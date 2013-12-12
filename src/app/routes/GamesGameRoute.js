@@ -2,6 +2,8 @@ define( [ "ember", "models/Streams" ], function( Ember, Model ) {
 
 	return Ember.Route.extend({
 		model: function( params ) {
+			this.set( "game", params.game );
+
 			return Model({
 				game: params.game
 			});
@@ -12,12 +14,8 @@ define( [ "ember", "models/Streams" ], function( Ember, Model ) {
 		 * @param {TwitchStreams} streams
 		 */
 		setupController: function( controller, streams ) {
-			controller.set( "game", streams.game );
-
-			controller.set( "streams", streams.streams.map(function( stream ) {
-				stream.livestreamer = "require('child_process').spawn('livestreamer',['" + stream.channel.url + "','best'])";
-				return stream;
-			}));
+			controller.set( "game", this.get( "game" ) );
+			controller.set( "streams", streams.streams );
 		}
 	});
 

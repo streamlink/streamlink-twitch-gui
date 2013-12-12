@@ -35,6 +35,7 @@ requirejs.config({
 		"controllers"	: "controllers",
 		"router"		: "router",
 		"routes"		: "routes",
+		"components"	: "components",
 		"utils"			: "utils",
 		"gui"			: "gui",
 		"templates"		: "../templates"

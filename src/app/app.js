@@ -33,7 +33,9 @@ define(function( require ) {
 
 		ChannelsIndexController: require( "controllers/ChannelsIndexController" ),
 		ChannelsIndexRoute: require( "routes/ChannelsIndexRoute" ),
-		ChannelsIndexView: require( "views/ChannelsIndexView" )
+		ChannelsIndexView: require( "views/ChannelsIndexView" ),
+
+		StreamItemComponent: require( "components/StreamItemComponent" )
 	};
 
 

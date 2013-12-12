@@ -10,10 +10,7 @@ define( [ "ember", "models/Streams" ], function( Ember, Model ) {
 		 * @param {TwitchStreams} streams
 		 */
 		setupController: function( controller, streams ) {
-			controller.set( "streams", streams.streams.map(function( stream ) {
-				stream.livestreamer = "require('child_process').spawn('livestreamer',['" + stream.channel.url + "','best'])";
-				return stream;
-			}));
+			controller.set( "streams", streams.streams );
 		}
 	});
 

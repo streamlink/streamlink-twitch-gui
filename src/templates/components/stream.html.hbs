@@ -1,0 +1,7 @@
+<p class="text-outside title">{{stream.channel.display_name}}</p>
+<!--<p class="hidden status">{{stream.channel.status}}</p>-->
+<img {{bind-attr src="stream.preview"}}>
+<p class="text-outside info">
+<span class="half"><i class="fa fa-clock-o"></i> {{hours-from-now stream.channel.updated_at}}</span>
+<span class="half text-right">{{format-viewers stream.viewers}} <i class="fa fa-users"></i></span>
+</p>
