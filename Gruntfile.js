@@ -133,8 +133,8 @@ module.exports = function( grunt ) {
 		nodewebkit		: {
 			options			: {
 				build_dir		: "build",
-				version			: "0.8.1",
-				keep_nw			: true,
+				version			: "<%= pkg.config['node-webkit-version'] %>",
+				keep_nw			: false,
 				win				: false,
 				mac				: false,
 				linux32			: false,
@@ -164,16 +164,44 @@ module.exports = function( grunt ) {
 				level			: 9
 			},
 			win				: {
-				options			: { archive: "dist/win.zip" },
-				files			: [
-					{
-						expand			: true,
-						flatten			: true,
-						cwd				: "build/releases/livestreamer-twitch-gui",
-						src				: [ "win/**" ],
-						dest			: "livestreamer-twitch-gui"
-					}
-				]
+				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-win.zip" },
+				files			: [ {
+					expand			: true,
+					flatten			: true,
+					cwd				: "build/releases/<%= pkg.name %>",
+					src				: [ "win/**" ],
+					dest			: "<%= pkg.name %>"
+				} ]
+			},
+			mac				: {
+				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-mac.zip" },
+				files			: [ {
+					expand			: true,
+					flatten			: true,
+					cwd				: "build/releases/<%= pkg.name %>",
+					src				: [ "mac/**" ],
+					dest			: "<%= pkg.name %>"
+				} ]
+			},
+			linux32			: {
+				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-linux32.zip" },
+				files			: [ {
+					expand			: true,
+					flatten			: true,
+					cwd				: "build/releases/<%= pkg.name %>",
+					src				: [ "linux32/**" ],
+					dest			: "<%= pkg.name %>"
+				} ]
+			},
+			linux64			: {
+				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-linux64.zip" },
+				files			: [ {
+					expand			: true,
+					flatten			: true,
+					cwd				: "build/releases/<%= pkg.name %>",
+					src				: [ "linux64/**" ],
+					dest			: "<%= pkg.name %>"
+				} ]
 			}
 		},
 
