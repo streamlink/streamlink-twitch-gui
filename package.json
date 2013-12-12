@@ -18,6 +18,7 @@
 		"grunt-contrib-less"     : "~0.8.3",
 		"grunt-contrib-clean"    : "~0.5.0",
 		"grunt-contrib-copy"     : "~0.4.1",
+		"grunt-node-webkit-builder": "~0.1.13",
 		"grunt-contrib-compress" : "~0.5.3"
 	},
 
