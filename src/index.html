@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<title>Livestreamer Twitch GUI</title>
+<link rel="stylesheet" href="styles/app.css">
+<script>
+//noinspection ThisExpressionReferencesGlobalObjectJS
+(function( global, requirejs ) {
+if ( global.module && global.module.exports ) {
+	requirejs = require( requirejs );
+	requirejs.config({
+		baseUrl: "./app",
+		nodeRequire: require
+	});
+	requirejs( "main" );
+} else {
+	document.write( "<script src='" + requirejs + "' data-main='app/main.js'><\/script>" );
+}
+})( this, "./vendor/requirejs/require.js" );
+</script>
+</head>
+</html>

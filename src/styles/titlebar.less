@@ -1,0 +1,69 @@
+
+.titlebar {
+	@default-color		: rgba( 0, 0, 0, .2 );
+	@hover-color		: rgba( 0, 0, 0, .6 );
+	@hover-background	: rgba( 0, 0, 0, .08 );
+	@active-color		: rgb( 255, 255, 255 );
+	@active-background	: hsv( 206, 67%, 92% );
+
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 28px;
+	padding-left: 25%;
+
+	font-size: 14px;
+	z-index: 1000;
+
+	-webkit-user-select: none;
+	-webkit-app-region: drag;
+
+	> h1 {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		margin: 0 11px 0 25%;
+		color: fadeIn( @default-color, 20% );
+		font: normal normal 15px/26px "Open Sans", sans-serif;
+		text-align: center;
+		z-index: -1;
+	}
+
+	> i {
+
+		display: block;
+		height: 28px;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		padding: 0 .7em;
+
+		color: @default-color;
+		line-height: 28px;
+		text-align: center;
+		-webkit-app-region: no-drag;
+
+		&:hover {
+			color: @hover-color;
+			background: @hover-background;
+		}
+
+		&:active {
+			color: @active-color;
+			background: @active-background;
+		}
+
+		&.win-close {
+			&:hover {
+				color: #fff;
+				background: hsv( 0, 70%, 88% );
+			}
+			&:active {
+				color: #fff;
+				background: hsv( 0, 60%, 60% );
+			}
+		}
+	}
+}

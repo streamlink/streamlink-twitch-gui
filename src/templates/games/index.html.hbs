@@ -1,0 +1,13 @@
+<h2>Top Games</h2>
+<ul class="clearfix">
+{{#each top}}
+{{#link-to "games.game" game.name tagName="li" classNames="list-item list-item-game"}}
+<img {{bind-attr src="game.box.large"}}>
+<p class="text-inside title">{{game.name}}</p>
+<p class="text-inside info">
+<span class="half"><i class="fa fa-video-camera"></i> {{channels}}</span>
+<span class="half text-right">{{format-viewers viewers}} <i class="fa fa-users"></i></span>
+</p>
+{{/link-to}}
+{{/each}}
+</ul>

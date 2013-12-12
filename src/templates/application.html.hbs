@@ -1,0 +1,36 @@
+<section class="titlebar">
+<h1>Livestreamer Twitch GUI</h1>
+<i class="pull-right fa fa-times win-close" onclick="require('nw.gui').Window.get().close()"></i>
+<i class="pull-right fa fa-plus win-max" onclick="require('nw.gui').Window.get().maximize()"></i>
+<i class="pull-right fa fa-minus win-min" onclick="require('nw.gui').Window.get().minimize()"></i>
+<i class="pull-right fa fa-code win-dev" onclick="require('nw.gui').Window.get().showDevTools()"></i>
+<i class="pull-right fa fa-refresh win-refresh" onclick="require('nw.gui').Window.get().reloadIgnoringCache()"></i>
+</section>
+
+<section class="mainmenu">
+<img src="img/Twitch_Logo_White.png" class="logo">
+<menu>
+<nav>
+<ul>
+{{#linkTo "games" tagName="li"}}<i class="fa fa-gamepad"></i> Games{{/linkTo}}
+{{#linkTo "channels" tagName="li"}}<i class="fa fa-video-camera"></i> Channels{{/linkTo}}
+{{#linkTo "videos" tagName="li"}}<i class="fa fa-film"></i> Videos{{/linkTo}}
+{{#linkTo "following" tagName="li" classNames="disabled"}}<i class="fa fa-heart"></i> Following{{/linkTo}}
+{{#linkTo "subscriptions" tagName="li" classNames="disabled"}}<i class="fa fa-credit-card"></i> Subscriptions{{/linkTo}}
+</ul>
+</nav>
+</menu>
+<footer>
+<nav>
+<ul>
+{{#linkTo "settings" tagName="li"}}<i class="fa fa-cogs"></i><span>Change settings</span>{{/linkTo}}
+{{#linkTo "help" tagName="li"}}<i class="fa fa-question"></i><span>Get help</span>{{/linkTo}}
+<li onclick="(window.nwDispatcher?window.nwDispatcher.requireNwGui().Shell.openExternal:window.open)('https://github.com/bastimeyer/livestreamer-twitch-gui')"><i class="fa fa-github"></i><span>Fork on Github</span></li>
+</ul>
+</nav>
+</footer>
+</section>
+
+<section class="content">
+{{outlet}}
+</section>

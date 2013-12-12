@@ -1,0 +1,35 @@
+
+.clearfix() {
+	&:before,
+	&:after {
+		content: " "; // 1
+		display: table; // 2
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+.text-overflow() {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
+.arrow-bottom( @left; @color; @size: .5em ) {
+	&::before {
+		content: "";
+		display: block;
+		position: absolute;
+		left: @left;
+		top: 100%;
+		width: 0;
+		height: 0;
+		border-color: transparent;
+		border-style: solid;
+		margin-left: -@size;
+		border-width: @size @size 0;
+		border-top-color: @background-hover;
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"browser"  : true,
+	"validthis": true,
+	"laxcomma" : true,
+	"laxbreak" : true,
+	"eqeqeq"   : false,
+	"eqnull"   : true,
+	"debug"    : true,
+	"devel"    : true,
+	"curly"    : false,
+	"boss"     : true,
+	"expr"     : true,
+	"asi"      : true,
+
+	"undef"    : true,
+	"unused"   : false,
+	"evil"     : true,
+	"sub"      : true,
+
+	"globals"  : {
+		"define" : true
+	}
+}

@@ -1,0 +1,5 @@
+/.idea/
+/node_modules/
+/src/vendor/
+/build/
+/dist/

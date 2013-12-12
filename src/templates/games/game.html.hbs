@@ -1,0 +1,14 @@
+<h2>{{#link-to "games.index"}}<i class="fa fa-arrow-circle-o-left"></i>{{/link-to}} Game title{{game}}</h2>
+<ul class="clearfix">
+{{#each streams}}
+<li class="list-item list-item-stream" {{bind-attr onclick="livestreamer"}}>
+<p class="text-outside title">{{channel.display_name}}</p>
+<!--<p class="hidden status">{{channel.status}}</p>-->
+<img {{bind-attr src="preview"}}>
+<p class="text-outside info">
+<span class="half"><i class="fa fa-clock-o"></i> {{hours-from-now channel.updated_at}}</span>
+<span class="half text-right">{{format-viewers viewers}} <i class="fa fa-users"></i></span>
+</p>
+</li>
+{{/each}}
+</ul>

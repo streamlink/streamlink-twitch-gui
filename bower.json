@@ -1,0 +1,17 @@
+{
+	"name": "livestreamer-twitch-gui",
+	"version": "0.0.1",
+	"ignore": [ "**" ],
+	"dependencies": {
+		"requirejs": "~2.1.8",
+		"requirejs-text": "~2.0.10",
+		"ember": "~1.2.0",
+		"handlebars": "~1.1.2",
+		"jquery": "~2.0.3",
+		"bootstrap": "~3.0.3",
+		"font-awesome": "~4.0.3",
+		"momentjs": "~2.4.0"
+	},
+	"devDependencies": {
+	}
+}
