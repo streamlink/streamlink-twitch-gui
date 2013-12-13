@@ -45,6 +45,9 @@ define(function( require ) {
 	};
 
 
+	require( [ "utils/helpers" ] );
+
+
 	require( [ "ember" ], function( Ember ) {
 		Ember.Application.create( App );
 	});

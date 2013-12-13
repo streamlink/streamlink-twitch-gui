@@ -1,26 +1,39 @@
-define( [ "ember", "moment" ], function( Ember, Moment ) {
+define( [ "ember" ], function( Ember ) {
 
-	Ember.Handlebars.helper( "hours-from-now", function( datestr ) {
-		return Moment().diff( datestr, "hours", true ).toFixed( 1 ) + "h";
+	var nw_window, maximized;
+	if ( window.process && window.process.env ) {
+		nw_window = window.nwDispatcher.requireNwGui().Window.get();
+		nw_window.on( "maximize",   function() { maximized = true;  } );
+		nw_window.on( "unmaximize", function() { maximized = false; } );
+	}
+
+
+	return Ember.Controller.extend({
+		dev: "@@@dev@@@" !== "false",
+
+		actions: {
+			"winRefresh": function() {
+				nw_window && nw_window.reloadIgnoringCache();
+			},
+			"winDevTools": function() {
+				nw_window && nw_window.showDevTools()
+			},
+			"winMin": function() {
+				nw_window && nw_window.minimize();
+			},
+			"winMax": function() {
+				nw_window && nw_window[ maximized ? "unmaximize" : "maximize" ]();
+			},
+			"winClose": function() {
+				nw_window && nw_window.close();
+			},
+			"fork": function() {
+				( nw_window
+					? window.nwDispatcher.requireNwGui().Shell.openExternal
+					: window.open
+				)( "@@@repository@@@" );
+			}
+		}
 	});
-
-	Ember.Handlebars.helper( "format-viewers", function( viewers ) {
-		/*
-		 * 1
-		 * 10
-		 * 100
-		 * 1000
-		 * 10.0k
-		 * 100k
-		 * 1.00m
-		 */
-		return viewers >= 1000000
-			? ( viewers / 1000000 ).toFixed( 2 ) + "m"
-			: viewers >= 10000
-				? ( viewers / 1000 ).toFixed( viewers >= 100000 ? 0 : 1 ) + "k"
-				: viewers;
-	});
-
-	return Ember.Controller.extend();
 
 });

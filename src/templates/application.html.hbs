@@ -1,10 +1,12 @@
 <section class="titlebar">
 <h1>Livestreamer Twitch GUI</h1>
-<i class="pull-right fa fa-times win-close" onclick="require('nw.gui').Window.get().close()"></i>
-<i class="pull-right fa fa-plus win-max" onclick="require('nw.gui').Window.get().maximize()"></i>
-<i class="pull-right fa fa-minus win-min" onclick="require('nw.gui').Window.get().minimize()"></i>
-<i class="pull-right fa fa-code win-dev" onclick="require('nw.gui').Window.get().showDevTools()"></i>
-<i class="pull-right fa fa-refresh win-refresh" onclick="require('nw.gui').Window.get().reloadIgnoringCache()"></i>
+<i class="pull-right fa fa-times win-close" {{action "winClose"}}></i>
+<i class="pull-right fa fa-plus win-max" {{action "winMax"}}></i>
+<i class="pull-right fa fa-minus win-min" {{action "winMin"}}></i>
+{{#if dev}}
+<i class="pull-right fa fa-code win-dev" {{action "winDevTools"}}></i>
+<i class="pull-right fa fa-refresh win-refresh" {{action "winRefresh"}}></i>
+{{/if}}
 </section>
 
 <section class="mainmenu">
@@ -25,7 +27,7 @@
 <ul>
 {{#linkTo "settings" tagName="li" disabled=true}}<i class="fa fa-cogs"></i><span>Change settings</span>{{/linkTo}}
 {{#linkTo "help" tagName="li" disabled=true}}<i class="fa fa-question"></i><span>Get help</span>{{/linkTo}}
-<li onclick="(window.nwDispatcher?window.nwDispatcher.requireNwGui().Shell.openExternal:window.open)('https://github.com/bastimeyer/livestreamer-twitch-gui')"><i class="fa fa-github"></i><span>Fork on Github</span></li>
+<li {{action "fork"}}><i class="fa fa-github"></i><span>Fork on Github</span></li>
 </ul>
 </nav>
 </footer>

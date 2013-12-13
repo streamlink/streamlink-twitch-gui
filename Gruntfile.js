@@ -107,6 +107,26 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		"string-replace": {
+			all				: {
+				options			: {
+					replacements	: [ {
+						pattern			: "@@@dev@@@",
+						replacement		: "false"
+					}, {
+						pattern			: "@@@version@@@",
+						replacement		: "<%= pkg.version %>"
+					}, {
+						pattern			: "@@@repository@@@",
+						replacement		: "<%= pkg.repository.url %>"
+					} ]
+				},
+				files			: {
+					"build/tmp/app/main.js": "build/tmp/app/main.js"
+				}
+			}
+		},
+
 		clean			: {
 			build			: [
 				"build/releases",
@@ -245,8 +265,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( "grunt-contrib-copy" );
 	grunt.loadNpmTasks( "grunt-contrib-compress" );
 	grunt.loadNpmTasks( "grunt-node-webkit-builder" );
+	grunt.loadNpmTasks( "grunt-string-replace" );
 
 	grunt.registerTask( "default", [ "" ] );
-	grunt.registerTask( "build", [ "clean", "copy", "less", "requirejs", "uglify", "compile" ] );
+	grunt.registerTask( "build", [ "clean", "copy", "less", "requirejs", "string-replace", "uglify", "compile" ] );
 
 };
