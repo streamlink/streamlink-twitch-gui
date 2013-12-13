@@ -33,8 +33,6 @@
 	}
 
 	li {
-		cursor: pointer;
-
 		> i {
 			min-width: 1.75rem;
 			margin-right: .2em;
@@ -44,12 +42,17 @@
 
 		&.disabled {
 			color: fade( @color, 30% );
+
+			&:hover {
+				cursor: not-allowed;
+			}
 		}
 
 		&.active,
-		&:hover {
+		&:hover:not( .disabled ) {
 			color: fade( @color, 100% );
 			background: @background-hover;
+			cursor: pointer;
 		}
 	}
 
@@ -75,7 +78,6 @@
 			float: left;
 			padding: .3em;
 			color: fade( @color, 50% );
-			cursor: pointer;
 
 			> i {
 				display: block;
@@ -96,7 +98,7 @@
 				.arrow-bottom( percentage( ( 1 / 6 ) ), @background-hover, .75em );
 			}
 
-			&:hover > span {
+			&:hover:not( .disabled ) > span {
 				display: block;
 				background: @background-hover;
 			}

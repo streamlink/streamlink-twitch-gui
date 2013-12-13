@@ -14,17 +14,17 @@
 <ul>
 {{#linkTo "games" tagName="li"}}<i class="fa fa-gamepad"></i> Games{{/linkTo}}
 {{#linkTo "channels" tagName="li"}}<i class="fa fa-video-camera"></i> Channels{{/linkTo}}
-{{#linkTo "videos" tagName="li"}}<i class="fa fa-film"></i> Videos{{/linkTo}}
-{{#linkTo "following" tagName="li" classNames="disabled"}}<i class="fa fa-heart"></i> Following{{/linkTo}}
-{{#linkTo "subscriptions" tagName="li" classNames="disabled"}}<i class="fa fa-credit-card"></i> Subscriptions{{/linkTo}}
+{{#linkTo "videos" tagName="li" disabled=true}}<i class="fa fa-film"></i> Videos{{/linkTo}}
+{{#linkTo "following" tagName="li" disabled=true}}<i class="fa fa-heart"></i> Following{{/linkTo}}
+{{#linkTo "subscriptions" tagName="li" disabled=true}}<i class="fa fa-credit-card"></i> Subscriptions{{/linkTo}}
 </ul>
 </nav>
 </menu>
 <footer>
 <nav>
 <ul>
-{{#linkTo "settings" tagName="li"}}<i class="fa fa-cogs"></i><span>Change settings</span>{{/linkTo}}
-{{#linkTo "help" tagName="li"}}<i class="fa fa-question"></i><span>Get help</span>{{/linkTo}}
+{{#linkTo "settings" tagName="li" disabled=true}}<i class="fa fa-cogs"></i><span>Change settings</span>{{/linkTo}}
+{{#linkTo "help" tagName="li" disabled=true}}<i class="fa fa-question"></i><span>Get help</span>{{/linkTo}}
 <li onclick="(window.nwDispatcher?window.nwDispatcher.requireNwGui().Shell.openExternal:window.open)('https://github.com/bastimeyer/livestreamer-twitch-gui')"><i class="fa fa-github"></i><span>Fork on Github</span></li>
 </ul>
 </nav>
