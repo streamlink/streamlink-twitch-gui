@@ -9,13 +9,9 @@ define( [ "ember", "models/Streams" ], function( Ember, Model ) {
 			});
 		},
 
-		/**
-		 * @param {Ember.ObjectController} controller
-		 * @param {TwitchStreams} streams
-		 */
-		setupController: function( controller, streams ) {
+		setupController: function( controller, model ) {
+			controller.set( "model", model );
 			controller.set( "game", this.get( "game" ) );
-			controller.set( "streams", streams.streams );
 		}
 	});
 
