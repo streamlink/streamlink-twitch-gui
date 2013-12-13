@@ -3,6 +3,8 @@ define(function() {
 	return function() {
 		var	content		= document.body.querySelector( ".content" ),
 			observer	= new MutationObserver(function( mutations ) {
+				content.classList.remove( "scrollborder-top" );
+				content.classList.remove( "scrollborder-bottom" );
 				mutations.forEach(function( mutation ) {
 					var elem = mutation.addedNodes[ 0 ];
 					if ( elem && elem.tagName === "SECTION" ) {
@@ -15,6 +17,7 @@ define(function() {
 		addScrollEvent( content.querySelector( "section" ) );
 
 		function addScrollEvent( elem ) {
+			if ( !elem ) return;
 			elem.addEventListener( "scroll", onscroll.bind( null, elem ), false );
 		}
 
