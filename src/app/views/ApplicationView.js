@@ -9,7 +9,11 @@ define([
 
 	return Ember.View.extend({
 		template: Ember.Handlebars.compile( Template ),
+		tagName: "body",
 
+		willInsertElement: function() {
+			document.documentElement.removeChild( document.body );
+		},
 		didInsertElement: function() {
 			GUIFontsize();
 			GUISelectable();

@@ -10,7 +10,7 @@ define(function( require ) {
 		LOG_VERSION: true,
 		*/
 
-		//rootElement: document.documentElement,
+		rootElement: document.documentElement,
 
 
 		Router: require( "router/router" ),
