@@ -28,6 +28,8 @@ define(function( require ) {
 		GamesIndexRoute: require( "routes/GamesIndexRoute" ),
 		GamesIndexController: require( "controllers/GamesIndexController" ),
 		GamesIndexView: require( "views/GamesIndexView" ),
+		GamesLoadingRoute: require( "routes/LoadingRoute" ),
+		GamesLoadingView: require( "views/LoadingView" ),
 
 		GamesGameRoute: require( "routes/GamesGameRoute" ),
 		GamesGameController: require( "controllers/GamesGameController" ),
@@ -36,6 +38,8 @@ define(function( require ) {
 		ChannelsIndexController: require( "controllers/ChannelsIndexController" ),
 		ChannelsIndexRoute: require( "routes/ChannelsIndexRoute" ),
 		ChannelsIndexView: require( "views/ChannelsIndexView" ),
+		ChannelsLoadingRoute: require( "routes/LoadingRoute" ),
+		ChannelsLoadingView: require( "views/LoadingView" ),
 
 		StreamItemComponent: require( "components/StreamItemComponent" )
 	};
