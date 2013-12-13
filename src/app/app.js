@@ -18,6 +18,8 @@ define(function( require ) {
 
 		ApplicationController: require( "controllers/ApplicationController" ),
 		ApplicationView: require( "views/ApplicationView" ),
+
+		LoadingRoute: require( "routes/LoadingRoute" ),
 		LoadingView: require( "views/LoadingView" ),
 
 		IndexRoute: require( "routes/IndexRoute" ),

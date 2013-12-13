@@ -1,9 +1,12 @@
-define( [ "ember" ], function( Ember ) {
+define([
+	"ember",
+	"text!templates/loading.html.hbs"
+], function( Ember, Template ) {
 
 	return Ember.View.extend({
-		template: null,
-		tagName: "i",
-		classNames: [ "loading", "fa", "fa-refresh", "fa-spinner" ]
+		template: Ember.Handlebars.compile( Template ),
+		tagName: "section",
+		classNames: [ "loading" ]
 	});
 
 });
