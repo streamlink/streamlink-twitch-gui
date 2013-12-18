@@ -15,7 +15,7 @@ define( [ "jquery" ], function( $ ) {
 
 				return image;
 			});
-		});
+		}, error );
 
 		function loaded() {
 			var index = images.indexOf( this );
