@@ -1,21 +1,19 @@
 
 // https://github.com/daneden/animate.css
 
-@-webkit-keyframes fadeInRight {
+@-webkit-keyframes animFadeInRight {
 	0% {
 		opacity: 0;
-		-webkit-transform: translateX(4em);
+		-webkit-transform: translateX( 3rem );
 	}
 
 	100% {
 		opacity: 1;
-		-webkit-transform: translateX(0);
+		-webkit-transform: translateX( 0 );
 	}
 }
 
-.fadeInRight {
-	-webkit-animation-name: fadeInRight;
-	-webkit-animation-timing-function: ease-out;
-	-webkit-animation-duration: .5s;
+.content > section:not( .loading ) {
+	-webkit-animation: animFadeInRight .333s ease-out;
 	-webkit-animation-fill-mode: both;
 }
