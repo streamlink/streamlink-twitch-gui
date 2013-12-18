@@ -1,0 +1,31 @@
+
+.loading {
+	@width: .667rem;
+	@height: ( @width * 12 );
+
+	top: 50% !important;
+	height: @height;
+	margin-top: ( -@height / 2 );
+	overflow-y: hidden !important;
+	text-align: center;
+	-webkit-transform: translateY( -30px ); // add an imaginary titlebar to the bottom
+
+	> div {
+		display: inline-block;
+		width: @width;
+		height: 100%;
+		margin: 0 ( @width / 4 );
+		background-color: fade( @color-twitch-purple, 85% );
+		-webkit-animation: loadinganim 1.2s infinite ease-in-out;
+	}
+
+	> .rect2 { -webkit-animation-delay: -1.1s; }
+	> .rect3 { -webkit-animation-delay: -1.0s; }
+	> .rect4 { -webkit-animation-delay: -0.9s; }
+	> .rect5 { -webkit-animation-delay: -0.8s; }
+}
+
+@-webkit-keyframes loadinganim {
+	0%, 40%, 100% { -webkit-transform: scaleY( 0.4 ); }
+	20% { -webkit-transform: scaleY( 1.0 ); }
+}
