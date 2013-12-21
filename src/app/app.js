@@ -15,6 +15,7 @@ define(function( require ) {
 			Router: require( "router/router" ),
 
 
+			ApplicationRoute: require( "routes/ApplicationRoute" ),
 			ApplicationController: require( "controllers/ApplicationController" ),
 			ApplicationView: require( "views/ApplicationView" ),
 
@@ -39,6 +40,11 @@ define(function( require ) {
 			ChannelsIndexView: require( "views/ChannelsIndexView" ),
 			ChannelsLoadingRoute: require( "routes/LoadingRoute" ),
 			ChannelsLoadingView: require( "views/LoadingView" ),
+
+			Settings: require( "models/Settings" ),
+			SettingsIndexController: require( "controllers/SettingsController" ),
+			SettingsIndexRoute: require( "routes/SettingsRoute" ),
+			SettingsIndexView: require( "views/SettingsView" ),
 
 			StreamItemComponent: require( "components/StreamItemComponent" )
 		});
