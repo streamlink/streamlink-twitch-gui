@@ -84,7 +84,7 @@
 	}
 
 	&:hover > .text-inside {
-		color: fade( @color-twitch-purple, 100% );
+		color: fade( @color, 100% );
 		background: fade( mix( @background, @color-twitch-purple-light, 50% ), 100% );
 	}
 
@@ -145,7 +145,7 @@
 			font: 6em/0 "FontAwesome";
 			color: rgba( 255, 255, 255, 1 );
 			text-align: center;
-			text-shadow: .075em .075em .15em rgba( 0, 0, 0, 90% );
+			-webkit-text-stroke: .025em #000;
 		}
 	}
 }
