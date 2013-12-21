@@ -8,6 +8,7 @@
 		"jquery": "~2.0.3",
 		"bootstrap": "~3.0.3",
 		"font-awesome": "~4.0.3",
-		"momentjs": "~2.4.0"
+		"momentjs": "~2.4.0",
+		"Selecter": "~2.2.8"
 	}
 }

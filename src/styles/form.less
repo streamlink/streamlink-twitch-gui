@@ -1,0 +1,236 @@
+
+input, button, textarea {
+	&:focus {
+		outline: 0 !important;
+	}
+}
+
+input[type="checkbox"] {
+	position: relative;
+	width: 1em;
+	height: 1em;
+	margin: 0;
+	visibility: hidden;
+
+	&::before, &::after {
+		display: inline-block;
+		position: absolute;
+		visibility: visible;
+		font: 1.25em/1.1em "FontAwesome";
+	}
+
+	&::before {
+		content: @fa-var-square;
+		color: #fff;
+		font-size: 1.1em;
+	}
+
+	&::after {
+		content: @fa-var-square-o;
+		color: @color-twitch-purple;
+	}
+
+	&:checked::after {
+		content: @fa-var-check-square-o;
+	}
+
+	&:disabled {
+		&::before {
+			color: mix( @color-twitch-grey-light, @color-twitch-purple-light, 50% );
+		}
+		&::after {
+			color: mix( @color-twitch-grey-dark, @color-twitch-purple, 50% );
+		}
+	}
+}
+
+
+input[type="text"] {
+	height: 2em;
+	padding: .4em;
+	border: .1em solid @color-twitch-purple;
+	border-radius: .25em;
+	font-size: inherit;
+	color: @color-twitch-purple;
+	text-overflow: ellipsis;
+	box-shadow: 0 0 0 !important;
+	-webkit-box-shadow: 0 0 0 !important;
+
+	&:focus {
+		padding: .35em;
+		border: .15em solid @color-twitch-purple;
+	}
+
+	&::-webkit-input-placeholder {
+		color: @color-twitch-purple-light;
+	}
+
+	&.form-control + .input-group-btn > .btn {
+		min-width: 3em;
+		height: 2em;
+		border: 0;
+		line-height: 1;
+	}
+
+	&:disabled {
+		@color: mix( @color-twitch-grey-dark, @color-twitch-purple, 50% );
+		@background: mix( @color-twitch-grey-light, @color-twitch-purple-light, 50% );
+		border-color: @color;
+		background: @background;
+		color: @color;
+		-webkit-user-select: none;
+
+		&::-webkit-input-placeholder {
+			color: fade( @color, 50% );
+		}
+
+		&, & + .input-group-btn > button {
+			cursor: not-allowed;
+		}
+	}
+}
+
+.input-group .form-control:first-child {
+	border-right-width: 0 !important;
+}
+
+
+fieldset {
+	margin: 0 .5em 2em;
+
+	> .row {
+		margin-bottom: 1em;
+	}
+
+	&.submit {
+		margin-top: 3em;
+		text-align: center;
+
+		> .btn {
+			min-width: 9em;
+			line-height: 1.25;
+
+			> i {
+				margin-left: -1em;
+				font-size: 1.25em;
+				vertical-align: top;
+			}
+		}
+	}
+}
+
+legend {
+	margin: 0 0 1em;
+	padding: 0 0 .25em;
+	border-bottom: 1px solid fade( #fff, 50% );
+	color: #fff;
+	font-size: 1em;
+}
+
+.btn {
+	padding: .4em;
+	border-width: .1em;
+	border-radius: .25em;
+	font-size: 1em;
+
+	> i {
+		color: fade( #fff, percentage( 4 / 5 ) );
+	}
+
+	.btn-color();
+	&.btn-success { .btn-color( @color-success ); }
+	&.btn-danger { .btn-color( @color-danger ); }
+
+	.btn-color( @color: @color-twitch-purple ) {
+		background: @color;
+		border-color: darken( @color, 10% );
+		transition: background .2s ease-out;
+
+		&:not(:disabled):hover {
+			background: darken( @color, 5% );
+			border-color: darken( @color, 15% );
+		}
+	}
+
+	&:not(:disabled):active {
+		box-shadow: inset 0 .2em .35em fade( #000, 12.5% );
+	}
+}
+
+
+.selecter.custom {
+	margin: 0;
+
+	> .selecter-selected,
+	> .selecter-options {
+		color: @color-twitch-purple;
+		font-size: inherit;
+		box-shadow: none;
+	}
+
+	> .selecter-selected {
+		position: relative;
+		border: .1em solid @color-twitch-purple;
+		border-radius: .25em;
+		padding: .2em 1.4em .2em .4em;
+		background: #fff;
+
+		&::after {
+			content: @fa-var-caret-down;
+			position: absolute;
+			right: .4em;
+			opacity: 50%;
+			font-family: "FontAwesome";
+		}
+	}
+
+	&.open.cover {
+		> .selecter-selected {
+			border-radius: .25em .25em 0 0;
+		}
+	}
+
+	&.open.cover.bottom {
+		> .selecter-selected {
+			border-radius: 0 0 .25em .25em;
+		}
+	}
+
+	>.selecter-options {
+		max-height: 10em;
+		border: 0 !important;
+		border-radius: .25em;
+		background: transparent;
+		box-shadow: 0 0 0 0.125rem fade( @color-twitch-purple, 75% );
+	}
+
+	.selecter-item {
+		padding: .2em .4em;
+		border: .1em solid @color-twitch-purple;
+		border-bottom: 0;
+		color: inherit;
+		font-size: inherit;
+
+		&:hover {
+			background: mix( #fff, @color-twitch-purple-light, 75% );
+		}
+
+		&.selected {
+			background: @color-twitch-purple !important;
+			color: #fff;
+		}
+
+		&:first-child {
+			border-radius: .25em .25em 0 0;
+		}
+
+		&:last-child {
+			border-radius: 0 0 .25em .25em;
+			border-bottom: .1em solid @color-twitch-purple;
+		}
+	}
+
+	&.bottom .selecter-item:last-child {
+		border: .1em solid @color-twitch-purple;
+	}
+}

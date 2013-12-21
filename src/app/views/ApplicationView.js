@@ -4,8 +4,16 @@ define([
 	"gui/fontsize",
 	"gui/selectable",
 	"gui/smoothscroll",
-	"gui/scrollborders"
-], function( Ember, Template, GUIFontsize, GUISelectable, GUISmoothscroll, GUIScrollborders ) {
+	"gui/scrollborders",
+	"gui/selecter"
+], function( Ember, Template, GUIFontsize, GUISelectable, GUISmoothscroll, GUIScrollborders, GUISelecter ) {
+
+	Ember.Select.reopen({
+		didInsertElement: function() {
+			this._super();
+			GUISelecter( this.$() );
+		}
+	});
 
 	return Ember.View.extend({
 		template: Ember.Handlebars.compile( Template ),

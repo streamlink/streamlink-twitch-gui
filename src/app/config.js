@@ -24,6 +24,7 @@ requirejs.config({
 		"ember"			: "../vendor/ember/ember",
 		"handlebars"	: "../vendor/handlebars/handlebars",
 		"jquery"		: "../vendor/jquery/jquery",
+		"Selecter"		: "../vendor/Selecter/jquery.fs.selecter",
 		"moment"		: "../vendor/momentjs/moment",
 
 		// App
