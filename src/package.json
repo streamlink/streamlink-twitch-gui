@@ -2,7 +2,7 @@
 	"name": "livestreamer-twitch-gui",
 	"version": "0.1.0",
 
-	"main": "index.html",
+	"main": "app://livestreamer-twitch-gui/index.html",
 
 	"window": {
 		"title": "Livestreamer Twitch GUI",
