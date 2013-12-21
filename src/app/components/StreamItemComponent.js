@@ -9,10 +9,7 @@ define([
 		classNames: [ "list-item list-item-stream" ],
 
 		click: function() {
-			require( "child_process" ).spawn( "livestreamer", [
-				this.stream.channel.url,
-				"best,high,mobile_high,medium"
-			]);
+			this.sendAction( "action", this.get( "stream" ) );
 		}
 	});
 

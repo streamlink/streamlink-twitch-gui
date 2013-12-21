@@ -1,6 +1,6 @@
 <h2>Top Channels</h2>
 <ul class="clearfix">
-{{#each streams}}
-{{stream-item stream=this}}
+{{#each stream in streams}}
+{{stream-item stream=stream action="open_livestreamer"}}
 {{/each}}
 </ul>

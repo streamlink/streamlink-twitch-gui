@@ -13,6 +13,26 @@ define( [ "ember" ], function( Ember ) {
 					store.createRecord( "settings", { id: 1 } ).save();
 				}
 			);
+		},
+
+		actions: {
+			"open_livestreamer": function( stream ) {
+				this.store.find( "settings", 1 ).then(function( settings ) {
+					var	path = settings.get( "livestreamer" ),
+						qualities = settings.get( "qualities" ),
+						quality = settings.get( "quality" );
+
+					require( "child_process" ).spawn(
+						path.length ? path : "livestreamer",
+						[
+							stream.channel.url,
+							qualities.hasOwnProperty( quality )
+								? qualities[ quality ].quality
+								: qualities[ 0 ].quality
+						]
+					);
+				});
+			}
 		}
 	});
 
