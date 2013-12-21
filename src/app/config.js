@@ -6,6 +6,8 @@
  */
 requirejs.config({
 	"shim": {
+		"App": [ "ember", "ember-data", "ember-data-ls" ],
+
 		"handlebars": {
 			"deps": [],
 			"exports": "Handlebars"
@@ -13,7 +15,12 @@ requirejs.config({
 		"ember": {
 			"deps": [ "handlebars", "jquery" ],
 			"exports": "Ember"
-		}
+		},
+		"ember-data": {
+			"deps": [ "ember" ],
+			"exports": "DS"
+		},
+		"ember-data-ls": [ "ember-data" ]
 	},
 
 	"paths": {
@@ -22,6 +29,8 @@ requirejs.config({
 
 		// Vendor
 		"ember"			: "../vendor/ember/ember",
+		"ember-data"	: "../vendor/ember-data/ember-data",
+		"ember-data-ls"	: "../vendor/ember-localstorage-adapter/localstorage_adapter",
 		"handlebars"	: "../vendor/handlebars/handlebars",
 		"jquery"		: "../vendor/jquery/jquery",
 		"Selecter"		: "../vendor/Selecter/jquery.fs.selecter",
