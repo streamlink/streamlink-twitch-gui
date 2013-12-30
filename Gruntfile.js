@@ -142,9 +142,9 @@ module.exports = function( grunt ) {
 					"package.json",
 					"index.html",
 					"vendor/requirejs/require.js",
-					"**/*.woff",
-					"img/**",
-					"templates/**"
+					"fonts/*.woff",
+					"vendor/font-awesome/fonts/*.woff",
+					"img/**"
 				],
 				dest			: "build/tmp"
 			}
