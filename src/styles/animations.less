@@ -1,19 +1,34 @@
 
-// https://github.com/daneden/animate.css
-
-@-webkit-keyframes animFadeInRight {
-	0% {
+@-webkit-keyframes animFadeIn {
+	from {
 		opacity: 0;
-		-webkit-transform: translateX( 3rem );
 	}
 
-	100% {
+	to {
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes animFadeInLeft {
+	from {
+		opacity: 0;
+		-webkit-transform: translateX( -3rem );
+	}
+
+	to {
 		opacity: 1;
 		-webkit-transform: translateX( 0 );
 	}
 }
 
-.content > section:not( .loading ) {
-	-webkit-animation: animFadeInRight .333s ease-out;
-	-webkit-animation-fill-mode: both;
+@-webkit-keyframes animFadeInRight {
+	from {
+		opacity: 0;
+		-webkit-transform: translateX( 3rem );
+	}
+
+	to {
+		opacity: 1;
+		-webkit-transform: translateX( 0 );
+	}
 }
