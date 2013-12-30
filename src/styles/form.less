@@ -138,10 +138,12 @@ legend {
 	border-width: .1em;
 	border-radius: 0;
 	font-size: 1em;
+	color: @color-text-default !important;
 
 	.btn-color();
 	&.btn-success { .btn-color( @color-success ); }
 	&.btn-danger { .btn-color( @color-danger ); }
+	&.btn-neutral { .btn-color( @color-neutral ); }
 
 	.btn-color( @color: @color-twitch-purple ) {
 		background: @color;
