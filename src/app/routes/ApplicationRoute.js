@@ -32,6 +32,25 @@ define( [ "ember" ], function( Ember ) {
 						]
 					);
 				});
+			},
+
+			"openModal": function( head, body, buttons ) {
+				var Modal = this.controllerFor( "modal" );
+				Modal.set( "head", head );
+				Modal.set( "body", body );
+				Modal.set( "buttons", buttons );
+
+				return this.render( "modal", {
+					into		: "application",
+					outlet		: "modal"
+				});
+			},
+
+			"closeModal": function() {
+				return this.disconnectOutlet({
+					parentView	: "application",
+					outlet		: "modal"
+				});
 			}
 		}
 	});

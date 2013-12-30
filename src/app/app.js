@@ -22,6 +22,9 @@ define(function( require ) {
 			LoadingRoute: require( "routes/LoadingRoute" ),
 			LoadingView: require( "views/LoadingView" ),
 
+			ModalController: require( "controllers/ModalController" ),
+			ModalView: require( "views/ModalView" ),
+
 			IndexRoute: require( "routes/IndexRoute" ),
 			IndexView: require( "views/IndexView" ),
 

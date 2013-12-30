@@ -1,0 +1,37 @@
+
+.mymodal {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 10000;
+	background: fade( #000, 50% );
+	-webkit-animation: fadeIn .333s ease-out;
+
+	> section {
+		position: absolute;
+		left: 8rem;
+		right: 8rem;
+		top: 50%;
+		height: 16rem;
+		margin-top: -8rem;
+		padding: 2rem 2rem 6rem;
+		background: @color-twitch-purple;
+		-webkit-animation: animFadeInRight .333s ease-out;
+	}
+
+	header {
+		font-size: 2em;
+		margin-bottom: .5em;
+	}
+
+	footer {
+		position: absolute;
+		bottom: 2rem;
+
+		> button {
+			min-width: 8em;
+		}
+	}
+}
