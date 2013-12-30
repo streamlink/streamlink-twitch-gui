@@ -120,17 +120,6 @@ fieldset {
 	&.submit {
 		margin-top: 3em;
 		text-align: center;
-
-		> .btn {
-			min-width: 9em;
-			line-height: 1.25;
-
-			> i {
-				margin-left: -1em;
-				font-size: 1.25em;
-				vertical-align: top;
-			}
-		}
 	}
 }
 
@@ -149,10 +138,6 @@ legend {
 	border-radius: 0;
 	font-size: 1em;
 
-	> i {
-		color: fade( #fff, percentage( 4 / 5 ) );
-	}
-
 	.btn-color();
 	&.btn-success { .btn-color( @color-success ); }
 	&.btn-danger { .btn-color( @color-danger ); }
@@ -170,6 +155,19 @@ legend {
 
 	&:not(:disabled):active {
 		box-shadow: inset 0 .2em .35em fade( #000, 12.5% );
+	}
+
+
+	&.btn-with-icon {
+		min-width: 9em;
+		line-height: 1.25;
+
+		> i {
+			margin-left: -1em;
+			font-size: 1.25em;
+			color: fade( #fff, 50% );
+			vertical-align: top;
+		}
 	}
 }
 
