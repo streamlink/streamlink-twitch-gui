@@ -1,13 +1,32 @@
 define( [ "jquery" ], function( $ ) {
 
+	function $$( element, classname ) {
+		return $( document.createElement( element ) ).addClass( classname );
+	}
+
 	return function( $context ) {
-		$( "[data-file]", $context ).each(function() {
-			var	$btn	= $( "button", this ),
-				$input	= $( ":text", this ),
-				$file	= $( document.createElement( "input" ) )
+		$( "[data-fileselect]", $context ).each(function() {
+			var	$input	= $( ":text", this ),
+				$grp	= $$( "div", "input-group" )
+					.append( $input )
+					.appendTo( this ),
+				$btn	= $$( "button" )
+					.attr({
+						type: "button",
+						tabindex: -1
+					})
+					.addClass( "btn" )
+					.append(
+						$$( "i", "fa fa-search" )
+					)
+					.appendTo(
+						$$( "span", "input-group-btn" )
+							.appendTo( $grp )
+					),
+				$file	= $$( "input" )
 					.attr({ type: "file" })
 					.addClass( "hidden" )
-					.insertAfter( this );
+					.appendTo( this );
 
 			$btn.click(function() {
 				if ( $input.is( ":disabled" ) ) return;
