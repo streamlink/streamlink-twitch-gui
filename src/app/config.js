@@ -38,6 +38,7 @@ requirejs.config({
 
 		// App
 		"App"			: "app",
+		"Router"		: "router",
 
 		// Ember paths
 		"models"		: "models",

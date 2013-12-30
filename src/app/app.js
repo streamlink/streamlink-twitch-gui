@@ -12,7 +12,7 @@ define(function( require ) {
 			}),
 
 
-			Router: require( "router" ),
+			Router: require( "Router" ),
 
 
 			ApplicationRoute: require( "routes/ApplicationRoute" ),
