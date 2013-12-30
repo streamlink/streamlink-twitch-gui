@@ -16,7 +16,8 @@ define( [ "jquery" ], function( $ ) {
 			url			: "https://api.twitch.tv/kraken/" + path + params,
 			headers		: {
 				accept		: "application/vnd.twitchtv.v2+json"
-			}
+			},
+			timeout		: 10000
 		});
 	};
 
