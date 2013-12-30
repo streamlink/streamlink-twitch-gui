@@ -1,17 +1,18 @@
 
 @scrollborder-color: @color-twitch-purple;
-@scrollborder-strength: 25%;
+@scrollborder-strength: 30%;
+@scrollborder-length: 12.5%;
 
 .scrollborder-top {
-	background-image: linear-gradient( to bottom, fade( @scrollborder-color, @scrollborder-strength ) 0%, fade( @scrollborder-color, 0% ) 10% );
+	background-image: linear-gradient( to bottom, fade( @scrollborder-color, @scrollborder-strength ) 0%, fade( @scrollborder-color, 0% ) @scrollborder-length );
 }
 .scrollborder-bottom {
-	background-image: linear-gradient( to bottom, fade( @scrollborder-color, 0% ) 90%, fade( @scrollborder-color, @scrollborder-strength ) 100% );
+	background-image: linear-gradient( to bottom, fade( @scrollborder-color, 0% ) ( 100% - @scrollborder-length ), fade( @scrollborder-color, @scrollborder-strength ) 100% );
 }
 .scrollborder-top.scrollborder-bottom {
 	//noinspection CssShorthandPropertyValue
-	background-image: linear-gradient( to bottom, fade( @scrollborder-color, @scrollborder-strength ) 0%, fade( @scrollborder-color, 0% ) 10% ),
-	                  linear-gradient( to bottom, fade( @scrollborder-color, 0% ) 90%, fade( @scrollborder-color, @scrollborder-strength ) 100% );
+	background-image: linear-gradient( to bottom, fade( @scrollborder-color, @scrollborder-strength ) 0%, fade( @scrollborder-color, 0% ) @scrollborder-length ),
+	                  linear-gradient( to bottom, fade( @scrollborder-color, 0% ) ( 100% - @scrollborder-length ), fade( @scrollborder-color, @scrollborder-strength ) 100% );
 }
 
 
