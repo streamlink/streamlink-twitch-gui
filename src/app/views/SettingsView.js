@@ -1,6 +1,6 @@
 define([
 	"ember",
-	"text!templates/settings/index.html.hbs",
+	"text!templates/settings.html.hbs",
 	"gui/fileselect"
 ], function( Ember, Template, GUIFileselect ) {
 

@@ -48,9 +48,9 @@ define(function( require ) {
 			ChannelsLoadingView: require( "views/LoadingView" ),
 
 			Settings: require( "models/Settings" ),
-			SettingsIndexController: require( "controllers/SettingsController" ),
-			SettingsIndexRoute: require( "routes/SettingsRoute" ),
-			SettingsIndexView: require( "views/SettingsView" ),
+			SettingsRoute: require( "routes/SettingsRoute" ),
+			SettingsController: require( "controllers/SettingsController" ),
+			SettingsView: require( "views/SettingsView" ),
 
 			StreamItemComponent: require( "components/StreamItemComponent" )
 		});

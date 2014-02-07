@@ -21,9 +21,7 @@ define( [ "ember" ], function( Ember ) {
 
 		this.route( "subscriptions" );
 
-		this.resource( "settings", function() {
-			// TODO
-		});
+		this.route( "settings" );
 
 		this.route( "help" );
 
