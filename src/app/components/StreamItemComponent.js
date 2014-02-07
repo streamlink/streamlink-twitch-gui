@@ -4,7 +4,7 @@ define([
 ], function( Ember, Template ) {
 
 	return Ember.Component.extend({
-		template: Ember.Handlebars.compile( Template ),
+		layout: Ember.Handlebars.compile( Template ),
 		tagName: "li",
 		classNames: [ "list-item list-item-stream" ],
 

@@ -10,23 +10,23 @@
 </section>
 
 <section class="mainmenu">
-{{#linkTo "index" classNames="logo" activeClass=""}}<img src="img/Twitch_Logo_White.png">{{/linkTo}}
+{{#link-to "index" classNames="logo" activeClass=""}}<img src="img/Twitch_Logo_White.png">{{/link-to}}
 <menu>
 <nav>
 <ul>
-{{#linkTo "games" tagName="li"}}<i class="fa fa-gamepad"></i> Games{{/linkTo}}
-{{#linkTo "channels" tagName="li"}}<i class="fa fa-video-camera"></i> Channels{{/linkTo}}
-{{#linkTo "videos" tagName="li" disabled=true}}<i class="fa fa-film"></i> Videos{{/linkTo}}
-{{#linkTo "following" tagName="li" disabled=true}}<i class="fa fa-heart"></i> Following{{/linkTo}}
-{{#linkTo "subscriptions" tagName="li" disabled=true}}<i class="fa fa-credit-card"></i> Subscriptions{{/linkTo}}
+{{#link-to "games" tagName="li"}}<i class="fa fa-gamepad"></i> Games{{/link-to}}
+{{#link-to "channels" tagName="li"}}<i class="fa fa-video-camera"></i> Channels{{/link-to}}
+{{#link-to "videos" tagName="li" disabled=true}}<i class="fa fa-film"></i> Videos{{/link-to}}
+{{#link-to "following" tagName="li" disabled=true}}<i class="fa fa-heart"></i> Following{{/link-to}}
+{{#link-to "subscriptions" tagName="li" disabled=true}}<i class="fa fa-credit-card"></i> Subscriptions{{/link-to}}
 </ul>
 </nav>
 </menu>
 <footer>
 <nav>
 <ul>
-{{#linkTo "settings" tagName="li"}}<i class="fa fa-cogs"></i><span>Change settings</span>{{/linkTo}}
-{{#linkTo "help" tagName="li" disabled=true}}<i class="fa fa-question"></i><span>Get help</span>{{/linkTo}}
+{{#link-to "settings" tagName="li"}}<i class="fa fa-cogs"></i><span>Change settings</span>{{/link-to}}
+{{#link-to "help" tagName="li" disabled=true}}<i class="fa fa-question"></i><span>Get help</span>{{/link-to}}
 <li {{action "fork"}}><i class="fa fa-github"></i><span>Fork on Github</span></li>
 </ul>
 </nav>
