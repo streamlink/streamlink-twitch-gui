@@ -1,37 +1,43 @@
 define( [ "ember" ], function( Ember ) {
 
-	var nw_window, maximized;
+	var nwGui, nwWindow, maximized;
 	if ( window.process && window.process.env ) {
-		nw_window = window.nwDispatcher.requireNwGui().Window.get();
-		nw_window.on( "maximize",   function() { maximized = true;  } );
-		nw_window.on( "unmaximize", function() { maximized = false; } );
+		nwGui = window.nwDispatcher.requireNwGui();
+		nwWindow = nwGui.Window.get();
+		nwWindow.on( "maximize",   function() { maximized = true;  } );
+		nwWindow.on( "unmaximize", function() { maximized = false; } );
 	}
 
 
 	return Ember.Controller.extend({
 		dev: "@@@dev@@@" !== "false",
 
+		nwGui: nwGui,
+		nwWindow: nwWindow,
+
 		actions: {
 			"winRefresh": function() {
-				nw_window && nw_window.reloadIgnoringCache();
+				nwWindow && nwWindow.reloadIgnoringCache();
 			},
+
 			"winDevTools": function() {
-				nw_window && nw_window.showDevTools()
+				nwWindow && nwWindow.showDevTools()
 			},
+
 			"winMin": function() {
-				nw_window && nw_window.minimize();
+				nwWindow && nwWindow.minimize();
 			},
+
 			"winMax": function() {
-				nw_window && nw_window[ maximized ? "unmaximize" : "maximize" ]();
+				nwWindow && nwWindow[ maximized ? "unmaximize" : "maximize" ]();
 			},
+
 			"winClose": function() {
-				nw_window && nw_window.close();
+				nwWindow && nwWindow.close();
 			},
+
 			"fork": function() {
-				( nw_window
-					? window.nwDispatcher.requireNwGui().Shell.openExternal
-					: window.open
-				)( "@@@repository@@@" );
+				this.send( "open_browser", this.get( "model.package.homepage" ) );
 			}
 		}
 	});

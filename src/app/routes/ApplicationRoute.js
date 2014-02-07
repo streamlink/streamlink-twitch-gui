@@ -15,7 +15,20 @@ define( [ "ember" ], function( Ember ) {
 			);
 		},
 
+		model: function() {
+			return Ember.$.getJSON( "/metadata.json" );
+		},
+
+		setupController: function( controller, model ) {
+			controller.set( "model", model );
+		},
+
+
 		actions: {
+			"open_browser": function( url ) {
+				this.get( "controller.nwGui" ).Shell.openExternal( url );
+			},
+
 			"open_livestreamer": function( stream ) {
 				this.store.find( "settings", 1 ).then(function( settings ) {
 					var	path = settings.get( "livestreamer" ),
