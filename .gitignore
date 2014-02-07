@@ -1,5 +1,6 @@
 /.idea/
 /node_modules/
 /src/vendor/
-/build/
+/build/*
+!/build/tasks
 /dist/
