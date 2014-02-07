@@ -17,7 +17,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		player			: DS.attr( "string", { defaultValue: "" } ),
 		player_params	: DS.attr( "string", { defaultValue: "" } ),
 		player_reconnect: DS.attr( "boolean", { defaultValue: true } ),
-		player_close	: DS.attr( "boolean", { defaultValue: false } ),
+		player_no_close	: DS.attr( "boolean", { defaultValue: true } ),
 
 		qualities		: qualities
 	});

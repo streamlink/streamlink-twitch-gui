@@ -14,8 +14,8 @@
 </div>
 </div>
 </fieldset>
-<fieldset class="hidden">
-<legend>Videoplayer settings <em class="small">(disabled for now)</em></legend>
+<fieldset>
+<legend>Videoplayer settings</legend>
 <div class="row">
 <div class="col-xs-4"><i class="fa fa-desktop"></i> Videoplayer<span class="description">Use a custom player which is not defined in your livestreamer config.</span></div>
 <div class="col-xs-8" data-fileselect>
@@ -29,12 +29,12 @@
 </div>
 </div>
 <div class="row">
-<div class="col-xs-4"><i class="fa fa-refresh"></i> Reconnect<span class="description">In case the connection was dropped.</span></div>
+<div class="col-xs-4"><i class="fa fa-refresh"></i> Reconnect<span class="description">In case the connection has been dropped.</span></div>
 <div class="col-xs-8"><label>{{input type="checkbox" checked=content.player_reconnect}}<span>Reconnect to stream</span></label></div>
 </div>
 <div class="row">
 <div class="col-xs-4"><i class="fa fa-times"></i> Close player<span class="description">After the stream has finished.</span></div>
-<div class="col-xs-8"><label>{{input type="checkbox" checked=content.player_close}}<span>Close player</span></label></div>
+<div class="col-xs-8"><label>{{input type="checkbox" checked=content.player_no_close}}<span>Do not close the player</span></label></div>
 </div>
 </fieldset>
 <fieldset class="submit">

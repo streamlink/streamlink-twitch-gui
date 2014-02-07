@@ -7,31 +7,31 @@ define( [ "ember" ], function( Ember ) {
 
 		actions: {
 			willTransition: function( transition ) {
-				var	Controller	= this.controller,
-					Modal		= this.controllerFor( "modal" );
+				var	controller	= this.get( "controller" ),
+					modal		= this.get( "controller.controllers.modal" );
 
 				function retry() {
 					transition.retry();
 				}
 
 				// if the user has changed any values
-				if ( Controller.get( "hasChanged" ) ) {
+				if ( controller.get( "hasChanged" ) ) {
 					// stay here...
 					transition.abort();
 
 					// and let the user decide
-					this.controllerFor( "application" ).send( "openModal",
+					this.send( "openModal",
 						"Please confirm",
 						"Do you want to apply your changes?",
 						[
-							new Modal.Button( "Apply", "btn-success", "fa-check", function() {
-								Controller.send( "apply", retry );
+							new modal.Button( "Apply", "btn-success", "fa-check", function() {
+								controller.send( "apply", retry );
 							}),
-							new Modal.Button( "Discard", "btn-danger", "fa-trash-o", function() {
-								Controller.send( "discard" );
+							new modal.Button( "Discard", "btn-danger", "fa-trash-o", function() {
+								controller.send( "discard" );
 								retry();
 							}),
-							new Modal.Button( "Cancel", "btn-neutral", "fa-times" )
+							new modal.Button( "Cancel", "btn-neutral", "fa-times" )
 						]
 					);
 				}

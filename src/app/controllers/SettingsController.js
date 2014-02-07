@@ -1,12 +1,14 @@
 define( [ "ember" ], function( Ember ) {
 
 	return Ember.ObjectController.extend({
+		needs: [ "application", "modal" ],
+
 		hasChanged: false,
 
 		actions: {
 			apply: function( callback ) {
 				var	model	= this.get( "model" ),
-					content	= this.get( "content");
+					content	= this.get( "content" );
 
 				// TODO: Validate
 				var valid = true;
@@ -25,7 +27,7 @@ define( [ "ember" ], function( Ember ) {
 
 			discard: function() {
 				var	model	= this.get( "model" ),
-					content	= this.get( "content");
+					content	= this.get( "content" );
 
 				model.rollback();
 				model.eachAttribute(function( attr ) {
