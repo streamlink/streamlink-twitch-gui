@@ -2,17 +2,13 @@ define( [ "ember" ], function( Ember ) {
 
 	return Ember.Route.extend({
 		beforeModel: function() {
-			var store = this.store;
-
-			// Create initial Settings record
-			store.find( "settings", 1 ).then(
-				// Settings already exist
-				function() {},
-				// Settings do not exists yet...
-				function() {
-					store.createRecord( "settings", { id: 1 } ).save();
-				}
-			);
+			// Load Settings records
+			this.store.findAll( "settings" ).then(function() {
+				try {
+					// Create initial Settings record
+					this.store.createRecord( "settings", { id: 1 } ).save();
+				} catch ( e ) {}
+			}.bind( this ) );
 		},
 
 		model: function() {
