@@ -55,7 +55,9 @@ define(function( require ) {
 			AboutController: require( "controllers/AboutController" ),
 			AboutView: require( "views/AboutView" ),
 
-			StreamItemComponent: require( "components/StreamItemComponent" )
+			StreamItemComponent: require( "components/StreamItemComponent" ),
+
+			LivestreamerController: require( "controllers/LivestreamerController" )
 		});
 
 		require( [ "utils/helpers" ] );

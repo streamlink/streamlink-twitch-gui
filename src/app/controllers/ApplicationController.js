@@ -10,6 +10,8 @@ define( [ "ember" ], function( Ember ) {
 
 
 	return Ember.Controller.extend({
+		needs: [ "livestreamer" ],
+
 		dev: "@@@dev@@@" !== "false",
 
 		nwGui: nwGui,

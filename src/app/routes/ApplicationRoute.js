@@ -27,20 +27,10 @@ define( [ "ember" ], function( Ember ) {
 
 			"open_livestreamer": function( stream ) {
 				this.store.find( "settings", 1 ).then(function( settings ) {
-					var	path = settings.get( "livestreamer" ),
-						qualities = settings.get( "qualities" ),
-						quality = settings.get( "quality" );
-
-					require( "child_process" ).spawn(
-						path.length ? path : "livestreamer",
-						[
-							stream.channel.url,
-							qualities.hasOwnProperty( quality )
-								? qualities[ quality ].quality
-								: qualities[ 0 ].quality
-						]
+					this.get( "controller.controllers.livestreamer" ).send(
+						"start", settings, stream
 					);
-				});
+				}.bind( this ) );
 			},
 
 			"openModal": function( head, body, buttons ) {
