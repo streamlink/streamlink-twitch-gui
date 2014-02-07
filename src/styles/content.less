@@ -164,3 +164,23 @@
 	color: fade( #fff, 80% );
 	font-size: percentage( 3 / 4 );
 }
+
+
+.content-about {
+	article {
+		padding-left: .5rem;
+		.clearfix();
+	}
+
+	.dl-horizontal {
+		@width: 15rem;
+
+		> dt {
+			width: @width;
+		}
+
+		> dd {
+			margin-left: ( @width + 1 );
+		}
+	}
+}

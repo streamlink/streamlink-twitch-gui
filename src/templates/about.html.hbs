@@ -1,0 +1,29 @@
+<h2>About</h2>
+<article>
+<h3><i class="fa fa-desktop"></i> Livestreamer Twitch GUI</h3>
+<dl class="dl-horizontal">
+<dt>Homepage</dt>
+<dd><a href="#" class="external-link" {{action "open_browser" model.package.homepage}}>{{unbound model.package.homepage}}</a></dd>
+<dt>Author</dt>
+<dd>{{unbound model.package.author}}</dd>
+<dt>Contributors</dt>
+<dd><ul class="list">{{#each contributor in model.contributors}}
+<li title="{{unbound contributor.commits}} commits">{{unbound contributor.name}}</li>
+{{/each}}</ul></dd>
+<dt>Version</dt>
+<dd>{{unbound model.package.version}}</dd>
+<dt>Built</dt>
+<dd>{{unbound model.package.built}}</dd>
+<dt>Node-Webkit</dt>
+<dd>{{unbound model.package.nodewebkit}}</dd>
+</dl>
+</article>
+<article>
+<h3><i class="fa fa-sitemap"></i> Third party applications</h3>
+<dl class="dl-horizontal">
+{{#each elem in model.dependencies}}
+<dt>{{unbound elem.title}}</dt>
+<dd>{{unbound elem.version}}</dd>
+{{/each}}
+</dl>
+</article>

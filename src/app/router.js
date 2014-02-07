@@ -23,7 +23,7 @@ define( [ "ember" ], function( Ember ) {
 
 		this.route( "settings" );
 
-		this.route( "help" );
+		this.route( "about" );
 
 	});
 

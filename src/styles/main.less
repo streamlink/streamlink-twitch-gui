@@ -28,5 +28,44 @@ h4 { font-size: 1rem; }
 h5 { font-size: .8rem; }
 h6 { font-size: .667rem; }
 
-h1, h2, h3 { margin-top: .75rem; margin-bottom: .75rem; font-family: "Open Sans", "Segoe UI", "Helvetica Neue", sans-serif; }
-h4, h5, h6 { margin-top: .75rem; margin-bottom: .75rem; font-family: "Open Sans", "Segoe UI", "Helvetica Neue", sans-serif; }
+h1, h2, h3, h4, h5, h6 {
+	margin-top: .75rem;
+	margin-bottom: .75rem;
+	font-family: "Open Sans", "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+
+a {
+	color: @color-text-default;
+	text-decoration: underline;
+
+	&:hover {
+		color: @color-twitch-purple;
+		text-decoration: none;
+	}
+
+	&.external-link::after {
+		content: @fa-var-external-link;
+		display: inline-block;
+		font-family: "FontAwesome";
+		padding-left: .333em;
+		text-decoration: none !important;
+	}
+}
+
+
+ul.list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	.clearfix();
+
+	> li {
+		float: left;
+
+		&:not(:last-of-type)::after {
+			content: ",";
+			padding-right: .5em;
+		}
+	}
+}

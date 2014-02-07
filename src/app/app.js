@@ -52,6 +52,9 @@ define(function( require ) {
 			SettingsController: require( "controllers/SettingsController" ),
 			SettingsView: require( "views/SettingsView" ),
 
+			AboutController: require( "controllers/AboutController" ),
+			AboutView: require( "views/AboutView" ),
+
 			StreamItemComponent: require( "components/StreamItemComponent" )
 		});
 
