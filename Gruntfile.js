@@ -134,6 +134,19 @@ module.exports = function( grunt ) {
 			]
 		},
 
+		metadata		: {
+			all				: {
+				dependencies	: [
+					"bower.json",
+					"package.json"
+				],
+				contributors	: {
+					minCommits		: 5
+				},
+				dest			: "build/tmp/metadata.json"
+			}
+		},
+
 		copy			: {
 			app				: {
 				expand			: true,
@@ -244,6 +257,6 @@ module.exports = function( grunt ) {
 	grunt.loadTasks( "build/tasks" );
 
 	grunt.registerTask( "default", [ "" ] );
-	grunt.registerTask( "build", [ "clean", "copy", "less", "requirejs", "string-replace", "uglify", "compile" ] );
+	grunt.registerTask( "build", [ "clean", "copy", "metadata", "less", "requirejs", "string-replace", "uglify", "compile" ] );
 
 };
