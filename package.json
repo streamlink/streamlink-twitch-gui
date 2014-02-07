@@ -1,13 +1,14 @@
 {
-	"name"   : "livestreamer-twitch-gui",
+	"name": "livestreamer-twitch-gui",
 	"version": "0.2.1",
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
+	"homepage": "https://github.com/bastimeyer/livestreamer-twitch-gui",
 
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/bastimeyer/livestreamer-twitch-gui.git"
+		"url": "https://github.com/bastimeyer/livestreamer-twitch-gui.git"
 	},
 
 	"dependencies": {
