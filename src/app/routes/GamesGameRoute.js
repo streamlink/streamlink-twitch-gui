@@ -1,19 +1,17 @@
-define( [ "ember", "models/Streams", "utils/preload" ], function( Ember, Model, preload ) {
+define([
+	"ember",
+	"utils/preload",
+	"models/Streams"
+], function( Ember, preload, ModelStreams ) {
 
 	return Ember.Route.extend({
 		model: function( params ) {
 			this.set( "game", params.game );
 
-			return preload(
-				Model({
-					game: params.game
-				}),
-				function( res ) {
-					return Object.create( res.streams ).map(function( stream ) {
-						return stream.preview;
-					});
-				}
-			);
+			return ModelStreams({
+				game: params.game
+			})
+				.then( preload( "streams.@each.preview" ) );
 		},
 
 		setupController: function( controller, model ) {

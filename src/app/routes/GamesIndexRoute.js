@@ -1,15 +1,13 @@
-define( [ "ember", "models/GamesTop", "utils/preload" ], function( Ember, Model, preload ) {
+define([
+	"ember",
+	"utils/preload",
+	"models/GamesTop"
+], function( Ember, preload, ModelGamesTop ) {
 
 	return Ember.Route.extend({
 		model: function() {
-			return preload(
-				Model(),
-				function( res ) {
-					return Object.create( res.top ).map(function( top ) {
-						return top.game.box.large;
-					});
-				}
-			);
+			return ModelGamesTop()
+				.then( preload( "top.@each.game.@each.box.@each.large" ) );
 		}
 	});
 

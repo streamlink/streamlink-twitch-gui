@@ -1,24 +1,24 @@
-define( [ "jquery" ], function( $ ) {
+define( [ "ember" ], function( Ember ) {
 
 	/**
 	 * Get data from twitch.tv
 	 * @param {string} path
 	 * @param {Object} [params]
-	 * @returns {jQuery.Promise}
+	 * @returns {Ember.RSVP.Promise}
 	 */
 	return function twitch( path, params ) {
 		params = params
 			? "?" + $.param( params )
 			: "";
 
-		return $.ajax({
+		return Ember.RSVP.Promise.cast( Ember.$.ajax({
 			dataType	: "json",
 			url			: "https://api.twitch.tv/kraken/" + path + params,
 			headers		: {
 				accept		: "application/vnd.twitchtv.v2+json"
 			},
 			timeout		: 10000
-		});
+		}) );
 	};
 
 });

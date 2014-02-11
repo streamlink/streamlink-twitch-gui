@@ -1,43 +1,38 @@
 define( [ "ember" ], function( Ember ) {
 
-	return function( dfd, traverse ) {
-		var	deferred = new Ember.Deferred(),
-			result,
-			images;
+	return function preload( withError, list ) {
+		if ( list === undefined ) {
+			list = withError;
+			withError = false;
+		}
 
-		dfd.then( success, error );
-
-		function success( res ) {
-			result = res;
-			images = traverse( res ).map(function( src ) {
-				var image = new Image;
-				image.addEventListener( "load", loaded.bind( image ), false );
-				// ignore all image errors... twitch will send an image placeholder instead
-				image.addEventListener( "error", loaded.bind( image ), false );
+		function createImagePromise( src ) {
+			return new Ember.RSVP.Promise(function promiseImagePreload( resolve, reject ) {
+				var image = new Image();
+				image.addEventListener( "load", resolve, false );
+				image.addEventListener( "error", withError ? reject : resolve, false );
 				image.src = src;
-
-				return image;
 			});
 		}
 
-		function error( err ) {
-			deferred.reject( err );
+		return function promisePreload( response ) {
+			// create a new promise containing all image preload promises
+			return Ember.RSVP.Promise.all(
+				// create a flat array out of all traversal strings
+				Ember.makeArray( list ).reduce(function createPromiseList( promises, traverse ) {
+					return [].concat.apply(
+						promises,
+						// traverse response data
+						Ember.getWithDefault( response, traverse, [] )
+							.toArray()
+							// preload images
+							.map( createImagePromise )
+					);
+				}, [] )
+			)
+				// return the original response
+				.then(function preloadFulfilled() { return response; });
 		}
-
-		function loaded() {
-			// remove the loaded image from the remaining images list
-			var index = images.indexOf( this );
-			if ( index !== -1 ) {
-				images.splice( index, 1 );
-			}
-
-			// remaining images empty? then we're finished preloading
-			if ( images.length === 0 ) {
-				deferred.resolve( result );
-			}
-		}
-
-		return deferred;
 	};
 
 });
