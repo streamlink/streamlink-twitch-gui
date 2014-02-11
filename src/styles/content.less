@@ -142,22 +142,12 @@
 
 	&.list-item-stream {
 		.content-item-grid( 3 );
+		.stream-hover();
 		border-top-width: 0;
 		border-bottom-width: 0;
-
-		&:hover::before {
-			content: @fa-var-play-circle-o;
-			display: block;
-			position: absolute;
-			width: 100%;
-			top: 50%;
-			font: 6em/0 "FontAwesome";
-			color: rgba( 255, 255, 255, 1 );
-			text-align: center;
-			-webkit-text-stroke: .025em #000;
-		}
 	}
 }
+
 
 .description {
 	display: block;
@@ -183,4 +173,80 @@
 			margin-left: ( @width + 1 );
 		}
 	}
+}
+
+.featured {
+	padding-left: .5em;
+	.clearfix();
+
+	.title, .game, .stats, .status {
+		float: right;
+		clear: right;
+		width: 45%;
+		padding-left: 1rem;
+	}
+
+	.title {
+		margin-top: 0;
+	}
+
+	.game {
+		padding-left: 2.667rem;
+
+		&::before {
+			content: @fa-var-gamepad;
+			display: inline-block;
+			width: 1.667rem;
+			margin-left: -1.667rem;
+			font: 1.2em/1.1 FontAwesome;
+		}
+	}
+
+	.stats {
+		> i:not(:first-of-type) {
+			margin-left: .5em;
+		}
+	}
+
+	.status {
+		font-size: .8em;
+	}
+
+	.preview {
+		position: relative;
+		width: 55%;
+		float: left;
+		.stream-hover();
+	}
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+		border: .333rem solid fade( @color-twitch-grey-light, 60% );
+		cursor: pointer;
+	}
+
+	ul {
+		clear: both;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		> li {
+			width: 18%;
+			float: left;
+			margin: 1em 1%;
+
+			&:first-of-type {
+				margin-left: 0;
+			}
+
+		}
+	}
+}
+
+.globalstats {
+	margin: 1em 0;
+	text-align: center;
 }

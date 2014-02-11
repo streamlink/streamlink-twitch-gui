@@ -29,6 +29,7 @@ define(function( require ) {
 			ModalView: require( "views/ModalView" ),
 
 			IndexRoute: require( "routes/IndexRoute" ),
+			IndexController: require( "controllers/IndexController" ),
 			IndexView: require( "views/IndexView" ),
 
 			GamesIndexRoute: require( "routes/GamesIndexRoute" ),

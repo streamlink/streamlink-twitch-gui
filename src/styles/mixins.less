@@ -33,3 +33,21 @@
 		border-top-color: @background-hover;
 	}
 }
+
+
+.stream-hover( @content: @fa-var-play-circle-o ) {
+	cursor: pointer;
+
+	&:hover::before {
+		content: @content;
+		display: block;
+		position: absolute;
+		width: 100%;
+		top: 50%;
+		z-index: 2;
+		font: 6em/0 "FontAwesome";
+		color: rgba( 255, 255, 255, 1 );
+		text-align: center;
+		-webkit-text-stroke: .025em #000;
+	}
+}
