@@ -28,7 +28,7 @@
 
 	"config": {
 		"sourceMaps": false,
-		"node-webkit-version": "0.8.4"
+		"node-webkit-version": "0.9.1"
 	},
 
 	"scripts": {
