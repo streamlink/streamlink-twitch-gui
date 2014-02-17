@@ -45,7 +45,6 @@ module.exports = function( grunt ) {
 					out						: "build/tmp/app/main.js",
 
 					include					: [ "main" ],
-					insertRequire			: [ "main" ],
 
 					findNestedDependencies	: true,
 					generateSourceMaps		: !!pkg.config.sourceMaps,
@@ -113,12 +112,6 @@ module.exports = function( grunt ) {
 					replacements	: [ {
 						pattern			: "@@@dev@@@",
 						replacement		: "false"
-					}, {
-						pattern			: "@@@version@@@",
-						replacement		: "<%= pkg.version %>"
-					}, {
-						pattern			: "@@@repository@@@",
-						replacement		: "<%= pkg.repository.url %>"
 					} ]
 				},
 				files			: {
