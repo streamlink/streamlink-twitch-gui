@@ -32,7 +32,7 @@ requirejs.config({
 		"ember-data"	: "../vendor/ember-data/ember-data",
 		"ember-data-ls"	: "../vendor/ember-localstorage-adapter/localstorage_adapter",
 		"handlebars"	: "../vendor/handlebars/handlebars",
-		"jquery"		: "../vendor/jquery/jquery",
+		"jquery"		: "../vendor/jquery/dist/jquery",
 		"Selecter"		: "../vendor/Selecter/jquery.fs.selecter",
 		"moment"		: "../vendor/momentjs/moment",
 
