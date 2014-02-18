@@ -32,7 +32,7 @@ grunt build
 
 
 
-  [Preview]: https://f.cloud.github.com/assets/467294/1742953/14df2d72-6405-11e3-983b-60c44306e2b8.png "Preview image"
+  [Preview]: https://f.cloud.github.com/assets/467294/2199101/065a5a3c-98d1-11e3-810d-73f7ba8859ca.png "Preview image"
   [Releases]: https://github.com/bastimeyer/livestreamer-twitch-gui/releases "Livestreamer Twitch GUI Releases"
   [Livestreamer]: https://github.com/chrippa/livestreamer "Livestreamer"
   [Twitch]: http://twitch.tv "Twitch.tv"
