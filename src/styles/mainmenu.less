@@ -1,29 +1,16 @@
 
 .mainmenu {
-	@color: #fff;
-	@background-hover: fade( #000, 10% );
-
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	min-width: 200px;
-	width: 25%;
-	background: @color-twitch-purple;
-	z-index: 2;
+	width: @menu-width;
 	-webkit-user-select: none;
 	-webkit-animation: animFadeInLeft .333s ease-out;
 
-	.logo {
-		display: block;
-		width: 75%;
-		margin: 30px auto 2rem;
+	h3 {
+		margin: 0 0 .2em @app-padding;
+		font: lighter 1.75em "Open Sans";
+		letter-spacing: -.025em;
 
-		> img {
-			width: 100%;
-			height: auto;
-			image-rendering: -moz-crisp-edges;
-			image-rendering: -webkit-optimize-contrast;
+		&:not(:first-of-type) {
+			margin-top: .5em;
 		}
 	}
 
@@ -34,84 +21,43 @@
 	}
 
 	li {
-		> i {
-			min-width: 1.75rem;
-			margin-right: .2em;
-			font-size: 1.3em;
-			text-align: center;
-		}
+		position: relative;
+		margin: .15em 0;
 
-		&.disabled {
-			color: fade( @color, 30% );
+		> a {
+			margin-left: @app-padding;
+			text-decoration: none;
+			font-weight: lighter;
 
+			&.active,
 			&:hover {
-				cursor: not-allowed;
+				color: @color-twitch-purple;
+
+				&.disabled {
+					color: @color-text-default;
+					cursor: not-allowed;
+				}
 			}
-		}
 
-		&.active,
-		&:hover:not( .disabled ) {
-			color: fade( @color, 100% );
-			background: @background-hover;
-			cursor: pointer;
-		}
-	}
+			&.active {
+				font-weight: normal;
+			}
 
-	> menu {
-		font-weight: bold;
+			&.active::before {
+				@size: .5em;
 
-		li {
-			width: 75%;
-			margin: 0 12.5%;
-			padding: .5em;
-			color: fade( @color, 100% );
-		}
-	}
-
-	> footer {
-		position: absolute;
-		left: 12.5%;
-		bottom: .5rem;
-		width: 75%;
-
-		li {
-			width: 33.333333%;
-			float: left;
-			padding: .3em;
-			color: fade( @color, 50% );
-
-			> i {
+				content: "";
 				display: block;
-				margin-right: 0;
-				font-size: 1em;
-				text-align: center;
-			}
-
-			> span {
-				display: none;
 				position: absolute;
 				left: 0;
-				bottom: 3.25em;
-				width: 100%;
-				font-size: .75em;
-				padding: .3em .5em;
-				color: fade( @color, 75% );
-				.arrow-bottom( percentage( ( 1 / 6 ) ), @background-hover, .75em );
-			}
-
-			&:hover:not( .disabled ) > span {
-				display: block;
-				background: @background-hover;
-			}
-
-			&:nth-of-type( 2 ) > span {
-				text-align: center;
-				&::before { left: percentage( ( 3 / 6 ) ); }
-			}
-
-			&:nth-of-type( 3 ) > span {
-				text-align: right;
-				&::before { left: percentage( ( 5 / 6 ) ); }
+				top: 50%;
+				width: 0;
+				height: 0;
+				margin-top: -@size;
+				border-width: @size 0 @size @size;
+				border-style: solid;
+				border-color: transparent;
+				border-left-color: @color-twitch-purple;
 			}
 		}
 	}

@@ -10,9 +10,9 @@
 		"resizable": true,
 		"toolbar": false,
 		"show": true,
-		"width": 800,
-		"height": 450,
-		"min_width": 800,
-		"min_height": 450
+		"width": 960,
+		"height": 540,
+		"min_width": 960,
+		"min_height": 540
 	}
 }

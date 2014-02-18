@@ -1,0 +1,18 @@
+
+.content-about {
+	article {
+		.clearfix();
+	}
+
+	.dl-horizontal {
+		@width: 15rem;
+
+		> dt {
+			width: @width;
+		}
+
+		> dd {
+			margin-left: ( @width + 1 );
+		}
+	}
+}

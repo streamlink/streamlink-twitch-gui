@@ -15,10 +15,7 @@ define( [ "jquery" ], function( $ ) {
 						type: "button",
 						tabindex: -1
 					})
-					.addClass( "btn" )
-					.append(
-						$$( "i", "fa fa-search" )
-					)
+					.addClass( "btn fa fa-search" )
 					.appendTo(
 						$$( "span", "input-group-btn" )
 							.appendTo( $grp )

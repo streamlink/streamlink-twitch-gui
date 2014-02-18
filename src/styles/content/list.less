@@ -1,0 +1,95 @@
+
+@content-width: ( @app-width - @menu-width - 2 * @scrollbar-size );
+@additional-width: ( @app-width - @content-width );
+
+
+.content-list {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	color: @color-text-default;
+
+	i {
+		color: @color-text-darker;
+	}
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+		margin: 0;
+	}
+
+	> li {
+		cursor: pointer;
+	}
+}
+
+
+.game-component {
+	@color: @color-text-dark;
+	@background: @color-background;
+
+	position: relative;
+	margin-bottom: 20px;
+	.dynamic-elems-per-row( 4, @content-width, 8%, @additional-width );
+
+	> header,
+	> footer {
+		position: absolute;
+		width: 100%;
+		padding: .33em;
+
+		&, i {
+			color: fade( @color, 0% );
+			background-color: fade( @color-background, 0% );
+			-webkit-transition: color .2s ease-out, background-color .2s ease-out;
+		}
+	}
+
+	&:hover {
+		> header,
+		> footer {
+			color: fade( @color, 100% );
+			background-color: fade( @background, 90% );
+		}
+
+		i {
+			color: fade( @color-text-darker, 100% );
+		}
+	}
+
+	> header {
+		top: 0;
+		text-align: center;
+	}
+
+	> footer {
+		display: flex;
+		justify-content: space-between;
+		bottom: 0;
+	}
+}
+
+.stream-component {
+	margin-bottom: 20px;
+	.dynamic-elems-per-row( 3, @content-width, 8%, @additional-width );
+	.stream-hover();
+
+	> header {
+		padding: .25em 0;
+		overflow: hidden;
+		color: @color-text-dark;
+		text-align: center;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	> footer {
+		display: flex;
+		justify-content: space-between;
+	}
+}

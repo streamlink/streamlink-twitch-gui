@@ -5,8 +5,8 @@ define([
 
 	return Ember.View.extend({
 		defaultTemplate: Ember.Handlebars.compile( IndexTemplate ),
-		tagName: "section",
-		classNames: [ "content-index" ]
+		tagName: "main",
+		classNames: [ "content", "content-index", "wrapper", "vertical" ]
 	});
 
 });

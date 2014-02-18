@@ -1,5 +1,5 @@
-<h2 {{bind-attr title=game}}>{{#link-to "games.index" tagName="i" classNames="fa fa-arrow-circle-o-left"}}{{/link-to}} {{unbound game}}</h2>
-<ul class="clearfix">
+<h2>{{unbound game}}</h2>
+<ul class="content-list">
 {{#each stream in streams}}
 {{stream-item stream=stream action="open_livestreamer"}}
 {{/each}}

@@ -1,4 +1,15 @@
 
+.wrapper {
+	&.horizontal {
+		display: flex;
+		flex-flow: row nowrap;
+	}
+	&.vertical {
+		display: flex;
+		flex-flow: column nowrap;
+	}
+}
+
 .clearfix() {
 	&:before,
 	&:after {
@@ -16,26 +27,8 @@
 	white-space: nowrap;
 }
 
-
-.arrow-bottom( @left; @color; @size: .5em ) {
-	&::before {
-		content: "";
-		display: block;
-		position: absolute;
-		left: @left;
-		top: 100%;
-		width: 0;
-		height: 0;
-		border-color: transparent;
-		border-style: solid;
-		margin-left: -@size;
-		border-width: @size @size 0;
-		border-top-color: @background-hover;
-	}
-}
-
-
 .stream-hover( @content: @fa-var-play-circle-o ) {
+	position: relative;
 	cursor: pointer;
 
 	&:hover::before {
@@ -46,8 +39,33 @@
 		top: 50%;
 		z-index: 2;
 		font: 6em/0 "FontAwesome";
-		color: rgba( 255, 255, 255, 1 );
+		color: @color-text-brightest;
 		text-align: center;
-		-webkit-text-stroke: .025em #000;
+		-webkit-text-stroke: .025em @color-text-darkest;
 	}
+}
+
+/**
+ * Set a dynamic width for wrapped flexbox elements
+ */
+.dynamic-elems-per-row( @min, @container, @spacing, @additional ) {
+	@sp: unit( ( @spacing / 100 ) );
+	// width of all elements in a row combined (percentage)
+	@content: ( 100% - @spacing );
+	// desired element width (pixels)
+	@desired: ( ( 1 - @sp ) * @container / @min );
+
+	// the maximum number of elements in a row is 8
+	.loop( @i ) when ( @i < 9 ) {
+		// window min-width calculation (pixels):
+		// additional width to the content container element
+		// plus the width of all elements including the free space between each one (row width)
+		@media ( min-width: ( @additional + @i * @desired * ( 1 + @sp ) ) ) {
+			flex-basis: ( @content / @i );
+		}
+		.loop( ( @i + 1 ) );
+	}
+
+	// for @i=@min to 8 do...
+	.loop( @min );
 }

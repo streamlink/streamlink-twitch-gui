@@ -1,0 +1,74 @@
+
+.content-index {
+	i {
+		color: @color-text-darker;
+	}
+
+	img {
+		width: 100%;
+		height: auto;
+	}
+
+	.featured {
+		flex: 1;
+		flex-direction: row-reverse;
+		justify-content: space-between;
+		align-items: stretch;
+		margin-bottom: 2rem;
+		overflow: hidden;
+	}
+
+	.info {
+		width: 38.5%;
+
+		.title {
+			margin-top: 0;
+		}
+
+		.game {
+			padding-left: 1.667rem;
+
+			&::before {
+				content: @fa-var-gamepad;
+				display: inline-block;
+				width: 1.667rem;
+				margin-left: -1.667rem;
+				color: @color-text-darker;
+				font: 1.2em/1.1 FontAwesome;
+			}
+		}
+
+		.stats {
+			> i:not(:first-of-type) {
+				margin-left: .5em;
+			}
+		}
+
+		.status {
+			font-size: .8em;
+		}
+	}
+
+	.preview {
+		width: 59%;
+		.stream-hover();
+	}
+
+	.channels {
+		justify-content: space-between;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		> li {
+			width: 18%;
+			cursor: pointer;
+		}
+	}
+
+	.globalstats {
+		height: 3em;
+		line-height: 3em;
+		text-align: center;
+	}
+}

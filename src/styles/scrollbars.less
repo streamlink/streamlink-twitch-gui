@@ -1,24 +1,21 @@
 
 ::-webkit-scrollbar {
-	width: 9px;
-	height: 9px;
-	//width: .65rem;
-	//height: .65rem;
+	width: @scrollbar-size;
+	height: @scrollbar-size;
 }
 
 ::-webkit-scrollbar-track {
-//	background: darken( @color-twitch-grey-light, 15% );
-//	background: darken( @color-twitch-purple-light, 10% );
+	background: @scrollbar-background;
 }
 
 ::-webkit-scrollbar-thumb {
-//	background: darken( @color-twitch-grey-light, 30% );
-	background: @color-twitch-purple;
-//	border-radius: 5px;
-}
+	border: ( ( @scrollbar-size - @scrollbar-thumb-size ) / 2 ) solid transparent;
+	background: @scrollbar-thumb-background;
+	background-clip: content-box;
 
-::-webkit-scrollbar-thumb:hover,
-::-webkit-scrollbar-thumb:active {
-//	background: darken( @color-twitch-grey-light, 60% );
-	background: darken( @color-twitch-purple, 10% );
+	&:hover,
+	&:active {
+		background: @scrollbar-thumb-hover-background;
+		background-clip: content-box;
+	}
 }

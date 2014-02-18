@@ -1,19 +1,17 @@
 
-.loading {
+main.content.content-loading {
 	@width: .667rem;
-	@height: ( @width * 12 );
+	@height: 10rem;
 
-	top: 50% !important;
-	height: @height;
-	margin-top: ( -@height / 2 );
-	overflow-y: hidden !important;
-	text-align: center;
-	-webkit-transform: translateY( -30px ); // add an imaginary titlebar to the bottom
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	overflow: hidden;
 
 	> div {
-		display: inline-block;
 		width: @width;
-		height: 100%;
+		height: @height;
 		margin: 0 ( @width / 4 );
 		background-color: fade( @color-twitch-purple, 85% );
 		-webkit-animation: loadinganim 1.2s infinite ease-in-out;

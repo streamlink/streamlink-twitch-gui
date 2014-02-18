@@ -1,75 +1,166 @@
 
 .titlebar {
-	@btn-def-color		: fade( #000,  20% );
-	@btn-def-bg			: fade( #000,   0% );
-	@btn-hover-color	: fade( @btn-def-color, 60% );
-	@btn-hover-bg		: fade( @btn-def-bg, 8% );
-	@btn-active-color	: #fff;
-	@btn-active-bg		: fade( @color-twitch-purple,  60% );
-	@close-hover-color	: #fff;
-	@close-hover-bg		: fade( @color-twitch-purple, 80% );
-	@close-active-color	: #fff;
-	@close-active-bg	: fade( @color-twitch-purple, 100% );
-
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	height: 28px;
-	padding-left: 25%;
-
-	font-size: 14px;
-	z-index: 1000;
-
+	display: flex;
+	width: 100%;
+	height: @titlebar-height;
 	-webkit-user-select: none;
 	-webkit-app-region: drag;
+	-webkit-animation: animFadeInTop .333s ease-out;
+
+	:disabled {
+		cursor: not-allowed;
+	}
 
 	> h1 {
 		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		margin: 0 11px 0 25%;
-		color: fade( #000, 40% );
+		width: 100%;
+		height: 0;
+		margin: 0;
+		overflow: visible;
+		color: @color-text-bright;
 		font: normal normal 15px/26px "Open Sans", sans-serif;
 		text-align: center;
-		z-index: -1;
 	}
 
-	> i {
+	> .logo {
+		@width: 140px;
+		@height: 46px;
+		@align-top: 9px;
+		@align-left: 3px;
 
 		display: block;
-		height: 28px;
-		margin-left: 0 !important;
-		margin-right: 0 !important;
-		padding: 0 .7em;
+		width: 140px;
+		height: 46px;
+		margin: ( @app-padding - @align-top ) ( @menu-width - @width - @app-padding + @align-left ) 0 ( @app-padding - @align-left );
+		background: url("../img/Twitch_Logo_Purple.png") 0 0 no-repeat;
+		background-size: 100%;
+		-webkit-app-region: no-drag;
+	}
 
-		color: @btn-def-color;
-		background: @btn-def-bg;
+	> .topnav {
+		@btn-size: @titlebar-size;
 
-		line-height: 28px;
-		text-align: center;
+		display: flex;
+		flex-grow: 1;
+		height: @titlebar-size;
+		margin-top: @app-padding;
+		border: 1px solid @color-text-brighter;
+		background: @titlebar-nav-background;
 		-webkit-app-region: no-drag;
 
-		&:hover {
-			color: @btn-hover-color;
-			background: @btn-hover-bg;
-		}
+		> button {
+			padding: 0;
+			border: 0 solid @color-text-brighter;
+			line-height: @titlebar-size;
+			text-align: center;
 
-		&:active {
-			color: @btn-active-color;
-			background: @btn-active-bg;
-		}
-
-		&.win-close {
 			&:hover {
-				color: @close-hover-color;
-				background: @close-hover-bg;
+				color: @color-text-dark;
 			}
-			&:active {
-				color: @close-active-color;
-				background: @close-active-bg;
+		}
+
+		> .btn-nav {
+			width: @btn-size;
+			border-right-width: 1px;
+			color: @color-text-default;
+		}
+
+		> .btn-small {
+			width: ( @titlebar-size * 4 / 5 );
+			color: @color-text-bright;
+			font-size: 85%;
+		}
+
+		> .btn-context-valid {
+			display: none;
+		}
+
+		> [type="search"]:valid ~ .btn-context-valid {
+			display: block;
+
+			&:hover {
+				border-left-width: 1px;
+				border-right-width: 1px;
+			}
+		}
+
+		> .btn-dropdown:hover {
+			border-left-width: 1px;
+		}
+
+		> [type="search"] {
+			flex-grow: 1;
+			padding: ( @titlebar-size / 6 );
+			border: 0;
+			color: @color-text-dark;
+			font: 14px/20px "Open Sans";
+
+			&::-webkit-input-placeholder {
+				color: @color-text-bright;
+				font-style: italic;
+			}
+		}
+	}
+
+	> .buttons {
+		display: flex;
+		flex-direction: row-reverse;
+		height: @titlebar-size;
+		margin: @app-padding ( @app-padding - 4px ) 0 2.5em;
+
+		> button {
+			width: ( @titlebar-size + 6px );
+			height: @titlebar-size;
+			padding: 0;
+			color: @titlebar-btn-color;
+			background: @titlebar-btn-background;
+			font-size: @titlebar-btn-fontsize;
+			line-height: ( @titlebar-size - 2px );
+			text-align: center;
+			-webkit-app-region: no-drag;
+
+			// adjust wrong line heights for these button icons... blaming font awesome <3
+			&.btn-max,
+			&.btn-min {
+				line-height: ( @titlebar-size + 2px );
+			}
+
+			&:hover {
+				color: @titlebar-btn-hover-color;
+				background: @titlebar-btn-hover-background;
+			}
+			&:not(:disabled):active {
+				color: @titlebar-btn-active-color;
+				background: @titlebar-btn-active-background;
+			}
+
+			&.btn-close {
+				&:hover {
+					color: @titlebar-btnclose-hover-color;
+					background: @titlebar-btnclose-hover-background;
+				}
+				&:active {
+					color: @titlebar-btnclose-active-color;
+					background: @titlebar-btnclose-active-background;
+				}
+			}
+		}
+
+		> .spacer {
+			width: 1px;
+			height: ( @app-padding + @titlebar-size + 4px );
+			margin: -@app-padding 7px 0;
+			background: @color-text-brighter;
+		}
+
+		> .loginname {
+			padding: 0 .5em;
+			color: @color-text-bright;
+			line-height: @titlebar-size;
+			-webkit-app-region: no-drag;
+
+			&.nologin {
+				display: none;
 			}
 		}
 	}

@@ -6,8 +6,8 @@ define([
 
 	return Ember.View.extend({
 		template: Ember.Handlebars.compile( Template ),
-		tagName: "section",
-		classNames: [ "content-settings" ],
+		tagName: "main",
+		classNames: [ "content", "content-settings" ],
 
 		didInsertElement: function() {
 			GUIFileselect( this.$() );

@@ -1,8 +1,6 @@
 
-input, button, textarea {
-	&:focus {
-		outline: 0 !important;
-	}
+:focus {
+	outline: 0 !important;
 }
 
 input[type="checkbox"] {
@@ -18,15 +16,15 @@ input[type="checkbox"] {
 		width: 1.1rem;
 		height: 1.1rem;
 		margin-top: .075rem;
-		color: @color-twitch-purple;
+		color: @color-text-dark;
 		font: .85rem/1.2rem "FontAwesome";
 		text-align: center;
 	}
 
 	&::before {
 		content: "";
-		background: @color-text-default;
-		border: .1rem solid @color-twitch-purple;
+		background: @color-text-brightest;
+		border: .1rem solid @color-text-default;
 	}
 
 	&::after {
@@ -44,17 +42,14 @@ input[type="checkbox"] {
 	}
 
 	&:disabled {
-		@color: mix( @color-twitch-grey-dark, @color-twitch-purple, 50% );
-		@background: mix( @color-twitch-grey-light, @color-twitch-purple-light, 50% );
 		&::before {
-			border-color: @color;
-			background: @background;
+			border-color: @input-color-disabled;
 		}
 		&::after {
-			color: @color;
+			color: @input-color-disabled;
 		}
 		& + span {
-			color: mix( @color-twitch-grey-light, @color-twitch-purple-light, 80% );
+			color: @color-text-bright;
 		}
 	}
 }
@@ -63,21 +58,22 @@ input[type="checkbox"] {
 input[type="text"] {
 	height: 2em;
 	padding: .4em;
-	border: .1em solid @color-twitch-purple;
+	border: .1em solid @input-border;
 	border-radius: 0;
+	color: @input-color;
 	font-size: inherit;
-	color: @color-twitch-purple;
 	text-overflow: ellipsis;
+	background: @input-background;
 	box-shadow: 0 0 0 !important;
 	-webkit-box-shadow: 0 0 0 !important;
 
 	&:focus {
-		padding: .35em;
-		border: .15em solid @color-twitch-purple;
+		border-color: @input-border-focus;
 	}
 
 	&::-webkit-input-placeholder {
-		color: @color-twitch-purple-light;
+		color: @color-text-bright;
+		font-style: italic;
 	}
 
 	&.form-control + .input-group-btn > .btn {
@@ -88,48 +84,59 @@ input[type="text"] {
 	}
 
 	&:disabled {
-		@color: mix( @color-twitch-grey-dark, @color-twitch-purple, 50% );
-		@background: mix( @color-twitch-grey-light, @color-twitch-purple-light, 50% );
-		border-color: @color;
-		background: @background;
-		color: @color;
-		-webkit-user-select: none;
-
-		&::-webkit-input-placeholder {
-			color: fade( @color, 50% );
-		}
-
-		&, & + .input-group-btn > button {
-			cursor: not-allowed;
-		}
+		border-color: @input-border-disabled;
+		color: @input-color-disabled;
 	}
 }
+
+input:disabled {
+	background: @input-background;
+	-webkit-user-select: none;
+
+	&, & + .input-group-btn > button {
+		cursor: not-allowed;
+	}
+}
+
 
 .input-group .form-control:first-child {
 	border-right-width: 0 !important;
 }
 
 
+// wtf... cannot use fieldset flexboxes in blink
 fieldset {
-	margin: 0 .5em 2em;
+	margin-bottom: 2em;
+	.clearfix();
 
-	> .row {
+	> legend {
+		margin: 0 0 1em;
+		padding: 0 0 .25em;
+		border-bottom: 1px solid @color-text-brighter;
+		color: @color-text-default;
+		font-size: 1em;
+		font-weight: lighter;
+	}
+
+	> :not(legend) {
 		margin-bottom: 1em;
+	}
+
+	> .left {
+		width: 33.333%;
+		float: left;
+		clear: both;
+	}
+
+	> .right {
+		width: 66.667%;
+		float: right;
 	}
 
 	&.submit {
 		margin-top: 3em;
 		text-align: center;
 	}
-}
-
-legend {
-	margin: 0 0 1em;
-	padding: 0 0 .25em;
-	border-bottom: 1px solid fade( #fff, 50% );
-	color: #fff;
-	font-size: 1em;
-	font-weight: bold;
 }
 
 
@@ -143,7 +150,8 @@ legend {
 	border-width: .1em;
 	border-radius: 0;
 	font-size: 1em;
-	color: @color-text-default !important;
+	color: @color-text-brightest !important;
+	z-index: initial !important;
 
 	.btn-color();
 	&.btn-success { .btn-color( @color-success ); }
@@ -173,7 +181,7 @@ legend {
 		> i {
 			margin-left: -1em;
 			font-size: 1.25em;
-			color: fade( #fff, 50% );
+			color: fade( @color-text-brightest, 50% ) !important;
 			vertical-align: top;
 		}
 	}
@@ -185,17 +193,17 @@ legend {
 
 	> .selecter-selected,
 	> .selecter-options {
-		color: @color-twitch-purple;
+		color: @select-color;
 		font-size: inherit;
 		box-shadow: none;
 	}
 
 	> .selecter-selected {
 		position: relative;
-		border: .1em solid @color-twitch-purple;
+		border: .1em solid @select-border;
 		border-radius: 0;
 		padding: .2em 1.4em .2em .4em;
-		background: #fff;
+		background: @select-background-selected;
 
 		&::after {
 			content: @fa-var-caret-down;
@@ -206,37 +214,36 @@ legend {
 		}
 	}
 
-	>.selecter-options {
+	> .selecter-options {
 		max-height: 10em;
-		border: 0 !important;
-		border-radius: 0 !important;
-		background: transparent;
-		box-shadow: 0 0 0 0.125rem @color-twitch-purple;
+		border: 0;
+		border-radius: 0;
+		background: @select-background;
+	}
+
+	&.open > .selecter-options {
+		border: 1px solid @select-border-focus;
 	}
 
 	.selecter-item {
 		padding: .2em .4em;
-		border: .1em solid @color-twitch-purple;
-		border-bottom: 0;
+		border: 0;
 		border-radius: 0 !important;
 		color: inherit;
 		font-size: inherit;
 
-		&:hover {
-			background: mix( #fff, @color-twitch-purple-light, 75% );
-		}
-
 		&.selected {
-			background: @color-twitch-purple !important;
-			color: #fff;
+			color: @select-color-selected;
+			font-weight: bold;
+			background: transparent;
 		}
 
-		&:last-child {
-			border-bottom: .1em solid @color-twitch-purple;
+		&:hover {
+			background: @select-background-hover;
 		}
-	}
 
-	&.bottom .selecter-item:last-child {
-		border: .1em solid @color-twitch-purple;
+		&:not(:last-of-type) {
+			border-bottom: 1px solid @select-border-inner;
+		}
 	}
 }

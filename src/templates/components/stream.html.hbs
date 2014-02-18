@@ -1,6 +1,6 @@
-<p class="text-outside title">{{unbound stream.channel.display_name}}</p>
+<header>{{unbound stream.channel.display_name}}</header>
 <img src="{{unbound stream.preview}}">
-<p class="text-outside info">
-<span class="half"><i class="fa fa-clock-o"></i> {{unbound hours-from-now stream.channel.updated_at}}</span>
-<span class="half text-right">{{unbound format-viewers stream.viewers}} <i class="fa fa-users"></i></span>
-</p>
+<footer>
+<span><i class="fa fa-clock-o"></i> {{unbound hours-from-now stream.channel.updated_at}}</span>
+<span>{{unbound format-viewers stream.viewers}} <i class="fa fa-users"></i></span>
+</footer>

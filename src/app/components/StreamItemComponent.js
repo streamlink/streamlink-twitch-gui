@@ -6,7 +6,7 @@ define([
 	return Ember.Component.extend({
 		layout: Ember.Handlebars.compile( Template ),
 		tagName: "li",
-		classNames: [ "list-item list-item-stream" ],
+		classNames: [ "stream-component" ],
 		attributeBindings: [ "title" ],
 		title: function() {
 			return this.get( "stream.channel.status" );

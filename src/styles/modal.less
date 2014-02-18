@@ -1,5 +1,9 @@
 
 .mymodal {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
 	position: fixed;
 	left: 0;
 	right: 0;
@@ -9,27 +13,30 @@
 	background: fade( #000, 50% );
 	-webkit-animation: fadeIn .333s ease-out;
 
-	> section {
-		position: absolute;
-		left: 8rem;
-		right: 8rem;
-		top: 50%;
-		height: 16rem;
-		margin-top: -8rem;
-		padding: 2rem 2rem 6rem;
-		background: @color-twitch-purple;
+	> div {
+		display: flex;
+		flex-flow: column nowrap;
+		width: 45rem;
+		min-height: 16rem;
+		margin: 5rem 0;
+		padding: 2rem;
+		background: @color-background;
 		-webkit-animation: animFadeInTop .333s ease-out;
 	}
 
+	.content {
+		flex: 1;
+		margin-bottom: 2rem;
+	}
+
 	header {
+		color: @color-text-dark;
 		font-size: 2em;
+		font-weight: lighter;
 		margin-bottom: .5em;
 	}
 
 	footer {
-		position: absolute;
-		bottom: 2rem;
-
 		> button {
 			min-width: 8em;
 		}

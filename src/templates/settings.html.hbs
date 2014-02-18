@@ -1,41 +1,21 @@
 <h2>Settings</h2>
 <fieldset>
 <legend>Livestreamer settings</legend>
-<div class="row">
-<div class="col-xs-4"><i class="fa fa-cog"></i> Executable location<span class="description">By omitting a value, Livestreamer has to be added to the $PATH-Variable.</span></div>
-<div class="col-xs-8" data-fileselect>
-{{input type="text" value=content.livestreamer classNames="form-control" placeholder="Leave blank for default location"}}
-</div>
-</div>
-<div class="row">
-<div class="col-xs-4"><i class="fa fa-eye"></i> Preferred quality<span class="description">Choose the default stream quality.</span></div>
-<div class="col-xs-8">
-{{view Ember.Select value=content.quality content=model.qualities optionValuePath="content.id" optionLabelPath="content.label"}}
-</div>
-</div>
+<div class="left"><i class="fa fa-cog"></i> Executable location<span class="description">By omitting a value, Livestreamer has to be added to the $PATH-Variable.</span></div>
+<div class="right" data-fileselect>{{input type="text" value=content.livestreamer classNames="form-control" placeholder="Leave blank for default location"}}</div>
+<div class="left"><i class="fa fa-eye"></i> Preferred quality<span class="description">Choose the default stream quality.</span></div>
+<div class="right">{{view Ember.Select value=content.quality content=model.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 </fieldset>
 <fieldset>
 <legend>Videoplayer settings</legend>
-<div class="row">
-<div class="col-xs-4"><i class="fa fa-desktop"></i> Videoplayer<span class="description">Use a custom player which is not defined in your livestreamer config.</span></div>
-<div class="col-xs-8" data-fileselect>
-{{input type="text" value=content.player class="form-control" placeholder="Leave blank for default player"}}
-</div>
-</div>
-<div class="row">
-<div class="col-xs-4"><i class="fa fa-code"></i> Parameters<span class="description">Add player specific arguments</span></div>
-<div class="col-xs-8">
-{{input type="text" value=content.player_params classNames="col-xs-12" placeholder="Add custom arguments"}}
-</div>
-</div>
-<div class="row">
-<div class="col-xs-4"><i class="fa fa-refresh"></i> Reconnect<span class="description">In case the connection has been dropped.</span></div>
-<div class="col-xs-8"><label>{{input type="checkbox" checked=content.player_reconnect}}<span>Reconnect to stream</span></label></div>
-</div>
-<div class="row">
-<div class="col-xs-4"><i class="fa fa-times"></i> Close player<span class="description">After the stream has finished.</span></div>
-<div class="col-xs-8"><label>{{input type="checkbox" checked=content.player_no_close}}<span>Do not close the player</span></label></div>
-</div>
+<div class="left"><i class="fa fa-desktop"></i> Videoplayer<span class="description">Use a custom player which is not defined in your livestreamer config.</span></div>
+<div class="right" data-fileselect>{{input type="text" value=content.player class="form-control" placeholder="Leave blank for default player"}}</div>
+<div class="left"><i class="fa fa-code"></i> Parameters<span class="description">Add player specific arguments</span></div>
+<div class="right">{{input type="text" value=content.player_params classNames="col-xs-12" placeholder="Add custom arguments"}}</div>
+<div class="left"><i class="fa fa-refresh"></i> Reconnect<span class="description">In case the connection has been dropped.</span></div>
+<div class="right"><label>{{input type="checkbox" checked=content.player_reconnect}}<span>Reconnect to stream</span></label></div>
+<div class="left"><i class="fa fa-times"></i> Close player<span class="description">After the stream has finished.</span></div>
+<div class="right"><label>{{input type="checkbox" checked=content.player_no_close}}<span>Do not close the player</span></label></div>
 </fieldset>
 <fieldset class="submit">
 <button type="button" class="btn btn-with-icon btn-success" {{action "apply"}}><i class="fa fa-check"></i> Apply</button>

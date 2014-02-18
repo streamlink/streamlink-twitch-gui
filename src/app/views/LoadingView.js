@@ -5,8 +5,8 @@ define([
 
 	return Ember.View.extend({
 		template: Ember.Handlebars.compile( Template ),
-		tagName: "section",
-		classNames: [ "loading" ]
+		tagName: "main",
+		classNames: [ "content content-loading" ]
 	});
 
 });

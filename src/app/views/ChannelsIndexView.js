@@ -5,8 +5,8 @@ define([
 
 	return Ember.View.extend({
 		template: Ember.Handlebars.compile( Template ),
-		tagName: "section",
-		classNames: [ "content-channels" ]
+		tagName: "main",
+		classNames: [ "content", "content-channels" ]
 	});
 
 });

@@ -1,16 +1,18 @@
 <h2>Featured channels</h2>
-<section class="featured">
+<section class="featured wrapper horizontal">
+<aside class="info">
 <h3 class="title">{{stream.channel.name}}</h3>
-<div class="preview" {{action "open_livestreamer" stream}}><img {{bind-attr src=stream.preview}}></div>
 <p class="game">{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</p>
 <p class="stats"><i class="fa fa-clock-o"></i> {{hours-from-now stream.channel.updated_at}} <i class="fa fa-users"></i> {{format-viewers stream.viewers}}</p>
 <p class="status">{{stream.channel.status}}</p>
-<ul>
+</aside>
+<div class="preview" {{action "open_livestreamer" stream}}><img {{bind-attr src=stream.preview}}></div>
+</section>
+<ul class="channels wrapper horizontal">
 {{#each featured in model.featured}}
 <li {{bind-attr title="featured.channel.name"}} {{action "switchFeatured" featured.stream}}>
 <img src="{{unbound featured.image}}" title="{{unbound featured.stream.channel.name}}">
 </li>
 {{/each}}
 </ul>
-</section>
 <section class="globalstats">There are {{model.summary.viewers}} people watching {{model.summary.channels}} live streams right now!</section>

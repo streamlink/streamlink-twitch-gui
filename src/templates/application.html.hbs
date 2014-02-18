@@ -1,40 +1,57 @@
-<section class="titlebar">
+<header class="titlebar">
 <h1>Livestreamer Twitch GUI</h1>
-<i class="pull-right fa fa-times win-close" {{action "winClose"}}></i>
-<i class="pull-right fa fa-plus win-max" {{action "winMax"}}></i>
-<i class="pull-right fa fa-minus win-min" {{action "winMin"}}></i>
+{{#link-to "index" classNames="logo" activeClass=""}}{{/link-to}}
+<nav class="topnav">
+<button type="button" class="btn-nav fa fa-chevron-left" {{action "history" -1}}></button>
+<button type="button" class="btn-nav fa fa-chevron-right" {{action "history" 1}}></button>
+{{input type="search" placeholder="Search" disabled=true}}
+<button type="button" class="btn-small btn-context-valid fa fa-times"></button>
+<button type="button" class="btn-small btn-context-valid fa fa-search"></button>
+<button type="button" class="btn-small btn-dropdown fa fa-chevron-down" disabled></button>
+</nav>
+<nav class="buttons">
+<button type="button" class="btn-close fa fa-times" {{action "winClose"}}></button>
+<button type="button" class="btn-max fa fa-plus" {{action "winMax"}}></button>
+<button type="button" class="btn-min fa fa-minus" {{action "winMin"}}></button>
+<div class="spacer"></div>
 {{#if dev}}
-<i class="pull-right fa fa-code win-dev" {{action "winDevTools"}}></i>
-<i class="pull-right fa fa-refresh win-refresh" {{action "winRefresh"}}></i>
+<button type="button" class="btn-dev fa fa-code" {{action "winDevTools"}}></button>
+<button type="button" class="btn-refresh fa fa-refresh" {{action "winRefresh"}}></button>
+<div class="spacer"></div>
 {{/if}}
-</section>
+<button type="button" class="btn-settings fa fa-cog" {{action "goto" "settings"}}></button>
+<button type="button" class="btn-login fa fa-user" disabled></button>
+<div {{bind-attr class=":loginname isLoggedin::nologin"}}>{{loginname}}</div>
+</nav>
+</header>
 
-<section class="mainmenu">
-{{#link-to "index" classNames="logo" activeClass=""}}<img src="img/Twitch_Logo_White.png">{{/link-to}}
-<menu>
+<div class="wrapper horizontal">
+
+<aside class="mainmenu">
 <nav>
+<h3>Browse</h3>
 <ul>
-{{#link-to "games" tagName="li"}}<i class="fa fa-gamepad"></i> Games{{/link-to}}
-{{#link-to "channels" tagName="li"}}<i class="fa fa-video-camera"></i> Channels{{/link-to}}
-{{#link-to "videos" tagName="li" disabled=true}}<i class="fa fa-film"></i> Videos{{/link-to}}
-{{#link-to "following" tagName="li" disabled=true}}<i class="fa fa-heart"></i> Following{{/link-to}}
-{{#link-to "subscriptions" tagName="li" disabled=true}}<i class="fa fa-credit-card"></i> Subscriptions{{/link-to}}
+<li>{{#link-to "index"}}Featured{{/link-to}}</li>
+<li>{{#link-to "games"}}Top Games{{/link-to}}</li>
+<li>{{#link-to "channels"}}Top Channels{{/link-to}}</li>
+</ul>
+<h3>Your</h3>
+<ul>
+<li>{{#link-to "history" disabled=true}}Recent Activity{{/link-to}}</li>
+<li>{{#link-to "mostviewed" disabled=true}}Most Viewed{{/link-to}}</li>
+<li>{{#link-to "following" disabled=true}}Favorites{{/link-to}}</li>
+<li>{{#link-to "subscriptions" disabled=true}}Subscriptions{{/link-to}}</li>
+</ul>
+<h3>Misc</h3>
+<ul>
+<li>{{#link-to "settings"}}Settings{{/link-to}}</li>
+<li>{{#link-to "about"}}About{{/link-to}}</li>
 </ul>
 </nav>
-</menu>
-<footer>
-<nav>
-<ul>
-{{#link-to "settings" tagName="li"}}<i class="fa fa-cogs"></i><span>Change settings</span>{{/link-to}}
-{{#link-to "about" tagName="li"}}<i class="fa fa-question"></i><span>About</span>{{/link-to}}
-<li {{action "fork"}}><i class="fa fa-github"></i><span><i class="fa fa-external-link"></i> Fork on Github</span></li>
-</ul>
-</nav>
-</footer>
-</section>
+</aside>
 
-<section class="content">
 {{outlet}}
-</section>
+
+</div>
 
 {{outlet modal}}

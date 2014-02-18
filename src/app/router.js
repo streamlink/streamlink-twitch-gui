@@ -1,4 +1,5 @@
 define( [ "ember" ], function( Ember ) {
+
 	var Router = Ember.Router.extend();
 
 	Router.map(function() {
@@ -17,6 +18,10 @@ define( [ "ember" ], function( Ember ) {
 			this.route( "video", { path: "/:video" } );
 		});
 
+		this.route( "history" );
+
+		this.route( "mostviewed" );
+
 		this.route( "following" );
 
 		this.route( "subscriptions" );
@@ -28,4 +33,5 @@ define( [ "ember" ], function( Ember ) {
 	});
 
 	return Router;
+
 });
