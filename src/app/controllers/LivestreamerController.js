@@ -73,7 +73,7 @@ define( [ "ember" ], function( Ember ) {
 				}.bind( this ) );
 
 				function kill() {
-					livestreamer.kill( "SIGTERM" );
+					livestreamer && livestreamer.kill( "SIGTERM" );
 				}
 			}
 		}
