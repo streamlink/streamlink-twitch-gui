@@ -1,4 +1,3 @@
-
 module.exports = function( grunt ) {
 	"use strict";
 
@@ -10,7 +9,7 @@ module.exports = function( grunt ) {
 				case "win32":
 					grunt.task.run( [ "nodewebkit:win", "compress:win" ] );
 					return;
-				case "mac":
+				case "darwin":
 					grunt.task.run( [ "nodewebkit:mac", "compress:mac" ] );
 					return;
 				case "linux":
