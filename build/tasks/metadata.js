@@ -56,7 +56,7 @@ module.exports = function( grunt ) {
 					author: json.author,
 					version: json.version,
 					built: grunt.template.today( "isoDateTime" ),
-					nodewebkit: json.config[ "node-webkit-version" ]
+					config: json.config
 				};
 			});
 	}
