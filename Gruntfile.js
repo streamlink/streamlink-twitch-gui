@@ -233,6 +233,22 @@ module.exports = function( grunt ) {
 
 		compile: {
 			all: {}
+		},
+
+		watch: {
+			files: [ "src/**" ],
+			tasks: [ "build" ],
+			options: {
+				livereload: true
+			}
+		},
+
+		connect: {
+			dev: {
+				options: {
+					base: "build/tmp/"
+				}
+			}
 		}
 	});
 
@@ -244,12 +260,16 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( "grunt-contrib-clean" );
 	grunt.loadNpmTasks( "grunt-contrib-copy" );
 	grunt.loadNpmTasks( "grunt-contrib-compress" );
+	grunt.loadNpmTasks( "grunt-contrib-connect" );
+	grunt.loadNpmTasks( "grunt-contrib-watch" );
 	grunt.loadNpmTasks( "grunt-node-webkit-builder" );
 	grunt.loadNpmTasks( "grunt-string-replace" );
 
 	grunt.loadTasks( "build/tasks" );
 
-	grunt.registerTask( "default", [ "" ] );
-	grunt.registerTask( "build", [ "clean", "copy", "metadata", "less", "requirejs", "string-replace", "uglify", "compile" ] );
+	grunt.registerTask( "default", [ "build" ] );
+	grunt.registerTask( "build", ["clean", "copy", "metadata", "less", "requirejs"]);
+	grunt.registerTask( "dev", ["build", "connect", "watch"] );
+	grunt.registerTask( "release", [ "build", "string-replace", "uglify", "compile" ] );
 
 };
