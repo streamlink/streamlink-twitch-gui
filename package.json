@@ -1,37 +1,37 @@
 {
-  "name": "livestreamer-twitch-gui",
-  "version": "0.3.0",
-  "license": "MIT",
-  "author": "Sebastian Meyer",
-  "homepage": "https://github.com/bastimeyer/livestreamer-twitch-gui",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bastimeyer/livestreamer-twitch-gui.git"
-  },
-  "dependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-less": "~0.9.0",
-    "grunt-contrib-jshint": "~0.8.0",
-    "grunt-contrib-requirejs": "~0.4.1",
-    "grunt-contrib-uglify": "~0.3.2",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-compress": "~0.6.0",
-    "grunt-node-webkit-builder": "~0.1.17",
-    "grunt-string-replace": "~0.2.7",
-    "q": "~1.0.0",
-    "q-io": "~1.10.8"
-  },
-  "config": {
-    "sourceMaps": false,
-    "node-webkit-version": "0.9.1"
-  },
-  "scripts": {
-    "build": "grunt build"
-  },
-  "devDependencies": {
-    "grunt-contrib-connect": "^0.7.1",
-    "grunt": "^0.4.4",
-    "grunt-contrib-watch": "^0.6.1"
-  }
+	"name": "livestreamer-twitch-gui",
+	"version": "0.3.0",
+	"license": "MIT",
+	"author": "Sebastian Meyer",
+	"homepage": "https://github.com/bastimeyer/livestreamer-twitch-gui",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bastimeyer/livestreamer-twitch-gui.git"
+	},
+	"dependencies": {
+		"grunt": "~0.4.2",
+		"grunt-contrib-less": "~0.9.0",
+		"grunt-contrib-jshint": "~0.8.0",
+		"grunt-contrib-requirejs": "~0.4.1",
+		"grunt-contrib-uglify": "~0.3.2",
+		"grunt-contrib-clean": "~0.5.0",
+		"grunt-contrib-copy": "~0.5.0",
+		"grunt-contrib-compress": "~0.6.0",
+		"grunt-node-webkit-builder": "~0.1.17",
+		"grunt-string-replace": "~0.2.7",
+		"q": "~1.0.0",
+		"q-io": "~1.10.8"
+	},
+	"config": {
+		"sourceMaps": false,
+		"node-webkit-version": "0.9.1"
+	},
+	"scripts": {
+		"build": "grunt build"
+	},
+	"devDependencies": {
+		"grunt-contrib-connect": "^0.7.1",
+		"grunt": "^0.4.4",
+		"grunt-contrib-watch": "^0.6.1"
+	}
 }
