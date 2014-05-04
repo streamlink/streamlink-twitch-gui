@@ -34,15 +34,19 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"openModal": function( head, body, buttons ) {
-				var Modal = this.controllerFor( "modal" );
-				Modal.set( "head", head );
-				Modal.set( "body", body );
-				Modal.set( "buttons", buttons );
+				this.send( "updateModal", head, body, buttons );
 
 				return this.render( "modal", {
 					into		: "application",
 					outlet		: "modal"
 				});
+			},
+
+			"updateModal": function( head, body, buttons ) {
+				var Modal = this.controllerFor( "modal" );
+				if (    head !== undefined ) { Modal.set(    "head",    head ); }
+				if (    body !== undefined ) { Modal.set(    "body",    body ); }
+				if ( buttons !== undefined ) { Modal.set( "buttons", buttons ); }
 			},
 
 			"closeModal": function() {

@@ -1,6 +1,6 @@
 <div>
-<header>{{#if head}}{{unbound head}}{{else}}Please confirm{{/if}}</header>
-<section class="content">{{#if body}}{{unbound body}}{{else}}Are you sure?{{/if}}</section>
+<header>{{#if head}}{{head}}{{else}}Please confirm{{/if}}</header>
+<section class="content">{{#if body}}{{body}}{{else}}Are you sure?{{/if}}</section>
 <footer>
 {{#each button in buttons}}
 <button type="button" class="btn btn-with-icon {{unbound button.button}}" {{action "close" button.action}}><i class="fa {{unbound button.icon}}"></i> {{unbound button.value}}</button>
