@@ -27,7 +27,7 @@ You will then find the built executable inside the `/build/releases` folder.
 npm install -g grunt-cli bower # may require administrator privileges
 npm install
 bower install
-grunt build
+grunt release
 ```
 
 

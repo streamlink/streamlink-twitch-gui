@@ -7,22 +7,28 @@ module.exports = function( grunt ) {
 		pkg				: pkg,
 
 		less			: {
-			all				: {
+			options			: {
+				compress			: true,
+				// cleancss still has no soucemap support
+				// https://github.com/gruntjs/grunt-contrib-less/issues/165
+				cleancss			: false,
+				relativeUrls		: true,
+				strictMath			: true,
+				strictUnits			: true
+			},
+			dev				: {
 				options			: {
-					compress			: true,
-					// cleancss disables sourcemaps in current less version (1.5.1)
-					cleancss			: false,
-					relativeUrls		: true,
-					strictMath			: true,
-					strictUnits			: true,
-					sourceMap			: !!pkg.config.sourceMaps,
-					sourceMapFilename	: pkg.config.sourceMaps
-						? "app.css.map"
-						: null,
-					sourceMapBasepath	: pkg.config.sourceMaps
-						? __dirname + "/src"
-						: null
+					sourceMap			: true,
+					sourceMapFilename	: "build/tmp/styles/app.css.map",
+					sourceMapURL		: "app.css.map",
+					sourceMapBasepath	: __dirname + "/src",
+					sourceMapRootpath	: "../../../",
+					outputSourceFiles	: true
 				},
+				src				: "src/styles/app.less",
+				dest			: "build/tmp/styles/app.css"
+			},
+			release			: {
 				src				: "src/styles/app.less",
 				dest			: "build/tmp/styles/app.css"
 			}
@@ -36,83 +42,76 @@ module.exports = function( grunt ) {
 		},
 
 		requirejs		: {
-			all				: {
+			options			: {
+				baseUrl					: "src/app",
+				mainConfigFile			: "src/app/config.js",
+
+				name					: "",
+				out						: "build/tmp/app/main.js",
+
+				include					: [ "main" ],
+
+				findNestedDependencies	: true,
+				generateSourceMaps		: false,
+				optimize				: "none",
+
+				/*
+				 * Create module definitions for all non-AMD modules!
+				 */
+				skipModuleInsertion		: false,
+				/*
+				 * Handlebars doesn't register itself to the global namespace properly... :(
+				 * var Handlebars=(function(){...})()
+				 * So we can't use a shim config which reads from the global namespace
+				 * this.Handlebars === undefined
+				 * So Handlebars and Ember will only work if we don't wrap all the code :(((
+				 */
+				wrap					: false,
+
+				skipSemiColonInsertion	: true,
+				useStrict				: true,
+				preserveLicenseComments	: true
+			},
+			dev				: {
 				options			: {
-					baseUrl					: "src/app",
-					mainConfigFile			: "src/app/config.js",
-
-					name					: "",
-					out						: "build/tmp/app/main.js",
-
-					include					: [ "main" ],
-
-					findNestedDependencies	: true,
-					generateSourceMaps		: !!pkg.config.sourceMaps,
-					optimize				: "none",
-
-					/*
-					 * Create module definitions for all non-AMD modules!
-					 */
-					skipModuleInsertion		: false,
-					/*
-					 * Handlebars doesn't register itself to the global namespace properly... :(
-					 * var Handlebars=(function(){...})()
-					 * So we can't use a shim config which reads from the global namespace
-					 * this.Handlebars === undefined
-					 * So Handlebars and Ember will only work if we don't wrap all the code :(((
-					 */
-					wrap					: false,
-
-					skipSemiColonInsertion	: true,
-					useStrict				: true,
-					preserveLicenseComments	: true
+					generateSourceMaps	: true
 				}
-			}
+			},
+			release			: {}
 		},
 
 		uglify			: {
-			all				: {
-				options			: {
-					compress			: {
-						global_defs			: {
-							DEBUG				: false
-						}
-					},
-					mangle				: true,
-					beautify			: false,
-					preserveComments	: "some",
-
-					sourceMap			: pkg.config.sourceMaps
-						? "build/tmp/app/main.js.map"
-						: false,
-					sourceMappingURL	: pkg.config.sourceMaps
-						? "main.js.map"
-						: null,
-					sourceMapIn			: pkg.config.sourceMaps
-						? "build/tmp/app/main.js.map"
-						: null,
-
-					report				: "min",
-					banner				: [
-						"/*!",
-						" * <%= pkg.name %>",
-						" * @version v<%= pkg.version %>",
-						" * @date <%= grunt.template.today('yyyy-mm-dd') %>",
-						" * @copyright <%= pkg.author %>",
-						" */"
-					].join( "\n" )
+			options			: {
+				compress			: {
+					global_defs			: {
+						DEBUG				: false
+					}
 				},
-				src				: "build/tmp/app/main.js",
+				mangle				: true,
+				beautify			: false,
+				preserveComments	: "some",
+
+				report				: "min",
+				banner				: [
+					"/*!",
+					" * <%= pkg.name %>",
+					" * @version v<%= pkg.version %>",
+					" * @date <%= grunt.template.today('yyyy-mm-dd') %>",
+					" * @copyright <%= pkg.author %>",
+					" */"
+				].join( "\n" )
+			},
+			release			: {
 				// overwrite input file
+				src				: "build/tmp/app/main.js",
 				dest			: "build/tmp/app/main.js"
 			}
 		},
 
 		clean			: {
-			build			: [
-				"build/releases",
-				"build/tmp"
-			]
+			options			: { force: true },
+			dev				: [ "build/tmp/**", "!build/tmp" ],
+			release			: [ "build/{tmp,releases}/**", "!build/{tmp,releases}" ]
 		},
 
 		metadata		: {
@@ -129,7 +128,7 @@ module.exports = function( grunt ) {
 		},
 
 		copy			: {
-			app				: {
+			all				: {
 				expand			: true,
 				cwd				: "src",
 				src				: [
@@ -141,6 +140,17 @@ module.exports = function( grunt ) {
 					"img/**"
 				],
 				dest			: "build/tmp"
+			}
+		},
+
+		watch			: {
+			less			: {
+				files			: [ "src/**/*.less" ],
+				tasks			: [ "less:dev" ]
+			},
+			js				: {
+				files			: [ "src/**/*.js" ],
+				tasks			: [ "requirejs:dev" ]
 			}
 		},
 
@@ -232,11 +242,14 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( "grunt-contrib-less" );
 	grunt.loadNpmTasks( "grunt-contrib-requirejs" );
 	grunt.loadNpmTasks( "grunt-contrib-uglify" );
+	grunt.loadNpmTasks( "grunt-contrib-watch" );
 	grunt.loadNpmTasks( "grunt-node-webkit-builder" );
 
 	grunt.loadTasks( "build/tasks" );
 
 	grunt.registerTask( "default", [ "" ] );
-	grunt.registerTask( "build", [ "clean", "copy", "metadata", "less", "requirejs", "uglify", "compile" ] );
+	grunt.registerTask( "build", [ "clean:dev", "copy", "metadata", "less:dev", "requirejs:dev" ] );
+	grunt.registerTask( "dev", [ "build", "watch" ] );
+	grunt.registerTask( "release", [ "clean:release", "copy", "metadata", "less:release", "requirejs:release", "uglify", "compile" ] );
 
 };
