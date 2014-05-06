@@ -1,7 +1,7 @@
 define( [ "ember" ], function( Ember ) {
 
 	var	FS		= require( "fs" ),
-		isWin	= /win/.test( process.platform ),
+		isWin	= /^win/.test( process.platform ),
 		PATH	= process.env.PATH || process.env.Path || process.env.path || ".",
 		PATHS	= PATH.split( isWin ? ";" : ":" ),
 		EXTS	= [ ".exe" ]; // isWin ? process.env.PATHEXT.split( ";" ) : null;
