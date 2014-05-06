@@ -74,7 +74,9 @@ module.exports = function( grunt ) {
 			all				: {
 				options			: {
 					compress			: {
-						global_defs			: {}
+						global_defs			: {
+							DEBUG				: false
+						}
 					},
 					mangle				: true,
 					beautify			: false,
@@ -103,20 +105,6 @@ module.exports = function( grunt ) {
 				src				: "build/tmp/app/main.js",
 				// overwrite input file
 				dest			: "build/tmp/app/main.js"
-			}
-		},
-
-		"string-replace": {
-			all				: {
-				options			: {
-					replacements	: [ {
-						pattern			: "@@@dev@@@",
-						replacement		: "false"
-					} ]
-				},
-				files			: {
-					"build/tmp/app/main.js": "build/tmp/app/main.js"
-				}
 			}
 		},
 
@@ -245,11 +233,10 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( "grunt-contrib-requirejs" );
 	grunt.loadNpmTasks( "grunt-contrib-uglify" );
 	grunt.loadNpmTasks( "grunt-node-webkit-builder" );
-	grunt.loadNpmTasks( "grunt-string-replace" );
 
 	grunt.loadTasks( "build/tasks" );
 
 	grunt.registerTask( "default", [ "" ] );
-	grunt.registerTask( "build", [ "clean", "copy", "metadata", "less", "requirejs", "string-replace", "uglify", "compile" ] );
+	grunt.registerTask( "build", [ "clean", "copy", "metadata", "less", "requirejs", "uglify", "compile" ] );
 
 };

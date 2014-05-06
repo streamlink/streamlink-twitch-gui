@@ -21,7 +21,6 @@
 		"grunt-contrib-requirejs": "~0.4.4",
 		"grunt-contrib-uglify": "~0.4.0",
 		"grunt-node-webkit-builder": "~0.1.21",
-		"grunt-string-replace": "~0.2.7",
 		"q": "~1.0.1",
 		"q-io": "~1.11.0"
 	},
