@@ -12,6 +12,8 @@ define([
 			return this.get( "stream.channel.status" );
 		}.property( "stream.channel.status" ),
 
+		action: "open_livestreamer",
+
 		click: function() {
 			this.sendAction( "action", this.get( "stream" ) );
 		}
