@@ -1,0 +1,12 @@
+<button type="button" class="btn-nav fa fa-chevron-left" {{action "history" -1}}></button>
+<button type="button" class="btn-nav fa fa-chevron-right" {{action "history" 1}}></button>
+{{input type="search" placeholder="Search" value=query required=true action="submit"}}
+<button type="button" class="btn-small btn-context-valid fa fa-times" {{action "clear"}}></button>
+<button type="button" class="btn-small btn-context-valid fa fa-search" {{action "submit"}}></button>
+<button type="button" class="btn-small btn-dropdown fa fa-chevron-down" {{action "toggleDropdown"}}></button>
+<div {{bind-attr class=":searchbar-dropdown showDropdown::hidden"}}>
+<section class="filters">
+<div class="title">Filter results</div>
+{{radio-buttons content=filters value=filter name="searchfilters" classNames="default"}}
+</section>
+</div>

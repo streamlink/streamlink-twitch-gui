@@ -6,6 +6,8 @@ define( [ "ember" ], function( Ember ) {
 
 		this.route( "index", { path: "/" } );
 
+		this.route( "search", { path: "/search/:filter/:query" } );
+
 		this.resource( "games", function() {
 			this.route( "game", { path: "/:game" } );
 		});

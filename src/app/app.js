@@ -28,9 +28,18 @@ define(function( require ) {
 			ModalController: require( "controllers/ModalController" ),
 			ModalView: require( "views/ModalView" ),
 
+			SearchbarController: require( "controllers/SearchbarController" ),
+			SearchbarView: require( "views/SearchbarView" ),
+
 			IndexRoute: require( "routes/IndexRoute" ),
 			IndexController: require( "controllers/IndexController" ),
 			IndexView: require( "views/IndexView" ),
+
+			SearchRoute: require( "routes/SearchRoute" ),
+			SearchController: require( "controllers/SearchController" ),
+			SearchView: require( "views/SearchView" ),
+			SearchLoadingRoute: require( "routes/LoadingRoute" ),
+			SearchLoadingView: require( "views/LoadingView" ),
 
 			GamesIndexRoute: require( "routes/GamesIndexRoute" ),
 			GamesIndexController: require( "controllers/GamesIndexController" ),

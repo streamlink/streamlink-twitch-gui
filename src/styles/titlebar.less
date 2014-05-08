@@ -37,20 +37,19 @@
 		-webkit-app-region: no-drag;
 	}
 
-	> .topnav {
-		@btn-size: @titlebar-size;
-
+	> .searchbar {
 		display: flex;
+		position: relative;
 		flex-grow: 1;
 		height: @titlebar-size;
 		margin-top: @app-padding;
-		border: 1px solid @color-text-brighter;
-		background: @titlebar-nav-background;
+		border: 1px solid @searchbar-border-color;
+		background: @searchbar-background;
 		-webkit-app-region: no-drag;
 
 		> button {
 			padding: 0;
-			border: 0 solid @color-text-brighter;
+			border: 0 solid @searchbar-border-color;
 			line-height: @titlebar-size;
 			text-align: center;
 
@@ -60,13 +59,13 @@
 		}
 
 		> .btn-nav {
-			width: @btn-size;
+			width: @searchbar-btn-size;
 			border-right-width: 1px;
 			color: @color-text-default;
 		}
 
 		> .btn-small {
-			width: ( @titlebar-size * 4 / 5 );
+			width: ( @searchbar-btn-size * 4 / 5 );
 			color: @color-text-bright;
 			font-size: 85%;
 		}
@@ -90,7 +89,7 @@
 
 		> [type="search"] {
 			flex-grow: 1;
-			padding: ( @titlebar-size / 6 );
+			padding: @searchbar-padding;
 			border: 0;
 			color: @color-text-dark;
 			font: 14px/20px "Open Sans";
@@ -162,6 +161,60 @@
 			&.nologin {
 				display: none;
 			}
+		}
+	}
+}
+
+.searchbar-dropdown {
+	-webkit-app-region: no-drag;
+
+	position: absolute;
+	left: ( 2 * @searchbar-btn-size );
+	right: 0;
+	top: 100%;
+	max-height: 8rem;
+	margin-top: 1px;
+	padding: @searchbar-padding;
+	outline: 1px solid @color-text-brighter;
+	background: @input-background;
+	z-index: 100;
+
+	&.hidden {
+		display: none;
+	}
+
+	label {
+		margin: 0;
+	}
+
+	.filters {
+		display: flex;
+
+		> .title {
+			flex: 1;
+			line-height: 1.75em;
+		}
+
+		input {
+			display: none;
+		}
+
+		label {
+			display: inline-block;
+			padding: .25em;
+			border: 1px solid @searchbar-border-color;
+			background: @searchbar-filter-background;
+			line-height: 1em;
+			font-weight: normal;
+			cursor: pointer;
+
+			&:hover {
+				background: @searchbar-filter-background-hover;
+			}
+		}
+
+		input:checked + label {
+			background: @searchbar-filter-background-checked;
 		}
 	}
 }

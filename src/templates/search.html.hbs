@@ -1,0 +1,24 @@
+<h2>{{unbound filterlabel}} search results: <span>{{unbound query}}</span></h2>
+{{#if noresults}}
+<section class="noresults">Your query didn't match anything...</section>
+{{/if}}
+{{#if games.length}}
+<section class="search-games">
+{{#if notFiltered}}<h3>Games</h3>{{/if}}
+<ul class="content-list">
+{{#each games}}
+{{game-item game=this}}
+{{/each}}
+</ul>
+</section>
+{{/if}}
+{{#if streams.length}}
+<section class="search-streams">
+{{#if notFiltered}}<h3>Streams</h3>{{/if}}
+<ul class="content-list">
+{{#each stream in streams}}
+{{stream-item stream=stream action="open_livestreamer"}}
+{{/each}}
+</ul>
+</section>
+{{/if}}

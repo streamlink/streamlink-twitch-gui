@@ -1,14 +1,7 @@
 <header class="titlebar">
 <h1>Livestreamer Twitch GUI</h1>
 {{#link-to "index" classNames="logo" activeClass=""}}{{/link-to}}
-<nav class="topnav">
-<button type="button" class="btn-nav fa fa-chevron-left" {{action "history" -1}}></button>
-<button type="button" class="btn-nav fa fa-chevron-right" {{action "history" 1}}></button>
-{{input type="search" placeholder="Search" disabled=true}}
-<button type="button" class="btn-small btn-context-valid fa fa-times"></button>
-<button type="button" class="btn-small btn-context-valid fa fa-search"></button>
-<button type="button" class="btn-small btn-dropdown fa fa-chevron-down" disabled></button>
-</nav>
+{{render "searchbar"}}
 <nav class="buttons">
 <button type="button" class="btn-close fa fa-times" {{action "winClose"}}></button>
 <button type="button" class="btn-max fa fa-plus" {{action "winMax"}}></button>
