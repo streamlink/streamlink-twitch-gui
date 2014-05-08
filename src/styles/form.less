@@ -3,54 +3,60 @@
 	outline: 0 !important;
 }
 
-input[type="checkbox"] {
-	position: relative;
-	width: 1rem;
-	height: 1rem;
-	margin: 0;
-	visibility: hidden;
+:not( .default ) {
+	input[type="checkbox"]&,
+	input[type="radio"]& {
+		position: relative;
+		width: 1rem;
+		height: 1rem;
+		margin: 0;
+		visibility: hidden;
 
-	&::before, &::after {
-		position: absolute;
-		visibility: visible;
-		width: 1.1rem;
-		height: 1.1rem;
-		margin-top: .075rem;
-		color: @color-text-dark;
-		font: .85rem/1.2rem "FontAwesome";
-		text-align: center;
+		&::before, &::after {
+			position: absolute;
+			visibility: visible;
+			width: 1.1rem;
+			height: 1.1rem;
+			margin-top: .075rem;
+			color: @color-text-dark;
+			font: .85rem/1.2rem "FontAwesome";
+			text-align: center;
+		}
+
+		&::before {
+			content: "";
+			background: @color-text-brightest;
+			border: .1rem solid @color-text-default;
+		}
+
+		&::after {
+			content: "";
+		}
+
+		& + span {
+			display: inline-block;
+			margin-left: .5em;
+			font-weight: normal;
+		}
+
+		&:disabled {
+			&::before {
+				border-color: @input-color-disabled;
+			}
+			&::after {
+				color: @input-color-disabled;
+			}
+			& + span {
+				color: @color-text-bright;
+			}
+		}
 	}
 
-	&::before {
-		content: "";
-		background: @color-text-brightest;
-		border: .1rem solid @color-text-default;
-	}
-
-	&::after {
-		content: "";
-	}
-
-	&:checked::after {
+	input[type="checkbox"]&:checked::after {
 		content: @fa-var-check;
 	}
-
-	& + span {
-		display: inline-block;
-		margin-left: .5em;
-		font-weight: normal;
-	}
-
-	&:disabled {
-		&::before {
-			border-color: @input-color-disabled;
-		}
-		&::after {
-			color: @input-color-disabled;
-		}
-		& + span {
-			color: @color-text-bright;
-		}
+	input[type="radio"]&:checked::after {
+		content: @fa-var-times;
 	}
 }
 
