@@ -1,13 +1,6 @@
 <h2>Top Games</h2>
 <ul class="content-list">
 {{#each top}}
-{{#link-to "games.game" game.name tagName="li" classNames="game-component"}}
-<header>{{unbound game.name}}</header>
-<img src="{{unbound game.box.large}}">
-<footer>
-<span><i class="fa fa-video-camera"></i> {{unbound channels}}</span>
-<span>{{unbound format-viewers viewers}} <i class="fa fa-users"></i></span>
-</footer>
-{{/link-to}}
+{{game-item game=game channels=channels viewers=viewers}}
 {{/each}}
 </ul>

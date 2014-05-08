@@ -18,15 +18,6 @@ define( [ "ember" ], function( Ember ) {
 		nwWindow: nwWindow,
 
 		actions: {
-			"history": function( action ) {
-				window.history.go( +action );
-			},
-
-			"goto": function( where ) {
-				console.log( this );
-				this.target.router.transitionTo( where );
-			},
-
 			"winRefresh": function() {
 				nwWindow && nwWindow.reloadIgnoringCache();
 			},
@@ -45,10 +36,6 @@ define( [ "ember" ], function( Ember ) {
 
 			"winClose": function() {
 				nwWindow && nwWindow.close();
-			},
-
-			"fork": function() {
-				this.send( "open_browser", this.get( "model.package.homepage" ) );
 			}
 		}
 	});

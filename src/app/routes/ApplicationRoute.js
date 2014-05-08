@@ -12,7 +12,7 @@ define( [ "ember" ], function( Ember ) {
 		},
 
 		model: function() {
-			return Ember.$.getJSON( "/metadata.json" );
+			return Ember.$.getJSON( "metadata.json" );
 		},
 
 		setupController: function( controller, model ) {
@@ -21,6 +21,14 @@ define( [ "ember" ], function( Ember ) {
 
 
 		actions: {
+			"history": function( action ) {
+				window.history.go( +action );
+			},
+
+			"goto": function() {
+				this.transitionTo.apply( this, arguments );
+			},
+
 			"open_browser": function( url ) {
 				this.get( "controller.nwGui" ).Shell.openExternal( url );
 			},

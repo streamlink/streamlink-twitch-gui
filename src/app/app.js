@@ -56,6 +56,7 @@ define(function( require ) {
 			AboutController: require( "controllers/AboutController" ),
 			AboutView: require( "views/AboutView" ),
 
+			GameItemComponent: require( "components/GameItemComponent" ),
 			StreamItemComponent: require( "components/StreamItemComponent" ),
 
 			LivestreamerController: require( "controllers/LivestreamerController" )
