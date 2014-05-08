@@ -1,0 +1,4 @@
+{{#each content}}
+{{radio-button id=id classNames=view.classNames name=view.name value=value selection=view.value}}
+<label {{bind-attr for=id}}>{{unbound label}}</label>
+{{/each}}
