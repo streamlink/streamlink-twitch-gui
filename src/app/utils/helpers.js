@@ -1,5 +1,9 @@
 define( [ "ember", "moment" ], function( Ember, Moment ) {
 
+	Ember.Handlebars.helper( "time-from-now", function( date, suffix ) {
+		return Moment( date ).fromNow( suffix );
+	});
+
 	Ember.Handlebars.helper( "hours-from-now", function( datestr ) {
 		return Math.max( 0, Moment().diff( datestr, "hours", true ) ).toFixed( 1 ) + "h";
 	});
