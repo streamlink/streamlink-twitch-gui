@@ -28,6 +28,7 @@ define(function( require ) {
 			ModalController: require( "controllers/ModalController" ),
 			ModalView: require( "views/ModalView" ),
 
+			Searchbar: require( "models/Searchbar" ),
 			SearchbarController: require( "controllers/SearchbarController" ),
 			SearchbarView: require( "views/SearchbarView" ),
 

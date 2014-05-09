@@ -5,8 +5,25 @@
 <button type="button" class="btn-small btn-context-valid fa fa-search" {{action "submit"}}></button>
 <button type="button" class="btn-small btn-dropdown fa fa-chevron-down" {{action "toggleDropdown"}}></button>
 <div {{bind-attr class=":searchbar-dropdown showDropdown::hidden"}}>
-<section class="filters">
-<div class="title">Filter results</div>
+<section class="wrapper filters">
+<div>Filter results</div>
 {{radio-buttons content=filters value=filter name="searchfilters" classNames="default"}}
 </section>
+{{#if content.length}}
+<section class="recent">
+<div class="wrapper">
+<div>Recent searches</div>
+<div class="clear" {{action "clearHistory"}}><i class="fa fa-trash-o"></i></div>
+</div>
+<ul class="list-unstyled">
+{{#each sortedContent}}
+<li {{action "searchHistory" this}}>
+<div class="filter">{{unbound label}}</div>
+<div class="query">{{unbound query}}</div>
+<div class="date">{{unbound time-from-now date false}}</div>
+</li>
+{{/each}}
+</ul>
+</section>
+{{/if}}
 </div>

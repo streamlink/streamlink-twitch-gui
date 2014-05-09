@@ -172,10 +172,10 @@
 	left: ( 2 * @searchbar-btn-size );
 	right: 0;
 	top: 100%;
-	max-height: 8rem;
 	margin-top: 1px;
 	padding: @searchbar-padding;
 	outline: 1px solid @color-text-brighter;
+	font-size: @searchbar-dropdown-fontsize;
 	background: @input-background;
 	z-index: 100;
 
@@ -183,16 +183,26 @@
 		display: none;
 	}
 
-	label {
-		margin: 0;
+	.wrapper {
+		display: flex;
+		padding-bottom: 1px;
+		line-height: 1.5em;
+
+		> div {
+			flex: 1;
+
+			&:first-of-type {
+				padding: 1px 0;
+			}
+		}
 	}
 
 	.filters {
-		display: flex;
-
-		> .title {
-			flex: 1;
-			line-height: 1.75em;
+		> div:last-of-type {
+			display: flex;
+			justify-content: flex-end;
+			flex: none;
+			width: 15em;
 		}
 
 		input {
@@ -200,21 +210,77 @@
 		}
 
 		label {
-			display: inline-block;
-			padding: .25em;
-			border: 1px solid @searchbar-border-color;
-			background: @searchbar-filter-background;
-			line-height: 1em;
-			font-weight: normal;
+			.button();
+			flex: 1;
+		}
+
+		input:checked + label {
+			background: @searchbar-filter-background-checked;
+		}
+	}
+
+	.recent {
+		margin-top: @searchbar-padding;
+		padding-top: @searchbar-padding;
+		border-top: 1px solid mix( @searchbar-background, @searchbar-border-color );
+
+		.clear {
+			.button();
+			flex: none;
+
+			> i {
+				font-size: 1rem;
+			}
+		}
+
+		ul {
+			margin: .25em 0 0;
+		}
+
+		li {
+			display: flex;
+			color: @color-text-bright;
+			line-height: 1.3em;
 			cursor: pointer;
 
 			&:hover {
 				background: @searchbar-filter-background-hover;
 			}
-		}
 
-		input:checked + label {
-			background: @searchbar-filter-background-checked;
+			> div {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			> .filter {
+				width: 4em;
+			}
+
+			> .query {
+				flex: 1;
+			}
+
+			> .date {
+				font-size: .85em;
+			}
+		}
+	}
+
+
+	.button() {
+		display: block;
+		margin: 0 0 0 @searchbar-padding;
+		padding: 0 .25em;
+		border: 1px solid @searchbar-border-color;
+		background: @searchbar-filter-background;
+		line-height: 1.5em;
+		font-weight: normal;
+		text-align: center;
+		cursor: pointer;
+
+		&:hover {
+			background: @searchbar-filter-background-hover;
 		}
 	}
 }
