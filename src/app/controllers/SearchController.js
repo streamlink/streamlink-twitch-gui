@@ -1,17 +1,11 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "ember", "models/Search" ], function( Ember, Search ) {
 
 	return Ember.ObjectController.extend({
-		filters: [
-			{ id: "searchfilter0", label: "All", value: "all" },
-			{ id: "searchfilter1", label: "Game", value: "games" },
-			{ id: "searchfilter2", label: "Stream", value: "streams" }
-		],
-
 		filterlabel: function() {
 			var filter = this.get( "filter" );
-			return this.filters.filter(function( elem ) {
-				return elem.value === filter;
-			})[0].label;
+			return filter in Search.filtermap
+				? Search.filtermap[ filter ].label
+				: "All";
 		}.property( "filter" ),
 
 		notFiltered: function() {

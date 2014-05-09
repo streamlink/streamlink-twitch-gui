@@ -1,6 +1,6 @@
 define( [ "ember", "utils/twitch" ], function( Ember, twitch ) {
 
-	return function( params ) {
+	function Search( params ) {
 		params = params || {};
 
 		return Ember.RSVP.Promise.all([
@@ -26,5 +26,22 @@ define( [ "ember", "utils/twitch" ], function( Ember, twitch ) {
 				};
 			});
 	}
+
+	Search.filters = [
+		{ label: "All", value: "all" },
+		{ label: "Game", value: "games" },
+		{ label: "Stream", value: "streams" }
+	];
+
+	Search.filters.forEach(function( filter, i ) {
+		filter.id = "searchfilter" + i;
+	});
+
+	Search.filtermap = Search.filters.reduce(function( map, filter ) {
+		map[ filter.value ] = filter;
+		return map;
+	}, {} );
+
+	return Search;
 
 });

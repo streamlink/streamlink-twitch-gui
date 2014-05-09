@@ -1,13 +1,11 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "ember", "models/Search" ], function( Ember, Search ) {
 
 	return Ember.ObjectController.extend({
 		needs: [ "search" ],
 
 		showDropdown: false,
 
-		filters: function() {
-			return this.get( "controllers.search.filters" );
-		}.property( "controllers.search.filters" ),
+		filters: function() { return Search.filters; }.property(),
 
 		filter: "all",
 		query: "",
