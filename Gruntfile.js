@@ -233,7 +233,7 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( "default", [ "" ] );
 	grunt.registerTask( "build", [ "clean:dev", "copy", "metadata", "less:dev", "requirejs:dev" ] );
+	grunt.registerTask( "buildrelease", [ "clean:release", "copy", "metadata", "less:release", "requirejs:release", "uglify" ] );
 	grunt.registerTask( "dev", [ "build", "watch" ] );
-	grunt.registerTask( "release", [ "clean:release", "copy", "metadata", "less:release", "requirejs:release", "uglify", "compile" ] );
 
 };
