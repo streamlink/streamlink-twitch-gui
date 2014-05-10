@@ -3,4 +3,5 @@
 /src/vendor/
 /build/*
 !/build/tasks
+!/build/script
 /dist/

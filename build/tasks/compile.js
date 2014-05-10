@@ -2,10 +2,10 @@ module.exports = function( grunt ) {
 	"use strict";
 
 	var	configs = {
-			"win"		: { task:     "win", platform:  "win32", arch:  null },
-			"mac"		: { task:     "mac", platform: "darwin", arch:  null },
-			"linux32"	: { task: "linux32", platform:  "linux", arch: "x86" },
-			"linux64"	: { task: "linux64", platform:  "linux", arch: "x64" }
+			"win"		: { platform:  "win32", arch:  null, tasks: [ "nodewebkit:win", "compress:win" ] },
+			"mac"		: { platform: "darwin", arch:  null, tasks: [ "nodewebkit:mac", "compress:mac" ] },
+			"linux32"	: { platform:  "linux", arch: "x86", tasks: [ "nodewebkit:linux32", "copy:linux32start", "compress:linux32" ] },
+			"linux64"	: { platform:  "linux", arch: "x64", tasks: [ "nodewebkit:linux64", "copy:linux64start", "compress:linux64" ] }
 		};
 
 	grunt.task.registerTask(
@@ -38,8 +38,7 @@ module.exports = function( grunt ) {
 			}
 
 			tasks.forEach(function( task ) {
-				task = configs[ task ].task;
-				grunt.task.run([ "nodewebkit:" + task, "compress:" + task ]);
+				grunt.task.run( configs[ task ].tasks );
 			});
 		}
 	);

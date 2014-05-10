@@ -128,7 +128,7 @@ module.exports = function( grunt ) {
 		},
 
 		copy			: {
-			all				: {
+			build			: {
 				expand			: true,
 				cwd				: "src",
 				src				: [
@@ -140,6 +140,16 @@ module.exports = function( grunt ) {
 					"img/**"
 				],
 				dest			: "build/tmp"
+			},
+			linux32start	: {
+				options			: { mode: 493 }, // 0755 (js strict mode)
+				src				: "build/script/start.sh",
+				dest			: "build/releases/<%= pkg.name %>/linux32/<%= pkg.name %>/start.sh"
+			},
+			linux64start	: {
+				options			: { mode: 493 }, // 0755 (js strict mode)
+				src				: "build/script/start.sh",
+				dest			: "build/releases/<%= pkg.name %>/linux64/<%= pkg.name %>/start.sh"
 			}
 		},
 
@@ -232,8 +242,8 @@ module.exports = function( grunt ) {
 	grunt.loadTasks( "build/tasks" );
 
 	grunt.registerTask( "default", [ "" ] );
-	grunt.registerTask( "build", [ "clean:dev", "copy", "metadata", "less:dev", "requirejs:dev" ] );
-	grunt.registerTask( "buildrelease", [ "clean:release", "copy", "metadata", "less:release", "requirejs:release", "uglify" ] );
+	grunt.registerTask( "build", [ "clean:dev", "copy:build", "metadata", "less:dev", "requirejs:dev" ] );
+	grunt.registerTask( "buildrelease", [ "clean:release", "copy:build", "metadata", "less:release", "requirejs:release", "uglify" ] );
 	grunt.registerTask( "dev", [ "build", "watch" ] );
 
 };
