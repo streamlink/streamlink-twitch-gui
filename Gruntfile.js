@@ -172,11 +172,11 @@ module.exports = function( grunt ) {
 				options			: { mac: true },
 				src				: "build/tmp/**"
 			},
-			linux32				: {
+			linux32			: {
 				options			: { linux32: true },
 				src				: "build/tmp/**"
 			},
-			linux64				: {
+			linux64			: {
 				options			: { linux64: true },
 				src				: "build/tmp/**"
 			}
@@ -184,53 +184,37 @@ module.exports = function( grunt ) {
 
 		compress		: {
 			options			: {
-				mode			: "zip",
+				mode			: "tgz",
 				level			: 9
 			},
 			win				: {
-				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-win.zip" },
-				files			: [ {
-					expand			: true,
-					flatten			: true,
-					cwd				: "build/releases/<%= pkg.name %>",
-					src				: [ "win/**" ],
-					dest			: "<%= pkg.name %>"
-				} ]
+				options			: { mode: "zip", archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-win.zip" },
+				expand			: true,
+				cwd				: "build/releases/<%= pkg.name %>/win",
+				src				: [ "**" ],
+				dest			: ""
 			},
 			mac				: {
-				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-mac.zip" },
-				files			: [ {
-					expand			: true,
-					flatten			: true,
-					cwd				: "build/releases/<%= pkg.name %>",
-					src				: [ "mac/**" ],
-					dest			: "<%= pkg.name %>"
-				} ]
+				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-mac.tar.gz" },
+				expand			: true,
+				cwd				: "build/releases/<%= pkg.name %>/mac",
+				src				: [ "**" ],
+				dest			: ""
 			},
 			linux32			: {
-				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-linux32.zip" },
-				files			: [ {
-					expand			: true,
-					flatten			: true,
-					cwd				: "build/releases/<%= pkg.name %>",
-					src				: [ "linux32/**" ],
-					dest			: "<%= pkg.name %>"
-				} ]
+				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-linux32.tar.gz" },
+				expand			: true,
+				cwd				: "build/releases/<%= pkg.name %>/linux32",
+				src				: [ "**" ],
+				dest			: ""
 			},
 			linux64			: {
-				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-linux64.zip" },
-				files			: [ {
-					expand			: true,
-					flatten			: true,
-					cwd				: "build/releases/<%= pkg.name %>",
-					src				: [ "linux64/**" ],
-					dest			: "<%= pkg.name %>"
-				} ]
+				options			: { archive: "dist/<%= pkg.name %>-v<%= pkg.version %>-linux64.tar.gz" },
+				expand			: true,
+				cwd				: "build/releases/<%= pkg.name %>/linux64",
+				src				: [ "**" ],
+				dest			: ""
 			}
-		},
-
-		compile: {
-			all: {}
 		}
 	});
 
