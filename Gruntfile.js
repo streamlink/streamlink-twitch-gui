@@ -242,8 +242,8 @@ module.exports = function( grunt ) {
 	grunt.loadTasks( "build/tasks" );
 
 	grunt.registerTask( "default", [ "" ] );
-	grunt.registerTask( "build", [ "clean:dev", "copy:build", "metadata", "less:dev", "requirejs:dev" ] );
-	grunt.registerTask( "buildrelease", [ "clean:release", "copy:build", "metadata", "less:release", "requirejs:release", "uglify" ] );
+	grunt.registerTask( "build", [ "jshint", "clean:dev", "copy:build", "metadata", "less:dev", "requirejs:dev" ] );
+	grunt.registerTask( "buildrelease", [ "jshint", "clean:release", "copy:build", "metadata", "less:release", "requirejs:release", "uglify" ] );
 	grunt.registerTask( "dev", [ "build", "watch" ] );
 
 };

@@ -1,23 +1,29 @@
 {
 	"browser"  : true,
-	"validthis": true,
-	"laxcomma" : true,
+	"node"     : true,
+
 	"laxbreak" : true,
-	"eqeqeq"   : false,
 	"eqnull"   : true,
 	"debug"    : true,
 	"devel"    : true,
-	"curly"    : false,
+	"curly"    : true,
 	"boss"     : true,
 	"expr"     : true,
 	"asi"      : true,
+	"noempty"  : true,
 
 	"undef"    : true,
-	"unused"   : false,
-	"evil"     : true,
+	"latedef"  : true,
+	"unused"   : true,
 	"sub"      : true,
 
+	"quotmark" : "double",
+	"trailing" : true,
+	"indent"   : 4,
+	"maxlen"   : 100,
+
 	"globals"  : {
-		"define" : true
+		"define" : true,
+		"DEBUG"  : true
 	}
 }
