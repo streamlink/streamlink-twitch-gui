@@ -8,7 +8,7 @@ define( [ "ember" ], function( Ember ) {
 	 */
 	return function twitch( path, params ) {
 		params = params
-			? "?" + $.param( params )
+			? "?" + Ember.$.param( params )
 			: "";
 
 		return Ember.RSVP.Promise.cast( Ember.$.ajax({

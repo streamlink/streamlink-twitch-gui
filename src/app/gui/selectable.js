@@ -8,7 +8,9 @@ define(function() {
 				selectable = false;
 
 				var el = e.target;
-				if ( /input|textarea/i.test( el.tagName ) ) return;
+				if ( /input|textarea/i.test( el.tagName ) ) {
+					return;
+				}
 				do {
 					if ( el.dataset && "selectable" in el.dataset ) {
 						return;

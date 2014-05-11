@@ -67,30 +67,7 @@ define(function() {
 		 * Tests if smooth scrolling is allowed. Shuts down everything if not.
 		 */
 		function initTest() {
-
-			var disableKeyboard = false;
-
-			// disable everything if the page is blacklisted
-			if (options.excluded) {
-				var domains = options.excluded.split(/[,\n] ?/);
-				domains.push("mail.google.com"); // exclude Gmail for now
-				for (var i = domains.length; i--;) {
-					if (document.URL.indexOf(domains[i]) > -1) {
-						observer && observer.disconnect();
-						removeEvent("mousewheel", wheel);
-						disableKeyboard = true;
-						isExcluded = true;
-						break;
-					}
-				}
-			}
-
-			// disable keyboard support if anything above requested it
-			if (disableKeyboard) {
-				removeEvent("keydown", keydown);
-			}
-
-			if (options.keyboardSupport && !disableKeyboard) {
+			if (options.keyboardSupport) {
 				addEvent("keydown", keydown);
 			}
 		}
@@ -100,7 +77,7 @@ define(function() {
 		 */
 		function init() {
 
-			if (!document.body) return;
+			if (!document.body) { return; }
 
 			var body = document.body;
 			var html = document.documentElement;
@@ -108,14 +85,14 @@ define(function() {
 			var scrollHeight = body.scrollHeight;
 
 			// check compat mode for root element
-			root = (document.compatMode.indexOf('CSS') >= 0) ? html : body;
+			root = (document.compatMode.indexOf("CSS") >= 0) ? html : body;
 			activeElement = body;
 
 			initTest();
 			initDone = true;
 
 			// Checks if this script is running in a frame
-			if (top != self) {
+			if (window.top != window.self) {
 				isFrame = true;
 			}
 
@@ -134,12 +111,12 @@ define(function() {
 					if (!pending && html.scrollHeight != document.height) {
 						pending = true; // add a new pending action
 						setTimeout(function () {
-							html.style.height = document.height + 'px';
+							html.style.height = document.height + "px";
 							pending = false;
 						}, 500); // act rarely to stay fast
 					}
 				};
-				html.style.height = 'auto';
+				html.style.height = "auto";
 				setTimeout(refresh, 10);
 
 				var config = {
@@ -173,7 +150,7 @@ define(function() {
 
 		var que = [];
 		var pending = false;
-		var lastScroll = +new Date;
+		var lastScroll = +new Date();
 
 		/**
 		 * Pushes scroll actions to the scrolling queue.
@@ -184,7 +161,7 @@ define(function() {
 			directionCheck(left, top);
 
 			if (options.accelerationMax != 1) {
-				var now = +new Date;
+				var now = +new Date();
 				var elapsed = now - lastScroll;
 				if (elapsed < options.accelerationDelta) {
 					var factor = (1 + (30 / elapsed)) / 2;
@@ -194,7 +171,7 @@ define(function() {
 						top  *= factor;
 					}
 				}
-				lastScroll = +new Date;
+				lastScroll = +new Date();
 			}
 
 			// push a scroll command
@@ -203,7 +180,7 @@ define(function() {
 				y: top,
 				lastX: (left < 0) ? 0.99 : -0.99,
 				lastY: (top  < 0) ? 0.99 : -0.99,
-				start: +new Date
+				start: +new Date()
 			});
 
 			// don't act if there's a pending queue
@@ -215,7 +192,7 @@ define(function() {
 
 			var step = function () {
 
-				var now = +new Date;
+				var now = +new Date();
 				var scrollX = 0;
 				var scrollY = 0;
 
@@ -256,8 +233,8 @@ define(function() {
 					window.scrollBy(scrollX, scrollY);
 				}
 				else {
-					if (scrollX) elem.scrollLeft += scrollX;
-					if (scrollY) elem.scrollTop  += scrollY;
+					if (scrollX) { elem.scrollLeft += scrollX; }
+					if (scrollY) { elem.scrollTop  += scrollY; }
 				}
 
 				// clean up if there's nothing left to do
@@ -357,11 +334,9 @@ define(function() {
 
 			var shift, x = 0, y = 0;
 			var elem = overflowingAncestor(activeElement);
-			var clientHeight = elem.clientHeight;
-
-			if (elem == document.body) {
-				clientHeight = window.innerHeight;
-			}
+			var clientHeight = !elem || elem === document.body
+				? window.innerHeight
+				: elem.clientHeight;
 
 			switch (event.keyCode) {
 				case key.up:
@@ -424,8 +399,9 @@ define(function() {
 		})();
 
 		function setCache(elems, overflowing) {
-			for (var i = elems.length; i--;)
-				cache[uniqueID(elems[i])] = overflowing;
+			for (var i = elems.length; i--;) {
+				cache[uniqueID( elems[i] )] = overflowing;
+			}
 			return overflowing;
 		}
 
@@ -479,17 +455,12 @@ define(function() {
 			}
 		}
 
-		var deltaBufferTimer;
 
 		function isTouchpad(deltaY) {
-			if (!deltaY) return;
-			deltaY = Math.abs(deltaY)
+			if (!deltaY) { return; }
+			deltaY = Math.abs(deltaY);
 			deltaBuffer.push(deltaY);
 			deltaBuffer.shift();
-			clearTimeout(deltaBufferTimer);
-			deltaBufferTimer = setTimeout(function () {
-				chrome.storage.local.set({ deltaBuffer: deltaBuffer });
-			}, 1000);
 			var allEquals    = (deltaBuffer[0] == deltaBuffer[1] &&
 				deltaBuffer[1] == deltaBuffer[2]);
 			var allDivisable = (isDivisible(deltaBuffer[0], 120) &&
@@ -504,14 +475,12 @@ define(function() {
 
 
 		var requestFrame = (function () {
-			return  window.requestAnimationFrame       ||
+			return  window.requestAnimationFrame ||
 				window.webkitRequestAnimationFrame ||
 				function (callback, element, delay) {
 					window.setTimeout(callback, delay || (1000/60));
 				};
 		})();
-
-		var MutationObserver = window.MutationObserver;
 
 
 		/***********************************************
@@ -542,8 +511,8 @@ define(function() {
 		}
 
 		function pulse(x) {
-			if (x >= 1) return 1;
-			if (x <= 0) return 0;
+			if (x >= 1) { return 1; }
+			if (x <= 0) { return 0; }
 
 			if (options.pulseNormalize == 1) {
 				options.pulseNormalize /= pulse_(1);
@@ -612,7 +581,7 @@ define(function() {
 
 				do {
 					isLink = isNodeName(elem, "a");
-					if (isLink) break;
+					if (isLink) { break; }
 				} while (elem = elem.parentNode);
 
 				elem = overflowingAncestor(e.target);
@@ -647,12 +616,12 @@ define(function() {
 				var speedY = 0;
 
 				// animation loop
-				var last = +new Date;
+				var last = +new Date();
 				var delay = 1000 / options.frameRate;
 				var finished = false;
 
 				requestFrame(function step(time) {
-					var now = time || +new Date;
+					var now = time || +new Date();
 					var elapsed = now - last;
 					elem.scrollLeft += (speedX * elapsed) >> 0;
 					elem.scrollTop  += (speedY * elapsed) >> 0;

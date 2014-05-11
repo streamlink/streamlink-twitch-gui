@@ -1,4 +1,4 @@
-define( [ "jquery", "Selecter" ], function( $ ) {
+define( [ "jquery", "Selecter" ], function() {
 
 	return function( $select ) {
 		$select.selecter({

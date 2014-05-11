@@ -140,6 +140,11 @@ define( [ "ember" ], function( Ember ) {
 						: qualities[ 0 ].quality
 				]);
 
+
+				function kill() {
+					livestreamer && livestreamer.kill( "SIGTERM" );
+				}
+
 				// Dialog
 				this.send( "openModal",
 					"Preparing",
@@ -167,10 +172,6 @@ define( [ "ember" ], function( Ember ) {
 					livestreamer && livestreamer.on( "exit", function () {
 						this.send( "closeModal" );
 					}.bind( this ) );
-				}
-
-				function kill() {
-					livestreamer && livestreamer.kill( "SIGTERM" );
 				}
 			}
 		}

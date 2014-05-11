@@ -26,8 +26,9 @@ define( [ "jquery" ], function( $ ) {
 					.appendTo( this );
 
 			$btn.click(function() {
-				if ( $input.is( ":disabled" ) ) return;
-				$file.click();
+				if ( !$input.is( ":disabled" ) ) {
+					$file.click();
+				}
 			});
 			$file.change(function() {
 				$input
