@@ -7,7 +7,7 @@ define( [ "ember", "models/Search" ], function( Ember, Search ) {
 			return this.get( "content" ).toArray().sort(function( a, b ) {
 				return b.id - a.id;
 			});
-		}.property( "content", "content.@each" ),
+		}.property( "content", "content.@each", "showDropdown" ),
 
 		showDropdown: false,
 
