@@ -5,12 +5,7 @@ define(function( require ) {
 		Ember.Application.create({
 			rootElement: document.documentElement,
 
-			Store: DS.Store.extend({
-				adapter: DS.LSAdapter.extend({
-					namespace: "app"
-				})
-			}),
-
+			Store: DS.Store.extend(),
 
 			Router: require( "Router" ),
 
@@ -29,6 +24,7 @@ define(function( require ) {
 			ModalView: require( "views/ModalView" ),
 
 			Searchbar: require( "models/Searchbar" ),
+			SearchbarAdapter: require( "store/LocalstorageAdapter" ),
 			SearchbarController: require( "controllers/SearchbarController" ),
 			SearchbarView: require( "views/SearchbarView" ),
 
@@ -59,6 +55,7 @@ define(function( require ) {
 			ChannelsLoadingView: require( "views/LoadingView" ),
 
 			Settings: require( "models/Settings" ),
+			SettingsAdapter: require( "store/LocalstorageAdapter" ),
 			SettingsRoute: require( "routes/SettingsRoute" ),
 			SettingsController: require( "controllers/SettingsController" ),
 			SettingsView: require( "views/SettingsView" ),
