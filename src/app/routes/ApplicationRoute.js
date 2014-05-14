@@ -3,11 +3,11 @@ define( [ "ember" ], function( Ember ) {
 	return Ember.Route.extend({
 		beforeModel: function() {
 			// Load Settings records
-			this.store.findAll( "settings" ).then(function() {
-				try {
+			this.store.find( "settings" ).then(function( records ) {
+				if ( !records.content.length ) {
 					// Create initial Settings record
 					this.store.createRecord( "settings", { id: 1 } ).save();
-				} catch ( e ) {}
+				}
 			}.bind( this ) );
 		},
 
@@ -15,8 +15,8 @@ define( [ "ember" ], function( Ember ) {
 			return Ember.$.getJSON( "metadata.json" );
 		},
 
-		setupController: function( controller, model ) {
-			controller.set( "model", model );
+		afterModel: function( resolvedModel ) {
+			this.controllerFor( "versioncheck" ).check( resolvedModel );
 		},
 
 

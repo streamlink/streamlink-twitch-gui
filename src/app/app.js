@@ -68,7 +68,13 @@ define(function( require ) {
 			GameItemComponent: require( "components/GameItemComponent" ),
 			StreamItemComponent: require( "components/StreamItemComponent" ),
 
-			LivestreamerController: require( "controllers/LivestreamerController" )
+			LivestreamerController: require( "controllers/LivestreamerController" ),
+
+			Versioncheck: require( "models/Versioncheck" ),
+			VersioncheckAdapter: require( "store/LocalstorageAdapter" ),
+			VersioncheckController: require( "controllers/VersioncheckController" ),
+			GithubReleases: require( "models/github/Releases" ),
+			GithubReleasesAdapter: require( "store/GithubAdapter" )
 		});
 
 		require( [ "utils/helpers" ] );
