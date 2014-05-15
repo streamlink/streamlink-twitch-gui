@@ -34,6 +34,7 @@
 	},
 
 	"scripts": {
-		"build": "grunt build"
+		"build": "grunt release",
+		"test": "grunt test"
 	}
 }
