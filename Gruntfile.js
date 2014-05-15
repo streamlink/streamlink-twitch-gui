@@ -164,6 +164,25 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		qunit			: {
+			all				: {
+				options			: {
+					urls			: [
+						"http://localhost:8000/test/tests.html"
+					]
+				}
+			}
+		},
+
+		connect			: {
+			test			: {
+				options			: {
+					port			: 8000,
+					base			: "./src"
+				}
+			}
+		},
+
 		nodewebkit		: {
 			options			: {
 				build_dir		: "build",
@@ -231,9 +250,11 @@ module.exports = function( grunt ) {
 
 	grunt.loadNpmTasks( "grunt-contrib-clean" );
 	grunt.loadNpmTasks( "grunt-contrib-compress" );
+	grunt.loadNpmTasks( "grunt-contrib-connect" );
 	grunt.loadNpmTasks( "grunt-contrib-copy" );
 	grunt.loadNpmTasks( "grunt-contrib-jshint" );
 	grunt.loadNpmTasks( "grunt-contrib-less" );
+	grunt.loadNpmTasks( "grunt-contrib-qunit" );
 	grunt.loadNpmTasks( "grunt-contrib-requirejs" );
 	grunt.loadNpmTasks( "grunt-contrib-uglify" );
 	grunt.loadNpmTasks( "grunt-contrib-watch" );
@@ -242,8 +263,9 @@ module.exports = function( grunt ) {
 	grunt.loadTasks( "build/tasks" );
 
 	grunt.registerTask( "default", [ "" ] );
+	grunt.registerTask( "test", [ "connect:test", "qunit" ] );
 	grunt.registerTask( "build", [ "jshint", "clean:dev", "copy:build", "metadata", "less:dev", "requirejs:dev" ] );
-	grunt.registerTask( "buildrelease", [ "jshint", "clean:release", "copy:build", "metadata", "less:release", "requirejs:release", "uglify" ] );
+	grunt.registerTask( "buildrelease", [ "jshint", "test", "clean:release", "copy:build", "metadata", "less:release", "requirejs:release", "uglify" ] );
 	grunt.registerTask( "dev", [ "build", "watch" ] );
 
 };
