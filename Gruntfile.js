@@ -35,10 +35,18 @@ module.exports = function( grunt ) {
 		},
 
 		jshint			: {
-			options			: {
-				jshintrc		: "src/.jshintrc"
+			app				: {
+				options			: {
+					jshintrc		: "src/.jshintrc"
+				},
+				src				: [ "src/**/*.js", "!src/vendor/**", "!src/test/**" ]
 			},
-			src				: [ "src/**/*.js", "!src/vendor/**" ]
+			test			: {
+				options			: {
+					jshintrc		: "src/test/.jshintrc"
+				},
+				src				: [ "src/test/**/*.js" ]
+			}
 		},
 
 		requirejs		: {
@@ -263,9 +271,9 @@ module.exports = function( grunt ) {
 	grunt.loadTasks( "build/tasks" );
 
 	grunt.registerTask( "default", [ "" ] );
-	grunt.registerTask( "test", [ "connect:test", "qunit" ] );
-	grunt.registerTask( "build", [ "jshint", "clean:dev", "copy:build", "metadata", "less:dev", "requirejs:dev" ] );
-	grunt.registerTask( "buildrelease", [ "jshint", "test", "clean:release", "copy:build", "metadata", "less:release", "requirejs:release", "uglify" ] );
+	grunt.registerTask( "test", [ "jshint:test", "connect:test", "qunit" ] );
+	grunt.registerTask( "build", [ "jshint:app", "clean:dev", "copy:build", "metadata", "less:dev", "requirejs:dev" ] );
+	grunt.registerTask( "buildrelease", [ "jshint:app", "test", "clean:release", "copy:build", "metadata", "less:release", "requirejs:release", "uglify" ] );
 	grunt.registerTask( "dev", [ "build", "watch" ] );
 
 };

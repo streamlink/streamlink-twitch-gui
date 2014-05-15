@@ -1,0 +1,45 @@
+{
+	"browser"  : true,
+	"node"     : true,
+
+	"laxbreak" : true,
+	"eqnull"   : true,
+	"debug"    : true,
+	"devel"    : true,
+	"curly"    : true,
+	"boss"     : true,
+	"expr"     : true,
+	"asi"      : true,
+	"noempty"  : true,
+
+	"undef"    : true,
+	"latedef"  : true,
+	"unused"   : true,
+	"sub"      : true,
+
+	"quotmark" : "double",
+	"trailing" : true,
+	"indent"   : 4,
+	"maxlen"   : 100,
+
+	"globals"  : {
+		"define"         : true,
+		"requirejs"      : true,
+
+		"asyncTest"      : true,
+		"deepEqual"      : true,
+		"equal"          : true,
+		"expect"         : true,
+		"module"         : true,
+		"notDeepEqual"   : true,
+		"notEqual"       : true,
+		"notStrictEqual" : true,
+		"ok"             : true,
+		"QUnit"          : true,
+		"raises"         : true,
+		"start"          : true,
+		"stop"           : true,
+		"strictEqual"    : true,
+		"test"           : true
+	}
+}
