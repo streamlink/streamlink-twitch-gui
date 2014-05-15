@@ -28,7 +28,7 @@ define(function( require ) {
 		// then load tests and start QUnit
 		require(
 			[
-				
+				"test/semver"
 			],
 			QUnit.start
 		);
