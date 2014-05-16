@@ -23,7 +23,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 				ns	= Ember.get( this, "namespace" );
 
 			if (   ns ) { url.push( ns ); }
-			if ( type ) { url.push( type.resourceName ); }
+			if ( type ) { url.push( type.toString() ); }
 			if (   id ) { url.push( id ); }
 
 			return url.join( "/" );

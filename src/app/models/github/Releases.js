@@ -5,7 +5,7 @@ define( [ "ember-data" ], function( DS ) {
 		html_url: DS.attr( "string" ),
 		draft: DS.attr( "boolean" )
 	}).reopenClass({
-		resourceName: "releases"
+		toString: function() { return "releases"; }
 	});
 
 });
