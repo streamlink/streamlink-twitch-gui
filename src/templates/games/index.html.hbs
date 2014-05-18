@@ -1,6 +1,7 @@
 <h2>Top Games</h2>
 <ul class="content-list">
-{{#each top}}
+{{#each}}
 {{game-item game=game channels=channels viewers=viewers}}
 {{/each}}
 </ul>
+{{infinite-scroll}}

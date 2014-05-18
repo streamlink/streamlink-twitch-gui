@@ -1,6 +1,7 @@
 <h2>{{unbound game}}</h2>
 <ul class="content-list">
-{{#each stream in streams}}
-{{stream-item stream=stream}}
+{{#each}}
+{{stream-item stream=this}}
 {{/each}}
 </ul>
+{{infinite-scroll}}

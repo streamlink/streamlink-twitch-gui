@@ -1,13 +1,20 @@
 define([
 	"ember",
+	"routes/InfiniteScrollRouteMixin",
 	"utils/preload",
 	"models/GamesTop"
-], function( Ember, preload, ModelGamesTop ) {
+], function( Ember, InfiniteScroll, preload, ModelGamesTop ) {
 
-	return Ember.Route.extend({
+	return Ember.Route.extend( InfiniteScroll, {
 		model: function() {
-			return ModelGamesTop()
-				.then( preload( "top.@each.game.@each.box.@each.large" ) );
+			return ModelGamesTop({
+				offset	: Ember.get( this, "offset" ),
+				limit	: Ember.get( this, "limit" )
+			})
+				.then(function( data ) {
+					return Ember.getWithDefault( data, "top", [] );
+				})
+				.then( preload( "@each.game.@each.box.@each.large" ) );
 		}
 	});
 

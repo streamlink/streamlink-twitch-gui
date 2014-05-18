@@ -1,9 +1,10 @@
 define([
 	"ember",
+	"views/InfiniteScrollViewMixin",
 	"text!templates/games/index.html.hbs"
-], function( Ember, Template ) {
+], function( Ember, InfiniteScroll, Template ) {
 
-	return Ember.View.extend({
+	return Ember.View.extend( InfiniteScroll, {
 		template: Ember.Handlebars.compile( Template ),
 		tagName: "main",
 		classNames: [ "content", "content-games" ]

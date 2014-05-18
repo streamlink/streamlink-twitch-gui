@@ -1,9 +1,11 @@
 define( [ "utils/twitch" ], function( twitch ) {
 
-	return function( limit, offset ) {
+	return function( params ) {
+		params = params || {};
+
 		return twitch( "games/top", {
-			limit	: limit || 25,
-			offset	: offset || 0
+			limit	: params.limit || 25,
+			offset	: params.offset || 0
 		});
 	}
 

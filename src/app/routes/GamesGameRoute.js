@@ -1,22 +1,33 @@
 define([
 	"ember",
+	"routes/InfiniteScrollRouteMixin",
 	"utils/preload",
 	"models/Streams"
-], function( Ember, preload, ModelStreams ) {
+], function( Ember, InfiniteScroll, preload, ModelStreams ) {
 
-	return Ember.Route.extend({
+	return Ember.Route.extend( InfiniteScroll, {
 		model: function( params ) {
-			this.set( "game", params.game );
+			params = params || {};
+			if ( params.game ) {
+				Ember.set( this, "game", params.game );
+			}
 
 			return ModelStreams({
-				game: params.game
+				game	: Ember.get( this, "game" ),
+				offset	: Ember.get( this, "offset" ),
+				limit	: Ember.get( this, "limit" )
 			})
-				.then( preload( "streams.@each.preview" ) );
+				.then(function( data ) {
+					return Ember.getWithDefault( data, "streams", [] );
+				})
+				.then( preload( "@each.preview" ) );
 		},
 
 		setupController: function( controller, model ) {
+			this._super.apply( this, arguments );
+
 			controller.set( "model", model );
-			controller.set( "game", this.get( "game" ) );
+			controller.set( "game", Ember.get( this, "game" ) );
 		}
 	});
 

@@ -67,6 +67,7 @@ define(function( require ) {
 			RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
 			GameItemComponent: require( "components/GameItemComponent" ),
 			StreamItemComponent: require( "components/StreamItemComponent" ),
+			InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
 
 			LivestreamerController: require( "controllers/LivestreamerController" ),
 
