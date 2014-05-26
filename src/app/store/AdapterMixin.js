@@ -29,6 +29,12 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 			return url.join( "/" );
 		},
 
+		ajaxError: function( jqXHR ) {
+			this._super.apply( this, arguments );
+
+			return new Ember.XHRError( jqXHR );
+		},
+
 		defaultSerializer: DS.RESTSerializer
 	});
 

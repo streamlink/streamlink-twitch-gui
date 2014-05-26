@@ -1,19 +1,24 @@
 
 .content-error {
-	> article {
-		margin: 0 .5rem;
+	@width: 8em;
+	@margin: .25em;
 
-		h4 {
-			font-size: 1.2em;
-		}
+	h4 {
+		font-size: 1.2em;
+	}
 
-		dt {
-			width: 6rem;
-			text-align: left;
-		}
+	dt {
+		width: @width;
+		margin-bottom: @margin;
+		text-align: left;
+	}
 
-		dd {
-			margin-left: 6rem;
-		}
+	dd {
+		margin: 0 0 @margin @width;
+	}
+
+	.stack {
+		font-family: monospace;
+		white-space: pre-wrap;
 	}
 }
