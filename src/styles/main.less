@@ -25,6 +25,21 @@ body > .wrapper {
 }
 
 
+* {
+	-webkit-user-select: none;
+}
+
+[data-selectable] {
+	cursor: text;
+	-webkit-user-select: initial;
+}
+
+::selection {
+	color: @color-background;
+	background: @color-twitch-purple;
+}
+
+
 h1 { font-size: 2.5rem }
 h2 { font-size: 2rem; }
 h3 { font-size: 1.5rem; }
