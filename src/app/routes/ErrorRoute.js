@@ -59,9 +59,9 @@ define( [ "ember" ], function( Ember ) {
 				})
 			);
 
-			// also log the error in dev mode
-			if ( DEBUG && model.stack ) {
-				console.error( model.stack );
+			// throw the error in dev mode for debugging purposes
+			if ( DEBUG && model instanceof Error ) {
+				throw model;
 			}
 		}
 	});
