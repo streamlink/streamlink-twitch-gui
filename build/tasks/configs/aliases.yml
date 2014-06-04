@@ -1,0 +1,25 @@
+default:
+    - "dev"
+dev:
+    - "build"
+    - "concurrent:dev_watchers"
+test:
+    - "jshint:test"
+    - "connect:test"
+    - "qunit"
+build:
+    - "jshint:app"
+    - "clean:dev"
+    - "copy:build"
+    - "metadata"
+    - "less:dev"
+    - "requirejs:dev"
+buildrelease:
+    - "jshint:app"
+    - "test"
+    - "clean:release"
+    - "copy:build"
+    - "metadata"
+    - "less:release"
+    - "requirejs:release"
+    - "uglify"
