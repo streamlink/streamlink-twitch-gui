@@ -172,6 +172,13 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		concurrent		: {
+			options			: {
+				logConcurrentOutput	: true
+			},
+			dev_watchers	: [ "watch:less", "watch:js" ]
+		},
+
 		qunit			: {
 			all				: {
 				options			: {
@@ -256,6 +263,7 @@ module.exports = function( grunt ) {
 	});
 
 
+	grunt.loadNpmTasks( "grunt-concurrent" );
 	grunt.loadNpmTasks( "grunt-contrib-clean" );
 	grunt.loadNpmTasks( "grunt-contrib-compress" );
 	grunt.loadNpmTasks( "grunt-contrib-connect" );
@@ -274,6 +282,6 @@ module.exports = function( grunt ) {
 	grunt.registerTask( "test", [ "jshint:test", "connect:test", "qunit" ] );
 	grunt.registerTask( "build", [ "jshint:app", "clean:dev", "copy:build", "metadata", "less:dev", "requirejs:dev" ] );
 	grunt.registerTask( "buildrelease", [ "jshint:app", "test", "clean:release", "copy:build", "metadata", "less:release", "requirejs:release", "uglify" ] );
-	grunt.registerTask( "dev", [ "build", "watch" ] );
+	grunt.registerTask( "dev", [ "build", "concurrent:dev_watchers" ] );
 
 };
