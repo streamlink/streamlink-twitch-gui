@@ -34,6 +34,7 @@
 	},
 
 	"scripts": {
+		"postinstall": "bower install",
 		"build": "grunt release",
 		"test": "grunt test"
 	}

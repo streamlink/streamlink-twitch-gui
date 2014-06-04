@@ -23,10 +23,9 @@ To build this application on your own, make sure you have installed the latest v
 Then just run these lines to install all dependencies and start the build process.
 You will then find the built executable inside the `/build/releases` folder.
 
-```
+```bash
 npm install -g grunt-cli bower # may require administrator privileges
 npm install
-bower install
 grunt release
 ```
 
