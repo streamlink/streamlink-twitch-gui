@@ -5,3 +5,5 @@
 !/build/tasks
 !/build/script
 /dist/
+/src/styles/app.css
+/src/styles/app.css.map

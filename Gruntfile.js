@@ -8,27 +8,38 @@ module.exports = function( grunt ) {
 
 		less			: {
 			options			: {
-				compress			: true,
+				compress			: false,
 				// cleancss still has no soucemap support
 				// https://github.com/gruntjs/grunt-contrib-less/issues/165
 				cleancss			: false,
 				relativeUrls		: true,
 				strictMath			: true,
-				strictUnits			: true
+				strictUnits			: true,
+				sourceMap			: true,
+				sourceMapBasepath	: "src",
+				sourceMapRootpath	: "../",
+				sourceMapURL		: "app.css.map"
+			},
+			source			: {
+				options			: {
+					sourceMapFilename	: "src/styles/app.css.map"
+				},
+				src				: "src/styles/app.less",
+				dest			: "src/styles/app.css"
 			},
 			dev				: {
 				options			: {
-					sourceMap			: true,
 					sourceMapFilename	: "build/tmp/styles/app.css.map",
-					sourceMapURL		: "app.css.map",
-					sourceMapBasepath	: __dirname + "/src",
-					sourceMapRootpath	: "../../../",
 					outputSourceFiles	: true
 				},
 				src				: "src/styles/app.less",
 				dest			: "build/tmp/styles/app.css"
 			},
 			release			: {
+				options			: {
+					compress			: true,
+					sourceMap			: false
+				},
 				src				: "src/styles/app.less",
 				dest			: "build/tmp/styles/app.css"
 			}
@@ -162,6 +173,10 @@ module.exports = function( grunt ) {
 		},
 
 		watch			: {
+			lesssource		: {
+				files			: [ "src/**/*.less" ],
+				tasks			: [ "less:source" ]
+			},
 			less			: {
 				files			: [ "src/**/*.less" ],
 				tasks			: [ "less:dev" ]
