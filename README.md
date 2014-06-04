@@ -29,10 +29,17 @@ npm install
 grunt release
 ```
 
+---
+
+## Contributing
+
+Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first.
+
 
 
   [Preview]: https://f.cloud.github.com/assets/467294/2199101/065a5a3c-98d1-11e3-810d-73f7ba8859ca.png "Preview image"
   [Releases]: https://github.com/bastimeyer/livestreamer-twitch-gui/releases "Livestreamer Twitch GUI Releases"
+  [Contributing]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/CONTRIBUTING.md
   [Livestreamer]: https://github.com/chrippa/livestreamer "Livestreamer"
   [Twitch]: http://twitch.tv "Twitch.tv"
   [NodeWebkit]: https://github.com/rogerwang/node-webkit "Node-Webkit"
