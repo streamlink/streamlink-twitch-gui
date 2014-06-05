@@ -80,9 +80,9 @@ define( [ "ember" ], function( Ember ) {
 	return Ember.ObjectController.extend({
 		needs: [ "application", "modal" ],
 
-		model: function() {
-			return this.get( "controllers.application.model" );
-		}.property( "controllers.application.model" ),
+		modelBinding: "controllers.application.model",
+
+		configBinding: "model.package.config",
 
 		parameters: [
 			{
@@ -112,13 +112,38 @@ define( [ "ember" ], function( Ember ) {
 				var	livestreamer,
 					command,
 
-					modal = this.get( "controllers.modal" ),
-					exec = this.get( "model.package.config.livestreamer-exec" ),
+					exec = this.get( "config.livestreamer-exec" ),
 					path = settings.get( "livestreamer" ),
 
 					qualities = settings.get( "qualities" ),
 					quality = settings.get( "quality" ),
-					args = [];
+					args = [],
+
+					modal = this.get( "controllers.modal" ),
+
+					btn_close = new modal.Button( "Close", "btn-danger", "fa-times",
+						function() {
+							livestreamer && livestreamer.kill( "SIGTERM" );
+						}
+					),
+					btn_download = new modal.Button( "Download", "btn-success", "fa-download",
+						function() {
+							var url = this.get( "config.livestreamer-download-url" );
+							this.send( "open_browser", url );
+						}.bind( this )
+					),
+					btn_chat = new modal.Button( "Open Chat", "btn-success", "fa-comments",
+						function() {
+							var url = this.get( "config.twitch-chat-url" ).replace(
+								"{channel}",
+								Ember.get( stream, "channel.name" )
+							);
+							this.send( "open_browser", url );
+							// don't close modal on click
+							return false;
+						}.bind( this )
+					);
+
 
 				// Prepare parameters
 				this.parameters.forEach(function( elem ) {
@@ -141,29 +166,23 @@ define( [ "ember" ], function( Ember ) {
 				]);
 
 
-				function kill() {
-					livestreamer && livestreamer.kill( "SIGTERM" );
-				}
-
-				// Dialog
-				this.send( "openModal",
-					"Preparing",
-					"Please wait...",
-					[ new modal.Button( "Close", "btn-danger", "fa-times", kill ) ]
-				);
+				// show dialog
+				this.send( "openModal", "Preparing", "Please wait..." );
 
 				// prepare the command and validate
 				command = checkLivestreamer( path, exec );
 				if ( !command ) {
 					this.send( "updateModal",
 						"Error: Livestreamer was not found",
-						"Please check settings and/or (re)install Livestreamer."
+						"Please check settings and/or (re)install Livestreamer.",
+						[ btn_close, btn_download ]
 					);
 
 				} else {
 					this.send( "updateModal",
 						"Watching now: " + Ember.get( stream, "channel.name" ),
-						Ember.get( stream, "channel.status" )
+						Ember.get( stream, "channel.status" ),
+						[ btn_close, btn_chat ]
 					);
 
 					// start the child process

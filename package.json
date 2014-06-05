@@ -32,7 +32,9 @@
 
 	"config": {
 		"node-webkit-version": "0.9.2",
-		"livestreamer-exec": "livestreamer"
+		"livestreamer-exec": "livestreamer",
+		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",
+		"twitch-chat-url": "http://twitch.tv/chat/embed?channel={channel}&popout_chat=true"
 	},
 
 	"scripts": {
