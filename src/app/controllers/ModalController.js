@@ -15,9 +15,10 @@ define( [ "ember" ], function( Ember ) {
 		buttons: [],
 
 		actions: {
-			close: function( action ) {
-				if ( action ) { action(); }
-				return this.send( "closeModal" );
+			"button": function( action ) {
+				if ( !action || action && action() !== false ) {
+					this.send( "closeModal" );
+				}
 			}
 		}
 	});
