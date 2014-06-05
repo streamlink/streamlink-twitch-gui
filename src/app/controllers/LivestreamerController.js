@@ -134,7 +134,7 @@ define( [ "ember" ], function( Ember ) {
 				});
 
 				args = args.concat([
-					stream.channel.url,
+					Ember.get( stream, "channel.url" ),
 					qualities.hasOwnProperty( quality )
 						? qualities[ quality ].quality
 						: qualities[ 0 ].quality
@@ -162,8 +162,8 @@ define( [ "ember" ], function( Ember ) {
 
 				} else {
 					this.send( "updateModal",
-						"Watching now: " + stream.channel.name,
-						stream.channel.status
+						"Watching now: " + Ember.get( stream, "channel.name" ),
+						Ember.get( stream, "channel.status" )
 					);
 
 					// start the child process
