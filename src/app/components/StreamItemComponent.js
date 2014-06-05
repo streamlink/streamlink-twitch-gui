@@ -8,9 +8,7 @@ define([
 		tagName: "li",
 		classNames: [ "stream-component" ],
 		attributeBindings: [ "title" ],
-		title: function() {
-			return this.get( "stream.channel.status" );
-		}.property( "stream.channel.status" ),
+		titleBinding: "stream.channel.status",
 
 		action: "open_livestreamer",
 
