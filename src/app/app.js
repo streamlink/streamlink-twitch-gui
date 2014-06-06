@@ -6,6 +6,7 @@ define(function( require ) {
 			rootElement: document.documentElement,
 
 			Store: DS.Store.extend(),
+			LocalstorageSerializer: DS.LSSerializer.extend(),
 
 			Router: require( "Router" ),
 
