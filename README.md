@@ -49,5 +49,5 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Livestreamer]: https://github.com/chrippa/livestreamer "Livestreamer"
   [Twitch]: http://twitch.tv "Twitch.tv"
   [NodeWebkit]: https://github.com/rogerwang/node-webkit "Node-Webkit"
-  [Nodejs]: https://nodejs.org "Node.js"
+  [Nodejs]: http://nodejs.org "Node.js"
   [npm]: https://npmjs.org "Node Packaged Modules"
