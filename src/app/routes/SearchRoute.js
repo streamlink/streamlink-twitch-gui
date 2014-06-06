@@ -15,7 +15,7 @@ define([
 			})
 				.then( preload(
 					"games.@each.box.@each.large",
-					"streams.@each.preview"
+					"streams.@each.preview.@each.medium"
 				) );
 		},
 

@@ -14,7 +14,7 @@ define([
 				.then(function( data ) {
 					return Ember.getWithDefault( data, "streams", [] );
 				})
-				.then( preload( "@each.preview" ) );
+				.then( preload( "@each.preview.@each.medium" ) );
 		}
 	});
 
