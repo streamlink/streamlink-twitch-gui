@@ -11,9 +11,15 @@ This is a [node-webkit][NodeWebkit] application, which means it is written in Ja
 
 ## Description
 
-As the title already says, this is just a GUI on top of the [Livestreamer][Livestreamer] application.
-So if livestreamer is not installed on your system, you won't be able to watch streams at all.
-There are still some core features missing at the current stage of development, but simple browsing and watching streams is working fine.
+As the title already says, this is just a GUI on top of the [Livestreamer][Livestreamer] CLI application.
+There are still some core features missing at the current stage of development, but the most important parts are working fine.
+
+---
+
+## Download
+
+[Here you can find the list of all recent releases.][Releases]
+**Please note**: [Livestreamer][Livestreamer] has to be installed on your machine to be able to watch any stream, so please do this *before* starting the application.
 
 ---
 

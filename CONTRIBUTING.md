@@ -102,7 +102,7 @@ under the terms of the [MIT License][license].
 This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5bp].
 
 
-  [license]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/LICENSE.md
+  [license]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/LICENSE
   [issues]: https://github.com/bastimeyer/livestreamer-twitch-gui/issues
   [howto-fork]: https://help.github.com/articles/fork-a-repo
   [howto-rebase]: https://help.github.com/articles/interactive-rebase
