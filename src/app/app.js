@@ -1,6 +1,6 @@
 define(function( require ) {
 
-	require( [ "ember", "ember-data" ], function( Ember, DS ) {
+	require( [ "ember", "ember-data", "utils/helpers" ], function( Ember, DS ) {
 
 		Ember.Application.create({
 			rootElement: document.documentElement,
@@ -78,7 +78,6 @@ define(function( require ) {
 			GithubReleasesAdapter: require( "store/GithubAdapter" )
 		});
 
-		require( [ "utils/helpers" ] );
 	});
 
 });
