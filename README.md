@@ -27,7 +27,7 @@ There are still some core features missing at the current stage of development, 
 
 To build this application on your own, make sure you have installed the latest version of [Node.js][Nodejs] (including [npm][npm]).
 Then just run these lines to install all dependencies and start the build process.
-You will then find the built executable inside the `/build/releases` folder.
+You will then find the built executable inside the `build/releases` folder.
 
 ```bash
 npm install -g grunt-cli bower # may require administrator privileges

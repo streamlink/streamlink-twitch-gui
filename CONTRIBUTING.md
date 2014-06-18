@@ -42,10 +42,10 @@ Run `grunt --help` to list all other available grunt tasks.
 There are two different methods to run the program while developing:
 
 1. **the "easy" method**
-   Simply run `grunt dev`. This task builds the project to the `/build/tmp` folder with enabled debug flags and also starts a watcher task which rebuilds changed content from the `/src` folder. Now start NW (`nw build/tmp`) and open the developer-console by clicking on the button inside the menubar.
+   Simply run `grunt dev`. This task builds the project to the `build/tmp` folder with enabled debug flags and also starts a watcher task which rebuilds changed content from the `src` folder. Now start NW (`nw build/tmp`) and open the developer-console by clicking on the button inside the menubar.
 
 2. **the "source" method**
-   Another way of running the program is by starting it directly from the `/src` folder (`nw src`). Before you can do this, you need to run the `grunt build` task once and copy the generated `/build/tmp/metadata.json` file into the `/src` folder. By using this method, only the stylesheets need to be built: run `grunt less:source` or start the watcher task `grunt watch:lesssource`.
+   Another way of running the program is by starting it directly from the `src` folder (`nw src`). Before you can do this, you need to run the `grunt build` task once and copy the generated `build/tmp/metadata.json` file into the `src` folder. By using this method, only the stylesheets need to be built: run `grunt less:source` or start the watcher task `grunt watch:lesssource`.
 
 
 ## Pull requests
