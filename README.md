@@ -43,7 +43,7 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
 
 
 
-  [Preview]: https://f.cloud.github.com/assets/467294/2199101/065a5a3c-98d1-11e3-810d-73f7ba8859ca.png "Preview image"
+  [Preview]: https://cloud.githubusercontent.com/assets/467294/3655974/53894240-1181-11e4-9605-1b8f058f9420.png "Preview image"
   [Releases]: https://github.com/bastimeyer/livestreamer-twitch-gui/releases "Livestreamer Twitch GUI Releases"
   [Contributing]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/CONTRIBUTING.md
   [Livestreamer]: https://github.com/chrippa/livestreamer "Livestreamer"
