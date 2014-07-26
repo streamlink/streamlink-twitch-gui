@@ -15,5 +15,7 @@
 		"height": 540,
 		"min_width": 960,
 		"min_height": 540
-	}
+	},
+
+	"chromium-args": "--enable-direct-write"
 }
