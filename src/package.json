@@ -10,6 +10,7 @@
 		"resizable": true,
 		"toolbar": false,
 		"show": true,
+		"position": "center",
 		"width": 960,
 		"height": 540,
 		"min_width": 960,
