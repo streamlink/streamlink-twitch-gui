@@ -117,8 +117,10 @@ define( [ "ember" ], function( Ember ) {
 
 					qualities = settings.get( "qualities" ),
 					quality = settings.get( "quality" ),
+					gui_minimize = settings.get( "gui_minimize" ) !== false,
 					args = [],
 
+					win = this.get( "controllers.application.nwWindow" ),
 					modal = this.get( "controllers.modal" ),
 
 					btn_close = new modal.Button( "Close", "btn-danger", "fa-times",
@@ -188,8 +190,18 @@ define( [ "ember" ], function( Ember ) {
 					// start the child process
 					livestreamer = require( "child_process" ).spawn( command, args );
 
+					// hide the GUI
+					if ( win && gui_minimize ) {
+						win.minimize();
+					}
+
 					livestreamer && livestreamer.on( "exit", function () {
 						this.send( "closeModal" );
+
+						// restore the GUI
+						if ( win && gui_minimize ) {
+							win.restore();
+						}
 					}.bind( this ) );
 				}
 			}

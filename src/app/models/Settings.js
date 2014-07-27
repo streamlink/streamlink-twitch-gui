@@ -7,6 +7,7 @@ define( [ "ember-data" ], function( DS ) {
 		player_params	: DS.attr( "string", { defaultValue: "" } ),
 		player_reconnect: DS.attr( "boolean", { defaultValue: true } ),
 		player_no_close	: DS.attr( "boolean", { defaultValue: true } ),
+		gui_minimize	: DS.attr( "boolean", { defaultValue: false } ),
 
 		qualities		: [
 			{ id: 0, label: "best",   quality: "best" },

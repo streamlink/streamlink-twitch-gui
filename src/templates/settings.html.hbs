@@ -16,6 +16,8 @@
 <div class="right"><label>{{input type="checkbox" checked=content.player_reconnect}}<span>Reconnect to stream</span></label></div>
 <div class="left"><i class="fa fa-times"></i> Close player<span class="description">After the stream has finished.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=content.player_no_close}}<span>Do not close the player</span></label></div>
+<div class="left"><i class="fa fa-minus"></i> Minimize GUI<span class="description">When videoplayer opens.</span></div>
+<div class="right"><label>{{input type="checkbox" checked=content.gui_minimize}}<span>Minimize the GUI on stream start</span></label></div>
 </fieldset>
 <fieldset class="submit">
 <button type="button" class="btn btn-with-icon btn-success" {{action "apply"}}><i class="fa fa-check"></i> Apply</button>
