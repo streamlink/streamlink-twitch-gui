@@ -1,11 +1,16 @@
 define(function( require ) {
 
-	require( [ "ember", "ember-data", "utils/helpers" ], function( Ember, DS ) {
+	require([
+		"ember",
+		"ember-data",
+		"utils/inflector",
+		"utils/helpers"
+	], function( Ember, DS ) {
 
 		Ember.Application.create({
 			rootElement: document.documentElement,
 
-			Store: DS.Store.extend(),
+			ApplicationStore: DS.Store.extend(),
 			LocalstorageSerializer: DS.LSSerializer.extend(),
 
 			Router: require( "Router" ),
