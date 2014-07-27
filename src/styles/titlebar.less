@@ -3,7 +3,6 @@
 	display: flex;
 	width: 100%;
 	height: @titlebar-height;
-	-webkit-user-select: none;
 	-webkit-app-region: drag;
 	-webkit-animation: animFadeInTop .333s ease-out;
 
@@ -48,6 +47,7 @@
 		-webkit-app-region: no-drag;
 
 		> button {
+			margin: 0;
 			padding: 0;
 			border: 0 solid @searchbar-border-color;
 			line-height: @titlebar-size;
@@ -84,11 +84,14 @@
 		}
 
 		> .btn-dropdown:hover {
+			padding-right: 1px;
 			border-left-width: 1px;
 		}
 
 		> [type="search"] {
 			flex-grow: 1;
+			height: ( @titlebar-size - 2px );
+			margin: 0;
 			padding: @searchbar-padding;
 			border: 0;
 			color: @color-text-dark;
