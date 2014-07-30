@@ -8,14 +8,11 @@ define( [ "ember", "models/Search" ], function( Ember, Search ) {
 				: "All";
 		}.property( "filter" ),
 
-		notFiltered: function() {
-			return this.get( "filter" ) === "all";
-		}.property( "filter" ),
+		notFiltered: Ember.computed.equal( "filter", "all" ),
 
-		noresults: function() {
-			return	!this.get( "games" ).length
-				&&	!this.get( "streams" ).length;
-		}.property( "games", "streams" )
+		emptyGames: Ember.computed.empty( "games" ),
+		emptyStreams: Ember.computed.empty( "streams" ),
+		noresults: Ember.computed.and( "emptyGames", "emptyStreams" )
 	});
 
 });

@@ -11,7 +11,7 @@ define( [ "ember" ], function( Ember ) {
 
 		checked: function() {
 			return this.get( "value" ) === this.get( "selection" );
-		}.property( "selection" )
+		}.property( "value", "selection" )
 	});
 
 });

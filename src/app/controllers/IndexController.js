@@ -4,10 +4,7 @@ define( [ "ember" ], function( Ember ) {
 		summaryBinding: "content.summary",
 		featuredBinding: "content.featured",
 
-		// no binding here: just get an initial value
-		stream: function() {
-			return this.get( "featured.0.stream" );
-		}.property( "featured.0.stream" ),
+		stream: Ember.computed.defaultTo( "featured.0.stream" ),
 
 		actions: {
 			"switchFeatured": function( stream ) {

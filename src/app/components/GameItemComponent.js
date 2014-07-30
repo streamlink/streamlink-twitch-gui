@@ -8,10 +8,7 @@ define([
 		tagName: "li",
 		classNames: [ "game-component" ],
 
-		hasStats: function() {
-			return	this.get( "channels" ) !== undefined
-				&&	this.get( "viewers" ) !== undefined;
-		}.property( "channels", "viewers" ),
+		hasStats: Ember.computed.any( "channels", "viewers" ),
 
 		action: "goto",
 

@@ -10,9 +10,7 @@ define([
 		attributeBindings: [ "type", "disabled" ],
 
 		type: "button",
-		disabled: function() {
-			return this.get( "isFetching" ) || this.get( "hasFetchedAll" );
-		}.property( "isFetching", "hasFetchedAll" ),
+		disabled: Ember.computed.or( "isFetching", "hasFetchedAll" ),
 
 		isFetchingBinding: "targetObject.isFetching",
 		hasFetchedAllBinding: "targetObject.hasFetchedAll",
