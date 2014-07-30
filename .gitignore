@@ -1,10 +1,30 @@
-/.idea/
+# OS and editors
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+*.bak
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+nbproject
+*.sublime-project
+*.sublime-workspace
+.idea
+
+# dependencies
 /node_modules/
 /src/vendor/
+
+# builds
 /build/*
 !/build/tasks
 !/build/script
 /dist/
+
+# dev files
 /src/styles/app.css
 /src/styles/app.css.map
 /src/metadata.json
