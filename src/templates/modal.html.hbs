@@ -2,8 +2,12 @@
 <header>{{#if head}}{{head}}{{else}}Please confirm{{/if}}</header>
 <section class="content">{{#if body}}{{body}}{{else}}Are you sure?{{/if}}</section>
 <footer>
-{{#each button in buttons}}
-<button type="button" class="btn btn-with-icon {{unbound button.button}}" {{action "button" button.action}}><i class="fa {{unbound button.icon}}"></i> {{unbound button.value}}</button>
+{{#each controls}}
+{{#if this.isButton}}
+<button type="button" class="btn btn-with-icon {{unbound this.classname}}" {{action "button" this.action}}><i class="fa {{unbound this.icon}}"></i> {{unbound this.value}}</button>
+{{else}}
+{{view Ember.Select classNames=this.classname value=this.value content=this.list optionValuePath="content.id" optionLabelPath="content.label" change=this.action}}
+{{/if}}
 {{else}}
 <button type="button" class="btn btn-with-icon btn-success" {{action "close"}}><i class="fa fa-check"></i> OK</button>
 {{/each}}

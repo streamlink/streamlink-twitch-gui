@@ -41,8 +41,8 @@ define( [ "ember" ], function( Ember ) {
 				}.bind( this ) );
 			},
 
-			"openModal": function( head, body, buttons ) {
-				this.send( "updateModal", head, body, buttons );
+			"openModal": function( head, body, controls ) {
+				this.send( "updateModal", head, body, controls );
 
 				return this.render( "modal", {
 					into		: "application",
@@ -50,11 +50,11 @@ define( [ "ember" ], function( Ember ) {
 				});
 			},
 
-			"updateModal": function( head, body, buttons ) {
-				var Modal = this.controllerFor( "modal" );
-				if (    head !== undefined ) { Modal.set(    "head",    head ); }
-				if (    body !== undefined ) { Modal.set(    "body",    body ); }
-				if ( buttons !== undefined ) { Modal.set( "buttons", buttons ); }
+			"updateModal": function( head, body, controls ) {
+				var modal = this.controllerFor( "modal" );
+				if (     head !== undefined ) { modal.set(     "head",     head ); }
+				if (     body !== undefined ) { modal.set(     "body",     body ); }
+				if ( controls !== undefined ) { modal.set( "controls", controls ); }
 			},
 
 			"closeModal": function() {

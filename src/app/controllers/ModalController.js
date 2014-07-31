@@ -1,18 +1,30 @@
 define( [ "ember" ], function( Ember ) {
 
+	function ModalButton( value, classname, icon, action ) {
+		this.isButton	= true;
+		this.value		= value;
+		this.action		= action;
+		this.classname	= classname;
+		this.icon		= icon;
+	}
+
+	function ModalSelect( list, value, classname, action ) {
+		this.isSelect	= true;
+		this.list		= list;
+		this.value		= value;
+		this.classname	= Ember.makeArray( classname );
+		this.action		= action;
+	}
+
 	return Ember.ObjectController.extend({
 		needs: [ "application" ],
 
-		Button: function( value, button, icon, action ) {
-			this.value	= value;
-			this.button	= button;
-			this.icon	= icon;
-			this.action	= action;
-		},
+		Button: ModalButton,
+		Select: ModalSelect,
 
 		head: null,
 		body: null,
-		buttons: [],
+		controls: [],
 
 		actions: {
 			"button": function( action ) {
