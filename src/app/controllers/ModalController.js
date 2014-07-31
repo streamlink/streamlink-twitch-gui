@@ -12,7 +12,7 @@ define( [ "ember" ], function( Ember ) {
 		this.isSelect	= true;
 		this.list		= list;
 		this.value		= value;
-		this.classname	= Ember.makeArray( classname );
+		this.classname	= classname;
 		this.action		= action;
 	}
 

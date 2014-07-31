@@ -6,10 +6,10 @@
 {{#if this.isButton}}
 <button type="button" class="btn btn-with-icon {{unbound this.classname}}" {{action "button" this.action}}><i class="fa {{unbound this.icon}}"></i> {{unbound this.value}}</button>
 {{else}}
-{{view Ember.Select classNames=this.classname value=this.value content=this.list optionValuePath="content.id" optionLabelPath="content.label" change=this.action}}
+{{view view.SelectView myclass=this.classname value=this.value content=this.list optionValuePath="content.id" optionLabelPath="content.label" change=this.action}}
 {{/if}}
 {{else}}
-<button type="button" class="btn btn-with-icon btn-success" {{action "close"}}><i class="fa fa-check"></i> OK</button>
+<button type="button" class="btn btn-with-icon btn-success" {{action "button"}}><i class="fa fa-check"></i> OK</button>
 {{/each}}
 </footer>
 </div>

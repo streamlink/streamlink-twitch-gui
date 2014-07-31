@@ -6,7 +6,11 @@ define([
 	return Ember.View.extend({
 		defaultTemplate: Ember.Handlebars.compile( ModalTemplate ),
 		tagName: "section",
-		classNames: [ "mymodal" ]
+		classNames: [ "mymodal" ],
+
+		SelectView: Ember.Select.extend({
+			classNameBindings: [ "myclass" ]
+		})
 	});
 
 });
