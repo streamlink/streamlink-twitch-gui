@@ -10,10 +10,10 @@ define( [ "ember-data" ], function( DS ) {
 		gui_minimize	: DS.attr( "boolean", { defaultValue: false } ),
 
 		qualities		: [
-			{ id: 0, label: "source", quality: "source,best" },
-			{ id: 1, label: "high",   quality: "high,mobile_high" },
-			{ id: 2, label: "medium", quality: "medium,mobile_medium" },
-			{ id: 3, label: "low",    quality: "low,mobile_mobile,worst" }
+			{ id: 0, label: "Source", quality: "source,best" },
+			{ id: 1, label: "High",   quality: "high,mobile_high" },
+			{ id: 2, label: "Medium", quality: "medium,mobile_medium" },
+			{ id: 3, label: "Low",    quality: "low,mobile_mobile,worst" }
 		]
 	}).reopenClass({
 		toString: function() { return "Settings"; }
