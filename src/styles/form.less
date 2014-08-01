@@ -218,11 +218,14 @@ fieldset {
 		background: @select-background-selected;
 
 		&::after {
-			content: @fa-var-caret-down;
+			content: @fa-var-chevron-down;
 			position: absolute;
-			right: .4em;
-			opacity: 50%;
-			font-family: "FontAwesome";
+			top: 0;
+			bottom: 0;
+			right: .5em;
+			padding: .2em 0;
+			opacity: .5;
+			font: .85em/1.875 FontAwesome;
 		}
 	}
 

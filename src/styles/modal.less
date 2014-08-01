@@ -57,6 +57,7 @@
 	@color-border: darken( @color, 5% );
 	@color-hover: darken( @color, 10% );
 	@color-hover-border: darken( @color, 15% );
+	@icon-size: 1.25em;
 	@icon-space: 1.75em;
 
 	.icon() {
@@ -65,9 +66,10 @@
 		&::before {
 			content: @fa-var-eye;
 			.fa();
-			width: @icon-space;
+			width: ( @icon-space - .25em );
+			margin: .1em 0 -.1em .25em;
 			color: fade( @text, 50% ) !important;
-			font-size: 1.25em;
+			font-size: @icon-size;
 			text-align: center;
 		}
 	}
@@ -88,6 +90,10 @@
 		border-color: @color-hover-border !important;
 		background: @color-hover;
 		.icon();
+
+		&::after {
+			line-height: 2.25;
+		}
 	}
 
 	> .selecter-options {
@@ -100,7 +106,7 @@
 	}
 
 	.selecter-item {
-		padding-left: ( @icon-space * 1.25 );
+		padding-left: ( @icon-space * unit( @icon-size ) );
 		color: @text;
 		background: @color;
 		transition: background .2s ease-out;
