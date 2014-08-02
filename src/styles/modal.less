@@ -54,9 +54,9 @@
 .selecter.custom.modalqualityselect {
 	@text: @color-text-brightest;
 	@color: @color-neutral;
-	@color-border: darken( @color, 5% );
 	@color-hover: darken( @color, 10% );
-	@color-hover-border: darken( @color, 15% );
+	@color-border: darken( @color, 5% );
+	@color-border-hover: darken( @color, 15% );
 	@icon-size: 1.25em;
 	@icon-space: 1.75em;
 
@@ -82,13 +82,11 @@
 
 		&:not(:disabled):hover {
 			background: @color-hover;
-			border-color: @color-hover-border !important;
+			border-color: @color-border-hover !important;
 		}
 	}
 
 	> .selecter-selected {
-		border-color: @color-hover-border !important;
-		background: @color-hover;
 		.icon();
 
 		&::after {
@@ -102,14 +100,11 @@
 	}
 
 	&.open > .selecter-options {
-		border-color: @color-hover-border !important;
+		border-color: @color-border-hover !important;
 	}
 
 	.selecter-item {
 		padding-left: ( @icon-space * unit( @icon-size ) );
-		color: @text;
-		background: @color;
-		transition: background .2s ease-out;
 
 		&.selected {
 			color: @text;
@@ -117,12 +112,21 @@
 			.icon();
 		}
 
-		&:hover {
-			background: @color-hover;
-		}
-
 		&:not(:last-of-type) {
 			border-color: @color-border !important;
+		}
+	}
+
+	> .selecter-selected,
+	.selecter-item {
+		border-color: @color-border !important;
+		color: @text;
+		background: @color;
+		transition: background .2s ease-out;
+
+		&:hover {
+			border-color: @color-border-hover;
+			background: @color-hover;
 		}
 	}
 }
