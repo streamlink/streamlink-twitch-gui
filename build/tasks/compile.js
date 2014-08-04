@@ -5,10 +5,12 @@ module.exports = function( grunt ) {
 			"win"		: { platform:  "win32", arch:  null, tasks: [] },
 			"mac"		: { platform: "darwin", arch:  null, tasks: [] },
 			"linux32"	: { platform:  "linux", arch: "x86", tasks: [
-				"copy:linux32scripts"
+				"copy:linux32scripts",
+				"copy:linux32icons"
 			] },
 			"linux64"	: { platform:  "linux", arch: "x64", tasks: [
-				"copy:linux64scripts"
+				"copy:linux64scripts",
+				"copy:linux64icons"
 			] }
 		};
 
