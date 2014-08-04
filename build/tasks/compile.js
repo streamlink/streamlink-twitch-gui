@@ -2,43 +2,54 @@ module.exports = function( grunt ) {
 	"use strict";
 
 	var	configs = {
-			"win"		: { platform:  "win32", arch:  null, tasks: [ "nodewebkit:win", "compress:win" ] },
-			"mac"		: { platform: "darwin", arch:  null, tasks: [ "nodewebkit:mac", "compress:mac" ] },
-			"linux32"	: { platform:  "linux", arch: "x86", tasks: [ "nodewebkit:linux32", "copy:linux32scripts", "compress:linux32" ] },
-			"linux64"	: { platform:  "linux", arch: "x64", tasks: [ "nodewebkit:linux64", "copy:linux64scripts", "compress:linux64" ] }
+			"win"		: { platform:  "win32", arch:  null, tasks: [] },
+			"mac"		: { platform: "darwin", arch:  null, tasks: [] },
+			"linux32"	: { platform:  "linux", arch: "x86", tasks: [
+				"copy:linux32scripts"
+			] },
+			"linux64"	: { platform:  "linux", arch: "x64", tasks: [
+				"copy:linux64scripts"
+			] }
 		};
 
 	grunt.task.registerTask(
 		"compile",
 		"Compile the built project with node-webkit and compress it. " +
-			"Optional targets: all:" + Object.keys( configs ).join( ":" ),
+			"Optional platforms: all:" + Object.keys( configs ).join( ":" ),
 		function() {
-			var tasks = Object.keys( this.flags );
+			var platforms = Object.keys( this.flags );
 
 			// compile for all platforms
-			if ( tasks.length === 1 && tasks[0] === "all" ) {
-				tasks = Object.keys( configs );
+			if ( platforms.length === 1 && platforms[0] === "all" ) {
+				platforms = Object.keys( configs );
 
 			// compile for current platform
-			} else if ( tasks.length === 0 ) {
-				tasks = Object.keys( configs ).filter(function( task ) {
-					var config = configs[ task ];
+			} else if ( platforms.length === 0 ) {
+				platforms = Object.keys( configs ).filter(function( platform ) {
+					var config = configs[ platform ];
 					return	config.platform === process.platform
 						&&	( config.arch === null || config.arch === process.arch );
 				});
 
 			// search for invalid flags
-			} else if ( !tasks.every(function( task ) {
-				return task in configs;
+			} else if ( !platforms.every(function( platform ) {
+				return platform in configs;
 			}) ) {
 				return grunt.fail.fatal(
-					"Invalid targets. " +
-					"Valid targets are: all:" + Object.keys( configs ).join( ":" )
+					"Invalid platforms. " +
+					"Valid platforms are: all:" + Object.keys( configs ).join( ":" )
 				);
 			}
 
-			tasks.forEach(function( task ) {
-				grunt.task.run( configs[ task ].tasks );
+			platforms.forEach(function( platform ) {
+				grunt.task.run( []
+					// always run these tasks
+					.concat([ "nodewebkit:" + platform ])
+					// conditional tasks
+					.concat( configs[ platform ].tasks )
+					// also run these tasks afterwards
+					.concat([ "compress:" + platform ])
+				);
 			});
 		}
 	);
