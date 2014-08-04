@@ -21,7 +21,7 @@ nbproject
 # builds
 /build/*
 !/build/tasks
-!/build/script
+!/build/resources
 /dist/
 
 # dev files

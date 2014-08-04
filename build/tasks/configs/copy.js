@@ -12,14 +12,18 @@ module.exports = {
 		],
 		dest			: "build/tmp"
 	},
-	linux32start	: {
+	linux32scripts	: {
 		options			: { mode: 493 }, // 0755 (js strict mode)
-		src				: "build/script/start.sh",
-		dest			: "build/releases/<%= package.name %>/linux32/<%= package.name %>/start.sh"
+		expand			: true,
+		flatten			: true,
+		src				: "build/resources/linux/*.sh",
+		dest			: "build/releases/<%= package.name %>/linux32/<%= package.name %>/"
 	},
-	linux64start	: {
+	linux64scripts	: {
 		options			: { mode: 493 }, // 0755 (js strict mode)
-		src				: "build/script/start.sh",
-		dest			: "build/releases/<%= package.name %>/linux64/<%= package.name %>/start.sh"
+		expand			: true,
+		flatten			: true,
+		src				: "build/resources/linux/*.sh",
+		dest			: "build/releases/<%= package.name %>/linux64/<%= package.name %>/"
 	}
 };

@@ -4,8 +4,8 @@ module.exports = function( grunt ) {
 	var	configs = {
 			"win"		: { platform:  "win32", arch:  null, tasks: [ "nodewebkit:win", "compress:win" ] },
 			"mac"		: { platform: "darwin", arch:  null, tasks: [ "nodewebkit:mac", "compress:mac" ] },
-			"linux32"	: { platform:  "linux", arch: "x86", tasks: [ "nodewebkit:linux32", "copy:linux32start", "compress:linux32" ] },
-			"linux64"	: { platform:  "linux", arch: "x64", tasks: [ "nodewebkit:linux64", "copy:linux64start", "compress:linux64" ] }
+			"linux32"	: { platform:  "linux", arch: "x86", tasks: [ "nodewebkit:linux32", "copy:linux32scripts", "compress:linux32" ] },
+			"linux64"	: { platform:  "linux", arch: "x64", tasks: [ "nodewebkit:linux64", "copy:linux64scripts", "compress:linux64" ] }
 		};
 
 	grunt.task.registerTask(
