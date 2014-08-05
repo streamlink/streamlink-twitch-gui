@@ -17,25 +17,25 @@ module.exports = {
 		expand			: true,
 		flatten			: true,
 		src				: "build/resources/linux/*.sh",
-		dest			: "build/releases/<%= package.name %>/linux32/<%= package.name %>/"
+		dest			: "build/releases/<%= package.name %>/linux32/"
 	},
 	linux64scripts	: {
 		options			: { mode: 493 }, // 0755 (js strict mode)
 		expand			: true,
 		flatten			: true,
 		src				: "build/resources/linux/*.sh",
-		dest			: "build/releases/<%= package.name %>/linux64/<%= package.name %>/"
+		dest			: "build/releases/<%= package.name %>/linux64/"
 	},
 	linux32icons	: {
 		expand			: true,
 		flatten			: true,
 		src				: "build/resources/icons/*.png",
-		dest			: "build/releases/<%= package.name %>/linux32/<%= package.name %>/icons/"
+		dest			: "build/releases/<%= package.name %>/linux32/icons/"
 	},
 	linux64icons	: {
 		expand			: true,
 		flatten			: true,
 		src				: "build/resources/icons/*.png",
-		dest			: "build/releases/<%= package.name %>/linux64/<%= package.name %>/icons/"
+		dest			: "build/releases/<%= package.name %>/linux64/icons/"
 	}
 };

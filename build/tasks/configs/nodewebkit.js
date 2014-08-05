@@ -1,19 +1,15 @@
 module.exports = {
 	options			: {
-		build_dir		: "build",
-		version			: "<%= package.config['node-webkit-version'] %>",
-		keep_nw			: false,
-		win				: false,
-		mac				: false,
-		linux32			: false,
-		linux64			: false
+		buildDir		: "build/releases",
+		cacheDir		: "build/cache",
+		version			: "<%= package.config['node-webkit-version'] %>"
 	},
 	win				: {
 		options			: { win: true },
 		src				: "build/tmp/**"
 	},
-	mac				: {
-		options			: { mac: true },
+	osx				: {
+		options			: { osx: true },
 		src				: "build/tmp/**"
 	},
 	linux32			: {
