@@ -9,7 +9,7 @@ module.exports = {
 		src				: "build/tmp/**"
 	},
 	osx				: {
-		options			: { osx: true },
+		options			: { osx: true, macIcns: "build/resources/icons/icon-512.icns" },
 		src				: "build/tmp/**"
 	},
 	linux32			: {
