@@ -9,7 +9,7 @@ test:
     - "qunit"
 build:
     - "jshint:app"
-    - "clean:dev"
+    - "clean:tmp"
     - "copy:build"
     - "metadata"
     - "less:dev"
@@ -17,7 +17,7 @@ build:
 buildrelease:
     - "jshint:app"
     - "test"
-    - "clean:release"
+    - "clean:tmp"
     - "copy:build"
     - "metadata"
     - "less:release"
