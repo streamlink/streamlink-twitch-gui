@@ -10,10 +10,10 @@ module.exports = {
 		src				: [ "**" ],
 		dest			: "<%= package.name %>"
 	},
-	mac				: {
-		options			: { archive: "dist/<%= package.name %>-v<%= package.version %>-mac.tar.gz" },
+	osx				: {
+		options			: { archive: "dist/<%= package.name %>-v<%= package.version %>-osx.tar.gz" },
 		expand			: true,
-		cwd				: "build/releases/<%= package.name %>/mac",
+		cwd				: "build/releases/<%= package.name %>/osx",
 		src				: [ "**" ],
 		dest			: "" // no archive subfolder for osx... the package already is a folder
 	},
