@@ -20,6 +20,11 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 
 		parameters: [
 			{
+				arg		: "--no-version-check",
+				params	: [],
+				cond	: []
+			},
+			{
 				arg		: "--player",
 				params	: [ "player" ],
 				cond	: [ "player" ]
@@ -72,7 +77,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		},
 
 		/**
-		 * Validate the livestreamer path
+		 * Check the location of livestreamer and validate
 		 * @param {string} path A user defined path
 		 * @returns {Promise}
 		 */
@@ -93,6 +98,12 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				.then( this.validateLivestreamer.bind( this ) );
 		},
 
+		/**
+		 * Validate livestreamer
+		 * Runs the executable with `--version` parameters and reads answer from stderr
+		 * @param {string} livestreamer
+		 * @returns {Promise}
+		 */
 		validateLivestreamer: function( livestreamer ) {
 			var	params	= this.get( "versionParameters" ),
 				regexp	= this.get( "versionRegExp" ),
@@ -123,7 +134,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 					// resolve before process exit
 					defer.resolve( match[1] );
 				}
-				// immediately to kill the process
+				// immediately kill the process
 				spawn.kill( "SIGKILL" );
 			});
 
