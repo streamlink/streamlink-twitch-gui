@@ -21,11 +21,11 @@ define( [ "ember" ], function( Ember ) {
 
 		// check for invalid values first
 		if ( path.indexOf( exec ) === -1 ) {
-			return Ember.RSVP.Promise.reject();
+			return Promise.reject();
 		}
 
 		// then check for the executable
-		return new Ember.RSVP.Promise(function( resolve, reject ) {
+		return new Promise(function( resolve, reject ) {
 			// TODO: make which() async
 			//       will do this together with validation
 			var res = which( path );

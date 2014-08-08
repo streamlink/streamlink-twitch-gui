@@ -3,7 +3,7 @@ define( [ "ember", "utils/twitch" ], function( Ember, twitch ) {
 	function Search( params ) {
 		params = params || {};
 
-		return Ember.RSVP.Promise.all([
+		return Promise.all([
 			// search for games
 			params.filter === "games" || params.filter === "all"
 				? twitch( "search/games", {
@@ -11,13 +11,13 @@ define( [ "ember", "utils/twitch" ], function( Ember, twitch ) {
 					type: "suggest",
 					live: true
 				} ).then(function( res ) { return res.games; })
-				: Ember.RSVP.Promise.resolve( [] ),
+				: Promise.resolve( [] ),
 			// search for streams
 			params.filter === "streams" || params.filter === "all"
 				? twitch( "search/streams", {
 					query: params.query
 				} ).then(function( res ) { return res.streams; })
-				: Ember.RSVP.Promise.resolve( [] )
+				: Promise.resolve( [] )
 		])
 			.then(function( queries ) {
 				return {

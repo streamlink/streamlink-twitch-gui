@@ -7,7 +7,7 @@ define( [ "ember" ], function( Ember ) {
 		}
 
 		function createImagePromise( src ) {
-			return new Ember.RSVP.Promise(function promiseImagePreload( resolve, reject ) {
+			return new Promise(function promiseImagePreload( resolve, reject ) {
 				var image = new Image();
 				image.addEventListener( "load", resolve, false );
 				image.addEventListener( "error", withError ? reject : resolve, false );
@@ -17,7 +17,7 @@ define( [ "ember" ], function( Ember ) {
 
 		return function promisePreload( response ) {
 			// create a new promise containing all image preload promises
-			return Ember.RSVP.Promise.all(
+			return Promise.all(
 				// create a flat array out of all traversal strings
 				Ember.makeArray( list ).reduce(function createPromiseList( promises, traverse ) {
 					return [].concat.apply(

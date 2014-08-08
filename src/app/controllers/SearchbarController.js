@@ -30,7 +30,7 @@ define( [ "ember", "models/Search" ], function( Ember, Search ) {
 
 				// this.store.findQuery( "searchbar", { query: query, filter: filter })
 				// findQuery maybe broken on LSAdapter?! let's implement a custom solution
-				new Ember.RSVP.Promise(function( resolve, reject ) {
+				new Promise(function( resolve, reject ) {
 					for ( var i = 0, record; record = all.content[ i++ ]; ) {
 						if (
 								query === record.get( "query" )

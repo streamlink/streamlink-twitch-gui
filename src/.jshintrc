@@ -24,6 +24,7 @@
 
 	"globals"  : {
 		"define" : true,
-		"DEBUG"  : true
+		"DEBUG"  : true,
+		"Promise": true
 	}
 }
