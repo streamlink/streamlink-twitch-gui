@@ -1,93 +1,9 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semver ) {
 
-	var	FS		= require( "fs" ),
-		CP		= require( "child_process" ),
-		isWin	= /^win/.test( process.platform ),
-		PATH	= process.env.PATH || process.env.Path || process.env.path || ".",
-		PATHS	= PATH.split( isWin ? ";" : ":" ),
-		EXTS	= [ ".exe" ]; // isWin ? process.env.PATHEXT.split( ";" ) : null;
+	var CP = require( "child_process" );
 
-
-	/**
-	 * Check if the path for livestreamer is valid
-	 * TODO: maybe also check if the file really is livestreamer? `livestreamer --version`
-	 * @param {string} path A user defined path
-	 * @param {string} exec The default command
-	 * @returns {Promise}
-	 */
-	function checkLivestreamer( path, exec ) {
-		// use the default command if the user did not define one
-		path = path ? String( path ) : exec;
-
-		// check for invalid values first
-		if ( path.indexOf( exec ) === -1 ) {
-			return Promise.reject();
-		}
-
-		// then check for the executable
-		return new Promise(function( resolve, reject ) {
-			// TODO: make which() async
-			//       will do this together with validation
-			var res = which( path );
-			if ( res !== false ) {
-				resolve( res );
-			} else {
-				reject();
-			}
-		});
-	}
-
-	/**
-	 * Locate a command
-	 * @param {string} file
-	 * @returns {boolean|string}
-	 */
-	function which( file ) {
-		// absolute or relative
-		if ( file.indexOf( isWin ? "\\" : "/" ) !== -1 ) {
-			return checkFile( file ) && file;
-
-		// search in every PATH
-		} else {
-			var check, j, i = 0, l = PATHS.length, m = EXTS.length;
-			if ( isWin ) {
-				for ( ; i < l; i++ ) {
-					for ( j = 0; j < m; j++ ) {
-						check = PATHS[ i ] + "\\" + file + EXTS[ j ];
-						if ( checkFile( check ) ) {
-							return check;
-						}
-					}
-				}
-
-			} else {
-				for ( ; i < l; i++ ) {
-					check = PATHS[ i ] + "/" + file;
-					if ( checkFile( check ) ) {
-						return check;
-					}
-				}
-			}
-
-			return false;
-		}
-	}
-
-	/**
-	 * Does the file exist and is it executable?
-	 * @param {string} file
-	 * @returns {boolean}
-	 */
-	function checkFile( file ) {
-		if ( !FS.existsSync( file ) ) { return false; }
-		var stat = FS.statSync( file );
-		return	stat.isFile()
-			&&	!isWin
-				// check for executable flag on non-windows
-				? stat.mode & 0111
-				// ?
-				: true;
-	}
+	function VersionError( version ) { this.version = version; }
+	VersionError.prototype = new Error();
 
 
 	return Ember.ObjectController.extend({
@@ -96,6 +12,11 @@ define( [ "ember" ], function( Ember ) {
 		modelBinding: "controllers.application.model",
 
 		configBinding: "model.package.config",
+
+		versionMinBinding: "config.livestreamer-version-min",
+		versionParameters: [ "--version", "--no-version-check" ],
+		versionRegExp: /^livestreamer(?:\.exe)? (\d+\.\d+.\d+)(.*)$/,
+		versionTimeout: 2000,
 
 		parameters: [
 			{
@@ -148,6 +69,69 @@ define( [ "ember" ], function( Ember ) {
 					? qualities[ quality ].quality
 					: qualities[ 0 ].quality
 			]);
+		},
+
+		/**
+		 * Validate the livestreamer path
+		 * @param {string} path A user defined path
+		 * @returns {Promise}
+		 */
+		checkLivestreamer: function( path ) {
+			var exec = this.get( "config.livestreamer-exec" );
+
+			// use the default command if the user did not define one
+			path = path ? String( path ) : exec;
+
+			// check for invalid values first
+			if ( path.indexOf( exec ) === -1 ) {
+				return Promise.reject();
+			}
+
+			// check for the executable
+			return which( path )
+			// check for correct version
+				.then( this.validateLivestreamer.bind( this ) );
+		},
+
+		validateLivestreamer: function( livestreamer ) {
+			var	params	= this.get( "versionParameters" ),
+				regexp	= this.get( "versionRegExp" ),
+				minimum	= this.get( "versionMin" ),
+				time	= this.get( "versionTimeout" ),
+				defer	= Promise.defer(),
+				spawn	= CP.spawn( livestreamer, params );
+
+			function failed() {
+				spawn = null;
+				defer.reject();
+			}
+
+			// reject on error / exit
+			spawn.on( "error", failed );
+			spawn.on(  "exit", failed );
+
+			// kill after a certain time
+			setTimeout(function() {
+				if ( spawn ) { spawn.kill( "SIGKILL" ); }
+				failed();
+			}, time );
+
+			// only check the first chunk of data
+			spawn.stderr.on( "data", function( data ) {
+				var match = regexp.exec( String( data ).trim() );
+				if ( match ) {
+					// resolve before process exit
+					defer.resolve( match[1] );
+				}
+				// immediately to kill the process
+				spawn.kill( "SIGKILL" );
+			});
+
+			return defer.promise.then(function( version ) {
+				return version === semver.getMax([ version, minimum ])
+					? livestreamer
+					: Promise.reject( new VersionError( version ) );
+			});
 		},
 
 		actions: {
@@ -235,13 +219,11 @@ define( [ "ember" ], function( Ember ) {
 
 
 				// show dialog
-				this.send( "openModal", "Preparing", "Please wait..." );
+				this.send( "openModal", "Preparing", "Please wait...", [ btn_close ] );
 
 				// validate and prepare the exec command
-				checkLivestreamer(
-					settings.get( "livestreamer" ),
-					this.get( "config.livestreamer-exec" )
-				)
+				this.checkLivestreamer( settings.get( "livestreamer" ) )
+
 					// livestreamer found
 					.then(function( cmd ) {
 						// set the exec command in the upper scope
@@ -255,13 +237,22 @@ define( [ "ember" ], function( Ember ) {
 						streamStart();
 					}.bind( this ) )
 
-					// livestreamer not found
-					.catch(function() {
-						this.send( "updateModal",
-							"Error: Livestreamer was not found",
-							"Please check settings and/or (re)install Livestreamer.",
-							[ btn_close, btn_download ]
-						);
+					// livestreamer not found or invalid
+					.catch(function( err ) {
+						if ( err instanceof VersionError ) {
+							this.send( "updateModal",
+								"Error: Invalid Livestreamer version",
+								"Your version v%@ does not match the minimum requirements (v%@)"
+									.fmt( err.version, this.get( "versionMin" ) ),
+								[ btn_close, btn_download ]
+							);
+						} else {
+							this.send( "updateModal",
+								"Error: Livestreamer was not found",
+								"Please check settings and/or (re)install Livestreamer.",
+								[ btn_close, btn_download ]
+							);
+						}
 					}.bind( this ) );
 			}
 		}
