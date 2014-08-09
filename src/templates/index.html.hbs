@@ -6,7 +6,7 @@
 <p class="stats"><i class="fa fa-clock-o"></i> {{hours-from-now stream.channel.updated_at}} <i class="fa fa-users"></i> {{format-viewers stream.viewers}}</p>
 <p class="status">{{stream.channel.status}}</p>
 </aside>
-<div class="preview" {{action "open_livestreamer" stream}}><img {{bind-attr src=stream.preview.large}}></div>
+<div class="preview" {{action "openLivestreamer" stream}}><img {{bind-attr src=stream.preview.large}}></div>
 </section>
 <ul class="channels wrapper horizontal">
 {{#each featured}}

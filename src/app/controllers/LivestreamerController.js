@@ -203,7 +203,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 					btn_download = new modal.Button( "Download", "btn-success", "fa-download",
 						function() {
 							var url = this.get( "config.livestreamer-download-url" );
-							this.send( "open_browser", url );
+							this.send( "openBrowser", url );
 						}.bind( this )
 					),
 					btn_chat = new modal.Button( "Open Chat", "btn-success", "fa-comments",
@@ -212,7 +212,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 									"{channel}",
 									Ember.get( stream, "channel.name" )
 								);
-							this.send( "open_browser", url );
+							this.send( "openBrowser", url );
 							// don't close modal on click
 							return false;
 						}.bind( this )

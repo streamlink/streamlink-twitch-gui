@@ -10,7 +10,7 @@ define([
 		attributeBindings: [ "title" ],
 		titleBinding: "stream.channel.status",
 
-		action: "open_livestreamer",
+		action: "openLivestreamer",
 
 		click: function() {
 			this.sendAction( "action", this.get( "stream" ) );

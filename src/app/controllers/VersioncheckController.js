@@ -66,7 +66,7 @@ define( [ "ember", "utils/semver" ], function( Ember, SemVer ) {
 		},
 
 		releaseDownload: function( url ) {
-			this.send( "open_browser", url );
+			this.send( "openBrowser", url );
 			this.releaseIgnore();
 		},
 

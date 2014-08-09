@@ -29,11 +29,11 @@ define( [ "ember" ], function( Ember ) {
 				this.transitionTo.apply( this, arguments );
 			},
 
-			"open_browser": function( url ) {
+			"openBrowser": function( url ) {
 				this.get( "controller.nwGui" ).Shell.openExternal( url );
 			},
 
-			"open_livestreamer": function( stream ) {
+			"openLivestreamer": function( stream ) {
 				this.store.find( "settings", 1 ).then(function( settings ) {
 					this.get( "controller.controllers.livestreamer" ).send(
 						"start", settings, stream
