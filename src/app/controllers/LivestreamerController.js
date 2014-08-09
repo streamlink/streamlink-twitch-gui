@@ -1,79 +1,136 @@
 define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semver ) {
 
-	var CP = require( "child_process" );
+	var	CP	= require( "child_process" ),
+		get	= Ember.get;
+
 
 	function VersionError( version ) { this.version = version; }
 	VersionError.prototype = new Error();
+
+	function NotFoundError() {}
+	NotFoundError.prototype = new Error();
+
+
+	function Parameter( arg, params, cond ) {
+		this.arg	= arg;
+		this.params	= Ember.makeArray( params );
+		this.cond	= Ember.makeArray( cond );
+	}
+
+
+	function Stream( spawn, stream ) {
+		this.spawn	= spawn;
+		this.stream	= stream;
+		this.name	= get( stream, "channel.name" );
+	}
+
+	Stream.prototype.kill = function( callback ) {
+		this.spawn.killCallback = callback;
+		this.spawn.kill( "SIGTERM" );
+	};
 
 
 	return Ember.ObjectController.extend({
 		needs: [ "application", "modal" ],
 
-		modelBinding: "controllers.application.model",
-
-		configBinding: "model.package.config",
+		globalsBinding: "controllers.application.model",
+		windowBinding: "controllers.application.nwWindow",
+		configBinding: "globals.package.config",
 
 		versionMinBinding: "config.livestreamer-version-min",
 		versionParameters: [ "--version", "--no-version-check" ],
 		versionRegExp: /^livestreamer(?:\.exe)? (\d+\.\d+.\d+)(.*)$/,
 		versionTimeout: 2000,
 
+		streams: [],
+
 		parameters: [
-			{
-				arg		: "--no-version-check",
-				params	: [],
-				cond	: []
-			},
-			{
-				arg		: "--player",
-				params	: [ "player" ],
-				cond	: [ "player" ]
-			},
-			{
-				arg		: "--player-args",
-				params	: [ "player_params" ],
-				cond	: [ "player", "player_params" ]
-			},
-			{
-				arg		: "--player-continuous-http",
-				params	: [],
-				cond	: [ "player_reconnect" ]
-			},
-			{
-				arg		: "--player-no-close",
-				params	: [],
-				cond	: [ "player_no_close" ]
-			}
+			new Parameter( "--no-version-check" ),
+			new Parameter( "--player", "player", "player" ),
+			new Parameter( "--player-args", "player_params", [ "player", "player_params" ] ),
+			new Parameter( "--player-continuous-http", null, "player_reconnect" ),
+			new Parameter( "--player-no-close", null, "player_no_close" )
 		],
 
 		getParametersString: function( settings, stream, quality ) {
 			var	args = [],
-				qualities = settings.get( "qualities" );
+				qualities = get( settings, "qualities" );
 
 			// default quality
 			if ( quality === undefined ) {
-				quality = settings.get( "quality" );
+				quality = get( settings, "quality" );
 			}
 
 			// prepare parameters
 			this.parameters.forEach(function( elem ) {
 				if ( elem.cond.every(function( cond ) {
-					return !!settings.get( cond );
+					return !!get( settings, cond );
 				}) ) {
 					[].push.apply( args, [ elem.arg ].concat(
 						elem.params.map(function( param ) {
-							return settings.get( param );
+							return get( settings, param );
 						})
 					));
 				}
 			});
 
 			return args.concat([
-				Ember.get( stream, "channel.url" ),
+				get( stream, "channel.url" ),
 				qualities.hasOwnProperty( quality )
 					? qualities[ quality ].quality
 					: qualities[ 0 ].quality
 			]);
+		},
+
+
+		prepare: function() {
+			var	defer = Promise.defer(),
+				modal = get( this, "controllers.modal" );
+
+			this.send( "openModal",
+				"Preparing",
+				"Please wait...",
+				[ new modal.ButtonClose( defer.reject ) ]
+			);
+
+			// read current settings
+			this.store.find( "settings", 1 ).then(function( settings ) {
+
+				// validate and get the exec command
+				this.checkLivestreamer( get( settings, "livestreamer" ) )
+					// proceed with outer promise
+					.then(function( exec ) {
+						defer.resolve([ settings, exec ]);
+					})
+					// livestreamer not found or invalid
+					.catch(function( err ) {
+						var	controls = [
+								new modal.ButtonClose(),
+								new modal.ButtonDownload(
+									get( this, "config.livestreamer-download-url" )
+								)
+							];
+						if ( err instanceof VersionError ) {
+							this.send( "updateModal",
+								"Error: Invalid Livestreamer version",
+								"Your version v%@ does not match the minimum requirements (v%@)"
+									.fmt( err.version, get( this, "versionMin" ) ),
+								controls
+							);
+						} else if ( err instanceof NotFoundError ) {
+							this.send( "updateModal",
+								"Error: Livestreamer was not found",
+								"Please check settings and/or (re)install Livestreamer.",
+								controls
+							);
+						}
+						// reject the outer promise and show a generic error message if err exists
+						defer.reject( err );
+					}.bind( this ) );
+
+			}.bind( this ) ).catch( defer.reject );
+
+			return defer.promise;
 		},
 
 		/**
@@ -82,18 +139,21 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		 * @returns {Promise}
 		 */
 		checkLivestreamer: function( path ) {
-			var exec = this.get( "config.livestreamer-exec" );
+			var exec = get( this, "config.livestreamer-exec" );
 
 			// use the default command if the user did not define one
 			path = path ? String( path ) : exec;
 
 			// check for invalid values first
 			if ( path.indexOf( exec ) === -1 ) {
-				return Promise.reject();
+				return Promise.reject( new NotFoundError() );
 			}
 
 			// check for the executable
 			return which( path )
+				.catch(function() {
+					throw new NotFoundError();
+				})
 			// check for correct version
 				.then( this.validateLivestreamer.bind( this ) );
 		},
@@ -105,16 +165,16 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		 * @returns {Promise}
 		 */
 		validateLivestreamer: function( livestreamer ) {
-			var	params	= this.get( "versionParameters" ),
-				regexp	= this.get( "versionRegExp" ),
-				minimum	= this.get( "versionMin" ),
-				time	= this.get( "versionTimeout" ),
+			var	params	= get( this, "versionParameters" ),
+				regexp	= get( this, "versionRegExp" ),
+				minimum	= get( this, "versionMin" ),
+				time	= get( this, "versionTimeout" ),
 				defer	= Promise.defer(),
 				spawn	= CP.spawn( livestreamer, params );
 
-			function failed() {
+			function failed( err ) {
 				spawn = null;
-				defer.reject();
+				defer.reject( err );
 			}
 
 			// reject on error / exit
@@ -124,7 +184,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			// kill after a certain time
 			setTimeout(function() {
 				if ( spawn ) { spawn.kill( "SIGKILL" ); }
-				failed();
+				failed( new Error( "timeout" ) );
 			}, time );
 
 			// only check the first chunk of data
@@ -145,125 +205,100 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			});
 		},
 
-		actions: {
-			start: function( settings, stream ) {
-				var	win = this.get( "controllers.application.nwWindow" ),
-					modal = this.get( "controllers.modal" ),
 
-					quality = settings.get( "quality" ),
-					qualities = settings.get( "qualities" ),
-					gui_minimize = settings.get( "gui_minimize" ) !== false,
+		streamStart: function( settings, exec, stream ) {
+			var	self	= this,
+				defer	= Promise.defer(),
+				modal	= get( this, "controllers.modal" ),
+				streamObj;
 
-
-					// child process related
-					spawn,
-					exec,
-					streamCloseCallback = null,
-
-					streamClose = function( callback ) {
-						if ( !spawn ) { return; }
-						streamCloseCallback = callback;
-						spawn.kill( "SIGTERM" );
-					},
-
-					streamStart = function( quality ) {
-						if ( spawn ) { return; }
-
-						// start child process
-						spawn = CP.spawn(
-							exec,
-							this.getParametersString( settings, stream, quality )
-						);
-
-						if ( !spawn ) { return; }
-
-						spawn.on( "exit", function() {
-							spawn = null;
-
-							// don't close the modal if the callback returns false
-							if ( !streamCloseCallback || streamCloseCallback() !== false ) {
-								streamCloseCallback = null;
-
-								this.send( "closeModal" );
-
-								// restore the GUI
-								if ( win && gui_minimize ) { win.restore(); }
-							}
-						}.bind( this ) );
-
-						// hide the GUI
-						if ( win && gui_minimize ) { win.minimize(); }
-					}.bind( this ),
-
-
-					// modal controls
-					btn_close = new modal.Button( "Close", "btn-danger", "fa-times",
-						streamClose
-					),
-					btn_download = new modal.Button( "Download", "btn-success", "fa-download",
-						function() {
-							var url = this.get( "config.livestreamer-download-url" );
-							this.send( "openBrowser", url );
-						}.bind( this )
-					),
-					btn_chat = new modal.Button( "Open Chat", "btn-success", "fa-comments",
-						function() {
-							var	url = this.get( "config.twitch-chat-url" ).replace(
-									"{channel}",
-									Ember.get( stream, "channel.name" )
-								);
-							this.send( "openBrowser", url );
-							// don't close modal on click
-							return false;
-						}.bind( this )
-					),
-					sel_qualities = new modal.Select( qualities, quality, "modalqualityselect",
-						function() {
-							streamClose(function() {
-								// restart stream with new quality
-								streamStart( this.selection.id );
-								// do not close modal
-								return false;
-							}.bind( this ) )
-						}
+			function createSpawn( quality ) {
+				var	spawn = CP.spawn(
+						exec,
+						self.getParametersString( settings, stream, quality )
 					);
 
+				spawn.on( "error", defer.reject );
+				spawn.on( "exit", function() {
+					// stream was closed regularly
+					if ( !spawn.killCallback || spawn.killCallback() !== false ) {
+						delete spawn.killCallback;
+						self.send( "closeModal" );
 
-				// show dialog
-				this.send( "openModal", "Preparing", "Please wait...", [ btn_close ] );
+						// restore the GUI
+						if ( get( settings, "gui_minimize" ) ) { get( self, "window" ).restore(); }
 
-				// validate and prepare the exec command
-				this.checkLivestreamer( settings.get( "livestreamer" ) )
+						// remove the stream from the streams list
+						self.streams.removeObject( streamObj );
+						streamObj = null;
 
-					// livestreamer found
-					.then(function( cmd ) {
-						// set the exec command in the upper scope
-						exec = cmd;
-						this.send( "updateModal",
-							"Watching now: " + Ember.get( stream, "channel.name" ),
-							Ember.get( stream, "channel.status" ),
-							[ btn_close, btn_chat, sel_qualities ]
-						);
-						// start the stream
-						streamStart();
-					}.bind( this ) )
+						// also finish promise
+						defer.resolve();
+					}
+					spawn = null;
+				});
 
-					// livestreamer not found or invalid
-					.catch(function( err ) {
-						if ( err instanceof VersionError ) {
-							this.send( "updateModal",
-								"Error: Invalid Livestreamer version",
-								"Your version v%@ does not match the minimum requirements (v%@)"
-									.fmt( err.version, this.get( "versionMin" ) ),
-								[ btn_close, btn_download ]
-							);
-						} else {
-							this.send( "updateModal",
-								"Error: Livestreamer was not found",
-								"Please check settings and/or (re)install Livestreamer.",
-								[ btn_close, btn_download ]
-							);
+				// hide the GUI
+				if ( get( settings, "gui_minimize" ) ) { get( self, "window" ).minimize(); }
+
+				return spawn;
+			}
+
+			// add the new stream object to the streams list
+			streamObj = new Stream( createSpawn(), stream );
+			this.streams.addObject( streamObj );
+
+			this.send( "updateModal",
+				"Watching now: " + get( stream, "channel.name" ),
+				get( stream, "channel.status" ),
+				[
+					new modal.ButtonClose( streamObj.kill.bind( streamObj ) ),
+					new modal.ButtonBrowser(
+						"Chat",
+						"fa-comments",
+						get( this, "config.twitch-chat-url" )
+							.replace( "{channel}", get( stream, "channel.name" ) ),
+						false
+					),
+					new modal.Select(
+						get( settings, "qualities" ),
+						get( settings, "quality" ),
+						"modalqualityselect",
+						function() {
+							streamObj.kill(function() {
+								streamObj.spawn = createSpawn( this.selection.id );
+								// do not close modal
+								return false;
+							}.bind( this ) );
 						}
+					)
+				]
+			);
+
+			return defer.promise;
+		},
+
+		actions: {
+			"start": function( stream ) {
+				// is the stream already running?
+				if ( this.streams.findBy( "name", get( stream, "channel.name" ) ) ) {
+					return;
+				}
+
+				// validate configuration
+				this.prepare()
+					// start the stream
+					.then(function( data ) {
+						return this.streamStart( data[0], data[1], stream );
+					}.bind( this ) )
+					// an error occured
+					.catch(function( err ) {
+						var modal = get( this, "controllers.modal" );
+						this.send( "updateModal",
+							"Error while trying to launch the stream",
+							err.message || "Internal error",
+							[ new modal.ButtonClose() ]
+						);
 					}.bind( this ) );
 			}
 		}

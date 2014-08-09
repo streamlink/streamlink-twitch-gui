@@ -34,11 +34,7 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"openLivestreamer": function( stream ) {
-				this.store.find( "settings", 1 ).then(function( settings ) {
-					this.get( "controller.controllers.livestreamer" ).send(
-						"start", settings, stream
-					);
-				}.bind( this ) );
+				this.get( "controller.controllers.livestreamer" ).send( "start", stream );
 			},
 
 			"openModal": function( head, body, controls ) {
