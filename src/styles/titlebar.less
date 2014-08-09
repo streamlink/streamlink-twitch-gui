@@ -146,6 +146,47 @@
 					background: @titlebar-btnclose-active-background;
 				}
 			}
+
+			&.btn-indicator {
+				@anim-length: .333s;
+
+				position: relative;
+				-webkit-transition: width @anim-length ease-in;
+
+				> .indicator {
+					display: block;
+					position: absolute;
+					right: .2em;
+					bottom: .2em;
+					padding: 0 .2em;
+					border-radius: .2em;
+					font: .55em/1.2 "Open Sans";
+					color: @color-text-brightest;
+					background: @color-twitch-purple;
+
+					opacity: 1;
+					z-index: 1;
+					// "show" with delay
+					-webkit-transition: opacity .001s @anim-length, z-index .001s @anim-length;
+				}
+
+				// keep the icon centered during the animation
+				&::before {
+					display: block;
+					padding: 0 .3em;
+				}
+
+				&.btn-hidden {
+					width: 0;
+
+					// "hide" instantly
+					> .indicator {
+						opacity: 0;
+						z-index: -1;
+						-webkit-transition-delay: 0;
+					}
+				}
+			}
 		}
 
 		> .spacer {

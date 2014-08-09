@@ -252,6 +252,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				"Watching now: " + get( stream, "channel.name" ),
 				get( stream, "channel.status" ),
 				[
+					new modal.Button( "Continue", "", "fa-reply", defer.resolve ),
 					new modal.ButtonClose( streamObj.kill.bind( streamObj ) ),
 					new modal.ButtonBrowser(
 						"Chat",
@@ -276,6 +277,12 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			);
 
 			return defer.promise;
+		},
+
+		killAll: function() {
+			this.streams.forEach(function( stream ) {
+				stream.kill();
+			});
 		},
 
 		actions: {
