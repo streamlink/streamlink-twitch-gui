@@ -215,7 +215,8 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			function createSpawn( quality ) {
 				var	spawn = CP.spawn(
 						exec,
-						self.getParametersString( settings, stream, quality )
+						self.getParametersString( settings, stream, quality ),
+						{ detached: true }
 					);
 
 				spawn.on( "error", defer.reject );
