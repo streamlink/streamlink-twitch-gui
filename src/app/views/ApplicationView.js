@@ -6,6 +6,18 @@ define([
 	"gui/selecter"
 ], function( Ember, Template, GUISelectable, GUISmoothscroll, GUISelecter ) {
 
+	Ember.LinkView.reopen({
+		didInsertElement: function() {
+			this._super.apply( this, arguments );
+			this.$().on( "click", function( e ) {
+				if ( e.button !== 0 ) {
+					e.preventDefault();
+					e.stopImmediatePropagation();
+				}
+			});
+		}
+	});
+
 	Ember.Select.reopen({
 		didInsertElement: function() {
 			this._super();

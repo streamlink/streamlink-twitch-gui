@@ -73,6 +73,7 @@ define(function( require ) {
 			AboutController: require( "controllers/AboutController" ),
 			AboutView: require( "views/AboutView" ),
 
+			ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
 			RadioButtonComponent: require( "components/RadioButtonComponent" ),
 			RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
 			GameItemComponent: require( "components/GameItemComponent" ),

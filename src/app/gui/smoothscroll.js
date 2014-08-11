@@ -593,6 +593,11 @@ define(function() {
 					return true;
 				}
 
+				// only apply to scrollable regions
+				if ( elem.clientHeight === elem.scrollHeight ) {
+					return true;
+				}
+
 				// we don't want the default by now
 				e.preventDefault();
 
