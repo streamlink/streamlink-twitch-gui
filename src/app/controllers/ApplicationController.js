@@ -16,9 +16,33 @@ define( [ "ember" ], function( Ember ) {
 
 		nwGui: nwGui,
 		nwWindow: nwWindow,
+		nwTray: null,
 
 		// use an alias here: a binding will reach the callstack limit
 		streamsLength: Ember.computed.alias( "controllers.livestreamer.streams.length" ),
+
+
+		winToTray: function() {
+			if ( !nwGui || !nwWindow || this.get( "nwTray" ) ) { return; }
+
+			this.set( "nwTray",
+				new nwGui.Tray({
+					title: "Livestreamer Twitch GUI",
+					icon: "/img/icon-tray.png"
+				}).on( "click", this.winFromTray.bind( this ) )
+			);
+			nwWindow.hide();
+			nwWindow.setShowInTaskbar( false );
+		},
+
+		winFromTray: function() {
+			if ( !nwGui || !nwWindow || !this.get( "nwTray" ) ) { return; }
+
+			nwWindow.show();
+			nwWindow.setShowInTaskbar( true );
+			this.get( "nwTray" ).remove();
+			this.set( "nwTray", null );
+		},
 
 		actions: {
 			"winRefresh": function() {

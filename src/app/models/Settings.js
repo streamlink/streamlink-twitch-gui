@@ -1,6 +1,7 @@
 define( [ "ember", "ember-data" ], function( Ember, DS ) {
 
 	return DS.Model.extend({
+
 		livestreamer		: DS.attr( "string", { defaultValue: "" } ),
 		quality				: DS.attr( "number", { defaultValue: 0 } ),
 		player				: DS.attr( "string", { defaultValue: "" } ),
@@ -10,26 +11,37 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		player_no_close		: DS.attr( "boolean", { defaultValue: false } ),
 		gui_minimize		: DS.attr( "string", { defaultValue: "false" } ),
 
-		qualities			: [
+
+		isHttp: Ember.computed.equal( "player_passthrough", "http" ),
+
+
+		qualities: [
 			{ id: 0, label: "Source", quality: "source,best" },
 			{ id: 1, label: "High",   quality: "high,mobile_high" },
 			{ id: 2, label: "Medium", quality: "medium,mobile_medium" },
 			{ id: 3, label: "Low",    quality: "low,mobile_mobile,worst" }
 		],
 
-		passthrough			: [
+		passthrough: [
 			{ value: "http", label: "http" },
 			{ value: "rtmp", label: "rtmp" },
 			{ value: "hls",  label: "hls" }
 		],
 
-		minimize			: [
-			{ value: "false", label: "Do nothing" },
-			{ value: "bar",   label: "Minimize" }
-		],
+		minimize: (function() {
+			var	minimize = [
+					{ value: "false", label: "Do nothing" },
+					{ value: "bar",   label: "Minimize" }
+				];
 
+			// move to tray only on windows
+			// tray icon doesn't work on osx+linux
+			if ( /^win/.test( process.platform ) ) {
+				minimize.push({ value: "tray", label: "Move to tray" });
+			}
 
-		isHttp: Ember.computed.equal( "player_passthrough", "http" )
+			return minimize;
+		})()
 
 	}).reopenClass({
 		toString: function() { return "Settings"; }

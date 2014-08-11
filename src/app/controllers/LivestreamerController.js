@@ -225,8 +225,12 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						self.send( "closeModal" );
 
 						// restore the GUI
-						if ( get( settings, "gui_minimize" ) !== "false" ) {
-							get( self, "window" ).restore();
+						switch ( get( settings, "gui_minimize" ) ) {
+							case "bar":
+								get( self, "window" ).restore();
+								break;
+							case "tray":
+								get( self, "controllers.application" ).winFromTray();
 						}
 
 						// remove the stream from the streams list
@@ -240,8 +244,12 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				});
 
 				// hide the GUI
-				if ( get( settings, "gui_minimize" ) !== "false" ) {
-					get( self, "window" ).minimize();
+				switch ( get( settings, "gui_minimize" ) ) {
+					case "bar":
+						get( self, "window" ).minimize();
+						break;
+					case "tray":
+						get( self, "controllers.application" ).winToTray();
 				}
 
 				return spawn;
