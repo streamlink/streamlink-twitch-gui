@@ -5,6 +5,8 @@
 <div class="right" data-fileselect>{{input type="text" value=content.livestreamer classNames="form-control" placeholder="Leave blank for default location"}}</div>
 <div class="left"><i class="fa fa-eye"></i> Preferred quality<span class="description">Choose the default stream quality.</span></div>
 <div class="right">{{view Ember.Select value=content.quality content=model.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div class="left"><i class="fa fa-filter"></i> Stream type<span class="description">Your videoplayer needs to support this.</span></div>
+<div class="right">{{view Ember.Select value=content.player_passthrough content=model.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 </fieldset>
 <fieldset>
 <legend>Videoplayer settings</legend>
@@ -12,12 +14,17 @@
 <div class="right" data-fileselect>{{input type="text" value=content.player class="form-control" placeholder="Leave blank for default player"}}</div>
 <div class="left"><i class="fa fa-code"></i> Parameters<span class="description">Add player specific arguments</span></div>
 <div class="right">{{input type="text" value=content.player_params classNames="col-xs-12" placeholder="Add custom arguments"}}</div>
+{{#if isHttp}}
 <div class="left"><i class="fa fa-refresh"></i> Reconnect<span class="description">In case the connection has been dropped.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=content.player_reconnect}}<span>Reconnect to stream</span></label></div>
+{{/if}}
 <div class="left"><i class="fa fa-times"></i> Close player<span class="description">After the stream has finished.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=content.player_no_close}}<span>Do not close the player</span></label></div>
+</fieldset>
+<fieldset>
+<legend>GUI settings</legend>
 <div class="left"><i class="fa fa-minus"></i> Minimize GUI<span class="description">When videoplayer opens.</span></div>
-<div class="right"><label>{{input type="checkbox" checked=content.gui_minimize}}<span>Minimize the GUI on stream start</span></label></div>
+<div class="right">{{view Ember.Select value=content.gui_minimize content=model.minimize optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 </fieldset>
 <fieldset class="submit">
 <button type="button" class="btn btn-with-icon btn-success" {{action "apply"}}><i class="fa fa-check"></i> Apply</button>

@@ -11,9 +11,9 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 	NotFoundError.prototype = new Error();
 
 
-	function Parameter( arg, params, cond ) {
+	function Parameter( arg, cond, params ) {
 		this.arg	= arg;
-		this.params	= Ember.makeArray( params );
+		this.params	= params;
 		this.cond	= Ember.makeArray( cond );
 	}
 
@@ -47,10 +47,11 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 
 		parameters: [
 			new Parameter( "--no-version-check" ),
-			new Parameter( "--player", "player", "player" ),
-			new Parameter( "--player-args", "player_params", [ "player", "player_params" ] ),
-			new Parameter( "--player-continuous-http", null, "player_reconnect" ),
-			new Parameter( "--player-no-close", null, "player_no_close" )
+			new Parameter( "--player", null, "player" ),
+			new Parameter( "--player-args", "player", "player_params" ),
+			new Parameter( "--player-passthrough", null, "player_passthrough" ),
+			new Parameter( "--player-continuous-http", [ "isHttp", "player_reconnect" ] ),
+			new Parameter( "--player-no-close", "player_no_close" )
 		],
 
 		getParametersString: function( settings, stream, quality ) {
@@ -58,14 +59,14 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				qualities = get( settings, "qualities" );
 
 			// prepare parameters
-			this.parameters.forEach(function( elem ) {
-				if ( elem.cond.every(function( cond ) {
+			this.parameters.forEach(function( parameter ) {
+				if ( parameter.cond.concat( parameter.params || [] ).every(function( cond ) {
 					return !!get( settings, cond );
 				}) ) {
-					[].push.apply( args, [ elem.arg ].concat(
-						elem.params.map(function( param ) {
-							return get( settings, param );
-						})
+					[].push.apply( args, [ parameter.arg ].concat(
+						parameter.params
+							? get( settings, parameter.params )
+							: []
 					));
 				}
 			});
@@ -224,7 +225,9 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						self.send( "closeModal" );
 
 						// restore the GUI
-						if ( get( settings, "gui_minimize" ) ) { get( self, "window" ).restore(); }
+						if ( get( settings, "gui_minimize" ) !== "false" ) {
+							get( self, "window" ).restore();
+						}
 
 						// remove the stream from the streams list
 						self.streams.removeObject( streamObj );
@@ -237,7 +240,9 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				});
 
 				// hide the GUI
-				if ( get( settings, "gui_minimize" ) ) { get( self, "window" ).minimize(); }
+				if ( get( settings, "gui_minimize" ) !== "false" ) {
+					get( self, "window" ).minimize();
+				}
 
 				return spawn;
 			}
