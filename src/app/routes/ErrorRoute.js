@@ -13,7 +13,8 @@ define( [ "ember" ], function( Ember ) {
 		);
 
 		this.name	= "XMLHttpRequest Error";
-		this.xhr	= xhr;
+		this.host	= xhr.host;
+		this.path	= xhr.path;
 	};
 
 	Ember.XHRError.prototype = Ember.create( Ember.Error.prototype );
@@ -30,7 +31,10 @@ define( [ "ember" ], function( Ember ) {
 		setupController: function( controller, model ) {
 			this._super.apply( this, arguments );
 
-			var	props	= [ "name", "message" ],
+			model = model || new Error( "Unknown error" );
+			model.name = model.name || model.constructor.name;
+
+			var	props	= [ "name", "message", "host", "path" ],
 				reason	= Ember.get( model, "reason" );
 
 			// handle rejected promises with a passed Error object as reason
@@ -41,28 +45,26 @@ define( [ "ember" ], function( Ember ) {
 			}
 
 			// display the callstack of non-xhr errors
-			if ( model instanceof Error && !( model instanceof Ember.XHRError ) ) {
+			if ( DEBUG && model instanceof Error && !( model instanceof Ember.XHRError ) ) {
 				props.push( "stack" );
 			}
 
 			// create the error-content array
 			controller.set( "error", props
 				.filter(function( key ) {
-					return model[ key ] !== undefined;
+					var value = model[ key ];
+					return	value !== undefined
+						&&	!( value instanceof Object )
+						&&	String( value ).trim().length > 0;
 				})
 				.map(function( key ) {
 					return {
 						key: key.charAt( 0 ).toUpperCase() + key.slice( 1 ),
-						value: model[ key ],
+						value: String( model[ key ] ),
 						isStack: key === "stack"
 					};
 				})
 			);
-
-			// throw the error in dev mode for debugging purposes
-			if ( DEBUG && model instanceof Error ) {
-				throw model;
-			}
 		}
 	});
 

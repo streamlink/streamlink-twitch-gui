@@ -31,7 +31,10 @@ define( [ "ember" ], function( Ember ) {
 				}, [] )
 			)
 				// return the original response
-				.then(function preloadFulfilled() { return response; });
+				.then(function preloadFulfilled() { return response; })
+				.catch(function() {
+					throw new Error( "Could not load image resources" );
+				});
 		}
 	};
 

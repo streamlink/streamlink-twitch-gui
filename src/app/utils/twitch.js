@@ -18,7 +18,12 @@ define( [ "ember" ], function( Ember ) {
 				accept		: "application/vnd.twitchtv.v3+json"
 			},
 			timeout		: 10000
-		}) );
+		}) )
+			.catch(function( jqErr ) {
+				jqErr.host	= "api.twitch.tv";
+				jqErr.path	= path;
+				throw new Ember.XHRError( jqErr );
+			});
 	};
 
 });
