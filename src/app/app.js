@@ -34,6 +34,10 @@ define(function( require ) {
 			SearchbarController: require( "controllers/SearchbarController" ),
 			SearchbarView: require( "views/SearchbarView" ),
 
+			WatchingRoute: require( "routes/WatchingRoute" ),
+			WatchingController: require( "controllers/WatchingController" ),
+			WatchingView: require( "views/WatchingView" ),
+
 			IndexRoute: require( "routes/IndexRoute" ),
 			IndexController: require( "controllers/IndexController" ),
 			IndexView: require( "views/IndexView" ),

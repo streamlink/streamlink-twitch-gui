@@ -1,0 +1,28 @@
+<h2>{{#if model.length}}You're watching{{else}}All streams have been closed{{/if}}</h2>
+<ul class="list-unstyled">
+{{#each model}}
+<li class="watching-stream">
+<img class="left" {{bind-attr src=stream.preview.large}}>
+<section class="right">
+<h3>{{stream.channel.display_name}}</h3>
+<div class="game">{{#link-to "games.game" stream.game}}<i class="fa fa-gamepad"></i> {{stream.game}}{{/link-to}}</div>
+<div class="info">{{stream.channel.status}}</div>
+<div class="stats">
+<div><i class="fa fa-clock-o"></i> {{hours-from-now stream.channel.updated_at}}</div>
+<div><i class="fa fa-group"></i> {{format-viewers stream.viewers}}</div>
+</div>
+<footer class="buttons">
+<button type="button" class="btn btn-with-icon btn-danger" {{action "close" this}}><i class="fa fa-times"></i> Close</button>
+<button type="button" class="btn btn-with-icon btn-success" {{action "chat" this}}><i class="fa fa-comments"></i> Chat</button>
+{{view Ember.Select class="modalqualityselect" value=quality content=controller.qualities optionValuePath="content.id" optionLabelPath="content.label" change=changeQuality}}
+</footer>
+</section>
+</li>
+{{else}}
+<p>What to do next?</p>
+<ul class="fa-ul watching-empty">
+<li>{{#link-to "index"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
+<li>{{#link-to "history" disabled=true}}<i class="fa fa-li fa-caret-right"></i>Browse recently watched streams{{/link-to}}</li>
+</ul>
+{{/each}}
+</ul>

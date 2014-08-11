@@ -1,0 +1,77 @@
+
+.content-watching {
+	a {
+		text-decoration: none;
+	}
+}
+
+.watching-stream {
+	display: flex;
+	margin-bottom: 2rem;
+
+	> .left {
+		flex-shrink: 0;
+		display: block;
+		width: 320px;
+		height: 200px;
+		margin-right: 1em;
+	}
+
+	> .right {
+		flex-grow: 1;
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: space-between;
+
+		> * {
+			flex-shrink: 0;
+		}
+
+		> h3 {
+			margin: 0;
+		}
+
+		> .game {
+			margin: .5em 0;
+		}
+
+		> .info {
+			flex-grow: 1;
+			flex-shrink: 1;
+			overflow: auto;
+			word-break: break-word;
+		}
+
+		> .stats {
+			display: flex;
+			margin: .5em 0;
+
+			> div {
+				display: inline-block;
+				width: auto;
+				margin-right: 1em;
+			}
+		}
+
+		> .game,
+		> .stats {
+			i {
+				color: @color-text-darker;
+			}
+		}
+
+		> .buttons {
+			display: flex;
+			justify-content: flex-start;
+
+			> * {
+				width: 9em;
+				margin: 0 .5em 0 0;
+			}
+
+			> .selecter {
+				line-height: 1.75;
+			}
+		}
+	}
+}

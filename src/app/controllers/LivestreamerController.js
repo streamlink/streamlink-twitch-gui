@@ -18,10 +18,11 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 	}
 
 
-	function Stream( spawn, stream ) {
-		this.spawn	= spawn;
-		this.stream	= stream;
-		this.name	= get( stream, "channel.name" );
+	function Stream( spawn, stream, quality ) {
+		this.spawn		= spawn;
+		this.stream		= stream;
+		this.quality	= quality;
+		this.name		= get( stream, "channel.name" );
 	}
 
 	Stream.prototype.kill = function( callback ) {
@@ -55,11 +56,6 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		getParametersString: function( settings, stream, quality ) {
 			var	args = [],
 				qualities = get( settings, "qualities" );
-
-			// default quality
-			if ( quality === undefined ) {
-				quality = get( settings, "quality" );
-			}
 
 			// prepare parameters
 			this.parameters.forEach(function( elem ) {
@@ -210,6 +206,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			var	self	= this,
 				defer	= Promise.defer(),
 				modal	= get( this, "controllers.modal" ),
+				quality	= get( settings, "quality" ),
 				streamObj;
 
 			function createSpawn( quality ) {
@@ -245,8 +242,18 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				return spawn;
 			}
 
+			// create a new stream object
+			streamObj = new Stream( createSpawn( quality ), stream, quality );
+			streamObj.changeQuality = function() {
+				streamObj.quality = this.selection.id;
+				streamObj.kill(function() {
+					streamObj.spawn = createSpawn( streamObj.quality );
+					// do not close modal
+					return false;
+				});
+			};
+
 			// add the new stream object to the streams list
-			streamObj = new Stream( createSpawn(), stream );
 			this.streams.addObject( streamObj );
 
 			this.send( "updateModal",
@@ -266,13 +273,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						get( settings, "qualities" ),
 						get( settings, "quality" ),
 						"modalqualityselect",
-						function() {
-							streamObj.kill(function() {
-								streamObj.spawn = createSpawn( this.selection.id );
-								// do not close modal
-								return false;
-							}.bind( this ) );
-						}
+						streamObj.changeQuality
 					)
 				]
 			);

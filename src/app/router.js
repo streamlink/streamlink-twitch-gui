@@ -20,6 +20,8 @@ define( [ "ember" ], function( Ember ) {
 			this.route( "video", { path: "/:video" } );
 		});
 
+		this.route( "watching" );
+
 		this.route( "history" );
 
 		this.route( "mostviewed" );
