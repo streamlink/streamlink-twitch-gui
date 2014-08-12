@@ -278,27 +278,31 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			// add the new stream object to the streams list
 			this.streams.addObject( streamObj );
 
-			this.send( "updateModal",
-				"Watching now: " + get( stream, "channel.name" ),
-				get( stream, "channel.status" ),
-				[
-					new modal.Button( "Continue", "", "fa-reply", defer.resolve ),
-					new modal.ButtonClose( streamObj.kill.bind( streamObj ) ),
-					new modal.ButtonBrowser(
-						"Chat",
-						"fa-comments",
-						get( this, "config.twitch-chat-url" )
-							.replace( "{channel}", get( stream, "channel.name" ) ),
-						false
-					),
-					new modal.Select(
-						get( settings, "qualities" ),
-						get( settings, "quality" ),
-						"modalqualityselect",
-						streamObj.changeQuality
-					)
-				]
-			);
+			if ( get( settings, "gui_hidestreampopup" ) ) {
+				this.send( "closeModal" );
+			} else {
+				this.send( "updateModal",
+					"Watching now: " + get( stream, "channel.name" ),
+					get( stream, "channel.status" ),
+					[
+						new modal.Button( "Continue", "", "fa-reply", defer.resolve ),
+						new modal.ButtonClose( streamObj.kill.bind( streamObj ) ),
+						new modal.ButtonBrowser(
+							"Chat",
+							"fa-comments",
+							get( this, "config.twitch-chat-url" )
+								.replace( "{channel}", get( stream, "channel.name" ) ),
+							false
+						),
+						new modal.Select(
+							get( settings, "qualities" ),
+							get( settings, "quality" ),
+							"modalqualityselect",
+							streamObj.changeQuality
+						)
+					]
+				);
+			}
 
 			return defer.promise;
 		},

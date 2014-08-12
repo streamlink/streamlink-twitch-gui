@@ -25,6 +25,8 @@
 <legend>GUI settings</legend>
 <div class="left"><i class="fa fa-minus"></i> Minimize GUI<span class="description">When videoplayer opens.</span></div>
 <div class="right">{{view Ember.Select value=content.gui_minimize content=model.minimize optionValuePath="content.value" optionLabelPath="content.label"}}</div>
+<div class="left"><i class="fa fa-info"></i> Stream popup<span class="description">When a stream has started.</span></div>
+<div class="right"><label>{{input type="checkbox" checked=content.gui_hidestreampopup}}<span>Hide the popup on success</span></label></div>
 </fieldset>
 <fieldset class="submit">
 <button type="button" class="btn btn-with-icon btn-success" {{action "apply"}}><i class="fa fa-check"></i> Apply</button>

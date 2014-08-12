@@ -10,6 +10,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		player_reconnect	: DS.attr( "boolean", { defaultValue: true } ),
 		player_no_close		: DS.attr( "boolean", { defaultValue: false } ),
 		gui_minimize		: DS.attr( "string", { defaultValue: "false" } ),
+		gui_hidestreampopup	: DS.attr( "boolean", { defaultValue: false } ),
 
 
 		isHttp: Ember.computed.equal( "player_passthrough", "http" ),
