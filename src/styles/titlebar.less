@@ -46,10 +46,15 @@
 		background: @searchbar-background;
 		-webkit-app-region: no-drag;
 
+		> * {
+			z-index: 100;
+		}
+
 		> button {
 			margin: 0;
 			padding: 0;
 			border: 0 solid @searchbar-border-color;
+			background: @searchbar-background;
 			line-height: @titlebar-size;
 			text-align: center;
 
@@ -221,7 +226,8 @@
 	outline: 1px solid @color-text-brighter;
 	font-size: @searchbar-dropdown-fontsize;
 	background: @input-background;
-	z-index: 100;
+	z-index: 99 !important;
+	-webkit-animation: animFadeInTop .333s ease-out;
 
 	&.hidden {
 		display: none;
