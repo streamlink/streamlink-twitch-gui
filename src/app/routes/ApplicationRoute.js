@@ -25,6 +25,10 @@ define( [ "ember" ], function( Ember ) {
 				window.history.go( +action );
 			},
 
+			"refresh": function() {
+				this.container.lookup( "route:" + this.controller.currentRouteName ).refresh();
+			},
+
 			"goto": function() {
 				this.transitionTo.apply( this, arguments );
 			},
