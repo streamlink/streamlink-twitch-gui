@@ -41,6 +41,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		versionMinBinding: "config.livestreamer-version-min",
 		versionParameters: [ "--version", "--no-version-check" ],
 		versionRegExp: /^livestreamer(?:\.exe)? (\d+\.\d+.\d+)(.*)$/,
+		versionRegExpFail: /^usage: livestreamer(?:\.exe)? \[OPTIONS] \[URL] \[STREAM]$/,
 		versionTimeout: 5000,
 
 		streams: [],
@@ -110,7 +111,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						if ( err instanceof VersionError ) {
 							this.send( "updateModal",
 								"Error: Invalid Livestreamer version",
-								"Your version v%@ does not match the minimum requirements (v%@)"
+								"Your version %@ does not match the minimum requirements (v%@)"
 									.fmt( err.version, get( this, "versionMin" ) ),
 								controls
 							);
@@ -120,9 +121,11 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 								"Please check settings and/or (re)install Livestreamer.",
 								controls
 							);
+						} else {
+							// reject outer promise and show a generic error message if err exists
+							return defer.reject( err );
 						}
-						// reject the outer promise and show a generic error message if err exists
-						defer.reject( err );
+						defer.reject();
 					}.bind( this ) );
 
 			}.bind( this ) ).catch( defer.reject );
@@ -164,6 +167,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		validateLivestreamer: function( livestreamer ) {
 			var	params	= get( this, "versionParameters" ),
 				regexp	= get( this, "versionRegExp" ),
+				regexp2	= get( this, "versionRegExpFail" ),
 				minimum	= get( this, "versionMin" ),
 				time	= get( this, "versionTimeout" ),
 				defer	= Promise.defer(),
@@ -186,8 +190,13 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 
 			// only check the first chunk of data
 			spawn.stderr.on( "data", function( data ) {
-				var match = regexp.exec( String( data ).trim() );
-				if ( match ) {
+				var match;
+				data = String( data ).trim();
+
+				if ( regexp2.test( data ) ) {
+					// handle livestreamer < v1.8.0 (no --no-version-check support)
+					defer.reject( new VersionError( "UNKNOWN" ) );
+				} else if ( match = regexp.exec( data ) ) {
 					// resolve before process exit
 					defer.resolve( match[1] );
 				}
@@ -198,7 +207,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			return defer.promise.then(function( version ) {
 				return version === semver.getMax([ version, minimum ])
 					? livestreamer
-					: Promise.reject( new VersionError( version ) );
+					: Promise.reject( new VersionError( "v" + version ) );
 			});
 		},
 
