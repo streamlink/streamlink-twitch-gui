@@ -12,11 +12,14 @@ define( [ "ember" ],function( Ember ) {
 			this.set( "offset", 0 );
 		},
 
-		setupController: function( controller ) {
+		setupController: function( controller, model ) {
+			var	num	= Ember.get( model, "length" ),
+				max	= Ember.get( this, "limit" );
+
 			this._super.apply( this, arguments );
 
 			controller.set( "isFetching", false );
-			controller.set( "hasFetchedAll", false );
+			controller.set( "hasFetchedAll", num < max );
 		},
 
 		fetchContent: function() {
