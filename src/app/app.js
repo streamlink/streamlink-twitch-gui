@@ -74,6 +74,7 @@ define(function( require ) {
 			AboutView: require( "views/AboutView" ),
 
 			ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
+			LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
 			RadioButtonComponent: require( "components/RadioButtonComponent" ),
 			RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
 			GameItemComponent: require( "components/GameItemComponent" ),

@@ -8,7 +8,22 @@
 
 	.description {
 		display: block;
+		padding-left: 1.75em;
+		font-size: .75em;
 		color: @color-text-bright;
-		font-size: 75%;
+
+		.docs {
+			display: inline-block;
+			margin-top: .25em;
+			padding: 0 .25em;
+			white-space: nowrap;
+			font-style: italic;
+			cursor: help;
+
+			&:hover {
+				color: @color-twitch-purple-light;
+				background: @color-text-brightest;
+			}
+		}
 	}
 }

@@ -19,7 +19,7 @@
 			height: 1.15rem;
 			margin-top: .075rem;
 			color: @color-text-dark;
-			font: .85rem/1.2rem "FontAwesome";
+			font: 1rem/1.2rem "FontAwesome";
 			text-align: center;
 		}
 
@@ -48,6 +48,13 @@
 			}
 			& + span {
 				color: @color-text-bright;
+			}
+		}
+
+		&:not(:disabled) {
+			&::before,
+			& + span {
+				cursor: pointer;
 			}
 		}
 	}
@@ -132,6 +139,7 @@ fieldset {
 		width: 33.333%;
 		float: left;
 		clear: both;
+		padding-right: 1.5em;
 	}
 
 	> .right {
