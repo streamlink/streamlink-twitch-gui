@@ -40,8 +40,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 
 		versionMinBinding: "config.livestreamer-version-min",
 		versionParameters: [ "--version", "--no-version-check" ],
-		versionRegExp: /^livestreamer(?:\.exe)? (\d+\.\d+.\d+)(.*)$/,
-		versionRegExpFail: /^usage: livestreamer(?:\.exe)? \[OPTIONS] \[URL] \[STREAM]$/,
+		versionRegExp: /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
 		versionTimeout: 5000,
 
 		streams: [],
@@ -111,7 +110,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						if ( err instanceof VersionError ) {
 							this.send( "updateModal",
 								"Error: Invalid Livestreamer version",
-								"Your version %@ does not match the minimum requirements (v%@)"
+								"Your version v%@ does not match the minimum requirements (v%@)"
 									.fmt( err.version, get( this, "versionMin" ) ),
 								controls
 							);
@@ -167,7 +166,6 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		validateLivestreamer: function( livestreamer ) {
 			var	params	= get( this, "versionParameters" ),
 				regexp	= get( this, "versionRegExp" ),
-				regexp2	= get( this, "versionRegExpFail" ),
 				minimum	= get( this, "versionMin" ),
 				time	= get( this, "versionTimeout" ),
 				defer	= Promise.defer(),
@@ -178,36 +176,39 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				defer.reject( err );
 			}
 
+			function onData( data ) {
+				var match;
+				data = String( data ).trim();
+
+				if ( match = regexp.exec( data ) ) {
+					// resolve before process exit
+					defer.resolve( match[1] );
+				}
+
+				// immediately kill the process
+				spawn.kill( "SIGKILL" );
+			}
+
+			function onTimeout() {
+				if ( spawn ) { spawn.kill( "SIGKILL" ); }
+				failed( new Error( "timeout" ) );
+			}
+
 			// reject on error / exit
 			spawn.on( "error", failed );
 			spawn.on(  "exit", failed );
 
-			// kill after a certain time
-			setTimeout(function() {
-				if ( spawn ) { spawn.kill( "SIGKILL" ); }
-				failed( new Error( "timeout" ) );
-			}, time );
-
 			// only check the first chunk of data
-			spawn.stderr.on( "data", function( data ) {
-				var match;
-				data = String( data ).trim();
+			spawn.stdout.on( "data", onData );
+			spawn.stderr.on( "data", onData );
 
-				if ( regexp2.test( data ) ) {
-					// handle livestreamer < v1.8.0 (no --no-version-check support)
-					defer.reject( new VersionError( "UNKNOWN" ) );
-				} else if ( match = regexp.exec( data ) ) {
-					// resolve before process exit
-					defer.resolve( match[1] );
-				}
-				// immediately kill the process
-				spawn.kill( "SIGKILL" );
-			});
+			// kill after a certain time
+			setTimeout( onTimeout, time );
 
 			return defer.promise.then(function( version ) {
 				return version === semver.getMax([ version, minimum ])
-					? livestreamer
-					: Promise.reject( new VersionError( "v" + version ) );
+					? Promise.resolve( livestreamer )
+					: Promise.reject( new VersionError( version ) );
 			});
 		},
 
