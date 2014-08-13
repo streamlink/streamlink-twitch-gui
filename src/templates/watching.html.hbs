@@ -12,8 +12,8 @@
 <div><i class="fa fa-group"></i> {{format-viewers stream.viewers}}</div>
 </div>
 <footer class="buttons">
-<button type="button" class="btn btn-with-icon btn-danger" {{action "close" this}}><i class="fa fa-times"></i> Close</button>
-<button type="button" class="btn btn-with-icon btn-success" {{action "chat" this}}><i class="fa fa-comments"></i> Chat</button>
+<button type="button" class="btn btn-with-icon btn-danger" {{action "close" this}}><i class="fa fa-times"></i>Close</button>
+<button type="button" class="btn btn-with-icon btn-success" {{action "chat" this}}><i class="fa fa-comments"></i>Chat</button>
 {{view Ember.Select class="modalqualityselect" value=quality content=controller.qualities optionValuePath="content.id" optionLabelPath="content.label" change=changeQuality}}
 </footer>
 </section>
