@@ -13,7 +13,7 @@ define([
 		}),
 
 		didInsertElement: function() {
-			var $this = this.$();
+			var $this = this.$().removeClass( "shown" );
 			this._super.apply( this, arguments );
 			Ember.run.next( $this, $this.addClass, "shown" );
 		},

@@ -43,6 +43,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		versionRegExp: /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
 		versionTimeout: 5000,
 
+		modal: null,
 		streams: [],
 
 		parameters: [
@@ -232,7 +233,12 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 					// stream was closed regularly
 					if ( !spawn.killCallback || spawn.killCallback() !== false ) {
 						delete spawn.killCallback;
-						self.send( "closeModal" );
+
+						// only close the stream's modal
+						if ( self.get( "modal" ) === stream ) {
+							self.set( "modal", null );
+							self.send( "closeModal" );
+						}
 
 						// restore the GUI
 						switch ( get( settings, "gui_minimize" ) ) {
@@ -280,13 +286,19 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			this.streams.addObject( streamObj );
 
 			if ( get( settings, "gui_hidestreampopup" ) ) {
+				this.set( "modal", null );
 				this.send( "closeModal" );
 			} else {
+				// modal belongs to this stream now
+				this.set( "modal", stream );
 				this.send( "updateModal",
 					"Watching now: " + get( stream, "channel.name" ),
 					get( stream, "channel.status" ),
 					[
-						new modal.Button( "Continue", "", "fa-reply", defer.resolve ),
+						new modal.Button( "Continue", "", "fa-reply", function() {
+							this.set( "modal", null );
+							defer.resolve();
+						}.bind( this ) ),
 						new modal.ButtonClose( streamObj.kill.bind( streamObj ) ),
 						new modal.ButtonBrowser(
 							"Chat",
@@ -333,7 +345,9 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						this.send( "updateModal",
 							"Error while trying to launch the stream",
 							err.message || "Internal error",
-							[ new modal.ButtonClose() ]
+							[ new modal.ButtonClose(function() {
+								this.set( "modal", null );
+							}.bind( this ) ) ]
 						);
 					}.bind( this ) );
 			}
