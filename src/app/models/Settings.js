@@ -18,8 +18,8 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 
 		qualities: [
 			{ id: 0, label: "Source", quality: "source,best" },
-			{ id: 1, label: "High",   quality: "high,mobile_high" },
-			{ id: 2, label: "Medium", quality: "medium,mobile_medium" },
+			{ id: 1, label: "High",   quality: "high,mobile_high,best" },
+			{ id: 2, label: "Medium", quality: "medium,mobile_medium,worst" },
 			{ id: 3, label: "Low",    quality: "low,mobile_mobile,worst" }
 		],
 
