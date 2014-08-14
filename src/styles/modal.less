@@ -11,7 +11,8 @@
 	bottom: 0;
 	z-index: 10000;
 	background: fade( #000, 50% );
-	-webkit-animation: fadeIn .333s ease-out;
+	opacity: 0;
+	-webkit-transition: opacity .333s ease-out;
 
 	> div {
 		display: flex;
@@ -21,7 +22,16 @@
 		margin: 5rem 0;
 		padding: 2rem;
 		background: @color-background;
-		-webkit-animation: animFadeInTop .333s ease-out;
+		-webkit-transform: translateY( -3rem );
+		-webkit-transition: -webkit-transform .333s ease-out;
+	}
+
+	&.shown {
+		opacity: 1;
+
+		> div {
+			-webkit-transform: translateY( 0 );
+		}
 	}
 
 	.content {
