@@ -328,8 +328,20 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 
 		actions: {
 			"start": function( stream ) {
+				var modal = get( this, "controllers.modal" );
+
 				// is the stream already running?
 				if ( this.streams.findBy( "name", get( stream, "channel.name" ) ) ) {
+					this.send( "openModal",
+						"You're already watching " + get( stream, "channel.display_name" ),
+						get( stream, "channel.status" ),
+						[
+							new modal.Button( "Continue", "", "fa-reply" ),
+							new modal.Button( "Streams", "btn-success", "fa-desktop", function() {
+								this.send( "goto", "watching" );
+							}.bind( this ) )
+						]
+					);
 					return;
 				}
 
@@ -341,7 +353,6 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 					}.bind( this ) )
 					// an error occured
 					.catch(function( err ) {
-						var modal = get( this, "controllers.modal" );
 						this.send( "updateModal",
 							"Error while trying to launch the stream",
 							err.message || "Internal error",
