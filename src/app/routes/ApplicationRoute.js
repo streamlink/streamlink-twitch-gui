@@ -26,7 +26,10 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"refresh": function() {
-				this.container.lookup( "route:" + this.controller.currentRouteName ).refresh();
+				var routeName = this.controller.currentRouteName;
+				if ( routeName !== "error" ) {
+					this.container.lookup( "route:" + routeName ).refresh();
+				}
 			},
 
 			"goto": function() {

@@ -13,6 +13,7 @@ define( [ "ember" ], function( Ember ) {
 		);
 
 		this.name	= "XMLHttpRequest Error";
+		this.status	= xhr.status;
 		this.host	= xhr.host;
 		this.path	= xhr.path;
 	};
@@ -34,7 +35,7 @@ define( [ "ember" ], function( Ember ) {
 			model = model || new Error( "Unknown error" );
 			model.name = model.name || model.constructor.name;
 
-			var	props	= [ "name", "message", "host", "path" ],
+			var	props	= [ "name", "message", "status", "host", "path" ],
 				reason	= Ember.get( model, "reason" );
 
 			// handle rejected promises with a passed Error object as reason
