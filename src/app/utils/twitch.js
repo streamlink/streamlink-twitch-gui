@@ -17,7 +17,8 @@ define( [ "ember" ], function( Ember ) {
 			headers		: {
 				accept		: "application/vnd.twitchtv.v3+json"
 			},
-			timeout		: 10000
+			timeout		: 10000,
+			cache		: false
 		}) )
 			.catch(function( jqErr ) {
 				jqErr.host	= "api.twitch.tv";
