@@ -1,4 +1,7 @@
-define( [ "ember" ],function( Ember ) {
+define( [ "ember" ], function( Ember ) {
+
+	var	get = Ember.get,
+		set = Ember.set;
 
 	return Ember.Mixin.create({
 		offset: 0,
@@ -9,17 +12,17 @@ define( [ "ember" ],function( Ember ) {
 		beforeModel: function() {
 			this._super.apply( this, arguments );
 
-			this.set( "offset", 0 );
+			set( this, "offset", 0 );
 		},
 
 		setupController: function( controller, model ) {
-			var	num	= Ember.get( model, "length" ),
-				max	= Ember.get( this, "limit" );
+			var	num	= get( model, "length" ),
+				max	= get( this, "limit" );
 
 			this._super.apply( this, arguments );
 
-			controller.set( "isFetching", false );
-			controller.set( "hasFetchedAll", num < max );
+			set( controller, "isFetching", false );
+			set( controller, "hasFetchedAll", num < max );
 		},
 
 		fetchContent: function() {
@@ -28,25 +31,30 @@ define( [ "ember" ],function( Ember ) {
 
 		actions: {
 			"willFetchContent": function( force ) {
-				var controller = this.get( "controller" );
-				if ( !controller.get( "isFetching" ) && !controller.get( "hasFetchedAll" ) ) {
-					// don't fetch more than 3 times automatically
-					var numFetches = this.get( "offset" ) / this.get( "limit" );
-					if ( !force && this.get( "maxAutoFetches" ) <= numFetches ) {
-						return;
-					}
+				var	controller	= get( this, "controller" ),
+					isFetching	= get( controller, "isFetching" ),
+					fetchedAll	= get( controller, "hasFetchedAll" );
 
-					controller.toggleProperty( "isFetching" );
-					this.incrementProperty( "offset", this.get( "limit" ) );
+				if ( !isFetching && !fetchedAll ) {
+					var	offset	= get( this, "offset" ),
+						limit	= get( this, "limit" ),
+						max		= get( this, "maxAutoFetches" ),
+						num		= offset / limit;
+
+					// don't fetch more than 3 times automatically
+					if ( !force && num > max ) { return; }
+
+					set( controller, "isFetching", true );
+					set( this, "offset", offset + limit );
 
 					// fetch content and append to ArrayController
 					this.fetchContent().then(function( content ) {
 						if ( !content || !content.length ) {
-							controller.set( "hasFetchedAll", true );
+							set( controller, "hasFetchedAll", true );
 						} else {
 							controller.pushObjects( content );
 						}
-						controller.toggleProperty( "isFetching" );
+						set( controller, "isFetching", false );
 					}.bind( this ) );
 				}
 			}
