@@ -23,6 +23,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		this.stream		= stream;
 		this.quality	= quality;
 		this.name		= get( stream, "channel.name" );
+		this.started	= new Date();
 	}
 
 	Stream.prototype.kill = function( callback ) {

@@ -6,6 +6,9 @@ define( [ "ember" ], function( Ember ) {
 		globalBinding: "controllers.application.model",
 		configBinding: "global.package.config",
 
+		sortAscending: false,
+		sortProperties: [ "started" ],
+
 		actions: {
 			"close": function( stream ) {
 				stream && stream.kill && stream.kill();
