@@ -6,6 +6,9 @@ define([
 ], function( Ember, InfiniteScroll, preload, ModelGamesTop ) {
 
 	return Ember.Route.extend( InfiniteScroll, {
+		itemSelector: ".game-component",
+		itemHeight: 255,
+
 		model: function() {
 			return ModelGamesTop({
 				offset	: Ember.get( this, "offset" ),

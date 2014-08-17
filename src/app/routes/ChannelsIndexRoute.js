@@ -6,6 +6,9 @@ define([
 ], function( Ember, InfiniteScroll, preload, ModelStreams ) {
 
 	return Ember.Route.extend( InfiniteScroll, {
+		itemSelector: ".stream-component",
+		itemHeight: 207,
+
 		model: function() {
 			return ModelStreams({
 				offset	: Ember.get( this, "offset" ),
