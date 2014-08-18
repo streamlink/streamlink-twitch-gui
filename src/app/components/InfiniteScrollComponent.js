@@ -11,6 +11,7 @@ define([
 
 		type: "button",
 		disabled: Ember.computed.or( "isFetching", "hasFetchedAll" ),
+		errorBinding: "targetObject.fetchError",
 
 		isFetchingBinding: "targetObject.isFetching",
 		hasFetchedAllBinding: "targetObject.hasFetchedAll",

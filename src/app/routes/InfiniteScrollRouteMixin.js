@@ -122,7 +122,14 @@ define( [ "ember" ], function( Ember ) {
 
 		fetchContent: function() {
 			this.calcFetchSize();
-			return this.model();
+			return this.model()
+				.catch(function( err ) {
+					set( this, "offset", get( this, "offset" ) - get( this, "limit" ) );
+					set( this, "controller.fetchError", true );
+					set( this, "controller.isFetching", false );
+					set( this, "controller.hasFetchedAll", false );
+					return Promise.reject( err );
+				}.bind( this ) );
 		},
 
 		actions: {
@@ -140,6 +147,7 @@ define( [ "ember" ], function( Ember ) {
 					// don't fetch more than 3 times automatically
 					if ( !force && num > max ) { return; }
 
+					set( controller, "fetchError", false );
 					set( controller, "isFetching", true );
 					set( this, "offset", offset + limit );
 

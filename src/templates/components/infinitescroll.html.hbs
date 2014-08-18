@@ -1,5 +1,9 @@
-{{#if disabled}}
-<i class="fa fa-spinner fa-spin"></i> Loading
+{{#if error}}
+<i class="fa fa-bolt"></i>Error
 {{else}}
-<i class="fa fa-arrow-down"></i> Fetch more
+{{#if disabled}}
+<i class="fa fa-spinner fa-spin"></i>Loading
+{{else}}
+<i class="fa fa-arrow-down"></i>Fetch more
+{{/if}}
 {{/if}}
