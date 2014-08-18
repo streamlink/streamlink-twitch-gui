@@ -223,7 +223,8 @@
 	font-size: @searchbar-dropdown-fontsize;
 	background: @input-background;
 	z-index: 99 !important;
-	-webkit-animation: animFadeInTop .333s ease-out;
+	opacity: 0;
+	-webkit-animation: animFadeInTop .333s ease-out forwards;
 
 	&.hidden {
 		display: none;
