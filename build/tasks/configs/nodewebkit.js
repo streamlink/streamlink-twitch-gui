@@ -5,7 +5,7 @@ module.exports = {
 		version			: "<%= package.config['node-webkit-version'] %>"
 	},
 	win				: {
-		options			: { win: true },
+		options			: { win: true/*, winIco: "build/resources/icons/icon-16-32-48-256.ico"*/ },
 		src				: "build/tmp/**"
 	},
 	osx				: {

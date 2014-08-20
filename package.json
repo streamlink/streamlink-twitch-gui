@@ -24,7 +24,7 @@
 		"grunt-contrib-requirejs": "0.4.4",
 		"grunt-contrib-uglify": "0.5.1",
 		"grunt-contrib-watch": "0.6.1",
-		"grunt-node-webkit-builder": "0.2.1",
+		"grunt-node-webkit-builder": "0.2.2",
 		"load-grunt-config": "0.12.0",
 		"q": "1.0.1",
 		"q-io": "1.11.3"
