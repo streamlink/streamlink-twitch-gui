@@ -15,6 +15,14 @@ define([
 					e.stopImmediatePropagation();
 				}
 			});
+		},
+
+		_invoke: function() {
+			if ( this.get( "active" ) ) {
+				this.get( "controller" ).send( "refresh" );
+			} else {
+				this._super.apply( this, arguments );
+			}
 		}
 	});
 
