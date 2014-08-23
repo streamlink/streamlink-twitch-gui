@@ -27,7 +27,35 @@ module.exports = {
 
 		skipSemiColonInsertion	: true,
 		useStrict				: true,
-		preserveLicenseComments	: true
+		preserveLicenseComments	: true,
+
+
+		onBuildRead: function ( moduleName, path, contents ) {
+			/*
+			 * https://github.com/emberjs/ember.js/issues/4994
+			 * https://github.com/emberjs/data/issues/2196
+			 * https://github.com/dbashford/ember-canary-plus-almond/commit/c0a494d5
+			 *
+			 * Ember v1.7.0 and ember-data v1.0.0-beta.9 both changed their internal
+			 * module loader structure. Requirejs detects the internal define calls and
+			 * misinterprets these as global calls. This causes a false name collision.
+			 * The fix is to rename the internal modules to "ember-fix" and "ember-data-fix".
+			 * The final ember and ember-data modules will be created like before, by using the
+			 * shim exports and module insertion function of requirejs.
+			 */
+			[ "ember", "ember-data" ].forEach(function( module ) {
+				if ( moduleName === module ) {
+					contents = contents.replace(
+						new RegExp( "(define|requireModule)\\(([\"'])" + module + "\\2", "gm" ),
+						function( _, fn, q ) {
+							return fn + "(" + q + module + "-fix" + q;
+						}
+					);
+				}
+			});
+			return contents;
+		}
+
 	},
 	dev				: {
 		options			: {
