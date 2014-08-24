@@ -17,9 +17,14 @@ define([
 			});
 		},
 
-		_invoke: function() {
+		click: function( event ) {
 			if ( this.get( "active" ) ) {
-				this.get( "controller" ).send( "refresh" );
+				var controller = this.get( "controller.targetObject" );
+				if ( controller ) {
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					controller.send( "refresh" );
+				}
 			} else {
 				this._super.apply( this, arguments );
 			}
