@@ -19,6 +19,8 @@ define(function( require ) {
 
 			// Store
 			ApplicationStore: DS.Store.extend(),
+			ApplicationAdapter: require( "store/TwitchAdapter" ),
+			TwitchSerializer: require( "store/TwitchSerializer" ),
 			LocalstorageSerializer: DS.LSSerializer.extend(),
 
 
@@ -34,6 +36,30 @@ define(function( require ) {
 			// Models: github
 			GithubReleases: require( "models/github/Releases" ),
 			GithubReleasesAdapter: require( "store/GithubAdapter" ),
+
+
+			// Models: twitch
+			TwitchGame: require( "models/twitch/Game" ),
+			TwitchGameSerializer: require( "models/twitch/GameSerializer" ),
+			TwitchStream: require( "models/twitch/Stream" ),
+			TwitchStreamSerializer: require( "models/twitch/StreamSerializer" ),
+			TwitchChannel: require( "models/twitch/Channel" ),
+			TwitchChannelSerializer: require( "models/twitch/ChannelSerializer" ),
+			TwitchTeam: require( "models/twitch/Team" ),
+			TwitchTeamSerializer: require( "models/twitch/TeamSerializer" ),
+			TwitchImage: require( "models/twitch/Image" ),
+			TwitchImageSerializer: require( "models/twitch/ImageSerializer" ),
+
+			TwitchGamesTop: require( "models/twitch/GamesTop" ),
+			TwitchGamesTopSerializer: require( "models/twitch/GamesTopSerializer" ),
+			TwitchStreamsSummary: require( "models/twitch/StreamsSummary" ),
+			TwitchStreamsSummarySerializer: require( "models/twitch/StreamsSummarySerializer" ),
+			TwitchStreamsFeatured: require( "models/twitch/StreamsFeatured" ),
+			TwitchStreamsFeaturedSerializer: require( "models/twitch/StreamsFeaturedSerializer" ),
+			TwitchSearchGame: require( "models/twitch/SearchGame" ),
+			TwitchSearchGameSerializer: require( "models/twitch/SearchGameSerializer" ),
+			TwitchSearchStream: require( "models/twitch/SearchStream" ),
+			TwitchSearchStreamSerializer: require( "models/twitch/SearchStreamSerializer" ),
 
 
 			// Application
