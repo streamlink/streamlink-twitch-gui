@@ -8,14 +8,35 @@ define(function( require ) {
 	], function( Ember, DS ) {
 
 		Ember.Application.create({
+
+			// Configuration
 			rootElement: document.documentElement,
 
-			ApplicationStore: DS.Store.extend(),
-			LocalstorageSerializer: DS.LSSerializer.extend(),
 
+			// Routing
 			Router: require( "Router" ),
 
 
+			// Store
+			ApplicationStore: DS.Store.extend(),
+			LocalstorageSerializer: DS.LSSerializer.extend(),
+
+
+			// Models: localstorage
+			Settings: require( "models/Settings" ),
+			SettingsAdapter: require( "store/LocalstorageAdapter" ),
+			Versioncheck: require( "models/Versioncheck" ),
+			VersioncheckAdapter: require( "store/LocalstorageAdapter" ),
+			Searchbar: require( "models/Searchbar" ),
+			SearchbarAdapter: require( "store/LocalstorageAdapter" ),
+
+
+			// Models: github
+			GithubReleases: require( "models/github/Releases" ),
+			GithubReleasesAdapter: require( "store/GithubAdapter" ),
+
+
+			// Application
 			ApplicationRoute: require( "routes/ApplicationRoute" ),
 			ApplicationController: require( "controllers/ApplicationController" ),
 			ApplicationView: require( "views/ApplicationView" ),
@@ -29,11 +50,24 @@ define(function( require ) {
 			ModalController: require( "controllers/ModalController" ),
 			ModalView: require( "views/ModalView" ),
 
-			Searchbar: require( "models/Searchbar" ),
-			SearchbarAdapter: require( "store/LocalstorageAdapter" ),
 			SearchbarController: require( "controllers/SearchbarController" ),
 			SearchbarView: require( "views/SearchbarView" ),
 
+			VersioncheckController: require( "controllers/VersioncheckController" ),
+			LivestreamerController: require( "controllers/LivestreamerController" ),
+
+
+			// Components
+			ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
+			LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
+			RadioButtonComponent: require( "components/RadioButtonComponent" ),
+			RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
+			GameItemComponent: require( "components/GameItemComponent" ),
+			StreamItemComponent: require( "components/StreamItemComponent" ),
+			InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
+
+
+			// Content
 			WatchingRoute: require( "routes/WatchingRoute" ),
 			WatchingController: require( "controllers/WatchingController" ),
 			WatchingView: require( "views/WatchingView" ),
@@ -45,49 +79,28 @@ define(function( require ) {
 			SearchRoute: require( "routes/SearchRoute" ),
 			SearchController: require( "controllers/SearchController" ),
 			SearchView: require( "views/SearchView" ),
-			SearchLoadingRoute: require( "routes/LoadingRoute" ),
-			SearchLoadingView: require( "views/LoadingView" ),
 
+			GamesLoadingRoute: require( "routes/LoadingRoute" ),
+			GamesLoadingView: require( "views/LoadingView" ),
 			GamesIndexRoute: require( "routes/GamesIndexRoute" ),
 			GamesIndexController: require( "controllers/GamesIndexController" ),
 			GamesIndexView: require( "views/GamesIndexView" ),
-			GamesLoadingRoute: require( "routes/LoadingRoute" ),
-			GamesLoadingView: require( "views/LoadingView" ),
-
 			GamesGameRoute: require( "routes/GamesGameRoute" ),
 			GamesGameController: require( "controllers/GamesGameController" ),
 			GamesGameView: require( "views/GamesGameView" ),
 
-			ChannelsIndexController: require( "controllers/ChannelsIndexController" ),
-			ChannelsIndexRoute: require( "routes/ChannelsIndexRoute" ),
-			ChannelsIndexView: require( "views/ChannelsIndexView" ),
 			ChannelsLoadingRoute: require( "routes/LoadingRoute" ),
 			ChannelsLoadingView: require( "views/LoadingView" ),
+			ChannelsIndexRoute: require( "routes/ChannelsIndexRoute" ),
+			ChannelsIndexController: require( "controllers/ChannelsIndexController" ),
+			ChannelsIndexView: require( "views/ChannelsIndexView" ),
 
-			Settings: require( "models/Settings" ),
-			SettingsAdapter: require( "store/LocalstorageAdapter" ),
 			SettingsRoute: require( "routes/SettingsRoute" ),
 			SettingsController: require( "controllers/SettingsController" ),
 			SettingsView: require( "views/SettingsView" ),
 
 			AboutController: require( "controllers/AboutController" ),
-			AboutView: require( "views/AboutView" ),
-
-			ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
-			LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
-			RadioButtonComponent: require( "components/RadioButtonComponent" ),
-			RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
-			GameItemComponent: require( "components/GameItemComponent" ),
-			StreamItemComponent: require( "components/StreamItemComponent" ),
-			InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
-
-			LivestreamerController: require( "controllers/LivestreamerController" ),
-
-			Versioncheck: require( "models/Versioncheck" ),
-			VersioncheckAdapter: require( "store/LocalstorageAdapter" ),
-			VersioncheckController: require( "controllers/VersioncheckController" ),
-			GithubReleases: require( "models/github/Releases" ),
-			GithubReleasesAdapter: require( "store/GithubAdapter" )
+			AboutView: require( "views/AboutView" )
 		});
 
 	});
