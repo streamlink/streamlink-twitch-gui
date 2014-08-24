@@ -1,20 +1,18 @@
-define([
-	"ember",
-	"utils/preload",
-	"models/Summary",
-	"models/Featured"
-], function( Ember, preload, ModelSummary, ModelFeatured ) {
+define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 
 	return Ember.Route.extend({
 		model: function() {
 			return Ember.RSVP.all([
-				ModelSummary(),
-				ModelFeatured( 5, 0 )
+				this.store.findAll( "twitchStreamsSummary", null ),
+				this.store.findQuery( "twitchStreamsFeatured", {
+					offset: 0,
+					limit: 5
+				})
 			])
-				.then(function( models ) {
+				.then(function( data ) {
 					return {
-						summary: models[0],
-						featured: models[1].featured
+						summary: data[0].toArray()[0],
+						featured: data[1].toArray()
 					};
 				})
 				.then( preload([

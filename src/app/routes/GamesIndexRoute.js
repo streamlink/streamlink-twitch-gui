@@ -1,22 +1,19 @@
 define([
 	"ember",
 	"routes/InfiniteScrollRouteMixin",
-	"utils/preload",
-	"models/GamesTop"
-], function( Ember, InfiniteScroll, preload, ModelGamesTop ) {
+	"utils/preload"
+], function( Ember, InfiniteScroll, preload ) {
 
 	return Ember.Route.extend( InfiniteScroll, {
 		itemSelector: ".game-component",
 		itemHeight: 255,
 
 		model: function() {
-			return ModelGamesTop({
+			return this.store.findQuery( "twitchGamesTop", {
 				offset	: Ember.get( this, "offset" ),
 				limit	: Ember.get( this, "limit" )
 			})
-				.then(function( data ) {
-					return Ember.getWithDefault( data, "top", [] );
-				})
+				.then(function( data ) { return data.toArray(); })
 				.then( preload( "@each.game.@each.box.@each.large" ) );
 		}
 	});

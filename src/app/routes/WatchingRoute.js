@@ -1,30 +1,27 @@
-define( [ "ember", "utils/twitch", "utils/preload" ], function( Ember, twitch, preload ) {
+define([
+	"ember",
+	"utils/preload"
+], function( Ember, preload ) {
 
 	return Ember.Route.extend({
 		model: function() {
-			return Promise.resolve(
-				this.controllerFor( "livestreamer" ).get( "streams" )
-			)
-				.then(function( streams ) {
-					return Promise.all( streams.map(function( stream ) {
-						return twitch( "streams/" + Ember.get( stream, "stream.channel.name" ) )
-							.then(function( data ) {
-								if ( !data || !data.stream ) {
-									throw new Error( "Invalid payload" );
-								}
-								// replace the old stream object with the new one
-								stream.stream = data.stream;
-							});
-					}) )
-						.then(function() {
-							return streams;
-						});
-				})
-				.then( preload( "@each.stream.@each.preview.@each.large" ) );
+			var streams = this.controllerFor( "livestreamer" ).get( "streams" );
+
+			return Promise.all( streams.map(function( elem ) {
+				// reload the stream record
+				// this will query the twitch.tv API with the record's ID (channel name)
+				return elem.stream.reload()
+					// return the streams array element instead of the stream record
+					.then(function() { return elem; })
+			}) )
+				.then( preload( "@each.stream.@each.preview.@each.large" ) )
+				// return the original streams array reference!!!
+				.then(function() { return streams; });
 		},
 
 		setupController: function( controller ) {
 			this._super.apply( this, arguments );
+
 			controller.set( "qualities", this.store.modelFor( "settings" ).prototype.qualities );
 		}
 	});
