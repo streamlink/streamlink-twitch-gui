@@ -1,11 +1,8 @@
-define( [ "ember", "models/Search" ], function( Ember, Search ) {
+define( [ "ember" ], function( Ember ) {
 
 	return Ember.ObjectController.extend({
 		filterlabel: function() {
-			var filter = this.get( "filter" );
-			return filter in Search.filtermap
-				? Search.filtermap[ filter ].label
-				: "All";
+			return this.store.modelFor( "search" ).getLabel( this.get( "filter" ) );
 		}.property( "filter" ),
 
 		notFiltered: Ember.computed.equal( "filter", "all" ),

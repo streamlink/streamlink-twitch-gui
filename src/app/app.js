@@ -29,8 +29,8 @@ define(function( require ) {
 			SettingsAdapter: require( "store/LocalstorageAdapter" ),
 			Versioncheck: require( "models/Versioncheck" ),
 			VersioncheckAdapter: require( "store/LocalstorageAdapter" ),
-			Searchbar: require( "models/Searchbar" ),
-			SearchbarAdapter: require( "store/LocalstorageAdapter" ),
+			Search: require( "models/Search" ),
+			SearchAdapter: require( "store/LocalstorageAdapter" ),
 
 
 			// Models: github
