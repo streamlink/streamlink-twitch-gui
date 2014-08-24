@@ -20,7 +20,7 @@ define([
 				.then( preload( "@each.preview.@each.medium" ) );
 		},
 
-		setupController: function( controller, model ) {
+		setupController: function( controller ) {
 			this._super.apply( this, arguments );
 
 			controller.set( "game", Ember.get( this, "game" ) );
