@@ -1,4 +1,7 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "ember", "text!root/metadata.json" ], function( Ember, metadata_json ) {
+
+	var metadata = JSON.parse( metadata_json );
+	metadata_json = null;
 
 	return Ember.Route.extend({
 		beforeModel: function() {
@@ -12,7 +15,7 @@ define( [ "ember" ], function( Ember ) {
 		},
 
 		model: function() {
-			return Ember.$.getJSON( "metadata.json" );
+			return metadata;
 		},
 
 		afterModel: function( resolvedModel ) {

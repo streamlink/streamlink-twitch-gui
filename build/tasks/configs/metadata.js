@@ -5,8 +5,8 @@ module.exports = {
 			"package.json"
 		],
 		contributors	: {
-			minCommits		: 5
+			minCommits		: 3
 		},
-		dest			: "build/tmp/metadata.json"
+		dest			: "src/metadata.json"
 	}
 };
