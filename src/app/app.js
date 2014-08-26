@@ -1,135 +1,130 @@
 define(function( require ) {
 
-	require([
-		"ember",
-		"ember-data",
-		"utils/inflector",
-		"utils/helpers"
-	], function( Ember, DS ) {
-
-		Ember.Application.create({
-
-			// Configuration
-			rootElement: document.documentElement,
+	require( "utils/inflector" );
+	require( "utils/helpers" );
 
 
-			// Routing
-			Router: require( "Router" ),
+	return require( "ember" ).Application.create({
+
+		// Configuration
+		rootElement: document.documentElement,
 
 
-			// Store
-			ApplicationStore: DS.Store.extend(),
-			ApplicationAdapter: require( "store/TwitchAdapter" ),
-			TwitchSerializer: require( "store/TwitchSerializer" ),
-			LocalstorageSerializer: DS.LSSerializer.extend(),
+		// Routing
+		Router: require( "Router" ),
 
 
-			// Models: localstorage
-			Settings: require( "models/Settings" ),
-			SettingsAdapter: require( "store/LocalstorageAdapter" ),
-			Versioncheck: require( "models/Versioncheck" ),
-			VersioncheckAdapter: require( "store/LocalstorageAdapter" ),
-			Search: require( "models/Search" ),
-			SearchAdapter: require( "store/LocalstorageAdapter" ),
+		// Store
+		ApplicationStore: require( "ember-data" ).Store.extend(),
+		ApplicationAdapter: require( "store/TwitchAdapter" ),
+		TwitchSerializer: require( "store/TwitchSerializer" ),
+		LocalstorageSerializer: require( "ember-data" ).LSSerializer.extend(),
 
 
-			// Models: github
-			GithubReleases: require( "models/github/Releases" ),
-			GithubReleasesAdapter: require( "store/GithubAdapter" ),
-			GithubReleasesSerializer: require( "models/github/ReleasesSerializer" ),
+		// Models: localstorage
+		Settings: require( "models/Settings" ),
+		SettingsAdapter: require( "store/LocalstorageAdapter" ),
+		Versioncheck: require( "models/Versioncheck" ),
+		VersioncheckAdapter: require( "store/LocalstorageAdapter" ),
+		Search: require( "models/Search" ),
+		SearchAdapter: require( "store/LocalstorageAdapter" ),
 
 
-			// Models: twitch
-			TwitchGame: require( "models/twitch/Game" ),
-			TwitchGameSerializer: require( "models/twitch/GameSerializer" ),
-			TwitchStream: require( "models/twitch/Stream" ),
-			TwitchStreamSerializer: require( "models/twitch/StreamSerializer" ),
-			TwitchChannel: require( "models/twitch/Channel" ),
-			TwitchChannelSerializer: require( "models/twitch/ChannelSerializer" ),
-			TwitchTeam: require( "models/twitch/Team" ),
-			TwitchTeamSerializer: require( "models/twitch/TeamSerializer" ),
-			TwitchImage: require( "models/twitch/Image" ),
-			TwitchImageSerializer: require( "models/twitch/ImageSerializer" ),
-
-			TwitchGamesTop: require( "models/twitch/GamesTop" ),
-			TwitchGamesTopSerializer: require( "models/twitch/GamesTopSerializer" ),
-			TwitchStreamsSummary: require( "models/twitch/StreamsSummary" ),
-			TwitchStreamsSummarySerializer: require( "models/twitch/StreamsSummarySerializer" ),
-			TwitchStreamsFeatured: require( "models/twitch/StreamsFeatured" ),
-			TwitchStreamsFeaturedSerializer: require( "models/twitch/StreamsFeaturedSerializer" ),
-			TwitchSearchGame: require( "models/twitch/SearchGame" ),
-			TwitchSearchGameSerializer: require( "models/twitch/SearchGameSerializer" ),
-			TwitchSearchStream: require( "models/twitch/SearchStream" ),
-			TwitchSearchStreamSerializer: require( "models/twitch/SearchStreamSerializer" ),
+		// Models: github
+		GithubReleases: require( "models/github/Releases" ),
+		GithubReleasesAdapter: require( "store/GithubAdapter" ),
+		GithubReleasesSerializer: require( "models/github/ReleasesSerializer" ),
 
 
-			// Application
-			ApplicationRoute: require( "routes/ApplicationRoute" ),
-			ApplicationController: require( "controllers/ApplicationController" ),
-			ApplicationView: require( "views/ApplicationView" ),
+		// Models: twitch
+		TwitchGame: require( "models/twitch/Game" ),
+		TwitchGameSerializer: require( "models/twitch/GameSerializer" ),
+		TwitchStream: require( "models/twitch/Stream" ),
+		TwitchStreamSerializer: require( "models/twitch/StreamSerializer" ),
+		TwitchChannel: require( "models/twitch/Channel" ),
+		TwitchChannelSerializer: require( "models/twitch/ChannelSerializer" ),
+		TwitchTeam: require( "models/twitch/Team" ),
+		TwitchTeamSerializer: require( "models/twitch/TeamSerializer" ),
+		TwitchImage: require( "models/twitch/Image" ),
+		TwitchImageSerializer: require( "models/twitch/ImageSerializer" ),
 
-			LoadingRoute: require( "routes/LoadingRoute" ),
-			LoadingView: require( "views/LoadingView" ),
-
-			ErrorRoute: require( "routes/ErrorRoute" ),
-			ErrorView: require( "views/ErrorView" ),
-
-			ModalController: require( "controllers/ModalController" ),
-			ModalView: require( "views/ModalView" ),
-
-			SearchbarController: require( "controllers/SearchbarController" ),
-			SearchbarView: require( "views/SearchbarView" ),
-
-			VersioncheckController: require( "controllers/VersioncheckController" ),
-			LivestreamerController: require( "controllers/LivestreamerController" ),
-
-
-			// Components
-			ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
-			LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
-			RadioButtonComponent: require( "components/RadioButtonComponent" ),
-			RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
-			GameItemComponent: require( "components/GameItemComponent" ),
-			StreamItemComponent: require( "components/StreamItemComponent" ),
-			InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
+		TwitchGamesTop: require( "models/twitch/GamesTop" ),
+		TwitchGamesTopSerializer: require( "models/twitch/GamesTopSerializer" ),
+		TwitchStreamsSummary: require( "models/twitch/StreamsSummary" ),
+		TwitchStreamsSummarySerializer: require( "models/twitch/StreamsSummarySerializer" ),
+		TwitchStreamsFeatured: require( "models/twitch/StreamsFeatured" ),
+		TwitchStreamsFeaturedSerializer: require( "models/twitch/StreamsFeaturedSerializer" ),
+		TwitchSearchGame: require( "models/twitch/SearchGame" ),
+		TwitchSearchGameSerializer: require( "models/twitch/SearchGameSerializer" ),
+		TwitchSearchStream: require( "models/twitch/SearchStream" ),
+		TwitchSearchStreamSerializer: require( "models/twitch/SearchStreamSerializer" ),
 
 
-			// Content
-			WatchingRoute: require( "routes/WatchingRoute" ),
-			WatchingController: require( "controllers/WatchingController" ),
-			WatchingView: require( "views/WatchingView" ),
+		// Application
+		ApplicationRoute: require( "routes/ApplicationRoute" ),
+		ApplicationController: require( "controllers/ApplicationController" ),
+		ApplicationView: require( "views/ApplicationView" ),
 
-			IndexRoute: require( "routes/IndexRoute" ),
-			IndexController: require( "controllers/IndexController" ),
-			IndexView: require( "views/IndexView" ),
+		LoadingRoute: require( "routes/LoadingRoute" ),
+		LoadingView: require( "views/LoadingView" ),
 
-			SearchRoute: require( "routes/SearchRoute" ),
-			SearchController: require( "controllers/SearchController" ),
-			SearchView: require( "views/SearchView" ),
+		ErrorRoute: require( "routes/ErrorRoute" ),
+		ErrorView: require( "views/ErrorView" ),
 
-			GamesLoadingRoute: require( "routes/LoadingRoute" ),
-			GamesLoadingView: require( "views/LoadingView" ),
-			GamesIndexRoute: require( "routes/GamesIndexRoute" ),
-			GamesIndexController: require( "controllers/GamesIndexController" ),
-			GamesIndexView: require( "views/GamesIndexView" ),
-			GamesGameRoute: require( "routes/GamesGameRoute" ),
-			GamesGameController: require( "controllers/GamesGameController" ),
-			GamesGameView: require( "views/GamesGameView" ),
+		ModalController: require( "controllers/ModalController" ),
+		ModalView: require( "views/ModalView" ),
 
-			ChannelsLoadingRoute: require( "routes/LoadingRoute" ),
-			ChannelsLoadingView: require( "views/LoadingView" ),
-			ChannelsIndexRoute: require( "routes/ChannelsIndexRoute" ),
-			ChannelsIndexController: require( "controllers/ChannelsIndexController" ),
-			ChannelsIndexView: require( "views/ChannelsIndexView" ),
+		SearchbarController: require( "controllers/SearchbarController" ),
+		SearchbarView: require( "views/SearchbarView" ),
 
-			SettingsRoute: require( "routes/SettingsRoute" ),
-			SettingsController: require( "controllers/SettingsController" ),
-			SettingsView: require( "views/SettingsView" ),
+		VersioncheckController: require( "controllers/VersioncheckController" ),
+		LivestreamerController: require( "controllers/LivestreamerController" ),
 
-			AboutController: require( "controllers/AboutController" ),
-			AboutView: require( "views/AboutView" )
-		});
 
+		// Components
+		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
+		LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
+		RadioButtonComponent: require( "components/RadioButtonComponent" ),
+		RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
+		GameItemComponent: require( "components/GameItemComponent" ),
+		StreamItemComponent: require( "components/StreamItemComponent" ),
+		InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
+
+
+		// Content
+		WatchingRoute: require( "routes/WatchingRoute" ),
+		WatchingController: require( "controllers/WatchingController" ),
+		WatchingView: require( "views/WatchingView" ),
+
+		IndexRoute: require( "routes/IndexRoute" ),
+		IndexController: require( "controllers/IndexController" ),
+		IndexView: require( "views/IndexView" ),
+
+		SearchRoute: require( "routes/SearchRoute" ),
+		SearchController: require( "controllers/SearchController" ),
+		SearchView: require( "views/SearchView" ),
+
+		GamesLoadingRoute: require( "routes/LoadingRoute" ),
+		GamesLoadingView: require( "views/LoadingView" ),
+		GamesIndexRoute: require( "routes/GamesIndexRoute" ),
+		GamesIndexController: require( "controllers/GamesIndexController" ),
+		GamesIndexView: require( "views/GamesIndexView" ),
+		GamesGameRoute: require( "routes/GamesGameRoute" ),
+		GamesGameController: require( "controllers/GamesGameController" ),
+		GamesGameView: require( "views/GamesGameView" ),
+
+		ChannelsLoadingRoute: require( "routes/LoadingRoute" ),
+		ChannelsLoadingView: require( "views/LoadingView" ),
+		ChannelsIndexRoute: require( "routes/ChannelsIndexRoute" ),
+		ChannelsIndexController: require( "controllers/ChannelsIndexController" ),
+		ChannelsIndexView: require( "views/ChannelsIndexView" ),
+
+		SettingsRoute: require( "routes/SettingsRoute" ),
+		SettingsController: require( "controllers/SettingsController" ),
+		SettingsView: require( "views/SettingsView" ),
+
+		AboutController: require( "controllers/AboutController" ),
+		AboutView: require( "views/AboutView" )
 	});
 
 });
