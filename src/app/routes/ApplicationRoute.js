@@ -1,7 +1,6 @@
-define( [ "ember", "text!root/metadata.json" ], function( Ember, metadata_json ) {
+define( [ "ember", "text!root/metadata.json" ], function( Ember, metadata ) {
 
-	var metadata = JSON.parse( metadata_json );
-	metadata_json = null;
+	metadata = JSON.parse( metadata );
 
 	return Ember.Route.extend({
 		beforeModel: function() {
@@ -18,8 +17,10 @@ define( [ "ember", "text!root/metadata.json" ], function( Ember, metadata_json )
 			return metadata;
 		},
 
-		afterModel: function( resolvedModel ) {
-			this.controllerFor( "versioncheck" ).check( resolvedModel );
+		setupController: function( controller, model ) {
+			this._super.apply( this, arguments );
+
+			this.controllerFor( "versioncheck" ).check();
 		},
 
 

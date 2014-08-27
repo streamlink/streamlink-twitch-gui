@@ -32,6 +32,7 @@
 
 	"config": {
 		"node-webkit-version": "0.10.1",
+		"version-check-days": 7,
 		"livestreamer-exec": "livestreamer",
 		"livestreamer-version-min": "1.8.0",
 		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",

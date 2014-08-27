@@ -1,42 +1,50 @@
 define( [ "ember", "utils/semver" ], function( Ember, SemVer ) {
 
+	var get = Ember.get;
+
 	return Ember.ObjectController.extend({
-		needs: [ "modal" ],
+		needs: [ "application", "modal" ],
 
-		// check again in 3 days (time in ms)
-		time: 1000 * 3600 * 24 * 3,
+		packageBinding: "controllers.application.content.package",
+		versionBinding: "package.version",
+
+		// check again in x days (time in ms)
+		time: function() {
+			var days = Number( get( this, "package.config.version-check-days" ) );
+			return 1000 * 3600 * 24 * days;
+		}.property( "package.config.version-check-days" ),
 
 
-		check: function( ApplicationModel ) {
-			var version = Ember.get( ApplicationModel, "package.version" );
-			if ( !version ) { return; }
+		check: function() {
+			if ( !get( this, "version" ) ) { return; }
+
+			var checkReleases = this.checkReleases.bind( this );
 
 			// Load Versioncheck record
-			this.store.find( "versioncheck" ).then(function( records ) {
-				var content = records.toArray();
-				if ( !content.length || Ember.get( content, "0.checkagain" ) <= +new Date() ) {
+			this.store.find( "versioncheck", 1 ).then(function( record ) {
+				if ( Ember.getWithDefault( record, "checkagain", 0 ) <= +new Date() ) {
 					// let's check for a new release
-					this.checkReleases( version );
+					checkReleases();
 				}
-			}.bind( this ) );
+			}, checkReleases );
 		},
 
-		checkReleases: function( version ) {
+		checkReleases: function() {
 			function getVers( record ) {
-				return Ember.get( record, "tag_name" );
+				return get( record, "tag_name" );
 			}
 
 			this.store.find( "githubReleases" ).then(function( releases ) {
 				// filter records first
-				return releases.toArray().filter(function( release ) {
+				releases = releases.toArray().filter(function( release ) {
 					// ignore drafts
-					return !release.get( "draft" );
+					return !get( release, "draft" );
 				});
-			}).then(function( releases ) {
-				var	modal	= this.get( "controllers.modal" ),
+
+				var	modal	= get( this, "controllers.modal" ),
 
 				// create a fake record for the current version and save a reference
-					current	= { tag_name: "v" + version },
+					current	= { tag_name: "v" + get( this, "version" ) },
 				// find out the maximum of fetched releases
 					maximum	= SemVer.getMax( releases, getVers ),
 				// and compare it with the current version
@@ -54,7 +62,7 @@ define( [ "ember", "utils/semver" ], function( Ember, SemVer ) {
 					[
 						new modal.Button(
 							"Download", "btn-success", "fa-download",
-							this.releaseDownload.bind( this, Ember.get( latest, "html_url" ) )
+							this.releaseDownload.bind( this, get( latest, "html_url" ) )
 						),
 						new modal.Button(
 							"Ignore", "btn-danger", "fa-times",
@@ -71,17 +79,15 @@ define( [ "ember", "utils/semver" ], function( Ember, SemVer ) {
 		},
 
 		releaseIgnore: function() {
-			this.store.find( "versioncheck" ).then(function( record ) {
-				if ( record = record.content[0] ) {
-					record.set( "checkagain", +new Date() + this.time );
-					record.save();
-				} else {
-					this.store.createRecord( "versioncheck", {
-						id: 1,
-						checkagain: +new Date() + this.time
-					}).save();
-				}
-			}.bind( this ) );
+			var	store = this.store,
+				data = { checkagain: +new Date() + get( this, "time" ) };
+
+			this.store.find( "versioncheck", 1 ).then(function( record ) {
+				record.setProperties( data ).save();
+			}, function() {
+				data.id = 1;
+				store.createRecord( "versioncheck", data ).save();
+			});
 		}
 	});
 
