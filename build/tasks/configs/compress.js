@@ -17,7 +17,7 @@ module.exports = {
 		src				: [ "**" ],
 		dest			: "", // no archive subfolder for osx... the package already is a folder
 		mode			: function( file ) {
-			return /\.app\/Contents\/(?:Frameworks|MacOS)\//.test( file ) ? 0755 : 0744;
+			return /\.app\/Contents\/(?:Frameworks|MacOS)\//.test( file ) ? 0755 : 0644;
 		}
 	},
 	linux32			: {
@@ -27,7 +27,7 @@ module.exports = {
 		src				: [ "**" ],
 		dest			: "<%= package.name %>",
 		mode			: function( file ) {
-			return /\.sh$/.test( file ) ? 0755 : 0744;
+			return /\.sh$/.test( file ) ? 0755 : 0644;
 		}
 	},
 	linux64			: {
@@ -37,7 +37,7 @@ module.exports = {
 		src				: [ "**" ],
 		dest			: "<%= package.name %>",
 		mode			: function( file ) {
-			return /\.sh$/.test( file ) ? 0755 : 0744;
+			return /\.sh$/.test( file ) ? 0755 : 0644;
 		}
 	}
 };
