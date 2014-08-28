@@ -28,6 +28,8 @@ define(function( require ) {
 		VersioncheckAdapter: require( "store/LocalstorageAdapter" ),
 		Search: require( "models/Search" ),
 		SearchAdapter: require( "store/LocalstorageAdapter" ),
+		Auth: require( "models/Auth" ),
+		AuthAdapter: require( "store/LocalstorageAdapter" ),
 
 
 		// Models: github
@@ -48,12 +50,16 @@ define(function( require ) {
 		TwitchImage: require( "models/twitch/Image" ),
 		TwitchImageSerializer: require( "models/twitch/ImageSerializer" ),
 
+		TwitchToken: require( "models/twitch/Token" ),
+		TwitchTokenSerializer: require( "models/twitch/TokenSerializer" ),
 		TwitchGamesTop: require( "models/twitch/GamesTop" ),
 		TwitchGamesTopSerializer: require( "models/twitch/GamesTopSerializer" ),
 		TwitchStreamsSummary: require( "models/twitch/StreamsSummary" ),
 		TwitchStreamsSummarySerializer: require( "models/twitch/StreamsSummarySerializer" ),
 		TwitchStreamsFeatured: require( "models/twitch/StreamsFeatured" ),
 		TwitchStreamsFeaturedSerializer: require( "models/twitch/StreamsFeaturedSerializer" ),
+		TwitchStreamsFollowed: require( "models/twitch/StreamsFollowed" ),
+		TwitchStreamsFollowedSerializer: require( "models/twitch/StreamsFollowedSerializer" ),
 		TwitchSearchGame: require( "models/twitch/SearchGame" ),
 		TwitchSearchGameSerializer: require( "models/twitch/SearchGameSerializer" ),
 		TwitchSearchStream: require( "models/twitch/SearchStream" ),
