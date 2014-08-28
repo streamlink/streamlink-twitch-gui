@@ -19,7 +19,10 @@ There are still some core features missing at the current stage of development, 
 ## Download
 
 [Here you can find the list of all recent releases.][Releases]
-**Please note**: [Livestreamer][Livestreamer] has to be installed on your machine to be able to watch any stream, so please do this *before* starting the application.
+
+**Please note**: Livestreamer Twitch GUI depends on Livestreamer. Install [Livestreamer][Livestreamer] prior to using Livestreamer Twitch GUI.
+
+**Windows users**: Do not install Livestreamer via pip. Instead, install the [Microsoft Visual C++ 2008 Redistributable Package][Microsoft Visual C++ 2008 Redistributable Package], then install Livestreamer via its [installation package][installation package].
 
 ---
 
@@ -49,5 +52,7 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Livestreamer]: https://github.com/chrippa/livestreamer "Livestreamer"
   [Twitch]: http://twitch.tv "Twitch.tv"
   [NodeWebkit]: https://github.com/rogerwang/node-webkit "Node-Webkit"
+  [Microsoft Visual C++ 2008 Redistributable Package]: http://www.microsoft.com/en-us/download/details.aspx?id=29 "Microsoft Visual C++ 2008 Redistributable Package"
+  [installation package]: http://livestreamer.tanuki.se/en/latest/install.html#windows-binaries "Livestreamer installation package"
   [Nodejs]: http://nodejs.org "Node.js"
   [npm]: https://npmjs.org "Node Packaged Modules"
