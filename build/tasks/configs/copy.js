@@ -5,6 +5,7 @@ module.exports = {
 		src				: [
 			"package.json",
 			"index.html",
+			"oauth.{html,json}",
 			"vendor/requirejs/require.js",
 			"fonts/*.woff",
 			"vendor/font-awesome/fonts/*.woff",

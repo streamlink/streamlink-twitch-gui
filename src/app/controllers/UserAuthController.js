@@ -2,7 +2,7 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 
 	var	get = Ember.get,
 		set = Ember.set,
-		reURI = /^([a-z]+):\/\/([\w-]+(?:\.\w+)*)(\/.+)?$/;
+		reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
 
 	OAuth = JSON.parse( OAuth );
 
@@ -21,10 +21,14 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 		auth_failure: false,
 
 		auth_url: function() {
-			return get( this, "config.twitch-oauth-base-uri" )
-				.replace( "{client-id}", get( this, "config.twitch-oauth-client-id" ) )
-				.replace( "{redirect-uri}", get( this, "config.twitch-oauth-redirect-uri" ) )
-				.replace( "{scope}", get( this, "config.twitch-oauth-scope" ).join( "+" ) );
+			var	baseuri		= get( this, "config.twitch-oauth-base-uri" ),
+				clientid	= get( this, "config.twitch-oauth-client-id" ),
+				redirecturi	= get( this, "config.twitch-oauth-redirect-uri" ),
+				scope		= get( this, "config.twitch-oauth-scope" );
+			return baseuri
+				.replace( "{client-id}", clientid )
+				.replace( "{redirect-uri}", encodeURIComponent( redirecturi ) )
+				.replace( "{scope}", scope.join( "+" ) );
 		}.property( "config" ),
 
 
