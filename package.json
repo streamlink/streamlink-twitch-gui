@@ -37,7 +37,18 @@
 		"livestreamer-version-min": "1.8.0",
 		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",
 		"livestreamer-docs-url": "http://livestreamer.tanuki.se/en/latest/cli.html#cmdoption{cmd}",
-		"twitch-chat-url": "http://twitch.tv/chat/embed?channel={channel}&popout_chat=true"
+		"twitch-chat-url": "http://twitch.tv/chat/embed?channel={channel}&popout_chat=true",
+		"twitch-oauth-base-uri": "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id={client-id}&redirect_uri={redirect-uri}&scope={scope}",
+		"twitch-oauth-client-id": "phiay4sq36lfv9zu7cbqwz2ndnesfd8",
+		"twitch-oauth-redirect-uri": "app://livestreamer-twitch-gui/oauth.html",
+		"twitch-oauth-scope": [
+			"user_read",
+			"user_blocks_read",
+			"user_blocks_edit",
+			"user_follows_edit",
+			"user_subscriptions",
+			"chat_login"
+		]
 	},
 
 	"scripts": {

@@ -10,7 +10,7 @@ define( [ "ember" ], function( Ember ) {
 
 
 	return Ember.Controller.extend({
-		needs: [ "livestreamer", "modal" ],
+		needs: [ "livestreamer", "userAuth", "modal" ],
 
 		dev: DEBUG,
 
@@ -21,8 +21,14 @@ define( [ "ember" ], function( Ember ) {
 		// use an alias here: a binding will reach the callstack limit
 		streamsLength: Ember.computed.alias( "controllers.livestreamer.streams.length" ),
 
-		isLoggedIn: false,
-		loginTitle: "You're not logged in",
+		userLogin: Ember.computed.alias( "controllers.userAuth.content" ),
+		isLoggedIn: Ember.computed.notEmpty( "userLogin" ),
+		loginTitle: function() {
+			var user = this.get( "userLogin" );
+			return user
+				? "Logged in as %@".fmt( Ember.get( user, "user_name" ) )
+				: "You're not logged in";
+		}.property( "userLogin" ),
 
 
 		winToTray: function() {

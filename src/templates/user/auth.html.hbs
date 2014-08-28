@@ -1,0 +1,7 @@
+<div class="bigicon"><i class="fa fa-user"></i></div>
+<button type="button" class="btn btn-with-icon btn-signin" {{action "signin"}}><i class="fa fa-sign-in"></i>Sign in</button>
+{{#if auth_failure}}
+<footer>
+<p class="fail">Authentication failed. Please try again.</p>
+</footer>
+{{/if}}

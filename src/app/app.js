@@ -125,6 +125,14 @@ define(function( require ) {
 		ChannelsIndexController: require( "controllers/ChannelsIndexController" ),
 		ChannelsIndexView: require( "views/ChannelsIndexView" ),
 
+		UserLoadingRoute: require( "routes/LoadingRoute" ),
+		UserLoadingView: require( "views/LoadingView" ),
+		UserIndexRoute: require( "routes/UserIndexRoute" ),
+		UserIndexController: require( "controllers/UserIndexController" ),
+		UserIndexView: require( "views/UserIndexView" ),
+		UserAuthController: require( "controllers/UserAuthController" ),
+		UserAuthView: require( "views/UserAuthView" ),
+
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
 		SettingsView: require( "views/SettingsView" ),

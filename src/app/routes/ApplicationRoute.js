@@ -21,6 +21,7 @@ define( [ "ember", "text!root/metadata.json" ], function( Ember, metadata ) {
 			this._super.apply( this, arguments );
 
 			this.controllerFor( "versioncheck" ).check();
+			this.controllerFor( "userAuth" ).loadUserRecord().catch(function(){});
 		},
 
 

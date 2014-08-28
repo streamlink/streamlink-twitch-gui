@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<title>Authentication</title>
+</head>
+<body>
+<script>
+(function() {
+var cb = window.opener && window.opener.OAUTH_CALLBACK;
+if ( cb ) { cb( String( window.location.hash ).replace( /^#/, "" ) ); }
+else { window.close(); }
+})();
+</script>
+</body>
+</html>
