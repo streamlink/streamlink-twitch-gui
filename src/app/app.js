@@ -92,13 +92,13 @@ define(function( require ) {
 
 
 		// Content
-		WatchingRoute: require( "routes/WatchingRoute" ),
-		WatchingController: require( "controllers/WatchingController" ),
-		WatchingView: require( "views/WatchingView" ),
-
 		IndexRoute: require( "routes/IndexRoute" ),
 		IndexController: require( "controllers/IndexController" ),
 		IndexView: require( "views/IndexView" ),
+
+		WatchingRoute: require( "routes/WatchingRoute" ),
+		WatchingController: require( "controllers/WatchingController" ),
+		WatchingView: require( "views/WatchingView" ),
 
 		SearchRoute: require( "routes/SearchRoute" ),
 		SearchController: require( "controllers/SearchController" ),

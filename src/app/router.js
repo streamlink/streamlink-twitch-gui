@@ -6,6 +6,8 @@ define( [ "ember" ], function( Ember ) {
 
 		this.route( "index", { path: "/" } );
 
+		this.route( "watching" );
+
 		this.route( "search", { path: "/search/:filter/:query" } );
 
 		this.resource( "games", function() {
@@ -20,15 +22,15 @@ define( [ "ember" ], function( Ember ) {
 			this.route( "video", { path: "/:video" } );
 		});
 
-		this.route( "watching" );
+		this.resource( "user", function() {
+			this.route( "auth" );
+			this.route( "following" );
+			this.route( "subscriptions" );
+		});
 
 		this.route( "history" );
 
 		this.route( "mostviewed" );
-
-		this.route( "following" );
-
-		this.route( "subscriptions" );
 
 		this.route( "settings" );
 

@@ -16,7 +16,7 @@
 <button type="button" {{bind-attr class=":btn-watching :btn-indicator streamsLength::btn-hidden :fa :fa-desktop"}} {{action "goto" "watching"}}>
 <span class="indicator">{{streamsLength}}</span>
 </button>
-<button type="button" {{bind-attr class="isLoggedIn:btn-user:btn-no-user :fa :fa-user" title=loginTitle}} disabled></button>
+<button type="button" {{bind-attr class="isLoggedIn:btn-user:btn-no-user :fa :fa-user" title=loginTitle}} {{action "goto" "user.index"}} disabled></button>
 </nav>
 </header>
 
@@ -32,8 +32,8 @@
 </ul>
 <h3>Your</h3>
 <ul>
-<li>{{#link-to "following" disabled=true}}Favorites{{/link-to}}</li>
-<li>{{#link-to "subscriptions" disabled=true}}Subscriptions{{/link-to}}</li>
+<li>{{#link-to "user.following" disabled=true}}Favorites{{/link-to}}</li>
+<li>{{#link-to "user.subscriptions" disabled=true}}Subscriptions{{/link-to}}</li>
 <li>{{#link-to "history" disabled=true}}Recent Activity{{/link-to}}</li>
 <li>{{#link-to "mostviewed" disabled=true}}Most Viewed{{/link-to}}</li>
 </ul>
