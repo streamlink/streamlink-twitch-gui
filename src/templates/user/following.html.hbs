@@ -1,0 +1,14 @@
+<h2>Channels you follow</h2>
+{{#if content.length}}
+<ul class="content-list">
+{{#each}}
+{{stream-item stream=this}}
+{{/each}}
+</ul>
+{{infinite-scroll}}
+{{else}}
+<div class="content-empty">
+<p>No streams online</p>
+<p>{{#link-to "index"}}Watch currently featured streams{{/link-to}}</p>
+</div>
+{{/if}}

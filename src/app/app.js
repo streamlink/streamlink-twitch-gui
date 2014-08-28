@@ -132,6 +132,8 @@ define(function( require ) {
 		UserIndexView: require( "views/UserIndexView" ),
 		UserAuthController: require( "controllers/UserAuthController" ),
 		UserAuthView: require( "views/UserAuthView" ),
+		UserFollowingRoute: require( "routes/UserFollowingRoute" ),
+		UserFollowingView: require( "views/UserFollowingView" ),
 
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
