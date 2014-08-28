@@ -21,6 +21,9 @@ define( [ "ember" ], function( Ember ) {
 		// use an alias here: a binding will reach the callstack limit
 		streamsLength: Ember.computed.alias( "controllers.livestreamer.streams.length" ),
 
+		isLoggedIn: false,
+		loginTitle: "You're not logged in",
+
 
 		winToTray: function() {
 			if ( !nwGui || !nwWindow || this.get( "nwTray" ) ) { return; }

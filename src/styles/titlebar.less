@@ -148,6 +148,17 @@
 				}
 			}
 
+			&.btn-no-user {
+				color: transparent;
+				-webkit-text-stroke: .05em @titlebar-btn-color;
+
+				&:active {
+					color: transparent;
+					-webkit-text-stroke-color: @titlebar-btn-active-color;
+					background: @titlebar-btn-active-background;
+				}
+			}
+
 			&.btn-indicator {
 				@anim-length: .333s;
 
@@ -195,17 +206,6 @@
 			height: ( @app-padding + @titlebar-size + 4px );
 			margin: -@app-padding 7px 0;
 			background: @color-text-brighter;
-		}
-
-		> .loginname {
-			padding: 0 .5em;
-			color: @color-text-bright;
-			line-height: @titlebar-size;
-			-webkit-app-region: no-drag;
-
-			&.nologin {
-				display: none;
-			}
 		}
 	}
 }
