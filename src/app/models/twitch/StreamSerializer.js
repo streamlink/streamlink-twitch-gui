@@ -8,13 +8,6 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 
 		typeForRoot: function() {
 			return "twitchStream";
-		},
-
-		normalize: function( type, hash, prop ) {
-			// use the channel name as ID, so we can reload the record later on
-			// ember-data uses the ID for querying the API for single records
-			hash._id = hash.channel.name;
-			return this._super.call( this, type, hash, prop );
 		}
 	});
 

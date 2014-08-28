@@ -5,16 +5,18 @@ define([
 
 	return Ember.Route.extend({
 		model: function() {
-			var streams = this.controllerFor( "livestreamer" ).get( "streams" );
+			var	store	= this.store,
+				streams	= this.controllerFor( "livestreamer" ).get( "streams" );
 
 			return Promise.all( streams.map(function( elem ) {
-				// reload the stream record
-				// this will query the twitch.tv API with the record's ID (channel name)
-				return elem.stream.reload()
-					// return the streams array element instead of the stream record
-					.then(function() { return elem; })
+				return store.find( "twitchStream", Ember.get( elem, "name" ) )
+					.then(function( stream ) {
+						// add the new stream record to the stream object
+						elem.stream = stream;
+						return stream;
+					});
 			}) )
-				.then( preload( "@each.stream.@each.preview.@each.large" ) )
+				.then( preload( "@each.preview.@each.large" ) )
 				// return the original streams array reference!!!
 				.then(function() { return streams; });
 		},

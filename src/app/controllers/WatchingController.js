@@ -18,7 +18,7 @@ define( [ "ember" ], function( Ember ) {
 				this.send(
 					"openBrowser",
 					this.get( "config.twitch-chat-url" )
-						.replace( "{channel}", Ember.get( stream, "stream.channel.name" ) )
+						.replace( "{channel}", Ember.get( stream, "name" ) )
 				);
 			}
 		}

@@ -18,11 +18,10 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 	}
 
 
-	function Stream( spawn, stream, quality ) {
+	function Stream( spawn, name, quality ) {
 		this.spawn		= spawn;
-		this.stream		= stream;
+		this.name		= name;
 		this.quality	= quality;
-		this.name		= get( stream, "channel.name" );
 		this.started	= new Date();
 	}
 
@@ -56,7 +55,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			new Parameter( "--player-no-close", "player_no_close" )
 		],
 
-		getParametersString: function( settings, stream, quality ) {
+		getParametersString: function( settings, url, quality ) {
 			var	args = [],
 				qualities = get( settings, "qualities" );
 
@@ -74,7 +73,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			});
 
 			return args.concat([
-				get( stream, "channel.url" ),
+				url,
 				qualities.hasOwnProperty( quality )
 					? qualities[ quality ].quality
 					: qualities[ 0 ].quality
@@ -219,13 +218,15 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			var	self	= this,
 				defer	= Promise.defer(),
 				modal	= get( this, "controllers.modal" ),
+				name	= get( stream, "channel.name" ),
+				url		= get( stream, "channel.url" ),
 				quality	= get( settings, "quality" ),
 				streamObj;
 
 			function createSpawn( quality ) {
 				var	spawn = CP.spawn(
 						exec,
-						self.getParametersString( settings, stream, quality ),
+						self.getParametersString( settings, url, quality ),
 						{ detached: true }
 					);
 
@@ -273,7 +274,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			}
 
 			// create a new stream object
-			streamObj = new Stream( createSpawn( quality ), stream, quality );
+			streamObj = new Stream( createSpawn( quality ), name, quality );
 			streamObj.changeQuality = function() {
 				streamObj.quality = this.selection.id;
 				streamObj.kill(function() {
@@ -293,7 +294,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				// modal belongs to this stream now
 				this.set( "modal", stream );
 				this.send( "updateModal",
-					"Watching now: " + get( stream, "channel.name" ),
+					"Watching now: " + name,
 					get( stream, "channel.status" ),
 					[
 						new modal.Button( "Continue", "", "fa-reply", function() {
@@ -304,8 +305,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						new modal.ButtonBrowser(
 							"Chat",
 							"fa-comments",
-							get( this, "config.twitch-chat-url" )
-								.replace( "{channel}", get( stream, "channel.name" ) ),
+							get( this, "config.twitch-chat-url" ).replace( "{channel}", name ),
 							false
 						),
 						new modal.Select(
