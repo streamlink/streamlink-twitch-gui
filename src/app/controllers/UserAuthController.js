@@ -1,4 +1,4 @@
-define( [ "ember", "text!/oauth.json" ], function( Ember, OAuth ) {
+define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 
 	var	get = Ember.get,
 		set = Ember.set,
@@ -58,11 +58,14 @@ define( [ "ember", "text!/oauth.json" ], function( Ember, OAuth ) {
 						.then(function( record ) {
 							record = record.objectAt( 0 );
 							if ( !get( record, "valid" ) || !get( record, "user_name" ) ) {
-								twitchAdapter.set( "access_token", null );
 								throw new Error( "Invalid access token" );
 							}
 
 							set( self, "model", record );
+						})
+						.catch(function( err ) {
+							self.updateAdapter( null );
+							throw ( err || new Error() );
 						});
 				});
 		},
