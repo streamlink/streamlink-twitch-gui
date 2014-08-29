@@ -15,29 +15,20 @@ module.exports = {
 		expand			: true,
 		cwd				: "build/releases/<%= package.name %>/osx",
 		src				: [ "**" ],
-		dest			: "", // no archive subfolder for osx... the package already is a folder
-		mode			: function( file ) {
-			return /\.app\/Contents\/(?:Frameworks|MacOS)\//.test( file ) ? 0755 : 0644;
-		}
+		dest			: "" // no archive subfolder for osx... the package already is a folder
 	},
 	linux32			: {
 		options			: { archive: "dist/<%= package.name %>-v<%= package.version %>-linux32.tar.gz" },
 		expand			: true,
 		cwd				: "build/releases/<%= package.name %>/linux32",
 		src				: [ "**" ],
-		dest			: "<%= package.name %>",
-		mode			: function( file ) {
-			return /\.sh$/.test( file ) ? 0755 : 0644;
-		}
+		dest			: "<%= package.name %>"
 	},
 	linux64			: {
 		options			: { archive: "dist/<%= package.name %>-v<%= package.version %>-linux64.tar.gz" },
 		expand			: true,
 		cwd				: "build/releases/<%= package.name %>/linux64",
 		src				: [ "**" ],
-		dest			: "<%= package.name %>",
-		mode			: function( file ) {
-			return /\.sh$/.test( file ) ? 0755 : 0644;
-		}
+		dest			: "<%= package.name %>"
 	}
 };
