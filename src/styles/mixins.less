@@ -46,23 +46,51 @@
 }
 
 /**
- * Set a dynamic width for wrapped flexbox elements
+ * Create media queries for dynamically scaling lists
  */
 .dynamic-elems-per-row( @min, @container, @spacing, @additional ) {
+	@max: 8;
+
+
 	@sp: unit( ( @spacing / 100 ) );
 	// width of all elements in a row combined (percentage)
 	@content: ( 100% - @spacing );
 	// desired element width (pixels)
 	@desired: ( ( 1 - @sp ) * @container / @min );
 
-	// the maximum number of elements in a row is 8
-	.loop( @i ) when ( @i < 9 ) {
+	// the maximum number of elements in a row is 16
+	.loop( @i ) when ( @i =< @max ) {
 		// window min-width calculation (pixels):
 		// additional width to the content container element
 		// plus the width of all elements including the free space between each one (row width)
-		@media ( min-width: ( @additional + @i * @desired * ( 1 + @sp ) ) ) {
-			flex-basis: ( @content / @i );
+		@min-width:  ceil( ( @additional +   @i       * @desired * ( 1 + @sp ) ) );
+		@max-width: floor( ( @additional + ( @i + 1 ) * @desired * ( 1 + @sp ) ) );
+
+		.rules() {
+			width: ( @content / @i );
+			margin-right: ( @spacing / ( @i - 1 ) );
+
+			// no margin-right for the last element of each row
+			@nth: ~"@{i}n";
+			&:nth-of-type( @{nth} ) { margin-right: 0; }
 		}
+
+		// max-width constraint required, so the nth-child rule doesn't get used by other queries
+		.mediaquery() when( @i < @max ) {
+			@media ( max-width: @max-width ) and ( min-width: @min-width ) {
+				.rules();
+			}
+		}
+
+		// no max-width constraint on the last media query, so the items can scale from that point
+		.mediaquery() when( @i = @max ) {
+			@media ( min-width: @min-width ) {
+				.rules();
+			}
+		}
+
+		.mediaquery();
+
 		.loop( ( @i + 1 ) );
 	}
 

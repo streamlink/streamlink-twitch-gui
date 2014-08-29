@@ -5,13 +5,13 @@ define( [ "ember" ], function( Ember ) {
 
 
 	var	cachedMinWidths	= {},
-		reMinWidth		= /^\(min-width: (\d+(?:\.\d+)?)px\)$/,
+		reMinWidth		= /^(?:\(max-width: \d+px\) and )?\(min-width: (\d+)px\)$/,
 		cssMediaRules	= [].slice.call( document.styleSheets[0].rules )
 			.filter(function( rule ) {
 				return	rule instanceof window.CSSMediaRule
 					&&	rule.media.length === 1
 					&&	reMinWidth.test( rule.media[0] )
-					&&	rule.cssRules.length === 1;
+					&&	rule.cssRules.length > 0;
 			});
 
 	/**
@@ -35,7 +35,7 @@ define( [ "ember" ], function( Ember ) {
 						reMinWidth.exec( rule.media[0] )[1]
 					),
 					numItems: Math.floor( 100 / Number(
-						rule.cssRules[0].style[ "flexBasis" ].slice( 0, -1 )
+						rule.cssRules[0].style[ "width" ].slice( 0, -1 )
 					) )
 				};
 			});

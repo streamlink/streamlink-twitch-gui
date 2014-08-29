@@ -4,9 +4,8 @@
 
 
 .content-list {
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: space-between;
+	.clearfix();
+
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -24,6 +23,7 @@
 	}
 
 	> li {
+		float: left;
 		cursor: pointer;
 	}
 }
