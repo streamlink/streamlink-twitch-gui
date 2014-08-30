@@ -6,7 +6,7 @@
 <section class="right">
 <h3>{{stream.channel.display_name}}</h3>
 <div class="game">{{#link-to "games.game" stream.game}}<i class="fa fa-gamepad"></i> {{stream.game}}{{/link-to}}</div>
-<div class="info">{{stream.channel.status}}</div>
+<div class="info">{{embedded-links text=stream.channel.status}}</div>
 <div class="stats">
 <div><i class="fa fa-clock-o"></i> {{hours-from-now stream.channel.updated_at}}</div>
 <div><i class="fa fa-group"></i> {{format-viewers stream.viewers}}</div>

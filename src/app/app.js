@@ -95,6 +95,7 @@ define(function( require ) {
 		GameItemComponent: require( "components/GameItemComponent" ),
 		StreamItemComponent: require( "components/StreamItemComponent" ),
 		InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
+		EmbeddedLinksComponent: require( "components/EmbeddedLinksComponent" ),
 
 
 		// Content
