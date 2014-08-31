@@ -1,6 +1,6 @@
 <div>
-<header>{{#if head}}{{head}}{{else}}Please confirm{{/if}}</header>
-<section class="content">{{#if body}}{{body}}{{else}}Are you sure?{{/if}}</section>
+<header>{{_head}}</header>
+{{embedded-links tagName="section" class="content" text=_body}}
 <footer>
 {{#each controls}}
 {{#if this.isButton}}

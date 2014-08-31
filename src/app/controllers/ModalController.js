@@ -46,6 +46,14 @@ define( [ "ember" ], function( Ember ) {
 		body: null,
 		controls: [],
 
+		_head: function() {
+			return Ember.getWithDefault( this, "head", "Please confirm" );
+		}.property( "body" ),
+
+		_body: function() {
+			return Ember.getWithDefault( this, "body", "Are you sure?" );
+		}.property( "body" ),
+
 		actions: {
 			"button": function( button, action ) {
 				if ( button instanceof ModalButtonBrowser ) {
