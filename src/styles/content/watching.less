@@ -1,5 +1,5 @@
 
-.content-watching {
+.watching-empty {
 	a {
 		text-decoration: none;
 	}
@@ -33,6 +33,16 @@
 
 		> .game {
 			margin: .5em 0;
+			padding-left: 1.667rem;
+
+			&::before {
+				content: @fa-var-gamepad;
+				display: inline-block;
+				width: 1.667rem;
+				margin-left: -1.667rem;
+				color: @color-text-darker;
+				font: 1.2em/1.1 FontAwesome;
+			}
 		}
 
 		> .info {
