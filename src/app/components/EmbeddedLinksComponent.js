@@ -9,7 +9,7 @@ define( [ "ember" ], function( Ember ) {
 
 		twitter_re	= new RegExp([
 			// boundary (no look-behind)
-			"(^|\\s)",
+			"(^|[^a-z0-9_])",
 			// username
 			"@([a-z0-9_]+)",
 			// boundary
@@ -56,7 +56,11 @@ define( [ "ember" ], function( Ember ) {
 			return this.get( "text" )
 				.replace( twitter_re, twitter_fn )
 				.replace( linkurl_re, linkurl_fn );
-		}.property( "text" )
+		}.property( "text" ),
+
+		textChangeObserver: function() {
+			this.rerender();
+		}.observes( "text" )
 	});
 
 });
