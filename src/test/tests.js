@@ -25,13 +25,13 @@ define(function( require ) {
 			}
 		});
 
-		// then load tests and start QUnit
-		require(
-			[
-				"test/semver"
-			],
-			QUnit.start
-		);
+
+		require( [ "text!./tests.json" ], function( tests ) {
+			tests = JSON.parse( tests ).tests;
+
+			// then load tests and start QUnit
+			require( tests, QUnit.start );
+		});
 
 	});
 
