@@ -1,5 +1,6 @@
 {
 	"tests": [
-		"test/semver"
+		"test/semver",
+		"test/linkmatching"
 	]
 }

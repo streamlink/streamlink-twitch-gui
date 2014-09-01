@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
 
 	var	hbs_string	= "%@"
 			+ "{{#external-link"
@@ -7,42 +7,10 @@ define( [ "ember" ], function( Ember ) {
 			+ "%@"
 			+ "{{/external-link}}",
 
-		twitter_re	= new RegExp([
-			// boundary (no look-behind)
-			"(^|[^a-z0-9_])",
-			// username
-			"@([a-z0-9_]+)",
-			// boundary
-			"(?=[^a-z0-9_]|$)"
-		].join( "" ), "igm" ),
-		twitter_fn	= function( _, lookbehind, user ) {
-			return hbs_string.fmt(
-				lookbehind,
-				"https://twitter.com/" + user,
-				"@" + user
-			);
-		},
-
-		linkurl_re	= new RegExp([
-			// boundary (no look-behind)
-			"(^|\\s)",
-			// scheme (allow implicit http scheme)
-			"((?:http|ftp)s?:\\/\\/|www\\.)",
-			// user:pass@sub.host.tld:port
-			"((?:\\w+(?::\\w+)?@)?(?:[a-z0-9\u00C0-\uFFFF-]+\\.)*[a-z]+(?::\\d{2,5})?)",
-			// path
-			"(\/\\S*)?",
-			// boundary
-			"(?=\\s|$)"
-		].join( "" ), "igm" ),
-		linkurl_fn	= function( _, lookbehind, scheme, host, path ) {
-			var url = "%@%@%@".fmt( scheme, host, path );
-			return hbs_string.fmt(
-				lookbehind,
-				( scheme === "www." ? "http://" : "" ) + url,
-				url
-			);
-		};
+		linkurl_re	= linkmatching.linkurl_re,
+		linkurl_fn	= linkmatching.linkurl_fn( hbs_string ),
+		twitter_re	= linkmatching.twitter_re,
+		twitter_fn	= linkmatching.twitter_fn( hbs_string );
 
 
 	return Ember.Component.extend({
@@ -54,8 +22,8 @@ define( [ "ember" ], function( Ember ) {
 
 		_text: function() {
 			return this.get( "text" )
-				.replace( twitter_re, twitter_fn )
-				.replace( linkurl_re, linkurl_fn );
+				.replace( linkurl_re, linkurl_fn )
+				.replace( twitter_re, twitter_fn );
 		}.property( "text" ),
 
 		textChangeObserver: function() {
