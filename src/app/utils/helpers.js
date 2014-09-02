@@ -4,25 +4,23 @@ define( [ "ember", "moment" ], function( Ember, Moment ) {
 		return Moment( date ).fromNow( suffix );
 	});
 
-	Ember.Handlebars.helper( "hours-from-now", function( datestr ) {
-		return Math.max( 0, Moment().diff( datestr, "hours", true ) ).toFixed( 1 ) + "h";
+	Ember.Handlebars.helper( "hours-from-now", function( time ) {
+		var diff = Math.floor( Math.max( 0, Moment().diff( time, "minutes", true ) ) );
+		return diff < 1
+			? "just now"
+			: diff < 60
+			? ( diff % 60 < 10 ? "0" : "" ) + ( diff % 60 ).toFixed( 0 ) + "m"
+			: ( diff / 60 ).toFixed( 1 ) + "h";
 	});
 
 	Ember.Handlebars.helper( "format-viewers", function( viewers ) {
-		/*
-		 * 1
-		 * 10
-		 * 100
-		 * 1000
-		 * 10.0k
-		 * 100k
-		 * 1.00m
-		 */
 		return viewers >= 1000000
-			? ( viewers / 1000000 ).toFixed( 2 ) + "m"
+			? ( Math.floor( viewers / 10000 ) / 100 ).toFixed( 2 ) + "m"
+			: viewers >= 100000
+			? ( Math.floor( viewers / 1000 ) ).toFixed( 0 ) + "k"
 			: viewers >= 10000
-			? ( viewers / 1000 ).toFixed( viewers >= 100000 ? 0 : 1 ) + "k"
-			: viewers;
+			? ( Math.floor( viewers / 100 ) / 10 ).toFixed( 1 ) + "k"
+			: viewers.toFixed( 0 );
 	});
 
 });
