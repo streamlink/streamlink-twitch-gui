@@ -8,7 +8,9 @@
 {{infinite-scroll}}
 {{else}}
 <div class="content-empty">
-<p>No streams online</p>
-<p>{{#link-to "index"}}Watch currently featured streams{{/link-to}}</p>
+<p>None of your followed channels is online right now</p>
+<ul class="fa-ul watching-empty">
+<li>{{#link-to "index"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
+</ul>
 </div>
 {{/if}}
