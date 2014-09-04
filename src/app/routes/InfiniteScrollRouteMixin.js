@@ -68,8 +68,15 @@ define( [ "ember" ], function( Ember ) {
 
 
 	return Ember.Mixin.create({
-		offset: 0,
-		limit: 12,
+		/**
+		 * Define the content array location.
+		 * Can't use a binding here!!!
+		 */
+		content: "controller.model",
+
+		/**
+		 * Don't fetch infinitely.
+		 */
 		maxAutoFetches: 3,
 
 		/**
@@ -80,6 +87,7 @@ define( [ "ember" ], function( Ember ) {
 		 * time where the size is being calculated...
 		 */
 		itemSelector: Ember.required(),
+
 		/**
 		 * Second part of the fetch size calculation: the height of an item is unknown at this
 		 * point, but we need to know how many items to fetch. This property holds the minimum
@@ -106,6 +114,7 @@ define( [ "ember" ], function( Ember ) {
 		beforeModel: function() {
 			this._super.apply( this, arguments );
 
+			// reset on route change
 			set( this, "offset", 0 );
 			this.calcFetchSize();
 		},
@@ -116,20 +125,16 @@ define( [ "ember" ], function( Ember ) {
 
 			this._super.apply( this, arguments );
 
+			// late bindings
+			Ember.Binding.from( get( this, "content" ) ).to( "content" ).connect( this );
+			Ember.Binding.from( "content.length" ).to( "offset" ).connect( this );
+
 			set( controller, "isFetching", false );
 			set( controller, "hasFetchedAll", num < max );
 		},
 
 		fetchContent: function() {
-			this.calcFetchSize();
-			return this.model()
-				.catch(function( err ) {
-					set( this, "offset", get( this, "offset" ) - get( this, "limit" ) );
-					set( this, "controller.fetchError", true );
-					set( this, "controller.isFetching", false );
-					set( this, "controller.hasFetchedAll", false );
-					return Promise.reject( err );
-				}.bind( this ) );
+			return this.model();
 		},
 
 		actions: {
@@ -138,29 +143,38 @@ define( [ "ember" ], function( Ember ) {
 					isFetching	= get( controller, "isFetching" ),
 					fetchedAll	= get( controller, "hasFetchedAll" );
 
-				if ( !isFetching && !fetchedAll ) {
-					var	offset	= get( this, "offset" ),
-						limit	= get( this, "limit" ),
-						max		= get( this, "maxAutoFetches" ),
-						num		= offset / limit;
+				// we're already busy or finished fetching
+				if ( isFetching || fetchedAll ) { return; }
 
-					// don't fetch more than 3 times automatically
-					if ( !force && num > max ) { return; }
+				var	content	= get( this, "content" ),
+					offset	= get( this, "offset" ),
+					limit	= get( this, "limit" ),
+					max		= get( this, "maxAutoFetches" ),
+					num		= offset / limit;
 
-					set( controller, "fetchError", false );
-					set( controller, "isFetching", true );
-					set( this, "offset", offset + limit );
+				// don't fetch infinitely
+				if ( !force && num > max + 1 ) { return; }
 
-					// fetch content and append to ArrayController
-					this.fetchContent().then(function( content ) {
-						if ( !content || !content.length ) {
+				set( controller, "fetchError", false );
+				set( controller, "isFetching", true );
+
+				// fetch content
+				this.calcFetchSize();
+				this.fetchContent()
+					.then(function( data ) {
+						if ( !data || !data.length ) {
 							set( controller, "hasFetchedAll", true );
 						} else {
-							controller.pushObjects( content );
+							content.pushObjects( data );
 						}
 						set( controller, "isFetching", false );
-					}.bind( this ) );
-				}
+					})
+					.catch(function( err ) {
+						set( controller, "fetchError", true );
+						set( controller, "isFetching", false );
+						set( controller, "hasFetchedAll", false );
+						return Promise.reject( err );
+					});
 			}
 		}
 	});
