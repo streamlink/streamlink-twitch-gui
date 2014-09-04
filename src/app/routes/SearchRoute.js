@@ -16,7 +16,6 @@ define([
 		content: "controller.model.streams",
 
 		itemSelector: ".stream-component",
-		itemHeight: 207,
 
 
 		model: function( params ) {

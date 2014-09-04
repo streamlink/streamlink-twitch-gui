@@ -4,39 +4,41 @@ define( [ "ember" ], function( Ember ) {
 		set = Ember.set;
 
 
-	var	cachedMinWidths	= {},
-		reMinWidth		= /^(?:\(max-width: \d+px\) and )?\(min-width: (\d+)px\)$/,
-		cssMediaRules	= [].slice.call( document.styleSheets[0].rules )
-			.filter(function( rule ) {
-				return	rule instanceof window.CSSMediaRule
-					&&	rule.media.length === 1
-					&&	reMinWidth.test( rule.media[0] )
-					&&	rule.cssRules.length > 0;
-			});
+	var	CSSMediaRule		= window.CSSMediaRule,
+		CSSStyleRule		= window.CSSStyleRule,
+		reMinWidth			= /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/,
+		cachedMinWidths		= {},
+		cssMinWidthRules	= [].filter.call( document.styleSheets[0].rules, function( rule ) {
+			return	rule instanceof CSSMediaRule
+				&&	rule.media.length === 1
+				&&	reMinWidth.test( rule.media[0] )
+				&&	rule.cssRules.length > 0;
+		}),
+		cachedMinHeights	= [].filter.call( document.styleSheets[0].rules, function( rule ) {
+			return	rule instanceof CSSStyleRule
+				&&	rule.style.minHeight !== "";
+		}).reduce(function( cache, rule ) {
+			cache[ rule.selectorText ] = parseInt( rule.style.minHeight );
+			return cache;
+		}, {} );
 
 	/**
 	 * Generate a list of all min-width media queries and their item widths for a specific selector.
 	 * These media queries have been defined by the lesscss function .dynamic-elems-per-row()
 	 */
 	function readMinWidths( selector ) {
-		var data;
-
 		if ( cachedMinWidths.hasOwnProperty( selector ) ) {
 			return cachedMinWidths[ selector ];
 		}
 
-		data = cssMediaRules
+		var data = cssMinWidthRules
 			.filter(function( rule ) {
 				return rule.cssRules[0].selectorText === selector;
 			})
 			.map(function( rule ) {
 				return {
-					minWidth: Math.floor(
-						reMinWidth.exec( rule.media[0] )[1]
-					),
-					numItems: Math.floor( 100 / Number(
-						rule.cssRules[0].style[ "width" ].slice( 0, -1 )
-					) )
+					minWidth: Math.floor( reMinWidth.exec( rule.media[0] )[1] ),
+					numItems: Math.floor( 100 / parseInt( rule.cssRules[0].style.width ) )
 				};
 			});
 
@@ -44,8 +46,14 @@ define( [ "ember" ], function( Ember ) {
 			throw new Error( "Invalid selector" );
 		}
 
-		// set cache
 		return cachedMinWidths[ selector ] = data;
+	}
+
+	function readMinHeights( selector ) {
+		if ( !cachedMinHeights.hasOwnProperty( selector ) ) {
+			throw new Error( "Invalid selector" );
+		}
+		return cachedMinHeights[ selector ];
 	}
 
 	function getNeededColumns( selector ) {
@@ -56,8 +64,9 @@ define( [ "ember" ], function( Ember ) {
 		}).numItems;
 	}
 
-	function getNeededRows( itemHeight ) {
-		return 1 + Math.ceil( getItemContainer().clientHeight / itemHeight );
+	function getNeededRows( selector ) {
+		var minHeight = readMinHeights( selector );
+		return 1 + Math.ceil( getItemContainer().clientHeight / minHeight );
 	}
 
 	function getItemContainer() {
@@ -88,20 +97,14 @@ define( [ "ember" ], function( Ember ) {
 		 */
 		itemSelector: Ember.required(),
 
-		/**
-		 * Second part of the fetch size calculation: the height of an item is unknown at this
-		 * point, but we need to know how many items to fetch. This property holds the minimum
-		 * height of an item of the selector specified above.
-		 */
-		itemHeight: Ember.required(),
-
 
 		/**
 		 * Calculate how many items are needed to completely fill the container
 		 */
 		calcFetchSize: function() {
-			var	columns	= getNeededColumns( get( this, "itemSelector" ) ),
-				rows	= getNeededRows( get( this, "itemHeight" ) ),
+			var	itemSel	= get( this, "itemSelector" ),
+				columns	= getNeededColumns( itemSel ),
+				rows	= getNeededRows( itemSel ),
 				offset	= get( this, "offset" ),
 				uneven	= offset % columns,
 				limit	= ( columns * rows ) + ( uneven > 0 ? columns - uneven : 0 );

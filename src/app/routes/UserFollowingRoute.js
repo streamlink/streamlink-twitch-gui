@@ -7,7 +7,6 @@ define([
 
 	return UserIndexRoute.extend( InfiniteScroll, {
 		itemSelector: ".stream-component",
-		itemHeight: 207,
 
 		model: function() {
 			return this.store.findQuery( "twitchStreamsFollowed", {

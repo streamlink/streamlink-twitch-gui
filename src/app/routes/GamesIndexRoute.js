@@ -6,7 +6,6 @@ define([
 
 	return Ember.Route.extend( InfiniteScroll, {
 		itemSelector: ".game-component",
-		itemHeight: 255,
 
 		model: function() {
 			return this.store.findQuery( "twitchGamesTop", {

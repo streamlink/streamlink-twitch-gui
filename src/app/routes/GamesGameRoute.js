@@ -6,7 +6,6 @@ define([
 
 	return Ember.Route.extend( InfiniteScroll, {
 		itemSelector: ".stream-component",
-		itemHeight: 207,
 
 		model: function( params ) {
 			Ember.set( this, "game", Ember.get( params || {}, "game" ) );
