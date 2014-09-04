@@ -1,4 +1,8 @@
-define( [ "ember", "utils/preload" ], function( Ember, preload ) {
+define([
+	"ember",
+	"routes/InfiniteScrollRouteMixin",
+	"utils/preload"
+], function( Ember, InfiniteScroll, preload ) {
 
 	var	get	= Ember.get,
 		set	= Ember.set;
@@ -7,7 +11,14 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 		return filter === "all" || filter === value;
 	}
 
-	return Ember.Route.extend({
+
+	return Ember.Route.extend( InfiniteScroll, {
+		content: "controller.model.streams",
+
+		itemSelector: ".stream-component",
+		itemHeight: 207,
+
+
 		model: function( params ) {
 			set( this, "filter", params.filter );
 			set( this,  "query",  params.query );
@@ -17,16 +28,18 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 				// search for games
 				filterMatches( params.filter, "games" )
 					? this.store.findQuery( "twitchSearchGame", {
-						query: params.query,
-						type: "suggest",
-						live: true
+						query	: params.query,
+						type	: "suggest",
+						live	: true
 					})
 					: Promise.resolve([]),
 
 				// search for streams
 				filterMatches( params.filter, "streams" )
 					? this.store.findQuery( "twitchSearchStream", {
-						query: params.query
+						query	: params.query,
+						offset	: get( this, "offset" ),
+						limit	: get( this, "limit" )
 					})
 					: Promise.resolve([])
 
@@ -41,6 +54,20 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 					"games.@each.box.@each.large",
 					"streams.@each.preview.@each.medium"
 				]) );
+		},
+
+		fetchContent: function() {
+			if ( !filterMatches( get( this, "filter" ), "streams" ) ) {
+				return Promise.resolve([]);
+			}
+
+			return this.store.findQuery( "twitchSearchStream", {
+				query	: get( this, "query" ),
+				offset	: get( this, "offset" ),
+				limit	: get( this, "limit" )
+			})
+				.then(function( data ) { return data.toArray(); })
+				.then( preload( "@each.preview.@each.medium" ) );
 		},
 
 		setupController: function( controller, model ) {

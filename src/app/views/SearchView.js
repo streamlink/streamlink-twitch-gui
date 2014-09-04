@@ -1,10 +1,11 @@
 define([
 	"ember",
+	"views/InfiniteScrollViewMixin",
 	"text!templates/search.html.hbs"
-], function( Ember, template ) {
+], function( Ember, InfiniteScroll, Template ) {
 
-	return Ember.View.extend({
-		defaultTemplate: Ember.Handlebars.compile( template ),
+	return Ember.View.extend( InfiniteScroll, {
+		template: Ember.Handlebars.compile( Template ),
 		tagName: "main",
 		classNames: [ "content", "content-search" ]
 	});
