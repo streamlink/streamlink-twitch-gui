@@ -122,15 +122,15 @@ define( [ "ember" ], function( Ember ) {
 			this.calcFetchSize();
 		},
 
-		setupController: function( controller, model ) {
-			var	num	= get( model, "length" ),
-				max	= get( this, "limit" );
-
+		setupController: function( controller ) {
 			this._super.apply( this, arguments );
 
 			// late bindings
 			Ember.Binding.from( get( this, "content" ) ).to( "content" ).connect( this );
 			Ember.Binding.from( "content.length" ).to( "offset" ).connect( this );
+
+			var	num	= get( this, "content.length" ),
+				max	= get( this, "limit" );
 
 			set( controller, "isFetching", false );
 			set( controller, "hasFetchedAll", num < max );
@@ -149,6 +149,8 @@ define( [ "ember" ], function( Ember ) {
 				// we're already busy or finished fetching
 				if ( isFetching || fetchedAll ) { return; }
 
+				this.calcFetchSize();
+
 				var	content	= get( this, "content" ),
 					offset	= get( this, "offset" ),
 					limit	= get( this, "limit" ),
@@ -156,16 +158,15 @@ define( [ "ember" ], function( Ember ) {
 					num		= offset / limit;
 
 				// don't fetch infinitely
-				if ( !force && num > max + 1 ) { return; }
+				if ( !force && num > max ) { return; }
 
 				set( controller, "fetchError", false );
 				set( controller, "isFetching", true );
 
 				// fetch content
-				this.calcFetchSize();
 				this.fetchContent()
 					.then(function( data ) {
-						if ( !data || !data.length ) {
+						if ( !data || !data.length || data.length < limit ) {
 							set( controller, "hasFetchedAll", true );
 						} else {
 							content.pushObjects( data );
