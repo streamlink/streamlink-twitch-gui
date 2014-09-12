@@ -221,6 +221,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				name	= get( stream, "channel.name" ),
 				url		= get( stream, "channel.url" ),
 				quality	= get( settings, "quality" ),
+				chaturl	= get( this, "config.twitch-chat-url" ).replace( "{channel}", name ),
 				streamObj;
 
 			function createSpawn( quality ) {
@@ -270,6 +271,11 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						get( self, "controllers.application" ).winToTray();
 				}
 
+				// open chat automatically
+				if ( !streamObj && get( settings, "gui_openchat" ) ) {
+					self.send( "openBrowser", chaturl );
+				}
+
 				return spawn;
 			}
 
@@ -302,12 +308,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 							defer.resolve();
 						}.bind( this ) ),
 						new modal.ButtonClose( streamObj.kill.bind( streamObj ) ),
-						new modal.ButtonBrowser(
-							"Chat",
-							"fa-comments",
-							get( this, "config.twitch-chat-url" ).replace( "{channel}", name ),
-							false
-						),
+						new modal.ButtonBrowser( "Chat", "fa-comments", chaturl, false ),
 						new modal.Select(
 							get( settings, "qualities" ),
 							get( settings, "quality" ),

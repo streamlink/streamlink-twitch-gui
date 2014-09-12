@@ -27,6 +27,8 @@
 <div class="right">{{view Ember.Select value=content.gui_minimize content=model.minimize optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 <div class="left"><i class="fa fa-info"></i> Stream popup<span class="description">When a stream has started.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=content.gui_hidestreampopup}}<span>Hide the popup on success</span></label></div>
+<div class="left"><i class="fa fa-comment"></i> Open chat<span class="description">After launching a stream.</span></div>
+<div class="right"><label>{{input type="checkbox" checked=content.gui_openchat}}<span>Automatically open chat</span></label></div>
 </fieldset>
 <fieldset class="submit">
 <button type="button" class="btn btn-with-icon btn-success" {{action "apply"}}><i class="fa fa-check"></i>Apply</button>
