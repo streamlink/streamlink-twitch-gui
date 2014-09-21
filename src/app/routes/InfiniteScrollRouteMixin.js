@@ -126,8 +126,20 @@ define( [ "ember" ], function( Ember ) {
 			this._super.apply( this, arguments );
 
 			// late bindings
-			Ember.Binding.from( get( this, "content" ) ).to( "content" ).connect( this );
-			Ember.Binding.from( "content.length" ).to( "offset" ).connect( this );
+			var	b1	= get( this, "_binding_content" ),
+				b2	= get( this, "_binding_contentlength" );
+			if ( b1 ) {
+				// update observers of the bindings by reattaching
+				b1.disconnect( this ).connect( this );
+				b2.disconnect( this ).connect( this );
+			} else {
+				// read content path and make bindings out of it
+				b1 = Ember.Binding.from( get( this, "content" ) ).to( "content" ).connect( this );
+				b2 = Ember.Binding.from( "content.length" ).to( "offset" ).connect( this );
+				// save references, so they can be updated later
+				set( this, "_binding_content", b1 );
+				set( this, "_binding_contentlength", b2 );
+			}
 
 			var	num	= get( this, "content.length" ),
 				max	= get( this, "limit" );
