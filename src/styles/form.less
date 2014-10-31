@@ -160,19 +160,23 @@ fieldset {
 
 
 .btn {
-	padding: .4em;
+	padding: 0 .4em;
 	border-width: .1em;
 	border-radius: 0;
-	font-size: 1em;
-	color: @color-text-brightest !important;
+	font-size: 1rem;
+	line-height: 2;
+	color: @button-color !important;
 	z-index: initial !important;
 
-	.btn-color();
+	&,
+	&.btn-primary { .btn-color( @color-primary ); }
 	&.btn-success { .btn-color( @color-success ); }
-	&.btn-danger { .btn-color( @color-danger ); }
+	&.btn-danger  { .btn-color( @color-danger  ); }
 	&.btn-neutral { .btn-color( @color-neutral ); }
+	&.btn-info    { .btn-color( @color-info    ); }
 
-	.btn-color( @color: @color-twitch-purple ) {
+
+	.btn-color( @color ) {
 		background: @color;
 		border-color: darken( @color, 10% );
 		transition: background .2s ease-out;
@@ -184,20 +188,23 @@ fieldset {
 	}
 
 	&:not(:disabled):active {
-		box-shadow: inset 0 .2em .35em fade( #000, 12.5% );
+		box-shadow: none;
 	}
 
 
 	&.btn-with-icon {
 		min-width: 9em;
-		line-height: 1.25;
 
 		> i {
-			margin-left: -1.2em;
-			margin-right: .2em;
-			font-size: 1.25em;
-			color: fade( @color-text-brightest, 50% ) !important;
-			vertical-align: top;
+			width: 1em;
+			height: 1em;
+			margin-left: ( -1 * ( 1 + @button-icon-spacing ) );
+			margin-right: @button-icon-spacing;
+			font-size: @button-icon-size;
+			line-height: ( 1 / unit( @button-icon-size ) );
+			color: @button-icon-color !important;
+			text-align: center;
+			vertical-align: middle;
 		}
 	}
 

@@ -47,46 +47,44 @@
 	}
 
 	footer {
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: flex-start;
+		align-items: flex-end;
+
 		> * {
-			display: block;
-			float: left;
 			min-width: 9em;
 			margin-right: 1em;
-		}
-
-		> .selecter.custom {
-			line-height: 1.75;
 		}
 	}
 }
 
 
 .selecter.custom.modalqualityselect {
-	@text: @color-text-brightest;
 	@color: @color-neutral;
 	@color-hover: darken( @color, 10% );
 	@color-border: darken( @color, 5% );
 	@color-border-hover: darken( @color, 15% );
-	@icon-size: 1.25em;
-	@icon-space: 1.75em;
+	@icon-width: ( @button-icon-size + 2 * @button-icon-spacing );
+	@icon-height: ( 1 / unit( @button-icon-size ) );
 
-	.icon() {
-		padding-left: 0 !important;
-
+	.icon( @opacity: 1 ) {
 		&::before {
 			content: @fa-var-eye;
-			.fa();
-			width: ( @icon-space - .25em );
-			margin: .1em 0 -.1em .25em;
-			color: fade( @text, 50% ) !important;
-			font-size: @icon-size;
+			display: inline-block;
+			width: @icon-width;
+			height: 1em;
+			font: normal normal normal @button-icon-size/@icon-height FontAwesome;
+			color: @button-icon-color !important;
 			text-align: center;
+			vertical-align: middle;
+			opacity: @opacity;
 		}
 	}
 
 	> .selecter-selected,
 	> .selecter-options {
-		color: @text;
+		color: @button-color;
 		background: @color;
 		transition: background .2s ease-out;
 
@@ -96,11 +94,19 @@
 		}
 	}
 
+	&.open > .selecter-options {
+		border-color: @color-border-hover !important;
+	}
+
 	> .selecter-selected {
+		padding: 0;
+		font-size: 1rem;
+		line-height: 2;
+
 		.icon();
 
 		&::after {
-			line-height: 2.25;
+			line-height: 2;
 		}
 	}
 
@@ -109,17 +115,19 @@
 		background: @color;
 	}
 
-	&.open > .selecter-options {
-		border-color: @color-border-hover !important;
-	}
-
 	.selecter-item {
-		padding-left: ( @icon-space * unit( @icon-size ) );
+		padding: 0;
+		line-height: 2;
+
+		.icon( 0 );
 
 		&.selected {
-			color: @text;
+			color: @button-color;
 			font-weight: normal;
-			.icon();
+
+			&::before {
+				opacity: 1;
+			}
 		}
 
 		&:not(:last-of-type) {
@@ -130,7 +138,7 @@
 	> .selecter-selected,
 	.selecter-item {
 		border-color: @color-border !important;
-		color: @text;
+		color: @button-color;
 		background: @color;
 		transition: background .2s ease-out;
 

@@ -55,6 +55,14 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: lighter;
 }
 
+p {
+	margin: 0 0 .75em;
+
+	&:last-of-type {
+		margin-bottom: 0;
+	}
+}
+
 
 a {
 	color: @color-text-default;
@@ -65,12 +73,16 @@ a {
 		text-decoration: none;
 	}
 
-	&.external-link::after {
-		content: @fa-var-external-link;
-		display: inline-block;
-		font-family: "FontAwesome";
-		padding-left: .333em;
-		text-decoration: none !important;
+	&.external-link {
+		word-break: break-word;
+
+		&::after {
+			content: @fa-var-external-link;
+			display: inline-block;
+			font-family: "FontAwesome";
+			padding-left: .333em;
+			text-decoration: none !important;
+		}
 	}
 }
 

@@ -1,21 +1,34 @@
 
-@color-twitch-purple: rgb( 100, 65, 165 );
+// twitch.tv colors
+@color-twitch-purple      : rgb( 100,  65, 165 );
 @color-twitch-purple-light: rgb( 185, 163, 227 );
-@color-twitch-grey-dark: rgb( 38, 38, 38 );
-@color-twitch-grey-light: rgb( 241, 241, 241 );
+@color-twitch-grey-dark   : rgb(  38,  38,  38 );
+@color-twitch-grey-light  : rgb( 241, 241, 241 );
 
-@color-success: mix( @color-twitch-purple, desaturate( lime, 10% ), 67% );
-@color-danger: mix( @color-twitch-purple, desaturate( red, 10% ), 67% );
-@color-neutral: mix( @color-twitch-purple, desaturate( blue, 10% ), 67% );
+// @color-twitch-purple: h = 261, s = 61%, v = 65%
+// keep the same saturation and value
+@color-red   : mix( @color-twitch-purple, spin( @color-twitch-purple, -261 ), 20% );
+@color-yellow: mix( @color-twitch-purple, spin( @color-twitch-purple, -203 ), 20% );
+@color-green : mix( @color-twitch-purple, spin( @color-twitch-purple, -166 ), 20% );
+@color-blue  : mix( @color-twitch-purple, spin( @color-twitch-purple,  -51 ), 20% );
+@color-purple: mix( @color-twitch-purple, spin( @color-twitch-purple,    0 ), 20% );
 
-@color-background: lighten( #000, 99% );
+// brand colors
+@color-primary: @color-purple;
+@color-success: @color-green;
+@color-danger : @color-red;
+@color-neutral: @color-blue;
+@color-info   : @color-yellow;
+
+// greyscale
+@color-background    : lighten( #000,  99% );
 @color-text-brightest: lighten( #000, 100% );
-@color-text-brighter: lighten( #000, 85% );
-@color-text-bright: lighten( #000, 70% );
-@color-text-default: lighten( #000, 55% );
-@color-text-dark: lighten( #000, 40% );
-@color-text-darker: lighten( #000, 25% );
-@color-text-darkest: lighten( #000, 10% );
+@color-text-brighter : lighten( #000,  85% );
+@color-text-bright   : lighten( #000,  70% );
+@color-text-default  : lighten( #000,  55% );
+@color-text-dark     : lighten( #000,  40% );
+@color-text-darker   : lighten( #000,  25% );
+@color-text-darkest  : lighten( #000,  10% );
 
 
 @app-width: 960px;
@@ -70,6 +83,11 @@
 @select-background: @input-background;
 @select-background-hover: mix( @input-background, @color-text-brighter, 75% );
 @select-background-selected: @color-text-brightest;
+
+@button-color: @color-text-brightest;
+@button-icon-size: 1.25em;
+@button-icon-spacing: .25em;
+@button-icon-color: fade( @color-text-brightest, 50% );
 
 @anim-sidebar-speed: .2s;
 @anim-sidebar-easing: ease-out;
