@@ -1,9 +1,10 @@
 Livestreamer Twitch GUI
 ===
+[![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues]
 
 **A multi platform [Twitch.tv][Twitch] browser for [Livestreamer][Livestreamer]**
 
-[ ![Livestreamer Twitch GUI][Preview] ][Releases]
+[![Livestreamer Twitch GUI][Preview]][Releases]
 
 
 ## Description
@@ -52,6 +53,7 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
 
   [Preview]: https://cloud.githubusercontent.com/assets/467294/3655974/53894240-1181-11e4-9605-1b8f058f9420.png "Preview image"
   [Releases]: https://github.com/bastimeyer/livestreamer-twitch-gui/releases "Livestreamer Twitch GUI Releases"
+  [Issues]: https://github.com/bastimeyer/livestreamer-twitch-gui/issues "Livestreamer Twitch GUI Issues"
   [Contributing]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/CONTRIBUTING.md
   [Livestreamer]: https://github.com/chrippa/livestreamer "Livestreamer"
   [Twitch]: http://twitch.tv "Twitch.tv"
@@ -65,3 +67,6 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Installation package]: http://livestreamer.tanuki.se/en/latest/install.html#windows-binaries "Livestreamer installation package"
   [Nodejs]: http://nodejs.org "Node.js"
   [npm]: https://npmjs.org "Node Packaged Modules"
+  [badge-platforms]: https://img.shields.io/badge/platform-win%20%7C%20osx%20%7C%20linux-green.svg?style=flat-square "Supported platforms"
+  [badge-release]: https://img.shields.io/github/release/bastimeyer/livestreamer-twitch-gui.svg?style=flat-square "Latest release"
+  [badge-issues]: https://img.shields.io/github/issues/bastimeyer/livestreamer-twitch-gui.svg?style=flat-square "Open issues"
