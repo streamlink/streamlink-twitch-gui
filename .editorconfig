@@ -1,0 +1,27 @@
+# http://editorconfig.org
+
+# top-most EditorConfig file
+root = true
+
+
+# global file encoding
+[*]
+charset = utf-8
+end_of_line = lf
+
+# javascript and stylesheets
+[**.{js,json,less}]
+indent_size = 4
+indent_style = tab
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# markup files
+[**.{html,hbs}]
+indent_size = 0
+insert_final_newline = false
+
+# yaml configs
+[**.yml]
+indent_style = space
+insert_final_newline = true
