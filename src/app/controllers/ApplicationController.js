@@ -22,7 +22,8 @@ define( [ "ember" ], function( Ember ) {
 		streamsLength: Ember.computed.alias( "controllers.livestreamer.streams.length" ),
 
 		userLogin: Ember.computed.alias( "controllers.userAuth.content" ),
-		isLoggedIn: Ember.computed.notEmpty( "userLogin" ),
+		isLoggedIn: Ember.computed.alias( "controllers.userAuth.isLoggedIn" ),
+		loginPending: Ember.computed.alias( "controllers.userAuth.loginPending" ),
 		loginTitle: function() {
 			var user = this.get( "userLogin" );
 			return user
