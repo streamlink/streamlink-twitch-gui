@@ -7,8 +7,10 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 	OAuth = JSON.parse( OAuth );
 
 
-	return Ember.ObjectController.extend({
+	return Ember.ObjectController.extend( Ember.Evented, {
 		needs: [ "application" ],
+
+		model: null,
 
 		nwGuiBinding: "controllers.application.nwGui",
 		configBinding: "controllers.application.content.package.config",
@@ -19,6 +21,9 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 
 		auth_win: null,
 		auth_failure: false,
+
+		loginPending: false,
+		isLoggedIn: Ember.computed.notEmpty( "model" ),
 
 		auth_url: function() {
 			var	baseuri		= get( this, "config.twitch-oauth-base-uri" ),
@@ -52,6 +57,8 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 			var	self = this,
 				store = this.store;
 
+			set( self, "loginPending", true );
+
 			return store.find( "auth", 1 )
 				.then(function( record ) {
 					// tell the twitch adapter to use the token from now on
@@ -65,12 +72,19 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 								throw new Error( "Invalid access token" );
 							}
 
+							set( self, "loginPending", false );
 							set( self, "model", record );
+							self.trigger( "login", true );
 						})
 						.catch(function( err ) {
 							self.updateAdapter( null );
 							throw ( err || new Error() );
 						});
+				})
+				.catch(function( err ) {
+					set( self, "loginPending", false );
+					self.trigger( "login", false );
+					throw err;
 				});
 		},
 
