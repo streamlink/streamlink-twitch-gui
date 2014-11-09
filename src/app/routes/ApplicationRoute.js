@@ -17,11 +17,19 @@ define( [ "ember", "text!root/metadata.json" ], function( Ember, metadata ) {
 			return metadata;
 		},
 
-		setupController: function() {
+		setupController: function( controller ) {
 			this._super.apply( this, arguments );
 
 			this.controllerFor( "versioncheck" ).check();
 			this.controllerFor( "userAuth" ).loadUserRecord().catch(function(){});
+
+
+			// Let the initial transition to the blank index route fulfill first!!!
+			Ember.run.next( this, function() {
+				if ( controller.get( "currentRouteName" ) === "index" ) {
+					this.transitionTo( "featured" );
+				}
+			});
 		},
 
 
@@ -31,7 +39,7 @@ define( [ "ember", "text!root/metadata.json" ], function( Ember, metadata ) {
 			},
 
 			"refresh": function() {
-				var routeName = this.controller.currentRouteName;
+				var routeName = this.controller.get( "currentRouteName" );
 				if ( routeName !== "error" ) {
 					this.container.lookup( "route:" + routeName ).refresh();
 				}

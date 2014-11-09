@@ -99,9 +99,9 @@ define(function( require ) {
 
 
 		// Content
-		IndexRoute: require( "routes/IndexRoute" ),
-		IndexController: require( "controllers/IndexController" ),
-		IndexView: require( "views/IndexView" ),
+		FeaturedRoute: require( "routes/FeaturedRoute" ),
+		FeaturedController: require( "controllers/FeaturedController" ),
+		FeaturedView: require( "views/FeaturedView" ),
 
 		WatchingRoute: require( "routes/WatchingRoute" ),
 		WatchingController: require( "controllers/WatchingController" ),

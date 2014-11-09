@@ -10,6 +10,8 @@ define( [ "ember" ], function( Ember ) {
 
 		this.route( "search", { path: "/search/:filter/:query" } );
 
+		this.route( "featured" );
+
 		this.resource( "games", function() {
 			this.route( "game", { path: "/:game" } );
 		});
