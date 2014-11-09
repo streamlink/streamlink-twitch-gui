@@ -12,6 +12,8 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		gui_minimize		: DS.attr( "string", { defaultValue: "false" } ),
 		gui_hidestreampopup	: DS.attr( "boolean", { defaultValue: false } ),
 		gui_openchat		: DS.attr( "boolean", { defaultValue: false } ),
+		gui_homepage		: DS.attr( "string", { defaultValue: "/featured" }),
+		gui_layout			: DS.attr( "string", { defaultValue: "tile" }),
 
 
 		isHttp: Ember.computed.equal( "player_passthrough", "http" ),

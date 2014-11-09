@@ -4,7 +4,7 @@ main.content {
 	padding-right: ( @app-padding - @scrollbar-size );
 	overflow-y: scroll;
 
-	> h2 {
+	.headline() {
 		height: 1.5em;
 		margin: 0;
 		overflow: hidden;
@@ -13,7 +13,97 @@ main.content {
 		text-overflow: ellipsis;
 	}
 
+	> h2 {
+		.headline();
+	}
+
+	> header {
+		display: flex;
+
+		> h2 {
+			flex-grow: 1;
+			.headline();
+		}
+	}
+
 	&:not( .content-loading ) {
 		-webkit-animation: animFadeInRight .333s ease-out;
+	}
+}
+
+
+.settingsbar {
+	@button-size: unit( ( 1 + 2 * unit( @button-padding ) ), rem );
+
+	display: flex;
+	flex-flow: row-reverse nowrap;
+	flex-grow: 0;
+	flex-shrink: 0;
+	height: @button-size;
+	margin-left: 1rem;
+	font-size: 1rem;
+	opacity: .333;
+
+	&:hover,
+	&.opened {
+		opacity: 1;
+	}
+
+	> .menu {
+		display: flex;
+		max-width: 0;
+		overflow: hidden;
+		transition: max-width .333s ease-out;
+
+		button,
+		.multibtn {
+			flex-shrink: 0;
+			margin-right: .333em;
+		}
+
+		button.inactive:not(:hover) {
+			color: fade( @button-color, 40% ) !important;
+		}
+
+		.multibtn {
+			display: flex;
+
+			> button {
+				margin-right: 0;
+
+				&:not( :first-of-type ) {
+					border-left-width: 0;
+					padding-left: @button-border-width;
+				}
+				&:not( :last-of-type ) {
+					border-right-width: 0;
+					padding-right: @button-border-width;
+				}
+			}
+		}
+	}
+
+	&.opened > .menu {
+		max-width: 100%;
+	}
+
+	button {
+		width: @button-size;
+		padding: 0;
+		font-size: inherit;
+		line-height: 1.5;
+		text-align: center;
+	}
+
+	> .btn-open {
+		border-color: @color-text-bright !important;
+		color: @color-text-default !important;
+		background: @color-text-brightest !important;
+	}
+	&        > .btn-open:active > i:before {
+		content: @fa-var-angle-double-left;
+	}
+	&.opened > .btn-open:active > i:before {
+		content: @fa-var-angle-double-right;
 	}
 }

@@ -83,11 +83,13 @@ define(function( require ) {
 		SearchbarController: require( "controllers/SearchbarController" ),
 		SearchbarView: require( "views/SearchbarView" ),
 
+		SettingsBarController: require( "controllers/SettingsBarController" ),
 		VersioncheckController: require( "controllers/VersioncheckController" ),
 		LivestreamerController: require( "controllers/LivestreamerController" ),
 
 
 		// Components
+		SettingsBarComponent: require( "components/SettingsBarComponent" ),
 		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
 		LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
 		RadioButtonComponent: require( "components/RadioButtonComponent" ),
