@@ -4,16 +4,21 @@ define([
 	"utils/preload"
 ], function( Ember, InfiniteScroll, preload ) {
 
+	var	get = Ember.get,
+		set = Ember.set;
+
 	return Ember.Route.extend( InfiniteScroll, {
 		itemSelector: ".stream-component",
 
 		model: function( params ) {
-			Ember.set( this, "game", Ember.get( params || {}, "game" ) );
+			if ( arguments.length > 0 ) {
+				set( this, "game", get( params || {}, "game" ) );
+			}
 
 			return this.store.findQuery( "twitchStream", {
-				game	: Ember.get( this, "game" ),
-				offset	: Ember.get( this, "offset" ),
-				limit	: Ember.get( this, "limit" )
+				game	: get( this, "game" ),
+				offset	: get( this, "offset" ),
+				limit	: get( this, "limit" )
 			})
 				.then(function( data ) { return data.toArray(); })
 				.then( preload( "@each.preview.@each.medium" ) );
@@ -22,7 +27,7 @@ define([
 		setupController: function( controller ) {
 			this._super.apply( this, arguments );
 
-			controller.set( "game", Ember.get( this, "game" ) );
+			set( controller, "game", get( this, "game" ) );
 		}
 	});
 
