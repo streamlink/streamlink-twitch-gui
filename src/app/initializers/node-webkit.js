@@ -35,6 +35,18 @@ define( [ "ember" ], function( Ember ) {
 		tray = null;
 	};
 
+	nwWindow.cookiesRemoveAll = function cookiesRemoveAll() {
+		var Cookies = nwWindow.cookies;
+		Cookies.getAll( {}, function( cookies ) {
+			[].forEach.call( cookies, function( c ) {
+				Cookies.remove({
+					url: "http" + ( c.secure ? "s" : "" ) + "://" + c.domain + c.path,
+					name: c.name
+				});
+			});
+		});
+	};
+
 
 	Ember.Application.initializer({
 		name: "node-webkit",

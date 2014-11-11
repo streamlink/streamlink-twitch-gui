@@ -107,6 +107,7 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 					opt = get( this, "windowOptions" ),
 					scope_expected = get( this, "config.twitch-oauth-scope" ).join( "+" ),
 					store = this.store,
+					nwWindow = this.nwWindow,
 					win;
 
 				function callback( hash ) {
@@ -162,6 +163,7 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 				function onClose() {
 					set( this, "auth_win", null );
 					delete window.OAUTH_CALLBACK;
+					nwWindow.cookiesRemoveAll();
 				}
 
 				// add to the global namespace
@@ -169,6 +171,7 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 
 				// open window
 				this.enableRedirect();
+				nwWindow.cookiesRemoveAll();
 				win = this.nwGui.Window.open( url, opt );
 				win.on( "closed", onClose.bind( this ) );
 				set( this, "auth_win", win );
