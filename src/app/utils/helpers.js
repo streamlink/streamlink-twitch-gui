@@ -20,7 +20,7 @@ define( [ "ember", "moment" ], function( Ember, Moment ) {
 			? ( Math.floor( viewers / 1000 ) ).toFixed( 0 ) + "k"
 			: viewers >= 10000
 			? ( Math.floor( viewers / 100 ) / 10 ).toFixed( 1 ) + "k"
-			: viewers.toFixed( 0 );
+			: ( viewers || 0 ).toFixed( 0 );
 	});
 
 });
