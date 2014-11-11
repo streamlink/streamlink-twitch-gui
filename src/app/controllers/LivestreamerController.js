@@ -34,9 +34,8 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 	return Ember.ObjectController.extend({
 		needs: [ "application", "modal" ],
 
-		globalsBinding: "controllers.application.model",
 		windowBinding: "controllers.application.nwWindow",
-		configBinding: "globals.package.config",
+		configBinding: "metadata.package.config",
 
 		versionMinBinding: "config.livestreamer-version-min",
 		versionParameters: [ "--version", "--no-version-check" ],

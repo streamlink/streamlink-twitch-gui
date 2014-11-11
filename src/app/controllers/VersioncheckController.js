@@ -3,9 +3,9 @@ define( [ "ember", "utils/semver" ], function( Ember, SemVer ) {
 	var get = Ember.get;
 
 	return Ember.ObjectController.extend({
-		needs: [ "application", "modal" ],
+		needs: [ "modal" ],
 
-		packageBinding: "controllers.application.content.package",
+		packageBinding: "metadata.package",
 		versionBinding: "package.version",
 
 		// check again in x days (time in ms)

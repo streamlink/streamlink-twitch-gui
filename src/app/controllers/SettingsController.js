@@ -1,39 +1,22 @@
 define( [ "ember" ], function( Ember ) {
 
 	return Ember.ObjectController.extend({
-		needs: [ "application", "modal" ],
+		needs: [ "modal" ],
 
+		modelBinding: "settings",
 		hasChanged: false,
 
 		actions: {
 			apply: function( callback ) {
-				var	model	= this.get( "model" ),
-					content	= this.get( "content" );
-
-				// TODO: Validate
-				var valid = true;
-
-				if ( valid ) {
-					model.eachAttribute(function( attr ) {
-						model.set( attr, content.get( attr ) );
-					});
-					model.save();
-
-					this.set( "hasChanged", false );
-
-					if ( callback ) { callback(); }
-				}
+				this.settings.save()
+					.then(function() {
+						this.set( "hasChanged", false );
+						if ( callback ) { callback(); }
+					}.bind( this ) );
 			},
 
 			discard: function() {
-				var	model	= this.get( "model" ),
-					content	= this.get( "content" );
-
-				model.rollback();
-				model.eachAttribute(function( attr ) {
-					content.set( attr, model.get( attr ) );
-				});
-
+				this.settings.rollback();
 				this.set( "hasChanged", false );
 			}
 		}

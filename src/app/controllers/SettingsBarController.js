@@ -3,7 +3,7 @@ define( [ "ember" ], function( Ember ) {
 	var	get = Ember.get,
 		set = Ember.set;
 
-	function computed_prop( key ) {
+	function settings_property( key ) {
 		return function( _, value ) {
 			var settings = get( this, "settings" );
 			if ( arguments.length < 2 ) {
@@ -20,15 +20,8 @@ define( [ "ember" ], function( Ember ) {
 	return Ember.Controller.extend({
 		settings: {},
 
-		homepage: computed_prop( "gui_homepage" ),
-		layout: computed_prop( "gui_layout" ),
-
-
-		init: function() {
-			this.store.find( "settings", 1 ).then(function( record ) {
-				set( this, "settings", record );
-			}.bind( this ) );
-		},
+		homepage: settings_property( "gui_homepage" ),
+		layout: settings_property( "gui_layout" ),
 
 		actions: {
 			homepage: function( url ) {

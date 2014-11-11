@@ -3,25 +3,25 @@
 <h3><i class="fa fa-desktop"></i> Livestreamer Twitch GUI</h3>
 <dl class="dl-horizontal">
 <dt>Homepage</dt>
-<dd>{{#external-link url=model.package.homepage}}{{unbound model.package.homepage}}{{/external-link}}</dd>
+<dd>{{#external-link url=metadata.package.homepage}}{{unbound metadata.package.homepage}}{{/external-link}}</dd>
 <dt>Author</dt>
-<dd>{{unbound model.package.author}}</dd>
+<dd>{{unbound metadata.package.author}}</dd>
 <dt>Contributors</dt>
-<dd><ul class="list">{{#each contributor in model.contributors}}
+<dd><ul class="list">{{#each contributor in metadata.contributors}}
 <li title="{{unbound contributor.commits}} commits">{{unbound contributor.name}}</li>
 {{/each}}</ul></dd>
 <dt>Version</dt>
-<dd>{{unbound model.package.version}}</dd>
+<dd>{{unbound metadata.package.version}}</dd>
 <dt>Built</dt>
-<dd>{{unbound model.package.built}}</dd>
+<dd>{{unbound metadata.package.built}}</dd>
 <dt>Node-Webkit</dt>
-<dd>{{unbound model.package.config.node-webkit-version}}</dd>
+<dd>{{unbound metadata.package.config.node-webkit-version}}</dd>
 </dl>
 </article>
 <article>
 <h3><i class="fa fa-sitemap"></i> Third party applications</h3>
 <dl class="dl-horizontal">
-{{#each elem in model.dependencies}}
+{{#each elem in metadata.dependencies}}
 <dt>{{unbound elem.title}}</dt>
 <dd>{{unbound elem.version}}</dd>
 {{/each}}

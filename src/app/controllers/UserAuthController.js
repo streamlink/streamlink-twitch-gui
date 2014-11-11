@@ -13,7 +13,7 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 		model: null,
 
 		nwGuiBinding: "controllers.application.nwGui",
-		configBinding: "controllers.application.content.package.config",
+		configBinding: "metadata.package.config",
 		windowOptions: get( OAuth, "window" ),
 		redirectEnabled: false,
 

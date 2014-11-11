@@ -4,10 +4,6 @@ define( [ "ember" ], function( Ember ) {
 		set = Ember.set;
 
 	return Ember.Route.extend({
-		model: function() {
-			return this.metadata;
-		},
-
 		setupController: function() {
 			// TODO: also create initializers for all this
 			this.controllerFor( "versioncheck" ).check();

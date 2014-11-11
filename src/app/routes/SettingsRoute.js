@@ -1,18 +1,10 @@
 define( [ "ember" ], function( Ember ) {
 
 	return Ember.Route.extend({
-		model: function() {
-			return this.store.find( "settings", 1 );
-		},
-
 		actions: {
 			willTransition: function( transition ) {
-				var	controller	= this.get( "controller" ),
-					modal		= this.get( "controller.controllers.modal" );
-
-				function retry() {
-					transition.retry();
-				}
+				var	controller	= this.controller,
+					modal		= controller.get( "controllers.modal" );
 
 				// if the user has changed any values
 				if ( controller.get( "hasChanged" ) ) {
@@ -25,11 +17,11 @@ define( [ "ember" ], function( Ember ) {
 						"Do you want to apply your changes?",
 						[
 							new modal.Button( "Apply", "btn-success", "fa-check", function() {
-								controller.send( "apply", retry );
+								controller.send( "apply", transition.retry.bind( transition ) );
 							}),
 							new modal.Button( "Discard", "btn-danger", "fa-trash-o", function() {
 								controller.send( "discard" );
-								retry();
+								transition.retry();
 							}),
 							new modal.Button( "Cancel", "btn-neutral", "fa-times" )
 						]
