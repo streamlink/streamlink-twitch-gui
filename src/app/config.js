@@ -42,6 +42,7 @@ requirejs.config({
 
 		// Ember paths
 		"root"			: "..",
+		"initializers"	: "initializers",
 		"models"		: "models",
 		"views"			: "views",
 		"controllers"	: "controllers",

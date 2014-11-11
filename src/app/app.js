@@ -2,6 +2,7 @@ define(function( require ) {
 
 	require( "utils/inflector" );
 	require( "utils/helpers" );
+	require( "initializers/initializers" );
 
 
 	return require( "ember" ).Application.create({
@@ -76,6 +77,8 @@ define(function( require ) {
 
 		ErrorRoute: require( "routes/ErrorRoute" ),
 		ErrorView: require( "views/ErrorView" ),
+
+		IndexRoute: require( "routes/IndexRoute" ),
 
 		ModalController: require( "controllers/ModalController" ),
 		ModalView: require( "views/ModalView" ),

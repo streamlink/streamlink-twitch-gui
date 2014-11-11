@@ -1,48 +1,17 @@
-define( [ "ember", "text!root/metadata.json" ], function( Ember, metadata ) {
+define( [ "ember" ], function( Ember ) {
 
 	var	get = Ember.get,
 		set = Ember.set;
 
 	return Ember.Route.extend({
-		beforeModel: function() {
-			// load settings records... also return a promise
-			return this.store.find( "settings" )
-				.then(function( records ) {
-					if ( !records.content.length ) {
-						// create initial settings record
-						return this.store.createRecord( "settings", { id: 1 } ).save();
-					} else {
-						return records.objectAt( 0 );
-					}
-				}.bind( this ) )
-				.then(function( settings ) {
-					// TODO: save the settings record globally in the application container
-					this.settings = settings;
-				}.bind( this ) );
-		},
-
 		model: function() {
-			return JSON.parse( metadata );
+			return this.metadata;
 		},
 
-		setupController: function( controller ) {
-			this._super.apply( this, arguments );
-
+		setupController: function() {
+			// TODO: also create initializers for all this
 			this.controllerFor( "versioncheck" ).check();
 			this.controllerFor( "userAuth" ).loadUserRecord().catch(function(){});
-
-
-			// Redirect to user defined homepage...
-			// Transition logic needs to be executed after user auth, so we can handle a possible
-			// pending login so that the user can then be redirected to auth required routes.
-			// Let the initial transition to the blank index route fulfill first!!!
-			Ember.run.next( this, function() {
-				if ( get( controller, "currentRouteName" ) === "index" ) {
-					var homepage = get( this.settings, "gui_homepage" );
-					this.transitionTo( homepage || "featured" );
-				}
-				delete this.settings;
-			});
 		},
 
 
