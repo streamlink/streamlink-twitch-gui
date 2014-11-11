@@ -32,9 +32,8 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 
 
 	return Ember.ObjectController.extend({
-		needs: [ "application", "modal" ],
+		needs: [ "modal" ],
 
-		windowBinding: "controllers.application.nwWindow",
 		configBinding: "metadata.package.config",
 
 		versionMinBinding: "config.livestreamer-version-min",
@@ -245,10 +244,10 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						// restore the GUI
 						switch ( get( settings, "gui_minimize" ) ) {
 							case "bar":
-								get( self, "window" ).restore();
+								self.nwWindow.restore();
 								break;
 							case "tray":
-								get( self, "controllers.application" ).winFromTray();
+								self.nwWindow.winFromTray();
 						}
 
 						// remove the stream from the streams list
@@ -264,10 +263,10 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				// hide the GUI
 				switch ( get( settings, "gui_minimize" ) ) {
 					case "bar":
-						get( self, "window" ).minimize();
+						self.nwWindow.minimize();
 						break;
 					case "tray":
-						get( self, "controllers.application" ).winToTray();
+						self.nwWindow.winToTray();
 				}
 
 				// open chat automatically

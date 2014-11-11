@@ -28,7 +28,7 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"openBrowser": function( url ) {
-				get( this.controller, "nwGui" ).Shell.openExternal( url );
+				this.nwGui.Shell.openExternal( url );
 			},
 
 			"openLivestreamer": function( stream ) {

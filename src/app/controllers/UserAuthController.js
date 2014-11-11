@@ -12,7 +12,6 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 
 		model: null,
 
-		nwGuiBinding: "controllers.application.nwGui",
 		configBinding: "metadata.package.config",
 		windowOptions: get( OAuth, "window" ),
 		redirectEnabled: false,
@@ -48,7 +47,7 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 			}
 
 			// enable the redirect from https://api.twitch.tv to app://livestreamer-twitch-gui
-			get( this, "nwGui" ).App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
+			this.nwGui.App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
 			set( this, "redirectEnabled", true );
 		},
 
@@ -170,7 +169,7 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 
 				// open window
 				this.enableRedirect();
-				win = get( this, "nwGui" ).Window.open( url, opt );
+				win = this.nwGui.Window.open( url, opt );
 				win.on( "closed", onClose.bind( this ) );
 				set( this, "auth_win", win );
 			},
