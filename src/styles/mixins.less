@@ -28,17 +28,20 @@
 }
 
 .stream-hover( @content: @fa-var-play-circle-o ) {
-	position: relative;
 	cursor: pointer;
 
-	&:hover::before {
+	> .preview {
+		position: relative;
+	}
+
+	&:hover > .preview::before {
 		content: @content;
 		display: block;
 		position: absolute;
 		width: 100%;
 		top: 50%;
 		z-index: 2;
-		font: 6em/0 "FontAwesome";
+		font: 6em/.025em "FontAwesome";
 		color: @color-text-brightest;
 		text-align: center;
 		-webkit-text-stroke: .025em @color-text-darkest;
