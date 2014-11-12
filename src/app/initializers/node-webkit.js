@@ -52,12 +52,22 @@ define( [ "ember" ], function( Ember ) {
 		name: "node-webkit",
 
 		initialize: function( container ) {
+			// inject nwGui and nwWindow into all routes and controllers
 			container.register( "nw:nwGui",    nwGui,    { instantiate: false } );
 			container.register( "nw:nwWindow", nwWindow, { instantiate: false } );
 			container.injection( "route",      "nwGui",    "nw:nwGui" );
 			container.injection( "controller", "nwGui",    "nw:nwGui" );
 			container.injection( "route",      "nwWindow", "nw:nwWindow" );
 			container.injection( "controller", "nwWindow", "nw:nwWindow" );
+
+			// listen for the close event and show the dialog instead of strictly shutting down
+			nwWindow.on( "close", function() {
+				try {
+					container.lookup( "controller:application" ).send( "winClose" )
+				} catch ( e ) {
+					this.close( true );
+				}
+			});
 		}
 	});
 
