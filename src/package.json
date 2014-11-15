@@ -16,7 +16,5 @@
 		"min_width": 960,
 		"min_height": 540,
 		"icon": "img/icon-app.png"
-	},
-
-	"chromium-args": "--enable-direct-write"
+	}
 }
