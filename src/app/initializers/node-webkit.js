@@ -62,6 +62,10 @@ define( [ "ember" ], function( Ember ) {
 
 			// listen for the close event and show the dialog instead of strictly shutting down
 			nwWindow.on( "close", function() {
+				if ( location.pathname !== "/index.html" ) {
+					return this.close( true );
+				}
+
 				try {
 					container.lookup( "controller:application" ).send( "winClose" )
 				} catch ( e ) {
