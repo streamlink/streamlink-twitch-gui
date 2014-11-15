@@ -1,10 +1,7 @@
 define( [ "ember" ], function( Ember ) {
 
 	return Ember.ArrayController.extend({
-		needs: [ "application" ],
-
-		globalBinding: "controllers.application.model",
-		configBinding: "global.package.config",
+		configBinding: "metadata.package.config",
 
 		sortAscending: false,
 		sortProperties: [ "started" ],
