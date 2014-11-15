@@ -1,4 +1,5 @@
 <h2>{{#if model.length}}You're watching{{else}}All streams have been closed{{/if}}</h2>
+{{#if model.length}}
 <ul class="list-unstyled">
 {{#each arrangedContent}}
 <li class="watching-stream">
@@ -18,11 +19,12 @@
 </footer>
 </section>
 </li>
-{{else}}
-<p>What to do next?</p>
-<ul class="fa-ul watching-empty">
-<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
-<li>{{#link-to "history" disabled=true}}<i class="fa fa-li fa-caret-right"></i>Browse recently watched streams{{/link-to}}</li>
-</ul>
 {{/each}}
 </ul>
+{{else}}
+<p>What to do next?</p>
+<ul class="fa-ul list-empty">
+<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
+{{!--<li>{{#link-to "history" disabled=true}}<i class="fa fa-li fa-caret-right"></i>Browse recently watched streams{{/link-to}}</li>--}}
+</ul>
+{{/if}}
