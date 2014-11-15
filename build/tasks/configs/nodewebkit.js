@@ -16,6 +16,8 @@ module.exports = {
 			osx				: true,
 			macIcns			: "build/resources/icons/icon-512.icns",
 			macPlist		: {
+				CFBundleName		: "<%= package.config.displayName %>",
+				CFBundleDisplayName	: "<%= package.config.displayName %>",
 				LSEnvironment		: {
 					PATH				: "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 				}

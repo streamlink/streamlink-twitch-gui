@@ -13,9 +13,9 @@ module.exports = {
 	osx				: {
 		options			: { archive: "dist/<%= package.name %>-v<%= package.version %>-osx.tar.gz" },
 		expand			: true,
-		cwd				: "build/releases/<%= package.name %>/osx",
+		cwd				: "build/releases/<%= package.name %>/osx/<%= package.name %>.app/",
 		src				: [ "**" ],
-		dest			: "" // no archive subfolder for osx... the package already is a folder
+		dest			: "<%= package.config.displayName %>.app/"
 	},
 	linux32			: {
 		options			: { archive: "dist/<%= package.name %>-v<%= package.version %>-linux32.tar.gz" },
