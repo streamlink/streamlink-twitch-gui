@@ -10,7 +10,7 @@ define( [ "ember", "components/ExternalLinkComponent" ], function( Ember, Extern
 
 		url: function() {
 			return this.container.lookup( "controller:application" )
-				.get( "model.package.config.livestreamer-docs-url" )
+				.get( "metadata.package.config.livestreamer-docs-url" )
 				.replace( "{cmd}", this.get( "cmd" ) );
 		}.property( "cmd" )
 	});
