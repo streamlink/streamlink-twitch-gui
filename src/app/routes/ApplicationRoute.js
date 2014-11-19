@@ -4,10 +4,10 @@ define( [ "ember" ], function( Ember ) {
 		set = Ember.set;
 
 	return Ember.Route.extend({
-		setupController: function() {
-			// TODO: also create initializers for all this
+		init: function() {
+			this._super();
 			this.controllerFor( "versioncheck" ).check();
-			this.controllerFor( "userAuth" ).loadUserRecord().catch(function(){});
+			this.controllerFor( "userAuth" ).validateToken();
 		},
 
 

@@ -11,11 +11,11 @@ define( [ "ember" ], function( Ember ) {
 			}
 
 			// check if user is successfully logged in
-			if ( !authController.get( "isLoggedIn" ) ) {
+			if ( !self.auth.get( "isLoggedIn" ) ) {
 				transition.abort();
 
 				// pending login?
-				if ( !authController.get( "loginPending" ) ) {
+				if ( !self.auth.get( "isPending" ) ) {
 					// send user directly to login form
 					login_fail();
 

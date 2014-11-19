@@ -1,19 +1,12 @@
-define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
+define( [ "ember" ], function( Ember ) {
 
 	var	get = Ember.get,
 		set = Ember.set,
 		reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
 
-	OAuth = JSON.parse( OAuth );
 
-
-	return Ember.ObjectController.extend( Ember.Evented, {
-		needs: [ "application" ],
-
-		model: null,
-
+	return Ember.Controller.extend( Ember.Evented, {
 		configBinding: "metadata.package.config",
-		windowOptions: get( OAuth, "window" ),
 		redirectEnabled: false,
 
 		previousTransition: null,
@@ -21,23 +14,24 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 		auth_win: null,
 		auth_failure: false,
 
-		loginPending: false,
-		isLoggedIn: Ember.computed.notEmpty( "model" ),
+		auth_scope: function() {
+			return get( this, "config.twitch-oauth-scope" ).join( "+" );
+		}.property( "config" ),
 
 		auth_url: function() {
 			var	baseuri		= get( this, "config.twitch-oauth-base-uri" ),
 				clientid	= get( this, "config.twitch-oauth-client-id" ),
 				redirecturi	= get( this, "config.twitch-oauth-redirect-uri" ),
-				scope		= get( this, "config.twitch-oauth-scope" );
+				scope		= get( this, "auth_scope" );
 			return baseuri
 				.replace( "{client-id}", clientid )
 				.replace( "{redirect-uri}", encodeURIComponent( redirecturi ) )
-				.replace( "{scope}", scope.join( "+" ) );
-		}.property( "config" ),
+				.replace( "{scope}", scope );
+		}.property( "config", "auth_scope" ),
 
 
 		enableRedirect: function() {
-			if ( get( this, "redirectEnabled" ) ) { return; }
+			if ( this.redirectEnabled ) { return; }
 
 			var	src	= reURI.exec( get( this, "config.twitch-oauth-base-uri" ) ),
 				dst	= reURI.exec( get( this, "config.twitch-oauth-redirect-uri" ) );
@@ -48,141 +42,133 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 
 			// enable the redirect from https://api.twitch.tv to app://livestreamer-twitch-gui
 			this.nwGui.App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
-			set( this, "redirectEnabled", true );
+			this.redirectEnabled = true;
 		},
 
+		validateToken: function() {
+			var	self	= this,
+				auth	= self.auth,
+				token	= get( auth, "access_token" ),
+				defer;
 
-		loadUserRecord: function() {
-			var	self = this,
-				store = this.store;
+			// no token set
+			if ( !token ) { return Promise.reject(); }
 
-			set( self, "loginPending", true );
+			defer = Promise.defer();
+			set( auth, "isPending", true );
 
-			return store.find( "auth", 1 )
-				.then(function( record ) {
-					// tell the twitch adapter to use the token from now on
-					self.updateAdapter( get( record, "access_token" ) );
+			// tell the twitch adapter to use the token from now on
+			self.updateAdapter();
 
-					// validate token
-					return store.findAll( "twitchToken", null )
-						.then(function( record ) {
-							record = record.objectAt( 0 );
-							if ( !get( record, "valid" ) || !get( record, "user_name" ) ) {
-								throw new Error( "Invalid access token" );
-							}
-
-							set( self, "loginPending", false );
-							set( self, "model", record );
-							self.trigger( "login", true );
-						})
-						.catch(function( err ) {
-							self.updateAdapter( null );
-							throw ( err || new Error() );
-						});
+			// validate token
+			self.store.findAll( "twitchToken", null )
+				.then(function( records ) { return records.objectAt( 0 ); })
+				// validate and store token
+				.then( auth.sessionValidate.bind( auth ) )
+				.then(function() {
+					// success
+					set( auth, "isPending", false );
+					self.trigger( "login", true );
+					defer.resolve();
 				})
 				.catch(function( err ) {
-					set( self, "loginPending", false );
-					self.trigger( "login", false );
-					throw err;
+					// failure: reset everything
+					return auth.sessionReset()
+						.then(function() {
+							// don't forget to reset the adapter, too
+							self.updateAdapter();
+							set( auth, "isPending", false );
+							self.trigger( "login", false );
+							defer.reject( err );
+						});
 				});
+
+			return defer.promise;
 		},
 
-		updateAdapter: function( token ) {
+		updateAdapter: function() {
 			var adapter = this.container.lookup( "adapter:application" );
 			if ( !adapter ) {
 				throw new Error( "Adapter not found" );
 			}
 
-			set( adapter, "access_token", token );
+			set( adapter, "access_token", get( this.auth, "access_token" ) );
+		},
+
+		parseParams: function( str ) {
+			return String( str || "" ).split( "&" )
+				.reduce(function( obj, elem ) {
+					var split = elem.split( "=" );
+					obj[ split.splice( 0, 1 ) ] = split.join( "=" );
+					return obj;
+				}, {} );
+		},
+
+		returnToPreviousRoute: function() {
+			var previousTransition = get( this, "previousTransition" );
+			if ( previousTransition ) {
+				set( this, "previousTransition", null );
+				previousTransition.retry();
+			} else {
+				this.transitionToRoute( "user.index" );
+			}
 		},
 
 
 		actions: {
 			"signin": function() {
-				if ( get( this, "auth_win" ) ) { return; }
+				if ( this.auth_win ) { return; }
 
-				set( this, "auth_failure", false );
-
-				var	url = get( this, "auth_url" ),
-					opt = get( this, "windowOptions" ),
-					scope_expected = get( this, "config.twitch-oauth-scope" ).join( "+" ),
-					store = this.store,
-					nwWindow = this.nwWindow,
-					win;
+				var self = this;
 
 				function callback( hash ) {
-					var	params = hash.split( "&" ).reduce(function( obj, elem ) {
-							var split = elem.split( "=" );
-							obj[ split.splice( 0, 1 ) ] = split.join( "=" );
-							return obj;
-						}, {} ),
-						data;
+					var	params	= self.parseParams( hash ),
+						token	= params[ "access_token" ],
+						scope	= params[ "scope" ];
 
-					if ( !params[ "access_token" ] || params[ "scope" ] !== scope_expected ) {
-						set( this, "auth_failure", true );
+					// check the returned token and compare scopes
+					if ( !token || !token.length || scope !== get( self, "auth_scope" ) ) {
+						set( self, "auth_failure", true );
 
 					} else {
-						data = {
-							access_token: params[ "access_token" ],
-							scope: params[ "scope" ],
-							date: new Date()
-						};
-
-						// save the token
-						store.find( "auth", 1 )
-							.then(function( record ) {
-								record.setProperties( data ).save();
-							}, function() {
-								data.id = 1;
-								store.createRecord( "auth", data ).save();
-							})
-
-							// update adapter and fetch user record
-							.then( this.loadUserRecord.bind( this ) )
-
+						// save the token for now
+						self.auth.sessionPrepare( token, scope );
+						// and validate it
+						self.validateToken()
 							// user is logged in! return to previous route
-							.then(function() {
-								var previousTransition = get( this, "previousTransition" );
-								if ( previousTransition ) {
-									set( this, "previousTransition", null );
-									previousTransition.retry();
-								} else {
-									this.transitionToRoute( "user.index" );
-								}
-							}.bind( this ) )
-
+							.then( self.returnToPreviousRoute.bind( self ) )
 							// something stupid happened
 							.catch(function() {
-								set( this, "auth_failure", true );
-							}.bind( this ) );
+								set( self, "auth_failure", true );
+							});
 					}
 
-					win.close();
+					self.auth_win.close();
 				}
 
-				function onClose() {
-					set( this, "auth_win", null );
+				function onClosed() {
+					self.auth_win = null;
 					delete window.OAUTH_CALLBACK;
-					nwWindow.cookiesRemoveAll();
+					self.nwWindow.cookiesRemoveAll();
 				}
 
-				// add to the global namespace
-				window.OAUTH_CALLBACK = callback.bind( this );
+				// prepare...
+				set( self, "auth_failure", false );
+				self.enableRedirect();
+				self.nwWindow.cookiesRemoveAll();
+				window.OAUTH_CALLBACK = callback;
 
 				// open window
-				this.enableRedirect();
-				nwWindow.cookiesRemoveAll();
-				win = this.nwGui.Window.open( url, opt );
-				win.on( "closed", onClose.bind( this ) );
-				set( this, "auth_win", win );
+				self.auth_win = self.nwGui.Window.open(
+					get( self, "auth_url" ),
+					get( self, "oauth.window" )
+				);
+				self.auth_win.on( "closed", onClosed );
 			},
 
 			"signout": function() {
-				set( this, "model", null );
-				this.store.find( "auth", 1 ).then(function( record ) {
-					this.updateAdapter( null );
-					record.destroyRecord();
-				}.bind( this ) );
+				this.auth.sessionReset()
+					.then( this.updateAdapter.bind( this ) );
 			}
 		}
 	});

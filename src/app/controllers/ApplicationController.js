@@ -1,22 +1,20 @@
 define( [ "ember" ], function( Ember ) {
 
 	return Ember.Controller.extend({
-		needs: [ "livestreamer", "userAuth", "modal" ],
+		needs: [ "livestreamer", "modal" ],
 
 		dev: DEBUG,
 
 		// use an alias here: a binding will reach the callstack limit
 		streamsLength: Ember.computed.alias( "controllers.livestreamer.streams.length" ),
 
-		userLogin: Ember.computed.alias( "controllers.userAuth.content" ),
-		isLoggedIn: Ember.computed.alias( "controllers.userAuth.isLoggedIn" ),
-		loginPending: Ember.computed.alias( "controllers.userAuth.loginPending" ),
+		loginSuccess: Ember.computed.alias( "auth.isLoggedIn" ),
+		loginPending: Ember.computed.alias( "auth.isPending" ),
 		loginTitle: function() {
-			var user = this.get( "userLogin" );
-			return user
-				? "Logged in as %@".fmt( Ember.get( user, "user_name" ) )
+			return this.get( "loginSuccess" )
+				? "Logged in as %@".fmt( this.get( "auth.user_name" ) )
 				: "You're not logged in";
-		}.property( "userLogin" ),
+		}.property( "loginSuccess" ),
 
 
 		actions: {

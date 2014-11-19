@@ -1,9 +1,7 @@
 define( [ "ember" ], function( Ember ) {
 
-	return Ember.ObjectController.extend({
+	return Ember.Controller.extend({
 		needs: [ "userAuth" ],
-
-		modelBinding: "controllers.userAuth.model",
 
 		actions: {
 			"signout": function() {
