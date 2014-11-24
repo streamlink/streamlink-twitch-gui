@@ -22,7 +22,7 @@ define([
 			set( this, "filter", params.filter );
 			set( this,  "query",  params.query );
 
-			return Ember.RSVP.Promise.all([
+			return Promise.all([
 
 				// search for games
 				filterMatches( params.filter, "games" )
