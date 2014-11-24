@@ -13,14 +13,16 @@ define([
 
 
 	return Ember.Route.extend( InfiniteScroll, {
-		content: "controller.model.streams",
+		contentPath: "controller.model.streams",
 
 		itemSelector: ".stream-component",
 
 
 		model: function( params ) {
-			set( this, "filter", params.filter );
-			set( this,  "query",  params.query );
+			if ( arguments.length > 0 ) {
+				set( this, "filter", params.filter );
+				set( this,  "query",  params.query );
+			}
 
 			return Promise.all([
 

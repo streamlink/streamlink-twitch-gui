@@ -81,7 +81,7 @@ define( [ "ember" ], function( Ember ) {
 		 * Define the content array location.
 		 * Can't use a binding here!!!
 		 */
-		content: "controller.model",
+		contentPath: "controller.model",
 
 		/**
 		 * Don't fetch infinitely.
@@ -126,26 +126,20 @@ define( [ "ember" ], function( Ember ) {
 			this._super.apply( this, arguments );
 
 			// late bindings
-			var	b1	= get( this, "_binding_content" ),
-				b2	= get( this, "_binding_contentlength" );
-			if ( b1 ) {
-				// update observers of the bindings by reattaching
-				b1.disconnect( this ).connect( this );
-				b2.disconnect( this ).connect( this );
-			} else {
-				// read content path and make bindings out of it
-				b1 = Ember.Binding.from( get( this, "content" ) ).to( "content" ).connect( this );
-				b2 = Ember.Binding.from( "content.length" ).to( "offset" ).connect( this );
-				// save references, so they can be updated later
-				set( this, "_binding_content", b1 );
-				set( this, "_binding_contentlength", b2 );
+			var binding = get( this, "_binding_offset" );
+			if ( !binding ) {
+				binding = Ember.Binding.from(
+					"%@.length".fmt( get( this, "contentPath" ) )
+				).to( "offset" );
+				set( this, "_binding_offset", binding );
 			}
+			binding.connect( this );
 
-			var	num	= get( this, "content.length" ),
-				max	= get( this, "limit" );
+			var	offset	= get( this, "offset" ),
+				limit	= get( this, "limit" );
 
 			set( controller, "isFetching", false );
-			set( controller, "hasFetchedAll", num < max );
+			set( controller, "hasFetchedAll", offset < limit );
 		},
 
 		fetchContent: function() {
@@ -153,6 +147,13 @@ define( [ "ember" ], function( Ember ) {
 		},
 
 		actions: {
+			"willTransition": function () {
+				var binding = get( this, "_binding_offset" );
+				if ( binding ) {
+					binding.disconnect( this );
+				}
+			},
+
 			"willFetchContent": function( force ) {
 				var	controller	= get( this, "controller" ),
 					isFetching	= get( controller, "isFetching" ),
@@ -163,7 +164,7 @@ define( [ "ember" ], function( Ember ) {
 
 				this.calcFetchSize();
 
-				var	content	= get( this, "content" ),
+				var	content	= get( this, get( this, "contentPath" ) ),
 					offset	= get( this, "offset" ),
 					limit	= get( this, "limit" ),
 					max		= get( this, "maxAutoFetches" ),
