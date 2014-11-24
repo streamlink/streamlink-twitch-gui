@@ -58,7 +58,7 @@ define( [ "ember" ], function( Ember ) {
 			set( auth, "isPending", true );
 
 			// tell the twitch adapter to use the token from now on
-			self.updateAdapter();
+			self.updateAdapter( token );
 
 			// validate token
 			self.store.findAll( "twitchToken", null )
@@ -72,27 +72,23 @@ define( [ "ember" ], function( Ember ) {
 					defer.resolve();
 				})
 				.catch(function( err ) {
-					// failure: reset everything
-					return auth.sessionReset()
-						.then(function() {
-							// don't forget to reset the adapter, too
-							self.updateAdapter();
-							set( auth, "isPending", false );
-							self.trigger( "login", false );
-							defer.reject( err );
-						});
+					// reset the adapter
+					self.updateAdapter( null );
+					set( auth, "isPending", false );
+					self.trigger( "login", false );
+					defer.reject( err );
 				});
 
 			return defer.promise;
 		},
 
-		updateAdapter: function() {
+		updateAdapter: function( token ) {
 			var adapter = this.container.lookup( "adapter:application" );
 			if ( !adapter ) {
 				throw new Error( "Adapter not found" );
 			}
 
-			set( adapter, "access_token", get( this.auth, "access_token" ) );
+			set( adapter, "access_token", token );
 		},
 
 		parseParams: function( str ) {
@@ -140,6 +136,8 @@ define( [ "ember" ], function( Ember ) {
 							// something stupid happened
 							.catch(function() {
 								set( self, "auth_failure", true );
+								// reset auth record
+								self.auth.sessionReset();
 							});
 					}
 
