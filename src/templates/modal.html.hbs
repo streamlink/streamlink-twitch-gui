@@ -2,11 +2,11 @@
 <header>{{_head}}</header>
 {{embedded-links tagName="section" class="content" text=_body}}
 <footer>
-{{#each controls}}
-{{#if this.isButton}}
-<button type="button" class="btn btn-with-icon {{unbound this.classname}}" {{action "button" this this.action}}><i class="fa {{unbound this.icon}}"></i>{{unbound this.value}}</button>
+{{#each control in controls}}
+{{#if control.isButton}}
+<button type="button" class="btn btn-with-icon {{unbound control.classname}}" {{action "button" control control.action}}><i class="fa {{unbound control.icon}}"></i>{{unbound control.value}}</button>
 {{else}}
-{{view view.SelectView myclass=this.classname value=this.value content=this.list optionValuePath="content.id" optionLabelPath="content.label" change=this.action}}
+{{view view.SelectView myclass=control.classname value=control.value content=control.list optionValuePath="content.id" optionLabelPath="content.label" change=control.action}}
 {{/if}}
 {{else}}
 <button type="button" class="btn btn-with-icon btn-success" {{action "button"}}><i class="fa fa-check"></i>OK</button>

@@ -11,10 +11,13 @@ define(function( require ) {
 
 	require( [ "config" ], function() {
 
-		/**
-		 * Load the App
-		 */
-		require( [ "App" ] );
+		// load libraries first
+		require( [ "ember", "ember-data", "ember-data-ls" ], function() {
+
+			// then load the app
+			require( [ "App" ] );
+
+		});
 
 	});
 

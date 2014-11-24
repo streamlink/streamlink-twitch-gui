@@ -4,7 +4,7 @@ define( [ "ember" ], function( Ember ) {
 		summaryBinding: "content.summary",
 		featuredBinding: "content.featured",
 
-		stream: Ember.computed.defaultTo( "featured.0.stream" ),
+		stream: Ember.computed.oneWay( "featured.0.stream" ),
 
 		actions: {
 			"switchFeatured": function( stream ) {

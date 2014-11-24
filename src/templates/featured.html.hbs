@@ -12,9 +12,9 @@
 <div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img {{bind-attr src=stream.preview.large}}></div></div>
 </section>
 <ul class="channels wrapper horizontal">
-{{#each featured}}
-<li {{bind-attr title="channel.name"}} {{action "switchFeatured" stream}}>
-<img src="{{unbound image}}" title="{{unbound stream.channel.name}}">
+{{#each channel in featured}}
+<li {{bind-attr title="channel.channel.name"}} {{action "switchFeatured" channel.stream}}>
+<img src="{{unbound channel.image}}" title="{{unbound channel.stream.channel.name}}">
 </li>
 {{/each}}
 </ul>

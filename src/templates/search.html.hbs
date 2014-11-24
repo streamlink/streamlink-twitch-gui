@@ -6,8 +6,8 @@
 <section class="search-games">
 {{#if notFiltered}}<h3>Games</h3>{{/if}}
 <ul class="content-list">
-{{#each games}}
-{{game-item game=this}}
+{{#each game in games}}
+{{game-item game=game}}
 {{/each}}
 </ul>
 </section>
@@ -16,8 +16,8 @@
 <section class="search-streams">
 {{#if notFiltered}}<h3>Streams</h3>{{/if}}
 <ul class="content-list">
-{{#each streams}}
-{{stream-item stream=this}}
+{{#each stream in streams}}
+{{stream-item stream=stream}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

@@ -8,7 +8,7 @@
 <div {{bind-attr class=":searchbar-dropdown showDropdown::hidden"}}>
 <section class="wrapper filters">
 <div>Filter results</div>
-{{radio-buttons content=filters value=filter name="searchfilters" classNames="default"}}
+{{radio-buttons content=filters value=filter buttonName="searchfilters" buttonClass="default"}}
 </section>
 {{#if content.length}}
 <section class="recent">
@@ -17,11 +17,11 @@
 <div class="clear" {{action "clearHistory"}}><i class="fa fa-trash-o"></i></div>
 </div>
 <ul class="list-unstyled">
-{{#each arrangedContent}}
-<li {{action "searchHistory" this}}>
-<div class="filter">{{unbound label}}</div>
-<div class="query">{{unbound query}}</div>
-<div class="date">{{unbound time-from-now date false}}</div>
+{{#each history in arrangedContent}}
+<li {{action "searchHistory" history}}>
+<div class="filter">{{unbound history.label}}</div>
+<div class="query">{{unbound history.query}}</div>
+<div class="date">{{unbound time-from-now history.date false}}</div>
 </li>
 {{/each}}
 </ul>

@@ -1,7 +1,8 @@
 define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semver ) {
 
 	var	CP	= require( "child_process" ),
-		get	= Ember.get;
+		get	= Ember.get,
+		set	= Ember.set;
 
 
 	function VersionError( version ) { this.version = version; }
@@ -236,8 +237,8 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						delete spawn.killCallback;
 
 						// only close the stream's modal
-						if ( self.get( "modal" ) === stream ) {
-							self.set( "modal", null );
+						if ( get( self, "modal" ) === stream ) {
+							set( self, "modal", null );
 							self.send( "closeModal" );
 						}
 
@@ -280,7 +281,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			// create a new stream object
 			streamObj = new Stream( createSpawn( quality ), name, quality );
 			streamObj.changeQuality = function() {
-				streamObj.quality = this.selection.id;
+				set( streamObj, "quality", this.selection.id );
 				streamObj.kill(function() {
 					streamObj.spawn = createSpawn( streamObj.quality );
 					// do not close modal
@@ -292,17 +293,17 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			this.streams.addObject( streamObj );
 
 			if ( get( settings, "gui_hidestreampopup" ) ) {
-				this.set( "modal", null );
+				set( this, "modal", null );
 				this.send( "closeModal" );
 			} else {
 				// modal belongs to this stream now
-				this.set( "modal", stream );
+				set( this, "modal", stream );
 				this.send( "updateModal",
 					"Watching now: " + name,
 					get( stream, "channel.status" ),
 					[
 						new modal.Button( "Continue", "", "fa-reply", function() {
-							this.set( "modal", null );
+							set( this, "modal", null );
 							defer.resolve();
 						}.bind( this ) ),
 						new modal.ButtonClose( streamObj.kill.bind( streamObj ) ),
@@ -357,7 +358,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 							"Error while trying to launch the stream",
 							err.message || "Internal error",
 							[ new modal.ButtonClose(function() {
-								this.set( "modal", null );
+								set( this, "modal", null );
 							}.bind( this ) ) ]
 						);
 					}.bind( this ) );

@@ -3,8 +3,8 @@
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
 <ul class="content-list">
-{{#each}}
-{{stream-item stream=this}}
+{{#each stream in model}}
+{{stream-item stream=stream}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

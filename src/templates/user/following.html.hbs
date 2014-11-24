@@ -4,8 +4,8 @@
 </header>
 {{#if content.length}}
 <ul class="content-list">
-{{#each}}
-{{stream-item stream=this}}
+{{#each stream in model}}
+{{stream-item stream=stream}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

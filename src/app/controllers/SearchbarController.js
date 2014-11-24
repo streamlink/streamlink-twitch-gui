@@ -74,7 +74,7 @@ define( [ "ember" ], function( Ember ) {
 					// load recent searches
 					this.store.findAll( "search" ).then(function( content ) {
 						this.set( "content", content.map(function( row ) {
-							row.id = Number( row.id );
+							Ember.set( row, "id", Number( row.id ) );
 							return row;
 						}) );
 					}.bind( this ) );

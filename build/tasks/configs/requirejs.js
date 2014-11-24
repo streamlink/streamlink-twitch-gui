@@ -12,17 +12,7 @@ module.exports = {
 		generateSourceMaps		: false,
 		optimize				: "none",
 
-		/*
-		 * Create module definitions for all non-AMD modules!
-		 */
 		skipModuleInsertion		: false,
-		/*
-		 * Handlebars doesn't register itself to the global namespace properly... :(
-		 * var Handlebars=(function(){...})()
-		 * So we can't use a shim config which reads from the global namespace
-		 * this.Handlebars === undefined
-		 * So Handlebars and Ember will only work if we don't wrap all the code :(((
-		 */
 		wrap					: false,
 
 		skipSemiColonInsertion	: true,
@@ -42,8 +32,14 @@ module.exports = {
 			 * The fix is to rename the internal modules to "ember-fix" and "ember-data-fix".
 			 * The final ember and ember-data modules will be created like before, by using the
 			 * shim exports and module insertion function of requirejs.
+			 *
+			 * UPDATE:
+			 * The internal module loader of ember was fixed in the v1.8.0 release. Ember-data's
+			 * module loader will also be fixed in the upcoming (beta) release - it is fixed in the
+			 * current canary build.
+			 * Their solution was reversing the function names, which is similar to this approach.
 			 */
-			[ "ember", "ember-data" ].forEach(function( module ) {
+			[ /*"ember", */"ember-data" ].forEach(function( module ) {
 				if ( moduleName === module ) {
 					contents = contents.replace(
 						new RegExp( "(define|requireModule)\\(([\"'])" + module + "\\2", "gm" ),
@@ -55,7 +51,6 @@ module.exports = {
 			});
 			return contents;
 		}
-
 	},
 	dev				: {
 		options			: {

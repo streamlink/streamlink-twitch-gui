@@ -1,30 +1,30 @@
-<h2>{{#if model.length}}You're watching{{else}}All streams have been closed{{/if}}</h2>
-{{#if model.length}}
+{{#if content.length}}
+<h2>You're watching</h2>
 <ul class="list-unstyled">
-{{#each arrangedContent}}
+{{#each watching in arrangedContent}}
 <li class="watching-stream">
-<img class="left" {{bind-attr src=stream.preview.large}}>
+<img class="left" {{bind-attr src=watching.stream.preview.large}}>
 <section class="right">
-<h3>{{stream.channel.display_name}}</h3>
-<div class="game">{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>
-{{embedded-links class="info" text=stream.channel.status}}
+<h3>{{watching.stream.channel.display_name}}</h3>
+<div class="game">{{#link-to "games.game" watching.stream.game}}{{watching.stream.game}}{{/link-to}}</div>
+{{embedded-links class="info" text=watching.stream.channel.status}}
 <div class="stats">
-<div><i class="fa fa-clock-o"></i> {{hours-from-now stream.channel.updated_at}}</div>
-<div><i class="fa fa-group"></i> {{format-viewers stream.viewers}}</div>
+<div><i class="fa fa-clock-o"></i> {{hours-from-now watching.stream.channel.updated_at}}</div>
+<div><i class="fa fa-group"></i> {{format-viewers watching.stream.viewers}}</div>
 </div>
 <footer class="buttons">
-<button type="button" class="btn btn-with-icon btn-danger" {{action "close" this}}><i class="fa fa-times"></i>Close</button>
-<button type="button" class="btn btn-with-icon btn-success" {{action "chat" this}}><i class="fa fa-comments"></i>Chat</button>
-{{view Ember.Select class="modalqualityselect" value=quality content=controller.qualities optionValuePath="content.id" optionLabelPath="content.label" change=changeQuality}}
+<button type="button" class="btn btn-with-icon btn-danger" {{action "close" watching}}><i class="fa fa-times"></i>Close</button>
+<button type="button" class="btn btn-with-icon btn-success" {{action "chat" watching}}><i class="fa fa-comments"></i>Chat</button>
+{{view "select" class="modalqualityselect" value=watching.quality content=controller.qualities optionValuePath="content.id" optionLabelPath="content.label" change=watching.changeQuality}}
 </footer>
 </section>
 </li>
 {{/each}}
 </ul>
 {{else}}
+<h2>All streams have been closed</h2>
 <p>What to do next?</p>
 <ul class="fa-ul list-empty">
 <li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
-{{!--<li>{{#link-to "history" disabled=true}}<i class="fa fa-li fa-caret-right"></i>Browse recently watched streams{{/link-to}}</li>--}}
 </ul>
 {{/if}}

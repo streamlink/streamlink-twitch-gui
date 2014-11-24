@@ -1,8 +1,8 @@
 <h2>Error</h2>
 <h4>There was an error while trying to display this page.</h4>
 <dl class="dl-horizontal">
-{{#each error}}
-<dt>{{unbound key}}</dt>
-<dd {{bind-attr class="isStack:stack" data-selectable=isStack}}>{{unbound value}}</dd>
+{{#each row in error}}
+<dt>{{unbound row.key}}</dt>
+<dd {{bind-attr class="row.isStack:stack" data-selectable=row.isStack}}>{{unbound row.value}}</dd>
 {{/each}}
 </dl>
