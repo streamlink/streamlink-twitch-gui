@@ -1,7 +1,6 @@
 define(function( require ) {
 
 	require( "utils/inflector" );
-	require( "utils/helpers" );
 	require( "initializers/initializers" );
 
 

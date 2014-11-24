@@ -59,7 +59,6 @@ define(function() {
 
 
 	return {
-		foo: "foo",
 		linkurl_re	: linkurl_re,
 		linkurl_fn	: wrap( linkurl_fn ),
 

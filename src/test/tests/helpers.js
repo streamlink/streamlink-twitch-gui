@@ -1,11 +1,11 @@
-define( [ "ember", "utils/helpers" ], function( Ember ) {
+define( [ "utils/helpers" ], function( helpers ) {
 
 	module( "Ember handlebars helpers" );
 
 
 	test( "Hours from now", function() {
 
-		var _ = Ember.Handlebars.helpers[ "hours-from-now" ]._rawFunction;
+		var _ = helpers[ "hours-from-now" ];
 
 		deepEqual(
 			[
@@ -48,7 +48,19 @@ define( [ "ember", "utils/helpers" ], function( Ember ) {
 
 	test( "Format viewers", function() {
 
-		var _ = Ember.Handlebars.helpers[ "format-viewers" ]._rawFunction;
+		var _ = helpers[ "format-viewers" ];
+
+		deepEqual(
+			[
+				_( "" ),
+				_( "foo" )
+			],
+			[
+				"0",
+				"0"
+			],
+			"Unexpected values"
+		);
 
 		deepEqual(
 			[
