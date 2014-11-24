@@ -1,116 +1,119 @@
 define( [ "ember" ], function( Ember ) {
 
-	return Ember.ArrayController.extend({
+	var	get = Ember.get,
+		set = Ember.set;
 
-		sortProperties: [ "id" ],
+	return Ember.ArrayController.extend({
+		numKeepItems: 5,
+
+		sortProperties: [ "date" ],
 		sortAscending: false,
 
 		showDropdown: false,
-
-		filters: Ember.computed(function() {
-			return Ember.get( this.store.modelFor( "search" ), "filters" );
-		}),
-
+		updateFormattedTime: 0,
 		filter: "all",
 		query: "",
 
+		reQuery: /^[a-z0-9]{3,}/i,
+
+		filters: function() {
+			return this.store.modelFor( "search" ).filters.map(function( filter, i ) {
+				filter.id = "searchfilter" + i;
+				return filter;
+			});
+		}.property(),
+
+
+		init: function() {
+			this._super();
+
+			this.store.find( "search" ).then(function( records ) {
+				set( this, "model", records );
+			}.bind( this ) );
+		},
+
 
 		addRecord: function( query, filter ) {
-			// search history
-			this.store.findAll( "search" ).then(function( all ) {
-				var	length	= all.content.length,
-					newid	= length > 0
-						? Number( all.content[ length - 1 ].id ) + 1
-						: 1;
+			var	model = get( this, "model" ),
+				match = model.filter(function( record ) {
+					return	 query === get( record, "query" )
+						&&	filter === get( record, "filter" );
+				}),
+				record;
 
-				// don't store more than 5 records...
-				// find a matching record first
+			// found a matching record? just update the date property and save the record
+			if ( get( match, "length" ) === 1 ) {
+				set( match[0], "date", new Date() );
+				return match[0].save();
+			}
 
-				// this.store.findQuery( "searchbar", { query: query, filter: filter })
-				// findQuery maybe broken on LSAdapter?! let's implement a custom solution
-				new Promise(function( resolve, reject ) {
-					for ( var i = 0, record; record = all.content[ i++ ]; ) {
-						if (
-								 query === record.get( "query" )
-							&&	filter === record.get( "filter" )
-						) {
-							resolve( record );
-							return;
-						}
-					}
-					reject();
-				})
-					// found a record? delete it!
-					.then(function( record ) {
-						record.destroyRecord();
-					})
-					// not found? delete the 5th-last one!
-					.catch(function() {
-						all.content.slice( 0, -4 ).forEach(function( record ) {
-							Ember.run.once( this, function() {
-								record.deleteRecord();
-								record.save();
-							});
-						}, this );
-					}.bind( this ) )
-					// then create the new record
-					.then(function() {
-						this.store.createRecord( "search", {
-							id		: newid,
-							query	: query,
-							filter	: filter,
-							date	: +new Date()
-						}).save();
-					}.bind( this ) );
-			}.bind( this ) );
+			// we don't want to store more than X records
+			if ( get( model, "length" ) >= get( this, "numKeepItems" ) ) {
+				// delete the oldest record
+				model.sortBy( "date" ).shiftObject().destroyRecord();
+			}
+
+			// create a new record
+			record = this.store.createRecord( "search", {
+				id: 1 + Number( Ember.getWithDefault( model, "lastObject.id", 0 ) ),
+				query: query,
+				filter: filter,
+				date: new Date()
+			});
+			record.save().then(function () {
+				model.addRecord( record );
+			});
+		},
+
+		deleteAllRecords: function() {
+			var model = get( this, "model" );
+			model.content.forEach(function( record ) {
+				record.deleteRecord();
+			});
+			// delete all records at once and then clear the deleted records
+			model.save().then(function() {
+				model.clear();
+			});
+		},
+
+		doSearch: function( query, filter ) {
+			set( this, "showDropdown", false );
+			this.addRecord( query, filter );
+			this.transitionToRoute( "search", filter, query );
 		},
 
 
 		actions: {
 			"toggleDropdown": function() {
-				this.toggleProperty( "showDropdown" );
-
-				if ( this.get( "showDropdown" ) ) {
-					// load recent searches
-					this.store.findAll( "search" ).then(function( content ) {
-						this.set( "content", content.map(function( row ) {
-							Ember.set( row, "id", Number( row.id ) );
-							return row;
-						}) );
-					}.bind( this ) );
+				var showDropdown = get( this, "showDropdown" );
+				if ( !showDropdown ) {
+					set( this, "updateFormattedTime", +new Date() );
 				}
+				set( this, "showDropdown", !showDropdown );
 			},
 
 			"clear": function() {
-				this.set( "query", "" );
+				set( this, "query", "" );
 			},
 
 			"submit": function() {
-				var	query	= this.get( "query" ).trim(),
-					filter	= this.get( "filter" );
+				var	query	= get( this, "query" ).trim(),
+					filter	= get( this, "filter" );
 
-				if ( !/^[a-z0-9]{3,}/i.test( query ) ) { return; }
-
-				this.addRecord( query, filter );
-
-				this.set( "showDropdown", false );
-				this.send( "goto", "search", filter, query );
-			},
-
-			"clearHistory": function() {
-				this.store.findAll( "search" ).then(function( all ) {
-					all.content.forEach(function( record ) {
-						Ember.run.once( this, function() {
-							record.deleteRecord();
-							record.save();
-						});
-					}, this );
-				});
+				if ( this.reQuery.test( query ) ) {
+					this.doSearch( query, filter );
+				}
 			},
 
 			"searchHistory": function( record ) {
-				this.set( "showDropdown", false );
-				this.send( "goto", "search", record.get( "filter" ), record.get( "query" ) );
+				this.doSearch(
+					get( record, "query" ),
+					get( record, "filter" )
+				);
+			},
+
+			"clearHistory": function() {
+				this.deleteAllRecords();
 			}
 		}
 	});

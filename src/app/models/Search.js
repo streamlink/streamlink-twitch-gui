@@ -5,7 +5,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 	return DS.Model.extend({
 		query		: DS.attr( "string" ),
 		filter		: DS.attr( "string" ),
-		date		: DS.attr( "number" ),
+		date		: DS.attr( "date" ),
 
 		label		: function() {
 			return this.constructor.getLabel( get( this, "filter" ) );
@@ -18,11 +18,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 			{ label: "All", value: "all" },
 			{ label: "Game", value: "games" },
 			{ label: "Stream", value: "streams" }
-
-		].map(function( filter, i ) {
-			filter.id = "searchfilter" + i;
-			return filter;
-		}),
+		],
 
 		filtersmap: function() {
 			return get( this, "filters" ).reduce(function( map, filter ) {
