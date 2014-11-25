@@ -9,7 +9,7 @@
 		"frame": false,
 		"resizable": true,
 		"toolbar": false,
-		"show": true,
+		"show": false,
 		"position": "center",
 		"width": 960,
 		"height": 540,

@@ -144,7 +144,15 @@ define(function( require ) {
 		SettingsController: require( "controllers/SettingsController" ),
 		SettingsView: require( "views/SettingsView" ),
 
-		AboutView: require( "views/AboutView" )
+		AboutView: require( "views/AboutView" ),
+
+
+		// ready event
+		ready: function ready() {
+			// make the application window visible
+			this.__container__.lookup( "nw:nwWindow" ).show();
+		}
+
 	});
 
 });
