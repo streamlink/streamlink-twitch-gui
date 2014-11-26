@@ -16,16 +16,11 @@ define( [ "ember" ], function( Ember ) {
 
 		reQuery: /^[a-z0-9]{3,}/i,
 
-		filters: function() {
-			return this.store.modelFor( "search" ).filters.map(function( filter, i ) {
-				filter.id = "searchfilter" + i;
-				return filter;
-			});
-		}.property(),
-
 
 		init: function() {
 			this._super();
+
+			set( this, "filters", this.store.modelFor( "search" ).filters );
 
 			this.store.find( "search" ).then(function( records ) {
 				set( this, "model", records );
