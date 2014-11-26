@@ -175,18 +175,6 @@ fieldset {
 	&.btn-neutral { .btn-color( @color-neutral ); }
 	&.btn-info    { .btn-color( @color-info    ); }
 
-
-	.btn-color( @color ) {
-		background: @color;
-		border-color: darken( @color, 10% );
-		transition: background .2s ease-out;
-
-		&:not(:disabled):hover {
-			background: darken( @color, 5% );
-			border-color: darken( @color, 15% );
-		}
-	}
-
 	&:not(:disabled):active {
 		box-shadow: none;
 	}
@@ -194,18 +182,6 @@ fieldset {
 
 	&.btn-with-icon {
 		min-width: 9em;
-
-		> i {
-			width: 1em;
-			height: 1em;
-			margin-left: ( -1 * ( 1 + @button-icon-spacing ) );
-			margin-right: @button-icon-spacing;
-			font-size: @button-icon-size;
-			line-height: ( 1 / unit( @button-icon-size ) );
-			color: @button-icon-color !important;
-			text-align: center;
-			vertical-align: middle;
-		}
 	}
 
 	&.infinitescroll {
@@ -216,6 +192,47 @@ fieldset {
 		> i {
 			line-height: 1;
 			vertical-align: text-bottom;
+		}
+	}
+}
+
+.btn-with-icon {
+	> i {
+		width: 1em;
+		height: 1em;
+		margin-left: ( -1 * ( 1 + @button-icon-spacing ) );
+		margin-right: @button-icon-spacing;
+		font-size: @button-icon-size;
+		line-height: ( 1 / unit( @button-icon-size ) );
+		color: @button-icon-color !important;
+		text-align: center;
+		vertical-align: middle;
+	}
+}
+
+
+.radiobtns {
+	display: flex;
+
+	> input {
+		display: none;
+	}
+
+	> label {
+		display: block;
+		flex: 1;
+		margin: 0 .2em;
+		padding: 0 .25em;
+		border: @button-border-width solid;
+		font-weight: normal;
+		text-align: center;
+		cursor: pointer;
+
+		&:first-of-type {
+			margin-left: 0;
+		}
+		&:last-of-type {
+			margin-right: 0;
 		}
 	}
 }

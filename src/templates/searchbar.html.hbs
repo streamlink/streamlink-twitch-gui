@@ -6,16 +6,16 @@
 <button type="button" class="btn-small btn-context-valid fa fa-search" {{action "submit"}}></button>
 <button type="button" class="btn-small btn-dropdown fa fa-chevron-down" {{action "toggleDropdown"}}></button>
 <div {{bind-attr class=":searchbar-dropdown showDropdown::hidden"}}>
-<section class="wrapper filters">
+<section class="filters">
 <div>Filter results</div>
 {{radio-buttons content=filters value=filter buttonName="searchfilters"}}
 </section>
 {{#if model.length}}
 <section class="recent">
-<div class="wrapper">
+<header>
 <div>Recent queries</div>
 <div class="clear" {{action "clearHistory"}}><i class="fa fa-trash-o"></i></div>
-</div>
+</header>
 <ul class="list-unstyled">
 {{#with updateFormattedTime as _}}
 {{#each history in arrangedContent}}

@@ -21,11 +21,41 @@
 	}
 }
 
+
 .text-overflow() {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+
+.btn-color( @background: @color-primary, @color: @button-color ) {
+	color: @color;
+	background: @background;
+	border-color: darken( @background, @button-shading-border );
+	transition: background .2s ease-out;
+
+	&:not(:disabled):hover {
+		background: darken( @background, @button-shading-hover-background );
+		border-color: darken( @background, @button-shading-hover-border );
+	}
+}
+
+.radiobtns-color( @background: @color-primary, @color: @button-color ) {
+	> label {
+		.btn-color( @background, @color );
+
+		> i {
+			color: @color !important;
+		}
+	}
+
+	> input:checked + label {
+		background: darken( @background, @button-shading-selection-background ) !important;
+		border-color: darken( @background, @button-shading-selection-border ) !important;
+	}
+}
+
 
 .stream-hover( @content: @fa-var-play-circle-o ) {
 	cursor: pointer;
@@ -47,6 +77,7 @@
 		-webkit-text-stroke: .025em @color-text-darkest;
 	}
 }
+
 
 /**
  * Create media queries for dynamically scaling lists
