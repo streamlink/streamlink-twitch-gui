@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 
 	var	nwGui		= window.nwDispatcher.requireNwGui(),
 		nwWindow	= nwGui.Window.get(),
@@ -17,8 +17,8 @@ define( [ "ember" ], function( Ember ) {
 		if ( tray ) { return; }
 
 		tray = new nwGui.Tray({
-			title: "Livestreamer Twitch GUI",
-			icon: "/img/icon-tray.png"
+			title: metadata.package.config[ "display-name" ],
+			icon: metadata.package.config[ "tray-icon" ]
 		}).on( "click", nwWindow.winFromTray );
 
 		nwWindow.hide();

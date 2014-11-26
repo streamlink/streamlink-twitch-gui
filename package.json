@@ -31,9 +31,10 @@
 	},
 
 	"config": {
-		"displayName": "Livestreamer Twitch GUI",
+		"display-name": "Livestreamer Twitch GUI",
 		"node-webkit-version": "0.11.0",
 		"version-check-days": 7,
+		"tray-icon": "img/icon-tray.png",
 		"livestreamer-exec": "livestreamer",
 		"livestreamer-version-min": "1.8.0",
 		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",
