@@ -6,17 +6,30 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		quality				: DS.attr( "number", { defaultValue: 0 } ),
 		player				: DS.attr( "string", { defaultValue: "" } ),
 		player_params		: DS.attr( "string", { defaultValue: "" } ),
-		player_passthrough	: DS.attr( "string", { defaultValue: "http" }),
+		player_passthrough	: DS.attr( "string", { defaultValue: "http" } ),
 		player_reconnect	: DS.attr( "boolean", { defaultValue: true } ),
 		player_no_close		: DS.attr( "boolean", { defaultValue: false } ),
 		gui_minimize		: DS.attr( "string", { defaultValue: "false" } ),
 		gui_hidestreampopup	: DS.attr( "boolean", { defaultValue: false } ),
 		gui_openchat		: DS.attr( "boolean", { defaultValue: false } ),
-		gui_homepage		: DS.attr( "string", { defaultValue: "/featured" }),
-		gui_layout			: DS.attr( "string", { defaultValue: "tile" }),
+		gui_homepage		: DS.attr( "string", { defaultValue: "/featured" } ),
+		gui_layout			: DS.attr( "string", { defaultValue: "tile" } )
 
+	}).reopenClass({
 
-		isHttp: Ember.computed.equal( "player_passthrough", "http" ),
+		toString: function() { return "Settings"; },
+
+		/**
+		 * Create a new object containing the current attribute values of the record.
+		 * Will be used by the settings route/controller
+		 */
+		readAttributes: function( record ) {
+			var obj = Ember.Object.create({});
+			record.eachAttribute(function( name ) {
+				obj.set( name, record.get( name ) );
+			});
+			return obj;
+		},
 
 
 		qualities: [
@@ -47,8 +60,6 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 			return minimize;
 		})()
 
-	}).reopenClass({
-		toString: function() { return "Settings"; }
 	});
 
 });

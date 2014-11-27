@@ -56,7 +56,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 
 		getParametersString: function( settings, url, quality ) {
 			var	args = [],
-				qualities = get( settings, "qualities" );
+				qualities = settings.constructor.qualities;
 
 			// prepare parameters
 			this.parameters.forEach(function( parameter ) {
@@ -309,7 +309,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						new modal.ButtonClose( streamObj.kill.bind( streamObj ) ),
 						new modal.ButtonBrowser( "Chat", "fa-comments", chaturl, false ),
 						new modal.Select(
-							get( settings, "qualities" ),
+							settings.constructor.qualities,
 							get( settings, "quality" ),
 							"modalqualityselect",
 							streamObj.changeQuality

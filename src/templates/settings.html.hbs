@@ -4,9 +4,9 @@
 <div class="left"><i class="fa fa-cog"></i> Executable location<span class="description">By omitting a value, livestreamer has to be added to the $PATH variable.</span></div>
 <div class="right" data-fileselect>{{input type="text" value=model.livestreamer classNames="form-control" placeholder="Leave blank for default location"}}</div>
 <div class="left"><i class="fa fa-eye"></i> Preferred quality<span class="description">Choose the default stream quality.</span></div>
-<div class="right">{{view "select" value=model.quality content=model.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div class="right">{{view "select" value=model.quality content=settings.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 <div class="left"><i class="fa fa-filter"></i> Stream type<span class="description">Make sure your player does support the selected stream type.{{livestreamer-docs cmd="--player-passthrough"}}</span></div>
-<div class="right">{{view "select" value=model.player_passthrough content=model.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
+<div class="right">{{view "select" value=model.player_passthrough content=settings.constructor.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 </fieldset>
 <fieldset>
 <legend>Videoplayer settings</legend>
@@ -24,7 +24,7 @@
 <fieldset>
 <legend>GUI settings</legend>
 <div class="left"><i class="fa fa-minus"></i> Minimize GUI<span class="description">When the videoplayer opens.</span></div>
-<div class="right">{{view "select" value=model.gui_minimize content=model.minimize optionValuePath="content.value" optionLabelPath="content.label"}}</div>
+<div class="right">{{view "select" value=model.gui_minimize content=settings.constructor.minimize optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 <div class="left"><i class="fa fa-info"></i> Stream popup<span class="description">When a stream has started.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=model.gui_hidestreampopup}}<span>Hide the popup on success</span></label></div>
 <div class="left"><i class="fa fa-comment"></i> Open chat<span class="description">After launching a stream.</span></div>

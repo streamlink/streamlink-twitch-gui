@@ -11,10 +11,6 @@ define([
 
 		didInsertElement: function() {
 			GUIFileselect( this.$() );
-		},
-
-		change: function() {
-			this.controller.set( "hasChanged", true );
 		}
 	});
 

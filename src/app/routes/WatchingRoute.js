@@ -19,12 +19,6 @@ define([
 				.then( preload( "@each.preview.@each.large" ) )
 				// return the original streams array reference!!!
 				.then(function() { return streams; });
-		},
-
-		setupController: function( controller ) {
-			this._super.apply( this, arguments );
-
-			controller.set( "qualities", this.store.modelFor( "settings" ).prototype.qualities );
 		}
 	});
 

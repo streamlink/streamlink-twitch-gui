@@ -1,13 +1,22 @@
 define( [ "ember" ], function( Ember ) {
 
 	return Ember.Route.extend({
+		model: function() {
+			return this.settings.constructor.readAttributes( this.settings );
+		},
+
 		actions: {
 			willTransition: function( transition ) {
 				var	controller	= this.controller,
-					modal		= controller.get( "controllers.modal" );
+					modal		= Ember.get( controller, "controllers.modal" ),
+					model		= Ember.get( controller, "model" ),
+					settings	= this.settings,
+					hasChanged	= !Object.keys( model ).every(function( attr ) {
+						return model.get( attr ) === settings.get( attr );
+					});
 
 				// if the user has changed any values
-				if ( controller.get( "hasChanged" ) ) {
+				if ( hasChanged ) {
 					// stay here...
 					transition.abort();
 
