@@ -15,7 +15,17 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 	function Parameter( arg, cond, params ) {
 		this.arg	= arg;
 		this.params	= params;
-		this.cond	= Ember.makeArray( cond );
+
+		if ( cond instanceof Function ) {
+			cond = [ cond ];
+		} else {
+			cond = Ember.makeArray( cond ).concat( params || [] ).map(function( prop ) {
+				return function( settings ) {
+					return get( settings, prop );
+				};
+			});
+		}
+		this.cond = cond;
 	}
 
 
@@ -50,7 +60,10 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			new Parameter( "--player", null, "player" ),
 			new Parameter( "--player-args", "player", "player_params" ),
 			new Parameter( "--player-passthrough", null, "player_passthrough" ),
-			new Parameter( "--player-continuous-http", [ "isHttp", "player_reconnect" ] ),
+			new Parameter( "--player-continuous-http", function( settings ) {
+				return	get( settings, "player_passthrough" ) === "http"
+					&&	!!get( settings, "player_reconnect" );
+			} ),
 			new Parameter( "--player-no-close", "player_no_close" )
 		],
 
@@ -60,8 +73,8 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 
 			// prepare parameters
 			this.parameters.forEach(function( parameter ) {
-				if ( parameter.cond.concat( parameter.params || [] ).every(function( cond ) {
-					return !!get( settings, cond );
+				if ( parameter.cond.every(function( cond ) {
+					return cond( settings );
 				}) ) {
 					[].push.apply( args, [ parameter.arg ].concat(
 						parameter.params
