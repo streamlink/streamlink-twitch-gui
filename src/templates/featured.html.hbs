@@ -6,7 +6,12 @@
 <aside class="info">
 <h3 class="title">{{stream.channel.name}}</h3>
 <p class="game">{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</p>
-<p class="stats"><i class="fa fa-clock-o"></i> {{hours-from-now stream.channel.updated_at}} <i class="fa fa-users"></i> {{format-viewers stream.viewers}}</p>
+<p class="stats stats-row">
+<span {{bind-attr title=stream.title_created_at}}><i class="fa fa-clock-o"></i>{{hours-from-now stream.created_at}}</span>
+<span {{bind-attr title=stream.title_viewers}}><i class="fa fa-users"></i>{{format-viewers stream.viewers}}</span>
+<span {{bind-attr title=stream.channel.title_followers}}><i class="fa fa-heart"></i>{{format-viewers stream.channel.followers}}</span>
+<span {{bind-attr title=stream.channel.title_views}}><i class="fa fa-line-chart"></i>{{format-viewers stream.channel.views}}</span>
+</p>
 {{embedded-links tagName="p" class="status" text=stream.channel.status}}
 </aside>
 <div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img {{bind-attr src=stream.preview.large}}></div></div>

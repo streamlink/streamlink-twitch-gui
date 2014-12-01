@@ -32,6 +32,21 @@ main.content {
 }
 
 
+.stats-row {
+	display: flex;
+	justify-content: space-between;
+
+	span {
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	i {
+		margin-right: .25em;
+	}
+}
+
+
 .settingsbar {
 	@button-size: unit( ( 1 + 2 * unit( @button-padding ) ), rem );
 

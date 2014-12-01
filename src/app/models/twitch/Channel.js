@@ -28,7 +28,21 @@ define( [ "ember-data" ], function( DS ) {
 		// a stream record instead of a channels record (/channels/:channel - the current model).
 		// We're defining the "missing" attributes, so that ember-data doesn't complain...
 		bio: DS.attr(),
-		type: DS.attr()
+		type: DS.attr(),
+
+
+		title_followers: function() {
+			var	followers	= this.get( "followers" ),
+				numerus		= followers === 1 ? "person is" : "people are";
+			return "%@ %@ following".fmt( followers, numerus );
+		}.property( "followers" ),
+
+		title_views: function() {
+			var	views	= this.get( "views" ),
+				numerus	= views === 1 ? "view" : "views";
+			return "%@ channel %@".fmt( views, numerus );
+		}.property( "views" )
+
 	}).reopenClass({
 		toString: function() { return "channels" }
 	});
