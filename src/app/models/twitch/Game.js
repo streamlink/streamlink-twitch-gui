@@ -1,10 +1,10 @@
 define( [ "ember-data" ], function( DS ) {
 
 	return DS.Model.extend({
-		name: DS.attr( "string" ),
-		giantbomb_id: DS.attr( "number" ),
 		box: DS.belongsTo( "twitchImage" ),
-		logo: DS.belongsTo( "twitchImage" )
+		giantbomb_id: DS.attr( "number" ),
+		logo: DS.belongsTo( "twitchImage" ),
+		name: DS.attr( "string" )
 	}).reopenClass({
 		toString: function() { return "games"; }
 	});

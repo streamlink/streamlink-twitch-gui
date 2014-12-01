@@ -1,10 +1,11 @@
 define( [ "ember-data" ], function( DS ) {
 
 	return DS.Model.extend({
-		viewers: DS.attr( "number" ),
-		game: DS.attr( "string" ),
 		channel: DS.belongsTo( "twitchChannel" ),
-		preview: DS.belongsTo( "twitchImage" )
+		created_at: DS.attr( "date" ),
+		game: DS.attr( "string" ),
+		preview: DS.belongsTo( "twitchImage" ),
+		viewers: DS.attr( "number" )
 	}).reopenClass({
 		toString: function() { return "streams"; }
 	});

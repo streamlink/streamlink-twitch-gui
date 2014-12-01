@@ -23,6 +23,19 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 			});
 
 			store.metaForType( type, data );
+		},
+
+
+		/**
+		 * Also extract metadata from all embedded records
+		 * @see DS.EmbeddedRecordsMixin.normalize
+		 * @param {DS.Model} type
+		 * @param {Object} hash
+		 * @returns {Object}
+		 */
+		normalize: function( type, hash ) {
+			this.extractMeta( this.store, type, hash );
+			return this._super.apply( this, arguments );
 		}
 	});
 
