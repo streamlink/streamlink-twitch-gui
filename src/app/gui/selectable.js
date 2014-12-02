@@ -15,7 +15,7 @@ define(function() {
 					if ( el.dataset && "selectable" in el.dataset ) {
 						return;
 					}
-				} while ( el = el.parentNode );
+				} while ( ( el = el.parentNode ) );
 			}
 			e.preventDefault();
 			e.stopImmediatePropagation();

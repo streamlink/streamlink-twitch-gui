@@ -92,7 +92,7 @@ define(function() {
 			initDone = true;
 
 			// Checks if this script is running in a frame
-			if (window.top != window.self) {
+			if (window.top !== window.self) {
 				isFrame = true;
 			}
 
@@ -108,7 +108,7 @@ define(function() {
 				// DOMChange (throttle): fix height
 				var pending = false;
 				var refresh = function () {
-					if (!pending && html.scrollHeight != document.height) {
+					if (!pending && html.scrollHeight !== document.height) {
 						pending = true; // add a new pending action
 						setTimeout(function () {
 							html.style.height = document.height + "px";
@@ -157,10 +157,10 @@ define(function() {
 		 */
 		function scrollArray(elem, left, top, delay) {
 
-			delay || (delay = 1000);
+			delay = delay || 1000;
 			directionCheck(left, top);
 
-			if (options.accelerationMax != 1) {
+			if (options.accelerationMax !== 1) {
 				var now = +new Date();
 				var elapsed = now - lastScroll;
 				if (elapsed < options.accelerationDelta) {
@@ -424,7 +424,7 @@ define(function() {
 						return setCache(elems, el);
 					}
 				}
-			} while (el = el.parentNode);
+			} while ((el = el.parentNode));
 		}
 
 
@@ -461,8 +461,8 @@ define(function() {
 			deltaY = Math.abs(deltaY);
 			deltaBuffer.push(deltaY);
 			deltaBuffer.shift();
-			var allEquals    = (deltaBuffer[0] == deltaBuffer[1] &&
-				deltaBuffer[1] == deltaBuffer[2]);
+			var allEquals    = (deltaBuffer[0] === deltaBuffer[1] &&
+				deltaBuffer[1] === deltaBuffer[2]);
 			var allDivisable = (isDivisible(deltaBuffer[0], 120) &&
 				isDivisible(deltaBuffer[1], 120) &&
 				isDivisible(deltaBuffer[2], 120));
@@ -470,7 +470,7 @@ define(function() {
 		}
 
 		function isDivisible(n, divisor) {
-			return (Math.floor(n / divisor) == n / divisor);
+			return (Math.floor(n / divisor) === n / divisor);
 		}
 
 
@@ -514,7 +514,7 @@ define(function() {
 			if (x >= 1) { return 1; }
 			if (x <= 0) { return 0; }
 
-			if (options.pulseNormalize == 1) {
+			if (options.pulseNormalize === 1) {
 				options.pulseNormalize /= pulse_(1);
 			}
 			return pulse_(x);
@@ -548,7 +548,7 @@ define(function() {
 
 
 			// we check the OS for default middle mouse behavior only!
-			var isLinux = (navigator.platform.indexOf("Linux") != -1);
+			var isLinux = (navigator.platform.indexOf("Linux") !== -1);
 
 
 			/**
@@ -582,7 +582,7 @@ define(function() {
 				do {
 					isLink = isNodeName(elem, "a");
 					if (isLink) { break; }
-				} while (elem = elem.parentNode);
+				} while ((elem = elem.parentNode));
 
 				elem = overflowingAncestor(e.target);
 

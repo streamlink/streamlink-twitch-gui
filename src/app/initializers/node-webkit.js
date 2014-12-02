@@ -67,7 +67,7 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 				}
 
 				try {
-					container.lookup( "controller:application" ).send( "winClose" )
+					container.lookup( "controller:application" ).send( "winClose" );
 				} catch ( e ) {
 					this.close( true );
 				}

@@ -1,4 +1,4 @@
-define( [ "ember-data", "moment" ], function( DS, Moment ) {
+define( [ "ember-data", "moment" ], function( DS, moment ) {
 
 	return DS.Model.extend({
 		channel: DS.belongsTo( "twitchChannel" ),
@@ -10,7 +10,7 @@ define( [ "ember-data", "moment" ], function( DS, Moment ) {
 
 		title_created_at: function() {
 			var	created_at	= this.get( "created_at" ),
-				formatted	= Moment( created_at ).format( "LTS" );
+				formatted	= moment( created_at ).format( "LTS" );
 			return "Online since %@".fmt( formatted );
 		}.property( "created_at" ),
 

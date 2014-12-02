@@ -23,7 +23,7 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"winDevTools": function() {
-				this.nwWindow.showDevTools()
+				this.nwWindow.showDevTools();
 			},
 
 			"winMin": function() {

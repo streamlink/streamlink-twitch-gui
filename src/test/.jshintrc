@@ -1,28 +1,32 @@
 {
-	"browser"  : true,
-	"node"     : true,
-
-	"laxbreak" : true,
-	"eqnull"   : true,
-	"debug"    : true,
-	"devel"    : true,
-	"curly"    : true,
-	"boss"     : true,
-	"expr"     : true,
-	"asi"      : true,
-	"noempty"  : true,
-
-	"undef"    : true,
-	"latedef"  : true,
-	"unused"   : true,
-	"sub"      : true,
+	"maxerr"   : 0,
 
 	"quotmark" : "double",
-	"trailing" : true,
 	"indent"   : 4,
 	"maxlen"   : 100,
+	"maxdepth" : 4,
+	"maxparams": 5,
+
+	"browser"  : true,
+	"node"     : true,
+	"devel"    : false,
+
+	"curly"    : true,
+	"eqeqeq"   : true,
+	"immed"    : true,
+	"latedef"  : true,
+	"laxbreak" : true,
+	"newcap"   : true,
+	"noarg"    : true,
+	"noempty"  : true,
+	"nonew"    : true,
+	"plusplus" : false,
+	"sub"      : true,
+	"undef"    : true,
+	"unused"   : true,
 
 	"globals"  : {
+		"Promise"        : true,
 		"define"         : true,
 		"requirejs"      : true,
 

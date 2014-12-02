@@ -75,5 +75,5 @@ requirejs.config({
  * github.com/emberjs/ember.js/blob/v1.8.1/packages/ember-handlebars-compiler/lib/main.js#L30
  */
 define( "handlebars-wrapper", [ "handlebars" ], function( Handlebars ) {
-	return this.Handlebars = Handlebars;
+	return ( this.Handlebars = Handlebars );
 });

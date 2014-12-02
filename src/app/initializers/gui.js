@@ -8,13 +8,13 @@ define([
 	"gui/selectable",
 	"gui/smoothscroll",
 	"gui/selecter"
-], function( Ember, ApplicationView, GUISelectable, GUISmoothscroll, GUISelecter ) {
+], function( Ember, ApplicationView, guiSelectable, guiSmoothscroll, guiSelecter ) {
 
 	ApplicationView.reopen({
 		didInsertElement: function() {
 			this._super();
-			GUISelectable();
-			GUISmoothscroll();
+			guiSelectable();
+			guiSmoothscroll();
 		}
 	});
 
@@ -54,7 +54,7 @@ define([
 	Ember.Select.reopen({
 		didInsertElement: function() {
 			this._super();
-			GUISelecter( this.$() );
+			guiSelecter( this.$() );
 		},
 
 		/*

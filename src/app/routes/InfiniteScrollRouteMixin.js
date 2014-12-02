@@ -46,7 +46,7 @@ define( [ "ember" ], function( Ember ) {
 			throw new Error( "Invalid selector" );
 		}
 
-		return cachedMinWidths[ selector ] = data;
+		return ( cachedMinWidths[ selector ] = data );
 	}
 
 	function readMinHeights( selector ) {

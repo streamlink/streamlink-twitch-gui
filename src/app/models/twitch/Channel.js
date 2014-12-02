@@ -44,7 +44,7 @@ define( [ "ember-data" ], function( DS ) {
 		}.property( "views" )
 
 	}).reopenClass({
-		toString: function() { return "channels" }
+		toString: function() { return "channels"; }
 	});
 
 });

@@ -8,7 +8,9 @@ define( [ "ember" ], function( Ember ) {
 
 		actions: {
 			"close": function( stream ) {
-				stream && stream.kill && stream.kill();
+				if ( stream && stream.kill ) {
+					stream.kill();
+				}
 			},
 
 			"chat": function( stream ) {

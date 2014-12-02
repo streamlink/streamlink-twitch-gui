@@ -35,7 +35,7 @@ define( [ "ember" ], function( Ember ) {
 				.catch(function() {
 					throw new Error( "Could not load image resources" );
 				});
-		}
+		};
 	};
 
 });

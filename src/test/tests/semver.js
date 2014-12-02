@@ -1,8 +1,8 @@
 define( [ "utils/semver" ], function( SemVer ) {
 
-	var	T = SemVer.tokenize,
-		M = SemVer.getMax,
-		S = SemVer.sort;
+	var	t = SemVer.tokenize,
+		m = SemVer.getMax,
+		s = SemVer.sort;
 
 
 	module( "Semantic versioning" );
@@ -12,11 +12,11 @@ define( [ "utils/semver" ], function( SemVer ) {
 
 		deepEqual(
 			[
-				T( "foo" ),
-				T( "1.0" ),
-				T( "foo1.0.0bar" ),
-				T( "1.0.0-" ),
-				T( "1.0.0+" )
+				t( "foo" ),
+				t( "1.0" ),
+				t( "foo1.0.0bar" ),
+				t( "1.0.0-" ),
+				t( "1.0.0+" )
 			],
 			[
 				undefined,
@@ -30,9 +30,9 @@ define( [ "utils/semver" ], function( SemVer ) {
 
 		deepEqual(
 			[
-				T( "1.0.0" ),
-				T( "   v1.0.0   " ),
-				T( "1.23.456" )
+				t( "1.0.0" ),
+				t( "   v1.0.0   " ),
+				t( "1.23.456" )
 			],
 			[
 				[ [ 1, 0, 0 ], undefined ],
@@ -44,11 +44,11 @@ define( [ "utils/semver" ], function( SemVer ) {
 
 		deepEqual(
 			[
-				T( "1.0.0-1.2.3" ),
-				T( "1.0.0-alpha" ),
-				T( "1.0.0-alpha.1" ),
-				T( "1.0.0-alpha.beta1" ),
-				T( "1.0.0-beta+abc123" )
+				t( "1.0.0-1.2.3" ),
+				t( "1.0.0-alpha" ),
+				t( "1.0.0-alpha.1" ),
+				t( "1.0.0-alpha.beta1" ),
+				t( "1.0.0-beta+abc123" )
 			],
 			[
 				[ [ 1, 0, 0 ], [ 1, 2, 3 ] ],
@@ -67,9 +67,9 @@ define( [ "utils/semver" ], function( SemVer ) {
 
 		deepEqual(
 			[
-				M([ "0.0.1", "0.0.10", "0.0.2" ]),
-				M([ "0.0.10", "0.1.0", "0.2.0" ]),
-				M([ "1.0.0", "0.10.0", "0.10.10" ])
+				m([ "0.0.1", "0.0.10", "0.0.2" ]),
+				m([ "0.0.10", "0.1.0", "0.2.0" ]),
+				m([ "1.0.0", "0.10.0", "0.10.10" ])
 			],
 			[
 				"0.0.10",
@@ -81,13 +81,13 @@ define( [ "utils/semver" ], function( SemVer ) {
 
 		deepEqual(
 			[
-				M([ "1.0.0-123", "1.0.0-alpha" ]),
-				M([ "1.0.0-alpha", "1.0.0-alpha.1" ]),
-				M([ "1.0.0-alpha.1", "1.0.0-alpha.beta" ]),
-				M([ "1.0.0-alpha.beta", "1.0.0-beta" ]),
-				M([ "1.0.0-beta", "1.0.0-beta.2" ]),
-				M([ "1.0.0-beta.2", "1.0.0-beta.11" ]),
-				M([ "1.0.0-beta.11", "1.0.0" ])
+				m([ "1.0.0-123", "1.0.0-alpha" ]),
+				m([ "1.0.0-alpha", "1.0.0-alpha.1" ]),
+				m([ "1.0.0-alpha.1", "1.0.0-alpha.beta" ]),
+				m([ "1.0.0-alpha.beta", "1.0.0-beta" ]),
+				m([ "1.0.0-beta", "1.0.0-beta.2" ]),
+				m([ "1.0.0-beta.2", "1.0.0-beta.11" ]),
+				m([ "1.0.0-beta.11", "1.0.0" ])
 			],
 			[
 				"1.0.0-alpha",
@@ -107,7 +107,7 @@ define( [ "utils/semver" ], function( SemVer ) {
 	test( "Sorting", function() {
 
 		deepEqual(
-			S([
+			s([
 				"1.0.0",
 				"0.0.10",
 				"0.1.0",
@@ -125,7 +125,7 @@ define( [ "utils/semver" ], function( SemVer ) {
 		);
 
 		deepEqual(
-			S([
+			s([
 				"1.0.0-beta",
 				"1.0.0-alpha.beta",
 				"1.0.0-alpha1",

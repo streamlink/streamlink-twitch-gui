@@ -190,10 +190,11 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			}
 
 			function onData( data ) {
-				var match;
-				data = String( data ).trim();
+				var	match = regexp.exec(
+						String( data ).trim()
+					);
 
-				if ( match = regexp.exec( data ) ) {
+				if ( match ) {
 					// resolve before process exit
 					defer.resolve( match[1] );
 				}

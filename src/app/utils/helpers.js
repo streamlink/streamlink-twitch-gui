@@ -1,13 +1,13 @@
-define( [ "moment" ], function( Moment ) {
+define( [ "moment" ], function( moment ) {
 
 	var helpers = {};
 
 	helpers[ "time-from-now" ] = function helperTimeFromNow( date, suffix ) {
-		return Moment( date ).fromNow( suffix );
+		return moment( date ).fromNow( suffix );
 	};
 
 	helpers[ "hours-from-now" ] = function helperHoursFromNow( time ) {
-		var diff = Math.floor( Math.max( 0, Moment().diff( time, "minutes", true ) ) );
+		var diff = Math.floor( Math.max( 0, moment().diff( time, "minutes", true ) ) );
 		return diff < 1
 			? "just now"
 			: diff < 60

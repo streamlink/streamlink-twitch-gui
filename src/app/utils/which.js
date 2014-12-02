@@ -53,6 +53,6 @@ define( [ "ember" ], function() {
 				});
 			}, Promise.reject() );
 		}
-	}
+	};
 
 });
