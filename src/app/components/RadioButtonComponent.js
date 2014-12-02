@@ -3,9 +3,12 @@ define( [ "ember" ], function( Ember ) {
 	return Ember.Component.extend({
 		tagName: "input",
 		type: "radio",
-		attributeBindings: [ "id", "name", "type", "value", "checked:checked", "data-label" ],
+		attributeBindings: [
+			"id", "name", "type", "value", "checked:checked", "disabled", "data-label"
+		],
 
 		click: function() {
+			if ( this.get( "disabled" ) ) { return; }
 			this.set( "selection", this.get( "value" ) );
 		},
 

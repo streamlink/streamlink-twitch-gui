@@ -227,6 +227,8 @@ fieldset {
 		font-weight: normal;
 		text-align: center;
 		cursor: pointer;
+		opacity: 1;
+		transition: opacity .2s ease-out;
 
 		&:first-of-type {
 			margin-left: 0;
@@ -234,6 +236,20 @@ fieldset {
 		&:last-of-type {
 			margin-right: 0;
 		}
+
+		> i {
+			opacity: 0;
+			transition: opacity .2s ease-out;
+		}
+	}
+
+	input:checked + label > i {
+		opacity: .5;
+	}
+
+	input:disabled + label {
+		opacity: .667;
+		cursor: default;
 	}
 }
 
