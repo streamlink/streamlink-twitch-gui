@@ -15,7 +15,7 @@ module.exports = {
 		expand			: true,
 		cwd				: "build/releases/<%= package.name %>/osx/<%= package.name %>.app/",
 		src				: [ "**" ],
-		dest			: "<%= package.config.displayName %>.app/"
+		dest			: "<%= package.config['display-name'] %>.app/"
 	},
 	linux32			: {
 		options			: { archive: "dist/<%= package.name %>-v<%= package.version %>-linux32.tar.gz" },
