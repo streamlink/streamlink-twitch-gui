@@ -15,7 +15,7 @@
 		"height": 540,
 		"min_width": 960,
 		"min_height": 540,
-		"icon": "img/icon-app.png",
+		"icon": "img/icon-256.png",
 		"show_in_taskbar": false
 	}
 }

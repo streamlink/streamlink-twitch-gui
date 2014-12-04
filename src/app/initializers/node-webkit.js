@@ -6,7 +6,16 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 		trayIcon    = null,
 		isHidden    = false,
 		isMaximized = false,
-		isMinimized = false;
+		isMinimized = false,
+
+		trayIconRes	= (function getTrayIconRes() {
+			if ( process.platform === "darwin" ) {
+				var dpr = window.devicePixelRatio;
+				return dpr > 2 ? 48 : dpr > 1 ? 32 : 16;
+			} else {
+				return 48;
+			}
+		})();
 
 
 	function removeTrayIcon() {
@@ -53,9 +62,9 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 		removeTrayIcon();
 		if ( bool ) {
 			trayIcon = new nwGui.Tray({
-				title: metadata.package.config[ "display-name" ],
-				icon: metadata.package.config[ "tray-icon" ]
+				icon: metadata.package.config[ "tray-icon" ].replace( "{res}", trayIconRes )
 			});
+			trayIcon.tooltip = metadata.package.config[ "display-name" ];
 			trayIcon.on( "click", function() {
 				nwWindow.toggleVisibility();
 				// also toggle taskbar visiblity on click (gui_integration === both)
