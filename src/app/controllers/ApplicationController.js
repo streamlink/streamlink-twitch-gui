@@ -27,7 +27,13 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"winMin": function() {
-				this.nwWindow.minimize();
+				if ( Ember.get( this.settings, "gui_integration" ) === 2 ) {
+					// tray only: just hide the window
+					this.nwWindow.toggleVisibility( false );
+				} else {
+					// taskbar or both: just minimize the window
+					this.nwWindow.toggleMinimize( false );
+				}
 			},
 
 			"winMax": function() {

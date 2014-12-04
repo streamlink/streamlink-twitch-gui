@@ -23,9 +23,11 @@
 </fieldset>
 <fieldset>
 <legend>GUI settings</legend>
+<div class="left"><i class="fa fa-puzzle-piece"></i> OS integration<span class="description">Where to access the GUI from</span></div>
+<div class="right">{{radio-buttons buttonName="integration" icon=true value=model.gui_integration content=settings.constructor.integration}}</div>
 <div class="left"><i class="fa fa-minus"></i> Minimize GUI<span class="description">When the videoplayer opens.</span></div>
-<div class="right">{{view "select" value=model.gui_minimize content=settings.constructor.minimize optionValuePath="content.value" optionLabelPath="content.label"}}</div>
-<div class="left"><i class="fa fa-info"></i> Stream popup<span class="description">When a stream has started.</span></div>
+<div class="right">{{radio-buttons buttonName="minimize" icon=true value=model.gui_minimize content=settings.constructor.minimize}}</div>
+<div class="left"><i class="fa fa-info-circle"></i> Stream popup<span class="description">When a stream has started.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=model.gui_hidestreampopup}}<span>Hide the popup on success</span></label></div>
 <div class="left"><i class="fa fa-comment"></i> Open chat<span class="description">After launching a stream.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=model.gui_openchat}}<span>Automatically open chat</span></label></div>

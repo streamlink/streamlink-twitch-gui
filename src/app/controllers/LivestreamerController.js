@@ -257,13 +257,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 						}
 
 						// restore the GUI
-						switch ( get( settings, "gui_minimize" ) ) {
-							case "bar":
-								self.nwWindow.restore();
-								break;
-							case "tray":
-								self.nwWindow.winFromTray();
-						}
+						self.minimize( true );
 
 						// remove the stream from the streams list
 						self.streams.removeObject( streamObj );
@@ -276,13 +270,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 				});
 
 				// hide the GUI
-				switch ( get( settings, "gui_minimize" ) ) {
-					case "bar":
-						self.nwWindow.minimize();
-						break;
-					case "tray":
-						self.nwWindow.winToTray();
-				}
+				self.minimize( false );
 
 				// open chat automatically
 				if ( !streamObj && get( settings, "gui_openchat" ) ) {
@@ -339,6 +327,22 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 			this.streams.forEach(function( stream ) {
 				stream.kill();
 			});
+		},
+
+		minimize: function( restore ) {
+			switch ( get( this.settings, "gui_minimize" ) ) {
+				// minimize
+				case 1:
+					this.nwWindow.toggleMinimize( restore );
+					break;
+				// move to tray: toggle window and taskbar visibility
+				case 2:
+					this.nwWindow.toggleVisibility( restore );
+					if ( get( this.settings, "isVisibleInTaskbar" ) ) {
+						this.nwWindow.setShowInTaskbar( restore );
+					}
+					break;
+			}
 		},
 
 		actions: {
