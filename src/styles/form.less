@@ -204,9 +204,18 @@ fieldset {
 		margin-right: @button-icon-spacing;
 		font-size: @button-icon-size;
 		line-height: ( 1 / unit( @button-icon-size ) );
-		color: @button-icon-color !important;
+		color: fade( @button-color, ( 100 * @button-icon-opacity ) );
 		text-align: center;
 		vertical-align: middle;
+		transition: color .2s ease-out;
+	}
+
+	&:hover > i {
+		color: fade( @button-color, ( 100 * @button-icon-opacity-hover ) );
+	}
+
+	&:hover:active > i {
+		color: fade( @button-color, ( 100 * @button-icon-opacity-active ) );
 	}
 }
 
@@ -238,18 +247,29 @@ fieldset {
 		}
 
 		> i {
-			opacity: 0;
 			transition: opacity .2s ease-out;
 		}
 	}
 
-	input:checked + label > i {
-		opacity: .5;
+	input:not(:checked) + label {
+		               > i { opacity: 0; }
+		&:hover        > i { opacity: @button-icon-opacity-hover; }
+		&:hover:active > i { opacity: @button-icon-opacity-active; }
+	}
+
+	input:checked + label {
+		               > i { opacity: @button-icon-opacity; }
+		&:hover        > i { opacity: @button-icon-opacity-hover; }
+		&:hover:active > i { opacity: @button-icon-opacity-active; }
 	}
 
 	input:disabled + label {
 		opacity: .667;
 		cursor: default;
+
+		> i {
+			opacity: 0 !important;
+		}
 	}
 }
 
@@ -278,12 +298,17 @@ fieldset {
 			bottom: 0;
 			right: .5em;
 			padding: .2em 0;
-			opacity: .5;
+			opacity: @button-icon-opacity;
 			font: .85em/1.875 FontAwesome;
+			transition: opacity .2s ease-out;
 		}
 
 		&:hover::after {
-			opacity: .75;
+			opacity: @button-icon-opacity-hover;
+		}
+
+		&:hover:active::after {
+			opacity: @button-icon-opacity-active;
 		}
 	}
 
