@@ -14,7 +14,7 @@ define([
 				limit	: Ember.get( this, "limit" )
 			})
 				.then(function( data ) { return data.toArray(); })
-				.then( preload( "@each.preview.@each.medium" ) );
+				.then( preload( "@each.preview.@each.medium_nocache" ) );
 		}
 	});
 

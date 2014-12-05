@@ -17,7 +17,7 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 				})
 				.then( preload([
 					"featured.@each.image",
-					"featured.@each.stream.@each.preview.@each.large"
+					"featured.@each.stream.@each.preview.@each.large_nocache"
 				]) );
 		}
 	});
