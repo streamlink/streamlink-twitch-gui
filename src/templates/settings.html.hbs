@@ -1,35 +1,35 @@
 <h2>Settings</h2>
 <fieldset>
 <legend>Livestreamer settings</legend>
-<div class="left"><i class="fa fa-cog"></i> Executable location<span class="description">By omitting a value, livestreamer has to be added to the $PATH variable.</span></div>
+<div class="left"><i class="fa fa-cog"></i> Executable location<span>By omitting a value, livestreamer has to be added to the $PATH variable.</span></div>
 <div class="right" data-fileselect>{{input type="text" value=model.livestreamer classNames="form-control" placeholder="Leave blank for default location"}}</div>
-<div class="left"><i class="fa fa-eye"></i> Preferred quality<span class="description">Choose the default stream quality.</span></div>
+<div class="left"><i class="fa fa-eye"></i> Preferred quality<span>Choose the default stream quality.</span></div>
 <div class="right">{{view "select" value=model.quality content=settings.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
-<div class="left"><i class="fa fa-filter"></i> Stream type<span class="description">Make sure your player does support the selected stream type.{{livestreamer-docs cmd="--player-passthrough"}}</span></div>
+<div class="left"><i class="fa fa-filter"></i> Stream type<span>Make sure your player does support the selected stream type.{{livestreamer-docs cmd="--player-passthrough"}}</span></div>
 <div class="right">{{view "select" value=model.player_passthrough content=settings.constructor.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 </fieldset>
 <fieldset>
 <legend>Videoplayer settings</legend>
-<div class="left"><i class="fa fa-laptop"></i> Videoplayer<span class="description">Use a custom player other than the one defined in your livestreamer config.{{livestreamer-docs cmd="--player"}}</span></div>
+<div class="left"><i class="fa fa-laptop"></i> Videoplayer<span>Use a custom player other than the one defined in your livestreamer config.{{livestreamer-docs cmd="--player"}}</span></div>
 <div class="right" data-fileselect>{{input type="text" value=model.player class="form-control" placeholder="Leave blank for default player"}}</div>
-<div class="left"><i class="fa fa-code"></i> Parameters<span class="description">Add player specific parameters.{{livestreamer-docs cmd="--player-args"}}</span></div>
+<div class="left"><i class="fa fa-code"></i> Parameters<span>Add player specific parameters.{{livestreamer-docs cmd="--player-args"}}</span></div>
 <div class="right">{{input type="text" value=model.player_params classNames="col-xs-12" placeholder="Add custom player parameters"}}</div>
 {{#if isHttp}}
-<div class="left"><i class="fa fa-refresh"></i> Reconnect<span class="description">In case the connection has dropped.{{livestreamer-docs cmd="--player-continuous-http"}}</span></div>
+<div class="left"><i class="fa fa-refresh"></i> Reconnect<span>In case the connection has dropped.{{livestreamer-docs cmd="--player-continuous-http"}}</span></div>
 <div class="right"><label>{{input type="checkbox" checked=model.player_reconnect}}<span>Reconnect to stream</span></label></div>
 {{/if}}
-<div class="left"><i class="fa fa-times"></i> Close player<span class="description">After the stream has ended.{{livestreamer-docs cmd="--player-no-close"}}</span></div>
+<div class="left"><i class="fa fa-times"></i> Close player<span>After the stream has ended.{{livestreamer-docs cmd="--player-no-close"}}</span></div>
 <div class="right"><label>{{input type="checkbox" checked=model.player_no_close}}<span>Do not close the player</span></label></div>
 </fieldset>
 <fieldset>
 <legend>GUI settings</legend>
-<div class="left"><i class="fa fa-puzzle-piece"></i> OS integration<span class="description">Where to access the GUI from</span></div>
+<div class="left"><i class="fa fa-puzzle-piece"></i> OS integration<span>Where to access the GUI from</span></div>
 <div class="right">{{radio-buttons buttonName="integration" icon=true value=model.gui_integration content=settings.constructor.integration}}</div>
-<div class="left"><i class="fa fa-minus"></i> Minimize GUI<span class="description">When the videoplayer opens.</span></div>
+<div class="left"><i class="fa fa-minus"></i> Minimize GUI<span>When the videoplayer opens.</span></div>
 <div class="right">{{radio-buttons buttonName="minimize" icon=true value=model.gui_minimize content=settings.constructor.minimize}}</div>
-<div class="left"><i class="fa fa-info-circle"></i> Stream popup<span class="description">When a stream has started.</span></div>
+<div class="left"><i class="fa fa-info-circle"></i> Stream popup<span>When a stream has started.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=model.gui_hidestreampopup}}<span>Hide the popup on success</span></label></div>
-<div class="left"><i class="fa fa-comment"></i> Open chat<span class="description">After launching a stream.</span></div>
+<div class="left"><i class="fa fa-comment"></i> Open chat<span>After launching a stream.</span></div>
 <div class="right"><label>{{input type="checkbox" checked=model.gui_openchat}}<span>Automatically open chat</span></label></div>
 </fieldset>
 <fieldset class="submit">
