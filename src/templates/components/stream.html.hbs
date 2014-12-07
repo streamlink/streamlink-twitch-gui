@@ -1,5 +1,10 @@
 <header>{{unbound stream.channel.display_name}}</header>
-<div class="preview"><img src="{{unbound stream.preview.medium_nocache}}"></div>
+<section class="preview" {{action "startStream"}}>
+<img src="{{unbound stream.preview.medium_nocache}}">
+{{#if _showGame}}
+<footer><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.channel.game title=stream.channel.game}}{{unbound stream.channel.game}}{{/link-to}}</footer>
+{{/if}}
+</section>
 <footer>
 <span><i class="fa fa-clock-o"></i> {{unbound hours-from-now stream.created_at}}</span>
 <span>{{unbound format-viewers stream.viewers}} <i class="fa fa-users"></i></span>

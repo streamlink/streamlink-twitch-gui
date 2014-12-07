@@ -6,14 +6,19 @@ define([
 	return Ember.Component.extend({
 		layout: Ember.Handlebars.compile( Template ),
 		tagName: "li",
-		classNames: [ "stream-component" ],
+		classNameBindings: [ ":stream-component", "_showGame:show-game" ],
 		attributeBindings: [ "title" ],
 		titleBinding: "stream.channel.status",
 
 		action: "openLivestreamer",
 
-		click: function() {
-			this.sendAction( "action", this.get( "stream" ) );
+		showGame: false,
+		_showGame: Ember.computed.and( "showGame", "stream.channel.game" ),
+
+		actions: {
+			"startStream": function() {
+				this.sendAction( "action", this.get( "stream" ) );
+			}
 		}
 	});
 

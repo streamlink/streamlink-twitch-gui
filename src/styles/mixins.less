@@ -62,23 +62,32 @@
 
 
 .stream-hover( @content: @fa-var-play-circle-o ) {
-	cursor: pointer;
-
 	> .preview {
 		position: relative;
+		cursor: pointer;
+
+		&::before {
+			content: @content;
+			display: block;
+			position: absolute;
+			width: 100%;
+			top: 50%;
+			z-index: 2;
+			font: 6em/.025em "FontAwesome";
+			color: @color-text-brightest;
+			text-align: center;
+			-webkit-text-stroke: .025em @color-text-darkest;
+			opacity: 0;
+			transition: opacity .333s ease-out;
+		}
 	}
 
-	&:hover > .preview::before {
-		content: @content;
-		display: block;
-		position: absolute;
-		width: 100%;
-		top: 50%;
-		z-index: 2;
-		font: 6em/.025em "FontAwesome";
-		color: @color-text-brightest;
-		text-align: center;
-		-webkit-text-stroke: .025em @color-text-darkest;
+	> .preview:hover::before {
+		opacity: 1;
+	}
+
+	&.show-game > .preview::before {
+		top: calc( 50% - .75rem );
 	}
 }
 

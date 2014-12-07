@@ -24,7 +24,6 @@
 
 	> li {
 		float: left;
-		cursor: pointer;
 	}
 }
 
@@ -36,6 +35,7 @@
 	position: relative;
 	min-height: 235px;
 	margin-bottom: 20px;
+	cursor: pointer;
 	.dynamic-elems-per-row( 4, @content-width, 8%, @additional-width );
 
 	> header,
@@ -78,13 +78,13 @@
 .stream-component {
 	min-height: 187px;
 	margin-bottom: 20px;
+	color: @color-text-dark;
 	.dynamic-elems-per-row( 3, @content-width, 8%, @additional-width );
 	.stream-hover();
 
 	> header {
 		padding: .25em 0;
 		overflow: hidden;
-		color: @color-text-dark;
 		text-align: center;
 		white-space: nowrap;
 		text-overflow: ellipsis;
@@ -93,5 +93,54 @@
 	> footer {
 		display: flex;
 		justify-content: space-between;
+	}
+
+	> .preview {
+		> footer {
+			display: flex;
+			justify-content: center;
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			padding: .25em;
+			font-size: .85em;
+			opacity: 0;
+			background: fade( @color-background, 80% );
+			transition: opacity .333s ease-out;
+
+			// Set an icon width and move the icon to the left, so the text remains centered.
+			// Let the text have a max-width, so the icon stays on the screen.
+			@icon-width: 1.5em;
+			@icon-offset: ( -1 * @icon-width );
+			@text-max-width: ( -2 * @icon-offset );
+
+			> i {
+				width: @icon-width;
+				margin-left: @icon-offset;
+				line-height: inherit;
+				text-align: center;
+
+				&.fa-gamepad {
+					text-indent: -.05em;
+				}
+			}
+
+			> a {
+				max-width: calc( 100% - @text-max-width );
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				text-decoration: none;
+
+				&:not(:hover) {
+					color: @color-text-dark;
+				}
+			}
+		}
+
+		&:hover > footer {
+			opacity: 1;
+		}
 	}
 }
