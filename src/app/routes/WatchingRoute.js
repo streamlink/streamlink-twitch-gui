@@ -1,22 +1,26 @@
-define([
-	"ember",
-	"utils/preload"
-], function( Ember, preload ) {
+define( [ "ember", "utils/preload" ], function( Ember, preload ) {
+
+	var	get = Ember.get,
+		set = Ember.set;
 
 	return Ember.Route.extend({
 		model: function() {
 			var	store	= this.store,
 				streams	= this.controllerFor( "livestreamer" ).get( "streams" );
 
+			// unload all cached stream records first
+			store.unloadAll( "twitchStream" );
+
 			return Promise.all( streams.map(function( elem ) {
-				return store.find( "twitchStream", Ember.get( elem, "name" ) )
+				var id = get( elem, "name" );
+				return store.find( "twitchStream", id )
 					.then(function( stream ) {
 						// add the new stream record to the stream object
-						elem.stream = stream;
+						set( elem, "stream", stream );
 						return stream;
 					});
 			}) )
-				.then( preload( "@each.preview.@each.large" ) )
+				.then( preload( "@each.preview.@each.large_nocache" ) )
 				// return the original streams array reference!!!
 				.then(function() { return streams; });
 		}
