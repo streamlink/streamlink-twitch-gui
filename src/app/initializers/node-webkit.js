@@ -126,6 +126,7 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 				}
 
 				try {
+					nwWindow.toggleVisibility( true );
 					nwWindow.focus();
 					container.lookup( "controller:application" ).send( "winClose" );
 				} catch ( e ) {
