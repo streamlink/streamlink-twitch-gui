@@ -8,13 +8,27 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 		isMaximized = false,
 		isMinimized = false,
 
-		trayIconRes	= (function getTrayIconRes() {
-			if ( process.platform === "darwin" ) {
-				var dpr = window.devicePixelRatio;
-				return dpr > 2 ? 48 : dpr > 1 ? 32 : 16;
-			} else {
-				return 48;
-			}
+		trayTooltip = metadata.package.config[ "display-name" ],
+		trayIconImg = (function getTrayIconRes() {
+			var	dpr	= window.devicePixelRatio,
+				res	= process.platform !== "darwin" || dpr > 2
+					? 48
+					: dpr > 1
+						? 32
+						: 16;
+			return metadata.package.config[ "tray-icon" ].replace( "{res}", res );
+		})(),
+		trayMenu    = (function() {
+			var menu = new nwGui.Menu();
+
+			menu.append( new nwGui.MenuItem({
+				label: "Exit %@".fmt( metadata.package.config[ "display-name" ] ),
+				click: function() {
+					nwWindow.close();
+				}
+			}));
+
+			return menu;
 		})();
 
 
@@ -61,10 +75,9 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 		// we need a new click event listener in case the taskbar param has changed
 		removeTrayIcon();
 		if ( bool ) {
-			trayIcon = new nwGui.Tray({
-				icon: metadata.package.config[ "tray-icon" ].replace( "{res}", trayIconRes )
-			});
-			trayIcon.tooltip = metadata.package.config[ "display-name" ];
+			trayIcon = new nwGui.Tray({ icon: trayIconImg });
+			trayIcon.tooltip = trayTooltip;
+			trayIcon.menu = trayMenu;
 			trayIcon.on( "click", function() {
 				nwWindow.toggleVisibility();
 				// also toggle taskbar visiblity on click (gui_integration === both)
