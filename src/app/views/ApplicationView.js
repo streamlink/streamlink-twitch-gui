@@ -1,7 +1,9 @@
 define([
 	"ember",
-	"text!templates/application.html.hbs"
-], function( Ember, Template ) {
+	"text!templates/application.html.hbs",
+	"gui/selectable",
+	"gui/smoothscroll"
+], function( Ember, Template, guiSelectable, guiSmoothscroll ) {
 
 	return Ember.View.extend({
 		template: Ember.Handlebars.compile( Template ),
@@ -10,6 +12,12 @@ define([
 
 		willInsertElement: function() {
 			document.documentElement.removeChild( document.body );
+		},
+
+		didInsertElement: function() {
+			this._super();
+			guiSelectable();
+			guiSmoothscroll();
 		}
 	});
 

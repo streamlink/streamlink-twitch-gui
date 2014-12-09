@@ -3,6 +3,5 @@ define([
 	"initializers/metadata",
 	"initializers/settings",
 	"initializers/auth",
-	"initializers/helpers",
-	"initializers/gui"
+	"initializers/helpers"
 ], function() {} );

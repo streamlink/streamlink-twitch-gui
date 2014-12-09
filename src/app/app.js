@@ -66,6 +66,11 @@ define(function( require ) {
 		TwitchSearchStreamSerializer: require( "models/twitch/SearchStreamSerializer" ),
 
 
+		// Ember additions/changes/fixes
+		LinkView: require( "views/LinkView" ),
+		SelectView: require( "views/SelectView" ),
+
+
 		// Application
 		ApplicationRoute: require( "routes/ApplicationRoute" ),
 		ApplicationController: require( "controllers/ApplicationController" ),
