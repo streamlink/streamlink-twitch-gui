@@ -9,7 +9,7 @@ define( [ "ember" ], function( Ember ) {
 		didInsertElement: function() {
 			this._super();
 			this.$().on( "click", function( e ) {
-				if ( e.button !== 0 ) {
+				if ( e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey ) {
 					e.preventDefault();
 					e.stopImmediatePropagation();
 				}
