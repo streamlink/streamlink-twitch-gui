@@ -7,13 +7,13 @@
 <section class="right">
 <h3>{{watching.stream.channel.display_name}}</h3>
 <div class="game">{{#link-to "games.game" watching.stream.game}}{{watching.stream.game}}{{/link-to}}</div>
-{{embedded-links class="info" text=watching.stream.channel.status}}
 <div class="stats stats-row">
 <span {{bind-attr title=watching.stream.title_created_at}}><i class="fa fa-clock-o"></i>{{hours-from-now watching.stream.created_at}}</span>
 <span {{bind-attr title=watching.stream.title_viewers}}><i class="fa fa-users"></i>{{format-viewers watching.stream.viewers}}</span>
 <span {{bind-attr title=watching.stream.channel.title_followers}}><i class="fa fa-heart"></i>{{format-viewers watching.stream.channel.followers}}</span>
 <span {{bind-attr title=watching.stream.channel.title_views}}><i class="fa fa-line-chart"></i>{{format-viewers watching.stream.channel.views}}</span>
 </div>
+{{embedded-links class="info" text=watching.stream.channel.status}}
 <footer class="buttons">
 <button type="button" class="btn btn-with-icon btn-danger" {{action "close" watching}}><i class="fa fa-times"></i>Close</button>
 <button type="button" class="btn btn-with-icon btn-success" {{action "chat" watching}}><i class="fa fa-comments"></i>Chat</button>
