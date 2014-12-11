@@ -1,0 +1,65 @@
+// We're using strict parsing settings, so we need to use a custom implementation.
+// This is based on `../vendor/flag-icon-css/less/flag-icon-base.less`
+// It also saves some space, since we're ignoring the 1x1 format flags...
+
+@flag-icon-svg-path: "../vendor/flag-icon-css/flags/4x3";
+@flag-icon-width: unit( ( 4 / 3 ), em );
+
+// Flag icon list
+@import "../vendor/flag-icon-css/less/flag-icon-list";
+
+
+.flag-icon {
+	display: inline-block;
+	position: relative;
+	width: @flag-icon-width;
+	height: 1em;
+	margin: unit( ( ( @line-height-base - 1 ) / 2 ), em ) 0;
+	line-height: 0;
+	background-repeat: no-repeat;
+	background-position: 50%;
+	background-size: contain;
+	cursor: help;
+	-webkit-filter: saturate(.75) brightness(.85);
+	transition: -webkit-filter .2s ease-out;
+
+	&::before {
+		content: "\00a0";
+	}
+
+	&:hover {
+		-webkit-filter: saturate(1) brightness(1);
+	}
+}
+
+.flag-icon(@country) {
+	.flag-icon-@{country} {
+		background-image: ~"url(@{flag-icon-svg-path}/@{country}.svg)";
+	}
+}
+
+// special "en - us/gb" flag
+.flag-icon-en {
+	&::before,
+	&::after {
+		content: "\00a0";
+		position: absolute;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+
+	&::before {
+		left: 0;
+		right: 50%;
+		background-position: 0 50%;
+		background-image: ~"url(@{flag-icon-svg-path}/us.svg)";
+	}
+
+	&::after {
+		left: 50%;
+		right: 0;
+		background-position: 100% 50%;
+		background-image: ~"url(@{flag-icon-svg-path}/gb.svg)";
+	}
+}

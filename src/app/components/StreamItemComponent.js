@@ -7,8 +7,6 @@ define([
 		layout: Ember.Handlebars.compile( Template ),
 		tagName: "li",
 		classNameBindings: [ ":stream-component", "_showGame:show-game" ],
-		attributeBindings: [ "title" ],
-		titleBinding: "stream.channel.status",
 
 		action: "openLivestreamer",
 

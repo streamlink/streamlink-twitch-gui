@@ -83,11 +83,27 @@
 	.stream-hover();
 
 	> header {
+		display: flex;
 		padding: .25em 0;
-		overflow: hidden;
-		text-align: center;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+
+		> i {
+			display: none;
+		}
+
+		> span {
+			flex: 1;
+			overflow: hidden;
+			text-align: center;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+	}
+
+	&:hover > header {
+		> i { display: inline-block; }
+		> span { margin: 0 .5em; }
+		> span.noL  { margin-left : ( .5em + @flag-icon-width ); }
+		> span.noBL { margin-right: ( .5em + @flag-icon-width ); }
 	}
 
 	> footer {

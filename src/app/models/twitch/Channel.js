@@ -41,7 +41,19 @@ define( [ "ember-data" ], function( DS ) {
 			var	views	= this.get( "views" ),
 				numerus	= views === 1 ? "view" : "views";
 			return "%@ channel %@".fmt( views, numerus );
-		}.property( "views" )
+		}.property( "views" ),
+
+
+		has_language: function() {
+			var lang = this.get( "language" );
+			return lang && lang !== "other";
+		}.property( "language" ),
+
+		has_broadcaster_language: function() {
+			var	broadcaster = this.get( "broadcaster_language" ),
+				language = this.get( "language" );
+			return broadcaster && broadcaster !== "other" && broadcaster !== language;
+		}.property( "broadcaster_language", "language" )
 
 	}).reopenClass({
 		toString: function() { return "channels"; }

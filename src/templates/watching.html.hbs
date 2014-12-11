@@ -5,9 +5,10 @@
 <li class="watching-stream">
 <img class="left" {{bind-attr src=watching.stream.preview.large_nocache}}>
 <section class="right">
-<h3>{{watching.stream.channel.display_name}}</h3>
+<h3>{{#if watching.stream.channel.has_language}}{{flag-icon type="channel" lang=watching.stream.channel.language}}{{/if}}{{watching.stream.channel.display_name}}</h3>
 <div class="game">{{#link-to "games.game" watching.stream.game}}{{watching.stream.game}}{{/link-to}}</div>
 <div class="stats stats-row">
+{{#if watching.stream.channel.has_broadcaster_language}}<span>{{flag-icon type="broadcaster" lang=watching.stream.channel.broadcaster_language}}</span>{{/if}}
 <span {{bind-attr title=watching.stream.title_created_at}}><i class="fa fa-clock-o"></i>{{hours-from-now watching.stream.created_at}}</span>
 <span {{bind-attr title=watching.stream.title_viewers}}><i class="fa fa-users"></i>{{format-viewers watching.stream.viewers}}</span>
 <span {{bind-attr title=watching.stream.channel.title_followers}}><i class="fa fa-heart"></i>{{format-viewers watching.stream.channel.followers}}</span>
