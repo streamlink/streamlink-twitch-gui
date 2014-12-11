@@ -21,7 +21,7 @@ define( [ "ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
 		},
 
 		_text: function() {
-			return this.get( "text" )
+			return ( this.get( "text" ) || "" )
 				.replace( linkurl_re, linkurl_fn )
 				.replace( twitter_re, twitter_fn );
 		}.property( "text" ),
