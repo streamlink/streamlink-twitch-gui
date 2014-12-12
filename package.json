@@ -36,7 +36,7 @@
 		"version-check-days": 7,
 		"tray-icon": "img/icon-{res}.png",
 		"livestreamer-exec": "livestreamer",
-		"livestreamer-version-min": "1.8.0",
+		"livestreamer-version-min": "1.11.1",
 		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",
 		"livestreamer-docs-url": "http://livestreamer.tanuki.se/en/latest/cli.html#cmdoption{cmd}",
 		"twitch-chat-url": "http://twitch.tv/chat/embed?channel={channel}&popout_chat=true",
