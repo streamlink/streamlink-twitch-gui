@@ -87,23 +87,25 @@
 		padding: .25em 0;
 
 		> i {
-			display: none;
+			opacity: 0;
+			transition: opacity .333s ease-out;
 		}
 
 		> span {
 			flex: 1;
+			margin: 0 .5em;
 			overflow: hidden;
 			text-align: center;
 			white-space: nowrap;
 			text-overflow: ellipsis;
+
+			&.noL  { margin-left : ( .5em + @flag-icon-width ); }
+			&.noBL { margin-right: ( .5em + @flag-icon-width ); }
 		}
 	}
 
-	&:hover > header {
-		> i { display: inline-block; }
-		> span { margin: 0 .5em; }
-		> span.noL  { margin-left : ( .5em + @flag-icon-width ); }
-		> span.noBL { margin-right: ( .5em + @flag-icon-width ); }
+	&:hover > header > i {
+		opacity: 1;
 	}
 
 	> footer {
