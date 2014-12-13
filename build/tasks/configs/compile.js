@@ -1,10 +1,16 @@
 module.exports = {
-	win    : {
-		before: [ "clean:release_win" ]
+	win32: {
+		before: [ "clean:release_win32" ]
+	},
+	win64: {
+		before: [ "clean:release_win64" ]
 	},
 
-	osx    : {
-		before: [ "clean:release_osx" ]
+	osx32: {
+		before: [ "clean:release_osx32" ]
+	},
+	osx64: {
+		before: [ "clean:release_osx64" ]
 	},
 
 	linux32: {
