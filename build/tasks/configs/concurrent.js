@@ -1,6 +1,7 @@
 module.exports = {
-	options			: {
-		logConcurrentOutput	: true
+	options: {
+		logConcurrentOutput: true
 	},
-	dev_watchers	: [ "watch:less", "watch:js" ]
+
+	dev_watchers: [ "watch:less", "watch:js" ]
 };

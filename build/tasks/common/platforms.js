@@ -1,20 +1,22 @@
 module.exports = {
 	platforms: {
 		win: {
-			platform	: "win32",
-			arch		: null
+			platform: "win32",
+			arch    : null
 		},
+
 		osx: {
-			platform	: "darwin",
-			arch		: null
+			platform: "darwin",
+			arch    : null
 		},
+
 		linux32: {
-			platform	: "linux",
-			arch		: "x86"
+			platform: "linux",
+			arch    : "x86"
 		},
 		linux64: {
-			platform	: "linux",
-			arch		: "x64"
+			platform: "linux",
+			arch    : "x64"
 		}
 	},
 

@@ -1,31 +1,33 @@
 module.exports = {
-	options			: {
-		baseUrl					: "src/app",
-		mainConfigFile			: "src/app/config.js",
+	options: {
+		baseUrl       : "src/app",
+		mainConfigFile: "src/app/config.js",
 
-		name					: "",
-		out						: "build/tmp/app/main.js",
+		name: "",
+		out : "build/tmp/app/main.js",
 
-		include					: [ "main" ],
+		include: [ "main" ],
 
-		findNestedDependencies	: true,
-		generateSourceMaps		: false,
-		optimize				: "none",
+		findNestedDependencies: true,
+		generateSourceMaps    : false,
+		optimize              : "none",
 
-		skipModuleInsertion		: false,
-		wrap					: false,
+		skipModuleInsertion: false,
+		wrap               : false,
 
-		skipSemiColonInsertion	: true,
-		useStrict				: true,
-		preserveLicenseComments	: true
+		skipSemiColonInsertion : true,
+		useStrict              : true,
+		preserveLicenseComments: true
 	},
-	dev				: {
-		options			: {
-			generateSourceMaps	: true
+
+	dev: {
+		options: {
+			generateSourceMaps: true
 		}
 	},
-	release			: {
-		options			: {
+
+	release: {
+		options: {
 			/*
 			 * Do not use dev versions for release builds
 			 *
@@ -33,9 +35,9 @@ module.exports = {
 			 * doesn't seem to work here. So we need to overwrite the paths in the grunt config :(
 			 * https://gist.github.com/askesian/6e05daa443ca1955ea32
 			 */
-			paths			: {
-				"ember"			: "../vendor/ember/ember.prod",
-				"ember-data"	: "../vendor/ember-data/ember-data.prod"
+			paths: {
+				"ember"     : "../vendor/ember/ember.prod",
+				"ember-data": "../vendor/ember-data/ember-data.prod"
 			}
 		}
 	}

@@ -1,8 +1,8 @@
 module.exports = {
-	test			: {
-		options			: {
-			port			: 8000,
-			base			: "./src"
+	test: {
+		options: {
+			port: 8000,
+			base: "./src"
 		}
 	}
 };

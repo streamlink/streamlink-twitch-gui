@@ -1,21 +1,21 @@
 module.exports = {
-	options			: {
-		compress			: {
-			global_defs			: {
-				DEBUG				: false
+	options: {
+		compress: {
+			global_defs: {
+				DEBUG: false
 			}
 		},
 
-		mangle				: true,
-		beautify			: false,
-		preserveComments	: "some",
+		mangle          : true,
+		beautify        : false,
+		preserveComments: "some",
 
-		report				: "min"
+		report: "min"
 	},
 
-	release			: {
-		options			: {
-			banner			: [
+	release: {
+		options: {
+			banner: [
 				"/*!",
 				" * <%= package.name %>",
 				" * @version v<%= package.version %>",
@@ -26,13 +26,13 @@ module.exports = {
 		},
 
 		// overwrite input file
-		src				: "build/tmp/app/main.js",
-		dest			: "build/tmp/app/main.js"
+		src    : "build/tmp/app/main.js",
+		dest   : "build/tmp/app/main.js"
 	},
 
-	requirejs		: {
+	requirejs: {
 		// overwrite input file
-		src				: "build/tmp/vendor/requirejs/require.js",
-		dest			: "build/tmp/vendor/requirejs/require.js"
+		src : "build/tmp/vendor/requirejs/require.js",
+		dest: "build/tmp/vendor/requirejs/require.js"
 	}
 };

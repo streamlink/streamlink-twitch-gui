@@ -1,14 +1,15 @@
 module.exports = {
-	app				: {
-		options			: {
-			jshintrc		: "src/.jshintrc"
+	app: {
+		options: {
+			jshintrc: "src/.jshintrc"
 		},
-		src				: [ "src/**/*.js", "!src/vendor/**", "!src/test/**" ]
+		src    : [ "src/**/*.js", "!src/vendor/**", "!src/test/**" ]
 	},
-	test			: {
-		options			: {
-			jshintrc		: "src/test/.jshintrc"
+
+	test: {
+		options: {
+			jshintrc: "src/test/.jshintrc"
 		},
-		src				: [ "src/test/**/*.js" ]
+		src    : [ "src/test/**/*.js" ]
 	}
 };

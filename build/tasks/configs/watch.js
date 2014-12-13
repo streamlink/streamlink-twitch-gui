@@ -1,14 +1,16 @@
 module.exports = {
-	lesssource		: {
-		files			: [ "src/**/*.less" ],
-		tasks			: [ "less:source" ]
+	lesssource: {
+		files: [ "src/**/*.less" ],
+		tasks: [ "less:source" ]
 	},
-	less			: {
-		files			: [ "src/**/*.less" ],
-		tasks			: [ "less:dev" ]
+
+	less: {
+		files: [ "src/**/*.less" ],
+		tasks: [ "less:dev" ]
 	},
-	js				: {
-		files			: [ "src/**/*.js" ],
-		tasks			: [ "requirejs:dev" ]
+
+	js: {
+		files: [ "src/**/*.js" ],
+		tasks: [ "requirejs:dev" ]
 	}
 };
