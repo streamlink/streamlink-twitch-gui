@@ -9,9 +9,19 @@ module.exports = {
 			"vendor/requirejs/require.js",
 			"fonts/*.woff",
 			"vendor/font-awesome/fonts/*.woff",
+			"vendor/flag-icon-css/flags/4x3/{<%= copy.build.flags( package.config ) %>}.svg",
 			"img/**"
 		],
-		dest			: "build/tmp"
+		dest			: "build/tmp",
+
+		flags			: function( config ) {
+			var codes = config[ "language_codes" ];
+			return Object.keys( codes )
+				.map(function( lang ) {
+					return codes[ lang ][ "flag" ];
+				})
+				.join( "," );
+		}
 	},
 	linux32scripts	: {
 		options			: { mode: 493 }, // 0755 (js strict mode)
@@ -38,20 +48,5 @@ module.exports = {
 		flatten			: true,
 		src				: "build/resources/icons/*.png",
 		dest			: "build/releases/<%= package.name %>/linux64/icons/"
-	},
-	flags			: {
-		expand			: true,
-		cwd				: "src",
-		src				: "vendor/flag-icon-css/flags/4x3/"
-		                + "{<%= copy.flags.getFlags( package.config.language_codes ) %>}.svg",
-		dest			: "build/tmp",
-		"getFlags"		: function getFlags( config ) {
-			return Object.keys( config )
-				.reduce(function( flags, lang ) {
-					flags.push( config[ lang ][ "flag" ] );
-					return flags;
-				}, [] )
-				.join( "," );
-		}
 	}
 };
