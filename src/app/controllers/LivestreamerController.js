@@ -50,7 +50,7 @@ define( [ "ember", "utils/which", "utils/semver" ], function( Ember, which, semv
 		versionMinBinding: "config.livestreamer-version-min",
 		versionParameters: [ "--version", "--no-version-check" ],
 		versionRegExp: /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
-		versionTimeout: 5000,
+		versionTimeout: 10000,
 
 		modal: null,
 		streams: [],
