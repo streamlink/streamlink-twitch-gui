@@ -181,7 +181,8 @@ define( [ "ember" ], function( Ember ) {
 					.then(function( data ) {
 						if ( !data || !data.length || data.length < limit ) {
 							set( controller, "hasFetchedAll", true );
-						} else {
+						}
+						if ( data && data.length ) {
 							content.pushObjects( data );
 						}
 						set( controller, "isFetching", false );
