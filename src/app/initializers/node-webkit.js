@@ -42,6 +42,7 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 	window.addEventListener( "beforeunload", function() {
 		// remove all listeners
 		nwWindow.removeAllListeners();
+		process.removeAllListeners();
 		// prevent tray icons from stacking up when refreshing the page or devtools
 		removeTrayIcon();
 	}, false );
