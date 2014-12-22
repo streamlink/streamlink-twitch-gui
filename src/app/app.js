@@ -96,6 +96,7 @@ define(function( require ) {
 
 
 		// Components
+		FormButtonComponent: require( "components/FormButtonComponent" ),
 		SettingsBarComponent: require( "components/SettingsBarComponent" ),
 		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
 		LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
