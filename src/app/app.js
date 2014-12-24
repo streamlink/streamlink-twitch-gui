@@ -10,6 +10,10 @@ define(function( require ) {
 		rootElement: document.documentElement,
 
 
+		// Resolver
+		Resolver: require( "Resolver" ),
+
+
 		// Routing
 		Router: require( "Router" ),
 

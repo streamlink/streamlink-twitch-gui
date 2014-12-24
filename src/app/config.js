@@ -45,6 +45,7 @@ requirejs.config({
 
 		// App
 		"App"			: "app",
+		"Resolver"		: "resolver",
 		"Router"		: "router",
 
 		// Ember paths
