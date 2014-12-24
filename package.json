@@ -32,7 +32,7 @@
 
 	"config": {
 		"display-name": "Livestreamer Twitch GUI",
-		"node-webkit-version": "0.11.2",
+		"node-webkit-version": "0.11.4",
 		"version-check-days": 7,
 		"tray-icon": "img/icon-{res}.png",
 		"livestreamer-exec": "livestreamer",
