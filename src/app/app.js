@@ -88,15 +88,20 @@ define(function( require ) {
 
 		IndexRoute: require( "routes/IndexRoute" ),
 
-		ModalController: require( "controllers/ModalController" ),
 		ModalView: require( "views/ModalView" ),
+
+		QuitModalTemplate: require( "text!templates/modals/quit.html.hbs" ),
 
 		SearchbarController: require( "controllers/SearchbarController" ),
 		SearchbarView: require( "views/SearchbarView" ),
 
 		SettingsBarController: require( "controllers/SettingsBarController" ),
+
 		VersioncheckController: require( "controllers/VersioncheckController" ),
+		VersioncheckModalTemplate: require( "text!templates/modals/versioncheck.html.hbs" ),
+
 		LivestreamerController: require( "controllers/LivestreamerController" ),
+		LivestreamerModalTemplate: require( "text!templates/modals/livestreamer.html.hbs" ),
 
 
 		// Components
@@ -154,6 +159,7 @@ define(function( require ) {
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
 		SettingsView: require( "views/SettingsView" ),
+		SettingsModalTemplate: require( "text!templates/modals/settings.html.hbs" ),
 
 		AboutView: require( "views/AboutView" ),
 

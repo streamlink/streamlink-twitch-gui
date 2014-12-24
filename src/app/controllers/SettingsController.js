@@ -1,18 +1,26 @@
 define( [ "ember" ], function( Ember ) {
 
-	var	get = Ember.get,
-		set = Ember.set;
+	var get = Ember.get,
+	    set = Ember.set;
 
-	return Ember.ObjectController.extend({
-		needs: [ "modal" ],
+	return Ember.Controller.extend({
+		retryTransition: function() {
+			var transition = get( this, "transition" );
+			if ( transition ) {
+				this.send( "closeModal" );
+				transition.retry();
+				set( this, "transition", null );
+			}
+		},
+
 
 		isHttp: Ember.computed.equal( "model.player_passthrough", "http" ),
 
 		minimize_observer: function() {
-			var	int = get( this, "model.gui_integration" ),
-				min = get( this, "model.gui_minimize" ),
-				noTask = ( int & 1 ) === 0,
-				noTray = ( int & 2 ) === 0;
+			var int    = get( this, "model.gui_integration" ),
+			    min    = get( this, "model.gui_minimize" ),
+			    noTask = ( int & 1 ) === 0,
+			    noTray = ( int & 2 ) === 0;
 
 			// make sure that disabled options are not selected
 			if ( noTask && min === 1 ) {
@@ -30,30 +38,19 @@ define( [ "ember" ], function( Ember ) {
 
 
 		actions: {
-			apply: function( callback ) {
-				var	self	= this,
-					model	= get( self, "model" );
-
-				function success() {
-					if ( callback ) { callback( true ); }
-				}
-
-				function failure() {
-					self.settings.rollback();
-					if ( callback ) { callback( false ); }
-				}
-
+			apply: function() {
 				// copy all attributes back to the original settings record
-				self.settings.setProperties( model );
+				this.settings.setProperties( get( this, "model" ) );
 				// and then save
-				self.settings.save()
-					.then( success, failure );
+				this.settings.save()
+					.then( this.retryTransition.bind( this ) )
+					.catch( this.settings.rollback.bind( this.settings ) );
 			},
 
 			discard: function() {
-				get( this, "model" ).setProperties(
-					this.settings.constructor.readAttributes( this.settings )
-				);
+				var attributes = this.settings.constructor.readAttributes( this.settings );
+				get( this, "model" ).setProperties( attributes );
+				Ember.run.next( this, this.retryTransition );
 			}
 		}
 	});

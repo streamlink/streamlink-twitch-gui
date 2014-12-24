@@ -1,10 +1,8 @@
-define( [ "ember", "utils/semver" ], function( Ember, SemVer ) {
+define( [ "ember", "utils/semver" ], function( Ember, semver ) {
 
 	var get = Ember.get;
 
-	return Ember.ObjectController.extend({
-		needs: [ "modal" ],
-
+	return Ember.Controller.extend({
 		packageBinding: "metadata.package",
 		versionBinding: "package.version",
 
@@ -20,7 +18,7 @@ define( [ "ember", "utils/semver" ], function( Ember, SemVer ) {
 
 			var checkReleases = this.checkReleases.bind( this );
 
-			// Load Versioncheck record
+			// load Versioncheck record
 			this.store.find( "versioncheck", 1 ).then(function( record ) {
 				if ( Ember.getWithDefault( record, "checkagain", 0 ) <= +new Date() ) {
 					// let's check for a new release
@@ -41,53 +39,50 @@ define( [ "ember", "utils/semver" ], function( Ember, SemVer ) {
 					return !get( release, "draft" );
 				});
 
-				var	modal	= get( this, "controllers.modal" ),
-
 				// create a fake record for the current version and save a reference
-					current	= { tag_name: "v" + get( this, "version" ) },
+				var current = { tag_name: "v" + get( this, "version" ) };
 				// find out the maximum of fetched releases
-					maximum	= SemVer.getMax( releases, getVers ),
+				var maximum = semver.getMax( releases, getVers );
 				// and compare it with the current version
-					latest	= SemVer.getMax( [ current, maximum ], getVers );
+				var latest  = semver.getMax( [ current, maximum ], getVers );
 
 				// no new release? check again in a few days
-				if ( latest === current || getVers( current ) === getVers( maximum ) ) {
-					return this.releaseIgnore();
+				if ( current === latest || getVers( current ) === getVers( latest ) ) {
+					return this.send( "releaseIgnore" );
 				}
 
 				// ask the user what to do
-				this.send( "openModal",
-					"You're using an outdated version: " + getVers( current ),
-					"Do you want to download the latest release now? (" + getVers( maximum ) + ")",
-					[
-						new modal.Button(
-							"Download", "btn-success", "fa-download",
-							this.releaseDownload.bind( this, get( latest, "html_url" ) )
-						),
-						new modal.Button(
-							"Ignore", "btn-danger", "fa-times",
-							this.releaseIgnore.bind( this )
-						)
-					]
-				);
+				this.send( "openModal", "versioncheckModal", this, {
+					modalHead: "You're using an outdated version: %@".fmt(
+						getVers( current )
+					),
+					modalBody: "Do you want to download the latest release now? (%@)".fmt(
+						getVers( latest )
+					),
+					downloadURL: get( latest, "html_url" )
+				});
 			}.bind( this ) );
 		},
 
-		releaseDownload: function( url ) {
-			this.send( "openBrowser", url );
-			this.releaseIgnore();
-		},
+		actions: {
+			releaseDownload: function() {
+				this.send( "openBrowser", get( this, "downloadURL" ) );
+				this.send( "releaseIgnore" );
+			},
 
-		releaseIgnore: function() {
-			var	store = this.store,
-				data = { checkagain: +new Date() + get( this, "time" ) };
+			releaseIgnore: function() {
+				var store = this.store,
+				    data  = { checkagain: +new Date() + get( this, "time" ) };
 
-			this.store.find( "versioncheck", 1 ).then(function( record ) {
-				record.setProperties( data ).save();
-			}, function() {
-				data.id = 1;
-				store.createRecord( "versioncheck", data ).save();
-			});
+				this.store.find( "versioncheck", 1 ).then(function( record ) {
+					record.setProperties( data ).save();
+				}, function() {
+					data.id = 1;
+					store.createRecord( "versioncheck", data ).save();
+				});
+
+				this.send( "closeModal" );
+			}
 		}
 	});
 

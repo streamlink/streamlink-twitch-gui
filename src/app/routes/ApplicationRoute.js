@@ -1,8 +1,5 @@
 define( [ "ember" ], function( Ember ) {
 
-	var	get = Ember.get,
-		set = Ember.set;
-
 	return Ember.Route.extend({
 		init: function() {
 			this._super();
@@ -10,14 +7,13 @@ define( [ "ember" ], function( Ember ) {
 			this.controllerFor( "userAuth" ).validateToken();
 		},
 
-
 		actions: {
 			"history": function( action ) {
 				window.history.go( +action );
 			},
 
 			"refresh": function() {
-				var routeName = get( this.controller, "currentRouteName" );
+				var routeName = this.controller.get( "currentRouteName" );
 				if ( routeName !== "error" ) {
 					this.container.lookup( "route:" + routeName ).refresh();
 				}
@@ -35,26 +31,26 @@ define( [ "ember" ], function( Ember ) {
 				get( this.controller, "controllers.livestreamer" ).send( "start", stream );
 			},
 
-			"openModal": function( head, body, controls ) {
-				this.send( "updateModal", head, body, controls );
+			"openModal": function( template, controller, data ) {
+				if ( typeof controller === "string" ) {
+					controller = this.controllerFor( controller );
+				}
+				if ( controller && data instanceof Object ) {
+					controller.setProperties( data );
+				}
 
-				return this.render( "modal", {
-					into		: "application",
-					outlet		: "modal"
+				this.render( template, {
+					into      : "application",
+					outlet    : "modal",
+					view      : "modal",
+					controller: controller
 				});
 			},
 
-			"updateModal": function( head, body, controls ) {
-				var modal = this.controllerFor( "modal" );
-				if (     head !== undefined ) { set( modal,     "head",     head ); }
-				if (     body !== undefined ) { set( modal,     "body",     body ); }
-				if ( controls !== undefined ) { set( modal, "controls", controls ); }
-			},
-
 			"closeModal": function() {
-				return this.disconnectOutlet({
-					parentView	: "application",
-					outlet		: "modal"
+				this.disconnectOutlet({
+					parentView: "application",
+					outlet    : "modal"
 				});
 			}
 		}
