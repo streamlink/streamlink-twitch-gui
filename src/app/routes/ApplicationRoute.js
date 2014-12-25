@@ -28,7 +28,7 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"openLivestreamer": function( stream ) {
-				get( this.controller, "controllers.livestreamer" ).send( "start", stream );
+				this.controllerFor( "livestreamer" ).startStream( stream );
 			},
 
 			"openModal": function( template, controller, data ) {

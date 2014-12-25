@@ -18,7 +18,7 @@
 <footer class="buttons">
 <button type="button" class="btn btn-with-icon btn-danger" {{action "close" watching}}><i class="fa fa-times"></i>Close</button>
 <button type="button" class="btn btn-with-icon btn-success" {{action "chat" watching}}><i class="fa fa-comments"></i>Chat</button>
-{{view "select" class="modalqualityselect" value=watching.quality content=settings.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label" change=watching.changeQuality}}
+{{view "select" value=watching.quality content=settings.constructor.qualities class="modalqualityselect" optionValuePath="content.id" optionLabelPath="content.label"}}
 </footer>
 </section>
 </li>
