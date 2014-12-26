@@ -173,7 +173,6 @@ define([
 		},
 
 		streamFailure: function( err ) {
-			console.log( "failure", err );
 			if ( err instanceof VersionError ) {
 				this.setProperties({
 					modalHead: "Error: Invalid Livestreamer version",
@@ -353,10 +352,8 @@ define([
 			// reject promise on any error output
 			spawn.stderr.on( "data", function( data ) {
 				data = String( data ).trim();
-				var error = parseError( data );
-				if ( !error ) { error = new Error( data ); }
 				set( livestreamer, "isError", true );
-				defer.reject( error );
+				defer.reject( parseError( data ) || new Error( data ) );
 			});
 
 			// fulfill promise as soon as livestreamer is launching the player
@@ -379,10 +376,10 @@ define([
 					 * The promise should resolve at the point when livestreamer is launching the
 					 * player. The only way of doing this is reading from stdout. The issue here
 					 * is though, that in case the user has set an invalid player path, we don't
-					 * know it yet. The message of an invalid player is being sent afterwards and
-					 * also in stdout instead of stderr (worth of a bug report?).
+					 * know it yet, because the error message is being sent afterwards (and also
+					 * in stdout instead of stderr - worth of a bug report?).
 					 * The stupid solution is adding a short delay. This is again stupid, because
-					 * we don't know how long the machine of the user takes for opening the player
+					 * we don't know how long the machine of the user takes for launching the player
 					 * or detecting an invalid path, etc.
 					 */
 					Ember.run.later( defer, defer.resolve, 500 );
