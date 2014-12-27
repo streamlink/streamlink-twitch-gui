@@ -148,8 +148,16 @@ fieldset {
 	}
 
 	&.submit {
-		margin-top: 3em;
-		text-align: center;
+		margin: 5em 0 3em;
+
+		> div {
+			display: flex;
+			justify-content: center;
+
+			> .btn {
+				margin: 0 .5em;
+			}
+		}
 	}
 }
 
