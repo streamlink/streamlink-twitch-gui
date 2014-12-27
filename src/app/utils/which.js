@@ -1,41 +1,22 @@
-// define an unused dependency, so requirejs doesn't insert the requirejs-require here
-define( [ "ember" ], function() {
+define( [ "utils/stat" ], function( stat ) {
 
-	var	FS		= require( "fs" ),
-		isWin	= /^win/.test( process.platform ),
-		DS		= isWin ? "\\" : "/",
-		PATH	= process.env.PATH || process.env.Path || process.env.path || ".",
-		PATHS	= PATH.split( isWin ? ";" : ":" ),
-		EXTS	= isWin ? [ ".exe" ] : [ "" ]; // isWin ? process.env.PATHEXT.split( ";" ) : [ "" ]
+	var PATH  = require( "path" );
 
+	var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter ),
+	    exts  = /^win/.test( process.platform ) ? [ ".exe" ] : [ "" ],
+	    sep   = PATH.sep;
 
-	/**
-	 * Does the file exist and is it executable?
-	 * @param {string} file
-	 * @returns {Promise}
-	 */
-	function checkFile( file ) {
-		return new Promise(function( resolve, reject ) {
-			FS.stat( file, function( err, stat ) {
-				// check for executable flag on non-windows
-				if ( !err && ( isWin || stat.mode & 0111 ) ) {
-					resolve( file );
-				} else {
-					reject();
-				}
-			});
-		});
-	}
 
 	/**
 	 * Locate a command
 	 * @param {string} file
+	 * @param {Function?} check
 	 * @returns {Promise}
 	 */
-	return function which( file ) {
+	return function which( file, check ) {
 		// absolute or relative
-		if ( file.indexOf( DS ) !== -1 ) {
-			return checkFile( file );
+		if ( file.indexOf( sep ) !== -1 ) {
+			return stat( file, check );
 
 		// search in every PATHS + EXTS
 		} else {
@@ -43,11 +24,11 @@ define( [ "ember" ], function() {
 			 * Start with a rejected promise and build a promise chain with catches.
 			 * The first resolving file check will jump to the end of the chain.
 			 */
-			return PATHS.reduce(function( chain, path ) {
+			return paths.reduce(function( chain, path ) {
 				return chain.catch(function() {
-					return EXTS.reduce(function( chain, ext ) {
+					return exts.reduce(function( chain, ext ) {
 						return chain.catch(function() {
-							return checkFile( path + DS + file + ext );
+							return stat( path + sep + file + ext, check );
 						});
 					}, chain );
 				});

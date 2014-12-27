@@ -9,6 +9,8 @@ define([
 	    get = Ember.get,
 	    set = Ember.set;
 
+	var isWin = /^win/.test( process.platform );
+
 	var re_version   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
 	    re_unable    = /^error: Unable to open URL: /,
 	    re_nostreams = /^error: No streams found on this URL: /,
@@ -232,8 +234,12 @@ define([
 				return Promise.reject( new NotFoundError() );
 			}
 
+			function execCheck( stat ) {
+				return isWin || ( stat.mode & 0111 ) > 0;
+			}
+
 			// check for the executable
-			return which( path )
+			return which( path, execCheck )
 				.catch(function() { throw new NotFoundError(); })
 			// check for correct version
 				.then( this.validateLivestreamer.bind( this ) );
