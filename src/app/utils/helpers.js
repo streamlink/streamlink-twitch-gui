@@ -2,6 +2,10 @@ define( [ "moment" ], function( moment ) {
 
 	var helpers = {};
 
+	helpers[ "format-time" ] = function( date, format ) {
+		return moment( date ).format( format );
+	};
+
 	helpers[ "time-from-now" ] = function helperTimeFromNow( date, suffix ) {
 		return moment( date ).fromNow( suffix );
 	};

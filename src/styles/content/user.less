@@ -12,8 +12,12 @@
 		color: @color-text-dark;
 		text-align: center;
 
-		& + p {
+		& ~ p {
 			margin-bottom: .75em;
+
+			&:not(:last-of-type) {
+				margin-bottom: 0;
+			}
 		}
 	}
 
