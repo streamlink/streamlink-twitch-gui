@@ -36,7 +36,7 @@ define( [ "utils/stat", "utils/mkdirp" ], function( stat, mkdirp ) {
 							write.close( defer.reject );
 						});
 						write.on( "finish", function() {
-							write.close( defer.resolve.bind( null, dir ) );
+							write.close( defer.resolve.bind( null, dest ) );
 						});
 
 						// start the download via https or http depending on the url scheme
