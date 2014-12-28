@@ -1,20 +1,23 @@
 define( [ "ember" ], function( Ember ) {
 
 	return Ember.Controller.extend({
-		needs: [ "livestreamer" ],
+		needs: [ "livestreamer", "notification" ],
 
 		dev: DEBUG,
 
-		// use an alias here: a binding will reach the callstack limit
-		streamsLength: Ember.computed.alias( "controllers.livestreamer.streams.length" ),
+		streamsLength: Ember.computed.readOnly( "controllers.livestreamer.streams.length" ),
+		notifications: Ember.computed.readOnly( "controllers.notification.enabled" ),
 
-		loginSuccess: Ember.computed.alias( "auth.isLoggedIn" ),
-		loginPending: Ember.computed.alias( "auth.isPending" ),
+		loginSuccess: Ember.computed.readOnly( "auth.isLoggedIn" ),
+		loginPending: Ember.computed.readOnly( "auth.isPending" ),
 		loginTitle: function() {
 			return this.get( "loginSuccess" )
-				? "Logged in as %@".fmt( this.get( "auth.user_name" ) )
+				? "Logged in as %@%@".fmt(
+					this.get( "auth.user_name" ),
+					this.get( "notifications" ) ? "\nDesktop notifications enabled" : ""
+				)
 				: "You're not logged in";
-		}.property( "loginSuccess" ),
+		}.property( "loginSuccess", "notifications" ),
 
 
 		actions: {

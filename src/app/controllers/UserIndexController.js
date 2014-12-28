@@ -1,7 +1,9 @@
 define( [ "ember" ], function( Ember ) {
 
 	return Ember.Controller.extend({
-		needs: [ "userAuth" ],
+		needs: [ "userAuth", "notification" ],
+
+		notifications: Ember.computed.readOnly( "controllers.notification.enabled" ),
 
 		actions: {
 			"signout": function() {

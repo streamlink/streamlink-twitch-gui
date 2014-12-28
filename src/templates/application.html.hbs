@@ -16,7 +16,9 @@
 <button type="button" {{bind-attr class=":btn-watching :btn-indicator streamsLength::btn-hidden :fa :fa-desktop"}} {{action "goto" "watching"}}>
 <span class="indicator">{{streamsLength}}</span>
 </button>
-<button type="button" {{bind-attr class="loginSuccess:btn-user:btn-no-user loginPending:btn-user-pending :fa :fa-user" title=loginTitle}} {{action "goto" "user.index"}}></button>
+<button type="button" {{bind-attr class="loginSuccess:btn-user:btn-no-user notifications:btn-indicator loginPending:btn-user-pending :fa :fa-user" title=loginTitle}} {{action "goto" "user.index"}}>
+{{#if notifications}}<span class="indicator fa fa-bullhorn"></span>{{/if}}
+</button>
 </nav>
 </header>
 
