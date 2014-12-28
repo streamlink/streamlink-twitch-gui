@@ -2,19 +2,23 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 
 	return DS.Model.extend({
 
-		livestreamer		: DS.attr( "string", { defaultValue: "" } ),
-		quality				: DS.attr( "number", { defaultValue: 0 } ),
-		player				: DS.attr( "string", { defaultValue: "" } ),
-		player_params		: DS.attr( "string", { defaultValue: "" } ),
-		player_passthrough	: DS.attr( "string", { defaultValue: "http" } ),
-		player_reconnect	: DS.attr( "boolean", { defaultValue: true } ),
-		player_no_close		: DS.attr( "boolean", { defaultValue: false } ),
-		gui_integration		: DS.attr( "number", { defaultValue: 3 } ),
-		gui_minimize		: DS.attr( "number", { defaultValue: 0 } ),
-		gui_hidestreampopup	: DS.attr( "boolean", { defaultValue: false } ),
-		gui_openchat		: DS.attr( "boolean", { defaultValue: false } ),
-		gui_homepage		: DS.attr( "string", { defaultValue: "/featured" } ),
-		gui_layout			: DS.attr( "string", { defaultValue: "tile" } ),
+		livestreamer        : DS.attr( "string", { defaultValue: "" } ),
+		quality             : DS.attr( "number", { defaultValue: 0 } ),
+		player              : DS.attr( "string", { defaultValue: "" } ),
+		player_params       : DS.attr( "string", { defaultValue: "" } ),
+		player_passthrough  : DS.attr( "string", { defaultValue: "http" } ),
+		player_reconnect    : DS.attr( "boolean", { defaultValue: true } ),
+		player_no_close     : DS.attr( "boolean", { defaultValue: false } ),
+		gui_integration     : DS.attr( "number", { defaultValue: 3 } ),
+		gui_minimize        : DS.attr( "number", { defaultValue: 0 } ),
+		gui_hidestreampopup : DS.attr( "boolean", { defaultValue: false } ),
+		gui_openchat        : DS.attr( "boolean", { defaultValue: false } ),
+		gui_homepage        : DS.attr( "string", { defaultValue: "/featured" } ),
+		gui_layout          : DS.attr( "string", { defaultValue: "tile" } ),
+		notify_enabled      : DS.attr( "boolean", { defaultValue: true } ),
+		notify_grouping     : DS.attr( "boolean", { defaultValue: true } ),
+		notify_click        : DS.attr( "number", { defaultValue: 1 } ),
+		notify_click_group  : DS.attr( "number", { defaultValue: 1 } ),
 
 
 		// correct old value
@@ -73,6 +77,19 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 			{ id: 0, label: "Do nothing" },
 			{ id: 1, label: "Minimize" },
 			{ id: 2, label: "Move to tray" }
+		],
+
+		notify_click: [
+			{ id: 0, label: "Do nothing" },
+			{ id: 1, label: "Go to favorites" },
+			{ id: 2, label: "Open stream" },
+			{ id: 3, label: "Open stream+chat" }
+		],
+
+		notify_click_group: [
+			{ id: 1, label: "Go to favorites" },
+			{ id: 2, label: "Open all streams" },
+			{ id: 3, label: "Open all streams+chats" }
 		]
 
 	});
