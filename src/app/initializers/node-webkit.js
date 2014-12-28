@@ -32,6 +32,18 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 		})();
 
 
+	if ( /^win/.test( process.platform ) ) {
+		// register AppUserModelID
+		// this is required for toast notifications on windows
+		// https://github.com/rogerwang/node-webkit/wiki/Notification#windows
+		var shortcut = "%@\\Microsoft\\Windows\\Start Menu\\Programs\\%@.lnk".fmt(
+			process.env.APPDATA,
+			Ember.get( metadata, "package.config.display-name" )
+		);
+		nwGui.App.createShortcut( shortcut );
+	}
+
+
 	function removeTrayIcon() {
 		if ( trayIcon ) {
 			trayIcon.remove();
