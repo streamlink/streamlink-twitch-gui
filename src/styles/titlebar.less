@@ -176,7 +176,7 @@
 					bottom: .2em;
 					padding: 0 .2em;
 					border-radius: .2em;
-					font: .55em/1.2 "Open Sans";
+					font: bold .55em/1.2 "Open Sans";
 					color: @color-text-brightest;
 					background: @color-twitch-purple;
 
@@ -184,6 +184,15 @@
 					z-index: 1;
 					// "show" with delay
 					-webkit-transition: opacity .001s @anim-length, z-index .001s @anim-length;
+
+					&.fa {
+						font-family: FontAwesome;
+						font-weight: normal;
+					}
+
+					&.fa-bullhorn {
+						transform: scaleX(.75);
+					}
 				}
 
 				// keep the icon centered during the animation

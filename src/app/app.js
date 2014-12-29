@@ -103,6 +103,8 @@ define(function( require ) {
 		LivestreamerController: require( "controllers/LivestreamerController" ),
 		LivestreamerModalTemplate: require( "text!templates/modals/livestreamer.html.hbs" ),
 
+		NotificationController: require( "controllers/NotificationController" ),
+
 
 		// Components
 		FormButtonComponent: require( "components/FormButtonComponent" ),

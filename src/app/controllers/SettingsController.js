@@ -15,6 +15,9 @@ define( [ "ember" ], function( Ember ) {
 
 
 		isHttp: Ember.computed.equal( "model.player_passthrough", "http" ),
+		notifyGroupAndClick: Ember.computed.and( "model.notify_grouping", "model.notify_click" ),
+		// https://github.com/rogerwang/node-webkit/wiki/Notification#linux :(
+		hasNotificationClickSupport: process.platform !== "linux",
 
 		minimize_observer: function() {
 			var int    = get( this, "model.gui_integration" ),

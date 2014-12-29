@@ -1,26 +1,26 @@
-// define an unused dependency, so requirejs doesn't insert the requirejs-require here
-define( [ "ember" ], function() {
+define( [ "utils/denodify" ], function( denodify ) {
 
 	var FS = require( "fs" );
+	var fs_stat = denodify( FS.stat );
 
-	/**
-	 * Does the file exist?
-	 * @param {string} file
-	 * @param {Function?} check
-	 * @returns {Promise}
-	 */
-	return function stat( file, check ) {
-		var defer = Promise.defer();
+	return function stat( path, check ) {
+		var promise = fs_stat( path );
 
-		FS.stat( file, function( err, stat ) {
-			if ( err || check && !check( stat ) ) {
-				defer.reject( err );
-			} else {
-				defer.resolve( file );
-			}
-		});
+		if ( check instanceof Function ) {
+			promise = promise
+				.then( check )
+				.then(function( result ) {
+					if ( !result ) {
+						return Promise.reject( result );
+					}
+				});
+		}
 
-		return defer.promise;
+		return promise
+			.then(function() {
+				// always return the file instead of the stats object
+				return path;
+			});
 	};
 
 });

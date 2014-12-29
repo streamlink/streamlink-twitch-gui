@@ -1,4 +1,5 @@
 <div class="bigicon"><i class="fa fa-user"></i></div>
 <p>Logged in as {{auth.user_name}}</p>
 <p>since {{format-time auth.date "dddd, MMMM Do YYYY, h:mm:ss a"}}</p>
+{{#if notifications}}<p>Desktop notifications are enabled</p>{{/if}}
 <button type="button" class="btn btn-with-icon btn-signout" {{action "signout"}}><i class="fa fa-sign-out"></i>Sign out</button>

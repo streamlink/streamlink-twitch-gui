@@ -5,6 +5,7 @@ define( [ "ember" ], function( Ember ) {
 			this._super();
 			this.controllerFor( "versioncheck" ).check();
 			this.controllerFor( "userAuth" ).validateToken();
+			this.controllerFor( "notification" );
 		},
 
 		actions: {
