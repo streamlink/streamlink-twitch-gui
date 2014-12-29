@@ -1,4 +1,9 @@
-define( [ "ember", "utils/mkdirp", "utils/download" ], function( Ember, mkdirp, download ) {
+define([
+	"ember",
+	"utils/mkdirp",
+	"utils/download",
+	"utils/clearfolder"
+], function( Ember, mkdirp, download, clearfolder ) {
 
 	var PATH  = require( "path" ),
 	    OS    = require( "os" ),
@@ -9,17 +14,23 @@ define( [ "ember", "utils/mkdirp", "utils/download" ], function( Ember, mkdirp, 
 	return Ember.Controller.extend({
 		configBinding  : "metadata.package.config",
 		intervalBinding: "config.notification-interval",
-		tempDirBinding : "config.notification-temp-dir",
 
-		// where to store the icon cache
-		iconTempDir: function() {
-			return PATH.resolve( get( this, "tempDir" ).replace( "{os-tmpdir}", OS.tmpdir() ) );
-		}.property( "tempDir" ),
+		// cache related properties
+		cacheDir: function() {
+			var dir = get( this, "config.notification-cache-dir" );
+			return PATH.resolve( dir.replace( "{os-tmpdir}", OS.tmpdir() ) );
+		}.property( "config.notification-cache-dir" ),
+		cacheTime: function() {
+			var days = get( this, "config.notification-cache-time" );
+			return days * 24 * 3600 * 1000;
+		}.property( "config.notification-cache-time" ),
+
 		// use the app icon as group icon
 		iconGroup: function() {
 			return get( this, "config.tray-icon" ).replace( "{res}", 256 );
 		}.property( "config.tray-icon" ),
 
+		// controller state
 		firstRun: true,
 		model   : {},
 
@@ -31,7 +42,11 @@ define( [ "ember", "utils/mkdirp", "utils/download" ], function( Ember, mkdirp, 
 					firstRun: true,
 					model   : {}
 				});
-				this.check();
+
+				// collect garbage once at the beginning
+				this.gc_icons()
+					// then start
+					.then( this.check.bind( this ) );
 			}
 		}.observes( "enabled" ).on( "init" ),
 
@@ -88,7 +103,7 @@ define( [ "ember", "utils/mkdirp", "utils/download" ], function( Ember, mkdirp, 
 			// show all notifications
 			} else {
 				// download all channel icons first and save them into a local temp dir...
-				return mkdirp( get( this, "iconTempDir" ) )
+				return mkdirp( get( this, "cacheDir" ) )
 					.then(function( iconTempDir ) {
 						return Promise.all( streams.map(function( stream ) {
 							var logo = get( stream, "channel.logo" );
@@ -162,6 +177,16 @@ define( [ "ember", "utils/mkdirp", "utils/download" ], function( Ember, mkdirp, 
 					obj.click();
 				}, false );
 			}
+		},
+
+
+		gc_icons: function() {
+			var cacheDir  = get( this, "cacheDir" ),
+			    cacheTime = get( this, "cacheTime" );
+
+			return clearfolder( cacheDir, cacheTime )
+				// always resolve
+				.catch(function() {});
 		}
 	});
 

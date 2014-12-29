@@ -81,7 +81,8 @@
 			"zh-cn": { "flag": "cn", "lang": "chinese" },
 			"zh-tw": { "flag": "tw", "lang": "chinese" }
 		},
-		"notification-temp-dir": "{os-tmpdir}/livestreamer-twitch-gui/icon-cache",
+		"notification-cache-dir": "{os-tmpdir}/livestreamer-twitch-gui/icon-cache",
+		"notification-cache-time": 7,
 		"notification-interval": 60000
 	},
 
