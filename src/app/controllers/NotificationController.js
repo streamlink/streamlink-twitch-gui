@@ -124,7 +124,7 @@ define([
 		showNotificationGroup: function( streams ) {
 			this.showNotification({
 				icon : get( this, "groupIcon" ),
-				title: "Some of your favorites have come online",
+				title: "Some of your favorites have started streaming",
 				body : streams.map(function( stream ) {
 					return get( stream, "channel.display_name" );
 				}).join( ", " ),
@@ -138,7 +138,7 @@ define([
 		showNotificationSingle: function( stream ) {
 			this.showNotification({
 				icon : get( stream, "channel.logo" ),
-				title: "%@ has come online".fmt( get( stream, "channel.display_name" ) ),
+				title: "%@ has started streaming".fmt( get( stream, "channel.display_name" ) ),
 				body : get( stream, "channel.status" ),
 				click: function() {
 					var settings = get( this, "settings.notify_click" );
