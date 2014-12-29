@@ -1,22 +1,9 @@
-define( [ "utils/stat" ], function( stat ) {
+define( [ "utils/denodify", "utils/stat" ], function( denodify, stat ) {
 
 	var PATH = require( "path" ),
 	    FS   = require( "fs" );
 
-
-	function mkdir( dir ) {
-		var defer = Promise.defer();
-
-		FS.mkdir( dir, function( err ) {
-			if ( err ) {
-				defer.reject( err );
-			} else {
-				defer.resolve( dir );
-			}
-		});
-
-		return defer.promise;
-	}
+	var mkdir = denodify( FS.mkdir );
 
 	function isDirectory( stat ) {
 		return stat.isDirectory();
