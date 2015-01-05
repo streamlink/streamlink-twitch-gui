@@ -148,11 +148,14 @@ define([
 		},
 
 		notificationClick: function( settings, stream ) {
+			// always restore the window
+			if ( settings !== 0 ) {
+				this.nwWindow.toggleMinimize( true );
+				this.nwWindow.toggleVisibility( true );
+			}
+
 			switch( settings ) {
 				case 1:
-					// restore the window
-					this.nwWindow.toggleMinimize( true );
-					this.nwWindow.toggleVisibility( true );
 					this.send( "goto", "user.following" );
 					break;
 				case 2:
