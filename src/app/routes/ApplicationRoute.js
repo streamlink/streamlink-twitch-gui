@@ -20,8 +20,13 @@ define( [ "ember" ], function( Ember ) {
 				}
 			},
 
-			"goto": function() {
-				this.transitionTo.apply( this, arguments );
+			"goto": function( routeName ) {
+				var currentRoute = this.controller.get( "currentRouteName" );
+				if ( routeName === currentRoute ) {
+					this.send( "refresh" );
+				} else {
+					this.transitionTo.apply( this, arguments );
+				}
 			},
 
 			"openBrowser": function( url ) {
