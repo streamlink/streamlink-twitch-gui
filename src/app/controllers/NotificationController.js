@@ -34,22 +34,42 @@ define([
 		firstRun: true,
 		model   : {},
 
+		_error  : false,
+		error   : Ember.computed.and( "_error", "enabled" ),
+		_next   : null,
+		_running: Ember.computed.notEmpty( "_next" ),
+		running : Ember.computed.and( "_running", "enabled" ),
+
 		// automatically start polling once the user is logged in and has notifications enabled
 		enabled: Ember.computed.and( "auth.isLoggedIn", "settings.notify_enabled" ),
 		enabledObserver: function() {
 			if ( get( this, "enabled" ) ) {
-				this.setProperties({
-					firstRun: true,
-					model   : {}
-				});
-
-				// collect garbage once at the beginning
-				this.gc_icons()
-					// then start
-					.then( this.check.bind( this ) );
+				this.start();
+			} else {
+				this.reset();
 			}
 		}.observes( "enabled" ).on( "init" ),
 
+
+		reset: function() {
+			Ember.run.cancel( get( this, "_next" ) );
+
+			this.setProperties({
+				_error  : false,
+				firstRun: true,
+				model   : {},
+				_next   : null
+			});
+		},
+
+		start: function() {
+			this.reset();
+
+			// collect garbage once at the beginning
+			this.gc_icons()
+				// then start
+				.then( this.check.bind( this ) );
+		},
 
 		check: function() {
 			if ( !get( this, "enabled" ) ) { return; }
@@ -64,7 +84,14 @@ define([
 				}.bind( this ) )
 				.then(function() {
 					// query again in X milliseconds
-					Ember.run.later( this, this.check, get( this, "interval" ) || 60000 );
+					var interval = get( this, "interval" ) || 60000,
+					    next     = Ember.run.later( this, this.check, interval );
+					set( this, "_next", next );
+				}.bind( this ) )
+				// reset the controller in case of an error
+				.catch(function() {
+					this.reset();
+					set( this, "_error", true );
 				}.bind( this ) );
 		},
 
