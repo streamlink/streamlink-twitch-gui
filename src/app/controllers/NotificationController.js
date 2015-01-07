@@ -13,6 +13,7 @@ define([
 
 	return Ember.Controller.extend({
 		configBinding  : "metadata.package.config",
+		retriesBinding : "config.notification-retries",
 		intervalBinding: "config.notification-interval",
 
 		// cache related properties
@@ -33,6 +34,7 @@ define([
 		// controller state
 		firstRun: true,
 		model   : {},
+		tries   : 0,
 
 		_error  : false,
 		error   : Ember.computed.and( "_error", "enabled" ),
@@ -55,9 +57,10 @@ define([
 			Ember.run.cancel( get( this, "_next" ) );
 
 			this.setProperties({
-				_error  : false,
 				firstRun: true,
 				model   : {},
+				tries   : 0,
+				_error  : false,
 				_next   : null
 			});
 		},
@@ -87,11 +90,22 @@ define([
 					var interval = get( this, "interval" ) || 60000,
 					    next     = Ember.run.later( this, this.check, interval );
 					set( this, "_next", next );
+					set( this, "tries", 0 );
 				}.bind( this ) )
 				// reset the controller in case of an error
 				.catch(function() {
-					this.reset();
-					set( this, "_error", true );
+					var tries = get( this, "tries" ),
+					    max   = get( this, "retries" );
+					if ( ++tries > max ) {
+						// we've reached the retry limit
+						this.reset();
+						set( this, "_error", true );
+					} else {
+						// immediately retry (with a slight delay)
+						var next = Ember.run.later( this, this.check, 1000 );
+						set( this, "_next", next );
+						set( this, "tries", tries );
+					}
 				}.bind( this ) );
 		},
 
