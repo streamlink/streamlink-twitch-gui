@@ -225,6 +225,10 @@ fieldset {
 	&:hover:active > i {
 		color: fade( @button-color, ( 100 * @button-icon-opacity-active ) );
 	}
+
+	&.btn-with-anim > i {
+		-webkit-animation: animIconScale .5s ease-out;
+	}
 }
 
 

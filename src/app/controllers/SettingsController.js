@@ -41,19 +41,29 @@ define( [ "ember" ], function( Ember ) {
 
 
 		actions: {
-			apply: function() {
+			apply: function( successCallback ) {
 				// copy all attributes back to the original settings record
 				this.settings.setProperties( get( this, "model" ) );
 				// and then save
 				this.settings.save()
-					.then( this.retryTransition.bind( this ) )
+					.then(function() {
+						if ( successCallback ) {
+							successCallback( this.retryTransition.bind( this ) );
+						} else {
+							this.retryTransition();
+						}
+					}.bind( this ) )
 					.catch( this.settings.rollback.bind( this.settings ) );
 			},
 
-			discard: function() {
+			discard: function( successCallback ) {
 				var attributes = this.settings.constructor.readAttributes( this.settings );
 				get( this, "model" ).setProperties( attributes );
-				Ember.run.next( this, this.retryTransition );
+				if ( successCallback ) {
+					successCallback( this.retryTransition.bind( this ) );
+				} else {
+					Ember.run.next( this, this.retryTransition );
+				}
 			}
 		}
 	});

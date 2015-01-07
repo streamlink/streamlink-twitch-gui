@@ -8,14 +8,30 @@ define([
 		tagName: "button",
 		attributeBindings: [ "type" ],
 		type: "button",
-		classNameBindings: [ ":btn", "icon:btn-with-icon", "class" ],
+		classNameBindings: [ ":btn", "icon:btn-with-icon", "_iconanim:btn-with-anim", "class" ],
 
 		action: "",
 		class: "",
 		icon: false,
+		iconanim: false,
+		_iconanim: false,
 
 		click: function() {
-			this.sendAction();
+			var self = this,
+			    success;
+			if ( this.get( "iconanim" ) ) {
+				success = function( callback ) {
+					self.set( "_iconanim", true );
+					self.element.addEventListener( "webkitAnimationEnd", function( e ) {
+						if ( e.animationName === "animIconScale" ) {
+							self.set( "_iconanim", false );
+							if ( callback ) { callback( e ); }
+						}
+					}, false );
+				};
+			}
+
+			this.sendAction( "action", success );
 		}
 	});
 

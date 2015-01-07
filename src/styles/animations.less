@@ -2,35 +2,57 @@
 @-webkit-keyframes animFadeInLeft {
 	from {
 		opacity: 0;
-		-webkit-transform: translateX( -3rem );
+		transform: translateX( -3rem );
 	}
 
 	to {
 		opacity: 1;
-		-webkit-transform: translateX( 0 );
+		transform: translateX( 0 );
 	}
 }
 
 @-webkit-keyframes animFadeInRight {
 	from {
 		opacity: 0;
-		-webkit-transform: translateX( 3rem );
+		transform: translateX( 3rem );
 	}
 
 	to {
 		opacity: 1;
-		-webkit-transform: translateX( 0 );
+		transform: translateX( 0 );
 	}
 }
 
 @-webkit-keyframes animFadeInTop {
 	from {
 		opacity: 0;
-		-webkit-transform: translateY( -3rem );
+		transform: translateY( -3rem );
 	}
 
 	to {
 		opacity: 1;
-		-webkit-transform: translateY( 0 );
+		transform: translateY( 0 );
+	}
+}
+
+@-webkit-keyframes animIconScale {
+	0% {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	75% {
+		opacity: 0;
+		transform: scale(5);
+	}
+
+	76% {
+		opacity: 0;
+		transform: scale(1);
+	}
+
+	100% {
+		opacity: 1;
+		transform: scale(1);
 	}
 }
