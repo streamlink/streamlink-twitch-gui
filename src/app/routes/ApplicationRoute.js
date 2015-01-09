@@ -38,6 +38,11 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"openModal": function( template, controller, data ) {
+				var view = "modal";
+				if ( template instanceof Object ) {
+					view     = template.view;
+					template = template.template;
+				}
 				if ( typeof controller === "string" ) {
 					controller = this.controllerFor( controller );
 				}
@@ -48,7 +53,7 @@ define( [ "ember" ], function( Ember ) {
 				this.render( template, {
 					into      : "application",
 					outlet    : "modal",
-					view      : "modal",
+					view      : view,
 					controller: controller
 				});
 			},
