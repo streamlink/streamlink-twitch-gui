@@ -105,6 +105,7 @@ define(function( require ) {
 		VersioncheckModalTemplate: require( "text!templates/modals/versioncheck.html.hbs" ),
 
 		LivestreamerController: require( "controllers/LivestreamerController" ),
+		LivestreamerModalView: require( "views/LivestreamerModalView" ),
 		LivestreamerModalTemplate: require( "text!templates/modals/livestreamer.html.hbs" ),
 
 		NotificationController: require( "controllers/NotificationController" ),

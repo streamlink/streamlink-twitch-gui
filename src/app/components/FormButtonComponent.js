@@ -6,13 +6,26 @@ define([
 	return Ember.Component.extend({
 		layout: Ember.Handlebars.compile( template ),
 		tagName: "button",
-		attributeBindings: [ "type" ],
+		attributeBindings: [ "type", "title" ],
 		type: "button",
-		classNameBindings: [ ":btn", "icon:btn-with-icon", "_iconanim:btn-with-anim", "class" ],
+		title: "",
+		classNameBindings: [
+			":btn",
+			"_iconAndNoText:btn-icon",
+			"_iconAndText:btn-with-icon",
+			"_iconanim:btn-with-anim",
+			"class"
+		],
 
 		action: "",
 		class: "",
+
 		icon: false,
+		_iconAndText: Ember.computed.and( "icon", "template" ),
+		_iconAndNoText: function() {
+			return this.get( "icon" ) && !this.get( "template" );
+		}.property( "icon", "template" ),
+
 		iconanim: false,
 		_iconanim: false,
 
