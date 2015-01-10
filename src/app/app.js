@@ -68,6 +68,10 @@ define(function( require ) {
 		TwitchSearchGameSerializer: require( "models/twitch/SearchGameSerializer" ),
 		TwitchSearchStream: require( "models/twitch/SearchStream" ),
 		TwitchSearchStreamSerializer: require( "models/twitch/SearchStreamSerializer" ),
+		TwitchUserFollowsChannel: require( "models/twitch/UserFollowsChannel" ),
+		TwitchUserFollowsChannelSerializer: require( "models/twitch/UserFollowsChannelSerializer" ),
+		TwitchUserSubscription: require( "models/twitch/UserSubscription" ),
+		TwitchUserSubscriptionSerializer: require( "models/twitch/UserSubscriptionSerializer" ),
 
 
 		// Ember additions/changes/fixes
