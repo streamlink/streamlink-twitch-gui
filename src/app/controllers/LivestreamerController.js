@@ -104,7 +104,10 @@ define([
 
 
 		startStream: function( stream ) {
-			this.send( "openModal", "livestreamerModal", this, {
+			this.send( "openModal", {
+				view    : "livestreamerModal",
+				template: "livestreamerModal"
+			}, this, {
 				modalHead: "Preparing",
 				modalBody: "Please wait...",
 				modalBtns: null
@@ -420,8 +423,9 @@ define([
 
 
 		actions: {
-			"download": function() {
+			"download": function( callback ) {
 				this.send( "openBrowser", get( this, "config.livestreamer-download-url" ) );
+				if ( callback ) { callback(); }
 			},
 
 			"close": function() {
@@ -440,11 +444,21 @@ define([
 				this.send( "close" );
 			},
 
-			"chat": function() {
+			"chat": function( callback ) {
 				var url  = get( this, "config.twitch-chat-url" ),
 				    name = get( this, "current.stream.channel.name" );
 				if ( name ) {
 					this.send( "openBrowser", url.replace( "{channel}", name ) );
+				}
+				if ( callback ) { callback(); }
+			},
+
+			"share": function( callback ) {
+				var url = get( this, "current.stream.channel.url" ),
+				    cb  = this.nwGui.Clipboard.get();
+				if ( url && cb ) {
+					cb.set( url, "text" );
+					if ( callback ) { callback(); }
 				}
 			}
 		}

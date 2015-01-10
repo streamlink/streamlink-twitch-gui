@@ -52,9 +52,14 @@
 		justify-content: flex-start;
 		align-items: flex-end;
 
-		> * {
-			min-width: 9em;
+		button:not(:last-of-type) {
 			margin-right: 1em;
+		}
+	}
+
+	&.modal-livestreamer {
+		footer {
+			justify-content: space-between;
 		}
 	}
 }
@@ -67,6 +72,8 @@
 	@color-border-hover: darken( @color, 15% );
 	@icon-width: ( @button-icon-size + 2 * @button-icon-spacing );
 	@icon-height: ( 1 / unit( @button-icon-size ) );
+
+	min-width: 9em;
 
 	.icon() {
 		&::before {
