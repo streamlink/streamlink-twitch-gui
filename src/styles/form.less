@@ -187,11 +187,6 @@ fieldset {
 		box-shadow: none;
 	}
 
-
-	&.btn-with-icon {
-		min-width: 9em;
-	}
-
 	&.infinitescroll {
 		display: block;
 		min-width: 12em;
@@ -204,12 +199,13 @@ fieldset {
 	}
 }
 
-.btn-with-icon {
+.btn-icon {
+	min-width: 2.25em;
+	overflow: hidden;
+
 	> i {
 		width: 1em;
 		height: 1em;
-		margin-left: ( -1 * ( 1 + @button-icon-spacing ) );
-		margin-right: @button-icon-spacing;
 		font-size: @button-icon-size;
 		line-height: ( 1 / unit( @button-icon-size ) );
 		color: fade( @button-color, ( 100 * @button-icon-opacity ) );
@@ -228,6 +224,17 @@ fieldset {
 
 	&.btn-with-anim > i {
 		-webkit-animation: animIconScale .5s ease-out;
+	}
+}
+
+.btn-with-icon {
+	.btn-icon;
+
+	min-width: 9em;
+
+	> i {
+		margin-left: ( -1 * ( 1 + @button-icon-spacing ) );
+		margin-right: @button-icon-spacing;
 	}
 }
 
