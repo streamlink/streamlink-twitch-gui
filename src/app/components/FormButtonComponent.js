@@ -8,7 +8,7 @@ define([
 		tagName: "button",
 		attributeBindings: [ "type", "title" ],
 		type: "button",
-		title: "",
+		title: null,
 		classNameBindings: [
 			":btn",
 			"_iconAndNoText:btn-icon",
@@ -16,9 +16,10 @@ define([
 			"_iconanim:btn-with-anim",
 			"class"
 		],
+		class: null,
 
 		action: "",
-		class: "",
+		actionParam: null,
 
 		icon: false,
 		_iconAndText: Ember.computed.and( "icon", "template" ),
@@ -30,7 +31,8 @@ define([
 		_iconanim: false,
 
 		click: function() {
-			var self = this,
+			var self  = this,
+			    param = Ember.makeArray( this.get( "actionParam" ) ),
 			    success;
 			if ( this.get( "iconanim" ) ) {
 				success = function( callback ) {
@@ -44,7 +46,7 @@ define([
 				};
 			}
 
-			this.sendAction( "action", success );
+			this.sendAction.apply( this, [ "action" ].concat( param ).concat( success ) );
 		}
 	});
 
