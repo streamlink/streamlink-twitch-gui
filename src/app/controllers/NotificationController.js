@@ -180,7 +180,7 @@ define([
 			this.showNotification({
 				icon : get( stream, "channel.logo" ),
 				title: "%@ has started streaming".fmt( get( stream, "channel.display_name" ) ),
-				body : get( stream, "channel.status" ),
+				body : get( stream, "channel.status" ) || "",
 				click: function() {
 					var settings = get( this, "settings.notify_click" );
 					this.notificationClick( settings, stream );
