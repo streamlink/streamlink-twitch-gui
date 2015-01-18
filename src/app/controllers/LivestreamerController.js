@@ -142,6 +142,8 @@ define([
 					});
 					return this.launchLivestreamer( exec, livestreamer );
 				}.bind( this ) )
+				// check if the user follows the channel
+				.then( this.checkUserFollowsChannel.bind( this, livestreamer ) )
 				// add the stream object to the streams list
 				.then(function() {
 					this.streams.addObject( livestreamer );
@@ -421,6 +423,17 @@ define([
 			}
 		},
 
+		checkUserFollowsChannel: function( livestreamer ) {
+			var name = get( livestreamer, "stream.channel.name" );
+			this.store.fetch( "twitchUserFollowsChannel", name )
+				.catch(function() {
+					// twitch.tv API returned 404: user does not follow the channel
+					return false;
+				})
+				.then(function( record ) {
+					set( livestreamer, "_following", record );
+				});
+		},
 
 		actions: {
 			"download": function( callback ) {
@@ -459,6 +472,36 @@ define([
 				if ( url && cb ) {
 					cb.set( url, "text" );
 					if ( callback ) { callback(); }
+				}
+			},
+
+			"follow": function( callback ) {
+				var store     = this.store,
+				    current   = get( this, "current" ),
+				    following = get( current, "_following" );
+
+				if ( !following ) {
+					var name = get( current, "stream.channel.name" );
+					// find a previous record and unload it
+					following = store.getById( "twitchUserFollowsChannel", name );
+					if ( following ) {
+						store.unloadRecord( following );
+					}
+					// now create a new record and save it
+					following = store.createRecord( "twitchUserFollowsChannel", { id: name });
+					following.save().then(function() {
+						set( current, "_following", following );
+						if ( callback ) { callback(); }
+					});
+
+				} else {
+					// delete the record and save it
+					following.destroyRecord().then(function() {
+						set( current, "_following", false );
+						// also unload it
+						store.unloadRecord( following );
+						if ( callback ) { callback(); }
+					});
 				}
 			}
 		}

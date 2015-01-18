@@ -12,6 +12,11 @@ define( [ "ember" ], function( Ember ) {
 		urlBinding        : "stream.channel.url",
 		statusBinding     : "stream.channel.status",
 
+		/** @type {(TwitchUserFollowsChannel|boolean)} _following */
+		_following       : null,
+		following        : Ember.computed.bool( "_following" ),
+		following_loading: Ember.computed.equal( "_following", null ),
+
 
 		init: function() {
 			this.started = new Date();

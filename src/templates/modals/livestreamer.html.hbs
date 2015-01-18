@@ -11,8 +11,11 @@
 {{form-button action="shutdown" class="btn-danger"  icon="fa-times"      title="Close stream"}}
 </div>
 <div>
-{{form-button action="chat"  class="btn-success" icon="fa-comments"  iconanim=true title="Open chat"}}
-{{form-button action="share" class="btn-info"    icon="fa-share-alt" iconanim=true title="Copy stream url to clipboard"}}
+{{form-button action="chat"            class="btn-hint"       icon="fa-comments"   iconanim=true title="Open chat"}}
+{{form-button action="share"           class="btn-info"       icon="fa-share-alt"  iconanim=true title="Copy stream url to clipboard"}}
+{{#if view.isLoggedIn}}
+{{form-button action=view.followAction class=view.followClass icon=view.followIcon iconanim=true title=view.followTitle}}
+{{/if}}
 </div>
 {{view "select" value=current.quality content=settings.constructor.qualities class="modalqualityselect" optionValuePath="content.id" optionLabelPath="content.label"}}
 {{/if}}

@@ -55,7 +55,7 @@ define( [ "ember" ], function( Ember ) {
 			return { data: data };
 		},
 
-		deleteRecord: function(store, type, record) {
+		deleteRecord: function( store, type, record ) {
 			var id = get( record, "id" );
 			return this.ajax( this.buildURL( type, id ), "DELETE" );
 		},
