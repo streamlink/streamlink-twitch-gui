@@ -424,6 +424,8 @@ define([
 		},
 
 		checkUserFollowsChannel: function( livestreamer ) {
+			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
+
 			var name = get( livestreamer, "stream.channel.name" );
 			this.store.fetch( "twitchUserFollowsChannel", name )
 				.catch(function() {
