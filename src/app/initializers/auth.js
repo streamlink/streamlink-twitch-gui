@@ -24,8 +24,9 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 				})
 				.then(function( auth ) {
 					container.register( "record:auth", auth, { instantiate: false } );
-					container.injection( "route", "auth", "record:auth" );
+					container.injection( "route",      "auth", "record:auth" );
 					container.injection( "controller", "auth", "record:auth" );
+					container.injection( "adapter",    "auth", "record:auth" );
 
 					// now we're ready
 					application.advanceReadiness();
