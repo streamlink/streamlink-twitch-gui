@@ -12,6 +12,8 @@ define([
 	    set   = Ember.set;
 
 	return Ember.Controller.extend({
+		needs: [ "livestreamer" ],
+
 		configBinding  : "metadata.package.config",
 		retriesBinding : "config.notification-retries",
 		intervalBinding: "config.notification-interval",
@@ -51,6 +53,21 @@ define([
 				this.reset();
 			}
 		}.observes( "enabled" ).on( "init" ),
+
+
+		/**
+		 * Add a newly followed channel to the channel list cache
+		 * so it doesn't pop up a new notification on the next query
+		 */
+		isFollowingChannelObserver: function() {
+			if ( !get( this, "enabled" ) ) { return; }
+			/** @type {Object} model */
+			var model     = get( this, "model" );
+			var following = get( this, "controllers.livestreamer.current._following" );
+			var name      = get( following, "channel.name" );
+			if ( !following || !name || model.hasOwnProperty( name ) ) { return; }
+			model[ name ] = new Date();
+		}.observes( "controllers.livestreamer.current._following" ),
 
 
 		reset: function() {
