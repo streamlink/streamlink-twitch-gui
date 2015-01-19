@@ -480,7 +480,12 @@ define([
 			"follow": function( callback ) {
 				var store     = this.store,
 				    current   = get( this, "current" ),
-				    following = get( current, "_following" );
+				    following = get( current, "_following" ),
+				    lock      = get( current, "following_lock" );
+
+				if ( lock ) { return; }
+				set( current, "following_lock", true );
+				function unlock() { set( current, "following_lock", false ); }
 
 				if ( !following ) {
 					var name = get( current, "stream.channel.name" );
@@ -494,7 +499,7 @@ define([
 					following.save().then(function() {
 						set( current, "_following", following );
 						if ( callback ) { callback(); }
-					});
+					}).then( unlock, unlock );
 
 				} else {
 					// delete the record and save it
@@ -503,7 +508,7 @@ define([
 						// also unload it
 						store.unloadRecord( following );
 						if ( callback ) { callback(); }
-					});
+					}).then( unlock, unlock );
 				}
 			}
 		}

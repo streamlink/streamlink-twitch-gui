@@ -16,6 +16,7 @@ define( [ "ember" ], function( Ember ) {
 		_following       : null,
 		following        : Ember.computed.bool( "_following" ),
 		following_loading: Ember.computed.equal( "_following", null ),
+		following_lock   : false,
 
 
 		init: function() {
