@@ -53,6 +53,8 @@ define([
 		versionMinBinding    : "config.livestreamer-version-min",
 		versionTimeoutBinding: "config.livestreamer-validation-timeout",
 
+		streamURL: "twitch.tv/%@",
+
 		modalBtns        : null,
 		modalBtnsDefault : Ember.computed.equal( "modalBtns", null ),
 		modalBtnsDownload: Ember.computed.equal( "modalBtns", "download" ),
@@ -74,7 +76,7 @@ define([
 		],
 
 
-		getParametersString: function( url, quality ) {
+		getParametersString: function( name, quality ) {
 			var params    = [],
 			    settings  = this.settings,
 			    qualities = settings.constructor.qualities;
@@ -97,7 +99,7 @@ define([
 
 			// append stream url + quality and return the array
 			return params.concat([
-				url,
+				get( this, "streamURL" ).fmt( name ),
 				( qualities[ quality ] || qualities[ 0 ] ).quality
 			]);
 		},
@@ -308,9 +310,9 @@ define([
 			}
 
 			var defer    = Promise.defer(),
-			    url      = get( livestreamer, "url" ),
+			    name     = get( livestreamer, "name" ),
 			    quality  = get( livestreamer, "quality" ),
-			    params   = this.getParametersString( url, quality ),
+			    params   = this.getParametersString( name, quality ),
 			    spawn    = CP.spawn( exec, params, { detached: true } );
 
 			set( livestreamer, "spawn", spawn );

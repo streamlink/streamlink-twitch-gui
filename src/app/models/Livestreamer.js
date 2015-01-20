@@ -9,7 +9,6 @@ define( [ "ember" ], function( Ember ) {
 
 		nameBinding       : "stream.channel.name",
 		displayNameBinding: "stream.channel.display_name",
-		urlBinding        : "stream.channel.url",
 		statusBinding     : "stream.channel.status",
 
 		/** @type {(TwitchUserFollowsChannel|boolean)} _following */
