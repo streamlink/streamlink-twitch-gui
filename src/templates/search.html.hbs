@@ -17,7 +17,7 @@
 {{#if notFiltered}}<h3>Streams</h3>{{/if}}
 <ul class="content-list">
 {{#each stream in streams}}
-{{stream-item stream=stream}}
+{{stream-item stream=stream showGame=true}}
 {{/each}}
 </ul>
 {{infinite-scroll}}
