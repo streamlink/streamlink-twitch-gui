@@ -99,8 +99,6 @@ define(function( require ) {
 		SearchbarController: require( "controllers/SearchbarController" ),
 		SearchbarView: require( "views/SearchbarView" ),
 
-		SettingsBarController: require( "controllers/SettingsBarController" ),
-
 		VersioncheckController: require( "controllers/VersioncheckController" ),
 		VersioncheckModalTemplate: require( "text!templates/modals/versioncheck.html.hbs" ),
 

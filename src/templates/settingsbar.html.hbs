@@ -1,12 +1,12 @@
-<button type="button" class="btn btn-open"><i class="fa fa-wrench"></i></button>
+{{form-button action="toggle" class="btn-open" icon="fa-wrench"}}
 <div class="menu">
 {{#if btnHomepage}}
-<button type="button" {{bind-attr class=":btn :btn-neutral isHomepage::inactive"}} {{action "homepage" url}} title="Set as homepage"><i class="fa fa-home"></i></button>
+{{form-button action="homepage" actionParam=url classNameBindings=":btn-neutral isHomepage::inactive" title="Set as homepage" icon="fa-home" iconanim=true}}
 {{/if}}
 {{#if btnLayout}}
 <div class="multibtn">
-<button type="button" {{bind-attr class=":btn isLayoutTile::inactive"}} {{action "layout" "tile"}} title="Switch to tile layout"><i class="fa fa-th-large"></i></button>
-<button type="button" {{bind-attr class=":btn isLayoutList::inactive"}} {{action "layout" "list"}} title="Switch to list layout"><i class="fa fa-align-justify"></i></button>
+{{form-action action="layout" actionParam="tile" classNameBindings="isLayoutTile::inactive" title="Switch to tile layout" icon="fa-th-large" iconanim=true}}
+{{form-action action="layout" actionParam="list" classNameBindings="isLayoutList::inactive" title="Switch to list layout" icon="fa-align-justify" iconanim=true}}
 </div>
 {{/if}}
 </div>

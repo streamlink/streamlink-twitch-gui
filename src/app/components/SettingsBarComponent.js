@@ -3,13 +3,15 @@ define([
 	"text!templates/settingsbar.html.hbs"
 ], function( Ember, Template ) {
 
-	var	get = Ember.get,
-		set = Ember.set;
+	var get = Ember.get,
+	    set = Ember.set;
 
 	return Ember.Component.extend({
 		layout: Ember.Handlebars.compile( Template ),
 		tagName: "div",
 		classNameBindings: [ ":settingsbar", "isOpened:opened" ],
+
+		settingsBinding: "targetObject.settings",
 
 		isOpened: false,
 
@@ -22,22 +24,31 @@ define([
 		}.property( "targetObject.target.location" ).volatile(),
 
 		isHomepage: function() {
-			return get( this, "url" ) === get( this, "controller.homepage" );
-		}.property( "url", "controller.homepage" ),
+			return get( this, "url" ) === get( this, "settings.gui_homepage" );
+		}.property( "url", "settings.gui_homepage" ),
 
-		isLayoutTile: Ember.computed.equal( "controller.layout", "tile" ),
+		isLayoutTile: Ember.computed.equal( "settings.gui_layout", "tile" ),
 		isLayoutList: Ember.computed.not( "isLayoutTile" ),
 
 
-		init: function() {
-			this._super();
+		actions: {
+			toggle: function() {
+				this.toggleProperty( "isOpened" );
+			},
 
-			var controller = this.targetObject.container.lookup( "controller:settingsBar" );
-			set( this, "controller", controller );
-		},
+			homepage: function( url, callback ) {
+				set( this, "settings.gui_homepage", url );
+				get( this, "settings" ).save().then(function() {
+					if ( callback ) { callback(); }
+				});
+			},
 
-		didInsertElement: function() {
-			this.$( ".btn-open" ).click( this.toggleProperty.bind( this, "isOpened" ) );
+			layout: function( mode, callback ) {
+				set( this, "settings.gui_layout", mode );
+				get( this, "settings" ).save().then(function() {
+					if ( callback ) { callback(); }
+				});
+			}
 		}
 	});
 
