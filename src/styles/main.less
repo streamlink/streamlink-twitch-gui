@@ -65,10 +65,13 @@ p {
 
 
 a {
-	color: @color-text-default;
 	text-decoration: underline;
 
-	&:hover {
+	&, &:focus {
+		color: @color-text-default;
+	}
+
+	&:hover, &:active:not(.disabled) {
 		color: @color-twitch-purple;
 		text-decoration: none;
 	}
