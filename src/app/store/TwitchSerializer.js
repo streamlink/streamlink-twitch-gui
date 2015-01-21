@@ -12,8 +12,8 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		extractMeta: function( store, type, payload ) {
 			if ( !payload ) { return; }
 
-			var	primaryKey = Ember.get( this, "primaryKey" ),
-				data = {};
+			var primaryKey = Ember.get( this, "primaryKey" ),
+			    data = {};
 
 			Object.keys( payload ).forEach(function( key ) {
 				if ( key.charAt( 0 ) === "_" && key !== primaryKey ) {
@@ -22,7 +22,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 				}
 			});
 
-			store.metaForType( type, data );
+			store.setMetadataFor( type, data );
 		},
 
 
