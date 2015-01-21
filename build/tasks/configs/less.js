@@ -1,11 +1,5 @@
 module.exports = {
 	options: {
-		compress         : false,
-		/*
-		 * cleancss still has no soucemap support
-		 * https://github.com/gruntjs/grunt-contrib-less/issues/165
-		 */
-		cleancss         : false,
 		relativeUrls     : true,
 		strictMath       : true,
 		strictUnits      : true,
@@ -34,8 +28,10 @@ module.exports = {
 
 	release: {
 		options: {
-			compress : true,
-			sourceMap: false
+			sourceMap: false,
+			plugins  : [
+				new ( require( "less-plugin-clean-css" ) )()
+			]
 		},
 		src    : "src/styles/app.less",
 		dest   : "build/tmp/styles/app.css"
