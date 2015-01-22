@@ -91,6 +91,7 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 			trayIcon = new nwGui.Tray({ icon: trayIconImg });
 			trayIcon.tooltip = trayTooltip;
 			trayIcon.menu = trayMenu;
+			trayIcon.iconsAreTemplates = false;
 			trayIcon.on( "click", function() {
 				nwWindow.toggleVisibility();
 				// also toggle taskbar visiblity on click (gui_integration === both)
