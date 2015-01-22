@@ -11,6 +11,10 @@ define( [ "ember" ], function( Ember ) {
 		displayNameBinding: "stream.channel.display_name",
 		statusBinding     : "stream.channel.status",
 
+		/** @type {(TwitchUserSubscription|boolean)} _subscribed */
+		_subscribed      : false,
+		subscribed       : Ember.computed.bool( "_subscribed" ),
+
 		/** @type {(TwitchUserFollowsChannel|boolean)} _following */
 		_following       : null,
 		following        : Ember.computed.bool( "_following" ),

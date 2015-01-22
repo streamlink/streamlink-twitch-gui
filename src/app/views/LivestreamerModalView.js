@@ -15,13 +15,18 @@ define( [ "ember", "views/ModalView" ], function( Ember, ModalView ) {
 
 		isLoggedIn: Ember.computed.readOnly( "context.auth.isLoggedIn" ),
 
+		subscribed : Ember.computed.readOnly( "context.current.subscribed" ),
 		following  : Ember.computed.readOnly( "context.current.following" ),
 		following_l: Ember.computed.readOnly( "context.current.following_loading" ),
 
 		followAction: following( "follow", "follow", null ),
 		followClass : following( "btn-success", "btn-danger", "btn-info" ),
 		followIcon  : following( "fa-heart", "fa-heart-o", "fa-question" ),
-		followTitle : following( "Unfollow channel", "Follow channel", "" )
+		followTitle : following( "Unfollow channel", "Follow channel", "" ),
+
+		subscrClass: function() {
+			return this.get( "subscribed" ) ? "btn-success" : "btn-primary";
+		}.property( "subscribed" )
 	});
 
 });

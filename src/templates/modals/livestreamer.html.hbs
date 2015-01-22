@@ -14,7 +14,7 @@
 {{form-button action="chat"            class="btn-hint"       icon="fa-comments"    iconanim=true title="Open chat"}}
 {{form-button action="share"           class="btn-info"       icon="fa-share-alt"   iconanim=true title="Copy stream url to clipboard"}}
 {{#if current.stream.channel.partner}}
-{{form-button action="subscribe"       class="btn-primary"    icon="fa-credit-card" iconanim=true title="Subscribe to channel"}}
+{{form-button action="subscribe"       class=view.subscrClass icon="fa-credit-card" iconanim=true title="Subscribe to channel"}}
 {{/if}}
 {{#if view.isLoggedIn}}
 {{form-button action=view.followAction class=view.followClass icon=view.followIcon  iconanim=true title=view.followTitle}}

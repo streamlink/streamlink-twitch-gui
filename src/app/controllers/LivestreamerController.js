@@ -144,6 +144,8 @@ define([
 					});
 					return this.launchLivestreamer( exec, livestreamer );
 				}.bind( this ) )
+				// check if the user subscribes the channel
+				.then( this.checkUserSubscribesChannel.bind( this, livestreamer ) )
 				// check if the user follows the channel
 				.then( this.checkUserFollowsChannel.bind( this, livestreamer ) )
 				// add the stream object to the streams list
@@ -423,6 +425,21 @@ define([
 					}
 					break;
 			}
+		},
+
+		checkUserSubscribesChannel: function( livestreamer ) {
+			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
+			if ( !get( livestreamer, "stream.channel.partner" ) ) { return; }
+
+			var name = get( livestreamer, "stream.channel.name" );
+			this.store.fetch( "twitchUserSubscription", name )
+				.catch(function() {
+					// twitch.tv API returned 404: user does not subscribe the channel
+					return false;
+				})
+				.then(function( record ) {
+					set( livestreamer, "_subscribed", record );
+				});
 		},
 
 		checkUserFollowsChannel: function( livestreamer ) {
