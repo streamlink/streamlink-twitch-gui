@@ -21,8 +21,22 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 		trayMenu    = (function() {
 			var menu = new nwGui.Menu();
 
+			menu.taskbar = true;
+			menu.toggleVisibility = function() {
+				nwWindow.toggleVisibility();
+				// also toggle taskbar visiblity on click (gui_integration === both)
+				if ( menu.taskbar ) {
+					nwWindow.setShowInTaskbar( !isHidden );
+				}
+			};
+
 			menu.append( new nwGui.MenuItem({
-				label: "Exit %@".fmt( metadata.package.config[ "display-name" ] ),
+				label: "Toggle visibility",
+				click: menu.toggleVisibility
+			}));
+
+			menu.append( new nwGui.MenuItem({
+				label: "Close application",
 				click: function() {
 					nwWindow.close();
 				}
@@ -92,13 +106,8 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 			trayIcon.tooltip = trayTooltip;
 			trayIcon.menu = trayMenu;
 			trayIcon.iconsAreTemplates = false;
-			trayIcon.on( "click", function() {
-				nwWindow.toggleVisibility();
-				// also toggle taskbar visiblity on click (gui_integration === both)
-				if ( taskbar ) {
-					nwWindow.setShowInTaskbar( !isHidden );
-				}
-			});
+			trayIcon.on( "click", trayMenu.toggleVisibility );
+			trayMenu.taskbar = taskbar;
 		}
 	};
 
