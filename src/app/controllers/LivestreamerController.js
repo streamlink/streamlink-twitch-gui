@@ -512,6 +512,15 @@ define([
 						if ( callback ) { callback(); }
 					}).then( unlock, unlock );
 				}
+			},
+
+			"subscribe": function( callback ) {
+				var url  = get( this, "config.twitch-subscribe-url" ),
+				    name = get( this, "current.stream.channel.name" );
+				if ( name ) {
+					this.send( "openBrowser", url.replace( "{channel}", name ) );
+				}
+				if ( callback ) { callback(); }
 			}
 		}
 	});
