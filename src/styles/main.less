@@ -16,7 +16,7 @@ body {
 	overflow: hidden;
 	color: @color-text-default;
 	font-size: inherit;
-	font-family: "Open Sans";
+	font-family: @font-name;
 	background: @color-background;
 	cursor: default;
 }
@@ -51,7 +51,7 @@ h6 { font-size: .667rem; }
 h1, h2, h3, h4, h5, h6 {
 	margin-bottom: .75em;
 	color: @color-text-dark;
-	font-family: "Open Sans";
+	font-family: @font-name;
 	font-weight: lighter;
 }
 
@@ -82,7 +82,7 @@ a {
 		&::after {
 			content: @fa-var-external-link;
 			display: inline-block;
-			font-family: "FontAwesome";
+			font-family: FontAwesome;
 			padding-left: .333em;
 			text-decoration: none !important;
 		}

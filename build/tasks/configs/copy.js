@@ -8,6 +8,7 @@ module.exports = {
 			"oauth.{html,json}",
 			"vendor/requirejs/require.js",
 			"fonts/*.woff",
+			"vendor/roboto-fontface/fonts/Roboto-{Light,Regular,Medium,Bold,RegularItalic}.woff2",
 			"vendor/font-awesome/fonts/*.woff",
 			"vendor/flag-icon-css/flags/4x3/{<%= copy.build.flags( package.config ) %>}.svg",
 			"img/**"
