@@ -61,12 +61,22 @@
 }
 
 
-.stream-hover( @content: @fa-var-play-circle-o ) {
+.block-aspect-ratio( @ratio: 1 ) {
+	&::before {
+		content: "";
+		display: block;
+		padding-top: unit( ( 100 / @ratio ), % );
+	}
+}
+
+
+.stream-hover( @ratio: ( 16 / 9 ); @content: @fa-var-play-circle-o ) {
 	> .preview {
 		position: relative;
 		cursor: pointer;
+		.block-aspect-ratio( @ratio );
 
-		&::before {
+		&::after {
 			content: @content;
 			display: block;
 			position: absolute;
@@ -82,11 +92,11 @@
 		}
 	}
 
-	> .preview:hover::before {
+	> .preview:hover::after {
 		opacity: 1;
 	}
 
-	&.show-game > .preview::before {
+	&.show-game > .preview::after {
 		top: calc( 50% - .75rem );
 	}
 }

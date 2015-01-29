@@ -17,8 +17,11 @@
 
 	img {
 		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
-		height: auto;
+		height: 100%;
 		margin: 0;
 	}
 
@@ -37,12 +40,14 @@
 	margin-bottom: 20px;
 	cursor: pointer;
 	.dynamic-elems-per-row( 4, @content-width, 8%, @additional-width );
+	.block-aspect-ratio( ( 272 / 380 ) );
 
 	> header,
 	> footer {
 		position: absolute;
 		width: 100%;
 		padding: .33em;
+		z-index: 2;
 
 		&, i {
 			color: fade( @color, 0% );
