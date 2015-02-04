@@ -15,6 +15,7 @@ define([
 	    re_unable    = /^error: Unable to open URL: /,
 	    re_nostreams = /^error: No streams found on this URL: /,
 	    re_noplayer  = /^error: Failed to start player: /,
+	    re_noplayer2 = /^error: The default player \(.+\) does not seem to be installed\./,
 	    re_replace   = /^\[cli]\[\S+]\s+/,
 	    re_player    = /^Starting player: \S+/;
 
@@ -359,7 +360,7 @@ define([
 					return new UnableToOpenError();
 				} else if ( re_nostreams.test( data ) ) {
 					return new NoStreamsFoundError();
-				} else if ( re_noplayer.test( data ) ) {
+				} else if ( re_noplayer.test( data ) || re_noplayer2.test( data ) ) {
 					return new NoPlayerError();
 				}
 			}
