@@ -1,4 +1,4 @@
-define( [ "ember", "./metadata" ], function( Ember, metadata ) {
+define( [ "ember", "./metadata", "utils/semver" ], function( Ember, metadata, semver ) {
 
 	var	nwGui       = window.nwDispatcher.requireNwGui(),
 		nwWindow    = nwGui.Window.get(),
@@ -46,9 +46,17 @@ define( [ "ember", "./metadata" ], function( Ember, metadata ) {
 		})();
 
 
-	if ( /^win/.test( process.platform ) ) {
+	var OS   = require( "os" );
+	var win8 = "6.2.0";
+
+	if (
+		// check if current platform is windows
+		   /^win/.test( process.platform )
+		// check if windows version is >= 8
+		&& semver.sort([ OS.release(), win8 ]).shift() === win8
+	) {
 		// register AppUserModelID
-		// this is required for toast notifications on windows
+		// this is required for toast notifications on windows 8+
 		// https://github.com/rogerwang/node-webkit/wiki/Notification#windows
 		var shortcut = "%@\\Microsoft\\Windows\\Start Menu\\Programs\\%@.lnk".fmt(
 			process.env.APPDATA,
