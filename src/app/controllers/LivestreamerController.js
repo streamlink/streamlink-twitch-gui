@@ -19,6 +19,7 @@ define([
 	    re_replace   = /^\[cli]\[\S+]\s+/,
 	    re_player    = /^Starting player: \S+/;
 
+	var split = /\r?\n/g;
 
 	function VersionError( version ) { this.version = version; }
 	VersionError.prototype = new Error();
@@ -366,16 +367,16 @@ define([
 			}
 
 			// reject promise on any error output
-			spawn.stderr.on( "data", function( data ) {
-				data = String( data ).trim();
+			function stderrCallback( data ) {
+				data = data.trim();
 				set( livestreamer, "isError", true );
 				defer.reject( parseError( data ) || new Error( data ) );
-			});
+			}
 
 			// fulfill promise as soon as livestreamer is launching the player
 			// also print all stdout messages
-			spawn.stdout.on( "data", function( data ) {
-				data = String( data ).trim();
+			function stdoutCallback( data ) {
+				data = data.trim();
 				var error = parseError( data );
 				if ( error ) {
 					set( livestreamer, "isError", true );
@@ -400,6 +401,14 @@ define([
 					 */
 					Ember.run.later( defer, defer.resolve, 500 );
 				}
+			}
+
+			spawn.stderr.on( "data", function( data ) {
+				String( data ).trim().split( split ).forEach( stderrCallback );
+			});
+
+			spawn.stdout.on( "data", function( data ) {
+				String( data ).trim().split( split ).forEach( stdoutCallback.bind( this ) );
 			}.bind( this ) );
 
 			return defer.promise;
