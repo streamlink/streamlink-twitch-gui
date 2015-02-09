@@ -40,7 +40,7 @@
 		"livestreamer-version-min": "1.11.1",
 		"livestreamer-validation-timeout": 10000,
 		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",
-		"livestreamer-docs-url": "http://livestreamer.tanuki.se/en/latest/cli.html#cmdoption{cmd}",
+		"livestreamer-docs-url": "http://docs.livestreamer.io/en/latest/cli.html#cmdoption{cmd}",
 		"twitch-chat-url": "http://www.twitch.tv/{channel}/chat",
 		"twitch-subscribe-url": "http://www.twitch.tv/{channel}/subscribe",
 		"twitch-oauth-base-uri": "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id={client-id}&redirect_uri={redirect-uri}&scope={scope}",
