@@ -16,70 +16,76 @@ define( [ "ember", "utils/semver" ], function( Ember, semver ) {
 		check: function() {
 			if ( !get( this, "version" ) ) { return; }
 
-			var checkReleases = this.checkReleases.bind( this );
+			var getReleases = this.getReleases.bind( this );
 
 			// load Versioncheck record
 			this.store.find( "versioncheck", 1 ).then(function( record ) {
 				if ( Ember.getWithDefault( record, "checkagain", 0 ) <= +new Date() ) {
 					// let's check for a new release
-					checkReleases();
+					getReleases();
 				}
-			}, checkReleases );
+			}, getReleases );
+		}.on( "init" ),
+
+		getReleases: function() {
+			this.store.find( "githubReleases" )
+				.then(function( releases ) {
+					// filter records first
+					return releases.toArray().filter(function( release ) {
+						// ignore drafts
+						return !get( release, "draft" );
+					});
+				})
+				.then( this.checkReleases.bind( this ) );
 		},
 
-		checkReleases: function() {
+		checkReleases: function( releases ) {
 			function getVers( record ) {
 				return get( record, "tag_name" );
 			}
 
-			this.store.find( "githubReleases" ).then(function( releases ) {
-				// filter records first
-				releases = releases.toArray().filter(function( release ) {
-					// ignore drafts
-					return !get( release, "draft" );
-				});
+			// create a fake record for the current version and save a reference
+			var current = { tag_name: "v" + get( this, "version" ) };
+			// find out the maximum of fetched releases
+			var maximum = semver.getMax( releases, getVers );
+			// and compare it with the current version
+			var latest  = semver.getMax( [ current, maximum ], getVers );
 
-				// create a fake record for the current version and save a reference
-				var current = { tag_name: "v" + get( this, "version" ) };
-				// find out the maximum of fetched releases
-				var maximum = semver.getMax( releases, getVers );
-				// and compare it with the current version
-				var latest  = semver.getMax( [ current, maximum ], getVers );
+			// no new release? check again in a few days
+			if ( current === latest || getVers( current ) === getVers( latest ) ) {
+				return this.send( "releaseIgnore" );
+			}
 
-				// no new release? check again in a few days
-				if ( current === latest || getVers( current ) === getVers( latest ) ) {
-					return this.send( "releaseIgnore" );
-				}
-
-				// ask the user what to do
-				this.send( "openModal", "versioncheckModal", this, {
-					modalHead: "You're using an outdated version: %@".fmt(
-						getVers( current )
-					),
-					modalBody: "Do you want to download the latest release now? (%@)".fmt(
-						getVers( latest )
-					),
-					downloadURL: get( latest, "html_url" )
-				});
-			}.bind( this ) );
+			// ask the user what to do
+			this.send( "openModal", "versioncheckModal", this, {
+				modalHead: "You're using an outdated version: %@".fmt(
+					getVers( current )
+				),
+				modalBody: "Do you want to download the latest release now? (%@)".fmt(
+					getVers( latest )
+				),
+				downloadURL: get( latest, "html_url" )
+			});
 		},
 
 		actions: {
-			releaseDownload: function() {
+			releaseDownload: function( callback ) {
 				this.send( "openBrowser", get( this, "downloadURL" ) );
 				this.send( "releaseIgnore" );
+				if ( callback ) { callback(); }
 			},
 
 			releaseIgnore: function() {
 				var store = this.store,
-				    data  = { checkagain: +new Date() + get( this, "time" ) };
+				    check = store.getById( "versioncheck", 1 );
 
-				this.store.find( "versioncheck", 1 ).then(function( record ) {
-					record.setProperties( data ).save();
-				}, function() {
-					data.id = 1;
-					store.createRecord( "versioncheck", data ).save();
-				});
+				if ( check ) {
+					store.unloadRecord( check );
+				}
+				store.createRecord( "versioncheck", {
+					id: 1,
+					checkagain: +new Date() + get( this, "time" )
+				}).save();
 
 				this.send( "closeModal" );
 			}

@@ -3,7 +3,7 @@ define( [ "ember" ], function( Ember ) {
 	return Ember.Route.extend({
 		init: function() {
 			this._super();
-			this.controllerFor( "versioncheck" ).check();
+			this.controllerFor( "versioncheck" );
 			this.controllerFor( "userAuth" ).validateToken();
 			this.controllerFor( "notification" );
 		},
