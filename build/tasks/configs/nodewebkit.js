@@ -2,7 +2,7 @@ module.exports = {
 	options: {
 		buildDir: "build/releases",
 		cacheDir: "build/cache",
-		version : "<%= package.config['node-webkit-version'] %>",
+		version : "<%= package.config['nw-js-version'] %>",
 		winIco  : "build/resources/icons/icon-16-32-48-256.ico",
 		macIcns : "build/resources/icons/icon-512.icns",
 		macPlist: {
