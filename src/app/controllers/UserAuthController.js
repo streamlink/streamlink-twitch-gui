@@ -1,8 +1,8 @@
 define( [ "ember" ], function( Ember ) {
 
-	var	get = Ember.get,
-		set = Ember.set,
-		reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
+	var get   = Ember.get,
+	    set   = Ember.set,
+	    reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
 
 
 	return Ember.Controller.extend( Ember.Evented, {
@@ -19,10 +19,11 @@ define( [ "ember" ], function( Ember ) {
 		}.property( "config" ),
 
 		auth_url: function() {
-			var	baseuri		= get( this, "config.twitch-oauth-base-uri" ),
-				clientid	= get( this, "config.twitch-oauth-client-id" ),
-				redirecturi	= get( this, "config.twitch-oauth-redirect-uri" ),
-				scope		= get( this, "auth_scope" );
+			var baseuri     = get( this, "config.twitch-oauth-base-uri" ),
+			    clientid    = get( this, "config.twitch-oauth-client-id" ),
+			    redirecturi = get( this, "config.twitch-oauth-redirect-uri" ),
+			    scope       = get( this, "auth_scope" );
+
 			return baseuri
 				.replace( "{client-id}", clientid )
 				.replace( "{redirect-uri}", encodeURIComponent( redirecturi ) )
@@ -33,8 +34,8 @@ define( [ "ember" ], function( Ember ) {
 		enableRedirect: function() {
 			if ( this.redirectEnabled ) { return; }
 
-			var	src	= reURI.exec( get( this, "config.twitch-oauth-base-uri" ) ),
-				dst	= reURI.exec( get( this, "config.twitch-oauth-redirect-uri" ) );
+			var src = reURI.exec( get( this, "config.twitch-oauth-base-uri" ) ),
+			    dst = reURI.exec( get( this, "config.twitch-oauth-redirect-uri" ) );
 
 			if ( !src || !dst ) {
 				throw new Error( "Invalid oauth parameters" );
@@ -45,11 +46,17 @@ define( [ "ember" ], function( Ember ) {
 			this.redirectEnabled = true;
 		},
 
+
+		check: function() {
+			this.validateToken().catch(function(){});
+		}.on( "init" ),
+
+
 		validateToken: function() {
-			var	self	= this,
-				auth	= self.auth,
-				token	= get( auth, "access_token" ),
-				defer;
+			var self  = this,
+			    auth  = self.auth,
+			    token = get( auth, "access_token" ),
+			    defer;
 
 			// no token set
 			if ( !token ) { return Promise.reject(); }
@@ -118,9 +125,9 @@ define( [ "ember" ], function( Ember ) {
 				var self = this;
 
 				function callback( hash ) {
-					var	params	= self.parseParams( hash ),
-						token	= params[ "access_token" ],
-						scope	= params[ "scope" ];
+					var params = self.parseParams( hash ),
+					    token  = params[ "access_token" ],
+					    scope  = params[ "scope" ];
 
 					// check the returned token and compare scopes
 					if ( !token || !token.length || scope !== get( self, "auth_scope" ) ) {
