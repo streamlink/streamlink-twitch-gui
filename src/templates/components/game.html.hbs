@@ -1,5 +1,9 @@
 <header>{{unbound game.name}}</header>
+{{#if previewError}}
+<div class="previewError"><i class="fa fa-twitch"></i></div>
+{{else}}
 <img src="{{unbound game.box.large}}">
+{{/if}}
 {{#if hasStats}}
 <footer>
 <span><i class="fa fa-video-camera"></i> {{unbound channels}}</span>

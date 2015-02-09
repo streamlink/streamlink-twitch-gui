@@ -13,6 +13,14 @@ define([
 		showGame: false,
 		_showGame: Ember.computed.and( "showGame", "stream.channel.game" ),
 
+		previewError: false,
+
+		willInsertElement: function() {
+			this._super.apply( this, arguments );
+
+			this.$( "img" ).one( "error", Ember.set.bind( null, this, "previewError", true ) );
+		},
+
 		actions: {
 			"startStream": function() {
 				this.sendAction( "action", this.get( "stream" ) );
