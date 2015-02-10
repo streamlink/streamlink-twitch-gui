@@ -15,35 +15,8 @@
 		color: @color-text-darker;
 	}
 
-	img, .previewError {
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		margin: 0;
-	}
-
 	> li {
 		float: left;
-	}
-
-	.previewError {
-		background: @color-twitch-purple;
-
-		> i {
-			position: absolute;
-			top: 50%;
-			left: 0;
-			right: 0;
-			font-size: 4.5em;
-			line-height: 0;
-			color: @color-text-brightest !important;
-			text-align: center;
-			opacity: 1;
-			-webkit-transition: opacity .333s ease-out;
-		}
 	}
 }
 
@@ -183,7 +156,7 @@
 			opacity: 1;
 		}
 
-		&:hover > .previewError > i {
+		&:hover > .previewError::before {
 			opacity: 0;
 		}
 	}

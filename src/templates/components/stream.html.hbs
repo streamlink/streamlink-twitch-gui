@@ -4,11 +4,7 @@
 {{#if stream.channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}{{/if}}
 </header>
 <section class="preview" {{action "startStream"}} {{bind-attr title="stream.channel.status"}}>
-{{#if previewError}}
-<div class="previewError"><i class="fa fa-twitch"></i></div>
-{{else}}
-<img src="{{unbound stream.preview.medium_nocache}}">
-{{/if}}
+<img class="previewImage" src="{{unbound stream.preview.medium_nocache}}">
 {{#if _showGame}}
 <footer><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.channel.game title=stream.channel.game}}{{unbound stream.channel.game}}{{/link-to}}</footer>
 {{/if}}

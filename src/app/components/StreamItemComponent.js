@@ -1,9 +1,10 @@
 define([
 	"ember",
+	"views/PreviewImageViewMixin",
 	"text!templates/components/stream.html.hbs"
-], function( Ember, Template ) {
+], function( Ember, PreviewImage, Template ) {
 
-	return Ember.Component.extend({
+	return Ember.Component.extend( PreviewImage, {
 		layout: Ember.Handlebars.compile( Template ),
 		tagName: "li",
 		classNameBindings: [ ":stream-component", "_showGame:show-game" ],
@@ -12,14 +13,6 @@ define([
 
 		showGame: false,
 		_showGame: Ember.computed.and( "showGame", "stream.channel.game" ),
-
-		previewError: false,
-
-		willInsertElement: function() {
-			this._super.apply( this, arguments );
-
-			this.$( "img" ).one( "error", Ember.set.bind( null, this, "previewError", true ) );
-		},
 
 		actions: {
 			"startStream": function() {
