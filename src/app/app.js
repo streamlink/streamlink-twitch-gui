@@ -26,6 +26,8 @@ define(function( require ) {
 
 
 		// Models: localstorage
+		Window: require( "models/Window" ),
+		WindowAdapter: require( "store/LocalstorageAdapter" ),
 		Settings: require( "models/Settings" ),
 		SettingsAdapter: require( "store/LocalstorageAdapter" ),
 		Versioncheck: require( "models/Versioncheck" ),
