@@ -67,7 +67,7 @@ define( [ "ember" ], function( Ember ) {
 
 	Ember.Application.initializer({
 		name: "window",
-		after: [ "store", "node-webkit" ],
+		after: [ "store", "nwjs" ],
 
 		initialize: function( container, application ) {
 			var store    = container.lookup( "store:main" ),

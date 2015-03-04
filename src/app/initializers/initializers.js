@@ -1,5 +1,5 @@
 define([
-	"initializers/node-webkit",
+	"initializers/nwjs",
 	"initializers/window",
 	"initializers/metadata",
 	"initializers/settings",

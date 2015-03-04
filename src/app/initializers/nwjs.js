@@ -139,7 +139,7 @@ define( [ "ember", "./metadata", "utils/semver" ], function( Ember, metadata, se
 
 
 	Ember.Application.initializer({
-		name: "node-webkit",
+		name: "nwjs",
 
 		initialize: function( container ) {
 			// inject nwGui and nwWindow into all routes and controllers
