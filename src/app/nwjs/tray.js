@@ -40,7 +40,7 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 		_buildTray: function() {
 			var tray = new nwGui.Tray({
 				icon   : get( this, "iconRes" ),
-				tooltip: get( this, "tooltip" )
+				tooltip: get( this, "name" )
 			});
 			tray.menu = get( this, "menu" );
 			tray.iconsAreTemplates = false;
