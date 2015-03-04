@@ -3,93 +3,29 @@ define([
 	"nwWindow",
 	"ember",
 	"./metadata",
-	"utils/semver"
+	"nwjs/shortcut",
+	"nwjs/tray"
 ], function(
 	nwGui,
 	nwWindow,
 	Ember,
 	metadata,
-	semver
+	shortcut,
+	tray
 ) {
-
-	var trayIcon    = null,
-		isHidden    = false,
-		isMaximized = false,
-		isMinimized = false,
-
-		trayTooltip = metadata.package.config[ "display-name" ],
-		trayIconImg = (function getTrayIconRes() {
-			var	dpr	= window.devicePixelRatio,
-				res	= process.platform !== "darwin" || dpr > 2
-					? 48
-					: dpr > 1
-						? 32
-						: 16;
-			return metadata.package.config[ "tray-icon" ].replace( "{res}", res );
-		})(),
-		trayMenu    = (function() {
-			var menu = new nwGui.Menu();
-
-			menu.taskbar = true;
-			menu.toggleVisibility = function() {
-				nwWindow.toggleVisibility();
-				// also toggle taskbar visiblity on click (gui_integration === both)
-				if ( menu.taskbar ) {
-					nwWindow.setShowInTaskbar( !isHidden );
-				}
-			};
-
-			menu.append( new nwGui.MenuItem({
-				label: "Toggle visibility",
-				click: menu.toggleVisibility
-			}));
-
-			menu.append( new nwGui.MenuItem({
-				label: "Close application",
-				click: function() {
-					nwWindow.close();
-				}
-			}));
-
-			return menu;
-		})();
-
-
-	var OS   = require( "os" );
-	var win8 = "6.2.0";
-
-	if (
-		// check if current platform is windows
-		   /^win/.test( process.platform )
-		// check if windows version is >= 8
-		&& semver.sort([ OS.release(), win8 ]).shift() === win8
-	) {
-		// register AppUserModelID
-		// this is required for toast notifications on windows 8+
-		// https://github.com/rogerwang/node-webkit/wiki/Notification#windows
-		var shortcut = "%@\\Microsoft\\Windows\\Start Menu\\Programs\\%@.lnk".fmt(
-			process.env.APPDATA,
-			Ember.get( metadata, "package.config.display-name" )
-		);
-		nwGui.App.createShortcut( shortcut );
-	}
-
-
-	function removeTrayIcon() {
-		if ( trayIcon ) {
-			trayIcon.remove();
-			trayIcon = null;
-		}
-	}
 
 	window.addEventListener( "beforeunload", function() {
 		// remove all listeners
 		nwWindow.removeAllListeners();
 		process.removeAllListeners();
 		// prevent tray icons from stacking up when refreshing the page or devtools
-		removeTrayIcon();
+		tray.remove();
 	}, false );
 
+
+	var isHidden    = true;
+	var isMaximized = false;
+	var isMinimized = false;
 
 	nwWindow.on( "maximize",   function onMaximize()   { isMaximized = true;  } );
 	nwWindow.on( "unmaximize", function onUnmaximize() { isMaximized = false; } );
@@ -110,7 +46,7 @@ define([
 		onIntegrationChange();
 
 		// make the application window visible
-		nwWindow.show();
+		nwWindow.toggleVisibility( true );
 	});
 
 
@@ -134,14 +70,15 @@ define([
 	nwWindow.setShowInTray = function setShowInTray( bool, taskbar ) {
 		// always remove the tray icon...
 		// we need a new click event listener in case the taskbar param has changed
-		removeTrayIcon();
+		tray.remove();
 		if ( bool ) {
-			trayIcon = new nwGui.Tray({ icon: trayIconImg });
-			trayIcon.tooltip = trayTooltip;
-			trayIcon.menu = trayMenu;
-			trayIcon.iconsAreTemplates = false;
-			trayIcon.on( "click", trayMenu.toggleVisibility );
-			trayMenu.taskbar = taskbar;
+			tray.add(function() {
+				nwWindow.toggleVisibility();
+				// also toggle taskbar visiblity on click (gui_integration === both)
+				if ( taskbar ) {
+					nwWindow.setShowInTaskbar( !isHidden );
+				}
+			});
 		}
 	};
 
@@ -163,18 +100,25 @@ define([
 		name: "nwjs",
 
 		initialize: function( container ) {
+			var displayName = Ember.get( metadata, "package.config.display-name" );
+			var trayIconImg = Ember.get( metadata, "package.config.tray-icon" );
+
+			shortcut.create( displayName );
+			tray.init( displayName, trayIconImg );
+
+
 			// listen for the close event and show the dialog instead of strictly shutting down
 			nwWindow.on( "close", function() {
 				if ( location.pathname !== "/index.html" ) {
-					return this.close( true );
+					return nwWindow.close( true );
 				}
 
 				try {
-					nwWindow.toggleVisibility( true );
+					nwWindow.show();
 					nwWindow.focus();
 					container.lookup( "controller:application" ).send( "winClose" );
 				} catch ( e ) {
-					this.close( true );
+					nwWindow.close( true );
 				}
 			});
 		}
