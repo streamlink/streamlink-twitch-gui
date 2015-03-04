@@ -1,10 +1,12 @@
 define( [ "ember-data", "moment" ], function( DS, moment ) {
 
 	return DS.Model.extend({
+		average_fps: DS.attr( "number" ),
 		channel: DS.belongsTo( "twitchChannel" ),
 		created_at: DS.attr( "date" ),
 		game: DS.attr( "string" ),
 		preview: DS.belongsTo( "twitchImage" ),
+		video_height: DS.attr( "number" ),
 		viewers: DS.attr( "number" ),
 
 
