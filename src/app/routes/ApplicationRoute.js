@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
 	return Ember.Route.extend({
 		init: function() {
@@ -30,7 +30,7 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"openBrowser": function( url ) {
-				this.nwGui.Shell.openExternal( url );
+				nwGui.Shell.openExternal( url );
 			},
 
 			"openLivestreamer": function( stream ) {

@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 
 	var get = Ember.get;
 
@@ -31,25 +31,25 @@ define( [ "ember" ], function( Ember ) {
 
 		actions: {
 			"winRefresh": function() {
-				this.nwWindow.reloadIgnoringCache();
+				nwWindow.reloadIgnoringCache();
 			},
 
 			"winDevTools": function() {
-				this.nwWindow.showDevTools();
+				nwWindow.showDevTools();
 			},
 
 			"winMin": function() {
 				if ( get( this.settings, "gui_integration" ) === 2 ) {
 					// tray only: just hide the window
-					this.nwWindow.toggleVisibility( false );
+					nwWindow.toggleVisibility( false );
 				} else {
 					// taskbar or both: just minimize the window
-					this.nwWindow.toggleMinimize( false );
+					nwWindow.toggleMinimize( false );
 				}
 			},
 
 			"winMax": function() {
-				this.nwWindow.toggleMaximize();
+				nwWindow.toggleMaximize();
 			},
 
 			"winClose": function() {
@@ -64,7 +64,7 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"quit": function() {
-				this.nwWindow.close( true );
+				nwWindow.close( true );
 			},
 
 			"shutdown": function() {

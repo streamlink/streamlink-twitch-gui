@@ -5,7 +5,6 @@
 	"indent"   : 4,
 	"maxlen"   : 100,
 	"maxdepth" : 4,
-	"maxparams": 5,
 
 	"browser"  : true,
 	"node"     : true,

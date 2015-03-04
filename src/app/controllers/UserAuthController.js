@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 	var get   = Ember.get,
 	    set   = Ember.set,
@@ -42,7 +42,7 @@ define( [ "ember" ], function( Ember ) {
 			}
 
 			// enable the redirect from https://api.twitch.tv to app://livestreamer-twitch-gui
-			this.nwGui.App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
+			nwGui.App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
 			this.redirectEnabled = true;
 		},
 
@@ -154,17 +154,17 @@ define( [ "ember" ], function( Ember ) {
 				function onClosed() {
 					self.auth_win = null;
 					delete window.OAUTH_CALLBACK;
-					self.nwWindow.cookiesRemoveAll();
+					nwWindow.cookiesRemoveAll();
 				}
 
 				// prepare...
 				set( self, "auth_failure", false );
 				self.enableRedirect();
-				self.nwWindow.cookiesRemoveAll();
+				nwWindow.cookiesRemoveAll();
 				window.OAUTH_CALLBACK = callback;
 
 				// open window
-				self.auth_win = self.nwGui.Window.open(
+				self.auth_win = nwGui.Window.open(
 					get( self, "auth_url" ),
 					get( self, "oauth.window" )
 				);

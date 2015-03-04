@@ -1,9 +1,18 @@
-define( [ "ember", "./metadata", "utils/semver" ], function( Ember, metadata, semver ) {
+define([
+	"nwGui",
+	"nwWindow",
+	"ember",
+	"./metadata",
+	"utils/semver"
+], function(
+	nwGui,
+	nwWindow,
+	Ember,
+	metadata,
+	semver
+) {
 
-	var	nwGui       = window.nwDispatcher.requireNwGui(),
-		nwWindow    = nwGui.Window.get(),
-
-		trayIcon    = null,
+	var trayIcon    = null,
 		isHidden    = false,
 		isMaximized = false,
 		isMinimized = false,
@@ -142,14 +151,6 @@ define( [ "ember", "./metadata", "utils/semver" ], function( Ember, metadata, se
 		name: "nwjs",
 
 		initialize: function( container ) {
-			// inject nwGui and nwWindow into all routes and controllers
-			container.register( "nw:nwGui",    nwGui,    { instantiate: false } );
-			container.register( "nw:nwWindow", nwWindow, { instantiate: false } );
-			container.injection( "route",      "nwGui",    "nw:nwGui" );
-			container.injection( "controller", "nwGui",    "nw:nwGui" );
-			container.injection( "route",      "nwWindow", "nw:nwWindow" );
-			container.injection( "controller", "nwWindow", "nw:nwWindow" );
-
 			// listen for the close event and show the dialog instead of strictly shutting down
 			nwWindow.on( "close", function() {
 				if ( location.pathname !== "/index.html" ) {

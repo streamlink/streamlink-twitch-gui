@@ -1,9 +1,16 @@
 define([
+	"nwWindow",
 	"ember",
 	"utils/mkdirp",
 	"utils/download",
 	"utils/clearfolder"
-], function( Ember, mkdirp, download, clearfolder ) {
+], function(
+	nwWindow,
+	Ember,
+	mkdirp,
+	download,
+	clearfolder
+) {
 
 	var PATH  = require( "path" ),
 	    OS    = require( "os" ),
@@ -208,8 +215,8 @@ define([
 		notificationClick: function( settings, stream ) {
 			// always restore the window
 			if ( settings !== 0 ) {
-				this.nwWindow.toggleMinimize( true );
-				this.nwWindow.toggleVisibility( true );
+				nwWindow.toggleMinimize( true );
+				nwWindow.toggleVisibility( true );
 			}
 
 			switch( settings ) {

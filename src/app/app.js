@@ -174,7 +174,7 @@ define(function( require ) {
 		// ready event
 		ready: function ready() {
 			// make the application window visible
-			this.__container__.lookup( "nw:nwWindow" ).show();
+			require( "nwWindow" ).show();
 		}
 
 	});

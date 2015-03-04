@@ -1,12 +1,11 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 
 	Ember.Application.initializer({
 		name: "settings",
 		after: [ "store", "nwjs" ],
 
 		initialize: function( container, application ) {
-			var	store = container.lookup( "store:main" ),
-				nwWindow = container.lookup( "nw:nwWindow" );
+			var store = container.lookup( "store:main" );
 
 			// wait for the promise to resolve first
 			application.deferReadiness();

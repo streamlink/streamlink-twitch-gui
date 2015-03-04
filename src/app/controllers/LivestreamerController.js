@@ -1,9 +1,18 @@
 define([
+	"nwGui",
+	"nwWindow",
 	"ember",
 	"models/Livestreamer",
 	"utils/which",
 	"utils/semver"
-], function( Ember, Livestreamer, which, semver ) {
+], function(
+	nwGui,
+	nwWindow,
+	Ember,
+	Livestreamer,
+	which,
+	semver
+) {
 
 	var CP  = require( "child_process" ),
 	    get = Ember.get,
@@ -425,13 +434,13 @@ define([
 			switch ( get( this.settings, "gui_minimize" ) ) {
 				// minimize
 				case 1:
-					this.nwWindow.toggleMinimize( restore );
+					nwWindow.toggleMinimize( restore );
 					break;
 				// move to tray: toggle window and taskbar visibility
 				case 2:
-					this.nwWindow.toggleVisibility( restore );
+					nwWindow.toggleVisibility( restore );
 					if ( get( this.settings, "isVisibleInTaskbar" ) ) {
-						this.nwWindow.setShowInTaskbar( restore );
+						nwWindow.setShowInTaskbar( restore );
 					}
 					break;
 			}
@@ -499,7 +508,7 @@ define([
 
 			"share": function( callback ) {
 				var url = get( this, "current.stream.channel.url" ),
-				    cb  = this.nwGui.Clipboard.get();
+				    cb  = nwGui.Clipboard.get();
 				if ( url && cb ) {
 					cb.set( url, "text" );
 					if ( callback ) { callback(); }

@@ -23,7 +23,9 @@ requirejs.config({
 
 	"map": {
 		"*": {
-			"handlebars": "handlebars-wrapper"
+			"handlebars": "handlebars-wrapper",
+			"nwGui"     : "nwjs/nwGui",
+			"nwWindow"  : "nwjs/nwWindow"
 		},
 		"handlebars-wrapper": {
 			"handlebars": "handlebars"
@@ -32,34 +34,34 @@ requirejs.config({
 
 	"paths": {
 		// RequireJS plugins
-		"text"			: "../vendor/requirejs-text/text",
+		"text": "../vendor/requirejs-text/text",
 
 		// Vendor
-		"ember"			: "../vendor/ember/ember",
-		"ember-data"	: "../vendor/ember-data/ember-data",
-		"ember-data-ls"	: "../vendor/ember-localstorage-adapter/localstorage_adapter",
-		"handlebars"	: "../vendor/handlebars/handlebars",
-		"jquery"		: "../vendor/jquery/dist/jquery",
-		"Selecter"		: "../vendor/Selecter/jquery.fs.selecter",
-		"moment"		: "../vendor/momentjs/moment",
+		"ember"        : "../vendor/ember/ember",
+		"ember-data"   : "../vendor/ember-data/ember-data",
+		"ember-data-ls": "../vendor/ember-localstorage-adapter/localstorage_adapter",
+		"handlebars"   : "../vendor/handlebars/handlebars",
+		"jquery"       : "../vendor/jquery/dist/jquery",
+		"Selecter"     : "../vendor/Selecter/jquery.fs.selecter",
+		"moment"       : "../vendor/momentjs/moment",
 
 		// App
-		"App"			: "app",
-		"Resolver"		: "resolver",
-		"Router"		: "router",
+		"App"     : "app",
+		"Resolver": "resolver",
+		"Router"  : "router",
 
 		// Ember paths
-		"root"			: "..",
-		"initializers"	: "initializers",
-		"models"		: "models",
-		"views"			: "views",
-		"controllers"	: "controllers",
-		"routes"		: "routes",
-		"components"	: "components",
-		"store"			: "store",
-		"utils"			: "utils",
-		"gui"			: "gui",
-		"templates"		: "../templates"
+		"root"        : "..",
+		"initializers": "initializers",
+		"models"      : "models",
+		"views"       : "views",
+		"controllers" : "controllers",
+		"routes"      : "routes",
+		"components"  : "components",
+		"store"       : "store",
+		"utils"       : "utils",
+		"gui"         : "gui",
+		"templates"   : "../templates"
 	}
 });
 

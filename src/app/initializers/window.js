@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 	var get = Ember.get,
 	    set = Ember.set;
@@ -70,9 +70,7 @@ define( [ "ember" ], function( Ember ) {
 		after: [ "store", "nwjs" ],
 
 		initialize: function( container, application ) {
-			var store    = container.lookup( "store:main" ),
-			    nwGui    = container.lookup( "nw:nwGui" ),
-			    nwWindow = container.lookup( "nw:nwWindow" );
+			var store = container.lookup( "store:main" );
 
 			// wait for the promise to resolve first
 			application.deferReadiness();
