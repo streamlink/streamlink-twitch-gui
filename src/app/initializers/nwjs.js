@@ -97,6 +97,23 @@ define([
 	nwWindow.on( "restore",    function onRestore()    { isMinimized = false; } );
 
 
+	nwWindow.on( "ready", function onReady( settings ) {
+		// taskbar and tray OS integrations
+		function onIntegrationChange() {
+			var taskbar = Ember.get( settings, "isVisibleInTaskbar" );
+			var tray    = Ember.get( settings, "isVisibleInTray" );
+			nwWindow.setShowInTaskbar( taskbar );
+			nwWindow.setShowInTray( tray, taskbar );
+		}
+		// observe the settings record
+		Ember.addObserver( settings, "gui_integration", onIntegrationChange );
+		onIntegrationChange();
+
+		// make the application window visible
+		nwWindow.show();
+	});
+
+
 	nwWindow.toggleMaximize = function toggleMaximize( bool ) {
 		if ( bool === undefined ) { bool = isMaximized; }
 		nwWindow[ bool ? "unmaximize" : "maximize" ]();
@@ -126,11 +143,6 @@ define([
 			trayIcon.on( "click", trayMenu.toggleVisibility );
 			trayMenu.taskbar = taskbar;
 		}
-	};
-
-	nwWindow.changeIntegrations = function changeIntegrations( taskbar, tray ) {
-		nwWindow.setShowInTaskbar( taskbar );
-		nwWindow.setShowInTray( tray, taskbar );
 	};
 
 

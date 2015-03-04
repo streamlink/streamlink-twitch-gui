@@ -173,8 +173,11 @@ define(function( require ) {
 
 		// ready event
 		ready: function ready() {
-			// make the application window visible
-			require( "nwWindow" ).show();
+			// get the global settings record
+			var settings = this.__container__.lookup( "record:settings" );
+
+			// and emit the ready event to the nwjs window
+			require( "nwWindow" ).emit( "ready", settings );
 		}
 
 	});
