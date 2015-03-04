@@ -14,6 +14,8 @@ define([
 	tray
 ) {
 
+	var get = Ember.get;
+
 	window.addEventListener( "beforeunload", function() {
 		// remove all listeners
 		nwWindow.removeAllListeners();
@@ -36,8 +38,8 @@ define([
 	nwWindow.on( "ready", function onReady( settings ) {
 		// taskbar and tray OS integrations
 		function onIntegrationChange() {
-			var taskbar = Ember.get( settings, "isVisibleInTaskbar" );
-			var tray    = Ember.get( settings, "isVisibleInTray" );
+			var taskbar = get( settings, "isVisibleInTaskbar" );
+			var tray    = get( settings, "isVisibleInTray" );
 			nwWindow.setShowInTaskbar( taskbar );
 			nwWindow.setShowInTray( tray, taskbar );
 		}
@@ -51,7 +53,11 @@ define([
 
 		// hide in tray
 		if ( contains.call( argv, "--tray", "--hide", "--hidden" ) ) {
-			nwWindow.setShowInTray( true, Ember.get( settings, "isVisibleInTaskbar" ) );
+			nwWindow.setShowInTray( true, get( settings, "isVisibleInTaskbar" ) );
+			// remove the tray icon after clicking it if it's disabled in the settings
+			if ( !get( settings, "isVisibleInTray" ) ) {
+				tray.tray.once( "click", tray.remove.bind( tray ) );
+			}
 		} else {
 			nwWindow.toggleVisibility( true );
 		}
