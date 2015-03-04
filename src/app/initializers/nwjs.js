@@ -45,8 +45,21 @@ define([
 		Ember.addObserver( settings, "gui_integration", onIntegrationChange );
 		onIntegrationChange();
 
-		// make the application window visible
-		nwWindow.toggleVisibility( true );
+
+		// parse process arguments
+		var argv = nwGui.App.fullArgv;
+
+		// hide in tray
+		if ( contains.call( argv, "--tray", "--hide", "--hidden" ) ) {
+			nwWindow.setShowInTray( true, Ember.get( settings, "isVisibleInTaskbar" ) );
+		} else {
+			nwWindow.toggleVisibility( true );
+		}
+
+		// minimize window
+		if ( contains.call( argv, "--min", "--minimize", "--minimized" ) ) {
+			nwWindow.toggleMinimize( false );
+		}
 	});
 
 
@@ -123,5 +136,15 @@ define([
 			});
 		}
 	});
+
+
+	function contains() {
+		for ( var e, j, i = 0, l = this.length << 0, n = arguments.length; i < l; ) {
+			for ( e = this[i++], j = 0; j < n; ) {
+				if ( e === arguments[j++] ) { return true; }
+			}
+		}
+		return false;
+	}
 
 });
