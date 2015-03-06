@@ -24,7 +24,7 @@
 		"grunt-contrib-requirejs": "0.4.4",
 		"grunt-contrib-uglify": "0.7.0",
 		"grunt-contrib-watch": "0.6.1",
-		"grunt-node-webkit-builder": "1.0.0",
+		"grunt-node-webkit-builder": "1.0.1",
 		"less-plugin-clean-css": "1.4.0",
 		"load-grunt-config": "0.13.1",
 		"q": "1.0.1",
