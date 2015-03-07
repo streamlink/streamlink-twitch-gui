@@ -1,18 +1,23 @@
 define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 	var get   = Ember.get,
-	    set   = Ember.set,
-	    reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
+	    set   = Ember.set;
+
+	var reURI   = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
+	var reToken = /^[a-z\d]{30}$/i;
 
 
 	return Ember.Controller.extend( Ember.Evented, {
-		configBinding: "metadata.package.config",
+		config: Ember.computed.readOnly( "metadata.package.config" ),
 		redirectEnabled: false,
 
 		previousTransition: null,
 
 		auth_win: null,
+		auth_lock: false,
 		auth_failure: false,
+
+		auth_win_lock: Ember.computed.notEmpty( "auth_win" ),
 
 		auth_scope: function() {
 			return get( this, "config.twitch-oauth-scope" ).join( "+" );
@@ -59,7 +64,7 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 			    defer;
 
 			// no token set
-			if ( !token ) { return Promise.reject(); }
+			if ( !token || !reToken.test( token ) ) { return Promise.reject(); }
 
 			defer = Promise.defer();
 			set( auth, "isPending", true );
@@ -117,42 +122,47 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 			}
 		},
 
+		authenticate: function( token, scope ) {
+			// check the returned token and compare scopes
+			if ( !token || !token.length || scope !== get( this, "auth_scope" ) ) {
+				return Promise.reject();
+			}
+
+			// save the token for now
+			this.auth.sessionPrepare( token, scope );
+
+			// and validate it
+			return this.validateToken()
+				// something stupid happened
+				.catch(function( err ) {
+					// reset auth record
+					this.auth.sessionReset();
+					return Promise.reject( err );
+				}.bind( this ) );
+		},
+
 
 		actions: {
 			"signin": function() {
-				if ( this.auth_win ) { return; }
+				if ( get( this, "auth_win" ) ) { return; }
 
 				var self = this;
 
 				function callback( hash ) {
-					var params = self.parseParams( hash ),
-					    token  = params[ "access_token" ],
-					    scope  = params[ "scope" ];
-
-					// check the returned token and compare scopes
-					if ( !token || !token.length || scope !== get( self, "auth_scope" ) ) {
-						set( self, "auth_failure", true );
-
-					} else {
-						// save the token for now
-						self.auth.sessionPrepare( token, scope );
-						// and validate it
-						self.validateToken()
-							// user is logged in! return to previous route
-							.then( self.returnToPreviousRoute.bind( self ) )
-							// something stupid happened
-							.catch(function() {
-								set( self, "auth_failure", true );
-								// reset auth record
-								self.auth.sessionReset();
-							});
-					}
+					var params = self.parseParams( hash );
 
 					self.auth_win.close();
+
+					self.authenticate( params[ "access_token" ], params[ "scope" ] )
+						// user is logged in! return to previous route
+						.then( self.returnToPreviousRoute.bind( self ) )
+						.catch(function() {
+							set( self, "auth_failure", true );
+						});
 				}
 
 				function onClosed() {
-					self.auth_win = null;
+					set( self, "auth_win", null );
 					delete window.OAUTH_CALLBACK;
 					nwWindow.cookiesRemoveAll();
 				}
@@ -164,11 +174,12 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 				window.OAUTH_CALLBACK = callback;
 
 				// open window
-				self.auth_win = nwGui.Window.open(
+				var auth_win = nwGui.Window.open(
 					get( self, "auth_url" ),
 					get( self, "oauth.window" )
 				);
-				self.auth_win.on( "closed", onClosed );
+				auth_win.on( "closed", onClosed );
+				set( self, "auth_win", auth_win );
 			},
 
 			"signout": function() {

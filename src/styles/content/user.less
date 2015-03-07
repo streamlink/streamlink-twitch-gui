@@ -21,10 +21,59 @@
 		}
 	}
 
-	.btn-signin {
+	.token-form {
+		@button-width: 2.25em;
+
+		width: 24em;
+
+		input {
+			background: @input-background;
+			text-align: center;
+			text-indent: @button-width;
+			cursor: text;
+		}
+
+		button {
+			min-width: @button-width !important;
+			line-height: 2 !important;
+		}
+	}
+
+	footer {
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
+		margin-top: 3em;
+	}
+}
+
+.content-user {
+	.btn-signin, .btn-signout {
 		width: 8em;
-		margin-bottom: 4em;
 		z-index: 2 !important;
+	}
+
+	.btn-token {
+		width: 14em;
+		.btn-color( @color-hint );
+	}
+}
+
+.content-user-auth {
+	footer {
+		height: 5em;
+
+		> .fail {
+			margin-top: 1em;
+			text-align: center;
+		}
+	}
+
+	i.fa-spin {
+		font-size: 1em;
+		line-height: 1;
 	}
 }
 

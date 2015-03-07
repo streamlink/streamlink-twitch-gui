@@ -4,3 +4,17 @@
 {{#if notif_running}}<p>Desktop notifications are enabled</p>{{/if}}
 {{#if notif_error}}<p><a href="#" {{action "notifications_restart"}}>Restart desktop notifications</a></p>{{/if}}
 <button type="button" class="btn btn-with-icon btn-signout" {{action "signout"}}><i class="fa fa-sign-out"></i>Sign out</button>
+{{#if settings.advanced}}
+<footer>
+{{#if view.showTokenForm}}
+<div class="input-group token-form">
+<input type="text" class="form-control" data-selectable readonly {{bind-attr value=auth.access_token}}>
+<span class="input-group-btn">
+{{form-button action="copyToken" icon="fa-copy" iconanim=true}}
+</span>
+</div>
+{{else}}
+{{#form-button action="showTokenForm" targetObject=view class="btn-token" icon="fa-key"}}Show access token{{/form-button}}
+{{/if}}
+</footer>
+{{/if}}

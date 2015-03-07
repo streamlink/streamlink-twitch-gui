@@ -160,6 +160,7 @@ define(function( require ) {
 		UserIndexRoute: require( "routes/UserIndexRoute" ),
 		UserIndexController: require( "controllers/UserIndexController" ),
 		UserIndexView: require( "views/UserIndexView" ),
+		UserAuthRoute: require( "routes/UserAuthRoute" ),
 		UserAuthController: require( "controllers/UserAuthController" ),
 		UserAuthView: require( "views/UserAuthView" ),
 		UserFollowingRoute: require( "routes/UserFollowingRoute" ),
