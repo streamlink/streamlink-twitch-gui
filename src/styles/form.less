@@ -117,51 +117,6 @@ input:disabled {
 }
 
 
-// wtf... cannot use fieldset flexboxes in blink
-fieldset {
-	margin-bottom: 2em;
-	.clearfix();
-
-	> legend {
-		margin: 0 0 1em;
-		padding: 0 0 .25em;
-		border-bottom: 1px solid @color-text-brighter;
-		color: @color-text-default;
-		font-size: 1em;
-		font-weight: lighter;
-	}
-
-	> :not(legend) {
-		margin-bottom: 1em;
-	}
-
-	> .left {
-		width: 33.333%;
-		float: left;
-		clear: both;
-		padding-right: 1.5em;
-	}
-
-	> .right {
-		width: 66.667%;
-		float: right;
-	}
-
-	&.submit {
-		margin: 5em 0 3em;
-
-		> div {
-			display: flex;
-			justify-content: center;
-
-			> .btn {
-				margin: 0 .5em;
-			}
-		}
-	}
-}
-
-
 .input-group-btn {
 	font-size: inherit;
 }

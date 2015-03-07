@@ -1,29 +1,79 @@
 
 .content-settings {
-	.left > i.fa {
-		color: @color-text-dark;
-		width: 1em;
-		margin-right: .25em;
-		text-align: center;
-	}
 
-	.left > span {
-		display: block;
-		padding-left: 2em;
-		font-size: .75em;
-		color: @color-text-bright;
+	// wtf... cannot use fieldset flexboxes in blink
+	fieldset {
+		margin-bottom: 2em;
+		.clearfix();
 
-		.docs {
-			display: table;
-			margin-top: .25em;
-			padding: 0 .25em;
-			white-space: nowrap;
-			font-style: italic;
-			cursor: pointer;
+		> legend {
+			margin: 0 0 1em;
+			padding: 0 0 .25em;
+			border-bottom: 1px solid @color-text-brighter;
+			color: @color-text-default;
+			font-size: 1em;
+			font-weight: lighter;
+		}
 
-			&:hover {
-				color: @color-twitch-purple-light;
-				background: @color-text-brightest;
+		> :not(legend) {
+			margin-bottom: 1em;
+		}
+
+		// left column
+		> div:nth-of-type(2n+1) {
+			width: 33.333%;
+			float: left;
+			clear: both;
+			padding-right: 1.5em;
+
+			> i.fa {
+				color: @color-text-dark;
+				width: 1em;
+				margin-right: .25em;
+				text-align: center;
+			}
+
+			> span {
+				display: block;
+				padding-left: 2em;
+				font-size: .75em;
+				color: @color-text-bright;
+
+				.docs {
+					display: table;
+					margin-top: .25em;
+					padding: 0 .25em;
+					white-space: nowrap;
+					font-style: italic;
+					cursor: pointer;
+
+					&:hover {
+						color: @color-twitch-purple-light;
+						background: @color-text-brightest;
+					}
+				}
+			}
+		}
+
+		// right column
+		> div:nth-of-type(2n+1) + div {
+			width: 66.667%;
+			float: right;
+		}
+
+		// footer
+		&.submit {
+			margin: 5em 0 3em;
+
+			> div {
+				display: flex;
+				justify-content: center;
+				width: auto;
+				float: none;
+
+				> .btn {
+					margin: 0 .5em;
+				}
 			}
 		}
 	}
