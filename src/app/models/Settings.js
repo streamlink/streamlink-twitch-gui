@@ -2,6 +2,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 
 	return DS.Model.extend({
 
+		advanced            : DS.attr( "boolean", { defaultValue: false } ),
 		livestreamer        : DS.attr( "string", { defaultValue: "" } ),
 		quality             : DS.attr( "number", { defaultValue: 0 } ),
 		player              : DS.attr( "string", { defaultValue: "" } ),

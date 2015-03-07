@@ -14,9 +14,10 @@ define( [ "ember" ], function( Ember ) {
 		},
 
 
+		isAdvanced: Ember.computed.readOnly( "model.advanced" ),
 		isHttp: Ember.computed.equal( "model.player_passthrough", "http" ),
 		notifyGroupAndClick: Ember.computed.and( "model.notify_grouping", "model.notify_click" ),
-		// https://github.com/rogerwang/node-webkit/wiki/Notification#linux :(
+		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
 		hasNotificationClickSupport: process.platform !== "linux",
 
 		minimize_observer: function() {
