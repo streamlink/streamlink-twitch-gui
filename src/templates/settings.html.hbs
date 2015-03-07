@@ -16,10 +16,10 @@
 <div>{{input type="text" value=model.player_params classNames="col-xs-12" placeholder="Add custom player parameters"}}</div>
 {{#if isHttp}}
 <div><i class="fa fa-refresh"></i> Reconnect<span>In case the connection has dropped.{{livestreamer-docs cmd="--player-continuous-http"}}</span></div>
-<div><label>{{input type="checkbox" checked=model.player_reconnect}}<span>Reconnect to stream</span></label></div>
+<div>{{#check-box checked=model.player_reconnect}}Reconnect to stream{{/check-box}}</div>
 {{/if}}
 <div><i class="fa fa-times"></i> Close player<span>After the stream has ended.{{livestreamer-docs cmd="--player-no-close"}}</span></div>
-<div><label>{{input type="checkbox" checked=model.player_no_close}}<span>Do not close the player</span></label></div>
+<div>{{#check-box checked=model.player_no_close}}Do not close the player{{/check-box}}</div>
 </fieldset>
 <fieldset>
 <legend>GUI settings</legend>
@@ -28,17 +28,17 @@
 <div><i class="fa fa-minus"></i> Minimize GUI<span>When the videoplayer opens.</span></div>
 <div>{{radio-buttons buttonName="minimize" icon=true value=model.gui_minimize content=settings.constructor.minimize}}</div>
 <div><i class="fa fa-info-circle"></i> Stream popup<span>When a stream has started.</span></div>
-<div><label>{{input type="checkbox" checked=model.gui_hidestreampopup}}<span>Hide the popup on success</span></label></div>
+<div>{{#check-box checked=model.gui_hidestreampopup}}Hide the popup on success{{/check-box}}</div>
 <div><i class="fa fa-comment"></i> Open chat<span>After launching a stream.</span></div>
-<div><label>{{input type="checkbox" checked=model.gui_openchat}}<span>Automatically open chat</span></label></div>
+<div>{{#check-box checked=model.gui_openchat}}Automatically open chat{{/check-box}}</div>
 </fieldset>
 <fieldset>
 <legend>Desktop notifications</legend>
 <div><i class="fa fa-bullhorn"></i> Notifications<span>When favorites start streaming.</span></div>
-<div><label>{{input type="checkbox" checked=model.notify_enabled}}<span>Enable desktop notifications</span></label></div>
+<div>{{#check-box checked=model.notify_enabled}}Enable desktop notifications{{/check-box}}</div>
 {{#if model.notify_enabled}}
 <div><i class="fa fa-folder-open-o"></i> Grouping<span>Merge multiple notifications.</span></div>
-<div><label>{{input type="checkbox" checked=model.notify_grouping}}<span>Only show one notification at a time</span></label></div>
+<div>{{#check-box checked=model.notify_grouping}}Only show one notification at a time{{/check-box}}</div>
 {{#if hasNotificationClickSupport}}
 <div><i class="fa fa-crosshairs"></i> Notification click<span>Preferred click action.</span></div>
 <div>{{view "select" class="notifications" value=model.notify_click content=settings.constructor.notify_click optionValuePath="content.id" optionLabelPath="content.label"}}</div>

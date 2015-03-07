@@ -112,6 +112,7 @@ define(function( require ) {
 
 
 		// Components
+		CheckBoxComponent: require( "components/CheckBoxComponent" ),
 		FormButtonComponent: require( "components/FormButtonComponent" ),
 		SettingsBarComponent: require( "components/SettingsBarComponent" ),
 		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
