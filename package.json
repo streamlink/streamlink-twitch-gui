@@ -33,7 +33,7 @@
 
 	"config": {
 		"display-name": "Livestreamer Twitch GUI",
-		"nw-js-version": "0.11.6",
+		"nw-js-version": "0.12.0",
 		"version-check-days": 7,
 		"tray-icon": "img/icon-{res}.png",
 		"livestreamer-exec": "livestreamer",
