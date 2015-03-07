@@ -1,17 +1,12 @@
 define([
 	"ember",
-	"text!templates/settings.html.hbs",
-	"gui/fileselect"
-], function( Ember, Template, guiFileselect ) {
+	"text!templates/settings.html.hbs"
+], function( Ember, Template ) {
 
 	return Ember.View.extend({
 		template: Ember.Handlebars.compile( Template ),
 		tagName: "main",
-		classNames: [ "content", "content-settings" ],
-
-		didInsertElement: function() {
-			guiFileselect( this.$() );
-		}
+		classNames: [ "content", "content-settings" ]
 	});
 
 });

@@ -112,13 +112,14 @@ define(function( require ) {
 
 
 		// Components
-		CheckBoxComponent: require( "components/CheckBoxComponent" ),
 		FormButtonComponent: require( "components/FormButtonComponent" ),
 		SettingsBarComponent: require( "components/SettingsBarComponent" ),
 		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
 		LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
+		CheckBoxComponent: require( "components/CheckBoxComponent" ),
 		RadioButtonComponent: require( "components/RadioButtonComponent" ),
 		RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
+		FileSelectComponent: require( "components/FileSelectComponent" ),
 		GameItemComponent: require( "components/GameItemComponent" ),
 		StreamItemComponent: require( "components/StreamItemComponent" ),
 		InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),

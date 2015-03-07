@@ -2,7 +2,7 @@
 <fieldset>
 <legend>Livestreamer settings</legend>
 <div><i class="fa fa-cog"></i> Executable location<span>By omitting a value, livestreamer has to be added to the $PATH variable.</span></div>
-<div data-fileselect>{{input type="text" value=model.livestreamer classNames="form-control" placeholder="Leave blank for default location"}}</div>
+<div>{{file-select value=model.livestreamer inputClass="form-control" placeholder="Leave blank for default location"}}</div>
 <div><i class="fa fa-eye"></i> Preferred quality<span>Choose the default stream quality.</span></div>
 <div>{{view "select" value=model.quality content=settings.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 <div><i class="fa fa-filter"></i> Stream type<span>Make sure your player does support the selected stream type.{{livestreamer-docs cmd="--player-passthrough"}}</span></div>
@@ -11,7 +11,7 @@
 <fieldset>
 <legend>Videoplayer settings</legend>
 <div><i class="fa fa-laptop"></i> Videoplayer<span>Use a custom player other than the one defined in your livestreamer config.{{livestreamer-docs cmd="--player"}}</span></div>
-<div data-fileselect>{{input type="text" value=model.player class="form-control" placeholder="Leave blank for default player"}}</div>
+<div>{{file-select value=model.player inputClass="form-control" placeholder="Leave blank for default player"}}</div>
 <div><i class="fa fa-code"></i> Parameters<span>Add player specific parameters.{{livestreamer-docs cmd="--player-args"}}</span></div>
 <div>{{input type="text" value=model.player_params classNames="col-xs-12" placeholder="Add custom player parameters"}}</div>
 {{#if isHttp}}
