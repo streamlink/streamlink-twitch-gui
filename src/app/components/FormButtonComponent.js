@@ -6,7 +6,7 @@ define([
 	return Ember.Component.extend({
 		layout: Ember.Handlebars.compile( template ),
 		tagName: "button",
-		attributeBindings: [ "type", "title" ],
+		attributeBindings: [ "type", "title", "disabled" ],
 		type: "button",
 		title: null,
 		classNameBindings: [
@@ -37,12 +37,13 @@ define([
 			if ( this.get( "iconanim" ) ) {
 				success = function( callback ) {
 					self.set( "_iconanim", true );
-					self.element.addEventListener( "webkitAnimationEnd", function( e ) {
+					self.$().one( "webkitAnimationEnd", function( e ) {
+						e = e.originalEvent;
 						if ( e.animationName === "animIconScale" ) {
 							self.set( "_iconanim", false );
 							if ( callback ) { callback( e ); }
 						}
-					}, false );
+					});
 				};
 			}
 
