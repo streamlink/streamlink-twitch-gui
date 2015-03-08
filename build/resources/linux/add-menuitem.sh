@@ -9,7 +9,7 @@ DESKTOP=$TMP/livestreamer-twitch-gui.desktop
 cat << EOF > $DESKTOP
 [Desktop Entry]
 Type=Application
-Name=Livestreamer-Twitch-GUI
+Name=Livestreamer Twitch GUI
 GenericName=Twitch.tv browser for livestreamer
 Comment=Browse Twitch.tv and watch streams in your videoplayer of choice
 Keywords=livestreamer;twitch;
