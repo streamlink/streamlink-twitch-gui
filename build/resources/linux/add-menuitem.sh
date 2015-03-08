@@ -19,12 +19,12 @@ Icon=livestreamer-twitch-gui
 EOF
 
 xdg-desktop-menu install $DESKTOP
-xdg-icon-resource install --size 16 "icons/icon-16.png" livestreamer-twitch-gui
-xdg-icon-resource install --size 32 "icons/icon-32.png" livestreamer-twitch-gui
-xdg-icon-resource install --size 48 "icons/icon-48.png" livestreamer-twitch-gui
-xdg-icon-resource install --size 64 "icons/icon-64.png" livestreamer-twitch-gui
-xdg-icon-resource install --size 128 "icons/icon-128.png" livestreamer-twitch-gui
-xdg-icon-resource install --size 256 "icons/icon-256.png" livestreamer-twitch-gui
+xdg-icon-resource install --size 16 "$HERE/icons/icon-16.png" livestreamer-twitch-gui
+xdg-icon-resource install --size 32 "$HERE/icons/icon-32.png" livestreamer-twitch-gui
+xdg-icon-resource install --size 48 "$HERE/icons/icon-48.png" livestreamer-twitch-gui
+xdg-icon-resource install --size 64 "$HERE/icons/icon-64.png" livestreamer-twitch-gui
+xdg-icon-resource install --size 128 "$HERE/icons/icon-128.png" livestreamer-twitch-gui
+xdg-icon-resource install --size 256 "$HERE/icons/icon-256.png" livestreamer-twitch-gui
 
 rm $DESKTOP
 rm -R $TMP
