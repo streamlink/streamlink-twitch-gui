@@ -1,4 +1,4 @@
-# Contributing to Livestreamer-Twitch-GUI
+# Contributing to Livestreamer Twitch GUI
 
 Want to get involved? Thanks! There are plenty of ways to help!
 
@@ -24,7 +24,7 @@ Feature requests are welcome. But take a moment to find out whether your idea fi
 
 
 ## Developing and building
-Livestreamer-Twitch-GUI is based on [Node-Webkit (NW)][node-webkit]. NW has to be installed on your machine in order to run this program - using a browser does not work. Have a look at the [NW wiki page][nw-wiki] to get some more informations on how to run NW-apps. Also please ensure that [Node.js (including npm)][nodejs] is installed so you can build the program.
+Livestreamer Twitch GUI is based on [NW.js (formerly Node-Webkit)][NW.js]. NW.js has to be installed on your machine in order to run this program - using a browser does not work. Have a look at the [NW.js wiki page][NW.js-wiki] to get some more informations on how to run NW.js apps. Also please ensure that either [io.js][io.js] or [Node.js][Node.js] and also [npm][npm] are installed so you can build the program.
 
 Building is simple:
 
@@ -39,15 +39,17 @@ grunt release
 
 Run `grunt --help` to list all other available grunt tasks.
 
-There are two different methods to run the program while developing:
+While developing, you can choose between two methods to run the program:
 
 1. **the "easy" method**
-   Simply run `grunt dev`. This task builds the project to the `build/tmp` folder with enabled debug flags and also starts a watcher task which rebuilds changed content from the `src` folder. Now start NW (`nw build/tmp`).
+   Simply run `grunt dev`. This task builds the project to the `build/tmp` folder with enabled debug flags and also starts a watcher task which rebuilds changed content from the `src` folder. Now start NW.js (`/path/to/nw build/tmp`).
 
 2. **the "source" method**
-   Another way of running the program is by starting it directly from the `src` folder (`nw src`). Before you can do this, you need to run the `grunt metadata` task once. By using this method, only the stylesheets need to be built: run `grunt less:source` or start the watcher task `grunt watch:lesssource`.
+   Another way of running the program is by starting it directly from the `src` folder (`/path/to/nw src`). Before you can do this, you first need to run the `grunt metadata less:source` tasks once. If you're working on the stylesheets, then you should start the watcher task `grunt less:source watch:lesssource` which automatically compiles it after each change.
 
-The easiest way to debug a node-webkit application is by running `nw` with the `--remote-debugging-port=8888` parameter. Then you can comfortably access the developer console in your local browser at `http://localhost:8888/`. I recommend adding an alias for the `nw` + parameter command.
+The easiest way of debugging a NW.js application is by running `nw` with the `--remote-debugging-port=8888` parameter. Then you can comfortably access the developer console in your local browser at `http://localhost:8888/`. I recommend adding an alias for the `nw` + parameter command.
+If you're running the application from source or the compiled debug version, you're able to access NW.js' internal developer tools by clicking on the embedded button inside the titlebar.
+There also exist several IDEs with NW.js debugging support, too.
 
 
 ## Pull requests
@@ -110,7 +112,9 @@ This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5
   [howto-rebase]: https://help.github.com/articles/interactive-rebase
   [howto-format-commits]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
   [howto-open-pull-requests]: https://help.github.com/articles/using-pull-requests
-  [node-webkit]: https://github.com/rogerwang/node-webkit
-  [nw-wiki]: https://github.com/rogerwang/node-webkit/wiki
-  [nodejs]: http://nodejs.org/
+  [NW.js]: https://github.com/nwjs/nw.js
+  [NW.js-wiki]: https://github.com/nwjs/nw.js/wiki
+  [io.js]: https://iojs.org
+  [Node.js]: https://nodejs.org
+  [npm]: https://npmjs.org
   [ref-h5bp]: https://github.com/h5bp/html5-boilerplate/blob/master/CONTRIBUTING.md
