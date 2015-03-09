@@ -30,6 +30,10 @@ define([
 			}
 		}.observes( "controller.auth_win_lock" ),
 
+		auth_scope: function() {
+			return get( this, "controller.auth_scope" ).join( ", " );
+		}.property( "controller.auth_scope" ),
+
 		token: "",
 
 		tokenBtnClass: "",
@@ -39,6 +43,9 @@ define([
 			"showTokenForm": function() {
 				set( this, {
 					showTokenForm: true
+				});
+				set( this.controller, {
+					auth_failure: false
 				});
 				Ember.run.next( this, function() {
 					this.$( "input" ).focus();
@@ -104,7 +111,12 @@ define([
 								tokenBtnIcon: "fa-sign-in"
 							});
 
-							self.$( "input" ).focus().select();
+							self.$( "input" ).focus().select().on( "blur keydown", function() {
+								Ember.$( this ).off( "blur keydown" );
+								set( controller, {
+									auth_failure: false
+								});
+							});
 						});
 					});
 			}

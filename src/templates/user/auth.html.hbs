@@ -4,13 +4,16 @@
 {{#if settings.advanced}}
 {{#if view.showTokenForm}}
 <div class="input-group token-form">
-{{input type="text" action="inputAction" targetObject=view class="form-control" value=view.token placeholder="Insert access token from another device"}}
+{{input type="text" action="inputAction" targetObject=view class="form-control" value=view.token placeholder="Insert access token"}}
 <span class="input-group-btn">
 {{form-button action="signinToken" targetObject=view class=view.tokenBtnClass icon=view.tokenBtnIcon iconanim=true}}
 </span>
 </div>
+{{#unless auth_failure}}
+<p class="hint">Log in to your Twitch.tv account by using an access token.<br>Make sure that it matches the following permissions:<br><em>{{view.auth_scope}}</em></p>
+{{/unless}}
 {{else}}
-{{#form-button action="showTokenForm" targetObject=view class="btn-token" icon="fa-key" disabled=auth_win_lock}}Add access token{{/form-button}}
+{{#form-button action="showTokenForm" targetObject=view class="btn-token" icon="fa-key" disabled=auth_win_lock}}Use access token{{/form-button}}
 {{/if}}
 {{/if}}
 {{#if auth_failure}}
