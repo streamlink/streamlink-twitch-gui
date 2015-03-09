@@ -7,6 +7,14 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 	var reToken = /^[a-z\d]{30}$/i;
 
 
+	function containsAll() {
+		for ( var i = 0, l = arguments.length; i < l; i++ ) {
+			if ( this.indexOf( arguments[ i ] ) < 0 ) { return false; }
+		}
+		return true;
+	}
+
+
 	return Ember.Controller.extend( Ember.Evented, {
 		config: Ember.computed.readOnly( "metadata.package.config" ),
 		redirectEnabled: false,
@@ -19,9 +27,7 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 		auth_win_lock: Ember.computed.notEmpty( "auth_win" ),
 
-		auth_scope: function() {
-			return get( this, "config.twitch-oauth-scope" ).join( "+" );
-		}.property( "config" ),
+		auth_scope: Ember.computed.readOnly( "config.twitch-oauth-scope" ),
 
 		auth_url: function() {
 			var baseuri     = get( this, "config.twitch-oauth-base-uri" ),
@@ -32,7 +38,7 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 			return baseuri
 				.replace( "{client-id}", clientid )
 				.replace( "{redirect-uri}", encodeURIComponent( redirecturi ) )
-				.replace( "{scope}", scope );
+				.replace( "{scope}", scope.join( "+" ) );
 		}.property( "config", "auth_scope" ),
 
 
@@ -53,46 +59,145 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 
 		check: function() {
-			this.validateToken().catch(function(){});
+			var token = get( this, "auth.access_token" );
+			this.login( token, true ).catch(function(){});
 		}.on( "init" ),
 
 
-		validateToken: function() {
+		/**
+		 * Update the adapter and try to authenticate with the given access token
+		 * @param {string} token
+		 * @param {boolean} isAutoLogin
+		 * @returns {Promise}
+		 */
+		login: function( token, isAutoLogin ) {
 			var self  = this,
-			    auth  = self.auth,
-			    token = get( auth, "access_token" ),
-			    defer;
+			    auth  = self.auth;
 
 			// no token set
 			if ( !token || !reToken.test( token ) ) { return Promise.reject(); }
 
-			defer = Promise.defer();
 			set( auth, "isPending", true );
 
 			// tell the twitch adapter to use the token from now on
 			self.updateAdapter( token );
 
-			// validate token
-			self.store.findAll( "twitchToken", null )
-				.then(function( records ) { return records.objectAt( 0 ); })
-				// validate and store token
-				.then( auth.sessionValidate.bind( auth ) )
+			// validate session
+			return self.validateSession()
+				// logged in...
+				.then(function( record ) {
+					var promise = isAutoLogin
+						? Promise.resolve()
+						// save auth record if this was no auto login
+						: self.sessionSave( token, record );
+
+					// also don't forget to set the user_name on the auth record (volatile)
+					return promise.then(function() {
+						var name = get( record, "user_name" );
+						set( auth, "user_name", name );
+					});
+				})
+				// SUCCESS
 				.then(function() {
-					// success
 					set( auth, "isPending", false );
 					self.trigger( "login", true );
-					defer.resolve();
 				})
+				// FAILURE: reset the adapter
 				.catch(function( err ) {
-					// reset the adapter
 					self.updateAdapter( null );
 					set( auth, "isPending", false );
 					self.trigger( "login", false );
-					defer.reject( err );
+					return Promise.reject( err );
 				});
-
-			return defer.promise;
 		},
+
+		/**
+		 * Adapter was updated. Now check if the access token is valid.
+		 * @returns {Promise}
+		 */
+		validateSession: function() {
+			// validate token
+			return this.store.findAll( "twitchToken", null )
+				.then(function( records ) { return records.objectAt( 0 ); })
+				.then( this.validateToken.bind( this ) );
+		},
+
+		/**
+		 * Validate access token response
+		 * @param {DS.Model} record
+		 */
+		validateToken: function( record ) {
+			var valid = get( record, "valid" ),
+			    name  = get( record, "user_name" ),
+			    scope = get( record, "authorization.scopes" );
+
+			return valid === true
+			    && name
+			    && name.length
+			    && this.validateScope( scope )
+				? record
+				: Promise.reject( new Error( "Invalid access token" ) );
+		},
+
+		/**
+		 * Received and expected scopes need to be identical
+		 * @param {Array} scope
+		 * @returns {boolean}
+		 */
+		validateScope: function( scope ) {
+			var expected = get( this, "auth_scope" );
+
+			return scope instanceof Array
+			    && containsAll.apply( scope, expected );
+		},
+
+		/**
+		 * Validate the OAuth response after a login attempt
+		 * @param {string} token
+		 * @param {string} scope
+		 * @returns {Promise}
+		 */
+		validateOAuthResponse: function( token, scope ) {
+			// check the returned token and validate scopes
+			return token
+			    && token.length
+			    && scope
+			    && scope.length
+			    && this.validateScope( scope.split( "+" ) )
+				? this.login( token, false )
+				: Promise.reject();
+		},
+
+
+		/**
+		 * Update the auth record and save it
+		 * @param {string} token
+		 * @param {DS.Model} record
+		 * @returns {Promise}
+		 */
+		sessionSave: function( token, record ) {
+			return this.auth.setProperties({
+				access_token: token,
+				scope       : get( record, "authorization.scopes" ).join( "+" ),
+				date        : new Date()
+			}).save();
+		},
+
+		/**
+		 * Clear auth record and save it
+		 * @returns {Promise}
+		 */
+		sessionReset: function() {
+			// reset all values and save record
+			this.auth.setProperties({
+				access_token: null,
+				scope       : null,
+				date        : null,
+				user_name   : null
+			});
+			return this.auth.save();
+		},
+
 
 		updateAdapter: function( token ) {
 			var adapter = this.container.lookup( "adapter:application" );
@@ -122,25 +227,6 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 			}
 		},
 
-		authenticate: function( token, scope ) {
-			// check the returned token and compare scopes
-			if ( !token || !token.length || scope !== get( this, "auth_scope" ) ) {
-				return Promise.reject();
-			}
-
-			// save the token for now
-			this.auth.sessionPrepare( token, scope );
-
-			// and validate it
-			return this.validateToken()
-				// something stupid happened
-				.catch(function( err ) {
-					// reset auth record
-					this.auth.sessionReset();
-					return Promise.reject( err );
-				}.bind( this ) );
-		},
-
 
 		actions: {
 			"signin": function() {
@@ -153,7 +239,7 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 					self.auth_win.close();
 
-					self.authenticate( params[ "access_token" ], params[ "scope" ] )
+					self.validateOAuthResponse( params[ "access_token" ], params[ "scope" ] )
 						// user is logged in! return to previous route
 						.then( self.returnToPreviousRoute.bind( self ) )
 						.catch(function() {
@@ -183,8 +269,8 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 			},
 
 			"signout": function() {
-				this.auth.sessionReset()
-					.then( this.updateAdapter.bind( this ) );
+				this.sessionReset();
+				this.updateAdapter();
 			}
 		}
 	});

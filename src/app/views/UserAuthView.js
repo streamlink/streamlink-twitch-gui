@@ -68,11 +68,10 @@ define([
 				});
 
 				var token = get( self, "token" );
-				var scope = get( controller, "auth_scope" );
 
 				Promise.resolve()
 					.then( wait( 1000 ) )
-					.then( controller.authenticate.bind( controller, token, scope ) )
+					.then( controller.login.bind( controller, token, false ) )
 					.then(function() {
 						set( self, {
 							tokenBtnClass: "btn-success",
