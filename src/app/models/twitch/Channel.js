@@ -1,7 +1,7 @@
 define( [ "ember", "ember-data" ], function( Ember, DS ) {
 
-	var	get = Ember.get,
-		re_lang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
+	var get = Ember.get,
+	    re_lang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
 	return DS.Model.extend({
 		background: DS.attr( "string" ),
@@ -19,6 +19,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		partner: DS.attr( "boolean" ),
 		profile_banner: DS.attr( "string" ),
 		profile_banner_background_color: DS.attr( "string" ),
+		staff: DS.attr( "boolean" ),
 		status: DS.attr( "string" ),
 		teams: DS.hasMany( "twitchTeam" ),
 		updated_at: DS.attr( "date" ),
@@ -35,14 +36,14 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 
 
 		title_followers: function() {
-			var	followers	= get( this, "followers" ),
-				numerus		= followers === 1 ? "person is" : "people are";
+			var followers = get( this, "followers" ),
+			    numerus   = followers === 1 ? "person is" : "people are";
 			return "%@ %@ following".fmt( followers, numerus );
 		}.property( "followers" ),
 
 		title_views: function() {
-			var	views	= get( this, "views" ),
-				numerus	= views === 1 ? "view" : "views";
+			var views   = get( this, "views" ),
+			    numerus = views === 1 ? "view" : "views";
 			return "%@ channel %@".fmt( views, numerus );
 		}.property( "views" ),
 
@@ -53,10 +54,10 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		}.property( "language" ),
 
 		has_broadcaster_language: function() {
-			var	broadcaster = get( this, "broadcaster_language" ),
-				language = get( this, "language" ),
-				m_broadcaster = re_lang.exec( broadcaster ),
-				m_language = re_lang.exec( language );
+			var broadcaster = get( this, "broadcaster_language" ),
+			    language = get( this, "language" ),
+			    m_broadcaster = re_lang.exec( broadcaster ),
+			    m_language = re_lang.exec( language );
 			// show the broadcaster_language only if it is set and
 			// 1. the language is not set or
 			// 2. the language is different from the broadcaster_language
