@@ -19,6 +19,7 @@ define( [ "ember" ], function( Ember ) {
 		notifyGroupAndClick: Ember.computed.and( "model.notify_grouping", "model.notify_click" ),
 		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
 		hasNotificationClickSupport: process.platform !== "linux",
+		hasBothIntegrations: Ember.computed.equal( "model.gui_integration", 3 ),
 
 		minimize_observer: function() {
 			var int    = get( this, "model.gui_integration" ),

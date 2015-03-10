@@ -39,11 +39,13 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 			},
 
 			"winMin": function() {
-				if ( get( this.settings, "gui_integration" ) === 2 ) {
-					// tray only: just hide the window
+				var integration    = get( this, "settings.gui_integration" ),
+				    minimizetotray = get( this, "settings.gui_minimizetotray" );
+
+				// tray only or both with min2tray: just hide the window
+				if ( integration === 2 || integration === 3 && minimizetotray ) {
 					nwWindow.toggleVisibility( false );
 				} else {
-					// taskbar or both: just minimize the window
 					nwWindow.toggleMinimize( false );
 				}
 			},

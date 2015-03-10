@@ -11,6 +11,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		player_reconnect    : DS.attr( "boolean", { defaultValue: true } ),
 		player_no_close     : DS.attr( "boolean", { defaultValue: false } ),
 		gui_integration     : DS.attr( "number", { defaultValue: 3 } ),
+		gui_minimizetotray  : DS.attr( "number", { defaultValue: false } ),
 		gui_minimize        : DS.attr( "number", { defaultValue: 0 } ),
 		gui_hidestreampopup : DS.attr( "boolean", { defaultValue: false } ),
 		gui_openchat        : DS.attr( "boolean", { defaultValue: false } ),
