@@ -4,6 +4,7 @@ define([
 	"ember",
 	"models/Livestreamer",
 	"utils/which",
+	"utils/stat",
 	"utils/semver"
 ], function(
 	nwGui,
@@ -11,12 +12,15 @@ define([
 	Ember,
 	Livestreamer,
 	which,
+	stat,
 	semver
 ) {
 
-	var CP  = require( "child_process" ),
-	    get = Ember.get,
-	    set = Ember.set;
+	var CP   = require( "child_process" ),
+	    PATH = require( "path" );
+
+	var get  = Ember.get,
+	    set  = Ember.set;
 
 	var isWin = /^win/.test( process.platform );
 
@@ -244,7 +248,8 @@ define([
 		 */
 		checkLivestreamer: function() {
 			var path = get( this.settings, "livestreamer" ),
-			    exec = get( this, "config.livestreamer-exec" );
+			    exec = get( this, "config.livestreamer-exec" ),
+			    fb   = get( this, "config.livestreamer-fallback-path-unix" );
 
 			// use the default command if the user did not define one
 			path = path ? String( path ) : exec;
@@ -260,8 +265,17 @@ define([
 
 			// check for the executable
 			return which( path, execCheck )
+				// check fallback path
+				.catch(function() {
+					if ( !isWin ) {
+						fb = PATH.join( PATH.resolve( fb ), exec );
+						return stat( fb, execCheck );
+					}
+					return Promise.reject();
+				})
+				// not found
 				.catch(function() { throw new NotFoundError(); })
-			// check for correct version
+				// check for correct version
 				.then( this.validateLivestreamer.bind( this ) );
 		},
 
