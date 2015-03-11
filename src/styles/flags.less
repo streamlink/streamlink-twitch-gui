@@ -14,7 +14,7 @@
 	position: relative;
 	width: @flag-icon-width;
 	height: 1em;
-	margin: unit( ( ( @line-height-base - 1 ) / 2 ), em ) 0;
+	margin: 0;
 	line-height: 1;
 	background-repeat: no-repeat;
 	background-position: 50%;
@@ -43,22 +43,19 @@
 	&::before,
 	&::after {
 		content: "\00a0";
-		position: absolute;
+		display: inline-block;
+		width: 50%;
 		height: 100%;
 		background-repeat: no-repeat;
 		background-size: cover;
 	}
 
 	&::before {
-		left: 0;
-		right: 50%;
 		background-position: 0 50%;
 		background-image: ~"url(@{flag-icon-svg-path}/us.svg)";
 	}
 
 	&::after {
-		left: 50%;
-		right: 0;
 		background-position: 100% 50%;
 		background-image: ~"url(@{flag-icon-svg-path}/gb.svg)";
 	}
