@@ -101,7 +101,9 @@ define([
 		check: function() {
 			if ( !get( this, "enabled" ) ) { return; }
 
-			this.store.find( "twitchStreamsFollowed" )
+			this.store.find( "twitchStreamsFollowed", {
+				limit: 100
+			})
 				.then( this.queryCallback.bind( this ) )
 				.then(function( newStreams ) {
 					// show notifications
