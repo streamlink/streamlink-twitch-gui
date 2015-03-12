@@ -4,6 +4,8 @@ define([
 	"text!templates/modals/default.html.hbs"
 ], function( Ember, layout, template ) {
 
+	var get = Ember.get;
+
 	return Ember.View.extend({
 		defaultLayout: Ember.Handlebars.compile( layout ),
 		defaultTemplate: Ember.Handlebars.compile( template ),
@@ -11,23 +13,31 @@ define([
 
 		tagName: "section",
 		classNames: [ "mymodal" ],
+		classNameBindings: [ "_isVisible:shown" ],
+
+		_isVisible: false,
 
 		head: function() {
-			return this.get( "context.modalHead" )
-			    || this.get( "context.head" );
+			return get( this, "context.modalHead" )
+			    || get( this, "context.head" );
 		}.property( "context.modalHead", "context.head" ),
 
 		body: function() {
-			return this.get( "context.modalBody" )
-			    || this.get( "context.body" );
+			return get( this, "context.modalBody" )
+			    || get( this, "context.body" );
 		}.property( "context.modalBody", "context.body" ),
 
 
-		didInsertElement: function() {
-			var $this = this.$().removeClass( "shown" );
-			this._super.apply( this, arguments );
-			Ember.run.next( $this, $this.addClass, "shown" );
-		},
+		_willInsertElement: function() {
+			this.set( "_isVisible", false );
+		}.on( "willInsertElement" ),
+
+		_didInsertElement: function() {
+			Ember.run.next( this, function() {
+				// add another 20ms delay
+				Ember.run.later( this, this.set, "_isVisible", true, 20 );
+			});
+		}.on( "didInsertElement" ),
 
 		/*
 		 * This will be called synchronously.
