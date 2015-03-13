@@ -1,23 +1,23 @@
 define( [ "ember", "views/ModalView" ], function( Ember, ModalView ) {
 
+	var get = Ember.get;
+
 	function following( yes, no, unknown ) {
 		return function() {
-			return this.get( "following_l" )
+			return get( this, "isFollowingL" )
 				? unknown
-				: this.get( "following" )
+				: get( this, "isFollowing" )
 					? yes
 					: no;
-		}.property( "following", "following_l" );
+		}.property( "isFollowing", "isFollowingL" );
 	}
 
 	return ModalView.extend({
 		classNames: [ "mymodal", "modal-livestreamer" ],
 
-		isLoggedIn: Ember.computed.readOnly( "context.auth.isLoggedIn" ),
-
-		subscribed : Ember.computed.readOnly( "context.current.subscribed" ),
-		following  : Ember.computed.readOnly( "context.current.following" ),
-		following_l: Ember.computed.readOnly( "context.current.following_loading" ),
+		isSubscribed: Ember.computed.readOnly( "context.active.channel.isSubscribed" ),
+		isFollowing : Ember.computed.readOnly( "context.active.channel.isFollowing" ),
+		isFollowingL: Ember.computed.readOnly( "context.active.channel.isFollowingLoading" ),
 
 		followAction: following( "follow", "follow", null ),
 		followClass : following( "btn-success", "btn-danger", "btn-info" ),
@@ -25,8 +25,8 @@ define( [ "ember", "views/ModalView" ], function( Ember, ModalView ) {
 		followTitle : following( "Unfollow channel", "Follow channel", "" ),
 
 		subscrClass: function() {
-			return this.get( "subscribed" ) ? "btn-success" : "btn-primary";
-		}.property( "subscribed" )
+			return get( this, "isSubscribed" ) ? "btn-success" : "btn-primary";
+		}.property( "isSubscribed" )
 	});
 
 });

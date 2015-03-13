@@ -63,7 +63,18 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 			// 2. the language is different from the broadcaster_language
 			//    WITHOUT comparing both lang variants
 			return m_broadcaster && ( !m_language || m_language[1] !== m_broadcaster[1] );
-		}.property( "broadcaster_language", "language" )
+		}.property( "broadcaster_language", "language" ),
+
+
+		/** @type {(TwitchUserSubscription|boolean)} subscribed */
+		subscribed        : false,
+		isSubscribed      : Ember.computed.bool( "subscribed" ),
+
+		/** @type {(TwitchUserFollowsChannel|boolean)} following */
+		following         : null,
+		isFollowing       : Ember.computed.bool( "following" ),
+		isFollowingLoading: Ember.computed.equal( "following", null ),
+		isFollowingLocked : false
 
 	}).reopenClass({
 		toString: function() { return "channels"; }

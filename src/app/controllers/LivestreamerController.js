@@ -2,6 +2,7 @@ define([
 	"nwGui",
 	"nwWindow",
 	"ember",
+	"controllers/ChannelMixin",
 	"models/Livestreamer",
 	"utils/which",
 	"utils/stat",
@@ -10,6 +11,7 @@ define([
 	nwGui,
 	nwWindow,
 	Ember,
+	ChannelMixin,
 	Livestreamer,
 	which,
 	stat,
@@ -30,9 +32,9 @@ define([
 	    re_noplayer  = /^error: Failed to start player: /,
 	    re_noplayer2 = /^error: The default player \(.+\) does not seem to be installed\./,
 	    re_replace   = /^\[cli]\[\S+]\s+/,
-	    re_player    = /^Starting player: \S+/;
+	    re_player    = /^Starting player: \S+/,
+	    re_split     = /\r?\n/g;
 
-	var split = /\r?\n/g;
 
 	function VersionError( version ) { this.version = version; }
 	VersionError.prototype = new Error();
@@ -63,10 +65,9 @@ define([
 	}
 
 
-	return Ember.Controller.extend({
-		configBinding        : "metadata.package.config",
-		versionMinBinding    : "config.livestreamer-version-min",
-		versionTimeoutBinding: "config.livestreamer-validation-timeout",
+	return Ember.Controller.extend( ChannelMixin, {
+		versionMin    : Ember.computed.readOnly( "config.livestreamer-version-min" ),
+		versionTimeout: Ember.computed.readOnly( "config.livestreamer-validation-timeout" ),
 
 		streamURL: "twitch.tv/%@",
 
@@ -76,7 +77,7 @@ define([
 		modalBtnsRunning : Ember.computed.equal( "modalBtns", "running" ),
 
 		streams: [],
-		current: null,
+		active : null,
 
 		parameters: [
 			new Parameter( "--no-version-check" ),
@@ -130,13 +131,16 @@ define([
 				modalBtns: null
 			});
 
+
+			var channel = get( stream, "channel" );
+
 			// is the stream already running? compare by channel name (which is unique)
-			var livestreamer = this.streams.findBy( "name", get( stream, "channel.name" ) );
+			var livestreamer = this.streams.findBy( "channel.name", get( channel, "name" ) );
 			if ( livestreamer ) {
-				set( this, "current", livestreamer );
+				set( this, "active", livestreamer );
 				return this.setProperties({
-					modalHead: "You're watching %@".fmt( get( livestreamer, "displayName" ) ),
-					modalBody: get( livestreamer, "status" ),
+					modalHead: "You're watching %@".fmt( get( channel, "display_name" ) ),
+					modalBody: get( channel, "status" ),
 					modalBtns: "running"
 				});
 			}
@@ -144,10 +148,11 @@ define([
 			// create a new livestreamer object
 			livestreamer = Livestreamer.create({
 				stream : stream,
+				channel: channel,
 				quality: get( this.settings, "quality" )
 			});
 			// modal belongs to this stream now
-			set( this, "current", livestreamer );
+			set( this, "active", livestreamer );
 
 			// validate configuration and get the exec command
 			this.checkLivestreamer()
@@ -160,24 +165,24 @@ define([
 					return this.launchLivestreamer( exec, livestreamer );
 				}.bind( this ) )
 				// check if the user subscribes the channel
-				.then( this.checkUserSubscribesChannel.bind( this, livestreamer ) )
+				.then( this.checkUserSubscribesChannel.bind( this, channel ) )
 				// check if the user follows the channel
-				.then( this.checkUserFollowsChannel.bind( this, livestreamer ) )
+				.then( this.checkUserFollowsChannel.bind( this, channel ) )
 				// add the stream object to the streams list
 				.then(function() {
 					this.streams.addObject( livestreamer );
 				}.bind( this ) )
 				// success/failure
 				.then(
-					this.streamSuccess.bind( this, livestreamer, true ),
+					this.streamSuccess.bind( this, channel, true ),
 					this.streamFailure.bind( this )
 				);
 		},
 
-		streamSuccess: function( livestreamer, guiActions ) {
+		streamSuccess: function( channel, guiActions ) {
 			this.setProperties({
-				modalHead: "Watching now: %@".fmt( get( livestreamer, "displayName" ) ),
-				modalBody: get( livestreamer, "status" ),
+				modalHead: "Watching now: %@".fmt( get( channel, "display_name" ) ),
+				modalBody: get( channel, "status" ),
 				modalBtns: "running"
 			});
 
@@ -185,13 +190,12 @@ define([
 
 			// automatically close modal on success
 			if ( get( this.settings, "gui_hidestreampopup" ) ) {
-				set( this, "modal", null );
-				this.send( "closeModal" );
+				this.send( "close" );
 			}
 
 			// automatically open chat
 			if ( get( this.settings, "gui_openchat" ) ) {
-				this.send( "chat" );
+				this.send( "chat", channel );
 			}
 
 			// hide the GUI
@@ -337,7 +341,8 @@ define([
 			}
 
 			var defer    = Promise.defer(),
-			    name     = get( livestreamer, "name" ),
+			    channel  = get( livestreamer, "channel" ),
+			    name     = get( channel, "name" ),
 			    quality  = get( livestreamer, "quality" ),
 			    params   = this.getParametersString( name, quality ),
 			    spawn    = CP.spawn( exec, params, { detached: true } );
@@ -354,7 +359,7 @@ define([
 				if ( quality !== get( livestreamer, "quality" ) ) {
 					Ember.run.next( this, function() {
 						this.launchLivestreamer( exec, livestreamer ).then(
-							this.streamSuccess.bind( this, livestreamer, false ),
+							this.streamSuccess.bind( this, channel, false ),
 							this.streamFailure.bind( this )
 						);
 					});
@@ -363,8 +368,8 @@ define([
 				} else {
 					// close the modal only if there was no error and if it belongs to the stream
 					if (
-						  !get( livestreamer, "isError" )
-						&& get( this, "current" ) === livestreamer
+						  !get( livestreamer, "error" )
+						&& get( this, "active" ) === livestreamer
 					) {
 						this.send( "close" );
 					}
@@ -392,7 +397,7 @@ define([
 			// reject promise on any error output
 			function stderrCallback( data ) {
 				data = data.trim();
-				set( livestreamer, "isError", true );
+				set( livestreamer, "error", true );
 				defer.reject( parseError( data ) || new Error( data ) );
 			}
 
@@ -402,12 +407,12 @@ define([
 				data = data.trim();
 				var error = parseError( data );
 				if ( error ) {
-					set( livestreamer, "isError", true );
+					set( livestreamer, "error", true );
 					return defer.reject( error );
 				}
 
 				data = data.replace( re_replace, "" );
-				if ( get( this, "current" ) === livestreamer ) {
+				if ( get( this, "active" ) === livestreamer ) {
 					set( this, "modalBody", data );
 				}
 				if ( re_player.test( data ) ) {
@@ -427,11 +432,11 @@ define([
 			}
 
 			spawn.stderr.on( "data", function( data ) {
-				String( data ).trim().split( split ).forEach( stderrCallback );
+				String( data ).trim().split( re_split ).forEach( stderrCallback );
 			});
 
 			spawn.stdout.on( "data", function( data ) {
-				String( data ).trim().split( split ).forEach( stdoutCallback.bind( this ) );
+				String( data ).trim().split( re_split ).forEach( stdoutCallback.bind( this ) );
 			}.bind( this ) );
 
 			return defer.promise;
@@ -460,117 +465,26 @@ define([
 			}
 		},
 
-		checkUserSubscribesChannel: function( livestreamer ) {
-			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
-			if ( !get( livestreamer, "stream.channel.partner" ) ) { return; }
-
-			var name = get( livestreamer, "stream.channel.name" );
-			this.store.fetch( "twitchUserSubscription", name )
-				.catch(function() {
-					// twitch.tv API returned 404: user does not subscribe the channel
-					return false;
-				})
-				.then(function( record ) {
-					set( livestreamer, "_subscribed", record );
-				});
-		},
-
-		checkUserFollowsChannel: function( livestreamer ) {
-			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
-
-			var name = get( livestreamer, "stream.channel.name" );
-			this.store.fetch( "twitchUserFollowsChannel", name )
-				.catch(function() {
-					// twitch.tv API returned 404: user does not follow the channel
-					return false;
-				})
-				.then(function( record ) {
-					set( livestreamer, "_following", record );
-				});
-		},
-
 		actions: {
 			"download": function( callback ) {
 				this.send( "openBrowser", get( this, "config.livestreamer-download-url" ) );
-				if ( callback ) { callback(); }
+				callback();
 			},
 
 			"close": function() {
-				set( this, "current", null );
+				set( this, "active", null );
 				this.send( "closeModal" );
 			},
 
 			"shutdown": function() {
-				var current = get( this, "current" ),
+				var active = get( this, "active" ),
 				    spawn;
-				if ( current ) {
-					set( current, "shutdown", true );
-					spawn = get( current, "spawn" );
+				if ( active ) {
+					set( active, "shutdown", true );
+					spawn = get( active, "spawn" );
 					if ( spawn ) { spawn.kill(); }
 				}
 				this.send( "close" );
-			},
-
-			"chat": function( callback ) {
-				var url  = get( this, "config.twitch-chat-url" ),
-				    name = get( this, "current.stream.channel.name" );
-				if ( name ) {
-					this.send( "openBrowser", url.replace( "{channel}", name ) );
-				}
-				if ( callback ) { callback(); }
-			},
-
-			"share": function( callback ) {
-				var url = get( this, "current.stream.channel.url" ),
-				    cb  = nwGui.Clipboard.get();
-				if ( url && cb ) {
-					cb.set( url, "text" );
-					if ( callback ) { callback(); }
-				}
-			},
-
-			"follow": function( callback ) {
-				var store     = this.store,
-				    current   = get( this, "current" ),
-				    following = get( current, "_following" ),
-				    lock      = get( current, "following_lock" );
-
-				if ( lock ) { return; }
-				set( current, "following_lock", true );
-				function unlock() { set( current, "following_lock", false ); }
-
-				if ( !following ) {
-					var name = get( current, "stream.channel.name" );
-					// find a previous record and unload it
-					following = store.getById( "twitchUserFollowsChannel", name );
-					if ( following ) {
-						store.unloadRecord( following );
-					}
-					// now create a new record and save it
-					following = store.createRecord( "twitchUserFollowsChannel", { id: name });
-					following.save().then(function() {
-						set( current, "_following", following );
-						if ( callback ) { callback(); }
-					}).then( unlock, unlock );
-
-				} else {
-					// delete the record and save it
-					following.destroyRecord().then(function() {
-						set( current, "_following", false );
-						// also unload it
-						store.unloadRecord( following );
-						if ( callback ) { callback(); }
-					}).then( unlock, unlock );
-				}
-			},
-
-			"subscribe": function( callback ) {
-				var url  = get( this, "config.twitch-subscribe-url" ),
-				    name = get( this, "current.stream.channel.name" );
-				if ( name ) {
-					this.send( "openBrowser", url.replace( "{channel}", name ) );
-				}
-				if ( callback ) { callback(); }
 			}
 		}
 	});
