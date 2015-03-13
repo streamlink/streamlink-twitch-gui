@@ -168,6 +168,10 @@ input:disabled {
 		text-align: center;
 		vertical-align: middle;
 		transition: color .2s ease-out;
+
+		&.fa-credit-card {
+			transform: scaleX(.9) translateX(-.025em);
+		}
 	}
 
 	&:hover > i {
@@ -290,7 +294,7 @@ input:disabled {
 	> .selecter-options {
 		max-height: 10em;
 		border: 0;
-		border-radius: 0;
+		border-radius: 0 !important;
 		background: @select-background;
 	}
 
