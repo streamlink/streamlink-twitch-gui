@@ -4,7 +4,7 @@
 </header>
 <section class="featured wrapper horizontal">
 <aside class="info">
-<h3 class="title">{{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{stream.channel.display_name}}</h3>
+<h3 class="title">{{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{#link-to "channels.channel" stream.channel.id}}{{stream.channel.display_name}}{{/link-to}}</h3>
 <div class="game">{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>
 <div class="stats stats-row">
 {{#if stream.channel.has_broadcaster_language}}<span>{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}</span>{{/if}}

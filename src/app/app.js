@@ -154,6 +154,9 @@ define(function( require ) {
 		ChannelsIndexRoute: require( "routes/ChannelsIndexRoute" ),
 		ChannelsIndexController: require( "controllers/ChannelsIndexController" ),
 		ChannelsIndexView: require( "views/ChannelsIndexView" ),
+		ChannelsChannelRoute: require( "routes/ChannelsChannelRoute" ),
+		ChannelsChannelController: require( "controllers/ChannelsChannelController" ),
+		ChannelsChannelView: require( "views/ChannelsChannelView" ),
 
 		UserLoadingRoute: require( "routes/LoadingRoute" ),
 		UserLoadingView: require( "views/LoadingView" ),
