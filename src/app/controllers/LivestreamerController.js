@@ -2,7 +2,7 @@ define([
 	"nwGui",
 	"nwWindow",
 	"ember",
-	"controllers/ChannelMixin",
+	"controllers/ChannelControllerMixin",
 	"models/Livestreamer",
 	"utils/which",
 	"utils/stat",
@@ -11,7 +11,7 @@ define([
 	nwGui,
 	nwWindow,
 	Ember,
-	ChannelMixin,
+	ChannelControllerMixin,
 	Livestreamer,
 	which,
 	stat,
@@ -65,7 +65,7 @@ define([
 	}
 
 
-	return Ember.Controller.extend( ChannelMixin, {
+	return Ember.Controller.extend( ChannelControllerMixin, {
 		versionMin    : Ember.computed.readOnly( "config.livestreamer-version-min" ),
 		versionTimeout: Ember.computed.readOnly( "config.livestreamer-validation-timeout" ),
 
