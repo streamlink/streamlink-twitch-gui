@@ -18,9 +18,9 @@
 <div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img {{bind-attr src=stream.preview.large_nocache}}></div></div>
 </section>
 <ul class="channels wrapper horizontal">
-{{#each channel in featured}}
-<li {{bind-attr title="channel.channel.name"}} {{action "switchFeatured" channel.stream}}>
-<img src="{{unbound channel.image}}" title="{{unbound channel.stream.channel.name}}">
+{{#each elem in featured}}
+<li {{bind-attr title=elem.stream.channel.id}} {{action "switchFeatured" elem}}>
+<img {{bind-attr src=elem.image title=elem.stream.channel.id}}>
 </li>
 {{/each}}
 </ul>

@@ -1,14 +1,21 @@
 define( [ "ember" ], function( Ember ) {
 
-	return Ember.ObjectController.extend({
-		summaryBinding: "content.summary",
-		featuredBinding: "content.featured",
+	var get = Ember.get,
+	    set = Ember.set;
 
-		stream: Ember.computed.oneWay( "featured.0.stream" ),
+	return Ember.Controller.extend({
+		summary : Ember.computed.alias( "model.summary" ),
+		featured: Ember.computed.alias( "model.featured" ),
+
+		_streamIndex: 0,
+		stream: function() {
+			return get( this, "featured.%@.stream".fmt( get( this, "_streamIndex" ) ) );
+		}.property( "featured.@each.stream", "_streamIndex" ),
 
 		actions: {
-			"switchFeatured": function( stream ) {
-				this.set( "stream", stream );
+			"switchFeatured": function( featured ) {
+				var index = get( this, "featured" ).indexOf( featured );
+				set( this, "_streamIndex", index );
 			}
 		}
 	});
