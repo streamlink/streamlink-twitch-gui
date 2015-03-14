@@ -28,7 +28,7 @@ define( [ "ember" ], function( Ember ) {
 					var resources = get( response, traverse, [] );
 
 					// data instanceof Ember.Enumerable
-					resources = resources.toArray
+					resources = resources && resources.toArray
 						? resources.toArray()
 						: makeArray( resources );
 
