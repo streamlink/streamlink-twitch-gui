@@ -10,7 +10,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 		checkUserFollowsChannel: function( channel ) {
 			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
 
-			var name = get( channel, "name" );
+			var name = get( channel, "id" );
 			this.store.fetch( "twitchUserFollowsChannel", name )
 				.catch(function() {
 					// twitch.tv API returned 404: user does not follow the channel
@@ -25,7 +25,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
 			if ( !get( channel, "partner" ) ) { return; }
 
-			var name = get( channel, "name" );
+			var name = get( channel, "id" );
 			this.store.fetch( "twitchUserSubscription", name )
 				.catch(function() {
 					// twitch.tv API returned 404: user does not subscribe the channel
@@ -47,7 +47,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 				function unlock() { set( channel, "isFollowingLocked", false ); }
 
 				if ( !following ) {
-					var name = get( channel, "name" );
+					var name = get( channel, "id" );
 					// find a previous record and unload it
 					following = store.getById( "twitchUserFollowsChannel", name );
 					if ( following ) {
@@ -77,7 +77,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
 			"subscribe": function( channel, callback ) {
 				var url  = get( this, "config.twitch-subscribe-url" ),
-				    name = get( channel, "name" );
+				    name = get( channel, "id" );
 				if ( url && name ) {
 					this.send( "openBrowser", url.replace( "{channel}", name ) );
 					callback();
@@ -86,7 +86,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
 			"chat": function( channel, callback ) {
 				var url  = get( this, "config.twitch-chat-url" ),
-				    name = get( channel, "name" );
+				    name = get( channel, "id" );
 				if ( url && name ) {
 					this.send( "openBrowser", url.replace( "{channel}", name ) );
 					if ( callback instanceof Function ) {

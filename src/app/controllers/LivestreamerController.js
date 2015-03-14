@@ -134,8 +134,8 @@ define([
 
 			var channel = get( stream, "channel" );
 
-			// is the stream already running? compare by channel name (which is unique)
-			var livestreamer = this.streams.findBy( "channel.name", get( channel, "name" ) );
+			// is the stream already running? compare by channel
+			var livestreamer = this.streams.findBy( "channel.id", get( channel, "id" ) );
 			if ( livestreamer ) {
 				set( this, "active", livestreamer );
 				return this.setProperties({
@@ -342,7 +342,7 @@ define([
 
 			var defer    = Promise.defer(),
 			    channel  = get( livestreamer, "channel" ),
-			    name     = get( channel, "name" ),
+			    name     = get( channel, "id" ),
 			    quality  = get( livestreamer, "quality" ),
 			    params   = this.getParametersString( name, quality ),
 			    spawn    = CP.spawn( exec, params, { detached: true } );

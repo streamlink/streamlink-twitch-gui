@@ -71,7 +71,7 @@ define([
 			/** @type {Object} model */
 			var model     = get( this, "model" );
 			var following = get( this, "controllers.livestreamer.active.channel.following" );
-			var name      = get( following, "channel.name" );
+			var name      = get( following, "channel.id" );
 			if ( !following || !name || model.hasOwnProperty( name ) ) { return; }
 			model[ name ] = new Date();
 		}.observes( "controllers.livestreamer.active.channel.following" ),
@@ -144,7 +144,7 @@ define([
 				// get a list of all new streams by comparing the cached streams
 				model = get( this, "model" );
 				newStreams = streams.filter(function( stream ) {
-					var name  = get( stream, "channel.name" ),
+					var name  = get( stream, "channel.id" ),
 					    since = get( stream, "created_at" );
 					return name && ( !model.hasOwnProperty( name ) || model[ name ] < since );
 				});
@@ -153,7 +153,7 @@ define([
 
 			// update cache
 			model = streams.reduce(function( obj, stream ) {
-				obj[ get( stream, "channel.name" ) ] = get( stream, "created_at" );
+				obj[ get( stream, "channel.id" ) ] = get( stream, "created_at" );
 				return obj;
 			}, {} );
 			set( this, "model", model );
@@ -230,7 +230,7 @@ define([
 					break;
 				case 3:
 					var url = get( this, "config.twitch-chat-url" )
-						.replace( "{channel}", get( stream, "name" ) );
+						.replace( "{channel}", get( stream, "channel.id" ) );
 					this.send( "openLivestreamer", stream );
 					this.send( "openBrowser", url );
 			}
