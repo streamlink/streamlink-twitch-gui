@@ -7,7 +7,7 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 		},
 
 		normalize: function( type, hash ) {
-			if ( hash.preview ) {
+			if ( hash.preview && hash.channel ) {
 				hash.preview._id = hash.channel.name;
 			}
 			return this._super.apply( this, arguments );
