@@ -9,10 +9,10 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 			    streams = this.controllerFor( "livestreamer" ).get( "streams" );
 
 			// unload all cached stream records first
-			store.unloadAll( "twitchStream" );
+			//store.unloadAll( "twitchStream" );
 
 			return Promise.all( streams.map(function( elem ) {
-				var id = get( elem, "channel.name" );
+				var id = get( elem, "channel.id" );
 				return store.find( "twitchStream", id )
 					.then(function( stream ) {
 						// add the new stream record to the stream object

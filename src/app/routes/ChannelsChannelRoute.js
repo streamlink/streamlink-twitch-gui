@@ -8,7 +8,7 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 			var channel = get( params, "channel" );
 
 			// unload all cached stream records first
-			store.unloadAll( "twitchStream" );
+			//store.unloadAll( "twitchStream" );
 
 			// try to find a stream record if the channel is broadcasting
 			return store.find( "twitchStream", channel )
