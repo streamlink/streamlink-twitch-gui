@@ -4,14 +4,16 @@ define([
 	"ember",
 	"./metadata",
 	"nwjs/shortcut",
-	"nwjs/tray"
+	"nwjs/tray",
+	"nwjs/menu"
 ], function(
 	nwGui,
 	nwWindow,
 	Ember,
 	metadata,
 	shortcut,
-	tray
+	tray,
+	menu
 ) {
 
 	var get = Ember.get;
@@ -124,6 +126,9 @@ define([
 
 			shortcut.create( displayName );
 			tray.init( displayName, trayIconImg );
+			if ( process.platform === "darwin" ) {
+				menu.createMacNativeMenuBar( displayName );
+			}
 
 
 			// listen for the close event and show the dialog instead of strictly shutting down
