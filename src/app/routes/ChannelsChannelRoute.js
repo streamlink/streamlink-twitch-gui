@@ -4,14 +4,11 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 
 	return Ember.Route.extend({
 		model: function( params ) {
-			var store   = this.store;
-			var channel = get( params, "channel" );
-
-			// unload all cached stream records first
-			//store.unloadAll( "twitchStream" );
+			var store = this.store,
+			    id    = get( params, "channel" );
 
 			// try to find a stream record if the channel is broadcasting
-			return store.find( "twitchStream", channel )
+			return store.fetch( "twitchStream", id )
 				.then(function( stream ) {
 					return {
 						stream : stream,
@@ -19,7 +16,7 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 					};
 				}, function() {
 					// if the channel is not online, just *fetch* the channel record
-					return store.fetch( "twitchChannel", channel )
+					return store.fetch( "twitchChannel", id )
 						.then(function( channel ) {
 							return {
 								channel: channel

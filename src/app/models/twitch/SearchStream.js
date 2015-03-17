@@ -1,6 +1,8 @@
-define( [ "models/twitch/Stream" ], function( Stream ) {
+define( [ "ember-data" ], function( DS ) {
 
-	return Stream.extend().reopenClass({
+	return DS.Model.extend({
+		stream: DS.belongsTo( "twitchStream" )
+	}).reopenClass({
 		toString: function() { return "search/streams"; }
 	});
 

@@ -6,6 +6,10 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			preview: { deserialize: "records" }
 		},
 
+		typeForRoot: function() {
+			return "twitchStream";
+		},
+
 		normalize: function( type, hash ) {
 			if ( hash.preview && hash.channel ) {
 				hash.preview._id = hash.channel.name;
@@ -13,8 +17,16 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			return this._super.apply( this, arguments );
 		},
 
-		typeForRoot: function() {
-			return "twitchStream";
+		/**
+		 * Use the channel name as stream record ID, so we can .refresh() it.
+		 * The adapter will use the ID for building the URL.
+		 */
+		normalizeId: function( hash ) {
+			if ( !hash.channel ) {
+				return this._super.apply( this, arguments );
+			}
+			hash.id = hash.channel.name;
+			delete hash._id;
 		}
 	});
 

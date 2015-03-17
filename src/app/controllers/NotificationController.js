@@ -104,6 +104,9 @@ define([
 			this.store.find( "twitchStreamsFollowed", {
 				limit: 100
 			})
+				.then(function( streams ) {
+					return streams.mapBy( "stream" );
+				})
 				.then( this.queryCallback.bind( this ) )
 				.then(function( newStreams ) {
 					// show notifications

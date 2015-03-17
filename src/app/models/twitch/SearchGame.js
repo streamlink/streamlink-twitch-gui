@@ -1,6 +1,8 @@
-define( [ "models/twitch/Game" ], function( Game ) {
+define( [ "ember-data" ], function( DS ) {
 
-	return Game.extend().reopenClass({
+	return DS.Model.extend({
+		game: DS.belongsTo( "twitchGame" )
+	}).reopenClass({
 		toString: function() { return "search/games"; }
 	});
 

@@ -5,15 +5,19 @@ define([
 	"utils/preload"
 ], function( Ember, UserIndexRoute, InfiniteScroll, preload ) {
 
+	var get = Ember.get;
+
 	return UserIndexRoute.extend( InfiniteScroll, {
 		itemSelector: ".stream-component",
 
 		model: function() {
 			return this.store.findQuery( "twitchStreamsFollowed", {
-				offset	: Ember.get( this, "offset" ),
-				limit	: Ember.get( this, "limit" )
+				offset: get( this, "offset" ),
+				limit : get( this, "limit" )
 			})
-				.then(function( data ) { return data.toArray(); })
+				.then(function( data ) {
+					return data.toArray().mapBy( "stream" );
+				})
 				.then( preload( "@each.preview.@each.medium_nocache" ) );
 		}
 	});
