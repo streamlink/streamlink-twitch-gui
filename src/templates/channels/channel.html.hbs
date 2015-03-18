@@ -46,10 +46,12 @@
 {{form-button action="chat"  actionParam=channel class="btn-hint" icon="fa-comments"  iconanim=true title="Open chat"}}
 {{/if}}
 {{form-button action="share" actionParam=channel class="btn-info" icon="fa-share-alt" iconanim=true title="Copy channel url to clipboard"}}
+{{#if auth.isLoggedIn}}
 {{#if channel.partner}}
 {{form-button action="subscribe" actionParam=channel class=view.subscrClass icon="fa-credit-card" iconanim=true title="Subscribe to channel"}}
 {{/if}}
 {{form-button action=view.followAction actionParam=channel class=view.followClass icon=view.followIcon iconanim=true title=view.followTitle}}
+{{/if}}
 </div>
 </div>
 </section>
