@@ -1,7 +1,8 @@
 define( [ "ember-data" ], function( DS ) {
 
 	return DS.Model.extend({
-		channel      : DS.belongsTo( "twitchChannel" ),
+		// pass through: don't update the channel record
+		channel      : DS.attr(),
 		created_at   : DS.attr( "date" ),
 		notifications: DS.attr( "boolean" )
 	}).reopenClass({
