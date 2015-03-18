@@ -11,7 +11,7 @@
 		"url": "https://github.com/bastimeyer/livestreamer-twitch-gui.git"
 	},
 
-	"dependencies": {
+	"devDependencies": {
 		"grunt": "0.4.5",
 		"grunt-concurrent": "1.0.0",
 		"grunt-contrib-clean": "0.6.0",

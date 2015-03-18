@@ -6,8 +6,8 @@
 module.exports = function( grunt ) {
 	"use strict";
 
-	var	Q	= require( "q" ),
-		FS	= require( "q-io/fs" );
+	var Q  = require( "q" ),
+	    FS = require( "q-io/fs" );
 
 	grunt.task.registerMultiTask(
 		"metadata",
@@ -121,25 +121,34 @@ module.exports = function( grunt ) {
 	 */
 	function promiseDependencies( files ) {
 		return Q.all(
-			files.map(function( file ) {
+			Object.keys( files ).map(function( file ) {
+				// read each file containing dependency metadata
 				return FS.read( file )
 					.then( JSON.parse )
 					.then(function( json ) {
-						return json.dependencies;
+						return files[ file ]
+							// get all dependency objects
+							.map(function( property ) {
+								return json[ property ] || {};
+							})
+							// merge multiple dependency objects
+							.reduce(function( deps, list ) {
+								Object.keys( list ).forEach(function( dep ) {
+									deps[ dep ] = list[ dep ];
+								});
+								return deps;
+							}, {} );
 					});
 			})
 		)
-			.then(function( objs ) {
-				return objs.reduce(function( prev, curr ) {
-					return prev.concat(
-						Object.keys( curr ).map(function( key ) {
-							return {
-								title: key,
-								version: curr[ key ]
-							};
-						})
-					);
-				}, [] );
+			// merge all dependencies
+			.then(function( lists ) {
+				return lists.reduce(function( deps, list ) {
+					Object.keys( list ).forEach(function( dep ) {
+						deps[ dep ] = list[ dep ];
+					});
+					return deps;
+				}, {} );
 			});
 	}
 
