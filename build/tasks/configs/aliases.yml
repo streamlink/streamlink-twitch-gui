@@ -8,6 +8,7 @@ test:
     - "connect:test"
     - "qunit"
 build:
+    - "jshint:tasks"
     - "jshint:app"
     - "clean:tmp"
     - "copy:build"
@@ -15,6 +16,7 @@ build:
     - "less:dev"
     - "requirejs:dev"
 buildrelease:
+    - "jshint:tasks"
     - "jshint:app"
     - "test"
     - "clean:tmp"

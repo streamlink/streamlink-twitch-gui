@@ -1,0 +1,28 @@
+{
+	"maxerr"   : 0,
+
+	"quotmark" : "double",
+	"indent"   : 4,
+	"maxlen"   : 100,
+	"maxdepth" : 4,
+
+	"browser"  : true,
+	"node"     : true,
+	"devel"    : false,
+
+	"curly"    : true,
+	"eqeqeq"   : true,
+	"immed"    : true,
+	"latedef"  : true,
+	"laxbreak" : true,
+	"newcap"   : true,
+	"noarg"    : true,
+	"noempty"  : true,
+	"nonew"    : true,
+	"plusplus" : false,
+	"sub"      : true,
+	"undef"    : true,
+	"unused"   : true,
+
+	"globals"  : {}
+}

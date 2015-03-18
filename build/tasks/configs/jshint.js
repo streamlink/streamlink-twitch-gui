@@ -11,5 +11,12 @@ module.exports = {
 			jshintrc: "src/test/.jshintrc"
 		},
 		src    : [ "src/test/**/*.js" ]
+	},
+
+	tasks: {
+		options: {
+			jshintrc: "build/tasks/.jshintrc"
+		},
+		src    : [ "build/tasks/**/*.js" ]
 	}
 };
