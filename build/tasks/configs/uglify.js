@@ -6,8 +6,9 @@ module.exports = {
 			}
 		},
 
-		mangle          : true,
+		mangle          : {},
 		beautify        : false,
+		screwIE8        : true,
 		preserveComments: "some",
 
 		report: "min"
