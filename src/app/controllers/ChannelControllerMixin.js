@@ -11,7 +11,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
 
 			var name = get( channel, "id" );
-			this.store.fetch( "twitchUserFollowsChannel", name )
+			this.store.fetchById( "twitchUserFollowsChannel", name )
 				.catch(function() {
 					// twitch.tv API returned 404: user does not follow the channel
 					return false;
@@ -26,7 +26,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			if ( !get( channel, "partner" ) ) { return; }
 
 			var name = get( channel, "id" );
-			this.store.fetch( "twitchUserSubscription", name )
+			this.store.fetchById( "twitchUserSubscription", name )
 				.catch(function() {
 					// twitch.tv API returned 404: user does not subscribe the channel
 					return false;

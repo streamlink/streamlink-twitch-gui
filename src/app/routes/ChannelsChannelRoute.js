@@ -8,7 +8,7 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 			    id    = get( params, "channel" );
 
 			// try to find a stream record if the channel is broadcasting
-			return store.fetch( "twitchStream", id )
+			return store.fetchById( "twitchStream", id )
 				.then(function( stream ) {
 					return {
 						stream : stream,
@@ -16,7 +16,7 @@ define( [ "ember", "utils/preload" ], function( Ember, preload ) {
 					};
 				}, function() {
 					// if the channel is not online, just *fetch* the channel record
-					return store.fetch( "twitchChannel", id )
+					return store.fetchById( "twitchChannel", id )
 						.then(function( channel ) {
 							return {
 								channel: channel

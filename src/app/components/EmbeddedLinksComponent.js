@@ -1,29 +1,27 @@
 define( [ "ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
 
-	var	hbs_string	= "%@"
-			+ "{{#external-link"
-			+ " url='%@'"
-			+ " targetObject=targetObject}}"
-			+ "%@"
-			+ "{{/external-link}}",
+	var hbs_string = [
+	    "%@",
+	    "{{#external-link",
+	    " url='%@'",
+	    " targetObject=targetObject}}",
+	    "%@",
+	    "{{/external-link}}"
+	].join( "" );
 
-		linkurl_re	= linkmatching.linkurl_re,
-		linkurl_fn	= linkmatching.linkurl_fn( hbs_string ),
-		twitter_re	= linkmatching.twitter_re,
-		twitter_fn	= linkmatching.twitter_fn( hbs_string );
+	var linkurl_re = linkmatching.linkurl_re,
+	    linkurl_fn = linkmatching.linkurl_fn( hbs_string ),
+	    twitter_re = linkmatching.twitter_re,
+	    twitter_fn = linkmatching.twitter_fn( hbs_string );
 
 
 	return Ember.Component.extend({
-		layout: function( context ) {
-			return Ember.Handlebars.compile(
-				Ember.get( context, "_text" )
-			).apply( this, arguments );
-		},
-
-		_text: function() {
-			return ( this.get( "text" ) || "" )
+		layout: function() {
+			var template = String( this.get( "text" ) )
 				.replace( linkurl_re, linkurl_fn )
 				.replace( twitter_re, twitter_fn );
+
+			return Ember.HTMLBars.compile( template );
 		}.property( "text" ),
 
 		textChangeObserver: function() {

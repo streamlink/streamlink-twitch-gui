@@ -9,7 +9,6 @@ define( [ "ember", "text!root/oauth.json" ], function( Ember, OAuth ) {
 
 			// OAuth metadata record
 			container.register( "record:oauth", JSON.parse( OAuth ), { instantiate: false } );
-			container.register( "controller:userAuth", container.resolve( "controller:userAuth" ) );
 			container.injection( "controller:userAuth", "oauth", "record:oauth" );
 
 

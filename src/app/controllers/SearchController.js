@@ -1,6 +1,6 @@
 define( [ "ember" ], function( Ember ) {
 
-	return Ember.ObjectController.extend({
+	return Ember.Controller.extend({
 		filterlabel: function() {
 			return this.store.modelFor( "search" ).getLabel( this.get( "filter" ) );
 		}.property( "filter" ),
