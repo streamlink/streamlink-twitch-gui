@@ -1,7 +1,7 @@
 define([
 	"ember",
 	"text!templates/user/auth.html.hbs"
-], function( Ember, Template ) {
+], function( Ember, template ) {
 
 	var get = Ember.get,
 	    set = Ember.setProperties;
@@ -17,7 +17,7 @@ define([
 	}
 
 	return Ember.View.extend({
-		template: Ember.Handlebars.compile( Template ),
+		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-user", "content-user-auth" ],
 

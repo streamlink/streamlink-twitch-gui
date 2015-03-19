@@ -10,7 +10,7 @@ define( [ "ember" ], function( Ember ) {
 			this.useRouterNaming( name );
 			var template = this.resolveOther( name );
 			return typeof template === "string"
-				? Ember.Handlebars.compile( template )
+				? Ember.HTMLBars.compile( template )
 				: template;
 		}
 

@@ -1,10 +1,10 @@
 define([
 	"ember",
 	"text!templates/settings.html.hbs"
-], function( Ember, Template ) {
+], function( Ember, template ) {
 
 	return Ember.View.extend({
-		template: Ember.Handlebars.compile( Template ),
+		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-settings" ]
 	});

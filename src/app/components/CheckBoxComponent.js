@@ -4,7 +4,7 @@ define([
 ], function( Ember, template ) {
 
 	return Ember.Component.extend({
-		defaultLayout: Ember.Handlebars.compile( template ),
+		defaultLayout: Ember.HTMLBars.compile( template ),
 		tagName: "label"
 	});
 

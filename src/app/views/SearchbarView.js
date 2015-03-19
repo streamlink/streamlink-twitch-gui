@@ -4,7 +4,7 @@ define([
 ], function( Ember, template ) {
 
 	return Ember.View.extend({
-		defaultTemplate: Ember.Handlebars.compile( template ),
+		defaultTemplate: Ember.HTMLBars.compile( template ),
 		tagName: "nav",
 		classNames: [ "searchbar" ],
 

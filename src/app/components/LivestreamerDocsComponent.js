@@ -1,7 +1,10 @@
-define( [ "ember", "components/ExternalLinkComponent" ], function( Ember, ExternalLinkComponent ) {
+define([
+	"ember",
+	"components/ExternalLinkComponent"
+], function( Ember, ExternalLinkComponent ) {
 
 	return ExternalLinkComponent.extend({
-		layout: Ember.Handlebars.compile( "{{cmd}}" ),
+		layout: Ember.HTMLBars.compile( "{{cmd}}" ),
 
 		tagName: "span",
 		classNameBindings: [ ":docs" ],

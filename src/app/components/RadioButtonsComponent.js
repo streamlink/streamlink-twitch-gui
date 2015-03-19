@@ -7,7 +7,7 @@ define([
 		set = Ember.set;
 
 	return Ember.Component.extend({
-		layout: Ember.Handlebars.compile( template ),
+		layout: Ember.HTMLBars.compile( template ),
 		tagName: "div",
 		className: "",
 		classNameBindings: [ ":radiobtns", "className" ],

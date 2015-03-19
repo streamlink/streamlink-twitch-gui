@@ -3,10 +3,10 @@ define([
 	"text!templates/application.html.hbs",
 	"gui/selectable",
 	"gui/smoothscroll"
-], function( Ember, Template, guiSelectable, guiSmoothscroll ) {
+], function( Ember, template, guiSelectable, guiSmoothscroll ) {
 
 	return Ember.View.extend({
-		template: Ember.Handlebars.compile( Template ),
+		template: Ember.HTMLBars.compile( template ),
 		tagName: "body",
 		classNames: [ "wrapper", "vertical" ],
 

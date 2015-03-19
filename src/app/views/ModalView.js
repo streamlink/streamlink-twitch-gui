@@ -7,8 +7,8 @@ define([
 	var get = Ember.get;
 
 	return Ember.View.extend({
-		defaultLayout: Ember.Handlebars.compile( layout ),
-		defaultTemplate: Ember.Handlebars.compile( template ),
+		defaultLayout: Ember.HTMLBars.compile( layout ),
+		defaultTemplate: Ember.HTMLBars.compile( template ),
 		template: null,
 
 		tagName: "section",

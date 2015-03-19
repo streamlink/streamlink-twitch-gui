@@ -2,10 +2,10 @@ define([
 	"ember",
 	"views/InfiniteScrollViewMixin",
 	"text!templates/user/following.html.hbs"
-], function( Ember, InfiniteScroll, Template ) {
+], function( Ember, InfiniteScroll, template ) {
 
 	return Ember.View.extend( InfiniteScroll, {
-		template: Ember.Handlebars.compile( Template ),
+		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-user", "content-user-following" ]
 	});

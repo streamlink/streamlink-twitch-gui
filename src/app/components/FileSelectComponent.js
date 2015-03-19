@@ -4,7 +4,7 @@ define([
 ], function( Ember, template ) {
 
 	return Ember.Component.extend({
-		layout: Ember.Handlebars.compile( template ),
+		layout: Ember.HTMLBars.compile( template ),
 		tagName: "div",
 		classNames: [ "input-group" ],
 

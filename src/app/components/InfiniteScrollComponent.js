@@ -1,10 +1,10 @@
 define([
 	"ember",
 	"text!templates/components/infinitescroll.html.hbs"
-], function( Ember, Template ) {
+], function( Ember, template ) {
 
 	return Ember.Component.extend({
-		layout: Ember.Handlebars.compile( Template ),
+		layout: Ember.HTMLBars.compile( template ),
 		tagName: "button",
 		classNameBindings: [ ":btn", ":btn-with-icon", ":infinitescroll", "hasFetchedAll:hidden" ],
 		attributeBindings: [ "type", "disabled" ],

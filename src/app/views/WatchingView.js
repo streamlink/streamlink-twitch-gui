@@ -1,10 +1,10 @@
 define([
 	"ember",
 	"text!templates/watching.html.hbs"
-], function( Ember, WatchingTemplate ) {
+], function( Ember, template ) {
 
 	return Ember.View.extend({
-		defaultTemplate: Ember.Handlebars.compile( WatchingTemplate ),
+		defaultTemplate: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-watching" ]
 	});

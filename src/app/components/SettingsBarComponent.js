@@ -1,13 +1,13 @@
 define([
 	"ember",
 	"text!templates/settingsbar.html.hbs"
-], function( Ember, Template ) {
+], function( Ember, template ) {
 
 	var get = Ember.get,
 	    set = Ember.set;
 
 	return Ember.Component.extend({
-		layout: Ember.Handlebars.compile( Template ),
+		layout: Ember.HTMLBars.compile( template ),
 		tagName: "div",
 		classNameBindings: [ ":settingsbar", "isOpened:opened" ],
 
