@@ -8,20 +8,20 @@
 <div class="game">{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>
 <div class="stats stats-row">
 {{#if stream.channel.has_broadcaster_language}}<span>{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}</span>{{/if}}
-<span {{bind-attr title=stream.title_created_at}}><i class="fa fa-clock-o"></i>{{hours-from-now stream.created_at}}</span>
-<span {{bind-attr title=stream.title_viewers}}><i class="fa fa-users"></i>{{format-viewers stream.viewers}}</span>
-<span {{bind-attr title=stream.channel.title_followers}}><i class="fa fa-heart"></i>{{format-viewers stream.channel.followers}}</span>
-<span {{bind-attr title=stream.channel.title_views}}><i class="fa fa-line-chart"></i>{{format-viewers stream.channel.views}}</span>
+<span title="{{stream.title_created_at}}"><i class="fa fa-clock-o"></i>{{hours-from-now stream.created_at}}</span>
+<span title="{{stream.title_viewers}}"><i class="fa fa-users"></i>{{format-viewers stream.viewers}}</span>
+<span title="{{stream.channel.title_followers}}"><i class="fa fa-heart"></i>{{format-viewers stream.channel.followers}}</span>
+<span title="{{stream.channel.title_views}}"><i class="fa fa-line-chart"></i>{{format-viewers stream.channel.views}}</span>
 </div>
 {{embedded-links tagName="p" class="status" text=stream.channel.status}}
 </aside>
-<div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img {{bind-attr src=stream.preview.large_nocache}}></div></div>
+<div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img src="{{unbound stream.preview.large_nocache}}"></div></div>
 </section>
 <ul class="channels wrapper horizontal">
 {{#each elem in featured}}
-<li {{bind-attr title=elem.stream.channel.id}} {{action "switchFeatured" elem}}>
-<img {{bind-attr src=elem.image title=elem.stream.channel.id}}>
+<li title="{{elem.stream.channel.id}}" {{action "switchFeatured" elem}}>
+<img src="{{unbound elem.image}}" title="{{elem.stream.channel.id}}">
 </li>
 {{/each}}
 </ul>
-<section class="globalstats">There are {{unbound summary.viewers}} people watching {{unbound summary.channels}} live streams right now!</section>
+<section class="globalstats">There are {{summary.viewers}} people watching {{summary.channels}} live streams right now!</section>

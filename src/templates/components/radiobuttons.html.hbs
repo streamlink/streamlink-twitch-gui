@@ -1,4 +1,4 @@
 {{#each button in _content}}
 {{radio-button id=button._id name=buttonName value=button.value selection=value disabled=button.disabled class="default"}}
-<label {{bind-attr for=button._id class="icon:btn-with-icon"}}>{{#if icon}}<i class="fa fa-check"></i>{{/if}}{{button.label}}</label>
+<label for="{{button._id}}" class="{{if icon 'btn-with-icon'}}">{{#if icon}}<i class="fa fa-check"></i>{{/if}}{{button.label}}</label>
 {{/each}}

@@ -1,5 +1,5 @@
 <header class="clearfix">
-<img {{bind-attr title=channel.display_name src=channel.logo}}>
+<img title="{{channel.display_name}}" src="{{unbound channel.logo}}">
 <div>
 <h3>
 {{#if channel.has_language}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
@@ -7,8 +7,8 @@
 </h3>
 {{#if stream}}
 <div class="online">
-<span {{bind-attr title=stream.title_created_at}}><i class="fa fa-clock-o"></i> {{hours-from-now stream.created_at}}</span>
-<span {{bind-attr title=stream.title_viewers}}><i class="fa fa-users"></i> {{format-viewers stream.viewers}}</span>
+<span title="{{stream.title_created_at}}"><i class="fa fa-clock-o"></i> {{hours-from-now stream.created_at}}</span>
+<span title="{{stream.title_viewers}}"><i class="fa fa-users"></i> {{format-viewers stream.viewers}}</span>
 <span><i class="fa fa-gamepad"></i> {{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</span>
 </div>
 {{embedded-links tagName="div" class="status" text=channel.status}}
@@ -18,7 +18,11 @@
 </div>
 </header>
 <section class="channelinfo">
-<div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img class="previewImage" {{bind-attr src=previewImage}}></div></div>
+<div class="big-image">
+<div class="preview" {{action "openLivestreamer" stream}}>
+<img class="previewImage" src="{{unbound previewImage}}">
+</div>
+</div>
 <div class="info">
 <h3>Channel statistics</h3>
 <dl class="dl-horizontal">

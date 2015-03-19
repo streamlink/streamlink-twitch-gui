@@ -2,7 +2,7 @@
 <h4>There was an error while trying to display this page.</h4>
 <dl class="dl-horizontal">
 {{#each row in error}}
-<dt>{{unbound row.key}}</dt>
-<dd {{bind-attr class="row.isStack:stack" data-selectable=row.isStack}}>{{unbound row.value}}</dd>
+<dt>{{row.key}}</dt>
+<dd class="{{if row.isStack 'stack'}}" data-selectable={{row.isStack}}>{{row.value}}</dd>
 {{/each}}
 </dl>

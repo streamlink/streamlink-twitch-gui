@@ -1,15 +1,15 @@
 <header>
 {{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}
-<span {{bind-attr class="stream.channel.has_language::noL stream.channel.has_broadcaster_language::noBL"}}>{{#link-to "channels.channel" stream.channel.id}}{{unbound stream.channel.display_name}}{{/link-to}}</span>
+<span class="{{unless stream.channel.has_language 'noL'}} {{unless stream.channel.has_broadcaster_language 'noBL'}}">{{#link-to "channels.channel" stream.channel.id}}{{unbound stream.channel.display_name}}{{/link-to}}</span>
 {{#if stream.channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}{{/if}}
 </header>
-<section class="preview" {{action "startStream"}} {{bind-attr title="stream.channel.status"}}>
+<section class="preview" {{action "startStream"}} title="{{stream.channel.status}}">
 <img class="previewImage" src="{{unbound stream.preview.medium_nocache}}">
 {{#if _showGame}}
-<footer><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.channel.game title=stream.channel.game}}{{unbound stream.channel.game}}{{/link-to}}</footer>
+<footer><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.channel.game title=stream.channel.game}}{{stream.channel.game}}{{/link-to}}</footer>
 {{/if}}
 </section>
 <footer>
-<span {{bind-attr title=stream.title_created_at}}><i class="fa fa-clock-o"></i> {{unbound hours-from-now stream.created_at}}</span>
-<span {{bind-attr title=stream.title_viewers}}>{{unbound format-viewers stream.viewers}} <i class="fa fa-users"></i></span>
+<span title="{{stream.title_created_at}}"><i class="fa fa-clock-o"></i> {{hours-from-now stream.created_at}}</span>
+<span title="{{stream.title_viewers}}">{{format-viewers stream.viewers}} <i class="fa fa-users"></i></span>
 </footer>

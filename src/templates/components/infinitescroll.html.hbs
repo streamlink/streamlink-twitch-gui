@@ -1,9 +1,7 @@
 {{#if error}}
 <i class="fa fa-bolt"></i>Error
-{{else}}
-{{#if disabled}}
+{{else if disabled}}
 <i class="fa fa-spinner fa-spin"></i>Loading
 {{else}}
 <i class="fa fa-arrow-down"></i>Fetch more
-{{/if}}
 {{/if}}

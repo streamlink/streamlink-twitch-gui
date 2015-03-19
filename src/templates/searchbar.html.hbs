@@ -5,7 +5,7 @@
 <button type="button" class="btn-small btn-context-valid fa fa-times" {{action "clear"}}></button>
 <button type="button" class="btn-small btn-context-valid fa fa-search" {{action "submit"}}></button>
 <button type="button" class="btn-small btn-dropdown fa fa-chevron-down" {{action "toggleDropdown"}}></button>
-<div {{bind-attr class=":searchbar-dropdown showDropdown::hidden"}}>
+<div class="searchbar-dropdown {{unless showDropdown 'hidden'}}">
 <section class="filters">
 <div>Filter results</div>
 {{radio-buttons content=filters value=filter buttonName="searchfilters"}}
