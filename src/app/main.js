@@ -7,18 +7,9 @@ if ( DEBUG ) {
 	process.on( "uncaughtException", function() {} );
 }
 
+
 define(function( require ) {
-
 	require( [ "config" ], function() {
-
-		// load libraries first
-		require( [ "ember", "ember-data", "ember-data-ls" ], function() {
-
-			// then load the app
-			require( [ "App" ] );
-
-		});
-
+		require( [ "app" ] );
 	});
-
 });

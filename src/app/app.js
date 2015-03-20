@@ -11,11 +11,11 @@ define(function( require ) {
 
 
 		// Resolver
-		Resolver: require( "Resolver" ),
+		Resolver: require( "resolver" ),
 
 
 		// Routing
-		Router: require( "Router" ),
+		Router: require( "router" ),
 
 
 		// Store

@@ -6,6 +6,7 @@
  */
 requirejs.config({
 	"shim": {
+		"app": [ "ember", "ember-data", "ember-data-ls" ],
 		"ember": {
 			"deps": [ "ember-htmlbars", "jquery" ],
 			"exports": "Ember"
@@ -37,12 +38,7 @@ requirejs.config({
 		"Selecter"      : "../vendor/Selecter/jquery.fs.selecter",
 		"moment"        : "../vendor/momentjs/moment",
 
-		// App
-		"App"     : "app",
-		"Resolver": "resolver",
-		"Router"  : "router",
-
-		// Ember paths
+		// Application paths
 		"root"        : "..",
 		"initializers": "initializers",
 		"models"      : "models",
