@@ -1,72 +1,17 @@
 
 .content-featured {
-	img {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-	}
-
-	.featured {
+	> .stream-presentation {
 		flex: 1;
-		flex-direction: row-reverse;
-		justify-content: space-between;
-		align-items: stretch;
 		margin-bottom: 2rem;
-		overflow: hidden;
 
-		i {
-			color: @color-text-darker;
+		> .image {
+			overflow: hidden;
+			.stream-hover();
 		}
 	}
 
-	.info {
-		width: 38.5%;
-
-		.title {
-			margin-top: 0;
-
-			> .flag-icon {
-				margin: 0 .25em 0 0;
-				font-size: .85em;
-			}
-
-			> a {
-				text-decoration: none;
-			}
-		}
-
-		.game {
-			margin-top: .5em;
-			padding-left: 1.667rem;
-
-			&::before {
-				content: @fa-var-gamepad;
-				display: inline-block;
-				width: 1.667rem;
-				margin-left: -1.667rem;
-				color: @color-text-darker;
-				font: 1.2em/1.1 FontAwesome;
-			}
-		}
-
-		.stats {
-			max-width: 20em;
-			margin-top: .5em;
-		}
-
-		.status {
-			margin: .5em 0;
-		}
-	}
-
-	.big-image {
-		width: 59%;
-		.stream-hover();
-	}
-
-	.channels {
+	> .channels {
+		display: flex;
 		justify-content: space-between;
 		margin: 0;
 		padding: 0;
@@ -80,7 +25,7 @@
 		}
 	}
 
-	.globalstats {
+	> .globalstats {
 		height: 3em;
 		line-height: 3em;
 		text-align: center;

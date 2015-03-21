@@ -2,19 +2,23 @@
 <h2>Featured Channels</h2>
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
-<section class="featured wrapper horizontal">
-<aside class="info">
+<section class="stream-presentation">
+<div class="image">
+<div class="preview" {{action "openLivestreamer" stream}}>
+<img class="previewImage" src="{{stream.preview.large_nocache}}">
+</div>
+</div>
+<div class="info">
 <h3 class="title">{{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{#link-to "channels.channel" stream.channel.id}}{{stream.channel.display_name}}{{/link-to}}</h3>
-<div class="game">{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>
-{{stats-row class="stats" stream=stream}}
-{{embedded-links tagName="p" class="status" text=stream.channel.status}}
-</aside>
-<div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img src="{{stream.preview.large_nocache}}"></div></div>
+{{#if stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>{{/if}}
+{{stats-row stream=stream}}
+{{embedded-links class="status" text=stream.channel.status}}
+</div>
 </section>
-<ul class="channels wrapper horizontal">
+<ul class="channels">
 {{#each elem in featured}}
 <li title="{{elem.stream.channel.id}}" {{action "switchFeatured" elem}}>
-<img src="{{unbound elem.image}}" title="{{elem.stream.channel.id}}">
+<img class="previewImage" src="{{unbound elem.image}}" title="{{elem.stream.channel.id}}">
 </li>
 {{/each}}
 </ul>

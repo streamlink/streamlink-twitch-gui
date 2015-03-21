@@ -1,0 +1,49 @@
+
+.stream-presentation {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+
+	> .image {
+		position: relative;
+		width: 59%;
+	}
+
+	> .info {
+		width: 38.5%;
+
+		> .title {
+			margin-top: 0;
+
+			> .flag-icon {
+				margin-right: .25em;
+			}
+
+			> a {
+				text-decoration: none;
+			}
+		}
+
+		> .game {
+			> i.fa-gamepad {
+				margin-right: .333em;
+			}
+		}
+
+		> .stats-row {
+			max-width: 20em;
+			margin-top: .5em;
+		}
+
+		> .game,
+		> .stats-row {
+			i.fa {
+				color: @color-text-darker;
+			}
+		}
+
+		> .status {
+			margin: .5em 0;
+		}
+	}
+}

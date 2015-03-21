@@ -7,68 +7,40 @@
 			text-decoration: none;
 		}
 	}
-}
 
-.watching-stream {
-	display: flex;
-	margin-bottom: 2rem;
+	.stream-presentation {
+		margin-bottom: 2rem;
 
-	> .left {
-		flex-shrink: 0;
-		display: block;
-		width: 320px;
-		height: 200px;
-		margin-right: 1em;
-	}
-
-	> .right {
-		flex-grow: 1;
-		display: flex;
-		flex-flow: column nowrap;
-		justify-content: space-between;
-
-		> * {
-			flex-shrink: 0;
-		}
-
-		> h3 {
-			margin: 0;
-
-			> .flag-icon {
-				margin: 0 .25em 0 0;
-				font-size: .85em;
-			}
-		}
-
-		> .game {
-			margin-top: .5em;
-			padding-left: 1.667rem;
-
-			&::before {
-				content: @fa-var-gamepad;
-				display: inline-block;
-				width: 1.667rem;
-				margin-left: -1.667rem;
-				color: @color-text-darker;
-				font: 1.2em/1.1 FontAwesome;
+		> .image {
+			> .preview {
+				.block-aspect-ratio( ( 16 / 9 ) );
 			}
 		}
 
 		> .info {
-			flex-grow: 1;
-			flex-shrink: 1;
-			margin: .5em 0;
-			overflow: auto;
-			word-break: break-word;
-		}
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: space-between;
 
-		> .stats {
-			max-width: 27.5em;
-			margin-top: .5em;
-		}
+			> .stats-row {
+				max-width: 27.5em;
+				margin-top: .5em;
+			}
 
-		> .buttons > button {
-			min-width: 10em;
+			> :not(.status) {
+				flex-grow: 0;
+			}
+
+			> .status {
+				flex: 1 1;
+				margin: .5em 0;
+				overflow: auto;
+				word-break: break-word;
+			}
+
+			> .buttons > button {
+				min-width: 10em;
+			}
 		}
 	}
 }

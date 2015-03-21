@@ -2,17 +2,21 @@
 <h2>You're watching</h2>
 <ul class="list-unstyled">
 {{#each watching in arrangedContent}}
-<li class="watching-stream">
-<img class="left" src="{{unbound watching.stream.preview.large_nocache}}">
-<section class="right">
-<h3>{{#if watching.stream.channel.has_language}}{{flag-icon type="channel" lang=watching.stream.channel.language}}{{/if}}{{watching.stream.channel.display_name}}</h3>
-<div class="game">{{#link-to "games.game" watching.stream.game}}{{watching.stream.game}}{{/link-to}}</div>
-{{stats-row class="stats" stream=watching.stream}}
-{{embedded-links class="info" text=watching.stream.channel.status}}
+<li class="stream-presentation watching">
+<div class="image">
+<div class="preview">
+<img class="previewImage" src="{{unbound watching.stream.preview.large_nocache}}">
+</div>
+</div>
+<div class="info">
+<h3 class="title">{{#if watching.stream.channel.has_language}}{{flag-icon type="channel" lang=watching.stream.channel.language}}{{/if}}{{watching.stream.channel.display_name}}</h3>
+{{#if watching.stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" watching.stream.game}}{{watching.stream.game}}{{/link-to}}</div>{{/if}}
+{{stats-row stream=watching.stream}}
+{{embedded-links class="status" text=watching.stream.channel.status}}
 <footer class="buttons">
 {{#form-button action="openLivestreamer" actionParam=watching.stream icon="fa-arrow-up"}}Open dialog{{/form-button}}
 </footer>
-</section>
+</div>
 </li>
 {{/each}}
 </ul>
