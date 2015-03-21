@@ -19,7 +19,6 @@
 		flex-flow: column nowrap;
 		width: 45rem;
 		min-height: 16rem;
-		margin: 5rem 0;
 		padding: 2rem;
 		background: @color-background;
 		-webkit-transform: translateY( -3rem );
@@ -35,15 +34,17 @@
 	}
 
 	.content {
-		flex: 1;
-		margin-bottom: 2rem;
+		flex: 1 0;
 	}
 
 	header {
 		color: @color-text-dark;
 		font-size: 2em;
 		font-weight: lighter;
-		margin-bottom: .5em;
+		margin-bottom: 1rem;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	footer {
@@ -51,6 +52,7 @@
 		flex-flow: row nowrap;
 		justify-content: flex-start;
 		align-items: flex-end;
+		margin-top: 2rem;
 
 		button:not(:last-of-type) {
 			margin-right: 1em;
@@ -58,6 +60,15 @@
 	}
 
 	&.modal-livestreamer {
+		header {
+			margin-bottom: .5rem;
+		}
+
+		.stats-row {
+			width: 50%;
+			margin-bottom: .5em;
+		}
+
 		footer {
 			justify-content: space-between;
 		}

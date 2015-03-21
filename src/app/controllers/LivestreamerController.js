@@ -175,17 +175,18 @@ define([
 				}.bind( this ) )
 				// success/failure
 				.then(
-					this.streamSuccess.bind( this, channel, true ),
+					this.streamSuccess.bind( this, livestreamer, true ),
 					this.streamFailure.bind( this )
 				);
 		},
 
-		streamSuccess: function( channel, guiActions ) {
+		streamSuccess: function( livestreamer, guiActions ) {
 			this.setProperties({
-				modalHead: "Watching now: %@".fmt( get( channel, "display_name" ) ),
-				modalBody: get( channel, "status" ),
+				modalHead: "Watching now: %@".fmt( get( livestreamer, "channel.display_name" ) ),
+				modalBody: get( livestreamer, "channel.status" ),
 				modalBtns: "running"
 			});
+			set( livestreamer, "success", true );
 
 			if ( !guiActions ) { return; }
 
@@ -196,7 +197,7 @@ define([
 
 			// automatically open chat
 			if ( get( this.settings, "gui_openchat" ) ) {
-				this.send( "chat", channel );
+				this.send( "chat", get( livestreamer, "channel" ) );
 			}
 
 			// hide the GUI
@@ -348,6 +349,7 @@ define([
 			    params   = this.getParametersString( name, quality ),
 			    spawn    = CP.spawn( exec, params, { detached: true } );
 
+			set( livestreamer, "success", false );
 			set( livestreamer, "spawn", spawn );
 
 			spawn.on( "error", defer.reject );
@@ -360,7 +362,7 @@ define([
 				if ( quality !== get( livestreamer, "quality" ) ) {
 					Ember.run.next( this, function() {
 						this.launchLivestreamer( exec, livestreamer ).then(
-							this.streamSuccess.bind( this, channel, false ),
+							this.streamSuccess.bind( this, livestreamer, false ),
 							this.streamFailure.bind( this )
 						);
 					});

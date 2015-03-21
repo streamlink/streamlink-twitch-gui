@@ -1,0 +1,8 @@
+<div>
+<header>{{view.head}}</header>
+{{#if view.showStats}}
+{{stats-row stream=view.stream withFlag=false}}
+{{/if}}
+{{embedded-links tagName="section" class="content" text=view.body}}
+<footer>{{yield}}</footer>
+</div>
