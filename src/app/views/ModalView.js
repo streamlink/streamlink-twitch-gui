@@ -1,6 +1,6 @@
 define([
 	"ember",
-	"text!templates/modal.html.hbs",
+	"text!templates/modals/layouts/default.html.hbs",
 	"text!templates/modals/default.html.hbs"
 ], function( Ember, layout, template ) {
 
