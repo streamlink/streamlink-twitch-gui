@@ -9,7 +9,7 @@ define( [ "ember" ], function( Ember ) {
 	 * Adapter mixin for using static model names
 	 * instead of using type.typeKey as name
 	 */
-	return Ember.Mixin.create({
+	return Ember.Mixin.create( Ember.Evented, {
 		find: function( store, type, id ) {
 			return this.ajax( this.buildURL( type, id ), "GET" );
 		},
@@ -28,9 +28,13 @@ define( [ "ember" ], function( Ember ) {
 			var id = get( record, "id" );
 			return this.ajax(
 				this.buildURL( type, id ),
-				this.get( "createRecordMethod" ),
+				get( this, "createRecordMethod" ),
 				this.createRecordData( store, type, record )
-			);
+			)
+				.then(function( data ) {
+					this.trigger( "createRecord", store, type, record );
+					return data;
+				}.bind( this ) );
 		},
 		createRecordData: function( store, type, record ) {
 			var data = {},
@@ -44,9 +48,13 @@ define( [ "ember" ], function( Ember ) {
 			var id = get( record, "id" );
 			return this.ajax(
 				this.buildURL( type, id ),
-				this.get( "updateRecordMethod" ),
+				get( this, "updateRecordMethod" ),
 				this.updateRecordData( store, type, record )
-			);
+			)
+				.then(function( data ) {
+					this.trigger( "updateRecord", store, type, record );
+					return data;
+				}.bind( this ) );
 		},
 		updateRecordData: function( store, type, record ) {
 			var data = {},
@@ -57,7 +65,14 @@ define( [ "ember" ], function( Ember ) {
 
 		deleteRecord: function( store, type, record ) {
 			var id = get( record, "id" );
-			return this.ajax( this.buildURL( type, id ), "DELETE" );
+			return this.ajax(
+				this.buildURL( type, id ),
+				"DELETE"
+			)
+				.then(function( data ) {
+					this.trigger( "deleteRecord", store, type, record );
+					return data;
+				}.bind( this ) );
 		},
 
 		buildURL: function( type, id ) {
