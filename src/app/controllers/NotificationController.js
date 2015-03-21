@@ -66,15 +66,26 @@ define([
 		 * Add a newly followed channel to the channel list cache
 		 * so it doesn't pop up a new notification on the next query
 		 */
-		isFollowingChannelObserver: function() {
-			if ( !get( this, "enabled" ) ) { return; }
-			/** @type {Object} model */
-			var model     = get( this, "model" );
-			var following = get( this, "controllers.livestreamer.active.channel.following" );
-			var name      = get( following, "channel.id" );
-			if ( !following || !name || model.hasOwnProperty( name ) ) { return; }
-			model[ name ] = new Date();
-		}.observes( "controllers.livestreamer.active.channel.following" ),
+		_userHasFollowedChannel: function() {
+			var self    = this;
+			var follows = self.store.modelFor( "twitchUserFollowsChannel" );
+			var adapter = self.store.adapterFor( "twitchUserFollowsChannel" );
+
+			adapter.on( "createRecord", function( store, type, record ) {
+				if ( !get( self, "enabled" ) ) { return; }
+				if ( type !== follows ) { return; }
+
+				var name = get( record, "id" );
+				// is the followed channel online?
+				store.fetchById( "twitchStream", name )
+					.then(function() {
+						/** @type {Object} model */
+						var model = get( self, "model" );
+						if ( model.hasOwnProperty( name ) ) { return; }
+						model[ name ] = new Date();
+					});
+			});
+		}.on( "init" ),
 
 
 		reset: function() {
