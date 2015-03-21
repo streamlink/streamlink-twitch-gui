@@ -125,6 +125,7 @@ define(function( require ) {
 		InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
 		EmbeddedLinksComponent: require( "components/EmbeddedLinksComponent" ),
 		FlagIconComponent: require( "components/FlagIconComponent" ),
+		StatsRowComponent: require( "components/StatsRowComponent" ),
 
 
 		// Content
