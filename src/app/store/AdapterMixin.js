@@ -38,8 +38,9 @@ define( [ "ember" ], function( Ember ) {
 		},
 		createRecordData: function( store, type, record ) {
 			var data = {},
-			    serializer = store.serializerFor( type.typeKey );
-			serializer.serializeIntoHash( data, type, record, { includeId: true } );
+			    serializer = store.serializerFor( type.typeKey ),
+			    snapshot = record._createSnapshot();
+			serializer.serializeIntoHash( data, type, snapshot, { includeId: true } );
 			return { data: data };
 		},
 
@@ -58,8 +59,9 @@ define( [ "ember" ], function( Ember ) {
 		},
 		updateRecordData: function( store, type, record ) {
 			var data = {},
-			    serializer = store.serializerFor( type.typeKey );
-			serializer.serializeIntoHash( data, type, record );
+			    serializer = store.serializerFor( type.typeKey ),
+			    snapshot = record._createSnapshot();
+			serializer.serializeIntoHash( data, type, snapshot );
 			return { data: data };
 		},
 
