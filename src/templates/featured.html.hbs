@@ -9,7 +9,7 @@
 {{stats-row class="stats" stream=stream}}
 {{embedded-links tagName="p" class="status" text=stream.channel.status}}
 </aside>
-<div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img src="{{unbound stream.preview.large_nocache}}"></div></div>
+<div class="big-image"><div class="preview" {{action "openLivestreamer" stream}}><img src="{{stream.preview.large_nocache}}"></div></div>
 </section>
 <ul class="channels wrapper horizontal">
 {{#each elem in featured}}
