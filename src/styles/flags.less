@@ -11,20 +11,21 @@
 
 .flag-icon {
 	display: inline-block;
-	position: relative;
 	width: @flag-icon-width;
 	height: 1em;
-	margin: 0;
 	line-height: 1;
-	background-repeat: no-repeat;
-	background-position: 50%;
-	background-size: contain;
 	cursor: help;
 	-webkit-filter: saturate(.75) brightness(.85);
 	transition: -webkit-filter .2s ease-out;
 
 	&::before {
 		content: "\00a0";
+		display: inline-block;
+		width: 100%;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-position: 50%;
+		background-size: contain;
 	}
 
 	&:hover {
@@ -33,7 +34,7 @@
 }
 
 .flag-icon(@country) {
-	.flag-icon-@{country} {
+	.flag-icon-@{country}::before {
 		background-image: ~"url(@{flag-icon-svg-path}/@{country}.svg)";
 	}
 }
@@ -42,11 +43,7 @@
 .flag-icon-en {
 	&::before,
 	&::after {
-		content: "\00a0";
-		display: inline-block;
 		width: 50%;
-		height: 100%;
-		background-repeat: no-repeat;
 		background-size: cover;
 	}
 
@@ -56,6 +53,10 @@
 	}
 
 	&::after {
+		content: "\00a0";
+		display: inline-block;
+		height: 100%;
+		background-repeat: no-repeat;
 		background-position: 100% 50%;
 		background-image: ~"url(@{flag-icon-svg-path}/gb.svg)";
 	}
