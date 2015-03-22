@@ -169,7 +169,9 @@ define([
 				.then( this.checkUserSubscribesChannel.bind( this, channel ) )
 				// check if the user follows the channel
 				.then( this.checkUserFollowsChannel.bind( this, channel ) )
-				// add the stream object to the streams list
+				// setup stream refresh interval
+				.then( this.refreshStream.bind( this, livestreamer ) )
+				// add the livestreamer object to the streams list
 				.then(function() {
 					this.streams.addObject( livestreamer );
 				}.bind( this ) )
@@ -369,6 +371,8 @@ define([
 
 				// stream was shut down regularly
 				} else {
+					set( livestreamer, "shutdown", true );
+
 					// close the modal only if there was no error and if it belongs to the stream
 					if (
 						  !get( livestreamer, "error" )
@@ -467,6 +471,28 @@ define([
 					break;
 			}
 		},
+
+		refreshStream: function( livestreamer ) {
+			var interval = get( this, "config.stream-reload-interval" ) || 60000;
+
+			// don't refresh immediately
+			Ember.run.later( this, function() {
+				if ( get( livestreamer, "shutdown" ) ) { return; }
+
+				var stream  = get( livestreamer, "stream" ),
+				    reload  = stream.reload.bind( stream ),
+				    promise = reload();
+
+				// try to reload the record at least 3 times
+				for ( var i = 1; i < 3; i++ ) {
+					promise = promise.catch( reload );
+				}
+
+				// queue another refresh
+				promise.then( this.refreshStream.bind( this, livestreamer ) );
+			}, interval );
+		},
+
 
 		actions: {
 			"download": function( callback ) {
