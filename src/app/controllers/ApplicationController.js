@@ -58,7 +58,7 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 				if ( get( this, "streamsLength" ) ) {
 					this.send( "openModal", "quitModal", this, {
 						modalHead: "Are you sure you want to quit?",
-						modalBody: "Choose shutdown for closing all streams, too."
+						modalBody: "By choosing shutdown, all streams will be closed, too."
 					});
 				} else {
 					this.send( "quit" );
