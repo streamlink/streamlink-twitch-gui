@@ -9,7 +9,7 @@
 </div>
 </div>
 <div class="info">
-<h3 class="title">{{#if watching.stream.channel.has_language}}{{flag-icon type="channel" lang=watching.stream.channel.language}}{{/if}}{{watching.stream.channel.display_name}}</h3>
+<h3 class="title">{{#if watching.stream.channel.has_language}}{{flag-icon type="channel" lang=watching.stream.channel.language}}{{/if}}{{#link-to "channels.channel" watching.stream.channel.id}}{{watching.stream.channel.display_name}}{{/link-to}}</h3>
 {{#if watching.stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" watching.stream.game}}{{watching.stream.game}}{{/link-to}}</div>{{/if}}
 {{stats-row stream=watching.stream}}
 {{embedded-links class="status" text=watching.stream.channel.status}}
