@@ -68,6 +68,10 @@ define([
 		if ( contains.call( argv, "--min", "--minimize", "--minimized" ) ) {
 			nwWindow.toggleMinimize( false );
 		}
+
+		if ( DEBUG ) {
+			window.initialized = true;
+		}
 	});
 
 
