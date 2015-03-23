@@ -38,7 +38,15 @@ define([
 			return get( this, "channel.views" ) / get( this, "age" );
 		}.property( "age", "channel.views" ),
 
-		hasDelay: Ember.computed.gt( "channel.delay", 0 )
+		hasDelay: Ember.computed.gt( "channel.delay", 0 ),
+
+
+		actions: {
+			"startStream": function( stream ) {
+				if ( !stream ) { return; }
+				this.send( "openLivestreamer", stream );
+			}
+		}
 	});
 
 });

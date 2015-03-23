@@ -18,8 +18,8 @@
 </div>
 </header>
 <section class="channelinfo">
-<div class="big-image">
-<div class="preview" {{action "openLivestreamer" stream}}>
+<div class="big-image {{if stream 'online'}}">
+<div class="preview" {{action "startStream" stream}}>
 <img class="previewImage" src="{{unbound previewImage}}">
 </div>
 </div>

@@ -42,9 +42,13 @@
 
 		> .big-image {
 			width: 59%;
-			.stream-hover();
+
+			&.online {
+				.stream-hover();
+			}
 
 			> .preview {
+				position: relative;
 				.block-aspect-ratio( ( 16 / 9 ) );
 			}
 
