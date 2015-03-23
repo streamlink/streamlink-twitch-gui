@@ -7,15 +7,24 @@ define( [ "ember" ], function( Ember ) {
 		summary : Ember.computed.alias( "model.summary" ),
 		featured: Ember.computed.alias( "model.featured" ),
 
-		_streamIndex: 0,
-		stream: function() {
-			return get( this, "featured.%@.stream".fmt( get( this, "_streamIndex" ) ) );
-		}.property( "featured.@each.stream", "_streamIndex" ),
+		// reference the active stream by id
+		// so we can safely go back to the route
+		_index: 0,
+		active: function() {
+			return get( this, "featured.%@".fmt( get( this, "_index" ) ) );
+		}.property( "featured.@each", "_index" ),
+		activeObserver: function() {
+			set( this, "active.isActive", true );
+		}.observes( "active" ),
+
+		stream: Ember.computed.readOnly( "active.stream" ),
 
 		actions: {
-			"switchFeatured": function( featured ) {
-				var index = get( this, "featured" ).indexOf( featured );
-				set( this, "_streamIndex", index );
+			"switchFeatured": function( elem ) {
+				var index = get( this, "featured" ).indexOf( elem );
+				if ( index === get( this, "_index" ) ) { return; }
+				set( this, "active.isActive", false );
+				set( this, "_index", index );
 			}
 		}
 	});

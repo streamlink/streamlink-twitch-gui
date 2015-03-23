@@ -17,7 +17,7 @@
 </section>
 <ul class="channels">
 {{#each elem in featured}}
-<li title="{{elem.stream.channel.id}}" {{action "switchFeatured" elem}}>
+<li title="{{elem.stream.channel.id}}" class="{{if elem.isActive 'active'}}" {{action "switchFeatured" elem}}>
 <img class="previewImage" src="{{unbound elem.image}}" title="{{elem.stream.channel.id}}">
 </li>
 {{/each}}
