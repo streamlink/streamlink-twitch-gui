@@ -21,6 +21,10 @@ trim_trailing_whitespace = true
 indent_size = 0
 insert_final_newline = false
 
+# markdown files
+[**.md]
+trim_trailing_whitespace = false
+
 # yaml configs
 [**.yml]
 indent_style = space
