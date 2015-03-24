@@ -1,6 +1,26 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Implemented channel pages.
+- Implemented login via OAuth token. #53  
+  Requires "advanced settings" to be enabled (see settings menu).
+- Added more infos to the stream popup (refreshes automatically).
+- Added `--tray` and `--min` start parameters. #50
+- Added minimize to tray option.
+- The window state will now be preserved between sessions. #48  
+  Use `--reset-window` to start the application centered again.
+- Fixed desktop notification bugs.
+- Fixed livestreamer default path (OSX). #55
+- Fixed broken keyboard shortcuts (OSX). #59
+- Upgraded dependencies.
+- Upgraded NW.js to v0.12.0.
+- Various other bugfixes and improvements.
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.1...master)
+
+
 ## [v0.7.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.1) (2015-02-10)
 
 - Fixed "Launching stream" dialog being stuck in some cases. See #45 and #38. Thanks @Wraul
