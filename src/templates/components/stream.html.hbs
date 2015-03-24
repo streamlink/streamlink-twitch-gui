@@ -1,10 +1,10 @@
 <header>
 {{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}
-<span class="{{unless stream.channel.has_language 'noL'}} {{unless stream.channel.has_broadcaster_language 'noBL'}}">{{#link-to "channels.channel" stream.channel.id}}{{unbound stream.channel.display_name}}{{/link-to}}</span>
+<span class="{{unless stream.channel.has_language 'noL'}} {{unless stream.channel.has_broadcaster_language 'noBL'}}">{{#link-to "channels.channel" stream.channel.id}}{{stream.channel.display_name}}{{/link-to}}</span>
 {{#if stream.channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}{{/if}}
 </header>
 <section class="preview" {{action "startStream"}} title="{{stream.channel.status}}">
-<img class="previewImage" src="{{unbound stream.preview.medium_nocache}}">
+<img class="previewImage" src="{{stream.preview.medium_nocache}}">
 {{#if _showGame}}
 <footer><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.channel.game title=stream.channel.game}}{{stream.channel.game}}{{/link-to}}</footer>
 {{/if}}

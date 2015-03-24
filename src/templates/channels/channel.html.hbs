@@ -1,5 +1,5 @@
 <header>
-<img title="{{channel.display_name}}" src="{{unbound channel.logo}}">
+<img title="{{channel.display_name}}" src="{{channel.logo}}">
 <div>
 <h3>
 {{#if channel.has_language}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
@@ -20,7 +20,7 @@
 <section class="channelinfo">
 <div class="big-image {{if stream 'online'}}">
 <div class="preview" {{action "startStream" stream}}>
-<img class="previewImage" src="{{unbound previewImage}}">
+<img class="previewImage" src="{{previewImage}}">
 </div>
 </div>
 <div class="info">
