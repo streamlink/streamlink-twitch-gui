@@ -17,7 +17,7 @@ define( [ "ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
 
 	return Ember.Component.extend({
 		layout: function() {
-			var template = String( this.get( "text" ) )
+			var template = String( Ember.getWithDefault( this, "text", "" ) )
 				.replace( linkurl_re, linkurl_fn )
 				.replace( twitter_re, twitter_fn );
 
