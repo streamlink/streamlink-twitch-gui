@@ -12,7 +12,7 @@
 		"momentjs": "2.9.0",
 		"Selecter": "3.1.4",
 		"flag-icon-css": "0.7.0",
-		"roboto-fontface": "0.3.0",
+		"roboto-fontface": "0.2.7",
 		"qunit": "1.17.1"
 	}
 }
