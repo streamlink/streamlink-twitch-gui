@@ -1,7 +1,7 @@
 <h2>Error</h2>
 <h4>There was an error while trying to display this page.</h4>
 <dl class="dl-horizontal">
-{{#each row in error}}
+{{#each row in model}}
 <dt>{{row.key}}</dt>
 <dd class="{{if row.isStack 'stack'}}" data-selectable={{row.isStack}}>{{row.value}}</dd>
 {{/each}}
