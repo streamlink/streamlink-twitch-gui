@@ -3,7 +3,6 @@ Changelog - Livestreamer Twitch GUI
 
 ## [v0.7.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.1) (2015-02-10)
 
-### Patch highlights
 - Fixed "Launching stream" dialog being stuck in some cases. See #45 and #38. Thanks @Wraul
 - Fixed invalid aspect ratio of broken preview images.
 - Restricted start menu shortcut creation on windows to win8 and higher. Required for toast notifications. See #44.
@@ -15,7 +14,6 @@ Changelog - Livestreamer Twitch GUI
 
 ## [v0.7.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.0) (2015-01-22)
 
-### Highlights
 - Added x64 builds for Windows and OSX (see below).
 - Implemented follow-channel mechanics.
 - Implemented desktop notifications.  
@@ -36,16 +34,9 @@ Changelog - Livestreamer Twitch GUI
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.6.1...v0.7.0)
 
-### Known issues
-- See issues of the [v0.6.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.6.1) release
-
-### Notes
-I really appreciate all the people who share this project by posting about it on other websites. But please be respectful and don't link directly to the attached files. Thank you!
-
 
 ## [v0.6.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.6.1) (2014-12-12)
 
-### Patch highlights
 - **Set the required livestreamer version to v1.11.1 !!!** See #30  
   Twitch had changed their API lately, so livestreamer was unable to launch any streams. This means that you need to [install the latest livestreamer version](https://github.com/chrippa/livestreamer/releases) in order to watch twitch.tv streams. If you're running the old version, the GUI will prompt you to do so.
 - Rewrote the tray-icon logic: You can now choose where to access the application from - either the taskbar/dock, tray or both. The previous settings for this option have been reset.
@@ -65,20 +56,9 @@ I really appreciate all the people who share this project by posting about it on
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.6.0...v0.6.1)
 
-### Known issues
-- **OSX:**  
-  Due to a build dependency issue, the old problem regarding the path of the livestreamer executable is back in (pre v0.6.0). This means that you need to manually set the path to livestreamer, if you haven't already. The default path is `/usr/local/bin/livestreamer`, but if this doesn't work, please check `which livestreamer`, to see where the livestreamer executable is located.
-- **Twitch.tv API issues:**  
-  Sometimes the returned list of streams is empty. This affects all stream listings, the infinite scroll mechanic, the stream search function and also the streams-being-watched menu.
-- See issues of the [v0.6.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.6.0) release
-
-### Notes
-I really appreciate all the people who share this project by posting about it on other websites. But please be respectful and don't link directly to the attached files. Thank you!
-
 
 ## [v0.6.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.6.0) (2014-11-15)
 
-### Highlights
 - Implemented twitch.tv login (due to dependency issues, only the followed channels are currently supported #27)
 - Improved the infinite scroll logic and stream tile layout
 - Implemented twitter name and link parser for stream titles and descriptions
@@ -92,15 +72,9 @@ I really appreciate all the people who share this project by posting about it on
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.5.0...v0.6.0)
 
-### Known issues
-- A click on a documentation link in the settings menu breaks the application (fixed in [1b85be9](https://github.com/bastimeyer/livestreamer-twitch-gui/commit/1b85be9acb6147b168c83a7536a39a367f89d76b))
-- The select dropdown views keep the old selection after clicking the discard button in the settings menu. (fixed in [0a5f415](https://github.com/bastimeyer/livestreamer-twitch-gui/commit/0a5f415367b81eb18d2be2cf8fcc78752bbbec59))
-- See issues of the [v0.5.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.5.0) release
-
 
 ## [v0.5.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.5.0) (2014-08-19)
 
-### Highlights
 - Multi stream support! #13
 - The GUI may now be closed while streams are still running
 - Implemented livestreamer validation / version check
@@ -115,16 +89,9 @@ I really appreciate all the people who share this project by posting about it on
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.4.2...v0.5.0)
 
-### Known issues
-- [Win] The icon of the .exe file will be changed as well in the next release
-- The livestreamer error log of streams that failed to launch still needs to be implemented (the popup will silently close)
-- The refresh button doesn't work on error routes
-- See issues of the [v0.4.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.4.2) release
-
 
 ## [v0.4.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.4.2) (2014-08-07)
 
-### Highlights
 * Added chat button to the "now watching" popup #9
 * Added quality change dropdown to the popup #10
 * Added "minimize GUI" options
@@ -138,11 +105,6 @@ I really appreciate all the people who share this project by posting about it on
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.4.1...v0.4.2)
 
-### Known issues:
-* There might be some problems with the videoplayer when changing the stream quality via the dropdown.
-* [Win] The titlebar buttons (min, max and close) stay hovered after moving the cursor.
-* [OSX,Linux] When building the app, the tarballs still don't include the +x flags for the executable files (the attached files are working though). #14
-
 
 ## [v0.4.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.4.1) (2014-06-04)
 
@@ -151,7 +113,6 @@ I really appreciate all the people who share this project by posting about it on
 
 ## [v0.4.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.4.0) (2014-05-11)
 
-### Highlights
 * Implemented the search function
 * Added startscript for linux users
 * Split up the build task into `release` and `dev`. See changelog
@@ -159,10 +120,6 @@ I really appreciate all the people who share this project by posting about it on
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.3.1...v0.4.0)
 
-### Known issues:
-* The startscript and binary files are not set as executable inside the tarballs. It's an issue related to the `grunt-contrib-compress` build-dependency. There's a pull request on this repository to fix this problem.
-
-### Preview image
 ![image](https://cloud.githubusercontent.com/assets/467294/2937991/b94283f2-d8e8-11e3-9636-1824d17f757a.png)
 
 
@@ -209,7 +166,6 @@ There is currently no validation of the user input and some more fields for cust
 
 ## [v0.1.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.1.0) (2013-12-13)
 
-### The first release
 There is not much to see, just some core functionality and some design ideas.
 
 The only thing you can do right now is browsing the top games, top channels by game and all top channels. A click on a channel will then start a new livestreamer process with the stream quality preset "best". Please make sure that livestreamer is defined in your PATH-variable. There will be no output of this child process, so please be patient and wait for your videoplayer to start.
