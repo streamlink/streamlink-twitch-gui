@@ -475,22 +475,21 @@ define([
 		refreshStream: function( livestreamer ) {
 			var interval = get( this, "config.stream-reload-interval" ) || 60000;
 
-			// don't refresh immediately
-			Ember.run.later( this, function() {
-				if ( get( livestreamer, "shutdown" ) ) { return; }
+			if ( get( livestreamer, "shutdown" ) ) { return; }
 
-				var stream  = get( livestreamer, "stream" ),
-				    reload  = stream.reload.bind( stream ),
-				    promise = reload();
+			var stream  = get( livestreamer, "stream" ),
+			    reload  = stream.reload.bind( stream ),
+			    promise = reload();
 
-				// try to reload the record at least 3 times
-				for ( var i = 1; i < 3; i++ ) {
-					promise = promise.catch( reload );
-				}
+			// try to reload the record at least 3 times
+			for ( var i = 1; i < 3; i++ ) {
+				promise = promise.catch( reload );
+			}
 
-				// queue another refresh
-				promise.then( this.refreshStream.bind( this, livestreamer ) );
-			}, interval );
+			// queue another refresh
+			promise.then(function() {
+				Ember.run.later( this, this.refreshStream, livestreamer, interval );
+			}.bind( this ) );
 		},
 
 
