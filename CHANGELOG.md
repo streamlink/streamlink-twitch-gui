@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.7.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.2) (2015-03-26)
 
 - Implemented channel pages.
 - Implemented login via OAuth token. #53  
@@ -18,7 +18,7 @@ Changelog - Livestreamer Twitch GUI
 - Upgraded NW.js to v0.12.0.
 - Various other bugfixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.1...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.1...v0.7.2)
 
 
 ## [v0.7.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.1) (2015-02-10)
