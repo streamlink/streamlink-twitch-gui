@@ -419,7 +419,10 @@ define([
 				}
 
 				data = data.replace( re_replace, "" );
-				if ( get( this, "active" ) === livestreamer ) {
+				if (
+					    get( this, "active" ) === livestreamer
+					&& !get( livestreamer, "error" )
+				) {
 					set( this, "modalBody", data );
 				}
 				if ( re_player.test( data ) ) {
