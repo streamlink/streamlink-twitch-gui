@@ -1,48 +1,62 @@
 define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 	var get = Ember.get,
-	    set = Ember.set;
+	    set = Ember.setProperties,
+	    debounce = Ember.run.debounce;
 
-	var ismaximize = false;
+	var concat = [].concat;
 
-	function deferEvent( fn ) {
+	var isWin = process.platform === "win32";
+
+	var timeEvent  = 100,
+	    timeIgnore = 1000,
+	    ignore     = false;
+
+
+	function deferEvent( thisArg, fn ) {
+		var args = [ thisArg, fn ];
 		return function() {
-			var args = arguments;
-			setTimeout(function() {
-				fn.apply( null, args );
-			}, 10 );
+			// Ember.run.debounce( thisArg, fn, arguments..., time );
+			debounce.apply( null, concat.apply( args, arguments ).concat( timeEvent ) );
 		};
 	}
 
-	var timeout = null;
-	function delegateSave() {
-		clearTimeout( timeout );
-		timeout = setTimeout( this.save.bind( this ), 100 );
+	function save( params ) {
+		set( this, params );
+		this.save();
 	}
 
 	function onResize( width, height ) {
-		if ( ismaximize ) { return; }
-		set( this, "width", width );
-		set( this, "height", height );
-		delegateSave.call( this );
+		if ( ignore ) { return; }
+		save.call( this, {
+			width : width,
+			height: height
+		});
 	}
 
 	function onMove( x, y ) {
-		if ( ismaximize ) { return; }
-		set( this, "x", x );
-		set( this, "y", y );
-		delegateSave.call( this );
+		if ( ignore ) { return; }
+		// double check: NW.js moves the window to
+		// [    -8,    -8] when maximizing...
+		// [-32000,-32000] when minimizing...
+		if ( isWin && ( x === -8 && y === -8 || x === -32000 && x === -32000 ) ) { return; }
+		save.call( this, {
+			x: x,
+			y: y
+		});
 	}
 
-	function onMaximize() {
-		ismaximize = true;
-		setTimeout( function() {
-			ismaximize = false;
-		}, 20 );
+	function ignoreNextEvent() {
+		ignore = true;
+		debounce( unignoreNextEvent, timeIgnore );
+	}
+
+	function unignoreNextEvent() {
+		ignore = false;
 	}
 
 
-	function restoreWindow( nwWindow ) {
+	function restoreWindow() {
 		var width  = get( this, "width" ),
 		    height = get( this, "height" );
 		if ( width !== null && height !== null ) {
@@ -57,11 +71,12 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 	}
 
 	function resetWindow() {
-		set( this, "width", null );
-		set( this, "height", null );
-		set( this, "x", null );
-		set( this, "y", null );
-		this.save();
+		save.call( this, {
+			width : null,
+			height: null,
+			x     : null,
+			y     : null
+		});
 	}
 
 
@@ -88,18 +103,20 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 					if ( nwGui.App.fullArgv.indexOf( "--reset-window" ) >= 0 ) {
 						resetWindow.call( Window );
 					} else {
-						restoreWindow.call( Window, nwWindow );
+						restoreWindow.call( Window );
 					}
 
 					// also listen for the maximize events
 					// we don't want to save the window size+pos after these events
-					nwWindow.on(   "maximize", onMaximize );
-					nwWindow.on( "unmaximize", onMaximize );
+					nwWindow.on(   "maximize", ignoreNextEvent );
+					nwWindow.on( "unmaximize", ignoreNextEvent );
+					nwWindow.on(   "minimize", ignoreNextEvent );
+					nwWindow.on(    "restore", ignoreNextEvent );
 
 					// resize and move events need to be defered
 					// the maximize events are triggered afterwards
-					nwWindow.on( "resize", deferEvent( onResize.bind( Window ) ) );
-					nwWindow.on(   "move", deferEvent(   onMove.bind( Window ) ) );
+					nwWindow.on( "resize", deferEvent( Window, onResize ) );
+					nwWindow.on(   "move", deferEvent( Window, onMove   ) );
 
 					// now we're ready
 					application.advanceReadiness();
