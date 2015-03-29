@@ -31,7 +31,7 @@ define([
 	    re_nostreams = /^error: No streams found on this URL: /,
 	    re_noplayer  = /^error: Failed to start player: /,
 	    re_noplayer2 = /^error: The default player \(.+\) does not seem to be installed\./,
-	    re_replace   = /^\[cli]\[\S+]\s+/,
+	    re_replace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/,
 	    re_player    = /^Starting player: \S+/,
 	    re_split     = /\r?\n/g;
 
