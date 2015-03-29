@@ -246,7 +246,9 @@ define([
 					var url = get( this, "config.twitch-chat-url" )
 						.replace( "{channel}", get( stream, "channel.id" ) );
 					this.send( "openLivestreamer", stream );
-					this.send( "openBrowser", url );
+					if ( !get( this, "settings.gui_openchat" ) ) {
+						this.send( "openBrowser", url );
+					}
 			}
 		},
 
