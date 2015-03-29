@@ -1,6 +1,7 @@
 define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 	var get = Ember.get;
+	var isOSX = process.platform === "darwin";
 
 	return Ember.Object.extend({
 
@@ -29,11 +30,16 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 		iconRes: function() {
 			var dpr = window.devicePixelRatio;
-			var res = process.platform !== "darwin" || dpr > 2
+			var res = !isOSX || dpr > 2
 				? 48
 				: dpr > 1
 					? 32
 					: 16;
+
+			if ( isOSX ) {
+				res = "osx-" + res;
+			}
+
 			return get( this, "icon" ).replace( "{res}", res );
 		}.property( "icon" ),
 
@@ -43,7 +49,6 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 				tooltip: get( this, "name" )
 			});
 			tray.menu = get( this, "menu" );
-			tray.iconsAreTemplates = false;
 			return tray;
 		},
 
