@@ -1,6 +1,15 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## [v0.7.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.3) (2015-03-29)
+
+- Fixed application being hidden after closing it while being minimized. #62
+- Replaced colored tray icons on OSX with grayscale ones.
+- Fixed notification click bug where chat was opened twice in some cases.
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.2...v0.7.3)
+
+
 ## [v0.7.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.2) (2015-03-26)
 
 - Implemented channel pages.
