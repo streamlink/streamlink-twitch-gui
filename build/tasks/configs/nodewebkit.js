@@ -4,7 +4,7 @@ module.exports = {
 		cacheDir: "build/cache",
 		version : "<%= package.config['nw-js-version'] %>",
 		winIco  : "build/resources/icons/icon-16-32-48-256.ico",
-		macIcns : "build/resources/icons/icon-512.icns",
+		macIcns : "build/resources/icons/icon-1024.icns",
 		macPlist: {
 			CFBundleName       : "<%= package.config['display-name'] %>",
 			CFBundleDisplayName: "<%= package.config['display-name'] %>",
