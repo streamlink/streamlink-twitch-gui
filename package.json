@@ -36,6 +36,7 @@
 		"nw-js-version": "0.12.0",
 		"version-check-days": 7,
 		"tray-icon": "img/icon-{res}.png",
+		"tray-icon-osx": "img/icon-osx-{res}{hidpi}.png",
 		"livestreamer-exec": "livestreamer",
 		"livestreamer-fallback-path-unix": "/usr/local/bin",
 		"livestreamer-version-min": "1.11.1",

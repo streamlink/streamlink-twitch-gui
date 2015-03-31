@@ -125,11 +125,12 @@ define([
 		name: "nwjs",
 
 		initialize: function( container ) {
-			var displayName = Ember.get( metadata, "package.config.display-name" );
-			var trayIconImg = Ember.get( metadata, "package.config.tray-icon" );
+			var displayName    = Ember.get( metadata, "package.config.display-name" );
+			var trayIconImg    = Ember.get( metadata, "package.config.tray-icon" );
+			var trayIconImgOSX = Ember.get( metadata, "package.config.tray-icon-osx" );
 
 			shortcut.create( displayName );
-			tray.init( displayName, trayIconImg );
+			tray.init( displayName, trayIconImg, trayIconImgOSX );
 			if ( process.platform === "darwin" ) {
 				menu.createMacNativeMenuBar( displayName );
 			}

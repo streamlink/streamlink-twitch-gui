@@ -5,10 +5,11 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 	return Ember.Object.extend({
 
-		init: function( name, icon ) {
+		init: function( name, icon, iconOSX ) {
 			this.setProperties({
 				name: name,
 				icon: icon,
+				iconOSX: iconOSX,
 				tray: null,
 				menu: this._buildMenu()
 			});
@@ -30,18 +31,29 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 		iconRes: function() {
 			var dpr = window.devicePixelRatio;
-			var res = !isOSX || dpr > 2
-				? 48
-				: dpr > 1
-					? 32
-					: 16;
 
 			if ( isOSX ) {
-				res = "osx-" + res;
-			}
+				var hidpi = dpr > 2
+					? "@3x"
+					: dpr > 1
+						? "@2x"
+						: "";
 
-			return get( this, "icon" ).replace( "{res}", res );
-		}.property( "icon" ),
+				return get( this, "iconOSX" )
+					.replace( "{res}", 18 )
+					.replace( "{hidpi}", hidpi );
+
+			} else {
+				var res = dpr > 2
+					? 48
+					: dpr > 1
+						? 32
+						: 16;
+
+				return get( this, "icon" )
+					.replace( "{res}", res );
+			}
+		}.property( "icon", "iconOSX" ),
 
 		_buildTray: function() {
 			var tray = new nwGui.Tray({
