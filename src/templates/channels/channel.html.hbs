@@ -33,9 +33,9 @@
 <dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>
 {{/if}}
 <dt><i class="fa fa-heart"></i>Followers</dt>
-<dd>{{format-viewers channel.followers}} ({{format-viewers followersPerDay}} per day)</dd>
+<dd title="{{channel.title_followers}}">{{format-viewers channel.followers}} ({{format-viewers followersPerDay}} per day)</dd>
 <dt><i class="fa fa-line-chart"></i>Views</dt>
-<dd>{{format-viewers channel.views}} ({{format-viewers viewsPerDay}} per day)</dd>
+<dd title="{{channel.title_views}}">{{format-viewers channel.views}} ({{format-viewers viewsPerDay}} per day)</dd>
 <dt><i class="fa fa-history"></i>Delay</dt>
 <dd>{{#if hasDelay}}{{channel.delay}} seconds{{else}}No additional delay{{/if}}</dd>
 <dt><i class="fa fa-male"></i>Content</dt>
