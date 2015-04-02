@@ -7,7 +7,7 @@ define( [ "ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
 	    " targetObject=targetObject}}",
 	    "%@",
 	    "{{/external-link}}"
-	].join( "" );
+	].join( "\n" );
 
 	var linkurl_re = linkmatching.linkurl_re,
 	    linkurl_fn = linkmatching.linkurl_fn( hbs_string ),
