@@ -1,6 +1,6 @@
 define([
 	"ember",
-	"text!templates/settingsbar.html.hbs"
+	"text!templates/components/settingsbar.html.hbs"
 ], function( Ember, template ) {
 
 	var get = Ember.get,
