@@ -21,6 +21,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		notify_grouping     : DS.attr( "boolean", { defaultValue: true } ),
 		notify_click        : DS.attr( "number", { defaultValue: 1 } ),
 		notify_click_group  : DS.attr( "number", { defaultValue: 1 } ),
+		notify_badgelabel   : DS.attr( "boolean", { defaultValue: true } ),
 
 
 		// correct old value

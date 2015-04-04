@@ -60,6 +60,10 @@
 <div>{{view "select" class="notifications" value=model.notify_click_group content=settings.constructor.notify_click_group optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 {{/if}}
 {{/if}}
+{{#if isVisibleInTaskbar}}
+<div><i class="fa fa-tag"></i> Favorites indication<span>As label on the task bar / dock icon.<br>Has to be supported by your OS.</span></div>
+<div>{{#check-box checked=model.notify_badgelabel}}Show number of streaming favorites{{/check-box}}</div>
+{{/if}}
 {{/if}}
 </fieldset>
 <fieldset class="submit">

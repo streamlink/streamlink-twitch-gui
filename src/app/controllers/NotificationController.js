@@ -87,6 +87,19 @@ define([
 			});
 		}.on( "init" ),
 
+		_windowBadgeLabel: function() {
+			var label;
+			if ( !get( this, "running" ) || !get( this.settings, "notify_badgelabel" ) ) {
+				label = "";
+			} else {
+				var model = get( this, "model" );
+				var num   = Object.keys( model ).length;
+				label = String( num );
+			}
+			// update badge label or remove it
+			nwWindow.setBadgeLabel( label );
+		}.observes( "running", "settings.notify_badgelabel", "model" ),
+
 
 		reset: function() {
 			Ember.run.cancel( get( this, "_next" ) );

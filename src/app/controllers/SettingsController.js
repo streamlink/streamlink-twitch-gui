@@ -15,11 +15,16 @@ define( [ "ember" ], function( Ember ) {
 
 
 		isAdvanced: Ember.computed.readOnly( "model.advanced" ),
+
 		isHttp: Ember.computed.equal( "model.player_passthrough", "http" ),
+
+		hasTaskBarIntegration: Ember.computed.equal( "model.gui_integration", 1 ),
+		hasBothIntegrations: Ember.computed.equal( "model.gui_integration", 3 ),
+		isVisibleInTaskbar: Ember.computed.or( "hasTaskBarIntegration", "hasBothIntegrations" ),
+
 		notifyGroupAndClick: Ember.computed.and( "model.notify_grouping", "model.notify_click" ),
 		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
 		hasNotificationClickSupport: process.platform !== "linux",
-		hasBothIntegrations: Ember.computed.equal( "model.gui_integration", 3 ),
 
 		minimize_observer: function() {
 			var int    = get( this, "model.gui_integration" ),
