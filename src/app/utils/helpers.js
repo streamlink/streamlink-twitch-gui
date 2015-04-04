@@ -2,6 +2,10 @@ define( [ "moment" ], function( moment ) {
 
 	var helpers = {};
 
+	helpers[ "is-equal" ] = function( a, b ) {
+		return a === b;
+	};
+
 	helpers[ "format-time" ] = function( date, format ) {
 		return moment( date ).format( format );
 	};
