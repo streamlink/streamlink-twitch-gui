@@ -3,7 +3,8 @@ define([
 	"text!templates/featured.html.hbs"
 ], function( Ember, template ) {
 
-	var $ = Ember.$;
+	var get = Ember.get,
+	    set = Ember.set;
 
 	return Ember.View.extend({
 		defaultTemplate: Ember.HTMLBars.compile( template ),
@@ -11,11 +12,19 @@ define([
 		classNames: [ "content", "content-featured", "wrapper", "vertical" ],
 
 		createCursor: function() {
-			var $cursor = $( "<i>" ).addClass( "cursor fa fa-caret-down" );
+			var $cursor = Ember.$( "<i>" ).addClass( "cursor fa fa-caret-down" );
 			this.$( ".channels" )
 				.append( $cursor )
 				.append( $cursor.clone().addClass( "cursor-hover" ) );
-		}.on( "willInsertElement" )
+		}.on( "willInsertElement" ),
+
+		actions: {
+			"switchFeatured": function( index ) {
+				if ( index === get( this, "controller._index" ) ) { return; }
+				this.element.classList.add( "animated" );
+				set( this, "controller._index", index );
+			}
+		}
 	});
 
 });

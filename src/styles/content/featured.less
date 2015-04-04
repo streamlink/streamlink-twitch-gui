@@ -1,5 +1,7 @@
 
 .content-featured {
+	overflow-x: hidden;
+
 	> .stream-presentation {
 		flex: 1;
 		margin-bottom: 2rem;
@@ -7,6 +9,12 @@
 		> .image {
 			overflow: hidden;
 			.stream-hover();
+		}
+	}
+
+	&.animated {
+		> .stream-presentation {
+			-webkit-animation: animFadeInRight .5s ease-out;
 		}
 	}
 

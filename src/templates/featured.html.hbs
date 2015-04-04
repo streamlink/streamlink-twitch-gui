@@ -2,22 +2,26 @@
 <h2>Featured Channels</h2>
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
+{{#each featured as |elem index|}}
+{{#if (is-equal _index index)}}
 <section class="stream-presentation">
 <div class="image">
-<div class="preview" {{action "openLivestreamer" stream}}>
-<img class="previewImage" src="{{stream.preview.large_nocache}}">
+<div class="preview" {{action "openLivestreamer" elem.stream}}>
+<img class="previewImage" src="{{elem.stream.preview.large_nocache}}">
 </div>
 </div>
 <div class="info">
-<h3 class="title">{{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{#link-to "channels.channel" stream.channel.id}}{{stream.channel.display_name}}{{/link-to}}</h3>
-{{#if stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>{{/if}}
-{{stats-row stream=stream}}
-{{embedded-links class="status" text=stream.channel.status}}
+<h3 class="title">{{#if elem.stream.channel.has_language}}{{flag-icon type="channel" lang=elem.stream.channel.language}}{{/if}}{{#link-to "channels.channel" elem.stream.channel.id}}{{elem.stream.channel.display_name}}{{/link-to}}</h3>
+{{#if elem.stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" elem.stream.game}}{{elem.stream.game}}{{/link-to}}</div>{{/if}}
+{{stats-row stream=elem.stream}}
+{{embedded-links class="status" text=elem.stream.channel.status}}
 </div>
 </section>
+{{/if}}
+{{/each}}
 <ul class="channels">
-{{#each elem in featured}}
-<li title="{{elem.stream.channel.id}}" class="{{if elem.isActive 'active'}}" {{action "switchFeatured" elem}}>
+{{#each featured as |elem index|}}
+<li title="{{elem.stream.channel.id}}" class="{{if (is-equal _index index) 'active'}}" {{action "switchFeatured" index target=view}}>
 <img class="previewImage" src="{{elem.image}}" title="{{elem.stream.channel.id}}">
 </li>
 {{/each}}
