@@ -1,6 +1,15 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Added task bar / dock icon badge label showing number of online favorites. #67
+- Fixed incorrect OSX tray icon scaling. #64
+- Fixed rare HTMLBars parsing error resulting in a blank page.
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.3...master)
+
+
 ## [v0.7.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.3) (2015-03-29)
 
 - Fixed application being hidden after closing it while being minimized. #62
