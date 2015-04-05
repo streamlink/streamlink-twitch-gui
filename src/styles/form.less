@@ -41,8 +41,11 @@
 		}
 
 		&:disabled {
+			cursor: default;
+
 			&::before {
 				border-color: @input-color-disabled;
+				background: @input-background-disabled;
 			}
 			&::after {
 				color: @input-color-disabled;
@@ -105,7 +108,7 @@ input[type="text"] {
 }
 
 input:disabled {
-	background: @input-background;
+	background: @input-background-disabled;
 	-webkit-user-select: none;
 
 	&, & + .input-group-btn > button {
@@ -302,6 +305,11 @@ input:disabled {
 
 	&.open > .selecter-options {
 		border: 1px solid @select-border-focus;
+	}
+
+	// selecter doesn't update the `disabled` class. wtf?
+	> select:disabled + .selecter-selected {
+		background: @input-background-disabled;
 	}
 
 	.selecter-item {
