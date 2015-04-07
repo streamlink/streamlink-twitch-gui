@@ -3,7 +3,7 @@
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
 <ul class="content-list">
-{{#each game in model}}
+{{#each model as |game|}}
 {{game-item game=game.game channels=game.channels viewers=game.viewers}}
 {{/each}}
 </ul>

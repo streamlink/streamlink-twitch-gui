@@ -7,7 +7,7 @@
 <dt>Author</dt>
 <dd>{{metadata.package.author}}</dd>
 <dt>Contributors</dt>
-<dd><ul class="list">{{#each contributor in metadata.contributors}}
+<dd><ul class="list">{{#each metadata.contributors as |contributor|}}
 <li title="{{contributor.commits}} commits">{{contributor.name}}</li>
 {{/each}}</ul></dd>
 <dt>Version</dt>
@@ -21,7 +21,7 @@
 <article>
 <h3><i class="fa fa-sitemap"></i> Third party applications</h3>
 <dl class="dl-horizontal">
-{{#each elem in view.dependencies}}
+{{#each view.dependencies as |elem|}}
 <dt>{{elem.title}}</dt>
 <dd>{{elem.version}}</dd>
 {{/each}}

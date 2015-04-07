@@ -4,7 +4,7 @@
 </header>
 {{#if content.length}}
 <ul class="content-list">
-{{#each stream in model}}
+{{#each model as |stream|}}
 {{stream-item stream=stream showGame=true}}
 {{/each}}
 </ul>
