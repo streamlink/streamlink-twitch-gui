@@ -17,7 +17,9 @@ define( [ "ember" ], function( Ember ) {
 		});
 
 		this.resource( "channels", function() {
-			this.route( "channel", { path: "/:channel" } );
+			this.resource( "channels.channel", { path: "/:channel" }, function() {
+				this.route( "settings" );
+			});
 		});
 
 		this.resource( "videos", function() {

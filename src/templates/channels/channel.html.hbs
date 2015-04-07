@@ -17,45 +17,4 @@
 {{/if}}
 </div>
 </header>
-<section class="channelinfo">
-<div class="big-image {{if stream 'online'}}">
-<div class="preview" {{action "startStream" stream}}>
-<img class="previewImage" src="{{previewImage}}">
-</div>
-</div>
-<div class="info">
-<h3>Channel statistics</h3>
-<dl class="dl-horizontal">
-<dt><i class="fa fa-calendar"></i>Created</dt>
-<dd>{{format-time channel.created_at "MMMM Do YYYY"}}</dd>
-{{#if channel.has_broadcaster_language}}
-<dt><i class="fa fa-language"></i>Language</dt>
-<dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>
-{{/if}}
-<dt><i class="fa fa-heart"></i>Followers</dt>
-<dd title="{{channel.title_followers}}">{{format-viewers channel.followers}} ({{format-viewers followersPerDay}} per day)</dd>
-<dt><i class="fa fa-line-chart"></i>Views</dt>
-<dd title="{{channel.title_views}}">{{format-viewers channel.views}} ({{format-viewers viewsPerDay}} per day)</dd>
-<dt><i class="fa fa-history"></i>Delay</dt>
-<dd>{{#if hasDelay}}{{channel.delay}} seconds{{else}}No additional delay{{/if}}</dd>
-<dt><i class="fa fa-male"></i>Content</dt>
-<dd>{{#if channel.mature}}Inappropriate for children{{else}}No age restrictions{{/if}}</dd>
-{{#if channel.staff}}
-<dt><i class="fa fa-legal"></i>Staff</dt>
-<dd>Twitch.tv staff member</dd>
-{{/if}}
-</dl>
-<div class="interactions">
-{{#if stream}}
-{{form-button action="chat"  actionParam=channel class="btn-hint" icon="fa-comments"  iconanim=true title="Open chat"}}
-{{/if}}
-{{form-button action="share" actionParam=channel class="btn-info" icon="fa-share-alt" iconanim=true title="Copy channel url to clipboard"}}
-{{#if auth.isLoggedIn}}
-{{#if channel.partner}}
-{{form-button action="subscribe" actionParam=channel class=view.subscrClass icon="fa-credit-card" iconanim=true title="Subscribe to channel"}}
-{{/if}}
-{{form-button action=view.followAction actionParam=channel class=view.followClass icon=view.followIcon iconanim=true title=view.followTitle}}
-{{/if}}
-</div>
-</div>
-</section>
+{{outlet}}

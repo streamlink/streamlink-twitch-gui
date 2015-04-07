@@ -158,6 +158,9 @@ define(function( require ) {
 		ChannelsChannelRoute: require( "routes/ChannelsChannelRoute" ),
 		ChannelsChannelController: require( "controllers/ChannelsChannelController" ),
 		ChannelsChannelView: require( "views/ChannelsChannelView" ),
+		ChannelsChannelIndexRoute: require( "routes/ChannelsChannelIndexRoute" ),
+		ChannelsChannelIndexController: require( "controllers/ChannelsChannelIndexController" ),
+		ChannelsChannelIndexView: require( "views/ChannelsChannelIndexView" ),
 
 		UserLoadingRoute: require( "routes/LoadingRoute" ),
 		UserLoadingView: require( "views/LoadingView" ),
