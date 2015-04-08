@@ -1,6 +1,6 @@
 define([
 	"ember",
-	"text!templates/channels/channel.html.hbs"
+	"text!templates/channel/channel.html.hbs"
 ], function( Ember, template ) {
 
 	return Ember.View.extend({

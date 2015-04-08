@@ -16,10 +16,10 @@ define( [ "ember" ], function( Ember ) {
 			this.route( "game", { path: "/:game" } );
 		});
 
-		this.resource( "channels", function() {
-			this.resource( "channels.channel", { path: "/:channel" }, function() {
-				this.route( "settings" );
-			});
+		this.route( "channels" );
+
+		this.resource( "channel", { path: "/:channel" }, function() {
+			this.route( "settings" );
 		});
 
 		this.resource( "videos", function() {

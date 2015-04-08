@@ -1,7 +1,7 @@
 define([
 	"ember",
 	"views/InfiniteScrollViewMixin",
-	"text!templates/channels/index.html.hbs"
+	"text!templates/channels.html.hbs"
 ], function( Ember, InfiniteScroll, template ) {
 
 	return Ember.View.extend( InfiniteScroll, {

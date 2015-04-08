@@ -11,7 +11,7 @@
 </div>
 </div>
 <div class="info">
-<h3 class="title">{{#if elem.stream.channel.has_language}}{{flag-icon type="channel" lang=elem.stream.channel.language}}{{/if}}{{#link-to "channels.channel" elem.stream.channel.id}}{{elem.stream.channel.display_name}}{{/link-to}}</h3>
+<h3 class="title">{{#if elem.stream.channel.has_language}}{{flag-icon type="channel" lang=elem.stream.channel.language}}{{/if}}{{#link-to "channel" elem.stream.channel.id}}{{elem.stream.channel.display_name}}{{/link-to}}</h3>
 {{#if elem.stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" elem.stream.game}}{{elem.stream.game}}{{/link-to}}</div>{{/if}}
 {{stats-row stream=elem.stream}}
 {{embedded-links class="status" text=elem.stream.channel.status}}

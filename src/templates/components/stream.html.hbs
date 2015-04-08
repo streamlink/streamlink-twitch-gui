@@ -1,6 +1,6 @@
 <header>
 {{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}
-<span class="{{unless stream.channel.has_language 'noL'}} {{unless stream.channel.has_broadcaster_language 'noBL'}}">{{#link-to "channels.channel" stream.channel.id}}{{stream.channel.display_name}}{{/link-to}}</span>
+<span class="{{unless stream.channel.has_language 'noL'}} {{unless stream.channel.has_broadcaster_language 'noBL'}}">{{#link-to "channel" stream.channel.id}}{{stream.channel.display_name}}{{/link-to}}</span>
 {{#if stream.channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}{{/if}}
 </header>
 <section class="preview" {{action "startStream"}} title="{{stream.channel.status}}">
