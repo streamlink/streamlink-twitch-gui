@@ -17,7 +17,7 @@
 <dt><i class="fa fa-line-chart"></i>Views</dt>
 <dd title="{{channel.title_views}}">{{format-viewers channel.views}} ({{format-viewers viewsPerDay}} per day)</dd>
 <dt><i class="fa fa-history"></i>Delay</dt>
-<dd>{{#if hasDelay}}{{channel.delay}} seconds{{else}}No additional delay{{/if}}</dd>
+<dd>{{#if (is-gt channel.delay 0)}}{{channel.delay}} seconds{{else}}No additional delay{{/if}}</dd>
 <dt><i class="fa fa-male"></i>Content</dt>
 <dd>{{#if channel.mature}}Inappropriate for children{{else}}No age restrictions{{/if}}</dd>
 {{#if channel.staff}}
