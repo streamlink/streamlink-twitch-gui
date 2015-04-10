@@ -1,10 +1,15 @@
 define(function( require ) {
 
+	var Ember = require( "ember" ),
+	    DS    = require( "ember-data" );
+
+
+	require( "utils/localstorage" )();
 	require( "utils/inflector" );
 	require( "initializers/initializers" );
 
 
-	return require( "ember" ).Application.create({
+	return Ember.Application.create({
 
 		// Configuration
 		rootElement: document.documentElement,
@@ -19,23 +24,26 @@ define(function( require ) {
 
 
 		// Store
-		ApplicationStore: require( "ember-data" ).Store.extend(),
+		ApplicationStore: DS.Store.extend(),
 		ApplicationAdapter: require( "store/TwitchAdapter" ),
-		TwitchSerializer: require( "store/TwitchSerializer" ),
-		LocalstorageSerializer: require( "ember-data" ).LSSerializer.extend(),
 
 
 		// Models: localstorage
-		Window: require( "models/Window" ),
-		WindowAdapter: require( "store/LocalstorageAdapter" ),
-		Settings: require( "models/Settings" ),
-		SettingsAdapter: require( "store/LocalstorageAdapter" ),
-		Versioncheck: require( "models/Versioncheck" ),
-		VersioncheckAdapter: require( "store/LocalstorageAdapter" ),
-		Search: require( "models/Search" ),
-		SearchAdapter: require( "store/LocalstorageAdapter" ),
-		Auth: require( "models/Auth" ),
-		AuthAdapter: require( "store/LocalstorageAdapter" ),
+		Window: require( "models/localstorage/Window" ),
+		WindowAdapter: DS.LSAdapter.extend({ namespace: "window" }),
+		WindowSerializer: DS.LSSerializer,
+		Settings: require( "models/localstorage/Settings" ),
+		SettingsAdapter: DS.LSAdapter.extend({ namespace: "settings" }),
+		SettingsSerializer: DS.LSSerializer,
+		Versioncheck: require( "models/localstorage/Versioncheck" ),
+		VersioncheckAdapter: DS.LSAdapter.extend({ namespace: "versioncheck" }),
+		VersioncheckSerializer: DS.LSSerializer,
+		Auth: require( "models/localstorage/Auth" ),
+		AuthAdapter: DS.LSAdapter.extend({ namespace: "auth" }),
+		AuthSerializer: DS.LSSerializer,
+		Search: require( "models/localstorage/Search" ),
+		SearchAdapter: DS.LSAdapter.extend({ namespace: "search" }),
+		SearchSerializer: DS.LSSerializer,
 
 
 		// Models: github
