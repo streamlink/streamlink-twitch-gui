@@ -1,4 +1,4 @@
-define( [ "utils/stat", "utils/mkdirp" ], function( stat, mkdirp ) {
+define( [ "utils/fs/stat", "utils/fs/mkdirp" ], function( stat, mkdirp ) {
 
 	var PATH  = require( "path" ),
 	    FS    = require( "fs" ),

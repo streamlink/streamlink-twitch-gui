@@ -1,8 +1,8 @@
 define(function() {
 
-	return function upgradeLocalstorage() {
-		var LS  = window.localStorage;
+	var LS = window.localStorage;
 
+	function upgradeLocalstorage() {
 		var old = LS.getItem( "app" );
 		if ( old === null ) { return; }
 
@@ -14,11 +14,16 @@ define(function() {
 
 		Object.keys( old ).forEach(function( key ) {
 			var data = {};
-			data[ key.toLowerCase() ] = old[ key ];
-			LS.setItem( key, JSON.stringify( data ) );
+			data[ key ] = old[ key ];
+			LS.setItem(
+				key.toLowerCase(),
+				JSON.stringify( data )
+			);
 		});
 
 		LS.removeItem( "app" );
-	};
+	}
+
+	upgradeLocalstorage();
 
 });

@@ -1,9 +1,9 @@
 define([
 	"nwWindow",
 	"ember",
-	"utils/mkdirp",
-	"utils/download",
-	"utils/clearfolder"
+	"utils/fs/mkdirp",
+	"utils/fs/download",
+	"utils/fs/clearfolder"
 ], function(
 	nwWindow,
 	Ember,

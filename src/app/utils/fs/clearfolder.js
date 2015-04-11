@@ -1,4 +1,4 @@
-define( [ "utils/denodify", "utils/stat" ], function( denodify, stat ) {
+define( [ "utils/denodify", "utils/fs/stat" ], function( denodify, stat ) {
 
 	var PATH = require( "path" ),
 	    FS   = require( "fs" );

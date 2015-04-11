@@ -3,9 +3,6 @@ define(function( require ) {
 	var Ember = require( "ember" ),
 	    DS    = require( "ember-data" );
 
-
-	require( "utils/localstorage" )();
-	require( "utils/inflector" );
 	require( "initializers/initializers" );
 
 

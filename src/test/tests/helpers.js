@@ -1,4 +1,4 @@
-define( [ "utils/helpers" ], function( helpers ) {
+define( [ "utils/ember/helpers" ], function( helpers ) {
 
 	module( "Ember handlebars helpers" );
 

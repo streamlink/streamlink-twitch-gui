@@ -4,8 +4,8 @@ define([
 	"ember",
 	"controllers/ChannelControllerMixin",
 	"models/Livestreamer",
-	"utils/which",
-	"utils/stat",
+	"utils/fs/which",
+	"utils/fs/stat",
 	"utils/semver"
 ], function(
 	nwGui,

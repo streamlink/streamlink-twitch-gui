@@ -1,11 +1,11 @@
 define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
 
-	var	replacement	= "%@'%@'%@",
+	var replacement = "%@'%@'%@";
 
-		linkurl_re	= linkmatching.linkurl_re,
-		linkurl_fn	= linkmatching.linkurl_fn( replacement ),
-		twitter_re	= linkmatching.twitter_re,
-		twitter_fn	= linkmatching.twitter_fn( replacement );
+	var linkurl_re  = linkmatching.linkurl_re;
+	var linkurl_fn  = linkmatching.linkurl_fn( replacement );
+	var twitter_re  = linkmatching.twitter_re;
+	var twitter_fn  = linkmatching.twitter_fn( replacement );
 
 
 	module( "Link matching" );

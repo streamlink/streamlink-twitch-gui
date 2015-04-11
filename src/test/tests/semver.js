@@ -1,8 +1,8 @@
-define( [ "utils/semver" ], function( SemVer ) {
+define( [ "utils/semver" ], function( semver ) {
 
-	var	t = SemVer.tokenize,
-		m = SemVer.getMax,
-		s = SemVer.sort;
+	var t = semver.tokenize;
+	var m = semver.getMax;
+	var s = semver.sort;
 
 
 	module( "Semantic versioning" );

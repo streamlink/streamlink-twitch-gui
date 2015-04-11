@@ -1,4 +1,4 @@
-define( [ "utils/stat" ], function( stat ) {
+define( [ "utils/fs/stat" ], function( stat ) {
 
 	var PATH  = require( "path" );
 
