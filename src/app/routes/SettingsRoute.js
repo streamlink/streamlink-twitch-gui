@@ -1,5 +1,7 @@
 define( [ "ember" ], function( Ember ) {
 
+	var get = Ember.get;
+
 	return Ember.Route.extend({
 		model: function() {
 			return this.settings.constructor.readAttributes( this.settings );
@@ -7,13 +9,14 @@ define( [ "ember" ], function( Ember ) {
 
 		actions: {
 			willTransition: function( transition ) {
-				var model    = Ember.get( this.controller, "model" ),
-				    settings = this.settings;
+				var model    = get( this.controller, "model" );
+				var settings = this.settings;
+				var isEqual  = Object.keys( model ).every(function( attr ) {
+					return get( model, attr ) === get( settings, attr );
+				});
 
 				// if the user has changed any values
-				if ( !Object.keys( model ).every(function( attr ) {
-					return model.get( attr ) === settings.get( attr );
-				}) ) {
+				if ( !isEqual ) {
 					// stay here...
 					transition.abort();
 
@@ -21,7 +24,7 @@ define( [ "ember" ], function( Ember ) {
 					this.send( "openModal", "settingsModal", this.controller, {
 						modalHead: "Please confirm",
 						modalBody: "Do you want to apply your changes?",
-						transition: transition
+						previousTransition: transition
 					});
 				}
 			}

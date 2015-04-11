@@ -1,19 +1,12 @@
-define( [ "ember" ], function( Ember ) {
+define([
+	"ember",
+	"controllers/RetryTransitionMixin"
+], function( Ember, RetryTransitionMixin ) {
 
 	var get = Ember.get,
 	    set = Ember.set;
 
-	return Ember.Controller.extend({
-		retryTransition: function() {
-			var transition = get( this, "transition" );
-			if ( transition ) {
-				this.send( "closeModal" );
-				transition.retry();
-				set( this, "transition", null );
-			}
-		},
-
-
+	return Ember.Controller.extend( RetryTransitionMixin, {
 		isAdvanced: Ember.computed.readOnly( "model.advanced" ),
 
 		isHttp: Ember.computed.equal( "model.player_passthrough", "http" ),
@@ -55,9 +48,9 @@ define( [ "ember" ], function( Ember ) {
 				this.settings.save()
 					.then(function() {
 						if ( successCallback ) {
-							successCallback( this.retryTransition.bind( this ) );
+							successCallback( this.retryTransition.bind( this, null, true ) );
 						} else {
-							this.retryTransition();
+							this.retryTransition( null, true );
 						}
 					}.bind( this ) )
 					.catch( this.settings.rollback.bind( this.settings ) );
@@ -67,9 +60,9 @@ define( [ "ember" ], function( Ember ) {
 				var attributes = this.settings.constructor.readAttributes( this.settings );
 				get( this, "model" ).setProperties( attributes );
 				if ( successCallback ) {
-					successCallback( this.retryTransition.bind( this ) );
+					successCallback( this.retryTransition.bind( this, null, true ) );
 				} else {
-					Ember.run.next( this, this.retryTransition );
+					Ember.run.next( this, this.retryTransition, null, true );
 				}
 			}
 		}

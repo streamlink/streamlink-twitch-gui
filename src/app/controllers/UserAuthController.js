@@ -1,4 +1,9 @@
-define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
+define([
+	"nwGui",
+	"nwWindow",
+	"ember",
+	"controllers/RetryTransitionMixin"
+], function( nwGui, nwWindow, Ember, RetryTransitionMixin ) {
 
 	var get   = Ember.get,
 	    set   = Ember.set;
@@ -15,11 +20,9 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 	}
 
 
-	return Ember.Controller.extend( Ember.Evented, {
+	return Ember.Controller.extend( Ember.Evented, RetryTransitionMixin, {
 		config: Ember.computed.readOnly( "metadata.package.config" ),
 		redirectEnabled: false,
-
-		previousTransition: null,
 
 		auth_win: null,
 		auth_lock: false,
@@ -125,6 +128,7 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 		/**
 		 * Validate access token response
 		 * @param {DS.Model} record
+		 * @returns {Promise}
 		 */
 		validateToken: function( record ) {
 			var valid = get( record, "valid" ),
@@ -135,7 +139,7 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 			    && name
 			    && name.length
 			    && this.validateScope( scope )
-				? record
+				? Promise.resolve( record )
 				: Promise.reject( new Error( "Invalid access token" ) );
 		},
 
@@ -188,14 +192,12 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 		 * @returns {Promise}
 		 */
 		sessionReset: function() {
-			// reset all values and save record
-			this.auth.setProperties({
+			return this.auth.setProperties({
 				access_token: null,
 				scope       : null,
 				date        : null,
 				user_name   : null
-			});
-			return this.auth.save();
+			}).save();
 		},
 
 
@@ -217,16 +219,6 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 				}, {} );
 		},
 
-		returnToPreviousRoute: function() {
-			var previousTransition = get( this, "previousTransition" );
-			if ( previousTransition ) {
-				set( this, "previousTransition", null );
-				previousTransition.retry();
-			} else {
-				this.transitionToRoute( "user.index" );
-			}
-		},
-
 
 		actions: {
 			"signin": function() {
@@ -241,7 +233,7 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 					self.validateOAuthResponse( params[ "access_token" ], params[ "scope" ] )
 						// user is logged in! return to previous route
-						.then( self.returnToPreviousRoute.bind( self ) )
+						.then( self.retryTransition.bind( self, "user.index" ) )
 						.catch(function() {
 							set( self, "auth_failure", true );
 						});

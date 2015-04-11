@@ -103,7 +103,7 @@ define([
 							});
 
 							if ( success ) {
-								return controller.returnToPreviousRoute();
+								return controller.retryTransition( "user.index" );
 							}
 
 							set( self, {
