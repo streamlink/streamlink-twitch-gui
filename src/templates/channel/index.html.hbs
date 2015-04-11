@@ -1,6 +1,6 @@
 <div class="big-image {{if stream 'online'}}">
 <div class="preview" {{action "startStream" stream}}>
-<img class="previewImage" src="{{previewImage}}">
+<img class="previewImage" src="{{bool-or stream.preview.large_nocache channel.video_banner}}">
 </div>
 </div>
 <div class="info">
@@ -13,9 +13,9 @@
 <dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>
 {{/if}}
 <dt><i class="fa fa-heart"></i>Followers</dt>
-<dd title="{{channel.title_followers}}">{{format-viewers channel.followers}} ({{format-viewers followersPerDay}} per day)</dd>
+<dd title="{{channel.title_followers}}">{{format-viewers channel.followers}} ({{format-viewers (math-div channel.followers age)}} per day)</dd>
 <dt><i class="fa fa-line-chart"></i>Views</dt>
-<dd title="{{channel.title_views}}">{{format-viewers channel.views}} ({{format-viewers viewsPerDay}} per day)</dd>
+<dd title="{{channel.title_views}}">{{format-viewers channel.views}} ({{format-viewers (math-div channel.views age)}} per day)</dd>
 <dt><i class="fa fa-history"></i>Delay</dt>
 <dd>{{#if (is-gt channel.delay 0)}}{{channel.delay}} seconds{{else}}No additional delay{{/if}}</dd>
 <dt><i class="fa fa-male"></i>Content</dt>

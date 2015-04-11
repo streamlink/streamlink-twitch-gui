@@ -2,33 +2,19 @@ define( [ "moment" ], function( moment ) {
 
 	var helpers = {};
 
-	helpers[ "is-equal" ] = function( a, b ) {
-		return a === b;
-	};
+	helpers[ "is-equal" ] = function( a, b ) { return a === b; };
+	helpers[ "is-null" ]  = function( a )    { return a === null; };
+	helpers[ "is-gt" ]    = function( a, b ) { return a > b; };
+	helpers[ "is-gte" ]   = function( a, b ) { return a >= b; };
 
-	helpers[ "is-null" ] = function( a ) {
-		return a === null;
-	};
+	helpers[ "bool-not" ] = function( a )    { return !a; };
+	helpers[ "bool-and" ] = function( a, b ) { return a && b; };
+	helpers[ "bool-or" ]  = function( a, b ) { return a || b; };
 
-	helpers[ "is-gt" ] = function( a, b ) {
-		return a > b;
-	};
-
-	helpers[ "is-gte" ] = function( a, b ) {
-		return a >= b;
-	};
-
-	helpers[ "bool-not" ] = function( a ) {
-		return !a;
-	};
-
-	helpers[ "bool-and" ] = function( a, b ) {
-		return a && b;
-	};
-
-	helpers[ "bool-or" ] = function( a, b ) {
-		return a || b;
-	};
+	helpers[ "math-add" ] = function( a, b ) { return a + b; };
+	helpers[ "math-sub" ] = function( a, b ) { return a - b; };
+	helpers[ "math-mul" ] = function( a, b ) { return a * b; };
+	helpers[ "math-div" ] = function( a, b ) { return a / b; };
 
 	helpers[ "format-time" ] = function( date, format ) {
 		return moment( date ).format( format );
