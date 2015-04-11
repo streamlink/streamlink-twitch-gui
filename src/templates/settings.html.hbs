@@ -10,7 +10,7 @@
 <div>{{file-select value=model.livestreamer inputClass="form-control" placeholder="Leave blank for default location"}}</div>
 <div><i class="fa fa-eye"></i> Preferred quality<span>Choose the default stream quality.</span></div>
 <div>{{view "select" value=model.quality content=settings.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
-{{#if isAdvanced}}
+{{#if model.advanced}}
 <div><i class="fa fa-filter"></i> Stream type<span>Make sure your player does support the selected stream type.{{livestreamer-docs cmd="--player-passthrough"}}</span></div>
 <div>{{view "select" value=model.player_passthrough content=settings.constructor.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 {{/if}}
@@ -19,11 +19,11 @@
 <legend>Videoplayer settings</legend>
 <div><i class="fa fa-laptop"></i> Videoplayer<span>Use a custom player other than the one defined in your livestreamer config.{{livestreamer-docs cmd="--player"}}</span></div>
 <div>{{file-select value=model.player inputClass="form-control" placeholder="Leave blank for default player"}}</div>
-{{#if isAdvanced}}
+{{#if model.advanced}}
 <div><i class="fa fa-code"></i> Parameters<span>Add player specific parameters.{{livestreamer-docs cmd="--player-args"}}</span></div>
 <div>{{input type="text" value=model.player_params classNames="col-xs-12" placeholder="Add custom player parameters"}}</div>
 {{/if}}
-{{#if isHttp}}
+{{#if (is-equal model.player_passthrough "http")}}
 <div><i class="fa fa-refresh"></i> Reconnect<span>In case the connection has dropped.{{livestreamer-docs cmd="--player-continuous-http"}}</span></div>
 <div>{{#check-box checked=model.player_reconnect}}Reconnect to stream{{/check-box}}</div>
 {{/if}}
@@ -55,12 +55,12 @@
 {{#if hasNotificationClickSupport}}
 <div><i class="fa fa-crosshairs"></i> Notification click<span>Preferred click action.</span></div>
 <div>{{view "select" class="notifications" value=model.notify_click content=settings.constructor.notify_click optionValuePath="content.id" optionLabelPath="content.label"}}</div>
-{{#if notifyGroupAndClick}}
+{{#if (bool-and model.notify_grouping model.notify_click)}}
 <div><i class="fa fa-crosshairs"></i> Group click<span>Preferred group click action.</span></div>
 <div>{{view "select" class="notifications" value=model.notify_click_group content=settings.constructor.notify_click_group optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 {{/if}}
 {{/if}}
-{{#if isVisibleInTaskbar}}
+{{#if (bool-or hasTaskBarIntegration hasBothIntegrations)}}
 <div><i class="fa fa-tag"></i> Favorites indication<span>As label on the task bar / dock icon.<br>Has to be supported by your OS.</span></div>
 <div>{{#check-box checked=model.notify_badgelabel}}Show number of streaming favorites{{/check-box}}</div>
 {{/if}}

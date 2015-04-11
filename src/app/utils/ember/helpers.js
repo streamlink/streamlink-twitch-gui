@@ -10,16 +10,24 @@ define( [ "moment" ], function( moment ) {
 		return a === null;
 	};
 
-	helpers[ "is-not" ] = function( a ) {
-		return !a;
-	};
-
 	helpers[ "is-gt" ] = function( a, b ) {
 		return a > b;
 	};
 
 	helpers[ "is-gte" ] = function( a, b ) {
 		return a >= b;
+	};
+
+	helpers[ "bool-not" ] = function( a ) {
+		return !a;
+	};
+
+	helpers[ "bool-and" ] = function( a, b ) {
+		return a && b;
+	};
+
+	helpers[ "bool-or" ] = function( a, b ) {
+		return a || b;
 	};
 
 	helpers[ "format-time" ] = function( date, format ) {

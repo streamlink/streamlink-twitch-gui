@@ -7,15 +7,9 @@ define([
 	    set = Ember.set;
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
-		isAdvanced: Ember.computed.readOnly( "model.advanced" ),
-
-		isHttp: Ember.computed.equal( "model.player_passthrough", "http" ),
-
 		hasTaskBarIntegration: Ember.computed.equal( "model.gui_integration", 1 ),
-		hasBothIntegrations: Ember.computed.equal( "model.gui_integration", 3 ),
-		isVisibleInTaskbar: Ember.computed.or( "hasTaskBarIntegration", "hasBothIntegrations" ),
+		hasBothIntegrations  : Ember.computed.equal( "model.gui_integration", 3 ),
 
-		notifyGroupAndClick: Ember.computed.and( "model.notify_grouping", "model.notify_click" ),
 		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
 		hasNotificationClickSupport: process.platform !== "linux",
 
