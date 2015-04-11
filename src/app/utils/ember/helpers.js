@@ -6,6 +6,10 @@ define( [ "moment" ], function( moment ) {
 		return a === b;
 	};
 
+	helpers[ "is-null" ] = function( a ) {
+		return a === null;
+	};
+
 	helpers[ "is-not" ] = function( a ) {
 		return !a;
 	};

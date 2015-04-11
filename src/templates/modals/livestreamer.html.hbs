@@ -1,11 +1,9 @@
-{{#if modalBtnsDefault}}
+{{#if (is-null modalBtns)}}
 {{#form-button action="shutdown" class="btn-danger"  icon="fa-times"}}Close{{/form-button}}
-{{/if}}
-{{#if modalBtnsDownload}}
+{{else if (is-equal modalBtns "download")}}
 {{#form-button action="close"    class="btn-danger"  icon="fa-times"                 }}Close{{/form-button}}
 {{#form-button action="download" class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
-{{/if}}
-{{#if modalBtnsRunning}}
+{{else if (is-equal modalBtns "running")}}
 <div>
 {{form-button action="close"    class="btn-primary" icon="fa-arrow-left" title="Continue"}}
 {{form-button action="shutdown" class="btn-danger"  icon="fa-times"      title="Close stream"}}

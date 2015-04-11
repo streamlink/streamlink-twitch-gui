@@ -22,18 +22,20 @@ define([
 	    PATH = require( "path" );
 
 	var get  = Ember.get,
-	    set  = Ember.set;
+	    set  = Ember.set,
+	    setP = Ember.setProperties,
+	    run  = Ember.run;
 
-	var isWin = /^win/.test( process.platform );
+	var isWin = process.platform === "win32";
 
-	var re_version   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
-	    re_unable    = /^error: Unable to open URL: /,
-	    re_nostreams = /^error: No streams found on this URL: /,
-	    re_noplayer  = /^error: Failed to start player: /,
-	    re_noplayer2 = /^error: The default player \(.+\) does not seem to be installed\./,
-	    re_replace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/,
-	    re_player    = /^Starting player: \S+/,
-	    re_split     = /\r?\n/g;
+	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
+	    reUnable    = /^error: Unable to open URL: /,
+	    reNoStreams = /^error: No streams found on this URL: /,
+	    reNoPlayer  = /^error: Failed to start player: /,
+	    reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./,
+	    reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/,
+	    rePlayer    = /^Starting player: \S+/,
+	    reSplit     = /\r?\n/g;
 
 
 	function VersionError( version ) { this.version = version; }
@@ -71,10 +73,7 @@ define([
 
 		streamURL: "twitch.tv/%@",
 
-		modalBtns        : null,
-		modalBtnsDefault : Ember.computed.equal( "modalBtns", null ),
-		modalBtnsDownload: Ember.computed.equal( "modalBtns", "download" ),
-		modalBtnsRunning : Ember.computed.equal( "modalBtns", "running" ),
+		modalBtns: null,
 
 		streams: [],
 		active : null,
@@ -139,7 +138,7 @@ define([
 			var livestreamer = this.streams.findBy( "channel.id", get( channel, "id" ) );
 			if ( livestreamer ) {
 				set( this, "active", livestreamer );
-				return this.setProperties({
+				return setP( this, {
 					modalHead: "You're watching %@".fmt( get( channel, "display_name" ) ),
 					modalBody: get( channel, "status" ),
 					modalBtns: "running"
@@ -159,7 +158,7 @@ define([
 			this.checkLivestreamer()
 				// launch the stream
 				.then(function( exec ) {
-					this.setProperties({
+					setP( this, {
 						modalHead: "Launching stream",
 						modalBody: "Waiting for Livestreamer to launch the stream..."
 					});
@@ -183,7 +182,7 @@ define([
 		},
 
 		streamSuccess: function( livestreamer, guiActions ) {
-			this.setProperties({
+			setP( this, {
 				modalHead: "Watching now: %@".fmt( get( livestreamer, "channel.display_name" ) ),
 				modalBody: get( livestreamer, "channel.status" ),
 				modalBtns: "running"
@@ -208,38 +207,38 @@ define([
 
 		streamFailure: function( err ) {
 			if ( err instanceof VersionError ) {
-				this.setProperties({
+				setP( this, {
 					modalHead: "Error: Invalid Livestreamer version",
 					modalBody: "Your version v%@ doesn't match the min. requirements (v%@)"
 						.fmt( err.version, get( this, "versionMin" ) ),
 					modalBtns: "download"
 				});
 			} else if ( err instanceof NotFoundError ) {
-				this.setProperties({
+				setP( this, {
 					modalHead: "Error: Livestreamer was not found",
 					modalBody: "Please check settings and/or (re)install Livestreamer.",
 					modalBtns: "download"
 				});
 			} else if ( err instanceof UnableToOpenError ) {
-				this.setProperties({
+				setP( this, {
 					modalHead: "Error: Unable to open stream",
 					modalBody: "Livestreamer was unable to open the stream.",
 					modalBtns: null
 				});
 			} else if ( err instanceof NoStreamsFoundError ) {
-				this.setProperties({
+				setP( this, {
 					modalHead: "Error: No streams found",
 					modalBody: "Livestreamer was unable to find the stream.",
 					modalBtns: null
 				});
 			} else if ( err instanceof NoPlayerError ) {
-				this.setProperties({
+				setP( this, {
 					modalHead: "Error: Invalid player",
 					modalBody: "Please check your player configuration.",
 					modalBtns: null
 				});
 			} else {
-				this.setProperties({
+				setP( this, {
 					modalHead: "Error: Couldn't launch the stream",
 					modalBody: err
 						? err.message || err.toString()
@@ -305,7 +304,7 @@ define([
 			}
 
 			function onData( data ) {
-				var match = re_version.exec( String( data ).trim() );
+				var match = reVersion.exec( String( data ).trim() );
 				if ( match ) {
 					// resolve before process exit
 					defer.resolve( match[1] );
@@ -328,7 +327,7 @@ define([
 			spawn.stderr.on( "data", onData );
 
 			// kill after a certain time
-			setTimeout( onTimeout, time );
+			run.later( onTimeout, time );
 
 			return defer.promise.then(function( version ) {
 				return version === semver.getMax([ version, minimum ])
@@ -362,7 +361,7 @@ define([
 
 				// quality was changed
 				if ( quality !== get( livestreamer, "quality" ) ) {
-					Ember.run.next( this, function() {
+					run.next( this, function() {
 						this.launchLivestreamer( exec, livestreamer ).then(
 							this.streamSuccess.bind( this, livestreamer, false ),
 							this.streamFailure.bind( this )
@@ -392,11 +391,11 @@ define([
 			// we need a common error parsing function for stdout and stderr, because
 			// livestreamer is weird sometimes and prints error messages to stdout instead... :(
 			function parseError( data ) {
-				if ( re_unable.test( data ) ) {
+				if ( reUnable.test( data ) ) {
 					return new UnableToOpenError();
-				} else if ( re_nostreams.test( data ) ) {
+				} else if ( reNoStreams.test( data ) ) {
 					return new NoStreamsFoundError();
-				} else if ( re_noplayer.test( data ) || re_noplayer2.test( data ) ) {
+				} else if ( reNoPlayer.test( data ) || reNoPlayer2.test( data ) ) {
 					return new NoPlayerError();
 				}
 			}
@@ -418,14 +417,14 @@ define([
 					return defer.reject( error );
 				}
 
-				data = data.replace( re_replace, "" );
+				data = data.replace( reReplace, "" );
 				if (
 					    get( this, "active" ) === livestreamer
 					&& !get( livestreamer, "error" )
 				) {
 					set( this, "modalBody", data );
 				}
-				if ( re_player.test( data ) ) {
+				if ( rePlayer.test( data ) ) {
 					/*
 					 * FIXME:
 					 * The promise should resolve at the point when livestreamer is launching the
@@ -437,16 +436,16 @@ define([
 					 * we don't know how long the machine of the user takes for launching the player
 					 * or detecting an invalid path, etc.
 					 */
-					Ember.run.later( defer, defer.resolve, 500 );
+					run.later( defer, defer.resolve, 500 );
 				}
 			}
 
 			spawn.stderr.on( "data", function( data ) {
-				String( data ).trim().split( re_split ).forEach( stderrCallback );
+				String( data ).trim().split( reSplit ).forEach( stderrCallback );
 			});
 
 			spawn.stdout.on( "data", function( data ) {
-				String( data ).trim().split( re_split ).forEach( stdoutCallback.bind( this ) );
+				String( data ).trim().split( reSplit ).forEach( stdoutCallback.bind( this ) );
 			}.bind( this ) );
 
 			return defer.promise;
@@ -480,9 +479,9 @@ define([
 
 			if ( get( livestreamer, "shutdown" ) ) { return; }
 
-			var stream  = get( livestreamer, "stream" ),
-			    reload  = stream.reload.bind( stream ),
-			    promise = reload();
+			var stream  = get( livestreamer, "stream" );
+			var reload  = stream.reload.bind( stream );
+			var promise = reload();
 
 			// try to reload the record at least 3 times
 			for ( var i = 1; i < 3; i++ ) {
@@ -491,7 +490,7 @@ define([
 
 			// queue another refresh
 			promise.then(function() {
-				Ember.run.later( this, this.refreshStream, livestreamer, interval );
+				run.later( this, this.refreshStream, livestreamer, interval );
 			}.bind( this ) );
 		},
 
