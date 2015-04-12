@@ -12,7 +12,7 @@
 	z-index: 10000;
 	background: fade( #000, 50% );
 	opacity: 0;
-	-webkit-transition: opacity .333s ease-out;
+	-webkit-animation: animFadeIn .333s ease-out 0s 1 normal forwards;
 
 	> div {
 		display: flex;
@@ -21,15 +21,13 @@
 		min-height: 16rem;
 		padding: 2rem;
 		background: @color-background;
-		-webkit-transform: translateY( -3rem );
-		-webkit-transition: -webkit-transform .333s ease-out;
+		-webkit-animation: animFadeInTop .333s ease-out 0s 1 normal forwards;
 	}
 
-	&.shown {
-		opacity: 1;
-
+	&.fadeOut {
+		&,
 		> div {
-			-webkit-transform: translateY( 0 );
+			-webkit-animation-direction: reverse;
 		}
 	}
 

@@ -13,7 +13,6 @@ define([
 
 		tagName: "section",
 		classNames: [ "mymodal" ],
-		classNameBindings: [ "_isVisible:shown" ],
 
 		_isVisible: false,
 
@@ -28,17 +27,6 @@ define([
 		}.property( "context.modalBody", "context.body" ),
 
 
-		_willInsertElement: function() {
-			this.set( "_isVisible", false );
-		}.on( "willInsertElement" ),
-
-		_didInsertElement: function() {
-			Ember.run.next( this, function() {
-				// add another 20ms delay
-				Ember.run.later( this, this.set, "_isVisible", true, 20 );
-			});
-		}.on( "didInsertElement" ),
-
 		/*
 		 * This will be called synchronously.
 		 * Ember doesn't support animations right now.
@@ -46,10 +34,9 @@ define([
 		 */
 		willDestroyElement: function() {
 			var $this = this.$(),
-			    $clone = $this.clone();
+			    $clone = $this.clone().addClass( "fadeOut" );
 			$this.parent().append( $clone );
-			$clone.one( "webkitTransitionEnd", function() { $clone.remove(); });
-			Ember.run.next( $clone, $clone.removeClass, "shown" );
+			$clone.one( "webkitAnimationEnd", function() { $clone.remove(); });
 		}
 	});
 
