@@ -71,11 +71,11 @@ define([
 			var follows = self.store.modelFor( "twitchUserFollowsChannel" );
 			var adapter = self.store.adapterFor( "twitchUserFollowsChannel" );
 
-			adapter.on( "createRecord", function( store, type, snapshot ) {
+			adapter.on( "createRecord", function( store, type, record ) {
 				if ( !get( self, "enabled" ) ) { return; }
 				if ( type !== follows ) { return; }
 
-				var name = snapshot.id;
+				var name = get( record, "id" );
 				// is the followed channel online?
 				store.fetchById( "twitchStream", name )
 					.then(function() {

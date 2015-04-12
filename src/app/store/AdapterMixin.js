@@ -10,8 +10,8 @@ define( [ "ember" ], function( Ember ) {
 	 * instead of using type.typeKey as name
 	 */
 	return Ember.Mixin.create( Ember.Evented, {
-		find: function( store, type, id, snapshot ) {
-			return this.ajax( this.buildURL( type, id, snapshot ), "GET" );
+		find: function( store, type, id ) {
+			return this.ajax( this.buildURL( type, id ), "GET" );
 		},
 
 		findAll: function( store, type, sinceToken ) {
@@ -24,50 +24,55 @@ define( [ "ember" ], function( Ember ) {
 		},
 
 		createRecordMethod: "POST",
-		createRecord: function( store, type, snapshot ) {
+		createRecord: function( store, type, record ) {
+			var id = get( record, "id" );
 			return this.ajax(
-				this.buildURL( type, snapshot.id, snapshot ),
+				this.buildURL( type, id ),
 				get( this, "createRecordMethod" ),
-				this.createRecordData( store, type, snapshot )
+				this.createRecordData( store, type, record )
 			)
 				.then(function( data ) {
-					this.trigger( "createRecord", store, type, snapshot );
+					this.trigger( "createRecord", store, type, record );
 					return data;
 				}.bind( this ) );
 		},
-		createRecordData: function( store, type, snapshot ) {
+		createRecordData: function( store, type, record ) {
 			var data = {},
-			    serializer = store.serializerFor( type.typeKey );
+			    serializer = store.serializerFor( type.typeKey ),
+			    snapshot = record._createSnapshot();
 			serializer.serializeIntoHash( data, type, snapshot, { includeId: true } );
 			return { data: data };
 		},
 
 		updateRecordMethod: "PUT",
-		updateRecord: function( store, type, snapshot ) {
+		updateRecord: function( store, type, record ) {
+			var id = get( record, "id" );
 			return this.ajax(
-				this.buildURL( type, snapshot.id, snapshot ),
+				this.buildURL( type, id ),
 				get( this, "updateRecordMethod" ),
-				this.updateRecordData( store, type, snapshot )
+				this.updateRecordData( store, type, record )
 			)
 				.then(function( data ) {
-					this.trigger( "updateRecord", store, type, snapshot );
+					this.trigger( "updateRecord", store, type, record );
 					return data;
 				}.bind( this ) );
 		},
-		updateRecordData: function( store, type, snapshot ) {
+		updateRecordData: function( store, type, record ) {
 			var data = {},
-			    serializer = store.serializerFor( type.typeKey );
+			    serializer = store.serializerFor( type.typeKey ),
+			    snapshot = record._createSnapshot();
 			serializer.serializeIntoHash( data, type, snapshot );
 			return { data: data };
 		},
 
-		deleteRecord: function( store, type, snapshot ) {
+		deleteRecord: function( store, type, record ) {
+			var id = get( record, "id" );
 			return this.ajax(
-				this.buildURL( type, snapshot.id, snapshot ),
+				this.buildURL( type, id ),
 				"DELETE"
 			)
 				.then(function( data ) {
-					this.trigger( "deleteRecord", store, type, snapshot );
+					this.trigger( "deleteRecord", store, type, record );
 					return data;
 				}.bind( this ) );
 		},
