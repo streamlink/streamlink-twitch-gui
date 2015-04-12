@@ -96,26 +96,25 @@ define([
 						return false;
 					})
 					.then( wait( 1000 ) )
+					.then( callback )
 					.then(function( success ) {
-						callback(function() {
+						set( controller, {
+							auth_lock: false
+						});
+
+						if ( success ) {
+							return controller.retryTransition( "user.index" );
+						}
+
+						set( self, {
+							tokenBtnClass: "",
+							tokenBtnIcon: "fa-sign-in"
+						});
+
+						self.$( "input" ).focus().select().on( "blur keydown", function() {
+							Ember.$( this ).off( "blur keydown" );
 							set( controller, {
-								auth_lock: false
-							});
-
-							if ( success ) {
-								return controller.retryTransition( "user.index" );
-							}
-
-							set( self, {
-								tokenBtnClass: "",
-								tokenBtnIcon: "fa-sign-in"
-							});
-
-							self.$( "input" ).focus().select().on( "blur keydown", function() {
-								Ember.$( this ).off( "blur keydown" );
-								set( controller, {
-									auth_failure: false
-								});
+								auth_failure: false
 							});
 						});
 					});

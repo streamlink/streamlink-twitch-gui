@@ -35,29 +35,24 @@ define([
 
 
 		actions: {
-			apply: function( successCallback ) {
+			"apply": function( callback ) {
 				// copy all attributes back to the original settings record
 				this.settings.setProperties( get( this, "model" ) );
 				// and then save
 				this.settings.save()
-					.then(function() {
-						if ( successCallback ) {
-							successCallback( this.retryTransition.bind( this, null, true ) );
-						} else {
-							this.retryTransition( null, true );
-						}
-					}.bind( this ) )
+					.then( callback )
+					.then( this.send.bind( this, "closeModal" ) )
+					.then( this.retryTransition.bind( this ) )
 					.catch( this.settings.rollback.bind( this.settings ) );
 			},
 
-			discard: function( successCallback ) {
+			"discard": function( callback ) {
 				var attributes = this.settings.constructor.readAttributes( this.settings );
 				get( this, "model" ).setProperties( attributes );
-				if ( successCallback ) {
-					successCallback( this.retryTransition.bind( this, null, true ) );
-				} else {
-					Ember.run.next( this, this.retryTransition, null, true );
-				}
+				Promise.resolve()
+					.then( callback )
+					.then( this.send.bind( this, "closeModal" ) )
+					.then( this.retryTransition.bind( this ) );
 			}
 		}
 	});

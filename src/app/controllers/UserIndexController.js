@@ -22,7 +22,9 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 				if ( !token || !cb ) { return; }
 
 				cb.set( token, "text" );
-				callback();
+				if ( callback instanceof Function ) {
+					callback();
+				}
 			}
 		}
 	});

@@ -498,7 +498,9 @@ define([
 		actions: {
 			"download": function( callback ) {
 				this.send( "openBrowser", get( this, "config.livestreamer-download-url" ) );
-				callback();
+				if ( callback instanceof Function ) {
+					callback();
+				}
 			},
 
 			"close": function() {

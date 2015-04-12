@@ -69,25 +69,28 @@ define( [ "ember", "utils/semver" ], function( Ember, semver ) {
 		},
 
 		actions: {
-			releaseDownload: function( callback ) {
+			"releaseDownload": function( callback ) {
 				this.send( "openBrowser", get( this, "downloadURL" ) );
 				this.send( "releaseIgnore" );
-				if ( callback ) { callback(); }
+				if ( callback instanceof Function ) {
+					callback();
+				}
 			},
 
-			releaseIgnore: function() {
-				var store = this.store,
-				    check = store.getById( "versioncheck", 1 );
-
-				if ( check ) {
-					store.unloadRecord( check );
+			"releaseIgnore": function( callback ) {
+				var store  = this.store;
+				var record = store.getById( "versioncheck", 1 );
+				if ( record ) {
+					store.unloadRecord( record );
 				}
+
 				store.createRecord( "versioncheck", {
 					id: 1,
 					checkagain: +new Date() + get( this, "time" )
-				}).save();
-
-				this.send( "closeModal" );
+				})
+					.save()
+					.then( callback )
+					.then( this.send.bind( this, "closeModal" ) );
 			}
 		}
 	});

@@ -6,20 +6,15 @@ define( [ "ember" ], function( Ember ) {
 	return Ember.Mixin.create({
 		/**
 		 * Retry a previously stored transition
-		 * @param {string?}  transitionTo
-		 * @param {boolean?} closeModal
+		 * @param {string?} route
 		 * @returns {Promise}
 		 */
-		retryTransition: function( transitionTo, closeModal ) {
+		retryTransition: function( route ) {
 			var transition = get( this, "previousTransition" );
 
-			if ( closeModal ) {
-				this.send( "closeModal" );
-			}
-
 			if ( !transition ) {
-				return transitionTo
-					? this.transitionTo( transitionTo )
+				return route
+					? this.transitionToRoute( route )
 					: Promise.resolve();
 			}
 

@@ -42,17 +42,17 @@ define([
 			if ( !action ) { return; }
 
 			if ( get( this, "iconanim" ) ) {
-				context = context.concat(function animationStart( callback ) {
+				context = context.concat(function animationStart( data ) {
+					var defer = Promise.defer();
 					set( self, "_iconanim", true );
 					self.$().one( "webkitAnimationEnd", function animationEnd( e ) {
 						e = e.originalEvent;
 						if ( e.animationName !== "animIconScale" ) { return; }
 
 						set( self, "_iconanim", false );
-						if ( callback instanceof Function ) {
-							callback( e );
-						}
+						defer.resolve( data );
 					});
+					return defer.promise;
 				});
 			}
 

@@ -10,9 +10,16 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 		checkUserFollowsChannel: function( channel ) {
 			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
 
-			var name = get( channel, "id" );
+			var store = this.store;
+			var name  = get( channel, "id" );
 			this.store.fetchById( "twitchUserFollowsChannel", name )
 				.catch(function() {
+					// unload the generated empty record
+					var record = store.getById( "twitchUserFollowsChannel", name );
+					if ( record ) {
+						store.unloadRecord( record );
+					}
+
 					// twitch.tv API returned 404: user does not follow the channel
 					return false;
 				})
@@ -25,9 +32,16 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
 			if ( !get( channel, "partner" ) ) { return; }
 
-			var name = get( channel, "id" );
+			var store = this.store;
+			var name  = get( channel, "id" );
 			this.store.fetchById( "twitchUserSubscription", name )
 				.catch(function() {
+					// unload the generated empty record
+					var record = store.getById( "twitchUserSubscription", name );
+					if ( record ) {
+						store.unloadRecord( record );
+					}
+
 					// twitch.tv API returned 404: user does not subscribe the channel
 					return false;
 				})
@@ -48,30 +62,25 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
 				if ( !following ) {
 					var name = get( channel, "id" );
-					// find a previous record and unload it
-					following = store.getById( "twitchUserFollowsChannel", name );
-					if ( following ) {
-						store.unloadRecord( following );
-					}
-					// now create a new record and save it
+					// create a new record and save it
 					following = store.createRecord( "twitchUserFollowsChannel", { id: name });
-					following.save().then(function() {
-						var defer = Promise.defer();
-						set( channel, "following", following );
-						callback( defer.resolve );
-						return defer.promise;
-					}).then( unlock, unlock );
+					following.save()
+						.then(function() {
+							set( channel, "following", following );
+						})
+						.then( callback )
+						.then( unlock, unlock );
 
 				} else {
 					// delete the record and save it
-					following.destroyRecord().then(function() {
-						var defer = Promise.defer();
-						set( channel, "following", false );
-						// also unload it
-						store.unloadRecord( following );
-						callback( defer.resolve );
-						return defer.promise;
-					}).then( unlock, unlock );
+					following.destroyRecord()
+						.then(function() {
+							set( channel, "following", false );
+							// also unload it
+							store.unloadRecord( following );
+						})
+						.then( callback )
+						.then( unlock, unlock );
 				}
 			},
 
@@ -100,7 +109,9 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 				    cb  = nwGui.Clipboard.get();
 				if ( url && cb ) {
 					cb.set( url, "text" );
-					callback();
+					if ( callback instanceof Function ) {
+						callback();
+					}
 				}
 			}
 		}
