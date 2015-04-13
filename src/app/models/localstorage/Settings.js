@@ -1,27 +1,32 @@
-define( [ "ember", "ember-data" ], function( Ember, DS ) {
+define([
+	"ember-data",
+	"models/ModelCloneMixin"
+], function( DS, ModelCloneMixin ) {
 
-	return DS.Model.extend({
+	var attr = DS.attr;
 
-		advanced            : DS.attr( "boolean", { defaultValue: false } ),
-		livestreamer        : DS.attr( "string", { defaultValue: "" } ),
-		quality             : DS.attr( "number", { defaultValue: 0 } ),
-		player              : DS.attr( "string", { defaultValue: "" } ),
-		player_params       : DS.attr( "string", { defaultValue: "" } ),
-		player_passthrough  : DS.attr( "string", { defaultValue: "http" } ),
-		player_reconnect    : DS.attr( "boolean", { defaultValue: true } ),
-		player_no_close     : DS.attr( "boolean", { defaultValue: false } ),
-		gui_integration     : DS.attr( "number", { defaultValue: 3 } ),
-		gui_minimizetotray  : DS.attr( "number", { defaultValue: false } ),
-		gui_minimize        : DS.attr( "number", { defaultValue: 0 } ),
-		gui_hidestreampopup : DS.attr( "boolean", { defaultValue: false } ),
-		gui_openchat        : DS.attr( "boolean", { defaultValue: false } ),
-		gui_homepage        : DS.attr( "string", { defaultValue: "/featured" } ),
-		gui_layout          : DS.attr( "string", { defaultValue: "tile" } ),
-		notify_enabled      : DS.attr( "boolean", { defaultValue: true } ),
-		notify_grouping     : DS.attr( "boolean", { defaultValue: true } ),
-		notify_click        : DS.attr( "number", { defaultValue: 1 } ),
-		notify_click_group  : DS.attr( "number", { defaultValue: 1 } ),
-		notify_badgelabel   : DS.attr( "boolean", { defaultValue: true } ),
+	return DS.Model.extend( ModelCloneMixin, {
+
+		advanced            : attr( "boolean", { defaultValue: false } ),
+		livestreamer        : attr( "string",  { defaultValue: "" } ),
+		quality             : attr( "number",  { defaultValue: 0 } ),
+		player              : attr( "string",  { defaultValue: "" } ),
+		player_params       : attr( "string",  { defaultValue: "" } ),
+		player_passthrough  : attr( "string",  { defaultValue: "http" } ),
+		player_reconnect    : attr( "boolean", { defaultValue: true } ),
+		player_no_close     : attr( "boolean", { defaultValue: false } ),
+		gui_integration     : attr( "number",  { defaultValue: 3 } ),
+		gui_minimizetotray  : attr( "number",  { defaultValue: false } ),
+		gui_minimize        : attr( "number",  { defaultValue: 0 } ),
+		gui_hidestreampopup : attr( "boolean", { defaultValue: false } ),
+		gui_openchat        : attr( "boolean", { defaultValue: false } ),
+		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
+		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
+		notify_enabled      : attr( "boolean", { defaultValue: true } ),
+		notify_grouping     : attr( "boolean", { defaultValue: true } ),
+		notify_click        : attr( "number",  { defaultValue: 1 } ),
+		notify_click_group  : attr( "number",  { defaultValue: 1 } ),
+		notify_badgelabel   : attr( "boolean", { defaultValue: true } ),
 
 
 		// correct old value
@@ -42,19 +47,6 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 	}).reopenClass({
 
 		toString: function() { return "Settings"; },
-
-		/**
-		 * Create a new object containing the current attribute values of the record.
-		 * Will be used by the settings route/controller
-		 */
-		readAttributes: function( record ) {
-			var obj = Ember.Object.create({});
-			record.eachAttribute(function( name ) {
-				obj.set( name, record.get( name ) );
-			});
-			return obj;
-		},
-
 
 		qualities: [
 			{ id: 0, label: "Source", quality: "source,best" },

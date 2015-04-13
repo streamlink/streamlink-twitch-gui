@@ -36,10 +36,7 @@ define([
 
 		actions: {
 			"apply": function( callback ) {
-				// copy all attributes back to the original settings record
-				this.settings.setProperties( get( this, "model" ) );
-				// and then save
-				this.settings.save()
+				this.settings.setCloneAttributes( get( this, "model" ) )
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) )
@@ -47,8 +44,7 @@ define([
 			},
 
 			"discard": function( callback ) {
-				var attributes = this.settings.constructor.readAttributes( this.settings );
-				get( this, "model" ).setProperties( attributes );
+				set( this, "model", this.settings.cloneModel() );
 				Promise.resolve()
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )

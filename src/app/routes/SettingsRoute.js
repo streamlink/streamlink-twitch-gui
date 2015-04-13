@@ -4,19 +4,15 @@ define( [ "ember" ], function( Ember ) {
 
 	return Ember.Route.extend({
 		model: function() {
-			return this.settings.constructor.readAttributes( this.settings );
+			return this.settings.cloneModel();
 		},
 
 		actions: {
 			willTransition: function( transition ) {
-				var model    = get( this.controller, "model" );
-				var settings = this.settings;
-				var isEqual  = Object.keys( model ).every(function( attr ) {
-					return get( model, attr ) === get( settings, attr );
-				});
+				var model = get( this.controller, "model" );
 
 				// if the user has changed any values
-				if ( !isEqual ) {
+				if ( !this.settings.compareModelClone( model ) ) {
 					// stay here...
 					transition.abort();
 
