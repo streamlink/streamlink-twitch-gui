@@ -1,11 +1,8 @@
-define([
-	"ember-data",
-	"models/ModelCloneMixin"
-], function( DS, ModelCloneMixin ) {
+define( [ "ember-data" ], function( DS ) {
 
 	var attr = DS.attr;
 
-	return DS.Model.extend( ModelCloneMixin, {
+	return DS.Model.extend({
 
 		advanced            : attr( "boolean", { defaultValue: false } ),
 		livestreamer        : attr( "string",  { defaultValue: "" } ),

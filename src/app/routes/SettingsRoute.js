@@ -1,18 +1,18 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
 
 	var get = Ember.get;
 
 	return Ember.Route.extend({
 		model: function() {
-			return this.settings.cloneModel();
+			return ObjectBuffer.create({
+				content: this.settings
+			});
 		},
 
 		actions: {
 			willTransition: function( transition ) {
-				var model = get( this.controller, "model" );
-
 				// if the user has changed any values
-				if ( !this.settings.compareModelClone( model ) ) {
+				if ( get( this.controller, "model.hasBufferedChanges" ) ) {
 					// stay here...
 					transition.abort();
 

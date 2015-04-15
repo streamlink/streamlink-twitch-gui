@@ -36,15 +36,16 @@ define([
 
 		actions: {
 			"apply": function( callback ) {
-				this.settings.setCloneAttributes( get( this, "model" ) )
+				var model = get( this, "model" ).applyChanges( true );
+				model.save()
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) )
-					.catch( this.settings.rollback.bind( this.settings ) );
+					.catch( model.rollback.bind( model ) );
 			},
 
 			"discard": function( callback ) {
-				set( this, "model", this.settings.cloneModel() );
+				get( this, "model" ).discardChanges();
 				Promise.resolve()
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
