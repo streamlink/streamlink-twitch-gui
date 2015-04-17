@@ -54,6 +54,14 @@ define([
 	NoPlayerError.prototype = new Error();
 
 
+	function setIfNotNull( objA, objB, key ) {
+		var val = get( objA, key );
+		if ( val !== null ) {
+			set( objB, key, val );
+		}
+	}
+
+
 	function Parameter( arg, cond, params ) {
 		this.arg    = arg;
 		this.params = params;
@@ -133,9 +141,10 @@ define([
 
 
 			var channel = get( stream, "channel" );
+			var id = get( channel, "id" );
 
 			// is the stream already running? compare by channel
-			var livestreamer = this.streams.findBy( "channel.id", get( channel, "id" ) );
+			var livestreamer = this.streams.findBy( "channel.id", id );
 			if ( livestreamer ) {
 				set( this, "active", livestreamer );
 				return setP( this, {
@@ -149,13 +158,20 @@ define([
 			livestreamer = Livestreamer.create({
 				stream : stream,
 				channel: channel,
-				quality: get( this.settings, "quality" )
+				quality: get( this.settings, "quality" ),
+				gui_openchat: get( this.settings, "gui_openchat" )
 			});
 			// modal belongs to this stream now
 			set( this, "active", livestreamer );
 
-			// validate configuration and get the exec command
-			this.checkLivestreamer()
+			this.loadChannelSettings( id )
+				// override channel specific settings
+				.then(function( settings ) {
+					setIfNotNull( settings, livestreamer, "quality" );
+					setIfNotNull( settings, livestreamer, "gui_openchat" );
+				}.bind( this) )
+				// validate configuration and get the exec command
+				.then( this.checkLivestreamer.bind( this ) )
 				// launch the stream
 				.then(function( exec ) {
 					setP( this, {
@@ -197,7 +213,7 @@ define([
 			}
 
 			// automatically open chat
-			if ( get( this.settings, "gui_openchat" ) ) {
+			if ( get( livestreamer, "gui_openchat" ) ) {
 				this.send( "chat", get( livestreamer, "channel" ) );
 			}
 
@@ -246,6 +262,27 @@ define([
 					modalBtns: null
 				});
 			}
+		},
+
+
+		/**
+		 * Load channel specific settings
+		 * @param {number} id
+		 * @returns {Promise}
+		 */
+		loadChannelSettings: function( id ) {
+			var store = this.store;
+			return store.find( "channelSettings", id )
+				.catch(function() {
+					// return the generated empty record from the store
+					return store.recordForId( "channelSettings", id );
+				})
+				.then(function( record ) {
+					// get its data and unload it
+					var data = record.toJSON();
+					store.unloadRecord( record );
+					return data;
+				});
 		},
 
 
