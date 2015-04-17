@@ -26,8 +26,7 @@ define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 		actions: {
 			willTransition: function( transition ) {
-				var model = get( this, "controller.model" );
-				if ( get( model, "hasBufferedChanges" ) ) {
+				if ( get( this, "controller.model.hasBufferedChanges" ) ) {
 					transition.abort();
 
 					this.send( "openModal", "settingsModal", this.controller, {
@@ -36,19 +35,6 @@ define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 						previousTransition: transition
 					});
 
-				} else {
-					// prevent pollution:
-					// destroy all records that don't have custom values set
-					var isEmpty = true;
-					model = get( model, "content" );
-					model.eachAttribute(function( attr, meta ) {
-						if ( get( model, attr ) !== meta.options.defaultValue ) {
-							isEmpty = false;
-						}
-					});
-					if ( isEmpty ) {
-						model.destroyRecord();
-					}
 				}
 			}
 		}

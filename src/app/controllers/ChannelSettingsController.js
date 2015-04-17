@@ -66,10 +66,43 @@ define([
 			}, this );
 		}.observes( "model" ),
 
+		/**
+		 * Prevent pollution:
+		 * Destroy all records that don't have custom values set, otherwise just save it normally
+		 * @param record
+		 * @returns {Promise}
+		 */
+		saveRecord: function( record ) {
+			// check if the record has any values set
+			var isEmpty = true;
+			record.eachAttribute(function( attr, meta ) {
+				if ( get( record, attr ) !== meta.options.defaultValue ) {
+					isEmpty = false;
+				}
+			});
+
+			if ( !isEmpty ) {
+				// save the changes
+				return record.save();
+			} else {
+				if ( get( record, "isNew" ) ) {
+					// don't do anything here
+					return Promise.resolve();
+				} else {
+					// tell the adapter to remove the record
+					return record.destroyRecord()
+						.then(function() {
+							// but return back to `root.loaded.created.uncommitted`
+							record.transitionTo( "loaded.created.uncommitted" );
+						});
+				}
+			}
+		},
+
 		actions: {
 			"apply": function( callback ) {
 				var model = get( this, "model" ).applyChanges( true );
-				model.save()
+				this.saveRecord( model )
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) )
