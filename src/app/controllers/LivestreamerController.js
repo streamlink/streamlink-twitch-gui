@@ -3,6 +3,7 @@ define([
 	"nwWindow",
 	"ember",
 	"controllers/ChannelControllerMixin",
+	"controllers/ChannelSettingsMixin",
 	"models/Livestreamer",
 	"utils/fs/which",
 	"utils/fs/stat",
@@ -12,6 +13,7 @@ define([
 	nwWindow,
 	Ember,
 	ChannelControllerMixin,
+	ChannelSettingsMixin,
 	Livestreamer,
 	which,
 	stat,
@@ -75,7 +77,7 @@ define([
 	}
 
 
-	return Ember.Controller.extend( ChannelControllerMixin, {
+	return Ember.Controller.extend( ChannelControllerMixin, ChannelSettingsMixin, {
 		versionMin    : Ember.computed.readOnly( "config.livestreamer-version-min" ),
 		versionTimeout: Ember.computed.readOnly( "config.livestreamer-validation-timeout" ),
 
@@ -262,27 +264,6 @@ define([
 					modalBtns: null
 				});
 			}
-		},
-
-
-		/**
-		 * Load channel specific settings
-		 * @param {number} id
-		 * @returns {Promise}
-		 */
-		loadChannelSettings: function( id ) {
-			var store = this.store;
-			return store.find( "channelSettings", id )
-				.catch(function() {
-					// return the generated empty record from the store
-					return store.recordForId( "channelSettings", id );
-				})
-				.then(function( record ) {
-					// get its data and unload it
-					var data = record.toJSON();
-					store.unloadRecord( record );
-					return data;
-				});
 		},
 
 

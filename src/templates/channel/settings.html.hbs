@@ -6,11 +6,13 @@
 <div><i class="fa fa-comments"></i> {{#check-box checked=_gui_openchat}}Chat{{/check-box}}<span>Automatically open chat.</span></div>
 <div>{{#check-box checked=gui_openchat disabled=(bool-not _gui_openchat)}}Open chat when the stream starts{{/check-box}}</div>
 </fieldset>
+{{#if settings.notify_enabled}}
 <fieldset>
 <legend>Desktop notifications</legend>
 <div><i class="fa fa-bullhorn"></i> {{#check-box checked=_notify_enabled}}Notifications{{/check-box}}<span>When the channel starts streaming.<br>Channel needs to be followed.</span></div>
 <div>{{#check-box checked=notify_enabled disabled=(bool-not _notify_enabled)}}Receive notifications for this channel{{/check-box}}</div>
 </fieldset>
+{{/if}}
 <fieldset class="submit">
 <div>
 {{#form-button action="apply"   class="btn-success" icon="fa-check"   iconanim=true}}Apply{{/form-button}}
