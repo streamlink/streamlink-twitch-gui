@@ -4,14 +4,22 @@ define([
 ], function( Ember, template ) {
 
 	var get = Ember.get,
-		set = Ember.set;
+	    set = Ember.set;
 
 	return Ember.Component.extend({
 		layout: Ember.HTMLBars.compile( template ),
 		tagName: "div",
 		className: "",
-		classNameBindings: [ ":radiobtns", "className" ],
+		classNameBindings: [ "boxes:radiobtns", "className" ],
+		boxes: true,
 		icon: false,
+
+		buttonView: Ember._MetamorphView,
+		buttonClass: function() {
+			return get( this, "boxes" )
+				? "default"
+				: "";
+		}.property( "boxes" ),
 
 		// generate button id for label attribute "for"
 		_content: function() {

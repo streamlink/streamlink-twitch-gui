@@ -35,10 +35,18 @@
 			content: "";
 		}
 
-		& + span {
+		& + span,
+		& + label[for] {
 			display: inline-block;
-			margin-left: .5em;
 			font-weight: normal;
+		}
+
+		& + span {
+			margin: 0 0 0 .5em;
+		}
+
+		& + label[for] {
+			margin: 0 0 0 .25em;
 		}
 
 		&:disabled {
@@ -51,7 +59,8 @@
 			&::after {
 				color: @input-color-disabled;
 			}
-			& + span {
+			& + span,
+			& + label[for] {
 				color: @color-text-bright;
 			}
 		}
@@ -59,7 +68,8 @@
 		&:not(:disabled) {
 			&::before,
 			&::after,
-			& + span {
+			& + span,
+			& + label[for] {
 				cursor: pointer;
 			}
 		}
