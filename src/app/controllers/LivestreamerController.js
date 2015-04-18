@@ -3,6 +3,7 @@ define([
 	"nwWindow",
 	"ember",
 	"controllers/ChannelControllerMixin",
+	"controllers/ChannelSettingsMixin",
 	"models/Livestreamer",
 	"utils/fs/which",
 	"utils/fs/stat",
@@ -12,6 +13,7 @@ define([
 	nwWindow,
 	Ember,
 	ChannelControllerMixin,
+	ChannelSettingsMixin,
 	Livestreamer,
 	which,
 	stat,
@@ -54,6 +56,14 @@ define([
 	NoPlayerError.prototype = new Error();
 
 
+	function setIfNotNull( objA, objB, key ) {
+		var val = get( objA, key );
+		if ( val !== null ) {
+			set( objB, key, val );
+		}
+	}
+
+
 	function Parameter( arg, cond, params ) {
 		this.arg    = arg;
 		this.params = params;
@@ -67,7 +77,7 @@ define([
 	}
 
 
-	return Ember.Controller.extend( ChannelControllerMixin, {
+	return Ember.Controller.extend( ChannelControllerMixin, ChannelSettingsMixin, {
 		versionMin    : Ember.computed.readOnly( "config.livestreamer-version-min" ),
 		versionTimeout: Ember.computed.readOnly( "config.livestreamer-validation-timeout" ),
 
@@ -133,9 +143,10 @@ define([
 
 
 			var channel = get( stream, "channel" );
+			var id = get( channel, "id" );
 
 			// is the stream already running? compare by channel
-			var livestreamer = this.streams.findBy( "channel.id", get( channel, "id" ) );
+			var livestreamer = this.streams.findBy( "channel.id", id );
 			if ( livestreamer ) {
 				set( this, "active", livestreamer );
 				return setP( this, {
@@ -149,13 +160,20 @@ define([
 			livestreamer = Livestreamer.create({
 				stream : stream,
 				channel: channel,
-				quality: get( this.settings, "quality" )
+				quality: get( this.settings, "quality" ),
+				gui_openchat: get( this.settings, "gui_openchat" )
 			});
 			// modal belongs to this stream now
 			set( this, "active", livestreamer );
 
-			// validate configuration and get the exec command
-			this.checkLivestreamer()
+			this.loadChannelSettings( id )
+				// override channel specific settings
+				.then(function( settings ) {
+					setIfNotNull( settings, livestreamer, "quality" );
+					setIfNotNull( settings, livestreamer, "gui_openchat" );
+				}.bind( this) )
+				// validate configuration and get the exec command
+				.then( this.checkLivestreamer.bind( this ) )
 				// launch the stream
 				.then(function( exec ) {
 					setP( this, {
@@ -197,7 +215,7 @@ define([
 			}
 
 			// automatically open chat
-			if ( get( this.settings, "gui_openchat" ) ) {
+			if ( get( livestreamer, "gui_openchat" ) ) {
 				this.send( "chat", get( livestreamer, "channel" ) );
 			}
 

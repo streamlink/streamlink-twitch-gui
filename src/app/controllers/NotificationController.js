@@ -1,12 +1,14 @@
 define([
 	"nwWindow",
 	"ember",
+	"controllers/ChannelSettingsMixin",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
 	"utils/fs/clearfolder"
 ], function(
 	nwWindow,
 	Ember,
+	ChannelSettingsMixin,
 	mkdirp,
 	download,
 	clearfolder
@@ -18,7 +20,7 @@ define([
 	    get   = Ember.get,
 	    set   = Ember.set;
 
-	return Ember.Controller.extend({
+	return Ember.Controller.extend( ChannelSettingsMixin, {
 		needs: [ "livestreamer" ],
 
 		configBinding  : "metadata.package.config",
@@ -132,12 +134,8 @@ define([
 					return streams.mapBy( "stream" );
 				})
 				.then( this.queryCallback.bind( this ) )
-				.then(function( newStreams ) {
-					// show notifications
-					if ( newStreams && newStreams.length ) {
-						return this.prepareNotifications( newStreams );
-					}
-				}.bind( this ) )
+				.then( this.stripDisabledChannels.bind( this ) )
+				.then( this.prepareNotifications.bind( this ) )
 				.then(function() {
 					// query again in X milliseconds
 					var interval = get( this, "interval" ) || 60000,
@@ -185,11 +183,42 @@ define([
 			}, {} );
 			set( this, "model", model );
 
-			return newStreams;
+			return newStreams || [];
 		},
 
 
+		stripDisabledChannels: function( streams ) {
+			var all = get( this.settings, "notify_all" );
+
+			return Promise.all( streams.map(function( stream ) {
+				var id = get( stream, "channel.id" );
+				return this.loadChannelSettings( id )
+					.then(function( channelSettings ) {
+						return {
+							stream  : stream,
+							settings: channelSettings
+						};
+					});
+			}, this ) )
+				.then(function( streams ) {
+					return streams
+						.filter(function( data ) {
+							var enabled = get( data.settings, "notify_enabled" );
+							return all === true
+								// include all, exclude disabled
+								? enabled !== false
+								// exclude all, include enabled
+								: enabled === true;
+						})
+						.map(function( data ) {
+							return data.stream;
+						});
+				});
+		},
+
 		prepareNotifications: function( streams ) {
+			if ( !streams.length ) { return; }
+
 			// merge multiple notifications and show a single one
 			if ( streams.length > 1 && get( this.settings, "notify_grouping" ) ) {
 				return this.showNotificationGroup( streams );

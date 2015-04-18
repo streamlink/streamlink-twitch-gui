@@ -1,4 +1,4 @@
-{{#each _content as |button|}}
-{{radio-button id=button._id name=buttonName value=button.value selection=value disabled=button.disabled class="default"}}
+{{#each _content itemViewClass=buttonView as |button|}}
+{{radio-button class=buttonClass id=button._id name=buttonName value=button.value selection=value disabled=button.disabled}}
 <label for="{{button._id}}" class="{{if icon 'btn-with-icon'}}">{{#if icon}}<i class="fa fa-check"></i>{{/if}}{{button.label}}</label>
 {{/each}}

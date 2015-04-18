@@ -1,5 +1,11 @@
 
 main.content-channel {
+	overflow-x: hidden;
+
+	&.animated > .content {
+		-webkit-animation: animFadeInRight .333s ease-out;
+	}
+
 	> header {
 		margin-bottom: 1em;
 
@@ -16,10 +22,25 @@ main.content-channel {
 		> div {
 			display: flex;
 			flex-flow: column;
+			flex-grow: 1;
+		}
+
+		.title {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
 		}
 
 		h3 {
 			margin: 0;
+			flex-grow: 1;
+			.text-overflow();
+		}
+
+		.settingsbar {
+			.btn-open:active > i:before {
+				content: @fa-var-wrench;
+			}
 		}
 
 		.online, .offline {
@@ -96,6 +117,12 @@ main.content-channel {
 	> .content-index > .info > dl {
 		i:not(.flag-icon) {
 			color: @color-text-darker;
+		}
+	}
+
+	> .content-settings {
+		> fieldset > div:nth-of-type(odd) > label > span {
+			margin-left: .25em;
 		}
 	}
 }

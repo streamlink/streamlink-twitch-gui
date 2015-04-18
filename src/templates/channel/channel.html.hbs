@@ -1,10 +1,15 @@
 <header>
 <img title="{{channel.display_name}}" src="{{channel.logo}}">
 <div>
+<div class="title">
 <h3>
 {{#if channel.has_language}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
 <span>{{channel.display_name}}</span>
 </h3>
+<div class="settingsbar {{if isSubrouteSettings 'opened'}}">
+{{form-button action="toggleSettings" targetObject=view class="btn-open" icon="fa-wrench"}}
+</div>
+</div>
 {{#if stream}}
 <div class="online">
 <span title="{{stream.title_created_at}}"><i class="fa fa-clock-o"></i> {{hours-from-now stream.created_at}}</span>

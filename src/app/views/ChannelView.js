@@ -6,7 +6,14 @@ define([
 	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
-		classNames: [ "content", "content-channel" ]
+		classNames: [ "content", "content-channel" ],
+
+		actions: {
+			"toggleSettings": function() {
+				this.element.classList.add( "animated" );
+				this.get( "controller" ).send( "toggleSettings" );
+			}
+		}
 	});
 
 });

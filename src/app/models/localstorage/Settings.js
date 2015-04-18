@@ -20,6 +20,7 @@ define( [ "ember-data" ], function( DS ) {
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
 		notify_enabled      : attr( "boolean", { defaultValue: true } ),
+		notify_all          : attr( "boolean", { defaultValue: true } ),
 		notify_grouping     : attr( "boolean", { defaultValue: true } ),
 		notify_click        : attr( "number",  { defaultValue: 1 } ),
 		notify_click_group  : attr( "number",  { defaultValue: 1 } ),
@@ -69,6 +70,11 @@ define( [ "ember-data" ], function( DS ) {
 			{ id: 0, label: "Do nothing" },
 			{ id: 1, label: "Minimize" },
 			{ id: 2, label: "Move to tray" }
+		],
+
+		notify_all: [
+			{ value: true,  label: "Show all except disabled ones" },
+			{ value: false, label: "Ignore all except enabled ones" }
 		],
 
 		notify_click: [

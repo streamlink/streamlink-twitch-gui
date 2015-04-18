@@ -6,6 +6,7 @@ define( [ "ember" ], function( Ember ) {
 		stream : null,
 		channel: null,
 		quality: null,
+		gui_openchat: null,
 		success: false,
 		error  : false,
 		started: undefined,

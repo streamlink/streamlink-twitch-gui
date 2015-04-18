@@ -41,6 +41,9 @@ define(function( require ) {
 		Search: require( "models/localstorage/Search" ),
 		SearchAdapter: DS.LSAdapter.extend({ namespace: "search" }),
 		SearchSerializer: DS.LSSerializer,
+		ChannelSettings: require( "models/localstorage/ChannelSettings" ),
+		ChannelSettingsAdapter: DS.LSAdapter.extend({ namespace: "channelsettings" }),
+		ChannelSettingsSerializer: DS.LSSerializer,
 
 
 		// Models: github
@@ -82,6 +85,7 @@ define(function( require ) {
 
 
 		// Ember additions/changes/fixes
+		BooleanTransform: require( "store/BooleanTransform" ),
 		LinkView: require( "views/LinkView" ),
 		SelectView: require( "views/SelectView" ),
 
@@ -169,6 +173,9 @@ define(function( require ) {
 		ChannelIndexRoute: require( "routes/ChannelIndexRoute" ),
 		ChannelIndexController: require( "controllers/ChannelIndexController" ),
 		ChannelIndexView: require( "views/ChannelIndexView" ),
+		ChannelSettingsRoute: require( "routes/ChannelSettingsRoute" ),
+		ChannelSettingsController: require( "controllers/ChannelSettingsController" ),
+		ChannelSettingsView: require( "views/ChannelSettingsView" ),
 
 		UserLoadingRoute: require( "routes/LoadingRoute" ),
 		UserLoadingView: require( "views/LoadingView" ),
