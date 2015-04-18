@@ -1,8 +1,20 @@
-define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
+define([
+	"nwGui",
+	"nwWindow",
+	"nwScreen",
+	"ember"
+], function(
+	nwGui,
+	nwWindow,
+	nwScreen,
+	Ember
+) {
 
 	var get = Ember.get,
 	    set = Ember.setProperties,
 	    debounce = Ember.run.debounce;
+
+	var manifest = nwGui.App.manifest;
 
 	var concat = [].concat;
 
@@ -28,6 +40,8 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 
 	function onResize( width, height ) {
 		if ( ignore ) { return; }
+		// validate window position
+		if ( !isWindowFullyVisible() ) { return; }
 		save.call( this, {
 			width : width,
 			height: height
@@ -40,6 +54,8 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 		// [    -8,    -8] when maximizing...
 		// [-32000,-32000] when minimizing...
 		if ( isWin && ( x === -8 && y === -8 || x === -32000 && x === -32000 ) ) { return; }
+		// validate window position
+		if ( !isWindowFullyVisible() ) { return; }
 		save.call( this, {
 			x: x,
 			y: y
@@ -80,6 +96,48 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 	}
 
 
+	function resetWindowPosition() {
+		// use the DE's main screen and the minimum window size
+		var screen = nwScreen.screens[0].bounds;
+		var w = manifest.window.width;
+		var h = manifest.window.height;
+		// center the window and don't forget the screen offset
+		nwWindow.width  = w;
+		nwWindow.height = h;
+		nwWindow.x = Math.round( screen.x + ( screen.width  - w ) / 2 );
+		nwWindow.y = Math.round( screen.y + ( screen.height - h ) / 2 );
+		// also reset the saved window position
+		resetWindow.call( this );
+	}
+
+	function onDisplayBoundsChanged() {
+		// validate window position and reset if it's invalid
+		if ( !isWindowFullyVisible() ) {
+			resetWindowPosition.call( this );
+		}
+	}
+
+	function isWindowFullyVisible() {
+		var x = nwWindow.x;
+		var y = nwWindow.y;
+		var w = nwWindow.width;
+		var h = nwWindow.height;
+
+		// the window needs to be fully visible on one screen
+		return nwScreen.screens.some(function( screenObj ) {
+			var bounds = screenObj.bounds;
+			// substract screen offset from window position
+			var posX = x - bounds.x;
+			var posY = y - bounds.y;
+			// check boundaries
+			return posX >= 0
+				&& posY >= 0
+				&& posX + w <= bounds.width
+				&& posY + h <= bounds.height;
+		});
+	}
+
+
 	Ember.Application.initializer({
 		name: "window",
 		after: [ "store", "nwjs" ],
@@ -104,7 +162,14 @@ define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
 						resetWindow.call( Window );
 					} else {
 						restoreWindow.call( Window );
+						// validate restored window position and reset if it's invalid
+						if ( !isWindowFullyVisible() ) {
+							resetWindowPosition.call( Window );
+						}
 					}
+
+					// listen for screen changes
+					nwScreen.on( "displayBoundsChanged", onDisplayBoundsChanged.bind( Window ) );
 
 					// also listen for the maximize events
 					// we don't want to save the window size+pos after these events
