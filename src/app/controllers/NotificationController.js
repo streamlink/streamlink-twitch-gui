@@ -188,6 +188,8 @@ define([
 
 
 		stripDisabledChannels: function( streams ) {
+			var all = get( this.settings, "notify_all" );
+
 			return Promise.all( streams.map(function( stream ) {
 				var id = get( stream, "channel.id" );
 				return this.loadChannelSettings( id )
@@ -201,7 +203,12 @@ define([
 				.then(function( streams ) {
 					return streams
 						.filter(function( data ) {
-							return get( data.settings, "notify_enabled" ) !== false;
+							var enabled = get( data.settings, "notify_enabled" );
+							return all === true
+								// include all, exclude disabled
+								? enabled !== false
+								// exclude all, include enabled
+								: enabled === true;
 						})
 						.map(function( data ) {
 							return data.stream;
