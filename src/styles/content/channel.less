@@ -1,12 +1,15 @@
 
 main.content-channel {
+	display: flex;
+	flex-flow: column nowrap;
 	overflow-x: hidden;
 
-	&.animated > .content {
+	&.animated > .content:not(.content-loading) {
 		-webkit-animation: animFadeInRight .333s ease-out;
 	}
 
 	> header {
+		flex-shrink: 0;
 		margin-bottom: 1em;
 
 		> img {
@@ -121,6 +124,10 @@ main.content-channel {
 	}
 
 	> .content-settings {
+		> h3 {
+			margin-top: 0;
+		}
+
 		> fieldset > div:nth-of-type(odd) > label > span {
 			margin-left: .25em;
 		}

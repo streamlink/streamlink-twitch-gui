@@ -6,18 +6,14 @@ define([
 	var get = Ember.get;
 
 	return Ember.Controller.extend( ChannelControllerMixin, {
-		needs: [ "channel" ],
-		model: Ember.computed.alias( "controllers.channel.model" ),
-
 		stream : Ember.computed.alias( "model.stream" ),
 		channel: Ember.computed.alias( "model.channel" ),
-
 
 		_loadSubscriptionAndFollowingData: function() {
 			var channel = get( this, "channel" );
 			this.checkUserSubscribesChannel( channel );
 			this.checkUserFollowsChannel( channel );
-		}.observes( "channel" ).on( "init" ),
+		}.observes( "channel" ),
 
 		age: function() {
 			return ( new Date() - get( this, "channel.created_at" ) ) / ( 24 * 3600 * 1000 );
