@@ -24,6 +24,10 @@ define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 				});
 		},
 
+		refresh: function() {
+			return this.container.lookup( "route:channel" ).refresh();
+		},
+
 		actions: {
 			willTransition: function( transition ) {
 				if ( get( this, "controller.model.hasBufferedChanges" ) ) {
