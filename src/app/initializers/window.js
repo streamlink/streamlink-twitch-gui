@@ -20,8 +20,8 @@ define([
 
 	var isWin = process.platform === "win32";
 
-	var timeEvent  = 100,
-	    timeIgnore = 1000,
+	var timeEvent  = 1000,
+	    timeIgnore = 2000,
 	    ignore     = false;
 
 
