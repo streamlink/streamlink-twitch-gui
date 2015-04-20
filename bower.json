@@ -3,7 +3,7 @@
 	"dependencies": {
 		"requirejs": "2.1.16",
 		"requirejs-text": "2.0.14",
-		"ember": "1.11.0",
+		"ember": "1.11.3",
 		"ember-data": "1.0.0-beta.15",
 		"ember-localstorage-adapter": "0.5.2",
 		"jquery": "2.1.3",
