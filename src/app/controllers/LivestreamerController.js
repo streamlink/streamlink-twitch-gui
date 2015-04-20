@@ -64,71 +64,15 @@ define([
 	}
 
 
-	function Parameter( arg, cond, params ) {
-		this.arg    = arg;
-		this.params = params;
-		this.cond   = cond instanceof Function
-			? [ cond ]
-			: Ember.makeArray( cond ).concat( params || [] ).map(function( prop ) {
-				return function() {
-					return !!get( this, prop );
-				};
-			});
-	}
-
-
 	return Ember.Controller.extend( ChannelControllerMixin, ChannelSettingsMixin, {
 		versionMin    : Ember.computed.readOnly( "config.livestreamer-version-min" ),
 		versionTimeout: Ember.computed.readOnly( "config.livestreamer-validation-timeout" ),
-
-		streamURL: "twitch.tv/%@",
+		streamURL     : Ember.computed.readOnly( "config.twitch-stream-url" ),
 
 		modalBtns: null,
 
 		streams: [],
 		active : null,
-
-		parameters: [
-			new Parameter( "--no-version-check" ),
-			new Parameter( "--player", null, "settings.player" ),
-			new Parameter( "--player-args", "settings.player", "settings.player_params" ),
-			new Parameter( "--player-passthrough", null, "settings.player_passthrough" ),
-			new Parameter( "--player-continuous-http", function() {
-				return "http" === get( this, "settings.player_passthrough" )
-				    &&          !!get( this, "settings.player_reconnect" );
-			}),
-			new Parameter( "--player-no-close", "settings.player_no_close" ),
-			new Parameter( "--twitch-oauth-token", "auth.isLoggedIn", "auth.access_token" )
-		],
-
-
-		getParametersString: function( name, quality ) {
-			var self      = this,
-			    params    = [],
-			    settings  = this.settings,
-			    qualities = settings.constructor.qualities;
-
-			// prepare parameters
-			this.parameters.forEach(function( parameter ) {
-				// a parameter must fulfill every condition
-				if ( parameter.cond.every(function( cond ) {
-					return cond.call( self );
-				}) ) {
-					// append process parameter arg and its own parameters (settings properties)
-					params.push.apply( params, [ parameter.arg ].concat(
-						parameter.params
-							? get( self, parameter.params )
-							: []
-					));
-				}
-			});
-
-			// append stream url + quality and return the array
-			return params.concat([
-				get( this, "streamURL" ).fmt( name ),
-				( qualities[ quality ] || qualities[ 0 ] ).quality
-			]);
-		},
 
 
 		startStream: function( stream ) {
@@ -355,18 +299,24 @@ define([
 		},
 
 
+		/**
+		 * Launch the stream
+		 * @param {string} exec
+		 * @param {Livestreamer} livestreamer
+		 * @returns {Promise}
+		 */
 		launchLivestreamer: function( exec, livestreamer ) {
 			// in case the shutdown button was pressed before
 			if ( get( livestreamer, "shutdown" ) ) {
 				return Promise.reject();
 			}
 
-			var defer    = Promise.defer(),
-			    channel  = get( livestreamer, "channel" ),
-			    name     = get( channel, "id" ),
-			    quality  = get( livestreamer, "quality" ),
-			    params   = this.getParametersString( name, quality ),
-			    spawn    = CP.spawn( exec, params, { detached: true } );
+			var defer   = Promise.defer();
+			var quality = get( livestreamer, "quality" );
+
+			/** @this {LivestreamerController} */
+			var params  = livestreamer.getParametersString( this );
+			var spawn   = CP.spawn( exec, params, { detached: true } );
 
 			set( livestreamer, "success", false );
 			set( livestreamer, "spawn", spawn );

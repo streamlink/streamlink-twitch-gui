@@ -2,6 +2,7 @@
 	"tests": [
 		"test/semver",
 		"test/linkmatching",
-		"test/helpers"
+		"test/helpers",
+		"test/param_substitution"
 	]
 }
