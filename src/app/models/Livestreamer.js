@@ -87,6 +87,7 @@ define( [ "ember" ], function( Ember ) {
 			var parameters = [];
 			var streamURL  = get( controller, "streamURL" );
 			var qualities  = get( controller, "settings.constructor.qualities" );
+			var advanced   = get( controller, "settings.advanced" );
 			var quality    = get( this, "quality" );
 
 			// prepare parameters
@@ -102,7 +103,7 @@ define( [ "ember" ], function( Ember ) {
 					params = [];
 				} else {
 					params = get( controller, parameter.params );
-					params = Ember.makeArray( parameter.subst
+					params = Ember.makeArray( advanced && parameter.subst
 						? this.substitute( params )
 						: params
 					);
