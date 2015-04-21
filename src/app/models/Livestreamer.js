@@ -1,6 +1,7 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "ember", "ember-data" ], function( Ember, DS ) {
 
-	var get = Ember.get;
+	var get = Ember.get,
+	    set = Ember.set;
 
 
 	/**
@@ -28,20 +29,24 @@ define( [ "ember" ], function( Ember ) {
 	/**
 	 * @class Livestreamer
 	 */
-	return Ember.Object.extend({
-		/** @type {ChildProcess} spawn */
+	return DS.Model.extend({
+		stream      : DS.belongsTo( "twitchStream" ),
+		channel     : DS.belongsTo( "twitchChannel" ),
+		quality     : DS.attr( "number" ),
+		gui_openchat: DS.attr( "boolean" ),
+		started     : DS.attr( "date" ),
+
+
+		/** @property {ChildProcess} spawn */
 		spawn  : null,
-		stream : null,
-		channel: null,
-		quality: null,
-		gui_openchat: null,
 		success: false,
 		error  : false,
-		started: undefined,
 
 
 		init: function() {
-			this.started = new Date();
+			this._super.apply( this, arguments );
+			set( this, "auth",     this.container.lookup( "record:auth" ) );
+			set( this, "settings", this.container.lookup( "record:settings" ) );
 		},
 
 		kill: function() {
@@ -52,7 +57,9 @@ define( [ "ember" ], function( Ember ) {
 
 		qualityObserver: function() {
 			// The LivestreamerController knows that it has to spawn a new child process
-			this.kill();
+			if ( get( this, "success" ) ) {
+				this.kill();
+			}
 		}.observes( "quality" ),
 
 
@@ -85,7 +92,7 @@ define( [ "ember" ], function( Ember ) {
 		 */
 		getParametersString: function( controller ) {
 			var parameters = [];
-			var streamURL  = get( controller, "streamURL" );
+			var streamURL  = get( controller, "config.twitch-stream-url" );
 			var qualities  = get( controller, "settings.constructor.qualities" );
 			var advanced   = get( controller, "settings.advanced" );
 			var quality    = get( this, "quality" );

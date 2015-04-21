@@ -25,6 +25,11 @@ define(function( require ) {
 		ApplicationAdapter: require( "store/TwitchAdapter" ),
 
 
+		// Models: memory
+		Livestreamer: require( "models/Livestreamer" ),
+		LivestreamerAdapter: DS.Adapter,
+
+
 		// Models: localstorage
 		Window: require( "models/localstorage/Window" ),
 		WindowAdapter: DS.LSAdapter.extend({ namespace: "window" }),

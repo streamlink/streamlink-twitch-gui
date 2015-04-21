@@ -65,14 +65,12 @@ define([
 
 
 	return Ember.Controller.extend( ChannelControllerMixin, ChannelSettingsMixin, {
-		versionMin    : Ember.computed.readOnly( "config.livestreamer-version-min" ),
-		versionTimeout: Ember.computed.readOnly( "config.livestreamer-validation-timeout" ),
-		streamURL     : Ember.computed.readOnly( "config.twitch-stream-url" ),
-
 		modalBtns: null,
 
-		streams: [],
-		active : null,
+		active: null,
+		model : function() {
+			return this.store.all( "livestreamer" );
+		}.property(),
 
 
 		startStream: function( stream ) {
@@ -89,10 +87,9 @@ define([
 			var channel = get( stream, "channel" );
 			var id = get( channel, "id" );
 
-			// is the stream already running? compare by channel
-			var livestreamer = this.streams.findBy( "channel.id", id );
-			if ( livestreamer ) {
-				set( this, "active", livestreamer );
+			// is the stream already running?
+			if ( this.store.hasRecordForId( "livestreamer", id ) ) {
+				set( this, "active", this.store.recordForId( "livestreamer", id ) );
 				return setP( this, {
 					modalHead: "You're watching %@".fmt( get( channel, "display_name" ) ),
 					modalBody: get( channel, "status" ),
@@ -101,11 +98,13 @@ define([
 			}
 
 			// create a new livestreamer object
-			livestreamer = Livestreamer.create({
-				stream : stream,
-				channel: channel,
-				quality: get( this.settings, "quality" ),
-				gui_openchat: get( this.settings, "gui_openchat" )
+			var livestreamer = this.store.createRecord( "livestreamer", {
+				id          : id,
+				stream      : stream,
+				channel     : channel,
+				quality     : get( this.settings, "quality" ),
+				gui_openchat: get( this.settings, "gui_openchat" ),
+				started     : new Date()
 			});
 			// modal belongs to this stream now
 			set( this, "active", livestreamer );
@@ -132,14 +131,10 @@ define([
 				.then( this.checkUserFollowsChannel.bind( this, channel ) )
 				// setup stream refresh interval
 				.then( this.refreshStream.bind( this, livestreamer ) )
-				// add the livestreamer object to the streams list
-				.then(function() {
-					this.streams.addObject( livestreamer );
-				}.bind( this ) )
 				// success/failure
 				.then(
 					this.streamSuccess.bind( this, livestreamer, true ),
-					this.streamFailure.bind( this )
+					this.streamFailure.bind( this, livestreamer )
 				);
 		},
 
@@ -167,7 +162,11 @@ define([
 			this.minimize( false );
 		},
 
-		streamFailure: function( err ) {
+		streamFailure: function( livestreamer, err ) {
+			if ( !get( livestreamer, "isDeleted" ) ) {
+				livestreamer.destroyRecord();
+			}
+
 			if ( err instanceof VersionError ) {
 				setP( this, {
 					modalHead: "Error: Invalid Livestreamer version",
@@ -255,8 +254,8 @@ define([
 		 * @returns {Promise}
 		 */
 		validateLivestreamer: function( exec ) {
-			var minimum = get( this, "versionMin" ),
-			    time    = get( this, "versionTimeout" ),
+			var minimum = get( this, "config.livestreamer-version-min" ),
+			    time    = get( this, "config.livestreamer-validation-timeout" ),
 			    defer   = Promise.defer(),
 			    spawn   = CP.spawn( exec, [ "--version", "--no-version-check" ] );
 
@@ -301,8 +300,6 @@ define([
 
 		/**
 		 * Launch the stream
-		 * @param {string} exec
-		 * @param {Livestreamer} livestreamer
 		 * @returns {Promise}
 		 */
 		launchLivestreamer: function( exec, livestreamer ) {
@@ -332,7 +329,7 @@ define([
 					run.next( this, function() {
 						this.launchLivestreamer( exec, livestreamer ).then(
 							this.streamSuccess.bind( this, livestreamer, false ),
-							this.streamFailure.bind( this )
+							this.streamFailure.bind( this, livestreamer )
 						);
 					});
 
@@ -351,8 +348,10 @@ define([
 					// restore the GUI
 					this.minimize( true );
 
-					// remove the stream from the streams list
-					this.streams.removeObject( livestreamer );
+					// remove the livestreamer record from the store
+					if ( !get( livestreamer, "isDeleted" ) ) {
+						livestreamer.destroyRecord();
+					}
 				}
 			}.bind( this ) );
 
@@ -421,7 +420,9 @@ define([
 
 
 		killAll: function() {
-			this.streams.forEach(function( stream ) {
+			/** @type {Array} */
+			var model = get( this, "model" );
+			model.slice().forEach(function( stream ) {
 				stream.kill();
 			});
 		},

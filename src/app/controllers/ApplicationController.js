@@ -7,7 +7,7 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 
 		dev: DEBUG,
 
-		streamsLength: Ember.computed.readOnly( "controllers.livestreamer.streams.length" ),
+		streamsLength: Ember.computed.readOnly( "controllers.livestreamer.model.length" ),
 
 		notif_enabled: Ember.computed.readOnly( "controllers.notification.enabled" ),
 		notif_running: Ember.computed.readOnly( "controllers.notification.running" ),
