@@ -21,7 +21,8 @@ requirejs.config({
 	"map": {
 		"*": {
 			"nwGui"     : "nwjs/nwGui",
-			"nwWindow"  : "nwjs/nwWindow"
+			"nwWindow"  : "nwjs/nwWindow",
+			"nwScreen"  : "nwjs/nwScreen"
 		}
 	},
 

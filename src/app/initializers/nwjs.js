@@ -1,6 +1,7 @@
 define([
 	"nwGui",
 	"nwWindow",
+	"nwScreen",
 	"ember",
 	"./metadata",
 	"nwjs/shortcut",
@@ -9,6 +10,7 @@ define([
 ], function(
 	nwGui,
 	nwWindow,
+	nwScreen,
 	Ember,
 	metadata,
 	shortcut,
@@ -21,6 +23,7 @@ define([
 	window.addEventListener( "beforeunload", function() {
 		// remove all listeners
 		nwWindow.removeAllListeners();
+		nwScreen.removeAllListeners();
 		process.removeAllListeners();
 		// prevent tray icons from stacking up when refreshing the page or devtools
 		tray.remove();
