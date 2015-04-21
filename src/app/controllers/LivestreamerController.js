@@ -308,12 +308,21 @@ define([
 				return Promise.reject();
 			}
 
-			var defer   = Promise.defer();
-			var quality = get( livestreamer, "quality" );
+			var defer     = Promise.defer();
 
-			/** @this {LivestreamerController} */
-			var params  = livestreamer.getParametersString( this );
-			var spawn   = CP.spawn( exec, params, { detached: true } );
+			var channel   = get( livestreamer, "channel.id" );
+			var quality   = get( livestreamer, "quality" );
+			var streamURL = get( this, "config.twitch-stream-url" );
+			var qualities = get( this, "settings.constructor.qualities" );
+
+			// get the livestreamer parameter list
+			var params    = get( livestreamer, "parameters" );
+			// append stream url and quality
+			params.push( streamURL.replace( "{channel}", channel ) );
+			params.push( ( qualities[ quality ] || qualities[ 0 ] ).quality );
+
+			// spawn the livestreamer process
+			var spawn = CP.spawn( exec, params, { detached: true } );
 
 			set( livestreamer, "success", false );
 			set( livestreamer, "spawn", spawn );

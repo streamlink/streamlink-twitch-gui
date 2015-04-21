@@ -3,6 +3,6 @@
 		"test/semver",
 		"test/linkmatching",
 		"test/helpers",
-		"test/param_substitution"
+		"test/parameters"
 	]
 }
