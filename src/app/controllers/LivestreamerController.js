@@ -396,10 +396,12 @@ define([
 				data = data.replace( reReplace, "" );
 				if (
 					    get( this, "active" ) === livestreamer
+					&& !get( livestreamer, "success" )
 					&& !get( livestreamer, "error" )
 				) {
 					set( this, "modalBody", data );
 				}
+
 				if ( rePlayer.test( data ) ) {
 					/*
 					 * FIXME:
