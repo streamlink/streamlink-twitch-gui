@@ -6,7 +6,7 @@ define( [ "ember", "utils/Substitution" ], function( Ember, Substitution ) {
 	/**
 	 * @class Parameter
 	 * @param {string} name
-	 * @param {(string|Function)?} cond
+	 * @param {(string|string[]|Function)?} cond
 	 * @param {string?} value
 	 * @param {boolean?} subst
 	 * @constructor
@@ -30,7 +30,8 @@ define( [ "ember", "utils/Substitution" ], function( Ember, Substitution ) {
 	 */
 	Parameter.prototype.validate = function( obj ) {
 		return this.cond.every(function( cond ) {
-			return cond.call( obj );
+			// cond may be bound to something else
+			return cond.call( obj, obj );
 		});
 	};
 
@@ -40,7 +41,7 @@ define( [ "ember", "utils/Substitution" ], function( Ember, Substitution ) {
 	 * @returns {(string|boolean)}
 	 */
 	Parameter.prototype.getValue = function( obj, substitutions ) {
-		if ( this.value === undefined ) { return false; }
+		if ( Ember.isNone( this.value ) ) { return false; }
 
 		var value = String( get( obj, this.value ) );
 		return this.subst && substitutions
