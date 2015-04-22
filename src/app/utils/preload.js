@@ -2,7 +2,8 @@ define( [ "ember" ], function( Ember ) {
 
 	var concat = [].concat,
 	    get = Ember.getWithDefault,
-	    makeArray = Ember.makeArray;
+	    makeArray = Ember.makeArray,
+	    isNone = Ember.isNone;
 
 	return function preload( withError, list ) {
 		if ( list === undefined ) {
@@ -11,6 +12,10 @@ define( [ "ember" ], function( Ember ) {
 		}
 
 		function promiseImage( src ) {
+			if ( isNone( src ) ) {
+				return Promise.resolve();
+			}
+
 			var defer = Promise.defer();
 			var image = new Image();
 			image.addEventListener( "load", defer.resolve, false );
