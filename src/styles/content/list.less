@@ -166,3 +166,44 @@
 		}
 	}
 }
+
+.channel-component {
+	display: flex;
+	flex-flow: row nowrap;
+	width: 50%;
+	margin-bottom: 1.5em;
+	float: left;
+
+	> .logo {
+		@size: 6.5em;
+
+		display: block;
+		position: relative;
+		width: @size;
+		height: @size;
+		flex-shrink: 0;
+	}
+
+	> .text {
+		margin: 0 .5em;
+
+		> header {
+			margin: 0 0 .5em;
+		}
+
+		> .game {
+			margin: 0 0 .25em;
+
+			> i {
+				color: @color-text-darker;
+			}
+		}
+
+		> .status {
+			height: @line-height-base;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+	}
+}

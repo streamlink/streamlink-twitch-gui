@@ -1,5 +1,5 @@
 <h2>{{filterlabel}} search results: <span>{{query}}</span></h2>
-{{#if noresults}}
+{{#if noResults}}
 <section class="noresults">Your query didn't match anything...</section>
 {{/if}}
 {{#if games.length}}
@@ -8,6 +8,16 @@
 <ul class="content-list">
 {{#each games as |game|}}
 {{game-item game=game}}
+{{/each}}
+</ul>
+</section>
+{{/if}}
+{{#if channels.length}}
+<section class="search-channels">
+{{#if notFiltered}}<h3>Channels</h3>{{/if}}
+<ul>
+{{#each channels as |channel|}}
+{{channel-item channel=channel}}
 {{/each}}
 </ul>
 </section>

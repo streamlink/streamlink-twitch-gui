@@ -3,12 +3,13 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 	var get = Ember.get;
 
 	return DS.Model.extend({
-		query		: DS.attr( "string" ),
-		filter		: DS.attr( "string" ),
-		date		: DS.attr( "date" ),
+		query : DS.attr( "string" ),
+		filter: DS.attr( "string" ),
+		date  : DS.attr( "date" ),
 
-		label		: function() {
-			return this.constructor.getLabel( get( this, "filter" ) );
+		label: function() {
+			var filter = get( this, "filter" );
+			return this.constructor.getLabel( filter );
 		}.property( "filter" )
 
 	}).reopenClass({
@@ -17,15 +18,16 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		filters: [
 			{ label: "All", value: "all" },
 			{ label: "Game", value: "games" },
+			{ label: "Channel", value: "channels" },
 			{ label: "Stream", value: "streams" }
 		],
 
 		filtersmap: function() {
-			return get( this, "filters" ).reduce(function( map, filter ) {
+			return this.filters.reduce(function( map, filter ) {
 				map[ filter.value ] = filter;
 				return map;
 			}, {} );
-		}.property( "filters" ),
+		}.property(),
 
 		getLabel: function( filter ) {
 			var map = get( this, "filtersmap" );

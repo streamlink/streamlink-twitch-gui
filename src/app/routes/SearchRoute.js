@@ -33,6 +33,14 @@ define([
 						live : true
 					})
 					: Promise.resolve([]),
+				// search for channels
+				filterMatches( params.filter, "channels" )
+					? this.store.findQuery( "twitchSearchChannel", {
+						query : params.query,
+						offset: 0,
+						limit : 10
+					})
+					: Promise.resolve([]),
 				// search for streams
 				filterMatches( params.filter, "streams" )
 					? this.store.findQuery( "twitchSearchStream", {
@@ -44,13 +52,15 @@ define([
 			])
 				.then(function( queries ) {
 					return {
-						games  : queries[0].toArray().mapBy( "game" ),
-						streams: queries[1].toArray().mapBy( "stream" )
+						games   : queries[0].toArray().mapBy( "game" ),
+						channels: queries[1].toArray().mapBy( "channel" ),
+						streams : queries[2].toArray().mapBy( "stream" )
 					};
 				})
 				.then( preload([
 					"games.@each.box.@each.large",
-					"streams.@each.preview.@each.medium_nocache"
+					"streams.@each.preview.@each.medium_nocache",
+					"channels.@each.logo"
 				]) );
 		},
 
@@ -68,13 +78,11 @@ define([
 				.then( preload( "@each.preview.@each.medium_nocache" ) );
 		},
 
-		setupController: function( controller, model ) {
+		setupController: function( controller ) {
 			this._super.apply( this, arguments );
 
 			set( controller,  "filter", get(  this,  "filter" ) );
 			set( controller,   "query", get(  this,   "query" ) );
-			set( controller,   "games", get( model,   "games" ) );
-			set( controller, "streams", get( model, "streams" ) );
 		}
 	});
 

@@ -1,0 +1,11 @@
+<div class="logo">
+<img class="previewImage" title="{{channel.display_name}}" src="{{channel.logo}}">
+</div>
+<div class="text">
+<header>
+{{#if channel.has_language}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
+<span>{{#link-to "channel" channel.id}}{{channel.display_name}}{{/link-to}}</span>
+</header>
+<div class="game"><i class="fa fa-gamepad"></i> {{#if channel.game}}{{#link-to "games.game" channel.game}}{{channel.game}}{{/link-to}}{{else}}<span>no game set yet</span>{{/if}}</div>
+{{#if channel.status}}{{embedded-links tagName="div" class="status" text=channel.status}}{{/if}}
+</div>
