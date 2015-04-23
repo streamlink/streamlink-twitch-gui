@@ -1,5 +1,8 @@
 define( [ "ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
 
+	var get = Ember.get;
+	var compile = Ember.HTMLBars.compile;
+
 	var hbs_string = [
 		"%@",
 		"{{#external-link",
@@ -20,13 +23,17 @@ define( [ "ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
 
 	return Ember.Component.extend({
 		layout: function() {
-			var template = String( Ember.getWithDefault( this, "text", "" ) )
+			var str = get( this, "text" );
+			str = Ember.isNone( str )
+				? ""
+				: String( str );
+			var template = str
 				.replace( reSafestringL, "&lt;" )
 				.replace( reSafestringR, "&gt;" )
 				.replace( linkurl_re, linkurl_fn )
 				.replace( twitter_re, twitter_fn );
 
-			return Ember.HTMLBars.compile( template );
+			return compile( template );
 		}.property( "text" ),
 
 		textChangeObserver: function() {
