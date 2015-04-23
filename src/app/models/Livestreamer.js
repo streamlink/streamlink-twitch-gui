@@ -76,31 +76,38 @@ define([
 		substitutions: [
 			new Substitution(
 				[ "name", "channel", "channelname" ],
-				"channel.display_name"
+				"channel.display_name",
+				"Channel name"
 			),
 			new Substitution(
 				[ "status", "title" ],
-				"channel.status"
+				"channel.status",
+				"Channel status text"
 			),
 			new Substitution(
 				[ "game", "gamename" ],
-				"stream.game"
+				"stream.game",
+				"Name of the game being played"
 			),
 			new Substitution(
 				"delay",
-				"channel.delay"
+				"channel.delay",
+				"Additional stream delay in seconds"
 			),
 			new Substitution(
-				[ "created", "since" ],
-				"stream.created_at"
+				[ "online", "since", "created" ],
+				"stream.created_at",
+				"Online since"
 			),
 			new Substitution(
-				"viewers",
-				"stream.viewers"
+				[ "viewers", "current" ],
+				"stream.viewers",
+				"Number of current viewers"
 			),
 			new Substitution(
-				"views",
-				"channel.views"
+				[ "views", "overall" ],
+				"channel.views",
+				"Total number of views"
 			)
 		]
 

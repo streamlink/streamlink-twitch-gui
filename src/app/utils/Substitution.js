@@ -12,11 +12,13 @@ define( [ "ember" ], function( Ember ) {
 	 * @class Substitution
 	 * @param {(string|string[])} vars
 	 * @param {string} path
+	 * @param {string?} description
 	 * @constructor
 	 */
-	function Substitution( vars, path ) {
+	function Substitution( vars, path, description ) {
 		this.vars = Ember.makeArray( vars );
 		this.path = path;
+		this.description = description;
 	}
 
 	/**

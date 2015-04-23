@@ -88,4 +88,33 @@
 	.selecter.notifications {
 		max-width: 14em;
 	}
+
+	.btn-subst {
+		min-width: 0;
+		padding: 0 .2em;
+		float: right;
+		font-size: .85em;
+		line-height: inherit;
+	}
+
+	.substitutions {
+		.docs {
+			cursor: inherit !important;
+		}
+
+		dl {
+			@width: 6.5em;
+			font-size: .9em;
+
+			> dt {
+				width: @width;
+				font-weight: normal;
+				text-align: left;
+			}
+
+			> dd {
+				margin-left: @width;
+			}
+		}
+	}
 }
