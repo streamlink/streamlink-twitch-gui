@@ -77,7 +77,7 @@ define(function() {
 		 */
 		function init() {
 
-			if (!document.body) { return; }
+			if (!document.body || initDone) { return; }
 
 			var body = document.body;
 			var html = document.documentElement;
@@ -573,29 +573,33 @@ define(function() {
 			 */
 			function mousedown(e) {
 
-				var isLink = false;
-				var elem   = e.target;
+				var elem = e.target;
+
+				// watch for middle clicks only
+				if ( e.button !== 1 || !options.middleMouse ) {
+					return;
+				}
 
 				// linux middle mouse shouldn't be overwritten (paste)
-				var linux = (isLinux && /input|textarea/i.test(elem.nodeName));
+				if ( isLinux && /input|textarea/i.test( elem.nodeName ) ) {
+					return;
+				}
 
 				do {
-					isLink = isNodeName(elem, "a");
-					if (isLink) { break; }
-				} while ((elem = elem.parentNode));
+					// ignore anchors
+					if ( elem.tagName === "A" ) {
+						return;
+					}
+				} while ( ( elem = elem.parentNode ) );
 
-				elem = overflowingAncestor(e.target);
-
-				// if it's not the middle button, or
-				// it's being used on an <a> element
-				// take the default action
-				if (!elem || !options.middleMouse || e.button !== 1 || isLink || linux) {
-					return true;
+				elem = overflowingAncestor( e.target );
+				if ( !elem ) {
+					return;
 				}
 
 				// only apply to scrollable regions
 				if ( elem.clientHeight === elem.scrollHeight ) {
-					return true;
+					return;
 				}
 
 				// we don't want the default by now
@@ -603,7 +607,7 @@ define(function() {
 
 				// quit if there's an ongoing scrolling
 				if (scrolling) {
-					return false;
+					return;
 				}
 
 				// set up a new scrolling phase
