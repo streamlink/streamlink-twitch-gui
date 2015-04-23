@@ -3,9 +3,19 @@ Changelog - Livestreamer Twitch GUI
 
 ## Master
 
-- Added task bar / dock icon badge label showing number of online favorites. #67
+- Implemented custom channel settings (see the wrench icon in the upper right corner). #23, #63
+- Implemented channel search function.
+- Implemented task bar / dock icon badge showing number of online favorites. #67
+- Implemented player command line variables (click the button in the videoplayer settings section).
+  Requires advanced settings to be enabled.
+- Restructured the settings menu.
 - Fixed incorrect OSX tray icon scaling. #64
+- Fixed window state persistence when changing the desktop resolution.
+- Fixed stream popup overwriting the channel status after a successful stream launch.
 - Fixed rare HTMLBars parsing error resulting in a blank page.
+- Fixed mousewheel scrolling not working sometimes.
+- Upgraded NW.js to v0.12.1 (fixes the HiDPI issues on Windows). #72
+- Several minor bug fixes and improvements.
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.3...master)
 
