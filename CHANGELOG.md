@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.8.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.8.0) (2015-04-23)
 
 - Implemented custom channel settings (see the wrench icon in the upper right corner). #23, #63
 - Implemented channel search function.
@@ -17,7 +17,7 @@ Changelog - Livestreamer Twitch GUI
 - Upgraded NW.js to v0.12.1 (fixes the HiDPI issues on Windows). #72
 - Several minor bug fixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.3...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.3...v0.8.0)
 
 
 ## [v0.7.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.3) (2015-03-29)
