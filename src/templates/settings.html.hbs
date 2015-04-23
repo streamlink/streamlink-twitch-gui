@@ -27,8 +27,8 @@
 {{/if}}
 </fieldset>
 <fieldset>
-<legend>Videoplayer{{form-button action="togglePlayerCmdSubstitutions" targetObject=view icon=view.playerCmdSubstitutionsIcon class="btn-subst btn-neutral"}}</legend>
-{{#if view.playerCmdSubstitutionsVisible}}
+<legend>Videoplayer{{#if model.advanced}}{{form-button action="togglePlayerCmdSubstitutions" targetObject=view icon=view.playerCmdSubstitutionsIcon class="btn-subst btn-neutral"}}{{/if}}</legend>
+{{#if (bool-and model.advanced view.playerCmdSubstitutionsVisible)}}
 <div class="substitutions"><i class="fa fa-terminal"></i> Command line variables<span>These variables may be used in the <em>--player</em> and <em>--player-args</em> parameters, eg. if you intend to change the player title to the channel name. Please make sure that you put all variables in parentheses.<br>Example:<br><span class="docs">/usr/bin/mpv --title &quot;{name} - {game}&quot;</span></span></div>
 <div class="substitutions">
 <dl class="dl-horizontal">
