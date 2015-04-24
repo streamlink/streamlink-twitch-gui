@@ -46,6 +46,7 @@ define([
 		firstRun: true,
 		model   : {},
 		tries   : 0,
+		apiFails: 0,
 
 		_error  : false,
 		error   : Ember.computed.and( "_error", "enabled" ),
@@ -110,6 +111,7 @@ define([
 				firstRun: true,
 				model   : {},
 				tries   : 0,
+				apiFails: 0,
 				_error  : false,
 				_next   : null
 			});
@@ -166,6 +168,16 @@ define([
 
 			// just fill the cache on the first run
 			if ( !get( this, "firstRun" ) ) {
+				// check for failed queries (empty record arrays), but not twice in a row
+				if (
+					   get( streams, "length" ) === 0
+					&& this.incrementProperty( "apiFails" ) < 2
+				) {
+					// don't update the model and just return an empty array
+					return [];
+				}
+				set( this, "apiFails", 0 );
+
 				// get a list of all new streams by comparing the cached streams
 				model = get( this, "model" );
 				newStreams = streams.filter(function( stream ) {
