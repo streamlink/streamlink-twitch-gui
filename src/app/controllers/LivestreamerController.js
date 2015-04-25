@@ -484,7 +484,9 @@ define([
 			},
 
 			"close": function() {
-				set( this, "active", null );
+				run.next( this, function() {
+					set( this, "active", null );
+				});
 				this.send( "closeModal" );
 			},
 
