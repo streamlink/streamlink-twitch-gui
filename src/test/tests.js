@@ -29,6 +29,8 @@ define(function( require ) {
 		require( [ "text!./tests.json" ], function( tests ) {
 			tests = JSON.parse( tests ).tests;
 
+			tests.unshift( "jquery" );
+
 			// then load tests and start QUnit
 			require( tests, QUnit.start );
 		});
