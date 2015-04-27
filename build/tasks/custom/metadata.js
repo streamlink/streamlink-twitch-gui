@@ -55,7 +55,7 @@ module.exports = function( grunt ) {
 					homepage: json.homepage,
 					author: json.author,
 					version: json.version,
-					built: grunt.template.today( "isoDateTime" ),
+					built: grunt.template.today( "isoUtcDateTime" ),
 					config: json.config
 				};
 			});
