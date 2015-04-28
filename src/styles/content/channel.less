@@ -42,9 +42,24 @@ main.content-channel {
 			.text-overflow();
 		}
 
-		.settingsbar {
-			.btn-open:active > i:before {
-				content: @fa-var-wrench;
+		.settingsicon {
+			> button {
+				&:extend(.settingsbar button);
+
+				> i {
+					height: inherit;
+					font-size: inherit;
+					line-height: inherit;
+					vertical-align: inherit;
+				}
+
+				&:active > i:before {
+					content: @fa-var-wrench;
+				}
+			}
+
+			&.opened > button > i {
+				color: fade( @button-color, ( 100 * @button-icon-opacity-active ) );
 			}
 		}
 

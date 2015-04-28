@@ -8,8 +8,8 @@
 {{#if channel.has_language}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
 <span>{{channel.display_name}}</span>
 </h3>
-<div class="settingsbar {{if isSubrouteSettings 'opened'}}">
-{{form-button action="toggleSettings" targetObject=view class="btn-open" icon="fa-wrench"}}
+<div class="settingsicon {{if isSubrouteSettings 'opened'}}">
+{{form-button action="toggleSettings" targetObject=view icon="fa-wrench"}}
 </div>
 </div>
 {{#if stream}}
