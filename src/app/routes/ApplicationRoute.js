@@ -1,5 +1,7 @@
 define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
+	var get = Ember.get;
+
 	return Ember.Route.extend({
 		init: function() {
 			this._super();
@@ -14,19 +16,27 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			},
 
 			"refresh": function() {
-				var routeName = this.controller.get( "currentRouteName" );
+				var routeName = get( this.controller, "currentRouteName" );
 				if ( routeName !== "error" ) {
 					this.container.lookup( "route:" + routeName ).refresh();
 				}
 			},
 
 			"goto": function( routeName ) {
-				var currentRoute = this.controller.get( "currentRouteName" );
+				var currentRoute = get( this.controller, "currentRouteName" );
 				if ( routeName === currentRoute ) {
 					this.send( "refresh" );
 				} else {
 					this.transitionTo.apply( this, arguments );
 				}
+			},
+
+			"gotoHomepage": function( noHistoryEntry ) {
+				var homepage = get( this.settings, "gui_homepage" );
+				var method   = noHistoryEntry
+					? "replaceWith"
+					: "transitionTo";
+				this.router[ method ]( homepage || "/featured" );
 			},
 
 			"openBrowser": function( url ) {

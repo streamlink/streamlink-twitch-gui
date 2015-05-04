@@ -11,9 +11,7 @@ define( [ "ember" ], function( Ember ) {
 
 		actions: {
 			"didTransition": function() {
-				// redirect to user defined homepage and don't create a history entry
-				var homepage = this.settings.get( "gui_homepage" );
-				this.router.replaceWith( homepage || "/featured" );
+				this.send( "gotoHomepage", true );
 			}
 		}
 	});
