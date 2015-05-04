@@ -24,6 +24,12 @@
 <div><i class="fa fa-refresh"></i> Reconnect<span>In case the connection has dropped.{{livestreamer-docs cmd="--player-continuous-http"}}</span></div>
 <div>{{#check-box checked=model.player_reconnect}}Reconnect to stream{{/check-box}}</div>
 {{/if}}
+{{#unless (is-equal model.player_passthrough "hls")}}
+<div><i class="fa fa-bolt"></i> HLS live edge<span>Lowering the value will reduce stream latency, but may also cause buffering.{{livestreamer-docs cmd="--hls-live-edge"}}</span></div>
+<div>{{input type="number" value=model.hls_live_edge placeholder=hlsLiveEdgeDefault min=hlsLiveEdgeMin max=hlsLiveEdgeMax}}</div>
+<div><i class="fa fa-sort-amount-asc"></i> HLS segment threads<span>Number of threads used for downloading and processing stream segments.{{livestreamer-docs cmd="--hls-segment-threads"}}</span></div>
+<div>{{input type="number" value=model.hls_segment_threads placeholder=hlsSegmentThreadsDefault min=hlsSegmentThreadsMin max=hlsSegmentThreadsMax}}</div>
+{{/unless}}
 {{/if}}
 </fieldset>
 <fieldset>

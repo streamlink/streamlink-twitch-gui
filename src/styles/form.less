@@ -84,7 +84,8 @@
 }
 
 
-input[type="text"] {
+input[type="text"],
+input[type="number"] {
 	height: 2em;
 	padding: .4em;
 	border: .1em solid @input-border;
@@ -117,6 +118,40 @@ input[type="text"] {
 		color: @input-color-disabled;
 	}
 }
+
+input[type="number"] {
+	position: relative;
+	padding: .2em .4em;
+
+	&::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+	}
+
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		width: 1em;
+		font: 1em/1 FontAwesome;
+		opacity: .75;
+		cursor: pointer;
+
+		&::before,
+		&::after {
+			position: absolute;
+			right: .6em;
+		}
+
+		&::before {
+			content: @fa-var-caret-up;
+			top: 0;
+		}
+
+		&::after {
+			content: @fa-var-caret-down;
+			bottom: 0;
+		}
+	}
+}
+
 
 input:disabled {
 	background: @input-background-disabled;

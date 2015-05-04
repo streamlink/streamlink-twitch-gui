@@ -6,7 +6,21 @@ define([
 	var get = Ember.get,
 	    set = Ember.set;
 
+	function settingsAttrMeta( attr, prop ) {
+		return function() {
+			return this.settings.constructor.metaForProperty( attr ).options[ prop ];
+		}.property( "settings" );
+	}
+
 	return Ember.Controller.extend( RetryTransitionMixin, {
+		hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
+		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "minValue" ),
+		hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "maxValue" ),
+
+		hlsSegmentThreadsDefault: settingsAttrMeta( "hls_segment_threads", "defaultValue" ),
+		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
+		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
+
 		hasTaskBarIntegration: Ember.computed.equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : Ember.computed.equal( "model.gui_integration", 3 ),
 
