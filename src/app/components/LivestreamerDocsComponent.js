@@ -1,15 +1,16 @@
 define([
 	"ember",
-	"components/ExternalLinkComponent"
-], function( Ember, ExternalLinkComponent ) {
+	"components/ExternalLinkComponent",
+	"text!templates/components/livestreamerdocs.html.hbs"
+], function( Ember, ExternalLinkComponent, layout ) {
 
 	return ExternalLinkComponent.extend({
-		layout: Ember.HTMLBars.compile( "{{cmd}}" ),
+		layout: Ember.HTMLBars.compile( layout ),
 
 		tagName: "span",
 		classNameBindings: [ ":docs" ],
 		attributeBindings: [ "title" ],
-		title: "See the livestreamer documentation for this command",
+		title: "Read the documentation of this livestreamer parameter",
 
 		url: function() {
 			return this.container.lookup( "controller:application" )
