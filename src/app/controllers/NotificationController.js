@@ -22,6 +22,7 @@ define([
 
 	return Ember.Controller.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
+		auth    : Ember.inject.service(),
 
 		needs: [ "livestreamer" ],
 
@@ -57,7 +58,7 @@ define([
 		running : Ember.computed.and( "_running", "enabled" ),
 
 		// automatically start polling once the user is logged in and has notifications enabled
-		enabled: Ember.computed.and( "auth.isLoggedIn", "settings.notify_enabled" ),
+		enabled: Ember.computed.and( "auth.session.isLoggedIn", "settings.notify_enabled" ),
 		enabledObserver: function() {
 			if ( get( this, "enabled" ) ) {
 				this.start();

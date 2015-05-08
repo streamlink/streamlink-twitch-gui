@@ -5,12 +5,13 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
 	return Ember.Mixin.create({
 		metadata: Ember.inject.service(),
+		auth    : Ember.inject.service(),
 
 		config: Ember.computed.alias( "metadata.config" ),
 
 
 		checkUserFollowsChannel: function( channel ) {
-			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
+			if ( !get( this, "auth.session.isLoggedIn" ) ) { return; }
 
 			var store = this.store;
 			var name  = get( channel, "id" );
@@ -31,7 +32,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 		},
 
 		checkUserSubscribesChannel: function( channel ) {
-			if ( !get( this, "auth.isLoggedIn" ) ) { return; }
+			if ( !get( this, "auth.session.isLoggedIn" ) ) { return; }
 			if ( !get( channel, "partner" ) ) { return; }
 
 			var store = this.store;

@@ -25,7 +25,7 @@
 <p>What to do next?</p>
 <ul class="fa-ul list-empty">
 <li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
-{{#if auth.isLoggedIn}}
+{{#if auth.session.isLoggedIn}}
 <li>{{#link-to "user.following"}}<i class="fa fa-li fa-caret-right"></i>Watch your followed channels{{/link-to}}</li>
 {{/if}}
 </ul>

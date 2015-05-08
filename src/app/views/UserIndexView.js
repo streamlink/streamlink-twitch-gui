@@ -10,10 +10,6 @@ define([
 
 		showTokenForm: false,
 
-		auth_scope: function() {
-			return this.get( "controller.auth.scope" ).split( "+" ).join( ", " );
-		}.property( "controller.auth.scope" ),
-
 		actions: {
 			"showTokenForm": function() {
 				this.set( "showTokenForm", true );

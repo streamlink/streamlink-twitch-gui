@@ -14,7 +14,7 @@
 {{#if active.channel.partner}}
 {{form-button action="subscribe" actionParam=active.channel class=view.subscrClass icon="fa-credit-card" iconanim=true title="Subscribe to channel"}}
 {{/if}}
-{{#if auth.isLoggedIn}}
+{{#if auth.session.isLoggedIn}}
 {{form-button action=view.followAction actionParam=active.channel class=view.followClass icon=view.followIcon iconanim=true title=view.followTitle}}
 {{/if}}
 </div>

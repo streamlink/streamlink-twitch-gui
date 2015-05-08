@@ -4,40 +4,37 @@ define([
 	"text!templates/user/auth.html.hbs"
 ], function( Ember, wait, template ) {
 
-	var get = Ember.get,
-	    set = Ember.setProperties;
+	var get  = Ember.get,
+	    set  = Ember.set,
+	    setP = Ember.setProperties;
 
 	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-user", "content-user-auth" ],
 
-		showTokenForm: false,
-		authWinObserver: function() {
-			if ( get( this, "showTokenForm" ) && get( this, "controller.auth_win_lock" ) ) {
-				set( this, {
-					showTokenForm: false
-				});
-			}
-		}.observes( "controller.auth_win_lock" ),
+		failure  : false,
+		tokenForm: false,
+		lock     : false,
 
-		auth_scope: function() {
-			return get( this, "controller.auth_scope" ).join( ", " );
-		}.property( "controller.auth_scope" ),
+		windowObserver: function() {
+			if ( get( this, "controller.auth.window" ) ) {
+				set( this, "tokenForm", false );
+			}
+		}.observes( "controller.auth.window" ),
 
 		token: "",
 
 		tokenBtnClass: "",
-		tokenBtnIcon: "fa-sign-in",
+		tokenBtnIcon : "fa-sign-in",
 
 		actions: {
 			"showTokenForm": function() {
-				set( this, {
-					showTokenForm: true
+				setP( this, {
+					failure  : false,
+					tokenForm: true
 				});
-				set( this.controller, {
-					auth_failure: false
-				});
+
 				Ember.run.next( this, function() {
 					this.$( "input" ).focus();
 				});
@@ -47,66 +44,78 @@ define([
 				this.$( "input + .input-group-btn > button" ).click();
 			},
 
-			"signinToken": function( callback ) {
-				var self = this;
+			// login via user and password
+			"signin": function() {
+				var self       = this;
 				var controller = get( self, "controller" );
+				var auth       = get( controller, "auth" );
 
-				if ( get( controller, "auth_lock" ) || get( controller, "auth_win_lock" ) ) {
+				auth.signin()
+					.then(function() {
+						controller.retryTransition( "user.index" );
+					}, function() {
+						set( self, "failure", true );
+					});
+			},
+
+			// login via access token
+			"signinToken": function( callback ) {
+				var self       = this;
+				var controller = get( self, "controller" );
+				var token      = get( self, "token" );
+				var auth       = get( controller, "auth" );
+
+				if ( get( self, "lock" ) || get( auth, "window" ) ) {
 					return;
 				}
 
-				set( controller, {
-					auth_lock: true,
-					auth_failure: false
-				});
-
-				set( self, {
-					tokenBtnClass: "btn-info",
-					tokenBtnIcon: "fa-refresh fa-spin"
-				});
-
-				var token = get( self, "token" );
-
 				Promise.resolve()
-					.then( wait( 1000 ) )
-					.then( controller.login.bind( controller, token, false ) )
+					// show the loading icon for a sec
 					.then(function() {
-						set( self, {
+						setP( self, {
+							failure      : false,
+							lock         : true,
+							tokenBtnClass: "btn-info",
+							tokenBtnIcon : "fa-refresh fa-spin"
+						});
+					})
+					.then( wait( 1000 ) )
+					// login attempt
+					.then( auth.login.bind( auth, token, false ) )
+					// login response
+					.then(function() {
+						setP( self, {
 							tokenBtnClass: "btn-success",
-							tokenBtnIcon: "fa-check"
+							tokenBtnIcon : "fa-check"
 						});
 						return true;
 					}, function() {
-						set( controller, {
-							auth_failure: true
-						});
-						set( self, {
+						setP( self, {
+							failure      : true,
 							tokenBtnClass: "btn-danger",
-							tokenBtnIcon: "fa-times"
+							tokenBtnIcon : "fa-times"
 						});
 						return false;
 					})
+					// wait another sec and animate icon
 					.then( wait( 1000 ) )
 					.then( callback )
+					// retry transition on success, reset form on failure
 					.then(function( success ) {
-						set( controller, {
-							auth_lock: false
-						});
-
 						if ( success ) {
 							return controller.retryTransition( "user.index" );
 						}
 
-						set( self, {
+						setP( self, {
+							lock         : false,
 							tokenBtnClass: "",
-							tokenBtnIcon: "fa-sign-in"
+							tokenBtnIcon : "fa-sign-in"
 						});
 
+						// hide the failure message on user interaction
 						self.$( "input" ).focus().select().on( "blur keydown", function() {
 							Ember.$( this ).off( "blur keydown" );
-							set( controller, {
-								auth_failure: false
-							});
+							set( self, "failure", false );
 						});
 					});
 			}

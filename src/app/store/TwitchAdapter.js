@@ -7,6 +7,8 @@ define([
 	var reURLFragment = /^:(.+)$/;
 
 	return DS.RESTAdapter.extend( AdapterMixin, {
+		auth: Ember.inject.service(),
+
 		host: "https://api.twitch.tv",
 		namespace: "kraken",
 		headers: {
@@ -44,7 +46,7 @@ define([
 					switch ( key ) {
 						// a user fragment requires the user to be logged in
 						case "user":
-							var user = adapter.get( "auth.user_name" );
+							var user = adapter.get( "auth.session.user_name" );
 							if ( !user ) { throw new Error( "Unknown user" ); }
 							return user;
 						// unknown fragment

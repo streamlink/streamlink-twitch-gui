@@ -1,23 +1,33 @@
 define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
+	var get = Ember.get;
+
 	return Ember.Controller.extend({
-		needs: [ "userAuth", "notification" ],
+		auth: Ember.inject.service(),
+
+		needs: [ "notification" ],
 
 		notif_running: Ember.computed.readOnly( "controllers.notification.running" ),
 		notif_error  : Ember.computed.readOnly( "controllers.notification.error" ),
 
+		scope: function() {
+			return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
+		}.property( "auth.session.scope" ),
+
 		actions: {
 			"signout": function() {
-				this.get( "controllers.userAuth" ).send( "signout" );
-				this.transitionToRoute( "user.auth" );
+				get( this, "auth" ).signout()
+					.then(function() {
+						this.transitionToRoute( "user.auth" );
+					}.bind( this ) );
 			},
 
 			"notifications_restart": function() {
-				this.get( "controllers.notification" ).start();
+				get( this, "controllers.notification" ).start();
 			},
 
 			"copyToken": function( callback ) {
-				var token = this.get( "auth.access_token" );
+				var token = get( this, "auth.session.access_token" );
 				var cb = nwGui.Clipboard.get();
 				if ( !token || !cb ) { return; }
 

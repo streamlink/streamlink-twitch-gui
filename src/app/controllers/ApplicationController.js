@@ -3,6 +3,8 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 	var get = Ember.get;
 
 	return Ember.Controller.extend({
+		auth: Ember.inject.service( "auth" ),
+
 		needs: [ "livestreamer", "notification" ],
 
 		dev: DEBUG,
@@ -13,12 +15,12 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 		notif_running: Ember.computed.readOnly( "controllers.notification.running" ),
 		notif_error  : Ember.computed.readOnly( "controllers.notification.error" ),
 
-		loginSuccess: Ember.computed.readOnly( "auth.isLoggedIn" ),
-		loginPending: Ember.computed.readOnly( "auth.isPending" ),
+		loginSuccess: Ember.computed.readOnly( "auth.session.isLoggedIn" ),
+		loginPending: Ember.computed.readOnly( "auth.session.isPending" ),
 		loginTitle  : function() {
 			return get( this, "loginSuccess" )
 				? "Logged in as %@%@".fmt(
-					get( this, "auth.user_name" ),
+					get( this, "auth.session.user_name" ),
 					get( this, "notif_running" )
 						? "\nDesktop notifications enabled"
 						: get( this, "notif_error" )

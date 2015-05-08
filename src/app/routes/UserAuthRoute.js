@@ -1,9 +1,24 @@
 define( [ "ember" ], function( Ember ) {
 
+	var get = Ember.get;
+
 	return Ember.Route.extend({
+		auth: Ember.inject.service(),
+
+		beforeModel: function( transition ) {
+			// check if user is successfully logged in
+			if ( get( this, "auth.session.isLoggedIn" ) ) {
+				transition.abort();
+				this.transitionTo( "user.index" );
+			}
+		},
+
 		actions: {
-			"willTransition": function() {
-				this.set( "controller.auth_failure", false );
+			willTransition: function() {
+				var win = get( this, "auth.window" );
+				if ( win ) {
+					win.close();
+				}
 			}
 		}
 	});

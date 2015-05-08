@@ -99,6 +99,7 @@ define(function( require ) {
 
 		// Services
 		MetadataService: require( "services/MetadataService" ),
+		AuthService: require( "services/AuthService" ),
 
 
 		// Application

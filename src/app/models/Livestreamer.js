@@ -25,9 +25,12 @@ define([
 		error  : false,
 
 
+		auth: Ember.inject.service(),
+
+		session: Ember.computed.alias( "auth.session" ),
+
 		init: function() {
 			this._super.apply( this, arguments );
-			set( this, "auth",     this.container.lookup( "record:auth" ) );
 			set( this, "settings", this.container.lookup( "record:settings" ) );
 		},
 
@@ -69,7 +72,7 @@ define([
 				    &&          !!get( this, "settings.player_reconnect" );
 			}),
 			new Parameter( "--player-no-close", "settings.player_no_close" ),
-			new Parameter( "--twitch-oauth-token", "auth.isLoggedIn", "auth.access_token" ),
+			new Parameter( "--twitch-oauth-token", "session.isLoggedIn", "session.access_token" ),
 			new Parameter( "--hls-live-edge", null, "settings.hls_live_edge" ),
 			new Parameter( "--hls-segment-threads", null, "settings.hls_segment_threads" )
 		],

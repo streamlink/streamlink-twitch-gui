@@ -1,22 +1,22 @@
 <div class="bigicon"><i class="fa fa-user"></i></div>
-{{#form-button action="signin" class="btn-signin" icon="fa-sign-in" disabled=auth_lock}}Sign in{{/form-button}}
+{{#form-button action="signin" targetObject=view class="btn-signin" icon="fa-sign-in" disabled=view.lock}}Sign in{{/form-button}}
 <footer>
 {{#if settings.advanced}}
-{{#if view.showTokenForm}}
+{{#if view.tokenForm}}
 <div class="input-group token-form">
 {{input type="text" action="inputAction" targetObject=view class="form-control" value=view.token placeholder="Insert access token"}}
 <span class="input-group-btn">
 {{form-button action="signinToken" targetObject=view class=view.tokenBtnClass icon=view.tokenBtnIcon iconanim=true}}
 </span>
 </div>
-{{#unless auth_failure}}
-<p class="hint">Log in to your Twitch.tv account by using an access token.<br>Make sure that it matches the following permissions:<br><em>{{view.auth_scope}}</em></p>
+{{#unless view.failure}}
+<p class="hint">Log in to your Twitch.tv account by using an access token.<br>Make sure that it matches the following permissions:<br><em>{{scope}}</em></p>
 {{/unless}}
 {{else}}
-{{#form-button action="showTokenForm" targetObject=view class="btn-token" icon="fa-key" disabled=auth_win_lock}}Use access token{{/form-button}}
+{{#form-button action="showTokenForm" targetObject=view class="btn-token" icon="fa-key" disabled=auth.window}}Use access token{{/form-button}}
 {{/if}}
 {{/if}}
-{{#if auth_failure}}
+{{#if view.failure}}
 <p class="fail">Authentication failed. Please try again.</p>
 {{/if}}
 </footer>
