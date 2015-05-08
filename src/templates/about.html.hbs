@@ -3,19 +3,19 @@
 <h3><i class="fa fa-desktop"></i> Livestreamer Twitch GUI</h3>
 <dl class="dl-horizontal">
 <dt>Homepage</dt>
-<dd>{{#external-link url=metadata.package.homepage}}{{metadata.package.homepage}}{{/external-link}}</dd>
+<dd>{{#external-link url=view.metadata.package.homepage}}{{view.metadata.package.homepage}}{{/external-link}}</dd>
 <dt>Author</dt>
-<dd>{{metadata.package.author}}</dd>
+<dd>{{view.metadata.package.author}}</dd>
 <dt>Contributors</dt>
-<dd><ul class="list">{{#each metadata.contributors as |contributor|}}
+<dd><ul class="list">{{#each view.metadata.contributors as |contributor|}}
 <li title="{{contributor.commits}} commits">{{contributor.name}}</li>
 {{/each}}</ul></dd>
 <dt>Version</dt>
-<dd>{{metadata.package.version}}</dd>
+<dd>{{view.metadata.package.version}}</dd>
 <dt>Built</dt>
-<dd>{{metadata.package.built}}</dd>
+<dd>{{view.metadata.package.built}}</dd>
 <dt>NW.js</dt>
-<dd>{{metadata.package.config.nw-js-version}}</dd>
+<dd>{{view.metadata.package.config.nw-js-version}}</dd>
 </dl>
 </article>
 <article>

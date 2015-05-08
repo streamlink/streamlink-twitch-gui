@@ -21,11 +21,13 @@ define([
 	    set   = Ember.set;
 
 	return Ember.Controller.extend( ChannelSettingsMixin, {
+		metadata: Ember.inject.service(),
+
 		needs: [ "livestreamer" ],
 
-		configBinding  : "metadata.package.config",
-		retriesBinding : "config.notification-retries",
-		intervalBinding: "config.notification-interval",
+		config  : Ember.computed.alias( "metadata.config" ),
+		retries : Ember.computed.alias( "config.notification-retries" ),
+		interval: Ember.computed.alias( "config.notification-interval" ),
 
 		// cache related properties
 		cacheDir: function() {

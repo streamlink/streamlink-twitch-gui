@@ -3,7 +3,6 @@ define([
 	"nwWindow",
 	"nwScreen",
 	"ember",
-	"./metadata",
 	"nwjs/shortcut",
 	"nwjs/tray",
 	"nwjs/menu"
@@ -12,7 +11,6 @@ define([
 	nwWindow,
 	nwScreen,
 	Ember,
-	metadata,
 	shortcut,
 	tray,
 	menu
@@ -128,9 +126,11 @@ define([
 		name: "nwjs",
 
 		initialize: function( container ) {
-			var displayName    = Ember.get( metadata, "package.config.display-name" );
-			var trayIconImg    = Ember.get( metadata, "package.config.tray-icon" );
-			var trayIconImgOSX = Ember.get( metadata, "package.config.tray-icon-osx" );
+			var metadata = container.lookup( "service:metadata" );
+
+			var displayName    = get( metadata, "config.display-name" );
+			var trayIconImg    = get( metadata, "config.tray-icon" );
+			var trayIconImgOSX = get( metadata, "config.tray-icon-osx" );
 
 			shortcut.create( displayName );
 			tray.init( displayName, trayIconImg, trayIconImgOSX );

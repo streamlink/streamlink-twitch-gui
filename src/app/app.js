@@ -97,6 +97,10 @@ define(function( require ) {
 		SelectView: require( "views/SelectView" ),
 
 
+		// Services
+		MetadataService: require( "services/MetadataService" ),
+
+
 		// Application
 		ApplicationRoute: require( "routes/ApplicationRoute" ),
 		ApplicationController: require( "controllers/ApplicationController" ),

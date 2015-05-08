@@ -21,7 +21,10 @@ define([
 
 
 	return Ember.Controller.extend( Ember.Evented, RetryTransitionMixin, {
+		metadata: Ember.inject.service(),
+
 		config: Ember.computed.readOnly( "metadata.package.config" ),
+
 		redirectEnabled: false,
 
 		auth_win: null,

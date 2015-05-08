@@ -65,6 +65,10 @@ define([
 
 
 	return Ember.Controller.extend( ChannelControllerMixin, ChannelSettingsMixin, {
+		metadata: Ember.inject.service(),
+
+		config: Ember.computed.alias( "metadata.config" ),
+
 		modalBtns: null,
 
 		active: null,

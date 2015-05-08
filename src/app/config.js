@@ -47,6 +47,7 @@ requirejs.config({
 		// Application paths
 		"root"        : "..",
 		"initializers": "initializers",
+		"services"    : "services",
 		"models"      : "models",
 		"views"       : "views",
 		"controllers" : "controllers",

@@ -3,6 +3,8 @@ define( [ "ember" ], function( Ember ) {
 	var get = Ember.get;
 
 	return Ember.Component.extend({
+		metadata: Ember.inject.service(),
+
 		tagName: "i",
 		classNameBindings: [ ":flag-icon", "flag" ],
 		attributeBindings: [ "title" ],
@@ -10,26 +12,24 @@ define( [ "ember" ], function( Ember ) {
 		lang: null,
 		type: null,
 
-		codes: function() {
-			return get(
-				this.container.lookup( "controller:application" ),
-				"metadata.package.config.language_codes"
-			);
-		}.property(),
+		codes: Ember.computed.alias( "metadata.config.language_codes" ),
 
 		flag: function() {
-			var	codes = get( this, "codes" ),
-				lang = get( this, "lang" );
+			var codes = get( this, "codes" );
+			var lang  = get( this, "lang" );
+
 			return codes[ lang ]
 				? "flag-icon-%@".fmt( codes[ lang ][ "flag" ] )
 				: null;
 		}.property( "lang" ),
 
 		title: function() {
-			var	codes = get( this, "codes" ),
-				lang = get( this, "lang" );
+			var codes = get( this, "codes" );
+			var lang  = get( this, "lang" );
+
 			if ( !codes[ lang ] ) { return; }
 			lang = codes[ lang ][ "lang" ];
+
 			switch ( get( this, "type" ) ) {
 				case "channel":
 					return "This channel is %@".fmt( lang );

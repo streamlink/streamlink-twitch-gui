@@ -4,7 +4,9 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 	    set = Ember.set;
 
 	return Ember.Mixin.create({
-		config: Ember.computed.readOnly( "metadata.package.config" ),
+		metadata: Ember.inject.service(),
+
+		config: Ember.computed.alias( "metadata.config" ),
 
 
 		checkUserFollowsChannel: function( channel ) {

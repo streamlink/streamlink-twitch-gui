@@ -3,14 +3,16 @@ define( [ "ember", "utils/semver" ], function( Ember, semver ) {
 	var get = Ember.get;
 
 	return Ember.Controller.extend({
-		packageBinding: "metadata.package",
-		versionBinding: "package.version",
+		metadata: Ember.inject.service(),
+
+		config : Ember.computed.alias( "metadata.config" ),
+		version: Ember.computed.alias( "metadata.package.version" ),
 
 		// check again in x days (time in ms)
 		time: function() {
-			var days = Number( get( this, "package.config.version-check-days" ) );
+			var days = Number( get( this, "config.version-check-days" ) );
 			return 1000 * 3600 * 24 * days;
-		}.property( "package.config.version-check-days" ),
+		}.property( "config.version-check-days" ),
 
 
 		check: function() {
