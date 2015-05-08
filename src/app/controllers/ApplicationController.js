@@ -3,17 +3,18 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 	var get = Ember.get;
 
 	return Ember.Controller.extend({
-		auth: Ember.inject.service( "auth" ),
+		auth        : Ember.inject.service(),
+		notification: Ember.inject.service(),
 
-		needs: [ "livestreamer", "notification" ],
+		needs: [ "livestreamer" ],
 
 		dev: DEBUG,
 
 		streamsLength: Ember.computed.readOnly( "controllers.livestreamer.model.length" ),
 
-		notif_enabled: Ember.computed.readOnly( "controllers.notification.enabled" ),
-		notif_running: Ember.computed.readOnly( "controllers.notification.running" ),
-		notif_error  : Ember.computed.readOnly( "controllers.notification.error" ),
+		notif_enabled: Ember.computed.readOnly( "notification.enabled" ),
+		notif_running: Ember.computed.readOnly( "notification.running" ),
+		notif_error  : Ember.computed.readOnly( "notification.error" ),
 
 		loginSuccess: Ember.computed.readOnly( "auth.session.isLoggedIn" ),
 		loginPending: Ember.computed.readOnly( "auth.session.isPending" ),

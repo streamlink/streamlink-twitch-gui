@@ -20,11 +20,10 @@ define([
 	    get   = Ember.get,
 	    set   = Ember.set;
 
-	return Ember.Controller.extend( ChannelSettingsMixin, {
+
+	return Ember.Service.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		auth    : Ember.inject.service(),
-
-		needs: [ "livestreamer" ],
 
 		config  : Ember.computed.alias( "metadata.config" ),
 		retries : Ember.computed.alias( "config.notification-retries" ),
@@ -66,6 +65,15 @@ define([
 				this.reset();
 			}
 		}.observes( "enabled" ).on( "init" ),
+
+
+		init: function() {
+			this._super.apply( this, arguments );
+			// FIXME: remove this and use service injection. requires ember-data upgrade
+			this.store = this.container.lookup( "store:main" );
+			// FIXME: remove this and use service injection
+			set( this, "settings", this.container.lookup( "record:settings" ) );
+		},
 
 
 		/**

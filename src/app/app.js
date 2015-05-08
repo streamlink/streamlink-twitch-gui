@@ -100,6 +100,7 @@ define(function( require ) {
 		// Services
 		MetadataService: require( "services/MetadataService" ),
 		AuthService: require( "services/AuthService" ),
+		NotificationService: require( "services/NotificationService" ),
 
 
 		// Application
@@ -128,8 +129,6 @@ define(function( require ) {
 		LivestreamerController: require( "controllers/LivestreamerController" ),
 		LivestreamerModalView: require( "views/LivestreamerModalView" ),
 		LivestreamerModalTemplate: require( "text!templates/modals/livestreamer.html.hbs" ),
-
-		NotificationController: require( "controllers/NotificationController" ),
 
 
 		// Components

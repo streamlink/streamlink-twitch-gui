@@ -3,12 +3,11 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 	var get = Ember.get;
 
 	return Ember.Controller.extend({
-		auth: Ember.inject.service(),
+		auth        : Ember.inject.service(),
+		notification: Ember.inject.service(),
 
-		needs: [ "notification" ],
-
-		notif_running: Ember.computed.readOnly( "controllers.notification.running" ),
-		notif_error  : Ember.computed.readOnly( "controllers.notification.error" ),
+		notif_running: Ember.computed.readOnly( "notification.running" ),
+		notif_error  : Ember.computed.readOnly( "notification.error" ),
 
 		scope: function() {
 			return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
@@ -23,7 +22,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			},
 
 			"notifications_restart": function() {
-				get( this, "controllers.notification" ).start();
+				get( this, "notification" ).start();
 			},
 
 			"copyToken": function( callback ) {

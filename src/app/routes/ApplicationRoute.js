@@ -6,8 +6,6 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 		init: function() {
 			this._super();
 			this.controllerFor( "versioncheck" );
-			this.controllerFor( "userAuth" );
-			this.controllerFor( "notification" );
 		},
 
 		actions: {
