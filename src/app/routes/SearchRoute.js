@@ -1,8 +1,8 @@
 define([
 	"ember",
-	"routes/InfiniteScrollRouteMixin",
+	"mixins/InfiniteScrollRouteMixin",
 	"utils/preload"
-], function( Ember, InfiniteScroll, preload ) {
+], function( Ember, InfiniteScrollRouteMixin, preload ) {
 
 	var get = Ember.get,
 	    set = Ember.set;
@@ -12,7 +12,7 @@ define([
 	}
 
 
-	return Ember.Route.extend( InfiniteScroll, {
+	return Ember.Route.extend( InfiniteScrollRouteMixin, {
 		contentPath: "controller.model.streams",
 
 		itemSelector: ".stream-component",

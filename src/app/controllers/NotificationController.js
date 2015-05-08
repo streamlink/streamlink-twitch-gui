@@ -1,7 +1,7 @@
 define([
 	"nwWindow",
 	"ember",
-	"controllers/ChannelSettingsMixin",
+	"mixins/ChannelSettingsMixin",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
 	"utils/fs/clearfolder"

@@ -1,11 +1,11 @@
 define([
 	"ember",
-	"controllers/ChannelControllerMixin"
-], function( Ember, ChannelControllerMixin ) {
+	"mixins/ChannelMixin"
+], function( Ember, ChannelMixin ) {
 
 	var get = Ember.get;
 
-	return Ember.Controller.extend( ChannelControllerMixin, {
+	return Ember.Controller.extend( ChannelMixin, {
 		stream : Ember.computed.alias( "model.stream" ),
 		channel: Ember.computed.alias( "model.channel" ),
 

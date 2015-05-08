@@ -1,13 +1,18 @@
 define([
 	"ember",
 	"routes/UserIndexRoute",
-	"routes/InfiniteScrollRouteMixin",
+	"mixins/InfiniteScrollRouteMixin",
 	"utils/preload"
-], function( Ember, UserIndexRoute, InfiniteScroll, preload ) {
+], function(
+	Ember,
+	UserIndexRoute,
+	InfiniteScrollRouteMixin,
+	preload
+) {
 
 	var get = Ember.get;
 
-	return UserIndexRoute.extend( InfiniteScroll, {
+	return UserIndexRoute.extend( InfiniteScrollRouteMixin, {
 		itemSelector: ".stream-component",
 
 		model: function() {

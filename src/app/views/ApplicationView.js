@@ -1,9 +1,14 @@
 define([
 	"ember",
-	"text!templates/application.html.hbs",
 	"gui/selectable",
-	"gui/smoothscroll"
-], function( Ember, template, guiSelectable, guiSmoothscroll ) {
+	"gui/smoothscroll",
+	"text!templates/application.html.hbs"
+], function(
+	Ember,
+	guiSelectable,
+	guiSmoothscroll,
+	template
+) {
 
 	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),

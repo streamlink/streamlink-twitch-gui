@@ -1,10 +1,10 @@
 define([
 	"ember",
-	"views/PreviewImageViewMixin",
+	"mixins/PreviewImageViewMixin",
 	"text!templates/components/game.html.hbs"
-], function( Ember, PreviewImage, template ) {
+], function( Ember, PreviewImageViewMixin, template ) {
 
-	return Ember.Component.extend( PreviewImage, {
+	return Ember.Component.extend( PreviewImageViewMixin, {
 		layout: Ember.HTMLBars.compile( template ),
 		tagName: "li",
 		classNames: [ "game-component" ],

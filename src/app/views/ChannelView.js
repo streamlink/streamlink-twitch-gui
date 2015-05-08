@@ -1,6 +1,6 @@
 define([
 	"ember",
-	"views/PreviewImageViewMixin",
+	"mixins/PreviewImageViewMixin",
 	"text!templates/channel/channel.html.hbs"
 ], function( Ember, PreviewImageViewMixin, template ) {
 

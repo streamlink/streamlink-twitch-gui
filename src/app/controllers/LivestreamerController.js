@@ -2,9 +2,8 @@ define([
 	"nwGui",
 	"nwWindow",
 	"ember",
-	"controllers/ChannelControllerMixin",
-	"controllers/ChannelSettingsMixin",
-	"models/Livestreamer",
+	"mixins/ChannelMixin",
+	"mixins/ChannelSettingsMixin",
 	"utils/fs/which",
 	"utils/fs/stat",
 	"utils/semver"
@@ -12,9 +11,8 @@ define([
 	nwGui,
 	nwWindow,
 	Ember,
-	ChannelControllerMixin,
+	ChannelMixin,
 	ChannelSettingsMixin,
-	Livestreamer,
 	which,
 	stat,
 	semver
@@ -64,7 +62,7 @@ define([
 	}
 
 
-	return Ember.Controller.extend( ChannelControllerMixin, ChannelSettingsMixin, {
+	return Ember.Controller.extend( ChannelMixin, ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 
 		config: Ember.computed.alias( "metadata.config" ),

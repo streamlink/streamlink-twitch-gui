@@ -1,9 +1,14 @@
 define([
 	"ember",
-	"views/PreviewImageViewMixin",
-	"views/ChannelViewMixin",
+	"mixins/PreviewImageViewMixin",
+	"mixins/ChannelViewMixin",
 	"text!templates/channel/index.html.hbs"
-], function( Ember, PreviewImageViewMixin, ChannelViewMixin, template ) {
+], function(
+	Ember,
+	PreviewImageViewMixin,
+	ChannelViewMixin,
+	template
+) {
 
 	return Ember.View.extend( PreviewImageViewMixin, ChannelViewMixin, {
 		template: Ember.HTMLBars.compile( template ),

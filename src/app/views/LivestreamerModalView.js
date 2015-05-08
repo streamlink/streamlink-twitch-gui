@@ -1,9 +1,14 @@
 define([
 	"ember",
-	"views/ChannelViewMixin",
 	"views/ModalView",
+	"mixins/ChannelViewMixin",
 	"text!templates/modals/layouts/livestreamer.html.hbs"
-], function( Ember, ChannelViewMixin, ModalView, layout ) {
+], function(
+	Ember,
+	ModalView,
+	ChannelViewMixin,
+	layout
+) {
 
 	return ModalView.extend( ChannelViewMixin, {
 		layout: Ember.HTMLBars.compile( layout ),

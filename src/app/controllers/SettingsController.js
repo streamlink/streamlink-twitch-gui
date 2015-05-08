@@ -1,6 +1,6 @@
 define([
 	"ember",
-	"controllers/RetryTransitionMixin"
+	"mixins/RetryTransitionMixin"
 ], function( Ember, RetryTransitionMixin ) {
 
 	var get = Ember.get,
