@@ -32,7 +32,7 @@ define( [ "ember" ], function( Ember ) {
 			}
 
 			// login not pending?
-			if ( !get( auth, "session.isPending" ) ) {
+			if ( get( auth, "session" ) && !get( auth, "session.isPending" ) ) {
 				redirect();
 
 			} else {
