@@ -486,10 +486,10 @@ define([
 			},
 
 			"close": function() {
-				run.next( this, function() {
+				this.send( "closeModal" );
+				run.schedule( "destroy", this, function() {
 					set( this, "active", null );
 				});
-				this.send( "closeModal" );
 			},
 
 			"shutdown": function() {
