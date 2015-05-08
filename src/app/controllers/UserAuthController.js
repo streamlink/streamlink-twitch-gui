@@ -1,31 +1,31 @@
 define([
 	"nwGui",
 	"nwWindow",
+	"nwjs/redirect",
+	"nwjs/cookies",
 	"ember",
-	"controllers/RetryTransitionMixin"
-], function( nwGui, nwWindow, Ember, RetryTransitionMixin ) {
+	"controllers/RetryTransitionMixin",
+	"utils/contains"
+], function(
+	nwGui,
+	nwWindow,
+	redirect,
+	cookies,
+	Ember,
+	RetryTransitionMixin,
+	contains
+) {
 
 	var get   = Ember.get,
 	    set   = Ember.set;
 
-	var reURI   = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
 	var reToken = /^[a-z\d]{30}$/i;
-
-
-	function containsAll() {
-		for ( var i = 0, l = arguments.length; i < l; i++ ) {
-			if ( this.indexOf( arguments[ i ] ) < 0 ) { return false; }
-		}
-		return true;
-	}
 
 
 	return Ember.Controller.extend( Ember.Evented, RetryTransitionMixin, {
 		metadata: Ember.inject.service(),
 
 		config: Ember.computed.readOnly( "metadata.package.config" ),
-
-		redirectEnabled: false,
 
 		auth_win: null,
 		auth_lock: false,
@@ -46,22 +46,6 @@ define([
 				.replace( "{redirect-uri}", encodeURIComponent( redirecturi ) )
 				.replace( "{scope}", scope.join( "+" ) );
 		}.property( "config", "auth_scope" ),
-
-
-		enableRedirect: function() {
-			if ( this.redirectEnabled ) { return; }
-
-			var src = reURI.exec( get( this, "config.twitch-oauth-base-uri" ) ),
-			    dst = reURI.exec( get( this, "config.twitch-oauth-redirect-uri" ) );
-
-			if ( !src || !dst ) {
-				throw new Error( "Invalid oauth parameters" );
-			}
-
-			// enable the redirect from https://api.twitch.tv to app://livestreamer-twitch-gui
-			nwGui.App.addOriginAccessWhitelistEntry( src[0], dst[1], dst[2], true );
-			this.redirectEnabled = true;
-		},
 
 
 		check: function() {
@@ -155,7 +139,7 @@ define([
 			var expected = get( this, "auth_scope" );
 
 			return scope instanceof Array
-			    && containsAll.apply( scope, expected );
+			    && contains.all.apply( scope, expected );
 		},
 
 		/**
@@ -245,13 +229,17 @@ define([
 				function onClosed() {
 					set( self, "auth_win", null );
 					delete window.OAUTH_CALLBACK;
-					nwWindow.cookiesRemoveAll();
+					cookies.removeAll();
 				}
 
 				// prepare...
 				set( self, "auth_failure", false );
-				self.enableRedirect();
-				nwWindow.cookiesRemoveAll();
+				// enable the redirect from https://api.twitch.tv to app://livestreamer-twitch-gui
+				redirect.enable(
+					get( this, "config.twitch-oauth-base-uri" ),
+					get( this, "config.twitch-oauth-redirect-uri" )
+				);
+				cookies.removeAll();
 				window.OAUTH_CALLBACK = callback;
 
 				// open window

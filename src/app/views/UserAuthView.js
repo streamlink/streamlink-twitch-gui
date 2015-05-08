@@ -1,20 +1,11 @@
 define([
 	"ember",
+	"utils/wait",
 	"text!templates/user/auth.html.hbs"
-], function( Ember, template ) {
+], function( Ember, wait, template ) {
 
 	var get = Ember.get,
 	    set = Ember.setProperties;
-
-	function wait( time ) {
-		return function( data ) {
-			var defer = Promise.defer();
-			setTimeout(function() {
-				defer.resolve( data );
-			}, time );
-			return defer.promise;
-		};
-	}
 
 	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),

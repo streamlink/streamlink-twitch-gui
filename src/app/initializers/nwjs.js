@@ -5,7 +5,8 @@ define([
 	"ember",
 	"nwjs/shortcut",
 	"nwjs/tray",
-	"nwjs/menu"
+	"nwjs/menu",
+	"utils/contains"
 ], function(
 	nwGui,
 	nwWindow,
@@ -13,7 +14,8 @@ define([
 	Ember,
 	shortcut,
 	tray,
-	menu
+	menu,
+	contains
 ) {
 
 	var get = Ember.get;
@@ -55,7 +57,7 @@ define([
 		var argv = nwGui.App.fullArgv;
 
 		// hide in tray
-		if ( contains.call( argv, "--tray", "--hide", "--hidden" ) ) {
+		if ( contains.some.call( argv, "--tray", "--hide", "--hidden" ) ) {
 			nwWindow.setShowInTray( true, get( settings, "isVisibleInTaskbar" ) );
 			// remove the tray icon after clicking it if it's disabled in the settings
 			if ( !get( settings, "isVisibleInTray" ) ) {
@@ -66,7 +68,7 @@ define([
 		}
 
 		// minimize window
-		if ( contains.call( argv, "--min", "--minimize", "--minimized" ) ) {
+		if ( contains.some.call( argv, "--min", "--minimize", "--minimized" ) ) {
 			nwWindow.toggleMinimize( false );
 		}
 
@@ -109,19 +111,6 @@ define([
 	};
 
 
-	nwWindow.cookiesRemoveAll = function cookiesRemoveAll() {
-		var Cookies = nwWindow.cookies;
-		Cookies.getAll( {}, function( cookies ) {
-			[].forEach.call( cookies, function( c ) {
-				Cookies.remove({
-					url: "http" + ( c.secure ? "s" : "" ) + "://" + c.domain + c.path,
-					name: c.name
-				});
-			});
-		});
-	};
-
-
 	Ember.Application.initializer({
 		name: "nwjs",
 
@@ -155,15 +144,5 @@ define([
 			});
 		}
 	});
-
-
-	function contains() {
-		for ( var e, j, i = 0, l = this.length << 0, n = arguments.length; i < l; ) {
-			for ( e = this[i++], j = 0; j < n; ) {
-				if ( e === arguments[j++] ) { return true; }
-			}
-		}
-		return false;
-	}
 
 });
