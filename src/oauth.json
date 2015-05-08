@@ -2,7 +2,7 @@
 	"window": {
 		"nodejs": false,
 		"title": "Authenticate",
-		"icon": "img/icon-app.png",
+		"icon": "img/icon-256.png",
 		"position": "center",
 		"frame": true,
 		"toolbar": false,
