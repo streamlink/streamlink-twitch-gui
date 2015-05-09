@@ -25,8 +25,8 @@ define([
 	return Ember.Service.extend( Ember.Evented, {
 		metadata: Ember.inject.service(),
 
-		config  : Ember.computed.alias( "metadata.config" ),
-		scope   : Ember.computed.alias( "config.twitch-oauth-scope" ),
+		config: Ember.computed.alias( "metadata.config" ),
+		scope : Ember.computed.alias( "config.twitch-oauth-scope" ),
 
 		session: null,
 
@@ -63,6 +63,9 @@ define([
 					var token = get( session, "access_token" );
 					self.login( token, true )
 						.catch(function() {});
+
+					// trigger event after calling login, so `isPending` can be set first
+					self.trigger( "initialized" );
 				});
 		},
 

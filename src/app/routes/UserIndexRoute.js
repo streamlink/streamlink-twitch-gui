@@ -31,22 +31,30 @@ define( [ "ember" ], function( Ember ) {
 				}
 			}
 
-			// login not pending?
-			if ( get( auth, "session" ) && !get( auth, "session.isPending" ) ) {
-				redirect();
+			function check() {
+				// login not pending?
+				if ( !get( auth, "session.isPending" ) ) {
+					redirect();
+				} else {
+					// show loading screen
+					self.intermediateTransitionTo( "loading" );
 
+					// unregister onLogin callback as soon as the user switches the route
+					// before the callback has fired
+					self.router.one( "didTransition", function() {
+						auth.off( "login", onLogin );
+					});
+
+					// register callback once
+					auth.one( "login", onLogin );
+				}
+			}
+
+			// session record not yet loaded?
+			if ( !get( auth, "session" ) ) {
+				auth.one( "initialized", check );
 			} else {
-				// show loading screen
-				self.intermediateTransitionTo( "loading" );
-
-				// unregister onLogin callback as soon as the user switches the route
-				// before the callback has fired
-				self.router.one( "didTransition", function() {
-					auth.off( "login", self, onLogin );
-				});
-
-				// register callback once
-				auth.one( "login", self, onLogin );
+				check();
 			}
 		}
 	});
