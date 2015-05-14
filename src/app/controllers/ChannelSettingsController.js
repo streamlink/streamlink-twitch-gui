@@ -84,18 +84,20 @@ define([
 			if ( !isEmpty ) {
 				// save the changes
 				return record.save();
+
+			} else if ( get( record, "isNew" ) ) {
+				// don't do anything here
+				return Promise.resolve();
+
 			} else {
-				if ( get( record, "isNew" ) ) {
-					// don't do anything here
-					return Promise.resolve();
-				} else {
-					// tell the adapter to remove the record
-					return record.destroyRecord()
-						.then(function() {
-							// but return back to `root.loaded.created.uncommitted`
-							record.transitionTo( "loaded.created.uncommitted" );
-						});
-				}
+				// tell the adapter to remove the record
+				return record.destroyRecord()
+					.then(function() {
+						// but return back to `root.loaded.created.uncommitted`.
+						// At this point, the record has already been removed from the store, but
+						// saving it again later will work just fine...
+						record.transitionTo( "loaded.created.uncommitted" );
+					});
 			}
 		},
 

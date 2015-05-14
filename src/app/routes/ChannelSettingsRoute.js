@@ -39,6 +39,9 @@ define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 						previousTransition: transition
 					});
 
+				} else {
+					// don't keep the channelSettings records in cache
+					this.store.unloadAll( "channelSettings" );
 				}
 			}
 		}
