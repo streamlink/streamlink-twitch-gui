@@ -4,6 +4,7 @@ define([
 	"store/AdapterMixin"
 ], function( Ember, DS, AdapterMixin ) {
 
+	var get = Ember.get;
 	var reURLFragment = /^:(.+)$/;
 
 	return DS.RESTAdapter.extend( AdapterMixin, {
@@ -39,14 +40,30 @@ define([
 			return {};
 		},
 
-		buildURLFragments: function( url ) {
+
+		/**
+		 * Dynamic URL fragments
+		 * @param {DS.Model} type
+		 * @param {string?} id
+		 * @returns {string[]}
+		 */
+		buildURLFragments: function( type, id ) {
 			var adapter = this;
-			return this._super( url ).map(function( frag ) {
+			var idFound = false;
+
+			var path = type.toString();
+			var url  = path.split( "/" );
+
+			url = url.map(function( frag ) {
 				return frag.replace( reURLFragment, function( _, key ) {
 					switch ( key ) {
+						case "id":
+							if ( Ember.isNone( id ) ) { throw new Error( "Unknown ID" ); }
+							idFound = true;
+							return id;
 						// a user fragment requires the user to be logged in
 						case "user":
-							var user = adapter.get( "auth.session.user_name" );
+							var user = get( adapter, "auth.session.user_name" );
 							if ( !user ) { throw new Error( "Unknown user" ); }
 							return user;
 						// unknown fragment
@@ -55,6 +72,12 @@ define([
 					}
 				});
 			});
+
+			if ( !idFound && !Ember.isNone( id ) ) {
+				url.push( id );
+			}
+
+			return url;
 		}
 	});
 

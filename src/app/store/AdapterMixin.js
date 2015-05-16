@@ -1,8 +1,8 @@
 define( [ "ember" ], function( Ember ) {
 
-	var get   = Ember.get,
-	    push  = [].push,
-	    reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
+	var get   = Ember.get;
+	var push  = [].push;
+	var reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
 
 
 	/**
@@ -11,85 +11,109 @@ define( [ "ember" ], function( Ember ) {
 	 */
 	return Ember.Mixin.create( Ember.Evented, {
 		find: function( store, type, id, snapshot ) {
-			return this.ajax( this.buildURL( type, id, snapshot ), "GET" );
+			var url = this.buildURL( type, id, snapshot, "find" );
+			return this.ajax( url, "GET" );
 		},
 
 		findAll: function( store, type, sinceToken ) {
+			var url   = this.buildURL( type, null, null, "findAll" );
 			var query = sinceToken ? { since: sinceToken } : undefined;
-			return this.ajax( this.buildURL( type ), "GET", { data: query } );
+			return this.ajax( url, "GET", { data: query } );
 		},
 
 		findQuery: function( store, type, query ) {
-			return this.ajax( this.buildURL( type ), "GET", { data: query } );
+			var url = this.buildURL( type, query, null, "findQuery" );
+			query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
+			return this.ajax( url, "GET", { data: query } );
 		},
 
 		createRecordMethod: "POST",
 		createRecord: function( store, type, snapshot ) {
-			return this.ajax(
-				this.buildURL( type, snapshot.id, snapshot ),
-				get( this, "createRecordMethod" ),
-				this.createRecordData( store, type, snapshot )
-			)
+			var self   = this;
+			var url    = self.buildURL( type, null, snapshot, "createRecord" );
+			var method = get( self, "createRecordMethod" );
+			var data   = self.createRecordData( store, type, snapshot );
+			return self.ajax( url, method, data )
 				.then(function( data ) {
-					this.trigger( "createRecord", store, type, snapshot );
+					self.trigger( "createRecord", store, type, snapshot );
 					return data;
-				}.bind( this ) );
+				});
 		},
 		createRecordData: function( store, type, snapshot ) {
-			var data = {},
-			    serializer = store.serializerFor( type.typeKey );
+			var data = {};
+			var serializer = store.serializerFor( type.typeKey );
 			serializer.serializeIntoHash( data, type, snapshot, { includeId: true } );
 			return { data: data };
 		},
 
 		updateRecordMethod: "PUT",
 		updateRecord: function( store, type, snapshot ) {
-			return this.ajax(
-				this.buildURL( type, snapshot.id, snapshot ),
-				get( this, "updateRecordMethod" ),
-				this.updateRecordData( store, type, snapshot )
-			)
+			var self   = this;
+			var url    = self.buildURL( type, snapshot.id, snapshot, "updateRecord" );
+			var method = get( self, "updateRecordMethod" );
+			var data   = self.updateRecordData( store, type, snapshot );
+			return self.ajax( url, method, data )
 				.then(function( data ) {
-					this.trigger( "updateRecord", store, type, snapshot );
+					self.trigger( "updateRecord", store, type, snapshot );
 					return data;
-				}.bind( this ) );
+				});
 		},
 		updateRecordData: function( store, type, snapshot ) {
-			var data = {},
-			    serializer = store.serializerFor( type.typeKey );
+			var data = {};
+			var serializer = store.serializerFor( type.typeKey );
 			serializer.serializeIntoHash( data, type, snapshot );
 			return { data: data };
 		},
 
 		deleteRecord: function( store, type, snapshot ) {
-			return this.ajax(
-				this.buildURL( type, snapshot.id, snapshot ),
-				"DELETE"
-			)
+			var self = this;
+			var url  = self.buildURL( type, snapshot.id, snapshot, "deleteRecord" );
+			return self.ajax( url, "DELETE" )
 				.then(function( data ) {
-					this.trigger( "deleteRecord", store, type, snapshot );
+					self.trigger( "deleteRecord", store, type, snapshot );
 					return data;
-				}.bind( this ) );
+				});
 		},
 
-		buildURL: function( type, id ) {
-			var host = get( this, "host" ),
-			    ns   = get( this, "namespace" ),
-			    url  = [ host ];
+
+		urlForCreateRecord: function( typeKey, snapshot ) {
+			// Why does Ember-Data do this?
+			// the id is missing on BuildURLMixin.urlForCreateRecord
+			return this._buildURL( typeKey, snapshot.id );
+		},
+
+		/**
+		 * Custom buildURL method with type instead of typeKey
+		 * @param {DS.Model} type
+		 * @param {string?} id
+		 * @returns {string}
+		 */
+		_buildURL: function( type, id ) {
+			var host = get( this, "host" );
+			var ns   = get( this, "namespace" );
+			var url  = [ host ];
 
 			// append the adapter specific namespace
-			if (   ns ) { push.call( url, ns ); }
+			if ( ns ) { push.call( url, ns ); }
 			// append the type fragments (and process the dynamic ones)
-			if ( type ) { push.apply( url, this.buildURLFragments( type.toString() ) ); }
-			// append the type's ID at the end
-			if (   id ) { push.call( url, id ); }
+			push.apply( url, this.buildURLFragments( type, id ) );
 
 			return url.join( "/" );
 		},
 
-		buildURLFragments: function( url ) {
-			return url.split( "/" );
+		/**
+		 * Custom method for building URL fragments
+		 * @param {DS.Model} type
+		 * @param {string?} id
+		 * @returns {string[]}
+		 */
+		buildURLFragments: function( type, id ) {
+			var path = type.toString();
+			var url  = path.split( "/" );
+			if ( !Ember.isNone( id ) ) { push.call( url, id ); }
+			return url;
 		},
+
 
 		ajax: function( url, type, options ) {
 			var adapter = this;
