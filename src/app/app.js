@@ -215,7 +215,9 @@ define(function( require ) {
 
 			// and emit the ready event to the nwjs window
 			require( "nwWindow" ).emit( "ready", settings );
-		}
+		},
+
+		toString: function() { return "App"; }
 
 	});
 
