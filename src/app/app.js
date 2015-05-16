@@ -58,6 +58,9 @@ define(function( require ) {
 
 
 		// Models: twitch
+		TwitchToken: require( "models/twitch/Token" ),
+		TwitchTokenSerializer: require( "models/twitch/TokenSerializer" ),
+
 		TwitchGame: require( "models/twitch/Game" ),
 		TwitchGameSerializer: require( "models/twitch/GameSerializer" ),
 		TwitchStream: require( "models/twitch/Stream" ),
@@ -69,8 +72,6 @@ define(function( require ) {
 		TwitchImage: require( "models/twitch/Image" ),
 		TwitchImageSerializer: require( "models/twitch/ImageSerializer" ),
 
-		TwitchToken: require( "models/twitch/Token" ),
-		TwitchTokenSerializer: require( "models/twitch/TokenSerializer" ),
 		TwitchGamesTop: require( "models/twitch/GamesTop" ),
 		TwitchGamesTopSerializer: require( "models/twitch/GamesTopSerializer" ),
 		TwitchStreamsSummary: require( "models/twitch/StreamsSummary" ),
@@ -79,12 +80,14 @@ define(function( require ) {
 		TwitchStreamsFeaturedSerializer: require( "models/twitch/StreamsFeaturedSerializer" ),
 		TwitchStreamsFollowed: require( "models/twitch/StreamsFollowed" ),
 		TwitchStreamsFollowedSerializer: require( "models/twitch/StreamsFollowedSerializer" ),
+
 		TwitchSearchGame: require( "models/twitch/SearchGame" ),
 		TwitchSearchGameSerializer: require( "models/twitch/SearchGameSerializer" ),
 		TwitchSearchStream: require( "models/twitch/SearchStream" ),
 		TwitchSearchStreamSerializer: require( "models/twitch/SearchStreamSerializer" ),
 		TwitchSearchChannel: require( "models/twitch/SearchChannel" ),
 		TwitchSearchChannelSerializer: require( "models/twitch/SearchChannelSerializer" ),
+
 		TwitchUserFollowsChannel: require( "models/twitch/UserFollowsChannel" ),
 		TwitchUserFollowsChannelSerializer: require( "models/twitch/UserFollowsChannelSerializer" ),
 		TwitchUserSubscription: require( "models/twitch/UserSubscription" ),
