@@ -4,7 +4,7 @@ define( [ "ember-data" ], function( DS ) {
 		channels: DS.attr( "number" ),
 		viewers: DS.attr( "number" )
 	}).reopenClass({
-		toString: function() { return "streams/summary"; }
+		toString: function() { return "kraken/streams/summary"; }
 	});
 
 });

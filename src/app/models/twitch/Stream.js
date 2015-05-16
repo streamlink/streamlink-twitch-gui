@@ -24,7 +24,7 @@ define( [ "ember-data", "moment" ], function( DS, moment ) {
 		}.property( "viewers" )
 
 	}).reopenClass({
-		toString: function() { return "streams"; }
+		toString: function() { return "kraken/streams"; }
 	});
 
 });

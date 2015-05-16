@@ -6,7 +6,7 @@ define( [ "ember-data" ], function( DS ) {
 		created_at   : DS.attr( "date" ),
 		notifications: DS.attr( "boolean" )
 	}).reopenClass({
-		toString: function() { return "users/:user/follows/channels"; }
+		toString: function() { return "kraken/users/:user/follows/channels"; }
 	});
 
 });

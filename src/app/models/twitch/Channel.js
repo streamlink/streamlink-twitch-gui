@@ -77,7 +77,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		isFollowingLocked : false
 
 	}).reopenClass({
-		toString: function() { return "channels"; }
+		toString: function() { return "kraken/channels"; }
 	});
 
 });

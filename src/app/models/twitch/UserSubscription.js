@@ -5,7 +5,7 @@ define( [ "ember-data" ], function( DS ) {
 		channel   : DS.attr(),
 		created_at: DS.attr( "date" )
 	}).reopenClass({
-		toString: function() { return "users/:user/subscriptions"; }
+		toString: function() { return "kraken/users/:user/subscriptions"; }
 	});
 
 });

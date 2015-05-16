@@ -9,7 +9,7 @@ define( [ "ember-data" ], function( DS ) {
 		text: DS.attr( "string" ),
 		title: DS.attr( "string" )
 	}).reopenClass({
-		toString: function() { return "streams/featured"; }
+		toString: function() { return "kraken/streams/featured"; }
 	});
 
 });

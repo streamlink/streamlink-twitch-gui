@@ -7,7 +7,7 @@ define( [ "ember-data" ], function( DS ) {
 		name: DS.attr( "string" ),
 		popularity: DS.attr( "number" )
 	}).reopenClass({
-		toString: function() { return "games"; }
+		toString: function() { return "kraken/games"; }
 	});
 
 });

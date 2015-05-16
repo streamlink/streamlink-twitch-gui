@@ -5,7 +5,7 @@ define( [ "ember-data" ], function( DS ) {
 		game: DS.belongsTo( "twitchGame" ),
 		viewers: DS.attr( "number" )
 	}).reopenClass({
-		toString: function() { return "games/top"; }
+		toString: function() { return "kraken/games/top"; }
 	});
 
 });

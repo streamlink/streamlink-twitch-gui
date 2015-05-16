@@ -6,7 +6,7 @@ define( [ "ember-data" ], function( DS ) {
 		user_name: DS.attr( "string" ),
 		valid: DS.attr( "boolean" )
 	}).reopenClass({
-		toString: function() { return ""; }
+		toString: function() { return "kraken/"; }
 	});
 
 });

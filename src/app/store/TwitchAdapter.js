@@ -10,7 +10,7 @@ define([
 		auth: Ember.inject.service(),
 
 		host: "https://api.twitch.tv",
-		namespace: "kraken",
+		namespace: "",
 		headers: {
 			Accept: "application/vnd.twitchtv.v3+json"
 		},
