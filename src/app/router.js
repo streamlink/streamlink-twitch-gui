@@ -22,19 +22,13 @@ define( [ "ember" ], function( Ember ) {
 			this.route( "settings" );
 		});
 
-		this.resource( "videos", function() {
-			this.route( "video", { path: "/:video" } );
-		});
-
 		this.resource( "user", function() {
 			this.route( "auth" );
-			this.route( "following" );
 			this.route( "subscriptions" );
+			this.route( "followedStreams" );
+			this.route( "followedChannels" );
+			this.route( "followedGames" );
 		});
-
-		this.route( "history" );
-
-		this.route( "mostviewed" );
 
 		this.route( "settings" );
 

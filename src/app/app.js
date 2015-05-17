@@ -78,6 +78,7 @@ define(function( require ) {
 		TwitchStreamsSummarySerializer: require( "models/twitch/StreamsSummarySerializer" ),
 		TwitchStreamsFeatured: require( "models/twitch/StreamsFeatured" ),
 		TwitchStreamsFeaturedSerializer: require( "models/twitch/StreamsFeaturedSerializer" ),
+
 		TwitchStreamsFollowed: require( "models/twitch/StreamsFollowed" ),
 		TwitchStreamsFollowedSerializer: require( "models/twitch/StreamsFollowedSerializer" ),
 
@@ -200,8 +201,8 @@ define(function( require ) {
 		UserAuthRoute: require( "routes/UserAuthRoute" ),
 		UserAuthController: require( "controllers/UserAuthController" ),
 		UserAuthView: require( "views/UserAuthView" ),
-		UserFollowingRoute: require( "routes/UserFollowingRoute" ),
-		UserFollowingView: require( "views/UserFollowingView" ),
+		UserFollowedStreamsRoute: require( "routes/UserFollowedStreamsRoute" ),
+		UserFollowedStreamsView: require( "views/UserFollowedStreamsView" ),
 
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
