@@ -1,0 +1,19 @@
+<header>
+<h2>Followed channels</h2>
+{{settings-bar targetObject=this btnHomepage=true}}
+</header>
+{{#if content.length}}
+<ul class="content-list">
+{{#each model as |channel|}}
+{{channel-item channel=channel}}
+{{/each}}
+</ul>
+{{infinite-scroll}}
+{{else}}
+<div class="content-empty">
+<p>You're not following any channels.</p>
+<ul class="fa-ul list-empty">
+<li>{{#link-to "channels"}}<i class="fa fa-li fa-caret-right"></i>Watch top channels{{/link-to}}</li>
+</ul>
+</div>
+{{/if}}

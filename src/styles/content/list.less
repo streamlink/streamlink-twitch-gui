@@ -171,8 +171,15 @@
 	display: flex;
 	flex-flow: row nowrap;
 	width: 50%;
+	min-height: 91px;
 	margin-bottom: 1.5em;
 	float: left;
+
+	// no dynamic columns for this component
+	// this media query is required by InfiniteScrollRouteMixin, though
+	@media (min-width: 1px) {
+		width: 50%;
+	}
 
 	> .logo {
 		@size: 6.5em;
