@@ -1,26 +1,27 @@
 define( [ "ember" ], function( Ember ) {
 
-	var	get = Ember.get,
-		set = Ember.set;
+	var get = Ember.get,
+	    set = Ember.set;
 
 
-	var	CSSMediaRule		= window.CSSMediaRule,
-		CSSStyleRule		= window.CSSStyleRule,
-		reMinWidth			= /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/,
-		cachedMinWidths		= {},
-		cssMinWidthRules	= [].filter.call( document.styleSheets[0].rules, function( rule ) {
-			return	rule instanceof CSSMediaRule
-				&&	rule.media.length === 1
-				&&	reMinWidth.test( rule.media[0] )
-				&&	rule.cssRules.length > 0;
-		}),
-		cachedMinHeights	= [].filter.call( document.styleSheets[0].rules, function( rule ) {
-			return	rule instanceof CSSStyleRule
-				&&	rule.style.minHeight !== "";
-		}).reduce(function( cache, rule ) {
-			cache[ rule.selectorText ] = parseInt( rule.style.minHeight );
-			return cache;
-		}, {} );
+	var CSSMediaRule     = window.CSSMediaRule,
+	    CSSStyleRule     = window.CSSStyleRule,
+	    reMinWidth       = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/,
+	    cachedMinWidths  = {};
+
+	var cssMinWidthRules = [].filter.call( document.styleSheets[0].rules, function( rule ) {
+		return rule instanceof CSSMediaRule
+		    && rule.media.length === 1
+		    && reMinWidth.test( rule.media[0] )
+		    && rule.cssRules.length > 0;
+	});
+	var cachedMinHeights = [].filter.call( document.styleSheets[0].rules, function( rule ) {
+		return rule instanceof CSSStyleRule
+		    && rule.style.minHeight !== "";
+	}).reduce(function( cache, rule ) {
+		cache[ rule.selectorText ] = parseInt( rule.style.minHeight );
+		return cache;
+	}, {} );
 
 	/**
 	 * Generate a list of all min-width media queries and their item widths for a specific selector.
@@ -31,20 +32,20 @@ define( [ "ember" ], function( Ember ) {
 			return cachedMinWidths[ selector ];
 		}
 
-		var data = cssMinWidthRules
-			.filter(function( rule ) {
-				return rule.cssRules[0].selectorText === selector;
-			})
-			.map(function( rule ) {
-				return {
-					minWidth: Math.floor( reMinWidth.exec( rule.media[0] )[1] ),
-					numItems: Math.floor( 100 / parseInt( rule.cssRules[0].style.width ) )
-				};
-			});
+		var data = cssMinWidthRules.filter(function( rule ) {
+			return rule.cssRules[0].selectorText === selector;
+		});
 
 		if ( !data.length ) {
 			throw new Error( "Invalid selector" );
 		}
+
+		data = data.map( function( rule ) {
+			return {
+				minWidth: Math.floor( reMinWidth.exec( rule.media[0] )[1] ),
+				numItems: Math.floor( 100 / parseInt( rule.cssRules[0].style.width ) )
+			};
+		});
 
 		return ( cachedMinWidths[ selector ] = data );
 	}
@@ -71,8 +72,8 @@ define( [ "ember" ], function( Ember ) {
 
 	function getItemContainer() {
 		// the route's view hasn't been inserted yet: choose the parent element
-		return	document.querySelector( "body > .wrapper" )
-			||	document.body;
+		return document.querySelector( "body > .wrapper" )
+		    || document.body;
 	}
 
 
@@ -102,12 +103,12 @@ define( [ "ember" ], function( Ember ) {
 		 * Calculate how many items are needed to completely fill the container
 		 */
 		calcFetchSize: function() {
-			var	itemSel	= get( this, "itemSelector" ),
-				columns	= getNeededColumns( itemSel ),
-				rows	= getNeededRows( itemSel ),
-				offset	= get( this, "offset" ),
-				uneven	= offset % columns,
-				limit	= ( columns * rows ) + ( uneven > 0 ? columns - uneven : 0 );
+			var itemSel = get( this, "itemSelector" );
+			var offset  = get( this, "offset" );
+			var columns = getNeededColumns( itemSel );
+			var rows    = getNeededRows( itemSel );
+			var uneven  = offset % columns;
+			var limit   = ( columns * rows ) + ( uneven > 0 ? columns - uneven : 0 );
 
 			// fetch size + number of items to fill the last row after a window resize
 			set( this, "limit", limit );
@@ -135,8 +136,8 @@ define( [ "ember" ], function( Ember ) {
 			}
 			binding.connect( this );
 
-			var	offset	= get( this, "offset" ),
-				limit	= get( this, "limit" );
+			var offset = get( this, "offset" );
+			var limit  = get( this, "limit" );
 
 			set( controller, "isFetching", false );
 			set( controller, "hasFetchedAll", offset < limit );
@@ -155,20 +156,20 @@ define( [ "ember" ], function( Ember ) {
 			},
 
 			"willFetchContent": function( force ) {
-				var	controller	= get( this, "controller" ),
-					isFetching	= get( controller, "isFetching" ),
-					fetchedAll	= get( controller, "hasFetchedAll" );
+				var controller = get( this, "controller" );
+				var isFetching = get( controller, "isFetching" );
+				var fetchedAll = get( controller, "hasFetchedAll" );
 
 				// we're already busy or finished fetching
 				if ( isFetching || fetchedAll ) { return; }
 
 				this.calcFetchSize();
 
-				var	content	= get( this, get( this, "contentPath" ) ),
-					offset	= get( this, "offset" ),
-					limit	= get( this, "limit" ),
-					max		= get( this, "maxAutoFetches" ),
-					num		= offset / limit;
+				var content = get( this, get( this, "contentPath" ) );
+				var offset  = get( this, "offset" );
+				var limit   = get( this, "limit" );
+				var max     = get( this, "maxAutoFetches" );
+				var num     = offset / limit;
 
 				// don't fetch infinitely
 				if ( !force && num > max ) { return; }
