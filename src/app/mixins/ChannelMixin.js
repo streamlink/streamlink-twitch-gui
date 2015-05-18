@@ -15,7 +15,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
 			var store = this.store;
 			var name  = get( channel, "id" );
-			this.store.fetchById( "twitchUserFollowsChannel", name )
+			return this.store.fetchById( "twitchUserFollowsChannel", name )
 				.catch(function() {
 					// unload the generated empty record
 					var record = store.getById( "twitchUserFollowsChannel", name );
@@ -37,7 +37,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
 			var store = this.store;
 			var name  = get( channel, "id" );
-			this.store.fetchById( "twitchUserSubscription", name )
+			return this.store.fetchById( "twitchUserSubscription", name )
 				.catch(function() {
 					// unload the generated empty record
 					var record = store.getById( "twitchUserSubscription", name );

@@ -116,7 +116,7 @@ define([
 				.then(function( settings ) {
 					setIfNotNull( settings, livestreamer, "quality" );
 					setIfNotNull( settings, livestreamer, "gui_openchat" );
-				}.bind( this) )
+				})
 				// validate configuration and get the exec command
 				.then( this.checkLivestreamer.bind( this ) )
 				// launch the stream
@@ -127,10 +127,11 @@ define([
 					});
 					return this.launchLivestreamer( exec, livestreamer );
 				}.bind( this ) )
-				// check if the user subscribes the channel
-				.then( this.checkUserSubscribesChannel.bind( this, channel ) )
-				// check if the user follows the channel
-				.then( this.checkUserFollowsChannel.bind( this, channel ) )
+				// independently check whether the user is following / subscribing the channel
+				.then(function() {
+					this.checkUserSubscribesChannel( channel );
+					this.checkUserFollowsChannel( channel );
+				}.bind( this ) )
 				// setup stream refresh interval
 				.then( this.refreshStream.bind( this, livestreamer ) )
 				// success/failure
