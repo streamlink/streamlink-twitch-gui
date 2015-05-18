@@ -23,7 +23,7 @@ define([
 				.then(function( data ) {
 					return data.toArray().mapBy( "channel" );
 				})
-				.then( preload( "@each.preview.@each.medium_nocache" ) );
+				.then( preload( "@each.logo" ) );
 		}
 	});
 
