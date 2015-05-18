@@ -98,6 +98,13 @@ define(function( require ) {
 		TwitchUserSubscription: require( "models/twitch/UserSubscription" ),
 		TwitchUserSubscriptionSerializer: require( "models/twitch/UserSubscriptionSerializer" ),
 
+		TwitchTicket: require( "models/twitch/Ticket" ),
+		TwitchTicketSerializer: require( "models/twitch/TicketSerializer" ),
+		TwitchProduct: require( "models/twitch/Product" ),
+		TwitchProductSerializer: require( "models/twitch/ProductSerializer" ),
+		TwitchProductEmoticon: require( "models/twitch/ProductEmoticon" ),
+		TwitchProductEmoticonSerializer: require( "models/twitch/ProductEmoticonSerializer" ),
+
 
 		// Ember additions/changes/fixes
 		BooleanTransform: require( "store/BooleanTransform" ),
@@ -151,6 +158,7 @@ define(function( require ) {
 		GameItemComponent: require( "components/GameItemComponent" ),
 		StreamItemComponent: require( "components/StreamItemComponent" ),
 		ChannelItemComponent: require( "components/ChannelItemComponent" ),
+		SubscriptionItemComponent: require( "components/SubscriptionItemComponent" ),
 		InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
 		EmbeddedLinksComponent: require( "components/EmbeddedLinksComponent" ),
 		FlagIconComponent: require( "components/FlagIconComponent" ),
@@ -205,6 +213,8 @@ define(function( require ) {
 		UserAuthRoute: require( "routes/UserAuthRoute" ),
 		UserAuthController: require( "controllers/UserAuthController" ),
 		UserAuthView: require( "views/UserAuthView" ),
+		UserSubscriptionsRoute: require( "routes/UserSubscriptionsRoute" ),
+		UserSubscriptionsView: require( "views/UserSubscriptionsView" ),
 		UserFollowedStreamsRoute: require( "routes/UserFollowedStreamsRoute" ),
 		UserFollowedStreamsView: require( "views/UserFollowedStreamsView" ),
 		UserFollowedChannelsRoute: require( "routes/UserFollowedChannelsRoute" ),

@@ -1,0 +1,28 @@
+<header>
+{{#link-to "channel" channel.id tagName="div" class="logo"}}
+<img class="previewImage" title="{{channel.display_name}}" src="{{channel.logo}}">
+{{/link-to}}
+<div class="buttons">
+{{form-button action="cancel" targetObject=this class="btn-danger" icon="fa-times" title="Cancel subscription"}}
+{{form-button action="edit" targetObject=this class="btn-hint" icon="fa-pencil" title="Edit subscription"}}
+</div>
+</header>
+<div class="info">
+<h3>{{#link-to "channel" channel.id}}{{channel.display_name}}{{/link-to}}</h3>
+<div class="subscription">
+<span title="{{format-time subscription.access_end "LLLL"}}">
+<i class="fa fa-credit-card"></i> {{#if hasEnded}}Has ended{{else if subscription.purchase_profile.will_renew}}Will be renewed{{else}}Will end{{/if}} {{ends}}
+</span>
+<span title="Directly supports the broadcaster">
+<i class="fa fa-money"></i> {{product.price}} / {{product.period}}
+</span>
+<span title="Since {{format-time channel.subscribed.created_at "LLLL"}}">
+<i class="fa fa-calendar"></i> Subscribed for {{product.interval_number}} {{#if (is-gt product.interval_number 1)}}months{{else}}month{{/if}}
+</span>
+</div>
+<ul class="list-unstyled emoticons">
+{{#each emoticons as |emoticon|}}
+<li><img title={{emoticon.id}} src={{emoticon.url}}></li>
+{{/each}}
+</ul>
+</div>

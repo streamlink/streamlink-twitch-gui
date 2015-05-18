@@ -1,0 +1,17 @@
+<header>
+<h2>Subscriptions</h2>
+{{settings-bar targetObject=this btnHomepage=true}}
+</header>
+{{#if model.length}}
+<ul class="list-unstyled">
+{{#each model as |subscription|}}
+{{subscription-item targetObject=this subscription=subscription}}
+{{/each}}
+</ul>
+{{infinite-scroll}}
+{{else}}
+<div class="content-empty">
+<p>You don't have any channel subscriptions.</p>
+<p>Directly support broadcasters by subscribing to their channel.</p>
+</div>
+{{/if}}

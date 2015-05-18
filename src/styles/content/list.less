@@ -214,3 +214,99 @@
 		}
 	}
 }
+
+.subscription-component {
+	@size: 6.5em;
+	@padding: 1.5em;
+	@color: @color-text-dark;
+	@background: @color-background;
+
+	position: relative;
+	min-height: 264px;
+	margin-bottom: 2em;
+	padding-top: @padding;
+	background-position: center center;
+	background-size: cover;
+	color: @color;
+
+	// no dynamic columns for this component
+	// this media query is required by InfiniteScrollRouteMixin, though
+	@media (min-width: 1px) {
+		width: 100%;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	> header {
+		display: flex;
+		flex-flow: row nowrap;
+		align-items: flex-start;
+		justify-content: space-between;
+
+		> .logo {
+			display: block;
+			position: relative;
+			width: @size;
+			height: @size;
+			margin: 0 0 @padding @padding;
+			cursor: pointer;
+
+			> .previewImage {
+				border: .25em solid @background;
+			}
+		}
+
+		> .buttons {
+			display: flex;
+			flex-flow: row-reverse nowrap;
+			align-items: flex-start;
+			margin-right: @padding;
+			padding: .5em;
+			background: fade( @color-background, 80% );
+			opacity: 0;
+			transition: opacity .333s ease-out;
+
+			> button:not(:last-of-type) {
+				margin-left: .5em;
+			}
+		}
+	}
+
+	&:hover > header > .buttons {
+		opacity: 1;
+	}
+
+	> .info {
+		padding: @padding;
+		background: fade( @color-background, 80% );
+
+		> h3 {
+			margin: 0;
+			font-size: 1.75em;
+
+			> a:not(:hover) {
+				color: @color-text-darker;
+			}
+		}
+
+		> .subscription {
+			margin: .5em 0;
+
+			> span {
+				display: inline-block;
+				margin-right: 2em;
+			}
+		}
+
+		> .emoticons {
+			display: flex;
+			justify-content: flex-start;
+
+			> li {
+				margin-right: .5em;
+			}
+		}
+	}
+}
