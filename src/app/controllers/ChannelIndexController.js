@@ -6,6 +6,8 @@ define([
 	var get = Ember.get;
 
 	return Ember.Controller.extend( ChannelMixin, {
+		metadata: Ember.inject.service(),
+
 		stream : Ember.computed.alias( "model.stream" ),
 		channel: Ember.computed.alias( "model.channel" ),
 
@@ -16,12 +18,14 @@ define([
 		}.observes( "channel" ),
 
 		age: function() {
-			return ( new Date() - get( this, "channel.created_at" ) ) / ( 24 * 3600 * 1000 );
+			var createdAt = get( this, "channel.created_at" );
+			return ( new Date() - createdAt ) / ( 24 * 3600 * 1000 );
 		}.property( "channel.created_at" ),
 
 		language: function() {
-			var codes = get( this, "config.language_codes" ),
-			    lang  = codes[ get( this, "channel.broadcaster_language" ) ];
+			var codes = get( this, "metadata.config.language_codes" );
+			var blang = get( this, "channel.broadcaster_language" );
+			var lang  = codes[ blang ];
 			return lang ? lang[ "lang" ] : "";
 		}.property( "channel.broadcaster_language" ),
 

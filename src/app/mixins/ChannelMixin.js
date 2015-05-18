@@ -7,15 +7,12 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 		metadata: Ember.inject.service(),
 		auth    : Ember.inject.service(),
 
-		config: Ember.computed.alias( "metadata.config" ),
-
-
 		checkUserFollowsChannel: function( channel ) {
 			if ( !get( this, "auth.session.isLoggedIn" ) ) { return; }
 
-			var store = this.store;
+			var store = get( this, "store" );
 			var name  = get( channel, "id" );
-			return this.store.fetchById( "twitchUserFollowsChannel", name )
+			return store.fetchById( "twitchUserFollowsChannel", name )
 				.catch(function() {
 					// unload the generated empty record
 					var record = store.getById( "twitchUserFollowsChannel", name );
@@ -35,9 +32,9 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			if ( !get( this, "auth.session.isLoggedIn" ) ) { return; }
 			if ( !get( channel, "partner" ) ) { return; }
 
-			var store = this.store;
+			var store = get( this, "store" );
 			var name  = get( channel, "id" );
-			return this.store.fetchById( "twitchUserSubscription", name )
+			return store.fetchById( "twitchUserSubscription", name )
 				.catch(function() {
 					// unload the generated empty record
 					var record = store.getById( "twitchUserSubscription", name );
@@ -56,8 +53,8 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 
 		actions: {
 			"follow": function( channel, callback ) {
-				var store     = this.store,
-				    following = get( channel, "following" );
+				var store     = get( this, "store" );
+				var following = get( channel, "following" );
 
 				if ( get( channel, "isFollowingLocked" ) ) { return; }
 				set( channel, "isFollowingLocked", true );
@@ -88,17 +85,19 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			},
 
 			"subscribe": function( channel, callback ) {
-				var url  = get( this, "config.twitch-subscribe-url" ),
-				    name = get( channel, "id" );
+				var url  = get( this, "metadata.config.twitch-subscribe-url" );
+				var name = get( channel, "id" );
 				if ( url && name ) {
 					this.send( "openBrowser", url.replace( "{channel}", name ) );
-					callback();
+					if ( callback instanceof Function ) {
+						callback();
+					}
 				}
 			},
 
 			"chat": function( channel, callback ) {
-				var url  = get( this, "config.twitch-chat-url" ),
-				    name = get( channel, "id" );
+				var url  = get( this, "metadata.config.twitch-chat-url" );
+				var name = get( channel, "id" );
 				if ( url && name ) {
 					this.send( "openBrowser", url.replace( "{channel}", name ) );
 					if ( callback instanceof Function ) {
@@ -108,8 +107,8 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			},
 
 			"share": function( channel, callback ) {
-				var url = get( channel, "url" ),
-				    cb  = nwGui.Clipboard.get();
+				var url = get( channel, "url" );
+				var cb  = nwGui.Clipboard.get();
 				if ( url && cb ) {
 					cb.set( url, "text" );
 					if ( callback instanceof Function ) {
