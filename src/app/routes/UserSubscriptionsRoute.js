@@ -45,9 +45,9 @@ define([
 						});
 				})
 				.then( preload([
-					"@each.product.partner_login.logo",
-					"@each.product.partner_login.profile_banner",
-					"@each.product.@each.emoticons.@each.url"
+					"@each.product.@each.partner_login.@each.logo",
+					"@each.product.@each.partner_login.@each.profile_banner",
+					"@each.product.@each.emoticons.firstObject.@each.url"
 				]) );
 		}
 	});
