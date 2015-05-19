@@ -1,11 +1,13 @@
 define( [ "ember", "utils/Substitution" ], function( Ember, Substitution ) {
 
 	var get = Ember.get;
+	var makeArray = Ember.makeArray;
+	var isNone = Ember.isNone;
 	var push = [].push;
 
 	/**
 	 * @class Parameter
-	 * @param {string} name
+	 * @param {string?} name
 	 * @param {(string|string[]|Function)?} cond
 	 * @param {string?} value
 	 * @param {boolean?} subst
@@ -17,7 +19,7 @@ define( [ "ember", "utils/Substitution" ], function( Ember, Substitution ) {
 		this.subst = !!subst;
 		this.cond  = cond instanceof Function
 			? [ cond ]
-			: Ember.makeArray( cond ).concat( value || [] ).map(function( prop ) {
+			: makeArray( cond ).concat( value || [] ).map(function( prop ) {
 				return function() {
 					return !!get( this, prop );
 				};
@@ -37,16 +39,36 @@ define( [ "ember", "utils/Substitution" ], function( Ember, Substitution ) {
 
 	/**
 	 * @param {Object} obj
-	 * @param {Substitution[]} substitutions
+	 * @param {Substitution[]?} substitutions
 	 * @returns {(string|boolean)}
 	 */
 	Parameter.prototype.getValue = function( obj, substitutions ) {
-		if ( Ember.isNone( this.value ) ) { return false; }
+		if ( isNone( this.value ) ) { return false; }
 
 		var value = String( get( obj, this.value ) );
 		return this.subst && substitutions
 			? Substitution.substitute( value, substitutions, obj )
 			: value;
+	};
+
+	/**
+	 * @param {Object} obj
+	 * @param {Substitution[]} substitutions
+	 * @returns {string[]}
+	 */
+	Parameter.prototype.get = function( obj, substitutions ) {
+		var res = [];
+
+		if ( !isNone( this.name ) ) {
+			res.push( this.name );
+		}
+
+		var value = this.getValue( obj, substitutions );
+		if ( value !== false && value.length ) {
+			push.call( res, value );
+		}
+
+		return res;
 	};
 
 	/**
@@ -63,12 +85,8 @@ define( [ "ember", "utils/Substitution" ], function( Ember, Substitution ) {
 			})
 			// return a list of each parameter's name and its (substituted) value
 			.reduce(function( arr, parameter ) {
-				push.call( arr, parameter.name );
-
-				var value = parameter.getValue( obj, substitutions );
-				if ( value !== false && value.length ) {
-					push.call( arr, value );
-				}
+				var params = parameter.get( obj, substitutions );
+				push.apply( arr, makeArray( params ) );
 
 				return arr;
 			}, [] );

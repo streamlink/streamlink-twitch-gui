@@ -6,6 +6,7 @@ define( [ "ember-data" ], function( DS ) {
 
 		advanced            : attr( "boolean", { defaultValue: false } ),
 		livestreamer        : attr( "string",  { defaultValue: "" } ),
+		livestreamer_params : attr( "string",  { defaultValue: "" } ),
 		quality             : attr( "number",  { defaultValue: 0 } ),
 		player              : attr( "string",  { defaultValue: "" } ),
 		player_params       : attr( "string",  { defaultValue: "" } ),

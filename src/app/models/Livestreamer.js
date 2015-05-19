@@ -2,8 +2,15 @@ define([
 	"ember",
 	"ember-data",
 	"utils/Parameter",
+	"utils/ParameterCustom",
 	"utils/Substitution"
-], function( Ember, DS, Parameter, Substitution ) {
+], function(
+	Ember,
+	DS,
+	Parameter,
+	ParameterCustom,
+	Substitution
+) {
 
 	var get = Ember.get,
 	    set = Ember.set;
@@ -63,6 +70,7 @@ define([
 
 		/** @property {Parameter[]} parameters */
 		parameters: [
+			new ParameterCustom( null, "settings.livestreamer_params" ),
 			new Parameter( "--no-version-check" ),
 			new Parameter( "--player", null, "settings.player", true ),
 			new Parameter( "--player-args", "settings.player", "settings.player_params", true ),

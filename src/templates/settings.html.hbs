@@ -18,6 +18,8 @@
 <div><i class="fa fa-cog"></i> Executable location<span>By omitting a value, livestreamer has to be added to the $PATH variable.</span></div>
 <div>{{file-select value=model.livestreamer inputClass="form-control" placeholder="Leave blank for default location"}}</div>
 {{#if model.advanced}}
+<div><i class="fa fa-code"></i> Custom parameters<span>Set additional custom livestreamer parameters.</span></div>
+<div>{{input type="text" value=model.livestreamer_params classNames="col-xs-12" placeholder="Add custom livestreamer parameters"}}</div>
 <div><i class="fa fa-filter"></i> Stream type<span>Make sure your player does support the selected stream type.{{livestreamer-docs cmd="--player-passthrough"}}</span></div>
 <div>{{view "select" value=model.player_passthrough content=settings.constructor.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 {{#if (is-equal model.player_passthrough "http")}}

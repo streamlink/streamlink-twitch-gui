@@ -2,8 +2,14 @@
 define([
 	"ember",
 	"utils/Parameter",
+	"utils/ParameterCustom",
 	"utils/Substitution"
-], function( Ember, Parameter, Substitution ) {
+], function(
+	Ember,
+	Parameter,
+	ParameterCustom,
+	Substitution
+) {
 
 	module( "Parameters" );
 
@@ -218,6 +224,70 @@ define([
 			Parameter.getParameters( obj, [ l ], [ foo, bar, baz ] ),
 			[ "--l", "{foo} {bar} {baz}" ],
 			"Disabled parameter value substitution"
+		);
+
+	});
+
+
+	test( "Custom parameters", function() {
+
+		var obj = {
+			a: "--foo --bar",
+			b: "--foo foo --bar bar",
+			c: "--foo \"foo bar\" --bar 'baz qux'",
+			d: "--foo \"'foo'\"",
+			e: "--foo \"foo \\\"bar\\\"\" --bar 'baz \\'qux\\''",
+			f: "--foo \"foo",
+			g: "--foo \\a\\"
+		};
+		var a = new ParameterCustom( null, "a" );
+		var b = new ParameterCustom( null, "b" );
+		var c = new ParameterCustom( null, "c" );
+		var d = new ParameterCustom( null, "d" );
+		var e = new ParameterCustom( null, "e" );
+		var f = new ParameterCustom( null, "f" );
+		var g = new ParameterCustom( null, "g" );
+
+		deepEqual(
+			Parameter.getParameters( obj, [ a ] ),
+			[ "--foo", "--bar" ],
+			"Basic tokenization"
+		);
+
+		deepEqual(
+			Parameter.getParameters( obj, [ b ] ),
+			[ "--foo", "foo", "--bar", "bar" ],
+			"Basic tokenization with parameter values"
+		);
+
+		deepEqual(
+			Parameter.getParameters( obj, [ c ] ),
+			[ "--foo", "foo bar", "--bar", "baz qux" ],
+			"Quoted tokenization with parameter values"
+		);
+
+		deepEqual(
+			Parameter.getParameters( obj, [ d ] ),
+			[ "--foo", "'foo'" ],
+			"Quotation marks inside quoted parameter values"
+		);
+
+		deepEqual(
+			Parameter.getParameters( obj, [ e ] ),
+			[ "--foo", "foo \"bar\"", "--bar", "baz 'qux'" ],
+			"Escaped quotation marks inside quoted parameter values"
+		);
+
+		deepEqual(
+			Parameter.getParameters( obj, [ f ] ),
+			[ "--foo", "\"foo" ],
+			"Missing closing quotation mark"
+		);
+
+		deepEqual(
+			Parameter.getParameters( obj, [ g ] ),
+			[ "--foo", "\\a\\" ],
+			"Invalid escaping backslashes"
 		);
 
 	});
