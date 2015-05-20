@@ -302,7 +302,7 @@ define([
 
 			switch( settings ) {
 				case 1:
-					this.send( "goto", "user.following" );
+					this.send( "goto", "user.followedStreams" );
 					break;
 				case 2:
 					this.send( "openLivestreamer", stream );
