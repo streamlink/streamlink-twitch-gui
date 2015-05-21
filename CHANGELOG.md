@@ -7,7 +7,8 @@ Changelog - Livestreamer Twitch GUI
   - Implemented subscriptions and followed channels+games menus.
   - Removed "Recent activity" and "Most viewed" menu templates (for now).
 - Implemented custom livestreamer parameters. #88
-- Added settings for customizing livestreamer's download behavior. #82 
+- Added settings for customizing livestreamer's download behavior. #82
+- Added animation effects.
 - Added F5 and Ctrl+R reload shortcuts.
 - Added Twitch.tv API hiccup detection.
 - Fixed stream quality dropdown glitching when closing the stream popup.

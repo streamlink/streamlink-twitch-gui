@@ -3,8 +3,8 @@
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
 <ul class="content-list">
-{{#each model as |stream|}}
-{{stream-item stream=stream}}
+{{#each model as |stream index|}}
+{{stream-item content=stream isNewItem=(is-gte index initialFetchSize)}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

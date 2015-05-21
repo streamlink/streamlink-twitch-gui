@@ -1,12 +1,11 @@
 define([
 	"ember",
-	"mixins/PreviewImageViewMixin",
+	"components/ListItemComponent",
 	"text!templates/components/channel.html.hbs"
-], function( Ember, PreviewImageViewMixin, template ) {
+], function( Ember, ListItemComponent, template ) {
 
-	return Ember.Component.extend( PreviewImageViewMixin, {
+	return ListItemComponent.extend({
 		layout: Ember.HTMLBars.compile( template ),
-		tagName: "li",
 		classNames: [ "channel-component" ]
 	});
 

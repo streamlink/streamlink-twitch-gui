@@ -1,20 +1,22 @@
 define([
 	"ember",
-	"mixins/PreviewImageViewMixin",
+	"components/ListItemComponent",
 	"text!templates/components/game.html.hbs"
-], function( Ember, PreviewImageViewMixin, template ) {
+], function( Ember, ListItemComponent, template ) {
 
-	return Ember.Component.extend( PreviewImageViewMixin, {
+	var get = Ember.get;
+
+	return ListItemComponent.extend({
 		layout: Ember.HTMLBars.compile( template ),
-		tagName: "li",
 		classNames: [ "game-component" ],
 
 		action: "goto",
 
-		hasStats: Ember.computed.any( "channels", "viewers" ),
+		game: Ember.computed.any( "content.game", "content" ),
+		hasStats: Ember.computed.any( "content.channels", "content.viewers" ),
 
 		click: function() {
-			this.sendAction( "action", "games.game", this.get( "game.name" ) );
+			this.sendAction( "action", "games.game", get( this, "game.name" ) );
 		}
 	});
 

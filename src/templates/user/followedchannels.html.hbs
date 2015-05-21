@@ -4,8 +4,8 @@
 </header>
 {{#if content.length}}
 <ul class="content-list">
-{{#each model as |channel|}}
-{{channel-item channel=channel}}
+{{#each model as |channel index|}}
+{{channel-item content=channel isNewItem=(is-gte index initialFetchSize)}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

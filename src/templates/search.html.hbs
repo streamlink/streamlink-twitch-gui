@@ -7,7 +7,7 @@
 {{#if notFiltered}}<h3>Games</h3>{{/if}}
 <ul class="content-list">
 {{#each games as |game|}}
-{{game-item game=game}}
+{{game-item content=game}}
 {{/each}}
 </ul>
 </section>
@@ -17,7 +17,7 @@
 {{#if notFiltered}}<h3>Channels</h3>{{/if}}
 <ul>
 {{#each channels as |channel|}}
-{{channel-item channel=channel}}
+{{channel-item content=channel}}
 {{/each}}
 </ul>
 </section>
@@ -26,8 +26,8 @@
 <section class="search-streams">
 {{#if notFiltered}}<h3>Streams</h3>{{/if}}
 <ul class="content-list">
-{{#each streams as |stream|}}
-{{stream-item stream=stream showGame=true}}
+{{#each streams as |stream index|}}
+{{stream-item stream=content isNewItem=(is-gte index initialFetchSize) showGame=true}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

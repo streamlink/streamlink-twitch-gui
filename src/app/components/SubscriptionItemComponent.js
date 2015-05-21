@@ -1,21 +1,20 @@
 define([
 	"ember",
-	"mixins/PreviewImageViewMixin",
+	"components/ListItemComponent",
 	"moment",
 	"text!templates/components/subscription.html.hbs"
-], function( Ember, PreviewImageViewMixin, moment, template ) {
+], function( Ember, ListItemComponent, moment, template ) {
 
 	var get = Ember.get;
 
-	return Ember.Component.extend( PreviewImageViewMixin, {
+	return ListItemComponent.extend({
 		metadata: Ember.inject.service(),
 
 		layout: Ember.HTMLBars.compile( template ),
-		tagName: "li",
-		classNameBindings: [ ":subscription-component" ],
+		classNames: [ "subscription-component" ],
 		attributeBindings: [ "style" ],
 
-		product  : Ember.computed.alias( "subscription.product" ),
+		product  : Ember.computed.alias( "content.product" ),
 		channel  : Ember.computed.alias( "product.partner_login" ),
 		emoticons: Ember.computed.alias( "product.emoticons" ),
 

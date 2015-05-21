@@ -123,7 +123,7 @@ define( [ "ember" ], function( Ember ) {
 			this.calcFetchSize();
 		},
 
-		setupController: function( controller ) {
+		setupController: function( controller, model ) {
 			this._super.apply( this, arguments );
 
 			// late bindings
@@ -141,6 +141,7 @@ define( [ "ember" ], function( Ember ) {
 
 			set( controller, "isFetching", false );
 			set( controller, "hasFetchedAll", offset < limit );
+			set( controller, "initialFetchSize", model.length );
 		},
 
 		fetchContent: function() {

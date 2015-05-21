@@ -3,9 +3,9 @@
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
 {{#if model.length}}
-<ul class="list-unstyled">
-{{#each model as |subscription|}}
-{{subscription-item targetObject=this subscription=subscription}}
+<ul class="content-list">
+{{#each model as |subscription index|}}
+{{subscription-item targetObject=this content=subscription isNewItem=(is-gte index initialFetchSize)}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

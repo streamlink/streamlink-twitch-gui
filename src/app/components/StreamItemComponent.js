@@ -1,22 +1,25 @@
 define([
 	"ember",
-	"mixins/PreviewImageViewMixin",
+	"components/ListItemComponent",
 	"text!templates/components/stream.html.hbs"
-], function( Ember, PreviewImageViewMixin, template ) {
+], function( Ember, ListItemComponent, template ) {
 
-	return Ember.Component.extend( PreviewImageViewMixin, {
+	var get = Ember.get;
+
+	return ListItemComponent.extend({
 		layout: Ember.HTMLBars.compile( template ),
-		tagName: "li",
 		classNameBindings: [ ":stream-component", "_showGame:show-game" ],
 
 		action: "openLivestreamer",
 
+		channel: Ember.computed.alias( "content.channel" ),
+
 		showGame: false,
-		_showGame: Ember.computed.and( "showGame", "stream.channel.game" ),
+		_showGame: Ember.computed.and( "showGame", "channel.game" ),
 
 		actions: {
 			"startStream": function() {
-				this.sendAction( "action", this.get( "stream" ) );
+				this.sendAction( "action", get( this, "content" ) );
 			}
 		}
 	});

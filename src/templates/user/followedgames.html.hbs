@@ -4,8 +4,8 @@
 </header>
 {{#if content.length}}
 <ul class="content-list">
-{{#each model as |game|}}
-{{game-item game=game}}
+{{#each model as |game index|}}
+{{game-item content=game isNewItem=(is-gte index initialFetchSize)}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

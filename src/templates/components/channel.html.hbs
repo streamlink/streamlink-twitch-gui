@@ -1,11 +1,11 @@
 <div class="logo">
-<img class="previewImage" title="{{channel.display_name}}" src="{{channel.logo}}">
+<img class="previewImage" title="{{content.display_name}}" src="{{content.logo}}">
 </div>
 <div class="text">
 <header>
-{{#if channel.has_language}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
-<span>{{#link-to "channel" channel.id}}{{channel.display_name}}{{/link-to}}</span>
+{{#if content.has_language}}{{flag-icon type="channel" lang=content.language}}{{/if}}
+<span>{{#link-to "channel" content.id}}{{content.display_name}}{{/link-to}}</span>
 </header>
-<div class="game"><i class="fa fa-gamepad"></i> {{#if channel.game}}{{#link-to "games.game" channel.game}}{{channel.game}}{{/link-to}}{{else}}<span>no game set yet</span>{{/if}}</div>
-{{#if channel.status}}{{embedded-links tagName="div" class="status" text=channel.status}}{{/if}}
+<div class="game"><i class="fa fa-gamepad"></i> {{#if content.game}}{{#link-to "games.game" content.game}}{{content.game}}{{/link-to}}{{else}}<span>no game set yet</span>{{/if}}</div>
+{{#if content.status}}{{embedded-links tagName="div" class="status" text=content.status}}{{/if}}
 </div>
