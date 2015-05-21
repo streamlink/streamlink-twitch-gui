@@ -77,4 +77,10 @@
 		line-height: 3em;
 		text-align: center;
 	}
+
+	> .channels,
+	> .globalstats {
+		@delay: ( @anim-content-duration / 2 );
+		-webkit-animation: animFadeInRight @anim-content-duration @delay ease-out both;
+	}
 }
