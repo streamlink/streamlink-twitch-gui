@@ -27,7 +27,7 @@
 {{#if notFiltered}}<h3>Streams</h3>{{/if}}
 <ul class="content-list">
 {{#each streams as |stream index|}}
-{{stream-item stream=content isNewItem=(is-gte index initialFetchSize) showGame=true}}
+{{stream-item content=stream isNewItem=(is-gte index initialFetchSize) showGame=true}}
 {{/each}}
 </ul>
 {{infinite-scroll}}
