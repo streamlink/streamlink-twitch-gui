@@ -1,6 +1,6 @@
-<div class="logo">
+{{#link-to "channel" content.id tagName="div" class="logo"}}
 <img class="previewImage" title="{{content.display_name}}" src="{{content.logo}}">
-</div>
+{{/link-to}}
 <div class="text">
 <header>
 {{#if content.has_language}}{{flag-icon type="channel" lang=content.language}}{{/if}}
