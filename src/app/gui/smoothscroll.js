@@ -264,6 +264,9 @@ define(function() {
 		 * @param {Object} event
 		 */
 		function wheel(event) {
+			if (event.defaultPrevented) {
+				return;
+			}
 
 			if (!initDone) {
 				init();
@@ -272,11 +275,8 @@ define(function() {
 			var target = event.target;
 			var overflowing = overflowingAncestor(target);
 
-			// use default if there's no overflowing
-			// element or default action is prevented
-			if (!overflowing || event.defaultPrevented ||
-				isNodeName(activeElement, "embed") ||
-				(isNodeName(target, "embed") && /\.pdf/i.test(target.src))) {
+			// use default if there's no overflowing element
+			if (!overflowing) {
 				return true;
 			}
 
@@ -407,18 +407,13 @@ define(function() {
 
 		function overflowingAncestor(el) {
 			var elems = [];
-			var rootScrollHeight = root.scrollHeight;
 			do {
 				var cached = cache[uniqueID(el)];
 				if (cached) {
 					return setCache(elems, cached);
 				}
 				elems.push(el);
-				if (rootScrollHeight === el.scrollHeight) {
-					if (!isFrame || root.clientHeight + 10 < rootScrollHeight) {
-						return setCache(elems, document.body); // scrolling root in WebKit
-					}
-				} else if (el.clientHeight + 10 < el.scrollHeight) {
+				if (el.clientHeight < el.scrollHeight) {
 					var overflow = getComputedStyle(el, "").getPropertyValue("overflow-y");
 					if (overflow === "scroll" || overflow === "auto") {
 						return setCache(elems, el);
