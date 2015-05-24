@@ -24,14 +24,14 @@ define([
 		}.property( "channel.profile_banner" ),
 
 		hasEnded: function() {
-			var access_end = get( this, "subscription.access_end" );
+			var access_end = get( this, "content.access_end" );
 			return new Date() > access_end;
-		}.property( "subscription.access_end" ),
+		}.property( "content.access_end" ).volatile(),
 
 		ends: function() {
-			var access_end = get( this, "subscription.access_end" );
+			var access_end = get( this, "content.access_end" );
 			return moment().to( access_end );
-		}.property( "subscription.access_end" ).volatile(),
+		}.property( "content.access_end" ).volatile(),
 
 
 		buttonAction: "openBrowser",
