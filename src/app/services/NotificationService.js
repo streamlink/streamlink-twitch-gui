@@ -23,6 +23,7 @@ define([
 
 	return Ember.Service.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
+		store   : Ember.inject.service(),
 		auth    : Ember.inject.service(),
 
 		config  : Ember.computed.alias( "metadata.config" ),
@@ -69,8 +70,6 @@ define([
 
 		init: function() {
 			this._super.apply( this, arguments );
-			// FIXME: remove this and use service injection. requires ember-data upgrade
-			this.store = this.container.lookup( "store:main" );
 			// FIXME: remove this and use service injection
 			set( this, "settings", this.container.lookup( "record:settings" ) );
 		},
@@ -82,8 +81,9 @@ define([
 		 */
 		_userHasFollowedChannel: function() {
 			var self    = this;
-			var follows = self.store.modelFor( "twitchUserFollowsChannel" );
-			var adapter = self.store.adapterFor( "twitchUserFollowsChannel" );
+			var store   = get( self, "store" );
+			var follows = store.modelFor( "twitchUserFollowsChannel" );
+			var adapter = store.adapterFor( "twitchUserFollowsChannel" );
 
 			adapter.on( "createRecord", function( store, type, snapshot ) {
 				if ( !get( self, "enabled" ) ) { return; }
@@ -140,7 +140,8 @@ define([
 		check: function() {
 			if ( !get( this, "enabled" ) ) { return; }
 
-			this.store.find( "twitchStreamsFollowed", {
+			var store = get( this, "store" );
+			store.find( "twitchStreamsFollowed", {
 				limit: 100
 			})
 				.then(function( streams ) {
@@ -300,19 +301,22 @@ define([
 				nwWindow.toggleVisibility( true );
 			}
 
+			// FIXME: refactor global openLivestreamer and openBrowser actions
+			var applicationController = this.container.lookup( "controller:application" );
+
 			switch( settings ) {
 				case 1:
-					this.send( "goto", "user.followedStreams" );
+					applicationController.send( "goto", "user.followedStreams" );
 					break;
 				case 2:
-					this.send( "openLivestreamer", stream );
+					applicationController.send( "openLivestreamer", stream );
 					break;
 				case 3:
 					var url = get( this, "config.twitch-chat-url" )
 						.replace( "{channel}", get( stream, "channel.id" ) );
-					this.send( "openLivestreamer", stream );
+					applicationController.send( "openLivestreamer", stream );
 					if ( !get( this, "settings.gui_openchat" ) ) {
-						this.send( "openBrowser", url );
+						applicationController.send( "openBrowser", url );
 					}
 			}
 		},
