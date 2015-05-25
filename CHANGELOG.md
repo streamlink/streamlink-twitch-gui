@@ -1,22 +1,23 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.9.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.0) (2015-05-25)
 
 - Restructured mainmenu (renamed "Your" to "My"):
   - Implemented subscriptions and followed channels+games menus.
   - Removed "Recent activity" and "Most viewed" menu templates (for now).
 - Implemented custom livestreamer parameters. #88
-- Added settings for customizing livestreamer's download behavior. #82
-- Added animation effects.
+- Added livestreamer download/caching settings. #82
+- Added Twitch.tv API hiccup detection (prevents notifications of all followed channels).
 - Added F5 and Ctrl+R reload shortcuts.
-- Added Twitch.tv API hiccup detection.
+- Added animation effects.
 - Fixed stream quality dropdown glitching when closing the stream popup.
 - Fixed channel pages not reloading correctly. #89
+- Fixed issue with videoplayer parameters. #94
 - Upgraded to Ember-Data 1.0.0-beta.17.
 - Several bug fixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.8.0...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.8.0...v0.9.0)
 
 
 ## [v0.8.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.8.0) (2015-04-23)
