@@ -9,10 +9,11 @@ Livestreamer Twitch GUI
 
 ## Description
 
-This app is just a graphical user interface (GUI) on top of the [Livestreamer][Livestreamer] command line interface (CLI).  
-There are still some features missing at the current stage of development, but the most important ones are working fine.
+This is just a graphical user interface (GUI) on top of the [Livestreamer][Livestreamer] command line interface (CLI).  
 
 Livestreamer Twitch GUI is a [NW.js (formerly Node-Webkit)][NW.js] application, which means that it is a web application written in JavaScript ([EmberJS][EmberJS]), HTML ([Handlebars][Handlebars]) and CSS ([LessCSS][LessCSS]) and is being run by an [io.js][io.js] (fork of [Node.js][Node.js]) powered version of [Chromium][Chromium].
+
+[Recent releases][Releases] / [Changelog][Changelog] / [Wiki][Wiki]
 
 
 ## When to use
@@ -54,7 +55,9 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Preview]: https://cloud.githubusercontent.com/assets/467294/3655974/53894240-1181-11e4-9605-1b8f058f9420.png "Preview image"
   [Releases]: https://github.com/bastimeyer/livestreamer-twitch-gui/releases "Livestreamer Twitch GUI Releases"
   [Issues]: https://github.com/bastimeyer/livestreamer-twitch-gui/issues "Livestreamer Twitch GUI Issues"
+  [Wiki]: https://github.com/bastimeyer/livestreamer-twitch-gui/wiki "Livestreamer Twitch GUI Wiki"
   [Contributing]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/CONTRIBUTING.md
+  [Changelog]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/CHANGELOG.md
   [Livestreamer]: https://github.com/chrippa/livestreamer "Livestreamer"
   [Twitch]: http://twitch.tv "Twitch.tv"
   [TwitchTurbo]: http://twitch.tv/products/turbo "Twitch Turbo"
