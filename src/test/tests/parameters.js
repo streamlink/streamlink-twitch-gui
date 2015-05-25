@@ -71,12 +71,18 @@ define([
 		);
 
 		equal(
+			Substitution.substitute( "{foo}", foo, { foo: "{foo}" } ),
+			"{{foo}}",
+			"Escape curly brackets"
+		);
+
+		equal(
 			Substitution.substitute(
 				"{foo}{bar}{baz}",
 				[ foo, bar, baz ],
 				{ foo: "{bar}", bar: "{baz}", baz: "{foo}" }
 			),
-			"{bar}{baz}{foo}",
+			"{{bar}}{{baz}}{{foo}}",
 			"Don't parse substituted variables again"
 		);
 

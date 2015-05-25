@@ -3,8 +3,13 @@ define( [ "ember" ], function( Ember ) {
 	var get = Ember.get;
 
 	var reSubstitution = /\{([a-z]+)}/ig;
+
 	var reEscape       = /(["'`$\\])/g;
 	var strEscape      = "\\$1";
+
+	var reDouble       = /([\{}])/g;
+	var strDouble      = "$1$1";
+
 	var reWhitespace   = /\s+/g;
 
 
@@ -42,6 +47,8 @@ define( [ "ember" ], function( Ember ) {
 		return String( val )
 			// escape special characters
 			.replace( reEscape, strEscape )
+			// escape curly brackets
+			.replace( reDouble, strDouble )
 			// remove whitespace
 			.replace( reWhitespace, " " )
 			.trim();
