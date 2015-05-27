@@ -1,5 +1,7 @@
 define( [ "ember" ], function( Ember ) {
 
+	var get = Ember.get;
+
 	return Ember.Mixin.create({
 		/**
 		 * Load channel specific settings
@@ -7,7 +9,7 @@ define( [ "ember" ], function( Ember ) {
 		 * @returns {Promise}
 		 */
 		loadChannelSettings: function( id ) {
-			var store = this.store;
+			var store = get( this, "store" );
 			return store.find( "channelSettings", id )
 				.then(function( record ) {
 					// get its data and unload it
