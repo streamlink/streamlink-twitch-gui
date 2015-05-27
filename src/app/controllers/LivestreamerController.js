@@ -64,6 +64,7 @@ define([
 
 	return Ember.Controller.extend( ChannelMixin, ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
+		store   : Ember.inject.service(),
 
 		config: Ember.computed.alias( "metadata.config" ),
 
@@ -71,7 +72,8 @@ define([
 
 		active: null,
 		model : function() {
-			return this.store.all( "livestreamer" );
+			var store = get( this, "store" );
+			return store.all( "livestreamer" );
 		}.property(),
 
 
@@ -86,12 +88,13 @@ define([
 			});
 
 
+			var store   = get( this, "store" );
 			var channel = get( stream, "channel" );
-			var id = get( channel, "id" );
+			var id      = get( channel, "id" );
 
 			// is the stream already running?
-			if ( this.store.hasRecordForId( "livestreamer", id ) ) {
-				set( this, "active", this.store.recordForId( "livestreamer", id ) );
+			if ( store.hasRecordForId( "livestreamer", id ) ) {
+				set( this, "active", store.recordForId( "livestreamer", id ) );
 				return setP( this, {
 					modalHead: "You're watching %@".fmt( get( channel, "display_name" ) ),
 					modalBody: get( channel, "status" ),
@@ -100,12 +103,12 @@ define([
 			}
 
 			// create a new livestreamer object
-			var livestreamer = this.store.createRecord( "livestreamer", {
+			var livestreamer = store.createRecord( "livestreamer", {
 				id          : id,
 				stream      : stream,
 				channel     : channel,
-				quality     : get( this.settings, "quality" ),
-				gui_openchat: get( this.settings, "gui_openchat" ),
+				quality     : get( this, "settings.quality" ),
+				gui_openchat: get( this, "settings.gui_openchat" ),
 				started     : new Date()
 			});
 			// modal belongs to this stream now
@@ -152,7 +155,7 @@ define([
 			if ( !guiActions ) { return; }
 
 			// automatically close modal on success
-			if ( get( this.settings, "gui_hidestreampopup" ) ) {
+			if ( get( this, "settings.gui_hidestreampopup" ) ) {
 				this.send( "close" );
 			}
 
@@ -448,7 +451,7 @@ define([
 		},
 
 		minimize: function( restore ) {
-			switch ( get( this.settings, "gui_minimize" ) ) {
+			switch ( get( this, "settings.gui_minimize" ) ) {
 				// minimize
 				case 1:
 					nwWindow.toggleMinimize( restore );
@@ -456,7 +459,7 @@ define([
 				// move to tray: toggle window and taskbar visibility
 				case 2:
 					nwWindow.toggleVisibility( restore );
-					if ( get( this.settings, "isVisibleInTaskbar" ) ) {
+					if ( get( this, "settings.isVisibleInTaskbar" ) ) {
 						nwWindow.setShowInTaskbar( restore );
 					}
 					break;
