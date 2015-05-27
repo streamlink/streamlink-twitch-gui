@@ -1,6 +1,14 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Fixed desktop notifications.
+- Added a second livestreamer fallback path on OSX. #99
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.0...master)
+
+
 ## [v0.9.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.0) (2015-05-25)
 
 - Restructured mainmenu (renamed "Your" to "My"):
