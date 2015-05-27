@@ -218,9 +218,9 @@ define([
 		 * @returns {Promise}
 		 */
 		checkLivestreamer: function() {
-			var path = get( this.settings, "livestreamer" ),
-			    exec = get( this, "config.livestreamer-exec" ),
-			    fb   = get( this, "config.livestreamer-fallback-path-unix" );
+			var path = get( this, "settings.livestreamer" );
+			var exec = get( this, "config.livestreamer-exec" );
+			var fb   = get( this, "config.livestreamer-fallback-paths-unix" );
 
 			// use the default command if the user did not define one
 			path = path ? String( path ) : exec;
@@ -236,14 +236,20 @@ define([
 
 			// check for the executable
 			return which( path, execCheck )
-				// check fallback path
+				// check fallback paths
 				.catch(function() {
-					if ( !isWin ) {
-						fb = PATH.join( PATH.resolve( fb ), exec );
-						return stat( fb, execCheck );
+					var promise = Promise.reject();
+					if ( isWin || !fb || !fb.length ) {
+						return promise;
 					}
-					return Promise.reject();
-				})
+
+					return fb.reduce(function( promise, path ) {
+						var check = PATH.join( PATH.resolve( path ), exec );
+						return promise.catch(function() {
+							return stat( check, execCheck );
+						});
+					}, promise );
+				}.bind( this ) )
 				// not found
 				.catch(function() { throw new NotFoundError(); })
 				// check for correct version
@@ -257,10 +263,10 @@ define([
 		 * @returns {Promise}
 		 */
 		validateLivestreamer: function( exec ) {
-			var minimum = get( this, "config.livestreamer-version-min" ),
-			    time    = get( this, "config.livestreamer-validation-timeout" ),
-			    defer   = Promise.defer(),
-			    spawn   = CP.spawn( exec, [ "--version", "--no-version-check" ] );
+			var minimum = get( this, "config.livestreamer-version-min" );
+			var time    = get( this, "config.livestreamer-validation-timeout" );
+			var defer   = Promise.defer();
+			var spawn   = CP.spawn( exec, [ "--version", "--no-version-check" ] );
 
 			function failed( err ) {
 				spawn = null;
