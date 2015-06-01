@@ -6,14 +6,8 @@
  */
 requirejs.config({
 	"shim": {
-		"app": [
-			"jquery",
-			"ember",
-			"ember-htmlbars",
-			"ember-data",
-			"ember-data-ls"
-		],
 		"ember": {
+			"deps": [ "jquery" ],
 			"exports": "Ember"
 		},
 		"ember-data": {

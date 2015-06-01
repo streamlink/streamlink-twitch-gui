@@ -20,7 +20,23 @@ if ( DEBUG ) {
 
 
 define(function( require ) {
+
+	// load the config first
 	require( [ "config" ], function() {
-		require( [ "app" ] );
+
+		// load dependencies
+		require([
+			"ember",
+			"ember-htmlbars",
+			"ember-data",
+			"ember-data-ls"
+		], function() {
+
+			// load the app module
+			require( [ "app" ] );
+
+		});
+
 	});
+
 });
