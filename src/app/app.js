@@ -135,9 +135,6 @@ define(function( require ) {
 
 		QuitModalTemplate: require( "text!templates/modals/quit.html.hbs" ),
 
-		SearchbarController: require( "controllers/SearchbarController" ),
-		SearchbarView: require( "views/SearchbarView" ),
-
 		VersioncheckController: require( "controllers/VersioncheckController" ),
 		VersioncheckModalTemplate: require( "text!templates/modals/versioncheck.html.hbs" ),
 
@@ -148,6 +145,7 @@ define(function( require ) {
 
 		// Components
 		FormButtonComponent: require( "components/FormButtonComponent" ),
+		SearchBarComponent: require( "components/SearchBarComponent" ),
 		SettingsBarComponent: require( "components/SettingsBarComponent" ),
 		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
 		LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
