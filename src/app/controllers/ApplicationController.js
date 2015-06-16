@@ -1,4 +1,4 @@
-define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
+define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 	var get = Ember.get;
 

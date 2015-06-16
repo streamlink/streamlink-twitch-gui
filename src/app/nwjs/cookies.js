@@ -1,4 +1,4 @@
-define( [ "nwWindow" ], function( nwWindow ) {
+define( [ "nwjs/nwWindow" ], function( nwWindow ) {
 
 	function removeAll() {
 		var Cookies = nwWindow.cookies;

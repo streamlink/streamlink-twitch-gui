@@ -1,6 +1,6 @@
 define([
-	"ember",
-	"ember-data",
+	"Ember",
+	"EmberData",
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution"

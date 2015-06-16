@@ -1,4 +1,4 @@
-define( [ "ember-data", "moment" ], function( DS, moment ) {
+define( [ "EmberData", "Moment" ], function( DS, Moment ) {
 
 	return DS.Model.extend({
 		average_fps: DS.attr( "number" ),
@@ -11,7 +11,7 @@ define( [ "ember-data", "moment" ], function( DS, moment ) {
 
 
 		title_created_at: function() {
-			var created_at = moment( this.get( "created_at" ) );
+			var created_at = new Moment( this.get( "created_at" ) );
 			return "Online since %@".fmt( created_at.format(
 				created_at.diff( new Date(), "days" ) === 0 ? "LTS" : "llll"
 			) );

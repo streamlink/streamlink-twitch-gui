@@ -1,4 +1,4 @@
-define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
+define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
 
 	var get = Ember.get;
 

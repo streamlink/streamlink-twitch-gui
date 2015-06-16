@@ -1,6 +1,6 @@
 define([
-	"ember",
-	"ember-data",
+	"Ember",
+	"EmberData",
 	"store/AdapterMixin"
 ], function( Ember, DS, AdapterMixin ) {
 

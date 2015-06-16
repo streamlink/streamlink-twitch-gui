@@ -1,4 +1,4 @@
-define( [ "nwGui", "nwWindow" ], function( nwGui, nwWindow ) {
+define( [ "nwjs/nwGui", "nwjs/nwWindow" ], function( nwGui, nwWindow ) {
 
 	var macNativeMenuBar;
 

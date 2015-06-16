@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"text!templates/components/formbutton.html.hbs"
 ], function( Ember, template ) {
 

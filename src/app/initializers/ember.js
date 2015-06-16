@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"utils/ember/inflector",
 	"utils/ember/helpers"
 ], function( Ember, inflector, helpers ) {

@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
 
 	return Ember.Controller.extend({
 		summary : Ember.computed.alias( "model.summary" ),

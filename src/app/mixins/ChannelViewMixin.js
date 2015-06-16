@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
 
 	var get = Ember.get;
 	var computed = Ember.computed;

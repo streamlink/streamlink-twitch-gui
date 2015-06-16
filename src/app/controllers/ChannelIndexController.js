@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"mixins/ChannelMixin"
 ], function( Ember, ChannelMixin ) {
 

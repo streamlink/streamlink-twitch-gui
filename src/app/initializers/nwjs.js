@@ -1,17 +1,17 @@
 define([
-	"nwGui",
-	"nwWindow",
-	"nwScreen",
-	"ember",
+	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow",
+	"nwjs/nwScreen",
 	"nwjs/shortcut",
 	"nwjs/tray",
 	"nwjs/menu",
 	"utils/contains"
 ], function(
+	Ember,
 	nwGui,
 	nwWindow,
 	nwScreen,
-	Ember,
 	shortcut,
 	tray,
 	menu,

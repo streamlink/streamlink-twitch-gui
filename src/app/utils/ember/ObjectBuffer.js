@@ -3,7 +3,7 @@
  * Written by Kris Selden for Yapp Labs, published by Luke Melia
  * Slightly modified
  */
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
 
 	var get = Ember.get,
 	    set = Ember.set;

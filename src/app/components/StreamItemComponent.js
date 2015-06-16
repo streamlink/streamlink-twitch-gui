@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"components/ListItemComponent",
 	"text!templates/components/stream.html.hbs"
 ], function( Ember, ListItemComponent, template ) {

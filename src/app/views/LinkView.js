@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
 
 	// reopen and don't extend: this class may be used globally
 

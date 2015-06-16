@@ -1,4 +1,4 @@
-define( [ "nwGui" ], function( nwGui ) {
+define( [ "nwjs/nwGui" ], function( nwGui ) {
 
 	return nwGui.Screen.Init();
 

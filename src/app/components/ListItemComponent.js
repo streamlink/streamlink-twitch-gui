@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"mixins/PreviewImageViewMixin"
 ], function( Ember, PreviewImageViewMixin ) {
 

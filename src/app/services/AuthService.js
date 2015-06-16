@@ -1,16 +1,16 @@
 define([
-	"nwGui",
+	"Ember",
+	"nwjs/nwGui",
 	"nwjs/redirect",
 	"nwjs/cookies",
 	"utils/contains",
-	"ember",
 	"text!root/oauth.json"
 ], function(
+	Ember,
 	nwGui,
 	redirect,
 	cookies,
 	contains,
-	Ember,
 	OAuth
 ) {
 
@@ -47,7 +47,7 @@ define([
 
 		init: function() {
 			var self = this;
-			// FIXME: remove this and use service injection. requires ember-data upgrade
+			// FIXME: remove this and use service injection. requires EmberData upgrade
 			self.store = self.container.lookup( "store:main" );
 
 			self.store.find( "auth" )

@@ -1,6 +1,6 @@
 define([
-	"ember",
-	"ember-data",
+	"Ember",
+	"EmberData",
 	"models/localstorage/Settings"
 ], function( Ember, DS, Settings ) {
 

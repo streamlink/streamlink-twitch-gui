@@ -6,23 +6,15 @@
  */
 requirejs.config({
 	"shim": {
-		"ember": {
-			"deps": [ "jquery" ],
+		"Ember": {
+			"deps": [ "JQuery" ],
 			"exports": "Ember"
 		},
-		"ember-data": {
-			"deps": [ "ember" ],
+		"EmberData": {
+			"deps": [ "Ember" ],
 			"exports": "DS"
 		},
-		"ember-data-ls": [ "ember-data" ]
-	},
-
-	"map": {
-		"*": {
-			"nwGui"     : "nwjs/nwGui",
-			"nwWindow"  : "nwjs/nwWindow",
-			"nwScreen"  : "nwjs/nwScreen"
-		}
+		"EmberDataLS": [ "EmberData" ]
 	},
 
 	"paths": {
@@ -30,13 +22,13 @@ requirejs.config({
 		"text": "../vendor/requirejs-text/text",
 
 		// Vendor
-		"ember"         : "../vendor/ember/ember.debug",
-		"ember-htmlbars": "../vendor/ember/ember-template-compiler",
-		"ember-data"    : "../vendor/ember-data/ember-data",
-		"ember-data-ls" : "../vendor/ember-localstorage-adapter/localstorage_adapter",
-		"jquery"        : "../vendor/jquery/dist/jquery",
-		"Selecter"      : "../vendor/Selecter/jquery.fs.selecter",
-		"moment"        : "../vendor/momentjs/moment",
+		"Ember"        : "../vendor/ember/ember.debug",
+		"EmberHtmlbars": "../vendor/ember/ember-template-compiler",
+		"EmberData"    : "../vendor/ember-data/ember-data",
+		"EmberDataLS"  : "../vendor/ember-localstorage-adapter/localstorage_adapter",
+		"JQuery"       : "../vendor/jquery/dist/jquery",
+		"Selecter"     : "../vendor/Selecter/jquery.fs.selecter",
+		"Moment"       : "../vendor/momentjs/moment",
 
 		// Application paths
 		"root"        : "..",

@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"gui/selectable",
 	"gui/smoothscroll",
 	"text!templates/application.html.hbs"

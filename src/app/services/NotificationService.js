@@ -1,13 +1,13 @@
 define([
-	"nwWindow",
-	"ember",
+	"Ember",
+	"nwjs/nwWindow",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
 	"utils/fs/clearfolder"
 ], function(
-	nwWindow,
 	Ember,
+	nwWindow,
 	ChannelSettingsMixin,
 	mkdirp,
 	download,

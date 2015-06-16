@@ -1,4 +1,4 @@
-define( [ "nwGui", "ember", "utils/semver" ], function( nwGui, Ember, semver ) {
+define( [ "Ember", "nwjs/nwGui", "utils/semver" ], function( Ember, nwGui, semver ) {
 
 	var OS   = require( "os" ).release();
 	var win8 = "6.2.0";

@@ -1,4 +1,4 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "EmberData" ], function( DS ) {
 
 	return DS.Model.extend({
 		access_token: DS.attr( "string" ),

@@ -1,4 +1,4 @@
-define( [ "ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
+define( [ "Ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
 
 	var get = Ember.get;
 	var compile = Ember.HTMLBars.compile;

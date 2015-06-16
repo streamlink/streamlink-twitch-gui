@@ -1,7 +1,7 @@
 define(function( require ) {
 
-	var Ember = require( "ember" ),
-	    DS    = require( "ember-data" );
+	var Ember = require( "Ember" );
+	var DS    = require( "EmberData" );
 
 	require( "initializers/initializers" );
 
@@ -234,7 +234,7 @@ define(function( require ) {
 			var settings = this.__container__.lookup( "record:settings" );
 
 			// and emit the ready event to the nwjs window
-			require( "nwWindow" ).emit( "ready", settings );
+			require( "nwjs/nwWindow" ).emit( "ready", settings );
 		},
 
 		toString: function() { return "App"; }

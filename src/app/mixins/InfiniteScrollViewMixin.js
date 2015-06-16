@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
 
 	var $window = Ember.$( window );
 

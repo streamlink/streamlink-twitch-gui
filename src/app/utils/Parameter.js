@@ -1,4 +1,4 @@
-define( [ "ember", "utils/Substitution" ], function( Ember, Substitution ) {
+define( [ "Ember", "utils/Substitution" ], function( Ember, Substitution ) {
 
 	var get = Ember.get;
 	var makeArray = Ember.makeArray;

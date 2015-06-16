@@ -1,6 +1,6 @@
 /* jshint quotmark:false */
 define([
-	"ember",
+	"Ember",
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution"

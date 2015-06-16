@@ -1,4 +1,4 @@
-define( [ "ember", "ember-data" ], function( Ember, DS ) {
+define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 	var get  = Ember.get,
 	    url  = "%@?_=%@",

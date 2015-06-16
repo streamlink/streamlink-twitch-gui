@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"text!templates/watching.html.hbs"
 ], function( Ember, template ) {
 

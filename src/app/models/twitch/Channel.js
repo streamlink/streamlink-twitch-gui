@@ -1,4 +1,4 @@
-define( [ "ember", "ember-data" ], function( Ember, DS ) {
+define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 	var get = Ember.get,
 	    re_lang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
@@ -30,7 +30,7 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 		// Twitch.tv API bug?
 		// Sometimes a user record (/user/:user - model not implemented) is embedded into
 		// a stream record instead of a channels record (/channels/:channel - the current model).
-		// We're defining the "missing" attributes, so that ember-data doesn't complain...
+		// We're defining the "missing" attributes, so that EmberData doesn't complain...
 		bio: DS.attr(),
 		type: DS.attr(),
 

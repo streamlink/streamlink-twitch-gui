@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"text!root/metadata.json"
 ], function( Ember, metadata ) {
 

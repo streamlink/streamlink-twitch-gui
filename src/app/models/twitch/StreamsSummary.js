@@ -1,4 +1,4 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "EmberData" ], function( DS ) {
 
 	return DS.Model.extend({
 		channels: DS.attr( "number" ),

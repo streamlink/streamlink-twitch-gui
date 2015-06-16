@@ -1,4 +1,4 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "EmberData" ], function( DS ) {
 
 	// These records have a different structure than /kraken/chat/emoticons
 	// So we're defining another model explicitly for those

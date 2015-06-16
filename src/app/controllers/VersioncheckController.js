@@ -1,4 +1,4 @@
-define( [ "ember", "utils/semver" ], function( Ember, semver ) {
+define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 
 	var get = Ember.get;
 

@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"mixins/InfiniteScrollRouteMixin",
 	"utils/preload"
 ], function( Ember, InfiniteScrollRouteMixin, preload ) {

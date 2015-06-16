@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"views/ModalView",
 	"mixins/ChannelViewMixin",
 	"text!templates/modals/layouts/livestreamer.html.hbs"

@@ -1,4 +1,4 @@
-define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
+define( [ "Ember" ], function( Ember ) {
 
 	Ember.Application.initializer({
 		name: "settings",

@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"utils/wait",
 	"text!templates/user/auth.html.hbs"
 ], function( Ember, wait, template ) {

@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"utils/linkmatching"
 ], function(
 	Ember,

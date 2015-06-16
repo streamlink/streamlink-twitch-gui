@@ -1,9 +1,9 @@
 define([
-	"ember",
+	"Ember",
+	"Moment",
 	"components/ListItemComponent",
-	"moment",
 	"text!templates/components/subscription.html.hbs"
-], function( Ember, ListItemComponent, moment, template ) {
+], function( Ember, Moment, ListItemComponent, template ) {
 
 	var get = Ember.get;
 
@@ -30,7 +30,7 @@ define([
 
 		ends: function() {
 			var access_end = get( this, "content.access_end" );
-			return moment().to( access_end );
+			return new Moment().to( access_end );
 		}.property( "content.access_end" ).volatile(),
 
 

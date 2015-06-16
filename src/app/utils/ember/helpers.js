@@ -1,4 +1,4 @@
-define( [ "moment" ], function( moment ) {
+define( [ "Moment" ], function( Moment ) {
 
 	var helpers = {};
 
@@ -17,15 +17,15 @@ define( [ "moment" ], function( moment ) {
 	helpers[ "math-div" ] = function( a, b ) { return a / b; };
 
 	helpers[ "format-time" ] = function( date, format ) {
-		return moment( date ).format( format );
+		return new Moment( date ).format( format );
 	};
 
 	helpers[ "time-from-now" ] = function helperTimeFromNow( date, suffix ) {
-		return moment( date ).fromNow( suffix );
+		return new Moment( date ).fromNow( suffix );
 	};
 
 	helpers[ "hours-from-now" ] = function helperHoursFromNow( time ) {
-		var diff = Math.floor( Math.max( 0, moment().diff( time, "minutes", true ) ) );
+		var diff = Math.floor( Math.max( 0, new Moment().diff( time, "minutes", true ) ) );
 		return diff < 1
 			? "just now"
 			: diff < 60

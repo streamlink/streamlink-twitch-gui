@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"text!templates/components/infinitescroll.html.hbs"
 ], function( Ember, template ) {
 

@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"mixins/RetryTransitionMixin"
 ], function( Ember, RetryTransitionMixin ) {
 

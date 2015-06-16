@@ -1,13 +1,13 @@
 define([
-	"nwGui",
-	"nwWindow",
-	"nwScreen",
-	"ember"
+	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow",
+	"nwjs/nwScreen"
 ], function(
+	Ember,
 	nwGui,
 	nwWindow,
-	nwScreen,
-	Ember
+	nwScreen
 ) {
 
 	var get = Ember.get,

@@ -1,16 +1,16 @@
 define([
-	"nwGui",
-	"nwWindow",
-	"ember",
+	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow",
 	"mixins/ChannelMixin",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/which",
 	"utils/fs/stat",
 	"utils/semver"
 ], function(
+	Ember,
 	nwGui,
 	nwWindow,
-	Ember,
 	ChannelMixin,
 	ChannelSettingsMixin,
 	which,

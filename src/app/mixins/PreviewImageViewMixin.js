@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
 
 	var $     = Ember.$;
 	var $node = $( "<div>" ).addClass( "previewError" );
