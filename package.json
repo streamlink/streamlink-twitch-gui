@@ -24,13 +24,13 @@
 		"grunt-contrib-requirejs": "0.4.4",
 		"grunt-contrib-uglify": "0.8.0",
 		"grunt-contrib-watch": "0.6.1",
-		"grunt-node-webkit-builder": "1.0.2",
 		"grunt-shell": "1.1.2",
 		"grunt-template": "0.2.3",
 		"less-plugin-clean-css": "1.5.0",
 		"load-grunt-config": "0.16.0",
 		"q": "1.2.0",
-		"q-io": "1.12.0"
+		"q-io": "1.12.0",
+		"node-webkit-builder": "1.0.12"
 	},
 
 	"config": {

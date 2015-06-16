@@ -14,7 +14,7 @@ module.exports = function( grunt ) {
 						// run these tasks before the compilation
 						.concat( tasks[ platform ].before || [] )
 						// the actual compile tasks
-						.concat([ "nodewebkit:" + platform ])
+						.concat([ "nwjs:" + platform ])
 						// run these tasks after the compilation
 						.concat( tasks[ platform ].after || [] )
 					);

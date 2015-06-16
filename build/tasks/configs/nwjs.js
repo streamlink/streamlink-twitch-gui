@@ -15,29 +15,29 @@ module.exports = {
 	},
 
 	win32: {
-		options: { win32: true },
+		options: { platforms: [ "win32" ] },
 		src    : "build/tmp/**"
 	},
 	win64: {
-		options: { win64: true },
+		options: { platforms: [ "win64" ] },
 		src    : "build/tmp/**"
 	},
 
 	osx32: {
-		options: { osx32: true },
+		options: { platforms: [ "osx32" ] },
 		src    : "build/tmp/**"
 	},
 	osx64: {
-		options: { osx64: true },
+		options: { platforms: [ "osx64" ] },
 		src    : "build/tmp/**"
 	},
 
 	linux32: {
-		options: { linux32: true },
+		options: { platforms: [ "linux32" ] },
 		src    : "build/tmp/**"
 	},
 	linux64: {
-		options: { linux64: true },
+		options: { platforms: [ "linux64" ] },
 		src    : "build/tmp/**"
 	}
 };
