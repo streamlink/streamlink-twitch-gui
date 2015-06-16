@@ -2,7 +2,7 @@ default:
     - "dev"
 dev:
     - "build"
-    - "concurrent:dev_watchers"
+    - "concurrent:runbuild"
 test:
     - "jshint:test"
     - "connect:test"
