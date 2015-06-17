@@ -9,8 +9,8 @@ define([
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		modelObserver: function() {
 			var model    = get( this, "model" );
+			var settings = get( this, "settings" );
 			var original = get( model, "content" );
-			var settings = this.settings;
 
 			original.eachAttribute(function( attr, meta ) {
 				var customDefault = meta.options.defaultValue;

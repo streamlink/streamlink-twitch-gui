@@ -9,7 +9,8 @@ define([
 
 	function settingsAttrMeta( attr, prop ) {
 		return function() {
-			return this.settings.constructor.metaForProperty( attr ).options[ prop ];
+			var settings = get( this, "settings" );
+			return settings.constructor.metaForProperty( attr ).options[ prop ];
 		}.property( "settings" );
 	}
 

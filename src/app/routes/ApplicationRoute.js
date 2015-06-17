@@ -30,7 +30,7 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 			},
 
 			"gotoHomepage": function( noHistoryEntry ) {
-				var homepage = get( this.settings, "gui_homepage" );
+				var homepage = get( this, "settings.gui_homepage" );
 				var method   = noHistoryEntry
 					? "replaceWith"
 					: "transitionTo";

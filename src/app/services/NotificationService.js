@@ -108,7 +108,7 @@ define([
 
 		_windowBadgeLabel: function() {
 			var label;
-			if ( !get( this, "running" ) || !get( this.settings, "notify_badgelabel" ) ) {
+			if ( !get( this, "running" ) || !get( this, "settings.notify_badgelabel" ) ) {
 				label = "";
 			} else {
 				var model = get( this, "model" );
@@ -217,7 +217,7 @@ define([
 
 
 		stripDisabledChannels: function( streams ) {
-			var all = get( this.settings, "notify_all" );
+			var all = get( this, "settings.notify_all" );
 
 			return Promise.all( streams.map(function( stream ) {
 				var id = get( stream, "channel.id" );
@@ -249,7 +249,7 @@ define([
 			if ( !streams.length ) { return; }
 
 			// merge multiple notifications and show a single one
-			if ( streams.length > 1 && get( this.settings, "notify_grouping" ) ) {
+			if ( streams.length > 1 && get( this, "settings.notify_grouping" ) ) {
 				return this.showNotificationGroup( streams );
 
 			// show all notifications
