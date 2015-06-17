@@ -3,7 +3,11 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 	var get = Ember.get;
 	var attr = DS.attr;
 	var hasMany = DS.hasMany;
+	var bool = Ember.computed.bool;
+	var equal = Ember.computed.equal;
+
 	var re_lang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
+
 
 	return DS.Model.extend({
 		background: attr( "string" ),
@@ -70,12 +74,12 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 		/** @type {(TwitchUserSubscription|boolean)} subscribed */
 		subscribed        : false,
-		isSubscribed      : Ember.computed.bool( "subscribed" ),
+		isSubscribed      : bool( "subscribed" ),
 
 		/** @type {(TwitchUserFollowsChannel|boolean)} following */
 		following         : null,
-		isFollowing       : Ember.computed.bool( "following" ),
-		isFollowingLoading: Ember.computed.equal( "following", null ),
+		isFollowing       : bool( "following" ),
+		isFollowingLoading: equal( "following", null ),
 		isFollowingLocked : false
 
 	}).reopenClass({

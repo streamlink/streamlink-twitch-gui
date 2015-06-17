@@ -3,8 +3,9 @@ define([
 	"text!templates/components/searchbar.html.hbs"
 ], function( Ember, layout ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var alias = Ember.computed.alias;
 
 	return Ember.Component.extend( Ember.SortableMixin, {
 		store: Ember.inject.service(),
@@ -16,7 +17,7 @@ define([
 		// the record array (will be set by init())
 		model: {},
 		// needed by SortableMixin's arrangedContent
-		content: Ember.computed.alias( "model.content" ),
+		content: alias( "model.content" ),
 		sortProperties: [ "date" ],
 		sortAscending: false,
 

@@ -26,6 +26,8 @@ define([
 	    setP = Ember.setProperties,
 	    run  = Ember.run;
 
+	var alias = Ember.computed.alias;
+
 	var isWin = process.platform === "win32";
 
 	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
@@ -66,7 +68,7 @@ define([
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
 
-		config: Ember.computed.alias( "metadata.config" ),
+		config: alias( "metadata.config" ),
 
 		modalBtns: null,
 

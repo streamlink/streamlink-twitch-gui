@@ -5,6 +5,7 @@ define([
 ], function( Ember, ListItemComponent, template ) {
 
 	var get = Ember.get;
+	var any = Ember.computed.any;
 
 	return ListItemComponent.extend({
 		layout: Ember.HTMLBars.compile( template ),
@@ -12,8 +13,8 @@ define([
 
 		action: "goto",
 
-		game: Ember.computed.any( "content.game", "content" ),
-		hasStats: Ember.computed.any( "content.channels", "content.viewers" ),
+		game: any( "content.game", "content" ),
+		hasStats: any( "content.channels", "content.viewers" ),
 
 		click: function() {
 			this.sendAction( "action", "games.game", get( this, "game.name" ) );

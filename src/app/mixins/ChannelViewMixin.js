@@ -1,28 +1,29 @@
 define( [ "Ember" ], function( Ember ) {
 
 	var get = Ember.get;
-	var computed = Ember.computed;
+	var alias = Ember.computed.alias;
+	var readOnly = Ember.computed.readOnly;
 
 	function following( yes, no, unknown ) {
-		return computed( "isFollowing", "isFollowingL", function() {
+		return function() {
 			return get( this, "isFollowingL" )
 				? unknown
 				: get( this, "isFollowing" )
 					? yes
 					: no;
-		});
+		}.property( "isFollowing", "isFollowingL" );
 	}
 
 	return Ember.Mixin.create({
-		channel     : computed.alias( "context.channel" ),
+		channel     : alias( "context.channel" ),
 
-		isSubscribed: computed.readOnly( "channel.isSubscribed" ),
-		isFollowing : computed.readOnly( "channel.isFollowing" ),
-		isFollowingL: computed.readOnly( "channel.isFollowingLoading" ),
+		isSubscribed: readOnly( "channel.isSubscribed" ),
+		isFollowing : readOnly( "channel.isFollowing" ),
+		isFollowingL: readOnly( "channel.isFollowingLoading" ),
 
-		subscrClass : computed( "isSubscribed", function() {
+		subscrClass : function() {
 			return get( this, "isSubscribed" ) ? "btn-success" : "btn-primary";
-		}),
+		}.property( "isSubscribed" ),
 
 		followAction: following( "follow", "follow", null ),
 		followClass : following( "btn-success", "btn-danger", "btn-info" ),

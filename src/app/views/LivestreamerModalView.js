@@ -10,14 +10,17 @@ define([
 	layout
 ) {
 
+	var alias = Ember.computed.alias;
+	var bool = Ember.computed.bool;
+
 	return ModalView.extend( ChannelViewMixin, {
 		layout: Ember.HTMLBars.compile( layout ),
 		classNames: [ "mymodal", "modal-livestreamer" ],
 
-		showStats: Ember.computed.bool( "context.active.success" ),
+		showStats: bool( "context.active.success" ),
 
-		stream : Ember.computed.alias( "context.active.stream" ),
-		channel: Ember.computed.alias( "context.active.channel" )
+		stream : alias( "context.active.stream" ),
+		channel: alias( "context.active.channel" )
 	});
 
 });

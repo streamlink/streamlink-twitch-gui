@@ -4,6 +4,7 @@ define([
 ], function( Ember, template ) {
 
 	var get = Ember.get;
+	var or = Ember.computed.or;
 
 	return Ember.Component.extend({
 		layout: Ember.HTMLBars.compile( template ),
@@ -12,7 +13,7 @@ define([
 		attributeBindings: [ "type", "disabled" ],
 
 		type: "button",
-		disabled: Ember.computed.or( "isFetching", "hasFetchedAll" ),
+		disabled: or( "isFetching", "hasFetchedAll" ),
 		errorBinding: "targetObject.fetchError",
 
 		isFetchingBinding: "targetObject.isFetching",

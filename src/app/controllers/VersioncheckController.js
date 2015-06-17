@@ -1,12 +1,13 @@
 define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 
 	var get = Ember.get;
+	var alias = Ember.computed.alias;
 
 	return Ember.Controller.extend({
 		metadata: Ember.inject.service(),
 
-		config : Ember.computed.alias( "metadata.config" ),
-		version: Ember.computed.alias( "metadata.package.version" ),
+		config : alias( "metadata.config" ),
+		version: alias( "metadata.package.version" ),
 
 		// check again in x days (time in ms)
 		time: function() {

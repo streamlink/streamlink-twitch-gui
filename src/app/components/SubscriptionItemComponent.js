@@ -6,6 +6,7 @@ define([
 ], function( Ember, Moment, ListItemComponent, template ) {
 
 	var get = Ember.get;
+	var alias = Ember.computed.alias;
 
 	return ListItemComponent.extend({
 		metadata: Ember.inject.service(),
@@ -14,9 +15,9 @@ define([
 		classNames: [ "subscription-component" ],
 		attributeBindings: [ "style" ],
 
-		product  : Ember.computed.alias( "content.product" ),
-		channel  : Ember.computed.alias( "product.partner_login" ),
-		emoticons: Ember.computed.alias( "product.emoticons" ),
+		product  : alias( "content.product" ),
+		channel  : alias( "product.partner_login" ),
+		emoticons: alias( "product.emoticons" ),
 
 		style: function() {
 			var banner = get( this, "channel.profile_banner" );

@@ -5,6 +5,8 @@ define([
 ], function( Ember, ListItemComponent, template ) {
 
 	var get = Ember.get;
+	var alias = Ember.computed.alias;
+	var and = Ember.computed.and;
 
 	return ListItemComponent.extend({
 		layout: Ember.HTMLBars.compile( template ),
@@ -12,10 +14,10 @@ define([
 
 		action: "openLivestreamer",
 
-		channel: Ember.computed.alias( "content.channel" ),
+		channel: alias( "content.channel" ),
 
 		showGame: false,
-		_showGame: Ember.computed.and( "showGame", "channel.game" ),
+		_showGame: and( "showGame", "channel.game" ),
 
 		actions: {
 			"startStream": function() {

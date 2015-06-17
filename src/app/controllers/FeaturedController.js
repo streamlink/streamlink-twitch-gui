@@ -1,8 +1,10 @@
 define( [ "Ember" ], function( Ember ) {
 
+	var alias = Ember.computed.alias;
+
 	return Ember.Controller.extend({
-		summary : Ember.computed.alias( "model.summary" ),
-		featured: Ember.computed.alias( "model.featured" ),
+		summary : alias( "model.summary" ),
+		featured: alias( "model.featured" ),
 
 		// reference the active stream by id
 		// so we can safely go back to the route

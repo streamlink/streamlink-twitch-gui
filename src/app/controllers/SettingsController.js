@@ -3,8 +3,9 @@ define([
 	"mixins/RetryTransitionMixin"
 ], function( Ember, RetryTransitionMixin ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var equal = Ember.computed.equal;
 
 	function settingsAttrMeta( attr, prop ) {
 		return function() {
@@ -21,8 +22,8 @@ define([
 		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
 		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
 
-		hasTaskBarIntegration: Ember.computed.equal( "model.gui_integration", 1 ),
-		hasBothIntegrations  : Ember.computed.equal( "model.gui_integration", 3 ),
+		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
+		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
 		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
 		hasNotificationClickSupport: process.platform !== "linux",

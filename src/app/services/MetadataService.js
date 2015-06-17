@@ -3,15 +3,17 @@ define([
 	"text!root/metadata.json"
 ], function( Ember, metadata ) {
 
+	var alias = Ember.computed.alias;
+
 	metadata = JSON.parse( metadata );
 
 	return Ember.Service.extend({
 		metadata: metadata,
 
-		package     : Ember.computed.alias( "metadata.package" ),
-		config      : Ember.computed.alias( "metadata.package.config" ),
-		dependencies: Ember.computed.alias( "metadata.dependencies" ),
-		contributors: Ember.computed.alias( "metadata.contributors" )
+		package     : alias( "metadata.package" ),
+		config      : alias( "metadata.package.config" ),
+		dependencies: alias( "metadata.dependencies" ),
+		contributors: alias( "metadata.contributors" )
 	});
 
 });

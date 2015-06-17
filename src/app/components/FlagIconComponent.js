@@ -1,6 +1,7 @@
 define( [ "Ember" ], function( Ember ) {
 
 	var get = Ember.get;
+	var alias = Ember.computed.alias;
 
 	return Ember.Component.extend({
 		metadata: Ember.inject.service(),
@@ -12,7 +13,7 @@ define( [ "Ember" ], function( Ember ) {
 		lang: null,
 		type: null,
 
-		codes: Ember.computed.alias( "metadata.config.language_codes" ),
+		codes: alias( "metadata.config.language_codes" ),
 
 		flag: function() {
 			var codes = get( this, "codes" );

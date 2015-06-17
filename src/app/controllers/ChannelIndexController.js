@@ -4,12 +4,13 @@ define([
 ], function( Ember, ChannelMixin ) {
 
 	var get = Ember.get;
+	var alias = Ember.computed.alias;
 
 	return Ember.Controller.extend( ChannelMixin, {
 		metadata: Ember.inject.service(),
 
-		stream : Ember.computed.alias( "model.stream" ),
-		channel: Ember.computed.alias( "model.channel" ),
+		stream : alias( "model.stream" ),
+		channel: alias( "model.channel" ),
 
 		_loadSubscriptionAndFollowingData: function() {
 			var channel = get( this, "channel" );

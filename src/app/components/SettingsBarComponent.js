@@ -3,15 +3,18 @@ define([
 	"text!templates/components/settingsbar.html.hbs"
 ], function( Ember, template ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var alias = Ember.computed.alias;
+	var equal = Ember.computed.equal;
+	var not = Ember.computed.not;
 
 	return Ember.Component.extend({
 		layout: Ember.HTMLBars.compile( template ),
 		tagName: "div",
 		classNameBindings: [ ":settingsbar", "isOpened:opened" ],
 
-		settingsBinding: "targetObject.settings",
+		settings: alias( "targetObject.settings" ),
 
 		isOpened: false,
 
@@ -27,8 +30,8 @@ define([
 			return get( this, "url" ) === get( this, "settings.gui_homepage" );
 		}.property( "url", "settings.gui_homepage" ),
 
-		isLayoutTile: Ember.computed.equal( "settings.gui_layout", "tile" ),
-		isLayoutList: Ember.computed.not( "isLayoutTile" ),
+		isLayoutTile: equal( "settings.gui_layout", "tile" ),
+		isLayoutList: not( "isLayoutTile" ),
 
 
 		actions: {

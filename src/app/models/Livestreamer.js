@@ -16,6 +16,7 @@ define([
 	var set = Ember.set;
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
+	var alias = Ember.computed.alias;
 
 	/**
 	 * @class Livestreamer
@@ -36,7 +37,7 @@ define([
 
 		auth: Ember.inject.service(),
 
-		session: Ember.computed.alias( "auth.session" ),
+		session: alias( "auth.session" ),
 
 		init: function() {
 			this._super.apply( this, arguments );

@@ -1,6 +1,7 @@
 define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 	var get = Ember.get;
+	var readOnly = Ember.computed.readOnly;
 
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
@@ -10,14 +11,14 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 		dev: DEBUG,
 
-		streamsLength: Ember.computed.readOnly( "controllers.livestreamer.model.length" ),
+		streamsLength: readOnly( "controllers.livestreamer.model.length" ),
 
-		notif_enabled: Ember.computed.readOnly( "notification.enabled" ),
-		notif_running: Ember.computed.readOnly( "notification.running" ),
-		notif_error  : Ember.computed.readOnly( "notification.error" ),
+		notif_enabled: readOnly( "notification.enabled" ),
+		notif_running: readOnly( "notification.running" ),
+		notif_error  : readOnly( "notification.error" ),
 
-		loginSuccess: Ember.computed.readOnly( "auth.session.isLoggedIn" ),
-		loginPending: Ember.computed.readOnly( "auth.session.isPending" ),
+		loginSuccess: readOnly( "auth.session.isLoggedIn" ),
+		loginPending: readOnly( "auth.session.isPending" ),
 		loginTitle  : function() {
 			return get( this, "loginSuccess" )
 				? "Logged in as %@%@".fmt(
