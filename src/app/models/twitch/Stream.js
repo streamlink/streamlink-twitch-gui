@@ -1,4 +1,6 @@
-define( [ "EmberData", "Moment" ], function( DS, Moment ) {
+define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
+
+	var get = Ember.get;
 
 	return DS.Model.extend({
 		average_fps: DS.attr( "number" ),
@@ -11,15 +13,16 @@ define( [ "EmberData", "Moment" ], function( DS, Moment ) {
 
 
 		title_created_at: function() {
-			var created_at = new Moment( this.get( "created_at" ) );
-			return "Online since %@".fmt( created_at.format(
-				created_at.diff( new Date(), "days" ) === 0 ? "LTS" : "llll"
-			) );
+			var created_at = get( this, "created_at" );
+			var moment     = new Moment( created_at );
+			var diff       = moment.diff( new Date(), "days" );
+			var formatted  = moment.format( diff === 0 ? "LTS" : "llll" );
+			return "Online since %@".fmt( formatted );
 		}.property( "created_at" ),
 
 		title_viewers: function() {
-			var viewers = this.get( "viewers" ),
-			    numerus = viewers === 1 ? "person is" : "people are";
+			var viewers = get( this, "viewers" );
+			var numerus = viewers === 1 ? "person is" : "people are";
 			return "%@ %@ watching".fmt( viewers, numerus );
 		}.property( "viewers" )
 

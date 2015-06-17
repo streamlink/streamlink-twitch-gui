@@ -1,4 +1,6 @@
-define( [ "EmberData" ], function( DS ) {
+define( [ "Ember", "EmberData" ], function( Ember, DS ) {
+
+	var get = Ember.get;
 
 	return DS.Model.extend({
 		access_token: DS.attr( "string" ),
@@ -12,9 +14,9 @@ define( [ "EmberData" ], function( DS ) {
 		// status properties
 		isPending : false,
 		isLoggedIn: function() {
-			var token   = this.get( "access_token" ),
-			    name    = this.get( "user_name" ),
-			    pending = this.get( "isPending" );
+			var token   = get( this, "access_token" );
+			var name    = get( this, "user_name" );
+			var pending = get( this, "isPending" );
 
 			return token && name && !pending;
 		}.property( "access_token", "user_name", "isPending" )

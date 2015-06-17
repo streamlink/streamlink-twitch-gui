@@ -3,6 +3,8 @@ define([
 	"text!templates/about.html.hbs"
 ], function( Ember, template ) {
 
+	var get = Ember.get;
+
 	return Ember.View.extend({
 		metadata: Ember.inject.service(),
 
@@ -11,7 +13,7 @@ define([
 		classNames: [ "content", "content-about" ],
 
 		dependencies: function() {
-			var deps = this.get( "metadata.dependencies" );
+			var deps = get( this, "metadata.dependencies" );
 			return Object.keys( deps ).map(function( key ) {
 				return {
 					title  : key,

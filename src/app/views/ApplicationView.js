@@ -10,6 +10,8 @@ define([
 	template
 ) {
 
+	var get = Ember.get;
+
 	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),
 		tagName: "body",
@@ -27,7 +29,7 @@ define([
 				var f5    = e.keyCode === 116;
 				var ctrlR = e.keyCode ===  82 && e.ctrlKey === true;
 				if ( f5 || ctrlR ) {
-					this.get( "controller" ).send( "refresh" );
+					get( this, "controller" ).send( "refresh" );
 				}
 			}.bind( this ), false );
 		}

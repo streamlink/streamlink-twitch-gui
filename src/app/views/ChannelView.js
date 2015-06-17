@@ -4,6 +4,8 @@ define([
 	"text!templates/channel/channel.html.hbs"
 ], function( Ember, PreviewImageViewMixin, template ) {
 
+	var get = Ember.get;
+
 	return Ember.View.extend( PreviewImageViewMixin, {
 		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
@@ -12,7 +14,7 @@ define([
 		actions: {
 			"toggleSettings": function() {
 				this.element.classList.add( "animated" );
-				this.get( "controller" ).send( "toggleSettings" );
+				get( this, "controller" ).send( "toggleSettings" );
 			}
 		}
 	});

@@ -3,6 +3,8 @@ define([
 	"text!templates/components/infinitescroll.html.hbs"
 ], function( Ember, template ) {
 
+	var get = Ember.get;
+
 	return Ember.Component.extend({
 		layout: Ember.HTMLBars.compile( template ),
 		tagName: "button",
@@ -17,7 +19,8 @@ define([
 		hasFetchedAllBinding: "targetObject.hasFetchedAll",
 
 		click: function() {
-			this.get( "targetObject" ).send( "willFetchContent", true );
+			var targetObject = get( this, "targetObject" );
+			targetObject.send( "willFetchContent", true );
 		}
 	});
 

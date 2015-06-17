@@ -3,6 +3,9 @@ define([
 	"text!templates/components/fileselect.html.hbs"
 ], function( Ember, template ) {
 
+	var get = Ember.get;
+	var set = Ember.set;
+
 	return Ember.Component.extend({
 		layout: Ember.HTMLBars.compile( template ),
 		tagName: "div",
@@ -19,14 +22,14 @@ define([
 				tabindex: -1
 			}).change(function() {
 				if ( !this.value.length ) { return; }
-				self.set( "value", this.value );
+				set( self, "value", this.value );
 				this.files.clear();
 			});
 		}.on( "init" ),
 
 		actions: {
 			"selectfile": function() {
-				if ( !this.get( "disabled" ) ) {
+				if ( !get( this, "disabled" ) ) {
 					this._input.click();
 				}
 			}

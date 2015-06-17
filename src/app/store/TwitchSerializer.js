@@ -1,5 +1,7 @@
 define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
+	var get = Ember.get;
+
 	return DS.RESTSerializer.extend( DS.EmbeddedRecordsMixin, {
 		primaryKey: "_id",
 
@@ -12,8 +14,8 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		extractMeta: function( store, type, payload ) {
 			if ( !payload ) { return; }
 
-			var primaryKey = Ember.get( this, "primaryKey" ),
-			    data = {};
+			var primaryKey = get( this, "primaryKey" );
+			var data = {};
 
 			Object.keys( payload ).forEach(function( key ) {
 				if ( key.charAt( 0 ) === "_" && key !== primaryKey ) {

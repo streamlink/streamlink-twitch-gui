@@ -1,5 +1,7 @@
 define( [ "Ember" ], function( Ember ) {
 
+	var get = Ember.get;
+
 	return Ember.Component.extend({
 		tagName: "a",
 		classNameBindings: [ ":external-link" ],
@@ -12,7 +14,7 @@ define( [ "Ember" ], function( Ember ) {
 		click: function( e ) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
-			this.sendAction( "action", this.get( "url" ) );
+			this.sendAction( "action", get( this, "url" ) );
 		},
 
 		didInsertElement: function() {
