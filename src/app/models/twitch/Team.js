@@ -1,14 +1,16 @@
 define( [ "EmberData" ], function( DS ) {
 
+	var attr = DS.attr;
+
 	return DS.Model.extend({
-		background: DS.attr( "string" ),
-		banner: DS.attr( "string" ),
-		created_at: DS.attr( "date" ),
-		display_name: DS.attr( "string" ),
-		info: DS.attr( "string" ),
-		logo: DS.attr( "string" ),
-		name: DS.attr( "string" ),
-		updated_at: DS.attr( "date" )
+		background: attr( "string" ),
+		banner: attr( "string" ),
+		created_at: attr( "date" ),
+		display_name: attr( "string" ),
+		info: attr( "string" ),
+		logo: attr( "string" ),
+		name: attr( "string" ),
+		updated_at: attr( "date" )
 	});
 
 });

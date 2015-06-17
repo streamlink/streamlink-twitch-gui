@@ -1,11 +1,12 @@
 define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 	var get = Ember.get;
+	var attr = DS.attr;
 
 	return DS.Model.extend({
-		query : DS.attr( "string" ),
-		filter: DS.attr( "string" ),
-		date  : DS.attr( "date" ),
+		query : attr( "string" ),
+		filter: attr( "string" ),
+		date  : attr( "date" ),
 
 		label: function() {
 			var filter = get( this, "filter" );

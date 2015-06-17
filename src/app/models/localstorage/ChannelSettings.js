@@ -4,6 +4,8 @@ define([
 	"models/localstorage/Settings"
 ], function( Ember, DS, Settings ) {
 
+	var attr = DS.attr;
+
 	var attributes = [
 		"quality",
 		"gui_openchat",
@@ -15,7 +17,7 @@ define([
 	attributes.forEach(function( name ) {
 		var meta = Settings.metaForProperty( name );
 		if ( !meta || !meta.isAttribute ) { return; }
-		attrs[ name ] = DS.attr( meta.type, { defaultValue: null } );
+		attrs[ name ] = attr( meta.type, { defaultValue: null } );
 	});
 
 

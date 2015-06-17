@@ -1,15 +1,17 @@
 define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
 
 	var get = Ember.get;
+	var attr = DS.attr;
+	var belongsTo = DS.belongsTo;
 
 	return DS.Model.extend({
-		average_fps: DS.attr( "number" ),
-		channel: DS.belongsTo( "twitchChannel" ),
-		created_at: DS.attr( "date" ),
-		game: DS.attr( "string" ),
-		preview: DS.belongsTo( "twitchImage" ),
-		video_height: DS.attr( "number" ),
-		viewers: DS.attr( "number" ),
+		average_fps: attr( "number" ),
+		channel: belongsTo( "twitchChannel" ),
+		created_at: attr( "date" ),
+		game: attr( "string" ),
+		preview: belongsTo( "twitchImage" ),
+		video_height: attr( "number" ),
+		viewers: attr( "number" ),
 
 
 		title_created_at: function() {

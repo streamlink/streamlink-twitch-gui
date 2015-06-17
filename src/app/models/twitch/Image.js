@@ -1,8 +1,9 @@
 define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
-	var get  = Ember.get,
-	    url  = "%@?_=%@",
-	    time = 60;
+	var get  = Ember.get;
+	var attr = DS.attr;
+	var url  = "%@?_=%@";
+	var time = 60;
 
 	function nocache( attr ) {
 		// use a volatile property
@@ -15,10 +16,10 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 	}
 
 	return DS.Model.extend({
-		large   : DS.attr( "string" ),
-		medium  : DS.attr( "string" ),
-		small   : DS.attr( "string" ),
-		template: DS.attr( "string" ),
+		large   : attr( "string" ),
+		medium  : attr( "string" ),
+		small   : attr( "string" ),
+		template: attr( "string" ),
 
 		large_nocache : nocache( "large" ),
 		medium_nocache: nocache( "medium" ),

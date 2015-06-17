@@ -12,18 +12,20 @@ define([
 	Substitution
 ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var attr = DS.attr;
+	var belongsTo = DS.belongsTo;
 
 	/**
 	 * @class Livestreamer
 	 */
 	return DS.Model.extend({
-		stream      : DS.belongsTo( "twitchStream" ),
-		channel     : DS.belongsTo( "twitchChannel" ),
-		quality     : DS.attr( "number" ),
-		gui_openchat: DS.attr( "boolean" ),
-		started     : DS.attr( "date" ),
+		stream      : belongsTo( "twitchStream" ),
+		channel     : belongsTo( "twitchChannel" ),
+		quality     : attr( "number" ),
+		gui_openchat: attr( "boolean" ),
+		started     : attr( "date" ),
 
 
 		/** @property {ChildProcess} spawn */

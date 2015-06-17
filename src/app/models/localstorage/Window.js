@@ -1,11 +1,13 @@
 define( [ "EmberData" ], function( DS ) {
 
+	var attr = DS.attr;
+
 	return DS.Model.extend({
 
-		width : DS.attr( "number", { defaultValue: null } ),
-		height: DS.attr( "number", { defaultValue: null } ),
-		x     : DS.attr( "number", { defaultValue: null } ),
-		y     : DS.attr( "number", { defaultValue: null } )
+		width : attr( "number", { defaultValue: null } ),
+		height: attr( "number", { defaultValue: null } ),
+		x     : attr( "number", { defaultValue: null } ),
+		y     : attr( "number", { defaultValue: null } )
 
 	}).reopenClass({
 		toString: function() { return "Window"; }

@@ -2,7 +2,6 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
-
 	var attr = DS.attr;
 
 	return DS.Model.extend({

@@ -1,11 +1,14 @@
 define( [ "EmberData" ], function( DS ) {
 
+	var attr = DS.attr;
+	var belongsTo = DS.belongsTo;
+
 	return DS.Model.extend({
-		box: DS.belongsTo( "twitchImage" ),
-		giantbomb_id: DS.attr( "number" ),
-		logo: DS.belongsTo( "twitchImage" ),
-		name: DS.attr( "string" ),
-		popularity: DS.attr( "number" )
+		box: belongsTo( "twitchImage" ),
+		giantbomb_id: attr( "number" ),
+		logo: belongsTo( "twitchImage" ),
+		name: attr( "string" ),
+		popularity: attr( "number" )
 	}).reopenClass({
 		toString: function() { return "kraken/games"; }
 	});

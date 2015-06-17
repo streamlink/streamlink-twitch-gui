@@ -1,11 +1,12 @@
 define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 	var get = Ember.get;
+	var attr = DS.attr;
 
 	return DS.Model.extend({
-		access_token: DS.attr( "string" ),
-		scope       : DS.attr( "string" ),
-		date        : DS.attr( "date" ),
+		access_token: attr( "string" ),
+		scope       : attr( "string" ),
+		date        : attr( "date" ),
 
 
 		// volatile property

@@ -1,10 +1,12 @@
 define( [ "EmberData" ], function( DS ) {
 
+	var attr = DS.attr;
+
 	return DS.Model.extend({
 		// pass through: don't update the channel record
-		channel      : DS.attr(),
-		created_at   : DS.attr( "date" ),
-		notifications: DS.attr( "boolean" )
+		channel      : attr(),
+		created_at   : attr( "date" ),
+		notifications: attr( "boolean" )
 	}).reopenClass({
 		toString: function() { return "kraken/users/:user/follows/channels"; }
 	});

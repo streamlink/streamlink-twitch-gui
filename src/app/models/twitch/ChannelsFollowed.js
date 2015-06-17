@@ -1,9 +1,12 @@
 define( [ "EmberData" ], function( DS ) {
 
+	var attr = DS.attr;
+	var belongsTo = DS.belongsTo;
+
 	return DS.Model.extend({
-		channel: DS.belongsTo( "twitchChannel" ),
-		created_at: DS.attr( "date" ),
-		notifications: DS.attr( "boolean" )
+		channel: belongsTo( "twitchChannel" ),
+		created_at: attr( "date" ),
+		notifications: attr( "boolean" )
 	}).reopenClass({
 		toString: function() { return "kraken/users/:user/follows/channels"; }
 	});
