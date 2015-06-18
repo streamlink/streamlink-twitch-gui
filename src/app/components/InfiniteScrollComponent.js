@@ -4,6 +4,7 @@ define([
 ], function( Ember, template ) {
 
 	var get = Ember.get;
+	var alias = Ember.computed.alias;
 	var or = Ember.computed.or;
 
 	return Ember.Component.extend({
@@ -14,10 +15,10 @@ define([
 
 		type: "button",
 		disabled: or( "isFetching", "hasFetchedAll" ),
-		errorBinding: "targetObject.fetchError",
+		error: alias( "targetObject.fetchError" ),
 
-		isFetchingBinding: "targetObject.isFetching",
-		hasFetchedAllBinding: "targetObject.hasFetchedAll",
+		isFetching: alias( "targetObject.isFetching" ),
+		hasFetchedAll: alias( "targetObject.hasFetchedAll" ),
 
 		click: function() {
 			var targetObject = get( this, "targetObject" );
