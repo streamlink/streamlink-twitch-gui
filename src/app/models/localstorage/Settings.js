@@ -22,6 +22,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		gui_openchat        : attr( "boolean", { defaultValue: false } ),
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
+		gui_flagsvisible    : attr( "boolean", { defaultValue: false } ),
 		notify_enabled      : attr( "boolean", { defaultValue: true } ),
 		notify_all          : attr( "boolean", { defaultValue: true } ),
 		notify_grouping     : attr( "boolean", { defaultValue: true } ),

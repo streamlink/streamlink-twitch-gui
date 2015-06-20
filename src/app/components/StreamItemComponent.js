@@ -7,10 +7,11 @@ define([
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
 	var and = Ember.computed.and;
+	var bool = Ember.computed.bool;
 
 	return ListItemComponent.extend({
 		layout: Ember.HTMLBars.compile( template ),
-		classNameBindings: [ ":stream-component", "_showGame:show-game" ],
+		classNameBindings: [ ":stream-component", "_showGame:show-game", "showFlag:show-flag" ],
 
 		action: "openLivestreamer",
 
@@ -18,6 +19,8 @@ define([
 
 		showGame: false,
 		_showGame: and( "showGame", "channel.game" ),
+
+		showFlag: bool( "settings.gui_flagsvisible" ),
 
 		actions: {
 			"startStream": function() {
