@@ -70,8 +70,16 @@
 <div><i class="fa fa-tag"></i> Application badge<span>On the task bar icon or dock icon.<br>Has to be supported by your OS and requires enabled desktop notifications.</span></div>
 <div>{{#check-box checked=model.notify_badgelabel disabled=(bool-not model.notify_enabled)}}Show number of streaming favorites{{/check-box}}</div>
 {{/if}}
-<div><i class="fa fa-language"></i> Flags<span>Channel and broadcaster flags</span></div>
+<div><i class="fa fa-language"></i> Stream languages<span>Channel and broadcaster languages</span></div>
+<div>
 <div>{{#check-box checked=model.gui_flagsvisible}}Always show flags{{/check-box}}</div>
+<h4>Language Filter</h4>
+<ul class="list-unstyled filter-lang">
+{{#each language in languages}}
+{{lang-filter obj=model.gui_langfilter language=language}}
+{{/each}}
+</ul>
+</div>
 </fieldset>
 <fieldset>
 <legend>Desktop notifications</legend>

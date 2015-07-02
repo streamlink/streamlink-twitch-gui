@@ -161,6 +161,7 @@ define(function( require ) {
 		EmbeddedLinksComponent: require( "components/EmbeddedLinksComponent" ),
 		FlagIconComponent: require( "components/FlagIconComponent" ),
 		StatsRowComponent: require( "components/StatsRowComponent" ),
+		LangFilterComponent: require( "components/LangFilterComponent" ),
 
 
 		// Content

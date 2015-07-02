@@ -15,6 +15,8 @@ define([
 	}
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
+		metadata: Ember.inject.service(),
+
 		hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
 		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "minValue" ),
 		hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "maxValue" ),
@@ -48,6 +50,18 @@ define([
 			set( this, "settings.constructor.minimize.2.disabled", noTray );
 
 		}.observes( "model.gui_integration" ),
+
+
+		languages: function() {
+			var codes = get( this, "metadata.config.language_codes" );
+			return Object.keys( codes ).map(function( code ) {
+				return {
+					id     : code,
+					flag   : codes[ code ][ "flag" ],
+					lang   : codes[ code ][ "lang" ].capitalize()
+				};
+			});
+		}.property( "metadata.config.language_codes" ),
 
 
 		actions: {
