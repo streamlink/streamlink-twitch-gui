@@ -73,10 +73,10 @@
 <div><i class="fa fa-language"></i> Stream languages<span>Channel and broadcaster languages</span></div>
 <div>
 <div>{{#check-box checked=model.gui_flagsvisible}}Always show flags{{/check-box}}</div>
-<h4>Language Filter</h4>
+<h4>Language filter</h4>
 <ul class="list-unstyled filter-lang">
 {{#each language in languages}}
-{{lang-filter obj=model.gui_langfilter language=language}}
+{{lang-filter obj=model.gui_langfilter prop=language.id name=language.lang}}
 {{/each}}
 </ul>
 </div>

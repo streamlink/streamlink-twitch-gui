@@ -4,7 +4,16 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 	var set = Ember.set;
 	var attr = DS.attr;
 
+	function defaultLangFilterValue( model ) {
+		var codes = get( model, "metadata.config.language_codes" );
+		return Object.keys( codes ).reduce(function( obj, key ) {
+			obj[ key ] = true;
+			return obj;
+		}, {} );
+	}
+
 	return DS.Model.extend({
+		metadata: Ember.inject.service(),
 
 		advanced            : attr( "boolean", { defaultValue: false } ),
 		livestreamer        : attr( "string",  { defaultValue: "" } ),
@@ -23,7 +32,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
 		gui_flagsvisible    : attr( "boolean", { defaultValue: false } ),
-		gui_langfilter      : attr( "",        { defaultValue: function() { return {}; } } ),
+		gui_langfilter      : attr( "",        { defaultValue: defaultLangFilterValue } ),
 		notify_enabled      : attr( "boolean", { defaultValue: true } ),
 		notify_all          : attr( "boolean", { defaultValue: true } ),
 		notify_grouping     : attr( "boolean", { defaultValue: true } ),

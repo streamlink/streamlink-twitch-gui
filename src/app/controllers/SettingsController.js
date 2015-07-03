@@ -56,9 +56,8 @@ define([
 			var codes = get( this, "metadata.config.language_codes" );
 			return Object.keys( codes ).map(function( code ) {
 				return {
-					id     : code,
-					flag   : codes[ code ][ "flag" ],
-					lang   : codes[ code ][ "lang" ].capitalize()
+					id  : code,
+					lang: codes[ code ][ "lang" ].capitalize()
 				};
 			});
 		}.property( "metadata.config.language_codes" ),
@@ -66,8 +65,10 @@ define([
 
 		actions: {
 			"apply": function( callback ) {
-				var model = get( this, "model" ).applyChanges( true );
-				model.save()
+				var model  = get( this, "settings" );
+				var buffer = get( this, "model" ).applyChanges().getContent();
+				model.setProperties( buffer )
+					.save()
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) )

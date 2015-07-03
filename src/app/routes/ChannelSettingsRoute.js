@@ -18,9 +18,12 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 				})
 				.then(function( record ) {
 					// use a buffer proxy object as model
-					return ObjectBuffer.create({
-						content: record
-					});
+					return {
+						model : record,
+						buffer: ObjectBuffer.create({
+							content: record.toJSON()
+						})
+					};
 				});
 		},
 
@@ -30,7 +33,7 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 		actions: {
 			willTransition: function( transition ) {
-				if ( get( this, "controller.model.hasBufferedChanges" ) ) {
+				if ( get( this, "controller.model.buffer.isDirty" ) ) {
 					transition.abort();
 
 					this.send( "openModal", "settingsModal", this.controller, {
