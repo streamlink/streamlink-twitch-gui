@@ -16,9 +16,9 @@ define( [ "Ember" ], function( Ember ) {
 
 	function checkDirty() {
 		var children = this._children;
-		var dirty    = get( this, "_hasChanges" ) === true
+		var dirty    = get( this, "_hasChanges" )
 			|| Object.keys( children ).some(function( key ) {
-				return get( children[ key ], "_hasChanges" );
+				return get( children[ key ], "isDirty" );
 			});
 		set( this, "isDirty", dirty );
 	}
@@ -44,7 +44,7 @@ define( [ "Ember" ], function( Ember ) {
 				content[ key ] = childBuffer;
 				set( this._children, key, childBuffer );
 
-				this.addObserver( "_children.%@._hasChanges".fmt( key ), this, checkDirty );
+				this.addObserver( "_children.%@.isDirty".fmt( key ), this, checkDirty );
 			}, this );
 
 			this._super.apply( this, arguments );
