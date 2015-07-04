@@ -1,6 +1,10 @@
 define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 
 	return TwitchSerializer.extend({
+		modelNameFromPayloadKey: function() {
+			return "twitchChannelsFollowed";
+		},
+
 		attrs: {
 			channel: { deserialize: "records" }
 		},
@@ -10,10 +14,6 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 				hash.id = hash.channel.name;
 				return hash;
 			}
-		},
-
-		modelNameFromPayloadKey: function() {
-			return "twitchChannelsFollowed";
 		}
 	});
 
