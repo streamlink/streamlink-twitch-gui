@@ -24,7 +24,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 				}
 			});
 
-			store.setMetadataFor( type, data );
+			return data;
 		},
 
 

@@ -7,7 +7,7 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			emoticons: { deserialize: "records" }
 		},
 
-		typeForRoot: function() {
+		modelNameFromPayloadKey: function() {
 			return "twitchProduct";
 		}
 	});

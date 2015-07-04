@@ -16,7 +16,7 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			return this._super.apply( this, arguments );
 		},
 
-		typeForRoot: function() {
+		modelNameFromPayloadKey: function() {
 			return "twitchGame";
 		}
 	});

@@ -13,7 +13,7 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 					// get the record automatically created by store.find()
 					var record = store.recordForId( "channelSettings", id );
 					// transition from `root.empty` to `root.loaded.created.uncommitted`
-					record.loadedData();
+					record._internalModel.loadedData();
 					return record;
 				})
 				.then(function( record ) {

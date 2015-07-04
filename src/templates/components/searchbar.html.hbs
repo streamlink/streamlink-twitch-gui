@@ -17,7 +17,7 @@
 <div class="clear" {{action "clearHistory"}}><i class="fa fa-trash-o"></i></div>
 </header>
 <ul class="list-unstyled">
-{{#with updateFormattedTime as _}}
+{{#with updateFormattedTime as |_|}}
 {{#each arrangedContent as |history|}}
 <li {{action "searchHistory" history}}>
 <div class="filter">{{history.label}}</div>

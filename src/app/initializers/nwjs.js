@@ -111,11 +111,12 @@ define([
 	};
 
 
-	Ember.Application.initializer({
+	Ember.Application.instanceInitializer({
 		name: "nwjs",
 
-		initialize: function( container ) {
-			var metadata = container.lookup( "service:metadata" );
+		initialize: function( application ) {
+			var container = application.container;
+			var metadata  = container.lookup( "service:metadata" );
 
 			var displayName    = get( metadata, "config.display-name" );
 			var trayIconImg    = get( metadata, "config.tray-icon" );

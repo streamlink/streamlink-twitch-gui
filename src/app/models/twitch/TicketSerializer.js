@@ -7,7 +7,7 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			product: { deserialize: "records" }
 		},
 
-		typeForRoot: function() {
+		modelNameFromPayloadKey: function() {
 			return "twitchTicket";
 		}
 	});

@@ -12,7 +12,7 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			}
 		},
 
-		typeForRoot: function() {
+		modelNameFromPayloadKey: function() {
 			return "twitchChannelsFollowed";
 		}
 	});

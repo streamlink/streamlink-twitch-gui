@@ -5,7 +5,7 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			stream: { deserialize: "records" }
 		},
 
-		typeForRoot: function() {
+		modelNameFromPayloadKey: function() {
 			return "twitchStreamsFollowed";
 		},
 

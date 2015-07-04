@@ -5,7 +5,7 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			game: { deserialize: "records" }
 		},
 
-		typeForRoot: function() {
+		modelNameFromPayloadKey: function() {
 			return "twitchGamesTop";
 		},
 
