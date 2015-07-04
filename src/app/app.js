@@ -240,7 +240,9 @@ define(function( require ) {
 				if ( !settings.get( "content" ) ) { return; }
 				nwWindow.emit( "ready", settings );
 			});
-		}
+		},
+
+		toString: function() { return "App"; }
 
 	});
 
