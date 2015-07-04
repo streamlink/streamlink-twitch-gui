@@ -9,13 +9,14 @@ define([
 
 	function settingsAttrMeta( attr, prop ) {
 		return function() {
-			var settings = get( this, "settings" );
+			var settings = get( this, "settings.content" );
 			return settings.constructor.metaForProperty( attr ).options[ prop ];
-		}.property( "settings" );
+		}.property( "settings.content" );
 	}
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		metadata: Ember.inject.service(),
+		settings: Ember.inject.service(),
 
 		hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
 		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "minValue" ),
@@ -46,8 +47,9 @@ define([
 			}
 
 			// enable/disable buttons
-			set( this, "settings.constructor.minimize.1.disabled", noTask );
-			set( this, "settings.constructor.minimize.2.disabled", noTray );
+			var Settings = get( this, "settings.content.constructor" );
+			set( Settings, "minimize.1.disabled", noTask );
+			set( Settings, "minimize.2.disabled", noTray );
 
 		}.observes( "model.gui_integration" ),
 
@@ -65,7 +67,7 @@ define([
 
 		actions: {
 			"apply": function( callback ) {
-				var model  = get( this, "settings" );
+				var model  = get( this, "settings.content" );
 				var buffer = get( this, "model" ).applyChanges().getContent();
 				model.setProperties( buffer )
 					.save()

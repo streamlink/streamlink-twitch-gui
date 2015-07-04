@@ -7,6 +7,8 @@ define([
 	    set = Ember.set;
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
+		settings: Ember.inject.service(),
+
 		modelObserver: function() {
 			var original = get( this, "model.model" );
 			var model    = get( this, "model.buffer" );

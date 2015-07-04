@@ -29,6 +29,7 @@ define([
 	return Ember.Service.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
+		settings: Ember.inject.service(),
 		auth    : Ember.inject.service(),
 
 		config  : alias( "metadata.config" ),
@@ -71,13 +72,6 @@ define([
 				this.reset();
 			}
 		}.observes( "enabled" ).on( "init" ),
-
-
-		init: function() {
-			this._super.apply( this, arguments );
-			// FIXME: remove this and use service injection
-			set( this, "settings", this.container.lookup( "record:settings" ) );
-		},
 
 
 		/**

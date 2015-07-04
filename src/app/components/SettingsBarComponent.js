@@ -5,16 +5,15 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
-	var alias = Ember.computed.alias;
 	var equal = Ember.computed.equal;
 	var not = Ember.computed.not;
 
 	return Ember.Component.extend({
+		settings: Ember.inject.service(),
+
 		layout: Ember.HTMLBars.compile( template ),
 		tagName: "div",
 		classNameBindings: [ ":settingsbar", "isOpened:opened" ],
-
-		settings: alias( "targetObject.settings" ),
 
 		isOpened: false,
 
@@ -34,23 +33,25 @@ define([
 		isLayoutList: not( "isLayoutTile" ),
 
 
+		saveSettings: function( prop, value, callback ) {
+			var settings = get( this, "settings" );
+			var record = get( settings, "content" );
+			set( settings, prop, value );
+			record.save().then( callback );
+		},
+
+
 		actions: {
 			toggle: function() {
 				this.toggleProperty( "isOpened" );
 			},
 
-			homepage: function( url, callback ) {
-				set( this, "settings.gui_homepage", url );
-				get( this, "settings" ).save().then(function() {
-					if ( callback ) { callback(); }
-				});
+			homepage: function( value, callback ) {
+				this.saveSettings( "gui_homepage", value, callback );
 			},
 
-			layout: function( mode, callback ) {
-				set( this, "settings.gui_layout", mode );
-				get( this, "settings" ).save().then(function() {
-					if ( callback ) { callback(); }
-				});
+			layout: function( value, callback ) {
+				this.saveSettings( "gui_layout", value, callback );
 			}
 		}
 	});

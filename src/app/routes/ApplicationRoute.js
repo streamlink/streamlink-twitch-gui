@@ -3,6 +3,8 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 	var get = Ember.get;
 
 	return Ember.Route.extend({
+		settings: Ember.inject.service(),
+
 		init: function() {
 			this._super();
 			this.controllerFor( "versioncheck" );

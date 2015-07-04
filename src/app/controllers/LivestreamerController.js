@@ -67,6 +67,7 @@ define([
 	return Ember.Controller.extend( ChannelMixin, ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
+		settings: Ember.inject.service(),
 
 		config: alias( "metadata.config" ),
 
@@ -327,7 +328,7 @@ define([
 			var channel   = get( livestreamer, "channel.id" );
 			var quality   = get( livestreamer, "quality" );
 			var streamURL = get( this, "config.twitch-stream-url" );
-			var qualities = get( this, "settings.constructor.qualities" );
+			var qualities = get( this, "settings.content.constructor.qualities" );
 
 			// get the livestreamer parameter list
 			var params    = get( livestreamer, "parameters" );

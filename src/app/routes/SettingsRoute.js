@@ -3,8 +3,10 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 	var get = Ember.get;
 
 	return Ember.Route.extend({
+		settings: Ember.inject.service(),
+
 		model: function() {
-			var settings = get( this, "settings" );
+			var settings = get( this, "settings.content" );
 			return ObjectBuffer.create({
 				content: settings.toJSON()
 			});

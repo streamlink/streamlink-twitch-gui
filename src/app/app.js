@@ -114,6 +114,7 @@ define(function( require ) {
 
 		// Services
 		MetadataService: require( "services/MetadataService" ),
+		SettingsService: require( "services/SettingsService" ),
 		AuthService: require( "services/AuthService" ),
 		NotificationService: require( "services/NotificationService" ),
 
@@ -231,14 +232,15 @@ define(function( require ) {
 
 		// ready event
 		ready: function ready() {
-			// get the global settings record
-			var settings = this.__container__.lookup( "record:settings" );
+			var nwWindow = require( "nwjs/nwWindow" );
 
-			// and emit the ready event to the nwjs window
-			require( "nwjs/nwWindow" ).emit( "ready", settings );
-		},
-
-		toString: function() { return "App"; }
+			// wait for the SettingsService to load
+			var settings = this.__container__.lookup( "service:settings" );
+			settings.addObserver( "content", function() {
+				if ( !settings.get( "content" ) ) { return; }
+				nwWindow.emit( "ready", settings );
+			});
+		}
 
 	});
 

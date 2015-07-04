@@ -13,7 +13,6 @@ define([
 ) {
 
 	var get = Ember.get;
-	var set = Ember.set;
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 	var alias = Ember.computed.alias;
@@ -35,14 +34,10 @@ define([
 		error  : false,
 
 
-		auth: Ember.inject.service(),
+		auth    : Ember.inject.service(),
+		settings: Ember.inject.service(),
 
 		session: alias( "auth.session" ),
-
-		init: function() {
-			this._super.apply( this, arguments );
-			set( this, "settings", this.container.lookup( "record:settings" ) );
-		},
 
 		kill: function() {
 			if ( this.spawn ) {
