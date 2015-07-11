@@ -7,11 +7,13 @@ define( [ "Ember" ], function( Ember ) {
 		metadata: Ember.inject.service(),
 
 		tagName: "i",
-		classNameBindings: [ ":flag-icon", "flag" ],
+		classNameBindings: [ ":flag-icon", "flag", "withCursor::flag-icon-no-cursor" ],
 		attributeBindings: [ "title" ],
 
 		lang: null,
 		type: null,
+		withTitle : true,
+		withCursor: true,
 
 		codes: alias( "metadata.config.language_codes" ),
 
@@ -25,10 +27,12 @@ define( [ "Ember" ], function( Ember ) {
 		}.property( "lang" ),
 
 		title: function() {
+			if ( !get( this, "withTitle" ) ) { return ""; }
+
 			var codes = get( this, "codes" );
 			var lang  = get( this, "lang" );
 
-			if ( !codes[ lang ] ) { return; }
+			if ( !codes[ lang ] ) { return ""; }
 			lang = codes[ lang ][ "lang" ];
 
 			switch ( get( this, "type" ) ) {
@@ -37,7 +41,7 @@ define( [ "Ember" ], function( Ember ) {
 				case "broadcaster":
 					return "The broadcaster's language is %@".fmt( lang );
 			}
-		}.property( "lang" )
+		}.property( "withTitle", "codes", "lang" )
 	});
 
 });

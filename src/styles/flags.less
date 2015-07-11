@@ -14,9 +14,12 @@
 	width: @flag-icon-width;
 	height: 1em;
 	line-height: 1;
-	cursor: help;
 	-webkit-filter: saturate(.75) brightness(.85);
 	transition: -webkit-filter .2s ease-out;
+
+	&:not(.flag-icon-no-cursor) {
+		cursor: help;
+	}
 
 	&::before {
 		content: "\00a0";
