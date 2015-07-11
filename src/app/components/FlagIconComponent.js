@@ -33,7 +33,7 @@ define( [ "Ember" ], function( Ember ) {
 
 			switch ( get( this, "type" ) ) {
 				case "channel":
-					return "This channel is %@".fmt( lang );
+					return "The channel's language is %@".fmt( lang );
 				case "broadcaster":
 					return "The broadcaster's language is %@".fmt( lang );
 			}
