@@ -6,10 +6,13 @@
 :not(.default) {
 	input[type="checkbox"]&,
 	input[type="radio"]& {
+		@line: ( @checkbox-size * @line-height-base );
+		@size: ( @checkbox-size + 2 * @checkbox-outline-size );
+
 		position: relative;
 		width: @checkbox-size;
 		height: @checkbox-size;
-		margin: 0 .1rem .2rem;
+		margin: 0 @checkbox-outline-size ( ( @line - @size ) / 2 );
 		visibility: hidden;
 		vertical-align: middle;
 
@@ -28,7 +31,7 @@
 		&::before {
 			content: "";
 			background: @checkbox-background;
-			outline: .1rem solid @checkbox-outline-color;
+			outline: @checkbox-outline-size solid @checkbox-outline-color;
 		}
 
 		&::after {
