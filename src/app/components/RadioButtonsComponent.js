@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"text!templates/components/radiobuttons.html.hbs"
 ], function( Ember, template ) {
 

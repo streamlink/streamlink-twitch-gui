@@ -10,9 +10,13 @@
 <div class="info">
 <h3>{{#link-to "channel" channel.id}}{{channel.display_name}}{{/link-to}}</h3>
 <div class="subscription">
+{{#if content.access_end}}
 <span title="{{format-time content.access_end "LLLL"}}">
 <i class="fa fa-credit-card"></i> {{#if hasEnded}}Has ended{{else if content.purchase_profile.will_renew}}Will be renewed{{else}}Will end{{/if}} {{ends}}
 </span>
+{{else}}
+<span><i class="fa fa-credit-card"></i> You are subscribed</span>
+{{/if}}
 <span title="Directly supports the broadcaster">
 <i class="fa fa-money"></i> {{product.price}} / {{product.period}}
 </span>

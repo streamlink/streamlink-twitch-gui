@@ -1,8 +1,10 @@
-define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
+define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 
 	var get = Ember.get;
 
 	return Ember.Route.extend({
+		settings: Ember.inject.service(),
+
 		init: function() {
 			this._super();
 			this.controllerFor( "versioncheck" );
@@ -30,7 +32,7 @@ define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
 			},
 
 			"gotoHomepage": function( noHistoryEntry ) {
-				var homepage = get( this.settings, "gui_homepage" );
+				var homepage = get( this, "settings.gui_homepage" );
 				var method   = noHistoryEntry
 					? "replaceWith"
 					: "transitionTo";

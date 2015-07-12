@@ -1,17 +1,19 @@
 define([
-	"ember",
+	"Ember",
 	"text!templates/components/settingsbar.html.hbs"
 ], function( Ember, template ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var equal = Ember.computed.equal;
+	var not = Ember.computed.not;
 
 	return Ember.Component.extend({
+		settings: Ember.inject.service(),
+
 		layout: Ember.HTMLBars.compile( template ),
 		tagName: "div",
 		classNameBindings: [ ":settingsbar", "isOpened:opened" ],
-
-		settingsBinding: "targetObject.settings",
 
 		isOpened: false,
 
@@ -27,8 +29,16 @@ define([
 			return get( this, "url" ) === get( this, "settings.gui_homepage" );
 		}.property( "url", "settings.gui_homepage" ),
 
-		isLayoutTile: Ember.computed.equal( "settings.gui_layout", "tile" ),
-		isLayoutList: Ember.computed.not( "isLayoutTile" ),
+		isLayoutTile: equal( "settings.gui_layout", "tile" ),
+		isLayoutList: not( "isLayoutTile" ),
+
+
+		saveSettings: function( prop, value, callback ) {
+			var settings = get( this, "settings" );
+			var record = get( settings, "content" );
+			set( settings, prop, value );
+			record.save().then( callback );
+		},
 
 
 		actions: {
@@ -36,18 +46,12 @@ define([
 				this.toggleProperty( "isOpened" );
 			},
 
-			homepage: function( url, callback ) {
-				set( this, "settings.gui_homepage", url );
-				get( this, "settings" ).save().then(function() {
-					if ( callback ) { callback(); }
-				});
+			homepage: function( value, callback ) {
+				this.saveSettings( "gui_homepage", value, callback );
 			},
 
-			layout: function( mode, callback ) {
-				set( this, "settings.gui_layout", mode );
-				get( this, "settings" ).save().then(function() {
-					if ( callback ) { callback(); }
-				});
+			layout: function( value, callback ) {
+				this.saveSettings( "gui_layout", value, callback );
 			}
 		}
 	});

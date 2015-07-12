@@ -1,4 +1,4 @@
-define( [ "nwGui", "nwWindow", "ember" ], function( nwGui, nwWindow, Ember ) {
+define( [ "Ember", "nwjs/nwGui", "nwjs/nwWindow" ], function( Ember, nwGui, nwWindow ) {
 
 	var get = Ember.get;
 	var isOSX = process.platform === "darwin";

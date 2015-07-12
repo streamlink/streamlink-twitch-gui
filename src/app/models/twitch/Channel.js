@@ -1,38 +1,44 @@
-define( [ "ember", "ember-data" ], function( Ember, DS ) {
+define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
-	var get = Ember.get,
-	    re_lang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
+	var get = Ember.get;
+	var attr = DS.attr;
+	var hasMany = DS.hasMany;
+	var bool = Ember.computed.bool;
+	var equal = Ember.computed.equal;
+
+	var re_lang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
+
 
 	return DS.Model.extend({
-		background: DS.attr( "string" ),
-		banner: DS.attr( "string" ),
-		broadcaster_language: DS.attr( "string" ),
-		created_at: DS.attr( "date" ),
-		delay: DS.attr( "number" ),
-		display_name: DS.attr( "string" ),
-		followers: DS.attr( "number" ),
-		game: DS.attr( "string" ),
-		language: DS.attr( "string" ),
-		logo: DS.attr( "string" ),
-		mature: DS.attr( "boolean" ),
-		name: DS.attr( "string" ),
-		partner: DS.attr( "boolean" ),
-		profile_banner: DS.attr( "string" ),
-		profile_banner_background_color: DS.attr( "string" ),
-		staff: DS.attr( "boolean" ),
-		status: DS.attr( "string" ),
-		teams: DS.hasMany( "twitchTeam" ),
-		updated_at: DS.attr( "date" ),
-		url: DS.attr( "string" ),
-		video_banner: DS.attr( "string" ),
-		views: DS.attr( "number" ),
+		background: attr( "string" ),
+		banner: attr( "string" ),
+		broadcaster_language: attr( "string" ),
+		created_at: attr( "date" ),
+		delay: attr( "number" ),
+		display_name: attr( "string" ),
+		followers: attr( "number" ),
+		game: attr( "string" ),
+		language: attr( "string" ),
+		logo: attr( "string" ),
+		mature: attr( "boolean" ),
+		name: attr( "string" ),
+		partner: attr( "boolean" ),
+		profile_banner: attr( "string" ),
+		profile_banner_background_color: attr( "string" ),
+		staff: attr( "boolean" ),
+		status: attr( "string" ),
+		teams: hasMany( "twitchTeam" ),
+		updated_at: attr( "date" ),
+		url: attr( "string" ),
+		video_banner: attr( "string" ),
+		views: attr( "number" ),
 
 		// Twitch.tv API bug?
 		// Sometimes a user record (/user/:user - model not implemented) is embedded into
 		// a stream record instead of a channels record (/channels/:channel - the current model).
-		// We're defining the "missing" attributes, so that ember-data doesn't complain...
-		bio: DS.attr(),
-		type: DS.attr(),
+		// We're defining the "missing" attributes, so that EmberData doesn't complain...
+		bio: attr(),
+		type: attr(),
 
 
 		title_followers: function() {
@@ -68,12 +74,12 @@ define( [ "ember", "ember-data" ], function( Ember, DS ) {
 
 		/** @type {(TwitchUserSubscription|boolean)} subscribed */
 		subscribed        : false,
-		isSubscribed      : Ember.computed.bool( "subscribed" ),
+		isSubscribed      : bool( "subscribed" ),
 
 		/** @type {(TwitchUserFollowsChannel|boolean)} following */
 		following         : null,
-		isFollowing       : Ember.computed.bool( "following" ),
-		isFollowingLoading: Ember.computed.equal( "following", null ),
+		isFollowing       : bool( "following" ),
+		isFollowingLoading: equal( "following", null ),
 		isFollowingLocked : false
 
 	}).reopenClass({

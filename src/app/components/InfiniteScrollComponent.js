@@ -1,7 +1,11 @@
 define([
-	"ember",
+	"Ember",
 	"text!templates/components/infinitescroll.html.hbs"
 ], function( Ember, template ) {
+
+	var get = Ember.get;
+	var alias = Ember.computed.alias;
+	var or = Ember.computed.or;
 
 	return Ember.Component.extend({
 		layout: Ember.HTMLBars.compile( template ),
@@ -10,14 +14,15 @@ define([
 		attributeBindings: [ "type", "disabled" ],
 
 		type: "button",
-		disabled: Ember.computed.or( "isFetching", "hasFetchedAll" ),
-		errorBinding: "targetObject.fetchError",
+		disabled: or( "isFetching", "hasFetchedAll" ),
+		error: alias( "targetObject.fetchError" ),
 
-		isFetchingBinding: "targetObject.isFetching",
-		hasFetchedAllBinding: "targetObject.hasFetchedAll",
+		isFetching: alias( "targetObject.isFetching" ),
+		hasFetchedAll: alias( "targetObject.hasFetchedAll" ),
 
 		click: function() {
-			this.get( "targetObject" ).send( "willFetchContent", true );
+			var targetObject = get( this, "targetObject" );
+			targetObject.send( "willFetchContent", true );
 		}
 	});
 

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# This is a fix for node-webkit applications which fail to run because of
+# This is a fix for NW.js applications which fail to run because of
 # the missing libudev library version on some linux distributions
-# https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0
+# https://github.com/nwjs/nw.js/wiki/The-solution-of-lacking-libudev.so.0
 
 # name of the executable
 EXEC="livestreamer-twitch-gui"

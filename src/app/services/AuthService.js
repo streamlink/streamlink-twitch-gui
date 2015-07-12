@@ -1,23 +1,24 @@
 define([
-	"nwGui",
+	"Ember",
+	"nwjs/nwGui",
 	"nwjs/redirect",
 	"nwjs/cookies",
 	"utils/contains",
-	"ember",
 	"text!root/oauth.json"
 ], function(
+	Ember,
 	nwGui,
 	redirect,
 	cookies,
 	contains,
-	Ember,
 	OAuth
 ) {
 
 	OAuth = JSON.parse( OAuth );
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var alias = Ember.computed.alias;
 
 	var reToken = /^[a-z\d]{30}$/i;
 
@@ -25,8 +26,8 @@ define([
 	return Ember.Service.extend( Ember.Evented, {
 		metadata: Ember.inject.service(),
 
-		config: Ember.computed.alias( "metadata.config" ),
-		scope : Ember.computed.alias( "config.twitch-oauth-scope" ),
+		config: alias( "metadata.config" ),
+		scope : alias( "config.twitch-oauth-scope" ),
 
 		session: null,
 
@@ -47,7 +48,7 @@ define([
 
 		init: function() {
 			var self = this;
-			// FIXME: remove this and use service injection. requires ember-data upgrade
+			// FIXME: remove this and use service injection. requires EmberData upgrade
 			self.store = self.container.lookup( "store:main" );
 
 			self.store.find( "auth" )

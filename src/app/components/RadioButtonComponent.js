@@ -1,4 +1,7 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
+
+	var get = Ember.get;
+	var set = Ember.set;
 
 	return Ember.Component.extend({
 		tagName: "input",
@@ -8,12 +11,13 @@ define( [ "ember" ], function( Ember ) {
 		],
 
 		click: function() {
-			if ( this.get( "disabled" ) ) { return; }
-			this.set( "selection", this.get( "value" ) );
+			if ( get( this, "disabled" ) ) { return; }
+			var value = get( this, "value" );
+			set( this, "selection", value );
 		},
 
 		checked: function() {
-			return this.get( "value" ) === this.get( "selection" );
+			return get( this, "value" ) === get( this, "selection" );
 		}.property( "value", "selection" )
 	});
 

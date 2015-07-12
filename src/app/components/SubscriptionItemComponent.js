@@ -1,11 +1,12 @@
 define([
-	"ember",
+	"Ember",
+	"Moment",
 	"components/ListItemComponent",
-	"moment",
 	"text!templates/components/subscription.html.hbs"
-], function( Ember, ListItemComponent, moment, template ) {
+], function( Ember, Moment, ListItemComponent, template ) {
 
 	var get = Ember.get;
+	var alias = Ember.computed.alias;
 
 	return ListItemComponent.extend({
 		metadata: Ember.inject.service(),
@@ -14,9 +15,9 @@ define([
 		classNames: [ "subscription-component" ],
 		attributeBindings: [ "style" ],
 
-		product  : Ember.computed.alias( "content.product" ),
-		channel  : Ember.computed.alias( "product.partner_login" ),
-		emoticons: Ember.computed.alias( "product.emoticons" ),
+		product  : alias( "content.product" ),
+		channel  : alias( "product.partner_login" ),
+		emoticons: alias( "product.emoticons" ),
 
 		style: function() {
 			var banner = get( this, "channel.profile_banner" );
@@ -30,7 +31,7 @@ define([
 
 		ends: function() {
 			var access_end = get( this, "content.access_end" );
-			return moment().to( access_end );
+			return new Moment().to( access_end );
 		}.property( "content.access_end" ).volatile(),
 
 

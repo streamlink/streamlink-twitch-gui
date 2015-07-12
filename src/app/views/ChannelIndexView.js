@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"mixins/PreviewImageViewMixin",
 	"mixins/ChannelViewMixin",
 	"text!templates/channel/index.html.hbs"

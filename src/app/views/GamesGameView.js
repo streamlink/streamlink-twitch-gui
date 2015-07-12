@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"mixins/InfiniteScrollViewMixin",
 	"text!templates/games/game.html.hbs"
 ], function( Ember, InfiniteScrollViewMixin, template ) {

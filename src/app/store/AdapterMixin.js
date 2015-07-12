@@ -1,4 +1,4 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
 
 	var get   = Ember.get;
 	var push  = [].push;
@@ -7,7 +7,7 @@ define( [ "ember" ], function( Ember ) {
 
 	/**
 	 * Adapter mixin for using static model names
-	 * instead of using type.typeKey as name
+	 * instead of using type.modelName as name
 	 */
 	return Ember.Mixin.create( Ember.Evented, {
 		find: function( store, type, id, snapshot ) {
@@ -41,7 +41,7 @@ define( [ "ember" ], function( Ember ) {
 		},
 		createRecordData: function( store, type, snapshot ) {
 			var data = {};
-			var serializer = store.serializerFor( type.typeKey );
+			var serializer = store.serializerFor( type.modelName );
 			serializer.serializeIntoHash( data, type, snapshot, { includeId: true } );
 			return { data: data };
 		},
@@ -60,7 +60,7 @@ define( [ "ember" ], function( Ember ) {
 		},
 		updateRecordData: function( store, type, snapshot ) {
 			var data = {};
-			var serializer = store.serializerFor( type.typeKey );
+			var serializer = store.serializerFor( type.modelName );
 			serializer.serializeIntoHash( data, type, snapshot );
 			return { data: data };
 		},
@@ -76,14 +76,14 @@ define( [ "ember" ], function( Ember ) {
 		},
 
 
-		urlForCreateRecord: function( typeKey, snapshot ) {
+		urlForCreateRecord: function( modelName, snapshot ) {
 			// Why does Ember-Data do this?
 			// the id is missing on BuildURLMixin.urlForCreateRecord
-			return this._buildURL( typeKey, snapshot.id );
+			return this._buildURL( modelName, snapshot.id );
 		},
 
 		/**
-		 * Custom buildURL method with type instead of typeKey
+		 * Custom buildURL method with type instead of modelName
 		 * @param {DS.Model} type
 		 * @param {string?} id
 		 * @returns {string}

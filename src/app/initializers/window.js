@@ -1,13 +1,13 @@
 define([
-	"nwGui",
-	"nwWindow",
-	"nwScreen",
-	"ember"
+	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow",
+	"nwjs/nwScreen"
 ], function(
+	Ember,
 	nwGui,
 	nwWindow,
-	nwScreen,
-	Ember
+	nwScreen
 ) {
 
 	var get = Ember.get,
@@ -138,15 +138,13 @@ define([
 	}
 
 
-	Ember.Application.initializer({
+	Ember.Application.instanceInitializer({
 		name: "window",
-		after: [ "store", "nwjs" ],
+		after: [ "ember-data", "nwjs" ],
 
-		initialize: function( container, application ) {
+		initialize: function( application ) {
+			var container = application.container;
 			var store = container.lookup( "store:main" );
-
-			// wait for the promise to resolve first
-			application.deferReadiness();
 
 			store.find( "window" )
 				.then(function( records ) {
@@ -155,8 +153,6 @@ define([
 						: store.createRecord( "window", { id: 1 } ).save();
 				})
 				.then(function( Window ) {
-					container.register( "record:window", Window, { instantiate: false } );
-
 					// reset window
 					if ( nwGui.App.fullArgv.indexOf( "--reset-window" ) >= 0 ) {
 						resetWindow.call( Window );
@@ -182,9 +178,6 @@ define([
 					// the maximize events are triggered afterwards
 					nwWindow.on( "resize", deferEvent( Window, onResize ) );
 					nwWindow.on(   "move", deferEvent( Window, onMove   ) );
-
-					// now we're ready
-					application.advanceReadiness();
 				});
 		}
 	});

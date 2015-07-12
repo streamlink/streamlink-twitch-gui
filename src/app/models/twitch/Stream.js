@@ -1,25 +1,30 @@
-define( [ "ember-data", "moment" ], function( DS, moment ) {
+define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
+
+	var get = Ember.get;
+	var attr = DS.attr;
+	var belongsTo = DS.belongsTo;
 
 	return DS.Model.extend({
-		average_fps: DS.attr( "number" ),
-		channel: DS.belongsTo( "twitchChannel" ),
-		created_at: DS.attr( "date" ),
-		game: DS.attr( "string" ),
-		preview: DS.belongsTo( "twitchImage" ),
-		video_height: DS.attr( "number" ),
-		viewers: DS.attr( "number" ),
+		average_fps: attr( "number" ),
+		channel: belongsTo( "twitchChannel" ),
+		created_at: attr( "date" ),
+		game: attr( "string" ),
+		preview: belongsTo( "twitchImage" ),
+		video_height: attr( "number" ),
+		viewers: attr( "number" ),
 
 
 		title_created_at: function() {
-			var created_at = moment( this.get( "created_at" ) );
-			return "Online since %@".fmt( created_at.format(
-				created_at.diff( new Date(), "days" ) === 0 ? "LTS" : "llll"
-			) );
+			var created_at = get( this, "created_at" );
+			var moment     = new Moment( created_at );
+			var diff       = moment.diff( new Date(), "days" );
+			var formatted  = moment.format( diff === 0 ? "LTS" : "llll" );
+			return "Online since %@".fmt( formatted );
 		}.property( "created_at" ),
 
 		title_viewers: function() {
-			var viewers = this.get( "viewers" ),
-			    numerus = viewers === 1 ? "person is" : "people are";
+			var viewers = get( this, "viewers" );
+			var numerus = viewers === 1 ? "person is" : "people are";
 			return "%@ %@ watching".fmt( viewers, numerus );
 		}.property( "viewers" )
 

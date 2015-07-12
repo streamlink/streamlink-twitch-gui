@@ -1,9 +1,12 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "Ember", "EmberData" ], function( Ember, DS ) {
+
+	var get = Ember.get;
+	var attr = DS.attr;
 
 	return DS.Model.extend({
-		access_token: DS.attr( "string" ),
-		scope       : DS.attr( "string" ),
-		date        : DS.attr( "date" ),
+		access_token: attr( "string" ),
+		scope       : attr( "string" ),
+		date        : attr( "date" ),
 
 
 		// volatile property
@@ -12,9 +15,9 @@ define( [ "ember-data" ], function( DS ) {
 		// status properties
 		isPending : false,
 		isLoggedIn: function() {
-			var token   = this.get( "access_token" ),
-			    name    = this.get( "user_name" ),
-			    pending = this.get( "isPending" );
+			var token   = get( this, "access_token" );
+			var name    = get( this, "user_name" );
+			var pending = get( this, "isPending" );
 
 			return token && name && !pending;
 		}.property( "access_token", "user_name", "isPending" )

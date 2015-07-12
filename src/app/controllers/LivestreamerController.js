@@ -1,16 +1,16 @@
 define([
-	"nwGui",
-	"nwWindow",
-	"ember",
+	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow",
 	"mixins/ChannelMixin",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/which",
 	"utils/fs/stat",
 	"utils/semver"
 ], function(
+	Ember,
 	nwGui,
 	nwWindow,
-	Ember,
 	ChannelMixin,
 	ChannelSettingsMixin,
 	which,
@@ -25,6 +25,8 @@ define([
 	    set  = Ember.set,
 	    setP = Ember.setProperties,
 	    run  = Ember.run;
+
+	var alias = Ember.computed.alias;
 
 	var isWin = process.platform === "win32";
 
@@ -65,8 +67,9 @@ define([
 	return Ember.Controller.extend( ChannelMixin, ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
+		settings: Ember.inject.service(),
 
-		config: Ember.computed.alias( "metadata.config" ),
+		config: alias( "metadata.config" ),
 
 		modalBtns: null,
 
@@ -325,7 +328,7 @@ define([
 			var channel   = get( livestreamer, "channel.id" );
 			var quality   = get( livestreamer, "quality" );
 			var streamURL = get( this, "config.twitch-stream-url" );
-			var qualities = get( this, "settings.constructor.qualities" );
+			var qualities = get( this, "settings.content.constructor.qualities" );
 
 			// get the livestreamer parameter list
 			var params    = get( livestreamer, "parameters" );

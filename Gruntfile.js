@@ -6,8 +6,7 @@ module.exports = function( grunt ) {
 
 	// load task configs
 	require( "load-grunt-config" )( grunt, {
-		configPath		: require( "path" ).join( process.cwd(), "build", "tasks", "configs" ),
-		init			: true
+		configPath: require( "path" ).join( process.cwd(), "build", "tasks", "configs" ),
+		init      : true
 	});
-
 };

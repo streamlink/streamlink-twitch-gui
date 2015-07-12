@@ -1,7 +1,7 @@
 define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 
 	return TwitchSerializer.extend({
-		typeForRoot: function() {
+		modelNameFromPayloadKey: function() {
 			return "twitchUserSubscription";
 		},
 

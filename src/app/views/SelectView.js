@@ -1,4 +1,4 @@
-define( [ "ember", "gui/selecter" ], function( Ember, guiSelecter ) {
+define( [ "Ember", "gui/selecter" ], function( Ember, guiSelecter ) {
 
 	// reopen and don't extend: this class may be used globally
 

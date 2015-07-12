@@ -24,30 +24,36 @@ Feature requests are welcome. But take a moment to find out whether your idea fi
 
 
 ## Developing and building
-Livestreamer Twitch GUI is based on [NW.js (formerly Node-Webkit)][NW.js]. NW.js has to be installed on your machine in order to run this program - using a browser does not work. Have a look at the [NW.js wiki page][NW.js-wiki] to get some more informations on how to run NW.js apps. Also please ensure that either [io.js][io.js] or [Node.js][Node.js] and also [npm][npm] are installed so you can build the program.
+Livestreamer Twitch GUI is based on [NW.js (formerly Node-Webkit)][NW.js]. This means, that if you want to debug or contribute to this program, NW.js has to be installed on your machine - using a browser does not work. There are grunt tasks available that will download and start NW.js for you (see below). Also please ensure that either [io.js][io.js] or [Node.js][Node.js] and also [npm][npm] are installed, so all dependencies can be installed as well and the application can be built and compiled.  
+If you want to know more about NW.js apps in general, head over to the [NW.js wiki page][NW.js-wiki].
 
-Building is simple:
+Run these commands to get started:
 
 ```bash
 # globally install grunt-cli and bower - may require administrator privileges
 npm install -g grunt-cli bower
 # locally install all npm and bower dependencies
 npm install
+```
+
+If you just want to build and compile the application, do this:
+
+```bash
 # build and compile - executable will be created inside the build/releases folder
 grunt release
 ```
 
-Run `grunt --help` to list all other available grunt tasks.
+To get a list of all available grunt tasks, run `grunt --help`, or just take a look at the files in `build/tasks/{config,custom}`. 
 
-While developing, you can choose between two methods to run the program:
+While developing, you can choose between two methods:
 
-1. **the "easy" method**
-   Simply run `grunt dev`. This task builds the project to the `build/tmp` folder with enabled debug flags and also starts a watcher task which rebuilds changed content from the `src` folder. Now start NW.js (`/path/to/nw build/tmp`).
+1. **Run the "precompiled" application**  
+   Simply run `grunt`. This will start the `dev` grunt task, which will then begin building the application (with enabled debug flags) into the `build/tmp` folder. This task will also start a couple of file watchers which rebuild the application as soon as some changes are being made inside the `src` folder. NW.js will automatically be started (and downloaded, if it hasn't been installed yet).
 
-2. **the "source" method**
-   Another way of running the program is by starting it directly from the `src` folder (`/path/to/nw src`). Before you can do this, you first need to run the `grunt metadata less:source` tasks once. If you're working on the stylesheets, then you should start the watcher task `grunt less:source watch:lesssource` which automatically compiles it after each change.
+2. **Run the application from source**  
+   Another way of running the application is by starting it directly from the `src` folder (`grunt run:src`). Before you can do this though, you first need to run the `grunt metadata less:source` tasks once. If you're working on the stylesheets, then you should also start the watcher task `grunt watch:lesssource`, which will automatically recompile the stylesheets after each change.
 
-The easiest way of debugging a NW.js application is by running `nw` with the `--remote-debugging-port=8888` parameter. Then you can comfortably access the developer console in your local browser at `http://localhost:8888/`. I recommend adding an alias for the `nw` + parameter command.
+The easiest way of debugging a NW.js application is by running `nw` with the `--remote-debugging-port=8888` parameter (the grunt `run` task already does this). Then you can comfortably access the developer console in your local browser at `http://localhost:8888/`. I recommend adding an alias for the `nw` + parameter command.
 If you're running the application from source or the compiled debug version, you're able to access NW.js' internal developer tools by clicking on the embedded button inside the titlebar.
 There also exist several IDEs with NW.js debugging support, too.
 

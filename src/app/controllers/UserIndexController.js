@@ -1,13 +1,14 @@
-define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
+define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 
 	var get = Ember.get;
+	var readOnly = Ember.computed.readOnly;
 
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
 		notification: Ember.inject.service(),
 
-		notif_running: Ember.computed.readOnly( "notification.running" ),
-		notif_error  : Ember.computed.readOnly( "notification.error" ),
+		notif_running: readOnly( "notification.running" ),
+		notif_error  : readOnly( "notification.error" ),
 
 		scope: function() {
 			return get( this, "auth.session.scope" ).split( "+" ).join( ", " );

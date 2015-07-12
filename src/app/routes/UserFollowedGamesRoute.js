@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"routes/UserIndexRoute",
 	"mixins/InfiniteScrollRouteMixin",
 	"utils/preload"

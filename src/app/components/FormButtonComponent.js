@@ -1,10 +1,11 @@
 define([
-	"ember",
+	"Ember",
 	"text!templates/components/formbutton.html.hbs"
 ], function( Ember, template ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var and = Ember.computed.and;
 
 	return Ember.Component.extend({
 		layout: Ember.HTMLBars.compile( template ),
@@ -25,7 +26,7 @@ define([
 		actionParam: null,
 
 		icon: false,
-		_iconAndText: Ember.computed.and( "icon", "template" ),
+		_iconAndText: and( "icon", "template" ),
 		_iconAndNoText: function() {
 			return get( this, "icon" ) && !get( this, "template" );
 		}.property( "icon", "template" ),

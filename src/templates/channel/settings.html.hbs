@@ -2,7 +2,7 @@
 <fieldset>
 <legend>Stream</legend>
 <div><i class="fa fa-eye"></i> {{#check-box checked=_quality}}Quality{{/check-box}}<span>Priorize this quality over the default one.</span></div>
-<div>{{view "select" value=quality content=settings.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label" disabled=(bool-not _quality)}}</div>
+<div>{{view "select" value=quality content=settings.content.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label" disabled=(bool-not _quality)}}</div>
 <div><i class="fa fa-comments"></i> {{#check-box checked=_gui_openchat}}Chat{{/check-box}}<span>Automatically open chat.</span></div>
 <div>{{#check-box checked=gui_openchat disabled=(bool-not _gui_openchat)}}Open chat when the stream starts{{/check-box}}</div>
 </fieldset>

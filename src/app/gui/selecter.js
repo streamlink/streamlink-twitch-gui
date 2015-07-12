@@ -1,4 +1,4 @@
-define( [ "jquery", "Selecter" ], function() {
+define( [ "JQuery", "Selecter" ], function() {
 
 	return function( $select ) {
 		var	classnames = [].slice.call( $select[0].classList )

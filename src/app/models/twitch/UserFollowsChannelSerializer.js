@@ -3,12 +3,12 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 	return TwitchSerializer.extend({
 		primaryKey: "id",
 
-		attrs: {
-			channel: { deserialize: "records" }
+		modelNameFromPayloadKey: function() {
+			return "twitchUserFollowsChannel";
 		},
 
-		typeForRoot: function() {
-			return "twitchUserFollowsChannel";
+		attrs: {
+			channel: { deserialize: "records" }
 		},
 
 		normalizePayload: function( payload ) {

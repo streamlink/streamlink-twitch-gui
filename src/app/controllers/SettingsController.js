@@ -1,18 +1,23 @@
 define([
-	"ember",
+	"Ember",
 	"mixins/RetryTransitionMixin"
 ], function( Ember, RetryTransitionMixin ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var equal = Ember.computed.equal;
 
 	function settingsAttrMeta( attr, prop ) {
 		return function() {
-			return this.settings.constructor.metaForProperty( attr ).options[ prop ];
-		}.property( "settings" );
+			var settings = get( this, "settings.content" );
+			return settings.constructor.metaForProperty( attr ).options[ prop ];
+		}.property( "settings.content" );
 	}
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
+		metadata: Ember.inject.service(),
+		settings: Ember.inject.service(),
+
 		hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
 		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "minValue" ),
 		hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "maxValue" ),
@@ -21,8 +26,8 @@ define([
 		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
 		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
 
-		hasTaskBarIntegration: Ember.computed.equal( "model.gui_integration", 1 ),
-		hasBothIntegrations  : Ember.computed.equal( "model.gui_integration", 3 ),
+		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
+		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
 		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
 		hasNotificationClickSupport: process.platform !== "linux",
@@ -42,16 +47,30 @@ define([
 			}
 
 			// enable/disable buttons
-			set( this, "settings.constructor.minimize.1.disabled", noTask );
-			set( this, "settings.constructor.minimize.2.disabled", noTray );
+			var Settings = get( this, "settings.content.constructor" );
+			set( Settings, "minimize.1.disabled", noTask );
+			set( Settings, "minimize.2.disabled", noTray );
 
 		}.observes( "model.gui_integration" ),
 
 
+		languages: function() {
+			var codes = get( this, "metadata.config.language_codes" );
+			return Object.keys( codes ).map(function( code ) {
+				return {
+					id  : code,
+					lang: codes[ code ][ "lang" ].capitalize()
+				};
+			});
+		}.property( "metadata.config.language_codes" ),
+
+
 		actions: {
 			"apply": function( callback ) {
-				var model = get( this, "model" ).applyChanges( true );
-				model.save()
+				var model  = get( this, "settings.content" );
+				var buffer = get( this, "model" ).applyChanges().getContent();
+				model.setProperties( buffer )
+					.save()
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) )

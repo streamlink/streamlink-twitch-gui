@@ -1,7 +1,7 @@
 define(function( require ) {
 
-	var Ember = require( "ember" ),
-	    DS    = require( "ember-data" );
+	var Ember = require( "Ember" );
+	var DS    = require( "EmberData" );
 
 	require( "initializers/initializers" );
 
@@ -114,6 +114,7 @@ define(function( require ) {
 
 		// Services
 		MetadataService: require( "services/MetadataService" ),
+		SettingsService: require( "services/SettingsService" ),
 		AuthService: require( "services/AuthService" ),
 		NotificationService: require( "services/NotificationService" ),
 
@@ -161,6 +162,7 @@ define(function( require ) {
 		EmbeddedLinksComponent: require( "components/EmbeddedLinksComponent" ),
 		FlagIconComponent: require( "components/FlagIconComponent" ),
 		StatsRowComponent: require( "components/StatsRowComponent" ),
+		LangFilterComponent: require( "components/LangFilterComponent" ),
 
 
 		// Content
@@ -230,11 +232,14 @@ define(function( require ) {
 
 		// ready event
 		ready: function ready() {
-			// get the global settings record
-			var settings = this.__container__.lookup( "record:settings" );
+			var nwWindow = require( "nwjs/nwWindow" );
 
-			// and emit the ready event to the nwjs window
-			require( "nwWindow" ).emit( "ready", settings );
+			// wait for the SettingsService to load
+			var settings = this.__container__.lookup( "service:settings" );
+			settings.addObserver( "content", function() {
+				if ( !settings.get( "content" ) ) { return; }
+				nwWindow.emit( "ready", settings );
+			});
 		},
 
 		toString: function() { return "App"; }

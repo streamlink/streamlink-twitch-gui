@@ -26,10 +26,10 @@ define(function( require ) {
 
 		// load dependencies
 		require([
-			"ember",
-			"ember-htmlbars",
-			"ember-data",
-			"ember-data-ls"
+			"Ember",
+			"EmberHtmlbars",
+			"EmberData",
+			"EmberDataLS"
 		], function() {
 
 			// load the app module

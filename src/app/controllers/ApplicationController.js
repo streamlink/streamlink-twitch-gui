@@ -1,6 +1,7 @@
-define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
+define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 	var get = Ember.get;
+	var readOnly = Ember.computed.readOnly;
 
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
@@ -10,14 +11,14 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 
 		dev: DEBUG,
 
-		streamsLength: Ember.computed.readOnly( "controllers.livestreamer.model.length" ),
+		streamsLength: readOnly( "controllers.livestreamer.model.length" ),
 
-		notif_enabled: Ember.computed.readOnly( "notification.enabled" ),
-		notif_running: Ember.computed.readOnly( "notification.running" ),
-		notif_error  : Ember.computed.readOnly( "notification.error" ),
+		notif_enabled: readOnly( "notification.enabled" ),
+		notif_running: readOnly( "notification.running" ),
+		notif_error  : readOnly( "notification.error" ),
 
-		loginSuccess: Ember.computed.readOnly( "auth.session.isLoggedIn" ),
-		loginPending: Ember.computed.readOnly( "auth.session.isPending" ),
+		loginSuccess: readOnly( "auth.session.isLoggedIn" ),
+		loginPending: readOnly( "auth.session.isPending" ),
 		loginTitle  : function() {
 			return get( this, "loginSuccess" )
 				? "Logged in as %@%@".fmt(
@@ -30,6 +31,15 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 				)
 				: "You're not logged in";
 		}.property( "loginSuccess", "notif_running", "notif_error" ),
+
+
+		modalHead: "Are you sure you want to quit?",
+		modalBody: function() {
+			var length = get( this, "streamsLength" );
+			return length
+				? "By choosing shutdown, all streams will be closed, too."
+				: "All streams have been closed. Do you want to quit now?";
+		}.property( "streamsLength" ),
 
 
 		actions: {
@@ -59,10 +69,7 @@ define( [ "nwWindow", "ember" ], function( nwWindow, Ember ) {
 
 			"winClose": function() {
 				if ( get( this, "streamsLength" ) ) {
-					this.send( "openModal", "quitModal", this, {
-						modalHead: "Are you sure you want to quit?",
-						modalBody: "By choosing shutdown, all streams will be closed, too."
-					});
+					this.send( "openModal", "quitModal", this );
 				} else {
 					this.send( "quit" );
 				}

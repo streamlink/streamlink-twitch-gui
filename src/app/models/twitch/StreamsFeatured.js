@@ -1,13 +1,16 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "EmberData" ], function( DS ) {
+
+	var attr = DS.attr;
+	var belongsTo = DS.belongsTo;
 
 	return DS.Model.extend({
-		image: DS.attr( "string" ),
-		priority: DS.attr( "number" ),
-		scheduled: DS.attr( "boolean" ),
-		sponsored: DS.attr( "boolean" ),
-		stream: DS.belongsTo( "twitchStream" ),
-		text: DS.attr( "string" ),
-		title: DS.attr( "string" )
+		image: attr( "string" ),
+		priority: attr( "number" ),
+		scheduled: attr( "boolean" ),
+		sponsored: attr( "boolean" ),
+		stream: belongsTo( "twitchStream" ),
+		text: attr( "string" ),
+		title: attr( "string" )
 	}).reopenClass({
 		toString: function() { return "kraken/streams/featured"; }
 	});

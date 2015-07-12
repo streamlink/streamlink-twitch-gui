@@ -1,6 +1,10 @@
 define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 
 	return TwitchSerializer.extend({
+		modelNameFromPayloadKey: function() {
+			return "twitchGamesFollowed";
+		},
+
 		attrs: {
 			box: { deserialize: "records" },
 			logo: { deserialize: "records" }
@@ -14,10 +18,6 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 				hash.logo._id = hash.name + "_logo";
 			}
 			return this._super.apply( this, arguments );
-		},
-
-		typeForRoot: function() {
-			return "twitchGamesFollowed";
 		}
 	});
 

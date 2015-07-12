@@ -1,4 +1,4 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "EmberData" ], function( DS ) {
 
 	return DS.BooleanTransform.reopen({
 		deserialize: function( serialized ) {

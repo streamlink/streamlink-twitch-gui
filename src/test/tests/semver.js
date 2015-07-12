@@ -1,16 +1,20 @@
-define( [ "utils/semver" ], function( semver ) {
+define([
+	"utils/semver"
+], function(
+	semver
+) {
 
 	var t = semver.tokenize;
 	var m = semver.getMax;
 	var s = semver.sort;
 
 
-	module( "Semantic versioning" );
+	QUnit.module( "Semantic versioning" );
 
 
-	test( "Tokenization", function() {
+	QUnit.test( "Tokenization", function( assert ) {
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				t( "foo" ),
 				t( "1.0" ),
@@ -28,7 +32,7 @@ define( [ "utils/semver" ], function( semver ) {
 			"Invalid values"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				t( "1.0.0" ),
 				t( "   v1.0.0   " ),
@@ -42,7 +46,7 @@ define( [ "utils/semver" ], function( semver ) {
 			"Major, minor and patch version"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				t( "1.0.0-1.2.3" ),
 				t( "1.0.0-alpha" ),
@@ -63,9 +67,9 @@ define( [ "utils/semver" ], function( semver ) {
 	});
 
 
-	test( "Maximum", function() {
+	QUnit.test( "Maximum", function( assert ) {
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				m([ "0.0.1", "0.0.10", "0.0.2" ]),
 				m([ "0.0.10", "0.1.0", "0.2.0" ]),
@@ -79,7 +83,7 @@ define( [ "utils/semver" ], function( semver ) {
 			"Major, minor and patch version"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				m([ "1.0.0-123", "1.0.0-alpha" ]),
 				m([ "1.0.0-alpha", "1.0.0-alpha.1" ]),
@@ -104,9 +108,9 @@ define( [ "utils/semver" ], function( semver ) {
 	});
 
 
-	test( "Sorting", function() {
+	QUnit.test( "Sorting", function( assert ) {
 
-		deepEqual(
+		assert.deepEqual(
 			s([
 				"1.0.0",
 				"0.0.10",
@@ -124,7 +128,7 @@ define( [ "utils/semver" ], function( semver ) {
 			"Major, minor and patch version"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			s([
 				"1.0.0-beta",
 				"1.0.0-alpha.beta",

@@ -1,12 +1,12 @@
 define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 
 	return TwitchSerializer.extend({
-		attrs: {
-			game: { deserialize: "records" }
+		modelNameFromPayloadKey: function() {
+			return "twitchSearchGame";
 		},
 
-		typeForRoot: function() {
-			return "twitchSearchGame";
+		attrs: {
+			game: { deserialize: "records" }
 		},
 
 		normalizePayload: function( payload ) {

@@ -1,7 +1,9 @@
 define([
-	"ember",
+	"Ember",
 	"text!templates/user/index.html.hbs"
 ], function( Ember, template ) {
+
+	var set = Ember.set;
 
 	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),
@@ -12,7 +14,7 @@ define([
 
 		actions: {
 			"showTokenForm": function() {
-				this.set( "showTokenForm", true );
+				set( this, "showTokenForm", true );
 				Ember.run.next( this, function() {
 					this.$( "input" ).focus();
 				});

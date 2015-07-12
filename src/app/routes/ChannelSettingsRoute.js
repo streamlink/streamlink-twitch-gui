@@ -1,4 +1,4 @@
-define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
+define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
 
 	var get = Ember.get;
 
@@ -13,14 +13,17 @@ define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 					// get the record automatically created by store.find()
 					var record = store.recordForId( "channelSettings", id );
 					// transition from `root.empty` to `root.loaded.created.uncommitted`
-					record.loadedData();
+					record._internalModel.loadedData();
 					return record;
 				})
 				.then(function( record ) {
 					// use a buffer proxy object as model
-					return ObjectBuffer.create({
-						content: record
-					});
+					return {
+						model : record,
+						buffer: ObjectBuffer.create({
+							content: record.toJSON()
+						})
+					};
 				});
 		},
 
@@ -30,7 +33,7 @@ define( [ "ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 		actions: {
 			willTransition: function( transition ) {
-				if ( get( this, "controller.model.hasBufferedChanges" ) ) {
+				if ( get( this, "controller.model.buffer.isDirty" ) ) {
 					transition.abort();
 
 					this.send( "openModal", "settingsModal", this.controller, {

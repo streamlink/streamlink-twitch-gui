@@ -1,6 +1,6 @@
 define([
-	"ember",
-	"ember-data",
+	"Ember",
+	"EmberData",
 	"store/AdapterMixin"
 ], function( Ember, DS, AdapterMixin ) {
 
@@ -20,7 +20,7 @@ define([
 
 		access_token: null,
 		tokenObserver: function() {
-			var token = this.get( "access_token" );
+			var token = get( this, "access_token" );
 			if ( token === null ) {
 				delete this.headers[ token ];
 			} else {

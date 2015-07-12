@@ -1,34 +1,40 @@
 define([
-	"nwWindow",
-	"ember",
+	"Ember",
+	"nwjs/nwWindow",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
 	"utils/fs/clearfolder"
 ], function(
-	nwWindow,
 	Ember,
+	nwWindow,
 	ChannelSettingsMixin,
 	mkdirp,
 	download,
 	clearfolder
 ) {
 
-	var PATH  = require( "path" ),
-	    OS    = require( "os" ),
-	    Notif = window.Notification,
-	    get   = Ember.get,
-	    set   = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+	var alias = Ember.computed.alias;
+	var and = Ember.computed.and;
+	var notEmpty = Ember.computed.notEmpty;
+
+	var PATH = require( "path" );
+	var OS   = require( "os" );
+
+	var Notif = window.Notification;
 
 
 	return Ember.Service.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
+		settings: Ember.inject.service(),
 		auth    : Ember.inject.service(),
 
-		config  : Ember.computed.alias( "metadata.config" ),
-		retries : Ember.computed.alias( "config.notification-retries" ),
-		interval: Ember.computed.alias( "config.notification-interval" ),
+		config  : alias( "metadata.config" ),
+		retries : alias( "config.notification-retries" ),
+		interval: alias( "config.notification-interval" ),
 
 		// cache related properties
 		cacheDir: function() {
@@ -52,13 +58,13 @@ define([
 		apiFails: 0,
 
 		_error  : false,
-		error   : Ember.computed.and( "_error", "enabled" ),
+		error   : and( "_error", "enabled" ),
 		_next   : null,
-		_running: Ember.computed.notEmpty( "_next" ),
-		running : Ember.computed.and( "_running", "enabled" ),
+		_running: notEmpty( "_next" ),
+		running : and( "_running", "enabled" ),
 
 		// automatically start polling once the user is logged in and has notifications enabled
-		enabled: Ember.computed.and( "auth.session.isLoggedIn", "settings.notify_enabled" ),
+		enabled: and( "auth.session.isLoggedIn", "settings.notify_enabled" ),
 		enabledObserver: function() {
 			if ( get( this, "enabled" ) ) {
 				this.start();
@@ -66,13 +72,6 @@ define([
 				this.reset();
 			}
 		}.observes( "enabled" ).on( "init" ),
-
-
-		init: function() {
-			this._super.apply( this, arguments );
-			// FIXME: remove this and use service injection
-			set( this, "settings", this.container.lookup( "record:settings" ) );
-		},
 
 
 		/**
@@ -103,7 +102,7 @@ define([
 
 		_windowBadgeLabel: function() {
 			var label;
-			if ( !get( this, "running" ) || !get( this.settings, "notify_badgelabel" ) ) {
+			if ( !get( this, "running" ) || !get( this, "settings.notify_badgelabel" ) ) {
 				label = "";
 			} else {
 				var model = get( this, "model" );
@@ -212,7 +211,7 @@ define([
 
 
 		stripDisabledChannels: function( streams ) {
-			var all = get( this.settings, "notify_all" );
+			var all = get( this, "settings.notify_all" );
 
 			return Promise.all( streams.map(function( stream ) {
 				var id = get( stream, "channel.id" );
@@ -244,7 +243,7 @@ define([
 			if ( !streams.length ) { return; }
 
 			// merge multiple notifications and show a single one
-			if ( streams.length > 1 && get( this.settings, "notify_grouping" ) ) {
+			if ( streams.length > 1 && get( this, "settings.notify_grouping" ) ) {
 				return this.showNotificationGroup( streams );
 
 			// show all notifications

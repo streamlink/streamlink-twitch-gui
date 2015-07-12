@@ -1,4 +1,10 @@
-define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
+define([
+	"Ember",
+	"utils/linkmatching"
+], function(
+	Ember,
+	linkmatching
+) {
 
 	var replacement = "%@'%@'%@";
 
@@ -8,16 +14,16 @@ define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
 	var twitter_fn  = linkmatching.twitter_fn( replacement );
 
 
-	module( "Link matching" );
+	QUnit.module( "Link matching" );
 
 
-	test( "URL matching", function() {
+	QUnit.test( "URL matching", function( assert ) {
 
 		function _( text ) {
 			return text.replace( linkurl_re, linkurl_fn );
 		}
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				// invalid starting boundary
 				_( "foohttps://google.com" ),
@@ -31,7 +37,7 @@ define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
 			"Invalid boundaries"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				// just the url
 				_( "https://google.com" ),
@@ -56,13 +62,13 @@ define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
 			"Valid boundaries"
 		);
 
-		equal(
+		assert.equal(
 			_( "http://google.com" ),
 			"'http://google.com'google.com",
 			"Remove http protocol from link text"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( "google.com" ),
 				_( "maps.google.com" ),
@@ -76,7 +82,7 @@ define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
 			"Implicit protocol"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( "google.de" ),
 				_( "cat.jpg" )
@@ -88,19 +94,19 @@ define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
 			"TLDs"
 		);
 
-		equal(
+		assert.equal(
 			_( "http://sub.host.com/path/subpath?a=b&c#d" ),
 			"'http://sub.host.com/path/subpath?a=b&c#d'sub.host.com/path/subpath?a=b&c#d",
 			"Path + query + hash"
 		);
 
-		equal(
+		assert.equal(
 			_( "foo http://foo.com bar http://foo.com baz" ),
 			"foo 'http://foo.com'foo.com bar 'http://foo.com'foo.com baz",
 			"Multiple matches"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( "ftp://user@host.com/path" ),
 				_( "ftp://user:pass@host.com/path" ),
@@ -116,7 +122,7 @@ define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
 			"User and password"
 		);
 
-		equal(
+		assert.equal(
 			_( "foo.com:8080" ),
 			"'http://foo.com:8080'foo.com:8080",
 			"Port number"
@@ -125,31 +131,31 @@ define( [ "utils/linkmatching", "ember" ], function( linkmatching ) {
 	});
 
 
-	test( "Twitter username matching", function() {
+	QUnit.test( "Twitter username matching", function( assert ) {
 
 		function _( text ) {
 			return text.replace( twitter_re, twitter_fn );
 		}
 
-		equal(
+		assert.equal(
 			_( "@foo" ),
 			"'https://twitter.com/foo'@foo",
 			"Simple test"
 		);
 
-		equal(
+		assert.equal(
 			_( "name@mail.com" ),
 			"name@mail.com",
 			"Email test"
 		);
 
-		equal(
+		assert.equal(
 			_( "!@foo..." ),
 			"!'https://twitter.com/foo'@foo...",
 			"Special char boundaries"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			_( "@myusernameiswaytoolongfortwitter" ),
 			"@myusernameiswaytoolongfortwitter",
 			"Username length"

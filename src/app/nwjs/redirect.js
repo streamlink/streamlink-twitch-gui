@@ -1,4 +1,4 @@
-define( [ "nwGui" ], function( nwGui ) {
+define( [ "nwjs/nwGui" ], function( nwGui ) {
 
 	var reURI = /^([a-z]+):\/\/([\w-]+(?:\.[\w-]+)*)\/?/;
 

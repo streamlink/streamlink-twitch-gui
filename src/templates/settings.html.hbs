@@ -7,7 +7,7 @@
 <fieldset>
 <legend>Streams</legend>
 <div><i class="fa fa-eye"></i> Preferred quality<span>Choose the default stream quality.</span></div>
-<div>{{view "select" value=model.quality content=settings.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div>{{view "select" value=model.quality content=settings.content.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 <div><i class="fa fa-comment"></i> Open chat<span>After launching a stream.</span></div>
 <div>{{#check-box checked=model.gui_openchat}}Automatically open chat{{/check-box}}</div>
 <div><i class="fa fa-info-circle"></i> Stream popup<span>When a stream has started.</span></div>
@@ -21,7 +21,7 @@
 <div><i class="fa fa-code"></i> Custom parameters<span>Set additional custom livestreamer parameters.</span></div>
 <div>{{input type="text" value=model.livestreamer_params classNames="col-xs-12" placeholder="Add custom livestreamer parameters"}}</div>
 <div><i class="fa fa-filter"></i> Stream type<span>Make sure your player does support the selected stream type.{{livestreamer-docs cmd="--player-passthrough"}}</span></div>
-<div>{{view "select" value=model.player_passthrough content=settings.constructor.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
+<div>{{view "select" value=model.player_passthrough content=settings.content.constructor.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
 {{#if (is-equal model.player_passthrough "http")}}
 <div><i class="fa fa-refresh"></i> Reconnect<span>In case the connection has dropped.{{livestreamer-docs cmd="--player-continuous-http"}}</span></div>
 <div>{{#check-box checked=model.player_reconnect}}Reconnect to stream{{/check-box}}</div>
@@ -59,9 +59,9 @@
 <fieldset>
 <legend>GUI</legend>
 <div><i class="fa fa-puzzle-piece"></i> OS integration<span>Where to access the GUI from.</span></div>
-<div>{{radio-buttons buttonName="integration" icon=true value=model.gui_integration content=settings.constructor.integration}}</div>
+<div>{{radio-buttons buttonName="integration" icon=true value=model.gui_integration content=settings.content.constructor.integration}}</div>
 <div><i class="fa fa-minus"></i> Minimize GUI<span>When the videoplayer opens.</span></div>
-<div>{{radio-buttons buttonName="minimize" icon=true value=model.gui_minimize content=settings.constructor.minimize}}</div>
+<div>{{radio-buttons buttonName="minimize" icon=true value=model.gui_minimize content=settings.content.constructor.minimize}}</div>
 {{#if hasBothIntegrations}}
 <div><i class="fa fa-minus-square"></i> Minimize button<span>Minimize button click behavior.</span></div>
 <div>{{#check-box checked=model.gui_minimizetotray}}Minimize to tray{{/check-box}}</div>
@@ -70,6 +70,16 @@
 <div><i class="fa fa-tag"></i> Application badge<span>On the task bar icon or dock icon.<br>Has to be supported by your OS and requires enabled desktop notifications.</span></div>
 <div>{{#check-box checked=model.notify_badgelabel disabled=(bool-not model.notify_enabled)}}Show number of streaming favorites{{/check-box}}</div>
 {{/if}}
+<div><i class="fa fa-language"></i> Stream languages<span>Channel and broadcaster languages</span></div>
+<div>
+<div>{{#check-box checked=model.gui_flagsvisible}}Always show flags{{/check-box}}</div>
+<h4>Language filter</h4>
+<ul class="list-unstyled filter-lang">
+{{#each language in languages}}
+{{lang-filter obj=model.gui_langfilter prop=language.id name=language.lang}}
+{{/each}}
+</ul>
+</div>
 </fieldset>
 <fieldset>
 <legend>Desktop notifications</legend>
@@ -77,15 +87,15 @@
 <div>{{#check-box checked=model.notify_enabled}}Enable desktop notifications{{/check-box}}</div>
 {{#if model.notify_enabled}}
 <div><i class="fa fa-eyedropper"></i> Channel filter<span>Notifications can be turned on/off individually in a channel's settings menu.</span></div>
-{{radio-buttons buttonName="notify_all" boxes=false buttonView=view.RadioBoxesView value=model.notify_all content=settings.constructor.notify_all}}
+{{radio-buttons buttonName="notify_all" boxes=false buttonView=view.RadioBoxesView value=model.notify_all content=settings.content.constructor.notify_all}}
 <div><i class="fa fa-folder-open-o"></i> Grouping<span>Merge multiple notifications.</span></div>
 <div>{{#check-box checked=model.notify_grouping}}Only show one notification at a time{{/check-box}}</div>
 {{#if hasNotificationClickSupport}}
 <div><i class="fa fa-crosshairs"></i> Notification click<span>Preferred click action.</span></div>
-<div>{{view "select" class="notifications" value=model.notify_click content=settings.constructor.notify_click optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div>{{view "select" class="notifications" value=model.notify_click content=settings.content.constructor.notify_click optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 {{#if (bool-and model.notify_grouping model.notify_click)}}
 <div><i class="fa fa-crosshairs"></i> Group click<span>Preferred group click action.</span></div>
-<div>{{view "select" class="notifications" value=model.notify_click_group content=settings.constructor.notify_click_group optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div>{{view "select" class="notifications" value=model.notify_click_group content=settings.content.constructor.notify_click_group optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 {{/if}}
 {{/if}}
 {{/if}}

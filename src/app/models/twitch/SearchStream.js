@@ -1,7 +1,9 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "EmberData" ], function( DS ) {
+
+	var belongsTo = DS.belongsTo;
 
 	return DS.Model.extend({
-		stream: DS.belongsTo( "twitchStream" )
+		stream: belongsTo( "twitchStream" )
 	}).reopenClass({
 		toString: function() { return "kraken/search/streams"; }
 	});

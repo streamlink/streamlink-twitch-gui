@@ -119,6 +119,16 @@
 	.dynamic-elems-per-row( 3, @content-width, 8%, @additional-width );
 	.stream-hover();
 
+	&.faded {
+		&:not(:hover) > * {
+			opacity: .25;
+		}
+
+		> * {
+			transition: opacity .333s ease-out;
+		}
+	}
+
 	> header {
 		display: flex;
 		align-items: center;
@@ -146,8 +156,11 @@
 		}
 	}
 
-	&:hover > header > i {
-		opacity: 1;
+	&:hover,
+	&.show-flag {
+		> header > i {
+			opacity: 1;
+		}
 	}
 
 	> footer {

@@ -1,4 +1,7 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
+
+	var get = Ember.get;
+	var set = Ember.set;
 
 	/**
 	 * Subclass of Ember.Error
@@ -35,8 +38,8 @@ define( [ "ember" ], function( Ember ) {
 			model = model || new Error( "Unknown error" );
 			model.name = model.name || model.constructor.name;
 
-			var props  = [ "name", "message", "status", "host", "path" ],
-			    reason = Ember.get( model, "reason" );
+			var props  = [ "name", "message", "status", "host", "path" ];
+			var reason = get( model, "reason" );
 
 			// handle rejected promises with a passed Error object as reason
 			if ( reason instanceof Error ) {
@@ -51,7 +54,7 @@ define( [ "ember" ], function( Ember ) {
 			}
 
 			// create the error-content array
-			controller.set( "model", props
+			set( controller, "model", props
 				.filter(function( key ) {
 					var value = model[ key ];
 					return value !== undefined

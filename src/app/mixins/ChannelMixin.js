@@ -1,4 +1,4 @@
-define( [ "nwGui", "ember" ], function( nwGui, Ember ) {
+define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 
 	var get = Ember.get,
 	    set = Ember.set;

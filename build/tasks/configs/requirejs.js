@@ -28,16 +28,9 @@ module.exports = {
 
 	release: {
 		options: {
-			/*
-			 * Do not use dev versions for release builds
-			 *
-			 * Defining two versions in the config file and mapping the names for a release build
-			 * doesn't seem to work here. So we need to overwrite the paths in the grunt config :(
-			 * https://gist.github.com/askesian/6e05daa443ca1955ea32
-			 */
 			paths: {
-				"ember"     : "../vendor/ember/ember.prod",
-				"ember-data": "../vendor/ember-data/ember-data.prod"
+				"Ember"    : "../vendor/ember/ember.prod",
+				"EmberData": "../vendor/ember-data/ember-data.prod"
 			}
 		}
 	}

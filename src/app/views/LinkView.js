@@ -1,4 +1,6 @@
-define( [ "ember" ], function( Ember ) {
+define( [ "Ember" ], function( Ember ) {
+
+	var get = Ember.get;
 
 	// reopen and don't extend: this class may be used globally
 
@@ -20,12 +22,12 @@ define( [ "ember" ], function( Ember ) {
 		 * Enable route refreshing by clicking on the link pointing to this route
 		 */
 		click: function( event ) {
-			if ( this.get( "active" ) ) {
-				var controller = this.get( "controller.targetObject" );
-				if ( controller ) {
+			if ( get( this, "active" ) ) {
+				var targetObject = get( this, "controller.targetObject" );
+				if ( targetObject ) {
 					event.preventDefault();
 					event.stopImmediatePropagation();
-					controller.send( "refresh" );
+					targetObject.send( "refresh" );
 				}
 			} else {
 				this._super.apply( this, arguments );

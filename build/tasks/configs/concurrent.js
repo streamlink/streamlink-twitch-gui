@@ -3,5 +3,6 @@ module.exports = {
 		logConcurrentOutput: true
 	},
 
-	dev_watchers: [ "watch:less", "watch:js" ]
+	devwatchers: [ "watch:less", "watch:js" ],
+	runbuild: [ "run:build", "concurrent:devwatchers" ]
 };

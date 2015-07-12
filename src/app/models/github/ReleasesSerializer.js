@@ -1,7 +1,7 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "EmberData" ], function( DS ) {
 
 	return DS.RESTSerializer.extend({
-		typeForRoot: function() {
+		modelNameFromPayloadKey: function() {
 			return "githubReleases";
 		},
 

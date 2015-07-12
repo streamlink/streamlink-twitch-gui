@@ -1,13 +1,17 @@
-define( [ "utils/ember/helpers" ], function( helpers ) {
+define([
+	"utils/ember/helpers"
+], function(
+	helpers
+) {
 
-	module( "Ember handlebars helpers" );
+	QUnit.module( "Ember handlebars helpers" );
 
 
-	test( "Hours from now", function() {
+	QUnit.test( "Hours from now", function( assert ) {
 
 		var _ = helpers[ "hours-from-now" ];
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( +new Date() ),
 				_( +new Date() - 59 * 1000 )
@@ -19,7 +23,7 @@ define( [ "utils/ember/helpers" ], function( helpers ) {
 			"Less than a minute"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( +new Date() - 60 * 1000 ),
 				_( +new Date() - 59 * 60 * 1000 )
@@ -31,7 +35,7 @@ define( [ "utils/ember/helpers" ], function( helpers ) {
 			"Minutes"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( +new Date() - 60 * 60 * 1000 ),
 				_( +new Date() - Math.PI * 60 * 60 * 1000 )
@@ -46,11 +50,11 @@ define( [ "utils/ember/helpers" ], function( helpers ) {
 	});
 
 
-	test( "Format viewers", function() {
+	QUnit.test( "Format viewers", function( assert ) {
 
 		var _ = helpers[ "format-viewers" ];
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( "" ),
 				_( "foo" )
@@ -62,7 +66,7 @@ define( [ "utils/ember/helpers" ], function( helpers ) {
 			"Unexpected values"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( 1 ),
 				_( 10 ),
@@ -80,7 +84,7 @@ define( [ "utils/ember/helpers" ], function( helpers ) {
 			"Less than 5 digits"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( 10000 ),
 				_( 10099 ),
@@ -100,7 +104,7 @@ define( [ "utils/ember/helpers" ], function( helpers ) {
 			"Thousands"
 		);
 
-		deepEqual(
+		assert.deepEqual(
 			[
 				_( 1000000 ),
 				_( 1009999 ),

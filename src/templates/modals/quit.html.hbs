@@ -1,3 +1,5 @@
 {{#form-button action="closeModal" class="btn-primary" icon="fa-thumbs-down"}}Return{{/form-button}}
+{{#if streamsLength}}
 {{#form-button action="shutdown"   class="btn-danger"  icon="fa-power-off"  }}Shutdown{{/form-button}}
+{{/if}}
 {{#form-button action="quit"       class="btn-success" icon="fa-thumbs-up"  }}Quit{{/form-button}}

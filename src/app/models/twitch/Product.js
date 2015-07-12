@@ -1,16 +1,20 @@
-define( [ "ember-data" ], function( DS ) {
+define( [ "EmberData" ], function( DS ) {
+
+	var attr = DS.attr;
+	var belongsTo = DS.belongsTo;
+	var hasMany = DS.hasMany;
 
 	return DS.Model.extend({
-		emoticons: DS.hasMany( "twitchProductEmoticon" ),
-		features: DS.attr(),
-		interval_number: DS.attr( "number" ),
-		owner_name: DS.attr( "string" ),
-		partner_login: DS.belongsTo( "twitchChannel", { async: true } ),
-		period: DS.attr( "string" ),
-		price: DS.attr( "string" ),
-		recurring: DS.attr( "boolean" ),
-		short_name: DS.attr( "string" ),
-		ticket_type: DS.attr( "string" )
+		emoticons: hasMany( "twitchProductEmoticon" ),
+		features: attr(),
+		interval_number: attr( "number" ),
+		owner_name: attr( "string" ),
+		partner_login: belongsTo( "twitchChannel", { async: true } ),
+		period: attr( "string" ),
+		price: attr( "string" ),
+		recurring: attr( "boolean" ),
+		short_name: attr( "string" ),
+		ticket_type: attr( "string" )
 	}).reopenClass({
 		toString: function() { return "twitchProduct"; }
 	});

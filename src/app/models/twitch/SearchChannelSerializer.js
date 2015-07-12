@@ -1,12 +1,12 @@
 define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 
 	return TwitchSerializer.extend({
-		attrs: {
-			channel: { deserialize: "records" }
+		modelNameFromPayloadKey: function() {
+			return "twitchSearchChannel";
 		},
 
-		typeForRoot: function() {
-			return "twitchSearchChannel";
+		attrs: {
+			channel: { deserialize: "records" }
 		},
 
 		normalizePayload: function( payload ) {

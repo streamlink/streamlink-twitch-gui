@@ -1,5 +1,5 @@
 define([
-	"ember",
+	"Ember",
 	"components/ExternalLinkComponent",
 	"text!templates/components/livestreamerdocs.html.hbs"
 ], function( Ember, ExternalLinkComponent, layout ) {
