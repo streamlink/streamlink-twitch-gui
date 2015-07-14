@@ -25,6 +25,7 @@ define([
 
 	return Ember.Service.extend( Ember.Evented, {
 		metadata: Ember.inject.service(),
+		store   : Ember.inject.service(),
 
 		config: alias( "metadata.config" ),
 		scope : alias( "config.twitch-oauth-scope" ),
@@ -47,27 +48,24 @@ define([
 
 
 		init: function() {
-			var self = this;
-			// FIXME: remove this and use service injection. requires EmberData upgrade
-			self.store = self.container.lookup( "store:main" );
-
-			self.store.find( "auth" )
+			var store = get( this, "store" );
+			store.find( "auth" )
 				.then(function( records ) {
 					return records.content.length
 						? records.objectAt( 0 )
-						: self.store.createRecord( "auth", { id: 1 } ).save();
+						: store.createRecord( "auth", { id: 1 } ).save();
 				})
 				.then(function( session ) {
-					set( self, "session", session );
+					set( this, "session", session );
 
 					// startup auto login
 					var token = get( session, "access_token" );
-					self.login( token, true )
+					this.login( token, true )
 						.catch(function() {});
 
 					// trigger event after calling login, so `isPending` can be set first
-					self.trigger( "initialized" );
-				});
+					this.trigger( "initialized" );
+				}.bind( this ) );
 		},
 
 
@@ -200,7 +198,8 @@ define([
 		 */
 		validateSession: function() {
 			// validate token
-			return this.store.findAll( "twitchToken", null )
+			var store = get( this, "store" );
+			return store.findAll( "twitchToken", null )
 				.then(function( records ) { return records.objectAt( 0 ); })
 				.then( this.validateToken.bind( this ) );
 		},
