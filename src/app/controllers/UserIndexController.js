@@ -6,6 +6,7 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
 		notification: Ember.inject.service(),
+		settings    : Ember.inject.service(),
 
 		notif_running: readOnly( "notification.running" ),
 		notif_error  : readOnly( "notification.error" ),

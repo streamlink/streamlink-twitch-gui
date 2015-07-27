@@ -6,7 +6,8 @@ define([
 	var get = Ember.get;
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
-		auth: Ember.inject.service(),
+		auth    : Ember.inject.service(),
+		settings: Ember.inject.service(),
 
 		scope: function() {
 			return get( this, "auth.scope" ).join( ", " );
