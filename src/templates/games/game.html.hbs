@@ -1,5 +1,9 @@
 <header>
-<h2>{{game}}</h2>
+<h2>
+{{#if auth.session.isLoggedIn}}
+{{form-button action=view.followAction class=view.followClass icon=view.followIcon iconanim=true title=view.followTitle}}
+{{/if}}
+{{game}}</h2>
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
 <ul class="content-list">
