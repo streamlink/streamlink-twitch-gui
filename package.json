@@ -30,7 +30,7 @@
 		"load-grunt-config": "0.16.0",
 		"q": "1.2.0",
 		"q-io": "1.12.0",
-		"node-webkit-builder": "1.0.12"
+		"nw-builder": "2.0.1"
 	},
 
 	"config": {
