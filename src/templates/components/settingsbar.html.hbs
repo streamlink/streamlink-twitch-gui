@@ -1,5 +1,6 @@
 {{form-button action="toggle" class="btn-open" icon="fa-wrench"}}
 <div class="menu">
+{{yield}}
 {{#if btnHomepage}}
 {{form-button action="homepage" actionParam=url classNameBindings=":btn-neutral isHomepage::inactive" title="Set as homepage" icon="fa-home" iconanim=true}}
 {{/if}}

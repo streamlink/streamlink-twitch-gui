@@ -1,6 +1,41 @@
 <header>
 <h2>Followed channels</h2>
-{{settings-bar targetObject=this btnHomepage=true}}
+{{#settings-bar targetObject=this btnHomepage=true}}
+<div class="multibtn sort-method">
+{{form-button
+  action="sortMethod"
+  actionParam="created_at"
+  class=view.sortbyCreatedClass
+  icon="fa-calendar"
+  title="Sort by date followed"}}
+{{form-button
+  action="sortMethod"
+  actionParam="last_broadcast"
+  class=view.sortbyBroadcastClass
+  icon="fa-video-camera"
+  title="Sort by last broadcast"}}
+{{form-button
+  action="sortMethod"
+  actionParam="login"
+  class=view.sortbyLoginClass
+  icon="fa-sign-in"
+  title="Sort by last login"}}
+</div>
+<div class="multibtn sort-order">
+{{form-button
+  action="sortOrder"
+  actionParam="desc"
+  class=view.directionDescClass
+  icon="fa-long-arrow-down"
+  title="Sort in descending order"}}
+{{form-button
+  action="sortOrder"
+  actionParam="asc"
+  class=view.directionAscClass
+  icon="fa-long-arrow-up"
+  title="Sort in ascending order"}}
+</div>
+{{/settings-bar}}
 </header>
 {{#if content.length}}
 <ul class="content-list">

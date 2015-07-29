@@ -15,15 +15,33 @@ define([
 	return UserIndexRoute.extend( InfiniteScrollRouteMixin, {
 		itemSelector: ".channel-component",
 
-		model: function() {
+		queryParams: {
+			sortby: {
+				refreshModel: true
+			},
+			direction: {
+				refreshModel: true
+			}
+		},
+
+		model: function( params ) {
 			return this.store.findQuery( "twitchChannelsFollowed", {
-				offset: get( this, "offset" ),
-				limit : get( this, "limit" )
+				offset   : get( this, "offset" ),
+				limit    : get( this, "limit" ),
+				sortby   : params.sortby || "created_at",
+				direction: params.direction || "desc"
 			})
 				.then(function( data ) {
 					return data.toArray().mapBy( "channel" );
 				})
 				.then( preload( "@each.logo" ) );
+		},
+
+		fetchContent: function() {
+			return this.model({
+				sortby   : get( this, "controller.sortby" ),
+				direction: get( this, "controller.direction" )
+			});
 		}
 	});
 

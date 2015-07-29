@@ -220,6 +220,7 @@ define(function( require ) {
 		UserFollowedStreamsRoute: require( "routes/UserFollowedStreamsRoute" ),
 		UserFollowedStreamsView: require( "views/UserFollowedStreamsView" ),
 		UserFollowedChannelsRoute: require( "routes/UserFollowedChannelsRoute" ),
+		UserFollowedChannelsController: require( "controllers/UserFollowedChannelsController" ),
 		UserFollowedChannelsView: require( "views/UserFollowedChannelsView" ),
 		UserFollowedGamesRoute: require( "routes/UserFollowedGamesRoute" ),
 		UserFollowedGamesView: require( "views/UserFollowedGamesView" ),
