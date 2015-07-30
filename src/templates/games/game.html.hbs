@@ -6,9 +6,13 @@
 {{game}}</h2>
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
+{{#if model.length}}
 <ul class="content-list">
 {{#each model as |stream index|}}
 {{stream-item content=stream isNewItem=(is-gte index initialFetchSize)}}
 {{/each}}
 </ul>
 {{infinite-scroll}}
+{{else}}
+<p>There are no broadcasters online streaming this game...</p>
+{{/if}}

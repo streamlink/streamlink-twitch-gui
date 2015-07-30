@@ -2,6 +2,7 @@
 <h2>Featured Channels</h2>
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
+{{#if featured.length}}
 {{#each featured as |elem index|}}
 {{#if (is-equal _index index)}}
 <section class="stream-presentation">
@@ -26,4 +27,7 @@
 </li>
 {{/each}}
 </ul>
+{{else}}
+<section class="error-message">The featured streams list could not be loaded!</section>
+{{/if}}
 <section class="globalstats">There are {{summary.viewers}} people watching {{summary.channels}} live streams right now!</section>
