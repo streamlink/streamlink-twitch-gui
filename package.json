@@ -49,7 +49,7 @@
 		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",
 		"livestreamer-docs-url": "http://docs.livestreamer.io/en/latest/cli.html#cmdoption{cmd}",
 		"twitch-stream-url": "twitch.tv/{channel}",
-		"twitch-chat-url": "http://www.twitch.tv/{channel}/chat",
+		"twitch-chat-url": "http://www.twitch.tv/{channel}/chat?popup=",
 		"twitch-subscribe-url": "http://www.twitch.tv/{channel}/subscribe",
 		"twitch-subscribe-edit": "http://www.twitch.tv/products/{channel}/ticket/edit",
 		"twitch-subscribe-cancel": "http://www.twitch.tv/products/{channel}/ticket/edit?cancel_and_refund=true",
