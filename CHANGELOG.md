@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.9.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.2) (2015-07-30)
 
 - Implemented stream language filters. (#113)
 - Fully implemented the game following feature. (#31)
@@ -12,7 +12,7 @@ Changelog - Livestreamer Twitch GUI
 - Upgraded to NW.js v0.12.2.
 - Some minor bug fixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.1...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.1...v0.9.2)
 
 
 ## [v0.9.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.1) (2015-05-27)
