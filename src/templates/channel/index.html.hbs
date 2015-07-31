@@ -26,9 +26,7 @@
 {{/if}}
 </dl>
 <div class="interactions">
-{{#if stream}}
 {{form-button action="chat"  actionParam=channel class="btn-hint" icon="fa-comments"  iconanim=true title="Open chat"}}
-{{/if}}
 {{form-button action="share" actionParam=channel class="btn-info" icon="fa-share-alt" iconanim=true title="Copy channel url to clipboard"}}
 {{#if auth.session.isLoggedIn}}
 {{#if channel.partner}}
