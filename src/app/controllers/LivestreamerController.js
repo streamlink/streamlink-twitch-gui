@@ -6,6 +6,7 @@ define([
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/which",
 	"utils/fs/stat",
+	"utils/StreamOutputBuffer",
 	"utils/semver"
 ], function(
 	Ember,
@@ -15,6 +16,7 @@ define([
 	ChannelSettingsMixin,
 	which,
 	stat,
+	StreamOutputBuffer,
 	semver
 ) {
 
@@ -271,47 +273,60 @@ define([
 		validateLivestreamer: function( exec ) {
 			var minimum = get( this, "config.livestreamer-version-min" );
 			var time    = get( this, "config.livestreamer-validation-timeout" );
-			var defer   = Promise.defer();
-			var spawn   = CP.spawn( exec, [ "--version", "--no-version-check" ] );
+			var spawn;
 
-			function failed( err ) {
-				spawn = null;
-				defer.reject( err );
-			}
-
-			function onData( data ) {
-				var match = reVersion.exec( String( data ).trim() );
-				if ( match ) {
-					// resolve before process exit
-					defer.resolve( match[1] );
-				}
-				if ( spawn ) {
-					// immediately kill the process
-					spawn.kill( "SIGKILL" );
-				}
-			}
-
-			function onTimeout() {
+			function kill() {
 				if ( spawn ) { spawn.kill( "SIGKILL" ); }
-				failed( new Error( "timeout" ) );
+				spawn = null;
 			}
 
-			// reject on error / exit
-			spawn.on( "error", failed );
-			spawn.on(  "exit", failed );
+			return new Promise(function( resolve, reject ) {
+				spawn = CP.spawn( exec, [ "--version", "--no-version-check" ] );
 
-			// only check the first chunk of data
-			spawn.stdout.on( "data", onData );
-			spawn.stderr.on( "data", onData );
+				function onLine( line, idx, lines ) {
+					// be strict: livestreamer's output is just one single line
+					if ( idx !== 0 || lines.length !== 1 ) {
+						reject( new Error( "Unexpected version check output" ) );
+					}
 
-			// kill after a certain time
-			run.later( onTimeout, time );
+					// match the version string
+					var match = reVersion.exec( line );
+					if ( match ) {
+						resolve( match[1] );
+					}
+				}
 
-			return defer.promise.then(function( version ) {
-				return version === semver.getMax([ version, minimum ])
-					? Promise.resolve( exec )
-					: Promise.reject( new VersionError( version ) );
-			});
+				function onExit( code ) {
+					// ignore code 0 (no error)
+					if ( code === 0 ) { return; }
+					reject( new Error( "Exit code " + code ) );
+				}
+
+				function onTimeout() {
+					reject( new Error( "Timeout" ) );
+				}
+
+				// reject on error / exit
+				spawn.on( "error", reject );
+				spawn.on(  "exit", onExit );
+
+				// read from stdout and stderr independently
+				spawn.stdout.on( "data", new StreamOutputBuffer( onLine ) );
+				spawn.stderr.on( "data", new StreamOutputBuffer( onLine ) );
+
+				// kill after a certain time
+				run.later( onTimeout, time );
+			})
+				.then(function( version ) {
+					kill();
+					return version === semver.getMax([ version, minimum ])
+						? Promise.resolve( exec )
+						: Promise.reject( new VersionError( version ) );
+
+				}, function( err ) {
+					kill();
+					return Promise.reject( err );
+				});
 		},
 
 
