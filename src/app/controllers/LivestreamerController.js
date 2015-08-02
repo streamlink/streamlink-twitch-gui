@@ -285,8 +285,10 @@ define([
 					// resolve before process exit
 					defer.resolve( match[1] );
 				}
-				// immediately kill the process
-				spawn.kill( "SIGKILL" );
+				if ( spawn ) {
+					// immediately kill the process
+					spawn.kill( "SIGKILL" );
+				}
 			}
 
 			function onTimeout() {
