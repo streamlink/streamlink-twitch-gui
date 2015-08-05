@@ -1,14 +1,14 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.9.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.3) (2015-08-05)
 
 - Fixed livestreamer validation failure on OSX. #121
 - Fixed minimize to tray. #122
 - Always show chat button on channel pages. #119
-- Upgraded to NW.js v0.12.3
+- Upgraded to NW.js v0.12.3.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.2...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.2...v0.9.3)
 
 
 ## [v0.9.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.2) (2015-07-31)
