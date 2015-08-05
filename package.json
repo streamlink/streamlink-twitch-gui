@@ -35,7 +35,7 @@
 
 	"config": {
 		"display-name": "Livestreamer Twitch GUI",
-		"nw-js-version": "0.12.2",
+		"nw-js-version": "0.12.3",
 		"version-check-days": 7,
 		"tray-icon": "img/icon-{res}.png",
 		"tray-icon-osx": "img/icon-osx-{res}{hidpi}.png",
