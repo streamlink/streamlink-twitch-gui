@@ -1,13 +1,23 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## [v0.9.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.2) (2015-07-30)
+## Master
 
-- Implemented stream language filters. (#113)
-- Fully implemented the game following feature. (#31)
+- Fixed livestreamer validation failure on OSX. #121
+- Fixed minimize to tray. #122
+- Always show chat button on channel pages. #119
+- Upgraded to NW.js v0.12.3
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.2...master)
+
+
+## [v0.9.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.2) (2015-07-31)
+
+- Implemented stream language filters. #113
+- Fully implemented the game following feature. #31
 - Added sorting options to followed channels.
-- Added option to always show stream flags. (#106)
-- Fixed touch issues with dropdown elements. (#108)
+- Added option to always show stream flags. #106
+- Fixed touch issues with dropdown elements. #108
 - Upgraded to Ember v1.12.1 and Ember-Data v1.0.0-beta.19.2.
 - Upgraded to NW.js v0.12.2.
 - Some minor bug fixes and improvements.
