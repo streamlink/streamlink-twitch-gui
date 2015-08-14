@@ -21,7 +21,6 @@ define(function( require ) {
 
 
 		// Store
-		ApplicationStore: DS.Store.extend(),
 		ApplicationAdapter: require( "store/TwitchAdapter" ),
 
 
