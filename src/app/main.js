@@ -24,6 +24,11 @@ define(function( require ) {
 	// load the config first
 	require( [ "config" ], function() {
 
+		// fix ember 1.13.x
+		// https://github.com/emberjs/ember.js/issues/11679
+		var process = window.process;
+		window.process = null;
+
 		// load dependencies
 		require([
 			"Ember",
@@ -31,6 +36,8 @@ define(function( require ) {
 			"EmberData",
 			"EmberDataLS"
 		], function() {
+
+			window.process = process;
 
 			// load the app module
 			require( [ "app" ] );
