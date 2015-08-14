@@ -109,7 +109,7 @@ define(function( require ) {
 
 		// Ember additions/changes/fixes
 		BooleanTransform: require( "store/BooleanTransform" ),
-		LinkView: require( "views/LinkView" ),
+		LinkComponent: require( "components/LinkComponent" ),
 		SelectView: require( "views/SelectView" ),
 
 

@@ -4,7 +4,7 @@ define( [ "Ember" ], function( Ember ) {
 
 	// reopen and don't extend: this class may be used globally
 
-	return Ember.LinkView.reopen({
+	return Ember.LinkComponent.reopen({
 		/*
 		 * Prevent new windows from being opened by middleclicking on links/anchors
 		 */
