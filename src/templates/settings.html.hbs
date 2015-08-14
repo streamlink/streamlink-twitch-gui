@@ -75,7 +75,7 @@
 <div>{{#check-box checked=model.gui_flagsvisible}}Always show flags{{/check-box}}</div>
 <h4>Language filter</h4>
 <ul class="list-unstyled filter-lang">
-{{#each language in languages}}
+{{#each languages as |language|}}
 {{lang-filter obj=model.gui_langfilter prop=language.id name=language.lang}}
 {{/each}}
 </ul>
