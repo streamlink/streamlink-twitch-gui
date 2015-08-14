@@ -16,7 +16,7 @@ define([
 		itemSelector: ".game-component",
 
 		model: function() {
-			return this.store.findQuery( "twitchGamesFollowed", {
+			return get( this, "store" ).query( "twitchGamesFollowed", {
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})

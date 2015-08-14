@@ -16,7 +16,7 @@ define([
 		itemSelector: ".stream-component",
 
 		model: function() {
-			return this.store.findQuery( "twitchStreamsFollowed", {
+			return get( this, "store" ).query( "twitchStreamsFollowed", {
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})

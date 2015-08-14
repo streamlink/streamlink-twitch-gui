@@ -26,10 +26,10 @@ define( [ "Ember" ], function( Ember ) {
 			set( this, "isFollowingLocked", true );
 
 			var store = get( this, "store" );
-			return store.find( "twitchUserFollowsGame", game )
+			return store.findRecord( "twitchUserFollowsGame", game )
 				.catch(function() {
 					// unload the generated empty record
-					var record = store.getById( "twitchUserFollowsGame", game );
+					var record = store.peekRecord( "twitchUserFollowsGame", game );
 					if ( record ) {
 						store.unloadRecord( record );
 					}

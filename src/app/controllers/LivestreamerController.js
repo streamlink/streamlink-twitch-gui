@@ -78,7 +78,7 @@ define([
 		active: null,
 		model : function() {
 			var store = get( this, "store" );
-			return store.all( "livestreamer" );
+			return store.peekAll( "livestreamer" );
 		}.property(),
 
 

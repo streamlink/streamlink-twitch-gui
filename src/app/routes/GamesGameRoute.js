@@ -4,8 +4,8 @@ define([
 	"utils/preload"
 ], function( Ember, InfiniteScrollRouteMixin, preload ) {
 
-	var	get = Ember.get,
-		set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
 
 	return Ember.Route.extend( InfiniteScrollRouteMixin, {
 		itemSelector: ".stream-component",
@@ -15,10 +15,10 @@ define([
 				set( this, "game", get( params || {}, "game" ) );
 			}
 
-			return this.store.findQuery( "twitchStream", {
-				game	: get( this, "game" ),
-				offset	: get( this, "offset" ),
-				limit	: get( this, "limit" )
+			return get( this, "store" ).query( "twitchStream", {
+				game  : get( this, "game" ),
+				offset: get( this, "offset" ),
+				limit : get( this, "limit" )
 			})
 				.then(function( data ) { return data.toArray(); })
 				.then( preload( "@each.preview.@each.medium_nocache" ) );

@@ -40,7 +40,7 @@ define([
 			var filters = store.modelFor( "search" ).filters;
 			set( this, "filters", filters );
 
-			store.find( "search" )
+			store.findAll( "search" )
 				.then(function( records ) {
 					set( this, "model", records );
 				}.bind( this ) );

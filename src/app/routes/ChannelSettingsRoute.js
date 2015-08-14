@@ -4,13 +4,13 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 	return Ember.Route.extend({
 		model: function() {
-			var store  = this.store;
+			var store  = get( this, "store" );
 			var params = this.paramsFor( "channel" );
 			var id     = params.channel;
 
-			return store.find( "channelSettings", id )
+			return store.findRecord( "channelSettings", id )
 				.catch(function() {
-					// get the record automatically created by store.find()
+					// get the record automatically created by store.findRecord()
 					var record = store.recordForId( "channelSettings", id );
 					// transition from `root.empty` to `root.loaded.created.uncommitted`
 					record._internalModel.loadedData();
@@ -44,7 +44,7 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 				} else {
 					// don't keep the channelSettings records in cache
-					this.store.unloadAll( "channelSettings" );
+					get( this, "store" ).unloadAll( "channelSettings" );
 				}
 			}
 		}

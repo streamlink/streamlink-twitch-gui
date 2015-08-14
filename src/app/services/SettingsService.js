@@ -14,7 +14,7 @@ define( [ "Ember" ], function( Ember ) {
 
 			var store = get( this, "store" );
 
-			store.find( "settings" )
+			store.findAll( "settings" )
 				.then(function( records ) {
 					return records.content.length
 						? records.objectAt( 0 )

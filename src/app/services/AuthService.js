@@ -49,7 +49,7 @@ define([
 
 		init: function() {
 			var store = get( this, "store" );
-			store.find( "auth" )
+			store.findAll( "auth" )
 				.then(function( records ) {
 					return records.content.length
 						? records.objectAt( 0 )
@@ -199,7 +199,7 @@ define([
 		validateSession: function() {
 			// validate token
 			var store = get( this, "store" );
-			return store.findAll( "twitchToken", null )
+			return store.findAll( "twitchToken", { reload: true } )
 				.then(function( records ) { return records.objectAt( 0 ); })
 				.then( this.validateToken.bind( this ) );
 		},

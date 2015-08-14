@@ -20,9 +20,9 @@ define([
 		model: function() {
 			var self = this;
 
-			return this.store.findQuery( "twitchTicket", {
-				offset: get( this, "offset" ),
-				limit : get( this, "limit" ),
+			return get( this, "store" ).query( "twitchTicket", {
+				offset : get( this, "offset" ),
+				limit  : get( this, "limit" ),
 				unended: true
 			})
 				.then(function( data ) {

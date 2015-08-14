@@ -12,10 +12,10 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 
 			var store = get( this, "store" );
 			var name  = get( channel, "id" );
-			return store.fetchById( "twitchUserFollowsChannel", name )
+			return store.findRecord( "twitchUserFollowsChannel", name, { reload: true } )
 				.catch(function() {
 					// unload the generated empty record
-					var record = store.getById( "twitchUserFollowsChannel", name );
+					var record = store.peekRecord( "twitchUserFollowsChannel", name );
 					if ( record ) {
 						store.unloadRecord( record );
 					}
@@ -34,10 +34,10 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 
 			var store = get( this, "store" );
 			var name  = get( channel, "id" );
-			return store.fetchById( "twitchUserSubscription", name )
+			return store.findRecord( "twitchUserSubscription", name, { reload: true } )
 				.catch(function() {
 					// unload the generated empty record
-					var record = store.getById( "twitchUserSubscription", name );
+					var record = store.peekRecord( "twitchUserSubscription", name );
 					if ( record ) {
 						store.unloadRecord( record );
 					}

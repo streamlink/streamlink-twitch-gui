@@ -90,7 +90,7 @@ define([
 
 				var name = snapshot.id;
 				// is the followed channel online?
-				store.fetchById( "twitchStream", name )
+				store.findRecord( "twitchStream", name, { reload: true } )
 					.then(function() {
 						/** @type {Object} model */
 						var model = get( self, "model" );
@@ -140,7 +140,7 @@ define([
 			if ( !get( this, "enabled" ) ) { return; }
 
 			var store = get( this, "store" );
-			store.find( "twitchStreamsFollowed", {
+			store.query( "twitchStreamsFollowed", {
 				limit: 100
 			})
 				.then(function( streams ) {

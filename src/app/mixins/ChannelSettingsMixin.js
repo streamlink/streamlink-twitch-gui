@@ -10,7 +10,7 @@ define( [ "Ember" ], function( Ember ) {
 		 */
 		loadChannelSettings: function( id ) {
 			var store = get( this, "store" );
-			return store.find( "channelSettings", id )
+			return store.findRecord( "channelSettings", id )
 				.then(function( record ) {
 					// get its data and unload it
 					return record.toJSON();
