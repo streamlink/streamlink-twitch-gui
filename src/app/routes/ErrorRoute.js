@@ -21,7 +21,8 @@ define( [ "Ember" ], function( Ember ) {
 		this.path   = xhr.path;
 	};
 
-	Ember.XHRError.prototype = Ember.create( Ember.Error.prototype );
+	Ember.XHRError.prototype = Object.create( Ember.Error.prototype );
+	Ember.XHRError.prototype.constructor = Ember.XHRError;
 
 
 	return Ember.Route.extend({
