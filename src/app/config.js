@@ -35,6 +35,7 @@ requirejs.config({
 		"initializers": "initializers",
 		"mixins"      : "mixins",
 		"services"    : "services",
+		"helpers"     : "helpers",
 		"models"      : "models",
 		"views"       : "views",
 		"controllers" : "controllers",

@@ -7,14 +7,20 @@ define(function( require ) {
 		requirejs.config({
 			"baseUrl": "../app",
 
+			"shim": {
+				"EmberTest": [ "Ember", "EmberData", "EmberHtmlbars" ]
+			},
+
 			"paths": {
+				"EmberTest": "../vendor/ember/ember-testing",
+
 				// Test paths
 				"test": "../test/tests"
 			}
 		});
 
 
-		require( [ "text!../test/tests.json" ], function( tests ) {
+		require( [ "text!../test/tests.json", "EmberTest" ], function( tests ) {
 			tests = JSON.parse( tests ).tests;
 
 			// then load tests and start QUnit

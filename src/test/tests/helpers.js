@@ -1,122 +1,383 @@
 define([
-	"utils/ember/helpers"
+	"Ember",
+	"helpers/IsEqualHelper",
+	"helpers/IsNullHelper",
+	"helpers/IsGtHelper",
+	"helpers/IsGteHelper",
+	"helpers/BoolNotHelper",
+	"helpers/BoolAndHelper",
+	"helpers/BoolOrHelper",
+	"helpers/MathAddHelper",
+	"helpers/MathSubHelper",
+	"helpers/MathMulHelper",
+	"helpers/MathDivHelper",
+	"helpers/FormatViewersHelper",
+	"helpers/FormatTimeHelper",
+	"helpers/HoursFromNowHelper",
+	"helpers/TimeFromNowHelper"
 ], function(
-	helpers
+	Ember,
+	IsEqualHelper,
+	IsNullHelper,
+	IsGtHelper,
+	IsGteHelper,
+	BoolNotHelper,
+	BoolAndHelper,
+	BoolOrHelper,
+	MathAddHelper,
+	MathSubHelper,
+	MathMulHelper,
+	MathDivHelper,
+	FormatViewersHelper,
+	FormatTimeHelper,
+	HoursFromNowHelper,
+	TimeFromNowHelper
 ) {
 
-	QUnit.module( "Ember handlebars helpers" );
+	var get = Ember.get;
+	var set = Ember.set;
+	var run = Ember.run;
+	var Component = Ember.Component;
+	var compile = Ember.HTMLBars.compile;
+
+	var registry, container, component;
+
+	function runAppend( view ) {
+		run( view, "appendTo", "#qunit-fixture" );
+	}
+
+	function runDestroy( destroyed ) {
+		if ( destroyed ) {
+			run( destroyed, "destroy" );
+		}
+	}
+
+	function getOutput( component ) {
+		return component.$().text();
+	}
+
+	QUnit.module( "Ember helpers", {
+		"setup": function() {
+			registry = new Ember.Registry();
+			registry.optionsForType( "template", { instantiate: false } );
+			registry.optionsForType( "helper", { singleton: false } );
+			container = registry.container();
+		},
+
+		"teardown": function() {
+			runDestroy( component );
+			runDestroy( container );
+			registry = container = component = null;
+		}
+	});
 
 
-	QUnit.test( "Hours from now", function( assert ) {
+	QUnit.test( "Is equal", function( assert ) {
 
-		var _ = helpers[ "hours-from-now" ];
+		registry.register( "helper:is-equal", IsEqualHelper );
+		component = Component.extend({
+			container: container,
+			valA     : "foo",
+			valB     : "foo",
+			valC     : "foo",
+			layout   : compile( "{{is-equal valA valB valC}}" )
+		}).create();
 
-		assert.deepEqual(
-			[
-				_( +new Date() ),
-				_( +new Date() - 59 * 1000 )
-			],
-			[
-				"just now",
-				"just now"
-			],
-			"Less than a minute"
-		);
+		runAppend( component );
+		assert.equal( getOutput( component ), "true", "Equal values" );
+		run( component, "set", "valC", "bar" );
+		assert.equal( getOutput( component ), "false", "Unequal values" );
 
-		assert.deepEqual(
-			[
-				_( +new Date() - 60 * 1000 ),
-				_( +new Date() - 59 * 60 * 1000 )
-			],
-			[
-				"01m",
-				"59m"
-			],
-			"Minutes"
-		);
+	});
 
-		assert.deepEqual(
-			[
-				_( +new Date() - 60 * 60 * 1000 ),
-				_( +new Date() - Math.PI * 60 * 60 * 1000 )
-			],
-			[
-				"1.0h",
-				"3.1h"
-			],
-			"Hours"
-		);
+
+	QUnit.test( "Is null", function( assert ) {
+
+		registry.register( "helper:is-null", IsNullHelper );
+		component = Component.extend({
+			container: container,
+			valA     : null,
+			valB     : null,
+			valC     : null,
+			layout   : compile( "{{is-null valA valB valC}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "true", "All values are null" );
+		run( component, "set", "valC", false );
+		assert.equal( getOutput( component ), "false", "Some values are not null" );
+
+	});
+
+
+	QUnit.test( "Is greater than", function( assert ) {
+
+		registry.register( "helper:is-gt", IsGtHelper );
+		component = Component.extend({
+			container: container,
+			valA     : 2,
+			valB     : 1,
+			layout   : compile( "{{is-gt valA valB}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "true", "2 is greater than 1" );
+		run( component, "set", "valA", 0 );
+		assert.equal( getOutput( component ), "false", "0 is not greater than 1" );
+
+	});
+
+
+	QUnit.test( "Is greater than or equal", function( assert ) {
+
+		registry.register( "helper:is-gte", IsGteHelper );
+		component = Component.extend({
+			container: container,
+			valA     : 2,
+			valB     : 1,
+			layout   : compile( "{{is-gte valA valB}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "true", "2 is greater than or equal 1" );
+		run( component, "set", "valA", 1 );
+		assert.equal( getOutput( component ), "true", "1 is greater than or equal 1" );
+		run( component, "set", "valA", 0 );
+		assert.equal( getOutput( component ), "false", "0 is not greater than or equal 1" );
+
+	});
+
+
+	QUnit.test( "Bool not", function( assert ) {
+
+		registry.register( "helper:bool-not", BoolNotHelper );
+		component = Component.extend({
+			container: container,
+			valA     : false,
+			valB     : null,
+			valC     : undefined,
+			valD     : "",
+			layout   : compile( "{{bool-not valA valB valC valD}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "true", "All values are falsey" );
+		run( component, "set", "valA", true );
+		assert.equal( getOutput( component ), "false", "Not all values are falsey" );
+
+	});
+
+
+	QUnit.test( "Bool and", function( assert ) {
+
+		registry.register( "helper:bool-and", BoolAndHelper );
+		component = Component.extend({
+			container: container,
+			valA     : true,
+			valB     : true,
+			layout   : compile( "{{bool-and valA valB}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "true", "A and B" );
+		run( component, "set", "valA", false );
+		assert.equal( getOutput( component ), "false", "not A and B" );
+
+	});
+
+
+	QUnit.test( "Bool or", function( assert ) {
+
+		registry.register( "helper:bool-or", BoolOrHelper );
+		component = Component.extend({
+			container: container,
+			valA     : true,
+			valB     : true,
+			layout   : compile( "{{bool-or valA valB}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "true", "A or B" );
+		run( component, "set", "valA", false );
+		assert.equal( getOutput( component ), "true", "A or B" );
+		run( component, "set", "valB", false );
+		assert.equal( getOutput( component ), "false", "not A or B" );
+
+	});
+
+
+	QUnit.test( "Math add", function( assert ) {
+
+		registry.register( "helper:math-add", MathAddHelper );
+		component = Component.extend({
+			container: container,
+			valA     : 1,
+			valB     : 2,
+			layout   : compile( "{{math-add valA valB}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), 3, "1 + 2 = 3" );
+
+	});
+
+
+	QUnit.test( "Math sub", function( assert ) {
+
+		registry.register( "helper:math-sub", MathSubHelper );
+		component = Component.extend({
+			container: container,
+			valA     : 1,
+			valB     : 2,
+			layout   : compile( "{{math-sub valA valB}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), -1, "1 - 2 = -1" );
+
+	});
+
+
+	QUnit.test( "Math mul", function( assert ) {
+
+		registry.register( "helper:math-mul", MathMulHelper );
+		component = Component.extend({
+			container: container,
+			valA     : 7,
+			valB     : 7,
+			layout   : compile( "{{math-mul valA valB}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), 49, "7 * 7 = 49" );
+
+	});
+
+
+	QUnit.test( "Math div", function( assert ) {
+
+		registry.register( "helper:math-div", MathDivHelper );
+		component = Component.extend({
+			container: container,
+			valA     : 12,
+			valB     : 3,
+			layout   : compile( "{{math-div valA valB}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), 4, "12 / 3 = 4" );
 
 	});
 
 
 	QUnit.test( "Format viewers", function( assert ) {
 
-		var _ = helpers[ "format-viewers" ];
+		registry.register( "helper:format-viewers", FormatViewersHelper );
+		component = Component.extend({
+			container: container,
+			viewers  : "",
+			layout   : compile( "{{format-viewers viewers}}" )
+		}).create();
 
-		assert.deepEqual(
-			[
-				_( "" ),
-				_( "foo" )
-			],
-			[
-				"0",
-				"0"
-			],
-			"Unexpected values"
+		runAppend( component );
+		assert.equal( getOutput( component ), "0", "Unexpected values" );
+		run( component, "set", "viewers", "foo" );
+		assert.equal( getOutput( component ), "0", "Unexpected values" );
+
+		run( component, "set", "viewers", 9 );
+		assert.equal( getOutput( component ), "9", "Less than 5 digits" );
+		run( component, "set", "viewers", 99 );
+		assert.equal( getOutput( component ), "99", "Less than 5 digits" );
+		run( component, "set", "viewers", 999 );
+		assert.equal( getOutput( component ), "999", "Less than 5 digits" );
+		run( component, "set", "viewers", 9999 );
+		assert.equal( getOutput( component ), "9999", "Less than 5 digits" );
+
+		run( component, "set", "viewers", 10000 );
+		assert.equal( getOutput( component ), "10.0k", "Thousands" );
+		run( component, "set", "viewers", 10099 );
+		assert.equal( getOutput( component ), "10.0k", "Thousands" );
+		run( component, "set", "viewers", 10100 );
+		assert.equal( getOutput( component ), "10.1k", "Thousands" );
+		run( component, "set", "viewers", 99999 );
+		assert.equal( getOutput( component ), "99.9k", "Thousands" );
+		run( component, "set", "viewers", 100000 );
+		assert.equal( getOutput( component ), "100k", "Thousands" );
+		run( component, "set", "viewers", 999999 );
+		assert.equal( getOutput( component ), "999k", "Thousands" );
+
+		run( component, "set", "viewers", 1000000 );
+		assert.equal( getOutput( component ), "1.00m", "Millions" );
+		run( component, "set", "viewers", 1009999 );
+		assert.equal( getOutput( component ), "1.00m", "Millions" );
+		run( component, "set", "viewers", 1010000 );
+		assert.equal( getOutput( component ), "1.01m", "Millions" );
+
+	});
+
+
+	QUnit.test( "Format time", function( assert ) {
+
+		registry.register( "helper:format-time", FormatTimeHelper );
+		component = Component.extend({
+			container: container,
+			time     : new Date(),
+			format   : "D",
+			layout   : compile( "{{format-time time format=format}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal(
+			getOutput( component ),
+			get( component, "time" ).getDate(),
+			"Format time using a custom format"
 		);
 
-		assert.deepEqual(
-			[
-				_( 1 ),
-				_( 10 ),
-				_( 100 ),
-				_( 1000 ),
-				_( 9999 )
-			],
-			[
-				"1",
-				"10",
-				"100",
-				"1000",
-				"9999"
-			],
-			"Less than 5 digits"
-		);
+	});
 
-		assert.deepEqual(
-			[
-				_( 10000 ),
-				_( 10099 ),
-				_( 10100 ),
-				_( 99999 ),
-				_( 100000 ),
-				_( 999999 )
-			],
-			[
-				"10.0k",
-				"10.0k",
-				"10.1k",
-				"99.9k",
-				"100k",
-				"999k"
-			],
-			"Thousands"
-		);
 
-		assert.deepEqual(
-			[
-				_( 1000000 ),
-				_( 1009999 ),
-				_( 1010000 )
-			],
-			[
-				"1.00m",
-				"1.00m",
-				"1.01m"
-			],
-			"Millions"
-		);
+	QUnit.test( "Hours from now", function( assert ) {
+
+		registry.register( "helper:hours-from-now", HoursFromNowHelper );
+		component = Component.extend({
+			container: container,
+			layout   : compile( "{{hours-from-now dateA}} - {{hours-from-now dateB}}" )
+		}).create();
+
+		set( component, "dateA", +new Date() );
+		set( component, "dateB", +new Date() - 59 * 1000 );
+		runAppend( component );
+		assert.equal( getOutput( component ), "just now - just now", "Less than a minute" );
+
+		run(function() {
+			set( component, "dateA", +new Date() -      60 * 1000 );
+			set( component, "dateB", +new Date() - 59 * 60 * 1000 );
+		});
+		assert.equal( getOutput( component ), "01m - 59m", "Minutes" );
+
+		run(function() {
+			set( component, "dateA", +new Date() -           60 * 60 * 1000 );
+			set( component, "dateB", +new Date() - Math.PI * 60 * 60 * 1000 );
+		});
+		assert.equal( getOutput( component ), "1.0h - 3.1h", "Hours" );
+
+	});
+
+
+	QUnit.test( "Time from now", function( assert ) {
+
+		registry.register( "helper:time-from-now", TimeFromNowHelper );
+		component = Component.extend({
+			container: container,
+			time     : new Date() - Math.PI * 60 * 1000,
+			suffix   : false,
+			layout   : compile( "{{time-from-now time suffix=suffix}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "3 minutes ago", "Time from now with suffix" );
+		run( component, "set", "suffix", true );
+		assert.equal( getOutput( component ), "3 minutes", "Time from now without suffix" );
 
 	});
 

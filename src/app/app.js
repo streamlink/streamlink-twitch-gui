@@ -114,6 +114,24 @@ define(function( require ) {
 		SelectView: require( "views/SelectView" ),
 
 
+		// Helpers
+		IsEqualHelper: require( "helpers/IsEqualHelper" ),
+		IsNullHelper: require( "helpers/IsNullHelper" ),
+		IsGtHelper: require( "helpers/IsGtHelper" ),
+		IsGteHelper: require( "helpers/IsGteHelper" ),
+		BoolNotHelper: require( "helpers/BoolNotHelper" ),
+		BoolAndHelper: require( "helpers/BoolAndHelper" ),
+		BoolOrHelper: require( "helpers/BoolOrHelper" ),
+		MathAddHelper: require( "helpers/MathAddHelper" ),
+		MathSubHelper: require( "helpers/MathSubHelper" ),
+		MathMulHelper: require( "helpers/MathMulHelper" ),
+		MathDivHelper: require( "helpers/MathDivHelper" ),
+		FormatViewersHelper: require( "helpers/FormatViewersHelper" ),
+		FormatTimeHelper: require( "helpers/FormatTimeHelper" ),
+		HoursFromNowHelper: require( "helpers/HoursFromNowHelper" ),
+		TimeFromNowHelper: require( "helpers/TimeFromNowHelper" ),
+
+
 		// Services
 		MetadataService: require( "services/MetadataService" ),
 		SettingsService: require( "services/SettingsService" ),
