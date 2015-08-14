@@ -5,12 +5,12 @@ define( [ "Ember" ], function( Ember ) {
 	var equal = Ember.computed.equal;
 
 	return Ember.Controller.extend({
-		needs: [ "application" ],
+		application: Ember.inject.controller(),
 
 		stream : alias( "model.stream" ),
 		channel: alias( "model.channel" ),
 
-		isSubrouteSettings: equal( "controllers.application.currentRouteName", "channel.settings" ),
+		isSubrouteSettings: equal( "application.currentRouteName", "channel.settings" ),
 
 		actions: {
 			"toggleSettings": function() {

@@ -7,12 +7,11 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 		auth        : Ember.inject.service(),
 		notification: Ember.inject.service(),
 		settings    : Ember.inject.service(),
-
-		needs: [ "livestreamer" ],
+		livestreamer: Ember.inject.controller(),
 
 		dev: DEBUG,
 
-		streamsLength: readOnly( "controllers.livestreamer.model.length" ),
+		streamsLength: readOnly( "livestreamer.model.length" ),
 
 		notif_enabled: readOnly( "notification.enabled" ),
 		notif_running: readOnly( "notification.running" ),
@@ -81,7 +80,7 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 			},
 
 			"shutdown": function() {
-				get( this, "controllers.livestreamer" ).killAll();
+				get( this, "livestreamer" ).killAll();
 				this.send( "quit" );
 			}
 		}
