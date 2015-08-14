@@ -115,7 +115,7 @@ define([
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) )
-					.catch( model.rollback.bind( model ) );
+					.catch( model.rollbackAttributes.bind( model ) );
 			},
 
 			"discard": function( callback ) {
