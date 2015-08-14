@@ -5,7 +5,7 @@ define( [ "EmberData" ], function( DS ) {
 
 	return DS.Model.extend({
 		channels: attr( "number" ),
-		game: belongsTo( "twitchGame" ),
+		game: belongsTo( "twitchGame", { async: false } ),
 		viewers: attr( "number" )
 	}).reopenClass({
 		toString: function() { return "kraken/games/top"; }

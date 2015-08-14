@@ -8,7 +8,7 @@ define( [ "EmberData" ], function( DS ) {
 		priority: attr( "number" ),
 		scheduled: attr( "boolean" ),
 		sponsored: attr( "boolean" ),
-		stream: belongsTo( "twitchStream" ),
+		stream: belongsTo( "twitchStream", { async: false } ),
 		text: attr( "string" ),
 		title: attr( "string" )
 	}).reopenClass({

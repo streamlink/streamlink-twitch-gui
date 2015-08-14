@@ -4,7 +4,7 @@ define( [ "EmberData" ], function( DS ) {
 	var belongsTo = DS.belongsTo;
 
 	return DS.Model.extend({
-		channel: belongsTo( "twitchChannel" ),
+		channel: belongsTo( "twitchChannel", { async: false } ),
 		created_at: attr( "date" ),
 		notifications: attr( "boolean" )
 	}).reopenClass({
