@@ -1,16 +1,9 @@
-define([
-	"Ember",
-	"text!templates/about.html.hbs"
-], function( Ember, template ) {
+define( [ "Ember" ], function( Ember ) {
 
 	var get = Ember.get;
 
-	return Ember.View.extend({
+	return Ember.Controller.extend({
 		metadata: Ember.inject.service(),
-
-		template: Ember.HTMLBars.compile( template ),
-		tagName: "main",
-		classNames: [ "content", "content-about" ],
 
 		dependencies: function() {
 			var deps = get( this, "metadata.dependencies" );

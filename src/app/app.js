@@ -144,10 +144,10 @@ define(function( require ) {
 		ApplicationView: require( "views/ApplicationView" ),
 
 		LoadingRoute: require( "routes/LoadingRoute" ),
-		LoadingView: require( "views/LoadingView" ),
+		LoadingTemplate: require( "text!templates/loading.html.hbs" ),
 
 		ErrorRoute: require( "routes/ErrorRoute" ),
-		ErrorView: require( "views/ErrorView" ),
+		ErrorTemplate: require( "text!templates/error.html.hbs" ),
 
 		IndexRoute: require( "routes/IndexRoute" ),
 
@@ -191,14 +191,14 @@ define(function( require ) {
 
 		WatchingRoute: require( "routes/WatchingRoute" ),
 		WatchingController: require( "controllers/WatchingController" ),
-		WatchingView: require( "views/WatchingView" ),
+		WatchingTemplate: require( "text!templates/watching.html.hbs" ),
 
 		SearchRoute: require( "routes/SearchRoute" ),
 		SearchController: require( "controllers/SearchController" ),
 		SearchView: require( "views/SearchView" ),
 
 		GamesLoadingRoute: require( "routes/LoadingRoute" ),
-		GamesLoadingView: require( "views/LoadingView" ),
+		GamesLoadingTemplate: require( "text!templates/loading.html.hbs" ),
 		GamesIndexRoute: require( "routes/GamesIndexRoute" ),
 		GamesIndexController: require( "controllers/GamesIndexController" ),
 		GamesIndexView: require( "views/GamesIndexView" ),
@@ -206,8 +206,6 @@ define(function( require ) {
 		GamesGameController: require( "controllers/GamesGameController" ),
 		GamesGameView: require( "views/GamesGameView" ),
 
-		ChannelsLoadingRoute: require( "routes/LoadingRoute" ),
-		ChannelsLoadingView: require( "views/LoadingView" ),
 		ChannelsRoute: require( "routes/ChannelsRoute" ),
 		ChannelsController: require( "controllers/ChannelsController" ),
 		ChannelsView: require( "views/ChannelsView" ),
@@ -216,16 +214,16 @@ define(function( require ) {
 		ChannelController: require( "controllers/ChannelController" ),
 		ChannelView: require( "views/ChannelView" ),
 		ChannelLoadingRoute: require( "routes/LoadingRoute" ),
-		ChannelLoadingView: require( "views/LoadingView" ),
+		ChannelLoadingTemplate: require( "text!templates/loading.html.hbs" ),
 		ChannelIndexRoute: require( "routes/ChannelIndexRoute" ),
 		ChannelIndexController: require( "controllers/ChannelIndexController" ),
 		ChannelIndexView: require( "views/ChannelIndexView" ),
 		ChannelSettingsRoute: require( "routes/ChannelSettingsRoute" ),
 		ChannelSettingsController: require( "controllers/ChannelSettingsController" ),
-		ChannelSettingsView: require( "views/ChannelSettingsView" ),
+		ChannelSettingsTemplate: require( "text!templates/channel/settings.html.hbs" ),
 
 		UserLoadingRoute: require( "routes/LoadingRoute" ),
-		UserLoadingView: require( "views/LoadingView" ),
+		UserLoadingTemplate: require( "text!templates/loading.html.hbs" ),
 		UserIndexRoute: require( "routes/UserIndexRoute" ),
 		UserIndexController: require( "controllers/UserIndexController" ),
 		UserIndexView: require( "views/UserIndexView" ),
@@ -247,7 +245,8 @@ define(function( require ) {
 		SettingsView: require( "views/SettingsView" ),
 		SettingsModalTemplate: require( "text!templates/modals/settings.html.hbs" ),
 
-		AboutView: require( "views/AboutView" ),
+		AboutController: require( "controllers/AboutController" ),
+		AboutTemplate: require( "text!templates/about.html.hbs" ),
 
 
 		// ready event
