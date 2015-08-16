@@ -1,6 +1,7 @@
 define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 
 	return Ember.Route.extend({
 		model: function() {
@@ -23,6 +24,12 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 					"featured.@each.image",
 					"featured.@each.stream.@each.preview.@each.large_nocache"
 				]) );
+		},
+
+		actions: {
+			willTransition: function() {
+				set( this, "controller.isAnimated", false );
+			}
 		}
 	});
 

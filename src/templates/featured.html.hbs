@@ -1,3 +1,4 @@
+<main class="wrapper vertical content content-featured {{if isAnimated 'animated'}}">
 <header>
 <h2>Featured Channels</h2>
 {{settings-bar targetObject=this btnHomepage=true}}
@@ -22,12 +23,15 @@
 {{/each}}
 <ul class="channels">
 {{#each featured as |elem index|}}
-<li title="{{elem.stream.channel.id}}" class="{{if (is-equal _index index) 'active'}}" {{action "switchFeatured" index target=view}}>
+<li title="{{elem.stream.channel.id}}" class="{{if (is-equal _index index) 'active'}}" {{action "switchFeatured" index}}>
 <img class="previewImage" src="{{elem.image}}" title="{{elem.stream.channel.id}}">
 </li>
 {{/each}}
+<i class="cursor fa fa-caret-down"></i>
+<i class="cursor fa fa-caret-down cursor-hover"></i>
 </ul>
 {{else}}
 <section class="error-message">The featured streams list could not be loaded!</section>
 {{/if}}
 <section class="globalstats">There are {{summary.viewers}} people watching {{summary.channels}} live streams right now!</section>
+</main>

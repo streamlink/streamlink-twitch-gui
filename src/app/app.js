@@ -187,7 +187,7 @@ define(function( require ) {
 		// Content
 		FeaturedRoute: require( "routes/FeaturedRoute" ),
 		FeaturedController: require( "controllers/FeaturedController" ),
-		FeaturedView: require( "views/FeaturedView" ),
+		FeaturedTemplate: require( "text!templates/featured.html.hbs" ),
 
 		WatchingRoute: require( "routes/WatchingRoute" ),
 		WatchingController: require( "controllers/WatchingController" ),
