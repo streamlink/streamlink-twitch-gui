@@ -1,8 +1,7 @@
 define([
 	"Ember",
-	"mixins/InfiniteScrollViewMixin",
 	"text!templates/user/followedchannels.html.hbs"
-], function( Ember, InfiniteScrollViewMixin, template ) {
+], function( Ember, template ) {
 
 	var get = Ember.get;
 
@@ -12,7 +11,7 @@ define([
 		}.property( key );
 	}
 
-	return Ember.View.extend( InfiniteScrollViewMixin, {
+	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-user", "content-user-followed-channels" ],

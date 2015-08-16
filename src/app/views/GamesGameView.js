@@ -1,8 +1,7 @@
 define([
 	"Ember",
-	"mixins/InfiniteScrollViewMixin",
 	"text!templates/games/game.html.hbs"
-], function( Ember, InfiniteScrollViewMixin, template ) {
+], function( Ember, template ) {
 
 	var get = Ember.get;
 	var readOnly = Ember.computed.readOnly;
@@ -17,7 +16,7 @@ define([
 		}.property( "isFollowing", "isFollowingL" );
 	}
 
-	return Ember.View.extend( InfiniteScrollViewMixin, {
+	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-gamesgame" ],

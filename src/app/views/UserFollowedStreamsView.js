@@ -1,10 +1,9 @@
 define([
 	"Ember",
-	"mixins/InfiniteScrollViewMixin",
 	"text!templates/user/followedstreams.html.hbs"
-], function( Ember, InfiniteScrollViewMixin, template ) {
+], function( Ember, template ) {
 
-	return Ember.View.extend( InfiniteScrollViewMixin, {
+	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-user", "content-user-followed-streams" ]
