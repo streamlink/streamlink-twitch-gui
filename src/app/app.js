@@ -226,7 +226,7 @@ define(function( require ) {
 		UserLoadingTemplate: require( "text!templates/loading.html.hbs" ),
 		UserIndexRoute: require( "routes/UserIndexRoute" ),
 		UserIndexController: require( "controllers/UserIndexController" ),
-		UserIndexView: require( "views/UserIndexView" ),
+		UserIndexTemplate: require( "text!templates/user/index.html.hbs" ),
 		UserAuthRoute: require( "routes/UserAuthRoute" ),
 		UserAuthController: require( "controllers/UserAuthController" ),
 		UserAuthView: require( "views/UserAuthView" ),
