@@ -20,27 +20,26 @@ define([
 			"_iconanim:btn-with-anim",
 			"class"
 		],
-		class: null,
+		"class": null,
 
-		action: null,
+		action     : null,
 		actionParam: null,
 
 		icon: false,
-		_iconAndText: and( "icon", "template" ),
+		_iconAndText: and( "icon", "hasBlock" ),
 		_iconAndNoText: function() {
-			return get( this, "icon" ) && !get( this, "template" );
-		}.property( "icon", "template" ),
+			return get( this, "icon" ) && !get( this, "hasBlock" );
+		}.property( "icon", "hasBlock" ),
 
-		iconanim: false,
+		iconanim : false,
 		_iconanim: false,
 
 		click: function() {
-			var self    = this,
-			    target  = get( this, "targetObject" ),
-			    action  = get( this, "action" ),
-			    context = Ember.makeArray( get( this, "actionParam" ) );
-
+			var action  = get( this, "action" );
 			if ( !action ) { return; }
+
+			var self    = this;
+			var context = Ember.makeArray( get( this, "actionParam" ) );
 
 			if ( get( this, "iconanim" ) ) {
 				context = context.concat(function animationStart( data ) {
@@ -58,7 +57,7 @@ define([
 			}
 
 			this.triggerAction({
-				target: target,
+				target: get( this, "targetObject" ),
 				action: action,
 				actionContext: context
 			});
