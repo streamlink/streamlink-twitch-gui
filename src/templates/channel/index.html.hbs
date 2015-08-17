@@ -1,6 +1,6 @@
 <div class="big-image {{if stream 'online'}}">
 <div class="preview" {{action "startStream" stream}}>
-<img class="previewImage" src="{{bool-or stream.preview.large_nocache channel.video_banner}}">
+{{preview-image src=(bool-or stream.preview.large_nocache channel.video_banner)}}
 </div>
 </div>
 <div class="info">

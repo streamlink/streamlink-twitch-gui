@@ -183,6 +183,7 @@ define(function( require ) {
 		FlagIconComponent: require( "components/FlagIconComponent" ),
 		StatsRowComponent: require( "components/StatsRowComponent" ),
 		LangFilterComponent: require( "components/LangFilterComponent" ),
+		PreviewImageComponent: require( "components/PreviewImageComponent" ),
 
 
 		// Content

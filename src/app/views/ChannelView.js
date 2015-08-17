@@ -1,12 +1,11 @@
 define([
 	"Ember",
-	"mixins/PreviewImageViewMixin",
 	"text!templates/channel/channel.html.hbs"
-], function( Ember, PreviewImageViewMixin, template ) {
+], function( Ember, template ) {
 
 	var get = Ember.get;
 
-	return Ember.View.extend( PreviewImageViewMixin, {
+	return Ember.View.extend({
 		template: Ember.HTMLBars.compile( template ),
 		tagName: "main",
 		classNames: [ "content", "content-channel" ],

@@ -9,7 +9,7 @@
 <section class="stream-presentation">
 <div class="image">
 <div class="preview" {{action "openLivestreamer" elem.stream}}>
-<img class="previewImage" src="{{elem.stream.preview.large_nocache}}">
+{{preview-image src=elem.stream.preview.large_nocache}}
 </div>
 </div>
 <div class="info">
@@ -24,7 +24,7 @@
 <ul class="channels">
 {{#each featured as |elem index|}}
 <li title="{{elem.stream.channel.id}}" class="{{if (is-equal _index index) 'active'}}" {{action "switchFeatured" index}}>
-<img class="previewImage" src="{{elem.image}}" title="{{elem.stream.channel.id}}">
+{{preview-image src=elem.image title=elem.stream.channel.id}}
 </li>
 {{/each}}
 <i class="cursor fa fa-caret-down"></i>
