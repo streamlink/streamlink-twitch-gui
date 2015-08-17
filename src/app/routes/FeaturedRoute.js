@@ -26,9 +26,9 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 				]) );
 		},
 
-		actions: {
-			willTransition: function() {
-				set( this, "controller.isAnimated", false );
+		resetController: function( controller, isExiting ) {
+			if ( isExiting ) {
+				set( controller, "isAnimated", false );
 			}
 		}
 	});
