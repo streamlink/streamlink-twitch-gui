@@ -14,7 +14,8 @@ define([
 	"helpers/FormatViewersHelper",
 	"helpers/FormatTimeHelper",
 	"helpers/HoursFromNowHelper",
-	"helpers/TimeFromNowHelper"
+	"helpers/TimeFromNowHelper",
+	"helpers/GetParamHelper"
 ], function(
 	Ember,
 	IsEqualHelper,
@@ -31,7 +32,8 @@ define([
 	FormatViewersHelper,
 	FormatTimeHelper,
 	HoursFromNowHelper,
-	TimeFromNowHelper
+	TimeFromNowHelper,
+	GetParamHelper
 ) {
 
 	var get = Ember.get;
@@ -378,6 +380,26 @@ define([
 		assert.equal( getOutput( component ), "3 minutes ago", "Time from now with suffix" );
 		run( component, "set", "suffix", true );
 		assert.equal( getOutput( component ), "3 minutes", "Time from now without suffix" );
+
+	});
+
+
+	QUnit.test( "Get param", function( assert ) {
+
+		registry.register( "helper:get-param", GetParamHelper );
+		component = Component.extend({
+			container: container,
+			param    : "baz",
+			index    : 0,
+			layout   : compile( "{{get-param 'foo' 'bar' param index=index}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "foo", "First parameter's value is foo" );
+		run( component, "set", "index", 2 );
+		assert.equal( getOutput( component ), "baz", "Bound parameter" );
+		run( component, "set", "param", "qux" );
+		assert.equal( getOutput( component ), "qux", "Changed bound parameter" );
 
 	});
 

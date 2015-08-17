@@ -129,6 +129,7 @@ define(function( require ) {
 		FormatTimeHelper: require( "helpers/FormatTimeHelper" ),
 		HoursFromNowHelper: require( "helpers/HoursFromNowHelper" ),
 		TimeFromNowHelper: require( "helpers/TimeFromNowHelper" ),
+		GetParamHelper: require( "helpers/GetParamHelper" ),
 
 
 		// Services
