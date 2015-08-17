@@ -214,7 +214,7 @@ define(function( require ) {
 
 		ChannelRoute: require( "routes/ChannelRoute" ),
 		ChannelController: require( "controllers/ChannelController" ),
-		ChannelView: require( "views/ChannelView" ),
+		ChannelTemplate: require( "text!templates/channel/channel.html.hbs" ),
 		ChannelLoadingRoute: require( "routes/LoadingRoute" ),
 		ChannelLoadingTemplate: require( "text!templates/loading.html.hbs" ),
 		ChannelIndexRoute: require( "routes/ChannelIndexRoute" ),

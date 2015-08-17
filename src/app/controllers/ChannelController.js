@@ -1,6 +1,7 @@
 define( [ "Ember" ], function( Ember ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 	var alias = Ember.computed.alias;
 	var equal = Ember.computed.equal;
 
@@ -11,9 +12,11 @@ define( [ "Ember" ], function( Ember ) {
 		channel: alias( "model.channel" ),
 
 		isSubrouteSettings: equal( "application.currentRouteName", "channel.settings" ),
+		isAnimated: false,
 
 		actions: {
 			"toggleSettings": function() {
+				set( this, "isAnimated", true );
 				this.transitionToRoute(
 					get( this, "isSubrouteSettings" )
 						? "channel.index"
