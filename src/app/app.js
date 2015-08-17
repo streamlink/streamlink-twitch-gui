@@ -230,7 +230,7 @@ define(function( require ) {
 		UserIndexTemplate: require( "text!templates/user/index.html.hbs" ),
 		UserAuthRoute: require( "routes/UserAuthRoute" ),
 		UserAuthController: require( "controllers/UserAuthController" ),
-		UserAuthView: require( "views/UserAuthView" ),
+		UserAuthTemplate: require( "text!templates/user/auth.html.hbs" ),
 		UserSubscriptionsRoute: require( "routes/UserSubscriptionsRoute" ),
 		UserSubscriptionsTemplate: require( "text!templates/user/subscriptions.html.hbs" ),
 		UserFollowedStreamsRoute: require( "routes/UserFollowedStreamsRoute" ),
