@@ -5,12 +5,15 @@ define([
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
+	var or = Ember.computed.or;
 
 	return Ember.Controller.extend( ChannelMixin, {
 		metadata: Ember.inject.service(),
 
 		stream : alias( "model.stream" ),
 		channel: alias( "model.channel" ),
+
+		previewImage: or( "stream.preview.large_nocache", "channel.video_banner" ),
 
 		_loadSubscriptionAndFollowingData: function() {
 			var channel = get( this, "channel" );
