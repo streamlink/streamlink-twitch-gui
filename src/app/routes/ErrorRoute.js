@@ -1,75 +1,92 @@
-define( [ "Ember" ], function( Ember ) {
+define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var merge = Ember.merge;
+	var isNone = Ember.isNone;
+	var AdapterError = DS.AdapterError;
 
-	/**
-	 * Subclass of Ember.Error
-	 * @param xhr
-	 * @constructor
-	 */
-	Ember.XHRError = function( xhr ) {
-		Ember.Error.call( this, xhr.statusText === "error"
-			// display a friendlier message
-			? "Failed to load resource"
-			: xhr.statusText
-		);
+	var errorProps = [
+		"name",
+		"title",
+		"message",
+		"detail",
+		"description",
+		"status",
+		"host",
+		"path"
+	];
 
-		this.name   = "XMLHttpRequest Error";
-		this.status = xhr.status;
-		this.host   = xhr.host;
-		this.path   = xhr.path;
+	var duplicates = {
+		name   : [ "title" ],
+		message: [ "detail", "description" ]
 	};
-
-	Ember.XHRError.prototype = Object.create( Ember.Error.prototype );
-	Ember.XHRError.prototype.constructor = Ember.XHRError;
 
 
 	return Ember.Route.extend({
 		/**
 		 * Do all the error display stuff here instead of using an error controller.
 		 * A route for errors is needed anyway.
-		 *
 		 * @param controller
-		 * @param {(Error|Ember.RSVP.Promise)} model
+		 * @param {(Error|Ember.RSVP.Promise)} error
 		 */
-		setupController: function( controller, model ) {
+		setupController: function( controller, error ) {
 			this._super.call( this, controller );
 
-			model = model || new Error( "Unknown error" );
-			model.name = model.name || model.constructor.name;
+			error = error || new Error( "Unknown error" );
 
-			var props  = [ "name", "message", "status", "host", "path" ];
-			var reason = get( model, "reason" );
+			// if it's an AdapterError, just use the first error object
+			if ( error instanceof AdapterError ) {
+				merge( error, error.errors[0] || {} );
+			}
+
+			// choose a better error name
+			if ( !error.name || error.name.toLowerCase() === "error" ) {
+				error.name = error.title || error.constructor.name;
+			}
+
+			// remove duplicates
+			Object.keys( duplicates ).forEach(function( key ) {
+				var keys = duplicates[ key ];
+				keys.forEach(function( dup ) {
+					if ( error[ key ] === error[ dup ] ) {
+						delete error[ dup ];
+					}
+				});
+			});
+
+			var props = errorProps.slice();
 
 			// handle rejected promises with a passed Error object as reason
+			var reason = get( error, "reason" );
 			if ( reason instanceof Error ) {
-				model = reason;
+				error = reason;
 			} else if ( reason !== undefined ) {
 				props.push( "reason" );
 			}
 
-			// display the callstack of non-xhr errors
-			if ( DEBUG && model instanceof Error && !( model instanceof Ember.XHRError ) ) {
+			// display the callstack of non-adapter errors
+			if ( DEBUG && error instanceof Error && !( error instanceof AdapterError ) ) {
 				props.push( "stack" );
 			}
 
-			// create the error-content array
-			set( controller, "model", props
+			// create the model
+			var model = props
 				.filter(function( key ) {
-					var value = model[ key ];
-					return value !== undefined
+					var value = error[ key ];
+					return !isNone( value )
 					    && !( value instanceof Object )
-					    && String( value ).trim().length > 0;
+					    && String( value ).trim().length > 0
+					    && value !== 0;
 				})
 				.map(function( key ) {
 					return {
-						key: key.charAt( 0 ).toUpperCase() + key.slice( 1 ),
-						value: String( model[ key ] ),
+						key    : key.charAt( 0 ).toUpperCase() + key.slice( 1 ),
+						value  : String( error[ key ] ),
 						isStack: key === "stack"
 					};
-				})
-			);
+				});
+			set( controller, "model", model );
 		}
 	});
 

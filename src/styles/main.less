@@ -31,8 +31,10 @@ body > .wrapper {
 }
 
 [data-selectable] {
-	cursor: text;
-	-webkit-user-select: initial;
+	&, & :not([data-not-selectable]) {
+		cursor: text;
+		-webkit-user-select: initial;
+	}
 }
 
 ::selection {
