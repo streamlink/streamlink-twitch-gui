@@ -283,7 +283,7 @@ define([
 
 		showNotificationSingle: function( stream ) {
 			this.showNotification({
-				icon : get( stream, "channel.logo" ),
+				icon : get( stream, "logo" ) || get( stream, "channel.logo" ),
 				title: "%@ has started streaming".fmt( get( stream, "channel.display_name" ) ),
 				body : get( stream, "channel.status" ) || "",
 				click: function() {
