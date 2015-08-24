@@ -23,6 +23,7 @@ define([
 
 		numKeepItems: 5,
 		reQuery: /^[a-z0-9]{3,}/i,
+		reChannelURL: /^(?:https?:\/\/)?(?:\w+\.)*twitch\.tv\/(.+)$/,
 
 		showDropdown: false,
 		filter: "all",
@@ -139,6 +140,12 @@ define([
 			"submit": function() {
 				var query  = get( this, "query" ).trim();
 				var filter = get( this, "filter" );
+
+				var match = this.reChannelURL.exec( query );
+				if ( match ) {
+					query  = match[ 1 ];
+					filter = "channels";
+				}
 
 				if ( this.reQuery.test( query ) ) {
 					this.doSearch( query, filter );
