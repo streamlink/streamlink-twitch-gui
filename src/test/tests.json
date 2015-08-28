@@ -4,6 +4,7 @@
 		"test/linkmatching",
 		"test/helpers",
 		"test/parameters",
-		"test/ObjectBuffer"
+		"test/ObjectBuffer",
+		"test/StreamOutputBuffer"
 	]
 }

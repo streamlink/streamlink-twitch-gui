@@ -1,6 +1,6 @@
 "use strict";
 
-var NwBuilder = require( "node-webkit-builder" );
+var NwBuilder = require( "nw-builder" );
 
 module.exports = function( grunt ) {
 	var name  = "nwjs";

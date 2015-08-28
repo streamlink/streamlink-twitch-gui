@@ -1,6 +1,6 @@
 {
 	"name": "livestreamer-twitch-gui",
-	"version": "0.9.1",
+	"version": "0.9.3",
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
@@ -30,12 +30,12 @@
 		"load-grunt-config": "0.16.0",
 		"q": "1.2.0",
 		"q-io": "1.12.0",
-		"node-webkit-builder": "1.0.12"
+		"nw-builder": "2.0.1"
 	},
 
 	"config": {
 		"display-name": "Livestreamer Twitch GUI",
-		"nw-js-version": "0.12.2",
+		"nw-js-version": "0.12.3",
 		"version-check-days": 7,
 		"tray-icon": "img/icon-{res}.png",
 		"tray-icon-osx": "img/icon-osx-{res}{hidpi}.png",

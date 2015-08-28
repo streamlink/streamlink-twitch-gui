@@ -6,6 +6,7 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
 		notification: Ember.inject.service(),
+		settings    : Ember.inject.service(),
 
 		needs: [ "livestreamer" ],
 

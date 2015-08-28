@@ -32,10 +32,15 @@ define([
 			var clang  = get( this, "content.channel.language" );
 			var blang  = get( this, "content.channel.broadcaster_language" );
 
+			// a channel language needs to be set
 			return clang
-				&& blang
-				&& filter[ clang ] === false
-				&& filter[ blang ] === false;
+				&& (
+					// fade out if
+					// no broadcaster language is set and channel language is filtered out
+					   !blang && filter[ clang ] === false
+					// OR broadcaster language is set and filtered out (ignore channel language)
+					||  blang && filter[ blang ] === false
+				);
 		}.property(
 			"settings.gui_langfilter",
 			"content.channel.language",

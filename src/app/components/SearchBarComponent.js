@@ -15,14 +15,15 @@ define([
 		classNames: [ "searchbar" ],
 
 		// the record array (will be set by init())
-		model: {},
+		model: null,
 		// needed by SortableMixin's arrangedContent
-		content: alias( "model.content" ),
+		content: alias( "model" ),
 		sortProperties: [ "date" ],
 		sortAscending: false,
 
 		numKeepItems: 5,
 		reQuery: /^[a-z0-9]{3,}/i,
+		reChannelURL: /^(?:https?:\/\/)?(?:\w+\.)*twitch\.tv\/(.+)$/,
 
 		showDropdown: false,
 		filter: "all",
@@ -48,9 +49,9 @@ define([
 
 
 		addRecord: function( query, filter ) {
-			var store   = get( this, "store" );
-			var content = this.model;
-			var match   = content.filter(function( record ) {
+			var store = get( this, "store" );
+			var model = get( this, "model" );
+			var match = model.filter(function( record ) {
 				return query  === get( record, "query" )
 				    && filter === get( record, "filter" );
 			});
@@ -63,31 +64,31 @@ define([
 			}
 
 			// we don't want to store more than X records
-			if ( get( content, "length" ) >= get( this, "numKeepItems" ) ) {
+			if ( get( model, "length" ) >= get( this, "numKeepItems" ) ) {
 				// delete the oldest record
-				content.sortBy( "date" ).shiftObject().destroyRecord();
+				model.sortBy( "date" ).shiftObject().destroyRecord();
 			}
 
 			// create a new record
 			record = store.createRecord( "search", {
-				id    : 1 + Number( Ember.getWithDefault( content, "lastObject.id", 0 ) ),
+				id    : 1 + Number( Ember.getWithDefault( model, "lastObject.id", 0 ) ),
 				query : query,
 				filter: filter,
 				date  : new Date()
 			});
 			record.save().then(function () {
-				content.addObject( record );
+				model.addObject( record );
 			});
 		},
 
 		deleteAllRecords: function() {
-			var content = this.model;
-			content.forEach(function( record ) {
+			var model = get( this, "model" );
+			model.forEach(function( record ) {
 				record.deleteRecord();
 			});
 			// delete all records at once and then clear the record array
-			content.save().then(function() {
-				content.clear();
+			model.save().then(function() {
+				model.clear();
 			});
 		},
 
@@ -139,6 +140,12 @@ define([
 			"submit": function() {
 				var query  = get( this, "query" ).trim();
 				var filter = get( this, "filter" );
+
+				var match = this.reChannelURL.exec( query );
+				if ( match ) {
+					query  = match[ 1 ];
+					filter = "channels";
+				}
 
 				if ( this.reQuery.test( query ) ) {
 					this.doSearch( query, filter );

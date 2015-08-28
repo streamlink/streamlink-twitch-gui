@@ -2,9 +2,13 @@
 <h2>Top Channels</h2>
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
+{{#if model.length}}
 <ul class="content-list">
 {{#each model as |stream index|}}
 {{stream-item content=stream isNewItem=(is-gte index initialFetchSize) showGame=true}}
 {{/each}}
 </ul>
 {{infinite-scroll}}
+{{else}}
+<p>The top channels list could not be loaded!</p>
+{{/if}}

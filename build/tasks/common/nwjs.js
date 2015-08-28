@@ -1,7 +1,7 @@
 "use strict";
 
 var path      = require( "path" );
-var NwBuilder = require( "node-webkit-builder" );
+var NwBuilder = require( "nw-builder" );
 var nwoptions = require( "../configs/nwjs" ).options;
 var platforms = require( "../common/platforms" );
 
