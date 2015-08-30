@@ -26,6 +26,17 @@ define([
 		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
 		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
 
+		chatMethods: function() {
+			var methods = get( this, "settings.content.constructor.chat_methods" );
+			return methods.filter(function( method ) {
+				return !method.disabled;
+			});
+		}.property( "settings.content" ),
+
+		isChatMethodDefault: equal( "model.chat_method", "default" ),
+		isChatMethodMSIE   : equal( "model.chat_method", "msie" ),
+		isChatMethodCustom : equal( "model.chat_method", "custom" ),
+
 		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 

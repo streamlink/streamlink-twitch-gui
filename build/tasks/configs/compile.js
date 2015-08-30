@@ -1,9 +1,11 @@
 module.exports = {
 	win32: {
-		before: [ "clean:release_win32" ]
+		before: [ "clean:release_win32" ],
+		after : [ "copy:win32scripts" ]
 	},
 	win64: {
-		before: [ "clean:release_win64" ]
+		before: [ "clean:release_win64" ],
+		after : [ "copy:win64scripts" ]
 	},
 
 	osx32: {

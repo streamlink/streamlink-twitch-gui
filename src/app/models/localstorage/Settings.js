@@ -3,6 +3,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 	var get = Ember.get;
 	var set = Ember.set;
 	var attr = DS.attr;
+	var isWin = process.platform === "win32";
 
 	function defaultLangFilterValue( model ) {
 		var codes = get( model, "metadata.config.language_codes" );
@@ -41,6 +42,8 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		notify_badgelabel   : attr( "boolean", { defaultValue: true } ),
 		hls_live_edge       : attr( "number",  { defaultValue: 3, minValue: 1, maxValue: 10 } ),
 		hls_segment_threads : attr( "number",  { defaultValue: 1, minValue: 1, maxValue: 10 } ),
+		chat_method         : attr( "string",  { defaultValue: "default" } ),
+		chat_command        : attr( "string",  { defaultValue: "" } ),
 
 
 		// correct old value
@@ -104,6 +107,18 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 			{ id: 1, label: "Go to favorites" },
 			{ id: 2, label: "Open all streams" },
 			{ id: 3, label: "Open all streams+chats" }
+		],
+
+		chat_methods: [
+			// TODO: change to "browser"
+			{ id: "default",  label: "Default Browser" },
+			// TODO: change to "default"
+			{ id: "irc",      label: "Internal IRC Client", disabled: true },
+			{ id: "chromium", label: "Chromium" },
+			{ id: "chrome",   label: "Google Chrome" },
+			{ id: "firefox",  label: "Mozilla Firefox" },
+			{ id: "msie",     label: "Internet Explorer", disabled: !isWin },
+			{ id: "custom",   label: "Custom application" }
 		]
 
 	});
