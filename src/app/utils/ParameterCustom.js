@@ -12,10 +12,11 @@ define( [ "utils/Parameter" ], function( Parameter ) {
 	 * @extends Parameter
 	 * @param {(string|string[]|Function)?} cond
 	 * @param {string?} value
+	 * @param {boolean?} subst
 	 * @constructor
 	 */
-	function ParameterCustom( cond, value ) {
-		Parameter.call( this, undefined, cond, value );
+	function ParameterCustom( cond, value, subst ) {
+		Parameter.call( this, undefined, cond, value, subst );
 	}
 
 	ParameterCustom.prototype = Object.create( Parameter.prototype );
@@ -24,10 +25,11 @@ define( [ "utils/Parameter" ], function( Parameter ) {
 
 	/**
 	 * @param {Object} obj
+	 * @param {Substitution[]} substitutions
 	 * @returns {string[]}
 	 */
-	ParameterCustom.prototype.get = function( obj ) {
-		var value = this.getValue( obj );
+	ParameterCustom.prototype.get = function( obj, substitutions ) {
+		var value = this.getValue( obj, substitutions );
 		return value === false
 			? []
 			: this.tokenize( value );
