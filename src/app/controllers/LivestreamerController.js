@@ -2,7 +2,6 @@ define([
 	"Ember",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
-	"mixins/ChannelMixin",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/which",
 	"utils/fs/stat",
@@ -12,7 +11,6 @@ define([
 	Ember,
 	nwGui,
 	nwWindow,
-	ChannelMixin,
 	ChannelSettingsMixin,
 	which,
 	stat,
@@ -66,7 +64,7 @@ define([
 	}
 
 
-	return Ember.Controller.extend( ChannelMixin, ChannelSettingsMixin, {
+	return Ember.Controller.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
 		settings: Ember.inject.service(),
@@ -134,11 +132,6 @@ define([
 						modalBody: "Waiting for Livestreamer to launch the stream..."
 					});
 					return this.launchLivestreamer( exec, livestreamer );
-				}.bind( this ) )
-				// independently check whether the user is following / subscribing the channel
-				.then(function() {
-					this.checkUserSubscribesChannel( channel );
-					this.checkUserFollowsChannel( channel );
 				}.bind( this ) )
 				// setup stream refresh interval
 				.then( this.refreshStream.bind( this, livestreamer ) )

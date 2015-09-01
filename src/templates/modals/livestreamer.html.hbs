@@ -9,14 +9,10 @@
 {{form-button action="shutdown" class="btn-danger"  icon="fa-times"      title="Close stream"}}
 </div>
 <div>
-{{form-button action="chat"  actionParam=active.channel class="btn-hint" icon="fa-comments"  iconanim=true title="Open chat"}}
-{{form-button action="share" actionParam=active.channel class="btn-info" icon="fa-share-alt" iconanim=true title="Copy stream url to clipboard"}}
-{{#if active.channel.partner}}
-{{form-button action="subscribe" actionParam=active.channel class=view.subscrClass icon="fa-credit-card" iconanim=true title="Subscribe to channel"}}
-{{/if}}
-{{#if auth.session.isLoggedIn}}
-{{form-button action=view.followAction actionParam=active.channel class=view.followClass icon=view.followIcon iconanim=true title=view.followTitle}}
-{{/if}}
+{{open-chat channel=active.channel}}
+{{share-channel channel=active.channel}}
+{{subscribe-channel channel=active.channel}}
+{{follow-channel channel=active.channel}}
 </div>
 {{view "select" value=active.quality content=settings.content.constructor.qualities class="modalqualityselect" optionValuePath="content.id" optionLabelPath="content.label"}}
 {{/if}}

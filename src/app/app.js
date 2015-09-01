@@ -184,6 +184,11 @@ define(function( require ) {
 		StatsRowComponent: require( "components/StatsRowComponent" ),
 		LangFilterComponent: require( "components/LangFilterComponent" ),
 		PreviewImageComponent: require( "components/PreviewImageComponent" ),
+		OpenChatComponent: require( "components/OpenChatComponent" ),
+		ShareChannelComponent: require( "components/ShareChannelComponent" ),
+		SubscribeChannelComponent: require( "components/SubscribeChannelComponent" ),
+		FollowChannelComponent: require( "components/FollowChannelComponent" ),
+		FollowGameComponent: require( "components/FollowGameComponent" ),
 
 
 		// Content

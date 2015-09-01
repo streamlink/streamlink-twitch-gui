@@ -3,8 +3,6 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 	var get = Ember.get;
 	var attr = DS.attr;
 	var hasMany = DS.hasMany;
-	var bool = Ember.computed.bool;
-	var equal = Ember.computed.equal;
 
 	var re_lang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
@@ -73,14 +71,10 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 
 		/** @type {(TwitchUserSubscription|boolean)} subscribed */
-		subscribed        : false,
-		isSubscribed      : bool( "subscribed" ),
+		subscribed: null,
 
 		/** @type {(TwitchUserFollowsChannel|boolean)} following */
-		following         : null,
-		isFollowing       : bool( "following" ),
-		isFollowingLoading: equal( "following", null ),
-		isFollowingLocked : false
+		followed  : null
 
 	}).reopenClass({
 		toString: function() { return "kraken/channels"; }

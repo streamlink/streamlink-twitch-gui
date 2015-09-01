@@ -1,19 +1,17 @@
 define([
 	"Ember",
 	"views/ModalView",
-	"mixins/ChannelViewMixin",
 	"text!templates/modals/layouts/livestreamer.html.hbs"
 ], function(
 	Ember,
 	ModalView,
-	ChannelViewMixin,
 	layout
 ) {
 
 	var alias = Ember.computed.alias;
 	var bool = Ember.computed.bool;
 
-	return ModalView.extend( ChannelViewMixin, {
+	return ModalView.extend({
 		layout: Ember.HTMLBars.compile( layout ),
 		classNames: [ "mymodal", "modal-livestreamer" ],
 

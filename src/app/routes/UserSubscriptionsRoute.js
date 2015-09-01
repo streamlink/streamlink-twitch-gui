@@ -1,26 +1,25 @@
 define([
 	"Ember",
 	"routes/UserIndexRoute",
-	"mixins/ChannelMixin",
 	"mixins/InfiniteScrollRouteMixin",
 	"utils/preload"
 ], function(
 	Ember,
 	UserIndexRoute,
-	ChannelMixin,
 	InfiniteScrollRouteMixin,
 	preload
 ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 
-	return UserIndexRoute.extend( ChannelMixin, InfiniteScrollRouteMixin, {
+	return UserIndexRoute.extend( InfiniteScrollRouteMixin, {
 		itemSelector: ".stream-component",
 
 		model: function() {
-			var self = this;
+			var store = get( this, "store" );
 
-			return get( this, "store" ).query( "twitchTicket", {
+			return store.query( "twitchTicket", {
 				offset : get( this, "offset" ),
 				limit  : get( this, "limit" ),
 				unended: true
@@ -37,7 +36,12 @@ define([
 							// Also load the UserSubscription record (needed for subscription date)
 							// Sadly, this can't be loaded in parallel (channel needs to be loaded)
 							return Promise.all( channels.map(function( channel ) {
-								return self.checkUserSubscribesChannel( channel );
+								var id = get( channel, "id" );
+								return store.findExistingRecord( "twitchUserSubscription", id )
+									.catch(function() { return false; })
+									.then(function( record ) {
+										set( channel, "subscribed", record );
+									});
 							}) );
 						})
 						.then(function() {
