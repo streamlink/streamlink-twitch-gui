@@ -56,11 +56,18 @@ define([
 				});
 			}
 
-			this.triggerAction({
-				target: get( this, "targetObject" ),
-				action: action,
-				actionContext: context
-			});
+			// allow the component to send actions to itself
+			// in case it has been extended and uses its own actions
+			if ( this._actions instanceof Object && this._actions.hasOwnProperty( action ) ) {
+				this.send.apply( this, [ action ].concat( context ) );
+
+			} else {
+				this.triggerAction({
+					target: get( this, "targetObject" ),
+					action: action,
+					actionContext: context
+				});
+			}
 		}
 	});
 
