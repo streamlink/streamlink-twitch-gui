@@ -243,7 +243,7 @@ define(function( require ) {
 		UserFollowedStreamsTemplate: require( "text!templates/user/followedstreams.html.hbs" ),
 		UserFollowedChannelsRoute: require( "routes/UserFollowedChannelsRoute" ),
 		UserFollowedChannelsController: require( "controllers/UserFollowedChannelsController" ),
-		UserFollowedChannelsView: require( "views/UserFollowedChannelsView" ),
+		UserFollowedChannelsTemplate: require( "text!templates/user/followedchannels.html.hbs" ),
 		UserFollowedGamesRoute: require( "routes/UserFollowedGamesRoute" ),
 		UserFollowedGamesTemplate: require( "text!templates/user/followedgames.html.hbs" ),
 

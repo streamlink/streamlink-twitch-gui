@@ -1,3 +1,4 @@
+<main class="content content-user content-user-followed-channels">
 <header>
 <h2>Followed channels</h2>
 {{#settings-bar targetObject=this btnHomepage=true}}
@@ -5,19 +6,19 @@
 {{form-button
   action="sortMethod"
   actionParam="created_at"
-  class=view.sortbyCreatedClass
+  class=(unless (is-equal sortby "created_at") "inactive")
   icon="fa-calendar"
   title="Sort by date followed"}}
 {{form-button
   action="sortMethod"
   actionParam="last_broadcast"
-  class=view.sortbyBroadcastClass
+  class=(unless (is-equal sortby "last_broadcast") "inactive")
   icon="fa-video-camera"
   title="Sort by last broadcast"}}
 {{form-button
   action="sortMethod"
   actionParam="login"
-  class=view.sortbyLoginClass
+  class=(unless (is-equal sortby "login") "inactive")
   icon="fa-sign-in"
   title="Sort by last login"}}
 </div>
@@ -25,13 +26,13 @@
 {{form-button
   action="sortOrder"
   actionParam="desc"
-  class=view.directionDescClass
+  class=(unless (is-equal direction "desc") "inactive")
   icon="fa-long-arrow-down"
   title="Sort in descending order"}}
 {{form-button
   action="sortOrder"
   actionParam="asc"
-  class=view.directionAscClass
+  class=(unless (is-equal direction "asc") "inactive")
   icon="fa-long-arrow-up"
   title="Sort in ascending order"}}
 </div>
@@ -52,3 +53,4 @@
 </ul>
 </div>
 {{/if}}
+</main>
