@@ -211,7 +211,7 @@ define(function( require ) {
 		GamesIndexTemplate: require( "text!templates/games/index.html.hbs" ),
 		GamesGameRoute: require( "routes/GamesGameRoute" ),
 		GamesGameController: require( "controllers/GamesGameController" ),
-		GamesGameView: require( "views/GamesGameView" ),
+		GamesGameTemplate: require( "text!templates/games/game.html.hbs" ),
 
 		ChannelsRoute: require( "routes/ChannelsRoute" ),
 		ChannelsController: require( "controllers/ChannelsController" ),
@@ -224,7 +224,7 @@ define(function( require ) {
 		ChannelLoadingTemplate: require( "text!templates/loading.html.hbs" ),
 		ChannelIndexRoute: require( "routes/ChannelIndexRoute" ),
 		ChannelIndexController: require( "controllers/ChannelIndexController" ),
-		ChannelIndexView: require( "views/ChannelIndexView" ),
+		ChannelIndexTemplate: require( "text!templates/channel/index.html.hbs" ),
 		ChannelSettingsRoute: require( "routes/ChannelSettingsRoute" ),
 		ChannelSettingsController: require( "controllers/ChannelSettingsController" ),
 		ChannelSettingsTemplate: require( "text!templates/channel/settings.html.hbs" ),
