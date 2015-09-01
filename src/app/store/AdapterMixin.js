@@ -139,21 +139,20 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 		isSuccess: function( status, headers, payload ) {
 			return this._super.apply( this, arguments )
-			    && payload
-			    && !payload.error;
+			    && ( payload ? !payload.error : true );
 		},
 
 		handleResponse: function( status, headers, payload ) {
 			if ( this.isSuccess( status, headers, payload ) ) {
 				return payload;
 			} else if ( this.isInvalid( status, headers, payload ) ) {
-				return new DS.InvalidError( payload.errors || [] );
+				return new DS.InvalidError( payload && payload.errors || [] );
 			}
 
 			return new AdapterError([{
 				name   : "HTTP Error",
-				message: payload.error || "Failed to load resource",
-				detail : payload.message,
+				message: payload && payload.error || "Failed to load resource",
+				detail : payload && payload.message,
 				status : status
 			}]);
 		}
