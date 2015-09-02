@@ -5,7 +5,7 @@
 {{#if content.length}}
 <ul class="content-list">
 {{#each model as |stream index|}}
-{{stream-item content=stream isNewItem=(is-gte index initialFetchSize) showGame=true}}
+{{stream-item content=stream isNewItem=(is-gte index initialFetchSize) showGame=true faded=false}}
 {{/each}}
 </ul>
 {{infinite-scroll}}
