@@ -47,6 +47,7 @@ define([
 				.then( preload([
 					"@each.product.@each.partner_login.@each.logo",
 					"@each.product.@each.partner_login.@each.profile_banner",
+					"@each.product.@each.partner_login.@each.video_banner",
 					"@each.product.@each.emoticons.firstObject.@each.url"
 				]) );
 		}

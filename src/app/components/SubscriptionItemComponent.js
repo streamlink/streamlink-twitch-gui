@@ -20,9 +20,11 @@ define([
 		emoticons: alias( "product.emoticons" ),
 
 		style: function() {
-			var banner = get( this, "channel.profile_banner" );
+			var banner =  get( this, "channel.profile_banner" )
+			           || get( this, "channel.video_banner" )
+			           || "";
 			return "background-image:url(\"%@\")".fmt( banner ).htmlSafe();
-		}.property( "channel.profile_banner" ),
+		}.property( "channel.profile_banner", "channel.video_banner" ),
 
 		hasEnded: function() {
 			var access_end = get( this, "content.access_end" );
