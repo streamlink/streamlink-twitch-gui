@@ -28,18 +28,20 @@ define([
 		showFlag: bool( "settings.gui_flagsvisible" ),
 
 		faded: function() {
-			var filter = get( this, "settings.gui_langfilter" );
-			var clang  = get( this, "content.channel.language" );
-			var blang  = get( this, "content.channel.broadcaster_language" );
+			var filter  = get( this, "settings.gui_filterstreams" );
+			var filters = get( this, "settings.gui_langfilter" );
+			var clang   = get( this, "channel.language" );
+			var blang   = get( this, "channel.broadcaster_language" );
 
-			// a channel language needs to be set
-			return clang
+			return !filter
+				// a channel language needs to be set
+				&& clang
 				&& (
 					// fade out if
 					// no broadcaster language is set and channel language is filtered out
-					   !blang && filter[ clang ] === false
+					   !blang && filters[ clang ] === false
 					// OR broadcaster language is set and filtered out (ignore channel language)
-					||  blang && filter[ blang ] === false
+					||  blang && filters[ blang ] === false
 				);
 		}.property(
 			"settings.gui_langfilter",

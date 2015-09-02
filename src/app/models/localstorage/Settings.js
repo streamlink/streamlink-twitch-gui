@@ -32,6 +32,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
 		gui_flagsvisible    : attr( "boolean", { defaultValue: false } ),
+		gui_filterstreams   : attr( "boolean", { defaultValue: false } ),
 		gui_langfilter      : attr( "",        { defaultValue: defaultLangFilterValue } ),
 		notify_enabled      : attr( "boolean", { defaultValue: true } ),
 		notify_all          : attr( "boolean", { defaultValue: true } ),
