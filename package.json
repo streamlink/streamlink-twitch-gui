@@ -141,25 +141,6 @@
 					]
 				}
 			},
-			"firefox": {
-				"args": "-chrome '{url}'",
-				"exec": {
-					"win32": [ "firefox.exe" ],
-					"darwin": [ "firefox" ],
-					"linux": [ "firefox" ]
-				},
-				"fallback": {
-					"win32": [
-						"%PROGRAMFILES%\\Mozilla Firefox",
-						"%PROGRAMFILES(X86)%\\Mozilla Firefox"
-					],
-					"darwin": [ "/Applications/Firefox.app/Contents/MacOS" ],
-					"linux": [
-						"/usr/bin",
-						"/usr/local/bin"
-					]
-				}
-			},
 			"msie": {
 				"args": "\"{script}\" \"{url}\"",
 				"exec": "cscript",

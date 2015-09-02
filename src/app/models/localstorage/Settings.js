@@ -116,7 +116,6 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 			{ id: "irc",      label: "Internal IRC Client", disabled: true },
 			{ id: "chromium", label: "Chromium" },
 			{ id: "chrome",   label: "Google Chrome" },
-			{ id: "firefox",  label: "Mozilla Firefox" },
 			{ id: "msie",     label: "Internet Explorer", disabled: !isWin },
 			{ id: "custom",   label: "Custom application" }
 		]
