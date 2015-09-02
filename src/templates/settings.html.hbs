@@ -8,10 +8,27 @@
 <legend>Streams</legend>
 <div><i class="fa fa-eye"></i> Preferred quality<span>Choose the default stream quality.</span></div>
 <div>{{view "select" value=model.quality content=settings.content.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
-<div><i class="fa fa-comment"></i> Open chat<span>After launching a stream.</span></div>
-<div>{{#check-box checked=model.gui_openchat}}Automatically open chat{{/check-box}}</div>
 <div><i class="fa fa-info-circle"></i> Stream popup<span>When a stream has started.</span></div>
 <div>{{#check-box checked=model.gui_hidestreampopup}}Hide the popup on success{{/check-box}}</div>
+</fieldset>
+<fieldset>
+<legend>Chat</legend>
+{{#if model.advanced}}
+<div><i class="fa fa-twitch"></i> Chat method<span>Explicitly choose a browser to be able to use minimal chat windows.</span></div>
+<div>{{view "select" class="chat-method" value=model.chat_method content=chatMethods optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+{{#unless (bool-or isChatMethodDefault isChatMethodMSIE)}}
+<div><i class="fa fa-cog"></i> Executable location<span>
+{{#if isChatMethodCustom}}
+Available parameters: <span title="Name of the channel">{channel}</span> and <span title="Twitch chat URL">{url}</span>.<br>Example: <span class="docs">/path/to/app --name {channel} {url}</span>
+{{else}}
+Choose a custom executable file of your selected browser. If left blank, default installation paths are assumed.
+{{/if}}
+</span></div>
+<div>{{file-select value=model.chat_command inputClass="form-control" placeholder=(if isChatMethodCustom "Application path and parameters" "Custom browser executable")}}</div>
+{{/unless}}
+{{/if}}
+<div><i class="fa fa-comment"></i> Open chat<span>After launching a stream.</span></div>
+<div>{{#check-box checked=model.gui_openchat}}Automatically open chat{{/check-box}}</div>
 </fieldset>
 <fieldset>
 <legend>Livestreamer</legend>

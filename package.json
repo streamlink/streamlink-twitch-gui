@@ -97,7 +97,56 @@
 		"notification-cache-time": 7,
 		"notification-retries": 3,
 		"notification-interval": 60000,
-		"stream-reload-interval": 60000
+		"stream-reload-interval": 60000,
+		"chat-methods": {
+			"chromium": {
+				"args": "--app={url}",
+				"exec": {
+					"win32": [ "chrome.exe" ],
+					"darwin": [ "Chromium" ],
+					"linux": [ "chromium-browser" ]
+				},
+				"fallback": {
+					"win32": [
+						"%LOCALAPPDATA%\\Chromium\\Application",
+						"%PROGRAMFILES%\\Chromium\\Application",
+						"%PROGRAMFILES(X86)%\\Chromium\\Application"
+					],
+					"darwin": [ "/Applications/Chromium.app/Contents/MacOS" ],
+					"linux": [
+						"/usr/bin",
+						"/usr/local/bin",
+						"/opt/chromium"
+					]
+				}
+			},
+			"chrome": {
+				"args": "--app={url}",
+				"exec": {
+					"win32": [ "chrome.exe" ],
+					"darwin": [ "Google Chrome" ],
+					"linux": [ "google-chrome", "google-chrome-unstable" ]
+				},
+				"fallback": {
+					"win32": [
+						"%LOCALAPPDATA%\\Google\\Chrome\\Application",
+						"%PROGRAMFILES%\\Google\\Chrome\\Application",
+						"%PROGRAMFILES(X86)%\\Google\\Chrome\\Application"
+					],
+					"darwin": [ "/Applications/Google Chrome.app/Contents/MacOS" ],
+					"linux": [
+						"/usr/bin",
+						"/usr/local/bin",
+						"/opt/google/chrome"
+					]
+				}
+			},
+			"msie": {
+				"args": "\"{script}\" \"{url}\"",
+				"exec": "cscript",
+				"script": "msie-minimal.vbs"
+			}
+		}
 	},
 
 	"scripts": {

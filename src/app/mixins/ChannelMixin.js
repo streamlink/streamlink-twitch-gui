@@ -6,6 +6,7 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 	return Ember.Mixin.create({
 		metadata: Ember.inject.service(),
 		auth    : Ember.inject.service(),
+		chat    : Ember.inject.service(),
 
 		checkUserFollowsChannel: function( channel ) {
 			if ( !get( this, "auth.session.isLoggedIn" ) ) { return; }
@@ -96,14 +97,9 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 			},
 
 			"chat": function( channel, callback ) {
-				var url  = get( this, "metadata.config.twitch-chat-url" );
-				var name = get( channel, "id" );
-				if ( url && name ) {
-					this.send( "openBrowser", url.replace( "{channel}", name ) );
-					if ( callback instanceof Function ) {
-						callback();
-					}
-				}
+				var chat = get( this, "chat" );
+				chat.open( channel )
+					.then( callback );
 			},
 
 			"share": function( channel, callback ) {

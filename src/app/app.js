@@ -119,6 +119,7 @@ define(function( require ) {
 		SettingsService: require( "services/SettingsService" ),
 		AuthService: require( "services/AuthService" ),
 		NotificationService: require( "services/NotificationService" ),
+		ChatService: require( "services/ChatService" ),
 
 
 		// Application
