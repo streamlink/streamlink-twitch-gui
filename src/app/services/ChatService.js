@@ -61,13 +61,8 @@ define([
 
 			url = url.replace( "{channel}", name );
 
-			var advanced = get( this, "settings.advanced" );
 			var method   = get( this, "settings.chat_method" );
 			var command  = get( this, "settings.chat_command" ).trim();
-
-			if ( !advanced ) {
-				method = "default";
-			}
 
 			switch ( method ) {
 				case "default":
@@ -77,7 +72,6 @@ define([
 					return this._openIRC( channel );
 				case "chromium":
 				case "chrome":
-				case "firefox":
 					return this._openPredefined( command, method, url );
 				case "msie":
 					return this._openMSIE( url );

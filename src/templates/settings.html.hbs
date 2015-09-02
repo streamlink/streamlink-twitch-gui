@@ -13,7 +13,6 @@
 </fieldset>
 <fieldset>
 <legend>Chat</legend>
-{{#if model.advanced}}
 <div><i class="fa fa-twitch"></i> Chat method<span>Explicitly choose a browser to be able to use minimal chat windows.</span></div>
 <div>{{view "select" class="chat-method" value=model.chat_method content=chatMethods optionValuePath="content.id" optionLabelPath="content.label"}}</div>
 {{#unless (bool-or isChatMethodDefault isChatMethodMSIE)}}
@@ -26,7 +25,6 @@ Choose a custom executable file of your selected browser. If left blank, default
 </span></div>
 <div>{{file-select value=model.chat_command inputClass="form-control" placeholder=(if isChatMethodCustom "Application path and parameters" "Custom browser executable")}}</div>
 {{/unless}}
-{{/if}}
 <div><i class="fa fa-comment"></i> Open chat<span>After launching a stream.</span></div>
 <div>{{#check-box checked=model.gui_openchat}}Automatically open chat{{/check-box}}</div>
 </fieldset>
