@@ -256,6 +256,7 @@ define([
 							return download( logo, iconTempDir )
 								.then(function( file ) {
 									// the channel logo is now the local file
+									file = "file://" + file;
 									set( stream, "logo", file );
 									return stream;
 								});
