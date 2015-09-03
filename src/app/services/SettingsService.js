@@ -24,6 +24,9 @@ define( [ "Ember" ], function( Ember ) {
 					set( this, "content", settings );
 				}.bind( this ) );
 		}
+
+	}).reopenClass({
+		isServiceFactory: true
 	});
 
 });
