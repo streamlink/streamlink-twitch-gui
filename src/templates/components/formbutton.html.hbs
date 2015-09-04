@@ -1,1 +1,7 @@
-{{#if icon}}<i class="fa {{icon}}"></i>{{/if}}{{yield}}
+<button
+  type="button"
+  class="btn {{if icon (if hasBlock 'btn-with-icon' 'btn-icon')}} {{if _iconanim 'btn-with-anim'}} {{class}}"
+  title="{{title}}"
+  disabled={{disabled}}
+  {{action "click"}}
+>{{#if icon}}<i class="fa {{icon}}"></i>{{/if}}{{#if hasBlock}}{{yield}}{{/if}}</button>
