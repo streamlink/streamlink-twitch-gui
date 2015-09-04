@@ -10,10 +10,6 @@ define([
 		tagName: "main",
 		classNames: [ "content", "content-settings" ],
 
-		RadioBoxesView: Ember.View.extend({
-			tagName: "div"
-		}),
-
 		playerCmdSubstitutionsVisible: false,
 		playerCmdSubstitutions: function() {
 			var store = get( this, "controller.store" );

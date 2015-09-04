@@ -5,20 +5,20 @@ define( [ "Ember" ], function( Ember ) {
 
 	return Ember.Component.extend({
 		tagName: "input",
-		type: "radio",
 		attributeBindings: [
-			"id", "name", "type", "value", "checked:checked", "disabled", "data-label"
+			"id", "name", "type", "value", "checked", "disabled"
 		],
+		type: "radio",
+
+		checked: function() {
+			return get( this, "value" ) === get( this, "selection" );
+		}.property( "value", "selection" ),
 
 		click: function() {
 			if ( get( this, "disabled" ) ) { return; }
 			var value = get( this, "value" );
 			set( this, "selection", value );
-		},
-
-		checked: function() {
-			return get( this, "value" ) === get( this, "selection" );
-		}.property( "value", "selection" )
+		}
 	});
 
 });

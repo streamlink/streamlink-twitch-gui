@@ -189,6 +189,7 @@ define(function( require ) {
 		SubscribeChannelComponent: require( "components/SubscribeChannelComponent" ),
 		FollowChannelComponent: require( "components/FollowChannelComponent" ),
 		FollowGameComponent: require( "components/FollowGameComponent" ),
+		WrapContentComponent: require( "components/WrapContentComponent" ),
 
 
 		// Content

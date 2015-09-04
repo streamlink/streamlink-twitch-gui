@@ -3,8 +3,8 @@ define([
 	"text!templates/components/radiobuttons.html.hbs"
 ], function( Ember, template ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
 
 	return Ember.Component.extend({
 		layout: Ember.HTMLBars.compile( template ),
@@ -13,13 +13,7 @@ define([
 		classNameBindings: [ "boxes:radiobtns", "className" ],
 		boxes: true,
 		icon: false,
-
-		buttonView: Ember._MetamorphView,
-		buttonClass: function() {
-			return get( this, "boxes" )
-				? "default"
-				: "";
-		}.property( "boxes" ),
+		wrap: false,
 
 		// generate button id for label attribute "for"
 		_content: function() {
@@ -28,10 +22,10 @@ define([
 				var id = get( button, "id" );
 				if ( id === undefined ) { id = i; }
 
-				// give each button a unique id
+				// give buttons unique IDs
 				set( button, "_id", buttonName + "-" + id );
 
-				// use the id as value if there was no value specified
+				// use the ID as value if there was no value specified
 				if ( !button.hasOwnProperty( "value" ) ) {
 					set( button, "value", id );
 				}

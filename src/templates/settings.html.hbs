@@ -87,7 +87,7 @@
 <div>{{#check-box checked=model.notify_enabled}}Enable desktop notifications{{/check-box}}</div>
 {{#if model.notify_enabled}}
 <div><i class="fa fa-eyedropper"></i> Channel filter<span>Notifications can be turned on/off individually in a channel's settings menu.</span></div>
-{{radio-buttons buttonName="notify_all" boxes=false buttonView=view.RadioBoxesView value=model.notify_all content=settings.content.constructor.notify_all}}
+{{radio-buttons buttonName="notify_all" boxes=false wrap=true value=model.notify_all content=settings.content.constructor.notify_all}}
 <div><i class="fa fa-folder-open-o"></i> Grouping<span>Merge multiple notifications.</span></div>
 <div>{{#check-box checked=model.notify_grouping}}Only show one notification at a time{{/check-box}}</div>
 {{#if hasNotificationClickSupport}}
