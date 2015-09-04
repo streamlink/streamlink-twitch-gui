@@ -11,8 +11,8 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 	 * instead of using type.modelName as name
 	 */
 	return Ember.Mixin.create( Ember.Evented, {
-		find: function( store, type, id, snapshot ) {
-			var url = this.buildURL( type, id, snapshot, "find" );
+		findRecord: function( store, type, id, snapshot ) {
+			var url = this.buildURL( type, id, snapshot, "findRecord" );
 			return this.ajax( url, "GET" );
 		},
 
@@ -22,8 +22,8 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 			return this.ajax( url, "GET", { data: query } );
 		},
 
-		findQuery: function( store, type, query ) {
-			var url = this.buildURL( type, query, null, "findQuery" );
+		query: function( store, type, query ) {
+			var url = this.buildURL( type, query, null, "query" );
 			query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
 			return this.ajax( url, "GET", { data: query } );
 		},
