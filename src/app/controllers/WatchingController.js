@@ -1,10 +1,12 @@
 define( [ "Ember" ], function( Ember ) {
 
-	return Ember.ArrayController.extend({
+	var sort = Ember.computed.sort;
+
+	return Ember.Controller.extend({
 		auth: Ember.inject.service(),
 
-		sortAscending: false,
-		sortProperties: [ "started" ]
+		sortedModel: sort( "model", "sortBy" ),
+		sortBy: [ "started:desc" ]
 	});
 
 });

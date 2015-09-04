@@ -1,8 +1,8 @@
 <main class="content content-watching">
-{{#if content.length}}
+{{#if model.length}}
 <h2>You're watching</h2>
 <ul class="list-unstyled">
-{{#each arrangedContent as |watching|}}
+{{#each sortedModel as |watching|}}
 <li class="stream-presentation watching">
 <div class="image">
 <div class="preview">
@@ -27,7 +27,7 @@
 <ul class="fa-ul list-empty">
 <li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
 {{#if auth.session.isLoggedIn}}
-<li>{{#link-to "user.followedStreams"}}<i class="fa fa-li fa-caret-right"></i>Watch your followed channels{{/link-to}}</li>
+<li>{{#link-to "user.followedStreams"}}<i class="fa fa-li fa-caret-right"></i>Watch your followed streams{{/link-to}}</li>
 {{/if}}
 </ul>
 {{/if}}
