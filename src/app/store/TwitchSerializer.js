@@ -1,8 +1,8 @@
-define( [ "Ember", "EmberData" ], function( Ember, DS ) {
-
-	var get = Ember.get;
+define( [ "EmberData" ], function( DS ) {
 
 	return DS.RESTSerializer.extend( DS.EmbeddedRecordsMixin, {
+		isNewSerializerAPI: true,
+
 		primaryKey: "_id",
 
 		/**
@@ -14,7 +14,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		extractMeta: function( store, type, payload ) {
 			if ( !payload ) { return; }
 
-			var primaryKey = get( this, "primaryKey" );
+			var primaryKey = this.primaryKey;
 			var data = {};
 
 			Object.keys( payload ).forEach(function( key ) {
@@ -25,19 +25,6 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 			});
 
 			return data;
-		},
-
-
-		/**
-		 * Also extract metadata from all embedded records
-		 * @see DS.EmbeddedRecordsMixin.normalize
-		 * @param {DS.Model} type
-		 * @param {Object} hash
-		 * @returns {Object}
-		 */
-		normalize: function( type, hash ) {
-			this.extractMeta( this.store, type, hash );
-			return this._super.apply( this, arguments );
 		}
 	});
 

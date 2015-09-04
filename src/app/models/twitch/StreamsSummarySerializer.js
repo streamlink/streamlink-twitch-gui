@@ -1,16 +1,13 @@
 define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 
 	return TwitchSerializer.extend({
-		primaryKey: "id",
-
-		normalizePayload: function( payload ) {
-			return {
-				twitchStreamsSummaries: [{
-					id: 1,
-					channels: payload.channels,
-					viewers: payload.viewers
-				}]
+		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+			payload[ this.primaryKey ] = 1;
+			payload = {
+				twitchStreamsSummaries: [ payload ]
 			};
+
+			return this._super( store, primaryModelClass, payload, id, requestType );
 		}
 	});
 

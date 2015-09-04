@@ -9,11 +9,11 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			game: { deserialize: "records" }
 		},
 
-		normalizeHash: {
-			top: function( hash ) {
-				hash.id = hash.game._id;
-				return hash;
-			}
+		normalize: function( modelClass, resourceHash, prop ) {
+			var foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
+			resourceHash[ this.primaryKey ] = resourceHash.game[ foreignKey ];
+
+			return this._super( modelClass, resourceHash, prop );
 		}
 	});
 
