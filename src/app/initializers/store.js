@@ -1,4 +1,4 @@
-define( [ "Ember", "EmberData" ], function( Ember, DS ) {
+define( [ "Ember", "EmberData", "EmberDataLS" ], function( Ember, DS ) {
 
 	// no initializer here: just upgrade the application store
 
@@ -26,6 +26,16 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 					}
 					return Promise.reject();
 				});
+		}
+	});
+
+	DS.LSAdapter.reopen({
+		shouldReloadAll: function() {
+			return true;
+		},
+
+		shouldBackgroundReloadRecord: function() {
+			return false;
 		}
 	});
 
