@@ -250,7 +250,7 @@ define(function( require ) {
 
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
-		SettingsView: require( "views/SettingsView" ),
+		SettingsTemplate: require( "text!templates/settings.html.hbs" ),
 		SettingsModalTemplate: require( "text!templates/modals/settings.html.hbs" ),
 
 		AboutController: require( "controllers/AboutController" ),

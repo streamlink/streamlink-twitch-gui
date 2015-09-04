@@ -32,6 +32,28 @@ define([
 		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
 		hasNotificationClickSupport: process.platform !== "linux",
 
+		playerCmdSubstitutionsVisible: false,
+		playerCmdSubstitutions: function() {
+			var store = get( this, "store" );
+			var model = store.modelFor( "livestreamer" );
+			/** @type {Substitution[]} */
+			var substitutions = get( model, "substitutions" );
+
+			return substitutions.map(function( substitution ) {
+				/** @type {string[]} */
+				var vars = substitution.vars;
+				vars = vars.map(function( vars ) {
+					return "{%@}".fmt( vars );
+				});
+
+				return {
+					variable   : vars[0],
+					tooltip    : vars.join( ", " ),
+					description: substitution.description
+				};
+			});
+		}.property(),
+
 		minimize_observer: function() {
 			var int    = get( this, "model.gui_integration" ),
 			    min    = get( this, "model.gui_minimize" ),
@@ -83,6 +105,10 @@ define([
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) );
+			},
+
+			"togglePlayerCmdSubstitutions": function() {
+				this.toggleProperty( "playerCmdSubstitutionsVisible" );
 			}
 		}
 	});
