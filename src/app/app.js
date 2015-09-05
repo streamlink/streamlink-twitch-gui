@@ -142,7 +142,8 @@ define(function( require ) {
 		// Application
 		ApplicationRoute: require( "routes/ApplicationRoute" ),
 		ApplicationController: require( "controllers/ApplicationController" ),
-		ApplicationView: require( "views/ApplicationView" ),
+		ApplicationView: require( "components/ApplicationComponent" ),
+		ApplicationTemplate: require( "text!templates/application.html.hbs" ),
 
 		LoadingRoute: require( "routes/LoadingRoute" ),
 		LoadingTemplate: require( "text!templates/loading.html.hbs" ),
