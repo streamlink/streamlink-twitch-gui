@@ -1,0 +1,3 @@
+{{#each content key="@index" as |item|}}
+<option value="{{get-path item optionValuePath}}" selected={{is-equal (get-path item optionValuePath) value}}>{{get-path item optionLabelPath}}</option>
+{{/each}}

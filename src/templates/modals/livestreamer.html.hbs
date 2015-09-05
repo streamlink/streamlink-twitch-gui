@@ -14,5 +14,5 @@
 {{subscribe-channel channel=active.channel}}
 {{follow-channel channel=active.channel}}
 </div>
-{{view "select" value=active.quality content=settings.content.constructor.qualities class="modalqualityselect" optionValuePath="content.id" optionLabelPath="content.label"}}
+{{drop-down value=active.quality content=settings.content.constructor.qualities class="modalqualityselect"}}
 {{/if}}

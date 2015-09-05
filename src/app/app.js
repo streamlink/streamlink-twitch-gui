@@ -110,7 +110,6 @@ define(function( require ) {
 		// Ember additions/changes/fixes
 		BooleanTransform: require( "store/BooleanTransform" ),
 		LinkComponent: require( "components/LinkComponent" ),
-		SelectView: require( "views/SelectView" ),
 
 
 		// Helpers
@@ -130,6 +129,7 @@ define(function( require ) {
 		HoursFromNowHelper: require( "helpers/HoursFromNowHelper" ),
 		TimeFromNowHelper: require( "helpers/TimeFromNowHelper" ),
 		GetParamHelper: require( "helpers/GetParamHelper" ),
+		GetPathHelper: require( "helpers/GetPathHelper" ),
 
 
 		// Services
@@ -190,6 +190,7 @@ define(function( require ) {
 		FollowChannelComponent: require( "components/FollowChannelComponent" ),
 		FollowGameComponent: require( "components/FollowGameComponent" ),
 		WrapContentComponent: require( "components/WrapContentComponent" ),
+		DropDownComponent: require( "components/DropDownComponent" ),
 
 
 		// Content
