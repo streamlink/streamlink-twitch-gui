@@ -498,6 +498,14 @@ define([
 				}
 			},
 
+			"chat": function( channel ) {
+				var url  = get( this, "metadata.config.twitch-chat-url" );
+				var name = get( channel, "id" );
+				if ( url && name ) {
+					this.send( "openBrowser", url.replace( "{channel}", name ) );
+				}
+			},
+
 			"close": function() {
 				this.send( "closeModal" );
 				run.schedule( "destroy", this, function() {
