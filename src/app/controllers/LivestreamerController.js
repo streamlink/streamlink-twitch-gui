@@ -18,26 +18,23 @@ define([
 	semver
 ) {
 
-	var CP   = require( "child_process" ),
-	    PATH = require( "path" );
+	var CP   = require( "child_process" );
+	var PATH = require( "path" );
 
-	var get  = Ember.get,
-	    set  = Ember.set,
-	    setP = Ember.setProperties,
-	    run  = Ember.run;
-
-	var alias = Ember.computed.alias;
+	var get  = Ember.get;
+	var set  = Ember.set;
+	var setP = Ember.setProperties;
+	var run  = Ember.run;
 
 	var isWin = process.platform === "win32";
 
-	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
-	    reUnable    = /^error: Unable to open URL: /,
-	    reNoStreams = /^error: No streams found on this URL: /,
-	    reNoPlayer  = /^error: Failed to start player: /,
-	    reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./,
-	    reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/,
-	    rePlayer    = /^Starting player: \S+/,
-	    reSplit     = /\r?\n/g;
+	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
+	var reUnable    = /^error: Unable to open URL: /;
+	var reNoStreams = /^error: No streams found on this URL: /;
+	var reNoPlayer  = /^error: Failed to start player: /;
+	var reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./;
+	var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
+	var rePlayer    = /^Starting player: \S+/;
 
 
 	function VersionError( version ) { this.version = version; }
@@ -68,8 +65,6 @@ define([
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
 		settings: Ember.inject.service(),
-
-		config: alias( "metadata.config" ),
 
 		modalBtns: null,
 
@@ -220,8 +215,8 @@ define([
 		 */
 		checkLivestreamer: function() {
 			var path = get( this, "settings.livestreamer" );
-			var exec = get( this, "config.livestreamer-exec" );
-			var fb   = get( this, "config.livestreamer-fallback-paths-unix" );
+			var exec = get( this, "metadata.config.livestreamer-exec" );
+			var fb   = get( this, "metadata.config.livestreamer-fallback-paths-unix" );
 
 			// use the default command if the user did not define one
 			path = path ? String( path ) : exec;
@@ -232,7 +227,8 @@ define([
 			}
 
 			function execCheck( stat ) {
-				return isWin || ( stat.mode & 0111 ) > 0;
+				// octal: 0111
+				return isWin || ( stat.mode & 73 ) > 0;
 			}
 
 			// check for the executable
@@ -264,8 +260,8 @@ define([
 		 * @returns {Promise}
 		 */
 		validateLivestreamer: function( exec ) {
-			var minimum = get( this, "config.livestreamer-version-min" );
-			var time    = get( this, "config.livestreamer-validation-timeout" );
+			var minimum = get( this, "metadata.config.livestreamer-version-min" );
+			var time    = get( this, "metadata.config.livestreamer-validation-timeout" );
 			var spawn;
 
 			function kill() {
@@ -337,7 +333,7 @@ define([
 
 			var channel   = get( livestreamer, "channel.id" );
 			var quality   = get( livestreamer, "quality" );
-			var streamURL = get( this, "config.twitch-stream-url" );
+			var streamURL = get( this, "metadata.config.twitch-stream-url" );
 			var qualities = get( this, "settings.content.constructor.qualities" );
 
 			// get the livestreamer parameter list
@@ -402,16 +398,14 @@ define([
 			}
 
 			// reject promise on any error output
-			function stderrCallback( data ) {
-				data = data.trim();
+			function stdErrCallback( data ) {
 				set( livestreamer, "error", true );
 				defer.reject( parseError( data ) || new Error( data ) );
 			}
 
 			// fulfill promise as soon as livestreamer is launching the player
 			// also print all stdout messages
-			function stdoutCallback( data ) {
-				data = data.trim();
+			function stdOutCallback( data ) {
 				var error = parseError( data );
 				if ( error ) {
 					set( livestreamer, "error", true );
@@ -443,13 +437,8 @@ define([
 				}
 			}
 
-			spawn.stderr.on( "data", function( data ) {
-				String( data ).trim().split( reSplit ).forEach( stderrCallback );
-			});
-
-			spawn.stdout.on( "data", function( data ) {
-				String( data ).trim().split( reSplit ).forEach( stdoutCallback.bind( this ) );
-			}.bind( this ) );
+			spawn.stdout.on( "data", new StreamOutputBuffer( stdOutCallback ), this );
+			spawn.stderr.on( "data", new StreamOutputBuffer( stdErrCallback ), this );
 
 			return defer.promise;
 		},
@@ -480,7 +469,7 @@ define([
 		},
 
 		refreshStream: function( livestreamer ) {
-			var interval = get( this, "config.stream-reload-interval" ) || 60000;
+			var interval = get( this, "metadata.config.stream-reload-interval" ) || 60000;
 
 			if ( get( livestreamer, "shutdown" ) ) { return; }
 
@@ -502,7 +491,8 @@ define([
 
 		actions: {
 			"download": function( callback ) {
-				this.send( "openBrowser", get( this, "config.livestreamer-download-url" ) );
+				var url = get( this, "metadata.config.livestreamer-download-url" );
+				this.send( "openBrowser", url );
 				if ( callback instanceof Function ) {
 					callback();
 				}
@@ -516,11 +506,10 @@ define([
 			},
 
 			"shutdown": function() {
-				var active = get( this, "active" ),
-				    spawn;
+				var active = get( this, "active" );
 				if ( active ) {
 					set( active, "shutdown", true );
-					spawn = get( active, "spawn" );
+					var spawn = get( active, "spawn" );
 					if ( spawn ) { spawn.kill(); }
 				}
 				this.send( "close" );
