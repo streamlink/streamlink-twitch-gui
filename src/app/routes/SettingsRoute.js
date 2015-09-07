@@ -21,8 +21,6 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 					// and let the user decide
 					this.send( "openModal", "settingsModal", this.controller, {
-						modalHead: "Please confirm",
-						modalBody: "Do you want to apply your changes?",
 						previousTransition: transition
 					});
 				}

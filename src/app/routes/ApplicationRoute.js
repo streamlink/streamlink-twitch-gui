@@ -48,11 +48,6 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 			},
 
 			"openModal": function( template, controller, data ) {
-				var view = "modal";
-				if ( template instanceof Object ) {
-					view     = template.view;
-					template = template.template;
-				}
 				if ( typeof controller === "string" ) {
 					controller = this.controllerFor( controller );
 				}
@@ -63,7 +58,6 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 				this.render( template, {
 					into      : "application",
 					outlet    : "modal",
-					view      : view,
 					controller: controller
 				});
 			},

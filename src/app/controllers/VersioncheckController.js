@@ -61,13 +61,9 @@ define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 
 			// ask the user what to do
 			this.send( "openModal", "versioncheckModal", this, {
-				modalHead: "You're using an outdated version: %@".fmt(
-					getVers( current )
-				),
-				modalBody: "Do you want to download the latest release now? (%@)".fmt(
-					getVers( latest )
-				),
-				downloadURL: get( latest, "html_url" )
+				versionOutdated: getVers( current ),
+				versionLatest  : getVers( latest ),
+				downloadURL    : get( latest, "html_url" )
 			});
 		},
 

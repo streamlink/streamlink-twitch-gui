@@ -21,10 +21,10 @@ define([
 	var CP   = require( "child_process" );
 	var PATH = require( "path" );
 
-	var get  = Ember.get;
-	var set  = Ember.set;
-	var setP = Ember.setProperties;
-	var run  = Ember.run;
+	var get = Ember.get;
+	var set = Ember.set;
+	var run = Ember.run;
+	var merge = Ember.merge;
 
 	var isWin = process.platform === "win32";
 
@@ -38,19 +38,19 @@ define([
 
 
 	function VersionError( version ) { this.version = version; }
-	VersionError.prototype = new Error();
+	VersionError.prototype = merge( new Error(), { name: "VersionError" });
 
 	function NotFoundError() {}
-	NotFoundError.prototype = new Error();
+	NotFoundError.prototype = merge( new Error(), { name: "NotFoundError" });
 
 	function UnableToOpenError() {}
-	UnableToOpenError.prototype = new Error();
+	UnableToOpenError.prototype = merge( new Error(), { name: "UnableToOpenError" });
 
 	function NoStreamsFoundError() {}
-	NoStreamsFoundError.prototype = new Error();
+	NoStreamsFoundError.prototype = merge( new Error(), { name: "NoStreamsFoundError" });
 
 	function NoPlayerError() {}
-	NoPlayerError.prototype = new Error();
+	NoPlayerError.prototype = merge( new Error(), { name: "NoPlayerError" });
 
 
 	function setIfNotNull( objA, objB, key ) {
@@ -66,8 +66,7 @@ define([
 		store   : Ember.inject.service(),
 		settings: Ember.inject.service(),
 
-		modalBtns: null,
-
+		error : null,
 		active: null,
 		model : function() {
 			var store = get( this, "store" );
@@ -76,15 +75,10 @@ define([
 
 
 		startStream: function( stream ) {
-			this.send( "openModal", {
-				view    : "livestreamerModal",
-				template: "livestreamerModal"
-			}, this, {
-				modalHead: "Preparing",
-				modalBody: "Please wait...",
-				modalBtns: null
+			this.send( "openModal", "livestreamerModal", this, {
+				error : null,
+				active: null
 			});
-
 
 			var store   = get( this, "store" );
 			var channel = get( stream, "channel" );
@@ -92,12 +86,7 @@ define([
 
 			// is the stream already running?
 			if ( store.hasRecordForId( "livestreamer", id ) ) {
-				set( this, "active", store.recordForId( "livestreamer", id ) );
-				return setP( this, {
-					modalHead: "You're watching %@".fmt( get( channel, "display_name" ) ),
-					modalBody: get( channel, "status" ),
-					modalBtns: "running"
-				});
+				return set( this, "active", store.recordForId( "livestreamer", id ) );
 			}
 
 			// create a new livestreamer object
@@ -109,8 +98,6 @@ define([
 				gui_openchat: get( this, "settings.gui_openchat" ),
 				started     : new Date()
 			});
-			// modal belongs to this stream now
-			set( this, "active", livestreamer );
 
 			this.loadChannelSettings( id )
 				// override channel specific settings
@@ -121,13 +108,7 @@ define([
 				// validate configuration and get the exec command
 				.then( this.checkLivestreamer.bind( this ) )
 				// launch the stream
-				.then(function( exec ) {
-					setP( this, {
-						modalHead: "Launching stream",
-						modalBody: "Waiting for Livestreamer to launch the stream..."
-					});
-					return this.launchLivestreamer( exec, livestreamer );
-				}.bind( this ) )
+				.then( this.launchLivestreamer.bind( this, livestreamer ) )
 				// setup stream refresh interval
 				.then( this.refreshStream.bind( this, livestreamer ) )
 				// success/failure
@@ -138,11 +119,6 @@ define([
 		},
 
 		streamSuccess: function( livestreamer, guiActions ) {
-			setP( this, {
-				modalHead: "Watching now: %@".fmt( get( livestreamer, "channel.display_name" ) ),
-				modalBody: get( livestreamer, "channel.status" ),
-				modalBtns: "running"
-			});
 			set( livestreamer, "success", true );
 
 			if ( !guiActions ) { return; }
@@ -161,50 +137,12 @@ define([
 			this.minimize( false );
 		},
 
-		streamFailure: function( livestreamer, err ) {
+		streamFailure: function( livestreamer, error ) {
+			set( livestreamer, "error", true );
+			set( this, "error", error );
+
 			if ( !get( livestreamer, "isDeleted" ) ) {
 				livestreamer.destroyRecord();
-			}
-
-			if ( err instanceof VersionError ) {
-				setP( this, {
-					modalHead: "Error: Invalid Livestreamer version",
-					modalBody: "Your version v%@ doesn't match the min. requirements (v%@)"
-						.fmt( err.version, get( this, "versionMin" ) ),
-					modalBtns: "download"
-				});
-			} else if ( err instanceof NotFoundError ) {
-				setP( this, {
-					modalHead: "Error: Livestreamer was not found",
-					modalBody: "Please check settings and/or (re)install Livestreamer.",
-					modalBtns: "download"
-				});
-			} else if ( err instanceof UnableToOpenError ) {
-				setP( this, {
-					modalHead: "Error: Unable to open stream",
-					modalBody: "Livestreamer was unable to open the stream.",
-					modalBtns: null
-				});
-			} else if ( err instanceof NoStreamsFoundError ) {
-				setP( this, {
-					modalHead: "Error: No streams found",
-					modalBody: "Livestreamer was unable to find the stream.",
-					modalBtns: null
-				});
-			} else if ( err instanceof NoPlayerError ) {
-				setP( this, {
-					modalHead: "Error: Invalid player",
-					modalBody: "Please check your player configuration.",
-					modalBtns: null
-				});
-			} else {
-				setP( this, {
-					modalHead: "Error: Couldn't launch the stream",
-					modalBody: err
-						? err.message || err.toString()
-						: "Internal error",
-					modalBtns: null
-				});
 			}
 		},
 
@@ -323,11 +261,14 @@ define([
 		 * Launch the stream
 		 * @returns {Promise}
 		 */
-		launchLivestreamer: function( exec, livestreamer ) {
+		launchLivestreamer: function( livestreamer, exec ) {
 			// in case the shutdown button was pressed before
 			if ( get( livestreamer, "shutdown" ) ) {
 				return Promise.reject();
 			}
+
+			set( livestreamer, "success", false );
+			set( this, "active", livestreamer );
 
 			var defer     = Promise.defer();
 
@@ -345,7 +286,6 @@ define([
 			// spawn the livestreamer process
 			var spawn = CP.spawn( exec, params, { detached: true } );
 
-			set( livestreamer, "success", false );
 			set( livestreamer, "spawn", spawn );
 
 			spawn.on( "error", defer.reject );
@@ -354,16 +294,16 @@ define([
 				set( livestreamer, "spawn", null );
 				spawn = null;
 
-				// quality was changed
+				// quality has been changed
 				if ( quality !== get( livestreamer, "quality" ) ) {
 					run.next( this, function() {
-						this.launchLivestreamer( exec, livestreamer ).then(
+						this.launchLivestreamer( livestreamer, exec ).then(
 							this.streamSuccess.bind( this, livestreamer, false ),
 							this.streamFailure.bind( this, livestreamer )
 						);
 					});
 
-				// stream was shut down regularly
+				// stream has been shut down regularly
 				} else {
 					set( livestreamer, "shutdown", true );
 
@@ -399,8 +339,8 @@ define([
 
 			// reject promise on any error output
 			function stdErrCallback( data ) {
-				set( livestreamer, "error", true );
-				defer.reject( parseError( data ) || new Error( data ) );
+				var error = parseError( data );
+				defer.reject( error || new Error( data ) );
 			}
 
 			// fulfill promise as soon as livestreamer is launching the player
@@ -408,18 +348,10 @@ define([
 			function stdOutCallback( data ) {
 				var error = parseError( data );
 				if ( error ) {
-					set( livestreamer, "error", true );
 					return defer.reject( error );
 				}
 
 				data = data.replace( reReplace, "" );
-				if (
-					    get( this, "active" ) === livestreamer
-					&& !get( livestreamer, "success" )
-					&& !get( livestreamer, "error" )
-				) {
-					set( this, "modalBody", data );
-				}
 
 				if ( rePlayer.test( data ) ) {
 					/*
@@ -437,8 +369,8 @@ define([
 				}
 			}
 
-			spawn.stdout.on( "data", new StreamOutputBuffer( stdOutCallback ), this );
-			spawn.stderr.on( "data", new StreamOutputBuffer( stdErrCallback ), this );
+			spawn.stdout.on( "data", new StreamOutputBuffer( stdOutCallback ) );
+			spawn.stderr.on( "data", new StreamOutputBuffer( stdErrCallback ) );
 
 			return defer.promise;
 		},

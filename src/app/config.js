@@ -37,7 +37,6 @@ requirejs.config({
 		"services"    : "services",
 		"helpers"     : "helpers",
 		"models"      : "models",
-		"views"       : "views",
 		"controllers" : "controllers",
 		"routes"      : "routes",
 		"components"  : "components",

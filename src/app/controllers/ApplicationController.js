@@ -33,15 +33,6 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 		}.property( "loginSuccess", "notif_running", "notif_error" ),
 
 
-		modalHead: "Are you sure you want to quit?",
-		modalBody: function() {
-			var length = get( this, "streamsLength" );
-			return length
-				? "By choosing shutdown, all streams will be closed, too."
-				: "All streams have been closed. Do you want to quit now?";
-		}.property( "streamsLength" ),
-
-
 		actions: {
 			"winRefresh": function() {
 				nwWindow.reloadIgnoringCache();

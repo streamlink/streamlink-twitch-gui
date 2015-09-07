@@ -153,16 +153,20 @@ define(function( require ) {
 
 		IndexRoute: require( "routes/IndexRoute" ),
 
-		ModalView: require( "views/ModalView" ),
-
-		QuitModalTemplate: require( "text!templates/modals/quit.html.hbs" ),
-
 		VersioncheckController: require( "controllers/VersioncheckController" ),
-		VersioncheckModalTemplate: require( "text!templates/modals/versioncheck.html.hbs" ),
-
 		LivestreamerController: require( "controllers/LivestreamerController" ),
-		LivestreamerModalView: require( "views/LivestreamerModalView" ),
+
+
+		// Modal Dialogs
+		ModalDialogComponent: require( "components/ModalDialogComponent" ),
+		ModalHeaderComponent: require( "components/ModalHeaderComponent" ),
+		ModalBodyComponent: require( "components/ModalBodyComponent" ),
+		ModalFooterComponent: require( "components/ModalFooterComponent" ),
+
+		VersioncheckModalTemplate: require( "text!templates/modals/versioncheck.html.hbs" ),
+		SettingsModalTemplate: require( "text!templates/modals/settings.html.hbs" ),
 		LivestreamerModalTemplate: require( "text!templates/modals/livestreamer.html.hbs" ),
+		QuitModalTemplate: require( "text!templates/modals/quit.html.hbs" ),
 
 
 		// Components
@@ -253,7 +257,6 @@ define(function( require ) {
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
 		SettingsTemplate: require( "text!templates/settings.html.hbs" ),
-		SettingsModalTemplate: require( "text!templates/modals/settings.html.hbs" ),
 
 		AboutController: require( "controllers/AboutController" ),
 		AboutTemplate: require( "text!templates/about.html.hbs" ),
