@@ -8,7 +8,7 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 			var store = get( this, "store" );
 
 			return Promise.all([
-				store.findAll( "twitchStreamsSummary", null, { reload: true } ),
+				store.findAll( "twitchStreamsSummary", { reload: true } ),
 				store.query( "twitchStreamsFeatured", {
 					offset: 0,
 					limit: 5
