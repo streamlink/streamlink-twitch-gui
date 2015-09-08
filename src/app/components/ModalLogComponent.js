@@ -24,6 +24,7 @@ define([
 
 		scrollToBottom: function() {
 			var elem = this.element;
+			if ( !elem ) { return; }
 			elem.scrollTop = Math.max( 0, elem.scrollHeight - elem.clientHeight );
 		}.on( "didInsertElement" )
 	});
