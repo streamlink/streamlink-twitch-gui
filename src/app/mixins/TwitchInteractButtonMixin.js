@@ -76,7 +76,7 @@ define( [ "Ember" ], function( Ember ) {
 						isLocked : false
 					});
 				}.bind( this ) );
-		}.observes( "isValid", "model" ).on( "willInsertElement" )
+		}.observes( "isValid", "model" ).on( "didInitAttrs" )
 	});
 
 });
