@@ -196,6 +196,7 @@ define(function( require ) {
 		FollowGameComponent: require( "components/FollowGameComponent" ),
 		WrapContentComponent: require( "components/WrapContentComponent" ),
 		DropDownComponent: require( "components/DropDownComponent" ),
+		ModalLogComponent: require( "components/ModalLogComponent" ),
 
 
 		// Content

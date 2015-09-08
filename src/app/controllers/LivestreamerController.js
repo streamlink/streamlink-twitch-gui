@@ -53,6 +53,19 @@ define([
 	NoPlayerError.prototype = merge( new Error(), { name: "NoPlayerError" });
 
 
+	// we need a common error parsing function for stdout and stderr, because
+	// livestreamer is weird sometimes and prints error messages to stdout instead... :(
+	function parseError( data ) {
+		if ( reUnable.test( data ) ) {
+			return new UnableToOpenError();
+		} else if ( reNoStreams.test( data ) ) {
+			return new NoStreamsFoundError();
+		} else if ( reNoPlayer.test( data ) || reNoPlayer2.test( data ) ) {
+			return new NoPlayerError();
+		}
+	}
+
+
 	function setIfNotNull( objA, objB, key ) {
 		var val = get( objA, key );
 		if ( val !== null ) {
@@ -277,6 +290,8 @@ define([
 			var streamURL = get( this, "metadata.config.twitch-stream-url" );
 			var qualities = get( this, "settings.content.constructor.qualities" );
 
+			var log       = set( livestreamer, "log", [] );
+
 			// get the livestreamer parameter list
 			var params    = get( livestreamer, "parameters" );
 			// append stream url and quality
@@ -325,20 +340,16 @@ define([
 				}
 			}.bind( this ) );
 
-			// we need a common error parsing function for stdout and stderr, because
-			// livestreamer is weird sometimes and prints error messages to stdout instead... :(
-			function parseError( data ) {
-				if ( reUnable.test( data ) ) {
-					return new UnableToOpenError();
-				} else if ( reNoStreams.test( data ) ) {
-					return new NoStreamsFoundError();
-				} else if ( reNoPlayer.test( data ) || reNoPlayer2.test( data ) ) {
-					return new NoPlayerError();
-				}
+			function pushLog( type, line ) {
+				log.pushObject({
+					type: type,
+					line: line
+				});
 			}
 
 			// reject promise on any error output
 			function stdErrCallback( data ) {
+				pushLog( "stdErr", data );
 				var error = parseError( data );
 				defer.reject( error || new Error( data ) );
 			}
@@ -348,10 +359,12 @@ define([
 			function stdOutCallback( data ) {
 				var error = parseError( data );
 				if ( error ) {
+					pushLog( "stdErr", data );
 					return defer.reject( error );
 				}
 
 				data = data.replace( reReplace, "" );
+				pushLog( "stdOut", data );
 
 				if ( rePlayer.test( data ) ) {
 					/*
@@ -453,6 +466,13 @@ define([
 					if ( spawn ) { spawn.kill(); }
 				}
 				this.send( "close" );
+			},
+
+			"toggleLog": function() {
+				var active = get( this, "active" );
+				if ( active ) {
+					active.toggleProperty( "showLog" );
+				}
 			}
 		}
 	});

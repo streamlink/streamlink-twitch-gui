@@ -32,6 +32,8 @@ define([
 		spawn  : null,
 		success: false,
 		error  : false,
+		log    : null,
+		showLog: false,
 
 
 		auth    : Ember.inject.service(),

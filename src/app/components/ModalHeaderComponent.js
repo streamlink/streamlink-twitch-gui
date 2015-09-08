@@ -1,7 +1,8 @@
 define( [ "Ember" ], function( Ember ) {
 
 	return Ember.Component.extend({
-		tagName: "header"
+		tagName: "header",
+		classNameBindings: [ "class" ]
 	});
 
 });
