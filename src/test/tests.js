@@ -3,6 +3,8 @@ define(function( require ) {
 	// load requirejs app-config
 	require( [ "../app/config" ], function() {
 
+		window.process = window._process;
+
 		// adjust paths to the test environment
 		requirejs.config({
 			"baseUrl": "../app",

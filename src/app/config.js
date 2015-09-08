@@ -17,6 +17,15 @@ requirejs.config({
 		"EmberDataLS": [ "EmberData" ]
 	},
 
+	"map": {
+		"*": {
+			"Ember": "EmberShim"
+		},
+		"EmberShim": {
+			"Ember": "Ember"
+		}
+	},
+
 	"paths": {
 		// RequireJS plugins
 		"text": "../vendor/requirejs-text/text",
@@ -45,4 +54,20 @@ requirejs.config({
 		"gui"         : "gui",
 		"templates"   : "../templates"
 	}
+});
+
+
+// fix ember 1.13.x
+// https://github.com/emberjs/ember.js/issues/11679
+// reassign process property after loading ember
+window._process = window.process;
+window.process = null;
+
+define( "EmberShim", [ "Ember", "EmberHtmlbars" ], function( Ember ) {
+	// fix ember 1.13.x
+	// https://github.com/emberjs/ember.js/issues/11679
+	window.process = window._process;
+	delete window._process;
+
+	return Ember;
 });
