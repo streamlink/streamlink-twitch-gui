@@ -18,7 +18,7 @@
 </header>
 <ul class="list-unstyled">
 {{#with updateFormattedTime as |_|}}
-{{#each arrangedContent as |history|}}
+{{#each content as |history|}}
 <li {{action "searchHistory" history}}>
 <div class="filter">{{history.label}}</div>
 <div class="query">{{history.query}}</div>
