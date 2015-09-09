@@ -1,14 +1,15 @@
 define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 
 	return Ember.Route.extend({
 		model: function( params ) {
-			var store = this.store,
-			    id    = get( params, "channel" );
+			var store = get( this, "store" );
+			var id    = get( params, "channel" );
 
 			// try to find a stream record if the channel is broadcasting
-			return store.fetchById( "twitchStream", id )
+			return store.findRecord( "twitchStream", id, { reload: true } )
 				.then(function( stream ) {
 					return {
 						stream : stream,
@@ -21,7 +22,7 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 					stream._internalModel.notFound();
 
 					// if the channel is not online, just *fetch* the channel record
-					return store.fetchById( "twitchChannel", id )
+					return store.findRecord( "twitchChannel", id, { reload: true } )
 						.then(function( channel ) {
 							return {
 								channel: channel
@@ -33,6 +34,12 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 					"channel.logo",
 					"channel.video_banner"
 				]) );
+		},
+
+		resetController: function( controller, isExiting ) {
+			if ( isExiting ) {
+				set( controller, "isAnimated", false );
+			}
 		}
 	});
 

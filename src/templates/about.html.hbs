@@ -1,29 +1,31 @@
+<main class="content content-about">
 <h2>About</h2>
 <article>
 <h3><i class="fa fa-desktop"></i> Livestreamer Twitch GUI</h3>
 <dl class="dl-horizontal">
 <dt>Homepage</dt>
-<dd>{{#external-link url=view.metadata.package.homepage}}{{view.metadata.package.homepage}}{{/external-link}}</dd>
+<dd>{{#external-link url=metadata.package.homepage}}{{metadata.package.homepage}}{{/external-link}}</dd>
 <dt>Author</dt>
-<dd>{{view.metadata.package.author}}</dd>
+<dd>{{metadata.package.author}}</dd>
 <dt>Contributors</dt>
-<dd><ul class="list">{{#each view.metadata.contributors as |contributor|}}
+<dd><ul class="list">{{#each metadata.contributors as |contributor|}}
 <li title="{{contributor.commits}} commits">{{contributor.name}}</li>
 {{/each}}</ul></dd>
 <dt>Version</dt>
-<dd>{{view.metadata.package.version}}</dd>
+<dd>{{metadata.package.version}}</dd>
 <dt>Built</dt>
-<dd>{{view.metadata.package.built}}</dd>
+<dd>{{metadata.package.built}}</dd>
 <dt>NW.js</dt>
-<dd>{{view.metadata.package.config.nw-js-version}}</dd>
+<dd>{{metadata.package.config.nw-js-version}}</dd>
 </dl>
 </article>
 <article>
 <h3><i class="fa fa-sitemap"></i> Third party applications</h3>
 <dl class="dl-horizontal">
-{{#each view.dependencies as |elem|}}
+{{#each dependencies as |elem|}}
 <dt>{{elem.title}}</dt>
 <dd>{{elem.version}}</dd>
 {{/each}}
 </dl>
 </article>
+</main>

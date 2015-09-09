@@ -25,7 +25,7 @@ define([
 		},
 
 		model: function( params ) {
-			return this.store.findQuery( "twitchChannelsFollowed", {
+			return get( this, "store" ).query( "twitchChannelsFollowed", {
 				offset   : get( this, "offset" ),
 				limit    : get( this, "limit" ),
 				sortby   : params.sortby || "created_at",

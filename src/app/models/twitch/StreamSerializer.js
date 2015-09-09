@@ -10,23 +10,22 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			preview: { deserialize: "records" }
 		},
 
-		normalize: function( type, hash ) {
-			if ( hash.preview && hash.channel ) {
-				hash.preview._id = hash.channel.name;
-			}
-			return this._super.apply( this, arguments );
-		},
-
 		/**
 		 * Use the channel name as stream record ID, so we can .refresh() it.
 		 * The adapter will use the ID for building the URL.
 		 */
-		normalizeId: function( hash ) {
-			if ( !hash.channel ) {
-				return this._super.apply( this, arguments );
+		normalize: function( modelClass, resourceHash, prop ) {
+			var primaryKey        = this.primaryKey;
+			var foreignKeyChannel = this.store.serializerFor( "twitchChannel" ).primaryKey;
+			var foreignKeyImage   = this.store.serializerFor( "twitchImage" ).primaryKey;
+			var name = resourceHash.channel[ foreignKeyChannel ];
+
+			resourceHash[ primaryKey ] = name;
+			if ( resourceHash.preview ) {
+				resourceHash.preview[ foreignKeyImage ] = "stream/preview/%@".fmt( name );
 			}
-			hash.id = hash.channel.name;
-			delete hash._id;
+
+			return this._super( modelClass, resourceHash, prop );
 		}
 	});
 

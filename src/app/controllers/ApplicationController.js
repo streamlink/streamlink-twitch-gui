@@ -7,12 +7,11 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 		auth        : Ember.inject.service(),
 		notification: Ember.inject.service(),
 		settings    : Ember.inject.service(),
-
-		needs: [ "livestreamer" ],
+		livestreamer: Ember.inject.controller(),
 
 		dev: DEBUG,
 
-		streamsLength: readOnly( "controllers.livestreamer.model.length" ),
+		streamsLength: readOnly( "livestreamer.model.length" ),
 
 		notif_enabled: readOnly( "notification.enabled" ),
 		notif_running: readOnly( "notification.running" ),
@@ -32,15 +31,6 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 				)
 				: "You're not logged in";
 		}.property( "loginSuccess", "notif_running", "notif_error" ),
-
-
-		modalHead: "Are you sure you want to quit?",
-		modalBody: function() {
-			var length = get( this, "streamsLength" );
-			return length
-				? "By choosing shutdown, all streams will be closed, too."
-				: "All streams have been closed. Do you want to quit now?";
-		}.property( "streamsLength" ),
 
 
 		actions: {
@@ -81,7 +71,7 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 			},
 
 			"shutdown": function() {
-				get( this, "controllers.livestreamer" ).killAll();
+				get( this, "livestreamer" ).killAll();
 				this.send( "quit" );
 			}
 		}

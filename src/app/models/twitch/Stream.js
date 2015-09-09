@@ -6,10 +6,10 @@ define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
 
 	return DS.Model.extend({
 		average_fps: attr( "number" ),
-		channel: belongsTo( "twitchChannel" ),
+		channel: belongsTo( "twitchChannel", { async: false } ),
 		created_at: attr( "date" ),
 		game: attr( "string" ),
-		preview: belongsTo( "twitchImage" ),
+		preview: belongsTo( "twitchImage", { async: false } ),
 		video_height: attr( "number" ),
 		viewers: attr( "number" ),
 

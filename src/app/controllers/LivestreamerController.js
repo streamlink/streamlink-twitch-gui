@@ -2,7 +2,6 @@ define([
 	"Ember",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
-	"mixins/ChannelMixin",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/which",
 	"utils/fs/stat",
@@ -12,7 +11,6 @@ define([
 	Ember,
 	nwGui,
 	nwWindow,
-	ChannelMixin,
 	ChannelSettingsMixin,
 	which,
 	stat,
@@ -20,42 +18,52 @@ define([
 	semver
 ) {
 
-	var CP   = require( "child_process" ),
-	    PATH = require( "path" );
+	var CP   = require( "child_process" );
+	var PATH = require( "path" );
 
-	var get  = Ember.get,
-	    set  = Ember.set,
-	    setP = Ember.setProperties,
-	    run  = Ember.run;
-
-	var alias = Ember.computed.alias;
+	var get = Ember.get;
+	var set = Ember.set;
+	var run = Ember.run;
+	var merge = Ember.merge;
 
 	var isWin = process.platform === "win32";
 
-	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/,
-	    reUnable    = /^error: Unable to open URL: /,
-	    reNoStreams = /^error: No streams found on this URL: /,
-	    reNoPlayer  = /^error: Failed to start player: /,
-	    reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./,
-	    reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/,
-	    rePlayer    = /^Starting player: \S+/,
-	    reSplit     = /\r?\n/g;
+	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
+	var reUnable    = /^error: Unable to open URL: /;
+	var reNoStreams = /^error: No streams found on this URL: /;
+	var reNoPlayer  = /^error: Failed to start player: /;
+	var reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./;
+	var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
+	var rePlayer    = /^Starting player: \S+/;
 
 
 	function VersionError( version ) { this.version = version; }
-	VersionError.prototype = new Error();
+	VersionError.prototype = merge( new Error(), { name: "VersionError" });
 
 	function NotFoundError() {}
-	NotFoundError.prototype = new Error();
+	NotFoundError.prototype = merge( new Error(), { name: "NotFoundError" });
 
 	function UnableToOpenError() {}
-	UnableToOpenError.prototype = new Error();
+	UnableToOpenError.prototype = merge( new Error(), { name: "UnableToOpenError" });
 
 	function NoStreamsFoundError() {}
-	NoStreamsFoundError.prototype = new Error();
+	NoStreamsFoundError.prototype = merge( new Error(), { name: "NoStreamsFoundError" });
 
 	function NoPlayerError() {}
-	NoPlayerError.prototype = new Error();
+	NoPlayerError.prototype = merge( new Error(), { name: "NoPlayerError" });
+
+
+	// we need a common error parsing function for stdout and stderr, because
+	// livestreamer is weird sometimes and prints error messages to stdout instead... :(
+	function parseError( data ) {
+		if ( reUnable.test( data ) ) {
+			return new UnableToOpenError();
+		} else if ( reNoStreams.test( data ) ) {
+			return new NoStreamsFoundError();
+		} else if ( reNoPlayer.test( data ) || reNoPlayer2.test( data ) ) {
+			return new NoPlayerError();
+		}
+	}
 
 
 	function setIfNotNull( objA, objB, key ) {
@@ -66,32 +74,25 @@ define([
 	}
 
 
-	return Ember.Controller.extend( ChannelMixin, ChannelSettingsMixin, {
+	return Ember.Controller.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
 		settings: Ember.inject.service(),
+		chat    : Ember.inject.service(),
 
-		config: alias( "metadata.config" ),
-
-		modalBtns: null,
-
+		error : null,
 		active: null,
 		model : function() {
 			var store = get( this, "store" );
-			return store.all( "livestreamer" );
+			return store.peekAll( "livestreamer" );
 		}.property(),
 
 
 		startStream: function( stream ) {
-			this.send( "openModal", {
-				view    : "livestreamerModal",
-				template: "livestreamerModal"
-			}, this, {
-				modalHead: "Preparing",
-				modalBody: "Please wait...",
-				modalBtns: null
+			this.send( "openModal", "livestreamerModal", this, {
+				error : null,
+				active: null
 			});
-
 
 			var store   = get( this, "store" );
 			var channel = get( stream, "channel" );
@@ -99,12 +100,7 @@ define([
 
 			// is the stream already running?
 			if ( store.hasRecordForId( "livestreamer", id ) ) {
-				set( this, "active", store.recordForId( "livestreamer", id ) );
-				return setP( this, {
-					modalHead: "You're watching %@".fmt( get( channel, "display_name" ) ),
-					modalBody: get( channel, "status" ),
-					modalBtns: "running"
-				});
+				return set( this, "active", store.recordForId( "livestreamer", id ) );
 			}
 
 			// create a new livestreamer object
@@ -116,8 +112,6 @@ define([
 				gui_openchat: get( this, "settings.gui_openchat" ),
 				started     : new Date()
 			});
-			// modal belongs to this stream now
-			set( this, "active", livestreamer );
 
 			this.loadChannelSettings( id )
 				// override channel specific settings
@@ -128,18 +122,7 @@ define([
 				// validate configuration and get the exec command
 				.then( this.checkLivestreamer.bind( this ) )
 				// launch the stream
-				.then(function( exec ) {
-					setP( this, {
-						modalHead: "Launching stream",
-						modalBody: "Waiting for Livestreamer to launch the stream..."
-					});
-					return this.launchLivestreamer( exec, livestreamer );
-				}.bind( this ) )
-				// independently check whether the user is following / subscribing the channel
-				.then(function() {
-					this.checkUserSubscribesChannel( channel );
-					this.checkUserFollowsChannel( channel );
-				}.bind( this ) )
+				.then( this.launchLivestreamer.bind( this, livestreamer ) )
 				// setup stream refresh interval
 				.then( this.refreshStream.bind( this, livestreamer ) )
 				// success/failure
@@ -150,11 +133,6 @@ define([
 		},
 
 		streamSuccess: function( livestreamer, guiActions ) {
-			setP( this, {
-				modalHead: "Watching now: %@".fmt( get( livestreamer, "channel.display_name" ) ),
-				modalBody: get( livestreamer, "channel.status" ),
-				modalBtns: "running"
-			});
 			set( livestreamer, "success", true );
 
 			if ( !guiActions ) { return; }
@@ -173,50 +151,12 @@ define([
 			this.minimize( false );
 		},
 
-		streamFailure: function( livestreamer, err ) {
+		streamFailure: function( livestreamer, error ) {
+			set( livestreamer, "error", true );
+			set( this, "error", error );
+
 			if ( !get( livestreamer, "isDeleted" ) ) {
 				livestreamer.destroyRecord();
-			}
-
-			if ( err instanceof VersionError ) {
-				setP( this, {
-					modalHead: "Error: Invalid Livestreamer version",
-					modalBody: "Your version v%@ doesn't match the min. requirements (v%@)"
-						.fmt( err.version, get( this, "versionMin" ) ),
-					modalBtns: "download"
-				});
-			} else if ( err instanceof NotFoundError ) {
-				setP( this, {
-					modalHead: "Error: Livestreamer was not found",
-					modalBody: "Please check settings and/or (re)install Livestreamer.",
-					modalBtns: "download"
-				});
-			} else if ( err instanceof UnableToOpenError ) {
-				setP( this, {
-					modalHead: "Error: Unable to open stream",
-					modalBody: "Livestreamer was unable to open the stream.",
-					modalBtns: null
-				});
-			} else if ( err instanceof NoStreamsFoundError ) {
-				setP( this, {
-					modalHead: "Error: No streams found",
-					modalBody: "Livestreamer was unable to find the stream.",
-					modalBtns: null
-				});
-			} else if ( err instanceof NoPlayerError ) {
-				setP( this, {
-					modalHead: "Error: Invalid player",
-					modalBody: "Please check your player configuration.",
-					modalBtns: null
-				});
-			} else {
-				setP( this, {
-					modalHead: "Error: Couldn't launch the stream",
-					modalBody: err
-						? err.message || err.toString()
-						: "Internal error",
-					modalBtns: null
-				});
 			}
 		},
 
@@ -227,8 +167,8 @@ define([
 		 */
 		checkLivestreamer: function() {
 			var path = get( this, "settings.livestreamer" );
-			var exec = get( this, "config.livestreamer-exec" );
-			var fb   = get( this, "config.livestreamer-fallback-paths-unix" );
+			var exec = get( this, "metadata.config.livestreamer-exec" );
+			var fb   = get( this, "metadata.config.livestreamer-fallback-paths-unix" );
 
 			// use the default command if the user did not define one
 			path = path ? String( path ) : exec;
@@ -239,7 +179,8 @@ define([
 			}
 
 			function execCheck( stat ) {
-				return isWin || ( stat.mode & 0111 ) > 0;
+				// octal: 0111
+				return isWin || ( stat.mode & 73 ) > 0;
 			}
 
 			// check for the executable
@@ -271,8 +212,8 @@ define([
 		 * @returns {Promise}
 		 */
 		validateLivestreamer: function( exec ) {
-			var minimum = get( this, "config.livestreamer-version-min" );
-			var time    = get( this, "config.livestreamer-validation-timeout" );
+			var minimum = get( this, "metadata.config.livestreamer-version-min" );
+			var time    = get( this, "metadata.config.livestreamer-validation-timeout" );
 			var spawn;
 
 			function kill() {
@@ -334,18 +275,23 @@ define([
 		 * Launch the stream
 		 * @returns {Promise}
 		 */
-		launchLivestreamer: function( exec, livestreamer ) {
+		launchLivestreamer: function( livestreamer, exec ) {
 			// in case the shutdown button was pressed before
 			if ( get( livestreamer, "shutdown" ) ) {
 				return Promise.reject();
 			}
 
+			set( livestreamer, "success", false );
+			set( this, "active", livestreamer );
+
 			var defer     = Promise.defer();
 
 			var channel   = get( livestreamer, "channel.id" );
 			var quality   = get( livestreamer, "quality" );
-			var streamURL = get( this, "config.twitch-stream-url" );
+			var streamURL = get( this, "metadata.config.twitch-stream-url" );
 			var qualities = get( this, "settings.content.constructor.qualities" );
+
+			var log       = set( livestreamer, "log", [] );
 
 			// get the livestreamer parameter list
 			var params    = get( livestreamer, "parameters" );
@@ -356,7 +302,6 @@ define([
 			// spawn the livestreamer process
 			var spawn = CP.spawn( exec, params, { detached: true } );
 
-			set( livestreamer, "success", false );
 			set( livestreamer, "spawn", spawn );
 
 			spawn.on( "error", defer.reject );
@@ -365,16 +310,16 @@ define([
 				set( livestreamer, "spawn", null );
 				spawn = null;
 
-				// quality was changed
+				// quality has been changed
 				if ( quality !== get( livestreamer, "quality" ) ) {
 					run.next( this, function() {
-						this.launchLivestreamer( exec, livestreamer ).then(
+						this.launchLivestreamer( livestreamer, exec ).then(
 							this.streamSuccess.bind( this, livestreamer, false ),
 							this.streamFailure.bind( this, livestreamer )
 						);
 					});
 
-				// stream was shut down regularly
+				// stream has been shut down regularly
 				} else {
 					set( livestreamer, "shutdown", true );
 
@@ -396,43 +341,31 @@ define([
 				}
 			}.bind( this ) );
 
-			// we need a common error parsing function for stdout and stderr, because
-			// livestreamer is weird sometimes and prints error messages to stdout instead... :(
-			function parseError( data ) {
-				if ( reUnable.test( data ) ) {
-					return new UnableToOpenError();
-				} else if ( reNoStreams.test( data ) ) {
-					return new NoStreamsFoundError();
-				} else if ( reNoPlayer.test( data ) || reNoPlayer2.test( data ) ) {
-					return new NoPlayerError();
-				}
+			function pushLog( type, line ) {
+				log.pushObject({
+					type: type,
+					line: line
+				});
 			}
 
 			// reject promise on any error output
-			function stderrCallback( data ) {
-				data = data.trim();
-				set( livestreamer, "error", true );
-				defer.reject( parseError( data ) || new Error( data ) );
+			function stdErrCallback( data ) {
+				pushLog( "stdErr", data );
+				var error = parseError( data );
+				defer.reject( error || new Error( data ) );
 			}
 
 			// fulfill promise as soon as livestreamer is launching the player
 			// also print all stdout messages
-			function stdoutCallback( data ) {
-				data = data.trim();
+			function stdOutCallback( data ) {
 				var error = parseError( data );
 				if ( error ) {
-					set( livestreamer, "error", true );
+					pushLog( "stdErr", data );
 					return defer.reject( error );
 				}
 
 				data = data.replace( reReplace, "" );
-				if (
-					    get( this, "active" ) === livestreamer
-					&& !get( livestreamer, "success" )
-					&& !get( livestreamer, "error" )
-				) {
-					set( this, "modalBody", data );
-				}
+				pushLog( "stdOut", data );
 
 				if ( rePlayer.test( data ) ) {
 					/*
@@ -450,13 +383,8 @@ define([
 				}
 			}
 
-			spawn.stderr.on( "data", function( data ) {
-				String( data ).trim().split( reSplit ).forEach( stderrCallback );
-			});
-
-			spawn.stdout.on( "data", function( data ) {
-				String( data ).trim().split( reSplit ).forEach( stdoutCallback.bind( this ) );
-			}.bind( this ) );
+			spawn.stdout.on( "data", new StreamOutputBuffer( stdOutCallback ) );
+			spawn.stderr.on( "data", new StreamOutputBuffer( stdErrCallback ) );
 
 			return defer.promise;
 		},
@@ -487,7 +415,7 @@ define([
 		},
 
 		refreshStream: function( livestreamer ) {
-			var interval = get( this, "config.stream-reload-interval" ) || 60000;
+			var interval = get( this, "metadata.config.stream-reload-interval" ) || 60000;
 
 			if ( get( livestreamer, "shutdown" ) ) { return; }
 
@@ -509,10 +437,16 @@ define([
 
 		actions: {
 			"download": function( callback ) {
-				this.send( "openBrowser", get( this, "config.livestreamer-download-url" ) );
+				var url = get( this, "metadata.config.livestreamer-download-url" );
+				this.send( "openBrowser", url );
 				if ( callback instanceof Function ) {
 					callback();
 				}
+			},
+
+			"chat": function( channel ) {
+				var chat = get( this, "chat" );
+				chat.open( channel );
 			},
 
 			"close": function() {
@@ -523,14 +457,20 @@ define([
 			},
 
 			"shutdown": function() {
-				var active = get( this, "active" ),
-				    spawn;
+				var active = get( this, "active" );
 				if ( active ) {
 					set( active, "shutdown", true );
-					spawn = get( active, "spawn" );
+					var spawn = get( active, "spawn" );
 					if ( spawn ) { spawn.kill(); }
 				}
 				this.send( "close" );
+			},
+
+			"toggleLog": function() {
+				var active = get( this, "active" );
+				if ( active ) {
+					active.toggleProperty( "showLog" );
+				}
 			}
 		}
 	});

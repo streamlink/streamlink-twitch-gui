@@ -1,6 +1,7 @@
+<main class="content content-channel {{if isAnimated 'animated'}}">
 <header>
 <div class="logo">
-<img class="previewImage" title="{{channel.display_name}}" src="{{channel.logo}}">
+{{preview-image src=channel.logo title=channel.display_name}}
 </div>
 <div>
 <div class="title">
@@ -9,7 +10,7 @@
 <span>{{channel.display_name}}</span>
 </h3>
 <div class="settingsicon {{if isSubrouteSettings 'opened'}}">
-{{form-button action="toggleSettings" targetObject=view icon="fa-wrench"}}
+{{form-button action="toggleSettings" icon="fa-wrench"}}
 </div>
 </div>
 {{#if stream}}
@@ -25,3 +26,4 @@
 </div>
 </header>
 {{outlet}}
+</main>

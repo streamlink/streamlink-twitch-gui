@@ -1,2 +1,12 @@
-{{#form-button action="releaseDownload" class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
-{{#form-button action="releaseIgnore"   class="btn-danger"  icon="fa-times"                 }}Ignore{{/form-button}}
+{{#modal-dialog}}
+	{{#modal-header}}
+		You're using an outdated version: {{versionOutdated}}
+	{{/modal-header}}
+	{{#modal-body}}
+		Do you want to download the latest release now? ({{versionLatest}})
+	{{/modal-body}}
+	{{#modal-footer}}
+		{{#form-button action="releaseDownload" class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
+		{{#form-button action="releaseIgnore"   class="btn-danger"  icon="fa-times"                 }}Ignore{{/form-button}}
+	{{/modal-footer}}
+{{/modal-dialog}}

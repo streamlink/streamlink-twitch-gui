@@ -1,22 +1,83 @@
-{{#if (is-null modalBtns)}}
-{{#form-button action="shutdown" class="btn-danger"  icon="fa-times"}}Close{{/form-button}}
-{{else if (is-equal modalBtns "download")}}
-{{#form-button action="close"    class="btn-danger"  icon="fa-times"                 }}Close{{/form-button}}
-{{#form-button action="download" class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
-{{else if (is-equal modalBtns "running")}}
-<div>
-{{form-button action="close"    class="btn-primary" icon="fa-arrow-left" title="Continue"}}
-{{form-button action="shutdown" class="btn-danger"  icon="fa-times"      title="Close stream"}}
-</div>
-<div>
-{{form-button action="chat"  actionParam=active.channel class="btn-hint" icon="fa-comments"  iconanim=true title="Open chat"}}
-{{form-button action="share" actionParam=active.channel class="btn-info" icon="fa-share-alt" iconanim=true title="Copy stream url to clipboard"}}
-{{#if active.channel.partner}}
-{{form-button action="subscribe" actionParam=active.channel class=view.subscrClass icon="fa-credit-card" iconanim=true title="Subscribe to channel"}}
-{{/if}}
-{{#if auth.session.isLoggedIn}}
-{{form-button action=view.followAction actionParam=active.channel class=view.followClass icon=view.followIcon iconanim=true title=view.followTitle}}
-{{/if}}
-</div>
-{{view "select" value=active.quality content=settings.content.constructor.qualities class="modalqualityselect" optionValuePath="content.id" optionLabelPath="content.label"}}
-{{/if}}
+{{#modal-dialog class="modal-livestreamer"}}
+	{{#unless error}}
+		{{#unless active}}
+			{{#modal-header}}Preparing{{/modal-header}}
+			{{#modal-body}}Please wait...{{/modal-body}}
+			{{#modal-footer}}
+				{{#form-button action="shutdown" class="btn-danger" icon="fa-times"}}Close{{/form-button}}
+			{{/modal-footer}}
+		{{else}}
+			{{#unless active.success}}
+				{{#modal-header}}
+					Launching: {{active.channel.display_name}}
+				{{/modal-header}}
+				{{#modal-body class="launching"}}Waiting for Livestreamer to launch the stream...{{/modal-body}}
+				{{modal-log log=active.log}}
+			{{else}}
+				{{#modal-header}}
+					Watching: {{active.channel.display_name}}
+				{{/modal-header}}
+				{{#modal-body}}
+					{{#if active.stream.game}}<div class="game"><i class="fa fa-gamepad"></i> {{active.stream.game}}</div>{{/if}}
+					{{stats-row stream=active.stream withFlag=false}}
+					{{#unless active.showLog}}
+						{{embedded-links tagName="section" class="content" text=active.channel.status}}
+					{{else}}
+						{{modal-log log=active.log}}
+					{{/unless}}
+				{{/modal-body}}
+			{{/unless}}
+			{{#modal-footer}}
+				<div>
+					{{form-button action="close"    class="btn-primary" icon="fa-arrow-left" title="Continue"}}
+					{{form-button action="shutdown" class="btn-danger"  icon="fa-times"      title="Close stream"}}
+					{{#if active.success}}
+						{{form-button action="toggleLog" class="btn-info" icon="fa-ellipsis-v" title=(if active.showLog "Hide livestreamer log output" "Show livestreamer log output")}}
+					{{/if}}
+				</div>
+				<div>
+					{{open-chat channel=active.channel}}
+					{{share-channel channel=active.channel}}
+					{{subscribe-channel channel=active.channel}}
+					{{follow-channel channel=active.channel}}
+				</div>
+				{{drop-down value=active.quality content=settings.content.constructor.qualities class="modalqualityselect"}}
+			{{/modal-footer}}
+		{{/unless}}
+	{{else}}
+		{{#if (is-equal error.name "NotFoundError")}}
+			{{#modal-header}}Error: Livestreamer could not be found{{/modal-header}}
+			{{#modal-body class="error"}}Please check your settings and/or (re)install Livestreamer.{{/modal-body}}
+		{{else if (is-equal error.name "VersionError")}}
+			{{#modal-header}}Error: Invalid Livestreamer version{{/modal-header}}
+			{{#modal-body class="error"}}
+				Your version v{{versionCurrent}} doesn't match the min. requirements (v{{versionMin}}).
+			{{/modal-body}}
+		{{else if (is-equal error.name "UnableToOpenError")}}
+			{{#modal-header}}Error: Unable to open stream{{/modal-header}}
+			{{#modal-body class="error"}}Livestreamer was unable to open the stream.{{/modal-body}}
+		{{else if (is-equal error.name "NoStreamsFoundError")}}
+			{{#modal-header}}Error: No streams found{{/modal-header}}
+			{{#modal-body class="error"}}Livestreamer was unable to find the stream.{{/modal-body}}
+		{{else if (is-equal error.name "NoPlayerError")}}
+			{{#modal-header}}Error: Invalid player{{/modal-header}}
+			{{#modal-body class="error"}}Please check your player configuration.{{/modal-body}}
+		{{else}}
+			{{#modal-header}}Error: Couldn't launch the stream{{/modal-header}}
+			{{#modal-body class="error"}}
+				{{#if error.message}}
+					{{error.message}}
+				{{else}}
+					Internal error
+				{{/if}}
+			{{/modal-body}}
+		{{/if}}
+		{{modal-log log=active.log}}
+		{{#modal-footer}}
+			{{#form-button action="close" class="btn-danger" icon="fa-times"}}Close{{/form-button}}
+			{{#if (bool-or (is-equal error.name "NotFoundError") (is-equal error.name "VersionError"))}}
+				{{#form-button action="download" class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
+			{{/if}}
+		{{/modal-footer}}
+	{{/unless}}
+{{/modal-dialog}}

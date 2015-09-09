@@ -4,7 +4,7 @@
 {{#if channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
 </header>
 <section class="preview" {{action "startStream"}} title="{{channel.status}}">
-<img class="previewImage" src="{{content.preview.medium_nocache}}">
+{{preview-image src=content.preview.medium_nocache}}
 {{#if _showGame}}
 <footer><i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}</footer>
 {{/if}}

@@ -9,19 +9,21 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			channel: { deserialize: "records" }
 		},
 
-		normalizePayload: function( payload ) {
-			return {
-				channels: ( payload.channels || [] ).map(function( hash ) {
-					return { channel: hash };
-				})
-			};
+		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+			payload.channels = ( payload.channels || [] ).map(function( hash ) {
+				return {
+					channel: hash
+				};
+			});
+
+			return this._super( store, primaryModelClass, payload, id, requestType );
 		},
 
-		normalizeHash: {
-			channels: function( hash ) {
-				hash.id = hash.channel.name;
-				return hash;
-			}
+		normalize: function( modelClass, resourceHash, prop ) {
+			var foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
+			resourceHash[ this.primaryKey ] = resourceHash.channel[ foreignKey ];
+
+			return this._super( modelClass, resourceHash, prop );
 		}
 	});
 

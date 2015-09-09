@@ -19,6 +19,7 @@ define( [ "Ember" ], function( Ember ) {
 				if ( win ) {
 					win.close();
 				}
+				this.controller.resetProperties();
 			}
 		}
 	});

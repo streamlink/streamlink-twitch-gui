@@ -1,6 +1,6 @@
 define([
 	"initializers/localstorage",
 	"initializers/nwjs",
-	"initializers/window",
-	"initializers/ember"
+	"initializers/store",
+	"initializers/window"
 ], function() {} );

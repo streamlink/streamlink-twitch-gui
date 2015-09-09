@@ -22,7 +22,7 @@ define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 			var getReleases = this.getReleases.bind( this );
 
 			// load Versioncheck record
-			this.store.find( "versioncheck", 1 ).then(function( record ) {
+			get( this, "store" ).findRecord( "versioncheck", 1 ).then(function( record ) {
 				if ( Ember.getWithDefault( record, "checkagain", 0 ) <= +new Date() ) {
 					// let's check for a new release
 					getReleases();
@@ -31,7 +31,7 @@ define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 		}.on( "init" ),
 
 		getReleases: function() {
-			this.store.find( "githubReleases" )
+			get( this, "store" ).findAll( "githubReleases", { reload: true } )
 				.then(function( releases ) {
 					// filter records first
 					return releases.toArray().filter(function( release ) {
@@ -61,13 +61,9 @@ define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 
 			// ask the user what to do
 			this.send( "openModal", "versioncheckModal", this, {
-				modalHead: "You're using an outdated version: %@".fmt(
-					getVers( current )
-				),
-				modalBody: "Do you want to download the latest release now? (%@)".fmt(
-					getVers( latest )
-				),
-				downloadURL: get( latest, "html_url" )
+				versionOutdated: getVers( current ),
+				versionLatest  : getVers( latest ),
+				downloadURL    : get( latest, "html_url" )
 			});
 		},
 
@@ -81,8 +77,8 @@ define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 			},
 
 			"releaseIgnore": function( callback ) {
-				var store  = this.store;
-				var record = store.getById( "versioncheck", 1 );
+				var store  = get( this, "store" );
+				var record = store.peekRecord( "versioncheck", 1 );
 				if ( record ) {
 					store.unloadRecord( record );
 				}

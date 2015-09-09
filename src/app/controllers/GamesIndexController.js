@@ -1,5 +1,5 @@
 define( [ "Ember" ], function( Ember ) {
 
-	return Ember.ArrayController.extend();
+	return Ember.Controller.extend();
 
 });

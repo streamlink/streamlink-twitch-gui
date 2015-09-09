@@ -144,9 +144,9 @@ define([
 
 		initialize: function( application ) {
 			var container = application.container;
-			var store = container.lookup( "store:main" );
+			var store = container.lookup( "service:store" );
 
-			store.find( "window" )
+			store.findAll( "window" )
 				.then(function( records ) {
 					return records.content.length
 						? records.objectAt( 0 )

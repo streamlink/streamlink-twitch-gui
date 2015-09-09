@@ -5,12 +5,16 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			return "twitchUserSubscription";
 		},
 
-		normalizePayload: function( payload ) {
-			payload._id = payload.channel.name;
+		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+			var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
+			payload[ this.primaryKey ] = payload.channel[ foreignKey ];
 			payload.channel = null;
-			return {
+
+			payload = {
 				twitchUserSubscription: payload
 			};
+
+			return this._super( store, primaryModelClass, payload, id, requestType );
 		}
 	});
 

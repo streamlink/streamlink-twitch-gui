@@ -1,9 +1,0 @@
-<div>
-<header>{{view.head}}</header>
-{{#if view.showStats}}
-{{#if view.stream.game}}<div class="game"><i class="fa fa-gamepad"></i> {{view.stream.game}}</div>{{/if}}
-{{stats-row stream=view.stream withFlag=false}}
-{{/if}}
-{{embedded-links tagName="section" class="content" text=view.body}}
-<footer>{{yield}}</footer>
-</div>

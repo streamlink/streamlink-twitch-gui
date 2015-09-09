@@ -11,19 +11,31 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			channel: { deserialize: "records" }
 		},
 
-		normalizePayload: function( payload ) {
-			// expected payload
-			if ( payload.follows ) { return payload; }
-			// unexpected payload: normalize it! also don't forget to set a proper ID
-			if ( !payload.id ) { payload.id = payload.channel.name; }
-			return { follows: payload };
+		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+			// unexpected payload
+			if ( !payload.follows ) {
+				var primaryKey = this.primaryKey;
+				if ( !payload[ primaryKey ] ) {
+					var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
+					payload[ primaryKey ] = payload.channel[ foreignKey ];
+				}
+
+				payload = {
+					follows: payload
+				};
+			}
+
+			return this._super( store, primaryModelClass, payload, id, requestType );
 		},
 
-		normalizeHash: {
-			follows: function( hash ) {
-				if ( !hash.id ) { hash.id = hash.channel.name; }
-				return hash;
+		normalize: function( modelClass, resourceHash, prop ) {
+			var primaryKey = this.primaryKey;
+			if ( !resourceHash[ primaryKey ] ) {
+				var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
+				resourceHash[ primaryKey ] = resourceHash.channel[ foreignKey ];
 			}
+
+			return this._super( modelClass, resourceHash, prop );
 		}
 	});
 

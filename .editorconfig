@@ -18,7 +18,7 @@ trim_trailing_whitespace = true
 
 # markup files
 [**.{html,hbs}]
-indent_size = 0
+indent_size = 4
 insert_final_newline = false
 
 # markdown files

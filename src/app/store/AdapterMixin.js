@@ -1,8 +1,9 @@
-define( [ "Ember" ], function( Ember ) {
+define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 	var get   = Ember.get;
 	var push  = [].push;
 	var reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
+	var AdapterError = DS.AdapterError;
 
 
 	/**
@@ -10,8 +11,8 @@ define( [ "Ember" ], function( Ember ) {
 	 * instead of using type.modelName as name
 	 */
 	return Ember.Mixin.create( Ember.Evented, {
-		find: function( store, type, id, snapshot ) {
-			var url = this.buildURL( type, id, snapshot, "find" );
+		findRecord: function( store, type, id, snapshot ) {
+			var url = this.buildURL( type, id, snapshot, "findRecord" );
 			return this.ajax( url, "GET" );
 		},
 
@@ -21,8 +22,8 @@ define( [ "Ember" ], function( Ember ) {
 			return this.ajax( url, "GET", { data: query } );
 		},
 
-		findQuery: function( store, type, query ) {
-			var url = this.buildURL( type, query, null, "findQuery" );
+		query: function( store, type, query ) {
+			var url = this.buildURL( type, query, null, "query" );
 			query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
 			return this.ajax( url, "GET", { data: query } );
 		},
@@ -115,22 +116,17 @@ define( [ "Ember" ], function( Ember ) {
 		},
 
 
-		ajax: function( url, type, options ) {
+		ajax: function( url ) {
 			var adapter = this;
-
-			return new Promise(function( resolve, reject ) {
-				var hash = adapter.ajaxOptions( url, type, options );
-
-				hash.success = function( json ) {
-					Ember.run( null, resolve, json );
-				};
-
-				hash.error = function( jqXHR ) {
-					Ember.run( null, reject, adapter.ajaxError( jqXHR, url ) );
-				};
-
-				Ember.$.ajax( hash );
-			});
+			return this._super.apply( this, arguments )
+				.catch(function( err ) {
+					if ( err instanceof AdapterError ) {
+						var _url = reURL.exec( url );
+						err.host = _url && _url[1] || get( adapter, "host" );
+						err.path = _url && _url[2] || get( adapter, "namespace" );
+					}
+					return Promise.reject( err );
+				});
 		},
 
 		ajaxOptions: function() {
@@ -141,15 +137,26 @@ define( [ "Ember" ], function( Ember ) {
 			return hash;
 		},
 
-		ajaxError: function( jqXHR, url ) {
-			jqXHR = this._super.apply( this, arguments );
+		isSuccess: function( status, headers, payload ) {
+			return this._super.apply( this, arguments )
+			    && ( payload ? !payload.error : true );
+		},
 
-			url = reURL.exec( url );
-			jqXHR.host = url && url[1] || get( this, "host" );
-			jqXHR.path = url && url[2] || get( this, "namespace" );
+		handleResponse: function( status, headers, payload ) {
+			if ( this.isSuccess( status, headers, payload ) ) {
+				return payload;
+			} else if ( this.isInvalid( status, headers, payload ) ) {
+				return new DS.InvalidError( payload && payload.errors || [] );
+			}
 
-			return new Ember.XHRError( jqXHR );
+			return new AdapterError([{
+				name   : "HTTP Error",
+				message: payload && payload.error || "Failed to load resource",
+				detail : payload && payload.message,
+				status : status
+			}]);
 		}
+
 	});
 
 });

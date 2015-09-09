@@ -1,3 +1,4 @@
+<main class="content content-settings">
 <h2>Settings</h2>
 <fieldset>
 <legend>Advanced</legend>
@@ -7,14 +8,14 @@
 <fieldset>
 <legend>Streams</legend>
 <div><i class="fa fa-eye"></i> Preferred quality<span>Choose the default stream quality.</span></div>
-<div>{{view "select" value=model.quality content=settings.content.constructor.qualities optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div>{{drop-down value=model.quality content=settings.content.constructor.qualities}}</div>
 <div><i class="fa fa-info-circle"></i> Stream popup<span>When a stream has started.</span></div>
 <div>{{#check-box checked=model.gui_hidestreampopup}}Hide the popup on success{{/check-box}}</div>
 </fieldset>
 <fieldset>
 <legend>Chat</legend>
 <div><i class="fa fa-twitch"></i> Chat method<span>Explicitly choose a browser to be able to use minimal chat windows.</span></div>
-<div>{{view "select" class="chat-method" value=model.chat_method content=chatMethods optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div>{{drop-down value=model.chat_method content=chatMethods class="chat-method"}}</div>
 {{#unless (bool-or isChatMethodDefault isChatMethodMSIE)}}
 <div><i class="fa fa-cog"></i> Executable location<span>
 {{#if isChatMethodCustom}}
@@ -36,7 +37,7 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div><i class="fa fa-code"></i> Custom parameters<span>Set additional custom livestreamer parameters.</span></div>
 <div>{{input type="text" value=model.livestreamer_params classNames="col-xs-12" placeholder="Add custom livestreamer parameters"}}</div>
 <div><i class="fa fa-filter"></i> Stream type<span>Make sure your player does support the selected stream type.{{livestreamer-docs cmd="--player-passthrough"}}</span></div>
-<div>{{view "select" value=model.player_passthrough content=settings.content.constructor.passthrough optionValuePath="content.value" optionLabelPath="content.label"}}</div>
+<div>{{drop-down value=model.player_passthrough content=settings.content.constructor.passthrough optionValuePath="value"}}</div>
 {{#if (is-equal model.player_passthrough "http")}}
 <div><i class="fa fa-refresh"></i> Reconnect<span>In case the connection has dropped.{{livestreamer-docs cmd="--player-continuous-http"}}</span></div>
 <div>{{#check-box checked=model.player_reconnect}}Reconnect to stream{{/check-box}}</div>
@@ -50,12 +51,12 @@ Choose a custom executable file of your selected browser. If left blank, default
 {{/if}}
 </fieldset>
 <fieldset>
-<legend>Videoplayer{{#if model.advanced}}{{form-button action="togglePlayerCmdSubstitutions" targetObject=view icon=view.playerCmdSubstitutionsIcon class="btn-subst btn-neutral"}}{{/if}}</legend>
-{{#if (bool-and model.advanced view.playerCmdSubstitutionsVisible)}}
+<legend>Videoplayer{{#if model.advanced}}{{form-button action="togglePlayerCmdSubstitutions" class="btn-subst btn-neutral" icon=(if playerCmdSubstitutionsVisible "fa-chevron-up" "fa-chevron-down")}}{{/if}}</legend>
+{{#if (bool-and model.advanced playerCmdSubstitutionsVisible)}}
 <div class="substitutions"><i class="fa fa-terminal"></i> Command line variables<span>These variables may be used in the <em>--player</em> and <em>--player-args</em> parameters, eg. if you intend to change the player title to the channel name. Please make sure that you put all variables in quotation marks.<br>Example:<br><span class="docs">/usr/bin/mpv --title &quot;{name} - {game}&quot;</span></span></div>
 <div class="substitutions">
 <dl class="dl-horizontal">
-{{#each view.playerCmdSubstitutions as |substitution|}}
+{{#each playerCmdSubstitutions as |substitution|}}
 <dt title="{{substitution.tooltip}}">{{substitution.variable}}</dt>
 <dd>{{substitution.description}}</dd>
 {{/each}}
@@ -95,7 +96,7 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div><i class="fa fa-language"></i> Languages<span>Broadcaster languages.</span></div>
 <div>
 <ul class="list-unstyled filter-lang">
-{{#each language in languages}}
+{{#each languages as |language|}}
 {{lang-filter obj=model.gui_langfilter prop=language.id name=language.lang}}
 {{/each}}
 </ul>
@@ -107,15 +108,15 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div>{{#check-box checked=model.notify_enabled}}Enable desktop notifications{{/check-box}}</div>
 {{#if model.notify_enabled}}
 <div><i class="fa fa-eyedropper"></i> Channel filter<span>Notifications can be turned on/off individually in a channel's settings menu.</span></div>
-{{radio-buttons buttonName="notify_all" boxes=false buttonView=view.RadioBoxesView value=model.notify_all content=settings.content.constructor.notify_all}}
+{{radio-buttons buttonName="notify_all" boxes=false wrap=true value=model.notify_all content=settings.content.constructor.notify_all}}
 <div><i class="fa fa-folder-open-o"></i> Grouping<span>Merge multiple notifications.</span></div>
 <div>{{#check-box checked=model.notify_grouping}}Only show one notification at a time{{/check-box}}</div>
 {{#if hasNotificationClickSupport}}
 <div><i class="fa fa-crosshairs"></i> Notification click<span>Preferred click action.</span></div>
-<div>{{view "select" class="notifications" value=model.notify_click content=settings.content.constructor.notify_click optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div>{{drop-down value=model.notify_click content=settings.content.constructor.notify_click class="notifications"}}</div>
 {{#if (bool-and model.notify_grouping model.notify_click)}}
 <div><i class="fa fa-crosshairs"></i> Group click<span>Preferred group click action.</span></div>
-<div>{{view "select" class="notifications" value=model.notify_click_group content=settings.content.constructor.notify_click_group optionValuePath="content.id" optionLabelPath="content.label"}}</div>
+<div>{{drop-down value=model.notify_click_group content=settings.content.constructor.notify_click_group class="notifications"}}</div>
 {{/if}}
 {{/if}}
 {{/if}}
@@ -126,3 +127,4 @@ Choose a custom executable file of your selected browser. If left blank, default
 {{#form-button action="discard" class="btn-danger"  icon="fa-trash-o" iconanim=true}}Discard{{/form-button}}
 </div>
 </fieldset>
+</main>

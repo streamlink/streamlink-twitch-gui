@@ -5,7 +5,7 @@ define([
 ], function( Ember, ListItemComponent, template ) {
 
 	var get = Ember.get;
-	var any = Ember.computed.any;
+	var or = Ember.computed.or;
 
 	return ListItemComponent.extend({
 		layout: Ember.HTMLBars.compile( template ),
@@ -13,8 +13,8 @@ define([
 
 		action: "goto",
 
-		game: any( "content.game", "content" ),
-		hasStats: any( "content.channels", "content.viewers" ),
+		game: or( "content.game", "content" ),
+		hasStats: or( "content.channels", "content.viewers" ),
 
 		click: function() {
 			this.sendAction( "action", "games.game", get( this, "game.name" ) );

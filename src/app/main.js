@@ -6,7 +6,7 @@ if ( DEBUG ) {
 	window.initialized = false;
 
 	// don't show the node-webkit exception page during debug mode
-	process.on( "uncaughtException", function() {
+	global.process.on( "uncaughtException", function() {
 		if ( window.initialized ) { return; }
 		try {
 			// show the application window and the dev tools on any error
@@ -27,7 +27,6 @@ define(function( require ) {
 		// load dependencies
 		require([
 			"Ember",
-			"EmberHtmlbars",
 			"EmberData",
 			"EmberDataLS"
 		], function() {

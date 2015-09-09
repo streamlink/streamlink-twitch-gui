@@ -1,22 +1,16 @@
-define([
-	"Ember",
-	"mixins/ChannelMixin"
-], function( Ember, ChannelMixin ) {
+define( [ "Ember" ], function( Ember ) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
+	var or = Ember.computed.or;
 
-	return Ember.Controller.extend( ChannelMixin, {
+	return Ember.Controller.extend({
 		metadata: Ember.inject.service(),
 
 		stream : alias( "model.stream" ),
 		channel: alias( "model.channel" ),
 
-		_loadSubscriptionAndFollowingData: function() {
-			var channel = get( this, "channel" );
-			this.checkUserSubscribesChannel( channel );
-			this.checkUserFollowsChannel( channel );
-		}.observes( "channel" ),
+		previewImage: or( "stream.preview.large_nocache", "channel.video_banner" ),
 
 		age: function() {
 			var createdAt = get( this, "channel.created_at" );

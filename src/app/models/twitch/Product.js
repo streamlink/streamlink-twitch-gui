@@ -5,7 +5,7 @@ define( [ "EmberData" ], function( DS ) {
 	var hasMany = DS.hasMany;
 
 	return DS.Model.extend({
-		emoticons: hasMany( "twitchProductEmoticon" ),
+		emoticons: hasMany( "twitchProductEmoticon", { async: false } ),
 		features: attr(),
 		interval_number: attr( "number" ),
 		owner_name: attr( "string" ),

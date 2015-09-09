@@ -1,6 +1,7 @@
 define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 	var readOnly = Ember.computed.readOnly;
 
 	return Ember.Controller.extend({
@@ -14,6 +15,8 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 		scope: function() {
 			return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
 		}.property( "auth.session.scope" ),
+
+		showTokenForm: false,
 
 		actions: {
 			"signout": function() {
@@ -36,6 +39,10 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 				if ( callback instanceof Function ) {
 					callback();
 				}
+			},
+
+			"showTokenForm": function() {
+				set( this, "showTokenForm", true );
 			}
 		}
 	});

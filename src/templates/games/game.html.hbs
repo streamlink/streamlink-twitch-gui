@@ -1,9 +1,6 @@
+<main class="content content-gamesgame">
 <header>
-<h2>
-{{#if auth.session.isLoggedIn}}
-{{form-button action=view.followAction class=view.followClass icon=view.followIcon iconanim=true title=view.followTitle}}
-{{/if}}
-{{game}}</h2>
+<h2>{{follow-game game=game}}{{game}}</h2>
 {{settings-bar targetObject=this btnHomepage=true}}
 </header>
 {{#if model.length}}
@@ -16,3 +13,4 @@
 {{else}}
 <p>There are no broadcasters online streaming this game...</p>
 {{/if}}
+</main>

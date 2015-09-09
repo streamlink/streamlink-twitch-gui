@@ -5,9 +5,9 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
-	var alias = Ember.computed.alias;
+	var sort = Ember.computed.sort;
 
-	return Ember.Component.extend( Ember.SortableMixin, {
+	return Ember.Component.extend({
 		store: Ember.inject.service(),
 
 		layout: Ember.HTMLBars.compile( layout ),
@@ -17,9 +17,8 @@ define([
 		// the record array (will be set by init())
 		model: null,
 		// needed by SortableMixin's arrangedContent
-		content: alias( "model" ),
-		sortProperties: [ "date" ],
-		sortAscending: false,
+		content: sort( "model", "sortBy" ),
+		sortBy: [ "date:desc" ],
 
 		numKeepItems: 5,
 		reQuery: /^[a-z0-9]{3,}/i,
@@ -35,13 +34,13 @@ define([
 		init: function() {
 			this._super.apply( this, arguments );
 
-			this.arrangedContent.volatile();
+			this.content.volatile();
 
 			var store   = get( this, "store" );
 			var filters = store.modelFor( "search" ).filters;
 			set( this, "filters", filters );
 
-			store.find( "search" )
+			store.findAll( "search" )
 				.then(function( records ) {
 					set( this, "model", records );
 				}.bind( this ) );

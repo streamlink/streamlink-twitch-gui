@@ -21,8 +21,8 @@ define([
 	 * @class Livestreamer
 	 */
 	return DS.Model.extend({
-		stream      : belongsTo( "twitchStream" ),
-		channel     : belongsTo( "twitchChannel" ),
+		stream      : belongsTo( "twitchStream", { async: false } ),
+		channel     : belongsTo( "twitchChannel", { async: false } ),
 		quality     : attr( "number" ),
 		gui_openchat: attr( "boolean" ),
 		started     : attr( "date" ),
@@ -32,6 +32,8 @@ define([
 		spawn  : null,
 		success: false,
 		error  : false,
+		log    : null,
+		showLog: false,
 
 
 		auth    : Ember.inject.service(),

@@ -4,9 +4,9 @@ define( [ "EmberData" ], function( DS ) {
 	var belongsTo = DS.belongsTo;
 
 	return DS.Model.extend({
-		box: belongsTo( "twitchImage" ),
+		box: belongsTo( "twitchImage", { async: false } ),
 		giantbomb_id: attr( "number" ),
-		logo: belongsTo( "twitchImage" ),
+		logo: belongsTo( "twitchImage", { async: false } ),
 		name: attr( "string" ),
 		properties: attr( "number" )
 	}).reopenClass({

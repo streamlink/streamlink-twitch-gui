@@ -2,7 +2,7 @@ define( [ "Ember" ], function( Ember ) {
 
 	var set = Ember.set;
 
-	return Ember.ArrayController.extend({
+	return Ember.Controller.extend({
 		queryParams: [ "sortby", "direction" ],
 
 		sortby   : "created_at",

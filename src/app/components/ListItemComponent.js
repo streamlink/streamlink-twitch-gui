@@ -1,9 +1,6 @@
-define([
-	"Ember",
-	"mixins/PreviewImageViewMixin"
-], function( Ember, PreviewImageViewMixin ) {
+define( [ "Ember" ], function( Ember ) {
 
-	return Ember.Component.extend( PreviewImageViewMixin, {
+	return Ember.Component.extend({
 		settings: Ember.inject.service(),
 
 		tagName: "li",

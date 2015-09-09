@@ -31,8 +31,10 @@
 		}
 	}
 
-	.content {
+	.modal-body {
 		flex: 1 0;
+		position: static;
+		padding: 0;
 	}
 
 	header {
@@ -58,7 +60,11 @@
 	}
 
 	&.modal-livestreamer {
-		header {
+		@content-height: 3.1rem;
+
+		header,
+		.modal-body.launching,
+		.modal-body.error {
 			margin-bottom: .5rem;
 		}
 
@@ -76,9 +82,23 @@
 		}
 
 		.content {
-			max-height: 6em;
+			min-height: @content-height;
+			max-height: 6rem;
 			overflow: auto;
-			margin-bottom: .5em;
+		}
+
+		.modal-log {
+			height: @content-height;
+			overflow: auto;
+			font-size: .8em;
+
+			> ul {
+				margin: 0;
+
+				> .error {
+					color: @color-danger;
+				}
+			}
 		}
 
 		footer {

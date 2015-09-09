@@ -5,10 +5,12 @@ define( [ "EmberData" ], function( DS ) {
 			return "githubReleases";
 		},
 
-		normalizePayload: function( payload ) {
-			return {
+		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+			payload = {
 				githubReleases: payload
 			};
+
+			return this._super( store, primaryModelClass, payload, id, requestType );
 		}
 	});
 

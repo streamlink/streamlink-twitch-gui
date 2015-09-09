@@ -4,8 +4,8 @@ define([
 	"utils/preload"
 ], function( Ember, InfiniteScrollRouteMixin, preload ) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
 
 	function filterMatches( filter, value ) {
 		return filter === "all" || filter === value;
@@ -24,10 +24,12 @@ define([
 				set( this,  "query",  params.query );
 			}
 
+			var store = get( this, "store" );
+
 			return Promise.all([
 				// search for games
 				filterMatches( params.filter, "games" )
-					? this.store.findQuery( "twitchSearchGame", {
+					? store.query( "twitchSearchGame", {
 						query: params.query,
 						type : "suggest",
 						live : true
@@ -35,7 +37,7 @@ define([
 					: Promise.resolve([]),
 				// search for channels
 				filterMatches( params.filter, "channels" )
-					? this.store.findQuery( "twitchSearchChannel", {
+					? store.query( "twitchSearchChannel", {
 						query : params.query,
 						offset: 0,
 						limit : 10
@@ -43,7 +45,7 @@ define([
 					: Promise.resolve([]),
 				// search for streams
 				filterMatches( params.filter, "streams" )
-					? this.store.findQuery( "twitchSearchStream", {
+					? store.query( "twitchSearchStream", {
 						query : params.query,
 						offset: get( this, "offset" ),
 						limit : get( this, "limit" )
@@ -69,7 +71,7 @@ define([
 				return Promise.resolve([]);
 			}
 
-			return this.store.findQuery( "twitchSearchStream", {
+			return get( this, "store" ).query( "twitchSearchStream", {
 				query : get( this, "query" ),
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
