@@ -70,6 +70,10 @@ define( [ "Ember" ], function( Ember ) {
 			return store.findExistingRecord( modelName, id )
 				.catch(function() { return false; })
 				.then(function( record ) {
+					if ( get( this, "isDestroyed" ) ) {
+						return;
+					}
+
 					setP( this, {
 						record   : record,
 						isLoading: false,
