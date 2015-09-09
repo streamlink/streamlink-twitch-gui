@@ -3,12 +3,14 @@ define( [ "Ember" ], function( Ember ) {
 	var get = Ember.get;
 
 	return Ember.Mixin.create({
+		store: Ember.inject.service(),
+
 		/**
 		 * Load channel specific settings
 		 * @param {number} id
 		 * @returns {Promise}
 		 */
-		loadChannelSettings: function( id ) {
+		"loadChannelSettings": function( id ) {
 			var store = get( this, "store" );
 			return store.findRecord( "channelSettings", id )
 				.then(function( record ) {
