@@ -57,7 +57,7 @@
 	}
 }
 
-@-webkit-keyframes animIconScale {
+@-webkit-keyframes animIconSuccess {
 	0% {
 		opacity: 1;
 		transform: scale(1);
@@ -76,5 +76,19 @@
 	100% {
 		opacity: 1;
 		transform: scale(1);
+	}
+}
+
+@-webkit-keyframes animIconFailure {
+	@distance: .25em;
+
+	0%, 50%, 100% {
+		transform: translateX( 0 );
+	}
+	16.6667%, 66.6667% {
+		transform: translateX( ( -1 * @distance ) );
+	}
+	33.3333%, 83.3333% {
+		transform: translateX( @distance );
 	}
 }

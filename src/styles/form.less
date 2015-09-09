@@ -237,7 +237,16 @@ input:disabled {
 	}
 
 	&.btn-with-anim > i {
-		-webkit-animation: animIconScale .5s ease-out;
+		@duration: .5s;
+		@easing: ease-out;
+
+		&.anim-success {
+			-webkit-animation: animIconSuccess @duration @easing;
+		}
+
+		&.anim-failure {
+			-webkit-animation: animIconFailure @duration @easing;
+		}
 	}
 }
 

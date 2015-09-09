@@ -1,14 +1,32 @@
 define([
 	"Ember",
 	"text!templates/components/formbutton.html.hbs"
-], function( Ember, template ) {
+], function(
+	Ember,
+	layout
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var makeArray = Ember.makeArray;
 	var $ = Ember.$;
 
+	function iconAnimation( success, data ) {
+		var defer = Promise.defer();
+		// dirty
+		var element  = this._renderNode.firstNode;
+
+		set( this, "_iconAnimState", success );
+		$( element ).one( "webkitAnimationEnd", function() {
+			set( this, "_iconAnimState", null );
+			defer[ success ? "resolve" : "reject" ]( data );
+		}.bind( this ) );
+
+		return defer.promise;
+	}
+
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( template ),
+		layout: Ember.HTMLBars.compile( layout ),
 
 		tagName: "",
 
@@ -21,34 +39,20 @@ define([
 		icon    : false,
 		iconanim: false,
 
-		_iconanim: false,
-
-		_iconAnimation: function( data ) {
-			var self  = this;
-			var defer = Promise.defer();
-			// dirty
-			var element = this._renderNode.firstNode;
-
-			set( self, "_iconanim", true );
-			$( element ).one( "webkitAnimationEnd", function( e ) {
-				if ( e.originalEvent.animationName !== "animIconScale" ) { return; }
-
-				set( self, "_iconanim", false );
-				defer.resolve( data );
-			});
-
-			return defer.promise;
-		},
+		_iconAnimState: null,
 
 		actions: {
 			click: function() {
 				var action  = get( this, "action" );
 				if ( !action ) { return; }
 
-				var context = Ember.makeArray( get( this, "actionParam" ) );
+				var context = makeArray( get( this, "actionParam" ) );
 
-				if ( this.attrs.iconanim ) {
-					context.push( this._iconAnimation.bind( this ) );
+				if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
+					// success animation
+					context.push( iconAnimation.bind( this, true ) );
+					// failure animation
+					context.push( iconAnimation.bind( this, false ) );
 				}
 
 				// allow the component to send actions to itself
