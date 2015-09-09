@@ -4,10 +4,4 @@
 {{#if btnHomepage}}
 {{form-button action="homepage" actionParam=url classNameBindings=":btn-neutral isHomepage::inactive" title="Set as homepage" icon="fa-home" iconanim=true}}
 {{/if}}
-{{#if btnLayout}}
-<div class="multibtn">
-{{form-action action="layout" actionParam="tile" classNameBindings="isLayoutTile::inactive" title="Switch to tile layout" icon="fa-th-large" iconanim=true}}
-{{form-action action="layout" actionParam="list" classNameBindings="isLayoutList::inactive" title="Switch to list layout" icon="fa-align-justify" iconanim=true}}
-</div>
-{{/if}}
 </div>
