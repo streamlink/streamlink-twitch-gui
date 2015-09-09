@@ -30,14 +30,18 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 				get( this, "notification" ).start();
 			},
 
-			"copyToken": function( callback ) {
+			"copyToken": function( success, failure ) {
 				var token = get( this, "auth.session.access_token" );
 				var cb = nwGui.Clipboard.get();
-				if ( !token || !cb ) { return; }
 
-				cb.set( token, "text" );
-				if ( callback instanceof Function ) {
-					callback();
+				if ( token && cb ) {
+					cb.set( token, "text" );
+
+					if ( success instanceof Function ) {
+						success();
+					}
+				} else if ( failure instanceof Function ) {
+					failure().catch();
 				}
 			},
 

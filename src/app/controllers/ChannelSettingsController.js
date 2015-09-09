@@ -108,20 +108,20 @@ define([
 		},
 
 		actions: {
-			"apply": function( callback ) {
+			"apply": function( success, failure ) {
 				var model  = get( this, "model.model" );
 				var buffer = get( this, "model.buffer" ).applyChanges().getContent();
 				this.saveRecord( model, buffer )
-					.then( callback )
+					.then( success, failure )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) )
 					.catch( model.rollbackAttributes.bind( model ) );
 			},
 
-			"discard": function( callback ) {
+			"discard": function( success ) {
 				get( this, "model.buffer" ).discardChanges();
 				Promise.resolve()
-					.then( callback )
+					.then( success )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) );
 			},

@@ -20,11 +20,12 @@ define([
 		action: "chat",
 
 		actions: {
-			"chat": function( callback ) {
+			"chat": function( success, failure ) {
 				var channel = get( this, "channel" );
 				var chat    = get( this, "chat" );
 				chat.open( channel )
-					.then( callback );
+					.then( success, failure )
+					.catch();
 			}
 		}
 	});

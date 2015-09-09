@@ -46,7 +46,7 @@ define([
 
 
 		actions: {
-			"subscribe": function( callback ) {
+			"subscribe": function( success, failure ) {
 				var url  = get( this, "metadata.config.twitch-subscribe-url" );
 				var name = get( this, "id" );
 
@@ -54,9 +54,11 @@ define([
 					url = url.replace( "{channel}", name );
 					nwGui.Shell.openExternal( url );
 
-					if ( callback instanceof Function ) {
-						callback();
+					if ( success instanceof Function ) {
+						success();
 					}
+				} else if ( failure instanceof Function ) {
+					failure().catch();
 				}
 			}
 		}

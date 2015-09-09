@@ -27,7 +27,7 @@ define([
 
 
 		actions: {
-			"follow": function( callback ) {
+			"follow": function( success, failure ) {
 				if ( !this.modelName ) { return; }
 				if ( !get( this, "isValid" ) || get( this, "isLocked" ) ) { return; }
 				set( this, "isLocked", true );
@@ -46,7 +46,7 @@ define([
 						.then(function( record ) {
 							set( self, "record", record );
 						})
-						.then( callback )
+						.then( success, failure )
 						.then( unlock, unlock );
 
 				} else {
@@ -57,7 +57,7 @@ define([
 							// also unload it
 							store.unloadRecord( record );
 						})
-						.then( callback )
+						.then( success, failure )
 						.then( unlock, unlock );
 				}
 			}

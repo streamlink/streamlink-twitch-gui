@@ -104,7 +104,7 @@ define([
 			},
 
 			// login via access token
-			"signinToken": function( callback ) {
+			"signinToken": function( success, failure ) {
 				if ( get( this, "isLoggingIn" ) ) { return; }
 				set( this, "loginStatus", 5 );
 
@@ -116,16 +116,17 @@ define([
 				wait( 1000 )()
 					// login attempt
 					.then( auth.login.bind( auth, token, false ) )
-					// login response
-					.then(function() { return true; } )
-					.catch(function() { return false; })
 					// visualize result: update button and icon
-					.then(function( result ) {
-						set( self, "loginStatus", result ? 7 : 6 );
-						return wait( result ? 1000 : 3000 )( result );
+					.then(function() {
+						set( self, "loginStatus", 7 );
+						return wait( 1000 )( true )
+							.then( success );
+					}, function() {
+						set( self, "loginStatus", 6 );
+						return wait( 3000 )( false )
+							.then( failure )
+							.catch(function( data ) { return data; });
 					})
-					// wait again and animate icon
-					.then( callback )
 					// retry transition on success
 					.then(function( result ) {
 						set( self, "loginStatus", 4 );

@@ -21,16 +21,18 @@ define([
 		action: "share",
 
 		actions: {
-			"share": function( callback ) {
+			"share": function( success, failure ) {
 				var url = get( this, "channel.url" );
 				var cb  = nwGui.Clipboard.get();
 
 				if ( url && cb ) {
 					cb.set( url, "text" );
 
-					if ( callback instanceof Function ) {
-						callback();
+					if ( success instanceof Function ) {
+						success();
 					}
+				} else if ( failure instanceof Function ) {
+					failure().catch();
 				}
 			}
 		}

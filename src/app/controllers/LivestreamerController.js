@@ -436,11 +436,11 @@ define([
 
 
 		actions: {
-			"download": function( callback ) {
+			"download": function( success ) {
 				var url = get( this, "metadata.config.livestreamer-download-url" );
 				this.send( "openBrowser", url );
-				if ( callback instanceof Function ) {
-					callback();
+				if ( success instanceof Function ) {
+					success();
 				}
 			},
 

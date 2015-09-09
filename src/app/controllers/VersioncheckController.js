@@ -68,15 +68,15 @@ define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 		},
 
 		actions: {
-			"releaseDownload": function( callback ) {
+			"releaseDownload": function( success ) {
 				this.send( "openBrowser", get( this, "downloadURL" ) );
 				this.send( "releaseIgnore" );
-				if ( callback instanceof Function ) {
-					callback();
+				if ( success instanceof Function ) {
+					success();
 				}
 			},
 
-			"releaseIgnore": function( callback ) {
+			"releaseIgnore": function( success, failure ) {
 				var store  = get( this, "store" );
 				var record = store.peekRecord( "versioncheck", 1 );
 				if ( record ) {
@@ -88,7 +88,7 @@ define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 					checkagain: +new Date() + get( this, "time" )
 				})
 					.save()
-					.then( callback )
+					.then( success, failure )
 					.then( this.send.bind( this, "closeModal" ) );
 			}
 		}
