@@ -68,19 +68,58 @@ define([
 
 		/** @property {Parameter[]} parameters */
 		parameters: [
-			new ParameterCustom( null, "settings.livestreamer_params" ),
-			new Parameter( "--no-version-check" ),
-			new Parameter( "--player", null, "settings.player", true ),
-			new Parameter( "--player-args", "settings.player", "settings.player_params", true ),
-			new Parameter( "--player-passthrough", null, "settings.player_passthrough" ),
-			new Parameter( "--player-continuous-http", function() {
-				return "http" === get( this, "settings.player_passthrough" )
-				    &&          !!get( this, "settings.player_reconnect" );
-			}),
-			new Parameter( "--player-no-close", "settings.player_no_close" ),
-			new Parameter( "--twitch-oauth-token", "session.isLoggedIn", "session.access_token" ),
-			new Parameter( "--hls-live-edge", null, "settings.hls_live_edge" ),
-			new Parameter( "--hls-segment-threads", null, "settings.hls_segment_threads" )
+			new ParameterCustom(
+				"settings.advanced",
+				"settings.livestreamer_params"
+			),
+			new Parameter(
+				"--no-version-check"
+			),
+			new Parameter(
+				"--player",
+				null,
+				"settings.player",
+				true
+			),
+			new Parameter(
+				"--player-args",
+				[ "settings.advanced", "settings.player" ],
+				"settings.player_params",
+				true
+			),
+			new Parameter(
+				"--player-passthrough",
+				"settings.advanced",
+				"settings.player_passthrough"
+			),
+			new Parameter(
+				"--player-continuous-http",
+				[
+					"settings.player_reconnect",
+					function() {
+						return get( this, "settings.player_passthrough" ) === "http";
+					}
+				]
+			),
+			new Parameter(
+				"--player-no-close",
+				"settings.player_no_close"
+			),
+			new Parameter(
+				"--twitch-oauth-token",
+				"session.isLoggedIn",
+				"session.access_token"
+			),
+			new Parameter(
+				"--hls-live-edge",
+				"settings.advanced",
+				"settings.hls_live_edge"
+			),
+			new Parameter(
+				"--hls-segment-threads",
+				"settings.advanced",
+				"settings.hls_segment_threads"
+			)
 		],
 
 		/** @property {Substitution[]} substitutions */

@@ -20,9 +20,11 @@ define( [ "Ember", "utils/Substitution" ], function( Ember, Substitution ) {
 		this.cond  = cond instanceof Function
 			? [ cond ]
 			: makeArray( cond ).concat( value || [] ).map(function( prop ) {
-				return function() {
-					return !!get( this, prop );
-				};
+				return prop instanceof Function
+					? prop
+					: function() {
+						return !!get( this, prop );
+					};
 			});
 	}
 
