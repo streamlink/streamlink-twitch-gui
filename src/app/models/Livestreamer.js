@@ -13,6 +13,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 	var alias = Ember.computed.alias;
@@ -41,10 +42,23 @@ define([
 
 		session: alias( "auth.session" ),
 
+
 		kill: function() {
-			if ( this.spawn ) {
-				this.spawn.kill( "SIGTERM" );
+			var spawn = get( this, "spawn" );
+			if ( spawn ) {
+				spawn.kill( "SIGTERM" );
 			}
+		},
+
+		clearLog: function() {
+			return set( this, "log", [] );
+		},
+
+		pushLog: function( type, line ) {
+			get( this, "log" ).pushObject({
+				type: type,
+				line: line
+			});
 		},
 
 		qualityObserver: function() {

@@ -29,11 +29,11 @@ define([
 	var isWin = process.platform === "win32";
 
 	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
+	var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 	var reUnable    = /^error: Unable to open URL: /;
 	var reNoStreams = /^error: No streams found on this URL: /;
 	var reNoPlayer  = /^error: Failed to start player: /;
 	var reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./;
-	var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 	var rePlayer    = /^Starting player: \S+/;
 
 
@@ -82,6 +82,7 @@ define([
 
 		error : null,
 		active: null,
+		abort : false,
 		model : function() {
 			var store = get( this, "store" );
 			return store.peekAll( "livestreamer" );
@@ -91,7 +92,8 @@ define([
 		startStream: function( stream ) {
 			this.send( "openModal", "livestreamerModal", this, {
 				error : null,
-				active: null
+				active: null,
+				abort : false
 			});
 
 			var store   = get( this, "store" );
@@ -122,20 +124,15 @@ define([
 				// validate configuration and get the exec command
 				.then( this.checkLivestreamer.bind( this ) )
 				// launch the stream
-				.then( this.launchLivestreamer.bind( this, livestreamer ) )
+				.then( this.launchLivestreamer.bind( this, livestreamer, true ) )
 				// setup stream refresh interval
-				.then( this.refreshStream.bind( this, livestreamer ) )
-				// success/failure
-				.then(
-					this.streamSuccess.bind( this, livestreamer, true ),
-					this.streamFailure.bind( this, livestreamer )
-				);
+				.then( this.refreshStream.bind( this, livestreamer ) );
 		},
 
-		streamSuccess: function( livestreamer, guiActions ) {
+		onStreamSuccess: function( livestreamer, firstLaunch ) {
 			set( livestreamer, "success", true );
 
-			if ( !guiActions ) { return; }
+			if ( !firstLaunch ) { return; }
 
 			// automatically close modal on success
 			if ( get( this, "settings.gui_hidestreampopup" ) ) {
@@ -151,10 +148,30 @@ define([
 			this.minimize( false );
 		},
 
-		streamFailure: function( livestreamer, error ) {
+		onStreamFailure: function( livestreamer, error ) {
 			set( livestreamer, "error", true );
-			set( this, "error", error );
+			set( this, "error", error || new Error( "Internal error" ) );
 
+			this.clearLivestreamer( livestreamer );
+		},
+
+		onStreamShutdown: function( livestreamer ) {
+			// close the modal only if there was no error and if it belongs to the stream
+			if (
+				   !get( livestreamer, "error" )
+				&& get( this, "active" ) === livestreamer
+			) {
+				this.send( "close" );
+			}
+
+			// restore the GUI
+			this.minimize( true );
+
+			this.clearLivestreamer( livestreamer );
+		},
+
+		clearLivestreamer: function( livestreamer ) {
+			// remove the livestreamer record from the store
 			if ( !get( livestreamer, "isDeleted" ) ) {
 				livestreamer.destroyRecord();
 			}
@@ -275,12 +292,14 @@ define([
 		 * Launch the stream
 		 * @returns {Promise}
 		 */
-		launchLivestreamer: function( livestreamer, exec ) {
+		launchLivestreamer: function( livestreamer, firstLaunch, exec ) {
 			// in case the shutdown button was pressed before
-			if ( get( livestreamer, "shutdown" ) ) {
+			if ( get( this, "abort" ) ) {
+				this.clearLivestreamer( livestreamer );
 				return Promise.reject();
 			}
 
+			livestreamer.clearLog();
 			set( livestreamer, "success", false );
 			set( this, "active", livestreamer );
 
@@ -291,83 +310,52 @@ define([
 			var streamURL = get( this, "metadata.config.twitch-stream-url" );
 			var qualities = get( this, "settings.content.constructor.qualities" );
 
-			var log       = set( livestreamer, "log", [] );
-
-			// get the livestreamer parameter list
+			// get the livestreamer parameter list and append stream url and quality
 			var params    = get( livestreamer, "parameters" );
-			// append stream url and quality
 			params.push( streamURL.replace( "{channel}", channel ) );
-			params.push( ( qualities[ quality ] || qualities[ 0 ] ).quality );
+			params.push( get( qualities[ quality ] || qualities[ 0 ], "quality" ) );
 
 			// spawn the livestreamer process
 			var spawn = CP.spawn( exec, params, { detached: true } );
-
 			set( livestreamer, "spawn", spawn );
 
-			spawn.on( "error", defer.reject );
-			spawn.on( "exit", function() {
+
+			function onExit() {
 				// clear up some memory
 				set( livestreamer, "spawn", null );
 				spawn = null;
 
 				// quality has been changed
-				if ( quality !== get( livestreamer, "quality" ) ) {
-					run.next( this, function() {
-						this.launchLivestreamer( livestreamer, exec ).then(
-							this.streamSuccess.bind( this, livestreamer, false ),
-							this.streamFailure.bind( this, livestreamer )
-						);
-					});
+				var currentQuality = get( livestreamer, "quality" );
+				if ( quality !== currentQuality ) {
+					this.launchLivestreamer( livestreamer, false, exec );
 
-				// stream has been shut down regularly
+					// stream has been shut down regularly
 				} else {
-					set( livestreamer, "shutdown", true );
-
-					// close the modal only if there was no error and if it belongs to the stream
-					if (
-						  !get( livestreamer, "error" )
-						&& get( this, "active" ) === livestreamer
-					) {
-						this.send( "close" );
-					}
-
-					// restore the GUI
-					this.minimize( true );
-
-					// remove the livestreamer record from the store
-					if ( !get( livestreamer, "isDeleted" ) ) {
-						livestreamer.destroyRecord();
-					}
+					this.onStreamShutdown( livestreamer );
 				}
-			}.bind( this ) );
-
-			function pushLog( type, line ) {
-				log.pushObject({
-					type: type,
-					line: line
-				});
 			}
 
 			// reject promise on any error output
-			function stdErrCallback( data ) {
-				pushLog( "stdErr", data );
-				var error = parseError( data );
-				defer.reject( error || new Error( data ) );
+			function onStdErr( line ) {
+				livestreamer.pushLog( "stdErr", line );
+				var error = parseError( line );
+				defer.reject( error || new Error( line ) );
 			}
 
 			// fulfill promise as soon as livestreamer is launching the player
 			// also print all stdout messages
-			function stdOutCallback( data ) {
-				var error = parseError( data );
+			function onStdOut( line ) {
+				var error = parseError( line );
 				if ( error ) {
-					pushLog( "stdErr", data );
+					livestreamer.pushLog( "stdErr", line );
 					return defer.reject( error );
 				}
 
-				data = data.replace( reReplace, "" );
-				pushLog( "stdOut", data );
+				line = line.replace( reReplace, "" );
+				livestreamer.pushLog( "stdOut", line );
 
-				if ( rePlayer.test( data ) ) {
+				if ( rePlayer.test( line ) ) {
 					/*
 					 * FIXME:
 					 * The promise should resolve at the point when livestreamer is launching the
@@ -383,10 +371,15 @@ define([
 				}
 			}
 
-			spawn.stdout.on( "data", new StreamOutputBuffer( stdOutCallback ) );
-			spawn.stderr.on( "data", new StreamOutputBuffer( stdErrCallback ) );
+			spawn.on( "error", defer.reject );
+			spawn.on( "exit", onExit.bind( this ) );
+			spawn.stdout.on( "data", new StreamOutputBuffer( onStdOut ) );
+			spawn.stderr.on( "data", new StreamOutputBuffer( onStdErr ) );
 
-			return defer.promise;
+			return defer.promise.then(
+				this.onStreamSuccess.bind( this, livestreamer, firstLaunch ),
+				this.onStreamFailure.bind( this, livestreamer )
+			);
 		},
 
 
@@ -416,8 +409,6 @@ define([
 
 		refreshStream: function( livestreamer ) {
 			var interval = get( this, "metadata.config.stream-reload-interval" ) || 60000;
-
-			if ( get( livestreamer, "shutdown" ) ) { return; }
 
 			var stream  = get( livestreamer, "stream" );
 			var reload  = stream.reload.bind( stream );
@@ -449,6 +440,11 @@ define([
 				chat.open( channel );
 			},
 
+			"abort": function() {
+				set( this, "abort", true );
+				this.send( "closeModal" );
+			},
+
 			"close": function() {
 				this.send( "closeModal" );
 				run.schedule( "destroy", this, function() {
@@ -459,9 +455,7 @@ define([
 			"shutdown": function() {
 				var active = get( this, "active" );
 				if ( active ) {
-					set( active, "shutdown", true );
-					var spawn = get( active, "spawn" );
-					if ( spawn ) { spawn.kill(); }
+					active.kill();
 				}
 				this.send( "close" );
 			},
