@@ -6,7 +6,7 @@
 {{#if model.length}}
 <ul class="content-list">
 {{#each model as |subscription index|}}
-{{subscription-item targetObject=this content=subscription isNewItem=(is-gte index initialFetchSize)}}
+{{subscription-item content=subscription isNewItem=(is-gte index initialFetchSize)}}
 {{/each}}
 </ul>
 {{infinite-scroll}}

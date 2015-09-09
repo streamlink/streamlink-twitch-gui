@@ -1,9 +1,14 @@
 define([
 	"Ember",
-	"Moment",
 	"components/ListItemComponent",
+	"Moment",
 	"text!templates/components/subscription.html.hbs"
-], function( Ember, Moment, ListItemComponent, template ) {
+], function(
+	Ember,
+	ListItemComponent,
+	Moment,
+	layout
+) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
@@ -11,7 +16,7 @@ define([
 	return ListItemComponent.extend({
 		metadata: Ember.inject.service(),
 
-		layout: Ember.HTMLBars.compile( template ),
+		layout: Ember.HTMLBars.compile( layout ),
 		classNames: [ "subscription-component" ],
 		attributeBindings: [ "style" ],
 
@@ -45,14 +50,20 @@ define([
 
 
 		actions: {
-			edit: function() {
+			edit: function( success ) {
 				var url = get( this, "metadata.config.twitch-subscribe-edit" );
 				this.openBrowser( url );
+				if ( success instanceof Function ) {
+					success();
+				}
 			},
 
-			cancel: function() {
+			cancel: function( success ) {
 				var url = get( this, "metadata.config.twitch-subscribe-cancel" );
 				this.openBrowser( url );
+				if ( success instanceof Function ) {
+					success();
+				}
 			}
 		}
 	});
