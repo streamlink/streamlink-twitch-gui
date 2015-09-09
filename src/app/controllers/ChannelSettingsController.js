@@ -124,6 +124,11 @@ define([
 					.then( callback )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) );
+			},
+
+			"cancel": function() {
+				set( this, "previousTransition", null );
+				this.send( "closeModal" );
 			}
 		}
 	});

@@ -118,6 +118,11 @@ define([
 					.then( this.retryTransition.bind( this ) );
 			},
 
+			"cancel": function() {
+				set( this, "previousTransition", null );
+				this.send( "closeModal" );
+			},
+
 			"togglePlayerCmdSubstitutions": function() {
 				this.toggleProperty( "playerCmdSubstitutionsVisible" );
 			}
