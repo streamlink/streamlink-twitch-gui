@@ -34,6 +34,7 @@ define([
 	var reNoStreams = /^error: No streams found on this URL: /;
 	var reNoPlayer  = /^error: Failed to start player: /;
 	var reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./;
+	var reWarnInsec = /InsecurePlatformWarning: A true SSLContext object is not available\./;
 	var rePlayer    = /^Starting player: \S+/;
 
 
@@ -52,6 +53,9 @@ define([
 	function NoPlayerError() {}
 	NoPlayerError.prototype = merge( new Error(), { name: "NoPlayerError" });
 
+	function Warning( message ) { this.message = message; }
+	Warning.prototype = merge( new Error(), { name: "Warning" } );
+
 
 	// we need a common error parsing function for stdout and stderr, because
 	// livestreamer is weird sometimes and prints error messages to stdout instead... :(
@@ -62,6 +66,8 @@ define([
 			return new NoStreamsFoundError();
 		} else if ( reNoPlayer.test( data ) || reNoPlayer2.test( data ) ) {
 			return new NoPlayerError();
+		} else if ( reWarnInsec.test( data ) ) {
+			return new Warning( data );
 		}
 	}
 
@@ -301,6 +307,7 @@ define([
 
 			livestreamer.clearLog();
 			set( livestreamer, "success", false );
+			set( livestreamer, "warning", false );
 			set( this, "active", livestreamer );
 
 			var defer     = Promise.defer();
@@ -336,20 +343,27 @@ define([
 				}
 			}
 
+			function warnOrReject( line, error ) {
+				livestreamer.pushLog( "stdErr", line );
+
+				if ( error instanceof Warning ) {
+					set( livestreamer, "warning", true );
+				} else {
+					defer.reject( error || new Error( line ) );
+				}
+			}
+
 			// reject promise on any error output
 			function onStdErr( line ) {
-				livestreamer.pushLog( "stdErr", line );
 				var error = parseError( line );
-				defer.reject( error || new Error( line ) );
+				warnOrReject( line, error );
 			}
 
 			// fulfill promise as soon as livestreamer is launching the player
-			// also print all stdout messages
 			function onStdOut( line ) {
 				var error = parseError( line );
 				if ( error ) {
-					livestreamer.pushLog( "stdErr", line );
-					return defer.reject( error );
+					return warnOrReject( line, error );
 				}
 
 				line = line.replace( reReplace, "" );

@@ -33,6 +33,7 @@ define([
 		spawn  : null,
 		success: false,
 		error  : false,
+		warning: false,
 		log    : null,
 		showLog: false,
 

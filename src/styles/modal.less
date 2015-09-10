@@ -104,6 +104,19 @@
 		footer {
 			justify-content: space-between;
 		}
+
+		.btn-log.btn-danger {
+			@-webkit-keyframes errorLogButtonAnimation {
+				from { background: lighten( @color-danger, 10% ); }
+				to { background: darken( @color-danger, 10% ); }
+			}
+
+			-webkit-animation: errorLogButtonAnimation .333s ease-out infinite alternate;
+
+			> i {
+				color: @color-text-brightest;
+			}
+		}
 	}
 }
 
