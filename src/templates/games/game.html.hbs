@@ -1,6 +1,7 @@
 <main class="content content-gamesgame">
 <header>
 <h2>{{follow-game game=game}}{{game}}</h2>
+{{#if metadata.total}}<div class="total">({{metadata.total}})</div>{{/if}}
 {{settings-bar btnHomepage=true}}
 </header>
 {{#if model.length}}

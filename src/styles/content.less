@@ -4,7 +4,8 @@ main.content {
 	padding-right: ( @app-padding - @scrollbar-size );
 	overflow-y: scroll;
 
-	.headline() {
+	> h2,
+	> header > h2 {
 		height: 1.5em;
 		margin: 0;
 		overflow: hidden;
@@ -18,16 +19,16 @@ main.content {
 		}
 	}
 
-	> h2 {
-		.headline();
-	}
-
 	> header {
 		display: flex;
+		justify-content: space-between;
 
-		> h2 {
+		> div.total {
+			flex-shrink: 0;
 			flex-grow: 1;
-			.headline();
+			margin-left: .5em;
+			line-height: 2.5;
+			color: @color-text-bright;
 		}
 	}
 

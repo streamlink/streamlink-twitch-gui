@@ -2,17 +2,19 @@ define([
 	"Ember",
 	"routes/UserIndexRoute",
 	"mixins/InfiniteScrollMixin",
+	"mixins/ModelMetadataMixin",
 	"utils/preload"
 ], function(
 	Ember,
 	UserIndexRoute,
 	InfiniteScrollMixin,
+	ModelMetadataMixin,
 	preload
 ) {
 
 	var get = Ember.get;
 
-	return UserIndexRoute.extend( InfiniteScrollMixin, {
+	return UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 		itemSelector: ".channel-component",
 
 		queryParams: {
@@ -24,8 +26,10 @@ define([
 			}
 		},
 
+		modelName: "twitchChannelsFollowed",
+
 		model: function( params ) {
-			return get( this, "store" ).query( "twitchChannelsFollowed", {
+			return get( this, "store" ).query( this.modelName, {
 				offset   : get( this, "offset" ),
 				limit    : get( this, "limit" ),
 				sortby   : params.sortby || "created_at",
