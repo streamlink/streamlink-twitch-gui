@@ -44,12 +44,31 @@ define([
 					   !blang && filter[ clang ] === false
 					// OR broadcaster language is set and filtered out (ignore channel language)
 					||  blang && filter[ blang ] === false
+					// OR broadcaster language is set to "other" and a filter has been set
+					||  blang === "other" && get( this, "hasCustomLangFilter" )
 				);
 		}.property(
 			"settings.gui_langfilter",
 			"content.channel.language",
 			"content.channel.broadcaster_language"
 		),
+
+		/**
+		 * @returns {boolean} return false if none or all languages are selected
+		 */
+		hasCustomLangFilter: function() {
+			var filters = get( this, "settings.gui_langfilter" );
+			var keys    = Object.keys( filters );
+			var current = filters[ keys.shift() ];
+			return keys.reduce(function( result, value ) {
+				if ( !result ) {
+					value   = filters[ value ];
+					result  = current !== value;
+					current = value;
+				}
+				return result;
+			}, false );
+		}.property( "settings.gui_langfilter" ),
 
 		actions: {
 			"startStream": function() {
