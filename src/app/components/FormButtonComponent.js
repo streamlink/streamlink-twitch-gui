@@ -13,11 +13,9 @@ define([
 
 	function iconAnimation( success, data ) {
 		var defer = Promise.defer();
-		// dirty
-		var element  = this._renderNode.firstNode;
 
 		set( this, "_iconAnimState", success );
-		$( element ).one( "webkitAnimationEnd", function() {
+		this.$().one( "webkitAnimationEnd", function() {
 			set( this, "_iconAnimState", null );
 			defer[ success ? "resolve" : "reject" ]( data );
 		}.bind( this ) );
@@ -29,6 +27,13 @@ define([
 		layout: Ember.HTMLBars.compile( layout ),
 
 		tagName: "",
+
+		// prevents an ember bug regarding tagless components and isVisible bindings
+		$: function() {
+			// use the layout's first element as component element
+			var element = this._renderNode.childNodes[0].firstNode;
+			return $( element );
+		},
 
 		title  : null,
 		"class": null,
