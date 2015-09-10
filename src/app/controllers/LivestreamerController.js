@@ -408,6 +408,8 @@ define([
 		},
 
 		refreshStream: function( livestreamer ) {
+			if ( get( livestreamer, "isDeleted" ) ) { return; }
+
 			var interval = get( this, "metadata.config.stream-reload-interval" ) || 60000;
 
 			var stream  = get( livestreamer, "stream" );
