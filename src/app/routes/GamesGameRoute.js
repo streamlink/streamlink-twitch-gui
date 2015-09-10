@@ -21,7 +21,7 @@ define([
 				set( this, "game", get( params || {}, "game" ) );
 			}
 
-			return this.store.findQuery( "twitchStream", {
+			return get( this, "store" ).query( "twitchStream", {
 				game                : get( this, "game" ),
 				offset              : get( this, "offset" ),
 				limit               : get( this, "limit" ),
