@@ -125,6 +125,13 @@ define([
 
 			"togglePlayerCmdSubstitutions": function() {
 				this.toggleProperty( "playerCmdSubstitutionsVisible" );
+			},
+
+			"checkLanguages": function( all ) {
+				var filters = get( this, "model.gui_langfilter" );
+				Object.keys( filters.content ).forEach(function( key ) {
+					set( filters, key, all );
+				});
 			}
 		}
 	});

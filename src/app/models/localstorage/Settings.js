@@ -119,6 +119,11 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 			{ id: "chrome",   label: "Google Chrome" },
 			{ id: "msie",     label: "Internet Explorer", disabled: !isWin },
 			{ id: "custom",   label: "Custom application" }
+		],
+
+		gui_filterstreams: [
+			{ value: false, label: "Fade out (load all languages)" },
+			{ value: true,  label: "Filter out (only load checked languages)" }
 		]
 
 	});
