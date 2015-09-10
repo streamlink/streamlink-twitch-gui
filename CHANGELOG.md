@@ -1,6 +1,21 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Implemented multiple chat methods. #132
+- Implemented real stream language filters. #133
+- Reworked stream popup with better log/warning/error output. #123
+- Added stream URL support to the search bar. #126
+- Added totals of listed games/channels/streams to various page headers.
+- Fixed subscription item background if channel hasn't set one.
+- Fixed desktop notification icons (Windows).
+- Fixed issue with player parameters and disabled advanced settings.
+- Upgraded application to conform to Ember/Ember-Data 2.0.
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.3...master)
+
+
 ## [v0.9.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.3) (2015-08-05)
 
 - Fixed livestreamer validation failure on OSX. #121
