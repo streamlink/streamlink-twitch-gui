@@ -1,12 +1,16 @@
 define([
 	"Ember",
-	"mixins/InfiniteScrollRouteMixin",
+	"mixins/InfiniteScrollMixin",
 	"utils/preload"
-], function( Ember, InfiniteScrollRouteMixin, preload ) {
+], function(
+	Ember,
+	InfiniteScrollMixin,
+	preload
+) {
 
 	var get = Ember.get;
 
-	return Ember.Route.extend( InfiniteScrollRouteMixin, {
+	return Ember.Route.extend( InfiniteScrollMixin, {
 		itemSelector: ".game-component",
 
 		model: function() {

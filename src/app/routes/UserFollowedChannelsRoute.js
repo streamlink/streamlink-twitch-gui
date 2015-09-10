@@ -1,18 +1,18 @@
 define([
 	"Ember",
 	"routes/UserIndexRoute",
-	"mixins/InfiniteScrollRouteMixin",
+	"mixins/InfiniteScrollMixin",
 	"utils/preload"
 ], function(
 	Ember,
 	UserIndexRoute,
-	InfiniteScrollRouteMixin,
+	InfiniteScrollMixin,
 	preload
 ) {
 
 	var get = Ember.get;
 
-	return UserIndexRoute.extend( InfiniteScrollRouteMixin, {
+	return UserIndexRoute.extend( InfiniteScrollMixin, {
 		itemSelector: ".channel-component",
 
 		queryParams: {

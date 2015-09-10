@@ -1,18 +1,18 @@
 define([
 	"Ember",
-	"mixins/InfiniteScrollRouteMixin",
+	"mixins/InfiniteScrollMixin",
 	"mixins/LanguageFilterMixin",
 	"utils/preload"
 ], function(
 	Ember,
-	InfiniteScrollRouteMixin,
+	InfiniteScrollMixin,
 	LanguageFilterMixin,
 	preload
 ) {
 
 	var get = Ember.get;
 
-	return Ember.Route.extend( InfiniteScrollRouteMixin, LanguageFilterMixin, {
+	return Ember.Route.extend( InfiniteScrollMixin, LanguageFilterMixin, {
 		itemSelector: ".stream-component",
 
 		model: function() {
