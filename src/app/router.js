@@ -12,17 +12,17 @@ define( [ "Ember" ], function( Ember ) {
 
 		this.route( "featured" );
 
-		this.resource( "games", function() {
+		this.route( "games", function() {
 			this.route( "game", { path: "/:game" } );
 		});
 
 		this.route( "channels" );
 
-		this.resource( "channel", { path: "/:channel" }, function() {
+		this.route( "channel", { path: "/:channel" }, function() {
 			this.route( "settings" );
 		});
 
-		this.resource( "user", function() {
+		this.route( "user", function() {
 			this.route( "auth" );
 			this.route( "subscriptions" );
 			this.route( "followedStreams" );
