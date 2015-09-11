@@ -7,7 +7,7 @@ define( [ "Ember", "nwjs/nwGui", "utils/semver" ], function( Ember, nwGui, semve
 	function createAppShortcut( name ) {
 		if (
 			// check if current platform is windows
-			   /^win/.test( process.platform )
+			   process.platform === "win32"
 			// check if windows version is >= 8
 			&& semver.sort([ OS, win8 ]).shift() === win8
 		) {

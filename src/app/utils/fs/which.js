@@ -2,9 +2,9 @@ define( [ "utils/fs/stat" ], function( stat ) {
 
 	var PATH  = require( "path" );
 
-	var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter ),
-	    exts  = /^win/.test( process.platform ) ? [ ".exe" ] : [ "" ],
-	    sep   = PATH.sep;
+	var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter );
+	var exts  = process.platform === "win32" ? [ ".exe" ] : [ "" ];
+	var sep   = PATH.sep;
 
 
 	/**
