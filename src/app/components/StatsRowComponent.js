@@ -1,10 +1,13 @@
 define([
 	"Ember",
-	"text!templates/components/statsrow.html.hbs"
-], function( Ember, template ) {
+	"hbs!templates/components/statsrow.html"
+], function(
+	Ember,
+	layout
+) {
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( template ),
+		layout: layout,
 		tagName: "div",
 		classNameBindings: [ ":stats-row", "class" ],
 

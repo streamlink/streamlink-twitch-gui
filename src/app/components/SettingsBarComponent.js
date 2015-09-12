@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"text!templates/components/settingsbar.html.hbs"
+	"hbs!templates/components/settingsbar.html"
 ], function(
 	Ember,
 	layout
@@ -12,7 +12,7 @@ define([
 	return Ember.Component.extend({
 		settings: Ember.inject.service(),
 
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 		tagName: "div",
 		classNameBindings: [ ":settingsbar", "isOpened:opened" ],
 

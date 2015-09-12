@@ -1,15 +1,19 @@
 define([
 	"Ember",
 	"components/ExternalLinkComponent",
-	"text!templates/components/livestreamerdocs.html.hbs"
-], function( Ember, ExternalLinkComponent, layout ) {
+	"hbs!templates/components/livestreamerdocs.html"
+], function(
+	Ember,
+	ExternalLinkComponent,
+	layout
+) {
 
 	var get = Ember.get;
 
 	return ExternalLinkComponent.extend({
 		metadata: Ember.inject.service(),
 
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 
 		tagName: "span",
 		classNameBindings: [ ":docs" ],

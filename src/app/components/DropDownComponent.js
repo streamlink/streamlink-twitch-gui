@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"Selecter",
-	"text!templates/components/dropdown.html.hbs"
+	"hbs!templates/components/dropdown.html"
 ], function(
 	Ember,
 	Selecter,
@@ -12,7 +12,7 @@ define([
 	var set = Ember.set;
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 		tagName: "select",
 
 		classNameBindings: [ "class" ],

@@ -1,8 +1,12 @@
 define([
 	"Ember",
 	"components/ListItemComponent",
-	"text!templates/components/stream.html.hbs"
-], function( Ember, ListItemComponent, template ) {
+	"hbs!templates/components/stream.html"
+], function(
+	Ember,
+	ListItemComponent,
+	layout
+) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
@@ -10,7 +14,7 @@ define([
 	var bool = Ember.computed.bool;
 
 	return ListItemComponent.extend({
-		layout: Ember.HTMLBars.compile( template ),
+		layout: layout,
 		classNameBindings: [
 			":stream-component",
 			"_showGame:show-game",

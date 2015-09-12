@@ -1,11 +1,15 @@
 define([
 	"Ember",
 	"components/ListItemComponent",
-	"text!templates/components/channel.html.hbs"
-], function( Ember, ListItemComponent, template ) {
+	"hbs!templates/components/channel.html"
+], function(
+	Ember,
+	ListItemComponent,
+	layout
+) {
 
 	return ListItemComponent.extend({
-		layout: Ember.HTMLBars.compile( template ),
+		layout: layout,
 		classNames: [ "channel-component" ]
 	});
 

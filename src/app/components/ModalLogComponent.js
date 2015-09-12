@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"text!templates/components/modallog.html.hbs"
+	"hbs!templates/components/modallog.html"
 ], function(
 	Ember,
 	layout
@@ -9,7 +9,7 @@ define([
 	var scheduleOnce = Ember.run.scheduleOnce;
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 
 		tagName: "section",
 		classNames: [ "modal-log" ],

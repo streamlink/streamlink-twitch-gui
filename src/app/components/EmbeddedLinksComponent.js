@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"utils/linkparser",
-	"text!templates/components/embeddedlinks.html.hbs"
+	"hbs!templates/components/embeddedlinks.html"
 ], function(
 	Ember,
 	linkparser,
@@ -12,7 +12,7 @@ define([
 	var parseString = linkparser.parseString;
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 
 		content: function() {
 			var text   = get( this, "text" );

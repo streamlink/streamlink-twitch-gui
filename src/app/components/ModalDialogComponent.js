@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"text!templates/components/modaldialog.html.hbs"
+	"hbs!templates/components/modaldialog.html"
 ], function(
 	Ember,
 	layout
@@ -9,7 +9,7 @@ define([
 	var or = Ember.computed.or;
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 
 		tagName: "section",
 		classNameBindings: [ ":mymodal", "class" ],

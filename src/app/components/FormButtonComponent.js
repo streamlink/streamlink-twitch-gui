@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"text!templates/components/formbutton.html.hbs"
+	"hbs!templates/components/formbutton.html"
 ], function(
 	Ember,
 	layout
@@ -24,7 +24,7 @@ define([
 	}
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 
 		tagName: "",
 

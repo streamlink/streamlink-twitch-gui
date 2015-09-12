@@ -1,14 +1,18 @@
 define([
 	"Ember",
 	"components/ListItemComponent",
-	"text!templates/components/game.html.hbs"
-], function( Ember, ListItemComponent, template ) {
+	"hbs!templates/components/game.html"
+], function(
+	Ember,
+	ListItemComponent,
+	layout
+) {
 
 	var get = Ember.get;
 	var or = Ember.computed.or;
 
 	return ListItemComponent.extend({
-		layout: Ember.HTMLBars.compile( template ),
+		layout: layout,
 		classNames: [ "game-component" ],
 
 		action: "goto",
