@@ -122,7 +122,7 @@ define([
 			var trayIconImg    = get( metadata, "config.tray-icon" );
 			var trayIconImgOSX = get( metadata, "config.tray-icon-osx" );
 
-			shortcut.create( displayName );
+			shortcut.createShortcut( displayName );
 			tray.init( displayName, trayIconImg, trayIconImgOSX );
 			if ( process.platform === "darwin" ) {
 				menu.createMacNativeMenuBar( displayName );

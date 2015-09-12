@@ -97,6 +97,10 @@
 		"notification-cache-time": 7,
 		"notification-retries": 3,
 		"notification-interval": 60000,
+		"notifications-toast-windows": {
+			"version-min": "6.2.0",
+			"shortcut-path": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs"
+		},
 		"stream-reload-interval": 60000,
 		"chat-methods": {
 			"chromium": {

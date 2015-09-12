@@ -1,27 +1,43 @@
-define( [ "Ember", "nwjs/nwGui", "utils/semver" ], function( Ember, nwGui, semver ) {
+define([
+	"json!root/metadata",
+	"nwjs/nwGui",
+	"utils/semver",
+	"utils/resolvePath"
+], function(
+	metadata,
+	nwGui,
+	semver,
+	resolvePath
+) {
 
-	var OS   = require( "os" ).release();
-	var win8 = "6.2.0";
-	var path = "\\Microsoft\\Windows\\Start Menu\\Programs\\";
+	var PATH = require( "path" );
+	var OS   = require( "os" );
 
-	function createAppShortcut( name ) {
+	var config = metadata.package.config[ "notifications-toast-windows" ];
+
+	var vers = OS.release();
+	var win8 = config[ "version-min" ];
+
+	function createShortcut( name ) {
 		if (
 			// check if current platform is windows
 			   process.platform === "win32"
 			// check if windows version is >= 8
-			&& semver.sort([ OS, win8 ]).shift() === win8
+			&& semver.sort([ vers, win8 ]).shift() === win8
 		) {
 			// register AppUserModelID
 			// this is required for toast notifications on windows 8+
 			// https://github.com/nwjs/nwjs/wiki/Notification#windows
-			var shortcut = process.env.APPDATA + path + name + ".lnk";
+			var resolved = resolvePath( config[ "shortcut-path" ] );
+			var filename = name + ".lnk";
+			var shortcut = PATH.join( resolved, filename );
 			nwGui.App.createShortcut( shortcut );
 		}
 	}
 
 
 	return {
-		create: createAppShortcut
+		createShortcut: createShortcut
 	};
 
 });
