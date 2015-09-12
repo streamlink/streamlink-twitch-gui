@@ -22,11 +22,9 @@ define(function( require ) {
 		});
 
 
-		require( [ "text!../test/tests.json", "EmberTest" ], function( tests ) {
-			tests = JSON.parse( tests ).tests;
-
+		require( [ "json!../test/tests", "EmberTest" ], function( tests ) {
 			// then load tests and start QUnit
-			require( tests, QUnit.start );
+			require( tests.tests, QUnit.start );
 		});
 
 	});

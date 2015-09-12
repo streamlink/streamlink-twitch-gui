@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"text!templates/components/previewimage.html.hbs"
+	"hbs!templates/components/previewimage.html"
 ], function(
 	Ember,
 	layout
@@ -9,7 +9,7 @@ define([
 	var set = Ember.set;
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 
 		classNames: [],
 		error: false,

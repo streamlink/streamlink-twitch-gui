@@ -2,7 +2,7 @@ define([
 	"Ember",
 	"components/ListItemComponent",
 	"Moment",
-	"text!templates/components/subscription.html.hbs"
+	"hbs!templates/components/subscription.html"
 ], function(
 	Ember,
 	ListItemComponent,
@@ -16,7 +16,7 @@ define([
 	return ListItemComponent.extend({
 		metadata: Ember.inject.service(),
 
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 		classNames: [ "subscription-component" ],
 		attributeBindings: [ "style" ],
 

@@ -1,8 +1,7 @@
 {
 	"name": "livestreamer-twitch-gui",
 	"dependencies": {
-		"requirejs": "2.1.16",
-		"requirejs-text": "2.0.14",
+		"requirejs": "2.1.20",
 		"ember": "1.13.10",
 		"ember-data": "1.13.11",
 		"ember-localstorage-adapter": "kurko/ember-localstorage-adapter#c321b478372ebd720aca4d338e13cc11b644f3e3",

@@ -1,13 +1,16 @@
 define([
 	"Ember",
-	"text!templates/components/fileselect.html.hbs"
-], function( Ember, template ) {
+	"hbs!templates/components/fileselect.html"
+], function(
+	Ember,
+	layout
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( template ),
+		layout: layout,
 		tagName: "div",
 		classNames: [ "input-group" ],
 

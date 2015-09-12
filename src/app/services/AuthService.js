@@ -4,7 +4,7 @@ define([
 	"nwjs/redirect",
 	"nwjs/cookies",
 	"utils/contains",
-	"text!root/oauth.json"
+	"json!root/oauth"
 ], function(
 	Ember,
 	nwGui,
@@ -13,8 +13,6 @@ define([
 	contains,
 	OAuth
 ) {
-
-	OAuth = JSON.parse( OAuth );
 
 	var get = Ember.get;
 	var set = Ember.set;

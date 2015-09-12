@@ -1,12 +1,15 @@
 define([
 	"Ember",
-	"text!templates/components/langfilter.html.hbs"
-], function( Ember, layout ) {
+	"hbs!templates/components/langfilter.html"
+], function(
+	Ember,
+	layout
+) {
 
 	var get = Ember.get;
 
 	return Ember.Component.extend({
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 		tagName: "li",
 
 		init: function() {

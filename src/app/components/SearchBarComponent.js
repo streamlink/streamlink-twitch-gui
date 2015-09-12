@@ -1,7 +1,10 @@
 define([
 	"Ember",
-	"text!templates/components/searchbar.html.hbs"
-], function( Ember, layout ) {
+	"hbs!templates/components/searchbar.html"
+], function(
+	Ember,
+	layout
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -10,7 +13,7 @@ define([
 	return Ember.Component.extend({
 		store: Ember.inject.service(),
 
-		layout: Ember.HTMLBars.compile( layout ),
+		layout: layout,
 		tagName: "nav",
 		classNames: [ "searchbar" ],
 

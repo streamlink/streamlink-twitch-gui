@@ -19,16 +19,24 @@ requirejs.config({
 
 	"map": {
 		"*": {
-			"Ember": "EmberShim"
+			"Ember": "EmberWrapper",
+			"EmberHtmlbars": "EmberHtmlbarsWrapper"
 		},
-		"EmberShim": {
-			"Ember": "Ember"
+		// fixes ember 1.13.x on NW.js
+		"EmberWrapper": {
+			"Ember": "Ember",
+			"EmberHtmlbars": "EmberHtmlbars"
+		},
+		// export wrapper
+		"EmberHtmlbarsWrapper": {
+			"EmberHtmlbars": "EmberHtmlbars"
 		}
 	},
 
 	"paths": {
 		// RequireJS plugins
-		"text": "../vendor/requirejs-text/text",
+		"json": "../requirejs/plugins/json/json.dev",
+		"hbs" : "../requirejs/plugins/hbs/hbs.dev",
 
 		// Vendor
 		"Ember"        : "../vendor/ember/ember.debug",
@@ -39,8 +47,13 @@ requirejs.config({
 		"Selecter"     : "../vendor/Selecter/jquery.fs.selecter",
 		"Moment"       : "../vendor/momentjs/moment",
 
+		// Wrappers
+		"EmberWrapper"        : "../requirejs/wrappers/EmberWrapper.dev",
+		"EmberHtmlbarsWrapper": "../requirejs/wrappers/EmberHtmlbarsWrapper",
+
 		// Application paths
 		"root"        : "..",
+		"requirejs"   : "../requirejs",
 		"initializers": "initializers",
 		"mixins"      : "mixins",
 		"services"    : "services",
@@ -57,17 +70,7 @@ requirejs.config({
 });
 
 
-// fix ember 1.13.x
-// https://github.com/emberjs/ember.js/issues/11679
-// reassign process property after loading ember
+// See EmberWrapper
+// reassign process property after loading Ember
 window._process = window.process;
 window.process = null;
-
-define( "EmberShim", [ "Ember", "EmberHtmlbars" ], function( Ember ) {
-	// fix ember 1.13.x
-	// https://github.com/emberjs/ember.js/issues/11679
-	window.process = window._process;
-	delete window._process;
-
-	return Ember;
-});
