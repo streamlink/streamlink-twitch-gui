@@ -29,6 +29,7 @@ requirejs.config({
 	"paths": {
 		// RequireJS plugins
 		"text": "../vendor/requirejs-text/text",
+		"json": "../requirejs/plugins/json/json.dev",
 
 		// Vendor
 		"Ember"        : "../vendor/ember/ember.debug",
@@ -41,6 +42,7 @@ requirejs.config({
 
 		// Application paths
 		"root"        : "..",
+		"requirejs"   : "../requirejs",
 		"initializers": "initializers",
 		"mixins"      : "mixins",
 		"services"    : "services",

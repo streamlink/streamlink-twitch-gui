@@ -17,18 +17,30 @@ module.exports = {
 
 		skipSemiColonInsertion : true,
 		useStrict              : true,
-		preserveLicenseComments: true
+		preserveLicenseComments: true,
+
+		map: {
+			"json": {
+				"json": "../requirejs/plugins/json/json.optimizer"
+			}
+		}
 	},
 
 	dev: {
 		options: {
-			generateSourceMaps: true
+			generateSourceMaps: true,
+
+			paths: {
+				"json"     : "../requirejs/plugins/json/json.prod"
+			}
 		}
 	},
 
 	release: {
 		options: {
 			paths: {
+				"json"     : "../requirejs/plugins/json/json.prod",
+
 				"Ember"    : "../vendor/ember/ember.prod",
 				"EmberData": "../vendor/ember-data/ember-data.prod"
 			}
