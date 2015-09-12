@@ -29,14 +29,4 @@ define( [ "Ember", "EmberData", "EmberDataLS" ], function( Ember, DS ) {
 		}
 	});
 
-	DS.LSAdapter.reopen({
-		shouldReloadAll: function() {
-			return true;
-		},
-
-		shouldBackgroundReloadRecord: function() {
-			return false;
-		}
-	});
-
 });
