@@ -12,7 +12,7 @@
 					Launching: {{active.channel.display_name}}
 				{{/modal-header}}
 				{{#modal-body class="launching"}}Waiting for Livestreamer to launch the stream...{{/modal-body}}
-				{{modal-log log=active.log}}
+				{{modal-log class="launching" log=active.log}}
 			{{else}}
 				{{#modal-header}}
 					Watching: {{active.channel.display_name}}
@@ -77,7 +77,7 @@
 				{{/if}}
 			{{/modal-body}}
 		{{/if}}
-		{{modal-log log=active.log}}
+		{{modal-log class="error" log=active.log}}
 		{{#modal-footer}}
 			{{#form-button action="close" class="btn-danger" icon="fa-times"}}Close{{/form-button}}
 			{{#if (bool-or (is-equal error.name "NotFoundError") (is-equal error.name "VersionError"))}}

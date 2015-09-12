@@ -62,6 +62,10 @@
 	&.modal-livestreamer {
 		@content-height: 3.1rem;
 
+		> div {
+			min-height: 18.5rem;
+		}
+
 		header,
 		.modal-body.launching,
 		.modal-body.error {
@@ -91,6 +95,11 @@
 			height: @content-height;
 			overflow: auto;
 			font-size: .8em;
+
+			&.launching,
+			&.error {
+				height: ( @content-height + 1rem );
+			}
 
 			> ul {
 				margin: 0;
