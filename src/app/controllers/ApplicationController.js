@@ -20,16 +20,17 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 		loginSuccess: readOnly( "auth.session.isLoggedIn" ),
 		loginPending: readOnly( "auth.session.isPending" ),
 		loginTitle  : function() {
-			return get( this, "loginSuccess" )
-				? "Logged in as %@%@".fmt(
-					get( this, "auth.session.user_name" ),
-					get( this, "notif_running" )
-						? "\nDesktop notifications enabled"
-						: get( this, "notif_error" )
-							? "\nDesktop notifications error"
-							: ""
-				)
-				: "You're not logged in";
+			if ( !get( this, "loginSuccess" ) ) {
+				return "You're not logged in";
+			}
+
+			return "Logged in as " + get( this, "auth.session.user_name" )
+				+ ( get( this, "notif_running" )
+					? "\nDesktop notifications enabled"
+					: get( this, "notif_error" )
+						? "\nDesktop notifications error"
+						: ""
+				);
 		}.property( "loginSuccess", "notif_running", "notif_error" ),
 
 

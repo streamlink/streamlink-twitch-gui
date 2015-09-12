@@ -18,11 +18,11 @@ define([
 		titleLoading: "",
 		titleSuccess: function() {
 			var name = get( this, "name" );
-			return "Unfollow %@".fmt( name );
+			return "Unfollow " + name;
 		}.property( "name" ),
 		titleFailure: function() {
 			var name = get( this, "name" );
-			return "Follow %@".fmt( name );
+			return "Follow " + name;
 		}.property( "name" ),
 
 

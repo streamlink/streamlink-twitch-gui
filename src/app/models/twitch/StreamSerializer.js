@@ -22,7 +22,7 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 
 			resourceHash[ primaryKey ] = name;
 			if ( resourceHash.preview ) {
-				resourceHash.preview[ foreignKeyImage ] = "stream/preview/%@".fmt( name );
+				resourceHash.preview[ foreignKeyImage ] = "stream/preview/" + name;
 			}
 
 			return this._super( modelClass, resourceHash, prop );

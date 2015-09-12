@@ -14,7 +14,7 @@ define([
 
 			var prop = get( this, "prop" );
 			var binding = Ember.Binding
-				.from( "obj.%@".fmt( prop ) )
+				.from( "obj." + prop )
 				.to( "checked" );
 			binding.connect( this );
 		}

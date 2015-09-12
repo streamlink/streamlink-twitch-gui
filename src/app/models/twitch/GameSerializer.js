@@ -17,10 +17,10 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			var foreignKey = this.store.serializerFor( "twitchImage" ).primaryKey;
 
 			if ( resourceHash.box ) {
-				resourceHash.box[ foreignKey ] = "game/box/%@".fmt( name );
+				resourceHash.box[ foreignKey ] = "game/box/" + name;
 			}
 			if ( resourceHash.logo ) {
-				resourceHash.logo[ foreignKey ] = "game/logo/%@".fmt( name );
+				resourceHash.logo[ foreignKey ] = "game/logo/" + name;
 			}
 
 			return this._super( modelClass, resourceHash, prop );

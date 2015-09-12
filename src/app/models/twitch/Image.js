@@ -1,17 +1,19 @@
 define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
-	var get  = Ember.get;
+	var get = Ember.get;
+	var computed = Ember.computed;
 	var attr = DS.attr;
-	var url  = "%@?_=%@";
 	var time = 60;
 
 	function nocache( attr ) {
 		// use a volatile property
-		return Ember.computed( attr, function() {
+		return computed( attr, function() {
+			var url = get( this, attr );
 			// use the same timestamp for `time` seconds
 			var timestamp = +new Date() / 1000;
 			timestamp -= timestamp % time;
-			return url.fmt( get( this, attr ), timestamp );
+
+			return url + "?_=" + timestamp;
 		}).volatile();
 	}
 

@@ -19,13 +19,13 @@ define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
 			var moment     = new Moment( created_at );
 			var diff       = moment.diff( new Date(), "days" );
 			var formatted  = moment.format( diff === 0 ? "LTS" : "llll" );
-			return "Online since %@".fmt( formatted );
+			return "Online since " + formatted;
 		}.property( "created_at" ),
 
 		title_viewers: function() {
 			var viewers = get( this, "viewers" );
-			var numerus = viewers === 1 ? "person is" : "people are";
-			return "%@ %@ watching".fmt( viewers, numerus );
+			var numerus = viewers === 1 ? " person is watching" : " people are watching";
+			return viewers + numerus;
 		}.property( "viewers" )
 
 	}).reopenClass({

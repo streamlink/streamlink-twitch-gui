@@ -44,7 +44,7 @@ define( [ "Ember" ], function( Ember ) {
 				content[ key ] = childBuffer;
 				set( this._children, key, childBuffer );
 
-				this.addObserver( "_children.%@.isDirty".fmt( key ), this, checkDirty );
+				this.addObserver( "_children." + key + ".isDirty", this, checkDirty );
 			}, this );
 
 			this._super.apply( this, arguments );

@@ -53,8 +53,8 @@ define([
 			return substitutions.map(function( substitution ) {
 				/** @type {string[]} */
 				var vars = substitution.vars;
-				vars = vars.map(function( vars ) {
-					return "{%@}".fmt( vars );
+				vars = vars.map(function( name ) {
+					return "{" + name + "}";
 				});
 
 				return {

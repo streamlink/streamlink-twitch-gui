@@ -20,9 +20,10 @@ define( [ "Ember" ], function( Ember ) {
 		flag: function() {
 			var codes = get( this, "codes" );
 			var lang  = get( this, "lang" );
+			var code  = codes[ lang ];
 
-			return codes[ lang ]
-				? "flag-icon-%@".fmt( codes[ lang ][ "flag" ] )
+			return code
+				? "flag-icon-" + code.flag
 				: null;
 		}.property( "lang" ),
 
@@ -37,9 +38,11 @@ define( [ "Ember" ], function( Ember ) {
 
 			switch ( get( this, "type" ) ) {
 				case "channel":
-					return "The channel's language is %@".fmt( lang );
+					return "The channel's language is " + lang;
 				case "broadcaster":
-					return "The broadcaster's language is %@".fmt( lang );
+					return "The broadcaster's language is " + lang;
+				default:
+					return "";
 			}
 		}.property( "withTitle", "codes", "lang" )
 	});

@@ -129,9 +129,8 @@ define( [ "Ember" ], function( Ember ) {
 			// late bindings
 			var binding = get( this, "_binding_offset" );
 			if ( !binding ) {
-				binding = Ember.Binding.from(
-					"%@.length".fmt( get( this, "contentPath" ) )
-				).to( "offset" );
+				var contentPath = get( this, "contentPath" );
+				binding = Ember.Binding.from( contentPath + ".length" ).to( "offset" );
 				set( this, "_binding_offset", binding );
 			}
 			binding.connect( this );

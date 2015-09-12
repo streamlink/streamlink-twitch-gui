@@ -37,11 +37,11 @@ define([
 		titleLoading: "",
 		titleSuccess: function() {
 			var name = get( this, "name" );
-			return "You are subscribed to %@".fmt( name );
+			return "You are subscribed to " + name;
 		}.property( "name" ),
 		titleFailure: function() {
 			var name = get( this, "name" );
-			return "Subscribe to %@ now".fmt( name );
+			return "Subscribe to " + name + " now";
 		}.property( "name" ),
 
 
