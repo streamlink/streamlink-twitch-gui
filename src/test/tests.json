@@ -1,7 +1,7 @@
 {
 	"tests": [
 		"test/semver",
-		"test/linkmatching",
+		"test/linkparser",
 		"test/helpers",
 		"test/parameters",
 		"test/ObjectBuffer",

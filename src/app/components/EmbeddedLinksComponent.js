@@ -1,44 +1,35 @@
-define( [ "Ember", "utils/linkmatching" ], function( Ember, linkmatching ) {
+define([
+	"Ember",
+	"utils/linkparser",
+	"text!templates/components/embeddedlinks.html.hbs"
+], function(
+	Ember,
+	linkparser,
+	layout
+) {
 
 	var get = Ember.get;
-	var compile = Ember.HTMLBars.compile;
-
-	var hbs_string = [
-		"%@",
-		"{{#external-link",
-		" url='%@'",
-		" targetObject=targetObject}}",
-		"%@",
-		"{{/external-link}}"
-	].join( "" );
-
-	var reSafestringL = /</g;
-	var reSafestringR = />/g;
-
-	var linkurl_re = linkmatching.linkurl_re;
-	var linkurl_fn = linkmatching.linkurl_fn( hbs_string );
-	var twitter_re = linkmatching.twitter_re;
-	var twitter_fn = linkmatching.twitter_fn( hbs_string );
-
+	var parseString = linkparser.parseString;
 
 	return Ember.Component.extend({
-		layout: function() {
-			var str = get( this, "text" );
-			str = Ember.isNone( str )
-				? ""
-				: String( str );
-			var template = str
-				.replace( reSafestringL, "&lt;" )
-				.replace( reSafestringR, "&gt;" )
-				.replace( linkurl_re, linkurl_fn )
-				.replace( twitter_re, twitter_fn );
+		layout: Ember.HTMLBars.compile( layout ),
 
-			return compile( template );
-		}.property( "text" ),
+		content: function() {
+			var text   = get( this, "text" );
+			var parsed = parseString( text );
+			var links  = parsed.links;
 
-		textChangeObserver: function() {
-			this.rerender();
-		}.observes( "text" )
+			// merge texts and links
+			return parsed.texts.reduce(function( output, textItem, index ) {
+				if ( textItem.length ) {
+					output.push({ text: textItem });
+				}
+				if ( links[ index ] ) {
+					output.push( links[ index ] );
+				}
+				return output;
+			}, [] );
+		}.property( "text" )
 	});
 
 });

@@ -1,0 +1,11 @@
+{{#each content as |item|}}
+	{{#if item.url}}
+		{{#external-link url=item.url targetObject=targetObject}}
+			{{item.text}}
+		{{/external-link}}
+	{{else}}
+		{{item.text}}
+	{{/if}}
+{{else}}
+	{{text}}
+{{/each}}
