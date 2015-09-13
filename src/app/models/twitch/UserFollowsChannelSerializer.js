@@ -7,18 +7,15 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			return "twitchUserFollowsChannel";
 		},
 
-		attrs: {
-			channel: { deserialize: "records" }
-		},
-
 		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
 			// unexpected payload
 			if ( !payload.follows ) {
 				var primaryKey = this.primaryKey;
 				if ( !payload[ primaryKey ] ) {
-					var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
-					payload[ primaryKey ] = payload.channel[ foreignKey ];
+					payload[ primaryKey ] = id;
 				}
+
+				delete payload.channel;
 
 				payload = {
 					follows: payload
