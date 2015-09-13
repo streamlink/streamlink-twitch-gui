@@ -9,9 +9,10 @@ Changelog - Livestreamer Twitch GUI
 - Added stream URL support to the search bar. #126
 - Added totals of listed games/channels/streams to various page headers.
 - Fixed subscription item background if channel hasn't set one.
-- Fixed desktop notification icons (Windows).
-- Fixed issue with player parameters and disabled advanced settings.
-- Upgraded application to conform to Ember/Ember-Data 2.0.
+- Fixed missing desktop notification icons on Windows.
+- Fixed issue regarding player parameters and disabled advanced settings.
+- Several bug fixes and improvements.
+- Upgraded application to Ember/Ember-Data 2.0.
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.3...master)
 
