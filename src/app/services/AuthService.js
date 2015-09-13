@@ -240,11 +240,13 @@ define([
 		 * @returns {Promise}
 		 */
 		sessionSave: function( token, record ) {
-			return get( this, "session" ).setProperties({
+			var session = get( this, "session" );
+			session.setProperties({
 				access_token: token,
 				scope       : get( record, "authorization.scopes" ).join( "+" ),
 				date        : new Date()
-			}).save();
+			});
+			return session.save();
 		},
 
 		/**
@@ -252,12 +254,14 @@ define([
 		 * @returns {Promise}
 		 */
 		sessionReset: function() {
-			return get( this, "session" ).setProperties({
+			var session = get( this, "session" );
+			session.setProperties({
 				access_token: null,
 				scope       : null,
 				date        : null,
 				user_name   : null
-			}).save();
+			});
+			return session.save();
 		},
 
 

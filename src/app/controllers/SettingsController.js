@@ -102,8 +102,8 @@ define([
 			"apply": function( success, failure ) {
 				var model  = get( this, "settings.content" );
 				var buffer = get( this, "model" ).applyChanges().getContent();
-				model.setProperties( buffer )
-					.save()
+				model.setProperties( buffer );
+				model.save()
 					.then( success, failure )
 					.then( this.send.bind( this, "closeModal" ) )
 					.then( this.retryTransition.bind( this ) )
