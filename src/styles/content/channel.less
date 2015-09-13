@@ -1,7 +1,5 @@
 
 main.content-channel {
-	display: flex;
-	flex-flow: column nowrap;
 	overflow-x: hidden;
 
 	&.animated > .content:not(.content-loading) {
@@ -9,7 +7,6 @@ main.content-channel {
 	}
 
 	> header {
-		flex-shrink: 0;
 		margin-bottom: 1em;
 
 		> .logo {
@@ -80,6 +77,7 @@ main.content-channel {
 
 	> .content-index {
 		display: flex;
+		margin-bottom: 2rem;
 
 		> .big-image {
 			width: 59%;
