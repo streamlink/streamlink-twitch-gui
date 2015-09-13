@@ -62,7 +62,7 @@ define([
 
 				// allow the component to send actions to itself
 				// in case it has been extended and uses its own actions
-				if ( this._actions instanceof Object && this._actions.hasOwnProperty( action ) ) {
+				if ( this.actions instanceof Object && this.actions.hasOwnProperty( action ) ) {
 					this.send.apply( this, [ action ].concat( context ) );
 
 				} else {
