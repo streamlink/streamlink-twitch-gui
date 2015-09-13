@@ -64,9 +64,7 @@ define([
 
 		qualityObserver: function() {
 			// The LivestreamerController knows that it has to spawn a new child process
-			if ( get( this, "success" ) ) {
-				this.kill();
-			}
+			this.kill();
 		}.observes( "quality" ),
 
 		parameters: function() {
