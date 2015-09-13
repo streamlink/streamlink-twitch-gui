@@ -90,8 +90,8 @@ Choose a custom executable file of your selected browser. If left blank, default
 <fieldset>
 <legend>Stream languages</legend>
 <div><i class="fa fa-flag"></i> Flags<span>Indicating the broadcaster language.</span></div>
-<div>{{#check-box checked=model.gui_flagsvisible}}Always show flags{{/check-box}}</div>
-<div><i class="fa fa-filter"></i> Filter or fade out streams<span>Not matching your language selection.</span></div>
+<div>{{#check-box checked=model.gui_flagsvisible}}Flags are always visible{{/check-box}}</div>
+<div><i class="fa fa-filter"></i> Filter streams<span>Choose <i class="text-nowrap">Fade out</i> to dim or choose <i class="text-nowrap">Filter out</i> to remove streams not matching your language selection from lists.</span></div>
 {{radio-buttons buttonName="filterstreams" boxes=false wrap=true value=model.gui_filterstreams content=settings.content.constructor.gui_filterstreams}}
 <div><i class="fa fa-language"></i> Languages<span>Broadcaster languages.</span></div>
 <div>

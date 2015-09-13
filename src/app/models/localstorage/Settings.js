@@ -122,8 +122,8 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		],
 
 		gui_filterstreams: [
-			{ value: false, label: "Fade out (load all languages)" },
-			{ value: true,  label: "Filter out (only load checked languages)" }
+			{ value: false, label: "Fade out streams" },
+			{ value: true,  label: "Filter out streams" }
 		]
 
 	});
