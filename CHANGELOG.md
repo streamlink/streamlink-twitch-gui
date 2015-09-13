@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.10.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.10.0) (2015-09-13)
 
 - Implemented multiple chat methods. #132
 - Implemented real stream language filters. #133
@@ -14,7 +14,7 @@ Changelog - Livestreamer Twitch GUI
 - Several bug fixes and improvements.
 - Upgraded application to Ember/Ember-Data 2.0.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.3...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.3...v0.10.0)
 
 
 ## [v0.9.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.3) (2015-08-05)
