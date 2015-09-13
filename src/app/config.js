@@ -19,13 +19,7 @@ requirejs.config({
 
 	"map": {
 		"*": {
-			"Ember": "EmberWrapper",
 			"EmberHtmlbars": "EmberHtmlbarsWrapper"
-		},
-		// fixes ember 1.13.x on NW.js
-		"EmberWrapper": {
-			"Ember": "Ember",
-			"EmberHtmlbars": "EmberHtmlbars"
 		},
 		// export wrapper
 		"EmberHtmlbarsWrapper": {
@@ -48,7 +42,6 @@ requirejs.config({
 		"Moment"       : "../vendor/momentjs/moment",
 
 		// Wrappers
-		"EmberWrapper"        : "../requirejs/wrappers/EmberWrapper.dev",
 		"EmberHtmlbarsWrapper": "../requirejs/wrappers/EmberHtmlbarsWrapper",
 
 		// Application paths
@@ -68,9 +61,3 @@ requirejs.config({
 		"templates"   : "../templates"
 	}
 });
-
-
-// See EmberWrapper
-// reassign process property after loading Ember
-window._process = window.process;
-window.process = null;

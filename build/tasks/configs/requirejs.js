@@ -36,9 +36,7 @@ module.exports = {
 
 			paths: {
 				"json": "../requirejs/plugins/json/json.prod",
-				"hbs" : "../requirejs/plugins/hbs/hbs.prod",
-
-				"EmberWrapper": "../requirejs/wrappers/EmberWrapper.prod"
+				"hbs" : "../requirejs/plugins/hbs/hbs.prod"
 			}
 		}
 	},
@@ -48,8 +46,6 @@ module.exports = {
 			paths: {
 				"json": "../requirejs/plugins/json/json.prod",
 				"hbs" : "../requirejs/plugins/hbs/hbs.prod",
-
-				"EmberWrapper": "../requirejs/wrappers/EmberWrapper.prod",
 
 				"Ember"    : "../vendor/ember/ember.prod",
 				"EmberData": "../vendor/ember-data/ember-data.prod"
