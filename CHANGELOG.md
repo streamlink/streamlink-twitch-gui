@@ -1,13 +1,13 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.10.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.10.1) (2015-09-14)
 
 - Fixed livestreamer validation.
 - Fixed image preloader.
 - Fixed application name in gnome panel. #136
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.10.0...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.10.0...v0.10.1)
 
 
 ## [v0.10.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.10.0) (2015-09-13)
