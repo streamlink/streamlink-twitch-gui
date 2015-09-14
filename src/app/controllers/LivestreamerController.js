@@ -57,6 +57,12 @@ define([
 	Warning.prototype = merge( new Error(), { name: "Warning" } );
 
 
+	function execCheck( stat ) {
+		// octal: 0111
+		return isWin || ( stat.mode & 73 ) > 0;
+	}
+
+
 	// we need a common error parsing function for stdout and stderr, because
 	// livestreamer is weird sometimes and prints error messages to stdout instead... :(
 	function parseError( data ) {
@@ -129,16 +135,21 @@ define([
 				})
 				// validate configuration and get the exec command
 				.then( this.checkLivestreamer.bind( this ) )
-				// launch the stream
-				.then( this.launchLivestreamer.bind( this, livestreamer, true ) )
-				// setup stream refresh interval
-				.then( this.refreshStream.bind( this, livestreamer ) );
+				.then(
+					// launch the stream
+					this.launchLivestreamer.bind( this, livestreamer, true ),
+					// show error message
+					this.onStreamFailure.bind( this, livestreamer )
+				);
 		},
 
 		onStreamSuccess: function( livestreamer, firstLaunch ) {
 			set( livestreamer, "success", true );
 
 			if ( !firstLaunch ) { return; }
+
+			// setup stream refresh interval
+			this.refreshStream( livestreamer );
 
 			// automatically close modal on success
 			if ( get( this, "settings.gui_hidestreampopup" ) ) {
@@ -192,26 +203,27 @@ define([
 			var path = get( this, "settings.livestreamer" );
 			var exec = get( this, "metadata.config.livestreamer-exec" );
 			var fb   = get( this, "metadata.config.livestreamer-fallback-paths-unix" );
+			var livestreamer;
+
+			path = String( path ).trim();
 
 			// use the default command if the user did not define one
-			path = path ? String( path ) : exec;
-
-			// check for invalid values first
-			if ( path.indexOf( exec ) === -1 ) {
+			if ( !path.length ) {
+				livestreamer = exec;
+			// otherwise check for containing executable name
+			} else if ( path.indexOf( exec ) !== -1 ) {
+				livestreamer = path;
+			} else {
 				return Promise.reject( new NotFoundError() );
 			}
 
-			function execCheck( stat ) {
-				// octal: 0111
-				return isWin || ( stat.mode & 73 ) > 0;
-			}
-
 			// check for the executable
-			return which( path, execCheck )
+			return which( livestreamer, execCheck )
 				// check fallback paths
 				.catch(function() {
 					var promise = Promise.reject();
-					if ( isWin || !fb || !fb.length ) {
+					// ignore fallbacks if custom path has been set
+					if ( path || isWin || !fb || !fb.length ) {
 						return promise;
 					}
 
