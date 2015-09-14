@@ -49,4 +49,20 @@ if [[ ! -z `ldd $HERE/$EXEC | grep "libudev.so.0 => not found"` ]]; then
 fi
 
 # run the application
-exec -a "$0" "$HERE/$EXEC" "$@"
+exec -a "$0" "$HERE/$EXEC" "$@" &
+pid=$!
+
+# fix application name in gnome panel
+# consider for: GNOME / Unity / KDE / XFCE / X-Cinnamon / LXDE
+# useful also for cairo-dock, gnome dash-to-dock, and plank/docky
+if ( [[ "$XDG_CURRENT_DESKTOP" = "GNOME" ]] && [[ ! -z `which wmctrl` ]] ); then
+    sleep 1
+    while [ -z $winid ]
+    do
+    	sleep 1
+		winid=$(wmctrl -lpx | grep $pid | cut -d' ' -f 1)
+    done
+    xprop -id ${winid} -f WM_CLASS 8s -set WM_CLASS "Livestreamer Twitch GUI"
+fi
+
+wait $pid
