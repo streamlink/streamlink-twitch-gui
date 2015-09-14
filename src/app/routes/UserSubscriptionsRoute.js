@@ -48,12 +48,25 @@ define([
 							return data;
 						});
 				})
-				.then( preload([
-					"@each.product.@each.partner_login.@each.logo",
-					"@each.product.@each.partner_login.@each.profile_banner",
-					"@each.product.@each.partner_login.@each.video_banner",
-					"@each.product.@each.emoticons.firstObject.@each.url"
-				]) );
+				.then(function( data ) {
+					var emoticons = data.mapBy( "product.emoticons" ).reduce(function( res, item ) {
+						return res.concat( item.toArray() );
+					}, [] );
+
+					return Promise.all([
+						Promise.resolve( data ).then( preload([
+							"product.partner_login.logo",
+							"product.partner_login.profile_banner",
+							"product.partner_login.video_banner"
+						]) ),
+						Promise.resolve( emoticons ).then( preload(
+							"url"
+						) )
+					])
+						.then(function() {
+							return data;
+						});
+				});
 		}
 	});
 

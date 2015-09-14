@@ -23,7 +23,7 @@ define([
 				limit : get( this, "limit" )
 			})
 				.then(function( data ) { return data.toArray(); })
-				.then( preload( "@each.game.@each.box.@each.large" ) );
+				.then( preload( "game.box.large" ) );
 		}
 	});
 

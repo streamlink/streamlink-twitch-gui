@@ -26,7 +26,7 @@ define([
 				broadcaster_language: get( this, "broadcaster_language" )
 			})
 				.then(function( data ) { return data.toArray(); })
-				.then( preload( "@each.preview.@each.medium_nocache" ) );
+				.then( preload( "preview.medium_nocache" ) );
 		}
 	});
 

@@ -38,7 +38,12 @@ define([
 						type : "suggest",
 						live : true
 					})
+						.then(function( data ) {
+							return data.mapBy( "game" ).toArray();
+						})
+						.then( preload( "box.large_nocache" ) )
 					: Promise.resolve([]),
+
 				// search for channels
 				filterMatches( params.filter, "channels" )
 					? store.query( "twitchSearchChannel", {
@@ -46,7 +51,12 @@ define([
 						offset: 0,
 						limit : 10
 					})
+						.then(function( data ) {
+							return data.mapBy( "channel" ).toArray();
+						})
+						.then( preload( "logo" ) )
 					: Promise.resolve([]),
+
 				// search for streams
 				filterMatches( params.filter, "streams" )
 					? store.query( "twitchSearchStream", {
@@ -54,20 +64,19 @@ define([
 						offset: get( this, "offset" ),
 						limit : get( this, "limit" )
 					})
+						.then(function( data ) {
+							return data.mapBy( "stream" ).toArray();
+						})
+						.then( preload( "preview.medium_nocache" ) )
 					: Promise.resolve([])
 			])
 				.then(function( queries ) {
 					return {
-						games   : queries[0].toArray().mapBy( "game" ),
-						channels: queries[1].toArray().mapBy( "channel" ),
-						streams : queries[2].toArray().mapBy( "stream" )
+						games   : queries[0],
+						channels: queries[1],
+						streams : queries[2]
 					};
-				})
-				.then( preload([
-					"games.@each.box.@each.large",
-					"streams.@each.preview.@each.medium_nocache",
-					"channels.@each.logo"
-				]) );
+				});
 		},
 
 		fetchContent: function() {
@@ -80,8 +89,8 @@ define([
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})
-				.then(function( data ) { return data.toArray().mapBy( "stream" ); })
-				.then( preload( "@each.preview.@each.medium_nocache" ) );
+				.then(function( data ) { return data.mapBy( "stream" ).toArray(); })
+				.then( preload( "preview.medium_nocache" ) );
 		},
 
 		setupController: function( controller ) {

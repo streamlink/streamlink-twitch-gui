@@ -4,13 +4,10 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 
 	return Ember.Route.extend({
 		model: function() {
-			/** @type {Array} */
 			var records = get( this.controllerFor( "livestreamer" ), "model" );
 
-			return Promise.all( records.map(function( record ) {
-				return get( record, "stream" ).reload();
-			}) )
-				.then( preload( "@each.preview.@each.large_nocache" ) )
+			return Promise.resolve( records.mapBy( "stream" ).toArray() )
+				.then( preload( "preview.large_nocache" ) )
 				// return the original record array
 				.then(function() { return records; });
 		}

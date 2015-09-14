@@ -1,9 +1,8 @@
 define( [ "Ember" ], function( Ember ) {
 
-	var concat = [].concat,
-	    get = Ember.getWithDefault,
-	    makeArray = Ember.makeArray,
-	    isNone = Ember.isNone;
+	var concat = [].concat;
+	var makeArray = Ember.makeArray;
+	var isNone = Ember.isNone;
 
 	return function preload( withError, list ) {
 		if ( list === undefined ) {
@@ -30,7 +29,7 @@ define( [ "Ember" ], function( Ember ) {
 				// create a flat array out of all traversal strings
 				makeArray( list ).reduce(function createPromiseList( promises, traverse ) {
 					// traverse response data
-					var resources = get( response, traverse, [] );
+					var resources = makeArray( response ).mapBy( traverse );
 
 					// data instanceof Ember.Enumerable
 					resources = resources && resources.toArray

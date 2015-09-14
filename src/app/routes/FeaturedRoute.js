@@ -15,15 +15,21 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 				})
 			])
 				.then(function( data ) {
-					return {
-						summary: data[0].toArray()[0],
-						featured: data[1].toArray()
-					};
-				})
-				.then( preload([
-					"featured.@each.image",
-					"featured.@each.stream.@each.preview.@each.large_nocache"
-				]) );
+					var summary  = data[0].toArray()[0];
+					var featured = data[1].toArray();
+
+					return Promise.resolve( featured )
+						.then( preload([
+							"image",
+							"stream.preview.large_nocache"
+						]) )
+						.then(function() {
+							return {
+								summary : summary,
+								featured: featured
+							};
+						});
+				});
 		},
 
 		resetController: function( controller, isExiting ) {

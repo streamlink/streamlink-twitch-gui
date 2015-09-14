@@ -24,10 +24,8 @@ define([
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})
-				.then(function( data ) {
-					return data.toArray();
-				})
-				.then( preload( "@each.box.@each.large" ) );
+				.then(function( data ) { return data.toArray(); })
+				.then( preload( "box.large" ) );
 		}
 	});
 
