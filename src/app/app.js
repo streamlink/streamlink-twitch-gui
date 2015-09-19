@@ -194,6 +194,7 @@ define(function( require ) {
 		WrapContentComponent: require( "components/WrapContentComponent" ),
 		DropDownComponent: require( "components/DropDownComponent" ),
 		ModalLogComponent: require( "components/ModalLogComponent" ),
+		LoadingSpinnerComponent: require( "components/LoadingSpinnerComponent" ),
 
 
 		// Content

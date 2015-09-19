@@ -1,7 +1,6 @@
 
 main.content.content-loading {
-	@width: .667rem;
-	@height: 10rem;
+	@size: 6rem;
 
 	display: flex;
 	align-items: center;
@@ -9,21 +8,61 @@ main.content.content-loading {
 	padding: 0;
 	overflow: hidden;
 
-	> div {
-		width: @width;
-		height: @height;
-		margin: 0 ( @width / 4 );
-		background-color: fade( @color-twitch-purple, 85% );
-		-webkit-animation: loadinganim 1.2s infinite ease-in-out;
-	}
+	> .loading-spinner {
+		position: relative;
+		width: @size;
+		height: @size;
 
-	> .rect2 { -webkit-animation-delay: -1.1s; }
-	> .rect3 { -webkit-animation-delay: -1.0s; }
-	> .rect4 { -webkit-animation-delay: -0.9s; }
-	> .rect5 { -webkit-animation-delay: -0.8s; }
+		> circle {
+			stroke: @color-primary;
+		}
+	}
 }
 
-@-webkit-keyframes loadinganim {
-	0%, 40%, 100% { -webkit-transform: scaleY( 0.4 ); }
-	20% { -webkit-transform: scaleY( 1.0 ); }
+
+.loading-spinner {
+	// no SVG2 / SVG-Strokes yet: can't set stroke-alignment: inner
+	// so just reduce radius by stroke width
+	@stroke: .05;
+	@duration: 1.5s;
+
+	@radius: ( .5 - @stroke );
+
+	width: 1em;
+	height: 1em;
+	-webkit-animation: anim-loading-spinner-rotate ( @duration * 3 ) linear infinite;
+
+	> circle {
+		fill: transparent;
+		stroke: @color-text-darker;
+		stroke-linecap: round;
+		stroke-width: unit( ( @stroke * 100 ), % );
+		-webkit-animation: anim-loading-spinner-dash @duration ease-in-out infinite;
+	}
+
+
+	@-webkit-keyframes anim-loading-spinner-rotate {
+		100% {
+			transform: rotate(720deg);
+		}
+	}
+
+	@-webkit-keyframes anim-loading-spinner-dash {
+		@perimeter:     ( 2.0 * pi() * @radius );
+		@perimeter_1_4: ( 0.25 * @perimeter );
+		@perimeter_3_4: ( 0.75 * @perimeter );
+
+		0% {
+			stroke-dasharray: 0 @perimeter;
+			stroke-dashoffset: @perimeter_1_4;
+		}
+		50% {
+			stroke-dasharray: @perimeter_3_4 @perimeter_1_4;
+			stroke-dashoffset: 0;
+		}
+		100% {
+			stroke-dasharray: 0 @perimeter;
+			stroke-dashoffset: -@perimeter_3_4;
+		}
+	}
 }
