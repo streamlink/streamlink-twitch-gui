@@ -149,6 +149,30 @@
 				"args": "\"{script}\" \"{url}\"",
 				"exec": "cscript",
 				"script": "msie-minimal.vbs"
+			},
+			"chatty": {
+				"args": "-jar {chatty} -connect -single -token {token} -channel {channel}",
+				"exec": {
+					"win32": "javaw",
+					"darwin": "java",
+					"linux": "java"
+				},
+				"fallbacks": {
+					"win32": [
+						"%JAVA_HOME%\\bin",
+						"%JRE_HOME%\\bin",
+						"%PROGRAMDATA%\\Oracle\\Java\\javapath"
+					],
+					"darwin": [
+						"$JAVA_HOME/bin",
+						"$JRE_HOME/bin"
+					],
+					"linux": [
+						"$JAVA_HOME/bin",
+						"$JRE_HOME/bin",
+						"/etc/alternatives"
+					]
+				}
 			}
 		}
 	},

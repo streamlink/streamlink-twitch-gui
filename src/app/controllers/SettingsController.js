@@ -36,6 +36,7 @@ define([
 		isChatMethodDefault: equal( "model.chat_method", "default" ),
 		isChatMethodMSIE   : equal( "model.chat_method", "msie" ),
 		isChatMethodCustom : equal( "model.chat_method", "custom" ),
+		isChatMethodChatty : equal( "model.chat_method", "chatty" ),
 
 		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
