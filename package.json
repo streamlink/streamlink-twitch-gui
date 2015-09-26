@@ -40,7 +40,8 @@
 		"tray-icon": "img/icon-{res}.png",
 		"tray-icon-osx": "img/icon-osx-{res}{hidpi}.png",
 		"themes": [
-			"default"
+			"default",
+			"dark"
 		],
 		"livestreamer-exec": "livestreamer",
 		"livestreamer-fallback-paths-unix": [
