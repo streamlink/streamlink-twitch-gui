@@ -18,25 +18,47 @@
 
 		&::before,
 		&::after {
+			content: "";
 			position: absolute;
 			visibility: visible;
 			width: 100%;
 			height: 100%;
 			overflow: hidden;
-			color: @checkbox-color;
 			font: @checkbox-size/1 FontAwesome;
 			text-align: center;
 		}
 
 		&::before {
-			content: "";
-			background: @checkbox-background;
-			outline: @checkbox-outline-size solid @checkbox-outline-color;
+			outline: @checkbox-outline-size solid;
 		}
 
-		&::after {
-			content: "";
-		}
+		.themed({
+			&::before,
+			&::after {
+				color: @themed-checkbox-color;
+			}
+
+			&::before {
+				outline-color: @themed-checkbox-border-color;
+				background: @themed-checkbox-background;
+			}
+
+			&:not(:disabled):hover {
+				&::before {
+					outline-color: @themed-checkbox-border-color-hover;
+				}
+				&:active::before {
+					outline-color: @themed-checkbox-border-color-active;
+				}
+			}
+
+			&:disabled {
+				& + span,
+				& + label[for] {
+					opacity: @themed-checkbox-opacity-disabled;
+				}
+			}
+		});
 
 		& + span,
 		& + label[for] {
@@ -50,22 +72,6 @@
 
 		& + label[for] {
 			margin: 0 0 0 .25em;
-		}
-
-		&:disabled {
-			cursor: default;
-
-			&::before {
-				border-color: @input-color-disabled;
-				background: @input-background-disabled;
-			}
-			&::after {
-				color: @input-color-disabled;
-			}
-			& + span,
-			& + label[for] {
-				color: @color-text-bright;
-			}
 		}
 
 		&:not(:disabled) {
@@ -88,24 +94,37 @@
 
 
 input[type="text"],
+input[type="search"],
 input[type="number"] {
 	height: 2em;
 	padding: .4em;
-	border: .1em solid @input-border;
+	border: .1em solid;
 	border-radius: 0;
-	color: @input-color;
 	font-size: inherit;
 	text-overflow: ellipsis;
-	background: @input-background;
 	box-shadow: 0 0 0 !important;
 	-webkit-box-shadow: 0 0 0 !important;
+	transition: none;
 
-	&:focus {
-		border-color: @input-border-focus;
-	}
+	.themed({
+		color: @themed-input-color;
+		border-color: @themed-input-border-color;
+		background: @themed-input-background;
+
+		&:hover {
+			border-color: @themed-input-border-color-hover;
+		}
+
+		&:focus {
+			border-color: @themed-input-border-color-active;
+		}
+
+		&::-webkit-input-placeholder {
+			color: @themed-input-color-placeholder;
+		}
+	});
 
 	&::-webkit-input-placeholder {
-		color: @color-text-bright;
 		font-style: italic;
 	}
 
@@ -114,11 +133,6 @@ input[type="number"] {
 		height: 2em;
 		border: 0;
 		line-height: 1;
-	}
-
-	&:disabled {
-		border-color: @input-border-disabled;
-		color: @input-color-disabled;
 	}
 }
 
@@ -157,22 +171,15 @@ input[type="number"] {
 
 
 input:disabled {
-	background: @input-background-disabled;
 	-webkit-user-select: none;
 
+	.themed({
+		opacity: @themed-input-opacity-disabled;
+	});
+
 	&, & + .input-group-btn > button {
-		cursor: default;
+		cursor: default !important;
 	}
-}
-
-
-.input-group .form-control:first-child {
-	border-right-width: 0 !important;
-}
-
-
-.input-group-btn {
-	font-size: inherit;
 }
 
 
@@ -182,8 +189,12 @@ input:disabled {
 	border-radius: 0;
 	font-size: 1rem;
 	line-height: 2;
-	color: @button-color !important;
 	z-index: initial !important;
+	transition: background .2s ease-out, border-color .2s ease-out;
+
+	.themed({
+		color: @themed-button-color;
+	});
 
 	&,
 	&.btn-primary { .btn-color( @color-primary ); }
@@ -218,7 +229,6 @@ input:disabled {
 		height: 1em;
 		font-size: @button-icon-size;
 		line-height: ( 1 / unit( @button-icon-size ) );
-		color: fade( @button-color, ( 100 * @button-icon-opacity ) );
 		text-align: center;
 		vertical-align: middle;
 		transition: color .2s ease-out;
@@ -228,13 +238,19 @@ input:disabled {
 		}
 	}
 
-	&:hover > i {
-		color: fade( @button-color, ( 100 * @button-icon-opacity-hover ) );
-	}
+	.themed({
+		> i {
+			color: @themed-button-icon-color;
+		}
 
-	&:hover:active > i {
-		color: fade( @button-color, ( 100 * @button-icon-opacity-active ) );
-	}
+		&:hover > i {
+			color: @themed-button-icon-color-hover;
+		}
+
+		&:hover:active > i {
+			color: @themed-button-icon-color-active;
+		}
+	});
 
 	&.btn-with-anim > i {
 		@duration: .5s;
@@ -281,6 +297,10 @@ input:disabled {
 		opacity: 1;
 		transition: opacity .2s ease-out;
 
+		.themed({
+			color: @themed-button-color;
+		});
+
 		&:first-of-type {
 			margin-left: 0;
 		}
@@ -321,17 +341,24 @@ input:disabled {
 
 	> .selecter-selected,
 	> .selecter-options {
-		color: @select-color;
 		font-size: inherit;
 		box-shadow: none;
+
+		.themed({
+			color: @themed-select-color;
+		});
 	}
 
 	> .selecter-selected {
 		position: relative;
-		border: .1em solid @select-border;
+		border: .1em solid;
 		border-radius: 0;
 		padding: .2em 1.4em .2em .4em;
-		background: @select-background-selected;
+
+		.themed({
+			border-color: @themed-select-border-color;
+			background: @themed-select-background;
+		});
 
 		&::after {
 			content: @fa-var-chevron-down;
@@ -344,30 +371,43 @@ input:disabled {
 			font: .85em/1.875 FontAwesome;
 			transition: opacity .2s ease-out;
 		}
+	}
 
-		&:hover::after {
-			opacity: @button-icon-opacity-hover;
-		}
+	> select:not(:disabled) + .selecter-selected {
+		cursor: pointer;
 
-		&:hover:active::after {
-			opacity: @button-icon-opacity-active;
+		&:hover {
+			.themed({
+				border-color: @themed-select-border-color-hover;
+			});
+
+			&::after {
+				opacity: @button-icon-opacity-hover;
+			}
+			&:active::after {
+				opacity: @button-icon-opacity-active;
+			}
 		}
+	}
+
+	> select:disabled + .selecter-selected {
+		.themed({
+			opacity: @themed-select-opacity-disabled;
+		});
 	}
 
 	> .selecter-options {
 		max-height: 10em;
 		border: 0;
 		border-radius: 0 !important;
-		background: @select-background;
 	}
 
 	&.open > .selecter-options {
-		border: 1px solid @select-border-focus;
-	}
+		border: 1px solid;
 
-	// selecter doesn't update the `disabled` class. wtf?
-	> select:disabled + .selecter-selected {
-		background: @input-background-disabled;
+		.themed({
+			border-color: @themed-select-items-border-color;
+		});
 	}
 
 	.selecter-item {
@@ -376,19 +416,27 @@ input:disabled {
 		border-radius: 0 !important;
 		color: inherit;
 		font-size: inherit;
+		cursor: pointer;
+
+		.themed({
+			background: @themed-select-items-background;
+
+			&:hover {
+				background: @themed-select-items-background-hover;
+			}
+
+			&:not(:last-of-type) {
+				border-bottom: 1px solid @themed-select-items-divider-color;
+			}
+		});
 
 		&.selected {
-			color: @select-color-selected;
 			font-weight: bold;
 			background: transparent;
-		}
 
-		&:hover {
-			background: @select-background-hover;
-		}
-
-		&:not(:last-of-type) {
-			border-bottom: 1px solid @select-border-inner;
+			.themed({
+				color: @themed-select-items-selected-color;
+			});
 		}
 	}
 }

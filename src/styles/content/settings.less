@@ -9,10 +9,14 @@
 		> legend {
 			margin: 0 0 1em;
 			padding: 0 0 .25em;
-			border-bottom: 1px solid @color-text-brighter;
-			color: @color-text-default;
+			border-bottom: 1px solid;
 			font-size: 1em;
 			font-weight: lighter;
+
+			.themed({
+				color: @themed-settings-legend-color;
+				border-bottom-color: @themed-settings-legend-border-color;
+			});
 		}
 
 		> :not(legend) {
@@ -27,7 +31,6 @@
 			padding-right: 1.5em;
 
 			> i.fa {
-				color: @color-text-dark;
 				width: 1em;
 				margin-right: .25em;
 				text-align: center;
@@ -37,7 +40,10 @@
 				display: block;
 				padding-left: 2em;
 				font-size: .75em;
-				color: @color-text-bright;
+
+				.themed({
+					color: @themed-settings-descr-color;
+				});
 
 				.docs {
 					display: table;
@@ -48,12 +54,18 @@
 					cursor: pointer;
 
 					&:hover {
-						color: @color-twitch-purple-light;
-						background: @color-text-brightest;
+						.themed({
+							color: @themed-settings-descr-docs-color-hover;
+							background: @themed-settings-descr-docs-background-hover;
+						});
 					}
 
 					> i {
 						margin-right: .333em;
+
+						.themed({
+							color: @themed-settings-descr-docs-icon-color;
+						});
 					}
 				}
 			}
@@ -86,7 +98,7 @@
 		width: 32em;
 		font-size: .9em;
 		line-height: 1.8;
-		.radiobtns-color( @color-neutral, @button-color );
+		.radiobtns-color( ~"color-neutral" );
 	}
 
 	.selecter.notifications,

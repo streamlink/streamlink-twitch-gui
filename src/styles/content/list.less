@@ -10,11 +10,14 @@
 	padding: 0;
 	list-style: none;
 	overflow: hidden;
-	color: @color-text-default;
 
-	i {
-		color: @color-text-darker;
-	}
+	.themed({
+		color: @themed-contentlist-color;
+
+		i {
+			color: @themed-contentlist-icon-color;
+		}
+	});
 
 	> li {
 		float: left;
@@ -65,19 +68,18 @@
 	.dynamic-elems-per-row( 4, @content-width, 8%, @additional-width );
 	.block-aspect-ratio( ( 272 / 380 ) );
 
-	i {
-		color: @color-text-darker;
-	}
-
 	> header,
 	> footer {
 		position: absolute;
 		width: 100%;
 		padding: @padding;
-		color: @color-text-dark;
-		background-color: fade( @color-background, 90% );
 		opacity: 0;
 		transition: opacity @speed ease-out, top @speed ease-out, bottom @speed ease-out;
+
+		.themed({
+			background: @themed-gameitem-overlay-background;
+			color: @themed-gameitem-overlay-color;
+		});
 	}
 
 	> header {
@@ -115,7 +117,6 @@
 .stream-component {
 	min-height: 185px;
 	margin-bottom: 20px;
-	color: @color-text-dark;
 	.dynamic-elems-per-row( 3, @content-width, 8%, @additional-width );
 	.stream-hover();
 
@@ -166,6 +167,14 @@
 	> footer {
 		display: flex;
 		justify-content: space-between;
+
+		.themed({
+			color: @themed-streamitem-footer-color;
+
+			i {
+				color: @themed-streamitem-footer-icon-color;
+			}
+		});
 	}
 
 	> .preview {
@@ -179,8 +188,11 @@
 			padding: .25em;
 			font-size: .85em;
 			opacity: 0;
-			background: fade( @color-background, 80% );
 			transition: opacity .333s ease-out;
+
+			.themed({
+				background: @themed-streamitem-overlay-background;
+			});
 
 			// Set an icon width and move the icon to the left, so the text remains centered.
 			// Let the text have a max-width, so the icon stays on the screen.
@@ -191,7 +203,6 @@
 			> i {
 				width: @icon-width;
 				margin-left: @icon-offset;
-				line-height: initial;
 				text-align: center;
 
 				&.fa-gamepad {
@@ -207,7 +218,9 @@
 				text-decoration: none;
 
 				&:not(:hover) {
-					color: @color-text-dark;
+					.themed({
+						color: @themed-streamitem-game-color;
+					});
 				}
 			}
 		}
@@ -249,10 +262,6 @@
 
 		> .game {
 			margin: 0 0 .25em;
-
-			> i {
-				color: @color-text-darker;
-			}
 		}
 
 		> .status {
@@ -267,8 +276,6 @@
 .subscription-component {
 	@size: 6.5em;
 	@padding: 1.5em;
-	@color: @color-text-dark;
-	@background: @color-background;
 
 	position: relative;
 	min-height: 264px;
@@ -276,7 +283,10 @@
 	padding-top: @padding;
 	background-position: center center;
 	background-size: cover;
-	color: @color;
+
+	.themed({
+		color: @themed-subitem-color;
+	});
 
 	// no dynamic columns for this component
 	// this media query is required by InfiniteScrollRouteMixin, though
@@ -301,10 +311,6 @@
 			height: @size;
 			margin: 0 0 @padding @padding;
 			cursor: pointer;
-
-			> .previewImage {
-				border: .25em solid @background;
-			}
 		}
 
 		> .buttons {
@@ -313,9 +319,12 @@
 			align-items: flex-start;
 			margin-right: @padding;
 			padding: .5em;
-			background: fade( @color-background, 80% );
 			opacity: 0;
 			transition: opacity .333s ease-out;
+
+			.themed({
+				background: @themed-subitem-background;
+			});
 
 			> button:not(:last-of-type) {
 				margin-left: .5em;
@@ -329,15 +338,20 @@
 
 	> .info {
 		padding: @padding;
-		background: fade( @color-background, 80% );
+
+		.themed({
+			background: @themed-subitem-background;
+		});
 
 		> h3 {
 			margin: 0;
 			font-size: 1.75em;
 
-			> a:not(:hover) {
-				color: @color-text-darker;
-			}
+			.themed({
+				&, & > a:not(:hover) {
+					color: @themed-subitem-headline-color;
+				}
+			});
 		}
 
 		> .subscription {

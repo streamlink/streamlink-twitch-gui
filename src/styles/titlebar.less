@@ -12,9 +12,12 @@
 		height: 0;
 		margin: 0;
 		overflow: visible;
-		color: @color-text-bright;
 		font: normal normal 15px/26px @font-name;
 		text-align: center;
+
+		.themed({
+			color: @themed-titlebar-title-color;
+		});
 	}
 
 	> .logo {
@@ -38,9 +41,15 @@
 		flex-grow: 1;
 		height: @titlebar-size;
 		margin-top: @app-padding;
-		border: 1px solid @searchbar-border-color;
-		background: @searchbar-background;
+		border: 1px solid;
 		-webkit-app-region: no-drag;
+
+		.themed({
+			&, & > button {
+				background: @themed-searchbar-background;
+				border-color: @themed-searchbar-border-color;
+			}
+		});
 
 		> * {
 			z-index: 100;
@@ -49,25 +58,36 @@
 		> button {
 			margin: 0;
 			padding: 0;
-			border: 0 solid @searchbar-border-color;
-			background: @searchbar-background;
+			border: 0 solid;
 			line-height: @titlebar-size;
 			text-align: center;
 
-			&:hover {
-				color: @color-text-dark;
-			}
+			.themed({
+				color: @themed-searchbar-button-color;
+
+				&.btn-small {
+					color: @themed-searchbar-button-small-color;
+				}
+
+				&,
+				&.btn-small {
+					&:hover {
+						color: @themed-searchbar-button-color-hover;
+					}
+					&:hover:active {
+						color: @themed-searchbar-button-color-active;
+					}
+				}
+			});
 		}
 
 		> .btn-nav {
 			width: @searchbar-btn-size;
 			border-right-width: 1px;
-			color: @color-text-default;
 		}
 
 		> .btn-small {
 			width: ( @searchbar-btn-size * 4 / 5 );
-			color: @color-text-bright;
 			font-size: 85%;
 		}
 
@@ -95,13 +115,7 @@
 			margin: 0;
 			padding: @searchbar-padding;
 			border: 0;
-			color: @color-text-dark;
 			font: 14px/20px @font-name;
-
-			&::-webkit-input-placeholder {
-				color: @color-text-bright;
-				font-style: italic;
-			}
 		}
 	}
 
@@ -115,12 +129,24 @@
 			width: ( @titlebar-size + 6px );
 			height: @titlebar-size;
 			padding: 0;
-			color: @titlebar-btn-color;
-			background: @titlebar-btn-background;
 			font-size: @titlebar-btn-fontsize;
 			line-height: ( @titlebar-size - 2px );
 			text-align: center;
 			-webkit-app-region: no-drag;
+
+			.themed({
+				color: @themed-titlebar-button-color;
+				background: @themed-titlebar-button-background;
+
+				&:hover {
+					color: @themed-titlebar-button-color-hover;
+					background: @themed-titlebar-button-background-hover;
+				}
+				&:hover:active {
+					color: @themed-titlebar-button-color-active;
+					background: @themed-titlebar-button-background-active;
+				}
+			});
 
 			// adjust wrong line heights for these button icons... blaming font awesome <3
 			&.btn-max,
@@ -128,39 +154,38 @@
 				line-height: ( @titlebar-size + 2px );
 			}
 
-			&:hover {
-				color: @titlebar-btn-hover-color;
-				background: @titlebar-btn-hover-background;
-			}
-			&:not(:disabled):active {
-				color: @titlebar-btn-active-color;
-				background: @titlebar-btn-active-background;
-			}
-
 			&.btn-close {
-				&:hover {
-					color: @titlebar-btnclose-hover-color;
-					background: @titlebar-btnclose-hover-background;
-				}
-				&:active {
-					color: @titlebar-btnclose-active-color;
-					background: @titlebar-btnclose-active-background;
-				}
+				.themed({
+					&:hover {
+						color: @themed-titlebar-closingbutton-color-hover;
+						background: @themed-titlebar-closingbutton-background-hover;
+					}
+					&:hover:active {
+						color: @themed-titlebar-closingbutton-color-active;
+						background: @themed-titlebar-closingbutton-background-active;
+					}
+				});
 			}
 
 			&.btn-no-user {
-				color: transparent;
-				-webkit-text-stroke: .05em @titlebar-btn-color;
-
-				&:active {
+				&, &:active {
 					color: transparent;
-					-webkit-text-stroke-color: @titlebar-btn-active-color;
-					background: @titlebar-btn-active-background;
 				}
+
+				.themed({
+					-webkit-text-stroke: .05em @themed-titlebar-button-color;
+
+					&:hover:active {
+						-webkit-text-stroke-color: @themed-titlebar-button-color-active;
+						background: @themed-titlebar-button-background-active;
+					}
+				});
 			}
 
 			&.btn-user-pending {
-				color: fade( @titlebar-btn-color, 33% );
+				.themed({
+					color: fadeOut( @themed-titlebar-button-color, 50% );
+				});
 			}
 
 			&.btn-indicator {
@@ -177,17 +202,20 @@
 					padding: 0 .2em;
 					border-radius: .2em;
 					font: bold .55em/1.2 @font-name;
-					color: @color-text-brightest;
-					background: @color-twitch-purple;
+
+					.themed({
+						color: @themed-titlebar-buttonindicator-color;
+						background: @themed-titlebar-buttonindicator-background;
+
+						&.indicator-error {
+							background: @themed-titlebar-buttonindicator-background-error;
+						}
+					});
 
 					opacity: 1;
 					z-index: 1;
 					// "show" with delay
 					-webkit-transition: opacity .001s @anim-length, z-index .001s @anim-length;
-
-					&.indicator-error {
-						background: @color-danger;
-					}
 
 					&.fa {
 						font-family: FontAwesome;
@@ -222,7 +250,10 @@
 			width: 1px;
 			height: ( @app-padding + @titlebar-size + 4px );
 			margin: -@app-padding 7px 0;
-			background: @color-text-brighter;
+
+			.themed({
+				background: @themed-titlebar-divider-color;
+			});
 		}
 	}
 }
@@ -236,11 +267,15 @@
 	top: 100%;
 	margin-top: 1px;
 	padding: @searchbar-padding;
-	outline: 1px solid @color-text-brighter;
-	background: @searchbar-background;
+	outline: 1px solid;
 	z-index: 99 !important;
 	opacity: 0;
 	-webkit-animation: animFadeInTop .333s ease-out forwards;
+
+	.themed({
+		background: @themed-searchdropdown-background;
+		outline-color: @themed-searchdropdown-border-color;
+	});
 
 	&.hidden {
 		display: none;
@@ -258,16 +293,21 @@
 		.radiobtns {
 			flex: none;
 			width: 19em;
-			.radiobtns-color( @searchbar-filter-background, @color-text-default );
+			.radiobtns-color(
+				~"themed-searchdropdown-radiobuttons-background",
+				~"themed-searchdropdown-radiobuttons-color"
+			);
 		}
 	}
 
 	.recent {
-		@line-color: mix( @searchbar-background, @searchbar-border-color );
-
 		margin-top: @searchbar-padding;
 		padding-top: @searchbar-padding;
-		border-top: @button-border-width solid @line-color;
+		border-top: @button-border-width solid;
+
+		.themed({
+			border-top-color: @themed-searchdropdown-divider-color;
+		});
 
 		> header {
 			display: flex;
@@ -280,9 +320,10 @@
 			> .clear {
 				flex: none;
 				padding: 0 .333em;
-				border: @button-border-width solid;
-				.btn-color( @searchbar-filter-background, @color-text-default );
+				border: .1em solid;
 				cursor: pointer;
+
+				.btn-color( ~"themed-searchdropdown-button-clear-background" );
 			}
 		}
 
@@ -292,15 +333,18 @@
 
 		li {
 			display: flex;
-			color: @color-text-bright;
 			font-size: @searchbar-dropdown-fontsize;
 			line-height: 1.3;
 			cursor: pointer;
 			-webkit-transition: background .2s ease-out;
 
-			&:hover {
-				background: @searchbar-filter-background-hover;
-			}
+			.themed({
+				color: @themed-searchdropdown-recent-color;
+
+				&:hover {
+					background: @themed-searchdropdown-recent-background-hover;
+				}
+			});
 
 			> div {
 				overflow: hidden;

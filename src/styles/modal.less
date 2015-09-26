@@ -20,8 +20,12 @@
 		width: 45rem;
 		min-height: 16rem;
 		padding: 2rem;
-		background: @color-background;
-		-webkit-animation: animFadeInTop .333s ease-out 0s 1 normal forwards;
+		-webkit-animation: animFadeInTop .333s ease-out 0s 1 normal;
+
+		.themed({
+			background: @themed-modal-base-background;
+			color: @themed-modal-base-color;
+		});
 	}
 
 	&.fadeOut {
@@ -35,16 +39,25 @@
 		flex: 1 0;
 		position: static;
 		padding: 0;
+
+		i {
+			.themed({
+				color: @themed-modal-body-icon-color;
+			});
+		}
 	}
 
 	header {
-		color: @color-text-dark;
 		font-size: 2em;
 		font-weight: lighter;
 		margin-bottom: 1rem;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+
+		.themed({
+			color: @themed-modal-header-color;
+		});
 	}
 
 	footer {
@@ -74,10 +87,6 @@
 
 		.game {
 			margin-bottom: .5em;
-
-			> i.fa {
-				color: @color-text-darker;
-			}
 		}
 
 		.stats-row {
@@ -123,7 +132,9 @@
 			-webkit-animation: errorLogButtonAnimation .333s ease-out infinite alternate;
 
 			> i {
-				color: @color-text-brightest;
+				.themed({
+					color: @themed-button-color;
+				});
 			}
 		}
 	}
@@ -140,95 +151,88 @@
 
 	min-width: 9em;
 
-	.icon() {
+	> .selecter-selected,
+	> .selecter-options {
+		.themed({
+			color: @themed-modal-qualityselect-color !important;
+			border-color: mix( @themed-button-shading-color, @color, @themed-button-border-color );
+		});
+	}
+
+	> .selecter-selected {
+		padding: 0;
+		font-size: 1rem;
+
+		&, &::after {
+			line-height: 2;
+		}
+
+		&::before {
+			opacity: @button-icon-opacity;
+		}
+
+		&:hover {
+			.themed({
+				border-color: mix( @themed-button-shading-color, @color, @themed-button-border-color-hover );
+			});
+		}
+	}
+
+	> .selecter-options {
+		max-height: none;
+	}
+
+	> .selecter-selected,
+	.selecter-item {
+		transition: background .2s ease-out;
+
+		.btn-color( @color );
+	}
+
+	.selecter-item {
+		padding: 0;
+		line-height: 2;
+		color: inherit !important;
+
+		&:not(:last-of-type) {
+			.themed({
+				@border-color: mix( @themed-button-shading-color, @color, @themed-button-border-color-hover );
+				border-bottom-color: fadeOut( @border-color, 50%, relative );
+			});
+		}
+
+		&::before {
+			opacity: 0;
+		}
+
+		&.selected {
+			font-weight: normal;
+
+			&::before {
+				opacity: @button-icon-opacity-active;
+			}
+		}
+	}
+
+	.selecter-selected,
+	.selecter-item {
 		&::before {
 			content: @fa-var-eye;
 			display: inline-block;
 			width: @icon-width;
 			height: 1em;
 			font: normal normal normal @button-icon-size/@icon-height FontAwesome;
-			color: fade( @button-color, ( 100 * @button-icon-opacity ) );
 			text-align: center;
 			vertical-align: middle;
-			transition: color .2s ease-out;
+			transition: opacity .2s ease-out;
 		}
 
 		&:hover::before {
-			color: fade( @button-color, ( 100 * @button-icon-opacity-hover ) );
+			opacity: @button-icon-opacity-hover;
 		}
 
 		&:hover:active::before {
-			color: fade( @button-color, ( 100 * @button-icon-opacity-active ) );
-		}
-	}
-
-	> .selecter-selected,
-	> .selecter-options {
-		color: @button-color;
-		background: @color;
-		transition: background .2s ease-out;
-
-		&:not(:disabled):hover {
-			background: @color-hover;
-			border-color: @color-border-hover !important;
-		}
-	}
-
-	&.open > .selecter-options {
-		border-color: @color-border-hover !important;
-	}
-
-	> .selecter-selected {
-		padding: 0;
-		font-size: 1rem;
-		line-height: 2;
-
-		.icon();
-
-		&::after {
-			line-height: 2;
-		}
-	}
-
-	> .selecter-options {
-		max-height: none;
-		background: @color;
-	}
-
-	.selecter-item {
-		padding: 0;
-		line-height: 2;
-
-		.icon();
-
-		&::before {
-			color: transparent;
-		}
-
-		&.selected {
-			color: @button-color;
-			font-weight: normal;
-
-			&::before {
-				color: fade( @button-color, ( 100 * @button-icon-opacity-active ) ) !important;
-			}
-		}
-
-		&:not(:last-of-type) {
-			border-color: @color-border !important;
-		}
-	}
-
-	> .selecter-selected,
-	.selecter-item {
-		border-color: @color-border !important;
-		color: @button-color;
-		background: @color;
-		transition: background .2s ease-out;
-
-		&:hover {
-			border-color: @color-border-hover;
-			background: @color-hover;
+			opacity: @button-icon-opacity-active;
 		}
 	}
 }

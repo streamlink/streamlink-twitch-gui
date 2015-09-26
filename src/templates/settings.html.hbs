@@ -74,6 +74,8 @@ Choose a custom executable file of your selected browser. If left blank, default
 </fieldset>
 <fieldset>
 <legend>GUI</legend>
+<div><i class="fa fa-paint-brush"></i> Theme<span>Select a GUI color theme.</span></div>
+<div>{{drop-down value=model.gui_theme content=themes}}</div>
 <div><i class="fa fa-puzzle-piece"></i> OS integration<span>Where to access the GUI from.</span></div>
 <div>{{radio-buttons buttonName="integration" icon=true value=model.gui_integration content=settings.content.constructor.integration}}</div>
 <div><i class="fa fa-minus"></i> Minimize GUI<span>When the videoplayer opens.</span></div>

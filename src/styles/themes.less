@@ -1,0 +1,28 @@
+
+// import all themes here
+@import "themes/default";
+@import "themes/dark";
+
+// list of all themes
+@THEMES: ~"default", ~"dark";
+
+
+.themed( @block ) {
+	.loop( @i, @n ) when( @i <= @n ) {
+		@name: extract( @THEMES, @i );
+		@theme: ~"theme-@{name}";
+		@theme-ruleset: @@theme;
+
+		html.theme-@{name} & {
+			// apply the theme ruleset (variables container)
+			@theme-ruleset();
+			// rulesets don't return variables, so we need to use a mixin for that
+			.theme-variables();
+			// apply the passed block
+			@block();
+		}
+
+		.loop( ( @i + 1 ), @n );
+	}
+	.loop( 1, length( @THEMES ) );
+}

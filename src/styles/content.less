@@ -28,7 +28,10 @@ main.content {
 			flex-grow: 1;
 			margin-left: .5em;
 			line-height: 2.5;
-			color: @color-text-bright;
+
+			.themed({
+				color: @themed-headline-sub-color;
+			});
 		}
 	}
 
@@ -49,7 +52,6 @@ main.content {
 
 	i {
 		margin-right: .25em;
-		color: @color-text-darker;
 	}
 }
 
@@ -64,7 +66,7 @@ main.content {
 	height: @button-size;
 	margin-left: 1rem;
 	font-size: 1rem;
-	opacity: .333;
+	opacity: .5;
 
 	&:hover,
 	&.opened {
@@ -83,8 +85,10 @@ main.content {
 			margin-right: .333em;
 		}
 
-		button.inactive:not(:hover) {
-			color: fade( @button-color, 40% ) !important;
+		button:not(.inactive):not(:hover) > i {
+			.themed({
+				color: @themed-button-icon-color-active;
+			});
 		}
 
 		.multibtn {
@@ -126,21 +130,20 @@ main.content {
 		}
 	}
 
-	> .btn-open {
-		border-color: @color-text-bright !important;
-		color: @color-text-default !important;
-		background: @color-text-brightest !important;
-
-		&:hover, &:active, &:hover:active {
-			> i {
-				color: inherit;
-			}
+	.themed({
+		> .btn-open {
+			border-color: @themed-settingsbar-open-border-color !important;
+			color: @themed-settingsbar-open-color !important;
+			background: @themed-settingsbar-open-background !important;
 		}
-	}
-	&        > .btn-open:active > i:before {
-		content: @fa-var-angle-double-left;
-	}
-	&.opened > .btn-open:active > i:before {
-		content: @fa-var-angle-double-right;
+
+		> .btn-open:hover:active,
+		&.opened > .btn-open {
+			color: @themed-settingsbar-open-color-active !important;
+		}
+	});
+
+	> .btn-open > i {
+		color: inherit !important;
 	}
 }

@@ -12,6 +12,10 @@
 		&:not(:first-of-type) {
 			margin-top: .5em;
 		}
+
+		.themed({
+			color: @themed-mainmenu-headline-color;
+		});
 	}
 
 	> menu, ul {
@@ -29,15 +33,17 @@
 			text-decoration: none;
 			font-weight: lighter;
 
-			&.active,
-			&:hover {
-				color: @color-twitch-purple;
+			.themed({
+				color: @themed-mainmenu-anchor-color;
 
-				&.disabled {
-					color: @color-text-default;
-					cursor: default;
+				&:hover {
+					color: @themed-mainmenu-anchor-color-hover;
 				}
-			}
+
+				&:active, &.active {
+					color: @themed-mainmenu-anchor-color-active;
+				}
+			});
 
 			&.active {
 				font-weight: normal;
