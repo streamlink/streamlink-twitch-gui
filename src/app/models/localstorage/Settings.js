@@ -25,6 +25,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		player_passthrough  : attr( "string",  { defaultValue: "http" } ),
 		player_reconnect    : attr( "boolean", { defaultValue: true } ),
 		player_no_close     : attr( "boolean", { defaultValue: false } ),
+		gui_theme           : attr( "string",  { defaultValue: "default" } ),
 		gui_integration     : attr( "number",  { defaultValue: 3 } ),
 		gui_minimizetotray  : attr( "number",  { defaultValue: false } ),
 		gui_minimize        : attr( "number",  { defaultValue: 0 } ),

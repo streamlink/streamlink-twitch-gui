@@ -5,19 +5,21 @@
 }
 
 ::-webkit-scrollbar-track {
-	background: @scrollbar-background;
+	background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
 	border: ( ( @scrollbar-size - @scrollbar-thumb-size ) / 2 ) solid transparent;
-	background: @scrollbar-thumb-background;
-	background-clip: content-box;
+	background-clip: content-box !important;
 
-	&:hover,
-	&:active {
-		background: @scrollbar-thumb-hover-background;
-		background-clip: content-box;
-	}
+	.themed({
+		background: @themed-scrollbar-background;
+
+		&:hover,
+		&:active {
+			background: @themed-scrollbar-background-hover;
+		}
+	});
 }
 
 main.content::-webkit-scrollbar-thumb:vertical {

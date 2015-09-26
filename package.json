@@ -39,6 +39,9 @@
 		"version-check-days": 7,
 		"tray-icon": "img/icon-{res}.png",
 		"tray-icon-osx": "img/icon-osx-{res}{hidpi}.png",
+		"themes": [
+			"default"
+		],
 		"livestreamer-exec": "livestreamer",
 		"livestreamer-fallback-paths-unix": [
 			"/usr/local/bin",

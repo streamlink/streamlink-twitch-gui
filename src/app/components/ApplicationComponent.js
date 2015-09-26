@@ -8,9 +8,36 @@ define([
 	guiSmoothscroll
 ) {
 
+	var get = Ember.get;
+	var alias = Ember.computed.alias;
+	var reTheme = /^theme-/;
+
 	return Ember.Component.extend({
+		metadata: Ember.inject.service(),
+		settings: Ember.inject.service(),
+
 		tagName: "body",
 		classNames: [ "wrapper", "vertical" ],
+
+		themes: alias( "metadata.config.themes" ),
+		theme: alias( "settings.content.gui_theme" ),
+
+		themeObserver: function() {
+			var themes = get( this, "themes" );
+			var theme  = get( this, "theme" );
+
+			if ( themes.indexOf( theme ) === -1 ) {
+				theme = "default";
+			}
+
+			var list = document.documentElement.classList;
+			[].forEach.call( list, function( name ) {
+				if ( !reTheme.test( name ) ) { return; }
+				list.remove( name );
+			});
+
+			list.add( "theme-" + theme );
+		}.observes( "themes", "theme" ).on( "init" ),
 
 		willInsertElement: function() {
 			document.documentElement.removeChild( document.body );

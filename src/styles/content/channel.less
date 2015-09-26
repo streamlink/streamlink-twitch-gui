@@ -56,7 +56,9 @@ main.content-channel {
 			}
 
 			&.opened > button > i {
-				color: fade( @button-color, ( 100 * @button-icon-opacity-active ) );
+				.themed({
+					color: @themed-button-icon-color-active;
+				});
 			}
 		}
 
@@ -128,14 +130,6 @@ main.content-channel {
 			dd {
 				margin-left: 8em;
 			}
-		}
-	}
-
-	> header .online,
-	> header .offline,
-	> .content-index > .info > dl {
-		i:not(.flag-icon) {
-			color: @color-text-darker;
 		}
 	}
 

@@ -1,0 +1,141 @@
+
+@theme-default: {
+	.theme-variables() {
+		@themed-background: lighten( #000, 99% );
+
+		@themed-text-color         : rgba( 0, 0, 0, .45 );
+		@themed-text-color-alt     : fadeIn( @themed-text-color, 33%, relative );
+		@themed-text-color-hint    : fadeOut( @themed-text-color, 33%, relative );
+		@themed-text-color-disabled: fadeOut( @themed-text-color, 45%, relative );
+
+		@themed-icon-color: fadeIn( @themed-text-color, 50%, relative );
+
+		@themed-divider-color: fadeOut( @themed-text-color, 55%, relative );
+
+		@themed-selection-background: @themed-text-color;
+		@themed-selection-color     : @themed-background;
+
+		@themed-scrollbar-background      : @themed-text-color;
+		@themed-scrollbar-background-hover: @themed-text-color-alt;
+
+		@themed-headline-color    : @themed-text-color-alt;
+		@themed-headline-sub-color: @themed-text-color-hint;
+
+		@themed-anchor-color       : @themed-text-color;
+		@themed-anchor-color-hover : @color-twitch-purple;
+		@themed-anchor-color-active: @color-twitch-purple;
+
+		@themed-input-background         : lighten( @themed-background, 1% );
+		@themed-input-color              : fadeIn( @themed-text-color, 10% );
+		@themed-input-color-placeholder  : fadeOut( @themed-input-color, 50%, relative );
+		@themed-input-border-color       : fadeOut( @themed-input-color, 65%, relative );
+		@themed-input-border-color-hover : mix( @themed-input-border-color, @color-twitch-purple );
+		@themed-input-border-color-active: @color-twitch-purple;
+		@themed-input-opacity-disabled   : .5;
+
+		@themed-checkbox-background         : @themed-input-background;
+		@themed-checkbox-color              : @themed-input-color;
+		@themed-checkbox-border-color       : @themed-input-border-color;
+		@themed-checkbox-border-color-hover : @themed-input-border-color-hover;
+		@themed-checkbox-border-color-active: @themed-input-border-color-active;
+		@themed-checkbox-label-color        : @themed-text-color-alt;
+		@themed-checkbox-opacity-disabled   : @themed-input-opacity-disabled;
+
+		@themed-select-background            : @themed-input-background;
+		@themed-select-color                 : @themed-input-color;
+		@themed-select-border-color          : @themed-input-border-color;
+		@themed-select-border-color-hover    : @themed-input-border-color-hover;
+		@themed-select-items-background      : @themed-select-background;
+		@themed-select-items-background-hover: darken( @themed-select-items-background, 5% );
+		@themed-select-items-selected-color  : @color-twitch-purple;
+		@themed-select-items-border-color    : @themed-input-border-color-active;
+		@themed-select-items-divider-color   : @themed-input-border-color;
+		@themed-select-opacity-disabled      : @themed-input-opacity-disabled;
+
+		@themed-button-color              : #fff;
+		@themed-button-shading-color      : #000;
+		@themed-button-background-hover   : 5%;
+		@themed-button-background-active  : 7.5%;
+		@themed-button-border-color       : 10%;
+		@themed-button-border-color-hover : 15%;
+		@themed-button-border-color-active: 20%;
+		@themed-button-icon-color         : fade( @themed-button-color, 50% );
+		@themed-button-icon-color-hover   : fade( @themed-button-color, 75% );
+		@themed-button-icon-color-active  : fade( @themed-button-color, 100% );
+
+		@themed-titlebar-title-color  : @themed-text-color-hint;
+		@themed-titlebar-divider-color: fadeOut( @themed-divider-color, 50%, relative );
+
+		@themed-titlebar-button-color            : rgba( 0, 0, 0, .6 );
+		@themed-titlebar-button-background       : @themed-background;
+		@themed-titlebar-button-color-hover      : fadeIn( @themed-titlebar-button-color, 15% );
+		@themed-titlebar-button-background-hover : darken( @themed-titlebar-button-background, 20% );
+		@themed-titlebar-button-color-active     : @themed-titlebar-button-background;
+		@themed-titlebar-button-background-active: @themed-titlebar-button-color;
+		@themed-titlebar-buttonindicator-color           : #fff;
+		@themed-titlebar-buttonindicator-background      : @color-twitch-purple;
+		@themed-titlebar-buttonindicator-background-error: @color-danger;
+		@themed-titlebar-closingbutton-color-hover      : #fff;
+		@themed-titlebar-closingbutton-background-hover : @color-twitch-purple;
+		@themed-titlebar-closingbutton-color-active     : @themed-titlebar-closingbutton-color-hover;
+		@themed-titlebar-closingbutton-background-active: darken( @themed-titlebar-closingbutton-background-hover, 15% );
+
+		@themed-searchbar-background         : @themed-input-background;
+		@themed-searchbar-border-color       : fadeOut( @themed-input-border-color, 50%, relative );
+		@themed-searchbar-button-color       : fadeOut( @themed-input-color, 10%, relative );
+		@themed-searchbar-button-color-hover : fadeIn( @themed-searchbar-button-color, 25%, relative );
+		@themed-searchbar-button-color-active: fadeIn( @themed-searchbar-button-color, 50%, relative );
+		@themed-searchbar-button-small-color : fadeOut( @themed-input-color, 25%, relative );
+
+		@themed-searchdropdown-background             : @themed-input-background;
+		@themed-searchdropdown-color                  : @themed-text-color;
+		@themed-searchdropdown-border-color           : @themed-searchbar-border-color;
+		@themed-searchdropdown-divider-color          : fadeOut( @themed-searchdropdown-border-color, 50%, relative );
+		@themed-searchdropdown-recent-background-hover: darken( @themed-searchdropdown-background, 5% );
+		@themed-searchdropdown-recent-color           : @themed-text-color-hint;
+		@themed-searchdropdown-radiobuttons-background: @themed-searchdropdown-background;
+		@themed-searchdropdown-radiobuttons-color     : @themed-searchdropdown-color;
+		@themed-searchdropdown-button-clear-background: @themed-searchdropdown-background;
+
+		@themed-mainmenu-headline-color     : @themed-headline-color;
+		@themed-mainmenu-anchor-color       : @themed-text-color;
+		@themed-mainmenu-anchor-color-hover : @themed-anchor-color-hover;
+		@themed-mainmenu-anchor-color-active: @themed-anchor-color-active;
+
+		@themed-settingsbar-open-background  : @themed-input-background;
+		@themed-settingsbar-open-color       : @themed-input-color-placeholder;
+		@themed-settingsbar-open-color-active: fadeIn( @themed-settingsbar-open-color, 50%, relative );
+		@themed-settingsbar-open-border-color: @themed-input-border-color;
+
+		@themed-contentlist-color     : @themed-text-color;
+		@themed-contentlist-icon-color: @themed-icon-color;
+
+		@themed-gameitem-overlay-background: fade( @themed-background, 90% );
+		@themed-gameitem-overlay-color     : @themed-text-color;
+
+		@themed-streamitem-overlay-background: fade( @themed-background, 90% );
+		@themed-streamitem-game-color        : @themed-text-color;
+		@themed-streamitem-footer-color      : @themed-text-color;
+		@themed-streamitem-footer-icon-color : @themed-icon-color;
+		@themed-streamitem-play-color        : rgba( 255, 255, 255, 1 );
+		@themed-streamitem-play-stroke       : rgba( 0, 0, 0, .9 );
+
+		@themed-subitem-background    : fade( @themed-background, 80% );
+		@themed-subitem-color         : @themed-text-color;
+		@themed-subitem-headline-color: @themed-headline-color;
+
+		@themed-modal-base-background: @themed-background;
+		@themed-modal-base-color     : @themed-text-color;
+		@themed-modal-header-color   : @themed-headline-color;
+		@themed-modal-body-icon-color: @themed-icon-color;
+
+		@themed-modal-qualityselect-color: @themed-button-color;
+
+		@themed-settings-legend-color: @themed-text-color;
+		@themed-settings-legend-border-color: @themed-divider-color;
+		@themed-settings-descr-color: @themed-text-color-hint;
+		@themed-settings-descr-docs-background-hover: darken( @themed-background, 5% );
+		@themed-settings-descr-docs-color-hover: @color-twitch-purple-light;
+		@themed-settings-descr-docs-icon-color: @themed-settings-descr-color;
+	}
+};

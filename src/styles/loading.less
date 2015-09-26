@@ -34,10 +34,13 @@ main.content.content-loading {
 
 	> circle {
 		fill: transparent;
-		stroke: @color-text-darker;
 		stroke-linecap: round;
 		stroke-width: unit( ( @stroke * 100 ), % );
 		-webkit-animation: anim-loading-spinner-dash @duration ease-in-out infinite;
+
+		.themed({
+			stroke: @themed-text-color-alt;
+		});
 	}
 
 

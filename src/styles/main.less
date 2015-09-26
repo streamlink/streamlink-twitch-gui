@@ -14,11 +14,14 @@ body {
 	position: relative;
 	margin: 0;
 	overflow: hidden;
-	color: @color-text-default;
 	font-size: inherit;
 	font-family: @font-name;
-	background: @color-background;
 	cursor: default;
+
+	.themed({
+		background: @themed-background;
+		color: @themed-text-color;
+	});
 }
 
 body > .wrapper {
@@ -38,8 +41,10 @@ body > .wrapper {
 }
 
 ::selection {
-	color: @color-background;
-	background: @color-twitch-purple;
+	.themed({
+		color: @themed-selection-color;
+		background: @themed-selection-background;
+	});
 }
 
 
@@ -52,9 +57,12 @@ h6 { font-size: .667rem; }
 
 h1, h2, h3, h4, h5, h6 {
 	margin-bottom: .75em;
-	color: @color-text-dark;
 	font-family: @font-name;
 	font-weight: lighter;
+
+	.themed({
+		color: @themed-headline-color;
+	});
 }
 
 p {
@@ -69,12 +77,21 @@ p {
 a {
 	text-decoration: underline;
 
-	&, &:focus {
-		color: @color-text-default;
-	}
+	.themed({
+		&, &:focus {
+			color: @themed-anchor-color;
+		}
+
+		&:hover {
+			color: @themed-anchor-color-hover;
+		}
+
+		&:active:not(.disabled) {
+			color: @themed-anchor-color-active;
+		}
+	});
 
 	&:hover, &:active:not(.disabled) {
-		color: @color-twitch-purple;
 		text-decoration: none;
 	}
 
@@ -108,15 +125,9 @@ ul.list {
 	}
 }
 
-button {
-	border: 0;
-	border-radius: 0;
-	background: transparent;
-}
 
-
-// fix the weird size of the gamepad icon
-i.fa.fa-gamepad {
-	font-size: 1.2em;
-	line-height: 1.1;
+i.fa {
+	.themed({
+		color: @themed-icon-color;
+	});
 }

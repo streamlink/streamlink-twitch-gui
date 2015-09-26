@@ -1,7 +1,10 @@
 define([
 	"Ember",
 	"mixins/RetryTransitionMixin"
-], function( Ember, RetryTransitionMixin ) {
+], function(
+	Ember,
+	RetryTransitionMixin
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -36,6 +39,16 @@ define([
 		isChatMethodDefault: equal( "model.chat_method", "default" ),
 		isChatMethodMSIE   : equal( "model.chat_method", "msie" ),
 		isChatMethodCustom : equal( "model.chat_method", "custom" ),
+
+		themes: function() {
+			var themes = get( this, "metadata.config.themes" );
+			return themes.map(function( theme ) {
+				return {
+					id   : theme,
+					label: theme.substr( 0, 1 ).toUpperCase() + theme.substr( 1 )
+				};
+			});
+		}.property( "metadata.config.themes" ),
 
 		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
