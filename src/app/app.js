@@ -171,6 +171,7 @@ define(function( require ) {
 		SearchBarComponent: require( "components/SearchBarComponent" ),
 		QuickBarComponent: require( "components/QuickBarComponent" ),
 		QuickBarHomepageComponent: require( "components/QuickBarHomepageComponent" ),
+		QuickBarRandomStreamComponent: require( "components/QuickBarRandomStreamComponent" ),
 		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
 		LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
 		CheckBoxComponent: require( "components/CheckBoxComponent" ),

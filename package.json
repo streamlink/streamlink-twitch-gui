@@ -106,6 +106,7 @@
 			"shortcut-path": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs"
 		},
 		"stream-reload-interval": 60000,
+		"random-max": 500,
 		"chat-methods": {
 			"chromium": {
 				"args": "--app={url}",
