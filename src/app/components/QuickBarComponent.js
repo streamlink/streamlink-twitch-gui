@@ -6,6 +6,9 @@ define([
 	layout
 ) {
 
+	var set = Ember.set;
+	var run = Ember.run;
+
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "div",
@@ -13,10 +16,26 @@ define([
 
 		isOpened: false,
 
-		actions: {
-			toggle: function() {
-				this.toggleProperty( "isOpened" );
+		timer: null,
+
+		mouseEnter: function() {
+			run.cancel( this.timer );
+			this.timer = null;
+
+			set( this, "isOpened", true );
+		},
+
+		mouseLeave: function() {
+			this.timer = run.later( set, this, "isOpened", false, 3000 );
+		},
+
+
+		willDestroyElement: function() {
+			if ( this.timer ) {
+				run.cancel( this.timer );
 			}
+
+			this._super.apply( this, arguments );
 		}
 	});
 
