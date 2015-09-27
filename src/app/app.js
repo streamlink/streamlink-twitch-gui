@@ -169,7 +169,8 @@ define(function( require ) {
 		// Components
 		FormButtonComponent: require( "components/FormButtonComponent" ),
 		SearchBarComponent: require( "components/SearchBarComponent" ),
-		SettingsBarComponent: require( "components/SettingsBarComponent" ),
+		QuickBarComponent: require( "components/QuickBarComponent" ),
+		QuickBarHomepageComponent: require( "components/QuickBarHomepageComponent" ),
 		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
 		LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
 		CheckBoxComponent: require( "components/CheckBoxComponent" ),

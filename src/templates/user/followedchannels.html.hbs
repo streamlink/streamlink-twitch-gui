@@ -2,7 +2,7 @@
 <header>
 <h2>Followed channels</h2>
 {{#if metadata.total}}<div class="total">({{metadata.total}})</div>{{/if}}
-{{#settings-bar btnHomepage=true}}
+{{#quick-bar}}
 <div class="multibtn sort-method">
 {{form-button
   action="sortMethod"
@@ -37,7 +37,8 @@
   icon="fa-long-arrow-up"
   title="Sort in ascending order"}}
 </div>
-{{/settings-bar}}
+{{quick-bar-homepage}}
+{{/quick-bar}}
 </header>
 {{#if content.length}}
 <ul class="content-list">

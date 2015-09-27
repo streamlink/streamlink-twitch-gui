@@ -2,7 +2,9 @@
 <header>
 <h2>Followed streams</h2>
 {{#if metadata.total}}<div class="total">({{metadata.total}})</div>{{/if}}
-{{settings-bar btnHomepage=true}}
+{{#quick-bar}}
+{{quick-bar-homepage}}
+{{/quick-bar}}
 </header>
 {{#if content.length}}
 <ul class="content-list">

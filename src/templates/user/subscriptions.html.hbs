@@ -1,7 +1,9 @@
 <main class="content content-user content-user-subscriptions">
 <header>
 <h2>Subscriptions</h2>
-{{settings-bar btnHomepage=true}}
+{{#quick-bar}}
+{{quick-bar-homepage}}
+{{/quick-bar}}
 </header>
 {{#if model.length}}
 <ul class="content-list">
