@@ -7,19 +7,19 @@
 {{form-button
   action="sortMethod"
   actionParam="created_at"
-  class=(unless (is-equal sortby "created_at") "inactive")
+  class=(if (is-equal sortby "created_at") "active")
   icon="fa-calendar"
   title="Sort by date followed"}}
 {{form-button
   action="sortMethod"
   actionParam="last_broadcast"
-  class=(unless (is-equal sortby "last_broadcast") "inactive")
+  class=(if (is-equal sortby "last_broadcast") "active")
   icon="fa-video-camera"
   title="Sort by last broadcast"}}
 {{form-button
   action="sortMethod"
   actionParam="login"
-  class=(unless (is-equal sortby "login") "inactive")
+  class=(if (is-equal sortby "login") "active")
   icon="fa-sign-in"
   title="Sort by last login"}}
 </div>
@@ -27,13 +27,13 @@
 {{form-button
   action="sortOrder"
   actionParam="desc"
-  class=(unless (is-equal direction "desc") "inactive")
+  class=(if (is-equal direction "desc") "active")
   icon="fa-long-arrow-down"
   title="Sort in descending order"}}
 {{form-button
   action="sortOrder"
   actionParam="asc"
-  class=(unless (is-equal direction "asc") "inactive")
+  class=(if (is-equal direction "asc") "active")
   icon="fa-long-arrow-up"
   title="Sort in ascending order"}}
 </div>

@@ -13,7 +13,7 @@ define([
 		settings: Ember.inject.service(),
 
 		"class": function() {
-			return "btn-neutral" + ( get( this, "isHomepage" ) ? "" : " inactive" );
+			return "btn-neutral" + ( get( this, "isHomepage" ) ? " active" : "" );
 		}.property( "isHomepage" ),
 
 		title: "Set as homepage",
