@@ -26,7 +26,7 @@ define([
 		},
 
 		mouseLeave: function() {
-			this.timer = run.later( set, this, "isOpened", false, 3000 );
+			this.timer = run.later( set, this, "isOpened", false, 1000 );
 		},
 
 
