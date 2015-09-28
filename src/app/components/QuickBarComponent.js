@@ -6,27 +6,33 @@ define([
 	layout
 ) {
 
+	var get = Ember.get;
 	var set = Ember.set;
 	var run = Ember.run;
 
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "div",
-		classNameBindings: [ ":quickbar", "isOpened:opened" ],
+		classNameBindings: [ ":quickbar", "isOpened:opened", "isLocked:locked" ],
 
 		isOpened: false,
+		isLocked: false,
 
 		timer: null,
 
 		mouseEnter: function() {
-			run.cancel( this.timer );
-			this.timer = null;
+			if ( this.timer ) {
+				run.cancel( this.timer );
+				this.timer = null;
+			}
 
 			set( this, "isOpened", true );
 		},
 
 		mouseLeave: function() {
-			this.timer = run.later( set, this, "isOpened", false, 1000 );
+			if ( !get( this, "isLocked" ) ) {
+				this.timer = run.later( set, this, "isOpened", false, 1000 );
+			}
 		},
 
 
@@ -36,6 +42,13 @@ define([
 			}
 
 			this._super.apply( this, arguments );
+		},
+
+
+		actions: {
+			"menuClick": function() {
+				this.toggleProperty( "isLocked" );
+			}
 		}
 	});
 

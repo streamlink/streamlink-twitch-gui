@@ -1,4 +1,4 @@
-{{form-button class="btn-open" icon="fa-ellipsis-h"}}
+{{form-button action="menuClick" class="btn-open" icon=(if isLocked "fa-angle-double-left" "fa-ellipsis-h")}}
 <div class="menu">
 {{yield}}
 </div>
