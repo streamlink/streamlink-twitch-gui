@@ -115,10 +115,14 @@
 }
 
 .stream-component {
+	@padding: .25em;
+	@footer-height: ( 1 * unit( @line-height-base, em ) + 2 * @padding );
+	@duration: .25s;
+
 	min-height: 185px;
 	margin-bottom: 20px;
 	.dynamic-elems-per-row( 3, @content-width, 8%, @additional-width );
-	.stream-hover();
+	.stream-hover( @duration: @duration );
 
 	&.faded {
 		&:not(:hover) > * {
@@ -137,7 +141,7 @@
 
 		> i {
 			opacity: 0;
-			transition: opacity .333s ease-out;
+			transition: opacity @duration ease-out;
 		}
 
 		> span {
@@ -178,17 +182,19 @@
 	}
 
 	> .preview {
+		overflow: hidden;
+
 		> footer {
 			display: flex;
 			justify-content: center;
 			position: absolute;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			padding: .25em;
+			bottom: -@footer-height;
+			width: 100%;
+			height: @footer-height;
+			padding: @padding;
 			font-size: .85em;
 			opacity: 0;
-			transition: opacity .333s ease-out;
+			transition: opacity @duration ease-out, bottom @duration ease-out;
 
 			.themed({
 				background: @themed-streamitem-overlay-background;
@@ -226,6 +232,7 @@
 		}
 
 		&:hover > footer {
+			bottom: 0;
 			opacity: 1;
 		}
 

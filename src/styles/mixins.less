@@ -91,7 +91,7 @@
 }
 
 
-.stream-hover( @ratio: ( 16 / 9 ); @content: @fa-var-play-circle-o ) {
+.stream-hover( @ratio: ( 16 / 9 ); @content: @fa-var-play-circle-o; @duration: .333s ) {
 	> .preview {
 		position: relative;
 		cursor: pointer;
@@ -107,7 +107,7 @@
 			font: 6em/.025em FontAwesome;
 			text-align: center;
 			opacity: 0;
-			transition: opacity .333s ease-out;
+			transition: opacity @duration ease-out;
 
 			.themed({
 				color: @themed-streamitem-play-color;
