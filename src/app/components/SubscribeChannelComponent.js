@@ -11,6 +11,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var and = Ember.computed.and;
 	var alias = Ember.computed.alias;
 
 	return FormButtonComponent.extend( TwitchInteractButtonMixin, {
@@ -24,6 +25,8 @@ define([
 		record   : alias( "channel.subscribed" ),
 		// use the channel's display_name
 		name     : alias( "channel.display_name" ),
+
+		isVisible: and( "isValid", "model.partner" ),
 
 		action: "subscribe",
 		openBrowser: "openBrowser",
