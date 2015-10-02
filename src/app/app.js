@@ -189,6 +189,7 @@ define(function( require ) {
 		LangFilterComponent: require( "components/LangFilterComponent" ),
 		PreviewImageComponent: require( "components/PreviewImageComponent" ),
 		OpenChatComponent: require( "components/OpenChatComponent" ),
+		TwitchEmotesComponent: require( "components/TwitchEmotesComponent" ),
 		ShareChannelComponent: require( "components/ShareChannelComponent" ),
 		SubscribeChannelComponent: require( "components/SubscribeChannelComponent" ),
 		FollowChannelComponent: require( "components/FollowChannelComponent" ),
