@@ -9,8 +9,9 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 		notification: Ember.inject.service(),
 		settings    : Ember.inject.service(),
 
-		notif_running: readOnly( "notification.running" ),
-		notif_error  : readOnly( "notification.error" ),
+		notif_enabled        : readOnly( "notification.enabled" ),
+		notif_notTempDisabled: readOnly( "notification.notTempDisabled" ),
+		notif_error          : readOnly( "notification.error" ),
 
 		scope: function() {
 			return get( this, "auth.session.scope" ).split( "+" ).join( ", " );

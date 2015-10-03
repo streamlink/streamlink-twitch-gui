@@ -1,6 +1,7 @@
 define([
 	"Ember",
 	"nwjs/nwWindow",
+	"nwjs/tray",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
@@ -8,6 +9,7 @@ define([
 ], function(
 	Ember,
 	nwWindow,
+	tray,
 	ChannelSettingsMixin,
 	mkdirp,
 	download,
@@ -63,15 +65,19 @@ define([
 		_running: notEmpty( "_next" ),
 		running : and( "_running", "enabled" ),
 
+		// notifications disabled via tray item
+		// don't link this property with `enabled` (observe both instead)
+		notTempDisabled: true,
+
 		// automatically start polling once the user is logged in and has notifications enabled
 		enabled: and( "auth.session.isLoggedIn", "settings.notify_enabled" ),
 		enabledObserver: function() {
-			if ( get( this, "enabled" ) ) {
+			if ( get( this, "enabled" ) && get( this, "notTempDisabled" ) ) {
 				this.start();
 			} else {
 				this.reset();
 			}
-		}.observes( "enabled" ).on( "init" ),
+		}.observes( "enabled", "notTempDisabled" ).on( "init" ),
 
 
 		/**
@@ -112,6 +118,39 @@ define([
 			// update badge label or remove it
 			nwWindow.setBadgeLabel( label );
 		}.observes( "running", "settings.notify_badgelabel", "model" ),
+
+
+		_setupTrayItem: function() {
+			var self = this;
+			var settings = get( self, "settings.content" );
+			var trayItem = null;
+
+			function createTrayIcon() {
+				var enabled  = get( settings, "notify_enabled" );
+				if ( !enabled ) {
+					if ( trayItem ) {
+						tray.items.removeObject( trayItem );
+						trayItem = null;
+					}
+					return;
+				}
+
+				trayItem = {
+					type   : "checkbox",
+					label  : "Receive notifications",
+					tooltip: "Quickly toggle desktop notifications",
+					checked: get( self, "notTempDisabled" ),
+					click  : function( item ) {
+						set( self, "notTempDisabled", item.checked );
+					}
+				};
+
+				tray.items.unshiftObject( trayItem );
+			}
+
+			createTrayIcon();
+			settings.addObserver( "notify_enabled", createTrayIcon );
+		}.on( "init" ),
 
 
 		reset: function() {

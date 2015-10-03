@@ -2,8 +2,15 @@
 <div class="bigicon"><i class="fa fa-user"></i></div>
 <p>Logged in as {{auth.session.user_name}}</p>
 <p>since {{format-time auth.session.date "dddd, MMMM Do YYYY, h:mm:ss a"}}</p>
-{{#if notif_running}}<p>Desktop notifications are enabled</p>{{/if}}
-{{#if notif_error}}<p><a href="#" {{action "notifications_restart"}}>Restart desktop notifications</a></p>{{/if}}
+<p>{{#if notif_error}}
+<a href="#" {{action "notifications_restart"}}>Restart desktop notifications</a>
+{{else if (bool-not notif_enabled)}}
+Desktop notifications are disabled
+{{else if (bool-not notif_notTempDisabled)}}
+Desktop notifications are temporarily disabled
+{{else}}
+Desktop notifications are enabled
+{{/if}}</p>
 <button type="button" class="btn btn-with-icon btn-signout" {{action "signout"}}><i class="fa fa-sign-out"></i>Sign out</button>
 {{#if settings.advanced}}
 <footer>

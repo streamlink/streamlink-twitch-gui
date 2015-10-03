@@ -1,18 +1,54 @@
-define( [ "Ember", "nwjs/nwGui", "nwjs/nwWindow" ], function( Ember, nwGui, nwWindow ) {
+define([
+	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow"
+], function(
+	Ember,
+	nwGui,
+	nwWindow
+) {
 
 	var get = Ember.get;
 	var isOSX = process.platform === "darwin";
+
+	var Menu = nwGui.Menu;
+	var MenuItem = nwGui.MenuItem;
+	var Tray = nwGui.Tray;
+
+	var staticItems = [
+		{
+			label: "Toggle window",
+			click: function( item, tray ) {
+				tray.tray.emit( "click" );
+			}
+		},
+		{
+			label: "Close application",
+			click: function() {
+				nwWindow.close();
+			}
+		}
+	];
 
 	return Ember.Object.extend({
 
 		init: function( name, icon, iconOSX ) {
 			this.setProperties({
-				name: name,
-				icon: icon,
+				name   : name,
+				icon   : icon,
 				iconOSX: iconOSX,
-				tray: null,
-				menu: this._buildMenu()
+				tray   : null,
+				items  : []
 			});
+
+			this.menu = new Menu();
+
+			this.items.addArrayObserver( this, {
+				willChange: function() {},
+				didChange : this.itemsChanged
+			});
+
+			this.items.pushObjects( staticItems );
 		},
 
 
@@ -56,32 +92,39 @@ define( [ "Ember", "nwjs/nwGui", "nwjs/nwWindow" ], function( Ember, nwGui, nwWi
 		}.property( "icon", "iconOSX" ),
 
 		_buildTray: function() {
-			var tray = new nwGui.Tray({
+			var tray = new Tray({
 				icon   : get( this, "iconRes" ),
 				tooltip: get( this, "name" )
 			});
-			tray.menu = get( this, "menu" );
+			tray.menu = this.menu;
 			return tray;
 		},
 
-		_buildMenu: function() {
-			var menu = new nwGui.Menu();
+		itemsChanged: function( items ) {
+			// a new menu needs to be built and applied
+			// modifying already attached menus has no effect
+			// setting the menu property on the tray object to null causes nwjs to crash
+			var menu = new Menu();
 
-			menu.append( new nwGui.MenuItem({
-				label: "Toggle visibility",
-				click: function() {
-					this.tray.emit( "click" );
-				}.bind( this )
-			}) );
+			items.forEach(function( item ) {
+				var menuitem = new MenuItem({
+					type   : item.type || "normal",
+					enabled: item.enabled === undefined
+						? true
+						: item.enabled,
+					label  : item.label,
+					tooltip: item.tooltip,
+					checked: item.checked
+				});
+				menuitem.click = item.click.bind( null, menuitem, this );
 
-			menu.append( new nwGui.MenuItem({
-				label: "Close application",
-				click: function() {
-					nwWindow.close();
-				}
-			}) );
+				menu.append( menuitem );
+			}, this );
 
-			return menu;
+			this.menu = menu;
+			if ( this.tray ) {
+				this.tray.menu = menu;
+			}
 		}
 
 	}).create();
