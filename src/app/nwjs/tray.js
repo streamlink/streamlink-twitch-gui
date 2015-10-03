@@ -113,7 +113,7 @@ define([
 						? true
 						: item.enabled,
 					label  : item.label,
-					tooltip: item.tooltip,
+					tooltip: item.tooltip || "",
 					checked: item.checked
 				});
 				menuitem.click = item.click.bind( null, menuitem, this );
