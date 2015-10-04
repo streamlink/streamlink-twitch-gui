@@ -26,7 +26,13 @@ main.content.content-loading {
 	@stroke: .05;
 	@duration: 1.5s;
 
+	// radius = 50% - strokeWidth
+	// radius attribute will be set by the component after inserting the element into the DOM
+	// it can't be set via CSS
 	@radius: ( .5 - @stroke );
+
+	@btn-stroke: ( 2 * @stroke );
+	@btn-radius: ( .5 - @btn-stroke );
 
 	width: 1em;
 	height: 1em;
@@ -36,7 +42,7 @@ main.content.content-loading {
 		fill: transparent;
 		stroke-linecap: round;
 		stroke-width: unit( ( @stroke * 100 ), % );
-		-webkit-animation: anim-loading-spinner-dash @duration ease-in-out infinite;
+		.anim-spinner();
 
 		.themed({
 			stroke: @themed-text-color-alt;
@@ -50,22 +56,40 @@ main.content.content-loading {
 		}
 	}
 
-	@-webkit-keyframes anim-loading-spinner-dash {
-		@perimeter:     ( 2.0 * pi() * @radius );
-		@perimeter_1_4: ( 0.25 * @perimeter );
-		@perimeter_3_4: ( 0.75 * @perimeter );
+	.anim-spinner( @suffix: ~"", @variable: ~"radius" ) {
+		@name: ~"anim-loading-spinner-dash@{suffix}";
 
-		0% {
-			stroke-dasharray: 0 @perimeter;
-			stroke-dashoffset: @perimeter_1_4;
+		-webkit-animation: @name @duration ease-in-out infinite;
+
+		@-webkit-keyframes @name {
+			@perimeter:     ( 2.0 * pi() * @@variable );
+			@perimeter_1_4: ( 0.25 * @perimeter );
+			@perimeter_3_4: ( 0.75 * @perimeter );
+
+			0% {
+				stroke-dasharray: 0 @perimeter;
+				stroke-dashoffset: @perimeter_1_4;
+			}
+			50% {
+				stroke-dasharray: @perimeter_3_4 @perimeter_1_4;
+				stroke-dashoffset: 0;
+			}
+			100% {
+				stroke-dasharray: 0 @perimeter;
+				stroke-dashoffset: -@perimeter_3_4;
+			}
 		}
-		50% {
-			stroke-dasharray: @perimeter_3_4 @perimeter_1_4;
-			stroke-dashoffset: 0;
-		}
-		100% {
-			stroke-dasharray: 0 @perimeter;
-			stroke-dashoffset: -@perimeter_3_4;
+	}
+
+	.btn > & {
+		// fix vertical alignment
+		position: relative;
+		top: .125em;
+
+		> circle {
+			// spinner inside button has a different stroke width (also needs different animation)
+			stroke-width: unit( ( @btn-stroke * 100 ), % );
+			.anim-spinner( ~"-btn", ~"btn-radius" );
 		}
 	}
 }

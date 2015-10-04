@@ -250,6 +250,10 @@ input:disabled {
 		&:hover:active > i {
 			color: @themed-button-icon-color-active;
 		}
+
+		> svg > circle {
+			stroke: @themed-button-icon-color-active;
+		}
 	});
 
 	&.btn-with-anim > i {
@@ -271,7 +275,8 @@ input:disabled {
 
 	min-width: 9em;
 
-	> i {
+	> i,
+	> svg {
 		margin-left: ( -1 * ( 1 + @button-icon-spacing ) );
 		margin-right: @button-icon-spacing;
 	}

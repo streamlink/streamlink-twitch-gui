@@ -9,15 +9,20 @@ define([
 	var get = Ember.get;
 	var set = Ember.set;
 	var makeArray = Ember.makeArray;
+	var equal = Ember.computed.equal;
 	var $ = Ember.$;
 
-	function iconAnimation( success, data ) {
+	var STATE_LOADING = -1;
+	var STATE_FAILURE =  0;
+	var STATE_SUCCESS =  1;
+
+	function iconAnimation( status, data ) {
 		var defer = Promise.defer();
 
-		set( this, "_iconAnimState", success );
+		set( this, "_status", status );
 		this.$().one( "webkitAnimationEnd", function() {
-			set( this, "_iconAnimState", null );
-			defer[ success ? "resolve" : "reject" ]( data );
+			set( this, "_status", null );
+			defer[ status ? "resolve" : "reject" ]( data );
 		}.bind( this ) );
 
 		return defer.promise;
@@ -43,8 +48,13 @@ define([
 
 		icon    : false,
 		iconanim: false,
+		spinner : false,
 
-		_iconAnimState: null,
+		_status: null,
+
+		isSuccess: equal( "_status", STATE_SUCCESS ),
+		isFailure: equal( "_status", STATE_FAILURE ),
+		isLoading: equal( "_status", STATE_LOADING ),
 
 		actions: {
 			click: function() {
@@ -54,10 +64,13 @@ define([
 				var context = makeArray( get( this, "actionParam" ) );
 
 				if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
-					// success animation
-					context.push( iconAnimation.bind( this, true ) );
-					// failure animation
-					context.push( iconAnimation.bind( this, false ) );
+					// success and failure callbacks
+					context.push( iconAnimation.bind( this, STATE_SUCCESS ) );
+					context.push( iconAnimation.bind( this, STATE_FAILURE ) );
+
+					if ( get( this, "spinner" ) ) {
+						set( this, "_status", STATE_LOADING );
+					}
 				}
 
 				// allow the component to send actions to itself

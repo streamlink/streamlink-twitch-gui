@@ -5,5 +5,14 @@
   title="{{title}}"
   disabled={{disabled}}
   {{action "click"}}
->{{#if icon}}<i class="fa {{icon}} {{if _iconAnimState 'anim-success' 'anim-failure'}}"></i>{{/if}}{{#if hasBlock}}{{yield}}{{/if}}</button>
+>
+{{#if icon}}
+	{{#if isLoading}}
+		{{loading-spinner}}
+	{{else}}
+		<i class="fa {{icon}} {{if isSuccess 'anim-success' (if isFailure 'anim-failure')}}"></i>
+	{{/if}}
+{{/if}}
+{{#if hasBlock}}{{yield}}{{/if}}
+</button>
 {{/if}}
