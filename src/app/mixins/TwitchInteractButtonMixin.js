@@ -37,6 +37,7 @@ define( [ "Ember" ], function( Ember ) {
 		icon    : switchProperty( "icon" ),
 		title   : switchProperty( "title" ),
 		iconanim: true,
+		spinner : true,
 
 		classLoading: "btn-info",
 		classSuccess: "btn-success",

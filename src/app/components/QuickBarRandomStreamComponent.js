@@ -19,8 +19,9 @@ define([
 
 		title: "Launch random stream",
 
-		icon: "fa-random",
+		icon    : "fa-random",
 		iconanim: true,
+		spinner : true,
 
 		game: null,
 		followedStreams: false,
