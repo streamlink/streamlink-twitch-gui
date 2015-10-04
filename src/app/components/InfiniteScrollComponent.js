@@ -18,13 +18,13 @@ define([
 		layout: layout,
 		tagName: "button",
 		classNameBindings: [ ":btn", ":btn-with-icon", ":infinitescroll", "hasFetchedAll:hidden" ],
-		attributeBindings: [ "type", "disabled" ],
+		attributeBindings: [ "type", "locked:disabled" ],
 
 		scrollThreshold: 2 / 3,
 		scrollListener : null,
 
 		type: "button",
-		disabled: or( "isFetching", "hasFetchedAll" ),
+		locked: or( "isFetching", "hasFetchedAll" ),
 		error: alias( "targetObject.fetchError" ),
 
 		isFetching: alias( "targetObject.isFetching" ),
