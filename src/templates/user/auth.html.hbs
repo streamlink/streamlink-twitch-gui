@@ -5,13 +5,14 @@
 {{#if settings.advanced}}
 {{#if showTokenForm}}
 <div class="input-group token-form">
-{{input type="text" enter="signinToken" class="form-control" value=token placeholder="Insert access token" autofocus=true}}
+{{input type="text" class="form-control" value=token placeholder="Insert access token" autofocus=true}}
 <span class="input-group-btn">
 {{form-button
   action="signinToken"
-  class=(get-param "" "btn-info" "btn-danger" "btn-success" index=userStatus)
-  icon=(get-param "fa-sign-in" "fa-refresh fa-spin" "fa-times" "fa-check" index=userStatus)
-  iconanim=true}}
+  class=(get-param "btn-primary" "btn-info" "btn-danger" "btn-success" index=userStatus)
+  icon=(get-param  "fa-sign-in"  " "        "fa-times"   "fa-check"    index=userStatus)
+  iconanim=true
+  spinner=true}}
 </span>
 </div>
 {{#unless hasLoginResult}}
