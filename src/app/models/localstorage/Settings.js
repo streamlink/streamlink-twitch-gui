@@ -31,6 +31,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		gui_minimize        : attr( "number",  { defaultValue: 0 } ),
 		gui_hidestreampopup : attr( "boolean", { defaultValue: false } ),
 		gui_openchat        : attr( "boolean", { defaultValue: false } ),
+		gui_twitchemotes    : attr( "boolean", { defaultValue: false } ),
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
 		gui_flagsvisible    : attr( "boolean", { defaultValue: false } ),

@@ -9,12 +9,16 @@ define([
 ) {
 
 	var get = Ember.get;
-	var alias = Ember.computed.alias;
+	var and = Ember.computed.and;
+	var or = Ember.computed.or;
 
 	return FormButtonComponent.extend({
 		metadata: Ember.inject.service(),
+		settings: Ember.inject.service(),
 
-		isVisible: alias( "channel.partner" ),
+		showButton: false,
+		isEnabled : or( "showButton", "settings.content.gui_twitchemotes" ),
+		isVisible : and( "isEnabled", "channel.partner" ),
 
 		"class" : "btn-neutral",
 		icon    : "fa-smile-o",
