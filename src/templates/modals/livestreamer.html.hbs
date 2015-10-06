@@ -9,16 +9,20 @@
 		{{else}}
 			{{#unless active.success}}
 				{{#modal-header}}
-					Launching: {{active.channel.display_name}}
+					Launching: {{#link-to "channel" active.channel.id}}{{active.channel.display_name}}{{/link-to}}
 				{{/modal-header}}
 				{{#modal-body class="launching"}}Waiting for Livestreamer to launch the stream...{{/modal-body}}
 				{{modal-log class="launching" log=active.log}}
 			{{else}}
 				{{#modal-header}}
-					Watching: {{active.channel.display_name}}
+					Watching: {{#link-to "channel" active.channel.id}}{{active.channel.display_name}}{{/link-to}}
 				{{/modal-header}}
 				{{#modal-body}}
-					{{#if active.stream.game}}<div class="game"><i class="fa fa-gamepad"></i> {{active.stream.game}}</div>{{/if}}
+					{{#if active.stream.game}}
+						<div class="game">
+							<i class="fa fa-gamepad"></i> {{#link-to "games.game" active.stream.game}}{{active.stream.game}}{{/link-to}}
+						</div>
+					{{/if}}
 					{{stats-row stream=active.stream withFlag=false}}
 					{{#unless active.showLog}}
 						{{embedded-links tagName="section" class="content" text=active.channel.status}}
