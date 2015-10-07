@@ -198,6 +198,7 @@ define(function( require ) {
 		DropDownComponent: require( "components/DropDownComponent" ),
 		ModalLogComponent: require( "components/ModalLogComponent" ),
 		LoadingSpinnerComponent: require( "components/LoadingSpinnerComponent" ),
+		HeadlineTotalsComponent: require( "components/HeadlineTotalsComponent" ),
 
 
 		// Content

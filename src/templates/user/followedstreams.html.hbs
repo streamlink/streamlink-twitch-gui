@@ -1,7 +1,7 @@
 <main class="content content-user content-user-followed-streams">
 <header>
 <h2>Followed streams</h2>
-{{#if metadata.total}}<div class="total">({{metadata.total}})</div>{{/if}}
+{{headline-totals total=metadata.total}}
 {{#quick-bar}}
 {{quick-bar-random-stream followedStreams=true}}
 {{quick-bar-homepage}}
