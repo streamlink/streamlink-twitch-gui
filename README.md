@@ -16,6 +16,20 @@ Livestreamer Twitch GUI is a [NW.js (formerly Node-Webkit)][NW.js] application, 
 [Recent releases][Releases] / [Changelog][Changelog] / [Wiki][Wiki]
 
 
+## Features
+
+* Available for Windows, OSX and Linux (for both x86 and x64)
+* Browse streams by popularity or by different games
+* Watch multiple streams at once
+* Customizable settings like video players, stream types, stream bufferings and much more
+* Customizable channel settings
+* Integrated Twitch.tv login with access to subscriptions and followed channels and games
+* Follow your favorite channels and games
+* Desktop notifications
+* Multiple chat methods
+* Stream language filters
+
+
 ## When to use
 
 One of the reasons people are having bad viewing experiences on [Twitch.tv][Twitch] is the usage of the flash player on their website. With the current generation of web browsers they sadly almost don't have any other choice but using flash for delivering a simple streaming service. There are some platforms and configurations where flash is causing problems though. These problems are low frame rates when watching streams or videos and also the lack of GPU acceleration leading to high CPU + memory usage which can be a big issue especially for mobile desktop devices.  
@@ -25,11 +39,26 @@ Please have in mind, that by using this application you're bypassing any ads run
 
 ## Download
 
-[Here you can find the list of all recent releases.][Releases]
+#### Direct download
 
-You can also try out the latest unreleased version by cloning this repository and building the application off the master branch.
+[Directly download the application from the github releases page.][Releases]  
+More informations and installation instructions can be found in the project's [Wiki][Wiki]!!!
 
-**Please note**: Livestreamer Twitch GUI depends on Livestreamer. Install [Livestreamer][Livestreamer] prior to using this application or you won't be able to launch any streams.
+#### Packages
+
+Chocolatey (Windows):  
+[`livestreamer-twitch-gui`][Package-Chocolatey]
+
+AUR (Arch Linux):  
+[`livestreamer-twitch-gui`][Package-AUR]
+
+#### Dev version
+
+You can also try out the latest unreleased version by cloning this repository and building the application off the master branch. Bug reports are very much appreciated!
+
+#### Notes
+
+**Caution**: Livestreamer Twitch GUI depends on Livestreamer. Install [Livestreamer][Livestreamer] prior to using this application or you won't be able to launch any streams.
 
 **Windows users**: Do not install Livestreamer via pip. Instead, use the [installation package][Installation package] (requires [Microsoft Visual C++ 2008 Redistributable Package][Microsoft Visual C++ 2008 Redistributable Package]).
 
@@ -74,3 +103,5 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [badge-platforms]: https://img.shields.io/badge/platform-win%20%7C%20osx%20%7C%20linux-green.svg?style=flat-square "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/bastimeyer/livestreamer-twitch-gui.svg?style=flat-square "Latest release"
   [badge-issues]: https://img.shields.io/github/issues/bastimeyer/livestreamer-twitch-gui.svg?style=flat-square "Open issues"
+  [Package-Chocolatey]: https://chocolatey.org/packages/livestreamer-twitch-gui "Chocolatey package"
+  [Package-AUR]: https://aur.archlinux.org/packages/livestreamer-twitch-gui "AUR package"
