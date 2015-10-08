@@ -120,6 +120,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 			{ id: "chromium", label: "Chromium" },
 			{ id: "chrome",   label: "Google Chrome" },
 			{ id: "msie",     label: "Internet Explorer", disabled: !isWin },
+			{ id: "chatty",   label: "Chatty" },
 			{ id: "custom",   label: "Custom application" }
 		],
 

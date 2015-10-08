@@ -39,6 +39,7 @@ define([
 		isChatMethodDefault: equal( "model.chat_method", "default" ),
 		isChatMethodMSIE   : equal( "model.chat_method", "msie" ),
 		isChatMethodCustom : equal( "model.chat_method", "custom" ),
+		isChatMethodChatty : equal( "model.chat_method", "chatty" ),
 
 		themes: function() {
 			var themes = get( this, "metadata.config.themes" );

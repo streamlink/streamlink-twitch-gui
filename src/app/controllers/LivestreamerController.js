@@ -465,7 +465,8 @@ define([
 
 			"chat": function( channel ) {
 				var chat = get( this, "chat" );
-				chat.open( channel );
+				chat.open( channel )
+					.catch(function(){});
 			},
 
 			"abort": function() {

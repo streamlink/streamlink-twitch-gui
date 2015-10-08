@@ -25,7 +25,7 @@ define([
 				var chat    = get( this, "chat" );
 				chat.open( channel )
 					.then( success, failure )
-					.catch();
+					.catch(function(){});
 			}
 		}
 	});

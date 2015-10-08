@@ -44,6 +44,7 @@ define([
 	return Ember.Service.extend({
 		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
+		auth: Ember.inject.service(),
 
 		chatMethods: readOnly( "metadata.config.chat-methods" ),
 
@@ -75,6 +76,8 @@ define([
 					return this._openPredefined( command, method, url );
 				case "msie":
 					return this._openMSIE( url );
+				case "chatty":
+					return this._openChatty( command, name );
 				case "custom":
 					return this._openCustom( command, name, url );
 				default:
@@ -179,6 +182,59 @@ define([
 						[
 							new Substitution( "url", "url" ),
 							new Substitution( "script", "script" )
+						]
+					);
+
+					return launch( exec, params );
+				});
+		},
+
+
+		_openChatty: function( chatty, channel ) {
+			var token     = get( this, "auth.session.access_token" );
+			var user      = get( this, "auth.session.user_name" );
+			var data      = get( this, "chatMethods.chatty" );
+			var args      = data[ "args" ];
+			var exec      = data[ "exec" ][ platform ];
+			var fallbacks = data[ "fallbacks" ][ platform ];
+
+			return which( exec, checkExec )
+				.catch(function() {
+					// java executable fallback paths
+					return fallbacks.reduce(function( chain, fallback ) {
+						return chain.catch(function() {
+							// resolve env variables
+							fallback = resolvePath( fallback );
+							// append executable name to fallback path
+							var file = PATH.join( fallback, exec );
+							return which( file, checkExec );
+						});
+					}, Promise.reject() );
+				})
+				.then(function( exec ) {
+					// check for existing chatty .jar file (and return java executable)
+					return stat( chatty )
+						.then(function() {
+							return exec;
+						});
+				})
+				.then(function( exec ) {
+					var params = Parameter.getParameters(
+						{
+							args   : args,
+							chatty : chatty,
+							user   : user,
+							token  : token,
+							channel: channel
+						},
+						[
+							new ParameterCustom( null, "args", true )
+						],
+						[
+							new Substitution( "chatty", "chatty" ),
+							new Substitution( "user", "user" ),
+							new Substitution( "token", "token" ),
+							new Substitution( "channel", "channel" )
 						]
 					);
 
