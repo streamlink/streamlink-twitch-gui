@@ -151,7 +151,7 @@
 				"script": "msie-minimal.vbs"
 			},
 			"chatty": {
-				"args": "-jar {chatty} -connect -single -token {token} -channel {channel}",
+				"args": "-jar {chatty} -connect -single -user {user} -token {token} -channel {channel}",
 				"exec": {
 					"win32": "javaw",
 					"darwin": "java",

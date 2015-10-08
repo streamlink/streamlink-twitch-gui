@@ -192,6 +192,7 @@ define([
 
 		_openChatty: function( chatty, channel ) {
 			var token     = get( this, "auth.session.access_token" );
+			var user      = get( this, "auth.session.user_name" );
 			var data      = get( this, "chatMethods.chatty" );
 			var args      = data[ "args" ];
 			var exec      = data[ "exec" ][ platform ];
@@ -222,6 +223,7 @@ define([
 						{
 							args   : args,
 							chatty : chatty,
+							user   : user,
 							token  : token,
 							channel: channel
 						},
@@ -230,6 +232,7 @@ define([
 						],
 						[
 							new Substitution( "chatty", "chatty" ),
+							new Substitution( "user", "user" ),
 							new Substitution( "token", "token" ),
 							new Substitution( "channel", "channel" )
 						]
