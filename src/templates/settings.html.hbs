@@ -21,7 +21,7 @@
 {{#if isChatMethodCustom}}
 Available parameters: <span title="Name of the channel">{channel}</span> and <span title="Twitch chat URL">{url}</span>.<br>Example: <span class="docs">/path/to/app --name {channel} {url}</span>
 {{else if isChatMethodChatty}}
-Set the path to the Chatty .jar file.
+Set the path to the Chatty .jar file.<span class="docs">Requires Chatty >= 0.8.2b2</span>
 {{else}}
 Choose a custom executable file of your selected browser. If left blank, default installation paths are assumed.
 {{/if}}
