@@ -1,6 +1,20 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Implemented theme switcher and added dark theme.
+- Implemented menu-related random stream launch button.
+- Added notification toggling mechanism to tray icon context menu. #139
+- Added Chatty to custom chat methods (requires >= 0.8.2b2).
+- Added loading spinner and replaced old loading animation.
+- Added twitchemotes.com button to channel pages / stream popup (can be enable in settings). #143
+- Fixed subscribe button being visible on all channel pages / popups. #142
+- Fixed text of closing modal dialog.
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.10.1...master)
+
+
 ## [v0.10.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.10.1) (2015-09-14)
 
 - Fixed livestreamer validation.
