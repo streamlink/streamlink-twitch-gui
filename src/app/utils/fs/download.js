@@ -1,9 +1,18 @@
-define( [ "utils/fs/stat", "utils/fs/mkdirp" ], function( stat, mkdirp ) {
-
-	var PATH  = require( "path" ),
-	    FS    = require( "fs" ),
-	    HTTP  = require( "http" ),
-	    HTTPS = require( "https" );
+define([
+	"utils/fs/stat",
+	"utils/fs/mkdirp",
+	"commonjs!path",
+	"commonjs!fs",
+	"commonjs!http",
+	"commonjs!https"
+], function(
+	stat,
+	mkdirp,
+	PATH,
+	FS,
+	HTTP,
+	HTTPS
+) {
 
 	var re_scheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
 

@@ -6,7 +6,9 @@ define([
 	"utils/fs/which",
 	"utils/fs/stat",
 	"utils/StreamOutputBuffer",
-	"utils/semver"
+	"utils/semver",
+	"commonjs!child_process",
+	"commonjs!path"
 ], function(
 	Ember,
 	nwGui,
@@ -15,11 +17,10 @@ define([
 	which,
 	stat,
 	StreamOutputBuffer,
-	semver
+	semver,
+	CP,
+	PATH
 ) {
-
-	var CP   = require( "child_process" );
-	var PATH = require( "path" );
 
 	var get = Ember.get;
 	var set = Ember.set;

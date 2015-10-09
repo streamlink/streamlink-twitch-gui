@@ -1,6 +1,11 @@
-define( [ "utils/denodify" ], function( denodify ) {
+define([
+	"utils/denodify",
+	"commonjs!fs"
+], function(
+	denodify,
+	FS
+) {
 
-	var FS = require( "fs" );
 	var fs_stat = denodify( FS.stat );
 
 	return function stat( path, check ) {

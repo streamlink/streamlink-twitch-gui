@@ -1,7 +1,14 @@
-define( [ "utils/denodify", "utils/fs/stat" ], function( denodify, stat ) {
-
-	var PATH = require( "path" ),
-	    FS   = require( "fs" );
+define([
+	"utils/denodify",
+	"utils/fs/stat",
+	"commonjs!path",
+	"commonjs!fs"
+], function(
+	denodify,
+	stat,
+	PATH,
+	FS
+) {
 
 	var mkdir = denodify( FS.mkdir );
 

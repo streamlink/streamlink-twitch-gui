@@ -1,6 +1,4 @@
-define( [ "Ember" ], function() {
-
-	var PATH = require( "path" );
+define( [ "commonjs!path" ], function( PATH ) {
 
 	var reVarWindows = /%([^%]+)%/g;
 	var reVarUnix    = /\$([A-Z_]+)/g;

@@ -6,7 +6,9 @@ define([
 	"utils/Substitution",
 	"utils/resolvePath",
 	"utils/fs/which",
-	"utils/fs/stat"
+	"utils/fs/stat",
+	"commonjs!child_process",
+	"commonjs!path"
 ], function(
 	Ember,
 	nwGui,
@@ -15,11 +17,10 @@ define([
 	Substitution,
 	resolvePath,
 	which,
-	stat
+	stat,
+	CP,
+	PATH
 ) {
-
-	var CP   = require( "child_process" );
-	var PATH = require( "path" );
 
 	var get = Ember.get;
 	var readOnly = Ember.computed.readOnly;

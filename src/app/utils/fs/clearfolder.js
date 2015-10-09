@@ -1,10 +1,17 @@
-define( [ "utils/denodify", "utils/fs/stat" ], function( denodify, stat ) {
+define([
+	"utils/denodify",
+	"utils/fs/stat",
+	"commonjs!path",
+	"commonjs!fs"
+], function(
+	denodify,
+	stat,
+	PATH,
+	FS
+) {
 
-	var PATH = require( "path" ),
-	    FS   = require( "fs" );
-
-	var fs_readdir = denodify( FS.readdir ),
-	    fs_unlink  = denodify( FS.unlink );
+	var fs_readdir = denodify( FS.readdir );
+	var fs_unlink  = denodify( FS.unlink );
 
 
 	function execBatchAndIgnoreRejected( list, fn ) {

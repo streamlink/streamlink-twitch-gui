@@ -5,7 +5,9 @@ define([
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
-	"utils/fs/clearfolder"
+	"utils/fs/clearfolder",
+	"commonjs!path",
+	"commonjs!os"
 ], function(
 	Ember,
 	nwWindow,
@@ -13,7 +15,9 @@ define([
 	ChannelSettingsMixin,
 	mkdirp,
 	download,
-	clearfolder
+	clearfolder,
+	PATH,
+	OS
 ) {
 
 	var get = Ember.get;
@@ -21,9 +25,6 @@ define([
 	var alias = Ember.computed.alias;
 	var and = Ember.computed.and;
 	var notEmpty = Ember.computed.notEmpty;
-
-	var PATH = require( "path" );
-	var OS   = require( "os" );
 
 	var Notif = window.Notification;
 

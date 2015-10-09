@@ -1,6 +1,10 @@
-define( [ "utils/fs/stat" ], function( stat ) {
-
-	var PATH  = require( "path" );
+define([
+	"utils/fs/stat",
+	"commonjs!path"
+], function(
+	stat,
+	PATH
+) {
 
 	var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter );
 	var exts  = process.platform === "win32" ? [ ".exe" ] : [ "" ];

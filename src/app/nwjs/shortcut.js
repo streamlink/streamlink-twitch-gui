@@ -2,16 +2,17 @@ define([
 	"json!root/metadata",
 	"nwjs/nwGui",
 	"utils/semver",
-	"utils/resolvePath"
+	"utils/resolvePath",
+	"commonjs!path",
+	"commonjs!os"
 ], function(
 	metadata,
 	nwGui,
 	semver,
-	resolvePath
+	resolvePath,
+	PATH,
+	OS
 ) {
-
-	var PATH = require( "path" );
-	var OS   = require( "os" );
 
 	var config = metadata.package.config[ "notifications-toast-windows" ];
 

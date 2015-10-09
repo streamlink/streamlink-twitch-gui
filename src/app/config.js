@@ -29,8 +29,9 @@ requirejs.config({
 
 	"paths": {
 		// RequireJS plugins
-		"json": "../requirejs/plugins/json/json.dev",
-		"hbs" : "../requirejs/plugins/hbs/hbs.dev",
+		"commonjs": "../requirejs/plugins/commonjs/commonjs",
+		"json"    : "../requirejs/plugins/json/json.dev",
+		"hbs"     : "../requirejs/plugins/hbs/hbs.dev",
 
 		// Vendor
 		"Ember"        : "../vendor/ember/ember.debug",
