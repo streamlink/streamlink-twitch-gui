@@ -3,11 +3,31 @@
 <span class="{{unless channel.has_language 'noL'}} {{unless channel.has_broadcaster_language 'noBL'}}">{{#link-to "channel" channel.id}}{{channel.display_name}}{{/link-to}}</span>
 {{#if channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
 </header>
-<section class="preview" {{action "startStream"}} title="{{channel.status}}">
+<section class="preview {{if expanded 'expanded'}}" title="{{unless expanded channel.status}}" {{action "startStream"}}>
 {{preview-image src=content.preview.medium_nocache}}
+<footer class="{{if _showGame 'shaded'}} {{if expanded 'expanded'}}">
 {{#if _showGame}}
-<footer><i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}</footer>
+<div class="bottom">
+<i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}
+</div>
 {{/if}}
+<div class="details">
+<div>
+{{#if (bool-and content.video_height content.average_fps)}}
+<div class="stats">
+<div class="resolution"><i class="fa fa-film"></i> {{content.resolution}}</div>
+<div class="fps">{{content.fps}} fps <i class="fa fa-eye"></i></div>
+</div>
+{{/if}}
+<div class="status">
+{{embedded-links text=channel.status}}
+</div>
+</div>
+</div>
+</footer>
+<div class="btn-expand" title="{{unless expanded 'Show stream details' 'Hide stream details'}}" {{action "toggle" bubbles=false}}>
+<i class="fa {{unless expanded 'fa-chevron-up' 'fa-chevron-down'}}"></i>
+</div>
 </section>
 <footer>
 <span title="{{content.title_created_at}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.created_at}}</span>

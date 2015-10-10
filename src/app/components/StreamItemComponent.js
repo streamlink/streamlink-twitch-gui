@@ -23,8 +23,11 @@ define([
 		],
 
 		action: "openLivestreamer",
+		openBrowser: "openBrowser",
 
 		channel: alias( "content.channel" ),
+
+		expanded: false,
 
 		showGame: false,
 		_showGame: and( "showGame", "channel.game" ),
@@ -76,7 +79,16 @@ define([
 
 		actions: {
 			"startStream": function() {
+				if ( get( this, "expanded" ) ) { return; }
 				this.sendAction( "action", get( this, "content" ) );
+			},
+
+			"toggle": function() {
+				this.toggleProperty( "expanded" );
+			},
+
+			"openBrowser": function( url ) {
+				this.sendAction( "openBrowser", url );
 			}
 		}
 	});

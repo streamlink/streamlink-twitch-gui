@@ -184,60 +184,175 @@
 	> .preview {
 		overflow: hidden;
 
-		> footer {
-			display: flex;
-			justify-content: center;
+		> footer,
+		> .btn-expand {
 			position: absolute;
 			bottom: -@footer-height;
-			width: 100%;
-			height: @footer-height;
-			padding: @padding;
 			font-size: .85em;
 			opacity: 0;
 			transition: opacity @duration ease-out, bottom @duration ease-out;
+		}
 
-			.themed({
-				background: @themed-streamitem-overlay-background;
-			});
+		> .btn-expand {
+			right: @padding;
+			padding: 0 ( @padding / 2 );
+			cursor: pointer;
 
-			// Set an icon width and move the icon to the left, so the text remains centered.
-			// Let the text have a max-width, so the icon stays on the screen.
-			@icon-width: 1.5em;
-			@icon-offset: ( -1 * @icon-width );
-			@text-max-width: ( -2 * @icon-offset );
-
-			> i {
-				width: @icon-width;
-				margin-left: @icon-offset;
-				text-align: center;
-
-				&.fa-gamepad {
-					text-indent: -.05em;
-				}
+			&:hover {
+				opacity: .875;
 			}
 
-			> a {
-				max-width: calc( 100% - @text-max-width );
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				text-decoration: none;
-
-				&:not(:hover) {
-					.themed({
-						color: @themed-streamitem-game-color;
-					});
-				}
+			&:hover:active {
+				opacity: 1;
 			}
 		}
 
-		&:hover > footer {
-			bottom: 0;
-			opacity: 1;
+		&:hover,
+		&.expanded {
+			> .btn-expand {
+				bottom: @padding;
+				opacity: .75;
+			}
+		}
+
+		// make expand button a bit more visible if there is no shaded footer
+		&:not(.expanded) > footer:not(.shaded) + .btn-expand {
+			opacity: .875;
+
+			> i {
+				.themed({
+					color: @themed-streamitem-play-color;
+					-webkit-text-stroke: .025em @themed-streamitem-play-stroke;
+				});
+			}
+		}
+
+		> footer {
+			display: flex;
+			flex-flow: column-reverse nowrap;
+			width: 100%;
+			height: 100%;
+
+			> .bottom {
+				// Set an icon width and move the icon to the left, so the text remains centered.
+				// Let the text have a max-width, so the icon stays on the screen.
+				@icon-width: 1.5em;
+				@icon-offset: ( -1 * @icon-width );
+				@text-max-width: ( -2 * @icon-offset );
+
+				display: flex;
+				justify-content: center;
+				height: @footer-height;
+				padding: @padding;
+
+				> i {
+					width: @icon-width;
+					margin-left: @icon-offset;
+					text-align: center;
+
+					&.fa-gamepad {
+						text-indent: -.05em;
+					}
+				}
+
+				> a {
+					max-width: calc( 100% - @text-max-width );
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					text-decoration: none;
+
+					&:not(:hover) {
+						.themed({
+							color: @themed-streamitem-game-color;
+						});
+					}
+				}
+			}
+
+			> .details {
+				position: relative;
+				flex-grow: 1;
+				overflow: hidden;
+
+				> div {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					display: flex;
+					flex-flow: column nowrap;
+					padding: @padding;
+					bottom: -100%;
+					opacity: 0;
+					transition: opacity @duration ease-out, bottom @duration ease-out;
+
+					> .stats {
+						display: flex;
+						justify-content: space-between;
+
+						i.fa-film {
+							// fix alignment of film icon
+							position: relative;
+							top: -.1em;
+						}
+					}
+
+					> .status {
+						display: flex;
+						flex-flow: column nowrap;
+						flex-grow: 1;
+						justify-content: space-around;
+
+						> div {
+							// center text vertically and horizontally
+							// allow only 4 lines of text
+							flex-grow: 0;
+							display: -webkit-box;
+							padding: 0 .5em;
+							-webkit-line-clamp: 4;
+							-webkit-box-orient: vertical;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							text-align: center;
+						}
+					}
+				}
+			}
+
+			&.expanded {
+				> .details > div {
+					bottom: 0;
+					opacity: 1;
+				}
+
+				> .bottom,
+				> .details > div {
+					cursor: default;
+				}
+			}
+
+			&.shaded > .bottom,
+			> .details > div {
+				.themed({
+					background: @themed-streamitem-overlay-background;
+				});
+			}
+		}
+
+		&:hover,
+		&.expanded {
+			> footer {
+				bottom: 0;
+				opacity: 1;
+			}
 		}
 
 		&:hover > .previewError::before {
 			opacity: 0;
+		}
+
+		&.expanded::after {
+			display: none;
 		}
 	}
 }
