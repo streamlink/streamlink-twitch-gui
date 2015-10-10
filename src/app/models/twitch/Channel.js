@@ -2,7 +2,6 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 
 	var get = Ember.get;
 	var attr = DS.attr;
-	var hasMany = DS.hasMany;
 
 	var reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
@@ -25,7 +24,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		profile_banner_background_color: attr( "string" ),
 		staff: attr( "boolean" ),
 		status: attr( "string" ),
-		teams: hasMany( "twitchTeam" ),
+		//teams: hasMany( "twitchTeam" ),
 		updated_at: attr( "date" ),
 		url: attr( "string" ),
 		video_banner: attr( "string" ),

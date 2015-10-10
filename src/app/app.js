@@ -62,8 +62,6 @@ define(function( require ) {
 		TwitchStreamSerializer: require( "models/twitch/StreamSerializer" ),
 		TwitchChannel: require( "models/twitch/Channel" ),
 		TwitchChannelSerializer: require( "models/twitch/ChannelSerializer" ),
-		TwitchTeam: require( "models/twitch/Team" ),
-		TwitchTeamSerializer: require( "models/twitch/TeamSerializer" ),
 		TwitchImage: require( "models/twitch/Image" ),
 		TwitchImageSerializer: require( "models/twitch/ImageSerializer" ),
 

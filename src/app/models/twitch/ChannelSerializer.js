@@ -26,6 +26,9 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			if ( resourceHash ) {
 				delete resourceHash.bio;
 				delete resourceHash.type;
+
+				// also remove the teams property for now
+				delete resourceHash.teams;
 			}
 
 			return this._super( modelClass, resourceHash, prop );
