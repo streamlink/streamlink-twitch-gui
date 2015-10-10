@@ -31,13 +31,6 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		video_banner: attr( "string" ),
 		views: attr( "number" ),
 
-		// Twitch.tv API bug?
-		// Sometimes a user record (/user/:user - model not implemented) is embedded into
-		// a stream record instead of a channels record (/channels/:channel - the current model).
-		// We're defining the "missing" attributes, so that EmberData doesn't complain...
-		bio: attr(),
-		type: attr(),
-
 
 		title_followers: function() {
 			var followers = get( this, "followers" );
