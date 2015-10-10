@@ -194,23 +194,23 @@
 		}
 
 		> .btn-expand {
-			right: @padding;
-			padding: 0 ( @padding / 2 );
+			right: 0;
+			padding: @padding ( 1.5 * @padding );
 			cursor: pointer;
 
 			&:hover {
-				opacity: .875;
+				opacity: .875 !important;
 			}
 
 			&:hover:active {
-				opacity: 1;
+				opacity: 1 !important;
 			}
 		}
 
 		&:hover,
 		&.expanded {
 			> .btn-expand {
-				bottom: @padding;
+				bottom: 0;
 				opacity: .75;
 			}
 		}
