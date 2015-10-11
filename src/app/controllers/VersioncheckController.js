@@ -1,4 +1,12 @@
-define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
+define([
+	"Ember",
+	"nwjs/argv",
+	"utils/semver"
+], function(
+	Ember,
+	argv,
+	semver
+) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
@@ -17,6 +25,7 @@ define( [ "Ember", "utils/semver" ], function( Ember, semver ) {
 
 
 		check: function() {
+			if ( !argv.versioncheck ) { return; }
 			if ( !get( this, "version" ) ) { return; }
 
 			var getReleases = this.getReleases.bind( this );

@@ -11,7 +11,8 @@ define([
 	return {
 		"tray": contains.some.call( argv, "--tray", "--hide", "--hidden" ),
 		"min" : contains.some.call( argv, "--min", "--minimize", "--minimized" ),
-		"resetwindow": contains.some.call( argv, "--reset-window" )
+		"resetwindow": contains.some.call( argv, "--reset-window" ),
+		"versioncheck": !contains.some.call( argv, "--no-version-check" )
 	};
 
 });
