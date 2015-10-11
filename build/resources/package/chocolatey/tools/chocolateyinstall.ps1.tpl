@@ -10,4 +10,4 @@ Install-ChocolateyZipPackage "$packageName" "$url" "$extractDir" "$url64"
 $desktop = [Environment]::GetFolderPath("Desktop")
 $shortcutFile = Join-Path $desktop "$($packageName).lnk"
 $exeFile = Join-Path $installDir "$($packageName).exe"
-Install-ChocolateyShortcut -shortcutFilePath $shortcutFile -targetPath $exeFile
+Install-ChocolateyShortcut -shortcutFilePath $shortcutFile -targetPath $exeFile -arguments "--no-version-check"
