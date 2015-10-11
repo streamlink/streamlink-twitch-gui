@@ -6,6 +6,8 @@
 
 # name of the executable
 EXEC="livestreamer-twitch-gui"
+# enable/disable new version check
+CHECKNEWVERSIONS=true
 
 
 ########
@@ -48,8 +50,13 @@ if [[ ! -z `ldd $HERE/$EXEC | grep "libudev.so.0 => not found"` ]]; then
 
 fi
 
+
+# application parameters
+[[ $CHECKNEWVERSIONS = true ]] && params="$@" || params="$@ --no-version-check"
+
+
 # run the application
-exec -a "$0" "$HERE/$EXEC" "$@" &
+exec -a "$0" "$HERE/$EXEC" $params &
 pid=$!
 
 # fix application name in gnome panel
