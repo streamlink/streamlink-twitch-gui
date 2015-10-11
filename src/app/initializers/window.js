@@ -2,12 +2,14 @@ define([
 	"Ember",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
-	"nwjs/nwScreen"
+	"nwjs/nwScreen",
+	"nwjs/argv"
 ], function(
 	Ember,
 	nwGui,
 	nwWindow,
-	nwScreen
+	nwScreen,
+	argv
 ) {
 
 	var get = Ember.get,
@@ -154,7 +156,7 @@ define([
 				})
 				.then(function( Window ) {
 					// reset window
-					if ( nwGui.App.fullArgv.indexOf( "--reset-window" ) >= 0 ) {
+					if ( argv.resetwindow ) {
 						resetWindow.call( Window );
 					} else {
 						restoreWindow.call( Window );

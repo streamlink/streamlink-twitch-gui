@@ -6,7 +6,7 @@ define([
 	"nwjs/shortcut",
 	"nwjs/tray",
 	"nwjs/menu",
-	"utils/contains"
+	"nwjs/argv"
 ], function(
 	Ember,
 	nwGui,
@@ -15,7 +15,7 @@ define([
 	shortcut,
 	tray,
 	menu,
-	contains
+	argv
 ) {
 
 	var get = Ember.get;
@@ -53,11 +53,8 @@ define([
 		onIntegrationChange();
 
 
-		// parse process arguments
-		var argv = nwGui.App.fullArgv;
-
 		// hide in tray
-		if ( contains.some.call( argv, "--tray", "--hide", "--hidden" ) ) {
+		if ( argv.tray ) {
 			nwWindow.setShowInTray( true, get( settings, "isVisibleInTaskbar" ) );
 			// remove the tray icon after clicking it if it's disabled in the settings
 			if ( !get( settings, "isVisibleInTray" ) ) {
@@ -68,7 +65,7 @@ define([
 		}
 
 		// minimize window
-		if ( contains.some.call( argv, "--min", "--minimize", "--minimized" ) ) {
+		if ( argv.min ) {
 			nwWindow.toggleMinimize( false );
 		}
 
