@@ -9,13 +9,14 @@ define([
 ) {
 
 	var get = Ember.get;
-	var alias = Ember.computed.alias;
+	var set = Ember.set;
+	var readOnly = Ember.computed.readOnly;
 
 	return Ember.Controller.extend({
 		metadata: Ember.inject.service(),
 
-		config : alias( "metadata.config" ),
-		version: alias( "metadata.package.version" ),
+		config : readOnly( "metadata.config" ),
+		version: readOnly( "metadata.package.version" ),
 
 		// check again in x days (time in ms)
 		time: function() {
@@ -24,20 +25,78 @@ define([
 		}.property( "config.version-check-days" ),
 
 
+		model: null,
+
+
 		check: function() {
-			if ( !argv.versioncheck ) { return; }
-			if ( !get( this, "version" ) ) { return; }
+			// get the installed version
+			var current = get( this, "version" );
+			if ( !current ) { return; }
 
-			var getReleases = this.getReleases.bind( this );
+			var self  = this;
+			var store = get( self, "store" );
+			store.findRecord( "versioncheck", 1 )
+				.then(function( record ) {
+					// versioncheck record found
 
-			// load Versioncheck record
-			get( this, "store" ).findRecord( "versioncheck", 1 ).then(function( record ) {
-				if ( Ember.getWithDefault( record, "checkagain", 0 ) <= +new Date() ) {
-					// let's check for a new release
-					getReleases();
-				}
-			}, getReleases );
+					set( self, "model", record );
+
+					var version = get( record, "version" );
+					// if version string is empty, go on (new version)
+					// ignore if version string >= (not <) installed version metadata
+					if ( version && semver.getMax([ version, current ]) === version ) {
+						return true;
+					}
+
+					// NEW version -> upgrade record
+					set( record, "version", current );
+					record.save();
+
+					// don't show modal if versioncheck is enabled (manual upgrades)
+					// manual upgrades -> user has (most likely) seen changelog already
+					if ( argv.versioncheck ) {
+						return true;
+					}
+
+					// show changelog modal dialog
+					self.send( "openModal", "changelogModal", self );
+
+				}, function() {
+					// no versioncheck record found: first run
+
+					// unload automatically created record and create a new one instead
+					var record = store.peekRecord( "versioncheck", 1 );
+					if ( record ) {
+						store.unloadRecord( record );
+					}
+					record = store.createRecord( "versioncheck", {
+						id     : 1,
+						version: current
+					});
+					record.save();
+
+					set( self, "model", record );
+
+					// show first run modal dialog
+					self.send( "openModal", "firstrunModal", self );
+				})
+				.then(function( modalSkipped ) {
+					if ( !modalSkipped ) { return; }
+					// go on with new version check if no modal has been opened
+					self.checkForNewRelease();
+				});
 		}.on( "init" ),
+
+
+		checkForNewRelease: function() {
+			// don't check for new releases if disabled
+			if ( !argv.versioncheck ) { return; }
+
+			var checkagain = get( this, "model.checkagain" );
+			if ( checkagain <= +new Date() ) {
+				this.getReleases();
+			}
+		},
 
 		getReleases: function() {
 			get( this, "store" ).findAll( "githubReleases", { reload: true } )
@@ -69,7 +128,7 @@ define([
 			}
 
 			// ask the user what to do
-			this.send( "openModal", "versioncheckModal", this, {
+			this.send( "openModal", "newreleaseModal", this, {
 				versionOutdated: getVers( current ),
 				versionLatest  : getVers( latest ),
 				downloadURL    : get( latest, "html_url" )
@@ -77,27 +136,45 @@ define([
 		},
 
 		actions: {
+			"close": function() {
+				this.send( "closeModal" );
+				this.checkForNewRelease();
+			},
+
+			"gotoSettings": function() {
+				this.send( "goto", "settings" );
+				this.send( "close" );
+			},
+
+			"showChangelog": function( success ) {
+				var version = get( this, "version" );
+				var url = get( this, "config.changelog-url" );
+				if ( url ) {
+					url = url.replace( "{version}", version );
+					this.send( "openBrowser", url );
+					if ( success instanceof Function ) {
+						success();
+					}
+				}
+			},
+
 			"releaseDownload": function( success ) {
-				this.send( "openBrowser", get( this, "downloadURL" ) );
+				var url = get( this, "downloadURL" );
+				this.send( "openBrowser", url );
 				this.send( "releaseIgnore" );
 				if ( success instanceof Function ) {
 					success();
 				}
 			},
 
-			"releaseIgnore": function( success, failure ) {
-				var store  = get( this, "store" );
-				var record = store.peekRecord( "versioncheck", 1 );
-				if ( record ) {
-					store.unloadRecord( record );
-				}
+			"releaseIgnore": function( success ) {
+				var record     = get( this, "model" );
+				var time       = get( this, "time" );
+				var checkagain = +new Date() + time;
 
-				store.createRecord( "versioncheck", {
-					id: 1,
-					checkagain: +new Date() + get( this, "time" )
-				})
-					.save()
-					.then( success, failure )
+				record.set( "checkagain", checkagain );
+				record.save()
+					.then( success, function(){} )
 					.then( this.send.bind( this, "closeModal" ) );
 			}
 		}

@@ -1,0 +1,12 @@
+{{#modal-dialog}}
+	{{#modal-header}}
+		You just upgraded to v{{version}}
+	{{/modal-header}}
+	{{#modal-body}}
+		See what's new and open the changelog in your browser now?
+	{{/modal-body}}
+	{{#modal-footer}}
+		{{#form-button action="close"         class="btn-danger"  icon="fa-times"                 }}Close{{/form-button}}
+		{{#form-button action="showChangelog" class="btn-success" icon="fa-list-alt" iconanim=true}}Changelog{{/form-button}}
+	{{/modal-footer}}
+{{/modal-dialog}}

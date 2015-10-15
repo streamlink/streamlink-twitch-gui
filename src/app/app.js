@@ -158,7 +158,9 @@ define(function( require ) {
 		ModalBodyComponent: require( "components/ModalBodyComponent" ),
 		ModalFooterComponent: require( "components/ModalFooterComponent" ),
 
-		VersioncheckModalTemplate: require( "hbs!templates/modals/versioncheck.html" ),
+		FirstrunModalTemplate: require( "hbs!templates/modals/firstrun.html" ),
+		ChangelogModalTemplate: require( "hbs!templates/modals/changelog.html" ),
+		NewreleaseModalTemplate: require( "hbs!templates/modals/newrelease.html" ),
 		SettingsModalTemplate: require( "hbs!templates/modals/settings.html" ),
 		LivestreamerModalTemplate: require( "hbs!templates/modals/livestreamer.html" ),
 		QuitModalTemplate: require( "hbs!templates/modals/quit.html" ),
