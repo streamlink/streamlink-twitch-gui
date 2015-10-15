@@ -23,7 +23,7 @@ main.content.content-loading {
 .loading-spinner {
 	// no SVG2 / SVG-Strokes yet: can't set stroke-alignment: inner
 	// so just reduce radius by stroke width
-	@stroke: .05;
+	@stroke: .075;
 	@duration: 1.5s;
 
 	// radius = 50% - strokeWidth
@@ -31,7 +31,7 @@ main.content.content-loading {
 	// it can't be set via CSS
 	@radius: ( .5 - @stroke );
 
-	@btn-stroke: ( 2 * @stroke );
+	@btn-stroke: .1;
 	@btn-radius: ( .5 - @btn-stroke );
 
 	width: 1em;
