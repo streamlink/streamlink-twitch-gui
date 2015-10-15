@@ -366,6 +366,29 @@ define([
 	});
 
 
+	QUnit.test( "Hours from now with interval", function( assert ) {
+
+		var done = assert.async();
+
+		registry.register( "helper:hours-from-now", HoursFromNowHelper );
+		component = Component.extend({
+			container: container,
+			layout   : compile( "{{hours-from-now date interval=10}}" )
+		}).create();
+
+		set( component, "date", +new Date() - 59 * 1000 - 990 );
+		runAppend( component );
+		assert.equal( getOutput( component ), "just now", "Initial content" );
+
+		run.later(function() {
+			assert.equal( getOutput( component ), "01m", "Upgraded content" );
+
+			done();
+		}, 25 );
+
+	});
+
+
 	QUnit.test( "Time from now", function( assert ) {
 
 		registry.register( "helper:time-from-now", TimeFromNowHelper );

@@ -17,15 +17,13 @@
 <div class="clear" {{action "clearHistory"}}><i class="fa fa-trash-o"></i></div>
 </header>
 <ul class="list-unstyled">
-{{#with updateFormattedTime as |_|}}
 {{#each content as |history|}}
 <li {{action "searchHistory" history}}>
 <div class="filter">{{history.label}}</div>
 <div class="query">{{history.query}}</div>
-<div class="date">{{time-from-now history.date false}}</div>
+<div class="date">{{time-from-now history.date false interval=60000}}</div>
 </li>
 {{/each}}
-{{/with}}
 </ul>
 </section>
 {{/if}}

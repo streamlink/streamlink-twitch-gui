@@ -1,7 +1,15 @@
-define( [ "Ember", "Moment" ], function( Ember, Moment ) {
+define([
+	"helpers/-FromNowHelper",
+	"Moment"
+], function(
+	FromNowHelper,
+	Moment
+) {
 
-	return Ember.Helper.helper(function( params, hash ) {
-		return new Moment( params[0] ).fromNow( hash.suffix || params[1] );
+	return FromNowHelper.extend({
+		_compute: function( params, hash ) {
+			return new Moment( params[0] ).fromNow( hash.suffix || params[1] );
+		}
 	});
 
 });

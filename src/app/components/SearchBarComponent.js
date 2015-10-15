@@ -31,8 +31,6 @@ define([
 		filter: "all",
 		query: "",
 
-		updateFormattedTime: 0,
-
 
 		init: function() {
 			this._super.apply( this, arguments );
@@ -129,9 +127,6 @@ define([
 		actions: {
 			"toggleDropdown": function() {
 				var showDropdown = get( this, "showDropdown" );
-				if ( !showDropdown ) {
-					set( this, "updateFormattedTime", +new Date() );
-				}
 				set( this, "showDropdown", !showDropdown );
 			},
 

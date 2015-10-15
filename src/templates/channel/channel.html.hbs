@@ -15,7 +15,7 @@
 </div>
 {{#if stream}}
 <div class="online">
-<span title="{{stream.title_created_at}}"><i class="fa fa-clock-o"></i> {{hours-from-now stream.created_at}}</span>
+<span title="{{stream.title_created_at}}"><i class="fa fa-clock-o"></i> {{hours-from-now stream.created_at interval=60000}}</span>
 <span title="{{stream.title_viewers}}"><i class="fa fa-users"></i> {{format-viewers stream.viewers}}</span>
 <span><i class="fa fa-gamepad"></i> {{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</span>
 </div>
