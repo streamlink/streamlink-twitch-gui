@@ -245,17 +245,23 @@ define([
 
 
 		_openCustom: function( command, channel, url ) {
+			var token  = get( this, "auth.session.access_token" );
+			var user   = get( this, "auth.session.user_name" );
 			var params = Parameter.getParameters(
 				{
 					command: command,
 					channel: channel,
-					url    : url
+					url    : url,
+					user   : user,
+					token  : token
 				},
 				[
 					new ParameterCustom( null, "command", true )
 				],
 				[
 					new Substitution( "url", "url" ),
+					new Substitution( "user", "user" ),
+					new Substitution( "token", "token" ),
 					new Substitution( "channel", "channel" )
 				]
 			);

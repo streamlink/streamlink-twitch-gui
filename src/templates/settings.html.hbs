@@ -19,7 +19,7 @@
 {{#unless (bool-or isChatMethodDefault isChatMethodMSIE)}}
 <div><i class="fa fa-cog"></i> Executable location<span>
 {{#if isChatMethodCustom}}
-Available parameters: <span title="Name of the channel">{channel}</span> and <span title="Twitch chat URL">{url}</span>.<br>Example: <span class="docs">/path/to/app --name {channel} {url}</span>
+Available parameters: <span title="Name of the channel">{channel}</span>, <span title="Twitch chat URL">{url}</span>, <span title="Your user name">{user}</span> and <span title="Your access token">{token}</span>.<br>Example: <span class="docs">/path/to/app --name {channel} {url}</span>
 {{else if isChatMethodChatty}}
 Set the path to the Chatty .jar file.<span class="docs">Requires Chatty >= 0.8.2b2</span>
 {{else}}
