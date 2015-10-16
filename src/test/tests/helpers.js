@@ -373,10 +373,10 @@ define([
 		registry.register( "helper:hours-from-now", HoursFromNowHelper );
 		component = Component.extend({
 			container: container,
-			layout   : compile( "{{hours-from-now date interval=10}}" )
+			layout   : compile( "{{hours-from-now date interval=40}}" )
 		}).create();
 
-		set( component, "date", +new Date() - 59 * 1000 - 990 );
+		set( component, "date", +new Date() - 59 * 1000 - 980 );
 		runAppend( component );
 		assert.equal( getOutput( component ), "just now", "Initial content" );
 
@@ -384,7 +384,7 @@ define([
 			assert.equal( getOutput( component ), "01m", "Upgraded content" );
 
 			done();
-		}, 25 );
+		}, 60 );
 
 	});
 
