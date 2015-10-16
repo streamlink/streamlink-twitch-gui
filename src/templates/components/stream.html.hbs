@@ -13,7 +13,7 @@
 {{/if}}
 <div class="details">
 <div>
-{{#if (bool-and content.video_height content.average_fps)}}
+{{#if content.hasFormatInfo}}
 <div class="stats">
 <div class="resolution"><i class="fa fa-film"></i> {{content.resolution}}</div>
 <div class="fps">{{content.fps}} fps <i class="fa fa-eye"></i></div>

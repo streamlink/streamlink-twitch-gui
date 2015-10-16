@@ -25,6 +25,10 @@
 <dt><i class="fa fa-legal"></i>Staff</dt>
 <dd>Twitch.tv staff member</dd>
 {{/if}}
+{{#if stream.hasFormatInfo}}
+<dt><i class="fa fa-film"></i>Format</dt>
+<dd>{{stream.resolution}} @ {{stream.fps}}fps</dd>
+{{/if}}
 </dl>
 <div class="interactions">
 {{open-chat channel=channel}}

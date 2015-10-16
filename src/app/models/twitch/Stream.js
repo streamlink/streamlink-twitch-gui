@@ -1,6 +1,7 @@
 define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
 
 	var get = Ember.get;
+	var and = Ember.computed.and;
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 
@@ -12,6 +13,8 @@ define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
 		preview: belongsTo( "twitchImage", { async: false } ),
 		video_height: attr( "number" ),
 		viewers: attr( "number" ),
+
+		hasFormatInfo: and( "video_height", "average_fps" ),
 
 
 		title_created_at: function() {
