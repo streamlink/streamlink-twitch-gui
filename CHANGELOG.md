@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.11.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.0) (2015-10-16)
 
 - Implemented theme switcher and added dark theme.
 - Implemented menu-related random stream launch button.
@@ -13,7 +13,7 @@ Changelog - Livestreamer Twitch GUI
 - Fixed subscribe button being visible on all channel pages / popups. #142
 - Fixed text of closing modal dialog.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.10.1...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.10.1...v0.11.0)
 
 
 ## [v0.10.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.10.1) (2015-09-14)
