@@ -39,14 +39,14 @@ define([
 		didInsertElement: function() {
 			this._super();
 
-			var $elem     = this.$();
+			var $elem     = this.$().parent();
 			var threshold = get( this, "scrollThreshold" );
 			var target    = get( this, "targetObject" );
 			var listener  = this.infiniteScroll.bind( this, $elem[ 0 ], threshold, target );
 
 			set( this, "scrollListener", listener );
 
-			$elem.parent().on( "scroll", listener );
+			$elem.on( "scroll", listener );
 			$window.on( "resize", listener );
 		},
 
