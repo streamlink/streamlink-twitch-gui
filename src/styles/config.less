@@ -39,6 +39,9 @@
 @scrollbar-size: 16px;
 @scrollbar-thumb-size: 4px;
 
+@content-width: ( @app-width - @menu-width - 2 * @scrollbar-size );
+@additional-width: ( @app-width - @content-width );
+
 @titlebar-size: 28px;
 @titlebar-height: ( 2 * @app-padding + @titlebar-size );
 @titlebar-buttons-width: 400px;
