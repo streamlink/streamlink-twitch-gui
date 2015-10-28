@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/quickbar.html"
+	"hbs!templates/components/QuickBarComponent.html"
 ], function(
 	Ember,
 	layout
@@ -13,7 +13,11 @@ define([
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "div",
-		classNameBindings: [ ":quickbar", "isOpened:opened", "isLocked:locked" ],
+		classNameBindings: [
+			":quick-bar-component",
+			"isOpened:opened",
+			"isLocked:locked"
+		],
 
 		isOpened: false,
 		isLocked: false,
