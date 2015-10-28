@@ -331,6 +331,10 @@
 					background: @themed-streamitem-overlay-background;
 				});
 			}
+
+			&:not(.shaded) > .details .status {
+				padding-bottom: ( @footer-height - @padding );
+			}
 		}
 
 		&:hover,
