@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"components/ListItemComponent",
-	"hbs!templates/components/game.html"
+	"hbs!templates/components/GameItemComponent.html"
 ], function(
 	Ember,
 	ListItemComponent,
@@ -13,7 +13,7 @@ define([
 
 	return ListItemComponent.extend({
 		layout: layout,
-		classNames: [ "game-component" ],
+		classNames: [ "game-item-component" ],
 
 		action: "goto",
 
