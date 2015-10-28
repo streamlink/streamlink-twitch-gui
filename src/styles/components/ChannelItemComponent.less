@@ -1,0 +1,38 @@
+
+.channel-item-component {
+	min-height: 91px;
+	display: flex;
+	flex-flow: row nowrap;
+	margin-bottom: 1.5em;
+	.dynamic-elems-per-row( 2, @content-width, 4%, @additional-width );
+
+	> .logo {
+		@size: 6.5em;
+
+		display: block;
+		position: relative;
+		width: @size;
+		height: @size;
+		flex-shrink: 0;
+		cursor: pointer;
+	}
+
+	> .text {
+		margin: 0 .5em;
+
+		> header {
+			margin: 0 0 .5em;
+		}
+
+		> .game {
+			margin: 0 0 .25em;
+		}
+
+		> .status {
+			height: @line-height-base;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+	}
+}
