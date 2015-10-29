@@ -36,7 +36,7 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 				if ( get( this, "controller.model.buffer.isDirty" ) ) {
 					transition.abort();
 
-					this.send( "openModal", "settingsModal", this.controller, {
+					this.send( "openModal", "settings", this.controller, {
 						previousTransition: transition
 					});
 

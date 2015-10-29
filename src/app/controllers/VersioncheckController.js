@@ -59,7 +59,7 @@ define([
 					}
 
 					// show changelog modal dialog
-					self.send( "openModal", "changelogModal", self );
+					self.send( "openModal", "changelog", self );
 
 				}, function() {
 					// no versioncheck record found: first run
@@ -78,7 +78,7 @@ define([
 					set( self, "model", record );
 
 					// show first run modal dialog
-					self.send( "openModal", "firstrunModal", self );
+					self.send( "openModal", "firstrun", self );
 				})
 				.then(function( modalSkipped ) {
 					if ( !modalSkipped ) { return; }
@@ -128,7 +128,7 @@ define([
 			}
 
 			// ask the user what to do
-			this.send( "openModal", "newreleaseModal", this, {
+			this.send( "openModal", "newrelease", this, {
 				versionOutdated: getVers( current ),
 				versionLatest  : getVers( latest ),
 				downloadURL    : get( latest, "html_url" )

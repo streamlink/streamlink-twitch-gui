@@ -1,6 +1,11 @@
 define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 
 	var get = Ember.get;
+	var reModalTemplateName = /^(?:Modal)?(\w)(\w+)(?:Modal)?$/i;
+
+	function fnModalTemplateName( _, a, b ) {
+		return "modal" + a.toUpperCase() + b;
+	}
 
 	return Ember.Route.extend({
 		settings: Ember.inject.service(),
@@ -48,6 +53,8 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 			},
 
 			"openModal": function( template, controller, data ) {
+				template = template.replace( reModalTemplateName, fnModalTemplateName );
+
 				if ( typeof controller === "string" ) {
 					controller = this.controllerFor( controller );
 				}

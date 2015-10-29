@@ -20,7 +20,7 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 					transition.abort();
 
 					// and let the user decide
-					this.send( "openModal", "settingsModal", this.controller, {
+					this.send( "openModal", "settings", this.controller, {
 						previousTransition: transition
 					});
 				}

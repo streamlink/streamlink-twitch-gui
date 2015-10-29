@@ -158,12 +158,12 @@ define(function( require ) {
 		ModalBodyComponent: require( "components/ModalBodyComponent" ),
 		ModalFooterComponent: require( "components/ModalFooterComponent" ),
 
-		FirstrunModalTemplate: require( "hbs!templates/modal/ModalFirstrun" ),
-		ChangelogModalTemplate: require( "hbs!templates/modal/ModalChangelog" ),
-		NewreleaseModalTemplate: require( "hbs!templates/modal/ModalNewrelease" ),
-		SettingsModalTemplate: require( "hbs!templates/modal/ModalSettings" ),
-		LivestreamerModalTemplate: require( "hbs!templates/modal/ModalLivestreamer" ),
-		QuitModalTemplate: require( "hbs!templates/modal/ModalQuit" ),
+		ModalFirstrunTemplate: require( "hbs!templates/modal/ModalFirstrun" ),
+		ModalChangelogTemplate: require( "hbs!templates/modal/ModalChangelog" ),
+		ModalNewreleaseTemplate: require( "hbs!templates/modal/ModalNewrelease" ),
+		ModalSettingsTemplate: require( "hbs!templates/modal/ModalSettings" ),
+		ModalLivestreamerTemplate: require( "hbs!templates/modal/ModalLivestreamer" ),
+		ModalQuitTemplate: require( "hbs!templates/modal/ModalQuit" ),
 
 
 		// Components
