@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"components/ListItemComponent",
-	"hbs!templates/components/stream.html"
+	"hbs!templates/components/StreamItemComponent"
 ], function(
 	Ember,
 	ListItemComponent,
@@ -16,7 +16,7 @@ define([
 	return ListItemComponent.extend({
 		layout: layout,
 		classNameBindings: [
-			":stream-component",
+			":stream-item-component",
 			"_showGame:show-game",
 			"showFlag:show-flag",
 			"faded:faded"

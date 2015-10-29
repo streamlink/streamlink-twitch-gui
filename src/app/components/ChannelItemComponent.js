@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"components/ListItemComponent",
-	"hbs!templates/components/channel.html"
+	"hbs!templates/components/ChannelItemComponent"
 ], function(
 	Ember,
 	ListItemComponent,
@@ -10,7 +10,7 @@ define([
 
 	return ListItemComponent.extend({
 		layout: layout,
-		classNames: [ "channel-component" ]
+		classNames: [ "channel-item-component" ]
 	});
 
 });

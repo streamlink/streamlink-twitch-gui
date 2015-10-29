@@ -61,7 +61,7 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 			"winClose": function() {
 				if ( get( this, "streamsLength" ) ) {
-					this.send( "openModal", "quitModal", this );
+					this.send( "openModal", "quit", this );
 				} else {
 					this.send( "quit" );
 				}

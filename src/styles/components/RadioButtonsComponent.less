@@ -1,0 +1,57 @@
+
+.radiobtns {
+	display: flex;
+
+	> input {
+		display: none;
+	}
+
+	> label {
+		display: block;
+		flex: 1;
+		margin: 0 .2em;
+		padding: 0 .25em;
+		border: @button-border-width solid;
+		font-weight: normal;
+		text-align: center;
+		cursor: pointer;
+		opacity: 1;
+		transition: opacity .2s ease-out;
+
+		.themed({
+			color: @themed-button-color;
+		});
+
+		&:first-of-type {
+			margin-left: 0;
+		}
+		&:last-of-type {
+			margin-right: 0;
+		}
+
+		> i {
+			transition: opacity .2s ease-out;
+		}
+	}
+
+	input:not(:checked) + label {
+		> i { opacity: 0; }
+		&:hover        > i { opacity: @button-icon-opacity-hover; }
+		&:hover:active > i { opacity: @button-icon-opacity-active; }
+	}
+
+	input:checked + label {
+		> i { opacity: @button-icon-opacity; }
+		&:hover        > i { opacity: @button-icon-opacity-hover; }
+		&:hover:active > i { opacity: @button-icon-opacity-active; }
+	}
+
+	input:disabled + label {
+		opacity: .667;
+		cursor: default;
+
+		> i {
+			opacity: 0 !important;
+		}
+	}
+}

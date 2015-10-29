@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/searchbar.html"
+	"hbs!templates/components/SearchBarComponent"
 ], function(
 	Ember,
 	layout

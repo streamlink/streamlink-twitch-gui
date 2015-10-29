@@ -14,7 +14,7 @@ define([
 	var set = Ember.set;
 
 	return UserIndexRoute.extend( InfiniteScrollMixin, {
-		itemSelector: ".stream-component",
+		itemSelector: ".subscription-item-component",
 
 		model: function() {
 			var store = get( this, "store" );

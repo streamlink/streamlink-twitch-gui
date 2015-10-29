@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/loadingspinner.html"
+	"hbs!templates/components/LoadingSpinnerComponent"
 ], function(
 	Ember,
 	layout
@@ -11,7 +11,7 @@ define([
 
 		tagName: "svg",
 		attributeBindings: [ "viewBox" ],
-		classNames: [ "loading-spinner" ],
+		classNames: [ "loading-spinner-component" ],
 
 		viewBox: "0 0 1 1",
 

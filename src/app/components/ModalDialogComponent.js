@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/modaldialog.html"
+	"hbs!templates/components/ModalDialogComponent"
 ], function(
 	Ember,
 	layout
@@ -12,7 +12,7 @@ define([
 		layout: layout,
 
 		tagName: "section",
-		classNameBindings: [ ":mymodal", "class" ],
+		classNameBindings: [ ":modal-dialog-component", "class" ],
 
 		head: or( "context.modalHead", "context.head" ),
 		body: or( "context.modalBody", "context.body" ),

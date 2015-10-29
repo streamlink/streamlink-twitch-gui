@@ -19,7 +19,7 @@ define([
 	return Ember.Route.extend( InfiniteScrollMixin, {
 		contentPath: "controller.model.streams",
 
-		itemSelector: ".stream-component",
+		itemSelector: ".stream-item-component",
 
 
 		model: function( params ) {

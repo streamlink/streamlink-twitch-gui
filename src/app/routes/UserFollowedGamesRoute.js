@@ -15,7 +15,7 @@ define([
 	var get = Ember.get;
 
 	return UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
-		itemSelector: ".game-component",
+		itemSelector: ".game-item-component",
 
 		modelName: "twitchGamesFollowed",
 

@@ -15,7 +15,7 @@ define([
 	var get = Ember.get;
 
 	return Ember.Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMetadataMixin, {
-		itemSelector: ".stream-component",
+		itemSelector: ".stream-item-component",
 
 		modelName: "twitchStream",
 

@@ -15,7 +15,7 @@ define([
 	var get = Ember.get;
 
 	return UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
-		itemSelector: ".stream-component",
+		itemSelector: ".stream-item-component",
 
 		modelName: "twitchStreamsFollowed",
 

@@ -103,7 +103,7 @@ define([
 
 
 		startStream: function( stream ) {
-			this.send( "openModal", "livestreamerModal", this, {
+			this.send( "openModal", "livestreamer", this, {
 				error : null,
 				active: null,
 				abort : false

@@ -15,7 +15,7 @@ define([
 	var get = Ember.get;
 
 	return UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
-		itemSelector: ".channel-component",
+		itemSelector: ".channel-item-component",
 
 		queryParams: {
 			sortby: {

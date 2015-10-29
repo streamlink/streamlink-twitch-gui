@@ -22,10 +22,21 @@ body {
 		background: @themed-background;
 		color: @themed-text-color;
 	});
+
+	> .wrapper {
+		flex: 1;
+	}
 }
 
-body > .wrapper {
-	flex: 1;
+.wrapper {
+	&.horizontal {
+		display: flex;
+		flex-flow: row nowrap;
+	}
+	&.vertical {
+		display: flex;
+		flex-flow: column nowrap;
+	}
 }
 
 
