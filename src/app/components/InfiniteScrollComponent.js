@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/infinitescroll.html"
+	"hbs!templates/components/InfiniteScrollComponent.html"
 ], function(
 	Ember,
 	layout

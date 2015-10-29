@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/loadingspinner.html"
+	"hbs!templates/components/LoadingSpinnerComponent.html"
 ], function(
 	Ember,
 	layout

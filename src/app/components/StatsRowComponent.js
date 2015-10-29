@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/statsrow.html"
+	"hbs!templates/components/StatsRowComponent.html"
 ], function(
 	Ember,
 	layout

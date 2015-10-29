@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/wrapcontent.html"
+	"hbs!templates/components/WrapContentComponent.html"
 ], function(
 	Ember,
 	layout

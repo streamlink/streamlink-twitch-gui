@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/modaldialog.html"
+	"hbs!templates/components/ModalDialogComponent.html"
 ], function(
 	Ember,
 	layout

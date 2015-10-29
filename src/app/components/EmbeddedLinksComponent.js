@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"utils/linkparser",
-	"hbs!templates/components/embeddedlinks.html"
+	"hbs!templates/components/EmbeddedLinksComponent.html"
 ], function(
 	Ember,
 	linkparser,

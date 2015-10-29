@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/radiobuttons.html"
+	"hbs!templates/components/RadioButtonsComponent.html"
 ], function(
 	Ember,
 	layout
