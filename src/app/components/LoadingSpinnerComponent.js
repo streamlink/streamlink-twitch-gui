@@ -11,7 +11,7 @@ define([
 
 		tagName: "svg",
 		attributeBindings: [ "viewBox" ],
-		classNames: [ "loading-spinner" ],
+		classNames: [ "loading-spinner-component" ],
 
 		viewBox: "0 0 1 1",
 
