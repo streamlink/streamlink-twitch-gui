@@ -376,7 +376,7 @@ define([
 			layout   : compile( "{{hours-from-now date interval=40}}" )
 		}).create();
 
-		set( component, "date", +new Date() - 59 * 1000 - 980 );
+		set( component, "date", +new Date() - 59 * 1000 - 950 );
 		runAppend( component );
 		assert.equal( getOutput( component ), "just now", "Initial content" );
 
@@ -384,7 +384,7 @@ define([
 			assert.equal( getOutput( component ), "01m", "Upgraded content" );
 
 			done();
-		}, 60 );
+		}, 100 );
 
 	});
 
