@@ -9,7 +9,7 @@ define([
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "div",
-		classNameBindings: [ ":stats-row", "class" ],
+		classNameBindings: [ ":stats-row-component", "class" ],
 
 		withFlag: true
 	});
