@@ -17,8 +17,16 @@ define([
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "button",
-		classNameBindings: [ ":btn", ":btn-with-icon", ":infinitescroll", "hasFetchedAll:hidden" ],
-		attributeBindings: [ "type", "locked:disabled" ],
+		classNameBindings: [
+			":btn",
+			":btn-with-icon",
+			":infinite-scroll-component",
+			"hasFetchedAll:hidden"
+		],
+		attributeBindings: [
+			"type",
+			"locked:disabled"
+		],
 
 		scrollThreshold: 2 / 3,
 		scrollListener : null,
