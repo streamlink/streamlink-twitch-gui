@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/ModalLogComponent.html"
+	"hbs!templates/components/ModalLogComponent"
 ], function(
 	Ember,
 	layout

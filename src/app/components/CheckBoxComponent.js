@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/CheckBoxComponent.html"
+	"hbs!templates/components/CheckBoxComponent"
 ], function(
 	Ember,
 	layout

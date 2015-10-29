@@ -2,7 +2,7 @@ define([
 	"Ember",
 	"components/ListItemComponent",
 	"Moment",
-	"hbs!templates/components/SubscriptionItemComponent.html"
+	"hbs!templates/components/SubscriptionItemComponent"
 ], function(
 	Ember,
 	ListItemComponent,

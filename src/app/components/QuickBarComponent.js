@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/QuickBarComponent.html"
+	"hbs!templates/components/QuickBarComponent"
 ], function(
 	Ember,
 	layout

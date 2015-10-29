@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/FileSelectComponent.html"
+	"hbs!templates/components/FileSelectComponent"
 ], function(
 	Ember,
 	layout
