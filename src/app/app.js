@@ -123,7 +123,6 @@ define(function( require ) {
 		HoursFromNowHelper: require( "helpers/HoursFromNowHelper" ),
 		TimeFromNowHelper: require( "helpers/TimeFromNowHelper" ),
 		GetParamHelper: require( "helpers/GetParamHelper" ),
-		GetPathHelper: require( "helpers/GetPathHelper" ),
 
 
 		// Services
