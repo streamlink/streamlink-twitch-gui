@@ -8,7 +8,8 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
-	var run = Ember.run;
+	var later = Ember.run.later;
+	var cancel = Ember.run.cancel;
 
 	return Ember.Component.extend({
 		layout: layout,
@@ -25,28 +26,21 @@ define([
 		timer: null,
 
 		mouseEnter: function() {
-			if ( this.timer ) {
-				run.cancel( this.timer );
-				this.timer = null;
-			}
-
 			set( this, "isOpened", true );
 		},
 
 		mouseLeave: function() {
-			if ( !get( this, "isLocked" ) ) {
-				this.timer = run.later( set, this, "isOpened", false, 1000 );
-			}
+			if ( get( this, "isLocked" ) ) { return; }
+			this.timer = later( set, this, "isOpened", false, 1000 );
 		},
 
 
-		willDestroyElement: function() {
+		clearTimer: function() {
 			if ( this.timer ) {
-				run.cancel( this.timer );
+				cancel( this.timer );
+				this.timer = null;
 			}
-
-			this._super.apply( this, arguments );
-		},
+		}.on( "willDestroyElement", "mouseEnter" ),
 
 
 		actions: {
