@@ -7,7 +7,7 @@ define([
 ) {
 
 	return Ember.Component.extend({
-		defaultLayout: layout,
+		layout: layout,
 		tagName: "label"
 	});
 

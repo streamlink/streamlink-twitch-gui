@@ -112,8 +112,7 @@ define([
 		name: "nwjs",
 
 		initialize: function( application ) {
-			var container = application.container;
-			var metadata  = container.lookup( "service:metadata" );
+			var metadata = application.lookup( "service:metadata" );
 
 			var displayName    = get( metadata, "config.display-name" );
 			var trayIconImg    = get( metadata, "config.tray-icon" );
@@ -135,7 +134,7 @@ define([
 				try {
 					nwWindow.show();
 					nwWindow.focus();
-					container.lookup( "controller:application" ).send( "winClose" );
+					application.lookup( "controller:application" ).send( "winClose" );
 				} catch ( e ) {
 					nwWindow.close( true );
 				}

@@ -145,8 +145,7 @@ define([
 		after: [ "ember-data", "nwjs" ],
 
 		initialize: function( application ) {
-			var container = application.container;
-			var store = container.lookup( "service:store" );
+			var store = application.lookup( "service:store" );
 
 			store.findAll( "window" )
 				.then(function( records ) {
