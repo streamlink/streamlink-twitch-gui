@@ -5,7 +5,7 @@
 </header>
 <section class="preview {{if expanded 'expanded'}}" title="{{unless expanded channel.status}}" {{action "startStream"}}>
 {{preview-image src=content.preview.medium_nocache}}
-<footer class="{{if _showGame 'shaded'}} {{if expanded 'expanded'}}">
+<footer class="{{if _showGame 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
 {{#if _showGame}}
 <div class="bottom">
 <i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}
@@ -25,8 +25,8 @@
 </div>
 </div>
 </footer>
-<div class="btn-expand" title="{{unless expanded 'Show stream details' 'Hide stream details'}}" {{action "toggle" bubbles=false}}>
-<i class="fa {{unless expanded 'fa-chevron-up' 'fa-chevron-down'}}"></i>
+<div class="btn-expand" title="{{unless expanded 'Show stream details' (if locked 'Unlock details view' 'Lock details view')}}" {{action "details" bubbles=false}}>
+<i class="fa {{unless expanded 'fa-chevron-up' (if locked 'fa-lock' 'fa-unlock-alt')}}"></i>
 </div>
 </section>
 <footer>

@@ -9,9 +9,12 @@ define([
 ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 	var alias = Ember.computed.alias;
 	var and = Ember.computed.and;
 	var bool = Ember.computed.bool;
+	var later = Ember.run.later;
+	var cancel = Ember.run.cancel;
 
 	return ListItemComponent.extend({
 		layout: layout,
@@ -28,6 +31,8 @@ define([
 		channel: alias( "content.channel" ),
 
 		expanded: false,
+		locked  : false,
+		timer: null,
 
 		showGame: false,
 		_showGame: and( "showGame", "channel.game" ),
@@ -77,14 +82,45 @@ define([
 			}, false );
 		}.property( "settings.gui_langfilter" ),
 
+
+		mouseLeave: function() {
+			var expanded = get( this, "expanded" );
+			var locked   = get( this, "locked" );
+			if ( !expanded || locked ) { return; }
+
+			this.clearTimer();
+
+			this.timer = later( this, function() {
+				if ( get( this, "locked" ) ) { return; }
+				set( this, "expanded", false );
+			}, 1000 );
+		},
+
+		clearTimer: function() {
+			if ( this.timer ) {
+				cancel( this.timer );
+				this.timer = null;
+			}
+		}.on( "willDestroyElement", "mouseEnter" ),
+
+
 		actions: {
 			"startStream": function() {
-				if ( get( this, "expanded" ) ) { return; }
-				this.sendAction( "action", get( this, "content" ) );
+				if ( get( this, "expanded" ) ) {
+					if ( get( this, "locked" ) ) { return; }
+					this.clearTimer();
+					set( this, "expanded", false );
+				} else {
+					this.sendAction( "action", get( this, "content" ) );
+				}
 			},
 
-			"toggle": function() {
-				this.toggleProperty( "expanded" );
+			"details": function() {
+				if ( get( this, "expanded" ) ) {
+					this.toggleProperty( "locked" );
+				} else {
+					set( this, "expanded", true );
+				}
 			},
 
 			"openBrowser": function( url ) {
