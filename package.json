@@ -158,13 +158,15 @@
 				"script": "msie-minimal.vbs"
 			},
 			"chatty": {
-				"args": "-jar \"{chatty}\" -connect -single -user \"{user}\" -token \"{token}\" -channel \"{channel}\"",
+				"args": "-jar \"{chatty}\"",
+				"chatty-args": "-connect -single -user \"{user}\" -token \"{token}\" -channel \"{channel}\"",
+				"chatty-fallback": "chatty",
 				"exec": {
 					"win32": "javaw",
 					"darwin": "java",
 					"linux": "java"
 				},
-				"fallbacks": {
+				"fallback": {
 					"win32": [
 						"%JAVA_HOME%\\bin",
 						"%JRE_HOME%\\bin",

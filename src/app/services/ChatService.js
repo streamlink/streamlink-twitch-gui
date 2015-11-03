@@ -192,22 +192,53 @@ define([
 
 
 		_openChatty: function( chatty, channel ) {
-			var token     = get( this, "auth.session.access_token" );
-			var user      = get( this, "auth.session.user_name" );
-			var data      = get( this, "chatMethods.chatty" );
-			var args      = data[ "args" ];
-			var exec      = data[ "exec" ][ platform ];
-			var fallbacks = data[ "fallbacks" ][ platform ];
+			var token      = get( this, "auth.session.access_token" );
+			var user       = get( this, "auth.session.user_name" );
+			var data       = get( this, "chatMethods.chatty" );
+			var javaArgs   = data[ "args" ];
+			var javaExec   = data[ "exec" ][ platform ];
+			var fbPaths    = data[ "fallback" ][ platform ];
+			var chattyArgs = data[ "chatty-args" ];
+			var chattyFb   = data[ "chatty-fallback" ];
 
-			return which( exec, checkExec )
+			// object containing all the required data
+			var obj = {
+				args   : chattyArgs,
+				chatty : chatty,
+				user   : user,
+				token  : token,
+				channel: channel
+			};
+			// just a single custom parameter, so a string can be defined in package.json
+			var parameters = [
+				new ParameterCustom( null, "args", true )
+			];
+			// custom parameter substitutions
+			var substitutions = [
+				new Substitution( "user", "user" ),
+				new Substitution( "token", "token" ),
+				new Substitution( "channel", "channel" )
+			];
+
+			// if no chatty jar has been set
+			if ( !chatty || !chatty.trim().length ) {
+				// check for chatty startscript in $PATH
+				return which( chattyFb, checkExec )
+					.then(function() {
+						var params = Parameter.getParameters( obj, parameters, substitutions );
+						return launch( chattyFb, params );
+					});
+			}
+
+			return which( javaExec, checkExec )
 				.catch(function() {
 					// java executable fallback paths
-					return fallbacks.reduce(function( chain, fallback ) {
+					return fbPaths.reduce(function( chain, fallback ) {
 						return chain.catch(function() {
 							// resolve env variables
 							fallback = resolvePath( fallback );
 							// append executable name to fallback path
-							var file = PATH.join( fallback, exec );
+							var file = PATH.join( fallback, javaExec );
 							return which( file, checkExec );
 						});
 					}, Promise.reject() );
@@ -220,25 +251,10 @@ define([
 						});
 				})
 				.then(function( exec ) {
-					var params = Parameter.getParameters(
-						{
-							args   : args,
-							chatty : chatty,
-							user   : user,
-							token  : token,
-							channel: channel
-						},
-						[
-							new ParameterCustom( null, "args", true )
-						],
-						[
-							new Substitution( "chatty", "chatty" ),
-							new Substitution( "user", "user" ),
-							new Substitution( "token", "token" ),
-							new Substitution( "channel", "channel" )
-						]
-					);
+					obj.args = javaArgs + " " + obj.args;
+					substitutions.push( new Substitution( "chatty", "chatty" ) );
 
+					var params = Parameter.getParameters( obj, parameters, substitutions );
 					return launch( exec, params );
 				});
 		},
