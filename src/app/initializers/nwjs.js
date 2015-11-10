@@ -64,6 +64,10 @@ define([
 			nwWindow.toggleVisibility( true );
 		}
 
+		// maximize window
+		if ( argv.max ) {
+			nwWindow.toggleMaximize( false );
+		}
 		// minimize window
 		if ( argv.min ) {
 			nwWindow.toggleMinimize( false );
