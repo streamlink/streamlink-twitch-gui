@@ -340,28 +340,42 @@ define([
 
 	QUnit.test( "Hours from now", function( assert ) {
 
+		var second = 1000;
+		var minute = 60 * second;
+		var hour   = 60 * minute;
+		var day    = 24 * hour;
+
 		registry.register( "helper:hours-from-now", HoursFromNowHelper );
 		component = Component.extend({
 			container: container,
 			layout   : compile( "{{hours-from-now dateA}} - {{hours-from-now dateB}}" )
 		}).create();
-
-		set( component, "dateA", +new Date() );
-		set( component, "dateB", +new Date() - 59 * 1000 );
 		runAppend( component );
+
+
+		run(function() {
+			set( component, "dateA", +new Date() );
+			set( component, "dateB", +new Date() - ( minute - second ) );
+		});
 		assert.equal( getOutput( component ), "just now - just now", "Less than a minute" );
 
 		run(function() {
-			set( component, "dateA", +new Date() -      60 * 1000 );
-			set( component, "dateB", +new Date() - 59 * 60 * 1000 );
+			set( component, "dateA", +new Date() - minute );
+			set( component, "dateB", +new Date() - ( hour - second ) );
 		});
 		assert.equal( getOutput( component ), "01m - 59m", "Minutes" );
 
 		run(function() {
-			set( component, "dateA", +new Date() -           60 * 60 * 1000 );
-			set( component, "dateB", +new Date() - Math.PI * 60 * 60 * 1000 );
+			set( component, "dateA", +new Date() - hour );
+			set( component, "dateB", +new Date() - ( day - second ) );
 		});
-		assert.equal( getOutput( component ), "1.0h - 3.1h", "Hours" );
+		assert.equal( getOutput( component ), "1h - 23h59m", "Hours" );
+
+		run(function() {
+			set( component, "dateA", +new Date() - day );
+			set( component, "dateB", +new Date() - ( 2 * day - second ) );
+		});
+		assert.equal( getOutput( component ), "1d - 1d23h", "Days" );
 
 	});
 
