@@ -7,10 +7,6 @@ define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
 			return "twitchChannel";
 		},
 
-		attrs : {
-			teams: { deserialize: "records" }
-		},
-
 		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
 			payload = {
 				twitchChannel: payload
