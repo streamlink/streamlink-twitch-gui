@@ -10,7 +10,7 @@
 	.stream-hover( @duration: @duration );
 
 	&.faded {
-		&:not(:hover) > * {
+		&:not(:hover):not(.expanded) > * {
 			opacity: .25;
 		}
 

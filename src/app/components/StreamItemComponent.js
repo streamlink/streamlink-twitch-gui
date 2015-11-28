@@ -22,7 +22,8 @@ define([
 			":stream-item-component",
 			"_showGame:show-game",
 			"showFlag:show-flag",
-			"faded:faded"
+			"faded:faded",
+			"expanded:expanded"
 		],
 
 		action: "openLivestreamer",
