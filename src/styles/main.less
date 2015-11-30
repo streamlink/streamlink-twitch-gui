@@ -143,6 +143,33 @@ ul.list {
 }
 
 
+hr {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	.themed({
+		border-top-color: @themed-divider-color;
+	});
+}
+
+
+blockquote {
+	margin: 0 0 1em;
+	padding: .5em 1em;
+	border-left: .333em solid;
+	font-size: 1.125em;
+	font-weight: lighter;
+
+	* {
+		font-weight: inherit;
+		font-style: normal;
+	}
+
+	.themed({
+		border-left-color: @themed-blockquote-border-color;
+	});
+}
+
+
 i.fa {
 	.themed({
 		color: @themed-icon-color;
