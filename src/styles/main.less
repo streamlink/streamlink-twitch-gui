@@ -49,6 +49,11 @@ body {
 		cursor: text;
 		-webkit-user-select: initial;
 	}
+	a:not([data-not-selectable]) {
+		&, & * {
+			cursor: pointer;
+		}
+	}
 }
 
 ::selection {
