@@ -1,0 +1,9 @@
+{{#if panel.title}}
+<h3 class="title">{{#unless panel.link}}{{panel.title}}{{else}}{{#external-link url=panel.link}}{{panel.title}}{{/external-link}}{{/unless}}</h3>
+{{/if}}
+{{#if panel.image}}
+<img class="{{if panel.link 'withLink'}}" src="{{panel.image}}" title="{{if panel.link panel.link}}" {{action "openBrowser" panel.link}}>
+{{/if}}
+{{#if panel.html_description}}
+<div class="description" data-selectable>{{{panel.html_description}}}</div>
+{{/if}}

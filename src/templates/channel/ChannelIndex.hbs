@@ -39,3 +39,13 @@
 </div>
 </div>
 </section>
+{{#if panels.length}}
+<section class="content-panels">
+<h3>Channel details</h3>
+<ul class="content-list">
+{{#each panels as |panel|}}
+{{panel-item panel=panel}}
+{{/each}}
+</ul>
+</section>
+{{/if}}

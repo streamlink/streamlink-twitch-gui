@@ -9,6 +9,7 @@ define( [ "Ember" ], function( Ember ) {
 
 		stream : alias( "model.stream" ),
 		channel: alias( "model.channel" ),
+		panels : alias( "model.panels" ),
 
 		previewImage: or( "stream.preview.large_nocache", "channel.video_banner" ),
 

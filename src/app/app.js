@@ -100,6 +100,11 @@ define(function( require ) {
 		TwitchProductEmoticon: require( "models/twitch/ProductEmoticon" ),
 		TwitchProductEmoticonSerializer: require( "models/twitch/ProductEmoticonSerializer" ),
 
+		TwitchChannelPanel: require( "models/twitch/ChannelPanel" ),
+		TwitchChannelPanelSerializer: require( "models/twitch/ChannelPanelSerializer" ),
+		TwitchChannelPanelItem: require( "models/twitch/ChannelPanelItem" ),
+		TwitchChannelPanelItemSerializer: require( "models/twitch/ChannelPanelItemSerializer" ),
+
 
 		// Ember additions/changes/fixes
 		BooleanTransform: require( "store/BooleanTransform" ),
@@ -198,6 +203,7 @@ define(function( require ) {
 		ModalLogComponent: require( "components/ModalLogComponent" ),
 		LoadingSpinnerComponent: require( "components/LoadingSpinnerComponent" ),
 		HeadlineTotalsComponent: require( "components/HeadlineTotalsComponent" ),
+		PanelItemComponent: require( "components/PanelItemComponent" ),
 
 
 		// Content

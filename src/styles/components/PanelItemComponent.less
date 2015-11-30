@@ -1,0 +1,46 @@
+
+.panel-item-component {
+	float: left;
+	margin: 0 3.125em 2em 0;
+
+	> * {
+		// width in pixels
+		max-width: 320px;
+		margin: 0 auto;
+	}
+
+	.title {
+		> a {
+			font-weight: lighter;
+			text-decoration: none;
+		}
+	}
+
+	img {
+		display: block;
+
+		&.withLink {
+			cursor: pointer;
+		}
+	}
+
+	.description {
+		padding: 1em;
+
+		h1 { font-size: 1.25rem; }
+		h2 { font-size: 1.125rem; }
+		h3, h4 { font-size: 1rem; }
+
+		ul, ol {
+			margin-left: -1em;
+		}
+
+		a {
+			&,
+			& b,
+			& strong {
+				font-weight: normal;
+			}
+		}
+	}
+}

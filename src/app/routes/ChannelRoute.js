@@ -9,7 +9,7 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 			var id    = get( params, "channel" );
 
 			// try to find a stream record if the channel is broadcasting
-			return store.findRecord( "twitchStream", id, { reload: true } )
+			var streamPromise = store.findRecord( "twitchStream", id, { reload: true } )
 				.then(function( stream ) {
 					return {
 						stream : stream,
@@ -34,6 +34,31 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 					"channel.logo",
 					"channel.video_banner"
 				]) );
+
+			// load the channel panels in parallel
+			var panelsPromise = store.findRecord( "twitchChannelPanel", id, { reload: true } )
+				.then(function( panels ) {
+					panels = get( panels, "panels" );
+
+					return Promise.all( panels
+						.filterBy( "kind", "default" )
+						.sortBy( "display_order" )
+						.map(function( panel ) {
+							return Promise.resolve( panel )
+								.then( preload( "image" ) );
+						})
+					);
+				});
+
+			// wait for both requests to resolve and add the panels obj to the stream/channel obj
+			return Promise.all([
+				streamPromise,
+				panelsPromise
+			])
+				.then(function( data ) {
+					data[0].panels = data[1];
+					return data[0];
+				});
 		},
 
 		resetController: function( controller, isExiting ) {
