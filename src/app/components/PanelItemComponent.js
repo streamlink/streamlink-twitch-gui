@@ -14,11 +14,16 @@ define([
 		didInsertElement: function() {
 			var self = this;
 
-			this.$( "a" ).addClass( "external-link" ).click(function( e ) {
-				e.preventDefault();
-				e.stopImmediatePropagation();
-				self.send( "openBrowser", this.href );
-			});
+			this.$( "a" )
+				.addClass( "external-link" )
+				.each(function() {
+					this.setAttribute( "title", this.href );
+				})
+				.click(function( e ) {
+					e.preventDefault();
+					e.stopImmediatePropagation();
+					self.send( "openBrowser", this.href );
+				});
 
 			this._super.apply( this, arguments );
 		},
