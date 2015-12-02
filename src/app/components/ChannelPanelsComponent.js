@@ -16,6 +16,8 @@ define([
 		tagName: "section",
 		classNames: [ "content-panels" ],
 
+		action: "openBrowser",
+
 		_masonry: function() {
 			var container = this.$( "ul" )[0];
 			scheduleOnce( "afterRender", function() {
@@ -25,7 +27,13 @@ define([
 					transitionDuration: 0
 				});
 			});
-		}.on( "didInsertElement" )
+		}.on( "didInsertElement" ),
+
+		actions: {
+			openBrowser: function( url ) {
+				this.sendAction( "action", url );
+			}
+		}
 	});
 
 });
