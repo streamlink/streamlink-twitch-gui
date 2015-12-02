@@ -9,11 +9,15 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		// use a volatile property
 		return computed( attr, function() {
 			var url = get( this, attr );
-			// use the same timestamp for `time` seconds
-			var timestamp = +new Date() / 1000;
-			timestamp -= timestamp % time;
 
-			return url + "?_=" + timestamp;
+			// use the same timestamp for `time` seconds
+			var expires = this.expires;
+			var now     = Math.floor( +new Date() / 1000 );
+			if ( !expires || expires < now ) {
+				this.expires = expires = now + time;
+			}
+
+			return url + "?_=" + expires;
 		}).volatile();
 	}
 
@@ -22,6 +26,8 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		medium  : attr( "string" ),
 		small   : attr( "string" ),
 		template: attr( "string" ),
+
+		expires: null,
 
 		large_nocache : nocache( "large" ),
 		medium_nocache: nocache( "medium" ),
