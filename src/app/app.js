@@ -203,6 +203,7 @@ define(function( require ) {
 		ModalLogComponent: require( "components/ModalLogComponent" ),
 		LoadingSpinnerComponent: require( "components/LoadingSpinnerComponent" ),
 		HeadlineTotalsComponent: require( "components/HeadlineTotalsComponent" ),
+		ChannelPanelsComponent: require( "components/ChannelPanelsComponent" ),
 		PanelItemComponent: require( "components/PanelItemComponent" ),
 
 

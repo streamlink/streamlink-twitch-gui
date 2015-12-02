@@ -1,7 +1,6 @@
 
-.content-list {
-	.clearfix();
-
+.content-list,
+.content-list-grid {
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -16,8 +15,6 @@
 	});
 
 	> li {
-		float: left;
-
 		&:not(.newItem) {
 			@min: @anim-list-item-offset-min;
 			@max: @anim-list-item-offset-max;
@@ -46,5 +43,13 @@
 			}
 			.loop( 1 );
 		}
+	}
+}
+
+.content-list {
+	.clearfix();
+
+	> li {
+		float: left;
 	}
 }

@@ -41,6 +41,7 @@ requirejs.config({
 		"JQuery"       : "../vendor/jquery/dist/jquery",
 		"Selecter"     : "../vendor/Selecter/jquery.fs.selecter",
 		"Moment"       : "../vendor/momentjs/moment",
+		"Masonry"      : "../vendor/masonry/dist/masonry.pkgd",
 
 		// Wrappers
 		"EmberHtmlbarsWrapper": "../requirejs/wrappers/EmberHtmlbarsWrapper",
