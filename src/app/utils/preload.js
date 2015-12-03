@@ -2,7 +2,6 @@ define( [ "Ember" ], function( Ember ) {
 
 	var concat = [].concat;
 	var makeArray = Ember.makeArray;
-	var isNone = Ember.isNone;
 
 	return function preload( withError, list ) {
 		if ( list === undefined ) {
@@ -11,7 +10,7 @@ define( [ "Ember" ], function( Ember ) {
 		}
 
 		function promiseImage( src ) {
-			if ( isNone( src ) ) {
+			if ( !src ) {
 				return Promise.resolve();
 			}
 
