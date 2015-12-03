@@ -4,7 +4,7 @@
 {{#if channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
 </header>
 <section class="preview {{if expanded 'expanded'}}" title="{{unless expanded channel.status}}" {{action "startStream"}}>
-{{preview-image src=content.preview.medium_nocache}}
+{{preview-image src=content.preview.medium}}
 <footer class="{{if _showGame 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
 {{#if _showGame}}
 <div class="bottom">

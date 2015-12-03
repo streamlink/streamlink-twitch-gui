@@ -2,7 +2,6 @@ define( [ "Ember" ], function( Ember ) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
-	var or = Ember.computed.or;
 
 	return Ember.Controller.extend({
 		metadata: Ember.inject.service(),
@@ -10,8 +9,6 @@ define( [ "Ember" ], function( Ember ) {
 		stream : alias( "model.stream" ),
 		channel: alias( "model.channel" ),
 		panels : alias( "model.panels" ),
-
-		previewImage: or( "stream.preview.large_nocache", "channel.video_banner" ),
 
 		age: function() {
 			var createdAt = get( this, "channel.created_at" );
