@@ -5,6 +5,34 @@ define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 
+	/**
+	 * Try to fix the weird fps numbers received from twitch...
+	 * Define a list of common stream frame rates and give each one a min and max value range.
+	 * @type {FPSRange[]}
+	 */
+	var fpsRanges = [
+		{ target: 24, min: 22, max: 24.5 },
+		{ target: 25, min: 24.5, max: 27 },
+		{ target: 30, min: 28, max: 32 },
+		{ target: 45, min: 43, max: 46.5 },
+		{ target: 48, min: 46.5, max: 49.5 },
+		{ target: 50, min: 49.5, max: 52 },
+		{ target: 60, min: 58, max: 62.5 },
+		{ target: 72, min: 70, max: 74 },
+		{ target: 90, min: 88, max: 92 },
+		{ target: 100, min: 98, max: 102 },
+		{ target: 120, min: 118, max: 122 },
+		{ target: 144, min: 142, max: 146 }
+	];
+
+	/**
+	 * @typedef {Object} FPSRange
+	 * @property {Number} target
+	 * @property {Number} min
+	 * @property {Number} max
+	 */
+
+
 	return DS.Model.extend({
 		average_fps: attr( "number" ),
 		channel: belongsTo( "twitchChannel", { async: false } ),
@@ -41,7 +69,17 @@ define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
 
 		fps: function() {
 			var average_fps = get( this, "average_fps" );
-			return Math.ceil( average_fps );
+
+			if ( !average_fps ) { return null; }
+
+			var fpsRange = fpsRanges.find(function( fpsRange ) {
+				return average_fps >  fpsRange.min
+				    && average_fps <= fpsRange.max;
+			});
+
+			return fpsRange
+				? fpsRange.target
+				: Math.floor( average_fps );
 		}.property( "average_fps" )
 
 	}).reopenClass({
