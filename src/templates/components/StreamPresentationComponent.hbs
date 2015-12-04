@@ -1,0 +1,16 @@
+<div class="image">
+<div class="preview" {{action "previewClick" stream}}>
+{{preview-image src=stream.preview.large}}
+</div>
+</div>
+<div class="info">
+<h3 class="title">{{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{#link-to "channel" stream.channel.id}}{{stream.channel.display_name}}{{/link-to}}</h3>
+{{#if stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>{{/if}}
+{{stats-row stream=stream}}
+{{embedded-links class="status" text=stream.channel.status}}
+{{#if hasBlock}}
+<footer class="buttons">
+{{yield}}
+</footer>
+{{/if}}
+</div>

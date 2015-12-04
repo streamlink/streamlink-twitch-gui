@@ -3,22 +3,9 @@
 <h2>You're watching</h2>
 <ul class="list-unstyled">
 {{#each sortedModel as |watching|}}
-<li class="stream-presentation watching">
-<div class="image">
-<div class="preview">
-{{preview-image src=watching.stream.preview.large}}
-</div>
-</div>
-<div class="info">
-<h3 class="title">{{#if watching.stream.channel.has_language}}{{flag-icon type="channel" lang=watching.stream.channel.language}}{{/if}}{{#link-to "channel" watching.stream.channel.id}}{{watching.stream.channel.display_name}}{{/link-to}}</h3>
-{{#if watching.stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" watching.stream.game}}{{watching.stream.game}}{{/link-to}}</div>{{/if}}
-{{stats-row stream=watching.stream}}
-{{embedded-links class="status" text=watching.stream.channel.status}}
-<footer class="buttons">
+{{#stream-presentation stream=watching.stream tagName="li" class="watching" clickablePreview=false}}
 {{#form-button action="openLivestreamer" actionParam=watching.stream icon="fa-arrow-up"}}Open dialog{{/form-button}}
-</footer>
-</div>
-</li>
+{{/stream-presentation}}
 {{/each}}
 </ul>
 {{else}}

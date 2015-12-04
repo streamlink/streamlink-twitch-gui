@@ -182,6 +182,7 @@ define(function( require ) {
 		RadioButtonComponent: require( "components/RadioButtonComponent" ),
 		RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
 		FileSelectComponent: require( "components/FileSelectComponent" ),
+		StreamPresentationComponent: require( "components/StreamPresentationComponent" ),
 		GameItemComponent: require( "components/GameItemComponent" ),
 		StreamItemComponent: require( "components/StreamItemComponent" ),
 		ChannelItemComponent: require( "components/ChannelItemComponent" ),
