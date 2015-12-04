@@ -14,7 +14,7 @@ define([
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "section",
-		classNames: [ "content-panels" ],
+		classNames: [ "content", "content-panels" ],
 
 		action: "openBrowser",
 
