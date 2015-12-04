@@ -146,6 +146,7 @@ ul.list {
 hr {
 	margin-top: 1em;
 	margin-bottom: 1em;
+
 	.themed({
 		border-top-color: @themed-divider-color;
 	});
@@ -153,7 +154,7 @@ hr {
 
 
 blockquote {
-	margin: 0 0 1em;
+	margin: .5em 0 .5em;
 	padding: .5em 1em;
 	border-left: .333em solid;
 	font-size: 1.125em;
@@ -162,6 +163,11 @@ blockquote {
 	* {
 		font-weight: inherit;
 		font-style: normal;
+	}
+
+	blockquote {
+		font-size: 1em;
+		font-style: inherit;
 	}
 
 	.themed({
