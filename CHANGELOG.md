@@ -1,6 +1,21 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Implemented channel details.
+- Changed details view in stream list items.
+- Added OSX refresh shortcut. #152
+- Added --max launch parameter. #161
+- Added OAuth token variable to custom chat method.
+- Added Chatty startscript fallback. #159
+- Fixed bug causing certain locations of Chatty to be rejected. #150
+- Fixed image preloading system issue.
+- Upgraded to Ember/EmberData 2.1.0.
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.0...master)
+
+
 ## [v0.11.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.0) (2015-10-16)
 
 - Implemented theme switcher and added dark theme.
