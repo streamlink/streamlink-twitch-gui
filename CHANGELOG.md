@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.11.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.1) (2015-12-05)
 
 - Implemented channel details.
 - Changed details view in stream list items.
@@ -13,7 +13,7 @@ Changelog - Livestreamer Twitch GUI
 - Fixed image preloading system issue.
 - Upgraded to Ember/EmberData 2.1.0.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.0...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.0...v0.11.1)
 
 
 ## [v0.11.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.0) (2015-10-16)
