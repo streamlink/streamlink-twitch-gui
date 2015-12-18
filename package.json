@@ -116,7 +116,13 @@
 				"exec": {
 					"win32": [ "chrome.exe" ],
 					"darwin": [ "Chromium" ],
-					"linux": [ "chromium-browser" ]
+					"linux": [
+						"chromium-browser",
+						"chromium",
+						"chromium-dev",
+						"chromium-continuous-bin",
+						"chromium-snapshot-bin"
+					]
 				},
 				"fallback": {
 					"win32": [
@@ -137,7 +143,13 @@
 				"exec": {
 					"win32": [ "chrome.exe" ],
 					"darwin": [ "Google Chrome" ],
-					"linux": [ "google-chrome", "google-chrome-unstable" ]
+					"linux": [
+						"google-chrome",
+						"google-chrome-stable",
+						"google-chrome-unstable",
+						"google-chrome-beta",
+						"google-chrome-dev"
+					]
 				},
 				"fallback": {
 					"win32": [
@@ -149,7 +161,8 @@
 					"linux": [
 						"/usr/bin",
 						"/usr/local/bin",
-						"/opt/google/chrome"
+						"/opt/google/chrome",
+						"/opt/google/chrome-unstable"
 					]
 				}
 			},
