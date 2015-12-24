@@ -2,16 +2,11 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
-	var readOnly = Ember.computed.readOnly;
 
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
 		notification: Ember.inject.service(),
 		settings    : Ember.inject.service(),
-
-		notif_enabled        : readOnly( "notification.enabled" ),
-		notif_notTempDisabled: readOnly( "notification.notTempDisabled" ),
-		notif_error          : readOnly( "notification.error" ),
 
 		scope: function() {
 			return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
@@ -25,10 +20,6 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 					.then(function() {
 						this.transitionToRoute( "user.auth" );
 					}.bind( this ) );
-			},
-
-			"notifications_restart": function() {
-				get( this, "notification" ).start();
 			},
 
 			"copyToken": function( success, failure ) {

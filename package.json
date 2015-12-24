@@ -104,6 +104,8 @@
 		"notification-cache-time": 7,
 		"notification-retries": 3,
 		"notification-interval": 60000,
+		"notification-interval-retry": 1000,
+		"notification-interval-error": 120000,
 		"notifications-toast-windows": {
 			"version-min": "6.2.0",
 			"shortcut-path": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs"

@@ -22,9 +22,11 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var setProperties = Ember.setProperties;
 	var alias = Ember.computed.alias;
 	var and = Ember.computed.and;
-	var notEmpty = Ember.computed.notEmpty;
+	var cancel = Ember.run.cancel;
+	var later = Ember.run.later;
 
 	var Notif = window.Notification;
 
@@ -36,8 +38,11 @@ define([
 		auth    : Ember.inject.service(),
 
 		config  : alias( "metadata.config" ),
-		retries : alias( "config.notification-retries" ),
-		interval: alias( "config.notification-interval" ),
+
+		retries      : alias( "config.notification-retries" ),
+		interval     : alias( "config.notification-interval" ),
+		intervalRetry: alias( "config.notification-interval-retry" ),
+		intervalError: alias( "config.notification-interval-error" ),
 
 		// cache related properties
 		cacheDir: function() {
@@ -55,30 +60,45 @@ define([
 		}.property( "config.tray-icon" ),
 
 		// controller state
-		firstRun: true,
-		model   : {},
-		tries   : 0,
-		apiFails: 0,
+		model : {},
+		_first: true,
+		_fails: 0,
+		_tries: 0,
+		_next : null,
+		_error: false,
 
-		_error  : false,
-		error   : and( "_error", "enabled" ),
-		_next   : null,
-		_running: notEmpty( "_next" ),
-		running : and( "_running", "enabled" ),
-
-		// notifications disabled via tray item
-		// don't link this property with `enabled` (observe both instead)
-		notTempDisabled: true,
 
 		// automatically start polling once the user is logged in and has notifications enabled
 		enabled: and( "auth.session.isLoggedIn", "settings.notify_enabled" ),
+		// notifications disabled via tray item
+		// don't link this property with `enabled` (observe both instead)
+		paused : false,
+		running: function() {
+			return get( this, "enabled" ) && !get( this, "paused" );
+		}.property( "enabled", "paused" ),
+		error  : and( "running", "_error" ),
+
+
 		enabledObserver: function() {
-			if ( get( this, "enabled" ) && get( this, "notTempDisabled" ) ) {
+			if ( get( this, "running" ) ) {
 				this.start();
 			} else {
 				this.reset();
 			}
-		}.observes( "enabled", "notTempDisabled" ).on( "init" ),
+		}.observes( "running" ).on( "init" ),
+
+
+		statusText: function() {
+			var status = !get( this, "enabled" )
+				? "disabled"
+				: get( this, "paused" )
+				? "paused"
+				: get( this, "error" )
+				? "offline"
+				: "enabled";
+
+			return "Desktop notifications are " + status;
+		}.property( "enabled", "paused", "error" ),
 
 
 		/**
@@ -92,7 +112,7 @@ define([
 			var adapter = store.adapterFor( "twitchUserFollowsChannel" );
 
 			adapter.on( "createRecord", function( store, type, snapshot ) {
-				if ( !get( self, "enabled" ) ) { return; }
+				if ( !get( self, "running" ) ) { return; }
 				if ( type !== follows ) { return; }
 
 				var name = snapshot.id;
@@ -107,10 +127,12 @@ define([
 			});
 		}.on( "init" ),
 
+
 		_windowBadgeLabel: function() {
 			var label;
 			if ( !get( this, "running" ) || !get( this, "settings.notify_badgelabel" ) ) {
 				label = "";
+
 			} else {
 				var model = get( this, "model" );
 				var num   = Object.keys( model ).length;
@@ -123,47 +145,50 @@ define([
 
 		_setupTrayItem: function() {
 			var self = this;
-			var settings = get( self, "settings.content" );
 			var trayItem = null;
 
-			function createTrayIcon() {
-				var enabled  = get( settings, "notify_enabled" );
+			function createTrayItem() {
+				var enabled = get( self, "enabled" );
 				if ( !enabled ) {
 					if ( trayItem ) {
 						tray.items.removeObject( trayItem );
 						trayItem = null;
 					}
+					set( self, "paused", false );
 					return;
 				}
 
 				trayItem = {
 					type   : "checkbox",
-					label  : "Receive notifications",
+					label  : "Pause notifications",
 					tooltip: "Quickly toggle desktop notifications",
-					checked: get( self, "notTempDisabled" ),
+					checked: get( self, "paused" ),
 					click  : function( item ) {
-						set( self, "notTempDisabled", item.checked );
+						set( self, "paused", item.checked );
 					}
 				};
 
 				tray.items.unshiftObject( trayItem );
 			}
 
-			createTrayIcon();
-			settings.addObserver( "notify_enabled", createTrayIcon );
+			createTrayItem();
+			this.addObserver( "enabled", createTrayItem );
 		}.on( "init" ),
 
 
 		reset: function() {
-			Ember.run.cancel( get( this, "_next" ) );
+			var next = get( this, "_next" );
+			if ( next ) {
+				cancel( next );
+			}
 
-			this.setProperties({
-				firstRun: true,
-				model   : {},
-				tries   : 0,
-				apiFails: 0,
-				_error  : false,
-				_next   : null
+			setProperties( this, {
+				model : {},
+				_first: true,
+				_fails: 0,
+				_tries: 0,
+				_error: false,
+				_next : null
 			});
 		},
 
@@ -177,7 +202,7 @@ define([
 		},
 
 		check: function() {
-			if ( !get( this, "enabled" ) ) { return; }
+			if ( !get( this, "running" ) ) { return; }
 
 			var store = get( this, "store" );
 			store.query( "twitchStreamsFollowed", {
@@ -189,28 +214,44 @@ define([
 				.then( this.queryCallback.bind( this ) )
 				.then( this.stripDisabledChannels.bind( this ) )
 				.then( this.prepareNotifications.bind( this ) )
-				.then(function() {
-					// query again in X milliseconds
-					var interval = get( this, "interval" ) || 60000,
-					    next     = Ember.run.later( this, this.check, interval );
-					set( this, "_next", next );
-					set( this, "tries", 0 );
-				}.bind( this ) )
-				// reset the controller in case of an error
-				.catch(function() {
-					var tries = get( this, "tries" ),
-					    max   = get( this, "retries" );
-					if ( ++tries > max ) {
-						// we've reached the retry limit
-						this.reset();
-						set( this, "_error", true );
-					} else {
-						// immediately retry (with a slight delay)
-						var next = Ember.run.later( this, this.check, 1000 );
-						set( this, "_next", next );
-						set( this, "tries", tries );
-					}
-				}.bind( this ) );
+				.then( this.success.bind( this ) )
+				.catch( this.failure.bind( this ) );
+		},
+
+		success: function() {
+			// query again
+			var interval = get( this, "interval" ) || 60000;
+			var next     = later( this, this.check, interval );
+
+			setProperties( this, {
+				_error: false,
+				_next : next,
+				_tries: 0
+			});
+		},
+
+		failure: function() {
+			var tries = get( this, "_tries" );
+			var max   = get( this, "retries" );
+			var interval;
+
+			// did we reach the retry limit yet?
+			if ( ++tries > max ) {
+				// reset notification state
+				this.reset();
+				// let the user know that there was an error...
+				set( this, "_error", true );
+				// ...but keep going
+				interval = get( this, "intervalError" ) || 120000;
+
+			} else {
+				set( this, "_tries", tries );
+				// immediately retry (with a slight delay)
+				interval = get( this, "intervalRetry" ) || 1000;
+			}
+
+			var next = later( this, this.check, interval );
+			set( this, "_next", next );
 		},
 
 		queryCallback: function( streams ) {
@@ -218,26 +259,26 @@ define([
 			var model, newStreams;
 
 			// just fill the cache on the first run
-			if ( !get( this, "firstRun" ) ) {
+			if ( !get( this, "_first" ) ) {
 				// check for failed queries (empty record arrays), but not twice in a row
 				if (
 					   get( streams, "length" ) === 0
-					&& this.incrementProperty( "apiFails" ) < 2
+					&& this.incrementProperty( "_fails" ) < 2
 				) {
 					// don't update the model and just return an empty array
 					return [];
 				}
-				set( this, "apiFails", 0 );
+				set( this, "_fails", 0 );
 
 				// get a list of all new streams by comparing the cached streams
 				model = get( this, "model" );
 				newStreams = streams.filter(function( stream ) {
-					var name  = get( stream, "channel.id" ),
-					    since = get( stream, "created_at" );
+					var name  = get( stream, "channel.id" );
+					var since = get( stream, "created_at" );
 					return name && ( !model.hasOwnProperty( name ) || model[ name ] < since );
 				});
 			}
-			set( this, "firstRun", false );
+			set( this, "_first", false );
 
 			// update cache
 			model = streams.reduce(function( obj, stream ) {
@@ -254,8 +295,8 @@ define([
 			var all = get( this, "settings.notify_all" );
 
 			return Promise.all( streams.map(function( stream ) {
-				var id = get( stream, "channel.id" );
-				return this.loadChannelSettings( id )
+				var name = get( stream, "channel.id" );
+				return this.loadChannelSettings( name )
 					.then(function( channelSettings ) {
 						return {
 							stream  : stream,
@@ -378,8 +419,8 @@ define([
 
 
 		gc_icons: function() {
-			var cacheDir  = get( this, "cacheDir" ),
-			    cacheTime = get( this, "cacheTime" );
+			var cacheDir  = get( this, "cacheDir" );
+			var cacheTime = get( this, "cacheTime" );
 
 			return clearfolder( cacheDir, cacheTime )
 				// always resolve

@@ -16,9 +16,12 @@
 <button type="button" class="btn-watching btn-indicator {{unless streamsLength 'btn-hidden'}} fa fa-desktop" {{action "goto" "watching"}}>
 <span class="indicator">{{streamsLength}}</span>
 </button>
-<button type="button" class="{{if loginSuccess 'btn-user' 'btn-no-user'}} {{if notif_enabled 'btn-indicator'}} {{if loginPending 'btn-user-pending'}} fa fa-user" title="{{loginTitle}}" {{action "goto" "user.index"}}>
-{{#if notif_running}}<span class="indicator fa fa-bullhorn"></span>{{/if}}
-{{#if notif_error}}<span class="indicator indicator-error fa fa-bullhorn"></span>{{/if}}
+<button
+	type="button"
+	class="{{if auth.session.isLoggedIn 'btn-user' 'btn-no-user'}} {{if notification.enabled 'btn-indicator'}} {{if auth.session.isPending 'btn-user-pending'}} fa fa-user"
+	title="{{unless auth.session.isLoggedIn 'You\'re not logged in' (string-concat 'Logged in as ' auth.session.user_name nl notification.statusText)}}"
+	{{action "goto" "user.index"}}>
+{{#if notification.enabled}}<span class="indicator {{if notification.paused 'indicator-disabled' (if notification.error 'indicator-error')}} fa fa-bullhorn"></span>{{/if}}
 </button>
 </nav>
 </header>

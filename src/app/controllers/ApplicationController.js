@@ -13,25 +13,7 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 		streamsLength: readOnly( "livestreamer.model.length" ),
 
-		notif_enabled: readOnly( "notification.enabled" ),
-		notif_running: readOnly( "notification.running" ),
-		notif_error  : readOnly( "notification.error" ),
-
-		loginSuccess: readOnly( "auth.session.isLoggedIn" ),
-		loginPending: readOnly( "auth.session.isPending" ),
-		loginTitle  : function() {
-			if ( !get( this, "loginSuccess" ) ) {
-				return "You're not logged in";
-			}
-
-			return "Logged in as " + get( this, "auth.session.user_name" )
-				+ ( get( this, "notif_running" )
-					? "\nDesktop notifications enabled"
-					: get( this, "notif_error" )
-						? "\nDesktop notifications error"
-						: ""
-				);
-		}.property( "loginSuccess", "notif_running", "notif_error" ),
+		nl: "\n",
 
 
 		actions: {
