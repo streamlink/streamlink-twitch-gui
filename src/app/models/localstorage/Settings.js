@@ -34,6 +34,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		gui_twitchemotes    : attr( "boolean", { defaultValue: false } ),
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
+		gui_gamevisible     : attr( "boolean", { defaultValue: false } ),
 		gui_flagsvisible    : attr( "boolean", { defaultValue: false } ),
 		gui_filterstreams   : attr( "boolean", { defaultValue: false } ),
 		gui_langfilter      : attr( "",        { defaultValue: defaultLangFilterValue } ),

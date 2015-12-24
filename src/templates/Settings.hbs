@@ -94,9 +94,14 @@ Choose a custom executable file of your selected browser. If left blank, default
 {{/if}}
 </fieldset>
 <fieldset>
-<legend>Stream languages</legend>
+<legend>Stream lists</legend>
 <div><i class="fa fa-flag"></i> Flags<span>Indicating the broadcaster language.</span></div>
 <div>{{#check-box checked=model.gui_flagsvisible}}Flags are always visible{{/check-box}}</div>
+<div><i class="fa fa-gamepad"></i> Game<span>In &quot;Top Channels&quot; and &quot;My Streams&quot;.</span></div>
+<div>{{#check-box checked=model.gui_gamevisible}}Always show game being played{{/check-box}}</div>
+</fieldset>
+<fieldset>
+<legend>Languages</legend>
 <div><i class="fa fa-filter"></i> Filter streams<span>Choose <i class="text-nowrap">Fade out</i> to dim or choose <i class="text-nowrap">Filter out</i> to remove streams not matching your language selection from lists.</span></div>
 {{radio-buttons buttonName="filterstreams" boxes=false wrap=true value=model.gui_filterstreams content=settings.content.constructor.gui_filterstreams}}
 <div><i class="fa fa-language"></i> Languages<span>Broadcaster languages.</span></div>

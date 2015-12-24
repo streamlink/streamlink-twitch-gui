@@ -21,6 +21,7 @@ define([
 		classNameBindings: [
 			":stream-item-component",
 			"_showGame:show-game",
+			"settings.gui_gamevisible:always-show-game",
 			"showFlag:show-flag",
 			"faded:faded",
 			"expanded:expanded"
