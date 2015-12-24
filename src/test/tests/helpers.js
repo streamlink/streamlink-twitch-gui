@@ -15,7 +15,8 @@ define([
 	"helpers/FormatTimeHelper",
 	"helpers/HoursFromNowHelper",
 	"helpers/TimeFromNowHelper",
-	"helpers/GetParamHelper"
+	"helpers/GetParamHelper",
+	"helpers/StringConcatHelper"
 ], function(
 	Ember,
 	IsEqualHelper,
@@ -33,7 +34,8 @@ define([
 	FormatTimeHelper,
 	HoursFromNowHelper,
 	TimeFromNowHelper,
-	GetParamHelper
+	GetParamHelper,
+	StringConcatHelper
 ) {
 
 	var get = Ember.get;
@@ -438,6 +440,26 @@ define([
 		assert.equal( getOutput( component ), "baz", "Bound parameter" );
 		run( component, "set", "param", "qux" );
 		assert.equal( getOutput( component ), "qux", "Changed bound parameter" );
+
+	});
+
+
+	QUnit.test( "String concat", function( assert ) {
+
+		registry.register( "helper:string-concat", StringConcatHelper );
+		component = Component.extend({
+			container: container,
+			foo      : "foo",
+			bar      : "bar",
+			layout   : compile( "{{string-concat foo bar 'baz'}}" )
+		}).create();
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "foobarbaz", "Simple string concatenation" );
+
+		run( component, "set", "foo", undefined );
+		run( component, "set", "bar", null );
+		assert.equal( getOutput( component ), "baz", "Undefined values are empty strings" );
 
 	});
 
