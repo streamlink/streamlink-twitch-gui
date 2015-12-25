@@ -59,17 +59,12 @@ fi
 exec -a "$0" "$HERE/$EXEC" $params &
 pid=$!
 
-# fix application name in gnome panel
-# consider for: GNOME / Unity / KDE / XFCE / X-Cinnamon / LXDE
-# useful also for cairo-dock, gnome dash-to-dock, and plank/docky
-if ( [[ "$XDG_CURRENT_DESKTOP" = "GNOME" ]] && [[ ! -z `which wmctrl` ]] ); then
+# fix missing WM_CLASS property in NW.js apps
+while [ -z $winid ]
+do
 	sleep 1
-	while [ -z $winid ]
-	do
-		sleep 1
-		winid=$(wmctrl -lpx | grep $pid | cut -d' ' -f 1)
-	done
-	xprop -id ${winid} -f WM_CLASS 8s -set WM_CLASS "Livestreamer Twitch GUI"
-fi
+	winid=$(xwininfo -name "Livestreamer Twitch GUI" | grep "Window id:" | grep -Eio "0x[a-z0-9]+")
+done
+xprop -id ${winid} -f WM_CLASS 8s -set WM_CLASS "Livestreamer Twitch GUI"
 
 wait $pid
