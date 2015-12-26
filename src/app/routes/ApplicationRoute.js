@@ -1,6 +1,15 @@
-define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
+define([
+	"Ember",
+	"nwjs/nwGui",
+	"nwjs/nwWindow"
+], function(
+	Ember,
+	nwGui,
+	nwWindow
+) {
 
 	var get = Ember.get;
+	var debounce = Ember.run.debounce;
 	var reModalTemplateName = /^(?:Modal)?(\w)(\w+)(?:Modal)?$/i;
 
 	function fnModalTemplateName( _, a, b ) {
@@ -13,6 +22,39 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 		init: function() {
 			this._super();
 			this.controllerFor( "versioncheck" );
+			this.setupFocusRefresh();
+		},
+
+		setupFocusRefresh: function() {
+			var self = this;
+			var last = null;
+
+			function focusGain() {
+				var time  = get( self, "settings.gui_focusrefresh" );
+				if ( !time || !last || last + time > +new Date() ) { return; }
+				var name  = get( self.controller, "currentRouteName" );
+				var route = self.container.lookup( "route:" + name );
+				if ( name === "error" || get( route, "disableAutoRefresh" ) ) { return; }
+				route.refresh();
+			}
+
+			function focusLoss() {
+				last = +new Date();
+			}
+
+			function onFocusGain() {
+				// ignore multiple events (minimize+blur or restore+focus)
+				debounce( focusGain, 20 );
+			}
+
+			function onFocusLoss() {
+				debounce( focusLoss, 20 );
+			}
+
+			nwWindow.on( "blur", onFocusLoss );
+			nwWindow.on( "minimize", onFocusLoss );
+			nwWindow.on( "focus", onFocusGain );
+			nwWindow.on( "restore", onFocusGain );
 		},
 
 		actions: {

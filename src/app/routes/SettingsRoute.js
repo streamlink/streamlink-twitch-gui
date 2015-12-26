@@ -5,6 +5,8 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 	return Ember.Route.extend({
 		settings: Ember.inject.service(),
 
+		disableAutoRefresh: true,
+
 		model: function() {
 			var settings = get( this, "settings.content" );
 			return ObjectBuffer.create({

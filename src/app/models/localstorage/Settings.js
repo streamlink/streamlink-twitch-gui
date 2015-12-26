@@ -29,6 +29,7 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		gui_integration     : attr( "number",  { defaultValue: 3 } ),
 		gui_minimizetotray  : attr( "number",  { defaultValue: false } ),
 		gui_minimize        : attr( "number",  { defaultValue: 0 } ),
+		gui_focusrefresh    : attr( "number",  { defaultValue: 0 } ),
 		gui_hidestreampopup : attr( "boolean", { defaultValue: false } ),
 		gui_openchat        : attr( "boolean", { defaultValue: false } ),
 		gui_twitchemotes    : attr( "boolean", { defaultValue: false } ),
@@ -93,6 +94,13 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 			{ id: 0, label: "Do nothing" },
 			{ id: 1, label: "Minimize" },
 			{ id: 2, label: "Move to tray" }
+		],
+
+		gui_focusrefresh: [
+			{ value:      0, label: "Don't refresh" },
+			{ value:  60000, label: "After one minute" },
+			{ value: 120000, label: "After two minutes" },
+			{ value: 300000, label: "After five minutes" }
 		],
 
 		notify_all: [

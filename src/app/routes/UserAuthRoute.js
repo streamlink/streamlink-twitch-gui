@@ -5,6 +5,8 @@ define( [ "Ember" ], function( Ember ) {
 	return Ember.Route.extend({
 		auth: Ember.inject.service(),
 
+		disableAutoRefresh: true,
+
 		beforeModel: function( transition ) {
 			// check if user is successfully logged in
 			if ( get( this, "auth.session.isLoggedIn" ) ) {
