@@ -9,6 +9,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 	var debounce = Ember.run.debounce;
 	var reModalTemplateName = /^(?:Modal)?(\w)(\w+)(?:Modal)?$/i;
 
@@ -19,6 +20,8 @@ define([
 	return Ember.Route.extend({
 		settings: Ember.inject.service(),
 
+		isModalOpened: false,
+
 		init: function() {
 			this._super();
 			this.controllerFor( "versioncheck" );
@@ -28,14 +31,24 @@ define([
 		setupFocusRefresh: function() {
 			var self = this;
 			var last = null;
+			var defer = false;
 
-			function focusGain() {
-				var time  = get( self, "settings.gui_focusrefresh" );
-				if ( !time || !last || last + time > +new Date() ) { return; }
+			function refresh() {
 				var name  = get( self.controller, "currentRouteName" );
 				var route = self.container.lookup( "route:" + name );
 				if ( name === "error" || get( route, "disableAutoRefresh" ) ) { return; }
 				route.refresh();
+			}
+
+			function focusGain() {
+				var time  = get( self, "settings.gui_focusrefresh" );
+				if ( !time || !last || last + time > +new Date() ) { return; }
+				// defer the refresh if a modal dialog is opened
+				if ( get( self, "isModalOpened" ) ) {
+					defer = true;
+				} else {
+					refresh();
+				}
 			}
 
 			function focusLoss() {
@@ -51,10 +64,20 @@ define([
 				debounce( focusLoss, 20 );
 			}
 
+			function modalObserver() {
+				// the modal dialog has just been closed
+				if ( !get( self, "isModalOpened" ) && defer ) {
+					refresh();
+				}
+				defer = false;
+			}
+
 			nwWindow.on( "blur", onFocusLoss );
 			nwWindow.on( "minimize", onFocusLoss );
 			nwWindow.on( "focus", onFocusGain );
 			nwWindow.on( "restore", onFocusGain );
+
+			this.addObserver( "isModalOpened", modalObserver );
 		},
 
 		actions: {
@@ -109,6 +132,8 @@ define([
 					outlet    : "modal",
 					controller: controller
 				});
+
+				set( this, "isModalOpened", true );
 			},
 
 			"closeModal": function() {
@@ -116,6 +141,8 @@ define([
 					parentView: "application",
 					outlet    : "modal"
 				});
+
+				set( this, "isModalOpened", false );
 			}
 		}
 	});
