@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"models/localstorage/Settings",
-	"hbs!templates/components/StreamPreviewImage"
+	"hbs!templates/components/StreamPreviewImageComponent"
 ], function(
 	Ember,
 	Settings,
