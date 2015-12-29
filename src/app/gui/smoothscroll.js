@@ -581,8 +581,12 @@ define(function() {
 				}
 
 				do {
-					// ignore anchors
-					if ( elem.tagName === "A" ) {
+					if (
+						// ignore anchors
+						   elem.tagName === "A"
+						// ignore "no-middleclick-scroll" data attributes
+						|| elem.parentNode && elem.dataset.noMiddleclickScroll
+					) {
 						return;
 					}
 				} while ( ( elem = elem.parentNode ) );

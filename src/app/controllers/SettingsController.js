@@ -101,6 +101,9 @@ define([
 		}.observes( "model.gui_integration" ),
 
 
+		modifierKeyName: process.platform === "darwin" ? "CMD" : "CTRL",
+
+
 		languages: function() {
 			var codes = get( this, "metadata.config.language_codes" );
 			return Object.keys( codes ).map(function( code ) {

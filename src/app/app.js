@@ -194,6 +194,7 @@ define(function( require ) {
 		StatsRowComponent: require( "components/StatsRowComponent" ),
 		LangFilterComponent: require( "components/LangFilterComponent" ),
 		PreviewImageComponent: require( "components/PreviewImageComponent" ),
+		StreamPreviewImageComponent: require( "components/StreamPreviewImageComponent" ),
 		OpenChatComponent: require( "components/OpenChatComponent" ),
 		TwitchEmotesComponent: require( "components/TwitchEmotesComponent" ),
 		ShareChannelComponent: require( "components/ShareChannelComponent" ),

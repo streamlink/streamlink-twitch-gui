@@ -39,6 +39,8 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		gui_flagsvisible    : attr( "boolean", { defaultValue: false } ),
 		gui_filterstreams   : attr( "boolean", { defaultValue: false } ),
 		gui_langfilter      : attr( "",        { defaultValue: defaultLangFilterValue } ),
+		gui_streamclick_mod : attr( "number",  { defaultValue: 4 } ),
+		gui_streamclick_mid : attr( "number",  { defaultValue: 2 } ),
 		notify_enabled      : attr( "boolean", { defaultValue: true } ),
 		notify_all          : attr( "boolean", { defaultValue: true } ),
 		notify_grouping     : attr( "boolean", { defaultValue: true } ),
@@ -136,6 +138,14 @@ define( [ "Ember", "EmberData" ], function( Ember, DS ) {
 		gui_filterstreams: [
 			{ value: false, label: "Fade out streams" },
 			{ value: true,  label: "Filter out streams" }
+		],
+
+		gui_streamclick: [
+			{ id: 0, key: "disabled", label: "Do nothing" },
+			{ id: 1, key: "launch",   label: "Launch stream" },
+			{ id: 2, key: "chat",     label: "Open chat" },
+			{ id: 3, key: "channel",  label: "Go to channel page" },
+			{ id: 4, key: "settings", label: "Go to channel settings" }
 		]
 
 	});

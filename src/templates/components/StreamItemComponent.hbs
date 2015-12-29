@@ -3,8 +3,14 @@
 <span class="{{unless channel.has_language 'noL'}} {{unless channel.has_broadcaster_language 'noBL'}}">{{#link-to "channel" channel.id}}{{channel.display_name}}{{/link-to}}</span>
 {{#if channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
 </header>
-<section class="preview {{if expanded 'expanded'}}" title="{{unless expanded channel.status}}" {{action "startStream"}}>
-{{preview-image src=content.preview.medium}}
+{{#stream-preview-image
+	src=content.preview.medium
+	stream=content
+	clickable=(bool-not expanded)
+	tagName="section"
+	class=(if expanded "expanded")
+	title=(unless expanded channel.status "")
+	action=(action "collapse")}}
 <footer class="{{if _showGame 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
 {{#if _showGame}}
 <div class="bottom">
@@ -25,10 +31,10 @@
 </div>
 </div>
 </footer>
-<div class="btn-expand" title="{{unless expanded 'Show stream details' (if locked 'Unlock details view' 'Lock details view')}}" {{action "details" bubbles=false}}>
+<div class="btn-expand" title="{{unless expanded 'Show stream details' (if locked 'Unlock details view' 'Lock details view')}}" {{action "expand" bubbles=false}}>
 <i class="fa {{unless expanded 'fa-chevron-up' (if locked 'fa-lock' 'fa-unlock-alt')}}"></i>
 </div>
-</section>
+{{/stream-preview-image}}
 <footer>
 <span title="{{content.title_created_at}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.created_at interval=60000}}</span>
 <span title="{{content.title_viewers}}">{{format-viewers content.viewers}} <i class="fa fa-users"></i></span>

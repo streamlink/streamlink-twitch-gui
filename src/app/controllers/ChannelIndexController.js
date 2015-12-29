@@ -20,15 +20,7 @@ define( [ "Ember" ], function( Ember ) {
 			var blang = get( this, "channel.broadcaster_language" );
 			var lang  = codes[ blang ];
 			return lang ? lang[ "lang" ] : "";
-		}.property( "channel.broadcaster_language" ),
-
-
-		actions: {
-			"startStream": function( stream ) {
-				if ( !stream ) { return; }
-				this.send( "openLivestreamer", stream );
-			}
-		}
+		}.property( "channel.broadcaster_language" )
 	});
 
 });

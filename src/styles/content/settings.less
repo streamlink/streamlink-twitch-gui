@@ -107,7 +107,8 @@
 	}
 
 	.selecter.notifications,
-	.selecter.chat-method {
+	.selecter.chat-method,
+	.selecter.stream-click {
 		max-width: 14em;
 	}
 
@@ -137,6 +138,12 @@
 			> dd {
 				margin-left: @width;
 			}
+		}
+	}
+
+	.stream-click-dropdowns {
+		> div:not(:last-of-type) {
+			margin-bottom: 1em;
 		}
 	}
 

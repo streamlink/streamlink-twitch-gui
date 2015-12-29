@@ -1,8 +1,6 @@
 <section class="content content-index">
 <div class="big-image {{if stream 'online'}}">
-<div class="preview" {{action "startStream" stream}}>
-{{preview-image src=(if stream stream.preview.large channel.video_banner)}}
-</div>
+{{stream-preview-image stream=stream clickable=stream src=(if stream stream.preview.large channel.video_banner)}}
 </div>
 <div class="info">
 <h3>Channel statistics</h3>

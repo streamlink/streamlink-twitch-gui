@@ -27,7 +27,6 @@ define([
 			"expanded:expanded"
 		],
 
-		action: "openLivestreamer",
 		openBrowser: "openBrowser",
 
 		channel: alias( "content.channel" ),
@@ -107,17 +106,13 @@ define([
 
 
 		actions: {
-			"startStream": function() {
-				if ( get( this, "expanded" ) ) {
-					if ( get( this, "locked" ) ) { return; }
-					this.clearTimer();
-					set( this, "expanded", false );
-				} else {
-					this.sendAction( "action", get( this, "content" ) );
-				}
+			"collapse": function() {
+				if ( !get( this, "expanded" ) || get( this, "locked" ) ) { return; }
+				this.clearTimer();
+				set( this, "expanded", false );
 			},
 
-			"details": function() {
+			"expand": function() {
 				if ( get( this, "expanded" ) ) {
 					this.toggleProperty( "locked" );
 				} else {
