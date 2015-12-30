@@ -11,12 +11,13 @@ define([
 
 
 	return Ember.Object.extend( Ember.Evented, {
+		type : "contextmenu",
 		menu : null,
 		items: null,
 
-		init: function( type ) {
+		init: function() {
 			this.menu = new Menu({
-				type: type || "contextmenu"
+				type: this.type
 			});
 
 			if ( !this.items ) {
