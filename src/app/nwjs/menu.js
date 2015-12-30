@@ -52,23 +52,39 @@ define([
 
 		_itemsDidChange: function( observedObj, start, removeCount, addCount ) {
 			// add new menuitems
-			for ( var menu = this.menu, end = start + addCount, obj, item; start < end; start++ ) {
-				obj  = observedObj[ start ];
-				item = new MenuItem({
-					type   : obj.type || "normal",
-					enabled: obj.enabled === undefined
-						? true
-						: obj.enabled,
-					label  : obj.label,
-					tooltip: obj.tooltip || "",
-					checked: obj.checked
-				});
-				item.click = obj.click.bind( null, item, this );
-
+			for ( var menu = this.menu, end = start + addCount, item; start < end; start++ ) {
+				item = this._createMenuItem( observedObj[ start ] );
 				menu.insert( item, start );
 			}
 
 			this.trigger( "update" );
+		},
+
+		_createMenuItem: function( obj ) {
+			var data = {
+				type   : obj.type || "normal",
+				enabled: obj.enabled === undefined
+					? true
+					: obj.enabled,
+				label  : obj.label,
+				tooltip: obj.tooltip || "",
+				checked: obj.checked
+			};
+
+			if ( obj.submenu ) {
+				data.submenu = new Menu();
+				obj.submenu.forEach(function( submenuObj ) {
+					var submenuItem = this._createMenuItem( submenuObj );
+					data.submenu.append( submenuItem );
+				}, this );
+			}
+
+			var item = new MenuItem( data );
+			if ( obj.click ) {
+				item.click = obj.click.bind( null, item, this );
+			}
+
+			return item;
 		}
 	});
 
