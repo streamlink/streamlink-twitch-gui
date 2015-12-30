@@ -1,54 +1,65 @@
 define([
 	"Ember",
 	"nwjs/nwGui",
-	"nwjs/nwWindow"
+	"nwjs/nwWindow",
+	"nwjs/menu"
 ], function(
 	Ember,
 	nwGui,
-	nwWindow
+	nwWindow,
+	Menu
 ) {
 
 	var get = Ember.get;
 	var isOSX = process.platform === "darwin";
 
-	var Menu = nwGui.Menu;
-	var MenuItem = nwGui.MenuItem;
 	var Tray = nwGui.Tray;
 
-	var staticItems = [
-		{
-			label: "Toggle window",
-			click: function( item, tray ) {
-				tray.tray.emit( "click" );
-			}
-		},
-		{
-			label: "Close application",
-			click: function() {
-				nwWindow.close();
-			}
-		}
-	];
 
 	return Ember.Object.extend({
-
 		init: function( name, icon, iconOSX ) {
+			var self = this;
+			var menu = Menu.create({
+				items: [
+					{
+						label: "Toggle window",
+						click: function() {
+							self.tray.emit( "click" );
+						}
+					},
+					{
+						label: "Close application",
+						click: function() {
+							nwWindow.close();
+						}
+					}
+				]
+			});
+
+			// https://github.com/nwjs/nw.js/issues/1870#issuecomment-94958663
+			// reapply menu property, so NWjs updates it
+			menu.on( "update", function() {
+				if ( self.tray ) {
+					self.tray.menu = menu.menu;
+				}
+			});
+
 			this.setProperties({
 				name   : name,
 				icon   : icon,
 				iconOSX: iconOSX,
 				tray   : null,
-				items  : []
+				menu   : menu
 			});
+		},
 
-			this.menu = new Menu();
-
-			this.items.addArrayObserver( this, {
-				willChange: function() {},
-				didChange : this.itemsChanged
+		_buildTray: function() {
+			var tray = new Tray({
+				icon   : get( this, "iconRes" ),
+				tooltip: get( this, "name" )
 			});
-
-			this.items.pushObjects( staticItems );
+			tray.menu = this.menu.menu;
+			return tray;
 		},
 
 
@@ -63,7 +74,6 @@ define([
 			this.tray = this._buildTray();
 			this.tray.on( "click", click );
 		},
-
 
 		iconRes: function() {
 			var dpr = window.devicePixelRatio;
@@ -89,43 +99,7 @@ define([
 				return get( this, "icon" )
 					.replace( "{res}", res );
 			}
-		}.property( "icon", "iconOSX" ),
-
-		_buildTray: function() {
-			var tray = new Tray({
-				icon   : get( this, "iconRes" ),
-				tooltip: get( this, "name" )
-			});
-			tray.menu = this.menu;
-			return tray;
-		},
-
-		itemsChanged: function( items ) {
-			// a new menu needs to be built and applied
-			// modifying already attached menus has no effect
-			// setting the menu property on the tray object to null causes nwjs to crash
-			var menu = new Menu();
-
-			items.forEach(function( item ) {
-				var menuitem = new MenuItem({
-					type   : item.type || "normal",
-					enabled: item.enabled === undefined
-						? true
-						: item.enabled,
-					label  : item.label,
-					tooltip: item.tooltip || "",
-					checked: item.checked
-				});
-				menuitem.click = item.click.bind( null, menuitem, this );
-
-				menu.append( menuitem );
-			}, this );
-
-			this.menu = menu;
-			if ( this.tray ) {
-				this.tray.menu = menu;
-			}
-		}
+		}.property( "icon", "iconOSX" )
 
 	}).create();
 

@@ -145,20 +145,20 @@ define([
 
 		_setupTrayItem: function() {
 			var self = this;
-			var trayItem = null;
+			var menu = tray.menu;
+			var item = null;
 
 			function createTrayItem() {
 				var enabled = get( self, "enabled" );
 				if ( !enabled ) {
-					if ( trayItem ) {
-						tray.items.removeObject( trayItem );
-						trayItem = null;
+					if ( item ) {
+						menu.items.removeObject( item );
 					}
 					set( self, "paused", false );
 					return;
 				}
 
-				trayItem = {
+				item = {
 					type   : "checkbox",
 					label  : "Pause notifications",
 					tooltip: "Quickly toggle desktop notifications",
@@ -168,7 +168,7 @@ define([
 					}
 				};
 
-				tray.items.unshiftObject( trayItem );
+				menu.items.unshiftObject( item );
 			}
 
 			createTrayItem();

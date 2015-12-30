@@ -1,15 +1,18 @@
-define( [ "nwjs/nwGui", "nwjs/nwWindow" ], function( nwGui, nwWindow ) {
+define([
+	"nwjs/nwWindow",
+	"nwjs/menu"
+], function(
+	nwWindow,
+	Menu
+) {
 
 	var macNativeMenuBar;
 
 	function createMacNativeMenuBar( appname ) {
 		if ( macNativeMenuBar ) { return; }
-		macNativeMenuBar = new nwGui.Menu({ type: "menubar" });
-		macNativeMenuBar.createMacBuiltin( appname, {
-			hideEdit  : false,
-			hideWindow: false
-		});
-		nwWindow.menu = macNativeMenuBar;
+		macNativeMenuBar = Menu.create({ type: "menubar" });
+		macNativeMenuBar.createMacBuiltin( appname );
+		nwWindow.menu = macNativeMenuBar.menu;
 	}
 
 
