@@ -1,9 +1,11 @@
 define([
 	"Ember",
+	"nwjs/menu",
 	"models/localstorage/Settings",
 	"hbs!templates/components/StreamPreviewImageComponent"
 ], function(
 	Ember,
+	Menu,
 	Settings,
 	layout
 ) {
@@ -32,6 +34,7 @@ define([
 
 		init: function() {
 			this._super.apply( this, arguments );
+			// FIXME: refactor global openLivestreamer and goto actions
 			this.applicationRoute = this.container.lookup( "route:application" );
 		},
 
@@ -45,9 +48,6 @@ define([
 
 		click: function( event ) {
 			if ( get( this, "clickable" ) ) {
-				var stream = get( this, "stream" );
-				var channel = get( stream, "channel" );
-				var name = get( channel, "id" );
 				var action = event.button === 0
 					// left mouse button
 					? ( event.ctrlKey || event.metaKey
@@ -62,23 +62,74 @@ define([
 					// everything else (no action)
 					: -1;
 
-				// FIXME: refactor global openLivestreamer and goto actions
 				switch ( action ) {
 					case actions.launch:
-						return this.applicationRoute.send( "openLivestreamer", stream );
+						return this.launchStream();
 					case actions.chat:
-						return get( this, "chat" ).open( channel );
+						return this.openChat();
 					case actions.channel:
-						return this.applicationRoute.send( "goto", "channel", name );
+						return this.gotoChannelPage();
 					case actions.settings:
-						return this.applicationRoute.send( "goto", "channel.settings", name );
+						return this.gotoChannelSettings();
 				}
 			}
 
 			if ( this.attrs.action instanceof Function ) {
 				this.attrs.action();
 			}
+		},
+
+		contextMenu: function( event ) {
+			var menu = Menu.create();
+
+			menu.items.pushObjects([
+				{
+					label: "Launch stream",
+					click: this.launchStream.bind( this )
+				},
+				{
+					label: "Open chat",
+					click: this.openChat.bind( this )
+				}
+			]);
+
+			if ( !this.attrs.contextmenuNoGotos ) {
+				menu.items.pushObjects([
+					{
+						label: "Channel page",
+						click: this.gotoChannelPage.bind( this )
+					},
+					{
+						label: "Channel settings",
+						click: this.gotoChannelSettings.bind( this )
+					}
+				]);
+			}
+
+			menu.popup( event.originalEvent.x, event.originalEvent.y );
+		},
+
+
+		launchStream: function() {
+			var stream = get( this, "stream" );
+			this.applicationRoute.send( "openLivestreamer", stream );
+		},
+
+		openChat: function() {
+			var channel = get( this, "stream.channel" );
+			get( this, "chat" ).open( channel );
+		},
+
+		gotoChannelPage: function() {
+			var name = get( this, "stream.channel.id" );
+			this.applicationRoute.send( "goto", "channel", name );
+		},
+
+		gotoChannelSettings: function() {
+			var name = get( this, "stream.channel.id" );
+			this.applicationRoute.send( "goto", "channel.settings", name );
 		}
+
 	});
 
 });
