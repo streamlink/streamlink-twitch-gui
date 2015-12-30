@@ -84,8 +84,13 @@ define([
 
 			menu.items.pushObjects([
 				{
-					label: "Launch stream",
-					click: this.launchStream.bind( this )
+					label  : "Launch stream",
+					submenu: Settings.qualities.map(function( quality ) {
+						return {
+							label: quality.label,
+							click: this.launchStream.bind( this, quality.id )
+						};
+					}, this )
 				},
 				{
 					label: "Open chat",
@@ -110,9 +115,9 @@ define([
 		},
 
 
-		launchStream: function() {
+		launchStream: function( quality ) {
 			var stream = get( this, "stream" );
-			this.applicationRoute.send( "openLivestreamer", stream );
+			this.applicationRoute.send( "openLivestreamer", stream, quality );
 		},
 
 		openChat: function() {
