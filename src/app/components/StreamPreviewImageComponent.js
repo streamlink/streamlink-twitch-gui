@@ -80,6 +80,8 @@ define([
 		},
 
 		contextMenu: function( event ) {
+			if ( this.attrs.noContextmenu ) { return; }
+
 			var menu = Menu.create();
 
 			menu.items.pushObjects([
