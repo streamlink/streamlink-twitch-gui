@@ -2,6 +2,7 @@ define([
 	"Ember",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
+	"models/localstorage/Settings",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/which",
 	"utils/fs/stat",
@@ -13,6 +14,7 @@ define([
 	Ember,
 	nwGui,
 	nwWindow,
+	Settings,
 	ChannelSettingsMixin,
 	which,
 	stat,
@@ -102,7 +104,7 @@ define([
 		}.property(),
 
 
-		startStream: function( stream ) {
+		startStream: function( stream, quality ) {
 			this.send( "openModal", "livestreamer", this, {
 				error : null,
 				active: null,
@@ -131,7 +133,11 @@ define([
 			this.loadChannelSettings( id )
 				// override channel specific settings
 				.then(function( settings ) {
-					setIfNotNull( settings, livestreamer, "quality" );
+					if ( quality === undefined ) {
+						setIfNotNull( settings, livestreamer, "quality" );
+					} else {
+						set( livestreamer, "quality", quality );
+					}
 					setIfNotNull( settings, livestreamer, "gui_openchat" );
 				})
 				// validate configuration and get the exec command
@@ -328,12 +334,12 @@ define([
 			var channel   = get( livestreamer, "channel.id" );
 			var quality   = get( livestreamer, "quality" );
 			var streamURL = get( this, "metadata.config.twitch-stream-url" );
-			var qualities = get( this, "settings.content.constructor.qualities" );
+			var qualities = Settings.qualities;
 
 			// get the livestreamer parameter list and append stream url and quality
 			var params    = get( livestreamer, "parameters" );
 			params.push( streamURL.replace( "{channel}", channel ) );
-			params.push( get( qualities[ quality ] || qualities[ 0 ], "quality" ) );
+			params.push( ( qualities[ quality ] || qualities[ 0 ] ).quality );
 
 			// spawn the livestreamer process
 			var spawn = CP.spawn( exec, params, { detached: true } );

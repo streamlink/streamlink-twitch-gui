@@ -113,8 +113,8 @@ define([
 				nwGui.Shell.openExternal( url );
 			},
 
-			"openLivestreamer": function( stream ) {
-				this.controllerFor( "livestreamer" ).startStream( stream );
+			"openLivestreamer": function( stream, quality ) {
+				this.controllerFor( "livestreamer" ).startStream( stream, quality );
 			},
 
 			"openModal": function( template, controller, data ) {
