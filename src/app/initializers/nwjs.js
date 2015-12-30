@@ -5,7 +5,7 @@ define([
 	"nwjs/nwScreen",
 	"nwjs/shortcut",
 	"nwjs/tray",
-	"nwjs/menu",
+	"nwjs/menubar",
 	"nwjs/argv"
 ], function(
 	Ember,
@@ -14,7 +14,7 @@ define([
 	nwScreen,
 	shortcut,
 	tray,
-	menu,
+	menubar,
 	argv
 ) {
 
@@ -125,7 +125,7 @@ define([
 			shortcut.createShortcut( displayName );
 			tray.init( displayName, trayIconImg, trayIconImgOSX );
 			if ( process.platform === "darwin" ) {
-				menu.createMacNativeMenuBar( displayName );
+				menubar.createMacNativeMenuBar( displayName );
 			}
 
 
