@@ -1,11 +1,13 @@
 define([
 	"Ember",
 	"nwjs/menu",
+	"nwjs/clipboard",
 	"models/localstorage/Settings",
 	"hbs!templates/components/StreamPreviewImageComponent"
 ], function(
 	Ember,
 	Menu,
+	clipboard,
 	Settings,
 	layout
 ) {
@@ -97,6 +99,10 @@ define([
 				{
 					label: "Open chat",
 					click: this.openChat.bind( this )
+				},
+				{
+					label: "Copy channel URL",
+					click: this.copyChannelURL.bind( this )
 				}
 			]);
 
@@ -125,6 +131,11 @@ define([
 		openChat: function() {
 			var channel = get( this, "stream.channel" );
 			get( this, "chat" ).open( channel );
+		},
+
+		copyChannelURL: function() {
+			var url = get( this, "stream.channel.url" );
+			clipboard.set( url );
 		},
 
 		gotoChannelPage: function() {
