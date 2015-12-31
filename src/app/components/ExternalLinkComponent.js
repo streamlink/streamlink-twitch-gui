@@ -1,4 +1,12 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember",
+	"nwjs/menu",
+	"nwjs/clipboard"
+], function(
+	Ember,
+	Menu,
+	clipboard
+) {
 
 	var get = Ember.get;
 
@@ -11,10 +19,38 @@ define( [ "Ember" ], function( Ember ) {
 
 		action: "openBrowser",
 
-		click: function( e ) {
-			e.preventDefault();
-			e.stopImmediatePropagation();
-			this.sendAction( "action", get( this, "url" ) );
+		click: function( event ) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+		},
+
+		contextMenu: function( event ) {
+			if ( this.attrs.noContextmenu ) { return; }
+
+			var menu = Menu.create();
+
+			menu.items.pushObjects([
+				{
+					label: "Open URL",
+					click: this.openURL.bind( this )
+				},
+				{
+					label: "Copy URL",
+					click: this.copyURL.bind( this )
+				}
+			]);
+
+			menu.popup( event.originalEvent.x, event.originalEvent.y );
+		},
+
+		openURL: function() {
+			var url = get( this, "url" );
+			this.sendAction( "action", url );
+		},
+
+		copyURL: function() {
+			var url = get( this, "url" );
+			clipboard.set( url );
 		},
 
 		didInsertElement: function() {
