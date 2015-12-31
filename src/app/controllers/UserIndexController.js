@@ -1,4 +1,10 @@
-define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
+define([
+	"Ember",
+	"nwjs/clipboard"
+], function(
+	Ember,
+	clipboard
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -23,18 +29,9 @@ define( [ "Ember", "nwjs/nwGui" ], function( Ember, nwGui ) {
 			},
 
 			"copyToken": function( success, failure ) {
-				var token = get( this, "auth.session.access_token" );
-				var cb = nwGui.Clipboard.get();
-
-				if ( token && cb ) {
-					cb.set( token, "text" );
-
-					if ( success instanceof Function ) {
-						success();
-					}
-				} else if ( failure instanceof Function ) {
-					failure().catch();
-				}
+				clipboard.set( get( this, "auth.session.access_token" ) )
+					.then( success, failure )
+					.catch(function() {});
 			},
 
 			"showTokenForm": function() {

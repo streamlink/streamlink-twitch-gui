@@ -1,10 +1,10 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
+	"nwjs/clipboard",
 	"components/FormButtonComponent"
 ], function(
 	Ember,
-	nwGui,
+	clipboard,
 	FormButtonComponent
 ) {
 
@@ -22,18 +22,9 @@ define([
 
 		actions: {
 			"share": function( success, failure ) {
-				var url = get( this, "channel.url" );
-				var cb  = nwGui.Clipboard.get();
-
-				if ( url && cb ) {
-					cb.set( url, "text" );
-
-					if ( success instanceof Function ) {
-						success();
-					}
-				} else if ( failure instanceof Function ) {
-					failure().catch();
-				}
+				clipboard.set( get( this, "channel.url" ) )
+					.then( success, failure )
+					.catch(function() {});
 			}
 		}
 	});
