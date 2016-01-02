@@ -587,6 +587,7 @@ define(function() {
 						// ignore "no-middleclick-scroll" data attributes
 						|| elem.parentNode && elem.dataset.noMiddleclickScroll
 					) {
+						e.preventDefault();
 						return;
 					}
 				} while ( ( elem = elem.parentNode ) );
