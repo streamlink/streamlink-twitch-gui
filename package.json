@@ -37,8 +37,8 @@
 		"display-name": "Livestreamer Twitch GUI",
 		"nw-js-version": "0.12.3",
 		"version-check-days": 7,
-		"tray-icon": "img/icon-{res}.png",
-		"tray-icon-osx": "img/icon-osx-{res}{hidpi}.png",
+		"tray-icon": "img/icon-16{hidpi}.png",
+		"tray-icon-osx": "img/icon-osx-18{hidpi}.png",
 		"themes": [
 			"default",
 			"dark"

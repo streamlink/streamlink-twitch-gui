@@ -120,12 +120,9 @@ define([
 		initialize: function( application ) {
 			var metadata = application.lookup( "service:metadata" );
 
-			var displayName    = get( metadata, "config.display-name" );
-			var trayIconImg    = get( metadata, "config.tray-icon" );
-			var trayIconImgOSX = get( metadata, "config.tray-icon-osx" );
+			var displayName = get( metadata, "config.display-name" );
 
 			shortcut.createShortcut( displayName );
-			tray.init( displayName, trayIconImg, trayIconImgOSX );
 			if ( platform.isDarwin ) {
 				menubar.createMacNativeMenuBar( displayName );
 			}

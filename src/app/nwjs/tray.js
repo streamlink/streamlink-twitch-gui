@@ -3,23 +3,40 @@ define([
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
 	"nwjs/menu",
-	"utils/platform"
+	"utils/platform",
+	"json!root/metadata"
 ], function(
 	Ember,
 	nwGui,
 	nwWindow,
 	Menu,
-	platform
+	platform,
+	metadata
 ) {
 
-	var get = Ember.get;
+	var setProperties = Ember.setProperties;
+
 	var Tray = nwGui.Tray;
 
 	var isDarwin = platform.isDarwin;
 
+	var config         = metadata.package.config;
+	var displayName    = config[ "display-name" ];
+	var trayIconImg    = config[ "tray-icon" ];
+	var trayIconImgOSX = config[ "tray-icon-osx" ];
+
+	function getScale() {
+		var dpr = window.devicePixelRatio;
+		return dpr > 2
+			? "@3x"
+			: dpr > 1
+			? "@2x"
+			: "";
+	}
+
 
 	return Ember.Object.extend({
-		init: function( name, icon, iconOSX ) {
+		init: function() {
 			var self = this;
 			var menu = Menu.create({
 				items: [
@@ -46,22 +63,10 @@ define([
 				}
 			});
 
-			this.setProperties({
-				name   : name,
-				icon   : icon,
-				iconOSX: iconOSX,
-				tray   : null,
-				menu   : menu
+			setProperties( this, {
+				tray: null,
+				menu: menu
 			});
-		},
-
-		_buildTray: function() {
-			var tray = new Tray({
-				icon   : get( this, "iconRes" ),
-				tooltip: get( this, "name" )
-			});
-			tray.menu = this.menu.menu;
-			return tray;
 		},
 
 
@@ -73,35 +78,19 @@ define([
 		},
 
 		add: function( click ) {
-			this.tray = this._buildTray();
-			this.tray.on( "click", click );
-		},
+			var icon = isDarwin
+				? trayIconImgOSX
+				: trayIconImg;
 
-		iconRes: function() {
-			var dpr = window.devicePixelRatio;
+			var tray = new Tray({
+				icon   : icon.replace( "{hidpi}", getScale() ),
+				tooltip: displayName
+			});
+			tray.menu = this.menu.menu;
+			tray.on( "click", click );
 
-			if ( isDarwin ) {
-				var hidpi = dpr > 2
-					? "@3x"
-					: dpr > 1
-						? "@2x"
-						: "";
-
-				return get( this, "iconOSX" )
-					.replace( "{res}", 18 )
-					.replace( "{hidpi}", hidpi );
-
-			} else {
-				var res = dpr > 2
-					? 48
-					: dpr > 1
-						? 32
-						: 16;
-
-				return get( this, "icon" )
-					.replace( "{res}", res );
-			}
-		}.property( "icon", "iconOSX" )
+			this.tray = tray;
+		}
 
 	}).create();
 
