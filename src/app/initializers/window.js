@@ -3,13 +3,15 @@ define([
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
 	"nwjs/nwScreen",
-	"nwjs/argv"
+	"nwjs/argv",
+	"utils/platform"
 ], function(
 	Ember,
 	nwGui,
 	nwWindow,
 	nwScreen,
-	argv
+	argv,
+	platform
 ) {
 
 	var get = Ember.get,
@@ -20,7 +22,7 @@ define([
 
 	var concat = [].concat;
 
-	var isWin = process.platform === "win32";
+	var isWin = platform.isWin;
 
 	var timeEvent  = 1000,
 	    timeIgnore = 2000,

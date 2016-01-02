@@ -7,6 +7,7 @@ define([
 	"utils/resolvePath",
 	"utils/fs/which",
 	"utils/fs/stat",
+	"utils/platform",
 	"commonjs!child_process",
 	"commonjs!path"
 ], function(
@@ -18,6 +19,7 @@ define([
 	resolvePath,
 	which,
 	stat,
+	platform,
 	CP,
 	PATH
 ) {
@@ -26,8 +28,8 @@ define([
 	var readOnly = Ember.computed.readOnly;
 	var run = Ember.run;
 
-	var platform = process.platform;
-	var isWin = platform === "win32";
+	var platformName = platform.platform;
+	var isWin = platform.isWin;
 
 	function checkExec( stat ) {
 		return stat.isFile() && ( isWin || ( stat.mode & 73 ) > 0 );
@@ -104,8 +106,8 @@ define([
 			var methods  = get( this, "chatMethods" );
 			var data     = methods[ key ];
 			var args     = data[ "args" ];
-			var exec     = data[ "exec" ][ platform ];
-			var fallback = data[ "fallback" ][ platform ];
+			var exec     = data[ "exec" ][ platformName ];
+			var fallback = data[ "fallback" ][ platformName ];
 
 			// validate command and use fallback paths if needed
 			return this._validatePredefined( command, exec, fallback )
@@ -196,8 +198,8 @@ define([
 			var user       = get( this, "auth.session.user_name" );
 			var data       = get( this, "chatMethods.chatty" );
 			var javaArgs   = data[ "args" ];
-			var javaExec   = data[ "exec" ][ platform ];
-			var fbPaths    = data[ "fallback" ][ platform ];
+			var javaExec   = data[ "exec" ][ platformName ];
+			var fbPaths    = data[ "fallback" ][ platformName ];
 			var chattyArgs = data[ "chatty-args" ];
 			var chattyFb   = data[ "chatty-fallback" ];
 

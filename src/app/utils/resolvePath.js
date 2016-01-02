@@ -1,4 +1,10 @@
-define( [ "commonjs!path" ], function( PATH ) {
+define([
+	"utils/platform",
+	"commonjs!path"
+], function(
+	platform,
+	PATH
+) {
 
 	var reVarWindows = /%([^%]+)%/g;
 	var reVarUnix    = /\$([A-Z_]+)/g;
@@ -17,7 +23,7 @@ define( [ "commonjs!path" ], function( PATH ) {
 		return PATH.resolve( path );
 	}
 
-	return process.platform === "win32"
+	return platform.isWin
 		? resolvePathWindows
 		: resolvePathUnix;
 

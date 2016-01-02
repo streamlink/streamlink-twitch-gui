@@ -1,9 +1,11 @@
 define([
 	"Ember",
-	"mixins/RetryTransitionMixin"
+	"mixins/RetryTransitionMixin",
+	"utils/platform"
 ], function(
 	Ember,
-	RetryTransitionMixin
+	RetryTransitionMixin,
+	platform
 ) {
 
 	var get = Ember.get;
@@ -55,7 +57,7 @@ define([
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
 		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
-		hasNotificationClickSupport: process.platform !== "linux",
+		hasNotificationClickSupport: !platform.isLinux,
 
 		playerCmdSubstitutionsVisible: false,
 		playerCmdSubstitutions: function() {
@@ -101,7 +103,7 @@ define([
 		}.observes( "model.gui_integration" ),
 
 
-		modifierKeyName: process.platform === "darwin" ? "CMD" : "CTRL",
+		modifierKeyName: platform.isDarwin ? "CMD" : "CTRL",
 
 
 		languages: function() {

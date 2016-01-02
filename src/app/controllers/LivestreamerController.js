@@ -8,6 +8,7 @@ define([
 	"utils/fs/stat",
 	"utils/StreamOutputBuffer",
 	"utils/semver",
+	"utils/platform",
 	"commonjs!child_process",
 	"commonjs!path"
 ], function(
@@ -20,6 +21,7 @@ define([
 	stat,
 	StreamOutputBuffer,
 	semver,
+	platform,
 	CP,
 	PATH
 ) {
@@ -29,7 +31,7 @@ define([
 	var run = Ember.run;
 	var merge = Ember.merge;
 
-	var isWin = process.platform === "win32";
+	var isWin = platform.isWin;
 
 	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
 	var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;

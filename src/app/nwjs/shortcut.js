@@ -3,29 +3,21 @@ define([
 	"nwjs/nwGui",
 	"utils/semver",
 	"utils/resolvePath",
-	"commonjs!path",
-	"commonjs!os"
+	"utils/platform",
+	"commonjs!path"
 ], function(
 	metadata,
 	nwGui,
 	semver,
 	resolvePath,
-	PATH,
-	OS
+	platform,
+	PATH
 ) {
 
 	var config = metadata.package.config[ "notifications-toast-windows" ];
 
-	var vers = OS.release();
-	var win8 = config[ "version-min" ];
-
 	function createShortcut( name ) {
-		if (
-			// check if current platform is windows
-			   process.platform === "win32"
-			// check if windows version is >= 8
-			&& semver.sort([ vers, win8 ]).shift() === win8
-		) {
+		if ( platform.isWinGte8 ) {
 			// register AppUserModelID
 			// this is required for toast notifications on windows 8+
 			// https://github.com/nwjs/nwjs/wiki/Notification#windows

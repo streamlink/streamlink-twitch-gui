@@ -1,13 +1,15 @@
 define([
 	"utils/fs/stat",
+	"utils/platform",
 	"commonjs!path"
 ], function(
 	stat,
+	platform,
 	PATH
 ) {
 
 	var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter );
-	var exts  = process.platform === "win32" ? [ ".exe" ] : [ "" ];
+	var exts  = platform.isWin ? [ ".exe" ] : [ "" ];
 	var sep   = PATH.sep;
 
 

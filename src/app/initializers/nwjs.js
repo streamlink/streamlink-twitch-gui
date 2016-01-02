@@ -6,7 +6,8 @@ define([
 	"nwjs/shortcut",
 	"nwjs/tray",
 	"nwjs/menubar",
-	"nwjs/argv"
+	"nwjs/argv",
+	"utils/platform"
 ], function(
 	Ember,
 	nwGui,
@@ -15,7 +16,8 @@ define([
 	shortcut,
 	tray,
 	menubar,
-	argv
+	argv,
+	platform
 ) {
 
 	var get = Ember.get;
@@ -124,7 +126,7 @@ define([
 
 			shortcut.createShortcut( displayName );
 			tray.init( displayName, trayIconImg, trayIconImgOSX );
-			if ( process.platform === "darwin" ) {
+			if ( platform.isDarwin ) {
 				menubar.createMacNativeMenuBar( displayName );
 			}
 

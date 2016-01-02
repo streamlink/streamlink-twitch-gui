@@ -1,9 +1,17 @@
-define( [ "Ember", "EmberData" ], function( Ember, DS ) {
+define([
+	"Ember",
+	"EmberData",
+	"utils/platform"
+], function(
+	Ember,
+	DS,
+	platform
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var attr = DS.attr;
-	var isWin = process.platform === "win32";
+	var isWin = platform.isWin;
 
 	function defaultLangFilterValue( model ) {
 		var codes = get( model, "metadata.config.language_codes" );

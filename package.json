@@ -107,7 +107,6 @@
 		"notification-interval-retry": 1000,
 		"notification-interval-error": 120000,
 		"notifications-toast-windows": {
-			"version-min": "6.2.0",
 			"shortcut-path": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs"
 		},
 		"stream-reload-interval": 60000,

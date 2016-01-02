@@ -2,18 +2,20 @@ define([
 	"Ember",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
-	"nwjs/menu"
+	"nwjs/menu",
+	"utils/platform"
 ], function(
 	Ember,
 	nwGui,
 	nwWindow,
-	Menu
+	Menu,
+	platform
 ) {
 
 	var get = Ember.get;
-	var isOSX = process.platform === "darwin";
-
 	var Tray = nwGui.Tray;
+
+	var isDarwin = platform.isDarwin;
 
 
 	return Ember.Object.extend({
@@ -78,7 +80,7 @@ define([
 		iconRes: function() {
 			var dpr = window.devicePixelRatio;
 
-			if ( isOSX ) {
+			if ( isDarwin ) {
 				var hidpi = dpr > 2
 					? "@3x"
 					: dpr > 1
