@@ -10,8 +10,12 @@ module.exports = function( grunt ) {
 		var done    = this.async();
 		var options = this.options();
 
-		nwBuilder( grunt, this.data.src, options )
-			.run()
-			.then( done, grunt.fail.fatal );
+		var nw = nwBuilder( grunt, this.data.src, options );
+
+		nw.on( "log", grunt.log.writeln );
+		nw.on( "stdout", grunt.log.debug );
+		nw.on( "stderr", grunt.log.debug );
+
+		nw.run().then( done, grunt.fail.fatal );
 	});
 };
