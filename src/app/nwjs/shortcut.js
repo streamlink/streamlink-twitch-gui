@@ -1,36 +1,41 @@
 define([
-	"json!root/metadata",
 	"nwjs/nwGui",
-	"utils/semver",
 	"utils/resolvePath",
 	"utils/platform",
+	"json!root/metadata",
 	"commonjs!path"
 ], function(
-	metadata,
 	nwGui,
-	semver,
 	resolvePath,
 	platform,
+	metadata,
 	PATH
 ) {
 
-	var config = metadata.package.config[ "notifications-toast-windows" ];
+	var App = nwGui.App;
 
-	function createShortcut( name ) {
-		if ( platform.isWinGte8 ) {
-			// register AppUserModelID
-			// this is required for toast notifications on windows 8+
-			// https://github.com/nwjs/nwjs/wiki/Notification#windows
-			var resolved = resolvePath( config[ "shortcut-path" ] );
-			var filename = name + ".lnk";
-			var shortcut = PATH.join( resolved, filename );
-			nwGui.App.createShortcut( shortcut );
-		}
+	var isWinGte8 = platform.isWinGte8;
+
+	var displayName   = metadata.package.config[ "display-name" ];
+	var startmenuPath = metadata.package.config[ "windows-shortcut-path" ];
+
+	function createStartmenuShortcutWin8() {
+		// register AppUserModelID
+		// this is required for toast notifications on windows 8+
+		// https://github.com/nwjs/nwjs/wiki/Notification#windows
+		var resolved = resolvePath( startmenuPath );
+		var filename = displayName + ".lnk";
+		var shortcut = PATH.join( resolved, filename );
+		App.createShortcut( shortcut );
 	}
 
 
 	return {
-		createShortcut: createShortcut
+		createStartmenuShortcut: function() {
+			if ( isWinGte8 ) {
+				createStartmenuShortcutWin8();
+			}
+		}
 	};
 
 });

@@ -1,23 +1,38 @@
 define([
 	"nwjs/nwWindow",
-	"nwjs/menu"
+	"nwjs/menu",
+	"utils/platform",
+	"json!root/metadata"
 ], function(
 	nwWindow,
-	Menu
+	Menu,
+	platform,
+	metadata
 ) {
 
-	var macNativeMenuBar;
+	var isDarwin = platform.isDarwin;
 
-	function createMacNativeMenuBar( appname ) {
-		if ( macNativeMenuBar ) { return; }
-		macNativeMenuBar = Menu.create({ type: "menubar" });
-		macNativeMenuBar.createMacBuiltin( appname );
-		nwWindow.menu = macNativeMenuBar.menu;
+	var displayName = metadata.package.config[ "display-name" ];
+
+	function createNativeMenuBarDarwin() {
+		var menubar = Menu.create({ type: "menubar" });
+		menubar.createMacBuiltin( displayName );
+		return menubar.menu;
 	}
 
 
 	return {
-		createMacNativeMenuBar: createMacNativeMenuBar
+		createNativeMenuBar: function() {
+			var menubar;
+
+			if ( isDarwin ) {
+				menubar = createNativeMenuBarDarwin();
+			} else {
+				return;
+			}
+
+			nwWindow.menu = menubar;
+		}
 	};
 
 });
