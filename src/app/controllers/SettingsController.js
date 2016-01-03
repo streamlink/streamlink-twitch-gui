@@ -23,6 +23,8 @@ define([
 		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
 
+		platform : platform,
+
 		hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
 		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "minValue" ),
 		hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "maxValue" ),
@@ -55,9 +57,6 @@ define([
 
 		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
-
-		// https://github.com/nwjs/nw.js/wiki/Notification#linux :(
-		hasNotificationClickSupport: !platform.isLinux,
 
 		playerCmdSubstitutionsVisible: false,
 		playerCmdSubstitutions: function() {
@@ -101,9 +100,6 @@ define([
 			set( Settings, "minimize.2.disabled", noTray );
 
 		}.observes( "model.gui_integration" ),
-
-
-		modifierKeyName: platform.isDarwin ? "CMD" : "CTRL",
 
 
 		languages: function() {

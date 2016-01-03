@@ -55,6 +55,7 @@ define([
 		notify_click        : attr( "number",  { defaultValue: 1 } ),
 		notify_click_group  : attr( "number",  { defaultValue: 1 } ),
 		notify_badgelabel   : attr( "boolean", { defaultValue: true } ),
+		notify_shortcut     : attr( "boolean", { defaultValue: true } ),
 		hls_live_edge       : attr( "number",  { defaultValue: 3, minValue: 1, maxValue: 10 } ),
 		hls_segment_threads : attr( "number",  { defaultValue: 1, minValue: 1, maxValue: 10 } ),
 		chat_method         : attr( "string",  { defaultValue: "default" } ),

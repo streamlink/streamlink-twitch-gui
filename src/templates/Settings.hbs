@@ -104,7 +104,7 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div><i class="fa fa-hand-pointer-o"></i> Click behavior<span>Additional stream image click actions.</span></div>
 <div class="stream-click-dropdowns">
 <div>
-<p>{{modifierKeyName}} + Primary mouse button</p>
+<p>{{unless platform.isDarwin "CTRL" "CMD"}} + Primary mouse button</p>
 {{drop-down class="stream-click" value=model.gui_streamclick_mod content=settings.content.constructor.gui_streamclick}}
 </div>
 <div>
@@ -132,18 +132,22 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div><i class="fa fa-bullhorn"></i> Notifications<span>When favorites start streaming.</span></div>
 <div>{{#check-box checked=model.notify_enabled}}Enable desktop notifications{{/check-box}}</div>
 {{#if model.notify_enabled}}
+{{#if (bool-and model.advanced platform.isWinGte8)}}
+<div><i class="fa fa-link"></i> Startmenu shortcut<span>Required by Windows for receiving toast notifications. Re-enabling this option may require an application restart.</span></div>
+<div>{{#check-box checked=model.notify_shortcut}}Create a startmenu shortcut{{/check-box}}</div>
+{{/if}}
 <div><i class="fa fa-eyedropper"></i> Channel filter<span>Notifications can be turned on/off individually in a channel's settings menu.</span></div>
 {{radio-buttons buttonName="notify_all" boxes=false wrap=true value=model.notify_all content=settings.content.constructor.notify_all}}
 <div><i class="fa fa-folder-open-o"></i> Grouping<span>Merge multiple notifications.</span></div>
 <div>{{#check-box checked=model.notify_grouping}}Only show one notification at a time{{/check-box}}</div>
-{{#if hasNotificationClickSupport}}
+{{#unless platform.isLinux}}
 <div><i class="fa fa-crosshairs"></i> Notification click<span>Preferred click action.</span></div>
 <div>{{drop-down value=model.notify_click content=settings.content.constructor.notify_click class="notifications"}}</div>
 {{#if (bool-and model.notify_grouping model.notify_click)}}
 <div><i class="fa fa-crosshairs"></i> Group click<span>Preferred group click action.</span></div>
 <div>{{drop-down value=model.notify_click_group content=settings.content.constructor.notify_click_group class="notifications"}}</div>
 {{/if}}
-{{/if}}
+{{/unless}}
 {{/if}}
 </fieldset>
 <fieldset class="submit">

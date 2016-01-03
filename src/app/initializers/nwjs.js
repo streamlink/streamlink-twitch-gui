@@ -116,7 +116,9 @@ define([
 		name: "nwjs",
 
 		initialize: function( application ) {
-			shortcut.createStartmenuShortcut();
+			var settings = application.lookup( "service:settings" );
+
+			shortcut.createStartmenuShortcut( settings );
 			menubar.createNativeMenuBar();
 
 
