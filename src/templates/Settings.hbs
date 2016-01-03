@@ -141,10 +141,10 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div><i class="fa fa-folder-open-o"></i> Grouping<span>Merge multiple notifications.</span></div>
 <div>{{#check-box checked=model.notify_grouping}}Only show one notification at a time{{/check-box}}</div>
 {{#unless platform.isLinux}}
-<div><i class="fa fa-crosshairs"></i> Notification click<span>Preferred click action.</span></div>
+<div><i class="fa fa-hand-pointer-o"></i> Notification click<span>Preferred click action.</span></div>
 <div>{{drop-down value=model.notify_click content=settings.content.constructor.notify_click class="notifications"}}</div>
 {{#if (bool-and model.notify_grouping model.notify_click)}}
-<div><i class="fa fa-crosshairs"></i> Group click<span>Preferred group click action.</span></div>
+<div><i class="fa fa-hand-pointer-o"></i> Group click<span>Preferred group click action.</span></div>
 <div>{{drop-down value=model.notify_click_group content=settings.content.constructor.notify_click_group class="notifications"}}</div>
 {{/if}}
 {{/unless}}
