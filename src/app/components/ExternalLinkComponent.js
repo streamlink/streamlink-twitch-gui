@@ -22,6 +22,10 @@ define([
 		click: function( event ) {
 			event.preventDefault();
 			event.stopImmediatePropagation();
+
+			if ( event.button === 0 ) {
+				this.openURL();
+			}
 		},
 
 		contextMenu: function( event ) {
@@ -56,7 +60,7 @@ define([
 		didInsertElement: function() {
 			this._super.apply( this, arguments );
 			this.$().on( "click", function( e ) {
-				if ( e.button !== 0 ) {
+				if ( e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey ) {
 					e.preventDefault();
 					e.stopImmediatePropagation();
 				}
