@@ -1,29 +1,17 @@
 define([
 	"Ember",
 	"nwjs/nwGui",
-	"nwjs/nwWindow",
-	"nwjs/menu",
-	"utils/platform",
-	"json!root/metadata"
+	"nwjs/menu"
 ], function(
 	Ember,
 	nwGui,
-	nwWindow,
-	Menu,
-	platform,
-	metadata
+	Menu
 ) {
 
+	var get = Ember.get;
 	var setProperties = Ember.setProperties;
 
 	var Tray = nwGui.Tray;
-
-	var isDarwin = platform.isDarwin;
-
-	var config         = metadata.package.config;
-	var displayName    = config[ "display-name" ];
-	var trayIconImg    = config[ "tray-icon" ];
-	var trayIconImgOSX = config[ "tray-icon-osx" ];
 
 	function getScale() {
 		var dpr = window.devicePixelRatio;
@@ -36,23 +24,16 @@ define([
 
 
 	return Ember.Object.extend({
+		tooltip: null,
+		icon   : null,
+		items  : null,
+		menu   : null,
+		tray   : null,
+
 		init: function() {
 			var self = this;
 			var menu = Menu.create({
-				items: [
-					{
-						label: "Toggle window",
-						click: function() {
-							self.tray.emit( "click" );
-						}
-					},
-					{
-						label: "Close application",
-						click: function() {
-							nwWindow.close();
-						}
-					}
-				]
+				items: this.items || []
 			});
 
 			// https://github.com/nwjs/nw.js/issues/1870#issuecomment-94958663
@@ -71,27 +52,34 @@ define([
 
 
 		remove: function() {
-			if ( this.tray ) {
-				this.tray.remove();
-				this.tray = null;
-			}
+			if ( !this.tray ) { return; }
+			this.tray.remove();
+			this.tray = null;
 		},
 
 		add: function( click ) {
-			var icon = isDarwin
-				? trayIconImgOSX
-				: trayIconImg;
+			this.remove();
 
 			var tray = new Tray({
-				icon   : icon.replace( "{hidpi}", getScale() ),
-				tooltip: displayName
+				icon   : get( this, "icon" ).replace( "{hidpi}", getScale() ),
+				tooltip: get( this, "tooltip" )
 			});
 			tray.menu = this.menu.menu;
 			tray.on( "click", click );
 
 			this.tray = tray;
+		},
+
+		click: function() {
+			if ( !this.tray ) { return; }
+			this.tray.emit( "click" );
+		},
+
+		removeOnClick: function() {
+			if ( !this.tray ) { return; }
+			this.tray.once( "click", this.remove.bind( this ) );
 		}
 
-	}).create();
+	});
 
 });

@@ -1,5 +1,8 @@
 define( [ "nwjs/nwGui" ], function( nwGui ) {
 
-	return nwGui.Screen.Init();
+	var nwScreen = nwGui.Screen.Init();
+	nwScreen.removeAllListeners();
+
+	return nwScreen;
 
 });

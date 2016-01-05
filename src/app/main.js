@@ -21,6 +21,8 @@ if ( DEBUG ) {
 
 define(function( require ) {
 
+	global.process.removeAllListeners();
+
 	// load the config first
 	require( [ "config" ], function() {
 

@@ -1,7 +1,6 @@
 define([
 	"Ember",
 	"nwjs/nwWindow",
-	"nwjs/tray",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
@@ -11,7 +10,6 @@ define([
 ], function(
 	Ember,
 	nwWindow,
-	tray,
 	ChannelSettingsMixin,
 	mkdirp,
 	download,
@@ -145,7 +143,7 @@ define([
 
 		_setupTrayItem: function() {
 			var self = this;
-			var menu = tray.menu;
+			var menu = nwWindow.tray.menu;
 			var item = null;
 
 			function createTrayItem() {
