@@ -3,6 +3,8 @@ define(function( require ) {
 	var Ember = require( "Ember" );
 	var DS    = require( "EmberData" );
 
+	var nwWindow = require( "nwjs/nwWindow" );
+
 	require( "initializers/initializers" );
 
 
@@ -276,14 +278,7 @@ define(function( require ) {
 
 		// ready event
 		ready: function ready() {
-			var nwWindow = require( "nwjs/nwWindow" );
-
-			// wait for the SettingsService to load
-			var settings = this.__container__.lookup( "service:settings" );
-			settings.addObserver( "content", function() {
-				if ( !settings.get( "content" ) ) { return; }
-				nwWindow.emit( "ready", settings );
-			});
+			nwWindow.emit( "ready" );
 		},
 
 		toString: function() { return "App"; }
