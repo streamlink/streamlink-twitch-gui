@@ -34,6 +34,11 @@ define([
 				}
 			]
 		});
+
+		// prevent tray icons from stacking up when refreshing the page or devtools
+		nwWindow.window.addEventListener( "beforeunload", function() {
+			nwWindow.tray.remove();
+		}, false );
 	}
 
 

@@ -1,26 +1,8 @@
-define([
-	"nwjs/nwGui",
-	"nwjs/nwScreen"
-], function(
-	nwGui,
-	nwScreen
-) {
-
+define([ "nwjs/nwGui" ], function( nwGui ) {
 
 	// get the main application window
 	var nwWindow = nwGui.Window.get();
-
-
-	// remove all listeners
-	nwWindow.window.addEventListener( "beforeunload", function() {
-		nwWindow.removeAllListeners();
-		nwScreen.removeAllListeners();
-		global.process.removeAllListeners();
-		// prevent tray icons from stacking up when refreshing the page or devtools
-		if ( nwWindow.tray ) {
-			nwWindow.tray.remove();
-		}
-	}, false );
+	nwWindow.removeAllListeners();
 
 
 	var isHidden    = true;
