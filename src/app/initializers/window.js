@@ -144,7 +144,8 @@ define([
 
 	Ember.Application.instanceInitializer({
 		name: "window",
-		after: [ "ember-data", "nwjs" ],
+		before: [ "nwjs" ],
+		after: [ "ember-data" ],
 
 		initialize: function( application ) {
 			var store = application.lookup( "service:store" );
