@@ -1,5 +1,8 @@
 define( [ "Ember" ], function( Ember ) {
 
+	var get = Ember.get;
+	var set = Ember.set;
+
 	var Router = Ember.Router.extend();
 
 	Router.map(function() {
@@ -35,6 +38,19 @@ define( [ "Ember" ], function( Ember ) {
 		this.route( "about" );
 
 	});
+
+
+	Router.reopen({
+		lastRouteName: "index",
+
+		_updateLastRouteName: function() {
+			var routeName = get( this, "currentRouteName" );
+			if ( routeName && routeName !== "loading" && routeName !== "error" ) {
+				set( this, "lastRouteName", routeName );
+			}
+		}.on( "willTransition" )
+	});
+
 
 	return Router;
 

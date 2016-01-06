@@ -86,8 +86,15 @@ define([
 			},
 
 			"refresh": function() {
-				var routeName = get( this.controller, "currentRouteName" );
-				if ( routeName !== "error" ) {
+				var routeName = get( this.router, "currentRouteName" );
+
+				if ( routeName === "error" ) {
+					routeName = get( this.router, "lastRouteName" );
+					if ( routeName ) {
+						this.transitionTo( routeName );
+					}
+
+				} else {
 					this.container.lookup( "route:" + routeName ).refresh();
 				}
 			},
