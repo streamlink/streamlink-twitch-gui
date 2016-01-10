@@ -33,7 +33,7 @@ Livestreamer Twitch GUI is a [NW.js (formerly Node-Webkit)][NW.js] application, 
 ## When to use
 
 One of the reasons people are having bad viewing experiences on [Twitch.tv][Twitch] is the usage of the flash player on their website. With the current generation of web browsers they sadly almost don't have any other choice but using flash for delivering a simple streaming service. There are some platforms and configurations where flash is causing problems though. These problems are low frame rates when watching streams or videos and also the lack of GPU acceleration leading to high CPU + memory usage which can be a big issue especially for mobile desktop devices.  
-With Livestreamer Twitch GUI you're not dependent on your browser and flash, so less resources are needed. Also all streams can be watched in the video player of your choice, enabling a smooth video playback.  
+With Livestreamer Twitch GUI you're not dependent on your browser and flash, so fewer resources are needed. Also all streams can be watched in the video player of your choice, enabling a smooth video playback.  
 Please have in mind, that by using this application you're bypassing any ads run by Twitch (adblock users also do). If you want to support [Twitch][Twitch] or a single broadcaster, please consider buying [Twitch Turbo][TwitchTurbo] or subscribing to the broadcaster's channel. Thank you!
 
 
