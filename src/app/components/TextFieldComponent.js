@@ -9,6 +9,10 @@ define([
 ) {
 
 	return Ember.TextField.extend({
+		attributeBindings: [ "autoselect:data-selectable" ],
+
+		autoselect: false,
+
 		contextMenu: function( event ) {
 			if ( this.attrs.noContextmenu ) { return; }
 
@@ -44,6 +48,12 @@ define([
 			]);
 
 			menu.popup( event.originalEvent.x, event.originalEvent.y );
+		},
+
+		focusIn: function() {
+			if ( !this.attrs.autofocus || !this.attrs.autoselect ) { return; }
+
+			this.element.setSelectionRange( 0, this.element.value.length );
 		}
 	});
 

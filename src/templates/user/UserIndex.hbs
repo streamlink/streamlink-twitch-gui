@@ -8,7 +8,7 @@
 <footer>
 {{#if showTokenForm}}
 <div class="input-group token-form">
-<input type="text" class="form-control" data-selectable readonly autofocus value="{{auth.session.access_token}}" title="Your access token">
+{{input classNames="form-control" readonly=true autofocus=true autoselect=true value=auth.session.access_token title="Your access token"}}
 <span class="input-group-btn">
 {{form-button action="copyToken" icon="fa-copy" iconanim=true title="Copy to clipboard"}}
 </span>
