@@ -35,7 +35,7 @@ define([
 				},
 				{
 					label  : "Paste",
-					enabled: clip && clip.length,
+					enabled: !element.readOnly && !element.disabled && clip && clip.length,
 					click  : function() {
 						var value  = element.value;
 						var before = value.substr( 0, element.selectionStart );
