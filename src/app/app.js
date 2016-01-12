@@ -211,6 +211,7 @@ define(function( require ) {
 		HeadlineTotalsComponent: require( "components/HeadlineTotalsComponent" ),
 		ChannelPanelsComponent: require( "components/ChannelPanelsComponent" ),
 		PanelItemComponent: require( "components/PanelItemComponent" ),
+		SelectableTextComponent: require( "components/SelectableTextComponent" ),
 
 
 		// Content

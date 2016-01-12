@@ -1,5 +1,5 @@
-<ul class="list-unstyled" data-selectable>
+{{#selectable-text tagName="ul" class="list-unstyled"}}
 {{#each log as |line|}}
 <li class="{{if (is-equal line.type 'stdErr') 'error'}}">{{line.line}}</li>
 {{/each}}
-</ul>
+{{/selectable-text}}
