@@ -111,6 +111,7 @@ define(function( require ) {
 		// Ember additions/changes/fixes
 		BooleanTransform: require( "store/BooleanTransform" ),
 		LinkComponent: require( "components/LinkComponent" ),
+		TextFieldComponent: require( "components/TextFieldComponent" ),
 
 
 		// Helpers
