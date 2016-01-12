@@ -32,8 +32,11 @@ define([
 			});
 		},
 
-		popup: function( x, y ) {
-			this.menu.popup( x, y );
+		popup: function( event ) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+
+			this.menu.popup( event.originalEvent.x, event.originalEvent.y );
 		},
 
 		createMacBuiltin: function( appname, hideEdit, hideWindow ) {

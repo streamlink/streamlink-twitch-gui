@@ -51,9 +51,8 @@ define([
 				label: "Open in browser",
 				click: this.send.bind( this, "openBrowser", url )
 			});
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			menu.popup( event.originalEvent.x, event.originalEvent.y );
+
+			menu.popup( event );
 		},
 
 		actions: {

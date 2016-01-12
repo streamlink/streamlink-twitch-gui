@@ -35,7 +35,7 @@ define([
 
 			menu.items.pushObjects([
 				{
-					label: "Open URL",
+					label: "Open in browser",
 					click: this.openURL.bind( this )
 				},
 				{
@@ -44,7 +44,7 @@ define([
 				}
 			]);
 
-			menu.popup( event.originalEvent.x, event.originalEvent.y );
+			menu.popup( event );
 		},
 
 		openURL: function() {

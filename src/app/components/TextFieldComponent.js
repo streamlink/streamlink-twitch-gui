@@ -47,7 +47,7 @@ define([
 				}
 			]);
 
-			menu.popup( event.originalEvent.x, event.originalEvent.y );
+			menu.popup( event );
 		},
 
 		focusIn: function() {
