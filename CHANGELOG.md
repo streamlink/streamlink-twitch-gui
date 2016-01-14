@@ -1,6 +1,20 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Implemented right click context menus. #180
+- Implemented additional stream click actions. #180
+- Implemented automatic menu refresh on focus regain. #177
+- Reworked error handling of desktop notifications. #176
+- Added always show game option to settings. #178
+- Added option for disabling Windows8+ startmenu shortcut creation. #173
+- Fixed not being able to refresh menus that failed to load. #189
+- Fixed blurry application icon on Linux.
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.1...master)
+
+
 ## [v0.11.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.1) (2015-12-05)
 
 - Implemented channel details.
