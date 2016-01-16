@@ -82,10 +82,11 @@ define([
 		toString: function() { return "Settings"; },
 
 		qualities: [
-			{ id: 0, label: "Source", quality: "source,best" },
-			{ id: 1, label: "High",   quality: "high,mobile_high,best" },
-			{ id: 2, label: "Medium", quality: "medium,mobile_medium,worst" },
-			{ id: 3, label: "Low",    quality: "low,mobile_mobile,worst" }
+			{ id: 0, label: "Source",     quality: "source,best" },
+			{ id: 1, label: "High",       quality: "high,mobile_high,best" },
+			{ id: 2, label: "Medium",     quality: "medium,mobile_medium,worst" },
+			{ id: 3, label: "Low",        quality: "low,mobile_mobile,worst" },
+			{ id: 4, label: "Audio only", quality: "audio" }
 		],
 
 		passthrough: [
