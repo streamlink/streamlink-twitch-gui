@@ -52,6 +52,15 @@ define(function() {
 		};
 
 
+		var icon = document.createElement( "i" );
+		icon.classList.add( "fa" );
+		icon.classList.add( "fa-arrows-alt" );
+		icon.classList.add( "middleclick-scroll-icon" );
+
+		var isMiddleClickScrolling = false;
+		var isLinux = navigator.platform.indexOf( "Linux" ) !== -1;
+
+
 		/************************************************
 		 * SCROLLING
 		 ************************************************/
@@ -168,7 +177,7 @@ define(function() {
 		 * Mouse wheel handler.
 		 * @param {Object} event
 		 */
-		function wheel(event) {
+		function onMousewheel(event) {
 			if (event.defaultPrevented) {
 				return;
 			}
@@ -207,7 +216,7 @@ define(function() {
 		 * Keydown event handler.
 		 * @param {Object} event
 		 */
-		function keydown(event) {
+		function onKeydown(event) {
 			var target   = event.target;
 			var modifier = event.ctrlKey
 				|| event.altKey
@@ -273,6 +282,109 @@ define(function() {
 		}
 
 
+		/**
+		 * Shows the reference image, and binds event listeners for scrolling.
+		 * It also manages the animation.
+		 * @param {Object} e
+		 */
+		function onMousedown( e ) {
+			if ( isMiddleClickScrolling ) {
+				return;
+			}
+
+			var elem = e.target;
+
+			// watch for middle clicks only
+			if ( e.button !== 1 ) {
+				return;
+			}
+
+			// linux middle mouse shouldn't be overwritten (paste)
+			if ( isLinux && ( elem.tagName === "INPUT" || elem.tagName === "TEXTAREA" ) ) {
+				return;
+			}
+
+			do {
+				if (
+					// ignore anchors
+					   elem.tagName === "A"
+					// ignore "no-middleclick-scroll" data attributes
+					|| elem.parentNode && elem.dataset.noMiddleclickScroll
+				) {
+					e.preventDefault();
+					return;
+				}
+			} while ( ( elem = elem.parentNode ) );
+
+			elem = overflowingAncestor( e.target );
+			// only apply to scrollable regions
+			if ( !elem || elem.clientHeight === elem.scrollHeight ) {
+				return;
+			}
+
+			// we don't want the default by now
+			e.preventDefault();
+
+			// set up a new scrolling phase
+			isMiddleClickScrolling = true;
+
+			// reference point
+			icon.style.left = e.clientX + "px";
+			icon.style.top  = e.clientY + "px";
+			document.body.appendChild( icon );
+
+			var refereceX = e.clientX;
+			var refereceY = e.clientY;
+
+			var speedX = 0;
+			var speedY = 0;
+
+			// animation loop
+			var last = +new Date();
+			var finished = false;
+
+			function step( time ) {
+				var now = time || +new Date();
+				var elapsed = now - last;
+				elem.scrollLeft += ( speedX * elapsed ) >> 0;
+				elem.scrollTop  += ( speedY * elapsed ) >> 0;
+				last = now;
+				if ( !finished ) {
+					requestAnimationFrame( step );
+				}
+			}
+			requestAnimationFrame( step );
+
+			var first = true;
+
+			function mousemove( e ) {
+				var deltaX = Math.abs( refereceX - e.clientX );
+				var deltaY = Math.abs( refereceY - e.clientY );
+				var movedEnough = Math.max( deltaX, deltaY ) > 10;
+				if ( first && movedEnough ) {
+					window.addEventListener( "mouseup", remove, false );
+					first = false;
+				}
+				speedX = ( e.clientX - refereceX ) * 10 / 1000;
+				speedY = ( e.clientY - refereceY ) * 10 / 1000;
+			}
+
+			function remove() {
+				window.removeEventListener( "mousemove", mousemove, false );
+				window.removeEventListener( "mousedown", remove, false );
+				window.removeEventListener( "mouseup", remove, false );
+				window.removeEventListener( "keydown", remove, false );
+				document.body.removeChild( icon );
+				isMiddleClickScrolling = false;
+				finished = true;
+			}
+
+			window.addEventListener( "mousemove", mousemove, false );
+			window.addEventListener( "mousedown", remove, false );
+			window.addEventListener( "keydown", remove, false );
+		}
+
+
 		/***********************************************
 		 * OVERFLOW
 		 ***********************************************/
@@ -315,14 +427,6 @@ define(function() {
 		/***********************************************
 		 * HELPERS
 		 ***********************************************/
-
-		function addEvent(type, fn, bubble) {
-			window.addEventListener(type, fn, (bubble||false));
-		}
-
-		function removeEvent(type, fn, bubble) {
-			window.removeEventListener(type, fn, (bubble||false));
-		}
 
 		function directionCheck(x, y) {
 			x = (x > 0) ? 1 : -1;
@@ -373,155 +477,12 @@ define(function() {
 			return pulse_(x);
 		}
 
-		addEvent("mousewheel", wheel);
-		addEvent("keydown", keydown);
 
 
-
-		/**
-		 * A module for middle mouse scrolling.
-		 */
-		(function() {
-
-			var defaultOptions = {
-				middleMouse : true
-			};
-
-			var options = Object.create( defaultOptions );
-
-			var icon = document.createElement("i"); // img at the reference point
-			var scrolling = false; // guards one phase
-
-
-			// we check the OS for default middle mouse behavior only!
-			var isLinux = (navigator.platform.indexOf("Linux") !== -1);
-
-
-			/**
-			 * Initializes the image at the reference point.
-			 */
-			icon.classList.add( "fa" );
-			icon.classList.add( "fa-arrows-alt" );
-			var style = icon.style;
-			style.display    = "block";
-			style.position   = "fixed";
-			style.zIndex     = "1000";
-			style.margin     = "0";
-			style.fontSize   = "25px";
-			style.WebkitTextStrokeWidth = "1px";
-			style.WebkitTextStrokeColor = "#000";
-			style.WebkitTextFillColor   = "#fff";
-
-			/**
-			 * Shows the reference image, and binds event listeners for scrolling.
-			 * It also manages the animation.
-			 * @param {Object} e
-			 */
-			function mousedown(e) {
-				var elem = e.target;
-
-				// watch for middle clicks only
-				if ( e.button !== 1 || !options.middleMouse ) {
-					return;
-				}
-
-				// linux middle mouse shouldn't be overwritten (paste)
-				if ( isLinux && ( elem.tagName === "INPUT" || elem.tagName === "TEXTAREA" ) ) {
-					return;
-				}
-
-				do {
-					if (
-						// ignore anchors
-						   elem.tagName === "A"
-						// ignore "no-middleclick-scroll" data attributes
-						|| elem.parentNode && elem.dataset.noMiddleclickScroll
-					) {
-						e.preventDefault();
-						return;
-					}
-				} while ( ( elem = elem.parentNode ) );
-
-				elem = overflowingAncestor( e.target );
-				if ( !elem ) {
-					return;
-				}
-
-				// only apply to scrollable regions
-				if ( elem.clientHeight === elem.scrollHeight ) {
-					return;
-				}
-
-				// we don't want the default by now
-				e.preventDefault();
-
-				// quit if there's an ongoing scrolling
-				if (scrolling) {
-					return;
-				}
-
-				// set up a new scrolling phase
-				scrolling = true;
-
-				// reference point
-				icon.style.left = e.clientX - 10 + "px";
-				icon.style.top  = e.clientY - 10 + "px";
-				document.body.appendChild(icon);
-
-				var refereceX = e.clientX;
-				var refereceY = e.clientY;
-
-				var speedX = 0;
-				var speedY = 0;
-
-				// animation loop
-				var last = +new Date();
-				var finished = false;
-
-				function step( time ) {
-					var now = time || +new Date();
-					var elapsed = now - last;
-					elem.scrollLeft += (speedX * elapsed) >> 0;
-					elem.scrollTop  += (speedY * elapsed) >> 0;
-					last = now;
-					if ( !finished ) {
-						requestAnimationFrame( step );
-					}
-				}
-				requestAnimationFrame( step );
-
-				var first = true;
-
-				function mousemove(e) {
-					var deltaX = Math.abs(refereceX - e.clientX);
-					var deltaY = Math.abs(refereceY - e.clientY);
-					var movedEnough = Math.max(deltaX, deltaY) > 10;
-					if (first && movedEnough) {
-						addEvent("mouseup", remove);
-						first = false;
-					}
-					speedX = (e.clientX - refereceX) * 10 / 1000;
-					speedY = (e.clientY - refereceY) * 10 / 1000;
-				}
-
-				function remove() {
-					removeEvent("mousemove", mousemove);
-					removeEvent("mousedown", remove);
-					removeEvent("mouseup", remove);
-					removeEvent("keydown", remove);
-					document.body.removeChild(icon);
-					scrolling = false;
-					finished  = true;
-				}
-
-				addEvent("mousemove", mousemove);
-				addEvent("mousedown", remove);
-				addEvent("keydown", remove);
-			}
-
-			addEvent("mousedown", mousedown);
-
-		})();
+		// set up event listeners
+		window.addEventListener( "mousewheel", onMousewheel, false );
+		window.addEventListener( "mousedown", onMousedown, false );
+		window.addEventListener( "keydown", onKeydown, false );
 
 	};
 
