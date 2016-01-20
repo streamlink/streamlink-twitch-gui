@@ -42,7 +42,6 @@ define(function() {
 		var initDone  = false;
 		var document = window.document;
 		var root = document.documentElement;
-		var activeElement;
 		var observer;
 
 		var key = {
@@ -67,6 +66,7 @@ define(function() {
 		 */
 		function init() {
 			if ( !document.body || initDone ) { return; }
+			initDone = true;
 
 			var body = document.body;
 			var html = document.documentElement;
@@ -74,10 +74,7 @@ define(function() {
 			var scrollHeight = body.scrollHeight;
 
 			// check compat mode for root element
-			root = (document.compatMode.indexOf("CSS") >= 0) ? html : body;
-			activeElement = body;
-
-			initDone = true;
+			root = document.compatMode.indexOf( "CSS" ) >= 0 ? html : body;
 
 			// Checks if this script is running in a frame
 			if (window.top !== window.self) {
@@ -307,7 +304,7 @@ define(function() {
 			}
 
 			var shift, x = 0, y = 0;
-			var elem = overflowingAncestor(activeElement);
+			var elem = document.querySelector( "main.content" );
 			var clientHeight = !elem || elem === document.body
 				? window.innerHeight
 				: elem.clientHeight;
@@ -348,13 +345,6 @@ define(function() {
 
 			scrollArray(elem, x, y);
 			event.preventDefault();
-		}
-
-		/**
-		 * Mousedown event only for updating activeElement
-		 */
-		function mousedown(event) {
-			activeElement = event.target;
 		}
 
 
@@ -458,7 +448,6 @@ define(function() {
 			return pulse_(x);
 		}
 
-		addEvent("mousedown", mousedown);
 		addEvent("mousewheel", wheel);
 		addEvent("keydown", keydown);
 		addEvent("load", init);
