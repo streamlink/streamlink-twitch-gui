@@ -47,6 +47,7 @@ define(function() {
 		var isFrame = false;
 		var direction = { x: 0, y: 0 };
 		var initDone  = false;
+		var document = window.document;
 		var root = document.documentElement;
 		var activeElement;
 		var observer;
@@ -82,7 +83,6 @@ define(function() {
 		 * Sets up scrolls array, determines if frames are involved.
 		 */
 		function init() {
-			var document = window.document;
 			if ( !document.body || initDone ) { return; }
 
 			var body = document.body;
@@ -234,8 +234,8 @@ define(function() {
 				// scroll left and top
 				if (scrollWindow) {
 					window.scrollBy(scrollX, scrollY);
-				}
-				else {
+
+				} else if ( elem ) {
 					if (scrollX) { elem.scrollLeft += scrollX; }
 					if (scrollY) { elem.scrollTop  += scrollY; }
 				}
