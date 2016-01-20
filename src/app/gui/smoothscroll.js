@@ -37,14 +37,9 @@ define(function() {
 
 
 		// Other Variables
-		var isFrame = false;
+		var document  = window.document;
 		var direction = { x: 0, y: 0 };
-		var initDone  = false;
-		var document = window.document;
-		var root = document.documentElement;
-		var observer;
-
-		var key = {
+		var key       = {
 			left    : 37,
 			up      : 38,
 			right   : 39,
@@ -55,72 +50,6 @@ define(function() {
 			end     : 35,
 			home    : 36
 		};
-
-
-		/***********************************************
-		 * INITIALIZE
-		 ***********************************************/
-
-		/**
-		 * Sets up scrolls array, determines if frames are involved.
-		 */
-		function init() {
-			if ( !document.body || initDone ) { return; }
-			initDone = true;
-
-			var body = document.body;
-			var html = document.documentElement;
-			var windowHeight = window.innerHeight;
-			var scrollHeight = body.scrollHeight;
-
-			// check compat mode for root element
-			root = document.compatMode.indexOf( "CSS" ) >= 0 ? html : body;
-
-			// Checks if this script is running in a frame
-			if (window.top !== window.self) {
-				isFrame = true;
-			}
-
-			/**
-			 * This fixes a bug where the areas left and right to
-			 * the content does not trigger the onmousewheel event
-			 * on some pages. e.g.: html, body { height: 100% }
-			 */
-			else if (scrollHeight > windowHeight &&
-				(body.offsetHeight <= windowHeight ||
-					html.offsetHeight <= windowHeight)) {
-
-				// DOMChange (throttle): fix height
-				var pending = false;
-				var refresh = function () {
-					if (!pending && html.scrollHeight !== document.height) {
-						pending = true; // add a new pending action
-						setTimeout(function () {
-							html.style.height = document.height + "px";
-							pending = false;
-						}, 500); // act rarely to stay fast
-					}
-				};
-				html.style.height = "auto";
-				setTimeout(refresh, 10);
-
-				var config = {
-					attributes: true,
-					childList: true,
-					characterData: false
-				};
-
-				observer = new MutationObserver(refresh);
-				observer.observe(body, config);
-
-				// clearfix
-				if (root.offsetHeight <= windowHeight) {
-					var underlay = document.createElement("div");
-					underlay.style.clear = "both";
-					body.appendChild(underlay);
-				}
-			}
-		}
 
 
 		/************************************************
@@ -242,10 +171,6 @@ define(function() {
 		function wheel(event) {
 			if (event.defaultPrevented) {
 				return;
-			}
-
-			if (!initDone) {
-				init();
 			}
 
 			var target = event.target;
@@ -450,7 +375,6 @@ define(function() {
 
 		addEvent("mousewheel", wheel);
 		addEvent("keydown", keydown);
-		addEvent("load", init);
 
 
 
@@ -596,7 +520,6 @@ define(function() {
 			}
 
 			addEvent("mousedown", mousedown);
-			addEvent("DOMContentLoaded", init);
 
 		})();
 
