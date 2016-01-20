@@ -30,20 +30,13 @@ define(function() {
 			accelerationMax  : 1,
 
 			// Keyboard Settings
-			keyboardSupport: true,
-			arrowScroll    : 50,
-
-			// Other
-			touchpadSupport: true,
-			fixedBackground: true,
-			excluded       : ""
+			arrowScroll: 50
 		};
 
 		var options = Object.create( defaultOptions );
 
 
 		// Other Variables
-		var isExcluded = false;
 		var isFrame = false;
 		var direction = { x: 0, y: 0 };
 		var initDone  = false;
@@ -51,7 +44,6 @@ define(function() {
 		var root = document.documentElement;
 		var activeElement;
 		var observer;
-		var deltaBuffer = [ 120, 120, 120 ];
 
 		var key = {
 			left    : 37,
@@ -71,15 +63,6 @@ define(function() {
 		 ***********************************************/
 
 		/**
-		 * Tests if smooth scrolling is allowed. Shuts down everything if not.
-		 */
-		function initTest() {
-			if (options.keyboardSupport) {
-				addEvent("keydown", keydown);
-			}
-		}
-
-		/**
 		 * Sets up scrolls array, determines if frames are involved.
 		 */
 		function init() {
@@ -94,7 +77,6 @@ define(function() {
 			root = (document.compatMode.indexOf("CSS") >= 0) ? html : body;
 			activeElement = body;
 
-			initTest();
 			initDone = true;
 
 			// Checks if this script is running in a frame
@@ -140,12 +122,6 @@ define(function() {
 					underlay.style.clear = "both";
 					body.appendChild(underlay);
 				}
-			}
-
-			// disable fixed background
-			if (!options.fixedBackground && !isExcluded) {
-				body.style.backgroundAttachment = "scroll";
-				html.style.backgroundAttachment = "scroll";
 			}
 		}
 
@@ -289,11 +265,6 @@ define(function() {
 			// use wheelDelta if deltaX/Y is not available
 			if (!deltaX && !deltaY) {
 				deltaY = event.wheelDelta || 0;
-			}
-
-			// check if it's a touchpad scroll that should be ignored
-			if (!options.touchpadSupport && isTouchpad(deltaY)) {
-				return true;
 			}
 
 			// scale by step size
@@ -449,20 +420,6 @@ define(function() {
 			}
 		}
 
-		function isTouchpad(deltaY) {
-			if (!deltaY) { return; }
-			deltaY = Math.abs(deltaY);
-			deltaBuffer.push(deltaY);
-			deltaBuffer.shift();
-			return !(
-				   deltaBuffer[0] === deltaBuffer[1]
-				&& deltaBuffer[1] === deltaBuffer[2]
-				|| deltaBuffer[0] % 120 === 0
-				&& deltaBuffer[1] % 120 === 0
-				&& deltaBuffer[2] % 120 === 0
-			);
-		}
-
 
 		/***********************************************
 		 * PULSE
@@ -503,6 +460,7 @@ define(function() {
 
 		addEvent("mousedown", mousedown);
 		addEvent("mousewheel", wheel);
+		addEvent("keydown", keydown);
 		addEvent("load", init);
 
 
