@@ -1,45 +1,42 @@
 /*!
- * Smoothscroll
+ * SmoothScroll v1.2.1
  * https://github.com/galambalazs/smoothscroll
- * Slightly modified
+ * Licensed under the terms of the MIT license.
+ *
+ * People involved
+ * - Balazs Galambosi (maintainer)
+ * - Patrick Brunner  (original idea)
+ * - Michael Herf     (Pulse Algorithm)
+ *
+ * modified by Sebastian Meyer
  */
 define(function() {
 
 	return function() {
-		// SmoothScroll v1.2.1
-		// Licensed under the terms of the MIT license.
-
-		// People involved
-		//  - Balazs Galambosi (maintainer)
-		//  - Patrick Brunner  (original idea)
-		//  - Michael Herf     (Pulse Algorithm)
 
 		// Scroll Variables (tweakable)
 		var defaultOptions = {
-
-			// Scrolling Core
-			frameRate        : 60, // [Hz]
-			animationTime    : 400, // [px]
-			stepSize         : 120, // [px]
+			animationTime: 400,
+			stepSize     : 120,
 
 			// Pulse (less tweakable)
 			// ratio of "tail" to "acceleration"
-			pulseAlgorithm   : true,
-			pulseScale       : 4,
-			pulseNormalize   : 1,
+			pulseAlgorithm: true,
+			pulseScale    : 4,
+			pulseNormalize: 1,
 
 			// Acceleration
-			accelerationDelta : 20,  // 20
-			accelerationMax   : 1,   // 1
+			accelerationDelta: 20,
+			accelerationMax  : 1,
 
 			// Keyboard Settings
-			keyboardSupport   : true,  // option
-			arrowScroll       : 50,     // [px]
+			keyboardSupport: true,
+			arrowScroll    : 50,
 
 			// Other
-			touchpadSupport   : true,
-			fixedBackground   : true,
-			excluded          : ""
+			touchpadSupport: true,
+			fixedBackground: true,
+			excluded       : ""
 		};
 
 		var options = Object.create( defaultOptions );
@@ -55,8 +52,17 @@ define(function() {
 		var observer;
 		var deltaBuffer = [ 120, 120, 120 ];
 
-		var key = { left: 37, up: 38, right: 39, down: 40, spacebar: 32,
-			pageup: 33, pagedown: 34, end: 35, home: 36 };
+		var key = {
+			left    : 37,
+			up      : 38,
+			right   : 39,
+			down    : 40,
+			spacebar: 32,
+			pageup  : 33,
+			pagedown: 34,
+			end     : 35,
+			home    : 36
+		};
 
 
 		/***********************************************
@@ -76,8 +82,8 @@ define(function() {
 		 * Sets up scrolls array, determines if frames are involved.
 		 */
 		function init() {
-
-			if (!document.body || initDone) { return; }
+			var document = window.document;
+			if ( !document.body || initDone ) { return; }
 
 			var body = document.body;
 			var html = document.documentElement;
@@ -155,10 +161,8 @@ define(function() {
 		/**
 		 * Pushes scroll actions to the scrolling queue.
 		 */
-		function scrollArray(elem, left, top, delay) {
-
-			delay = delay || 1000;
-			directionCheck(left, top);
+		function scrollArray( elem, left, top ) {
+			directionCheck( left, top );
 
 			if (options.accelerationMax !== 1) {
 				var now = +new Date();
@@ -190,8 +194,7 @@ define(function() {
 
 			var scrollWindow = (elem === document.body);
 
-			var step = function () {
-
+			function step() {
 				var now = +new Date();
 				var scrollX = 0;
 				var scrollY = 0;
@@ -242,15 +245,15 @@ define(function() {
 					que = [];
 				}
 
-				if (que.length) {
-					requestFrame(step, elem, (delay / options.frameRate + 1));
+				if ( que.length ) {
+					requestAnimationFrame( step );
 				} else {
 					pending = false;
 				}
-			};
+			}
 
 			// start a new queue of actions
-			requestFrame(step, elem, 0);
+			requestAnimationFrame( step );
 			pending = true;
 		}
 
@@ -312,23 +315,23 @@ define(function() {
 		 * @param {Object} event
 		 */
 		function keydown(event) {
-
 			var target   = event.target;
-			var modifier = event.ctrlKey || event.altKey || event.metaKey ||
-				(event.shiftKey && event.keyCode !== key.spacebar);
+			var modifier = event.ctrlKey
+				|| event.altKey
+				|| event.metaKey
+				|| event.shiftKey && event.keyCode !== key.spacebar;
 
-			// do nothing if user is editing text
-			// or using a modifier key (except shift)
-			// or in a dropdown
-			if ( /input|textarea|select|embed/i.test(target.nodeName) ||
-				target.isContentEditable ||
-				event.defaultPrevented   ||
-				modifier ) {
-				return true;
-			}
-			// spacebar should trigger button press
-			if (isNodeName(target, "button") &&
-				event.keyCode === key.spacebar) {
+			if (
+				// do nothing if using a modifier key (except shift)
+				// or user is editing text
+				// or in a dropdown
+				   modifier
+				|| event.defaultPrevented
+				|| target.isContentEditable
+				|| /INPUT|TEXTAREA|SELECT/.test( target.tagName )
+				// spacebar should trigger button press
+				|| target.tagName === "BUTTON" && event.keyCode === key.spacebar
+			) {
 				return true;
 			}
 
@@ -435,10 +438,6 @@ define(function() {
 			window.removeEventListener(type, fn, (bubble||false));
 		}
 
-		function isNodeName(el, tag) {
-			return (el.nodeName||"").toLowerCase() === tag.toLowerCase();
-		}
-
 		function directionCheck(x, y) {
 			x = (x > 0) ? 1 : -1;
 			y = (y > 0) ? 1 : -1;
@@ -450,32 +449,19 @@ define(function() {
 			}
 		}
 
-
 		function isTouchpad(deltaY) {
 			if (!deltaY) { return; }
 			deltaY = Math.abs(deltaY);
 			deltaBuffer.push(deltaY);
 			deltaBuffer.shift();
-			var allEquals    = (deltaBuffer[0] === deltaBuffer[1] &&
-				deltaBuffer[1] === deltaBuffer[2]);
-			var allDivisable = (isDivisible(deltaBuffer[0], 120) &&
-				isDivisible(deltaBuffer[1], 120) &&
-				isDivisible(deltaBuffer[2], 120));
-			return !(allEquals || allDivisable);
+			return !(
+				   deltaBuffer[0] === deltaBuffer[1]
+				&& deltaBuffer[1] === deltaBuffer[2]
+				|| deltaBuffer[0] % 120 === 0
+				&& deltaBuffer[1] % 120 === 0
+				&& deltaBuffer[2] % 120 === 0
+			);
 		}
-
-		function isDivisible(n, divisor) {
-			return (Math.floor(n / divisor) === n / divisor);
-		}
-
-
-		var requestFrame = (function () {
-			return  window.requestAnimationFrame ||
-				window.webkitRequestAnimationFrame ||
-				function (callback, element, delay) {
-					window.setTimeout(callback, delay || (1000/60));
-				};
-		})();
 
 
 		/***********************************************
@@ -521,19 +507,13 @@ define(function() {
 
 
 
-
-		// SmoothScroll v1.2.1
-		// Licensed under the terms of the MIT license.
-		// Balázs Galambosi (c) 2013
-
 		/**
 		 * A module for middle mouse scrolling.
 		 */
 		(function() {
 
 			var defaultOptions = {
-				middleMouse : true,
-				frameRate   : 60
+				middleMouse : true
 			};
 
 			var options = Object.create( defaultOptions );
@@ -567,7 +547,6 @@ define(function() {
 			 * @param {Object} e
 			 */
 			function mousedown(e) {
-
 				var elem = e.target;
 
 				// watch for middle clicks only
@@ -576,7 +555,7 @@ define(function() {
 				}
 
 				// linux middle mouse shouldn't be overwritten (paste)
-				if ( isLinux && /input|textarea/i.test( elem.nodeName ) ) {
+				if ( isLinux && ( elem.tagName === "INPUT" || elem.tagName === "TEXTAREA" ) ) {
 					return;
 				}
 
@@ -626,19 +605,19 @@ define(function() {
 
 				// animation loop
 				var last = +new Date();
-				var delay = 1000 / options.frameRate;
 				var finished = false;
 
-				requestFrame(function step(time) {
+				function step( time ) {
 					var now = time || +new Date();
 					var elapsed = now - last;
 					elem.scrollLeft += (speedX * elapsed) >> 0;
 					elem.scrollTop  += (speedY * elapsed) >> 0;
 					last = now;
-					if (!finished) {
-						requestFrame(step, elem, delay);
+					if ( !finished ) {
+						requestAnimationFrame( step );
 					}
-				}, elem, delay);
+				}
+				requestAnimationFrame( step );
 
 				var first = true;
 
