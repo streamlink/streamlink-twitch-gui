@@ -45,7 +45,11 @@ define([
 
 		didInsertElement: function() {
 			guiSelectable();
-			guiSmoothscroll();
+
+			var enableSmoothscroll = get( this, "metadata.config.enable-smoothscroll" );
+			if ( enableSmoothscroll ) {
+				guiSmoothscroll();
+			}
 
 			var controller = this.container.lookup( "controller:application" );
 

@@ -70,6 +70,7 @@
 			"user_subscriptions",
 			"chat_login"
 		],
+		"enable-smoothscroll": true,
 		"image-expiration-time": 60,
 		"language_codes": {
 			"cs":    { "flag": "cz", "lang": "czech" },
