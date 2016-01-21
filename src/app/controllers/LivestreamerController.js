@@ -116,14 +116,22 @@ define([
 			var store   = get( this, "store" );
 			var channel = get( stream, "channel" );
 			var id      = get( channel, "id" );
+			var livestreamer;
 
 			// is the stream already running?
 			if ( store.hasRecordForId( "livestreamer", id ) ) {
-				return set( this, "active", store.recordForId( "livestreamer", id ) );
+				livestreamer = store.recordForId( "livestreamer", id );
+
+				if ( quality !== undefined && get( livestreamer, "quality" ) !== quality ) {
+					set( livestreamer, "quality", quality );
+				}
+
+				set( this, "active", livestreamer );
+				return;
 			}
 
 			// create a new livestreamer object
-			var livestreamer = store.createRecord( "livestreamer", {
+			livestreamer = store.createRecord( "livestreamer", {
 				id          : id,
 				stream      : stream,
 				channel     : channel,
