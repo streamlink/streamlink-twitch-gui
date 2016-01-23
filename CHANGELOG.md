@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.11.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.2) (2016-01-23)
 
 - Implemented right click context menus. #180
 - Implemented additional stream click actions. #180
@@ -14,7 +14,7 @@ Changelog - Livestreamer Twitch GUI
 - Fixed bug causing scrolling to stop working. #196
 - Fixed blurry application icon on Linux.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.1...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.1...v0.11.2)
 
 
 ## [v0.11.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.1) (2015-12-05)
