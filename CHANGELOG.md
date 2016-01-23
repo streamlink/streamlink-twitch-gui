@@ -7,9 +7,11 @@ Changelog - Livestreamer Twitch GUI
 - Implemented additional stream click actions. #180
 - Implemented automatic menu refresh on focus regain. #177
 - Reworked error handling of desktop notifications. #176
+- Added "Audio only" stream quality. #195
 - Added always show game option to settings. #178
 - Added option for disabling Windows8+ startmenu shortcut creation. #173
 - Fixed not being able to refresh menus that failed to load. #189
+- Fixed bug causing scrolling to stop working. #196
 - Fixed blurry application icon on Linux.
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.1...master)
