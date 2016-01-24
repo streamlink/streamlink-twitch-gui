@@ -13,8 +13,8 @@ CHECKNEWVERSIONS=true
 ########
 
 
-DIR=`readlink -f $0`
-HERE=`dirname $DIR`
+DIR=$(readlink -f $0)
+HERE=$(dirname $(find $(dirname $DIR)/../../releases -name livestreamer-twitch-gui -type f -path '*linux*'))
 
 # check for the missing libudev library version
 if [[ ! -z `ldd $HERE/$EXEC | grep "libudev.so.0 => not found"` ]]; then
