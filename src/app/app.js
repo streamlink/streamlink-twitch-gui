@@ -138,6 +138,7 @@ define(function( require ) {
 		MetadataService: require( "services/MetadataService" ),
 		SettingsService: require( "services/SettingsService" ),
 		AuthService: require( "services/AuthService" ),
+		ModalService: require( "services/ModalService" ),
 		NotificationService: require( "services/NotificationService" ),
 		ChatService: require( "services/ChatService" ),
 

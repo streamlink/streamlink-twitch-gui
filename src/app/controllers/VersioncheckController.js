@@ -14,6 +14,7 @@ define([
 
 	return Ember.Controller.extend({
 		metadata: Ember.inject.service(),
+		modal   : Ember.inject.service(),
 
 		config : readOnly( "metadata.config" ),
 		version: readOnly( "metadata.package.version" ),
@@ -59,7 +60,7 @@ define([
 					}
 
 					// show changelog modal dialog
-					self.send( "openModal", "changelog", self );
+					get( self, "modal" ).openModal( "changelog", self );
 
 				}, function() {
 					// no versioncheck record found: first run
@@ -78,7 +79,7 @@ define([
 					set( self, "model", record );
 
 					// show first run modal dialog
-					self.send( "openModal", "firstrun", self );
+					get( self, "modal" ).openModal( "firstrun", self );
 				})
 				.then(function( modalSkipped ) {
 					if ( !modalSkipped ) { return; }
@@ -128,7 +129,7 @@ define([
 			}
 
 			// ask the user what to do
-			this.send( "openModal", "newrelease", this, {
+			get( this, "modal" ).openModal( "newrelease", this, {
 				versionOutdated: getVers( current ),
 				versionLatest  : getVers( latest ),
 				downloadURL    : get( latest, "html_url" )
@@ -137,7 +138,7 @@ define([
 
 		actions: {
 			"close": function() {
-				this.send( "closeModal" );
+				get( this, "modal" ).closeModal();
 				this.checkForNewRelease();
 			},
 
@@ -168,6 +169,7 @@ define([
 			},
 
 			"releaseIgnore": function( success ) {
+				var modal      = get( this, "modal" );
 				var record     = get( this, "model" );
 				var time       = get( this, "time" );
 				var checkagain = +new Date() + time;
@@ -175,7 +177,7 @@ define([
 				record.set( "checkagain", checkagain );
 				record.save()
 					.then( success, function(){} )
-					.then( this.send.bind( this, "closeModal" ) );
+					.then( modal.closeModal.bind( modal ) );
 			}
 		}
 	});

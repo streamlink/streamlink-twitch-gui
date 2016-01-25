@@ -9,18 +9,13 @@ define([
 ) {
 
 	var get = Ember.get;
-	var set = Ember.set;
 	var debounce = Ember.run.debounce;
-	var reModalTemplateName = /^(?:Modal)?(\w)(\w+)(?:Modal)?$/i;
 
-	function fnModalTemplateName( _, a, b ) {
-		return "modal" + a.toUpperCase() + b;
-	}
 
 	return Ember.Route.extend({
 		settings: Ember.inject.service(),
+		modal   : Ember.inject.service(),
 
-		isModalOpened: false,
 
 		init: function() {
 			this._super();
@@ -44,7 +39,7 @@ define([
 				var time  = get( self, "settings.gui_focusrefresh" );
 				if ( !time || !last || last + time > +new Date() ) { return; }
 				// defer the refresh if a modal dialog is opened
-				if ( get( self, "isModalOpened" ) ) {
+				if ( get( self, "modal.isModalOpened" ) ) {
 					defer = true;
 				} else {
 					refresh();
@@ -66,7 +61,7 @@ define([
 
 			function modalObserver() {
 				// the modal dialog has just been closed
-				if ( !get( self, "isModalOpened" ) && defer ) {
+				if ( !get( self, "modal.isModalOpened" ) && defer ) {
 					refresh();
 				}
 				defer = false;
@@ -77,7 +72,7 @@ define([
 			nwWindow.on( "focus", onFocusGain );
 			nwWindow.on( "restore", onFocusGain );
 
-			this.addObserver( "isModalOpened", modalObserver );
+			this.addObserver( "modal.isModalOpened", modalObserver );
 		},
 
 		actions: {
@@ -122,34 +117,6 @@ define([
 
 			"openLivestreamer": function( stream, quality ) {
 				this.controllerFor( "livestreamer" ).startStream( stream, quality );
-			},
-
-			"openModal": function( template, controller, data ) {
-				template = template.replace( reModalTemplateName, fnModalTemplateName );
-
-				if ( typeof controller === "string" ) {
-					controller = this.controllerFor( controller );
-				}
-				if ( controller && data instanceof Object ) {
-					controller.setProperties( data );
-				}
-
-				this.render( template, {
-					into      : "application",
-					outlet    : "modal",
-					controller: controller
-				});
-
-				set( this, "isModalOpened", true );
-			},
-
-			"closeModal": function() {
-				this.disconnectOutlet({
-					parentView: "application",
-					outlet    : "modal"
-				});
-
-				set( this, "isModalOpened", false );
 			}
 		}
 	});

@@ -4,6 +4,7 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 	return Ember.Route.extend({
 		settings: Ember.inject.service(),
+		modal   : Ember.inject.service(),
 
 		disableAutoRefresh: true,
 
@@ -22,7 +23,7 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 					transition.abort();
 
 					// and let the user decide
-					this.send( "openModal", "settings", this.controller, {
+					get( this, "modal" ).openModal( "settings", this.controller, {
 						previousTransition: transition
 					});
 				}

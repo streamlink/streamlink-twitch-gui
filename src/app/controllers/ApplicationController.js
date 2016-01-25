@@ -5,6 +5,7 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
+		modal       : Ember.inject.service(),
 		notification: Ember.inject.service(),
 		settings    : Ember.inject.service(),
 		livestreamer: Ember.inject.controller(),
@@ -43,7 +44,7 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 			"winClose": function() {
 				if ( get( this, "streamsLength" ) ) {
-					this.send( "openModal", "quit", this );
+					get( this, "modal" ).openModal( "quit", this );
 				} else {
 					this.send( "quit" );
 				}

@@ -94,6 +94,7 @@ define([
 	return Ember.Controller.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
+		modal   : Ember.inject.service(),
 		settings: Ember.inject.service(),
 		chat    : Ember.inject.service(),
 
@@ -107,7 +108,7 @@ define([
 
 
 		startStream: function( stream, quality ) {
-			this.send( "openModal", "livestreamer", this, {
+			get( this, "modal" ).openModal( "livestreamer", this, {
 				error : null,
 				active: null,
 				abort : false
@@ -488,11 +489,11 @@ define([
 
 			"abort": function() {
 				set( this, "abort", true );
-				this.send( "closeModal" );
+				get( this, "modal" ).closeModal();
 			},
 
 			"close": function() {
-				this.send( "closeModal" );
+				get( this, "modal" ).closeModal();
 				run.schedule( "destroy", this, function() {
 					set( this, "active", null );
 				});

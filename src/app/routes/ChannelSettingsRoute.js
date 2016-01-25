@@ -3,6 +3,8 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 	var get = Ember.get;
 
 	return Ember.Route.extend({
+		modal: Ember.inject.service(),
+
 		model: function() {
 			var store  = get( this, "store" );
 			var params = this.paramsFor( "channel" );
@@ -36,7 +38,7 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 				if ( get( this, "controller.model.buffer.isDirty" ) ) {
 					transition.abort();
 
-					this.send( "openModal", "settings", this.controller, {
+					get( this, "modal" ).openModal( "settings", this.controller, {
 						previousTransition: transition
 					});
 
