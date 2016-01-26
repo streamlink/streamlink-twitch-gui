@@ -12,11 +12,14 @@ define([ "nwjs/nwGui" ], function( nwGui ) {
 	var isHidden    = true;
 	var isMaximized = false;
 	var isMinimized = false;
+	var isFocused   = true;
 
 	nwWindow.on( "maximize",   function onMaximize()   { isMaximized = true;  } );
 	nwWindow.on( "unmaximize", function onUnmaximize() { isMaximized = false; } );
 	nwWindow.on( "minimize",   function onMinimize()   { isMinimized = true;  } );
 	nwWindow.on( "restore",    function onRestore()    { isMinimized = false; } );
+	nwWindow.on( "focus",      function onFocus()      { isFocused   = true;  } );
+	nwWindow.on( "blur",       function onBlur()       { isFocused   = false; } );
 
 	nwWindow.toggleMaximize = function toggleMaximize( bool ) {
 		if ( bool === undefined ) { bool = isMaximized; }
@@ -47,6 +50,10 @@ define([ "nwjs/nwGui" ], function( nwGui ) {
 				}
 			});
 		}
+	};
+
+	nwWindow.isFocused = function() {
+		return isFocused;
 	};
 
 
