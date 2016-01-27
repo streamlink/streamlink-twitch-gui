@@ -67,11 +67,21 @@ define([
 				}
 			}, false );
 
+
 			// Fix not being able to refresh on OSX by pressing CMD+R. See #203
 			// NW.js < 0.13.0: Ctrl===Command
 			// Register a global hotkey and only refresh if the window is currently focused
-			if ( platform.isDarwin ) {
-				var shortcut = new nwGui.Shortcut({
+			var shortcut;
+
+			function unregisterHotkey() {
+				if ( !shortcut ) { return; }
+				nwGui.App.unregisterGlobalHotKey( shortcut );
+				shortcut = null;
+			}
+
+			function registerHotkey() {
+				unregisterHotkey();
+				shortcut = new nwGui.Shortcut({
 					key: "Ctrl+R",
 					active: function() {
 						if ( !nwWindow.isFocused() ) { return; }
@@ -79,11 +89,13 @@ define([
 					},
 					failed: function() {}
 				});
-
 				nwGui.App.registerGlobalHotKey( shortcut );
-				nwWindow.on( "shutdown", function() {
-					nwGui.App.unregisterGlobalHotKey( shortcut );
-				});
+			}
+
+			if ( platform.isDarwin ) {
+				nwWindow.on( "focus",    registerHotkey );
+				nwWindow.on( "blur",     unregisterHotkey );
+				nwWindow.on( "shutdown", unregisterHotkey );
 			}
 		}
 	});
