@@ -16,9 +16,23 @@ define( [ "Ember" ], function( Ember ) {
 
 			var defer = Promise.defer();
 			var image = new Image();
-			image.addEventListener( "load", defer.resolve, false );
-			image.addEventListener( "error", withError ? defer.reject : defer.resolve, false );
+
+			image.addEventListener( "load", function() {
+				image = null;
+				defer.resolve();
+			}, false );
+
+			image.addEventListener( "error", function() {
+				image = null;
+				if ( withError ) {
+					defer.reject();
+				} else {
+					defer.resolve();
+				}
+			}, false );
+
 			image.src = src;
+
 			return defer.promise;
 		}
 
