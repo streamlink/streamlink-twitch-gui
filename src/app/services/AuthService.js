@@ -1,17 +1,17 @@
 define([
 	"Ember",
 	"nwjs/nwGui",
-	"nwjs/redirect",
-	"nwjs/cookies",
+	"nwjs/nwWindow",
 	"utils/contains",
-	"json!root/oauth"
+	"utils/node/http/Server",
+	"file!root/oauth-redirect.html"
 ], function(
 	Ember,
 	nwGui,
-	redirect,
-	cookies,
+	nwWindow,
 	contains,
-	OAuth
+	HttpServer,
+	OAuthResponseRedirect
 ) {
 
 	var get = Ember.get;
@@ -26,23 +26,26 @@ define([
 		store   : Ember.inject.service(),
 
 		config: alias( "metadata.config" ),
-		scope : alias( "config.twitch-oauth-scope" ),
+		oauth : alias( "config.twitch-oauth" ),
 
 		session: null,
 
-		window: null,
+		server: null,
 
 		url: function() {
-			var baseuri     = get( this, "config.twitch-oauth-base-uri" );
-			var clientid    = get( this, "config.twitch-oauth-client-id" );
-			var redirecturi = get( this, "config.twitch-oauth-redirect-uri" );
-			var scope       = get( this, "scope" );
+			var baseuri     = get( this, "oauth.base-uri" );
+			var clientid    = get( this, "oauth.client-id" );
+			var serverport  = get( this, "oauth.server-port" );
+			var redirecturi = get( this, "oauth.redirect-uri" );
+			var scope       = get( this, "oauth.scope" );
+
+			redirecturi = redirecturi.replace( "{server-port}", String( serverport ) );
 
 			return baseuri
 				.replace( "{client-id}", clientid )
 				.replace( "{redirect-uri}", encodeURIComponent( redirecturi ) )
 				.replace( "{scope}", scope.join( "+" ) );
-		}.property( "config", "scope" ),
+		}.property( "config", "oauth.scope" ),
 
 
 		init: function() {
@@ -78,52 +81,63 @@ define([
 		},
 
 		/**
-		 * Open OAuth window
+		 * Open OAuth url in browser
 		 * @returns {Promise}
 		 */
 		signin: function() {
-			if ( get( this, "window" ) ) {
+			if ( get( this, "server" ) ) {
 				return Promise.reject();
 			}
 
 			var self  = this;
 			var defer = Promise.defer();
 
-			function callback( hash ) {
-				var params = self.parseParams( hash );
+			var port   = get( this, "oauth.server-port" );
+			var server = new HttpServer( port, 1000 );
+			set( self, "server", server );
 
-				self.validateOAuthResponse( params[ "access_token" ], params[ "scope" ] )
-					.then( defer.resolve, defer.reject )
-					.then(function() {
-						self.window.close();
+			server.onRequest( "GET", "/redirect", function( req, res ) {
+				res.end( OAuthResponseRedirect );
+			});
+
+			server.onRequest( "GET", "/token", function( req, res ) {
+				var token = req.url.query.access_token;
+				var scope = req.url.query.scope;
+
+				self.validateOAuthResponse( token, scope )
+					.then(function( data ) {
+						res.end();
+						defer.resolve( data );
+					}, function( err ) {
+						res.statusCode = 500;
+						res.end();
+						defer.reject( err );
 					});
-			}
 
-			function onClosed() {
-				set( self, "window", null );
-				delete window.OAUTH_CALLBACK;
-				cookies.removeAll();
-				defer.reject();
-			}
+				return true;
+			});
 
-			// enable the redirect from https://api.twitch.tv to app://livestreamer-twitch-gui
-			redirect.enable(
-				get( self, "config.twitch-oauth-base-uri" ),
-				get( self, "config.twitch-oauth-redirect-uri" )
-			);
-			cookies.removeAll();
+			// open auth url in web browser
+			var url = get( self, "url" );
+			nwGui.Shell.openExternal( url );
 
-			window.OAUTH_CALLBACK = callback;
+			return defer.promise
+				.then(function( data ) {
+					self.abortSignin();
+					nwWindow.focus();
+					return data;
+				}, function( err ) {
+					self.abortSignin();
+					nwWindow.focus();
+					return Promise.reject( err );
+				});
+		},
 
-			// open window
-			var win = nwGui.Window.open(
-				get( self, "url" ),
-				OAuth.window
-			);
-			win.on( "closed", onClosed );
-			set( self, "window", win );
-
-			return defer.promise;
+		abortSignin: function() {
+			var server = get( this, "server" );
+			if ( !server ) { return; }
+			server.close();
+			set( this, "server", null );
 		},
 
 		/**
@@ -138,7 +152,7 @@ define([
 			    && token.length > 0
 			    && scope
 			    && scope.length > 0
-			    && this.validateScope( scope.split( "+" ) )
+			    && this.validateScope( scope.split( " " ) )
 				? this.login( token, false )
 				: Promise.reject();
 		},
@@ -226,7 +240,7 @@ define([
 		 * @returns {boolean}
 		 */
 		validateScope: function( scope ) {
-			var expected = get( this, "scope" );
+			var expected = get( this, "oauth.scope" );
 
 			return scope instanceof Array
 			    && contains.all.apply( scope, expected );
@@ -272,15 +286,6 @@ define([
 			}
 
 			set( adapter, "access_token", token );
-		},
-
-		parseParams: function( str ) {
-			return String( str || "" ).split( "&" )
-				.reduce(function( obj, elem ) {
-					var split = elem.split( "=" );
-					obj[ split.splice( 0, 1 ) ] = split.join( "=" );
-					return obj;
-				}, {} );
 		}
 	});
 

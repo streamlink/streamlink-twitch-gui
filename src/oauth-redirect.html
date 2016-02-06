@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<title>Authentication</title>
+<style>html{width:100%;background:#fff;color:#222}body{width:28em;margin:5em auto}h2,p{text-align:center}body>p{display:none}em{padding:0 .2em;background:#f2f2f2}</style>
+</head>
+<body>
+<noscript>
+<h2>JavaScript required!</h2>
+<p>Alternative way:</p>
+<ol>
+<li>Copy the value of the <em>access_token</em> parameter from the URL</li>
+<li>Enable advanced settings at the top of the settings menu</li>
+<li>Go to the login menu and click the <em>Use access token</em> button</li>
+<li>Enter the access token into the input field and log in</li>
+</ol>
+</noscript>
+<p id="validating">Validating... Please wait!</p>
+<p id="success">Authentication successful!</p>
+<p id="failure">Authentication failed!</p>
+<p id="close">This window or tab can be closed now!</p>
+<script>
+(function() {
+function display( id, mode ) {
+	document.getElementById( id ).style.display = mode ? "block" : "none";
+}
+
+var params = String( location.hash ).replace( /^#/, "" );
+if ( /\berror=access_denied\b/.test( location.search ) ) {
+	params = "";
+} else if ( !params || /^(success|failure)$/.test( params ) ) {
+	return display( "close", true );
+}
+display( "validating", true );
+
+var req = new XMLHttpRequest();
+req.open( "GET", "/token?" + params, true );
+req.addEventListener( "readystatechange", function() {
+	if ( req.readyState !== XMLHttpRequest.DONE ) { return; }
+	var str = req.status === 200 ? "success" : "failure";
+	location.replace( location.origin + location.pathname + "#" + str );
+	display( "validating", false );
+	display( str, true );
+	display( "close", true );
+}, false );
+req.send();
+})();
+</script>
+</body>
+</html>
