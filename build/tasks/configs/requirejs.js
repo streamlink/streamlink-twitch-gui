@@ -21,6 +21,9 @@ module.exports = {
 		preserveLicenseComments: true,
 
 		map: {
+			"file": {
+				"file": "../requirejs/plugins/file/file.optimizer"
+			},
 			"json": {
 				"json": "../requirejs/plugins/json/json.optimizer"
 			},
@@ -35,6 +38,7 @@ module.exports = {
 			generateSourceMaps: true,
 
 			paths: {
+				"file": "../requirejs/plugins/file/file.prod",
 				"json": "../requirejs/plugins/json/json.prod",
 				"hbs" : "../requirejs/plugins/hbs/hbs.prod"
 			}
@@ -44,6 +48,7 @@ module.exports = {
 	release: {
 		options: {
 			paths: {
+				"file": "../requirejs/plugins/file/file.prod",
 				"json": "../requirejs/plugins/json/json.prod",
 				"hbs" : "../requirejs/plugins/hbs/hbs.prod",
 

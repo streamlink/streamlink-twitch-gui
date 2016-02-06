@@ -30,6 +30,7 @@ requirejs.config({
 	"paths": {
 		// RequireJS plugins
 		"commonjs": "../requirejs/plugins/commonjs/commonjs",
+		"file"    : "../requirejs/plugins/file/file.dev",
 		"json"    : "../requirejs/plugins/json/json.dev",
 		"hbs"     : "../requirejs/plugins/hbs/hbs.dev",
 
