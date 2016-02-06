@@ -98,17 +98,21 @@ define([
 
 			server.onRequest( "GET", "/redirect", function( req, res ) {
 				res.end( OAuthResponseRedirect );
+				return true;
 			});
 
 			server.onRequest( "GET", "/token", function( req, res ) {
 				var token = req.url.query.access_token;
 				var scope = req.url.query.scope;
 
+				// validate token and scope and keep the request open
 				self.validateOAuthResponse( token, scope )
 					.then(function( data ) {
+						// send 200
 						res.end();
 						defer.resolve( data );
 					}, function( err ) {
+						// send 500
 						res.statusCode = 500;
 						res.end();
 						defer.reject( err );
@@ -121,14 +125,18 @@ define([
 			var url = get( self, "url" );
 			nwGui.Shell.openExternal( url );
 
+			// shut down server and focus the application window when done
+			function done() {
+				self.abortSignin();
+				nwWindow.focus();
+			}
+
 			return defer.promise
 				.then(function( data ) {
-					self.abortSignin();
-					nwWindow.focus();
+					done();
 					return data;
 				}, function( err ) {
-					self.abortSignin();
-					nwWindow.focus();
+					done();
 					return Promise.reject( err );
 				});
 		},
