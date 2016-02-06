@@ -1,13 +1,13 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.12.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.12.0) (2016-02-06)
 
 - Re-implemented the authentication system. #209
 - Improved desktop notification failure detection.
 - Fixed OSX cmd+r refresh shortcut. #203
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.2...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.2...v0.12.0)
 
 
 ## [v0.11.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.2) (2016-01-23)
