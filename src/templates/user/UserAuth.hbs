@@ -1,6 +1,10 @@
 <main class="content content-user content-user-auth">
 <div class="bigicon"><i class="fa fa-user"></i></div>
+{{#if isLoggingIn}}
+{{#form-button action="abort" class="btn-danger" icon="fa-times"}}Abort{{/form-button}}
+{{else}}
 {{#form-button action="signin" class="btn-signin" icon="fa-sign-in" disabled=hasUserInteraction}}Sign in{{/form-button}}
+{{/if}}
 <footer>
 {{#if settings.advanced}}
 {{#if showTokenForm}}

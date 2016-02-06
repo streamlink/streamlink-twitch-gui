@@ -17,10 +17,7 @@ define( [ "Ember" ], function( Ember ) {
 
 		actions: {
 			willTransition: function() {
-				var win = get( this, "auth.window" );
-				if ( win ) {
-					win.close();
-				}
+				this.controller.send( "abort" );
 				this.controller.resetProperties();
 			}
 		}
