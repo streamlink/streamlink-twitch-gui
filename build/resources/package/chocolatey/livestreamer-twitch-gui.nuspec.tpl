@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>livestreamer-twitch-gui</id>
-    <title><%= name %> (Install)</title>
+    <title><%= name %></title>
     <version><%= version %></version>
     <authors><%= author %></authors>
     <owners>Sebastian Meyer, Scott Walters</owners>
@@ -29,13 +29,16 @@ Example: `choco uninstall livestreamer-twitch-gui -y -params '"/Purge"'`
   [Chromium]: https://www.chromium.org/ "Chromium"
     </description>
     <projectUrl><%= homepage %></projectUrl>
+    <packageSourceUrl>https://github.com/bastimeyer/livestreamer-twitch-gui</packageSourceUrl>
     <tags>livestreamer twitch gui streaming</tags>
     <copyright>Sebastian Meyer</copyright>
     <licenseUrl>https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/LICENSE</licenseUrl>
+    <docsUrl>https://github.com/bastimeyer/livestreamer-twitch-gui/wiki</docsUrl>
+    <bugTrackerUrl>https://github.com/bastimeyer/livestreamer-twitch-gui/issues</bugTrackerUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/bastimeyer/livestreamer-twitch-gui/master/src/img/icon-256.png</iconUrl>
     <dependencies>
-      <dependency id="livestreamer" />
+      <dependency id="livestreamer" version="1.12.2"/>
     </dependencies>
     <releaseNotes><%= releaseNotes %></releaseNotes>
   </metadata>
