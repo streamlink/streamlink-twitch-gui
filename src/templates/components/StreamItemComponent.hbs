@@ -9,7 +9,7 @@
 	clickable=(bool-not expanded)
 	tagName="section"
 	class=(if expanded "expanded")
-	title=(unless expanded channel.status "")
+	title=(unless expanded (if channel.status channel.status "") "")
 	action=(action "collapse")}}
 <footer class="{{if _showGame 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
 {{#if _showGame}}
