@@ -64,6 +64,12 @@ define(function() {
 	var kParsers = Object.keys( parsers );
 
 	function parseString( string ) {
+		if ( typeof string !== "string" ) {
+			string = string instanceof Object
+				? string.toString()
+				: "";
+		}
+
 		var texts = [ string ];
 		var links = [];
 

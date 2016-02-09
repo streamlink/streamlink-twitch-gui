@@ -10,6 +10,39 @@ define( [ "utils/linkparser" ], function( linkparser ) {
 
 		assert.deepEqual(
 			[
+				parseString( undefined ),
+				parseString( null ),
+				parseString( false ),
+				parseString( true ),
+				parseString( {} )
+			],
+			[
+				{
+					texts: [ "" ],
+					links: []
+				},
+				{
+					texts: [ "" ],
+					links: []
+				},
+				{
+					texts: [ "" ],
+					links: []
+				},
+				{
+					texts: [ "" ],
+					links: []
+				},
+				{
+					texts: [ "[object Object]" ],
+					links: []
+				}
+			],
+			"Unexpected values"
+		);
+
+		assert.deepEqual(
+			[
 				// invalid starting boundary
 				parseString( "foohttps://google.com" ),
 				// invalid ending boundary
