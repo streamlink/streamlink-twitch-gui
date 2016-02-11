@@ -7,9 +7,7 @@
     <authors><%= author %></authors>
     <owners>Sebastian Meyer, Scott Walters</owners>
     <summary>A multi platform Twitch.tv browser for Livestreamer</summary>
-    <description>This app is just a graphical user interface (GUI) on top of the [Livestreamer][Livestreamer] command line interface (CLI).
-
-There are still some features missing at the current stage of development, but the most important ones are working fine.
+    <description>This is just a graphical user interface (GUI) on top of the [Livestreamer][Livestreamer] command line interface (CLI).
 
 Livestreamer Twitch GUI is a [NW.js (formerly Node-Webkit)][NW.js] application, which means that it is a web application written in JavaScript ([EmberJS][EmberJS]), HTML ([Handlebars][Handlebars]) and CSS ([LessCSS][LessCSS]) and is being run by an [io.js][io.js] (fork of [Node.js][Node.js]) powered version of [Chromium][Chromium].
 
