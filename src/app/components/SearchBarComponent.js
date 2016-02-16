@@ -15,7 +15,7 @@ define([
 
 		layout: layout,
 		tagName: "nav",
-		classNames: [ "searchbar" ],
+		classNames: [ "search-bar-component" ],
 
 		// the record array (will be set by init())
 		model: null,
