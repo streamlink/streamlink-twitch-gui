@@ -108,7 +108,7 @@
 
 	.filters {
 		display: flex;
-		font-size: @searchbar-dropdown-fontsize;
+		font-size: @searchbar-dropdown-font-size;
 
 		:first-child {
 			flex: 1;
@@ -139,7 +139,7 @@
 			justify-content: space-between;
 
 			:first-child {
-				font-size: @searchbar-dropdown-fontsize;
+				font-size: @searchbar-dropdown-font-size;
 			}
 
 			> .clear {
@@ -153,13 +153,28 @@
 		}
 
 		ul {
-			margin: .25em 0 0;
+			@margin: .25em;
+			@height: (
+				  @searchbar-dropdown-max-items
+				* @searchbar-dropdown-font-size
+				* @searchbar-dropdown-line-height
+				- 2 * @margin
+			);
+
+			max-height: @height;
+			margin: @margin 0 0;
+			overflow-y: auto;
+
+			&::-webkit-scrollbar-thumb {
+				border-top: 0;
+				border-bottom: 0;
+			}
 		}
 
 		li {
 			display: flex;
-			font-size: @searchbar-dropdown-fontsize;
-			line-height: 1.3;
+			font-size: @searchbar-dropdown-font-size;
+			line-height: @searchbar-dropdown-line-height;
 			cursor: pointer;
 			-webkit-transition: background .2s ease-out;
 

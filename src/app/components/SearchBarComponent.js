@@ -8,10 +8,12 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var readOnly = Ember.computed.readOnly;
 	var sort = Ember.computed.sort;
 
 	return Ember.Component.extend({
-		store: Ember.inject.service(),
+		store   : Ember.inject.service(),
+		metadata: Ember.inject.service(),
 
 		layout: layout,
 		tagName: "nav",
@@ -23,7 +25,7 @@ define([
 		content: sort( "model", "sortBy" ),
 		sortBy: [ "date:desc" ],
 
-		numKeepItems: 5,
+		numKeepItems: readOnly( "metadata.config.search-history-size" ),
 		reQuery: /^[a-z0-9]{3,}/i,
 		reChannelURL: /^(?:https?:\/\/)?(?:\w+\.)*twitch\.tv\/(.+)$/,
 

@@ -73,6 +73,7 @@
 				"chat_login"
 			]
 		},
+		"search-history-size": 50,
 		"enable-smoothscroll": true,
 		"image-expiration-time": 60,
 		"language_codes": {
