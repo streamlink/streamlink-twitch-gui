@@ -47,8 +47,8 @@ define([
 		}.property( "userStatus" ),
 
 		isLoggingIn: function() {
-			return get( this, "userStatus" ) === 1;
-		}.property( "userStatus" ),
+			return get( this, "loginStatus" ) === 1;
+		}.property( "loginStatus" ),
 
 		hasLoginResult: function() {
 			var userStatus = get( this, "userStatus" );
