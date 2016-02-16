@@ -179,6 +179,7 @@
 			"chatty": {
 				"args": "-jar \"{chatty}\"",
 				"chatty-args": "-connect -single -user \"{user}\" -token \"{token}\" -channel \"{channel}\"",
+				"chatty-args-noauth": "-connect -single -channel \"{channel}\"",
 				"chatty-fallback": "chatty",
 				"exec": {
 					"win32": "javaw",

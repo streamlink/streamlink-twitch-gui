@@ -194,18 +194,20 @@ define([
 
 
 		_openChatty: function( chatty, channel ) {
+			var isLoggedIn = get( this, "auth.session.isLoggedIn" );
 			var token      = get( this, "auth.session.access_token" );
 			var user       = get( this, "auth.session.user_name" );
 			var data       = get( this, "chatMethods.chatty" );
 			var javaArgs   = data[ "args" ];
 			var javaExec   = data[ "exec" ][ platformName ];
 			var fbPaths    = data[ "fallback" ][ platformName ];
-			var chattyArgs = data[ "chatty-args" ];
 			var chattyFb   = data[ "chatty-fallback" ];
 
 			// object containing all the required data
 			var obj = {
-				args   : chattyArgs,
+				args   : isLoggedIn
+					? data[ "chatty-args" ]
+					: data[ "chatty-args-noauth" ],
 				chatty : chatty,
 				user   : user,
 				token  : token,
@@ -217,21 +219,31 @@ define([
 			];
 			// custom parameter substitutions
 			var substitutions = [
-				new Substitution( "user", "user" ),
-				new Substitution( "token", "token" ),
 				new Substitution( "channel", "channel" )
 			];
+
+			if ( isLoggedIn ) {
+				substitutions.push(
+					new Substitution( "user", "user" ),
+					new Substitution( "token", "token" )
+				);
+			}
+
+			function launchChatty( exec ) {
+				var params = Parameter.getParameters( obj, parameters, substitutions );
+				return launch( exec, params );
+			}
 
 			// if no chatty jar has been set
 			if ( !chatty || !chatty.trim().length ) {
 				// check for chatty startscript in $PATH
 				return which( chattyFb, checkExec )
-					.then(function() {
-						var params = Parameter.getParameters( obj, parameters, substitutions );
-						return launch( chattyFb, params );
+					.then(function( exec ) {
+						return launchChatty( exec );
 					});
 			}
 
+			// validate java executable
 			return which( javaExec, checkExec )
 				.catch(function() {
 					// java executable fallback paths
@@ -256,8 +268,7 @@ define([
 					obj.args = javaArgs + " " + obj.args;
 					substitutions.push( new Substitution( "chatty", "chatty" ) );
 
-					var params = Parameter.getParameters( obj, parameters, substitutions );
-					return launch( exec, params );
+					return launchChatty( exec );
 				});
 		},
 
