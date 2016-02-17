@@ -1,48 +1,40 @@
 define( [ "Ember" ], function( Ember ) {
 
-	var set = Ember.set;
+	var setProperties = Ember.setProperties;
+	var notEmpty = Ember.computed.notEmpty;
 
-	var reModalTemplateName = /^(?:Modal)?(\w)(\w+)(?:Modal)?$/i;
+	var reModalName = /[A-Z]/g;
 
-	function fnModalTemplateName( _, a, b ) {
-		return "modal" + a.toUpperCase() + b;
+	function fnModalName( a ) {
+		return "-" + a.toLowerCase();
 	}
 
 
 	return Ember.Service.extend({
-		isModalOpened: false,
+		modal  : null,
+		context: null,
+
+		isModalOpened: notEmpty( "modal" ),
 
 
-		init: function() {
-			this.applicationRoute = this.container.lookup( "route:application" );
-		},
+		openModal: function( modal, context, data ) {
+			modal = "modal-" + modal.replace( reModalName, fnModalName );
 
-		openModal: function( template, controller, data ) {
-			template = template.replace( reModalTemplateName, fnModalTemplateName );
-
-			if ( typeof controller === "string" ) {
-				controller = this.container.lookup( "controller:" + controller );
-			}
-			if ( controller && data instanceof Object ) {
-				controller.setProperties( data );
+			if ( context && data ) {
+				setProperties( context, data );
 			}
 
-			this.applicationRoute.render( template, {
-				into      : "application",
-				outlet    : "modal",
-				controller: controller
+			setProperties( this, {
+				modal  : modal,
+				context: context || null
 			});
-
-			set( this, "isModalOpened", true );
 		},
 
 		closeModal: function() {
-			this.applicationRoute.disconnectOutlet({
-				parentView: "application",
-				outlet    : "modal"
+			setProperties( this, {
+				modal  : null,
+				context: null
 			});
-
-			set( this, "isModalOpened", false );
 		}
 	});
 

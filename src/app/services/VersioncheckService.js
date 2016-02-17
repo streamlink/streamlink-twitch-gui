@@ -12,7 +12,9 @@ define([
 	var set = Ember.set;
 	var readOnly = Ember.computed.readOnly;
 
-	return Ember.Controller.extend({
+
+	return Ember.Service.extend({
+		store   : Ember.inject.service(),
 		metadata: Ember.inject.service(),
 		modal   : Ember.inject.service(),
 
@@ -86,7 +88,7 @@ define([
 					// go on with new version check if no modal has been opened
 					self.checkForNewRelease();
 				});
-		}.on( "init" ),
+		},
 
 
 		checkForNewRelease: function() {
@@ -136,49 +138,14 @@ define([
 			});
 		},
 
-		actions: {
-			"close": function() {
-				get( this, "modal" ).closeModal();
-				this.checkForNewRelease();
-			},
+		ignore: function() {
+			var record     = get( this, "model" );
+			var time       = get( this, "time" );
+			var checkagain = +new Date() + time;
 
-			"gotoSettings": function() {
-				this.send( "goto", "settings" );
-				this.send( "close" );
-			},
+			record.set( "checkagain", checkagain );
 
-			"showChangelog": function( success ) {
-				var version = get( this, "version" );
-				var url = get( this, "config.changelog-url" );
-				if ( url ) {
-					url = url.replace( "{version}", version );
-					this.send( "openBrowser", url );
-					if ( success instanceof Function ) {
-						success();
-					}
-				}
-			},
-
-			"releaseDownload": function( success ) {
-				var url = get( this, "downloadURL" );
-				this.send( "openBrowser", url );
-				this.send( "releaseIgnore" );
-				if ( success instanceof Function ) {
-					success();
-				}
-			},
-
-			"releaseIgnore": function( success ) {
-				var modal      = get( this, "modal" );
-				var record     = get( this, "model" );
-				var time       = get( this, "time" );
-				var checkagain = +new Date() + time;
-
-				record.set( "checkagain", checkagain );
-				record.save()
-					.then( success, function(){} )
-					.then( modal.closeModal.bind( modal ) );
-			}
+			return record.save();
 		}
 	});
 

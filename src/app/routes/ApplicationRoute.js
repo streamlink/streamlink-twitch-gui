@@ -13,13 +13,15 @@ define([
 
 
 	return Ember.Route.extend({
-		settings: Ember.inject.service(),
-		modal   : Ember.inject.service(),
+		settings    : Ember.inject.service(),
+		modal       : Ember.inject.service(),
+		versioncheck: Ember.inject.service(),
+		livestreamer: Ember.inject.service(),
 
 
 		init: function() {
 			this._super();
-			this.controllerFor( "versioncheck" );
+			get( this, "versioncheck" ).check();
 			this.setupFocusRefresh();
 		},
 
@@ -75,6 +77,7 @@ define([
 			this.addObserver( "modal.isModalOpened", modalObserver );
 		},
 
+
 		actions: {
 			"history": function( action ) {
 				window.history.go( +action );
@@ -116,7 +119,7 @@ define([
 			},
 
 			"openLivestreamer": function( stream, quality ) {
-				this.controllerFor( "livestreamer" ).startStream( stream, quality );
+				get( this, "livestreamer" ).startStream( stream, quality );
 			}
 		}
 	});

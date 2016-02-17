@@ -1,6 +1,13 @@
-define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
+define([
+	"Ember",
+	"utils/ember/ObjectBuffer"
+], function(
+	Ember,
+	ObjectBuffer
+) {
 
 	var get = Ember.get;
+
 
 	return Ember.Route.extend({
 		modal: Ember.inject.service(),
@@ -35,17 +42,19 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 		actions: {
 			willTransition: function( transition ) {
-				if ( get( this, "controller.model.buffer.isDirty" ) ) {
-					transition.abort();
-
-					get( this, "modal" ).openModal( "settings", this.controller, {
-						previousTransition: transition
-					});
-
-				} else {
+				// check whether the user has changed any values
+				if ( !get( this, "controller.model.buffer.isDirty" ) ) {
 					// don't keep the channelSettings records in cache
-					get( this, "store" ).unloadAll( "channelSettings" );
+					return get( this, "store" ).unloadAll( "channelSettings" );
 				}
+
+				// stay here...
+				transition.abort();
+
+				// and let the user decide
+				get( this, "modal" ).openModal( "confirm", this.controller, {
+					previousTransition: transition
+				});
 			}
 		}
 	});

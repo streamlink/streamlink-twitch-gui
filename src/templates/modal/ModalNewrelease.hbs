@@ -1,12 +1,12 @@
-{{#modal-dialog class="modal-newrelease"}}
+<div>
 	{{#modal-header}}
-		You're using an outdated version: {{versionOutdated}}
+		You're using an outdated version: {{outdated}}
 	{{/modal-header}}
 	{{#modal-body}}
-		Do you want to download the latest release now? ({{versionLatest}})
+		Do you want to download the latest release now? ({{latest}})
 	{{/modal-body}}
 	{{#modal-footer}}
-		{{#form-button action="releaseDownload" class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
-		{{#form-button action="releaseIgnore"   class="btn-danger"  icon="fa-times"                 }}Ignore{{/form-button}}
+		{{#form-button action="download" class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
+		{{#form-button action="ignore"   class="btn-danger"  icon="fa-times"                 }}Ignore{{/form-button}}
 	{{/modal-footer}}
-{{/modal-dialog}}
+</div>

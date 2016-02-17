@@ -6,16 +6,18 @@ define([
 	layout
 ) {
 
-	var or = Ember.computed.or;
+	var get = Ember.get;
+
 
 	return Ember.Component.extend({
+		modal: Ember.inject.service(),
+
 		layout: layout,
 
 		tagName: "section",
 		classNameBindings: [ ":modal-dialog-component", "class" ],
 
-		head: or( "context.modalHead", "context.head" ),
-		body: or( "context.modalBody", "context.body" ),
+		"class": "",
 
 		/*
 		 * This will be called synchronously, so we need to copy the element and animate it instead
@@ -25,6 +27,13 @@ define([
 			var $clone = $this.clone().addClass( "fadeOut" );
 			$this.parent().append( $clone );
 			$clone.one( "webkitAnimationEnd", function() { $clone.remove(); });
+		},
+
+
+		actions: {
+			"close": function() {
+				get( this, "modal" ).closeModal();
+			}
 		}
 	});
 
