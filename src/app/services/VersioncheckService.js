@@ -127,7 +127,7 @@ define([
 
 			// no new release? check again in a few days
 			if ( current === latest || getVers( current ) === getVers( latest ) ) {
-				return this.send( "releaseIgnore" );
+				return this.ignore();
 			}
 
 			// ask the user what to do
