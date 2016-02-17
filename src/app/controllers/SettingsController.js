@@ -22,6 +22,7 @@ define([
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
+		modal   : Ember.inject.service(),
 
 		platform : platform,
 
@@ -115,27 +116,29 @@ define([
 
 		actions: {
 			"apply": function( success, failure ) {
+				var modal  = get( this, "modal" );
 				var model  = get( this, "settings.content" );
 				var buffer = get( this, "model" ).applyChanges().getContent();
 				model.setProperties( buffer );
 				model.save()
 					.then( success, failure )
-					.then( this.send.bind( this, "closeModal" ) )
+					.then( modal.closeModal.bind( modal ) )
 					.then( this.retryTransition.bind( this ) )
 					.catch( model.rollbackAttributes.bind( model ) );
 			},
 
 			"discard": function( success ) {
+				var modal = get( this, "modal" );
 				get( this, "model" ).discardChanges();
 				Promise.resolve()
 					.then( success )
-					.then( this.send.bind( this, "closeModal" ) )
+					.then( modal.closeModal.bind( modal ) )
 					.then( this.retryTransition.bind( this ) );
 			},
 
 			"cancel": function() {
 				set( this, "previousTransition", null );
-				this.send( "closeModal" );
+				get( this, "modal" ).closeModal();
 			},
 
 			"togglePlayerCmdSubstitutions": function() {

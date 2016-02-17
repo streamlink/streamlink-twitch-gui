@@ -8,6 +8,7 @@ define([
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		settings: Ember.inject.service(),
+		modal   : Ember.inject.service(),
 
 		modelObserver: function() {
 			var original = get( this, "model.model" );
@@ -109,26 +110,28 @@ define([
 
 		actions: {
 			"apply": function( success, failure ) {
+				var modal  = get( this, "modal" );
 				var model  = get( this, "model.model" );
 				var buffer = get( this, "model.buffer" ).applyChanges().getContent();
 				this.saveRecord( model, buffer )
 					.then( success, failure )
-					.then( this.send.bind( this, "closeModal" ) )
+					.then( modal.closeModal.bind( modal ) )
 					.then( this.retryTransition.bind( this ) )
 					.catch( model.rollbackAttributes.bind( model ) );
 			},
 
 			"discard": function( success ) {
+				var modal = get( this, "modal" );
 				get( this, "model.buffer" ).discardChanges();
 				Promise.resolve()
 					.then( success )
-					.then( this.send.bind( this, "closeModal" ) )
+					.then( modal.closeModal.bind( modal ) )
 					.then( this.retryTransition.bind( this ) );
 			},
 
 			"cancel": function() {
 				set( this, "previousTransition", null );
-				this.send( "closeModal" );
+				get( this, "modal" ).closeModal();
 			}
 		}
 	});

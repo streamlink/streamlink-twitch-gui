@@ -91,9 +91,10 @@ define([
 	}
 
 
-	return Ember.Controller.extend( ChannelSettingsMixin, {
+	return Ember.Service.extend( ChannelSettingsMixin, {
 		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
+		modal   : Ember.inject.service(),
 		settings: Ember.inject.service(),
 		chat    : Ember.inject.service(),
 
@@ -107,7 +108,7 @@ define([
 
 
 		startStream: function( stream, quality ) {
-			this.send( "openModal", "livestreamer", this, {
+			get( this, "modal" ).openModal( "livestreamer", this, {
 				error : null,
 				active: null,
 				abort : false
@@ -170,12 +171,12 @@ define([
 
 			// automatically close modal on success
 			if ( get( this, "settings.gui_hidestreampopup" ) ) {
-				this.send( "close" );
+				get( this, "modal" ).closeModal();
 			}
 
 			// automatically open chat
 			if ( get( livestreamer, "gui_openchat" ) ) {
-				this.send( "chat", get( livestreamer, "channel" ) );
+				this.openChat( get( livestreamer, "channel" ) );
 			}
 
 			// hide the GUI
@@ -195,7 +196,7 @@ define([
 				   !get( livestreamer, "error" )
 				&& get( this, "active" ) === livestreamer
 			) {
-				this.send( "close" );
+				get( this, "modal" ).closeModal();
 			}
 
 			// restore the GUI
@@ -470,48 +471,10 @@ define([
 			}.bind( this ) );
 		},
 
-
-		actions: {
-			"download": function( success ) {
-				var url = get( this, "metadata.config.livestreamer-download-url" );
-				this.send( "openBrowser", url );
-				if ( success instanceof Function ) {
-					success();
-				}
-			},
-
-			"chat": function( channel ) {
-				var chat = get( this, "chat" );
-				chat.open( channel )
-					.catch(function(){});
-			},
-
-			"abort": function() {
-				set( this, "abort", true );
-				this.send( "closeModal" );
-			},
-
-			"close": function() {
-				this.send( "closeModal" );
-				run.schedule( "destroy", this, function() {
-					set( this, "active", null );
-				});
-			},
-
-			"shutdown": function() {
-				var active = get( this, "active" );
-				if ( active ) {
-					active.kill();
-				}
-				this.send( "close" );
-			},
-
-			"toggleLog": function() {
-				var active = get( this, "active" );
-				if ( active ) {
-					active.toggleProperty( "showLog" );
-				}
-			}
+		openChat: function( channel ) {
+			var chat = get( this, "chat" );
+			chat.open( channel )
+				.catch(function() {});
 		}
 	});
 

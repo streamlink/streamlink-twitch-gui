@@ -1,19 +1,19 @@
-{{#modal-dialog}}
+<div>
 	{{#modal-header}}
 		Are you sure you want to quit?
 	{{/modal-header}}
 	{{#modal-body}}
-		{{#if streamsLength}}
+		{{#if hasStreams}}
 			By choosing shutdown, all streams will be closed, too.
 		{{else}}
 			All streams have been closed. Do you want to quit now?
 		{{/if}}
 	{{/modal-body}}
 	{{#modal-footer}}
-		{{#form-button action="closeModal" class="btn-primary" icon="fa-thumbs-down"}}Return{{/form-button}}
-		{{#if streamsLength}}
-			{{#form-button action="shutdown" class="btn-danger"  icon="fa-power-off"}}Shutdown{{/form-button}}
+		{{#form-button action="close" class="btn-primary" icon="fa-thumbs-down"}}Return{{/form-button}}
+		{{#if hasStreams}}
+			{{#form-button action="shutdown" class="btn-danger" icon="fa-power-off"}}Shutdown{{/form-button}}
 		{{/if}}
 		{{#form-button action="quit" class="btn-success" icon="fa-thumbs-up"}}Quit{{/form-button}}
 	{{/modal-footer}}
-{{/modal-dialog}}
+</div>

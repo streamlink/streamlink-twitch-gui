@@ -12,8 +12,9 @@ define([
 	var set = Ember.set;
 
 	return FormButtonComponent.extend( LanguageFilterMixin, {
-		metadata: Ember.inject.service(),
-		store   : Ember.inject.service(),
+		metadata    : Ember.inject.service(),
+		store       : Ember.inject.service(),
+		livestreamer: Ember.inject.service(),
 
 		"class": "btn-info",
 
@@ -27,7 +28,6 @@ define([
 		followedStreams: false,
 
 		action: "randomStream",
-		openLivestreamer: "openLivestreamer",
 
 		lock: false,
 
@@ -84,7 +84,7 @@ define([
 							stream = get( stream, "stream" );
 						}
 
-						self.sendAction( "openLivestreamer", stream );
+						get( self, "livestreamer" ).startStream( stream );
 						success();
 					})
 					.catch(function(){

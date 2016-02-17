@@ -1,9 +1,17 @@
-define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer ) {
+define([
+	"Ember",
+	"utils/ember/ObjectBuffer"
+], function(
+	Ember,
+	ObjectBuffer
+) {
 
 	var get = Ember.get;
 
+
 	return Ember.Route.extend({
 		settings: Ember.inject.service(),
+		modal   : Ember.inject.service(),
 
 		disableAutoRefresh: true,
 
@@ -16,16 +24,16 @@ define( [ "Ember", "utils/ember/ObjectBuffer" ], function( Ember, ObjectBuffer )
 
 		actions: {
 			willTransition: function( transition ) {
-				// if the user has changed any values
-				if ( get( this.controller, "model.isDirty" ) ) {
-					// stay here...
-					transition.abort();
+				// check whether the user has changed any values
+				if ( !get( this, "controller.model.isDirty" ) ) { return; }
 
-					// and let the user decide
-					this.send( "openModal", "settings", this.controller, {
-						previousTransition: transition
-					});
-				}
+				// stay here...
+				transition.abort();
+
+				// and let the user decide
+				get( this, "modal" ).openModal( "confirm", this.controller, {
+					previousTransition: transition
+				});
 			}
 		}
 	});

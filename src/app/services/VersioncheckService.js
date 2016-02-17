@@ -12,8 +12,11 @@ define([
 	var set = Ember.set;
 	var readOnly = Ember.computed.readOnly;
 
-	return Ember.Controller.extend({
+
+	return Ember.Service.extend({
+		store   : Ember.inject.service(),
 		metadata: Ember.inject.service(),
+		modal   : Ember.inject.service(),
 
 		config : readOnly( "metadata.config" ),
 		version: readOnly( "metadata.package.version" ),
@@ -59,7 +62,7 @@ define([
 					}
 
 					// show changelog modal dialog
-					self.send( "openModal", "changelog", self );
+					get( self, "modal" ).openModal( "changelog", self );
 
 				}, function() {
 					// no versioncheck record found: first run
@@ -78,14 +81,14 @@ define([
 					set( self, "model", record );
 
 					// show first run modal dialog
-					self.send( "openModal", "firstrun", self );
+					get( self, "modal" ).openModal( "firstrun", self );
 				})
 				.then(function( modalSkipped ) {
 					if ( !modalSkipped ) { return; }
 					// go on with new version check if no modal has been opened
 					self.checkForNewRelease();
 				});
-		}.on( "init" ),
+		},
 
 
 		checkForNewRelease: function() {
@@ -128,55 +131,21 @@ define([
 			}
 
 			// ask the user what to do
-			this.send( "openModal", "newrelease", this, {
+			get( this, "modal" ).openModal( "newrelease", this, {
 				versionOutdated: getVers( current ),
 				versionLatest  : getVers( latest ),
 				downloadURL    : get( latest, "html_url" )
 			});
 		},
 
-		actions: {
-			"close": function() {
-				this.send( "closeModal" );
-				this.checkForNewRelease();
-			},
+		ignore: function() {
+			var record     = get( this, "model" );
+			var time       = get( this, "time" );
+			var checkagain = +new Date() + time;
 
-			"gotoSettings": function() {
-				this.send( "goto", "settings" );
-				this.send( "close" );
-			},
+			record.set( "checkagain", checkagain );
 
-			"showChangelog": function( success ) {
-				var version = get( this, "version" );
-				var url = get( this, "config.changelog-url" );
-				if ( url ) {
-					url = url.replace( "{version}", version );
-					this.send( "openBrowser", url );
-					if ( success instanceof Function ) {
-						success();
-					}
-				}
-			},
-
-			"releaseDownload": function( success ) {
-				var url = get( this, "downloadURL" );
-				this.send( "openBrowser", url );
-				this.send( "releaseIgnore" );
-				if ( success instanceof Function ) {
-					success();
-				}
-			},
-
-			"releaseIgnore": function( success ) {
-				var record     = get( this, "model" );
-				var time       = get( this, "time" );
-				var checkagain = +new Date() + time;
-
-				record.set( "checkagain", checkagain );
-				record.save()
-					.then( success, function(){} )
-					.then( this.send.bind( this, "closeModal" ) );
-			}
+			return record.save();
 		}
 	});
 

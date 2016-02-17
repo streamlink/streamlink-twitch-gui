@@ -1,13 +1,21 @@
-define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
+define([
+	"Ember",
+	"nwjs/nwWindow"
+], function(
+	Ember,
+	nwWindow
+) {
 
 	var get = Ember.get;
 	var readOnly = Ember.computed.readOnly;
 
+
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
+		modal       : Ember.inject.service(),
 		notification: Ember.inject.service(),
 		settings    : Ember.inject.service(),
-		livestreamer: Ember.inject.controller(),
+		livestreamer: Ember.inject.service(),
 
 		dev: DEBUG,
 
@@ -43,19 +51,10 @@ define( [ "Ember", "nwjs/nwWindow" ], function( Ember, nwWindow ) {
 
 			"winClose": function() {
 				if ( get( this, "streamsLength" ) ) {
-					this.send( "openModal", "quit", this );
+					get( this, "modal" ).openModal( "quit" );
 				} else {
-					this.send( "quit" );
+					nwWindow.close( true );
 				}
-			},
-
-			"quit": function() {
-				nwWindow.close( true );
-			},
-
-			"shutdown": function() {
-				get( this, "livestreamer" ).killAll();
-				this.send( "quit" );
 			}
 		}
 	});

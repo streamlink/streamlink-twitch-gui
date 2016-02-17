@@ -1,4 +1,4 @@
-{{#modal-dialog class="modal-firstrun"}}
+<div>
 	{{#modal-header}}
 		Thanks for using Livestreamer Twitch GUI!
 	{{/modal-header}}
@@ -6,7 +6,7 @@
 		Do you want to configure the application first before you start?
 	{{/modal-body}}
 	{{#modal-footer}}
-		{{#form-button action="close"        class="btn-primary" icon="fa-arrow-left"}}Start now{{/form-button}}
-		{{#form-button action="gotoSettings" class="btn-success" icon="fa-cog"       }}Settings{{/form-button}}
+		{{#form-button action="start"    class="btn-primary" icon="fa-arrow-left"}}Start now{{/form-button}}
+		{{#form-button action="settings" class="btn-success" icon="fa-cog"       }}Settings{{/form-button}}
 	{{/modal-footer}}
-{{/modal-dialog}}
+</div>

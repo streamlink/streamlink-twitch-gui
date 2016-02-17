@@ -1,4 +1,4 @@
-{{#modal-dialog class="modal-livestreamer"}}
+<div>
 	{{#unless error}}
 		{{#unless active}}
 			{{#modal-header}}Preparing{{/modal-header}}
@@ -35,8 +35,7 @@
 				<div>
 					{{form-button action="close"    class="btn-primary" icon="fa-arrow-left" title="Continue"}}
 					{{form-button action="shutdown" class="btn-danger"  icon="fa-times"      title="Close stream"}}
-					{{form-button
-						action="toggleLog"
+					{{form-button action="toggleLog"
 						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.success::invisible"
 						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
 						title=(if active.showLog "Show stream title" (if active.warning "Show livestreamer warning" "Show livestreamer log"))
@@ -49,7 +48,7 @@
 					{{subscribe-channel channel=active.channel}}
 					{{follow-channel channel=active.channel}}
 				</div>
-				{{drop-down value=active.quality content=settings.content.constructor.qualities class="modalqualityselect"}}
+				{{drop-down value=active.quality content=qualities class="modalqualityselect"}}
 			{{/modal-footer}}
 		{{/unless}}
 	{{else}}
@@ -88,4 +87,4 @@
 			{{/if}}
 		{{/modal-footer}}
 	{{/unless}}
-{{/modal-dialog}}
+</div>
