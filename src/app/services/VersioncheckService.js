@@ -39,55 +39,64 @@ define([
 			var self  = this;
 			var store = get( self, "store" );
 			store.findRecord( "versioncheck", 1 )
-				.then(function( record ) {
-					// versioncheck record found
-
-					set( self, "model", record );
-
-					var version = get( record, "version" );
-					// if version string is empty, go on (new version)
-					// ignore if version string >= (not <) installed version metadata
-					if ( version && semver.getMax([ version, current ]) === version ) {
-						return true;
-					}
-
-					// NEW version -> upgrade record
-					set( record, "version", current );
-					record.save();
-
-					// don't show modal if versioncheck is enabled (manual upgrades)
-					// manual upgrades -> user has (most likely) seen changelog already
-					if ( argv.versioncheck ) {
-						return true;
-					}
-
-					// show changelog modal dialog
-					get( self, "modal" ).openModal( "changelog", self );
-
-				}, function() {
-					// no versioncheck record found: first run
-
-					// unload automatically created record and create a new one instead
-					var record = store.peekRecord( "versioncheck", 1 );
-					if ( record ) {
-						store.unloadRecord( record );
-					}
-					record = store.createRecord( "versioncheck", {
-						id     : 1,
-						version: current
-					});
-					record.save();
-
-					set( self, "model", record );
-
-					// show first run modal dialog
-					get( self, "modal" ).openModal( "firstrun", self );
-				})
+				.then(
+					// versioncheck record found: existing user
+					this.notFirstRun.bind( this ),
+					// versioncheck record not found: new user
+					this.firstRun.bind( this )
+				)
 				.then(function( modalSkipped ) {
 					if ( !modalSkipped ) { return; }
 					// go on with new version check if no modal has been opened
 					self.checkForNewRelease();
 				});
+		},
+
+		notFirstRun: function( record ) {
+			set( this, "model", record );
+
+			var current = get( this,   "version" );
+			var version = get( record, "version" );
+
+			// if version string is empty, go on (new version)
+			// ignore if version string >= (not <) installed version metadata
+			if ( version && semver.getMax([ version, current ]) === version ) {
+				return true;
+			}
+
+			// NEW version -> upgrade record
+			set( record, "version", current );
+			record.save();
+
+			// don't show modal if versioncheck is enabled (manual upgrades)
+			// manual upgrades -> user has (most likely) seen changelog already
+			if ( argv.versioncheck ) {
+				return true;
+			}
+
+			// show changelog modal dialog
+			get( this, "modal" ).openModal( "changelog" );
+		},
+
+		firstRun: function() {
+			var store   = get( this, "store" );
+			var current = get( this, "version" );
+
+			// unload automatically created record and create a new one instead
+			var record = store.peekRecord( "versioncheck", 1 );
+			if ( record ) {
+				store.unloadRecord( record );
+			}
+			record = store.createRecord( "versioncheck", {
+				id     : 1,
+				version: current
+			});
+			record.save();
+
+			set( this, "model", record );
+
+			// show first run modal dialog
+			get( this, "modal" ).openModal( "firstrun", this );
 		},
 
 
@@ -127,7 +136,7 @@ define([
 
 			// no new release? check again in a few days
 			if ( current === latest || getVers( current ) === getVers( latest ) ) {
-				return this.ignore();
+				return this.ignoreRelease();
 			}
 
 			// ask the user what to do
@@ -138,7 +147,7 @@ define([
 			});
 		},
 
-		ignore: function() {
+		ignoreRelease: function() {
 			var record     = get( this, "model" );
 			var time       = get( this, "time" );
 			var checkagain = +new Date() + time;

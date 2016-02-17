@@ -38,7 +38,7 @@ define([
 			},
 
 			"ignore": function() {
-				get( this, "versioncheck" ).ignore();
+				get( this, "versioncheck" ).ignoreRelease();
 				this.send( "close" );
 			}
 		}
