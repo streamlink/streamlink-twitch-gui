@@ -30,10 +30,11 @@ define([
 
 
 	return Ember.Service.extend( ChannelSettingsMixin, {
-		metadata: Ember.inject.service(),
-		store   : Ember.inject.service(),
-		settings: Ember.inject.service(),
-		auth    : Ember.inject.service(),
+		metadata    : Ember.inject.service(),
+		store       : Ember.inject.service(),
+		settings    : Ember.inject.service(),
+		auth        : Ember.inject.service(),
+		livestreamer: Ember.inject.service(),
 
 		config  : alias( "metadata.config" ),
 
@@ -382,22 +383,29 @@ define([
 				nwWindow.toggleVisibility( true );
 			}
 
-			// FIXME: refactor global openLivestreamer and openBrowser actions
+			// FIXME: refactor global openBrowser actions
 			var applicationController = this.container.lookup( "controller:application" );
 
 			switch( settings ) {
+				// followed streams menu
 				case 1:
 					applicationController.send( "goto", "user.followedStreams" );
 					break;
+				// launch stream
 				case 2:
-					applicationController.send( "openLivestreamer", stream );
+					get( this, "livestreamer" ).startStream( stream );
 					break;
+				// launch stream + chat
 				case 3:
-					var url = get( this, "config.twitch-chat-url" )
-						.replace( "{channel}", get( stream, "channel.id" ) );
-					applicationController.send( "openLivestreamer", stream );
+					get( this, "livestreamer" ).startStream( stream );
+					// don't open the chat twice
 					if ( !get( this, "settings.gui_openchat" ) ) {
-						applicationController.send( "openBrowser", url );
+						var url = get( this, "config.twitch-chat-url" );
+						var channel = get( stream, "channel.id" );
+						if ( url && channel ) {
+							url = url.replace( "{channel}", channel );
+							applicationController.send( "openBrowser", url );
+						}
 					}
 			}
 		},

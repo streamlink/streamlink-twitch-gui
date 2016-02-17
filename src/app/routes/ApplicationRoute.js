@@ -116,10 +116,6 @@ define([
 
 			"openBrowser": function( url ) {
 				nwGui.Shell.openExternal( url );
-			},
-
-			"openLivestreamer": function( stream, quality ) {
-				get( this, "livestreamer" ).startStream( stream, quality );
 			}
 		}
 	});

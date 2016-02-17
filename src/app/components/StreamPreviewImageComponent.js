@@ -21,8 +21,9 @@ define([
 
 
 	return Ember.Component.extend({
-		chat    : Ember.inject.service(),
-		settings: Ember.inject.service(),
+		settings    : Ember.inject.service(),
+		livestreamer: Ember.inject.service(),
+		chat        : Ember.inject.service(),
 
 		layout: layout,
 		tagName: "div",
@@ -36,7 +37,7 @@ define([
 
 		init: function() {
 			this._super.apply( this, arguments );
-			// FIXME: refactor global openLivestreamer and goto actions
+			// FIXME: refactor global goto actions
 			this.applicationRoute = this.container.lookup( "route:application" );
 		},
 
@@ -66,7 +67,7 @@ define([
 
 				switch ( action ) {
 					case actions.launch:
-						return this.launchStream();
+						return this.startStream();
 					case actions.chat:
 						return this.openChat();
 					case actions.channel:
@@ -92,7 +93,7 @@ define([
 					submenu: Settings.qualities.map(function( quality ) {
 						return {
 							label: quality.label,
-							click: this.launchStream.bind( this, quality.id )
+							click: this.startStream.bind( this, quality.id )
 						};
 					}, this )
 				},
@@ -123,9 +124,9 @@ define([
 		},
 
 
-		launchStream: function( quality ) {
+		startStream: function( quality ) {
 			var stream = get( this, "stream" );
-			this.applicationRoute.send( "openLivestreamer", stream, quality );
+			get( this, "livestreamer" ).startStream( stream, quality );
 		},
 
 		openChat: function() {
