@@ -383,28 +383,34 @@ define([
 	 ***********************************************/
 
 	var cache = {};
-	setInterval(function () {
-		cache = {};
-	}, 10 * 1000);
+	var cacheAccess    = +new Date();
+	var cacheThreshold = 10 * 1000;
+	var cacheID        = 0;
+	var cacheProperty  = "smoothscrollOverflowID";
 
-	var uniqueID = (function() {
-		var i = 0;
-		return function( el ) {
-			return el.uniqueID || ( el.uniqueID = i++ );
-		};
-	})();
+
+	function getCacheID( el ) {
+		return el[ cacheProperty ] || ( el[ cacheProperty ] = ++cacheID );
+	}
 
 	function setCache( elems, overflowing ) {
-		for ( var i = elems.length; i--; ) {
-			cache[ uniqueID( elems[ i ] ) ] = overflowing;
+		var now = +new Date();
+		if ( cacheAccess + cacheThreshold < now ) {
+			cache = {};
 		}
+		cacheAccess = now;
+
+		for ( var i = elems.length; i--; ) {
+			cache[ getCacheID( elems[ i ] ) ] = overflowing;
+		}
+
 		return overflowing;
 	}
 
 	function overflowingAncestor( el ) {
 		var elems = [];
 		do {
-			var cached = cache[ uniqueID( el ) ];
+			var cached = cache[ getCacheID( el ) ];
 			if ( cached ) {
 				return setCache( elems, cached );
 			}
