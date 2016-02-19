@@ -45,17 +45,21 @@ define([
 			list.add( "theme-" + theme );
 		}.observes( "themes", "theme" ).on( "init" ),
 
+		smoothscrollObserver: function() {
+			if ( get( this, "settings.content.gui_smoothscroll" ) ) {
+				guiSmoothscroll.enable();
+			} else {
+				guiSmoothscroll.disable();
+			}
+		}.observes( "settings.content.gui_smoothscroll" ).on( "didInsertElement" ),
+
+
 		willInsertElement: function() {
 			document.documentElement.removeChild( document.body );
 		},
 
 		didInsertElement: function() {
 			guiSelectable();
-
-			var enableSmoothscroll = get( this, "metadata.config.enable-smoothscroll" );
-			if ( enableSmoothscroll ) {
-				guiSmoothscroll.enable();
-			}
 
 			var controller = this.container.lookup( "controller:application" );
 

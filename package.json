@@ -74,7 +74,6 @@
 			]
 		},
 		"search-history-size": 50,
-		"enable-smoothscroll": true,
 		"image-expiration-time": 60,
 		"language_codes": {
 			"cs":    { "flag": "cz", "lang": "czech" },

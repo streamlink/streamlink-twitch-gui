@@ -30,6 +30,8 @@ define([
 		arrowScroll: 50
 	};
 
+	var enabled = false;
+
 
 	var document  = window.document;
 	var direction = { x: 0, y: 0 };
@@ -478,15 +480,19 @@ define([
 
 	return {
 		enable: function() {
+			if ( enabled ) { return; }
 			window.addEventListener( "mousewheel", onMousewheel, false );
 			window.addEventListener( "mousedown", onMousedown, false );
 			window.addEventListener( "keydown", onKeydown, false );
+			enabled = true;
 		},
 
 		disable: function() {
+			if ( !enabled ) { return; }
 			window.removeEventListener( "mousewheel", onMousewheel, false );
 			window.removeEventListener( "mousedown", onMousedown, false );
 			window.removeEventListener( "keydown", onKeydown, false );
+			enabled = false;
 		}
 	};
 
