@@ -498,6 +498,7 @@ define([
 			window.removeEventListener( "mousewheel", onMousewheel, false );
 			window.removeEventListener( "mousedown", onMousedown, false );
 			window.removeEventListener( "keydown", onKeydown, false );
+			cache = {};
 			enabled = false;
 		}
 	};
