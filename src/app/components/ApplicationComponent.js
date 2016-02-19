@@ -54,7 +54,7 @@ define([
 
 			var enableSmoothscroll = get( this, "metadata.config.enable-smoothscroll" );
 			if ( enableSmoothscroll ) {
-				guiSmoothscroll();
+				guiSmoothscroll.enable();
 			}
 
 			var controller = this.container.lookup( "controller:application" );
