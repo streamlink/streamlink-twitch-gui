@@ -1,8 +1,8 @@
 define([
 	"Ember",
-	"components/ModalDialogComponent",
+	"components/modal/ModalDialogComponent",
 	"nwjs/nwWindow",
-	"hbs!templates/modal/ModalQuit"
+	"hbs!templates/components/modal/ModalQuitComponent"
 ], function(
 	Ember,
 	ModalDialogComponent,

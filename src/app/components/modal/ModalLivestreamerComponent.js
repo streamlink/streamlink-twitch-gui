@@ -1,8 +1,8 @@
 define([
 	"Ember",
-	"components/ModalDialogComponent",
+	"components/modal/ModalDialogComponent",
 	"models/localstorage/Settings",
-	"hbs!templates/modal/ModalLivestreamer"
+	"hbs!templates/components/modal/ModalLivestreamerComponent"
 ], function(
 	Ember,
 	ModalDialogComponent,

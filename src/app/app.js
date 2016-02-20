@@ -20,6 +20,7 @@ define(function( require ) {
 
 		// Store
 		ApplicationAdapter: require( "store/TwitchAdapter" ),
+		BooleanTransform: require( "store/BooleanTransform" ),
 
 
 		// Models: memory
@@ -108,12 +109,6 @@ define(function( require ) {
 		TwitchChannelPanelItemSerializer: require( "models/twitch/ChannelPanelItemSerializer" ),
 
 
-		// Ember additions/changes/fixes
-		BooleanTransform: require( "store/BooleanTransform" ),
-		LinkComponent: require( "components/LinkComponent" ),
-		TextFieldComponent: require( "components/TextFieldComponent" ),
-
-
 		// Helpers
 		IsEqualHelper: require( "helpers/IsEqualHelper" ),
 		IsNullHelper: require( "helpers/IsNullHelper" ),
@@ -160,57 +155,63 @@ define(function( require ) {
 		IndexRoute: require( "routes/IndexRoute" ),
 
 
-		// Modal Dialogs
-		ModalHeaderComponent: require( "components/ModalHeaderComponent" ),
-		ModalBodyComponent: require( "components/ModalBodyComponent" ),
-		ModalFooterComponent: require( "components/ModalFooterComponent" ),
-
-		ModalQuitComponent: require( "components/modal/ModalQuitComponent" ),
-		ModalFirstrunComponent: require( "components/modal/ModalFirstrunComponent" ),
-		ModalChangelogComponent: require( "components/modal/ModalChangelogComponent" ),
-		ModalNewreleaseComponent: require( "components/modal/ModalNewreleaseComponent" ),
-		ModalConfirmComponent: require( "components/modal/ModalConfirmComponent" ),
-		ModalLivestreamerComponent: require( "components/modal/ModalLivestreamerComponent" ),
-
-
 		// Components
-		FormButtonComponent: require( "components/FormButtonComponent" ),
-		SearchBarComponent: require( "components/SearchBarComponent" ),
-		QuickBarComponent: require( "components/QuickBarComponent" ),
-		QuickBarHomepageComponent: require( "components/QuickBarHomepageComponent" ),
-		QuickBarRandomStreamComponent: require( "components/QuickBarRandomStreamComponent" ),
-		ExternalLinkComponent: require( "components/ExternalLinkComponent" ),
-		LivestreamerDocsComponent: require( "components/LivestreamerDocsComponent" ),
-		CheckBoxComponent: require( "components/CheckBoxComponent" ),
-		RadioButtonComponent: require( "components/RadioButtonComponent" ),
-		RadioButtonsComponent: require( "components/RadioButtonsComponent" ),
-		FileSelectComponent: require( "components/FileSelectComponent" ),
-		StreamPresentationComponent: require( "components/StreamPresentationComponent" ),
-		GameItemComponent: require( "components/GameItemComponent" ),
-		StreamItemComponent: require( "components/StreamItemComponent" ),
-		ChannelItemComponent: require( "components/ChannelItemComponent" ),
-		SubscriptionItemComponent: require( "components/SubscriptionItemComponent" ),
-		InfiniteScrollComponent: require( "components/InfiniteScrollComponent" ),
-		EmbeddedLinksComponent: require( "components/EmbeddedLinksComponent" ),
+		EmbeddedLinksComponent: require( "components/link/EmbeddedLinksComponent" ),
+		ExternalLinkComponent: require( "components/link/ExternalLinkComponent" ),
+		LinkComponent: require( "components/link/LinkComponent" ),
+		LivestreamerDocsComponent: require( "components/link/LivestreamerDocsComponent" ),
+
+		CheckBoxComponent: require( "components/form/CheckBoxComponent" ),
+		DropDownComponent: require( "components/form/DropDownComponent" ),
+		FileSelectComponent: require( "components/form/FileSelectComponent" ),
+		RadioButtonComponent: require( "components/form/RadioButtonComponent" ),
+		RadioButtonsComponent: require( "components/form/RadioButtonsComponent" ),
+		TextFieldComponent: require( "components/form/TextFieldComponent" ),
+
+		FollowChannelComponent: require( "components/button/FollowChannelComponent" ),
+		FollowGameComponent: require( "components/button/FollowGameComponent" ),
+		FormButtonComponent: require( "components/button/FormButtonComponent" ),
+		OpenChatComponent: require( "components/button/OpenChatComponent" ),
+		ShareChannelComponent: require( "components/button/ShareChannelComponent" ),
+		SubscribeChannelComponent: require( "components/button/SubscribeChannelComponent" ),
+		TwitchEmotesComponent: require( "components/button/TwitchEmotesComponent" ),
+
+		ModalBodyComponent: require( "components/modal/ModalBodyComponent" ),
+		ModalChangelogComponent: require( "components/modal/ModalChangelogComponent" ),
+		ModalConfirmComponent: require( "components/modal/ModalConfirmComponent" ),
+		ModalFirstrunComponent: require( "components/modal/ModalFirstrunComponent" ),
+		ModalFooterComponent: require( "components/modal/ModalFooterComponent" ),
+		ModalHeaderComponent: require( "components/modal/ModalHeaderComponent" ),
+		ModalLivestreamerComponent: require( "components/modal/ModalLivestreamerComponent" ),
+		ModalLogComponent: require( "components/modal/ModalLogComponent" ),
+		ModalNewreleaseComponent: require( "components/modal/ModalNewreleaseComponent" ),
+		ModalQuitComponent: require( "components/modal/ModalQuitComponent" ),
+
+		ChannelItemComponent: require( "components/list/ChannelItemComponent" ),
+		GameItemComponent: require( "components/list/GameItemComponent" ),
+		HeadlineTotalsComponent: require( "components/list/HeadlineTotalsComponent" ),
+		InfiniteScrollComponent: require( "components/list/InfiniteScrollComponent" ),
+		StreamItemComponent: require( "components/list/StreamItemComponent" ),
+		SubscriptionItemComponent: require( "components/list/SubscriptionItemComponent" ),
+
+		QuickBarComponent: require( "components/quick/QuickBarComponent" ),
+		QuickBarHomepageComponent: require( "components/quick/QuickBarHomepageComponent" ),
+		QuickBarRandomStreamComponent: require( "components/quick/QuickBarRandomStreamComponent" ),
+
+		ChannelPanelsComponent: require( "components/channel/ChannelPanelsComponent" ),
+		PanelItemComponent: require( "components/channel/PanelItemComponent" ),
+
+		StatsRowComponent: require( "components/stream/StatsRowComponent" ),
+		StreamPresentationComponent: require( "components/stream/StreamPresentationComponent" ),
+		StreamPreviewImageComponent: require( "components/stream/StreamPreviewImageComponent" ),
+
 		FlagIconComponent: require( "components/FlagIconComponent" ),
-		StatsRowComponent: require( "components/StatsRowComponent" ),
 		LangFilterComponent: require( "components/LangFilterComponent" ),
-		PreviewImageComponent: require( "components/PreviewImageComponent" ),
-		StreamPreviewImageComponent: require( "components/StreamPreviewImageComponent" ),
-		OpenChatComponent: require( "components/OpenChatComponent" ),
-		TwitchEmotesComponent: require( "components/TwitchEmotesComponent" ),
-		ShareChannelComponent: require( "components/ShareChannelComponent" ),
-		SubscribeChannelComponent: require( "components/SubscribeChannelComponent" ),
-		FollowChannelComponent: require( "components/FollowChannelComponent" ),
-		FollowGameComponent: require( "components/FollowGameComponent" ),
-		WrapContentComponent: require( "components/WrapContentComponent" ),
-		DropDownComponent: require( "components/DropDownComponent" ),
-		ModalLogComponent: require( "components/ModalLogComponent" ),
 		LoadingSpinnerComponent: require( "components/LoadingSpinnerComponent" ),
-		HeadlineTotalsComponent: require( "components/HeadlineTotalsComponent" ),
-		ChannelPanelsComponent: require( "components/ChannelPanelsComponent" ),
-		PanelItemComponent: require( "components/PanelItemComponent" ),
+		PreviewImageComponent: require( "components/PreviewImageComponent" ),
+		SearchBarComponent: require( "components/SearchBarComponent" ),
 		SelectableTextComponent: require( "components/SelectableTextComponent" ),
+		WrapContentComponent: require( "components/WrapContentComponent" ),
 
 
 		// Content
