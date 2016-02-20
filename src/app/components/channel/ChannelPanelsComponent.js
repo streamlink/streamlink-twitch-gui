@@ -22,8 +22,8 @@ define([
 			var container = this.$( "ul" )[0];
 			scheduleOnce( "afterRender", function() {
 				return new Masonry( container, {
-					itemSelector: ".panel-item-component",
-					columnWidth: ".panel-item-component",
+					itemSelector: ".channel-panel-item-component",
+					columnWidth: ".channel-panel-item-component",
 					transitionDuration: 0
 				});
 			});

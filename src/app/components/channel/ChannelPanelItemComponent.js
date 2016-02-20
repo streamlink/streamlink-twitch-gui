@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"nwjs/menu",
-	"hbs!templates/components/channel/PanelItemComponent"
+	"hbs!templates/components/channel/ChannelPanelItemComponent"
 ], function(
 	Ember,
 	Menu,
@@ -14,7 +14,7 @@ define([
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "li",
-		classNames: [ "panel-item-component" ],
+		classNames: [ "channel-panel-item-component" ],
 
 		openBrowser: "openBrowser",
 

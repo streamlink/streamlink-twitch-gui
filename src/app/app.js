@@ -199,7 +199,7 @@ define(function( require ) {
 		QuickBarRandomStreamComponent: require( "components/quick/QuickBarRandomStreamComponent" ),
 
 		ChannelPanelsComponent: require( "components/channel/ChannelPanelsComponent" ),
-		PanelItemComponent: require( "components/channel/PanelItemComponent" ),
+		ChannelPanelItemComponent: require( "components/channel/ChannelPanelItemComponent" ),
 
 		StatsRowComponent: require( "components/stream/StatsRowComponent" ),
 		StreamPresentationComponent: require( "components/stream/StreamPresentationComponent" ),
