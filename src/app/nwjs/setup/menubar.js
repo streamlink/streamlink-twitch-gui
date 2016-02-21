@@ -23,15 +23,9 @@ define([
 
 	return {
 		createNativeMenuBar: function() {
-			var menubar;
+			if ( !isDarwin ) { return; }
 
-			if ( isDarwin ) {
-				menubar = createNativeMenuBarDarwin();
-			} else {
-				return;
-			}
-
-			nwWindow.menu = menubar;
+			nwWindow.menu = createNativeMenuBarDarwin();
 		}
 	};
 

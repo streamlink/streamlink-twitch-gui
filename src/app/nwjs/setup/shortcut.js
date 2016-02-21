@@ -54,16 +54,16 @@ define([
 
 	return {
 		createStartmenuShortcut: function( settings ) {
-			if ( isWinGte8 ) {
-				settings.addObserver( "notify_shortcut", function() {
-					var value = get( settings, "notify_shortcut" );
-					if ( value ) {
-						createStartmenuShortcutWin8();
-					} else {
-						removeStartmenuShortcutWin8();
-					}
-				});
-			}
+			if ( !isWinGte8 ) { return; }
+
+			settings.addObserver( "notify_shortcut", function() {
+				var value = get( settings, "notify_shortcut" );
+				if ( value ) {
+					createStartmenuShortcutWin8();
+				} else {
+					removeStartmenuShortcutWin8();
+				}
+			});
 		}
 	};
 

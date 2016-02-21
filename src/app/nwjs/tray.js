@@ -79,7 +79,6 @@ define([
 			if ( !this.tray ) { return; }
 			this.tray.once( "click", this.remove.bind( this ) );
 		}
-
 	});
 
 });

@@ -1,4 +1,4 @@
-define([ "nwjs/nwGui" ], function( nwGui ) {
+define( [ "nwjs/nwGui" ], function( nwGui ) {
 
 	// get the main application window
 	var nwWindow = nwGui.Window.get();

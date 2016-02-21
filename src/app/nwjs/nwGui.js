@@ -1,5 +1,5 @@
-define( [], function() {
+define(function() {
 
-	return window.nwDispatcher.requireNwGui();
+	return window.require( "nw.gui" );
 
 });
