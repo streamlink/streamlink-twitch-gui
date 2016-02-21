@@ -73,9 +73,19 @@ define([
 					}
 				}
 
+				// handle actions as functions
+				if ( action instanceof Function ) {
+					action.apply(
+						get( this, "targetObject" ),
+						context
+					);
+
 				// allow the component to send actions to itself
 				// in case it has been extended and uses its own actions
-				if ( this.actions instanceof Object && this.actions.hasOwnProperty( action ) ) {
+				} else if (
+					   this.actions instanceof Object
+					&& this.actions.hasOwnProperty( action )
+				) {
 					this.send.apply( this, [ action ].concat( context ) );
 
 				} else {
