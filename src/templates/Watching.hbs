@@ -4,7 +4,7 @@
 <ul class="list-unstyled">
 {{#each sortedModel as |watching|}}
 {{#stream-presentation stream=watching.stream tagName="li" class="watching" clickablePreview=false}}
-{{#form-button action="openLivestreamer" actionParam=watching.stream icon="fa-arrow-up"}}Open dialog{{/form-button}}
+{{#form-button action=(action "openLivestreamer" watching.stream) icon="fa-arrow-up"}}Open dialog{{/form-button}}
 {{/stream-presentation}}
 {{/each}}
 </ul>
