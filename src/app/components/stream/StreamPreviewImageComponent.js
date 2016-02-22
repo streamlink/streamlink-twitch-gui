@@ -27,7 +27,7 @@ define([
 
 		layout: layout,
 		tagName: "div",
-		classNameBindings: [ ":preview", "class" ],
+		classNameBindings: [ ":preview", "class", "opened:opened" ],
 		attributeBindings: [ "title", "noMiddleclickScroll:data-no-middleclick-scroll" ],
 		"class": "",
 		noMiddleclickScroll: function() {
@@ -42,6 +42,15 @@ define([
 		},
 
 		clickable: true,
+
+
+		opened: function() {
+			var model = get( this, "livestreamer.model" );
+			var id    = get( this, "stream.channel.id" );
+
+			return model.mapBy( "channel.id" ).indexOf( id ) !== -1;
+		}.property( "stream.channel.id", "livestreamer.model.length" ),
+
 
 		mouseUp: function( event ) {
 			if ( event.button === 1 ) {

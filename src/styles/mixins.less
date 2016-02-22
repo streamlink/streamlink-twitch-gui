@@ -80,14 +80,14 @@
 }
 
 
-.stream-hover( @ratio: ( 16 / 9 ); @content: @fa-var-play-circle-o; @duration: .333s ) {
+.stream-hover( @ratio: ( 16 / 9 ); @duration: .333s ) {
 	> .preview {
 		position: relative;
 		cursor: pointer;
 		.block-aspect-ratio( @ratio );
 
 		&::after {
-			content: @content;
+			content: @fa-var-play-circle-o;
 			display: block;
 			position: absolute;
 			width: 100%;
@@ -102,6 +102,10 @@
 				color: @themed-streamitem-play-color;
 				-webkit-text-stroke: .025em @themed-streamitem-play-stroke;
 			});
+		}
+
+		&.opened::after {
+			content: @fa-var-play-circle;
 		}
 	}
 
