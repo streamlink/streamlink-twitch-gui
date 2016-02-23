@@ -10,6 +10,8 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var merge = Ember.merge;
+
 
 	return FormButtonComponent.extend( LanguageFilterMixin, {
 		metadata    : Ember.inject.service(),
@@ -24,18 +26,12 @@ define([
 		iconanim: true,
 		spinner : true,
 
-		game: null,
-		followedStreams: false,
+		model: "twitchStream",
+		query: null,
 
 		action: "randomStream",
 
 		lock: false,
-
-		model: function() {
-			return get( this, "followedStreams" )
-				? "twitchStreamsFollowed"
-				: "twitchStream";
-		}.property( "followedStreams" ),
 
 
 		actions: {
@@ -47,7 +43,6 @@ define([
 				var model = get( self, "model" );
 				var store = get( self, "store" );
 				var max   = get( self, "metadata.config.random-max" ) || 100;
-				var game  = get( self, "game" );
 
 				var query = {
 					// [0, max)
@@ -56,8 +51,9 @@ define([
 					broadcaster_language: get( self, "broadcaster_language" )
 				};
 
-				if ( game ) {
-					query.game = game;
+				var _query = get( self, "query" );
+				if ( _query ) {
+					query = merge( _query, query );
 				}
 
 				store.query( model, query )
@@ -80,10 +76,13 @@ define([
 					.then(function( stream ) {
 						if ( !stream ) { throw new Error(); }
 
-						if ( get( self, "followedStreams" ) ) {
-							stream = get( stream, "stream" );
+						if ( model === "twitchStreamsFollowed" ) {
+							return get( stream, "stream" );
+						} else {
+							return stream;
 						}
-
+					})
+					.then(function( stream ) {
 						get( self, "livestreamer" ).startStream( stream );
 						success();
 					})
