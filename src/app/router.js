@@ -21,7 +21,7 @@ define( [ "Ember" ], function( Ember ) {
 
 		this.route( "channels" );
 
-		this.route( "channel", { path: "/:channel" }, function() {
+		this.route( "channel", { path: "/channel/:channel" }, function() {
 			this.route( "settings" );
 		});
 
