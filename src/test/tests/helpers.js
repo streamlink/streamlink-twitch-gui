@@ -15,8 +15,7 @@ define([
 	"helpers/FormatTimeHelper",
 	"helpers/HoursFromNowHelper",
 	"helpers/TimeFromNowHelper",
-	"helpers/GetParamHelper",
-	"helpers/StringConcatHelper"
+	"helpers/GetParamHelper"
 ], function(
 	Ember,
 	IsEqualHelper,
@@ -34,17 +33,17 @@ define([
 	FormatTimeHelper,
 	HoursFromNowHelper,
 	TimeFromNowHelper,
-	GetParamHelper,
-	StringConcatHelper
+	GetParamHelper
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var setOwner = Ember.setOwner;
 	var run = Ember.run;
 	var Component = Ember.Component;
 	var compile = Ember.HTMLBars.compile;
 
-	var registry, container, component;
+	var owner, component;
 
 	function runAppend( view ) {
 		run( view, "appendTo", "#qunit-fixture" );
@@ -60,32 +59,42 @@ define([
 		return component.$().text();
 	}
 
+	function buildOwner( properties ) {
+		var Owner = Ember.Object.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
+			init: function() {
+				this._super.apply( this, arguments );
+				var registry = new Ember.Registry( this._registryOptions );
+				this.__registry__  = registry;
+				this.__container__ = registry.container({ owner: this });
+			}
+		});
+
+		return Owner.create( properties || {} );
+	}
+
 	QUnit.module( "Ember helpers", {
 		"setup": function() {
-			registry = new Ember.Registry();
-			registry.optionsForType( "template", { instantiate: false } );
-			registry.optionsForType( "helper", { singleton: false } );
-			container = registry.container();
+			owner = buildOwner();
 		},
 
 		"teardown": function() {
 			runDestroy( component );
-			runDestroy( container );
-			registry = container = component = null;
+			runDestroy( owner );
+			owner = component = null;
 		}
 	});
 
 
 	QUnit.test( "Is equal", function( assert ) {
 
-		registry.register( "helper:is-equal", IsEqualHelper );
+		owner.register( "helper:is-equal", IsEqualHelper );
 		component = Component.extend({
-			container: container,
-			valA     : "foo",
-			valB     : "foo",
-			valC     : "foo",
-			layout   : compile( "{{is-equal valA valB valC}}" )
+			valA  : "foo",
+			valB  : "foo",
+			valC  : "foo",
+			layout: compile( "{{is-equal valA valB valC}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "true", "Equal values" );
@@ -97,14 +106,14 @@ define([
 
 	QUnit.test( "Is null", function( assert ) {
 
-		registry.register( "helper:is-null", IsNullHelper );
+		owner.register( "helper:is-null", IsNullHelper );
 		component = Component.extend({
-			container: container,
-			valA     : null,
-			valB     : null,
-			valC     : null,
-			layout   : compile( "{{is-null valA valB valC}}" )
+			valA  : null,
+			valB  : null,
+			valC  : null,
+			layout: compile( "{{is-null valA valB valC}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "true", "All values are null" );
@@ -116,13 +125,13 @@ define([
 
 	QUnit.test( "Is greater than", function( assert ) {
 
-		registry.register( "helper:is-gt", IsGtHelper );
+		owner.register( "helper:is-gt", IsGtHelper );
 		component = Component.extend({
-			container: container,
-			valA     : 2,
-			valB     : 1,
-			layout   : compile( "{{is-gt valA valB}}" )
+			valA  : 2,
+			valB  : 1,
+			layout: compile( "{{is-gt valA valB}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "true", "2 is greater than 1" );
@@ -134,13 +143,13 @@ define([
 
 	QUnit.test( "Is greater than or equal", function( assert ) {
 
-		registry.register( "helper:is-gte", IsGteHelper );
+		owner.register( "helper:is-gte", IsGteHelper );
 		component = Component.extend({
-			container: container,
-			valA     : 2,
-			valB     : 1,
-			layout   : compile( "{{is-gte valA valB}}" )
+			valA  : 2,
+			valB  : 1,
+			layout: compile( "{{is-gte valA valB}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "true", "2 is greater than or equal 1" );
@@ -154,15 +163,15 @@ define([
 
 	QUnit.test( "Bool not", function( assert ) {
 
-		registry.register( "helper:bool-not", BoolNotHelper );
+		owner.register( "helper:bool-not", BoolNotHelper );
 		component = Component.extend({
-			container: container,
-			valA     : false,
-			valB     : null,
-			valC     : undefined,
-			valD     : "",
-			layout   : compile( "{{bool-not valA valB valC valD}}" )
+			valA  : false,
+			valB  : null,
+			valC  : undefined,
+			valD  : "",
+			layout: compile( "{{bool-not valA valB valC valD}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "true", "All values are falsey" );
@@ -174,13 +183,13 @@ define([
 
 	QUnit.test( "Bool and", function( assert ) {
 
-		registry.register( "helper:bool-and", BoolAndHelper );
+		owner.register( "helper:bool-and", BoolAndHelper );
 		component = Component.extend({
-			container: container,
-			valA     : true,
-			valB     : true,
-			layout   : compile( "{{bool-and valA valB}}" )
+			valA  : true,
+			valB  : true,
+			layout: compile( "{{bool-and valA valB}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "true", "A and B" );
@@ -192,13 +201,13 @@ define([
 
 	QUnit.test( "Bool or", function( assert ) {
 
-		registry.register( "helper:bool-or", BoolOrHelper );
+		owner.register( "helper:bool-or", BoolOrHelper );
 		component = Component.extend({
-			container: container,
-			valA     : true,
-			valB     : true,
-			layout   : compile( "{{bool-or valA valB}}" )
+			valA  : true,
+			valB  : true,
+			layout: compile( "{{bool-or valA valB}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "true", "A or B" );
@@ -212,13 +221,13 @@ define([
 
 	QUnit.test( "Math add", function( assert ) {
 
-		registry.register( "helper:math-add", MathAddHelper );
+		owner.register( "helper:math-add", MathAddHelper );
 		component = Component.extend({
-			container: container,
-			valA     : 1,
-			valB     : 2,
-			layout   : compile( "{{math-add valA valB}}" )
+			valA  : 1,
+			valB  : 2,
+			layout: compile( "{{math-add valA valB}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), 3, "1 + 2 = 3" );
@@ -228,13 +237,13 @@ define([
 
 	QUnit.test( "Math sub", function( assert ) {
 
-		registry.register( "helper:math-sub", MathSubHelper );
+		owner.register( "helper:math-sub", MathSubHelper );
 		component = Component.extend({
-			container: container,
-			valA     : 1,
-			valB     : 2,
-			layout   : compile( "{{math-sub valA valB}}" )
+			valA  : 1,
+			valB  : 2,
+			layout: compile( "{{math-sub valA valB}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), -1, "1 - 2 = -1" );
@@ -244,13 +253,13 @@ define([
 
 	QUnit.test( "Math mul", function( assert ) {
 
-		registry.register( "helper:math-mul", MathMulHelper );
+		owner.register( "helper:math-mul", MathMulHelper );
 		component = Component.extend({
-			container: container,
-			valA     : 7,
-			valB     : 7,
-			layout   : compile( "{{math-mul valA valB}}" )
+			valA  : 7,
+			valB  : 7,
+			layout: compile( "{{math-mul valA valB}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), 49, "7 * 7 = 49" );
@@ -260,13 +269,13 @@ define([
 
 	QUnit.test( "Math div", function( assert ) {
 
-		registry.register( "helper:math-div", MathDivHelper );
+		owner.register( "helper:math-div", MathDivHelper );
 		component = Component.extend({
-			container: container,
-			valA     : 12,
-			valB     : 3,
-			layout   : compile( "{{math-div valA valB}}" )
+			valA  : 12,
+			valB  : 3,
+			layout: compile( "{{math-div valA valB}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), 4, "12 / 3 = 4" );
@@ -276,12 +285,12 @@ define([
 
 	QUnit.test( "Format viewers", function( assert ) {
 
-		registry.register( "helper:format-viewers", FormatViewersHelper );
+		owner.register( "helper:format-viewers", FormatViewersHelper );
 		component = Component.extend({
-			container: container,
-			viewers  : "",
-			layout   : compile( "{{format-viewers viewers}}" )
+			viewers: "",
+			layout : compile( "{{format-viewers viewers}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "0", "Unexpected values" );
@@ -322,13 +331,13 @@ define([
 
 	QUnit.test( "Format time", function( assert ) {
 
-		registry.register( "helper:format-time", FormatTimeHelper );
+		owner.register( "helper:format-time", FormatTimeHelper );
 		component = Component.extend({
-			container: container,
-			time     : new Date(),
-			format   : "D",
-			layout   : compile( "{{format-time time format=format}}" )
+			time  : new Date(),
+			format: "D",
+			layout: compile( "{{format-time time format=format}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal(
@@ -347,11 +356,12 @@ define([
 		var hour   = 60 * minute;
 		var day    = 24 * hour;
 
-		registry.register( "helper:hours-from-now", HoursFromNowHelper );
+		owner.register( "helper:hours-from-now", HoursFromNowHelper );
 		component = Component.extend({
-			container: container,
-			layout   : compile( "{{hours-from-now dateA}} - {{hours-from-now dateB}}" )
+			layout: compile( "{{hours-from-now dateA}} - {{hours-from-now dateB}}" )
 		}).create();
+		setOwner( component, owner );
+
 		runAppend( component );
 
 
@@ -386,11 +396,11 @@ define([
 
 		var done = assert.async();
 
-		registry.register( "helper:hours-from-now", HoursFromNowHelper );
+		owner.register( "helper:hours-from-now", HoursFromNowHelper );
 		component = Component.extend({
-			container: container,
-			layout   : compile( "{{hours-from-now date interval=40}}" )
+			layout: compile( "{{hours-from-now date interval=40}}" )
 		}).create();
+		setOwner( component, owner );
 
 		set( component, "date", +new Date() - 59 * 1000 - 950 );
 		runAppend( component );
@@ -408,13 +418,13 @@ define([
 
 	QUnit.test( "Time from now", function( assert ) {
 
-		registry.register( "helper:time-from-now", TimeFromNowHelper );
+		owner.register( "helper:time-from-now", TimeFromNowHelper );
 		component = Component.extend({
-			container: container,
-			time     : new Date() - Math.PI * 60 * 1000,
-			suffix   : false,
-			layout   : compile( "{{time-from-now time suffix=suffix}}" )
+			time  : new Date() - Math.PI * 60 * 1000,
+			suffix: false,
+			layout: compile( "{{time-from-now time suffix=suffix}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "3 minutes ago", "Time from now with suffix" );
@@ -426,13 +436,13 @@ define([
 
 	QUnit.test( "Get param", function( assert ) {
 
-		registry.register( "helper:get-param", GetParamHelper );
+		owner.register( "helper:get-param", GetParamHelper );
 		component = Component.extend({
-			container: container,
-			param    : "baz",
-			index    : 0,
-			layout   : compile( "{{get-param 'foo' 'bar' param index=index}}" )
+			param : "baz",
+			index : 0,
+			layout: compile( "{{get-param 'foo' 'bar' param index=index}}" )
 		}).create();
+		setOwner( component, owner );
 
 		runAppend( component );
 		assert.equal( getOutput( component ), "foo", "First parameter's value is foo" );
@@ -440,26 +450,6 @@ define([
 		assert.equal( getOutput( component ), "baz", "Bound parameter" );
 		run( component, "set", "param", "qux" );
 		assert.equal( getOutput( component ), "qux", "Changed bound parameter" );
-
-	});
-
-
-	QUnit.test( "String concat", function( assert ) {
-
-		registry.register( "helper:string-concat", StringConcatHelper );
-		component = Component.extend({
-			container: container,
-			foo      : "foo",
-			bar      : "bar",
-			layout   : compile( "{{string-concat foo bar 'baz'}}" )
-		}).create();
-
-		runAppend( component );
-		assert.equal( getOutput( component ), "foobarbaz", "Simple string concatenation" );
-
-		run( component, "set", "foo", undefined );
-		run( component, "set", "bar", null );
-		assert.equal( getOutput( component ), "baz", "Undefined values are empty strings" );
 
 	});
 

@@ -15,8 +15,10 @@ define([
 ) {
 
 	var get = Ember.get;
+	var getOwner = Ember.getOwner;
 	var alias = Ember.computed.alias;
 	var reTheme = /^theme-/;
+
 
 	return Ember.Component.extend({
 		metadata: Ember.inject.service(),
@@ -61,7 +63,7 @@ define([
 		didInsertElement: function() {
 			guiSelectable();
 
-			var controller = this.container.lookup( "controller:application" );
+			var controller = getOwner( this ).lookup( "controller:application" );
 
 			document.documentElement.addEventListener( "keyup", function( e ) {
 				var f5    = e.keyCode === 116;

@@ -13,6 +13,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var getOwner = Ember.getOwner;
 
 	var actions = Settings.gui_streamclick.reduce(function( obj, item ) {
 		obj[ item.key ] = item.id;
@@ -38,7 +39,7 @@ define([
 		init: function() {
 			this._super.apply( this, arguments );
 			// FIXME: refactor global goto actions
-			this.applicationRoute = this.container.lookup( "route:application" );
+			this.applicationRoute = getOwner( this ).lookup( "route:application" );
 		},
 
 		clickable: true,

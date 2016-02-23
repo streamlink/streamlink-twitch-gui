@@ -11,7 +11,7 @@ define( [ "Ember" ], function( Ember ) {
 
 		actions: {
 			"didTransition": function() {
-				this.send( "gotoHomepage", true );
+				this.send( "gotoHomepage" );
 			}
 		}
 	});

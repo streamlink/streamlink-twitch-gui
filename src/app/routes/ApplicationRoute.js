@@ -9,6 +9,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var getOwner = Ember.getOwner;
 	var debounce = Ember.run.debounce;
 
 
@@ -32,7 +33,7 @@ define([
 
 			function refresh() {
 				var name  = get( self.controller, "currentRouteName" );
-				var route = self.container.lookup( "route:" + name );
+				var route = getOwner( self ).lookup( "route:" + name );
 				if ( name === "error" || get( route, "disableAutoRefresh" ) ) { return; }
 				route.refresh();
 			}
@@ -80,25 +81,27 @@ define([
 
 		actions: {
 			"history": function( action ) {
+				// prevents going back to the index route
+				if ( action < 0 && window.history.length <= 2 ) { return; }
 				window.history.go( +action );
 			},
 
 			"refresh": function() {
-				var routeName = get( this.router, "currentRouteName" );
+				var routeName = get( this, "router.currentRouteName" );
 
 				if ( routeName === "error" ) {
-					routeName = get( this.router, "lastRouteName" );
+					routeName = get( this, "router.lastRouteName" );
 					if ( routeName ) {
 						this.transitionTo( routeName );
 					}
 
 				} else {
-					this.container.lookup( "route:" + routeName ).refresh();
+					getOwner( this ).lookup( "route:" + routeName ).refresh();
 				}
 			},
 
 			"goto": function( routeName ) {
-				var currentRoute = get( this.controller, "currentRouteName" );
+				var currentRoute = get( this, "controller.currentRouteName" );
 				if ( routeName === currentRoute ) {
 					this.send( "refresh" );
 				} else {
@@ -106,12 +109,9 @@ define([
 				}
 			},
 
-			"gotoHomepage": function( noHistoryEntry ) {
+			"gotoHomepage": function() {
 				var homepage = get( this, "settings.gui_homepage" );
-				var method   = noHistoryEntry
-					? "replaceWith"
-					: "transitionTo";
-				this.router[ method ]( homepage || "/featured" );
+				this.transitionTo( homepage || "/featured" );
 			},
 
 			"openBrowser": function( url ) {

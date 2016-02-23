@@ -19,7 +19,7 @@
 <button
 	type="button"
 	class="{{if auth.session.isLoggedIn 'btn-user' 'btn-no-user'}} {{if notification.enabled 'btn-indicator'}} {{if auth.session.isPending 'btn-user-pending'}} fa fa-user"
-	title="{{unless auth.session.isLoggedIn 'You\'re not logged in' (string-concat 'Logged in as ' auth.session.user_name nl notification.statusText)}}"
+	title="{{unless auth.session.isLoggedIn 'You\'re not logged in' (concat 'Logged in as ' auth.session.user_name nl notification.statusText)}}"
 	{{action "goto" "user.index"}}>
 {{#if notification.enabled}}<span class="indicator {{if notification.paused 'indicator-disabled' (if notification.error 'indicator-error')}} fa fa-bullhorn"></span>{{/if}}
 </button>

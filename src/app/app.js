@@ -126,7 +126,6 @@ define(function( require ) {
 		HoursFromNowHelper: require( "helpers/HoursFromNowHelper" ),
 		TimeFromNowHelper: require( "helpers/TimeFromNowHelper" ),
 		GetParamHelper: require( "helpers/GetParamHelper" ),
-		StringConcatHelper: require( "helpers/StringConcatHelper" ),
 
 
 		// Services

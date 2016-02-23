@@ -7,6 +7,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var getOwner = Ember.getOwner;
 
 
 	return Ember.Route.extend({
@@ -37,7 +38,7 @@ define([
 		},
 
 		refresh: function() {
-			return this.container.lookup( "route:channel" ).refresh();
+			return getOwner( this ).lookup( "route:channel" ).refresh();
 		},
 
 		actions: {

@@ -20,6 +20,7 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var getOwner = Ember.getOwner;
 	var setProperties = Ember.setProperties;
 	var alias = Ember.computed.alias;
 	var and = Ember.computed.and;
@@ -425,7 +426,7 @@ define([
 			}
 
 			// FIXME: refactor global openBrowser actions
-			var applicationController = this.container.lookup( "controller:application" );
+			var applicationController = getOwner( this ).lookup( "controller:application" );
 
 			switch( settings ) {
 				// followed streams menu

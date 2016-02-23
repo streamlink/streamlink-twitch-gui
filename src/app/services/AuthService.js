@@ -16,6 +16,7 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var getOwner = Ember.getOwner;
 	var alias = Ember.computed.alias;
 
 	var reToken = /^[a-z\d]{30}$/i;
@@ -288,7 +289,7 @@ define([
 
 
 		updateAdapter: function( token ) {
-			var adapter = this.container.lookup( "adapter:application" );
+			var adapter = getOwner( this ).lookup( "adapter:application" );
 			if ( !adapter ) {
 				throw new Error( "Adapter not found" );
 			}
