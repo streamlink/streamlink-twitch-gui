@@ -78,6 +78,8 @@ define([
 
 						if ( model === "twitchStreamsFollowed" ) {
 							return get( stream, "stream" );
+						} else if ( model === "twitchStreamsHosted" ) {
+							return get( stream, "target" );
 						} else {
 							return stream;
 						}

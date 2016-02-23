@@ -77,6 +77,8 @@ define(function( require ) {
 
 		TwitchStreamsFollowed: require( "models/twitch/StreamsFollowed" ),
 		TwitchStreamsFollowedSerializer: require( "models/twitch/StreamsFollowedSerializer" ),
+		TwitchStreamsHosted: require( "models/twitch/StreamsHosted" ),
+		TwitchStreamsHostedSerializer: require( "models/twitch/StreamsHostedSerializer" ),
 		TwitchChannelsFollowed: require( "models/twitch/ChannelsFollowed" ),
 		TwitchChannelsFollowedSerializer: require( "models/twitch/ChannelsFollowedSerializer" ),
 		TwitchGamesFollowed: require( "models/twitch/GamesFollowed" ),
@@ -263,6 +265,8 @@ define(function( require ) {
 		UserSubscriptionsTemplate: require( "hbs!templates/user/UserSubscriptions" ),
 		UserFollowedStreamsRoute: require( "routes/UserFollowedStreamsRoute" ),
 		UserFollowedStreamsTemplate: require( "hbs!templates/user/UserFollowedStreams" ),
+		UserHostedStreamsRoute: require( "routes/UserHostedStreamsRoute" ),
+		UserHostedStreamsTemplate: require( "hbs!templates/user/UserHostedStreams" ),
 		UserFollowedChannelsRoute: require( "routes/UserFollowedChannelsRoute" ),
 		UserFollowedChannelsController: require( "controllers/UserFollowedChannelsController" ),
 		UserFollowedChannelsTemplate: require( "hbs!templates/user/UserFollowedChannels" ),

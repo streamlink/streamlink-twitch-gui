@@ -29,6 +29,7 @@ define( [ "Ember" ], function( Ember ) {
 			this.route( "auth" );
 			this.route( "subscriptions" );
 			this.route( "followedStreams" );
+			this.route( "hostedStreams" );
 			this.route( "followedChannels" );
 			this.route( "followedGames" );
 		});
