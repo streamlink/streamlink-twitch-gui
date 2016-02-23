@@ -153,21 +153,26 @@
 		}
 
 		ul {
-			@margin: .25em;
-			@height: (
+			@margin: @searchbar-padding;
+			@height: unit( (
 				  @searchbar-dropdown-max-items
-				* @searchbar-dropdown-font-size
-				* @searchbar-dropdown-line-height
-				- 2 * @margin
-			);
+				* @line-height-base
+				/ ( @searchbar-dropdown-line-height * unit( @searchbar-dropdown-font-size ) )
+			), rem );
 
 			max-height: @height;
 			margin: @margin 0 0;
 			overflow-y: auto;
 
+			&::-webkit-scrollbar {
+				width: 10px;
+			}
+
 			&::-webkit-scrollbar-thumb {
 				border-top: 0;
 				border-bottom: 0;
+				border-right-width: 1px;
+				border-left-width: 5px;
 			}
 		}
 
