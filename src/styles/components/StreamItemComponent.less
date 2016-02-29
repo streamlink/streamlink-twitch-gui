@@ -69,13 +69,16 @@
 	> .preview {
 		overflow: hidden;
 
+		> header,
 		> footer,
 		> .btn-expand {
 			position: absolute;
 			bottom: -@footer-height;
 			font-size: .85em;
 			opacity: 0;
-			transition: opacity @duration ease-out, bottom @duration ease-out;
+			transition: opacity @duration ease-out,
+			            top @duration ease-out,
+			            bottom @duration ease-out;
 		}
 
 		> .btn-expand {
@@ -112,48 +115,60 @@
 			}
 		}
 
+		> header,
+		> footer > .bottom {
+			// Set an icon width and move the icon to the left, so the text remains centered.
+			// Let the text have a max-width, so the icon stays on the screen.
+			@icon-width: 1.5em;
+			@icon-offset: ( -1 * @icon-width );
+			@text-max-width: ( -2 * @icon-offset );
+
+			display: flex;
+			justify-content: center;
+			width: 100%;
+			height: @footer-height;
+			padding: @padding;
+
+			> i {
+				width: @icon-width;
+				margin-left: @icon-offset;
+				text-align: center;
+				text-indent: -.05em;
+
+				&.icon-host {
+					line-height: 1.6;
+				}
+			}
+
+			> a {
+				max-width: calc( 100% - @text-max-width );
+				text-decoration: none;
+				.text-overflow();
+
+				&:not(:hover) {
+					.themed({
+						color: @themed-streamitem-game-color;
+					});
+				}
+			}
+		}
+
+		> header {
+			top: -@footer-height;
+			bottom: auto;
+			text-align: center;
+			.text-overflow();
+
+			.themed({
+				background: @themed-streamitem-overlay-background;
+			});
+		}
+
 		> footer {
 			display: flex;
 			flex-flow: column-reverse nowrap;
 			width: 100%;
 			height: 100%;
-
-			> .bottom {
-				// Set an icon width and move the icon to the left, so the text remains centered.
-				// Let the text have a max-width, so the icon stays on the screen.
-				@icon-width: 1.5em;
-				@icon-offset: ( -1 * @icon-width );
-				@text-max-width: ( -2 * @icon-offset );
-
-				display: flex;
-				justify-content: center;
-				height: @footer-height;
-				padding: @padding;
-
-				> i {
-					width: @icon-width;
-					margin-left: @icon-offset;
-					text-align: center;
-
-					&.fa-gamepad {
-						text-indent: -.05em;
-					}
-				}
-
-				> a {
-					max-width: calc( 100% - @text-max-width );
-					overflow: hidden;
-					white-space: nowrap;
-					text-overflow: ellipsis;
-					text-decoration: none;
-
-					&:not(:hover) {
-						.themed({
-							color: @themed-streamitem-game-color;
-						});
-					}
-				}
-			}
 
 			> .details {
 				position: relative;
@@ -232,6 +247,14 @@
 			}
 		}
 
+		&:hover:not(.expanded) {
+			> header {
+				top: 0;
+				opacity: 1;
+				z-index: 1;
+			}
+		}
+
 		&:hover > .previewError::before {
 			opacity: 0;
 		}
@@ -246,5 +269,13 @@
 			bottom: 0;
 			opacity: 1;
 		}
+	}
+
+	&.show-game:not(.show-host) > .preview::after {
+		top: calc( 50% - .75rem );
+	}
+
+	&.show-host > .preview::after {
+		font-size: 5rem;
 	}
 }

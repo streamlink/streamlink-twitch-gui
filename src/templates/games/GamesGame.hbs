@@ -3,7 +3,7 @@
 <h2>{{follow-game game=game}}{{game}}</h2>
 {{headline-totals total=metadata.total}}
 {{#quick-bar}}
-{{quick-bar-random-stream game=game}}
+{{quick-bar-random-stream query=(hash game=game)}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>

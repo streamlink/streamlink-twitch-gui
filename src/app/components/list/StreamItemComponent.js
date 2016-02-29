@@ -22,6 +22,7 @@ define([
 			":stream-item-component",
 			"_showGame:show-game",
 			"settings.gui_gamevisible:always-show-game",
+			"host:show-host",
 			"showFlag:show-flag",
 			"faded:faded",
 			"expanded:expanded"
