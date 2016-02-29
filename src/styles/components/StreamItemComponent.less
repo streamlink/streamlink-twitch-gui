@@ -146,8 +146,7 @@
 				text-align: center;
 				text-indent: -.05em;
 
-				&.icon-host,
-				&.icon-info {
+				&.icon-host {
 					line-height: 1.6;
 				}
 			}
@@ -155,10 +154,8 @@
 			a,
 			span {
 				max-width: calc( 100% - @text-max-width );
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
 				text-decoration: none;
+				.text-overflow();
 			}
 
 			a:not(:hover) {
@@ -169,18 +166,14 @@
 		}
 
 		> header {
+			position: absolute;
 			top: -@footer-height;
 			bottom: auto;
 			text-align: center;
-			.text-overflow();
 
 			.themed({
 				background: @themed-streamitem-overlay-background;
 			});
-		}
-
-		> header {
-			position: absolute;
 		}
 
 		> footer {
