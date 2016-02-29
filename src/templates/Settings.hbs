@@ -101,8 +101,12 @@ Choose a custom executable file of your selected browser. If left blank, default
 <legend>Stream lists</legend>
 <div><i class="fa fa-flag"></i> Flags<span>Indicating the broadcaster language.</span></div>
 <div>{{#check-box checked=model.stream_show_flag}}Flags are always visible{{/check-box}}</div>
-<div><i class="fa fa-gamepad"></i> Game<span>In &quot;Top Channels&quot; and &quot;My Streams&quot;.</span></div>
-<div>{{#check-box checked=model.stream_show_info}}Always show game being played{{/check-box}}</div>
+<div><i class="fa fa-info"></i> Info bar<span>Bottom bar inside the stream preview.</span></div>
+<div>
+{{#check-box checked=model.stream_show_info}}Info bar is always visible{{/check-box}}
+<p>What should be displayed?</p>
+{{drop-down class="stream-click" value=model.stream_info content=settings.content.constructor.stream_info}}
+</div>
 <div><i class="fa fa-hand-pointer-o"></i> Click behavior<span>Additional stream image click actions.</span></div>
 <div class="stream-click-dropdowns">
 <div>

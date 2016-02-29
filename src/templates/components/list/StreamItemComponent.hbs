@@ -12,14 +12,13 @@
 	title=(unless expanded (if channel.status channel.status "") "")
 	action=(action "collapse")}}
 {{#if host}}
-<header><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.name title=(concat "hosted by " host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</header>
+<header><div><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.name title=(concat "hosted by " host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</div></header>
 {{/if}}
-<footer class="{{if _showGame 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
-{{#if _showGame}}
-<div class="bottom">
-<i class="fa fa-gamepad icon-game"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}
+<footer class="{{if (bool-or infoTitle _showGame) 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
+<div class="bottom {{unless (bool-or infoTitle _showGame) 'hidden'}}">
+<div class="info-game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}</div>
+<div class="info-title"><i class="fa fa-info icon-info"></i><span>{{channel.status}}</span></div>
 </div>
-{{/if}}
 <div class="details">
 <div>
 {{#if content.hasFormatInfo}}

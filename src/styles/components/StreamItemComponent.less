@@ -123,33 +123,48 @@
 			@icon-offset: ( -1 * @icon-width );
 			@text-max-width: ( -2 * @icon-offset );
 
-			display: flex;
-			justify-content: center;
+			position: relative;
 			width: 100%;
 			height: @footer-height;
-			padding: @padding;
 
-			> i {
+			> div {
+				display: flex;
+				justify-content: center;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				height: @footer-height;
+				padding: @padding;
+				opacity: 1;
+				transition: opacity @duration ease-out, bottom @duration ease-out;
+			}
+
+			i {
 				width: @icon-width;
 				margin-left: @icon-offset;
 				text-align: center;
 				text-indent: -.05em;
 
-				&.icon-host {
+				&.icon-host,
+				&.icon-info {
 					line-height: 1.6;
 				}
 			}
 
-			> a {
+			a,
+			span {
 				max-width: calc( 100% - @text-max-width );
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
 				text-decoration: none;
-				.text-overflow();
+			}
 
-				&:not(:hover) {
-					.themed({
-						color: @themed-streamitem-game-color;
-					});
-				}
+			a:not(:hover) {
+				.themed({
+					color: @themed-streamitem-game-color;
+				});
 			}
 		}
 
@@ -162,6 +177,10 @@
 			.themed({
 				background: @themed-streamitem-overlay-background;
 			});
+		}
+
+		> header {
+			position: absolute;
 		}
 
 		> footer {
@@ -271,11 +290,47 @@
 		}
 	}
 
-	&.show-game:not(.show-host) > .preview::after {
-		top: calc( 50% - .75rem );
+	// fix play icon position
+	&.show-game,
+	&.info-title {
+		&:not(.show-host) > .preview::after {
+			top: calc( 50% - .75rem );
+		}
 	}
 
+	// fix play icon size
 	&.show-host > .preview::after {
 		font-size: 5rem;
+	}
+
+	// show the right info in the bottom bar
+	&.info-game  > .preview > footer > .bottom > .info-title,
+	&.info-title > .preview > footer > .bottom > .info-game {
+		bottom: -100%;
+		opacity: 0;
+	}
+
+	// toggle game and title while being expanded
+	&.info-title {
+		> .preview.expanded > footer > .bottom {
+			> .info-game {
+				bottom: 0;
+				opacity: 1;
+			}
+
+			> .info-title {
+				bottom: 100%;
+				opacity: 0;
+			}
+		}
+
+		// don't show the game in expanded mode while being in the games.game route
+		&:not(.show-game) > .preview.expanded > footer > .bottom {
+			// and move the game info and title down instead
+			> .info-game,
+			> .info-title {
+				bottom: -100%;
+			}
+		}
 	}
 }

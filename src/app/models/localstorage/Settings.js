@@ -46,6 +46,7 @@ define([
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
 		gui_filterstreams   : attr( "boolean", { defaultValue: false } ),
 		gui_langfilter      : attr( "",        { defaultValue: defaultLangFilterValue } ),
+		stream_info         : attr( "number",  { defaultValue: 0 } ),
 		stream_show_flag    : attr( "boolean", { defaultValue: false } ),
 		stream_show_info    : attr( "boolean", { defaultValue: false } ),
 		stream_click_middle : attr( "number",  { defaultValue: 2 } ),
@@ -149,6 +150,11 @@ define([
 		gui_filterstreams: [
 			{ value: false, label: "Fade out streams" },
 			{ value: true,  label: "Filter out streams" }
+		],
+
+		stream_info: [
+			{ id: 0, label: "Game being played" },
+			{ id: 1, label: "Stream title" }
 		],
 
 		stream_click: [
