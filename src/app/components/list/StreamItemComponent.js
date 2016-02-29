@@ -12,18 +12,18 @@ define([
 	var set = Ember.set;
 	var alias = Ember.computed.alias;
 	var and = Ember.computed.and;
-	var bool = Ember.computed.bool;
 	var later = Ember.run.later;
 	var cancel = Ember.run.cancel;
+
 
 	return ListItemComponent.extend({
 		layout: layout,
 		classNameBindings: [
 			":stream-item-component",
 			"_showGame:show-game",
-			"settings.gui_gamevisible:always-show-game",
 			"host:show-host",
-			"showFlag:show-flag",
+			"settings.stream_show_flag:show-flag",
+			"settings.stream_show_info:show-info",
 			"faded:faded",
 			"expanded:expanded"
 		],
@@ -34,12 +34,11 @@ define([
 
 		expanded: false,
 		locked  : false,
-		timer: null,
+		timer   : null,
 
 		showGame: false,
 		_showGame: and( "showGame", "channel.game" ),
 
-		showFlag: bool( "settings.gui_flagsvisible" ),
 
 		faded: function() {
 			if ( get( this, "settings.gui_filterstreams" ) ) {

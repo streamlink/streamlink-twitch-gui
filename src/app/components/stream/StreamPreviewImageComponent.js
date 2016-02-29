@@ -15,7 +15,7 @@ define([
 	var get = Ember.get;
 	var getOwner = Ember.getOwner;
 
-	var actions = Settings.gui_streamclick.reduce(function( obj, item ) {
+	var actions = Settings.stream_click.reduce(function( obj, item ) {
 		obj[ item.key ] = item.id;
 		return obj;
 	}, {} );
@@ -33,8 +33,8 @@ define([
 		"class": "",
 		noMiddleclickScroll: function() {
 			// true or null
-			return get( this, "settings.gui_streamclick_mid" ) !== actions.disabled || null;
-		}.property( "settings.gui_streamclick_mid" ),
+			return get( this, "settings.stream_click_middle" ) !== actions.disabled || null;
+		}.property( "settings.stream_click_middle" ),
 
 		init: function() {
 			this._super.apply( this, arguments );
@@ -65,13 +65,13 @@ define([
 					// left mouse button
 					? ( event.ctrlKey || event.metaKey
 						// with modifier key
-						? get( this, "settings.gui_streamclick_mod" )
+						? get( this, "settings.stream_click_modify" )
 						// without modifier keys (default action)
 						: actions.launch
 					)
 					: event.button === 1
 					// middle mouse button
-					? get( this, "settings.gui_streamclick_mid" )
+					? get( this, "settings.stream_click_middle" )
 					// everything else (no action)
 					: -1;
 
