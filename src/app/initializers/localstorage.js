@@ -33,6 +33,19 @@ define(function() {
 			settings.gui_homepage = "/user/followedStreams";
 		}
 
+		var renamedProps = {
+			"gui_flagsvisible": "stream_show_flag",
+			"gui_gamevisible" : "stream_show_info",
+			"gui_streamclick_mid": "stream_click_middle",
+			"gui_streamclick_mod": "stream_click_modify"
+		};
+
+		Object.keys( renamedProps ).forEach(function( key ) {
+			if ( !( key in settings ) ) { return; }
+			settings[ renamedProps[ key ] ] = settings[ key ];
+			delete settings[ key ];
+		});
+
 		LS.setItem( "settings", JSON.stringify( data ) );
 	}
 

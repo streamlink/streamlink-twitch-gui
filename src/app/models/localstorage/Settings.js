@@ -44,12 +44,13 @@ define([
 		gui_twitchemotes    : attr( "boolean", { defaultValue: false } ),
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
-		gui_gamevisible     : attr( "boolean", { defaultValue: false } ),
-		gui_flagsvisible    : attr( "boolean", { defaultValue: false } ),
 		gui_filterstreams   : attr( "boolean", { defaultValue: false } ),
 		gui_langfilter      : attr( "",        { defaultValue: defaultLangFilterValue } ),
-		gui_streamclick_mod : attr( "number",  { defaultValue: 4 } ),
-		gui_streamclick_mid : attr( "number",  { defaultValue: 2 } ),
+		stream_info         : attr( "number",  { defaultValue: 0 } ),
+		stream_show_flag    : attr( "boolean", { defaultValue: false } ),
+		stream_show_info    : attr( "boolean", { defaultValue: false } ),
+		stream_click_middle : attr( "number",  { defaultValue: 2 } ),
+		stream_click_modify : attr( "number",  { defaultValue: 4 } ),
 		notify_enabled      : attr( "boolean", { defaultValue: true } ),
 		notify_all          : attr( "boolean", { defaultValue: true } ),
 		notify_grouping     : attr( "boolean", { defaultValue: true } ),
@@ -151,7 +152,12 @@ define([
 			{ value: true,  label: "Filter out streams" }
 		],
 
-		gui_streamclick: [
+		stream_info: [
+			{ id: 0, label: "Game being played" },
+			{ id: 1, label: "Stream title" }
+		],
+
+		stream_click: [
 			{ id: 0, key: "disabled", label: "Do nothing" },
 			{ id: 1, key: "launch",   label: "Launch stream" },
 			{ id: 2, key: "chat",     label: "Open chat" },
