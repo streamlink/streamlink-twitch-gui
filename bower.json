@@ -2,7 +2,7 @@
 	"name": "livestreamer-twitch-gui",
 	"dependencies": {
 		"requirejs": "2.1.20",
-		"ember": "2.3.0",
+		"ember": "2.4.1",
 		"ember-data": "2.3.0",
 		"ember-localstorage-adapter": "bastimeyer/ember-localstorage-adapter#ember-data-2.0",
 		"jquery": "2.1.3",

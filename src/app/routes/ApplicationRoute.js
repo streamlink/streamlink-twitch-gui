@@ -81,8 +81,6 @@ define([
 
 		actions: {
 			"history": function( action ) {
-				// prevents going back to the index route
-				if ( action < 0 && window.history.length <= 2 ) { return; }
 				window.history.go( +action );
 			},
 
@@ -109,9 +107,12 @@ define([
 				}
 			},
 
-			"gotoHomepage": function() {
+			"gotoHomepage": function( noHistoryEntry ) {
 				var homepage = get( this, "settings.gui_homepage" );
-				this.transitionTo( homepage || "/featured" );
+				var method   = noHistoryEntry
+					? "replaceWith"
+					: "transitionTo";
+				this.router[ method ]( homepage || "/featured" );
 			},
 
 			"openBrowser": function( url ) {
