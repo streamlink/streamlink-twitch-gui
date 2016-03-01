@@ -122,7 +122,12 @@ Choose a custom executable file of your selected browser. If left blank, default
 <fieldset>
 <legend>Languages</legend>
 <div><i class="fa fa-filter"></i> Filter streams<span>Choose <i class="text-nowrap">Fade out</i> to dim or choose <i class="text-nowrap">Filter out</i> to remove streams not matching your language selection from lists.</span></div>
+<div>
 {{radio-buttons buttonName="filterstreams" boxes=false wrap=true value=model.gui_filterstreams content=settings.content.constructor.gui_filterstreams}}
+{{#if model.gui_filterstreams}}
+<p class="notice"><em>Please select only one language.<br>Filtering multiple languages is not supported by Twitch.</em></p>
+{{/if}}
+</div>
 <div><i class="fa fa-language"></i> Languages<span>Broadcaster languages.</span></div>
 <div>
 <ul class="list-unstyled filter-lang">

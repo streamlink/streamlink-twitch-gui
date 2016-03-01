@@ -19,6 +19,10 @@ define( [ "Ember" ], function( Ember ) {
 				return filters[ lang ];
 			}, filters );
 
+			if ( filtered.length === 1 ) {
+				return filtered[ 0 ];
+			}
+
 			// ignore everything (un)checked
 			if ( filtered.length > 0 && filtered.length !== keys.length ) {
 				return filtered;
