@@ -9,6 +9,7 @@
 	.dynamic-elems-per-row( 3, @content-width, 8%, @additional-width );
 	.stream-hover( @duration: @duration );
 
+	&.duplicateItem,
 	&.faded {
 		&:not(:hover):not(.expanded) > * {
 			opacity: .25;

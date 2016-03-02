@@ -40,19 +40,12 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#if content.length}}
-<ul class="content-list">
-{{#each model as |channel index|}}
-{{channel-item content=channel isNewItem=(is-gte index initialFetchSize)}}
-{{/each}}
-</ul>
-{{infinite-scroll}}
+{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{channel-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<div class="content-empty">
 <p>The returned list of followed channels is empty.</p>
 <ul class="fa-ul list-empty">
 <li>{{#link-to "channels"}}<i class="fa fa-li fa-caret-right"></i>Watch top channels{{/link-to}}</li>
 </ul>
-</div>
-{{/if}}
+{{/content-list}}
 </main>

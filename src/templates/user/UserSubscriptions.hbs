@@ -5,17 +5,10 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#if model.length}}
-<ul class="content-list">
-{{#each model as |subscription index|}}
-{{subscription-item content=subscription isNewItem=(is-gte index initialFetchSize)}}
-{{/each}}
-</ul>
-{{infinite-scroll}}
+{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{subscription-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<div class="content-empty">
 <p>You don't have any channel subscriptions.</p>
 <p>Directly support broadcasters by subscribing to their channel.</p>
-</div>
-{{/if}}
+{{/content-list}}
 </main>

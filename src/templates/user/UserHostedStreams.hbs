@@ -7,20 +7,13 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#if content.length}}
-<ul class="content-list">
-{{#each model as |host index|}}
-{{stream-item content=host.target host=host isNewItem=(is-gte index initialFetchSize) showGame=true}}
-{{/each}}
-</ul>
-{{infinite-scroll}}
+{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{stream-item host=item content=item.target isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<div class="content-empty">
 <p>The returned list of hosted streams is empty.</p>
 <ul class="fa-ul list-empty">
 <li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
 <li>{{#link-to "user.followedStreams"}}<i class="fa fa-li fa-caret-right"></i>Watch your followed streams{{/link-to}}</li>
 </ul>
-</div>
-{{/if}}
+{{/content-list}}
 </main>

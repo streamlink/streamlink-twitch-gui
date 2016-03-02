@@ -4,9 +4,13 @@ define( [ "Ember" ], function( Ember ) {
 		settings: Ember.inject.service(),
 
 		tagName: "li",
-		classNameBindings: [ "isNewItem:newItem" ],
+		classNameBindings: [
+			"isNewItem:newItem",
+			"isDuplicateItem:duplicateItem"
+		],
 
-		isNewItem: false
+		isNewItem: false,
+		isDuplicateItem: false
 	});
 
 });

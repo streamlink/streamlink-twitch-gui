@@ -128,6 +128,7 @@ define(function( require ) {
 		HoursFromNowHelper: require( "helpers/HoursFromNowHelper" ),
 		TimeFromNowHelper: require( "helpers/TimeFromNowHelper" ),
 		GetParamHelper: require( "helpers/GetParamHelper" ),
+		HasOwnPropertyHelper: require( "helpers/HasOwnPropertyHelper" ),
 
 
 		// Services
@@ -188,6 +189,7 @@ define(function( require ) {
 		ModalNewreleaseComponent: require( "components/modal/ModalNewreleaseComponent" ),
 		ModalQuitComponent: require( "components/modal/ModalQuitComponent" ),
 
+		ContentListComponent: require( "components/list/ContentListComponent" ),
 		ChannelItemComponent: require( "components/list/ChannelItemComponent" ),
 		GameItemComponent: require( "components/list/GameItemComponent" ),
 		HeadlineTotalsComponent: require( "components/list/HeadlineTotalsComponent" ),

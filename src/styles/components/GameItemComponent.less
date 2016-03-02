@@ -13,6 +13,14 @@
 	.dynamic-elems-per-row( 4, @content-width, 8%, @additional-width );
 	.block-aspect-ratio( ( 272 / 380 ) );
 
+	&.duplicateItem {
+		transition: opacity .333s ease-out;
+
+		&:not(:hover) {
+			opacity: .25;
+		}
+	}
+
 	> header,
 	> footer {
 		position: absolute;

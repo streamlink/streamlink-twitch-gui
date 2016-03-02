@@ -6,19 +6,12 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#if content.length}}
-<ul class="content-list">
-{{#each model as |game index|}}
-{{game-item content=game isNewItem=(is-gte index initialFetchSize)}}
-{{/each}}
-</ul>
-{{infinite-scroll}}
+{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{game-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<div class="content-empty">
 <p>The returned list of followed games is empty.</p>
 <ul class="fa-ul list-empty">
 <li>{{#link-to "games"}}<i class="fa fa-li fa-caret-right"></i>Watch top games{{/link-to}}</li>
 </ul>
-</div>
-{{/if}}
+{{/content-list}}
 </main>

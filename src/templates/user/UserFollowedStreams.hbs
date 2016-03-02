@@ -7,20 +7,13 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#if content.length}}
-<ul class="content-list">
-{{#each model as |stream index|}}
-{{stream-item content=stream isNewItem=(is-gte index initialFetchSize) showGame=true faded=false}}
-{{/each}}
-</ul>
-{{infinite-scroll}}
+{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{stream-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem faded=false}}
 {{else}}
-<div class="content-empty">
 <p>The returned list of followed streams is empty.</p>
 <ul class="fa-ul list-empty">
 <li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
 <li>{{#link-to "channels"}}<i class="fa fa-li fa-caret-right"></i>Watch top channels{{/link-to}}</li>
 </ul>
-</div>
-{{/if}}
+{{/content-list}}
 </main>

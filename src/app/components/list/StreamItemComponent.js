@@ -39,7 +39,7 @@ define([
 		locked  : false,
 		timer   : null,
 
-		showGame: false,
+		showGame : true,
 		_showGame: and( "showGame", "channel.game" ),
 
 		infoGame : equal( "settings.stream_info", 0 ),
