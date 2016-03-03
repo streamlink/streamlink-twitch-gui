@@ -9,7 +9,7 @@
 	clickable=(bool-not expanded)
 	tagName="section"
 	class=(if expanded "expanded")
-	title=(unless expanded (if channel.status channel.status "") "")
+	title=(unless expanded (unless infoTitle (if channel.status channel.status "") (if channel.game channel.game "")) "")
 	action=(action "collapse")}}
 {{#if host}}
 <header><div><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.name title=(concat "hosted by " host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</div></header>
