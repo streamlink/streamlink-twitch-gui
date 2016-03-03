@@ -1,4 +1,5 @@
 define([
+	"Testutils",
 	"Ember",
 	"helpers/IsEqualHelper",
 	"helpers/IsNullHelper",
@@ -18,6 +19,7 @@ define([
 	"helpers/GetParamHelper",
 	"helpers/HasOwnPropertyHelper"
 ], function(
+	Testutils,
 	Ember,
 	IsEqualHelper,
 	IsNullHelper,
@@ -38,6 +40,11 @@ define([
 	HasOwnPropertyHelper
 ) {
 
+	var runAppend  = Testutils.runAppend;
+	var runDestroy = Testutils.runDestroy;
+	var getOutput  = Testutils.getOutput;
+	var buildOwner = Testutils.buildOwner;
+
 	var get = Ember.get;
 	var set = Ember.set;
 	var setOwner = Ember.setOwner;
@@ -47,32 +54,6 @@ define([
 
 	var owner, component;
 
-	function runAppend( view ) {
-		run( view, "appendTo", "#qunit-fixture" );
-	}
-
-	function runDestroy( destroyed ) {
-		if ( destroyed ) {
-			run( destroyed, "destroy" );
-		}
-	}
-
-	function getOutput( component ) {
-		return component.$().text();
-	}
-
-	function buildOwner( properties ) {
-		var Owner = Ember.Object.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
-			init: function() {
-				this._super.apply( this, arguments );
-				var registry = new Ember.Registry( this._registryOptions );
-				this.__registry__  = registry;
-				this.__container__ = registry.container({ owner: this });
-			}
-		});
-
-		return Owner.create( properties || {} );
-	}
 
 	QUnit.module( "Ember helpers", {
 		"setup": function() {

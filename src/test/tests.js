@@ -15,6 +15,7 @@ define(function( require ) {
 				"EmberTest": "../vendor/ember/ember-testing",
 
 				// Test paths
+				"Testutils": "../test/utils",
 				"test": "../test/tests"
 			}
 		});

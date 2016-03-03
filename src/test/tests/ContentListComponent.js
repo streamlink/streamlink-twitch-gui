@@ -1,53 +1,30 @@
 define([
+	"Testutils",
 	"Ember",
 	"components/list/ContentListComponent",
 	"helpers/IsGteHelper",
 	"helpers/HasOwnPropertyHelper"
 ], function(
+	Testutils,
 	Ember,
 	ContentListComponent,
 	IsGteHelper,
 	HasOwnPropertyHelper
 ) {
 
+	var runAppend  = Testutils.runAppend;
+	var runDestroy = Testutils.runDestroy;
+	var getOutput  = Testutils.getOutput;
+	var buildOwner = Testutils.buildOwner;
+
 	var setOwner = Ember.setOwner;
 	var run = Ember.run;
 	var Component = Ember.Component;
 	var ComponentLookup = Ember.ComponentLookup;
 	var compile = Ember.HTMLBars.compile;
-	var reWhiteSpace = /\s+/g;
 
 	var owner, component;
 
-	function runAppend( view ) {
-		run( view, "appendTo", "#qunit-fixture" );
-	}
-
-	function runDestroy( destroyed ) {
-		if ( destroyed ) {
-			run( destroyed, "destroy" );
-		}
-	}
-
-	function getOutput( component, stripWhiteSpace ) {
-		var text = component.$().text();
-		return stripWhiteSpace
-			? text.replace( reWhiteSpace, "" )
-			: text;
-	}
-
-	function buildOwner( properties ) {
-		var Owner = Ember.Object.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
-			init: function() {
-				this._super.apply( this, arguments );
-				var registry = new Ember.Registry( this._registryOptions );
-				this.__registry__  = registry;
-				this.__container__ = registry.container({ owner: this });
-			}
-		});
-
-		return Owner.create( properties || {} );
-	}
 
 	QUnit.module( "ContentListComponent", {
 		"setup": function() {
