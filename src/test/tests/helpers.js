@@ -15,7 +15,8 @@ define([
 	"helpers/FormatTimeHelper",
 	"helpers/HoursFromNowHelper",
 	"helpers/TimeFromNowHelper",
-	"helpers/GetParamHelper"
+	"helpers/GetParamHelper",
+	"helpers/HasOwnPropertyHelper"
 ], function(
 	Ember,
 	IsEqualHelper,
@@ -33,7 +34,8 @@ define([
 	FormatTimeHelper,
 	HoursFromNowHelper,
 	TimeFromNowHelper,
-	GetParamHelper
+	GetParamHelper,
+	HasOwnPropertyHelper
 ) {
 
 	var get = Ember.get;
@@ -450,6 +452,26 @@ define([
 		assert.equal( getOutput( component ), "baz", "Bound parameter" );
 		run( component, "set", "param", "qux" );
 		assert.equal( getOutput( component ), "qux", "Changed bound parameter" );
+
+	});
+
+
+	QUnit.test( "Has own property", function( assert ) {
+
+		owner.register( "helper:has-own-property", HasOwnPropertyHelper );
+		component = Component.extend({
+			obj   : { foo: true },
+			prop  : "foo",
+			layout: compile( "{{has-own-property obj prop}}" )
+		}).create();
+		setOwner( component, owner );
+
+		runAppend( component );
+		assert.equal( getOutput( component ), "true", "Does have its own property" );
+		run( component, "set", "prop", "bar" );
+		assert.equal( getOutput( component ), "false", "Property does not exist" );
+		run( component, "set", "prop", "toString" );
+		assert.equal( getOutput( component ), "false", "Prototype property" );
 
 	});
 

@@ -5,6 +5,7 @@
 		"test/helpers",
 		"test/parameters",
 		"test/ObjectBuffer",
-		"test/StreamOutputBuffer"
+		"test/StreamOutputBuffer",
+		"test/ContentListComponent"
 	]
 }
