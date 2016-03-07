@@ -26,6 +26,14 @@ define( [ "Ember", "EmberData", "EmberDataLS" ], function( Ember, DS ) {
 					}
 					return Promise.reject();
 				});
+		},
+
+		query: function() {
+			return this._super.apply( this, arguments )
+				.then(function( recordArray ) {
+					recordArray._unregisterFromManager();
+					return recordArray;
+				});
 		}
 	});
 
