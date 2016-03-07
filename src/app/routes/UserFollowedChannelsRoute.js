@@ -36,7 +36,7 @@ define([
 				direction: params.direction || "desc"
 			})
 				.then(function( data ) {
-					return data.mapBy( "channel" ).toArray();
+					return data.toArray().mapBy( "channel" );
 				})
 				.then( preload( "logo" ) );
 		},

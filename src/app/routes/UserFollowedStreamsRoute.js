@@ -25,7 +25,7 @@ define([
 				limit : get( this, "limit" )
 			})
 				.then(function( data ) {
-					return data.mapBy( "stream" ).toArray();
+					return data.toArray().mapBy( "stream" );
 				})
 				.then( preload( "preview.medium_nocache" ) );
 		}

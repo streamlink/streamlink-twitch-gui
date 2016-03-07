@@ -39,7 +39,7 @@ define([
 						live : true
 					})
 						.then(function( data ) {
-							return data.mapBy( "game" ).toArray();
+							return data.toArray().mapBy( "game" );
 						})
 						.then( preload( "box.large_nocache" ) )
 					: Promise.resolve([]),
@@ -52,7 +52,7 @@ define([
 						limit : 10
 					})
 						.then(function( data ) {
-							return data.mapBy( "channel" ).toArray();
+							return data.toArray().mapBy( "channel" );
 						})
 						.then( preload( "logo" ) )
 					: Promise.resolve([]),
@@ -65,7 +65,7 @@ define([
 						limit : get( this, "limit" )
 					})
 						.then(function( data ) {
-							return data.mapBy( "stream" ).toArray();
+							return data.toArray().mapBy( "stream" );
 						})
 						.then( preload( "preview.medium_nocache" ) )
 					: Promise.resolve([])
@@ -89,7 +89,7 @@ define([
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})
-				.then(function( data ) { return data.mapBy( "stream" ).toArray(); })
+				.then(function( data ) { return data.toArray().mapBy( "stream" ); })
 				.then( preload( "preview.medium_nocache" ) );
 		},
 
