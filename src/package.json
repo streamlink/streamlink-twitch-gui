@@ -2,13 +2,12 @@
 	"name": "livestreamer-twitch-gui",
 	"version": "0.12.0",
 
-	"main": "app://livestreamer-twitch-gui/index.html",
+	"main": "index.html",
 
 	"window": {
 		"title": "Livestreamer Twitch GUI",
 		"frame": false,
 		"resizable": true,
-		"toolbar": false,
 		"show": false,
 		"position": "center",
 		"width": 960,
