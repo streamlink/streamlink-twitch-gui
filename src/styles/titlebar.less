@@ -108,6 +108,7 @@
 				@anim-length: .333s;
 
 				position: relative;
+				overflow: hidden;
 				-webkit-transition: width @anim-length ease-in;
 
 				> .indicator {
@@ -160,7 +161,7 @@
 					> .indicator {
 						opacity: 0;
 						z-index: -1;
-						-webkit-transition-delay: 0;
+						transition-delay: 0s;
 					}
 				}
 			}
