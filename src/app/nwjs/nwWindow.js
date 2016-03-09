@@ -4,10 +4,6 @@ define( [ "nwjs/nwGui" ], function( nwGui ) {
 	var nwWindow = nwGui.Window.get();
 	nwWindow.removeAllListeners();
 
-	nwWindow.window.addEventListener( "beforeunload", function() {
-		nwWindow.emit( "shutdown" );
-	}, false );
-
 
 	var isHidden    = true;
 	var isMaximized = false;

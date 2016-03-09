@@ -36,7 +36,9 @@ define([
 		});
 
 		// prevent tray icons from stacking up when refreshing the page or devtools
-		nwWindow.on( "shutdown", nwWindow.tray.remove.bind( nwWindow.tray ) );
+		nwWindow.window.addEventListener( "beforeunload", function() {
+			nwWindow.tray.remove();
+		}, false );
 	}
 
 
