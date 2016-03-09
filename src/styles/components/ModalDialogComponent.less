@@ -12,7 +12,7 @@
 	z-index: 10000;
 	background: fade( #000, 50% );
 	opacity: 1;
-	-webkit-animation: animFadeIn .333s ease-out 0s 1 normal;
+	animation: animFadeIn .333s ease-out 0s 1 normal;
 
 	> div {
 		display: flex;
@@ -21,7 +21,7 @@
 		min-height: 16rem;
 		padding: 2rem;
 		opacity: 1;
-		-webkit-animation: animFadeInTop .333s ease-out 0s 1 normal;
+		animation: animFadeInTop .333s ease-out 0s 1 normal;
 
 		.themed({
 			background: @themed-modal-base-background;
@@ -32,7 +32,7 @@
 	&.fadeOut {
 		&,
 		> div {
-			-webkit-animation-direction: reverse;
+			animation-direction: reverse;
 		}
 	}
 
@@ -136,12 +136,12 @@
 		}
 
 		.btn-log.btn-danger {
-			@-webkit-keyframes errorLogButtonAnimation {
+			@keyframes errorLogButtonAnimation {
 				from { background: lighten( @color-danger, 10% ); }
 				to { background: darken( @color-danger, 10% ); }
 			}
 
-			-webkit-animation: errorLogButtonAnimation .333s ease-out infinite alternate;
+			animation: errorLogButtonAnimation .333s ease-out infinite alternate;
 
 			> i {
 				.themed({

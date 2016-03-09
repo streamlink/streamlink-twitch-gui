@@ -23,13 +23,13 @@
 
 			// let all list items be faded in and use an animation delay:
 			// we need to wait for the container animation to finish
-			-webkit-animation: animFadeInBottom @anim-list-item-duration @min ease-out both;
+			animation: animFadeInBottom @anim-list-item-duration @min ease-out both;
 
 			// increase the animation delay for each element...
 			.loop( @i ) when ( @i <= @num ) {
 				@nth: ~"@{i}";
 				&:nth-of-type( @{nth} ) {
-					-webkit-animation-delay: ( @min + @i * @inc );
+					animation-delay: ( @min + @i * @inc );
 				}
 				.loop( ( @i + 1 ) );
 			}
@@ -38,7 +38,7 @@
 			.loop( @i ) when ( @i > @num ) {
 				@nth: ~"n+@{i}";
 				&:nth-of-type( @{nth} ) {
-					-webkit-animation-delay: @max;
+					animation-delay: @max;
 				}
 			}
 			.loop( 1 );

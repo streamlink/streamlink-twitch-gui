@@ -15,7 +15,7 @@
 
 	width: 1em;
 	height: 1em;
-	-webkit-animation: anim-loading-spinner-rotate ( @duration * 3 ) linear infinite;
+	animation: anim-loading-spinner-rotate ( @duration * 3 ) linear infinite;
 
 	> circle {
 		fill: transparent;
@@ -29,7 +29,7 @@
 	}
 
 
-	@-webkit-keyframes anim-loading-spinner-rotate {
+	@keyframes anim-loading-spinner-rotate {
 		100% {
 			transform: rotate(720deg);
 		}
@@ -38,9 +38,9 @@
 	.anim-spinner( @suffix: ~"", @variable: ~"radius" ) {
 		@name: ~"anim-loading-spinner-dash@{suffix}";
 
-		-webkit-animation: @name @duration ease-in-out infinite;
+		animation: @name @duration ease-in-out infinite;
 
-		@-webkit-keyframes @name {
+		@keyframes @name {
 			@circumference:     ( 2.0 * pi() * @@variable );
 			@circumference_1_4: ( 0.25 * @circumference );
 			@circumference_3_4: ( 0.75 * @circumference );

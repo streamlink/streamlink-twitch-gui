@@ -18,7 +18,7 @@
 
 	&.animated {
 		> .stream-presentation-component {
-			-webkit-animation: animFadeInRight .5s ease-out;
+			animation: animFadeInRight .5s ease-out;
 		}
 	}
 
@@ -85,6 +85,6 @@
 	> .channels,
 	> .globalstats {
 		@delay: ( @anim-content-duration / 2 );
-		-webkit-animation: animFadeInRight @anim-content-duration @delay ease-out both;
+		animation: animFadeInRight @anim-content-duration @delay ease-out both;
 	}
 }

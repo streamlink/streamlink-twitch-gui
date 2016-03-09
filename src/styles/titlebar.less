@@ -4,7 +4,7 @@
 	width: 100%;
 	height: @titlebar-height;
 	-webkit-app-region: drag;
-	-webkit-animation: animFadeInTop .333s ease-out;
+	animation: animFadeInTop .333s ease-out;
 
 	> h1 {
 		position: absolute;
@@ -109,7 +109,7 @@
 
 				position: relative;
 				overflow: hidden;
-				-webkit-transition: width @anim-length ease-in;
+				transition: width @anim-length ease-in;
 
 				> .indicator {
 					display: block;
@@ -136,7 +136,7 @@
 					opacity: 1;
 					z-index: 1;
 					// "show" with delay
-					-webkit-transition: opacity .001s @anim-length, z-index .001s @anim-length;
+					transition: opacity .001s @anim-length, z-index .001s @anim-length;
 
 					&.fa {
 						font-family: FontAwesome;
