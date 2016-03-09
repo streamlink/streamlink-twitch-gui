@@ -77,11 +77,6 @@ define([
 			return days * 24 * 3600 * 1000;
 		}.property( "config.notification-cache-time" ),
 
-		// use the app icon as group icon
-		iconGroup: function() {
-			return get( this, "config.tray-icon" ).replace( "{res}", 256 );
-		}.property( "config.tray-icon" ),
-
 		// controller state
 		model : [],
 		_first: true,
@@ -392,7 +387,7 @@ define([
 
 		showNotificationGroup: function( streams ) {
 			this.showNotification({
-				icon : get( this, "groupIcon" ),
+				icon : get( this, "config.notification-icon-group" ),
 				title: "Some of your favorites have started streaming",
 				body : streams.map(function( stream ) {
 					return get( stream, "channel.display_name" );
