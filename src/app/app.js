@@ -283,11 +283,6 @@ define(function( require ) {
 		AboutTemplate: require( "hbs!templates/About" ),
 
 
-		// ready event
-		ready: function ready() {
-			nwWindow.emit( "ready" );
-		},
-
 		toString: function() { return "App"; }
 
 	});

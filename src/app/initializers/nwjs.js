@@ -25,21 +25,19 @@ define([
 			var settings   = application.lookup( "service:settings" );
 
 			// set up everything NWjs related
-			nwWindow.once( "ready", function() {
-				function settingsObserver() {
-					// wait for the settings to load
-					if ( !get( settings, "content" ) ) { return; }
-					settings.removeObserver( "content", settings, settingsObserver );
+			function settingsObserver() {
+				// wait for the settings to load
+				if ( !get( settings, "content" ) ) { return; }
+				settings.removeObserver( "content", settings, settingsObserver );
 
-					// do all the NWjs stuff
-					menubar.createNativeMenuBar();
-					shortcut.createStartmenuShortcut( settings );
-					tray.createTrayIcon( settings );
-					integrations.setupIntegrations( settings );
-				}
+				// do all the NWjs stuff
+				menubar.createNativeMenuBar();
+				shortcut.createStartmenuShortcut( settings );
+				tray.createTrayIcon( settings );
+				integrations.setupIntegrations( settings );
+			}
 
-				settings.addObserver( "content", settings, settingsObserver );
-			});
+			settings.addObserver( "content", settings, settingsObserver );
 
 			// listen for the close event and show the dialog instead of strictly shutting down
 			nwWindow.on( "close", function() {
