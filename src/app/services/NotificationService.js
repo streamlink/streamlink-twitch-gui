@@ -28,7 +28,7 @@ define([
 	var debounce = Ember.run.debounce;
 	var later = Ember.run.later;
 
-	var Notif = window.Notification;
+	var Notif = window.chrome.notifications;
 
 
 	function StreamCache( stream ) {
@@ -79,6 +79,7 @@ define([
 
 		// controller state
 		model : [],
+		notifs: [],
 		_first: true,
 		_tries: 0,
 		_next : null,
@@ -116,6 +117,32 @@ define([
 
 			return "Desktop notifications are " + status;
 		}.property( "enabled", "paused", "error" ),
+
+
+		_setupNotifications: function() {
+			[ "onClosed", "onClicked" ].forEach(function( key ) {
+				var ev = Notif[ key ];
+				ev.getListeners().forEach(function( listener ) {
+					ev.removeListener( listener.callback );
+				});
+			});
+
+			var self = this;
+
+			Notif.onClosed.addListener(function( id ) {
+				id = Number( id );
+				if ( isNaN( id ) ) { return; }
+				self.notifs.splice( id, 1 );
+			});
+
+			Notif.onClicked.addListener(function( id ) {
+				var item = self.notifs[ Number( id ) ];
+				if ( item && item.click ) {
+					item.click();
+				}
+				Notif.clear( id );
+			});
+		}.on( "init" ),
 
 
 		/**
@@ -448,16 +475,15 @@ define([
 		},
 
 		showNotification: function( obj ) {
-			var notify = new Notif( obj.title, {
-				icon: obj.icon,
-				body: obj.body
+			var id = this.notifs.push( obj ) - 1;
+			Notif.create( String( id ), {
+				type          : "basic",
+				iconUrl       : obj.icon,
+				title         : obj.title,
+				message       : obj.body,
+				contextMessage: get( this, "config.display-name" ),
+				isClickable   : true
 			});
-			if ( obj.click ) {
-				notify.addEventListener( "click", function() {
-					this.close();
-					obj.click();
-				}, false );
-			}
 		},
 
 
