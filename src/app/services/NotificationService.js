@@ -136,9 +136,9 @@ define([
 			});
 
 			Notif.onClicked.addListener(function( id ) {
-				var item = self.notifs[ Number( id ) ];
-				if ( item && item.click ) {
-					item.click();
+				var callback = self.notifs[ Number( id ) ];
+				if ( callback ) {
+					callback();
 				}
 				Notif.clear( id );
 			});
@@ -413,34 +413,35 @@ define([
 		},
 
 		showNotificationGroup: function( streams ) {
-			this.showNotification({
-				icon : get( this, "config.notification-icon-group" ),
-				title: "Some of your favorites have started streaming",
-				body : streams.map(function( stream ) {
-					return get( stream, "channel.display_name" );
-				}).join( ", " ),
-				click: function() {
+			this.showNotification(
+				"Some followed channels have started streaming",
+				get( this, "config.notification-icon-group" ),
+				streams.map(function( stream ) {
+					return {
+						title  : get( stream, "channel.display_name" ),
+						message: get( stream, "channel.status" ) || ""
+					};
+				}),
+				function() {
 					var settings = get( this, "settings.notify_click_group" );
-					streams.forEach( this.notificationClick.bind( this, settings ) );
+					this.notificationClick( settings, streams );
 				}.bind( this )
-			});
+			);
 		},
 
 		showNotificationSingle: function( stream ) {
-			var name = get( stream, "channel.display_name" );
-
-			this.showNotification({
-				icon : get( stream, "logo" ) || get( stream, "channel.logo" ),
-				title: name + " has started streaming",
-				body : get( stream, "channel.status" ) || "",
-				click: function() {
+			this.showNotification(
+				get( stream, "channel.display_name" ) + " has started streaming",
+				get( stream, "logo" ) || get( stream, "channel.logo" ),
+				get( stream, "channel.status" ) || "",
+				function() {
 					var settings = get( this, "settings.notify_click" );
-					this.notificationClick( settings, stream );
+					this.notificationClick( settings, [ stream ] );
 				}.bind( this )
-			});
+			);
 		},
 
-		notificationClick: function( settings, stream ) {
+		notificationClick: function( settings, streams ) {
 			// always restore the window
 			if ( settings !== 0 ) {
 				nwWindow.toggleMinimize( true );
@@ -457,33 +458,46 @@ define([
 					break;
 				// launch stream
 				case 2:
-					get( this, "livestreamer" ).startStream( stream );
+					streams.forEach(function( stream ) {
+						get( this, "livestreamer" ).startStream( stream );
+					}, this );
 					break;
 				// launch stream + chat
 				case 3:
-					get( this, "livestreamer" ).startStream( stream );
-					// don't open the chat twice
-					if ( !get( this, "settings.gui_openchat" ) ) {
-						var url = get( this, "config.twitch-chat-url" );
-						var channel = get( stream, "channel.id" );
-						if ( url && channel ) {
-							url = url.replace( "{channel}", channel );
-							applicationController.send( "openBrowser", url );
+					streams.forEach(function( stream ) {
+						get( this, "livestreamer" ).startStream( stream );
+						// don't open the chat twice
+						if ( !get( this, "settings.gui_openchat" ) ) {
+							var url = get( this, "config.twitch-chat-url" );
+							var channel = get( stream, "channel.id" );
+							if ( url && channel ) {
+								url = url.replace( "{channel}", channel );
+								applicationController.send( "openBrowser", url );
+							}
 						}
-					}
+					}, this );
 			}
 		},
 
-		showNotification: function( obj ) {
-			var id = this.notifs.push( obj ) - 1;
-			Notif.create( String( id ), {
-				type          : "basic",
-				iconUrl       : obj.icon,
-				title         : obj.title,
-				message       : obj.body,
+		showNotification: function( title, icon, message, click ) {
+			var data = {
+				title         : title,
+				iconUrl       : icon,
 				contextMessage: get( this, "config.display-name" ),
 				isClickable   : true
-			});
+			};
+
+			if ( message instanceof Array ) {
+				data.type = "list";
+				data.message = "";
+				data.items = message;
+			} else {
+				data.type = "basic";
+				data.message = message;
+			}
+
+			var id = this.notifs.push( click ) - 1;
+			Notif.create( String( id ), data );
 		},
 
 
