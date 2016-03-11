@@ -112,14 +112,15 @@ a {
 	}
 
 	&.external-link {
+		display: inline-block;
 		word-break: break-word;
 
 		&::after {
 			content: @fa-var-external-link;
 			display: inline-block;
 			font-family: FontAwesome;
-			padding-left: .333em;
-			font-size: 1rem;
+			padding-left: .2em;
+			font-size: 1em;
 			text-decoration: none !important;
 		}
 	}
