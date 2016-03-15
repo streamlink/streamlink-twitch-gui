@@ -48,11 +48,11 @@ define([
 
 			"abort": function() {
 				set( this, "livestreamer.abort", true );
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
 			},
 
 			"close": function() {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
 				schedule( "destroy", this, function() {
 					set( this, "livestreamer.active", null );
 				});

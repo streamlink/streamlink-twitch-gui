@@ -171,7 +171,7 @@ define([
 
 			// automatically close modal on success
 			if ( get( this, "settings.gui_hidestreampopup" ) ) {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			}
 
 			// automatically open chat
@@ -196,7 +196,7 @@ define([
 				   !get( livestreamer, "error" )
 				&& get( this, "active" ) === livestreamer
 			) {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			}
 
 			// restore the GUI

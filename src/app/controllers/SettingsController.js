@@ -122,7 +122,7 @@ define([
 				model.setProperties( buffer );
 				model.save()
 					.then( success, failure )
-					.then( modal.closeModal.bind( modal ) )
+					.then( modal.closeModal.bind( modal, this ) )
 					.then( this.retryTransition.bind( this ) )
 					.catch( model.rollbackAttributes.bind( model ) );
 			},
@@ -132,13 +132,13 @@ define([
 				get( this, "model" ).discardChanges();
 				Promise.resolve()
 					.then( success )
-					.then( modal.closeModal.bind( modal ) )
+					.then( modal.closeModal.bind( modal, this ) )
 					.then( this.retryTransition.bind( this ) );
 			},
 
 			"cancel": function() {
 				set( this, "previousTransition", null );
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			},
 
 			"togglePlayerCmdSubstitutions": function() {

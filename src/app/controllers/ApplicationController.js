@@ -51,7 +51,7 @@ define([
 
 			"winClose": function() {
 				if ( get( this, "streamsLength" ) ) {
-					get( this, "modal" ).openModal( "quit" );
+					get( this, "modal" ).openModal( "quit", this );
 				} else {
 					nwWindow.close( true );
 				}

@@ -32,7 +32,7 @@ define([
 
 		actions: {
 			"close": function() {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( null, true );
 			}
 		}
 	});
