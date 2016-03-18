@@ -79,7 +79,7 @@ define([
 		assert.equal( getOutput( component, true ), "falsefalse", "Initial content" );
 
 		run( content, "pushObjects", [ 3, 4 ] );
-		assert.equal( getOutput( component, true ), "falsefalsetruetrue", "Non empty content" );
+		assert.equal( getOutput( component, true ), "falsefalsetruetrue", "Unique items" );
 
 	});
 
@@ -99,7 +99,75 @@ define([
 		assert.equal( getOutput( component, true ), "falsefalse", "Initial content" );
 
 		run( content, "pushObjects", [ 2, 3 ] );
-		assert.equal( getOutput( component, true ), "falsefalsetruefalse", "Non empty content" );
+		assert.equal( getOutput( component, true ), "falsefalsetruefalse", "Duplicates" );
+
+	});
+
+
+	QUnit.test( "Simple nested duplicates", function( assert ) {
+
+		var done = assert.async();
+		var content = [ { foo: 1 }, { foo: 2 } ];
+		component = Component.extend({
+			content: content,
+			layout : compile(
+				"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
+			)
+		}).create();
+		setOwner( component, owner );
+
+		runAppend( component );
+		assert.equal( getOutput( component, true ), "falsefalse", "Initial content" );
+
+		run( content, "pushObjects", [ { foo: 2 }, { foo: 3 } ] );
+		run.next(function() {
+			assert.equal(
+				getOutput( component, true ),
+				"falsefalsetruefalse",
+				"Added nested duplicates"
+			);
+			done();
+		});
+
+	});
+
+
+	QUnit.test( "Deferred nested duplicates", function( assert ) {
+
+		var done = assert.async();
+		var a = Ember.RSVP.defer();
+		var b = Ember.RSVP.defer();
+
+		a.resolve( 1 );
+		var content = [ { foo: a.promise } ];
+		component = Component.extend({
+			content: content,
+			layout : compile(
+				"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
+			)
+		}).create();
+		setOwner( component, owner );
+
+		runAppend( component );
+		assert.equal( getOutput( component, true ), "false", "Initial content" );
+
+		run( content, "pushObjects", [ { foo: b.promise } ] );
+		run.next(function() {
+			assert.equal( getOutput( component, true ),
+				"falsefalse",
+				"Added unresolved nested duplicate"
+			);
+
+			b.resolve( 1 );
+			run.next(function() {
+				assert.equal( getOutput( component, true ),
+					"falsetrue",
+					"Resolved nested duplicate"
+				);
+
+				done();
+			});
+		});
 
 	});
 

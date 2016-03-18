@@ -18,6 +18,7 @@ define([
 		"class": "",
 
 		content   : null,
+		compare   : null,
 		duplicates: null,
 
 		length : 0,
@@ -33,24 +34,51 @@ define([
 				length    : length,
 				duplicates: {}
 			});
+
+			var compare = get( this, "compare" );
+			if ( compare !== null ) {
+				this.checkInitialDuplicates( compare );
+			}
 		},
 
 
 		_contentLengthObserver: function() {
+			var content = get( this, "content" );
+			var compare = get( this, "compare" );
+			var index   = get( this, "length" );
+
+			if ( compare !== null ) {
+				content = content.mapBy( compare );
+			}
+
+			this.checkDuplicates( content, index );
+		}.observes( "content.length" ),
+
+		checkInitialDuplicates: function( compare ) {
+			var content = get( this, "content" ).mapBy( compare );
+			this.checkDuplicates( content, 1 );
+		},
+
+		checkDuplicates: function( content, index ) {
+			var self       = this;
 			var duplicates = get( this, "duplicates" );
-			var content    = get( this, "content" );
-			var index      = get( this, "length" );
 			var length     = get( content, "length" );
 			var diff       = -length + index - 1;
 
-			for ( ; index < length; index++ ) {
-				if ( content.lastIndexOf( content[ index ], diff ) !== -1 ) {
-					duplicates[ index ] = true;
-				}
-			}
 
-			set( this, "length", length );
-		}.observes( "content.length" )
+			// wait for all potential DS.PromiseObjects to resolve first
+			Ember.RSVP.all( content ).then(function( content ) {
+				for ( var found; index < length; index++ ) {
+					found = content.lastIndexOf( content[ index ], diff );
+					if ( found !== -1 ) {
+						set( duplicates, String( index ), true );
+					}
+				}
+
+				self.notifyPropertyChange( "duplicates" );
+				set( self, "length", length );
+			});
+		}
 	});
 
 });
