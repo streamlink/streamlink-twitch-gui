@@ -52,6 +52,10 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div><i class="fa fa-sort-amount-asc"></i> HLS segment threads<span>Number of threads used for downloading and processing stream segments.{{livestreamer-docs cmd="--hls-segment-threads"}}</span></div>
 <div>{{input type="number" value=model.hls_segment_threads placeholder=hlsSegmentThreadsDefault min=hlsSegmentThreadsMin max=hlsSegmentThreadsMax}}</div>
 {{/unless}}
+<div><i class="fa fa-rocket"></i> Launch attempts<span>Number of stream launch attempts.{{livestreamer-docs cmd="--retry-open"}}</span></div>
+<div>{{input type="number" value=model.retry_open placeholder=retryOpenDefault min=retryOpenMin max=retryOpenMax}}</div>
+<div><i class="fa fa-hourglass-half"></i> Retry delay<span>Time in seconds between each attempt.{{livestreamer-docs cmd="--retry-streams"}}</span></div>
+<div>{{input type="number" value=model.retry_streams placeholder=retryStreamsDefault min=retryStreamsMin max=retryStreamsMax}}</div>
 {{/if}}
 </fieldset>
 <fieldset>

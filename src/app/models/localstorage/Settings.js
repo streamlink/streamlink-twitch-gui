@@ -60,6 +60,8 @@ define([
 		notify_shortcut     : attr( "boolean", { defaultValue: true } ),
 		hls_live_edge       : attr( "number",  { defaultValue: 3, minValue: 1, maxValue: 10 } ),
 		hls_segment_threads : attr( "number",  { defaultValue: 1, minValue: 1, maxValue: 10 } ),
+		retry_open          : attr( "number",  { defaultValue: 1, minValue: 1, maxValue: 10 } ),
+		retry_streams       : attr( "number",  { defaultValue: 1, minValue: 0, maxValue: 3 } ),
 		chat_method         : attr( "string",  { defaultValue: "default" } ),
 		chat_command        : attr( "string",  { defaultValue: "" } ),
 

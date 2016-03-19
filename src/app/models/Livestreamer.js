@@ -134,6 +134,16 @@ define([
 				"--hls-segment-threads",
 				"settings.advanced",
 				"settings.hls_segment_threads"
+			),
+			new Parameter(
+				"--retry-open",
+				"settings.advanced",
+				"settings.retry_open"
+			),
+			new Parameter(
+				"--retry-streams",
+				"settings.advanced",
+				"settings.retry_streams"
 			)
 		],
 

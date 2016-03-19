@@ -34,6 +34,14 @@ define([
 		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
 		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
 
+		retryStreamsDefault: settingsAttrMeta( "retry_streams", "defaultValue" ),
+		retryStreamsMin    : settingsAttrMeta( "retry_streams", "minValue" ),
+		retryStreamsMax    : settingsAttrMeta( "retry_streams", "maxValue" ),
+
+		retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
+		retryOpenMin    : settingsAttrMeta( "retry_open", "minValue" ),
+		retryOpenMax    : settingsAttrMeta( "retry_open", "maxValue" ),
+
 		chatMethods: function() {
 			var methods = get( this, "settings.content.constructor.chat_methods" );
 			return methods.filter(function( method ) {
