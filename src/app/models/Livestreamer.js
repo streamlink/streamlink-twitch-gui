@@ -137,12 +137,12 @@ define([
 			),
 			new Parameter(
 				"--retry-open",
-				"settings.advanced",
+				null,
 				"settings.retry_open"
 			),
 			new Parameter(
 				"--retry-streams",
-				"settings.advanced",
+				null,
 				"settings.retry_streams"
 			)
 		],
