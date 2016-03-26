@@ -31,8 +31,6 @@ define([
 			"expanded:expanded"
 		],
 
-		openBrowser: "openBrowser",
-
 		channel: alias( "content.channel" ),
 
 		expanded: false,
@@ -124,10 +122,6 @@ define([
 				} else {
 					set( this, "expanded", true );
 				}
-			},
-
-			"openBrowser": function( url ) {
-				this.sendAction( "openBrowser", url );
 			}
 		}
 	});
