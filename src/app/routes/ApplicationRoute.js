@@ -1,11 +1,13 @@
 define([
 	"Ember",
 	"nwjs/nwGui",
-	"nwjs/nwWindow"
+	"nwjs/nwWindow",
+	"utils/getStreamFromUrl"
 ], function(
 	Ember,
 	nwGui,
-	nwWindow
+	nwWindow,
+	getStreamFromUrl
 ) {
 
 	var get = Ember.get;
@@ -116,7 +118,12 @@ define([
 			},
 
 			"openBrowser": function( url ) {
-				nwGui.Shell.openExternal( url );
+				var stream = getStreamFromUrl( url );
+				if ( stream ) {
+					this.send( "goto", "channel", stream );
+				} else {
+					nwGui.Shell.openExternal( url );
+				}
 			}
 		}
 	});

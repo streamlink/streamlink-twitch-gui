@@ -1,8 +1,10 @@
 define([
 	"Ember",
+	"utils/getStreamFromUrl",
 	"hbs!templates/components/SearchBarComponent"
 ], function(
 	Ember,
+	getStreamFromUrl,
 	layout
 ) {
 
@@ -140,9 +142,9 @@ define([
 				var query  = get( this, "query" ).trim();
 				var filter = get( this, "filter" );
 
-				var match = this.reChannelURL.exec( query );
-				if ( match ) {
-					query  = match[ 1 ];
+				var stream = getStreamFromUrl( query );
+				if ( stream ) {
+					query  = stream;
 					filter = "channels";
 				}
 
