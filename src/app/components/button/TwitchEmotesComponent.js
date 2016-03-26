@@ -1,10 +1,10 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
+	"nwjs/openBrowser",
 	"components/button/FormButtonComponent"
 ], function(
 	Ember,
-	nwGui,
+	openBrowser,
 	FormButtonComponent
 ) {
 
@@ -34,7 +34,7 @@ define([
 
 				if ( url && channel ) {
 					url = url.replace( "{channel}", channel );
-					nwGui.Shell.openExternal( url );
+					openBrowser( url );
 					success();
 
 				} else {

@@ -1,10 +1,12 @@
 define([
 	"Ember",
 	"components/modal/ModalDialogComponent",
+	"nwjs/openBrowser",
 	"hbs!templates/components/modal/ModalChangelogComponent"
 ], function(
 	Ember,
 	ModalDialogComponent,
+	openBrowser,
 	layout
 ) {
 
@@ -18,8 +20,6 @@ define([
 		layout: layout,
 		"class": "modal-changelog",
 
-		openBrowser: "openBrowser",
-
 		version: readOnly( "metadata.package.version" ),
 		changelogUrl: readOnly( "metadata.config.changelog-url" ),
 
@@ -31,7 +31,7 @@ define([
 
 				if ( version && url ) {
 					url = url.replace( "{version}", version );
-					this.sendAction( "openBrowser", url );
+					openBrowser( url );
 
 					if ( success instanceof Function ) {
 						success();

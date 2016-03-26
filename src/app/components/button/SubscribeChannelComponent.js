@@ -1,11 +1,11 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
+	"nwjs/openBrowser",
 	"components/button/FormButtonComponent",
 	"mixins/TwitchInteractButtonMixin"
 ], function(
 	Ember,
-	nwGui,
+	openBrowser,
 	FormButtonComponent,
 	TwitchInteractButtonMixin
 ) {
@@ -55,7 +55,7 @@ define([
 
 				if ( url && name ) {
 					url = url.replace( "{channel}", name );
-					nwGui.Shell.openExternal( url );
+					openBrowser( url );
 
 					if ( success instanceof Function ) {
 						success();

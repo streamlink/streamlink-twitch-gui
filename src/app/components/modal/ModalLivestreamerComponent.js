@@ -2,11 +2,13 @@ define([
 	"Ember",
 	"components/modal/ModalDialogComponent",
 	"models/localstorage/Settings",
+	"nwjs/openBrowser",
 	"hbs!templates/components/modal/ModalLivestreamerComponent"
 ], function(
 	Ember,
 	ModalDialogComponent,
 	Settings,
+	openBrowser,
 	layout
 ) {
 
@@ -23,8 +25,6 @@ define([
 		layout: layout,
 		"class": "modal-livestreamer",
 
-		openBrowser: "openBrowser",
-
 		error : readOnly( "livestreamer.error" ),
 		active: readOnly( "livestreamer.active" ),
 
@@ -35,7 +35,7 @@ define([
 			"download": function( success ) {
 				var url = get( this, "metadata.config.livestreamer-download-url" );
 				if ( url ) {
-					this.sendAction( "openBrowser", url );
+					openBrowser( url );
 					if ( success instanceof Function ) {
 						success();
 					}

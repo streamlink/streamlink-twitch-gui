@@ -1,14 +1,14 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
 	"nwjs/nwWindow",
+	"nwjs/openBrowser",
 	"utils/contains",
 	"utils/node/http/Server",
 	"file!root/oauth-redirect.html"
 ], function(
 	Ember,
-	nwGui,
 	nwWindow,
+	openBrowser,
 	contains,
 	HttpServer,
 	OAuthResponseRedirect
@@ -124,7 +124,7 @@ define([
 
 			// open auth url in web browser
 			var url = get( self, "url" );
-			nwGui.Shell.openExternal( url );
+			openBrowser( url );
 
 			// shut down server and focus the application window when done
 			function done() {

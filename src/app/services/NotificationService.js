@@ -1,6 +1,7 @@
 define([
 	"Ember",
 	"nwjs/nwWindow",
+	"nwjs/openBrowser",
 	"mixins/ChannelSettingsMixin",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
@@ -10,6 +11,7 @@ define([
 ], function(
 	Ember,
 	nwWindow,
+	openBrowser,
 	ChannelSettingsMixin,
 	mkdirp,
 	download,
@@ -425,7 +427,6 @@ define([
 				nwWindow.toggleVisibility( true );
 			}
 
-			// FIXME: refactor global openBrowser actions
 			var applicationController = getOwner( this ).lookup( "controller:application" );
 
 			switch( settings ) {
@@ -446,7 +447,7 @@ define([
 						var channel = get( stream, "channel.id" );
 						if ( url && channel ) {
 							url = url.replace( "{channel}", channel );
-							applicationController.send( "openBrowser", url );
+							openBrowser( url );
 						}
 					}
 			}

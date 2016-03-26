@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
+	"nwjs/openBrowser",
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution",
@@ -12,7 +12,7 @@ define([
 	"commonjs!path"
 ], function(
 	Ember,
-	nwGui,
+	openBrowser,
 	Parameter,
 	ParameterCustom,
 	Substitution,
@@ -91,7 +91,7 @@ define([
 
 		_openDefaultBrowser: function( url ) {
 			return new Promise(function( resolve ) {
-				nwGui.Shell.openExternal( url );
+				openBrowser( url );
 				run.next( resolve );
 			});
 		},
