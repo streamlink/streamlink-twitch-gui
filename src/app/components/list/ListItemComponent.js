@@ -10,15 +10,7 @@ define( [ "Ember" ], function( Ember ) {
 		],
 
 		isNewItem: false,
-		isDuplicateItem: false,
-
-		openBrowser: "openBrowser",
-
-		actions: {
-			"openBrowser": function( url ) {
-				this.sendAction( "openBrowser", url );
-			}
-		}
+		isDuplicateItem: false
 	});
 
 });

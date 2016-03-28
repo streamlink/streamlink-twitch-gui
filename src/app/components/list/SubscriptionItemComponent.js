@@ -11,7 +11,9 @@ define([
 ) {
 
 	var get = Ember.get;
+	var getOwner = Ember.getOwner;
 	var alias = Ember.computed.alias;
+
 
 	return ListItemComponent.extend({
 		metadata: Ember.inject.service(),
@@ -42,10 +44,11 @@ define([
 		}.property( "content.access_end" ).volatile(),
 
 
-		buttonAction: "openBrowser",
 		openBrowser: function( url ) {
+			var applicationRoute = getOwner( this ).lookup( "route:application" );
 			var channel = get( this, "channel.id" );
-			this.sendAction( "buttonAction", url.replace( "{channel}", channel ) );
+			url = url.replace( "{channel}", channel );
+			applicationRoute.send( "openBrowser", url );
 		},
 
 

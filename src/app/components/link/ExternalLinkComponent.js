@@ -11,6 +11,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var getOwner = Ember.getOwner;
 
 
 	return Ember.Component.extend({
@@ -52,7 +53,8 @@ define([
 
 		openUrl: function() {
 			var url = get( this, "url" );
-			this.sendAction( "action", url );
+			var applicationRoute = getOwner( this ).lookup( "route:application" );
+			applicationRoute.send( "openBrowser", url );
 		},
 
 		openUrlInBrowser: function() {
