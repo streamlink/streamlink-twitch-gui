@@ -29,7 +29,6 @@ define([
 
 		numKeepItems: readOnly( "metadata.config.search-history-size" ),
 		reQuery: /^[a-z0-9]{3,}/i,
-		reChannelURL: /^(?:https?:\/\/)?(?:\w+\.)*twitch\.tv\/(.+)$/,
 
 		showDropdown: false,
 		filter: "all",

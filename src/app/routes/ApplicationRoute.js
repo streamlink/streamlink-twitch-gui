@@ -1,12 +1,10 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
 	"nwjs/nwWindow",
 	"nwjs/openBrowser",
 	"utils/getStreamFromUrl"
 ], function(
 	Ember,
-	nwGui,
 	nwWindow,
 	openBrowser,
 	getStreamFromUrl
