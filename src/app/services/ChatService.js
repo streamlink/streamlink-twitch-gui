@@ -37,7 +37,11 @@ define([
 
 	function launch( exec, params ) {
 		return new Promise(function( resolve, reject ) {
-			var spawn = CP.spawn( exec, params, { detached: true } );
+			var spawn = CP.spawn( exec, params, {
+				detached: true,
+				stdio: "ignore"
+			});
+			spawn.unref();
 			spawn.on( "error", reject );
 			run.next( resolve );
 		});
