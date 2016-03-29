@@ -90,6 +90,11 @@ define( [ "Ember" ], function( Ember ) {
 		maxAutoFetches: 3,
 
 		/**
+		 * Set by Twitch
+		 */
+		maxLimit: 100,
+
+		/**
 		 * This is actually an ugly concept, but we need to set this data at the route, so we can
 		 * control the fetch size before querying the data. The fetch size depends on the
 		 * window size and css media queries containing this selector. We can't move this
@@ -105,13 +110,15 @@ define( [ "Ember" ], function( Ember ) {
 		calcFetchSize: function() {
 			var itemSel = get( this, "itemSelector" );
 			var offset  = get( this, "offset" );
+			var max     = get( this, "maxLimit" );
 			var columns = getNeededColumns( itemSel );
 			var rows    = getNeededRows( itemSel );
 			var uneven  = offset % columns;
-			var limit   = ( columns * rows ) + ( uneven > 0 ? columns - uneven : 0 );
 
 			// fetch size + number of items to fill the last row after a window resize
-			set( this, "limit", limit );
+			var limit   = ( columns * rows ) + ( uneven > 0 ? columns - uneven : 0 );
+
+			set( this, "limit", Math.min( limit, max ) );
 		},
 
 
