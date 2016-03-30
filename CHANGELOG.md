@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.13.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.13.0) (2016-03-30)
 
 - Implemented hosted streams. #220
 - Implemented detection of duplicated items in infinite scroll lists. #216
@@ -18,7 +18,7 @@ Changelog - Livestreamer Twitch GUI
 - Fixed infinite scroll on unscaled UHD resolutions. #230
 - Upgraded to Ember/EmberData 2.4.0 LTS
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.12.0...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.12.0...v0.13.0)
 
 
 ## [v0.12.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.12.0) (2016-02-06)
