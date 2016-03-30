@@ -104,24 +104,26 @@ define([
 				};
 			}, this );
 
-			if ( get( this, "opened" ) ) {
-				menu.items.pushObjects([
-					{
-						label  : "Close stream",
-						click  : this.closeStream.bind( this )
-					},
-					{
-						label  : "Change quality",
-						submenu: qualities
-					}
-				]);
-			} else {
-				menu.items.pushObjects([
-					{
-						label  : "Launch stream",
-						submenu: qualities
-					}
-				]);
+			if ( get( this, "stream" ) ) {
+				if ( get( this, "opened" ) ) {
+					menu.items.pushObjects([
+						{
+							label  : "Close stream",
+							click  : this.closeStream.bind( this )
+						},
+						{
+							label  : "Change quality",
+							submenu: qualities
+						}
+					]);
+				} else {
+					menu.items.pushObjects([
+						{
+							label  : "Launch stream",
+							submenu: qualities
+						}
+					]);
+				}
 			}
 
 			menu.items.pushObjects([
