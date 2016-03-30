@@ -213,6 +213,15 @@ define([
 		},
 
 
+		closeStream: function( stream ) {
+			var model = get( this, "model" );
+			var livestreamer = model.findBy( "stream", stream );
+			if ( !livestreamer ) { return false; }
+			livestreamer.kill();
+			return true;
+		},
+
+
 		/**
 		 * Check the location of livestreamer and validate
 		 * @returns {Promise}

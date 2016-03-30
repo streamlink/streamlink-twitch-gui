@@ -97,16 +97,34 @@ define([
 
 			var menu = Menu.create();
 
+			var qualities = Settings.qualities.map(function( quality ) {
+				return {
+					label: quality.label,
+					click: this.startStream.bind( this, quality.id )
+				};
+			}, this );
+
+			if ( get( this, "opened" ) ) {
+				menu.items.pushObjects([
+					{
+						label  : "Close stream",
+						click  : this.closeStream.bind( this )
+					},
+					{
+						label  : "Change quality",
+						submenu: qualities
+					}
+				]);
+			} else {
+				menu.items.pushObjects([
+					{
+						label  : "Launch stream",
+						submenu: qualities
+					}
+				]);
+			}
+
 			menu.items.pushObjects([
-				{
-					label  : "Launch stream",
-					submenu: Settings.qualities.map(function( quality ) {
-						return {
-							label: quality.label,
-							click: this.startStream.bind( this, quality.id )
-						};
-					}, this )
-				},
 				{
 					label: "Open chat",
 					click: this.openChat.bind( this )
@@ -137,6 +155,11 @@ define([
 		startStream: function( quality ) {
 			var stream = get( this, "stream" );
 			get( this, "livestreamer" ).startStream( stream, quality );
+		},
+
+		closeStream: function() {
+			var stream = get( this, "stream" );
+			get( this, "livestreamer" ).closeStream( stream );
 		},
 
 		openChat: function() {
