@@ -3,6 +3,8 @@ define([
 	"nwjs/nwWindow",
 	"nwjs/openBrowser",
 	"mixins/ChannelSettingsMixin",
+	"utils/ember/toArray",
+	"utils/ember/mapBy",
 	"utils/fs/mkdirp",
 	"utils/fs/download",
 	"utils/fs/clearfolder",
@@ -13,6 +15,8 @@ define([
 	nwWindow,
 	openBrowser,
 	ChannelSettingsMixin,
+	toArray,
+	mapBy,
 	mkdirp,
 	download,
 	clearfolder,
@@ -229,13 +233,11 @@ define([
 		check: function() {
 			if ( !get( this, "running" ) ) { return; }
 
-			var store = get( this, "store" );
-			store.query( "twitchStreamsFollowed", {
+			get( this, "store" ).query( "twitchStreamsFollowed", {
 				limit: 100
 			})
-				.then(function( streams ) {
-					return streams.mapBy( "stream" );
-				})
+				.then( toArray )
+				.then( mapBy( "stream" ) )
 				.then( this.queryCallback.bind( this ) )
 				.then( this.stripDisabledChannels.bind( this ) )
 				.then( this.prepareNotifications.bind( this ) )

@@ -1,10 +1,14 @@
 define([
 	"Ember",
 	"mixins/InfiniteScrollMixin",
+	"utils/ember/toArray",
+	"utils/ember/mapBy",
 	"utils/preload"
 ], function(
 	Ember,
 	InfiniteScrollMixin,
+	toArray,
+	mapBy,
 	preload
 ) {
 
@@ -38,9 +42,8 @@ define([
 						type : "suggest",
 						live : true
 					})
-						.then(function( data ) {
-							return data.toArray().mapBy( "game" );
-						})
+						.then( toArray )
+						.then( mapBy( "game" ) )
 						.then( preload( "box.large_nocache" ) )
 					: Promise.resolve([]),
 
@@ -51,9 +54,8 @@ define([
 						offset: 0,
 						limit : 10
 					})
-						.then(function( data ) {
-							return data.toArray().mapBy( "channel" );
-						})
+						.then( toArray )
+						.then( mapBy( "channel" ) )
 						.then( preload( "logo" ) )
 					: Promise.resolve([]),
 
@@ -64,9 +66,8 @@ define([
 						offset: get( this, "offset" ),
 						limit : get( this, "limit" )
 					})
-						.then(function( data ) {
-							return data.toArray().mapBy( "stream" );
-						})
+						.then( toArray )
+						.then( mapBy( "stream" ) )
 						.then( preload( "preview.medium_nocache" ) )
 					: Promise.resolve([])
 			])
@@ -89,7 +90,8 @@ define([
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})
-				.then(function( data ) { return data.toArray().mapBy( "stream" ); })
+				.then( toArray )
+				.then( mapBy( "stream" ) )
 				.then( preload( "preview.medium_nocache" ) );
 		},
 

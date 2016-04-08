@@ -2,16 +2,19 @@ define([
 	"Ember",
 	"routes/UserIndexRoute",
 	"mixins/InfiniteScrollMixin",
+	"utils/ember/toArray",
 	"utils/preload"
 ], function(
 	Ember,
 	UserIndexRoute,
 	InfiniteScrollMixin,
+	toArray,
 	preload
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+
 
 	return UserIndexRoute.extend( InfiniteScrollMixin, {
 		itemSelector: ".subscription-item-component",
@@ -24,14 +27,15 @@ define([
 				limit  : get( this, "limit" ),
 				unended: true
 			})
-				.then(function( data ) {
-					return data.toArray().filterBy( "product.ticket_type", "chansub" );
+				.then( toArray )
+				.then(function( records ) {
+					return records.filterBy( "product.ticket_type", "chansub" );
 				})
-				.then(function( data ) {
+				.then(function( records ) {
 					// The partner_login (channel) reference is loaded asynchronously
 					// just get the PromiseProxy object and wait for it to resolve
-					var promises = data.mapBy( "product.partner_login" );
-					return Promise.all( promises )
+					var channelPromises = records.mapBy( "product.partner_login" );
+					return Promise.all( channelPromises )
 						.then(function( channels ) {
 							// Also load the UserSubscription record (needed for subscription date)
 							// Sadly, this can't be loaded in parallel (channel needs to be loaded)
@@ -45,26 +49,31 @@ define([
 							}) );
 						})
 						.then(function() {
-							return data;
+							return records;
 						});
 				})
-				.then(function( data ) {
-					var emoticons = data.mapBy( "product.emoticons" ).reduce(function( res, item ) {
-						return res.concat( item.toArray() );
-					}, [] );
+				.then(function( records ) {
+					var emoticons = records
+						.mapBy( "product.emoticons" )
+						.reduce(function( res, item ) {
+							return res.concat( item.toArray() );
+						}, [] );
+
+					var preloadChannelPromise = Promise.resolve( records ).then( preload([
+						"product.partner_login.logo",
+						"product.partner_login.profile_banner",
+						"product.partner_login.video_banner"
+					]) );
+					var preloadEmoticonsPromise = Promise.resolve( emoticons ).then( preload(
+						"url"
+					) );
 
 					return Promise.all([
-						Promise.resolve( data ).then( preload([
-							"product.partner_login.logo",
-							"product.partner_login.profile_banner",
-							"product.partner_login.video_banner"
-						]) ),
-						Promise.resolve( emoticons ).then( preload(
-							"url"
-						) )
+						preloadChannelPromise,
+						preloadEmoticonsPromise
 					])
 						.then(function() {
-							return data;
+							return records;
 						});
 				});
 		}

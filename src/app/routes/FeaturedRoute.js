@@ -1,4 +1,12 @@
-define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
+define([
+	"Ember",
+	"utils/ember/toArray",
+	"utils/preload"
+], function(
+	Ember,
+	toArray,
+	preload
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -8,15 +16,17 @@ define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
 			var store = get( this, "store" );
 
 			return Promise.all([
-				store.findAll( "twitchStreamsSummary", { reload: true } ),
+				store.findAll( "twitchStreamsSummary", { reload: true } )
+					.then( toArray ),
 				store.query( "twitchStreamsFeatured", {
 					offset: 0,
 					limit: 5
 				})
+					.then( toArray )
 			])
 				.then(function( data ) {
-					var summary  = data[0].toArray()[0];
-					var featured = data[1].toArray();
+					var summary  = data[0][0];
+					var featured = data[1];
 
 					return Promise.resolve( featured )
 						.then( preload([
