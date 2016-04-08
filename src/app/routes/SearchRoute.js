@@ -34,9 +34,9 @@ define([
 
 			var store = get( this, "store" );
 
-			return Promise.all([
+			return Ember.RSVP.hash({
 				// search for games
-				filterMatches( params.filter, "games" )
+				games: filterMatches( params.filter, "games" )
 					? store.query( "twitchSearchGame", {
 						query: params.query,
 						type : "suggest",
@@ -48,7 +48,7 @@ define([
 					: Promise.resolve([]),
 
 				// search for channels
-				filterMatches( params.filter, "channels" )
+				channels: filterMatches( params.filter, "channels" )
 					? store.query( "twitchSearchChannel", {
 						query : params.query,
 						offset: 0,
@@ -60,7 +60,7 @@ define([
 					: Promise.resolve([]),
 
 				// search for streams
-				filterMatches( params.filter, "streams" )
+				streams: filterMatches( params.filter, "streams" )
 					? store.query( "twitchSearchStream", {
 						query : params.query,
 						offset: get( this, "offset" ),
@@ -70,14 +70,7 @@ define([
 						.then( mapBy( "stream" ) )
 						.then( preload( "preview.medium_nocache" ) )
 					: Promise.resolve([])
-			])
-				.then(function( queries ) {
-					return {
-						games   : queries[0],
-						channels: queries[1],
-						streams : queries[2]
-					};
-				});
+			});
 		},
 
 		fetchContent: function() {
