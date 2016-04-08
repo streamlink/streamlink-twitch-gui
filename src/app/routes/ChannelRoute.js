@@ -1,7 +1,14 @@
-define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
+define([
+	"Ember",
+	"utils/preload"
+], function(
+	Ember,
+	preload
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+
 
 	return Ember.Route.extend({
 		model: function( params ) {

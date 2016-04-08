@@ -14,9 +14,9 @@ define([
 	platform
 ) {
 
-	var get = Ember.get,
-	    set = Ember.setProperties,
-	    debounce = Ember.run.debounce;
+	var get = Ember.get;
+	var set = Ember.setProperties;
+	var debounce = Ember.run.debounce;
 
 	var manifest = nwGui.App.manifest;
 
@@ -24,9 +24,9 @@ define([
 
 	var isWin = platform.isWin;
 
-	var timeEvent  = 1000,
-	    timeIgnore = 2000,
-	    ignore     = false;
+	var timeEvent  = 1000;
+	var timeIgnore = 2000;
+	var ignore     = false;
 
 
 	function deferEvent( thisArg, fn ) {
@@ -77,14 +77,14 @@ define([
 
 
 	function restoreWindow() {
-		var width  = get( this, "width" ),
-		    height = get( this, "height" );
+		var width  = get( this, "width" );
+		var height = get( this, "height" );
 		if ( width !== null && height !== null ) {
 			nwWindow.resizeTo( width, height );
 		}
 
-		var x = get( this, "x" ),
-		    y = get( this, "y" );
+		var x = get( this, "x" );
+		var y = get( this, "y" );
 		if ( x !== null && y !== null ) {
 			nwWindow.moveTo( x, y );
 		}

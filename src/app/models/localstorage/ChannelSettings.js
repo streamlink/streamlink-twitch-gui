@@ -2,7 +2,11 @@ define([
 	"Ember",
 	"EmberData",
 	"models/localstorage/Settings"
-], function( Ember, DS, Settings ) {
+], function(
+	Ember,
+	DS,
+	Settings
+) {
 
 	var attr = DS.attr;
 

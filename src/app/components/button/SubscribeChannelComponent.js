@@ -14,6 +14,7 @@ define([
 	var and = Ember.computed.and;
 	var alias = Ember.computed.alias;
 
+
 	return FormButtonComponent.extend( TwitchInteractButtonMixin, {
 		metadata: Ember.inject.service(),
 

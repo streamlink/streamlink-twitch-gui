@@ -1,4 +1,8 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	return Ember.Component.extend({
 		tagName: "footer",

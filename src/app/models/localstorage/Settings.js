@@ -21,6 +21,7 @@ define([
 		}, {} );
 	}
 
+
 	return DS.Model.extend({
 		metadata: Ember.inject.service(),
 

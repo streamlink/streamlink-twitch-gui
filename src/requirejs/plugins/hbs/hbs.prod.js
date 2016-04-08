@@ -1,6 +1,11 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var template = Ember.HTMLBars.template;
+
 
 	return {
 		pluginBuilder: "hbs",

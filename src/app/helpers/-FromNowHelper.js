@@ -1,7 +1,12 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var later  = Ember.run.later;
 	var cancel = Ember.run.cancel;
+
 
 	return Ember.Helper.extend({
 		compute: function( params, hash ) {

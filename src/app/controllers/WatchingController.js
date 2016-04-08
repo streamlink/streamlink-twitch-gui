@@ -1,7 +1,12 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var sort = Ember.computed.sort;
+
 
 	return Ember.Controller.extend({
 		auth: Ember.inject.service(),

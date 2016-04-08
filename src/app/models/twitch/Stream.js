@@ -1,4 +1,12 @@
-define( [ "Ember", "EmberData", "Moment" ], function( Ember, DS, Moment ) {
+define([
+	"Ember",
+	"EmberData",
+	"Moment"
+], function(
+	Ember,
+	DS,
+	Moment
+) {
 
 	var get = Ember.get;
 	var and = Ember.computed.and;

@@ -28,6 +28,7 @@ define([
 		return defer.promise;
 	}
 
+
 	return Ember.Component.extend({
 		layout: layout,
 

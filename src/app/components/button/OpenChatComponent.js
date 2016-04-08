@@ -8,6 +8,7 @@ define([
 
 	var get = Ember.get;
 
+
 	return FormButtonComponent.extend({
 		metadata: Ember.inject.service(),
 		chat    : Ember.inject.service(),

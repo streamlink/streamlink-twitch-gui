@@ -1,7 +1,12 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
+
 
 	return Ember.Component.extend({
 		metadata: Ember.inject.service(),

@@ -1,13 +1,17 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
 
 
-	var CSSMediaRule     = window.CSSMediaRule,
-	    CSSStyleRule     = window.CSSStyleRule,
-	    reMinWidth       = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/,
-	    cachedMinWidths  = {};
+	var CSSMediaRule     = window.CSSMediaRule;
+	var CSSStyleRule     = window.CSSStyleRule;
+	var reMinWidth       = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/;
+	var cachedMinWidths  = {};
 
 	var cssMinWidthRules = [].filter.call( document.styleSheets[0].rules, function( rule ) {
 		return rule instanceof CSSMediaRule

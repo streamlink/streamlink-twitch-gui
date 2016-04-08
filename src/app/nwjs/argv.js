@@ -8,6 +8,7 @@ define([
 
 	var argv = nwGui.App.fullArgv;
 
+
 	return {
 		"tray": contains.some.call( argv, "--tray", "--hide", "--hidden" ),
 		"max" : contains.some.call( argv, "--max", "--maximize", "--maximized" ),

@@ -1,8 +1,13 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var merge = Ember.merge;
+
 
 	return Ember.Mixin.create({
 		store: Ember.inject.service(),

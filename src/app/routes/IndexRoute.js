@@ -1,4 +1,8 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	return Ember.Route.extend({
 		beforeModel: function( transition ) {

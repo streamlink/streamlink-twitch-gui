@@ -1,9 +1,14 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
 	var empty = Ember.computed.empty;
 	var equal = Ember.computed.equal;
+
 
 	return Ember.Controller.extend({
 		games   : alias( "model.games" ),

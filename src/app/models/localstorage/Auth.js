@@ -1,7 +1,14 @@
-define( [ "Ember", "EmberData" ], function( Ember, DS ) {
+define([
+	"Ember",
+	"EmberData"
+], function(
+	Ember,
+	DS
+) {
 
 	var get = Ember.get;
 	var attr = DS.attr;
+
 
 	return DS.Model.extend({
 		access_token: attr( "string" ),

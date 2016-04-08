@@ -1,6 +1,11 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var set = Ember.set;
+
 
 	return Ember.Controller.extend({
 		queryParams: [ "sortby", "direction" ],

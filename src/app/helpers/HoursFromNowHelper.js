@@ -28,6 +28,7 @@ define([
 			+ ( remaining > hour ? formatHours( remaining, true ) : "" );
 	}
 
+
 	return FromNowHelper.extend({
 		_compute: function( params ) {
 			var diff = +new Date() - params[0];

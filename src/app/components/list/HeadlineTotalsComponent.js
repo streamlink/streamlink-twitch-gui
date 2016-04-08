@@ -8,6 +8,7 @@ define([
 
 	var gte = Ember.computed.gte;
 
+
 	return Ember.Component.extend({
 		layout: layout,
 

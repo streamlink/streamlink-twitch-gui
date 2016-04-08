@@ -11,6 +11,7 @@ define([
 	var get = Ember.get;
 	var set = Ember.set;
 
+
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "select",

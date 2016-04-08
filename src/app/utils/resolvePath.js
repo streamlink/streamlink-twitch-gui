@@ -23,6 +23,7 @@ define([
 		return PATH.resolve( path );
 	}
 
+
 	return platform.isWin
 		? resolvePathWindows
 		: resolvePathUnix;

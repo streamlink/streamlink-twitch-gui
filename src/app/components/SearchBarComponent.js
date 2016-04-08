@@ -13,6 +13,7 @@ define([
 	var readOnly = Ember.computed.readOnly;
 	var sort = Ember.computed.sort;
 
+
 	return Ember.Component.extend({
 		store   : Ember.inject.service(),
 		metadata: Ember.inject.service(),

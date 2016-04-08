@@ -38,8 +38,8 @@ define([
 					.catch( mkdirp.bind( null, dir ) )
 					// now start the download
 					.then(function() {
-						var defer = Promise.defer(),
-						    write = FS.createWriteStream( dest );
+						var defer = Promise.defer();
+						var write = FS.createWriteStream( dest );
 
 						write.on( "error", function() {
 							write.close( defer.reject );

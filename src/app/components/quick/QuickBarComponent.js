@@ -11,6 +11,7 @@ define([
 	var later = Ember.run.later;
 	var cancel = Ember.run.cancel;
 
+
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "div",

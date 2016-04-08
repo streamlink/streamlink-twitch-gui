@@ -8,6 +8,7 @@ define([
 
 	var fs_stat = denodify( FS.stat );
 
+
 	return function stat( path, check ) {
 		var promise = fs_stat( path );
 

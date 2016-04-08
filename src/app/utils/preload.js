@@ -1,7 +1,12 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var concat = [].concat;
 	var makeArray = Ember.makeArray;
+
 
 	return function preload( withError, list ) {
 		if ( list === undefined ) {

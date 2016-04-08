@@ -1,10 +1,14 @@
 define([
 	"Ember",
 	"mixins/RetryTransitionMixin"
-], function( Ember, RetryTransitionMixin ) {
+], function(
+	Ember,
+	RetryTransitionMixin
+) {
 
-	var get = Ember.get,
-	    set = Ember.set;
+	var get = Ember.get;
+	var set = Ember.set;
+
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		settings: Ember.inject.service(),

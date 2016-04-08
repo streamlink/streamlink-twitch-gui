@@ -8,6 +8,7 @@ define([
 
 	var scheduleOnce = Ember.run.scheduleOnce;
 
+
 	return Ember.Component.extend({
 		layout: layout,
 

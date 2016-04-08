@@ -8,6 +8,7 @@ define([
 
 	var alias = Ember.computed.alias;
 
+
 	return Ember.Service.extend({
 		metadata: metadata,
 

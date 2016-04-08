@@ -28,6 +28,7 @@ define(function() {
 		return false;
 	}
 
+
 	return {
 		all : containsAll,
 		some: containsSome

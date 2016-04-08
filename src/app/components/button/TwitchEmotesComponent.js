@@ -12,6 +12,7 @@ define([
 	var and = Ember.computed.and;
 	var or = Ember.computed.or;
 
+
 	return FormButtonComponent.extend({
 		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),

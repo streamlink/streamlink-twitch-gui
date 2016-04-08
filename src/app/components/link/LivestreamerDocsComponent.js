@@ -10,6 +10,7 @@ define([
 
 	var get = Ember.get;
 
+
 	return ExternalLinkComponent.extend({
 		metadata: Ember.inject.service(),
 

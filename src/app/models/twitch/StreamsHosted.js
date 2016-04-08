@@ -1,7 +1,12 @@
-define( [ "EmberData" ], function( DS ) {
+define([
+	"EmberData"
+], function(
+	DS
+) {
 
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
+
 
 	return DS.Model.extend({
 		display_name: attr( "string" ),

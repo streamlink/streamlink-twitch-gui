@@ -11,6 +11,7 @@ define([
 	var get = Ember.get;
 	var parseString = linkparser.parseString;
 
+
 	return Ember.Component.extend({
 		layout: layout,
 

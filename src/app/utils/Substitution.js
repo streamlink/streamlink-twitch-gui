@@ -1,4 +1,8 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 
@@ -80,6 +84,7 @@ define( [ "Ember" ], function( Ember ) {
 				: res;
 		});
 	};
+
 
 	return Substitution;
 

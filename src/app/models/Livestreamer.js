@@ -18,6 +18,7 @@ define([
 	var belongsTo = DS.belongsTo;
 	var alias = Ember.computed.alias;
 
+
 	/**
 	 * @class Livestreamer
 	 */

@@ -2,6 +2,7 @@ define(function() {
 
 	var fs = require.nodeRequire( "fs" );
 
+
 	return function( path, onSuccess, onFailure ) {
 		var buffer;
 		try {

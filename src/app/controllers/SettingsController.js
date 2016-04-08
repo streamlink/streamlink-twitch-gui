@@ -19,6 +19,7 @@ define([
 		}.property( "settings.content" );
 	}
 
+
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
@@ -90,10 +91,10 @@ define([
 		}.property(),
 
 		minimize_observer: function() {
-			var int    = get( this, "model.gui_integration" ),
-			    min    = get( this, "model.gui_minimize" ),
-			    noTask = ( int & 1 ) === 0,
-			    noTray = ( int & 2 ) === 0;
+			var int    = get( this, "model.gui_integration" );
+			var min    = get( this, "model.gui_minimize" );
+			var noTask = ( int & 1 ) === 0;
+			var noTray = ( int & 2 ) === 0;
 
 			// make sure that disabled options are not selected
 			if ( noTask && min === 1 ) {

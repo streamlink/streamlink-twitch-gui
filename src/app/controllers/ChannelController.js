@@ -1,9 +1,14 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var alias = Ember.computed.alias;
 	var equal = Ember.computed.equal;
+
 
 	return Ember.Controller.extend({
 		application: Ember.inject.controller(),

@@ -36,8 +36,8 @@ define(function() {
 	 * @returns {number}
 	 */
 	function compare( left, right ) {
-		var	typeL = !(  left instanceof Array ),
-			typeR = !( right instanceof Array );
+		var typeL = !(  left instanceof Array );
+		var typeR = !( right instanceof Array );
 
 		// only compare two arrays!!!
 		if ( typeL && typeR ) { return 0; }

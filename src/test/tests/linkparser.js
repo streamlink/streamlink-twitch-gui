@@ -1,4 +1,8 @@
-define( [ "utils/linkparser" ], function( linkparser ) {
+define([
+	"utils/linkparser"
+], function(
+	linkparser
+) {
 
 	var parseString = linkparser.parseString;
 

@@ -1,4 +1,8 @@
-define( [ "utils/Parameter" ], function( Parameter ) {
+define([
+	"utils/Parameter"
+], function(
+	Parameter
+) {
 
 	var reBackslash = /^\\$/;
 	var reSpace     = /^ $/;

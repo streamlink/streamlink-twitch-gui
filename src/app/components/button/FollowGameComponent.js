@@ -10,6 +10,7 @@ define([
 
 	var alias = Ember.computed.alias;
 
+
 	return FormButtonComponent.extend( FollowButtonMixin, {
 		modelName: "twitchUserFollowsGame",
 
