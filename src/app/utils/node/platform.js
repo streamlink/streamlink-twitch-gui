@@ -1,9 +1,13 @@
 define([
 	"utils/semver",
-	"commonjs!os"
+	"json!root/metadata",
+	"commonjs!os",
+	"commonjs!path"
 ], function(
 	semver,
-	OS
+	metadata,
+	OS,
+	PATH
 ) {
 
 	var platform = OS.platform();
@@ -21,6 +25,16 @@ define([
 	var isWinGte8 = isWin && isVersionGte( "6.2.0" );
 
 
+	var slice = [].slice;
+	var tmpdirName = metadata.package.config[ "tempdir" ];
+	var tmpdirRoot = [ OS.tmpdir(), tmpdirName ];
+
+	function tmpdir() {
+		var args = slice.call( arguments );
+		return PATH.resolve.apply( PATH, tmpdirRoot.concat( args ) );
+	}
+
+
 	return {
 		platform: platform,
 		release : release,
@@ -29,7 +43,9 @@ define([
 		isDarwin: isDarwin,
 		isLinux : isLinux,
 
-		isWinGte8: isWinGte8
+		isWinGte8: isWinGte8,
+
+		tmpdir: tmpdir
 	};
 
 });

@@ -43,6 +43,7 @@
 			"default",
 			"dark"
 		],
+		"tempdir": "livestreamer-twitch-gui",
 		"livestreamer-exec": "livestreamer",
 		"livestreamer-fallback-paths-unix": [
 			"/usr/local/bin",
@@ -105,7 +106,7 @@
 			"zh-tw": { "flag": "tw", "lang": "chinese" }
 		},
 		"notification": {
-			"cache-dir": "{os-tmpdir}/livestreamer-twitch-gui/icon-cache",
+			"cache-dir": "icon-cache",
 			"cache-time": 7,
 			"max-fails-requests": 3,
 			"max-fails-channels": 1,
