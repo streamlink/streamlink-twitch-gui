@@ -16,10 +16,6 @@ define([
 
 	var reScheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
 
-	function isDirectory( stat ) {
-		return stat.isDirectory();
-	}
-
 
 	return function download( url, dir, name ) {
 		var match = reScheme.exec( url );
@@ -33,7 +29,7 @@ define([
 			// file does not exist
 			.catch(function() {
 				// check if the directory exists
-				return stat( dir, isDirectory )
+				return stat( dir, stat.isDirectory )
 					// try to create directory
 					.catch( mkdirp.bind( null, dir ) )
 					// now start the download

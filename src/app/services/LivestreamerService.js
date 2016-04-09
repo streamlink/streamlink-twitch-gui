@@ -62,12 +62,6 @@ define([
 	Warning.prototype = merge( new Error(), { name: "Warning" } );
 
 
-	function execCheck( stat ) {
-		// octal: 0111
-		return isWin || ( stat.mode & 73 ) > 0;
-	}
-
-
 	// we need a common error parsing function for stdout and stderr, because
 	// livestreamer is weird sometimes and prints error messages to stdout instead... :(
 	function parseError( data ) {
@@ -245,7 +239,7 @@ define([
 			}
 
 			// check for the executable
-			return which( livestreamer, execCheck )
+			return which( livestreamer, stat.isExecutable )
 				// check fallback paths
 				.catch(function() {
 					var promise = Promise.reject();
@@ -257,7 +251,7 @@ define([
 					return fb.reduce(function( promise, path ) {
 						var check = PATH.join( PATH.resolve( path ), exec );
 						return promise.catch(function() {
-							return stat( check, execCheck );
+							return stat( check, stat.isExecutable );
 						});
 					}, promise );
 				}.bind( this ) )

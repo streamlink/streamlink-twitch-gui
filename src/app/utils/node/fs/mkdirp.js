@@ -12,10 +12,6 @@ define([
 
 	var fsMkdir = denodify( FS.mkdir );
 
-	function isDirectory( stat ) {
-		return stat.isDirectory();
-	}
-
 
 	// simplified and promisified version of node-mkdirp
 	// https://github.com/substack/node-mkdirp
@@ -30,7 +26,7 @@ define([
 
 				} else {
 					// does the dir already exist?
-					return stat( dir, isDirectory );
+					return stat( dir, stat.isDirectory );
 				}
 			});
 	};
