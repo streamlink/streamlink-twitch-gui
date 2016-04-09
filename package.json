@@ -104,13 +104,15 @@
 			"zh-cn": { "flag": "cn", "lang": "chinese" },
 			"zh-tw": { "flag": "tw", "lang": "chinese" }
 		},
-		"notification-cache-dir": "{os-tmpdir}/livestreamer-twitch-gui/icon-cache",
-		"notification-cache-time": 7,
-		"notification-max-fails-requests": 3,
-		"notification-max-fails-channels": 1,
-		"notification-interval": 60000,
-		"notification-interval-retry": 1000,
-		"notification-interval-error": 120000,
+		"notification": {
+			"cache-dir": "{os-tmpdir}/livestreamer-twitch-gui/icon-cache",
+			"cache-time": 7,
+			"max-fails-requests": 3,
+			"max-fails-channels": 1,
+			"interval": 60000,
+			"interval-retry": 1000,
+			"interval-error": 120000
+		},
 		"windows-shortcut-path": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs",
 		"stream-reload-interval": 60000,
 		"random-max": 500,

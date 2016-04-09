@@ -67,21 +67,21 @@ define([
 
 		config  : alias( "metadata.config" ),
 
-		failsRequests: alias( "config.notification-max-fails-requests" ),
-		failsChannels: alias( "config.notification-max-fails-channels" ),
-		interval     : alias( "config.notification-interval" ),
-		intervalRetry: alias( "config.notification-interval-retry" ),
-		intervalError: alias( "config.notification-interval-error" ),
+		failsRequests: alias( "config.notification.max-fails-requests" ),
+		failsChannels: alias( "config.notification.max-fails-channels" ),
+		interval     : alias( "config.notification.interval" ),
+		intervalRetry: alias( "config.notification.interval-retry" ),
+		intervalError: alias( "config.notification.interval-error" ),
 
 		// cache related properties
 		cacheDir: function() {
-			var dir = get( this, "config.notification-cache-dir" );
+			var dir = get( this, "config.notification.cache-dir" );
 			return PATH.resolve( dir.replace( "{os-tmpdir}", OS.tmpdir() ) );
-		}.property( "config.notification-cache-dir" ),
+		}.property( "config.notification.cache-dir" ),
 		cacheTime: function() {
-			var days = get( this, "config.notification-cache-time" );
+			var days = get( this, "config.notification.cache-time" );
 			return days * 24 * 3600 * 1000;
-		}.property( "config.notification-cache-time" ),
+		}.property( "config.notification.cache-time" ),
 
 		// use the app icon as group icon
 		iconGroup: function() {
