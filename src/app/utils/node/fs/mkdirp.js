@@ -13,9 +13,13 @@ define([
 	var fsMkdir = denodify( FS.mkdir );
 
 
-	// simplified and promisified version of node-mkdirp
-	// https://github.com/substack/node-mkdirp
-	return function mkdirp( dir ) {
+	/**
+	 * simplified and promisified version of node-mkdirp
+	 * https://github.com/substack/node-mkdirp
+	 * @param {String} dir
+	 * @returns {Promise}
+	 */
+	function mkdirp( dir ) {
 		return fsMkdir( dir )
 			.catch(function( err ) {
 				if ( err && err.code === "ENOENT" ) {
@@ -29,6 +33,9 @@ define([
 					return stat( dir, stat.isDirectory );
 				}
 			});
-	};
+	}
+
+
+	return mkdirp;
 
 });

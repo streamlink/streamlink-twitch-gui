@@ -17,7 +17,14 @@ define([
 	var reScheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
 
 
-	return function download( url, dir, name ) {
+	/**
+	 * Download a file via HTTP/HTTPS and save it to the filesystem
+	 * @param {String} url
+	 * @param {String} dir
+	 * @param {String?} name
+	 * @returns {Promise}
+	 */
+	function download( url, dir, name ) {
 		var match = reScheme.exec( url );
 		if ( !dir || !match || !match[2] ) { return Promise.reject(); }
 
@@ -52,6 +59,9 @@ define([
 						return defer.promise;
 					});
 			});
-	};
+	}
+
+
+	return download;
 
 });

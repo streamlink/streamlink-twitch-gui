@@ -3,9 +3,19 @@ define(function() {
 	var slice = [].slice;
 
 
-	return function denodify( func, thisArg ) {
-		// return the denodified function
-		return function() {
+	/**
+	 * Let native Node.js methods return promises
+	 * @param {Function} func
+	 * @param {Object?} thisArg
+	 * @returns {denodified}
+	 */
+	function denodify( func, thisArg ) {
+		/**
+		 * The denodified function
+		 * @typedef denodified
+		 * @returns {Promise}
+		 */
+		function denodified() {
 			var args  = slice.call( arguments );
 			var defer = Promise.defer();
 
@@ -26,7 +36,12 @@ define(function() {
 			func.apply( thisArg, args.concat( callback ) );
 
 			return defer.promise;
-		};
-	};
+		}
+
+		return denodified;
+	}
+
+
+	return denodify;
 
 });

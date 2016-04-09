@@ -14,6 +14,11 @@ define([
 	var fsUnlink  = denodify( FS.unlink );
 
 
+	/**
+	 * @param {String[]} list
+	 * @param {Function} fn
+	 * @returns {Promise}
+	 */
 	function execBatchAndIgnoreRejected( list, fn ) {
 		// additional fn arguments
 		var args = [].slice.call( arguments, 2 );
@@ -34,7 +39,13 @@ define([
 	}
 
 
-	return function clearfolder( dir, threshold ) {
+	/**
+	 * Delete files in a directory optionally filtered by age
+	 * @param {String} dir
+	 * @param {Number?} threshold
+	 * @returns {Promise}
+	 */
+	function clearfolder( dir, threshold ) {
 		return fsReaddir( dir )
 			.then(function( files ) {
 				// prepend dir path
@@ -49,13 +60,16 @@ define([
 				var now = new Date();
 				return execBatchAndIgnoreRejected( files, stat, function( stat ) {
 					return stat.isFile()
-						&& now - stat.mtime > threshold;
+					    && now - stat.mtime > threshold;
 				});
 			})
 			// delete all matched files
 			.then(function( files ) {
 				return execBatchAndIgnoreRejected( files, fsUnlink );
 			});
-	};
+	}
+
+
+	return clearfolder;
 
 });

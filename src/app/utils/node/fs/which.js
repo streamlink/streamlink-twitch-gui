@@ -15,7 +15,7 @@ define([
 
 	/**
 	 * Locate a command
-	 * @param {string} file
+	 * @param {String} file
 	 * @param {Function?} callback
 	 * @returns {Promise<string>} The resolved promise will return the path
 	 */
