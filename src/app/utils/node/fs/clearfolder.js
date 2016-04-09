@@ -1,6 +1,6 @@
 define([
-	"utils/denodify",
-	"utils/fs/stat",
+	"utils/node/denodify",
+	"utils/node/fs/stat",
 	"commonjs!path",
 	"commonjs!fs"
 ], function(
@@ -10,8 +10,8 @@ define([
 	FS
 ) {
 
-	var fs_readdir = denodify( FS.readdir );
-	var fs_unlink  = denodify( FS.unlink );
+	var fsReaddir = denodify( FS.readdir );
+	var fsUnlink  = denodify( FS.unlink );
 
 
 	function execBatchAndIgnoreRejected( list, fn ) {
@@ -35,7 +35,7 @@ define([
 
 
 	return function clearfolder( dir, threshold ) {
-		return fs_readdir( dir )
+		return fsReaddir( dir )
 			.then(function( files ) {
 				// prepend dir path
 				files = files.map(function( file ) {
@@ -54,7 +54,7 @@ define([
 			})
 			// delete all matched files
 			.then(function( files ) {
-				return execBatchAndIgnoreRejected( files, fs_unlink );
+				return execBatchAndIgnoreRejected( files, fsUnlink );
 			});
 	};
 

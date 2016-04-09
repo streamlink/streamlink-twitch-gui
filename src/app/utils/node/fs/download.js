@@ -1,6 +1,6 @@
 define([
-	"utils/fs/stat",
-	"utils/fs/mkdirp",
+	"utils/node/fs/stat",
+	"utils/node/fs/mkdirp",
 	"commonjs!path",
 	"commonjs!fs",
 	"commonjs!http",
@@ -14,7 +14,7 @@ define([
 	HTTPS
 ) {
 
-	var re_scheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
+	var reScheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
 
 	function isDirectory( stat ) {
 		return stat.isDirectory();
@@ -22,7 +22,7 @@ define([
 
 
 	return function download( url, dir, name ) {
-		var match = re_scheme.exec( url );
+		var match = reScheme.exec( url );
 		if ( !dir || !match || !match[2] ) { return Promise.reject(); }
 
 		// if name is not set, use the remote path as file name

@@ -1,16 +1,16 @@
 define([
-	"utils/denodify",
+	"utils/node/denodify",
 	"commonjs!fs"
 ], function(
 	denodify,
 	FS
 ) {
 
-	var fs_stat = denodify( FS.stat );
+	var fsStat = denodify( FS.stat );
 
 
 	return function stat( path, check ) {
-		var promise = fs_stat( path );
+		var promise = fsStat( path );
 
 		if ( check instanceof Function ) {
 			promise = promise

@@ -5,9 +5,9 @@ define([
 	"mixins/ChannelSettingsMixin",
 	"utils/ember/toArray",
 	"utils/ember/mapBy",
-	"utils/fs/mkdirp",
-	"utils/fs/download",
-	"utils/fs/clearfolder",
+	"utils/node/fs/mkdirp",
+	"utils/node/fs/download",
+	"utils/node/fs/clearfolder",
 	"commonjs!path",
 	"commonjs!os"
 ], function(

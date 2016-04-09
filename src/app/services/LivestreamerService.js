@@ -4,11 +4,11 @@ define([
 	"nwjs/nwWindow",
 	"models/localstorage/Settings",
 	"mixins/ChannelSettingsMixin",
-	"utils/fs/which",
-	"utils/fs/stat",
-	"utils/StreamOutputBuffer",
 	"utils/semver",
-	"utils/platform",
+	"utils/StreamOutputBuffer",
+	"utils/node/platform",
+	"utils/node/fs/stat",
+	"utils/node/fs/which",
 	"commonjs!child_process",
 	"commonjs!path"
 ], function(
@@ -17,11 +17,11 @@ define([
 	nwWindow,
 	Settings,
 	ChannelSettingsMixin,
-	which,
-	stat,
-	StreamOutputBuffer,
 	semver,
+	StreamOutputBuffer,
 	platform,
+	stat,
+	which,
 	CP,
 	PATH
 ) {

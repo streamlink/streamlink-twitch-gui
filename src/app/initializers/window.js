@@ -4,7 +4,7 @@ define([
 	"nwjs/nwWindow",
 	"nwjs/nwScreen",
 	"nwjs/argv",
-	"utils/platform"
+	"utils/node/platform"
 ], function(
 	Ember,
 	nwGui,

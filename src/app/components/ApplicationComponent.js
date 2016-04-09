@@ -2,7 +2,7 @@ define([
 	"Ember",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
-	"utils/platform",
+	"utils/node/platform",
 	"gui/selectable",
 	"gui/smoothscroll"
 ], function(

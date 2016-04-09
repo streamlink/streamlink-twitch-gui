@@ -1,10 +1,10 @@
 define([
 	"Ember",
 	"nwjs/nwGui",
-	"utils/resolvePath",
-	"utils/platform",
-	"utils/denodify",
-	"utils/fs/stat",
+	"utils/node/resolvePath",
+	"utils/node/platform",
+	"utils/node/denodify",
+	"utils/node/fs/stat",
 	"json!root/metadata",
 	"commonjs!fs",
 	"commonjs!path"

@@ -4,10 +4,10 @@ define([
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution",
-	"utils/resolvePath",
-	"utils/fs/which",
-	"utils/fs/stat",
-	"utils/platform",
+	"utils/node/resolvePath",
+	"utils/node/fs/which",
+	"utils/node/fs/stat",
+	"utils/node/platform",
 	"commonjs!child_process",
 	"commonjs!path"
 ], function(

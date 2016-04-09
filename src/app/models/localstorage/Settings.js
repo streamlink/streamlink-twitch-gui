@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"EmberData",
-	"utils/platform"
+	"utils/node/platform"
 ], function(
 	Ember,
 	DS,

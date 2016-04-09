@@ -1,5 +1,5 @@
 define([
-	"utils/platform",
+	"utils/node/platform",
 	"commonjs!path"
 ], function(
 	platform,

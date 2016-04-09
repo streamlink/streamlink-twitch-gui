@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"mixins/RetryTransitionMixin",
-	"utils/platform"
+	"utils/node/platform"
 ], function(
 	Ember,
 	RetryTransitionMixin,

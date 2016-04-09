@@ -1,7 +1,7 @@
 define([
 	"nwjs/nwWindow",
 	"nwjs/tray",
-	"utils/platform",
+	"utils/node/platform",
 	"json!root/metadata"
 ], function(
 	nwWindow,

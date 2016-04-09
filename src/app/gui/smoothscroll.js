@@ -11,7 +11,7 @@
  * modified by Sebastian Meyer
  */
 define([
-	"utils/platform"
+	"utils/node/platform"
 ], function(
 	platform
 ) {
