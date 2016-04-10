@@ -16,7 +16,7 @@ define([
 	 * @extends Parameter
 	 * @param {(string|string[]|Function)?} cond
 	 * @param {string?} value
-	 * @param {boolean?} subst
+	 * @param {Substitution[]?} subst
 	 * @constructor
 	 */
 	function ParameterCustom( cond, value, subst ) {
@@ -29,11 +29,11 @@ define([
 
 	/**
 	 * @param {Object} obj
-	 * @param {Substitution[]} substitutions
+	 * @param {boolean} advanced
 	 * @returns {string[]}
 	 */
-	ParameterCustom.prototype.get = function( obj, substitutions ) {
-		var value = this.getValue( obj, substitutions );
+	ParameterCustom.prototype.get = function( obj, advanced ) {
+		var value = this.getValue( obj, advanced );
 		return value === false
 			? []
 			: this.tokenize( value );

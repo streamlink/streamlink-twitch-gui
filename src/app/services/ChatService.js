@@ -117,9 +117,16 @@ define([
 			return this._validatePredefined( command, exec, fallback )
 				.then(function( exec ) {
 					var params = Parameter.getParameters(
-						{ args: args, url : url },
-						[ new ParameterCustom( null, "args", true ) ],
-						[ new Substitution( "url", "url" ) ]
+						{
+							args: args,
+							url : url
+						},
+						[
+							new ParameterCustom( null, "args", [
+								new Substitution( "url", "url" )
+							])
+						],
+						true
 					);
 
 					return launch( exec, params );
@@ -184,12 +191,12 @@ define([
 							url   : url
 						},
 						[
-							new ParameterCustom( null, "args", true )
+							new ParameterCustom( null, "args", [
+								new Substitution( "url", "url" ),
+								new Substitution( "script", "script" )
+							])
 						],
-						[
-							new Substitution( "url", "url" ),
-							new Substitution( "script", "script" )
-						]
+						true
 					);
 
 					return launch( exec, params );
@@ -217,10 +224,7 @@ define([
 				token  : token,
 				channel: channel
 			};
-			// just a single custom parameter, so a string can be defined in package.json
-			var parameters = [
-				new ParameterCustom( null, "args", true )
-			];
+
 			// custom parameter substitutions
 			var substitutions = [
 				new Substitution( "channel", "channel" )
@@ -233,8 +237,13 @@ define([
 				);
 			}
 
+			// just a single custom parameter, so a string can be defined in package.json
+			var parameters = [
+				new ParameterCustom( null, "args", substitutions )
+			];
+
 			function launchChatty( exec ) {
-				var params = Parameter.getParameters( obj, parameters, substitutions );
+				var params = Parameter.getParameters( obj, parameters, true );
 				return launch( exec, params );
 			}
 
@@ -289,14 +298,14 @@ define([
 					token  : token
 				},
 				[
-					new ParameterCustom( null, "command", true )
+					new ParameterCustom( null, "command", [
+						new Substitution( "url", "url" ),
+						new Substitution( "user", "user" ),
+						new Substitution( "token", "token" ),
+						new Substitution( "channel", "channel" )
+					])
 				],
-				[
-					new Substitution( "url", "url" ),
-					new Substitution( "user", "user" ),
-					new Substitution( "token", "token" ),
-					new Substitution( "channel", "channel" )
-				]
+				true
 			);
 			var exec = params.shift();
 

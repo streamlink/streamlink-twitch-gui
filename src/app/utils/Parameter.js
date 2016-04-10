@@ -11,18 +11,19 @@ define([
 	var isNone = Ember.isNone;
 	var push = [].push;
 
+
 	/**
 	 * @class Parameter
 	 * @param {string?} name
 	 * @param {(string|string[]|Function)?} cond
 	 * @param {string?} value
-	 * @param {boolean?} subst
+	 * @param {Substitution[]?} subst
 	 * @constructor
 	 */
 	function Parameter( name, cond, value, subst ) {
 		this.name  = name;
 		this.value = value;
-		this.subst = !!subst;
+		this.subst = subst;
 		this.cond  = cond instanceof Function
 			? [ cond ]
 			: makeArray( cond ).concat( value || [] ).map(function( prop ) {
@@ -47,31 +48,31 @@ define([
 
 	/**
 	 * @param {Object} obj
-	 * @param {Substitution[]?} substitutions
+	 * @param {boolean} advanced
 	 * @returns {(string|boolean)}
 	 */
-	Parameter.prototype.getValue = function( obj, substitutions ) {
+	Parameter.prototype.getValue = function( obj, advanced ) {
 		if ( isNone( this.value ) ) { return false; }
 
 		var value = String( get( obj, this.value ) );
-		return this.subst && substitutions
-			? Substitution.substitute( value, substitutions, obj )
+		return advanced && this.subst
+			? Substitution.substitute( value, this.subst, obj )
 			: value;
 	};
 
 	/**
 	 * @param {Object} obj
-	 * @param {Substitution[]} substitutions
+	 * @param {boolean} advanced
 	 * @returns {string[]}
 	 */
-	Parameter.prototype.get = function( obj, substitutions ) {
+	Parameter.prototype.get = function( obj, advanced ) {
 		var res = [];
 
 		if ( !isNone( this.name ) ) {
 			res.push( this.name );
 		}
 
-		var value = this.getValue( obj, substitutions );
+		var value = this.getValue( obj, advanced );
 		if ( value !== false && value.length ) {
 			push.call( res, value );
 		}
@@ -79,13 +80,15 @@ define([
 		return res;
 	};
 
+
 	/**
+	 * Turn an array of parameters into an array of strings in context of an object
 	 * @param {Object} obj
 	 * @param {Parameter[]} parameters
-	 * @param {Substitution[]?} substitutions
+	 * @param {boolean?} advanced
 	 * @returns {string[]}
 	 */
-	Parameter.getParameters = function( obj, parameters, substitutions ) {
+	Parameter.getParameters = function( obj, parameters, advanced ) {
 		return parameters
 			// a parameter must fulfill every condition
 			.filter(function( parameter ) {
@@ -93,7 +96,7 @@ define([
 			})
 			// return a list of each parameter's name and its (substituted) value
 			.reduce(function( arr, parameter ) {
-				var params = parameter.get( obj, substitutions );
+				var params = parameter.get( obj, advanced );
 				push.apply( arr, makeArray( params ) );
 
 				return arr;

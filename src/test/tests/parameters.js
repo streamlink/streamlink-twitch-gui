@@ -116,9 +116,7 @@ define([
 			d: "foo bar",
 			e: "\"foo\" \"bar\"",
 			valid: true,
-			invalid: false,
-			j: "{foo} {bar} {baz}",
-			k: "{qux}"
+			invalid: false
 		};
 
 		function condition( obj ) {
@@ -138,98 +136,111 @@ define([
 		var h = new Parameter( "--h", condition, "a" );
 		var i = new Parameter( "--i", [ "valid", "valid" ], "a" );
 
-		var j = new Parameter( "--j", null, "j", true );
-		var k = new Parameter( "--k", null, "k", true );
-		var l = new Parameter( "--l", null, "j", false );
-
-		var foo = new Substitution( "foo", "a" );
-		var bar = new Substitution( "bar", "b" );
-		var baz = new Substitution( "baz", "c" );
-		var qux = new Substitution( "qux", "e" );
-
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [], [] ),
+			Parameter.getParameters( obj, [] ),
 			[],
 			"No parameters"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ a ], [] ),
+			Parameter.getParameters( obj, [ a ] ),
 			[ "--a" ],
 			"Simple single parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ a, a, a ], [] ),
+			Parameter.getParameters( obj, [ a, a, a ] ),
 			[ "--a", "--a", "--a" ],
 			"Simple multiple parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ b ], [] ),
+			Parameter.getParameters( obj, [ b ] ),
 			[ "--b", "b" ],
 			"Single parameter with value"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ c ], [] ),
+			Parameter.getParameters( obj, [ c ] ),
 			[],
 			"Parameter with invalid value"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ b, a, b ], [] ),
+			Parameter.getParameters( obj, [ b, a, b ] ),
 			[ "--b", "b", "--a", "--b", "b" ],
 			"Multiple parameters with value"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ d, e ], [] ),
+			Parameter.getParameters( obj, [ d, e ] ),
 			[ "--d", "foo bar", "--e", "\"foo\" \"bar\"" ],
 			"Multiple parameters with complex values"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ f ], [] ),
+			Parameter.getParameters( obj, [ f ] ),
 			[ "--f", "a" ],
 			"Valid conditional parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ g ], [] ),
+			Parameter.getParameters( obj, [ g ] ),
 			[],
 			"Invalid conditional parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ h ], [] ),
+			Parameter.getParameters( obj, [ h ] ),
 			[ "--h", "a" ],
 			"Dynamic conditional parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ i ], [] ),
+			Parameter.getParameters( obj, [ i ] ),
 			[ "--i", "a" ],
 			"Multiple conditions"
 		);
 
+	});
+
+
+	QUnit.test( "Substituted parameters", function( assert ) {
+
+		var obj = {
+			a: "a",
+			b: "b",
+			c: "c",
+			d: "\"foo\" \'bar\'",
+			paramA: "{foo} {bar} {baz}",
+			paramB: "{qux}"
+		};
+
+		var foo = new Substitution( "foo", "a" );
+		var bar = new Substitution( "bar", "b" );
+		var baz = new Substitution( "baz", "c" );
+		var qux = new Substitution( "qux", "d" );
+
+		var paramA = new Parameter( "--paramA", null, "paramA", [ foo, bar, baz ] );
+		var paramB = new Parameter( "--paramB", null, "paramB", [ qux ] );
+
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ j ], [ foo, bar, baz ] ),
-			[ "--j", "a b c" ],
+			Parameter.getParameters( obj, [ paramA ], true ),
+			[ "--paramA", "a b c" ],
 			"Parameter value substitution"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ k ], [ qux ] ),
-			[ "--k", "\\\"foo\\\" \\\"bar\\\"" ],
-			"Escaped parameter value substitution"
+			Parameter.getParameters( obj, [ paramA ], false ),
+			[ "--paramA", "{foo} {bar} {baz}" ],
+			"Disabled parameter value substitution"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ l ], [ foo, bar, baz ] ),
-			[ "--l", "{foo} {bar} {baz}" ],
-			"Disabled parameter value substitution"
+			Parameter.getParameters( obj, [ paramB ], true ),
+			[ "--paramB", "\\\"foo\\\" \\\'bar\\\'" ],
+			"Escaped parameter value substitution"
 		);
 
 	});
