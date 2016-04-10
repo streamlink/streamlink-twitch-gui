@@ -113,22 +113,20 @@ define([
 			var exec     = data[ "exec" ][ platformName ];
 			var fallback = data[ "fallback" ][ platformName ];
 
+			var context = {
+				args: args,
+				url : url
+			};
+			var paramsPredefined = [
+				new ParameterCustom( null, "args", [
+					new Substitution( "url", "url" )
+				])
+			];
+
 			// validate command and use fallback paths if needed
 			return this._validatePredefined( command, exec, fallback )
 				.then(function( exec ) {
-					var params = Parameter.getParameters(
-						{
-							args: args,
-							url : url
-						},
-						[
-							new ParameterCustom( null, "args", [
-								new Substitution( "url", "url" )
-							])
-						],
-						true
-					);
-
+					var params = Parameter.getParameters( context, paramsPredefined, true );
 					return launch( exec, params );
 				});
 		},
@@ -182,23 +180,21 @@ define([
 			var dir    = PATH.dirname( process.execPath );
 			var file   = PATH.join( dir, script );
 
+			var context = {
+				args  : args,
+				url   : url,
+				script: file
+			};
+			var paramsMSIE = [
+				new ParameterCustom( null, "args", [
+					new Substitution( "url", "url" ),
+					new Substitution( "script", "script" )
+				])
+			];
+
 			return stat( file )
 				.then(function() {
-					var params = Parameter.getParameters(
-						{
-							args  : args,
-							script: file,
-							url   : url
-						},
-						[
-							new ParameterCustom( null, "args", [
-								new Substitution( "url", "url" ),
-								new Substitution( "script", "script" )
-							])
-						],
-						true
-					);
-
+					var params = Parameter.getParameters( context, paramsMSIE, true );
 					return launch( exec, params );
 				});
 		},
@@ -215,7 +211,7 @@ define([
 			var chattyFb   = data[ "chatty-fallback" ];
 
 			// object containing all the required data
-			var obj = {
+			var context = {
 				args   : isLoggedIn
 					? data[ "chatty-args" ]
 					: data[ "chatty-args-noauth" ],
@@ -238,12 +234,12 @@ define([
 			}
 
 			// just a single custom parameter, so a string can be defined in package.json
-			var parameters = [
+			var paramsChatty = [
 				new ParameterCustom( null, "args", substitutions )
 			];
 
 			function launchChatty( exec ) {
-				var params = Parameter.getParameters( obj, parameters, true );
+				var params = Parameter.getParameters( context, paramsChatty, true );
 				return launch( exec, params );
 			}
 
@@ -278,7 +274,7 @@ define([
 						});
 				})
 				.then(function( exec ) {
-					obj.args = javaArgs + " " + obj.args;
+					context.args = javaArgs + " " + context.args;
 					substitutions.push( new Substitution( "chatty", "chatty" ) );
 
 					return launchChatty( exec );
@@ -287,27 +283,24 @@ define([
 
 
 		_openCustom: function( command, channel, url ) {
-			var token  = get( this, "auth.session.access_token" );
-			var user   = get( this, "auth.session.user_name" );
-			var params = Parameter.getParameters(
-				{
-					command: command,
-					channel: channel,
-					url    : url,
-					user   : user,
-					token  : token
-				},
-				[
-					new ParameterCustom( null, "command", [
-						new Substitution( "url", "url" ),
-						new Substitution( "user", "user" ),
-						new Substitution( "token", "token" ),
-						new Substitution( "channel", "channel" )
-					])
-				],
-				true
-			);
-			var exec = params.shift();
+			var context = {
+				command: command,
+				channel: channel,
+				url    : url,
+				user   : get( this, "auth.session.user_name" ),
+				token  : get( this, "auth.session.access_token" )
+			};
+			var paramsCustom = [
+				new ParameterCustom( null, "command", [
+					new Substitution( "url", "url" ),
+					new Substitution( "user", "user" ),
+					new Substitution( "token", "token" ),
+					new Substitution( "channel", "channel" )
+				])
+			];
+
+			var params = Parameter.getParameters( context, paramsCustom, true );
+			var exec   = params.shift();
 
 			return which( exec, checkExec )
 				.then(function() {
