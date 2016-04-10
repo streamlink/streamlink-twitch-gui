@@ -8,8 +8,8 @@ define(function() {
 	 * @param {String} url
 	 * @returns {(Boolean|String)}
 	 */
-	return function getStreamFromUrl( str ) {
-		var match = reUrl.exec( String( str ) );
+	function getStreamFromUrl( url ) {
+		var match = reUrl.exec( String( url ) );
 
 		if ( !match ) {
 			return false;
@@ -18,6 +18,9 @@ define(function() {
 		return blacklist.indexOf( match[ 1 ] ) === -1
 			? match[ 1 ]
 			: false;
-	};
+	}
+
+
+	return getStreamFromUrl;
 
 });
