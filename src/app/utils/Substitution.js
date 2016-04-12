@@ -5,6 +5,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var makeArray = Ember.makeArray;
 
 	var reSubstitution = /\{([a-z]+)}/ig;
 
@@ -25,7 +26,7 @@ define([
 	 * @constructor
 	 */
 	function Substitution( vars, path, description ) {
-		this.vars = Ember.makeArray( vars );
+		this.vars = makeArray( vars );
 		this.path = path;
 		this.description = description;
 	}
@@ -39,11 +40,11 @@ define([
 	};
 
 	/**
-	 * @param {Object} obj
+	 * @param {Object} context
 	 * @returns {(string|boolean)}
 	 */
-	Substitution.prototype.getValue = function( obj ) {
-		var val = get( obj, this.path );
+	Substitution.prototype.getValue = function( context ) {
+		var val = get( context, this.path );
 		if ( val === undefined ) {
 			return false;
 		}
@@ -60,12 +61,12 @@ define([
 
 	/**
 	 * Apply multiple substituions at once.
-	 * @param {string} str
+	 * @param {Object} context
 	 * @param {(Substitution|Substitution[])} substitutions
-	 * @param {Object} obj
+	 * @param {string} str
 	 */
-	Substitution.substitute = function( str, substitutions, obj ) {
-		substitutions = Ember.makeArray( substitutions );
+	Substitution.substitute = function( context, substitutions, str ) {
+		substitutions = makeArray( substitutions );
 
 		return str.replace( reSubstitution, function( all, name ) {
 			name = name.toLowerCase();
@@ -74,7 +75,7 @@ define([
 			// find the first matching variable and get its value
 			substitutions.some(function( substitution ) {
 				if ( substitution.hasVar( name ) ) {
-					res = substitution.getValue( obj );
+					res = substitution.getValue( context );
 					return true;
 				}
 			});

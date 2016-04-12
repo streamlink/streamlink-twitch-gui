@@ -28,12 +28,12 @@ define([
 
 
 	/**
-	 * @param {Object} obj
+	 * @param {Object} context
 	 * @param {boolean} advanced
 	 * @returns {string[]}
 	 */
-	ParameterCustom.prototype.get = function( obj, advanced ) {
-		var value = this.getValue( obj, advanced );
+	ParameterCustom.prototype.get = function( context, advanced ) {
+		var value = this.getValue( context, advanced );
 		return value === false
 			? []
 			: this.tokenize( value );

@@ -23,22 +23,22 @@ define([
 
 
 		assert.equal(
-			Substitution.substitute( "{bar}", foo, { foo: "foo" } ),
+			Substitution.substitute( { foo: "foo" }, foo, "{bar}" ),
 			"{bar}",
 			"Invalid variable"
 		);
 
 		assert.equal(
-			Substitution.substitute( "{foo}", foo, {} ),
+			Substitution.substitute( {}, foo, "{foo}" ),
 			"{foo}",
 			"Unknown property"
 		);
 
 		assert.deepEqual(
 			[
-				Substitution.substitute( "{foo}", foo, { foo: "foo" } ),
-				Substitution.substitute( "{bar}", bar, { bar: "bar" } ),
-				Substitution.substitute( "{baz}", baz, { baz: "baz" } )
+				Substitution.substitute( { foo: "foo" }, foo, "{foo}" ),
+				Substitution.substitute( { bar: "bar" }, bar, "{bar}" ),
+				Substitution.substitute( { baz: "baz" }, baz, "{baz}" )
 			],
 			[
 				"foo",
@@ -49,38 +49,38 @@ define([
 		);
 
 		assert.equal(
-			Substitution.substitute( "{foo}{bar}", foobar, { foobar: "foobar" } ),
+			Substitution.substitute( { foobar: "foobar" }, foobar, "{foo}{bar}" ),
 			"foobarfoobar",
 			"Multiple variables"
 		);
 
 		assert.equal(
-			Substitution.substitute( "{FOO}", foo, { foo: "foo" } ),
+			Substitution.substitute( { foo: "foo" }, foo, "{FOO}" ),
 			"foo",
 			"Case insensitive variables"
 		);
 
 		assert.equal(
 			Substitution.substitute(
-				"{foo}{bar}{baz}",
+				{ foo: "foo", bar: "bar", baz: "baz" },
 				[ foo, bar, baz ],
-				{ foo: "foo", bar: "bar", baz: "baz" }
+				"{foo}{bar}{baz}"
 			),
 			"foobarbaz",
 			"Substitution list"
 		);
 
 		assert.equal(
-			Substitution.substitute( "{foo}", foo, { foo: "{foo}" } ),
+			Substitution.substitute( { foo: "{foo}" }, foo, "{foo}" ),
 			"{{foo}}",
 			"Escape curly brackets"
 		);
 
 		assert.equal(
 			Substitution.substitute(
-				"{foo}{bar}{baz}",
+				{ foo: "{bar}", bar: "{baz}", baz: "{foo}" },
 				[ foo, bar, baz ],
-				{ foo: "{bar}", bar: "{baz}", baz: "{foo}" }
+				"{foo}{bar}{baz}"
 			),
 			"{{bar}}{{baz}}{{foo}}",
 			"Don't parse substituted variables again"
@@ -88,11 +88,11 @@ define([
 
 		assert.deepEqual(
 			[
-				Substitution.substitute( '"{foo}"', foo, { foo: '";rm -rf / --preserve-root' } ),
-				Substitution.substitute( "'{foo}'", foo, { foo: "';rm -rf / --preserve-root" } ),
-				Substitution.substitute( '"{foo}"', foo, { foo: "`rm -rf / --preserve-root`" } ),
-				Substitution.substitute( '"{foo}"', foo, { foo: "$(rm -rf / --preserve-root)" } ),
-				Substitution.substitute( '"{foo}"', foo, { foo: "\\" } )
+				Substitution.substitute( { foo: '";rm -rf / --preserve-root'  }, foo, '"{foo}"' ),
+				Substitution.substitute( { foo: "';rm -rf / --preserve-root"  }, foo, "'{foo}'" ),
+				Substitution.substitute( { foo: "`rm -rf / --preserve-root`"  }, foo, '"{foo}"' ),
+				Substitution.substitute( { foo: "$(rm -rf / --preserve-root)" }, foo, '"{foo}"' ),
+				Substitution.substitute( { foo: "\\" }, foo, '"{foo}"' )
 			],
 			[
 				'"\\";rm -rf / --preserve-root"',

@@ -36,43 +36,43 @@ define([
 	}
 
 	/**
-	 * @param {Object} obj
+	 * @param {Object} context
 	 * @returns {boolean}
 	 */
-	Parameter.prototype.validate = function( obj ) {
+	Parameter.prototype.validate = function( context ) {
 		return this.cond.every(function( cond ) {
 			// cond may be bound to something else
-			return cond.call( obj, obj );
+			return cond.call( context, context );
 		});
 	};
 
 	/**
-	 * @param {Object} obj
+	 * @param {Object} context
 	 * @param {boolean} advanced
 	 * @returns {(string|boolean)}
 	 */
-	Parameter.prototype.getValue = function( obj, advanced ) {
+	Parameter.prototype.getValue = function( context, advanced ) {
 		if ( isNone( this.value ) ) { return false; }
 
-		var value = String( get( obj, this.value ) );
+		var value = String( get( context, this.value ) );
 		return advanced && this.subst
-			? Substitution.substitute( value, this.subst, obj )
+			? Substitution.substitute( context, this.subst, value )
 			: value;
 	};
 
 	/**
-	 * @param {Object} obj
+	 * @param {Object} context
 	 * @param {boolean} advanced
 	 * @returns {string[]}
 	 */
-	Parameter.prototype.get = function( obj, advanced ) {
+	Parameter.prototype.get = function( context, advanced ) {
 		var res = [];
 
 		if ( !isNone( this.name ) ) {
 			res.push( this.name );
 		}
 
-		var value = this.getValue( obj, advanced );
+		var value = this.getValue( context, advanced );
 		if ( value !== false && value.length ) {
 			push.call( res, value );
 		}
@@ -83,20 +83,20 @@ define([
 
 	/**
 	 * Turn an array of parameters into an array of strings in context of an object
-	 * @param {Object} obj
+	 * @param {Object} context
 	 * @param {Parameter[]} parameters
 	 * @param {boolean?} advanced
 	 * @returns {string[]}
 	 */
-	Parameter.getParameters = function( obj, parameters, advanced ) {
+	Parameter.getParameters = function( context, parameters, advanced ) {
 		return parameters
 			// a parameter must fulfill every condition
 			.filter(function( parameter ) {
-				return parameter.validate( obj );
+				return parameter.validate( context );
 			})
 			// return a list of each parameter's name and its (substituted) value
 			.reduce(function( arr, parameter ) {
-				var params = parameter.get( obj, advanced );
+				var params = parameter.get( context, advanced );
 				push.apply( arr, makeArray( params ) );
 
 				return arr;
