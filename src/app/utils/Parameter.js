@@ -56,7 +56,7 @@ define([
 
 		var value = String( get( context, this.value ) );
 		return advanced && this.subst
-			? Substitution.substitute( context, this.subst, value )
+			? Substitution.substitute( context, this.subst, value, true )
 			: value;
 	};
 

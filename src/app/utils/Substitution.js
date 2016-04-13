@@ -7,15 +7,17 @@ define([
 	var get = Ember.get;
 	var makeArray = Ember.makeArray;
 
-	var reSubstitution = /\{([a-z]+)}/ig;
-
-	var reEscape       = /(["'`$\\])/g;
-	var strEscape      = "\\$1";
-
-	var reDouble       = /([\{}])/g;
-	var strDouble      = "$1$1";
-
+	var reSubstitution = /(\{)?\{([a-z]+)}(})?/ig;
 	var reWhitespace   = /\s+/g;
+	var reQuote        = /^['"]$/;
+	var reDoubleQuote  = /"|\\$/g;
+	var reSingleQuote  = /'|\\$/g;
+	var reAll          = /./g;
+	var strEscape      = "\\";
+
+	function fnEscape( c ) {
+		return strEscape + c;
+	}
 
 
 	/**
@@ -49,41 +51,126 @@ define([
 			return false;
 		}
 
-		return String( val )
-			// escape special characters
-			.replace( reEscape, strEscape )
-			// escape curly brackets
-			.replace( reDouble, strDouble )
-			// remove whitespace
-			.replace( reWhitespace, " " )
-			.trim();
+		// remove whitespace
+		return String( val ).trim().replace( reWhitespace, " " );
 	};
+
 
 	/**
 	 * Apply multiple substituions at once.
 	 * @param {Object} context
 	 * @param {(Substitution|Substitution[])} substitutions
 	 * @param {string} str
+	 * @param {boolean?} escape
 	 */
-	Substitution.substitute = function( context, substitutions, str ) {
+	Substitution.substitute = function( context, substitutions, str, escape ) {
 		substitutions = makeArray( substitutions );
 
-		return str.replace( reSubstitution, function( all, name ) {
-			name = name.toLowerCase();
+		// tokenize string (search for strings)
+		return Substitution.tokenize( String( str ) )
+			// and reduce token array back to a string
+			.reduce(function( result, token ) {
+				// search for variables in each token independently
+				token = token.string.replace( reSubstitution, function( all, left, name, right ) {
+					// ignore double curly bracket vars
+					if ( left ) { return all; }
 
-			var res = false;
-			// find the first matching variable and get its value
-			substitutions.some(function( substitution ) {
-				if ( substitution.hasVar( name ) ) {
-					res = substitution.getValue( context );
-					return true;
-				}
+					// var names are case independent
+					name = name.toLowerCase();
+
+					var res = false;
+					// find the first matching variable and get its value
+					substitutions.every(function( substitution ) {
+						if ( !substitution.hasVar( name ) ) { return true; }
+
+						res = substitution.getValue( context );
+						if ( escape && res !== false ) {
+							// escape the variable's content
+							res = res.replace(
+								token.quote === "\""
+									? reDoubleQuote
+									: token.quote === "\'"
+										? reSingleQuote
+										: reAll,
+								fnEscape
+							);
+						}
+					});
+
+					return res === false
+						? all
+						: res + ( right || "" );
+				});
+
+				return result + token;
+			}, "" );
+	};
+
+
+	/**
+	 * Tokenize a string
+	 * @param {string} str
+	 * @returns {Array}
+	 */
+	Substitution.tokenize = function( str ) {
+		var output  = [];
+		var buffer  = "";
+		var escaped = false;
+		var quote   = false;
+
+		function clearBuffer() {
+			if ( !buffer.length ) { return; }
+			output.push({
+				string: buffer,
+				quote : quote
 			});
+			buffer = "";
+			quote = false;
+		}
 
-			return res === false
-				? all
-				: res;
-		});
+		// tokenize string
+		for ( var char, i = 0, l = str.length; i < l; i++ ) {
+			char = str.charAt( i );
+
+			// detect escaped characters
+			if ( escaped ) {
+				buffer += strEscape + char;
+				escaped = false;
+				continue;
+			} else if ( char === strEscape ) {
+				escaped = true;
+				continue;
+			}
+
+			// detect quoted strings
+			if ( reQuote.test( char ) ) {
+				// not in quoted mode
+				if ( !quote ) {
+					clearBuffer();
+					buffer += char;
+					quote = char;
+					continue;
+
+				// closing quotation mark
+				} else if ( char === quote ) {
+					buffer += char;
+					clearBuffer();
+					continue;
+				}
+			}
+
+			// add char to buffer
+			buffer += char;
+		}
+
+		if ( buffer.length ) {
+			if ( escaped ) {
+				buffer += strEscape;
+			}
+			clearBuffer();
+		}
+
+		return output;
 	};
 
 

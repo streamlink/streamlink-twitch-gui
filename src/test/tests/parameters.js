@@ -75,9 +75,9 @@ define([
 		);
 
 		assert.equal(
-			subst( { foo: "{foo}" }, foo, "{foo}" ),
+			subst( { foo: "bar" }, foo, "{{foo}}" ),
 			"{{foo}}",
-			"Escape curly brackets"
+			"Ignore escaped variables"
 		);
 
 		assert.equal(
@@ -86,26 +86,32 @@ define([
 				[ foo, bar, baz ],
 				"{foo}{bar}{baz}"
 			),
-			"{{bar}}{{baz}}{{foo}}",
+			"{bar}{baz}{foo}",
 			"Don't parse substituted variables again"
 		);
 
-		assert.deepEqual(
-			[
-				subst( { foo: '";rm -rf / --preserve-root'  }, foo, '"{foo}"' ),
-				subst( { foo: "';rm -rf / --preserve-root"  }, foo, "'{foo}'" ),
-				subst( { foo: "`rm -rf / --preserve-root`"  }, foo, '"{foo}"' ),
-				subst( { foo: "$(rm -rf / --preserve-root)" }, foo, '"{foo}"' ),
-				subst( { foo: "\\" }, foo, '"{foo}"' )
-			],
-			[
-				'"\\";rm -rf / --preserve-root"',
-				"'\\';rm -rf / --preserve-root'",
-				'"\\`rm -rf / --preserve-root\\`"',
-				'"\\$(rm -rf / --preserve-root)"',
-				'"\\\\"'
-			],
-			"String escaping"
+		assert.equal(
+			subst( { foo: '";rm -rf / --preserve-root'  }, foo, '"{foo}"', true ),
+			'"\\";rm -rf / --preserve-root"',
+			"Escape double-quotes inside a double-quotes string"
+		);
+
+		assert.equal(
+			subst( { foo: "';rm -rf / --preserve-root"  }, foo, "'{foo}'", true ),
+			"'\\';rm -rf / --preserve-root'",
+			"Escape single-quotes inside a single-quotes string"
+		);
+
+		assert.equal(
+			subst( { foo: ";rm -rf / --preserve-root"  }, foo, '{foo}', true ),
+			'\\;\\r\\m\\ \\-\\r\\f\\ \\/\\ \\-\\-\\p\\r\\e\\s\\e\\r\\v\\e\\-\\r\\o\\o\\t',
+			"Escape every character everywhere else"
+		);
+
+		assert.equal(
+			subst( { foo: "\\" }, foo, '"{foo}"', true ),
+			'"\\\\"',
+			"Don't break strings with tailing escape characters"
 		);
 
 	});
@@ -213,38 +219,56 @@ define([
 	QUnit.test( "Substituted parameters", function( assert ) {
 
 		var obj = {
-			a: "a",
-			b: "b",
-			c: "c",
-			d: "\"foo\" \'bar\'",
-			paramA: "{foo} {bar} {baz}",
-			paramB: "{qux}"
+			foo: "f o o",
+			bar: "b a r",
+			baz: "b a z",
+			param: "{foo} \"{bar}\" \'{baz}\'",
+
+			title: "foo\'s \"bar\" \\",
+			paramTitleA: "--title \"{title}\"",
+			paramTitleB: "--title \'{title}\'",
+			paramTitleC: "--title {title}"
 		};
 
-		var foo = new Substitution( "foo", "a" );
-		var bar = new Substitution( "bar", "b" );
-		var baz = new Substitution( "baz", "c" );
-		var qux = new Substitution( "qux", "d" );
+		var foo = new Substitution( "foo", "foo" );
+		var bar = new Substitution( "bar", "bar" );
+		var baz = new Substitution( "baz", "baz" );
+		var title = new Substitution( "title", "title" );
 
-		var paramA = new Parameter( "--paramA", null, "paramA", [ foo, bar, baz ] );
-		var paramB = new Parameter( "--paramB", null, "paramB", [ qux ] );
+		var param = new Parameter( "--param", null, "param", [ foo, bar, baz ] );
+
+		var paramTitleA = new Parameter( "--player-args", null, "paramTitleA", [ title ] );
+		var paramTitleB = new Parameter( "--player-args", null, "paramTitleB", [ title ] );
+		var paramTitleC = new Parameter( "--player-args", null, "paramTitleC", [ title ] );
 
 		assert.deepEqual(
-			getParams( obj, [ paramA ], true ),
-			[ "--paramA", "a b c" ],
+			getParams( obj, [ param ], true ),
+			[ "--param", "\\f\\ \\o\\ \\o \"b a r\" \'b a z\'" ],
 			"Parameter value substitution"
 		);
 
 		assert.deepEqual(
-			getParams( obj, [ paramA ], false ),
-			[ "--paramA", "{foo} {bar} {baz}" ],
+			getParams( obj, [ param ], false ),
+			[ "--param", "{foo} \"{bar}\" \'{baz}\'" ],
 			"Disabled parameter value substitution"
 		);
 
 		assert.deepEqual(
-			getParams( obj, [ paramB ], true ),
-			[ "--paramB", "\\\"foo\\\" \\\'bar\\\'" ],
-			"Escaped parameter value substitution"
+			getParams( obj, [ paramTitleA ], true ),
+			[ "--player-args", "--title \"foo's \\\"bar\\\" \\\\\"" ],
+			"Only escape double quote chars in double quote strings"
+		);
+
+		assert.deepEqual(
+			getParams( obj, [ paramTitleB ], true ),
+			[ "--player-args", "--title \'foo\\\'s \"bar\" \\\\\'" ],
+			"Only escape single quote chars in single quote strings"
+		);
+
+		assert.deepEqual(
+			getParams( obj, [ paramTitleC ], true ),
+			[ "--player-args", "--title \\f\\o\\o\\\'\\s\\ \\\"\\b\\a\\r\\\"\\ \\\\" ],
+			"Escape all chars"
 		);
 
 	});
