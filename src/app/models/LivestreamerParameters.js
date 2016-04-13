@@ -70,7 +70,7 @@ define([
 		new Parameter(
 			"--player-args",
 			[ "settings.advanced", "settings.player" ],
-			"settings.player_params",
+			"settings.playerParamsCorrected",
 			playerSubstitutions
 		),
 		new Parameter(

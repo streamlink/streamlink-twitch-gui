@@ -80,7 +80,14 @@ define([
 
 		isVisibleInTray: function() {
 			return ( get( this, "gui_integration" ) & 2 ) > 0;
-		}.property( "gui_integration" )
+		}.property( "gui_integration" ),
+
+		playerParamsCorrected: function() {
+			var params = get( this, "player_params" );
+			return params.length && params.indexOf( "{filename}" ) === -1
+				? params + " {filename}"
+				: params;
+		}.property( "player_params" )
 
 	}).reopenClass({
 
