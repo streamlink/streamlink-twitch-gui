@@ -11,6 +11,10 @@ define([
 	Substitution
 ) {
 
+	var subst = Substitution.substitute;
+	var getParams = Parameter.getParameters;
+
+
 	QUnit.module( "Parameters" );
 
 
@@ -23,22 +27,22 @@ define([
 
 
 		assert.equal(
-			Substitution.substitute( { foo: "foo" }, foo, "{bar}" ),
+			subst( { foo: "foo" }, foo, "{bar}" ),
 			"{bar}",
 			"Invalid variable"
 		);
 
 		assert.equal(
-			Substitution.substitute( {}, foo, "{foo}" ),
+			subst( {}, foo, "{foo}" ),
 			"{foo}",
 			"Unknown property"
 		);
 
 		assert.deepEqual(
 			[
-				Substitution.substitute( { foo: "foo" }, foo, "{foo}" ),
-				Substitution.substitute( { bar: "bar" }, bar, "{bar}" ),
-				Substitution.substitute( { baz: "baz" }, baz, "{baz}" )
+				subst( { foo: "foo" }, foo, "{foo}" ),
+				subst( { bar: "bar" }, bar, "{bar}" ),
+				subst( { baz: "baz" }, baz, "{baz}" )
 			],
 			[
 				"foo",
@@ -49,19 +53,19 @@ define([
 		);
 
 		assert.equal(
-			Substitution.substitute( { foobar: "foobar" }, foobar, "{foo}{bar}" ),
+			subst( { foobar: "foobar" }, foobar, "{foo}{bar}" ),
 			"foobarfoobar",
 			"Multiple variables"
 		);
 
 		assert.equal(
-			Substitution.substitute( { foo: "foo" }, foo, "{FOO}" ),
+			subst( { foo: "foo" }, foo, "{FOO}" ),
 			"foo",
 			"Case insensitive variables"
 		);
 
 		assert.equal(
-			Substitution.substitute(
+			subst(
 				{ foo: "foo", bar: "bar", baz: "baz" },
 				[ foo, bar, baz ],
 				"{foo}{bar}{baz}"
@@ -71,13 +75,13 @@ define([
 		);
 
 		assert.equal(
-			Substitution.substitute( { foo: "{foo}" }, foo, "{foo}" ),
+			subst( { foo: "{foo}" }, foo, "{foo}" ),
 			"{{foo}}",
 			"Escape curly brackets"
 		);
 
 		assert.equal(
-			Substitution.substitute(
+			subst(
 				{ foo: "{bar}", bar: "{baz}", baz: "{foo}" },
 				[ foo, bar, baz ],
 				"{foo}{bar}{baz}"
@@ -88,11 +92,11 @@ define([
 
 		assert.deepEqual(
 			[
-				Substitution.substitute( { foo: '";rm -rf / --preserve-root'  }, foo, '"{foo}"' ),
-				Substitution.substitute( { foo: "';rm -rf / --preserve-root"  }, foo, "'{foo}'" ),
-				Substitution.substitute( { foo: "`rm -rf / --preserve-root`"  }, foo, '"{foo}"' ),
-				Substitution.substitute( { foo: "$(rm -rf / --preserve-root)" }, foo, '"{foo}"' ),
-				Substitution.substitute( { foo: "\\" }, foo, '"{foo}"' )
+				subst( { foo: '";rm -rf / --preserve-root'  }, foo, '"{foo}"' ),
+				subst( { foo: "';rm -rf / --preserve-root"  }, foo, "'{foo}'" ),
+				subst( { foo: "`rm -rf / --preserve-root`"  }, foo, '"{foo}"' ),
+				subst( { foo: "$(rm -rf / --preserve-root)" }, foo, '"{foo}"' ),
+				subst( { foo: "\\" }, foo, '"{foo}"' )
 			],
 			[
 				'"\\";rm -rf / --preserve-root"',
@@ -138,67 +142,67 @@ define([
 
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [] ),
+			getParams( obj, [] ),
 			[],
 			"No parameters"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ a ] ),
+			getParams( obj, [ a ] ),
 			[ "--a" ],
 			"Simple single parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ a, a, a ] ),
+			getParams( obj, [ a, a, a ] ),
 			[ "--a", "--a", "--a" ],
 			"Simple multiple parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ b ] ),
+			getParams( obj, [ b ] ),
 			[ "--b", "b" ],
 			"Single parameter with value"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ c ] ),
+			getParams( obj, [ c ] ),
 			[],
 			"Parameter with invalid value"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ b, a, b ] ),
+			getParams( obj, [ b, a, b ] ),
 			[ "--b", "b", "--a", "--b", "b" ],
 			"Multiple parameters with value"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ d, e ] ),
+			getParams( obj, [ d, e ] ),
 			[ "--d", "foo bar", "--e", "\"foo\" \"bar\"" ],
 			"Multiple parameters with complex values"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ f ] ),
+			getParams( obj, [ f ] ),
 			[ "--f", "a" ],
 			"Valid conditional parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ g ] ),
+			getParams( obj, [ g ] ),
 			[],
 			"Invalid conditional parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ h ] ),
+			getParams( obj, [ h ] ),
 			[ "--h", "a" ],
 			"Dynamic conditional parameter"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ i ] ),
+			getParams( obj, [ i ] ),
 			[ "--i", "a" ],
 			"Multiple conditions"
 		);
@@ -226,19 +230,19 @@ define([
 		var paramB = new Parameter( "--paramB", null, "paramB", [ qux ] );
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ paramA ], true ),
+			getParams( obj, [ paramA ], true ),
 			[ "--paramA", "a b c" ],
 			"Parameter value substitution"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ paramA ], false ),
+			getParams( obj, [ paramA ], false ),
 			[ "--paramA", "{foo} {bar} {baz}" ],
 			"Disabled parameter value substitution"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ paramB ], true ),
+			getParams( obj, [ paramB ], true ),
 			[ "--paramB", "\\\"foo\\\" \\\'bar\\\'" ],
 			"Escaped parameter value substitution"
 		);
@@ -266,43 +270,43 @@ define([
 		var g = new ParameterCustom( null, "g" );
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ a ] ),
+			getParams( obj, [ a ] ),
 			[ "--foo", "--bar" ],
 			"Basic tokenization"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ b ] ),
+			getParams( obj, [ b ] ),
 			[ "--foo", "foo", "--bar", "bar" ],
 			"Basic tokenization with parameter values"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ c ] ),
+			getParams( obj, [ c ] ),
 			[ "--foo", "foo bar", "--bar", "baz qux" ],
 			"Quoted tokenization with parameter values"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ d ] ),
+			getParams( obj, [ d ] ),
 			[ "--foo", "'foo'" ],
 			"Quotation marks inside quoted parameter values"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ e ] ),
+			getParams( obj, [ e ] ),
 			[ "--foo", "foo \"bar\"", "--bar", "baz 'qux'" ],
 			"Escaped quotation marks inside quoted parameter values"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ f ] ),
+			getParams( obj, [ f ] ),
 			[ "--foo", "\"foo" ],
 			"Missing closing quotation mark"
 		);
 
 		assert.deepEqual(
-			Parameter.getParameters( obj, [ g ] ),
+			getParams( obj, [ g ] ),
 			[ "--foo", "\\a\\" ],
 			"Invalid escaping backslashes"
 		);
