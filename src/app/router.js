@@ -15,7 +15,7 @@ define([
 
 		this.route( "watching" );
 
-		this.route( "search", { path: "/search/:filter/:query" } );
+		this.route( "search", { path: "/search" } );
 
 		this.route( "featured" );
 

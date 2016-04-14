@@ -13,7 +13,6 @@ define([
 ) {
 
 	var get = Ember.get;
-	var set = Ember.set;
 
 	function filterMatches( filter, value ) {
 		return filter === "all" || filter === value;
@@ -25,14 +24,19 @@ define([
 
 		itemSelector: ".stream-item-component",
 
+		queryParams: {
+			filter: {
+				refreshModel: true,
+				replace: true
+			},
+			query: {
+				refreshModel: true,
+				replace: true
+			}
+		},
 
 		model: function( params ) {
-			if ( arguments.length > 0 ) {
-				set( this, "filter", params.filter );
-				set( this,  "query",  params.query );
-			}
-
-			var store = get( this, "store" );
+			var store  = get( this, "store" );
 
 			return Ember.RSVP.hash({
 				// search for games
@@ -86,13 +90,6 @@ define([
 				.then( toArray )
 				.then( mapBy( "stream" ) )
 				.then( preload( "preview.medium_nocache" ) );
-		},
-
-		setupController: function( controller ) {
-			this._super.apply( this, arguments );
-
-			set( controller,  "filter", get(  this,  "filter" ) );
-			set( controller,   "query", get(  this,   "query" ) );
 		}
 	});
 

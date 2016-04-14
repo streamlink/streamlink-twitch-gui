@@ -99,8 +99,14 @@ define([
 		doSearch: function( query, filter ) {
 			set( this, "showDropdown", false );
 			this.addRecord( query, filter );
+
 			var targetObject = get( this, "targetObject" );
-			targetObject.transitionToRoute( "search", filter, query );
+			targetObject.transitionToRoute( "search", {
+				queryParams: {
+					filter: filter,
+					query : query
+				}
+			});
 		},
 
 

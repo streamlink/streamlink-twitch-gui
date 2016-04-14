@@ -11,6 +11,8 @@ define([
 
 
 	return Ember.Controller.extend({
+		queryParams: [ "filter", "query" ],
+
 		games   : alias( "model.games" ),
 		streams : alias( "model.streams" ),
 		channels: alias( "model.channels" ),
