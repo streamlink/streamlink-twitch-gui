@@ -15,7 +15,7 @@ Please read the following guidelines before you [report an issue][issues]:
 
 3. **Isolate the demonstrable problem** — make sure that the code in the project's repository is *definitely* responsible for the issue.
 
-Please try to be as detailed as possible in your report too. What is your environment? What steps will reproduce the issue? What would you expect to be the outcome? All these details will help people to assess and fix any potential bugs.
+Please try to be as detailed as possible in your report too. What is your environment? What steps will reproduce the issue? What would you expect to be the outcome? All these details will help people to assess and fix any potential bugs. You can also consider using the [issue template][issue-template] when reporting an issue.
 
 
 ## Feature requests
@@ -66,7 +66,7 @@ Good pull requests - patches, improvements, new features - are a fantastic help.
 
 Please adhere to the coding conventions used throughout a project (indentation, white space, accurate comments, etc.) and any other requirements (such as test coverage).
 
-Adhering to the following this process is the best way to get your work included in the project:
+Adhering to the following process is the best way to get your work included in the project:
 
 1. [Fork][howto-fork] the project, clone your fork, and configure the remotes:
    ```bash
@@ -114,6 +114,7 @@ This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5
 
   [license]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/LICENSE
   [issues]: https://github.com/bastimeyer/livestreamer-twitch-gui/issues
+  [issue-template]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/ISSUE_TEMPLATE.md
   [howto-fork]: https://help.github.com/articles/fork-a-repo
   [howto-rebase]: https://help.github.com/articles/interactive-rebase
   [howto-format-commits]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
