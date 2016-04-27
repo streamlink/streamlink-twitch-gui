@@ -21,8 +21,23 @@ define([
 			"isLocked:locked"
 		],
 
-		isOpened: false,
-		isLocked: false,
+		isOpened: Ember.computed({
+			get: function() {
+				return get( this, "isLocked" );
+			}
+		}),
+		isLocked: Ember.computed({
+			get: function() {
+				return this.constructor.isLocked;
+			},
+			set: function( key, value ) {
+				if ( value ) {
+					set( this, "isOpened", true );
+				}
+				this.constructor.isLocked = value;
+				return value;
+			}
+		}),
 
 		timer: null,
 
@@ -49,6 +64,9 @@ define([
 				this.toggleProperty( "isLocked" );
 			}
 		}
+
+	}).reopenClass({
+		isLocked: false
 	});
 
 });
