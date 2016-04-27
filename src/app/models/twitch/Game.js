@@ -13,7 +13,8 @@ define([
 		giantbomb_id: attr( "number" ),
 		logo: belongsTo( "twitchImage", { async: false } ),
 		name: attr( "string" ),
-		popularity: attr( "number" )
+		popularity: attr( "number" ),
+		properties: attr()
 
 	}).reopenClass({
 		toString: function() { return "kraken/games"; }

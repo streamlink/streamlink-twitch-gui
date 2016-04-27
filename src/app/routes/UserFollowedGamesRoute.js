@@ -20,15 +20,33 @@ define([
 	return UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 		itemSelector: ".game-item-component",
 
-		modelName: "twitchGamesFollowed",
+		queryParams: {
+			all: {
+				refreshModel: true
+			}
+		},
 
-		model: function() {
-			return get( this, "store" ).query( this.modelName, {
+		modelName: "twitchGamesLiveFollowed",
+		modelNameAll: "twitchGamesFollowed",
+
+		model: function( params ) {
+			// query parameters are strings
+			var modelname = params.all === "true"
+				? this.modelNameAll
+				: this.modelName;
+
+			return get( this, "store" ).query( modelname, {
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})
 				.then( toArray )
 				.then( preload( "box.large" ) );
+		},
+
+		fetchContent: function() {
+			return this.model({
+				all: get( this, "controller.all" )
+			});
 		}
 	});
 

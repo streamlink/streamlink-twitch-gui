@@ -1,8 +1,13 @@
 <main class="content content-user content-user-followed-games">
 <header>
-<h2>Followed games</h2>
+<h2>{{#if (is-equal all "true")}}All followed games{{else}}Followed live games{{/if}}</h2>
 {{headline-totals total=metadata.total}}
 {{#quick-bar}}
+{{form-button
+  action="toggleAll"
+  class=(unless (is-equal all "true") "active")
+  icon="fa-video-camera"
+  title=(if (is-equal all "true") "Show games with live channels" "Show all followed games")}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
