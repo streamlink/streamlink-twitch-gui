@@ -28,8 +28,11 @@ Choose a custom executable file of your selected browser. If left blank, default
 </span></div>
 <div>{{file-select value=model.chat_command inputClass="form-control" placeholder=(if isChatMethodCustom "Application path and parameters" (if isChatMethodChatty "Chatty .jar file path" "Custom browser executable"))}}</div>
 {{/unless}}
-<div><i class="fa fa-comment"></i> Open chat<span>After launching a stream.</span></div>
+<div><i class="fa fa-comment"></i> Open chat<span>While launching streams.</span></div>
+<div>
 <div>{{#check-box checked=model.gui_openchat}}Automatically open chat{{/check-box}}</div>
+{{#if model.gui_openchat}}<div>{{#check-box checked=model.gui_openchat_context}}Don&#39;t open chat while launching streams via the context menu{{/check-box}}</div>{{/if}}
+</div>
 <div><i class="fa fa-smile-o"></i> Twitch emotes<span>Button that opens up twitchemotes.com.</span></div>
 <div>{{#check-box checked=model.gui_twitchemotes}}Show emotes button in stream popups{{/check-box}}</div>
 </fieldset>

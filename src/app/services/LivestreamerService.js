@@ -140,8 +140,10 @@ define([
 				.then(function( settings ) {
 					if ( quality === undefined ) {
 						setIfNotNull( settings, livestreamer, "quality" );
+						set( livestreamer, "strictQuality", false );
 					} else {
 						set( livestreamer, "quality", quality );
+						set( livestreamer, "strictQuality", true );
 					}
 					setIfNotNull( settings, livestreamer, "gui_openchat" );
 				})
@@ -169,7 +171,16 @@ define([
 			}
 
 			// automatically open chat
-			if ( get( livestreamer, "gui_openchat" ) ) {
+			if (
+				// require open chat setting
+				   get( livestreamer, "gui_openchat" )
+				&& (
+					// context menu not used
+					   !get( livestreamer, "strictQuality" )
+					// or context menu setting disabled
+					|| !get( this, "settings.gui_openchat_context" )
+				)
+			) {
 				this.openChat( get( livestreamer, "channel" ) );
 			}
 
