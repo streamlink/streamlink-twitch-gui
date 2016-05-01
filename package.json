@@ -52,7 +52,7 @@
 		"livestreamer-version-min": "1.11.1",
 		"livestreamer-validation-timeout": 10000,
 		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",
-		"livestreamer-docs-url": "http://docs.livestreamer.io/en/latest/cli.html#cmdoption{cmd}",
+		"livestreamer-docs-url": "http://docs.livestreamer.io/cli.html#cmdoption{cmd}",
 		"changelog-url": "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v{version}",
 		"twitch-stream-url": "twitch.tv/{channel}",
 		"twitch-chat-url": "https://www.twitch.tv/{channel}/chat",
