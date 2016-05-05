@@ -35,6 +35,17 @@ define([
 		preferences.click = controller.send.bind( controller, "goto", "settings" );
 		mainMenu.insert( preferences, 2 );
 
+		// Add a refresh menu item to the view menubar submenu
+		var viewMenu = menubar.items[ 2 ].submenu;
+		var refresh = new MenuItem({
+			type: "normal",
+			label: "Refresh",
+			key: "r",
+			modifiers: "cmd"
+		});
+		refresh.click = controller.send.bind( controller, "refresh" );
+		viewMenu.insert( refresh, 0 );
+
 		return menubar;
 	}
 
