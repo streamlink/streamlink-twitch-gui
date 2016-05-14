@@ -119,7 +119,7 @@
 		"random-max": 500,
 		"chat-methods": {
 			"chromium": {
-				"args": "--app={url}",
+				"args": "\"--app={url}\"",
 				"exec": {
 					"win32": [ "chrome.exe" ],
 					"darwin": [ "Chromium" ],
@@ -146,7 +146,7 @@
 				}
 			},
 			"chrome": {
-				"args": "--app={url}",
+				"args": "\"--app={url}\"",
 				"exec": {
 					"win32": [ "chrome.exe" ],
 					"darwin": [ "Google Chrome" ],
