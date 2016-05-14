@@ -64,6 +64,7 @@ define([
 					removeStartmenuShortcutWin8();
 				}
 			});
+			settings.notifyPropertyChange( "notify_shortcut" );
 		}
 	};
 
