@@ -1,7 +1,7 @@
 define(function( require ) {
 
 	// load requirejs app-config
-	require( [ "../app/config" ], function() {
+	require( [ "../requirejs/config" ], function() {
 
 		// adjust paths to the test environment
 		requirejs.config({

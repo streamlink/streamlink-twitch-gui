@@ -50,17 +50,17 @@ requirejs.config({
 		// Application paths
 		"root"        : "..",
 		"requirejs"   : "../requirejs",
-		"initializers": "initializers",
-		"mixins"      : "mixins",
-		"services"    : "services",
-		"helpers"     : "helpers",
-		"models"      : "models",
-		"controllers" : "controllers",
-		"routes"      : "routes",
-		"components"  : "components",
-		"store"       : "store",
-		"utils"       : "utils",
-		"gui"         : "gui",
+		"initializers": "../app/initializers",
+		"mixins"      : "../app/mixins",
+		"services"    : "../app/services",
+		"helpers"     : "../app/helpers",
+		"models"      : "../app/models",
+		"controllers" : "../app/controllers",
+		"routes"      : "../app/routes",
+		"components"  : "../app/components",
+		"store"       : "../app/store",
+		"utils"       : "../app/utils",
+		"gui"         : "../app/gui",
 		"templates"   : "../templates"
 	}
 });
