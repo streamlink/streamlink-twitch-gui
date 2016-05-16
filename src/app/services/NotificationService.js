@@ -1,7 +1,6 @@
 define([
 	"Ember",
 	"nwjs/nwWindow",
-	"nwjs/openBrowser",
 	"mixins/ChannelSettingsMixin",
 	"utils/ember/toArray",
 	"utils/ember/mapBy",
@@ -12,7 +11,6 @@ define([
 ], function(
 	Ember,
 	nwWindow,
-	openBrowser,
 	ChannelSettingsMixin,
 	toArray,
 	mapBy,
@@ -62,6 +60,7 @@ define([
 		settings    : Ember.inject.service(),
 		auth        : Ember.inject.service(),
 		livestreamer: Ember.inject.service(),
+		chat        : Ember.inject.service(),
 
 		config  : alias( "metadata.config" ),
 
@@ -441,15 +440,13 @@ define([
 				// launch stream + chat
 				case 3:
 					get( this, "livestreamer" ).startStream( stream );
-					// don't open the chat twice
-					if ( !get( this, "settings.gui_openchat" ) ) {
-						var url = get( this, "config.twitch-chat-url" );
-						var channel = get( stream, "channel.id" );
-						if ( url && channel ) {
-							url = url.replace( "{channel}", channel );
-							openBrowser( url );
-						}
-					}
+					// don't open the chat twice (startStream may open chat already)
+					if ( get( this, "settings.gui_openchat" ) ) { break; }
+					var chat    = get( this, "chat" );
+					var channel = get( stream, "channel.id" );
+					chat.open( channel )
+						.catch(function() {});
+					break;
 			}
 		},
 
