@@ -1,19 +1,20 @@
 define([
 	"Ember",
 	"config",
+	"nwjs/openBrowser",
 	"components/list/ListItemComponent",
 	"Moment",
 	"hbs!templates/components/list/SubscriptionItemComponent"
 ], function(
 	Ember,
 	config,
+	openBrowser,
 	ListItemComponent,
 	Moment,
 	layout
 ) {
 
 	var get = Ember.get;
-	var getOwner = Ember.getOwner;
 	var alias = Ember.computed.alias;
 
 	var subscriptionEditUrl   = config.twitch[ "subscription" ][ "edit-url" ];
@@ -48,26 +49,26 @@ define([
 
 
 		openBrowser: function( url ) {
-			var applicationRoute = getOwner( this ).lookup( "route:application" );
 			var channel = get( this, "channel.id" );
+			if ( !channel ) { return Promise.reject(); }
+
 			url = url.replace( "{channel}", channel );
-			applicationRoute.send( "openBrowser", url );
+			openBrowser( url );
+			return Promise.resolve();
 		},
 
 
 		actions: {
-			edit: function( success ) {
-				this.openBrowser( subscriptionEditUrl );
-				if ( success instanceof Function ) {
-					success();
-				}
+			edit: function( success, failure ) {
+				this.openBrowser( subscriptionEditUrl )
+					.then( success, failure )
+					.catch(function() {});
 			},
 
-			cancel: function( success ) {
-				this.openBrowser( subscriptionCancelUrl );
-				if ( success instanceof Function ) {
-					success();
-				}
+			cancel: function( success, failure ) {
+				this.openBrowser( subscriptionCancelUrl )
+					.then( success, failure )
+					.catch(function() {});
 			}
 		}
 	});
