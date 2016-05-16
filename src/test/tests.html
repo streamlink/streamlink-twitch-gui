@@ -8,8 +8,47 @@
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
-<script src="../vendor/qunit/qunit/qunit.js"></script>
-<script>QUnit.config.autostart = false;</script>
-<script src="../vendor/requirejs/require.js" data-main="tests"></script>
+<script src="../vendor/requirejs/require.js"></script>
+<script>
+/* global requirejs */
+
+// define requirejs test-config before loading everything else
+// the QUnit bridge requires the "qunit" module and is executed immediately afterwards
+requirejs.config({
+	"baseUrl": "../app",
+
+	"shim": {
+		"EmberTest": [ "Ember", "EmberData", "EmberHtmlbars" ]
+	},
+
+	"map": {
+		"*": {
+			"qunit": "QUnit"
+		}
+	},
+
+	"paths": {
+		"QUnit": "../vendor/qunit/qunit/qunit",
+		"EmberTest": "../vendor/ember/ember-testing",
+
+		// Test paths
+		"Testutils": "../test/utils",
+		"test": "../test/tests"
+	}
+});
+
+// load requirejs app-config
+requirejs( [ "QUnit", "../requirejs/config" ], function( QUnit ) {
+
+	// don't start automatically
+	QUnit.config.autostart = false;
+
+	requirejs( [ "json!../test/tests", "EmberTest" ], function( tests ) {
+		// then load tests and start QUnit
+		requirejs( tests.tests, QUnit.start );
+	});
+
+});
+</script>
 </body>
 </html>

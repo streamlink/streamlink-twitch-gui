@@ -1,10 +1,12 @@
 define([
+	"QUnit",
 	"Testutils",
 	"Ember",
 	"components/list/ContentListComponent",
 	"helpers/IsGteHelper",
 	"helpers/HasOwnPropertyHelper"
 ], function(
+	QUnit,
 	Testutils,
 	Ember,
 	ContentListComponent,
