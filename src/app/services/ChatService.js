@@ -5,10 +5,8 @@ define([
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution",
-	"utils/node/resolvePath",
-	"utils/node/fs/which",
+	"utils/node/fs/whichFallback",
 	"utils/node/fs/stat",
-	"utils/node/platform",
 	"commonjs!child_process",
 	"commonjs!path"
 ], function(
@@ -18,10 +16,8 @@ define([
 	Parameter,
 	ParameterCustom,
 	Substitution,
-	resolvePath,
-	which,
+	whichFallback,
 	stat,
-	platform,
 	CP,
 	PATH
 ) {
@@ -32,13 +28,6 @@ define([
 	var twitchChatUrl = config.twitch[ "chat-url" ];
 	var chatApplications = config.chat;
 
-	var platformName = platform.platform;
-	var isWin = platform.isWin;
-
-
-	function checkExec( stat ) {
-		return stat.isFile() && ( isWin || ( stat.mode & 73 ) > 0 );
-	}
 
 	function launch( exec, params ) {
 		return new Promise(function( resolve, reject ) {
@@ -114,8 +103,8 @@ define([
 			if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
 
 			var args     = data[ "args" ];
-			var exec     = data[ "exec" ][ platformName ];
-			var fallback = data[ "fallback" ][ platformName ];
+			var exec     = data[ "exec" ];
+			var fallback = data[ "fallback" ];
 
 			var context = {
 				args: args,
@@ -127,50 +116,20 @@ define([
 				])
 			];
 
-			// validate command and use fallback paths if needed
-			return this._validatePredefined( command, exec, fallback )
+			var promise = command.length
+				// user has set a custom executable path
+				// check if the command's executable name is equal to one of the given ones
+				? exec.indexOf( PATH.basename( command ) ) === -1
+					? Promise.reject( new Error( "Invalid command" ) )
+					: whichFallback( command )
+				// no custom command
+				: whichFallback( exec, fallback );
+
+			return promise
 				.then(function( exec ) {
 					var params = Parameter.getParameters( context, paramsPredefined, true );
 					return launch( exec, params );
 				});
-		},
-
-		_validatePredefined: function( command, executables, fallbacks ) {
-			// user has set a custom executable path
-			if ( command.length ) {
-				// validate command:
-				// check if the command's executable name is equal to one of the given ones
-				var exec = PATH.basename( command );
-				return executables.indexOf( exec ) !== -1
-					? which( command, checkExec )
-					: Promise.reject( new Error( "Invalid command" ) );
-
-			} else {
-				// look for matching executables inside the $PATH variable first
-				return executables.reduce(function( chain, exec ) {
-					return chain.catch(function() {
-						// check file
-						return which( exec, checkExec );
-					});
-				}, Promise.reject() )
-					.catch( function() {
-						// or look for matching executables in a list of fallback paths
-						return fallbacks.reduce(function( chain, fallback ) {
-							return chain.catch(function() {
-								// resolve env variables
-								fallback = resolvePath( fallback );
-								// append each executable to the current path
-								return executables.reduce(function( chain, exec ) {
-									return chain.catch(function() {
-										var file = PATH.join( fallback, exec );
-										// check file (absolute path)
-										return which( file, checkExec );
-									});
-								}, Promise.reject() );
-							});
-						}, Promise.reject() );
-					});
-			}
 		},
 
 
@@ -214,8 +173,8 @@ define([
 			var token      = get( this, "auth.session.access_token" );
 			var user       = get( this, "auth.session.user_name" );
 			var javaArgs   = data[ "args" ];
-			var javaExec   = data[ "exec" ][ platformName ];
-			var fbPaths    = data[ "fallback" ][ platformName ];
+			var javaExec   = data[ "exec" ];
+			var javaFb     = data[ "fallback" ];
 			var chattyFb   = data[ "chatty-fallback" ];
 
 			// object containing all the required data
@@ -246,46 +205,26 @@ define([
 				new ParameterCustom( null, "args", substitutions )
 			];
 
-			function launchChatty( exec ) {
-				var params = Parameter.getParameters( context, paramsChatty, true );
-				return launch( exec, params );
-			}
-
-			// if no chatty jar has been set
-			if ( !chatty || !chatty.trim().length ) {
-				// check for chatty startscript in $PATH
-				return which( chattyFb, checkExec )
+			var promise = !chatty || !chatty.trim().length
+				// look for a chatty startscript if no chatty jar file has been set
+				? whichFallback( chattyFb )
+				// validate java installation
+				: whichFallback( javaExec, javaFb )
 					.then(function( exec ) {
-						return launchChatty( exec );
+						// check for existing chatty .jar file (and return java executable)
+						return stat( chatty )
+							.then(function() {
+								// alter command line
+								context.args = javaArgs + " " + context.args;
+								substitutions.push( new Substitution( "chatty", "chatty" ) );
+								return exec;
+							});
 					});
-			}
 
-			// validate java executable
-			return which( javaExec, checkExec )
-				.catch(function() {
-					// java executable fallback paths
-					return fbPaths.reduce(function( chain, fallback ) {
-						return chain.catch(function() {
-							// resolve env variables
-							fallback = resolvePath( fallback );
-							// append executable name to fallback path
-							var file = PATH.join( fallback, javaExec );
-							return which( file, checkExec );
-						});
-					}, Promise.reject() );
-				})
+			return promise
 				.then(function( exec ) {
-					// check for existing chatty .jar file (and return java executable)
-					return stat( chatty )
-						.then(function() {
-							return exec;
-						});
-				})
-				.then(function( exec ) {
-					context.args = javaArgs + " " + context.args;
-					substitutions.push( new Substitution( "chatty", "chatty" ) );
-
-					return launchChatty( exec );
+					var params = Parameter.getParameters( context, paramsChatty, true );
+					return launch( exec, params );
 				});
 		},
 
@@ -310,7 +249,7 @@ define([
 			var params = Parameter.getParameters( context, paramsCustom, true );
 			var exec   = params.shift();
 
-			return which( exec, checkExec )
+			return whichFallback( exec )
 				.then(function() {
 					return launch( exec, params );
 				});

@@ -7,12 +7,8 @@ define([
 	"mixins/ChannelSettingsMixin",
 	"utils/semver",
 	"utils/StreamOutputBuffer",
-	"utils/node/platform",
-	"utils/node/resolvePath",
-	"utils/node/fs/stat",
-	"utils/node/fs/which",
-	"commonjs!child_process",
-	"commonjs!path"
+	"utils/node/fs/whichFallback",
+	"commonjs!child_process"
 ], function(
 	Ember,
 	config,
@@ -22,12 +18,8 @@ define([
 	ChannelSettingsMixin,
 	semver,
 	StreamOutputBuffer,
-	platform,
-	resolvePath,
-	stat,
-	which,
-	CP,
-	PATH
+	whichFallback,
+	CP
 ) {
 
 	var get = Ember.get;
@@ -36,7 +28,7 @@ define([
 	var merge = Ember.merge;
 
 	var livestreamerExec = config.livestreamer[ "exec" ];
-	var livestreamerFallback = config.livestreamer[ "fallback" ][ platform.platform ];
+	var livestreamerFallback = config.livestreamer[ "fallback" ];
 	var livestreamerVersionMin = config.livestreamer[ "version-min" ];
 	var livestreamerTimeout = config.livestreamer[ "validation-timeout" ];
 	var twitchStreamUrl = config.twitch[ "stream-url" ];
@@ -155,8 +147,10 @@ define([
 					}
 					setIfNotNull( settings, livestreamer, "gui_openchat" );
 				})
-				// validate configuration and get the exec command
+				// get the exec command
 				.then( this.checkLivestreamer.bind( this ) )
+				// and validate configuration
+				.then( this.validateLivestreamer.bind( this ) )
 				.then(
 					// launch the stream
 					this.launchLivestreamer.bind( this, livestreamer, true ),
@@ -240,42 +234,21 @@ define([
 		 * @returns {Promise}
 		 */
 		checkLivestreamer: function() {
-			var path = get( this, "settings.livestreamer" );
-			var livestreamer;
-
-			path = String( path ).trim();
-
-			// use the default command if the user did not define one
-			if ( !path.length ) {
-				livestreamer = livestreamerExec;
-			// otherwise check for containing executable name
-			} else if ( path.indexOf( livestreamerExec ) !== -1 ) {
-				livestreamer = path;
-			} else {
-				return Promise.reject( new NotFoundError() );
-			}
+			var customExec = String( get( this, "settings.livestreamer" ) ).trim();
 
 			// check for the executable
-			return which( livestreamer, stat.isExecutable )
-				// check fallback paths
-				.catch(function() {
-					var promise = Promise.reject();
-					// ignore fallbacks if custom path has been set
-					if ( path || !livestreamerFallback || !livestreamerFallback.length ) {
-						return promise;
-					}
-
-					return livestreamerFallback.reduce(function( promise, path ) {
-						var check = PATH.join( resolvePath( path ), livestreamerExec );
-						return promise.catch(function() {
-							return stat( check, stat.isExecutable );
-						});
-					}, promise );
-				})
+			return whichFallback(
+				// use the default command if the user did not define a custom one
+				customExec.length
+					? customExec
+					: livestreamerExec,
+				// ignore fallbacks if custom path has been set
+				customExec
+					? null
+					: livestreamerFallback
+			)
 				// not found
-				.catch(function() { throw new NotFoundError(); })
-				// check for correct version
-				.then( this.validateLivestreamer.bind( this ) );
+				.catch(function() { throw new NotFoundError(); });
 		},
 
 		/**
