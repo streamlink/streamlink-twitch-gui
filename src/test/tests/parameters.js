@@ -1,10 +1,12 @@
 /* jshint quotmark:false */
 define([
+	"QUnit",
 	"Ember",
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution"
 ], function(
+	QUnit,
 	Ember,
 	Parameter,
 	ParameterCustom,

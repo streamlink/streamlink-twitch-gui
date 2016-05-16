@@ -6,8 +6,8 @@
 module.exports = function( grunt ) {
 	"use strict";
 
-	var Q  = require( "q" ),
-	    FS = require( "q-io/fs" );
+	var Q  = require( "q" );
+	var FS = require( "q-io/fs" );
 
 	grunt.task.registerMultiTask(
 		"metadata",
@@ -55,8 +55,7 @@ module.exports = function( grunt ) {
 					homepage: json.homepage,
 					author: json.author,
 					version: json.version,
-					built: grunt.template.today( "isoUtcDateTime" ),
-					config: json.config
+					built: grunt.template.today( "isoUtcDateTime" )
 				};
 			});
 	}

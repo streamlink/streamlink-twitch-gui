@@ -1,6 +1,8 @@
 define([
+	"QUnit",
 	"utils/getStreamFromUrl"
 ], function(
+	QUnit,
 	getStreamFromUrl
 ) {
 

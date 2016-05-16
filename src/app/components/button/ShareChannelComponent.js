@@ -12,8 +12,6 @@ define([
 
 
 	return FormButtonComponent.extend({
-		metadata: Ember.inject.service(),
-
 		"class" : "btn-info",
 		icon    : "fa-share-alt",
 		title   : "Copy channel url to clipboard",

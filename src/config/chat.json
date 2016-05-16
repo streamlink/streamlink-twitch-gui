@@ -1,0 +1,93 @@
+{
+	"chromium": {
+		"args": "\"--app={url}\"",
+		"exec": {
+			"win32": "chrome.exe",
+			"darwin": "Chromium",
+			"linux": [
+				"chromium-browser",
+				"chromium",
+				"chromium-dev",
+				"chromium-continuous-bin",
+				"chromium-snapshot-bin"
+			]
+		},
+		"fallback": {
+			"win32": [
+				"%LOCALAPPDATA%\\Chromium\\Application",
+				"%PROGRAMFILES%\\Chromium\\Application",
+				"%PROGRAMFILES(X86)%\\Chromium\\Application"
+			],
+			"darwin": [
+				"/Applications/Chromium.app/Contents/MacOS"
+			],
+			"linux": [
+				"/usr/bin",
+				"/usr/local/bin",
+				"/opt/chromium"
+			]
+		}
+	},
+	"chrome": {
+		"args": "\"--app={url}\"",
+		"exec": {
+			"win32": [ "chrome.exe" ],
+			"darwin": [ "Google Chrome" ],
+			"linux": [
+				"google-chrome",
+				"google-chrome-stable",
+				"google-chrome-unstable",
+				"google-chrome-beta",
+				"google-chrome-dev"
+			]
+		},
+		"fallback": {
+			"win32": [
+				"%LOCALAPPDATA%\\Google\\Chrome\\Application",
+				"%PROGRAMFILES%\\Google\\Chrome\\Application",
+				"%PROGRAMFILES(X86)%\\Google\\Chrome\\Application"
+			],
+			"darwin": [
+				"/Applications/Google Chrome.app/Contents/MacOS"
+			],
+			"linux": [
+				"/usr/bin",
+				"/usr/local/bin",
+				"/opt/google/chrome",
+				"/opt/google/chrome-unstable"
+			]
+		}
+	},
+	"msie": {
+		"args": "\"{script}\" \"{url}\"",
+		"exec": "cscript",
+		"script": "msie-minimal.vbs"
+	},
+	"chatty": {
+		"args": "-jar \"{chatty}\"",
+		"chatty-args": "-connect -single -user \"{user}\" -token \"{token}\" -channel \"{channel}\"",
+		"chatty-args-noauth": "-connect -single -channel \"{channel}\"",
+		"chatty-fallback": "chatty",
+		"exec": {
+			"win32": "javaw",
+			"darwin": "java",
+			"linux": "java"
+		},
+		"fallback": {
+			"win32": [
+				"%JAVA_HOME%\\bin",
+				"%JRE_HOME%\\bin",
+				"%PROGRAMDATA%\\Oracle\\Java\\javapath"
+			],
+			"darwin": [
+				"$JAVA_HOME/bin",
+				"$JRE_HOME/bin"
+			],
+			"linux": [
+				"$JAVA_HOME/bin",
+				"$JRE_HOME/bin",
+				"/etc/alternatives"
+			]
+		}
+	}
+}

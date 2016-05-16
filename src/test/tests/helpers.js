@@ -1,4 +1,5 @@
 define([
+	"QUnit",
 	"Testutils",
 	"Ember",
 	"helpers/IsEqualHelper",
@@ -19,6 +20,7 @@ define([
 	"helpers/GetParamHelper",
 	"helpers/HasOwnPropertyHelper"
 ], function(
+	QUnit,
 	Testutils,
 	Ember,
 	IsEqualHelper,

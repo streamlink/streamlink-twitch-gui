@@ -1,24 +1,24 @@
 define([
+	"config",
 	"nwjs/nwWindow",
 	"nwjs/tray",
-	"utils/node/platform",
-	"json!root/metadata"
+	"utils/node/platform"
 ], function(
+	config,
 	nwWindow,
 	tray,
-	platform,
-	metadata
+	platform
 ) {
 
-	function createTrayIcon() {
-		var config = metadata.package.config;
+	var displayName = config.main[ "display-name" ];
+	var trayIcon    = config.files[ "icons" ][ "tray" ][ platform.platform ];
 
+
+	function createTrayIcon() {
 		// apply a tray icon+menu to the main application window
 		nwWindow.tray = tray.create({
-			tooltip: config[ "display-name" ],
-			icon   : platform.isDarwin
-				? config[ "tray-icon-osx" ]
-				: config[ "tray-icon" ],
+			tooltip: displayName,
+			icon   : trayIcon,
 			items  : [
 				{
 					label: "Toggle window",

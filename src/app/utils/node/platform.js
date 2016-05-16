@@ -1,11 +1,11 @@
 define([
+	"config",
 	"utils/semver",
-	"json!root/metadata",
 	"commonjs!os",
 	"commonjs!path"
 ], function(
+	config,
 	semver,
-	metadata,
 	OS,
 	PATH
 ) {
@@ -26,7 +26,7 @@ define([
 
 
 	var slice = [].slice;
-	var tmpdirName = metadata.package.config[ "tempdir" ];
+	var tmpdirName = config.dirs[ "temp" ];
 	var tmpdirRoot = [ OS.tmpdir(), tmpdirName ];
 
 	function tmpdir() {

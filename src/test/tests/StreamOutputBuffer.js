@@ -1,6 +1,8 @@
 define([
+	"QUnit",
 	"utils/StreamOutputBuffer"
 ], function(
+	QUnit,
 	StreamOutputBuffer
 ) {
 

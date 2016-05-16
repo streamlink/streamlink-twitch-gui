@@ -1,7 +1,9 @@
 define([
+	"QUnit",
 	"Ember",
 	"utils/ember/ObjectBuffer"
 ], function(
+	QUnit,
 	Ember,
 	ObjectBuffer
 ) {

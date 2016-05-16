@@ -1,0 +1,22 @@
+{
+	"exec": "livestreamer",
+	"fallback": {
+		"win32": [
+			"%PROGRAMFILES%\\Livestreamer",
+			"%PROGRAMFILES(X86)%\\Livestreamer"
+		],
+		"darwin": [
+			"/usr/bin",
+			"/usr/local/bin",
+			"/Library/Frameworks/Python.framework/Versions/Current/bin"
+		],
+		"linux": [
+			"/usr/bin",
+			"/usr/local/bin"
+		]
+	},
+	"version-min": "1.11.1",
+	"validation-timeout": 10000,
+	"download-url": "https://github.com/chrippa/livestreamer/releases",
+	"docs-url": "http://docs.livestreamer.io/cli.html#cmdoption{cmd}"
+}

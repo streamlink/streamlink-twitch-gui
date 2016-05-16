@@ -1,0 +1,15 @@
+{
+	"cache": {
+		"dir": "icon-cache",
+		"time": 604800000
+	},
+	"fails": {
+		"requests": 3,
+		"channels": 1
+	},
+	"interval": {
+		"request": 60000,
+		"retry": 1000,
+		"error": 120000
+	}
+}

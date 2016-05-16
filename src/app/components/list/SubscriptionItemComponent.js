@@ -1,10 +1,12 @@
 define([
 	"Ember",
+	"config",
 	"components/list/ListItemComponent",
 	"Moment",
 	"hbs!templates/components/list/SubscriptionItemComponent"
 ], function(
 	Ember,
+	config,
 	ListItemComponent,
 	Moment,
 	layout
@@ -14,10 +16,11 @@ define([
 	var getOwner = Ember.getOwner;
 	var alias = Ember.computed.alias;
 
+	var subscriptionEditUrl   = config.twitch[ "subscription" ][ "edit-url" ];
+	var subscriptionCancelUrl = config.twitch[ "subscription" ][ "cancel-url" ];
+
 
 	return ListItemComponent.extend({
-		metadata: Ember.inject.service(),
-
 		layout: layout,
 		classNames: [ "subscription-item-component" ],
 		attributeBindings: [ "style" ],
@@ -54,16 +57,14 @@ define([
 
 		actions: {
 			edit: function( success ) {
-				var url = get( this, "metadata.config.twitch-subscribe-edit" );
-				this.openBrowser( url );
+				this.openBrowser( subscriptionEditUrl );
 				if ( success instanceof Function ) {
 					success();
 				}
 			},
 
 			cancel: function( success ) {
-				var url = get( this, "metadata.config.twitch-subscribe-cancel" );
-				this.openBrowser( url );
+				this.openBrowser( subscriptionCancelUrl );
 				if ( success instanceof Function ) {
 					success();
 				}

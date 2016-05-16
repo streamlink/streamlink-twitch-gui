@@ -1,9 +1,11 @@
 define([
 	"Ember",
+	"config",
 	"components/button/FormButtonComponent",
 	"mixins/LanguageFilterMixin"
 ], function(
 	Ember,
+	config,
 	FormButtonComponent,
 	LanguageFilterMixin
 ) {
@@ -12,9 +14,10 @@ define([
 	var set = Ember.set;
 	var merge = Ember.merge;
 
+	var randomMax = config.vars[ "random-max"] || 100;
+
 
 	return FormButtonComponent.extend( LanguageFilterMixin, {
-		metadata    : Ember.inject.service(),
 		store       : Ember.inject.service(),
 		livestreamer: Ember.inject.service(),
 
@@ -42,11 +45,10 @@ define([
 				var self  = this;
 				var model = get( self, "model" );
 				var store = get( self, "store" );
-				var max   = get( self, "metadata.config.random-max" ) || 100;
 
 				var query = {
 					// [0, max)
-					offset              : Math.floor( Math.random() * max ),
+					offset              : Math.floor( Math.random() * randomMax ),
 					limit               : 1,
 					broadcaster_language: get( self, "broadcaster_language" )
 				};

@@ -1,9 +1,11 @@
 define([
 	"Ember",
+	"config",
 	"nwjs/openBrowser",
 	"components/button/FormButtonComponent"
 ], function(
 	Ember,
+	config,
 	openBrowser,
 	FormButtonComponent
 ) {
@@ -12,9 +14,10 @@ define([
 	var and = Ember.computed.and;
 	var or = Ember.computed.or;
 
+	var twitchEmotesUrl = config.twitch[ "emotes-url" ];
+
 
 	return FormButtonComponent.extend({
-		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
 
 		showButton: false,
@@ -30,7 +33,7 @@ define([
 
 		actions: {
 			"openTwitchEmotes": function( success, failure ) {
-				var url = get( this, "metadata.config.twitch-emotes-url" );
+				var url = twitchEmotesUrl;
 				var channel = get( this, "channel.id" );
 
 				if ( url && channel ) {
