@@ -31,8 +31,8 @@
 	"chrome": {
 		"args": "\"--app={url}\"",
 		"exec": {
-			"win32": [ "chrome.exe" ],
-			"darwin": [ "Google Chrome" ],
+			"win32": "chrome.exe",
+			"darwin": "Google Chrome",
 			"linux": [
 				"google-chrome",
 				"google-chrome-stable",
@@ -81,11 +81,13 @@
 			],
 			"darwin": [
 				"$JAVA_HOME/bin",
-				"$JRE_HOME/bin"
+				"$JRE_HOME/bin",
+				"/usr/bin"
 			],
 			"linux": [
 				"$JAVA_HOME/bin",
 				"$JRE_HOME/bin",
+				"/usr/bin",
 				"/etc/alternatives"
 			]
 		}
