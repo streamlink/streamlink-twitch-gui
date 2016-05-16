@@ -8,6 +8,7 @@ define([
 	"utils/semver",
 	"utils/StreamOutputBuffer",
 	"utils/node/platform",
+	"utils/node/resolvePath",
 	"utils/node/fs/stat",
 	"utils/node/fs/which",
 	"commonjs!child_process",
@@ -22,6 +23,7 @@ define([
 	semver,
 	StreamOutputBuffer,
 	platform,
+	resolvePath,
 	stat,
 	which,
 	CP,
@@ -264,7 +266,7 @@ define([
 					}
 
 					return livestreamerFallback.reduce(function( promise, path ) {
-						var check = PATH.join( PATH.resolve( path ), livestreamerExec );
+						var check = PATH.join( resolvePath( path ), livestreamerExec );
 						return promise.catch(function() {
 							return stat( check, stat.isExecutable );
 						});
