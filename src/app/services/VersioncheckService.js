@@ -1,18 +1,19 @@
 define([
 	"Ember",
 	"config",
+	"nwjs/nwGui",
 	"nwjs/argv",
 	"utils/semver"
 ], function(
 	Ember,
 	config,
+	nwGui,
 	argv,
 	semver
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
-	var readOnly = Ember.computed.readOnly;
 
 
 	var checkAgain = config.update[ "check-again" ];
@@ -20,10 +21,9 @@ define([
 
 	return Ember.Service.extend({
 		store   : Ember.inject.service(),
-		metadata: Ember.inject.service(),
 		modal   : Ember.inject.service(),
 
-		version: readOnly( "metadata.package.version" ),
+		version: nwGui.App.manifest.version,
 
 
 		model: null,

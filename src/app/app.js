@@ -134,7 +134,6 @@ define(function( require ) {
 
 
 		// Services
-		MetadataService: require( "services/MetadataService" ),
 		SettingsService: require( "services/SettingsService" ),
 		AuthService: require( "services/AuthService" ),
 		ModalService: require( "services/ModalService" ),

@@ -1,16 +1,18 @@
 define([
 	"Ember",
-	"config"
+	"config",
+	"json!root/metadata"
 ], function(
 	Ember,
-	config
+	config,
+	metadata
 ) {
 
 	var get = Ember.get;
 
 
 	return Ember.Controller.extend({
-		metadata: Ember.inject.service(),
+		metadata: metadata,
 
 		nwjsVersion: config.main[ "nwjs-version" ],
 
