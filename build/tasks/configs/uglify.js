@@ -9,7 +9,8 @@ module.exports = {
 		mangle          : {},
 		beautify        : false,
 		screwIE8        : true,
-		preserveComments: "some",
+		// https://github.com/gruntjs/grunt-contrib-uglify/issues/392
+		preserveComments: /(?:^!|@(?:license|preserve|cc_on))/,
 
 		report: "min"
 	},
