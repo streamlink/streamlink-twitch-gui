@@ -50,6 +50,7 @@ requirejs.config({
 		// Application paths
 		"root"        : "..",
 		"requirejs"   : "../requirejs",
+		"config"      : "../app/config",
 		"initializers": "../app/initializers",
 		"mixins"      : "../app/mixins",
 		"services"    : "../app/services",

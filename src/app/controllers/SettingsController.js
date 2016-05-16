@@ -1,9 +1,11 @@
 define([
 	"Ember",
+	"config",
 	"mixins/RetryTransitionMixin",
 	"utils/node/platform"
 ], function(
 	Ember,
+	config,
 	RetryTransitionMixin,
 	platform
 ) {
@@ -11,6 +13,10 @@ define([
 	var get = Ember.get;
 	var set = Ember.set;
 	var equal = Ember.computed.equal;
+
+	var themes = config.themes[ "themes" ];
+	var langs  = config.langs;
+
 
 	function settingsAttrMeta( attr, prop ) {
 		return function() {
@@ -21,7 +27,6 @@ define([
 
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
-		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
 		modal   : Ember.inject.service(),
 
@@ -56,14 +61,13 @@ define([
 		isChatMethodChatty : equal( "model.chat_method", "chatty" ),
 
 		themes: function() {
-			var themes = get( this, "metadata.config.themes" );
 			return themes.map(function( theme ) {
 				return {
 					id   : theme,
 					label: theme.substr( 0, 1 ).toUpperCase() + theme.substr( 1 )
 				};
 			});
-		}.property( "metadata.config.themes" ),
+		}.property(),
 
 		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
@@ -113,14 +117,13 @@ define([
 
 
 		languages: function() {
-			var codes = get( this, "metadata.config.language_codes" );
-			return Object.keys( codes ).map(function( code ) {
+			return Object.keys( langs ).map(function( code ) {
 				return {
 					id  : code,
-					lang: codes[ code ][ "lang" ].capitalize()
+					lang: langs[ code ][ "lang" ].capitalize()
 				};
 			});
-		}.property( "metadata.config.language_codes" ),
+		}.property(),
 
 
 		actions: {

@@ -1,9 +1,11 @@
 define([
 	"Ember",
+	"config",
 	"nwjs/argv",
 	"utils/semver"
 ], function(
 	Ember,
+	config,
 	argv,
 	semver
 ) {
@@ -13,19 +15,15 @@ define([
 	var readOnly = Ember.computed.readOnly;
 
 
+	var checkAgain = config.update[ "check-again" ];
+
+
 	return Ember.Service.extend({
 		store   : Ember.inject.service(),
 		metadata: Ember.inject.service(),
 		modal   : Ember.inject.service(),
 
-		config : readOnly( "metadata.config" ),
 		version: readOnly( "metadata.package.version" ),
-
-		// check again in x days (time in ms)
-		time: function() {
-			var days = Number( get( this, "config.version-check-days" ) );
-			return 1000 * 3600 * 24 * days;
-		}.property( "config.version-check-days" ),
 
 
 		model: null,
@@ -148,11 +146,8 @@ define([
 		},
 
 		ignoreRelease: function() {
-			var record     = get( this, "model" );
-			var time       = get( this, "time" );
-			var checkagain = +new Date() + time;
-
-			record.set( "checkagain", checkagain );
+			var record = get( this, "model" );
+			record.set( "checkagain", +new Date() + checkAgain );
 
 			return record.save();
 		}

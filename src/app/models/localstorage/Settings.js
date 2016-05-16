@@ -1,21 +1,25 @@
 define([
 	"Ember",
 	"EmberData",
+	"config",
 	"utils/node/platform"
 ], function(
 	Ember,
 	DS,
+	config,
 	platform
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var attr = DS.attr;
+
+	var langs = Object.keys( config.langs );
 	var isWin = platform.isWin;
 
-	function defaultLangFilterValue( model ) {
-		var codes = get( model, "metadata.config.language_codes" );
-		return Object.keys( codes ).reduce(function( obj, key ) {
+
+	function defaultLangFilterValue() {
+		return langs.reduce(function( obj, key ) {
 			obj[ key ] = true;
 			return obj;
 		}, {} );
@@ -23,8 +27,6 @@ define([
 
 
 	return DS.Model.extend({
-		metadata: Ember.inject.service(),
-
 		advanced            : attr( "boolean", { defaultValue: false } ),
 		livestreamer        : attr( "string",  { defaultValue: "" } ),
 		livestreamer_params : attr( "string",  { defaultValue: "" } ),

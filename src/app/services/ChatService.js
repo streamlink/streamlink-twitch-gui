@@ -1,5 +1,6 @@
 define([
 	"Ember",
+	"config",
 	"nwjs/openBrowser",
 	"utils/Parameter",
 	"utils/ParameterCustom",
@@ -12,6 +13,7 @@ define([
 	"commonjs!path"
 ], function(
 	Ember,
+	config,
 	openBrowser,
 	Parameter,
 	ParameterCustom,
@@ -25,11 +27,14 @@ define([
 ) {
 
 	var get = Ember.get;
-	var readOnly = Ember.computed.readOnly;
 	var run = Ember.run;
+
+	var twitchChatUrl = config.twitch[ "chat-url" ];
+	var chatApplications = config.chat;
 
 	var platformName = platform.platform;
 	var isWin = platform.isWin;
+
 
 	function checkExec( stat ) {
 		return stat.isFile() && ( isWin || ( stat.mode & 73 ) > 0 );
@@ -49,18 +54,16 @@ define([
 
 
 	return Ember.Service.extend({
-		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
 		auth: Ember.inject.service(),
 
-		chatMethods: readOnly( "metadata.config.chat-methods" ),
 
 		/**
 		 * @param channel
 		 * @returns {Promise}
 		 */
 		open: function( channel ) {
-			var url  = get( this, "metadata.config.twitch-chat-url" );
+			var url  = twitchChatUrl;
 			var name = get( channel, "id" );
 
 			if ( !url || !name ) {
@@ -107,8 +110,9 @@ define([
 
 
 		_openPredefined: function( command, key, url ) {
-			var methods  = get( this, "chatMethods" );
-			var data     = methods[ key ];
+			var data = chatApplications[ key ];
+			if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
+
 			var args     = data[ "args" ];
 			var exec     = data[ "exec" ][ platformName ];
 			var fallback = data[ "fallback" ][ platformName ];
@@ -171,7 +175,9 @@ define([
 
 
 		_openMSIE: function( url ) {
-			var data   = get( this, "chatMethods.msie" );
+			var data = chatApplications[ "msie" ];
+			if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
+
 			var args   = data[ "args" ];
 			var exec   = data[ "exec" ];
 			var script = data[ "script" ];
@@ -201,10 +207,12 @@ define([
 
 
 		_openChatty: function( chatty, channel ) {
+			var data = chatApplications[ "chatty" ];
+			if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
+
 			var isLoggedIn = get( this, "auth.session.isLoggedIn" );
 			var token      = get( this, "auth.session.access_token" );
 			var user       = get( this, "auth.session.user_name" );
-			var data       = get( this, "chatMethods.chatty" );
 			var javaArgs   = data[ "args" ];
 			var javaExec   = data[ "exec" ][ platformName ];
 			var fbPaths    = data[ "fallback" ][ platformName ];

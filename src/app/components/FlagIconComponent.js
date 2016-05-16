@@ -1,16 +1,17 @@
 define([
-	"Ember"
+	"Ember",
+	"config"
 ], function(
-	Ember
+	Ember,
+	config
 ) {
 
 	var get = Ember.get;
-	var alias = Ember.computed.alias;
+
+	var langs = config.langs;
 
 
 	return Ember.Component.extend({
-		metadata: Ember.inject.service(),
-
 		tagName: "i",
 		classNameBindings: [ ":flag-icon", "flag", "withCursor::flag-icon-no-cursor" ],
 		attributeBindings: [ "title" ],
@@ -20,12 +21,9 @@ define([
 		withTitle : true,
 		withCursor: true,
 
-		codes: alias( "metadata.config.language_codes" ),
-
 		flag: function() {
-			var codes = get( this, "codes" );
 			var lang  = get( this, "lang" );
-			var code  = codes[ lang ];
+			var code  = langs[ lang ];
 
 			return code
 				? "flag-icon-" + code.flag
@@ -35,11 +33,10 @@ define([
 		title: function() {
 			if ( !get( this, "withTitle" ) ) { return ""; }
 
-			var codes = get( this, "codes" );
 			var lang  = get( this, "lang" );
 
-			if ( !codes[ lang ] ) { return ""; }
-			lang = codes[ lang ][ "lang" ];
+			if ( !langs[ lang ] ) { return ""; }
+			lang = langs[ lang ][ "lang" ];
 
 			switch ( get( this, "type" ) ) {
 				case "channel":
@@ -49,7 +46,7 @@ define([
 				default:
 					return "";
 			}
-		}.property( "withTitle", "codes", "lang" )
+		}.property( "withTitle", "lang" )
 	});
 
 });

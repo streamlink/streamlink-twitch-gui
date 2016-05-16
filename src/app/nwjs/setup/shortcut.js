@@ -1,21 +1,21 @@
 define([
 	"Ember",
+	"config",
 	"nwjs/nwGui",
 	"utils/node/resolvePath",
 	"utils/node/platform",
 	"utils/node/denodify",
 	"utils/node/fs/stat",
-	"json!root/metadata",
 	"commonjs!fs",
 	"commonjs!path"
 ], function(
 	Ember,
+	config,
 	nwGui,
 	resolvePath,
 	platform,
 	denodify,
 	stat,
-	metadata,
 	FS,
 	PATH
 ) {
@@ -24,13 +24,12 @@ define([
 	var App = nwGui.App;
 	var isWinGte8 = platform.isWinGte8;
 
+	var shortcutPath = resolvePath( config.dirs[ "windows-shortcut" ] );
+	var shortcutName = config.main[ "display-name" ] + ".lnk";
+
 
 	function getStartmenuShortcutPath() {
-		var displayName   = metadata.package.config[ "display-name" ];
-		var startmenuPath = metadata.package.config[ "windows-shortcut-path" ];
-		var resolved = resolvePath( startmenuPath );
-		var filename = displayName + ".lnk";
-		return PATH.join( resolved, filename );
+		return PATH.join( shortcutPath, shortcutName );
 	}
 
 	function createStartmenuShortcutWin8() {

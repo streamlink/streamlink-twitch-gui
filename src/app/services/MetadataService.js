@@ -1,8 +1,10 @@
 define([
 	"Ember",
+	"config",
 	"json!root/metadata"
 ], function(
 	Ember,
+	config,
 	metadata
 ) {
 
@@ -11,9 +13,9 @@ define([
 
 	return Ember.Service.extend({
 		metadata: metadata,
+		config  : config,
 
 		package     : alias( "metadata.package" ),
-		config      : alias( "metadata.package.config" ),
 		dependencies: alias( "metadata.dependencies" ),
 		contributors: alias( "metadata.contributors" )
 	});

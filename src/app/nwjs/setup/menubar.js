@@ -1,21 +1,21 @@
 define([
+	"config",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
 	"nwjs/menu",
-	"utils/node/platform",
-	"json!root/metadata"
+	"utils/node/platform"
 ], function(
+	config,
 	nwGui,
 	nwWindow,
 	Menu,
-	platform,
-	metadata
+	platform
 ) {
 
 	var MenuItem = nwGui.MenuItem;
 	var isDarwin = platform.isDarwin;
 
-	var displayName = metadata.package.config[ "display-name" ];
+	var displayName = config.main[ "display-name" ];
 
 
 	function createNativeMenuBarDarwin( controller ) {

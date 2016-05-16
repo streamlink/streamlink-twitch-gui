@@ -32,7 +32,7 @@ module.exports = {
 		expand : true,
 		cwd    : "build/releases/<%= package.name %>/osx32/<%= package.name %>.app/",
 		src    : [ "**" ],
-		dest   : "<%= package.config['display-name'] %>.app/"
+		dest   : "<%= grunt.config('main.display-name') %>.app/"
 	},
 	osx64: {
 		options: {
@@ -41,7 +41,7 @@ module.exports = {
 		expand : true,
 		cwd    : "build/releases/<%= package.name %>/osx64/<%= package.name %>.app/",
 		src    : [ "**" ],
-		dest   : "<%= package.config['display-name'] %>.app/"
+		dest   : "<%= grunt.config('main.display-name') %>.app/"
 	},
 
 	linux32: {

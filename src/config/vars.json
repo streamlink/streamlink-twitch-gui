@@ -1,0 +1,7 @@
+{
+	"search-history-size": 50,
+	"random-max": 500,
+
+	"stream-reload-interval": 60000,
+	"image-expiration-time": 60000
+}

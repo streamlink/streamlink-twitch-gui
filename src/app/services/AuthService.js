@@ -1,5 +1,6 @@
 define([
 	"Ember",
+	"config",
 	"nwjs/nwWindow",
 	"nwjs/openBrowser",
 	"utils/contains",
@@ -7,6 +8,7 @@ define([
 	"file!root/oauth-redirect.html"
 ], function(
 	Ember,
+	config,
 	nwWindow,
 	openBrowser,
 	contains,
@@ -17,28 +19,24 @@ define([
 	var get = Ember.get;
 	var set = Ember.set;
 	var getOwner = Ember.getOwner;
-	var alias = Ember.computed.alias;
+
+	var oauth = config.twitch[ "oauth" ];
 
 	var reToken = /^[a-z\d]{30}$/i;
 
 
 	return Ember.Service.extend( Ember.Evented, {
-		metadata: Ember.inject.service(),
-		store   : Ember.inject.service(),
-
-		config: alias( "metadata.config" ),
-		oauth : alias( "config.twitch-oauth" ),
+		store: Ember.inject.service(),
 
 		session: null,
-
 		server: null,
 
 		url: function() {
-			var baseuri     = get( this, "oauth.base-uri" );
-			var clientid    = get( this, "oauth.client-id" );
-			var serverport  = get( this, "oauth.server-port" );
-			var redirecturi = get( this, "oauth.redirect-uri" );
-			var scope       = get( this, "oauth.scope" );
+			var baseuri     = oauth[ "base-uri" ];
+			var clientid    = oauth[ "client-id" ];
+			var serverport  = oauth[ "server-port" ];
+			var redirecturi = oauth[ "redirect-uri" ];
+			var scope       = oauth[ "scope" ];
 
 			redirecturi = redirecturi.replace( "{server-port}", String( serverport ) );
 
@@ -46,7 +44,7 @@ define([
 				.replace( "{client-id}", clientid )
 				.replace( "{redirect-uri}", encodeURIComponent( redirecturi ) )
 				.replace( "{scope}", scope.join( "+" ) );
-		}.property( "config", "oauth.scope" ),
+		}.property(),
 
 
 		init: function() {
@@ -93,7 +91,7 @@ define([
 			var self  = this;
 			var defer = Promise.defer();
 
-			var port   = get( this, "oauth.server-port" );
+			var port   = oauth[ "server-port" ];
 			var server = new HttpServer( port, 1000 );
 			set( self, "server", server );
 
@@ -249,7 +247,7 @@ define([
 		 * @returns {boolean}
 		 */
 		validateScope: function( scope ) {
-			var expected = get( this, "oauth.scope" );
+			var expected = oauth[ "scope" ];
 
 			return scope instanceof Array
 			    && contains.all.apply( scope, expected );

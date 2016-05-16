@@ -1,5 +1,6 @@
 define([
 	"Ember",
+	"config",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
 	"utils/node/platform",
@@ -7,6 +8,7 @@ define([
 	"gui/smoothscroll"
 ], function(
 	Ember,
+	config,
 	nwGui,
 	nwWindow,
 	platform,
@@ -35,13 +37,12 @@ define([
 
 
 	return Ember.Component.extend({
-		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
 
 		tagName: "body",
 		classNames: [ "wrapper", "vertical" ],
 
-		themes: alias( "metadata.config.themes" ),
+		themes: config.themes[ "themes" ],
 		theme: alias( "settings.content.gui_theme" ),
 
 		themeObserver: function() {

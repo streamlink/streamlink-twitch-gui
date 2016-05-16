@@ -1,0 +1,4 @@
+{
+	"check-again": 604800000,
+	"changelog-url": "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v{version}"
+}

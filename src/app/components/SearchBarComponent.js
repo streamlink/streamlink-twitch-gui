@@ -1,22 +1,24 @@
 define([
 	"Ember",
+	"config",
 	"utils/getStreamFromUrl",
 	"hbs!templates/components/SearchBarComponent"
 ], function(
 	Ember,
+	config,
 	getStreamFromUrl,
 	layout
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
-	var readOnly = Ember.computed.readOnly;
 	var sort = Ember.computed.sort;
+
+	var searchHistorySize = config.vars[ "search-history-size" ];
 
 
 	return Ember.Component.extend({
 		store   : Ember.inject.service(),
-		metadata: Ember.inject.service(),
 
 		layout: layout,
 		tagName: "nav",
@@ -28,7 +30,6 @@ define([
 		content: sort( "model", "sortBy" ),
 		sortBy: [ "date:desc" ],
 
-		numKeepItems: readOnly( "metadata.config.search-history-size" ),
 		reQuery: /^[a-z0-9]{3,}/i,
 
 		showDropdown: false,
@@ -68,7 +69,7 @@ define([
 			}
 
 			// we don't want to store more than X records
-			if ( get( model, "length" ) >= get( this, "numKeepItems" ) ) {
+			if ( get( model, "length" ) >= searchHistorySize ) {
 				// delete the oldest record
 				model.sortBy( "date" ).shiftObject().destroyRecord();
 			}

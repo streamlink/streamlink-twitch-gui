@@ -1,7 +1,9 @@
 define([
-	"Ember"
+	"Ember",
+	"config"
 ], function(
-	Ember
+	Ember,
+	config
 ) {
 
 	var get = Ember.get;
@@ -9,6 +11,8 @@ define([
 
 	return Ember.Controller.extend({
 		metadata: Ember.inject.service(),
+
+		nwjsVersion: config.main[ "nwjs-version" ],
 
 		dependencies: function() {
 			var deps = get( this, "metadata.dependencies" );
