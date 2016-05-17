@@ -10,7 +10,13 @@ module.exports = {
 	},
 
 	js: {
-		files: [ "src/**/*.js" ],
-		tasks: [ "requirejs:dev" ]
+		// also watch the metadata files and always execute it first
+		files: [ "package.json", "bower.json", "src/**/*.js" ],
+		tasks: [ "metadata", "requirejs:dev" ]
+	},
+
+	metadata: {
+		files: [ "package.json", "bower.json" ],
+		tasks: [ "metadata" ]
 	}
 };

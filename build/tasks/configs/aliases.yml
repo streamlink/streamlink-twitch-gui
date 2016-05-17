@@ -3,6 +3,10 @@ default:
 dev:
     - "build"
     - "concurrent:runbuild"
+src:
+    - "metadata"
+    - "less:source"
+    - "concurrent:runsrc"
 test:
     - "jshint:test"
     - "connect:test"
