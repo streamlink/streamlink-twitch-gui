@@ -6,6 +6,7 @@ import update from "root/config/update.json";
 import themes from "root/config/themes.json";
 import langs from "root/config/langs.json";
 import livestreamer from "root/config/livestreamer.json";
+import players from "root/config/players.json";
 import twitch from "root/config/twitch.json";
 import notification from "root/config/notification.json";
 import chat from "root/config/chat.json";
@@ -20,6 +21,7 @@ export {
 	themes,
 	langs,
 	livestreamer,
+	players,
 	twitch,
 	notification,
 	chat

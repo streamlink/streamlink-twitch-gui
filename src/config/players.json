@@ -1,0 +1,142 @@
+{
+	"vlc": {
+		"exec": {
+			"win32": "vlc.exe",
+			"darwin": "VLC",
+			"linux": "vlc"
+		},
+		"fallback": {
+			"win32": [
+				"%PROGRAMFILES%\\VideoLAN\\VLC",
+				"%PROGRAMFILES(X86)%\\VideoLAN\\VLC"
+			],
+			"darwin": [
+				"/Applications/VLC.app/Contents/MacOS"
+			],
+			"linux": [
+				"/usr/bin",
+				"/usr/local/bin"
+			]
+		},
+		"params": [
+			{
+				"name": "Prevent single instance mode",
+				"descr": "View multiple streams in different player windows.",
+				"default": true,
+				"args": "--no-one-instance"
+			},
+			{
+				"name": "Allow Livestreamer to close the player",
+				"descr": "Prevents stacking up empty player windows.",
+				"default": true,
+				"args": "--play-and-exit"
+			},
+			{
+				"name": "Customize player window title",
+				"descr": "Show the channel name, game being played and stream title.",
+				"default": true,
+				"args": "--meta-title \"{name} - {game} - {status}\""
+			},
+			{
+				"name": "Disable player video cache",
+				"descr": "Reduces stream delay. Livestreamer already buffers the stream.",
+				"default": false,
+				"args": "--file-caching=0"
+			},
+			{
+				"name": "Minimal player layout",
+				"descr": "Hide player controls. Can also be toggled by pressing CTRL+H.",
+				"default": false,
+				"args": "--qt-minimal-view"
+			}
+		]
+	},
+	"mpv": {
+		"exec": {
+			"win32": "mpv.exe",
+			"darwin": "mpv",
+			"linux": "mpv"
+		},
+		"fallback": {
+			"win32": [
+				"%PROGRAMFILES%\\mpv",
+				"%PROGRAMFILES(X86)%\\mpv"
+			],
+			"darwin": [
+				"/Applications/mpv.app/Contents/MacOS",
+				"/usr/bin",
+				"/usr/local/bin"
+			],
+			"linux": [
+				"/usr/bin",
+				"/usr/local/bin"
+			]
+		},
+		"params": [
+			{
+				"name": "Allow Livestreamer to close the player",
+				"descr": "Prevents stacking up empty player windows.",
+				"default": true,
+				"args": "--keep-open=no"
+			},
+			{
+				"name": "Customize player window title",
+				"descr": "Show the channel name, game being played and stream title.",
+				"default": true,
+				"args": "--title \"{name} - {game} - {status}\""
+			},
+			{
+				"name": "Disable player video cache",
+				"descr": "Reduces stream delay. Livestreamer already buffers the stream.",
+				"default": false,
+				"args": "--no-cache"
+			},
+			{
+				"name": "Minimal player layout",
+				"descr": "Don't show player window decorations.",
+				"default": false,
+				"args": "--no-border"
+			},
+			{
+				"name": "Always show player window",
+				"descr": "Fixes potential issues with audio-only streams.",
+				"default": true,
+				"args": "--force-window"
+			}
+		]
+	},
+	"mpc": {
+		"exec": {
+			"win32": [
+				"mpc-hc64.exe",
+				"mpc-hc.exe"
+			],
+			"darwin": false,
+			"linux": false
+		},
+		"fallback": {
+			"win32": [
+				"%PROGRAMFILES%\\MPC-HC",
+				"%PROGRAMFILES(X86)%\\MPC-HC",
+				"%PROGRAMFILES%\\K-Lite Codec Pack\\MPC-HC64",
+				"%PROGRAMFILES%\\K-Lite Codec Pack\\MPC-HC",
+				"%PROGRAMFILES(X86)%\\K-Lite Codec Pack\\MPC-HC64",
+				"%PROGRAMFILES(X86)%\\K-Lite Codec Pack\\MPC-HC"
+			]
+		},
+		"params": [
+			{
+				"name": "Prevent single instance mode",
+				"descr": "View multiple streams in different player windows.",
+				"default": true,
+				"args": "/new"
+			},
+			{
+				"name": "Allow Livestreamer to close the player",
+				"descr": "Prevents stacking up empty player windows.",
+				"default": true,
+				"args": "/play /close"
+			}
+		]
+	}
+}
