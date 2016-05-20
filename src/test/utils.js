@@ -4,7 +4,9 @@ define([
 	Ember
 ) {
 
+	var get = Ember.get;
 	var run = Ember.run;
+	var $ = Ember.$;
 	var reWhiteSpace = /\s+/g;
 
 
@@ -18,11 +20,19 @@ define([
 		}
 	}
 
-	function getOutput( component, stripWhiteSpace ) {
-		var text = component.$().text();
-		return stripWhiteSpace
-			? text.replace( reWhiteSpace, "" )
-			: text;
+	function getElem( component, selector ) {
+		var element = get( component, "element" );
+		return selector && selector.length
+			? $( selector, element )
+			: $( element );
+	}
+
+	function getOutput( component, selector ) {
+		return getElem( component, selector ).text();
+	}
+
+	function cleanOutput( component, selector ) {
+		return getOutput( component, selector ).replace( reWhiteSpace, "" );
 	}
 
 	function buildOwner( properties ) {
@@ -40,9 +50,11 @@ define([
 
 
 	return {
-		runAppend : runAppend,
+		runAppend: runAppend,
 		runDestroy: runDestroy,
-		getOutput : getOutput,
+		getElem: getElem,
+		getOutput: getOutput,
+		cleanOutput: cleanOutput,
 		buildOwner: buildOwner
 	};
 

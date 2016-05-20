@@ -14,9 +14,9 @@ define([
 	HasOwnPropertyHelper
 ) {
 
-	var runAppend  = Testutils.runAppend;
+	var runAppend = Testutils.runAppend;
 	var runDestroy = Testutils.runDestroy;
-	var getOutput  = Testutils.getOutput;
+	var cleanOutput = Testutils.cleanOutput;
 	var buildOwner = Testutils.buildOwner;
 
 	var setOwner = Ember.setOwner;
@@ -58,10 +58,10 @@ define([
 		setOwner( component, owner );
 
 		runAppend( component );
-		assert.equal( getOutput( component, true ), "empty", "Empty content" );
+		assert.equal( cleanOutput( component ), "empty", "Empty content" );
 
 		run( content, "pushObject", 1 );
-		assert.equal( getOutput( component, true ), "1", "Non empty content" );
+		assert.equal( cleanOutput( component ), "1", "Non empty content" );
 
 	});
 
@@ -78,10 +78,10 @@ define([
 		setOwner( component, owner );
 
 		runAppend( component );
-		assert.equal( getOutput( component, true ), "falsefalse", "Initial content" );
+		assert.equal( cleanOutput( component ), "falsefalse", "Initial content" );
 
 		run( content, "pushObjects", [ 3, 4 ] );
-		assert.equal( getOutput( component, true ), "falsefalsetruetrue", "Unique items" );
+		assert.equal( cleanOutput( component ), "falsefalsetruetrue", "Unique items" );
 
 	});
 
@@ -98,10 +98,10 @@ define([
 		setOwner( component, owner );
 
 		runAppend( component );
-		assert.equal( getOutput( component, true ), "falsefalse", "Initial content" );
+		assert.equal( cleanOutput( component ), "falsefalse", "Initial content" );
 
 		run( content, "pushObjects", [ 2, 3 ] );
-		assert.equal( getOutput( component, true ), "falsefalsetruefalse", "Duplicates" );
+		assert.equal( cleanOutput( component ), "falsefalsetruefalse", "Duplicates" );
 
 	});
 
@@ -119,12 +119,12 @@ define([
 		setOwner( component, owner );
 
 		runAppend( component );
-		assert.equal( getOutput( component, true ), "falsefalse", "Initial content" );
+		assert.equal( cleanOutput( component ), "falsefalse", "Initial content" );
 
 		run( content, "pushObjects", [ { foo: 2 }, { foo: 3 } ] );
 		run.next(function() {
 			assert.equal(
-				getOutput( component, true ),
+				cleanOutput( component ),
 				"falsefalsetruefalse",
 				"Added nested duplicates"
 			);
@@ -151,18 +151,18 @@ define([
 		setOwner( component, owner );
 
 		runAppend( component );
-		assert.equal( getOutput( component, true ), "false", "Initial content" );
+		assert.equal( cleanOutput( component ), "false", "Initial content" );
 
 		run( content, "pushObjects", [ { foo: b.promise } ] );
 		run.next(function() {
-			assert.equal( getOutput( component, true ),
+			assert.equal( cleanOutput( component ),
 				"falsefalse",
 				"Added unresolved nested duplicate"
 			);
 
 			b.resolve( 1 );
 			run.next(function() {
-				assert.equal( getOutput( component, true ),
+				assert.equal( cleanOutput( component ),
 					"falsetrue",
 					"Resolved nested duplicate"
 				);
