@@ -9,9 +9,11 @@ define([
 	var $ = Ember.$;
 	var reWhiteSpace = /\s+/g;
 
+	var fixtureElement = "#qunit-fixture";
+
 
 	function runAppend( view ) {
-		run( view, "appendTo", "#qunit-fixture" );
+		run( view, "appendTo", fixtureElement );
 	}
 
 	function runDestroy( destroyed ) {
@@ -45,11 +47,15 @@ define([
 			}
 		});
 
-		return Owner.create( properties || {} );
+		var owner = Owner.create( properties || {} );
+		owner.register( "component-lookup:main", Ember.ComponentLookup );
+
+		return owner;
 	}
 
 
 	return {
+		fixtureElement: fixtureElement,
 		runAppend: runAppend,
 		runDestroy: runDestroy,
 		getElem: getElem,

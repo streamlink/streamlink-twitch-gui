@@ -22,7 +22,6 @@ define([
 	var setOwner = Ember.setOwner;
 	var run = Ember.run;
 	var Component = Ember.Component;
-	var ComponentLookup = Ember.ComponentLookup;
 	var compile = Ember.HTMLBars.compile;
 
 	var owner, component;
@@ -31,7 +30,6 @@ define([
 	QUnit.module( "ContentListComponent", {
 		"setup": function() {
 			owner = buildOwner();
-			owner.register( "component-lookup:main", ComponentLookup );
 			owner.register( "component:content-list", ContentListComponent );
 			owner.register( "component:infinite-scroll", Ember.Component.extend({}) );
 			owner.register( "helper:is-gte", IsGteHelper );
