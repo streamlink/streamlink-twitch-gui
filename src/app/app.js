@@ -165,10 +165,10 @@ define(function( require ) {
 		LivestreamerDocsComponent: require( "components/link/LivestreamerDocsComponent" ),
 
 		CheckBoxComponent: require( "components/form/CheckBoxComponent" ),
+		RadioBtnComponent: require( "components/form/RadioBtnComponent" ),
+		RadioBtnsComponent: require( "components/form/RadioBtnsComponent" ),
 		DropDownComponent: require( "components/form/DropDownComponent" ),
 		FileSelectComponent: require( "components/form/FileSelectComponent" ),
-		RadioButtonComponent: require( "components/form/RadioButtonComponent" ),
-		RadioButtonsComponent: require( "components/form/RadioButtonsComponent" ),
 		TextFieldComponent: require( "components/form/TextFieldComponent" ),
 
 		FollowChannelComponent: require( "components/button/FollowChannelComponent" ),
@@ -215,7 +215,6 @@ define(function( require ) {
 		PreviewImageComponent: require( "components/PreviewImageComponent" ),
 		SearchBarComponent: require( "components/SearchBarComponent" ),
 		SelectableTextComponent: require( "components/SelectableTextComponent" ),
-		WrapContentComponent: require( "components/WrapContentComponent" ),
 
 
 		// Content

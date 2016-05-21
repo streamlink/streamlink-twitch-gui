@@ -90,9 +90,27 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div><i class="fa fa-arrows-alt"></i> Scrolling<span>Enable or disable smooth scrolling.</span></div>
 <div>{{#check-box checked=model.gui_smoothscroll}}Enable smooth scrolling{{/check-box}}</div>
 <div><i class="fa fa-puzzle-piece"></i> OS integration<span>Where to access the GUI from.</span></div>
-<div>{{radio-buttons buttonName="integration" icon=true value=model.gui_integration content=settings.content.constructor.integration}}</div>
+{{#radio-btns
+	name="gui_integration"
+	value=model.gui_integration
+	content=settings.content.constructor.integration
+	optionValuePath="id"
+	classNames="radio-btns-group"
+	as |radiobtn label|
+}}
+{{#component radiobtn classNames="btn btn-with-icon btn-neutral"}}{{label}}{{/component}}
+{{/radio-btns}}
 <div><i class="fa fa-minus"></i> Minimize GUI<span>When the videoplayer opens.</span></div>
-<div>{{radio-buttons buttonName="minimize" icon=true value=model.gui_minimize content=settings.content.constructor.minimize}}</div>
+{{#radio-btns
+	name="gui_minimize"
+	value=model.gui_minimize
+	content=settings.content.constructor.minimize
+	optionValuePath="id"
+	classNames="radio-btns-group"
+	as |radiobtn label|
+}}
+{{#component radiobtn classNames="btn btn-with-icon btn-neutral"}}{{label}}{{/component}}
+{{/radio-btns}}
 {{#if hasBothIntegrations}}
 <div><i class="fa fa-minus-square"></i> Minimize button<span>Minimize button click behavior.</span></div>
 <div>{{#check-box checked=model.gui_minimizetotray}}Minimize to tray{{/check-box}}</div>
@@ -130,7 +148,14 @@ Choose a custom executable file of your selected browser. If left blank, default
 <legend>Languages</legend>
 <div><i class="fa fa-filter"></i> Filter streams<span>Choose <i class="text-nowrap">Fade out</i> to dim or choose <i class="text-nowrap">Filter out</i> to remove streams not matching your language selection from lists.</span></div>
 <div>
-{{radio-buttons buttonName="filterstreams" boxes=false wrap=true value=model.gui_filterstreams content=settings.content.constructor.gui_filterstreams}}
+{{#radio-btns
+	name="filterstreams"
+	value=model.gui_filterstreams
+	content=settings.content.constructor.gui_filterstreams
+	as |radiobtn label|
+}}
+<div>{{#component radiobtn}}{{label}}{{/component}}</div>
+{{/radio-btns}}
 {{#if model.gui_filterstreams}}
 <p class="notice"><em>Please select only one language.<br>Filtering multiple languages is not supported by Twitch.</em></p>
 {{/if}}
@@ -155,7 +180,14 @@ Choose a custom executable file of your selected browser. If left blank, default
 <div>{{#check-box checked=model.notify_shortcut}}Create a startmenu shortcut{{/check-box}}</div>
 {{/if}}
 <div><i class="fa fa-eyedropper"></i> Channel filter<span>Notifications can be turned on/off individually in a channel's settings menu.</span></div>
-{{radio-buttons buttonName="notify_all" boxes=false wrap=true value=model.notify_all content=settings.content.constructor.notify_all}}
+{{#radio-btns
+	name="notify_all"
+	value=model.notify_all
+	content=settings.content.constructor.notify_all
+	as |radiobtn label|
+}}
+<div>{{#component radiobtn}}{{label}}{{/component}}</div>
+{{/radio-btns}}
 <div><i class="fa fa-folder-open-o"></i> Grouping<span>Merge multiple notifications.</span></div>
 <div>{{#check-box checked=model.notify_grouping}}Only show one notification at a time{{/check-box}}</div>
 {{#unless platform.isLinux}}

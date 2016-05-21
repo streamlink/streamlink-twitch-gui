@@ -10,11 +10,12 @@ define([
 
 
 	return InputBtnComponent.extend({
-		classNames: [ "check-box-component" ],
+		classNames: [ "radio-btn-component" ],
 
 		click: function() {
 			if ( get( this, "disabled" ) ) { return; }
-			this.toggleProperty( "checked" );
+			// notify RadioBtnsComponent that the current RadioBtnComponent is the selection now
+			get( this, "onClick" )( this );
 		}
 	});
 
