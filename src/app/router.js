@@ -39,6 +39,7 @@ define([
 		});
 
 		this.route( "settings", function() {
+			this.route( "main" );
 			this.route( "streams" );
 			this.route( "livestreamer" );
 			this.route( "player" );

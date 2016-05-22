@@ -4,6 +4,9 @@ define([
 	Ember
 ) {
 
+	var set = Ember.set;
+
+
 	return Ember.Route.extend({
 		controllerName: "settings",
 
@@ -11,6 +14,12 @@ define([
 
 		model: function() {
 			return this.modelFor( "settings" );
+		},
+
+		actions: {
+			"didTransition": function() {
+				set( this, "controller.lastSubmenu", this.routeName );
+			}
 		}
 	});
 
