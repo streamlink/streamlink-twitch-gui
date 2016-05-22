@@ -229,6 +229,13 @@ define([
 		},
 
 
+		substitutionsCustom: [
+			new Substitution( "url", "url", "Twitch chat URL" ),
+			new Substitution( "user", "user", "User name" ),
+			new Substitution( "channel", "channel", "Channel name" ),
+			new Substitution( "token", "token", "Twitch access token" )
+		],
+
 		_openCustom: function( command, channel, url ) {
 			var context = {
 				command: command,
@@ -237,13 +244,9 @@ define([
 				user   : get( this, "auth.session.user_name" ),
 				token  : get( this, "auth.session.access_token" )
 			};
+			var substitutionsCustom = get( this, "substitutionsCustom" );
 			var paramsCustom = [
-				new ParameterCustom( null, "command", [
-					new Substitution( "url", "url" ),
-					new Substitution( "user", "user" ),
-					new Substitution( "token", "token" ),
-					new Substitution( "channel", "channel" )
-				])
+				new ParameterCustom( null, "command", substitutionsCustom )
 			];
 
 			var params = Parameter.getParameters( context, paramsCustom, true );

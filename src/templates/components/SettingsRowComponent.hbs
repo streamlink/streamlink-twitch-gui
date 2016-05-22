@@ -1,0 +1,16 @@
+<div>
+	<p><i class="fa {{icon}}"></i> {{title}}</p>
+	<p>{{{description}}}</p>
+	{{#if _substitutions.length}}
+		<p class="substitutions-info" title="The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped."><i class="fa fa-question-circle"></i> Available variables:</p>
+		<ul class="list-unstyled substitutions-list">
+			{{#each _substitutions as |substitution|}}
+				<li title="{{substitution.description}}">{{substitution.variable}}</li>
+			{{/each}}
+		</ul>
+	{{/if}}
+	{{#if livestreamerCmd}}
+		<p>{{livestreamer-docs cmd=livestreamerCmd}}</p>
+	{{/if}}
+</div>
+<div>{{yield}}</div>

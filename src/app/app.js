@@ -216,6 +216,8 @@ define(function( require ) {
 		SearchBarComponent: require( "components/SearchBarComponent" ),
 		SelectableTextComponent: require( "components/SelectableTextComponent" ),
 
+		SettingsRowComponent: require( "components/SettingsRowComponent" ),
+
 
 		// Content
 		FeaturedRoute: require( "routes/FeaturedRoute" ),
