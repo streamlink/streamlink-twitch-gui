@@ -1,95 +1,57 @@
 
 .content-settings {
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
 
-	fieldset {
-		margin-bottom: 2em;
-		.clearfix();
-
-		> legend {
-			margin: 0 0 1em;
-			padding: 0 0 .25em;
-			border-bottom: 1px solid;
-			font-size: 1em;
-			font-weight: lighter;
-
-			.themed({
-				color: @themed-settings-legend-color;
-				border-bottom-color: @themed-settings-legend-border-color;
-			});
-		}
-
-		> :not(legend) {
-			margin-bottom: 1em;
-		}
-
-		// footer
-		&.submit {
-			margin: 5em 0 3em;
-
-			> div {
-				display: flex;
-				justify-content: center;
-				width: auto;
-				float: none;
-
-				> .btn {
-					margin: 0 .5em;
-				}
-			}
-		}
+	> * {
+		flex-shrink: 0;
 	}
 
-	.radio-btns-component.radio-btns-group > label {
-		max-width: 10em;
-		font-size: .9em;
-		line-height: 1.8;
-	}
-
-	.selecter {
-		min-width: 11.5em;
-
-		&.notifications,
-		&.stream-click {
-			max-width: 14em;
-		}
-	}
-
-	.btn-subst {
-		min-width: 0;
-		padding: 0 .2em;
-		float: right;
-		font-size: .85em;
-		line-height: inherit;
-	}
-
-	.filter-lang {
+	> header > ul {
 		display: flex;
-		flex-flow: row wrap;
+		margin: 0 0 2rem;
+		padding: 0;
 
 		> li {
-			flex: 15em 0 0;
+			margin-left: .5rem;
+			font-size: .91em;
 
-			.lang-code {
-				display: inline-block;
-				margin-left: .25em;
-				font-size: .8em;
+			&:first-of-type {
+				margin-left: 0;
 			}
 		}
 	}
 
-	p.notice {
-		margin-top: .75em;
-		font-size: .75em;
-		font-style: italic;
+	> fieldset:not(.submit) {
+		flex-grow: 1;
+	}
 
-		.themed({
-			color: @themed-text-color-hint;
-		});
+	&.animated > fieldset:not(.submit) {
+		-webkit-animation: animFadeInRight @anim-content-duration ease-out;
+	}
+
+	> fieldset.submit {
+		margin: 3rem 0 1rem;
+
+		> div {
+			display: flex;
+			justify-content: center;
+			width: auto;
+			margin: 0;
+			padding: 0;
+			float: none;
+
+			> .btn {
+				margin: 0 .5em;
+			}
+		}
 	}
 }
 
 .settings-row-component {
 	display: flex;
+	margin-bottom: 1rem;
 
 	> :first-child {
 		flex: 0 0 33.333%;
@@ -179,5 +141,45 @@
 				margin-top: 1em;
 			}
 		}
+	}
+
+	.radio-btns-component.radio-btns-group > label {
+		max-width: 10em;
+		font-size: .9em;
+		line-height: 1.8;
+	}
+
+	.selecter {
+		min-width: 11.5em;
+
+		&.notifications,
+		&.stream-click {
+			max-width: 14em;
+		}
+	}
+
+	.filter-lang {
+		display: flex;
+		flex-flow: row wrap;
+
+		> li {
+			flex: 15em 0 0;
+
+			.lang-code {
+				display: inline-block;
+				margin-left: .25em;
+				font-size: .8em;
+			}
+		}
+	}
+
+	p.notice {
+		margin-top: .75em;
+		font-size: .75em;
+		font-style: italic;
+
+		.themed({
+			color: @themed-text-color-hint;
+		});
 	}
 }

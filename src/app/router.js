@@ -38,7 +38,16 @@ define([
 			this.route( "followedGames" );
 		});
 
-		this.route( "settings" );
+		this.route( "settings", function() {
+			this.route( "streams" );
+			this.route( "livestreamer" );
+			this.route( "player" );
+			this.route( "chat" );
+			this.route( "gui" );
+			this.route( "lists" );
+			this.route( "languages" );
+			this.route( "notifications" );
+		});
 
 		this.route( "about" );
 

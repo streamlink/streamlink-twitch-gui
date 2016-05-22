@@ -1,0 +1,30 @@
+<fieldset>
+{{#settings-row
+	"Flags"
+	"Indicating the broadcaster language."
+	icon="fa-flag"
+}}
+	{{#check-box checked=model.stream_show_flag}}Flags are always visible{{/check-box}}
+{{/settings-row}}
+
+{{#settings-row
+	"Info bar"
+	"Bottom bar inside the stream preview."
+	icon="fa-info"
+}}
+	{{#check-box checked=model.stream_show_info}}Info bar is always visible{{/check-box}}
+	<p>What should be displayed?</p>
+	{{drop-down class="stream-click" value=model.stream_info content=settings.content.constructor.stream_info}}
+{{/settings-row}}
+
+{{#settings-row
+	"Click behavior"
+	"Additional stream image click actions."
+	icon="fa-hand-pointer-o"
+}}
+	<p>{{unless platform.isDarwin "CTRL" "CMD"}} + Primary mouse button</p>
+	{{drop-down class="stream-click" value=model.stream_click_modify content=settings.content.constructor.stream_click}}
+	<p>Middle mouse button</p>
+	{{drop-down class="stream-click" value=model.stream_click_middle content=settings.content.constructor.stream_click}}
+{{/settings-row}}
+</fieldset>

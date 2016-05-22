@@ -34,6 +34,8 @@ define([
 		modal   : Ember.inject.service(),
 		chat    : Ember.inject.service(),
 
+		isAnimated: false,
+
 		platform : platform,
 
 		hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),

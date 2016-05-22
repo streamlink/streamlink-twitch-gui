@@ -1,0 +1,32 @@
+<fieldset>
+{{#settings-row
+	"Videoplayer"
+	"Use a custom player other than the one defined in your livestreamer config."
+	icon="fa-laptop"
+	livestreamerCmd="--player"
+	substitutions=(if model.advanced substitutionsPlayer)
+}}
+	{{file-select value=model.player inputClass="form-control" placeholder="Leave blank for default player"}}
+{{/settings-row}}
+
+{{#if model.advanced}}
+	{{#settings-row
+		"Parameters"
+		"Add player specific parameters."
+		icon="fa-code"
+		livestreamerCmd="--player-args"
+		substitutions=substitutionsPlayer
+	}}
+		{{input type="text" value=model.player_params classNames="col-xs-12" placeholder="Add custom player parameters"}}
+	{{/settings-row}}
+{{/if}}
+
+{{#settings-row
+	"Close player"
+	"After the stream has ended."
+	icon="fa-times"
+	livestreamerCmd="--player-no-close"
+}}
+	{{#check-box checked=model.player_no_close}}Do not close the player{{/check-box}}
+{{/settings-row}}
+</fieldset>
