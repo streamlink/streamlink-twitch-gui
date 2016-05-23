@@ -121,7 +121,9 @@
 				"%PROGRAMFILES%\\K-Lite Codec Pack\\MPC-HC64",
 				"%PROGRAMFILES%\\K-Lite Codec Pack\\MPC-HC",
 				"%PROGRAMFILES(X86)%\\K-Lite Codec Pack\\MPC-HC64",
-				"%PROGRAMFILES(X86)%\\K-Lite Codec Pack\\MPC-HC"
+				"%PROGRAMFILES(X86)%\\K-Lite Codec Pack\\MPC-HC",
+				"%PROGRAMFILES%\\K-Lite Codec Pack\\Media Player Classic",
+				"%PROGRAMFILES(X86)%\\K-Lite Codec Pack\\Media Player Classic"
 			]
 		},
 		"params": [
