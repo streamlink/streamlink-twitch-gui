@@ -69,7 +69,7 @@ define([
 		parameters: function() {
 			return Parameter.getParameters(
 				this,
-				LivestreamerParameters,
+				LivestreamerParameters.parameters,
 				get( this, "settings.advanced" )
 			);
 		}.property().volatile()

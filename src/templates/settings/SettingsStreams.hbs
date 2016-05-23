@@ -1,0 +1,17 @@
+<fieldset>
+{{#settings-row
+	"Preferred quality"
+	"Choose the default stream quality."
+	icon="fa-eye"
+}}
+	{{drop-down value=model.quality content=settings.content.constructor.qualities}}
+{{/settings-row}}
+
+{{#settings-row
+	"Stream popup"
+	"When a stream has started."
+	icon="fa-info-circle"
+}}
+	{{#check-box checked=model.gui_hidestreampopup}}Hide the popup on success{{/check-box}}
+{{/settings-row}}
+</fieldset>

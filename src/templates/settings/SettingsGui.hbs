@@ -1,0 +1,63 @@
+<fieldset>
+{{#settings-row
+	"OS integration"
+	"Where to access the GUI from."
+	icon="fa-puzzle-piece"
+}}
+	{{#radio-btns
+		name="gui_integration"
+		value=model.gui_integration
+		content=settings.content.constructor.integration
+		optionValuePath="id"
+		classNames="radio-btns-group"
+		as |radiobtn label|
+	}}
+		{{#component radiobtn classNames="btn btn-with-icon btn-neutral"}}{{label}}{{/component}}
+	{{/radio-btns}}
+{{/settings-row}}
+
+{{#settings-row
+	"Minimize GUI"
+	"When the videoplayer opens."
+	icon="fa-minus"
+}}
+	{{#radio-btns
+		name="gui_minimize"
+		value=model.gui_minimize
+		content=settings.content.constructor.minimize
+		optionValuePath="id"
+		classNames="radio-btns-group"
+		as |radiobtn label|
+	}}
+		{{#component radiobtn classNames="btn btn-with-icon btn-neutral"}}{{label}}{{/component}}
+	{{/radio-btns}}
+{{/settings-row}}
+
+{{#if hasBothIntegrations}}
+	{{#settings-row
+		"Minimize button"
+		"Minimize button click behavior."
+		icon="fa-minus-square"
+	}}
+		{{#check-box checked=model.gui_minimizetotray}}Minimize to tray{{/check-box}}
+	{{/settings-row}}
+{{/if}}
+
+{{#if (bool-or hasTaskBarIntegration hasBothIntegrations)}}
+	{{#settings-row
+		"Application badge"
+		"On the task bar icon or dock icon.<br>Has to be supported by your OS and requires enabled desktop notifications."
+		icon="fa-tag"
+	}}
+		{{#check-box checked=model.notify_badgelabel disabled=(bool-not model.notify_enabled)}}Show number of streaming favorites{{/check-box}}
+	{{/settings-row}}
+{{/if}}
+
+{{#settings-row
+	"Refresh content"
+	"Automatically refresh when the application window regains focus."
+	icon="fa-refresh"
+}}
+	{{drop-down value=model.gui_focusrefresh content=settings.content.constructor.gui_focusrefresh optionValuePath="value"}}
+{{/settings-row}}
+</fieldset>

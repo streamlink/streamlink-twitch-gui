@@ -7,6 +7,9 @@ define([
 ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
+
+	var settingsRouteNames = /^settings\.\w+$/;
 
 
 	return Ember.Route.extend({
@@ -22,8 +25,20 @@ define([
 			});
 		},
 
+		resetController: function( controller, isExiting ) {
+			if ( isExiting ) {
+				set( controller, "isAnimated", false );
+			}
+		},
+
 		actions: {
 			willTransition: function( transition ) {
+				// don't show modal when transitioning between settings subroutes
+				if ( transition && settingsRouteNames.test( transition.targetName ) ) {
+					set( this, "controller.isAnimated", true );
+					return;
+				}
+
 				// check whether the user has changed any values
 				if ( !get( this, "controller.model.isDirty" ) ) { return; }
 

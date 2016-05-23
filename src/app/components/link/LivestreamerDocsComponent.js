@@ -19,7 +19,7 @@ define([
 		layout: layout,
 
 		tagName: "span",
-		classNameBindings: [ ":docs" ],
+		classNames: [ "livestreamer-docs-component" ],
 		attributeBindings: [ "title" ],
 		title: "Read the documentation of this livestreamer parameter",
 

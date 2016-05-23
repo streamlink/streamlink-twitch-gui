@@ -1,0 +1,71 @@
+<fieldset>
+{{#settings-row
+	"Chat method"
+	"Choose your preferred chat method."
+	icon="fa-twitch"
+	notes=(if isChatMethodDefault "Choosing the default browser may result in unwanted, non-minimal window sizes.")
+}}
+	{{drop-down value=model.chat_method content=chatMethods class="chat-method"}}
+{{/settings-row}}
+
+{{#if isChatMethodChatty}}
+	{{#settings-row
+		"Chatty"
+		"Set the path to the Chatty .jar file."
+		icon="fa-cog"
+		defaultValue=(if isChatMethodChatty "\"chatty\" start script (read from $PATH)")
+		requires=(if isChatMethodChatty "Chatty >= 0.8.2b2")
+	}}
+		{{file-select
+			value=model.chat_command
+			inputClass="form-control"
+			placeholder="Chatty .jar file path"
+		}}
+	{{/settings-row}}
+{{else if isChatMethodCustom}}
+	{{#settings-row
+		"Chat application"
+		"Set a custom chat application command."
+		icon="fa-cog"
+		substitutions=substitutionsChatCustom
+		example="/path/to/app --token \"{token}\" --channel \"{channel}\""
+	}}
+		{{file-select
+			value=model.chat_command
+			inputClass="form-control"
+			placeholder="Custom chat application command"
+		}}
+	{{/settings-row}}
+{{else unless (bool-or isChatMethodDefault isChatMethodMSIE)}}
+	{{#settings-row
+		"Executable location"
+		"Choose a custom executable of your selected browser. If left blank, default installation paths are assumed."
+		icon="fa-cog"
+	}}
+		{{file-select
+			value=model.chat_command
+			inputClass="form-control"
+			placeholder="Custom browser executable"
+		}}
+	{{/settings-row}}
+{{/if}}
+
+{{#settings-row
+	"Open chat"
+	"While launching streams."
+	icon="fa-comment"
+}}
+	<div>{{#check-box checked=model.gui_openchat}}Automatically open chat{{/check-box}}</div>
+	{{#if model.gui_openchat}}
+		<div>{{#check-box checked=model.gui_openchat_context}}Don&#39;t open chat while launching streams via the context menu{{/check-box}}</div>
+	{{/if}}
+{{/settings-row}}
+
+{{#settings-row
+	"Twitch emotes"
+	"Button that opens up twitchemotes.com."
+	icon="fa-smile-o"
+}}
+	{{#check-box checked=model.gui_twitchemotes}}Show emotes button in stream popups{{/check-box}}
+{{/settings-row}}
+</fieldset>

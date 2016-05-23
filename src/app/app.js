@@ -216,6 +216,8 @@ define(function( require ) {
 		SearchBarComponent: require( "components/SearchBarComponent" ),
 		SelectableTextComponent: require( "components/SelectableTextComponent" ),
 
+		SettingsRowComponent: require( "components/SettingsRowComponent" ),
+
 
 		// Content
 		FeaturedRoute: require( "routes/FeaturedRoute" ),
@@ -278,7 +280,26 @@ define(function( require ) {
 
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
-		SettingsTemplate: require( "hbs!templates/Settings" ),
+		SettingsTemplate: require( "hbs!templates/settings/Settings" ),
+		SettingsIndexRoute: require( "routes/SettingsIndexRoute" ),
+		SettingsMainRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsMainTemplate: require( "hbs!templates/settings/SettingsMain" ),
+		SettingsStreamsRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsStreamsTemplate: require( "hbs!templates/settings/SettingsStreams" ),
+		SettingsLivestreamerRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsLivestreamerTemplate: require( "hbs!templates/settings/SettingsLivestreamer" ),
+		SettingsPlayerRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsPlayerTemplate: require( "hbs!templates/settings/SettingsPlayer" ),
+		SettingsChatRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsChatTemplate: require( "hbs!templates/settings/SettingsChat" ),
+		SettingsGuiRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsGuiTemplate: require( "hbs!templates/settings/SettingsGui" ),
+		SettingsListsRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsListsTemplate: require( "hbs!templates/settings/SettingsLists" ),
+		SettingsLanguagesRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsLanguagesTemplate: require( "hbs!templates/settings/SettingsLanguages" ),
+		SettingsNotificationsRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsNotificationsTemplate: require( "hbs!templates/settings/SettingsNotifications" ),
 
 		AboutController: require( "controllers/AboutController" ),
 		AboutTemplate: require( "hbs!templates/About" ),

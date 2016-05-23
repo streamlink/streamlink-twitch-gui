@@ -1,0 +1,36 @@
+<fieldset>
+{{#settings-row
+	"Filter streams"
+	"Apply a language filter to all stream lists (except followed streams)."
+	icon="fa-filter"
+	notes=(unless model.gui_filterstreams
+		"Show all streams, fade out the ones not matching."
+		"Only show streams matching the language selection."
+	)
+}}
+	{{#radio-btns
+		name="filterstreams"
+		value=model.gui_filterstreams
+		content=settings.content.constructor.gui_filterstreams
+		as |radiobtn label|
+	}}
+		<div>{{#component radiobtn}}{{label}}{{/component}}</div>
+	{{/radio-btns}}
+	{{#if model.gui_filterstreams}}
+		<p class="notice"><em>Please select only one language.<br>Filtering multiple languages is not supported by Twitch.</em></p>
+	{{/if}}
+{{/settings-row}}
+
+{{#settings-row
+	"Languages"
+	"Broadcaster languages."
+	icon="fa-language"
+}}
+	<ul class="list-unstyled filter-lang">
+		{{#each languages as |language|}}
+			{{lang-filter obj=model.gui_langfilter prop=language.id name=language.lang}}
+		{{/each}}
+	</ul>
+	<div><a href="#" {{action "checkLanguages" true}}>Check all</a> / <a href="#" {{action "checkLanguages" false}}>Uncheck all</a></div>
+{{/settings-row}}
+</fieldset>

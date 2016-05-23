@@ -13,6 +13,7 @@ define([
 	var get = Ember.get;
 
 
+	/** @type {Substitution[]} */
 	var playerSubstitutions = [
 		new Substitution(
 			[ "name", "channel", "channelname" ],
@@ -53,7 +54,7 @@ define([
 
 
 	/** @type {Parameter[]} */
-	return [
+	var parameters = [
 		new ParameterCustom(
 			"settings.advanced",
 			"settings.livestreamer_params"
@@ -117,5 +118,11 @@ define([
 			"settings.retry_streams"
 		)
 	];
+
+
+	return {
+		parameters: parameters,
+		playerSubstitutions: playerSubstitutions
+	};
 
 });

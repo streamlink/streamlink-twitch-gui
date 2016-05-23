@@ -2,16 +2,19 @@ define([
 	"Ember",
 	"config",
 	"mixins/RetryTransitionMixin",
+	"models/LivestreamerParameters",
 	"utils/node/platform"
 ], function(
 	Ember,
 	config,
 	RetryTransitionMixin,
+	LivestreamerParameters,
 	platform
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var alias = Ember.computed.alias;
 	var equal = Ember.computed.equal;
 
 	var themes = config.themes[ "themes" ];
@@ -29,6 +32,9 @@ define([
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		settings: Ember.inject.service(),
 		modal   : Ember.inject.service(),
+		chat    : Ember.inject.service(),
+
+		isAnimated: false,
 
 		platform : platform,
 
@@ -72,27 +78,8 @@ define([
 		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
-		playerCmdSubstitutionsVisible: false,
-		playerCmdSubstitutions: function() {
-			var store = get( this, "store" );
-			var model = store.modelFor( "livestreamer" );
-			/** @type {Substitution[]} */
-			var substitutions = get( model, "substitutions" );
-
-			return substitutions.map(function( substitution ) {
-				/** @type {string[]} */
-				var vars = substitution.vars;
-				vars = vars.map(function( name ) {
-					return "{" + name + "}";
-				});
-
-				return {
-					variable   : vars[0],
-					tooltip    : vars.join( ", " ),
-					description: substitution.description
-				};
-			});
-		}.property(),
+		substitutionsPlayer: LivestreamerParameters.playerSubstitutions,
+		substitutionsChatCustom: alias( "chat.substitutionsCustom" ),
 
 		minimize_observer: function() {
 			var int    = get( this, "model.gui_integration" );
