@@ -7,3 +7,20 @@
 	{{#check-box checked=model.advanced}}Enable advanced settings and features{{/check-box}}
 {{/settings-row}}
 </fieldset>
+<fieldset>
+{{#settings-row
+	"Theme"
+	"Select a GUI color theme."
+	icon="fa-paint-brush"
+}}
+	{{drop-down value=model.gui_theme content=themes}}
+{{/settings-row}}
+
+{{#settings-row
+	"Scrolling"
+	"Enable or disable smooth scrolling."
+	icon="fa-arrows-alt"
+}}
+	{{#check-box checked=model.gui_smoothscroll}}Enable smooth scrolling{{/check-box}}
+{{/settings-row}}
+</fieldset>
