@@ -13,7 +13,8 @@ define([
 
 	return Ember.Component.extend({
 		tagName: "i",
-		classNameBindings: [ ":flag-icon", "flag", "withCursor::flag-icon-no-cursor" ],
+		classNames: [ "flag-icon-component" ],
+		classNameBindings: [ "flag", "withCursor::no-cursor" ],
 		attributeBindings: [ "title" ],
 
 		lang: null,
@@ -26,7 +27,7 @@ define([
 			var code  = langs[ lang ];
 
 			return code
-				? "flag-icon-" + code.flag
+				? "flag-" + code.flag
 				: null;
 		}.property( "lang" ),
 

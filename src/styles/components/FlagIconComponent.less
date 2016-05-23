@@ -6,10 +6,10 @@
 @flag-icon-width: unit( ( 4 / 3 ), em );
 
 // Flag icon list
-@import "../vendor/flag-icon-css/less/flag-icon-list";
+@import "../../vendor/flag-icon-css/less/flag-icon-list";
 
 
-.flag-icon {
+.flag-icon-component {
 	display: inline-block;
 	width: @flag-icon-width;
 	height: 1em;
@@ -17,7 +17,7 @@
 	-webkit-filter: saturate(.75) brightness(.85);
 	transition: -webkit-filter .2s ease-out;
 
-	&:not(.flag-icon-no-cursor) {
+	&:not(.no-cursor) {
 		cursor: help;
 	}
 
@@ -37,13 +37,13 @@
 }
 
 .flag-icon(@country) {
-	.flag-icon-@{country}::before {
+	.flag-@{country}::before {
 		background-image: ~"url(@{flag-icon-svg-path}/@{country}.svg)";
 	}
 }
 
 // special "en - us/gb" flag
-.flag-icon-en {
+.flag-en {
 	&::before,
 	&::after {
 		width: 50%;
