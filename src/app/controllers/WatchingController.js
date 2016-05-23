@@ -16,8 +16,12 @@ define([
 		sortBy: [ "started:desc" ],
 
 		actions: {
-			"openLivestreamer": function( stream ) {
+			"openDialog": function( stream ) {
 				get( this, "livestreamer" ).startStream( stream );
+			},
+
+			"closeStream": function( stream ) {
+				get( this, "livestreamer" ).closeStream( stream );
 			}
 		}
 	});
