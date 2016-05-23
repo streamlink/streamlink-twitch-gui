@@ -1,5 +1,7 @@
 
 .content-settings {
+	@margin: 2rem;
+
 	display: flex;
 	flex-direction: column;
 	overflow-x: hidden;
@@ -23,16 +25,20 @@
 		}
 	}
 
-	> fieldset:not(.submit) {
+	> fieldset:not(:last-of-type) {
+		margin-bottom: @margin;
+	}
+
+	> fieldset:nth-last-of-type(2) {
 		flex-grow: 1;
 	}
 
-	&.animated > fieldset:not(.submit) {
+	&.animated > fieldset:not(:last-of-type) {
 		-webkit-animation: animFadeInRight @anim-content-duration ease-out;
 	}
 
-	> fieldset.submit {
-		margin: 3rem 0 1rem;
+	> fieldset:last-of-type {
+		margin: 0 0 @margin;
 
 		> div {
 			display: flex;
@@ -51,7 +57,10 @@
 
 .settings-row-component {
 	display: flex;
-	margin-bottom: 1rem;
+
+	&:not(:last-of-type) {
+		margin-bottom: 1rem;
+	}
 
 	> :first-child {
 		flex: 0 0 33.333%;
@@ -65,6 +74,11 @@
 				margin-bottom: .25rem;
 				font-size: .75em;
 
+				&.section {
+					margin-top: .15rem;
+					margin-bottom: .10rem;
+				}
+
 				.themed({
 					color: @themed-settings-descr-color;
 
@@ -72,6 +86,10 @@
 						color: @themed-settings-descr-docs-icon-color;
 					}
 				});
+			}
+
+			&.text-overflow {
+				.text-overflow();
 			}
 		}
 
@@ -87,13 +105,8 @@
 		}
 
 		.livestreamer-docs-component {
-			margin-top: .25rem;
 			font-style: italic;
 			cursor: pointer;
-
-			> i {
-				margin-right: .333em;
-			}
 		}
 
 		> .substitutions-list {
@@ -109,13 +122,11 @@
 			}
 		}
 
-		> .substitutions-info,
-		> .substitutions-list > li {
+		.cursor-help {
 			cursor: help;
 		}
 
-		.livestreamer-docs-component,
-		> .substitutions-list > li {
+		.hoverable {
 			@padding: .25em;
 
 			margin-left: -@padding;

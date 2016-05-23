@@ -1,8 +1,12 @@
 <fieldset>
 {{#settings-row
 	"Filter streams"
-	"Choose <i class='text-nowrap'>Fade out</i> to dim or choose <i class='text-nowrap'>Filter out</i> to remove streams not matching your language selection from lists."
+	"Apply a language filter to all stream lists (except followed streams)."
 	icon="fa-filter"
+	notes=(unless model.gui_filterstreams
+		"Show all streams, fade out the ones not matching."
+		"Only show streams matching the language selection."
+	)
 }}
 	{{#radio-btns
 		name="filterstreams"

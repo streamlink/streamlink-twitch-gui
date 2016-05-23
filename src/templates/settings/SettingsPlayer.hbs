@@ -1,10 +1,11 @@
 <fieldset>
 {{#settings-row
 	"Videoplayer"
-	"Use a custom player other than the one defined in your livestreamer config."
-	icon="fa-laptop"
+	"Path to the player executable."
+	icon="fa-tv"
 	livestreamerCmd="--player"
 	substitutions=(if model.advanced substitutionsPlayer)
+	notes=(if model.advanced "Parameters can be added here, but should be set in the parameters field instead.")
 }}
 	{{file-select value=model.player inputClass="form-control" placeholder="Leave blank for default player"}}
 {{/settings-row}}
@@ -13,7 +14,7 @@
 	{{#settings-row
 		"Parameters"
 		"Add player specific parameters."
-		icon="fa-code"
+		icon="fa-terminal"
 		livestreamerCmd="--player-args"
 		substitutions=substitutionsPlayer
 	}}
@@ -26,6 +27,7 @@
 	"After the stream has ended."
 	icon="fa-times"
 	livestreamerCmd="--player-no-close"
+	notes="The player itself may prevent this."
 }}
 	{{#check-box checked=model.player_no_close}}Do not close the player{{/check-box}}
 {{/settings-row}}

@@ -1,16 +1,32 @@
 <div>
 	<p><i class="fa {{icon}}"></i> {{title}}</p>
 	<p>{{{description}}}</p>
+	{{#if notes}}
+		<p class="section"><i class="fa fa-exclamation-circle"></i>Notes</p>
+		<p>{{notes}}</p>
+	{{/if}}
+	{{#if defaultValue}}
+		<p class="section"><i class="fa fa-chevron-circle-right"></i>Default</p>
+		<p>{{defaultValue}}</p>
+	{{/if}}
 	{{#if _substitutions.length}}
-		<p class="substitutions-info" title="The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped."><i class="fa fa-question-circle"></i> Available variables:</p>
+		<p class="section"><span class="cursor-help" title="The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped."><i class="fa fa-info-circle"></i>Available variables</span></p>
 		<ul class="list-unstyled substitutions-list">
 			{{#each _substitutions as |substitution|}}
-				<li title="{{substitution.description}}">{{substitution.variable}}</li>
+				<li class="hoverable cursor-help" title="{{substitution.description}}">{{substitution.variable}}</li>
 			{{/each}}
 		</ul>
 	{{/if}}
+	{{#if requires}}
+		<p class="section"><i class="fa fa-exclamation-circle"></i>Requires</p>
+		<p>{{requires}}</p>
+	{{/if}}
+	{{#if example}}
+		<p class="section"><i class="fa fa-question-circle"></i>Example</p>
+		<p class="text-overflow"><span class="hoverable">{{example}}</span></p>
+	{{/if}}
 	{{#if livestreamerCmd}}
-		<p>{{livestreamer-docs cmd=livestreamerCmd}}</p>
+		<p class="section">{{livestreamer-docs cmd=livestreamerCmd classNames="hoverable"}}</p>
 	{{/if}}
 </div>
 <div>{{yield}}</div>

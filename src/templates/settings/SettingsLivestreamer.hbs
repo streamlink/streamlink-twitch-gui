@@ -1,8 +1,9 @@
 <fieldset>
 {{#settings-row
 	"Executable location"
-	"By omitting a value, livestreamer has to be added to the $PATH variable."
+	"Path to the livestreamer executable."
 	icon="fa-cog"
+	defaultValue="\"livestreamer\" (read from $PATH)"
 }}
 	{{file-select value=model.livestreamer inputClass="form-control" placeholder="Leave blank for default location"}}
 {{/settings-row}}
@@ -11,7 +12,7 @@
 	{{#settings-row
 		"Custom parameters"
 		"Set additional custom livestreamer parameters."
-		icon="fa-code"
+		icon="fa-terminal"
 	}}
 		{{input type="text" value=model.livestreamer_params classNames="col-xs-12" placeholder="Add custom livestreamer parameters"}}
 	{{/settings-row}}
