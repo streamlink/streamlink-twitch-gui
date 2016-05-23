@@ -3,35 +3,25 @@
 {{#if noResults}}
 <section class="noresults">Your query didn't match anything...</section>
 {{/if}}
+
 {{#if games.length}}
-<section class="search-games">
 {{#if notFiltered}}<h3>Games</h3>{{/if}}
-<ul class="content-list">
-{{#each games as |game|}}
-{{game-item content=game}}
-{{/each}}
-</ul>
-</section>
+{{#content-list content=games infiniteScroll=false classNames="search-games" as |item|}}
+{{game-item content=item}}
+{{/content-list}}
 {{/if}}
+
 {{#if channels.length}}
-<section class="search-channels">
 {{#if notFiltered}}<h3>Channels</h3>{{/if}}
-<ul class="content-list">
-{{#each channels as |channel|}}
-{{channel-item content=channel}}
-{{/each}}
-</ul>
-</section>
+{{#content-list content=channels infiniteScroll=false classNames="search-channels" as |item|}}
+{{channel-item content=item}}
+{{/content-list}}
 {{/if}}
+
 {{#if streams.length}}
-<section class="search-streams">
 {{#if notFiltered}}<h3>Streams</h3>{{/if}}
-<ul class="content-list">
-{{#each streams as |stream index|}}
-{{stream-item content=stream isNewItem=(is-gte index initialFetchSize) showGame=true}}
-{{/each}}
-</ul>
-{{infinite-scroll}}
-</section>
+{{#content-list content=streams classNames="search-streams" as |item isNewItem isDuplicate|}}
+{{stream-item content=item isNewItem=isNewItem isDuplicate=isDuplicate showGame=true}}
+{{/content-list}}
 {{/if}}
 </main>

@@ -1,6 +1,4 @@
 <h3>Channel details</h3>
-<ul class="content-list-grid">
-{{#each panels as |panel|}}
-{{channel-panel-item panel=panel}}
-{{/each}}
-</ul>
+{{#content-list content=panels float=false infiniteScroll=false as |item|}}
+{{channel-panel-item panel=item}}
+{{/content-list}}

@@ -14,12 +14,15 @@ define([
 	return Ember.Component.extend({
 		layout: layout,
 
-		tagName: "",
-		"class": "",
+		tagName: "div",
+		classNameBindings: [ ":content-list-component", "float::content-list-nofloat" ],
 
 		content   : null,
 		compare   : null,
 		duplicates: null,
+
+		infiniteScroll: true,
+		float: true,
 
 		length : 0,
 		initial: 0,
