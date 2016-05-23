@@ -13,7 +13,7 @@
 	languages="Languages"
 	notifications="Notifications"
 ) as |subroute name|}}
-	{{#link-to (concat "settings." subroute) tagName="li" classNames="btn" activeClass="btn-primary" inactiveClass="btn-neutral"}}{{name}}{{/link-to}}
+	{{#link-to (concat "settings." subroute) tagName="li" classNames="btn" activeClass="btn-primary active" inactiveClass="btn-neutral"}}{{name}}{{/link-to}}
 {{/each-in}}
 </ul>
 </header>

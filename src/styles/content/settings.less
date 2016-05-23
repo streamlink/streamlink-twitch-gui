@@ -18,10 +18,17 @@
 		> li {
 			margin-left: .5rem;
 			font-size: .91em;
+			opacity: .5;
+			transition: opacity .25s ease-out;
 
 			&:first-of-type {
 				margin-left: 0;
 			}
+		}
+
+		&:hover > li,
+		> li.active {
+			opacity: 1;
 		}
 	}
 
