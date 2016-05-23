@@ -1,12 +1,8 @@
 module.exports = {
-	options: {
-		mode : "tgz",
-		level: 9
-	},
-
 	win32: {
 		options: {
 			mode   : "zip",
+			level  : 9,
 			archive: "dist/<%= package.name %>-v<%= package.version %>-win32.zip"
 		},
 		expand : true,
@@ -17,6 +13,7 @@ module.exports = {
 	win64: {
 		options: {
 			mode   : "zip",
+			level  : 9,
 			archive: "dist/<%= package.name %>-v<%= package.version %>-win64.zip"
 		},
 		expand : true,
@@ -27,6 +24,8 @@ module.exports = {
 
 	osx32: {
 		options: {
+			mode   : "tgz",
+			level  : 9,
 			archive: "dist/<%= package.name %>-v<%= package.version %>-osx32.tar.gz"
 		},
 		expand : true,
@@ -36,6 +35,8 @@ module.exports = {
 	},
 	osx64: {
 		options: {
+			mode   : "tgz",
+			level  : 9,
 			archive: "dist/<%= package.name %>-v<%= package.version %>-osx64.tar.gz"
 		},
 		expand : true,
@@ -46,6 +47,8 @@ module.exports = {
 
 	linux32: {
 		options: {
+			mode   : "tgz",
+			level  : 9,
 			archive: "dist/<%= package.name %>-v<%= package.version %>-linux32.tar.gz"
 		},
 		expand : true,
@@ -55,6 +58,8 @@ module.exports = {
 	},
 	linux64: {
 		options: {
+			mode   : "tgz",
+			level  : 9,
 			archive: "dist/<%= package.name %>-v<%= package.version %>-linux64.tar.gz"
 		},
 		expand : true,
