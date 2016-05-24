@@ -1,5 +1,5 @@
 <div>
-	<p><i class="fa {{icon}}"></i> {{title}}</p>
+	<p><i class="fa {{icon}}"></i> {{#if toggle}}{{check-box title checked=enabled}}{{else}}{{title}}{{/if}}</p>
 	<p>{{{description}}}</p>
 	{{#if notes}}
 		<p class="section"><i class="fa fa-exclamation-circle"></i>Notes</p>

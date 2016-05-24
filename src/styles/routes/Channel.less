@@ -138,8 +138,17 @@ main.content-channel {
 			margin-top: 0;
 		}
 
-		> fieldset > div:nth-of-type(odd) > label > span {
-			margin-left: .25em;
+		> fieldset > legend {
+			margin: 0 0 1em;
+			padding: 0 0 .25em;
+			border-bottom: 1px solid;
+			font-size: 1em;
+			font-weight: lighter;
+
+			.themed({
+				color: @themed-settings-legend-color;
+				border-bottom-color: @themed-settings-legend-border-color;
+			});
 		}
 	}
 }

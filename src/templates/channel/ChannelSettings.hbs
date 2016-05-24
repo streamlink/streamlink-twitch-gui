@@ -2,16 +2,38 @@
 <h3 class="title">Channel settings</h3>
 <fieldset>
 <legend>Stream</legend>
-<div><i class="fa fa-eye"></i> {{#check-box checked=_quality}}Quality{{/check-box}}<span>Priorize this quality over the default one.</span></div>
-<div>{{drop-down value=quality content=settings.content.constructor.qualities disabled=(bool-not _quality)}}</div>
-<div><i class="fa fa-comments"></i> {{#check-box checked=_gui_openchat}}Chat{{/check-box}}<span>Automatically open chat.</span></div>
-<div>{{#check-box checked=gui_openchat disabled=(bool-not _gui_openchat)}}Open chat when the stream starts{{/check-box}}</div>
+{{#settings-row
+	"Quality"
+	"Priorize this quality over the default one."
+	icon="fa-eye"
+	toggle=true
+	enabled=_quality
+}}
+	{{drop-down value=quality content=settings.content.constructor.qualities disabled=(bool-not _quality)}}
+{{/settings-row}}
+
+{{#settings-row
+	"Chat"
+	"Automatically open chat."
+	icon="fa-comments"
+	toggle=true
+	enabled=_gui_openchat
+}}
+	{{check-box "Open chat when the stream starts" checked=gui_openchat disabled=(bool-not _gui_openchat)}}
+{{/settings-row}}
 </fieldset>
 {{#if settings.notify_enabled}}
 <fieldset>
 <legend>Desktop notifications</legend>
-<div><i class="fa fa-bullhorn"></i> {{#check-box checked=_notify_enabled}}Notifications{{/check-box}}<span>When the channel starts streaming.<br>Channel needs to be followed.</span></div>
-<div>{{#check-box checked=notify_enabled disabled=(bool-not _notify_enabled)}}Receive notifications for this channel{{/check-box}}</div>
+{{#settings-row
+	"Notifications"
+	"When the channel starts streaming.<br>Channel needs to be followed."
+	icon="fa-bullhorn"
+	toggle=true
+	enabled=_notify_enabled
+}}
+	{{check-box "Receive notifications for this channel" checked=notify_enabled disabled=(bool-not _notify_enabled)}}
+{{/settings-row}}
 </fieldset>
 {{/if}}
 <fieldset class="submit">
