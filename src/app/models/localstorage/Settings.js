@@ -14,13 +14,17 @@ define([
 	var set = Ember.set;
 	var attr = DS.attr;
 
-	var langs = Object.keys( config.langs );
+	var langs = config.langs;
+	var langCodes = Object.keys( langs );
+
 	var isWin = platform.isWin;
 
 
 	function defaultLangFilterValue() {
-		return langs.reduce(function( obj, key ) {
-			obj[ key ] = true;
+		return langCodes.reduce(function( obj, code ) {
+			if ( !langs[ code ].disabled ) {
+				obj[ code ] = true;
+			}
 			return obj;
 		}, {} );
 	}

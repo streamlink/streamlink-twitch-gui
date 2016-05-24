@@ -104,12 +104,16 @@ define([
 
 
 		languages: function() {
-			return Object.keys( langs ).map(function( code ) {
-				return {
-					id  : code,
-					lang: langs[ code ][ "lang" ].capitalize()
-				};
-			});
+			return Object.keys( langs )
+				.filter(function( code ) {
+					return !langs[ code ].disabled;
+				})
+				.map(function( code ) {
+					return {
+						id  : code,
+						lang: langs[ code ][ "lang" ].capitalize()
+					};
+				});
 		}.property(),
 
 

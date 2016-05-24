@@ -1,4 +1,8 @@
-define(function() {
+define([
+	"config"
+], function(
+	config
+) {
 
 	var LS = window.localStorage;
 
@@ -44,6 +48,14 @@ define(function() {
 			if ( !( key in settings ) ) { return; }
 			settings[ renamedProps[ key ] ] = settings[ key ];
 			delete settings[ key ];
+		});
+
+		// remove unused or disabled language filters
+		Object.keys( settings.gui_langfilter ).forEach(function( code ) {
+			var lang = config.langs[ code ];
+			if ( !lang || lang.disabled ) {
+				delete settings.gui_langfilter[ code ];
+			}
 		});
 
 		LS.setItem( "settings", JSON.stringify( data ) );
