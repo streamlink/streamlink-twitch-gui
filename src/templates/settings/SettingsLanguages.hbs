@@ -14,7 +14,7 @@
 		content=settings.content.constructor.gui_filterstreams
 		as |radiobtn label|
 	}}
-		<div>{{#component radiobtn}}{{label}}{{/component}}</div>
+		<div>{{component radiobtn label}}</div>
 	{{/radio-btns}}
 	<p class="notice {{unless model.gui_filterstreams 'invisible'}}"><em>Please select only one language.<br>Filtering multiple languages is not supported by Twitch.</em></p>
 {{/settings-row}}

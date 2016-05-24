@@ -11,6 +11,9 @@ define([
 		tagName: "label",
 		classNames: [ "input-btn-component" ],
 		classNameBindings: [ "checked", "disabled" ]
+
+	}).reopenClass({
+		positionalParams: [ "label" ]
 	});
 
 });

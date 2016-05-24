@@ -4,7 +4,7 @@
 	"When favorites start streaming."
 	icon="fa-bullhorn"
 }}
-	{{#check-box checked=model.notify_enabled}}Enable desktop notifications{{/check-box}}
+	{{check-box "Enable desktop notifications" checked=model.notify_enabled}}
 {{/settings-row}}
 
 {{#if model.notify_enabled}}
@@ -14,7 +14,7 @@
 			"Required by Windows for receiving toast notifications. Re-enabling this option may require an application restart."
 			icon="fa-link"
 		}}
-			{{#check-box checked=model.notify_shortcut}}Create a startmenu shortcut{{/check-box}}
+			{{check-box "Create a startmenu shortcut" checked=model.notify_shortcut}}
 		{{/settings-row}}
 	{{/if}}
 
@@ -29,7 +29,7 @@
 			content=settings.content.constructor.notify_all
 			as |radiobtn label|
 		}}
-			<div>{{#component radiobtn}}{{label}}{{/component}}</div>
+			<div>{{component radiobtn label}}</div>
 		{{/radio-btns}}
 	{{/settings-row}}
 
@@ -38,7 +38,7 @@
 		"Merge multiple notifications."
 		icon="fa-folder-open-o"
 	}}
-		{{#check-box checked=model.notify_grouping}}Only show one notification at a time{{/check-box}}
+		{{check-box "Only show one notification at a time" checked=model.notify_grouping}}
 	{{/settings-row}}
 
 	{{#unless platform.isLinux}}

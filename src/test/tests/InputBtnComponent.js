@@ -135,6 +135,35 @@ define([
 	});
 
 
+	QUnit.test( "CheckBoxComponent - without block", function( assert ) {
+
+		context = Component.extend({
+			label: "foo",
+			layout: compile(
+				"{{check-box label}}"
+			)
+		}).create();
+		setOwner( context, owner );
+
+		runAppend( context );
+		assert.equal(
+			cleanOutput( context, ".check-box-component" ),
+			"foo",
+			"The CheckBoxComponent has a label"
+		);
+
+		run(function() {
+			set( context, "label", "bar" );
+		});
+		assert.equal(
+			cleanOutput( context, ".check-box-component" ),
+			"bar",
+			"The label updates"
+		);
+
+	});
+
+
 	QUnit.test( "RadioBtnsComponent - without block", function( assert ) {
 
 		var content = [

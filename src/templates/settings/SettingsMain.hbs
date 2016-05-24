@@ -4,7 +4,7 @@
 	"Enable hidden settings and features.<br>Does not only apply to the settings menu."
 	icon="fa-unlock-alt"
 }}
-	{{#check-box checked=model.advanced}}Enable advanced settings and features{{/check-box}}
+	{{check-box "Enable advanced settings and features" checked=model.advanced}}
 {{/settings-row}}
 </fieldset>
 <fieldset>
@@ -21,6 +21,6 @@
 	"Enable or disable smooth scrolling."
 	icon="fa-arrows-alt"
 }}
-	{{#check-box checked=model.gui_smoothscroll}}Enable smooth scrolling{{/check-box}}
+	{{check-box "Enable smooth scrolling" checked=model.gui_smoothscroll}}
 {{/settings-row}}
 </fieldset>

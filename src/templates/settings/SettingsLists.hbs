@@ -4,7 +4,7 @@
 	"Indicating the broadcaster language."
 	icon="fa-flag"
 }}
-	{{#check-box checked=model.stream_show_flag}}Flags are always visible{{/check-box}}
+	{{check-box "Flags are always visible" checked=model.stream_show_flag}}
 {{/settings-row}}
 
 {{#settings-row
@@ -12,7 +12,7 @@
 	"Bottom bar inside the stream preview."
 	icon="fa-info"
 }}
-	{{#check-box checked=model.stream_show_info}}Info bar is always visible{{/check-box}}
+	{{check-box "Info bar is always visible" checked=model.stream_show_info}}
 	<p>What should be displayed?</p>
 	{{drop-down class="stream-click" value=model.stream_info content=settings.content.constructor.stream_info}}
 {{/settings-row}}
