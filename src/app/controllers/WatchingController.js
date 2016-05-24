@@ -1,7 +1,9 @@
 define([
-	"Ember"
+	"Ember",
+	"models/localstorage/Settings"
 ], function(
-	Ember
+	Ember,
+	Settings
 ) {
 
 	var get = Ember.get;
@@ -14,6 +16,8 @@ define([
 
 		sortedModel: sort( "model", "sortBy" ),
 		sortBy: [ "started:desc" ],
+
+		qualities: Settings.qualities,
 
 		actions: {
 			"openDialog": function( stream ) {
