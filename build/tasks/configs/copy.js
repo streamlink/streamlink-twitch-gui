@@ -1,6 +1,7 @@
 module.exports = {
 	build: {
 		expand: true,
+		dest  : "build/tmp",
 		cwd   : "src",
 		src   : [
 			"package.json",
@@ -9,18 +10,8 @@ module.exports = {
 			"vendor/requirejs/require.js",
 			"vendor/roboto-fontface/fonts/Roboto-{Light,Regular,Medium,Bold,RegularItalic}.woff2",
 			"vendor/font-awesome/fonts/*.woff2",
-			"vendor/flag-icon-css/flags/4x3/{<%= copy.build.flags( grunt.config('langs') ) %>}.svg",
 			"img/**"
-		],
-		dest  : "build/tmp",
-
-		flags : function( langs ) {
-			return Object.keys( langs )
-				.map(function( lang ) {
-					return langs[ lang ][ "flag" ];
-				})
-				.join( "," );
-		}
+		]
 	},
 
 	win32scripts: {
