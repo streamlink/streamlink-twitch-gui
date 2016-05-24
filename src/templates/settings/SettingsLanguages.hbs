@@ -4,8 +4,8 @@
 	"Apply a language filter to all stream lists (except followed streams)."
 	icon="fa-filter"
 	notes=(unless model.gui_filterstreams
-		"Show all streams, fade out the ones not matching."
-		"Only show streams matching the language selection."
+		"List all streams, fade out the ones not matching."
+		"Only list streams matching the language selection."
 	)
 }}
 	{{#radio-btns
@@ -16,15 +16,14 @@
 	}}
 		<div>{{#component radiobtn}}{{label}}{{/component}}</div>
 	{{/radio-btns}}
-	{{#if model.gui_filterstreams}}
-		<p class="notice"><em>Please select only one language.<br>Filtering multiple languages is not supported by Twitch.</em></p>
-	{{/if}}
+	<p class="notice {{unless model.gui_filterstreams 'invisible'}}"><em>Please select only one language.<br>Filtering multiple languages is not supported by Twitch.</em></p>
 {{/settings-row}}
 
 {{#settings-row
 	"Languages"
-	"Broadcaster languages."
+	"Broadcaster language, or if not set, the channel language."
 	icon="fa-language"
+	notes="Select all languages to disable filtering."
 }}
 	<ul class="list-unstyled filter-lang">
 		{{#each languages as |language|}}
