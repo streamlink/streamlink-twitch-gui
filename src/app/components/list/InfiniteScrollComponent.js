@@ -15,7 +15,6 @@ define([
 	var $window = $( window );
 
 	var document = window.document;
-	var documentElement = document.documentElement;
 	var getComputedStyle = window.getComputedStyle;
 
 
@@ -56,17 +55,20 @@ define([
 			var overflow;
 			var parent = get( this, "element" );
 			while ( ( parent = parent.parentNode ) ) {
+				// stop at the document body
+				if ( parent === document.body ) {
+					parent = document.body.querySelector( "main.content" ) || document.body;
+					break;
+				}
+				// the current element's clientHeight needs to be smaller than its scrollHeight
 				if ( parent.clientHeight >= parent.scrollHeight ) {
 					continue;
 				}
+				// finally check the overflow-y css property if a scroll bar is available
 				overflow = getComputedStyle( parent, "" ).getPropertyValue( "overflow-y" );
 				if ( overflow === "scroll" || overflow === "auto" ) {
 					break;
 				}
-			}
-			// fallback: use the main content element or the document body
-			if ( parent === documentElement ) {
-				parent = documentElement.querySelector( "main.content" ) || document.body;
 			}
 
 			var $parent   = $( parent );
