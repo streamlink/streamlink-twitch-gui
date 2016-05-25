@@ -217,6 +217,7 @@ define(function( require ) {
 		SelectableTextComponent: require( "components/SelectableTextComponent" ),
 
 		SettingsRowComponent: require( "components/SettingsRowComponent" ),
+		SettingsChannelItemComponent: require( "components/list/SettingsChannelItemComponent" ),
 
 
 		// Content
@@ -300,6 +301,9 @@ define(function( require ) {
 		SettingsLanguagesTemplate: require( "hbs!templates/settings/SettingsLanguages" ),
 		SettingsNotificationsRoute: require( "routes/SettingsSubmenuRoute" ),
 		SettingsNotificationsTemplate: require( "hbs!templates/settings/SettingsNotifications" ),
+		SettingsChannelsRoute: require( "routes/SettingsChannelsRoute" ),
+		SettingsChannelsController: require( "controllers/SettingsChannelsController" ),
+		SettingsChannelsTemplate: require( "hbs!templates/settings/SettingsChannels" ),
 
 		AboutController: require( "controllers/AboutController" ),
 		AboutTemplate: require( "hbs!templates/About" ),

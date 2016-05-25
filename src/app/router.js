@@ -48,6 +48,7 @@ define([
 			this.route( "lists" );
 			this.route( "languages" );
 			this.route( "notifications" );
+			this.route( "channels" );
 		});
 
 		this.route( "about" );
