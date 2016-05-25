@@ -18,7 +18,8 @@ define([
 
 		actions: {
 			"didTransition": function() {
-				set( this, "controller.lastSubmenu", this.routeName );
+				var settingsController = this.controllerFor( "settings" );
+				set( settingsController, "lastSubmenu", this.routeName );
 			}
 		}
 	});
