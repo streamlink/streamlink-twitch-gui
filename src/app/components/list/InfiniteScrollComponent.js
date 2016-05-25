@@ -8,6 +8,7 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var scheduleOnce = Ember.run.scheduleOnce;
 	var alias = Ember.computed.alias;
 	var or = Ember.computed.or;
 
@@ -45,6 +46,29 @@ define([
 		click: function() {
 			var targetObject = get( this, "targetObject" );
 			targetObject.send( "willFetchContent", true );
+		},
+
+
+		_contentLength: 0,
+		// check for available space (scrollListener) if items were removed from the content array
+		_contentObserver: function() {
+			var length = get( this, "content.length" );
+			if ( length >= this._contentLength ) { return; }
+			this._contentLength = length;
+
+			var scrollListener = get( this, "scrollListener" );
+			if ( !scrollListener ) { return; }
+			// wait for the DOM to upgrade
+			scheduleOnce( "afterRender", scrollListener );
+		}.observes( "content.length" ),
+
+
+		init: function() {
+			this._super.apply( this, arguments );
+
+			if ( get( this, "content" ) ) {
+				this._contentLength = get( this, "content.length" );
+			}
 		},
 
 
