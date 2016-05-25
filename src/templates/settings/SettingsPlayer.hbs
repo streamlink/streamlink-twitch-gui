@@ -1,0 +1,34 @@
+<fieldset>
+{{#settings-row
+	"Videoplayer"
+	"Path to the player executable."
+	icon="fa-tv"
+	livestreamerCmd="--player"
+	substitutions=(if model.advanced substitutionsPlayer)
+	notes=(if model.advanced "Parameters can be added here, but should be set in the parameters field instead.")
+}}
+	{{file-select value=model.player inputClass="form-control" placeholder="Leave blank for default player"}}
+{{/settings-row}}
+
+{{#if model.advanced}}
+	{{#settings-row
+		"Parameters"
+		"Add player specific parameters."
+		icon="fa-terminal"
+		livestreamerCmd="--player-args"
+		substitutions=substitutionsPlayer
+	}}
+		{{input type="text" value=model.player_params classNames="col-xs-12" placeholder="Add custom player parameters"}}
+	{{/settings-row}}
+{{/if}}
+
+{{#settings-row
+	"Close player"
+	"After the stream has ended."
+	icon="fa-times"
+	livestreamerCmd="--player-no-close"
+	notes="The player itself may prevent this."
+}}
+	{{check-box "Do not close the player" checked=model.player_no_close}}
+{{/settings-row}}
+</fieldset>

@@ -1,6 +1,6 @@
 {
 	"name": "livestreamer-twitch-gui",
-	"version": "0.12.0",
+	"version": "0.13.0",
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
@@ -12,198 +12,26 @@
 	},
 
 	"devDependencies": {
-		"grunt": "0.4.5",
-		"grunt-concurrent": "1.0.0",
-		"grunt-contrib-clean": "0.6.0",
-		"grunt-contrib-compress": "0.13.0",
-		"grunt-contrib-connect": "0.9.0",
-		"grunt-contrib-copy": "0.8.0",
-		"grunt-contrib-jshint": "0.11.0",
-		"grunt-contrib-less": "1.0.0",
-		"grunt-contrib-qunit": "0.5.2",
-		"grunt-contrib-requirejs": "0.4.4",
-		"grunt-contrib-uglify": "0.8.0",
-		"grunt-contrib-watch": "0.6.1",
-		"grunt-shell": "1.1.2",
-		"grunt-template": "0.2.3",
-		"less-plugin-clean-css": "1.5.0",
-		"load-grunt-config": "0.16.0",
+		"grunt": "1.0.1",
+		"grunt-concurrent": "2.3.0",
+		"grunt-contrib-clean": "1.0.0",
+		"grunt-contrib-compress": "gruntjs/grunt-contrib-compress#fe2f565",
+		"grunt-contrib-connect": "1.0.2",
+		"grunt-contrib-copy": "1.0.0",
+		"grunt-contrib-jshint": "1.0.0",
+		"grunt-contrib-less": "1.3.0",
+		"grunt-contrib-qunit": "1.2.0",
+		"grunt-contrib-requirejs": "1.0.0",
+		"grunt-contrib-uglify": "1.0.1",
+		"grunt-contrib-watch": "1.0.0",
+		"grunt-shell": "1.3.0",
+		"grunt-template": "gruntjs-updater/grunt-template#peerDep",
+		"grunt-svgmin": "3.2.0",
+		"less-plugin-clean-css": "1.5.1",
+		"load-grunt-config": "0.19.2",
 		"q": "1.2.0",
 		"q-io": "1.12.0",
 		"nw-builder": "2.0.1"
-	},
-
-	"config": {
-		"display-name": "Livestreamer Twitch GUI",
-		"nw-js-version": "0.12.3",
-		"version-check-days": 7,
-		"tray-icon": "img/icon-16{hidpi}.png",
-		"tray-icon-osx": "img/icon-osx-18{hidpi}.png",
-		"themes": [
-			"default",
-			"dark"
-		],
-		"livestreamer-exec": "livestreamer",
-		"livestreamer-fallback-paths-unix": [
-			"/usr/local/bin",
-			"/Library/Frameworks/Python.framework/Versions/Current/bin"
-		],
-		"livestreamer-version-min": "1.11.1",
-		"livestreamer-validation-timeout": 10000,
-		"livestreamer-download-url": "https://github.com/chrippa/livestreamer/releases",
-		"livestreamer-docs-url": "http://docs.livestreamer.io/en/latest/cli.html#cmdoption{cmd}",
-		"changelog-url": "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v{version}",
-		"twitch-stream-url": "twitch.tv/{channel}",
-		"twitch-chat-url": "http://www.twitch.tv/{channel}/chat",
-		"twitch-emotes-url": "https://twitchemotes.com/channel/{channel}",
-		"twitch-subscribe-url": "http://www.twitch.tv/{channel}/subscribe",
-		"twitch-subscribe-edit": "http://www.twitch.tv/products/{channel}/ticket/edit",
-		"twitch-subscribe-cancel": "http://www.twitch.tv/products/{channel}/ticket/edit?cancel_and_refund=true",
-		"twitch-oauth": {
-			"server-port": 65432,
-			"base-uri": "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id={client-id}&redirect_uri={redirect-uri}&scope={scope}",
-			"client-id": "phiay4sq36lfv9zu7cbqwz2ndnesfd8",
-			"redirect-uri": "http://localhost:{server-port}/redirect",
-			"scope": [
-				"user_read",
-				"user_blocks_read",
-				"user_blocks_edit",
-				"user_follows_edit",
-				"user_subscriptions",
-				"chat_login"
-			]
-		},
-		"search-history-size": 50,
-		"image-expiration-time": 60,
-		"language_codes": {
-			"cs":    { "flag": "cz", "lang": "czech" },
-			"da":    { "flag": "dk", "lang": "danish" },
-			"de":    { "flag": "de", "lang": "german" },
-			"el":    { "flag": "gr", "lang": "greek" },
-			"en":    { "flag": "en", "lang": "english" },
-			"en-gb": { "flag": "gb", "lang": "british" },
-			"en-us": { "flag": "us", "lang": "american" },
-			"es":    { "flag": "es", "lang": "spanish" },
-			"es-mx": { "flag": "mx", "lang": "mexican" },
-			"fi":    { "flag": "fi", "lang": "finnish" },
-			"fr":    { "flag": "fr", "lang": "french" },
-			"hu":    { "flag": "hu", "lang": "hungarian" },
-			"it":    { "flag": "it", "lang": "italian" },
-			"ja":    { "flag": "jp", "lang": "japanese" },
-			"ko":    { "flag": "kr", "lang": "korean" },
-			"nl":    { "flag": "nl", "lang": "dutch" },
-			"no":    { "flag": "no", "lang": "norwegian" },
-			"pl":    { "flag": "pl", "lang": "polish" },
-			"pt":    { "flag": "pt", "lang": "portuguese" },
-			"pt-br": { "flag": "br", "lang": "brazilian" },
-			"ru":    { "flag": "ru", "lang": "russian" },
-			"sk":    { "flag": "sk", "lang": "slovakian" },
-			"sv":    { "flag": "se", "lang": "swedish" },
-			"tr":    { "flag": "tr", "lang": "turkish" },
-			"zh":    { "flag": "cn", "lang": "chinese" },
-			"zh-cn": { "flag": "cn", "lang": "chinese" },
-			"zh-tw": { "flag": "tw", "lang": "chinese" }
-		},
-		"notification-cache-dir": "{os-tmpdir}/livestreamer-twitch-gui/icon-cache",
-		"notification-cache-time": 7,
-		"notification-max-fails-requests": 3,
-		"notification-max-fails-channels": 1,
-		"notification-interval": 60000,
-		"notification-interval-retry": 1000,
-		"notification-interval-error": 120000,
-		"notification-icon-group": "img/icon-256.png",
-		"windows-shortcut-path": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs",
-		"stream-reload-interval": 60000,
-		"random-max": 500,
-		"chat-methods": {
-			"chromium": {
-				"args": "--app={url}",
-				"exec": {
-					"win32": [ "chrome.exe" ],
-					"darwin": [ "Chromium" ],
-					"linux": [
-						"chromium-browser",
-						"chromium",
-						"chromium-dev",
-						"chromium-continuous-bin",
-						"chromium-snapshot-bin"
-					]
-				},
-				"fallback": {
-					"win32": [
-						"%LOCALAPPDATA%\\Chromium\\Application",
-						"%PROGRAMFILES%\\Chromium\\Application",
-						"%PROGRAMFILES(X86)%\\Chromium\\Application"
-					],
-					"darwin": [ "/Applications/Chromium.app/Contents/MacOS" ],
-					"linux": [
-						"/usr/bin",
-						"/usr/local/bin",
-						"/opt/chromium"
-					]
-				}
-			},
-			"chrome": {
-				"args": "--app={url}",
-				"exec": {
-					"win32": [ "chrome.exe" ],
-					"darwin": [ "Google Chrome" ],
-					"linux": [
-						"google-chrome",
-						"google-chrome-stable",
-						"google-chrome-unstable",
-						"google-chrome-beta",
-						"google-chrome-dev"
-					]
-				},
-				"fallback": {
-					"win32": [
-						"%LOCALAPPDATA%\\Google\\Chrome\\Application",
-						"%PROGRAMFILES%\\Google\\Chrome\\Application",
-						"%PROGRAMFILES(X86)%\\Google\\Chrome\\Application"
-					],
-					"darwin": [ "/Applications/Google Chrome.app/Contents/MacOS" ],
-					"linux": [
-						"/usr/bin",
-						"/usr/local/bin",
-						"/opt/google/chrome",
-						"/opt/google/chrome-unstable"
-					]
-				}
-			},
-			"msie": {
-				"args": "\"{script}\" \"{url}\"",
-				"exec": "cscript",
-				"script": "msie-minimal.vbs"
-			},
-			"chatty": {
-				"args": "-jar \"{chatty}\"",
-				"chatty-args": "-connect -single -user \"{user}\" -token \"{token}\" -channel \"{channel}\"",
-				"chatty-args-noauth": "-connect -single -channel \"{channel}\"",
-				"chatty-fallback": "chatty",
-				"exec": {
-					"win32": "javaw",
-					"darwin": "java",
-					"linux": "java"
-				},
-				"fallback": {
-					"win32": [
-						"%JAVA_HOME%\\bin",
-						"%JRE_HOME%\\bin",
-						"%PROGRAMDATA%\\Oracle\\Java\\javapath"
-					],
-					"darwin": [
-						"$JAVA_HOME/bin",
-						"$JRE_HOME/bin"
-					],
-					"linux": [
-						"$JAVA_HOME/bin",
-						"$JRE_HOME/bin",
-						"/etc/alternatives"
-					]
-				}
-			}
-		}
 	},
 
 	"scripts": {

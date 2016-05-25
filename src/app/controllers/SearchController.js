@@ -1,11 +1,18 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
 	var empty = Ember.computed.empty;
 	var equal = Ember.computed.equal;
 
+
 	return Ember.Controller.extend({
+		queryParams: [ "filter", "query" ],
+
 		games   : alias( "model.games" ),
 		streams : alias( "model.streams" ),
 		channels: alias( "model.channels" ),

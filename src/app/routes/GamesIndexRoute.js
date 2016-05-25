@@ -2,15 +2,18 @@ define([
 	"Ember",
 	"mixins/InfiniteScrollMixin",
 	"mixins/ModelMetadataMixin",
+	"utils/ember/toArray",
 	"utils/preload"
 ], function(
 	Ember,
 	InfiniteScrollMixin,
 	ModelMetadataMixin,
+	toArray,
 	preload
 ) {
 
 	var get = Ember.get;
+
 
 	return Ember.Route.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 		itemSelector: ".game-item-component",
@@ -22,7 +25,7 @@ define([
 				offset: get( this, "offset" ),
 				limit : get( this, "limit" )
 			})
-				.then(function( data ) { return data.toArray(); })
+				.then( toArray )
 				.then( preload( "game.box.large" ) );
 		}
 	});

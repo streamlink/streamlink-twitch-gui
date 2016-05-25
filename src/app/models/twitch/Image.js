@@ -1,18 +1,18 @@
 define([
 	"Ember",
 	"EmberData",
-	"json!root/metadata"
+	"config"
 ], function(
 	Ember,
 	DS,
-	metadata
+	config
 ) {
 
 	var get = Ember.get;
 	var computed = Ember.computed;
 	var attr = DS.attr;
 
-	var time = get( metadata, "package.config.image-expiration-time" ) || 60;
+	var time = config.vars[ "image-expiration-time" ] || 60;
 
 
 	function getURL( url, time ) {
@@ -49,7 +49,7 @@ define([
 			// use the same timestamp for `time` seconds
 			var key = attr + "_expiration";
 			var exp = this[ key ];
-			var now = Math.floor( +new Date() / 1000 );
+			var now = +new Date();
 			if ( !exp || exp < now ) {
 				this[ key ] = exp = now + time;
 			}

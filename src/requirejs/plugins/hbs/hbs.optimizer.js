@@ -11,6 +11,7 @@ define([
 	var precompile = EmberHtmlbars.precompile;
 	var buildMap   = {};
 
+
 	return {
 		load: function( name, req, onload ) {
 			var url = req.toUrl( name + ".hbs" );

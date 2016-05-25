@@ -1,7 +1,12 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+
 
 	// A service object is just a regular object, so we can use an ObjectProxy as well
 	return Ember.ObjectProxy.extend({

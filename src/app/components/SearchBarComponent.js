@@ -1,19 +1,24 @@
 define([
 	"Ember",
+	"config",
+	"utils/getStreamFromUrl",
 	"hbs!templates/components/SearchBarComponent"
 ], function(
 	Ember,
+	config,
+	getStreamFromUrl,
 	layout
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
-	var readOnly = Ember.computed.readOnly;
 	var sort = Ember.computed.sort;
+
+	var searchHistorySize = config.vars[ "search-history-size" ];
+
 
 	return Ember.Component.extend({
 		store   : Ember.inject.service(),
-		metadata: Ember.inject.service(),
 
 		layout: layout,
 		tagName: "nav",
@@ -25,9 +30,7 @@ define([
 		content: sort( "model", "sortBy" ),
 		sortBy: [ "date:desc" ],
 
-		numKeepItems: readOnly( "metadata.config.search-history-size" ),
 		reQuery: /^[a-z0-9]{3,}/i,
-		reChannelURL: /^(?:https?:\/\/)?(?:\w+\.)*twitch\.tv\/(.+)$/,
 
 		showDropdown: false,
 		filter: "all",
@@ -66,7 +69,7 @@ define([
 			}
 
 			// we don't want to store more than X records
-			if ( get( model, "length" ) >= get( this, "numKeepItems" ) ) {
+			if ( get( model, "length" ) >= searchHistorySize ) {
 				// delete the oldest record
 				model.sortBy( "date" ).shiftObject().destroyRecord();
 			}
@@ -97,8 +100,14 @@ define([
 		doSearch: function( query, filter ) {
 			set( this, "showDropdown", false );
 			this.addRecord( query, filter );
+
 			var targetObject = get( this, "targetObject" );
-			targetObject.transitionToRoute( "search", filter, query );
+			targetObject.transitionToRoute( "search", {
+				queryParams: {
+					filter: filter,
+					query : query
+				}
+			});
 		},
 
 
@@ -140,9 +149,9 @@ define([
 				var query  = get( this, "query" ).trim();
 				var filter = get( this, "filter" );
 
-				var match = this.reChannelURL.exec( query );
-				if ( match ) {
-					query  = match[ 1 ];
+				var stream = getStreamFromUrl( query );
+				if ( stream ) {
+					query  = stream;
 					filter = "channels";
 				}
 

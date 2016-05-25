@@ -1,0 +1,78 @@
+<fieldset>
+{{#settings-row
+	"Executable location"
+	"Path to the livestreamer executable."
+	icon="fa-cog"
+	defaultValue="\"livestreamer\" (read from $PATH)"
+}}
+	{{file-select value=model.livestreamer inputClass="form-control" placeholder="Leave blank for default location"}}
+{{/settings-row}}
+
+{{#if model.advanced}}
+	{{#settings-row
+		"Custom parameters"
+		"Set additional custom livestreamer parameters."
+		icon="fa-terminal"
+	}}
+		{{input type="text" value=model.livestreamer_params classNames="col-xs-12" placeholder="Add custom livestreamer parameters"}}
+	{{/settings-row}}
+
+	{{#settings-row
+		"Stream type"
+		"Make sure your player does support the selected stream type."
+		icon="fa-filter"
+		livestreamerCmd="--player-passthrough"
+	}}
+		{{drop-down value=model.player_passthrough content=settings.content.constructor.passthrough optionValuePath="value"}}
+	{{/settings-row}}
+
+	{{#if (is-equal model.player_passthrough "http")}}
+		{{#settings-row
+			"Reconnect"
+			"In case the connection has dropped."
+			icon="fa-refresh"
+			livestreamerCmd="--player-continuous-http"
+		}}
+			{{check-box "Reconnect to stream" checked=model.player_reconnect}}
+		{{/settings-row}}
+	{{/if}}
+
+	{{#unless (is-equal model.player_passthrough "hls")}}
+		{{#settings-row
+			"HLS live edge"
+			"Lowering the value will reduce stream latency, but may also cause buffering."
+			icon="fa-bolt"
+			livestreamerCmd="--hls-live-edge"
+		}}
+			{{input type="number" value=model.hls_live_edge placeholder=hlsLiveEdgeDefault min=hlsLiveEdgeMin max=hlsLiveEdgeMax}}
+		{{/settings-row}}
+
+		{{#settings-row
+			"HLS segment threads"
+			"Number of threads used for downloading and processing stream segments."
+			icon="fa-sort-amount-asc"
+			livestreamerCmd="--hls-segment-threads"
+		}}
+			{{input type="number" value=model.hls_segment_threads placeholder=hlsSegmentThreadsDefault min=hlsSegmentThreadsMin max=hlsSegmentThreadsMax}}
+		{{/settings-row}}
+	{{/unless}}
+{{/if}}
+
+{{#settings-row
+	"Launch attempts"
+	"Number of stream launch attempts."
+	icon="fa-rocket"
+	livestreamerCmd="--retry-open"
+}}
+	{{input type="number" value=model.retry_open placeholder=retryOpenDefault min=retryOpenMin max=retryOpenMax}}
+{{/settings-row}}
+
+{{#settings-row
+	"Retry delay"
+	"Time in seconds between each attempt."
+	icon="fa-hourglass-half"
+	livestreamerCmd="--retry-streams"
+}}
+	{{input type="number" value=model.retry_streams placeholder=retryStreamsDefault min=retryStreamsMin max=retryStreamsMax}}
+{{/settings-row}}
+</fieldset>

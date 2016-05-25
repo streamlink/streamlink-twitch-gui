@@ -1,8 +1,13 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var alias = Ember.computed.alias;
+
 
 	return Ember.Controller.extend({
 		summary : alias( "model.summary" ),

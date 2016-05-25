@@ -1,6 +1,26 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## [v0.13.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.13.0) (2016-03-30)
+
+- Implemented hosted streams. #220
+- Implemented detection of duplicated items in infinite scroll lists. #216
+- Added livestreamer retry options to settings.
+- Added close stream context menu entry.
+- Added option to switch between game and title in stream previews. #215
+- Added twitch stream link detection for external links. #228
+- Added support for filtering a single language. #151
+- Added checkbox to disable smooth scrolling. #204
+- Increased size of the search history. #217
+- Fixed missing stream titles causing menus to be empty. #214
+- Fixed chatty parameters while not being logged in.
+- Fixed issues with third party chat applications. #231
+- Fixed infinite scroll on unscaled UHD resolutions. #230
+- Upgraded to Ember/EmberData 2.4.0 LTS
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.12.0...v0.13.0)
+
+
 ## [v0.12.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.12.0) (2016-02-06)
 
 - Re-implemented the authentication system. #209

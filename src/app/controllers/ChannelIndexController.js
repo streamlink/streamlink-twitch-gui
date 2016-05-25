@@ -1,11 +1,18 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember",
+	"config"
+], function(
+	Ember,
+	config
+) {
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
 
-	return Ember.Controller.extend({
-		metadata: Ember.inject.service(),
+	var langs = config.langs;
 
+
+	return Ember.Controller.extend({
 		stream : alias( "model.stream" ),
 		channel: alias( "model.channel" ),
 		panels : alias( "model.panels" ),
@@ -16,9 +23,8 @@ define( [ "Ember" ], function( Ember ) {
 		}.property( "channel.created_at" ),
 
 		language: function() {
-			var codes = get( this, "metadata.config.language_codes" );
 			var blang = get( this, "channel.broadcaster_language" );
-			var lang  = codes[ blang ];
+			var lang  = langs[ blang ];
 			return lang ? lang[ "lang" ] : "";
 		}.property( "channel.broadcaster_language" )
 	});

@@ -1,15 +1,10 @@
-define( [ "EmberData" ], function( DS ) {
+define([
+	"models/twitch/Game"
+], function(
+	Game
+) {
 
-	var attr = DS.attr;
-	var belongsTo = DS.belongsTo;
-
-	return DS.Model.extend({
-		box: belongsTo( "twitchImage", { async: false } ),
-		giantbomb_id: attr( "number" ),
-		logo: belongsTo( "twitchImage", { async: false } ),
-		name: attr( "string" ),
-		properties: attr( "number" )
-	}).reopenClass({
+	return Game.extend().reopenClass({
 		toString: function() { return "api/users/:user/follows/games"; }
 	});
 

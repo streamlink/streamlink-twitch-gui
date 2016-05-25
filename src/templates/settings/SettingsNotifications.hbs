@@ -1,0 +1,62 @@
+<fieldset>
+{{#settings-row
+	"Notifications"
+	"When favorites start streaming."
+	icon="fa-bullhorn"
+}}
+	{{check-box "Enable desktop notifications" checked=model.notify_enabled}}
+{{/settings-row}}
+
+{{#if model.notify_enabled}}
+	{{#if (bool-and model.advanced platform.isWinGte8)}}
+		{{#settings-row
+			"Startmenu shortcut"
+			"Required by Windows for receiving toast notifications. Re-enabling this option may require an application restart."
+			icon="fa-link"
+		}}
+			{{check-box "Create a startmenu shortcut" checked=model.notify_shortcut}}
+		{{/settings-row}}
+	{{/if}}
+
+	{{#settings-row
+		"Channel filter"
+		"Notifications can be turned on/off individually in a channel's settings menu."
+		icon="fa-eyedropper"
+	}}
+		{{#radio-btns
+			name="notify_all"
+			value=model.notify_all
+			content=settings.content.constructor.notify_all
+			as |radiobtn label|
+		}}
+			<div>{{component radiobtn label}}</div>
+		{{/radio-btns}}
+	{{/settings-row}}
+
+	{{#settings-row
+		"Grouping"
+		"Merge multiple notifications."
+		icon="fa-folder-open-o"
+	}}
+		{{check-box "Only show one notification at a time" checked=model.notify_grouping}}
+	{{/settings-row}}
+
+	{{#settings-row
+		"Notification click"
+		"Preferred click action."
+		icon="fa-hand-pointer-o"
+	}}
+		{{drop-down value=model.notify_click content=settings.content.constructor.notify_click class="notifications"}}
+	{{/settings-row}}
+
+	{{#if (bool-and model.notify_grouping model.notify_click)}}
+		{{#settings-row
+			"Group click"
+			"Preferred group click action."
+			icon="fa-hand-pointer-o"
+		}}
+			{{drop-down value=model.notify_click_group content=settings.content.constructor.notify_click_group class="notifications"}}
+		{{/settings-row}}
+	{{/if}}
+{{/if}}
+</fieldset>

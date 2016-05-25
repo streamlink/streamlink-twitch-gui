@@ -1,10 +1,12 @@
 define([
 	"Ember",
 	"components/modal/ModalDialogComponent",
+	"nwjs/openBrowser",
 	"hbs!templates/components/modal/ModalNewreleaseComponent"
 ], function(
 	Ember,
 	ModalDialogComponent,
+	openBrowser,
 	layout
 ) {
 
@@ -18,8 +20,6 @@ define([
 		layout: layout,
 		"class": "modal-newrelease",
 
-		openBrowser: "openBrowser",
-
 		outdated: readOnly( "versioncheck.versionOutdated" ),
 		latest  : readOnly( "versioncheck.versionLatest" ),
 
@@ -28,7 +28,7 @@ define([
 			"download": function( success ) {
 				var url = get( this, "versioncheck.downloadURL" );
 				if ( url ) {
-					this.sendAction( "openBrowser", url );
+					openBrowser( url );
 					if ( success instanceof Function ) {
 						success();
 					}

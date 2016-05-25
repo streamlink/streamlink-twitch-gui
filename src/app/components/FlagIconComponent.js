@@ -1,13 +1,20 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember",
+	"config"
+], function(
+	Ember,
+	config
+) {
 
 	var get = Ember.get;
-	var alias = Ember.computed.alias;
+
+	var langs = config.langs;
+
 
 	return Ember.Component.extend({
-		metadata: Ember.inject.service(),
-
 		tagName: "i",
-		classNameBindings: [ ":flag-icon", "flag", "withCursor::flag-icon-no-cursor" ],
+		classNames: [ "flag-icon-component" ],
+		classNameBindings: [ "flag", "withCursor::no-cursor" ],
 		attributeBindings: [ "title" ],
 
 		lang: null,
@@ -15,26 +22,22 @@ define( [ "Ember" ], function( Ember ) {
 		withTitle : true,
 		withCursor: true,
 
-		codes: alias( "metadata.config.language_codes" ),
-
 		flag: function() {
-			var codes = get( this, "codes" );
 			var lang  = get( this, "lang" );
-			var code  = codes[ lang ];
+			var code  = langs[ lang ];
 
 			return code
-				? "flag-icon-" + code.flag
+				? "flag-" + code.flag
 				: null;
 		}.property( "lang" ),
 
 		title: function() {
 			if ( !get( this, "withTitle" ) ) { return ""; }
 
-			var codes = get( this, "codes" );
 			var lang  = get( this, "lang" );
 
-			if ( !codes[ lang ] ) { return ""; }
-			lang = codes[ lang ][ "lang" ];
+			if ( !langs[ lang ] ) { return ""; }
+			lang = langs[ lang ][ "lang" ];
 
 			switch ( get( this, "type" ) ) {
 				case "channel":
@@ -44,7 +47,7 @@ define( [ "Ember" ], function( Ember ) {
 				default:
 					return "";
 			}
-		}.property( "withTitle", "codes", "lang" )
+		}.property( "withTitle", "lang" )
 	});
 
 });

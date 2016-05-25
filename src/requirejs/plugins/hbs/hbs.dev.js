@@ -8,6 +8,7 @@ define([
 
 	var compile = EmberHtmlbars.compile;
 
+
 	return {
 		load: function( name, req, onload ) {
 			var url = req.toUrl( name + ".hbs" );

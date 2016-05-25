@@ -1,4 +1,8 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var setP = Ember.setProperties;
@@ -16,6 +20,7 @@ define( [ "Ember" ], function( Ember ) {
 			return get( this, property );
 		}.property( "isLoading", "isSuccessful" );
 	}
+
 
 	return Ember.Mixin.create({
 		auth : Ember.inject.service(),

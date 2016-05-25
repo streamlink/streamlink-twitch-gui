@@ -1,16 +1,25 @@
 define([
 	"Ember",
+	"config",
 	"mixins/RetryTransitionMixin",
-	"utils/platform"
+	"models/LivestreamerParameters",
+	"utils/node/platform"
 ], function(
 	Ember,
+	config,
 	RetryTransitionMixin,
+	LivestreamerParameters,
 	platform
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var alias = Ember.computed.alias;
 	var equal = Ember.computed.equal;
+
+	var themes = config.themes[ "themes" ];
+	var langs  = config.langs;
+
 
 	function settingsAttrMeta( attr, prop ) {
 		return function() {
@@ -19,10 +28,13 @@ define([
 		}.property( "settings.content" );
 	}
 
+
 	return Ember.Controller.extend( RetryTransitionMixin, {
-		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
 		modal   : Ember.inject.service(),
+		chat    : Ember.inject.service(),
+
+		isAnimated: false,
 
 		platform : platform,
 
@@ -33,6 +45,14 @@ define([
 		hlsSegmentThreadsDefault: settingsAttrMeta( "hls_segment_threads", "defaultValue" ),
 		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
 		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
+
+		retryStreamsDefault: settingsAttrMeta( "retry_streams", "defaultValue" ),
+		retryStreamsMin    : settingsAttrMeta( "retry_streams", "minValue" ),
+		retryStreamsMax    : settingsAttrMeta( "retry_streams", "maxValue" ),
+
+		retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
+		retryOpenMin    : settingsAttrMeta( "retry_open", "minValue" ),
+		retryOpenMax    : settingsAttrMeta( "retry_open", "maxValue" ),
 
 		chatMethods: function() {
 			var methods = get( this, "settings.content.constructor.chat_methods" );
@@ -47,45 +67,25 @@ define([
 		isChatMethodChatty : equal( "model.chat_method", "chatty" ),
 
 		themes: function() {
-			var themes = get( this, "metadata.config.themes" );
 			return themes.map(function( theme ) {
 				return {
 					id   : theme,
 					label: theme.substr( 0, 1 ).toUpperCase() + theme.substr( 1 )
 				};
 			});
-		}.property( "metadata.config.themes" ),
+		}.property(),
 
 		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
-		playerCmdSubstitutionsVisible: false,
-		playerCmdSubstitutions: function() {
-			var store = get( this, "store" );
-			var model = store.modelFor( "livestreamer" );
-			/** @type {Substitution[]} */
-			var substitutions = get( model, "substitutions" );
-
-			return substitutions.map(function( substitution ) {
-				/** @type {string[]} */
-				var vars = substitution.vars;
-				vars = vars.map(function( name ) {
-					return "{" + name + "}";
-				});
-
-				return {
-					variable   : vars[0],
-					tooltip    : vars.join( ", " ),
-					description: substitution.description
-				};
-			});
-		}.property(),
+		substitutionsPlayer: LivestreamerParameters.playerSubstitutions,
+		substitutionsChatCustom: alias( "chat.substitutionsCustom" ),
 
 		minimize_observer: function() {
-			var int    = get( this, "model.gui_integration" ),
-			    min    = get( this, "model.gui_minimize" ),
-			    noTask = ( int & 1 ) === 0,
-			    noTray = ( int & 2 ) === 0;
+			var int    = get( this, "model.gui_integration" );
+			var min    = get( this, "model.gui_minimize" );
+			var noTask = ( int & 1 ) === 0;
+			var noTray = ( int & 2 ) === 0;
 
 			// make sure that disabled options are not selected
 			if ( noTask && min === 1 ) {
@@ -104,14 +104,17 @@ define([
 
 
 		languages: function() {
-			var codes = get( this, "metadata.config.language_codes" );
-			return Object.keys( codes ).map(function( code ) {
-				return {
-					id  : code,
-					lang: codes[ code ][ "lang" ].capitalize()
-				};
-			});
-		}.property( "metadata.config.language_codes" ),
+			return Object.keys( langs )
+				.filter(function( code ) {
+					return !langs[ code ].disabled;
+				})
+				.map(function( code ) {
+					return {
+						id  : code,
+						lang: langs[ code ][ "lang" ].capitalize()
+					};
+				});
+		}.property(),
 
 
 		actions: {
@@ -122,7 +125,7 @@ define([
 				model.setProperties( buffer );
 				model.save()
 					.then( success, failure )
-					.then( modal.closeModal.bind( modal ) )
+					.then( modal.closeModal.bind( modal, this ) )
 					.then( this.retryTransition.bind( this ) )
 					.catch( model.rollbackAttributes.bind( model ) );
 			},
@@ -132,13 +135,13 @@ define([
 				get( this, "model" ).discardChanges();
 				Promise.resolve()
 					.then( success )
-					.then( modal.closeModal.bind( modal ) )
+					.then( modal.closeModal.bind( modal, this ) )
 					.then( this.retryTransition.bind( this ) );
 			},
 
 			"cancel": function() {
 				set( this, "previousTransition", null );
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			},
 
 			"togglePlayerCmdSubstitutions": function() {

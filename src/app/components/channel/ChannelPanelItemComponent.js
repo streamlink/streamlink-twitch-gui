@@ -1,10 +1,12 @@
 define([
 	"Ember",
 	"nwjs/menu",
+	"nwjs/openBrowser",
 	"hbs!templates/components/channel/ChannelPanelItemComponent"
 ], function(
 	Ember,
 	Menu,
+	openBrowser,
 	layout
 ) {
 
@@ -49,7 +51,7 @@ define([
 			var menu = Menu.create();
 			menu.items.pushObject({
 				label: "Open in browser",
-				click: this.send.bind( this, "openBrowser", url )
+				click: openBrowser.bind( null, url )
 			});
 
 			menu.popup( event );

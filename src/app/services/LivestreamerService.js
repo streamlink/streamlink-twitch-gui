@@ -1,29 +1,25 @@
 define([
 	"Ember",
+	"config",
 	"nwjs/nwGui",
 	"nwjs/nwWindow",
 	"models/localstorage/Settings",
 	"mixins/ChannelSettingsMixin",
-	"utils/fs/which",
-	"utils/fs/stat",
-	"utils/StreamOutputBuffer",
 	"utils/semver",
-	"utils/platform",
-	"commonjs!child_process",
-	"commonjs!path"
+	"utils/StreamOutputBuffer",
+	"utils/node/fs/whichFallback",
+	"commonjs!child_process"
 ], function(
 	Ember,
+	config,
 	nwGui,
 	nwWindow,
 	Settings,
 	ChannelSettingsMixin,
-	which,
-	stat,
-	StreamOutputBuffer,
 	semver,
-	platform,
-	CP,
-	PATH
+	StreamOutputBuffer,
+	whichFallback,
+	CP
 ) {
 
 	var get = Ember.get;
@@ -31,7 +27,12 @@ define([
 	var run = Ember.run;
 	var merge = Ember.merge;
 
-	var isWin = platform.isWin;
+	var livestreamerExec = config.livestreamer[ "exec" ];
+	var livestreamerFallback = config.livestreamer[ "fallback" ];
+	var livestreamerVersionMin = config.livestreamer[ "version-min" ];
+	var livestreamerTimeout = config.livestreamer[ "validation-timeout" ];
+	var twitchStreamUrl = config.twitch[ "stream-url" ];
+	var streamReloadInterval = config.vars[ "stream-reload-interval" ] || 60000;
 
 	var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
 	var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
@@ -62,12 +63,6 @@ define([
 	Warning.prototype = merge( new Error(), { name: "Warning" } );
 
 
-	function execCheck( stat ) {
-		// octal: 0111
-		return isWin || ( stat.mode & 73 ) > 0;
-	}
-
-
 	// we need a common error parsing function for stdout and stderr, because
 	// livestreamer is weird sometimes and prints error messages to stdout instead... :(
 	function parseError( data ) {
@@ -92,7 +87,6 @@ define([
 
 
 	return Ember.Service.extend( ChannelSettingsMixin, {
-		metadata: Ember.inject.service(),
 		store   : Ember.inject.service(),
 		modal   : Ember.inject.service(),
 		settings: Ember.inject.service(),
@@ -146,13 +140,17 @@ define([
 				.then(function( settings ) {
 					if ( quality === undefined ) {
 						setIfNotNull( settings, livestreamer, "quality" );
+						set( livestreamer, "strictQuality", false );
 					} else {
 						set( livestreamer, "quality", quality );
+						set( livestreamer, "strictQuality", true );
 					}
 					setIfNotNull( settings, livestreamer, "gui_openchat" );
 				})
-				// validate configuration and get the exec command
+				// get the exec command
 				.then( this.checkLivestreamer.bind( this ) )
+				// and validate configuration
+				.then( this.validateLivestreamer.bind( this ) )
 				.then(
 					// launch the stream
 					this.launchLivestreamer.bind( this, livestreamer, true ),
@@ -171,11 +169,20 @@ define([
 
 			// automatically close modal on success
 			if ( get( this, "settings.gui_hidestreampopup" ) ) {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			}
 
 			// automatically open chat
-			if ( get( livestreamer, "gui_openchat" ) ) {
+			if (
+				// require open chat setting
+				   get( livestreamer, "gui_openchat" )
+				&& (
+					// context menu not used
+					   !get( livestreamer, "strictQuality" )
+					// or context menu setting disabled
+					|| !get( this, "settings.gui_openchat_context" )
+				)
+			) {
 				this.openChat( get( livestreamer, "channel" ) );
 			}
 
@@ -196,7 +203,7 @@ define([
 				   !get( livestreamer, "error" )
 				&& get( this, "active" ) === livestreamer
 			) {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( this );
 			}
 
 			// restore the GUI
@@ -213,49 +220,35 @@ define([
 		},
 
 
+		closeStream: function( stream ) {
+			var model = get( this, "model" );
+			var livestreamer = model.findBy( "stream", stream );
+			if ( !livestreamer ) { return false; }
+			livestreamer.kill();
+			return true;
+		},
+
+
 		/**
 		 * Check the location of livestreamer and validate
 		 * @returns {Promise}
 		 */
 		checkLivestreamer: function() {
-			var path = get( this, "settings.livestreamer" );
-			var exec = get( this, "metadata.config.livestreamer-exec" );
-			var fb   = get( this, "metadata.config.livestreamer-fallback-paths-unix" );
-			var livestreamer;
-
-			path = String( path ).trim();
-
-			// use the default command if the user did not define one
-			if ( !path.length ) {
-				livestreamer = exec;
-			// otherwise check for containing executable name
-			} else if ( path.indexOf( exec ) !== -1 ) {
-				livestreamer = path;
-			} else {
-				return Promise.reject( new NotFoundError() );
-			}
+			var customExec = String( get( this, "settings.livestreamer" ) ).trim();
 
 			// check for the executable
-			return which( livestreamer, execCheck )
-				// check fallback paths
-				.catch(function() {
-					var promise = Promise.reject();
-					// ignore fallbacks if custom path has been set
-					if ( path || isWin || !fb || !fb.length ) {
-						return promise;
-					}
-
-					return fb.reduce(function( promise, path ) {
-						var check = PATH.join( PATH.resolve( path ), exec );
-						return promise.catch(function() {
-							return stat( check, execCheck );
-						});
-					}, promise );
-				}.bind( this ) )
+			return whichFallback(
+				// use the default command if the user did not define a custom one
+				customExec.length
+					? customExec
+					: livestreamerExec,
+				// ignore fallbacks if custom path has been set
+				customExec
+					? null
+					: livestreamerFallback
+			)
 				// not found
-				.catch(function() { throw new NotFoundError(); })
-				// check for correct version
-				.then( this.validateLivestreamer.bind( this ) );
+				.catch(function() { throw new NotFoundError(); });
 		},
 
 		/**
@@ -265,8 +258,6 @@ define([
 		 * @returns {Promise}
 		 */
 		validateLivestreamer: function( exec ) {
-			var minimum = get( this, "metadata.config.livestreamer-version-min" );
-			var time    = get( this, "metadata.config.livestreamer-validation-timeout" );
 			var spawn;
 
 			function kill() {
@@ -309,11 +300,11 @@ define([
 				spawn.stderr.on( "data", new StreamOutputBuffer( onLine ) );
 
 				// kill after a certain time
-				run.later( onTimeout, time );
+				run.later( onTimeout, livestreamerTimeout );
 			})
 				.then(function( version ) {
 					kill();
-					return version === semver.getMax([ version, minimum ])
+					return version === semver.getMax([ version, livestreamerVersionMin ])
 						? Promise.resolve( exec )
 						: Promise.reject( new VersionError( version ) );
 
@@ -344,12 +335,11 @@ define([
 
 			var channel   = get( livestreamer, "channel.id" );
 			var quality   = get( livestreamer, "quality" );
-			var streamURL = get( this, "metadata.config.twitch-stream-url" );
 			var qualities = Settings.qualities;
 
 			// get the livestreamer parameter list and append stream url and quality
 			var params    = get( livestreamer, "parameters" );
-			params.push( streamURL.replace( "{channel}", channel ) );
+			params.push( twitchStreamUrl.replace( "{channel}", channel ) );
 			params.push( ( qualities[ quality ] || qualities[ 0 ] ).quality );
 
 			// spawn the livestreamer process
@@ -454,8 +444,6 @@ define([
 		refreshStream: function( livestreamer ) {
 			if ( get( livestreamer, "isDeleted" ) ) { return; }
 
-			var interval = get( this, "metadata.config.stream-reload-interval" ) || 60000;
-
 			var stream  = get( livestreamer, "stream" );
 			var reload  = stream.reload.bind( stream );
 			var promise = reload();
@@ -467,7 +455,7 @@ define([
 
 			// queue another refresh
 			promise.then(function() {
-				run.later( this, this.refreshStream, livestreamer, interval );
+				run.later( this, this.refreshStream, livestreamer, streamReloadInterval );
 			}.bind( this ) );
 		},
 

@@ -9,6 +9,7 @@ define([
 	var get = Ember.get;
 	var set = Ember.set;
 
+
 	return Ember.Controller.extend({
 		auth        : Ember.inject.service(),
 		notification: Ember.inject.service(),

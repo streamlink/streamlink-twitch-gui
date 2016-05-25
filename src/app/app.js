@@ -83,6 +83,8 @@ define(function( require ) {
 		TwitchChannelsFollowedSerializer: require( "models/twitch/ChannelsFollowedSerializer" ),
 		TwitchGamesFollowed: require( "models/twitch/GamesFollowed" ),
 		TwitchGamesFollowedSerializer: require( "models/twitch/GamesFollowedSerializer" ),
+		TwitchGamesLiveFollowed: require( "models/twitch/GamesLiveFollowed" ),
+		TwitchGamesLiveFollowedSerializer: require( "models/twitch/GamesLiveFollowedSerializer" ),
 
 		TwitchSearchGame: require( "models/twitch/SearchGame" ),
 		TwitchSearchGameSerializer: require( "models/twitch/SearchGameSerializer" ),
@@ -132,7 +134,6 @@ define(function( require ) {
 
 
 		// Services
-		MetadataService: require( "services/MetadataService" ),
 		SettingsService: require( "services/SettingsService" ),
 		AuthService: require( "services/AuthService" ),
 		ModalService: require( "services/ModalService" ),
@@ -164,10 +165,10 @@ define(function( require ) {
 		LivestreamerDocsComponent: require( "components/link/LivestreamerDocsComponent" ),
 
 		CheckBoxComponent: require( "components/form/CheckBoxComponent" ),
+		RadioBtnComponent: require( "components/form/RadioBtnComponent" ),
+		RadioBtnsComponent: require( "components/form/RadioBtnsComponent" ),
 		DropDownComponent: require( "components/form/DropDownComponent" ),
 		FileSelectComponent: require( "components/form/FileSelectComponent" ),
-		RadioButtonComponent: require( "components/form/RadioButtonComponent" ),
-		RadioButtonsComponent: require( "components/form/RadioButtonsComponent" ),
 		TextFieldComponent: require( "components/form/TextFieldComponent" ),
 
 		FollowChannelComponent: require( "components/button/FollowChannelComponent" ),
@@ -214,7 +215,9 @@ define(function( require ) {
 		PreviewImageComponent: require( "components/PreviewImageComponent" ),
 		SearchBarComponent: require( "components/SearchBarComponent" ),
 		SelectableTextComponent: require( "components/SelectableTextComponent" ),
-		WrapContentComponent: require( "components/WrapContentComponent" ),
+
+		SettingsRowComponent: require( "components/SettingsRowComponent" ),
+		SettingsChannelItemComponent: require( "components/list/SettingsChannelItemComponent" ),
 
 
 		// Content
@@ -273,11 +276,34 @@ define(function( require ) {
 		UserFollowedChannelsController: require( "controllers/UserFollowedChannelsController" ),
 		UserFollowedChannelsTemplate: require( "hbs!templates/user/UserFollowedChannels" ),
 		UserFollowedGamesRoute: require( "routes/UserFollowedGamesRoute" ),
+		UserFollowedGamesController: require( "controllers/UserFollowedGamesController" ),
 		UserFollowedGamesTemplate: require( "hbs!templates/user/UserFollowedGames" ),
 
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
-		SettingsTemplate: require( "hbs!templates/Settings" ),
+		SettingsTemplate: require( "hbs!templates/settings/Settings" ),
+		SettingsIndexRoute: require( "routes/SettingsIndexRoute" ),
+		SettingsMainRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsMainTemplate: require( "hbs!templates/settings/SettingsMain" ),
+		SettingsStreamsRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsStreamsTemplate: require( "hbs!templates/settings/SettingsStreams" ),
+		SettingsLivestreamerRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsLivestreamerTemplate: require( "hbs!templates/settings/SettingsLivestreamer" ),
+		SettingsPlayerRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsPlayerTemplate: require( "hbs!templates/settings/SettingsPlayer" ),
+		SettingsChatRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsChatTemplate: require( "hbs!templates/settings/SettingsChat" ),
+		SettingsGuiRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsGuiTemplate: require( "hbs!templates/settings/SettingsGui" ),
+		SettingsListsRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsListsTemplate: require( "hbs!templates/settings/SettingsLists" ),
+		SettingsLanguagesRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsLanguagesTemplate: require( "hbs!templates/settings/SettingsLanguages" ),
+		SettingsNotificationsRoute: require( "routes/SettingsSubmenuRoute" ),
+		SettingsNotificationsTemplate: require( "hbs!templates/settings/SettingsNotifications" ),
+		SettingsChannelsRoute: require( "routes/SettingsChannelsRoute" ),
+		SettingsChannelsController: require( "controllers/SettingsChannelsController" ),
+		SettingsChannelsTemplate: require( "hbs!templates/settings/SettingsChannels" ),
 
 		AboutController: require( "controllers/AboutController" ),
 		AboutTemplate: require( "hbs!templates/About" ),

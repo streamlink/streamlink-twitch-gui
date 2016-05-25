@@ -1,14 +1,18 @@
 define([
 	"Ember",
 	"nwjs/menu",
-	"nwjs/clipboard"
+	"nwjs/clipboard",
+	"nwjs/openBrowser"
 ], function(
 	Ember,
 	Menu,
-	clipboard
+	clipboard,
+	openBrowser
 ) {
 
 	var get = Ember.get;
+	var getOwner = Ember.getOwner;
+
 
 	return Ember.Component.extend({
 		tagName: "a",
@@ -24,7 +28,7 @@ define([
 			event.stopImmediatePropagation();
 
 			if ( event.button === 0 ) {
-				this.openURL();
+				this.openUrl();
 			}
 		},
 
@@ -36,23 +40,29 @@ define([
 			menu.items.pushObjects([
 				{
 					label: "Open in browser",
-					click: this.openURL.bind( this )
+					click: this.openUrlInBrowser.bind( this )
 				},
 				{
 					label: "Copy URL",
-					click: this.copyURL.bind( this )
+					click: this.copyUrl.bind( this )
 				}
 			]);
 
 			menu.popup( event );
 		},
 
-		openURL: function() {
+		openUrl: function() {
 			var url = get( this, "url" );
-			this.sendAction( "action", url );
+			var applicationRoute = getOwner( this ).lookup( "route:application" );
+			applicationRoute.send( "openBrowser", url );
 		},
 
-		copyURL: function() {
+		openUrlInBrowser: function() {
+			var url = get( this, "url" );
+			openBrowser( url );
+		},
+
+		copyUrl: function() {
 			var url = get( this, "url" );
 			clipboard.set( url );
 		},

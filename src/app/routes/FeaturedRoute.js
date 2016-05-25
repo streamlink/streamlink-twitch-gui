@@ -1,33 +1,38 @@
-define( [ "Ember", "utils/preload" ], function( Ember, preload ) {
+define([
+	"Ember",
+	"utils/ember/toArray",
+	"utils/preload"
+], function(
+	Ember,
+	toArray,
+	preload
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+
 
 	return Ember.Route.extend({
 		model: function() {
 			var store = get( this, "store" );
 
-			return Promise.all([
-				store.findAll( "twitchStreamsSummary", { reload: true } ),
-				store.query( "twitchStreamsFeatured", {
+			return Ember.RSVP.hash({
+				summary : store.findAll( "twitchStreamsSummary", { reload: true } )
+					.then( toArray ),
+				featured: store.query( "twitchStreamsFeatured", {
 					offset: 0,
-					limit: 5
+					limit : 5
 				})
-			])
+					.then( toArray )
+			})
 				.then(function( data ) {
-					var summary  = data[0].toArray()[0];
-					var featured = data[1].toArray();
-
-					return Promise.resolve( featured )
+					return Promise.resolve( data.featured )
 						.then( preload([
 							"image",
 							"stream.preview.large_nocache"
 						]) )
 						.then(function() {
-							return {
-								summary : summary,
-								featured: featured
-							};
+							return data;
 						});
 				});
 		},

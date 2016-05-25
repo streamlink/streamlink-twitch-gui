@@ -1,29 +1,36 @@
 define([
 	"Ember",
 	"EmberData",
-	"utils/platform"
+	"config",
+	"utils/node/platform"
 ], function(
 	Ember,
 	DS,
+	config,
 	platform
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var attr = DS.attr;
+
+	var langs = config.langs;
+	var langCodes = Object.keys( langs );
+
 	var isWin = platform.isWin;
 
-	function defaultLangFilterValue( model ) {
-		var codes = get( model, "metadata.config.language_codes" );
-		return Object.keys( codes ).reduce(function( obj, key ) {
-			obj[ key ] = true;
+
+	function defaultLangFilterValue() {
+		return langCodes.reduce(function( obj, code ) {
+			if ( !langs[ code ].disabled ) {
+				obj[ code ] = true;
+			}
 			return obj;
 		}, {} );
 	}
 
-	return DS.Model.extend({
-		metadata: Ember.inject.service(),
 
+	return DS.Model.extend({
 		advanced            : attr( "boolean", { defaultValue: false } ),
 		livestreamer        : attr( "string",  { defaultValue: "" } ),
 		livestreamer_params : attr( "string",  { defaultValue: "" } ),
@@ -41,6 +48,7 @@ define([
 		gui_focusrefresh    : attr( "number",  { defaultValue: 0 } ),
 		gui_hidestreampopup : attr( "boolean", { defaultValue: false } ),
 		gui_openchat        : attr( "boolean", { defaultValue: false } ),
+		gui_openchat_context: attr( "boolean", { defaultValue: false } ),
 		gui_twitchemotes    : attr( "boolean", { defaultValue: false } ),
 		gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 		gui_layout          : attr( "string",  { defaultValue: "tile" } ),
@@ -60,6 +68,8 @@ define([
 		notify_shortcut     : attr( "boolean", { defaultValue: true } ),
 		hls_live_edge       : attr( "number",  { defaultValue: 3, minValue: 1, maxValue: 10 } ),
 		hls_segment_threads : attr( "number",  { defaultValue: 1, minValue: 1, maxValue: 10 } ),
+		retry_open          : attr( "number",  { defaultValue: 1, minValue: 1, maxValue: 10 } ),
+		retry_streams       : attr( "number",  { defaultValue: 1, minValue: 0, maxValue: 3 } ),
 		chat_method         : attr( "string",  { defaultValue: "default" } ),
 		chat_command        : attr( "string",  { defaultValue: "" } ),
 
@@ -77,7 +87,14 @@ define([
 
 		isVisibleInTray: function() {
 			return ( get( this, "gui_integration" ) & 2 ) > 0;
-		}.property( "gui_integration" )
+		}.property( "gui_integration" ),
+
+		playerParamsCorrected: function() {
+			var params = get( this, "player_params" );
+			return params.length && params.indexOf( "{filename}" ) === -1
+				? params + " {filename}"
+				: params;
+		}.property( "player_params" )
 
 	}).reopenClass({
 

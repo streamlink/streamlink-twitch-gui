@@ -2,12 +2,12 @@ module.exports = {
 	options: {
 		buildDir: "build/releases",
 		cacheDir: "build/cache",
-		version : "<%= package.config['nw-js-version'] %>",
+		version : "<%= grunt.config('main.nwjs-version') %>",
 		winIco  : "build/resources/icons/icon-16-32-48-256.ico",
 		macIcns : "build/resources/icons/icon-1024.icns",
 		macPlist: {
-			CFBundleName       : "<%= package.config['display-name'] %>",
-			CFBundleDisplayName: "<%= package.config['display-name'] %>",
+			CFBundleName       : "<%= grunt.config('main.display-name') %>",
+			CFBundleDisplayName: "<%= grunt.config('main.display-name') %>",
 			LSEnvironment      : {
 				PATH: "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 			}

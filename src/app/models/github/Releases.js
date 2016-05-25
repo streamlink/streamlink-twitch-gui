@@ -1,6 +1,11 @@
-define( [ "EmberData" ], function( DS ) {
+define([
+	"EmberData"
+], function(
+	DS
+) {
 
 	var attr = DS.attr;
+
 
 	return DS.Model.extend({
 		assets: attr(),
@@ -19,6 +24,7 @@ define( [ "EmberData" ], function( DS ) {
 		upload_url: attr(),
 		url: attr(),
 		zipball_url: attr()
+
 	}).reopenClass({
 		toString: function() { return "releases"; }
 	});

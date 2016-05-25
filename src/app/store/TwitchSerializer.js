@@ -1,4 +1,8 @@
-define( [ "EmberData" ], function( DS ) {
+define([
+	"EmberData"
+], function(
+	DS
+) {
 
 	return DS.RESTSerializer.extend( DS.EmbeddedRecordsMixin, {
 		isNewSerializerAPI: true,

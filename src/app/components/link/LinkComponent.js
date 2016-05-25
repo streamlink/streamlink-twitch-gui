@@ -1,10 +1,23 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 
-	// reopen and don't extend: this class may be used globally
 
+	// reopen and don't extend: this class may be used globally
 	return Ember.LinkComponent.reopen({
+		active: function() {
+			var active = this._super.apply( this, arguments );
+			if ( active === false ) {
+				var inactiveClass = get( this, "inactiveClass" );
+				return inactiveClass ? inactiveClass : false;
+			}
+			return active;
+		}.property( "attrs.params", "_routing.currentState", "inactiveClass" ),
+
 		/*
 		 * Prevent new windows from being opened by middleclicking on links/anchors
 		 */

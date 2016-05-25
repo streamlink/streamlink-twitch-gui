@@ -110,18 +110,36 @@
 		display: flex;
 		font-size: @searchbar-dropdown-font-size;
 
-		:first-child {
+		> :first-child {
 			flex: 1;
 			padding: @button-border-width 0;
 		}
 
-		.radiobtns {
-			flex: none;
-			width: 19em;
-			.radiobtns-color(
-				~"themed-searchdropdown-radiobuttons-background",
-				~"themed-searchdropdown-radiobuttons-color"
-			);
+		.radio-btn-searchbar-filter {
+			font-size: .8em;
+			line-height: 1.6;
+			transition: opacity .2s ease-out, background .2s ease-out, border-color .2s ease-out;
+
+			.btn-color( ~"themed-searchdropdown-radiobuttons-background" );
+
+			.themed({
+				background: @themed-searchdropdown-radiobuttons-background;
+				color: @themed-searchdropdown-radiobuttons-color;
+				border-color: @themed-searchdropdown-divider-color;
+
+				&.checked {
+					background: mix( @themed-button-shading-color, @themed-searchdropdown-radiobuttons-background, @themed-button-background-active ) !important;
+					border-color: mix( @themed-button-shading-color, @themed-searchdropdown-radiobuttons-background, @themed-button-border-color-active ) !important;
+				}
+			});
+
+			> i {
+				display: none;
+			}
+
+			> span {
+				margin: .1em .4em;
+			}
 		}
 	}
 

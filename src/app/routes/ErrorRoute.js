@@ -1,4 +1,10 @@
-define( [ "Ember", "EmberData" ], function( Ember, DS ) {
+define([
+	"Ember",
+	"EmberData"
+], function(
+	Ember,
+	DS
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;

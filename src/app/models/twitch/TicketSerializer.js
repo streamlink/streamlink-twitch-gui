@@ -1,4 +1,8 @@
-define( [ "store/TwitchSerializer" ], function( TwitchSerializer ) {
+define([
+	"store/TwitchSerializer"
+], function(
+	TwitchSerializer
+) {
 
 	return TwitchSerializer.extend({
 		primaryKey: "id",

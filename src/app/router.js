@@ -1,4 +1,8 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -11,7 +15,7 @@ define( [ "Ember" ], function( Ember ) {
 
 		this.route( "watching" );
 
-		this.route( "search", { path: "/search/:filter/:query" } );
+		this.route( "search", { path: "/search" } );
 
 		this.route( "featured" );
 
@@ -34,7 +38,18 @@ define( [ "Ember" ], function( Ember ) {
 			this.route( "followedGames" );
 		});
 
-		this.route( "settings" );
+		this.route( "settings", function() {
+			this.route( "main" );
+			this.route( "streams" );
+			this.route( "livestreamer" );
+			this.route( "player" );
+			this.route( "chat" );
+			this.route( "gui" );
+			this.route( "lists" );
+			this.route( "languages" );
+			this.route( "notifications" );
+			this.route( "channels" );
+		});
 
 		this.route( "about" );
 

@@ -8,7 +8,14 @@
 <div class="searchbar-dropdown {{unless showDropdown 'hidden'}}">
 <section class="filters">
 <div>Filter results</div>
-{{radio-buttons content=filters value=filter buttonName="searchfilters"}}
+{{#radio-btns
+	name="searchfilters"
+	value=filter
+	content=filters
+	as |radiobtn label|
+}}
+{{#component radiobtn classNames="default btn radio-btn-searchbar-filter"}}{{label}}{{/component}}
+{{/radio-btns}}
 </section>
 {{#if model.length}}
 <section class="recent">

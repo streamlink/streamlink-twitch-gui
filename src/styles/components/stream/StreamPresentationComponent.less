@@ -1,0 +1,45 @@
+
+.stream-presentation-component {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+
+	> .image {
+		position: relative;
+		width: 59%;
+	}
+
+	> .info {
+		width: 38.5%;
+
+		> .title {
+			margin-top: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+
+			> .flag-icon-component {
+				margin-right: .25em;
+			}
+
+			> a {
+				text-decoration: none;
+			}
+		}
+
+		> .game {
+			> i.fa-gamepad {
+				margin-right: .333em;
+			}
+		}
+
+		> .stats-row-component {
+			max-width: 20em;
+			margin-top: .5em;
+		}
+
+		> .status {
+			margin: .5em 0;
+		}
+	}
+}

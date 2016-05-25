@@ -4,7 +4,15 @@
 <ul class="list-unstyled">
 {{#each sortedModel as |watching|}}
 {{#stream-presentation stream=watching.stream tagName="li" class="watching" clickablePreview=false}}
-{{#form-button action=(action "openLivestreamer" watching.stream) icon="fa-arrow-up"}}Open dialog{{/form-button}}
+<div>
+{{form-button action=(action "openDialog" watching.stream) icon="fa-arrow-up" title="Open dialog"}}
+{{form-button action=(action "closeStream" watching.stream) class="btn-danger" icon="fa-times" title="Close stream"}}
+</div>
+<div>
+{{open-chat channel=watching.stream.channel}}
+{{share-channel channel=watching.stream.channel}}
+</div>
+{{drop-down value=watching.quality content=qualities class="modalqualityselect"}}
 {{/stream-presentation}}
 {{/each}}
 </ul>

@@ -13,7 +13,7 @@
 	"curly"    : true,
 	"eqeqeq"   : true,
 	"immed"    : true,
-	"latedef"  : true,
+	"latedef"  : false,
 	"laxbreak" : true,
 	"newcap"   : true,
 	"noarg"    : true,

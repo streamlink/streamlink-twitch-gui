@@ -8,6 +8,7 @@ define([
 
 	var set = Ember.set;
 
+
 	return Ember.Component.extend({
 		layout: layout,
 

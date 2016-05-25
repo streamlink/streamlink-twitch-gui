@@ -1,7 +1,12 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var concat = [].concat;
 	var makeArray = Ember.makeArray;
+
 
 	return function preload( withError, list ) {
 		if ( list === undefined ) {
@@ -42,7 +47,9 @@ define( [ "Ember" ], function( Ember ) {
 				// create a flat array out of all traversal strings
 				makeArray( list ).reduce(function createPromiseList( promises, traverse ) {
 					// traverse response data
-					var resources = makeArray( response ).mapBy( traverse );
+					var resources = response.mapBy
+						? response.mapBy( traverse )
+						: makeArray( response ).mapBy( traverse );
 
 					// data instanceof Ember.Enumerable
 					resources = resources && resources.toArray

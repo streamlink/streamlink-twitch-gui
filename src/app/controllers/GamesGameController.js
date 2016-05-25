@@ -1,4 +1,8 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	return Ember.Controller.extend({
 		game: null

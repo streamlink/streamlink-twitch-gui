@@ -1,32 +1,44 @@
 define([
 	"Ember",
+	"config",
 	"nwjs/nwWindow",
 	"mixins/ChannelSettingsMixin",
-	"utils/fs/mkdirp",
-	"utils/fs/download",
-	"utils/fs/clearfolder",
-	"commonjs!path",
-	"commonjs!os"
+	"utils/ember/toArray",
+	"utils/ember/mapBy",
+	"utils/node/platform",
+	"utils/node/fs/mkdirp",
+	"utils/node/fs/download",
+	"utils/node/fs/clearfolder"
 ], function(
 	Ember,
+	config,
 	nwWindow,
 	ChannelSettingsMixin,
+	toArray,
+	mapBy,
+	platform,
 	mkdirp,
 	download,
-	clearfolder,
-	PATH,
-	OS
+	clearfolder
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var getOwner = Ember.getOwner;
 	var setProperties = Ember.setProperties;
-	var alias = Ember.computed.alias;
 	var and = Ember.computed.and;
 	var cancel = Ember.run.cancel;
 	var debounce = Ember.run.debounce;
 	var later = Ember.run.later;
+
+	var intervalSuccess = config.notification[ "interval" ][ "requests" ] || 60000;
+	var intervalRetry = config.notification[ "interval" ][ "retry" ] || 1000;
+	var intervalError = config.notification[ "interval" ][ "error" ] || 120000;
+	var failsRequests = config.notification[ "fails" ][ "requests" ];
+	var failsChannels = config.notification[ "fails" ][ "channels" ];
+	var cacheDir = platform.tmpdir( config.notification[ "cache" ][ "dir" ] );
+	var cacheTime = config.notification[ "cache" ][ "time" ];
+	var iconGroup = config.files[ "icons" ][ "big" ];
 
 	var Notif = window.chrome.notifications;
 
@@ -53,31 +65,13 @@ define([
 
 
 	return Ember.Service.extend( ChannelSettingsMixin, {
-		metadata    : Ember.inject.service(),
 		store       : Ember.inject.service(),
 		settings    : Ember.inject.service(),
 		auth        : Ember.inject.service(),
 		livestreamer: Ember.inject.service(),
+		chat        : Ember.inject.service(),
 
-		config  : alias( "metadata.config" ),
 
-		failsRequests: alias( "config.notification-max-fails-requests" ),
-		failsChannels: alias( "config.notification-max-fails-channels" ),
-		interval     : alias( "config.notification-interval" ),
-		intervalRetry: alias( "config.notification-interval-retry" ),
-		intervalError: alias( "config.notification-interval-error" ),
-
-		// cache related properties
-		cacheDir: function() {
-			var dir = get( this, "config.notification-cache-dir" );
-			return PATH.resolve( dir.replace( "{os-tmpdir}", OS.tmpdir() ) );
-		}.property( "config.notification-cache-dir" ),
-		cacheTime: function() {
-			var days = get( this, "config.notification-cache-time" );
-			return days * 24 * 3600 * 1000;
-		}.property( "config.notification-cache-time" ),
-
-		// controller state
 		model : [],
 		notifs: [],
 		_first: true,
@@ -249,13 +243,11 @@ define([
 		check: function() {
 			if ( !get( this, "running" ) ) { return; }
 
-			var store = get( this, "store" );
-			store.query( "twitchStreamsFollowed", {
+			get( this, "store" ).query( "twitchStreamsFollowed", {
 				limit: 100
 			})
-				.then(function( streams ) {
-					return streams.mapBy( "stream" );
-				})
+				.then( toArray )
+				.then( mapBy( "stream" ) )
 				.then( this.queryCallback.bind( this ) )
 				.then( this.stripDisabledChannels.bind( this ) )
 				.then( this.prepareNotifications.bind( this ) )
@@ -265,8 +257,7 @@ define([
 
 		success: function() {
 			// query again
-			var interval = get( this, "interval" ) || 60000;
-			var next     = later( this, this.check, interval );
+			var next = later( this, this.check, intervalSuccess );
 
 			setProperties( this, {
 				_error: false,
@@ -277,22 +268,21 @@ define([
 
 		failure: function() {
 			var tries = get( this, "_tries" );
-			var max   = get( this, "failsRequests" );
 			var interval;
 
 			// did we reach the retry limit yet?
-			if ( ++tries > max ) {
+			if ( ++tries > failsRequests ) {
 				// reset notification state
 				this.reset();
 				// let the user know that there was an error...
 				set( this, "_error", true );
 				// ...but keep going
-				interval = get( this, "intervalError" ) || 120000;
+				interval = intervalError;
 
 			} else {
 				set( this, "_tries", tries );
 				// immediately retry (with a slight delay)
-				interval = get( this, "intervalRetry" ) || 1000;
+				interval = intervalRetry;
 			}
 
 			var next = later( this, this.check, interval );
@@ -301,7 +291,6 @@ define([
 
 		queryCallback: function( streams ) {
 			var model = get( this, "model" );
-			var max   = get( this, "failsChannels" );
 
 			// figure out which streams are new
 			for ( var item, idx, i = 0, l = model.length; i < l; i++ ) {
@@ -327,7 +316,7 @@ define([
 				} else {
 					// stream not found (may be offline):
 					// increase fails counter
-					if ( ++item.fails <= max ) {
+					if ( ++item.fails <= failsChannels ) {
 						// keep the item (has not reached failure limit yet)
 						continue;
 					}
@@ -393,7 +382,7 @@ define([
 			// show all notifications
 			} else {
 				// download all channel icons first and save them into a local temp dir...
-				return mkdirp( get( this, "cacheDir" ) )
+				return mkdirp( cacheDir )
 					.then(function( iconTempDir ) {
 						return Promise.all( streams.map(function( stream ) {
 							var logo = get( stream, "channel.logo" );
@@ -415,7 +404,7 @@ define([
 		showNotificationGroup: function( streams ) {
 			this.showNotification(
 				"Some followed channels have started streaming",
-				get( this, "config.notification-icon-group" ),
+				iconGroup,
 				streams.map(function( stream ) {
 					return {
 						title  : get( stream, "channel.display_name" ),
@@ -448,7 +437,6 @@ define([
 				nwWindow.toggleVisibility( true );
 			}
 
-			// FIXME: refactor global openBrowser actions
 			var applicationController = getOwner( this ).lookup( "controller:application" );
 
 			switch( settings ) {
@@ -466,16 +454,14 @@ define([
 				case 3:
 					streams.forEach(function( stream ) {
 						get( this, "livestreamer" ).startStream( stream );
-						// don't open the chat twice
-						if ( !get( this, "settings.gui_openchat" ) ) {
-							var url = get( this, "config.twitch-chat-url" );
-							var channel = get( stream, "channel.id" );
-							if ( url && channel ) {
-								url = url.replace( "{channel}", channel );
-								applicationController.send( "openBrowser", url );
-							}
-						}
+						// don't open the chat twice (startStream may open chat already)
+						if ( get( this, "settings.gui_openchat" ) ) { return; }
+						var chat    = get( this, "chat" );
+						var channel = get( stream, "channel.id" );
+						chat.open( channel )
+							.catch(function() {});
 					}, this );
+					break;
 			}
 		},
 
@@ -502,9 +488,6 @@ define([
 
 
 		gc_icons: function() {
-			var cacheDir  = get( this, "cacheDir" );
-			var cacheTime = get( this, "cacheTime" );
-
 			return clearfolder( cacheDir, cacheTime )
 				// always resolve
 				.catch(function() {});

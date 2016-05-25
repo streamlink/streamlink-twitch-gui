@@ -1,6 +1,11 @@
-define( [ "EmberData" ], function( DS ) {
+define([
+	"EmberData"
+], function(
+	DS
+) {
 
 	var hasMany = DS.hasMany;
+
 
 	return DS.Model.extend({
 		panels: hasMany( "twitchChannelPanelItem" )

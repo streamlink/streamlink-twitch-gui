@@ -3,6 +3,10 @@ default:
 dev:
     - "build"
     - "concurrent:runbuild"
+src:
+    - "metadata"
+    - "less:source"
+    - "concurrent:runsrc"
 test:
     - "jshint:test"
     - "connect:test"
@@ -12,6 +16,7 @@ build:
     - "jshint:app"
     - "clean:tmp"
     - "copy:build"
+    - "svgmin"
     - "metadata"
     - "less:dev"
     - "requirejs:dev"
@@ -21,6 +26,7 @@ buildrelease:
     - "test"
     - "clean:tmp"
     - "copy:build"
+    - "svgmin"
     - "metadata"
     - "less:release"
     - "requirejs:release"

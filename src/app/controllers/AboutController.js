@@ -1,9 +1,20 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember",
+	"config",
+	"json!root/metadata"
+], function(
+	Ember,
+	config,
+	metadata
+) {
 
 	var get = Ember.get;
 
+
 	return Ember.Controller.extend({
-		metadata: Ember.inject.service(),
+		metadata: metadata,
+
+		nwjsVersion: config.main[ "nwjs-version" ],
 
 		dependencies: function() {
 			var deps = get( this, "metadata.dependencies" );

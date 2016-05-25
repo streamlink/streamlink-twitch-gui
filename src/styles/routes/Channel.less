@@ -1,0 +1,154 @@
+
+main.content-channel {
+	overflow-x: hidden;
+
+	&.animated > .content:not(.content-loading) {
+		animation: animFadeInRight .333s ease-out;
+	}
+
+	> header {
+		margin-bottom: 1em;
+
+		> .logo {
+			@size: 6.5em;
+
+			display: block;
+			position: relative;
+			width: @size;
+			height: @size;
+			margin-right: .5em;
+			flex-shrink: 0;
+			flex-grow: 0;
+		}
+
+		> div {
+			display: flex;
+			flex-flow: column;
+			flex-grow: 1;
+		}
+
+		.title {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
+		}
+
+		h3 {
+			margin: 0;
+			flex-grow: 1;
+			.text-overflow();
+		}
+
+		.settingsicon {
+			> button {
+				&:extend(.quick-bar-component button);
+
+				> i {
+					height: inherit;
+					font-size: inherit;
+					line-height: inherit;
+					vertical-align: inherit;
+				}
+
+				&:active > i:before {
+					content: @fa-var-wrench;
+				}
+			}
+
+			&.opened > button > i {
+				.themed({
+					color: @themed-button-icon-color-active;
+				});
+			}
+		}
+
+		.online, .offline {
+			margin: .25em 0;
+		}
+
+		.online {
+			> span:not(:first-of-type) {
+				margin-left: .75em;
+			}
+		}
+
+		.status {
+			flex-grow: 1;
+		}
+	}
+
+	> .content-index {
+		display: flex;
+		margin-bottom: 2rem;
+
+		> .big-image {
+			width: 59%;
+
+			&.online {
+				.stream-hover();
+			}
+
+			> .preview {
+				position: relative;
+				.block-aspect-ratio( ( 16 / 9 ) );
+			}
+
+			img {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		> .info {
+			display: flex;
+			flex-flow: column;
+			margin-left: 1em;
+
+			> h3 {
+				margin: 0 0 .5em;
+			}
+
+			> dl {
+				flex-grow: 1;
+				margin: 0 0 1em;
+			}
+
+			dt {
+				width: 8em;
+				font-weight: normal;
+				text-align: left;
+
+				> i {
+					.fa-fw;
+					margin-right: .25em;
+				}
+			}
+
+			dd {
+				margin-left: 8em;
+			}
+		}
+	}
+
+	> .content-settings {
+		> h3 {
+			margin-top: 0;
+		}
+
+		> fieldset > legend {
+			margin: 0 0 1em;
+			padding: 0 0 .25em;
+			border-bottom: 1px solid;
+			font-size: 1em;
+			font-weight: lighter;
+
+			.themed({
+				color: @themed-settings-legend-color;
+				border-bottom-color: @themed-settings-legend-border-color;
+			});
+		}
+	}
+}

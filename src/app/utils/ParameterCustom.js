@@ -1,4 +1,8 @@
-define( [ "utils/Parameter" ], function( Parameter ) {
+define([
+	"utils/Parameter"
+], function(
+	Parameter
+) {
 
 	var reBackslash = /^\\$/;
 	var reSpace     = /^ $/;
@@ -12,7 +16,7 @@ define( [ "utils/Parameter" ], function( Parameter ) {
 	 * @extends Parameter
 	 * @param {(string|string[]|Function)?} cond
 	 * @param {string?} value
-	 * @param {boolean?} subst
+	 * @param {Substitution[]?} subst
 	 * @constructor
 	 */
 	function ParameterCustom( cond, value, subst ) {
@@ -24,12 +28,12 @@ define( [ "utils/Parameter" ], function( Parameter ) {
 
 
 	/**
-	 * @param {Object} obj
-	 * @param {Substitution[]} substitutions
+	 * @param {Object} context
+	 * @param {boolean} advanced
 	 * @returns {string[]}
 	 */
-	ParameterCustom.prototype.get = function( obj, substitutions ) {
-		var value = this.getValue( obj, substitutions );
+	ParameterCustom.prototype.get = function( context, advanced ) {
+		var value = this.getValue( context, advanced );
 		return value === false
 			? []
 			: this.tokenize( value );

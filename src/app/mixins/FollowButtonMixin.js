@@ -9,6 +9,7 @@ define([
 	var get = Ember.get;
 	var set = Ember.set;
 
+
 	return Ember.Mixin.create( TwitchInteractButtonMixin, {
 		action: "follow",
 

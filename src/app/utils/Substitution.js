@@ -1,16 +1,23 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
+	var makeArray = Ember.makeArray;
 
-	var reSubstitution = /\{([a-z]+)}/ig;
-
-	var reEscape       = /(["'`$\\])/g;
-	var strEscape      = "\\$1";
-
-	var reDouble       = /([\{}])/g;
-	var strDouble      = "$1$1";
-
+	var reSubstitution = /(\{)?\{([a-z]+)}(})?/ig;
 	var reWhitespace   = /\s+/g;
+	var reQuote        = /^['"]$/;
+	var reDoubleQuote  = /"|\\$/g;
+	var reSingleQuote  = /'|\\$/g;
+	var reAll          = /./g;
+	var strEscape      = "\\";
+
+	function fnEscape( c ) {
+		return strEscape + c;
+	}
 
 
 	/**
@@ -21,7 +28,7 @@ define( [ "Ember" ], function( Ember ) {
 	 * @constructor
 	 */
 	function Substitution( vars, path, description ) {
-		this.vars = Ember.makeArray( vars );
+		this.vars = makeArray( vars );
 		this.path = path;
 		this.description = description;
 	}
@@ -35,51 +42,137 @@ define( [ "Ember" ], function( Ember ) {
 	};
 
 	/**
-	 * @param {Object} obj
+	 * @param {Object} context
 	 * @returns {(string|boolean)}
 	 */
-	Substitution.prototype.getValue = function( obj ) {
-		var val = get( obj, this.path );
+	Substitution.prototype.getValue = function( context ) {
+		var val = get( context, this.path );
 		if ( val === undefined ) {
 			return false;
 		}
 
-		return String( val )
-			// escape special characters
-			.replace( reEscape, strEscape )
-			// escape curly brackets
-			.replace( reDouble, strDouble )
-			// remove whitespace
-			.replace( reWhitespace, " " )
-			.trim();
+		// remove whitespace
+		return String( val ).trim().replace( reWhitespace, " " );
 	};
+
 
 	/**
 	 * Apply multiple substituions at once.
-	 * @param {string} str
+	 * @param {Object} context
 	 * @param {(Substitution|Substitution[])} substitutions
-	 * @param {Object} obj
+	 * @param {string} str
+	 * @param {boolean?} escape
 	 */
-	Substitution.substitute = function( str, substitutions, obj ) {
-		substitutions = Ember.makeArray( substitutions );
+	Substitution.substitute = function( context, substitutions, str, escape ) {
+		substitutions = makeArray( substitutions );
 
-		return str.replace( reSubstitution, function( all, name ) {
-			name = name.toLowerCase();
+		// tokenize string (search for strings)
+		return Substitution.tokenize( String( str ) )
+			// and reduce token array back to a string
+			.reduce(function( result, token ) {
+				// search for variables in each token independently
+				token = token.string.replace( reSubstitution, function( all, left, name, right ) {
+					// ignore double curly bracket vars
+					if ( left ) { return all; }
 
-			var res = false;
-			// find the first matching variable and get its value
-			substitutions.some(function( substitution ) {
-				if ( substitution.hasVar( name ) ) {
-					res = substitution.getValue( obj );
-					return true;
-				}
-			});
+					// var names are case independent
+					name = name.toLowerCase();
 
-			return res === false
-				? all
-				: res;
-		});
+					var res = false;
+					// find the first matching variable and get its value
+					substitutions.every(function( substitution ) {
+						if ( !substitution.hasVar( name ) ) { return true; }
+
+						res = substitution.getValue( context );
+						if ( escape && res !== false ) {
+							// escape the variable's content
+							res = res.replace(
+								token.quote === "\""
+									? reDoubleQuote
+									: token.quote === "\'"
+										? reSingleQuote
+										: reAll,
+								fnEscape
+							);
+						}
+					});
+
+					return res === false
+						? all
+						: res + ( right || "" );
+				});
+
+				return result + token;
+			}, "" );
 	};
+
+
+	/**
+	 * Tokenize a string
+	 * @param {string} str
+	 * @returns {Array}
+	 */
+	Substitution.tokenize = function( str ) {
+		var output  = [];
+		var buffer  = "";
+		var escaped = false;
+		var quote   = false;
+
+		function clearBuffer() {
+			if ( !buffer.length ) { return; }
+			output.push({
+				string: buffer,
+				quote : quote
+			});
+			buffer = "";
+			quote = false;
+		}
+
+		// tokenize string
+		for ( var char, i = 0, l = str.length; i < l; i++ ) {
+			char = str.charAt( i );
+
+			// detect escaped characters
+			if ( escaped ) {
+				buffer += strEscape + char;
+				escaped = false;
+				continue;
+			} else if ( char === strEscape ) {
+				escaped = true;
+				continue;
+			}
+
+			// detect quoted strings
+			if ( reQuote.test( char ) ) {
+				// not in quoted mode
+				if ( !quote ) {
+					clearBuffer();
+					buffer += char;
+					quote = char;
+					continue;
+
+				// closing quotation mark
+				} else if ( char === quote ) {
+					buffer += char;
+					clearBuffer();
+					continue;
+				}
+			}
+
+			// add char to buffer
+			buffer += char;
+		}
+
+		if ( buffer.length ) {
+			if ( escaped ) {
+				buffer += strEscape;
+			}
+			clearBuffer();
+		}
+
+		return output;
+	};
+
 
 	return Substitution;
 

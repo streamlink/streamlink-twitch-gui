@@ -1,27 +1,30 @@
 define([
 	"Ember",
+	"config",
 	"components/link/ExternalLinkComponent",
 	"hbs!templates/components/link/LivestreamerDocsComponent"
 ], function(
 	Ember,
+	config,
 	ExternalLinkComponent,
 	layout
 ) {
 
 	var get = Ember.get;
 
-	return ExternalLinkComponent.extend({
-		metadata: Ember.inject.service(),
+	var livestreamerDocsUrl = config.livestreamer[ "docs-url" ];
 
+
+	return ExternalLinkComponent.extend({
 		layout: layout,
 
 		tagName: "span",
-		classNameBindings: [ ":docs" ],
+		classNames: [ "livestreamer-docs-component" ],
 		attributeBindings: [ "title" ],
 		title: "Read the documentation of this livestreamer parameter",
 
 		url: function() {
-			var url = get( this, "metadata.config.livestreamer-docs-url" );
+			var url = livestreamerDocsUrl;
 			var cmd = get( this, "cmd" );
 
 			return url.replace( "{cmd}", cmd );

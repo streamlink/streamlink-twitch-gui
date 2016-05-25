@@ -1,4 +1,8 @@
-define( [ "nwjs/nwGui" ], function( nwGui ) {
+define([
+	"nwjs/nwGui"
+], function(
+	nwGui
+) {
 
 	function getClipboard() {
 		try {

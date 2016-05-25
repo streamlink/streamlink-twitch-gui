@@ -1,9 +1,16 @@
-define( [ "Ember", "EmberData", "EmberDataLS" ], function( Ember, DS ) {
-
-	// no initializer here: just upgrade the application store
+define([
+	"Ember",
+	"EmberData",
+	"EmberDataLS"
+], function(
+	Ember,
+	DS
+) {
 
 	var merge = Ember.merge;
 
+
+	// no initializer here: just upgrade the application store
 	DS.Store.reopen({
 		/**
 		 * Find a record and unload the generated record

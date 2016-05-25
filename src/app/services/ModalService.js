@@ -1,5 +1,10 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
+	var get = Ember.get;
 	var setProperties = Ember.setProperties;
 	var notEmpty = Ember.computed.notEmpty;
 
@@ -30,7 +35,10 @@ define( [ "Ember" ], function( Ember ) {
 			});
 		},
 
-		closeModal: function() {
+		closeModal: function( context, force ) {
+			var _context = get( this, "context" );
+			if ( !force && _context !== null && context !== _context ) { return; }
+
 			setProperties( this, {
 				modal  : null,
 				context: null

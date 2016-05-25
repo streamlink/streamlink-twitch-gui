@@ -1,11 +1,13 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
+	"config",
+	"nwjs/openBrowser",
 	"components/button/FormButtonComponent",
 	"mixins/TwitchInteractButtonMixin"
 ], function(
 	Ember,
-	nwGui,
+	config,
+	openBrowser,
 	FormButtonComponent,
 	TwitchInteractButtonMixin
 ) {
@@ -14,9 +16,10 @@ define([
 	var and = Ember.computed.and;
 	var alias = Ember.computed.alias;
 
-	return FormButtonComponent.extend( TwitchInteractButtonMixin, {
-		metadata: Ember.inject.service(),
+	var subscriptionCreateUrl = config.twitch[ "subscription" ][ "create-url" ];
 
+
+	return FormButtonComponent.extend( TwitchInteractButtonMixin, {
 		modelName: "twitchUserSubscription",
 
 		// model alias (component attribute)
@@ -50,12 +53,12 @@ define([
 
 		actions: {
 			"subscribe": function( success, failure ) {
-				var url  = get( this, "metadata.config.twitch-subscribe-url" );
+				var url  = subscriptionCreateUrl;
 				var name = get( this, "id" );
 
 				if ( url && name ) {
 					url = url.replace( "{channel}", name );
-					nwGui.Shell.openExternal( url );
+					openBrowser( url );
 
 					if ( success instanceof Function ) {
 						success();

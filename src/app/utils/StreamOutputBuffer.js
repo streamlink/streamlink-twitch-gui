@@ -3,6 +3,7 @@ define(function() {
 	var defDelimiter   = /\r\n|\r|\n/g;
 	var defMaxBuffSize = 4096;
 
+
 	/**
 	 * @param {Object?}       options
 	 * @param {string|RegExp} options.delimiter

@@ -7,7 +7,7 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{#content-list content=model compare="target" as |item isNewItem isDuplicateItem|}}
 {{stream-item host=item content=item.target isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
 <p>The returned list of hosted streams is empty.</p>

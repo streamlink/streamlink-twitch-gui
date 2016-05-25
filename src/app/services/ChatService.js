@@ -1,43 +1,41 @@
 define([
 	"Ember",
-	"nwjs/nwGui",
+	"config",
+	"nwjs/openBrowser",
 	"utils/Parameter",
 	"utils/ParameterCustom",
 	"utils/Substitution",
-	"utils/resolvePath",
-	"utils/fs/which",
-	"utils/fs/stat",
-	"utils/platform",
+	"utils/node/fs/whichFallback",
+	"utils/node/fs/stat",
 	"commonjs!child_process",
 	"commonjs!path"
 ], function(
 	Ember,
-	nwGui,
+	config,
+	openBrowser,
 	Parameter,
 	ParameterCustom,
 	Substitution,
-	resolvePath,
-	which,
+	whichFallback,
 	stat,
-	platform,
 	CP,
 	PATH
 ) {
 
 	var get = Ember.get;
-	var readOnly = Ember.computed.readOnly;
 	var run = Ember.run;
 
-	var platformName = platform.platform;
-	var isWin = platform.isWin;
+	var twitchChatUrl = config.twitch[ "chat-url" ];
+	var chatApplications = config.chat;
 
-	function checkExec( stat ) {
-		return stat.isFile() && ( isWin || ( stat.mode & 73 ) > 0 );
-	}
 
 	function launch( exec, params ) {
 		return new Promise(function( resolve, reject ) {
-			var spawn = CP.spawn( exec, params, { detached: true } );
+			var spawn = CP.spawn( exec, params, {
+				detached: true,
+				stdio: "ignore"
+			});
+			spawn.unref();
 			spawn.on( "error", reject );
 			run.next( resolve );
 		});
@@ -45,18 +43,16 @@ define([
 
 
 	return Ember.Service.extend({
-		metadata: Ember.inject.service(),
 		settings: Ember.inject.service(),
 		auth: Ember.inject.service(),
 
-		chatMethods: readOnly( "metadata.config.chat-methods" ),
 
 		/**
 		 * @param channel
 		 * @returns {Promise}
 		 */
 		open: function( channel ) {
-			var url  = get( this, "metadata.config.twitch-chat-url" );
+			var url  = twitchChatUrl;
 			var name = get( channel, "id" );
 
 			if ( !url || !name ) {
@@ -91,7 +87,7 @@ define([
 
 		_openDefaultBrowser: function( url ) {
 			return new Promise(function( resolve ) {
-				nwGui.Shell.openExternal( url );
+				openBrowser( url );
 				run.next( resolve );
 			});
 		},
@@ -103,66 +99,44 @@ define([
 
 
 		_openPredefined: function( command, key, url ) {
-			var methods  = get( this, "chatMethods" );
-			var data     = methods[ key ];
+			var data = chatApplications[ key ];
+			if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
+
 			var args     = data[ "args" ];
-			var exec     = data[ "exec" ][ platformName ];
-			var fallback = data[ "fallback" ][ platformName ];
+			var exec     = data[ "exec" ];
+			var fallback = data[ "fallback" ];
 
-			// validate command and use fallback paths if needed
-			return this._validatePredefined( command, exec, fallback )
+			var context = {
+				args: args,
+				url : url
+			};
+			var paramsPredefined = [
+				new ParameterCustom( null, "args", [
+					new Substitution( "url", "url" )
+				])
+			];
+
+			var promise = command.length
+				// user has set a custom executable path
+				// check if the command's executable name is equal to one of the given ones
+				? exec.indexOf( PATH.basename( command ) ) === -1
+					? Promise.reject( new Error( "Invalid command" ) )
+					: whichFallback( command )
+				// no custom command
+				: whichFallback( exec, fallback );
+
+			return promise
 				.then(function( exec ) {
-					var params = Parameter.getParameters(
-						{ args: args, url : url },
-						[ new ParameterCustom( null, "args", true ) ],
-						[ new Substitution( "url", "url" ) ]
-					);
-
+					var params = Parameter.getParameters( context, paramsPredefined, true );
 					return launch( exec, params );
 				});
 		},
 
-		_validatePredefined: function( command, executables, fallbacks ) {
-			// user has set a custom executable path
-			if ( command.length ) {
-				// validate command:
-				// check if the command's executable name is equal to one of the given ones
-				var exec = PATH.basename( command );
-				return executables.indexOf( exec ) !== -1
-					? which( command, checkExec )
-					: Promise.reject( new Error( "Invalid command" ) );
-
-			} else {
-				// look for matching executables inside the $PATH variable first
-				return executables.reduce(function( chain, exec ) {
-					return chain.catch(function() {
-						// check file
-						return which( exec, checkExec );
-					});
-				}, Promise.reject() )
-					.catch( function() {
-						// or look for matching executables in a list of fallback paths
-						return fallbacks.reduce(function( chain, fallback ) {
-							return chain.catch(function() {
-								// resolve env variables
-								fallback = resolvePath( fallback );
-								// append each executable to the current path
-								return executables.reduce(function( chain, exec ) {
-									return chain.catch(function() {
-										var file = PATH.join( fallback, exec );
-										// check file (absolute path)
-										return which( file, checkExec );
-									});
-								}, Promise.reject() );
-							});
-						}, Promise.reject() );
-					});
-			}
-		},
-
 
 		_openMSIE: function( url ) {
-			var data   = get( this, "chatMethods.msie" );
+			var data = chatApplications[ "msie" ];
+			if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
+
 			var args   = data[ "args" ];
 			var exec   = data[ "exec" ];
 			var script = data[ "script" ];
@@ -171,40 +145,40 @@ define([
 			var dir    = PATH.dirname( process.execPath );
 			var file   = PATH.join( dir, script );
 
+			var context = {
+				args  : args,
+				url   : url,
+				script: file
+			};
+			var paramsMSIE = [
+				new ParameterCustom( null, "args", [
+					new Substitution( "url", "url" ),
+					new Substitution( "script", "script" )
+				])
+			];
+
 			return stat( file )
 				.then(function() {
-					var params = Parameter.getParameters(
-						{
-							args  : args,
-							script: file,
-							url   : url
-						},
-						[
-							new ParameterCustom( null, "args", true )
-						],
-						[
-							new Substitution( "url", "url" ),
-							new Substitution( "script", "script" )
-						]
-					);
-
+					var params = Parameter.getParameters( context, paramsMSIE, true );
 					return launch( exec, params );
 				});
 		},
 
 
 		_openChatty: function( chatty, channel ) {
+			var data = chatApplications[ "chatty" ];
+			if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
+
 			var isLoggedIn = get( this, "auth.session.isLoggedIn" );
 			var token      = get( this, "auth.session.access_token" );
 			var user       = get( this, "auth.session.user_name" );
-			var data       = get( this, "chatMethods.chatty" );
 			var javaArgs   = data[ "args" ];
-			var javaExec   = data[ "exec" ][ platformName ];
-			var fbPaths    = data[ "fallback" ][ platformName ];
+			var javaExec   = data[ "exec" ];
+			var javaFb     = data[ "fallback" ];
 			var chattyFb   = data[ "chatty-fallback" ];
 
 			// object containing all the required data
-			var obj = {
+			var context = {
 				args   : isLoggedIn
 					? data[ "chatty-args" ]
 					: data[ "chatty-args-noauth" ],
@@ -213,10 +187,7 @@ define([
 				token  : token,
 				channel: channel
 			};
-			// just a single custom parameter, so a string can be defined in package.json
-			var parameters = [
-				new ParameterCustom( null, "args", true )
-			];
+
 			// custom parameter substitutions
 			var substitutions = [
 				new Substitution( "channel", "channel" )
@@ -229,74 +200,59 @@ define([
 				);
 			}
 
-			function launchChatty( exec ) {
-				var params = Parameter.getParameters( obj, parameters, substitutions );
-				return launch( exec, params );
-			}
+			// just a single custom parameter, so a string can be defined in package.json
+			var paramsChatty = [
+				new ParameterCustom( null, "args", substitutions )
+			];
 
-			// if no chatty jar has been set
-			if ( !chatty || !chatty.trim().length ) {
-				// check for chatty startscript in $PATH
-				return which( chattyFb, checkExec )
+			var promise = !chatty || !chatty.trim().length
+				// look for a chatty startscript if no chatty jar file has been set
+				? whichFallback( chattyFb )
+				// validate java installation
+				: whichFallback( javaExec, javaFb )
 					.then(function( exec ) {
-						return launchChatty( exec );
+						// check for existing chatty .jar file (and return java executable)
+						return stat( chatty )
+							.then(function() {
+								// alter command line
+								context.args = javaArgs + " " + context.args;
+								substitutions.push( new Substitution( "chatty", "chatty" ) );
+								return exec;
+							});
 					});
-			}
 
-			// validate java executable
-			return which( javaExec, checkExec )
-				.catch(function() {
-					// java executable fallback paths
-					return fbPaths.reduce(function( chain, fallback ) {
-						return chain.catch(function() {
-							// resolve env variables
-							fallback = resolvePath( fallback );
-							// append executable name to fallback path
-							var file = PATH.join( fallback, javaExec );
-							return which( file, checkExec );
-						});
-					}, Promise.reject() );
-				})
+			return promise
 				.then(function( exec ) {
-					// check for existing chatty .jar file (and return java executable)
-					return stat( chatty )
-						.then(function() {
-							return exec;
-						});
-				})
-				.then(function( exec ) {
-					obj.args = javaArgs + " " + obj.args;
-					substitutions.push( new Substitution( "chatty", "chatty" ) );
-
-					return launchChatty( exec );
+					var params = Parameter.getParameters( context, paramsChatty, true );
+					return launch( exec, params );
 				});
 		},
 
 
-		_openCustom: function( command, channel, url ) {
-			var token  = get( this, "auth.session.access_token" );
-			var user   = get( this, "auth.session.user_name" );
-			var params = Parameter.getParameters(
-				{
-					command: command,
-					channel: channel,
-					url    : url,
-					user   : user,
-					token  : token
-				},
-				[
-					new ParameterCustom( null, "command", true )
-				],
-				[
-					new Substitution( "url", "url" ),
-					new Substitution( "user", "user" ),
-					new Substitution( "token", "token" ),
-					new Substitution( "channel", "channel" )
-				]
-			);
-			var exec = params.shift();
+		substitutionsCustom: [
+			new Substitution( "url", "url", "Twitch chat URL" ),
+			new Substitution( "user", "user", "User name" ),
+			new Substitution( "channel", "channel", "Channel name" ),
+			new Substitution( "token", "token", "Twitch access token" )
+		],
 
-			return which( exec, checkExec )
+		_openCustom: function( command, channel, url ) {
+			var context = {
+				command: command,
+				channel: channel,
+				url    : url,
+				user   : get( this, "auth.session.user_name" ),
+				token  : get( this, "auth.session.access_token" )
+			};
+			var substitutionsCustom = get( this, "substitutionsCustom" );
+			var paramsCustom = [
+				new ParameterCustom( null, "command", substitutionsCustom )
+			];
+
+			var params = Parameter.getParameters( context, paramsCustom, true );
+			var exec   = params.shift();
+
+			return whichFallback( exec )
 				.then(function() {
 					return launch( exec, params );
 				});

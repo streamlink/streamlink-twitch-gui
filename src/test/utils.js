@@ -1,11 +1,19 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
+	var get = Ember.get;
 	var run = Ember.run;
+	var $ = Ember.$;
 	var reWhiteSpace = /\s+/g;
+
+	var fixtureElement = "#qunit-fixture";
 
 
 	function runAppend( view ) {
-		run( view, "appendTo", "#qunit-fixture" );
+		run( view, "appendTo", fixtureElement );
 	}
 
 	function runDestroy( destroyed ) {
@@ -14,11 +22,19 @@ define( [ "Ember" ], function( Ember ) {
 		}
 	}
 
-	function getOutput( component, stripWhiteSpace ) {
-		var text = component.$().text();
-		return stripWhiteSpace
-			? text.replace( reWhiteSpace, "" )
-			: text;
+	function getElem( component, selector ) {
+		var element = get( component, "element" );
+		return selector && selector.length
+			? $( selector, element )
+			: $( element );
+	}
+
+	function getOutput( component, selector ) {
+		return getElem( component, selector ).text();
+	}
+
+	function cleanOutput( component, selector ) {
+		return getOutput( component, selector ).replace( reWhiteSpace, "" );
 	}
 
 	function buildOwner( properties ) {
@@ -31,14 +47,20 @@ define( [ "Ember" ], function( Ember ) {
 			}
 		});
 
-		return Owner.create( properties || {} );
+		var owner = Owner.create( properties || {} );
+		owner.register( "component-lookup:main", Ember.ComponentLookup );
+
+		return owner;
 	}
 
 
 	return {
-		runAppend : runAppend,
+		fixtureElement: fixtureElement,
+		runAppend: runAppend,
 		runDestroy: runDestroy,
-		getOutput : getOutput,
+		getElem: getElem,
+		getOutput: getOutput,
+		cleanOutput: cleanOutput,
 		buildOwner: buildOwner
 	};
 

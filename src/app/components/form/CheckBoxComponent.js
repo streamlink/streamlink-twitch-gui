@@ -1,14 +1,21 @@
 define([
 	"Ember",
-	"hbs!templates/components/form/CheckBoxComponent"
+	"components/form/InputBtnComponent"
 ], function(
 	Ember,
-	layout
+	InputBtnComponent
 ) {
 
-	return Ember.Component.extend({
-		layout: layout,
-		tagName: "label"
+	var get = Ember.get;
+
+
+	return InputBtnComponent.extend({
+		classNames: [ "check-box-component" ],
+
+		click: function() {
+			if ( get( this, "disabled" ) ) { return; }
+			this.toggleProperty( "checked" );
+		}
 	});
 
 });

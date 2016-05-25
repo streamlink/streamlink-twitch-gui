@@ -1,4 +1,10 @@
-define( [ "utils/linkparser" ], function( linkparser ) {
+define([
+	"QUnit",
+	"utils/linkparser"
+], function(
+	QUnit,
+	linkparser
+) {
 
 	var parseString = linkparser.parseString;
 

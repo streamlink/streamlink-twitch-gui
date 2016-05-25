@@ -11,6 +11,7 @@ define([
 	var run = Ember.run;
 	var scheduleOnce = run.scheduleOnce;
 
+
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "section",

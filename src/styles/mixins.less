@@ -49,27 +49,6 @@
 	.apply-btn-color( @background );
 }
 
-.radiobtns-color( @background, @color: ~"themed-button-color" ) {
-	> label {
-		.themed({
-			color: @@color;
-		});
-
-		.btn-color( @background );
-
-		transition+: opacity .2s ease-out;
-		transition+: background .2s ease-out;
-		transition+: border-color .2s ease-out !important;
-	}
-
-	> input:checked + label {
-		.themed({
-			background: mix( @themed-button-shading-color, @@background, @themed-button-background-active ) !important;
-			border-color: mix( @themed-button-shading-color, @@background, @themed-button-border-color-active ) !important;
-		});
-	}
-}
-
 
 .block-aspect-ratio( @ratio: 1 ) {
 	&::before {
@@ -119,7 +98,12 @@
  * Create media queries for dynamically scaling lists
  */
 .dynamic-elems-per-row( @min, @container, @spacing, @additional ) {
-	@max: 8;
+	// The maximum number of elements in a row is 7
+	// At 100% DPI scaling this limit will be reached at the following window widths:
+	// - ".stream-item-component": 1920px (maximized window at 1920x1080)
+	// - ".game-item-component": 1498px
+	// All items will scale infinitely beyond that point (unscaled QHD, UHD, etc.)
+	@max: 7;
 
 
 	@sp: unit( ( @spacing / 100 ) );
@@ -128,7 +112,7 @@
 	// desired element width (pixels)
 	@desired: ( ( 1 - @sp ) * @container / @min );
 
-	// the maximum number of elements in a row is 16
+
 	.loop( @i ) when ( @i =< @max ) {
 		// window min-width calculation (pixels):
 		// additional width to the content container element

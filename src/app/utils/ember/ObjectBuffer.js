@@ -2,7 +2,11 @@
  * Based on https://github.com/movableink/buffered-proxy
  * Written by Kris Selden for Yapp Labs, published by Luke Melia
  */
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember"
+], function(
+	Ember
+) {
 
 	var get = Ember.get;
 	var set = Ember.set;

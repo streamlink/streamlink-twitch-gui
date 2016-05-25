@@ -1,0 +1,50 @@
+
+.radio-btns-component {
+	&.radio-btns-group {
+		display: flex;
+
+		> .radio-btn-component {
+			display: block;
+			flex: 1;
+			margin: 0 0 0 .5em;
+			transition: opacity .2s ease-out;
+
+			&:first-of-type {
+				margin-left: 0;
+			}
+
+			> i {
+				&::before {
+					display: none;
+				}
+
+				&::after {
+					content: @fa-var-check;
+				}
+			}
+
+			> span {
+				margin-left: 0;
+			}
+
+			&:not(.checked):hover {
+				> i::after {
+					opacity: .5;
+				}
+				&:active > i::after {
+					opacity: .75;
+				}
+			}
+
+			&.disabled {
+				opacity: .5;
+			}
+
+			.themed({
+				> i::after {
+					color: @themed-button-color;
+				}
+			});
+		}
+	}
+}

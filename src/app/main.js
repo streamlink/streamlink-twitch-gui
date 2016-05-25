@@ -26,7 +26,7 @@ define(function( require ) {
 
 
 	// load the config first
-	require( [ "config" ], function() {
+	require( [ "../requirejs/config" ], function() {
 
 		// load dependencies
 		require([

@@ -1,7 +1,7 @@
 module.exports = {
 	options: {
 		baseUrl       : "src/app",
-		mainConfigFile: "src/app/config.js",
+		mainConfigFile: "src/requirejs/config.js",
 
 		name: "",
 		out : "build/tmp/app/main.js",

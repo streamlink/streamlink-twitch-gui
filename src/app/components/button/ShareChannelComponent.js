@@ -10,9 +10,8 @@ define([
 
 	var get = Ember.get;
 
-	return FormButtonComponent.extend({
-		metadata: Ember.inject.service(),
 
+	return FormButtonComponent.extend({
 		"class" : "btn-info",
 		icon    : "fa-share-alt",
 		title   : "Copy channel url to clipboard",

@@ -2,10 +2,15 @@ define([
 	"Ember",
 	"EmberData",
 	"store/AdapterMixin"
-], function( Ember, DS, AdapterMixin ) {
+], function(
+	Ember,
+	DS,
+	AdapterMixin
+) {
 
 	var get = Ember.get;
 	var reURLFragment = /^:(.+)$/;
+
 
 	return DS.RESTAdapter.extend( AdapterMixin, {
 		auth: Ember.inject.service(),

@@ -58,7 +58,7 @@
 		{{else if (is-equal error.name "VersionError")}}
 			{{#modal-header}}Error: Invalid Livestreamer version{{/modal-header}}
 			{{#modal-body class="error"}}
-				Your version v{{error.version}} doesn't match the min. requirements (v{{metadata.config.livestreamer-version-min}}).
+				Your version v{{error.version}} doesn't match the min. requirements (v{{versionMin}}).
 			{{/modal-body}}
 		{{else if (is-equal error.name "UnableToOpenError")}}
 			{{#modal-header}}Error: Unable to open stream{{/modal-header}}

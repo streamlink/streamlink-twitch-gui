@@ -1,12 +1,16 @@
 define([
 	"Ember",
+	"config",
 	"components/modal/ModalDialogComponent",
 	"models/localstorage/Settings",
+	"nwjs/openBrowser",
 	"hbs!templates/components/modal/ModalLivestreamerComponent"
 ], function(
 	Ember,
+	config,
 	ModalDialogComponent,
 	Settings,
+	openBrowser,
 	layout
 ) {
 
@@ -15,27 +19,26 @@ define([
 	var schedule = Ember.run.schedule;
 	var readOnly = Ember.computed.readOnly;
 
+	var livestreamerDownloadUrl = config.livestreamer[ "download-url" ];
+
 
 	return ModalDialogComponent.extend({
-		metadata    : Ember.inject.service(),
 		livestreamer: Ember.inject.service(),
 
 		layout: layout,
 		"class": "modal-livestreamer",
 
-		openBrowser: "openBrowser",
-
 		error : readOnly( "livestreamer.error" ),
 		active: readOnly( "livestreamer.active" ),
 
 		qualities: Settings.qualities,
+		versionMin: config.livestreamer[ "version-min" ],
 
 
 		actions: {
 			"download": function( success ) {
-				var url = get( this, "metadata.config.livestreamer-download-url" );
-				if ( url ) {
-					this.sendAction( "openBrowser", url );
+				if ( livestreamerDownloadUrl ) {
+					openBrowser( livestreamerDownloadUrl );
 					if ( success instanceof Function ) {
 						success();
 					}
@@ -48,11 +51,11 @@ define([
 
 			"abort": function() {
 				set( this, "livestreamer.abort", true );
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
 			},
 
 			"close": function() {
-				get( this, "modal" ).closeModal();
+				get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
 				schedule( "destroy", this, function() {
 					set( this, "livestreamer.active", null );
 				});

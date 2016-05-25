@@ -31,7 +31,7 @@ define([
 				settings.removeObserver( "content", settings, settingsObserver );
 
 				// do all the NWjs stuff
-				menubar.createNativeMenuBar();
+				menubar.createNativeMenuBar( controller );
 				shortcut.createStartmenuShortcut( settings );
 				tray.createTrayIcon( settings );
 				integrations.setupIntegrations( settings );

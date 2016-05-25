@@ -1,8 +1,13 @@
-define( [ "EmberData" ], function( DS ) {
+define([
+	"EmberData"
+], function(
+	DS
+) {
 
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 	var hasMany = DS.hasMany;
+
 
 	return DS.Model.extend({
 		emoticons: hasMany( "twitchProductEmoticon", { async: false } ),
@@ -15,6 +20,7 @@ define( [ "EmberData" ], function( DS ) {
 		recurring: attr( "boolean" ),
 		short_name: attr( "string" ),
 		ticket_type: attr( "string" )
+
 	}).reopenClass({
 		toString: function() { return "twitchProduct"; }
 	});

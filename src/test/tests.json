@@ -6,6 +6,8 @@
 		"test/parameters",
 		"test/ObjectBuffer",
 		"test/StreamOutputBuffer",
-		"test/ContentListComponent"
+		"test/ContentListComponent",
+		"test/InputBtnComponent",
+		"test/getStreamFromUrl"
 	]
 }

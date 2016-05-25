@@ -11,6 +11,7 @@ define([
 	var get = Ember.get;
 	var set = Ember.set;
 
+
 	return Ember.Controller.extend( RetryTransitionMixin, {
 		auth    : Ember.inject.service(),
 		settings: Ember.inject.service(),

@@ -11,6 +11,7 @@ define([
 	var get = Ember.get;
 	var or = Ember.computed.or;
 
+
 	return ListItemComponent.extend({
 		layout: layout,
 		classNames: [ "game-item-component" ],

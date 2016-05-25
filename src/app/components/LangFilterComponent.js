@@ -8,6 +8,7 @@ define([
 
 	var get = Ember.get;
 
+
 	return Ember.Component.extend({
 		layout: layout,
 		tagName: "li",

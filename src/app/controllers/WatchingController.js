@@ -1,7 +1,14 @@
-define( [ "Ember" ], function( Ember ) {
+define([
+	"Ember",
+	"models/localstorage/Settings"
+], function(
+	Ember,
+	Settings
+) {
 
 	var get = Ember.get;
 	var sort = Ember.computed.sort;
+
 
 	return Ember.Controller.extend({
 		auth: Ember.inject.service(),
@@ -10,9 +17,15 @@ define( [ "Ember" ], function( Ember ) {
 		sortedModel: sort( "model", "sortBy" ),
 		sortBy: [ "started:desc" ],
 
+		qualities: Settings.qualities,
+
 		actions: {
-			"openLivestreamer": function( stream ) {
+			"openDialog": function( stream ) {
 				get( this, "livestreamer" ).startStream( stream );
+			},
+
+			"closeStream": function( stream ) {
+				get( this, "livestreamer" ).closeStream( stream );
 			}
 		}
 	});

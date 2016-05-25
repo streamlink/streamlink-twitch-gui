@@ -1,10 +1,14 @@
 define([
 	"Ember",
+	"config",
+	"nwjs/openBrowser",
 	"components/list/ListItemComponent",
 	"Moment",
 	"hbs!templates/components/list/SubscriptionItemComponent"
 ], function(
 	Ember,
+	config,
+	openBrowser,
 	ListItemComponent,
 	Moment,
 	layout
@@ -13,9 +17,11 @@ define([
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
 
-	return ListItemComponent.extend({
-		metadata: Ember.inject.service(),
+	var subscriptionEditUrl   = config.twitch[ "subscription" ][ "edit-url" ];
+	var subscriptionCancelUrl = config.twitch[ "subscription" ][ "cancel-url" ];
 
+
+	return ListItemComponent.extend({
 		layout: layout,
 		classNames: [ "subscription-item-component" ],
 		attributeBindings: [ "style" ],
@@ -42,28 +48,27 @@ define([
 		}.property( "content.access_end" ).volatile(),
 
 
-		buttonAction: "openBrowser",
 		openBrowser: function( url ) {
 			var channel = get( this, "channel.id" );
-			this.sendAction( "buttonAction", url.replace( "{channel}", channel ) );
+			if ( !channel ) { return Promise.reject(); }
+
+			url = url.replace( "{channel}", channel );
+			openBrowser( url );
+			return Promise.resolve();
 		},
 
 
 		actions: {
-			edit: function( success ) {
-				var url = get( this, "metadata.config.twitch-subscribe-edit" );
-				this.openBrowser( url );
-				if ( success instanceof Function ) {
-					success();
-				}
+			edit: function( success, failure ) {
+				this.openBrowser( subscriptionEditUrl )
+					.then( success, failure )
+					.catch(function() {});
 			},
 
-			cancel: function( success ) {
-				var url = get( this, "metadata.config.twitch-subscribe-cancel" );
-				this.openBrowser( url );
-				if ( success instanceof Function ) {
-					success();
-				}
+			cancel: function( success, failure ) {
+				this.openBrowser( subscriptionCancelUrl )
+					.then( success, failure )
+					.catch(function() {});
 			}
 		}
 	});

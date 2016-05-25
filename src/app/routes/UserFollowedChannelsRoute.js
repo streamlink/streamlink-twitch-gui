@@ -3,16 +3,21 @@ define([
 	"routes/UserIndexRoute",
 	"mixins/InfiniteScrollMixin",
 	"mixins/ModelMetadataMixin",
+	"utils/ember/toArray",
+	"utils/ember/mapBy",
 	"utils/preload"
 ], function(
 	Ember,
 	UserIndexRoute,
 	InfiniteScrollMixin,
 	ModelMetadataMixin,
+	toArray,
+	mapBy,
 	preload
 ) {
 
 	var get = Ember.get;
+
 
 	return UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 		itemSelector: ".channel-item-component",
@@ -35,9 +40,8 @@ define([
 				sortby   : params.sortby || "created_at",
 				direction: params.direction || "desc"
 			})
-				.then(function( data ) {
-					return data.toArray().mapBy( "channel" );
-				})
+				.then( toArray )
+				.then( mapBy( "channel" ) )
 				.then( preload( "logo" ) );
 		},
 

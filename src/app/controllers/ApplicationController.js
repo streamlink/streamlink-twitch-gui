@@ -34,8 +34,8 @@ define([
 			},
 
 			"winMin": function() {
-				var integration    = get( this, "settings.gui_integration" ),
-				    minimizetotray = get( this, "settings.gui_minimizetotray" );
+				var integration    = get( this, "settings.gui_integration" );
+				var minimizetotray = get( this, "settings.gui_minimizetotray" );
 
 				// tray only or both with min2tray: just hide the window
 				if ( integration === 2 || integration === 3 && minimizetotray ) {
@@ -51,7 +51,7 @@ define([
 
 			"winClose": function() {
 				if ( get( this, "streamsLength" ) ) {
-					get( this, "modal" ).openModal( "quit" );
+					get( this, "modal" ).openModal( "quit", this );
 				} else {
 					nwWindow.close( true );
 				}

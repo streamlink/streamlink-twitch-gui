@@ -1,12 +1,12 @@
 {{#if content.length}}
-<ul class="content-list {{class}}">
+<ul>
 {{#each content as |item index|}}
 {{yield item (is-gte index initial) (has-own-property duplicates index)}}
 {{/each}}
 </ul>
-{{infinite-scroll targetObject=targetObject}}
+{{#if infiniteScroll}}{{infinite-scroll content=content targetObject=targetObject}}{{/if}}
 {{else if (hasBlock "inverse")}}
-<div class="content-empty">
+<div>
 {{yield to="inverse"}}
 </div>
 {{/if}}
