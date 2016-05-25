@@ -122,6 +122,8 @@ define([
 	}
 
 	function isWindowFullyVisible() {
+		if ( !nwScreen.screens ) { return; }
+
 		var x = nwWindow.x;
 		var y = nwWindow.y;
 		var w = nwWindow.width;
