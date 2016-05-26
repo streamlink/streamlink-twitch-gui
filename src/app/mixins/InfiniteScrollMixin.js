@@ -164,6 +164,7 @@ define([
 				if ( binding ) {
 					binding.disconnect( this );
 				}
+				return true;
 			},
 
 			"willFetchContent": function( force ) {
