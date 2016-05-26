@@ -42,20 +42,20 @@ define([
 
 
 		hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
-		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "minValue" ),
-		hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "maxValue" ),
+		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "min" ),
+		hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "max" ),
 
 		hlsSegmentThreadsDefault: settingsAttrMeta( "hls_segment_threads", "defaultValue" ),
-		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
-		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
+		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "min" ),
+		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "max" ),
 
 		retryStreamsDefault: settingsAttrMeta( "retry_streams", "defaultValue" ),
-		retryStreamsMin    : settingsAttrMeta( "retry_streams", "minValue" ),
-		retryStreamsMax    : settingsAttrMeta( "retry_streams", "maxValue" ),
+		retryStreamsMin    : settingsAttrMeta( "retry_streams", "min" ),
+		retryStreamsMax    : settingsAttrMeta( "retry_streams", "max" ),
 
 		retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
-		retryOpenMin    : settingsAttrMeta( "retry_open", "minValue" ),
-		retryOpenMax    : settingsAttrMeta( "retry_open", "maxValue" ),
+		retryOpenMin    : settingsAttrMeta( "retry_open", "min" ),
+		retryOpenMax    : settingsAttrMeta( "retry_open", "max" ),
 
 
 		substitutionsPlayer: LivestreamerParameters.playerSubstitutions,
