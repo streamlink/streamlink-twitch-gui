@@ -23,7 +23,7 @@
 		icon="fa-filter"
 		livestreamerCmd="--player-passthrough"
 	}}
-		{{drop-down value=model.player_passthrough content=settings.content.constructor.passthrough optionValuePath="value"}}
+		{{drop-down value=model.player_passthrough content=Settings.passthrough optionValuePath="value"}}
 	{{/settings-row}}
 
 	{{#if (is-equal model.player_passthrough "http")}}

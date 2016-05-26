@@ -14,7 +14,7 @@
 }}
 	{{check-box "Info bar is always visible" checked=model.stream_show_info}}
 	<p>What should be displayed?</p>
-	{{drop-down class="stream-click" value=model.stream_info content=settings.content.constructor.stream_info}}
+	{{drop-down class="stream-click" value=model.stream_info content=Settings.stream_info}}
 {{/settings-row}}
 
 {{#settings-row
@@ -23,8 +23,8 @@
 	icon="fa-hand-pointer-o"
 }}
 	<p>{{unless platform.isDarwin "CTRL" "CMD"}} + Primary mouse button</p>
-	{{drop-down class="stream-click" value=model.stream_click_modify content=settings.content.constructor.stream_click}}
+	{{drop-down class="stream-click" value=model.stream_click_modify content=Settings.stream_click}}
 	<p>Middle mouse button</p>
-	{{drop-down class="stream-click" value=model.stream_click_middle content=settings.content.constructor.stream_click}}
+	{{drop-down class="stream-click" value=model.stream_click_middle content=Settings.stream_click}}
 {{/settings-row}}
 </fieldset>
