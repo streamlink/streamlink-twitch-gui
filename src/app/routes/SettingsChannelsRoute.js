@@ -65,11 +65,9 @@ define([
 			this._super.apply( this, arguments );
 		},
 
-
-		actions: {
-			"deactivate": function() {
-				this.all = null;
-			}
+		deactivate: function() {
+			this._super.apply( this, arguments );
+			this.all = null;
 		}
 	});
 
