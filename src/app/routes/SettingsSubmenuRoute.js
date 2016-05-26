@@ -16,9 +16,13 @@ define([
 			return this.modelFor( "settings" );
 		},
 
+		activate: function() {
+			var settingsController = this.controllerFor( "settings" );
+			set( settingsController, "currentSubmenu", this.routeName );
+		},
+
 		deactivate: function() {
 			var settingsController = this.controllerFor( "settings" );
-			set( settingsController, "lastSubmenu", this.routeName );
 			set( settingsController, "isAnimated", true );
 		}
 	});

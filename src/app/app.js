@@ -218,6 +218,7 @@ define(function( require ) {
 
 		SettingsRowComponent: require( "components/SettingsRowComponent" ),
 		SettingsChannelItemComponent: require( "components/list/SettingsChannelItemComponent" ),
+		SettingsSubmitComponent: require( "components/SettingsSubmitComponent" ),
 
 
 		// Content

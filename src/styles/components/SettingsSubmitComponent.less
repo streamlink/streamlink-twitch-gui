@@ -1,0 +1,17 @@
+
+.settings-submit-component {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 2rem;
+	overflow: hidden;
+
+	> .btn {
+		margin: 0 .5rem;
+		transition: opacity @anim-content-duration ease-out, transform @anim-content-duration ease-out;
+	}
+
+	&.faded > .btn {
+		opacity: 0;
+		transform: translateY( 3rem );
+	}
+}
