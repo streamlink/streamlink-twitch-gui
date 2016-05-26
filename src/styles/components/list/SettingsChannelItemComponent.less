@@ -34,10 +34,22 @@
 	}
 
 	> .text {
+		display: flex;
+		flex-flow: column nowrap;
 		flex-grow: 1;
+		justify-content: space-between;
 
-		> header {
-			margin: 0 0 .5em;
+		p {
+			margin: 0;
+		}
+
+		.erase {
+			font-size: .9em;
+		}
+
+		.btn {
+			font-size: .8rem;
+			min-width: 5em;
 		}
 	}
 }
