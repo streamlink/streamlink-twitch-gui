@@ -96,5 +96,63 @@ module.exports = {
 			"deb-compression": "xz",
 			"deb-no-default-config-files": true
 		}
+	},
+
+	rpm32: {
+		options: {
+			t: "rpm",
+			a: "i386",
+			C: "<%= dir.releases %>/<%= package.name %>/linux32",
+			p: [
+				"<%= dir.dist %>/",
+				"<%= package.name %>",
+				"-<%= package.version %>",
+				"-<%= fpm.options.iteration %>",
+				".<%= fpm.rpm32.options.a %>",
+				".<%= fpm.rpm32.options.t %>"
+			].join( "" ),
+
+			depends: [
+				"xdg-utils"
+			],
+
+			"template-value": {
+				"prefix": "<%= fpm.options.prefix %>",
+				"exec": "<%= package.name %>"
+			},
+			"after-install": "<%= dir.resources %>/package/rpm/postinst",
+			"before-remove": "<%= dir.resources %>/package/rpm/prerm",
+
+			"rpm-compression": "xz"
+		}
+	},
+
+	rpm64: {
+		options: {
+			t: "rpm",
+			a: "x86_64",
+			C: "<%= dir.releases %>/<%= package.name %>/linux64",
+			p: [
+				"<%= dir.dist %>/",
+				"<%= package.name %>",
+				"-<%= package.version %>",
+				"-<%= fpm.options.iteration %>",
+				".<%= fpm.rpm64.options.a %>",
+				".<%= fpm.rpm64.options.t %>"
+			].join( "" ),
+
+			depends: [
+				"xdg-utils"
+			],
+
+			"template-value": {
+				"prefix": "<%= fpm.options.prefix %>",
+				"exec": "<%= package.name %>"
+			},
+			"after-install": "<%= dir.resources %>/package/rpm/postinst",
+			"before-remove": "<%= dir.resources %>/package/rpm/prerm",
+
+			"rpm-compression": "xz"
+		}
 	}
 };

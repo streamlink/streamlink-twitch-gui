@@ -16,6 +16,7 @@ addons:
       - nsis
       - ruby-dev
       - devscripts
+      - rpm
 
 cache:
   apt: true

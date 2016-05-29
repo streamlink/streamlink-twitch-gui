@@ -55,5 +55,15 @@ module.exports = {
 	linux64deb: {
 		platform: "linux64",
 		tasks: [ "fpm:deb64" ]
+	},
+
+	linux32rpm: {
+		platform: "linux32",
+		tasks: [ "fpm:rpm32" ]
+	},
+
+	linux64rpm: {
+		platform: "linux64",
+		tasks: [ "fpm:rpm64" ]
 	}
 };
