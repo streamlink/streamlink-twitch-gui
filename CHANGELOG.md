@@ -1,6 +1,26 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Reworked the settings menu.
+- Added "custom channel settings" submenu to settings.
+- Added "live" and "all" switch to followed games. #243, #148, #109
+- Added inline stream control buttons to the "Watching now" menu. #251
+- Added invalid input detection for the `--player-args` parameter.
+- Added setting to disable auto-chat when launching streams via the context menu. #240
+- Added more fallback paths for Livestreamer (on Windows) and also for Java (used by Chatty).
+- Reimplemented OSX menubar and added preferences hotkey (`CMD+,`). #245
+- Renewed the language filter list and disabled languages with localization codes (not supported by Twitch anymore, use the main one instead).
+- Fixed player parameter characters being escaped unnecessarily.
+- Fixed broken initial start menu shortcut creation on Windows. #224
+- Fixed current working directory being in the temp folder on Windows. #237
+- Fixed old Livestreamer parameter documentation URL. #244
+
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.13.0...master)
+
+
 ## [v0.13.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.13.0) (2016-03-30)
 
 - Implemented hosted streams. #220
