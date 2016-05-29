@@ -14,6 +14,7 @@ addons:
   apt:
     packages:
       - nsis
+      - ruby-dev
 
 cache:
   apt: true
@@ -35,7 +36,7 @@ script:
   # test and build
   - grunt build:prod
   # compile and package
-  - if [ -n "${TRAVIS_TAG}" ]; then build/travis/package.sh; fi
+  - if [ -n "${TRAVIS_TAG}" ]; then rvm use --default 1.9.3; build/travis/package.sh; fi
 
 deploy:
   - provider: releases
