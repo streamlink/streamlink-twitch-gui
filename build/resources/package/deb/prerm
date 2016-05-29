@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+rm /usr/bin/<%= exec %>
+
+<%= prefix %>/remove-menuitem.sh

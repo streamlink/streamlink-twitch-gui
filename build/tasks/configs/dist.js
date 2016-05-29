@@ -45,5 +45,15 @@ module.exports = {
 			"shell:win64installer"
 		],
 		checksum: "<%= dir.dist %>/<%= template.win64installer.options.data.filename %>"
+	},
+
+	linux32deb: {
+		platform: "linux32",
+		tasks: [ "fpm:deb32" ]
+	},
+
+	linux64deb: {
+		platform: "linux64",
+		tasks: [ "fpm:deb64" ]
 	}
 };

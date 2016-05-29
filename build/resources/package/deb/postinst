@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+ln -sf <%= prefix %>/<%= exec %> /usr/bin/<%= exec %>
+
+<%= prefix %>/add-menuitem.sh

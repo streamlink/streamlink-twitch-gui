@@ -15,6 +15,7 @@ addons:
     packages:
       - nsis
       - ruby-dev
+      - devscripts
 
 cache:
   apt: true
