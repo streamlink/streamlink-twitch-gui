@@ -52,7 +52,11 @@
 			{{/modal-footer}}
 		{{/unless}}
 	{{else}}
-		{{#if (is-equal error.name "NotFoundError")}}
+		{{#if (is-equal error.name "ErrorLog")}}
+			{{#modal-header}}Error: Couldn't launch the stream{{/modal-header}}
+			{{#modal-body class="error"}}{{error.message}}{{/modal-body}}
+			{{modal-log class="error" log=error.log}}
+		{{else if (is-equal error.name "NotFoundError")}}
 			{{#modal-header}}Error: Livestreamer could not be found{{/modal-header}}
 			{{#modal-body class="error"}}Please check your settings and/or (re)install Livestreamer.{{/modal-body}}
 		{{else if (is-equal error.name "VersionError")}}
@@ -79,7 +83,9 @@
 				{{/if}}
 			{{/modal-body}}
 		{{/if}}
-		{{modal-log class="error" log=active.log}}
+		{{#if active}}
+			{{modal-log class="error" log=active.log}}
+		{{/if}}
 		{{#modal-footer}}
 			{{#form-button action="close" class="btn-danger" icon="fa-times"}}Close{{/form-button}}
 			{{#if (bool-or (is-equal error.name "NotFoundError") (is-equal error.name "VersionError"))}}

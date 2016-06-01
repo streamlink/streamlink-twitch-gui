@@ -26,6 +26,7 @@ define([
 	var set = Ember.set;
 	var run = Ember.run;
 	var merge = Ember.merge;
+	var makeArray = Ember.makeArray;
 
 	var livestreamerExec = config.livestreamer[ "exec" ];
 	var livestreamerFallback = config.livestreamer[ "fallback" ];
@@ -43,6 +44,17 @@ define([
 	var reWarnInsec = /InsecurePlatformWarning: A true SSLContext object is not available\./;
 	var rePlayer    = /^Starting player: \S+/;
 
+
+	function ErrorLog( message, log ) {
+		this.message = message;
+		this.log = makeArray( log ).map(function( line ) {
+			return {
+				type: "stdErr",
+				line: line
+			};
+		});
+	}
+	ErrorLog.prototype = merge( new Error(), { name: "ErrorLog" });
 
 	function VersionError( version ) { this.version = version; }
 	VersionError.prototype = merge( new Error(), { name: "VersionError" });
@@ -271,7 +283,8 @@ define([
 				function onLine( line, idx, lines ) {
 					// be strict: livestreamer's output is just one single line
 					if ( idx !== 0 || lines.length !== 1 ) {
-						reject( new Error( "Unexpected version check output" ) );
+						reject( new ErrorLog( "Unexpected version check output", lines ) );
+						return;
 					}
 
 					// match the version string
