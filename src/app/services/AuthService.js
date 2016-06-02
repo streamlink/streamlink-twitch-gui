@@ -18,7 +18,6 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
-	var getOwner = Ember.getOwner;
 
 	var oauth = config.twitch[ "oauth" ];
 
@@ -287,7 +286,7 @@ define([
 
 
 		updateAdapter: function( token ) {
-			var adapter = getOwner( this ).lookup( "adapter:application" );
+			var adapter = get( this, "store" ).adapterFor( "twitch" );
 			if ( !adapter ) {
 				throw new Error( "Adapter not found" );
 			}
