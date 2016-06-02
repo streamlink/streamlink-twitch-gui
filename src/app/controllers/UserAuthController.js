@@ -1,15 +1,19 @@
 define([
 	"Ember",
+	"config",
 	"mixins/RetryTransitionMixin",
 	"utils/wait"
 ], function(
 	Ember,
+	config,
 	RetryTransitionMixin,
 	wait
 ) {
 
 	var get = Ember.get;
 	var set = Ember.set;
+
+	var oauth = config.twitch[ "oauth" ];
 
 
 	return Ember.Controller.extend( RetryTransitionMixin, {
@@ -24,8 +28,8 @@ define([
 		token: "",
 
 		scope: function() {
-			return get( this, "auth.oauth.scope" ).join( ", " );
-		}.property( "auth.oauth.scope" ),
+			return oauth[ "scope" ].join( ", " );
+		}.property(),
 
 		/**
 		 * 0 000: start
