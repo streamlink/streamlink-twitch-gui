@@ -1,5 +1,6 @@
 {
 	"vlc": {
+		"name": "VLC media player",
 		"exec": {
 			"win32": "vlc.exe",
 			"darwin": "VLC",
@@ -20,38 +21,41 @@
 		},
 		"params": [
 			{
-				"name": "Prevent single instance mode",
-				"descr": "View multiple streams in different player windows.",
+				"title": "Single instance mode",
+				"description": "View multiple streams in different player windows.",
+				"type": "boolean",
 				"default": true,
+				"text": "Prevent single instance mode",
 				"args": "--no-one-instance"
 			},
 			{
-				"name": "Allow Livestreamer to close the player",
-				"descr": "Prevents stacking up empty player windows.",
+				"title": "Close player",
+				"description": "Prevents stacking up empty player windows.",
+				"type": "boolean",
 				"default": true,
+				"text": "Allow Livestreamer to close the player",
 				"args": "--play-and-exit"
 			},
 			{
-				"name": "Customize player window title",
-				"descr": "Show the channel name, game being played and stream title.",
+				"title": "Player window title",
+				"description": "Show the channel name, game being played and stream title.",
+				"type": "boolean",
 				"default": true,
+				"text": "Set custom title",
 				"args": "--meta-title \"{name} - {game} - {status}\""
 			},
 			{
-				"name": "Disable player video cache",
-				"descr": "Reduces stream delay. Livestreamer already buffers the stream.",
+				"title": "Layout",
+				"description": "Hide player controls. Can also be toggled by pressing CTRL+H.",
+				"type": "boolean",
 				"default": false,
-				"args": "--file-caching=0"
-			},
-			{
-				"name": "Minimal player layout",
-				"descr": "Hide player controls. Can also be toggled by pressing CTRL+H.",
-				"default": false,
+				"text": "Minimal player layout",
 				"args": "--qt-minimal-view"
 			}
 		]
 	},
 	"mpv": {
+		"name": "MPV",
 		"exec": {
 			"win32": "mpv.exe",
 			"darwin": "mpv",
@@ -74,38 +78,41 @@
 		},
 		"params": [
 			{
-				"name": "Allow Livestreamer to close the player",
-				"descr": "Prevents stacking up empty player windows.",
+				"title": "Close player",
+				"description": "Prevents stacking up empty player windows.",
+				"type": "boolean",
 				"default": true,
+				"text": "Allow Livestreamer to close the player",
 				"args": "--keep-open=no"
 			},
 			{
-				"name": "Customize player window title",
-				"descr": "Show the channel name, game being played and stream title.",
+				"title": "Player window title",
+				"description": "Show the channel name, game being played and stream title.",
+				"type": "boolean",
 				"default": true,
+				"text": "Set custom title",
 				"args": "--title \"{name} - {game} - {status}\""
 			},
 			{
-				"name": "Disable player video cache",
-				"descr": "Reduces stream delay. Livestreamer already buffers the stream.",
+				"title": "Layout",
+				"description": "Don't show player window decorations.",
+				"type": "boolean",
 				"default": false,
-				"args": "--no-cache"
-			},
-			{
-				"name": "Minimal player layout",
-				"descr": "Don't show player window decorations.",
-				"default": false,
+				"text": "Minimal player layout",
 				"args": "--no-border"
 			},
 			{
-				"name": "Always show player window",
-				"descr": "Fixes potential issues with audio-only streams.",
+				"title": "Force window",
+				"description": "Fixes potential issues with audio-only streams.",
+				"type": "boolean",
 				"default": true,
+				"text": "Always show player window",
 				"args": "--force-window"
 			}
 		]
 	},
 	"mpc": {
+		"name": "Media Player Classic - Home Cinema",
 		"exec": {
 			"win32": [
 				"mpc-hc64.exe",
@@ -128,15 +135,19 @@
 		},
 		"params": [
 			{
-				"name": "Prevent single instance mode",
-				"descr": "View multiple streams in different player windows.",
+				"title": "Single instance mode",
+				"description": "View multiple streams in different player windows.",
+				"type": "boolean",
 				"default": true,
+				"text": "Prevent single instance mode",
 				"args": "/new"
 			},
 			{
-				"name": "Allow Livestreamer to close the player",
-				"descr": "Prevents stacking up empty player windows.",
+				"title": "Close player",
+				"description": "Prevents stacking up empty player windows.",
+				"type": "boolean",
 				"default": true,
+				"text": "Allow Livestreamer to close the player",
 				"args": "/play /close"
 			}
 		]
