@@ -11,6 +11,7 @@ define([
 ) {
 
 	var get = Ember.get;
+	var set = Ember.set;
 	var getOwner = Ember.getOwner;
 	var debounce = Ember.run.debounce;
 
@@ -82,6 +83,12 @@ define([
 
 
 		actions: {
+			"error": function( error, transition ) {
+				transition.abort();
+				set( this, "router.errorTransition", transition );
+				return true;
+			},
+
 			"history": function( action ) {
 				window.history.go( +action );
 			},
@@ -90,9 +97,16 @@ define([
 				var routeName = get( this, "router.currentRouteName" );
 
 				if ( routeName === "error" ) {
-					routeName = get( this, "router.lastRouteName" );
-					if ( routeName ) {
-						this.transitionTo( routeName );
+					var errorTransition = get( this, "router.errorTransition" );
+					if ( errorTransition ) {
+						set( this, "router.errorTransition", null );
+						errorTransition.retry();
+
+					} else {
+						routeName = get( this, "router.lastRouteName" );
+						if ( routeName ) {
+							this.transitionTo( routeName );
+						}
 					}
 
 				} else {
