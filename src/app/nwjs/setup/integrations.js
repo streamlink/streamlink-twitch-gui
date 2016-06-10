@@ -1,22 +1,17 @@
 define([
 	"Ember",
 	"nwjs/nwWindow",
-	"nwjs/argv",
-	"nwjs/setup/platformfixes"
+	"nwjs/argv"
 ], function(
 	Ember,
 	nwWindow,
-	argv,
-	platformfixes
+	argv
 ) {
 
 	var get = Ember.get;
 
 
 	function setupIntegrations( settings ) {
-		// try to fix issues on certain platforms first
-		platformfixes();
-
 		// read from settings first
 		onChangeIntegrations( settings );
 

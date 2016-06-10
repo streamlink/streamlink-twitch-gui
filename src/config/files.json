@@ -2,7 +2,7 @@
 	"icons": {
 		"big": "img/icon-256.png",
 		"tray": {
-			"win32": "img/icon-16{hidpi}.png",
+			"win32": "%NWJSAPPPATH%\\img\\icon-16{hidpi}.png",
 			"darwin": "img/icon-osx-18{hidpi}.png",
 			"linux": "img/icon-16{hidpi}.png"
 		}

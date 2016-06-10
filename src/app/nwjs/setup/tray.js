@@ -2,12 +2,14 @@ define([
 	"config",
 	"nwjs/nwWindow",
 	"nwjs/tray",
-	"utils/node/platform"
+	"utils/node/platform",
+	"utils/node/resolvePath"
 ], function(
 	config,
 	nwWindow,
 	tray,
-	platform
+	platform,
+	resolvePath
 ) {
 
 	var displayName = config.main[ "display-name" ];
@@ -15,10 +17,12 @@ define([
 
 
 	function createTrayIcon() {
+		var icon = resolvePath( trayIcon );
+
 		// apply a tray icon+menu to the main application window
 		nwWindow.tray = tray.create({
 			tooltip: displayName,
-			icon   : trayIcon,
+			icon   : icon,
 			items  : [
 				{
 					label: "Toggle window",
