@@ -96,6 +96,7 @@ define(function( require ) {
 		TwitchUserFollowsChannel: require( "models/twitch/UserFollowsChannel" ),
 		TwitchUserFollowsChannelSerializer: require( "models/twitch/UserFollowsChannelSerializer" ),
 		TwitchUserFollowsGame: require( "models/twitch/UserFollowsGame" ),
+		TwitchUserFollowsGameAdapter: require( "models/twitch/UserFollowsGameAdapter" ),
 		TwitchUserFollowsGameSerializer: require( "models/twitch/UserFollowsGameSerializer" ),
 		TwitchUserSubscription: require( "models/twitch/UserSubscription" ),
 		TwitchUserSubscriptionSerializer: require( "models/twitch/UserSubscriptionSerializer" ),
