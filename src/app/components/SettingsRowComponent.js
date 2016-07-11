@@ -38,6 +38,8 @@ define([
 		strNewLine: "\n",
 		substitutionsExpanded: false,
 
+		documentationUrl: null,
+
 		_substitutions: function() {
 			var substitutions = get( this, "substitutions" );
 			return getSubstitutionsList( substitutions );

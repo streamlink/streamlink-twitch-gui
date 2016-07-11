@@ -163,7 +163,7 @@ define(function( require ) {
 		EmbeddedLinksComponent: require( "components/link/EmbeddedLinksComponent" ),
 		ExternalLinkComponent: require( "components/link/ExternalLinkComponent" ),
 		LinkComponent: require( "components/link/LinkComponent" ),
-		LivestreamerDocsComponent: require( "components/link/LivestreamerDocsComponent" ),
+		DocumentationLinkComponent: require( "components/link/DocumentationLinkComponent" ),
 
 		CheckBoxComponent: require( "components/form/CheckBoxComponent" ),
 		RadioBtnComponent: require( "components/form/RadioBtnComponent" ),

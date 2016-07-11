@@ -3,7 +3,7 @@
 	"Videoplayer"
 	"Path to the player executable."
 	icon="fa-tv"
-	livestreamerCmd="--player"
+	documentation="--player"
 	substitutions=(if model.advanced substitutionsPlayer)
 	notes=(if model.advanced "Parameters can be added here, but should be set in the parameters field instead.")
 }}
@@ -15,7 +15,7 @@
 		"Parameters"
 		"Add player specific parameters."
 		icon="fa-terminal"
-		livestreamerCmd="--player-args"
+		documentation="--player-args"
 		substitutions=substitutionsPlayer
 	}}
 		{{input type="text" value=model.player_params classNames="col-xs-12" placeholder="Add custom player parameters"}}
@@ -26,7 +26,7 @@
 	"Close player"
 	"After the stream has ended."
 	icon="fa-times"
-	livestreamerCmd="--player-no-close"
+	documentation="--player-no-close"
 	notes="The player itself may prevent this."
 }}
 	{{check-box "Do not close the player" checked=model.player_no_close}}
