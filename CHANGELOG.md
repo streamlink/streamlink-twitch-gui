@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.14.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.0) (2016-07-11)
 
 - Include ClientID in all API requests.  
   See https://blog.twitch.tv/-afbb8e95f843
@@ -22,7 +22,7 @@ Changelog - Livestreamer Twitch GUI
 - Fixed reloading initial error routes.
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.13.0...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.13.0...v0.14.0)
 
 
 ## [v0.13.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.13.0) (2016-03-30)
