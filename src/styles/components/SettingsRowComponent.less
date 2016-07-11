@@ -22,14 +22,6 @@
 					margin-top: .15rem;
 					margin-bottom: .10rem;
 				}
-
-				.themed({
-					color: @themed-settings-descr-color;
-
-					i.fa {
-						color: @themed-settings-descr-docs-icon-color;
-					}
-				});
 			}
 
 			&.text-overflow {
@@ -90,6 +82,27 @@
 			&:not(:first-child) {
 				margin-top: 1em;
 			}
+		}
+	}
+
+	// fade out default text color a bit while not hovering
+	& {
+		> :first-child > :not(:first-child) {
+			&,
+			& i.fa {
+				transition: color .333s ease-out;
+			}
+		}
+	}
+	&:not(:hover) {
+		> :first-child > :not(:first-child) {
+			.themed({
+				color: @themed-settings-descr-color;
+
+				i.fa {
+					color: @themed-settings-descr-docs-icon-color;
+				}
+			});
 		}
 	}
 }
