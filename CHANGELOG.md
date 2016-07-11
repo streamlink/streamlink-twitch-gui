@@ -3,6 +3,8 @@ Changelog - Livestreamer Twitch GUI
 
 ## Master
 
+- Include ClientID in all API requests.  
+  See https://blog.twitch.tv/-afbb8e95f843
 - Reworked the settings menu.
 - Added "custom channel settings" submenu to settings.
 - Added "live" and "all" switch to followed games. #243, #148, #109
@@ -12,10 +14,12 @@ Changelog - Livestreamer Twitch GUI
 - Added more fallback paths for Livestreamer (on Windows) and also for Java (used by Chatty).
 - Reimplemented OSX menubar and added preferences hotkey (`CMD+,`). #245
 - Renewed the language filter list and disabled languages with localization codes (not supported by Twitch anymore, use the main one instead).
+- Fixed broken follow game button and use new Twitch API endpoint.
 - Fixed player parameter characters being escaped unnecessarily.
 - Fixed broken initial start menu shortcut creation on Windows. #224
 - Fixed current working directory being in the temp folder on Windows. #237
 - Fixed old Livestreamer parameter documentation URL. #244
+- Fixed reloading initial error routes.
 
 
 [Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.13.0...master)
