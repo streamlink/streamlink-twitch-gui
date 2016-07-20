@@ -70,8 +70,16 @@ Building the application on your own is simple. Just make sure that the latest s
 Then run the following lines from the path of your cloned repository to install all dependencies and to start the build process. You will then find the built executable inside the `build/releases` folder.
 
 ```bash
-npm install -g grunt-cli bower # may require administrator privileges
-npm install
+sudo apt-get update
+sudo apt-get install livestreamer x11-utils and xdg-utils
+cd
+sudo rm -rf livestreamer-twitch-gui
+git clone https://github.com/bastimeyer/livestreamer-twitch-gui.git
+cd livestreamer-twitch-gui/
+sudo npm install -g grunt-cli grunt grunt-mocha bower minimatch qunit phantomjs
+sudo npm update
+bower install mocha grunt
+bower install
 grunt release
 ```
 
