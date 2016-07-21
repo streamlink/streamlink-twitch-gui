@@ -1,14 +1,19 @@
 define([
 	"Ember",
 	"EmberData",
+	"config",
 	"store/AdapterMixin"
 ], function(
 	Ember,
 	DS,
+	config,
 	AdapterMixin
 ) {
 
 	var get = Ember.get;
+
+	var oauth = config.twitch[ "oauth" ];
+
 	var reURLFragment = /^:(.+)$/;
 
 
@@ -18,7 +23,8 @@ define([
 		host: "https://api.twitch.tv",
 		namespace: "",
 		headers: {
-			Accept: "application/vnd.twitchtv.v3+json"
+			"Accept": "application/vnd.twitchtv.v3+json",
+			"Client-ID": oauth[ "client-id" ]
 		},
 
 		defaultSerializer: "twitch",
@@ -27,7 +33,7 @@ define([
 		tokenObserver: function() {
 			var token = get( this, "access_token" );
 			if ( token === null ) {
-				delete this.headers[ token ];
+				delete this.headers[ "Authorization" ];
 			} else {
 				this.headers[ "Authorization" ] = "OAuth " + token;
 			}

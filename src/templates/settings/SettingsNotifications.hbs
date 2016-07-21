@@ -26,7 +26,7 @@
 		{{#radio-btns
 			name="notify_all"
 			value=model.notify_all
-			content=settings.content.constructor.notify_all
+			content=Settings.notify_all
 			as |radiobtn label|
 		}}
 			<div>{{component radiobtn label}}</div>
@@ -46,7 +46,7 @@
 		"Preferred click action."
 		icon="fa-hand-pointer-o"
 	}}
-		{{drop-down value=model.notify_click content=settings.content.constructor.notify_click class="notifications"}}
+		{{drop-down value=model.notify_click content=Settings.notify_click class="notifications"}}
 	{{/settings-row}}
 
 	{{#if (bool-and model.notify_grouping model.notify_click)}}
@@ -55,7 +55,7 @@
 			"Preferred group click action."
 			icon="fa-hand-pointer-o"
 		}}
-			{{drop-down value=model.notify_click_group content=settings.content.constructor.notify_click_group class="notifications"}}
+			{{drop-down value=model.notify_click_group content=Settings.notify_click_group class="notifications"}}
 		{{/settings-row}}
 	{{/if}}
 {{/if}}

@@ -1,6 +1,6 @@
 {
 	"name": "livestreamer-twitch-gui",
-	"version": "0.13.0",
+	"version": "0.14.0",
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
@@ -35,7 +35,7 @@
 	},
 
 	"scripts": {
-		"postinstall": "bower --config.interactive=false install",
+		"postinstall": "bower install",
 		"build": "grunt release",
 		"test": "grunt test"
 	}

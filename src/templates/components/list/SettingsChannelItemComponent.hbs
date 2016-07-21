@@ -9,7 +9,19 @@
 {{#if content.has_language}}{{flag-icon type="channel" lang=content.language}}{{/if}}
 <span>{{#link-to "channel" content.id}}{{content.display_name}}{{/link-to}}</span>
 </header>
-<div><i class="fa fa-fw fa-cog"></i> {{#link-to "channel.settings" content.id}}Settings{{/link-to}}</div>
-<div><i class="fa fa-fw fa-eraser"></i> <a href="#" {{action erase}}>Unset</a></div>
+{{#unless dialog}}
+<div>
+<p><i class="fa fa-fw fa-cog"></i> {{#link-to "channel.settings" content.id}}Settings{{/link-to}}</p>
+<p><i class="fa fa-fw fa-eraser"></i> <a href="#" {{action "eraseDialog"}}>Unset</a></p>
+</div>
+{{else}}
+<div class="erase">
+<p>Unset custom settings?</p>
+<div class="btns">
+{{#form-button action="confirm" class="btn-success"}}Yes{{/form-button}}
+{{#form-button action="decline" class="btn-danger"}}No{{/form-button}}
+</div>
+</div>
+{{/unless}}
 </div>
 {{/unless}}

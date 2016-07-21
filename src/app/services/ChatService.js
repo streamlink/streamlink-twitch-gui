@@ -118,10 +118,7 @@ define([
 
 			var promise = command.length
 				// user has set a custom executable path
-				// check if the command's executable name is equal to one of the given ones
-				? exec.indexOf( PATH.basename( command ) ) === -1
-					? Promise.reject( new Error( "Invalid command" ) )
-					: whichFallback( command )
+				? whichFallback( command )
 				// no custom command
 				: whichFallback( exec, fallback );
 

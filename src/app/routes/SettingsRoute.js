@@ -35,8 +35,7 @@ define([
 			willTransition: function( transition ) {
 				// don't show modal when transitioning between settings subroutes
 				if ( transition && settingsRouteNames.test( transition.targetName ) ) {
-					set( this, "controller.isAnimated", true );
-					return;
+					return true;
 				}
 
 				// check whether the user has changed any values

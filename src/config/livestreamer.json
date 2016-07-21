@@ -18,5 +18,5 @@
 	"version-min": "1.11.1",
 	"validation-timeout": 10000,
 	"download-url": "https://github.com/chrippa/livestreamer/releases",
-	"docs-url": "http://docs.livestreamer.io/cli.html#cmdoption{cmd}"
+	"docs-url": "http://docs.livestreamer.io/cli.html#cmdoption{item}"
 }

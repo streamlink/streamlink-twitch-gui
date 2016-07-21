@@ -53,6 +53,7 @@ define([
 
 		openUrl: function() {
 			var url = get( this, "url" );
+			if ( !url ) { return; }
 			var applicationRoute = getOwner( this ).lookup( "route:application" );
 			applicationRoute.send( "openBrowser", url );
 		},

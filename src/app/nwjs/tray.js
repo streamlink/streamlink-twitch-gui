@@ -60,9 +60,12 @@ define([
 		add: function( click ) {
 			this.remove();
 
+			var icon    = get( this, "icon" ).replace( "{hidpi}", getScale() );
+			var tooltip = get( this, "tooltip" );
+
 			var tray = new Tray({
-				icon   : get( this, "icon" ).replace( "{hidpi}", getScale() ),
-				tooltip: get( this, "tooltip" )
+				icon   : icon,
+				tooltip: tooltip
 			});
 			tray.menu = this.menu.menu;
 			tray.on( "click", click );

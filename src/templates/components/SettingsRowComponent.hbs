@@ -25,8 +25,14 @@
 		<p class="section"><i class="fa fa-question-circle"></i>Example</p>
 		<p class="text-overflow"><span class="hoverable">{{example}}</span></p>
 	{{/if}}
-	{{#if livestreamerCmd}}
-		<p class="section">{{livestreamer-docs cmd=livestreamerCmd classNames="hoverable"}}</p>
+	{{#if documentation}}
+		<p class="section">
+			{{#unless (is-null documentationUrl)}}
+				{{documentation-link item=documentation baseUrl=documentationUrl classNames=(if documentationUrl "hoverable" "")}}
+			{{else}}
+				{{documentation-link item=documentation classNames="hoverable"}}
+			{{/unless}}
+		</p>
 	{{/if}}
 </div>
 <div>{{yield}}</div>

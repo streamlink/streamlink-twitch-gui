@@ -3,12 +3,14 @@ define([
 	"config",
 	"mixins/RetryTransitionMixin",
 	"models/LivestreamerParameters",
+	"models/localstorage/Settings",
 	"utils/node/platform"
 ], function(
 	Ember,
 	config,
 	RetryTransitionMixin,
 	LivestreamerParameters,
+	Settings,
 	platform
 ) {
 
@@ -23,9 +25,8 @@ define([
 
 	function settingsAttrMeta( attr, prop ) {
 		return function() {
-			var settings = get( this, "settings.content" );
-			return settings.constructor.metaForProperty( attr ).options[ prop ];
-		}.property( "settings.content" );
+			return Settings.metaForProperty( attr ).options[ prop ];
+		}.property();
 	}
 
 
@@ -36,35 +37,42 @@ define([
 
 		isAnimated: false,
 
-		platform : platform,
+		Settings: Settings,
+		platform: platform,
+
 
 		hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
-		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "minValue" ),
-		hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "maxValue" ),
+		hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "min" ),
+		hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "max" ),
 
 		hlsSegmentThreadsDefault: settingsAttrMeta( "hls_segment_threads", "defaultValue" ),
-		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "minValue" ),
-		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "maxValue" ),
+		hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "min" ),
+		hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "max" ),
 
 		retryStreamsDefault: settingsAttrMeta( "retry_streams", "defaultValue" ),
-		retryStreamsMin    : settingsAttrMeta( "retry_streams", "minValue" ),
-		retryStreamsMax    : settingsAttrMeta( "retry_streams", "maxValue" ),
+		retryStreamsMin    : settingsAttrMeta( "retry_streams", "min" ),
+		retryStreamsMax    : settingsAttrMeta( "retry_streams", "max" ),
 
 		retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
-		retryOpenMin    : settingsAttrMeta( "retry_open", "minValue" ),
-		retryOpenMax    : settingsAttrMeta( "retry_open", "maxValue" ),
+		retryOpenMin    : settingsAttrMeta( "retry_open", "min" ),
+		retryOpenMax    : settingsAttrMeta( "retry_open", "max" ),
+
+
+		substitutionsPlayer: LivestreamerParameters.playerSubstitutions,
+		substitutionsChatCustom: alias( "chat.substitutionsCustom" ),
+
 
 		chatMethods: function() {
-			var methods = get( this, "settings.content.constructor.chat_methods" );
-			return methods.filter(function( method ) {
+			return Settings.chat_methods.filter(function( method ) {
 				return !method.disabled;
 			});
-		}.property( "settings.content" ),
+		}.property(),
 
 		isChatMethodDefault: equal( "model.chat_method", "default" ),
 		isChatMethodMSIE   : equal( "model.chat_method", "msie" ),
 		isChatMethodCustom : equal( "model.chat_method", "custom" ),
 		isChatMethodChatty : equal( "model.chat_method", "chatty" ),
+
 
 		themes: function() {
 			return themes.map(function( theme ) {
@@ -75,13 +83,11 @@ define([
 			});
 		}.property(),
 
+
 		hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 		hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
-		substitutionsPlayer: LivestreamerParameters.playerSubstitutions,
-		substitutionsChatCustom: alias( "chat.substitutionsCustom" ),
-
-		minimize_observer: function() {
+		_minimizeObserver: function() {
 			var int    = get( this, "model.gui_integration" );
 			var min    = get( this, "model.gui_minimize" );
 			var noTask = ( int & 1 ) === 0;
@@ -96,7 +102,6 @@ define([
 			}
 
 			// enable/disable buttons
-			var Settings = get( this, "settings.content.constructor" );
 			set( Settings, "minimize.1.disabled", noTask );
 			set( Settings, "minimize.2.disabled", noTray );
 
@@ -142,10 +147,6 @@ define([
 			"cancel": function() {
 				set( this, "previousTransition", null );
 				get( this, "modal" ).closeModal( this );
-			},
-
-			"togglePlayerCmdSubstitutions": function() {
-				this.toggleProperty( "playerCmdSubstitutionsVisible" );
 			},
 
 			"checkLanguages": function( all ) {

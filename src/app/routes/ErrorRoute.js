@@ -93,6 +93,10 @@ define([
 					};
 				});
 			set( controller, "model", model );
+		},
+
+		deactivate: function() {
+			set( this, "router.errorTransition", null );
 		}
 	});
 

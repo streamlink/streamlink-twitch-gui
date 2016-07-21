@@ -1,6 +1,7 @@
 define([
 	"Ember",
 	"nwjs/nwWindow",
+	"nwjs/setup/platformfixes",
 	"nwjs/setup/menubar",
 	"nwjs/setup/shortcut",
 	"nwjs/setup/tray",
@@ -8,6 +9,7 @@ define([
 ], function(
 	Ember,
 	nwWindow,
+	platformfixes,
 	menubar,
 	shortcut,
 	tray,
@@ -29,6 +31,9 @@ define([
 				// wait for the settings to load
 				if ( !get( settings, "content" ) ) { return; }
 				settings.removeObserver( "content", settings, settingsObserver );
+
+				// try to fix issues on certain platforms first
+				platformfixes();
 
 				// do all the NWjs stuff
 				menubar.createNativeMenuBar( controller );

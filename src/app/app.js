@@ -96,6 +96,7 @@ define(function( require ) {
 		TwitchUserFollowsChannel: require( "models/twitch/UserFollowsChannel" ),
 		TwitchUserFollowsChannelSerializer: require( "models/twitch/UserFollowsChannelSerializer" ),
 		TwitchUserFollowsGame: require( "models/twitch/UserFollowsGame" ),
+		TwitchUserFollowsGameAdapter: require( "models/twitch/UserFollowsGameAdapter" ),
 		TwitchUserFollowsGameSerializer: require( "models/twitch/UserFollowsGameSerializer" ),
 		TwitchUserSubscription: require( "models/twitch/UserSubscription" ),
 		TwitchUserSubscriptionSerializer: require( "models/twitch/UserSubscriptionSerializer" ),
@@ -162,7 +163,7 @@ define(function( require ) {
 		EmbeddedLinksComponent: require( "components/link/EmbeddedLinksComponent" ),
 		ExternalLinkComponent: require( "components/link/ExternalLinkComponent" ),
 		LinkComponent: require( "components/link/LinkComponent" ),
-		LivestreamerDocsComponent: require( "components/link/LivestreamerDocsComponent" ),
+		DocumentationLinkComponent: require( "components/link/DocumentationLinkComponent" ),
 
 		CheckBoxComponent: require( "components/form/CheckBoxComponent" ),
 		RadioBtnComponent: require( "components/form/RadioBtnComponent" ),
@@ -218,6 +219,7 @@ define(function( require ) {
 
 		SettingsRowComponent: require( "components/SettingsRowComponent" ),
 		SettingsChannelItemComponent: require( "components/list/SettingsChannelItemComponent" ),
+		SettingsSubmitComponent: require( "components/SettingsSubmitComponent" ),
 
 
 		// Content

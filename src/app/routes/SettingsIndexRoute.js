@@ -12,7 +12,7 @@ define([
 		actions: {
 			"didTransition": function() {
 				var settingsController = this.controllerFor( "settings" );
-				var goto = get( settingsController, "lastSubmenu" );
+				var goto = get( settingsController, "currentSubmenu" );
 				if ( !goto ) {
 					goto = "settings.main";
 				}
