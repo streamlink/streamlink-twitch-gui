@@ -27,6 +27,8 @@
 <ul class="list-unstyled emoticons">
 {{#each emoticons as |emoticon|}}
 <li><img title={{emoticon.id}} src={{emoticon.url}}></li>
+{{else}}
+<li class="no-emoticons">This channel doesn't have any emoticons (yet)</li>
 {{/each}}
 </ul>
 </div>
