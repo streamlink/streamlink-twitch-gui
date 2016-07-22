@@ -59,6 +59,7 @@ define([
 
 		actions: {
 			"openBrowser": function( url ) {
+				if ( !url ) { return; }
 				this.sendAction( "openBrowser", url );
 			}
 		}
