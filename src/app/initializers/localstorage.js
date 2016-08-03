@@ -51,7 +51,7 @@ define([
 		});
 
 		// remove unused or disabled language filters
-		Object.keys( settings.gui_langfilter ).forEach(function( code ) {
+		Object.keys( settings.gui_langfilter || {} ).forEach(function( code ) {
 			var lang = config.langs[ code ];
 			if ( !lang || lang.disabled ) {
 				delete settings.gui_langfilter[ code ];
