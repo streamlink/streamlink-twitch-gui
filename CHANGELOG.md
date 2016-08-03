@@ -1,6 +1,18 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Fixed application launch bug. #278
+- Fixed broken custom Chromium/Chrome executable paths. #270
+- Added new Twitch stream qualities as fallback.  
+  Fixes livestreamer selecting the wrong quality. 322cc8c  
+  https://blog.twitch.tv/-705404e95cc2
+
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.0...master)
+
+
 ## [v0.14.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.0) (2016-07-11)
 
 - Include ClientID in all API requests.  
