@@ -5,6 +5,8 @@ Changelog - Livestreamer Twitch GUI
 
 - Fixed application launch bug. #278
 - Fixed broken custom Chromium/Chrome executable paths. #270
+- Fixed (un)following games not working sometimes. #273
+- Fixed unlinked channel images being clickable. #274
 - Added new Twitch stream qualities as fallback.  
   Fixes livestreamer selecting the wrong quality. 322cc8c  
   https://blog.twitch.tv/-705404e95cc2
