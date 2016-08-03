@@ -50,7 +50,8 @@ Chocolatey (Windows):
 [`livestreamer-twitch-gui`][Package-Chocolatey]
 
 AUR (Arch Linux):  
-[`livestreamer-twitch-gui`][Package-AUR]
+[`livestreamer-twitch-gui`][Package-AUR]  
+[`livestreamer-twitch-gui-git`][Package-AUR-git]
 
 #### Development version
 
@@ -106,4 +107,5 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [badge-issues]: https://img.shields.io/github/issues/bastimeyer/livestreamer-twitch-gui.svg?style=flat-square "Open issues"
   [badge-gitter]: https://img.shields.io/gitter/room/bastimeyer/livestreamer-twitch-gui.svg?style=flat-square "Gitter IRC"
   [Package-Chocolatey]: https://chocolatey.org/packages/livestreamer-twitch-gui "Chocolatey package"
-  [Package-AUR]: https://aur.archlinux.org/packages/livestreamer-twitch-gui "AUR package"
+  [Package-AUR]: https://aur.archlinux.org/packages/livestreamer-twitch-gui "AUR stable package"
+  [Package-AUR-git]: https://aur.archlinux.org/packages/livestreamer-twitch-gui-git "AUR git package"
