@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.14.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.1) (2016-08-03)
 
 - Fixed application launch bug. #278
 - Fixed broken custom Chromium/Chrome executable paths. #270
@@ -10,7 +10,7 @@ Changelog - Livestreamer Twitch GUI
   https://blog.twitch.tv/-705404e95cc2
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.0...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.0...v0.14.1)
 
 
 ## [v0.14.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.0) (2016-07-11)
