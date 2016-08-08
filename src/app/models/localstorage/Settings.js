@@ -114,7 +114,7 @@ define([
 		 */
 		qualities: [
 			// Source - input stream from the broadcaster
-			{ id: 0, label: "Source",     quality: "source,best" },
+			{ id: 0, label: "Source",     quality: "source,1080p60,best" },
 			// High   - 720p30 @ ~1.25 Mbit/s (use the same framerate first)
 			{ id: 1, label: "High",       quality: "high,720p30,720p60,best" },
 			// Medium - 480p30 @ ~0.75 Mbit/s (use the same bitrate first)
