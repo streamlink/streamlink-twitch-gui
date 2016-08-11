@@ -3,7 +3,7 @@ define([
 	"nwjs/menu",
 	"nwjs/clipboard",
 	"models/localstorage/Settings",
-	"hbs!templates/components/stream/StreamPreviewImageComponent"
+	"templates/components/stream/StreamPreviewImageComponent.hbs"
 ], function(
 	Ember,
 	Menu,

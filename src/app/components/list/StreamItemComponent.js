@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"components/list/ListItemComponent",
-	"hbs!templates/components/list/StreamItemComponent"
+	"templates/components/list/StreamItemComponent.hbs"
 ], function(
 	Ember,
 	ListItemComponent,

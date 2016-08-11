@@ -1,12 +1,18 @@
-define(function( require ) {
-
-	var Ember = require( "Ember" );
-	var DS    = require( "EmberData" );
-
-	var nwWindow = require( "nwjs/nwWindow" );
-
-	require( "initializers/initializers" );
-
+define([
+	"Ember",
+	"EmberData",
+	"EmberDataLS",
+	"nwjs/nwWindow",
+	"initializers/initializers",
+	"require"
+],function(
+	Ember,
+	DS,
+	LS,
+	nwWindow,
+	initializers,
+	require
+) {
 
 	return Ember.Application.create({
 
@@ -148,13 +154,13 @@ define(function( require ) {
 		ApplicationRoute: require( "routes/ApplicationRoute" ),
 		ApplicationController: require( "controllers/ApplicationController" ),
 		ApplicationView: require( "components/ApplicationComponent" ),
-		ApplicationTemplate: require( "hbs!templates/Application" ),
+		ApplicationTemplate: require( "templates/Application.hbs" ),
 
 		LoadingRoute: require( "routes/LoadingRoute" ),
-		LoadingTemplate: require( "hbs!templates/Loading" ),
+		LoadingTemplate: require( "templates/Loading.hbs" ),
 
 		ErrorRoute: require( "routes/ErrorRoute" ),
-		ErrorTemplate: require( "hbs!templates/Error" ),
+		ErrorTemplate: require( "templates/Error.hbs" ),
 
 		IndexRoute: require( "routes/IndexRoute" ),
 
@@ -225,90 +231,90 @@ define(function( require ) {
 		// Content
 		FeaturedRoute: require( "routes/FeaturedRoute" ),
 		FeaturedController: require( "controllers/FeaturedController" ),
-		FeaturedTemplate: require( "hbs!templates/Featured" ),
+		FeaturedTemplate: require( "templates/Featured.hbs" ),
 
 		WatchingRoute: require( "routes/WatchingRoute" ),
 		WatchingController: require( "controllers/WatchingController" ),
-		WatchingTemplate: require( "hbs!templates/Watching" ),
+		WatchingTemplate: require( "templates/Watching.hbs" ),
 
 		SearchRoute: require( "routes/SearchRoute" ),
 		SearchController: require( "controllers/SearchController" ),
-		SearchTemplate: require( "hbs!templates/Search" ),
+		SearchTemplate: require( "templates/Search.hbs" ),
 
 		GamesLoadingRoute: require( "routes/LoadingRoute" ),
-		GamesLoadingTemplate: require( "hbs!templates/Loading" ),
+		GamesLoadingTemplate: require( "templates/Loading.hbs" ),
 		GamesIndexRoute: require( "routes/GamesIndexRoute" ),
 		GamesIndexController: require( "controllers/GamesIndexController" ),
-		GamesIndexTemplate: require( "hbs!templates/games/GamesIndex" ),
+		GamesIndexTemplate: require( "templates/games/GamesIndex.hbs" ),
 		GamesGameRoute: require( "routes/GamesGameRoute" ),
 		GamesGameController: require( "controllers/GamesGameController" ),
-		GamesGameTemplate: require( "hbs!templates/games/GamesGame" ),
+		GamesGameTemplate: require( "templates/games/GamesGame.hbs" ),
 
 		ChannelsRoute: require( "routes/ChannelsRoute" ),
 		ChannelsController: require( "controllers/ChannelsController" ),
-		ChannelsTemplate: require( "hbs!templates/Channels" ),
+		ChannelsTemplate: require( "templates/Channels.hbs" ),
 
 		ChannelRoute: require( "routes/ChannelRoute" ),
 		ChannelController: require( "controllers/ChannelController" ),
-		ChannelTemplate: require( "hbs!templates/channel/Channel" ),
+		ChannelTemplate: require( "templates/channel/Channel.hbs" ),
 		ChannelLoadingRoute: require( "routes/LoadingRoute" ),
-		ChannelLoadingTemplate: require( "hbs!templates/Loading" ),
+		ChannelLoadingTemplate: require( "templates/Loading.hbs" ),
 		ChannelIndexRoute: require( "routes/ChannelIndexRoute" ),
 		ChannelIndexController: require( "controllers/ChannelIndexController" ),
-		ChannelIndexTemplate: require( "hbs!templates/channel/ChannelIndex" ),
+		ChannelIndexTemplate: require( "templates/channel/ChannelIndex.hbs" ),
 		ChannelSettingsRoute: require( "routes/ChannelSettingsRoute" ),
 		ChannelSettingsController: require( "controllers/ChannelSettingsController" ),
-		ChannelSettingsTemplate: require( "hbs!templates/channel/ChannelSettings" ),
+		ChannelSettingsTemplate: require( "templates/channel/ChannelSettings.hbs" ),
 
 		UserLoadingRoute: require( "routes/LoadingRoute" ),
-		UserLoadingTemplate: require( "hbs!templates/Loading" ),
+		UserLoadingTemplate: require( "templates/Loading.hbs" ),
 		UserIndexRoute: require( "routes/UserIndexRoute" ),
 		UserIndexController: require( "controllers/UserIndexController" ),
-		UserIndexTemplate: require( "hbs!templates/user/UserIndex" ),
+		UserIndexTemplate: require( "templates/user/UserIndex.hbs" ),
 		UserAuthRoute: require( "routes/UserAuthRoute" ),
 		UserAuthController: require( "controllers/UserAuthController" ),
-		UserAuthTemplate: require( "hbs!templates/user/UserAuth" ),
+		UserAuthTemplate: require( "templates/user/UserAuth.hbs" ),
 		UserSubscriptionsRoute: require( "routes/UserSubscriptionsRoute" ),
-		UserSubscriptionsTemplate: require( "hbs!templates/user/UserSubscriptions" ),
+		UserSubscriptionsTemplate: require( "templates/user/UserSubscriptions.hbs" ),
 		UserFollowedStreamsRoute: require( "routes/UserFollowedStreamsRoute" ),
-		UserFollowedStreamsTemplate: require( "hbs!templates/user/UserFollowedStreams" ),
+		UserFollowedStreamsTemplate: require( "templates/user/UserFollowedStreams.hbs" ),
 		UserHostedStreamsRoute: require( "routes/UserHostedStreamsRoute" ),
-		UserHostedStreamsTemplate: require( "hbs!templates/user/UserHostedStreams" ),
+		UserHostedStreamsTemplate: require( "templates/user/UserHostedStreams.hbs" ),
 		UserFollowedChannelsRoute: require( "routes/UserFollowedChannelsRoute" ),
 		UserFollowedChannelsController: require( "controllers/UserFollowedChannelsController" ),
-		UserFollowedChannelsTemplate: require( "hbs!templates/user/UserFollowedChannels" ),
+		UserFollowedChannelsTemplate: require( "templates/user/UserFollowedChannels.hbs" ),
 		UserFollowedGamesRoute: require( "routes/UserFollowedGamesRoute" ),
 		UserFollowedGamesController: require( "controllers/UserFollowedGamesController" ),
-		UserFollowedGamesTemplate: require( "hbs!templates/user/UserFollowedGames" ),
+		UserFollowedGamesTemplate: require( "templates/user/UserFollowedGames.hbs" ),
 
 		SettingsRoute: require( "routes/SettingsRoute" ),
 		SettingsController: require( "controllers/SettingsController" ),
-		SettingsTemplate: require( "hbs!templates/settings/Settings" ),
+		SettingsTemplate: require( "templates/settings/Settings.hbs" ),
 		SettingsIndexRoute: require( "routes/SettingsIndexRoute" ),
 		SettingsMainRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsMainTemplate: require( "hbs!templates/settings/SettingsMain" ),
+		SettingsMainTemplate: require( "templates/settings/SettingsMain.hbs" ),
 		SettingsStreamsRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsStreamsTemplate: require( "hbs!templates/settings/SettingsStreams" ),
+		SettingsStreamsTemplate: require( "templates/settings/SettingsStreams.hbs" ),
 		SettingsLivestreamerRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsLivestreamerTemplate: require( "hbs!templates/settings/SettingsLivestreamer" ),
+		SettingsLivestreamerTemplate: require( "templates/settings/SettingsLivestreamer.hbs" ),
 		SettingsPlayerRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsPlayerTemplate: require( "hbs!templates/settings/SettingsPlayer" ),
+		SettingsPlayerTemplate: require( "templates/settings/SettingsPlayer.hbs" ),
 		SettingsChatRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsChatTemplate: require( "hbs!templates/settings/SettingsChat" ),
+		SettingsChatTemplate: require( "templates/settings/SettingsChat.hbs" ),
 		SettingsGuiRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsGuiTemplate: require( "hbs!templates/settings/SettingsGui" ),
+		SettingsGuiTemplate: require( "templates/settings/SettingsGui.hbs" ),
 		SettingsListsRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsListsTemplate: require( "hbs!templates/settings/SettingsLists" ),
+		SettingsListsTemplate: require( "templates/settings/SettingsLists.hbs" ),
 		SettingsLanguagesRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsLanguagesTemplate: require( "hbs!templates/settings/SettingsLanguages" ),
+		SettingsLanguagesTemplate: require( "templates/settings/SettingsLanguages.hbs" ),
 		SettingsNotificationsRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsNotificationsTemplate: require( "hbs!templates/settings/SettingsNotifications" ),
+		SettingsNotificationsTemplate: require( "templates/settings/SettingsNotifications.hbs" ),
 		SettingsChannelsRoute: require( "routes/SettingsChannelsRoute" ),
 		SettingsChannelsController: require( "controllers/SettingsChannelsController" ),
-		SettingsChannelsTemplate: require( "hbs!templates/settings/SettingsChannels" ),
+		SettingsChannelsTemplate: require( "templates/settings/SettingsChannels.hbs" ),
 
 		AboutController: require( "controllers/AboutController" ),
-		AboutTemplate: require( "hbs!templates/About" ),
+		AboutTemplate: require( "templates/About.hbs" ),
 
 
 		// ready event

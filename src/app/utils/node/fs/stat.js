@@ -1,7 +1,7 @@
 define([
 	"utils/node/denodify",
 	"utils/node/platform",
-	"commonjs!fs"
+	"fs"
 ], function(
 	denodify,
 	platform,

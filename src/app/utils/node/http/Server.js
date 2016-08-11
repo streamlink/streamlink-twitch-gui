@@ -1,6 +1,6 @@
 define([
-	"commonjs!http",
-	"commonjs!url"
+	"http",
+	"url"
 ], function(
 	HTTP,
 	URL

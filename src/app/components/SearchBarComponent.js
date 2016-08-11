@@ -2,7 +2,7 @@ define([
 	"Ember",
 	"config",
 	"utils/getStreamFromUrl",
-	"hbs!templates/components/SearchBarComponent"
+	"templates/components/SearchBarComponent.hbs"
 ], function(
 	Ember,
 	config,

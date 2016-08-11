@@ -7,10 +7,22 @@ module.exports = {
 			"package.json",
 			"index.html",
 			"oauth.{html,json}",
-			"vendor/requirejs/require.js",
 			"vendor/roboto-fontface/fonts/Roboto-{Light,Regular,Medium,Bold,RegularItalic}.woff2",
 			"vendor/font-awesome/fonts/*.woff2",
 			"img/**"
+		]
+	},
+
+	test: {
+		files: [
+			{
+				src : "src/test/index.html",
+				dest: "build/tmp/index.html"
+			},
+			{
+				src : "src/vendor/qunit/qunit/qunit.css",
+				dest: "build/tmp/vendor/qunit/qunit/qunit.css"
+			}
 		]
 	},
 

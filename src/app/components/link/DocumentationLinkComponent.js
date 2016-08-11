@@ -2,7 +2,7 @@ define([
 	"Ember",
 	"config",
 	"components/link/ExternalLinkComponent",
-	"hbs!templates/components/link/DocumentationLinkComponent"
+	"templates/components/link/DocumentationLinkComponent.hbs"
 ], function(
 	Ember,
 	config,

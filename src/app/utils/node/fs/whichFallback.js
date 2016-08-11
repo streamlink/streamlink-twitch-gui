@@ -3,7 +3,7 @@ define([
 	"utils/node/resolvePath",
 	"utils/node/fs/which",
 	"utils/node/fs/stat",
-	"commonjs!path"
+	"path"
 ], function(
 	platform,
 	resolvePath,

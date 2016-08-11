@@ -2,7 +2,7 @@ define([
 	"Ember",
 	"components/modal/ModalDialogComponent",
 	"nwjs/openBrowser",
-	"hbs!templates/components/modal/ModalNewreleaseComponent"
+	"templates/components/modal/ModalNewreleaseComponent.hbs"
 ], function(
 	Ember,
 	ModalDialogComponent,

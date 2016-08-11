@@ -1,7 +1,7 @@
 define([
 	"utils/node/fs/stat",
 	"utils/node/platform",
-	"commonjs!path"
+	"path"
 ], function(
 	stat,
 	platform,

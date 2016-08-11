@@ -39,9 +39,7 @@ define([
 			nwWindow.toggleVisibility( true );
 		}
 
-		if ( DEBUG ) {
-			nwWindow.window.initialized = true;
-		}
+		nwWindow.window.initialized = true;
 
 		// listen for changes to integration settings
 		settings.addObserver( "gui_integration", settings, onChangeIntegrations );

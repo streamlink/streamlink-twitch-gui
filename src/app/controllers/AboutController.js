@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"config",
-	"json!root/metadata"
+	"root/metadata.json"
 ], function(
 	Ember,
 	config,

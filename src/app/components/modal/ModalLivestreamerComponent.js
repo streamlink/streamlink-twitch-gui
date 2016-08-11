@@ -4,7 +4,7 @@ define([
 	"components/modal/ModalDialogComponent",
 	"models/localstorage/Settings",
 	"nwjs/openBrowser",
-	"hbs!templates/components/modal/ModalLivestreamerComponent"
+	"templates/components/modal/ModalLivestreamerComponent.hbs"
 ], function(
 	Ember,
 	config,

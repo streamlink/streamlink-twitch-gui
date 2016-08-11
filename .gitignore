@@ -25,6 +25,4 @@ nbproject
 /dist/
 
 # dev files
-/src/styles/app.css
-/src/styles/app.css.map
 /src/metadata.json

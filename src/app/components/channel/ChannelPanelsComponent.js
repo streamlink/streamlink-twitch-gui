@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"Masonry",
-	"hbs!templates/components/channel/ChannelPanelsComponent"
+	"templates/components/channel/ChannelPanelsComponent.hbs"
 ], function(
 	Ember,
 	Masonry,

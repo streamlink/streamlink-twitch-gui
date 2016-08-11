@@ -5,9 +5,5 @@ module.exports = {
 
 	build: {
 		src: "build/tmp/**"
-	},
-
-	src: {
-		src: "src/**"
 	}
 };

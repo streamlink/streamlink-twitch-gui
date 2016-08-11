@@ -1,45 +1,26 @@
-if ( typeof DEBUG === "undefined" ) {
-	DEBUG = true;
-}
 
-if ( DEBUG ) {
-	window.initialized = false;
-}
+global.process.removeAllListeners();
 
+global.process.on( "uncaughtException", function( err ) {
+	console.log( "Uncaught exception:", err );
 
-define(function( require ) {
+	// do nothing if window was fully initialized
+	if ( window.initialized ) { return; }
 
-	global.process.removeAllListeners();
+	// kill the process while not being in debug mode
+	if ( !DEBUG ) {
+		global.process.exit( 1 );
+	}
 
-	global.process.on( "uncaughtException", function( err ) {
-		console.log( "Uncaught exception:", err );
-
-		if ( DEBUG ) {
-			if ( window.initialized ) { return; }
-			try {
-				var nwWindow = window.nwDispatcher.requireNwGui().Window.get();
-				nwWindow.show();
-				nwWindow.showDevTools();
-			} catch( e ) {}
-		}
-	});
-
-
-	// load the config first
-	require( [ "../requirejs/config" ], function() {
-
-		// load dependencies
-		require([
-			"Ember",
-			"EmberData",
-			"EmberDataLS"
-		], function() {
-
-			// load the app module
-			require( [ "app" ] );
-
-		});
-
-	});
-
+	// open the window and dev tools
+	try {
+		var nwWindow = window.nwDispatcher.requireNwGui().Window.get();
+		nwWindow.show();
+		nwWindow.showDevTools();
+	} catch ( e ) {
+		console.log( "Could not initialize application window" );
+		global.process.exit( 1 );
+	}
 });
+
+require( "./app" );

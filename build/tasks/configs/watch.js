@@ -1,22 +1,16 @@
 module.exports = {
-	lesssource: {
-		files: [ "src/**/*.less" ],
-		tasks: [ "less:source" ]
-	},
-
 	less: {
 		files: [ "src/**/*.less" ],
 		tasks: [ "less:dev" ]
 	},
 
 	js: {
-		// also watch the metadata files and always execute it first
-		files: [ "package.json", "bower.json", "src/config/*.json", "src/**/*.js" ],
-		tasks: [ "metadata", "requirejs:dev" ]
+		files: [ "src/config/*.json", "src/metadata.json", "src/**/*.js" ],
+		tasks: [ "webpack:dev" ]
 	},
 
 	metadata: {
-		files: [ "package.json", "bower.json", "src/config/*.json" ],
+		files: [ "package.json", "bower.json" ],
 		tasks: [ "metadata" ]
 	}
 };

@@ -2,13 +2,13 @@ default:
     - "dev"
 dev:
     - "build"
-    - "concurrent:runbuild"
-src:
-    - "metadata"
-    - "less:source"
-    - "concurrent:runsrc"
+    - "concurrent:dev"
 test:
     - "jshint:test"
+    - "clean:tmp"
+    - "copy:test"
+    - "metadata"
+    - "webpack:test"
     - "connect:test"
     - "qunit"
 build:
@@ -19,7 +19,7 @@ build:
     - "svgmin"
     - "metadata"
     - "less:dev"
-    - "requirejs:dev"
+    - "webpack:dev"
 buildrelease:
     - "jshint:tasks"
     - "jshint:app"
@@ -28,6 +28,5 @@ buildrelease:
     - "copy:build"
     - "svgmin"
     - "metadata"
-    - "less:release"
-    - "requirejs:release"
-    - "uglify"
+    - "less:prod"
+    - "webpack:prod"

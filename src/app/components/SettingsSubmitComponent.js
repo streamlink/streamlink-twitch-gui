@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/SettingsSubmitComponent"
+	"templates/components/SettingsSubmitComponent.hbs"
 ], function(
 	Ember,
 	layout

@@ -8,7 +8,7 @@ define([
 	"utils/semver",
 	"utils/StreamOutputBuffer",
 	"utils/node/fs/whichFallback",
-	"commonjs!child_process"
+	"child_process"
 ], function(
 	Ember,
 	config,
