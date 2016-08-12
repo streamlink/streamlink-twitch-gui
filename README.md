@@ -53,6 +53,9 @@ AUR (Arch Linux):
 [`livestreamer-twitch-gui`][Package-AUR]  
 [`livestreamer-twitch-gui-git`][Package-AUR-git]
 
+Homebrew Cask (OS X):  
+[`brew cask install livestreamer-twitch-gui`][Package-Homebrew-cask]  
+
 #### Development version
 
 If you want to test the latest unreleased version, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or [here][Contributing].  
@@ -109,3 +112,4 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Package-Chocolatey]: https://chocolatey.org/packages/livestreamer-twitch-gui "Chocolatey package"
   [Package-AUR]: https://aur.archlinux.org/packages/livestreamer-twitch-gui "AUR stable package"
   [Package-AUR-git]: https://aur.archlinux.org/packages/livestreamer-twitch-gui-git "AUR git package"
+  [Package-Homebrew-cask]: https://caskroom.github.io/
