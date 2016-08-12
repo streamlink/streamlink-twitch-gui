@@ -23,6 +23,3 @@ nbproject
 !/build/tasks
 !/build/resources
 /dist/
-
-# dev files
-/src/metadata.json

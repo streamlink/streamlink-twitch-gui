@@ -7,7 +7,6 @@ module.exports = {
 	dev: [
 		"run",
 		"watch:less",
-		"watch:js",
-		"watch:metadata"
+		"watch:js"
 	]
 };

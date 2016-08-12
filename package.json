@@ -32,8 +32,6 @@
 		"raw-loader": "0.5.1",
 		"less-plugin-clean-css": "1.5.1",
 		"load-grunt-config": "0.19.2",
-		"q": "1.2.0",
-		"q-io": "1.12.0",
 		"nw-builder": "2.0.1"
 	},
 

@@ -5,12 +5,7 @@ module.exports = {
 	},
 
 	js: {
-		files: [ "src/config/*.json", "src/metadata.json", "src/**/*.js" ],
+		files: [ "src/config/*.json", "src/**/*.js" ],
 		tasks: [ "webpack:dev" ]
-	},
-
-	metadata: {
-		files: [ "package.json", "bower.json" ],
-		tasks: [ "metadata" ]
 	}
 };

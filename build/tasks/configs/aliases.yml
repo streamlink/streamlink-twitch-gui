@@ -7,7 +7,6 @@ test:
     - "jshint:test"
     - "clean:tmp"
     - "copy:test"
-    - "metadata"
     - "webpack:test"
     - "connect:test"
     - "qunit"
@@ -17,7 +16,6 @@ build:
     - "clean:tmp"
     - "copy:build"
     - "svgmin"
-    - "metadata"
     - "less:dev"
     - "webpack:dev"
 buildrelease:
@@ -27,6 +25,5 @@ buildrelease:
     - "clean:tmp"
     - "copy:build"
     - "svgmin"
-    - "metadata"
     - "less:prod"
     - "webpack:prod"

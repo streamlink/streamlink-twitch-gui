@@ -91,6 +91,10 @@ module.exports = {
 				{
 					test: /\.html$/,
 					loader: "raw-loader"
+				},
+				{
+					test: /metadata\.js$/,
+					loader: "metadata-loader"
 				}
 			]
 		},
