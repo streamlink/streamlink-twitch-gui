@@ -47,11 +47,11 @@ More informations and installation instructions can be found in the project's [W
 #### Packages
 
 Chocolatey (Windows):  
-[`livestreamer-twitch-gui`][Package-Chocolatey]
+[`choco install livestreamer-twitch-gui`][Package-Chocolatey]
 
 AUR (Arch Linux):  
-[`livestreamer-twitch-gui`][Package-AUR]  
-[`livestreamer-twitch-gui-git`][Package-AUR-git]
+[`yaourt -S livestreamer-twitch-gui`][Package-AUR]  
+[`yaourt -S livestreamer-twitch-gui-git`][Package-AUR-git]
 
 Homebrew Cask (OS X):  
 [`brew cask install livestreamer-twitch-gui`][Package-Homebrew-cask]  
