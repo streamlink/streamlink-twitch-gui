@@ -1,6 +1,4 @@
 default:
-    - "dev"
-dev:
     - "build"
     - "concurrent:dev"
 test:
@@ -11,13 +9,15 @@ test:
     - "connect:test"
     - "qunit"
 build:
+    - "build:dev"
+build:dev:
     - "jshint:tasks"
     - "jshint:app"
     - "clean:tmp"
     - "copy:build"
     - "svgmin"
     - "webpack:dev"
-buildrelease:
+build:prod:
     - "jshint:tasks"
     - "jshint:app"
     - "test"

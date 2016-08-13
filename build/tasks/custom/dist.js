@@ -8,8 +8,8 @@ module.exports = function( grunt ) {
 		"Build the project, compile and compress it. " + platforms.getList(),
 		function() {
 			grunt.task.run( []
-				// make a fresh build
-				.concat([ "buildrelease" ])
+				// build
+				.concat([ "build:prod" ])
 				// compile
 				.concat( platforms.getTasks( grunt, "compile", arguments ) )
 				// compress
