@@ -30,7 +30,7 @@
 		"extract-text-webpack-plugin": "1.0.1",
 		"json-loader": "0.5.4",
 		"raw-loader": "0.5.1",
-		"css-loader": "0.23.1",
+		"css-loader": "bastimeyer/css-loader#sourcemap-fix",
 		"less-loader": "2.2.3",
 		"less": "2.5.1",
 		"less-plugin-clean-css": "1.5.1",
