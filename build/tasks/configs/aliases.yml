@@ -1,6 +1,5 @@
 default:
     - "build"
-    - "concurrent:dev"
 test:
     - "jshint:test"
     - "clean:tmp"

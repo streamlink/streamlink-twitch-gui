@@ -3,6 +3,8 @@ var PATH = require( "path" );
 var webpack = require( "webpack" );
 var ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 var LessPluginCleanCSS = require( "less-plugin-clean-css" );
+var NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
+
 
 var r = PATH.resolve;
 var j = PATH.join;
@@ -155,8 +157,21 @@ module.exports = {
 		plugins: [
 			new webpack.DefinePlugin({
 				DEBUG: true
+			}),
+
+			new NwjsPlugin({
+				files: r( "build", "tmp", "**" ),
+				argv: "--remote-debugging-port=8888",
+				rerunOnExit: true,
+				log: true,
+				logStdOut: false,
+				logStdErr: false
 			})
-		]
+		],
+
+		watch: true,
+		keepalive: true,
+		failOnError: false
 	},
 
 
