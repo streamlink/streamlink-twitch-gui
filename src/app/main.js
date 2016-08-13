@@ -23,4 +23,5 @@ global.process.on( "uncaughtException", function( err ) {
 	}
 });
 
+require( "styles/app.less" );
 require( "./app" );

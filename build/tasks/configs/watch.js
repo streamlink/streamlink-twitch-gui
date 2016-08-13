@@ -1,11 +1,6 @@
 module.exports = {
-	less: {
-		files: [ "src/**/*.less" ],
-		tasks: [ "less:dev" ]
-	},
-
-	js: {
-		files: [ "src/config/*.json", "src/**/*.js" ],
+	dev: {
+		files: [ "src/config/*.json", "src/**/*.js", "src/**/*.less" ],
 		tasks: [ "webpack:dev" ]
 	}
 };

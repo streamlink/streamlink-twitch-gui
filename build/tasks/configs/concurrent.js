@@ -3,10 +3,9 @@ module.exports = {
 		logConcurrentOutput: true
 	},
 
-	// TODO: use webpack watchers and integrate less into webpack
+	// TODO: use webpack watchers
 	dev: [
 		"run",
-		"watch:less",
-		"watch:js"
+		"watch:dev"
 	]
 };

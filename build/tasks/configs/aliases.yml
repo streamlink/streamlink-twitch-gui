@@ -16,7 +16,6 @@ build:
     - "clean:tmp"
     - "copy:build"
     - "svgmin"
-    - "less:dev"
     - "webpack:dev"
 buildrelease:
     - "jshint:tasks"
@@ -25,5 +24,4 @@ buildrelease:
     - "clean:tmp"
     - "copy:build"
     - "svgmin"
-    - "less:prod"
     - "webpack:prod"

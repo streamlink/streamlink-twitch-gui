@@ -1,17 +1,25 @@
 var FS = require( "fs" );
 var PATH = require( "path" );
 var webpack = require( "webpack" );
+var ExtractTextPlugin = require( "extract-text-webpack-plugin" );
+var LessPluginCleanCSS = require( "less-plugin-clean-css" );
 
 var r = PATH.resolve;
 var j = PATH.join;
 
 
+// path definitions
 var pRoot = r( ".", "src" );
 var pApp = r( pRoot, "app" );
 var pTest = r( pRoot, "test" );
+var pStyles = r( pRoot, "styles" );
 var pTemplates = r( pRoot, "templates" );
 var pVendor = r( pRoot, "vendor" );
 var pWebModules = r( pRoot, "web_modules" );
+
+
+// exclude modules/files from the js bundle
+var cssExtractTextPlugin = new ExtractTextPlugin( "styles.css" );
 
 
 module.exports = {
@@ -46,6 +54,7 @@ module.exports = {
 			alias: {
 				// folder aliases
 				"root"        : pRoot,
+				"styles"      : pStyles,
 				"templates"   : pTemplates,
 				"vendor"      : pVendor,
 
@@ -81,6 +90,14 @@ module.exports = {
 		module: {
 			loaders: [
 				{
+					test: /\.less$/,
+					include: pStyles,
+					loader: cssExtractTextPlugin.extract([
+						"css?sourceMap&-url&-import",
+						"less?sourceMap&strictMath&strictUnits&relativeUrls&noIeCompat"
+					])
+				},
+				{
 					test: /\.hbs$/,
 					loader: "hbs-loader"
 				},
@@ -108,6 +125,9 @@ module.exports = {
 				name: "vendor",
 				minChunks: Infinity
 			}),
+
+			// don't include css stylesheets in the js bundle
+			cssExtractTextPlugin,
 
 			// ignore l10n modules of momentjs
 			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ )
@@ -185,7 +205,16 @@ module.exports = {
 			].join( "\n" ), {
 				entryOnly: true
 			})
-		]
+		],
+
+		// optimize css
+		lessLoader: {
+			lessPlugins: [
+				new LessPluginCleanCSS({
+					advanced: true
+				})
+			]
+		}
 	},
 
 
