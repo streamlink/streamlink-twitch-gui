@@ -1,5 +1,6 @@
 module.exports = {
 	options: {
+		files   : "build/tmp/prod/**",
 		buildDir: "build/releases",
 		cacheDir: "build/cache",
 		version : "<%= grunt.config('main.nwjs-version') %>",
@@ -15,29 +16,23 @@ module.exports = {
 	},
 
 	win32: {
-		options: { platforms: [ "win32" ] },
-		src    : "build/tmp/**"
+		options: { platforms: [ "win32" ] }
 	},
 	win64: {
-		options: { platforms: [ "win64" ] },
-		src    : "build/tmp/**"
+		options: { platforms: [ "win64" ] }
 	},
 
 	osx32: {
-		options: { platforms: [ "osx32" ] },
-		src    : "build/tmp/**"
+		options: { platforms: [ "osx32" ] }
 	},
 	osx64: {
-		options: { platforms: [ "osx64" ] },
-		src    : "build/tmp/**"
+		options: { platforms: [ "osx64" ] }
 	},
 
 	linux32: {
-		options: { platforms: [ "linux32" ] },
-		src    : "build/tmp/**"
+		options: { platforms: [ "linux32" ] }
 	},
 	linux64: {
-		options: { platforms: [ "linux64" ] },
-		src    : "build/tmp/**"
+		options: { platforms: [ "linux64" ] }
 	}
 };

@@ -3,7 +3,11 @@ module.exports = {
 		argv: "--remote-debugging-port=8888"
 	}),
 
-	build: {
-		src: "build/tmp/**"
+	dev: {
+		src: "build/tmp/dev/**"
+	},
+
+	prod: {
+		src: "build/tmp/prod/**"
 	}
 };

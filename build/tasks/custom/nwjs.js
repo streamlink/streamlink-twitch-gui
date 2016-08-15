@@ -7,9 +7,7 @@ module.exports = function( grunt ) {
 
 	grunt.registerMultiTask( task, descr, function() {
 		var done      = this.async();
-		var options   = this.options({
-			files: this.filesSrc
-		});
+		var options   = this.options();
 
 		var nw = new NwBuilder( options );
 

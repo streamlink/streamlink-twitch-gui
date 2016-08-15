@@ -2,7 +2,7 @@ default:
     - "build"
 test:
     - "jshint:test"
-    - "clean:tmp"
+    - "clean:tmp_test"
     - "copy:test"
     - "webpack:test"
     - "connect:test"
@@ -12,13 +12,13 @@ build:
 build:dev:
     - "jshint:tasks"
     - "jshint:app"
-    - "clean:tmp"
-    - "copy:build"
+    - "clean:tmp_dev"
+    - "copy:dev"
     - "webpack:dev"
 build:prod:
     - "jshint:tasks"
     - "jshint:app"
     - "test"
-    - "clean:tmp"
-    - "copy:build"
+    - "clean:tmp_prod"
+    - "copy:prod"
     - "webpack:prod"

@@ -19,7 +19,9 @@ var pImages = r( pRoot, "img" );
 var pTemplates = r( pRoot, "templates" );
 var pVendor = r( pRoot, "vendor" );
 var pWebModules = r( pRoot, "web_modules" );
-var pBuild = r( ".", "build", "tmp" );
+var pBuildDev = r( ".", "build", "tmp", "dev" );
+var pBuildProd = r( ".", "build", "tmp", "prod" );
+var pBuildTest = r( ".", "build", "tmp", "test" );
 
 
 // exclude modules/files from the js bundle
@@ -170,7 +172,7 @@ module.exports = {
 
 	dev: {
 		output: {
-			path: pBuild
+			path: pBuildDev
 		},
 
 		resolve: {
@@ -186,7 +188,7 @@ module.exports = {
 			}),
 
 			new NwjsPlugin({
-				files: r( pBuild, "**" ),
+				files: r( pBuildDev, "**" ),
 				argv: "--remote-debugging-port=8888",
 				rerunOnExit: true,
 				log: true,
@@ -203,7 +205,7 @@ module.exports = {
 
 	prod: {
 		output: {
-			path: pBuild
+			path: pBuildProd
 		},
 
 		resolve: {
@@ -275,7 +277,7 @@ module.exports = {
 
 	test: {
 		output: {
-			path: pBuild
+			path: pBuildTest
 		},
 
 		resolve: {

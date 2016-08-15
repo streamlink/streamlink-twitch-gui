@@ -10,9 +10,10 @@ module.exports = function( grunt ) {
 	grunt.task.registerMultiTask( task, descr, function() {
 		var done    = this.async();
 		var options = this.options({
-			files: PATH.resolve( process.cwd(), this.data.src ),
 			platforms: platforms.getPlatforms( [] )
 		});
+
+		options.files = PATH.resolve( process.cwd(), this.data.src );
 
 		var nw = new NwBuilder( options );
 

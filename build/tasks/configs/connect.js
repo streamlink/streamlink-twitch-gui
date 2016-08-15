@@ -2,7 +2,7 @@ module.exports = {
 	test: {
 		options: {
 			port: 8000,
-			base: "./build/tmp"
+			base: "./build/tmp/test"
 		}
 	}
 };

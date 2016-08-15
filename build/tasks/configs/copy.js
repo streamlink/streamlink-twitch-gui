@@ -1,7 +1,17 @@
 module.exports = {
-	build: {
+	dev: {
 		expand: true,
-		dest  : "build/tmp",
+		dest  : "build/tmp/dev",
+		cwd   : "src",
+		src   : [
+			"package.json",
+			"index.html"
+		]
+	},
+
+	prod: {
+		expand: true,
+		dest  : "build/tmp/prod",
 		cwd   : "src",
 		src   : [
 			"package.json",
@@ -13,11 +23,11 @@ module.exports = {
 		files: [
 			{
 				src : "src/test/index.html",
-				dest: "build/tmp/index.html"
+				dest: "build/tmp/test/index.html"
 			},
 			{
 				src : "src/vendor/qunit/qunit/qunit.css",
-				dest: "build/tmp/vendor/qunit/qunit/qunit.css"
+				dest: "build/tmp/test/vendor/qunit/qunit/qunit.css"
 			}
 		]
 	},
