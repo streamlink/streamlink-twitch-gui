@@ -15,6 +15,7 @@ var pRoot = r( ".", "src" );
 var pApp = r( pRoot, "app" );
 var pTest = r( pRoot, "test" );
 var pStyles = r( pRoot, "styles" );
+var pImages = r( pRoot, "img" );
 var pTemplates = r( pRoot, "templates" );
 var pVendor = r( pRoot, "vendor" );
 var pWebModules = r( pRoot, "web_modules" );
@@ -64,6 +65,7 @@ module.exports = {
 				// folder aliases
 				"root"        : pRoot,
 				"styles"      : pStyles,
+				"img"         : pImages,
 				"templates"   : pTemplates,
 				"vendor"      : pVendor,
 
@@ -135,7 +137,7 @@ module.exports = {
 				// Assets
 				{
 					test: /\.(jpe?g|png|svg|woff2)$/,
-					loader: "file?name=assets/[name]-[sha256:hash:hex:7].[ext]"
+					loader: "file?name=[path][name].[ext]"
 				}
 			]
 		},
