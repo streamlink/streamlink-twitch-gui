@@ -1,37 +1,4 @@
 module.exports = {
-	dev: {
-		expand: true,
-		dest  : "build/tmp/dev",
-		cwd   : "src",
-		src   : [
-			"package.json",
-			"index.html"
-		]
-	},
-
-	prod: {
-		expand: true,
-		dest  : "build/tmp/prod",
-		cwd   : "src",
-		src   : [
-			"package.json",
-			"index.html"
-		]
-	},
-
-	test: {
-		files: [
-			{
-				src : "src/test/index.html",
-				dest: "build/tmp/test/index.html"
-			},
-			{
-				src : "src/vendor/qunit/qunit/qunit.css",
-				dest: "build/tmp/test/vendor/qunit/qunit/qunit.css"
-			}
-		]
-	},
-
 	win32scripts: {
 		expand : true,
 		flatten: true,

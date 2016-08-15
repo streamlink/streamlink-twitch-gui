@@ -1,11 +1,9 @@
 define([
-	"EmberTest",
 	"QUnit",
-	"require"
+	"EmberTest",
+	"vendor/qunit/qunit/qunit.css"
 ], function(
-	_,
-	QUnit,
-	require
+	QUnit
 ) {
 
 	// don't start automatically

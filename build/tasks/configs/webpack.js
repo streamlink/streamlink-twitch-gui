@@ -1,6 +1,8 @@
 var FS = require( "fs" );
 var PATH = require( "path" );
 var webpack = require( "webpack" );
+var HtmlWebpackPlugin = require( "html-webpack-plugin" );
+var CopyWebpackPlugin = require( "copy-webpack-plugin" );
 var ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 var LessPluginCleanCSS = require( "less-plugin-clean-css" );
 var NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
@@ -155,6 +157,11 @@ module.exports = {
 				minChunks: Infinity
 			}),
 
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: "package.json" }
+			]),
+
 			// don't include css stylesheets in the js bundle
 			cssExtractTextPlugin,
 			lessExtractTextPlugin,
@@ -183,6 +190,12 @@ module.exports = {
 		devtool: "source-map",
 
 		plugins: [
+			new HtmlWebpackPlugin({
+				inject: "head",
+				hash: false,
+				template: r( pRoot, "index.html" )
+			}),
+
 			new webpack.DefinePlugin({
 				DEBUG: true
 			}),
@@ -229,6 +242,12 @@ module.exports = {
 		},
 
 		plugins: [
+			new HtmlWebpackPlugin({
+				inject: "head",
+				hash: false,
+				template: r( pRoot, "index.html" )
+			}),
+
 			// use non-debug versions of ember and ember-data in production builds
 			new webpack.NormalModuleReplacementPlugin(
 				/vendor\/ember\/ember\.debug\.js$/,
@@ -287,6 +306,14 @@ module.exports = {
 			}
 		},
 
-		target: "web"
+		target: "web",
+
+		plugins: [
+			new HtmlWebpackPlugin({
+				inject: "body",
+				hash: false,
+				template: r( pTest, "index.html" )
+			})
+		]
 	}
 };
