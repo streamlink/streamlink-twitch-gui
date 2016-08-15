@@ -28,6 +28,11 @@ module.exports = {
 	// common options
 	// the grunt-webpack merges the "options" objects with each task config (nested)
 	options: {
+		stats: {
+			timings: true,
+			children: false
+		},
+
 		context: j( ".", "src" ),
 
 		output: {
