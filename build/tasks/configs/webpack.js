@@ -208,6 +208,20 @@ module.exports = {
 
 		target: "node-webkit",
 
+		module: {
+			loaders: [
+				{
+					test: /\.svg$/,
+					loader: "svgo?" + JSON.stringify({
+						plugins: [
+							{ removeTitle: true },
+							{ removeUselessStrokeAndFill: false }
+						]
+					})
+				}
+			]
+		},
+
 		plugins: [
 			// use non-debug versions of ember and ember-data in production builds
 			new webpack.NormalModuleReplacementPlugin(
