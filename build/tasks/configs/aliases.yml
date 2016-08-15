@@ -14,7 +14,6 @@ build:dev:
     - "jshint:app"
     - "clean:tmp"
     - "copy:build"
-    - "svgmin"
     - "webpack:dev"
 build:prod:
     - "jshint:tasks"
@@ -22,5 +21,4 @@ build:prod:
     - "test"
     - "clean:tmp"
     - "copy:build"
-    - "svgmin"
     - "webpack:prod"

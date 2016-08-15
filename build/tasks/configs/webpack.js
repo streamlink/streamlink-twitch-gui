@@ -21,7 +21,8 @@ var pWebModules = r( pRoot, "web_modules" );
 
 
 // exclude modules/files from the js bundle
-var cssExtractTextPlugin = new ExtractTextPlugin( "styles.css" );
+var cssExtractTextPlugin  = new ExtractTextPlugin( "../styles/vendor.css" );
+var lessExtractTextPlugin = new ExtractTextPlugin( "../styles/main.css" );
 
 
 module.exports = {
@@ -97,14 +98,6 @@ module.exports = {
 		module: {
 			loaders: [
 				{
-					test: /\.less$/,
-					include: pStyles,
-					loader: cssExtractTextPlugin.extract([
-						"css?sourceMap&-url&-import",
-						"less?sourceMap&strictMath&strictUnits&relativeUrls&noIeCompat"
-					])
-				},
-				{
 					test: /\.hbs$/,
 					loader: "hbs-loader"
 				},
@@ -119,6 +112,29 @@ module.exports = {
 				{
 					test: /metadata\.js$/,
 					loader: "metadata-loader"
+				},
+				// Vendor stylesheets (don't parse anything)
+				{
+					test: /\.css$/,
+					include: pVendor,
+					loader: cssExtractTextPlugin.extract([
+						"css?sourceMap&-minify&-url&-import"
+					])
+				},
+				// Application stylesheets (extract fonts and images)
+				{
+					test: /app\.less$/,
+					include: pStyles,
+					loader: lessExtractTextPlugin.extract([
+						"css?sourceMap&minify&url&-import",
+						"less?sourceMap&strictMath&strictUnits&relativeUrls&noIeCompat",
+						"flag-icons-loader"
+					])
+				},
+				// Assets
+				{
+					test: /\.(jpe?g|png|svg|woff2)$/,
+					loader: "file?name=../assets/[name]-[sha256:hash:hex:7].[ext]"
 				}
 			]
 		},
@@ -135,6 +151,7 @@ module.exports = {
 
 			// don't include css stylesheets in the js bundle
 			cssExtractTextPlugin,
+			lessExtractTextPlugin,
 
 			// ignore l10n modules of momentjs
 			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ )

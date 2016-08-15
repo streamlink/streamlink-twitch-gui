@@ -5,11 +5,7 @@ module.exports = {
 		cwd   : "src",
 		src   : [
 			"package.json",
-			"index.html",
-			"oauth.{html,json}",
-			"vendor/roboto-fontface/fonts/Roboto-{Light,Regular,Medium,Bold,RegularItalic}.woff2",
-			"vendor/font-awesome/fonts/*.woff2",
-			"img/**"
+			"index.html"
 		]
 	},
 
