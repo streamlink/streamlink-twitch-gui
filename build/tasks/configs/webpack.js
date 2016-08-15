@@ -18,11 +18,12 @@ var pStyles = r( pRoot, "styles" );
 var pTemplates = r( pRoot, "templates" );
 var pVendor = r( pRoot, "vendor" );
 var pWebModules = r( pRoot, "web_modules" );
+var pBuild = r( ".", "build", "tmp" );
 
 
 // exclude modules/files from the js bundle
-var cssExtractTextPlugin  = new ExtractTextPlugin( "../styles/vendor.css" );
-var lessExtractTextPlugin = new ExtractTextPlugin( "../styles/main.css" );
+var cssExtractTextPlugin  = new ExtractTextPlugin( "vendor.css" );
+var lessExtractTextPlugin = new ExtractTextPlugin( "main.css" );
 
 
 module.exports = {
@@ -86,7 +87,7 @@ module.exports = {
 		},
 
 		resolveLoader: {
-			root: r( pRoot ),
+			root: pRoot,
 			modulesDirectories: [
 				"web_loaders",
 				"web_modules",
@@ -134,7 +135,7 @@ module.exports = {
 				// Assets
 				{
 					test: /\.(jpe?g|png|svg|woff2)$/,
-					loader: "file?name=../assets/[name]-[sha256:hash:hex:7].[ext]"
+					loader: "file?name=assets/[name]-[sha256:hash:hex:7].[ext]"
 				}
 			]
 		},
@@ -166,7 +167,7 @@ module.exports = {
 
 	dev: {
 		output: {
-			path: r( "build", "tmp", "app" )
+			path: pBuild
 		},
 
 		resolve: {
@@ -182,7 +183,7 @@ module.exports = {
 			}),
 
 			new NwjsPlugin({
-				files: r( "build", "tmp", "**" ),
+				files: r( pBuild, "**" ),
 				argv: "--remote-debugging-port=8888",
 				rerunOnExit: true,
 				log: true,
@@ -199,7 +200,7 @@ module.exports = {
 
 	prod: {
 		output: {
-			path: r( "build", "tmp", "app" )
+			path: pBuild
 		},
 
 		resolve: {
@@ -226,11 +227,11 @@ module.exports = {
 			// use non-debug versions of ember and ember-data in production builds
 			new webpack.NormalModuleReplacementPlugin(
 				/vendor\/ember\/ember\.debug\.js$/,
-				r( pRoot, "vendor", "ember", "ember.prod.js" )
+				r( pVendor, "ember", "ember.prod.js" )
 			),
 			new webpack.NormalModuleReplacementPlugin(
 				/vendor\/ember-data\/ember-data\.js$/,
-				r( pRoot, "vendor", "ember-data", "ember-data.prod.js" )
+				r( pVendor, "ember-data", "ember-data.prod.js" )
 			),
 
 			// minify
@@ -271,7 +272,7 @@ module.exports = {
 
 	test: {
 		output: {
-			path: r( "build", "tmp" )
+			path: pBuild
 		},
 
 		resolve: {
