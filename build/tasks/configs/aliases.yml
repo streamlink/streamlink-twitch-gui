@@ -1,11 +1,5 @@
 default:
     - "build"
-test:
-    - "jshint:test"
-    - "clean:tmp_test"
-    - "webpack:test"
-    - "connect:test"
-    - "qunit"
 build:
     - "build:dev"
 build:dev:
@@ -19,3 +13,9 @@ build:prod:
     - "test"
     - "clean:tmp_prod"
     - "webpack:prod"
+test:
+    - "jshint:test"
+    - "clean:tmp_test"
+    - "webpack:test"
+    - "connect:test"
+    - "qunit"
