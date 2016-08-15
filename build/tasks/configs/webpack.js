@@ -131,7 +131,8 @@ module.exports = {
 					loader: lessExtractTextPlugin.extract([
 						"css?sourceMap&minify&url&-import",
 						"less?sourceMap&strictMath&strictUnits&relativeUrls&noIeCompat",
-						"flag-icons-loader"
+						"flag-icons-loader",
+						"themes-loader"
 					])
 				},
 				// Assets
