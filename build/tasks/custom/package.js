@@ -1,19 +1,62 @@
 module.exports = function( grunt ) {
-	"use strict";
+	var name  = "package";
+	var descr = "Build a package";
 
-	var pack = require( "../common/package" );
+	function setConfig( key, pattern, replacement ) {
+		return function( data ) {
+			grunt.config.set(
+				"package." + key,
+				pattern && replacement
+					? data.replace( pattern, replacement )
+					: data
+			);
+			return data;
+		};
+	}
 
-	grunt.task.registerTask(
-		"package:chocolatey",
-		"Package for chocolatey",
-		function(){
-			var version = grunt.file.readJSON("package.json").version;
-			var releaseNotes = pack.getReleaseNotes(version);
-
-			grunt.config.set("releaseNotes", releaseNotes);
-
-			grunt.task.run(["clean:package_chocolatey", "template:chocolatey", "shell:chocolatey"]);
+	var reEscapeXmlChars = /[&<>"']/g;
+	function fnEscapeXmlChars( char ) {
+		switch ( char ) {
+			case "&":  return "&amp;";
+			case "<":  return "&lt;";
+			case ">":  return "&gt;";
+			case "\"": return "&quot;";
+			case "'":  return "&apos;";
+			default:   return char;
 		}
-	);
+	}
+
+	grunt.task.registerMultiTask( name, descr, function() {
+		var done = this.async();
+		var options = this.options({
+			changelog: false,
+			checksums: false
+		});
+		var tasks = this.data.tasks;
+		var packageJSON = grunt.config.get( "package" );
+		var promises = [];
+
+
+		if ( options.changelog ) {
+			promises.push(
+				require( "../common/release-changelog" )( options, packageJSON )
+					.then( setConfig( "changelog" ) )
+					.then( setConfig( "changelogEscaped", reEscapeXmlChars, fnEscapeXmlChars ) )
+			);
+		}
+
+		if ( options.checksums ) {
+			promises.push(
+				require( "../common/release-checksums" )( options, packageJSON )
+					.then( setConfig( "checksums" ) )
+			);
+		}
+
+		Promise.all( promises )
+			.then(function() {
+				grunt.task.run( tasks || [] );
+			})
+			.then( done, grunt.fail.fatal );
+	});
 
 };

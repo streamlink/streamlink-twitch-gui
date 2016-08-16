@@ -5,7 +5,7 @@ module.exports = {
 				"author": "<%= package.author %>",
 				"homepage": "<%= package.homepage %>",
 				"name": "<%= package.name %>",
-				"releaseNotes": "<%= releaseNotes %>",
+				"changelog": "<%= package.changelogEscaped %>",
 				"version": "<%= package.version %>"
 			}
 		},
