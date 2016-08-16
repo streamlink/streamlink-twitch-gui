@@ -24,6 +24,7 @@
 		"grunt-webpack": "bastimeyer/grunt-webpack#plugins-grunt-template-fix",
 		"webpack": "1.13.1",
 		"webpack-dev-server": "1.14.1",
+		"webpack-split-by-path": "0.0.10",
 		"html-webpack-plugin": "2.22.0",
 		"copy-webpack-plugin": "3.0.1",
 		"extract-text-webpack-plugin": "1.0.1",

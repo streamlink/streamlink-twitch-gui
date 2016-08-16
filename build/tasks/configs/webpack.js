@@ -1,6 +1,6 @@
-var FS = require( "fs" );
 var PATH = require( "path" );
 var webpack = require( "webpack" );
+var SplitByPathPlugin = require( "webpack-split-by-path" );
 var HtmlWebpackPlugin = require( "html-webpack-plugin" );
 var CopyWebpackPlugin = require( "copy-webpack-plugin" );
 var ExtractTextPlugin = require( "extract-text-webpack-plugin" );
@@ -19,8 +19,8 @@ var pTest = r( pRoot, "test" );
 var pStyles = r( pRoot, "styles" );
 var pImages = r( pRoot, "img" );
 var pTemplates = r( pRoot, "templates" );
-var pVendor = r( pRoot, "vendor" );
-var pWebModules = r( pRoot, "web_modules" );
+var pModulesBower = r( pRoot, "vendor" );
+var pModulesNpm = r( ".", "node_modules" );
 var pBuildDev = r( ".", "build", "tmp", "dev" );
 var pBuildProd = r( ".", "build", "tmp", "prod" );
 var pBuildTest = r( ".", "build", "tmp", "test" );
@@ -49,16 +49,8 @@ module.exports = {
 			devtoolModuleFilenameTemplate: "/[resource-path]"
 		},
 
-		entry: {
-			// the "main" module is our real entry module
-			main: "main",
-			// a list of modules in a separated vendor module file
-			vendor: FS.readdirSync( pWebModules )
-				.sort()
-				.map(function( name ) {
-					return name.replace( /\.\w+$/, "" );
-				})
-		},
+		// the entry module
+		entry: "main",
 
 		resolve: {
 			modulesDirectories: [
@@ -71,7 +63,7 @@ module.exports = {
 				"styles"      : pStyles,
 				"img"         : pImages,
 				"templates"   : pTemplates,
-				"vendor"      : pVendor,
+				"vendor"      : pModulesBower,
 
 				// app folders
 				"config"      : r( pApp, "config" ),
@@ -123,7 +115,7 @@ module.exports = {
 				// Vendor stylesheets (don't parse anything)
 				{
 					test: /\.css$/,
-					include: pVendor,
+					include: pModulesBower,
 					loader: cssExtractTextPlugin.extract([
 						"css?sourceMap&-minify&-url&-import"
 					])
@@ -151,11 +143,21 @@ module.exports = {
 			// don't split the main module into multiple chunks
 			new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
 
-			// extract all vendor modules for a quicker app rebuild
-			new webpack.optimize.CommonsChunkPlugin({
-				name: "vendor",
-				minChunks: Infinity
-			}),
+			// split into chunks by module path
+			new SplitByPathPlugin([
+				{
+					name: "vendor.bower",
+					path: pModulesBower
+				},
+				{
+					name: "vendor.npm",
+					path: pModulesNpm
+				},
+				{
+					name: "templates",
+					path: pTemplates
+				}
+			]),
 
 			// NW.js package.json
 			new CopyWebpackPlugin([
@@ -251,11 +253,11 @@ module.exports = {
 			// use non-debug versions of ember and ember-data in production builds
 			new webpack.NormalModuleReplacementPlugin(
 				/vendor\/ember\/ember\.debug\.js$/,
-				r( pVendor, "ember", "ember.prod.js" )
+				r( pModulesBower, "ember", "ember.prod.js" )
 			),
 			new webpack.NormalModuleReplacementPlugin(
 				/vendor\/ember-data\/ember-data\.js$/,
-				r( pVendor, "ember-data", "ember-data.prod.js" )
+				r( pModulesBower, "ember-data", "ember-data.prod.js" )
 			),
 
 			// minify
