@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/button/FormButtonComponent"
+	"templates/components/button/FormButtonComponent.hbs"
 ], function(
 	Ember,
 	layout

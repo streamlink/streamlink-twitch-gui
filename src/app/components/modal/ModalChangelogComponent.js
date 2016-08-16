@@ -4,7 +4,7 @@ define([
 	"nwjs/nwGui",
 	"components/modal/ModalDialogComponent",
 	"nwjs/openBrowser",
-	"hbs!templates/components/modal/ModalChangelogComponent"
+	"templates/components/modal/ModalChangelogComponent.hbs"
 ], function(
 	Ember,
 	config,

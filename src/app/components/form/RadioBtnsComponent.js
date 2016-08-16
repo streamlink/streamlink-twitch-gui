@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/form/RadioBtnsComponent"
+	"templates/components/form/RadioBtnsComponent.hbs"
 ], function(
 	Ember,
 	layout

@@ -1,10 +1,10 @@
 define([
 	"utils/node/fs/stat",
 	"utils/node/fs/mkdirp",
-	"commonjs!path",
-	"commonjs!fs",
-	"commonjs!http",
-	"commonjs!https"
+	"path",
+	"fs",
+	"http",
+	"https"
 ], function(
 	stat,
 	mkdirp,

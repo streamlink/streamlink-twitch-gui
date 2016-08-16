@@ -2,9 +2,21 @@
 	"icons": {
 		"big": "img/icon-256.png",
 		"tray": {
-			"win32": "%NWJSAPPPATH%\\img\\icon-16{hidpi}.png",
-			"darwin": "img/icon-osx-18{hidpi}.png",
-			"linux": "img/icon-16{hidpi}.png"
+			"win32": {
+				"@1x": "img/icon-16.png",
+				"@2x": "img/icon-16@2x.png",
+				"@3x": "img/icon-16@3x.png"
+			},
+			"darwin": {
+				"@1x": "img/icon-osx-18.png",
+				"@2x": "img/icon-osx-18@2x.png",
+				"@3x": "img/icon-osx-18@3x.png"
+			},
+			"linux": {
+				"@1x": "img/icon-16.png",
+				"@2x": "img/icon-16@2x.png",
+				"@3x": "img/icon-16@3x.png"
+			}
 		}
 	}
 }

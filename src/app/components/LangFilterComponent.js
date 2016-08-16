@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/LangFilterComponent"
+	"templates/components/LangFilterComponent.hbs"
 ], function(
 	Ember,
 	layout

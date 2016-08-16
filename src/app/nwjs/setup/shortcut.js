@@ -6,8 +6,8 @@ define([
 	"utils/node/platform",
 	"utils/node/denodify",
 	"utils/node/fs/stat",
-	"commonjs!fs",
-	"commonjs!path"
+	"fs",
+	"path"
 ], function(
 	Ember,
 	config,

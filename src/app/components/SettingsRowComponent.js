@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/SettingsRowComponent"
+	"templates/components/SettingsRowComponent.hbs"
 ], function(
 	Ember,
 	layout

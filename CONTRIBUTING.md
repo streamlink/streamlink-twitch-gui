@@ -24,11 +24,13 @@ Feature requests are welcome. But take a moment to find out whether your idea fi
 
 
 ## Developing and building
-Livestreamer Twitch GUI is based on [NW.js][NW.js]. This means, that if you want to debug or contribute to this program, NW.js has to be installed on your machine - using a browser does not work. There are grunt tasks (the build tool that's being used) available that will download and start NW.js for you (see below). Also please ensure that you've installed the latest stable version of [Node.js][Node.js] (including [npm][npm]), so all dependencies can be installed as well and the application can be built and compiled.
 
-If you want to know more about NW.js apps in general, head over to the [NW.js website][NW.js-website].
+Livestreamer Twitch GUI is based on [NW.js][NW.js].  
+Please visit the [NW.js website][NW.js-website] if you want to know more about NW.js apps.
 
-Run these commands to get started:
+Building the application is simple. Please ensure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Npm][npm] (bundled with Node.js) are installed on your system, so all dependencies can be installed and the application can be built and compiled.
+
+### Setup
 
 ```bash
 # clone the repository
@@ -42,25 +44,37 @@ npm install -g grunt-cli bower
 npm install
 ```
 
-If you just want to build and compile the application, do this:
+Livestreamer Twitch GUI uses [Gruntjs][Gruntjs] and [Webpack][Webpack] as build tools.  
+To get a list of all available grunt tasks, run `grunt --help`.  
+All task configs can be found in `build/tasks/{configs,custom}`.
+
+### Developing
 
 ```bash
-# build and compile - executable will be created inside the build/releases folder
+grunt build
+```
+
+This will create a development build and will run it afterwards. If NW.js has not been downloaded yet, it will do this automatically.  
+Since NW.js is based on Chromium, you will find all the usual debugging tools. These can be accessed by clicking the button in the titlebar of the application or by opening `http://localhost:8888/` in your web browser. IDEs with internal NW.js debugging support can be used as well.  
+Once NW.js has been launched, file watchers will look for any changes being made to the source files and will then rebuild those parts of the application.
+
+### Testing
+
+```bash
+grunt test
+```
+
+Builds the tests and runs them.
+
+### Building and compiling
+
+```bash
 grunt release
 ```
 
-To get a list of all available grunt tasks, run `grunt --help`, or just take a look at the files in `build/tasks/{config,custom}`. 
+This creates a production build and compiles it afterwards into the `build/releases` folder.
 
-While debugging and developing, you can choose between two methods:
-
-1. **Run the dev build**  
-   Simply run `grunt`. This will start the `dev` grunt task, which will then begin building the application (with enabled debug flags) into the `build/tmp` folder. This task will also start a couple of file watchers which rebuild the application as soon as some changes are being made. NW.js will automatically be downloaded and launched.
-
-2. **Run from source**  
-   Another way of running the application is by starting it directly from the `src` folder without building/compiling it. This method should be faster than the first one.  
-   To do this, run `grunt src`. This will do some preparations first before downloading and launching NW.js and will also start additional file watchers.
-
-Since NW.js is based on Chromium, you will find all the usual debugging tools. These can be accessed by clicking the button in the titlebar of the application, or by launching NW.js with the `--remote-debugging-port=8888` parameter (grunt already does this). The dev tools can then be found in your local browser at `http://localhost:8888/`. There also exist several IDEs with internal NW.js debugging support, too.
+The `release` task supports multiple *targets* for different platforms. Targets can be set by appending `:target` to the task name (eg. `grunt release:linux64:osx64`). See `build/tasks/common/platforms.js` for all available targets.
 
 
 ## Pull requests
@@ -126,6 +140,9 @@ This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5
   [howto-open-pull-requests]: https://help.github.com/articles/using-pull-requests
   [NW.js]: https://github.com/nwjs/nw.js
   [NW.js-website]: http://nwjs.io
+  [Git]: https://git-scm.com
   [Node.js]: https://nodejs.org
   [npm]: https://npmjs.org
+  [Gruntjs]: http://gruntjs.com
+  [Webpack]: https://webpack.github.io
   [ref-h5bp]: https://github.com/h5bp/html5-boilerplate/blob/master/CONTRIBUTING.md

@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"Selecter",
-	"hbs!templates/components/form/DropDownComponent"
+	"templates/components/form/DropDownComponent.hbs"
 ], function(
 	Ember,
 	Selecter,

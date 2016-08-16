@@ -1,33 +1,21 @@
 default:
-    - "dev"
-dev:
     - "build"
-    - "concurrent:runbuild"
-src:
-    - "metadata"
-    - "less:source"
-    - "concurrent:runsrc"
-test:
-    - "jshint:test"
-    - "connect:test"
-    - "qunit"
 build:
+    - "build:dev"
+build:dev:
     - "jshint:tasks"
     - "jshint:app"
-    - "clean:tmp"
-    - "copy:build"
-    - "svgmin"
-    - "metadata"
-    - "less:dev"
-    - "requirejs:dev"
-buildrelease:
+    - "clean:tmp_dev"
+    - "webpack:dev"
+build:prod:
     - "jshint:tasks"
     - "jshint:app"
     - "test"
-    - "clean:tmp"
-    - "copy:build"
-    - "svgmin"
-    - "metadata"
-    - "less:release"
-    - "requirejs:release"
-    - "uglify"
+    - "clean:tmp_prod"
+    - "webpack:prod"
+test:
+    - "jshint:test"
+    - "clean:tmp_test"
+    - "webpack:test"
+    - "connect:test"
+    - "qunit"

@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/list/HeadlineTotalsComponent"
+	"templates/components/list/HeadlineTotalsComponent.hbs"
 ], function(
 	Ember,
 	layout

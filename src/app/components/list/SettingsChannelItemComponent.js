@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"components/list/ListItemComponent",
-	"hbs!templates/components/list/SettingsChannelItemComponent"
+	"templates/components/list/SettingsChannelItemComponent.hbs"
 ], function(
 	Ember,
 	ListItemComponent,

@@ -1,5 +1,5 @@
 define([
-	"qunit",
+	"QUnit",
 	"utils/semver"
 ], function(
 	QUnit,

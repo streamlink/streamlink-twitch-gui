@@ -1,31 +1,24 @@
-"use strict";
-
 var NwBuilder = require( "nw-builder" );
 
+
 module.exports = function( grunt ) {
-	var name  = "nwjs";
+	var task  = "nwjs";
 	var descr = "Build the NW.js application";
 
-	grunt.registerMultiTask( name, descr, function() {
+	grunt.registerMultiTask( task, descr, function() {
 		var done      = this.async();
 		var options   = this.options();
 
-		options.files = this.filesSrc;
-
 		var nw = new NwBuilder( options );
 
-		nw.on( "log", function( log ) {
-			grunt.log.debug( log );
-		});
+		nw.on( "log", grunt.log.debug );
+		nw.on( "stdout", grunt.log.debug );
+		nw.on( "stderr", grunt.log.debug );
 
-		nw.build(function( err ) {
-			if ( err ) {
-				grunt.fail.fatal( err );
-			} else {
-				grunt.log.ok( "NW.js application created." );
-			}
+		nw.build().then(function() {
+			grunt.log.ok( "NW.js application created." );
 			done();
-		});
+		}, grunt.fail.fatal );
 	});
 
 };

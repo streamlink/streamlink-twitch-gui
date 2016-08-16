@@ -1,13 +1,13 @@
 module.exports = {
-	options: {
+	options: Object.assign( {}, require( "./nwjs" ).options, {
 		argv: "--remote-debugging-port=8888"
+	}),
+
+	dev: {
+		src: "build/tmp/dev/**"
 	},
 
-	build: {
-		src: "build/tmp/**"
-	},
-
-	src: {
-		src: "src/**"
+	prod: {
+		src: "build/tmp/prod/**"
 	}
 };

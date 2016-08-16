@@ -1,12 +1,4 @@
 
-// import all themes here
-@import "themes/default";
-@import "themes/dark";
-
-// list of all themes
-@THEMES: ~"default", ~"dark";
-
-
 .themed( @block ) {
 	.loop( @i, @n ) when( @i <= @n ) {
 		@name: extract( @THEMES, @i );

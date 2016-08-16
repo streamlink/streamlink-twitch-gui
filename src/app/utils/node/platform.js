@@ -1,8 +1,8 @@
 define([
 	"config",
 	"utils/semver",
-	"commonjs!os",
-	"commonjs!path"
+	"os",
+	"path"
 ], function(
 	config,
 	semver,

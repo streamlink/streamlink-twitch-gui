@@ -2,7 +2,7 @@ define([
 	"Ember",
 	"components/modal/ModalDialogComponent",
 	"nwjs/nwWindow",
-	"hbs!templates/components/modal/ModalQuitComponent"
+	"templates/components/modal/ModalQuitComponent.hbs"
 ], function(
 	Ember,
 	ModalDialogComponent,

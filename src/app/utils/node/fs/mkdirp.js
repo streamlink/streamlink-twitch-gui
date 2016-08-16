@@ -1,8 +1,8 @@
 define([
 	"utils/node/denodify",
 	"utils/node/fs/stat",
-	"commonjs!path",
-	"commonjs!fs"
+	"path",
+	"fs"
 ], function(
 	denodify,
 	stat,

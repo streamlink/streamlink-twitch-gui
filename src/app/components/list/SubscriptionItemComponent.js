@@ -4,7 +4,7 @@ define([
 	"nwjs/openBrowser",
 	"components/list/ListItemComponent",
 	"Moment",
-	"hbs!templates/components/list/SubscriptionItemComponent"
+	"templates/components/list/SubscriptionItemComponent.hbs"
 ], function(
 	Ember,
 	config,

@@ -13,17 +13,22 @@ define([
 	var reMinWidth       = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/;
 	var cachedMinWidths  = {};
 
-	var cssMinWidthRules = [].filter.call( document.styleSheets[0].rules, function( rule ) {
+	var styleSheetsRules = [].reduce.call( document.styleSheets, function( rules, stylesheet ) {
+		rules.push.apply( rules, stylesheet.rules );
+		return rules;
+	}, [] );
+
+	var cssMinWidthRules = [].filter.call( styleSheetsRules, function( rule ) {
 		return rule instanceof CSSMediaRule
 		    && rule.media.length === 1
 		    && reMinWidth.test( rule.media[0] )
 		    && rule.cssRules.length > 0;
 	});
-	var cachedMinHeights = [].filter.call( document.styleSheets[0].rules, function( rule ) {
+	var cachedMinHeights = [].filter.call( styleSheetsRules, function( rule ) {
 		return rule instanceof CSSStyleRule
 		    && rule.style.minHeight !== "";
 	}).reduce(function( cache, rule ) {
-		cache[ rule.selectorText ] = parseInt( rule.style.minHeight );
+		cache[ rule.selectorText ] = parseInt( rule.style.minHeight, 10 );
 		return cache;
 	}, {} );
 
