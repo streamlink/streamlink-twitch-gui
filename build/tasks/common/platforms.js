@@ -40,6 +40,10 @@ module.exports = {
 		return "Optional platforms: all:x86:x64:" + Object.keys( this.platforms ).join( ":" );
 	},
 
+	/**
+	 * @param {string[]} platforms
+	 * @returns {string[]}
+	 */
 	getPlatforms: function( platforms ) {
 		var configs = this.platforms;
 		var filters = this.filters;
@@ -106,6 +110,11 @@ module.exports = {
 		);
 	},
 
+	/**
+	 * @param {string} task
+	 * @param {string[]} targets
+	 * @returns {string[]}
+	 */
 	getTasks: function( task, targets ) {
 		return this.getPlatforms( targets )
 			.map(function( platform ) {

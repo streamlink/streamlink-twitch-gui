@@ -3,7 +3,7 @@ var platforms = require( "../common/platforms" );
 
 module.exports = function( grunt ) {
 	var task  = "dist";
-	var descr = "Build the project, compile and compress it. " + platforms.getList();
+	var descr = "Build the application, compile, compress and checksum it. " + platforms.getList();
 
 	grunt.task.registerTask( task, descr, function() {
 		grunt.task.run( []
@@ -13,6 +13,8 @@ module.exports = function( grunt ) {
 			.concat( platforms.getTasks( "compile", arguments ) )
 			// compress
 			.concat( platforms.getTasks( "compress", arguments ) )
+			// checksum
+			.concat([ "checksum:" + [].slice.call( arguments ).join( ":" ) ])
 		);
 	});
 };

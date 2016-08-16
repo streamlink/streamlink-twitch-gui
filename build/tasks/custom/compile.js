@@ -4,7 +4,7 @@ var tasks = require( "../configs/compile" );
 
 module.exports = function( grunt ) {
 	var task  = "compile";
-	var descr = "Compile the built project. " + platforms.getList();
+	var descr = "Compile the built application. " + platforms.getList();
 
 	grunt.task.registerTask( task, descr, function() {
 		platforms.getPlatforms( arguments )
