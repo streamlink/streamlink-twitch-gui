@@ -47,10 +47,14 @@ More informations and installation instructions can be found in the project's [W
 #### Packages
 
 Chocolatey (Windows):  
-[`livestreamer-twitch-gui`][Package-Chocolatey]
+[`choco install livestreamer-twitch-gui`][Package-Chocolatey]
 
 AUR (Arch Linux):  
-[`livestreamer-twitch-gui`][Package-AUR]
+[`yaourt -S livestreamer-twitch-gui`][Package-AUR]  
+[`yaourt -S livestreamer-twitch-gui-git`][Package-AUR-git]
+
+Homebrew Cask (OS X):  
+[`brew cask install livestreamer-twitch-gui`][Package-Homebrew-cask]  
 
 #### Development version
 
@@ -82,7 +86,7 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
 
 
 
-  [Preview]: https://cloud.githubusercontent.com/assets/467294/9153558/c14cdfa2-3e5e-11e5-87b3-982188dc5d3c.png "Preview image"
+  [Preview]: https://cloud.githubusercontent.com/assets/467294/17694798/e23ac324-63a5-11e6-857d-54f8c9228fda.png "Preview image"
   [Releases]: https://github.com/bastimeyer/livestreamer-twitch-gui/releases "Livestreamer Twitch GUI Releases"
   [Issues]: https://github.com/bastimeyer/livestreamer-twitch-gui/issues "Livestreamer Twitch GUI Issues"
   [Wiki]: https://github.com/bastimeyer/livestreamer-twitch-gui/wiki "Livestreamer Twitch GUI Wiki"
@@ -106,4 +110,6 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [badge-issues]: https://img.shields.io/github/issues/bastimeyer/livestreamer-twitch-gui.svg?style=flat-square "Open issues"
   [badge-gitter]: https://img.shields.io/gitter/room/bastimeyer/livestreamer-twitch-gui.svg?style=flat-square "Gitter IRC"
   [Package-Chocolatey]: https://chocolatey.org/packages/livestreamer-twitch-gui "Chocolatey package"
-  [Package-AUR]: https://aur.archlinux.org/packages/livestreamer-twitch-gui "AUR package"
+  [Package-AUR]: https://aur.archlinux.org/packages/livestreamer-twitch-gui "AUR stable package"
+  [Package-AUR-git]: https://aur.archlinux.org/packages/livestreamer-twitch-gui-git "AUR git package"
+  [Package-Homebrew-cask]: https://caskroom.github.io/

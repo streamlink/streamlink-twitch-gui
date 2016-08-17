@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/PreviewImageComponent"
+	"templates/components/PreviewImageComponent.hbs"
 ], function(
 	Ember,
 	layout

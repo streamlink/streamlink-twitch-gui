@@ -40,15 +40,20 @@ module.exports = {
 		return "Optional platforms: all:x86:x64:" + Object.keys( this.platforms ).join( ":" );
 	},
 
-	getPlatform: function( grunt, platforms ) {
-		var configs = this.platforms,
-		    filters = this.filters;
+	/**
+	 * @param {string[]} platforms
+	 * @returns {string[]}
+	 */
+	getPlatforms: function( platforms ) {
+		var configs = this.platforms;
+		var filters = this.filters;
 		platforms = [].slice.call( platforms );
 
 		// all platforms or platforms by arch
 		if ( platforms.length === 1 ) {
-			var keys = Object.keys( configs ),
-			    res;
+			var keys = Object.keys( configs );
+			var res;
+
 			switch ( platforms[0] ) {
 				case "all":
 					return keys;
@@ -90,25 +95,28 @@ module.exports = {
 		} else if ( platforms.length === 0 ) {
 			return Object.keys( configs ).filter(function( platform ) {
 				var config = configs[ platform ];
-				return	config.platform === process.platform
-					&&	( config.arch === null || config.arch === process.arch );
+				return config.platform === process.platform
+				    && ( config.arch === null || config.arch === process.arch );
 			});
 
 		// validate given platform list
-		} else if ( platforms.every(function( platform ) {
-			return configs.hasOwnProperty( platform );
-		}) ) {
+		} else if ( platforms.every( configs.hasOwnProperty.bind( configs ) ) ) {
 			return platforms;
 		}
 
-		grunt.fail.fatal(
+		throw new Error(
 			"Invalid platforms. " +
 			"Valid platforms are: all:" + Object.keys( configs ).join( ":" )
 		);
 	},
 
-	getTasks: function( grunt, task, targets ) {
-		return this.getPlatform( grunt, targets )
+	/**
+	 * @param {string} task
+	 * @param {string[]} targets
+	 * @returns {string[]}
+	 */
+	getTasks: function( task, targets ) {
+		return this.getPlatforms( targets )
 			.map(function( platform ) {
 				return task + ":" + platform;
 			});

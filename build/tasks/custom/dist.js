@@ -1,21 +1,20 @@
+var platforms = require( "../common/platforms" );
+
+
 module.exports = function( grunt ) {
-	"use strict";
+	var task  = "dist";
+	var descr = "Build the application, compile, compress and checksum it. " + platforms.getList();
 
-	var platforms = require( "../common/platforms" );
-
-	grunt.task.registerTask(
-		"dist",
-		"Build the project, compile and compress it. " + platforms.getList(),
-		function() {
-			grunt.task.run( []
-				// make a fresh build
-				.concat([ "buildrelease" ])
-				// compile
-				.concat( platforms.getTasks( grunt, "compile", arguments ) )
-				// compress
-				.concat( platforms.getTasks( grunt, "compress", arguments ) )
-			);
-		}
-	);
-
+	grunt.task.registerTask( task, descr, function() {
+		grunt.task.run( []
+			// build
+			.concat([ "build:prod" ])
+			// compile
+			.concat( platforms.getTasks( "compile", arguments ) )
+			// compress
+			.concat( platforms.getTasks( "compress", arguments ) )
+			// checksum
+			.concat([ "checksum:" + [].slice.call( arguments ).join( ":" ) ])
+		);
+	});
 };

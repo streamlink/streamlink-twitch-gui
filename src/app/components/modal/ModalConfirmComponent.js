@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"components/modal/ModalDialogComponent",
-	"hbs!templates/components/modal/ModalConfirmComponent"
+	"templates/components/modal/ModalConfirmComponent.hbs"
 ], function(
 	Ember,
 	ModalDialogComponent,

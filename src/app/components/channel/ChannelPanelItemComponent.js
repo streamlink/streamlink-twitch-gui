@@ -2,7 +2,7 @@ define([
 	"Ember",
 	"nwjs/menu",
 	"nwjs/openBrowser",
-	"hbs!templates/components/channel/ChannelPanelItemComponent"
+	"templates/components/channel/ChannelPanelItemComponent.hbs"
 ], function(
 	Ember,
 	Menu,
@@ -59,6 +59,7 @@ define([
 
 		actions: {
 			"openBrowser": function( url ) {
+				if ( !url ) { return; }
 				this.sendAction( "openBrowser", url );
 			}
 		}

@@ -1,12 +1,14 @@
 
 .subscription-item-component {
-	@size: 6.5em;
-	@padding: 1.5em;
+	@size: 6.5rem;
+	@padding: 1.5rem;
+	@emoticon-size: 2rem;
 
+	display: flex;
+	flex-flow: column;
 	position: relative;
 	min-height: 264px;
 	margin-bottom: 2em;
-	padding-top: @padding;
 	background-position: center center;
 	background-size: cover;
 
@@ -29,13 +31,15 @@
 		flex-flow: row nowrap;
 		align-items: flex-start;
 		justify-content: space-between;
+		flex: 1 0;
+		margin: @padding;
 
 		> .logo {
 			display: block;
 			position: relative;
 			width: @size;
 			height: @size;
-			margin: 0 0 @padding @padding;
+			margin: 0;
 			cursor: pointer;
 		}
 
@@ -43,10 +47,10 @@
 			display: flex;
 			flex-flow: row-reverse nowrap;
 			align-items: flex-start;
-			margin-right: @padding;
+			margin: 0;
 			padding: .5em;
 			opacity: 0;
-			transition: opacity .333s ease-out;
+			transition: opacity .2s ease-out;
 
 			.themed({
 				background: @themed-subitem-background;
@@ -92,9 +96,20 @@
 		> .emoticons {
 			display: flex;
 			justify-content: flex-start;
+			min-height: @emoticon-size;
 
 			> li {
 				margin-right: .5em;
+
+				> img {
+					width: auto;
+					height: @emoticon-size;
+				}
+
+				&.no-emoticons {
+					font-style: italic;
+					line-height: @emoticon-size;
+				}
 			}
 		}
 	}

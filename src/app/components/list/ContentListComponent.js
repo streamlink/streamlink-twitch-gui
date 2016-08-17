@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/list/ContentListComponent"
+	"templates/components/list/ContentListComponent.hbs"
 ], function(
 	Ember,
 	layout

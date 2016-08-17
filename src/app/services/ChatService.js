@@ -7,8 +7,8 @@ define([
 	"utils/Substitution",
 	"utils/node/fs/whichFallback",
 	"utils/node/fs/stat",
-	"commonjs!child_process",
-	"commonjs!path"
+	"child_process",
+	"path"
 ], function(
 	Ember,
 	config,

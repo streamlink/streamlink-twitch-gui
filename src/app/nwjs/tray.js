@@ -19,13 +19,13 @@ define([
 			? "@3x"
 			: dpr > 1
 			? "@2x"
-			: "";
+			: "@1x";
 	}
 
 
 	return Ember.Object.extend({
 		tooltip: null,
-		icon   : null,
+		icons  : null,
 		items  : null,
 		menu   : null,
 		tray   : null,
@@ -51,6 +51,12 @@ define([
 		},
 
 
+		icon: function() {
+			var icons = get( this, "icons" );
+			return icons[ getScale() ];
+		}.property( "icons" ),
+
+
 		remove: function() {
 			if ( !this.tray ) { return; }
 			this.tray.remove();
@@ -60,7 +66,7 @@ define([
 		add: function( click ) {
 			this.remove();
 
-			var icon    = get( this, "icon" ).replace( "{hidpi}", getScale() );
+			var icon    = get( this, "icon" );
 			var tooltip = get( this, "tooltip" );
 
 			var tray = new Tray({

@@ -1,6 +1,6 @@
 define([
-	"commonjs!os",
-	"commonjs!path"
+	"os",
+	"path"
 ], function(
 	OS,
 	PATH

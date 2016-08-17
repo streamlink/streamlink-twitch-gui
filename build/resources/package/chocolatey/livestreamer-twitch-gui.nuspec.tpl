@@ -9,7 +9,7 @@
     <summary>A multi platform Twitch.tv browser for Livestreamer</summary>
     <description>This is just a graphical user interface (GUI) on top of the [Livestreamer][Livestreamer] command line interface (CLI).
 
-Livestreamer Twitch GUI is a [NW.js (formerly Node-Webkit)][NW.js] application, which means that it is a web application written in JavaScript ([EmberJS][EmberJS]), HTML ([Handlebars][Handlebars]) and CSS ([LessCSS][LessCSS]) and is being run by an [io.js][io.js] (fork of [Node.js][Node.js]) powered version of [Chromium][Chromium].
+Livestreamer Twitch GUI is a [NW.js][NW.js] application, which means that it is a web application written in JavaScript ([EmberJS][EmberJS]), HTML ([Handlebars][Handlebars]) and CSS ([LessCSS][LessCSS]) and is being run by a [Node.js][Node.js] powered version of [Chromium][Chromium].
 
 #### Package parameters
 
@@ -22,7 +22,6 @@ Example: `choco uninstall livestreamer-twitch-gui -y -params '"/Purge"'`
   [EmberJS]: http://emberjs.com/ "EmberJS"
   [Handlebars]: http://handlebarsjs.com/ "Handlebars.js"
   [LessCSS]: http://lesscss.org/ "LessCSS"
-  [io.js]: https://iojs.org "io.js"
   [Node.js]: https://nodejs.org "Node.js"
   [Chromium]: https://www.chromium.org/ "Chromium"
     </description>
@@ -38,6 +37,6 @@ Example: `choco uninstall livestreamer-twitch-gui -y -params '"/Purge"'`
     <dependencies>
       <dependency id="livestreamer" version="1.12.2"/>
     </dependencies>
-    <releaseNotes><%= releaseNotes %></releaseNotes>
+    <releaseNotes><%= changelog %></releaseNotes>
   </metadata>
 </package>

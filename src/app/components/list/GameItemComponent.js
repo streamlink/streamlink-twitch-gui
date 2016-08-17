@@ -1,7 +1,7 @@
 define([
 	"Ember",
 	"components/list/ListItemComponent",
-	"hbs!templates/components/list/GameItemComponent"
+	"templates/components/list/GameItemComponent.hbs"
 ], function(
 	Ember,
 	ListItemComponent,

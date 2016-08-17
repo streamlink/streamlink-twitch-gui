@@ -1,6 +1,6 @@
 define([
 	"Ember",
-	"hbs!templates/components/stream/StreamPresentationComponent"
+	"templates/components/stream/StreamPresentationComponent.hbs"
 ], function(
 	Ember,
 	layout

@@ -13,16 +13,20 @@ define([
 ) {
 
 	var displayName = config.main[ "display-name" ];
-	var trayIcon    = config.files[ "icons" ][ "tray" ][ platform.platform ];
+	var trayIcons   = config.files[ "icons" ][ "tray" ][ platform.platform ];
+
+	if ( platform.isWin ) {
+		Object.keys( trayIcons ).forEach(function( key ) {
+			trayIcons[ key ] = resolvePath( "%NWJSAPPPATH%/" + trayIcons[ key ] );
+		});
+	}
 
 
 	function createTrayIcon() {
-		var icon = resolvePath( trayIcon );
-
 		// apply a tray icon+menu to the main application window
 		nwWindow.tray = tray.create({
 			tooltip: displayName,
-			icon   : icon,
+			icons  : trayIcons,
 			items  : [
 				{
 					label: "Toggle window",

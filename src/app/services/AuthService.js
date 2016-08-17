@@ -5,7 +5,7 @@ define([
 	"nwjs/openBrowser",
 	"utils/contains",
 	"utils/node/http/Server",
-	"file!root/oauth-redirect.html"
+	"root/oauth-redirect.html"
 ], function(
 	Ember,
 	config,

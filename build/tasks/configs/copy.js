@@ -1,19 +1,4 @@
 module.exports = {
-	build: {
-		expand: true,
-		dest  : "build/tmp",
-		cwd   : "src",
-		src   : [
-			"package.json",
-			"index.html",
-			"oauth.{html,json}",
-			"vendor/requirejs/require.js",
-			"vendor/roboto-fontface/fonts/Roboto-{Light,Regular,Medium,Bold,RegularItalic}.woff2",
-			"vendor/font-awesome/fonts/*.woff2",
-			"img/**"
-		]
-	},
-
 	win32scripts: {
 		expand : true,
 		flatten: true,
