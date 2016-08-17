@@ -52,6 +52,13 @@ module.exports = function( grunt ) {
 			);
 		}
 
+		if ( options.checksumAtom ) {
+			promises.push(
+				require( "../common/download-and-hash" )( options.githubReleasesAtom )
+					.then( setConfig( "checksumAtom" ) )
+			);
+		}
+
 		Promise.all( promises )
 			.then(function() {
 				grunt.task.run( tasks || [] );

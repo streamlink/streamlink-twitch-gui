@@ -6,9 +6,10 @@ var parseUrl = require( "url" ).parse;
 /**
  * Download a file via https (default) or http and support redirects
  * @param {Object} request
+ * @param {stream.Writable?} stream
  * @returns {Promise<String>}
  */
-function download( request ) {
+function download( request, stream ) {
 	if ( typeof request === "string" ) {
 		request = parseUrl( request );
 	}
@@ -29,13 +30,19 @@ function download( request ) {
 				return download( response.headers[ "location" ] ).then( resolve, reject );
 			}
 
-			var data = [];
-			response.on( "data", function( chunk ) {
-				data.push( chunk );
-			});
-			response.on( "end", function() {
-				resolve( Buffer.concat( data ).toString() );
-			});
+			if ( stream ) {
+				response.pipe( stream );
+				response.on( "end", resolve );
+
+			} else {
+				var data = [];
+				response.on( "data", function( chunk ) {
+					data.push( chunk );
+				});
+				response.on( "end", function() {
+					resolve( Buffer.concat( data ).toString() );
+				});
+			}
 		}).on( "error", reject );
 	});
 }
