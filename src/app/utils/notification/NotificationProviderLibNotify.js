@@ -5,7 +5,10 @@ import UTIL from "util";
 
 
 function NotificationProviderLibNotify() {
-	this.provider = new LibNotify();
+	this.provider = new LibNotify({
+		// don't run `which notify-send` twice
+		suppressOsdCheck: true
+	});
 }
 
 UTIL.inherits( NotificationProviderLibNotify, NotificationProvider );
