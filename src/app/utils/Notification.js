@@ -19,7 +19,8 @@ const providers = {
 	"growl": ProviderGrowl,
 	"rich": ProviderRich
 };
-const cache = {};
+const fallbackMap = {};
+const instanceCache = {};
 
 
 /**
@@ -64,9 +65,9 @@ function getFallback( provider ) {
  * @returns {Promise}
  */
 function notify( provider, data, setupData ) {
-	var providerInstance = cache.hasOwnProperty( provider )
-		? cache[ provider ]
-		: ( cache[ provider ] = new providers[ provider ]( setupData ) );
+	let providerInstance = instanceCache.hasOwnProperty( provider )
+		? instanceCache[ provider ]
+		: ( instanceCache[ provider ] = new providers[ provider ]( setupData ) );
 
 	data.sound = false;
 	data.wait = false;
@@ -83,30 +84,38 @@ function notify( provider, data, setupData ) {
  * @returns {Promise}
  */
 export function show( provider, data, noFallback ) {
-	if ( !isSupported( provider ) ) {
-		return Promise.reject( new Error( "Invalid provider" ) );
+	// recursively test provider and its fallbacks
+	function testProvider( currentProvider ) {
+		// optimization: is a fallback for the current provider already known and set up?
+		if ( !noFallback && fallbackMap.hasOwnProperty( currentProvider ) ) {
+			// don't test the current provider twice
+			return notify( fallbackMap[ currentProvider ], data );
+		}
+
+		// test the current provider
+		return providers[ currentProvider ].test()
+			// current provider is working...
+			.then(function( setupData ) {
+				// add it to the fallbackMap
+				fallbackMap[ provider ] = currentProvider;
+				return notify( currentProvider, data, setupData );
+
+			// provider is not working... try to find fallbacks
+			}, function( err ) {
+				// don't use fallbacks
+				if ( noFallback ) {
+					return Promise.reject( err );
+				}
+
+				// get fallback of current provider
+				let fallbackProvider = getFallback( currentProvider );
+
+				// no further fallbacks defined?
+				return !fallbackProvider
+					? Promise.reject( err )
+					: testProvider( fallbackProvider );
+			});
 	}
 
-	return providers[ provider ].test()
-		.then(function( setupData ) {
-			return notify( provider, data, setupData );
-		})
-		.catch(function( err ) {
-			if ( noFallback ) {
-				return Promise.reject( err );
-			}
-
-			function showFallback( provider ) {
-				var fallbackProvider = getFallback( provider );
-
-				return show( fallbackProvider, data )
-					.catch(function( err ) {
-						return fallbackProvider === null
-							? Promise.reject( err )
-							: showFallback( fallbackProvider );
-					});
-			}
-
-			return showFallback( provider );
-		});
+	return testProvider( provider );
 }
