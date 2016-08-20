@@ -16,5 +16,7 @@
 		"min_height": 540,
 		"icon": "img/icon-256.png",
 		"show_in_taskbar": false
-	}
+	},
+
+	"chromium-args": "--disable-devtools"
 }
