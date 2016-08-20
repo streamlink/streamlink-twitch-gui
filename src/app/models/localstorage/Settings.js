@@ -139,6 +139,7 @@ export default Model.extend({
 	stream_click_modify : attr( "number",  { defaultValue: 4 } ),
 	channel_name        : attr( "number",  { defaultValue: 3 } ),
 	notify_enabled      : attr( "boolean", { defaultValue: true } ),
+	notify_provider     : attr( "string",  { defaultValue: "auto" } ),
 	notify_all          : attr( "boolean", { defaultValue: true } ),
 	notify_grouping     : attr( "boolean", { defaultValue: true } ),
 	notify_click        : attr( "number",  { defaultValue: 1 } ),
@@ -189,6 +190,57 @@ export default Model.extend({
 		{ value:  60000, label: "After one minute" },
 		{ value: 120000, label: "After two minutes" },
 		{ value: 300000, label: "After five minutes" }
+	],
+
+	notify_provider: [
+		{
+			value: "auto",
+			label: {
+				name: "Automatic selection",
+				description: "Detects the best type of notification",
+				notes: "Prefers native notifications, falls back to growl or rich notifications"
+			}
+		},
+		{
+			value: "toast",
+			label: {
+				name: "Windows toast notifications",
+				description: "Native notifications on Windows 8+",
+				notes: "\"Banner notifications\" need to be enabled"
+			}
+		},
+		{
+			value: "notificationcenter",
+			label: {
+				name: "Notification center",
+				description: "Native notifications on MacOS",
+				notes: "Does not support click events"
+			}
+		},
+		{
+			value: "libnotify",
+			label: {
+				name: "Libnotify notifications",
+				description: "Native notifications on Linux",
+				notes: "Does not support click events"
+			}
+		},
+		{
+			value: "growl",
+			label: {
+				name: "Growl notifications",
+				description: "Third-party notification service for Windows, MacOS and Linux",
+				notes: "Requires Growl to be installed and running on your system"
+			}
+		},
+		{
+			value: "rich",
+			label: {
+				name: "Rich notifications",
+				description: "Chromium rich notifications",
+				notes: "Rendered by the application itself"
+			}
+		}
 	],
 
 	notify_all: [

@@ -25,6 +25,7 @@ import { tmpdir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
 import download from "utils/node/fs/download";
 import clearfolder from "utils/node/fs/clearfolder";
+import { show as showNotification } from "utils/Notification";
 
 
 const { and } = computed;
@@ -48,7 +49,6 @@ const {
 const { icons: { "big": iconGroup } } = files;
 
 const cacheTmpDir = tmpdir( cacheDir );
-const Notif = window.chrome.notifications;
 
 
 function StreamCache( stream ) {
@@ -119,32 +119,6 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		return `Desktop notifications are ${status}`;
 	}),
-
-
-	_setupNotifications: function() {
-		[ "onClosed", "onClicked" ].forEach(function( key ) {
-			var ev = Notif[ key ];
-			ev.getListeners().forEach(function( listener ) {
-				ev.removeListener( listener.callback );
-			});
-		});
-
-		var self = this;
-
-		Notif.onClosed.addListener(function( id ) {
-			id = Number( id );
-			if ( isNaN( id ) ) { return; }
-			self.notifs.splice( id, 1 );
-		});
-
-		Notif.onClicked.addListener(function( id ) {
-			var callback = self.notifs[ Number( id ) ];
-			if ( callback ) {
-				callback();
-			}
-			Notif.clear( id );
-		});
-	}.on( "init" ),
 
 
 	/**
@@ -411,32 +385,27 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 	showNotificationGroup: function( streams ) {
-		this.showNotification(
-			"Some followed channels have started streaming",
-			iconGroup,
-			streams.map(function( stream ) {
+		this.showNotification({
+			title  : "Some followed channels have started streaming",
+			message: streams.map(function( stream ) {
+				/** @type NotificationMessageList */
 				return {
 					title  : get( stream, "channel.display_name" ),
 					message: get( stream, "channel.status" ) || ""
 				};
 			}),
-			function() {
-				var settings = get( this, "settings.notify_click_group" );
-				this.notificationClick( settings, streams );
-			}.bind( this )
-		);
+			icon   : "file://" + iconGroup,
+			click  : this.notificationClick.bind( this, streams )
+		});
 	},
 
 	showNotificationSingle: function( stream ) {
-		this.showNotification(
-			get( stream, "channel.display_name" ) + " has started streaming",
-			get( stream, "logo" ) || get( stream, "channel.logo" ),
-			get( stream, "channel.status" ) || "",
-			function() {
-				var settings = get( this, "settings.notify_click" );
-				this.notificationClick( settings, [ stream ] );
-			}.bind( this )
-		);
+		this.showNotification({
+			title  : get( stream, "channel.display_name" ) + " has started streaming",
+			message: get( stream, "channel.status" ) || "",
+			icon   : get( stream, "logo" ) || get( stream, "channel.logo" ),
+			click  : this.notificationClick.bind( this, [ stream ] )
+		});
 	},
 
 	notificationClick: function( settings, streams ) {
@@ -474,25 +443,10 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 	},
 
-	showNotification: function( title, icon, message, click ) {
-		var data = {
-			title         : title,
-			iconUrl       : icon,
-			contextMessage: get( this, "config.display-name" ),
-			isClickable   : true
-		};
-
-		if ( message instanceof Array ) {
-			data.type = "list";
-			data.message = "";
-			data.items = message;
-		} else {
-			data.type = "basic";
-			data.message = message;
-		}
-
-		var id = this.notifs.push( click ) - 1;
-		Notif.create( String( id ), data );
+	showNotification: function( data ) {
+		var provider = get( this, "settings.notify_provider" );
+		showNotification( provider, data )
+			.catch(function() {});
 	},
 
 

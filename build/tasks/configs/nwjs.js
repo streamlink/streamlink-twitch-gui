@@ -8,6 +8,7 @@ module.exports = {
 		winIco  : "<%= dir.resources %>/icons/icon-16-32-48-256.ico",
 		macIcns : "<%= dir.resources %>/icons/icon-1024.icns",
 		macPlist: {
+			CFBundleIdentifier : "<%= main['app-identifier'] %>",
 			CFBundleName       : "<%= main['display-name'] %>",
 			CFBundleDisplayName: "<%= main['display-name'] %>",
 			LSEnvironment      : {
