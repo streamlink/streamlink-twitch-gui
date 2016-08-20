@@ -23,13 +23,17 @@ NotificationProvider.prototype.notify = function notify( data ) {
 	}
 
 	return new Promise(function( resolve, reject ) {
-		self.provider.notify( data, function( err ) {
+		let notification = self.provider.notify( data, function( err ) {
 			if ( err ) {
 				reject( err );
 			} else {
 				resolve();
 			}
 		});
+
+		if ( data.click ) {
+			notification.once( "click", data.click );
+		}
 	});
 };
 
