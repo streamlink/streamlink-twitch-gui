@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"models/localstorage/Settings"
-], function(
-	Ember,
-	Settings
-) {
+import Ember from "Ember";
+import Settings from "models/localstorage/Settings";
+
 
 	var get = Ember.get;
 	var sort = Ember.computed.sort;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		auth: Ember.inject.service(),
 		livestreamer: Ember.inject.service(),
 
@@ -29,5 +25,3 @@ define([
 			}
 		}
 	});
-
-});

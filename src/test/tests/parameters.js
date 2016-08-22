@@ -1,23 +1,15 @@
-/* jshint quotmark:false */
-define([
-	"QUnit",
-	"Ember",
-	"utils/Parameter",
-	"utils/ParameterCustom",
-	"utils/Substitution"
-], function(
-	QUnit,
-	Ember,
-	Parameter,
-	ParameterCustom,
-	Substitution
-) {
+	/* jshint quotmark:false */
+import QUnit from "QUnit";
+import Parameter from "utils/Parameter";
+import ParameterCustom from "utils/ParameterCustom";
+import Substitution from "utils/Substitution";
+
 
 	var subst = Substitution.substitute;
 	var getParams = Parameter.getParameters;
 
 
-	QUnit.module( "Parameters" );
+	QUnit.module( "Parameters", {} );
 
 
 	QUnit.test( "Substitutions", function( assert ) {
@@ -338,5 +330,3 @@ define([
 		);
 
 	});
-
-});

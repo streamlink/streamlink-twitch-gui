@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"EmberData",
-	"config",
-	"store/AdapterMixin"
-], function(
-	Ember,
-	DS,
-	config,
-	AdapterMixin
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+import config from "config";
+import AdapterMixin from "store/AdapterMixin";
+
 
 	var get = Ember.get;
 
@@ -17,7 +11,7 @@ define([
 	var reURLFragment = /^:(.+)$/;
 
 
-	return DS.RESTAdapter.extend( AdapterMixin, {
+	export default DS.RESTAdapter.extend( AdapterMixin, {
 		auth: Ember.inject.service(),
 
 		host: "https://api.twitch.tv",
@@ -91,5 +85,3 @@ define([
 			return url;
 		}
 	});
-
-});

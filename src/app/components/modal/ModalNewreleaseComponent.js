@@ -1,20 +1,14 @@
-define([
-	"Ember",
-	"components/modal/ModalDialogComponent",
-	"nwjs/openBrowser",
-	"templates/components/modal/ModalNewreleaseComponent.hbs"
-], function(
-	Ember,
-	ModalDialogComponent,
-	openBrowser,
-	layout
-) {
+import Ember from "Ember";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import openBrowser from "nwjs/openBrowser";
+import layout from "templates/components/modal/ModalNewreleaseComponent.hbs";
+
 
 	var get = Ember.get;
 	var readOnly = Ember.computed.readOnly;
 
 
-	return ModalDialogComponent.extend({
+	export default ModalDialogComponent.extend({
 		versioncheck: Ember.inject.service(),
 
 		layout: layout,
@@ -43,5 +37,3 @@ define([
 			}
 		}
 	});
-
-});

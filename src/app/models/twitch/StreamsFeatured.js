@@ -1,14 +1,11 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
+
 
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		image: attr( "string" ),
 		priority: attr( "number" ),
 		scheduled: attr( "boolean" ),
@@ -20,5 +17,3 @@ define([
 	}).reopenClass({
 		toString: function() { return "kraken/streams/featured"; }
 	});
-
-});

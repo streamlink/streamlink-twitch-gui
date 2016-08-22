@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"mixins/TwitchInteractButtonMixin"
-], function(
-	Ember,
-	TwitchInteractButtonMixin
-) {
+import Ember from "Ember";
+import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Mixin.create( TwitchInteractButtonMixin, {
+	export default Ember.Mixin.create( TwitchInteractButtonMixin, {
 		action: "follow",
 
 		iconLoading : "fa-question",
@@ -64,5 +60,3 @@ define([
 			}
 		}
 	});
-
-});

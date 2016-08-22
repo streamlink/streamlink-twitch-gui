@@ -1,8 +1,5 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -68,6 +65,4 @@ define([
 	});
 
 
-	return Router;
-
-});
+	export default Router;

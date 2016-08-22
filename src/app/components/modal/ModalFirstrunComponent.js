@@ -1,17 +1,12 @@
-define([
-	"Ember",
-	"components/modal/ModalDialogComponent",
-	"templates/components/modal/ModalFirstrunComponent.hbs"
-], function(
-	Ember,
-	ModalDialogComponent,
-	layout
-) {
+import Ember from "Ember";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import layout from "templates/components/modal/ModalFirstrunComponent.hbs";
+
 
 	var get = Ember.get;
 
 
-	return ModalDialogComponent.extend({
+	export default ModalDialogComponent.extend({
 		versioncheck: Ember.inject.service(),
 
 		layout: layout,
@@ -32,5 +27,3 @@ define([
 			}
 		}
 	});
-
-});

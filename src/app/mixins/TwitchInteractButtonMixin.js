@@ -1,8 +1,5 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var setP = Ember.setProperties;
@@ -22,7 +19,7 @@ define([
 	}
 
 
-	return Ember.Mixin.create({
+	export default Ember.Mixin.create({
 		auth : Ember.inject.service(),
 		store: Ember.inject.service(),
 
@@ -88,5 +85,3 @@ define([
 				}.bind( this ) );
 		}.observes( "isValid", "model" ).on( "didInitAttrs" )
 	});
-
-});

@@ -1,15 +1,12 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var alias = Ember.computed.alias;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		summary : alias( "model.summary" ),
 		featured: alias( "model.featured" ),
 
@@ -27,5 +24,3 @@ define([
 			}
 		}
 	});
-
-});

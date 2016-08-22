@@ -1,8 +1,5 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -10,7 +7,7 @@ define([
 	var equal = Ember.computed.equal;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		application: Ember.inject.controller(),
 
 		stream : alias( "model.stream" ),
@@ -31,5 +28,3 @@ define([
 			}
 		}
 	});
-
-});

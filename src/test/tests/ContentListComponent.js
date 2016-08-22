@@ -1,18 +1,10 @@
-define([
-	"QUnit",
-	"Testutils",
-	"Ember",
-	"components/list/ContentListComponent",
-	"helpers/IsGteHelper",
-	"helpers/HasOwnPropertyHelper"
-], function(
-	QUnit,
-	Testutils,
-	Ember,
-	ContentListComponent,
-	IsGteHelper,
-	HasOwnPropertyHelper
-) {
+import QUnit from "QUnit";
+import Testutils from "Testutils";
+import Ember from "Ember";
+import ContentListComponent from "components/list/ContentListComponent";
+import IsGteHelper from "helpers/IsGteHelper";
+import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
+
 
 	var runAppend = Testutils.runAppend;
 	var runDestroy = Testutils.runDestroy;
@@ -170,5 +162,3 @@ define([
 		});
 
 	});
-
-});

@@ -1,14 +1,9 @@
-define([
-	"Ember",
-	"nwjs/menu",
-	"nwjs/clipboard"
-], function(
-	Ember,
-	Menu,
-	clipboard
-) {
+import Ember from "Ember";
+import Menu from "nwjs/menu";
+import clipboard from "nwjs/clipboard";
 
-	return Ember.Component.extend({
+
+	export default Ember.Component.extend({
 		tagName: "div",
 
 		classNameBindings: [ "class" ],
@@ -37,5 +32,3 @@ define([
 			menu.popup( event );
 		}
 	});
-
-});

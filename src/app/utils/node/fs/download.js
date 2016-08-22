@@ -1,18 +1,10 @@
-define([
-	"utils/node/fs/stat",
-	"utils/node/fs/mkdirp",
-	"path",
-	"fs",
-	"http",
-	"https"
-], function(
-	stat,
-	mkdirp,
-	PATH,
-	FS,
-	HTTP,
-	HTTPS
-) {
+import stat from "utils/node/fs/stat";
+import mkdirp from "utils/node/fs/mkdirp";
+import PATH from "path";
+import FS from "fs";
+import HTTP from "http";
+import HTTPS from "https";
+
 
 	var reScheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
 
@@ -62,6 +54,4 @@ define([
 	}
 
 
-	return download;
-
-});
+	export default download;

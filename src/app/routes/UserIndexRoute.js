@@ -1,14 +1,11 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		auth: Ember.inject.service(),
 
 		beforeModel: function( transition ) {
@@ -63,5 +60,3 @@ define([
 			}
 		}
 	});
-
-});

@@ -1,12 +1,7 @@
-define([
-	"Ember",
-	"components/modal/ModalDialogComponent",
-	"templates/components/modal/ModalConfirmComponent.hbs"
-], function(
-	Ember,
-	ModalDialogComponent,
-	layout
-) {
+import Ember from "Ember";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import layout from "templates/components/modal/ModalConfirmComponent.hbs";
+
 
 	var get = Ember.get;
 
@@ -17,7 +12,7 @@ define([
 	}
 
 
-	return ModalDialogComponent.extend({
+	export default ModalDialogComponent.extend({
 		layout: layout,
 		"class": "modal-confirm",
 
@@ -28,5 +23,3 @@ define([
 			"cancel" : actionFactory( "cancel" )
 		}
 	});
-
-});

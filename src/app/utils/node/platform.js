@@ -1,14 +1,8 @@
-define([
-	"config",
-	"utils/semver",
-	"os",
-	"path"
-], function(
-	config,
-	semver,
-	OS,
-	PATH
-) {
+import config from "config";
+import semver from "utils/semver";
+import OS from "os";
+import PATH from "path";
+
 
 	var platform = OS.platform();
 	var release  = OS.release();
@@ -35,7 +29,7 @@ define([
 	}
 
 
-	return {
+	export default {
 		platform: platform,
 		release : release,
 
@@ -47,5 +41,3 @@ define([
 
 		tmpdir: tmpdir
 	};
-
-});

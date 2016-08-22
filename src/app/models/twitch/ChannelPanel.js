@@ -1,17 +1,12 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
+
 
 	var hasMany = DS.hasMany;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		panels: hasMany( "twitchChannelPanelItem" )
 
 	}).reopenClass({
 		toString: function() { return "api/channels/:id/panels"; }
 	});
-
-});

@@ -1,8 +1,5 @@
-define([
-	"utils/Parameter"
-], function(
-	Parameter
-) {
+import Parameter from "utils/Parameter";
+
 
 	var reBackslash = /^\\$/;
 	var reSpace     = /^ $/;
@@ -134,6 +131,4 @@ define([
 	};
 
 
-	return ParameterCustom;
-
-});
+	export default ParameterCustom;

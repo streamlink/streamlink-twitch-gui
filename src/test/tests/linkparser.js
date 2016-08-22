@@ -1,15 +1,11 @@
-define([
-	"QUnit",
-	"utils/linkparser"
-], function(
-	QUnit,
-	linkparser
-) {
+import QUnit from "QUnit";
+import linkparser from "utils/linkparser";
+
 
 	var parseString = linkparser.parseString;
 
 
-	QUnit.module( "Link parsing" );
+	QUnit.module( "Link parsing", {} );
 
 
 	QUnit.test( "URLs", function( assert ) {
@@ -275,5 +271,3 @@ define([
 		);
 
 	});
-
-});

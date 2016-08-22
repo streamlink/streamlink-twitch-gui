@@ -1,17 +1,12 @@
-define([
-	"Ember",
-	"components/button/FormButtonComponent",
-	"mixins/FollowButtonMixin"
-], function(
-	Ember,
-	FormButtonComponent,
-	FollowButtonMixin
-) {
+import Ember from "Ember";
+import FormButtonComponent from "components/button/FormButtonComponent";
+import FollowButtonMixin from "mixins/FollowButtonMixin";
+
 
 	var alias = Ember.computed.alias;
 
 
-	return FormButtonComponent.extend( FollowButtonMixin, {
+	export default FormButtonComponent.extend( FollowButtonMixin, {
 		modelName: "twitchUserFollowsChannel",
 
 		// model alias (component attribute)
@@ -21,5 +16,3 @@ define([
 		// use the channel's display_name
 		name     : alias( "channel.display_name" )
 	});
-
-});

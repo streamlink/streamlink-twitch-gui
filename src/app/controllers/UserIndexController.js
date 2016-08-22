@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"nwjs/clipboard"
-], function(
-	Ember,
-	clipboard
-) {
+import Ember from "Ember";
+import clipboard from "nwjs/clipboard";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		auth        : Ember.inject.service(),
 		notification: Ember.inject.service(),
 		settings    : Ember.inject.service(),
@@ -40,5 +36,3 @@ define([
 			}
 		}
 	});
-
-});

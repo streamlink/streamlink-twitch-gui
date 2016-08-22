@@ -1,19 +1,13 @@
-define([
-	"Ember",
-	"nwjs/menu",
-	"nwjs/openBrowser",
-	"templates/components/channel/ChannelPanelItemComponent.hbs"
-], function(
-	Ember,
-	Menu,
-	openBrowser,
-	layout
-) {
+import Ember from "Ember";
+import Menu from "nwjs/menu";
+import openBrowser from "nwjs/openBrowser";
+import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
+
 
 	var get = Ember.get;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 		tagName: "li",
 		classNames: [ "channel-panel-item-component" ],
@@ -64,5 +58,3 @@ define([
 			}
 		}
 	});
-
-});

@@ -1,11 +1,5 @@
-define([
-	"EmberData",
-	"vendor/ember-localstorage-adapter/localstorage_adapter"
-], function(
-	DS,
-	LS
-) {
+import {} from "EmberData";
+import LS from "vendor/ember-localstorage-adapter/localstorage_adapter";
 
-	return LS;
 
-});
+export default LS;

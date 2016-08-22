@@ -1,10 +1,7 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
 
-	return DS.RESTSerializer.extend( DS.EmbeddedRecordsMixin, {
+
+	export default DS.RESTSerializer.extend( DS.EmbeddedRecordsMixin, {
 		isNewSerializerAPI: true,
 
 		primaryKey: "_id",
@@ -31,5 +28,3 @@ define([
 			return data;
 		}
 	});
-
-});

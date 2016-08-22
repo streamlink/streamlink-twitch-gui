@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"config",
-	"utils/getStreamFromUrl",
-	"templates/components/SearchBarComponent.hbs"
-], function(
-	Ember,
-	config,
-	getStreamFromUrl,
-	layout
-) {
+import Ember from "Ember";
+import config from "config";
+import getStreamFromUrl from "utils/getStreamFromUrl";
+import layout from "templates/components/SearchBarComponent.hbs" ;
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -17,7 +11,7 @@ define([
 	var searchHistorySize = config.vars[ "search-history-size" ];
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		store   : Ember.inject.service(),
 
 		layout: layout,
@@ -171,5 +165,3 @@ define([
 			}
 		}
 	});
-
-});

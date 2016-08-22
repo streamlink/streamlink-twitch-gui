@@ -1,10 +1,7 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
+
+	export default TwitchSerializer.extend({
 		primaryKey: "name",
 
 		modelNameFromPayloadKey: function() {
@@ -15,5 +12,3 @@ define([
 			emoticons: { deserialize: "records" }
 		}
 	});
-
-});

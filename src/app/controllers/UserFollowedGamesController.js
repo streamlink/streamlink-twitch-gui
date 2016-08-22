@@ -1,14 +1,11 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		queryParams: [ "all" ],
 
 		actions: {
@@ -18,5 +15,3 @@ define([
 			}
 		}
 	});
-
-});

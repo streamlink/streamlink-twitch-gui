@@ -1,20 +1,14 @@
-define([
-	"Ember",
-	"components/modal/ModalDialogComponent",
-	"nwjs/nwWindow",
-	"templates/components/modal/ModalQuitComponent.hbs"
-], function(
-	Ember,
-	ModalDialogComponent,
-	nwWindow,
-	layout
-) {
+import Ember from "Ember";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import nwWindow from "nwjs/nwWindow";
+import layout from "templates/components/modal/ModalQuitComponent.hbs";
+
 
 	var get = Ember.get;
 	var readOnly = Ember.computed.readOnly;
 
 
-	return ModalDialogComponent.extend({
+	export default ModalDialogComponent.extend({
 		livestreamer: Ember.inject.service(),
 
 		layout: layout,
@@ -34,5 +28,3 @@ define([
 			}
 		}
 	});
-
-});

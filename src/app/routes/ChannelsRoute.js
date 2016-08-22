@@ -1,23 +1,15 @@
-define([
-	"Ember",
-	"mixins/InfiniteScrollMixin",
-	"mixins/LanguageFilterMixin",
-	"mixins/ModelMetadataMixin",
-	"utils/ember/toArray",
-	"utils/preload"
-], function(
-	Ember,
-	InfiniteScrollMixin,
-	LanguageFilterMixin,
-	ModelMetadataMixin,
-	toArray,
-	preload
-) {
+import Ember from "Ember";
+import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import LanguageFilterMixin from "mixins/LanguageFilterMixin";
+import ModelMetadataMixin from "mixins/ModelMetadataMixin";
+import toArray from "utils/ember/toArray";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 
 
-	return Ember.Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMetadataMixin, {
+	export default Ember.Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMetadataMixin, {
 		itemSelector: ".stream-item-component",
 
 		modelName: "twitchStream",
@@ -32,5 +24,3 @@ define([
 				.then( preload( "preview.medium_nocache" ) );
 		}
 	});
-
-});

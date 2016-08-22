@@ -1,16 +1,9 @@
-define([
-	"utils/node/platform",
-	"utils/node/resolvePath",
-	"utils/node/fs/which",
-	"utils/node/fs/stat",
-	"path"
-], function(
-	platform,
-	resolvePath,
-	which,
-	stat,
-	PATH
-) {
+import platform from "utils/node/platform";
+import resolvePath from "utils/node/resolvePath";
+import which from "utils/node/fs/which";
+import stat from "utils/node/fs/stat";
+import PATH from "path";
+
 
 	/**
 	 * @typedef {Object} PlatformList
@@ -86,6 +79,4 @@ define([
 	}
 
 
-	return whichFallback;
-
-});
+	export default whichFallback;

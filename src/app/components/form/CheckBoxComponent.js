@@ -1,15 +1,11 @@
-define([
-	"Ember",
-	"components/form/InputBtnComponent"
-], function(
-	Ember,
-	InputBtnComponent
-) {
+import Ember from "Ember";
+import InputBtnComponent from "components/form/InputBtnComponent";
+
 
 	var get = Ember.get;
 
 
-	return InputBtnComponent.extend({
+	export default InputBtnComponent.extend({
 		classNames: [ "check-box-component" ],
 
 		click: function() {
@@ -17,5 +13,3 @@ define([
 			this.toggleProperty( "checked" );
 		}
 	});
-
-});

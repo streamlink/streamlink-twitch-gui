@@ -1,46 +1,24 @@
-define([
-	"QUnit",
-	"Testutils",
-	"Ember",
-	"helpers/IsEqualHelper",
-	"helpers/IsNullHelper",
-	"helpers/IsGtHelper",
-	"helpers/IsGteHelper",
-	"helpers/BoolNotHelper",
-	"helpers/BoolAndHelper",
-	"helpers/BoolOrHelper",
-	"helpers/MathAddHelper",
-	"helpers/MathSubHelper",
-	"helpers/MathMulHelper",
-	"helpers/MathDivHelper",
-	"helpers/FormatViewersHelper",
-	"helpers/FormatTimeHelper",
-	"helpers/HoursFromNowHelper",
-	"helpers/TimeFromNowHelper",
-	"helpers/GetParamHelper",
-	"helpers/HasOwnPropertyHelper"
-], function(
-	QUnit,
-	Testutils,
-	Ember,
-	IsEqualHelper,
-	IsNullHelper,
-	IsGtHelper,
-	IsGteHelper,
-	BoolNotHelper,
-	BoolAndHelper,
-	BoolOrHelper,
-	MathAddHelper,
-	MathSubHelper,
-	MathMulHelper,
-	MathDivHelper,
-	FormatViewersHelper,
-	FormatTimeHelper,
-	HoursFromNowHelper,
-	TimeFromNowHelper,
-	GetParamHelper,
-	HasOwnPropertyHelper
-) {
+import QUnit from "QUnit";
+import Testutils from "Testutils";
+import Ember from "Ember";
+import IsEqualHelper from "helpers/IsEqualHelper";
+import IsNullHelper from "helpers/IsNullHelper";
+import IsGtHelper from "helpers/IsGtHelper";
+import IsGteHelper from "helpers/IsGteHelper";
+import BoolNotHelper from "helpers/BoolNotHelper";
+import BoolAndHelper from "helpers/BoolAndHelper";
+import BoolOrHelper from "helpers/BoolOrHelper";
+import MathAddHelper from "helpers/MathAddHelper";
+import MathSubHelper from "helpers/MathSubHelper";
+import MathMulHelper from "helpers/MathMulHelper";
+import MathDivHelper from "helpers/MathDivHelper";
+import FormatViewersHelper from "helpers/FormatViewersHelper";
+import FormatTimeHelper from "helpers/FormatTimeHelper";
+import HoursFromNowHelper from "helpers/HoursFromNowHelper";
+import TimeFromNowHelper from "helpers/TimeFromNowHelper";
+import GetParamHelper from "helpers/GetParamHelper";
+import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
+
 
 	var runAppend  = Testutils.runAppend;
 	var runDestroy = Testutils.runDestroy;
@@ -457,5 +435,3 @@ define([
 		assert.equal( getOutput( component ), "false", "Prototype property" );
 
 	});
-
-});

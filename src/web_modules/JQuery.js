@@ -1,11 +1,7 @@
-define([
-	"vendor/jquery/dist/jquery"
-], function(
-	JQuery
-) {
+import JQuery from "vendor/jquery/dist/jquery";
 
-	window.jQuery = window.$ = JQuery;
 
-	return JQuery;
+window.jQuery = window.$ = JQuery;
 
-});
+
+export default JQuery;

@@ -1,20 +1,14 @@
-define([
-	"Ember",
-	"nwjs/menu",
-	"nwjs/clipboard",
-	"nwjs/openBrowser"
-], function(
-	Ember,
-	Menu,
-	clipboard,
-	openBrowser
-) {
+import Ember from "Ember";
+import Menu from "nwjs/menu";
+import clipboard from "nwjs/clipboard";
+import openBrowser from "nwjs/openBrowser";
+
 
 	var get = Ember.get;
 	var getOwner = Ember.getOwner;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		tagName: "a",
 		classNameBindings: [ ":external-link" ],
 		attributeBindings: [ "href" ],
@@ -78,5 +72,3 @@ define([
 			});
 		}
 	});
-
-});

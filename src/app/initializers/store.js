@@ -1,11 +1,6 @@
-define([
-	"Ember",
-	"EmberData",
-	"EmberDataLS"
-], function(
-	Ember,
-	DS
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+
 
 	var merge = Ember.merge;
 
@@ -43,5 +38,3 @@ define([
 				});
 		}
 	});
-
-});

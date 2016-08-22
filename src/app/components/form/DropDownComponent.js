@@ -1,18 +1,13 @@
-define([
-	"Ember",
-	"Selecter",
-	"templates/components/form/DropDownComponent.hbs"
-], function(
-	Ember,
-	Selecter,
-	layout
-) {
+import Ember from "Ember";
+import {} from "Selecter";
+import layout from "templates/components/form/DropDownComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 		tagName: "select",
 
@@ -68,5 +63,3 @@ define([
 			set( this, "value", value );
 		}
 	});
-
-});

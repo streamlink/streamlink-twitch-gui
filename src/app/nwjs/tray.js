@@ -1,12 +1,7 @@
-define([
-	"Ember",
-	"nwjs/nwGui",
-	"nwjs/menu"
-], function(
-	Ember,
-	nwGui,
-	Menu
-) {
+import Ember from "Ember";
+import nwGui from "nwjs/nwGui";
+import Menu from "nwjs/menu";
+
 
 	var get = Ember.get;
 	var setProperties = Ember.setProperties;
@@ -23,7 +18,7 @@ define([
 	}
 
 
-	return Ember.Object.extend({
+	export default Ember.Object.extend({
 		tooltip: null,
 		icons  : null,
 		items  : null,
@@ -89,5 +84,3 @@ define([
 			this.tray.once( "click", this.remove.bind( this ) );
 		}
 	});
-
-});

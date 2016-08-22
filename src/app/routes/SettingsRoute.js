@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"utils/ember/ObjectBuffer"
-], function(
-	Ember,
-	ObjectBuffer
-) {
+import Ember from "Ember";
+import ObjectBuffer from "utils/ember/ObjectBuffer";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -12,7 +8,7 @@ define([
 	var settingsRouteNames = /^settings\.\w+$/;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		settings: Ember.inject.service(),
 		modal   : Ember.inject.service(),
 
@@ -51,5 +47,3 @@ define([
 			}
 		}
 	});
-
-});

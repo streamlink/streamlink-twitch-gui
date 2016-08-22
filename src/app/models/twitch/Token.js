@@ -1,13 +1,10 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
+
 
 	var attr = DS.attr;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		// pass through
 		authorization: attr(),
 		user_name: attr( "string" ),
@@ -16,5 +13,3 @@ define([
 	}).reopenClass({
 		toString: function() { return "kraken/"; }
 	});
-
-});

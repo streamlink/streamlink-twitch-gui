@@ -1,26 +1,14 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/nwWindow",
-	"mixins/ChannelSettingsMixin",
-	"utils/ember/toArray",
-	"utils/ember/mapBy",
-	"utils/node/platform",
-	"utils/node/fs/mkdirp",
-	"utils/node/fs/download",
-	"utils/node/fs/clearfolder"
-], function(
-	Ember,
-	config,
-	nwWindow,
-	ChannelSettingsMixin,
-	toArray,
-	mapBy,
-	platform,
-	mkdirp,
-	download,
-	clearfolder
-) {
+import Ember from "Ember";
+import config from "config";
+import nwWindow from "nwjs/nwWindow";
+import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
+import toArray from "utils/ember/toArray";
+import mapBy from "utils/ember/mapBy";
+import platform from "utils/node/platform";
+import mkdirp from "utils/node/fs/mkdirp";
+import download from "utils/node/fs/download";
+import clearfolder from "utils/node/fs/clearfolder";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -64,7 +52,7 @@ define([
 	};
 
 
-	return Ember.Service.extend( ChannelSettingsMixin, {
+	export default Ember.Service.extend( ChannelSettingsMixin, {
 		store       : Ember.inject.service(),
 		settings    : Ember.inject.service(),
 		auth        : Ember.inject.service(),
@@ -453,5 +441,3 @@ define([
 				.catch(function() {});
 		}
 	});
-
-});

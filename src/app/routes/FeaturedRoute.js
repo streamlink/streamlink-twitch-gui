@@ -1,18 +1,13 @@
-define([
-	"Ember",
-	"utils/ember/toArray",
-	"utils/preload"
-], function(
-	Ember,
-	toArray,
-	preload
-) {
+import Ember from "Ember";
+import toArray from "utils/ember/toArray";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		model: function() {
 			var store = get( this, "store" );
 
@@ -43,5 +38,3 @@ define([
 			}
 		}
 	});
-
-});

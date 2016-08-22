@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"utils/preload"
-], function(
-	Ember,
-	preload
-) {
+import Ember from "Ember";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		model: function( params ) {
 			var store = get( this, "store" );
 			var id    = get( params, "channel" );
@@ -74,5 +70,3 @@ define([
 			}
 		}
 	});
-
-});

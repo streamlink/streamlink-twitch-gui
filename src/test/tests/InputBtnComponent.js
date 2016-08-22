@@ -1,18 +1,10 @@
-define([
-	"QUnit",
-	"Testutils",
-	"Ember",
-	"components/form/CheckBoxComponent",
-	"components/form/RadioBtnComponent",
-	"components/form/RadioBtnsComponent"
-], function(
-	QUnit,
-	Testutils,
-	Ember,
-	CheckBoxComponent,
-	RadioBtnComponent,
-	RadioBtnsComponent
-) {
+import QUnit from "QUnit";
+import Testutils from "Testutils";
+import Ember from "Ember";
+import CheckBoxComponent from "components/form/CheckBoxComponent";
+import RadioBtnComponent from "components/form/RadioBtnComponent";
+import RadioBtnsComponent from "components/form/RadioBtnsComponent";
+
 
 	var runAppend = Testutils.runAppend;
 	var runDestroy = Testutils.runDestroy;
@@ -471,5 +463,3 @@ define([
 		);
 
 	});
-
-});

@@ -1,13 +1,10 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 
 
-	return Ember.Mixin.create({
+	export default Ember.Mixin.create({
 		settings: Ember.inject.service(),
 
 		/**
@@ -34,5 +31,3 @@ define([
 			}
 		}.property( "settings.gui_filterstreams", "settings.gui_langfilter" )
 	});
-
-});

@@ -1,10 +1,7 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
 
-	return DS.RESTSerializer.extend({
+
+	export default DS.RESTSerializer.extend({
 		modelNameFromPayloadKey: function() {
 			return "githubReleases";
 		},
@@ -17,5 +14,3 @@ define([
 			return this._super( store, primaryModelClass, payload, id, requestType );
 		}
 	});
-
-});

@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"EmberData"
-], function(
-	Ember,
-	DS
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+
 
 	var get = Ember.get;
 	var attr = DS.attr;
@@ -12,7 +8,7 @@ define([
 	var reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		background: attr( "string" ),
 		banner: attr( "string" ),
 		broadcaster_language: attr( "string" ),
@@ -77,5 +73,3 @@ define([
 	}).reopenClass({
 		toString: function() { return "kraken/channels"; }
 	});
-
-});

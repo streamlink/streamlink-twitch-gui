@@ -1,14 +1,11 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		actions: {
 			"didTransition": function() {
 				var settingsController = this.controllerFor( "settings" );
@@ -27,5 +24,3 @@ define([
 			}
 		}
 	});
-
-});

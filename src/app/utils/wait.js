@@ -1,11 +1,9 @@
-define(function() {
-
 	/**
 	 * @param {number} time
 	 * @param {boolean?} reject
 	 * @returns {Function}
 	 */
-	return function wait( time, reject ) {
+	function wait( time, reject ) {
 		var method = reject
 			? "reject"
 			: "resolve";
@@ -19,6 +17,7 @@ define(function() {
 
 			return defer.promise;
 		};
-	};
+	}
 
-});
+
+	export default wait;

@@ -1,21 +1,14 @@
-define([
-	"Ember",
-	"mixins/InfiniteScrollMixin",
-	"mixins/ModelMetadataMixin",
-	"utils/ember/toArray",
-	"utils/preload"
-], function(
-	Ember,
-	InfiniteScrollMixin,
-	ModelMetadataMixin,
-	toArray,
-	preload
-) {
+import Ember from "Ember";
+import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import ModelMetadataMixin from "mixins/ModelMetadataMixin";
+import toArray from "utils/ember/toArray";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 
 
-	return Ember.Route.extend( InfiniteScrollMixin, ModelMetadataMixin, {
+	export default Ember.Route.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 		itemSelector: ".game-item-component",
 
 		modelName: "twitchGamesTop",
@@ -29,5 +22,3 @@ define([
 				.then( preload( "game.box.large" ) );
 		}
 	});
-
-});

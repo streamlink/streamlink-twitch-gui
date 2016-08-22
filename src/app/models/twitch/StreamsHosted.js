@@ -1,14 +1,11 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
+
 
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		display_name: attr( "string" ),
 		name: attr( "string" ),
 		// always side-load the target relation
@@ -17,5 +14,3 @@ define([
 	}).reopenClass({
 		toString: function() { return "api/users/:user/followed/hosting"; }
 	});
-
-});

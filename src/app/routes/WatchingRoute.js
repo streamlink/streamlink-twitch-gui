@@ -1,19 +1,13 @@
-define([
-	"Ember",
-	"utils/ember/toArray",
-	"utils/ember/mapBy",
-	"utils/preload"
-], function(
-	Ember,
-	toArray,
-	mapBy,
-	preload
-) {
+import Ember from "Ember";
+import toArray from "utils/ember/toArray";
+import mapBy from "utils/ember/mapBy";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		livestreamer: Ember.inject.service(),
 
 		model: function() {
@@ -27,5 +21,3 @@ define([
 				.then(function() { return records; });
 		}
 	});
-
-});

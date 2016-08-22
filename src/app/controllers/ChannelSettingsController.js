@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"mixins/RetryTransitionMixin"
-], function(
-	Ember,
-	RetryTransitionMixin
-) {
+import Ember from "Ember";
+import RetryTransitionMixin from "mixins/RetryTransitionMixin";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Controller.extend( RetryTransitionMixin, {
+	export default Ember.Controller.extend( RetryTransitionMixin, {
 		settings: Ember.inject.service(),
 		modal   : Ember.inject.service(),
 
@@ -139,5 +135,3 @@ define([
 			}
 		}
 	});
-
-});

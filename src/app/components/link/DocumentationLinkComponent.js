@@ -1,21 +1,15 @@
-define([
-	"Ember",
-	"config",
-	"components/link/ExternalLinkComponent",
-	"templates/components/link/DocumentationLinkComponent.hbs"
-], function(
-	Ember,
-	config,
-	ExternalLinkComponent,
-	layout
-) {
+import Ember from "Ember";
+import config from "config";
+import ExternalLinkComponent from "components/link/ExternalLinkComponent";
+import layout from "templates/components/link/DocumentationLinkComponent.hbs";
+
 
 	var get = Ember.get;
 
 	var livestreamerDocsUrl = config.livestreamer[ "docs-url" ];
 
 
-	return ExternalLinkComponent.extend({
+	export default ExternalLinkComponent.extend({
 		layout: layout,
 
 		// default baseUrl is the livestreamer docs url
@@ -42,5 +36,3 @@ define([
 			return baseUrl.replace( "{item}", itemUrl );
 		}.property( "baseUrl", "item" )
 	});
-
-});

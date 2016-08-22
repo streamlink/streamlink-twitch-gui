@@ -1,20 +1,9 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/nwGui",
-	"nwjs/nwWindow",
-	"utils/node/platform",
-	"gui/selectable",
-	"gui/smoothscroll"
-], function(
-	Ember,
-	config,
-	nwGui,
-	nwWindow,
-	platform,
-	guiSelectable,
-	guiSmoothscroll
-) {
+import Ember from "Ember";
+import config from "config";
+import platform from "utils/node/platform";
+import guiSelectable from "gui/selectable";
+import guiSmoothscroll from "gui/smoothscroll";
+
 
 	var get = Ember.get;
 	var getOwner = Ember.getOwner;
@@ -36,7 +25,7 @@ define([
 	}
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		settings: Ember.inject.service(),
 
 		tagName: "body",
@@ -82,5 +71,3 @@ define([
 			setupRefresh( controller );
 		}
 	});
-
-});

@@ -1,16 +1,9 @@
-define([
-	"Ember",
-	"EmberData",
-	"routes/SettingsSubmenuRoute",
-	"mixins/InfiniteScrollMixin",
-	"utils/preload"
-], function(
-	Ember,
-	DS,
-	SettingsSubmenuRoute,
-	InfiniteScrollMixin,
-	preload
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+import SettingsSubmenuRoute from "routes/SettingsSubmenuRoute";
+import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -18,7 +11,7 @@ define([
 	var PromiseObject = DS.PromiseObject;
 
 
-	return SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
+	export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 		controllerName: "settingsChannels",
 		itemSelector: ".settings-channel-item-component",
 
@@ -70,5 +63,3 @@ define([
 			this.all = null;
 		}
 	});
-
-});

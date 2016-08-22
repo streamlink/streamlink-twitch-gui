@@ -1,8 +1,5 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var makeArray = Ember.makeArray;
@@ -174,6 +171,4 @@ define([
 	};
 
 
-	return Substitution;
-
-});
+	export default Substitution;

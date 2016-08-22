@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"EmberData",
-	"models/LivestreamerParameters",
-	"utils/Parameter"
-], function(
-	Ember,
-	DS,
-	LivestreamerParameters,
-	Parameter
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+import LivestreamerParameters from "models/LivestreamerParameters";
+import Parameter from "utils/Parameter";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -20,7 +14,7 @@ define([
 	/**
 	 * @class Livestreamer
 	 */
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		stream      : belongsTo( "twitchStream", { async: false } ),
 		channel     : belongsTo( "twitchChannel", { async: false } ),
 		quality     : attr( "number" ),
@@ -79,5 +73,3 @@ define([
 		toString: function() { return "Livestreamer"; }
 
 	});
-
-});

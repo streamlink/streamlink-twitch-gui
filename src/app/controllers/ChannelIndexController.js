@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"config"
-], function(
-	Ember,
-	config
-) {
+import Ember from "Ember";
+import config from "config";
+
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
@@ -12,7 +8,7 @@ define([
 	var langs = config.langs;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		stream : alias( "model.stream" ),
 		channel: alias( "model.channel" ),
 		panels : alias( "model.panels" ),
@@ -28,5 +24,3 @@ define([
 			return lang ? lang[ "lang" ] : "";
 		}.property( "channel.broadcaster_language" )
 	});
-
-});

@@ -1,15 +1,11 @@
-define([
-	"Ember",
-	"templates/components/list/HeadlineTotalsComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/list/HeadlineTotalsComponent.hbs";
+
 
 	var gte = Ember.computed.gte;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 
 		tagName: "div",
@@ -19,5 +15,3 @@ define([
 
 		isVisible: gte( "total", 0 )
 	});
-
-});

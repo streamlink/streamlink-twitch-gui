@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"nwjs/nwWindow",
-	"nwjs/openBrowser",
-	"utils/getStreamFromUrl"
-], function(
-	Ember,
-	nwWindow,
-	openBrowser,
-	getStreamFromUrl
-) {
+import Ember from "Ember";
+import nwWindow from "nwjs/nwWindow";
+import openBrowser from "nwjs/openBrowser";
+import getStreamFromUrl from "utils/getStreamFromUrl";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -16,7 +10,7 @@ define([
 	var debounce = Ember.run.debounce;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		settings    : Ember.inject.service(),
 		modal       : Ember.inject.service(),
 		versioncheck: Ember.inject.service(),
@@ -141,5 +135,3 @@ define([
 			}
 		}
 	});
-
-});

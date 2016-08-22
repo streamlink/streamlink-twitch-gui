@@ -1,12 +1,7 @@
-define([
-	"utils/node/fs/stat",
-	"utils/node/platform",
-	"path"
-], function(
-	stat,
-	platform,
-	PATH
-) {
+import stat from "utils/node/fs/stat";
+import platform from "utils/node/platform";
+import PATH from "path";
+
 
 	var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter );
 	var exts  = platform.isWin ? [ ".exe" ] : [ "" ];
@@ -41,6 +36,4 @@ define([
 	}
 
 
-	return which;
-
-});
+	export default which;

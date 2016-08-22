@@ -1,9 +1,4 @@
-define([
-	"nwjs/nwGui"
-], function(
-	nwGui
-) {
+import nwGui from "nwjs/nwGui";
 
-	return nwGui.Shell.openExternal;
 
-});
+	export default nwGui.Shell.openExternal;

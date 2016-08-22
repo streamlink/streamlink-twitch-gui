@@ -1,18 +1,10 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/openBrowser",
-	"components/list/ListItemComponent",
-	"Moment",
-	"templates/components/list/SubscriptionItemComponent.hbs"
-], function(
-	Ember,
-	config,
-	openBrowser,
-	ListItemComponent,
-	Moment,
-	layout
-) {
+import Ember from "Ember";
+import config from "config";
+import openBrowser from "nwjs/openBrowser";
+import ListItemComponent from "components/list/ListItemComponent";
+import Moment from "Moment";
+import layout from "templates/components/list/SubscriptionItemComponent.hbs";
+
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
@@ -21,7 +13,7 @@ define([
 	var subscriptionCancelUrl = config.twitch[ "subscription" ][ "cancel-url" ];
 
 
-	return ListItemComponent.extend({
+	export default ListItemComponent.extend({
 		layout: layout,
 		classNames: [ "subscription-item-component" ],
 		attributeBindings: [ "style" ],
@@ -72,5 +64,3 @@ define([
 			}
 		}
 	});
-
-});

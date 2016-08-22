@@ -1,10 +1,6 @@
-define([
-	"http",
-	"url"
-], function(
-	HTTP,
-	URL
-) {
+import HTTP from "http";
+import URL from "url";
+
 
 	function Route( method, url, callback ) {
 		this.method   = method;
@@ -68,6 +64,4 @@ define([
 	};
 
 
-	return Server;
-
-});
+	export default Server;

@@ -1,5 +1,3 @@
-define(function() {
-
 	/*
 	 * Using a custom implementation for comparing semantic version strings
 	 * - "semver" npm-module too much (would also need to change the build process for node modules)
@@ -139,11 +137,9 @@ define(function() {
 	}
 
 
-	return {
+	export default {
 		tokenize: tokenize,
 		compare: compare,
 		getMax: getMax,
 		sort: sort
 	};
-
-});

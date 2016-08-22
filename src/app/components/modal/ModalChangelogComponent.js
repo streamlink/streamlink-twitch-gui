@@ -1,25 +1,17 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/nwGui",
-	"components/modal/ModalDialogComponent",
-	"nwjs/openBrowser",
-	"templates/components/modal/ModalChangelogComponent.hbs"
-], function(
-	Ember,
-	config,
-	nwGui,
-	ModalDialogComponent,
-	openBrowser,
-	layout
-) {
+import Ember from "Ember";
+import config from "config";
+import nwGui from "nwjs/nwGui";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import openBrowser from "nwjs/openBrowser";
+import layout from "templates/components/modal/ModalChangelogComponent.hbs";
+
 
 	var get = Ember.get;
 
 	var changelogUrl = config.update[ "changelog-url" ];
 
 
-	return ModalDialogComponent.extend({
+	export default ModalDialogComponent.extend({
 		layout: layout,
 		"class": "modal-changelog",
 
@@ -43,5 +35,3 @@ define([
 			}
 		}
 	});
-
-});

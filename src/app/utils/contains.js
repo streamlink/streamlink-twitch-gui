@@ -1,5 +1,3 @@
-define(function() {
-
 	/**
 	 * @this {Array}
 	 * @param {...*} arguments
@@ -29,9 +27,7 @@ define(function() {
 	}
 
 
-	return {
+	export default {
 		all : containsAll,
 		some: containsSome
 	};
-
-});

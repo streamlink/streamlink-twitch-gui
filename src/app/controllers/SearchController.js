@@ -1,8 +1,5 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var alias = Ember.computed.alias;
@@ -10,7 +7,7 @@ define([
 	var equal = Ember.computed.equal;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		queryParams: [ "filter", "query" ],
 
 		games   : alias( "model.games" ),
@@ -35,5 +32,3 @@ define([
 			    && get( this, "emptyChannels" );
 		}.property( "emptyGames", "emptyStreams", "emptyChannels" )
 	});
-
-});

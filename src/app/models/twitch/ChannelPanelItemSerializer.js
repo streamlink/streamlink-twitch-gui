@@ -1,10 +1,7 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
+
+	export default TwitchSerializer.extend({
 		normalize: function( modelClass, resourceHash, prop ) {
 			if ( resourceHash ) {
 				var data = resourceHash.data;
@@ -23,5 +20,3 @@ define([
 			return this._super( modelClass, resourceHash, prop );
 		}
 	});
-
-});

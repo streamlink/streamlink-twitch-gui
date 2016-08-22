@@ -1,10 +1,7 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
 
-	return Ember.Route.extend({
+
+	export default Ember.Route.extend({
 		beforeModel: function( transition ) {
 			// access to this route is restricted
 			// but don't block the initial transition
@@ -19,5 +16,3 @@ define([
 			}
 		}
 	});
-
-});

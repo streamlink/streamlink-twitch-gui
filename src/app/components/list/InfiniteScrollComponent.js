@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"templates/components/list/InfiniteScrollComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/list/InfiniteScrollComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -15,11 +11,8 @@ define([
 	var $ = Ember.$;
 	var $window = $( window );
 
-	var document = window.document;
-	var getComputedStyle = window.getComputedStyle;
 
-
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 		tagName: "button",
 		classNameBindings: [
@@ -128,5 +121,3 @@ define([
 			}
 		}
 	});
-
-});

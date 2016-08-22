@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"components/button/FormButtonComponent"
-], function(
-	Ember,
-	FormButtonComponent
-) {
+import Ember from "Ember";
+import FormButtonComponent from "components/button/FormButtonComponent";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return FormButtonComponent.extend({
+	export default FormButtonComponent.extend({
 		settings: Ember.inject.service(),
 
 		"class": function() {
@@ -48,5 +44,3 @@ define([
 			}
 		}
 	});
-
-});

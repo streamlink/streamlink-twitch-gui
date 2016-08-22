@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"EmberData"
-], function(
-	Ember,
-	DS
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -29,7 +25,7 @@ define([
 	};
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		/**
 		 * Do all the error display stuff here instead of using an error controller.
 		 * A route for errors is needed anyway.
@@ -99,5 +95,3 @@ define([
 			set( this, "router.errorTransition", null );
 		}
 	});
-
-});

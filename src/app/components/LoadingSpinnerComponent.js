@@ -1,12 +1,8 @@
-define([
-	"Ember",
-	"templates/components/LoadingSpinnerComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/LoadingSpinnerComponent.hbs";
 
-	return Ember.Component.extend({
+
+	export default Ember.Component.extend({
 		layout: layout,
 
 		tagName: "svg",
@@ -22,5 +18,3 @@ define([
 			circle.setAttribute( "r", radius + "%" );
 		}.on( "didInsertElement" )
 	});
-
-});

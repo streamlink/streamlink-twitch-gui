@@ -1,8 +1,5 @@
-define([
-	"nwjs/nwGui"
-], function(
-	nwGui
-) {
+import nwGui from "nwjs/nwGui";
+
 
 	// get the main application window
 	var nwWindow = nwGui.Window.get();
@@ -61,6 +58,4 @@ define([
 	};
 
 
-	return nwWindow;
-
-});
+	export default nwWindow;

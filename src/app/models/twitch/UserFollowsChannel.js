@@ -1,18 +1,13 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
+
 
 	var attr = DS.attr;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		created_at   : attr( "date" ),
 		notifications: attr( "boolean" )
 
 	}).reopenClass({
 		toString: function() { return "kraken/users/:user/follows/channels"; }
 	});
-
-});

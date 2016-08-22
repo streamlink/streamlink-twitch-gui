@@ -1,15 +1,12 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
+
 
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 	var hasMany = DS.hasMany;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		emoticons: hasMany( "twitchProductEmoticon", { async: false } ),
 		features: attr(),
 		interval_number: attr( "number" ),
@@ -24,5 +21,3 @@ define([
 	}).reopenClass({
 		toString: function() { return "twitchProduct"; }
 	});
-
-});

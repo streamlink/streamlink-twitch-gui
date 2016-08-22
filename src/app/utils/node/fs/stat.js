@@ -1,12 +1,7 @@
-define([
-	"utils/node/denodify",
-	"utils/node/platform",
-	"fs"
-], function(
-	denodify,
-	platform,
-	FS
-) {
+import denodify from "utils/node/denodify";
+import platform from "utils/node/platform";
+import FS from "fs";
+
 
 	var fsStat = denodify( FS.stat );
 	var isWin  = platform.isWin;
@@ -51,6 +46,4 @@ define([
 	};
 
 
-	return stat;
-
-});
+	export default stat;

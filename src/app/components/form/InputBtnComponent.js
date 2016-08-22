@@ -1,12 +1,8 @@
-define([
-	"Ember",
-	"templates/components/form/InputBtnComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/form/InputBtnComponent.hbs";
 
-	return Ember.Component.extend({
+
+	export default Ember.Component.extend({
 		layout: layout,
 		tagName: "label",
 		classNames: [ "input-btn-component" ],
@@ -15,5 +11,3 @@ define([
 	}).reopenClass({
 		positionalParams: [ "label" ]
 	});
-
-});

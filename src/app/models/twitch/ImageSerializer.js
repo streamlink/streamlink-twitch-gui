@@ -1,10 +1,7 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
+
+	export default TwitchSerializer.extend({
 		normalize: function( modelClass, resourceHash, prop ) {
 			// rename properties and ignore `template` property
 			resourceHash.small_image = resourceHash.small;
@@ -18,5 +15,3 @@ define([
 			return this._super( modelClass, resourceHash, prop );
 		}
 	});
-
-});

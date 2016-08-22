@@ -1,17 +1,13 @@
-define([
-	"QUnit",
-	"utils/semver"
-], function(
-	QUnit,
-	semver
-) {
+import QUnit from "QUnit";
+import semver from "utils/semver";
+
 
 	var t = semver.tokenize;
 	var m = semver.getMax;
 	var s = semver.sort;
 
 
-	QUnit.module( "Semantic versioning" );
+	QUnit.module( "Semantic versioning", {} );
 
 
 	QUnit.test( "Tokenization", function( assert ) {
@@ -161,5 +157,3 @@ define([
 		);
 
 	});
-
-});

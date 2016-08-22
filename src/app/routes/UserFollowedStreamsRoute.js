@@ -1,25 +1,16 @@
-define([
-	"Ember",
-	"routes/UserIndexRoute",
-	"mixins/InfiniteScrollMixin",
-	"mixins/ModelMetadataMixin",
-	"utils/ember/toArray",
-	"utils/ember/mapBy",
-	"utils/preload"
-], function(
-	Ember,
-	UserIndexRoute,
-	InfiniteScrollMixin,
-	ModelMetadataMixin,
-	toArray,
-	mapBy,
-	preload
-) {
+import Ember from "Ember";
+import UserIndexRoute from "routes/UserIndexRoute";
+import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import ModelMetadataMixin from "mixins/ModelMetadataMixin";
+import toArray from "utils/ember/toArray";
+import mapBy from "utils/ember/mapBy";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 
 
-	return UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
+	export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 		itemSelector: ".stream-item-component",
 
 		modelName: "twitchStreamsFollowed",
@@ -34,5 +25,3 @@ define([
 				.then( preload( "preview.medium_nocache" ) );
 		}
 	});
-
-});

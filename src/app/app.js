@@ -1,320 +1,571 @@
-define([
-	"Ember",
-	"EmberData",
-	"EmberDataLS",
-	"nwjs/nwWindow",
-	"initializers/initializers",
-	"require"
-],function(
-	Ember,
-	DS,
-	LS,
-	nwWindow,
-	initializers,
-	require
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+import {} from "EmberDataLS";
+import nwWindow from "nwjs/nwWindow";
+import {} from "initializers/initializers";
 
-	return Ember.Application.create({
+import Router from "./router";
+
+import ApplicationAdapter from "store/TwitchAdapter";
+import BooleanTransform from "store/BooleanTransform";
+
+import Livestreamer from "models/Livestreamer";
+import Window from "models/localstorage/Window";
+import Settings from "models/localstorage/Settings";
+import Versioncheck from "models/localstorage/Versioncheck";
+import Auth from "models/localstorage/Auth";
+import Search from "models/localstorage/Search";
+import ChannelSettings from "models/localstorage/ChannelSettings";
+
+import GithubReleases from "models/github/Releases";
+import GithubReleasesAdapter from "store/GithubAdapter";
+import GithubReleasesSerializer from "models/github/ReleasesSerializer";
+
+import TwitchToken from "models/twitch/Token";
+import TwitchTokenSerializer from "models/twitch/TokenSerializer";
+
+import TwitchGame from "models/twitch/Game";
+import TwitchGameSerializer from "models/twitch/GameSerializer";
+import TwitchStream from "models/twitch/Stream";
+import TwitchStreamSerializer from "models/twitch/StreamSerializer";
+import TwitchChannel from "models/twitch/Channel";
+import TwitchChannelSerializer from "models/twitch/ChannelSerializer";
+import TwitchImage from "models/twitch/Image";
+import TwitchImageSerializer from "models/twitch/ImageSerializer";
+
+import TwitchGamesTop from "models/twitch/GamesTop";
+import TwitchGamesTopSerializer from "models/twitch/GamesTopSerializer";
+import TwitchStreamsSummary from "models/twitch/StreamsSummary";
+import TwitchStreamsSummarySerializer from "models/twitch/StreamsSummarySerializer";
+import TwitchStreamsFeatured from "models/twitch/StreamsFeatured";
+import TwitchStreamsFeaturedSerializer from "models/twitch/StreamsFeaturedSerializer";
+
+import TwitchStreamsFollowed from "models/twitch/StreamsFollowed";
+import TwitchStreamsFollowedSerializer from "models/twitch/StreamsFollowedSerializer";
+import TwitchStreamsHosted from "models/twitch/StreamsHosted";
+import TwitchStreamsHostedSerializer from "models/twitch/StreamsHostedSerializer";
+import TwitchChannelsFollowed from "models/twitch/ChannelsFollowed";
+import TwitchChannelsFollowedSerializer from "models/twitch/ChannelsFollowedSerializer";
+import TwitchGamesFollowed from "models/twitch/GamesFollowed";
+import TwitchGamesFollowedSerializer from "models/twitch/GamesFollowedSerializer";
+import TwitchGamesLiveFollowed from "models/twitch/GamesLiveFollowed";
+import TwitchGamesLiveFollowedSerializer from "models/twitch/GamesLiveFollowedSerializer";
+
+import TwitchSearchGame from "models/twitch/SearchGame";
+import TwitchSearchGameSerializer from "models/twitch/SearchGameSerializer";
+import TwitchSearchStream from "models/twitch/SearchStream";
+import TwitchSearchStreamSerializer from "models/twitch/SearchStreamSerializer";
+import TwitchSearchChannel from "models/twitch/SearchChannel";
+import TwitchSearchChannelSerializer from "models/twitch/SearchChannelSerializer";
+
+import TwitchUserFollowsChannel from "models/twitch/UserFollowsChannel";
+import TwitchUserFollowsChannelSerializer from "models/twitch/UserFollowsChannelSerializer";
+import TwitchUserFollowsGame from "models/twitch/UserFollowsGame";
+import TwitchUserFollowsGameAdapter from "models/twitch/UserFollowsGameAdapter";
+import TwitchUserFollowsGameSerializer from "models/twitch/UserFollowsGameSerializer";
+import TwitchUserSubscription from "models/twitch/UserSubscription";
+import TwitchUserSubscriptionSerializer from "models/twitch/UserSubscriptionSerializer";
+
+import TwitchTicket from "models/twitch/Ticket";
+import TwitchTicketSerializer from "models/twitch/TicketSerializer";
+import TwitchProduct from "models/twitch/Product";
+import TwitchProductSerializer from "models/twitch/ProductSerializer";
+import TwitchProductEmoticon from "models/twitch/ProductEmoticon";
+import TwitchProductEmoticonSerializer from "models/twitch/ProductEmoticonSerializer";
+
+import TwitchChannelPanel from "models/twitch/ChannelPanel";
+import TwitchChannelPanelSerializer from "models/twitch/ChannelPanelSerializer";
+import TwitchChannelPanelItem from "models/twitch/ChannelPanelItem";
+import TwitchChannelPanelItemSerializer from "models/twitch/ChannelPanelItemSerializer";
+
+import IsEqualHelper from "helpers/IsEqualHelper";
+import IsNullHelper from "helpers/IsNullHelper";
+import IsGtHelper from "helpers/IsGtHelper";
+import IsGteHelper from "helpers/IsGteHelper";
+import BoolNotHelper from "helpers/BoolNotHelper";
+import BoolAndHelper from "helpers/BoolAndHelper";
+import BoolOrHelper from "helpers/BoolOrHelper";
+import MathAddHelper from "helpers/MathAddHelper";
+import MathSubHelper from "helpers/MathSubHelper";
+import MathMulHelper from "helpers/MathMulHelper";
+import MathDivHelper from "helpers/MathDivHelper";
+import FormatViewersHelper from "helpers/FormatViewersHelper";
+import FormatTimeHelper from "helpers/FormatTimeHelper";
+import HoursFromNowHelper from "helpers/HoursFromNowHelper";
+import TimeFromNowHelper from "helpers/TimeFromNowHelper";
+import GetParamHelper from "helpers/GetParamHelper";
+import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
+
+import SettingsService from "services/SettingsService";
+import AuthService from "services/AuthService";
+import ModalService from "services/ModalService";
+import VersioncheckService from "services/VersioncheckService";
+import LivestreamerService from "services/LivestreamerService";
+import NotificationService from "services/NotificationService";
+import ChatService from "services/ChatService";
+
+import ApplicationRoute from "routes/ApplicationRoute";
+import ApplicationController from "controllers/ApplicationController";
+import ApplicationView from "components/ApplicationComponent";
+import ApplicationTemplate from "templates/Application.hbs";
+
+import LoadingRoute from "routes/LoadingRoute";
+import LoadingTemplate from "templates/Loading.hbs";
+
+import ErrorRoute from "routes/ErrorRoute";
+import ErrorTemplate from "templates/Error.hbs";
+
+import IndexRoute from "routes/IndexRoute";
+
+import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
+import ExternalLinkComponent from "components/link/ExternalLinkComponent";
+import LinkComponent from "components/link/LinkComponent";
+import DocumentationLinkComponent from "components/link/DocumentationLinkComponent";
+
+import CheckBoxComponent from "components/form/CheckBoxComponent";
+import RadioBtnComponent from "components/form/RadioBtnComponent";
+import RadioBtnsComponent from "components/form/RadioBtnsComponent";
+import DropDownComponent from "components/form/DropDownComponent";
+import FileSelectComponent from "components/form/FileSelectComponent";
+import TextFieldComponent from "components/form/TextFieldComponent";
+
+import FollowChannelComponent from "components/button/FollowChannelComponent";
+import FollowGameComponent from "components/button/FollowGameComponent";
+import FormButtonComponent from "components/button/FormButtonComponent";
+import OpenChatComponent from "components/button/OpenChatComponent";
+import ShareChannelComponent from "components/button/ShareChannelComponent";
+import SubscribeChannelComponent from "components/button/SubscribeChannelComponent";
+import TwitchEmotesComponent from "components/button/TwitchEmotesComponent";
+
+import ModalBodyComponent from "components/modal/ModalBodyComponent";
+import ModalChangelogComponent from "components/modal/ModalChangelogComponent";
+import ModalConfirmComponent from "components/modal/ModalConfirmComponent";
+import ModalFirstrunComponent from "components/modal/ModalFirstrunComponent";
+import ModalFooterComponent from "components/modal/ModalFooterComponent";
+import ModalHeaderComponent from "components/modal/ModalHeaderComponent";
+import ModalLivestreamerComponent from "components/modal/ModalLivestreamerComponent";
+import ModalLogComponent from "components/modal/ModalLogComponent";
+import ModalNewreleaseComponent from "components/modal/ModalNewreleaseComponent";
+import ModalQuitComponent from "components/modal/ModalQuitComponent";
+
+import ContentListComponent from "components/list/ContentListComponent";
+import ChannelItemComponent from "components/list/ChannelItemComponent";
+import GameItemComponent from "components/list/GameItemComponent";
+import HeadlineTotalsComponent from "components/list/HeadlineTotalsComponent";
+import InfiniteScrollComponent from "components/list/InfiniteScrollComponent";
+import StreamItemComponent from "components/list/StreamItemComponent";
+import SubscriptionItemComponent from "components/list/SubscriptionItemComponent";
+
+import QuickBarComponent from "components/quick/QuickBarComponent";
+import QuickBarHomepageComponent from "components/quick/QuickBarHomepageComponent";
+import QuickBarRandomStreamComponent from "components/quick/QuickBarRandomStreamComponent";
+
+import ChannelPanelsComponent from "components/channel/ChannelPanelsComponent";
+import ChannelPanelItemComponent from "components/channel/ChannelPanelItemComponent";
+
+import StatsRowComponent from "components/stream/StatsRowComponent";
+import StreamPresentationComponent from "components/stream/StreamPresentationComponent";
+import StreamPreviewImageComponent from "components/stream/StreamPreviewImageComponent";
+
+import FlagIconComponent from "components/FlagIconComponent";
+import LangFilterComponent from "components/LangFilterComponent";
+import LoadingSpinnerComponent from "components/LoadingSpinnerComponent";
+import PreviewImageComponent from "components/PreviewImageComponent";
+import SearchBarComponent from "components/SearchBarComponent";
+import SelectableTextComponent from "components/SelectableTextComponent";
+
+import SettingsRowComponent from "components/SettingsRowComponent";
+import SettingsChannelItemComponent from "components/list/SettingsChannelItemComponent";
+import SettingsSubmitComponent from "components/SettingsSubmitComponent";
+
+import FeaturedRoute from "routes/FeaturedRoute";
+import FeaturedController from "controllers/FeaturedController";
+import FeaturedTemplate from "templates/Featured.hbs";
+
+import WatchingRoute from "routes/WatchingRoute";
+import WatchingController from "controllers/WatchingController";
+import WatchingTemplate from "templates/Watching.hbs";
+
+import SearchRoute from "routes/SearchRoute";
+import SearchController from "controllers/SearchController";
+import SearchTemplate from "templates/Search.hbs";
+
+import GamesLoadingRoute from "routes/LoadingRoute";
+import GamesLoadingTemplate from "templates/Loading.hbs";
+import GamesIndexRoute from "routes/GamesIndexRoute";
+import GamesIndexController from "controllers/GamesIndexController";
+import GamesIndexTemplate from "templates/games/GamesIndex.hbs";
+import GamesGameRoute from "routes/GamesGameRoute";
+import GamesGameController from "controllers/GamesGameController";
+import GamesGameTemplate from "templates/games/GamesGame.hbs";
+
+import ChannelsRoute from "routes/ChannelsRoute";
+import ChannelsController from "controllers/ChannelsController";
+import ChannelsTemplate from "templates/Channels.hbs";
+
+import ChannelRoute from "routes/ChannelRoute";
+import ChannelController from "controllers/ChannelController";
+import ChannelTemplate from "templates/channel/Channel.hbs";
+import ChannelLoadingRoute from "routes/LoadingRoute";
+import ChannelLoadingTemplate from "templates/Loading.hbs";
+import ChannelIndexRoute from "routes/ChannelIndexRoute";
+import ChannelIndexController from "controllers/ChannelIndexController";
+import ChannelIndexTemplate from "templates/channel/ChannelIndex.hbs";
+import ChannelSettingsRoute from "routes/ChannelSettingsRoute";
+import ChannelSettingsController from "controllers/ChannelSettingsController";
+import ChannelSettingsTemplate from "templates/channel/ChannelSettings.hbs";
+
+import UserLoadingRoute from "routes/LoadingRoute";
+import UserLoadingTemplate from "templates/Loading.hbs";
+import UserIndexRoute from "routes/UserIndexRoute";
+import UserIndexController from "controllers/UserIndexController";
+import UserIndexTemplate from "templates/user/UserIndex.hbs";
+import UserAuthRoute from "routes/UserAuthRoute";
+import UserAuthController from "controllers/UserAuthController";
+import UserAuthTemplate from "templates/user/UserAuth.hbs";
+import UserSubscriptionsRoute from "routes/UserSubscriptionsRoute";
+import UserSubscriptionsTemplate from "templates/user/UserSubscriptions.hbs";
+import UserFollowedStreamsRoute from "routes/UserFollowedStreamsRoute";
+import UserFollowedStreamsTemplate from "templates/user/UserFollowedStreams.hbs";
+import UserHostedStreamsRoute from "routes/UserHostedStreamsRoute";
+import UserHostedStreamsTemplate from "templates/user/UserHostedStreams.hbs";
+import UserFollowedChannelsRoute from "routes/UserFollowedChannelsRoute";
+import UserFollowedChannelsController from "controllers/UserFollowedChannelsController";
+import UserFollowedChannelsTemplate from "templates/user/UserFollowedChannels.hbs";
+import UserFollowedGamesRoute from "routes/UserFollowedGamesRoute";
+import UserFollowedGamesController from "controllers/UserFollowedGamesController";
+import UserFollowedGamesTemplate from "templates/user/UserFollowedGames.hbs";
+
+import SettingsRoute from "routes/SettingsRoute";
+import SettingsController from "controllers/SettingsController";
+import SettingsTemplate from "templates/settings/Settings.hbs";
+import SettingsIndexRoute from "routes/SettingsIndexRoute";
+import SettingsMainRoute from "routes/SettingsSubmenuRoute";
+import SettingsMainTemplate from "templates/settings/SettingsMain.hbs";
+import SettingsStreamsRoute from "routes/SettingsSubmenuRoute";
+import SettingsStreamsTemplate from "templates/settings/SettingsStreams.hbs";
+import SettingsLivestreamerRoute from "routes/SettingsSubmenuRoute";
+import SettingsLivestreamerTemplate from "templates/settings/SettingsLivestreamer.hbs";
+import SettingsPlayerRoute from "routes/SettingsSubmenuRoute";
+import SettingsPlayerTemplate from "templates/settings/SettingsPlayer.hbs";
+import SettingsChatRoute from "routes/SettingsSubmenuRoute";
+import SettingsChatTemplate from "templates/settings/SettingsChat.hbs";
+import SettingsGuiRoute from "routes/SettingsSubmenuRoute";
+import SettingsGuiTemplate from "templates/settings/SettingsGui.hbs";
+import SettingsListsRoute from "routes/SettingsSubmenuRoute";
+import SettingsListsTemplate from "templates/settings/SettingsLists.hbs";
+import SettingsLanguagesRoute from "routes/SettingsSubmenuRoute";
+import SettingsLanguagesTemplate from "templates/settings/SettingsLanguages.hbs";
+import SettingsNotificationsRoute from "routes/SettingsSubmenuRoute";
+import SettingsNotificationsTemplate from "templates/settings/SettingsNotifications.hbs";
+import SettingsChannelsRoute from "routes/SettingsChannelsRoute";
+import SettingsChannelsController from "controllers/SettingsChannelsController";
+import SettingsChannelsTemplate from "templates/settings/SettingsChannels.hbs";
+
+import AboutController from "controllers/AboutController";
+import AboutTemplate from "templates/About.hbs";
+
+
+	export default Ember.Application.create({
 
 		// Configuration
 		rootElement: document.documentElement,
 
 
 		// Routing
-		Router: require( "router" ),
+		Router,
 
 
 		// Store
-		ApplicationAdapter: require( "store/TwitchAdapter" ),
-		BooleanTransform: require( "store/BooleanTransform" ),
+		ApplicationAdapter,
+		BooleanTransform,
 
 
 		// Models: memory
-		Livestreamer: require( "models/Livestreamer" ),
+		Livestreamer,
 		LivestreamerAdapter: DS.Adapter,
 
 
 		// Models: localstorage
-		Window: require( "models/localstorage/Window" ),
+		Window,
 		WindowAdapter: DS.LSAdapter.extend({ namespace: "window" }),
 		WindowSerializer: DS.LSSerializer,
-		Settings: require( "models/localstorage/Settings" ),
+		Settings,
 		SettingsAdapter: DS.LSAdapter.extend({ namespace: "settings" }),
 		SettingsSerializer: DS.LSSerializer,
-		Versioncheck: require( "models/localstorage/Versioncheck" ),
+		Versioncheck,
 		VersioncheckAdapter: DS.LSAdapter.extend({ namespace: "versioncheck" }),
 		VersioncheckSerializer: DS.LSSerializer,
-		Auth: require( "models/localstorage/Auth" ),
+		Auth,
 		AuthAdapter: DS.LSAdapter.extend({ namespace: "auth" }),
 		AuthSerializer: DS.LSSerializer,
-		Search: require( "models/localstorage/Search" ),
+		Search,
 		SearchAdapter: DS.LSAdapter.extend({ namespace: "search" }),
 		SearchSerializer: DS.LSSerializer,
-		ChannelSettings: require( "models/localstorage/ChannelSettings" ),
+		ChannelSettings,
 		ChannelSettingsAdapter: DS.LSAdapter.extend({ namespace: "channelsettings" }),
 		ChannelSettingsSerializer: DS.LSSerializer,
 
 
 		// Models: github
-		GithubReleases: require( "models/github/Releases" ),
-		GithubReleasesAdapter: require( "store/GithubAdapter" ),
-		GithubReleasesSerializer: require( "models/github/ReleasesSerializer" ),
+		GithubReleases,
+		GithubReleasesAdapter,
+		GithubReleasesSerializer,
 
 
 		// Models: twitch
-		TwitchToken: require( "models/twitch/Token" ),
-		TwitchTokenSerializer: require( "models/twitch/TokenSerializer" ),
+		TwitchToken,
+		TwitchTokenSerializer,
 
-		TwitchGame: require( "models/twitch/Game" ),
-		TwitchGameSerializer: require( "models/twitch/GameSerializer" ),
-		TwitchStream: require( "models/twitch/Stream" ),
-		TwitchStreamSerializer: require( "models/twitch/StreamSerializer" ),
-		TwitchChannel: require( "models/twitch/Channel" ),
-		TwitchChannelSerializer: require( "models/twitch/ChannelSerializer" ),
-		TwitchImage: require( "models/twitch/Image" ),
-		TwitchImageSerializer: require( "models/twitch/ImageSerializer" ),
+		TwitchGame,
+		TwitchGameSerializer,
+		TwitchStream,
+		TwitchStreamSerializer,
+		TwitchChannel,
+		TwitchChannelSerializer,
+		TwitchImage,
+		TwitchImageSerializer,
 
-		TwitchGamesTop: require( "models/twitch/GamesTop" ),
-		TwitchGamesTopSerializer: require( "models/twitch/GamesTopSerializer" ),
-		TwitchStreamsSummary: require( "models/twitch/StreamsSummary" ),
-		TwitchStreamsSummarySerializer: require( "models/twitch/StreamsSummarySerializer" ),
-		TwitchStreamsFeatured: require( "models/twitch/StreamsFeatured" ),
-		TwitchStreamsFeaturedSerializer: require( "models/twitch/StreamsFeaturedSerializer" ),
+		TwitchGamesTop,
+		TwitchGamesTopSerializer,
+		TwitchStreamsSummary,
+		TwitchStreamsSummarySerializer,
+		TwitchStreamsFeatured,
+		TwitchStreamsFeaturedSerializer,
 
-		TwitchStreamsFollowed: require( "models/twitch/StreamsFollowed" ),
-		TwitchStreamsFollowedSerializer: require( "models/twitch/StreamsFollowedSerializer" ),
-		TwitchStreamsHosted: require( "models/twitch/StreamsHosted" ),
-		TwitchStreamsHostedSerializer: require( "models/twitch/StreamsHostedSerializer" ),
-		TwitchChannelsFollowed: require( "models/twitch/ChannelsFollowed" ),
-		TwitchChannelsFollowedSerializer: require( "models/twitch/ChannelsFollowedSerializer" ),
-		TwitchGamesFollowed: require( "models/twitch/GamesFollowed" ),
-		TwitchGamesFollowedSerializer: require( "models/twitch/GamesFollowedSerializer" ),
-		TwitchGamesLiveFollowed: require( "models/twitch/GamesLiveFollowed" ),
-		TwitchGamesLiveFollowedSerializer: require( "models/twitch/GamesLiveFollowedSerializer" ),
+		TwitchStreamsFollowed,
+		TwitchStreamsFollowedSerializer,
+		TwitchStreamsHosted,
+		TwitchStreamsHostedSerializer,
+		TwitchChannelsFollowed,
+		TwitchChannelsFollowedSerializer,
+		TwitchGamesFollowed,
+		TwitchGamesFollowedSerializer,
+		TwitchGamesLiveFollowed,
+		TwitchGamesLiveFollowedSerializer,
 
-		TwitchSearchGame: require( "models/twitch/SearchGame" ),
-		TwitchSearchGameSerializer: require( "models/twitch/SearchGameSerializer" ),
-		TwitchSearchStream: require( "models/twitch/SearchStream" ),
-		TwitchSearchStreamSerializer: require( "models/twitch/SearchStreamSerializer" ),
-		TwitchSearchChannel: require( "models/twitch/SearchChannel" ),
-		TwitchSearchChannelSerializer: require( "models/twitch/SearchChannelSerializer" ),
+		TwitchSearchGame,
+		TwitchSearchGameSerializer,
+		TwitchSearchStream,
+		TwitchSearchStreamSerializer,
+		TwitchSearchChannel,
+		TwitchSearchChannelSerializer,
 
-		TwitchUserFollowsChannel: require( "models/twitch/UserFollowsChannel" ),
-		TwitchUserFollowsChannelSerializer: require( "models/twitch/UserFollowsChannelSerializer" ),
-		TwitchUserFollowsGame: require( "models/twitch/UserFollowsGame" ),
-		TwitchUserFollowsGameAdapter: require( "models/twitch/UserFollowsGameAdapter" ),
-		TwitchUserFollowsGameSerializer: require( "models/twitch/UserFollowsGameSerializer" ),
-		TwitchUserSubscription: require( "models/twitch/UserSubscription" ),
-		TwitchUserSubscriptionSerializer: require( "models/twitch/UserSubscriptionSerializer" ),
+		TwitchUserFollowsChannel,
+		TwitchUserFollowsChannelSerializer,
+		TwitchUserFollowsGame,
+		TwitchUserFollowsGameAdapter,
+		TwitchUserFollowsGameSerializer,
+		TwitchUserSubscription,
+		TwitchUserSubscriptionSerializer,
 
-		TwitchTicket: require( "models/twitch/Ticket" ),
-		TwitchTicketSerializer: require( "models/twitch/TicketSerializer" ),
-		TwitchProduct: require( "models/twitch/Product" ),
-		TwitchProductSerializer: require( "models/twitch/ProductSerializer" ),
-		TwitchProductEmoticon: require( "models/twitch/ProductEmoticon" ),
-		TwitchProductEmoticonSerializer: require( "models/twitch/ProductEmoticonSerializer" ),
+		TwitchTicket,
+		TwitchTicketSerializer,
+		TwitchProduct,
+		TwitchProductSerializer,
+		TwitchProductEmoticon,
+		TwitchProductEmoticonSerializer,
 
-		TwitchChannelPanel: require( "models/twitch/ChannelPanel" ),
-		TwitchChannelPanelSerializer: require( "models/twitch/ChannelPanelSerializer" ),
-		TwitchChannelPanelItem: require( "models/twitch/ChannelPanelItem" ),
-		TwitchChannelPanelItemSerializer: require( "models/twitch/ChannelPanelItemSerializer" ),
+		TwitchChannelPanel,
+		TwitchChannelPanelSerializer,
+		TwitchChannelPanelItem,
+		TwitchChannelPanelItemSerializer,
 
 
 		// Helpers
-		IsEqualHelper: require( "helpers/IsEqualHelper" ),
-		IsNullHelper: require( "helpers/IsNullHelper" ),
-		IsGtHelper: require( "helpers/IsGtHelper" ),
-		IsGteHelper: require( "helpers/IsGteHelper" ),
-		BoolNotHelper: require( "helpers/BoolNotHelper" ),
-		BoolAndHelper: require( "helpers/BoolAndHelper" ),
-		BoolOrHelper: require( "helpers/BoolOrHelper" ),
-		MathAddHelper: require( "helpers/MathAddHelper" ),
-		MathSubHelper: require( "helpers/MathSubHelper" ),
-		MathMulHelper: require( "helpers/MathMulHelper" ),
-		MathDivHelper: require( "helpers/MathDivHelper" ),
-		FormatViewersHelper: require( "helpers/FormatViewersHelper" ),
-		FormatTimeHelper: require( "helpers/FormatTimeHelper" ),
-		HoursFromNowHelper: require( "helpers/HoursFromNowHelper" ),
-		TimeFromNowHelper: require( "helpers/TimeFromNowHelper" ),
-		GetParamHelper: require( "helpers/GetParamHelper" ),
-		HasOwnPropertyHelper: require( "helpers/HasOwnPropertyHelper" ),
-
+		IsEqualHelper,
+		IsNullHelper,
+		IsGtHelper,
+		IsGteHelper,
+		BoolNotHelper,
+		BoolAndHelper,
+		BoolOrHelper,
+		MathAddHelper,
+		MathSubHelper,
+		MathMulHelper,
+		MathDivHelper,
+		FormatViewersHelper,
+		FormatTimeHelper,
+		HoursFromNowHelper,
+		TimeFromNowHelper,
+		GetParamHelper,
+		HasOwnPropertyHelper,
 
 		// Services
-		SettingsService: require( "services/SettingsService" ),
-		AuthService: require( "services/AuthService" ),
-		ModalService: require( "services/ModalService" ),
-		VersioncheckService: require( "services/VersioncheckService" ),
-		LivestreamerService: require( "services/LivestreamerService" ),
-		NotificationService: require( "services/NotificationService" ),
-		ChatService: require( "services/ChatService" ),
+		SettingsService,
+		AuthService,
+		ModalService,
+		VersioncheckService,
+		LivestreamerService,
+		NotificationService,
+		ChatService,
 
 
 		// Application
-		ApplicationRoute: require( "routes/ApplicationRoute" ),
-		ApplicationController: require( "controllers/ApplicationController" ),
-		ApplicationView: require( "components/ApplicationComponent" ),
-		ApplicationTemplate: require( "templates/Application.hbs" ),
+		ApplicationRoute,
+		ApplicationController,
+		ApplicationView,
+		ApplicationTemplate,
 
-		LoadingRoute: require( "routes/LoadingRoute" ),
-		LoadingTemplate: require( "templates/Loading.hbs" ),
+		LoadingRoute,
+		LoadingTemplate,
 
-		ErrorRoute: require( "routes/ErrorRoute" ),
-		ErrorTemplate: require( "templates/Error.hbs" ),
+		ErrorRoute,
+		ErrorTemplate,
 
-		IndexRoute: require( "routes/IndexRoute" ),
+		IndexRoute,
 
 
 		// Components
-		EmbeddedLinksComponent: require( "components/link/EmbeddedLinksComponent" ),
-		ExternalLinkComponent: require( "components/link/ExternalLinkComponent" ),
-		LinkComponent: require( "components/link/LinkComponent" ),
-		DocumentationLinkComponent: require( "components/link/DocumentationLinkComponent" ),
+		EmbeddedLinksComponent,
+		ExternalLinkComponent,
+		LinkComponent,
+		DocumentationLinkComponent,
 
-		CheckBoxComponent: require( "components/form/CheckBoxComponent" ),
-		RadioBtnComponent: require( "components/form/RadioBtnComponent" ),
-		RadioBtnsComponent: require( "components/form/RadioBtnsComponent" ),
-		DropDownComponent: require( "components/form/DropDownComponent" ),
-		FileSelectComponent: require( "components/form/FileSelectComponent" ),
-		TextFieldComponent: require( "components/form/TextFieldComponent" ),
+		CheckBoxComponent,
+		RadioBtnComponent,
+		RadioBtnsComponent,
+		DropDownComponent,
+		FileSelectComponent,
+		TextFieldComponent,
 
-		FollowChannelComponent: require( "components/button/FollowChannelComponent" ),
-		FollowGameComponent: require( "components/button/FollowGameComponent" ),
-		FormButtonComponent: require( "components/button/FormButtonComponent" ),
-		OpenChatComponent: require( "components/button/OpenChatComponent" ),
-		ShareChannelComponent: require( "components/button/ShareChannelComponent" ),
-		SubscribeChannelComponent: require( "components/button/SubscribeChannelComponent" ),
-		TwitchEmotesComponent: require( "components/button/TwitchEmotesComponent" ),
+		FollowChannelComponent,
+		FollowGameComponent,
+		FormButtonComponent,
+		OpenChatComponent,
+		ShareChannelComponent,
+		SubscribeChannelComponent,
+		TwitchEmotesComponent,
 
-		ModalBodyComponent: require( "components/modal/ModalBodyComponent" ),
-		ModalChangelogComponent: require( "components/modal/ModalChangelogComponent" ),
-		ModalConfirmComponent: require( "components/modal/ModalConfirmComponent" ),
-		ModalFirstrunComponent: require( "components/modal/ModalFirstrunComponent" ),
-		ModalFooterComponent: require( "components/modal/ModalFooterComponent" ),
-		ModalHeaderComponent: require( "components/modal/ModalHeaderComponent" ),
-		ModalLivestreamerComponent: require( "components/modal/ModalLivestreamerComponent" ),
-		ModalLogComponent: require( "components/modal/ModalLogComponent" ),
-		ModalNewreleaseComponent: require( "components/modal/ModalNewreleaseComponent" ),
-		ModalQuitComponent: require( "components/modal/ModalQuitComponent" ),
+		ModalBodyComponent,
+		ModalChangelogComponent,
+		ModalConfirmComponent,
+		ModalFirstrunComponent,
+		ModalFooterComponent,
+		ModalHeaderComponent,
+		ModalLivestreamerComponent,
+		ModalLogComponent,
+		ModalNewreleaseComponent,
+		ModalQuitComponent,
 
-		ContentListComponent: require( "components/list/ContentListComponent" ),
-		ChannelItemComponent: require( "components/list/ChannelItemComponent" ),
-		GameItemComponent: require( "components/list/GameItemComponent" ),
-		HeadlineTotalsComponent: require( "components/list/HeadlineTotalsComponent" ),
-		InfiniteScrollComponent: require( "components/list/InfiniteScrollComponent" ),
-		StreamItemComponent: require( "components/list/StreamItemComponent" ),
-		SubscriptionItemComponent: require( "components/list/SubscriptionItemComponent" ),
+		ContentListComponent,
+		ChannelItemComponent,
+		GameItemComponent,
+		HeadlineTotalsComponent,
+		InfiniteScrollComponent,
+		StreamItemComponent,
+		SubscriptionItemComponent,
 
-		QuickBarComponent: require( "components/quick/QuickBarComponent" ),
-		QuickBarHomepageComponent: require( "components/quick/QuickBarHomepageComponent" ),
-		QuickBarRandomStreamComponent: require( "components/quick/QuickBarRandomStreamComponent" ),
+		QuickBarComponent,
+		QuickBarHomepageComponent,
+		QuickBarRandomStreamComponent,
 
-		ChannelPanelsComponent: require( "components/channel/ChannelPanelsComponent" ),
-		ChannelPanelItemComponent: require( "components/channel/ChannelPanelItemComponent" ),
+		ChannelPanelsComponent,
+		ChannelPanelItemComponent,
 
-		StatsRowComponent: require( "components/stream/StatsRowComponent" ),
-		StreamPresentationComponent: require( "components/stream/StreamPresentationComponent" ),
-		StreamPreviewImageComponent: require( "components/stream/StreamPreviewImageComponent" ),
+		StatsRowComponent,
+		StreamPresentationComponent,
+		StreamPreviewImageComponent,
 
-		FlagIconComponent: require( "components/FlagIconComponent" ),
-		LangFilterComponent: require( "components/LangFilterComponent" ),
-		LoadingSpinnerComponent: require( "components/LoadingSpinnerComponent" ),
-		PreviewImageComponent: require( "components/PreviewImageComponent" ),
-		SearchBarComponent: require( "components/SearchBarComponent" ),
-		SelectableTextComponent: require( "components/SelectableTextComponent" ),
+		FlagIconComponent,
+		LangFilterComponent,
+		LoadingSpinnerComponent,
+		PreviewImageComponent,
+		SearchBarComponent,
+		SelectableTextComponent,
 
-		SettingsRowComponent: require( "components/SettingsRowComponent" ),
-		SettingsChannelItemComponent: require( "components/list/SettingsChannelItemComponent" ),
-		SettingsSubmitComponent: require( "components/SettingsSubmitComponent" ),
+		SettingsRowComponent,
+		SettingsChannelItemComponent,
+		SettingsSubmitComponent,
 
 
 		// Content
-		FeaturedRoute: require( "routes/FeaturedRoute" ),
-		FeaturedController: require( "controllers/FeaturedController" ),
-		FeaturedTemplate: require( "templates/Featured.hbs" ),
+		FeaturedRoute,
+		FeaturedController,
+		FeaturedTemplate,
 
-		WatchingRoute: require( "routes/WatchingRoute" ),
-		WatchingController: require( "controllers/WatchingController" ),
-		WatchingTemplate: require( "templates/Watching.hbs" ),
+		WatchingRoute,
+		WatchingController,
+		WatchingTemplate,
 
-		SearchRoute: require( "routes/SearchRoute" ),
-		SearchController: require( "controllers/SearchController" ),
-		SearchTemplate: require( "templates/Search.hbs" ),
+		SearchRoute,
+		SearchController,
+		SearchTemplate,
 
-		GamesLoadingRoute: require( "routes/LoadingRoute" ),
-		GamesLoadingTemplate: require( "templates/Loading.hbs" ),
-		GamesIndexRoute: require( "routes/GamesIndexRoute" ),
-		GamesIndexController: require( "controllers/GamesIndexController" ),
-		GamesIndexTemplate: require( "templates/games/GamesIndex.hbs" ),
-		GamesGameRoute: require( "routes/GamesGameRoute" ),
-		GamesGameController: require( "controllers/GamesGameController" ),
-		GamesGameTemplate: require( "templates/games/GamesGame.hbs" ),
+		GamesLoadingRoute,
+		GamesLoadingTemplate,
+		GamesIndexRoute,
+		GamesIndexController,
+		GamesIndexTemplate,
+		GamesGameRoute,
+		GamesGameController,
+		GamesGameTemplate,
 
-		ChannelsRoute: require( "routes/ChannelsRoute" ),
-		ChannelsController: require( "controllers/ChannelsController" ),
-		ChannelsTemplate: require( "templates/Channels.hbs" ),
+		ChannelsRoute,
+		ChannelsController,
+		ChannelsTemplate,
 
-		ChannelRoute: require( "routes/ChannelRoute" ),
-		ChannelController: require( "controllers/ChannelController" ),
-		ChannelTemplate: require( "templates/channel/Channel.hbs" ),
-		ChannelLoadingRoute: require( "routes/LoadingRoute" ),
-		ChannelLoadingTemplate: require( "templates/Loading.hbs" ),
-		ChannelIndexRoute: require( "routes/ChannelIndexRoute" ),
-		ChannelIndexController: require( "controllers/ChannelIndexController" ),
-		ChannelIndexTemplate: require( "templates/channel/ChannelIndex.hbs" ),
-		ChannelSettingsRoute: require( "routes/ChannelSettingsRoute" ),
-		ChannelSettingsController: require( "controllers/ChannelSettingsController" ),
-		ChannelSettingsTemplate: require( "templates/channel/ChannelSettings.hbs" ),
+		ChannelRoute,
+		ChannelController,
+		ChannelTemplate,
+		ChannelLoadingRoute,
+		ChannelLoadingTemplate,
+		ChannelIndexRoute,
+		ChannelIndexController,
+		ChannelIndexTemplate,
+		ChannelSettingsRoute,
+		ChannelSettingsController,
+		ChannelSettingsTemplate,
 
-		UserLoadingRoute: require( "routes/LoadingRoute" ),
-		UserLoadingTemplate: require( "templates/Loading.hbs" ),
-		UserIndexRoute: require( "routes/UserIndexRoute" ),
-		UserIndexController: require( "controllers/UserIndexController" ),
-		UserIndexTemplate: require( "templates/user/UserIndex.hbs" ),
-		UserAuthRoute: require( "routes/UserAuthRoute" ),
-		UserAuthController: require( "controllers/UserAuthController" ),
-		UserAuthTemplate: require( "templates/user/UserAuth.hbs" ),
-		UserSubscriptionsRoute: require( "routes/UserSubscriptionsRoute" ),
-		UserSubscriptionsTemplate: require( "templates/user/UserSubscriptions.hbs" ),
-		UserFollowedStreamsRoute: require( "routes/UserFollowedStreamsRoute" ),
-		UserFollowedStreamsTemplate: require( "templates/user/UserFollowedStreams.hbs" ),
-		UserHostedStreamsRoute: require( "routes/UserHostedStreamsRoute" ),
-		UserHostedStreamsTemplate: require( "templates/user/UserHostedStreams.hbs" ),
-		UserFollowedChannelsRoute: require( "routes/UserFollowedChannelsRoute" ),
-		UserFollowedChannelsController: require( "controllers/UserFollowedChannelsController" ),
-		UserFollowedChannelsTemplate: require( "templates/user/UserFollowedChannels.hbs" ),
-		UserFollowedGamesRoute: require( "routes/UserFollowedGamesRoute" ),
-		UserFollowedGamesController: require( "controllers/UserFollowedGamesController" ),
-		UserFollowedGamesTemplate: require( "templates/user/UserFollowedGames.hbs" ),
+		UserLoadingRoute,
+		UserLoadingTemplate,
+		UserIndexRoute,
+		UserIndexController,
+		UserIndexTemplate,
+		UserAuthRoute,
+		UserAuthController,
+		UserAuthTemplate,
+		UserSubscriptionsRoute,
+		UserSubscriptionsTemplate,
+		UserFollowedStreamsRoute,
+		UserFollowedStreamsTemplate,
+		UserHostedStreamsRoute,
+		UserHostedStreamsTemplate,
+		UserFollowedChannelsRoute,
+		UserFollowedChannelsController,
+		UserFollowedChannelsTemplate,
+		UserFollowedGamesRoute,
+		UserFollowedGamesController,
+		UserFollowedGamesTemplate,
 
-		SettingsRoute: require( "routes/SettingsRoute" ),
-		SettingsController: require( "controllers/SettingsController" ),
-		SettingsTemplate: require( "templates/settings/Settings.hbs" ),
-		SettingsIndexRoute: require( "routes/SettingsIndexRoute" ),
-		SettingsMainRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsMainTemplate: require( "templates/settings/SettingsMain.hbs" ),
-		SettingsStreamsRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsStreamsTemplate: require( "templates/settings/SettingsStreams.hbs" ),
-		SettingsLivestreamerRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsLivestreamerTemplate: require( "templates/settings/SettingsLivestreamer.hbs" ),
-		SettingsPlayerRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsPlayerTemplate: require( "templates/settings/SettingsPlayer.hbs" ),
-		SettingsChatRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsChatTemplate: require( "templates/settings/SettingsChat.hbs" ),
-		SettingsGuiRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsGuiTemplate: require( "templates/settings/SettingsGui.hbs" ),
-		SettingsListsRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsListsTemplate: require( "templates/settings/SettingsLists.hbs" ),
-		SettingsLanguagesRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsLanguagesTemplate: require( "templates/settings/SettingsLanguages.hbs" ),
-		SettingsNotificationsRoute: require( "routes/SettingsSubmenuRoute" ),
-		SettingsNotificationsTemplate: require( "templates/settings/SettingsNotifications.hbs" ),
-		SettingsChannelsRoute: require( "routes/SettingsChannelsRoute" ),
-		SettingsChannelsController: require( "controllers/SettingsChannelsController" ),
-		SettingsChannelsTemplate: require( "templates/settings/SettingsChannels.hbs" ),
+		SettingsRoute,
+		SettingsController,
+		SettingsTemplate,
+		SettingsIndexRoute,
+		SettingsMainRoute,
+		SettingsMainTemplate,
+		SettingsStreamsRoute,
+		SettingsStreamsTemplate,
+		SettingsLivestreamerRoute,
+		SettingsLivestreamerTemplate,
+		SettingsPlayerRoute,
+		SettingsPlayerTemplate,
+		SettingsChatRoute,
+		SettingsChatTemplate,
+		SettingsGuiRoute,
+		SettingsGuiTemplate,
+		SettingsListsRoute,
+		SettingsListsTemplate,
+		SettingsLanguagesRoute,
+		SettingsLanguagesTemplate,
+		SettingsNotificationsRoute,
+		SettingsNotificationsTemplate,
+		SettingsChannelsRoute,
+		SettingsChannelsController,
+		SettingsChannelsTemplate,
 
-		AboutController: require( "controllers/AboutController" ),
-		AboutTemplate: require( "templates/About.hbs" ),
+		AboutController,
+		AboutTemplate,
 
 
 		// ready event
@@ -325,5 +576,3 @@ define([
 		toString: function() { return "App"; }
 
 	});
-
-});

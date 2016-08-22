@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"config",
-	"mixins/RetryTransitionMixin",
-	"utils/wait"
-], function(
-	Ember,
-	config,
-	RetryTransitionMixin,
-	wait
-) {
+import Ember from "Ember";
+import config from "config";
+import RetryTransitionMixin from "mixins/RetryTransitionMixin";
+import wait from "utils/wait";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -16,7 +10,7 @@ define([
 	var oauth = config.twitch[ "oauth" ];
 
 
-	return Ember.Controller.extend( RetryTransitionMixin, {
+	export default Ember.Controller.extend( RetryTransitionMixin, {
 		auth    : Ember.inject.service(),
 		settings: Ember.inject.service(),
 
@@ -147,5 +141,3 @@ define([
 			}
 		}
 	});
-
-});

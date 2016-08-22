@@ -1,18 +1,13 @@
-define([
-	"Ember",
-	"utils/linkparser",
-	"templates/components/link/EmbeddedLinksComponent.hbs"
-], function(
-	Ember,
-	linkparser,
-	layout
-) {
+import Ember from "Ember";
+import linkparser from "utils/linkparser";
+import layout from "templates/components/link/EmbeddedLinksComponent.hbs";
+
 
 	var get = Ember.get;
 	var parseString = linkparser.parseString;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 
 		content: function() {
@@ -32,5 +27,3 @@ define([
 			}, [] );
 		}.property( "text" )
 	});
-
-});

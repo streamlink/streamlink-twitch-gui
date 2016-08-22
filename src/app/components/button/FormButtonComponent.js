@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"templates/components/button/FormButtonComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/button/FormButtonComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -29,7 +25,7 @@ define([
 	}
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 
 		tagName: "",
@@ -99,5 +95,3 @@ define([
 			}
 		}
 	});
-
-});

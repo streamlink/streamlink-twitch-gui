@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"config",
-	"components/button/FormButtonComponent",
-	"mixins/LanguageFilterMixin"
-], function(
-	Ember,
-	config,
-	FormButtonComponent,
-	LanguageFilterMixin
-) {
+import Ember from "Ember";
+import config from "config";
+import FormButtonComponent from "components/button/FormButtonComponent";
+import LanguageFilterMixin from "mixins/LanguageFilterMixin";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -17,7 +11,7 @@ define([
 	var randomMax = config.vars[ "random-max"] || 100;
 
 
-	return FormButtonComponent.extend( LanguageFilterMixin, {
+	export default FormButtonComponent.extend( LanguageFilterMixin, {
 		store       : Ember.inject.service(),
 		livestreamer: Ember.inject.service(),
 
@@ -99,5 +93,3 @@ define([
 			}
 		}
 	});
-
-});

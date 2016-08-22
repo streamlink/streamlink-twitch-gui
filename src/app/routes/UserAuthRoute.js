@@ -1,13 +1,10 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		auth: Ember.inject.service(),
 
 		disableAutoRefresh: true,
@@ -27,5 +24,3 @@ define([
 			}
 		}
 	});
-
-});

@@ -1,18 +1,14 @@
-define([
-	"QUnit",
-	"EmberTest",
-	"vendor/qunit/qunit/qunit.css"
-], function(
-	QUnit
-) {
+import QUnit from "QUnit";
+import {} from "EmberTest";
+import {} from "vendor/qunit/qunit/qunit.css";
+import {} from "vendor/ember/ember-template-compiler";
+
 
 	// don't start automatically
 	QUnit.config.autostart = false;
 
 	// load tests and then start
 	require([
-		"vendor/ember/ember-template-compiler",
-
 		"tests/semver",
 		"tests/linkparser",
 		"tests/helpers",
@@ -23,5 +19,3 @@ define([
 		"tests/InputBtnComponent",
 		"tests/getStreamFromUrl"
 	], QUnit.start );
-
-});

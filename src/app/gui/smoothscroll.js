@@ -1,20 +1,17 @@
-/*!
- * SmoothScroll v1.2.1
- * https://github.com/galambalazs/smoothscroll
- * Licensed under the terms of the MIT license.
- *
- * People involved
- * - Balazs Galambosi (maintainer)
- * - Patrick Brunner  (original idea)
- * - Michael Herf     (Pulse Algorithm)
- *
- * modified by Sebastian Meyer
- */
-define([
-	"utils/node/platform"
-], function(
-	platform
-) {
+	/*!
+	 * SmoothScroll v1.2.1
+	 * https://github.com/galambalazs/smoothscroll
+	 * Licensed under the terms of the MIT license.
+	 *
+	 * People involved
+	 * - Balazs Galambosi (maintainer)
+	 * - Patrick Brunner  (original idea)
+	 * - Michael Herf     (Pulse Algorithm)
+	 *
+	 * modified by Sebastian Meyer
+	 */
+import platform from "utils/node/platform";
+
 
 	var options = {
 		animationTime: 400,
@@ -33,7 +30,6 @@ define([
 	var enabled = false;
 
 
-	var document  = window.document;
 	var direction = { x: 0, y: 0 };
 	var key       = {
 		left    : 37,
@@ -484,7 +480,7 @@ define([
 	}
 
 
-	return {
+	export default {
 		enable: function() {
 			if ( enabled ) { return; }
 			window.addEventListener( "mousewheel", onMousewheel, false );
@@ -502,5 +498,3 @@ define([
 			enabled = false;
 		}
 	};
-
-});

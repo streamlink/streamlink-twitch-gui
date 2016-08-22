@@ -1,12 +1,8 @@
-define([
-	"QUnit",
-	"utils/StreamOutputBuffer"
-], function(
-	QUnit,
-	StreamOutputBuffer
-) {
+import QUnit from "QUnit";
+import StreamOutputBuffer from "utils/StreamOutputBuffer";
 
-	QUnit.module( "StreamOutputBuffer" );
+
+	QUnit.module( "StreamOutputBuffer", {} );
 
 
 	QUnit.test( "Single line output", function( assert ) {
@@ -116,5 +112,3 @@ define([
 		buffer( "foo|bar|baz|" );
 
 	});
-
-});

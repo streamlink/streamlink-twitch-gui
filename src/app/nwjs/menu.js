@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"nwjs/nwGui"
-], function(
-	Ember,
-	nwGui
-) {
+import Ember from "Ember";
+import nwGui from "nwjs/nwGui";
+
 
 	var Menu = nwGui.Menu;
 	var MenuItem = nwGui.MenuItem;
 
 
-	return Ember.Object.extend( Ember.Evented, {
+	export default Ember.Object.extend( Ember.Evented, {
 		type : "contextmenu",
 		menu : null,
 		items: null,
@@ -91,5 +87,3 @@ define([
 			return item;
 		}
 	});
-
-});

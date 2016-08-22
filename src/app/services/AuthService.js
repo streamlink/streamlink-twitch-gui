@@ -1,20 +1,11 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/nwWindow",
-	"nwjs/openBrowser",
-	"utils/contains",
-	"utils/node/http/Server",
-	"root/oauth-redirect.html"
-], function(
-	Ember,
-	config,
-	nwWindow,
-	openBrowser,
-	contains,
-	HttpServer,
-	OAuthResponseRedirect
-) {
+import Ember from "Ember";
+import config from "config";
+import nwWindow from "nwjs/nwWindow";
+import openBrowser from "nwjs/openBrowser";
+import contains from "utils/contains";
+import HttpServer from "utils/node/http/Server";
+import OAuthResponseRedirect from "root/oauth-redirect.html";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -24,7 +15,7 @@ define([
 	var reToken = /^[a-z\d]{30}$/i;
 
 
-	return Ember.Service.extend( Ember.Evented, {
+	export default Ember.Service.extend( Ember.Evented, {
 		store: Ember.inject.service(),
 
 		session: null,
@@ -294,5 +285,3 @@ define([
 			set( adapter, "access_token", token );
 		}
 	});
-
-});

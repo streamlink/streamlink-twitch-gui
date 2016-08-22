@@ -1,24 +1,13 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/nwGui",
-	"utils/node/resolvePath",
-	"utils/node/platform",
-	"utils/node/denodify",
-	"utils/node/fs/stat",
-	"fs",
-	"path"
-], function(
-	Ember,
-	config,
-	nwGui,
-	resolvePath,
-	platform,
-	denodify,
-	stat,
-	FS,
-	PATH
-) {
+import Ember from "Ember";
+import config from "config";
+import nwGui from "nwjs/nwGui";
+import resolvePath from "utils/node/resolvePath";
+import platform from "utils/node/platform";
+import denodify from "utils/node/denodify";
+import stat from "utils/node/fs/stat";
+import FS from "fs";
+import PATH from "path";
+
 
 	var get = Ember.get;
 	var App = nwGui.App;
@@ -51,7 +40,7 @@ define([
 	}
 
 
-	return {
+	export default {
 		createStartmenuShortcut: function( settings ) {
 			if ( !isWinGte8 ) { return; }
 
@@ -66,5 +55,3 @@ define([
 			settings.notifyPropertyChange( "notify_shortcut" );
 		}
 	};
-
-});

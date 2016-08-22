@@ -1,18 +1,10 @@
-define([
-	"Ember",
-	"config",
-	"components/modal/ModalDialogComponent",
-	"models/localstorage/Settings",
-	"nwjs/openBrowser",
-	"templates/components/modal/ModalLivestreamerComponent.hbs"
-], function(
-	Ember,
-	config,
-	ModalDialogComponent,
-	Settings,
-	openBrowser,
-	layout
-) {
+import Ember from "Ember";
+import config from "config";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import Settings from "models/localstorage/Settings";
+import openBrowser from "nwjs/openBrowser";
+import layout from "templates/components/modal/ModalLivestreamerComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -22,7 +14,7 @@ define([
 	var livestreamerDownloadUrl = config.livestreamer[ "download-url" ];
 
 
-	return ModalDialogComponent.extend({
+	export default ModalDialogComponent.extend({
 		livestreamer: Ember.inject.service(),
 
 		layout: layout,
@@ -77,5 +69,3 @@ define([
 			}
 		}
 	});
-
-});

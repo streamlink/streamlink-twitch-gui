@@ -1,10 +1,7 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
+
+	export default TwitchSerializer.extend({
 		modelNameFromPayloadKey: function() {
 			return "twitchToken";
 		},
@@ -19,5 +16,3 @@ define([
 			return this._super( store, primaryModelClass, payload, id, requestType );
 		}
 	});
-
-});

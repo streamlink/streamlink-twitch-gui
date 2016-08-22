@@ -1,10 +1,7 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
 
-	return DS.BooleanTransform.reopen({
+
+	export default DS.BooleanTransform.reopen({
 		deserialize: function( serialized ) {
 			return serialized === null
 				? null
@@ -17,5 +14,3 @@ define([
 				: this._super( deserialized );
 		}
 	});
-
-});

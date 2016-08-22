@@ -1,13 +1,10 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
+
 
 	var attr = DS.attr;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		title: attr( "string" ),
 		image: attr( "string" ),
 		link: attr( "string" ),
@@ -16,5 +13,3 @@ define([
 		kind: attr( "string" ),
 		display_order: attr( "number" )
 	});
-
-});

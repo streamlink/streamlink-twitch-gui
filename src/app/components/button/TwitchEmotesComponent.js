@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/openBrowser",
-	"components/button/FormButtonComponent"
-], function(
-	Ember,
-	config,
-	openBrowser,
-	FormButtonComponent
-) {
+import Ember from "Ember";
+import config from "config";
+import openBrowser from "nwjs/openBrowser";
+import FormButtonComponent from "components/button/FormButtonComponent";
+
 
 	var get = Ember.get;
 	var and = Ember.computed.and;
@@ -17,7 +11,7 @@ define([
 	var twitchEmotesUrl = config.twitch[ "emotes-url" ];
 
 
-	return FormButtonComponent.extend({
+	export default FormButtonComponent.extend({
 		settings: Ember.inject.service(),
 
 		showButton: false,
@@ -47,5 +41,3 @@ define([
 			}
 		}
 	});
-
-});

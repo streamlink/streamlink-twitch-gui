@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"templates/components/SettingsRowComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/SettingsRowComponent.hbs";
+
 
 	var get = Ember.get;
 
@@ -31,7 +27,7 @@ define([
 	}
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 		classNames: [ "settings-row-component" ],
 
@@ -48,5 +44,3 @@ define([
 	}).reopenClass({
 		positionalParams: [ "title", "description" ]
 	});
-
-});

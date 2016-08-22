@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"utils/Parameter",
-	"utils/ParameterCustom",
-	"utils/Substitution"
-], function(
-	Ember,
-	Parameter,
-	ParameterCustom,
-	Substitution
-) {
+import Ember from "Ember";
+import Parameter from "utils/Parameter";
+import ParameterCustom from "utils/ParameterCustom";
+import Substitution from "utils/Substitution";
+
 
 	var get = Ember.get;
 
@@ -120,9 +114,7 @@ define([
 	];
 
 
-	return {
+	export default {
 		parameters: parameters,
 		playerSubstitutions: playerSubstitutions
 	};
-
-});

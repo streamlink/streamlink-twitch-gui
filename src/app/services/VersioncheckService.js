@@ -1,16 +1,9 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/nwGui",
-	"nwjs/argv",
-	"utils/semver"
-], function(
-	Ember,
-	config,
-	nwGui,
-	argv,
-	semver
-) {
+import Ember from "Ember";
+import config from "config";
+import nwGui from "nwjs/nwGui";
+import argv from "nwjs/argv";
+import semver from "utils/semver";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -19,7 +12,7 @@ define([
 	var checkAgain = config.update[ "check-again" ];
 
 
-	return Ember.Service.extend({
+	export default Ember.Service.extend({
 		store   : Ember.inject.service(),
 		modal   : Ember.inject.service(),
 
@@ -152,5 +145,3 @@ define([
 			return record.save();
 		}
 	});
-
-});

@@ -1,12 +1,8 @@
-define([
-	"QUnit",
-	"utils/getStreamFromUrl"
-], function(
-	QUnit,
-	getStreamFromUrl
-) {
+import QUnit from "QUnit";
+import getStreamFromUrl from "utils/getStreamFromUrl";
 
-	QUnit.module( "Get stream from URL" );
+
+	QUnit.module( "Get stream from URL", {} );
 
 
 	QUnit.test( "Invalid URLs", function( assert ) {
@@ -47,5 +43,3 @@ define([
 		assert.equal( getStreamFromUrl( "twitch.tv/name/profile" ), "name" );
 
 	});
-
-});

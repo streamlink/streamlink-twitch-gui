@@ -1,11 +1,6 @@
-define([
-	"models/twitch/GamesTop"
-], function(
-	GamesTop
-) {
+import GamesTop from "models/twitch/GamesTop";
 
-	return GamesTop.extend().reopenClass({
+
+	export default GamesTop.extend().reopenClass({
 		toString: function() { return "api/users/:user/follows/games/live"; }
 	});
-
-});

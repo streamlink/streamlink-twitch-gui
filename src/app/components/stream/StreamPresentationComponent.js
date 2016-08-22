@@ -1,12 +1,8 @@
-define([
-	"Ember",
-	"templates/components/stream/StreamPresentationComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/stream/StreamPresentationComponent.hbs";
 
-	return Ember.Component.extend({
+
+	export default Ember.Component.extend({
 		layout: layout,
 
 		tagName: "section",
@@ -15,5 +11,3 @@ define([
 
 		clickablePreview: true
 	});
-
-});

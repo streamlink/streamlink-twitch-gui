@@ -1,15 +1,12 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 
 	var reFilter = /^\w+$/;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		filter: "",
 
 		modelFiltered: function() {
@@ -37,5 +34,3 @@ define([
 			}
 		}
 	});
-
-});

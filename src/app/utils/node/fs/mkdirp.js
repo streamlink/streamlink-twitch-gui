@@ -1,14 +1,8 @@
-define([
-	"utils/node/denodify",
-	"utils/node/fs/stat",
-	"path",
-	"fs"
-], function(
-	denodify,
-	stat,
-	PATH,
-	FS
-) {
+import denodify from "utils/node/denodify";
+import stat from "utils/node/fs/stat";
+import PATH from "path";
+import FS from "fs";
+
 
 	var fsMkdir = denodify( FS.mkdir );
 
@@ -36,6 +30,4 @@ define([
 	}
 
 
-	return mkdirp;
-
-});
+	export default mkdirp;

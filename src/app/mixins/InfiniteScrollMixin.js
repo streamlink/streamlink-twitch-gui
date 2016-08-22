@@ -1,8 +1,5 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -86,7 +83,7 @@ define([
 	}
 
 
-	return Ember.Mixin.create({
+	export default Ember.Mixin.create({
 		/**
 		 * Define the content array location.
 		 * Can't use a binding here!!!
@@ -214,5 +211,3 @@ define([
 			}
 		}
 	});
-
-});

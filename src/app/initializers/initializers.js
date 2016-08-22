@@ -1,6 +1,4 @@
-define([
-	"initializers/localstorage",
-	"initializers/nwjs",
-	"initializers/store",
-	"initializers/window"
-], function() {} );
+import {} from "initializers/localstorage";
+import {} from "initializers/nwjs";
+import {} from "initializers/store";
+import {} from "initializers/window";

@@ -1,17 +1,13 @@
-define([
-	"Ember",
-	"config"
-], function(
-	Ember,
-	config
-) {
+import Ember from "Ember";
+import config from "config";
+
 
 	var get = Ember.get;
 
 	var langs = config.langs;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		tagName: "i",
 		classNames: [ "flag-icon-component" ],
 		classNameBindings: [ "flag", "withCursor::no-cursor" ],
@@ -49,5 +45,3 @@ define([
 			}
 		}.property( "withTitle", "lang" )
 	});
-
-});

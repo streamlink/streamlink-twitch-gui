@@ -1,16 +1,9 @@
-define([
-	"Ember",
-	"nwjs/menu",
-	"nwjs/clipboard",
-	"models/localstorage/Settings",
-	"templates/components/stream/StreamPreviewImageComponent.hbs"
-], function(
-	Ember,
-	Menu,
-	clipboard,
-	Settings,
-	layout
-) {
+import Ember from "Ember";
+import Menu from "nwjs/menu";
+import clipboard from "nwjs/clipboard";
+import Settings from "models/localstorage/Settings";
+import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
+
 
 	var get = Ember.get;
 	var getOwner = Ember.getOwner;
@@ -21,7 +14,7 @@ define([
 	}, {} );
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		settings    : Ember.inject.service(),
 		livestreamer: Ember.inject.service(),
 		chat        : Ember.inject.service(),
@@ -185,5 +178,3 @@ define([
 		}
 
 	});
-
-});

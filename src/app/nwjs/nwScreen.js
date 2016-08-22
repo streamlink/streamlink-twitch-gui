@@ -1,13 +1,8 @@
-define([
-	"nwjs/nwGui"
-], function(
-	nwGui
-) {
+import nwGui from "nwjs/nwGui";
+
 
 	var nwScreen = nwGui.Screen.Init();
 	nwScreen.removeAllListeners();
 
 
-	return nwScreen;
-
-});
+	export default nwScreen;

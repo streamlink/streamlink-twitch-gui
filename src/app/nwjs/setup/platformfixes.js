@@ -1,10 +1,6 @@
-define([
-	"os",
-	"path"
-], function(
-	OS,
-	PATH
-) {
+import OS from "os";
+import PATH from "path";
+
 
 	var reNwjsCacheDirName = /^nw\d+_\d+$/;
 
@@ -33,6 +29,4 @@ define([
 	}
 
 
-	return platformfixes;
-
-});
+	export default platformfixes;

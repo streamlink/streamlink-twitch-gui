@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"templates/components/QuickBarComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/QuickBarComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -12,7 +8,7 @@ define([
 	var cancel = Ember.run.cancel;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 		tagName: "div",
 		classNameBindings: [
@@ -68,5 +64,3 @@ define([
 	}).reopenClass({
 		isLocked: false
 	});
-
-});

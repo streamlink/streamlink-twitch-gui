@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"EmberData"
-], function(
-	Ember,
-	DS
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+
 
 	var get = Ember.get;
 	var attr = DS.attr;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		query : attr( "string" ),
 		filter: attr( "string" ),
 		date  : attr( "date" ),
@@ -44,5 +40,3 @@ define([
 				: "All";
 		}
 	});
-
-});

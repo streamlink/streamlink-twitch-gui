@@ -1,20 +1,11 @@
-define([
-	"Ember",
-	"nwjs/nwWindow",
-	"nwjs/setup/platformfixes",
-	"nwjs/setup/menubar",
-	"nwjs/setup/shortcut",
-	"nwjs/setup/tray",
-	"nwjs/setup/integrations"
-], function(
-	Ember,
-	nwWindow,
-	platformfixes,
-	menubar,
-	shortcut,
-	tray,
-	integrations
-) {
+import Ember from "Ember";
+import nwWindow from "nwjs/nwWindow";
+import platformfixes from "nwjs/setup/platformfixes";
+import menubar from "nwjs/setup/menubar";
+import shortcut from "nwjs/setup/shortcut";
+import tray from "nwjs/setup/tray";
+import integrations from "nwjs/setup/integrations";
+
 
 	var get = Ember.get;
 
@@ -62,5 +53,3 @@ define([
 			});
 		}
 	});
-
-});

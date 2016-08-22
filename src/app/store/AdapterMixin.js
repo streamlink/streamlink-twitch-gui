@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"EmberData"
-], function(
-	Ember,
-	DS
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+
 
 	var get   = Ember.get;
 	var push  = [].push;
@@ -16,7 +12,7 @@ define([
 	 * Adapter mixin for using static model names
 	 * instead of using type.modelName as name
 	 */
-	return Ember.Mixin.create( Ember.Evented, {
+	export default Ember.Mixin.create( Ember.Evented, {
 		findRecord: function( store, type, id, snapshot ) {
 			var url = this.buildURL( type, id, snapshot, "findRecord" );
 			return this.ajax( url, "GET" );
@@ -164,5 +160,3 @@ define([
 		}
 
 	});
-
-});

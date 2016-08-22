@@ -1,12 +1,7 @@
-define([
-	"Ember",
-	"EmberData",
-	"config"
-], function(
-	Ember,
-	DS,
-	config
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+import config from "config";
+
 
 	var get = Ember.get;
 	var computed = Ember.computed;
@@ -59,7 +54,7 @@ define([
 	}
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		// original attributes (renamed)
 		large_image : attr( "string" ),
 		medium_image: attr( "string" ),
@@ -77,5 +72,3 @@ define([
 		medium: buffered( "medium" ),
 		small : buffered( "small" )
 	});
-
-});

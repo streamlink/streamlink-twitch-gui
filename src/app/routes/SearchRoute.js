@@ -1,16 +1,9 @@
-define([
-	"Ember",
-	"mixins/InfiniteScrollMixin",
-	"utils/ember/toArray",
-	"utils/ember/mapBy",
-	"utils/preload"
-], function(
-	Ember,
-	InfiniteScrollMixin,
-	toArray,
-	mapBy,
-	preload
-) {
+import Ember from "Ember";
+import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import toArray from "utils/ember/toArray";
+import mapBy from "utils/ember/mapBy";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 
@@ -19,7 +12,7 @@ define([
 	}
 
 
-	return Ember.Route.extend( InfiniteScrollMixin, {
+	export default Ember.Route.extend( InfiniteScrollMixin, {
 		contentPath: "controller.model.streams",
 
 		itemSelector: ".stream-item-component",
@@ -92,5 +85,3 @@ define([
 				.then( preload( "preview.medium_nocache" ) );
 		}
 	});
-
-});

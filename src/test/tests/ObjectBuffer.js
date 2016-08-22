@@ -1,18 +1,13 @@
-define([
-	"QUnit",
-	"Ember",
-	"utils/ember/ObjectBuffer"
-], function(
-	QUnit,
-	Ember,
-	ObjectBuffer
-) {
+import QUnit from "QUnit";
+import Ember from "Ember";
+import ObjectBuffer from "utils/ember/ObjectBuffer";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	QUnit.module( "ObjectBuffer" );
+	QUnit.module( "ObjectBuffer", {} );
 
 
 	QUnit.test( "Flat ObjectBuffer", function( assert ) {
@@ -352,5 +347,3 @@ define([
 		);
 
 	});
-
-});

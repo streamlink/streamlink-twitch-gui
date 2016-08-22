@@ -1,18 +1,13 @@
-define([
-	"Ember",
-	"components/list/ListItemComponent",
-	"templates/components/list/GameItemComponent.hbs"
-], function(
-	Ember,
-	ListItemComponent,
-	layout
-) {
+import Ember from "Ember";
+import ListItemComponent from "components/list/ListItemComponent";
+import layout from "templates/components/list/GameItemComponent.hbs";
+
 
 	var get = Ember.get;
 	var or = Ember.computed.or;
 
 
-	return ListItemComponent.extend({
+	export default ListItemComponent.extend({
 		layout: layout,
 		classNames: [ "game-item-component" ],
 
@@ -25,5 +20,3 @@ define([
 			this.sendAction( "action", "games.game", get( this, "game.name" ) );
 		}
 	});
-
-});

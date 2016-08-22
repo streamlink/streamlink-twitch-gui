@@ -1,17 +1,12 @@
-define([
-	"Ember",
-	"config",
-	"metadata"
-], function(
-	Ember,
-	config,
-	metadata
-) {
+import Ember from "Ember";
+import config from "config";
+import metadata from "metadata";
+
 
 	var get = Ember.get;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		metadata: metadata,
 
 		nwjsVersion: config.main[ "nwjs-version" ],
@@ -26,5 +21,3 @@ define([
 			});
 		}.property( "metadata.dependencies" )
 	});
-
-});

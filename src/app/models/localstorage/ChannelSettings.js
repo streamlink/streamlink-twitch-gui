@@ -1,12 +1,6 @@
-define([
-	"Ember",
-	"EmberData",
-	"models/localstorage/Settings"
-], function(
-	Ember,
-	DS,
-	Settings
-) {
+import DS from "EmberData";
+import Settings from "models/localstorage/Settings";
+
 
 	var attr = DS.attr;
 
@@ -25,8 +19,6 @@ define([
 	});
 
 
-	return DS.Model.extend( attrs ).reopenClass({
+	export default DS.Model.extend( attrs ).reopenClass({
 		toString: function() { return "ChannelSettings"; }
 	});
-
-});

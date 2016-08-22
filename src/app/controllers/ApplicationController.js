@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"nwjs/nwWindow"
-], function(
-	Ember,
-	nwWindow
-) {
+import Ember from "Ember";
+import nwWindow from "nwjs/nwWindow";
+
 
 	var get = Ember.get;
 	var readOnly = Ember.computed.readOnly;
 
 
-	return Ember.Controller.extend({
+	export default Ember.Controller.extend({
 		auth        : Ember.inject.service(),
 		modal       : Ember.inject.service(),
 		notification: Ember.inject.service(),
@@ -58,5 +54,3 @@ define([
 			}
 		}
 	});
-
-});

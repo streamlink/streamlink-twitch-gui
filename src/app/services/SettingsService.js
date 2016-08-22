@@ -1,15 +1,12 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
 	// A service object is just a regular object, so we can use an ObjectProxy as well
-	return Ember.ObjectProxy.extend({
+	export default Ember.ObjectProxy.extend({
 		store: Ember.inject.service(),
 
 		content: null,
@@ -33,5 +30,3 @@ define([
 	}).reopenClass({
 		isServiceFactory: true
 	});
-
-});

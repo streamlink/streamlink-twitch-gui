@@ -1,14 +1,11 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Mixin.create({
+	export default Ember.Mixin.create({
 		/**
 		 * Retry a previously stored transition
 		 * @param {string?} route
@@ -27,5 +24,3 @@ define([
 			return transition.retry();
 		}
 	});
-
-});

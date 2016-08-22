@@ -1,4 +1,2 @@
-define([
-	"Ember",
-	"EmberData"
-]);
+import {} from "Ember";
+import {} from "EmberData";

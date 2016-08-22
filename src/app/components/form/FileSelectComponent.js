@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"templates/components/form/FileSelectComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/form/FileSelectComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 		tagName: "div",
 		classNames: [ "input-group" ],
@@ -39,5 +35,3 @@ define([
 			}
 		}
 	});
-
-});

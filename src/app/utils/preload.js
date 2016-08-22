@@ -1,14 +1,10 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var concat = [].concat;
 	var makeArray = Ember.makeArray;
 
-
-	return function preload( withError, list ) {
+	function preload( withError, list ) {
 		if ( list === undefined ) {
 			list = withError;
 			withError = false;
@@ -63,6 +59,7 @@ define([
 				// return the original response
 				.then(function preloadFulfilled() { return response; });
 		};
-	};
+	}
 
-});
+
+	export default preload;

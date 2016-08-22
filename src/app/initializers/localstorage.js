@@ -1,8 +1,5 @@
-define([
-	"config"
-], function(
-	config
-) {
+import config from "config";
+
 
 	var LS = window.localStorage;
 
@@ -63,5 +60,3 @@ define([
 
 	upgradeLocalstorage();
 	upgradeSettings();
-
-});

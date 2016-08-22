@@ -1,12 +1,9 @@
-/**
- * Based on https://github.com/movableink/buffered-proxy
- * Written by Kris Selden for Yapp Labs, published by Luke Melia
- */
-define([
-	"Ember"
-], function(
-	Ember
-) {
+	/*
+	 * Based on https://github.com/movableink/buffered-proxy
+	 * Written by Kris Selden for Yapp Labs, published by Luke Melia
+	 */
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -140,6 +137,4 @@ define([
 	});
 
 
-	return ObjectBuffer;
-
-});
+	export default ObjectBuffer;

@@ -1,12 +1,7 @@
-define([
-	"Ember",
-	"EmberData",
-	"Moment"
-], function(
-	Ember,
-	DS,
-	Moment
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+import Moment from "Moment";
+
 
 	var get = Ember.get;
 	var and = Ember.computed.and;
@@ -41,7 +36,7 @@ define([
 	 */
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		average_fps: attr( "number" ),
 		channel: belongsTo( "twitchChannel", { async: false } ),
 		created_at: attr( "date" ),
@@ -93,5 +88,3 @@ define([
 	}).reopenClass({
 		toString: function() { return "kraken/streams"; }
 	});
-
-});

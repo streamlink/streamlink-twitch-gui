@@ -1,18 +1,13 @@
-define([
-	"Ember",
-	"Masonry",
-	"templates/components/channel/ChannelPanelsComponent.hbs"
-], function(
-	Ember,
-	Masonry,
-	layout
-) {
+import Ember from "Ember";
+import Masonry from "Masonry";
+import layout from "templates/components/channel/ChannelPanelsComponent.hbs";
+
 
 	var run = Ember.run;
 	var scheduleOnce = run.scheduleOnce;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 		tagName: "section",
 		classNames: [ "content", "content-panels" ],
@@ -36,5 +31,3 @@ define([
 			}
 		}
 	});
-
-});

@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"utils/Substitution"
-], function(
-	Ember,
-	Substitution
-) {
+import Ember from "Ember";
+import Substitution from "utils/Substitution";
+
 
 	var get = Ember.get;
 	var makeArray = Ember.makeArray;
@@ -104,6 +100,4 @@ define([
 	};
 
 
-	return Parameter;
-
-});
+	export default Parameter;

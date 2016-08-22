@@ -1,8 +1,5 @@
-define([
-	"helpers/-FromNowHelper"
-], function(
-	FromNowHelper
-) {
+import FromNowHelper from "helpers/-FromNowHelper";
+
 
 	var second = 1000;
 	var minute = 60 * second;
@@ -29,7 +26,7 @@ define([
 	}
 
 
-	return FromNowHelper.extend({
+	export default FromNowHelper.extend({
 		_compute: function( params ) {
 			var diff = +new Date() - params[0];
 			return diff < minute
@@ -41,5 +38,3 @@ define([
 						: formatDays( diff );
 		}
 	});
-
-});

@@ -1,13 +1,10 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var set = Ember.set;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		controllerName: "settings",
 
 		disableAutoRefresh: true,
@@ -26,5 +23,3 @@ define([
 			set( settingsController, "isAnimated", true );
 		}
 	});
-
-});

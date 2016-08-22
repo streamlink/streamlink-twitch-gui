@@ -1,10 +1,6 @@
-define([
-	"Ember",
-	"templates/components/SettingsSubmitComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/SettingsSubmitComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -12,7 +8,7 @@ define([
 	var later = Ember.run.later;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 
 		classNames: [ "settings-submit-component" ],
@@ -63,5 +59,3 @@ define([
 			}
 		}.on( "willDestroyElement" )
 	});
-
-});

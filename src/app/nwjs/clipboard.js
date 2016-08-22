@@ -1,8 +1,5 @@
-define([
-	"nwjs/nwGui"
-], function(
-	nwGui
-) {
+import nwGui from "nwjs/nwGui";
+
 
 	function getClipboard() {
 		try {
@@ -13,7 +10,7 @@ define([
 	}
 
 
-	return {
+	export default {
 		get: function() {
 			return getClipboard().get( "text" );
 		},
@@ -25,5 +22,3 @@ define([
 			});
 		}
 	};
-
-});

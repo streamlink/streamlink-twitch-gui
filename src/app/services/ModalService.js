@@ -1,8 +1,5 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var setProperties = Ember.setProperties;
@@ -15,7 +12,7 @@ define([
 	}
 
 
-	return Ember.Service.extend({
+	export default Ember.Service.extend({
 		modal  : null,
 		context: null,
 
@@ -45,5 +42,3 @@ define([
 			});
 		}
 	});
-
-});

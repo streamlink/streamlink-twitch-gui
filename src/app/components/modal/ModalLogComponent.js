@@ -1,15 +1,11 @@
-define([
-	"Ember",
-	"templates/components/modal/ModalLogComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/modal/ModalLogComponent.hbs";
+
 
 	var scheduleOnce = Ember.run.scheduleOnce;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 
 		tagName: "section",
@@ -29,5 +25,3 @@ define([
 			elem.scrollTop = Math.max( 0, elem.scrollHeight - elem.clientHeight );
 		}.on( "didInsertElement" )
 	});
-
-});

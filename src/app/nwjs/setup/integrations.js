@@ -1,12 +1,7 @@
-define([
-	"Ember",
-	"nwjs/nwWindow",
-	"nwjs/argv"
-], function(
-	Ember,
-	nwWindow,
-	argv
-) {
+import Ember from "Ember";
+import nwWindow from "nwjs/nwWindow";
+import argv from "nwjs/argv";
+
 
 	var get = Ember.get;
 
@@ -54,8 +49,6 @@ define([
 	}
 
 
-	return {
+	export default {
 		setupIntegrations: setupIntegrations
 	};
-
-});

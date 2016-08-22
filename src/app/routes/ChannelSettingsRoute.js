@@ -1,16 +1,12 @@
-define([
-	"Ember",
-	"utils/ember/ObjectBuffer"
-], function(
-	Ember,
-	ObjectBuffer
-) {
+import Ember from "Ember";
+import ObjectBuffer from "utils/ember/ObjectBuffer";
+
 
 	var get = Ember.get;
 	var getOwner = Ember.getOwner;
 
 
-	return Ember.Route.extend({
+	export default Ember.Route.extend({
 		modal: Ember.inject.service(),
 
 		model: function() {
@@ -59,5 +55,3 @@ define([
 			}
 		}
 	});
-
-});

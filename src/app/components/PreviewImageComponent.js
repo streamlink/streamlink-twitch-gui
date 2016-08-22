@@ -1,15 +1,11 @@
-define([
-	"Ember",
-	"templates/components/PreviewImageComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/PreviewImageComponent.hbs";
+
 
 	var set = Ember.set;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 
 		classNames: [],
@@ -37,5 +33,3 @@ define([
 			img.addEventListener( "load",  onLoad,  false );
 		}.on( "willInsertElement" )
 	});
-
-});

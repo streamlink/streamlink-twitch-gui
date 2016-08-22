@@ -1,10 +1,7 @@
-define([
-	"store/TwitchAdapter"
-], function(
-	TwitchAdapter
-) {
+import TwitchAdapter from "store/TwitchAdapter";
 
-	return TwitchAdapter.extend({
+
+	export default TwitchAdapter.extend({
 		// use custom findRecord URL
 		findRecord: function( store, type, id, snapshot ) {
 			var url = this.buildURL( type, null, snapshot, "findRecord" );
@@ -49,5 +46,3 @@ define([
 			return this._buildURL( type, "unfollow" );
 		}
 	});
-
-});

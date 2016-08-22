@@ -1,14 +1,9 @@
-define([
-	"Ember",
-	"nwjs/menu",
-	"nwjs/clipboard"
-], function(
-	Ember,
-	Menu,
-	clipboard
-) {
+import Ember from "Ember";
+import Menu from "nwjs/menu";
+import clipboard from "nwjs/clipboard";
 
-	return Ember.TextField.extend({
+
+	export default Ember.TextField.extend({
 		attributeBindings: [ "autoselect:data-selectable" ],
 
 		autoselect: false,
@@ -56,5 +51,3 @@ define([
 			this.element.setSelectionRange( 0, this.element.value.length );
 		}
 	});
-
-});

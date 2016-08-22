@@ -1,8 +1,5 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var run = Ember.run;
@@ -54,7 +51,7 @@ define([
 	}
 
 
-	return {
+	export default {
 		fixtureElement: fixtureElement,
 		runAppend: runAppend,
 		runDestroy: runDestroy,
@@ -63,5 +60,3 @@ define([
 		cleanOutput: cleanOutput,
 		buildOwner: buildOwner
 	};
-
-});

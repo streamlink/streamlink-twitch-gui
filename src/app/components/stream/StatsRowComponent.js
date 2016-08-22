@@ -1,17 +1,11 @@
-define([
-	"Ember",
-	"templates/components/stream/StatsRowComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/stream/StatsRowComponent.hbs";
 
-	return Ember.Component.extend({
+
+	export default Ember.Component.extend({
 		layout: layout,
 		tagName: "div",
 		classNameBindings: [ ":stats-row-component", "class" ],
 
 		withFlag: true
 	});
-
-});

@@ -1,22 +1,15 @@
-define([
-	"Ember",
-	"routes/UserIndexRoute",
-	"mixins/InfiniteScrollMixin",
-	"utils/ember/toArray",
-	"utils/preload"
-], function(
-	Ember,
-	UserIndexRoute,
-	InfiniteScrollMixin,
-	toArray,
-	preload
-) {
+import Ember from "Ember";
+import UserIndexRoute from "routes/UserIndexRoute";
+import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import toArray from "utils/ember/toArray";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return UserIndexRoute.extend( InfiniteScrollMixin, {
+	export default UserIndexRoute.extend( InfiniteScrollMixin, {
 		itemSelector: ".subscription-item-component",
 
 		model: function() {
@@ -78,5 +71,3 @@ define([
 				});
 		}
 	});
-
-});

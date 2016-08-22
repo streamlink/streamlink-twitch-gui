@@ -1,16 +1,9 @@
-define([
-	"config",
-	"nwjs/nwWindow",
-	"nwjs/tray",
-	"utils/node/platform",
-	"utils/node/resolvePath"
-], function(
-	config,
-	nwWindow,
-	tray,
-	platform,
-	resolvePath
-) {
+import config from "config";
+import nwWindow from "nwjs/nwWindow";
+import tray from "nwjs/tray";
+import platform from "utils/node/platform";
+import resolvePath from "utils/node/resolvePath";
+
 
 	var displayName = config.main[ "display-name" ];
 	var trayIcons   = config.files[ "icons" ][ "tray" ][ platform.platform ];
@@ -48,8 +41,6 @@ define([
 	}
 
 
-	return {
+	export default {
 		createTrayIcon: createTrayIcon
 	};
-
-});

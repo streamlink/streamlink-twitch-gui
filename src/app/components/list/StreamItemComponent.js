@@ -1,12 +1,7 @@
-define([
-	"Ember",
-	"components/list/ListItemComponent",
-	"templates/components/list/StreamItemComponent.hbs"
-], function(
-	Ember,
-	ListItemComponent,
-	layout
-) {
+import Ember from "Ember";
+import ListItemComponent from "components/list/ListItemComponent";
+import layout from "templates/components/list/StreamItemComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -17,7 +12,7 @@ define([
 	var cancel = Ember.run.cancel;
 
 
-	return ListItemComponent.extend({
+	export default ListItemComponent.extend({
 		layout: layout,
 		classNameBindings: [
 			":stream-item-component",
@@ -125,5 +120,3 @@ define([
 			}
 		}
 	});
-
-});

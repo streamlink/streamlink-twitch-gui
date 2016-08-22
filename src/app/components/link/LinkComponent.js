@@ -1,14 +1,11 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 
 
 	// reopen and don't extend: this class may be used globally
-	return Ember.LinkComponent.reopen({
+	export default Ember.LinkComponent.reopen({
 		active: function() {
 			var active = this._super.apply( this, arguments );
 			if ( active === false ) {
@@ -47,5 +44,3 @@ define([
 			}
 		}
 	});
-
-});

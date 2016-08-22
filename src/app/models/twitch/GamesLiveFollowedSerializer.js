@@ -1,13 +1,8 @@
-define([
-	"models/twitch/GamesTopSerializer"
-], function(
-	GamesTopSerializer
-) {
+import GamesTopSerializer from "models/twitch/GamesTopSerializer";
 
-	return GamesTopSerializer.extend({
+
+	export default GamesTopSerializer.extend({
 		modelNameFromPayloadKey: function() {
 			return "twitchGamesLiveFollowed";
 		}
 	});
-
-});

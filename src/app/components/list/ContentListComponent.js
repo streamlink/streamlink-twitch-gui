@@ -1,17 +1,13 @@
-define([
-	"Ember",
-	"templates/components/list/ContentListComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/list/ContentListComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var setProperties = Ember.setProperties;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		layout: layout,
 
 		tagName: "div",
@@ -83,5 +79,3 @@ define([
 			});
 		}
 	});
-
-});

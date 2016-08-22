@@ -1,18 +1,13 @@
-define([
-	"Ember",
-	"components/list/ListItemComponent",
-	"templates/components/list/SettingsChannelItemComponent.hbs"
-], function(
-	Ember,
-	ListItemComponent,
-	layout
-) {
+import Ember from "Ember";
+import ListItemComponent from "components/list/ListItemComponent";
+import layout from "templates/components/list/SettingsChannelItemComponent.hbs";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 
 
-	return ListItemComponent.extend({
+	export default ListItemComponent.extend({
 		layout: layout,
 		classNames: [ "settings-channel-item-component" ],
 
@@ -32,5 +27,3 @@ define([
 			}
 		}
 	});
-
-});

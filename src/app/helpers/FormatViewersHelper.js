@@ -1,10 +1,7 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
 
-	return Ember.Helper.helper(function( params ) {
+
+	export default Ember.Helper.helper(function( params ) {
 		var viewers = Number( params[0] );
 		return isNaN( viewers )
 			? "0"
@@ -16,5 +13,3 @@ define([
 			? ( Math.floor( viewers / 100 ) / 10 ).toFixed( 1 ) + "k"
 			: viewers.toFixed( 0 );
 	});
-
-});

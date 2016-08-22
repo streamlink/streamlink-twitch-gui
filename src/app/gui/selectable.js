@@ -1,6 +1,4 @@
-define(function() {
-
-	return function() {
+	export default function() {
 		var selectable = true;
 
 		document.addEventListener( "selectstart", function( e ) {
@@ -29,6 +27,4 @@ define(function() {
 			e.preventDefault();
 			e.stopImmediatePropagation();
 		}, false );
-	};
-
-});
+	}

@@ -1,10 +1,6 @@
-define([
-	"utils/node/platform",
-	"path"
-], function(
-	platform,
-	PATH
-) {
+import platform from "utils/node/platform";
+import PATH from "path";
+
 
 	var reVarWindows = /%([^%]+)%/g;
 	var reVarUnix    = /\$([A-Z_]+)/g;
@@ -23,9 +19,9 @@ define([
 		return PATH.resolve( path );
 	}
 
-
-	return platform.isWin
+	var resolvePath = platform.isWin
 		? resolvePathWindows
 		: resolvePathUnix;
 
-});
+
+	export default resolvePath;

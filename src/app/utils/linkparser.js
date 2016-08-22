@@ -1,5 +1,3 @@
-define(function() {
-
 	// most common gTLDs... a little overkill, but
 	// we don't want to match something like cat.jpg
 	var gTLD   = [
@@ -117,9 +115,7 @@ define(function() {
 	}
 
 
-	return {
+	export default {
 		parsers    : parsers,
 		parseString: parseString
 	};
-
-});

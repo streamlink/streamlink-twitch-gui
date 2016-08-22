@@ -1,14 +1,8 @@
-define([
-	"Ember",
-	"EmberData",
-	"config",
-	"utils/node/platform"
-], function(
-	Ember,
-	DS,
-	config,
-	platform
-) {
+import Ember from "Ember";
+import DS from "EmberData";
+import config from "config";
+import platform from "utils/node/platform";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -30,7 +24,7 @@ define([
 	}
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		advanced            : attr( "boolean", { defaultValue: false } ),
 		livestreamer        : attr( "string",  { defaultValue: "" } ),
 		livestreamer_params : attr( "string",  { defaultValue: "" } ),
@@ -200,5 +194,3 @@ define([
 		]
 
 	});
-
-});

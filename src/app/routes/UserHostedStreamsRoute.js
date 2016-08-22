@@ -1,23 +1,15 @@
-define([
-	"Ember",
-	"routes/UserIndexRoute",
-	"mixins/InfiniteScrollMixin",
-	"mixins/ModelMetadataMixin",
-	"utils/ember/toArray",
-	"utils/preload"
-], function(
-	Ember,
-	UserIndexRoute,
-	InfiniteScrollMixin,
-	ModelMetadataMixin,
-	toArray,
-	preload
-) {
+import Ember from "Ember";
+import UserIndexRoute from "routes/UserIndexRoute";
+import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import ModelMetadataMixin from "mixins/ModelMetadataMixin";
+import toArray from "utils/ember/toArray";
+import preload from "utils/preload";
+
 
 	var get = Ember.get;
 
 
-	return UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
+	export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 		itemSelector: ".stream-item-component",
 
 		modelName: "twitchStreamsHosted",
@@ -51,5 +43,3 @@ define([
 				});
 		}
 	});
-
-});

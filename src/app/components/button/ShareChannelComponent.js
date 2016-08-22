@@ -1,17 +1,12 @@
-define([
-	"Ember",
-	"nwjs/clipboard",
-	"components/button/FormButtonComponent"
-], function(
-	Ember,
-	clipboard,
-	FormButtonComponent
-) {
+import Ember from "Ember";
+import clipboard from "nwjs/clipboard";
+import FormButtonComponent from "components/button/FormButtonComponent";
+
 
 	var get = Ember.get;
 
 
-	return FormButtonComponent.extend({
+	export default FormButtonComponent.extend({
 		"class" : "btn-info",
 		icon    : "fa-share-alt",
 		title   : "Copy channel url to clipboard",
@@ -27,5 +22,3 @@ define([
 			}
 		}
 	});
-
-});

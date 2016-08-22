@@ -1,5 +1,4 @@
-define(function() {
+import nwGui from "nw.gui";
 
-	return window.require( "nw.gui" );
 
-});
+	export default nwGui;

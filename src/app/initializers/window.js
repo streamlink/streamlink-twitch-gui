@@ -1,18 +1,10 @@
-define([
-	"Ember",
-	"nwjs/nwGui",
-	"nwjs/nwWindow",
-	"nwjs/nwScreen",
-	"nwjs/argv",
-	"utils/node/platform"
-], function(
-	Ember,
-	nwGui,
-	nwWindow,
-	nwScreen,
-	argv,
-	platform
-) {
+import Ember from "Ember";
+import nwGui from "nwjs/nwGui";
+import nwWindow from "nwjs/nwWindow";
+import nwScreen from "nwjs/nwScreen";
+import argv from "nwjs/argv";
+import platform from "utils/node/platform";
+
 
 	var get = Ember.get;
 	var set = Ember.setProperties;
@@ -185,5 +177,3 @@ define([
 				});
 		}
 	});
-
-});

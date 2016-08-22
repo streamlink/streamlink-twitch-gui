@@ -1,15 +1,12 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import Ember from "Ember";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
 	var merge = Ember.merge;
 
 
-	return Ember.Mixin.create({
+	export default Ember.Mixin.create({
 		store: Ember.inject.service(),
 
 		modelName: null,
@@ -27,5 +24,3 @@ define([
 			}
 		}
 	});
-
-});

@@ -1,15 +1,11 @@
-define([
-	"Ember",
-	"templates/components/modal/ModalDialogComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import Ember from "Ember";
+import layout from "templates/components/modal/ModalDialogComponent.hbs";
+
 
 	var get = Ember.get;
 
 
-	return Ember.Component.extend({
+	export default Ember.Component.extend({
 		modal: Ember.inject.service(),
 
 		layout: layout,
@@ -36,5 +32,3 @@ define([
 			}
 		}
 	});
-
-});

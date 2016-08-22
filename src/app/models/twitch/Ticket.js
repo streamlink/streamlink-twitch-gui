@@ -1,14 +1,11 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import DS from "EmberData";
+
 
 	var attr = DS.attr;
 	var belongsTo = DS.belongsTo;
 
 
-	return DS.Model.extend({
+	export default DS.Model.extend({
 		access_end: attr( "date" ),
 		access_start: attr( "date" ),
 		product: belongsTo( "twitchProduct", { async: false } ),
@@ -17,5 +14,3 @@ define([
 	}).reopenClass({
 		toString: function() { return "api/users/:user/tickets"; }
 	});
-
-});

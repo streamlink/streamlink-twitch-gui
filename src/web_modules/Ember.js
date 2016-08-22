@@ -1,8 +1,5 @@
-define([
-	"JQuery",
-	"vendor/ember/ember.debug"
-], function() {
+import {} from "JQuery";
+import {} from "vendor/ember/ember.debug";
 
-	return window.Ember;
 
-});
+export default window.Ember;

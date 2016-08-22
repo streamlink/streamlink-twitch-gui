@@ -1,26 +1,13 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/nwGui",
-	"nwjs/nwWindow",
-	"models/localstorage/Settings",
-	"mixins/ChannelSettingsMixin",
-	"utils/semver",
-	"utils/StreamOutputBuffer",
-	"utils/node/fs/whichFallback",
-	"child_process"
-], function(
-	Ember,
-	config,
-	nwGui,
-	nwWindow,
-	Settings,
-	ChannelSettingsMixin,
-	semver,
-	StreamOutputBuffer,
-	whichFallback,
-	CP
-) {
+import Ember from "Ember";
+import config from "config";
+import nwWindow from "nwjs/nwWindow";
+import Settings from "models/localstorage/Settings";
+import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
+import semver from "utils/semver";
+import StreamOutputBuffer from "utils/StreamOutputBuffer";
+import whichFallback from "utils/node/fs/whichFallback";
+import CP from "child_process";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -98,7 +85,7 @@ define([
 	}
 
 
-	return Ember.Service.extend( ChannelSettingsMixin, {
+	export default Ember.Service.extend( ChannelSettingsMixin, {
 		store   : Ember.inject.service(),
 		modal   : Ember.inject.service(),
 		settings: Ember.inject.service(),
@@ -478,5 +465,3 @@ define([
 				.catch(function() {});
 		}
 	});
-
-});

@@ -1,18 +1,10 @@
-define([
-	"Ember",
-	"config",
-	"mixins/RetryTransitionMixin",
-	"models/LivestreamerParameters",
-	"models/localstorage/Settings",
-	"utils/node/platform"
-], function(
-	Ember,
-	config,
-	RetryTransitionMixin,
-	LivestreamerParameters,
-	Settings,
-	platform
-) {
+import Ember from "Ember";
+import config from "config";
+import RetryTransitionMixin from "mixins/RetryTransitionMixin";
+import LivestreamerParameters from "models/LivestreamerParameters";
+import Settings from "models/localstorage/Settings";
+import platform from "utils/node/platform";
+
 
 	var get = Ember.get;
 	var set = Ember.set;
@@ -30,7 +22,7 @@ define([
 	}
 
 
-	return Ember.Controller.extend( RetryTransitionMixin, {
+	export default Ember.Controller.extend( RetryTransitionMixin, {
 		settings: Ember.inject.service(),
 		modal   : Ember.inject.service(),
 		chat    : Ember.inject.service(),
@@ -157,5 +149,3 @@ define([
 			}
 		}
 	});
-
-});

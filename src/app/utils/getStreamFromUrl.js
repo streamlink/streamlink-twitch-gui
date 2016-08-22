@@ -1,5 +1,3 @@
-define(function() {
-
 	var reUrl = /^(?:https?:\/\/)?(?:(?:www|secure)\.)?twitch\.tv\/(\w+)(?:\/profile)?$/;
 	var blacklist = [ "directory", "login", "signup", "logout", "settings" ];
 
@@ -21,6 +19,4 @@ define(function() {
 	}
 
 
-	return getStreamFromUrl;
-
-});
+	export default getStreamFromUrl;

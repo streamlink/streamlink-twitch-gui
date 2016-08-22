@@ -1,8 +1,5 @@
-define([
-	"Ember",
-	"vendor/ember-data/ember-data"
-], function() {
+import {} from "Ember";
+import {} from "vendor/ember-data/ember-data";
 
-	return window.DS;
 
-});
+export default window.DS;

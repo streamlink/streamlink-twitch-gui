@@ -1,16 +1,9 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/openBrowser",
-	"components/button/FormButtonComponent",
-	"mixins/TwitchInteractButtonMixin"
-], function(
-	Ember,
-	config,
-	openBrowser,
-	FormButtonComponent,
-	TwitchInteractButtonMixin
-) {
+import Ember from "Ember";
+import config from "config";
+import openBrowser from "nwjs/openBrowser";
+import FormButtonComponent from "components/button/FormButtonComponent";
+import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
+
 
 	var get = Ember.get;
 	var and = Ember.computed.and;
@@ -19,7 +12,7 @@ define([
 	var subscriptionCreateUrl = config.twitch[ "subscription" ][ "create-url" ];
 
 
-	return FormButtonComponent.extend( TwitchInteractButtonMixin, {
+	export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 		modelName: "twitchUserSubscription",
 
 		// model alias (component attribute)
@@ -69,5 +62,3 @@ define([
 			}
 		}
 	});
-
-});

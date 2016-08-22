@@ -1,26 +1,14 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/openBrowser",
-	"utils/Parameter",
-	"utils/ParameterCustom",
-	"utils/Substitution",
-	"utils/node/fs/whichFallback",
-	"utils/node/fs/stat",
-	"child_process",
-	"path"
-], function(
-	Ember,
-	config,
-	openBrowser,
-	Parameter,
-	ParameterCustom,
-	Substitution,
-	whichFallback,
-	stat,
-	CP,
-	PATH
-) {
+import Ember from "Ember";
+import config from "config";
+import openBrowser from "nwjs/openBrowser";
+import Parameter from "utils/Parameter";
+import ParameterCustom from "utils/ParameterCustom";
+import Substitution from "utils/Substitution";
+import whichFallback from "utils/node/fs/whichFallback";
+import stat from "utils/node/fs/stat";
+import CP from "child_process";
+import PATH from "path";
+
 
 	var get = Ember.get;
 	var run = Ember.run;
@@ -42,7 +30,7 @@ define([
 	}
 
 
-	return Ember.Service.extend({
+	export default Ember.Service.extend({
 		settings: Ember.inject.service(),
 		auth: Ember.inject.service(),
 
@@ -255,5 +243,3 @@ define([
 				});
 		}
 	});
-
-});

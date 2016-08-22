@@ -1,16 +1,9 @@
-define([
-	"config",
-	"nwjs/nwGui",
-	"nwjs/nwWindow",
-	"nwjs/menu",
-	"utils/node/platform"
-], function(
-	config,
-	nwGui,
-	nwWindow,
-	Menu,
-	platform
-) {
+import config from "config";
+import nwGui from "nwjs/nwGui";
+import nwWindow from "nwjs/nwWindow";
+import Menu from "nwjs/menu";
+import platform from "utils/node/platform";
+
 
 	var MenuItem = nwGui.MenuItem;
 	var isDarwin = platform.isDarwin;
@@ -50,12 +43,10 @@ define([
 	}
 
 
-	return {
+	export default {
 		createNativeMenuBar: function( controller ) {
 			if ( !isDarwin ) { return; }
 
 			nwWindow.menu = createNativeMenuBarDarwin( controller );
 		}
 	};
-
-});
