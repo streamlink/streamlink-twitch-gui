@@ -10,7 +10,7 @@ var livestreamerDocsUrl = config.livestreamer[ "docs-url" ];
 
 
 export default ExternalLinkComponent.extend({
-	layout: layout,
+	layout,
 
 	// default baseUrl is the livestreamer docs url
 	baseUrl: livestreamerDocsUrl,

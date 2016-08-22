@@ -13,7 +13,8 @@ function actionFactory( action ) {
 
 
 export default ModalDialogComponent.extend({
-	layout: layout,
+	layout,
+
 	"class": "modal-confirm",
 
 

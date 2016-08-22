@@ -17,7 +17,8 @@ var livestreamerDownloadUrl = config.livestreamer[ "download-url" ];
 export default ModalDialogComponent.extend({
 	livestreamer: Ember.inject.service(),
 
-	layout: layout,
+	layout,
+
 	"class": "modal-livestreamer",
 
 	error : readOnly( "livestreamer.error" ),

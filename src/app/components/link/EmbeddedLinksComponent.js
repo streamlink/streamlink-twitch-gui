@@ -8,7 +8,7 @@ var parseString = linkparser.parseString;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
 
 	content: function() {
 		var text   = get( this, "text" );

@@ -29,8 +29,8 @@ export default Ember.Controller.extend( RetryTransitionMixin, {
 
 	isAnimated: false,
 
-	Settings: Settings,
-	platform: platform,
+	Settings,
+	platform,
 
 
 	hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),

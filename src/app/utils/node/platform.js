@@ -30,14 +30,14 @@ function tmpdir() {
 
 
 export default {
-	platform: platform,
-	release : release,
+	platform,
+	release,
 
-	isWin   : isWin,
-	isDarwin: isDarwin,
-	isLinux : isLinux,
+	isWin,
+	isDarwin,
+	isLinux,
 
-	isWinGte8: isWinGte8,
+	isWinGte8,
 
-	tmpdir: tmpdir
+	tmpdir
 };

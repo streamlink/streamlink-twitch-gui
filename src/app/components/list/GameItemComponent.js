@@ -8,7 +8,8 @@ var or = Ember.computed.or;
 
 
 export default ListItemComponent.extend({
-	layout: layout,
+	layout,
+
 	classNames: [ "game-item-component" ],
 
 	action: "goto",

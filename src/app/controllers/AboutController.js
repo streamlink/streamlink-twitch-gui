@@ -7,7 +7,7 @@ var get = Ember.get;
 
 
 export default Ember.Controller.extend({
-	metadata: metadata,
+	metadata,
 
 	nwjsVersion: config.main[ "nwjs-version" ],
 

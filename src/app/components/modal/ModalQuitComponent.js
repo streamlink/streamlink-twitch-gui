@@ -11,7 +11,8 @@ var readOnly = Ember.computed.readOnly;
 export default ModalDialogComponent.extend({
 	livestreamer: Ember.inject.service(),
 
-	layout: layout,
+	layout,
+
 	"class": "modal-quit",
 
 	hasStreams: readOnly( "livestreamer.model.length" ),

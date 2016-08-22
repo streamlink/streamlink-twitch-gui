@@ -13,7 +13,8 @@ var $window = $( window );
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
+
 	tagName: "button",
 	classNameBindings: [
 		":btn",

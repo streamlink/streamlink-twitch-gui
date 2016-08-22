@@ -9,7 +9,8 @@ var get = Ember.get;
 export default ModalDialogComponent.extend({
 	versioncheck: Ember.inject.service(),
 
-	layout: layout,
+	layout,
+
 	"class": "modal-firstrun",
 
 	goto: "goto",

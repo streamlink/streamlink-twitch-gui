@@ -14,10 +14,9 @@ export default Ember.Route.extend({
 		// try to find a stream record if the channel is broadcasting
 		var streamPromise = store.findRecord( "twitchStream", id, { reload: true } )
 			.then(function( stream ) {
-				return {
-					stream : stream,
-					channel: get( stream, "channel" )
-				};
+				var channel = get( stream, "channel" );
+
+				return { stream, channel };
 			}, function() {
 				// let the stream record transition from root.loading into root.empty
 				// so that it can be reloaded later on... fixes #89
@@ -27,9 +26,7 @@ export default Ember.Route.extend({
 				// if the channel is not online, just *fetch* the channel record
 				return store.findRecord( "twitchChannel", id, { reload: true } )
 					.then(function( channel ) {
-						return {
-							channel: channel
-						};
+						return { channel };
 					});
 			})
 			.then( preload([

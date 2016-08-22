@@ -8,7 +8,7 @@ var get = Ember.get;
 export default Ember.Component.extend({
 	modal: Ember.inject.service(),
 
-	layout: layout,
+	layout,
 
 	tagName: "section",
 	classNameBindings: [ ":modal-dialog-component", "class" ],

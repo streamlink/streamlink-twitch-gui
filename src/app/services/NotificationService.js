@@ -310,11 +310,8 @@ export default Ember.Service.extend( ChannelSettingsMixin, {
 		return Promise.all( streams.map(function( stream ) {
 			var name = get( stream, "channel.id" );
 			return this.loadChannelSettings( name )
-				.then(function( channelSettings ) {
-					return {
-						stream  : stream,
-						settings: channelSettings
-					};
+				.then(function( settings ) {
+					return { stream, settings };
 				});
 		}, this ) )
 			.then(function( streams ) {

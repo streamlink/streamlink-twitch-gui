@@ -3,7 +3,8 @@ import layout from "templates/components/form/InputBtnComponent.hbs";
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
+
 	tagName: "label",
 	classNames: [ "input-btn-component" ],
 	classNameBindings: [ "checked", "disabled" ]

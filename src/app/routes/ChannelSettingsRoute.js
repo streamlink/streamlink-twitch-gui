@@ -38,7 +38,7 @@ export default Ember.Route.extend({
 	},
 
 	actions: {
-		willTransition: function( transition ) {
+		willTransition: function( previousTransition ) {
 			// check whether the user has changed any values
 			if ( !get( this, "controller.model.buffer.isDirty" ) ) {
 				// don't keep the channelSettings records in cache
@@ -46,11 +46,11 @@ export default Ember.Route.extend({
 			}
 
 			// stay here...
-			transition.abort();
+			previousTransition.abort();
 
 			// and let the user decide
 			get( this, "modal" ).openModal( "confirm", this.controller, {
-				previousTransition: transition
+				previousTransition
 			});
 		}
 	}

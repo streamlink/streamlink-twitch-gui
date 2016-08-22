@@ -109,13 +109,13 @@ function parseString( string ) {
 	});
 
 	return {
-		texts: texts,
-		links: links
+		texts,
+		links
 	};
 }
 
 
 export default {
-	parsers    : parsers,
-	parseString: parseString
+	parsers,
+	parseString
 };

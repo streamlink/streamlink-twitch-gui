@@ -8,7 +8,7 @@ var setProperties = Ember.setProperties;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "div",
 	classNameBindings: [ ":content-list-component", "float::content-list-nofloat" ],
@@ -30,7 +30,7 @@ export default Ember.Component.extend({
 		var length = get( this, "content.length" );
 		setProperties( this, {
 			initial   : length,
-			length    : length,
+			length,
 			duplicates: {}
 		});
 

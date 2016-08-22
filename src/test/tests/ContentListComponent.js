@@ -39,12 +39,10 @@ QUnit.module( "ContentListComponent", {
 QUnit.test( "Empty content", function( assert ) {
 
 	var content = [];
-	component = Component.extend({
-		content: content,
-		layout : compile(
-			"{{#content-list content=content as |i|}}{{i}}{{else}}empty{{/content-list}}"
-		)
-	}).create();
+	var layout = compile(
+		"{{#content-list content=content as |i|}}{{i}}{{else}}empty{{/content-list}}"
+	);
+	component = Component.extend({ content, layout }).create();
 	setOwner( component, owner );
 
 	runAppend( component );
@@ -59,12 +57,10 @@ QUnit.test( "Empty content", function( assert ) {
 QUnit.test( "New items", function( assert ) {
 
 	var content = [ 1, 2 ];
-	component = Component.extend({
-		content: content,
-		layout : compile(
-			"{{#content-list content=content as |i n|}}{{n}}{{/content-list}}"
-		)
-	}).create();
+	var layout = compile(
+		"{{#content-list content=content as |i n|}}{{n}}{{/content-list}}"
+	);
+	component = Component.extend({ content, layout }).create();
 	setOwner( component, owner );
 
 	runAppend( component );
@@ -79,12 +75,10 @@ QUnit.test( "New items", function( assert ) {
 QUnit.test( "Duplicates", function( assert ) {
 
 	var content = [ 1, 2 ];
-	component = Component.extend({
-		content: content,
-		layout : compile(
-			"{{#content-list content=content as |i n d|}}{{d}}{{/content-list}}"
-		)
-	}).create();
+	var layout = compile(
+		"{{#content-list content=content as |i n d|}}{{d}}{{/content-list}}"
+	);
+	component = Component.extend({ content, layout }).create();
 	setOwner( component, owner );
 
 	runAppend( component );
@@ -100,12 +94,10 @@ QUnit.test( "Simple nested duplicates", function( assert ) {
 
 	var done = assert.async();
 	var content = [ { foo: 1 }, { foo: 2 } ];
-	component = Component.extend({
-		content: content,
-		layout : compile(
-			"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
-		)
-	}).create();
+	var layout = compile(
+		"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
+	);
+	component = Component.extend({ content, layout }).create();
 	setOwner( component, owner );
 
 	runAppend( component );
@@ -132,12 +124,10 @@ QUnit.test( "Deferred nested duplicates", function( assert ) {
 
 	a.resolve( 1 );
 	var content = [ { foo: a.promise } ];
-	component = Component.extend({
-		content: content,
-		layout : compile(
-			"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
-		)
-	}).create();
+	var layout = compile(
+		"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
+	);
+	component = Component.extend({ content, layout }).create();
 	setOwner( component, owner );
 
 	runAppend( component );

@@ -94,10 +94,7 @@ export default Ember.Service.extend({
 		var exec     = data[ "exec" ];
 		var fallback = data[ "fallback" ];
 
-		var context = {
-			args: args,
-			url : url
-		};
+		var context = { args, url };
 		var paramsPredefined = [
 			new ParameterCustom( null, "args", [
 				new Substitution( "url", "url" )
@@ -122,19 +119,14 @@ export default Ember.Service.extend({
 		var data = chatApplications[ "msie" ];
 		if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
 
-		var args   = data[ "args" ];
-		var exec   = data[ "exec" ];
-		var script = data[ "script" ];
-
 		// the script needs to be inside the application's folder
 		var dir    = PATH.dirname( process.execPath );
-		var file   = PATH.join( dir, script );
 
-		var context = {
-			args  : args,
-			url   : url,
-			script: file
-		};
+		var args   = data[ "args" ];
+		var exec   = data[ "exec" ];
+		var script = PATH.join( dir, data[ "script" ] );
+
+		var context = { args, url, script };
 		var paramsMSIE = [
 			new ParameterCustom( null, "args", [
 				new Substitution( "url", "url" ),
@@ -142,7 +134,7 @@ export default Ember.Service.extend({
 			])
 		];
 
-		return stat( file )
+		return stat( script )
 			.then(function() {
 				var params = Parameter.getParameters( context, paramsMSIE, true );
 				return launch( exec, params );
@@ -162,15 +154,17 @@ export default Ember.Service.extend({
 		var javaFb     = data[ "fallback" ];
 		var chattyFb   = data[ "chatty-fallback" ];
 
+		var args = isLoggedIn
+			? data[ "chatty-args" ]
+			: data[ "chatty-args-noauth" ];
+
 		// object containing all the required data
 		var context = {
-			args   : isLoggedIn
-				? data[ "chatty-args" ]
-				: data[ "chatty-args-noauth" ],
-			chatty : chatty,
-			user   : user,
-			token  : token,
-			channel: channel
+			args,
+			chatty,
+			user,
+			token,
+			channel
 		};
 
 		// custom parameter substitutions
@@ -222,13 +216,17 @@ export default Ember.Service.extend({
 	],
 
 	_openCustom: function( command, channel, url ) {
+		var user = get( this, "auth.session.user_name" );
+		var token = get( this, "auth.session.access_token" );
+
 		var context = {
-			command: command,
-			channel: channel,
-			url    : url,
-			user   : get( this, "auth.session.user_name" ),
-			token  : get( this, "auth.session.access_token" )
+			command,
+			channel,
+			url,
+			user,
+			token
 		};
+
 		var substitutionsCustom = get( this, "substitutionsCustom" );
 		var paramsCustom = [
 			new ParameterCustom( null, "command", substitutionsCustom )

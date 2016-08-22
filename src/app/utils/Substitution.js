@@ -119,7 +119,7 @@ Substitution.tokenize = function( str ) {
 		if ( !buffer.length ) { return; }
 		output.push({
 			string: buffer,
-			quote : quote
+			quote
 		});
 		buffer = "";
 		quote = false;

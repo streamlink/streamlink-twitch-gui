@@ -52,11 +52,11 @@ function buildOwner( properties ) {
 
 
 export default {
-	fixtureElement: fixtureElement,
-	runAppend: runAppend,
-	runDestroy: runDestroy,
-	getElem: getElem,
-	getOutput: getOutput,
-	cleanOutput: cleanOutput,
-	buildOwner: buildOwner
+	fixtureElement,
+	runAppend,
+	runDestroy,
+	getElem,
+	getOutput,
+	cleanOutput,
+	buildOwner
 };

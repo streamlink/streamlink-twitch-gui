@@ -50,5 +50,5 @@ function onChangeIntegrations( settings ) {
 
 
 export default {
-	setupIntegrations: setupIntegrations
+	setupIntegrations
 };

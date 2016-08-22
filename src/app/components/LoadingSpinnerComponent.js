@@ -3,7 +3,7 @@ import layout from "templates/components/LoadingSpinnerComponent.hbs";
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "svg",
 	attributeBindings: [ "viewBox" ],

@@ -7,7 +7,8 @@ var set = Ember.set;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
+
 	tagName: "div",
 	classNames: [ "input-group" ],
 

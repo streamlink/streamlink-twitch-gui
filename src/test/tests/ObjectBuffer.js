@@ -17,7 +17,7 @@ QUnit.test( "Flat ObjectBuffer", function( assert ) {
 		"bar": "bar"
 	};
 	var buffer = ObjectBuffer.create({
-		content: content
+		content
 	});
 
 
@@ -156,7 +156,7 @@ QUnit.test( "Nested ObjectBuffer", function( assert ) {
 		}
 	};
 	var buffer = ObjectBuffer.create({
-		content: content
+		content
 	});
 
 

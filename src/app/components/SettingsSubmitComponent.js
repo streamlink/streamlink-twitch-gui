@@ -9,7 +9,7 @@ var later = Ember.run.later;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
 
 	classNames: [ "settings-submit-component" ],
 	classNameBindings: [ "_enabled::faded" ],

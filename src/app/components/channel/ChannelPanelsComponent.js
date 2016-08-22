@@ -8,7 +8,8 @@ var scheduleOnce = run.scheduleOnce;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
+
 	tagName: "section",
 	classNames: [ "content", "content-panels" ],
 

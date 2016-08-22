@@ -6,7 +6,7 @@ var gte = Ember.computed.gte;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "div",
 	classNames: [ "total" ],

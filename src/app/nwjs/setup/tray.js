@@ -42,5 +42,5 @@ function createTrayIcon() {
 
 
 export default {
-	createTrayIcon: createTrayIcon
+	createTrayIcon
 };

@@ -8,7 +8,8 @@ var set = Ember.set;
 
 
 export default ListItemComponent.extend({
-	layout: layout,
+	layout,
+
 	classNames: [ "settings-channel-item-component" ],
 
 	dialog: false,

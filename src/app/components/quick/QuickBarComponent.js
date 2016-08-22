@@ -9,7 +9,8 @@ var cancel = Ember.run.cancel;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
+
 	tagName: "div",
 	classNameBindings: [
 		":quick-bar-component",

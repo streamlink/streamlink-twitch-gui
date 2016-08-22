@@ -49,10 +49,7 @@ export default DS.Model.extend({
 	},
 
 	pushLog: function( type, line ) {
-		get( this, "log" ).pushObject({
-			type: type,
-			line: line
-		});
+		get( this, "log" ).pushObject({ type, line });
 	},
 
 	qualityObserver: function() {

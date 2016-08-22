@@ -14,7 +14,7 @@ var searchHistorySize = config.vars[ "search-history-size" ];
 export default Ember.Component.extend({
 	store   : Ember.inject.service(),
 
-	layout: layout,
+	layout,
 	tagName: "nav",
 	classNames: [ "search-bar-component" ],
 
@@ -69,11 +69,13 @@ export default Ember.Component.extend({
 		}
 
 		// create a new record
+		var id = 1 + Number( Ember.getWithDefault( model, "lastObject.id", 0 ) );
+		var date = new Date();
 		record = store.createRecord( "search", {
-			id    : 1 + Number( Ember.getWithDefault( model, "lastObject.id", 0 ) ),
-			query : query,
-			filter: filter,
-			date  : new Date()
+			id,
+			query,
+			filter,
+			date
 		});
 		record.save().then(function () {
 			model.addObject( record );
@@ -98,8 +100,8 @@ export default Ember.Component.extend({
 		var targetObject = get( this, "targetObject" );
 		targetObject.transitionToRoute( "search", {
 			queryParams: {
-				filter: filter,
-				query : query
+				filter,
+				query
 			}
 		});
 	},

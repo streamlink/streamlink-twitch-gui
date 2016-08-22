@@ -8,9 +8,9 @@ var set = Ember.set;
 
 
 export default Ember.Component.extend({
-	layout: layout,
-	tagName: "select",
+	layout,
 
+	tagName: "select",
 	classNameBindings: [ "class" ],
 	attributeBindings: [ "disabled" ],
 

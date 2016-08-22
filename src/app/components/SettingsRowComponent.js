@@ -28,7 +28,8 @@ function getSubstitutionsList( substitutions ) {
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
+
 	classNames: [ "settings-row-component" ],
 
 	strNewLine: "\n",

@@ -55,7 +55,7 @@ QUnit.test( "CheckBoxComponent", function( assert ) {
 	context = Component.extend({
 		checked: true,
 		disabled: false,
-		layout : compile(
+		layout: compile(
 			"{{#check-box checked=checked disabled=disabled}}foo{{/check-box}}"
 		)
 	}).create();
@@ -180,11 +180,11 @@ QUnit.test( "RadioBtnsComponent - without block", function( assert ) {
 	];
 
 	context = Component.extend({
+		content,
 		value: 2,
-		content: content,
 		optionValuePath: "value",
 		optionLabelPath: "label",
-		layout : compile([
+		layout: compile([
 			"{{radio-btns ",
 			"value=value ",
 			"content=content ",
@@ -417,9 +417,9 @@ QUnit.test( "RadioBtnsComponent - with block", function( assert ) {
 	];
 
 	context = Component.extend({
+		content,
 		value: 2,
-		content: content,
-		layout : compile([
+		layout: compile([
 			"{{#radio-btns value=value content=content as |radiobtn label|}}",
 			"<div>{{#component radiobtn}}{{label}}-{{label}}{{/component}}</div>",
 			"{{/radio-btns}}"

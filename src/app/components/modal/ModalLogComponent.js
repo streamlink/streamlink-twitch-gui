@@ -6,7 +6,7 @@ var scheduleOnce = Ember.run.scheduleOnce;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "section",
 	classNames: [ "modal-log" ],

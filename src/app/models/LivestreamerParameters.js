@@ -115,6 +115,6 @@ var parameters = [
 
 
 export default {
-	parameters: parameters,
-	playerSubstitutions: playerSubstitutions
+	parameters,
+	playerSubstitutions
 };

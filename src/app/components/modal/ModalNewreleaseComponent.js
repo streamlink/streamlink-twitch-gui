@@ -11,7 +11,8 @@ var readOnly = Ember.computed.readOnly;
 export default ModalDialogComponent.extend({
 	versioncheck: Ember.inject.service(),
 
-	layout: layout,
+	layout,
+
 	"class": "modal-newrelease",
 
 	outdated: readOnly( "versioncheck.versionOutdated" ),

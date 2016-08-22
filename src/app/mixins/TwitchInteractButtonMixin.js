@@ -78,7 +78,7 @@ export default Ember.Mixin.create({
 				}
 
 				setP( this, {
-					record   : record,
+					record,
 					isLoading: false,
 					isLocked : false
 				});

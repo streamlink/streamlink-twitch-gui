@@ -3,7 +3,7 @@ import layout from "templates/components/stream/StreamPresentationComponent.hbs"
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "section",
 	classNameBindings: [ ":stream-presentation-component", "class" ],

@@ -28,9 +28,9 @@ export default Ember.Route.extend({
 	},
 
 	actions: {
-		willTransition: function( transition ) {
+		willTransition: function( previousTransition ) {
 			// don't show modal when transitioning between settings subroutes
-			if ( transition && settingsRouteNames.test( transition.targetName ) ) {
+			if ( previousTransition && settingsRouteNames.test( previousTransition.targetName ) ) {
 				return true;
 			}
 
@@ -38,11 +38,11 @@ export default Ember.Route.extend({
 			if ( !get( this, "controller.model.isDirty" ) ) { return; }
 
 			// stay here...
-			transition.abort();
+			previousTransition.abort();
 
 			// and let the user decide
 			get( this, "modal" ).openModal( "confirm", this.controller, {
-				previousTransition: transition
+				previousTransition
 			});
 		}
 	}

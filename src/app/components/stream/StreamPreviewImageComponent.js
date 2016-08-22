@@ -19,7 +19,8 @@ export default Ember.Component.extend({
 	livestreamer: Ember.inject.service(),
 	chat        : Ember.inject.service(),
 
-	layout: layout,
+	layout,
+
 	tagName: "div",
 	classNameBindings: [ ":preview", "class", "opened:opened" ],
 	attributeBindings: [ "title", "noMiddleclickScroll:data-no-middleclick-scroll" ],

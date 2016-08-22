@@ -26,7 +26,7 @@ function iconAnimation( status, data ) {
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
 
 	tagName: "",
 
@@ -58,12 +58,12 @@ export default Ember.Component.extend({
 			var action  = get( this, "action" );
 			if ( !action ) { return; }
 
-			var context = makeArray( get( this, "actionParam" ) );
+			var actionContext = makeArray( get( this, "actionParam" ) );
 
 			if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
 				// success and failure callbacks
-				context.push( iconAnimation.bind( this, STATE_SUCCESS ) );
-				context.push( iconAnimation.bind( this, STATE_FAILURE ) );
+				actionContext.push( iconAnimation.bind( this, STATE_SUCCESS ) );
+				actionContext.push( iconAnimation.bind( this, STATE_FAILURE ) );
 
 				if ( get( this, "spinner" ) ) {
 					set( this, "_status", STATE_LOADING );
@@ -74,7 +74,7 @@ export default Ember.Component.extend({
 			if ( action instanceof Function ) {
 				action.apply(
 					get( this, "targetObject" ),
-					context
+					actionContext
 				);
 
 			// allow the component to send actions to itself
@@ -83,13 +83,13 @@ export default Ember.Component.extend({
 				   this.actions instanceof Object
 				&& this.actions.hasOwnProperty( action )
 			) {
-				this.send.apply( this, [ action ].concat( context ) );
+				this.send.apply( this, [ action ].concat( actionContext ) );
 
 			} else {
 				this.triggerAction({
 					target: get( this, "targetObject" ),
-					action: action,
-					actionContext: context
+					action,
+					actionContext
 				});
 			}
 		}

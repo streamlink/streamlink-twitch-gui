@@ -155,7 +155,7 @@ export default Ember.Mixin.create( Ember.Evented, {
 			name   : "HTTP Error",
 			message: payload && payload.error || "Failed to load resource",
 			detail : payload && payload.message,
-			status : status
+			status
 		}]);
 	}
 

@@ -14,7 +14,8 @@ var subscriptionCancelUrl = config.twitch[ "subscription" ][ "cancel-url" ];
 
 
 export default ListItemComponent.extend({
-	layout: layout,
+	layout,
+
 	classNames: [ "subscription-item-component" ],
 	attributeBindings: [ "style" ],
 

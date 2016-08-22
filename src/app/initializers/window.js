@@ -38,10 +38,7 @@ function onResize( width, height ) {
 	if ( ignore ) { return; }
 	// validate window position
 	if ( !isWindowFullyVisible() ) { return; }
-	save.call( this, {
-		width : width,
-		height: height
-	});
+	save.call( this, { width, height } );
 }
 
 function onMove( x, y ) {
@@ -52,10 +49,7 @@ function onMove( x, y ) {
 	if ( isWin && ( x === -8 && y === -8 || x === -32000 && x === -32000 ) ) { return; }
 	// validate window position
 	if ( !isWindowFullyVisible() ) { return; }
-	save.call( this, {
-		x: x,
-		y: y
-	});
+	save.call( this, { x, y } );
 }
 
 function ignoreNextEvent() {

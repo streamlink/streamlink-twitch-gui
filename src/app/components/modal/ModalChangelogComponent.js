@@ -12,7 +12,8 @@ var changelogUrl = config.update[ "changelog-url" ];
 
 
 export default ModalDialogComponent.extend({
-	layout: layout,
+	layout,
+
 	"class": "modal-changelog",
 
 	version: nwGui.App.manifest.version,

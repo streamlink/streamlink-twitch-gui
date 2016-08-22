@@ -6,7 +6,8 @@ var get = Ember.get;
 
 
 export default Ember.Component.extend({
-	layout: layout,
+	layout,
+
 	tagName: "li",
 
 	init: function() {

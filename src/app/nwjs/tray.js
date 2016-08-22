@@ -41,7 +41,7 @@ export default Ember.Object.extend({
 
 		setProperties( this, {
 			tray: null,
-			menu: menu
+			menu
 		});
 	},
 
@@ -65,8 +65,8 @@ export default Ember.Object.extend({
 		var tooltip = get( this, "tooltip" );
 
 		var tray = new Tray({
-			icon   : icon,
-			tooltip: tooltip
+			icon,
+			tooltip
 		});
 		tray.menu = this.menu.menu;
 		tray.on( "click", click );

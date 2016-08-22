@@ -21,15 +21,13 @@ export default Ember.Service.extend({
 
 	openModal: function( modal, context, data ) {
 		modal = "modal-" + modal.replace( reModalName, fnModalName );
+		context = context || null;
 
 		if ( context && data ) {
 			setProperties( context, data );
 		}
 
-		setProperties( this, {
-			modal  : modal,
-			context: context || null
-		});
+		setProperties( this, { modal, context } );
 	},
 
 	closeModal: function( context, force ) {

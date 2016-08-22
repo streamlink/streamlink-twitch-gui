@@ -33,12 +33,10 @@ var rePlayer    = /^Starting player: \S+/;
 
 
 function ErrorLog( message, log ) {
+	var type = "stdErr";
 	this.message = message;
 	this.log = makeArray( log ).map(function( line ) {
-		return {
-			type: "stdErr",
-			line: line
-		};
+		return { type, line };
 	});
 }
 ErrorLog.prototype = merge( new Error(), { name: "ErrorLog" });
@@ -126,9 +124,9 @@ export default Ember.Service.extend( ChannelSettingsMixin, {
 
 		// create a new livestreamer object
 		livestreamer = store.createRecord( "livestreamer", {
-			id          : id,
-			stream      : stream,
-			channel     : channel,
+			id,
+			stream,
+			channel,
 			quality     : get( this, "settings.quality" ),
 			gui_openchat: get( this, "settings.gui_openchat" ),
 			started     : new Date()
