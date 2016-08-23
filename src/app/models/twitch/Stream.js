@@ -57,13 +57,15 @@ export default Model.extend({
 		var moment     = new Moment( created_at );
 		var diff       = moment.diff( new Date(), "days" );
 		var formatted  = moment.format( diff === 0 ? "LTS" : "llll" );
-		return "Online since " + formatted;
+
+		return `Online since ${formatted}`;
 	}.property( "created_at" ),
 
 	title_viewers: function() {
 		var viewers = get( this, "viewers" );
 		var numerus = viewers === 1 ? " person is watching" : " people are watching";
-		return viewers + numerus;
+
+		return `${viewers}${numerus}`;
 	}.property( "viewers" ),
 
 	resolution: function() {
@@ -71,7 +73,8 @@ export default Model.extend({
 		var video_height = get( this, "video_height" );
 		var width  = Math.round( ( 16 / 9 ) * video_height );
 		var height = Math.round( video_height );
-		return width + "x" + height;
+
+		return `${width}x${height}`;
 	}.property( "video_height" ),
 
 	fps: function() {

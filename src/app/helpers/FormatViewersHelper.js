@@ -6,10 +6,10 @@ export default Helper.helper(function( params ) {
 	return isNaN( viewers )
 		? "0"
 		: viewers >= 1000000
-		? ( Math.floor( viewers / 10000 ) / 100 ).toFixed( 2 ) + "m"
+		? `${( Math.floor( viewers / 10000 ) / 100 ).toFixed( 2 )}m`
 		: viewers >= 100000
-		? ( Math.floor( viewers / 1000 ) ).toFixed( 0 ) + "k"
+		? `${( Math.floor( viewers / 1000 ) ).toFixed( 0 )}k`
 		: viewers >= 10000
-		? ( Math.floor( viewers / 100 ) / 10 ).toFixed( 1 ) + "k"
+		? `${( Math.floor( viewers / 100 ) / 10 ).toFixed( 1 )}k`
 		: viewers.toFixed( 0 );
 });

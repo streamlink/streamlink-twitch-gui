@@ -16,7 +16,7 @@ const { "display-name": displayName } = main;
 const { "windows-shortcut": windowsShortcut } = dirs;
 const { createShortcut } = App;
 
-const shortcutName = displayName + ".lnk";
+const shortcutName = `${displayName}.lnk`;
 const shortcutPath = resolvePath( windowsShortcut );
 
 

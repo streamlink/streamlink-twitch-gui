@@ -16,7 +16,7 @@ export default Component.extend({
 
 		var prop = get( this, "prop" );
 		var binding = Binding
-			.from( "obj." + prop )
+			.from( `obj.${prop}` )
 			.to( "checked" );
 		binding.connect( this );
 	}

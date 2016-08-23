@@ -1,5 +1,6 @@
 import {
 	get,
+	getWithDefault,
 	computed
 } from "Ember";
 import { twitch } from "config";
@@ -29,10 +30,12 @@ export default ListItemComponent.extend({
 	emoticons: alias( "product.emoticons" ),
 
 	style: function() {
-		var banner =  get( this, "channel.profile_banner" )
-		           || get( this, "channel.video_banner" )
-		           || "";
-		return ( "background-image:url(\"" + banner + "\")" ).htmlSafe();
+		let banner = getWithDefault( this,
+			"channel.profile_banner",
+			getWithDefault( this, "channel.video_banner", "" )
+		);
+
+		return ( `background-image:url("${banner}")` ).htmlSafe();
 	}.property( "channel.profile_banner", "channel.video_banner" ),
 
 	hasEnded: function() {

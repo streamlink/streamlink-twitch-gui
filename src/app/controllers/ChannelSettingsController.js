@@ -26,13 +26,13 @@ export default Controller.extend( RetryTransitionMixin, {
 
 			// proxy for setting the custom attr or getting the custom/global attr
 			var attributeProxy = computed(
-				"model.buffer." + attr,
-				"settings." + attr,
+				`model.buffer.${attr}`,
+				`settings.${attr}`,
 				{
 					set: function( key, value, oldValue ) {
 						// don't accept changes if disabled
 						// selectboxes without `null` options trigger property changes on insert
-						if ( !get( this, "_" + attr ) ) {
+						if ( !get( this, `_${attr}` ) ) {
 							return oldValue;
 						}
 						set( model, attr, value );
@@ -50,7 +50,7 @@ export default Controller.extend( RetryTransitionMixin, {
 
 			// computed property for enabling/disabling the custom attribute
 			var attributeEnabled = computed(
-				"model.buffer." + attr,
+				`model.buffer.${attr}`,
 				{
 					set: function( key, value ) {
 						// false => set attr value to null (delete)
@@ -71,7 +71,7 @@ export default Controller.extend( RetryTransitionMixin, {
 			);
 
 			defineProperty( this,       attr, attributeProxy );
-			defineProperty( this, "_" + attr, attributeEnabled );
+			defineProperty( this, `_${attr}`, attributeEnabled );
 		}, this );
 	}.observes( "model" ),
 

@@ -13,10 +13,10 @@ const { service } = inject;
 function switchProperty( key ) {
 	return function() {
 		var property = get( this, "isLoading" )
-			? key + "Loading"
+			? `${key}Loading`
 			: get( this, "isSuccessful" )
-				? key + "Success"
-				: key + "Failure";
+				? `${key}Success`
+				: `${key}Failure`;
 		return get( this, property );
 	}.property( "isLoading", "isSuccessful" );
 }

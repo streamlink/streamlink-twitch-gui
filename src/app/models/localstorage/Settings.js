@@ -85,7 +85,7 @@ export default Model.extend({
 	playerParamsCorrected: function() {
 		var params = get( this, "player_params" );
 		return params.length && params.indexOf( "{filename}" ) === -1
-			? params + " {filename}"
+			? `${params} {filename}`
 			: params;
 	}.property( "player_params" )
 

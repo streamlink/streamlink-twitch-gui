@@ -121,12 +121,14 @@ export default Service.extend({
 			return get( record, "tag_name" );
 		}
 
+		let version = get( this, "version" );
+
 		// create a fake record for the current version and save a reference
-		var current = { tag_name: "v" + get( this, "version" ) };
+		let current = { tag_name: `v${version}` };
 		// find out the maximum of fetched releases
-		var maximum = getMax( releases, getVers );
+		let maximum = getMax( releases, getVers );
 		// and compare it with the current version
-		var latest  = getMax( [ current, maximum ], getVers );
+		let latest  = getMax( [ current, maximum ], getVers );
 
 		// no new release? check again in a few days
 		if ( current === latest || getVers( current ) === getVers( latest ) ) {

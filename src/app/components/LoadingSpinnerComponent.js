@@ -15,6 +15,6 @@ export default Component.extend({
 		var circle = this.element.querySelector( "circle" );
 		var strokeWidth = window.getComputedStyle( circle ).strokeWidth;
 		var radius = 50 - parseInt( strokeWidth, 10 );
-		circle.setAttribute( "r", radius + "%" );
+		circle.setAttribute( "r", `${radius}%` );
 	}.on( "didInsertElement" )
 });

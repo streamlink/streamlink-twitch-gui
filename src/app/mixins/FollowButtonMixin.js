@@ -15,11 +15,11 @@ export default Mixin.create( TwitchInteractButtonMixin, {
 	titleLoading: "",
 	titleSuccess: function() {
 		var name = get( this, "name" );
-		return "Unfollow " + name;
+		return `Unfollow ${name}`;
 	}.property( "name" ),
 	titleFailure: function() {
 		var name = get( this, "name" );
-		return "Follow " + name;
+		return `Follow ${name}`;
 	}.property( "name" ),
 
 

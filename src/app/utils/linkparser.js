@@ -1,20 +1,20 @@
 // most common gTLDs... a little overkill, but
 // we don't want to match something like cat.jpg
-var gTLD   = [
+const gTLD   = [
 	"com", "org", "net", "int", "biz", "pro", "edu", "gov", "mil",
 	"info", "name", "mobi", "jobs", "pics", "link", "wiki", "asia"
-];
-var reTLD  = "(?:[a-z]{2}|" + gTLD.join( "|" ) + ")";
-var reHost = "(?:[a-z0-9\u00C0-\uFFFF-]+\\.)";
+].join( "|" );
+const reTLD  = `(?:[a-z]{2}|${gTLD})`;
+const reHost = "(?:[a-z0-9\u00C0-\uFFFF-]+\\.)";
 
 
-var reURL = new RegExp([
+const reURL = new RegExp([
 	// boundary (no look-behind)
 	"(^|(?:^|\\s)[^a-z]?)",
 	// scheme
 	"(https?:\\/\\/)?",
 	// sub.host.tld:port
-	"(" + reHost + "+" + reTLD + "(?::\\d{2,5})?)",
+	`(${reHost}+${reTLD}(?::\\d{2,5})?)`,
 	// path
 	"(\\/\\S*)?",
 	// boundary
@@ -22,16 +22,23 @@ var reURL = new RegExp([
 ].join( "" ), "igm" );
 
 function fnURL( _, __, scheme, host, path ) {
+	scheme = scheme || "";
+	host = host || "";
+	path = path || "";
+
+	// assume implicit http protocol
+	let urlScheme = scheme ? scheme : "http://";
+	// hide implicit http prototcol in link text
+	let textScheme = scheme === "http://" ? "" : scheme;
+
 	return {
-		// assume implicit http protocol
-		url : ( scheme ? scheme : "http://" ) + ( host || "" ) + ( path || "" ),
-		// hide implicit http prototcol in link text
-		text: ( scheme === "http://" ? "" : scheme || "" ) + ( host || "" ) + ( path || "" )
+		url : `${urlScheme}${host}${path}`,
+		text: `${textScheme}${host}${path}`
 	};
 }
 
 
-var reTwitter = new RegExp([
+const reTwitter = new RegExp([
 	// boundary (no look-behind)
 	"(^|\\W)",
 	// username
@@ -42,8 +49,8 @@ var reTwitter = new RegExp([
 
 function fnTwitter( _, __, user ) {
 	return {
-		url : "https://twitter.com/" + user,
-		text: "@" + user
+		url : `https://twitter.com/${user}`,
+		text: `@${user}`
 	};
 }
 

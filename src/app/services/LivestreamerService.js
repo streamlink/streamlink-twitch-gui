@@ -292,7 +292,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			function onExit( code ) {
 				// ignore code 0 (no error)
 				if ( code === 0 ) { return; }
-				reject( new Error( "Exit code " + code ) );
+				reject( new Error( `Exit code ${code}` ) );
 			}
 
 			function onTimeout() {

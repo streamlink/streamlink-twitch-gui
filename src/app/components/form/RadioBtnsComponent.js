@@ -16,7 +16,10 @@ export default Component.extend({
 	optionLabelPath: "label",
 
 	name: function() {
-		return "radio-btns-" + Date.now() + Math.floor( Math.random() * 10000000 );
+		let now = Date.now();
+		let random = Math.floor( Math.random() * 10000000 );
+
+		return `radio-btns-${now}${random}`;
 	}.property(),
 
 	content: null,

@@ -46,7 +46,7 @@ const ObjectBuffer = ObjectProxy.extend({
 			content[ key ] = childBuffer;
 			set( this._children, key, childBuffer );
 
-			this.addObserver( "_children." + key + ".isDirty", this, checkDirty );
+			this.addObserver( `_children.${key}.isDirty`, this, checkDirty );
 		}, this );
 
 		this._super.apply( this, arguments );
@@ -56,7 +56,7 @@ const ObjectBuffer = ObjectProxy.extend({
 		var buffer = this._buffer;
 		return buffer && buffer.hasOwnProperty( key )
 			? buffer[ key ]
-			: get( this, "content." + key );
+			: get( this, `content.${key}` );
 	},
 
 	setUnknownProperty: function( key, value ) {

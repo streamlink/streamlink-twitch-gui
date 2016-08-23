@@ -10,8 +10,9 @@ const { notEmpty } = computed;
 
 const reModalName = /[A-Z]/g;
 
-function fnModalName( a ) {
-	return "-" + a.toLowerCase();
+function fnModalName( name ) {
+	name = name.toLowerCase();
+	return `-${name}`;
 }
 
 
@@ -23,7 +24,9 @@ export default Service.extend({
 
 
 	openModal: function( modal, context, data ) {
-		modal = "modal-" + modal.replace( reModalName, fnModalName );
+		let name = modal.replace( reModalName, fnModalName );
+
+		modal = `modal-${name}`;
 		context = context || null;
 
 		if ( context && data ) {

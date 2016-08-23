@@ -35,7 +35,7 @@ export default Route.extend({
 
 		function refresh() {
 			var name  = get( self.controller, "currentRouteName" );
-			var route = getOwner( self ).lookup( "route:" + name );
+			var route = getOwner( self ).lookup( `route:${name}` );
 			if ( name === "error" || get( route, "disableAutoRefresh" ) ) { return; }
 			route.refresh();
 		}
@@ -109,7 +109,7 @@ export default Route.extend({
 				}
 
 			} else {
-				getOwner( this ).lookup( "route:" + routeName ).refresh();
+				getOwner( this ).lookup( `route:${routeName}` ).refresh();
 			}
 		},
 

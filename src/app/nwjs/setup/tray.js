@@ -16,7 +16,8 @@ let { icons: { tray: { [ platform ]: trayIcons } } } = files;
 
 if ( isWin ) {
 	Object.keys( trayIcons ).forEach(function( key ) {
-		trayIcons[ key ] = resolvePath( "%NWJSAPPPATH%/" + trayIcons[ key ] );
+		let icon = trayIcons[ key ];
+		trayIcons[ key ] = resolvePath( `%NWJSAPPPATH%/${icon}` );
 	});
 }
 

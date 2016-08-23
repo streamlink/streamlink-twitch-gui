@@ -111,7 +111,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			? "offline"
 			: "enabled";
 
-		return "Desktop notifications are " + status;
+		return `Desktop notifications are ${status}`;
 	}.property( "enabled", "paused", "error" ),
 
 
@@ -362,7 +362,7 @@ export default Service.extend( ChannelSettingsMixin, {
 						return download( logo, iconTempDir )
 							.then(function( file ) {
 								// the channel logo is now the local file
-								file = "file://" + file;
+								file = `file://${file}`;
 								set( stream, "logo", file );
 								return stream;
 							});
@@ -393,7 +393,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		this.showNotification({
 			icon : get( stream, "logo" ) || get( stream, "channel.logo" ),
-			title: name + " has started streaming",
+			title: `${name} has started streaming`,
 			body : get( stream, "channel.status" ) || "",
 			click: function() {
 				var settings = get( this, "settings.notify_click" );

@@ -13,7 +13,7 @@ const { "image-expiration-time": time } = vars;
 
 
 function getURL( url, time ) {
-	return url + "?_=" + time;
+	return `${url}?_=${time}`;
 }
 
 /**
@@ -24,11 +24,11 @@ function getURL( url, time ) {
  */
 function buffered( attr ) {
 	return computed(function() {
-		var exp = this[ attr + "_expiration" ];
+		let exp = this[ `${attr}_expiration` ];
 
 		return exp
-			? getURL( get( this, attr + "_image" ), exp )
-			: get( this, attr + "_nocache" );
+			? getURL( get( this, `${attr}_image` ), exp )
+			: get( this, `${attr}_nocache` );
 	}).volatile();
 }
 
@@ -41,10 +41,10 @@ function buffered( attr ) {
 function nocache( attr ) {
 	// use a volatile property
 	return computed(function() {
-		var url = get( this, attr + "_image" );
+		var url = get( this, `${attr}_image` );
 
 		// use the same timestamp for `time` seconds
-		var key = attr + "_expiration";
+		var key = `${attr}_expiration`;
 		var exp = this[ key ];
 		var now = +new Date();
 		if ( !exp || exp < now ) {

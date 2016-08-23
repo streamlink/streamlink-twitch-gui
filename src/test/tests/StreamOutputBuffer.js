@@ -24,11 +24,11 @@ test( "Single line output", function( assert ) {
 	var buffer = new StreamOutputBuffer( getSingleLine );
 
 	text = "foo";
-	buffer( text + "\r\n" );
+	buffer( `${text}\r\n` );
 	assert.strictEqual( buffer.getBuffer(), "", "Buffer is empty" );
 
 	text = "bar";
-	buffer( text + "\r\n" );
+	buffer( `${text}\r\n` );
 	assert.strictEqual( buffer.getBuffer(), "", "Buffer is empty" );
 
 });

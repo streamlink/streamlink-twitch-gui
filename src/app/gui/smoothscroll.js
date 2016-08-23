@@ -318,8 +318,8 @@ function onMousedown( e ) {
 	isMiddleClickScrolling = true;
 
 	// reference point
-	icon.style.left = e.clientX + "px";
-	icon.style.top  = e.clientY + "px";
+	icon.style.left = `${e.clientX}px`;
+	icon.style.top  = `${e.clientY}px`;
 	document.body.appendChild( icon );
 
 	var refereceX = e.clientX;

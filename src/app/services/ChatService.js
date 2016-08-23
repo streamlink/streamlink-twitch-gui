@@ -200,7 +200,7 @@ export default Service.extend({
 					return stat( chatty )
 						.then(function() {
 							// alter command line
-							context.args = javaArgs + " " + context.args;
+							context.args = `${javaArgs} ${context.args}`;
 							substitutions.push( new Substitution( "chatty", "chatty" ) );
 							return exec;
 						});

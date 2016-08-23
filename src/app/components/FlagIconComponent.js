@@ -21,7 +21,7 @@ export default Component.extend({
 		var code  = langs[ lang ];
 
 		return code
-			? "flag-" + code.flag
+			? `flag-${code.flag}`
 			: null;
 	}.property( "lang" ),
 
@@ -35,9 +35,9 @@ export default Component.extend({
 
 		switch ( get( this, "type" ) ) {
 			case "channel":
-				return "The channel's language is " + lang;
+				return `The channel's language is ${lang}`;
 			case "broadcaster":
-				return "The broadcaster's language is " + lang;
+				return `The broadcaster's language is ${lang}`;
 			default:
 				return "";
 		}

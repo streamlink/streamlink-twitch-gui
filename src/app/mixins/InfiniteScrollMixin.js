@@ -144,7 +144,7 @@ export default Mixin.create({
 		var binding = get( this, "_binding_offset" );
 		if ( !binding ) {
 			var contentPath = get( this, "contentPath" );
-			binding = Binding.from( contentPath + ".length" ).to( "offset" );
+			binding = Binding.from( `${contentPath}.length` ).to( "offset" );
 			set( this, "_binding_offset", binding );
 		}
 		binding.connect( this );

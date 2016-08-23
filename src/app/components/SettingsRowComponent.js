@@ -16,7 +16,7 @@ function getSubstitutionsList( substitutions ) {
 		/** @type {string[]} */
 		var vars = substitution.vars;
 		vars = vars.map(function( name ) {
-			return "{" + name + "}";
+			return `{${name}}`;
 		});
 
 		return {

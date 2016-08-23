@@ -23,7 +23,7 @@ export default TwitchSerializer.extend({
 
 		resourceHash[ primaryKey ] = name;
 		if ( resourceHash.preview ) {
-			resourceHash.preview[ foreignKeyImage ] = "stream/preview/" + name;
+			resourceHash.preview[ foreignKeyImage ] = `stream/preview/${name}`;
 		}
 
 		return this._super( modelClass, resourceHash, prop );
