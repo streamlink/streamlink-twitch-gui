@@ -1,13 +1,17 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	merge,
+	inject,
+	Mixin
+} from "Ember";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var merge = Ember.merge;
+const { service } = inject;
 
 
-export default Ember.Mixin.create({
-	store: Ember.inject.service(),
+export default Mixin.create({
+	store: service(),
 
 	modelName: null,
 

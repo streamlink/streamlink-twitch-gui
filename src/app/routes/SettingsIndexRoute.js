@@ -1,11 +1,11 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	Route
+} from "Ember";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Route.extend({
+export default Route.extend({
 	actions: {
 		"didTransition": function() {
 			var settingsController = this.controllerFor( "settings" );

@@ -1,13 +1,13 @@
-import Ember from "Ember";
+import {
+	get,
+	Component
+} from "Ember";
 import Menu from "nwjs/menu";
 import openBrowser from "nwjs/openBrowser";
 import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
 
 
-var get = Ember.get;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "li",

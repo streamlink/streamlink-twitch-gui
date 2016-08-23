@@ -1,11 +1,13 @@
-import Ember from "Ember";
+import {
+	run,
+	Helper
+} from "Ember";
 
 
-var later  = Ember.run.later;
-var cancel = Ember.run.cancel;
+const { cancel, later } = run;
 
 
-export default Ember.Helper.extend({
+export default Helper.extend({
 	compute: function( params, hash ) {
 		if ( hash.interval ) {
 			this._interval = later( this, "recompute", hash.interval );

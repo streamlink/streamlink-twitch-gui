@@ -1,11 +1,14 @@
-import QUnit from "QUnit";
+import {
+	module,
+	test
+} from "QUnit";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 
 
-QUnit.module( "Get stream from URL", {} );
+module( "Get stream from URL", {} );
 
 
-QUnit.test( "Invalid URLs", function( assert ) {
+test( "Invalid URLs", function( assert ) {
 
 	// non-URLs
 	assert.equal( getStreamFromUrl( "" ), false );
@@ -33,7 +36,7 @@ QUnit.test( "Invalid URLs", function( assert ) {
 });
 
 
-QUnit.test( "Valid URLs", function( assert ) {
+test( "Valid URLs", function( assert ) {
 
 	assert.equal( getStreamFromUrl( "twitch.tv/name" ), "name" );
 	assert.equal( getStreamFromUrl( "www.twitch.tv/name" ), "name" );

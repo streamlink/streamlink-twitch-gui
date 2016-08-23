@@ -1,18 +1,21 @@
-import Ember from "Ember";
+import {
+	get,
+	setProperties,
+	computed,
+	Service
+} from "Ember";
 
 
-var get = Ember.get;
-var setProperties = Ember.setProperties;
-var notEmpty = Ember.computed.notEmpty;
+const { notEmpty } = computed;
 
-var reModalName = /[A-Z]/g;
+const reModalName = /[A-Z]/g;
 
 function fnModalName( a ) {
 	return "-" + a.toLowerCase();
 }
 
 
-export default Ember.Service.extend({
+export default Service.extend({
 	modal  : null,
 	context: null,
 

@@ -1,14 +1,14 @@
-import Ember from "Ember";
-import DS from "EmberData";
+import {
+	get,
+	set,
+	isNone,
+	merge,
+	Route
+} from "Ember";
+import { AdapterError } from "EmberData";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var merge = Ember.merge;
-var isNone = Ember.isNone;
-var AdapterError = DS.AdapterError;
-
-var errorProps = [
+const errorProps = [
 	"name",
 	"title",
 	"message",
@@ -19,13 +19,13 @@ var errorProps = [
 	"path"
 ];
 
-var duplicates = {
+const duplicates = {
 	name   : [ "title" ],
 	message: [ "detail", "description" ]
 };
 
 
-export default Ember.Route.extend({
+export default Route.extend({
 	/**
 	 * Do all the error display stuff here instead of using an error controller.
 	 * A route for errors is needed anyway.

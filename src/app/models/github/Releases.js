@@ -1,10 +1,10 @@
-import DS from "EmberData";
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-var attr = DS.attr;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	assets: attr(),
 	assets_url: attr(),
 	author: attr(),

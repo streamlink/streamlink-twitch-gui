@@ -1,10 +1,10 @@
-import DS from "EmberData";
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-var attr = DS.attr;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	// pass through: don't update the channel record
 	channel   : attr(),
 	created_at: attr( "date" )

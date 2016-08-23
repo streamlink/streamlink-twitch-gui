@@ -1,12 +1,11 @@
-import Ember from "Ember";
-import DS from "EmberData";
+import { get } from "Ember";
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-var get = Ember.get;
-var attr = DS.attr;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	access_token: attr( "string" ),
 	scope       : attr( "string" ),
 	date        : attr( "date" ),

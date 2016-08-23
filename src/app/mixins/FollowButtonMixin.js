@@ -1,12 +1,12 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	Mixin
+} from "Ember";
 import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Mixin.create( TwitchInteractButtonMixin, {
+export default Mixin.create( TwitchInteractButtonMixin, {
 	action: "follow",
 
 	iconLoading : "fa-question",

@@ -1,10 +1,10 @@
-import DS from "EmberData";
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-var attr = DS.attr;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	created_at   : attr( "date" ),
 	notifications: attr( "boolean" )
 

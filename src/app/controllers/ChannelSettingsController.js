@@ -1,14 +1,20 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	defineProperty,
+	computed,
+	inject,
+	Controller
+} from "Ember";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 
 
-var get = Ember.get;
-var set = Ember.set;
+const { service } = inject;
 
 
-export default Ember.Controller.extend( RetryTransitionMixin, {
-	settings: Ember.inject.service(),
-	modal   : Ember.inject.service(),
+export default Controller.extend( RetryTransitionMixin, {
+	modal: service(),
+	settings: service(),
 
 	modelObserver: function() {
 		var original = get( this, "model.model" );
@@ -19,7 +25,7 @@ export default Ember.Controller.extend( RetryTransitionMixin, {
 			var customDefault = meta.options.defaultValue;
 
 			// proxy for setting the custom attr or getting the custom/global attr
-			var attributeProxy = Ember.computed(
+			var attributeProxy = computed(
 				"model.buffer." + attr,
 				"settings." + attr,
 				{
@@ -43,7 +49,7 @@ export default Ember.Controller.extend( RetryTransitionMixin, {
 			);
 
 			// computed property for enabling/disabling the custom attribute
-			var attributeEnabled = Ember.computed(
+			var attributeEnabled = computed(
 				"model.buffer." + attr,
 				{
 					set: function( key, value ) {
@@ -64,8 +70,8 @@ export default Ember.Controller.extend( RetryTransitionMixin, {
 				}
 			);
 
-			Ember.defineProperty( this,       attr, attributeProxy );
-			Ember.defineProperty( this, "_" + attr, attributeEnabled );
+			defineProperty( this,       attr, attributeProxy );
+			defineProperty( this, "_" + attr, attributeEnabled );
 		}, this );
 	}.observes( "model" ),
 

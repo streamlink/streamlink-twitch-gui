@@ -1,8 +1,8 @@
-import Ember from "Ember";
+import { Component } from "Ember";
 import layout from "templates/components/stream/StreamPresentationComponent.hbs";
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "section",

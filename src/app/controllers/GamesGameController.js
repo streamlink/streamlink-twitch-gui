@@ -1,6 +1,6 @@
-import Ember from "Ember";
+import { Controller } from "Ember";
 
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 	game: null
 });

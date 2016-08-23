@@ -1,20 +1,25 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	getOwner,
+	inject,
+	run,
+	Route
+} from "Ember";
 import nwWindow from "nwjs/nwWindow";
 import openBrowser from "nwjs/openBrowser";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var getOwner = Ember.getOwner;
-var debounce = Ember.run.debounce;
+const { service } = inject;
+const { debounce } = run;
 
 
-export default Ember.Route.extend({
-	settings    : Ember.inject.service(),
-	modal       : Ember.inject.service(),
-	versioncheck: Ember.inject.service(),
-	livestreamer: Ember.inject.service(),
+export default Route.extend({
+	livestreamer: service(),
+	modal: service(),
+	settings: service(),
+	versioncheck: service(),
 
 
 	init: function() {

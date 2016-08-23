@@ -1,11 +1,11 @@
-import DS from "EmberData";
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
 
 
-var attr = DS.attr;
-var belongsTo = DS.belongsTo;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	channels: attr( "number" ),
 	game: belongsTo( "twitchGame", { async: false } ),
 	viewers: attr( "number" )

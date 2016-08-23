@@ -1,12 +1,15 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	computed,
+	Controller
+} from "Ember";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var alias = Ember.computed.alias;
+const { alias } = computed;
 
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 	summary : alias( "model.summary" ),
 	featured: alias( "model.featured" ),
 

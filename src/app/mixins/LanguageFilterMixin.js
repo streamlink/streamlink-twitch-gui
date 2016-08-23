@@ -1,11 +1,15 @@
-import Ember from "Ember";
+import {
+	get,
+	inject,
+	Mixin
+} from "Ember";
 
 
-var get = Ember.get;
+const { service } = inject;
 
 
-export default Ember.Mixin.create({
-	settings: Ember.inject.service(),
+export default Mixin.create({
+	settings: service(),
 
 	/**
 	 * @returns {(string[]|undefined)}

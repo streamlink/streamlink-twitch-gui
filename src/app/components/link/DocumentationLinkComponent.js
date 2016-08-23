@@ -1,12 +1,10 @@
-import Ember from "Ember";
-import config from "config";
+import { get } from "Ember";
+import { livestreamer } from "config";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";
 
 
-var get = Ember.get;
-
-var livestreamerDocsUrl = config.livestreamer[ "docs-url" ];
+const { "docs-url": livestreamerDocsUrl } = livestreamer;
 
 
 export default ExternalLinkComponent.extend({

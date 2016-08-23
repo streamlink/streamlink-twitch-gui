@@ -1,12 +1,13 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	$,
+	Component
+} from "Ember";
 import layout from "templates/components/form/FileSelectComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "div",
@@ -18,7 +19,7 @@ export default Ember.Component.extend({
 
 	_createInput: function() {
 		var self = this;
-		self._input = Ember.$( "<input>" ).addClass( "hidden" ).attr({
+		self._input = $( "<input>" ).addClass( "hidden" ).attr({
 			type: "file",
 			tabindex: -1
 		}).change(function() {

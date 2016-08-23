@@ -3,7 +3,7 @@
  * @param {...*} arguments
  * @returns {boolean}
  */
-function containsAll() {
+export function all() {
 	for ( var i = 0, l = arguments.length; i < l; i++ ) {
 		if ( this.indexOf( arguments[ i ] ) < 0 ) {
 			return false;
@@ -17,7 +17,7 @@ function containsAll() {
  * @param {...*} arguments
  * @returns {boolean}
  */
-function containsSome() {
+export function some() {
 	for ( var i = 0, l = arguments.length; i < l; i++ ) {
 		if ( this.indexOf( arguments[ i ] ) >= 0 ) {
 			return true;
@@ -25,9 +25,3 @@ function containsSome() {
 	}
 	return false;
 }
-
-
-export default {
-	all : containsAll,
-	some: containsSome
-};

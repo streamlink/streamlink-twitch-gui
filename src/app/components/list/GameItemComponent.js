@@ -1,10 +1,12 @@
-import Ember from "Ember";
+import {
+	get,
+	computed
+} from "Ember";
 import ListItemComponent from "components/list/ListItemComponent";
 import layout from "templates/components/list/GameItemComponent.hbs";
 
 
-var get = Ember.get;
-var or = Ember.computed.or;
+const { or } = computed;
 
 
 export default ListItemComponent.extend({

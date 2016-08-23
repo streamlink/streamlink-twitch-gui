@@ -1,7 +1,7 @@
-import DS from "EmberData";
+import { RESTSerializer } from "EmberData";
 
 
-export default DS.RESTSerializer.extend({
+export default RESTSerializer.extend({
 	modelNameFromPayloadKey: function() {
 		return "githubReleases";
 	},

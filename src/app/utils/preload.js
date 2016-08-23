@@ -1,8 +1,7 @@
-import Ember from "Ember";
+import { makeArray } from "Ember";
 
 
-var concat = [].concat;
-var makeArray = Ember.makeArray;
+const concat = [].concat;
 
 function preload( withError, list ) {
 	if ( list === undefined ) {

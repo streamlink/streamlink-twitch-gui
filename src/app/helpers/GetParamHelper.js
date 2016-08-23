@@ -1,6 +1,6 @@
-import Ember from "Ember";
+import { Helper } from "Ember";
 
 
-export default Ember.Helper.helper(function( params, hash ) {
+export default Helper.helper(function( params, hash ) {
 	return params[ hash.index ];
 });

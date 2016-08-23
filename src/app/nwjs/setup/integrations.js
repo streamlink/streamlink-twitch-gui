@@ -1,28 +1,29 @@
-import Ember from "Ember";
+import { get } from "Ember";
 import nwWindow from "nwjs/nwWindow";
-import argv from "nwjs/argv";
+import {
+	max as argMax,
+	min as argMin,
+	tray as argTray
+} from "nwjs/argv";
 
 
-var get = Ember.get;
-
-
-function setupIntegrations( settings ) {
+export function setupIntegrations( settings ) {
 	// read from settings first
 	onChangeIntegrations( settings );
 
 	// then process launch parameters
 
-	if ( argv.max ) {
+	if ( argMax ) {
 		// maximize window
 		nwWindow.toggleMaximize( false );
 	}
 
-	if ( argv.min ) {
+	if ( argMin ) {
 		// minimize window
 		nwWindow.toggleMinimize( false );
 	}
 
-	if ( argv.tray ) {
+	if ( argTray ) {
 		// show tray icon (and taskbar item)
 		nwWindow.setShowInTray( true, get( settings, "isVisibleInTaskbar" ) );
 		// remove the tray icon after clicking it if it's disabled in the settings
@@ -47,8 +48,3 @@ function onChangeIntegrations( settings ) {
 	nwWindow.setShowInTaskbar( taskbar );
 	nwWindow.setShowInTray( tray, taskbar );
 }
-
-
-export default {
-	setupIntegrations
-};

@@ -1,10 +1,9 @@
 import denodify from "utils/node/denodify";
-import platform from "utils/node/platform";
+import { isWin } from "utils/node/platform";
 import FS from "fs";
 
 
-var fsStat = denodify( FS.stat );
-var isWin  = platform.isWin;
+const fsStat = denodify( FS.stat );
 
 
 /**
@@ -14,7 +13,7 @@ var isWin  = platform.isWin;
  * @param {Boolean?}  returnStats Return the stats object instead of the path
  * @returns {Promise<(String|fs.Stats)>}
  */
-function stat( path, callback, returnStats ) {
+export function stat( path, callback, returnStats ) {
 	var promise = fsStat( path );
 
 	if ( callback instanceof Function ) {
@@ -31,19 +30,16 @@ function stat( path, callback, returnStats ) {
 }
 
 
-stat.isDirectory = function( stats ) {
+export function isDirectory( stats ) {
 	return stats.isDirectory();
-};
+}
 
-stat.isFile = function( stats ) {
+export function isFile( stats ) {
 	return stats.isFile();
-};
+}
 
-stat.isExecutable = function( stats ) {
+export function isExecutable( stats ) {
 	return stats.isFile()
 	    // octal: 0111
 	    && ( isWin || ( stats.mode & 73 ) > 0 );
-};
-
-
-export default stat;
+}

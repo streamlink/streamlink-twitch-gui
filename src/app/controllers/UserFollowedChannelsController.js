@@ -1,10 +1,10 @@
-import Ember from "Ember";
+import {
+	set,
+	Controller
+} from "Ember";
 
 
-var set = Ember.set;
-
-
-export default Ember.Controller.extend({
+export default Controller.extend({
 	queryParams: [ "sortby", "direction" ],
 
 	sortby   : "created_at",

@@ -1,13 +1,11 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	Component
+} from "Ember";
+import { langs } from "config";
 
 
-var get = Ember.get;
-
-var langs = config.langs;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	tagName: "i",
 	classNames: [ "flag-icon-component" ],
 	classNameBindings: [ "flag", "withCursor::no-cursor" ],

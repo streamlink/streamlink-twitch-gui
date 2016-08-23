@@ -1,11 +1,12 @@
-import Ember from "Ember";
+import {
+	get,
+	Binding,
+	Component
+} from "Ember";
 import layout from "templates/components/LangFilterComponent.hbs";
 
 
-var get = Ember.get;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "li",
@@ -14,7 +15,7 @@ export default Ember.Component.extend({
 		this._super.apply( this, arguments );
 
 		var prop = get( this, "prop" );
-		var binding = Ember.Binding
+		var binding = Binding
 			.from( "obj." + prop )
 			.to( "checked" );
 		binding.connect( this );

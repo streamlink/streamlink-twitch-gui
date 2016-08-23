@@ -1,19 +1,23 @@
-import Ember from "Ember";
-import DS from "EmberData";
+import {
+	get,
+	computed
+} from "Ember";
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
 import Moment from "Moment";
 
 
-var get = Ember.get;
-var and = Ember.computed.and;
-var attr = DS.attr;
-var belongsTo = DS.belongsTo;
+const { and } = computed;
 
 /**
  * Try to fix the weird fps numbers received from twitch...
  * Define a list of common stream frame rates and give each one a min and max value range.
  * @type {FPSRange[]}
  */
-var fpsRanges = [
+const fpsRanges = [
 	{ target: 24, min: 22, max: 24.5 },
 	{ target: 25, min: 24.5, max: 27 },
 	{ target: 30, min: 28, max: 32 },
@@ -36,7 +40,7 @@ var fpsRanges = [
  */
 
 
-export default DS.Model.extend({
+export default Model.extend({
 	average_fps: attr( "number" ),
 	channel: belongsTo( "twitchChannel", { async: false } ),
 	created_at: attr( "date" ),

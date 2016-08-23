@@ -1,14 +1,14 @@
-import Ember from "Ember";
+import {
+	get,
+	Route
+} from "Ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import ModelMetadataMixin from "mixins/ModelMetadataMixin";
 import toArray from "utils/ember/toArray";
 import preload from "utils/preload";
 
 
-var get = Ember.get;
-
-
-export default Ember.Route.extend( InfiniteScrollMixin, ModelMetadataMixin, {
+export default Route.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 	itemSelector: ".game-item-component",
 
 	modelName: "twitchGamesTop",

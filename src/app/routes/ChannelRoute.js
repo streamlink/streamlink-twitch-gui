@@ -1,12 +1,12 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	Route
+} from "Ember";
 import preload from "utils/preload";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Route.extend({
+export default Route.extend({
 	model: function( params ) {
 		var store = get( this, "store" );
 		var id    = get( params, "channel" );

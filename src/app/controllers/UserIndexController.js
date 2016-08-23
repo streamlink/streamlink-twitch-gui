@@ -1,15 +1,19 @@
-import Ember from "Ember";
-import clipboard from "nwjs/clipboard";
+import {
+	get,
+	set,
+	inject,
+	Controller
+} from "Ember";
+import { set as setClipboard } from "nwjs/clipboard";
 
 
-var get = Ember.get;
-var set = Ember.set;
+const { service } = inject;
 
 
-export default Ember.Controller.extend({
-	auth        : Ember.inject.service(),
-	notification: Ember.inject.service(),
-	settings    : Ember.inject.service(),
+export default Controller.extend({
+	auth: service(),
+	notification: service(),
+	settings: service(),
 
 	scope: function() {
 		return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
@@ -26,7 +30,7 @@ export default Ember.Controller.extend({
 		},
 
 		"copyToken": function( success, failure ) {
-			clipboard.set( get( this, "auth.session.access_token" ) )
+			setClipboard( get( this, "auth.session.access_token" ) )
 				.then( success, failure )
 				.catch(function() {});
 		},

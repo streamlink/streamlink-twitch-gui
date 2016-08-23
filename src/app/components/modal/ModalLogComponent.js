@@ -1,11 +1,14 @@
-import Ember from "Ember";
+import {
+	run,
+	Component
+} from "Ember";
 import layout from "templates/components/modal/ModalLogComponent.hbs";
 
 
-var scheduleOnce = Ember.run.scheduleOnce;
+const { scheduleOnce } = run;
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "section",

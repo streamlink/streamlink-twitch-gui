@@ -1,10 +1,10 @@
-import DS from "EmberData";
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-var attr = DS.attr;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	// pass through
 	authorization: attr(),
 	user_name: attr( "string" ),

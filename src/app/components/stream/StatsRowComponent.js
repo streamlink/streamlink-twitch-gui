@@ -1,8 +1,8 @@
-import Ember from "Ember";
+import { Component } from "Ember";
 import layout from "templates/components/stream/StatsRowComponent.hbs";
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "div",

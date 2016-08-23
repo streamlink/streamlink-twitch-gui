@@ -1,8 +1,8 @@
-import Ember from "Ember";
+import { Component } from "Ember";
 import layout from "templates/components/form/InputBtnComponent.hbs";
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "label",

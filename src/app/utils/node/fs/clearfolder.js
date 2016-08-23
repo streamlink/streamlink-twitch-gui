@@ -1,11 +1,14 @@
 import denodify from "utils/node/denodify";
-import stat from "utils/node/fs/stat";
+import {
+	stat,
+	isFile
+} from "utils/node/fs/stat";
 import PATH from "path";
 import FS from "fs";
 
 
-var fsReaddir = denodify( FS.readdir );
-var fsUnlink  = denodify( FS.unlink );
+const fsReaddir = denodify( FS.readdir );
+const fsUnlink  = denodify( FS.unlink );
 
 
 /**
@@ -53,7 +56,7 @@ function clearfolder( dir, threshold ) {
 			// ignore all files newer than X
 			var now = new Date();
 			return execBatchAndIgnoreRejected( files, stat, function( stat ) {
-				return stat.isFile()
+				return isFile( stat )
 				    && now - stat.mtime > threshold;
 			});
 		})

@@ -10,7 +10,7 @@
  *
  * modified by Sebastian Meyer
  */
-import platform from "utils/node/platform";
+import { isLinux } from "utils/node/platform";
 
 
 var options = {
@@ -289,7 +289,7 @@ function onMousedown( e ) {
 	var elem = e.target;
 
 	// linux middle mouse shouldn't be overwritten (paste)
-	if ( platform.isLinux && ( elem.tagName === "INPUT" || elem.tagName === "TEXTAREA" ) ) {
+	if ( isLinux && ( elem.tagName === "INPUT" || elem.tagName === "TEXTAREA" ) ) {
 		return;
 	}
 
@@ -480,21 +480,19 @@ function pulse( x ) {
 }
 
 
-export default {
-	enable: function() {
-		if ( enabled ) { return; }
-		window.addEventListener( "mousewheel", onMousewheel, false );
-		window.addEventListener( "mousedown", onMousedown, false );
-		window.addEventListener( "keydown", onKeydown, false );
-		enabled = true;
-	},
+export function enable() {
+	if ( enabled ) { return; }
+	window.addEventListener( "mousewheel", onMousewheel, false );
+	window.addEventListener( "mousedown", onMousedown, false );
+	window.addEventListener( "keydown", onKeydown, false );
+	enabled = true;
+}
 
-	disable: function() {
-		if ( !enabled ) { return; }
-		window.removeEventListener( "mousewheel", onMousewheel, false );
-		window.removeEventListener( "mousedown", onMousedown, false );
-		window.removeEventListener( "keydown", onKeydown, false );
-		cache = {};
-		enabled = false;
-	}
-};
+export function disable() {
+	if ( !enabled ) { return; }
+	window.removeEventListener( "mousewheel", onMousewheel, false );
+	window.removeEventListener( "mousedown", onMousedown, false );
+	window.removeEventListener( "keydown", onKeydown, false );
+	cache = {};
+	enabled = false;
+}

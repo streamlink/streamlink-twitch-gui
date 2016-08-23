@@ -108,7 +108,10 @@ module.exports = {
 						presets: [],
 						plugins: [
 							"babel-plugin-transform-es2015-modules-commonjs",
-							"babel-plugin-transform-es2015-shorthand-properties"
+							"babel-plugin-transform-es2015-shorthand-properties",
+							"babel-plugin-transform-es2015-block-scoping",
+							"babel-plugin-transform-es2015-destructuring",
+							"babel-plugin-transform-es2015-computed-properties"
 						],
 						cacheDirectory: r( OS.tmpdir(), "babel-cache" )
 					}

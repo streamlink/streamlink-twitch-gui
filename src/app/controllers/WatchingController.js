@@ -1,14 +1,19 @@
-import Ember from "Ember";
+import {
+	get,
+	computed,
+	inject,
+	Controller
+} from "Ember";
 import Settings from "models/localstorage/Settings";
 
 
-var get = Ember.get;
-var sort = Ember.computed.sort;
+const { sort } = computed;
+const { service } = inject;
 
 
-export default Ember.Controller.extend({
-	auth: Ember.inject.service(),
-	livestreamer: Ember.inject.service(),
+export default Controller.extend({
+	auth: service(),
+	livestreamer: service(),
 
 	sortedModel: sort( "model", "sortBy" ),
 	sortBy: [ "started:desc" ],

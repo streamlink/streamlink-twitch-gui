@@ -1,14 +1,15 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	computed,
+	Controller
+} from "Ember";
+import { langs } from "config";
 
 
-var get = Ember.get;
-var alias = Ember.computed.alias;
-
-var langs = config.langs;
+const { alias } = computed;
 
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 	stream : alias( "model.stream" ),
 	channel: alias( "model.channel" ),
 	panels : alias( "model.panels" ),

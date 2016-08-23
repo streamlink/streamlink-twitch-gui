@@ -1,15 +1,19 @@
-import Ember from "Ember";
+import {
+	get,
+	computed,
+	inject
+} from "Ember";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import nwWindow from "nwjs/nwWindow";
 import layout from "templates/components/modal/ModalQuitComponent.hbs";
 
 
-var get = Ember.get;
-var readOnly = Ember.computed.readOnly;
+const { readOnly } = computed;
+const { service } = inject;
 
 
 export default ModalDialogComponent.extend({
-	livestreamer: Ember.inject.service(),
+	livestreamer: service(),
 
 	layout,
 

@@ -1,13 +1,17 @@
-import Ember from "Ember";
+import {
+	get,
+	getOwner,
+	inject,
+	Route
+} from "Ember";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 
-var get = Ember.get;
-var getOwner = Ember.getOwner;
+const { service } = inject;
 
 
-export default Ember.Route.extend({
-	modal: Ember.inject.service(),
+export default Route.extend({
+	modal: service(),
 
 	model: function() {
 		var store  = get( this, "store" );

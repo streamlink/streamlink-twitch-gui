@@ -1,14 +1,14 @@
-import Ember from "Ember";
+import {
+	get,
+	getOwner,
+	Component
+} from "Ember";
 import Menu from "nwjs/menu";
-import clipboard from "nwjs/clipboard";
+import { set as setClipboard } from "nwjs/clipboard";
 import openBrowser from "nwjs/openBrowser";
 
 
-var get = Ember.get;
-var getOwner = Ember.getOwner;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	tagName: "a",
 	classNameBindings: [ ":external-link" ],
 	attributeBindings: [ "href" ],
@@ -59,7 +59,7 @@ export default Ember.Component.extend({
 
 	copyUrl: function() {
 		var url = get( this, "url" );
-		clipboard.set( url );
+		setClipboard( url );
 	},
 
 	didInsertElement: function() {

@@ -1,14 +1,16 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	run,
+	Component
+} from "Ember";
 import layout from "templates/components/SettingsSubmitComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var cancel = Ember.run.cancel;
-var later = Ember.run.later;
+const { cancel, later } = run;
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	classNames: [ "settings-submit-component" ],

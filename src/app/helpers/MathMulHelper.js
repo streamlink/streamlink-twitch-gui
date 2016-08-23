@@ -1,4 +1,4 @@
-import Ember from "Ember";
+import { Helper } from "Ember";
 
 
 function mathMul( valueA, valueB ) {
@@ -6,6 +6,6 @@ function mathMul( valueA, valueB ) {
 }
 
 
-export default Ember.Helper.helper(function( params ) {
+export default Helper.helper(function( params ) {
 	return params.reduce( mathMul );
 });

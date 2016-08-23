@@ -1,18 +1,24 @@
-import Ember from "Ember";
-import DS from "EmberData";
+import {
+	get,
+	isNone,
+	Evented,
+	Mixin
+} from "Ember";
+import {
+	AdapterError,
+	InvalidError
+} from "EmberData";
 
 
-var get   = Ember.get;
-var push  = [].push;
-var reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
-var AdapterError = DS.AdapterError;
+const push = [].push;
+const reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
 
 
 /**
  * Adapter mixin for using static model names
  * instead of using type.modelName as name
  */
-export default Ember.Mixin.create( Ember.Evented, {
+export default Mixin.create( Evented, {
 	findRecord: function( store, type, id, snapshot ) {
 		var url = this.buildURL( type, id, snapshot, "findRecord" );
 		return this.ajax( url, "GET" );
@@ -113,7 +119,7 @@ export default Ember.Mixin.create( Ember.Evented, {
 	buildURLFragments: function( type, id ) {
 		var path = type.toString();
 		var url  = path.split( "/" );
-		if ( !Ember.isNone( id ) ) { push.call( url, id ); }
+		if ( !isNone( id ) ) { push.call( url, id ); }
 		return url;
 	},
 
@@ -148,7 +154,7 @@ export default Ember.Mixin.create( Ember.Evented, {
 		if ( this.isSuccess( status, headers, payload ) ) {
 			return payload;
 		} else if ( this.isInvalid( status, headers, payload ) ) {
-			return new DS.InvalidError( payload && payload.errors || [] );
+			return new InvalidError( payload && payload.errors || [] );
 		}
 
 		return new AdapterError([{

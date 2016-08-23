@@ -1,13 +1,12 @@
-import Ember from "Ember";
-import linkparser from "utils/linkparser";
+import {
+	get,
+	Component
+} from "Ember";
+import { parseString } from "utils/linkparser";
 import layout from "templates/components/link/EmbeddedLinksComponent.hbs";
 
 
-var get = Ember.get;
-var parseString = linkparser.parseString;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	content: function() {

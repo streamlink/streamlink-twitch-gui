@@ -1,9 +1,7 @@
-import Ember from "Ember";
+import { get } from "Ember";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import layout from "templates/components/modal/ModalConfirmComponent.hbs";
 
-
-var get = Ember.get;
 
 function actionFactory( action ) {
 	return function( success, failure ) {

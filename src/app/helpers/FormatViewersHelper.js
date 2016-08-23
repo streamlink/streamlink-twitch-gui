@@ -1,7 +1,7 @@
-import Ember from "Ember";
+import { Helper } from "Ember";
 
 
-export default Ember.Helper.helper(function( params ) {
+export default Helper.helper(function( params ) {
 	var viewers = Number( params[0] );
 	return isNaN( viewers )
 		? "0"

@@ -1,21 +1,27 @@
-import config from "config";
+import {
+	main,
+	files
+} from "config";
 import nwWindow from "nwjs/nwWindow";
 import tray from "nwjs/tray";
-import platform from "utils/node/platform";
+import {
+	platform,
+	isWin
+} from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 
 
-var displayName = config.main[ "display-name" ];
-var trayIcons   = config.files[ "icons" ][ "tray" ][ platform.platform ];
+const { "display-name": displayName } = main;
+let { icons: { tray: { [ platform ]: trayIcons } } } = files;
 
-if ( platform.isWin ) {
+if ( isWin ) {
 	Object.keys( trayIcons ).forEach(function( key ) {
 		trayIcons[ key ] = resolvePath( "%NWJSAPPPATH%/" + trayIcons[ key ] );
 	});
 }
 
 
-function createTrayIcon() {
+export function createTrayIcon() {
 	// apply a tray icon+menu to the main application window
 	nwWindow.tray = tray.create({
 		tooltip: displayName,
@@ -39,8 +45,3 @@ function createTrayIcon() {
 	// prevent tray icons from stacking up when refreshing the page or devtools
 	nwWindow.on( "shutdown", nwWindow.tray.remove.bind( nwWindow.tray ) );
 }
-
-
-export default {
-	createTrayIcon
-};

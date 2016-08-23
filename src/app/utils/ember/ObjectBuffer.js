@@ -2,11 +2,12 @@
  * Based on https://github.com/movableink/buffered-proxy
  * Written by Kris Selden for Yapp Labs, published by Luke Melia
  */
-import Ember from "Ember";
+import {
+	get,
+	set,
+	ObjectProxy
+} from "Ember";
 
-
-var get = Ember.get;
-var set = Ember.set;
 
 function isEmpty( obj ) {
 	for ( var key in obj ) {
@@ -24,7 +25,7 @@ function checkDirty() {
 	set( this, "isDirty", dirty );
 }
 
-var ObjectBuffer = Ember.ObjectProxy.extend({
+const ObjectBuffer = ObjectProxy.extend({
 	init: function() {
 		this._buffer     = {};
 		this._children   = {};

@@ -1,9 +1,9 @@
-import Ember from "Ember";
+import { computed } from "Ember";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import FollowButtonMixin from "mixins/FollowButtonMixin";
 
 
-var alias = Ember.computed.alias;
+const { alias } = computed;
 
 
 export default FormButtonComponent.extend( FollowButtonMixin, {

@@ -1,7 +1,7 @@
-import Ember from "Ember";
+import { Route } from "Ember";
 
 
-export default Ember.Route.extend({
+export default Route.extend({
 	beforeModel: function( transition ) {
 		// access to this route is restricted
 		// but don't block the initial transition

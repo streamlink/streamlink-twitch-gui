@@ -1,4 +1,4 @@
-import config from "config";
+import { langs } from "config";
 
 
 var LS = window.localStorage;
@@ -49,7 +49,7 @@ function upgradeSettings() {
 
 	// remove unused or disabled language filters
 	Object.keys( settings.gui_langfilter || {} ).forEach(function( code ) {
-		var lang = config.langs[ code ];
+		var lang = langs[ code ];
 		if ( !lang || lang.disabled ) {
 			delete settings.gui_langfilter[ code ];
 		}

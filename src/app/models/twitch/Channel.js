@@ -1,14 +1,14 @@
-import Ember from "Ember";
-import DS from "EmberData";
+import { get } from "Ember";
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-var get = Ember.get;
-var attr = DS.attr;
-
-var reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
+const reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
 
-export default DS.Model.extend({
+export default Model.extend({
 	background: attr( "string" ),
 	banner: attr( "string" ),
 	broadcaster_language: attr( "string" ),

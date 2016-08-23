@@ -1,12 +1,14 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	Router
+} from "Ember";
 
 
-var get = Ember.get;
-var set = Ember.set;
+const ApplicationRouter = Router.extend();
 
-var Router = Ember.Router.extend();
 
-Router.map(function() {
+ApplicationRouter.map(function() {
 
 	this.route( "index", { path: "/" } );
 
@@ -53,7 +55,7 @@ Router.map(function() {
 });
 
 
-Router.reopen({
+ApplicationRouter.reopen({
 	lastRouteName: "index",
 
 	_updateLastRouteName: function() {
@@ -65,4 +67,4 @@ Router.reopen({
 });
 
 
-export default Router;
+export default ApplicationRouter;

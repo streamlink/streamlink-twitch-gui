@@ -1,7 +1,7 @@
-import DS from "EmberData";
+import { BooleanTransform } from "EmberData";
 
 
-export default DS.BooleanTransform.reopen({
+export default BooleanTransform.reopen({
 	deserialize: function( serialized ) {
 		return serialized === null
 			? null

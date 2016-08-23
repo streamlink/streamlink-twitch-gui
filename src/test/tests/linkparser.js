@@ -1,14 +1,14 @@
-import QUnit from "QUnit";
-import linkparser from "utils/linkparser";
+import {
+	module,
+	test
+} from "QUnit";
+import { parseString } from "utils/linkparser";
 
 
-var parseString = linkparser.parseString;
+module( "Link parsing", {} );
 
 
-QUnit.module( "Link parsing", {} );
-
-
-QUnit.test( "URLs", function( assert ) {
+test( "URLs", function( assert ) {
 
 	assert.deepEqual(
 		[
@@ -200,7 +200,7 @@ QUnit.test( "URLs", function( assert ) {
 });
 
 
-QUnit.test( "Twitter", function( assert ) {
+test( "Twitter", function( assert ) {
 
 	assert.deepEqual(
 		parseString( "@foo" ),
@@ -254,7 +254,7 @@ QUnit.test( "Twitter", function( assert ) {
 });
 
 
-QUnit.test( "All parsers", function( assert ) {
+test( "All parsers", function( assert ) {
 
 	assert.deepEqual(
 		parseString( "Follow @foo and visit bar.com or follow @baz and visit qux.com" ),

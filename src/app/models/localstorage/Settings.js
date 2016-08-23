@@ -1,17 +1,16 @@
-import Ember from "Ember";
-import DS from "EmberData";
-import config from "config";
-import platform from "utils/node/platform";
+import {
+	get,
+	set
+} from "Ember";
+import {
+	attr,
+	Model
+} from "EmberData";
+import { langs } from "config";
+import { isWin } from "utils/node/platform";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var attr = DS.attr;
-
-var langs = config.langs;
-var langCodes = Object.keys( langs );
-
-var isWin = platform.isWin;
+const langCodes = Object.keys( langs );
 
 
 function defaultLangFilterValue() {
@@ -24,7 +23,7 @@ function defaultLangFilterValue() {
 }
 
 
-export default DS.Model.extend({
+export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
 	livestreamer        : attr( "string",  { defaultValue: "" } ),
 	livestreamer_params : attr( "string",  { defaultValue: "" } ),

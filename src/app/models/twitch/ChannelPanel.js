@@ -1,10 +1,10 @@
-import DS from "EmberData";
+import {
+	hasMany,
+	Model
+} from "EmberData";
 
 
-var hasMany = DS.hasMany;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	panels: hasMany( "twitchChannelPanelItem" )
 
 }).reopenClass({

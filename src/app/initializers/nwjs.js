@@ -1,16 +1,16 @@
-import Ember from "Ember";
+import {
+	get,
+	Application
+} from "Ember";
 import nwWindow from "nwjs/nwWindow";
 import platformfixes from "nwjs/setup/platformfixes";
-import menubar from "nwjs/setup/menubar";
-import shortcut from "nwjs/setup/shortcut";
-import tray from "nwjs/setup/tray";
-import integrations from "nwjs/setup/integrations";
+import { createNativeMenuBar } from "nwjs/setup/menubar";
+import { createStartmenuShortcut } from "nwjs/setup/shortcut";
+import { createTrayIcon } from "nwjs/setup/tray";
+import { setupIntegrations } from "nwjs/setup/integrations";
 
 
-var get = Ember.get;
-
-
-Ember.Application.instanceInitializer({
+Application.instanceInitializer({
 	name: "nwjs",
 
 	initialize: function( application ) {
@@ -28,10 +28,10 @@ Ember.Application.instanceInitializer({
 				platformfixes();
 
 				// do all the NWjs stuff
-				menubar.createNativeMenuBar( controller );
-				shortcut.createStartmenuShortcut( settings );
-				tray.createTrayIcon( settings );
-				integrations.setupIntegrations( settings );
+				createNativeMenuBar( controller );
+				createStartmenuShortcut( settings );
+				createTrayIcon( settings );
+				setupIntegrations( settings );
 			}
 
 			settings.addObserver( "content", settings, settingsObserver );

@@ -1,11 +1,14 @@
-import Ember from "Ember";
+import {
+	get,
+	setProperties,
+	computed,
+	inject,
+	Mixin
+} from "Ember";
 
 
-var get = Ember.get;
-var setP = Ember.setProperties;
-var alias = Ember.computed.alias;
-var and = Ember.computed.and;
-var bool = Ember.computed.bool;
+const { alias, and, bool } = computed;
+const { service } = inject;
 
 function switchProperty( key ) {
 	return function() {
@@ -19,9 +22,9 @@ function switchProperty( key ) {
 }
 
 
-export default Ember.Mixin.create({
-	auth : Ember.inject.service(),
-	store: Ember.inject.service(),
+export default Mixin.create({
+	auth : service(),
+	store: service(),
 
 	isVisible   : alias( "isValid" ),
 	isValid     : and( "model", "auth.session.isLoggedIn" ),
@@ -63,7 +66,7 @@ export default Ember.Mixin.create({
 		var record  = get( this, "record" );
 		if ( !isValid || !id || record !== null ) { return; }
 
-		setP( this, {
+		setProperties( this, {
 			record   : null,
 			isLoading: true,
 			isLocked : true
@@ -77,7 +80,7 @@ export default Ember.Mixin.create({
 					return;
 				}
 
-				setP( this, {
+				setProperties( this, {
 					record,
 					isLoading: false,
 					isLocked : false

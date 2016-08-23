@@ -1,15 +1,19 @@
-import Ember from "Ember";
+import {
+	get,
+	computed,
+	inject
+} from "Ember";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import openBrowser from "nwjs/openBrowser";
 import layout from "templates/components/modal/ModalNewreleaseComponent.hbs";
 
 
-var get = Ember.get;
-var readOnly = Ember.computed.readOnly;
+const { readOnly } = computed;
+const { service } = inject;
 
 
 export default ModalDialogComponent.extend({
-	versioncheck: Ember.inject.service(),
+	versioncheck: service(),
 
 	layout,
 

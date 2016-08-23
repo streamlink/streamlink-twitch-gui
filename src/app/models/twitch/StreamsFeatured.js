@@ -1,11 +1,11 @@
-import DS from "EmberData";
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
 
 
-var attr = DS.attr;
-var belongsTo = DS.belongsTo;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	image: attr( "string" ),
 	priority: attr( "number" ),
 	scheduled: attr( "boolean" ),

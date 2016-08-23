@@ -1,14 +1,18 @@
-import Ember from "Ember";
+import {
+	get,
+	inject,
+	Route
+} from "Ember";
 import toArray from "utils/ember/toArray";
 import mapBy from "utils/ember/mapBy";
 import preload from "utils/preload";
 
 
-var get = Ember.get;
+const { service } = inject;
 
 
-export default Ember.Route.extend({
-	livestreamer: Ember.inject.service(),
+export default Route.extend({
+	livestreamer: service(),
 
 	model: function() {
 		var records = get( this, "livestreamer.model" );

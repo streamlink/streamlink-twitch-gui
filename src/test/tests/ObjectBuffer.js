@@ -1,16 +1,18 @@
-import QUnit from "QUnit";
-import Ember from "Ember";
+import {
+	module,
+	test
+} from "QUnit";
+import {
+	get,
+	set
+} from "Ember";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 
-var get = Ember.get;
-var set = Ember.set;
+module( "ObjectBuffer", {} );
 
 
-QUnit.module( "ObjectBuffer", {} );
-
-
-QUnit.test( "Flat ObjectBuffer", function( assert ) {
+test( "Flat ObjectBuffer", function( assert ) {
 
 	var content = {
 		"foo": "foo",
@@ -144,7 +146,7 @@ QUnit.test( "Flat ObjectBuffer", function( assert ) {
 });
 
 
-QUnit.test( "Nested ObjectBuffer", function( assert ) {
+test( "Nested ObjectBuffer", function( assert ) {
 
 	var content = {
 		"foo": "foo",

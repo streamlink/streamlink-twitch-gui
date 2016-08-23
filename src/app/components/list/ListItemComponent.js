@@ -1,8 +1,14 @@
-import Ember from "Ember";
+import {
+	inject,
+	Component
+} from "Ember";
 
 
-export default Ember.Component.extend({
-	settings: Ember.inject.service(),
+const { service } = inject;
+
+
+export default Component.extend({
+	settings: service(),
 
 	tagName: "li",
 	classNameBindings: [

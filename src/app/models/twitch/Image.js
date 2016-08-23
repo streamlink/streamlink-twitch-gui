@@ -1,13 +1,15 @@
-import Ember from "Ember";
-import DS from "EmberData";
-import config from "config";
+import {
+	get,
+	computed
+} from "Ember";
+import {
+	attr,
+	Model
+} from "EmberData";
+import { vars } from "config";
 
 
-var get = Ember.get;
-var computed = Ember.computed;
-var attr = DS.attr;
-
-var time = config.vars[ "image-expiration-time" ] || 60;
+const { "image-expiration-time": time } = vars;
 
 
 function getURL( url, time ) {
@@ -54,7 +56,7 @@ function nocache( attr ) {
 }
 
 
-export default DS.Model.extend({
+export default Model.extend({
 	// original attributes (renamed)
 	large_image : attr( "string" ),
 	medium_image: attr( "string" ),

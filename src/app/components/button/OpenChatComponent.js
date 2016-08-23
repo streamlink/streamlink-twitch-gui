@@ -1,12 +1,15 @@
-import Ember from "Ember";
+import {
+	get,
+	inject
+} from "Ember";
 import FormButtonComponent from "components/button/FormButtonComponent";
 
 
-var get = Ember.get;
+const { service } = inject;
 
 
 export default FormButtonComponent.extend({
-	chat: Ember.inject.service(),
+	chat: service(),
 
 	"class" : "btn-hint",
 	icon    : "fa-comments",

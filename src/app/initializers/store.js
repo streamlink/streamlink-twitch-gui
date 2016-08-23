@@ -1,12 +1,9 @@
-import Ember from "Ember";
-import DS from "EmberData";
-
-
-var merge = Ember.merge;
+import { merge } from "Ember";
+import { Store } from "EmberData";
 
 
 // no initializer here: just upgrade the application store
-DS.Store.reopen({
+Store.reopen({
 	/**
 	 * Find a record and unload the generated record
 	 * @param {string} modelName

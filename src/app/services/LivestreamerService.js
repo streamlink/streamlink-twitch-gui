@@ -1,35 +1,45 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	set,
+	makeArray,
+	merge,
+	inject,
+	run,
+	Service
+} from "Ember";
+import {
+	livestreamer as livestreamerConfig,
+	twitch as twitchConfig,
+	vars as varsConfig
+} from "config";
 import nwWindow from "nwjs/nwWindow";
 import Settings from "models/localstorage/Settings";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
-import semver from "utils/semver";
+import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import whichFallback from "utils/node/fs/whichFallback";
 import CP from "child_process";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var run = Ember.run;
-var merge = Ember.merge;
-var makeArray = Ember.makeArray;
+const { service } = inject;
+const { later } = run;
+const {
+	"exec": livestreamerExec,
+	"fallback": livestreamerFallback,
+	"version-min": livestreamerVersionMin,
+	"validation-timeout": livestreamerTimeout
+} = livestreamerConfig;
+const { "stream-url": twitchStreamUrl } = twitchConfig;
+const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
-var livestreamerExec = config.livestreamer[ "exec" ];
-var livestreamerFallback = config.livestreamer[ "fallback" ];
-var livestreamerVersionMin = config.livestreamer[ "version-min" ];
-var livestreamerTimeout = config.livestreamer[ "validation-timeout" ];
-var twitchStreamUrl = config.twitch[ "stream-url" ];
-var streamReloadInterval = config.vars[ "stream-reload-interval" ] || 60000;
-
-var reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
-var reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
-var reUnable    = /^error: Unable to open URL: /;
-var reNoStreams = /^error: No streams found on this URL: /;
-var reNoPlayer  = /^error: Failed to start player: /;
-var reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./;
-var reWarnInsec = /InsecurePlatformWarning: A true SSLContext object is not available\./;
-var rePlayer    = /^Starting player: \S+/;
+const reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
+const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
+const reUnable    = /^error: Unable to open URL: /;
+const reNoStreams = /^error: No streams found on this URL: /;
+const reNoPlayer  = /^error: Failed to start player: /;
+const reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./;
+const reWarnInsec = /InsecurePlatformWarning: A true SSLContext object is not available\./;
+const rePlayer    = /^Starting player: \S+/;
 
 
 function ErrorLog( message, log ) {
@@ -83,11 +93,11 @@ function setIfNotNull( objA, objB, key ) {
 }
 
 
-export default Ember.Service.extend( ChannelSettingsMixin, {
-	store   : Ember.inject.service(),
-	modal   : Ember.inject.service(),
-	settings: Ember.inject.service(),
-	chat    : Ember.inject.service(),
+export default Service.extend( ChannelSettingsMixin, {
+	chat: service(),
+	modal: service(),
+	settings: service(),
+	store: service(),
 
 	error : null,
 	active: null,
@@ -298,11 +308,11 @@ export default Ember.Service.extend( ChannelSettingsMixin, {
 			spawn.stderr.on( "data", new StreamOutputBuffer( onLine ) );
 
 			// kill after a certain time
-			run.later( onTimeout, livestreamerTimeout );
+			later( onTimeout, livestreamerTimeout );
 		})
 			.then(function( version ) {
 				kill();
-				return version === semver.getMax([ version, livestreamerVersionMin ])
+				return version === getMax([ version, livestreamerVersionMin ])
 					? Promise.resolve( exec )
 					: Promise.reject( new VersionError( version ) );
 
@@ -399,7 +409,7 @@ export default Ember.Service.extend( ChannelSettingsMixin, {
 				 * we don't know how long the machine of the user takes for launching the player
 				 * or detecting an invalid path, etc.
 				 */
-				run.later( defer, defer.resolve, 500 );
+				later( defer, defer.resolve, 500 );
 			}
 		}
 
@@ -453,7 +463,7 @@ export default Ember.Service.extend( ChannelSettingsMixin, {
 
 		// queue another refresh
 		promise.then(function() {
-			run.later( this, this.refreshStream, livestreamer, streamReloadInterval );
+			later( this, this.refreshStream, livestreamer, streamReloadInterval );
 		}.bind( this ) );
 	},
 

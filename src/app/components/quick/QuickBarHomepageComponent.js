@@ -1,13 +1,16 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	inject
+} from "Ember";
 import FormButtonComponent from "components/button/FormButtonComponent";
 
 
-var get = Ember.get;
-var set = Ember.set;
+const { service } = inject;
 
 
 export default FormButtonComponent.extend({
-	settings: Ember.inject.service(),
+	settings: service(),
 
 	"class": function() {
 		return "btn-neutral" + ( get( this, "isHomepage" ) ? " active" : "" );

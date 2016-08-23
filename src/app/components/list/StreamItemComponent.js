@@ -1,15 +1,15 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	computed,
+	run
+} from "Ember";
 import ListItemComponent from "components/list/ListItemComponent";
 import layout from "templates/components/list/StreamItemComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var alias = Ember.computed.alias;
-var and = Ember.computed.and;
-var equal = Ember.computed.equal;
-var later = Ember.run.later;
-var cancel = Ember.run.cancel;
+const { alias, and, equal } = computed;
+const { cancel, later } = run;
 
 
 export default ListItemComponent.extend({

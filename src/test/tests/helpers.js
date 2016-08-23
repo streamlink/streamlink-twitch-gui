@@ -1,6 +1,21 @@
-import QUnit from "QUnit";
-import Testutils from "Testutils";
-import Ember from "Ember";
+import {
+	module,
+	test
+} from "QUnit";
+import {
+	runAppend,
+	runDestroy,
+	getOutput,
+	buildOwner
+} from "Testutils";
+import {
+	get,
+	set,
+	setOwner,
+	HTMLBars,
+	run,
+	Component
+} from "Ember";
 import IsEqualHelper from "helpers/IsEqualHelper";
 import IsNullHelper from "helpers/IsNullHelper";
 import IsGtHelper from "helpers/IsGtHelper";
@@ -20,22 +35,12 @@ import GetParamHelper from "helpers/GetParamHelper";
 import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
 
 
-var runAppend  = Testutils.runAppend;
-var runDestroy = Testutils.runDestroy;
-var getOutput  = Testutils.getOutput;
-var buildOwner = Testutils.buildOwner;
+const { compile } = HTMLBars;
 
-var get = Ember.get;
-var set = Ember.set;
-var setOwner = Ember.setOwner;
-var run = Ember.run;
-var Component = Ember.Component;
-var compile = Ember.HTMLBars.compile;
-
-var owner, component;
+let owner, component;
 
 
-QUnit.module( "Ember helpers", {
+module( "Ember helpers", {
 	"setup": function() {
 		owner = buildOwner();
 	},
@@ -48,7 +53,7 @@ QUnit.module( "Ember helpers", {
 });
 
 
-QUnit.test( "Is equal", function( assert ) {
+test( "Is equal", function( assert ) {
 
 	owner.register( "helper:is-equal", IsEqualHelper );
 	component = Component.extend({
@@ -67,7 +72,7 @@ QUnit.test( "Is equal", function( assert ) {
 });
 
 
-QUnit.test( "Is null", function( assert ) {
+test( "Is null", function( assert ) {
 
 	owner.register( "helper:is-null", IsNullHelper );
 	component = Component.extend({
@@ -86,7 +91,7 @@ QUnit.test( "Is null", function( assert ) {
 });
 
 
-QUnit.test( "Is greater than", function( assert ) {
+test( "Is greater than", function( assert ) {
 
 	owner.register( "helper:is-gt", IsGtHelper );
 	component = Component.extend({
@@ -104,7 +109,7 @@ QUnit.test( "Is greater than", function( assert ) {
 });
 
 
-QUnit.test( "Is greater than or equal", function( assert ) {
+test( "Is greater than or equal", function( assert ) {
 
 	owner.register( "helper:is-gte", IsGteHelper );
 	component = Component.extend({
@@ -124,7 +129,7 @@ QUnit.test( "Is greater than or equal", function( assert ) {
 });
 
 
-QUnit.test( "Bool not", function( assert ) {
+test( "Bool not", function( assert ) {
 
 	owner.register( "helper:bool-not", BoolNotHelper );
 	component = Component.extend({
@@ -144,7 +149,7 @@ QUnit.test( "Bool not", function( assert ) {
 });
 
 
-QUnit.test( "Bool and", function( assert ) {
+test( "Bool and", function( assert ) {
 
 	owner.register( "helper:bool-and", BoolAndHelper );
 	component = Component.extend({
@@ -162,7 +167,7 @@ QUnit.test( "Bool and", function( assert ) {
 });
 
 
-QUnit.test( "Bool or", function( assert ) {
+test( "Bool or", function( assert ) {
 
 	owner.register( "helper:bool-or", BoolOrHelper );
 	component = Component.extend({
@@ -182,7 +187,7 @@ QUnit.test( "Bool or", function( assert ) {
 });
 
 
-QUnit.test( "Math add", function( assert ) {
+test( "Math add", function( assert ) {
 
 	owner.register( "helper:math-add", MathAddHelper );
 	component = Component.extend({
@@ -198,7 +203,7 @@ QUnit.test( "Math add", function( assert ) {
 });
 
 
-QUnit.test( "Math sub", function( assert ) {
+test( "Math sub", function( assert ) {
 
 	owner.register( "helper:math-sub", MathSubHelper );
 	component = Component.extend({
@@ -214,7 +219,7 @@ QUnit.test( "Math sub", function( assert ) {
 });
 
 
-QUnit.test( "Math mul", function( assert ) {
+test( "Math mul", function( assert ) {
 
 	owner.register( "helper:math-mul", MathMulHelper );
 	component = Component.extend({
@@ -230,7 +235,7 @@ QUnit.test( "Math mul", function( assert ) {
 });
 
 
-QUnit.test( "Math div", function( assert ) {
+test( "Math div", function( assert ) {
 
 	owner.register( "helper:math-div", MathDivHelper );
 	component = Component.extend({
@@ -246,7 +251,7 @@ QUnit.test( "Math div", function( assert ) {
 });
 
 
-QUnit.test( "Format viewers", function( assert ) {
+test( "Format viewers", function( assert ) {
 
 	owner.register( "helper:format-viewers", FormatViewersHelper );
 	component = Component.extend({
@@ -292,7 +297,7 @@ QUnit.test( "Format viewers", function( assert ) {
 });
 
 
-QUnit.test( "Format time", function( assert ) {
+test( "Format time", function( assert ) {
 
 	owner.register( "helper:format-time", FormatTimeHelper );
 	component = Component.extend({
@@ -312,7 +317,7 @@ QUnit.test( "Format time", function( assert ) {
 });
 
 
-QUnit.test( "Hours from now", function( assert ) {
+test( "Hours from now", function( assert ) {
 
 	var second = 1000;
 	var minute = 60 * second;
@@ -355,7 +360,7 @@ QUnit.test( "Hours from now", function( assert ) {
 });
 
 
-QUnit.test( "Hours from now with interval", function( assert ) {
+test( "Hours from now with interval", function( assert ) {
 
 	var done = assert.async();
 
@@ -379,7 +384,7 @@ QUnit.test( "Hours from now with interval", function( assert ) {
 });
 
 
-QUnit.test( "Time from now", function( assert ) {
+test( "Time from now", function( assert ) {
 
 	owner.register( "helper:time-from-now", TimeFromNowHelper );
 	component = Component.extend({
@@ -397,7 +402,7 @@ QUnit.test( "Time from now", function( assert ) {
 });
 
 
-QUnit.test( "Get param", function( assert ) {
+test( "Get param", function( assert ) {
 
 	owner.register( "helper:get-param", GetParamHelper );
 	component = Component.extend({
@@ -417,7 +422,7 @@ QUnit.test( "Get param", function( assert ) {
 });
 
 
-QUnit.test( "Has own property", function( assert ) {
+test( "Has own property", function( assert ) {
 
 	owner.register( "helper:has-own-property", HasOwnPropertyHelper );
 	component = Component.extend({

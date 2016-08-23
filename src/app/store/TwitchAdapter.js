@@ -1,24 +1,27 @@
-import Ember from "Ember";
-import DS from "EmberData";
-import config from "config";
+import {
+	get,
+	isNone,
+	inject
+} from "Ember";
+import { RESTAdapter } from "EmberData";
+import { twitch } from "config";
 import AdapterMixin from "store/AdapterMixin";
 
 
-var get = Ember.get;
+const { service } = inject;
+const { oauth: { "client-id": clientId } } = twitch;
 
-var oauth = config.twitch[ "oauth" ];
-
-var reURLFragment = /^:(.+)$/;
+const reURLFragment = /^:(.+)$/;
 
 
-export default DS.RESTAdapter.extend( AdapterMixin, {
-	auth: Ember.inject.service(),
+export default RESTAdapter.extend( AdapterMixin, {
+	auth: service(),
 
 	host: "https://api.twitch.tv",
 	namespace: "",
 	headers: {
 		"Accept": "application/vnd.twitchtv.v3+json",
-		"Client-ID": oauth[ "client-id" ]
+		"Client-ID": clientId
 	},
 
 	defaultSerializer: "twitch",
@@ -63,7 +66,7 @@ export default DS.RESTAdapter.extend( AdapterMixin, {
 			return frag.replace( reURLFragment, function( _, key ) {
 				switch ( key ) {
 					case "id":
-						if ( Ember.isNone( id ) ) { throw new Error( "Unknown ID" ); }
+						if ( isNone( id ) ) { throw new Error( "Unknown ID" ); }
 						idFound = true;
 						return id;
 					// a user fragment requires the user to be logged in
@@ -78,7 +81,7 @@ export default DS.RESTAdapter.extend( AdapterMixin, {
 			});
 		});
 
-		if ( !idFound && !Ember.isNone( id ) ) {
+		if ( !idFound && !isNone( id ) ) {
 			url.push( id );
 		}
 

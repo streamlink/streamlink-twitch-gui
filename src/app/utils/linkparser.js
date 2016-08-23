@@ -48,7 +48,7 @@ function fnTwitter( _, __, user ) {
 }
 
 
-var parsers = {
+export const parsers = {
 	url: {
 		re: reURL,
 		fn: fnURL
@@ -59,9 +59,11 @@ var parsers = {
 	}
 };
 
-var kParsers = Object.keys( parsers );
 
-function parseString( string ) {
+const kParsers = Object.keys( parsers );
+
+
+export function parseString( string ) {
 	if ( typeof string !== "string" ) {
 		string = string instanceof Object
 			? string.toString()
@@ -113,9 +115,3 @@ function parseString( string ) {
 		links
 	};
 }
-
-
-export default {
-	parsers,
-	parseString
-};

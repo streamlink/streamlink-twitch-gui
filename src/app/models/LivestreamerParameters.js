@@ -1,14 +1,11 @@
-import Ember from "Ember";
+import { get } from "Ember";
 import Parameter from "utils/Parameter";
 import ParameterCustom from "utils/ParameterCustom";
 import Substitution from "utils/Substitution";
 
 
-var get = Ember.get;
-
-
 /** @type {Substitution[]} */
-var playerSubstitutions = [
+export const playerSubstitutions = [
 	new Substitution(
 		[ "name", "channel", "channelname" ],
 		"channel.display_name",
@@ -48,7 +45,7 @@ var playerSubstitutions = [
 
 
 /** @type {Parameter[]} */
-var parameters = [
+export const parameters = [
 	new ParameterCustom(
 		"settings.advanced",
 		"settings.livestreamer_params"
@@ -112,9 +109,3 @@ var parameters = [
 		"settings.retry_streams"
 	)
 ];
-
-
-export default {
-	parameters,
-	playerSubstitutions
-};

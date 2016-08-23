@@ -1,12 +1,13 @@
-import Ember from "Ember";
+import {
+	get,
+	Controller
+} from "Ember";
 
 
-var get = Ember.get;
-
-var reFilter = /^\w+$/;
+const reFilter = /^\w+$/;
 
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 	filter: "",
 
 	modelFiltered: function() {

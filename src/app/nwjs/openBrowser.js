@@ -1,4 +1,7 @@
-import nwGui from "nwjs/nwGui";
+import { Shell } from "nwjs/nwGui";
 
 
-export default nwGui.Shell.openExternal;
+const { openExternal } = Shell;
+
+
+export default openExternal;

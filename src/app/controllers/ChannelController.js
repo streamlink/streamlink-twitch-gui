@@ -1,14 +1,18 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	computed,
+	inject,
+	Controller
+} from "Ember";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var alias = Ember.computed.alias;
-var equal = Ember.computed.equal;
+const { alias, equal } = computed;
+const { controller } = inject;
 
 
-export default Ember.Controller.extend({
-	application: Ember.inject.controller(),
+export default Controller.extend({
+	application: controller(),
 
 	stream : alias( "model.stream" ),
 	channel: alias( "model.channel" ),

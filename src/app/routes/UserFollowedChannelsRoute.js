@@ -1,13 +1,10 @@
-import Ember from "Ember";
+import { get } from "Ember";
 import UserIndexRoute from "routes/UserIndexRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import ModelMetadataMixin from "mixins/ModelMetadataMixin";
 import toArray from "utils/ember/toArray";
 import mapBy from "utils/ember/mapBy";
 import preload from "utils/preload";
-
-
-var get = Ember.get;
 
 
 export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {

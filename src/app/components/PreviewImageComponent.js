@@ -1,11 +1,11 @@
-import Ember from "Ember";
+import {
+	set,
+	Component
+} from "Ember";
 import layout from "templates/components/PreviewImageComponent.hbs";
 
 
-var set = Ember.set;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	classNames: [],

@@ -1,10 +1,10 @@
-import stat from "utils/node/fs/stat";
-import platform from "utils/node/platform";
+import { stat } from "utils/node/fs/stat";
+import { isWin } from "utils/node/platform";
 import PATH from "path";
 
 
 var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter );
-var exts  = platform.isWin ? [ ".exe" ] : [ "" ];
+var exts  = isWin ? [ ".exe" ] : [ "" ];
 var sep   = PATH.sep;
 
 

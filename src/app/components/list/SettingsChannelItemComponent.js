@@ -1,10 +1,9 @@
-import Ember from "Ember";
+import {
+	get,
+	set
+} from "Ember";
 import ListItemComponent from "components/list/ListItemComponent";
 import layout from "templates/components/list/SettingsChannelItemComponent.hbs";
-
-
-var get = Ember.get;
-var set = Ember.set;
 
 
 export default ListItemComponent.extend({

@@ -1,16 +1,21 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	computed
+} from "Ember";
+import { twitch } from "config";
 import openBrowser from "nwjs/openBrowser";
 import ListItemComponent from "components/list/ListItemComponent";
 import Moment from "Moment";
 import layout from "templates/components/list/SubscriptionItemComponent.hbs";
 
 
-var get = Ember.get;
-var alias = Ember.computed.alias;
-
-var subscriptionEditUrl   = config.twitch[ "subscription" ][ "edit-url" ];
-var subscriptionCancelUrl = config.twitch[ "subscription" ][ "cancel-url" ];
+const { alias } = computed;
+const {
+	subscription: {
+		"edit-url": subscriptionEditUrl,
+		"cancel-url": subscriptionCancelUrl
+	}
+} = twitch;
 
 
 export default ListItemComponent.extend({

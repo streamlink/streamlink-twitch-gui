@@ -1,13 +1,17 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	inject,
+	ObjectProxy
+} from "Ember";
 
 
-var get = Ember.get;
-var set = Ember.set;
+const { service } = inject;
 
 
 // A service object is just a regular object, so we can use an ObjectProxy as well
-export default Ember.ObjectProxy.extend({
-	store: Ember.inject.service(),
+export default ObjectProxy.extend({
+	store: service(),
 
 	content: null,
 

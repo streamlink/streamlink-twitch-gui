@@ -1,17 +1,16 @@
-import config from "config";
-import nwGui from "nwjs/nwGui";
+import { main } from "config";
+import { MenuItem } from "nwjs/nwGui";
 import nwWindow from "nwjs/nwWindow";
 import Menu from "nwjs/menu";
-import platform from "utils/node/platform";
+import { isDarwin } from "utils/node/platform";
 
 
-var MenuItem = nwGui.MenuItem;
-var isDarwin = platform.isDarwin;
-
-var displayName = config.main[ "display-name" ];
+const { "display-name": displayName } = main;
 
 
-function createNativeMenuBarDarwin( controller ) {
+export function createNativeMenuBar( controller ) {
+	if ( !isDarwin ) { return; }
+
 	var menubar = Menu.create({ type: "menubar" });
 	menubar.createMacBuiltin( displayName );
 	menubar = menubar.menu;
@@ -39,14 +38,5 @@ function createNativeMenuBarDarwin( controller ) {
 	refresh.click = controller.send.bind( controller, "refresh" );
 	viewMenu.insert( refresh, 0 );
 
-	return menubar;
+	nwWindow.menu = menubar;
 }
-
-
-export default {
-	createNativeMenuBar: function( controller ) {
-		if ( !isDarwin ) { return; }
-
-		nwWindow.menu = createNativeMenuBarDarwin( controller );
-	}
-};

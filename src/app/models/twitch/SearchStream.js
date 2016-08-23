@@ -1,10 +1,10 @@
-import DS from "EmberData";
+import {
+	belongsTo,
+	Model
+} from "EmberData";
 
 
-var belongsTo = DS.belongsTo;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	stream: belongsTo( "twitchStream", { async: false } )
 
 }).reopenClass({

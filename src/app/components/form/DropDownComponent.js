@@ -1,13 +1,13 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	Component
+} from "Ember";
 import {} from "Selecter";
 import layout from "templates/components/form/DropDownComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "select",

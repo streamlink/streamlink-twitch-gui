@@ -1,8 +1,9 @@
-import nwGui from "nwjs/nwGui";
+import { Screen } from "nwjs/nwGui";
 
 
-var nwScreen = nwGui.Screen.Init();
-nwScreen.removeAllListeners();
+/* global -screen */
+const screen = Screen.Init();
+screen.removeAllListeners();
 
 
-export default nwScreen;
+export default screen;

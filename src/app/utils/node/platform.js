@@ -1,43 +1,31 @@
-import config from "config";
-import semver from "utils/semver";
+import { dirs } from "config";
+import { sort } from "utils/semver";
 import OS from "os";
 import PATH from "path";
 
 
-var platform = OS.platform();
-var release  = OS.release();
+export const platform = OS.platform();
+export const release  = OS.release();
+
 
 function isVersionGte( version ) {
-	return semver.sort([ release, version ]).shift() === version;
+	return sort([ release, version ]).shift() === version;
 }
 
 
-var isWin    = platform === "win32";
-var isDarwin = platform === "darwin";
-var isLinux  = platform === "linux";
+export const isWin    = platform === "win32";
+export const isDarwin = platform === "darwin";
+export const isLinux  = platform === "linux";
 
-var isWinGte8 = isWin && isVersionGte( "6.2.0" );
+export const isWinGte8 = isWin && isVersionGte( "6.2.0" );
 
 
-var slice = [].slice;
-var tmpdirName = config.dirs[ "temp" ];
-var tmpdirRoot = [ OS.tmpdir(), tmpdirName ];
+const slice = [].slice;
+const { temp: tmpdirName } = dirs;
+const tmpdirRoot = [ OS.tmpdir(), tmpdirName ];
 
-function tmpdir() {
-	var args = slice.call( arguments );
+
+export function tmpdir() {
+	let args = slice.call( arguments );
 	return PATH.resolve.apply( PATH, tmpdirRoot.concat( args ) );
 }
-
-
-export default {
-	platform,
-	release,
-
-	isWin,
-	isDarwin,
-	isLinux,
-
-	isWinGte8,
-
-	tmpdir
-};

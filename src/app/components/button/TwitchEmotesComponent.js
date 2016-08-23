@@ -1,18 +1,20 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	computed,
+	inject
+} from "Ember";
+import { twitch } from "config";
 import openBrowser from "nwjs/openBrowser";
 import FormButtonComponent from "components/button/FormButtonComponent";
 
 
-var get = Ember.get;
-var and = Ember.computed.and;
-var or = Ember.computed.or;
-
-var twitchEmotesUrl = config.twitch[ "emotes-url" ];
+const { and, or } = computed;
+const { service } = inject;
+const { "emotes-url": twitchEmotesUrl } = twitch;
 
 
 export default FormButtonComponent.extend({
-	settings: Ember.inject.service(),
+	settings: service(),
 
 	showButton: false,
 	isEnabled : or( "showButton", "settings.content.gui_twitchemotes" ),

@@ -1,9 +1,9 @@
-import Ember from "Ember";
+import { Component } from "Ember";
 import Menu from "nwjs/menu";
-import clipboard from "nwjs/clipboard";
+import { set as setClipboard } from "nwjs/clipboard";
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	tagName: "div",
 
 	classNameBindings: [ "class" ],
@@ -25,7 +25,7 @@ export default Ember.Component.extend({
 			label  : "Copy selection",
 			enabled: selected.length,
 			click  : function() {
-				clipboard.set( selected );
+				setClipboard( selected );
 			}
 		});
 

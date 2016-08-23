@@ -1,38 +1,44 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	set,
+	inject,
+	Evented,
+	Service
+} from "Ember";
+import { twitch } from "config";
 import nwWindow from "nwjs/nwWindow";
 import openBrowser from "nwjs/openBrowser";
-import contains from "utils/contains";
+import { all } from "utils/contains";
 import HttpServer from "utils/node/http/Server";
 import OAuthResponseRedirect from "root/oauth-redirect.html";
 
 
-var get = Ember.get;
-var set = Ember.set;
+const { service } = inject;
+const {
+	oauth: {
+		"base-uri": baseuri,
+		"client-id": clientid,
+		"server-port": serverport,
+		"redirect-uri": redirecturi,
+		"scope": scope
+	}
+} = twitch;
 
-var oauth = config.twitch[ "oauth" ];
-
-var reToken = /^[a-z\d]{30}$/i;
+const reToken = /^[a-z\d]{30}$/i;
 
 
-export default Ember.Service.extend( Ember.Evented, {
-	store: Ember.inject.service(),
+export default Service.extend( Evented, {
+	store: service(),
 
 	session: null,
 	server: null,
 
 	url: function() {
-		var baseuri     = oauth[ "base-uri" ];
-		var clientid    = oauth[ "client-id" ];
-		var serverport  = oauth[ "server-port" ];
-		var redirecturi = oauth[ "redirect-uri" ];
-		var scope       = oauth[ "scope" ];
-
-		redirecturi = redirecturi.replace( "{server-port}", String( serverport ) );
+		let redirect = redirecturi.replace( "{server-port}", String( serverport ) );
 
 		return baseuri
 			.replace( "{client-id}", clientid )
-			.replace( "{redirect-uri}", encodeURIComponent( redirecturi ) )
+			.replace( "{redirect-uri}", encodeURIComponent( redirect ) )
 			.replace( "{scope}", scope.join( "+" ) );
 	}.property(),
 
@@ -81,8 +87,7 @@ export default Ember.Service.extend( Ember.Evented, {
 		var self  = this;
 		var defer = Promise.defer();
 
-		var port   = oauth[ "server-port" ];
-		var server = new HttpServer( port, 1000 );
+		var server = new HttpServer( serverport, 1000 );
 		set( self, "server", server );
 
 		server.onRequest( "GET", "/redirect", function( req, res ) {
@@ -233,14 +238,12 @@ export default Ember.Service.extend( Ember.Evented, {
 
 	/**
 	 * Received and expected scopes need to be identical
-	 * @param {Array} scope
+	 * @param {Array} returnedScope
 	 * @returns {boolean}
 	 */
-	validateScope: function( scope ) {
-		var expected = oauth[ "scope" ];
-
-		return scope instanceof Array
-		    && contains.all.apply( scope, expected );
+	validateScope: function( returnedScope ) {
+		return returnedScope instanceof Array
+		    && all.apply( returnedScope, scope );
 	},
 
 

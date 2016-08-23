@@ -1,18 +1,26 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	set,
+	getWithDefault,
+	$,
+	computed,
+	inject,
+	run,
+	Component
+} from "Ember";
+import { vars } from "config";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import layout from "templates/components/SearchBarComponent.hbs" ;
 
 
-var get = Ember.get;
-var set = Ember.set;
-var sort = Ember.computed.sort;
+const { sort } = computed;
+const { service } = inject;
+const { next } = run;
+const { "search-history-size": searchHistorySize } = vars;
 
-var searchHistorySize = config.vars[ "search-history-size" ];
 
-
-export default Ember.Component.extend({
-	store   : Ember.inject.service(),
+export default Component.extend({
+	store: service(),
 
 	layout,
 	tagName: "nav",
@@ -69,7 +77,7 @@ export default Ember.Component.extend({
 		}
 
 		// create a new record
-		var id = 1 + Number( Ember.getWithDefault( model, "lastObject.id", 0 ) );
+		var id = 1 + Number( getWithDefault( model, "lastObject.id", 0 ) );
 		var date = new Date();
 		record = store.createRecord( "search", {
 			id,
@@ -114,11 +122,11 @@ export default Ember.Component.extend({
 		var dropdown = $element.find( ".searchbar-dropdown" )[0];
 		var button   = $element.find( ".btn-dropdown" )[0];
 		var search   = $element.find( "input[type='search']" ).focus(function() {
-			Ember.run.next( this, this.select );
+			next( this, this.select );
 		})[0];
 
-		Ember.$( document.body ).click(function( event ) {
-			var $target = Ember.$( event.target );
+		$( document.body ).click(function( event ) {
+			var $target = $( event.target );
 			// ignore clicks on the input, the dropdown button and on the dropdown itself
 			if (
 				   !$target.closest( search ).length

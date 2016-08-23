@@ -1,15 +1,15 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	computed
+} from "Ember";
+import { twitch } from "config";
 import openBrowser from "nwjs/openBrowser";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
 
 
-var get = Ember.get;
-var and = Ember.computed.and;
-var alias = Ember.computed.alias;
-
-var subscriptionCreateUrl = config.twitch[ "subscription" ][ "create-url" ];
+const { alias, and } = computed;
+const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
 
 
 export default FormButtonComponent.extend( TwitchInteractButtonMixin, {

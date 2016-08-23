@@ -1,10 +1,13 @@
 import denodify from "utils/node/denodify";
-import stat from "utils/node/fs/stat";
+import {
+	stat,
+	isDirectory
+} from "utils/node/fs/stat";
 import PATH from "path";
 import FS from "fs";
 
 
-var fsMkdir = denodify( FS.mkdir );
+const fsMkdir = denodify( FS.mkdir );
 
 
 /**
@@ -24,7 +27,7 @@ function mkdirp( dir ) {
 
 			} else {
 				// does the dir already exist?
-				return stat( dir, stat.isDirectory );
+				return stat( dir, isDirectory );
 			}
 		});
 }

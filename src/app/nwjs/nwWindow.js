@@ -1,8 +1,8 @@
-import nwGui from "nwjs/nwGui";
+import { Window } from "nwjs/nwGui";
 
 
 // get the main application window
-var nwWindow = nwGui.Window.get();
+const nwWindow = Window.get();
 nwWindow.removeAllListeners();
 
 nwWindow.window.addEventListener( "beforeunload", function() {

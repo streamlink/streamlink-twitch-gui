@@ -1,17 +1,18 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	RSVP,
+	Route
+} from "Ember";
 import toArray from "utils/ember/toArray";
 import preload from "utils/preload";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Route.extend({
+export default Route.extend({
 	model: function() {
 		var store = get( this, "store" );
 
-		return Ember.RSVP.hash({
+		return RSVP.hash({
 			summary : store.findAll( "twitchStreamsSummary", { reload: true } )
 				.then( toArray ),
 			featured: store.query( "twitchStreamsFeatured", {

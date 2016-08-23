@@ -1,4 +1,4 @@
-import Ember from "Ember";
+import { Helper } from "Ember";
 
 
 function isEqual( currentValue, index, arr ) {
@@ -6,6 +6,6 @@ function isEqual( currentValue, index, arr ) {
 }
 
 
-export default Ember.Helper.helper(function( params ) {
+export default Helper.helper(function( params ) {
 	return params.every( isEqual );
 });

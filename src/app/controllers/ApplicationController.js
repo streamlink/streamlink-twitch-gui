@@ -1,17 +1,22 @@
-import Ember from "Ember";
+import {
+	get,
+	computed,
+	inject,
+	Controller
+} from "Ember";
 import nwWindow from "nwjs/nwWindow";
 
 
-var get = Ember.get;
-var readOnly = Ember.computed.readOnly;
+const { readOnly } = computed;
+const { service } = inject;
 
 
-export default Ember.Controller.extend({
-	auth        : Ember.inject.service(),
-	modal       : Ember.inject.service(),
-	notification: Ember.inject.service(),
-	settings    : Ember.inject.service(),
-	livestreamer: Ember.inject.service(),
+export default Controller.extend({
+	auth: service(),
+	livestreamer: service(),
+	modal: service(),
+	notification: service(),
+	settings: service(),
 
 	dev: DEBUG,
 

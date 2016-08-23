@@ -1,19 +1,21 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	set,
+	merge,
+	inject
+} from "Ember";
+import { vars } from "config";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import LanguageFilterMixin from "mixins/LanguageFilterMixin";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var merge = Ember.merge;
-
-var randomMax = config.vars[ "random-max"] || 100;
+const { service } = inject;
+const { "random-max": randomMax } = vars;
 
 
 export default FormButtonComponent.extend( LanguageFilterMixin, {
-	store       : Ember.inject.service(),
-	livestreamer: Ember.inject.service(),
+	livestreamer: service(),
+	store: service(),
 
 	"class": "btn-info",
 

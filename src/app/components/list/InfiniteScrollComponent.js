@@ -1,18 +1,21 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	$,
+	computed,
+	run,
+	Component
+} from "Ember";
 import layout from "templates/components/list/InfiniteScrollComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var scheduleOnce = Ember.run.scheduleOnce;
-var alias = Ember.computed.alias;
-var or = Ember.computed.or;
+const { alias, or } = computed;
+const { scheduleOnce } = run;
 
-var $ = Ember.$;
-var $window = $( window );
+const $window = $( window );
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "button",

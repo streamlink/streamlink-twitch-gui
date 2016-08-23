@@ -1,8 +1,8 @@
-import Ember from "Ember";
+import {
+	get,
+	Component
+} from "Ember";
 import layout from "templates/components/SettingsRowComponent.hbs";
-
-
-var get = Ember.get;
 
 
 /**
@@ -27,7 +27,7 @@ function getSubstitutionsList( substitutions ) {
 }
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	classNames: [ "settings-row-component" ],

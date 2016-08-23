@@ -1,15 +1,17 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	Controller
+} from "Ember";
+import { main } from "config";
 import metadata from "metadata";
 
 
-var get = Ember.get;
+const { "nwjs-version": nwjsVersion } = main;
 
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 	metadata,
-
-	nwjsVersion: config.main[ "nwjs-version" ],
+	nwjsVersion,
 
 	dependencies: function() {
 		var deps = get( this, "metadata.dependencies" );

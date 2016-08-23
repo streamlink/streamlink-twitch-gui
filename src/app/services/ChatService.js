@@ -1,20 +1,26 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	inject,
+	run,
+	Service
+} from "Ember";
+import {
+	chat as chatApplications,
+	twitch
+} from "config";
 import openBrowser from "nwjs/openBrowser";
 import Parameter from "utils/Parameter";
 import ParameterCustom from "utils/ParameterCustom";
 import Substitution from "utils/Substitution";
 import whichFallback from "utils/node/fs/whichFallback";
-import stat from "utils/node/fs/stat";
+import { stat } from "utils/node/fs/stat";
 import CP from "child_process";
 import PATH from "path";
 
 
-var get = Ember.get;
-var run = Ember.run;
-
-var twitchChatUrl = config.twitch[ "chat-url" ];
-var chatApplications = config.chat;
+const { service } = inject;
+const { next } = run;
+const { "chat-url": twitchChatUrl } = twitch;
 
 
 function launch( exec, params ) {
@@ -25,14 +31,14 @@ function launch( exec, params ) {
 		});
 		spawn.unref();
 		spawn.on( "error", reject );
-		run.next( resolve );
+		next( resolve );
 	});
 }
 
 
-export default Ember.Service.extend({
-	settings: Ember.inject.service(),
-	auth: Ember.inject.service(),
+export default Service.extend({
+	auth: service(),
+	settings: service(),
 
 
 	/**
@@ -76,7 +82,7 @@ export default Ember.Service.extend({
 	_openDefaultBrowser: function( url ) {
 		return new Promise(function( resolve ) {
 			openBrowser( url );
-			run.next( resolve );
+			next( resolve );
 		});
 	},
 

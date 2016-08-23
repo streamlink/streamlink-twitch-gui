@@ -1,8 +1,5 @@
-import Ember from "Ember";
+import { get } from "Ember";
 import InputBtnComponent from "components/form/InputBtnComponent";
-
-
-var get = Ember.get;
 
 
 export default InputBtnComponent.extend({

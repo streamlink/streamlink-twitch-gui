@@ -1,14 +1,12 @@
-import Ember from "Ember";
-import DS from "EmberData";
+import {
+	get,
+	set,
+	EmberObject
+} from "Ember";
+import { PromiseObject } from "EmberData";
 import SettingsSubmenuRoute from "routes/SettingsSubmenuRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import preload from "utils/preload";
-
-
-var get = Ember.get;
-var set = Ember.set;
-var EmberObject = Ember.Object;
-var PromiseObject = DS.PromiseObject;
 
 
 export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {

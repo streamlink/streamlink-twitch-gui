@@ -1,10 +1,10 @@
-import Ember from "Ember";
+import {
+	getOwner,
+	Route
+} from "Ember";
 
 
-var getOwner = Ember.getOwner;
-
-
-export default Ember.Route.extend({
+export default Route.extend({
 	model: function() {
 		return this.modelFor( "channel" );
 	},

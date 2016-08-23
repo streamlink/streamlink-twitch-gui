@@ -1,13 +1,14 @@
-import Ember from "Ember";
+import {
+	get,
+	computed,
+	Controller
+} from "Ember";
 
 
-var get = Ember.get;
-var alias = Ember.computed.alias;
-var empty = Ember.computed.empty;
-var equal = Ember.computed.equal;
+const { alias, empty, equal } = computed;
 
 
-export default Ember.Controller.extend({
+export default Controller.extend({
 	queryParams: [ "filter", "query" ],
 
 	games   : alias( "model.games" ),

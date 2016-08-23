@@ -1,9 +1,6 @@
-import Ember from "Ember";
-import clipboard from "nwjs/clipboard";
+import { get } from "Ember";
+import { set as setClipboard } from "nwjs/clipboard";
 import FormButtonComponent from "components/button/FormButtonComponent";
-
-
-var get = Ember.get;
 
 
 export default FormButtonComponent.extend({
@@ -16,7 +13,7 @@ export default FormButtonComponent.extend({
 
 	actions: {
 		"share": function( success, failure ) {
-			clipboard.set( get( this, "channel.url" ) )
+			setClipboard( get( this, "channel.url" ) )
 				.then( success, failure )
 				.catch(function() {});
 		}

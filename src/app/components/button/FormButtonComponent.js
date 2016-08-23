@@ -1,16 +1,19 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	makeArray,
+	$,
+	computed,
+	Component
+} from "Ember";
 import layout from "templates/components/button/FormButtonComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var makeArray = Ember.makeArray;
-var equal = Ember.computed.equal;
-var $ = Ember.$;
+const { equal } = computed;
 
-var STATE_LOADING = -1;
-var STATE_FAILURE =  0;
-var STATE_SUCCESS =  1;
+const STATE_LOADING = -1;
+const STATE_FAILURE =  0;
+const STATE_SUCCESS =  1;
 
 function iconAnimation( status, data ) {
 	var defer = Promise.defer();
@@ -25,7 +28,7 @@ function iconAnimation( status, data ) {
 }
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "",

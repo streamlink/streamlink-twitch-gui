@@ -1,34 +1,49 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	set,
+	setProperties,
+	getOwner,
+	computed,
+	inject,
+	run,
+	Service
+} from "Ember";
+import {
+	files,
+	notification
+} from "config";
 import nwWindow from "nwjs/nwWindow";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import toArray from "utils/ember/toArray";
 import mapBy from "utils/ember/mapBy";
-import platform from "utils/node/platform";
+import { tmpdir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
 import download from "utils/node/fs/download";
 import clearfolder from "utils/node/fs/clearfolder";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var getOwner = Ember.getOwner;
-var setProperties = Ember.setProperties;
-var and = Ember.computed.and;
-var cancel = Ember.run.cancel;
-var debounce = Ember.run.debounce;
-var later = Ember.run.later;
+const { and } = computed;
+const { service } = inject;
+const { cancel, debounce, later } = run;
+const {
+	cache: {
+		"dir": cacheDir,
+		"time": cacheTime
+	},
+	fails: {
+		"requests": failsRequests,
+		"channels": failsChannels
+	},
+	interval: {
+		"request": intervalSuccess,
+		"retry": intervalRetry,
+		"error": intervalError
+	}
+} = notification;
+const { icons: { "big": iconGroup } } = files;
 
-var intervalSuccess = config.notification[ "interval" ][ "requests" ] || 60000;
-var intervalRetry = config.notification[ "interval" ][ "retry" ] || 1000;
-var intervalError = config.notification[ "interval" ][ "error" ] || 120000;
-var failsRequests = config.notification[ "fails" ][ "requests" ];
-var failsChannels = config.notification[ "fails" ][ "channels" ];
-var cacheDir = platform.tmpdir( config.notification[ "cache" ][ "dir" ] );
-var cacheTime = config.notification[ "cache" ][ "time" ];
-var iconGroup = config.files[ "icons" ][ "big" ];
-
-var Notif = window.Notification;
+const cacheTmpDir = tmpdir( cacheDir );
+const Notif = window.Notification;
 
 
 function StreamCache( stream ) {
@@ -52,12 +67,12 @@ StreamCache.prototype.isNotNewer = function( stream ) {
 };
 
 
-export default Ember.Service.extend( ChannelSettingsMixin, {
-	store       : Ember.inject.service(),
-	settings    : Ember.inject.service(),
-	auth        : Ember.inject.service(),
-	livestreamer: Ember.inject.service(),
-	chat        : Ember.inject.service(),
+export default Service.extend( ChannelSettingsMixin, {
+	auth: service(),
+	chat: service(),
+	livestreamer: service(),
+	settings: service(),
+	store: service(),
 
 
 	model : [],
@@ -218,7 +233,7 @@ export default Ember.Service.extend( ChannelSettingsMixin, {
 
 	success: function() {
 		// query again
-		var next = later( this, this.check, intervalSuccess );
+		let next = later( this, this.check, intervalSuccess );
 
 		setProperties( this, {
 			_error: false,
@@ -340,7 +355,7 @@ export default Ember.Service.extend( ChannelSettingsMixin, {
 		// show all notifications
 		} else {
 			// download all channel icons first and save them into a local temp dir...
-			return mkdirp( cacheDir )
+			return mkdirp( cacheTmpDir )
 				.then(function( iconTempDir ) {
 					return Promise.all( streams.map(function( stream ) {
 						var logo = get( stream, "channel.logo" );
@@ -433,7 +448,7 @@ export default Ember.Service.extend( ChannelSettingsMixin, {
 
 
 	gc_icons: function() {
-		return clearfolder( cacheDir, cacheTime )
+		return clearfolder( cacheTmpDir, cacheTime )
 			// always resolve
 			.catch(function() {});
 	}

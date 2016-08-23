@@ -1,4 +1,7 @@
-import stat from "utils/node/fs/stat";
+import {
+	stat,
+	isDirectory
+} from "utils/node/fs/stat";
 import mkdirp from "utils/node/fs/mkdirp";
 import PATH from "path";
 import FS from "fs";
@@ -6,7 +9,7 @@ import HTTP from "http";
 import HTTPS from "https";
 
 
-var reScheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
+const reScheme = /^(?:http(s)?):\/\/(?:.*\/)+([^\/]+)?$/i;
 
 
 /**
@@ -28,7 +31,7 @@ function download( url, dir, name ) {
 		// file does not exist
 		.catch(function() {
 			// check if the directory exists
-			return stat( dir, stat.isDirectory )
+			return stat( dir, isDirectory )
 				// try to create directory
 				.catch( mkdirp.bind( null, dir ) )
 				// now start the download

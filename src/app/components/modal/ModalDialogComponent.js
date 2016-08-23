@@ -1,12 +1,16 @@
-import Ember from "Ember";
+import {
+	get,
+	inject,
+	Component
+} from "Ember";
 import layout from "templates/components/modal/ModalDialogComponent.hbs";
 
 
-var get = Ember.get;
+const { service } = inject;
 
 
-export default Ember.Component.extend({
-	modal: Ember.inject.service(),
+export default Component.extend({
+	modal: service(),
 
 	layout,
 

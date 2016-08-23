@@ -1,11 +1,15 @@
-import Ember from "Ember";
+import {
+	get,
+	inject,
+	Route
+} from "Ember";
 
 
-var get = Ember.get;
+const { service } = inject;
 
 
-export default Ember.Route.extend({
-	auth: Ember.inject.service(),
+export default Route.extend({
+	auth: service(),
 
 	disableAutoRefresh: true,
 

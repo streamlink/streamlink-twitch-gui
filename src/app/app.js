@@ -1,4 +1,4 @@
-import Ember from "Ember";
+import { Application } from "Ember";
 import DS from "EmberData";
 import {} from "EmberDataLS";
 import nwWindow from "nwjs/nwWindow";
@@ -266,7 +266,7 @@ import AboutController from "controllers/AboutController";
 import AboutTemplate from "templates/About.hbs";
 
 
-export default Ember.Application.create({
+export default Application.create({
 
 	// Configuration
 	rootElement: document.documentElement,

@@ -1,18 +1,21 @@
 /* jshint quotmark:false */
-import QUnit from "QUnit";
+import {
+	module,
+	test
+} from "QUnit";
 import Parameter from "utils/Parameter";
 import ParameterCustom from "utils/ParameterCustom";
 import Substitution from "utils/Substitution";
 
 
-var subst = Substitution.substitute;
-var getParams = Parameter.getParameters;
+const { substitute: subst } = Substitution;
+const { getParameters: getParams } = Parameter;
 
 
-QUnit.module( "Parameters", {} );
+module( "Parameters", {} );
 
 
-QUnit.test( "Substitutions", function( assert ) {
+test( "Substitutions", function( assert ) {
 
 	var foo = new Substitution( "foo", "foo" );
 	var bar = new Substitution( "bar", "bar" );
@@ -111,7 +114,7 @@ QUnit.test( "Substitutions", function( assert ) {
 });
 
 
-QUnit.test( "Parameters", function( assert ) {
+test( "Parameters", function( assert ) {
 
 	var obj = {
 		a: "a",
@@ -210,7 +213,7 @@ QUnit.test( "Parameters", function( assert ) {
 });
 
 
-QUnit.test( "Substituted parameters", function( assert ) {
+test( "Substituted parameters", function( assert ) {
 
 	var obj = {
 		foo: "f o o",
@@ -268,7 +271,7 @@ QUnit.test( "Substituted parameters", function( assert ) {
 });
 
 
-QUnit.test( "Custom parameters", function( assert ) {
+test( "Custom parameters", function( assert ) {
 
 	var obj = {
 		a: "--foo --bar",

@@ -1,11 +1,11 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	Controller
+} from "Ember";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Controller.extend({
+export default Controller.extend({
 	queryParams: [ "all" ],
 
 	actions: {

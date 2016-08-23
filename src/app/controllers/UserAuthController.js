@@ -1,18 +1,21 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	set,
+	inject,
+	Controller
+} from "Ember";
+import { twitch } from "config";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 import wait from "utils/wait";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-var oauth = config.twitch[ "oauth" ];
+const { service } = inject;
+const { oauth: { scope } } = twitch;
 
 
-export default Ember.Controller.extend( RetryTransitionMixin, {
-	auth    : Ember.inject.service(),
-	settings: Ember.inject.service(),
+export default Controller.extend( RetryTransitionMixin, {
+	auth: service(),
+	settings: service(),
 
 	retryTransition: function() {
 		// use "user.index" as default route
@@ -21,9 +24,7 @@ export default Ember.Controller.extend( RetryTransitionMixin, {
 
 	token: "",
 
-	scope: function() {
-		return oauth[ "scope" ].join( ", " );
-	}.property(),
+	scope: scope.join( ", " ),
 
 	/**
 	 * 0 000: start

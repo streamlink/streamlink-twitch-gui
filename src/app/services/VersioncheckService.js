@@ -1,22 +1,25 @@
-import Ember from "Ember";
-import config from "config";
-import nwGui from "nwjs/nwGui";
-import argv from "nwjs/argv";
-import semver from "utils/semver";
+import {
+	get,
+	set,
+	inject,
+	Service
+} from "Ember";
+import { update } from "config";
+import { App } from "nwjs/nwGui";
+import { versioncheck as argVersioncheck } from "nwjs/argv";
+import { getMax } from "utils/semver";
 
 
-var get = Ember.get;
-var set = Ember.set;
+const { service } = inject;
+const { "check-again": checkAgain } = update;
+const { manifest: { version } } = App;
 
 
-var checkAgain = config.update[ "check-again" ];
+export default Service.extend({
+	modal: service(),
+	store: service(),
 
-
-export default Ember.Service.extend({
-	store   : Ember.inject.service(),
-	modal   : Ember.inject.service(),
-
-	version: nwGui.App.manifest.version,
+	version,
 
 
 	model: null,
@@ -51,7 +54,7 @@ export default Ember.Service.extend({
 
 		// if version string is empty, go on (new version)
 		// ignore if version string >= (not <) installed version metadata
-		if ( version && semver.getMax([ version, current ]) === version ) {
+		if ( version && getMax([ version, current ]) === version ) {
 			return true;
 		}
 
@@ -61,7 +64,7 @@ export default Ember.Service.extend({
 
 		// don't show modal if versioncheck is enabled (manual upgrades)
 		// manual upgrades -> user has (most likely) seen changelog already
-		if ( argv.versioncheck ) {
+		if ( argVersioncheck ) {
 			return true;
 		}
 
@@ -93,7 +96,7 @@ export default Ember.Service.extend({
 
 	checkForNewRelease: function() {
 		// don't check for new releases if disabled
-		if ( !argv.versioncheck ) { return; }
+		if ( !argVersioncheck ) { return; }
 
 		var checkagain = get( this, "model.checkagain" );
 		if ( checkagain <= +new Date() ) {
@@ -121,9 +124,9 @@ export default Ember.Service.extend({
 		// create a fake record for the current version and save a reference
 		var current = { tag_name: "v" + get( this, "version" ) };
 		// find out the maximum of fetched releases
-		var maximum = semver.getMax( releases, getVers );
+		var maximum = getMax( releases, getVers );
 		// and compare it with the current version
-		var latest  = semver.getMax( [ current, maximum ], getVers );
+		var latest  = getMax( [ current, maximum ], getVers );
 
 		// no new release? check again in a few days
 		if ( current === latest || getVers( current ) === getVers( latest ) ) {

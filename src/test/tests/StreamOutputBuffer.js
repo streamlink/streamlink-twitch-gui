@@ -1,11 +1,14 @@
-import QUnit from "QUnit";
+import {
+	module,
+	test
+} from "QUnit";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 
 
-QUnit.module( "StreamOutputBuffer", {} );
+module( "StreamOutputBuffer", {} );
 
 
-QUnit.test( "Single line output", function( assert ) {
+test( "Single line output", function( assert ) {
 
 	assert.expect( 10 );
 
@@ -31,7 +34,7 @@ QUnit.test( "Single line output", function( assert ) {
 });
 
 
-QUnit.test( "Multiple lines in one data chunk", function( assert ) {
+test( "Multiple lines in one data chunk", function( assert ) {
 
 	assert.expect( 5 );
 
@@ -47,7 +50,7 @@ QUnit.test( "Multiple lines in one data chunk", function( assert ) {
 });
 
 
-QUnit.test( "Buffer incomplete lines", function( assert ) {
+test( "Buffer incomplete lines", function( assert ) {
 
 	assert.expect( 2 * 2 + 3 );
 
@@ -76,7 +79,7 @@ QUnit.test( "Buffer incomplete lines", function( assert ) {
 });
 
 
-QUnit.test( "Buffer size", function( assert ) {
+test( "Buffer size", function( assert ) {
 
 	var buffer1 = new StreamOutputBuffer( { maxBuffSize: 1 }, function() {} );
 	assert.throws(function() {
@@ -93,7 +96,7 @@ QUnit.test( "Buffer size", function( assert ) {
 });
 
 
-QUnit.test( "Custom line delimiter", function( assert ) {
+test( "Custom line delimiter", function( assert ) {
 
 	assert.expect( 6 );
 

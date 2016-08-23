@@ -1,9 +1,9 @@
-import platform from "utils/node/platform";
+import { isWin } from "utils/node/platform";
 import PATH from "path";
 
 
-var reVarWindows = /%([^%]+)%/g;
-var reVarUnix    = /\$([A-Z_]+)/g;
+const reVarWindows = /%([^%]+)%/g;
+const reVarUnix    = /\$([A-Z_]+)/g;
 
 function fnVarReplace( _, v ) {
 	return process.env[ v ];
@@ -19,7 +19,7 @@ function resolvePathUnix( path ) {
 	return PATH.resolve( path );
 }
 
-var resolvePath = platform.isWin
+const resolvePath = isWin
 	? resolvePathWindows
 	: resolvePathUnix;
 

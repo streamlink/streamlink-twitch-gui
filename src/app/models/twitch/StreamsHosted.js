@@ -1,11 +1,11 @@
-import DS from "EmberData";
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
 
 
-var attr = DS.attr;
-var belongsTo = DS.belongsTo;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	display_name: attr( "string" ),
 	name: attr( "string" ),
 	// always side-load the target relation

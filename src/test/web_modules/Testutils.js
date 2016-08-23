@@ -1,41 +1,43 @@
-import Ember from "Ember";
+import Ember, {
+	get,
+	$,
+	run,
+	EmberObject
+} from "Ember";
 
 
-var get = Ember.get;
-var run = Ember.run;
-var $ = Ember.$;
-var reWhiteSpace = /\s+/g;
-
-var fixtureElement = "#qunit-fixture";
+const reWhiteSpace = /\s+/g;
 
 
-function runAppend( view ) {
+export const fixtureElement = "#qunit-fixture";
+
+export function runAppend( view ) {
 	run( view, "appendTo", fixtureElement );
 }
 
-function runDestroy( destroyed ) {
+export function runDestroy( destroyed ) {
 	if ( destroyed ) {
 		run( destroyed, "destroy" );
 	}
 }
 
-function getElem( component, selector ) {
+export function getElem( component, selector ) {
 	var element = get( component, "element" );
 	return selector && selector.length
 		? $( selector, element )
 		: $( element );
 }
 
-function getOutput( component, selector ) {
+export function getOutput( component, selector ) {
 	return getElem( component, selector ).text();
 }
 
-function cleanOutput( component, selector ) {
+export function cleanOutput( component, selector ) {
 	return getOutput( component, selector ).replace( reWhiteSpace, "" );
 }
 
-function buildOwner( properties ) {
-	var Owner = Ember.Object.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
+export function buildOwner( properties ) {
+	var Owner = EmberObject.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
 		init: function() {
 			this._super.apply( this, arguments );
 			var registry = new Ember.Registry( this._registryOptions );
@@ -49,14 +51,3 @@ function buildOwner( properties ) {
 
 	return owner;
 }
-
-
-export default {
-	fixtureElement,
-	runAppend,
-	runDestroy,
-	getElem,
-	getOutput,
-	cleanOutput,
-	buildOwner
-};

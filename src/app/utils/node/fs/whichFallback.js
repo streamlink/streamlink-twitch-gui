@@ -1,7 +1,10 @@
-import platform from "utils/node/platform";
+import { platform } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 import which from "utils/node/fs/which";
-import stat from "utils/node/fs/stat";
+import {
+	stat,
+	isExecutable
+} from "utils/node/fs/stat";
 import PATH from "path";
 
 
@@ -24,8 +27,8 @@ function whichFallback( exec, fallback, check ) {
 	if ( !exec ) {
 		return Promise.reject( new Error( "Missing executable name" ) );
 	// get executables for current platform
-	} else if ( exec.hasOwnProperty( platform.platform ) ) {
-		exec = exec[ platform.platform ];
+	} else if ( exec.hasOwnProperty( platform ) ) {
+		exec = exec[ platform ];
 	}
 
 	// always use a list of names
@@ -35,7 +38,7 @@ function whichFallback( exec, fallback, check ) {
 
 	// default file check callback
 	if ( !check ) {
-		check = stat.isExecutable;
+		check = isExecutable;
 	}
 
 
@@ -51,8 +54,8 @@ function whichFallback( exec, fallback, check ) {
 			if ( !fallback ) {
 				return Promise.reject( new Error( "Executables were not found" ) );
 			// get fallbacks for current platform
-			} else if ( fallback.hasOwnProperty( platform.platform ) ) {
-				fallback = fallback[ platform.platform ];
+			} else if ( fallback.hasOwnProperty( platform ) ) {
+				fallback = fallback[ platform ];
 			}
 
 			// always use a list of fallbacks

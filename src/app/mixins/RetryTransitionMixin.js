@@ -1,11 +1,11 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	Mixin
+} from "Ember";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 	/**
 	 * Retry a previously stored transition
 	 * @param {string?} route

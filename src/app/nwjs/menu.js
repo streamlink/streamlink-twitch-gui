@@ -1,12 +1,14 @@
-import Ember from "Ember";
-import nwGui from "nwjs/nwGui";
+import {
+	EmberObject,
+	Evented
+} from "Ember";
+import {
+	Menu,
+	MenuItem
+} from "nwjs/nwGui";
 
 
-var Menu = nwGui.Menu;
-var MenuItem = nwGui.MenuItem;
-
-
-export default Ember.Object.extend( Ember.Evented, {
+export default EmberObject.extend( Evented, {
 	type : "contextmenu",
 	menu : null,
 	items: null,

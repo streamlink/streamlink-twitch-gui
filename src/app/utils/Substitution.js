@@ -1,8 +1,8 @@
-import Ember from "Ember";
+import {
+	get,
+	makeArray
+} from "Ember";
 
-
-var get = Ember.get;
-var makeArray = Ember.makeArray;
 
 var reSubstitution = /(\{)?\{([a-z]+)}(})?/ig;
 var reWhitespace   = /\s+/g;

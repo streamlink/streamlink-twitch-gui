@@ -1,13 +1,15 @@
-import Ember from "Ember";
+import {
+	run,
+	Component
+} from "Ember";
 import Masonry from "Masonry";
 import layout from "templates/components/channel/ChannelPanelsComponent.hbs";
 
 
-var run = Ember.run;
-var scheduleOnce = run.scheduleOnce;
+const { scheduleOnce } = run;
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "section",

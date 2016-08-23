@@ -1,29 +1,35 @@
-import QUnit from "QUnit";
-import Testutils from "Testutils";
-import Ember from "Ember";
+import {
+	module,
+	test
+} from "QUnit";
+import {
+	runAppend,
+	runDestroy,
+	cleanOutput,
+	buildOwner
+} from "Testutils";
+import {
+	setOwner,
+	HTMLBars,
+	RSVP,
+	run,
+	Component
+} from "Ember";
 import ContentListComponent from "components/list/ContentListComponent";
 import IsGteHelper from "helpers/IsGteHelper";
 import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
 
 
-var runAppend = Testutils.runAppend;
-var runDestroy = Testutils.runDestroy;
-var cleanOutput = Testutils.cleanOutput;
-var buildOwner = Testutils.buildOwner;
+const { compile } = HTMLBars;
 
-var setOwner = Ember.setOwner;
-var run = Ember.run;
-var Component = Ember.Component;
-var compile = Ember.HTMLBars.compile;
-
-var owner, component;
+let owner, component;
 
 
-QUnit.module( "ContentListComponent", {
+module( "ContentListComponent", {
 	"setup": function() {
 		owner = buildOwner();
 		owner.register( "component:content-list", ContentListComponent );
-		owner.register( "component:infinite-scroll", Ember.Component.extend({}) );
+		owner.register( "component:infinite-scroll", Component.extend({}) );
 		owner.register( "helper:is-gte", IsGteHelper );
 		owner.register( "helper:has-own-property", HasOwnPropertyHelper );
 	},
@@ -36,7 +42,7 @@ QUnit.module( "ContentListComponent", {
 });
 
 
-QUnit.test( "Empty content", function( assert ) {
+test( "Empty content", function( assert ) {
 
 	var content = [];
 	var layout = compile(
@@ -54,7 +60,7 @@ QUnit.test( "Empty content", function( assert ) {
 });
 
 
-QUnit.test( "New items", function( assert ) {
+test( "New items", function( assert ) {
 
 	var content = [ 1, 2 ];
 	var layout = compile(
@@ -72,7 +78,7 @@ QUnit.test( "New items", function( assert ) {
 });
 
 
-QUnit.test( "Duplicates", function( assert ) {
+test( "Duplicates", function( assert ) {
 
 	var content = [ 1, 2 ];
 	var layout = compile(
@@ -90,7 +96,7 @@ QUnit.test( "Duplicates", function( assert ) {
 });
 
 
-QUnit.test( "Simple nested duplicates", function( assert ) {
+test( "Simple nested duplicates", function( assert ) {
 
 	var done = assert.async();
 	var content = [ { foo: 1 }, { foo: 2 } ];
@@ -116,11 +122,11 @@ QUnit.test( "Simple nested duplicates", function( assert ) {
 });
 
 
-QUnit.test( "Deferred nested duplicates", function( assert ) {
+test( "Deferred nested duplicates", function( assert ) {
 
 	var done = assert.async();
-	var a = Ember.RSVP.defer();
-	var b = Ember.RSVP.defer();
+	var a = RSVP.defer();
+	var b = RSVP.defer();
 
 	a.resolve( 1 );
 	var content = [ { foo: a.promise } ];

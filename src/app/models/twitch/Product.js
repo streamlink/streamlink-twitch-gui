@@ -1,12 +1,12 @@
-import DS from "EmberData";
+import {
+	attr,
+	belongsTo,
+	hasMany,
+	Model
+} from "EmberData";
 
 
-var attr = DS.attr;
-var belongsTo = DS.belongsTo;
-var hasMany = DS.hasMany;
-
-
-export default DS.Model.extend({
+export default Model.extend({
 	emoticons: hasMany( "twitchProductEmoticon", { async: false } ),
 	features: attr(),
 	interval_number: attr( "number" ),

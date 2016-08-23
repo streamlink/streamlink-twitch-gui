@@ -1,4 +1,4 @@
-import Ember from "Ember";
+import { Route } from "Ember";
 
 
-export default Ember.Route.extend({});
+export default Route.extend({});

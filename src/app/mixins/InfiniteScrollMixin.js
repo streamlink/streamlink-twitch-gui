@@ -1,8 +1,9 @@
-import Ember from "Ember";
-
-
-var get = Ember.get;
-var set = Ember.set;
+import {
+	get,
+	set,
+	Binding,
+	Mixin
+} from "Ember";
 
 
 var CSSMediaRule     = window.CSSMediaRule;
@@ -83,7 +84,7 @@ function getItemContainer() {
 }
 
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 	/**
 	 * Define the content array location.
 	 * Can't use a binding here!!!
@@ -143,7 +144,7 @@ export default Ember.Mixin.create({
 		var binding = get( this, "_binding_offset" );
 		if ( !binding ) {
 			var contentPath = get( this, "contentPath" );
-			binding = Ember.Binding.from( contentPath + ".length" ).to( "offset" );
+			binding = Binding.from( contentPath + ".length" ).to( "offset" );
 			set( this, "_binding_offset", binding );
 		}
 		binding.connect( this );

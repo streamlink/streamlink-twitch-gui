@@ -1,20 +1,26 @@
-import Ember from "Ember";
-import DS from "EmberData";
-import LivestreamerParameters from "models/LivestreamerParameters";
+import {
+	get,
+	set,
+	computed,
+	inject
+} from "Ember";
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
+import { parameters } from "models/LivestreamerParameters";
 import Parameter from "utils/Parameter";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var attr = DS.attr;
-var belongsTo = DS.belongsTo;
-var alias = Ember.computed.alias;
+const { alias } = computed;
+const { service } = inject;
 
 
 /**
  * @class Livestreamer
  */
-export default DS.Model.extend({
+export default Model.extend({
 	stream      : belongsTo( "twitchStream", { async: false } ),
 	channel     : belongsTo( "twitchChannel", { async: false } ),
 	quality     : attr( "number" ),
@@ -31,8 +37,8 @@ export default DS.Model.extend({
 	showLog: false,
 
 
-	auth    : Ember.inject.service(),
-	settings: Ember.inject.service(),
+	auth    : service(),
+	settings: service(),
 
 	session: alias( "auth.session" ),
 
@@ -60,7 +66,7 @@ export default DS.Model.extend({
 	parameters: function() {
 		return Parameter.getParameters(
 			this,
-			LivestreamerParameters.parameters,
+			parameters,
 			get( this, "settings.advanced" )
 		);
 	}.property().volatile()

@@ -11,12 +11,13 @@ function castToNumber( val ) {
 	return isNaN( num ) ? val : num;
 }
 
+
 /**
  * Split a matching semantic version string into a nested array of tokens
  * @param {string} value
  * @returns {Array|undefined}
  */
-function tokenize( value ) {
+export function tokenize( value ) {
 	var m = String( value ).match( reSemVer );
 	if ( !m ) { return undefined; }
 	return [
@@ -27,13 +28,14 @@ function tokenize( value ) {
 	];
 }
 
+
 /**
  * Compare function (Array.prototype.sort) for tokenized versions
  * @param {Array} left
  * @param {Array} right
  * @returns {number}
  */
-function compare( left, right ) {
+export function compare( left, right ) {
 	var typeL = !(  left instanceof Array );
 	var typeR = !( right instanceof Array );
 
@@ -99,13 +101,14 @@ function prepare( list, traverse ) {
 	});
 }
 
+
 /**
  * Get the highest version
  * @param {Object[]} list
  * @param {Function} [traverse]
  * @returns {Object} the record with the highest version string
  */
-function getMax( list, traverse ) {
+export function getMax( list, traverse ) {
 	// tokenize once and save original value
 	return prepare( list, traverse )
 	// then return the original value of the maximum
@@ -116,13 +119,14 @@ function getMax( list, traverse ) {
 		}).value;
 }
 
+
 /**
  * Sort an array of versions
  * @param {Object[]} list
  * @param {Function} [traverse]
  * @returns {Object[]} a new sorted array
  */
-function sort( list, traverse ) {
+export function sort( list, traverse ) {
 	// tokenize once and save original value
 	return prepare( list, traverse )
 	// then sort
@@ -134,11 +138,3 @@ function sort( list, traverse ) {
 			return object.value;
 		});
 }
-
-
-export default {
-	tokenize,
-	compare,
-	getMax,
-	sort
-};

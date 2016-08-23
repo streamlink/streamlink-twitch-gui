@@ -1,21 +1,28 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	set,
+	computed,
+	inject,
+	run
+} from "Ember";
+import { livestreamer } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import Settings from "models/localstorage/Settings";
 import openBrowser from "nwjs/openBrowser";
 import layout from "templates/components/modal/ModalLivestreamerComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var schedule = Ember.run.schedule;
-var readOnly = Ember.computed.readOnly;
-
-var livestreamerDownloadUrl = config.livestreamer[ "download-url" ];
+const { readOnly } = computed;
+const { service } = inject;
+const { schedule } = run;
+const {
+	"download-url": livestreamerDownloadUrl,
+	"version-min": versionMin
+} = livestreamer;
 
 
 export default ModalDialogComponent.extend({
-	livestreamer: Ember.inject.service(),
+	livestreamer: service(),
 
 	layout,
 
@@ -25,7 +32,7 @@ export default ModalDialogComponent.extend({
 	active: readOnly( "livestreamer.active" ),
 
 	qualities: Settings.qualities,
-	versionMin: config.livestreamer[ "version-min" ],
+	versionMin,
 
 
 	actions: {

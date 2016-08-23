@@ -1,14 +1,17 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	computed,
+	run,
+	Component
+} from "Ember";
 import layout from "templates/components/QuickBarComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var later = Ember.run.later;
-var cancel = Ember.run.cancel;
+const { cancel, later } = run;
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "div",
@@ -18,12 +21,12 @@ export default Ember.Component.extend({
 		"isLocked:locked"
 	],
 
-	isOpened: Ember.computed({
+	isOpened: computed({
 		get: function() {
 			return get( this, "isLocked" );
 		}
 	}),
-	isLocked: Ember.computed({
+	isLocked: computed({
 		get: function() {
 			return this.constructor.isLocked;
 		},

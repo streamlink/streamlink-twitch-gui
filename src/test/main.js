@@ -1,11 +1,14 @@
-import QUnit from "QUnit";
+import {
+	config,
+	start
+} from "QUnit";
 import {} from "EmberTest";
 import {} from "vendor/qunit/qunit/qunit.css";
 import {} from "vendor/ember/ember-template-compiler";
 
 
 // don't start automatically
-QUnit.config.autostart = false;
+config.autostart = false;
 
 // load tests and then start
 require([
@@ -18,4 +21,4 @@ require([
 	"tests/ContentListComponent",
 	"tests/InputBtnComponent",
 	"tests/getStreamFromUrl"
-], QUnit.start );
+], start );

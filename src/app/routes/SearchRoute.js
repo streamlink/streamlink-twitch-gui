@@ -1,18 +1,20 @@
-import Ember from "Ember";
+import {
+	get,
+	RSVP,
+	Route
+} from "Ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import toArray from "utils/ember/toArray";
 import mapBy from "utils/ember/mapBy";
 import preload from "utils/preload";
 
 
-var get = Ember.get;
-
 function filterMatches( filter, value ) {
 	return filter === "all" || filter === value;
 }
 
 
-export default Ember.Route.extend( InfiniteScrollMixin, {
+export default Route.extend( InfiniteScrollMixin, {
 	contentPath: "controller.model.streams",
 
 	itemSelector: ".stream-item-component",
@@ -31,7 +33,7 @@ export default Ember.Route.extend( InfiniteScrollMixin, {
 	model: function( params ) {
 		var store  = get( this, "store" );
 
-		return Ember.RSVP.hash({
+		return RSVP.hash({
 			// search for games
 			games: filterMatches( params.filter, "games" )
 				? store.query( "twitchSearchGame", {

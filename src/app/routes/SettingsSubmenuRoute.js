@@ -1,10 +1,10 @@
-import Ember from "Ember";
+import {
+	set,
+	Route
+} from "Ember";
 
 
-var set = Ember.set;
-
-
-export default Ember.Route.extend({
+export default Route.extend({
 	controllerName: "settings",
 
 	disableAutoRefresh: true,

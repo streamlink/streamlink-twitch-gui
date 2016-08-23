@@ -1,23 +1,27 @@
-import Ember from "Ember";
+import {
+	get,
+	getOwner,
+	inject,
+	Component
+} from "Ember";
 import Menu from "nwjs/menu";
-import clipboard from "nwjs/clipboard";
+import { set as setClipboard } from "nwjs/clipboard";
 import Settings from "models/localstorage/Settings";
 import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
 
 
-var get = Ember.get;
-var getOwner = Ember.getOwner;
+const { service } = inject;
 
-var actions = Settings.stream_click.reduce(function( obj, item ) {
+const actions = Settings.stream_click.reduce(function( obj, item ) {
 	obj[ item.key ] = item.id;
 	return obj;
 }, {} );
 
 
-export default Ember.Component.extend({
-	settings    : Ember.inject.service(),
-	livestreamer: Ember.inject.service(),
-	chat        : Ember.inject.service(),
+export default Component.extend({
+	chat: service(),
+	livestreamer: service(),
+	settings: service(),
 
 	layout,
 
@@ -165,7 +169,7 @@ export default Ember.Component.extend({
 
 	copyChannelURL: function() {
 		var url = get( this, "stream.channel.url" );
-		clipboard.set( url );
+		setClipboard( url );
 	},
 
 	gotoChannelPage: function() {

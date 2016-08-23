@@ -1,4 +1,4 @@
-import Ember from "Ember";
+import { Helper } from "Ember";
 
 
 function boolNot( value ) {
@@ -6,6 +6,6 @@ function boolNot( value ) {
 }
 
 
-export default Ember.Helper.helper(function( params ) {
+export default Helper.helper(function( params ) {
 	return params.every( boolNot );
 });

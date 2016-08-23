@@ -1,9 +1,12 @@
-import Ember from "Ember";
+import { TextField } from "Ember";
 import Menu from "nwjs/menu";
-import clipboard from "nwjs/clipboard";
+import {
+	get as getClipboard,
+	set as setClipboard
+} from "nwjs/clipboard";
 
 
-export default Ember.TextField.extend({
+export default TextField.extend({
 	attributeBindings: [ "autoselect:data-selectable" ],
 
 	autoselect: false,
@@ -15,7 +18,7 @@ export default Ember.TextField.extend({
 		var start   = element.selectionStart;
 		var end     = element.selectionEnd;
 
-		var clip    = clipboard.get();
+		var clip    = getClipboard();
 
 		var menu = Menu.create();
 
@@ -25,7 +28,7 @@ export default Ember.TextField.extend({
 				enabled: start !== end,
 				click  : function() {
 					var selected = element.value.substr( start, end - start );
-					clipboard.set( selected );
+					setClipboard( selected );
 				}
 			},
 			{

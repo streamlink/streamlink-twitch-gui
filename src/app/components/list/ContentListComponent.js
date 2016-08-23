@@ -1,13 +1,14 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	setProperties,
+	RSVP,
+	Component
+} from "Ember";
 import layout from "templates/components/list/ContentListComponent.hbs";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var setProperties = Ember.setProperties;
-
-
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "div",
@@ -66,7 +67,7 @@ export default Ember.Component.extend({
 
 
 		// wait for all potential DS.PromiseObjects to resolve first
-		Ember.RSVP.all( content ).then(function( content ) {
+		RSVP.all( content ).then(function( content ) {
 			for ( var found; index < length; index++ ) {
 				found = content.lastIndexOf( content[ index ], diff );
 				if ( found !== -1 ) {

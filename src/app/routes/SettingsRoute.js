@@ -1,16 +1,20 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	inject,
+	Route
+} from "Ember";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 
-var get = Ember.get;
-var set = Ember.set;
+const { service } = inject;
 
-var settingsRouteNames = /^settings\.\w+$/;
+const reRouteNames = /^settings\.\w+$/;
 
 
-export default Ember.Route.extend({
-	settings: Ember.inject.service(),
-	modal   : Ember.inject.service(),
+export default Route.extend({
+	modal: service(),
+	settings: service(),
 
 	disableAutoRefresh: true,
 
@@ -30,7 +34,7 @@ export default Ember.Route.extend({
 	actions: {
 		willTransition: function( previousTransition ) {
 			// don't show modal when transitioning between settings subroutes
-			if ( previousTransition && settingsRouteNames.test( previousTransition.targetName ) ) {
+			if ( previousTransition && reRouteNames.test( previousTransition.targetName ) ) {
 				return true;
 			}
 

@@ -1,14 +1,14 @@
-import nwGui from "nwjs/nwGui";
-import contains from "utils/contains";
+import { App } from "nwjs/nwGui";
+import { some } from "utils/contains";
 
 
-var argv = nwGui.App.fullArgv;
+const { fullArgv: argv } = App;
 
 
-export default {
-	"tray": contains.some.call( argv, "--tray", "--hide", "--hidden" ),
-	"max" : contains.some.call( argv, "--max", "--maximize", "--maximized" ),
-	"min" : contains.some.call( argv, "--min", "--minimize", "--minimized" ),
-	"resetwindow": contains.some.call( argv, "--reset-window" ),
-	"versioncheck": !contains.some.call( argv, "--no-version-check" )
-};
+export default argv;
+
+export const tray = some.call( argv, "--tray", "--hide", "--hidden" );
+export const max = some.call( argv, "--max", "--maximize", "--maximized" );
+export const min = some.call( argv, "--min", "--minimize", "--minimized" );
+export const resetwindow = some.call( argv, "--reset-window" );
+export const versioncheck = !some.call( argv, "--no-version-check" );

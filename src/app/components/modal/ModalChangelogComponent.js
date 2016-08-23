@@ -1,14 +1,13 @@
-import Ember from "Ember";
-import config from "config";
-import nwGui from "nwjs/nwGui";
+import { get } from "Ember";
+import { update } from "config";
+import { App } from "nwjs/nwGui";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import openBrowser from "nwjs/openBrowser";
 import layout from "templates/components/modal/ModalChangelogComponent.hbs";
 
 
-var get = Ember.get;
-
-var changelogUrl = config.update[ "changelog-url" ];
+const { "changelog-url": changelogUrl } = update;
+const { manifest: { version } } = App;
 
 
 export default ModalDialogComponent.extend({
@@ -16,7 +15,7 @@ export default ModalDialogComponent.extend({
 
 	"class": "modal-changelog",
 
-	version: nwGui.App.manifest.version,
+	version,
 
 
 	actions: {

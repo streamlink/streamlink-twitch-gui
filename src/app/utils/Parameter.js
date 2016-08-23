@@ -1,11 +1,12 @@
-import Ember from "Ember";
+import {
+	get,
+	isNone,
+	makeArray
+} from "Ember";
 import Substitution from "utils/Substitution";
 
 
-var get = Ember.get;
-var makeArray = Ember.makeArray;
-var isNone = Ember.isNone;
-var push = [].push;
+const push = [].push;
 
 
 /**

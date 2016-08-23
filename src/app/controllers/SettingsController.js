@@ -1,18 +1,23 @@
-import Ember from "Ember";
-import config from "config";
+import {
+	get,
+	set,
+	computed,
+	inject,
+	Controller
+} from "Ember";
+import {
+	langs,
+	themes
+} from "config";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
-import LivestreamerParameters from "models/LivestreamerParameters";
+import { playerSubstitutions } from "models/LivestreamerParameters";
 import Settings from "models/localstorage/Settings";
 import platform from "utils/node/platform";
 
 
-var get = Ember.get;
-var set = Ember.set;
-var alias = Ember.computed.alias;
-var equal = Ember.computed.equal;
-
-var themes = config.themes[ "themes" ];
-var langs  = config.langs;
+const { alias, equal } = computed;
+const { service } = inject;
+const { themes: themesList } = themes;
 
 
 function settingsAttrMeta( attr, prop ) {
@@ -22,10 +27,10 @@ function settingsAttrMeta( attr, prop ) {
 }
 
 
-export default Ember.Controller.extend( RetryTransitionMixin, {
-	settings: Ember.inject.service(),
-	modal   : Ember.inject.service(),
-	chat    : Ember.inject.service(),
+export default Controller.extend( RetryTransitionMixin, {
+	chat: service(),
+	modal: service(),
+	settings: service(),
 
 	isAnimated: false,
 
@@ -50,7 +55,7 @@ export default Ember.Controller.extend( RetryTransitionMixin, {
 	retryOpenMax    : settingsAttrMeta( "retry_open", "max" ),
 
 
-	substitutionsPlayer: LivestreamerParameters.playerSubstitutions,
+	substitutionsPlayer: playerSubstitutions,
 	substitutionsChatCustom: alias( "chat.substitutionsCustom" ),
 
 
@@ -67,7 +72,7 @@ export default Ember.Controller.extend( RetryTransitionMixin, {
 
 
 	themes: function() {
-		return themes.map(function( theme ) {
+		return themesList.map(function( theme ) {
 			return {
 				id   : theme,
 				label: theme.substr( 0, 1 ).toUpperCase() + theme.substr( 1 )

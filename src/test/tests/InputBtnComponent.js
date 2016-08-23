@@ -1,31 +1,38 @@
-import QUnit from "QUnit";
-import Testutils from "Testutils";
-import Ember from "Ember";
+import {
+	module,
+	test
+} from "QUnit";
+import {
+	runAppend,
+	runDestroy,
+	getElem,
+	cleanOutput,
+	buildOwner,
+	fixtureElement
+} from "Testutils";
+import {
+	get,
+	set,
+	setOwner,
+	HTMLBars,
+	run,
+	Component,
+	EventDispatcher
+} from "Ember";
 import CheckBoxComponent from "components/form/CheckBoxComponent";
 import RadioBtnComponent from "components/form/RadioBtnComponent";
 import RadioBtnsComponent from "components/form/RadioBtnsComponent";
 
 
-var runAppend = Testutils.runAppend;
-var runDestroy = Testutils.runDestroy;
-var getElem = Testutils.getElem;
-var cleanOutput = Testutils.cleanOutput;
-var buildOwner = Testutils.buildOwner;
+const { compile } = HTMLBars;
 
-var get = Ember.get;
-var set = Ember.set;
-var setOwner = Ember.setOwner;
-var run = Ember.run;
-var Component = Ember.Component;
-var compile = Ember.HTMLBars.compile;
+const eventDispatcher = EventDispatcher.create();
+eventDispatcher.setup( {}, fixtureElement );
 
-var eventDispatcher = Ember.EventDispatcher.create();
-eventDispatcher.setup( {}, Testutils.fixtureElement );
-
-var owner, context;
+let owner, context;
 
 
-QUnit.module( "InputBtnComponent", {
+module( "InputBtnComponent", {
 	"setup": function() {
 		owner = buildOwner();
 		owner.register( "component:check-box", CheckBoxComponent );
@@ -50,7 +57,7 @@ QUnit.module( "InputBtnComponent", {
 });
 
 
-QUnit.test( "CheckBoxComponent", function( assert ) {
+test( "CheckBoxComponent", function( assert ) {
 
 	context = Component.extend({
 		checked: true,
@@ -127,7 +134,7 @@ QUnit.test( "CheckBoxComponent", function( assert ) {
 });
 
 
-QUnit.test( "CheckBoxComponent - without block", function( assert ) {
+test( "CheckBoxComponent - without block", function( assert ) {
 
 	context = Component.extend({
 		label: "foo",
@@ -156,7 +163,7 @@ QUnit.test( "CheckBoxComponent - without block", function( assert ) {
 });
 
 
-QUnit.test( "RadioBtnsComponent - without block", function( assert ) {
+test( "RadioBtnsComponent - without block", function( assert ) {
 
 	var content = [
 		{
@@ -403,7 +410,7 @@ QUnit.test( "RadioBtnsComponent - without block", function( assert ) {
 });
 
 
-QUnit.test( "RadioBtnsComponent - with block", function( assert ) {
+test( "RadioBtnsComponent - with block", function( assert ) {
 
 	var content = [
 		{

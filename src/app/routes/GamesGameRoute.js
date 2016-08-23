@@ -1,4 +1,8 @@
-import Ember from "Ember";
+import {
+	get,
+	set,
+	Route
+} from "Ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import LanguageFilterMixin from "mixins/LanguageFilterMixin";
 import ModelMetadataMixin from "mixins/ModelMetadataMixin";
@@ -6,11 +10,7 @@ import toArray from "utils/ember/toArray";
 import preload from "utils/preload";
 
 
-var get = Ember.get;
-var set = Ember.set;
-
-
-export default Ember.Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMetadataMixin, {
+export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMetadataMixin, {
 	itemSelector: ".stream-item-component",
 
 	modelName: "twitchStream",

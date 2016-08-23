@@ -1,12 +1,11 @@
-import Ember from "Ember";
-import nwGui from "nwjs/nwGui";
+import {
+	get,
+	setProperties,
+	EmberObject
+} from "Ember";
+import { Tray } from "nwjs/nwGui";
 import Menu from "nwjs/menu";
 
-
-var get = Ember.get;
-var setProperties = Ember.setProperties;
-
-var Tray = nwGui.Tray;
 
 function getScale() {
 	var dpr = window.devicePixelRatio;
@@ -18,7 +17,7 @@ function getScale() {
 }
 
 
-export default Ember.Object.extend({
+export default EmberObject.extend({
 	tooltip: null,
 	icons  : null,
 	items  : null,

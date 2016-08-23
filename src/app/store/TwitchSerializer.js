@@ -1,7 +1,10 @@
-import DS from "EmberData";
+import {
+	EmbeddedRecordsMixin,
+	RESTSerializer
+} from "EmberData";
 
 
-export default DS.RESTSerializer.extend( DS.EmbeddedRecordsMixin, {
+export default RESTSerializer.extend( EmbeddedRecordsMixin, {
 	isNewSerializerAPI: true,
 
 	primaryKey: "_id",

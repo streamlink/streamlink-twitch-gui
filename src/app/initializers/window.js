@@ -1,24 +1,31 @@
-import Ember from "Ember";
-import nwGui from "nwjs/nwGui";
+import {
+	get,
+	setProperties,
+	run,
+	Application
+} from "Ember";
+import { App } from "nwjs/nwGui";
 import nwWindow from "nwjs/nwWindow";
 import nwScreen from "nwjs/nwScreen";
-import argv from "nwjs/argv";
-import platform from "utils/node/platform";
+import { resetwindow as argResetwindow } from "nwjs/argv";
+import { isWin } from "utils/node/platform";
 
 
-var get = Ember.get;
-var set = Ember.setProperties;
-var debounce = Ember.run.debounce;
+const { debounce } = run;
+const {
+	manifest: {
+		window: {
+			width: manifestWindowWidth,
+			height: manifestWindowHeight
+		}
+	}
+} = App;
 
-var manifest = nwGui.App.manifest;
+const concat = [].concat;
 
-var concat = [].concat;
-
-var isWin = platform.isWin;
-
-var timeEvent  = 1000;
-var timeIgnore = 2000;
-var ignore     = false;
+const timeEvent  = 1000;
+const timeIgnore = 2000;
+let ignore = false;
 
 
 function deferEvent( thisArg, fn ) {
@@ -30,7 +37,7 @@ function deferEvent( thisArg, fn ) {
 }
 
 function save( params ) {
-	set( this, params );
+	setProperties( this, params );
 	this.save();
 }
 
@@ -89,13 +96,11 @@ function resetWindow() {
 function resetWindowPosition() {
 	// use the DE's main screen and the minimum window size
 	var screen = nwScreen.screens[0].bounds;
-	var w = manifest.window.width;
-	var h = manifest.window.height;
 	// center the window and don't forget the screen offset
-	nwWindow.width  = w;
-	nwWindow.height = h;
-	nwWindow.x = Math.round( screen.x + ( screen.width  - w ) / 2 );
-	nwWindow.y = Math.round( screen.y + ( screen.height - h ) / 2 );
+	nwWindow.width  = manifestWindowWidth;
+	nwWindow.height = manifestWindowHeight;
+	nwWindow.x = Math.round( screen.x + ( screen.width  - manifestWindowWidth ) / 2 );
+	nwWindow.y = Math.round( screen.y + ( screen.height - manifestWindowHeight ) / 2 );
 	// also reset the saved window position
 	resetWindow.call( this );
 }
@@ -128,7 +133,7 @@ function isWindowFullyVisible() {
 }
 
 
-Ember.Application.instanceInitializer({
+Application.instanceInitializer({
 	name: "window",
 	before: [ "nwjs" ],
 	after: [ "ember-data" ],
@@ -144,7 +149,7 @@ Ember.Application.instanceInitializer({
 			})
 			.then(function( Window ) {
 				// reset window
-				if ( argv.resetwindow ) {
+				if ( argResetwindow ) {
 					resetWindow.call( Window );
 				} else {
 					restoreWindow.call( Window );

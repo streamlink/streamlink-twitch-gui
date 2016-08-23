@@ -1,11 +1,14 @@
-import Ember from "Ember";
+import {
+	computed,
+	Component
+} from "Ember";
 import layout from "templates/components/list/HeadlineTotalsComponent.hbs";
 
 
-var gte = Ember.computed.gte;
+const { gte } = computed;
 
 
-export default Ember.Component.extend({
+export default Component.extend({
 	layout,
 
 	tagName: "div",

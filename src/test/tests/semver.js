@@ -1,16 +1,18 @@
-import QUnit from "QUnit";
-import semver from "utils/semver";
+import {
+	module,
+	test
+} from "QUnit";
+import {
+	tokenize as t,
+	getMax as m,
+	sort as s
+} from "utils/semver";
 
 
-var t = semver.tokenize;
-var m = semver.getMax;
-var s = semver.sort;
+module( "Semantic versioning", {} );
 
 
-QUnit.module( "Semantic versioning", {} );
-
-
-QUnit.test( "Tokenization", function( assert ) {
+test( "Tokenization", function( assert ) {
 
 	assert.deepEqual(
 		[
@@ -65,7 +67,7 @@ QUnit.test( "Tokenization", function( assert ) {
 });
 
 
-QUnit.test( "Maximum", function( assert ) {
+test( "Maximum", function( assert ) {
 
 	assert.deepEqual(
 		[
@@ -106,7 +108,7 @@ QUnit.test( "Maximum", function( assert ) {
 });
 
 
-QUnit.test( "Sorting", function( assert ) {
+test( "Sorting", function( assert ) {
 
 	assert.deepEqual(
 		s([
