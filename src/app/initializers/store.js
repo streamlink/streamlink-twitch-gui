@@ -12,7 +12,7 @@ Store.reopen({
 	 * @param {boolean?} options.reload
 	 * @returns {Promise.<DS.Model?>}
 	 */
-	findExistingRecord: function( modelName, id, options ) {
+	findExistingRecord( modelName, id, options ) {
 		var store = this;
 		options = merge( { reload: true }, options );
 
@@ -27,7 +27,7 @@ Store.reopen({
 			});
 	},
 
-	query: function() {
+	query() {
 		return this._super.apply( this, arguments )
 			.then(function( recordArray ) {
 				recordArray._unregisterFromManager();

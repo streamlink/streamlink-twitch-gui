@@ -2,7 +2,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 
 export default TwitchSerializer.extend({
-	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
 		payload[ this.primaryKey ] = 1;
 		payload = {
 			twitchStreamsSummaries: [ payload ]

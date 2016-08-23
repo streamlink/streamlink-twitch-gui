@@ -2,7 +2,7 @@ import GameSerializer from "models/twitch/GameSerializer";
 
 
 export default GameSerializer.extend({
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "twitchGamesFollowed";
 	}
 });

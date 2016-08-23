@@ -8,5 +8,5 @@ export default Model.extend({
 	panels: hasMany( "twitchChannelPanelItem" )
 
 }).reopenClass({
-	toString: function() { return "api/channels/:id/panels"; }
+	toString() { return "api/channels/:id/panels"; }
 });

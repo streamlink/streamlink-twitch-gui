@@ -10,5 +10,5 @@ export default Model.extend({
 	created_at: attr( "date" )
 
 }).reopenClass({
-	toString: function() { return "kraken/users/:user/subscriptions"; }
+	toString() { return "kraken/users/:user/subscriptions"; }
 });

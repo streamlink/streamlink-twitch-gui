@@ -15,7 +15,7 @@ export default ObjectProxy.extend({
 
 	content: null,
 
-	init: function() {
+	init() {
 		this._super.apply( this, arguments );
 
 		var store = get( this, "store" );

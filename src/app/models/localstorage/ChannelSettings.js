@@ -21,5 +21,5 @@ attributes.forEach(function( name ) {
 
 
 export default Model.extend( attrs ).reopenClass({
-	toString: function() { return "ChannelSettings"; }
+	toString() { return "ChannelSettings"; }
 });

@@ -12,7 +12,7 @@ const { service } = inject;
 export default Route.extend({
 	auth: service(),
 
-	beforeModel: function( transition ) {
+	beforeModel( transition ) {
 		var self = this;
 		var auth = get( self, "auth" );
 

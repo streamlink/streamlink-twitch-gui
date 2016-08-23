@@ -2,7 +2,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 
 export default TwitchSerializer.extend({
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "twitchStreamsFeatured";
 	},
 
@@ -10,7 +10,7 @@ export default TwitchSerializer.extend({
 		stream: { deserialize: "records" }
 	},
 
-	normalize: function( modelClass, resourceHash, prop ) {
+	normalize( modelClass, resourceHash, prop ) {
 		var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
 		resourceHash[ this.primaryKey ] = resourceHash.stream.channel[ foreignKey ];
 

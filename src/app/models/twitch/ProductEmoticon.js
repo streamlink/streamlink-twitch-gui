@@ -13,5 +13,5 @@ export default Model.extend({
 	url: attr( "string" )
 
 }).reopenClass({
-	toString: function() { return "twitchProductEmoticon"; }
+	toString() { return "twitchProductEmoticon"; }
 });

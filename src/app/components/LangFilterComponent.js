@@ -11,7 +11,7 @@ export default Component.extend({
 
 	tagName: "li",
 
-	init: function() {
+	init() {
 		this._super.apply( this, arguments );
 
 		var prop = get( this, "prop" );

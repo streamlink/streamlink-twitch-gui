@@ -16,7 +16,7 @@ export default Mixin.create({
 	modelName: null,
 
 	actions: {
-		didTransition: function() {
+		didTransition() {
 			var modelName = get( this, "modelName" );
 			if ( !modelName ) { return; }
 

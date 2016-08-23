@@ -16,7 +16,7 @@ export default Mixin.create({
 	 * @param {number} id
 	 * @returns {Promise}
 	 */
-	"loadChannelSettings": function( id ) {
+	loadChannelSettings( id ) {
 		var store = get( this, "store" );
 		return store.findRecord( "channelSettings", id )
 			.then(function( record ) {

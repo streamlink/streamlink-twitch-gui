@@ -2,7 +2,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 
 export default TwitchSerializer.extend({
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "twitchStream";
 	},
 
@@ -15,7 +15,7 @@ export default TwitchSerializer.extend({
 	 * Use the channel name as stream record ID, so we can .refresh() it.
 	 * The adapter will use the ID for building the URL.
 	 */
-	normalize: function( modelClass, resourceHash, prop ) {
+	normalize( modelClass, resourceHash, prop ) {
 		var primaryKey        = this.primaryKey;
 		var foreignKeyChannel = this.store.serializerFor( "twitchChannel" ).primaryKey;
 		var foreignKeyImage   = this.store.serializerFor( "twitchImage" ).primaryKey;

@@ -16,7 +16,7 @@ export default Model.extend({
 	}.property( "filter" )
 
 }).reopenClass({
-	toString: function() { return "Search"; },
+	toString() { return "Search"; },
 
 	filters: [
 		{ label: "All", value: "all" },
@@ -32,7 +32,7 @@ export default Model.extend({
 		}, {} );
 	}.property(),
 
-	getLabel: function( filter ) {
+	getLabel( filter ) {
 		var map = get( this, "filtersmap" );
 		return map.hasOwnProperty( filter )
 			? map[ filter ].label

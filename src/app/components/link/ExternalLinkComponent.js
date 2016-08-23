@@ -17,7 +17,7 @@ export default Component.extend({
 
 	action: "openBrowser",
 
-	click: function( event ) {
+	click( event ) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
@@ -26,7 +26,7 @@ export default Component.extend({
 		}
 	},
 
-	contextMenu: function( event ) {
+	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
 		var menu = Menu.create();
@@ -45,24 +45,24 @@ export default Component.extend({
 		menu.popup( event );
 	},
 
-	openUrl: function() {
+	openUrl() {
 		var url = get( this, "url" );
 		if ( !url ) { return; }
 		var applicationRoute = getOwner( this ).lookup( "route:application" );
 		applicationRoute.send( "openBrowser", url );
 	},
 
-	openUrlInBrowser: function() {
+	openUrlInBrowser() {
 		var url = get( this, "url" );
 		openBrowser( url );
 	},
 
-	copyUrl: function() {
+	copyUrl() {
 		var url = get( this, "url" );
 		setClipboard( url );
 	},
 
-	didInsertElement: function() {
+	didInsertElement() {
 		this._super.apply( this, arguments );
 		this.$().on( "click", function( e ) {
 			if ( e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey ) {

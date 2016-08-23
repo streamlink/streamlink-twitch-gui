@@ -11,5 +11,5 @@ export default Model.extend({
 	viewers: attr( "number" )
 
 }).reopenClass({
-	toString: function() { return "kraken/games/top"; }
+	toString() { return "kraken/games/top"; }
 });

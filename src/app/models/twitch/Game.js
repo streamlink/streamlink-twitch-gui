@@ -14,5 +14,5 @@ export default Model.extend({
 	properties: attr()
 
 }).reopenClass({
-	toString: function() { return "kraken/games"; }
+	toString() { return "kraken/games"; }
 });

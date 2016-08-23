@@ -40,7 +40,7 @@ export default Component.extend({
 	isFetching: alias( "targetObject.isFetching" ),
 	hasFetchedAll: alias( "targetObject.hasFetchedAll" ),
 
-	click: function() {
+	click() {
 		var targetObject = get( this, "targetObject" );
 		targetObject.send( "willFetchContent", true );
 	},
@@ -60,7 +60,7 @@ export default Component.extend({
 	}.observes( "content.length" ),
 
 
-	init: function() {
+	init() {
 		this._super.apply( this, arguments );
 
 		if ( get( this, "content" ) ) {
@@ -69,7 +69,7 @@ export default Component.extend({
 	},
 
 
-	didInsertElement: function() {
+	didInsertElement() {
 		this._super.apply( this, arguments );
 
 		// find first parent node which has a scroll bar
@@ -105,7 +105,7 @@ export default Component.extend({
 	},
 
 
-	willDestroyElement: function() {
+	willDestroyElement() {
 		this._super.apply( this, arguments );
 
 		var $parent = get( this, "$parent" );
@@ -117,7 +117,7 @@ export default Component.extend({
 	},
 
 
-	infiniteScroll: function( elem, percentage, target ) {
+	infiniteScroll( elem, percentage, target ) {
 		var threshold = percentage * elem.clientHeight;
 		var remaining = elem.scrollHeight - elem.clientHeight - elem.scrollTop;
 		if ( remaining <= threshold ) {

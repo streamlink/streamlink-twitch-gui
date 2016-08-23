@@ -11,7 +11,7 @@ export default Mixin.create({
 	 * @param {string?} route
 	 * @returns {Promise}
 	 */
-	retryTransition: function( route ) {
+	retryTransition( route ) {
 		var transition = get( this, "previousTransition" );
 
 		if ( !transition ) {

@@ -14,15 +14,15 @@ export default ListItemComponent.extend({
 	dialog: false,
 
 	actions: {
-		"eraseDialog": function() {
+		eraseDialog() {
 			set( this, "dialog", true );
 		},
 
-		"confirm": function() {
+		confirm() {
 			get( this, "erase" )();
 		},
 
-		"decline": function() {
+		decline() {
 			set( this, "dialog", false );
 		}
 	}

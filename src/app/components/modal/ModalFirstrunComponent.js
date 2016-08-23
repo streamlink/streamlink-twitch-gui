@@ -20,12 +20,12 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		"settings": function() {
+		settings() {
 			this.sendAction( "goto", "settings" );
 			this.send( "start" );
 		},
 
-		"start": function() {
+		start() {
 			this.send( "close" );
 			get( this, "versioncheck" ).checkForNewRelease();
 		}

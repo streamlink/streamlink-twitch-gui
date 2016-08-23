@@ -9,5 +9,5 @@ export default Model.extend({
 	checkagain: attr( "number", { defaultValue: 0 } )
 
 }).reopenClass({
-	toString: function() { return "Versioncheck"; }
+	toString() { return "Versioncheck"; }
 });

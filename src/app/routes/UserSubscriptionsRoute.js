@@ -11,7 +11,7 @@ import preload from "utils/preload";
 export default UserIndexRoute.extend( InfiniteScrollMixin, {
 	itemSelector: ".subscription-item-component",
 
-	model: function() {
+	model() {
 		var store = get( this, "store" );
 
 		return store.query( "twitchTicket", {

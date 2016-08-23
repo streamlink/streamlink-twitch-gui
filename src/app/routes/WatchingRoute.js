@@ -14,7 +14,7 @@ const { service } = inject;
 export default Route.extend({
 	livestreamer: service(),
 
-	model: function() {
+	model() {
 		var records = get( this, "livestreamer.model" );
 
 		return Promise.resolve( records )

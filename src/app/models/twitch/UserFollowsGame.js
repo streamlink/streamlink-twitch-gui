@@ -6,5 +6,5 @@ export default Model.extend({
 	// all properties will be deleted by the serializer
 
 }).reopenClass({
-	toString: function() { return "api/users/:user/follows/games"; }
+	toString() { return "api/users/:user/follows/games"; }
 });

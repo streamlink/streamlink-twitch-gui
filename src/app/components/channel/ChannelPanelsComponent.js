@@ -29,7 +29,7 @@ export default Component.extend({
 	}.on( "didInsertElement" ),
 
 	actions: {
-		openBrowser: function( url ) {
+		openBrowser( url ) {
 			this.sendAction( "action", url );
 		}
 	}

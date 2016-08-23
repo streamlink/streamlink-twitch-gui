@@ -19,7 +19,7 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		"showChangelog": function( success ) {
+		showChangelog( success ) {
 			var version = get( this, "version" );
 
 			if ( version && changelogUrl ) {

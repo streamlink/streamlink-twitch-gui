@@ -11,5 +11,5 @@ export default Model.extend({
 	y     : attr( "number", { defaultValue: null } )
 
 }).reopenClass({
-	toString: function() { return "Window"; }
+	toString() { return "Window"; }
 });

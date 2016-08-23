@@ -26,15 +26,15 @@ export default Controller.extend({
 
 
 	actions: {
-		"winRefresh": function() {
+		winRefresh() {
 			nwWindow.reloadIgnoringCache();
 		},
 
-		"winDevTools": function() {
+		winDevTools() {
 			nwWindow.showDevTools();
 		},
 
-		"winMin": function() {
+		winMin() {
 			var integration    = get( this, "settings.gui_integration" );
 			var minimizetotray = get( this, "settings.gui_minimizetotray" );
 
@@ -46,11 +46,11 @@ export default Controller.extend({
 			}
 		},
 
-		"winMax": function() {
+		winMax() {
 			nwWindow.toggleMaximize();
 		},
 
-		"winClose": function() {
+		winClose() {
 			if ( get( this, "streamsLength" ) ) {
 				get( this, "modal" ).openModal( "quit", this );
 			} else {

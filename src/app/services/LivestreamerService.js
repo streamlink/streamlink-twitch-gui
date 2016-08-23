@@ -108,7 +108,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	}.property(),
 
 
-	startStream: function( stream, quality ) {
+	startStream( stream, quality ) {
 		get( this, "modal" ).openModal( "livestreamer", this, {
 			error : null,
 			active: null,
@@ -166,7 +166,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			);
 	},
 
-	onStreamSuccess: function( livestreamer, firstLaunch ) {
+	onStreamSuccess( livestreamer, firstLaunch ) {
 		set( livestreamer, "success", true );
 
 		if ( !firstLaunch ) { return; }
@@ -197,14 +197,14 @@ export default Service.extend( ChannelSettingsMixin, {
 		this.minimize( false );
 	},
 
-	onStreamFailure: function( livestreamer, error ) {
+	onStreamFailure( livestreamer, error ) {
 		set( livestreamer, "error", true );
 		set( this, "error", error || new Error( "Internal error" ) );
 
 		this.clearLivestreamer( livestreamer );
 	},
 
-	onStreamShutdown: function( livestreamer ) {
+	onStreamShutdown( livestreamer ) {
 		// close the modal only if there was no error and if it belongs to the stream
 		if (
 			   !get( livestreamer, "error" )
@@ -219,7 +219,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		this.clearLivestreamer( livestreamer );
 	},
 
-	clearLivestreamer: function( livestreamer ) {
+	clearLivestreamer( livestreamer ) {
 		// remove the livestreamer record from the store
 		if ( !get( livestreamer, "isDeleted" ) ) {
 			livestreamer.destroyRecord();
@@ -227,7 +227,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
-	closeStream: function( stream ) {
+	closeStream( stream ) {
 		var model = get( this, "model" );
 		var livestreamer = model.findBy( "stream", stream );
 		if ( !livestreamer ) { return false; }
@@ -240,7 +240,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * Check the location of livestreamer and validate
 	 * @returns {Promise}
 	 */
-	checkLivestreamer: function() {
+	checkLivestreamer() {
 		var customExec = String( get( this, "settings.livestreamer" ) ).trim();
 
 		// check for the executable
@@ -264,7 +264,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * @param {string} exec
 	 * @returns {Promise}
 	 */
-	validateLivestreamer: function( exec ) {
+	validateLivestreamer( exec ) {
 		var spawn;
 
 		function kill() {
@@ -327,7 +327,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * Launch the stream
 	 * @returns {Promise}
 	 */
-	launchLivestreamer: function( livestreamer, firstLaunch, exec ) {
+	launchLivestreamer( livestreamer, firstLaunch, exec ) {
 		// in case the shutdown button was pressed before
 		if ( get( this, "abort" ) ) {
 			this.clearLivestreamer( livestreamer );
@@ -425,7 +425,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
-	killAll: function() {
+	killAll() {
 		/** @type {Array} */
 		var model = get( this, "model" );
 		model.slice().forEach(function( stream ) {
@@ -433,7 +433,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		});
 	},
 
-	minimize: function( restore ) {
+	minimize( restore ) {
 		switch ( get( this, "settings.gui_minimize" ) ) {
 			// minimize
 			case 1:
@@ -449,7 +449,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 	},
 
-	refreshStream: function( livestreamer ) {
+	refreshStream( livestreamer ) {
 		if ( get( livestreamer, "isDeleted" ) ) { return; }
 
 		var stream  = get( livestreamer, "stream" );
@@ -467,7 +467,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		}.bind( this ) );
 	},
 
-	openChat: function( channel ) {
+	openChat( channel ) {
 		var chat = get( this, "chat" );
 		chat.open( channel )
 			.catch(function() {});

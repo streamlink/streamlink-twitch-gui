@@ -13,7 +13,7 @@ export default Route.extend({
 
 	disableAutoRefresh: true,
 
-	beforeModel: function( transition ) {
+	beforeModel( transition ) {
 		// check if user is successfully logged in
 		if ( get( this, "auth.session.isLoggedIn" ) ) {
 			transition.abort();
@@ -22,7 +22,7 @@ export default Route.extend({
 	},
 
 	actions: {
-		willTransition: function() {
+		willTransition() {
 			this.controller.send( "abort" );
 			this.controller.resetProperties();
 		}

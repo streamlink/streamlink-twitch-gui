@@ -21,11 +21,11 @@ export default Controller.extend({
 	qualities: Settings.qualities,
 
 	actions: {
-		"openDialog": function( stream ) {
+		openDialog( stream ) {
 			get( this, "livestreamer" ).startStream( stream );
 		},
 
-		"closeStream": function( stream ) {
+		closeStream( stream ) {
 			get( this, "livestreamer" ).closeStream( stream );
 		}
 	}

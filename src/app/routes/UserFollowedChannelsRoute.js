@@ -21,7 +21,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 
 	modelName: "twitchChannelsFollowed",
 
-	model: function( params ) {
+	model( params ) {
 		return get( this, "store" ).query( this.modelName, {
 			offset   : get( this, "offset" ),
 			limit    : get( this, "limit" ),
@@ -33,7 +33,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 			.then( preload( "logo" ) );
 	},
 
-	fetchContent: function() {
+	fetchContent() {
 		return this.model({
 			sortby   : get( this, "controller.sortby" ),
 			direction: get( this, "controller.direction" )

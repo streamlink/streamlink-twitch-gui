@@ -7,7 +7,7 @@ import {
 
 export default Route.extend({
 	actions: {
-		"didTransition": function() {
+		didTransition() {
 			var settingsController = this.controllerFor( "settings" );
 			var goto = get( settingsController, "currentSubmenu" );
 			if ( !goto ) {
@@ -19,7 +19,7 @@ export default Route.extend({
 			this.replaceWith( goto );
 		},
 
-		"willTransition": function() {
+		willTransition() {
 			return false;
 		}
 	}

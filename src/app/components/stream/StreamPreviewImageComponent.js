@@ -34,7 +34,7 @@ export default Component.extend({
 		return get( this, "settings.stream_click_middle" ) !== actions.disabled || null;
 	}.property( "settings.stream_click_middle" ),
 
-	init: function() {
+	init() {
 		this._super.apply( this, arguments );
 		// FIXME: refactor global goto actions
 		this.applicationRoute = getOwner( this ).lookup( "route:application" );
@@ -51,13 +51,13 @@ export default Component.extend({
 	}.property( "stream.channel.id", "livestreamer.model.length" ),
 
 
-	mouseUp: function( event ) {
+	mouseUp( event ) {
 		if ( event.button === 1 ) {
 			this.click( event );
 		}
 	},
 
-	click: function( event ) {
+	click( event ) {
 		if ( get( this, "clickable" ) ) {
 			var action = event.button === 0
 				// left mouse button
@@ -90,7 +90,7 @@ export default Component.extend({
 		}
 	},
 
-	contextMenu: function( event ) {
+	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
 		var menu = Menu.create();
@@ -152,32 +152,32 @@ export default Component.extend({
 	},
 
 
-	startStream: function( quality ) {
+	startStream( quality ) {
 		var stream = get( this, "stream" );
 		get( this, "livestreamer" ).startStream( stream, quality );
 	},
 
-	closeStream: function() {
+	closeStream() {
 		var stream = get( this, "stream" );
 		get( this, "livestreamer" ).closeStream( stream );
 	},
 
-	openChat: function() {
+	openChat() {
 		var channel = get( this, "stream.channel" );
 		get( this, "chat" ).open( channel );
 	},
 
-	copyChannelURL: function() {
+	copyChannelURL() {
 		var url = get( this, "stream.channel.url" );
 		setClipboard( url );
 	},
 
-	gotoChannelPage: function() {
+	gotoChannelPage() {
 		var name = get( this, "stream.channel.id" );
 		this.applicationRoute.send( "goto", "channel", name );
 	},
 
-	gotoChannelSettings: function() {
+	gotoChannelSettings() {
 		var name = get( this, "stream.channel.id" );
 		this.applicationRoute.send( "goto", "channel.settings", name );
 	}

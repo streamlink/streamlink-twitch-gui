@@ -18,7 +18,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 	modelName: "twitchGamesLiveFollowed",
 	modelNameAll: "twitchGamesFollowed",
 
-	model: function( params ) {
+	model( params ) {
 		// query parameters are strings
 		var modelname = params.all === "true"
 			? this.modelNameAll
@@ -32,7 +32,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 			.then( preload( "box.large" ) );
 	},
 
-	fetchContent: function() {
+	fetchContent() {
 		return this.model({
 			all: get( this, "controller.all" )
 		});

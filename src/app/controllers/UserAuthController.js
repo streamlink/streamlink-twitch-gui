@@ -17,7 +17,7 @@ export default Controller.extend( RetryTransitionMixin, {
 	auth: service(),
 	settings: service(),
 
-	retryTransition: function() {
+	retryTransition() {
 		// use "user.index" as default route
 		return this._super( "user.index" );
 	},
@@ -70,19 +70,19 @@ export default Controller.extend( RetryTransitionMixin, {
 	}.observes( "auth.server" ),
 
 
-	resetProperties: function() {
+	resetProperties() {
 		set( this, "token", "" );
 		set( this, "loginStatus", 0 );
 	},
 
 
 	actions: {
-		"showTokenForm": function() {
+		showTokenForm() {
 			set( this, "loginStatus", 4 );
 		},
 
 		// login via user and password
-		"signin": function() {
+		signin() {
 			if ( get( this, "isLoggingIn" ) ) { return; }
 			set( this, "loginStatus", 1 );
 
@@ -104,7 +104,7 @@ export default Controller.extend( RetryTransitionMixin, {
 		},
 
 		// login via access token
-		"signinToken": function( success, failure ) {
+		signinToken( success, failure ) {
 			if ( get( this, "isLoggingIn" ) ) { return; }
 			set( this, "loginStatus", 5 );
 
@@ -137,7 +137,7 @@ export default Controller.extend( RetryTransitionMixin, {
 		},
 
 		// abort sign in with username + password
-		"abort": function() {
+		abort() {
 			get( this, "auth" ).abortSignin();
 		}
 	}

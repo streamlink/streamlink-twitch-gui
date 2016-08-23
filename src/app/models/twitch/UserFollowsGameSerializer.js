@@ -4,11 +4,11 @@ import TwitchSerializer from "store/TwitchSerializer";
 export default TwitchSerializer.extend({
 	primaryKey: "name",
 
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "twitchUserFollowsGame";
 	},
 
-	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
 		var primaryKey = this.primaryKey;
 
 		if ( !payload || !payload[ primaryKey ] ) {

@@ -36,7 +36,7 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		"download": function( success ) {
+		download( success ) {
 			if ( livestreamerDownloadUrl ) {
 				openBrowser( livestreamerDownloadUrl );
 				if ( success instanceof Function ) {
@@ -45,23 +45,23 @@ export default ModalDialogComponent.extend({
 			}
 		},
 
-		"chat": function( channel ) {
+		chat( channel ) {
 			get( this, "livestreamer" ).openChat( channel );
 		},
 
-		"abort": function() {
+		abort() {
 			set( this, "livestreamer.abort", true );
 			get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
 		},
 
-		"close": function() {
+		close() {
 			get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
 			schedule( "destroy", this, function() {
 				set( this, "livestreamer.active", null );
 			});
 		},
 
-		"shutdown": function() {
+		shutdown() {
 			var active = get( this, "active" );
 			if ( active ) {
 				active.kill();
@@ -69,7 +69,7 @@ export default ModalDialogComponent.extend({
 			this.send( "close" );
 		},
 
-		"toggleLog": function() {
+		toggleLog() {
 			var active = get( this, "active" );
 			if ( active ) {
 				active.toggleProperty( "showLog" );

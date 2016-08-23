@@ -13,7 +13,7 @@ const { service } = inject;
 export default Route.extend({
 	modal: service(),
 
-	model: function() {
+	model() {
 		var store  = get( this, "store" );
 		var params = this.paramsFor( "channel" );
 		var id     = params.channel;
@@ -37,12 +37,12 @@ export default Route.extend({
 			});
 	},
 
-	refresh: function() {
+	refresh() {
 		return getOwner( this ).lookup( "route:channel" ).refresh();
 	},
 
 	actions: {
-		willTransition: function( previousTransition ) {
+		willTransition( previousTransition ) {
 			// check whether the user has changed any values
 			if ( !get( this, "controller.model.buffer.isDirty" ) ) {
 				// don't keep the channelSettings records in cache

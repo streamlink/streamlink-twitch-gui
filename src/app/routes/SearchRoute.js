@@ -30,7 +30,7 @@ export default Route.extend( InfiniteScrollMixin, {
 		}
 	},
 
-	model: function( params ) {
+	model( params ) {
 		var store  = get( this, "store" );
 
 		return RSVP.hash({
@@ -72,7 +72,7 @@ export default Route.extend( InfiniteScrollMixin, {
 		});
 	},
 
-	fetchContent: function() {
+	fetchContent() {
 		if ( !filterMatches( get( this, "filter" ), "streams" ) ) {
 			return Promise.resolve([]);
 		}

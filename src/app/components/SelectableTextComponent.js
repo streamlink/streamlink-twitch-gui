@@ -12,7 +12,7 @@ export default Component.extend({
 	"class"   : "",
 	selectable: true,
 
-	contextMenu: function( event ) {
+	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
 		var selection = window.getSelection();
@@ -24,7 +24,7 @@ export default Component.extend({
 		menu.items.pushObject({
 			label  : "Copy selection",
 			enabled: selected.length,
-			click  : function() {
+			click() {
 				setClipboard( selected );
 			}
 		});

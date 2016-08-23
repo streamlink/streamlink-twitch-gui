@@ -38,7 +38,7 @@ export function cleanOutput( component, selector ) {
 
 export function buildOwner( properties ) {
 	var Owner = EmberObject.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
-		init: function() {
+		init() {
 			this._super.apply( this, arguments );
 			var registry = new Ember.Registry( this._registryOptions );
 			this.__registry__  = registry;

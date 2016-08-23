@@ -9,7 +9,7 @@ export default Controller.extend({
 	queryParams: [ "all" ],
 
 	actions: {
-		"toggleAll": function() {
+		toggleAll() {
 			// query parameters are strings
 			set( this, "all", get( this, "all" ) === "true" ? "false" : "true" );
 		}

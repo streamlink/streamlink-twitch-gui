@@ -16,7 +16,7 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 	all: null,
 
 
-	model: function() {
+	model() {
 		var store = get( this, "store" );
 
 		return store.findAll( "channelSettings" )
@@ -42,7 +42,7 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 			.then( this.fetchContent.bind( this ) );
 	},
 
-	fetchContent: function() {
+	fetchContent() {
 		var limit  = get( this, "limit" );
 		var offset = get( this, "offset" );
 
@@ -51,12 +51,12 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 		);
 	},
 
-	setupController: function( controller ) {
+	setupController( controller ) {
 		set( controller, "all", this.all );
 		this._super.apply( this, arguments );
 	},
 
-	deactivate: function() {
+	deactivate() {
 		this._super.apply( this, arguments );
 		this.all = null;
 	}

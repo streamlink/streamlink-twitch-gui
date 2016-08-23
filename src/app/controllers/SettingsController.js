@@ -120,7 +120,7 @@ export default Controller.extend( RetryTransitionMixin, {
 
 
 	actions: {
-		"apply": function( success, failure ) {
+		apply( success, failure ) {
 			var modal  = get( this, "modal" );
 			var model  = get( this, "settings.content" );
 			var buffer = get( this, "model" ).applyChanges().getContent();
@@ -132,7 +132,7 @@ export default Controller.extend( RetryTransitionMixin, {
 				.catch( model.rollbackAttributes.bind( model ) );
 		},
 
-		"discard": function( success ) {
+		discard( success ) {
 			var modal = get( this, "modal" );
 			get( this, "model" ).discardChanges();
 			Promise.resolve()
@@ -141,12 +141,12 @@ export default Controller.extend( RetryTransitionMixin, {
 				.then( this.retryTransition.bind( this ) );
 		},
 
-		"cancel": function() {
+		cancel() {
 			set( this, "previousTransition", null );
 			get( this, "modal" ).closeModal( this );
 		},
 
-		"checkLanguages": function( all ) {
+		checkLanguages( all ) {
 			var filters = get( this, "model.gui_langfilter" );
 			Object.keys( filters.content ).forEach(function( key ) {
 				set( filters, key, all );

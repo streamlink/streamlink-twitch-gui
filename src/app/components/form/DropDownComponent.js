@@ -23,7 +23,7 @@ export default Component.extend({
 
 	action: null,
 
-	didInsertElement: function() {
+	didInsertElement() {
 		this._super();
 
 		// TODO: remove Selecter dependency
@@ -55,7 +55,7 @@ export default Component.extend({
 		this.sendAction( "action", value );
 	}.observes( "value" ),
 
-	change: function() {
+	change() {
 		var index   = this.element.selectedIndex;
 		var content = get( this, "content" );
 		var path    = get( this, "optionValuePath" );

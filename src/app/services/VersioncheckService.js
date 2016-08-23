@@ -25,7 +25,7 @@ export default Service.extend({
 	model: null,
 
 
-	check: function() {
+	check() {
 		// get the installed version
 		var current = get( this, "version" );
 		if ( !current ) { return; }
@@ -46,7 +46,7 @@ export default Service.extend({
 			});
 	},
 
-	notFirstRun: function( record ) {
+	notFirstRun( record ) {
 		set( this, "model", record );
 
 		var current = get( this,   "version" );
@@ -72,7 +72,7 @@ export default Service.extend({
 		get( this, "modal" ).openModal( "changelog" );
 	},
 
-	firstRun: function() {
+	firstRun() {
 		var store   = get( this, "store" );
 		var current = get( this, "version" );
 
@@ -94,7 +94,7 @@ export default Service.extend({
 	},
 
 
-	checkForNewRelease: function() {
+	checkForNewRelease() {
 		// don't check for new releases if disabled
 		if ( !argVersioncheck ) { return; }
 
@@ -104,7 +104,7 @@ export default Service.extend({
 		}
 	},
 
-	getReleases: function() {
+	getReleases() {
 		get( this, "store" ).findAll( "githubReleases", { reload: true } )
 			.then(function( releases ) {
 				// filter records first
@@ -116,7 +116,7 @@ export default Service.extend({
 			.then( this.checkReleases.bind( this ) );
 	},
 
-	checkReleases: function( releases ) {
+	checkReleases( releases ) {
 		function getVers( record ) {
 			return get( record, "tag_name" );
 		}
@@ -143,7 +143,7 @@ export default Service.extend({
 		});
 	},
 
-	ignoreRelease: function() {
+	ignoreRelease() {
 		var record = get( this, "model" );
 		record.set( "checkagain", +new Date() + checkAgain );
 

@@ -19,5 +19,5 @@ export default Model.extend({
 	ticket_type: attr( "string" )
 
 }).reopenClass({
-	toString: function() { return "twitchProduct"; }
+	toString() { return "twitchProduct"; }
 });

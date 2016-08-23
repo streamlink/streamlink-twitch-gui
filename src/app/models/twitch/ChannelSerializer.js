@@ -4,11 +4,11 @@ import TwitchSerializer from "store/TwitchSerializer";
 export default TwitchSerializer.extend({
 	primaryKey: "name",
 
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "twitchChannel";
 	},
 
-	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
 		payload = {
 			twitchChannel: payload
 		};
@@ -16,7 +16,7 @@ export default TwitchSerializer.extend({
 		return this._super( store, primaryModelClass, payload, id, requestType );
 	},
 
-	normalize: function( modelClass, resourceHash, prop ) {
+	normalize( modelClass, resourceHash, prop ) {
 		// Twitch.tv API bug?
 		// Sometimes a user record (/user/:user - model not implemented) is embedded into
 		// a stream record instead of a channels record (/channels/:channel - the current model)

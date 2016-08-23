@@ -22,20 +22,20 @@ export default Controller.extend({
 	showTokenForm: false,
 
 	actions: {
-		"signout": function() {
+		signout() {
 			get( this, "auth" ).signout()
 				.then(function() {
 					this.transitionToRoute( "user.auth" );
 				}.bind( this ) );
 		},
 
-		"copyToken": function( success, failure ) {
+		copyToken( success, failure ) {
 			setClipboard( get( this, "auth.session.access_token" ) )
 				.then( success, failure )
 				.catch(function() {});
 		},
 
-		"showTokenForm": function() {
+		showTokenForm() {
 			set( this, "showTokenForm", true );
 		}
 	}

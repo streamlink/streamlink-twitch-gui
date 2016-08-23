@@ -71,5 +71,5 @@ export default Model.extend({
 	followed  : null
 
 }).reopenClass({
-	toString: function() { return "kraken/channels"; }
+	toString() { return "kraken/channels"; }
 });

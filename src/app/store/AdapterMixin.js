@@ -19,25 +19,25 @@ const reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
  * instead of using type.modelName as name
  */
 export default Mixin.create( Evented, {
-	findRecord: function( store, type, id, snapshot ) {
+	findRecord( store, type, id, snapshot ) {
 		var url = this.buildURL( type, id, snapshot, "findRecord" );
 		return this.ajax( url, "GET" );
 	},
 
-	findAll: function( store, type, sinceToken ) {
+	findAll( store, type, sinceToken ) {
 		var url   = this.buildURL( type, null, null, "findAll" );
 		var query = sinceToken ? { since: sinceToken } : undefined;
 		return this.ajax( url, "GET", { data: query } );
 	},
 
-	query: function( store, type, query ) {
+	query( store, type, query ) {
 		var url = this.buildURL( type, query, null, "query" );
 		query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
 		return this.ajax( url, "GET", { data: query } );
 	},
 
 	createRecordMethod: "POST",
-	createRecord: function( store, type, snapshot ) {
+	createRecord( store, type, snapshot ) {
 		var self   = this;
 		var url    = self.buildURL( type, null, snapshot, "createRecord" );
 		var method = get( self, "createRecordMethod" );
@@ -48,7 +48,7 @@ export default Mixin.create( Evented, {
 				return data;
 			});
 	},
-	createRecordData: function( store, type, snapshot ) {
+	createRecordData( store, type, snapshot ) {
 		var data = {};
 		var serializer = store.serializerFor( type.modelName );
 		serializer.serializeIntoHash( data, type, snapshot, { includeId: true } );
@@ -56,7 +56,7 @@ export default Mixin.create( Evented, {
 	},
 
 	updateRecordMethod: "PUT",
-	updateRecord: function( store, type, snapshot ) {
+	updateRecord( store, type, snapshot ) {
 		var self   = this;
 		var url    = self.buildURL( type, snapshot.id, snapshot, "updateRecord" );
 		var method = get( self, "updateRecordMethod" );
@@ -67,14 +67,14 @@ export default Mixin.create( Evented, {
 				return data;
 			});
 	},
-	updateRecordData: function( store, type, snapshot ) {
+	updateRecordData( store, type, snapshot ) {
 		var data = {};
 		var serializer = store.serializerFor( type.modelName );
 		serializer.serializeIntoHash( data, type, snapshot );
 		return { data: data };
 	},
 
-	deleteRecord: function( store, type, snapshot ) {
+	deleteRecord( store, type, snapshot ) {
 		var self = this;
 		var url  = self.buildURL( type, snapshot.id, snapshot, "deleteRecord" );
 		return self.ajax( url, "DELETE" )
@@ -85,7 +85,7 @@ export default Mixin.create( Evented, {
 	},
 
 
-	urlForCreateRecord: function( modelName, snapshot ) {
+	urlForCreateRecord( modelName, snapshot ) {
 		// Why does Ember-Data do this?
 		// the id is missing on BuildURLMixin.urlForCreateRecord
 		return this._buildURL( modelName, snapshot.id );
@@ -97,7 +97,7 @@ export default Mixin.create( Evented, {
 	 * @param {string?} id
 	 * @returns {string}
 	 */
-	_buildURL: function( type, id ) {
+	_buildURL( type, id ) {
 		var host = get( this, "host" );
 		var ns   = get( this, "namespace" );
 		var url  = [ host ];
@@ -116,7 +116,7 @@ export default Mixin.create( Evented, {
 	 * @param {string?} id
 	 * @returns {string[]}
 	 */
-	buildURLFragments: function( type, id ) {
+	buildURLFragments( type, id ) {
 		var path = type.toString();
 		var url  = path.split( "/" );
 		if ( !isNone( id ) ) { push.call( url, id ); }
@@ -124,7 +124,7 @@ export default Mixin.create( Evented, {
 	},
 
 
-	ajax: function( url ) {
+	ajax( url ) {
 		var adapter = this;
 		return this._super.apply( this, arguments )
 			.catch(function( err ) {
@@ -137,7 +137,7 @@ export default Mixin.create( Evented, {
 			});
 	},
 
-	ajaxOptions: function() {
+	ajaxOptions() {
 		var hash = this._super.apply( this, arguments );
 		hash.timeout = 10000;
 		hash.cache = false;
@@ -145,12 +145,12 @@ export default Mixin.create( Evented, {
 		return hash;
 	},
 
-	isSuccess: function( status, headers, payload ) {
+	isSuccess( status, headers, payload ) {
 		return this._super.apply( this, arguments )
 		    && ( payload ? !payload.error : true );
 	},
 
-	handleResponse: function( status, headers, payload ) {
+	handleResponse( status, headers, payload ) {
 		if ( this.isSuccess( status, headers, payload ) ) {
 			return payload;
 		} else if ( this.isInvalid( status, headers, payload ) ) {

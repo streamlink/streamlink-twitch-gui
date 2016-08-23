@@ -15,7 +15,7 @@ export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMeta
 
 	modelName: "twitchStream",
 
-	model: function( params ) {
+	model( params ) {
 		if ( arguments.length > 0 ) {
 			set( this, "game", get( params || {}, "game" ) );
 		}
@@ -30,7 +30,7 @@ export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMeta
 			.then( preload( "preview.medium_nocache" ) );
 	},
 
-	setupController: function( controller ) {
+	setupController( controller ) {
 		this._super.apply( this, arguments );
 
 		set( controller, "game", get( this, "game" ) );

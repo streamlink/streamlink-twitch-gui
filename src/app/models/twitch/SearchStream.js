@@ -8,5 +8,5 @@ export default Model.extend({
 	stream: belongsTo( "twitchStream", { async: false } )
 
 }).reopenClass({
-	toString: function() { return "kraken/search/streams"; }
+	toString() { return "kraken/search/streams"; }
 });

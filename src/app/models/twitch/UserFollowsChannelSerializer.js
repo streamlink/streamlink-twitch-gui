@@ -4,11 +4,11 @@ import TwitchSerializer from "store/TwitchSerializer";
 export default TwitchSerializer.extend({
 	primaryKey: "id",
 
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "twitchUserFollowsChannel";
 	},
 
-	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
 		// unexpected payload
 		if ( !payload.follows ) {
 			var primaryKey = this.primaryKey;
@@ -26,7 +26,7 @@ export default TwitchSerializer.extend({
 		return this._super( store, primaryModelClass, payload, id, requestType );
 	},
 
-	normalize: function( modelClass, resourceHash, prop ) {
+	normalize( modelClass, resourceHash, prop ) {
 		var primaryKey = this.primaryKey;
 		if ( !resourceHash[ primaryKey ] ) {
 			var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;

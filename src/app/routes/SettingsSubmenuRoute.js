@@ -9,16 +9,16 @@ export default Route.extend({
 
 	disableAutoRefresh: true,
 
-	model: function() {
+	model() {
 		return this.modelFor( "settings" );
 	},
 
-	activate: function() {
+	activate() {
 		var settingsController = this.controllerFor( "settings" );
 		set( settingsController, "currentSubmenu", this.routeName );
 	},
 
-	deactivate: function() {
+	deactivate() {
 		var settingsController = this.controllerFor( "settings" );
 		set( settingsController, "isAnimated", true );
 	}

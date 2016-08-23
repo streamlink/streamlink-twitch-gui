@@ -141,7 +141,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	}.on( "init" ),
 
 
-	_setWindowBadgeLabel: function() {
+	_setWindowBadgeLabel() {
 		var label;
 		if ( !get( this, "running" ) || !get( this, "settings.notify_badgelabel" ) ) {
 			label = "";
@@ -179,7 +179,7 @@ export default Service.extend( ChannelSettingsMixin, {
 				label  : "Pause notifications",
 				tooltip: "Quickly toggle desktop notifications",
 				checked: get( self, "paused" ),
-				click  : function( item ) {
+				click( item ) {
 					set( self, "paused", item.checked );
 				}
 			};
@@ -192,7 +192,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	}.on( "init" ),
 
 
-	reset: function() {
+	reset() {
 		var next = get( this, "_next" );
 		if ( next ) {
 			cancel( next );
@@ -207,7 +207,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		});
 	},
 
-	start: function() {
+	start() {
 		this.reset();
 
 		// collect garbage once at the beginning
@@ -216,7 +216,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			.then( this.check.bind( this ) );
 	},
 
-	check: function() {
+	check() {
 		if ( !get( this, "running" ) ) { return; }
 
 		get( this, "store" ).query( "twitchStreamsFollowed", {
@@ -231,7 +231,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			.catch( this.failure.bind( this ) );
 	},
 
-	success: function() {
+	success() {
 		// query again
 		let next = later( this, this.check, intervalSuccess );
 
@@ -242,7 +242,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		});
 	},
 
-	failure: function() {
+	failure() {
 		var tries = get( this, "_tries" );
 		var interval;
 
@@ -265,7 +265,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		set( this, "_next", next );
 	},
 
-	queryCallback: function( streams ) {
+	queryCallback( streams ) {
 		var model = get( this, "model" );
 
 		// figure out which streams are new
@@ -319,7 +319,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
-	stripDisabledChannels: function( streams ) {
+	stripDisabledChannels( streams ) {
 		var all = get( this, "settings.notify_all" );
 
 		return Promise.all( streams.map(function( stream ) {
@@ -345,7 +345,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			});
 	},
 
-	prepareNotifications: function( streams ) {
+	prepareNotifications( streams ) {
 		if ( !streams.length ) { return; }
 
 		// merge multiple notifications and show a single one
@@ -374,7 +374,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 	},
 
-	showNotificationGroup: function( streams ) {
+	showNotificationGroup( streams ) {
 		this.showNotification({
 			icon : iconGroup,
 			title: "Some of your favorites have started streaming",
@@ -388,7 +388,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		});
 	},
 
-	showNotificationSingle: function( stream ) {
+	showNotificationSingle( stream ) {
 		var name = get( stream, "channel.display_name" );
 
 		this.showNotification({
@@ -402,7 +402,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		});
 	},
 
-	notificationClick: function( settings, stream ) {
+	notificationClick( settings, stream ) {
 		// always restore the window
 		if ( settings !== 0 ) {
 			nwWindow.toggleMinimize( true );
@@ -433,7 +433,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 	},
 
-	showNotification: function( obj ) {
+	showNotification( obj ) {
 		var notify = new Notif( obj.title, {
 			icon: obj.icon,
 			body: obj.body
@@ -447,7 +447,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
-	gc_icons: function() {
+	gc_icons() {
 		return clearfolder( cacheTmpDir, cacheTime )
 			// always resolve
 			.catch(function() {});

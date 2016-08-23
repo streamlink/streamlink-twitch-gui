@@ -23,12 +23,12 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		"shutdown": function() {
+		shutdown() {
 			get( this, "livestreamer" ).killAll();
 			this.send( "quit" );
 		},
 
-		"quit": function() {
+		quit() {
 			nwWindow.close( true );
 		}
 	}

@@ -569,10 +569,10 @@ export default Application.create({
 
 
 	// ready event
-	ready: function ready() {
+	ready() {
 		nwWindow.emit( "ready" );
 	},
 
-	toString: function() { return "App"; }
+	toString() { return "App"; }
 
 });

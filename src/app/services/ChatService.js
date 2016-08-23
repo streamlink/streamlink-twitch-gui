@@ -45,7 +45,7 @@ export default Service.extend({
 	 * @param channel
 	 * @returns {Promise}
 	 */
-	open: function( channel ) {
+	open( channel ) {
 		var url  = twitchChatUrl;
 		var name = get( channel, "id" );
 
@@ -79,7 +79,7 @@ export default Service.extend({
 	},
 
 
-	_openDefaultBrowser: function( url ) {
+	_openDefaultBrowser( url ) {
 		return new Promise(function( resolve ) {
 			openBrowser( url );
 			next( resolve );
@@ -87,12 +87,12 @@ export default Service.extend({
 	},
 
 
-	_openIRC: function() {
+	_openIRC() {
 		return Promise.reject( new Error( "Not yet implemented" ) );
 	},
 
 
-	_openPredefined: function( command, key, url ) {
+	_openPredefined( command, key, url ) {
 		var data = chatApplications[ key ];
 		if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
 
@@ -121,7 +121,7 @@ export default Service.extend({
 	},
 
 
-	_openMSIE: function( url ) {
+	_openMSIE( url ) {
 		var data = chatApplications[ "msie" ];
 		if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
 
@@ -148,7 +148,7 @@ export default Service.extend({
 	},
 
 
-	_openChatty: function( chatty, channel ) {
+	_openChatty( chatty, channel ) {
 		var data = chatApplications[ "chatty" ];
 		if ( !data ) { return Promise.reject( new Error( "Missing chat data" ) ); }
 
@@ -221,7 +221,7 @@ export default Service.extend({
 		new Substitution( "token", "token", "Twitch access token" )
 	],
 
-	_openCustom: function( command, channel, url ) {
+	_openCustom( command, channel, url ) {
 		var user = get( this, "auth.session.user_name" );
 		var token = get( this, "auth.session.access_token" );
 

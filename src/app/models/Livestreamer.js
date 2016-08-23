@@ -43,18 +43,18 @@ export default Model.extend({
 	session: alias( "auth.session" ),
 
 
-	kill: function() {
+	kill() {
 		var spawn = get( this, "spawn" );
 		if ( spawn ) {
 			spawn.kill( "SIGTERM" );
 		}
 	},
 
-	clearLog: function() {
+	clearLog() {
 		return set( this, "log", [] );
 	},
 
-	pushLog: function( type, line ) {
+	pushLog( type, line ) {
 		get( this, "log" ).pushObject({ type, line });
 	},
 
@@ -73,6 +73,6 @@ export default Model.extend({
 
 }).reopenClass({
 
-	toString: function() { return "Livestreamer"; }
+	toString() { return "Livestreamer"; }
 
 });

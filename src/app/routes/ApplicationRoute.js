@@ -22,13 +22,13 @@ export default Route.extend({
 	versioncheck: service(),
 
 
-	init: function() {
+	init() {
 		this._super();
 		get( this, "versioncheck" ).check();
 		this.setupFocusRefresh();
 	},
 
-	setupFocusRefresh: function() {
+	setupFocusRefresh() {
 		var self = this;
 		var last = null;
 		var defer = false;
@@ -82,17 +82,17 @@ export default Route.extend({
 
 
 	actions: {
-		"error": function( error, transition ) {
+		error( error, transition ) {
 			transition.abort();
 			set( this, "router.errorTransition", transition );
 			return true;
 		},
 
-		"history": function( action ) {
+		history( action ) {
 			window.history.go( +action );
 		},
 
-		"refresh": function() {
+		refresh() {
 			var routeName = get( this, "router.currentRouteName" );
 
 			if ( routeName === "error" ) {
@@ -113,7 +113,7 @@ export default Route.extend({
 			}
 		},
 
-		"goto": function( routeName ) {
+		goto( routeName ) {
 			var currentRoute = get( this, "controller.currentRouteName" );
 			if ( routeName === currentRoute ) {
 				this.send( "refresh" );
@@ -122,7 +122,7 @@ export default Route.extend({
 			}
 		},
 
-		"gotoHomepage": function( noHistoryEntry ) {
+		gotoHomepage( noHistoryEntry ) {
 			var homepage = get( this, "settings.gui_homepage" );
 			var method   = noHistoryEntry
 				? "replaceWith"
@@ -130,7 +130,7 @@ export default Route.extend({
 			this.router[ method ]( homepage || "/featured" );
 		},
 
-		"openBrowser": function( url ) {
+		openBrowser( url ) {
 			var stream = getStreamFromUrl( url );
 			if ( stream ) {
 				this.send( "goto", "channel", stream );

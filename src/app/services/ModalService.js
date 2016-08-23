@@ -23,7 +23,7 @@ export default Service.extend({
 	isModalOpened: notEmpty( "modal" ),
 
 
-	openModal: function( modal, context, data ) {
+	openModal( modal, context, data ) {
 		let name = modal.replace( reModalName, fnModalName );
 
 		modal = `modal-${name}`;
@@ -36,7 +36,7 @@ export default Service.extend({
 		setProperties( this, { modal, context } );
 	},
 
-	closeModal: function( context, force ) {
+	closeModal( context, force ) {
 		var _context = get( this, "context" );
 		if ( !force && _context !== null && context !== _context ) { return; }
 

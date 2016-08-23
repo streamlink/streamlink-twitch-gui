@@ -25,5 +25,5 @@ export default Model.extend({
 	}.property( "access_token", "user_name", "isPending" )
 
 }).reopenClass({
-	toString: function() { return "Auth"; }
+	toString() { return "Auth"; }
 });

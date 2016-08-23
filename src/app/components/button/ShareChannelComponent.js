@@ -12,7 +12,7 @@ export default FormButtonComponent.extend({
 	action: "share",
 
 	actions: {
-		"share": function( success, failure ) {
+		share( success, failure ) {
 			setClipboard( get( this, "channel.url" ) )
 				.then( success, failure )
 				.catch(function() {});

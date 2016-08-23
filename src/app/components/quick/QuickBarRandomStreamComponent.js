@@ -34,7 +34,7 @@ export default FormButtonComponent.extend( LanguageFilterMixin, {
 
 
 	actions: {
-		"randomStream": function( success, failure ) {
+		randomStream( success, failure ) {
 			if ( get( this, "lock" ) ) { return; }
 			set( this, "lock", true );
 

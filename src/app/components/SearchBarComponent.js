@@ -39,7 +39,7 @@ export default Component.extend({
 	query: "",
 
 
-	init: function() {
+	init() {
 		this._super.apply( this, arguments );
 
 		this.content.volatile();
@@ -55,7 +55,7 @@ export default Component.extend({
 	},
 
 
-	addRecord: function( query, filter ) {
+	addRecord( query, filter ) {
 		var store = get( this, "store" );
 		var model = get( this, "model" );
 		var match = model.filter(function( record ) {
@@ -90,7 +90,7 @@ export default Component.extend({
 		});
 	},
 
-	deleteAllRecords: function() {
+	deleteAllRecords() {
 		var model = get( this, "model" );
 		model.forEach(function( record ) {
 			record.deleteRecord();
@@ -101,7 +101,7 @@ export default Component.extend({
 		});
 	},
 
-	doSearch: function( query, filter ) {
+	doSearch( query, filter ) {
 		set( this, "showDropdown", false );
 		this.addRecord( query, filter );
 
@@ -140,16 +140,16 @@ export default Component.extend({
 
 
 	actions: {
-		"toggleDropdown": function() {
+		toggleDropdown() {
 			var showDropdown = get( this, "showDropdown" );
 			set( this, "showDropdown", !showDropdown );
 		},
 
-		"clear": function() {
+		clear() {
 			set( this, "query", "" );
 		},
 
-		"submit": function() {
+		submit() {
 			var query  = get( this, "query" ).trim();
 			var filter = get( this, "filter" );
 
@@ -164,13 +164,13 @@ export default Component.extend({
 			}
 		},
 
-		"searchHistory": function( record ) {
+		searchHistory( record ) {
 			var query  = get( record, "query" );
 			var filter = get( record, "filter" );
 			this.doSearch( query, filter );
 		},
 
-		"clearHistory": function() {
+		clearHistory() {
 			this.deleteAllRecords();
 		}
 	}

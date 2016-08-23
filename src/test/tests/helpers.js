@@ -41,11 +41,11 @@ let owner, component;
 
 
 module( "Ember helpers", {
-	"setup": function() {
+	setup() {
 		owner = buildOwner();
 	},
 
-	"teardown": function() {
+	teardown() {
 		runDestroy( component );
 		runDestroy( owner );
 		owner = component = null;

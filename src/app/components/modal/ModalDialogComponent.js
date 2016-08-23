@@ -22,7 +22,7 @@ export default Component.extend({
 	/*
 	 * This will be called synchronously, so we need to copy the element and animate it instead
 	 */
-	willDestroyElement: function() {
+	willDestroyElement() {
 		var $this  = this.$();
 		var $clone = $this.clone().addClass( "fadeOut" );
 		$this.parent().append( $clone );
@@ -31,7 +31,7 @@ export default Component.extend({
 
 
 	actions: {
-		"close": function() {
+		close() {
 			get( this, "modal" ).closeModal( null, true );
 		}
 	}

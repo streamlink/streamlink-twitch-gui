@@ -18,7 +18,7 @@ export default LinkComponent.reopen({
 	/*
 	 * Prevent new windows from being opened by middleclicking on links/anchors
 	 */
-	didInsertElement: function() {
+	didInsertElement() {
 		this._super();
 		this.$().on( "click", function( e ) {
 			if ( e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey ) {
@@ -31,7 +31,7 @@ export default LinkComponent.reopen({
 	/*
 	 * Enable route refreshing by clicking on the link pointing to this route
 	 */
-	click: function( event ) {
+	click( event ) {
 		if ( get( this, "active" ) ) {
 			var targetObject = get( this, "controller.targetObject" );
 			if ( targetObject ) {

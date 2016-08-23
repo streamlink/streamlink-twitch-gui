@@ -13,7 +13,7 @@ export default EmberObject.extend( Evented, {
 	menu : null,
 	items: null,
 
-	init: function() {
+	init() {
 		this.menu = new Menu({
 			type: this.type
 		});
@@ -30,14 +30,14 @@ export default EmberObject.extend( Evented, {
 		});
 	},
 
-	popup: function( event ) {
+	popup( event ) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
 		this.menu.popup( event.originalEvent.x, event.originalEvent.y );
 	},
 
-	createMacBuiltin: function( appname, hideEdit, hideWindow ) {
+	createMacBuiltin( appname, hideEdit, hideWindow ) {
 		this.menu.createMacBuiltin( appname, {
 			hideEdit  : !!hideEdit,
 			hideWindow: !!hideWindow
@@ -45,14 +45,14 @@ export default EmberObject.extend( Evented, {
 	},
 
 
-	_itemsWillChange: function( observedObj, start, removeCount/*, addCount*/ ) {
+	_itemsWillChange( observedObj, start, removeCount/*, addCount*/ ) {
 		// remove old menuitems
 		for ( var menu = this.menu, end = start + removeCount; start < end; start++ ) {
 			menu.removeAt( start );
 		}
 	},
 
-	_itemsDidChange: function( observedObj, start, removeCount, addCount ) {
+	_itemsDidChange( observedObj, start, removeCount, addCount ) {
 		// add new menuitems
 		for ( var menu = this.menu, end = start + addCount, item; start < end; start++ ) {
 			item = this._createMenuItem( observedObj[ start ] );
@@ -62,7 +62,7 @@ export default EmberObject.extend( Evented, {
 		this.trigger( "update" );
 	},
 
-	_createMenuItem: function( obj ) {
+	_createMenuItem( obj ) {
 		var data = {
 			type   : obj.type || "normal",
 			enabled: obj.enabled === undefined

@@ -25,7 +25,7 @@ export default Component.extend({
 	initial: 0,
 
 
-	init: function() {
+	init() {
 		this._super.apply( this, arguments );
 
 		var length = get( this, "content.length" );
@@ -54,12 +54,12 @@ export default Component.extend({
 		this.checkDuplicates( content, index );
 	}.observes( "content.length" ),
 
-	checkInitialDuplicates: function( compare ) {
+	checkInitialDuplicates( compare ) {
 		var content = get( this, "content" ).mapBy( compare );
 		this.checkDuplicates( content, 1 );
 	},
 
-	checkDuplicates: function( content, index ) {
+	checkDuplicates( content, index ) {
 		var self       = this;
 		var duplicates = get( this, "duplicates" );
 		var length     = get( content, "length" );

@@ -22,15 +22,15 @@ export default Component.extend({
 	],
 
 	isOpened: computed({
-		get: function() {
+		get() {
 			return get( this, "isLocked" );
 		}
 	}),
 	isLocked: computed({
-		get: function() {
+		get() {
 			return this.constructor.isLocked;
 		},
-		set: function( key, value ) {
+		set( key, value ) {
 			if ( value ) {
 				set( this, "isOpened", true );
 			}
@@ -41,11 +41,11 @@ export default Component.extend({
 
 	timer: null,
 
-	mouseEnter: function() {
+	mouseEnter() {
 		set( this, "isOpened", true );
 	},
 
-	mouseLeave: function() {
+	mouseLeave() {
 		if ( get( this, "isLocked" ) ) { return; }
 		this.timer = later( set, this, "isOpened", false, 1000 );
 	},
@@ -60,7 +60,7 @@ export default Component.extend({
 
 
 	actions: {
-		"menuClick": function() {
+		menuClick() {
 			this.toggleProperty( "isLocked" );
 		}
 	}

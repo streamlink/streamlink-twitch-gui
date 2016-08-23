@@ -14,7 +14,7 @@ export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMeta
 
 	modelName: "twitchStream",
 
-	model: function() {
+	model() {
 		return get( this, "store" ).query( this.modelName, {
 			offset              : get( this, "offset" ),
 			limit               : get( this, "limit" ),

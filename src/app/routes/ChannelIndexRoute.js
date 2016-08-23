@@ -5,11 +5,11 @@ import {
 
 
 export default Route.extend({
-	model: function() {
+	model() {
 		return this.modelFor( "channel" );
 	},
 
-	refresh: function() {
+	refresh() {
 		return getOwner( this ).lookup( "route:channel" ).refresh();
 	}
 });

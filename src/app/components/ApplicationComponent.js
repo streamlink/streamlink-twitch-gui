@@ -67,11 +67,11 @@ export default Component.extend({
 	}.observes( "settings.content.gui_smoothscroll" ).on( "didInsertElement" ),
 
 
-	willInsertElement: function() {
+	willInsertElement() {
 		document.documentElement.removeChild( document.body );
 	},
 
-	didInsertElement: function() {
+	didInsertElement() {
 		var controller = getOwner( this ).lookup( "controller:application" );
 
 		guiSelectable();

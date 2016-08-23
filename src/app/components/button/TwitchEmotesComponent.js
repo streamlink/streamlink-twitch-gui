@@ -28,7 +28,7 @@ export default FormButtonComponent.extend({
 	action: "openTwitchEmotes",
 
 	actions: {
-		"openTwitchEmotes": function( success, failure ) {
+		openTwitchEmotes( success, failure ) {
 			var url = twitchEmotesUrl;
 			var channel = get( this, "channel.id" );
 

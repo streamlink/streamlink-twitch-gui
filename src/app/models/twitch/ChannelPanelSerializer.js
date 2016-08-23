@@ -2,7 +2,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 
 export default TwitchSerializer.extend({
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "twitchChannelPanel";
 	},
 
@@ -10,7 +10,7 @@ export default TwitchSerializer.extend({
 		panels: { deserialize: "records" }
 	},
 
-	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
 		// fix payload format
 		payload = {
 			twitchChannelPanel: {

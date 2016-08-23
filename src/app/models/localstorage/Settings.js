@@ -91,7 +91,7 @@ export default Model.extend({
 
 }).reopenClass({
 
-	toString: function() { return "Settings"; },
+	toString() { return "Settings"; },
 
 	/**
 	 * Use a static list of qualities on twitch recognized by livestreamer:

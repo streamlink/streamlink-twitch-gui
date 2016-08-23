@@ -21,7 +21,7 @@ export default Controller.extend({
 	isAnimated: false,
 
 	actions: {
-		"toggleSettings": function() {
+		toggleSettings() {
 			set( this, "isAnimated", true );
 			this.transitionToRoute(
 				get( this, "isSubrouteSettings" )

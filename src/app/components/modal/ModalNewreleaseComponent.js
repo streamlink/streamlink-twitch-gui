@@ -24,7 +24,7 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		"download": function( success ) {
+		download( success ) {
 			var url = get( this, "versioncheck.downloadURL" );
 			if ( url ) {
 				openBrowser( url );
@@ -36,7 +36,7 @@ export default ModalDialogComponent.extend({
 			this.send( "ignore" );
 		},
 
-		"ignore": function() {
+		ignore() {
 			get( this, "versioncheck" ).ignoreRelease();
 			this.send( "close" );
 		}

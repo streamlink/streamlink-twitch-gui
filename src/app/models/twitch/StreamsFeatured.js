@@ -15,5 +15,5 @@ export default Model.extend({
 	title: attr( "string" )
 
 }).reopenClass({
-	toString: function() { return "kraken/streams/featured"; }
+	toString() { return "kraken/streams/featured"; }
 });

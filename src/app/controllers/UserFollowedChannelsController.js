@@ -11,11 +11,11 @@ export default Controller.extend({
 	direction: "desc",
 
 	actions: {
-		"sortMethod": function( sortby ) {
+		sortMethod( sortby ) {
 			set( this, "sortby", sortby );
 		},
 
-		"sortOrder": function( direction ) {
+		sortOrder( direction ) {
 			set( this, "direction", direction );
 		}
 	}

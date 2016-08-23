@@ -12,7 +12,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 
 	modelName: "twitchStreamsFollowed",
 
-	model: function() {
+	model() {
 		return get( this, "store" ).query( this.modelName, {
 			offset: get( this, "offset" ),
 			limit : get( this, "limit" )

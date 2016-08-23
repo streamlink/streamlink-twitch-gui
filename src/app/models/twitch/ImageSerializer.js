@@ -2,7 +2,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 
 export default TwitchSerializer.extend({
-	normalize: function( modelClass, resourceHash, prop ) {
+	normalize( modelClass, resourceHash, prop ) {
 		// rename properties and ignore `template` property
 		resourceHash.small_image = resourceHash.small;
 		resourceHash.medium_image = resourceHash.medium;

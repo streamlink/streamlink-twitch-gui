@@ -2,11 +2,11 @@ import { RESTSerializer } from "EmberData";
 
 
 export default RESTSerializer.extend({
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "githubReleases";
 	},
 
-	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
 		payload = {
 			githubReleases: payload
 		};

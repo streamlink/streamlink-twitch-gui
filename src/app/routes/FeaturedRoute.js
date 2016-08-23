@@ -9,7 +9,7 @@ import preload from "utils/preload";
 
 
 export default Route.extend({
-	model: function() {
+	model() {
 		var store = get( this, "store" );
 
 		return RSVP.hash({
@@ -33,7 +33,7 @@ export default Route.extend({
 			});
 	},
 
-	resetController: function( controller, isExiting ) {
+	resetController( controller, isExiting ) {
 		if ( isExiting ) {
 			set( controller, "isAnimated", false );
 		}

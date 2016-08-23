@@ -11,7 +11,7 @@ export default TextField.extend({
 
 	autoselect: false,
 
-	contextMenu: function( event ) {
+	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
 		var element = this.element;
@@ -26,7 +26,7 @@ export default TextField.extend({
 			{
 				label  : "Copy",
 				enabled: start !== end,
-				click  : function() {
+				click() {
 					var selected = element.value.substr( start, end - start );
 					setClipboard( selected );
 				}
@@ -34,7 +34,7 @@ export default TextField.extend({
 			{
 				label  : "Paste",
 				enabled: !element.readOnly && !element.disabled && clip && clip.length,
-				click  : function() {
+				click() {
 					var value  = element.value;
 					var before = value.substr( 0, element.selectionStart );
 					var after  = value.substr( element.selectionEnd );
@@ -48,7 +48,7 @@ export default TextField.extend({
 		menu.popup( event );
 	},
 
-	focusIn: function() {
+	focusIn() {
 		if ( !this.attrs.autofocus || !this.attrs.autoselect ) { return; }
 
 		this.element.setSelectionRange( 0, this.element.value.length );

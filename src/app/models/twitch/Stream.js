@@ -93,5 +93,5 @@ export default Model.extend({
 	}.property( "average_fps" )
 
 }).reopenClass({
-	toString: function() { return "kraken/streams"; }
+	toString() { return "kraken/streams"; }
 });

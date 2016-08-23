@@ -23,7 +23,7 @@ export default Controller.extend({
 
 
 	actions: {
-		"erase": function( modelItem ) {
+		erase( modelItem ) {
 			var model = get( this, "model" );
 			var settingsRecord = get( modelItem, "settings" );
 			if ( get( settingsRecord, "isDeleted" ) ) { return; }

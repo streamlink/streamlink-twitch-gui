@@ -15,7 +15,7 @@ export default RESTSerializer.extend( EmbeddedRecordsMixin, {
 	 * @param {DS.Model} type
 	 * @param {Object} payload
 	 */
-	extractMeta: function( store, type, payload ) {
+	extractMeta( store, type, payload ) {
 		if ( !payload ) { return; }
 
 		var primaryKey = this.primaryKey;

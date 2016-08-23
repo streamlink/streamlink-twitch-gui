@@ -13,7 +13,7 @@ import { setupIntegrations } from "nwjs/setup/integrations";
 Application.instanceInitializer({
 	name: "nwjs",
 
-	initialize: function( application ) {
+	initialize( application ) {
 		var controller = application.lookup( "controller:application" );
 		var settings   = application.lookup( "service:settings" );
 

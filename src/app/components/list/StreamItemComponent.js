@@ -84,7 +84,7 @@ export default ListItemComponent.extend({
 	}.property( "settings.gui_langfilter" ),
 
 
-	mouseLeave: function() {
+	mouseLeave() {
 		var expanded = get( this, "expanded" );
 		var locked   = get( this, "locked" );
 		if ( !expanded || locked ) { return; }
@@ -106,13 +106,13 @@ export default ListItemComponent.extend({
 
 
 	actions: {
-		"collapse": function() {
+		collapse() {
 			if ( !get( this, "expanded" ) || get( this, "locked" ) ) { return; }
 			this.clearTimer();
 			set( this, "expanded", false );
 		},
 
-		"expand": function() {
+		expand() {
 			if ( get( this, "expanded" ) ) {
 				this.toggleProperty( "locked" );
 			} else {

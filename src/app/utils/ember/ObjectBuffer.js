@@ -26,7 +26,7 @@ function checkDirty() {
 }
 
 const ObjectBuffer = ObjectProxy.extend({
-	init: function() {
+	init() {
 		this._buffer     = {};
 		this._children   = {};
 		this._hasChanges = false;
@@ -52,14 +52,14 @@ const ObjectBuffer = ObjectProxy.extend({
 		this._super.apply( this, arguments );
 	},
 
-	unknownProperty: function( key ) {
+	unknownProperty( key ) {
 		var buffer = this._buffer;
 		return buffer && buffer.hasOwnProperty( key )
 			? buffer[ key ]
 			: get( this, `content.${key}` );
 	},
 
-	setUnknownProperty: function( key, value ) {
+	setUnknownProperty( key, value ) {
 		var buffer   = this._buffer;
 		var content  = this.content;
 		var current  = content
@@ -87,7 +87,7 @@ const ObjectBuffer = ObjectProxy.extend({
 		return value;
 	},
 
-	applyChanges: function() {
+	applyChanges() {
 		var buffer   = this._buffer;
 		var children = this._children;
 		var content  = this.content;
@@ -106,7 +106,7 @@ const ObjectBuffer = ObjectProxy.extend({
 		return this;
 	},
 
-	discardChanges: function() {
+	discardChanges() {
 		var buffer   = this._buffer;
 		var children = this._children;
 
@@ -125,7 +125,7 @@ const ObjectBuffer = ObjectProxy.extend({
 		return this;
 	},
 
-	getContent: function() {
+	getContent() {
 		var content  = this.content;
 		var children = this._children;
 		return Object.keys( content ).reduce(function( obj, key ) {

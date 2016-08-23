@@ -24,7 +24,7 @@ export default EmberObject.extend({
 	menu   : null,
 	tray   : null,
 
-	init: function() {
+	init() {
 		var self = this;
 		var menu = Menu.create({
 			items: this.items || []
@@ -51,13 +51,13 @@ export default EmberObject.extend({
 	}.property( "icons" ),
 
 
-	remove: function() {
+	remove() {
 		if ( !this.tray ) { return; }
 		this.tray.remove();
 		this.tray = null;
 	},
 
-	add: function( click ) {
+	add( click ) {
 		this.remove();
 
 		var icon    = get( this, "icon" );
@@ -73,12 +73,12 @@ export default EmberObject.extend({
 		this.tray = tray;
 	},
 
-	click: function() {
+	click() {
 		if ( !this.tray ) { return; }
 		this.tray.emit( "click" );
 	},
 
-	removeOnClick: function() {
+	removeOnClick() {
 		if ( !this.tray ) { return; }
 		this.tray.once( "click", this.remove.bind( this ) );
 	}

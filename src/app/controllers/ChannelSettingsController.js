@@ -29,7 +29,7 @@ export default Controller.extend( RetryTransitionMixin, {
 				`model.buffer.${attr}`,
 				`settings.${attr}`,
 				{
-					set: function( key, value, oldValue ) {
+					set( key, value, oldValue ) {
 						// don't accept changes if disabled
 						// selectboxes without `null` options trigger property changes on insert
 						if ( !get( this, `_${attr}` ) ) {
@@ -38,7 +38,7 @@ export default Controller.extend( RetryTransitionMixin, {
 						set( model, attr, value );
 						return value;
 					},
-					get: function() {
+					get() {
 						// return the global value if the custom value is null
 						var val = get( model, attr );
 						return val === customDefault
@@ -52,7 +52,7 @@ export default Controller.extend( RetryTransitionMixin, {
 			var attributeEnabled = computed(
 				`model.buffer.${attr}`,
 				{
-					set: function( key, value ) {
+					set( key, value ) {
 						// false => set attr value to null (delete)
 						// true  => set attr value to global value (init)
 						value = !!value;
@@ -62,7 +62,7 @@ export default Controller.extend( RetryTransitionMixin, {
 						);
 						return value;
 					},
-					get: function() {
+					get() {
 						// false => use global attribute (default)
 						// true  => use custom attribute
 						return get( model, attr ) !== customDefault;
@@ -82,7 +82,7 @@ export default Controller.extend( RetryTransitionMixin, {
 	 * @param buffer
 	 * @returns {Promise}
 	 */
-	saveRecord: function( record, buffer ) {
+	saveRecord( record, buffer ) {
 		// apply the buffered changes
 		record.setProperties( buffer );
 
@@ -115,7 +115,7 @@ export default Controller.extend( RetryTransitionMixin, {
 	},
 
 	actions: {
-		"apply": function( success, failure ) {
+		apply( success, failure ) {
 			var modal  = get( this, "modal" );
 			var model  = get( this, "model.model" );
 			var buffer = get( this, "model.buffer" ).applyChanges().getContent();
@@ -126,7 +126,7 @@ export default Controller.extend( RetryTransitionMixin, {
 				.catch( model.rollbackAttributes.bind( model ) );
 		},
 
-		"discard": function( success ) {
+		discard( success ) {
 			var modal = get( this, "modal" );
 			get( this, "model.buffer" ).discardChanges();
 			Promise.resolve()
@@ -135,7 +135,7 @@ export default Controller.extend( RetryTransitionMixin, {
 				.then( this.retryTransition.bind( this ) );
 		},
 
-		"cancel": function() {
+		cancel() {
 			set( this, "previousTransition", null );
 			get( this, "modal" ).closeModal( this );
 		}

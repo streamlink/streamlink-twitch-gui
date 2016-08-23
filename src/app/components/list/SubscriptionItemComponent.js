@@ -49,7 +49,7 @@ export default ListItemComponent.extend({
 	}.property( "content.access_end" ).volatile(),
 
 
-	openBrowser: function( url ) {
+	openBrowser( url ) {
 		var channel = get( this, "channel.id" );
 		if ( !channel ) { return Promise.reject(); }
 
@@ -60,13 +60,13 @@ export default ListItemComponent.extend({
 
 
 	actions: {
-		edit: function( success, failure ) {
+		edit( success, failure ) {
 			this.openBrowser( subscriptionEditUrl )
 				.then( success, failure )
 				.catch(function() {});
 		},
 
-		cancel: function( success, failure ) {
+		cancel( success, failure ) {
 			this.openBrowser( subscriptionCancelUrl )
 				.then( success, failure )
 				.catch(function() {});

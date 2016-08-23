@@ -45,7 +45,7 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 
 
 	actions: {
-		"subscribe": function( success, failure ) {
+		subscribe( success, failure ) {
 			var url  = subscriptionCreateUrl;
 			var name = get( this, "id" );
 

@@ -33,24 +33,24 @@ let owner, context;
 
 
 module( "InputBtnComponent", {
-	"setup": function() {
+	setup() {
 		owner = buildOwner();
 		owner.register( "component:check-box", CheckBoxComponent );
 		owner.register( "component:radio-btn", RadioBtnComponent );
 		owner.register( "component:radio-btns", RadioBtnsComponent );
 	},
 
-	"beforeEach": function() {
+	beforeEach() {
 		owner.register( "event_dispatcher:main", eventDispatcher );
 	},
 
-	"afterEach": function() {
+	afterEach() {
 		owner.unregister( "event_dispatcher:main" );
 		runDestroy( eventDispatcher );
 		runDestroy( context );
 	},
 
-	"teardown": function() {
+	teardown() {
 		runDestroy( owner );
 		owner = context = null;
 	}

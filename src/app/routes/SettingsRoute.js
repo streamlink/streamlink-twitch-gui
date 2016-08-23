@@ -18,21 +18,21 @@ export default Route.extend({
 
 	disableAutoRefresh: true,
 
-	model: function() {
+	model() {
 		var settings = get( this, "settings.content" );
 		return ObjectBuffer.create({
 			content: settings.toJSON()
 		});
 	},
 
-	resetController: function( controller, isExiting ) {
+	resetController( controller, isExiting ) {
 		if ( isExiting ) {
 			set( controller, "isAnimated", false );
 		}
 	},
 
 	actions: {
-		willTransition: function( previousTransition ) {
+		willTransition( previousTransition ) {
 			// don't show modal when transitioning between settings subroutes
 			if ( previousTransition && reRouteNames.test( previousTransition.targetName ) ) {
 				return true;

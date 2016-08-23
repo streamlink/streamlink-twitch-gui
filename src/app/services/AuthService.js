@@ -43,7 +43,7 @@ export default Service.extend( Evented, {
 	}.property(),
 
 
-	init: function() {
+	init() {
 		var store = get( this, "store" );
 		store.findAll( "auth" )
 			.then(function( records ) {
@@ -70,7 +70,7 @@ export default Service.extend( Evented, {
 	 * Signout and reset session
 	 * @returns {Promise}
 	 */
-	signout: function() {
+	signout() {
 		this.updateAdapter( null );
 		return this.sessionReset();
 	},
@@ -79,7 +79,7 @@ export default Service.extend( Evented, {
 	 * Open OAuth url in browser
 	 * @returns {Promise}
 	 */
-	signin: function() {
+	signin() {
 		if ( get( this, "server" ) ) {
 			return Promise.reject();
 		}
@@ -135,7 +135,7 @@ export default Service.extend( Evented, {
 			});
 	},
 
-	abortSignin: function() {
+	abortSignin() {
 		var server = get( this, "server" );
 		if ( !server ) { return; }
 		server.close();
@@ -148,7 +148,7 @@ export default Service.extend( Evented, {
 	 * @param {string} scope
 	 * @returns {Promise}
 	 */
-	validateOAuthResponse: function( token, scope ) {
+	validateOAuthResponse( token, scope ) {
 		// check the returned token and validate scopes
 		return token
 		    && token.length > 0
@@ -165,7 +165,7 @@ export default Service.extend( Evented, {
 	 * @param {boolean} isAutoLogin
 	 * @returns {Promise}
 	 */
-	login: function( token, isAutoLogin ) {
+	login( token, isAutoLogin ) {
 		var self = this;
 
 		// no token set
@@ -210,7 +210,7 @@ export default Service.extend( Evented, {
 	 * Adapter was updated. Now check if the access token is valid.
 	 * @returns {Promise}
 	 */
-	validateSession: function() {
+	validateSession() {
 		// validate token
 		var store = get( this, "store" );
 		return store.findAll( "twitchToken", { reload: true } )
@@ -223,7 +223,7 @@ export default Service.extend( Evented, {
 	 * @param {DS.Model} record
 	 * @returns {Promise}
 	 */
-	validateToken: function( record ) {
+	validateToken( record ) {
 		var valid = get( record, "valid" );
 		var name  = get( record, "user_name" );
 		var scope = get( record, "authorization.scopes" );
@@ -241,7 +241,7 @@ export default Service.extend( Evented, {
 	 * @param {Array} returnedScope
 	 * @returns {boolean}
 	 */
-	validateScope: function( returnedScope ) {
+	validateScope( returnedScope ) {
 		return returnedScope instanceof Array
 		    && all.apply( returnedScope, scope );
 	},
@@ -253,7 +253,7 @@ export default Service.extend( Evented, {
 	 * @param {DS.Model} record
 	 * @returns {Promise}
 	 */
-	sessionSave: function( token, record ) {
+	sessionSave( token, record ) {
 		var session = get( this, "session" );
 		session.setProperties({
 			access_token: token,
@@ -267,7 +267,7 @@ export default Service.extend( Evented, {
 	 * Clear auth record and save it
 	 * @returns {Promise}
 	 */
-	sessionReset: function() {
+	sessionReset() {
 		var session = get( this, "session" );
 		session.setProperties({
 			access_token: null,
@@ -279,7 +279,7 @@ export default Service.extend( Evented, {
 	},
 
 
-	updateAdapter: function( token ) {
+	updateAdapter( token ) {
 		var adapter = get( this, "store" ).adapterFor( "twitch" );
 		if ( !adapter ) {
 			throw new Error( "Adapter not found" );

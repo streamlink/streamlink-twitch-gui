@@ -38,12 +38,12 @@ export default RESTAdapter.extend( AdapterMixin, {
 
 
 	createRecordMethod: "PUT",
-	createRecordData: function() {
+	createRecordData() {
 		// we don't need to send any data with the request (yet?)
 		return {};
 	},
 
-	updateRecordData: function() {
+	updateRecordData() {
 		// we don't need to send any data with the request (yet?)
 		return {};
 	},
@@ -55,7 +55,7 @@ export default RESTAdapter.extend( AdapterMixin, {
 	 * @param {string?} id
 	 * @returns {string[]}
 	 */
-	buildURLFragments: function( type, id ) {
+	buildURLFragments( type, id ) {
 		var adapter = this;
 		var idFound = false;
 

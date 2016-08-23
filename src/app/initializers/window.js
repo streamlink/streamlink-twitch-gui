@@ -138,7 +138,7 @@ Application.instanceInitializer({
 	before: [ "nwjs" ],
 	after: [ "ember-data" ],
 
-	initialize: function( application ) {
+	initialize( application ) {
 		var store = application.lookup( "service:store" );
 
 		store.findAll( "window" )

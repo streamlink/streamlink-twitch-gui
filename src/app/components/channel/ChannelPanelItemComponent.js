@@ -15,7 +15,7 @@ export default Component.extend({
 
 	openBrowser: "openBrowser",
 
-	didInsertElement: function() {
+	didInsertElement() {
 		var self = this;
 
 		this.$( "a" )
@@ -32,7 +32,7 @@ export default Component.extend({
 		this._super.apply( this, arguments );
 	},
 
-	contextMenu: function( event ) {
+	contextMenu( event ) {
 		var target = event.target;
 		if ( target.tagName === "IMG" && target.classList.contains( "withLink" ) ) {
 			return this.linkContentMenu( event, get( this, "panel.link" ) );
@@ -42,7 +42,7 @@ export default Component.extend({
 		}
 	},
 
-	linkContentMenu: function( event, url ) {
+	linkContentMenu( event, url ) {
 		var menu = Menu.create();
 		menu.items.pushObject({
 			label: "Open in browser",
@@ -53,7 +53,7 @@ export default Component.extend({
 	},
 
 	actions: {
-		"openBrowser": function( url ) {
+		openBrowser( url ) {
 			if ( !url ) { return; }
 			this.sendAction( "openBrowser", url );
 		}

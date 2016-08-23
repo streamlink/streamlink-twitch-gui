@@ -9,5 +9,5 @@ export default Model.extend({
 	viewers: attr( "number" )
 
 }).reopenClass({
-	toString: function() { return "kraken/streams/summary"; }
+	toString() { return "kraken/streams/summary"; }
 });

@@ -2,7 +2,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 
 export default TwitchSerializer.extend({
-	modelNameFromPayloadKey: function() {
+	modelNameFromPayloadKey() {
 		return "twitchGamesTop";
 	},
 
@@ -10,7 +10,7 @@ export default TwitchSerializer.extend({
 		game: { deserialize: "records" }
 	},
 
-	normalize: function( modelClass, resourceHash, prop ) {
+	normalize( modelClass, resourceHash, prop ) {
 		var foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
 		resourceHash[ this.primaryKey ] = resourceHash.game[ foreignKey ];
 

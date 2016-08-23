@@ -32,7 +32,7 @@ export default Route.extend({
 	 * @param controller
 	 * @param {(Error|Ember.RSVP.Promise)} error
 	 */
-	setupController: function( controller, error ) {
+	setupController( controller, error ) {
 		this._super.call( this, controller );
 
 		error = error || new Error( "Unknown error" );
@@ -91,7 +91,7 @@ export default Route.extend({
 		set( controller, "model", model );
 	},
 
-	deactivate: function() {
+	deactivate() {
 		set( this, "router.errorTransition", null );
 	}
 });

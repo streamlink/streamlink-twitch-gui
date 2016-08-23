@@ -23,5 +23,5 @@ export default Model.extend({
 	zipball_url: attr()
 
 }).reopenClass({
-	toString: function() { return "releases"; }
+	toString() { return "releases"; }
 });

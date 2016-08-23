@@ -26,7 +26,7 @@ export default Component.extend({
 	value: null,
 	selection: null,
 
-	_updateItems: function() {
+	_updateItems() {
 		var value   = get( this, "value" );
 		var itemKey = get( this, "optionValuePath" );
 		var content = get( this, "content" ) || [];
@@ -47,7 +47,7 @@ export default Component.extend({
 		return found;
 	},
 
-	didInitAttrs: function() {
+	didInitAttrs() {
 		// update each button's checked status on initialization
 		this._updateItems();
 	},
@@ -70,7 +70,7 @@ export default Component.extend({
 	}.observes( "selection.value" ),
 
 	actions: {
-		"btnClicked": function( button ) {
+		btnClicked( button ) {
 			// update the current selection
 			set( this, "selection", button );
 		}

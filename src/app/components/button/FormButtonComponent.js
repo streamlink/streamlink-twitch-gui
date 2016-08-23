@@ -57,7 +57,7 @@ export default Component.extend({
 	isLoading: equal( "_status", STATE_LOADING ),
 
 	actions: {
-		click: function() {
+		click() {
 			var action  = get( this, "action" );
 			if ( !action ) { return; }
 

@@ -19,7 +19,7 @@ export default ListItemComponent.extend({
 	game: or( "content.game", "content" ),
 	hasStats: or( "content.channels", "content.viewers" ),
 
-	click: function() {
+	click() {
 		this.sendAction( "action", "games.game", get( this, "game.name" ) );
 	}
 });

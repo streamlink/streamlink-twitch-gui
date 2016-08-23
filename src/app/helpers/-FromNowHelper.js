@@ -8,7 +8,7 @@ const { cancel, later } = run;
 
 
 export default Helper.extend({
-	compute: function( params, hash ) {
+	compute( params, hash ) {
 		if ( hash.interval ) {
 			this._interval = later( this, "recompute", hash.interval );
 		}
@@ -16,7 +16,7 @@ export default Helper.extend({
 		return this._compute.apply( this, arguments );
 	},
 
-	destroy: function() {
+	destroy() {
 		if ( this._interval ) {
 			cancel( this._interval );
 		}

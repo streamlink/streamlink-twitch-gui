@@ -20,7 +20,7 @@ export default Controller.extend({
 	_index: 0,
 
 	actions: {
-		"switchFeatured": function( index ) {
+		switchFeatured( index ) {
 			if ( index === get( this, "_index" ) ) { return; }
 			set( this, "_index", index );
 			set( this, "isAnimated", true );

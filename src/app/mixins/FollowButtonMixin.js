@@ -24,7 +24,7 @@ export default Mixin.create( TwitchInteractButtonMixin, {
 
 
 	actions: {
-		"follow": function( success, failure ) {
+		follow( success, failure ) {
 			if ( !this.modelName ) { return; }
 			if ( !get( this, "isValid" ) || get( this, "isLocked" ) ) { return; }
 			set( this, "isLocked", true );

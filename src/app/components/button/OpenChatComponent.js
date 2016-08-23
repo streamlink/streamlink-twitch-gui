@@ -19,7 +19,7 @@ export default FormButtonComponent.extend({
 	action: "chat",
 
 	actions: {
-		"chat": function( success, failure ) {
+		chat( success, failure ) {
 			var channel = get( this, "channel" );
 			var chat    = get( this, "chat" );
 			chat.open( channel )

@@ -11,5 +11,5 @@ export default Model.extend({
 	valid: attr( "boolean" )
 
 }).reopenClass({
-	toString: function() { return "kraken/"; }
+	toString() { return "kraken/"; }
 });

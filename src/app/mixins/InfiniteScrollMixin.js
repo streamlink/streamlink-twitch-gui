@@ -114,7 +114,7 @@ export default Mixin.create({
 	/**
 	 * Calculate how many items are needed to completely fill the container
 	 */
-	calcFetchSize: function() {
+	calcFetchSize() {
 		var itemSel = get( this, "itemSelector" );
 		var offset  = get( this, "offset" );
 		var max     = get( this, "maxLimit" );
@@ -129,7 +129,7 @@ export default Mixin.create({
 	},
 
 
-	beforeModel: function() {
+	beforeModel() {
 		this._super.apply( this, arguments );
 
 		// reset on route change
@@ -137,7 +137,7 @@ export default Mixin.create({
 		this.calcFetchSize();
 	},
 
-	setupController: function( controller, model ) {
+	setupController( controller, model ) {
 		this._super.apply( this, arguments );
 
 		// late bindings
@@ -157,7 +157,7 @@ export default Mixin.create({
 		set( controller, "initialFetchSize", model.length );
 	},
 
-	fetchContent: function() {
+	fetchContent() {
 		return this.model();
 	},
 
@@ -170,7 +170,7 @@ export default Mixin.create({
 			return true;
 		},
 
-		"willFetchContent": function( force ) {
+		willFetchContent( force ) {
 			var controller = get( this, "controller" );
 			var isFetching = get( controller, "isFetching" );
 			var fetchedAll = get( controller, "hasFetchedAll" );

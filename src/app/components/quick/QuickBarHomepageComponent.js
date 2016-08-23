@@ -37,7 +37,7 @@ export default FormButtonComponent.extend({
 
 
 	actions: {
-		"setHomepage": function( success, failure ) {
+		setHomepage( success, failure ) {
 			var settings = get( this, "settings.content" );
 			var value    = get( this, "url" );
 			if ( !settings || !value ) {

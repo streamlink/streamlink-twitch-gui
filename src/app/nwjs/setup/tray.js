@@ -30,13 +30,13 @@ export function createTrayIcon() {
 		items  : [
 			{
 				label: "Toggle window",
-				click: function() {
+				click() {
 					nwWindow.tray.click();
 				}
 			},
 			{
 				label: "Close application",
-				click: function() {
+				click() {
 					nwWindow.close();
 				}
 			}

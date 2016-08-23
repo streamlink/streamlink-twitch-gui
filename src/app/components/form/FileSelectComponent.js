@@ -30,7 +30,7 @@ export default Component.extend({
 	}.on( "init" ),
 
 	actions: {
-		"selectfile": function() {
+		selectfile() {
 			if ( !get( this, "disabled" ) ) {
 				this._input.click();
 			}

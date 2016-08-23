@@ -7,7 +7,7 @@ import preload from "utils/preload";
 
 
 export default Route.extend({
-	model: function( params ) {
+	model( params ) {
 		var store = get( this, "store" );
 		var id    = get( params, "channel" );
 
@@ -61,7 +61,7 @@ export default Route.extend({
 			});
 	},
 
-	resetController: function( controller, isExiting ) {
+	resetController( controller, isExiting ) {
 		if ( isExiting ) {
 			set( controller, "isAnimated", false );
 		}
