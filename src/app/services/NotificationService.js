@@ -12,7 +12,11 @@ import {
 	files,
 	notification
 } from "config";
-import nwWindow from "nwjs/nwWindow";
+import nwWindow, {
+	toggleMinimize,
+	toggleVisibility
+} from "nwjs/Window";
+import { getMenu as getTrayMenu } from "nwjs/Tray";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import toArray from "utils/ember/toArray";
 import mapBy from "utils/ember/mapBy";
@@ -188,7 +192,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 	_setupTrayItem: function() {
 		var self = this;
-		var menu = nwWindow.tray.menu;
+		var menu = getTrayMenu();
 		var item = null;
 
 		function createTrayItem() {
@@ -433,8 +437,8 @@ export default Service.extend( ChannelSettingsMixin, {
 	notificationClick: function( settings, streams ) {
 		// always restore the window
 		if ( settings !== 0 ) {
-			nwWindow.toggleMinimize( true );
-			nwWindow.toggleVisibility( true );
+			toggleMinimize( true );
+			toggleVisibility( true );
 		}
 
 		var applicationController = getOwner( this ).lookup( "controller:application" );

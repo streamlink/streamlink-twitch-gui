@@ -1,6 +1,6 @@
 import { Component } from "Ember";
-import Menu from "nwjs/menu";
-import { set as setClipboard } from "nwjs/clipboard";
+import Menu from "nwjs/Menu";
+import { set as setClipboard } from "nwjs/Clipboard";
 
 
 export default Component.extend({

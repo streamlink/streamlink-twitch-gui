@@ -2,8 +2,8 @@ import {
 	get,
 	Component
 } from "Ember";
-import Menu from "nwjs/menu";
-import openBrowser from "nwjs/openBrowser";
+import Menu from "nwjs/Menu";
+import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
 
 

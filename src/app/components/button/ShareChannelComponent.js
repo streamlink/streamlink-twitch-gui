@@ -1,5 +1,5 @@
 import { get } from "Ember";
-import { set as setClipboard } from "nwjs/clipboard";
+import { set as setClipboard } from "nwjs/Clipboard";
 import FormButtonComponent from "components/button/FormButtonComponent";
 
 

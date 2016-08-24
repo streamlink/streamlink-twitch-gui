@@ -1,9 +1,9 @@
 import { TextField } from "Ember";
-import Menu from "nwjs/menu";
+import Menu from "nwjs/Menu";
 import {
 	get as getClipboard,
 	set as setClipboard
-} from "nwjs/clipboard";
+} from "nwjs/Clipboard";
 
 
 export default TextField.extend({

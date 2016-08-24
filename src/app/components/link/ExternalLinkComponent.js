@@ -3,9 +3,9 @@ import {
 	getOwner,
 	Component
 } from "Ember";
-import Menu from "nwjs/menu";
-import { set as setClipboard } from "nwjs/clipboard";
-import openBrowser from "nwjs/openBrowser";
+import Menu from "nwjs/Menu";
+import { set as setClipboard } from "nwjs/Clipboard";
+import { openBrowser } from "nwjs/Shell";
 
 
 export default Component.extend({

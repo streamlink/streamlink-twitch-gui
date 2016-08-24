@@ -8,7 +8,7 @@ import {
 	chat as chatApplications,
 	twitch
 } from "config";
-import openBrowser from "nwjs/openBrowser";
+import { openBrowser } from "nwjs/Shell";
 import Parameter from "utils/Parameter";
 import ParameterCustom from "utils/ParameterCustom";
 import Substitution from "utils/Substitution";
