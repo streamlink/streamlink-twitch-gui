@@ -1,17 +1,17 @@
 import Ember from "Ember";
 
 
-	var get = Ember.get;
-	var set = Ember.set;
+var get = Ember.get;
+var set = Ember.set;
 
 
-	export default Ember.Controller.extend({
-		queryParams: [ "all" ],
+export default Ember.Controller.extend({
+	queryParams: [ "all" ],
 
-		actions: {
-			"toggleAll": function() {
-				// query parameters are strings
-				set( this, "all", get( this, "all" ) === "true" ? "false" : "true" );
-			}
+	actions: {
+		"toggleAll": function() {
+			// query parameters are strings
+			set( this, "all", get( this, "all" ) === "true" ? "false" : "true" );
 		}
-	});
+	}
+});

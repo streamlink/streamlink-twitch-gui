@@ -1,6 +1,6 @@
-	function toArray( recordArray ) {
-		return recordArray.toArray();
-	}
+function toArray( recordArray ) {
+	return recordArray.toArray();
+}
 
 
-	export default toArray;
+export default toArray;

@@ -2,16 +2,16 @@ import Ember from "Ember";
 import layout from "templates/components/list/HeadlineTotalsComponent.hbs";
 
 
-	var gte = Ember.computed.gte;
+var gte = Ember.computed.gte;
 
 
-	export default Ember.Component.extend({
-		layout: layout,
+export default Ember.Component.extend({
+	layout: layout,
 
-		tagName: "div",
-		classNames: [ "total" ],
+	tagName: "div",
+	classNames: [ "total" ],
 
-		total: null,
+	total: null,
 
-		isVisible: gte( "total", 0 )
-	});
+	isVisible: gte( "total", 0 )
+});

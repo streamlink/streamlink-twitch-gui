@@ -11,19 +11,19 @@ import notification from "root/config/notification.json";
 import chat from "root/config/chat.json";
 
 
-	var config = {};
+var config = {};
 
-	config[ "main" ] = main;
-	config[ "dirs" ] = dirs;
-	config[ "files" ] = files;
-	config[ "vars" ] = vars;
-	config[ "update" ] = update;
-	config[ "themes" ] = themes;
-	config[ "langs" ] = langs;
-	config[ "livestreamer" ] = livestreamer;
-	config[ "twitch" ] = twitch;
-	config[ "notification" ] = notification;
-	config[ "chat" ] = chat;
+config[ "main" ] = main;
+config[ "dirs" ] = dirs;
+config[ "files" ] = files;
+config[ "vars" ] = vars;
+config[ "update" ] = update;
+config[ "themes" ] = themes;
+config[ "langs" ] = langs;
+config[ "livestreamer" ] = livestreamer;
+config[ "twitch" ] = twitch;
+config[ "notification" ] = notification;
+config[ "chat" ] = chat;
 
 
-	export default config;
+export default config;

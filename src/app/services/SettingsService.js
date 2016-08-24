@@ -1,32 +1,32 @@
 import Ember from "Ember";
 
 
-	var get = Ember.get;
-	var set = Ember.set;
+var get = Ember.get;
+var set = Ember.set;
 
 
-	// A service object is just a regular object, so we can use an ObjectProxy as well
-	export default Ember.ObjectProxy.extend({
-		store: Ember.inject.service(),
+// A service object is just a regular object, so we can use an ObjectProxy as well
+export default Ember.ObjectProxy.extend({
+	store: Ember.inject.service(),
 
-		content: null,
+	content: null,
 
-		init: function() {
-			this._super.apply( this, arguments );
+	init: function() {
+		this._super.apply( this, arguments );
 
-			var store = get( this, "store" );
+		var store = get( this, "store" );
 
-			store.findAll( "settings" )
-				.then(function( records ) {
-					return records.content.length
-						? records.objectAt( 0 )
-						: store.createRecord( "settings", { id: 1 } ).save();
-				})
-				.then(function( settings ) {
-					set( this, "content", settings );
-				}.bind( this ) );
-		}
+		store.findAll( "settings" )
+			.then(function( records ) {
+				return records.content.length
+					? records.objectAt( 0 )
+					: store.createRecord( "settings", { id: 1 } ).save();
+			})
+			.then(function( settings ) {
+				set( this, "content", settings );
+			}.bind( this ) );
+	}
 
-	}).reopenClass({
-		isServiceFactory: true
-	});
+}).reopenClass({
+	isServiceFactory: true
+});

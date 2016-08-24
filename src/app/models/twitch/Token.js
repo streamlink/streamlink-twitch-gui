@@ -1,15 +1,15 @@
 import DS from "EmberData";
 
 
-	var attr = DS.attr;
+var attr = DS.attr;
 
 
-	export default DS.Model.extend({
-		// pass through
-		authorization: attr(),
-		user_name: attr( "string" ),
-		valid: attr( "boolean" )
+export default DS.Model.extend({
+	// pass through
+	authorization: attr(),
+	user_name: attr( "string" ),
+	valid: attr( "boolean" )
 
-	}).reopenClass({
-		toString: function() { return "kraken/"; }
-	});
+}).reopenClass({
+	toString: function() { return "kraken/"; }
+});

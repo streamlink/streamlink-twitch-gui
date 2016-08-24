@@ -266,313 +266,313 @@ import AboutController from "controllers/AboutController";
 import AboutTemplate from "templates/About.hbs";
 
 
-	export default Ember.Application.create({
+export default Ember.Application.create({
 
-		// Configuration
-		rootElement: document.documentElement,
-
-
-		// Routing
-		Router,
+	// Configuration
+	rootElement: document.documentElement,
 
 
-		// Store
-		ApplicationAdapter,
-		BooleanTransform,
+	// Routing
+	Router,
 
 
-		// Models: memory
-		Livestreamer,
-		LivestreamerAdapter: DS.Adapter,
+	// Store
+	ApplicationAdapter,
+	BooleanTransform,
 
 
-		// Models: localstorage
-		Window,
-		WindowAdapter: DS.LSAdapter.extend({ namespace: "window" }),
-		WindowSerializer: DS.LSSerializer,
-		Settings,
-		SettingsAdapter: DS.LSAdapter.extend({ namespace: "settings" }),
-		SettingsSerializer: DS.LSSerializer,
-		Versioncheck,
-		VersioncheckAdapter: DS.LSAdapter.extend({ namespace: "versioncheck" }),
-		VersioncheckSerializer: DS.LSSerializer,
-		Auth,
-		AuthAdapter: DS.LSAdapter.extend({ namespace: "auth" }),
-		AuthSerializer: DS.LSSerializer,
-		Search,
-		SearchAdapter: DS.LSAdapter.extend({ namespace: "search" }),
-		SearchSerializer: DS.LSSerializer,
-		ChannelSettings,
-		ChannelSettingsAdapter: DS.LSAdapter.extend({ namespace: "channelsettings" }),
-		ChannelSettingsSerializer: DS.LSSerializer,
+	// Models: memory
+	Livestreamer,
+	LivestreamerAdapter: DS.Adapter,
 
 
-		// Models: github
-		GithubReleases,
-		GithubReleasesAdapter,
-		GithubReleasesSerializer,
+	// Models: localstorage
+	Window,
+	WindowAdapter: DS.LSAdapter.extend({ namespace: "window" }),
+	WindowSerializer: DS.LSSerializer,
+	Settings,
+	SettingsAdapter: DS.LSAdapter.extend({ namespace: "settings" }),
+	SettingsSerializer: DS.LSSerializer,
+	Versioncheck,
+	VersioncheckAdapter: DS.LSAdapter.extend({ namespace: "versioncheck" }),
+	VersioncheckSerializer: DS.LSSerializer,
+	Auth,
+	AuthAdapter: DS.LSAdapter.extend({ namespace: "auth" }),
+	AuthSerializer: DS.LSSerializer,
+	Search,
+	SearchAdapter: DS.LSAdapter.extend({ namespace: "search" }),
+	SearchSerializer: DS.LSSerializer,
+	ChannelSettings,
+	ChannelSettingsAdapter: DS.LSAdapter.extend({ namespace: "channelsettings" }),
+	ChannelSettingsSerializer: DS.LSSerializer,
 
 
-		// Models: twitch
-		TwitchToken,
-		TwitchTokenSerializer,
-
-		TwitchGame,
-		TwitchGameSerializer,
-		TwitchStream,
-		TwitchStreamSerializer,
-		TwitchChannel,
-		TwitchChannelSerializer,
-		TwitchImage,
-		TwitchImageSerializer,
-
-		TwitchGamesTop,
-		TwitchGamesTopSerializer,
-		TwitchStreamsSummary,
-		TwitchStreamsSummarySerializer,
-		TwitchStreamsFeatured,
-		TwitchStreamsFeaturedSerializer,
-
-		TwitchStreamsFollowed,
-		TwitchStreamsFollowedSerializer,
-		TwitchStreamsHosted,
-		TwitchStreamsHostedSerializer,
-		TwitchChannelsFollowed,
-		TwitchChannelsFollowedSerializer,
-		TwitchGamesFollowed,
-		TwitchGamesFollowedSerializer,
-		TwitchGamesLiveFollowed,
-		TwitchGamesLiveFollowedSerializer,
-
-		TwitchSearchGame,
-		TwitchSearchGameSerializer,
-		TwitchSearchStream,
-		TwitchSearchStreamSerializer,
-		TwitchSearchChannel,
-		TwitchSearchChannelSerializer,
-
-		TwitchUserFollowsChannel,
-		TwitchUserFollowsChannelSerializer,
-		TwitchUserFollowsGame,
-		TwitchUserFollowsGameAdapter,
-		TwitchUserFollowsGameSerializer,
-		TwitchUserSubscription,
-		TwitchUserSubscriptionSerializer,
-
-		TwitchTicket,
-		TwitchTicketSerializer,
-		TwitchProduct,
-		TwitchProductSerializer,
-		TwitchProductEmoticon,
-		TwitchProductEmoticonSerializer,
-
-		TwitchChannelPanel,
-		TwitchChannelPanelSerializer,
-		TwitchChannelPanelItem,
-		TwitchChannelPanelItemSerializer,
+	// Models: github
+	GithubReleases,
+	GithubReleasesAdapter,
+	GithubReleasesSerializer,
 
 
-		// Helpers
-		IsEqualHelper,
-		IsNullHelper,
-		IsGtHelper,
-		IsGteHelper,
-		BoolNotHelper,
-		BoolAndHelper,
-		BoolOrHelper,
-		MathAddHelper,
-		MathSubHelper,
-		MathMulHelper,
-		MathDivHelper,
-		FormatViewersHelper,
-		FormatTimeHelper,
-		HoursFromNowHelper,
-		TimeFromNowHelper,
-		GetParamHelper,
-		HasOwnPropertyHelper,
+	// Models: twitch
+	TwitchToken,
+	TwitchTokenSerializer,
 
-		// Services
-		SettingsService,
-		AuthService,
-		ModalService,
-		VersioncheckService,
-		LivestreamerService,
-		NotificationService,
-		ChatService,
+	TwitchGame,
+	TwitchGameSerializer,
+	TwitchStream,
+	TwitchStreamSerializer,
+	TwitchChannel,
+	TwitchChannelSerializer,
+	TwitchImage,
+	TwitchImageSerializer,
 
+	TwitchGamesTop,
+	TwitchGamesTopSerializer,
+	TwitchStreamsSummary,
+	TwitchStreamsSummarySerializer,
+	TwitchStreamsFeatured,
+	TwitchStreamsFeaturedSerializer,
 
-		// Application
-		ApplicationRoute,
-		ApplicationController,
-		ApplicationView,
-		ApplicationTemplate,
+	TwitchStreamsFollowed,
+	TwitchStreamsFollowedSerializer,
+	TwitchStreamsHosted,
+	TwitchStreamsHostedSerializer,
+	TwitchChannelsFollowed,
+	TwitchChannelsFollowedSerializer,
+	TwitchGamesFollowed,
+	TwitchGamesFollowedSerializer,
+	TwitchGamesLiveFollowed,
+	TwitchGamesLiveFollowedSerializer,
 
-		LoadingRoute,
-		LoadingTemplate,
+	TwitchSearchGame,
+	TwitchSearchGameSerializer,
+	TwitchSearchStream,
+	TwitchSearchStreamSerializer,
+	TwitchSearchChannel,
+	TwitchSearchChannelSerializer,
 
-		ErrorRoute,
-		ErrorTemplate,
+	TwitchUserFollowsChannel,
+	TwitchUserFollowsChannelSerializer,
+	TwitchUserFollowsGame,
+	TwitchUserFollowsGameAdapter,
+	TwitchUserFollowsGameSerializer,
+	TwitchUserSubscription,
+	TwitchUserSubscriptionSerializer,
 
-		IndexRoute,
+	TwitchTicket,
+	TwitchTicketSerializer,
+	TwitchProduct,
+	TwitchProductSerializer,
+	TwitchProductEmoticon,
+	TwitchProductEmoticonSerializer,
 
-
-		// Components
-		EmbeddedLinksComponent,
-		ExternalLinkComponent,
-		LinkComponent,
-		DocumentationLinkComponent,
-
-		CheckBoxComponent,
-		RadioBtnComponent,
-		RadioBtnsComponent,
-		DropDownComponent,
-		FileSelectComponent,
-		TextFieldComponent,
-
-		FollowChannelComponent,
-		FollowGameComponent,
-		FormButtonComponent,
-		OpenChatComponent,
-		ShareChannelComponent,
-		SubscribeChannelComponent,
-		TwitchEmotesComponent,
-
-		ModalBodyComponent,
-		ModalChangelogComponent,
-		ModalConfirmComponent,
-		ModalFirstrunComponent,
-		ModalFooterComponent,
-		ModalHeaderComponent,
-		ModalLivestreamerComponent,
-		ModalLogComponent,
-		ModalNewreleaseComponent,
-		ModalQuitComponent,
-
-		ContentListComponent,
-		ChannelItemComponent,
-		GameItemComponent,
-		HeadlineTotalsComponent,
-		InfiniteScrollComponent,
-		StreamItemComponent,
-		SubscriptionItemComponent,
-
-		QuickBarComponent,
-		QuickBarHomepageComponent,
-		QuickBarRandomStreamComponent,
-
-		ChannelPanelsComponent,
-		ChannelPanelItemComponent,
-
-		StatsRowComponent,
-		StreamPresentationComponent,
-		StreamPreviewImageComponent,
-
-		FlagIconComponent,
-		LangFilterComponent,
-		LoadingSpinnerComponent,
-		PreviewImageComponent,
-		SearchBarComponent,
-		SelectableTextComponent,
-
-		SettingsRowComponent,
-		SettingsChannelItemComponent,
-		SettingsSubmitComponent,
+	TwitchChannelPanel,
+	TwitchChannelPanelSerializer,
+	TwitchChannelPanelItem,
+	TwitchChannelPanelItemSerializer,
 
 
-		// Content
-		FeaturedRoute,
-		FeaturedController,
-		FeaturedTemplate,
+	// Helpers
+	IsEqualHelper,
+	IsNullHelper,
+	IsGtHelper,
+	IsGteHelper,
+	BoolNotHelper,
+	BoolAndHelper,
+	BoolOrHelper,
+	MathAddHelper,
+	MathSubHelper,
+	MathMulHelper,
+	MathDivHelper,
+	FormatViewersHelper,
+	FormatTimeHelper,
+	HoursFromNowHelper,
+	TimeFromNowHelper,
+	GetParamHelper,
+	HasOwnPropertyHelper,
 
-		WatchingRoute,
-		WatchingController,
-		WatchingTemplate,
-
-		SearchRoute,
-		SearchController,
-		SearchTemplate,
-
-		GamesLoadingRoute,
-		GamesLoadingTemplate,
-		GamesIndexRoute,
-		GamesIndexController,
-		GamesIndexTemplate,
-		GamesGameRoute,
-		GamesGameController,
-		GamesGameTemplate,
-
-		ChannelsRoute,
-		ChannelsController,
-		ChannelsTemplate,
-
-		ChannelRoute,
-		ChannelController,
-		ChannelTemplate,
-		ChannelLoadingRoute,
-		ChannelLoadingTemplate,
-		ChannelIndexRoute,
-		ChannelIndexController,
-		ChannelIndexTemplate,
-		ChannelSettingsRoute,
-		ChannelSettingsController,
-		ChannelSettingsTemplate,
-
-		UserLoadingRoute,
-		UserLoadingTemplate,
-		UserIndexRoute,
-		UserIndexController,
-		UserIndexTemplate,
-		UserAuthRoute,
-		UserAuthController,
-		UserAuthTemplate,
-		UserSubscriptionsRoute,
-		UserSubscriptionsTemplate,
-		UserFollowedStreamsRoute,
-		UserFollowedStreamsTemplate,
-		UserHostedStreamsRoute,
-		UserHostedStreamsTemplate,
-		UserFollowedChannelsRoute,
-		UserFollowedChannelsController,
-		UserFollowedChannelsTemplate,
-		UserFollowedGamesRoute,
-		UserFollowedGamesController,
-		UserFollowedGamesTemplate,
-
-		SettingsRoute,
-		SettingsController,
-		SettingsTemplate,
-		SettingsIndexRoute,
-		SettingsMainRoute,
-		SettingsMainTemplate,
-		SettingsStreamsRoute,
-		SettingsStreamsTemplate,
-		SettingsLivestreamerRoute,
-		SettingsLivestreamerTemplate,
-		SettingsPlayerRoute,
-		SettingsPlayerTemplate,
-		SettingsChatRoute,
-		SettingsChatTemplate,
-		SettingsGuiRoute,
-		SettingsGuiTemplate,
-		SettingsListsRoute,
-		SettingsListsTemplate,
-		SettingsLanguagesRoute,
-		SettingsLanguagesTemplate,
-		SettingsNotificationsRoute,
-		SettingsNotificationsTemplate,
-		SettingsChannelsRoute,
-		SettingsChannelsController,
-		SettingsChannelsTemplate,
-
-		AboutController,
-		AboutTemplate,
+	// Services
+	SettingsService,
+	AuthService,
+	ModalService,
+	VersioncheckService,
+	LivestreamerService,
+	NotificationService,
+	ChatService,
 
 
-		// ready event
-		ready: function ready() {
-			nwWindow.emit( "ready" );
-		},
+	// Application
+	ApplicationRoute,
+	ApplicationController,
+	ApplicationView,
+	ApplicationTemplate,
 
-		toString: function() { return "App"; }
+	LoadingRoute,
+	LoadingTemplate,
 
-	});
+	ErrorRoute,
+	ErrorTemplate,
+
+	IndexRoute,
+
+
+	// Components
+	EmbeddedLinksComponent,
+	ExternalLinkComponent,
+	LinkComponent,
+	DocumentationLinkComponent,
+
+	CheckBoxComponent,
+	RadioBtnComponent,
+	RadioBtnsComponent,
+	DropDownComponent,
+	FileSelectComponent,
+	TextFieldComponent,
+
+	FollowChannelComponent,
+	FollowGameComponent,
+	FormButtonComponent,
+	OpenChatComponent,
+	ShareChannelComponent,
+	SubscribeChannelComponent,
+	TwitchEmotesComponent,
+
+	ModalBodyComponent,
+	ModalChangelogComponent,
+	ModalConfirmComponent,
+	ModalFirstrunComponent,
+	ModalFooterComponent,
+	ModalHeaderComponent,
+	ModalLivestreamerComponent,
+	ModalLogComponent,
+	ModalNewreleaseComponent,
+	ModalQuitComponent,
+
+	ContentListComponent,
+	ChannelItemComponent,
+	GameItemComponent,
+	HeadlineTotalsComponent,
+	InfiniteScrollComponent,
+	StreamItemComponent,
+	SubscriptionItemComponent,
+
+	QuickBarComponent,
+	QuickBarHomepageComponent,
+	QuickBarRandomStreamComponent,
+
+	ChannelPanelsComponent,
+	ChannelPanelItemComponent,
+
+	StatsRowComponent,
+	StreamPresentationComponent,
+	StreamPreviewImageComponent,
+
+	FlagIconComponent,
+	LangFilterComponent,
+	LoadingSpinnerComponent,
+	PreviewImageComponent,
+	SearchBarComponent,
+	SelectableTextComponent,
+
+	SettingsRowComponent,
+	SettingsChannelItemComponent,
+	SettingsSubmitComponent,
+
+
+	// Content
+	FeaturedRoute,
+	FeaturedController,
+	FeaturedTemplate,
+
+	WatchingRoute,
+	WatchingController,
+	WatchingTemplate,
+
+	SearchRoute,
+	SearchController,
+	SearchTemplate,
+
+	GamesLoadingRoute,
+	GamesLoadingTemplate,
+	GamesIndexRoute,
+	GamesIndexController,
+	GamesIndexTemplate,
+	GamesGameRoute,
+	GamesGameController,
+	GamesGameTemplate,
+
+	ChannelsRoute,
+	ChannelsController,
+	ChannelsTemplate,
+
+	ChannelRoute,
+	ChannelController,
+	ChannelTemplate,
+	ChannelLoadingRoute,
+	ChannelLoadingTemplate,
+	ChannelIndexRoute,
+	ChannelIndexController,
+	ChannelIndexTemplate,
+	ChannelSettingsRoute,
+	ChannelSettingsController,
+	ChannelSettingsTemplate,
+
+	UserLoadingRoute,
+	UserLoadingTemplate,
+	UserIndexRoute,
+	UserIndexController,
+	UserIndexTemplate,
+	UserAuthRoute,
+	UserAuthController,
+	UserAuthTemplate,
+	UserSubscriptionsRoute,
+	UserSubscriptionsTemplate,
+	UserFollowedStreamsRoute,
+	UserFollowedStreamsTemplate,
+	UserHostedStreamsRoute,
+	UserHostedStreamsTemplate,
+	UserFollowedChannelsRoute,
+	UserFollowedChannelsController,
+	UserFollowedChannelsTemplate,
+	UserFollowedGamesRoute,
+	UserFollowedGamesController,
+	UserFollowedGamesTemplate,
+
+	SettingsRoute,
+	SettingsController,
+	SettingsTemplate,
+	SettingsIndexRoute,
+	SettingsMainRoute,
+	SettingsMainTemplate,
+	SettingsStreamsRoute,
+	SettingsStreamsTemplate,
+	SettingsLivestreamerRoute,
+	SettingsLivestreamerTemplate,
+	SettingsPlayerRoute,
+	SettingsPlayerTemplate,
+	SettingsChatRoute,
+	SettingsChatTemplate,
+	SettingsGuiRoute,
+	SettingsGuiTemplate,
+	SettingsListsRoute,
+	SettingsListsTemplate,
+	SettingsLanguagesRoute,
+	SettingsLanguagesTemplate,
+	SettingsNotificationsRoute,
+	SettingsNotificationsTemplate,
+	SettingsChannelsRoute,
+	SettingsChannelsController,
+	SettingsChannelsTemplate,
+
+	AboutController,
+	AboutTemplate,
+
+
+	// ready event
+	ready: function ready() {
+		nwWindow.emit( "ready" );
+	},
+
+	toString: function() { return "App"; }
+
+});

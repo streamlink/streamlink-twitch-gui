@@ -1,31 +1,31 @@
 import TwitchSerializer from "store/TwitchSerializer";
 
 
-	export default TwitchSerializer.extend({
-		modelNameFromPayloadKey: function() {
-			return "twitchStream";
-		},
+export default TwitchSerializer.extend({
+	modelNameFromPayloadKey: function() {
+		return "twitchStream";
+	},
 
-		attrs: {
-			channel: { deserialize: "records" },
-			preview: { deserialize: "records" }
-		},
+	attrs: {
+		channel: { deserialize: "records" },
+		preview: { deserialize: "records" }
+	},
 
-		/**
-		 * Use the channel name as stream record ID, so we can .refresh() it.
-		 * The adapter will use the ID for building the URL.
-		 */
-		normalize: function( modelClass, resourceHash, prop ) {
-			var primaryKey        = this.primaryKey;
-			var foreignKeyChannel = this.store.serializerFor( "twitchChannel" ).primaryKey;
-			var foreignKeyImage   = this.store.serializerFor( "twitchImage" ).primaryKey;
-			var name = resourceHash.channel[ foreignKeyChannel ];
+	/**
+	 * Use the channel name as stream record ID, so we can .refresh() it.
+	 * The adapter will use the ID for building the URL.
+	 */
+	normalize: function( modelClass, resourceHash, prop ) {
+		var primaryKey        = this.primaryKey;
+		var foreignKeyChannel = this.store.serializerFor( "twitchChannel" ).primaryKey;
+		var foreignKeyImage   = this.store.serializerFor( "twitchImage" ).primaryKey;
+		var name = resourceHash.channel[ foreignKeyChannel ];
 
-			resourceHash[ primaryKey ] = name;
-			if ( resourceHash.preview ) {
-				resourceHash.preview[ foreignKeyImage ] = "stream/preview/" + name;
-			}
-
-			return this._super( modelClass, resourceHash, prop );
+		resourceHash[ primaryKey ] = name;
+		if ( resourceHash.preview ) {
+			resourceHash.preview[ foreignKeyImage ] = "stream/preview/" + name;
 		}
-	});
+
+		return this._super( modelClass, resourceHash, prop );
+	}
+});

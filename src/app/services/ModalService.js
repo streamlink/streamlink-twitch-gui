@@ -1,44 +1,44 @@
 import Ember from "Ember";
 
 
-	var get = Ember.get;
-	var setProperties = Ember.setProperties;
-	var notEmpty = Ember.computed.notEmpty;
+var get = Ember.get;
+var setProperties = Ember.setProperties;
+var notEmpty = Ember.computed.notEmpty;
 
-	var reModalName = /[A-Z]/g;
+var reModalName = /[A-Z]/g;
 
-	function fnModalName( a ) {
-		return "-" + a.toLowerCase();
-	}
-
-
-	export default Ember.Service.extend({
-		modal  : null,
-		context: null,
-
-		isModalOpened: notEmpty( "modal" ),
+function fnModalName( a ) {
+	return "-" + a.toLowerCase();
+}
 
 
-		openModal: function( modal, context, data ) {
-			modal = "modal-" + modal.replace( reModalName, fnModalName );
+export default Ember.Service.extend({
+	modal  : null,
+	context: null,
 
-			if ( context && data ) {
-				setProperties( context, data );
-			}
+	isModalOpened: notEmpty( "modal" ),
 
-			setProperties( this, {
-				modal  : modal,
-				context: context || null
-			});
-		},
 
-		closeModal: function( context, force ) {
-			var _context = get( this, "context" );
-			if ( !force && _context !== null && context !== _context ) { return; }
+	openModal: function( modal, context, data ) {
+		modal = "modal-" + modal.replace( reModalName, fnModalName );
 
-			setProperties( this, {
-				modal  : null,
-				context: null
-			});
+		if ( context && data ) {
+			setProperties( context, data );
 		}
-	});
+
+		setProperties( this, {
+			modal  : modal,
+			context: context || null
+		});
+	},
+
+	closeModal: function( context, force ) {
+		var _context = get( this, "context" );
+		if ( !force && _context !== null && context !== _context ) { return; }
+
+		setProperties( this, {
+			modal  : null,
+			context: null
+		});
+	}
+});

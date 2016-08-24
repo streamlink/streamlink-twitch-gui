@@ -3,27 +3,27 @@ import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import layout from "templates/components/modal/ModalFirstrunComponent.hbs";
 
 
-	var get = Ember.get;
+var get = Ember.get;
 
 
-	export default ModalDialogComponent.extend({
-		versioncheck: Ember.inject.service(),
+export default ModalDialogComponent.extend({
+	versioncheck: Ember.inject.service(),
 
-		layout: layout,
-		"class": "modal-firstrun",
+	layout: layout,
+	"class": "modal-firstrun",
 
-		goto: "goto",
+	goto: "goto",
 
 
-		actions: {
-			"settings": function() {
-				this.sendAction( "goto", "settings" );
-				this.send( "start" );
-			},
+	actions: {
+		"settings": function() {
+			this.sendAction( "goto", "settings" );
+			this.send( "start" );
+		},
 
-			"start": function() {
-				this.send( "close" );
-				get( this, "versioncheck" ).checkForNewRelease();
-			}
+		"start": function() {
+			this.send( "close" );
+			get( this, "versioncheck" ).checkForNewRelease();
 		}
-	});
+	}
+});

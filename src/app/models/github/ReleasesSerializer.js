@@ -1,16 +1,16 @@
 import DS from "EmberData";
 
 
-	export default DS.RESTSerializer.extend({
-		modelNameFromPayloadKey: function() {
-			return "githubReleases";
-		},
+export default DS.RESTSerializer.extend({
+	modelNameFromPayloadKey: function() {
+		return "githubReleases";
+	},
 
-		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
-			payload = {
-				githubReleases: payload
-			};
+	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+		payload = {
+			githubReleases: payload
+		};
 
-			return this._super( store, primaryModelClass, payload, id, requestType );
-		}
-	});
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	}
+});

@@ -6,32 +6,32 @@ import openBrowser from "nwjs/openBrowser";
 import layout from "templates/components/modal/ModalChangelogComponent.hbs";
 
 
-	var get = Ember.get;
+var get = Ember.get;
 
-	var changelogUrl = config.update[ "changelog-url" ];
-
-
-	export default ModalDialogComponent.extend({
-		layout: layout,
-		"class": "modal-changelog",
-
-		version: nwGui.App.manifest.version,
+var changelogUrl = config.update[ "changelog-url" ];
 
 
-		actions: {
-			"showChangelog": function( success ) {
-				var version = get( this, "version" );
+export default ModalDialogComponent.extend({
+	layout: layout,
+	"class": "modal-changelog",
 
-				if ( version && changelogUrl ) {
-					var url = changelogUrl.replace( "{version}", version );
-					openBrowser( url );
+	version: nwGui.App.manifest.version,
 
-					if ( success instanceof Function ) {
-						success();
-					}
+
+	actions: {
+		"showChangelog": function( success ) {
+			var version = get( this, "version" );
+
+			if ( version && changelogUrl ) {
+				var url = changelogUrl.replace( "{version}", version );
+				openBrowser( url );
+
+				if ( success instanceof Function ) {
+					success();
 				}
-
-				this.send( "close" );
 			}
+
+			this.send( "close" );
 		}
-	});
+	}
+});

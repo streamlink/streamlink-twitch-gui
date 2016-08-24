@@ -1,24 +1,24 @@
 import TwitchSerializer from "store/TwitchSerializer";
 
 
-	export default TwitchSerializer.extend({
-		modelNameFromPayloadKey: function() {
-			return "twitchChannelPanel";
-		},
+export default TwitchSerializer.extend({
+	modelNameFromPayloadKey: function() {
+		return "twitchChannelPanel";
+	},
 
-		attrs: {
-			panels: { deserialize: "records" }
-		},
+	attrs: {
+		panels: { deserialize: "records" }
+	},
 
-		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
-			// fix payload format
-			payload = {
-				twitchChannelPanel: {
-					_id: id,
-					panels: payload
-				}
-			};
+	normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
+		// fix payload format
+		payload = {
+			twitchChannelPanel: {
+				_id: id,
+				panels: payload
+			}
+		};
 
-			return this._super( store, primaryModelClass, payload, id, requestType );
-		}
-	});
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	}
+});

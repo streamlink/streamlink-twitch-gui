@@ -6,66 +6,66 @@ import openBrowser from "nwjs/openBrowser";
 import layout from "templates/components/modal/ModalLivestreamerComponent.hbs";
 
 
-	var get = Ember.get;
-	var set = Ember.set;
-	var schedule = Ember.run.schedule;
-	var readOnly = Ember.computed.readOnly;
+var get = Ember.get;
+var set = Ember.set;
+var schedule = Ember.run.schedule;
+var readOnly = Ember.computed.readOnly;
 
-	var livestreamerDownloadUrl = config.livestreamer[ "download-url" ];
-
-
-	export default ModalDialogComponent.extend({
-		livestreamer: Ember.inject.service(),
-
-		layout: layout,
-		"class": "modal-livestreamer",
-
-		error : readOnly( "livestreamer.error" ),
-		active: readOnly( "livestreamer.active" ),
-
-		qualities: Settings.qualities,
-		versionMin: config.livestreamer[ "version-min" ],
+var livestreamerDownloadUrl = config.livestreamer[ "download-url" ];
 
 
-		actions: {
-			"download": function( success ) {
-				if ( livestreamerDownloadUrl ) {
-					openBrowser( livestreamerDownloadUrl );
-					if ( success instanceof Function ) {
-						success();
-					}
-				}
-			},
+export default ModalDialogComponent.extend({
+	livestreamer: Ember.inject.service(),
 
-			"chat": function( channel ) {
-				get( this, "livestreamer" ).openChat( channel );
-			},
+	layout: layout,
+	"class": "modal-livestreamer",
 
-			"abort": function() {
-				set( this, "livestreamer.abort", true );
-				get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
-			},
+	error : readOnly( "livestreamer.error" ),
+	active: readOnly( "livestreamer.active" ),
 
-			"close": function() {
-				get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
-				schedule( "destroy", this, function() {
-					set( this, "livestreamer.active", null );
-				});
-			},
+	qualities: Settings.qualities,
+	versionMin: config.livestreamer[ "version-min" ],
 
-			"shutdown": function() {
-				var active = get( this, "active" );
-				if ( active ) {
-					active.kill();
-				}
-				this.send( "close" );
-			},
 
-			"toggleLog": function() {
-				var active = get( this, "active" );
-				if ( active ) {
-					active.toggleProperty( "showLog" );
+	actions: {
+		"download": function( success ) {
+			if ( livestreamerDownloadUrl ) {
+				openBrowser( livestreamerDownloadUrl );
+				if ( success instanceof Function ) {
+					success();
 				}
 			}
+		},
+
+		"chat": function( channel ) {
+			get( this, "livestreamer" ).openChat( channel );
+		},
+
+		"abort": function() {
+			set( this, "livestreamer.abort", true );
+			get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
+		},
+
+		"close": function() {
+			get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
+			schedule( "destroy", this, function() {
+				set( this, "livestreamer.active", null );
+			});
+		},
+
+		"shutdown": function() {
+			var active = get( this, "active" );
+			if ( active ) {
+				active.kill();
+			}
+			this.send( "close" );
+		},
+
+		"toggleLog": function() {
+			var active = get( this, "active" );
+			if ( active ) {
+				active.toggleProperty( "showLog" );
+			}
 		}
-	});
+	}
+});

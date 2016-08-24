@@ -1,22 +1,22 @@
 import Ember from "Ember";
 
 
-	var set = Ember.set;
+var set = Ember.set;
 
 
-	export default Ember.Controller.extend({
-		queryParams: [ "sortby", "direction" ],
+export default Ember.Controller.extend({
+	queryParams: [ "sortby", "direction" ],
 
-		sortby   : "created_at",
-		direction: "desc",
+	sortby   : "created_at",
+	direction: "desc",
 
-		actions: {
-			"sortMethod": function( sortby ) {
-				set( this, "sortby", sortby );
-			},
+	actions: {
+		"sortMethod": function( sortby ) {
+			set( this, "sortby", sortby );
+		},
 
-			"sortOrder": function( direction ) {
-				set( this, "direction", direction );
-			}
+		"sortOrder": function( direction ) {
+			set( this, "direction", direction );
 		}
-	});
+	}
+});

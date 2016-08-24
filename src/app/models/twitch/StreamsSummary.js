@@ -1,13 +1,13 @@
 import DS from "EmberData";
 
 
-	var attr = DS.attr;
+var attr = DS.attr;
 
 
-	export default DS.Model.extend({
-		channels: attr( "number" ),
-		viewers: attr( "number" )
+export default DS.Model.extend({
+	channels: attr( "number" ),
+	viewers: attr( "number" )
 
-	}).reopenClass({
-		toString: function() { return "kraken/streams/summary"; }
-	});
+}).reopenClass({
+	toString: function() { return "kraken/streams/summary"; }
+});

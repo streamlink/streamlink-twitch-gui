@@ -1,15 +1,15 @@
 import DS from "EmberData";
 
 
-	var attr = DS.attr;
+var attr = DS.attr;
 
 
-	export default DS.Model.extend({
-		title: attr( "string" ),
-		image: attr( "string" ),
-		link: attr( "string" ),
-		//description: attr( "string" ),
-		html_description: attr( "string" ),
-		kind: attr( "string" ),
-		display_order: attr( "number" )
-	});
+export default DS.Model.extend({
+	title: attr( "string" ),
+	image: attr( "string" ),
+	link: attr( "string" ),
+	//description: attr( "string" ),
+	html_description: attr( "string" ),
+	kind: attr( "string" ),
+	display_order: attr( "number" )
+});

@@ -1,4 +1,4 @@
 import nwGui from "nwjs/nwGui";
 
 
-	export default nwGui.Shell.openExternal;
+export default nwGui.Shell.openExternal;
