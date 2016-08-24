@@ -1,11 +1,6 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import { Helper } from "Ember";
 
-	return Ember.Helper.helper(function( params, hash ) {
-		return params[ hash.index ];
-	});
 
+export default Helper.helper(function( params, hash ) {
+	return params[ hash.index ];
 });

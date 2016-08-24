@@ -1,63 +1,61 @@
-define([
-	"Ember",
-	"utils/ember/ObjectBuffer"
-], function(
-	Ember,
-	ObjectBuffer
-) {
-
-	var get = Ember.get;
-	var getOwner = Ember.getOwner;
+import {
+	get,
+	getOwner,
+	inject,
+	Route
+} from "Ember";
+import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 
-	return Ember.Route.extend({
-		modal: Ember.inject.service(),
+const { service } = inject;
 
-		model: function() {
-			var store  = get( this, "store" );
-			var params = this.paramsFor( "channel" );
-			var id     = params.channel;
 
-			return store.findRecord( "channelSettings", id )
-				.catch(function() {
-					// get the record automatically created by store.findRecord()
-					var record = store.recordForId( "channelSettings", id );
-					// transition from `root.empty` to `root.loaded.created.uncommitted`
-					record._internalModel.loadedData();
-					return record;
-				})
-				.then(function( record ) {
-					// use a buffer proxy object as model
-					return {
-						model : record,
-						buffer: ObjectBuffer.create({
-							content: record.toJSON()
-						})
-					};
-				});
-		},
+export default Route.extend({
+	modal: service(),
 
-		refresh: function() {
-			return getOwner( this ).lookup( "route:channel" ).refresh();
-		},
+	model() {
+		var store  = get( this, "store" );
+		var params = this.paramsFor( "channel" );
+		var id     = params.channel;
 
-		actions: {
-			willTransition: function( transition ) {
-				// check whether the user has changed any values
-				if ( !get( this, "controller.model.buffer.isDirty" ) ) {
-					// don't keep the channelSettings records in cache
-					return get( this, "store" ).unloadAll( "channelSettings" );
-				}
+		return store.findRecord( "channelSettings", id )
+			.catch(function() {
+				// get the record automatically created by store.findRecord()
+				var record = store.recordForId( "channelSettings", id );
+				// transition from `root.empty` to `root.loaded.created.uncommitted`
+				record._internalModel.loadedData();
+				return record;
+			})
+			.then(function( record ) {
+				// use a buffer proxy object as model
+				return {
+					model : record,
+					buffer: ObjectBuffer.create({
+						content: record.toJSON()
+					})
+				};
+			});
+	},
 
-				// stay here...
-				transition.abort();
+	refresh() {
+		return getOwner( this ).lookup( "route:channel" ).refresh();
+	},
 
-				// and let the user decide
-				get( this, "modal" ).openModal( "confirm", this.controller, {
-					previousTransition: transition
-				});
+	actions: {
+		willTransition( previousTransition ) {
+			// check whether the user has changed any values
+			if ( !get( this, "controller.model.buffer.isDirty" ) ) {
+				// don't keep the channelSettings records in cache
+				return get( this, "store" ).unloadAll( "channelSettings" );
 			}
-		}
-	});
 
+			// stay here...
+			previousTransition.abort();
+
+			// and let the user decide
+			get( this, "modal" ).openModal( "confirm", this.controller, {
+				previousTransition
+			});
+		}
+	}
 });

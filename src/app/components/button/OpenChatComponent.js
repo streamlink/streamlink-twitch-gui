@@ -1,33 +1,30 @@
-define([
-	"Ember",
-	"components/button/FormButtonComponent"
-], function(
-	Ember,
-	FormButtonComponent
-) {
-
-	var get = Ember.get;
+import {
+	get,
+	inject
+} from "Ember";
+import FormButtonComponent from "components/button/FormButtonComponent";
 
 
-	return FormButtonComponent.extend({
-		chat: Ember.inject.service(),
+const { service } = inject;
 
-		"class" : "btn-hint",
-		icon    : "fa-comments",
-		title   : "Open chat",
-		iconanim: true,
 
-		action: "chat",
+export default FormButtonComponent.extend({
+	chat: service(),
 
-		actions: {
-			"chat": function( success, failure ) {
-				var channel = get( this, "channel" );
-				var chat    = get( this, "chat" );
-				chat.open( channel )
-					.then( success, failure )
-					.catch(function() {});
-			}
+	"class" : "btn-hint",
+	icon    : "fa-comments",
+	title   : "Open chat",
+	iconanim: true,
+
+	action: "chat",
+
+	actions: {
+		chat( success, failure ) {
+			var channel = get( this, "channel" );
+			var chat    = get( this, "chat" );
+			chat.open( channel )
+				.then( success, failure )
+				.catch(function() {});
 		}
-	});
-
+	}
 });

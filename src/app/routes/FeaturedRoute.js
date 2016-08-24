@@ -1,47 +1,41 @@
-define([
-	"Ember",
-	"utils/ember/toArray",
-	"utils/preload"
-], function(
-	Ember,
-	toArray,
-	preload
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
+import {
+	get,
+	set,
+	RSVP,
+	Route
+} from "Ember";
+import toArray from "utils/ember/toArray";
+import preload from "utils/preload";
 
 
-	return Ember.Route.extend({
-		model: function() {
-			var store = get( this, "store" );
+export default Route.extend({
+	model() {
+		var store = get( this, "store" );
 
-			return Ember.RSVP.hash({
-				summary : store.findAll( "twitchStreamsSummary", { reload: true } )
-					.then( toArray ),
-				featured: store.query( "twitchStreamsFeatured", {
-					offset: 0,
-					limit : 5
-				})
-					.then( toArray )
+		return RSVP.hash({
+			summary : store.findAll( "twitchStreamsSummary", { reload: true } )
+				.then( toArray ),
+			featured: store.query( "twitchStreamsFeatured", {
+				offset: 0,
+				limit : 5
 			})
-				.then(function( data ) {
-					return Promise.resolve( data.featured )
-						.then( preload([
-							"image",
-							"stream.preview.large_nocache"
-						]) )
-						.then(function() {
-							return data;
-						});
-				});
-		},
+				.then( toArray )
+		})
+			.then(function( data ) {
+				return Promise.resolve( data.featured )
+					.then( preload([
+						"image",
+						"stream.preview.large_nocache"
+					]) )
+					.then(function() {
+						return data;
+					});
+			});
+	},
 
-		resetController: function( controller, isExiting ) {
-			if ( isExiting ) {
-				set( controller, "isAnimated", false );
-			}
+	resetController( controller, isExiting ) {
+		if ( isExiting ) {
+			set( controller, "isAnimated", false );
 		}
-	});
-
+	}
 });

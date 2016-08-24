@@ -1,38 +1,33 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
-		primaryKey: "name",
 
-		modelNameFromPayloadKey: function() {
-			return "twitchChannel";
-		},
+export default TwitchSerializer.extend({
+	primaryKey: "name",
 
-		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
-			payload = {
-				twitchChannel: payload
-			};
+	modelNameFromPayloadKey() {
+		return "twitchChannel";
+	},
 
-			return this._super( store, primaryModelClass, payload, id, requestType );
-		},
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
+		payload = {
+			twitchChannel: payload
+		};
 
-		normalize: function( modelClass, resourceHash, prop ) {
-			// Twitch.tv API bug?
-			// Sometimes a user record (/user/:user - model not implemented) is embedded into
-			// a stream record instead of a channels record (/channels/:channel - the current model)
-			if ( resourceHash ) {
-				delete resourceHash.bio;
-				delete resourceHash.type;
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	},
 
-				// also remove the teams property for now
-				delete resourceHash.teams;
-			}
+	normalize( modelClass, resourceHash, prop ) {
+		// Twitch.tv API bug?
+		// Sometimes a user record (/user/:user - model not implemented) is embedded into
+		// a stream record instead of a channels record (/channels/:channel - the current model)
+		if ( resourceHash ) {
+			delete resourceHash.bio;
+			delete resourceHash.type;
 
-			return this._super( modelClass, resourceHash, prop );
+			// also remove the teams property for now
+			delete resourceHash.teams;
 		}
-	});
 
+		return this._super( modelClass, resourceHash, prop );
+	}
 });

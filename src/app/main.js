@@ -2,26 +2,28 @@
 global.process.removeAllListeners();
 
 global.process.on( "uncaughtException", function( err ) {
-	console.log( "Uncaught exception:", err );
+// do nothing if window was fully initialized
+if ( window.initialized ) { return; }
 
-	// do nothing if window was fully initialized
-	if ( window.initialized ) { return; }
-
-	// kill the process while not being in debug mode
-	if ( !DEBUG ) {
-		global.process.exit( 1 );
-	}
-
-	// open the window and dev tools
+// show the app window and dev tools while being in debug mode
+if ( DEBUG ) {
 	try {
-		var nwWindow = window.nwDispatcher.requireNwGui().Window.get();
+		var nwWindow = require( "nw.gui" ).Window.get();
 		nwWindow.show();
 		nwWindow.showDevTools();
-	} catch ( e ) {
-		console.log( "Could not initialize application window" );
-		global.process.exit( 1 );
-	}
+		return;
+	} catch( e ) {}
+}
+
+// write to stderr and kill the process with error code 1
+global.process.stderr.write([
+	"Could not initialize application window",
+	require( "util" ).inspect( err ),
+	""
+].join( "\n" ) );
+global.process.exit( 1 );
 });
+
 
 require( "styles/app" );
 require( "./app" );

@@ -1,20 +1,21 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import {
+	inject,
+	Component
+} from "Ember";
 
-	return Ember.Component.extend({
-		settings: Ember.inject.service(),
 
-		tagName: "li",
-		classNameBindings: [
-			"isNewItem:newItem",
-			"isDuplicateItem:duplicateItem"
-		],
+const { service } = inject;
 
-		isNewItem: false,
-		isDuplicateItem: false
-	});
 
+export default Component.extend({
+	settings: service(),
+
+	tagName: "li",
+	classNameBindings: [
+		"isNewItem:newItem",
+		"isDuplicateItem:duplicateItem"
+	],
+
+	isNewItem: false,
+	isDuplicateItem: false
 });

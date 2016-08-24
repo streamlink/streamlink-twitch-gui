@@ -10,7 +10,7 @@ var defMaxBuffSize = 4096;
  * @param {Object?}       thisArg
  * @returns {StreamOutputBuffer}
  */
-module.exports = function( options, callback, thisArg ) {
+function StreamOutputBuffer( options, callback, thisArg ) {
 	if ( !options || options instanceof Function ) {
 		callback = options;
 		options  = {};
@@ -39,5 +39,8 @@ module.exports = function( options, callback, thisArg ) {
 	};
 
 	return StreamOutputBuffer;
-};
+}
 
+
+// don't export as an es6 module (metadata-loader)
+module.exports = StreamOutputBuffer;

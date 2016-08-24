@@ -1,24 +1,19 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
-		modelNameFromPayloadKey: function() {
-			return "twitchChannelsFollowed";
-		},
 
-		attrs: {
-			channel: { deserialize: "records" }
-		},
+export default TwitchSerializer.extend({
+	modelNameFromPayloadKey() {
+		return "twitchChannelsFollowed";
+	},
 
-		normalize: function( modelClass, resourceHash, prop ) {
-			var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
-			resourceHash[ this.primaryKey ] = resourceHash.channel[ foreignKey ];
+	attrs: {
+		channel: { deserialize: "records" }
+	},
 
-			return this._super( modelClass, resourceHash, prop );
-		}
-	});
+	normalize( modelClass, resourceHash, prop ) {
+		var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
+		resourceHash[ this.primaryKey ] = resourceHash.channel[ foreignKey ];
 
+		return this._super( modelClass, resourceHash, prop );
+	}
 });

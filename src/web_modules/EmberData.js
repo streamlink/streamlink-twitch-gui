@@ -1,8 +1,24 @@
-define([
-	"Ember",
-	"vendor/ember-data/ember-data"
-], function() {
+import {} from "Ember";
+import {} from "vendor/ember-data/ember-data";
 
-	return window.DS;
 
-});
+const EmberData = window.DS;
+
+
+export default EmberData;
+
+// attributes
+export const attr = EmberData.attr;
+export const belongsTo = EmberData.belongsTo;
+export const hasMany = EmberData.hasMany;
+
+// classes
+export const AdapterError = EmberData.AdapterError;
+export const BooleanTransform = EmberData.BooleanTransform;
+export const EmbeddedRecordsMixin = EmberData.EmbeddedRecordsMixin;
+export const InvalidError = EmberData.InvalidError;
+export const Model = EmberData.Model;
+export const PromiseObject = EmberData.PromiseObject;
+export const RESTAdapter = EmberData.RESTAdapter;
+export const RESTSerializer = EmberData.RESTSerializer;
+export const Store = EmberData.Store;

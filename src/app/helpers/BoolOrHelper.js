@@ -1,16 +1,11 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	function boolOr( value ) {
-		return value;
-	}
+import { Helper } from "Ember";
 
 
-	return Ember.Helper.helper(function( params ) {
-		return params.some( boolOr );
-	});
+function boolOr( value ) {
+	return value;
+}
 
+
+export default Helper.helper(function( params ) {
+	return params.some( boolOr );
 });

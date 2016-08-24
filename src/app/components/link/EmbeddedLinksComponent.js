@@ -1,36 +1,28 @@
-define([
-	"Ember",
-	"utils/linkparser",
-	"templates/components/link/EmbeddedLinksComponent.hbs"
-], function(
-	Ember,
-	linkparser,
-	layout
-) {
-
-	var get = Ember.get;
-	var parseString = linkparser.parseString;
+import {
+	get,
+	Component
+} from "Ember";
+import { parseString } from "utils/linkparser";
+import layout from "templates/components/link/EmbeddedLinksComponent.hbs";
 
 
-	return Ember.Component.extend({
-		layout: layout,
+export default Component.extend({
+	layout,
 
-		content: function() {
-			var text   = get( this, "text" );
-			var parsed = parseString( text );
-			var links  = parsed.links;
+	content: function() {
+		var text   = get( this, "text" );
+		var parsed = parseString( text );
+		var links  = parsed.links;
 
-			// merge texts and links
-			return parsed.texts.reduce(function( output, textItem, index ) {
-				if ( textItem.length ) {
-					output.push({ text: textItem });
-				}
-				if ( links[ index ] ) {
-					output.push( links[ index ] );
-				}
-				return output;
-			}, [] );
-		}.property( "text" )
-	});
-
+		// merge texts and links
+		return parsed.texts.reduce(function( output, textItem, index ) {
+			if ( textItem.length ) {
+				output.push({ text: textItem });
+			}
+			if ( links[ index ] ) {
+				output.push( links[ index ] );
+			}
+			return output;
+		}, [] );
+	}.property( "text" )
 });

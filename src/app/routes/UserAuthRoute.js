@@ -1,31 +1,30 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	var get = Ember.get;
+import {
+	get,
+	inject,
+	Route
+} from "Ember";
 
 
-	return Ember.Route.extend({
-		auth: Ember.inject.service(),
+const { service } = inject;
 
-		disableAutoRefresh: true,
 
-		beforeModel: function( transition ) {
-			// check if user is successfully logged in
-			if ( get( this, "auth.session.isLoggedIn" ) ) {
-				transition.abort();
-				this.transitionTo( "user.index" );
-			}
-		},
+export default Route.extend({
+	auth: service(),
 
-		actions: {
-			willTransition: function() {
-				this.controller.send( "abort" );
-				this.controller.resetProperties();
-			}
+	disableAutoRefresh: true,
+
+	beforeModel( transition ) {
+		// check if user is successfully logged in
+		if ( get( this, "auth.session.isLoggedIn" ) ) {
+			transition.abort();
+			this.transitionTo( "user.index" );
 		}
-	});
+	},
 
+	actions: {
+		willTransition() {
+			this.controller.send( "abort" );
+			this.controller.resetProperties();
+		}
+	}
 });

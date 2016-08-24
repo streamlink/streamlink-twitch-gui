@@ -1,20 +1,15 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
-
-	var attr = DS.attr;
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-	return DS.Model.extend({
-		// pass through
-		authorization: attr(),
-		user_name: attr( "string" ),
-		valid: attr( "boolean" )
+export default Model.extend({
+	// pass through
+	authorization: attr(),
+	user_name: attr( "string" ),
+	valid: attr( "boolean" )
 
-	}).reopenClass({
-		toString: function() { return "kraken/"; }
-	});
-
+}).reopenClass({
+	toString() { return "kraken/"; }
 });

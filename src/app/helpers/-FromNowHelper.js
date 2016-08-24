@@ -1,29 +1,26 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	var later  = Ember.run.later;
-	var cancel = Ember.run.cancel;
+import {
+	run,
+	Helper
+} from "Ember";
 
 
-	return Ember.Helper.extend({
-		compute: function( params, hash ) {
-			if ( hash.interval ) {
-				this._interval = later( this, "recompute", hash.interval );
-			}
+const { cancel, later } = run;
 
-			return this._compute.apply( this, arguments );
-		},
 
-		destroy: function() {
-			if ( this._interval ) {
-				cancel( this._interval );
-			}
-
-			this._super.apply( this, arguments );
+export default Helper.extend({
+	compute( params, hash ) {
+		if ( hash.interval ) {
+			this._interval = later( this, "recompute", hash.interval );
 		}
-	});
 
+		return this._compute.apply( this, arguments );
+	},
+
+	destroy() {
+		if ( this._interval ) {
+			cancel( this._interval );
+		}
+
+		this._super.apply( this, arguments );
+	}
 });

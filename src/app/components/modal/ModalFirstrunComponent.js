@@ -1,36 +1,33 @@
-define([
-	"Ember",
-	"components/modal/ModalDialogComponent",
-	"templates/components/modal/ModalFirstrunComponent.hbs"
-], function(
-	Ember,
-	ModalDialogComponent,
-	layout
-) {
-
-	var get = Ember.get;
+import {
+	get,
+	inject
+} from "Ember";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import layout from "templates/components/modal/ModalFirstrunComponent.hbs";
 
 
-	return ModalDialogComponent.extend({
-		versioncheck: Ember.inject.service(),
-
-		layout: layout,
-		"class": "modal-firstrun",
-
-		goto: "goto",
+const { service } = inject;
 
 
-		actions: {
-			"settings": function() {
-				this.sendAction( "goto", "settings" );
-				this.send( "start" );
-			},
+export default ModalDialogComponent.extend({
+	versioncheck: service(),
 
-			"start": function() {
-				this.send( "close" );
-				get( this, "versioncheck" ).checkForNewRelease();
-			}
+	layout,
+
+	"class": "modal-firstrun",
+
+	goto: "goto",
+
+
+	actions: {
+		settings() {
+			this.sendAction( "goto", "settings" );
+			this.send( "start" );
+		},
+
+		start() {
+			this.send( "close" );
+			get( this, "versioncheck" ).checkForNewRelease();
 		}
-	});
-
+	}
 });

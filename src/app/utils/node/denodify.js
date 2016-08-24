@@ -7,7 +7,7 @@ var slice = [].slice;
  * @param {Object?} thisArg
  * @returns {denodified}
  */
-module.exports = function denodify( func, thisArg ) {
+function denodify( func, thisArg ) {
 	/**
 	 * The denodified function
 	 * @typedef denodified
@@ -37,4 +37,9 @@ module.exports = function denodify( func, thisArg ) {
 	}
 
 	return denodified;
-};
+}
+
+
+// don't export as an es6 module (metadata-loader)
+// TODO: add a denodify npm dependency
+module.exports = denodify;

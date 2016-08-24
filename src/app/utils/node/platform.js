@@ -1,51 +1,31 @@
-define([
-	"config",
-	"utils/semver",
-	"os",
-	"path"
-], function(
-	config,
-	semver,
-	OS,
-	PATH
-) {
-
-	var platform = OS.platform();
-	var release  = OS.release();
-
-	function isVersionGte( version ) {
-		return semver.sort([ release, version ]).shift() === version;
-	}
+import { dirs } from "config";
+import { sort } from "utils/semver";
+import OS from "os";
+import PATH from "path";
 
 
-	var isWin    = platform === "win32";
-	var isDarwin = platform === "darwin";
-	var isLinux  = platform === "linux";
-
-	var isWinGte8 = isWin && isVersionGte( "6.2.0" );
+export const platform = OS.platform();
+export const release  = OS.release();
 
 
-	var slice = [].slice;
-	var tmpdirName = config.dirs[ "temp" ];
-	var tmpdirRoot = [ OS.tmpdir(), tmpdirName ];
-
-	function tmpdir() {
-		var args = slice.call( arguments );
-		return PATH.resolve.apply( PATH, tmpdirRoot.concat( args ) );
-	}
+function isVersionGte( version ) {
+	return sort([ release, version ]).shift() === version;
+}
 
 
-	return {
-		platform: platform,
-		release : release,
+export const isWin    = platform === "win32";
+export const isDarwin = platform === "darwin";
+export const isLinux  = platform === "linux";
 
-		isWin   : isWin,
-		isDarwin: isDarwin,
-		isLinux : isLinux,
+export const isWinGte8 = isWin && isVersionGte( "6.2.0" );
 
-		isWinGte8: isWinGte8,
 
-		tmpdir: tmpdir
-	};
+const slice = [].slice;
+const { temp: tmpdirName } = dirs;
+const tmpdirRoot = [ OS.tmpdir(), tmpdirName ];
 
-});
+
+export function tmpdir() {
+	let args = slice.call( arguments );
+	return PATH.resolve.apply( PATH, tmpdirRoot.concat( args ) );
+}

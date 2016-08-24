@@ -1,37 +1,27 @@
-define(function() {
-
-	/**
-	 * @this {Array}
-	 * @param {...*} arguments
-	 * @returns {boolean}
-	 */
-	function containsAll() {
-		for ( var i = 0, l = arguments.length; i < l; i++ ) {
-			if ( this.indexOf( arguments[ i ] ) < 0 ) {
-				return false;
-			}
+/**
+ * @this {Array}
+ * @param {...*} arguments
+ * @returns {boolean}
+ */
+export function all() {
+	for ( var i = 0, l = arguments.length; i < l; i++ ) {
+		if ( this.indexOf( arguments[ i ] ) < 0 ) {
+			return false;
 		}
-		return true;
 	}
+	return true;
+}
 
-	/**
-	 * @this {Array}
-	 * @param {...*} arguments
-	 * @returns {boolean}
-	 */
-	function containsSome() {
-		for ( var i = 0, l = arguments.length; i < l; i++ ) {
-			if ( this.indexOf( arguments[ i ] ) >= 0 ) {
-				return true;
-			}
+/**
+ * @this {Array}
+ * @param {...*} arguments
+ * @returns {boolean}
+ */
+export function some() {
+	for ( var i = 0, l = arguments.length; i < l; i++ ) {
+		if ( this.indexOf( arguments[ i ] ) >= 0 ) {
+			return true;
 		}
-		return false;
 	}
-
-
-	return {
-		all : containsAll,
-		some: containsSome
-	};
-
-});
+	return false;
+}

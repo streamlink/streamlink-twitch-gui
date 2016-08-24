@@ -1,18 +1,13 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
-
-	var attr = DS.attr;
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-	return DS.Model.extend({
-		version: attr( "string", { defaultValue: "" } ),
-		checkagain: attr( "number", { defaultValue: 0 } )
+export default Model.extend({
+	version: attr( "string", { defaultValue: "" } ),
+	checkagain: attr( "number", { defaultValue: 0 } )
 
-	}).reopenClass({
-		toString: function() { return "Versioncheck"; }
-	});
-
+}).reopenClass({
+	toString() { return "Versioncheck"; }
 });

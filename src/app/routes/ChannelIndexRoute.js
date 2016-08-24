@@ -1,20 +1,15 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	var getOwner = Ember.getOwner;
+import {
+	getOwner,
+	Route
+} from "Ember";
 
 
-	return Ember.Route.extend({
-		model: function() {
-			return this.modelFor( "channel" );
-		},
+export default Route.extend({
+	model() {
+		return this.modelFor( "channel" );
+	},
 
-		refresh: function() {
-			return getOwner( this ).lookup( "route:channel" ).refresh();
-		}
-	});
-
+	refresh() {
+		return getOwner( this ).lookup( "route:channel" ).refresh();
+	}
 });

@@ -1,41 +1,37 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	var get = Ember.get;
-
-	var reFilter = /^\w+$/;
+import {
+	get,
+	Controller
+} from "Ember";
 
 
-	return Ember.Controller.extend({
-		filter: "",
-
-		modelFiltered: function() {
-			var filter = get( this, "filter" ).toLowerCase();
-			if ( !reFilter.test( filter ) ) {
-				return get( this, "model" );
-			}
-
-			return get( this, "all" ).filter(function( item ) {
-				return get( item, "settings.id" ).toLowerCase().indexOf( filter ) !== -1;
-			});
-		}.property( "model.[]", "all", "filter" ),
+const reFilter = /^\w+$/;
 
 
-		actions: {
-			"erase": function( modelItem ) {
-				var model = get( this, "model" );
-				var settingsRecord = get( modelItem, "settings" );
-				if ( get( settingsRecord, "isDeleted" ) ) { return; }
+export default Controller.extend({
+	filter: "",
 
-				settingsRecord.destroyRecord()
-					.then(function() {
-						model.removeObject( modelItem );
-					});
-			}
+	modelFiltered: function() {
+		var filter = get( this, "filter" ).toLowerCase();
+		if ( !reFilter.test( filter ) ) {
+			return get( this, "model" );
 		}
-	});
 
+		return get( this, "all" ).filter(function( item ) {
+			return get( item, "settings.id" ).toLowerCase().indexOf( filter ) !== -1;
+		});
+	}.property( "model.[]", "all", "filter" ),
+
+
+	actions: {
+		erase( modelItem ) {
+			var model = get( this, "model" );
+			var settingsRecord = get( modelItem, "settings" );
+			if ( get( settingsRecord, "isDeleted" ) ) { return; }
+
+			settingsRecord.destroyRecord()
+				.then(function() {
+					model.removeObject( modelItem );
+				});
+		}
+	}
 });

@@ -1,9 +1,4 @@
-define([
-	"vendor/masonry/dist/masonry.pkgd"
-], function(
-	Masonry
-) {
+import Masonry from "vendor/masonry/dist/masonry.pkgd";
 
-	return Masonry;
 
-});
+export default Masonry;

@@ -1,7 +1,6 @@
-define(function() {
+function toArray( recordArray ) {
+	return recordArray.toArray();
+}
 
-	return function toArray( recordArray ) {
-		return recordArray.toArray();
-	};
 
-});
+export default toArray;

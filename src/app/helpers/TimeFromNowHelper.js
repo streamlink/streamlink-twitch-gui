@@ -1,15 +1,9 @@
-define([
-	"helpers/-FromNowHelper",
-	"Moment"
-], function(
-	FromNowHelper,
-	Moment
-) {
+import FromNowHelper from "helpers/-FromNowHelper";
+import Moment from "Moment";
 
-	return FromNowHelper.extend({
-		_compute: function( params, hash ) {
-			return new Moment( params[0] ).fromNow( hash.suffix || params[1] );
-		}
-	});
 
+export default FromNowHelper.extend({
+	_compute( params, hash ) {
+		return new Moment( params[0] ).fromNow( hash.suffix || params[1] );
+	}
 });

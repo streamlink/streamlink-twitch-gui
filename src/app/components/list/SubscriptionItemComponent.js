@@ -1,76 +1,75 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/openBrowser",
-	"components/list/ListItemComponent",
-	"Moment",
-	"templates/components/list/SubscriptionItemComponent.hbs"
-], function(
-	Ember,
-	config,
-	openBrowser,
-	ListItemComponent,
-	Moment,
-	layout
-) {
-
-	var get = Ember.get;
-	var alias = Ember.computed.alias;
-
-	var subscriptionEditUrl   = config.twitch[ "subscription" ][ "edit-url" ];
-	var subscriptionCancelUrl = config.twitch[ "subscription" ][ "cancel-url" ];
+import {
+	get,
+	getWithDefault,
+	computed
+} from "Ember";
+import { twitch } from "config";
+import openBrowser from "nwjs/openBrowser";
+import ListItemComponent from "components/list/ListItemComponent";
+import Moment from "Moment";
+import layout from "templates/components/list/SubscriptionItemComponent.hbs";
 
 
-	return ListItemComponent.extend({
-		layout: layout,
-		classNames: [ "subscription-item-component" ],
-		attributeBindings: [ "style" ],
-
-		product  : alias( "content.product" ),
-		channel  : alias( "product.partner_login" ),
-		emoticons: alias( "product.emoticons" ),
-
-		style: function() {
-			var banner =  get( this, "channel.profile_banner" )
-			           || get( this, "channel.video_banner" )
-			           || "";
-			return ( "background-image:url(\"" + banner + "\")" ).htmlSafe();
-		}.property( "channel.profile_banner", "channel.video_banner" ),
-
-		hasEnded: function() {
-			var access_end = get( this, "content.access_end" );
-			return new Date() > access_end;
-		}.property( "content.access_end" ).volatile(),
-
-		ends: function() {
-			var access_end = get( this, "content.access_end" );
-			return new Moment().to( access_end );
-		}.property( "content.access_end" ).volatile(),
+const { alias } = computed;
+const {
+	subscription: {
+		"edit-url": subscriptionEditUrl,
+		"cancel-url": subscriptionCancelUrl
+	}
+} = twitch;
 
 
-		openBrowser: function( url ) {
-			var channel = get( this, "channel.id" );
-			if ( !channel ) { return Promise.reject(); }
+export default ListItemComponent.extend({
+	layout,
 
-			url = url.replace( "{channel}", channel );
-			openBrowser( url );
-			return Promise.resolve();
+	classNames: [ "subscription-item-component" ],
+	attributeBindings: [ "style" ],
+
+	product  : alias( "content.product" ),
+	channel  : alias( "product.partner_login" ),
+	emoticons: alias( "product.emoticons" ),
+
+	style: function() {
+		let banner = getWithDefault( this,
+			"channel.profile_banner",
+			getWithDefault( this, "channel.video_banner", "" )
+		);
+
+		return ( `background-image:url("${banner}")` ).htmlSafe();
+	}.property( "channel.profile_banner", "channel.video_banner" ),
+
+	hasEnded: function() {
+		var access_end = get( this, "content.access_end" );
+		return new Date() > access_end;
+	}.property( "content.access_end" ).volatile(),
+
+	ends: function() {
+		var access_end = get( this, "content.access_end" );
+		return new Moment().to( access_end );
+	}.property( "content.access_end" ).volatile(),
+
+
+	openBrowser( url ) {
+		var channel = get( this, "channel.id" );
+		if ( !channel ) { return Promise.reject(); }
+
+		url = url.replace( "{channel}", channel );
+		openBrowser( url );
+		return Promise.resolve();
+	},
+
+
+	actions: {
+		edit( success, failure ) {
+			this.openBrowser( subscriptionEditUrl )
+				.then( success, failure )
+				.catch(function() {});
 		},
 
-
-		actions: {
-			edit: function( success, failure ) {
-				this.openBrowser( subscriptionEditUrl )
-					.then( success, failure )
-					.catch(function() {});
-			},
-
-			cancel: function( success, failure ) {
-				this.openBrowser( subscriptionCancelUrl )
-					.then( success, failure )
-					.catch(function() {});
-			}
+		cancel( success, failure ) {
+			this.openBrowser( subscriptionCancelUrl )
+				.then( success, failure )
+				.catch(function() {});
 		}
-	});
-
+	}
 });

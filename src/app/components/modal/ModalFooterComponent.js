@@ -1,12 +1,7 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import { Component } from "Ember";
 
-	return Ember.Component.extend({
-		tagName: "footer",
-		classNameBindings: [ "class" ]
-	});
 
+export default Component.extend({
+	tagName: "footer",
+	classNameBindings: [ "class" ]
 });

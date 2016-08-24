@@ -1,12 +1,7 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import { Component } from "Ember";
 
-	return Ember.Component.extend({
-		tagName: "section",
-		classNameBindings: [ ":modal-body", "class" ]
-	});
 
+export default Component.extend({
+	tagName: "section",
+	classNameBindings: [ ":modal-body", "class" ]
 });

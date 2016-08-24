@@ -1,36 +1,29 @@
-define([
-	"Ember",
-	"components/list/ListItemComponent",
-	"templates/components/list/SettingsChannelItemComponent.hbs"
-], function(
-	Ember,
-	ListItemComponent,
-	layout
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
+import {
+	get,
+	set
+} from "Ember";
+import ListItemComponent from "components/list/ListItemComponent";
+import layout from "templates/components/list/SettingsChannelItemComponent.hbs";
 
 
-	return ListItemComponent.extend({
-		layout: layout,
-		classNames: [ "settings-channel-item-component" ],
+export default ListItemComponent.extend({
+	layout,
 
-		dialog: false,
+	classNames: [ "settings-channel-item-component" ],
 
-		actions: {
-			"eraseDialog": function() {
-				set( this, "dialog", true );
-			},
+	dialog: false,
 
-			"confirm": function() {
-				get( this, "erase" )();
-			},
+	actions: {
+		eraseDialog() {
+			set( this, "dialog", true );
+		},
 
-			"decline": function() {
-				set( this, "dialog", false );
-			}
+		confirm() {
+			get( this, "erase" )();
+		},
+
+		decline() {
+			set( this, "dialog", false );
 		}
-	});
-
+	}
 });

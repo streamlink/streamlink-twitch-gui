@@ -1,67 +1,66 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
+import {
+	get,
+	set,
+	inject,
+	Route
+} from "Ember";
 
 
-	return Ember.Route.extend({
-		auth: Ember.inject.service(),
+const { service } = inject;
 
-		beforeModel: function( transition ) {
-			var self = this;
-			var auth = get( self, "auth" );
 
-			// check if user is successfully logged in
-			if ( get( auth, "session.isLoggedIn" ) ) { return; }
+export default Route.extend({
+	auth: service(),
 
-			transition.abort();
+	beforeModel( transition ) {
+		var self = this;
+		var auth = get( self, "auth" );
 
-			// send user to login form
-			function redirect() {
-				var controller = self.controllerFor( "userAuth" );
-				set( controller, "previousTransition", transition );
-				self.transitionTo( "user.auth" );
-			}
+		// check if user is successfully logged in
+		if ( get( auth, "session.isLoggedIn" ) ) { return; }
 
-			function onLogin( success ) {
-				if ( success ) {
-					// send user back to original route
-					transition.retry();
-				} else {
-					redirect();
-				}
-			}
+		transition.abort();
 
-			function check() {
-				// login not pending?
-				if ( !get( auth, "session.isPending" ) ) {
-					redirect();
-				} else {
-					// show loading screen
-					self.intermediateTransitionTo( "loading" );
+		// send user to login form
+		function redirect() {
+			var controller = self.controllerFor( "userAuth" );
+			set( controller, "previousTransition", transition );
+			self.transitionTo( "user.auth" );
+		}
 
-					// unregister onLogin callback as soon as the user switches the route
-					// before the callback has fired
-					self.router.one( "didTransition", function() {
-						auth.off( "login", onLogin );
-					});
-
-					// register callback once
-					auth.one( "login", onLogin );
-				}
-			}
-
-			// session record not yet loaded?
-			if ( !get( auth, "session" ) ) {
-				auth.one( "initialized", check );
+		function onLogin( success ) {
+			if ( success ) {
+				// send user back to original route
+				transition.retry();
 			} else {
-				check();
+				redirect();
 			}
 		}
-	});
 
+		function check() {
+			// login not pending?
+			if ( !get( auth, "session.isPending" ) ) {
+				redirect();
+			} else {
+				// show loading screen
+				self.intermediateTransitionTo( "loading" );
+
+				// unregister onLogin callback as soon as the user switches the route
+				// before the callback has fired
+				self.router.one( "didTransition", function() {
+					auth.off( "login", onLogin );
+				});
+
+				// register callback once
+				auth.one( "login", onLogin );
+			}
+		}
+
+		// session record not yet loaded?
+		if ( !get( auth, "session" ) ) {
+			auth.one( "initialized", check );
+		} else {
+			check();
+		}
+	}
 });

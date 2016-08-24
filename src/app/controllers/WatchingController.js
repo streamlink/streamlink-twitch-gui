@@ -1,33 +1,32 @@
-define([
-	"Ember",
-	"models/localstorage/Settings"
-], function(
-	Ember,
-	Settings
-) {
-
-	var get = Ember.get;
-	var sort = Ember.computed.sort;
+import {
+	get,
+	computed,
+	inject,
+	Controller
+} from "Ember";
+import Settings from "models/localstorage/Settings";
 
 
-	return Ember.Controller.extend({
-		auth: Ember.inject.service(),
-		livestreamer: Ember.inject.service(),
+const { sort } = computed;
+const { service } = inject;
 
-		sortedModel: sort( "model", "sortBy" ),
-		sortBy: [ "started:desc" ],
 
-		qualities: Settings.qualities,
+export default Controller.extend({
+	auth: service(),
+	livestreamer: service(),
 
-		actions: {
-			"openDialog": function( stream ) {
-				get( this, "livestreamer" ).startStream( stream );
-			},
+	sortedModel: sort( "model", "sortBy" ),
+	sortBy: [ "started:desc" ],
 
-			"closeStream": function( stream ) {
-				get( this, "livestreamer" ).closeStream( stream );
-			}
+	qualities: Settings.qualities,
+
+	actions: {
+		openDialog( stream ) {
+			get( this, "livestreamer" ).startStream( stream );
+		},
+
+		closeStream( stream ) {
+			get( this, "livestreamer" ).closeStream( stream );
 		}
-	});
-
+	}
 });

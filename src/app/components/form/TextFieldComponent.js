@@ -1,60 +1,56 @@
-define([
-	"Ember",
-	"nwjs/menu",
-	"nwjs/clipboard"
-], function(
-	Ember,
-	Menu,
-	clipboard
-) {
+import { TextField } from "Ember";
+import Menu from "nwjs/menu";
+import {
+	get as getClipboard,
+	set as setClipboard
+} from "nwjs/clipboard";
 
-	return Ember.TextField.extend({
-		attributeBindings: [ "autoselect:data-selectable" ],
 
-		autoselect: false,
+export default TextField.extend({
+	attributeBindings: [ "autoselect:data-selectable" ],
 
-		contextMenu: function( event ) {
-			if ( this.attrs.noContextmenu ) { return; }
+	autoselect: false,
 
-			var element = this.element;
-			var start   = element.selectionStart;
-			var end     = element.selectionEnd;
+	contextMenu( event ) {
+		if ( this.attrs.noContextmenu ) { return; }
 
-			var clip    = clipboard.get();
+		var element = this.element;
+		var start   = element.selectionStart;
+		var end     = element.selectionEnd;
 
-			var menu = Menu.create();
+		var clip    = getClipboard();
 
-			menu.items.pushObjects([
-				{
-					label  : "Copy",
-					enabled: start !== end,
-					click  : function() {
-						var selected = element.value.substr( start, end - start );
-						clipboard.set( selected );
-					}
-				},
-				{
-					label  : "Paste",
-					enabled: !element.readOnly && !element.disabled && clip && clip.length,
-					click  : function() {
-						var value  = element.value;
-						var before = value.substr( 0, element.selectionStart );
-						var after  = value.substr( element.selectionEnd );
+		var menu = Menu.create();
 
-						element.value = before + clip + after;
-						element.selectionStart = element.selectionEnd = before.length + clip.length;
-					}
+		menu.items.pushObjects([
+			{
+				label  : "Copy",
+				enabled: start !== end,
+				click() {
+					var selected = element.value.substr( start, end - start );
+					setClipboard( selected );
 				}
-			]);
+			},
+			{
+				label  : "Paste",
+				enabled: !element.readOnly && !element.disabled && clip && clip.length,
+				click() {
+					var value  = element.value;
+					var before = value.substr( 0, element.selectionStart );
+					var after  = value.substr( element.selectionEnd );
 
-			menu.popup( event );
-		},
+					element.value = before + clip + after;
+					element.selectionStart = element.selectionEnd = before.length + clip.length;
+				}
+			}
+		]);
 
-		focusIn: function() {
-			if ( !this.attrs.autofocus || !this.attrs.autoselect ) { return; }
+		menu.popup( event );
+	},
 
-			this.element.setSelectionRange( 0, this.element.value.length );
-		}
-	});
+	focusIn() {
+		if ( !this.attrs.autofocus || !this.attrs.autoselect ) { return; }
 
+		this.element.setSelectionRange( 0, this.element.value.length );
+	}
 });

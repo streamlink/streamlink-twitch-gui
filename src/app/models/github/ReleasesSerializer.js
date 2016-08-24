@@ -1,21 +1,16 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
+import { RESTSerializer } from "EmberData";
 
-	return DS.RESTSerializer.extend({
-		modelNameFromPayloadKey: function() {
-			return "githubReleases";
-		},
 
-		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
-			payload = {
-				githubReleases: payload
-			};
+export default RESTSerializer.extend({
+	modelNameFromPayloadKey() {
+		return "githubReleases";
+	},
 
-			return this._super( store, primaryModelClass, payload, id, requestType );
-		}
-	});
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
+		payload = {
+			githubReleases: payload
+		};
 
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	}
 });

@@ -1,103 +1,100 @@
-define([
-	"Ember",
-	"templates/components/button/FormButtonComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
-	var makeArray = Ember.makeArray;
-	var equal = Ember.computed.equal;
-	var $ = Ember.$;
-
-	var STATE_LOADING = -1;
-	var STATE_FAILURE =  0;
-	var STATE_SUCCESS =  1;
-
-	function iconAnimation( status, data ) {
-		var defer = Promise.defer();
-
-		set( this, "_status", status );
-		this.$().one( "webkitAnimationEnd", function() {
-			set( this, "_status", null );
-			defer[ status ? "resolve" : "reject" ]( data );
-		}.bind( this ) );
-
-		return defer.promise;
-	}
+import {
+	get,
+	set,
+	makeArray,
+	$,
+	computed,
+	Component
+} from "Ember";
+import layout from "templates/components/button/FormButtonComponent.hbs";
 
 
-	return Ember.Component.extend({
-		layout: layout,
+const { equal } = computed;
 
-		tagName: "",
+const STATE_LOADING = -1;
+const STATE_FAILURE =  0;
+const STATE_SUCCESS =  1;
 
-		// prevents an ember bug regarding tagless components and isVisible bindings
-		$: function() {
-			// use the layout's first element as component element
-			var element = this._renderNode.childNodes[0].firstNode;
-			return $( element );
-		},
+function iconAnimation( status, data ) {
+	var defer = Promise.defer();
 
-		title  : null,
-		"class": null,
+	set( this, "_status", status );
+	this.$().one( "webkitAnimationEnd", function() {
+		set( this, "_status", null );
+		defer[ status ? "resolve" : "reject" ]( data );
+	}.bind( this ) );
 
-		action     : null,
-		actionParam: null,
+	return defer.promise;
+}
 
-		icon    : false,
-		iconanim: false,
-		spinner : false,
 
-		_status: null,
+export default Component.extend({
+	layout,
 
-		isSuccess: equal( "_status", STATE_SUCCESS ),
-		isFailure: equal( "_status", STATE_FAILURE ),
-		isLoading: equal( "_status", STATE_LOADING ),
+	tagName: "",
 
-		actions: {
-			click: function() {
-				var action  = get( this, "action" );
-				if ( !action ) { return; }
+	// prevents an ember bug regarding tagless components and isVisible bindings
+	$: function() {
+		// use the layout's first element as component element
+		var element = this._renderNode.childNodes[0].firstNode;
+		return $( element );
+	},
 
-				var context = makeArray( get( this, "actionParam" ) );
+	title  : null,
+	"class": null,
 
-				if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
-					// success and failure callbacks
-					context.push( iconAnimation.bind( this, STATE_SUCCESS ) );
-					context.push( iconAnimation.bind( this, STATE_FAILURE ) );
+	action     : null,
+	actionParam: null,
 
-					if ( get( this, "spinner" ) ) {
-						set( this, "_status", STATE_LOADING );
-					}
-				}
+	icon    : false,
+	iconanim: false,
+	spinner : false,
 
-				// handle actions as functions
-				if ( action instanceof Function ) {
-					action.apply(
-						get( this, "targetObject" ),
-						context
-					);
+	_status: null,
 
-				// allow the component to send actions to itself
-				// in case it has been extended and uses its own actions
-				} else if (
-					   this.actions instanceof Object
-					&& this.actions.hasOwnProperty( action )
-				) {
-					this.send.apply( this, [ action ].concat( context ) );
+	isSuccess: equal( "_status", STATE_SUCCESS ),
+	isFailure: equal( "_status", STATE_FAILURE ),
+	isLoading: equal( "_status", STATE_LOADING ),
 
-				} else {
-					this.triggerAction({
-						target: get( this, "targetObject" ),
-						action: action,
-						actionContext: context
-					});
+	actions: {
+		click() {
+			var action  = get( this, "action" );
+			if ( !action ) { return; }
+
+			var actionContext = makeArray( get( this, "actionParam" ) );
+
+			if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
+				// success and failure callbacks
+				actionContext.push( iconAnimation.bind( this, STATE_SUCCESS ) );
+				actionContext.push( iconAnimation.bind( this, STATE_FAILURE ) );
+
+				if ( get( this, "spinner" ) ) {
+					set( this, "_status", STATE_LOADING );
 				}
 			}
-		}
-	});
 
+			// handle actions as functions
+			if ( action instanceof Function ) {
+				action.apply(
+					get( this, "targetObject" ),
+					actionContext
+				);
+
+			// allow the component to send actions to itself
+			// in case it has been extended and uses its own actions
+			} else if (
+				   this.actions instanceof Object
+				&& this.actions.hasOwnProperty( action )
+			) {
+				this.send.apply( this, [ action ].concat( actionContext ) );
+
+			} else {
+				this.triggerAction({
+					target: get( this, "targetObject" ),
+					action,
+					actionContext
+				});
+			}
+		}
+	}
 });

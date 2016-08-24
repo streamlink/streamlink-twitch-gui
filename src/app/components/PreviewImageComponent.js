@@ -1,41 +1,35 @@
-define([
-	"Ember",
-	"templates/components/PreviewImageComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
-
-	var set = Ember.set;
+import {
+	set,
+	Component
+} from "Ember";
+import layout from "templates/components/PreviewImageComponent.hbs";
 
 
-	return Ember.Component.extend({
-		layout: layout,
+export default Component.extend({
+	layout,
 
-		classNames: [],
-		error: false,
+	classNames: [],
+	error: false,
 
-		checkError: function() {
-			var self = this;
-			var img  = this.element.querySelector( "img" );
+	checkError: function() {
+		var self = this;
+		var img  = this.element.querySelector( "img" );
 
-			function unbind() {
-				img.removeEventListener( "error", onError, false );
-				img.removeEventListener( "load",  onLoad,  false );
-			}
+		function unbind() {
+			img.removeEventListener( "error", onError, false );
+			img.removeEventListener( "load",  onLoad,  false );
+		}
 
-			function onError() {
-				unbind();
-				set( self, "error", true );
-			}
+		function onError() {
+			unbind();
+			set( self, "error", true );
+		}
 
-			function onLoad() {
-				unbind();
-			}
+		function onLoad() {
+			unbind();
+		}
 
-			img.addEventListener( "error", onError, false );
-			img.addEventListener( "load",  onLoad,  false );
-		}.on( "willInsertElement" )
-	});
-
+		img.addEventListener( "error", onError, false );
+		img.addEventListener( "load",  onLoad,  false );
+	}.on( "willInsertElement" )
 });

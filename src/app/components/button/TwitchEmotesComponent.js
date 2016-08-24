@@ -1,51 +1,45 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/openBrowser",
-	"components/button/FormButtonComponent"
-], function(
-	Ember,
-	config,
-	openBrowser,
-	FormButtonComponent
-) {
-
-	var get = Ember.get;
-	var and = Ember.computed.and;
-	var or = Ember.computed.or;
-
-	var twitchEmotesUrl = config.twitch[ "emotes-url" ];
+import {
+	get,
+	computed,
+	inject
+} from "Ember";
+import { twitch } from "config";
+import openBrowser from "nwjs/openBrowser";
+import FormButtonComponent from "components/button/FormButtonComponent";
 
 
-	return FormButtonComponent.extend({
-		settings: Ember.inject.service(),
+const { and, or } = computed;
+const { service } = inject;
+const { "emotes-url": twitchEmotesUrl } = twitch;
 
-		showButton: false,
-		isEnabled : or( "showButton", "settings.content.gui_twitchemotes" ),
-		isVisible : and( "isEnabled", "channel.partner" ),
 
-		"class" : "btn-neutral",
-		icon    : "fa-smile-o",
-		iconanim: true,
-		title   : "Show available channel emotes",
+export default FormButtonComponent.extend({
+	settings: service(),
 
-		action: "openTwitchEmotes",
+	showButton: false,
+	isEnabled : or( "showButton", "settings.content.gui_twitchemotes" ),
+	isVisible : and( "isEnabled", "channel.partner" ),
 
-		actions: {
-			"openTwitchEmotes": function( success, failure ) {
-				var url = twitchEmotesUrl;
-				var channel = get( this, "channel.id" );
+	"class" : "btn-neutral",
+	icon    : "fa-smile-o",
+	iconanim: true,
+	title   : "Show available channel emotes",
 
-				if ( url && channel ) {
-					url = url.replace( "{channel}", channel );
-					openBrowser( url );
-					success();
+	action: "openTwitchEmotes",
 
-				} else {
-					failure();
-				}
+	actions: {
+		openTwitchEmotes( success, failure ) {
+			var url = twitchEmotesUrl;
+			var channel = get( this, "channel.id" );
+
+			if ( url && channel ) {
+				url = url.replace( "{channel}", channel );
+				openBrowser( url );
+				success();
+
+			} else {
+				failure();
 			}
 		}
-	});
-
+	}
 });
