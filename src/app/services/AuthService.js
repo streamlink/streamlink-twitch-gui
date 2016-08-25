@@ -18,6 +18,7 @@ define([
 
 	var get = Ember.get;
 	var set = Ember.set;
+	var RSVP = Ember.RSVP;
 
 	var oauth = config.twitch[ "oauth" ];
 
@@ -88,7 +89,7 @@ define([
 			}
 
 			var self  = this;
-			var defer = Promise.defer();
+			var defer = RSVP.defer();
 
 			var port   = oauth[ "server-port" ];
 			var server = new HttpServer( port, 1000 );
@@ -123,19 +124,11 @@ define([
 			var url = get( self, "url" );
 			openBrowser( url );
 
-			// shut down server and focus the application window when done
-			function done() {
-				self.abortSignin();
-				nwWindow.focus();
-			}
-
 			return defer.promise
-				.then(function( data ) {
-					done();
-					return data;
-				}, function( err ) {
-					done();
-					return Promise.reject( err );
+				// shut down server and focus the application window when done
+				.finally(function() {
+					self.abortSignin();
+					nwWindow.focus();
 				});
 		},
 

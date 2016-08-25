@@ -17,15 +17,15 @@ define([
 	var STATE_SUCCESS =  1;
 
 	function iconAnimation( status, data ) {
-		var defer = Promise.defer();
+		var self = this;
 
-		set( this, "_status", status );
-		this.$().one( "webkitAnimationEnd", function() {
-			set( this, "_status", null );
-			defer[ status ? "resolve" : "reject" ]( data );
-		}.bind( this ) );
-
-		return defer.promise;
+		return new Promise(function( resolve, reject ) {
+			set( self, "_status", status );
+			self.$().one( "webkitAnimationEnd", function() {
+				set( self, "_status", null );
+				( status ? resolve : reject )( data );
+			});
+		});
 	}
 
 

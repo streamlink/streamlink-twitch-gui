@@ -27,6 +27,7 @@ define([
 	var run = Ember.run;
 	var merge = Ember.merge;
 	var makeArray = Ember.makeArray;
+	var RSVP = Ember.RSVP;
 
 	var livestreamerExec = config.livestreamer[ "exec" ];
 	var livestreamerFallback = config.livestreamer[ "fallback" ];
@@ -277,7 +278,7 @@ define([
 				spawn = null;
 			}
 
-			return new Promise(function( resolve, reject ) {
+			return new RSVP.Promise(function( resolve, reject ) {
 				spawn = CP.spawn( exec, [ "--version", "--no-version-check" ] );
 
 				function onLine( line, idx, lines ) {
@@ -315,15 +316,12 @@ define([
 				// kill after a certain time
 				run.later( onTimeout, livestreamerTimeout );
 			})
+				.finally( kill )
 				.then(function( version ) {
-					kill();
 					return version === semver.getMax([ version, livestreamerVersionMin ])
 						? Promise.resolve( exec )
 						: Promise.reject( new VersionError( version ) );
 
-				}, function( err ) {
-					kill();
-					return Promise.reject( err );
 				});
 		},
 
@@ -344,7 +342,7 @@ define([
 			set( livestreamer, "warning", false );
 			set( this, "active", livestreamer );
 
-			var defer     = Promise.defer();
+			var defer     = RSVP.defer();
 
 			var channel   = get( livestreamer, "channel.id" );
 			var quality   = get( livestreamer, "quality" );

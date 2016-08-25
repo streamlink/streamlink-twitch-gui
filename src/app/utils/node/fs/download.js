@@ -41,22 +41,21 @@ define([
 					.catch( mkdirp.bind( null, dir ) )
 					// now start the download
 					.then(function() {
-						var defer = Promise.defer();
-						var write = FS.createWriteStream( dest );
+						return new Promise(function ( resolve, reject ) {
+							var write = FS.createWriteStream( dest );
 
-						write.on( "error", function() {
-							write.close( defer.reject );
+							write.on( "error", function() {
+								write.close( reject );
+							});
+							write.on( "finish", function() {
+								write.close( resolve.bind( null, dest ) );
+							});
+
+							// start the download via https or http depending on the url scheme
+							( match[1] ? HTTPS : HTTP ).get( url, function( response ) {
+								response.pipe( write );
+							}).on( "error", reject );
 						});
-						write.on( "finish", function() {
-							write.close( defer.resolve.bind( null, dest ) );
-						});
-
-						// start the download via https or http depending on the url scheme
-						( match[1] ? HTTPS : HTTP ).get( url, function( response ) {
-							response.pipe( write );
-						}).on( "error", defer.reject );
-
-						return defer.promise;
 					});
 			});
 	}
