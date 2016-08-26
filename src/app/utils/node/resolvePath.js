@@ -2,26 +2,27 @@ import { isWin } from "utils/node/platform";
 import PATH from "path";
 
 
+const slice = [].slice;
 const reVarWindows = /%([^%]+)%/g;
 const reVarUnix    = /\$([A-Z_]+)/g;
 
+
 function fnVarReplace( _, v ) {
-	return process.env[ v ];
+	return process.env[ v ] || "";
 }
 
-function resolvePathWindows( path ) {
-	path = path.replace( reVarWindows, fnVarReplace );
-	return PATH.resolve( path );
+function resolvePathFactory( pattern ) {
+	return function resolvePath() {
+		let args = slice.call( arguments );
+		if ( args[ 0 ] ) {
+			args[ 0 ] = args[ 0 ].replace( pattern, fnVarReplace );
+		}
+
+		return PATH.resolve.apply( null, args );
+	};
 }
 
-function resolvePathUnix( path ) {
-	path = path.replace( reVarUnix, fnVarReplace );
-	return PATH.resolve( path );
-}
 
-const resolvePath = isWin
-	? resolvePathWindows
-	: resolvePathUnix;
-
-
-export default resolvePath;
+export default isWin
+	? resolvePathFactory( reVarWindows )
+	: resolvePathFactory( reVarUnix );

@@ -22,7 +22,7 @@ let { icons: { tray: { [ platform ]: trayIcons } } } = files;
 if ( isWin ) {
 	Object.keys( trayIcons ).forEach(function( key ) {
 		let icon = trayIcons[ key ];
-		trayIcons[ key ] = resolvePath( `%NWJSAPPPATH%/${icon}` );
+		trayIcons[ key ] = resolvePath( "%NWJSAPPPATH%", icon );
 	});
 }
 

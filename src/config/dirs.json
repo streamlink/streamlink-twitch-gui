@@ -1,5 +1,10 @@
 {
 	"temp": "livestreamer-twitch-gui",
 
-	"windows-shortcut": "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs"
+	"windows-shortcut": {
+		"exec": "cscript",
+		"args": "\"{script}\" \"{dest}\" \"{target}\" \"{workingdir}\" \"{description}\"",
+		"script": "shortcut-helper.vbs",
+		"dest": [ "%APPDATA%", "Microsoft", "Windows", "Start Menu", "Programs" ]
+	}
 }
