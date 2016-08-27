@@ -19,13 +19,6 @@ import resolvePath from "utils/node/resolvePath";
 const { "display-name": displayName } = main;
 let { icons: { tray: { [ platform ]: trayIcons } } } = files;
 
-if ( isWin ) {
-	Object.keys( trayIcons ).forEach(function( key ) {
-		let icon = trayIcons[ key ];
-		trayIcons[ key ] = resolvePath( "%NWJSAPPPATH%", icon );
-	});
-}
-
 
 let tray = null;
 let items = [
@@ -58,9 +51,16 @@ nwWindow.window.addEventListener( "beforeunload", hide, false );
 
 export function show( click ) {
 	let dpr = window.devicePixelRatio;
+	let icons = Object.assign( {}, trayIcons );
+
+	if ( isWin && !DEBUG ) {
+		Object.keys( icons ).forEach(function( key ) {
+			icons[ key ] = resolvePath( "%NWJSAPPPATH%", icons[ key ] );
+		});
+	}
 
 	tray = new Tray({
-		icon: trayIcons[ dpr > 2 ? "@3x" : dpr > 1 ? "@2x" : "@1x" ],
+		icon: icons[ dpr > 2 ? "@3x" : dpr > 1 ? "@2x" : "@1x" ],
 		tooltip: displayName
 	});
 	tray.menu = menu.menu;
@@ -92,12 +92,11 @@ export function setShowInTray( bool, taskbar ) {
 	// we need a new click event listener in case the taskbar param has changed
 	hide();
 	if ( bool ) {
-		let hidden = isHidden();
 		show(function() {
 			toggleVisibility();
 			// also toggle taskbar visiblity on click (gui_integration === both)
 			if ( taskbar ) {
-				setShowInTaskbar( !hidden );
+				setShowInTaskbar( !isHidden() );
 			}
 		});
 	}
