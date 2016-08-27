@@ -1,21 +1,15 @@
 /**
  * @param {number} time
- * @param {boolean?} reject
+ * @param {boolean?} fail
  * @returns {Function}
  */
-function wait( time, reject ) {
-	var method = reject
-		? "reject"
-		: "resolve";
-
+function wait( time, fail ) {
 	return function waitPromise( data ) {
-		var defer = Promise.defer();
-
-		setTimeout(function() {
-			defer[ method ]( data );
-		}, time );
-
-		return defer.promise;
+		return new Promise(function( resolve, reject ) {
+			setTimeout(function() {
+				( fail ? reject : resolve )( data );
+			}, time );
+		});
 	};
 }
 

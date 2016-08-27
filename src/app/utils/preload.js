@@ -14,26 +14,25 @@ function preload( withError, list ) {
 			return Promise.resolve();
 		}
 
-		var defer = Promise.defer();
-		var image = new Image();
+		return new Promise(function( resolve, reject ) {
+			var image = new Image();
 
-		image.addEventListener( "load", function() {
-			image = null;
-			defer.resolve();
-		}, false );
+			image.addEventListener( "load", function() {
+				image = null;
+				resolve();
+			}, false );
 
-		image.addEventListener( "error", function() {
-			image = null;
-			if ( withError ) {
-				defer.reject();
-			} else {
-				defer.resolve();
-			}
-		}, false );
+			image.addEventListener( "error", function() {
+				image = null;
+				if ( withError ) {
+					reject();
+				} else {
+					resolve();
+				}
+			}, false );
 
-		image.src = src;
-
-		return defer.promise;
+			image.src = src;
+		});
 	}
 
 	return function promisePreload( response ) {

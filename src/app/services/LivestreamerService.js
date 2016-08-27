@@ -3,6 +3,7 @@ import {
 	set,
 	makeArray,
 	merge,
+	RSVP,
 	inject,
 	run,
 	Service
@@ -276,7 +277,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			spawn = null;
 		}
 
-		return new Promise(function( resolve, reject ) {
+		return new RSVP.Promise(function( resolve, reject ) {
 			spawn = CP.spawn( exec, [ "--version", "--no-version-check" ] );
 
 			function onLine( line, idx, lines ) {
@@ -314,18 +315,13 @@ export default Service.extend( ChannelSettingsMixin, {
 			// kill after a certain time
 			later( onTimeout, livestreamerTimeout );
 		})
+			.finally( kill )
 			.then(function( version ) {
-				kill();
 				return version === getMax([ version, livestreamerVersionMin ])
 					? Promise.resolve( exec )
 					: Promise.reject( new VersionError( version ) );
-
-			}, function( err ) {
-				kill();
-				return Promise.reject( err );
 			});
 	},
-
 
 	/**
 	 * Launch the stream
@@ -343,7 +339,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		set( livestreamer, "warning", false );
 		set( this, "active", livestreamer );
 
-		var defer     = Promise.defer();
+		var defer     = RSVP.defer();
 
 		var channel   = get( livestreamer, "channel.id" );
 		var quality   = get( livestreamer, "quality" );
