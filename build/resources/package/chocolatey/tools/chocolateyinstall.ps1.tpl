@@ -1,11 +1,17 @@
 $packageName = 'livestreamer-twitch-gui'
-$url = 'https://github.com/bastimeyer/livestreamer-twitch-gui/releases/download/v<%- version %>/livestreamer-twitch-gui-v<%- version %>-win32.zip'
-$url64 = 'https://github.com/bastimeyer/livestreamer-twitch-gui/releases/download/v<%- version %>/livestreamer-twitch-gui-v<%- version %>-win64.zip'
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $installDir = "$(Split-Path -parent $toolsDir)"
 $extractDir = "$(Split-Path -parent $installDir)"
 
-Install-ChocolateyZipPackage "$packageName" "$url" "$extractDir" "$url64"
+Install-ChocolateyZipPackage `
+	-PackageName    $packageName `
+	-Url            "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/download/v<%- version %>/livestreamer-twitch-gui-v<%- version %>-win32.zip" `
+	-Checksum       "<%= checksum %>" `
+	-ChecksumType   "sha256" `
+	-Url64bit       "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/download/v<%- version %>/livestreamer-twitch-gui-v<%- version %>-win64.zip" `
+	-Checksum64     "<%= checksum64 %>" `
+	-ChecksumType64 "sha256" `
+	-UnzipLocation  "$extractDir"
 
 $desktop = [Environment]::GetFolderPath("Desktop")
 $shortcutFile = Join-Path $desktop "$($packageName).lnk"
