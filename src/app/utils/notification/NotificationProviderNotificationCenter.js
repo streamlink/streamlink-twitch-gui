@@ -9,31 +9,31 @@ import UTIL from "util";
 // require binary dependencies
 // avoid using webpack's buggy recursive require.context method and list files explicitly
 require(
-	  "file?name=bin/terminal-notifier.app/Contents/MacOS/terminal-notifier!"
+	  "file?name=bin/darwin/terminal-notifier.app/Contents/MacOS/terminal-notifier!"
 	+ "node-notifier/vendor/terminal-notifier.app/Contents/MacOS/terminal-notifier"
 );
 require(
-	  "file?name=bin/terminal-notifier.app/Contents/Resources/en.lproj/InfoPlist.strings!"
+	  "file?name=bin/darwin/terminal-notifier.app/Contents/Resources/en.lproj/InfoPlist.strings!"
 	+ "node-notifier/vendor/terminal-notifier.app/Contents/Resources/en.lproj/InfoPlist.strings"
 );
 require(
-	  "file?name=bin/terminal-notifier.app/Contents/Resources/en.lproj/MainMenu.nib!"
+	  "file?name=bin/darwin/terminal-notifier.app/Contents/Resources/en.lproj/MainMenu.nib!"
 	+ "node-notifier/vendor/terminal-notifier.app/Contents/Resources/en.lproj/MainMenu.nib"
 );
 require(
-	  "file?name=bin/terminal-notifier.app/Contents/Resources/en.lproj/Credits.rtf!"
+	  "file?name=bin/darwin/terminal-notifier.app/Contents/Resources/en.lproj/Credits.rtf!"
 	+ "node-notifier/vendor/terminal-notifier.app/Contents/Resources/en.lproj/Credits.rtf"
 );
 require(
-	  "file?name=bin/terminal-notifier.app/Contents/Resources/Terminal.icns!"
+	  "file?name=bin/darwin/terminal-notifier.app/Contents/Resources/Terminal.icns!"
 	+ "node-notifier/vendor/terminal-notifier.app/Contents/Resources/Terminal.icns"
 );
 require(
-	  "file?name=bin/terminal-notifier.app/Contents/Info.plist!"
+	  "file?name=bin/darwin/terminal-notifier.app/Contents/Info.plist!"
 	+ "node-notifier/vendor/terminal-notifier.app/Contents/Info.plist"
 );
 require(
-	  "file?name=bin/terminal-notifier.app/Contents/PkgInfo!"
+	  "file?name=bin/darwin/terminal-notifier.app/Contents/PkgInfo!"
 	+ "node-notifier/vendor/terminal-notifier.app/Contents/PkgInfo"
 );
 
@@ -46,7 +46,7 @@ const {
 
 function NotificationProviderNotificationCenter() {
 	let customPath = PATH.resolve(
-		"bin", "terminal-notifier.app", "Contents", "MacOS", "terminal-notifier"
+		"bin", "darwin", "terminal-notifier.app", "Contents", "MacOS", "terminal-notifier"
 	);
 
 	// fix executable permissions

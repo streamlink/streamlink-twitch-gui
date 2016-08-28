@@ -1,3 +1,21 @@
+var files = [
+	"build/tmp/prod/**"
+];
+
+var filesWin32 = files.concat(
+	"!build/tmp/prod/bin/darwin/**",
+	"!build/tmp/prod/bin/linux/**"
+);
+var filesDarwin = files.concat(
+	"!build/tmp/prod/bin/win32/**",
+	"!build/tmp/prod/bin/linux/**"
+);
+var filesLinux = files.concat(
+	"!build/tmp/prod/bin/win32/**",
+	"!build/tmp/prod/bin/darwin/**"
+);
+
+
 module.exports = {
 	options: {
 		files   : "<%= dir.tmp_prod %>/**",
@@ -18,23 +36,41 @@ module.exports = {
 	},
 
 	win32: {
-		options: { platforms: [ "win32" ] }
+		options: {
+			files: filesWin32,
+			platforms: [ "win32" ]
+		}
 	},
 	win64: {
-		options: { platforms: [ "win64" ] }
+		options: {
+			files: filesWin32,
+			platforms: [ "win64" ]
+		}
 	},
 
 	osx32: {
-		options: { platforms: [ "osx32" ] }
+		options: {
+			files: filesDarwin,
+			platforms: [ "osx32" ]
+		}
 	},
 	osx64: {
-		options: { platforms: [ "osx64" ] }
+		options: {
+			files: filesDarwin,
+			platforms: [ "osx64" ]
+		}
 	},
 
 	linux32: {
-		options: { platforms: [ "linux32" ] }
+		options: {
+			files: filesLinux,
+			platforms: [ "linux32" ]
+		}
 	},
 	linux64: {
-		options: { platforms: [ "linux64" ] }
+		options: {
+			files: filesLinux,
+			platforms: [ "linux64" ]
+		}
 	}
 };

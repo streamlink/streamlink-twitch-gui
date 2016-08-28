@@ -7,21 +7,21 @@ import UTIL from "util";
 // require binary dependencies
 // avoid using webpack's buggy recursive require.context method and list files explicitly
 require(
-	"file?name=bin/Microsoft.WindowsAPICodePack.Shell.dll!"
+	"file?name=bin/win32/Microsoft.WindowsAPICodePack.Shell.dll!"
 	+ "node-notifier/vendor/toaster/Microsoft.WindowsAPICodePack.Shell.dll"
 );
 require(
-	"file?name=bin/Microsoft.WindowsAPICodePack.dll!"
+	"file?name=bin/win32/Microsoft.WindowsAPICodePack.dll!"
 	+ "node-notifier/vendor/toaster/Microsoft.WindowsAPICodePack.dll"
 );
 require(
-	"file?name=bin/toast.exe!"
+	"file?name=bin/win32/toast.exe!"
 	+ "node-notifier/vendor/toaster/toast.exe"
 );
 
 
 function NotificationProviderToast() {
-	let customPath = resolvePath( "%NWJSAPPPATH%", "bin", "toast.exe" );
+	let customPath = resolvePath( "%NWJSAPPPATH%", "bin", "win32", "toast.exe" );
 
 	this.provider = new Toaster({
 		withFallback: false,
