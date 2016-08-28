@@ -3,6 +3,8 @@ module.exports = {
 		"options" : {
 			"data" : {
 				"author": "<%= package.author %>",
+				"checksum": "<%= package.checksums.win32.hash %>",
+				"checksum64": "<%= package.checksums.win64.hash %>",
 				"homepage": "<%= package.homepage %>",
 				"name": "<%= package.name %>",
 				"changelog": "<%= package.changelogEscaped %>",
