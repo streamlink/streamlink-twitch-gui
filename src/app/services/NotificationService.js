@@ -21,7 +21,11 @@ import nwWindow, {
 import { getMenu as getTrayMenu } from "nwjs/Tray";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import { mapBy } from "utils/ember/recordArrayMethods";
-import { tmpdir } from "utils/node/platform";
+import {
+	isWin,
+	tmpdir
+} from "utils/node/platform";
+import resolvePath from "utils/node/resolvePath";
 import mkdirp from "utils/node/fs/mkdirp";
 import download from "utils/node/fs/download";
 import clearfolder from "utils/node/fs/clearfolder";
@@ -46,8 +50,11 @@ const {
 		"error": intervalError
 	}
 } = notification;
-const { icons: { "big": iconGroup } } = files;
+const { icons: { "big": bigIcon } } = files;
 
+const iconGroup = isWin
+	? resolvePath( "%NWJSAPPPATH%", bigIcon )
+	: resolvePath( bigIcon );
 const cacheTmpDir = tmpdir( cacheDir );
 
 
@@ -394,7 +401,7 @@ export default Service.extend( ChannelSettingsMixin, {
 					message: get( stream, "channel.status" ) || ""
 				};
 			}),
-			icon   : "file://" + iconGroup,
+			icon   : `file://${iconGroup}`,
 			click  : this.notificationClick.bind( this, streams )
 		});
 	},
