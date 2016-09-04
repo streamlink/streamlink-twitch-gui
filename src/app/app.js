@@ -127,6 +127,7 @@ import RadioBtnsComponent from "components/form/RadioBtnsComponent";
 import DropDownComponent from "components/form/DropDownComponent";
 import FileSelectComponent from "components/form/FileSelectComponent";
 import TextFieldComponent from "components/form/TextFieldComponent";
+import NumberFieldComponent from "components/form/NumberFieldComponent";
 
 import FollowChannelComponent from "components/button/FollowChannelComponent";
 import FollowGameComponent from "components/button/FollowGameComponent";
@@ -427,6 +428,7 @@ export default Application.create({
 	DropDownComponent,
 	FileSelectComponent,
 	TextFieldComponent,
+	NumberFieldComponent,
 
 	FollowChannelComponent,
 	FollowGameComponent,

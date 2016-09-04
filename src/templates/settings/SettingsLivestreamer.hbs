@@ -44,7 +44,7 @@
 			icon="fa-bolt"
 			documentation="--hls-live-edge"
 		}}
-			{{input type="number" value=model.hls_live_edge placeholder=hlsLiveEdgeDefault min=hlsLiveEdgeMin max=hlsLiveEdgeMax}}
+			{{number-field value=model.hls_live_edge default=hlsLiveEdgeDefault min=hlsLiveEdgeMin max=hlsLiveEdgeMax}}
 		{{/settings-row}}
 
 		{{#settings-row
@@ -53,7 +53,7 @@
 			icon="fa-sort-amount-asc"
 			documentation="--hls-segment-threads"
 		}}
-			{{input type="number" value=model.hls_segment_threads placeholder=hlsSegmentThreadsDefault min=hlsSegmentThreadsMin max=hlsSegmentThreadsMax}}
+			{{number-field value=model.hls_segment_threads default=hlsSegmentThreadsDefault min=hlsSegmentThreadsMin max=hlsSegmentThreadsMax}}
 		{{/settings-row}}
 	{{/unless}}
 {{/if}}
@@ -64,7 +64,7 @@
 	icon="fa-rocket"
 	documentation="--retry-open"
 }}
-	{{input type="number" value=model.retry_open placeholder=retryOpenDefault min=retryOpenMin max=retryOpenMax}}
+	{{number-field value=model.retry_open default=retryOpenDefault min=retryOpenMin max=retryOpenMax}}
 {{/settings-row}}
 
 {{#settings-row
@@ -73,6 +73,6 @@
 	icon="fa-hourglass-half"
 	documentation="--retry-streams"
 }}
-	{{input type="number" value=model.retry_streams placeholder=retryStreamsDefault min=retryStreamsMin max=retryStreamsMax}}
+	{{number-field value=model.retry_streams default=retryStreamsDefault min=retryStreamsMin max=retryStreamsMax}}
 {{/settings-row}}
 </fieldset>

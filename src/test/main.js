@@ -1,3 +1,4 @@
+import {} from "Shim";
 import {
 	config,
 	start
@@ -20,5 +21,6 @@ require([
 	"tests/StreamOutputBuffer",
 	"tests/ContentListComponent",
 	"tests/InputBtnComponent",
+	"tests/NumberFieldComponent",
 	"tests/getStreamFromUrl"
 ], start );
