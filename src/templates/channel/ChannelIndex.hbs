@@ -5,6 +5,10 @@
 <div class="info">
 <h3>Channel statistics</h3>
 <dl class="dl-horizontal">
+{{#if channel.hasCustomDisplayName}}
+<dt><i class="fa fa-user"></i>Name</dt>
+<dd>{{channel.name}}</dd>
+{{/if}}
 <dt><i class="fa fa-calendar"></i>Created</dt>
 <dd>{{format-time channel.created_at "MMMM Do YYYY"}}</dd>
 {{#if channel.has_broadcaster_language}}
