@@ -1,80 +1,78 @@
-define([
-	"Ember",
-	"templates/components/form/RadioBtnsComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
+import {
+	get,
+	set,
+	Component
+} from "Ember";
+import layout from "templates/components/form/RadioBtnsComponent.hbs";
 
 
-	return Ember.Component.extend({
-		layout: layout,
-		tagName: "div",
-		classNames: [ "radio-btns-component" ],
+export default Component.extend({
+	layout,
 
-		optionValuePath: "value",
-		optionLabelPath: "label",
+	tagName: "div",
+	classNames: [ "radio-btns-component" ],
 
-		name: function() {
-			return "radio-btns-" + Date.now() + Math.floor( Math.random() * 10000000 );
-		}.property(),
+	optionValuePath: "value",
+	optionLabelPath: "label",
 
-		content: null,
-		value: null,
-		selection: null,
+	name: function() {
+		let now = Date.now();
+		let random = Math.floor( Math.random() * 10000000 );
 
-		_updateItems: function() {
-			var value   = get( this, "value" );
-			var itemKey = get( this, "optionValuePath" );
-			var content = get( this, "content" ) || [];
-			var found   = false;
+		return `radio-btns-${now}${random}`;
+	}.property(),
 
-			content.forEach(function( item ) {
-				var itemValue = get( item, itemKey );
-				var checked = value === itemValue;
+	content: null,
+	value: null,
+	selection: null,
 
-				// only check the first item
-				set( item, "checked", checked && !found );
+	_updateItems() {
+		var value   = get( this, "value" );
+		var itemKey = get( this, "optionValuePath" );
+		var content = get( this, "content" ) || [];
+		var found   = false;
 
-				if ( checked ) {
-					found = true;
-				}
-			});
+		content.forEach(function( item ) {
+			var itemValue = get( item, itemKey );
+			var checked = value === itemValue;
 
-			return found;
-		},
+			// only check the first item
+			set( item, "checked", checked && !found );
 
-		didInitAttrs: function() {
-			// update each button's checked status on initialization
-			this._updateItems();
-		},
-
-		_contentObserver: function() {
-			if ( !this._updateItems() ) {
-				// set the value to undefined if the selected item was removed
-				set( this, "value", undefined );
+			if ( checked ) {
+				found = true;
 			}
-		}.observes( "content.[]" ),
+		});
 
-		_valueObserver: function() {
-			// update each button's checked status when the group's valuechanges
-			this._updateItems();
-		}.observes( "value", "optionValuePath" ),
+		return found;
+	},
 
-		_selectionValueObserver: function() {
-			// change the value if the selection or the selection's value changes
-			set( this, "value", get( this, "selection.value" ) );
-		}.observes( "selection.value" ),
+	didInitAttrs() {
+		// update each button's checked status on initialization
+		this._updateItems();
+	},
 
-		actions: {
-			"btnClicked": function( button ) {
-				// update the current selection
-				set( this, "selection", button );
-			}
+	_contentObserver: function() {
+		if ( !this._updateItems() ) {
+			// set the value to undefined if the selected item was removed
+			set( this, "value", undefined );
 		}
-	});
+	}.observes( "content.[]" ),
 
+	_valueObserver: function() {
+		// update each button's checked status when the group's valuechanges
+		this._updateItems();
+	}.observes( "value", "optionValuePath" ),
+
+	_selectionValueObserver: function() {
+		// change the value if the selection or the selection's value changes
+		set( this, "value", get( this, "selection.value" ) );
+	}.observes( "selection.value" ),
+
+	actions: {
+		btnClicked( button ) {
+			// update the current selection
+			set( this, "selection", button );
+		}
+	}
 });

@@ -1,20 +1,15 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
-
-	var attr = DS.attr;
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-	return DS.Model.extend({
-		width : attr( "number", { defaultValue: null } ),
-		height: attr( "number", { defaultValue: null } ),
-		x     : attr( "number", { defaultValue: null } ),
-		y     : attr( "number", { defaultValue: null } )
+export default Model.extend({
+	width : attr( "number", { defaultValue: null } ),
+	height: attr( "number", { defaultValue: null } ),
+	x     : attr( "number", { defaultValue: null } ),
+	y     : attr( "number", { defaultValue: null } )
 
-	}).reopenClass({
-		toString: function() { return "Window"; }
-	});
-
+}).reopenClass({
+	toString() { return "Window"; }
 });

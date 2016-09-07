@@ -1,81 +1,79 @@
-define([
-	"Ember",
-	"config",
-	"components/modal/ModalDialogComponent",
-	"models/localstorage/Settings",
-	"nwjs/openBrowser",
-	"templates/components/modal/ModalLivestreamerComponent.hbs"
-], function(
-	Ember,
-	config,
-	ModalDialogComponent,
-	Settings,
-	openBrowser,
-	layout
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
-	var schedule = Ember.run.schedule;
-	var readOnly = Ember.computed.readOnly;
-
-	var livestreamerDownloadUrl = config.livestreamer[ "download-url" ];
+import {
+	get,
+	set,
+	computed,
+	inject,
+	run
+} from "Ember";
+import { livestreamer } from "config";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import Settings from "models/localstorage/Settings";
+import openBrowser from "nwjs/openBrowser";
+import layout from "templates/components/modal/ModalLivestreamerComponent.hbs";
 
 
-	return ModalDialogComponent.extend({
-		livestreamer: Ember.inject.service(),
-
-		layout: layout,
-		"class": "modal-livestreamer",
-
-		error : readOnly( "livestreamer.error" ),
-		active: readOnly( "livestreamer.active" ),
-
-		qualities: Settings.qualities,
-		versionMin: config.livestreamer[ "version-min" ],
+const { readOnly } = computed;
+const { service } = inject;
+const { schedule } = run;
+const {
+	"download-url": livestreamerDownloadUrl,
+	"version-min": versionMin
+} = livestreamer;
 
 
-		actions: {
-			"download": function( success ) {
-				if ( livestreamerDownloadUrl ) {
-					openBrowser( livestreamerDownloadUrl );
-					if ( success instanceof Function ) {
-						success();
-					}
-				}
-			},
+export default ModalDialogComponent.extend({
+	livestreamer: service(),
 
-			"chat": function( channel ) {
-				get( this, "livestreamer" ).openChat( channel );
-			},
+	layout,
 
-			"abort": function() {
-				set( this, "livestreamer.abort", true );
-				get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
-			},
+	"class": "modal-livestreamer",
 
-			"close": function() {
-				get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
-				schedule( "destroy", this, function() {
-					set( this, "livestreamer.active", null );
-				});
-			},
+	error : readOnly( "livestreamer.error" ),
+	active: readOnly( "livestreamer.active" ),
 
-			"shutdown": function() {
-				var active = get( this, "active" );
-				if ( active ) {
-					active.kill();
-				}
-				this.send( "close" );
-			},
+	qualities: Settings.qualities,
+	versionMin,
 
-			"toggleLog": function() {
-				var active = get( this, "active" );
-				if ( active ) {
-					active.toggleProperty( "showLog" );
+
+	actions: {
+		download( success ) {
+			if ( livestreamerDownloadUrl ) {
+				openBrowser( livestreamerDownloadUrl );
+				if ( success instanceof Function ) {
+					success();
 				}
 			}
-		}
-	});
+		},
 
+		chat( channel ) {
+			get( this, "livestreamer" ).openChat( channel );
+		},
+
+		abort() {
+			set( this, "livestreamer.abort", true );
+			get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
+		},
+
+		close() {
+			get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
+			schedule( "destroy", this, function() {
+				set( this, "livestreamer.active", null );
+			});
+		},
+
+		shutdown() {
+			var active = get( this, "active" );
+			if ( active ) {
+				active.kill();
+			}
+			this.send( "close" );
+		},
+
+		toggleLog() {
+			var active = get( this, "active" );
+			if ( active ) {
+				active.toggleProperty( "showLog" );
+			}
+		}
+	}
 });

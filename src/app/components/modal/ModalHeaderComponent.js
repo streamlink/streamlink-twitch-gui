@@ -1,12 +1,7 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import { Component } from "Ember";
 
-	return Ember.Component.extend({
-		tagName: "header",
-		classNameBindings: [ "class" ]
-	});
 
+export default Component.extend({
+	tagName: "header",
+	classNameBindings: [ "class" ]
 });

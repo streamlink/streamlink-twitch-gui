@@ -1,20 +1,15 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
-
-	var attr = DS.attr;
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-	return DS.Model.extend({
-		title: attr( "string" ),
-		image: attr( "string" ),
-		link: attr( "string" ),
-		//description: attr( "string" ),
-		html_description: attr( "string" ),
-		kind: attr( "string" ),
-		display_order: attr( "number" )
-	});
-
+export default Model.extend({
+	title: attr( "string" ),
+	image: attr( "string" ),
+	link: attr( "string" ),
+	//description: attr( "string" ),
+	html_description: attr( "string" ),
+	kind: attr( "string" ),
+	display_order: attr( "number" )
 });

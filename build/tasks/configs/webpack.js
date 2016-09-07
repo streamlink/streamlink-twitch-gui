@@ -1,4 +1,5 @@
 var PATH = require( "path" );
+var OS = require( "os" );
 var webpack = require( "webpack" );
 var SplitByPathPlugin = require( "webpack-split-by-path" );
 var HtmlWebpackPlugin = require( "html-webpack-plugin" );
@@ -96,6 +97,26 @@ module.exports = {
 
 		module: {
 			loaders: [
+				{
+					test: /\.js$/,
+					exclude: [
+						pModulesNpm,
+						pModulesBower
+					],
+					loader: "babel",
+					query: {
+						presets: [],
+						plugins: [
+							"babel-plugin-transform-es2015-modules-commonjs",
+							"babel-plugin-transform-es2015-shorthand-properties",
+							"babel-plugin-transform-es2015-block-scoping",
+							"babel-plugin-transform-es2015-destructuring",
+							"babel-plugin-transform-es2015-computed-properties",
+							"babel-plugin-transform-es2015-template-literals"
+						],
+						cacheDirectory: r( OS.tmpdir(), "babel-cache" )
+					}
+				},
 				{
 					test: /\.hbs$/,
 					loader: "hbs-loader"

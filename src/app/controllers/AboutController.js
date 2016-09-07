@@ -1,30 +1,25 @@
-define([
-	"Ember",
-	"config",
-	"metadata"
-], function(
-	Ember,
-	config,
-	metadata
-) {
-
-	var get = Ember.get;
+import {
+	get,
+	Controller
+} from "Ember";
+import { main } from "config";
+import metadata from "metadata";
 
 
-	return Ember.Controller.extend({
-		metadata: metadata,
+const { "nwjs-version": nwjsVersion } = main;
 
-		nwjsVersion: config.main[ "nwjs-version" ],
 
-		dependencies: function() {
-			var deps = get( this, "metadata.dependencies" );
-			return Object.keys( deps ).map(function( key ) {
-				return {
-					title  : key,
-					version: deps[ key ]
-				};
-			});
-		}.property( "metadata.dependencies" )
-	});
+export default Controller.extend({
+	metadata,
+	nwjsVersion,
 
+	dependencies: function() {
+		var deps = get( this, "metadata.dependencies" );
+		return Object.keys( deps ).map(function( key ) {
+			return {
+				title  : key,
+				version: deps[ key ]
+			};
+		});
+	}.property( "metadata.dependencies" )
 });

@@ -1,9 +1,4 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
+import { Controller } from "Ember";
 
-	return Ember.Controller.extend();
 
-});
+export default Controller.extend();

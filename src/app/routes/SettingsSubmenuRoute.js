@@ -1,30 +1,25 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	var set = Ember.set;
+import {
+	set,
+	Route
+} from "Ember";
 
 
-	return Ember.Route.extend({
-		controllerName: "settings",
+export default Route.extend({
+	controllerName: "settings",
 
-		disableAutoRefresh: true,
+	disableAutoRefresh: true,
 
-		model: function() {
-			return this.modelFor( "settings" );
-		},
+	model() {
+		return this.modelFor( "settings" );
+	},
 
-		activate: function() {
-			var settingsController = this.controllerFor( "settings" );
-			set( settingsController, "currentSubmenu", this.routeName );
-		},
+	activate() {
+		var settingsController = this.controllerFor( "settings" );
+		set( settingsController, "currentSubmenu", this.routeName );
+	},
 
-		deactivate: function() {
-			var settingsController = this.controllerFor( "settings" );
-			set( settingsController, "isAnimated", true );
-		}
-	});
-
+	deactivate() {
+		var settingsController = this.controllerFor( "settings" );
+		set( settingsController, "isAnimated", true );
+	}
 });

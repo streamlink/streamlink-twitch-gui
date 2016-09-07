@@ -1,33 +1,28 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
-		primaryKey: "name",
 
-		modelNameFromPayloadKey: function() {
-			return "twitchUserFollowsGame";
-		},
+export default TwitchSerializer.extend({
+	primaryKey: "name",
 
-		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
-			var primaryKey = this.primaryKey;
+	modelNameFromPayloadKey() {
+		return "twitchUserFollowsGame";
+	},
 
-			if ( !payload || !payload[ primaryKey ] ) {
-				payload = {};
-			}
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
+		var primaryKey = this.primaryKey;
 
-			var record = {};
-			record[ primaryKey ] = payload[ primaryKey ];
-
-			// return an empty payload (ignore all properties)
-			payload = {
-				twitchUserFollowsGame: [ record ]
-			};
-
-			return this._super( store, primaryModelClass, payload, id, requestType );
+		if ( !payload || !payload[ primaryKey ] ) {
+			payload = {};
 		}
-	});
 
+		var record = {};
+		record[ primaryKey ] = payload[ primaryKey ];
+
+		// return an empty payload (ignore all properties)
+		payload = {
+			twitchUserFollowsGame: [ record ]
+		};
+
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	}
 });

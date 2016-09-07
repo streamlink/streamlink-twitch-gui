@@ -1,16 +1,9 @@
-define([
-	"Ember",
-	"components/list/ListItemComponent",
-	"templates/components/list/ChannelItemComponent.hbs"
-], function(
-	Ember,
-	ListItemComponent,
-	layout
-) {
+import ListItemComponent from "components/list/ListItemComponent";
+import layout from "templates/components/list/ChannelItemComponent.hbs";
 
-	return ListItemComponent.extend({
-		layout: layout,
-		classNames: [ "channel-item-component" ]
-	});
 
+export default ListItemComponent.extend({
+	layout,
+
+	classNames: [ "channel-item-component" ]
 });

@@ -1,19 +1,14 @@
-define([
-	"Ember",
-	"templates/components/form/InputBtnComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import { Component } from "Ember";
+import layout from "templates/components/form/InputBtnComponent.hbs";
 
-	return Ember.Component.extend({
-		layout: layout,
-		tagName: "label",
-		classNames: [ "input-btn-component" ],
-		classNameBindings: [ "checked", "disabled" ]
 
-	}).reopenClass({
-		positionalParams: [ "label" ]
-	});
+export default Component.extend({
+	layout,
 
+	tagName: "label",
+	classNames: [ "input-btn-component" ],
+	classNameBindings: [ "checked", "disabled" ]
+
+}).reopenClass({
+	positionalParams: [ "label" ]
 });

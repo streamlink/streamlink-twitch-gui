@@ -1,9 +1,4 @@
-define([
-	"vendor/Selecter/jquery.fs.selecter"
-], function(
-	Selecter
-) {
+import Selecter from "vendor/Selecter/jquery.fs.selecter";
 
-	return Selecter;
 
-});
+export default Selecter;

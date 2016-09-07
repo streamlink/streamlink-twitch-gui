@@ -1,47 +1,37 @@
-define([
-	"Ember",
-	"config",
-	"nwjs/nwGui",
-	"components/modal/ModalDialogComponent",
-	"nwjs/openBrowser",
-	"templates/components/modal/ModalChangelogComponent.hbs"
-], function(
-	Ember,
-	config,
-	nwGui,
-	ModalDialogComponent,
-	openBrowser,
-	layout
-) {
-
-	var get = Ember.get;
-
-	var changelogUrl = config.update[ "changelog-url" ];
+import { get } from "Ember";
+import { update } from "config";
+import { App } from "nwjs/nwGui";
+import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import openBrowser from "nwjs/openBrowser";
+import layout from "templates/components/modal/ModalChangelogComponent.hbs";
 
 
-	return ModalDialogComponent.extend({
-		layout: layout,
-		"class": "modal-changelog",
-
-		version: nwGui.App.manifest.version,
+const { "changelog-url": changelogUrl } = update;
+const { manifest: { version } } = App;
 
 
-		actions: {
-			"showChangelog": function( success ) {
-				var version = get( this, "version" );
+export default ModalDialogComponent.extend({
+	layout,
 
-				if ( version && changelogUrl ) {
-					var url = changelogUrl.replace( "{version}", version );
-					openBrowser( url );
+	"class": "modal-changelog",
 
-					if ( success instanceof Function ) {
-						success();
-					}
+	version,
+
+
+	actions: {
+		showChangelog( success ) {
+			var version = get( this, "version" );
+
+			if ( version && changelogUrl ) {
+				var url = changelogUrl.replace( "{version}", version );
+				openBrowser( url );
+
+				if ( success instanceof Function ) {
+					success();
 				}
-
-				this.send( "close" );
 			}
-		}
-	});
 
+			this.send( "close" );
+		}
+	}
 });

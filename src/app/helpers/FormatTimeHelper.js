@@ -1,13 +1,7 @@
-define([
-	"Ember",
-	"Moment"
-], function(
-	Ember,
-	Moment
-) {
+import { Helper } from "Ember";
+import Moment from "Moment";
 
-	return Ember.Helper.helper(function( params, hash ) {
-		return new Moment( params[0] ).format( hash.format || params[1] );
-	});
 
+export default Helper.helper(function( params, hash ) {
+	return new Moment( params[0] ).format( hash.format || params[1] );
 });

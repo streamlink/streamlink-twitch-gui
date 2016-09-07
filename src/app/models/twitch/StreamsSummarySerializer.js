@@ -1,18 +1,13 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
-		normalizeResponse: function( store, primaryModelClass, payload, id, requestType ) {
-			payload[ this.primaryKey ] = 1;
-			payload = {
-				twitchStreamsSummaries: [ payload ]
-			};
 
-			return this._super( store, primaryModelClass, payload, id, requestType );
-		}
-	});
+export default TwitchSerializer.extend({
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
+		payload[ this.primaryKey ] = 1;
+		payload = {
+			twitchStreamsSummaries: [ payload ]
+		};
 
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	}
 });

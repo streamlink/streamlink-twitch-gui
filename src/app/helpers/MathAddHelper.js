@@ -1,16 +1,11 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	function mathAdd( valueA, valueB ) {
-		return valueA + valueB;
-	}
+import { Helper } from "Ember";
 
 
-	return Ember.Helper.helper(function( params ) {
-		return params.reduce( mathAdd );
-	});
+function mathAdd( valueA, valueB ) {
+	return valueA + valueB;
+}
 
+
+export default Helper.helper(function( params ) {
+	return params.reduce( mathAdd );
 });

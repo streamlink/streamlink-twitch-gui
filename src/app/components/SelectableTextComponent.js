@@ -1,41 +1,34 @@
-define([
-	"Ember",
-	"nwjs/menu",
-	"nwjs/clipboard"
-], function(
-	Ember,
-	Menu,
-	clipboard
-) {
+import { Component } from "Ember";
+import Menu from "nwjs/menu";
+import { set as setClipboard } from "nwjs/clipboard";
 
-	return Ember.Component.extend({
-		tagName: "div",
 
-		classNameBindings: [ "class" ],
-		attributeBindings: [ "selectable:data-selectable" ],
+export default Component.extend({
+	tagName: "div",
 
-		"class"   : "",
-		selectable: true,
+	classNameBindings: [ "class" ],
+	attributeBindings: [ "selectable:data-selectable" ],
 
-		contextMenu: function( event ) {
-			if ( this.attrs.noContextmenu ) { return; }
+	"class"   : "",
+	selectable: true,
 
-			var selection = window.getSelection();
-			var selected  = selection.toString();
+	contextMenu( event ) {
+		if ( this.attrs.noContextmenu ) { return; }
 
-			if ( !selected.length && event.target.tagName === "A" ) { return; }
+		var selection = window.getSelection();
+		var selected  = selection.toString();
 
-			var menu = Menu.create();
-			menu.items.pushObject({
-				label  : "Copy selection",
-				enabled: selected.length,
-				click  : function() {
-					clipboard.set( selected );
-				}
-			});
+		if ( !selected.length && event.target.tagName === "A" ) { return; }
 
-			menu.popup( event );
-		}
-	});
+		var menu = Menu.create();
+		menu.items.pushObject({
+			label  : "Copy selection",
+			enabled: selected.length,
+			click() {
+				setClipboard( selected );
+			}
+		});
 
+		menu.popup( event );
+	}
 });

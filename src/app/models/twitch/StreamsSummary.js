@@ -1,18 +1,13 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
-
-	var attr = DS.attr;
+import {
+	attr,
+	Model
+} from "EmberData";
 
 
-	return DS.Model.extend({
-		channels: attr( "number" ),
-		viewers: attr( "number" )
+export default Model.extend({
+	channels: attr( "number" ),
+	viewers: attr( "number" )
 
-	}).reopenClass({
-		toString: function() { return "kraken/streams/summary"; }
-	});
-
+}).reopenClass({
+	toString() { return "kraken/streams/summary"; }
 });

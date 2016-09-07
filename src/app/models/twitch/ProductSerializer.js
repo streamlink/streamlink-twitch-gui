@@ -1,19 +1,14 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
-		primaryKey: "name",
 
-		modelNameFromPayloadKey: function() {
-			return "twitchProduct";
-		},
+export default TwitchSerializer.extend({
+	primaryKey: "name",
 
-		attrs: {
-			emoticons: { deserialize: "records" }
-		}
-	});
+	modelNameFromPayloadKey() {
+		return "twitchProduct";
+	},
 
+	attrs: {
+		emoticons: { deserialize: "records" }
+	}
 });

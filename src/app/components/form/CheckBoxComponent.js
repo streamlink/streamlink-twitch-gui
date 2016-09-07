@@ -1,21 +1,12 @@
-define([
-	"Ember",
-	"components/form/InputBtnComponent"
-], function(
-	Ember,
-	InputBtnComponent
-) {
-
-	var get = Ember.get;
+import { get } from "Ember";
+import InputBtnComponent from "components/form/InputBtnComponent";
 
 
-	return InputBtnComponent.extend({
-		classNames: [ "check-box-component" ],
+export default InputBtnComponent.extend({
+	classNames: [ "check-box-component" ],
 
-		click: function() {
-			if ( get( this, "disabled" ) ) { return; }
-			this.toggleProperty( "checked" );
-		}
-	});
-
+	click() {
+		if ( get( this, "disabled" ) ) { return; }
+		this.toggleProperty( "checked" );
+	}
 });

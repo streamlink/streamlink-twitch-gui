@@ -9,5 +9,5 @@ module.exports = function( source ) {
 
 	var precompiled = precompile( source ).toString();
 
-	return "module.exports=require('Ember').HTMLBars.template(" + precompiled + ");";
+	return "module.exports=require('Ember').default.HTMLBars.template(" + precompiled + ");";
 };

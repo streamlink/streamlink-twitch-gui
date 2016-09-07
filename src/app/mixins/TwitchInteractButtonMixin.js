@@ -1,92 +1,90 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	var get = Ember.get;
-	var setP = Ember.setProperties;
-	var alias = Ember.computed.alias;
-	var and = Ember.computed.and;
-	var bool = Ember.computed.bool;
-
-	function switchProperty( key ) {
-		return function() {
-			var property = get( this, "isLoading" )
-				? key + "Loading"
-				: get( this, "isSuccessful" )
-					? key + "Success"
-					: key + "Failure";
-			return get( this, property );
-		}.property( "isLoading", "isSuccessful" );
-	}
+import {
+	get,
+	setProperties,
+	computed,
+	inject,
+	Mixin
+} from "Ember";
 
 
-	return Ember.Mixin.create({
-		auth : Ember.inject.service(),
-		store: Ember.inject.service(),
+const { alias, and, bool } = computed;
+const { service } = inject;
 
-		isVisible   : alias( "isValid" ),
-		isValid     : and( "model", "auth.session.isLoggedIn" ),
-		isSuccessful: bool( "record" ),
-
-		model : null,
-		record: null,
-		id    : alias( "model.id" ),
-		name  : alias( "id" ),
-
-		isLoading: false,
-		isLocked : false,
-
-		"class" : switchProperty( "class" ),
-		icon    : switchProperty( "icon" ),
-		title   : switchProperty( "title" ),
-		iconanim: true,
-		spinner : true,
-
-		classLoading: "btn-info",
-		classSuccess: "btn-success",
-		classFailure: "btn-danger",
-		iconLoading : "fa-question",
-		iconSuccess : "fa-check",
-		iconFailure : "fa-times",
-		titleLoading: "",
-		titleSuccess: "",
-		titleFailure: "",
+function switchProperty( key ) {
+	return function() {
+		var property = get( this, "isLoading" )
+			? `${key}Loading`
+			: get( this, "isSuccessful" )
+				? `${key}Success`
+				: `${key}Failure`;
+		return get( this, property );
+	}.property( "isLoading", "isSuccessful" );
+}
 
 
-		_checkRecord: function() {
-			var modelName = this.modelName;
-			if ( !modelName ) { return; }
+export default Mixin.create({
+	auth : service(),
+	store: service(),
 
-			if ( get( this, "isLoading" ) ) { return; }
+	isVisible   : alias( "isValid" ),
+	isValid     : and( "model", "auth.session.isLoggedIn" ),
+	isSuccessful: bool( "record" ),
 
-			var isValid = get( this, "isValid" );
-			var id      = get( this, "id" );
-			var record  = get( this, "record" );
-			if ( !isValid || !id || record !== null ) { return; }
+	model : null,
+	record: null,
+	id    : alias( "model.id" ),
+	name  : alias( "id" ),
 
-			setP( this, {
-				record   : null,
-				isLoading: true,
-				isLocked : true
-			});
+	isLoading: false,
+	isLocked : false,
 
-			var store = get( this, "store" );
-			return store.findExistingRecord( modelName, id )
-				.catch(function() { return false; })
-				.then(function( record ) {
-					if ( get( this, "isDestroyed" ) ) {
-						return;
-					}
+	"class" : switchProperty( "class" ),
+	icon    : switchProperty( "icon" ),
+	title   : switchProperty( "title" ),
+	iconanim: true,
+	spinner : true,
 
-					setP( this, {
-						record   : record,
-						isLoading: false,
-						isLocked : false
-					});
-				}.bind( this ) );
-		}.observes( "isValid", "model" ).on( "didInitAttrs" )
-	});
+	classLoading: "btn-info",
+	classSuccess: "btn-success",
+	classFailure: "btn-danger",
+	iconLoading : "fa-question",
+	iconSuccess : "fa-check",
+	iconFailure : "fa-times",
+	titleLoading: "",
+	titleSuccess: "",
+	titleFailure: "",
 
+
+	_checkRecord: function() {
+		var modelName = this.modelName;
+		if ( !modelName ) { return; }
+
+		if ( get( this, "isLoading" ) ) { return; }
+
+		var isValid = get( this, "isValid" );
+		var id      = get( this, "id" );
+		var record  = get( this, "record" );
+		if ( !isValid || !id || record !== null ) { return; }
+
+		setProperties( this, {
+			record   : null,
+			isLoading: true,
+			isLocked : true
+		});
+
+		var store = get( this, "store" );
+		return store.findExistingRecord( modelName, id )
+			.catch(function() { return false; })
+			.then(function( record ) {
+				if ( get( this, "isDestroyed" ) ) {
+					return;
+				}
+
+				setProperties( this, {
+					record,
+					isLoading: false,
+					isLocked : false
+				});
+			}.bind( this ) );
+	}.observes( "isValid", "model" ).on( "didInitAttrs" )
 });

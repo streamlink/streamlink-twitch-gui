@@ -1,9 +1,4 @@
-define([
-	"vendor/momentjs/moment"
-], function(
-	Moment
-) {
+import Moment from "vendor/momentjs/moment";
 
-	return Moment;
 
-});
+export default Moment;

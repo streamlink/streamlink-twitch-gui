@@ -1,34 +1,29 @@
-define([
-	"store/TwitchSerializer"
-], function(
-	TwitchSerializer
-) {
+import TwitchSerializer from "store/TwitchSerializer";
 
-	return TwitchSerializer.extend({
-		primaryKey: "name",
 
-		modelNameFromPayloadKey: function() {
-			return "twitchGame";
-		},
+export default TwitchSerializer.extend({
+	primaryKey: "name",
 
-		attrs: {
-			box: { deserialize: "records" },
-			logo: { deserialize: "records" }
-		},
+	modelNameFromPayloadKey() {
+		return "twitchGame";
+	},
 
-		normalize: function( modelClass, resourceHash, prop ) {
-			var name = resourceHash[ this.primaryKey ];
-			var foreignKey = this.store.serializerFor( "twitchImage" ).primaryKey;
+	attrs: {
+		box: { deserialize: "records" },
+		logo: { deserialize: "records" }
+	},
 
-			if ( resourceHash.box ) {
-				resourceHash.box[ foreignKey ] = "game/box/" + name;
-			}
-			if ( resourceHash.logo ) {
-				resourceHash.logo[ foreignKey ] = "game/logo/" + name;
-			}
+	normalize( modelClass, resourceHash, prop ) {
+		var name = resourceHash[ this.primaryKey ];
+		var foreignKey = this.store.serializerFor( "twitchImage" ).primaryKey;
 
-			return this._super( modelClass, resourceHash, prop );
+		if ( resourceHash.box ) {
+			resourceHash.box[ foreignKey ] = `game/box/${name}`;
 		}
-	});
+		if ( resourceHash.logo ) {
+			resourceHash.logo[ foreignKey ] = `game/logo/${name}`;
+		}
 
+		return this._super( modelClass, resourceHash, prop );
+	}
 });

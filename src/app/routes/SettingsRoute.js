@@ -1,55 +1,53 @@
-define([
-	"Ember",
-	"utils/ember/ObjectBuffer"
-], function(
-	Ember,
-	ObjectBuffer
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
-
-	var settingsRouteNames = /^settings\.\w+$/;
+import {
+	get,
+	set,
+	inject,
+	Route
+} from "Ember";
+import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 
-	return Ember.Route.extend({
-		settings: Ember.inject.service(),
-		modal   : Ember.inject.service(),
+const { service } = inject;
 
-		disableAutoRefresh: true,
+const reRouteNames = /^settings\.\w+$/;
 
-		model: function() {
-			var settings = get( this, "settings.content" );
-			return ObjectBuffer.create({
-				content: settings.toJSON()
-			});
-		},
 
-		resetController: function( controller, isExiting ) {
-			if ( isExiting ) {
-				set( controller, "isAnimated", false );
-			}
-		},
+export default Route.extend({
+	modal: service(),
+	settings: service(),
 
-		actions: {
-			willTransition: function( transition ) {
-				// don't show modal when transitioning between settings subroutes
-				if ( transition && settingsRouteNames.test( transition.targetName ) ) {
-					return true;
-				}
+	disableAutoRefresh: true,
 
-				// check whether the user has changed any values
-				if ( !get( this, "controller.model.isDirty" ) ) { return; }
+	model() {
+		var settings = get( this, "settings.content" );
+		return ObjectBuffer.create({
+			content: settings.toJSON()
+		});
+	},
 
-				// stay here...
-				transition.abort();
-
-				// and let the user decide
-				get( this, "modal" ).openModal( "confirm", this.controller, {
-					previousTransition: transition
-				});
-			}
+	resetController( controller, isExiting ) {
+		if ( isExiting ) {
+			set( controller, "isAnimated", false );
 		}
-	});
+	},
 
+	actions: {
+		willTransition( previousTransition ) {
+			// don't show modal when transitioning between settings subroutes
+			if ( previousTransition && reRouteNames.test( previousTransition.targetName ) ) {
+				return true;
+			}
+
+			// check whether the user has changed any values
+			if ( !get( this, "controller.model.isDirty" ) ) { return; }
+
+			// stay here...
+			previousTransition.abort();
+
+			// and let the user decide
+			get( this, "modal" ).openModal( "confirm", this.controller, {
+				previousTransition
+			});
+		}
+	}
 });

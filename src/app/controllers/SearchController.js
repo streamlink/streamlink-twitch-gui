@@ -1,39 +1,35 @@
-define([
-	"Ember"
-], function(
-	Ember
-) {
-
-	var get = Ember.get;
-	var alias = Ember.computed.alias;
-	var empty = Ember.computed.empty;
-	var equal = Ember.computed.equal;
+import {
+	get,
+	computed,
+	Controller
+} from "Ember";
 
 
-	return Ember.Controller.extend({
-		queryParams: [ "filter", "query" ],
+const { alias, empty, equal } = computed;
 
-		games   : alias( "model.games" ),
-		streams : alias( "model.streams" ),
-		channels: alias( "model.channels" ),
 
-		filterlabel: function() {
-			var filter      = get( this, "filter" );
-			var SearchModel = this.store.modelFor( "search" );
-			return SearchModel.getLabel( filter );
-		}.property( "filter" ),
+export default Controller.extend({
+	queryParams: [ "filter", "query" ],
 
-		notFiltered: equal( "filter", "all" ),
+	games   : alias( "model.games" ),
+	streams : alias( "model.streams" ),
+	channels: alias( "model.channels" ),
 
-		emptyGames   : empty( "games" ),
-		emptyStreams : empty( "streams" ),
-		emptyChannels: empty( "channels" ),
+	filterlabel: function() {
+		var filter      = get( this, "filter" );
+		var SearchModel = this.store.modelFor( "search" );
+		return SearchModel.getLabel( filter );
+	}.property( "filter" ),
 
-		noResults: function() {
-			return get( this, "emptyGames" )
-			    && get( this, "emptyStreams" )
-			    && get( this, "emptyChannels" );
-		}.property( "emptyGames", "emptyStreams", "emptyChannels" )
-	});
+	notFiltered: equal( "filter", "all" ),
 
+	emptyGames   : empty( "games" ),
+	emptyStreams : empty( "streams" ),
+	emptyChannels: empty( "channels" ),
+
+	noResults: function() {
+		return get( this, "emptyGames" )
+		    && get( this, "emptyStreams" )
+		    && get( this, "emptyChannels" );
+	}.property( "emptyGames", "emptyStreams", "emptyChannels" )
 });

@@ -1,44 +1,42 @@
-define([
-	"Ember",
-	"nwjs/clipboard"
-], function(
-	Ember,
-	clipboard
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
+import {
+	get,
+	set,
+	inject,
+	Controller
+} from "Ember";
+import { set as setClipboard } from "nwjs/clipboard";
 
 
-	return Ember.Controller.extend({
-		auth        : Ember.inject.service(),
-		notification: Ember.inject.service(),
-		settings    : Ember.inject.service(),
+const { service } = inject;
 
-		scope: function() {
-			return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
-		}.property( "auth.session.scope" ),
 
-		showTokenForm: false,
+export default Controller.extend({
+	auth: service(),
+	notification: service(),
+	settings: service(),
 
-		actions: {
-			"signout": function() {
-				get( this, "auth" ).signout()
-					.then(function() {
-						this.transitionToRoute( "user.auth" );
-					}.bind( this ) );
-			},
+	scope: function() {
+		return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
+	}.property( "auth.session.scope" ),
 
-			"copyToken": function( success, failure ) {
-				clipboard.set( get( this, "auth.session.access_token" ) )
-					.then( success, failure )
-					.catch(function() {});
-			},
+	showTokenForm: false,
 
-			"showTokenForm": function() {
-				set( this, "showTokenForm", true );
-			}
+	actions: {
+		signout() {
+			get( this, "auth" ).signout()
+				.then(function() {
+					this.transitionToRoute( "user.auth" );
+				}.bind( this ) );
+		},
+
+		copyToken( success, failure ) {
+			setClipboard( get( this, "auth.session.access_token" ) )
+				.then( success, failure )
+				.catch(function() {});
+		},
+
+		showTokenForm() {
+			set( this, "showTokenForm", true );
 		}
-	});
-
+	}
 });

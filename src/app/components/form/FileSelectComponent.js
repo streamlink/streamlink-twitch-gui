@@ -1,43 +1,39 @@
-define([
-	"Ember",
-	"templates/components/form/FileSelectComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
+import {
+	get,
+	set,
+	$,
+	Component
+} from "Ember";
+import layout from "templates/components/form/FileSelectComponent.hbs";
 
 
-	return Ember.Component.extend({
-		layout: layout,
-		tagName: "div",
-		classNames: [ "input-group" ],
+export default Component.extend({
+	layout,
 
-		value: "",
-		placeholder: "",
-		disabled: false,
+	tagName: "div",
+	classNames: [ "input-group" ],
 
-		_createInput: function() {
-			var self = this;
-			self._input = Ember.$( "<input>" ).addClass( "hidden" ).attr({
-				type: "file",
-				tabindex: -1
-			}).change(function() {
-				if ( !this.value.length ) { return; }
-				set( self, "value", this.value );
-				this.files.clear();
-			});
-		}.on( "init" ),
+	value: "",
+	placeholder: "",
+	disabled: false,
 
-		actions: {
-			"selectfile": function() {
-				if ( !get( this, "disabled" ) ) {
-					this._input.click();
-				}
+	_createInput: function() {
+		var self = this;
+		self._input = $( "<input>" ).addClass( "hidden" ).attr({
+			type: "file",
+			tabindex: -1
+		}).change(function() {
+			if ( !this.value.length ) { return; }
+			set( self, "value", this.value );
+			this.files.clear();
+		});
+	}.on( "init" ),
+
+	actions: {
+		selectfile() {
+			if ( !get( this, "disabled" ) ) {
+				this._input.click();
 			}
 		}
-	});
-
+	}
 });

@@ -1,11 +1,6 @@
-define([
-	"models/twitch/Game"
-], function(
-	Game
-) {
+import Game from "models/twitch/Game";
 
-	return Game.extend().reopenClass({
-		toString: function() { return "api/users/:user/follows/games"; }
-	});
 
+export default Game.extend().reopenClass({
+	toString() { return "api/users/:user/follows/games"; }
 });

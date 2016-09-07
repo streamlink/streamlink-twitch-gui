@@ -1,103 +1,100 @@
-define([
-	"Ember",
-	"templates/components/button/FormButtonComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
+import {
+	get,
+	set,
+	makeArray,
+	$,
+	computed,
+	Component
+} from "Ember";
+import layout from "templates/components/button/FormButtonComponent.hbs";
 
-	var get = Ember.get;
-	var set = Ember.set;
-	var makeArray = Ember.makeArray;
-	var equal = Ember.computed.equal;
-	var $ = Ember.$;
 
-	var STATE_LOADING = -1;
-	var STATE_FAILURE =  0;
-	var STATE_SUCCESS =  1;
+const { equal } = computed;
 
-	function iconAnimation( status, data ) {
-		var self = this;
+const STATE_LOADING = -1;
+const STATE_FAILURE =  0;
+const STATE_SUCCESS =  1;
 
-		return new Promise(function( resolve, reject ) {
-			set( self, "_status", status );
-			self.$().one( "webkitAnimationEnd", function() {
-				set( self, "_status", null );
-				( status ? resolve : reject )( data );
-			});
+function iconAnimation( status, data ) {
+	let self = this;
+
+	return new Promise(function( resolve, reject ) {
+		set( self, "_status", status );
+		self.$().one( "webkitAnimationEnd", function() {
+			set( self, "_status", null );
+			( status ? resolve : reject )( data );
 		});
-	}
+	});
+}
 
 
-	return Ember.Component.extend({
-		layout: layout,
+export default Component.extend({
+	layout,
 
-		tagName: "",
+	tagName: "",
 
-		// prevents an ember bug regarding tagless components and isVisible bindings
-		$: function() {
-			// use the layout's first element as component element
-			var element = this._renderNode.childNodes[0].firstNode;
-			return $( element );
-		},
+	// prevents an ember bug regarding tagless components and isVisible bindings
+	$: function() {
+		// use the layout's first element as component element
+		var element = this._renderNode.childNodes[0].firstNode;
+		return $( element );
+	},
 
-		title  : null,
-		"class": null,
+	title  : null,
+	"class": null,
 
-		action     : null,
-		actionParam: null,
+	action     : null,
+	actionParam: null,
 
-		icon    : false,
-		iconanim: false,
-		spinner : false,
+	icon    : false,
+	iconanim: false,
+	spinner : false,
 
-		_status: null,
+	_status: null,
 
-		isSuccess: equal( "_status", STATE_SUCCESS ),
-		isFailure: equal( "_status", STATE_FAILURE ),
-		isLoading: equal( "_status", STATE_LOADING ),
+	isSuccess: equal( "_status", STATE_SUCCESS ),
+	isFailure: equal( "_status", STATE_FAILURE ),
+	isLoading: equal( "_status", STATE_LOADING ),
 
-		actions: {
-			click: function() {
-				var action  = get( this, "action" );
-				if ( !action ) { return; }
+	actions: {
+		click() {
+			var action  = get( this, "action" );
+			if ( !action ) { return; }
 
-				var context = makeArray( get( this, "actionParam" ) );
+			var actionContext = makeArray( get( this, "actionParam" ) );
 
-				if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
-					// success and failure callbacks
-					context.push( iconAnimation.bind( this, STATE_SUCCESS ) );
-					context.push( iconAnimation.bind( this, STATE_FAILURE ) );
+			if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
+				// success and failure callbacks
+				actionContext.push( iconAnimation.bind( this, STATE_SUCCESS ) );
+				actionContext.push( iconAnimation.bind( this, STATE_FAILURE ) );
 
-					if ( get( this, "spinner" ) ) {
-						set( this, "_status", STATE_LOADING );
-					}
-				}
-
-				// handle actions as functions
-				if ( action instanceof Function ) {
-					action.apply(
-						get( this, "targetObject" ),
-						context
-					);
-
-				// allow the component to send actions to itself
-				// in case it has been extended and uses its own actions
-				} else if (
-					   this.actions instanceof Object
-					&& this.actions.hasOwnProperty( action )
-				) {
-					this.send.apply( this, [ action ].concat( context ) );
-
-				} else {
-					this.triggerAction({
-						target: get( this, "targetObject" ),
-						action: action,
-						actionContext: context
-					});
+				if ( get( this, "spinner" ) ) {
+					set( this, "_status", STATE_LOADING );
 				}
 			}
-		}
-	});
 
+			// handle actions as functions
+			if ( action instanceof Function ) {
+				action.apply(
+					get( this, "targetObject" ),
+					actionContext
+				);
+
+			// allow the component to send actions to itself
+			// in case it has been extended and uses its own actions
+			} else if (
+				   this.actions instanceof Object
+				&& this.actions.hasOwnProperty( action )
+			) {
+				this.send.apply( this, [ action ].concat( actionContext ) );
+
+			} else {
+				this.triggerAction({
+					target: get( this, "targetObject" ),
+					action,
+					actionContext
+				});
+			}
+		}
+	}
 });

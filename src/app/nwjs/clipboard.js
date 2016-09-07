@@ -1,29 +1,22 @@
-define([
-	"nwjs/nwGui"
-], function(
-	nwGui
-) {
+import { Clipboard } from "nwjs/nwGui";
 
-	function getClipboard() {
-		try {
-			return nwGui.Clipboard.get();
-		} catch ( e ) {
-			throw new Error( "Clipboard not initialized" );
-		}
+
+function getClipboard() {
+	try {
+		return Clipboard.get();
+	} catch ( e ) {
+		throw new Error( "Clipboard not initialized" );
 	}
+}
 
 
-	return {
-		get: function() {
-			return getClipboard().get( "text" );
-		},
+export function get() {
+	return getClipboard().get( "text" );
+}
 
-		set: function( str ) {
-			return new Promise(function( resolve ) {
-				getClipboard().set( String( str ), "text" );
-				resolve( str );
-			});
-		}
-	};
-
-});
+export function set( str ) {
+	return new Promise(function( resolve ) {
+		getClipboard().set( String( str ), "text" );
+		resolve( str );
+	});
+}

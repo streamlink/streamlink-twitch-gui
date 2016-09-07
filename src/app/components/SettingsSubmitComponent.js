@@ -1,67 +1,63 @@
-define([
-	"Ember",
-	"templates/components/SettingsSubmitComponent.hbs"
-], function(
-	Ember,
-	layout
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
-	var cancel = Ember.run.cancel;
-	var later = Ember.run.later;
+import {
+	get,
+	set,
+	run,
+	Component
+} from "Ember";
+import layout from "templates/components/SettingsSubmitComponent.hbs";
 
 
-	return Ember.Component.extend({
-		layout: layout,
+const { cancel, later } = run;
 
-		classNames: [ "settings-submit-component" ],
-		classNameBindings: [ "_enabled::faded" ],
 
-		isDirty: true,
-		disabled: false,
+export default Component.extend({
+	layout,
 
-		delay: 1000,
+	classNames: [ "settings-submit-component" ],
+	classNameBindings: [ "_enabled::faded" ],
 
-		apply: "apply",
-		discard: "discard",
+	isDirty: true,
+	disabled: false,
 
-		_enabled: function() {
-			return get( this, "isDirty" )
-				&& !get( this, "disabled" );
-		}.property(),
+	delay: 1000,
 
-		// immediately set enabled when disabled property changes
-		_disabledObserver: function() {
-			var enabled = get( this, "disabled" )
-				? false
-				: get( this, "isDirty" );
-			set( this, "_enabled", enabled );
-		}.observes( "disabled" ),
+	apply: "apply",
+	discard: "discard",
 
-		// isDirty === true:  immediately set enabled to true
-		// isDirty === false: wait and then set to false
-		_timeout: null,
-		_isDirtyObserver: function() {
-			if ( get( this, "disabled" ) ) { return; }
+	_enabled: function() {
+		return get( this, "isDirty" )
+			&& !get( this, "disabled" );
+	}.property(),
 
-			this._clearTimeout();
+	// immediately set enabled when disabled property changes
+	_disabledObserver: function() {
+		var enabled = get( this, "disabled" )
+			? false
+			: get( this, "isDirty" );
+		set( this, "_enabled", enabled );
+	}.observes( "disabled" ),
 
-			if ( get( this, "isDirty" ) ) {
-				set( this, "_enabled", true );
-			} else {
-				this._timeout = later( this, function() {
-					set( this, "_enabled", false );
-				}, get( this, "delay" ) );
-			}
-		}.observes( "isDirty" ),
+	// isDirty === true:  immediately set enabled to true
+	// isDirty === false: wait and then set to false
+	_timeout: null,
+	_isDirtyObserver: function() {
+		if ( get( this, "disabled" ) ) { return; }
 
-		_clearTimeout: function() {
-			if ( this._timeout ) {
-				cancel( this._timeout );
-				this._timeout = null;
-			}
-		}.on( "willDestroyElement" )
-	});
+		this._clearTimeout();
 
+		if ( get( this, "isDirty" ) ) {
+			set( this, "_enabled", true );
+		} else {
+			this._timeout = later( this, function() {
+				set( this, "_enabled", false );
+			}, get( this, "delay" ) );
+		}
+	}.observes( "isDirty" ),
+
+	_clearTimeout: function() {
+		if ( this._timeout ) {
+			cancel( this._timeout );
+			this._timeout = null;
+		}
+	}.on( "willDestroyElement" )
 });

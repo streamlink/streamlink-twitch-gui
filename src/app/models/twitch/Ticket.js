@@ -1,21 +1,16 @@
-define([
-	"EmberData"
-], function(
-	DS
-) {
-
-	var attr = DS.attr;
-	var belongsTo = DS.belongsTo;
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
 
 
-	return DS.Model.extend({
-		access_end: attr( "date" ),
-		access_start: attr( "date" ),
-		product: belongsTo( "twitchProduct", { async: false } ),
-		purchase_profile: attr()
+export default Model.extend({
+	access_end: attr( "date" ),
+	access_start: attr( "date" ),
+	product: belongsTo( "twitchProduct", { async: false } ),
+	purchase_profile: attr()
 
-	}).reopenClass({
-		toString: function() { return "api/users/:user/tickets"; }
-	});
-
+}).reopenClass({
+	toString() { return "api/users/:user/tickets"; }
 });

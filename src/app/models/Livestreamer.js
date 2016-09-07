@@ -1,83 +1,78 @@
-define([
-	"Ember",
-	"EmberData",
-	"models/LivestreamerParameters",
-	"utils/Parameter"
-], function(
-	Ember,
-	DS,
-	LivestreamerParameters,
-	Parameter
-) {
-
-	var get = Ember.get;
-	var set = Ember.set;
-	var attr = DS.attr;
-	var belongsTo = DS.belongsTo;
-	var alias = Ember.computed.alias;
+import {
+	get,
+	set,
+	computed,
+	inject
+} from "Ember";
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
+import { parameters } from "models/LivestreamerParameters";
+import Parameter from "utils/Parameter";
 
 
-	/**
-	 * @class Livestreamer
-	 */
-	return DS.Model.extend({
-		stream      : belongsTo( "twitchStream", { async: false } ),
-		channel     : belongsTo( "twitchChannel", { async: false } ),
-		quality     : attr( "number" ),
-		gui_openchat: attr( "boolean" ),
-		started     : attr( "date" ),
+const { alias } = computed;
+const { service } = inject;
 
 
-		/** @property {ChildProcess} spawn */
-		spawn  : null,
-		success: false,
-		error  : false,
-		warning: false,
-		log    : null,
-		showLog: false,
+/**
+ * @class Livestreamer
+ */
+export default Model.extend({
+	stream      : belongsTo( "twitchStream", { async: false } ),
+	channel     : belongsTo( "twitchChannel", { async: false } ),
+	quality     : attr( "number" ),
+	gui_openchat: attr( "boolean" ),
+	started     : attr( "date" ),
 
 
-		auth    : Ember.inject.service(),
-		settings: Ember.inject.service(),
+	/** @property {ChildProcess} spawn */
+	spawn  : null,
+	success: false,
+	error  : false,
+	warning: false,
+	log    : null,
+	showLog: false,
 
-		session: alias( "auth.session" ),
+
+	auth    : service(),
+	settings: service(),
+
+	session: alias( "auth.session" ),
 
 
-		kill: function() {
-			var spawn = get( this, "spawn" );
-			if ( spawn ) {
-				spawn.kill( "SIGTERM" );
-			}
-		},
+	kill() {
+		var spawn = get( this, "spawn" );
+		if ( spawn ) {
+			spawn.kill( "SIGTERM" );
+		}
+	},
 
-		clearLog: function() {
-			return set( this, "log", [] );
-		},
+	clearLog() {
+		return set( this, "log", [] );
+	},
 
-		pushLog: function( type, line ) {
-			get( this, "log" ).pushObject({
-				type: type,
-				line: line
-			});
-		},
+	pushLog( type, line ) {
+		get( this, "log" ).pushObject({ type, line });
+	},
 
-		qualityObserver: function() {
-			// The LivestreamerService knows that it has to spawn a new child process
-			this.kill();
-		}.observes( "quality" ),
+	qualityObserver: function() {
+		// The LivestreamerService knows that it has to spawn a new child process
+		this.kill();
+	}.observes( "quality" ),
 
-		parameters: function() {
-			return Parameter.getParameters(
-				this,
-				LivestreamerParameters.parameters,
-				get( this, "settings.advanced" )
-			);
-		}.property().volatile()
+	parameters: function() {
+		return Parameter.getParameters(
+			this,
+			parameters,
+			get( this, "settings.advanced" )
+		);
+	}.property().volatile()
 
-	}).reopenClass({
+}).reopenClass({
 
-		toString: function() { return "Livestreamer"; }
-
-	});
+	toString() { return "Livestreamer"; }
 
 });
