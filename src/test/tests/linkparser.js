@@ -254,17 +254,105 @@ test( "Twitter", function( assert ) {
 });
 
 
+QUnit.test( "Subreddit", function( assert ) {
+
+	assert.deepEqual(
+		parseString( "/r/all /r/all/" ),
+		{
+			texts: [ "", " ", "" ],
+			links: [
+				{ url: "https://www.reddit.com/r/all", text: "/r/all" },
+				{ url: "https://www.reddit.com/r/all", text: "/r/all" }
+			]
+		},
+		"Implicit subreddit match"
+	);
+
+	assert.deepEqual(
+		parseString( "https://www.reddit.com/r/all https://www.reddit.com/r/all/" ),
+		{
+			texts: [ "", " ", "" ],
+			links: [
+				{ url: "https://www.reddit.com/r/all", text: "/r/all" },
+				{ url: "https://www.reddit.com/r/all", text: "/r/all" }
+			]
+		},
+		"Explicit subreddit match"
+	);
+
+	assert.deepEqual(
+		parseString( "https://www.reddit.com https://www.reddit.com/r/subreddit/comments/abcdef" ),
+		{
+			texts: [ "", " ", "" ],
+			links: [
+				{
+					url: "https://www.reddit.com",
+					text: "https://www.reddit.com"
+				},
+				{
+					url: "https://www.reddit.com/r/subreddit/comments/abcdef",
+					text: "https://www.reddit.com/r/subreddit/comments/abcdef"
+				}
+			]
+		},
+		"Non-matching subreddit links"
+	);
+
+});
+
+
+QUnit.test( "Reddit user", function( assert ) {
+
+	assert.deepEqual(
+		parseString( "/u/name /u/name/" ),
+		{
+			texts: [ "", " ", "" ],
+			links: [
+				{ url: "https://www.reddit.com/u/name", text: "/u/name" },
+				{ url: "https://www.reddit.com/u/name", text: "/u/name" }
+			]
+		},
+		"Implicit reddit user match (short)"
+	);
+
+	assert.deepEqual(
+		parseString( "/user/name /user/name" ),
+		{
+			texts: [ "", " ", "" ],
+			links: [
+				{ url: "https://www.reddit.com/u/name", text: "/u/name" },
+				{ url: "https://www.reddit.com/u/name", text: "/u/name" }
+			]
+		},
+		"Implicit reddit user match (long)"
+	);
+
+	assert.deepEqual(
+		parseString( "https://www.reddit.com/u/name https://www.reddit.com/u/name/" ),
+		{
+			texts: [ "", " ", "" ],
+			links: [
+				{ url: "https://www.reddit.com/u/name", text: "/u/name" },
+				{ url: "https://www.reddit.com/u/name", text: "/u/name" }
+			]
+		},
+		"Explicit reddit user match"
+	);
+
+});
+
+
 test( "All parsers", function( assert ) {
 
 	assert.deepEqual(
-		parseString( "Follow @foo and visit bar.com or follow @baz and visit qux.com" ),
+		parseString( "Follow @foo and visit bar.com or follow /u/baz and visit /r/qux" ),
 		{
 			texts: [ "Follow ", " and visit ", " or follow ", " and visit ", "" ],
 			links: [
 				{ url: "https://twitter.com/foo", text: "@foo" },
 				{ url: "http://bar.com", text: "bar.com" },
-				{ url: "https://twitter.com/baz", text: "@baz" },
-				{ url: "http://qux.com", text: "qux.com" }
+				{ url: "https://www.reddit.com/u/baz", text: "/u/baz" },
+				{ url: "https://www.reddit.com/r/qux", text: "/r/qux" }
 			]
 		},
 		"Multiple matches"
