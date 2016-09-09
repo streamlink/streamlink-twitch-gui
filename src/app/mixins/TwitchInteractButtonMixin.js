@@ -86,5 +86,5 @@ export default Mixin.create({
 					isLocked : false
 				});
 			}.bind( this ) );
-	}.observes( "isValid", "model" ).on( "didInitAttrs" )
+	}.observes( "isValid", "model" ).on( "init" )
 });
