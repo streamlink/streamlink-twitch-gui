@@ -1,13 +1,11 @@
 import { get } from "Ember";
 import UserIndexRoute from "routes/UserIndexRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
-import ModelMetadataMixin from "mixins/ModelMetadataMixin";
-import toArray from "utils/ember/toArray";
-import mapBy from "utils/ember/mapBy";
+import { mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
+export default UserIndexRoute.extend( InfiniteScrollMixin, {
 	itemSelector: ".stream-item-component",
 
 	modelName: "twitchStreamsFollowed",
@@ -17,7 +15,6 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 			offset: get( this, "offset" ),
 			limit : get( this, "limit" )
 		})
-			.then( toArray )
 			.then( mapBy( "stream" ) )
 			.then( preload( "preview.medium_nocache" ) );
 	}

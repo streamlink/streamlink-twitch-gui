@@ -1,13 +1,13 @@
 <main class="content content-user content-user-followed-streams">
 <header>
 <h2>Followed streams</h2>
-{{headline-totals total=metadata.total}}
+{{headline-totals model.meta.total}}
 {{#quick-bar}}
 {{quick-bar-random-stream model="twitchStreamsFollowed"}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{#content-list model as |item isNewItem isDuplicateItem|}}
 {{stream-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem faded=false}}
 {{else}}
 <p>The returned list of followed streams is empty.</p>

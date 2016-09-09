@@ -1,13 +1,13 @@
 <main class="content content-user content-user-hosted-streams">
 <header>
 <h2>Hosted streams</h2>
-{{headline-totals total=metadata.total}}
+{{headline-totals model.meta.total}}
 {{#quick-bar}}
 {{quick-bar-random-stream model="twitchStreamsHosted"}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#content-list content=model compare="target" as |item isNewItem isDuplicateItem|}}
+{{#content-list model compare="target" as |item isNewItem isDuplicateItem|}}
 {{stream-item host=item content=item.target isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
 <p>The returned list of hosted streams is empty.</p>

@@ -1,13 +1,13 @@
 <main class="content content-gamesgame">
 <header>
 <h2>{{follow-game game=game}}{{game}}</h2>
-{{headline-totals total=metadata.total}}
+{{headline-totals model.meta.total}}
 {{#quick-bar}}
 {{quick-bar-random-stream query=(hash game=game)}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{#content-list model as |item isNewItem isDuplicateItem|}}
 {{stream-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem showGame=false}}
 {{else}}
 <p>The returned list of streams of this game is empty.</p>

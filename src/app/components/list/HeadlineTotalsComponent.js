@@ -17,4 +17,7 @@ export default Component.extend({
 	total: null,
 
 	isVisible: gte( "total", 0 )
+
+}).reopenClass({
+	positionalParams: [ "total" ]
 });

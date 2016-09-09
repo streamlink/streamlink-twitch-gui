@@ -1,13 +1,13 @@
 <main class="content content-channels">
 <header>
 <h2>Top Channels</h2>
-{{headline-totals total=metadata.total}}
+{{headline-totals model.meta.total}}
 {{#quick-bar}}
 {{quick-bar-random-stream}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{#content-list model as |item isNewItem isDuplicateItem|}}
 {{stream-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
 <p>The returned list of top channels is empty.</p>

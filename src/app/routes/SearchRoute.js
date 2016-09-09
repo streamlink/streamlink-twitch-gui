@@ -4,8 +4,7 @@ import {
 	Route
 } from "Ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
-import toArray from "utils/ember/toArray";
-import mapBy from "utils/ember/mapBy";
+import { mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
@@ -41,7 +40,6 @@ export default Route.extend( InfiniteScrollMixin, {
 					type : "suggest",
 					live : true
 				})
-					.then( toArray )
 					.then( mapBy( "game" ) )
 					.then( preload( "box.large_nocache" ) )
 				: Promise.resolve([]),
@@ -53,7 +51,6 @@ export default Route.extend( InfiniteScrollMixin, {
 					offset: 0,
 					limit : 10
 				})
-					.then( toArray )
 					.then( mapBy( "channel" ) )
 					.then( preload( "logo" ) )
 				: Promise.resolve([]),
@@ -65,7 +62,6 @@ export default Route.extend( InfiniteScrollMixin, {
 					offset: get( this, "offset" ),
 					limit : get( this, "limit" )
 				})
-					.then( toArray )
 					.then( mapBy( "stream" ) )
 					.then( preload( "preview.medium_nocache" ) )
 				: Promise.resolve([])
@@ -82,7 +78,6 @@ export default Route.extend( InfiniteScrollMixin, {
 			offset: get( this, "offset" ),
 			limit : get( this, "limit" )
 		})
-			.then( toArray )
 			.then( mapBy( "stream" ) )
 			.then( preload( "preview.medium_nocache" ) );
 	}

@@ -1,7 +1,7 @@
 <main class="content content-user content-user-followed-channels">
 <header>
 <h2>Followed channels</h2>
-{{headline-totals total=metadata.total}}
+{{headline-totals model.meta.total}}
 {{#quick-bar}}
 <div class="multibtn sort-method">
 {{form-button
@@ -40,7 +40,7 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{#content-list model as |item isNewItem isDuplicateItem|}}
 {{channel-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
 <p>The returned list of followed channels is empty.</p>
