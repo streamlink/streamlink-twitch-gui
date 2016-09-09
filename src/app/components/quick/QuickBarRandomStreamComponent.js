@@ -1,7 +1,7 @@
 import {
 	get,
 	set,
-	merge,
+	assign,
 	inject
 } from "Ember";
 import { vars } from "config";
@@ -51,7 +51,7 @@ export default FormButtonComponent.extend( LanguageFilterMixin, {
 
 			var _query = get( self, "query" );
 			if ( _query ) {
-				query = merge( _query, query );
+				query = assign( _query, query );
 			}
 
 			store.query( model, query )

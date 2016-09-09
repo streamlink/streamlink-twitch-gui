@@ -19,7 +19,7 @@ export const getOwner = Ember.getOwner;
 export const setOwner = Ember.setOwner;
 export const isNone = Ember.isNone;
 export const makeArray = Ember.makeArray;
-export const merge = Ember.merge;
+export const assign = Ember.assign;
 
 // libs
 export const $ = Ember.$;

@@ -2,7 +2,7 @@ import {
 	get,
 	set,
 	isNone,
-	merge,
+	assign,
 	Route
 } from "Ember";
 import { AdapterError } from "EmberData";
@@ -39,7 +39,7 @@ export default Route.extend({
 
 		// if it's an AdapterError, just use the first error object
 		if ( error instanceof AdapterError ) {
-			merge( error, error.errors[0] || {} );
+			assign( error, error.errors[0] || {} );
 		}
 
 		// choose a better error name

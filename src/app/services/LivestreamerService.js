@@ -2,7 +2,7 @@ import {
 	get,
 	set,
 	makeArray,
-	merge,
+	assign,
 	RSVP,
 	inject,
 	run,
@@ -50,25 +50,25 @@ function ErrorLog( message, log ) {
 		return { type, line };
 	});
 }
-ErrorLog.prototype = merge( new Error(), { name: "ErrorLog" });
+ErrorLog.prototype = assign( new Error(), { name: "ErrorLog" });
 
 function VersionError( version ) { this.version = version; }
-VersionError.prototype = merge( new Error(), { name: "VersionError" });
+VersionError.prototype = assign( new Error(), { name: "VersionError" });
 
 function NotFoundError() {}
-NotFoundError.prototype = merge( new Error(), { name: "NotFoundError" });
+NotFoundError.prototype = assign( new Error(), { name: "NotFoundError" });
 
 function UnableToOpenError() {}
-UnableToOpenError.prototype = merge( new Error(), { name: "UnableToOpenError" });
+UnableToOpenError.prototype = assign( new Error(), { name: "UnableToOpenError" });
 
 function NoStreamsFoundError() {}
-NoStreamsFoundError.prototype = merge( new Error(), { name: "NoStreamsFoundError" });
+NoStreamsFoundError.prototype = assign( new Error(), { name: "NoStreamsFoundError" });
 
 function NoPlayerError() {}
-NoPlayerError.prototype = merge( new Error(), { name: "NoPlayerError" });
+NoPlayerError.prototype = assign( new Error(), { name: "NoPlayerError" });
 
 function Warning( message ) { this.message = message; }
-Warning.prototype = merge( new Error(), { name: "Warning" } );
+Warning.prototype = assign( new Error(), { name: "Warning" } );
 
 
 // we need a common error parsing function for stdout and stderr, because
