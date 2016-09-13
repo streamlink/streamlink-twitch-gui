@@ -12,7 +12,7 @@ module.exports = {
 	chocolatey: {
 		options: {
 			changelog: true,
-			checksums: false
+			checksums: true
 		},
 		tasks: [
 			"clean:package_chocolatey",

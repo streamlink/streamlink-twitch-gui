@@ -123,8 +123,8 @@ module.exports = function() {
 		}
 
 		return Promise.all([
-			readPackageNpm,
-			readPackageBower
+			readPackageBower,
+			readPackageNpm
 		])
 			.then(function( files ) {
 				return files

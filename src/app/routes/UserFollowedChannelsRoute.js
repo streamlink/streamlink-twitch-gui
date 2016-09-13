@@ -1,13 +1,11 @@
 import { get } from "Ember";
 import UserIndexRoute from "routes/UserIndexRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
-import ModelMetadataMixin from "mixins/ModelMetadataMixin";
-import toArray from "utils/ember/toArray";
-import mapBy from "utils/ember/mapBy";
+import { mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
+export default UserIndexRoute.extend( InfiniteScrollMixin, {
 	itemSelector: ".channel-item-component",
 
 	queryParams: {
@@ -28,7 +26,6 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 			sortby   : params.sortby || "created_at",
 			direction: params.direction || "desc"
 		})
-			.then( toArray )
 			.then( mapBy( "channel" ) )
 			.then( preload( "logo" ) );
 	},

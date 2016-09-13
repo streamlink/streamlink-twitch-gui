@@ -6,21 +6,21 @@
 
 {{#if games.length}}
 {{#if notFiltered}}<h3>Games</h3>{{/if}}
-{{#content-list content=games infiniteScroll=false classNames="search-games" as |item|}}
+{{#content-list games infiniteScroll=false classNames="search-games" as |item|}}
 {{game-item content=item}}
 {{/content-list}}
 {{/if}}
 
 {{#if channels.length}}
 {{#if notFiltered}}<h3>Channels</h3>{{/if}}
-{{#content-list content=channels infiniteScroll=false classNames="search-channels" as |item|}}
+{{#content-list channels infiniteScroll=false classNames="search-channels" as |item|}}
 {{channel-item content=item}}
 {{/content-list}}
 {{/if}}
 
 {{#if streams.length}}
 {{#if notFiltered}}<h3>Streams</h3>{{/if}}
-{{#content-list content=streams classNames="search-streams" as |item isNewItem isDuplicate|}}
+{{#content-list streams classNames="search-streams" as |item isNewItem isDuplicate|}}
 {{stream-item content=item isNewItem=isNewItem isDuplicate=isDuplicate showGame=true}}
 {{/content-list}}
 {{/if}}

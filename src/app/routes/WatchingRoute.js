@@ -3,8 +3,7 @@ import {
 	inject,
 	Route
 } from "Ember";
-import toArray from "utils/ember/toArray";
-import mapBy from "utils/ember/mapBy";
+import { mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
@@ -18,7 +17,6 @@ export default Route.extend({
 		var records = get( this, "livestreamer.model" );
 
 		return Promise.resolve( records )
-			.then( toArray )
 			.then( mapBy( "stream" ) )
 			.then( preload( "preview.large_nocache" ) )
 			// return the original record array

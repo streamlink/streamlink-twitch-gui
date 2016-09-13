@@ -55,7 +55,53 @@ function fnTwitter( _, __, user ) {
 }
 
 
+const reSubreddit = new RegExp([
+	// boundary (no look-behind)
+	"(^|\\W)",
+	// optional reddit URL
+	`(?:https?://${reHost}*reddit\\.com)?`,
+	// subreddit
+	"/r/([\\w-]+)/?",
+	// boundary
+	"([^\\w/-]|$)"
+].join( "" ), "igm" );
+
+function fnSubreddit( _, __, subreddit ) {
+	return {
+		url : `https://www.reddit.com/r/${subreddit}`,
+		text: `/r/${subreddit}`
+	};
+}
+
+
+const reRedditUser = new RegExp([
+	// boundary (no look-behind)
+	"(^|\\W)",
+	// optional reddit URL
+	`(?:https?://${reHost}*reddit\\.com)?`,
+	// user
+	"/u(?:ser)?/([\\w-]+)/?",
+	// boundary
+	"([^\\w/-]|$)"
+].join( "" ), "igm" );
+
+function fnRedditUser( _, __, user ) {
+	return {
+		url : `https://www.reddit.com/u/${user}`,
+		text: `/u/${user}`
+	};
+}
+
+
 export const parsers = {
+	subreddit: {
+		re: reSubreddit,
+		fn: fnSubreddit
+	},
+	reddituser: {
+		re: reRedditUser,
+		fn: fnRedditUser
+	},
 	url: {
 		re: reURL,
 		fn: fnURL

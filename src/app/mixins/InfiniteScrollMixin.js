@@ -1,9 +1,14 @@
 import {
 	get,
 	set,
-	Binding,
+	defineProperty,
+	computed,
+	observer,
 	Mixin
 } from "Ember";
+
+
+const { oneWay } = computed;
 
 
 var CSSMediaRule     = window.CSSMediaRule;
@@ -111,6 +116,14 @@ export default Mixin.create({
 	itemSelector: "",
 
 
+	_offsetObserver: observer( "contentPath", function() {
+		let contentPath = get( this, "contentPath" );
+		let path = `${contentPath}.length`;
+
+		defineProperty( this, "offset", oneWay( path ) );
+	}).on( "init" ),
+
+
 	/**
 	 * Calculate how many items are needed to completely fill the container
 	 */
@@ -132,25 +145,14 @@ export default Mixin.create({
 	beforeModel() {
 		this._super.apply( this, arguments );
 
-		// reset on route change
-		set( this, "offset", 0 );
 		this.calcFetchSize();
 	},
 
 	setupController( controller, model ) {
 		this._super.apply( this, arguments );
 
-		// late bindings
-		var binding = get( this, "_binding_offset" );
-		if ( !binding ) {
-			var contentPath = get( this, "contentPath" );
-			binding = Binding.from( `${contentPath}.length` ).to( "offset" );
-			set( this, "_binding_offset", binding );
-		}
-		binding.connect( this );
-
-		var offset = get( this, "offset" );
-		var limit  = get( this, "limit" );
+		let offset = get( this, "offset" );
+		let limit  = get( this, "limit" );
 
 		set( controller, "isFetching", false );
 		set( controller, "hasFetchedAll", offset < limit );
@@ -162,14 +164,6 @@ export default Mixin.create({
 	},
 
 	actions: {
-		"willTransition": function () {
-			var binding = get( this, "_binding_offset" );
-			if ( binding ) {
-				binding.disconnect( this );
-			}
-			return true;
-		},
-
 		willFetchContent( force ) {
 			var controller = get( this, "controller" );
 			var isFetching = get( controller, "isFetching" );

@@ -4,7 +4,7 @@ import {
 } from "Ember";
 import UserIndexRoute from "routes/UserIndexRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
-import toArray from "utils/ember/toArray";
+import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
@@ -19,7 +19,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 			limit  : get( this, "limit" ),
 			unended: true
 		})
-			.then( toArray )
+			.then( toArray() )
 			.then(function( records ) {
 				return records.filterBy( "product.ticket_type", "chansub" );
 			})

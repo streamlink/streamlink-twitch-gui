@@ -4,7 +4,7 @@
 <div class="text">
 <header>
 {{#if content.has_language}}{{flag-icon type="channel" lang=content.language}}{{/if}}
-<span>{{#link-to "channel" content.id}}{{content.display_name}}{{/link-to}}</span>
+<span>{{#link-to "channel" content.id}}{{content.detailedName}}{{/link-to}}</span>
 </header>
 <div class="game"><i class="fa fa-gamepad"></i> {{#if content.game}}{{#link-to "games.game" content.game}}{{content.game}}{{/link-to}}{{else}}<span>no game set yet</span>{{/if}}</div>
 {{#if content.status}}{{embedded-links tagName="div" class="status" text=content.status}}{{/if}}

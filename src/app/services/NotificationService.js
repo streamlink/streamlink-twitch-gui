@@ -18,8 +18,7 @@ import nwWindow, {
 } from "nwjs/Window";
 import { getMenu as getTrayMenu } from "nwjs/Tray";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
-import toArray from "utils/ember/toArray";
-import mapBy from "utils/ember/mapBy";
+import { mapBy } from "utils/ember/recordArrayMethods";
 import { tmpdir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
 import download from "utils/node/fs/download";
@@ -253,7 +252,6 @@ export default Service.extend( ChannelSettingsMixin, {
 		get( this, "store" ).query( "twitchStreamsFollowed", {
 			limit: 100
 		})
-			.then( toArray )
 			.then( mapBy( "stream" ) )
 			.then( this.queryCallback.bind( this ) )
 			.then( this.stripDisabledChannels.bind( this ) )

@@ -5,7 +5,7 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#content-list content=model as |item isNewItem isDuplicateItem|}}
+{{#content-list model as |item isNewItem isDuplicateItem|}}
 {{subscription-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
 <p>You don't have any channel subscriptions.</p>

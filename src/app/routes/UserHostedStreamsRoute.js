@@ -1,12 +1,11 @@
 import { get } from "Ember";
 import UserIndexRoute from "routes/UserIndexRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
-import ModelMetadataMixin from "mixins/ModelMetadataMixin";
-import toArray from "utils/ember/toArray";
+import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
+export default UserIndexRoute.extend( InfiniteScrollMixin, {
 	itemSelector: ".stream-item-component",
 
 	modelName: "twitchStreamsHosted",
@@ -16,7 +15,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, ModelMetadataMixin, {
 			offset: get( this, "offset" ),
 			limit : get( this, "limit" )
 		})
-			.then( toArray )
+			.then( toArray() )
 			.then(function( records ) {
 				// The target (stream) reference is loaded asynchronously
 				// just get the PromiseProxy object and wait for it to resolve

@@ -4,7 +4,7 @@ import {
 	RSVP,
 	Route
 } from "Ember";
-import toArray from "utils/ember/toArray";
+import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
@@ -14,12 +14,12 @@ export default Route.extend({
 
 		return RSVP.hash({
 			summary : store.findAll( "twitchStreamsSummary", { reload: true } )
-				.then( toArray ),
+				.then( toArray() ),
 			featured: store.query( "twitchStreamsFeatured", {
 				offset: 0,
 				limit : 5
 			})
-				.then( toArray )
+				.then( toArray() )
 		})
 			.then(function( data ) {
 				return Promise.resolve( data.featured )

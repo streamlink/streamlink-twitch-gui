@@ -2,7 +2,7 @@
 {{#if model.length}}
 <div class="channel-search">{{input type="search" value=filter placeholder="Find channel"}}</div>
 {{/if}}
-{{#content-list content=modelFiltered as |item|}}
+{{#content-list modelFiltered as |item|}}
 {{settings-channel-item content=item.channel erase=(action "erase" item)}}
 {{else if filter}}
 <p>No channels found.</p>

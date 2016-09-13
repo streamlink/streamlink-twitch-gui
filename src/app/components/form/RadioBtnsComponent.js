@@ -47,7 +47,8 @@ export default Component.extend({
 		return found;
 	},
 
-	didInitAttrs() {
+	init() {
+		this._super.apply( this, arguments );
 		// update each button's checked status on initialization
 		this._updateItems();
 	},

@@ -2,7 +2,7 @@ module.exports = {
 	platforms: {
 		win32: {
 			platform: "win32",
-			arch    : "x86"
+			arch    : "ia32"
 		},
 		win64: {
 			platform: "win32",
@@ -11,7 +11,7 @@ module.exports = {
 
 		osx32: {
 			platform: "darwin",
-			arch    : "x86"
+			arch    : "ia32"
 		},
 		osx64: {
 			platform: "darwin",
@@ -20,7 +20,7 @@ module.exports = {
 
 		linux32: {
 			platform: "linux",
-			arch    : "x86"
+			arch    : "ia32"
 		},
 		linux64: {
 			platform: "linux",
@@ -77,6 +77,7 @@ module.exports = {
 
 				case "32":
 				case "x86":
+				case "ia32":
 					res = keys.filter( filters.x86 );
 					if ( res.length ) { return res; }
 					break;

@@ -1,4 +1,4 @@
-import { merge } from "Ember";
+import { assign } from "Ember";
 import { Store } from "EmberData";
 
 
@@ -14,7 +14,7 @@ Store.reopen({
 	 */
 	findExistingRecord( modelName, id, options ) {
 		var store = this;
-		options = merge( { reload: true }, options );
+		options = assign( { reload: true }, options );
 
 		return store.findRecord( modelName, id, options )
 			.catch(function() {

@@ -19,7 +19,7 @@ export const getOwner = Ember.getOwner;
 export const setOwner = Ember.setOwner;
 export const isNone = Ember.isNone;
 export const makeArray = Ember.makeArray;
-export const merge = Ember.merge;
+export const assign = Ember.assign;
 
 // libs
 export const $ = Ember.$;
@@ -43,6 +43,7 @@ export const LinkComponent = Ember.LinkComponent;
 export const Mixin = Ember.Mixin;
 export const EmberObject = Ember.Object;
 export const ObjectProxy = Ember.ObjectProxy;
+export const observer = Ember.observer;
 export const Route = Ember.Route;
 export const Router = Ember.Router;
 export const Service = Ember.Service;

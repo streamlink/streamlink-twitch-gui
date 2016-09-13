@@ -1,16 +1,15 @@
 import { BooleanTransform } from "EmberData";
 
 
+const defaultOptions = { allowNull: true };
+
+
 export default BooleanTransform.reopen({
 	deserialize( serialized ) {
-		return serialized === null
-			? null
-			: this._super( serialized );
+		return this._super( serialized, defaultOptions );
 	},
 
 	serialize( deserialized ) {
-		return deserialized === null
-			? null
-			: this._super( deserialized );
+		return this._super( deserialized, defaultOptions );
 	}
 });

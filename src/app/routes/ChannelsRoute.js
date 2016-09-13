@@ -4,12 +4,11 @@ import {
 } from "Ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import LanguageFilterMixin from "mixins/LanguageFilterMixin";
-import ModelMetadataMixin from "mixins/ModelMetadataMixin";
-import toArray from "utils/ember/toArray";
+import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMetadataMixin, {
+export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, {
 	itemSelector: ".stream-item-component",
 
 	modelName: "twitchStream",
@@ -20,7 +19,7 @@ export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, ModelMeta
 			limit               : get( this, "limit" ),
 			broadcaster_language: get( this, "broadcaster_language" )
 		})
-			.then( toArray )
+			.then( toArray() )
 			.then( preload( "preview.medium_nocache" ) );
 	}
 });

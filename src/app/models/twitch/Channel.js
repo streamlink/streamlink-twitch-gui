@@ -33,6 +33,17 @@ export default Model.extend({
 	views: attr( "number" ),
 
 
+	hasCustomDisplayName: function() {
+		return get( this, "name" ).toLowerCase() !== get( this, "display_name" ).toLowerCase();
+	}.property( "name", "display_name" ),
+
+	detailedName: function() {
+		return get( this, "hasCustomDisplayName" )
+			? get( this, "display_name" ) + " (" + get( this, "name" ) + ")"
+			: get( this, "display_name" );
+	}.property( "name", "display_name", "hasCustomDisplayName" ),
+
+
 	title_followers: function() {
 		var followers = get( this, "followers" );
 		var numerus   = followers === 1 ? " person is following" : " people are following";

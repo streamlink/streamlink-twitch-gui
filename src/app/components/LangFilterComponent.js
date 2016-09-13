@@ -1,9 +1,14 @@
 import {
 	get,
-	Binding,
+	defineProperty,
+	computed,
+	observer,
 	Component
 } from "Ember";
 import layout from "templates/components/LangFilterComponent.hbs";
+
+
+const { alias } = computed;
 
 
 export default Component.extend({
@@ -11,13 +16,10 @@ export default Component.extend({
 
 	tagName: "li",
 
-	init() {
-		this._super.apply( this, arguments );
+	_checkedObserver: observer( "prop", function() {
+		let prop = get( this, "prop" );
+		let path = `obj.${prop}`;
 
-		var prop = get( this, "prop" );
-		var binding = Binding
-			.from( `obj.${prop}` )
-			.to( "checked" );
-		binding.connect( this );
-	}
+		defineProperty( this, "checked", alias( path ) );
+	}).on( "init" )
 });

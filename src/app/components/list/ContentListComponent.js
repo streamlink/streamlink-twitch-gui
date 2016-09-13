@@ -79,4 +79,7 @@ export default Component.extend({
 			set( self, "length", length );
 		});
 	}
+
+}).reopenClass({
+	positionalParams: [ "content" ]
 });

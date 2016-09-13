@@ -1,7 +1,7 @@
 import {
 	get,
 	set,
-	merge,
+	assign,
 	inject
 } from "Ember";
 import { vars } from "config";
@@ -51,7 +51,7 @@ export default FormButtonComponent.extend( LanguageFilterMixin, {
 
 			var _query = get( self, "query" );
 			if ( _query ) {
-				query = merge( _query, query );
+				query = assign( _query, query );
 			}
 
 			store.query( model, query )
@@ -61,7 +61,7 @@ export default FormButtonComponent.extend( LanguageFilterMixin, {
 					if ( stream ) { return stream; }
 
 					// if not, get number of streams in total
-					var total = store._metadataFor( model ).total;
+					let total = get( streams, "meta.total" );
 					if ( !total ) { return Promise.reject(); }
 
 					// decrease offset and query again [0, total)
