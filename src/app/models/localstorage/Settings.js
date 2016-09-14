@@ -27,6 +27,7 @@ export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
 	livestreamer        : attr( "string",  { defaultValue: "" } ),
 	livestreamer_params : attr( "string",  { defaultValue: "" } ),
+	livestreamer_oauth  : attr( "boolean", { defaultValue: true } ),
 	quality             : attr( "number",  { defaultValue: 0 } ),
 	player              : attr( "string",  { defaultValue: "" } ),
 	player_params       : attr( "string",  { defaultValue: "" } ),
