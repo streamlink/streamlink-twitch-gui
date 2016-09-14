@@ -95,6 +95,7 @@ function setIfNotNull( objA, objB, key ) {
 
 
 export default Service.extend( ChannelSettingsMixin, {
+	auth: service(),
 	chat: service(),
 	modal: service(),
 	settings: service(),
@@ -110,6 +111,10 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	startStream( stream, quality ) {
+		if ( !get( this, "auth.session.isLoggedIn" ) ) {
+			return get( this, "modal" ).openModal( "authRequired" );
+		}
+
 		get( this, "modal" ).openModal( "livestreamer", this, {
 			error : null,
 			active: null,
