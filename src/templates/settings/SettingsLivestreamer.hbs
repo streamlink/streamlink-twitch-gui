@@ -59,15 +59,6 @@
 {{/if}}
 
 {{#settings-row
-	"Twitch.tv login"
-	"Allow Livestreamer to use the Twitch.tv oauth token while being logged in."
-	icon="fa-sign-in"
-	documentation="--twitch-oauth-token"
-}}
-	{{check-box "Authenticate when launching a stream" checked=model.livestreamer_oauth}}
-{{/settings-row}}
-
-{{#settings-row
 	"Launch attempts"
 	"Number of stream launch attempts."
 	icon="fa-rocket"
