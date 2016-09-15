@@ -51,6 +51,11 @@ export const parameters = [
 		"settings.livestreamer_params"
 	),
 	new Parameter(
+		"--http-header",
+		null,
+		"clientID"
+	),
+	new Parameter(
 		"--no-version-check"
 	),
 	new Parameter(

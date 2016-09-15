@@ -11,10 +11,12 @@ import {
 } from "EmberData";
 import { parameters } from "models/LivestreamerParameters";
 import Parameter from "utils/Parameter";
+import { twitch } from "config";
 
 
 const { alias } = computed;
 const { service } = inject;
+const { oauth: { "client-id": clientId } } = twitch;
 
 
 /**
@@ -41,6 +43,10 @@ export default Model.extend({
 	settings: service(),
 
 	session: alias( "auth.session" ),
+
+
+	// let Livestreamer use the GUI's client-id
+	clientID: `Client-ID=${clientId}`,
 
 
 	kill() {
