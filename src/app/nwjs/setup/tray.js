@@ -13,16 +13,20 @@ import resolvePath from "utils/node/resolvePath";
 
 const { "display-name": displayName } = main;
 let { icons: { tray: { [ platform ]: trayIcons } } } = files;
-
-if ( isWin ) {
-	Object.keys( trayIcons ).forEach(function( key ) {
-		let icon = trayIcons[ key ];
-		trayIcons[ key ] = resolvePath( `%NWJSAPPPATH%/${icon}` );
-	});
-}
+let initialized = false;
 
 
 export function createTrayIcon() {
+	// make sure platformfixes have been applied
+	// FIXME: revisit this when merging nwjs-upgrade
+	if ( isWin && !initialized ) {
+		Object.keys( trayIcons ).forEach(function( key ) {
+			let icon = trayIcons[ key ];
+			trayIcons[ key ] = resolvePath( `%NWJSAPPPATH%\\${icon}` );
+		});
+	}
+	initialized = true;
+
 	// apply a tray icon+menu to the main application window
 	nwWindow.tray = tray.create({
 		tooltip: displayName,
