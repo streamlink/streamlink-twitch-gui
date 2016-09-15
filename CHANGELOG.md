@@ -1,7 +1,7 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.15.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.0) (2016-09-15)
 
 - Added authentication check to the stream launch routine (see below). #310
 - Added support for custom channel names. #303
@@ -16,7 +16,7 @@ The only workaround for this missing change is forcing all users to log in and l
 Please also see #289 if you think you can help with the organization of a Livestreamer fork. There are several bugs that need to be fixed and some features/ideas that need to be implemented for a better experience. This will benefit all Livestreamer and Livestreamer Twitch GUI users, thank you!
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.2...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.2...v0.15.0)
 
 
 ## [v0.14.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.2) (2016-08-08)
