@@ -1,14 +1,14 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.15.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.1) (2016-09-15)
 
 - Implemented a better workaround for the Livestreamer Client-ID issue. #310
 - Added option to disable Livestreamer authentication. #308
 - Fixed tray icon being invisible on Windows. #312
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.0...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.0...v0.15.1)
 
 
 ## [v0.15.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.0) (2016-09-15)
