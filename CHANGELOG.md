@@ -1,6 +1,14 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Fixed InfiniteScrollMixin using invalid request offsets when refreshing or revisiting the same route. #314
+
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.1...master)
+
+
 ## [v0.15.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.1) (2016-09-15)
 
 - Implemented a better workaround for the Livestreamer Client-ID issue. #310
