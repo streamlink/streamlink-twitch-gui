@@ -3,7 +3,6 @@ import {
 	set,
 	defineProperty,
 	computed,
-	observer,
 	Mixin
 } from "Ember";
 
@@ -97,6 +96,11 @@ export default Mixin.create({
 	contentPath: "controller.model",
 
 	/**
+	 * Fetch offset
+	 */
+	offset: 0,
+
+	/**
 	 * Don't fetch infinitely.
 	 */
 	maxAutoFetches: 3,
@@ -114,14 +118,6 @@ export default Mixin.create({
 	 * time where the size is being calculated...
 	 */
 	itemSelector: "",
-
-
-	_offsetObserver: observer( "contentPath", function() {
-		let contentPath = get( this, "contentPath" );
-		let path = `${contentPath}.length`;
-
-		defineProperty( this, "offset", oneWay( path ) );
-	}).on( "init" ),
 
 
 	/**
@@ -145,17 +141,24 @@ export default Mixin.create({
 	beforeModel() {
 		this._super.apply( this, arguments );
 
+		// reset offset value
+		set( this, "offset", 0 );
 		this.calcFetchSize();
 	},
 
 	setupController( controller, model ) {
 		this._super.apply( this, arguments );
 
-		let offset = get( this, "offset" );
+		// offset: setup oneWay computed property to the value of `contentPath`
+		let contentPath = get( this, "contentPath" );
+		let path = `${contentPath}.length`;
+		defineProperty( this, "offset", oneWay( path ) );
+
+		let length = get( this, "offset" );
 		let limit  = get( this, "limit" );
 
 		set( controller, "isFetching", false );
-		set( controller, "hasFetchedAll", offset < limit );
+		set( controller, "hasFetchedAll", length < limit );
 		set( controller, "initialFetchSize", model.length );
 	},
 
@@ -164,6 +167,17 @@ export default Mixin.create({
 	},
 
 	actions: {
+		willTransition() {
+			// offset: remove oneWay computed property and set value to 0
+			defineProperty( this, "offset", {
+				writable    : true,
+				configurable: true,
+				enumerable  : true,
+				value       : 0
+			});
+			return true;
+		},
+
 		willFetchContent( force ) {
 			var controller = get( this, "controller" );
 			var isFetching = get( controller, "isFetching" );
