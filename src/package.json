@@ -1,6 +1,6 @@
 {
 	"name": "livestreamer-twitch-gui",
-	"version": "0.15.1",
+	"version": "0.15.2",
 
 	"main": "app://livestreamer-twitch-gui/index.html",
 
