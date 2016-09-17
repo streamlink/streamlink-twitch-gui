@@ -1,6 +1,42 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## [v0.15.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.2) (2016-09-16)
+
+- Fixed InfiniteScrollMixin using invalid request offsets when refreshing or revisiting the same route. #314
+
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.1...v0.15.2)
+
+
+## [v0.15.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.1) (2016-09-15)
+
+- Implemented a better workaround for the Livestreamer Client-ID issue. #310
+- Added option to disable Livestreamer authentication. #308
+- Fixed tray icon being invisible on Windows. #312
+
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.0...v0.15.1)
+
+
+## [v0.15.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.0) (2016-09-15)
+
+- Added authentication check to the stream launch routine (see below). #310
+- Added support for custom channel names. #303
+- Added subreddit and reddit username link parsers.
+- Switched from RequireJS to Webpack and overhauled the build system. #295
+- Refactored all application modules to ES2015.
+- Upgraded to Ember/EmberData 2.7.
+
+Since September 15th, all anonymous Twitch API requests will now be rejected. This has been announced several weeks ago and the Livestreamer Twitch GUI was upgraded in the `v0.14.0` release. Unfortunately, Livestreamer did not receive any upgrades due to the inactivity of its maintainer and it is unknown if there will be any upgrades at all in the future.
+The only workaround for this missing change is forcing all users to log in and let Livestreamer use their Twitch OAuth token. Livestreamer Twitch GUI has always passed the user's login data to Livestreamer, which means that you're fine unless you did not log in to you Twitch account in the GUI. See #310 for more information.
+
+Please also see #289 if you think you can help with the organization of a Livestreamer fork. There are several bugs that need to be fixed and some features/ideas that need to be implemented for a better experience. This will benefit all Livestreamer and Livestreamer Twitch GUI users, thank you!
+
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.2...v0.15.0)
+
+
 ## [v0.14.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.2) (2016-08-08)
 
 - Added 1080p60 quality as fallback to source.  

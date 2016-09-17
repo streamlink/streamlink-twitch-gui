@@ -51,6 +51,11 @@ export const parameters = [
 		"settings.livestreamer_params"
 	),
 	new Parameter(
+		"--http-header",
+		null,
+		"clientID"
+	),
+	new Parameter(
 		"--no-version-check"
 	),
 	new Parameter(
@@ -85,7 +90,7 @@ export const parameters = [
 	),
 	new Parameter(
 		"--twitch-oauth-token",
-		"session.isLoggedIn",
+		[ "session.isLoggedIn", "settings.livestreamer_oauth" ],
 		"session.access_token"
 	),
 	new Parameter(
