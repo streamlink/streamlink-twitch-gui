@@ -46,7 +46,7 @@
 		"less": "2.5.1",
 		"less-plugin-clean-css": "1.5.1",
 		"load-grunt-config": "0.19.2",
-		"nw-builder": "bastimeyer/nw-builder#fix-gh-issue-343"
+		"nw-builder": "3.1.0"
 	},
 
 	"scripts": {

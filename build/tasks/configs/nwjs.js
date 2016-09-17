@@ -4,6 +4,7 @@ module.exports = {
 		buildDir: "build/releases",
 		cacheDir: "build/cache",
 		version : "<%= grunt.config('main.nwjs-version') %>",
+		flavor  : "normal",
 		winIco  : "build/resources/icons/icon-16-32-48-256.ico",
 		macIcns : "build/resources/icons/icon-1024.icns",
 		macPlist: {
