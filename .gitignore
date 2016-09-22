@@ -16,7 +16,7 @@ nbproject
 
 # dependencies
 /node_modules/
-/src/vendor/
+/bower_components/
 
 # builds
 /build/*

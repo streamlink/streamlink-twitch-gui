@@ -2,9 +2,9 @@ import {
 	config,
 	start
 } from "QUnit";
-import {} from "EmberTest";
-import {} from "vendor/qunit/qunit/qunit.css";
-import {} from "vendor/ember/ember-template-compiler";
+import "EmberTest";
+import "bower/qunit/qunit/qunit.css";
+import "bower/ember/ember-template-compiler";
 
 
 // don't start automatically

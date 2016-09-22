@@ -1,5 +1,5 @@
-import {} from "JQuery";
-import {} from "vendor/ember/ember.debug";
+import "jquery";
+import "bower/ember/ember.debug";
 
 
 const Ember = window.Ember;

@@ -1,4 +1,4 @@
-import QUnit from "vendor/qunit/qunit/qunit";
+import QUnit from "bower/qunit/qunit/qunit";
 
 
 export default QUnit;

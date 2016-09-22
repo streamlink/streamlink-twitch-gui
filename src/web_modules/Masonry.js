@@ -1,4 +1,5 @@
-import Masonry from "vendor/masonry/dist/masonry.pkgd";
+import "jquery";
+import Masonry from "bower/masonry/masonry";
 
 
 export default Masonry;

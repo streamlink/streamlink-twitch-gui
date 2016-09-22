@@ -1,4 +1,5 @@
-import Selecter from "vendor/Selecter/jquery.fs.selecter";
+import "jquery";
+import Selecter from "bower/Selecter/jquery.fs.selecter";
 
 
 export default Selecter;
