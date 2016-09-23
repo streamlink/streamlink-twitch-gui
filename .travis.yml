@@ -49,3 +49,12 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
+
+notifications:
+  email: false
+  webhooks:
+    urls:
+      - secure: "O3IQ/tbaIl7o2wdKjEBTuTZK8qYUQ+slscmV4ZQGeWWuwyEw6CoMEsspN/K4mFzhq7yupyBzeqpWydh5ekTjAqRFI8aJXOq7C1d1kahQskQ8cikqtFqr+cbwH9MLNjE6vZxQLDWHb97L3aQVau7JmwQ+HvvhQVmXcvCOvupA5WAOfBmHWIHpwuUSkPy77TOiK/4fBUPGOA4k3ChA2Z6bgCojw2SLqvIY6SyWHYm48xyNVeWEulZzaRYkzvbCz6dUH+Py4P5P6phrTw/o6xZ3x0gYl8bNs/yKarUc1k1S8ZUAqlzXcsbQaWnV/efe2O7TeV7N957VqzL1/Xk8zTIdq/LW4F1fBESM6u7i/ELLVNjecsGYPSGq4uWATojdOz/96Pne7NHkTiJaG1+I2pJasURScUkGxGwfJcgUcpF0Um3ed5kWJmPnC1aYolle7QseutyvllpJ83pCUdKaxrGPxu5nJEOzYoFT6iiLdJGC6t2CTNguOFoXUxwFkpEet/ORfmn0/o0xzC91u3wqJPaFKNI55086sL/TfzdW3HFuBgboL3fvNc5VkhPEX0LTvwH+Qx3QBBefUc3GT1GL3+rFH27kxnpU/qMWnMggvJQILdFpKjrTs8/AHobORMJ+S/ypzsyMQZO3O50qK035FJSbTk2q96EOm+SenLskUo11pEo="
+    on_success: change
+    on_failure: always
+    on_start: never
