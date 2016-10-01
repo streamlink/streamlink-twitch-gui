@@ -12,7 +12,7 @@ export default Mixin.create({
 	settings: service(),
 
 	/**
-	 * @returns {(string[]|undefined)}
+	 * @returns {(string|undefined)}
 	 */
 	broadcaster_language: function() {
 		if ( !get( this, "settings.gui_filterstreams" ) ) { return; }
@@ -25,13 +25,9 @@ export default Mixin.create({
 			return filters[ lang ];
 		}, filters );
 
-		if ( filtered.length === 1 ) {
-			return filtered[ 0 ];
-		}
-
 		// ignore everything (un)checked
-		if ( filtered.length > 0 && filtered.length !== keys.length ) {
-			return filtered;
-		}
+		return filtered.length > 0 && filtered.length !== keys.length
+			? filtered.join( "," )
+			: undefined;
 	}.property( "settings.gui_filterstreams", "settings.gui_langfilter" )
 });
