@@ -33,7 +33,7 @@ const {
 const { "stream-url": twitchStreamUrl } = twitchConfig;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
-const reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
+const reVersion   = /^(?:livestreamer|streamlink)(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(?:.*)$/;
 const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 const reUnable    = /^error: Unable to open URL: /;
 const reNoStreams = /^error: No streams found on this URL: /;
@@ -287,6 +287,8 @@ export default Service.extend( ChannelSettingsMixin, {
 				var match = reVersion.exec( line );
 				if ( match ) {
 					resolve( match[1] );
+				} else {
+					reject( new Error( "Invalid livestreamer executable" ) );
 				}
 			}
 
