@@ -26,7 +26,11 @@
 }}
 	<ul class="list-unstyled filter-lang">
 		{{#each languages as |language|}}
-			{{lang-filter obj=model.gui_langfilter prop=language.id name=language.lang}}
+			<li>
+				{{#check-box checked=(mut (get model.gui_langfilter language.id))}}
+					{{flag-icon lang=language.id withTitle=false withCursor=false}} {{language.lang}}<span class="lang-code">({{language.id}})</span>
+				{{/check-box}}
+			</li>
 		{{/each}}
 	</ul>
 	<div><a href="#" {{action "checkLanguages" true}}>Check all</a> / <a href="#" {{action "checkLanguages" false}}>Uncheck all</a></div>

@@ -168,7 +168,6 @@ import StreamPresentationComponent from "components/stream/StreamPresentationCom
 import StreamPreviewImageComponent from "components/stream/StreamPreviewImageComponent";
 
 import FlagIconComponent from "components/FlagIconComponent";
-import LangFilterComponent from "components/LangFilterComponent";
 import LoadingSpinnerComponent from "components/LoadingSpinnerComponent";
 import PreviewImageComponent from "components/PreviewImageComponent";
 import SearchBarComponent from "components/SearchBarComponent";
@@ -468,7 +467,6 @@ export default Application.create({
 	StreamPreviewImageComponent,
 
 	FlagIconComponent,
-	LangFilterComponent,
 	LoadingSpinnerComponent,
 	PreviewImageComponent,
 	SearchBarComponent,
