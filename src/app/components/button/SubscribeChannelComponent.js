@@ -34,14 +34,14 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 	iconSuccess : "fa-credit-card",
 	iconFailure : "fa-credit-card",
 	titleLoading: "",
-	titleSuccess: function() {
+	titleSuccess: computed( "name", function() {
 		var name = get( this, "name" );
 		return `You are subscribed to ${name}`;
-	}.property( "name" ),
-	titleFailure: function() {
+	}),
+	titleFailure: computed( "name", function() {
 		var name = get( this, "name" );
 		return `Subscribe to ${name} now`;
-	}.property( "name" ),
+	}),
 
 
 	actions: {

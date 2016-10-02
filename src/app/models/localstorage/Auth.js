@@ -1,4 +1,7 @@
-import { get } from "Ember";
+import {
+	get,
+	computed
+} from "Ember";
 import {
 	attr,
 	Model
@@ -16,13 +19,13 @@ export default Model.extend({
 
 	// status properties
 	isPending : false,
-	isLoggedIn: function() {
-		var token   = get( this, "access_token" );
-		var name    = get( this, "user_name" );
-		var pending = get( this, "isPending" );
+	isLoggedIn: computed( "access_token", "user_name", "isPending", function() {
+		let token   = get( this, "access_token" );
+		let name    = get( this, "user_name" );
+		let pending = get( this, "isPending" );
 
 		return token && name && !pending;
-	}.property( "access_token", "user_name", "isPending" )
+	})
 
 }).reopenClass({
 	toString() { return "Auth"; }

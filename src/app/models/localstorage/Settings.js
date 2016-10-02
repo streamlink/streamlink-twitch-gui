@@ -1,5 +1,6 @@
 import {
-	get
+	get,
+	computed
 } from "Ember";
 import {
 	attr,
@@ -77,20 +78,21 @@ export default Model.extend({
 	chat_command        : attr( "string",  { defaultValue: "" } ),
 
 
-	isVisibleInTaskbar: function() {
+	isVisibleInTaskbar: computed( "gui_integration", function() {
 		return ( get( this, "gui_integration" ) & 1 ) > 0;
-	}.property( "gui_integration" ),
+	}),
 
-	isVisibleInTray: function() {
+	isVisibleInTray: computed( "gui_integration", function() {
 		return ( get( this, "gui_integration" ) & 2 ) > 0;
-	}.property( "gui_integration" ),
+	}),
 
-	playerParamsCorrected: function() {
-		var params = get( this, "player_params" );
+	playerParamsCorrected: computed( "player_params", function() {
+		let params = get( this, "player_params" );
+
 		return params.length && params.indexOf( "{filename}" ) === -1
 			? `${params} {filename}`
 			: params;
-	}.property( "player_params" )
+	})
 
 }).reopenClass({
 

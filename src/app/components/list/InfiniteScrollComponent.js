@@ -4,6 +4,7 @@ import {
 	$,
 	computed,
 	run,
+	observer,
 	Component
 } from "Ember";
 import layout from "templates/components/list/InfiniteScrollComponent.hbs";
@@ -48,7 +49,7 @@ export default Component.extend({
 
 	_contentLength: 0,
 	// check for available space (scrollListener) if items were removed from the content array
-	_contentObserver: function() {
+	_contentObserver: observer( "content.length", function() {
 		var length = get( this, "content.length" );
 		if ( length >= this._contentLength ) { return; }
 		this._contentLength = length;
@@ -57,7 +58,7 @@ export default Component.extend({
 		if ( !scrollListener ) { return; }
 		// wait for the DOM to upgrade
 		scheduleOnce( "afterRender", scrollListener );
-	}.observes( "content.length" ),
+	}),
 
 
 	init() {

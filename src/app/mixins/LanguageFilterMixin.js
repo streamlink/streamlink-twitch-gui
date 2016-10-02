@@ -1,5 +1,6 @@
 import {
 	get,
+	computed,
 	inject,
 	Mixin
 } from "Ember";
@@ -11,23 +12,24 @@ const { service } = inject;
 export default Mixin.create({
 	settings: service(),
 
-	/**
-	 * @returns {(string|undefined)}
-	 */
-	broadcaster_language: function() {
-		if ( !get( this, "settings.gui_filterstreams" ) ) { return; }
+	broadcaster_language: computed(
+		"settings.gui_filterstreams",
+		"settings.gui_langfilter",
+		function() {
+			if ( !get( this, "settings.gui_filterstreams" ) ) { return; }
 
-		var filters = get( this, "settings.gui_langfilter" );
-		if ( !filters ) { return; }
+			let filters = get( this, "settings.gui_langfilter" );
+			if ( !filters ) { return; }
 
-		var keys     = Object.keys( filters );
-		var filtered = keys.filter(function( lang ) {
-			return filters[ lang ];
-		}, filters );
+			let keys     = Object.keys( filters );
+			let filtered = keys.filter(function( lang ) {
+				return filters[ lang ];
+			});
 
-		// ignore everything (un)checked
-		return filtered.length > 0 && filtered.length !== keys.length
-			? filtered.join( "," )
-			: undefined;
-	}.property( "settings.gui_filterstreams", "settings.gui_langfilter" )
+			// ignore everything (un)checked
+			return filtered.length > 0 && filtered.length !== keys.length
+				? filtered.join( "," )
+				: undefined;
+		}
+	)
 });

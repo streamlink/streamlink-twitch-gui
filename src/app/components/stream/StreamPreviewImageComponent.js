@@ -1,6 +1,7 @@
 import {
 	get,
 	getOwner,
+	computed,
 	inject,
 	Component
 } from "Ember";
@@ -30,10 +31,10 @@ export default Component.extend({
 	classNameBindings: [ ":preview", "class", "opened:opened" ],
 	attributeBindings: [ "title", "noMiddleclickScroll:data-no-middleclick-scroll" ],
 	"class": "",
-	noMiddleclickScroll: function() {
+	noMiddleclickScroll: computed( "settings.stream_click_middle", function() {
 		// true or null
 		return get( this, "settings.stream_click_middle" ) !== actions.disabled || null;
-	}.property( "settings.stream_click_middle" ),
+	}),
 
 	init() {
 		this._super.apply( this, arguments );
@@ -44,12 +45,12 @@ export default Component.extend({
 	clickable: true,
 
 
-	opened: function() {
+	opened: computed( "stream.channel.id", "livestreamer.model.length", function() {
 		var model = get( this, "livestreamer.model" );
 		var id    = get( this, "stream.channel.id" );
 
 		return model.mapBy( "channel.id" ).indexOf( id ) !== -1;
-	}.property( "stream.channel.id", "livestreamer.model.length" ),
+	}),
 
 
 	mouseUp( event ) {

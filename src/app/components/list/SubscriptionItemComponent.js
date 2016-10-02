@@ -29,24 +29,24 @@ export default ListItemComponent.extend({
 	channel  : alias( "product.partner_login" ),
 	emoticons: alias( "product.emoticons" ),
 
-	style: function() {
+	style: computed( "channel.profile_banner", "channel.video_banner", function() {
 		let banner = getWithDefault( this,
 			"channel.profile_banner",
 			getWithDefault( this, "channel.video_banner", "" )
 		);
 
 		return ( `background-image:url("${banner}")` ).htmlSafe();
-	}.property( "channel.profile_banner", "channel.video_banner" ),
+	}),
 
-	hasEnded: function() {
+	hasEnded: computed( "content.access_end", function() {
 		var access_end = get( this, "content.access_end" );
 		return new Date() > access_end;
-	}.property( "content.access_end" ).volatile(),
+	}).volatile(),
 
-	ends: function() {
+	ends: computed( "content.access_end", function() {
 		var access_end = get( this, "content.access_end" );
 		return new Moment().to( access_end );
-	}.property( "content.access_end" ).volatile(),
+	}).volatile(),
 
 
 	openBrowser( url ) {

@@ -44,6 +44,7 @@ export const Mixin = Ember.Mixin;
 export const EmberObject = Ember.Object;
 export const ObjectProxy = Ember.ObjectProxy;
 export const observer = Ember.observer;
+export const on = Ember.on;
 export const Route = Ember.Route;
 export const Router = Ember.Router;
 export const Service = Ember.Service;

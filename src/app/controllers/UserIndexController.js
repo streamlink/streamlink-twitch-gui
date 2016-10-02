@@ -1,6 +1,7 @@
 import {
 	get,
 	set,
+	computed,
 	inject,
 	Controller
 } from "Ember";
@@ -15,9 +16,9 @@ export default Controller.extend({
 	notification: service(),
 	settings: service(),
 
-	scope: function() {
+	scope: computed( "auth.session.scope", function() {
 		return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
-	}.property( "auth.session.scope" ),
+	}),
 
 	showTokenForm: false,
 

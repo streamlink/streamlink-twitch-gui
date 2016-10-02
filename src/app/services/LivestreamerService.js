@@ -4,6 +4,7 @@ import {
 	makeArray,
 	assign,
 	RSVP,
+	computed,
 	inject,
 	run,
 	Service
@@ -102,10 +103,10 @@ export default Service.extend( ChannelSettingsMixin, {
 	error : null,
 	active: null,
 	abort : false,
-	model : function() {
+	model : computed(function() {
 		var store = get( this, "store" );
 		return store.peekAll( "livestreamer" );
-	}.property(),
+	}),
 
 
 	startStream( stream, quality ) {

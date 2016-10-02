@@ -2,7 +2,8 @@ import {
 	get,
 	set,
 	computed,
-	inject
+	inject,
+	observer
 } from "Ember";
 import {
 	attr,
@@ -65,20 +66,20 @@ export default Model.extend({
 		get( this, "log" ).pushObject({ type, line });
 	},
 
-	qualityObserver: function() {
+	qualityObserver: observer( "quality", function() {
 		// The LivestreamerService knows that it has to spawn a new child process
 		this.kill();
-	}.observes( "quality" ),
+	}),
 
-	parameters: function() {
+	parameters: computed(function() {
 		return Parameter.getParameters(
 			this,
 			parameters,
 			get( this, "settings.advanced" )
 		);
-	}.property().volatile(),
+	}).volatile(),
 
-	streamquality: function() {
+	streamquality: computed( "quality", "settings.quality_presets", function() {
 		let quality = get( this, "quality" );
 		let custom = get( this, "settings.quality_presets" );
 
@@ -93,7 +94,7 @@ export default Model.extend({
 		return preset
 			? preset.value
 			: qualities.findBy( "id", "source" ).value;
-	}.property( "quality", "settings.quality_presets" )
+	})
 
 }).reopenClass({
 

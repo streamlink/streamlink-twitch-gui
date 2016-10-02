@@ -1,5 +1,6 @@
 import {
 	set,
+	on,
 	Component
 } from "Ember";
 import layout from "templates/components/PreviewImageComponent.hbs";
@@ -11,7 +12,7 @@ export default Component.extend({
 	classNames: [],
 	error: false,
 
-	checkError: function() {
+	checkError: on( "willInsertElement", function() {
 		var self = this;
 		var img  = this.element.querySelector( "img" );
 
@@ -31,5 +32,5 @@ export default Component.extend({
 
 		img.addEventListener( "error", onError, false );
 		img.addEventListener( "load",  onLoad,  false );
-	}.on( "willInsertElement" )
+	})
 });

@@ -1,4 +1,7 @@
-import { get } from "Ember";
+import {
+	get,
+	computed
+} from "Ember";
 import {
 	attr,
 	Model
@@ -33,36 +36,36 @@ export default Model.extend({
 	views: attr( "number" ),
 
 
-	hasCustomDisplayName: function() {
+	hasCustomDisplayName: computed( "name", "display_name", function() {
 		return get( this, "name" ).toLowerCase() !== get( this, "display_name" ).toLowerCase();
-	}.property( "name", "display_name" ),
+	}),
 
-	detailedName: function() {
+	detailedName: computed( "name", "display_name", "hasCustomDisplayName", function() {
 		return get( this, "hasCustomDisplayName" )
 			? get( this, "display_name" ) + " (" + get( this, "name" ) + ")"
 			: get( this, "display_name" );
-	}.property( "name", "display_name", "hasCustomDisplayName" ),
+	}),
 
 
-	title_followers: function() {
+	title_followers: computed( "followers", function() {
 		var followers = get( this, "followers" );
 		var numerus   = followers === 1 ? " person is following" : " people are following";
 		return followers + numerus;
-	}.property( "followers" ),
+	}),
 
-	title_views: function() {
+	title_views: computed( "views", function() {
 		var views   = get( this, "views" );
 		var numerus = views === 1 ? " channel view" : " channel views";
 		return views + numerus;
-	}.property( "views" ),
+	}),
 
 
-	has_language: function() {
+	has_language: computed( "language", function() {
 		var lang = get( this, "language" );
 		return lang && lang !== "other";
-	}.property( "language" ),
+	}),
 
-	has_broadcaster_language: function() {
+	has_broadcaster_language: computed( "broadcaster_language", "language", function() {
 		var broadcaster  = get( this, "broadcaster_language" );
 		var language     = get( this, "language" );
 		var mBroadcaster = reLang.exec( broadcaster );
@@ -72,7 +75,7 @@ export default Model.extend({
 		// 2. the language is different from the broadcaster_language
 		//    WITHOUT comparing both lang variants
 		return mBroadcaster && ( !mLanguage || mLanguage[1] !== mBroadcaster[1] );
-	}.property( "broadcaster_language", "language" ),
+	}),
 
 
 	/** @type {(TwitchUserSubscription|boolean)} subscribed */

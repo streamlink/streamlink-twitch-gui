@@ -1,19 +1,20 @@
 import {
 	get,
+	computed,
 	LinkComponent
 } from "Ember";
 
 
 // reopen and don't extend: this class may be used globally
 export default LinkComponent.reopen({
-	active: function() {
+	active: computed( "attrs.params", "_routing.currentState", "inactiveClass", function() {
 		var active = this._super.apply( this, arguments );
 		if ( active === false ) {
 			var inactiveClass = get( this, "inactiveClass" );
 			return inactiveClass ? inactiveClass : false;
 		}
 		return active;
-	}.property( "attrs.params", "_routing.currentState", "inactiveClass" ),
+	}),
 
 	/*
 	 * Prevent new windows from being opened by middleclicking on links/anchors

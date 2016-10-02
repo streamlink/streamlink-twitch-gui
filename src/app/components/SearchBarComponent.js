@@ -6,6 +6,7 @@ import {
 	computed,
 	inject,
 	run,
+	on,
 	Component
 } from "Ember";
 import { vars } from "config";
@@ -115,7 +116,7 @@ export default Component.extend({
 	},
 
 
-	_prepareDropdown: function() {
+	_prepareDropdown: on( "didInsertElement", function() {
 		// dropdown
 		var self     = this;
 		var $element = self.$();
@@ -136,7 +137,7 @@ export default Component.extend({
 				set( self, "showDropdown", false );
 			}
 		});
-	}.on( "didInsertElement" ),
+	}),
 
 
 	actions: {

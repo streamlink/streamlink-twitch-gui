@@ -1,4 +1,7 @@
-import { get } from "Ember";
+import {
+	get,
+	computed
+} from "Ember";
 import { livestreamer } from "config";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";
@@ -17,20 +20,20 @@ export default ExternalLinkComponent.extend({
 	classNameBindings: [ ":documentation-link-component", "url:with-url" ],
 	attributeBindings: [ "title" ],
 
-	title: function() {
+	title: computed( "baseUrl", "url", function() {
 		return get( this, "url" )
 			// keep default behavior
 			? get( this, "baseUrl" ) === livestreamerDocsUrl
 				? "Read the documentation of this livestreamer parameter"
 				: "Read the documentation in your web browser"
 			: "";
-	}.property( "baseUrl", "url" ),
+	}),
 
-	url: function() {
+	url: computed( "baseUrl", "item", function() {
 		var baseUrl = get( this, "baseUrl" );
 		var item    = get( this, "item" );
 		var itemUrl = encodeURIComponent( item );
 
 		return baseUrl.replace( "{item}", itemUrl );
-	}.property( "baseUrl", "item" )
+	})
 });

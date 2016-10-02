@@ -1,7 +1,8 @@
 import {
 	get,
 	isNone,
-	inject
+	inject,
+	observer
 } from "Ember";
 import { RESTAdapter } from "EmberData";
 import { twitch } from "config";
@@ -27,14 +28,14 @@ export default RESTAdapter.extend( AdapterMixin, {
 	defaultSerializer: "twitch",
 
 	access_token: null,
-	tokenObserver: function() {
+	tokenObserver: observer( "access_token", function() {
 		var token = get( this, "access_token" );
 		if ( token === null ) {
 			delete this.headers[ "Authorization" ];
 		} else {
 			this.headers[ "Authorization" ] = `OAuth ${token}`;
 		}
-	}.observes( "access_token" ),
+	}),
 
 
 	createRecordMethod: "PUT",

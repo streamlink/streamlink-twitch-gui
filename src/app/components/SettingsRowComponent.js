@@ -1,5 +1,6 @@
 import {
 	get,
+	computed,
 	Component
 } from "Ember";
 import layout from "templates/components/SettingsRowComponent.hbs";
@@ -37,10 +38,10 @@ export default Component.extend({
 
 	documentationUrl: null,
 
-	_substitutions: function() {
+	_substitutions: computed( "substitutions", function() {
 		var substitutions = get( this, "substitutions" );
 		return getSubstitutionsList( substitutions );
-	}.property( "substitutions" )
+	})
 
 }).reopenClass({
 	positionalParams: [ "title", "description" ]

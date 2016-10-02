@@ -3,6 +3,7 @@ import {
 	set,
 	setProperties,
 	RSVP,
+	observer,
 	Component
 } from "Ember";
 import layout from "templates/components/list/ContentListComponent.hbs";
@@ -42,7 +43,7 @@ export default Component.extend({
 	},
 
 
-	_contentLengthObserver: function() {
+	_contentLengthObserver: observer( "content.length", function() {
 		var content = get( this, "content" );
 		var compare = get( this, "compare" );
 		var index   = get( this, "length" );
@@ -52,7 +53,7 @@ export default Component.extend({
 		}
 
 		this.checkDuplicates( content, index );
-	}.observes( "content.length" ),
+	}),
 
 	checkInitialDuplicates( compare ) {
 		var content = get( this, "content" ).mapBy( compare );

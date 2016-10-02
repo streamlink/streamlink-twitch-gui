@@ -4,6 +4,7 @@ import {
 	defineProperty,
 	computed,
 	inject,
+	observer,
 	Controller
 } from "Ember";
 import qualities from "models/LivestreamerQualities";
@@ -19,7 +20,7 @@ export default Controller.extend( RetryTransitionMixin, {
 
 	qualities,
 
-	modelObserver: function() {
+	modelObserver: observer( "model", function() {
 		var original = get( this, "model.model" );
 		var model    = get( this, "model.buffer" );
 		var settings = get( this, "settings" );
@@ -76,7 +77,7 @@ export default Controller.extend( RetryTransitionMixin, {
 			defineProperty( this,       attr, attributeProxy );
 			defineProperty( this, `_${attr}`, attributeEnabled );
 		}, this );
-	}.observes( "model" ),
+	}),
 
 	/**
 	 * Prevent pollution:

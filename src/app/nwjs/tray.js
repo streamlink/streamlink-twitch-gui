@@ -1,6 +1,7 @@
 import {
 	get,
 	setProperties,
+	computed,
 	EmberObject
 } from "Ember";
 import { Tray } from "nwjs/nwGui";
@@ -45,10 +46,10 @@ export default EmberObject.extend({
 	},
 
 
-	icon: function() {
+	icon: computed( "icons", function() {
 		var icons = get( this, "icons" );
 		return icons[ getScale() ];
-	}.property( "icons" ),
+	}),
 
 
 	remove() {

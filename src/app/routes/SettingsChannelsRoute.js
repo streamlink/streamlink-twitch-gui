@@ -1,6 +1,7 @@
 import {
 	get,
 	set,
+	computed,
 	EmberObject
 } from "Ember";
 import { PromiseObject } from "EmberData";
@@ -29,13 +30,13 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 						settings: record,
 						// load the twitchChannel record on demand (PromiseObject)
 						// will be triggered by the first property read-access
-						channel: function() {
+						channel: computed(function() {
 							var id = get( record, "id" );
 							return PromiseObject.create({
 								promise: store.find( "twitchChannel", id )
 									.then( preload( "logo" ) )
 							});
-						}.property()
+						})
 					}).create();
 				});
 			}.bind( this ) )

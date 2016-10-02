@@ -3,6 +3,7 @@ import {
 	set,
 	computed,
 	run,
+	on,
 	Component
 } from "Ember";
 import layout from "templates/components/QuickBarComponent.hbs";
@@ -51,12 +52,12 @@ export default Component.extend({
 	},
 
 
-	clearTimer: function() {
+	clearTimer: on( "willDestroyElement", "mouseEnter", function() {
 		if ( this.timer ) {
 			cancel( this.timer );
 			this.timer = null;
 		}
-	}.on( "willDestroyElement", "mouseEnter" ),
+	}),
 
 
 	actions: {

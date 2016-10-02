@@ -1,5 +1,6 @@
 import {
 	run,
+	on,
 	Component
 } from "Ember";
 import Masonry from "Masonry";
@@ -17,7 +18,7 @@ export default Component.extend({
 
 	action: "openBrowser",
 
-	_masonry: function() {
+	_masonry: on( "didInsertElement", function() {
 		var container = this.$( "ul" )[0];
 		scheduleOnce( "afterRender", function() {
 			return new Masonry( container, {
@@ -26,7 +27,7 @@ export default Component.extend({
 				transitionDuration: 0
 			});
 		});
-	}.on( "didInsertElement" ),
+	}),
 
 	actions: {
 		openBrowser( url ) {

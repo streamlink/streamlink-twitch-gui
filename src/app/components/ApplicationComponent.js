@@ -3,6 +3,7 @@ import {
 	getOwner,
 	computed,
 	inject,
+	observer,
 	Component
 } from "Ember";
 import { themes } from "config";
@@ -42,7 +43,7 @@ export default Component.extend({
 
 	theme: alias( "settings.content.gui_theme" ),
 
-	themeObserver: function() {
+	themeObserver: observer( "themes", "theme", function() {
 		var theme  = get( this, "theme" );
 
 		if ( themesList.indexOf( theme ) === -1 ) {
@@ -56,15 +57,15 @@ export default Component.extend({
 		});
 
 		list.add( `theme-${theme}` );
-	}.observes( "themes", "theme" ).on( "init" ),
+	}).on( "init" ),
 
-	smoothscrollObserver: function() {
+	smoothscrollObserver: observer( "settings.content.gui_smoothscroll", function() {
 		if ( get( this, "settings.content.gui_smoothscroll" ) ) {
 			enableSmoothScroll();
 		} else {
 			disableSmoothScroll();
 		}
-	}.observes( "settings.content.gui_smoothscroll" ).on( "didInsertElement" ),
+	}).on( "didInsertElement" ),
 
 
 	willInsertElement() {
