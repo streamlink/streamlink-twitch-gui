@@ -4,7 +4,7 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import Settings from "models/localstorage/Settings";
+import qualities from "models/LivestreamerQualities";
 
 
 const { sort } = computed;
@@ -18,7 +18,7 @@ export default Controller.extend({
 	sortedModel: sort( "model", "sortBy" ),
 	sortBy: [ "started:desc" ],
 
-	qualities: Settings.qualities,
+	qualities,
 
 	actions: {
 		openDialog( stream ) {

@@ -7,6 +7,7 @@ import {
 import Menu from "nwjs/menu";
 import { set as setClipboard } from "nwjs/clipboard";
 import Settings from "models/localstorage/Settings";
+import qualities from "models/LivestreamerQualities";
 import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
 
 
@@ -95,7 +96,7 @@ export default Component.extend({
 
 		var menu = Menu.create();
 
-		var qualities = Settings.qualities.map(function( quality ) {
+		var quals = qualities.map(function( quality ) {
 			return {
 				label: quality.label,
 				click: this.startStream.bind( this, quality.id )
@@ -111,14 +112,14 @@ export default Component.extend({
 					},
 					{
 						label  : "Change quality",
-						submenu: qualities
+						submenu: quals
 					}
 				]);
 			} else {
 				menu.items.pushObjects([
 					{
 						label  : "Launch stream",
-						submenu: qualities
+						submenu: quals
 					}
 				]);
 			}

@@ -10,6 +10,7 @@ import {
 	Model
 } from "EmberData";
 import { parameters } from "models/LivestreamerParameters";
+import qualities from "models/LivestreamerQualities";
 import Parameter from "utils/Parameter";
 import { twitch } from "config";
 
@@ -25,7 +26,7 @@ const { oauth: { "client-id": clientId } } = twitch;
 export default Model.extend({
 	stream      : belongsTo( "twitchStream", { async: false } ),
 	channel     : belongsTo( "twitchChannel", { async: false } ),
-	quality     : attr( "number" ),
+	quality     : attr( "string" ),
 	gui_openchat: attr( "boolean" ),
 	started     : attr( "date" ),
 
@@ -75,7 +76,24 @@ export default Model.extend({
 			parameters,
 			get( this, "settings.advanced" )
 		);
-	}.property().volatile()
+	}.property().volatile(),
+
+	streamquality: function() {
+		let quality = get( this, "quality" );
+		let custom = get( this, "settings.quality_presets" );
+
+		// get custom quality list
+		if ( custom.hasOwnProperty( quality ) && custom[ quality ].length > 0 ) {
+			return custom[ quality ];
+		}
+
+		// get predefined quality list
+		let preset = qualities.findBy( "id", quality );
+
+		return preset
+			? preset.value
+			: qualities.findBy( "id", "source" ).value;
+	}.property( "quality", "settings.quality_presets" )
 
 }).reopenClass({
 

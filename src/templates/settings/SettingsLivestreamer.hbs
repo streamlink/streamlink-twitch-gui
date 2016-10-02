@@ -84,4 +84,19 @@
 }}
 	{{input type="number" value=model.retry_streams placeholder=retryStreamsDefault min=retryStreamsMin max=retryStreamsMax}}
 {{/settings-row}}
+
+{{#if model.advanced}}
+	{{#settings-row
+		"Quality presets"
+		"Customize livestreamer quality presets."
+		icon="fa-list"
+	}}
+		{{#each qualities as |quality|}}
+			<div class="quality-preset">
+				<div>{{quality.label}}</div>
+				{{input type="text" placeholder=quality.value value=(mut (get model.quality_presets quality.id))}}
+			</div>
+		{{/each}}
+	{{/settings-row}}
+{{/if}}
 </fieldset>

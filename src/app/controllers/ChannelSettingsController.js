@@ -6,6 +6,7 @@ import {
 	inject,
 	Controller
 } from "Ember";
+import qualities from "models/LivestreamerQualities";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 
 
@@ -15,6 +16,8 @@ const { service } = inject;
 export default Controller.extend( RetryTransitionMixin, {
 	modal: service(),
 	settings: service(),
+
+	qualities,
 
 	modelObserver: function() {
 		var original = get( this, "model.model" );

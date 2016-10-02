@@ -11,6 +11,7 @@ import {
 } from "config";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 import { playerSubstitutions } from "models/LivestreamerParameters";
+import qualities from "models/LivestreamerQualities";
 import Settings from "models/localstorage/Settings";
 import platform from "utils/node/platform";
 
@@ -34,6 +35,7 @@ export default Controller.extend( RetryTransitionMixin, {
 
 	isAnimated: false,
 
+	qualities,
 	Settings,
 	platform,
 

@@ -14,7 +14,6 @@ import {
 	vars as varsConfig
 } from "config";
 import nwWindow from "nwjs/nwWindow";
-import Settings from "models/localstorage/Settings";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
@@ -342,12 +341,11 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		var channel   = get( livestreamer, "channel.id" );
 		var quality   = get( livestreamer, "quality" );
-		var qualities = Settings.qualities;
 
 		// get the livestreamer parameter list and append stream url and quality
 		var params    = get( livestreamer, "parameters" );
 		params.push( twitchStreamUrl.replace( "{channel}", channel ) );
-		params.push( ( qualities[ quality ] || qualities[ 0 ] ).quality );
+		params.push( get( livestreamer, "streamquality" ) );
 
 		// spawn the livestreamer process
 		var spawn = CP.spawn( exec, params, { detached: true } );

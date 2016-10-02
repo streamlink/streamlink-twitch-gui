@@ -7,11 +7,20 @@ import {
 	Model
 } from "EmberData";
 import { langs } from "config";
+import qualities from "models/LivestreamerQualities";
 import { isWin } from "utils/node/platform";
 
 
 const langCodes = Object.keys( langs );
 
+
+
+function defaultQualityPresets() {
+	return qualities.reduce(function( obj, quality ) {
+		obj[ quality.id ] = "";
+		return obj;
+	}, {} );
+}
 
 function defaultLangFilterValue() {
 	return langCodes.reduce(function( obj, code ) {
@@ -28,7 +37,8 @@ export default Model.extend({
 	livestreamer        : attr( "string",  { defaultValue: "" } ),
 	livestreamer_params : attr( "string",  { defaultValue: "" } ),
 	livestreamer_oauth  : attr( "boolean", { defaultValue: true } ),
-	quality             : attr( "number",  { defaultValue: 0 } ),
+	quality             : attr( "string",  { defaultValue: "source" } ),
+	quality_presets     : attr( "",        { defaultValue: defaultQualityPresets } ),
 	player              : attr( "string",  { defaultValue: "" } ),
 	player_params       : attr( "string",  { defaultValue: "" } ),
 	player_passthrough  : attr( "string",  { defaultValue: "http" } ),
@@ -93,31 +103,6 @@ export default Model.extend({
 }).reopenClass({
 
 	toString() { return "Settings"; },
-
-	/**
-	 * Use a static list of qualities on twitch recognized by livestreamer:
-	 * source, high, medium, low, mobile
-	 *
-	 * Specific qualities are available for a couple of special channels:
-	 * 144p30, 240p30, 360p30, 480p30, 540p30, 720p30, 720p60
-	 * https://blog.twitch.tv/-705404e95cc2
-	 *
-	 * Always add an ultimate fallback quality to the end of the list. This is needed for
-	 * watching unpartnered channels that are only available in source quality when a
-	 * different default quality has been selected by the user.
-	 */
-	qualities: [
-		// Source - input stream from the broadcaster
-		{ id: 0, label: "Source",     quality: "source,1080p60,best" },
-		// High   - 720p30 @ ~1.25 Mbit/s (use the same framerate first)
-		{ id: 1, label: "High",       quality: "high,720p30,720p60,best" },
-		// Medium - 480p30 @ ~0.75 Mbit/s (use the same bitrate first)
-		{ id: 2, label: "Medium",     quality: "medium,480p30,540p30,worst" },
-		// Low    - 360p30 @ ~0.50 Mbit/s (use the same resolution first)
-		{ id: 3, label: "Low",        quality: "low,360p30,240p30,144p30,mobile,worst" },
-		// Audio (no fallback qualities)
-		{ id: 4, label: "Audio only", quality: "audio" }
-	],
 
 	passthrough: [
 		{ value: "http", label: "http" },
