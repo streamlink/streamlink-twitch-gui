@@ -31,6 +31,10 @@ function upgradeSettings() {
 	if ( !data || !data.settings || !data.settings.records[1] ) { return; }
 	var settings = data.settings.records[1];
 
+	if ( typeof settings.gui_minimize !== "number" ) {
+		settings.gui_minimize = 0;
+	}
+
 	if ( settings.gui_homepage === "/user/following" ) {
 		settings.gui_homepage = "/user/followedStreams";
 	}

@@ -1,6 +1,5 @@
 import {
-	get,
-	set
+	get
 } from "Ember";
 import {
 	attr,
@@ -77,13 +76,6 @@ export default Model.extend({
 	chat_method         : attr( "string",  { defaultValue: "default" } ),
 	chat_command        : attr( "string",  { defaultValue: "" } ),
 
-
-	// correct old value
-	gui_minimize_observer: function() {
-		if ( isNaN( get( this, "gui_minimize" ) ) ) {
-			set( this, "gui_minimize", 0 );
-		}
-	}.observes( "gui_minimize" ),
 
 	isVisibleInTaskbar: function() {
 		return ( get( this, "gui_integration" ) & 1 ) > 0;
