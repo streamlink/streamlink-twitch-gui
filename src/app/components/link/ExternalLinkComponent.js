@@ -63,7 +63,7 @@ export default Component.extend({
 	},
 
 	didInsertElement() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 		this.$().on( "click", function( e ) {
 			if ( e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey ) {
 				e.preventDefault();

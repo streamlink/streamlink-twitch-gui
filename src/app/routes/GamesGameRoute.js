@@ -30,7 +30,7 @@ export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, {
 	},
 
 	setupController( controller ) {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		set( controller, "game", get( this, "game" ) );
 	}

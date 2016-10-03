@@ -13,7 +13,7 @@ export default Helper.extend({
 			this._interval = later( this, "recompute", hash.interval );
 		}
 
-		return this._compute.apply( this, arguments );
+		return this._compute( ...arguments );
 	},
 
 	destroy() {
@@ -21,6 +21,6 @@ export default Helper.extend({
 			cancel( this._interval );
 		}
 
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 	}
 });

@@ -110,7 +110,8 @@ module.exports = {
 							"babel-plugin-transform-es2015-block-scoping",
 							"babel-plugin-transform-es2015-destructuring",
 							"babel-plugin-transform-es2015-computed-properties",
-							"babel-plugin-transform-es2015-template-literals"
+							"babel-plugin-transform-es2015-template-literals",
+							"babel-plugin-transform-es2015-spread"
 						],
 						cacheDirectory: r( OS.tmpdir(), "babel-cache" )
 					}

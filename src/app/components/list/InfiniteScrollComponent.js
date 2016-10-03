@@ -62,7 +62,7 @@ export default Component.extend({
 
 
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		if ( get( this, "content" ) ) {
 			this._contentLength = get( this, "content.length" );
@@ -71,7 +71,7 @@ export default Component.extend({
 
 
 	didInsertElement() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		// find first parent node which has a scroll bar
 		var overflow;
@@ -107,7 +107,7 @@ export default Component.extend({
 
 
 	willDestroyElement() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		var $parent = get( this, "$parent" );
 		var scrollListener = get( this, "scrollListener" );

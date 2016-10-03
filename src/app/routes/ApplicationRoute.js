@@ -23,7 +23,7 @@ export default Route.extend({
 
 
 	init() {
-		this._super();
+		this._super( ...arguments );
 		get( this, "versioncheck" ).check();
 		this.setupFocusRefresh();
 	},
@@ -118,7 +118,7 @@ export default Route.extend({
 			if ( routeName === currentRoute ) {
 				this.send( "refresh" );
 			} else {
-				this.transitionTo.apply( this, arguments );
+				this.transitionTo( ...arguments );
 			}
 		},
 

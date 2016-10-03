@@ -54,11 +54,11 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 
 	setupController( controller ) {
 		set( controller, "all", this.all );
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 	},
 
 	deactivate() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 		this.all = null;
 	}
 });

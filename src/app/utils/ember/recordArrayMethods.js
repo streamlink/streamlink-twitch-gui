@@ -14,7 +14,7 @@ function factory( fn ) {
 		return function( recordArray ) {
 			let meta = get( recordArray, "meta" );
 
-			recordArray = recordArray[ fn ].apply( recordArray, args );
+			recordArray = recordArray[ fn ]( ...args );
 
 			if ( meta ) {
 				set( recordArray, "meta", meta );

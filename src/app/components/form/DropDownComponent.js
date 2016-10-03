@@ -28,7 +28,7 @@ export default Component.extend({
 	action: null,
 
 	didInsertElement() {
-		this._super();
+		this._super( ...arguments );
 
 		// TODO: remove Selecter dependency
 

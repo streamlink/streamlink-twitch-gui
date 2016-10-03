@@ -86,7 +86,7 @@ export default Component.extend({
 				   this.actions instanceof Object
 				&& this.actions.hasOwnProperty( action )
 			) {
-				this.send.apply( this, [ action ].concat( actionContext ) );
+				this.send( action, ...actionContext );
 
 			} else {
 				this.triggerAction({

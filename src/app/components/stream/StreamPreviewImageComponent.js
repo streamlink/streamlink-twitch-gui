@@ -37,7 +37,7 @@ export default Component.extend({
 	}),
 
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 		// FIXME: refactor global goto actions
 		this.applicationRoute = getOwner( this ).lookup( "route:application" );
 	},

@@ -10,7 +10,6 @@ import {
 } from "EmberData";
 
 
-const push = [].push;
 const reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
 
 
@@ -103,9 +102,9 @@ export default Mixin.create( Evented, {
 		var url  = [ host ];
 
 		// append the adapter specific namespace
-		if ( ns ) { push.call( url, ns ); }
+		if ( ns ) { url.push( ns ); }
 		// append the type fragments (and process the dynamic ones)
-		push.apply( url, this.buildURLFragments( type, id ) );
+		url.push( ...this.buildURLFragments( type, id ) );
 
 		return url.join( "/" );
 	},
@@ -119,14 +118,14 @@ export default Mixin.create( Evented, {
 	buildURLFragments( type, id ) {
 		var path = type.toString();
 		var url  = path.split( "/" );
-		if ( !isNone( id ) ) { push.call( url, id ); }
+		if ( !isNone( id ) ) { url.push( id ); }
 		return url;
 	},
 
 
 	ajax( url ) {
 		var adapter = this;
-		return this._super.apply( this, arguments )
+		return this._super( ...arguments )
 			.catch(function( err ) {
 				if ( err instanceof AdapterError ) {
 					var _url = reURL.exec( url );
@@ -138,7 +137,7 @@ export default Mixin.create( Evented, {
 	},
 
 	ajaxOptions() {
-		var hash = this._super.apply( this, arguments );
+		var hash = this._super( ...arguments );
 		hash.timeout = 10000;
 		hash.cache = false;
 
@@ -146,7 +145,7 @@ export default Mixin.create( Evented, {
 	},
 
 	isSuccess( status, headers, payload ) {
-		return this._super.apply( this, arguments )
+		return this._super( ...arguments )
 		    && ( payload ? !payload.error : true );
 	},
 

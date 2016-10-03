@@ -27,7 +27,7 @@ export default Component.extend({
 
 
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		var length = get( this, "content.length" );
 		setProperties( this, {

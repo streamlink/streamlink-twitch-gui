@@ -49,7 +49,7 @@ const ObjectBuffer = ObjectProxy.extend({
 			this.addObserver( `_children.${key}.isDirty`, this, checkDirty );
 		}, this );
 
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 	},
 
 	unknownProperty( key ) {

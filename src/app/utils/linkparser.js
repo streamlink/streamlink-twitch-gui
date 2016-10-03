@@ -146,7 +146,7 @@ export function parseString( string ) {
 			}
 
 			// create the linkObj out of the parser function
-			linkObj = fn.apply( null, match );
+			linkObj = fn( ...match );
 
 			// update the current text item:
 			// everything from the beginning to the match index (including the "lookbehind")

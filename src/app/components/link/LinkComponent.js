@@ -8,9 +8,9 @@ import {
 // reopen and don't extend: this class may be used globally
 export default LinkComponent.reopen({
 	active: computed( "attrs.params", "_routing.currentState", "inactiveClass", function() {
-		var active = this._super.apply( this, arguments );
+		let active = this._super( ...arguments );
 		if ( active === false ) {
-			var inactiveClass = get( this, "inactiveClass" );
+			let inactiveClass = get( this, "inactiveClass" );
 			return inactiveClass ? inactiveClass : false;
 		}
 		return active;
@@ -20,7 +20,7 @@ export default LinkComponent.reopen({
 	 * Prevent new windows from being opened by middleclicking on links/anchors
 	 */
 	didInsertElement() {
-		this._super();
+		this._super( ...arguments );
 		this.$().on( "click", function( e ) {
 			if ( e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey ) {
 				e.preventDefault();
@@ -41,7 +41,7 @@ export default LinkComponent.reopen({
 				targetObject.send( "refresh" );
 			}
 		} else {
-			this._super.apply( this, arguments );
+			this._super( ...arguments );
 		}
 	}
 });

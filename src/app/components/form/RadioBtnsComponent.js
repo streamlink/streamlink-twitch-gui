@@ -50,7 +50,7 @@ export default Component.extend({
 	},
 
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 		// update each button's checked status on initialization
 		this._updateItems();
 	},

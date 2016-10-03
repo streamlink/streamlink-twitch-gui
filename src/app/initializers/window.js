@@ -21,18 +21,14 @@ const {
 	}
 } = App;
 
-const concat = [].concat;
-
 const timeEvent  = 1000;
 const timeIgnore = 2000;
 let ignore = false;
 
 
 function deferEvent( thisArg, fn ) {
-	var args = [ thisArg, fn ];
 	return function() {
-		// Ember.run.debounce( thisArg, fn, arguments..., time );
-		debounce.apply( null, concat.apply( args, arguments ).concat( timeEvent ) );
+		debounce( thisArg, fn, ...arguments, timeEvent );
 	};
 }
 

@@ -6,9 +6,6 @@ import {
 import Substitution from "utils/Substitution";
 
 
-const push = [].push;
-
-
 /**
  * @class Parameter
  * @param {string?} name
@@ -71,7 +68,7 @@ Parameter.prototype.get = function( context, advanced ) {
 
 	var value = this.getValue( context, advanced );
 	if ( value !== false && value.length ) {
-		push.call( res, value );
+		res.push( value );
 	}
 
 	return res;
@@ -94,7 +91,7 @@ Parameter.getParameters = function( context, parameters, advanced ) {
 		// return a list of each parameter's name and its (substituted) value
 		.reduce(function( arr, parameter ) {
 			var params = parameter.get( context, advanced );
-			push.apply( arr, makeArray( params ) );
+			arr.push( ...makeArray( params ) );
 
 			return arr;
 		}, [] );

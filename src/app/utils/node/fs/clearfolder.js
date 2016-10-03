@@ -23,7 +23,7 @@ function execBatchAndIgnoreRejected( list, fn ) {
 	// wait for all promises to resolve
 	return Promise.all( list.map(function( elem ) {
 		// do something with a list element
-		return fn.apply( null, [ elem ].concat( args ) )
+		return fn( elem, ...args )
 			// always resolve
 			.catch(function() { return null; });
 	}) )
