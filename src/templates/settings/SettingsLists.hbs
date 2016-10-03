@@ -1,5 +1,13 @@
 <fieldset>
 {{#settings-row
+	"Custom channel names"
+	"Channel name localizations."
+	icon="fa-language"
+}}
+	{{drop-down value=model.channel_name content=Settings.channel_name}}
+{{/settings-row}}
+
+{{#settings-row
 	"Flags"
 	"Indicating the broadcaster language."
 	icon="fa-flag"

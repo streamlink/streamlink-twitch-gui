@@ -63,6 +63,7 @@ export default Model.extend({
 	stream_show_info    : attr( "boolean", { defaultValue: false } ),
 	stream_click_middle : attr( "number",  { defaultValue: 2 } ),
 	stream_click_modify : attr( "number",  { defaultValue: 4 } ),
+	channel_name        : attr( "number",  { defaultValue: 3 } ),
 	notify_enabled      : attr( "boolean", { defaultValue: true } ),
 	notify_all          : attr( "boolean", { defaultValue: true } ),
 	notify_grouping     : attr( "boolean", { defaultValue: true } ),
@@ -170,6 +171,13 @@ export default Model.extend({
 		{ id: 2, key: "chat",     label: "Open chat" },
 		{ id: 3, key: "channel",  label: "Go to channel page" },
 		{ id: 4, key: "settings", label: "Go to channel settings" }
+	],
+
+	// bitwise
+	channel_name: [
+		{ id: 3, label: "Show both" },
+		{ id: 1, label: "Show custom names" },
+		{ id: 2, label: "Show original names" }
 	]
 
 });
