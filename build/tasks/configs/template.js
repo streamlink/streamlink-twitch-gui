@@ -85,5 +85,22 @@ module.exports = {
 			"<%= dir.tmp_installer %>/win64installer/installer.nsi":
 				"<%= dir.resources %>/installer/installer.nsi"
 		}
+	},
+
+	"bintray": {
+		"options": {
+			"data": {
+				"subject": process.env.BINTRAY_SUBJECT || "",
+				"repo_deb": process.env.BINTRAY_REPO_DEB || "",
+				"repo_rpm": process.env.BINTRAY_REPO_RPM || "",
+				"name": "<%= package.name %>",
+				"version": "<%= package.version %>",
+				"dirdist": "<%= dir.dist %>"
+			}
+		},
+		"files": {
+			"<%= dir.package %>/bintray/deb.json": "<%= dir.resources %>/package/deb/bintray.json",
+			"<%= dir.package %>/bintray/rpm.json": "<%= dir.resources %>/package/rpm/bintray.json"
+		}
 	}
 };

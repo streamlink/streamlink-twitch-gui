@@ -1,0 +1,42 @@
+{
+	"package": {
+		"subject": "<%= subject %>",
+		"repo": "<%= repo_deb %>",
+		"name": "<%= name %>"
+	},
+
+	"version": {
+		"name": "<%= version %>",
+		"desc": "v<%= version %>",
+		"released": "<%= grunt.template.today('yyyy-mm-dd') %>",
+		"vcs_tag": "v<%= version %>",
+		"gpgSign": true
+	},
+
+	"files": [
+		{
+			"includePattern": "<%= dirdist %>/(.*_i386\\.deb)",
+			"uploadPattern": "$1",
+			"matrixParams": {
+				"deb_distribution": "stable",
+				"deb_component": "main",
+				"deb_architecture": "i386",
+				"override": 1,
+				"publish": 1
+			}
+		},
+		{
+			"includePattern": "<%= dirdist %>/(.*_amd64\\.deb)",
+			"uploadPattern": "$1",
+			"matrixParams": {
+				"deb_distribution": "stable",
+				"deb_component": "main",
+				"deb_architecture": "amd64",
+				"override": 1,
+				"publish": 1
+			}
+		}
+	],
+
+	"publish": true
+}

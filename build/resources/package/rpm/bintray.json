@@ -1,0 +1,36 @@
+{
+	"package": {
+		"subject": "<%= subject %>",
+		"repo": "<%= repo_rpm %>",
+		"name": "<%= name %>"
+	},
+
+	"version": {
+		"name": "<%= version %>",
+		"desc": "v<%= version %>",
+		"released": "<%= grunt.template.today('yyyy-mm-dd') %>",
+		"vcs_tag": "v<%= version %>",
+		"gpgSign": true
+	},
+
+	"files": [
+		{
+			"includePattern": "<%= dirdist %>/(.*\\.i386\\.rpm)",
+			"uploadPattern": "$1",
+			"matrixParams": {
+				"override": 1,
+				"publish": 1
+			}
+		},
+		{
+			"includePattern": "<%= dirdist %>/(.*\\.x86_64\\.rpm)",
+			"uploadPattern": "$1",
+			"matrixParams": {
+				"override": 1,
+				"publish": 1
+			}
+		}
+	],
+
+	"publish": true
+}

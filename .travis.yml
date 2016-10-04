@@ -53,6 +53,27 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
+  - provider: bintray
+    file: build/package/bintray/deb.json
+    user: "${BINTRAY_USER}"
+    key: "${BINTRAY_KEY}"
+    passphrase: "${BINTRAY_PASSPHRASE}"
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: bintray
+    file: build/package/bintray/rpm.json
+    user: "${BINTRAY_USER}"
+    key: "${BINTRAY_KEY}"
+    passphrase: "${BINTRAY_PASSPHRASE}"
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: script
+    script: build/travis/deploy_bintray_fix.sh
+    skip_cleanup: true
+    on:
+      tags: true
 
 notifications:
   email: false
