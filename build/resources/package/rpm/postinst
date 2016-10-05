@@ -1,2 +1,3 @@
-ln -sf <%= prefix %>/<%= exec %> /usr/bin/<%= exec %>
-<%= prefix %>/add-menuitem.sh
+ln -sf "<%= prefix %>/<%= exec %>" "/usr/bin/<%= exec %>"
+sed -i "s/CHECKNEWVERSIONS=true/CHECKNEWVERSIONS=false/g" "<%= prefix %>/start.sh"
+"<%= prefix %>/add-menuitem.sh"

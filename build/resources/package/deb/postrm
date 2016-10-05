@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-mkdir -p $(dirname <%= prefix %>)
+mkdir -p $(dirname "<%= prefix %>")
