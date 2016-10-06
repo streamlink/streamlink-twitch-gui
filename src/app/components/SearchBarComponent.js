@@ -106,7 +106,8 @@ export default Component.extend({
 		set( this, "showDropdown", false );
 		this.addRecord( query, filter );
 
-		var targetObject = get( this, "targetObject" );
+		// FIXME: targetObject
+		var targetObject = get( this, "_targetObject" );
 		targetObject.transitionToRoute( "search", {
 			queryParams: {
 				filter,

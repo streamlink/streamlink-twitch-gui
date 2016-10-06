@@ -2,6 +2,7 @@ import {
 	get,
 	set,
 	computed,
+	getOwner,
 	inject
 } from "Ember";
 import FormButtonComponent from "components/button/FormButtonComponent";
@@ -28,8 +29,11 @@ export default FormButtonComponent.extend({
 
 	action: "setHomepage",
 
-	url: computed( "targetObject.target.location", function() {
-		return get( this, "targetObject.target.location" ).getURL();
+	url: computed(function() {
+		let router = getOwner( this ).lookup( "router:main" );
+		let location = get( router, "location" );
+
+		return location.getURL();
 	}).volatile(),
 
 	isHomepage: computed( "url", "settings.gui_homepage", function() {

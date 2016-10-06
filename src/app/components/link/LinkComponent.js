@@ -34,7 +34,8 @@ export default LinkComponent.reopen({
 	 */
 	click( event ) {
 		if ( get( this, "active" ) ) {
-			var targetObject = get( this, "controller.targetObject" );
+			// FIXME: targetObject
+			let targetObject = get( this, "_targetObject" );
 			if ( targetObject ) {
 				event.preventDefault();
 				event.stopImmediatePropagation();

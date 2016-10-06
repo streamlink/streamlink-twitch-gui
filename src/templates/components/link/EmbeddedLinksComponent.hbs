@@ -1,6 +1,6 @@
 {{#each content as |item|}}
 	{{#if item.url}}
-		{{#external-link url=item.url targetObject=targetObject}}
+		{{#external-link url=item.url _targetObject=_targetObject}}
 			{{item.text}}
 		{{/external-link}}
 	{{else}}

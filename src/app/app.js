@@ -106,8 +106,6 @@ import ChatService from "services/ChatService";
 
 import ApplicationRoute from "routes/ApplicationRoute";
 import ApplicationController from "controllers/ApplicationController";
-import ApplicationView from "components/ApplicationComponent";
-import ApplicationTemplate from "templates/Application.hbs";
 
 import LoadingRoute from "routes/LoadingRoute";
 import LoadingTemplate from "templates/Loading.hbs";
@@ -403,8 +401,6 @@ export default Application.create({
 	// Application
 	ApplicationRoute,
 	ApplicationController,
-	ApplicationView,
-	ApplicationTemplate,
 
 	LoadingRoute,
 	LoadingTemplate,

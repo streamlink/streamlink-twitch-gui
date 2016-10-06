@@ -36,13 +36,14 @@ export default Component.extend({
 
 	type: "button",
 	locked: or( "isFetching", "hasFetchedAll" ),
-	error: alias( "targetObject.fetchError" ),
+	error: alias( "_targetObject.fetchError" ),
 
-	isFetching: alias( "targetObject.isFetching" ),
-	hasFetchedAll: alias( "targetObject.hasFetchedAll" ),
+	isFetching: alias( "_targetObject.isFetching" ),
+	hasFetchedAll: alias( "_targetObject.hasFetchedAll" ),
 
 	click() {
-		var targetObject = get( this, "targetObject" );
+		// FIXME: targetObject
+		var targetObject = get( this, "_targetObject" );
 		targetObject.send( "willFetchContent", true );
 	},
 
@@ -73,13 +74,16 @@ export default Component.extend({
 	didInsertElement() {
 		this._super( ...arguments );
 
+		let body = document.body;
+		let documentElement = document.documentElement;
+
 		// find first parent node which has a scroll bar
-		var overflow;
-		var parent = get( this, "element" );
+		let overflow;
+		let parent = get( this, "element" );
 		while ( ( parent = parent.parentNode ) ) {
 			// stop at the document body
-			if ( parent === document.body ) {
-				parent = document.body.querySelector( "main.content" ) || document.body;
+			if ( parent === body || parent === documentElement ) {
+				parent = documentElement.querySelector( "main.content" ) || body;
 				break;
 			}
 			// the current element's clientHeight needs to be smaller than its scrollHeight
@@ -93,10 +97,11 @@ export default Component.extend({
 			}
 		}
 
-		var $parent   = $( parent );
-		var threshold = get( this, "scrollThreshold" );
-		var target    = get( this, "targetObject" );
-		var listener  = this.infiniteScroll.bind( this, parent, threshold, target );
+		let $parent   = $( parent );
+		let threshold = get( this, "scrollThreshold" );
+		// FIXME: targetObject
+		let target    = get( this, "_targetObject" );
+		let listener  = this.infiniteScroll.bind( this, parent, threshold, target );
 
 		set( this, "$parent", $parent );
 		set( this, "scrollListener", listener );

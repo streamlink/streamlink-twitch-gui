@@ -13,6 +13,7 @@ import {
 	enable as enableSmoothScroll,
 	disable as disableSmoothScroll
 } from "gui/smoothscroll";
+import layout from "templates/components/ApplicationComponent.hbs";
 
 
 const { alias } = computed;
@@ -37,6 +38,8 @@ function setupRefresh( controller ) {
 
 export default Component.extend({
 	settings: service(),
+
+	layout,
 
 	tagName: "body",
 	classNames: [ "wrapper", "vertical" ],
@@ -68,8 +71,9 @@ export default Component.extend({
 	}).on( "didInsertElement" ),
 
 
-	willInsertElement() {
+	init() {
 		document.documentElement.removeChild( document.body );
+		this._super( ...arguments );
 	},
 
 	didInsertElement() {
