@@ -52,14 +52,12 @@ export default Model.extend({
 		"hasCustomDisplayName",
 		"settings.content.channel_name",
 		function() {
-			if ( get( this, "hasCustomDisplayName" ) ) {
-				switch ( get( this, "settings.content.channel_name" ) ) {
-					case 1: return get( this, "display_name" );
-					case 2: return get( this, "name" );
-					case 3: return `${get( this, "display_name" )} (${get( this, "name" )})`;
-				}
-			} else {
-				return get( this, "name" );
+			switch ( get( this, "settings.content.channel_name" ) ) {
+				case 1: return get( this, "display_name" );
+				case 2: return get( this, "name" );
+				case 3: return get( this, "hasCustomDisplayName" )
+					? `${get( this, "display_name" )} (${get( this, "name" )})`
+					: get( this, "display_name" );
 			}
 		}
 	),
