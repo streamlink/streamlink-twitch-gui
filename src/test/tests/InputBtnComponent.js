@@ -26,31 +26,23 @@ import RadioBtnsComponent from "components/form/RadioBtnsComponent";
 
 const { compile } = HTMLBars;
 
-const eventDispatcher = EventDispatcher.create();
-eventDispatcher.setup( {}, fixtureElement );
-
-let owner, context;
+let eventDispatcher, owner, context;
 
 
 module( "InputBtnComponent", {
-	setup() {
+	beforeEach() {
+		eventDispatcher = EventDispatcher.create();
+		eventDispatcher.setup( {}, fixtureElement );
 		owner = buildOwner();
+		owner.register( "event_dispatcher:main", eventDispatcher );
 		owner.register( "component:check-box", CheckBoxComponent );
 		owner.register( "component:radio-btn", RadioBtnComponent );
 		owner.register( "component:radio-btns", RadioBtnsComponent );
 	},
 
-	beforeEach() {
-		owner.register( "event_dispatcher:main", eventDispatcher );
-	},
-
 	afterEach() {
-		owner.unregister( "event_dispatcher:main" );
-		runDestroy( eventDispatcher );
 		runDestroy( context );
-	},
-
-	teardown() {
+		runDestroy( eventDispatcher );
 		runDestroy( owner );
 		owner = context = null;
 	}

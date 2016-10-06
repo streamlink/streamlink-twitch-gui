@@ -26,7 +26,7 @@ let owner, component;
 
 
 module( "ContentListComponent", {
-	setup() {
+	beforeEach() {
 		owner = buildOwner();
 		owner.register( "component:content-list", ContentListComponent );
 		owner.register( "component:infinite-scroll", Component.extend({}) );
@@ -34,7 +34,7 @@ module( "ContentListComponent", {
 		owner.register( "helper:has-own-property", HasOwnPropertyHelper );
 	},
 
-	teardown() {
+	afterEach() {
 		runDestroy( component );
 		runDestroy( owner );
 		owner = component = null;
