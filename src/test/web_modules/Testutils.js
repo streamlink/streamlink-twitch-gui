@@ -11,8 +11,8 @@ const reWhiteSpace = /\s+/g;
 
 export const fixtureElement = "#qunit-fixture";
 
-export function runAppend( view ) {
-	run( view, "appendTo", fixtureElement );
+export function runAppend( view, element ) {
+	run( view, "appendTo", element || fixtureElement );
 }
 
 export function runDestroy( destroyed ) {

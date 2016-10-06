@@ -4,7 +4,15 @@
 {{yield item (is-gte index initial) (has-own-property duplicates index)}}
 {{/each}}
 </ul>
-{{#if infiniteScroll}}{{infinite-scroll content=content _targetObject=_targetObject}}{{/if}}
+{{#if infiniteScroll}}
+	{{infinite-scroll
+		content=content
+		isFetching=isFetching
+		hasFetchedAll=hasFetchedAll
+		fetchError=fetchError
+		action=(action "willFetchContent")
+	}}
+{{/if}}
 {{else if (hasBlock "inverse")}}
 <div>
 {{yield to="inverse"}}

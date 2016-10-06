@@ -3,10 +3,14 @@ import {
 	set,
 	setProperties,
 	RSVP,
+	computed,
 	observer,
 	Component
 } from "Ember";
 import layout from "templates/components/list/ContentListComponent.hbs";
+
+
+const { readOnly } = computed;
 
 
 export default Component.extend({
@@ -24,6 +28,11 @@ export default Component.extend({
 
 	length : 0,
 	initial: 0,
+
+
+	isFetching: readOnly( "_targetObject.isFetching" ),
+	hasFetchedAll: readOnly( "_targetObject.hasFetchedAll" ),
+	fetchError: readOnly( "_targetObject.fetchError" ),
 
 
 	init() {
@@ -79,6 +88,15 @@ export default Component.extend({
 			self.notifyPropertyChange( "duplicates" );
 			set( self, "length", length );
 		});
+	},
+
+	actions: {
+		willFetchContent( force ) {
+			this.triggerAction({
+				action: "willFetchContent",
+				actionContext: force
+			});
+		}
 	}
 
 }).reopenClass({

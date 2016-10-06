@@ -19,6 +19,7 @@ require([
 	"tests/ObjectBuffer",
 	"tests/StreamOutputBuffer",
 	"tests/ContentListComponent",
+	"tests/InfiniteScrollComponent",
 	"tests/InputBtnComponent",
 	"tests/getStreamFromUrl"
 ], start );

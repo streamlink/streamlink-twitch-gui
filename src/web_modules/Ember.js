@@ -32,6 +32,7 @@ export const inject = Ember.inject;
 export const run = Ember.run;
 
 // classes
+export const EmberNativeArray = Ember.A;
 export const Application = Ember.Application;
 export const Binding = Ember.Binding;
 export const Component = Ember.Component;
