@@ -1,5 +1,8 @@
 import {
+	computed,
 	run,
+	observer,
+	on,
 	Component
 } from "Ember";
 import layout from "templates/components/modal/ModalLogComponent.hbs";
@@ -14,17 +17,17 @@ export default Component.extend({
 	tagName: "section",
 	classNames: [ "modal-log" ],
 
-	log: function() {
+	log: computed(function() {
 		return [];
-	}.property(),
+	}),
 
-	_logObserver: function() {
+	_logObserver: observer( "log.[]", function() {
 		scheduleOnce( "afterRender", this, "scrollToBottom" );
-	}.observes( "log.[]" ),
+	}),
 
-	scrollToBottom: function() {
+	scrollToBottom: on( "didInsertElement", function() {
 		var elem = this.element;
 		if ( !elem ) { return; }
 		elem.scrollTop = Math.max( 0, elem.scrollHeight - elem.clientHeight );
-	}.on( "didInsertElement" )
+	})
 });

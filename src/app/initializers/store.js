@@ -28,7 +28,7 @@ Store.reopen({
 	},
 
 	query() {
-		return this._super.apply( this, arguments )
+		return this._super( ...arguments )
 			.then(function( recordArray ) {
 				recordArray._unregisterFromManager();
 				return recordArray;

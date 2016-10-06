@@ -1,2 +1,2 @@
-import {} from "Ember";
-import {} from "EmberData";
+import "Ember";
+import "EmberData";

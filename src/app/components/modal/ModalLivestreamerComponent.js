@@ -7,7 +7,7 @@ import {
 } from "Ember";
 import { livestreamer } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
-import Settings from "models/localstorage/Settings";
+import qualities from "models/LivestreamerQualities";
 import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalLivestreamerComponent.hbs";
 
@@ -31,7 +31,7 @@ export default ModalDialogComponent.extend({
 	error : readOnly( "livestreamer.error" ),
 	active: readOnly( "livestreamer.active" ),
 
-	qualities: Settings.qualities,
+	qualities,
 	versionMin,
 
 

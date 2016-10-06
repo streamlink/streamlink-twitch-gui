@@ -105,8 +105,6 @@ import ChatService from "services/ChatService";
 
 import ApplicationRoute from "routes/ApplicationRoute";
 import ApplicationController from "controllers/ApplicationController";
-import ApplicationView from "components/ApplicationComponent";
-import ApplicationTemplate from "templates/Application.hbs";
 
 import LoadingRoute from "routes/LoadingRoute";
 import LoadingTemplate from "templates/Loading.hbs";
@@ -168,7 +166,6 @@ import StreamPresentationComponent from "components/stream/StreamPresentationCom
 import StreamPreviewImageComponent from "components/stream/StreamPreviewImageComponent";
 
 import FlagIconComponent from "components/FlagIconComponent";
-import LangFilterComponent from "components/LangFilterComponent";
 import LoadingSpinnerComponent from "components/LoadingSpinnerComponent";
 import PreviewImageComponent from "components/PreviewImageComponent";
 import SearchBarComponent from "components/SearchBarComponent";
@@ -404,8 +401,6 @@ export default Application.create({
 	// Application
 	ApplicationRoute,
 	ApplicationController,
-	ApplicationView,
-	ApplicationTemplate,
 
 	LoadingRoute,
 	LoadingTemplate,
@@ -469,7 +464,6 @@ export default Application.create({
 	StreamPreviewImageComponent,
 
 	FlagIconComponent,
-	LangFilterComponent,
 	LoadingSpinnerComponent,
 	PreviewImageComponent,
 	SearchBarComponent,

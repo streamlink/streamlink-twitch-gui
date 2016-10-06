@@ -3,6 +3,7 @@ import {
 	setProperties,
 	computed,
 	inject,
+	observer,
 	Mixin
 } from "Ember";
 
@@ -11,14 +12,14 @@ const { alias, and, bool } = computed;
 const { service } = inject;
 
 function switchProperty( key ) {
-	return function() {
+	return computed( "isLoading", "isSuccessful", function() {
 		var property = get( this, "isLoading" )
 			? `${key}Loading`
 			: get( this, "isSuccessful" )
 				? `${key}Success`
 				: `${key}Failure`;
 		return get( this, property );
-	}.property( "isLoading", "isSuccessful" );
+	});
 }
 
 
@@ -55,7 +56,7 @@ export default Mixin.create({
 	titleFailure: "",
 
 
-	_checkRecord: function() {
+	_checkRecord: observer( "isValid", "model", function() {
 		var modelName = this.modelName;
 		if ( !modelName ) { return; }
 
@@ -86,5 +87,5 @@ export default Mixin.create({
 					isLocked : false
 				});
 			}.bind( this ) );
-	}.observes( "isValid", "model" ).on( "init" )
+	}).on( "init" )
 });

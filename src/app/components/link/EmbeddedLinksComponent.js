@@ -1,5 +1,6 @@
 import {
 	get,
+	computed,
 	Component
 } from "Ember";
 import { parseString } from "utils/linkparser";
@@ -9,7 +10,7 @@ import layout from "templates/components/link/EmbeddedLinksComponent.hbs";
 export default Component.extend({
 	layout,
 
-	content: function() {
+	content: computed( "text", function() {
 		var text   = get( this, "text" );
 		var parsed = parseString( text );
 		var links  = parsed.links;
@@ -24,5 +25,5 @@ export default Component.extend({
 			}
 			return output;
 		}, [] );
-	}.property( "text" )
+	})
 });

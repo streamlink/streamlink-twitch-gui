@@ -1,4 +1,4 @@
-var TemplateCompiler = require( "../vendor/ember/ember-template-compiler" );
+var TemplateCompiler = require( "../../bower_components/ember/ember-template-compiler" );
 var precompile = TemplateCompiler.precompile;
 
 

@@ -3,9 +3,14 @@ import {
 	set,
 	setProperties,
 	RSVP,
+	computed,
+	observer,
 	Component
 } from "Ember";
 import layout from "templates/components/list/ContentListComponent.hbs";
+
+
+const { readOnly } = computed;
 
 
 export default Component.extend({
@@ -25,8 +30,13 @@ export default Component.extend({
 	initial: 0,
 
 
+	isFetching: readOnly( "_targetObject.isFetching" ),
+	hasFetchedAll: readOnly( "_targetObject.hasFetchedAll" ),
+	fetchError: readOnly( "_targetObject.fetchError" ),
+
+
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		var length = get( this, "content.length" );
 		setProperties( this, {
@@ -42,7 +52,7 @@ export default Component.extend({
 	},
 
 
-	_contentLengthObserver: function() {
+	_contentLengthObserver: observer( "content.length", function() {
 		var content = get( this, "content" );
 		var compare = get( this, "compare" );
 		var index   = get( this, "length" );
@@ -52,7 +62,7 @@ export default Component.extend({
 		}
 
 		this.checkDuplicates( content, index );
-	}.observes( "content.length" ),
+	}),
 
 	checkInitialDuplicates( compare ) {
 		var content = get( this, "content" ).mapBy( compare );
@@ -78,6 +88,15 @@ export default Component.extend({
 			self.notifyPropertyChange( "duplicates" );
 			set( self, "length", length );
 		});
+	},
+
+	actions: {
+		willFetchContent( force ) {
+			this.triggerAction({
+				action: "willFetchContent",
+				actionContext: force
+			});
+		}
 	}
 
 }).reopenClass({

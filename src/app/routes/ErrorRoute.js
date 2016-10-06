@@ -33,7 +33,7 @@ export default Route.extend({
 	 * @param {(Error|Ember.RSVP.Promise)} error
 	 */
 	setupController( controller, error ) {
-		this._super.call( this, controller );
+		this._super( controller );
 
 		error = error || new Error( "Unknown error" );
 

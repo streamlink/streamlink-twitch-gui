@@ -1,5 +1,6 @@
 import {
 	get,
+	computed,
 	Controller
 } from "Ember";
 
@@ -10,7 +11,7 @@ const reFilter = /^\w+$/;
 export default Controller.extend({
 	filter: "",
 
-	modelFiltered: function() {
+	modelFiltered: computed( "model.[]", "all", "filter", function() {
 		var filter = get( this, "filter" ).toLowerCase();
 		if ( !reFilter.test( filter ) ) {
 			return get( this, "model" );
@@ -19,7 +20,7 @@ export default Controller.extend({
 		return get( this, "all" ).filter(function( item ) {
 			return get( item, "settings.id" ).toLowerCase().indexOf( filter ) !== -1;
 		});
-	}.property( "model.[]", "all", "filter" ),
+	}),
 
 
 	actions: {

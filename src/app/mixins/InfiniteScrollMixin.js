@@ -16,7 +16,7 @@ var reMinWidth       = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+
 var cachedMinWidths  = {};
 
 var styleSheetsRules = [].reduce.call( document.styleSheets, function( rules, stylesheet ) {
-	rules.push.apply( rules, stylesheet.rules );
+	rules.push( ...[].slice.call( stylesheet.rules ) );
 	return rules;
 }, [] );
 
@@ -139,7 +139,7 @@ export default Mixin.create({
 
 
 	beforeModel() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		// reset offset value
 		set( this, "offset", 0 );
@@ -147,7 +147,7 @@ export default Mixin.create({
 	},
 
 	setupController( controller, model ) {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		// offset: setup oneWay computed property to the value of `contentPath`
 		let contentPath = get( this, "contentPath" );

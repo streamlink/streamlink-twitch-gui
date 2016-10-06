@@ -1,6 +1,8 @@
 import {
 	get,
 	set,
+	computed,
+	observer,
 	Component
 } from "Ember";
 import layout from "templates/components/form/RadioBtnsComponent.hbs";
@@ -15,12 +17,12 @@ export default Component.extend({
 	optionValuePath: "value",
 	optionLabelPath: "label",
 
-	name: function() {
+	name: computed(function() {
 		let now = Date.now();
 		let random = Math.floor( Math.random() * 10000000 );
 
 		return `radio-btns-${now}${random}`;
-	}.property(),
+	}),
 
 	content: null,
 	value: null,
@@ -48,27 +50,27 @@ export default Component.extend({
 	},
 
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 		// update each button's checked status on initialization
 		this._updateItems();
 	},
 
-	_contentObserver: function() {
+	_contentObserver: observer( "content.[]", function() {
 		if ( !this._updateItems() ) {
 			// set the value to undefined if the selected item was removed
 			set( this, "value", undefined );
 		}
-	}.observes( "content.[]" ),
+	}),
 
-	_valueObserver: function() {
+	_valueObserver: observer( "value", "optionValuePath", function() {
 		// update each button's checked status when the group's valuechanges
 		this._updateItems();
-	}.observes( "value", "optionValuePath" ),
+	}),
 
-	_selectionValueObserver: function() {
+	_selectionValueObserver: observer( "selection.value", function() {
 		// change the value if the selection or the selection's value changes
 		set( this, "value", get( this, "selection.value" ) );
-	}.observes( "selection.value" ),
+	}),
 
 	actions: {
 		btnClicked( button ) {

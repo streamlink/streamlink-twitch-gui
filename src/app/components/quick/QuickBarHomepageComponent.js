@@ -1,6 +1,8 @@
 import {
 	get,
 	set,
+	computed,
+	getOwner,
 	inject
 } from "Ember";
 import FormButtonComponent from "components/button/FormButtonComponent";
@@ -12,13 +14,13 @@ const { service } = inject;
 export default FormButtonComponent.extend({
 	settings: service(),
 
-	"class": function() {
+	"class": computed( "isHomepage", function() {
 		let active = get( this, "isHomepage" )
 			? " active"
 			: "";
 
 		return `btn-neutral${active}`;
-	}.property( "isHomepage" ),
+	}),
 
 	title: "Set as homepage",
 
@@ -27,13 +29,16 @@ export default FormButtonComponent.extend({
 
 	action: "setHomepage",
 
-	url: function() {
-		return get( this, "targetObject.target.location" ).getURL();
-	}.property( "targetObject.target.location" ).volatile(),
+	url: computed(function() {
+		let router = getOwner( this ).lookup( "router:main" );
+		let location = get( router, "location" );
 
-	isHomepage: function() {
+		return location.getURL();
+	}).volatile(),
+
+	isHomepage: computed( "url", "settings.gui_homepage", function() {
 		return get( this, "url" ) === get( this, "settings.gui_homepage" );
-	}.property( "url", "settings.gui_homepage" ),
+	}),
 
 
 	actions: {

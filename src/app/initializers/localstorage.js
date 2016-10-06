@@ -1,4 +1,5 @@
 import { langs } from "config";
+import qualities from "models/LivestreamerQualities";
 
 
 var LS = window.localStorage;
@@ -30,6 +31,10 @@ function upgradeSettings() {
 	if ( !data || !data.settings || !data.settings.records[1] ) { return; }
 	var settings = data.settings.records[1];
 
+	if ( typeof settings.gui_minimize !== "number" ) {
+		settings.gui_minimize = 0;
+	}
+
 	if ( settings.gui_homepage === "/user/following" ) {
 		settings.gui_homepage = "/user/followedStreams";
 	}
@@ -42,7 +47,7 @@ function upgradeSettings() {
 	};
 
 	Object.keys( renamedProps ).forEach(function( key ) {
-		if ( !( key in settings ) ) { return; }
+		if ( !settings.hasOwnProperty( key ) ) { return; }
 		settings[ renamedProps[ key ] ] = settings[ key ];
 		delete settings[ key ];
 	});
@@ -55,8 +60,37 @@ function upgradeSettings() {
 		}
 	});
 
+	// map quality number IDs to strings
+	_upgradeQuality( settings );
+
 	LS.setItem( "settings", JSON.stringify( data ) );
 }
 
+function upgradeChannelSettings() {
+	var data = JSON.parse( LS.getItem( "channelsettings" ) );
+	// data key has a dash in it
+	if ( !data || !data[ "channel-settings" ] ) { return; }
+	var channelsettings = data[ "channel-settings" ].records;
+
+	Object.keys( channelsettings ).forEach(function( key ) {
+		let settings = channelsettings[ key ];
+
+		// map quality number IDs to strings
+		_upgradeQuality( settings );
+	});
+
+	LS.setItem( "channelsettings", JSON.stringify( data ) );
+}
+
+function _upgradeQuality( settings ) {
+	if ( !settings.hasOwnProperty( "quality" ) ) { return; }
+	if ( settings.quality === null ) { return; }
+	if ( !qualities.hasOwnProperty( settings.quality || 0 ) ) { return; }
+
+	settings.quality = qualities[ settings.quality || 0 ].id;
+}
+
+
 upgradeLocalstorage();
 upgradeSettings();
+upgradeChannelSettings();

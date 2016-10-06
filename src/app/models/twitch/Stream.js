@@ -52,32 +52,32 @@ export default Model.extend({
 	hasFormatInfo: and( "video_height", "average_fps" ),
 
 
-	title_created_at: function() {
+	title_created_at: computed( "created_at", function() {
 		var created_at = get( this, "created_at" );
 		var moment     = new Moment( created_at );
 		var diff       = moment.diff( new Date(), "days" );
 		var formatted  = moment.format( diff === 0 ? "LTS" : "llll" );
 
 		return `Online since ${formatted}`;
-	}.property( "created_at" ),
+	}),
 
-	title_viewers: function() {
+	title_viewers: computed( "viewers", function() {
 		var viewers = get( this, "viewers" );
 		var numerus = viewers === 1 ? " person is watching" : " people are watching";
 
 		return `${viewers}${numerus}`;
-	}.property( "viewers" ),
+	}),
 
-	resolution: function() {
+	resolution: computed( "video_height", function() {
 		// assume 16:9
 		var video_height = get( this, "video_height" );
 		var width  = Math.round( ( 16 / 9 ) * video_height );
 		var height = Math.round( video_height );
 
 		return `${width}x${height}`;
-	}.property( "video_height" ),
+	}),
 
-	fps: function() {
+	fps: computed( "average_fps", function() {
 		var average_fps = get( this, "average_fps" );
 
 		if ( !average_fps ) { return null; }
@@ -90,7 +90,7 @@ export default Model.extend({
 		return fpsRange
 			? fpsRange.target
 			: Math.floor( average_fps );
-	}.property( "average_fps" )
+	})
 
 }).reopenClass({
 	toString() { return "kraken/streams"; }

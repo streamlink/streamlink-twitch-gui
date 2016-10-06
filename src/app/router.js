@@ -1,6 +1,7 @@
 import {
 	get,
 	set,
+	on,
 	Router
 } from "Ember";
 
@@ -58,12 +59,12 @@ ApplicationRouter.map(function() {
 ApplicationRouter.reopen({
 	lastRouteName: "index",
 
-	_updateLastRouteName: function() {
+	_updateLastRouteName: on( "willTransition", function() {
 		var routeName = get( this, "currentRouteName" );
 		if ( routeName && routeName !== "loading" && routeName !== "error" ) {
 			set( this, "lastRouteName", routeName );
 		}
-	}.on( "willTransition" )
+	})
 });
 
 

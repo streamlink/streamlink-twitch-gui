@@ -6,6 +6,8 @@ import {
 	computed,
 	inject,
 	run,
+	observer,
+	on,
 	Service
 } from "Ember";
 import {
@@ -91,22 +93,22 @@ export default Service.extend( ChannelSettingsMixin, {
 	// notifications disabled via tray item
 	// don't link this property with `enabled` (observe both instead)
 	paused : false,
-	running: function() {
+	running: computed( "enabled", "paused", function() {
 		return get( this, "enabled" ) && !get( this, "paused" );
-	}.property( "enabled", "paused" ),
+	}),
 	error  : and( "running", "_error" ),
 
 
-	enabledObserver: function() {
+	enabledObserver: observer( "running", function() {
 		if ( get( this, "running" ) ) {
 			this.start();
 		} else {
 			this.reset();
 		}
-	}.observes( "running" ).on( "init" ),
+	}).on( "init" ),
 
 
-	statusText: function() {
+	statusText: computed( "enabled", "paused", "error", function() {
 		var status = !get( this, "enabled" )
 			? "disabled"
 			: get( this, "paused" )
@@ -115,8 +117,8 @@ export default Service.extend( ChannelSettingsMixin, {
 			? "offline"
 			: "enabled";
 
-		return "Desktop notifications are " + status;
-	}.property( "enabled", "paused", "error" ),
+		return `Desktop notifications are ${status}`;
+	}),
 
 
 	_setupNotifications: function() {
@@ -149,7 +151,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * Add a newly followed channel to the channel list cache
 	 * so it doesn't pop up a new notification on the next query
 	 */
-	_userHasFollowedChannel: function() {
+	_userHasFollowedChannel: on( "init", function() {
 		var self    = this;
 		var store   = get( self, "store" );
 		var follows = store.modelFor( "twitchUserFollowsChannel" );
@@ -168,7 +170,7 @@ export default Service.extend( ChannelSettingsMixin, {
 					model.push( new StreamCache( stream ) );
 				});
 		});
-	}.on( "init" ),
+	}),
 
 
 	_setWindowBadgeLabel() {
@@ -184,12 +186,17 @@ export default Service.extend( ChannelSettingsMixin, {
 		nwWindow.setBadgeLabel( label );
 	},
 
-	_windowBadgeLabelObserver: function() {
-		debounce( this, "_setWindowBadgeLabel", 500 );
-	}.observes( "running", "settings.notify_badgelabel", "model.[]" ),
+	_windowBadgeLabelObserver: observer(
+		"running",
+		"settings.notify_badgelabel",
+		"model.[]",
+		function() {
+			debounce( this, "_setWindowBadgeLabel", 500 );
+		}
+	),
 
 
-	_setupTrayItem: function() {
+	_setupTrayItem: on( "init", function() {
 		var self = this;
 		var menu = getTrayMenu();
 		var item = null;
@@ -219,7 +226,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		createTrayItem();
 		this.addObserver( "enabled", createTrayItem );
-	}.on( "init" ),
+	}),
 
 
 	reset() {

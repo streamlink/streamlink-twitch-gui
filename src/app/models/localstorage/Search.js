@@ -1,4 +1,7 @@
-import { get } from "Ember";
+import {
+	get,
+	computed
+} from "Ember";
 import {
 	attr,
 	Model
@@ -10,10 +13,10 @@ export default Model.extend({
 	filter: attr( "string" ),
 	date  : attr( "date" ),
 
-	label: function() {
+	label: computed( "filter", function() {
 		var filter = get( this, "filter" );
 		return this.constructor.getLabel( filter );
-	}.property( "filter" )
+	})
 
 }).reopenClass({
 	toString() { return "Search"; },
@@ -25,12 +28,12 @@ export default Model.extend({
 		{ label: "Stream", value: "streams" }
 	],
 
-	filtersmap: function() {
+	filtersmap: computed(function() {
 		return this.filters.reduce(function( map, filter ) {
 			map[ filter.value ] = filter;
 			return map;
 		}, {} );
-	}.property(),
+	}),
 
 	getLabel( filter ) {
 		var map = get( this, "filtersmap" );

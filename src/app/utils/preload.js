@@ -1,8 +1,6 @@
 import { makeArray } from "Ember";
 
 
-const concat = [].concat;
-
 function preload( withError, list ) {
 	if ( list === undefined ) {
 		list = withError;
@@ -51,7 +49,8 @@ function preload( withError, list ) {
 					: makeArray( resources );
 
 				// preload images
-				return concat.apply( promises, resources.map( promiseImage ) );
+				promises.push( ...resources.map( promiseImage ) );
+				return promises;
 			}, [] )
 		)
 			// return the original response

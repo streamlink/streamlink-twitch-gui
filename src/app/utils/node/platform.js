@@ -4,6 +4,9 @@ import OS from "os";
 import PATH from "path";
 
 
+const { resolve } = PATH;
+
+
 export const platform = OS.platform();
 export const release  = OS.release();
 
@@ -20,12 +23,10 @@ export const isLinux  = platform === "linux";
 export const isWinGte8 = isWin && isVersionGte( "6.2.0" );
 
 
-const slice = [].slice;
 const { temp: tmpdirName } = dirs;
 const tmpdirRoot = [ OS.tmpdir(), tmpdirName ];
 
 
 export function tmpdir() {
-	let args = slice.call( arguments );
-	return PATH.resolve.apply( PATH, tmpdirRoot.concat( args ) );
+	return resolve( ...tmpdirRoot, ...arguments );
 }

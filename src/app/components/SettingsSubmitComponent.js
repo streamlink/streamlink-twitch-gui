@@ -1,7 +1,10 @@
 import {
 	get,
 	set,
+	computed,
 	run,
+	observer,
+	on,
 	Component
 } from "Ember";
 import layout from "templates/components/SettingsSubmitComponent.hbs";
@@ -24,23 +27,23 @@ export default Component.extend({
 	apply: "apply",
 	discard: "discard",
 
-	_enabled: function() {
+	_enabled: computed(function() {
 		return get( this, "isDirty" )
 			&& !get( this, "disabled" );
-	}.property(),
+	}),
 
 	// immediately set enabled when disabled property changes
-	_disabledObserver: function() {
+	_disabledObserver: observer( "disabled", function() {
 		var enabled = get( this, "disabled" )
 			? false
 			: get( this, "isDirty" );
 		set( this, "_enabled", enabled );
-	}.observes( "disabled" ),
+	}),
 
 	// isDirty === true:  immediately set enabled to true
 	// isDirty === false: wait and then set to false
 	_timeout: null,
-	_isDirtyObserver: function() {
+	_isDirtyObserver: observer( "isDirty", function() {
 		if ( get( this, "disabled" ) ) { return; }
 
 		this._clearTimeout();
@@ -52,12 +55,12 @@ export default Component.extend({
 				set( this, "_enabled", false );
 			}, get( this, "delay" ) );
 		}
-	}.observes( "isDirty" ),
+	}),
 
-	_clearTimeout: function() {
+	_clearTimeout: on( "willDestroyElement", function() {
 		if ( this._timeout ) {
 			cancel( this._timeout );
 			this._timeout = null;
 		}
-	}.on( "willDestroyElement" )
+	})
 });

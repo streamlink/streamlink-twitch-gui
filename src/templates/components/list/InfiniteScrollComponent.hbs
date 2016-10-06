@@ -1,6 +1,6 @@
-{{#if error}}
+{{#if fetchError}}
 <i class="fa fa-bolt"></i>Error
-{{else if locked}}
+{{else if isLocked}}
 {{loading-spinner}}Loading
 {{else}}
 <i class="fa fa-arrow-down"></i>Fetch more

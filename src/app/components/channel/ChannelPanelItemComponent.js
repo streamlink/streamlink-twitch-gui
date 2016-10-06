@@ -29,7 +29,7 @@ export default Component.extend({
 				self.send( "openBrowser", this.href );
 			});
 
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 	},
 
 	contextMenu( event ) {

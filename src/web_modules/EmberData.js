@@ -1,5 +1,5 @@
-import {} from "Ember";
-import {} from "vendor/ember-data/ember-data";
+import "Ember";
+import "bower/ember-data/ember-data";
 
 
 const EmberData = window.DS;

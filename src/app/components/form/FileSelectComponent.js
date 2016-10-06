@@ -2,6 +2,7 @@ import {
 	get,
 	set,
 	$,
+	on,
 	Component
 } from "Ember";
 import layout from "templates/components/form/FileSelectComponent.hbs";
@@ -17,7 +18,7 @@ export default Component.extend({
 	placeholder: "",
 	disabled: false,
 
-	_createInput: function() {
+	_createInput: on( "init", function() {
 		var self = this;
 		self._input = $( "<input>" ).addClass( "hidden" ).attr({
 			type: "file",
@@ -27,7 +28,7 @@ export default Component.extend({
 			set( self, "value", this.value );
 			this.files.clear();
 		});
-	}.on( "init" ),
+	}),
 
 	actions: {
 		selectfile() {

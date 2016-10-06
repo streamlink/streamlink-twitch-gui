@@ -4,12 +4,13 @@ import {
 	$,
 	computed,
 	run,
+	observer,
 	Component
 } from "Ember";
 import layout from "templates/components/list/InfiniteScrollComponent.hbs";
 
 
-const { alias, or } = computed;
+const { or } = computed;
 const { scheduleOnce } = run;
 
 const $window = $( window );
@@ -27,41 +28,38 @@ export default Component.extend({
 	],
 	attributeBindings: [
 		"type",
-		"locked:disabled"
+		"isLocked:disabled"
 	],
 
-	scrollThreshold: 2 / 3,
-	scrollListener : null,
+	threshold: 2 / 3,
+	listener: null,
 
 	type: "button",
-	locked: or( "isFetching", "hasFetchedAll" ),
-	error: alias( "targetObject.fetchError" ),
-
-	isFetching: alias( "targetObject.isFetching" ),
-	hasFetchedAll: alias( "targetObject.hasFetchedAll" ),
+	isLocked: or( "isFetching", "hasFetchedAll" ),
 
 	click() {
-		var targetObject = get( this, "targetObject" );
-		targetObject.send( "willFetchContent", true );
+		if ( !get( this, "isLocked" ) ) {
+			get( this, "action" )( true );
+		}
 	},
 
 
 	_contentLength: 0,
-	// check for available space (scrollListener) if items were removed from the content array
-	_contentObserver: function() {
-		var length = get( this, "content.length" );
+	// check for available space if items were removed from the content array
+	_contentObserver: observer( "content.length", function() {
+		let length = get( this, "content.length" );
 		if ( length >= this._contentLength ) { return; }
 		this._contentLength = length;
 
-		var scrollListener = get( this, "scrollListener" );
-		if ( !scrollListener ) { return; }
+		let listener = get( this, "listener" );
+		if ( !listener ) { return; }
 		// wait for the DOM to upgrade
-		scheduleOnce( "afterRender", scrollListener );
-	}.observes( "content.length" ),
+		scheduleOnce( "afterRender", listener );
+	}),
 
 
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		if ( get( this, "content" ) ) {
 			this._contentLength = get( this, "content.length" );
@@ -70,15 +68,18 @@ export default Component.extend({
 
 
 	didInsertElement() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
+
+		let body = document.body;
+		let documentElement = document.documentElement;
 
 		// find first parent node which has a scroll bar
-		var overflow;
-		var parent = get( this, "element" );
+		let overflow;
+		let parent = get( this, "element" );
 		while ( ( parent = parent.parentNode ) ) {
 			// stop at the document body
-			if ( parent === document.body ) {
-				parent = document.body.querySelector( "main.content" ) || document.body;
+			if ( parent === body || parent === documentElement ) {
+				parent = documentElement.querySelector( "main.content" ) || body;
 				break;
 			}
 			// the current element's clientHeight needs to be smaller than its scrollHeight
@@ -92,13 +93,17 @@ export default Component.extend({
 			}
 		}
 
-		var $parent   = $( parent );
-		var threshold = get( this, "scrollThreshold" );
-		var target    = get( this, "targetObject" );
-		var listener  = this.infiniteScroll.bind( this, parent, threshold, target );
+		let $parent   = $( parent );
+		let action    = get( this, "action" );
+		let threshold = get( this, "threshold" );
+		let listener  = function() {
+			if ( this.infiniteScroll( parent, threshold ) ) {
+				action( false );
+			}
+		}.bind( this );
 
 		set( this, "$parent", $parent );
-		set( this, "scrollListener", listener );
+		set( this, "listener", listener );
 
 		$parent.on( "scroll", listener );
 		$window.on( "resize", listener );
@@ -106,22 +111,21 @@ export default Component.extend({
 
 
 	willDestroyElement() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
-		var $parent = get( this, "$parent" );
-		var scrollListener = get( this, "scrollListener" );
-		$parent.off( "scroll", scrollListener );
-		$window.off( "resize", scrollListener );
+		let $parent = get( this, "$parent" );
+		let listener = get( this, "listener" );
+		$parent.off( "scroll", listener );
+		$window.off( "resize", listener );
 		set( this, "$parent", null );
-		set( this, "scrollListener", null );
+		set( this, "listener", null );
 	},
 
 
-	infiniteScroll( elem, percentage, target ) {
-		var threshold = percentage * elem.clientHeight;
-		var remaining = elem.scrollHeight - elem.clientHeight - elem.scrollTop;
-		if ( remaining <= threshold ) {
-			target.send( "willFetchContent" );
-		}
+	infiniteScroll( elem, percentage ) {
+		let threshold = percentage * elem.clientHeight;
+		let remaining = elem.scrollHeight - elem.clientHeight - elem.scrollTop;
+
+		return remaining <= threshold;
 	}
 });

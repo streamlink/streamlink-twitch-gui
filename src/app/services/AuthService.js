@@ -2,6 +2,7 @@ import {
 	get,
 	set,
 	RSVP,
+	computed,
 	inject,
 	Evented,
 	Service
@@ -34,14 +35,14 @@ export default Service.extend( Evented, {
 	session: null,
 	server: null,
 
-	url: function() {
+	url: computed(function() {
 		let redirect = redirecturi.replace( "{server-port}", String( serverport ) );
 
 		return baseuri
 			.replace( "{client-id}", clientid )
 			.replace( "{redirect-uri}", encodeURIComponent( redirect ) )
 			.replace( "{scope}", scope.join( "+" ) );
-	}.property(),
+	}),
 
 
 	init() {

@@ -1,5 +1,6 @@
 import {
 	get,
+	computed,
 	Controller
 } from "Ember";
 import { main } from "config";
@@ -13,7 +14,7 @@ export default Controller.extend({
 	metadata,
 	nwjsVersion,
 
-	dependencies: function() {
+	dependencies: computed( "metadata.dependencies", function() {
 		var deps = get( this, "metadata.dependencies" );
 		return Object.keys( deps ).map(function( key ) {
 			return {
@@ -21,5 +22,5 @@ export default Controller.extend({
 				version: deps[ key ]
 			};
 		});
-	}.property( "metadata.dependencies" )
+	})
 });

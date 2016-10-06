@@ -15,11 +15,11 @@ export default Controller.extend({
 	streams : alias( "model.streams" ),
 	channels: alias( "model.channels" ),
 
-	filterlabel: function() {
+	filterlabel: computed( "filter", function() {
 		var filter      = get( this, "filter" );
 		var SearchModel = this.store.modelFor( "search" );
 		return SearchModel.getLabel( filter );
-	}.property( "filter" ),
+	}),
 
 	notFiltered: equal( "filter", "all" ),
 
@@ -27,9 +27,9 @@ export default Controller.extend({
 	emptyStreams : empty( "streams" ),
 	emptyChannels: empty( "channels" ),
 
-	noResults: function() {
+	noResults: computed( "emptyGames", "emptyStreams", "emptyChannels", function() {
 		return get( this, "emptyGames" )
 		    && get( this, "emptyStreams" )
 		    && get( this, "emptyChannels" );
-	}.property( "emptyGames", "emptyStreams", "emptyChannels" )
+	})
 });

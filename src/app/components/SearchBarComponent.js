@@ -6,6 +6,7 @@ import {
 	computed,
 	inject,
 	run,
+	on,
 	Component
 } from "Ember";
 import { vars } from "config";
@@ -40,7 +41,7 @@ export default Component.extend({
 
 
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 
 		this.content.volatile();
 
@@ -105,7 +106,8 @@ export default Component.extend({
 		set( this, "showDropdown", false );
 		this.addRecord( query, filter );
 
-		var targetObject = get( this, "targetObject" );
+		// FIXME: targetObject
+		var targetObject = get( this, "_targetObject" );
 		targetObject.transitionToRoute( "search", {
 			queryParams: {
 				filter,
@@ -115,7 +117,7 @@ export default Component.extend({
 	},
 
 
-	_prepareDropdown: function() {
+	_prepareDropdown: on( "didInsertElement", function() {
 		// dropdown
 		var self     = this;
 		var $element = self.$();
@@ -136,7 +138,7 @@ export default Component.extend({
 				set( self, "showDropdown", false );
 			}
 		});
-	}.on( "didInsertElement" ),
+	}),
 
 
 	actions: {

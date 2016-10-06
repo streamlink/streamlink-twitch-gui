@@ -2,7 +2,8 @@ import {
 	get,
 	set,
 	computed,
-	inject
+	inject,
+	observer
 } from "Ember";
 import {
 	attr,
@@ -10,6 +11,7 @@ import {
 	Model
 } from "EmberData";
 import { parameters } from "models/LivestreamerParameters";
+import qualities from "models/LivestreamerQualities";
 import Parameter from "utils/Parameter";
 import { twitch } from "config";
 
@@ -25,7 +27,7 @@ const { oauth: { "client-id": clientId } } = twitch;
 export default Model.extend({
 	stream      : belongsTo( "twitchStream", { async: false } ),
 	channel     : belongsTo( "twitchChannel", { async: false } ),
-	quality     : attr( "number" ),
+	quality     : attr( "string" ),
 	gui_openchat: attr( "boolean" ),
 	started     : attr( "date" ),
 
@@ -64,18 +66,35 @@ export default Model.extend({
 		get( this, "log" ).pushObject({ type, line });
 	},
 
-	qualityObserver: function() {
+	qualityObserver: observer( "quality", function() {
 		// The LivestreamerService knows that it has to spawn a new child process
 		this.kill();
-	}.observes( "quality" ),
+	}),
 
-	parameters: function() {
+	parameters: computed(function() {
 		return Parameter.getParameters(
 			this,
 			parameters,
 			get( this, "settings.advanced" )
 		);
-	}.property().volatile()
+	}).volatile(),
+
+	streamquality: computed( "quality", "settings.quality_presets", function() {
+		let quality = get( this, "quality" );
+		let custom = get( this, "settings.quality_presets" );
+
+		// get custom quality list
+		if ( custom.hasOwnProperty( quality ) && custom[ quality ].length > 0 ) {
+			return custom[ quality ];
+		}
+
+		// get predefined quality list
+		let preset = qualities.findBy( "id", quality );
+
+		return preset
+			? preset.value
+			: qualities.findBy( "id", "source" ).value;
+	})
 
 }).reopenClass({
 

@@ -1,7 +1,9 @@
 import {
 	get,
 	set,
+	computed,
 	inject,
+	observer,
 	Controller
 } from "Ember";
 import { twitch } from "config";
@@ -38,36 +40,36 @@ export default Controller.extend( RetryTransitionMixin, {
 	 */
 	loginStatus: 0,
 
-	userStatus: function() {
+	userStatus: computed( "loginStatus", function() {
 		return get( this, "loginStatus" ) & 3;
-	}.property( "loginStatus" ),
+	}),
 
-	hasUserInteraction: function() {
+	hasUserInteraction: computed( "userStatus", function() {
 		return get( this, "userStatus" ) > 0;
-	}.property( "userStatus" ),
+	}),
 
-	isLoggingIn: function() {
+	isLoggingIn: computed( "loginStatus", function() {
 		return get( this, "loginStatus" ) === 1;
-	}.property( "loginStatus" ),
+	}),
 
-	hasLoginResult: function() {
+	hasLoginResult: computed( "userStatus", function() {
 		var userStatus = get( this, "userStatus" );
 		return ( userStatus & 2 ) > 0;
-	}.property( "userStatus" ),
+	}),
 
-	showFailMessage: function() {
+	showFailMessage: computed( "userStatus", function() {
 		return get( this, "userStatus" ) === 2;
-	}.property( "userStatus" ),
+	}),
 
-	showTokenForm: function() {
+	showTokenForm: computed( "loginStatus", function() {
 		return get( this, "loginStatus" ) & 4;
-	}.property( "loginStatus" ),
+	}),
 
 
-	serverObserver: function() {
+	serverObserver: observer( "auth.server", function() {
 		var authServer = get( this, "auth.server" );
 		set( this, "loginStatus", authServer ? 1 : 0 );
-	}.observes( "auth.server" ),
+	}),
 
 
 	resetProperties() {

@@ -1,5 +1,5 @@
-import {} from "JQuery";
-import {} from "vendor/ember/ember.debug";
+import "jquery";
+import "bower/ember/ember.debug";
 
 
 const Ember = window.Ember;
@@ -32,6 +32,7 @@ export const inject = Ember.inject;
 export const run = Ember.run;
 
 // classes
+export const EmberNativeArray = Ember.A;
 export const Application = Ember.Application;
 export const Binding = Ember.Binding;
 export const Component = Ember.Component;
@@ -44,6 +45,7 @@ export const Mixin = Ember.Mixin;
 export const EmberObject = Ember.Object;
 export const ObjectProxy = Ember.ObjectProxy;
 export const observer = Ember.observer;
+export const on = Ember.on;
 export const Route = Ember.Route;
 export const Router = Ember.Router;
 export const Service = Ember.Service;

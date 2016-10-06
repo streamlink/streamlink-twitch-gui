@@ -75,8 +75,9 @@ export default Component.extend({
 
 			// handle actions as functions
 			if ( action instanceof Function ) {
+				// FIXME: targetObject
 				action.apply(
-					get( this, "targetObject" ),
+					get( this, "_targetObject" ),
 					actionContext
 				);
 
@@ -86,11 +87,12 @@ export default Component.extend({
 				   this.actions instanceof Object
 				&& this.actions.hasOwnProperty( action )
 			) {
-				this.send.apply( this, [ action ].concat( actionContext ) );
+				this.send( action, ...actionContext );
 
 			} else {
+				// FIXME: targetObject
 				this.triggerAction({
-					target: get( this, "targetObject" ),
+					target: get( this, "_targetObject" ),
 					action,
 					actionContext
 				});

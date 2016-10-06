@@ -3,6 +3,7 @@ import {
 	set,
 	computed,
 	inject,
+	observer,
 	Controller
 } from "Ember";
 import {
@@ -11,6 +12,7 @@ import {
 } from "config";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 import { playerSubstitutions } from "models/LivestreamerParameters";
+import qualities from "models/LivestreamerQualities";
 import Settings from "models/localstorage/Settings";
 import platform from "utils/node/platform";
 
@@ -21,9 +23,9 @@ const { themes: themesList } = themes;
 
 
 function settingsAttrMeta( attr, prop ) {
-	return function() {
+	return computed(function() {
 		return Settings.metaForProperty( attr ).options[ prop ];
-	}.property();
+	});
 }
 
 
@@ -34,6 +36,7 @@ export default Controller.extend( RetryTransitionMixin, {
 
 	isAnimated: false,
 
+	qualities,
 	Settings,
 	platform,
 
@@ -59,11 +62,11 @@ export default Controller.extend( RetryTransitionMixin, {
 	substitutionsChatCustom: alias( "chat.substitutionsCustom" ),
 
 
-	chatMethods: function() {
+	chatMethods: computed(function() {
 		return Settings.chat_methods.filter(function( method ) {
 			return !method.disabled;
 		});
-	}.property(),
+	}),
 
 	isChatMethodDefault: equal( "model.chat_method", "default" ),
 	isChatMethodMSIE   : equal( "model.chat_method", "msie" ),
@@ -71,20 +74,20 @@ export default Controller.extend( RetryTransitionMixin, {
 	isChatMethodChatty : equal( "model.chat_method", "chatty" ),
 
 
-	themes: function() {
+	themes: computed(function() {
 		return themesList.map(function( theme ) {
 			return {
 				id   : theme,
 				label: theme.substr( 0, 1 ).toUpperCase() + theme.substr( 1 )
 			};
 		});
-	}.property(),
+	}),
 
 
 	hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
 	hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
-	_minimizeObserver: function() {
+	_minimizeObserver: observer( "model.gui_integration", function() {
 		var int    = get( this, "model.gui_integration" );
 		var min    = get( this, "model.gui_minimize" );
 		var noTask = ( int & 1 ) === 0;
@@ -101,11 +104,10 @@ export default Controller.extend( RetryTransitionMixin, {
 		// enable/disable buttons
 		set( Settings, "minimize.1.disabled", noTask );
 		set( Settings, "minimize.2.disabled", noTray );
+	}),
 
-	}.observes( "model.gui_integration" ),
 
-
-	languages: function() {
+	languages: computed(function() {
 		return Object.keys( langs )
 			.filter(function( code ) {
 				return !langs[ code ].disabled;
@@ -116,7 +118,7 @@ export default Controller.extend( RetryTransitionMixin, {
 					lang: langs[ code ][ "lang" ].capitalize()
 				};
 			});
-	}.property(),
+	}),
 
 
 	actions: {

@@ -21,7 +21,7 @@
 <i class="fa fa-money"></i> {{product.price}} / {{product.period}}
 </span>
 <span title="Since {{format-time channel.subscribed.created_at "LLLL"}}">
-<i class="fa fa-calendar"></i> Subscribed for {{product.interval_number}} {{#if (is-gt product.interval_number 1)}}months{{else}}month{{/if}}
+<i class="fa fa-calendar"></i> Subscribed for {{content.purchase_profile.consecutive_months}} {{#if (is-gt content.purchase_profile.consecutive_months 1)}}months{{else}}month{{/if}}
 </span>
 </div>
 <ul class="list-unstyled emoticons">

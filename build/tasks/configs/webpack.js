@@ -20,7 +20,7 @@ var pTest = r( pRoot, "test" );
 var pStyles = r( pRoot, "styles" );
 var pImages = r( pRoot, "img" );
 var pTemplates = r( pRoot, "templates" );
-var pModulesBower = r( pRoot, "vendor" );
+var pModulesBower = r( ".", "bower_components" );
 var pModulesNpm = r( ".", "node_modules" );
 var pBuildDev = r( ".", "build", "tmp", "dev" );
 var pBuildProd = r( ".", "build", "tmp", "prod" );
@@ -56,7 +56,8 @@ module.exports = {
 		resolve: {
 			modulesDirectories: [
 				"web_modules",
-				"node_modules"
+				"node_modules",
+				"bower_components"
 			],
 			alias: {
 				// folder aliases
@@ -64,7 +65,7 @@ module.exports = {
 				"styles"      : pStyles,
 				"img"         : pImages,
 				"templates"   : pTemplates,
-				"vendor"      : pModulesBower,
+				"bower"       : pModulesBower,
 
 				// app folders
 				"config"      : r( pApp, "config" ),
@@ -78,10 +79,7 @@ module.exports = {
 				"components"  : r( pApp, "components" ),
 				"store"       : r( pApp, "store" ),
 				"utils"       : r( pApp, "utils" ),
-				"gui"         : r( pApp, "gui" ),
-
-				// vendor aliases (TODO: rename vendor modules)
-				"jquery"      : "JQuery"
+				"gui"         : r( pApp, "gui" )
 			}
 		},
 
@@ -112,7 +110,8 @@ module.exports = {
 							"babel-plugin-transform-es2015-block-scoping",
 							"babel-plugin-transform-es2015-destructuring",
 							"babel-plugin-transform-es2015-computed-properties",
-							"babel-plugin-transform-es2015-template-literals"
+							"babel-plugin-transform-es2015-template-literals",
+							"babel-plugin-transform-es2015-spread"
 						],
 						cacheDirectory: r( OS.tmpdir(), "babel-cache" )
 					}
@@ -273,11 +272,11 @@ module.exports = {
 
 			// use non-debug versions of ember and ember-data in production builds
 			new webpack.NormalModuleReplacementPlugin(
-				/vendor\/ember\/ember\.debug\.js$/,
+				/\/ember\/ember\.debug\.js$/,
 				r( pModulesBower, "ember", "ember.prod.js" )
 			),
 			new webpack.NormalModuleReplacementPlugin(
-				/vendor\/ember-data\/ember-data\.js$/,
+				/\/ember-data\/ember-data\.js$/,
 				r( pModulesBower, "ember-data", "ember-data.prod.js" )
 			),
 

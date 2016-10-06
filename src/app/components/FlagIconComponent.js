@@ -1,5 +1,6 @@
 import {
 	get,
+	computed,
 	Component
 } from "Ember";
 import { langs } from "config";
@@ -16,16 +17,16 @@ export default Component.extend({
 	withTitle : true,
 	withCursor: true,
 
-	flag: function() {
+	flag: computed( "lang", function() {
 		var lang  = get( this, "lang" );
 		var code  = langs[ lang ];
 
 		return code
 			? `flag-${code.flag}`
 			: null;
-	}.property( "lang" ),
+	}),
 
-	title: function() {
+	title: computed( "withTitle", "lang", function() {
 		if ( !get( this, "withTitle" ) ) { return ""; }
 
 		var lang  = get( this, "lang" );
@@ -41,5 +42,5 @@ export default Component.extend({
 			default:
 				return "";
 		}
-	}.property( "withTitle", "lang" )
+	})
 });

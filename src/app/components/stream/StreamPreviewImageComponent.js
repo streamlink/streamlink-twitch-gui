@@ -1,12 +1,14 @@
 import {
 	get,
 	getOwner,
+	computed,
 	inject,
 	Component
 } from "Ember";
 import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 import Settings from "models/localstorage/Settings";
+import qualities from "models/LivestreamerQualities";
 import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
 
 
@@ -29,13 +31,13 @@ export default Component.extend({
 	classNameBindings: [ ":preview", "class", "opened:opened" ],
 	attributeBindings: [ "title", "noMiddleclickScroll:data-no-middleclick-scroll" ],
 	"class": "",
-	noMiddleclickScroll: function() {
+	noMiddleclickScroll: computed( "settings.stream_click_middle", function() {
 		// true or null
 		return get( this, "settings.stream_click_middle" ) !== actions.disabled || null;
-	}.property( "settings.stream_click_middle" ),
+	}),
 
 	init() {
-		this._super.apply( this, arguments );
+		this._super( ...arguments );
 		// FIXME: refactor global goto actions
 		this.applicationRoute = getOwner( this ).lookup( "route:application" );
 	},
@@ -43,12 +45,12 @@ export default Component.extend({
 	clickable: true,
 
 
-	opened: function() {
+	opened: computed( "stream.channel.id", "livestreamer.model.length", function() {
 		var model = get( this, "livestreamer.model" );
 		var id    = get( this, "stream.channel.id" );
 
 		return model.mapBy( "channel.id" ).indexOf( id ) !== -1;
-	}.property( "stream.channel.id", "livestreamer.model.length" ),
+	}),
 
 
 	mouseUp( event ) {
@@ -95,7 +97,7 @@ export default Component.extend({
 
 		var menu = Menu.create();
 
-		var qualities = Settings.qualities.map(function( quality ) {
+		var quals = qualities.map(function( quality ) {
 			return {
 				label: quality.label,
 				click: this.startStream.bind( this, quality.id )
@@ -111,14 +113,14 @@ export default Component.extend({
 					},
 					{
 						label  : "Change quality",
-						submenu: qualities
+						submenu: quals
 					}
 				]);
 			} else {
 				menu.items.pushObjects([
 					{
 						label  : "Launch stream",
-						submenu: qualities
+						submenu: quals
 					}
 				]);
 			}

@@ -3,6 +3,7 @@ import {
 	getOwner,
 	computed,
 	inject,
+	observer,
 	Component
 } from "Ember";
 import { themes } from "config";
@@ -12,6 +13,7 @@ import {
 	enable as enableSmoothScroll,
 	disable as disableSmoothScroll
 } from "gui/smoothscroll";
+import layout from "templates/components/ApplicationComponent.hbs";
 
 
 const { alias } = computed;
@@ -37,12 +39,14 @@ function setupRefresh( controller ) {
 export default Component.extend({
 	settings: service(),
 
+	layout,
+
 	tagName: "body",
 	classNames: [ "wrapper", "vertical" ],
 
 	theme: alias( "settings.content.gui_theme" ),
 
-	themeObserver: function() {
+	themeObserver: observer( "themes", "theme", function() {
 		var theme  = get( this, "theme" );
 
 		if ( themesList.indexOf( theme ) === -1 ) {
@@ -56,19 +60,20 @@ export default Component.extend({
 		});
 
 		list.add( `theme-${theme}` );
-	}.observes( "themes", "theme" ).on( "init" ),
+	}).on( "init" ),
 
-	smoothscrollObserver: function() {
+	smoothscrollObserver: observer( "settings.content.gui_smoothscroll", function() {
 		if ( get( this, "settings.content.gui_smoothscroll" ) ) {
 			enableSmoothScroll();
 		} else {
 			disableSmoothScroll();
 		}
-	}.observes( "settings.content.gui_smoothscroll" ).on( "didInsertElement" ),
+	}).on( "didInsertElement" ),
 
 
-	willInsertElement() {
+	init() {
 		document.documentElement.removeChild( document.body );
+		this._super( ...arguments );
 	},
 
 	didInsertElement() {

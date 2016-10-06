@@ -1,25 +1,26 @@
 import {
 	get,
+	computed,
 	LinkComponent
 } from "Ember";
 
 
 // reopen and don't extend: this class may be used globally
 export default LinkComponent.reopen({
-	active: function() {
-		var active = this._super.apply( this, arguments );
+	active: computed( "attrs.params", "_routing.currentState", "inactiveClass", function() {
+		let active = this._super( ...arguments );
 		if ( active === false ) {
-			var inactiveClass = get( this, "inactiveClass" );
+			let inactiveClass = get( this, "inactiveClass" );
 			return inactiveClass ? inactiveClass : false;
 		}
 		return active;
-	}.property( "attrs.params", "_routing.currentState", "inactiveClass" ),
+	}),
 
 	/*
 	 * Prevent new windows from being opened by middleclicking on links/anchors
 	 */
 	didInsertElement() {
-		this._super();
+		this._super( ...arguments );
 		this.$().on( "click", function( e ) {
 			if ( e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey ) {
 				e.preventDefault();
@@ -33,14 +34,15 @@ export default LinkComponent.reopen({
 	 */
 	click( event ) {
 		if ( get( this, "active" ) ) {
-			var targetObject = get( this, "controller.targetObject" );
+			// FIXME: targetObject
+			let targetObject = get( this, "_targetObject" );
 			if ( targetObject ) {
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				targetObject.send( "refresh" );
 			}
 		} else {
-			this._super.apply( this, arguments );
+			this._super( ...arguments );
 		}
 	}
 });

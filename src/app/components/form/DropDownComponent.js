@@ -1,6 +1,8 @@
 import {
 	get,
 	set,
+	computed,
+	observer,
 	Component
 } from "Ember";
 import {} from "Selecter";
@@ -14,7 +16,9 @@ export default Component.extend({
 	classNameBindings: [ "class" ],
 	attributeBindings: [ "disabled" ],
 
-	content : function() { return []; }.property(),
+	content : computed(function() {
+		return [];
+	}),
 	value   : null,
 	disabled: false,
 
@@ -24,7 +28,7 @@ export default Component.extend({
 	action: null,
 
 	didInsertElement() {
-		this._super();
+		this._super( ...arguments );
 
 		// TODO: remove Selecter dependency
 
@@ -39,7 +43,7 @@ export default Component.extend({
 		});
 	},
 
-	_valueChangedObserver: function() {
+	_valueChangedObserver: observer( "value", function() {
 		var content = get( this, "content" );
 		var path    = get( this, "optionValuePath" );
 		var value   = get( this, "value" );
@@ -53,7 +57,7 @@ export default Component.extend({
 		this.$().selecter( "refresh" );
 
 		this.sendAction( "action", value );
-	}.observes( "value" ),
+	}),
 
 	change() {
 		var index   = this.element.selectedIndex;

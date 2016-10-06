@@ -1,6 +1,7 @@
 import {
 	get,
 	set,
+	computed,
 	Mixin
 } from "Ember";
 import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
@@ -13,14 +14,14 @@ export default Mixin.create( TwitchInteractButtonMixin, {
 	iconSuccess : "fa-heart",
 	iconFailure : "fa-heart-o",
 	titleLoading: "",
-	titleSuccess: function() {
-		var name = get( this, "name" );
+	titleSuccess: computed( "name", function() {
+		let name = get( this, "name" );
 		return `Unfollow ${name}`;
-	}.property( "name" ),
-	titleFailure: function() {
-		var name = get( this, "name" );
+	}),
+	titleFailure: computed( "name", function() {
+		let name = get( this, "name" );
 		return `Follow ${name}`;
-	}.property( "name" ),
+	}),
 
 
 	actions: {

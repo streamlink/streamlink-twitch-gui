@@ -1,4 +1,4 @@
-import Moment from "vendor/momentjs/moment";
+import Moment from "bower/momentjs/moment";
 
 
 export default Moment;

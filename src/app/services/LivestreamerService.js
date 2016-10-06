@@ -4,6 +4,7 @@ import {
 	makeArray,
 	assign,
 	RSVP,
+	computed,
 	inject,
 	run,
 	Service
@@ -18,7 +19,6 @@ import {
 	toggleMinimize,
 	toggleVisibility
 } from "nwjs/Window";
-import Settings from "models/localstorage/Settings";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
@@ -37,7 +37,7 @@ const {
 const { "stream-url": twitchStreamUrl } = twitchConfig;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
-const reVersion   = /^livestreamer(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(.*)$/;
+const reVersion   = /^(?:livestreamer|streamlink)(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(?:.*)$/;
 const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 const reUnable    = /^error: Unable to open URL: /;
 const reNoStreams = /^error: No streams found on this URL: /;
@@ -107,10 +107,10 @@ export default Service.extend( ChannelSettingsMixin, {
 	error : null,
 	active: null,
 	abort : false,
-	model : function() {
+	model : computed(function() {
 		var store = get( this, "store" );
 		return store.peekAll( "livestreamer" );
-	}.property(),
+	}),
 
 
 	startStream( stream, quality ) {
@@ -291,6 +291,8 @@ export default Service.extend( ChannelSettingsMixin, {
 				var match = reVersion.exec( line );
 				if ( match ) {
 					resolve( match[1] );
+				} else {
+					reject( new Error( "Invalid livestreamer executable" ) );
 				}
 			}
 
@@ -343,12 +345,11 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		var channel   = get( livestreamer, "channel.id" );
 		var quality   = get( livestreamer, "quality" );
-		var qualities = Settings.qualities;
 
 		// get the livestreamer parameter list and append stream url and quality
 		var params    = get( livestreamer, "parameters" );
 		params.push( twitchStreamUrl.replace( "{channel}", channel ) );
-		params.push( ( qualities[ quality ] || qualities[ 0 ] ).quality );
+		params.push( get( livestreamer, "streamquality" ) );
 
 		// spawn the livestreamer process
 		var spawn = CP.spawn( exec, params, { detached: true } );
