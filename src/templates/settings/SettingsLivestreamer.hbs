@@ -89,12 +89,14 @@
 	{{#settings-row
 		"Quality presets"
 		"Customize livestreamer quality presets."
-		icon="fa-list"
+		icon="fa-eye"
 	}}
 		{{#each qualities as |quality|}}
-			<div class="quality-preset">
-				<div>{{quality.label}}</div>
-				{{input type="text" placeholder=quality.value value=(mut (get model.quality_presets quality.id))}}
+			<div class="input-group quality-preset">
+				{{input type="text" classNames="form-control" placeholder=quality.value value=(mut (get model.quality_presets quality.id))}}
+				<span class="input-group-btn">
+					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
+				</span>
 			</div>
 		{{/each}}
 	{{/settings-row}}
