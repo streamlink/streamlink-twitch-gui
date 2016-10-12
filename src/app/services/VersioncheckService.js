@@ -105,41 +105,25 @@ export default Service.extend({
 	},
 
 	getReleases() {
-		get( this, "store" ).findAll( "githubReleases", { reload: true } )
-			.then(function( releases ) {
-				// filter records first
-				return releases.toArray().filter(function( release ) {
-					// ignore drafts
-					return !get( release, "draft" );
-				});
-			})
-			.then( this.checkReleases.bind( this ) );
+		get( this, "store" ).findRecord( "githubReleases", "latest", { reload: true } )
+			.then( this.checkRelease.bind( this ) );
 	},
 
-	checkReleases( releases ) {
-		function getVers( record ) {
-			return get( record, "tag_name" );
-		}
-
+	checkRelease( release ) {
+		let latest = get( release, "tag_name" );
 		let version = get( this, "version" );
-
-		// create a fake record for the current version and save a reference
-		let current = { tag_name: `v${version}` };
-		// find out the maximum of fetched releases
-		let maximum = getMax( releases, getVers );
-		// and compare it with the current version
-		let latest  = getMax( [ current, maximum ], getVers );
+		let current = `v${version}`;
 
 		// no new release? check again in a few days
-		if ( current === latest || getVers( current ) === getVers( latest ) ) {
+		if ( current !== getMax([ current, latest ]) ) {
 			return this.ignoreRelease();
 		}
 
 		// ask the user what to do
 		get( this, "modal" ).openModal( "newrelease", this, {
-			versionOutdated: getVers( current ),
-			versionLatest  : getVers( latest ),
-			downloadURL    : get( latest, "html_url" )
+			versionOutdated: current,
+			versionLatest  : latest,
+			downloadURL    : get( release, "html_url" )
 		});
 	},
 
