@@ -27,13 +27,13 @@ const { later } = run;
 const {
 	"exec": livestreamerExec,
 	"fallback": livestreamerFallback,
-	"version-min": livestreamerVersionMin,
+	"version-min": versionMin,
 	"validation-timeout": livestreamerTimeout
 } = livestreamerConfig;
 const { "stream-url": twitchStreamUrl } = twitchConfig;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
-const reVersion   = /^(?:livestreamer|streamlink)(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(?:.*)$/;
+const reVersion   = /^(livestreamer|streamlink)(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(?:.*)$/;
 const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 const reUnable    = /^error: Unable to open URL: /;
 const reNoStreams = /^error: No streams found on this URL: /;
@@ -284,9 +284,12 @@ export default Service.extend( ChannelSettingsMixin, {
 				}
 
 				// match the version string
-				var match = reVersion.exec( line );
+				let match = reVersion.exec( line );
 				if ( match ) {
-					resolve( match[1] );
+					resolve({
+						name: match[1],
+						version: match[2]
+					});
 				} else {
 					reject( new Error( "Invalid livestreamer executable" ) );
 				}
@@ -314,10 +317,16 @@ export default Service.extend( ChannelSettingsMixin, {
 			later( onTimeout, livestreamerTimeout );
 		})
 			.finally( kill )
-			.then(function( version ) {
-				return version === getMax([ version, livestreamerVersionMin ])
-					? Promise.resolve( exec )
-					: Promise.reject( new VersionError( version ) );
+			.then(function({ name, version }) {
+				if ( !versionMin.hasOwnProperty( name ) ) {
+					throw new NotFoundError();
+				}
+
+				if ( version !== getMax([ version, versionMin[ name ] ]) ) {
+					throw new VersionError( version );
+				}
+
+				return exec;
 			});
 	},
 
