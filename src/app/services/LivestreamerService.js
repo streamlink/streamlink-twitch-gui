@@ -362,18 +362,21 @@ export default Service.extend( ChannelSettingsMixin, {
 		set( livestreamer, "spawn", spawn );
 
 
-		function onExit() {
+		function onExit( code ) {
 			// clear up some memory
 			set( livestreamer, "spawn", null );
 			spawn = null;
 
 			// quality has been changed
-			var currentQuality = get( livestreamer, "quality" );
+			let currentQuality = get( livestreamer, "quality" );
 			if ( quality !== currentQuality ) {
 				this.launchLivestreamer( livestreamer, false, exec );
 
-				// stream has been shut down regularly
 			} else {
+				if ( code !== 0 ) {
+					set( livestreamer, "error", true );
+					set( this, "error", new Error( `The process exited with code ${code}` ) );
+				}
 				this.onStreamShutdown( livestreamer );
 			}
 		}
