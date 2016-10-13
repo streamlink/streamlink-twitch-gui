@@ -1,6 +1,26 @@
 #!/bin/bash
 set -e
 
-ln -sf "<%= prefix %>/<%= exec %>" "/usr/bin/<%= exec %>"
-sed -i "s/CHECKNEWVERSIONS=true/CHECKNEWVERSIONS=false/g" "<%= prefix %>/start.sh"
-"<%= prefix %>/add-menuitem.sh"
+HERE="<%= prefix %>"
+EXEC="<%= exec %>"
+
+ln -sf "${HERE}/${EXEC}" "/usr/bin/${EXEC}"
+sed -i "s/CHECKNEWVERSIONS=true/CHECKNEWVERSIONS=false/g" "${HERE}/start.sh"
+"${HERE}/add-menuitem.sh"
+
+
+if ldd "${HERE}/${EXEC}" 2>&1 >/dev/null | grep "libudev.so.0 => not found"; then
+	if [ ! -e "${HERE}/libudev.so.0" ]; then
+		libpaths=(
+			"/lib/x86_64-linux-gnu"
+			"/lib/i386-linux-gnu"
+		)
+		for libpath in "${libpaths[@]}"; do
+			libpath="${libpath}/libudev.so.1"
+			if [ -f "${libpath}" ]; then
+				ln -sf "${libpath}" "${HERE}/libudev.so.0"
+				break
+			fi
+		done
+	fi
+fi
