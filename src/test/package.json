@@ -1,0 +1,21 @@
+{
+	"name": "livestreamer-twitch-gui-test",
+	"version": "0.0.1",
+
+	"main": "app://livestreamer-twitch-gui-test/index.html",
+
+	"window": {
+		"title": "Livestreamer Twitch GUI",
+		"frame": false,
+		"resizable": true,
+		"toolbar": false,
+		"show": false,
+		"position": "center",
+		"width": 960,
+		"height": 540,
+		"min_width": 960,
+		"min_height": 540,
+		"icon": "img/icon-256.png",
+		"show_in_taskbar": false
+	}
+}

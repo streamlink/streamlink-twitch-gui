@@ -177,11 +177,6 @@ module.exports = {
 				}
 			]),
 
-			// NW.js package.json
-			new CopyWebpackPlugin([
-				{ from: "package.json" }
-			]),
-
 			// don't include css stylesheets in the js bundle
 			cssExtractTextPlugin,
 			lessExtractTextPlugin,
@@ -210,6 +205,11 @@ module.exports = {
 		devtool: "source-map",
 
 		plugins: [
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: r( pRoot, "package.json" ) }
+			]),
+
 			new HtmlWebpackPlugin({
 				inject: "head",
 				hash: false,
@@ -262,6 +262,11 @@ module.exports = {
 		},
 
 		plugins: [
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: r( pRoot, "package.json" ) }
+			]),
+
 			new HtmlWebpackPlugin({
 				inject: "head",
 				hash: false,
@@ -326,9 +331,14 @@ module.exports = {
 			}
 		},
 
-		target: "web",
+		target: "node-webkit",
 
 		plugins: [
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: r( pTest, "package.json" ) }
+			]),
+
 			new HtmlWebpackPlugin({
 				inject: "body",
 				hash: false,
