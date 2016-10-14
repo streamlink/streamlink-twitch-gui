@@ -115,7 +115,7 @@ export default Service.extend({
 		let current = `v${version}`;
 
 		// no new release? check again in a few days
-		if ( current !== getMax([ current, latest ]) ) {
+		if ( current === getMax([ current, latest ]) ) {
 			return this.ignoreRelease();
 		}
 
