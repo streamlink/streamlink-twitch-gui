@@ -18,3 +18,7 @@ test:
     - "clean:tmp_test"
     - "webpack:test"
     - "runtest"
+testdev:
+    - "jshint:test"
+    - "clean:tmp_test"
+    - "webpack:testdev"
