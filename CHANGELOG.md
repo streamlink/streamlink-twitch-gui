@@ -1,6 +1,21 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Added initial support for Streamlink (in addition to Livestreamer).
+- Added another workaround for Livestreamer's broken quality selection. #323
+- Implemented custom Livestreamer quality presets (advanced settings).
+- Re-enabled filtering multiple stream languages. #151
+- Added option to choose between custom and default channel names.
+- Fixed stream popup closing unexpectedly sometimes.
+- Fixed subscriptions menu showing incorrect subscription times.
+- Upgraded to Ember/EmberData 2.8.
+
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.2...master)
+
+
 ## [v0.15.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.2) (2016-09-16)
 
 - Fixed InfiniteScrollMixin using invalid request offsets when refreshing or revisiting the same route. #314
