@@ -115,7 +115,7 @@ export default Controller.extend( RetryTransitionMixin, {
 			.map(function( code ) {
 				return {
 					id  : code,
-					lang: langs[ code ][ "lang" ].capitalize()
+					lang: langs[ code ][ "lang" ]
 				};
 			});
 	}),
