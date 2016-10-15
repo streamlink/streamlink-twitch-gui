@@ -4,10 +4,10 @@ module.exports = {
 	}),
 
 	dev: {
-		src: "build/tmp/dev/**"
+		src: "<%= dir.tmp_dev %>/**"
 	},
 
 	prod: {
-		src: "build/tmp/prod/**"
+		src: "<%= dir.tmp_prod %>/**"
 	}
 };

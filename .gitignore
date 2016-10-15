@@ -19,7 +19,8 @@ nbproject
 /bower_components/
 
 # builds
-/build/*
-!/build/tasks
-!/build/resources
+/build/cache/
+/build/releases/
+/build/package/
+/build/tmp/
 /dist/

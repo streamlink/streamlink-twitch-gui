@@ -1,17 +1,46 @@
 module.exports = {
-	options           : { force: true },
-	dist              : [ "dist/**", "!dist" ],
-	tmp               : [ "build/tmp/**", "!build/tmp", "!build/tmp/{dev,prod,test}" ],
-	tmp_dev           : [ "build/tmp/dev/**", "!build/tmp/dev" ],
-	tmp_prod          : [ "build/tmp/prod/**", "!build/tmp/prod" ],
-	tmp_test          : [ "build/tmp/test/**", "!build/tmp/test" ],
-	cache             : [ "build/cache/**", "!build/cache" ],
-	releases          : [ "build/releases/**", "!build/releases" ],
-	release_win32     : [ "build/releases/<%= package.name %>/win32/**" ],
-	release_win64     : [ "build/releases/<%= package.name %>/win64/**" ],
-	release_osx32     : [ "build/releases/<%= package.name %>/osx32/**" ],
-	release_osx64     : [ "build/releases/<%= package.name %>/osx64/**" ],
-	release_linux32   : [ "build/releases/<%= package.name %>/linux32/**" ],
-	release_linux64   : [ "build/releases/<%= package.name %>/linux64/**" ],
-	package_chocolatey: [ "build/package/chocolatey/**" ]
+	options: { force: true },
+
+	dist: [
+		"<%= dir.dist %>/**",
+		"!<%= dir.dist %>"
+	],
+
+	tmp: [
+		"<%= dir.tmp %>/**",
+		"!<%= dir.tmp %>",
+		"!<%= dir.tmp_dev %>",
+		"!<%= dir.tmp_prod %>",
+		"!<%= dir.tmp_test %>"
+	],
+	tmp_dev: [
+		"<%= dir.tmp_dev %>/**",
+		"!<%= dir.tmp_dev %>"
+	],
+	tmp_prod: [
+		"<%= dir.tmp_prod %>/**",
+		"!<%= dir.tmp_prod %>"
+	],
+	tmp_test: [
+		"<%= dir.tmp_test %>/**",
+		"!<%= dir.tmp_test %>"
+	],
+
+	cache: [
+		"<%= dir.cache %>/**",
+		"!<%= dir.cache %>"
+	],
+
+	releases: [
+		"<%= dir.releases %>/**",
+		"!<%= dir.releases %>"
+	],
+	release_win32: [ "<%= dir.releases %>/<%= package.name %>/win32/**" ],
+	release_win64: [ "<%= dir.releases %>/<%= package.name %>/win64/**" ],
+	release_osx32: [ "<%= dir.releases %>/<%= package.name %>/osx32/**" ],
+	release_osx64: [ "<%= dir.releases %>/<%= package.name %>/osx64/**" ],
+	release_linux32: [ "<%= dir.releases %>/<%= package.name %>/linux32/**" ],
+	release_linux64: [ "<%= dir.releases %>/<%= package.name %>/linux64/**" ],
+
+	package_chocolatey: [ "<%= dir.package %>/chocolatey/**" ]
 };
