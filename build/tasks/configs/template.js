@@ -19,5 +19,20 @@ module.exports = {
 			"<%= dir.package %>/chocolatey/tools/chocolateyuninstall.ps1":
 				"<%= dir.resources %>/package/chocolatey/tools/chocolateyuninstall.ps1.tpl"
 		}
+	},
+
+	"releases": {
+		"options": {
+			"data": {
+				"display_name": "<%= main['display-name'] %>",
+				"version": "<%= package.version %>",
+				"homepage": "<%= package.homepage %>",
+				"changelog": "<%= releases.changelog %>",
+				"donation": JSON.parse( process.env.RELEASES_DONATION || "[]" ) || []
+			}
+		},
+		"files": {
+			"<%= dir.travis %>/data/releases.md": "<%= dir.travis %>/templates/releases.md"
+		}
 	}
 };

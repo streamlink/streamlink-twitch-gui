@@ -1,4 +1,6 @@
 var platforms = require( "../common/platforms" );
+var getReleaseChangelog = require( "../common/release-changelog" );
+var changelogFile = require( "path" ).resolve( "CHANGELOG.md" );
 var config = require( "../configs/dist" );
 var configKeys = Object.keys( config )
 	.filter(function( item ) {
@@ -12,6 +14,8 @@ module.exports = function( grunt ) {
 		+ " Optional platforms: all:" + configKeys.join( ":" );
 
 	grunt.task.registerTask( task, descr, function() {
+		var done = this.async();
+
 		/** @type {string[]} target */
 		var targets = ( !this.args.length
 			// default target is an archive for the current platform
@@ -38,8 +42,9 @@ module.exports = function( grunt ) {
 			grunt.fail.fatal( "Invalid dist task parameters" );
 		}
 
+		var tasks = [];
 		// compile the application once for every given platform
-		grunt.task.run( targets
+		tasks.push.apply( tasks, targets
 			// unique
 			.reduce(function( list, target ) {
 				var platform = config[ target ].platform;
@@ -54,7 +59,7 @@ module.exports = function( grunt ) {
 		);
 
 		// run all "main" tasks
-		grunt.task.run( targets
+		tasks.push.apply( tasks, targets
 			// flatten
 			.reduce(function( list, target ) {
 				var tasks = config[ target ].tasks || [];
@@ -64,7 +69,7 @@ module.exports = function( grunt ) {
 		);
 
 		// run all "after" tasks
-		grunt.task.run( targets
+		tasks.push.apply( tasks, targets
 			// unique & flatten
 			.reduce(function( list, target ) {
 				var after = config[ target ].after || [];
@@ -82,7 +87,21 @@ module.exports = function( grunt ) {
 			return config[ target ].hasOwnProperty( "checksum" );
 		});
 		if ( checksumTargets.length ) {
-			grunt.task.run( "checksum:" + checksumTargets.join( ":" ) );
+			tasks.push( "checksum:" + checksumTargets.join( ":" ) );
 		}
+
+		// read changelog
+		getReleaseChangelog( { changelogFile: changelogFile }, grunt.config.get( "package" ) )
+			.then(function( data ) {
+				grunt.config.set( "releases", {
+					changelog: data
+				});
+				tasks.push( "template:releases" );
+			})
+			.then(function() {
+				// run all tasks
+				grunt.task.run( tasks );
+				done();
+			});
 	});
 };

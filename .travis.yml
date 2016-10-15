@@ -40,6 +40,11 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
+  - provider: script
+    script: node build/travis/update_release.js
+    skip_cleanup: true
+    on:
+      tags: true
 
 notifications:
   email: false
