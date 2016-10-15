@@ -1,9 +1,10 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
-## Master
+## [v0.16.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.16.0) (2016-10-15)
 
-- Added initial support for Streamlink (in addition to Livestreamer).
+- Added initial support for Streamlink (in addition to Livestreamer).  
+  See "The future of Livestreamer Twitch GUI" (#331) for more infos.
 - Added another workaround for Livestreamer's broken quality selection. #323
 - Implemented custom Livestreamer quality presets (advanced settings).
 - Re-enabled filtering multiple stream languages. #151
@@ -13,7 +14,7 @@ Changelog - Livestreamer Twitch GUI
 - Upgraded to Ember/EmberData 2.8.
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.2...master)
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.2...v0.16.0)
 
 
 ## [v0.15.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.2) (2016-09-16)
