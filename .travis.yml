@@ -37,8 +37,7 @@ before_deploy:
   - "sudo apt-get update -qq"
   - "sudo apt-get install -y wine > /dev/null"
   # compile the application and package it
-  # do everything the "dist" grunt task does, but don't build twice
-  - "grunt clean:dist compile:all compress checksum:all"
+  - "grunt clean:dist dist:all"
 
 deploy:
   - provider: releases
