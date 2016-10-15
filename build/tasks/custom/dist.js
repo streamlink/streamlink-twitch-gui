@@ -40,11 +40,9 @@ module.exports = function( grunt ) {
 
 		// compile the application once for every given platform
 		grunt.task.run( targets
-			.map(function( target ) {
-				return config[ target ].platform;
-			})
 			// unique
-			.reduce(function( list, platform ) {
+			.reduce(function( list, target ) {
+				var platform = config[ target ].platform;
 				if ( list.indexOf( platform ) === -1 ) {
 					list.push( platform );
 				}
@@ -55,19 +53,36 @@ module.exports = function( grunt ) {
 			})
 		);
 
-		// run all main tasks
+		// run all "main" tasks
 		grunt.task.run( targets
-			.map(function( target ) {
-				return config[ target ].tasks;
-			})
 			// flatten
-			.reduce(function( list, curr ) {
-				list.push.apply( list, curr || [] );
+			.reduce(function( list, target ) {
+				var tasks = config[ target ].tasks || [];
+				list.push.apply( list, tasks );
+				return list;
+			}, [] )
+		);
+
+		// run all "after" tasks
+		grunt.task.run( targets
+			// unique & flatten
+			.reduce(function( list, target ) {
+				var after = config[ target ].after || [];
+				after.forEach(function( task ) {
+					if ( list.indexOf( task ) === -1 ) {
+						list.push( task );
+					}
+				});
 				return list;
 			}, [] )
 		);
 
 		// checksum (explicit target list)
-		grunt.task.run( "checksum:" + targets.join( ":" ) );
+		var checksumTargets = targets.filter(function( target ) {
+			return config[ target ].hasOwnProperty( "checksum" );
+		});
+		if ( checksumTargets.length ) {
+			grunt.task.run( "checksum:" + checksumTargets.join( ":" ) );
+		}
 	});
 };

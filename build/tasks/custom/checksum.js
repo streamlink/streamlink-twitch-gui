@@ -5,6 +5,12 @@ var platforms = require( "../common/platforms" );
 var config = require( "../configs/dist" );
 
 
+function checkTarget( target ) {
+	return config.hasOwnProperty( target )
+	    && config[ target ].hasOwnProperty( "checksum" );
+}
+
+
 module.exports = function( grunt ) {
 	var name  = "checksum";
 	var descr = "Create a list of checksums. " + platforms.getList();
@@ -17,13 +23,13 @@ module.exports = function( grunt ) {
 		var targets = this.args;
 
 		// targets need to be set explicitly
-		if ( !targets.every( config.hasOwnProperty.bind( config ) ) ) {
+		if ( !targets.every( checkTarget ) ) {
 			grunt.fail.fatal( "Invalid dist task parameters" );
 		}
 
 		var promises = targets
 			.map(function( target ) {
-				return grunt.config.process( config[ target ].file );
+				return grunt.config.process( config[ target ].checksum );
 			})
 			.sort()
 			.map(function( file ) {
