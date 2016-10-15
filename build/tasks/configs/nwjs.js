@@ -1,14 +1,14 @@
 module.exports = {
 	options: {
-		files   : "build/tmp/prod/**",
-		buildDir: "build/releases",
-		cacheDir: "build/cache",
-		version : "<%= grunt.config('main.nwjs-version') %>",
-		winIco  : "build/resources/icons/icon-16-32-48-256.ico",
-		macIcns : "build/resources/icons/icon-1024.icns",
+		files   : "<%= dir.tmp_prod %>/**",
+		buildDir: "<%= dir.releases %>",
+		cacheDir: "<%= dir.cache %>",
+		version : "<%= main['nwjs-version'] %>",
+		winIco  : "<%= dir.resources %>/icons/icon-16-32-48-256.ico",
+		macIcns : "<%= dir.resources %>/icons/icon-1024.icns",
 		macPlist: {
-			CFBundleName       : "<%= grunt.config('main.display-name') %>",
-			CFBundleDisplayName: "<%= grunt.config('main.display-name') %>",
+			CFBundleName       : "<%= main['display-name'] %>",
+			CFBundleDisplayName: "<%= main['display-name'] %>",
 			LSEnvironment      : {
 				PATH: "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 			}

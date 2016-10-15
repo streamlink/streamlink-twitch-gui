@@ -2,7 +2,7 @@ module.exports = {
 	test: {
 		options: {
 			port: 8000,
-			base: "./build/tmp/test"
+			base: "<%= dir.tmp_test %>"
 		}
 	}
 };

@@ -12,12 +12,12 @@ module.exports = {
 			}
 		},
 		"files": {
-			"build/package/chocolatey/livestreamer-twitch-gui.nuspec":
-				["build/resources/package/chocolatey/livestreamer-twitch-gui.nuspec.tpl"],
-			"build/package/chocolatey/tools/chocolateyinstall.ps1":
-				["build/resources/package/chocolatey/tools/chocolateyinstall.ps1.tpl"],
-			"build/package/chocolatey/tools/chocolateyuninstall.ps1":
-				["build/resources/package/chocolatey/tools/chocolateyuninstall.ps1.tpl"]
+			"<%= dir.package %>/chocolatey/livestreamer-twitch-gui.nuspec":
+				"<%= dir.resources %>/package/chocolatey/livestreamer-twitch-gui.nuspec.tpl",
+			"<%= dir.package %>/chocolatey/tools/chocolateyinstall.ps1":
+				"<%= dir.resources %>/package/chocolatey/tools/chocolateyinstall.ps1.tpl",
+			"<%= dir.package %>/chocolatey/tools/chocolateyuninstall.ps1":
+				"<%= dir.resources %>/package/chocolatey/tools/chocolateyuninstall.ps1.tpl"
 		}
 	}
 };
