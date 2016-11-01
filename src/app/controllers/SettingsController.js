@@ -83,11 +83,14 @@ export default Controller.extend( RetryTransitionMixin, {
 		return presetList;
 	}),
 
-	playerPresetFields: computed( "model.player_preset", function() {
-		let preset = get( this, "model.player_preset" );
-		if ( !preset || !players.hasOwnProperty( preset ) ) { return []; }
-
-		return players[ preset ][ "params" ];
+	playerPresetFields: computed(function() {
+		return kPlayers.reduce(function( list, preset ) {
+			list.push( ...players[ preset ].params.map(function( param ) {
+				param.preset = preset;
+				return param;
+			}) );
+			return list;
+		}, [] );
 	}),
 
 

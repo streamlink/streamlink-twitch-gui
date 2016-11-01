@@ -22,31 +22,30 @@
 	}}
 {{/settings-row}}
 
-{{#unless (is-equal model.player_preset "")}}
-	{{#each playerPresetFields as |field|}}
-		{{#settings-row
-			field.title
-			field.description
-			icon=(if field.icon
-				field.icon
-				(get
-					(hash
-						boolean="fa-check"
-					)
-					field.type
+{{#each playerPresetFields as |field|}}
+	{{#settings-row
+		field.title
+		field.description
+		icon=(if field.icon
+			field.icon
+			(get
+				(hash
+					boolean="fa-check"
 				)
+				field.type
 			)
-			command=field.args
-		}}
-			{{#if (is-equal field.type "boolean")}}
-				{{check-box
-					(if field.text field.text field.title)
-					checked=(mut (get (get (get model.player model.player_preset) "params") field.name))
-				}}
-			{{/if}}
-		{{/settings-row}}
-	{{/each}}
-{{/unless}}
+		)
+		command=field.args
+		isVisible=(is-equal field.preset model.player_preset)
+	}}
+		{{#if (is-equal field.type "boolean")}}
+			{{check-box
+				(if field.text field.text field.title)
+				checked=(mut (get (get (get model.player model.player_preset) "params") field.name))
+			}}
+		{{/if}}
+	{{/settings-row}}
+{{/each}}
 
 {{#settings-row
 	(if (is-equal model.player_preset "default") "Parameters" "Custom parameters")
