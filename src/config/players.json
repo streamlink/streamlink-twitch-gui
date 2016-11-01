@@ -171,5 +171,23 @@
 				"args": "/play /close"
 			}
 		]
+	},
+	"potplayer": {
+		"name": "Daum PotPlayer",
+		"exec": {
+			"win32": [
+				"PotPlayerMini64.exe",
+				"PotPlayerMini.exe"
+			],
+			"darwin": false,
+			"linux": false
+		},
+		"fallback": {
+			"win32": [
+				"%PROGRAMFILES%\\DAUM\\PotPlayer",
+				"%PROGRAMFILES(X86)%\\DAUM\\PotPlayer"
+			]
+		},
+		"params": []
 	}
 }
