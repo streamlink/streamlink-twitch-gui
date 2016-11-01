@@ -7,6 +7,7 @@ import {
 	Controller
 } from "Ember";
 import {
+	players,
 	langs,
 	themes
 } from "config";
@@ -14,12 +15,16 @@ import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 import { playerSubstitutions } from "models/LivestreamerParameters";
 import qualities from "models/LivestreamerQualities";
 import Settings from "models/localstorage/Settings";
-import platform from "utils/node/platform";
+import platform, {
+	platform as platformName
+} from "utils/node/platform";
 
 
 const { alias, equal } = computed;
 const { service } = inject;
 const { themes: themesList } = themes;
+
+const kPlayers = Object.keys( players );
 
 
 function settingsAttrMeta( attr, prop ) {
@@ -56,6 +61,34 @@ export default Controller.extend( RetryTransitionMixin, {
 	retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
 	retryOpenMin    : settingsAttrMeta( "retry_open", "min" ),
 	retryOpenMax    : settingsAttrMeta( "retry_open", "max" ),
+
+	playerPresets: computed(function() {
+		let presetList = kPlayers
+			.filter(function( key ) {
+				return players[ key ][ "exec" ][ platformName ]
+				    && players[ key ][ "disabled" ] !== true;
+			})
+			.map(function( key ) {
+				return {
+					id: key,
+					label: players[ key ][ "name" ]
+				};
+			});
+
+		presetList.unshift({
+			id   : "default",
+			label: "No preset"
+		});
+
+		return presetList;
+	}),
+
+	playerPresetFields: computed( "model.player_preset", function() {
+		let preset = get( this, "model.player_preset" );
+		if ( !preset || !players.hasOwnProperty( preset ) ) { return []; }
+
+		return players[ preset ][ "params" ];
+	}),
 
 
 	substitutionsPlayer: playerSubstitutions,

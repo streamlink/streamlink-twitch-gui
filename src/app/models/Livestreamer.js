@@ -8,9 +8,14 @@ import {
 import {
 	attr,
 	belongsTo,
+	PromiseObject,
 	Model
 } from "EmberData";
 import { parameters } from "models/LivestreamerParameters";
+import {
+	getPlayerExec,
+	getPlayerParams
+} from "models/LivestreamerPlayerParameters";
 import qualities from "models/LivestreamerQualities";
 import Parameter from "utils/Parameter";
 import { twitch } from "config";
@@ -71,13 +76,23 @@ export default Model.extend({
 		this.kill();
 	}),
 
-	parameters: computed(function() {
-		return Parameter.getParameters(
-			this,
-			parameters,
-			get( this, "settings.advanced" )
-		);
-	}).volatile(),
+	getParameters() {
+		// wait for all parameter promises to resolve first
+		return Promise.all([
+			get( this, "playerExec.promise" )
+		])
+			.then( Parameter.getParameters.bind( null, this, parameters ) );
+	},
+
+	playerExec: computed( "settings.player", "settings.player_preset", function() {
+		return PromiseObject.create({
+			promise: getPlayerExec( get( this, "settings" ) )
+		});
+	}),
+
+	playerParams: computed( "settings.player", "settings.player_preset", function() {
+		return getPlayerParams( get( this, "settings" ) );
+	}),
 
 	streamquality: computed( "quality", "settings.quality_presets", function() {
 		let quality = get( this, "quality" );

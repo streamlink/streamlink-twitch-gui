@@ -42,31 +42,29 @@ Parameter.prototype.validate = function( context ) {
 
 /**
  * @param {Object} context
- * @param {boolean} advanced
  * @returns {(string|boolean)}
  */
-Parameter.prototype.getValue = function( context, advanced ) {
+Parameter.prototype.getValue = function( context ) {
 	if ( isNone( this.value ) ) { return false; }
 
-	var value = String( get( context, this.value ) );
-	return advanced && this.subst
+	let value = String( get( context, this.value ) );
+	return this.subst
 		? Substitution.substitute( context, this.subst, value, true )
 		: value;
 };
 
 /**
  * @param {Object} context
- * @param {boolean} advanced
  * @returns {string[]}
  */
-Parameter.prototype.get = function( context, advanced ) {
-	var res = [];
+Parameter.prototype.get = function( context ) {
+	let res = [];
 
 	if ( !isNone( this.name ) ) {
 		res.push( this.name );
 	}
 
-	var value = this.getValue( context, advanced );
+	let value = this.getValue( context );
 	if ( value !== false && value.length ) {
 		res.push( value );
 	}
@@ -79,10 +77,9 @@ Parameter.prototype.get = function( context, advanced ) {
  * Turn an array of parameters into an array of strings in context of an object
  * @param {Object} context
  * @param {Parameter[]} parameters
- * @param {boolean?} advanced
  * @returns {string[]}
  */
-Parameter.getParameters = function( context, parameters, advanced ) {
+Parameter.getParameters = function( context, parameters ) {
 	return parameters
 		// a parameter must fulfill every condition
 		.filter(function( parameter ) {
@@ -90,7 +87,7 @@ Parameter.getParameters = function( context, parameters, advanced ) {
 		})
 		// return a list of each parameter's name and its (substituted) value
 		.reduce(function( arr, parameter ) {
-			var params = parameter.get( context, advanced );
+			let params = parameter.get( context );
 			arr.push( ...makeArray( params ) );
 
 			return arr;

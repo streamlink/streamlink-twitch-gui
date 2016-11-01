@@ -159,6 +159,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			.then( this.checkLivestreamer.bind( this ) )
 			// and validate configuration
 			.then( this.validateLivestreamer.bind( this ) )
+			.then( this.getLivestreamerParameters.bind( this, livestreamer ) )
 			.then(
 				// launch the stream
 				this.launchLivestreamer.bind( this, livestreamer, true ),
@@ -332,33 +333,50 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	/**
+	 * Get the livestreamer parameter list
+	 * @param {Livestreamer} livestreamer
+	 * @param {String} exec
+	 * @returns {Promise.<String[]>}
+	 */
+	getLivestreamerParameters: function( livestreamer, exec ) {
+		return livestreamer.getParameters()
+			.then(function( params ) {
+				return [ exec, params ];
+			});
+	},
+
+
+	/**
 	 * Launch the stream
+	 * @param {Livestreamer} livestreamer
+	 * @param {Boolean} firstLaunch
+	 * @param {String} exec
+	 * @param {String} params
 	 * @returns {Promise}
 	 */
-	launchLivestreamer( livestreamer, firstLaunch, exec ) {
+	launchLivestreamer( livestreamer, firstLaunch, [ exec, params ] ) {
 		// in case the shutdown button was pressed before
 		if ( get( this, "abort" ) ) {
 			this.clearLivestreamer( livestreamer );
 			return Promise.reject();
 		}
 
+		let defer = RSVP.defer();
+
 		livestreamer.clearLog();
 		set( livestreamer, "success", false );
 		set( livestreamer, "warning", false );
 		set( this, "active", livestreamer );
 
-		var defer     = RSVP.defer();
-
-		var channel   = get( livestreamer, "channel.id" );
-		var quality   = get( livestreamer, "quality" );
-
-		// get the livestreamer parameter list and append stream url and quality
-		var params    = get( livestreamer, "parameters" );
-		params.push( twitchStreamUrl.replace( "{channel}", channel ) );
-		params.push( get( livestreamer, "streamquality" ) );
+		let spawnQuality = get( livestreamer, "quality" );
+		let parameters = [
+			...params,
+			twitchStreamUrl.replace( "{channel}", get( livestreamer, "channel.id" ) ),
+			get( livestreamer, "streamquality" )
+		];
 
 		// spawn the livestreamer process
-		var spawn = CP.spawn( exec, params, { detached: true } );
+		let spawn = CP.spawn( exec, parameters, { detached: true } );
 		set( livestreamer, "spawn", spawn );
 
 
@@ -369,8 +387,8 @@ export default Service.extend( ChannelSettingsMixin, {
 
 			// quality has been changed
 			let currentQuality = get( livestreamer, "quality" );
-			if ( quality !== currentQuality ) {
-				this.launchLivestreamer( livestreamer, false, exec );
+			if ( spawnQuality !== currentQuality ) {
+				this.launchLivestreamer( livestreamer, false, [ exec, params ] );
 
 			} else {
 				if ( code !== 0 ) {
