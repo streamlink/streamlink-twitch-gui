@@ -61,13 +61,13 @@ export const parameters = [
 	new Parameter(
 		"--player",
 		null,
-		"settings.player",
+		"playerExec.exec",
 		playerSubstitutions
 	),
 	new Parameter(
 		"--player-args",
-		[ "settings.advanced", "settings.player" ],
-		"settings.playerParamsCorrected",
+		null,
+		"playerParams",
 		playerSubstitutions
 	),
 	new Parameter(

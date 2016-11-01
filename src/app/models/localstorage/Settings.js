@@ -6,7 +6,10 @@ import {
 	attr,
 	Model
 } from "EmberData";
-import { langs } from "config";
+import {
+	players,
+	langs
+} from "config";
 import qualities from "models/LivestreamerQualities";
 import { isWin } from "utils/node/platform";
 
@@ -22,6 +25,34 @@ function defaultQualityPresets() {
 	}, {} );
 }
 
+function defaultPlayerData() {
+	return Object.keys( players )
+		.map(function( player ) {
+			let params = players[ player ][ "params" ]
+				.reduce(function( obj, param ) {
+					obj[ param.name ] = param.default;
+					return obj;
+				}, {} );
+
+			return {
+				key: player,
+				exec: "",
+				args: "",
+				params: params
+			};
+		})
+		.reduce( function( obj, player ) {
+			obj[ player.key ] = player;
+			delete player.key;
+			return obj;
+		}, {
+			"default": {
+				exec: "",
+				args: ""
+			}
+		} );
+}
+
 function defaultLangFilterValue() {
 	return langCodes.reduce(function( obj, code ) {
 		if ( !langs[ code ].disabled ) {
@@ -32,6 +63,9 @@ function defaultLangFilterValue() {
 }
 
 
+/**
+ * @class Settings
+ */
 export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
 	livestreamer        : attr( "string",  { defaultValue: "" } ),
@@ -39,8 +73,8 @@ export default Model.extend({
 	livestreamer_oauth  : attr( "boolean", { defaultValue: true } ),
 	quality             : attr( "string",  { defaultValue: "source" } ),
 	quality_presets     : attr( "",        { defaultValue: defaultQualityPresets } ),
-	player              : attr( "string",  { defaultValue: "" } ),
-	player_params       : attr( "string",  { defaultValue: "" } ),
+	player              : attr( "",        { defaultValue: defaultPlayerData } ),
+	player_preset       : attr( "string",  { defaultValue: "default" } ),
 	player_passthrough  : attr( "string",  { defaultValue: "http" } ),
 	player_reconnect    : attr( "boolean", { defaultValue: true } ),
 	player_no_close     : attr( "boolean", { defaultValue: false } ),
@@ -85,14 +119,6 @@ export default Model.extend({
 
 	isVisibleInTray: computed( "gui_integration", function() {
 		return ( get( this, "gui_integration" ) & 2 ) > 0;
-	}),
-
-	playerParamsCorrected: computed( "player_params", function() {
-		let params = get( this, "player_params" );
-
-		return params.length && params.indexOf( "{filename}" ) === -1
-			? `${params} {filename}`
-			: params;
 	})
 
 }).reopenClass({

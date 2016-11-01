@@ -245,12 +245,6 @@ test( "Substituted parameters", function( assert ) {
 	);
 
 	assert.deepEqual(
-		getParams( obj, [ param ], false ),
-		[ "--param", "{foo} \"{bar}\" \'{baz}\'" ],
-		"Disabled parameter value substitution"
-	);
-
-	assert.deepEqual(
 		getParams( obj, [ paramTitleA ], true ),
 		[ "--player-args", "--title \"foo's \\\"bar\\\" \\\\\"" ],
 		"Only escape double quote chars in double quote strings"

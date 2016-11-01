@@ -1,33 +1,72 @@
 <fieldset>
 {{#settings-row
-	"Videoplayer"
-	"Path to the player executable."
+	"Player preset"
+	"Use a predefined player configuration."
+	icon="fa-play-circle-o"
+}}
+	{{drop-down value=model.player_preset content=playerPresets class="player-preset-dropdown"}}
+{{/settings-row}}
+
+{{#settings-row
+	(if (is-equal model.player_preset "default") "Video player" "Player executable")
+	"Path to the player executable or its name if it can be found in $PATH."
 	icon="fa-tv"
 	documentation="--player"
 	substitutions=(if model.advanced substitutionsPlayer)
 	notes=(if model.advanced "Parameters can be added here, but should be set in the parameters field instead.")
 }}
-	{{file-select value=model.player inputClass="form-control" placeholder="Leave blank for default player"}}
+	{{file-select
+		value=(mut (get (get model.player model.player_preset) "exec"))
+		inputClass="form-control"
+		placeholder=(if (is-equal model.player_preset "default") "Leave blank for default player" "Leave blank for default location")
+	}}
 {{/settings-row}}
 
-{{#if model.advanced}}
+{{#each playerPresetFields as |field|}}
 	{{#settings-row
-		"Parameters"
-		"Add player specific parameters."
-		icon="fa-terminal"
-		documentation="--player-args"
-		substitutions=substitutionsPlayer
+		field.title
+		field.description
+		icon=(if field.icon
+			field.icon
+			(get
+				(hash
+					boolean="fa-check"
+				)
+				field.type
+			)
+		)
+		command=field.args
+		isVisible=(is-equal field.preset model.player_preset)
 	}}
-		{{input type="text" value=model.player_params classNames="col-xs-12" placeholder="Add custom player parameters"}}
+		{{#if (is-equal field.type "boolean")}}
+			{{check-box
+				(if field.text field.text field.title)
+				checked=(mut (get (get (get model.player model.player_preset) "params") field.name))
+			}}
+		{{/if}}
 	{{/settings-row}}
-{{/if}}
+{{/each}}
 
 {{#settings-row
-	"Close player"
+	(if (is-equal model.player_preset "default") "Parameters" "Custom parameters")
+	(if (is-equal model.player_preset "default") "Add player specific parameters." "Set additional custom player parameters.")
+	icon="fa-terminal"
+	documentation="--player-args"
+	substitutions=substitutionsPlayer
+}}
+	{{input
+		type="text"
+		classNames="col-xs-12"
+		value=(mut (get (get model.player model.player_preset) "args"))
+		placeholder="Add custom player parameters"
+	}}
+{{/settings-row}}
+
+{{#settings-row
+	"Keep player window"
 	"After the stream has ended."
-	icon="fa-times"
+	icon="fa-caret-square-o-right"
 	documentation="--player-no-close"
-	notes="The player itself may prevent this."
 }}
 	{{check-box "Do not close the player" checked=model.player_no_close}}
 {{/settings-row}}
