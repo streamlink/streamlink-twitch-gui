@@ -7,16 +7,55 @@ import {
 	Model
 } from "EmberData";
 import {
+	streamprovider,
 	players,
 	langs
 } from "config";
 import qualities from "models/LivestreamerQualities";
-import { isWin } from "utils/node/platform";
+import {
+	platform as platformName,
+	isWin
+} from "utils/node/platform";
 
 
+const {
+	providers,
+	"default-provider": defaultProvider,
+} = streamprovider;
 const langCodes = Object.keys( langs );
 
 
+
+function defaultStreamprovider() {
+	let supported = Object.keys( providers )
+		.filter(function( provider ) {
+			return providers[ provider ][ "exec" ][ platformName ];
+		});
+
+	let indexDefault = supported.indexOf( defaultProvider );
+	if ( indexDefault !== -1 ) {
+		return supported[ indexDefault ];
+	}
+
+	return supported[0] || defaultProvider;
+}
+
+function defaultStreamproviders() {
+	return Object.keys( providers )
+		.reduce(function( obj, provider ) {
+			let execObj = providers[ provider ];
+
+			let item = {};
+			item.exec = "";
+			if ( execObj[ "python" ] ) {
+				item.pythonscript = "";
+			}
+
+			obj[ provider ] = item;
+
+			return obj;
+		}, {} );
+}
 
 function defaultQualityPresets() {
 	return qualities.reduce(function( obj, quality ) {
@@ -68,7 +107,8 @@ function defaultLangFilterValue() {
  */
 export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
-	livestreamer        : attr( "string",  { defaultValue: "" } ),
+	streamprovider      : attr( "string",  { defaultValue: defaultStreamprovider } ),
+	streamproviders     : attr( "",        { defaultValue: defaultStreamproviders } ),
 	livestreamer_params : attr( "string",  { defaultValue: "" } ),
 	livestreamer_oauth  : attr( "boolean", { defaultValue: true } ),
 	quality             : attr( "string",  { defaultValue: "source" } ),
