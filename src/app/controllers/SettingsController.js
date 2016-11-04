@@ -15,9 +15,7 @@ import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 import { playerSubstitutions } from "models/LivestreamerParameters";
 import qualities from "models/LivestreamerQualities";
 import Settings from "models/localstorage/Settings";
-import platform, {
-	platform as platformName
-} from "utils/node/platform";
+import * as platform from "utils/node/platform";
 
 
 const { alias, equal } = computed;
@@ -65,7 +63,7 @@ export default Controller.extend( RetryTransitionMixin, {
 	playerPresets: computed(function() {
 		let presetList = kPlayers
 			.filter(function( key ) {
-				return players[ key ][ "exec" ][ platformName ]
+				return players[ key ][ "exec" ][ platform.platform ]
 				    && players[ key ][ "disabled" ] !== true;
 			})
 			.map(function( key ) {
