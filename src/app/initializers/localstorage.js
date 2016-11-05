@@ -1,4 +1,7 @@
-import { langs } from "config";
+import {
+	players,
+	langs
+} from "config";
 import qualities from "models/LivestreamerQualities";
 
 
@@ -37,6 +40,42 @@ function upgradeSettings() {
 
 	if ( settings.gui_homepage === "/user/following" ) {
 		settings.gui_homepage = "/user/followedStreams";
+	}
+
+	// translate old livestreamer data into the executable format
+	if ( typeof settings.livestreamer === "string" ) {
+		delete settings[ "livestreamer" ];
+	}
+
+	// translate old player data into the player presets format
+	if ( typeof settings.player === "string" ) {
+		settings.player = {
+			"default": {
+				"exec": settings[ "player" ] || "",
+				"args": settings[ "player_params" ] || ""
+			}
+		};
+		delete settings[ "player_params" ];
+	}
+
+	// make sure that default player params are set/updated once a new one gets added
+	if ( typeof settings.player === "object" ) {
+		Object.keys( players ).forEach(function( name ) {
+			if ( !settings.player.hasOwnProperty( name ) ) {
+				settings.player[ name ] = {
+					"exec": "",
+					"args": "",
+					"params": {}
+				};
+			}
+			let playerParams = settings.player[ name ].params;
+			// iterate player preset params
+			players[ name ].params.forEach(function( param ) {
+				// don't overwrite already existing values
+				if ( playerParams.hasOwnProperty( param.name ) ) { return; }
+				playerParams[ param.name ] = param.default;
+			});
+		});
 	}
 
 	var renamedProps = {

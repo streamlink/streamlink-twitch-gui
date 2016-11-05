@@ -17,5 +17,8 @@ test:
     - "jshint:test"
     - "clean:tmp_test"
     - "webpack:test"
-    - "connect:test"
-    - "qunit"
+    - "runtest"
+testdev:
+    - "jshint:test"
+    - "clean:tmp_test"
+    - "webpack:testdev"

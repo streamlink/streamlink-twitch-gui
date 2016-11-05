@@ -5,7 +5,7 @@ import {
 	inject,
 	run
 } from "Ember";
-import { livestreamer } from "config";
+import { streamprovider } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import qualities from "models/LivestreamerQualities";
 import { openBrowser } from "nwjs/Shell";
@@ -16,13 +16,15 @@ const { readOnly } = computed;
 const { service } = inject;
 const { schedule } = run;
 const {
-	"download-url": livestreamerDownloadUrl,
+	providers,
+	"download-url": downloadUrl,
 	"version-min": versionMin
-} = livestreamer;
+} = streamprovider;
 
 
 export default ModalDialogComponent.extend({
 	livestreamer: service(),
+	settings: service(),
 
 	layout,
 
@@ -32,13 +34,27 @@ export default ModalDialogComponent.extend({
 	active: readOnly( "livestreamer.active" ),
 
 	qualities,
-	versionMin,
+	versionMin: computed( "settings.streamprovider", function() {
+		let streamprovider = get( this, "settings.streamprovider" );
+		let type = providers[ streamprovider ][ "type" ];
+
+		return versionMin[ type ];
+	}),
+
+	providername: computed( "settings.streamprovider", function() {
+		let streamprovider = get( this, "settings.streamprovider" );
+
+		return providers[ streamprovider ][ "name" ];
+	}),
 
 
 	actions: {
 		download( success ) {
-			if ( livestreamerDownloadUrl ) {
-				openBrowser( livestreamerDownloadUrl );
+			let streamprovider = get( this, "settings.streamprovider" );
+			let provider = providers[ streamprovider ][ "type" ];
+
+			if ( downloadUrl[ provider ] ) {
+				openBrowser( downloadUrl[ provider ] );
 				if ( success instanceof Function ) {
 					success();
 				}

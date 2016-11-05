@@ -1,33 +1,38 @@
 import {
 	get,
-	computed
+	computed,
+	inject
 } from "Ember";
-import { livestreamer } from "config";
+import { streamprovider } from "config";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";
 
 
-const { "docs-url": livestreamerDocsUrl } = livestreamer;
+const { service } = inject;
+const {
+	providers,
+	"docs-url": docsUrl
+} = streamprovider;
 
 
 export default ExternalLinkComponent.extend({
 	layout,
 
-	// default baseUrl is the livestreamer docs url
-	baseUrl: livestreamerDocsUrl,
+	settings: service(),
+
+	// default baseUrl
+	baseUrl: computed( "settings.streamprovider", function() {
+		let streamprovider = get( this, "settings.streamprovider" );
+		let type = providers[ streamprovider ].type;
+
+		return docsUrl[ type ];
+	}),
 
 	tagName: "span",
 	classNameBindings: [ ":documentation-link-component", "url:with-url" ],
 	attributeBindings: [ "title" ],
 
-	title: computed( "baseUrl", "url", function() {
-		return get( this, "url" )
-			// keep default behavior
-			? get( this, "baseUrl" ) === livestreamerDocsUrl
-				? "Read the documentation of this livestreamer parameter"
-				: "Read the documentation in your web browser"
-			: "";
-	}),
+	title: "Read the documentation in your web browser",
 
 	url: computed( "baseUrl", "item", function() {
 		var baseUrl = get( this, "baseUrl" );

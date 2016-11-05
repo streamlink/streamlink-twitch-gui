@@ -2,7 +2,13 @@ var CRYPTO = require( "crypto" );
 var FS = require( "fs" );
 var PATH = require( "path" );
 var platforms = require( "../common/platforms" );
-var config = require( "../configs/checksum" );
+var config = require( "../configs/dist" );
+
+
+function checkTarget( target ) {
+	return config.hasOwnProperty( target )
+	    && config[ target ].hasOwnProperty( "checksum" );
+}
 
 
 module.exports = function( grunt ) {
@@ -13,11 +19,20 @@ module.exports = function( grunt ) {
 		var done = this.async();
 		var options = this.options();
 
-		var promises = platforms.getPlatforms( arguments )
-			.sort()
-			.map(function( platform ) {
-				var file = grunt.config.process( config[ platform ].src );
+		/** @type {string[]} target */
+		var targets = this.args;
 
+		// targets need to be set explicitly
+		if ( !targets.every( checkTarget ) ) {
+			grunt.fail.fatal( "Invalid dist task parameters" );
+		}
+
+		var promises = targets
+			.map(function( target ) {
+				return grunt.config.process( config[ target ].checksum );
+			})
+			.sort()
+			.map(function( file ) {
 				return new Promise(function( resolve, reject ) {
 					var hash = CRYPTO.createHash( options.algorithm );
 					hash.setEncoding( options.encoding );

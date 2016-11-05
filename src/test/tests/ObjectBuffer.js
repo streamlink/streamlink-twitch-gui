@@ -349,3 +349,39 @@ test( "Nested ObjectBuffer", function( assert ) {
 	);
 
 });
+
+
+test( "ObjectBuffer with same nested objects", function( assert ) {
+
+	let contentInnerInner = {
+		"baz": "qux"
+	};
+	let contentInner = {
+		"bar": contentInnerInner
+	};
+	let contentOuter = {
+		"foo": contentInner
+	};
+	let buffer = ObjectBuffer.create({
+		content: contentOuter
+	});
+
+	set( buffer, "foo.bar.baz", "foo" );
+	buffer.applyChanges();
+
+	assert.ok(
+		contentOuter.foo.bar === contentInnerInner,
+		"Nested object references are not changed"
+	);
+
+	assert.ok(
+		buffer.getContent() === contentOuter,
+		"getOutput() returns the original object"
+	);
+
+	assert.ok(
+		buffer.getContent()[ "foo" ][ "bar" ][ "baz" ] === "foo",
+		"Nested objects of the original object have been updated"
+	);
+
+});

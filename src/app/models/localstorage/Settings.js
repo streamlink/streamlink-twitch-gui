@@ -6,20 +6,90 @@ import {
 	attr,
 	Model
 } from "EmberData";
-import { langs } from "config";
+import {
+	streamprovider,
+	players,
+	langs
+} from "config";
 import qualities from "models/LivestreamerQualities";
-import { isWin } from "utils/node/platform";
+import {
+	platform as platformName,
+	isWin
+} from "utils/node/platform";
 
 
+const {
+	providers,
+	"default-provider": defaultProvider,
+} = streamprovider;
 const langCodes = Object.keys( langs );
 
 
+
+function defaultStreamprovider() {
+	let supported = Object.keys( providers )
+		.filter(function( provider ) {
+			return providers[ provider ][ "exec" ][ platformName ];
+		});
+
+	let indexDefault = supported.indexOf( defaultProvider );
+	if ( indexDefault !== -1 ) {
+		return supported[ indexDefault ];
+	}
+
+	return supported[0] || defaultProvider;
+}
+
+function defaultStreamproviders() {
+	return Object.keys( providers )
+		.reduce(function( obj, provider ) {
+			let execObj = providers[ provider ];
+
+			let item = {};
+			item.exec = "";
+			if ( execObj[ "python" ] ) {
+				item.pythonscript = "";
+			}
+
+			obj[ provider ] = item;
+
+			return obj;
+		}, {} );
+}
 
 function defaultQualityPresets() {
 	return qualities.reduce(function( obj, quality ) {
 		obj[ quality.id ] = "";
 		return obj;
 	}, {} );
+}
+
+function defaultPlayerData() {
+	return Object.keys( players )
+		.map(function( player ) {
+			let params = players[ player ][ "params" ]
+				.reduce(function( obj, param ) {
+					obj[ param.name ] = param.default;
+					return obj;
+				}, {} );
+
+			return {
+				key: player,
+				exec: "",
+				args: "",
+				params: params
+			};
+		})
+		.reduce( function( obj, player ) {
+			obj[ player.key ] = player;
+			delete player.key;
+			return obj;
+		}, {
+			"default": {
+				exec: "",
+				args: ""
+			}
+		} );
 }
 
 function defaultLangFilterValue() {
@@ -32,15 +102,19 @@ function defaultLangFilterValue() {
 }
 
 
+/**
+ * @class Settings
+ */
 export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
-	livestreamer        : attr( "string",  { defaultValue: "" } ),
+	streamprovider      : attr( "string",  { defaultValue: defaultStreamprovider } ),
+	streamproviders     : attr( "",        { defaultValue: defaultStreamproviders } ),
 	livestreamer_params : attr( "string",  { defaultValue: "" } ),
 	livestreamer_oauth  : attr( "boolean", { defaultValue: true } ),
 	quality             : attr( "string",  { defaultValue: "source" } ),
 	quality_presets     : attr( "",        { defaultValue: defaultQualityPresets } ),
-	player              : attr( "string",  { defaultValue: "" } ),
-	player_params       : attr( "string",  { defaultValue: "" } ),
+	player              : attr( "",        { defaultValue: defaultPlayerData } ),
+	player_preset       : attr( "string",  { defaultValue: "default" } ),
 	player_passthrough  : attr( "string",  { defaultValue: "http" } ),
 	player_reconnect    : attr( "boolean", { defaultValue: true } ),
 	player_no_close     : attr( "boolean", { defaultValue: false } ),
@@ -85,14 +159,6 @@ export default Model.extend({
 
 	isVisibleInTray: computed( "gui_integration", function() {
 		return ( get( this, "gui_integration" ) & 2 ) > 0;
-	}),
-
-	playerParamsCorrected: computed( "player_params", function() {
-		let params = get( this, "player_params" );
-
-		return params.length && params.indexOf( "{filename}" ) === -1
-			? `${params} {filename}`
-			: params;
 	})
 
 }).reopenClass({

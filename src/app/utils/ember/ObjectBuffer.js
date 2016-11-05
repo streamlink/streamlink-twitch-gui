@@ -34,16 +34,25 @@ const ObjectBuffer = ObjectProxy.extend({
 
 		this.addObserver( "_hasChanges", this, checkDirty );
 
-		var content = this.content;
-		Object.keys( content ).forEach(function( key ) {
-			var obj = content[ key ];
-			// don't create buffers of primitives
-			if ( !( obj instanceof Object ) ) { return; }
+		// the original object
+		let original = this._original = this.content;
+		// the content object with bindings, etc...
+		let content = this.content = {};
+
+		// populate content object
+		Object.keys( original ).forEach(function( key ) {
+			let obj = original[ key ];
+
+			// set primitives
+			if ( !( obj instanceof Object ) ) {
+				content[ key ] = obj;
+				return;
+			}
 			// don't create buffers of buffers
 			if ( obj instanceof ObjectBuffer ) { return; }
 
-			var childBuffer = ObjectBuffer.create({ content: obj });
-			content[ key ] = childBuffer;
+			// create a child buffer for nested objects
+			let childBuffer = ObjectBuffer.create({ content: obj });
 			set( this._children, key, childBuffer );
 
 			this.addObserver( `_children.${key}.isDirty`, this, checkDirty );
@@ -53,10 +62,17 @@ const ObjectBuffer = ObjectProxy.extend({
 	},
 
 	unknownProperty( key ) {
-		var buffer = this._buffer;
+		let buffer = this._buffer;
+		let children = this._children;
+
+		// look for properties in the buffer first
 		return buffer && buffer.hasOwnProperty( key )
 			? buffer[ key ]
-			: get( this, `content.${key}` );
+			// then try child buffers
+			: children && children.hasOwnProperty( key )
+				? children[ key ]
+				// finally look up the content property
+				: get( this, `content.${key}` );
 	},
 
 	setUnknownProperty( key, value ) {
@@ -90,14 +106,17 @@ const ObjectBuffer = ObjectProxy.extend({
 	applyChanges() {
 		var buffer   = this._buffer;
 		var children = this._children;
+		var original = this._original;
 		var content  = this.content;
 
 		Object.keys( children ).forEach(function( key ) {
 			children[ key ].applyChanges();
 		});
 
+		// update both content and original objects
 		Object.keys( buffer ).forEach(function( key ) {
 			set( content, key, buffer[ key ] );
+			set( original, key, buffer[ key ] );
 		});
 
 		this._buffer = {};
@@ -126,14 +145,8 @@ const ObjectBuffer = ObjectProxy.extend({
 	},
 
 	getContent() {
-		var content  = this.content;
-		var children = this._children;
-		return Object.keys( content ).reduce(function( obj, key ) {
-			obj[ key ] = children.hasOwnProperty( key )
-				? children[ key ].getContent()
-				: content[ key ];
-			return obj;
-		}, {} );
+		// return the original object
+		return this._original;
 	}
 });
 

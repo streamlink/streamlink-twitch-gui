@@ -3,7 +3,7 @@ module.exports = {
 		options: {
 			jshintrc: "src/.jshintrc"
 		},
-		src    : [ "src/**/*.js", "!src/vendor/**", "!src/test/**" ]
+		src    : [ "src/**/*.js", "!src/test/**" ]
 	},
 
 	test: {

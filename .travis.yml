@@ -28,24 +28,20 @@ install:
 
 script:
   # test and build
-  - "grunt build:prod"
-
-before_deploy:
-  # travis "ubuntu trusty" workaround for wine
-  # wine is only needed for compiling the application (nw-builder)
-  - "sudo dpkg --add-architecture i386"
-  - "sudo apt-get update -qq"
-  - "sudo apt-get install -y wine > /dev/null"
-  # compile the application and package it
-  # do everything the "dist" grunt task does, but don't build twice
-  - "grunt clean:dist compile:all compress checksum:all"
+  - grunt build:prod
+  # compile and package
+  - if [ -n "${TRAVIS_TAG}" ]; then build/travis/package.sh; fi
 
 deploy:
   - provider: releases
-    api_key:
-      secure: "E4l/St08epvsX1NWYN3DI8dyHNus8kV8jqgu6/qK1QMqcORVeAl8Mto84QKGtOujDIo2nEHyxcPn+adbzsuYjKCNinFoc4+UWnvpwQtkHEC7dvZC54fpK86oSQfO0eHrnyjh6KCFf6cYqO2ClEcuFvKe/mTC2Z37xhs59mDF/ME+bA9MoccB13nfVA1aOHOx5QIAC56y6ZQoN0+w0sK9oZIEV3K+L3B7pNuhiSJ97IbPEy5kQMGxRcOazKlx7tkNzzWGBR3b1uwUK8UPBGH1fE66/ZGUxVGY3dHUlec2ZmuOPHMktQUgIiCxUod7D01fRgxjmrJizVNi2X/OQkloOMjb9ZuzAJg2NkEyAVlJ0dcg19j0aG7o0mzZl5UDSV6JhXe4xvaQQ+VBBR6GRs9FZ94YL+BrAAJB+er6c/H5zjK4AMlOhhc7zYJIMNQyDhU5CwkXRpsdGptgtT8Tzpxwpn0TsC4+tqIb5zpFsqKsKXgkwBHoVniPNqeYdl3fmFWGqCtWnpKwBPTly3DZjFMQcBspy48byFadASbCfVG50mUi/Mtv/tQ51suG8B+G3GDvL4MZmAdPyhcgo29tLEiYEqCmoW2P/HyyDgwZ0x0zuBBDcuvS6p3BFwCjxSA3Jl+rLR50A7rgCXB2p9uFLZpOGRQ3se8tOEUqNuEy77fwXwk="
-    file: "dist/*"
+    api_key: "${RELEASES_API_KEY}"
+    file: dist/*{.tar.gz,.zip,-checksums.txt}
     file_glob: true
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: script
+    script: node build/travis/update_release.js
     skip_cleanup: true
     on:
       tags: true
@@ -54,7 +50,7 @@ notifications:
   email: false
   webhooks:
     urls:
-      - secure: "O3IQ/tbaIl7o2wdKjEBTuTZK8qYUQ+slscmV4ZQGeWWuwyEw6CoMEsspN/K4mFzhq7yupyBzeqpWydh5ekTjAqRFI8aJXOq7C1d1kahQskQ8cikqtFqr+cbwH9MLNjE6vZxQLDWHb97L3aQVau7JmwQ+HvvhQVmXcvCOvupA5WAOfBmHWIHpwuUSkPy77TOiK/4fBUPGOA4k3ChA2Z6bgCojw2SLqvIY6SyWHYm48xyNVeWEulZzaRYkzvbCz6dUH+Py4P5P6phrTw/o6xZ3x0gYl8bNs/yKarUc1k1S8ZUAqlzXcsbQaWnV/efe2O7TeV7N957VqzL1/Xk8zTIdq/LW4F1fBESM6u7i/ELLVNjecsGYPSGq4uWATojdOz/96Pne7NHkTiJaG1+I2pJasURScUkGxGwfJcgUcpF0Um3ed5kWJmPnC1aYolle7QseutyvllpJ83pCUdKaxrGPxu5nJEOzYoFT6iiLdJGC6t2CTNguOFoXUxwFkpEet/ORfmn0/o0xzC91u3wqJPaFKNI55086sL/TfzdW3HFuBgboL3fvNc5VkhPEX0LTvwH+Qx3QBBefUc3GT1GL3+rFH27kxnpU/qMWnMggvJQILdFpKjrTs8/AHobORMJ+S/ypzsyMQZO3O50qK035FJSbTk2q96EOm+SenLskUo11pEo="
+      - "${WEBHOOK_GITTER}"
     on_success: change
     on_failure: always
     on_start: never

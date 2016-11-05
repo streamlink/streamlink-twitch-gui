@@ -7,6 +7,8 @@ import {
 	Controller
 } from "Ember";
 import {
+	streamprovider,
+	players,
 	langs,
 	themes
 } from "config";
@@ -14,12 +16,16 @@ import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 import { playerSubstitutions } from "models/LivestreamerParameters";
 import qualities from "models/LivestreamerQualities";
 import Settings from "models/localstorage/Settings";
-import platform from "utils/node/platform";
+import * as platform from "utils/node/platform";
+import { delimiter } from "path";
 
 
 const { alias, equal } = computed;
 const { service } = inject;
+const { providers } = streamprovider;
 const { themes: themesList } = themes;
+
+const kPlayers = Object.keys( players );
 
 
 function settingsAttrMeta( attr, prop ) {
@@ -56,6 +62,69 @@ export default Controller.extend( RetryTransitionMixin, {
 	retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
 	retryOpenMin    : settingsAttrMeta( "retry_open", "min" ),
 	retryOpenMax    : settingsAttrMeta( "retry_open", "max" ),
+
+	streamproviders: providers,
+	streamprovidersDropDown: computed(function() {
+		return Object.keys( providers )
+			.filter(function( key ) {
+				// exclude unsupported providers
+				return providers[ key ][ "exec" ][ platform.platform ];
+			})
+			.map(function( key ) {
+				return {
+					id: key,
+					label: providers[ key ][ "label" ]
+				};
+			});
+	}),
+
+	players,
+	playerPresets: computed(function() {
+		let presetList = kPlayers
+			.filter(function( key ) {
+				return players[ key ][ "exec" ][ platform.platform ]
+				    && players[ key ][ "disabled" ] !== true;
+			})
+			.map(function( key ) {
+				return {
+					id: key,
+					label: players[ key ][ "name" ]
+				};
+			});
+
+		presetList.unshift({
+			id   : "default",
+			label: "No preset"
+		});
+
+		return presetList;
+	}),
+
+	playerPlaceholder: computed( "model.player_preset", function() {
+		let preset = get( this, "model.player_preset" );
+		if ( preset === "default" || !players[ preset ] ) {
+			return "Leave blank for default player";
+		}
+		let exec = players[ preset ][ "exec" ][ platform.platform ];
+		if ( !exec ) {
+			return "Leave blank for default location";
+		}
+		if ( Array.isArray( exec ) ) {
+			exec = exec.join( `${delimiter} ` );
+		}
+		return exec;
+	}),
+
+	playerPresetDefaultAndPlayerEmpty: computed(
+		"model.player_preset",
+		"model.player.default.exec",
+		function() {
+			let preset = get( this, "model.player_preset" );
+			let player = get( this, "model.player" );
+
+			return preset === "default" && !get( player, "default.exec" );
+		}
+	),
 
 
 	substitutionsPlayer: playerSubstitutions,
@@ -115,7 +184,7 @@ export default Controller.extend( RetryTransitionMixin, {
 			.map(function( code ) {
 				return {
 					id  : code,
-					lang: langs[ code ][ "lang" ].capitalize()
+					lang: langs[ code ][ "lang" ]
 				};
 			});
 	}),

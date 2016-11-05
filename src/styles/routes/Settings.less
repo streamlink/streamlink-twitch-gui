@@ -92,15 +92,31 @@
 	}
 
 	.quality-preset {
-		display: flex;
 		margin-bottom: .5rem;
 
-		> div {
-			flex: 0 0 6rem;
-			line-height: 2rem;
+		.btn {
+			width: 6rem;
+			cursor: default;
 		}
-		> input {
-			flex: 1 0 auto;
+	}
+
+	.player-preset-dropdown {
+		max-width: 20rem;
+	}
+
+	.streamproviders-dropdown {
+		max-width: 15rem;
+		margin-bottom: 1rem !important;
+	}
+
+	.streamproviders-list {
+		> dt {
+			font-size: small;
+			margin-bottom: .125rem;
+		}
+
+		> dd:not(:last-of-type) {
+			margin-bottom: 1rem;
 		}
 	}
 }

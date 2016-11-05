@@ -22,9 +22,6 @@ var pImages = r( pRoot, "img" );
 var pTemplates = r( pRoot, "templates" );
 var pModulesBower = r( ".", "bower_components" );
 var pModulesNpm = r( ".", "node_modules" );
-var pBuildDev = r( ".", "build", "tmp", "dev" );
-var pBuildProd = r( ".", "build", "tmp", "prod" );
-var pBuildTest = r( ".", "build", "tmp", "test" );
 
 
 // exclude modules/files from the js bundle
@@ -111,7 +108,8 @@ module.exports = {
 							"babel-plugin-transform-es2015-destructuring",
 							"babel-plugin-transform-es2015-computed-properties",
 							"babel-plugin-transform-es2015-template-literals",
-							"babel-plugin-transform-es2015-spread"
+							"babel-plugin-transform-es2015-spread",
+							"babel-plugin-transform-es2015-parameters"
 						],
 						cacheDirectory: r( OS.tmpdir(), "babel-cache" )
 					}
@@ -179,11 +177,6 @@ module.exports = {
 				}
 			]),
 
-			// NW.js package.json
-			new CopyWebpackPlugin([
-				{ from: "package.json" }
-			]),
-
 			// don't include css stylesheets in the js bundle
 			cssExtractTextPlugin,
 			lessExtractTextPlugin,
@@ -201,7 +194,7 @@ module.exports = {
 
 	dev: {
 		output: {
-			path: pBuildDev
+			path: "<%= dir.tmp_dev %>"
 		},
 
 		resolve: {
@@ -212,6 +205,11 @@ module.exports = {
 		devtool: "source-map",
 
 		plugins: [
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: r( pRoot, "package.json" ) }
+			]),
+
 			new HtmlWebpackPlugin({
 				inject: "head",
 				hash: false,
@@ -223,7 +221,7 @@ module.exports = {
 			}),
 
 			new NwjsPlugin({
-				files: r( pBuildDev, "**" ),
+				files: "<%= dir.tmp_dev %>/**",
 				argv: "--remote-debugging-port=8888",
 				rerunOnExit: true,
 				log: true,
@@ -240,7 +238,7 @@ module.exports = {
 
 	prod: {
 		output: {
-			path: pBuildProd
+			path: "<%= dir.tmp_prod %>"
 		},
 
 		resolve: {
@@ -264,6 +262,11 @@ module.exports = {
 		},
 
 		plugins: [
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: r( pRoot, "package.json" ) }
+			]),
+
 			new HtmlWebpackPlugin({
 				inject: "head",
 				hash: false,
@@ -296,7 +299,7 @@ module.exports = {
 
 			// add license banner
 			new webpack.BannerPlugin([
-				"<%= grunt.config('main.display-name') %>",
+				"<%= main['display-name'] %>",
 				"@version v<%= package.version %>",
 				"@date <%= grunt.template.today('yyyy-mm-dd') %>",
 				"@copyright <%= package.author %>"
@@ -318,7 +321,7 @@ module.exports = {
 
 	test: {
 		output: {
-			path: pBuildTest
+			path: "<%= dir.tmp_test %>"
 		},
 
 		resolve: {
@@ -328,14 +331,64 @@ module.exports = {
 			}
 		},
 
-		target: "web",
+		target: "node-webkit",
 
 		plugins: [
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: r( pTest, "package.json" ) }
+			]),
+
 			new HtmlWebpackPlugin({
 				inject: "body",
 				hash: false,
 				template: r( pTest, "index.html" )
 			})
 		]
+	},
+
+
+	testdev: {
+		output: {
+			path: "<%= dir.tmp_test %>"
+		},
+
+		entry: "main-dev",
+		devtool: "source-map",
+
+		resolve: {
+			root: pTest,
+			alias: {
+				"tests": r( pTest, "tests" )
+			}
+		},
+
+		target: "node-webkit",
+
+		plugins: [
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: r( pTest, "package.json" ) }
+			]),
+
+			new HtmlWebpackPlugin({
+				inject: "body",
+				hash: false,
+				template: r( pTest, "index.html" )
+			}),
+
+			new NwjsPlugin({
+				files: "<%= dir.tmp_test %>/**",
+				argv: "--remote-debugging-port=8888",
+				rerunOnExit: true,
+				log: true,
+				logStdOut: false,
+				logStdErr: false
+			})
+		],
+
+		watch: true,
+		keepalive: true,
+		failOnError: false
 	}
 };
