@@ -58,7 +58,7 @@ ErrorLog.prototype = assign( new Error(), { name: "ErrorLog" });
 function VersionError( version ) { this.version = version; }
 VersionError.prototype = assign( new Error(), { name: "VersionError" });
 
-function NotFoundError() {}
+function NotFoundError( message ) { this.message = message; }
 NotFoundError.prototype = assign( new Error(), { name: "NotFoundError" });
 
 function UnableToOpenError() {}
@@ -281,13 +281,20 @@ export default Service.extend( ChannelSettingsMixin, {
 					)
 						.then(function( pythonscript ) {
 							return { exec, pythonscript };
+						}, function() {
+							throw new NotFoundError( "Could not find Python script." );
 						});
 				}
 
 				return { exec };
-			})
+
 			// not found
-			.catch(function() { throw new NotFoundError(); });
+			}, function() {
+				let python = providers[ streamprovider ][ "python" ]
+					? "Python "
+					: "";
+				throw new NotFoundError( `Could not find ${python}executable.` );
+			});
 	},
 
 	/**

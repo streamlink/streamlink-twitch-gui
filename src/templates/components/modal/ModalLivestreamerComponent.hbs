@@ -57,8 +57,8 @@
 			{{#modal-body class="error"}}{{error.message}}{{/modal-body}}
 			{{modal-log class="error" log=error.log}}
 		{{else if (is-equal error.name "NotFoundError")}}
-			{{#modal-header}}Error: {{providername}} could not be found{{/modal-header}}
-			{{#modal-body class="error"}}Please check your settings and/or (re)install {{providername}}.{{/modal-body}}
+			{{#modal-header}}Error: {{providername}} misconfiguration{{/modal-header}}
+			{{#modal-body class="error"}}{{#if error.message}}{{error.message}}<br><br>{{/if}}Please check your settings and/or (re)install {{providername}}.{{/modal-body}}
 		{{else if (is-equal error.name "VersionError")}}
 			{{#modal-header}}Error: Invalid {{providername}} version{{/modal-header}}
 			{{#modal-body class="error"}}
