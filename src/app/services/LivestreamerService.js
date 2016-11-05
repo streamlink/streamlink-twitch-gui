@@ -10,7 +10,7 @@ import {
 	Service
 } from "Ember";
 import {
-	livestreamer as livestreamerConfig,
+	streamprovider as streamproviderConfig,
 	twitch as twitchConfig,
 	vars as varsConfig
 } from "config";
@@ -18,6 +18,10 @@ import nwWindow from "nwjs/nwWindow";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
+import {
+	platform as platformName
+} from "utils/node/platform";
+import { isFile } from "utils/node/fs/stat";
 import whichFallback from "utils/node/fs/whichFallback";
 import CP from "child_process";
 
@@ -25,11 +29,10 @@ import CP from "child_process";
 const { service } = inject;
 const { later } = run;
 const {
-	"exec": livestreamerExec,
-	"fallback": livestreamerFallback,
+	providers,
 	"version-min": versionMin,
-	"validation-timeout": livestreamerTimeout
-} = livestreamerConfig;
+	"validation-timeout": validationTimeout
+} = streamproviderConfig;
 const { "stream-url": twitchStreamUrl } = twitchConfig;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
@@ -44,7 +47,7 @@ const rePlayer    = /^Starting player: \S+/;
 
 
 function ErrorLog( message, log ) {
-	var type = "stdErr";
+	let type = "stdErr";
 	this.message = message;
 	this.log = makeArray( log ).map(function( line ) {
 		return { type, line };
@@ -55,7 +58,7 @@ ErrorLog.prototype = assign( new Error(), { name: "ErrorLog" });
 function VersionError( version ) { this.version = version; }
 VersionError.prototype = assign( new Error(), { name: "VersionError" });
 
-function NotFoundError() {}
+function NotFoundError( message ) { this.message = message; }
 NotFoundError.prototype = assign( new Error(), { name: "NotFoundError" });
 
 function UnableToOpenError() {}
@@ -87,7 +90,7 @@ function parseError( data ) {
 
 
 function setIfNotNull( objA, objB, key ) {
-	var val = get( objA, key );
+	let val = get( objA, key );
 	if ( val !== null ) {
 		set( objB, key, val );
 	}
@@ -104,7 +107,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	active: null,
 	abort : false,
 	model : computed(function() {
-		var store = get( this, "store" );
+		let store = get( this, "store" );
 		return store.peekAll( "livestreamer" );
 	}),
 
@@ -116,25 +119,25 @@ export default Service.extend( ChannelSettingsMixin, {
 			abort : false
 		});
 
-		var store   = get( this, "store" );
-		var channel = get( stream, "channel" );
-		var id      = get( channel, "id" );
-		var livestreamer;
+		let store   = get( this, "store" );
+		let channel = get( stream, "channel" );
+		let id      = get( channel, "id" );
+		let record;
 
 		// is the stream already running?
 		if ( store.hasRecordForId( "livestreamer", id ) ) {
-			livestreamer = store.recordForId( "livestreamer", id );
+			record = store.recordForId( "livestreamer", id );
 
-			if ( quality !== undefined && get( livestreamer, "quality" ) !== quality ) {
-				set( livestreamer, "quality", quality );
+			if ( quality !== undefined && get( record, "quality" ) !== quality ) {
+				set( record, "quality", quality );
 			}
 
-			set( this, "active", livestreamer );
+			set( this, "active", record );
 			return;
 		}
 
 		// create a new livestreamer object
-		livestreamer = store.createRecord( "livestreamer", {
+		record = store.createRecord( "livestreamer", {
 			id,
 			stream,
 			channel,
@@ -147,34 +150,34 @@ export default Service.extend( ChannelSettingsMixin, {
 			// override channel specific settings
 			.then(function( settings ) {
 				if ( quality === undefined ) {
-					setIfNotNull( settings, livestreamer, "quality" );
-					set( livestreamer, "strictQuality", false );
+					setIfNotNull( settings, record, "quality" );
+					set( record, "strictQuality", false );
 				} else {
-					set( livestreamer, "quality", quality );
-					set( livestreamer, "strictQuality", true );
+					set( record, "quality", quality );
+					set( record, "strictQuality", true );
 				}
-				setIfNotNull( settings, livestreamer, "gui_openchat" );
+				setIfNotNull( settings, record, "gui_openchat" );
 			})
 			// get the exec command
-			.then( this.checkLivestreamer.bind( this ) )
+			.then( this.check.bind( this ) )
 			// and validate configuration
-			.then( this.validateLivestreamer.bind( this ) )
-			.then( this.getLivestreamerParameters.bind( this, livestreamer ) )
+			.then( this.validate.bind( this ) )
+			.then( this.getParameters.bind( this, record ) )
 			.then(
 				// launch the stream
-				this.launchLivestreamer.bind( this, livestreamer, true ),
+				this.launch.bind( this, record, true ),
 				// show error message
-				this.onStreamFailure.bind( this, livestreamer )
+				this.onStreamFailure.bind( this, record )
 			);
 	},
 
-	onStreamSuccess( livestreamer, firstLaunch ) {
-		set( livestreamer, "success", true );
+	onStreamSuccess( record, firstLaunch ) {
+		set( record, "success", true );
 
 		if ( !firstLaunch ) { return; }
 
 		// setup stream refresh interval
-		this.refreshStream( livestreamer );
+		this.refreshStream( record );
 
 		// automatically close modal on success
 		if ( get( this, "settings.gui_hidestreampopup" ) ) {
@@ -184,33 +187,33 @@ export default Service.extend( ChannelSettingsMixin, {
 		// automatically open chat
 		if (
 			// require open chat setting
-			   get( livestreamer, "gui_openchat" )
+			   get( record, "gui_openchat" )
 			&& (
 				// context menu not used
-				   !get( livestreamer, "strictQuality" )
+				   !get( record, "strictQuality" )
 				// or context menu setting disabled
 				|| !get( this, "settings.gui_openchat_context" )
 			)
 		) {
-			this.openChat( get( livestreamer, "channel" ) );
+			this.openChat( get( record, "channel" ) );
 		}
 
 		// hide the GUI
 		this.minimize( false );
 	},
 
-	onStreamFailure( livestreamer, error ) {
-		set( livestreamer, "error", true );
+	onStreamFailure( record, error ) {
+		set( record, "error", true );
 		set( this, "error", error || new Error( "Internal error" ) );
 
-		this.clearLivestreamer( livestreamer );
+		this.clear( record );
 	},
 
-	onStreamShutdown( livestreamer ) {
+	onStreamShutdown( record ) {
 		// close the modal only if there was no error and if it belongs to the stream
 		if (
-			   !get( livestreamer, "error" )
-			&& get( this, "active" ) === livestreamer
+			   !get( record, "error" )
+			&& get( this, "active" ) === record
 		) {
 			get( this, "modal" ).closeModal( this );
 		}
@@ -218,56 +221,92 @@ export default Service.extend( ChannelSettingsMixin, {
 		// restore the GUI
 		this.minimize( true );
 
-		this.clearLivestreamer( livestreamer );
+		this.clear( record );
 	},
 
-	clearLivestreamer( livestreamer ) {
-		// remove the livestreamer record from the store
-		if ( !get( livestreamer, "isDeleted" ) ) {
-			livestreamer.destroyRecord();
+	clear( record ) {
+		// remove the record from the store
+		if ( !get( record, "isDeleted" ) ) {
+			record.destroyRecord();
 		}
 	},
 
 
 	closeStream( stream ) {
-		var model = get( this, "model" );
-		var livestreamer = model.findBy( "stream", stream );
-		if ( !livestreamer ) { return false; }
-		livestreamer.kill();
+		let model = get( this, "model" );
+		let record = model.findBy( "stream", stream );
+		if ( !record ) { return false; }
+		record.kill();
 		return true;
 	},
 
 
 	/**
-	 * Check the location of livestreamer and validate
+	 * Get the path of the executable and pythonscript
 	 * @returns {Promise}
 	 */
-	checkLivestreamer() {
-		var customExec = String( get( this, "settings.livestreamer" ) ).trim();
+	check() {
+		let streamprovider  = get( this, "settings.streamprovider" );
+		let streamproviders = get( this, "settings.streamproviders" );
 
-		// check for the executable
+		if (
+			   !providers.hasOwnProperty( streamprovider )
+			|| !streamproviders.hasOwnProperty( streamprovider )
+		) {
+			return Promise.reject( new Error( "Invalid stream provider" ) );
+		}
+
+		// custom or default executable
+		let exec = get( streamproviders[ streamprovider ], "exec" )
+			|| providers[ streamprovider ][ "exec" ][ platformName ];
+		if ( !exec ) {
+			return Promise.reject( new Error( "Missing executable name for stream provider" ) );
+		}
+
+		// try to find the executable
 		return whichFallback(
-			// use the default command if the user did not define a custom one
-			customExec.length
-				? customExec
-				: livestreamerExec,
-			// ignore fallbacks if custom path has been set
-			customExec
-				? null
-				: livestreamerFallback
+			exec,
+			providers[ streamprovider ][ "fallback" ]
 		)
+			.then(function( exec ) {
+				// try to find the pythonscript
+				if ( providers[ streamprovider ][ "python" ] ) {
+					let pythonscript = get( streamproviders[ streamprovider ], "pythonscript" )
+						|| providers[ streamprovider ][ "pythonscript" ][ platformName ];
+
+					return whichFallback(
+						pythonscript,
+						providers[ streamprovider ][ "pythonscriptfallback" ],
+						isFile
+					)
+						.then(function( pythonscript ) {
+							return { exec, pythonscript };
+						}, function() {
+							throw new NotFoundError( "Could not find Python script." );
+						});
+				}
+
+				return { exec };
+
 			// not found
-			.catch(function() { throw new NotFoundError(); });
+			}, function() {
+				let python = providers[ streamprovider ][ "python" ]
+					? "Python "
+					: "";
+				throw new NotFoundError( `Could not find ${python}executable.` );
+			});
 	},
 
 	/**
-	 * Validate livestreamer
-	 * Runs the executable with `--version` parameters and reads answer from stderr
-	 * @param {string} exec
+	 * Validate
+	 * Runs the executable/pythonscript with the `--version` parameter and reads answer from stderr
+	 * @param {Object} exec
+	 * @param {String} exec.exec
+	 * @param {String?} exec.pythonscript
 	 * @returns {Promise}
 	 */
-	validateLivestreamer( exec ) {
-		var spawn;
+	validate( exec ) {
+		let spawn;
 
 		function kill() {
 			if ( spawn ) { spawn.kill( "SIGKILL" ); }
@@ -275,7 +314,12 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 
 		return new RSVP.Promise(function( resolve, reject ) {
-			spawn = CP.spawn( exec, [ "--version", "--no-version-check" ] );
+			let parameters = [ "--version", "--no-version-check" ];
+			if ( exec.pythonscript ) {
+				parameters.unshift( exec.pythonscript );
+			}
+
+			spawn = CP.spawn( exec.exec, parameters );
 
 			function onLine( line, idx, lines ) {
 				// be strict: livestreamer's output is just one single line
@@ -292,7 +336,7 @@ export default Service.extend( ChannelSettingsMixin, {
 						version: match[2]
 					});
 				} else {
-					reject( new Error( "Invalid livestreamer executable" ) );
+					reject( new Error( "Invalid version check output" ) );
 				}
 			}
 
@@ -315,7 +359,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			spawn.stderr.on( "data", new StreamOutputBuffer( onLine ) );
 
 			// kill after a certain time
-			later( onTimeout, livestreamerTimeout );
+			later( onTimeout, validationTimeout );
 		})
 			.finally( kill )
 			.then(function({ name, version }) {
@@ -333,77 +377,84 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	/**
-	 * Get the livestreamer parameter list
-	 * @param {Livestreamer} livestreamer
-	 * @param {String} exec
-	 * @returns {Promise.<String[]>}
+	 * Get the parameter list
+	 * @param {Livestreamer} record
+	 * @param {Object} exec
+	 * @returns {Promise}
 	 */
-	getLivestreamerParameters: function( livestreamer, exec ) {
-		return livestreamer.getParameters()
+	getParameters: function( record, exec ) {
+		return record.getParameters()
 			.then(function( params ) {
+				if ( exec.pythonscript ) {
+					params.unshift( exec.pythonscript );
+				}
+
 				return [ exec, params ];
 			});
 	},
 
 
 	/**
-	 * Launch the stream
-	 * @param {Livestreamer} livestreamer
+	 * Run the executable and launch the stream
+	 * @param {Livestreamer} record
 	 * @param {Boolean} firstLaunch
-	 * @param {String} exec
-	 * @param {String} params
+	 * @param {Object} exec
+	 * @param {String} exec.exec
+	 * @param {String?} exec.pythonscript
+	 * @param {String[]} params
 	 * @returns {Promise}
 	 */
-	launchLivestreamer( livestreamer, firstLaunch, [ exec, params ] ) {
+	launch( record, firstLaunch, [ exec, params ] ) {
 		// in case the shutdown button was pressed before
 		if ( get( this, "abort" ) ) {
-			this.clearLivestreamer( livestreamer );
+			this.clear( record );
 			return Promise.reject();
 		}
 
 		let defer = RSVP.defer();
 
-		livestreamer.clearLog();
-		set( livestreamer, "success", false );
-		set( livestreamer, "warning", false );
-		set( this, "active", livestreamer );
+		record.clearLog();
+		set( record, "success", false );
+		set( record, "warning", false );
+		set( this, "active", record );
 
-		let spawnQuality = get( livestreamer, "quality" );
+		let spawnQuality = get( record, "quality" );
+
 		let parameters = [
 			...params,
-			twitchStreamUrl.replace( "{channel}", get( livestreamer, "channel.id" ) ),
-			get( livestreamer, "streamquality" )
+			twitchStreamUrl.replace( "{channel}", get( record, "channel.id" ) ),
+			get( record, "streamquality" )
 		];
 
-		// spawn the livestreamer process
-		let spawn = CP.spawn( exec, parameters, { detached: true } );
-		set( livestreamer, "spawn", spawn );
+		// spawn the process
+		let spawn = CP.spawn( exec.exec, parameters, { detached: true } );
+		set( record, "spawn", spawn );
 
 
 		function onExit( code ) {
 			// clear up some memory
-			set( livestreamer, "spawn", null );
+			set( record, "spawn", null );
 			spawn = null;
 
 			// quality has been changed
-			let currentQuality = get( livestreamer, "quality" );
+			let currentQuality = get( record, "quality" );
 			if ( spawnQuality !== currentQuality ) {
-				this.launchLivestreamer( livestreamer, false, [ exec, params ] );
+				this.launch( record, false, [ exec, params ] );
 
 			} else {
 				if ( code !== 0 ) {
-					set( livestreamer, "error", true );
+					set( record, "error", true );
 					set( this, "error", new Error( `The process exited with code ${code}` ) );
 				}
-				this.onStreamShutdown( livestreamer );
+				this.onStreamShutdown( record );
 			}
 		}
 
 		function warnOrReject( line, error ) {
-			livestreamer.pushLog( "stdErr", line );
+			record.pushLog( "stdErr", line );
 
 			if ( error instanceof Warning ) {
-				set( livestreamer, "warning", true );
+				set( record, "warning", true );
 			} else {
 				defer.reject( error || new Error( line ) );
 			}
@@ -411,19 +462,19 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		// reject promise on any error output
 		function onStdErr( line ) {
-			var error = parseError( line );
+			let error = parseError( line );
 			warnOrReject( line, error );
 		}
 
-		// fulfill promise as soon as livestreamer is launching the player
+		// fulfill promise as soon as the player is launched
 		function onStdOut( line ) {
-			var error = parseError( line );
+			let error = parseError( line );
 			if ( error ) {
 				return warnOrReject( line, error );
 			}
 
 			line = line.replace( reReplace, "" );
-			livestreamer.pushLog( "stdOut", line );
+			record.pushLog( "stdOut", line );
 
 			if ( rePlayer.test( line ) ) {
 				/*
@@ -447,16 +498,16 @@ export default Service.extend( ChannelSettingsMixin, {
 		spawn.stderr.on( "data", new StreamOutputBuffer( onStdErr ) );
 
 		return defer.promise.then(
-			this.onStreamSuccess.bind( this, livestreamer, firstLaunch ),
-			this.onStreamFailure.bind( this, livestreamer )
+			this.onStreamSuccess.bind( this, record, firstLaunch ),
+			this.onStreamFailure.bind( this, record )
 		);
 	},
 
 
 	killAll() {
-		/** @type {Array} */
-		var model = get( this, "model" );
-		model.slice().forEach(function( stream ) {
+		/** @type {Livestreamer[]} */
+		let record = get( this, "model" );
+		record.slice().forEach(function( stream ) {
 			stream.kill();
 		});
 	},
@@ -477,26 +528,26 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 	},
 
-	refreshStream( livestreamer ) {
-		if ( get( livestreamer, "isDeleted" ) ) { return; }
+	refreshStream( record ) {
+		if ( get( record, "isDeleted" ) ) { return; }
 
-		var stream  = get( livestreamer, "stream" );
-		var reload  = stream.reload.bind( stream );
-		var promise = reload();
+		let stream  = get( record, "stream" );
+		let reload  = stream.reload.bind( stream );
+		let promise = reload();
 
 		// try to reload the record at least 3 times
-		for ( var i = 1; i < 3; i++ ) {
+		for ( let i = 1; i < 3; i++ ) {
 			promise = promise.catch( reload );
 		}
 
 		// queue another refresh
 		promise.then(function() {
-			later( this, this.refreshStream, livestreamer, streamReloadInterval );
+			later( this, this.refreshStream, record, streamReloadInterval );
 		}.bind( this ) );
 	},
 
 	openChat( channel ) {
-		var chat = get( this, "chat" );
+		let chat = get( this, "chat" );
 		chat.open( channel )
 			.catch(function() {});
 	}

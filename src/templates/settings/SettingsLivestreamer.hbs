@@ -1,11 +1,34 @@
 <fieldset>
 {{#settings-row
-	"Executable location"
-	"Path to the livestreamer executable."
+	"Streamlink / Livestreamer"
+	"Choose a stream provider and set custom executable location(s)."
 	icon="fa-cog"
-	defaultValue="\"livestreamer\" (read from $PATH)"
+	notes="An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths."
+	requires=(if (get (get streamproviders model.streamprovider) "python") (concat "Python " (get (get streamproviders model.streamprovider) "python")))
 }}
-	{{file-select value=model.livestreamer inputClass="form-control" placeholder="Leave blank for default location"}}
+	{{drop-down
+		value=model.streamprovider
+		content=streamprovidersDropDown
+		class="streamproviders-dropdown"
+	}}
+	{{#each-in streamproviders as |key provider|}}
+		<dl class="{{unless (is-equal key model.streamprovider) 'hidden'}} streamproviders-list">
+			<dt>{{#if provider.python}}Python{{else}}{{provider.name}}{{/if}} executable</dt>
+			<dd>{{file-select
+				value=(mut (get (get model.streamproviders key) "exec"))
+				placeholder=(get provider.exec platform.platform)
+				inputClass="form-control"
+			}}</dd>
+			{{#if provider.python}}
+				<dt>{{provider.name}} python script</dt>
+				<dd>{{file-select
+					value=(mut (get (get model.streamproviders key) "pythonscript"))
+					placeholder=(get provider.pythonscript platform.platform)
+					inputClass="form-control"
+				}}</dd>
+			{{/if}}
+		</dl>
+	{{/each-in}}
 {{/settings-row}}
 
 {{#if model.advanced}}

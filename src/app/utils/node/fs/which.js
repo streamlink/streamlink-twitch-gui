@@ -1,11 +1,11 @@
 import { stat } from "utils/node/fs/stat";
-import { isWin } from "utils/node/platform";
-import PATH from "path";
+import {
+	delimiter,
+	sep
+} from "path";
 
 
-var paths = ( process.env.PATH || process.env.path || "." ).split( PATH.delimiter );
-var exts  = isWin ? [ ".exe" ] : [ "" ];
-var sep   = PATH.sep;
+const paths = ( process.env.PATH || process.env.path || "." ).split( delimiter );
 
 
 /**
@@ -25,11 +25,7 @@ function which( file, callback ) {
 		// The first resolving file check will jump to the end of the chain.
 		return paths.reduce(function( chain, path ) {
 			return chain.catch(function() {
-				return exts.reduce(function( chain, ext ) {
-					return chain.catch(function() {
-						return stat( path + sep + file + ext, callback );
-					});
-				}, chain );
+				return stat( `${path}${sep}${file}`, callback );
 			});
 		}, Promise.reject() );
 	}

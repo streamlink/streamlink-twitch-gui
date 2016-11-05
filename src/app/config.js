@@ -5,7 +5,7 @@ import vars from "root/config/vars.json";
 import update from "root/config/update.json";
 import themes from "root/config/themes.json";
 import langs from "root/config/langs.json";
-import livestreamer from "root/config/livestreamer.json";
+import streamprovider from "root/config/streamprovider.json";
 import players from "root/config/players.json";
 import twitch from "root/config/twitch.json";
 import notification from "root/config/notification.json";
@@ -20,7 +20,7 @@ export {
 	update,
 	themes,
 	langs,
-	livestreamer,
+	streamprovider,
 	players,
 	twitch,
 	notification,

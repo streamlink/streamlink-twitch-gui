@@ -7,6 +7,7 @@ import {
 	Controller
 } from "Ember";
 import {
+	streamprovider,
 	players,
 	langs,
 	themes
@@ -21,6 +22,7 @@ import { delimiter } from "path";
 
 const { alias, equal } = computed;
 const { service } = inject;
+const { providers } = streamprovider;
 const { themes: themesList } = themes;
 
 const kPlayers = Object.keys( players );
@@ -60,6 +62,21 @@ export default Controller.extend( RetryTransitionMixin, {
 	retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
 	retryOpenMin    : settingsAttrMeta( "retry_open", "min" ),
 	retryOpenMax    : settingsAttrMeta( "retry_open", "max" ),
+
+	streamproviders: providers,
+	streamprovidersDropDown: computed(function() {
+		return Object.keys( providers )
+			.filter(function( key ) {
+				// exclude unsupported providers
+				return providers[ key ][ "exec" ][ platform.platform ];
+			})
+			.map(function( key ) {
+				return {
+					id: key,
+					label: providers[ key ][ "label" ]
+				};
+			});
+	}),
 
 	players,
 	playerPresets: computed(function() {

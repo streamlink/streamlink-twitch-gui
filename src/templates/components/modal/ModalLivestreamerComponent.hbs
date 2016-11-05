@@ -11,7 +11,7 @@
 				{{#modal-header}}
 					Launching: {{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
 				{{/modal-header}}
-				{{#modal-body class="launching"}}Waiting for Livestreamer to launch the stream...{{/modal-body}}
+				{{#modal-body class="launching"}}Waiting for {{providername}} to launch the stream...{{/modal-body}}
 				{{modal-log class="launching" log=active.log}}
 			{{else}}
 				{{#modal-header}}
@@ -57,19 +57,19 @@
 			{{#modal-body class="error"}}{{error.message}}{{/modal-body}}
 			{{modal-log class="error" log=error.log}}
 		{{else if (is-equal error.name "NotFoundError")}}
-			{{#modal-header}}Error: Livestreamer could not be found{{/modal-header}}
-			{{#modal-body class="error"}}Please check your settings and/or (re)install Livestreamer.{{/modal-body}}
+			{{#modal-header}}Error: {{providername}} misconfiguration{{/modal-header}}
+			{{#modal-body class="error"}}{{#if error.message}}{{error.message}}<br><br>{{/if}}Please check your settings and/or (re)install {{providername}}.{{/modal-body}}
 		{{else if (is-equal error.name "VersionError")}}
-			{{#modal-header}}Error: Invalid Livestreamer version{{/modal-header}}
+			{{#modal-header}}Error: Invalid {{providername}} version{{/modal-header}}
 			{{#modal-body class="error"}}
 				Your version v{{error.version}} doesn't match the min. requirements (v{{versionMin}}).
 			{{/modal-body}}
 		{{else if (is-equal error.name "UnableToOpenError")}}
 			{{#modal-header}}Error: Unable to open stream{{/modal-header}}
-			{{#modal-body class="error"}}Livestreamer was unable to open the stream.{{/modal-body}}
+			{{#modal-body class="error"}}{{providername}} was unable to open the stream.{{/modal-body}}
 		{{else if (is-equal error.name "NoStreamsFoundError")}}
 			{{#modal-header}}Error: No streams found{{/modal-header}}
-			{{#modal-body class="error"}}Livestreamer was unable to find the stream.{{/modal-body}}
+			{{#modal-body class="error"}}{{providername}} was unable to find the stream.{{/modal-body}}
 		{{else if (is-equal error.name "NoPlayerError")}}
 			{{#modal-header}}Error: Invalid player{{/modal-header}}
 			{{#modal-body class="error"}}Please check your player configuration.{{/modal-body}}

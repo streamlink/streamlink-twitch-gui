@@ -42,6 +42,11 @@ function upgradeSettings() {
 		settings.gui_homepage = "/user/followedStreams";
 	}
 
+	// translate old livestreamer data into the executable format
+	if ( typeof settings.livestreamer === "string" ) {
+		delete settings[ "livestreamer" ];
+	}
+
 	// translate old player data into the player presets format
 	if ( typeof settings.player === "string" ) {
 		settings.player = {
