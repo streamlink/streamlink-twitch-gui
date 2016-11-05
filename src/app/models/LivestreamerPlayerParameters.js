@@ -85,7 +85,12 @@ export function getPlayerParams( settings ) {
 		});
 
 	// combine preset and custom params
-	let res = [ ...paramlist, args ].join( " " );
+	let res = [ ...paramlist ];
+	// ignore custom parameters if preset is default and no custom player exec is set
+	if ( get( settings, "player_preset" ) !== "default" || get( playerData, "exec" ) !== "" ) {
+		res.push( args );
+	}
+	res = res.join( " " );
 
 	// fix missing {filename} variable
 	if ( res && res.indexOf( "{filename}" ) === -1 ) {

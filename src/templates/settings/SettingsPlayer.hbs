@@ -9,58 +9,66 @@
 
 {{#settings-row
 	(if (is-equal model.player_preset "default") "Video player" "Player executable")
-	"Path to the player executable or its name if it can be found in $PATH."
+	(if playerPresetDefaultAndPlayerEmpty
+		"If left empty, the player defined in Livestreamer's config file will be used."
+		"An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths."
+	)
 	icon="fa-tv"
+	defaultValue=(if playerPresetDefaultAndPlayerEmpty "VLC (unconfigured)")
+	notes=(unless playerPresetDefaultAndPlayerEmpty "Parameters can be added here, but should be set in the parameters field instead. See below for a list of available variables.")
 	documentation="--player"
-	substitutions=(if model.advanced substitutionsPlayer)
-	notes=(if model.advanced "Parameters can be added here, but should be set in the parameters field instead.")
 }}
 	{{file-select
 		value=(mut (get (get model.player model.player_preset) "exec"))
 		inputClass="form-control"
-		placeholder=(if (is-equal model.player_preset "default") "Leave blank for default player" "Leave blank for default location")
+		placeholder=playerPlaceholder
 	}}
 {{/settings-row}}
 
-{{#each playerPresetFields as |field|}}
-	{{#settings-row
-		field.title
-		field.description
-		icon=(if field.icon
-			field.icon
-			(get
-				(hash
-					boolean="fa-check"
+{{#each-in players as |playername player|}}
+	{{#each player.params as |field|}}
+		{{#settings-row
+			field.title
+			field.description
+			icon=(if field.icon
+				field.icon
+				(get
+					(hash
+						boolean="fa-check"
+					)
+					field.type
 				)
-				field.type
 			)
-		)
-		command=field.args
-		isVisible=(is-equal field.preset model.player_preset)
-	}}
-		{{#if (is-equal field.type "boolean")}}
-			{{check-box
-				(if field.text field.text field.title)
-				checked=(mut (get (get (get model.player model.player_preset) "params") field.name))
-			}}
-		{{/if}}
-	{{/settings-row}}
-{{/each}}
+			command=field.args
+			isVisible=(is-equal playername model.player_preset)
+		}}
+			{{#if (is-equal field.type "boolean")}}
+				{{check-box
+					(if field.text field.text field.title)
+					checked=(mut (get (get (get model.player model.player_preset) "params") field.name))
+				}}
+			{{/if}}
+		{{/settings-row}}
+	{{/each}}
+{{/each-in}}
 
-{{#settings-row
-	(if (is-equal model.player_preset "default") "Parameters" "Custom parameters")
-	(if (is-equal model.player_preset "default") "Add player specific parameters." "Set additional custom player parameters.")
-	icon="fa-terminal"
-	documentation="--player-args"
-	substitutions=substitutionsPlayer
-}}
-	{{input
-		type="text"
-		classNames="col-xs-12"
-		value=(mut (get (get model.player model.player_preset) "args"))
-		placeholder="Add custom player parameters"
+{{#unless playerPresetDefaultAndPlayerEmpty}}
+	{{#settings-row
+		(if (is-equal model.player_preset "default") "Parameters" "Custom parameters")
+		(if (is-equal model.player_preset "default") "Add player specific parameters." "Set additional custom player parameters.")
+		icon="fa-terminal"
+		documentation="--player-args"
+		substitutions=substitutionsPlayer
 	}}
-{{/settings-row}}
+		{{input
+			type="text"
+			classNames="col-xs-12"
+			value=(mut (get (get model.player model.player_preset) "args"))
+			placeholder="Add custom player parameters"
+		}}
+	{{/settings-row}}
+{{/unless}}
+
 
 {{#settings-row
 	"Keep player window"

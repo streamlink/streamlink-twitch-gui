@@ -16,6 +16,7 @@ import { playerSubstitutions } from "models/LivestreamerParameters";
 import qualities from "models/LivestreamerQualities";
 import Settings from "models/localstorage/Settings";
 import * as platform from "utils/node/platform";
+import { delimiter } from "path";
 
 
 const { alias, equal } = computed;
@@ -60,6 +61,7 @@ export default Controller.extend( RetryTransitionMixin, {
 	retryOpenMin    : settingsAttrMeta( "retry_open", "min" ),
 	retryOpenMax    : settingsAttrMeta( "retry_open", "max" ),
 
+	players,
 	playerPresets: computed(function() {
 		let presetList = kPlayers
 			.filter(function( key ) {
@@ -81,15 +83,31 @@ export default Controller.extend( RetryTransitionMixin, {
 		return presetList;
 	}),
 
-	playerPresetFields: computed(function() {
-		return kPlayers.reduce(function( list, preset ) {
-			list.push( ...players[ preset ].params.map(function( param ) {
-				param.preset = preset;
-				return param;
-			}) );
-			return list;
-		}, [] );
+	playerPlaceholder: computed( "model.player_preset", function() {
+		let preset = get( this, "model.player_preset" );
+		if ( preset === "default" || !players[ preset ] ) {
+			return "Leave blank for default player";
+		}
+		let exec = players[ preset ][ "exec" ][ platform.platform ];
+		if ( !exec ) {
+			return "Leave blank for default location";
+		}
+		if ( Array.isArray( exec ) ) {
+			exec = exec.join( `${delimiter} ` );
+		}
+		return exec;
 	}),
+
+	playerPresetDefaultAndPlayerEmpty: computed(
+		"model.player_preset",
+		"model.player.default.exec",
+		function() {
+			let preset = get( this, "model.player_preset" );
+			let player = get( this, "model.player" );
+
+			return preset === "default" && !get( player, "default.exec" );
+		}
+	),
 
 
 	substitutionsPlayer: playerSubstitutions,
