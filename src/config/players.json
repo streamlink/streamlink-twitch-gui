@@ -124,6 +124,16 @@
 				"default": true,
 				"text": "Always show player window",
 				"args": "--force-window"
+			},
+			{
+				"name": "no-cache",
+				"title": "No player cache",
+				"description": "Speed up stream launch time.",
+				"icon": "fa-area-chart",
+				"type": "boolean",
+				"default": false,
+				"text": "Don't use the additional player cache",
+				"args": "--no-cache"
 			}
 		]
 	},
