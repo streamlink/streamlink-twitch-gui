@@ -60,7 +60,7 @@
 	},
 	"msie": {
 		"args": "\"{script}\" \"{url}\"",
-		"exec": "cscript",
+		"exec": "cscript.exe",
 		"script": "msie-minimal.vbs"
 	},
 	"chatty": {
@@ -69,7 +69,7 @@
 		"chatty-args-noauth": "-connect -single -channel \"{channel}\"",
 		"chatty-fallback": "chatty",
 		"exec": {
-			"win32": "javaw",
+			"win32": "javaw.exe",
 			"darwin": "java",
 			"linux": "java"
 		},
