@@ -22,19 +22,6 @@ const { themes: themesList } = themes;
 
 const reTheme = /^theme-/;
 
-function setupRefresh( controller ) {
-	// OSX has its own refresh logic in the menubar module
-	if ( isDarwin ) { return; }
-
-	document.documentElement.addEventListener( "keyup", function( e ) {
-		var f5    = e.keyCode === 116;
-		var ctrlR = e.keyCode ===  82 && e.ctrlKey === true;
-		if ( f5 || ctrlR ) {
-			controller.send( "refresh" );
-		}
-	}, false );
-}
-
 
 export default Component.extend({
 	settings: service(),
@@ -77,9 +64,31 @@ export default Component.extend({
 	},
 
 	didInsertElement() {
-		var controller = getOwner( this ).lookup( "controller:application" );
-
 		guiSelectable();
-		setupRefresh( controller );
+		this._applicationController = getOwner( this ).lookup( "controller:application" );
+		this._super( ...arguments );
+	},
+
+	keyUp( e ) {
+		// f5 or ctrl+r
+		if ( e.keyCode === 116 || e.keyCode ===  82 && e.ctrlKey === true ) {
+			// MacOS has its menubar with its own hotkeys
+			if ( isDarwin ) { return; }
+			this._applicationController.send( "refresh" );
+
+		// alt+left
+		} else if ( e.keyCode === 37 && e.altKey ) {
+			this._applicationController.send( "history", -1 );
+
+		// alt+right
+		} else if ( e.keyCode === 39 && e.altKey ) {
+			this._applicationController.send( "history", +1 );
+
+		} else {
+			return;
+		}
+
+		e.preventDefault();
+		e.stopImmediatePropagation();
 	}
 });
