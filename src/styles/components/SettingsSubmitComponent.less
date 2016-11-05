@@ -13,5 +13,15 @@
 	&.faded > .btn {
 		opacity: 0;
 		transform: translateY( 3rem );
+		-webkit-animation: settings-submit-component-buttons @anim-content-duration 1 ease-out alternate both;
+	}
+}
+
+@-webkit-keyframes settings-submit-component-buttons {
+	0%, 99.9999% {
+		visibility: visible;
+	}
+	100% {
+		visibility: hidden;
 	}
 }
