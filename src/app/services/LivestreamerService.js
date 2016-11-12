@@ -256,9 +256,14 @@ export default Service.extend( ChannelSettingsMixin, {
 			return Promise.reject( new Error( "Invalid stream provider" ) );
 		}
 
+		// provider objects
+		let providerCustom = streamproviders[ streamprovider ];
+		let providerConfig = providers[ streamprovider ];
+		let isPython = providerConfig.hasOwnProperty( "python" );
+
 		// custom or default executable
-		let exec = get( streamproviders[ streamprovider ], "exec" )
-			|| providers[ streamprovider ][ "exec" ][ platformName ];
+		let exec = get( providerCustom, "exec" )
+			|| providerConfig[ "exec" ][ platformName ];
 		if ( !exec ) {
 			return Promise.reject( new Error( "Missing executable name for stream provider" ) );
 		}
@@ -266,17 +271,17 @@ export default Service.extend( ChannelSettingsMixin, {
 		// try to find the executable
 		return whichFallback(
 			exec,
-			providers[ streamprovider ][ "fallback" ]
+			providerConfig[ "fallback" ]
 		)
 			.then(function( exec ) {
 				// try to find the pythonscript
-				if ( providers[ streamprovider ][ "python" ] ) {
-					let pythonscript = get( streamproviders[ streamprovider ], "pythonscript" )
-						|| providers[ streamprovider ][ "pythonscript" ][ platformName ];
+				if ( isPython ) {
+					let pythonscript = get( providerCustom, "pythonscript" )
+						|| providerConfig[ "pythonscript" ][ platformName ];
 
 					return whichFallback(
 						pythonscript,
-						providers[ streamprovider ][ "pythonscriptfallback" ],
+						providerConfig[ "pythonscriptfallback" ],
 						isFile
 					)
 						.then(function( pythonscript ) {
@@ -290,10 +295,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 			// not found
 			}, function() {
-				let python = providers[ streamprovider ][ "python" ]
-					? "Python "
-					: "";
-				throw new NotFoundError( `Could not find ${python}executable.` );
+				throw new NotFoundError( `Could not find ${isPython ? "Python " : ""}executable.` );
 			});
 	},
 
