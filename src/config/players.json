@@ -139,7 +139,7 @@
 				"name": "no-cache",
 				"title": "No player cache",
 				"description": "Speed up stream launch time.",
-				"icon": "fa-area-chart",
+				"icon": "fa-hourglass-half",
 				"type": "boolean",
 				"default": false,
 				"text": "Don't use the additional player cache",
