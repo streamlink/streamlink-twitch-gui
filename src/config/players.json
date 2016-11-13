@@ -126,6 +126,16 @@
 				"args": "--force-window"
 			},
 			{
+				"name": "seeking",
+				"title": "Seeking",
+				"description": "Enables jumping forwards/backwards in the stream cache.",
+				"icon": "fa-forward",
+				"type": "boolean",
+				"default": true,
+				"text": "Enable seeking",
+				"args": "--force-seekable=yes --hr-seek=yes --hr-seek-framedrop=yes"
+			},
+			{
 				"name": "no-cache",
 				"title": "No player cache",
 				"description": "Speed up stream launch time.",
