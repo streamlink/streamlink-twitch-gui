@@ -32,7 +32,13 @@ export default ExternalLinkComponent.extend({
 	classNameBindings: [ ":documentation-link-component", "url:with-url" ],
 	attributeBindings: [ "title" ],
 
-	title: "Read the documentation in your web browser",
+	title: computed( "baseUrl", function() {
+		let baseUrl = get( this, "baseUrl" );
+
+		return baseUrl
+			? "Read the documentation in your web browser"
+			: "";
+	}),
 
 	url: computed( "baseUrl", "item", function() {
 		var baseUrl = get( this, "baseUrl" );
