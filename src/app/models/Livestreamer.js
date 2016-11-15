@@ -57,9 +57,9 @@ export default Model.extend({
 
 
 	isLivestreamer: not( "isStreamlink" ),
-	isStreamlink: computed( "settings.content.streamprovider", function() {
+	isStreamlink: computed(function() {
 		let streamprovider = get( this, "settings.content.streamprovider" );
-		if ( !providers.hasOwnProperty( streamprovider ) ) {
+		if ( !streamprovider || !providers.hasOwnProperty( streamprovider ) ) {
 			throw new Error( "Invalid stream provider" );
 		}
 
