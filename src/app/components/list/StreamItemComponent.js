@@ -9,7 +9,7 @@ import ListItemComponent from "components/list/ListItemComponent";
 import layout from "templates/components/list/StreamItemComponent.hbs";
 
 
-const { alias, and, equal } = computed;
+const { alias, equal, notEmpty } = computed;
 const { cancel, later } = run;
 
 
@@ -18,7 +18,7 @@ export default ListItemComponent.extend({
 
 	classNameBindings: [
 		":stream-item-component",
-		"_showGame:show-game",
+		"showGame:show-game",
 		"host:show-host",
 		"settings.stream_show_flag:show-flag",
 		"settings.stream_show_info:show-info",
@@ -34,8 +34,7 @@ export default ListItemComponent.extend({
 	locked  : false,
 	timer   : null,
 
-	showGame : true,
-	_showGame: and( "showGame", "channel.game" ),
+	showGame: notEmpty( "channel.game" ),
 
 	infoGame : equal( "settings.stream_info", 0 ),
 	infoTitle: equal( "settings.stream_info", 1 ),
