@@ -320,10 +320,14 @@
 
 		// don't show the game in expanded mode while being in the games.game route
 		&:not(.show-game) > .preview.expanded > footer > .bottom {
-			// and move the game info and title down instead
-			> .info-game,
-			> .info-title {
+			// move the game info down
+			> .info-game {
 				bottom: -100%;
+			}
+
+			// move the stream title up
+			> .info-title {
+				bottom: 100%;
 			}
 		}
 	}
