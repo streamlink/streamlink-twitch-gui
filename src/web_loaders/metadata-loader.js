@@ -24,22 +24,10 @@ module.exports = function() {
 	var readPackageBower = readFile( packageBower ).then( JSON.parse );
 
 
-	function promisePackageData() {
-		return readPackageNpm
-			.then(function( json ) {
-				return {
-					homepage: json.homepage,
-					author  : json.author,
-					version : json.version,
-					built   : new Date().toISOString()
-				};
-			});
-	}
-
-	function promiseGitContributors() {
+	function promiseExec( exec, params ) {
 		return new Promise(function( resolve, reject ) {
 			var data = [];
-			var spawn = CP.spawn( "git", [ "log", "--format=%aN <%cE>" ] );
+			var spawn = CP.spawn( exec, params );
 
 			function onError( err ) {
 				spawn = null;
@@ -66,7 +54,31 @@ module.exports = function() {
 			spawn.on( "error", onError );
 			spawn.on( "exit", onExit );
 			spawn.stdout.on( "data", streamoutputbuffer );
-		})
+		});
+	}
+
+
+	function promisePackageData() {
+		return Promise.all([
+			readPackageNpm,
+			promiseExec( "git", [ "describe", "--tags" ] )
+		])
+			.then(function( data ) {
+				var json = data[0];
+				var version = data[1];
+
+				return {
+					homepage: json.homepage,
+					author: json.author,
+					version: json.version,
+					versionstring: version,
+					built: new Date().toISOString()
+				};
+			});
+	}
+
+	function promiseGitContributors() {
+		return promiseExec( "git", [ "log", "--format=%aN <%cE>" ] )
 			.then(function( output ) {
 				var reRow = /^(.+) <(.+)>$/;
 
