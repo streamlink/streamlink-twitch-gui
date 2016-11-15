@@ -18,11 +18,15 @@ import {
 } from "models/LivestreamerPlayerParameters";
 import qualities from "models/LivestreamerQualities";
 import Parameter from "utils/Parameter";
-import { twitch } from "config";
+import {
+	streamprovider,
+	twitch
+} from "config";
 
 
-const { alias } = computed;
+const { alias, not } = computed;
 const { service } = inject;
+const { providers } = streamprovider;
 const { oauth: { "client-id": clientId } } = twitch;
 
 
@@ -51,6 +55,16 @@ export default Model.extend({
 
 	session: alias( "auth.session" ),
 
+
+	isLivestreamer: not( "isStreamlink" ),
+	isStreamlink: computed( "settings.content.streamprovider", function() {
+		let streamprovider = get( this, "settings.content.streamprovider" );
+		if ( !providers.hasOwnProperty( streamprovider ) ) {
+			throw new Error( "Invalid stream provider" );
+		}
+
+		return providers[ streamprovider ].type === "streamlink";
+	}),
 
 	// let Livestreamer use the GUI's client-id
 	clientID: `Client-ID=${clientId}`,

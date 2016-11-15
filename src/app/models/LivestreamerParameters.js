@@ -59,6 +59,10 @@ export const parameters = [
 		"--no-version-check"
 	),
 	new Parameter(
+		"--twitch-disable-hosting",
+		"isStreamlink"
+	),
+	new Parameter(
 		"--player",
 		null,
 		"playerExec.exec",
