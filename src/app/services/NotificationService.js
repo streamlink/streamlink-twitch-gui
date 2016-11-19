@@ -375,46 +375,60 @@ export default Service.extend( ChannelSettingsMixin, {
 			return mkdirp( cacheTmpDir )
 				.then(function( iconTempDir ) {
 					return Promise.all( streams.map(function( stream ) {
-						var logo = get( stream, "channel.logo" );
+						let logo = get( stream, "channel.logo" );
+
 						return download( logo, iconTempDir )
 							.then(function( file ) {
 								// the channel logo is now the local file
-								file = `file://${file}`;
 								set( stream, "logo", file );
 								return stream;
 							});
 					}) );
 				})
-				.then(function( streams ) {
-					streams.forEach( this.showNotificationSingle, this );
-				}.bind( this ) );
+				.then( streams => streams.forEach(
+					stream => this.showNotificationSingle( stream )
+				) );
 		}
 	},
 
+	/**
+	 * Show multiple streams as one notification
+	 * @param {TwitchStream[]} streams
+	 */
 	showNotificationGroup: function( streams ) {
+		let settings = get( this, "settings.notify_click_group" );
+
 		this.showNotification({
 			title  : "Some followed channels have started streaming",
-			message: streams.map(function( stream ) {
-				/** @type NotificationMessageList */
-				return {
-					title  : get( stream, "channel.display_name" ),
-					message: get( stream, "channel.status" ) || ""
-				};
-			}),
-			icon   : `file://${iconGroup}`,
-			click  : this.notificationClick.bind( this, streams )
+			message: streams.map( stream => ({
+				title  : get( stream, "channel.display_name" ),
+				message: get( stream, "channel.status" ) || ""
+			}) ),
+			icon   : iconGroup,
+			click  : () => this.notificationClick( settings, streams )
 		});
 	},
 
+	/**
+	 * Show a notification for each stream
+	 * @param {TwitchStream} stream
+	 */
 	showNotificationSingle: function( stream ) {
+		let settings = get( this, "settings.notify_click" );
+
 		this.showNotification({
 			title  : get( stream, "channel.display_name" ) + " has started streaming",
 			message: get( stream, "channel.status" ) || "",
 			icon   : get( stream, "logo" ) || get( stream, "channel.logo" ),
-			click  : this.notificationClick.bind( this, [ stream ] )
+			click  : () => this.notificationClick( settings, [ stream ] )
 		});
 	},
 
+	/**
+	 * Notfication click callback
+	 * @param {Number} settings
+	 * @param {TwitchStream[]} streams
+	 */
 	notificationClick: function( settings, streams ) {
 		// always restore the window
 		if ( settings !== 0 ) {
@@ -422,36 +436,38 @@ export default Service.extend( ChannelSettingsMixin, {
 			toggleVisibility( true );
 		}
 
-		var applicationController = getOwner( this ).lookup( "controller:application" );
+		let applicationController = getOwner( this ).lookup( "controller:application" );
+		let livestreamer = get( this, "livestreamer" );
 
 		switch( settings ) {
 			// followed streams menu
 			case 1:
 				applicationController.send( "goto", "user.followedStreams" );
 				break;
+
 			// launch stream
 			case 2:
-				streams.forEach(function( stream ) {
-					get( this, "livestreamer" ).startStream( stream );
-				}, this );
+				streams.forEach( stream => livestreamer.startStream( stream ) );
 				break;
+
 			// launch stream + chat
 			case 3:
-				streams.forEach(function( stream ) {
-					get( this, "livestreamer" ).startStream( stream );
+				streams.forEach( stream => {
+					livestreamer.startStream( stream );
 					// don't open the chat twice (startStream may open chat already)
 					if ( get( this, "settings.gui_openchat" ) ) { return; }
-					var chat    = get( this, "chat" );
-					var channel = get( stream, "channel.id" );
+					let chat    = get( this, "chat" );
+					let channel = get( stream, "channel.id" );
 					chat.open( channel )
 						.catch(function() {});
-				}, this );
+				});
 				break;
 		}
 	},
 
 	showNotification: function( data ) {
-		var provider = get( this, "settings.notify_provider" );
+		let provider = get( this, "settings.notify_provider" );
+
 		showNotification( provider, data )
 			.catch(function() {});
 	},

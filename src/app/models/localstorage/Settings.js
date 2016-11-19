@@ -202,7 +202,7 @@ export default Model.extend({
 			}
 		},
 		{
-			value: "toast",
+			value: "snoretoast",
 			label: {
 				name: "Windows toast notifications",
 				description: "Native notifications on Windows 8+",
@@ -210,10 +210,10 @@ export default Model.extend({
 			}
 		},
 		{
-			value: "notificationcenter",
+			value: "native",
 			label: {
-				name: "Notification center",
-				description: "Native notifications on MacOS",
+				name: "Native notifications",
+				description: "Chromium's native notification implementation",
 				notes: "Notifications can be configured in your system preferences"
 			}
 		},

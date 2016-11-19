@@ -9,6 +9,7 @@ const { resolve } = PATH;
 
 export const platform = OS.platform();
 export const release  = OS.release();
+export const arch     = OS.arch();
 
 
 function isVersionGte( version ) {
@@ -22,6 +23,9 @@ export const isLinux  = platform === "linux";
 
 export const isWinGte8 = isWin && isVersionGte( "6.2.0" );
 export const isMountainLion = isDarwin && isVersionGte( "12.0.0" );
+
+
+export const is64bit = arch === "x64";
 
 
 const { temp: tmpdirName } = dirs;

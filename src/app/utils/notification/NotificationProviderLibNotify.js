@@ -1,28 +1,41 @@
+import { main } from "config";
 import NotificationProvider from "./NotificationProvider";
-import LibNotify from "node-notifier/notifiers/notifysend";
 import which from "utils/node/fs/which";
-import UTIL from "util";
+import { spawn } from "child_process";
 
 
-function NotificationProviderLibNotify() {
-	this.provider = new LibNotify({
-		// don't run `which notify-send` twice
-		suppressOsdCheck: true
-	});
+const { "display-name": displayName } = main;
+
+
+export default class NotificationProviderLibNotify extends NotificationProvider {
+	constructor( exec ) {
+		super();
+		this.exec = exec;
+	}
+
+	static test() {
+		return which( "notify-send" );
+	}
+
+	notify( data ) {
+		return new Promise( ( resolve, reject ) => {
+			let params = [
+				"--app-name",
+				displayName,
+				"--icon",
+				data.icon,
+				data.title,
+				NotificationProvider.getMessageAsString( data.message )
+			];
+			let notification = spawn( this.exec, params );
+
+			notification.once( "error", reject );
+			notification.once( "exit", code => code === 0 ? resolve : reject );
+		});
+	}
 }
 
-UTIL.inherits( NotificationProviderLibNotify, NotificationProvider );
 
 NotificationProviderLibNotify.platforms = {
 	linux: "growl"
 };
-
-/**
- * @returns {Promise}
- */
-NotificationProviderLibNotify.test = function() {
-	return which( "notify-send" );
-};
-
-
-export default NotificationProviderLibNotify;

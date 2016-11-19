@@ -249,7 +249,7 @@ export default Controller.extend( RetryTransitionMixin, {
 			let notification = {
 				title: displayName,
 				message: "This is a test notification",
-				icon: `file://${icon}`
+				icon: icon
 			};
 			showNotification( provider, notification, provider !== "auto" )
 				.then( success, failure )

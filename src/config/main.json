@@ -1,5 +1,5 @@
 {
 	"display-name": "Livestreamer Twitch GUI",
-	"app-identifier": "de.bastimeyer.livestreamer-twitch-gui",
+	"app-identifier": "livestreamer-twitch-gui",
 	"nwjs-version": "0.18.7"
 }

@@ -3,16 +3,22 @@ var files = [
 ];
 
 var filesWin32 = files.concat(
-	"!build/tmp/prod/bin/darwin/**",
-	"!build/tmp/prod/bin/linux/**"
+	"!build/tmp/prod/bin/win64/**"
 );
-var filesDarwin = files.concat(
-	"!build/tmp/prod/bin/win32/**",
-	"!build/tmp/prod/bin/linux/**"
+var filesWin64 = files.concat(
+	"!build/tmp/prod/bin/win32/**"
 );
-var filesLinux = files.concat(
+var filesMacOS = files.concat(
 	"!build/tmp/prod/bin/win32/**",
-	"!build/tmp/prod/bin/darwin/**"
+	"!build/tmp/prod/bin/win64/**"
+);
+var filesLinux32 = files.concat(
+	"!build/tmp/prod/bin/win32/**",
+	"!build/tmp/prod/bin/win64/**"
+);
+var filesLinux64 = files.concat(
+	"!build/tmp/prod/bin/win32/**",
+	"!build/tmp/prod/bin/win64/**"
 );
 
 
@@ -43,33 +49,33 @@ module.exports = {
 	},
 	win64: {
 		options: {
-			files: filesWin32,
+			files: filesWin64,
 			platforms: [ "win64" ]
 		}
 	},
 
 	osx32: {
 		options: {
-			files: filesDarwin,
+			files: filesMacOS,
 			platforms: [ "osx32" ]
 		}
 	},
 	osx64: {
 		options: {
-			files: filesDarwin,
+			files: filesMacOS,
 			platforms: [ "osx64" ]
 		}
 	},
 
 	linux32: {
 		options: {
-			files: filesLinux,
+			files: filesLinux32,
 			platforms: [ "linux32" ]
 		}
 	},
 	linux64: {
 		options: {
-			files: filesLinux,
+			files: filesLinux64,
 			platforms: [ "linux64" ]
 		}
 	}

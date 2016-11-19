@@ -4,8 +4,8 @@ import {
 	isMountainLion
 } from "utils/node/platform";
 import ProviderAuto from "./notification/NotificationProviderAuto";
-import ProviderToast from "./notification/NotificationProviderToast";
-import ProviderNotificationCenter from "./notification/NotificationProviderNotificationCenter";
+import ProviderSnoreToast from "./notification/NotificationProviderSnoreToast";
+import ProviderNative from "./notification/NotificationProviderNative";
 import ProviderLibNotify from "./notification/NotificationProviderLibNotify";
 import ProviderGrowl from "./notification/NotificationProviderGrowl";
 import ProviderRich from "./notification/NotificationProviderRich";
@@ -13,8 +13,8 @@ import ProviderRich from "./notification/NotificationProviderRich";
 
 const providers = {
 	"auto": ProviderAuto,
-	"toast": ProviderToast,
-	"notificationcenter": ProviderNotificationCenter,
+	"snoretoast": ProviderSnoreToast,
+	"native": ProviderNative,
 	"libnotify": ProviderLibNotify,
 	"growl": ProviderGrowl,
 	"rich": ProviderRich
@@ -69,9 +69,6 @@ function notify( provider, data, setupData ) {
 		? instanceCache[ provider ]
 		: ( instanceCache[ provider ] = new providers[ provider ]( setupData ) );
 
-	data.sound = false;
-	data.wait = false;
-
 	return providerInstance.notify( data );
 }
 
@@ -86,10 +83,27 @@ function notify( provider, data, setupData ) {
 export function show( provider, data, noFallback ) {
 	// recursively test provider and its fallbacks
 	function testProvider( currentProvider ) {
+		// provider is not working... try to find fallbacks
+		function onError( err ) {
+			// don't use fallbacks
+			if ( noFallback ) {
+				return Promise.reject( err );
+			}
+
+			// get fallback of current provider
+			let fallbackProvider = getFallback( currentProvider );
+
+			// no further fallbacks defined?
+			return !fallbackProvider
+				? Promise.reject( err )
+				: testProvider( fallbackProvider );
+		}
+
 		// optimization: is a fallback for the current provider already known and set up?
 		if ( !noFallback && fallbackMap.hasOwnProperty( currentProvider ) ) {
 			// don't test the current provider twice
-			return notify( fallbackMap[ currentProvider ], data );
+			return notify( fallbackMap[ currentProvider ], data )
+				.catch( onError );
 		}
 
 		// test the current provider
@@ -99,22 +113,8 @@ export function show( provider, data, noFallback ) {
 				// add it to the fallbackMap
 				fallbackMap[ provider ] = currentProvider;
 				return notify( currentProvider, data, setupData );
-
-			// provider is not working... try to find fallbacks
-			}, function( err ) {
-				// don't use fallbacks
-				if ( noFallback ) {
-					return Promise.reject( err );
-				}
-
-				// get fallback of current provider
-				let fallbackProvider = getFallback( currentProvider );
-
-				// no further fallbacks defined?
-				return !fallbackProvider
-					? Promise.reject( err )
-					: testProvider( fallbackProvider );
-			});
+			})
+			.catch( onError );
 	}
 
 	return testProvider( provider );

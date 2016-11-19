@@ -1,41 +1,42 @@
 /**
- * @constructor
- */
-function NotificationProvider() {}
-
-/**
  * @typedef {{title: String, message: String}} NotificationMessageList
  */
 
-/**
- * @param {Object} data
- * @param {String} data.title
- * @param {(String|NotificationMessageList[])} data.message
- * @param {String} data.icon
- * @param {Function} data.click
- * @returns {Promise}
- */
-NotificationProvider.prototype.notify = function notify( data ) {
-	let self = this;
 
-	if ( Array.isArray( data.message ) ) {
-		data.message = data.message.mapBy( "title" ).join( ", " );
+/**
+ * @class NotificationProvider
+ */
+export default class NotificationProvider {
+	/**
+	 * Test notification provider
+	 * @returns {Promise}
+	 */
+	static test() {
+		return Promise.reject();
 	}
 
-	return new Promise(function( resolve, reject ) {
-		let notification = self.provider.notify( data, function( err ) {
-			if ( err ) {
-				reject( err );
-			} else {
-				resolve();
-			}
-		});
+	/**
+	 * @param {Object} data
+	 * @param {String} data.title
+	 * @param {(String|NotificationMessageList[])} data.message
+	 * @param {String} data.icon
+	 * @param {Function} data.click
+	 * @returns {Promise}
+	 */
+	notify( data ) {
+		let err = new Error( "Not implemented" );
+		err.data = data;
+		throw err;
+	}
 
-		if ( data.click ) {
-			notification.once( "click", data.click );
-		}
-	});
-};
 
-
-export default NotificationProvider;
+	/**
+	 * @param {(String|NotificationMessageList[])} message
+	 * @returns {String}
+	 */
+	static getMessageAsString( message ) {
+		return Array.isArray( message )
+			? message.map( message => message.title ).join( ", " )
+			: message;
+	}
+}

@@ -1,21 +1,20 @@
 import NotificationProvider from "./NotificationProvider";
-import UTIL from "util";
 
 
-function NotificationProviderAuto() {}
+export default class NotificationProviderAuto extends NotificationProvider {
+	constructor() {
+		super();
+	}
 
-UTIL.inherits( NotificationProviderAuto, NotificationProvider );
+	static test() {
+		return Promise.reject();
+	}
+}
+
 
 NotificationProviderAuto.platforms = {
 	win32: "growl",
-	win32gte8: "toast",
-	darwin: "notificationcenter",
+	win32gte8: "snoretoast",
+	darwin: "native",
 	linux: "libnotify"
 };
-
-NotificationProviderAuto.test = function() {
-	return Promise.reject();
-};
-
-
-export default NotificationProviderAuto;

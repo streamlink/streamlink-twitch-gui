@@ -109,7 +109,9 @@ module.exports = {
 							"babel-plugin-transform-es2015-computed-properties",
 							"babel-plugin-transform-es2015-template-literals",
 							"babel-plugin-transform-es2015-spread",
-							"babel-plugin-transform-es2015-parameters"
+							"babel-plugin-transform-es2015-parameters",
+							"babel-plugin-transform-es2015-arrow-functions",
+							"babel-plugin-transform-es2015-classes"
 						],
 						cacheDirectory: r( OS.tmpdir(), "babel-cache" )
 					}
