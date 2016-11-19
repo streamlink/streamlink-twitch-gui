@@ -50,6 +50,8 @@ module.exports = function( grunt ) {
 		new Promise(function( resolve, reject ) {
 			process.on( "exit", kill );
 
+			nwjs.on( "log", grunt.log.writeln.bind( grunt.log ) );
+
 			// listen for the appstart event
 			nwjs.on( "appstart", function() {
 				grunt.log.debug( "NW.js started" );
