@@ -1,6 +1,6 @@
 var NwBuilder = require( "nw-builder" );
-var criConnection = require( "../common/cri/criConnection" );
-var criTestReporterQUnit = require( "../common/cri/criTestReporterQUnit" );
+var cdpConnection = require( "../common/cdp/cdpConnection" );
+var cdpTestReporterQUnit = require( "../common/cdp/cdpTestReporterQUnit" );
 
 var nwjsTaskOptions = require( "../configs/nwjs" ).options;
 var currentPlatform = require( "../common/platforms" ).getPlatforms( [] );
@@ -60,12 +60,12 @@ module.exports = function( grunt ) {
 				});
 
 				// connect to NW.js
-				criConnection( options )
-					.then(function( chrome ) {
+				cdpConnection( options )
+					.then(function( cdp ) {
 						grunt.log.debug( "Connected to " + options.host + ":" + options.port );
 
 						// set up and start QUnit
-						return criTestReporterQUnit( grunt, options, chrome );
+						return cdpTestReporterQUnit( grunt, options, cdp );
 					})
 					// resolve on a successful test run
 					.then( resolve, reject );

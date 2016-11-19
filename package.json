@@ -46,7 +46,7 @@
 		"less": "2.5.1",
 		"less-plugin-clean-css": "1.5.1",
 		"load-grunt-config": "0.19.2",
-		"chrome-remote-interface": "0.15.0",
+		"chrome-remote-interface": "0.16.1",
 		"nw-builder": "3.1.0"
 	},
 
