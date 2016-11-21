@@ -30,7 +30,10 @@ export default class NotificationProviderLibNotify extends NotificationProvider 
 			let notification = spawn( this.exec, params );
 
 			notification.once( "error", reject );
-			notification.once( "exit", code => code === 0 ? resolve : reject );
+			notification.once( "exit", code => code === 0
+				? resolve()
+				: reject( new Error( "Could not display notification" ) )
+			);
 		});
 	}
 }
