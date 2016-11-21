@@ -119,4 +119,28 @@
 			margin-bottom: 1rem;
 		}
 	}
+
+	.btn.btn-test-notification {
+		min-width: 13em;
+		margin-bottom: 1em;
+	}
+
+	.notification-provider-item {
+		> label {
+			margin-bottom: 0;
+		}
+
+		> .description {
+			margin: 0 0 .5rem calc(@input-btn-size + 2 * @input-btn-outline-size + .5rem) !important;
+			font-size: small;
+
+			.themed({
+				color: @themed-text-color-hint;
+			});
+
+			> .fa {
+				cursor: help;
+			}
+		}
+	}
 }

@@ -1,9 +1,12 @@
+var consoleMethod = "info";
+
 /**
  * @returns {Promise}
  */
-module.exports = function( grunt, options, chrome ) {
-	return new Promise(function( resolve, reject ) {
-		var UUID = "qunit_" + Date.now() + "_" + Math.random().toString( 36 ).substring( 2, 15 );
+module.exports = function( grunt, options, cdp ) {
+	var UUID = "qunit_" + Date.now() + "_" + Math.random().toString( 36 ).substring( 2, 15 );
+
+	function promiseQUnitBridge( resolve, reject ) {
 		var started = false;
 
 		// wait X seconds for QUnit to start or reject the promise
@@ -14,9 +17,9 @@ module.exports = function( grunt, options, chrome ) {
 		var testTimeout;
 
 		// listen for qunit messages
-		chrome.on( "Console.messageAdded", function( message ) {
-			if ( !message || !message.message ) { return; }
-			var params = message.message.parameters;
+		cdp.on( "Runtime.consoleAPICalled", function( obj ) {
+			if ( !obj || !obj.type || obj.type !== consoleMethod ) { return; }
+			var params = obj.args;
 			if ( !params || params.length !== 3 || params[ 0 ].value !== UUID ) { return; }
 			var event = params[ 1 ].value;
 			var data = JSON.parse( params[ 2 ].value );
@@ -80,8 +83,10 @@ module.exports = function( grunt, options, chrome ) {
 		 * This function will be executed by NW.js over the remote connection
 		 */
 		function setupQUnit( QUnit ) {
+			delete global._setupQUnitBridge;
+
 			function logMessage( callback, obj ) {
-				console.log( "%UUID%", callback, JSON.stringify( obj ) );
+				console[ "%METHOD%" ]( "%UUID%", callback, JSON.stringify( obj ) );
 			}
 
 			[
@@ -94,20 +99,34 @@ module.exports = function( grunt, options, chrome ) {
 			].forEach(function( callback ) {
 				QUnit[ callback ]( logMessage.bind( null, callback ) );
 			});
+
+			QUnit.start();
 		}
 
-		// setup QUnit
-		chrome.Runtime.evaluate({
-			expression: "window.setupQUnit=" + setupQUnit.toString().replace( "%UUID%", UUID )
-		}, function() {
-			grunt.log.debug( "QUnit test reporter injected" );
+		var expression = [
+			"(function() {",
+			setupQUnit
+				.toString()
+				.replace( "%METHOD%", consoleMethod )
+				.replace( "%UUID%", UUID ),
+			"if ( global._setupQUnitBridge ) {",
+			"setupQUnit( global._setupQUnitBridge );",
+			"} else {",
+			"global._setupQUnitBridge = setupQUnit;",
+			"}",
+			"})();"
+		].join( "\n" );
 
-			// start QUnit
-			chrome.Runtime.evaluate({
-				expression: "window.startQUnit&&window.startQUnit()"
-			}, function() {
-				grunt.log.debug( "QUnit started" );
+		// setup & start QUnit
+		cdp.send( "Runtime.evaluate", { expression: expression } )
+			.then(function() {
+				grunt.log.debug( "QUnit test reporter injected and QUnit started" );
 			});
+	}
+
+
+	return cdp.send( "Runtime.enable" )
+		.then(function() {
+			return new Promise( promiseQUnitBridge );
 		});
-	});
 };
