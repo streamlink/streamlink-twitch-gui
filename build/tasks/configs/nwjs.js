@@ -54,12 +54,6 @@ module.exports = {
 		}
 	},
 
-	osx32: {
-		options: {
-			files: filesMacOS,
-			platforms: [ "osx32" ]
-		}
-	},
 	osx64: {
 		options: {
 			files: filesMacOS,
