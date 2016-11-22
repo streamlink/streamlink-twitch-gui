@@ -8,7 +8,7 @@ import {
 import { streamprovider } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import qualities from "models/LivestreamerQualities";
-import openBrowser from "nwjs/openBrowser";
+import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalLivestreamerComponent.hbs";
 
 

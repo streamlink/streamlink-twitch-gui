@@ -8,15 +8,24 @@
 {{/settings-row}}
 
 {{#if model.notify_enabled}}
-	{{#if (bool-and model.advanced platform.isWinGte8)}}
-		{{#settings-row
-			"Startmenu shortcut"
-			"Required by Windows for receiving toast notifications. Re-enabling this option may require an application restart."
-			icon="fa-link"
+	{{#settings-row
+		"Notification type"
+		"Choose the kind of notification"
+		icon="fa-cog"
+	}}
+		{{#form-button class="btn-test-notification" icon="fa-rocket" action="testNotification" iconanim=true}}Test notification{{/form-button}}
+		{{#radio-btns
+			name="notify_provider"
+			value=model.notify_provider
+			content=notifyProvider
+			as |radiobtn label|
 		}}
-			{{check-box "Create a startmenu shortcut" checked=model.notify_shortcut}}
-		{{/settings-row}}
-	{{/if}}
+			<div class="notification-provider-item">
+				{{component radiobtn label.name}}
+				<p class="description">{{#if label.notes}}<i class="fa fa-question-circle" title={{label.notes}}></i> {{/if}}{{label.description}}</p>
+			</div>
+		{{/radio-btns}}
+	{{/settings-row}}
 
 	{{#settings-row
 		"Channel filter"
@@ -41,24 +50,22 @@
 		{{check-box "Only show one notification at a time" checked=model.notify_grouping}}
 	{{/settings-row}}
 
-	{{#unless platform.isLinux}}
+	{{#settings-row
+		"Notification click"
+		"Preferred click action."
+		icon="fa-hand-pointer-o"
+	}}
+		{{drop-down value=model.notify_click content=Settings.notify_click class="notifications"}}
+	{{/settings-row}}
+
+	{{#if (bool-and model.notify_grouping model.notify_click)}}
 		{{#settings-row
-			"Notification click"
-			"Preferred click action."
+			"Group click"
+			"Preferred group click action."
 			icon="fa-hand-pointer-o"
 		}}
-			{{drop-down value=model.notify_click content=Settings.notify_click class="notifications"}}
+			{{drop-down value=model.notify_click_group content=Settings.notify_click_group class="notifications"}}
 		{{/settings-row}}
-
-		{{#if (bool-and model.notify_grouping model.notify_click)}}
-			{{#settings-row
-				"Group click"
-				"Preferred group click action."
-				icon="fa-hand-pointer-o"
-			}}
-				{{drop-down value=model.notify_click_group content=Settings.notify_click_group class="notifications"}}
-			{{/settings-row}}
-		{{/if}}
-	{{/unless}}
+	{{/if}}
 {{/if}}
 </fieldset>

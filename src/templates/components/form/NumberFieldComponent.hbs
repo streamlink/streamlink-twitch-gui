@@ -1,0 +1,13 @@
+<input
+	type="text"
+	value={{value}}
+	min={{min}}
+	max={{max}}
+	placeholder={{default}}
+	disabled={{disabled}}
+    {{action "blur" on="focusOut"}}
+>
+<div class="spin-buttons">
+<button class="spin-button spin-button-increase" {{action "increase"}}><i class="fa fa-caret-up"></i></button>
+<button class="spin-button spin-button-decrease" {{action "decrease"}}><i class="fa fa-caret-down"></i></button>
+</div>

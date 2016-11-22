@@ -139,16 +139,16 @@ export default Model.extend({
 	stream_click_modify : attr( "number",  { defaultValue: 4 } ),
 	channel_name        : attr( "number",  { defaultValue: 3 } ),
 	notify_enabled      : attr( "boolean", { defaultValue: true } ),
+	notify_provider     : attr( "string",  { defaultValue: "auto" } ),
 	notify_all          : attr( "boolean", { defaultValue: true } ),
 	notify_grouping     : attr( "boolean", { defaultValue: true } ),
 	notify_click        : attr( "number",  { defaultValue: 1 } ),
 	notify_click_group  : attr( "number",  { defaultValue: 1 } ),
 	notify_badgelabel   : attr( "boolean", { defaultValue: true } ),
-	notify_shortcut     : attr( "boolean", { defaultValue: true } ),
-	hls_live_edge       : attr( "string",  { defaultValue: "3", min: "1", max: "10" } ),
-	hls_segment_threads : attr( "string",  { defaultValue: "1", min: "1", max: "10" } ),
-	retry_open          : attr( "string",  { defaultValue: "1", min: "1", max: "10" } ),
-	retry_streams       : attr( "string",  { defaultValue: "1", min: "0", max: "3" } ),
+	hls_live_edge       : attr( "number",  { defaultValue: 3, min: 1, max: 10 } ),
+	hls_segment_threads : attr( "number",  { defaultValue: 1, min: 1, max: 10 } ),
+	retry_open          : attr( "number",  { defaultValue: 1, min: 1, max: 10 } ),
+	retry_streams       : attr( "number",  { defaultValue: 1, min: 0, max: 3 } ),
 	chat_method         : attr( "string",  { defaultValue: "default" } ),
 	chat_command        : attr( "string",  { defaultValue: "" } ),
 
@@ -189,6 +189,57 @@ export default Model.extend({
 		{ value:  60000, label: "After one minute" },
 		{ value: 120000, label: "After two minutes" },
 		{ value: 300000, label: "After five minutes" }
+	],
+
+	notify_provider: [
+		{
+			value: "auto",
+			label: {
+				name: "Automatic selection",
+				description: "Detects the best type of notification",
+				notes: "Prefers native notifications, falls back to growl or rich notifications"
+			}
+		},
+		{
+			value: "snoretoast",
+			label: {
+				name: "Windows toast notifications",
+				description: "Native notifications on Windows 8+",
+				notes: "\"Banner notifications\" need to be enabled"
+			}
+		},
+		{
+			value: "native",
+			label: {
+				name: "Native notifications",
+				description: "Chromium's native notification implementation",
+				notes: "Notifications can be configured in your system preferences"
+			}
+		},
+		{
+			value: "libnotify",
+			label: {
+				name: "Libnotify notifications",
+				description: "Native notifications on Linux",
+				notes: "Does not support click events"
+			}
+		},
+		{
+			value: "growl",
+			label: {
+				name: "Growl notifications",
+				description: "Third-party notification service for Windows, MacOS and Linux",
+				notes: "Requires Growl to be installed and running on your system"
+			}
+		},
+		{
+			value: "rich",
+			label: {
+				name: "Rich notifications",
+				description: "Chromium rich notifications",
+				notes: "Rendered by the application itself"
+			}
+		}
 	],
 
 	notify_all: [

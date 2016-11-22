@@ -8,8 +8,8 @@ import {
 	Service
 } from "Ember";
 import { twitch } from "config";
-import nwWindow from "nwjs/nwWindow";
-import openBrowser from "nwjs/openBrowser";
+import nwWindow from "nwjs/Window";
+import { openBrowser } from "nwjs/Shell";
 import { all } from "utils/contains";
 import HttpServer from "utils/node/http/Server";
 import OAuthResponseRedirect from "root/oauth-redirect.html";

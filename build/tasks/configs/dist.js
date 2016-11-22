@@ -10,11 +10,6 @@ module.exports = {
 		checksum: "<%= compress.win64.options.archive %>"
 	},
 
-	osx32archive: {
-		platform: "osx32",
-		tasks: [ "compress:osx32" ],
-		checksum: "<%= compress.osx32.options.archive %>"
-	},
 	osx64archive: {
 		platform: "osx64",
 		tasks: [ "compress:osx64" ],

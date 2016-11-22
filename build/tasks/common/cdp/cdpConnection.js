@@ -1,4 +1,4 @@
-var CRI = require( "chrome-remote-interface" );
+var CDP = require( "chrome-remote-interface" );
 
 
 /**
@@ -6,16 +6,10 @@ var CRI = require( "chrome-remote-interface" );
  */
 module.exports = function( options ) {
 	function connect() {
-		return CRI({
+		return CDP({
 			host: options.host,
 			port: options.port
-		})
-			.then(function( chrome ) {
-				chrome.Console.enable();
-				chrome.Runtime.enable();
-
-				return chrome;
-			});
+		});
 	}
 
 	// wait a second and try to connect at least 3 times before failing

@@ -1,7 +1,6 @@
 import { Application } from "Ember";
 import DS from "EmberData";
 import {} from "EmberDataLS";
-import nwWindow from "nwjs/nwWindow";
 import {} from "initializers/initializers";
 
 import Router from "./router";
@@ -126,6 +125,7 @@ import RadioBtnsComponent from "components/form/RadioBtnsComponent";
 import DropDownComponent from "components/form/DropDownComponent";
 import FileSelectComponent from "components/form/FileSelectComponent";
 import TextFieldComponent from "components/form/TextFieldComponent";
+import NumberFieldComponent from "components/form/NumberFieldComponent";
 
 import FollowChannelComponent from "components/button/FollowChannelComponent";
 import FollowGameComponent from "components/button/FollowGameComponent";
@@ -423,6 +423,7 @@ export default Application.create({
 	DropDownComponent,
 	FileSelectComponent,
 	TextFieldComponent,
+	NumberFieldComponent,
 
 	FollowChannelComponent,
 	FollowGameComponent,
@@ -561,11 +562,6 @@ export default Application.create({
 	AboutController,
 	AboutTemplate,
 
-
-	// ready event
-	ready() {
-		nwWindow.emit( "ready" );
-	},
 
 	toString() { return "App"; }
 

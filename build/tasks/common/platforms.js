@@ -9,10 +9,6 @@ module.exports = {
 			arch    : "x64"
 		},
 
-		osx32: {
-			platform: "darwin",
-			arch    : "ia32"
-		},
 		osx64: {
 			platform: "darwin",
 			arch    : "x64"

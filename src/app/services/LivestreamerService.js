@@ -14,7 +14,11 @@ import {
 	twitch as twitchConfig,
 	vars as varsConfig
 } from "config";
-import nwWindow from "nwjs/nwWindow";
+import {
+	setShowInTaskbar,
+	toggleMinimize,
+	toggleVisibility
+} from "nwjs/Window";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
@@ -377,7 +381,6 @@ export default Service.extend( ChannelSettingsMixin, {
 			});
 	},
 
-
 	/**
 	 * Get the parameter list
 	 * @param {Livestreamer} record
@@ -518,13 +521,13 @@ export default Service.extend( ChannelSettingsMixin, {
 		switch ( get( this, "settings.gui_minimize" ) ) {
 			// minimize
 			case 1:
-				nwWindow.toggleMinimize( restore );
+				toggleMinimize( restore );
 				break;
 			// move to tray: toggle window and taskbar visibility
 			case 2:
-				nwWindow.toggleVisibility( restore );
+				toggleVisibility( restore );
 				if ( get( this, "settings.isVisibleInTaskbar" ) ) {
-					nwWindow.setShowInTaskbar( restore );
+					setShowInTaskbar( restore );
 				}
 				break;
 		}

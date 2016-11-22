@@ -4,7 +4,7 @@ import {
 	computed
 } from "Ember";
 import { twitch } from "config";
-import openBrowser from "nwjs/openBrowser";
+import { openBrowser } from "nwjs/Shell";
 import ListItemComponent from "components/list/ListItemComponent";
 import Moment from "Moment";
 import layout from "templates/components/list/SubscriptionItemComponent.hbs";

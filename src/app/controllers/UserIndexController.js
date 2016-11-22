@@ -5,7 +5,7 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import { set as setClipboard } from "nwjs/clipboard";
+import { set as setClipboard } from "nwjs/Clipboard";
 
 
 const { service } = inject;

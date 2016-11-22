@@ -2,12 +2,64 @@ import {
 	get,
 	Application
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
-import platformfixes from "nwjs/setup/platformfixes";
-import { createNativeMenuBar } from "nwjs/setup/menubar";
-import { createStartmenuShortcut } from "nwjs/setup/shortcut";
-import { createTrayIcon } from "nwjs/setup/tray";
-import { setupIntegrations } from "nwjs/setup/integrations";
+import nwWindow, {
+	setShowInTaskbar,
+	toggleMaximize,
+	toggleMinimize,
+	toggleVisibility
+} from "nwjs/Window";
+import {
+	setShowInTray,
+	hideOnClick
+} from "nwjs/Tray";
+import {
+	max as argMax,
+	min as argMin,
+	tray as argTray
+} from "nwjs/argv";
+import platformfixes from "./nwjs/platformfixes";
+import { createNativeMenuBar } from "./nwjs/menubar";
+
+
+function onChangeIntegrations( settings ) {
+	let taskbar = get( settings, "isVisibleInTaskbar" );
+	let tray    = get( settings, "isVisibleInTray" );
+
+	setShowInTaskbar( taskbar );
+	setShowInTray( tray, taskbar );
+}
+
+function setupIntegrations( settings ) {
+	// maximize window
+	if ( argMax ) {
+		toggleMaximize( false );
+	}
+
+	// minimize window
+	if ( argMin ) {
+		toggleMinimize( false );
+	}
+
+	if ( argTray ) {
+		// show tray icon (and taskbar item)
+		setShowInTray( true, get( settings, "isVisibleInTaskbar" ) );
+		// remove the tray icon after clicking it if it's disabled in the settings
+		if ( !get( settings, "isVisibleInTray" ) ) {
+			hideOnClick();
+		}
+	} else {
+		// show tray and taskbar item depending on settings
+		onChangeIntegrations( settings );
+
+		// show application window
+		toggleVisibility( true );
+	}
+
+	nwWindow.window.initialized = true;
+
+	// listen for changes to integration settings
+	settings.addObserver( "gui_integration", settings, onChangeIntegrations );
+}
 
 
 Application.instanceInitializer({
@@ -18,24 +70,20 @@ Application.instanceInitializer({
 		var settings   = application.lookup( "service:settings" );
 
 		// set up everything NWjs related
-		nwWindow.once( "ready", function() {
-			function settingsObserver() {
-				// wait for the settings to load
-				if ( !get( settings, "content" ) ) { return; }
-				settings.removeObserver( "content", settings, settingsObserver );
+		function settingsObserver() {
+			// wait for the settings to load
+			if ( !get( settings, "content" ) ) { return; }
+			settings.removeObserver( "content", settings, settingsObserver );
 
-				// try to fix issues on certain platforms first
-				platformfixes();
+			// try to fix issues on certain platforms first
+			platformfixes();
 
-				// do all the NWjs stuff
-				createNativeMenuBar( controller );
-				createStartmenuShortcut( settings );
-				createTrayIcon( settings );
-				setupIntegrations( settings );
-			}
+			// initialize all the NWjs stuff
+			createNativeMenuBar( controller );
+			setupIntegrations( settings );
+		}
 
-			settings.addObserver( "content", settings, settingsObserver );
-		});
+		settings.addObserver( "content", settings, settingsObserver );
 
 		// listen for the close event and show the dialog instead of strictly shutting down
 		nwWindow.on( "close", function() {

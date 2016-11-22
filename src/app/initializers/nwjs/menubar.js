@@ -1,7 +1,7 @@
 import { main } from "config";
 import { MenuItem } from "nwjs/nwGui";
-import nwWindow from "nwjs/nwWindow";
-import Menu from "nwjs/menu";
+import nwWindow from "nwjs/Window";
+import Menu from "nwjs/Menu";
 import { isDarwin } from "utils/node/platform";
 
 

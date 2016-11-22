@@ -4,7 +4,7 @@ import {
 	inject
 } from "Ember";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
-import nwWindow from "nwjs/nwWindow";
+import nwWindow from "nwjs/Window";
 import layout from "templates/components/modal/ModalQuitComponent.hbs";
 
 

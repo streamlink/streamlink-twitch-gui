@@ -15,9 +15,9 @@ export default Component.extend({
 	viewBox: "0 0 1 1",
 
 	_setRadiusAttribute: on( "didInsertElement", function() {
-		var circle = this.element.querySelector( "circle" );
-		var strokeWidth = window.getComputedStyle( circle ).strokeWidth;
-		var radius = 50 - parseInt( strokeWidth, 10 );
+		let circle = this.element.querySelector( "circle" );
+		let strokeWidth = window.getComputedStyle( circle ).strokeWidth;
+		let radius = 50 - parseFloat( strokeWidth );
 		circle.setAttribute( "r", `${radius}%` );
 	})
 });

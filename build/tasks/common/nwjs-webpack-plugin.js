@@ -5,6 +5,7 @@ var nwjsOptions = require( "../configs/nwjs" ).options;
 
 function NwjsPlugin( options ) {
 	this.options = Object.assign( {}, nwjsOptions, options, {
+		flavor: "sdk",
 		platforms: platforms.getPlatforms( [] )
 	});
 	this.built = false;

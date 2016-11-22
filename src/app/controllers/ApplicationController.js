@@ -4,7 +4,11 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
+import nwWindow, {
+	toggleVisibility,
+	toggleMaximize,
+	toggleMinimize
+} from "nwjs/Window";
 
 
 const { readOnly } = computed;
@@ -40,14 +44,14 @@ export default Controller.extend({
 
 			// tray only or both with min2tray: just hide the window
 			if ( integration === 2 || integration === 3 && minimizetotray ) {
-				nwWindow.toggleVisibility( false );
+				toggleVisibility( false );
 			} else {
-				nwWindow.toggleMinimize( false );
+				toggleMinimize( false );
 			}
 		},
 
 		winMax() {
-			nwWindow.toggleMaximize();
+			toggleMaximize();
 		},
 
 		winClose() {

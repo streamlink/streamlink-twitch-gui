@@ -14,13 +14,22 @@ import {
 	files,
 	notification
 } from "config";
-import nwWindow from "nwjs/nwWindow";
+import nwWindow, {
+	toggleMinimize,
+	toggleVisibility
+} from "nwjs/Window";
+import { getMenu as getTrayMenu } from "nwjs/Tray";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import { mapBy } from "utils/ember/recordArrayMethods";
-import { tmpdir } from "utils/node/platform";
+import {
+	isWin,
+	tmpdir
+} from "utils/node/platform";
+import resolvePath from "utils/node/resolvePath";
 import mkdirp from "utils/node/fs/mkdirp";
 import download from "utils/node/fs/download";
 import clearfolder from "utils/node/fs/clearfolder";
+import { show as showNotification } from "utils/Notification";
 
 
 const { and } = computed;
@@ -41,10 +50,12 @@ const {
 		"error": intervalError
 	}
 } = notification;
-const { icons: { "big": iconGroup } } = files;
+const { icons: { "big": bigIcon } } = files;
 
+const iconGroup = isWin
+	? resolvePath( "%NWJSAPPPATH%", bigIcon )
+	: resolvePath( bigIcon );
 const cacheTmpDir = tmpdir( cacheDir );
-const Notif = window.Notification;
 
 
 function StreamCache( stream ) {
@@ -77,6 +88,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	model : [],
+	notifs: [],
 	_first: true,
 	_tries: 0,
 	_next : null,
@@ -167,7 +179,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 	_setupTrayItem: on( "init", function() {
 		var self = this;
-		var menu = nwWindow.tray.menu;
+		var menu = getTrayMenu();
 		var item = null;
 
 		function createTrayItem() {
@@ -363,92 +375,101 @@ export default Service.extend( ChannelSettingsMixin, {
 			return mkdirp( cacheTmpDir )
 				.then(function( iconTempDir ) {
 					return Promise.all( streams.map(function( stream ) {
-						var logo = get( stream, "channel.logo" );
+						let logo = get( stream, "channel.logo" );
+
 						return download( logo, iconTempDir )
 							.then(function( file ) {
 								// the channel logo is now the local file
-								file = `file://${file}`;
 								set( stream, "logo", file );
 								return stream;
 							});
 					}) );
 				})
-				.then(function( streams ) {
-					streams.forEach( this.showNotificationSingle, this );
-				}.bind( this ) );
+				.then( streams => streams.forEach(
+					stream => this.showNotificationSingle( stream )
+				) );
 		}
 	},
 
-	showNotificationGroup( streams ) {
+	/**
+	 * Show multiple streams as one notification
+	 * @param {TwitchStream[]} streams
+	 */
+	showNotificationGroup: function( streams ) {
+		let settings = get( this, "settings.notify_click_group" );
+
 		this.showNotification({
-			icon : iconGroup,
-			title: "Some of your favorites have started streaming",
-			body : streams.map(function( stream ) {
-				return get( stream, "channel.display_name" );
-			}).join( ", " ),
-			click: function() {
-				var settings = get( this, "settings.notify_click_group" );
-				streams.forEach( this.notificationClick.bind( this, settings ) );
-			}.bind( this )
+			title  : "Some followed channels have started streaming",
+			message: streams.map( stream => ({
+				title  : get( stream, "channel.display_name" ),
+				message: get( stream, "channel.status" ) || ""
+			}) ),
+			icon   : iconGroup,
+			click  : () => this.notificationClick( settings, streams )
 		});
 	},
 
-	showNotificationSingle( stream ) {
-		var name = get( stream, "channel.display_name" );
+	/**
+	 * Show a notification for each stream
+	 * @param {TwitchStream} stream
+	 */
+	showNotificationSingle: function( stream ) {
+		let settings = get( this, "settings.notify_click" );
 
 		this.showNotification({
-			icon : get( stream, "logo" ) || get( stream, "channel.logo" ),
-			title: `${name} has started streaming`,
-			body : get( stream, "channel.status" ) || "",
-			click: function() {
-				var settings = get( this, "settings.notify_click" );
-				this.notificationClick( settings, stream );
-			}.bind( this )
+			title  : get( stream, "channel.display_name" ) + " has started streaming",
+			message: get( stream, "channel.status" ) || "",
+			icon   : get( stream, "logo" ) || get( stream, "channel.logo" ),
+			click  : () => this.notificationClick( settings, [ stream ] )
 		});
 	},
 
-	notificationClick( settings, stream ) {
+	/**
+	 * Notfication click callback
+	 * @param {Number} settings
+	 * @param {TwitchStream[]} streams
+	 */
+	notificationClick: function( settings, streams ) {
 		// always restore the window
 		if ( settings !== 0 ) {
-			nwWindow.toggleMinimize( true );
-			nwWindow.toggleVisibility( true );
+			toggleMinimize( true );
+			toggleVisibility( true );
 		}
 
-		var applicationController = getOwner( this ).lookup( "controller:application" );
+		let applicationController = getOwner( this ).lookup( "controller:application" );
+		let livestreamer = get( this, "livestreamer" );
 
 		switch( settings ) {
 			// followed streams menu
 			case 1:
 				applicationController.send( "goto", "user.followedStreams" );
 				break;
+
 			// launch stream
 			case 2:
-				get( this, "livestreamer" ).startStream( stream );
+				streams.forEach( stream => livestreamer.startStream( stream ) );
 				break;
+
 			// launch stream + chat
 			case 3:
-				get( this, "livestreamer" ).startStream( stream );
-				// don't open the chat twice (startStream may open chat already)
-				if ( get( this, "settings.gui_openchat" ) ) { break; }
-				var chat    = get( this, "chat" );
-				var channel = get( stream, "channel.id" );
-				chat.open( channel )
-					.catch(function() {});
+				streams.forEach( stream => {
+					livestreamer.startStream( stream );
+					// don't open the chat twice (startStream may open chat already)
+					if ( get( this, "settings.gui_openchat" ) ) { return; }
+					let chat    = get( this, "chat" );
+					let channel = get( stream, "channel.id" );
+					chat.open( channel )
+						.catch(function() {});
+				});
 				break;
 		}
 	},
 
-	showNotification( obj ) {
-		var notify = new Notif( obj.title, {
-			icon: obj.icon,
-			body: obj.body
-		});
-		if ( obj.click ) {
-			notify.addEventListener( "click", function() {
-				this.close();
-				obj.click();
-			}, false );
-		}
+	showNotification: function( data ) {
+		let provider = get( this, "settings.notify_provider" );
+
+		showNotification( provider, data )
+			.catch(function() {});
 	},
 
 

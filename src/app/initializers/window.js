@@ -5,8 +5,8 @@ import {
 	Application
 } from "Ember";
 import { App } from "nwjs/nwGui";
-import nwWindow from "nwjs/nwWindow";
-import nwScreen from "nwjs/nwScreen";
+import nwWindow from "nwjs/Window";
+import nwScreen from "nwjs/Screen";
 import { resetwindow as argResetwindow } from "nwjs/argv";
 import { isWin } from "utils/node/platform";
 
@@ -109,6 +109,8 @@ function onDisplayBoundsChanged() {
 }
 
 function isWindowFullyVisible() {
+	if ( !nwScreen.screens ) { return; }
+
 	var x = nwWindow.x;
 	var y = nwWindow.y;
 	var w = nwWindow.width;

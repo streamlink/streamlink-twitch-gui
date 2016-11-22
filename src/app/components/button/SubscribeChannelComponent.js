@@ -3,7 +3,7 @@ import {
 	computed
 } from "Ember";
 import { twitch } from "config";
-import openBrowser from "nwjs/openBrowser";
+import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
 

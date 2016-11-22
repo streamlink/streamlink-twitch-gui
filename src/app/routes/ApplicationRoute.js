@@ -6,8 +6,8 @@ import {
 	run,
 	Route
 } from "Ember";
-import nwWindow from "nwjs/nwWindow";
-import openBrowser from "nwjs/openBrowser";
+import nwWindow from "nwjs/Window";
+import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 
 

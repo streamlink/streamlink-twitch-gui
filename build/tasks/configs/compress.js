@@ -22,17 +22,6 @@ module.exports = {
 		dest   : "<%= package.name %>"
 	},
 
-	osx32: {
-		options: {
-			mode   : "tgz",
-			level  : 9,
-			archive: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-osx32.tar.gz"
-		},
-		expand : true,
-		cwd    : "<%= dir.releases %>/<%= package.name %>/osx32/<%= package.name %>.app/",
-		src    : [ "**" ],
-		dest   : "<%= main['display-name'] %>.app/"
-	},
 	osx64: {
 		options: {
 			mode   : "tgz",
