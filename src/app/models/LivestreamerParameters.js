@@ -94,7 +94,7 @@ export const parameters = [
 	),
 	new Parameter(
 		"--twitch-oauth-token",
-		[ "session.isLoggedIn", "settings.livestreamer_oauth" ],
+		[ "session.isLoggedIn", "settings.streamprovider_oauth" ],
 		"session.access_token"
 	),
 	new Parameter(

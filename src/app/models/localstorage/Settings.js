@@ -111,7 +111,7 @@ export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
 	streamprovider      : attr( "string",  { defaultValue: defaultStreamprovider } ),
 	streamproviders     : attr( "",        { defaultValue: defaultStreamproviders } ),
-	livestreamer_oauth  : attr( "boolean", { defaultValue: true } ),
+	streamprovider_oauth: attr( "boolean", { defaultValue: true } ),
 	quality             : attr( "string",  { defaultValue: "source" } ),
 	quality_presets     : attr( "",        { defaultValue: defaultQualityPresets } ),
 	player              : attr( "",        { defaultValue: defaultPlayerData } ),

@@ -81,7 +81,8 @@ function upgradeSettings() {
 		});
 	}
 
-	var renamedProps = {
+	let renamedProps = {
+		"livestreamer_oauth": "streamprovider_oauth",
 		"gui_flagsvisible": "stream_show_flag",
 		"gui_gamevisible" : "stream_show_info",
 		"gui_streamclick_mid": "stream_click_middle",
