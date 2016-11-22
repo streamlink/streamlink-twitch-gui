@@ -1,4 +1,3 @@
-import {} from "Shim";
 import QUnit, {
 	config
 } from "QUnit";
