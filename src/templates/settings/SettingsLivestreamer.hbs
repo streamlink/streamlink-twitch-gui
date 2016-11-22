@@ -42,21 +42,6 @@
 
 {{#if model.advanced}}
 	{{#settings-row
-		"Quality presets"
-		"Customize livestreamer quality presets."
-		icon="fa-eye"
-	}}
-		{{#each qualities as |quality|}}
-			<div class="input-group quality-preset">
-				{{input type="text" classNames="form-control" placeholder=quality.value value=(mut (get model.quality_presets quality.id))}}
-				<span class="input-group-btn">
-					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
-				</span>
-			</div>
-		{{/each}}
-	{{/settings-row}}
-
-	{{#settings-row
 		"Stream type"
 		"Make sure your player does support the selected stream type."
 		icon="fa-filter"
