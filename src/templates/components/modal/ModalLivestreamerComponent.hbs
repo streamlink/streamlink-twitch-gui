@@ -38,7 +38,7 @@
 					{{form-button action="toggleLog"
 						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.success::invisible"
 						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
-						title=(if active.showLog "Show stream title" (if active.warning "Show livestreamer warning" "Show livestreamer log"))
+						title=(if active.showLog "Show stream title" (concat "Show " providername " " (if active.warning "warning" "log")))
 					}}
 				</div>
 				<div>

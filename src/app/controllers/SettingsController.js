@@ -86,6 +86,11 @@ export default Controller.extend( RetryTransitionMixin, {
 				};
 			});
 	}),
+	streamproviderName: computed( "model.streamprovider", function() {
+		let streamprovider = get( this, "model.streamprovider" );
+
+		return providers[ streamprovider ][ "name" ];
+	}),
 
 	players,
 	playerPresets: computed(function() {

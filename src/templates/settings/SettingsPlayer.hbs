@@ -10,7 +10,7 @@
 {{#settings-row
 	(if (is-equal model.player_preset "default") "Video player" "Player executable")
 	(if playerPresetDefaultAndPlayerEmpty
-		"If left empty, the player defined in Livestreamer's config file will be used."
+		(concat "If left empty, the player defined in " streamproviderName "'s config file will be used.")
 		"An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths."
 	)
 	icon="fa-tv"
