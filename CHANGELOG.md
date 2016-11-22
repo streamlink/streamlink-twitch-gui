@@ -1,6 +1,30 @@
 Changelog - Livestreamer Twitch GUI
 ===
 
+## Master
+
+- Upgraded from legacy NW.js (v0.12.3) to latest stable version (v0.18.7). #275
+- Implemented system for switching between Streamlink and Livestreamer. #331  
+  Please re-validate your Streamlink/Livestreamer settings (default is Streamlink).
+- Implemented player presets. #257  
+  Please check your player settings and choose a player preset for having a configuration that works best with Streamlink or Livestreamer.
+- Added alt+left/right hotkeys.
+- Added Streamlink parameter to disable redirection of hosting channels.
+- Fixed "Streamlink" and "Livestreamer via python-pip" issues on Windows. #336
+- Fixed stream info bar visibility bug. #342
+- Fixed broked number input fields on MacOS. #282
+- Fixed apply/discard settings buttons being clickable while being hidden.
+- Resolved memory leaks (legacy NW.js) #207
+- Resolved incorrect dimensions of maximized window on Windows. (legacy NW.js) #227
+- Resolved high CPU usage on MacOS (legacy NW.js) #234
+- Resolved HiDPI issues on Linux (legacy NW.js) #277
+- \[dev] Implemented QUnit test bridge based on the Chrome debugging protocol.
+- Upgraded to Ember 2.8.3
+
+
+[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.16.0...master)
+
+
 ## [v0.16.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.16.0) (2016-10-15)
 
 - Added initial support for Streamlink (in addition to Livestreamer).  
