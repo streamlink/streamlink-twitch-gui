@@ -66,6 +66,15 @@ export default Model.extend({
 		return providers[ streamprovider ].type === "streamlink";
 	}),
 
+
+	customParameters: computed(function() {
+		let streamprovider  = get( this, "settings.streamprovider" );
+		let streamproviders = get( this, "settings.streamproviders" );
+
+		return get( streamproviders, `${streamprovider}.params` ) || "";
+	}),
+
+
 	// let Livestreamer use the GUI's client-id
 	clientID: `Client-ID=${clientId}`,
 

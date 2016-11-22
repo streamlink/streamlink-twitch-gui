@@ -43,8 +43,11 @@ function upgradeSettings() {
 	}
 
 	// translate old livestreamer data into the executable format
-	if ( typeof settings.livestreamer === "string" ) {
+	if ( typeof settings[ "livestreamer" ] === "string" ) {
 		delete settings[ "livestreamer" ];
+	}
+	if ( typeof settings[ "livestreamer_params" ] === "string" ) {
+		delete settings[ "livestreamer_params" ];
 	}
 
 	// translate old player data into the player presets format

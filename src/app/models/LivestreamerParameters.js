@@ -48,7 +48,7 @@ export const playerSubstitutions = [
 export const parameters = [
 	new ParameterCustom(
 		"settings.advanced",
-		"settings.livestreamer_params"
+		"customParameters"
 	),
 	new Parameter(
 		"--http-header",

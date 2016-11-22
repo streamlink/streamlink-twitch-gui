@@ -27,19 +27,20 @@
 					inputClass="form-control"
 				}}</dd>
 			{{/if}}
+			{{#if model.advanced}}
+				<dt>Custom {{provider.name}} parameters</dt>
+				<dd>{{input
+					type="text"
+					value=(mut (get (get model.streamproviders key) "params"))
+					classNames="col-xs-12"
+					placeholder="Add custom parameters"
+				}}</dd>
+			{{/if}}
 		</dl>
 	{{/each-in}}
 {{/settings-row}}
 
 {{#if model.advanced}}
-	{{#settings-row
-		"Custom parameters"
-		"Set additional custom livestreamer parameters."
-		icon="fa-terminal"
-	}}
-		{{input type="text" value=model.livestreamer_params classNames="col-xs-12" placeholder="Add custom livestreamer parameters"}}
-	{{/settings-row}}
-
 	{{#settings-row
 		"Quality presets"
 		"Customize livestreamer quality presets."

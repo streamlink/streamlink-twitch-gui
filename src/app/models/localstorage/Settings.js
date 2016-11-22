@@ -43,11 +43,13 @@ function defaultStreamprovider() {
 function defaultStreamproviders() {
 	return Object.keys( providers )
 		.reduce(function( obj, provider ) {
-			let execObj = providers[ provider ];
+			let providerObject = providers[ provider ];
 
-			let item = {};
-			item.exec = "";
-			if ( execObj[ "python" ] ) {
+			let item = {
+				exec: "",
+				params: ""
+			};
+			if ( providerObject[ "python" ] ) {
 				item.pythonscript = "";
 			}
 
@@ -109,7 +111,6 @@ export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
 	streamprovider      : attr( "string",  { defaultValue: defaultStreamprovider } ),
 	streamproviders     : attr( "",        { defaultValue: defaultStreamproviders } ),
-	livestreamer_params : attr( "string",  { defaultValue: "" } ),
 	livestreamer_oauth  : attr( "boolean", { defaultValue: true } ),
 	quality             : attr( "string",  { defaultValue: "source" } ),
 	quality_presets     : attr( "",        { defaultValue: defaultQualityPresets } ),
