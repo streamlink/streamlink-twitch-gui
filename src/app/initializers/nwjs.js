@@ -19,7 +19,6 @@ import {
 } from "nwjs/argv";
 import platformfixes from "./nwjs/platformfixes";
 import { createNativeMenuBar } from "./nwjs/menubar";
-import { createStartmenuShortcut } from "./nwjs/shortcut";
 
 
 function onChangeIntegrations( settings ) {
@@ -81,7 +80,6 @@ Application.instanceInitializer({
 
 			// initialize all the NWjs stuff
 			createNativeMenuBar( controller );
-			createStartmenuShortcut( settings );
 			setupIntegrations( settings );
 		}
 

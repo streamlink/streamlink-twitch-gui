@@ -27,16 +27,6 @@
 		{{/radio-btns}}
 	{{/settings-row}}
 
-	{{#if (bool-and model.advanced platform.isWinGte8)}}
-		{{#settings-row
-			"Startmenu shortcut"
-			"Required by Windows for receiving toast notifications. Re-enabling this option may require an application restart."
-			icon="fa-link"
-		}}
-			{{check-box "Create a startmenu shortcut" checked=model.notify_shortcut}}
-		{{/settings-row}}
-	{{/if}}
-
 	{{#settings-row
 		"Channel filter"
 		"Notifications can be turned on/off individually in a channel's settings menu."
