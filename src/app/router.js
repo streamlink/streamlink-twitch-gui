@@ -41,7 +41,7 @@ ApplicationRouter.map(function() {
 	this.route( "settings", function() {
 		this.route( "main" );
 		this.route( "streams" );
-		this.route( "livestreamer" );
+		this.route( "streamprovider" );
 		this.route( "player" );
 		this.route( "chat" );
 		this.route( "gui" );

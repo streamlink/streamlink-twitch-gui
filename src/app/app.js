@@ -241,8 +241,8 @@ import SettingsMainRoute from "routes/SettingsSubmenuRoute";
 import SettingsMainTemplate from "templates/settings/SettingsMain.hbs";
 import SettingsStreamsRoute from "routes/SettingsSubmenuRoute";
 import SettingsStreamsTemplate from "templates/settings/SettingsStreams.hbs";
-import SettingsLivestreamerRoute from "routes/SettingsSubmenuRoute";
-import SettingsLivestreamerTemplate from "templates/settings/SettingsLivestreamer.hbs";
+import SettingsStreamproviderRoute from "routes/SettingsSubmenuRoute";
+import SettingsStreamproviderTemplate from "templates/settings/SettingsStreamprovider.hbs";
 import SettingsPlayerRoute from "routes/SettingsSubmenuRoute";
 import SettingsPlayerTemplate from "templates/settings/SettingsPlayer.hbs";
 import SettingsChatRoute from "routes/SettingsSubmenuRoute";
@@ -541,8 +541,8 @@ export default Application.create({
 	SettingsMainTemplate,
 	SettingsStreamsRoute,
 	SettingsStreamsTemplate,
-	SettingsLivestreamerRoute,
-	SettingsLivestreamerTemplate,
+	SettingsStreamproviderRoute,
+	SettingsStreamproviderTemplate,
 	SettingsPlayerRoute,
 	SettingsPlayerTemplate,
 	SettingsChatRoute,
