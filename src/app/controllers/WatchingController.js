@@ -4,7 +4,7 @@ import {
 	inject,
 	Controller
 } from "Ember";
-import qualities from "models/LivestreamerQualities";
+import qualities from "models/stream/qualities";
 
 
 const { sort } = computed;
@@ -13,7 +13,7 @@ const { service } = inject;
 
 export default Controller.extend({
 	auth: service(),
-	livestreamer: service(),
+	streamservice: service( "stream" ),
 
 	sortedModel: sort( "model", "sortBy" ),
 	sortBy: [ "started:desc" ],
@@ -22,11 +22,11 @@ export default Controller.extend({
 
 	actions: {
 		openDialog( stream ) {
-			get( this, "livestreamer" ).startStream( stream );
+			get( this, "streamservice" ).startStream( stream );
 		},
 
 		closeStream( stream ) {
-			get( this, "livestreamer" ).closeStream( stream );
+			get( this, "streamservice" ).closeStream( stream );
 		}
 	}
 });

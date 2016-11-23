@@ -7,7 +7,7 @@ import {
 	observer,
 	Controller
 } from "Ember";
-import qualities from "models/LivestreamerQualities";
+import qualities from "models/stream/qualities";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 
 

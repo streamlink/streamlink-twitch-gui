@@ -16,7 +16,6 @@ const { debounce } = run;
 
 
 export default Route.extend({
-	livestreamer: service(),
 	modal: service(),
 	settings: service(),
 	versioncheck: service(),

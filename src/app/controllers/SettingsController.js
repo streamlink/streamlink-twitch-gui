@@ -15,8 +15,8 @@ import {
 	themes
 } from "config";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
-import { playerSubstitutions } from "models/LivestreamerParameters";
-import qualities from "models/LivestreamerQualities";
+import { playerSubstitutions } from "models/stream/parameters";
+import qualities from "models/stream/qualities";
 import Settings from "models/localstorage/Settings";
 import {
 	isSupported as isNotificationSupported,

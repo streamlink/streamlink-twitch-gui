@@ -11,12 +11,12 @@ import {
 	PromiseObject,
 	Model
 } from "EmberData";
-import { parameters } from "models/LivestreamerParameters";
+import { parameters } from "./parameters";
 import {
 	getPlayerExec,
 	getPlayerParams
-} from "models/LivestreamerPlayerParameters";
-import qualities from "models/LivestreamerQualities";
+} from "./playerparameters";
+import qualities from "./qualities";
 import Parameter from "utils/Parameter";
 import {
 	streamprovider,
@@ -31,10 +31,12 @@ const { oauth: { "client-id": clientId } } = twitch;
 
 
 /**
- * @class Livestreamer
+ * @class Stream
  */
 export default Model.extend({
+	/** @property {TwitchStream} stream */
 	stream      : belongsTo( "twitchStream", { async: false } ),
+	/** @property {TwitchChannel} channel */
 	channel     : belongsTo( "twitchChannel", { async: false } ),
 	quality     : attr( "string" ),
 	gui_openchat: attr( "boolean" ),
@@ -58,7 +60,7 @@ export default Model.extend({
 
 	isLivestreamer: not( "isStreamlink" ),
 	isStreamlink: computed(function() {
-		let streamprovider = get( this, "settings.content.streamprovider" );
+		let streamprovider = get( this, "settings.streamprovider" );
 		if ( !streamprovider || !providers.hasOwnProperty( streamprovider ) ) {
 			throw new Error( "Invalid stream provider" );
 		}
@@ -75,7 +77,7 @@ export default Model.extend({
 	}),
 
 
-	// let Livestreamer use the GUI's client-id
+	// let Streamlink/Livestreamer use the GUI's client-id
 	clientID: `Client-ID=${clientId}`,
 
 
@@ -95,7 +97,7 @@ export default Model.extend({
 	},
 
 	qualityObserver: observer( "quality", function() {
-		// The LivestreamerService knows that it has to spawn a new child process
+		// The StreamproviderService knows that it has to spawn a new child process
 		this.kill();
 	}),
 
@@ -136,6 +138,6 @@ export default Model.extend({
 
 }).reopenClass({
 
-	toString() { return "Livestreamer"; }
+	toString() { return "Stream"; }
 
 });

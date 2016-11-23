@@ -82,9 +82,9 @@ StreamCache.prototype.isNotNewer = function( stream ) {
 export default Service.extend( ChannelSettingsMixin, {
 	auth: service(),
 	chat: service(),
-	livestreamer: service(),
 	settings: service(),
 	store: service(),
+	streamservice: service( "stream" ),
 
 
 	model : [],
@@ -437,7 +437,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 
 		let applicationController = getOwner( this ).lookup( "controller:application" );
-		let livestreamer = get( this, "livestreamer" );
+		let streamservice = get( this, "streamservice" );
 
 		switch( settings ) {
 			// followed streams menu
@@ -447,13 +447,13 @@ export default Service.extend( ChannelSettingsMixin, {
 
 			// launch stream
 			case 2:
-				streams.forEach( stream => livestreamer.startStream( stream ) );
+				streams.forEach( stream => streamservice.startStream( stream ) );
 				break;
 
 			// launch stream + chat
 			case 3:
 				streams.forEach( stream => {
-					livestreamer.startStream( stream );
+					streamservice.startStream( stream );
 					// don't open the chat twice (startStream may open chat already)
 					if ( get( this, "settings.gui_openchat" ) ) { return; }
 					let chat    = get( this, "chat" );

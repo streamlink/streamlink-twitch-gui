@@ -40,6 +40,8 @@ const {
 const { "stream-url": twitchStreamUrl } = twitchConfig;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
+const modelName = "stream";
+
 const reVersion   = /^(livestreamer|streamlink)(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(?:.*)$/;
 const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 const reUnable    = /^error: Unable to open URL: /;
@@ -79,7 +81,7 @@ Warning.prototype = assign( new Error(), { name: "Warning" } );
 
 
 // we need a common error parsing function for stdout and stderr, because
-// livestreamer is weird sometimes and prints error messages to stdout instead... :(
+// error messages get printed to stdout instead of stderr sometimes
 function parseError( data ) {
 	if ( reUnable.test( data ) ) {
 		return new UnableToOpenError();
@@ -112,12 +114,12 @@ export default Service.extend( ChannelSettingsMixin, {
 	abort : false,
 	model : computed(function() {
 		let store = get( this, "store" );
-		return store.peekAll( "livestreamer" );
+		return store.peekAll( modelName );
 	}),
 
 
 	startStream( stream, quality ) {
-		get( this, "modal" ).openModal( "livestreamer", this, {
+		get( this, "modal" ).openModal( "stream", this, {
 			error : null,
 			active: null,
 			abort : false
@@ -129,8 +131,8 @@ export default Service.extend( ChannelSettingsMixin, {
 		let record;
 
 		// is the stream already running?
-		if ( store.hasRecordForId( "livestreamer", id ) ) {
-			record = store.recordForId( "livestreamer", id );
+		if ( store.hasRecordForId( modelName, id ) ) {
+			record = store.recordForId( modelName, id );
 
 			if ( quality !== undefined && get( record, "quality" ) !== quality ) {
 				set( record, "quality", quality );
@@ -140,8 +142,8 @@ export default Service.extend( ChannelSettingsMixin, {
 			return;
 		}
 
-		// create a new livestreamer object
-		record = store.createRecord( "livestreamer", {
+		// create a new Stream record
+		record = store.createRecord( modelName, {
 			id,
 			stream,
 			channel,
@@ -236,9 +238,9 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
-	closeStream( stream ) {
+	closeStream( twitchStream ) {
 		let model = get( this, "model" );
-		let record = model.findBy( "stream", stream );
+		let record = model.findBy( "stream", twitchStream );
 		if ( !record ) { return false; }
 		record.kill();
 		return true;
@@ -299,7 +301,8 @@ export default Service.extend( ChannelSettingsMixin, {
 
 			// not found
 			}, function() {
-				throw new NotFoundError( `Could not find ${isPython ? "Python " : ""}executable.` );
+				let str = isPython ? "Python " : "";
+				throw new NotFoundError( `Could not find ${str}executable.` );
 			});
 	},
 
@@ -328,7 +331,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			spawn = CP.spawn( exec.exec, parameters );
 
 			function onLine( line, idx, lines ) {
-				// be strict: livestreamer's output is just one single line
+				// be strict: output is just one single line
 				if ( idx !== 0 || lines.length !== 1 ) {
 					reject( new ErrorLog( "Unexpected version check output", lines ) );
 					return;
@@ -383,7 +386,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 	/**
 	 * Get the parameter list
-	 * @param {Livestreamer} record
+	 * @param {Stream} record
 	 * @param {Object} exec
 	 * @returns {Promise}
 	 */
@@ -401,7 +404,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 	/**
 	 * Run the executable and launch the stream
-	 * @param {Livestreamer} record
+	 * @param {Stream} record
 	 * @param {Boolean} firstLaunch
 	 * @param {Object} exec
 	 * @param {String} exec.exec
@@ -482,17 +485,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			record.pushLog( "stdOut", line );
 
 			if ( rePlayer.test( line ) ) {
-				/*
-				 * FIXME:
-				 * The promise should resolve at the point when livestreamer is launching the
-				 * player. The only way of doing this is reading from stdout. The issue here
-				 * is though, that in case the user has set an invalid player path, we don't
-				 * know it yet, because the error message is being sent afterwards (and also
-				 * in stdout instead of stderr - worth of a bug report?).
-				 * The stupid solution is adding a short delay. This is again stupid, because
-				 * we don't know how long the machine of the user takes for launching the player
-				 * or detecting an invalid path, etc.
-				 */
+				// wait for potential error messages to appear in stderr first before resolving
 				later( defer, defer.resolve, 500 );
 			}
 		}
@@ -510,7 +503,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	killAll() {
-		/** @type {Livestreamer[]} */
+		/** @type {Stream[]} */
 		let record = get( this, "model" );
 		record.slice().forEach(function( stream ) {
 			stream.kill();

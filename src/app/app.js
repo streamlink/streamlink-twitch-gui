@@ -8,7 +8,7 @@ import Router from "./router";
 import ApplicationAdapter from "store/TwitchAdapter";
 import BooleanTransform from "store/BooleanTransform";
 
-import Livestreamer from "models/Livestreamer";
+import Stream from "models/stream/Stream";
 import Window from "models/localstorage/Window";
 import Settings from "models/localstorage/Settings";
 import Versioncheck from "models/localstorage/Versioncheck";
@@ -99,7 +99,7 @@ import SettingsService from "services/SettingsService";
 import AuthService from "services/AuthService";
 import ModalService from "services/ModalService";
 import VersioncheckService from "services/VersioncheckService";
-import LivestreamerService from "services/LivestreamerService";
+import StreamService from "services/StreamService";
 import NotificationService from "services/NotificationService";
 import ChatService from "services/ChatService";
 
@@ -141,7 +141,7 @@ import ModalConfirmComponent from "components/modal/ModalConfirmComponent";
 import ModalFirstrunComponent from "components/modal/ModalFirstrunComponent";
 import ModalFooterComponent from "components/modal/ModalFooterComponent";
 import ModalHeaderComponent from "components/modal/ModalHeaderComponent";
-import ModalLivestreamerComponent from "components/modal/ModalLivestreamerComponent";
+import ModalStreamComponent from "components/modal/ModalStreamComponent";
 import ModalLogComponent from "components/modal/ModalLogComponent";
 import ModalNewreleaseComponent from "components/modal/ModalNewreleaseComponent";
 import ModalQuitComponent from "components/modal/ModalQuitComponent";
@@ -279,8 +279,8 @@ export default Application.create({
 
 
 	// Models: memory
-	Livestreamer,
-	LivestreamerAdapter: DS.Adapter,
+	Stream,
+	StreamAdapter: DS.Adapter,
 
 
 	// Models: localstorage
@@ -393,7 +393,7 @@ export default Application.create({
 	AuthService,
 	ModalService,
 	VersioncheckService,
-	LivestreamerService,
+	StreamService,
 	NotificationService,
 	ChatService,
 
@@ -439,7 +439,7 @@ export default Application.create({
 	ModalFirstrunComponent,
 	ModalFooterComponent,
 	ModalHeaderComponent,
-	ModalLivestreamerComponent,
+	ModalStreamComponent,
 	ModalLogComponent,
 	ModalNewreleaseComponent,
 	ModalQuitComponent,

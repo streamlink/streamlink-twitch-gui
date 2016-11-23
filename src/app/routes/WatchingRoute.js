@@ -11,10 +11,10 @@ const { service } = inject;
 
 
 export default Route.extend({
-	livestreamer: service(),
+	streamservice: service( "stream" ),
 
 	model() {
-		var records = get( this, "livestreamer.model" );
+		let records = get( this, "streamservice.model" );
 
 		return Promise.resolve( records )
 			.then( mapBy( "stream" ) )

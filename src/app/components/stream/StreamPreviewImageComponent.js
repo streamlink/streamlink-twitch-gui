@@ -8,7 +8,7 @@ import {
 import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 import Settings from "models/localstorage/Settings";
-import qualities from "models/LivestreamerQualities";
+import qualities from "models/stream/qualities";
 import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
 
 
@@ -22,8 +22,8 @@ const actions = Settings.stream_click.reduce(function( obj, item ) {
 
 export default Component.extend({
 	chat: service(),
-	livestreamer: service(),
 	settings: service(),
+	streamservice: service( "stream" ),
 
 	layout,
 
@@ -45,9 +45,9 @@ export default Component.extend({
 	clickable: true,
 
 
-	opened: computed( "stream.channel.id", "livestreamer.model.length", function() {
-		var model = get( this, "livestreamer.model" );
-		var id    = get( this, "stream.channel.id" );
+	opened: computed( "stream.channel.id", "streamservice.model.length", function() {
+		let model = get( this, "streamservice.model" );
+		let id    = get( this, "stream.channel.id" );
 
 		return model.mapBy( "channel.id" ).indexOf( id ) !== -1;
 	}),
@@ -155,32 +155,32 @@ export default Component.extend({
 
 
 	startStream( quality ) {
-		var stream = get( this, "stream" );
-		get( this, "livestreamer" ).startStream( stream, quality );
+		let stream = get( this, "stream" );
+		get( this, "streamservice" ).startStream( stream, quality );
 	},
 
 	closeStream() {
-		var stream = get( this, "stream" );
-		get( this, "livestreamer" ).closeStream( stream );
+		let stream = get( this, "stream" );
+		get( this, "streamservice" ).closeStream( stream );
 	},
 
 	openChat() {
-		var channel = get( this, "stream.channel" );
+		let channel = get( this, "stream.channel" );
 		get( this, "chat" ).open( channel );
 	},
 
 	copyChannelURL() {
-		var url = get( this, "stream.channel.url" );
+		let url = get( this, "stream.channel.url" );
 		setClipboard( url );
 	},
 
 	gotoChannelPage() {
-		var name = get( this, "stream.channel.id" );
+		let name = get( this, "stream.channel.id" );
 		this.applicationRoute.send( "goto", "channel", name );
 	},
 
 	gotoChannelSettings() {
-		var name = get( this, "stream.channel.id" );
+		let name = get( this, "stream.channel.id" );
 		this.applicationRoute.send( "goto", "channel.settings", name );
 	}
 

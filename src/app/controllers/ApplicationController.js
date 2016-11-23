@@ -17,14 +17,14 @@ const { service } = inject;
 
 export default Controller.extend({
 	auth: service(),
-	livestreamer: service(),
 	modal: service(),
 	notification: service(),
 	settings: service(),
+	streamservice: service( "stream" ),
 
 	dev: DEBUG,
 
-	streamsLength: readOnly( "livestreamer.model.length" ),
+	streamsLength: readOnly( "streamservice.model.length" ),
 
 	nl: "\n",
 

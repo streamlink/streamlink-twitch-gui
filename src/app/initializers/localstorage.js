@@ -2,7 +2,7 @@ import {
 	players,
 	langs
 } from "config";
-import qualities from "models/LivestreamerQualities";
+import qualities from "models/stream/qualities";
 
 
 var LS = window.localStorage;

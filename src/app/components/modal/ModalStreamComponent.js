@@ -7,9 +7,9 @@ import {
 } from "Ember";
 import { streamprovider } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
-import qualities from "models/LivestreamerQualities";
+import qualities from "models/stream/qualities";
 import { openBrowser } from "nwjs/Shell";
-import layout from "templates/components/modal/ModalLivestreamerComponent.hbs";
+import layout from "templates/components/modal/ModalStreamComponent.hbs";
 
 
 const { readOnly } = computed;
@@ -23,15 +23,15 @@ const {
 
 
 export default ModalDialogComponent.extend({
-	livestreamer: service(),
+	streamservice: service( "stream" ),
 	settings: service(),
 
 	layout,
 
-	"class": "modal-livestreamer",
+	"class": "modal-stream",
 
-	error : readOnly( "livestreamer.error" ),
-	active: readOnly( "livestreamer.active" ),
+	error : readOnly( "streamservice.error" ),
+	active: readOnly( "streamservice.active" ),
 
 	qualities,
 	versionMin: computed( "settings.streamprovider", function() {
@@ -62,18 +62,18 @@ export default ModalDialogComponent.extend({
 		},
 
 		chat( channel ) {
-			get( this, "livestreamer" ).openChat( channel );
+			get( this, "streamservice" ).openChat( channel );
 		},
 
 		abort() {
-			set( this, "livestreamer.abort", true );
-			get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
+			set( this, "streamservice.abort", true );
+			get( this, "modal" ).closeModal( get( this, "streamservice" ) );
 		},
 
 		close() {
-			get( this, "modal" ).closeModal( get( this, "livestreamer" ) );
+			get( this, "modal" ).closeModal( get( this, "streamservice" ) );
 			schedule( "destroy", this, function() {
-				set( this, "livestreamer.active", null );
+				set( this, "streamservice.active", null );
 			});
 		},
 
