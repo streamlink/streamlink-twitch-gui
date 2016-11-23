@@ -37,7 +37,7 @@
 				"icon": "fa-times",
 				"type": "boolean",
 				"default": true,
-				"text": "Allow Livestreamer to close the player",
+				"text": "Allow the player to get closed",
 				"args": "--play-and-exit"
 			},
 			{
@@ -92,7 +92,7 @@
 				"icon": "fa-times",
 				"type": "boolean",
 				"default": true,
-				"text": "Allow Livestreamer to close the player",
+				"text": "Allow the player to get closed",
 				"args": "--keep-open=no"
 			},
 			{
@@ -187,7 +187,7 @@
 				"icon": "fa-times",
 				"type": "boolean",
 				"default": true,
-				"text": "Allow Livestreamer to close the player",
+				"text": "Allow the player to get closed",
 				"args": "/play /close"
 			}
 		]
