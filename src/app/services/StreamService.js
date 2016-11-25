@@ -26,7 +26,7 @@ import {
 } from "utils/node/platform";
 import { isFile } from "utils/node/fs/stat";
 import whichFallback from "utils/node/fs/whichFallback";
-import CP from "child_process";
+import { spawn } from "child_process";
 
 
 const { service } = inject;
@@ -151,30 +151,24 @@ export default Service.extend( ChannelSettingsMixin, {
 			started     : new Date()
 		});
 
-		this.loadChannelSettings( id )
-			// override channel specific settings
-			.then(function( settings ) {
-				if ( quality === undefined ) {
-					setIfNotNull( settings, record, "quality" );
-					set( record, "strictQuality", false );
-				} else {
-					set( record, "quality", quality );
-					set( record, "strictQuality", true );
-				}
-				setIfNotNull( settings, record, "gui_openchat" );
-			})
+		// begin the stream launch procedure
+		Promise.resolve()
+			// override record with channel specific settings
+			.then( () => this.getChannelSettings( record, quality ) )
 			// get the exec command
-			.then( this.check.bind( this ) )
-			// and validate configuration
-			.then( this.validate.bind( this ) )
-			.then( this.getParameters.bind( this, record ) )
+			.then( () => this.check() )
+			// validate configuration
+			.then( execObj => this.validate( execObj ) )
+			// build parameter array
+			.then( execObj => this.getParameters( record, execObj ) )
 			.then(
 				// launch the stream
-				this.launch.bind( this, record, true ),
+				params => this.launch( record, true, params ),
 				// show error message
-				this.onStreamFailure.bind( this, record )
+				error => this.onStreamFailure( record, error )
 			);
 	},
+
 
 	onStreamSuccess( record, firstLaunch ) {
 		set( record, "success", true );
@@ -246,6 +240,24 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
+	getChannelSettings( record, quality ) {
+		let id = get( record, "channel.id" );
+
+		return this.loadChannelSettings( id )
+			// override channel specific settings
+			.then( settings => {
+				if ( quality === undefined ) {
+					setIfNotNull( settings, record, "quality" );
+					set( record, "strictQuality", false );
+				} else {
+					set( record, "quality", quality );
+					set( record, "strictQuality", true );
+				}
+				setIfNotNull( settings, record, "gui_openchat" );
+			});
+	},
+
+
 	/**
 	 * Get the path of the executable and pythonscript
 	 * @returns {Promise}
@@ -296,7 +308,7 @@ export default Service.extend( ChannelSettingsMixin, {
 						});
 				}
 
-				return { exec };
+				return { exec, pythonscript: null };
 
 			// not found
 			}, function() {
@@ -308,26 +320,27 @@ export default Service.extend( ChannelSettingsMixin, {
 	/**
 	 * Validate
 	 * Runs the executable/pythonscript with the `--version` parameter and reads answer from stderr
-	 * @param {Object} exec
-	 * @param {String} exec.exec
-	 * @param {String?} exec.pythonscript
+	 * @param {Object} execObj
+	 * @param {String} execObj.exec
+	 * @param {String} execObj.pythonscript
 	 * @returns {Promise}
 	 */
-	validate( exec ) {
-		let spawn;
+	validate( execObj ) {
+		let { exec, pythonscript } = execObj;
+		let child;
 
 		function kill() {
-			if ( spawn ) { spawn.kill( "SIGKILL" ); }
-			spawn = null;
+			if ( child ) { child.kill( "SIGKILL" ); }
+			child = null;
 		}
 
 		return new Promise(function( resolve, reject ) {
-			let parameters = [ "--version", "--no-version-check" ];
-			if ( exec.pythonscript ) {
-				parameters.unshift( exec.pythonscript );
+			let params = [ "--version", "--no-version-check" ];
+			if ( pythonscript ) {
+				params.unshift( pythonscript );
 			}
 
-			spawn = CP.spawn( exec.exec, parameters );
+			child = spawn( exec, params );
 
 			function onLine( line, idx, lines ) {
 				// be strict: output is just one single line
@@ -339,10 +352,8 @@ export default Service.extend( ChannelSettingsMixin, {
 				// match the version string
 				let match = reVersion.exec( line );
 				if ( match ) {
-					resolve({
-						name: match[1],
-						version: match[2]
-					});
+					let [ , name, version ] = match;
+					resolve({ name, version });
 				} else {
 					reject( new Error( "Invalid version check output" ) );
 				}
@@ -359,12 +370,12 @@ export default Service.extend( ChannelSettingsMixin, {
 			}
 
 			// reject on error / exit
-			spawn.on( "error", reject );
-			spawn.on(  "exit", onExit );
+			child.on( "error", reject );
+			child.on(  "exit", onExit );
 
 			// read from stdout and stderr independently
-			spawn.stdout.on( "data", new StreamOutputBuffer( onLine ) );
-			spawn.stderr.on( "data", new StreamOutputBuffer( onLine ) );
+			child.stdout.on( "data", new StreamOutputBuffer( onLine ) );
+			child.stderr.on( "data", new StreamOutputBuffer( onLine ) );
 
 			// kill after a certain time
 			later( onTimeout, validationTimeout );
@@ -379,24 +390,28 @@ export default Service.extend( ChannelSettingsMixin, {
 					throw new VersionError( version );
 				}
 
-				return exec;
+				return execObj;
 			});
 	},
 
 	/**
 	 * Get the parameter list
 	 * @param {Stream} record
-	 * @param {Object} exec
+	 * @param {Object} execObj
+	 * @param {String} execObj.exec
+	 * @param {String} execObj.pythonscript
 	 * @returns {Promise}
 	 */
-	getParameters: function( record, exec ) {
+	getParameters: function( record, execObj ) {
 		return record.getParameters()
 			.then(function( params ) {
-				if ( exec.pythonscript ) {
-					params.unshift( exec.pythonscript );
+				let { exec, pythonscript } = execObj;
+
+				if ( pythonscript ) {
+					params.unshift( pythonscript );
 				}
 
-				return [ exec, params ];
+				return { exec, params };
 			});
 	},
 
@@ -405,13 +420,12 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * Run the executable and launch the stream
 	 * @param {Stream} record
 	 * @param {Boolean} firstLaunch
-	 * @param {Object} exec
-	 * @param {String} exec.exec
-	 * @param {String?} exec.pythonscript
-	 * @param {String[]} params
+	 * @param {Object} paramsObj
+	 * @param {String} paramsObj.exec
+	 * @param {String[]} paramsObj.params
 	 * @returns {Promise}
 	 */
-	launch( record, firstLaunch, [ exec, params ] ) {
+	launch( record, firstLaunch, paramsObj ) {
 		// in case the shutdown button was pressed before
 		if ( get( this, "abort" ) ) {
 			this.clear( record );
@@ -424,6 +438,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			set( record, "warning", false );
 			set( this, "active", record );
 
+			let { exec, params } = paramsObj;
 			let spawnQuality = get( record, "quality" );
 
 			let parameters = [
@@ -433,28 +448,9 @@ export default Service.extend( ChannelSettingsMixin, {
 			];
 
 			// spawn the process
-			let spawn = CP.spawn( exec.exec, parameters, { detached: true } );
-			set( record, "spawn", spawn );
+			let child = spawn( exec, parameters, { detached: true } );
+			set( record, "spawn", child );
 
-
-			function onExit( code ) {
-				// clear up some memory
-				set( record, "spawn", null );
-				spawn = null;
-
-				// quality has been changed
-				let currentQuality = get( record, "quality" );
-				if ( spawnQuality !== currentQuality ) {
-					this.launch( record, false, [ exec, params ] );
-
-				} else {
-					if ( code !== 0 ) {
-						set( record, "error", true );
-						set( this, "error", new Error( `The process exited with code ${code}` ) );
-					}
-					this.onStreamShutdown( record );
-				}
-			}
 
 			function warnOrReject( line, error ) {
 				record.pushLog( "stdErr", line );
@@ -488,10 +484,28 @@ export default Service.extend( ChannelSettingsMixin, {
 				}
 			}
 
-			spawn.on( "error", reject );
-			spawn.on( "exit", onExit.bind( this ) );
-			spawn.stdout.on( "data", new StreamOutputBuffer( onStdOut ) );
-			spawn.stderr.on( "data", new StreamOutputBuffer( onStdErr ) );
+			child.on( "error", reject );
+			child.on( "exit", code => {
+				// clear up some memory
+				set( record, "spawn", null );
+				child = null;
+
+				// quality has been changed
+				let currentQuality = get( record, "quality" );
+				if ( spawnQuality !== currentQuality ) {
+					this.launch( record, false, paramsObj );
+
+				} else {
+					if ( code !== 0 ) {
+						set( record, "error", true );
+						set( this, "error", new Error( `The process exited with code ${code}` ) );
+					}
+					this.onStreamShutdown( record );
+				}
+			});
+
+			child.stdout.on( "data", new StreamOutputBuffer( onStdOut ) );
+			child.stderr.on( "data", new StreamOutputBuffer( onStdErr ) );
 		})
 			.then(
 				()    => this.onStreamSuccess( record, firstLaunch ),
@@ -528,18 +542,16 @@ export default Service.extend( ChannelSettingsMixin, {
 		if ( get( record, "isDeleted" ) ) { return; }
 
 		let stream  = get( record, "stream" );
-		let reload  = stream.reload.bind( stream );
-		let promise = reload();
+		let reload  = () => stream.reload();
+		let promise = Promise.reject();
 
 		// try to reload the record at least 3 times
-		for ( let i = 1; i < 3; i++ ) {
+		for ( let i = 0; i < 3; i++ ) {
 			promise = promise.catch( reload );
 		}
 
 		// queue another refresh
-		promise.then(function() {
-			later( this, this.refreshStream, record, streamReloadInterval );
-		}.bind( this ) );
+		promise.then( () => later( () => this.refreshStream( record ), streamReloadInterval ) );
 	},
 
 	openChat( channel ) {
