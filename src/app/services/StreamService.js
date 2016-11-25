@@ -3,7 +3,6 @@ import {
 	set,
 	makeArray,
 	assign,
-	RSVP,
 	computed,
 	inject,
 	run,
@@ -322,7 +321,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			spawn = null;
 		}
 
-		return new RSVP.Promise(function( resolve, reject ) {
+		return new Promise(function( resolve, reject ) {
 			let parameters = [ "--version", "--no-version-check" ];
 			if ( exec.pythonscript ) {
 				parameters.unshift( exec.pythonscript );
@@ -419,86 +418,85 @@ export default Service.extend( ChannelSettingsMixin, {
 			return Promise.reject();
 		}
 
-		let defer = RSVP.defer();
+		return new Promise( ( resolve, reject ) => {
+			record.clearLog();
+			set( record, "success", false );
+			set( record, "warning", false );
+			set( this, "active", record );
 
-		record.clearLog();
-		set( record, "success", false );
-		set( record, "warning", false );
-		set( this, "active", record );
+			let spawnQuality = get( record, "quality" );
 
-		let spawnQuality = get( record, "quality" );
+			let parameters = [
+				...params,
+				twitchStreamUrl.replace( "{channel}", get( record, "channel.id" ) ),
+				get( record, "streamquality" )
+			];
 
-		let parameters = [
-			...params,
-			twitchStreamUrl.replace( "{channel}", get( record, "channel.id" ) ),
-			get( record, "streamquality" )
-		];
-
-		// spawn the process
-		let spawn = CP.spawn( exec.exec, parameters, { detached: true } );
-		set( record, "spawn", spawn );
+			// spawn the process
+			let spawn = CP.spawn( exec.exec, parameters, { detached: true } );
+			set( record, "spawn", spawn );
 
 
-		function onExit( code ) {
-			// clear up some memory
-			set( record, "spawn", null );
-			spawn = null;
+			function onExit( code ) {
+				// clear up some memory
+				set( record, "spawn", null );
+				spawn = null;
 
-			// quality has been changed
-			let currentQuality = get( record, "quality" );
-			if ( spawnQuality !== currentQuality ) {
-				this.launch( record, false, [ exec, params ] );
+				// quality has been changed
+				let currentQuality = get( record, "quality" );
+				if ( spawnQuality !== currentQuality ) {
+					this.launch( record, false, [ exec, params ] );
 
-			} else {
-				if ( code !== 0 ) {
-					set( record, "error", true );
-					set( this, "error", new Error( `The process exited with code ${code}` ) );
+				} else {
+					if ( code !== 0 ) {
+						set( record, "error", true );
+						set( this, "error", new Error( `The process exited with code ${code}` ) );
+					}
+					this.onStreamShutdown( record );
 				}
-				this.onStreamShutdown( record );
-			}
-		}
-
-		function warnOrReject( line, error ) {
-			record.pushLog( "stdErr", line );
-
-			if ( error instanceof Warning ) {
-				set( record, "warning", true );
-			} else {
-				defer.reject( error || new Error( line ) );
-			}
-		}
-
-		// reject promise on any error output
-		function onStdErr( line ) {
-			let error = parseError( line );
-			warnOrReject( line, error );
-		}
-
-		// fulfill promise as soon as the player is launched
-		function onStdOut( line ) {
-			let error = parseError( line );
-			if ( error ) {
-				return warnOrReject( line, error );
 			}
 
-			line = line.replace( reReplace, "" );
-			record.pushLog( "stdOut", line );
+			function warnOrReject( line, error ) {
+				record.pushLog( "stdErr", line );
 
-			if ( rePlayer.test( line ) ) {
-				// wait for potential error messages to appear in stderr first before resolving
-				later( defer, defer.resolve, 500 );
+				if ( error instanceof Warning ) {
+					set( record, "warning", true );
+				} else {
+					reject( error || new Error( line ) );
+				}
 			}
-		}
 
-		spawn.on( "error", defer.reject );
-		spawn.on( "exit", onExit.bind( this ) );
-		spawn.stdout.on( "data", new StreamOutputBuffer( onStdOut ) );
-		spawn.stderr.on( "data", new StreamOutputBuffer( onStdErr ) );
+			// reject promise on any error output
+			function onStdErr( line ) {
+				let error = parseError( line );
+				warnOrReject( line, error );
+			}
 
-		return defer.promise.then(
-			this.onStreamSuccess.bind( this, record, firstLaunch ),
-			this.onStreamFailure.bind( this, record )
-		);
+			// fulfill promise as soon as the player is launched
+			function onStdOut( line ) {
+				let error = parseError( line );
+				if ( error ) {
+					return warnOrReject( line, error );
+				}
+
+				line = line.replace( reReplace, "" );
+				record.pushLog( "stdOut", line );
+
+				if ( rePlayer.test( line ) ) {
+					// wait for potential error messages to appear in stderr first before resolving
+					later( resolve, 500 );
+				}
+			}
+
+			spawn.on( "error", reject );
+			spawn.on( "exit", onExit.bind( this ) );
+			spawn.stdout.on( "data", new StreamOutputBuffer( onStdOut ) );
+			spawn.stderr.on( "data", new StreamOutputBuffer( onStdErr ) );
+		})
+			.then(
+				()    => this.onStreamSuccess( record, firstLaunch ),
+				error => this.onStreamFailure( record, error )
+			);
 	},
 
 

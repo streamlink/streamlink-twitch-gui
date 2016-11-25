@@ -1,6 +1,5 @@
 import {
 	get,
-	RSVP,
 	Route
 } from "Ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
@@ -30,11 +29,11 @@ export default Route.extend( InfiniteScrollMixin, {
 	},
 
 	model( params ) {
-		var store  = get( this, "store" );
+		let store = get( this, "store" );
 
-		return RSVP.hash({
+		return Promise.all([
 			// search for games
-			games: filterMatches( params.filter, "games" )
+			filterMatches( params.filter, "games" )
 				? store.query( "twitchSearchGame", {
 					query: params.query,
 					type : "suggest",
@@ -42,10 +41,10 @@ export default Route.extend( InfiniteScrollMixin, {
 				})
 					.then( mapBy( "game" ) )
 					.then( preload( "box.large_nocache" ) )
-				: Promise.resolve([]),
+				: Promise.resolve( [] ),
 
 			// search for channels
-			channels: filterMatches( params.filter, "channels" )
+			filterMatches( params.filter, "channels" )
 				? store.query( "twitchSearchChannel", {
 					query : params.query,
 					offset: 0,
@@ -53,10 +52,10 @@ export default Route.extend( InfiniteScrollMixin, {
 				})
 					.then( mapBy( "channel" ) )
 					.then( preload( "logo" ) )
-				: Promise.resolve([]),
+				: Promise.resolve( [] ),
 
 			// search for streams
-			streams: filterMatches( params.filter, "streams" )
+			filterMatches( params.filter, "streams" )
 				? store.query( "twitchSearchStream", {
 					query : params.query,
 					offset: get( this, "offset" ),
@@ -64,13 +63,14 @@ export default Route.extend( InfiniteScrollMixin, {
 				})
 					.then( mapBy( "stream" ) )
 					.then( preload( "preview.medium_nocache" ) )
-				: Promise.resolve([])
-		});
+				: Promise.resolve( [] )
+		])
+			.then( ([ games, channels, streams ]) => ({ games, channels, streams }) );
 	},
 
 	fetchContent() {
 		if ( !filterMatches( get( this, "filter" ), "streams" ) ) {
-			return Promise.resolve([]);
+			return Promise.resolve( [] );
 		}
 
 		return get( this, "store" ).query( "twitchSearchStream", {

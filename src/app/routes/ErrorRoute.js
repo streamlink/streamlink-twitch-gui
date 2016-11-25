@@ -30,7 +30,7 @@ export default Route.extend({
 	 * Do all the error display stuff here instead of using an error controller.
 	 * A route for errors is needed anyway.
 	 * @param controller
-	 * @param {(Error|Ember.RSVP.Promise)} error
+	 * @param {Error} error
 	 */
 	setupController( controller, error ) {
 		this._super( controller );

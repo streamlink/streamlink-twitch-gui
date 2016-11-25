@@ -1,7 +1,6 @@
 import {
 	get,
 	set,
-	RSVP,
 	computed,
 	inject,
 	Evented,
@@ -86,51 +85,46 @@ export default Service.extend( Evented, {
 			return Promise.reject();
 		}
 
-		var self  = this;
-		var defer = RSVP.defer();
+		return new Promise( ( resolve, reject ) => {
+			let server = new HttpServer( serverport, 1000 );
+			set( this, "server", server );
 
-		var server = new HttpServer( serverport, 1000 );
-		set( self, "server", server );
+			server.onRequest( "GET", "/redirect", ( req, res ) => {
+				res.end( OAuthResponseRedirect );
+				return true;
+			});
 
-		server.onRequest( "GET", "/redirect", function( req, res ) {
-			res.end( OAuthResponseRedirect );
-			return true;
-		});
+			server.onRequest( "GET", "/token", ( req, res ) => {
+				let { access_token: token, scope } = req.url.query;
 
-		server.onRequest( "GET", "/token", function( req, res ) {
-			var token = req.url.query.access_token;
-			var scope = req.url.query.scope;
+				// validate token and scope and keep the request open
+				this.validateOAuthResponse( token, scope )
+					.finally( () => res.end() )
+					.then( data => {
+						// send 200
+						resolve( data );
+					}, err => {
+						// send 500
+						res.statusCode = 500;
+						reject( err );
+					});
 
-			// validate token and scope and keep the request open
-			self.validateOAuthResponse( token, scope )
-				.then(function( data ) {
-					// send 200
-					res.end();
-					defer.resolve( data );
-				}, function( err ) {
-					// send 500
-					res.statusCode = 500;
-					res.end();
-					defer.reject( err );
-				});
+				return true;
+			});
 
-			return true;
-		});
-
-		// open auth url in web browser
-		var url = get( self, "url" );
-		openBrowser( url );
-
-		return defer.promise
+			// open auth url in web browser
+			let url = get( this, "url" );
+			openBrowser( url );
+		})
 			// shut down server and focus the application window when done
-			.finally(function() {
-				self.abortSignin();
+			.finally( () => {
+				this.abortSignin();
 				nwWindow.focus();
 			});
 	},
 
 	abortSignin() {
-		var server = get( this, "server" );
+		let server = get( this, "server" );
 		if ( !server ) { return; }
 		server.close();
 		set( this, "server", null );

@@ -76,7 +76,8 @@ module.exports = {
 				"components"  : r( pApp, "components" ),
 				"store"       : r( pApp, "store" ),
 				"utils"       : r( pApp, "utils" ),
-				"gui"         : r( pApp, "gui" )
+				"gui"         : r( pApp, "gui" ),
+				"shim"        : r( pRoot, "shim" )
 			}
 		},
 

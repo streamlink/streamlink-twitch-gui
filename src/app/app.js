@@ -1,3 +1,4 @@
+import "Shim";
 import { Application } from "Ember";
 import DS from "EmberData";
 import {} from "EmberDataLS";
