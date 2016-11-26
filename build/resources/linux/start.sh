@@ -13,7 +13,6 @@ CHECKNEWVERSIONS=true
 
 
 EXEC="livestreamer-twitch-gui"
-TITLE="Livestreamer Twitch GUI"
 DIR=$(readlink -f "${0}")
 HERE=$(dirname "${DIR}")
 
@@ -60,21 +59,4 @@ fi
 
 
 # run the application
-exec -a "${0}" "${HERE}/${EXEC}" ${params} &
-pid=$!
-
-
-# fix missing WM_CLASS property in NW.js v0.12.3
-if command_exists "xwininfo" \
-&& command_exists "xprop"
-then
-	winid=
-	while [ -z "${winid}" ]; do
-		sleep 1
-		winid=$(xwininfo -name "${TITLE}" 2>/dev/null | grep "Window id:" | grep -Eio "0x\\w+")
-	done
-	xprop -id "${winid}" -f WM_CLASS 8s -set WM_CLASS "${EXEC}"
-fi
-
-
-wait ${pid}
+exec -a "${0}" "${HERE}/${EXEC}" ${params}
