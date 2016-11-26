@@ -6,7 +6,6 @@ import {
 import ProviderAuto from "./notification/NotificationProviderAuto";
 import ProviderSnoreToast from "./notification/NotificationProviderSnoreToast";
 import ProviderNative from "./notification/NotificationProviderNative";
-import ProviderLibNotify from "./notification/NotificationProviderLibNotify";
 import ProviderFreedesktop from "./notification/NotificationProviderFreedesktop";
 import ProviderGrowl from "./notification/NotificationProviderGrowl";
 import ProviderRich from "./notification/NotificationProviderRich";
@@ -16,7 +15,6 @@ const providers = {
 	"auto": ProviderAuto,
 	"snoretoast": ProviderSnoreToast,
 	"native": ProviderNative,
-	"libnotify": ProviderLibNotify,
 	"freedesktop": ProviderFreedesktop,
 	"growl": ProviderGrowl,
 	"rich": ProviderRich

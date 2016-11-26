@@ -103,6 +103,11 @@ function upgradeSettings() {
 		}
 	});
 
+	// update notification provider
+	if ( settings.notify_provider === "libnotify" ) {
+		settings.notify_provider = "freedesktop";
+	}
+
 	// map quality number IDs to strings
 	_upgradeQuality( settings );
 
