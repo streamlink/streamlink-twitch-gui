@@ -226,6 +226,14 @@ export default Model.extend({
 			}
 		},
 		{
+			value: "freedesktop",
+			label: {
+				name: "Freedesktop notifications",
+				description: "Native notifications on Linux",
+				notes: "Implementation of the Desktop Notifications Specification"
+			}
+		},
+		{
 			value: "growl",
 			label: {
 				name: "Growl notifications",
