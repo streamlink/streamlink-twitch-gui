@@ -64,10 +64,10 @@
 		"script": "msie-minimal.vbs"
 	},
 	"chatty": {
-		"args": "-jar \"{chatty}\"",
 		"chatty-args": "-connect -single -user \"{user}\" -token \"{token}\" -channel \"{channel}\"",
 		"chatty-args-noauth": "-connect -single -channel \"{channel}\"",
-		"chatty-fallback": "chatty",
+		"chatty-script": "chatty",
+		"args": "-jar \"{jar}\"",
 		"exec": {
 			"win32": "javaw.exe",
 			"darwin": "java",
