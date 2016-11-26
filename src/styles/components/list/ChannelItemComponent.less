@@ -1,24 +1,28 @@
 
 .channel-item-component {
+	@logo: 6.5em;
+
 	min-height: 91px;
 	display: flex;
-	flex-flow: row nowrap;
 	margin-bottom: 1.5em;
 	.dynamic-elems-per-row( 2, @content-width, 4%, @additional-width );
 
 	> .logo {
-		@size: 6.5em;
-
 		display: block;
 		position: relative;
-		width: @size;
-		height: @size;
+		width: @logo;
+		height: @logo;
 		flex-shrink: 0;
 		cursor: pointer;
 	}
 
 	> .text {
+		width: calc( 100% - @logo );
 		margin: 0 .5em;
+
+		> * {
+			.text-overflow();
+		}
 
 		> header {
 			margin: 0 0 .5em;
@@ -29,10 +33,7 @@
 		}
 
 		> .status {
-			height: @line-height-base;
-			overflow: hidden;
-			white-space: nowrap;
-			text-overflow: ellipsis;
+			height: unit( @line-height-base, em );
 		}
 	}
 }
