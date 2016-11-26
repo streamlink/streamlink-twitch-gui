@@ -12,9 +12,46 @@ const reSingleQuote  = /'|\\$/g;
 const reAll          = /./g;
 const strEscape      = "\\";
 
-function fnEscape( c ) {
-	return `${strEscape}${c}`;
+
+class SubstitutionToken {
+	/**
+	 * @param {String} string
+	 */
+	constructor( string ) {
+		this.string = string;
+	}
+
+	/**
+	 * @param {Function} fn
+	 * @return {String}
+	 */
+	substituteVariables( fn ) {
+		return this.string.replace( reSubstitution, fn );
+	}
+
+	/**
+	 * @param {String} string
+	 * @returns {String}
+	 */
+	escape( string ) {
+		return String( string ).replace( this.regexp, c => `${strEscape}${c}` );
+	}
 }
+
+class SubstitutionTokenSingleQuote extends SubstitutionToken {}
+SubstitutionTokenSingleQuote.prototype.regexp = reSingleQuote;
+
+class SubstitutionTokenDoubleQuote extends SubstitutionToken {}
+SubstitutionTokenDoubleQuote.prototype.regexp = reDoubleQuote;
+
+class SubstitutionTokenNoQuote extends SubstitutionToken {}
+SubstitutionTokenNoQuote.prototype.regexp = reAll;
+
+
+const tokenQuoteMap = {
+	"\'": SubstitutionTokenSingleQuote,
+	"\"": SubstitutionTokenDoubleQuote
+};
 
 
 /**
@@ -61,6 +98,7 @@ export default class Substitution {
 	 * @param {(Substitution|Substitution[])} substitutions
 	 * @param {String} str
 	 * @param {Boolean?} escape
+	 * @return {String}
 	 */
 	static substitute( context, substitutions, str, escape ) {
 		substitutions = makeArray( substitutions );
@@ -70,7 +108,7 @@ export default class Substitution {
 			// and reduce token array back to a string
 			.reduce( ( result, token ) => {
 				// search for variables in each token independently
-				token = token.string.replace( reSubstitution, ( all, left, name, right ) => {
+				result.push( token.substituteVariables( ( all, left, name, right ) => {
 					// ignore double curly bracket vars
 					if ( left ) { return all; }
 
@@ -85,30 +123,24 @@ export default class Substitution {
 						res = substitution.getValue( context );
 						if ( escape && res !== false ) {
 							// escape the variable's content
-							res = res.replace(
-								token.quote === "\""
-									? reDoubleQuote
-									: token.quote === "\'"
-										? reSingleQuote
-										: reAll,
-								fnEscape
-							);
+							res = token.escape( res );
 						}
 					});
 
 					return res === false
 						? all
-						: res + ( right || "" );
-				});
+						: `${res}${right || ""}`;
+				}) );
 
-				return `${result}${token}`;
-			}, "" );
+				return result;
+			}, [] )
+			.join( "" );
 	}
 
 	/**
 	 * Tokenize a string
 	 * @param {String} str
-	 * @returns {Array}
+	 * @returns {SubstitutionToken[]}
 	 */
 	static tokenize( str ) {
 		let output  = [];
@@ -118,10 +150,8 @@ export default class Substitution {
 
 		function clearBuffer() {
 			if ( !buffer.length ) { return; }
-			output.push({
-				string: buffer,
-				quote
-			});
+			let Token = quote && tokenQuoteMap[ quote ] || SubstitutionTokenNoQuote;
+			output.push( new Token( buffer ) );
 			buffer = "";
 			quote = false;
 		}
