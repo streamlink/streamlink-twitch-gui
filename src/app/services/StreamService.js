@@ -158,7 +158,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			// get the exec command
 			.then( () => this.check() )
 			// validate configuration
-			.then( execObj => this.validate( execObj ) )
+			.then( execObj => this.validate( record, execObj ) )
 			// build parameter array
 			.then( execObj => this.getParameters( record, execObj ) )
 			.then(
@@ -320,12 +320,19 @@ export default Service.extend( ChannelSettingsMixin, {
 	/**
 	 * Validate
 	 * Runs the executable/pythonscript with the `--version` parameter and reads answer from stderr
+	 * @param {Stream} record
 	 * @param {Object} execObj
 	 * @param {String} execObj.exec
 	 * @param {String} execObj.pythonscript
 	 * @returns {Promise}
 	 */
-	validate( execObj ) {
+	validate( record, execObj ) {
+		// in case the shutdown button was pressed before
+		if ( get( this, "abort" ) ) {
+			this.clear( record );
+			return Promise.reject();
+		}
+
 		let { exec, pythonscript } = execObj;
 		let child;
 
@@ -403,6 +410,12 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * @returns {Promise}
 	 */
 	getParameters: function( record, execObj ) {
+		// in case the shutdown button was pressed before
+		if ( get( this, "abort" ) ) {
+			this.clear( record );
+			return Promise.reject();
+		}
+
 		return record.getParameters()
 			.then(function( params ) {
 				let { exec, pythonscript } = execObj;
