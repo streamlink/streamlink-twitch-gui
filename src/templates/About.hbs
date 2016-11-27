@@ -1,7 +1,7 @@
 <main class="content content-about">
 <h2>About</h2>
 <article>
-<h3><i class="fa fa-desktop"></i> Livestreamer Twitch GUI</h3>
+<h3><i class="fa fa-desktop"></i>Livestreamer Twitch GUI</h3>
 <dl class="dl-horizontal">
 <dt>Homepage</dt>
 <dd>{{#external-link url=metadata.package.homepage}}{{metadata.package.homepage}}{{/external-link}}</dd>
@@ -19,8 +19,20 @@
 <dd>{{nwjsVersion}}</dd>
 </dl>
 </article>
+{{#if metadata.donation.length}}
 <article>
-<h3><i class="fa fa-sitemap"></i> Third party applications</h3>
+<h3><i class="fa fa-heart"></i>Support &amp; donate</h3>
+<p class="text-donation">If you think that this application is helpful, please consider supporting the creator by donating.<br>Thank you very much!</p>
+<dl class="dl-horizontal">
+{{#each metadata.donation as |item|}}
+<dt><i class="fa fa-angle-right"></i></dt>
+<dd>{{#external-link url=item.url}}{{item.text}}{{/external-link}}{{#if item.coinaddress}}{{#selectable-text tagName="span" class="coinaddress"}}{{item.coinaddress}}{{/selectable-text}}{{/if}}</dd>
+{{/each}}
+</dl>
+</article>
+{{/if}}
+<article>
+<h3><i class="fa fa-sitemap"></i>Third party applications</h3>
 <dl class="dl-horizontal">
 {{#each dependencies as |elem|}}
 <dt>{{elem.title}}</dt>

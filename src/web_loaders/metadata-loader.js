@@ -153,17 +153,25 @@ module.exports = function() {
 			});
 	}
 
+	function getDonationData() {
+		return process.env.hasOwnProperty( "RELEASES_DONATION" )
+			? JSON.parse( process.env.RELEASES_DONATION )
+			: [];
+	}
+
 
 	Promise.all([
 		promisePackageData(),
 		promiseGitContributors(),
-		promiseDependencies()
+		promiseDependencies(),
+		getDonationData()
 	])
 		.then(function( data ) {
 			callback( null, "module.exports=" + JSON.stringify({
 				"package"     : data[0],
 				"contributors": data[1],
-				"dependencies": data[2]
+				"dependencies": data[2],
+				"donation"    : data[3]
 			}) );
 		}, callback );
 };
