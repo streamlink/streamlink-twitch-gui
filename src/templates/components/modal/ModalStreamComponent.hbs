@@ -1,8 +1,8 @@
 <div>
 	{{#unless error}}
 		{{#unless active}}
-			{{#modal-header}}Preparing{{/modal-header}}
-			{{#modal-body}}Please wait...{{/modal-body}}
+			{{#modal-header}}Preparing, please wait{{/modal-header}}
+			{{#modal-body class="loading"}}{{loading-spinner}}{{/modal-body}}
 			{{#modal-footer}}
 				{{#form-button action="abort" class="btn-danger" icon="fa-times"}}Close{{/form-button}}
 			{{/modal-footer}}
