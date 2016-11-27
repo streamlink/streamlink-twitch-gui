@@ -218,11 +218,11 @@ export default Model.extend({
 			}
 		},
 		{
-			value: "libnotify",
+			value: "freedesktop",
 			label: {
-				name: "Libnotify notifications",
+				name: "Freedesktop notifications",
 				description: "Native notifications on Linux",
-				notes: "Does not support click events"
+				notes: "Implementation of the Desktop Notifications Specification"
 			}
 		},
 		{
