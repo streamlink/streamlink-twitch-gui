@@ -29,6 +29,94 @@ var cssExtractTextPlugin  = new ExtractTextPlugin( "vendor.css" );
 var lessExtractTextPlugin = new ExtractTextPlugin( "main.css" );
 
 
+var commonLoaders = [
+	{
+		test: /\.hbs$/,
+		loader: "hbs-loader"
+	},
+	{
+		test: /\.json$/,
+		loader: "json-loader"
+	},
+	{
+		test: /\.html$/,
+		loader: "raw-loader"
+	},
+	{
+		test: /metadata\.js$/,
+		loader: "metadata-loader"
+	},
+	// Vendor stylesheets (don't parse anything)
+	{
+		test: /\.css$/,
+		include: pModulesBower,
+		loader: cssExtractTextPlugin.extract([
+			"css?sourceMap&-minify&-url&-import"
+		])
+	},
+	// Application stylesheets (extract fonts and images)
+	{
+		test: /app\.less$/,
+		include: pStyles,
+		loader: lessExtractTextPlugin.extract([
+			"css?sourceMap&minify&url&-import",
+			"less?sourceMap&strictMath&strictUnits&relativeUrls&noIeCompat",
+			"flag-icons-loader",
+			"themes-loader"
+		])
+	},
+	// Assets
+	{
+		test: /\.(jpe?g|png|svg|woff2)$/,
+		loader: "file?name=[path][name].[ext]"
+	}
+];
+
+
+// only transpile code that isn't supported yet by the currently used NW.js release
+var loaderBabelDev = {
+	test: /\.js$/,
+	exclude: [
+		pModulesNpm,
+		pModulesBower
+	],
+	loader: "babel",
+	query: {
+		presets: [],
+		plugins: [
+			"babel-plugin-transform-es2015-modules-commonjs"
+		],
+		cacheDirectory: r( OS.tmpdir(), "babel-cache" )
+	}
+};
+
+// transpile everything to es5, so uglifyJS can optimize and minimize it
+var loaderBabelProd = {
+	test: /\.js$/,
+	exclude: [
+		pModulesNpm,
+		pModulesBower
+	],
+	loader: "babel",
+	query: {
+		presets: [],
+		plugins: [
+			"babel-plugin-transform-es2015-arrow-functions",
+			"babel-plugin-transform-es2015-block-scoping",
+			"babel-plugin-transform-es2015-classes",
+			"babel-plugin-transform-es2015-computed-properties",
+			"babel-plugin-transform-es2015-destructuring",
+			"babel-plugin-transform-es2015-modules-commonjs",
+			"babel-plugin-transform-es2015-parameters",
+			"babel-plugin-transform-es2015-shorthand-properties",
+			"babel-plugin-transform-es2015-spread",
+			"babel-plugin-transform-es2015-template-literals"
+		],
+		cacheDirectory: r( OS.tmpdir(), "babel-cache" )
+	}
+};
+
+
 module.exports = {
 	// common options
 	// the grunt-webpack merges the "options" objects with each task config (nested)
@@ -91,75 +179,6 @@ module.exports = {
 			]
 		},
 
-		module: {
-			loaders: [
-				{
-					test: /\.js$/,
-					exclude: [
-						pModulesNpm,
-						pModulesBower
-					],
-					loader: "babel",
-					query: {
-						presets: [],
-						plugins: [
-							"babel-plugin-transform-es2015-modules-commonjs",
-							"babel-plugin-transform-es2015-shorthand-properties",
-							"babel-plugin-transform-es2015-block-scoping",
-							"babel-plugin-transform-es2015-destructuring",
-							"babel-plugin-transform-es2015-computed-properties",
-							"babel-plugin-transform-es2015-template-literals",
-							"babel-plugin-transform-es2015-spread",
-							"babel-plugin-transform-es2015-parameters",
-							"babel-plugin-transform-es2015-arrow-functions",
-							"babel-plugin-transform-es2015-classes"
-						],
-						cacheDirectory: r( OS.tmpdir(), "babel-cache" )
-					}
-				},
-				{
-					test: /\.hbs$/,
-					loader: "hbs-loader"
-				},
-				{
-					test: /\.json$/,
-					loader: "json-loader"
-				},
-				{
-					test: /\.html$/,
-					loader: "raw-loader"
-				},
-				{
-					test: /metadata\.js$/,
-					loader: "metadata-loader"
-				},
-				// Vendor stylesheets (don't parse anything)
-				{
-					test: /\.css$/,
-					include: pModulesBower,
-					loader: cssExtractTextPlugin.extract([
-						"css?sourceMap&-minify&-url&-import"
-					])
-				},
-				// Application stylesheets (extract fonts and images)
-				{
-					test: /app\.less$/,
-					include: pStyles,
-					loader: lessExtractTextPlugin.extract([
-						"css?sourceMap&minify&url&-import",
-						"less?sourceMap&strictMath&strictUnits&relativeUrls&noIeCompat",
-						"flag-icons-loader",
-						"themes-loader"
-					])
-				},
-				// Assets
-				{
-					test: /\.(jpe?g|png|svg|woff2)$/,
-					loader: "file?name=[path][name].[ext]"
-				}
-			]
-		},
-
 		plugins: [
 			// don't split the main module into multiple chunks
 			new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
@@ -207,6 +226,10 @@ module.exports = {
 		target: "node-webkit",
 		devtool: "source-map",
 
+		module: {
+			loaders: [].concat( [ loaderBabelDev, ], commonLoaders )
+		},
+
 		plugins: [
 			// NW.js package.json
 			new CopyWebpackPlugin([
@@ -251,7 +274,7 @@ module.exports = {
 		target: "node-webkit",
 
 		module: {
-			loaders: [
+			loaders: [].concat( [ loaderBabelProd, ], commonLoaders, [
 				{
 					test: /\.svg$/,
 					loader: "svgo?" + JSON.stringify({
@@ -261,7 +284,7 @@ module.exports = {
 						]
 					})
 				}
-			]
+			])
 		},
 
 		plugins: [
@@ -336,6 +359,10 @@ module.exports = {
 
 		target: "node-webkit",
 
+		module: {
+			loaders: [].concat( [ loaderBabelDev, ], commonLoaders )
+		},
+
 		plugins: [
 			// NW.js package.json
 			new CopyWebpackPlugin([
@@ -367,6 +394,10 @@ module.exports = {
 		},
 
 		target: "node-webkit",
+
+		module: {
+			loaders: [].concat( [ loaderBabelDev, ], commonLoaders )
+		},
 
 		plugins: [
 			// NW.js package.json
