@@ -25,6 +25,7 @@ require([
 	"tests/NumberFieldComponent",
 	"tests/getStreamFromUrl"
 ], function() {
+	if ( global._noQUnitBridge ) { return; }
 	if ( global._setupQUnitBridge ) {
 		// bridge injected, set it up and start QUnit
 		global._setupQUnitBridge( QUnit );
