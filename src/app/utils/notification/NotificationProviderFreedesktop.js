@@ -16,9 +16,14 @@ const CODE_NOTIF_DISMISSED = 2;
 //const CODE_NOTIF_CLOSED = 3;
 
 const EVENT_CLOSED = "closed";
-//const EVENT_ACTION = "action";
+const EVENT_ACTION = "action";
 
 const TIME_MONITOR_INIT = 3000;
+
+const ACTION_OPEN_ID   = "open";
+const ACTION_OPEN_TEXT = "Open";
+const ACTION_DISMISS_ID   = "dismiss";
+const ACTION_DISMISS_TEXT = "Dismiss";
 
 const EXPIRE_SECS = 3600 * 12;
 const EXPIRE_MSECS = EXPIRE_SECS * 1000;
@@ -32,8 +37,14 @@ const commonParams = [
 	DBUS_PATH,
 ];
 
+const strActions = [ ACTION_OPEN_ID, ACTION_OPEN_TEXT, ACTION_DISMISS_ID, ACTION_DISMISS_TEXT ]
+	.map( item => `'${item}'` )
+	.join( "," );
+
 
 const reDbusName = DBUS_NAME.replace( ".", "\\." );
+const reCapabilities = /^\(\s*(\[.*])\s*,?\s*\)$/;
+const reCapabilityString = /'/g;
 const reMonitorSuccess = [
 	new RegExp( `^Monitoring signals on object ${DBUS_PATH} owned by ${reDbusName}$` ),
 	new RegExp( `^The name ${reDbusName} is owned by .+$` )
@@ -88,9 +99,14 @@ class NotificationFreedesktopCallback {
 
 
 export default class NotificationProviderFreedesktop extends NotificationProvider {
-	constructor( exec ) {
+	/**
+	 * @param {String} exec
+	 * @param {Boolean} supportsActions
+	 */
+	constructor({ exec, supportsActions }) {
 		super();
 		this.exec = exec;
+		this.supportsActions = supportsActions;
 		this.events = new EventEmitter();
 		/** @type {ChildProcess} */
 		this.monitorSpawn = null;
@@ -100,7 +116,10 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 
 	static test() {
 		return which( "gdbus" )
-			.then( exec => NotificationProviderFreedesktop.getServerInformation( exec ) );
+			.then( exec => NotificationProviderFreedesktop.getServerInformation( exec )
+				.then( () => NotificationProviderFreedesktop.getCapabilities( exec ) )
+				.then( supportsActions => ({ exec, supportsActions }) )
+			);
 	}
 
 	static getServerInformation( exec ) {
@@ -114,6 +133,34 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 				} else {
 					reject( new Error( "Could not validate notification server" ) );
 				}
+			}
+		);
+	}
+
+	static getCapabilities( exec ) {
+		return callMethod(
+			exec,
+			"org.freedesktop.Notifications.GetCapabilities",
+			[],
+			( code, resolve, reject ) => {
+				if ( code !== 0 ) {
+					reject( new Error( "Could not validate notification server" ) );
+				}
+			},
+			( line, resolve, reject ) => {
+				if ( !line ) { return; }
+
+				let match = reCapabilities.exec( line.trim() );
+				if ( !match ) {
+					return reject( new Error( "Invalid capabilities response" ) );
+				}
+
+				let capabilities = JSON.parse( match[ 1 ].replace( reCapabilityString, "\"" ) );
+				if ( !capabilities || !Array.isArray( capabilities ) ) {
+					return reject( new Error( "Capabilities parsing error" ) );
+				}
+
+				resolve( capabilities.indexOf( "actions" ) !== -1 );
 			}
 		);
 	}
@@ -147,15 +194,15 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 				let match = reMonitorMessage.exec( data );
 				if ( !match ) { return; }
 
-				let [ , signal, id, code/*, action*/ ] = match;
+				let [ , signal, id, code, action ] = match;
 				id = Number( id );
 				if ( isNaN( id ) ) { return; }
 
 				switch ( signal ) {
 					case "NotificationClosed":
 						return this.events.emit( EVENT_CLOSED, id, Number( code ) );
-					//case "ActionInvoked":
-					//	return this.events.emit( EVENT_ACTION, id, action );
+					case "ActionInvoked":
+						return this.events.emit( EVENT_ACTION, id, action );
 				}
 			});
 
@@ -187,7 +234,18 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 					// look only for registered callbacks
 					if ( !this.callbacks.hasOwnProperty( id ) ) { return; }
 					// execute click callback if user has dismissed the notification
-					if ( code === CODE_NOTIF_DISMISSED ) {
+					if ( !this.supportsActions && code === CODE_NOTIF_DISMISSED ) {
+						this.callbacks[ id ].click();
+					}
+					// remove callback and its expiration timeout
+					this.unregisterCallback( id );
+				});
+
+				this.events.addListener( EVENT_ACTION, ( id, action ) => {
+					// look only for registered callbacks
+					if ( !this.callbacks.hasOwnProperty( id ) ) { return; }
+					// execute click callback if user has dismissed the notification
+					if ( this.supportsActions && action === ACTION_OPEN_ID ) {
 						this.callbacks[ id ].click();
 					}
 					// remove callback and its expiration timeout
@@ -206,7 +264,7 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 				data.icon,
 				data.title,
 				NotificationProvider.getMessageAsString( data.message ),
-				"[]",
+				`[${this.supportsActions && data.click ? strActions : ""}]`,
 				"{}",
 				EXPIRE_SECS
 			],
