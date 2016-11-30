@@ -21,6 +21,7 @@ const { "search-history-size": searchHistorySize } = vars;
 
 
 export default Component.extend({
+	routing: service( "-routing" ),
 	store: service(),
 
 	layout,
@@ -106,13 +107,9 @@ export default Component.extend({
 		set( this, "showDropdown", false );
 		this.addRecord( query, filter );
 
-		// FIXME: targetObject
-		var targetObject = get( this, "_targetObject" );
-		targetObject.transitionToRoute( "search", {
-			queryParams: {
-				filter,
-				query
-			}
+		get( this, "routing" ).transitionTo( "search", [], {
+			filter,
+			query
 		});
 	},
 
@@ -142,6 +139,18 @@ export default Component.extend({
 
 
 	actions: {
+		back() {
+			get( this, "routing" ).history( -1 );
+		},
+
+		forward() {
+			get( this, "routing" ).history( +1 );
+		},
+
+		refresh() {
+			get( this, "routing" ).refresh();
+		},
+
 		toggleDropdown() {
 			var showDropdown = get( this, "showDropdown" );
 			set( this, "showDropdown", !showDropdown );

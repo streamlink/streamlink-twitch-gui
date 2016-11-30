@@ -1,59 +1,6 @@
-<header class="titlebar">
-<h1>Livestreamer Twitch GUI</h1>
-<div class="logo" {{action "gotoHomepage"}}></div>
-{{search-bar}}
-<nav class="buttons">
-<button type="button" class="btn-close fa fa-times" {{action "winClose"}}></button>
-<button type="button" class="btn-max fa fa-plus" {{action "winMax"}}></button>
-<button type="button" class="btn-min fa fa-minus" {{action "winMin"}}></button>
-<div class="spacer"></div>
-{{#if dev}}
-<button type="button" class="btn-dev fa fa-code" {{action "winDevTools"}}></button>
-<button type="button" class="btn-refresh fa fa-refresh" {{action "winRefresh"}}></button>
-<div class="spacer"></div>
-{{/if}}
-<button type="button" class="btn-settings fa fa-cog" {{action "goto" "settings"}}></button>
-<button type="button" class="btn-watching btn-indicator {{unless streamsLength 'btn-hidden'}} fa fa-desktop" {{action "goto" "watching"}}>
-<span class="indicator">{{streamsLength}}</span>
-</button>
-<button
-	type="button"
-	class="{{if auth.session.isLoggedIn 'btn-user' 'btn-no-user'}} {{if notification.enabled 'btn-indicator'}} {{if auth.session.isPending 'btn-user-pending'}} fa fa-user"
-	title="{{unless auth.session.isLoggedIn 'You\'re not logged in' (concat 'Logged in as ' auth.session.user_name nl notification.statusText)}}"
-	{{action "goto" "user.index"}}>
-{{#if notification.enabled}}<span class="indicator {{if notification.paused 'indicator-disabled' (if notification.error 'indicator-error')}} fa fa-bullhorn"></span>{{/if}}
-</button>
-</nav>
-</header>
-
+{{title-bar}}
 <div class="wrapper horizontal">
-
-<aside class="mainmenu">
-<nav>
-<h3>Browse</h3>
-<ul>
-<li>{{#link-to "featured"}}Featured{{/link-to}}</li>
-<li>{{#link-to "games"}}Top Games{{/link-to}}</li>
-<li>{{#link-to "channels"}}Top Channels{{/link-to}}</li>
-</ul>
-<h3>My</h3>
-<ul>
-<li>{{#link-to "user.subscriptions"}}Subscriptions{{/link-to}}</li>
-<li>{{#link-to "user.followedStreams"}}Live Streams{{/link-to}}</li>
-<li>{{#link-to "user.hostedStreams"}}Hosted Streams{{/link-to}}</li>
-<li>{{#link-to "user.followedChannels"}}Channels{{/link-to}}</li>
-<li>{{#link-to "user.followedGames"}}Games{{/link-to}}</li>
-</ul>
-<h3>Misc</h3>
-<ul>
-<li>{{#link-to "settings"}}Settings{{/link-to}}</li>
-<li>{{#link-to "about"}}About{{/link-to}}</li>
-</ul>
-</nav>
-</aside>
-
+{{main-menu}}
 {{outlet}}
-
 </div>
-
-{{#if modal.isModalOpened}}{{component modal.modal}}{{/if}}
+{{modal-service}}

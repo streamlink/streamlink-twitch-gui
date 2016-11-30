@@ -2,7 +2,6 @@ import {
 	get,
 	set,
 	setProperties,
-	getOwner,
 	computed,
 	inject,
 	run,
@@ -82,6 +81,7 @@ StreamCache.prototype.isNotNewer = function( stream ) {
 export default Service.extend( ChannelSettingsMixin, {
 	auth: service(),
 	chat: service(),
+	routing: service( "-routing" ),
 	settings: service(),
 	store: service(),
 	streamservice: service( "stream" ),
@@ -436,13 +436,12 @@ export default Service.extend( ChannelSettingsMixin, {
 			toggleVisibility( true );
 		}
 
-		let applicationController = getOwner( this ).lookup( "controller:application" );
 		let streamservice = get( this, "streamservice" );
 
 		switch( settings ) {
 			// followed streams menu
 			case 1:
-				applicationController.send( "goto", "user.followedStreams" );
+				get( this, "routing" ).transitionTo( "user.followedStreams" );
 				break;
 
 			// launch stream

@@ -8,7 +8,7 @@ import { isDarwin } from "utils/node/platform";
 const { "display-name": displayName } = main;
 
 
-export function createNativeMenuBar( controller ) {
+export function createNativeMenuBar( routingService ) {
 	if ( !isDarwin ) { return; }
 
 	var menubar = Menu.create({ type: "menubar" });
@@ -24,7 +24,7 @@ export function createNativeMenuBar( controller ) {
 		key: ",",
 		modifier: "cmd"
 	});
-	preferences.click = controller.send.bind( controller, "goto", "settings" );
+	preferences.click = () => routingService.transitionTo( "settings" );
 	mainMenu.insert( preferences, 2 );
 
 	// Add a refresh menu item to the view menubar submenu
@@ -35,7 +35,7 @@ export function createNativeMenuBar( controller ) {
 		key: "r",
 		modifiers: "cmd"
 	});
-	refresh.click = controller.send.bind( controller, "refresh" );
+	refresh.click = () => routingService.refresh();
 	viewMenu.insert( refresh, 0 );
 
 	nwWindow.menu = menubar;

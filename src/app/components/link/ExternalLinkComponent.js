@@ -1,6 +1,6 @@
 import {
 	get,
-	getOwner,
+	inject,
 	Component
 } from "Ember";
 import Menu from "nwjs/Menu";
@@ -8,7 +8,12 @@ import { set as setClipboard } from "nwjs/Clipboard";
 import { openBrowser } from "nwjs/Shell";
 
 
+const { service } = inject;
+
+
 export default Component.extend({
+	routing: service( "-routing" ),
+
 	tagName: "a",
 	classNameBindings: [ ":external-link" ],
 	attributeBindings: [ "href" ],
@@ -46,19 +51,17 @@ export default Component.extend({
 	},
 
 	openUrl() {
-		var url = get( this, "url" );
-		if ( !url ) { return; }
-		var applicationRoute = getOwner( this ).lookup( "route:application" );
-		applicationRoute.send( "openBrowser", url );
+		let url = get( this, "url" );
+		get( this, "routing" ).openBrowserOrTransitionToChannel( url );
 	},
 
 	openUrlInBrowser() {
-		var url = get( this, "url" );
+		let url = get( this, "url" );
 		openBrowser( url );
 	},
 
 	copyUrl() {
-		var url = get( this, "url" );
+		let url = get( this, "url" );
 		setClipboard( url );
 	},
 

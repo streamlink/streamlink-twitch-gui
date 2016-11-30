@@ -66,8 +66,9 @@ Application.instanceInitializer({
 	name: "nwjs",
 
 	initialize( application ) {
-		var controller = application.lookup( "controller:application" );
-		var settings   = application.lookup( "service:settings" );
+		let nwjsService = application.lookup( "service:nwjs" );
+		let routingService = application.lookup( "service:-routing" );
+		let settings = application.lookup( "service:settings" );
 
 		// set up everything NWjs related
 		function settingsObserver() {
@@ -79,7 +80,7 @@ Application.instanceInitializer({
 			platformfixes();
 
 			// initialize all the NWjs stuff
-			createNativeMenuBar( controller );
+			createNativeMenuBar( routingService );
 			setupIntegrations( settings );
 		}
 
@@ -94,7 +95,7 @@ Application.instanceInitializer({
 			try {
 				nwWindow.show();
 				nwWindow.focus();
-				controller.send( "winClose" );
+				nwjsService.close();
 			} catch ( e ) {
 				nwWindow.close( true );
 			}

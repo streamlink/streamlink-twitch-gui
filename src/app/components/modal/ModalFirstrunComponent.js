@@ -10,6 +10,7 @@ const { service } = inject;
 
 
 export default ModalDialogComponent.extend({
+	routing: service( "-routing" ),
 	versioncheck: service(),
 
 	layout,
@@ -21,7 +22,7 @@ export default ModalDialogComponent.extend({
 
 	actions: {
 		settings() {
-			this.sendAction( "goto", "settings" );
+			get( this, "routing" ).transitionTo( "settings" );
 			this.send( "start" );
 		},
 

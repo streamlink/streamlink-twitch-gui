@@ -1,5 +1,6 @@
 import {
 	get,
+	inject,
 	Component
 } from "Ember";
 import Menu from "nwjs/Menu";
@@ -7,16 +8,19 @@ import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
 
 
+const { service } = inject;
+
+
 export default Component.extend({
+	routing: service( "-routing" ),
+
 	layout,
 
 	tagName: "li",
 	classNames: [ "channel-panel-item-component" ],
 
-	openBrowser: "openBrowser",
-
 	didInsertElement() {
-		var self = this;
+		let routing = get( this, "routing" );
 
 		this.$( "a" )
 			.addClass( "external-link" )
@@ -26,7 +30,7 @@ export default Component.extend({
 			.click(function( e ) {
 				e.preventDefault();
 				e.stopImmediatePropagation();
-				self.send( "openBrowser", this.href );
+				routing.openBrowserOrTransitionToChannel( this.href );
 			});
 
 		this._super( ...arguments );
@@ -54,8 +58,7 @@ export default Component.extend({
 
 	actions: {
 		openBrowser( url ) {
-			if ( !url ) { return; }
-			this.sendAction( "openBrowser", url );
+			get( this, "routing" ).openBrowserOrTransitionToChannel( url );
 		}
 	}
 });

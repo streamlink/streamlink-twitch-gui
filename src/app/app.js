@@ -96,6 +96,7 @@ import TimeFromNowHelper from "helpers/TimeFromNowHelper";
 import GetParamHelper from "helpers/GetParamHelper";
 import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
 
+import NwjsService from "services/NwjsService";
 import SettingsService from "services/SettingsService";
 import AuthService from "services/AuthService";
 import ModalService from "services/ModalService";
@@ -105,7 +106,6 @@ import NotificationService from "services/NotificationService";
 import ChatService from "services/ChatService";
 
 import ApplicationRoute from "routes/ApplicationRoute";
-import ApplicationController from "controllers/ApplicationController";
 
 import LoadingRoute from "routes/LoadingRoute";
 import LoadingTemplate from "templates/Loading.hbs";
@@ -114,6 +114,9 @@ import ErrorRoute from "routes/ErrorRoute";
 import ErrorTemplate from "templates/Error.hbs";
 
 import IndexRoute from "routes/IndexRoute";
+
+import TitleBarComponent from "components/TitleBarComponent";
+import MainMenuComponent from "components/MainMenuComponent";
 
 import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
@@ -136,6 +139,7 @@ import ShareChannelComponent from "components/button/ShareChannelComponent";
 import SubscribeChannelComponent from "components/button/SubscribeChannelComponent";
 import TwitchEmotesComponent from "components/button/TwitchEmotesComponent";
 
+import ModalServiceComponent from "components/modal/ModalServiceComponent";
 import ModalBodyComponent from "components/modal/ModalBodyComponent";
 import ModalChangelogComponent from "components/modal/ModalChangelogComponent";
 import ModalConfirmComponent from "components/modal/ModalConfirmComponent";
@@ -390,6 +394,7 @@ export default Application.create({
 	HasOwnPropertyHelper,
 
 	// Services
+	NwjsService,
 	SettingsService,
 	AuthService,
 	ModalService,
@@ -401,7 +406,6 @@ export default Application.create({
 
 	// Application
 	ApplicationRoute,
-	ApplicationController,
 
 	LoadingRoute,
 	LoadingTemplate,
@@ -413,6 +417,9 @@ export default Application.create({
 
 
 	// Components
+	TitleBarComponent,
+	MainMenuComponent,
+
 	EmbeddedLinksComponent,
 	ExternalLinkComponent,
 	LinkComponent,
@@ -434,6 +441,7 @@ export default Application.create({
 	SubscribeChannelComponent,
 	TwitchEmotesComponent,
 
+	ModalServiceComponent,
 	ModalBodyComponent,
 	ModalChangelogComponent,
 	ModalConfirmComponent,

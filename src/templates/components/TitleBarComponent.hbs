@@ -1,0 +1,25 @@
+<h1>Livestreamer Twitch GUI</h1>
+<div class="logo" {{action "homepage"}}></div>
+{{search-bar}}
+<nav class="buttons">
+	<button type="button" class="btn-close fa fa-times" {{action "nwjs" "close"}}></button>
+	<button type="button" class="btn-max fa fa-plus" {{action "nwjs" "maximize"}}></button>
+	<button type="button" class="btn-min fa fa-minus" {{action "nwjs" "minimize"}}></button>
+	<div class="spacer"></div>
+	{{#if dev}}
+		<button type="button" class="btn-dev fa fa-code" {{action "nwjs" "devTools"}}></button>
+		<button type="button" class="btn-refresh fa fa-refresh" {{action "nwjs" "reload"}}></button>
+		<div class="spacer"></div>
+	{{/if}}
+	<button type="button" class="btn-settings fa fa-cog" {{action "goto" "settings"}}></button>
+	<button type="button" class="btn-watching btn-indicator {{unless streamservice.model.length 'btn-hidden'}} fa fa-desktop" {{action "goto" "watching"}}>
+		<span class="indicator">{{streamservice.model.length}}</span>
+	</button>
+	<button
+		type="button"
+		class="{{if auth.session.isLoggedIn 'btn-user' 'btn-no-user'}} {{if notification.enabled 'btn-indicator'}} {{if auth.session.isPending 'btn-user-pending'}} fa fa-user"
+		title="{{unless auth.session.isLoggedIn 'You\'re not logged in' (concat 'Logged in as ' auth.session.user_name nl notification.statusText)}}"
+		{{action "goto" "user.index"}}>
+		{{#if notification.enabled}}<span class="indicator {{if notification.paused 'indicator-disabled' (if notification.error 'indicator-error')}} fa fa-bullhorn"></span>{{/if}}
+	</button>
+</nav>

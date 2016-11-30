@@ -1,6 +1,5 @@
 import {
 	get,
-	getOwner,
 	computed,
 	inject,
 	Component
@@ -22,6 +21,7 @@ const actions = Settings.stream_click.reduce(function( obj, item ) {
 
 export default Component.extend({
 	chat: service(),
+	routing: service( "-routing" ),
 	settings: service(),
 	streamservice: service( "stream" ),
 
@@ -35,12 +35,6 @@ export default Component.extend({
 		// true or null
 		return get( this, "settings.stream_click_middle" ) !== actions.disabled || null;
 	}),
-
-	init() {
-		this._super( ...arguments );
-		// FIXME: refactor global goto actions
-		this.applicationRoute = getOwner( this ).lookup( "route:application" );
-	},
 
 	clickable: true,
 
@@ -176,12 +170,12 @@ export default Component.extend({
 
 	gotoChannelPage() {
 		let name = get( this, "stream.channel.id" );
-		this.applicationRoute.send( "goto", "channel", name );
+		get( this, "routing" ).transitionTo( "channel", name );
 	},
 
 	gotoChannelSettings() {
 		let name = get( this, "stream.channel.id" );
-		this.applicationRoute.send( "goto", "channel.settings", name );
+		get( this, "routing" ).transitionTo( "channel.settings", name );
 	}
 
 });

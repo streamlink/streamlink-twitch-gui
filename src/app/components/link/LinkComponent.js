@@ -1,12 +1,18 @@
 import {
 	get,
 	computed,
+	inject,
 	LinkComponent
 } from "Ember";
 
 
+const { service } = inject;
+
+
 // reopen and don't extend: this class may be used globally
 export default LinkComponent.reopen({
+	routing: service( "-routing" ),
+
 	active: computed( "attrs.params", "_routing.currentState", "inactiveClass", function() {
 		let active = this._super( ...arguments );
 		if ( active === false ) {
@@ -34,13 +40,9 @@ export default LinkComponent.reopen({
 	 */
 	click( event ) {
 		if ( get( this, "active" ) ) {
-			// FIXME: targetObject
-			let targetObject = get( this, "_targetObject" );
-			if ( targetObject ) {
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				targetObject.send( "refresh" );
-			}
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			get( this, "routing" ).refresh();
 		} else {
 			this._super( ...arguments );
 		}

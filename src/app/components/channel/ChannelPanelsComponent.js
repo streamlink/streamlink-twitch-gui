@@ -1,4 +1,6 @@
 import {
+	get,
+	inject,
 	run,
 	on,
 	Component
@@ -7,16 +9,17 @@ import Masonry from "Masonry";
 import layout from "templates/components/channel/ChannelPanelsComponent.hbs";
 
 
+const { service } = inject;
 const { scheduleOnce } = run;
 
 
 export default Component.extend({
+	routing: service( "-routing" ),
+
 	layout,
 
 	tagName: "section",
 	classNames: [ "content", "content-panels" ],
-
-	action: "openBrowser",
 
 	_masonry: on( "didInsertElement", function() {
 		var container = this.$( "ul" )[0];
@@ -31,7 +34,7 @@ export default Component.extend({
 
 	actions: {
 		openBrowser( url ) {
-			this.sendAction( "action", url );
+			get( this, "routing" ).openBrowserOrTransitionToChannel( url );
 		}
 	}
 });

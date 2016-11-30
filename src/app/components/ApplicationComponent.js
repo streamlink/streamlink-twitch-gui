@@ -1,6 +1,5 @@
 import {
 	get,
-	getOwner,
 	computed,
 	inject,
 	observer,
@@ -24,6 +23,7 @@ const reTheme = /^theme-/;
 
 
 export default Component.extend({
+	routing: service( "-routing" ),
 	settings: service(),
 
 	layout,
@@ -65,7 +65,6 @@ export default Component.extend({
 
 	didInsertElement() {
 		guiSelectable();
-		this._applicationController = getOwner( this ).lookup( "controller:application" );
 		this._super( ...arguments );
 	},
 
@@ -74,15 +73,15 @@ export default Component.extend({
 		if ( e.keyCode === 116 || e.keyCode ===  82 && e.ctrlKey === true ) {
 			// MacOS has its menubar with its own hotkeys
 			if ( isDarwin ) { return; }
-			this._applicationController.send( "refresh" );
+			get( this, "routing" ).refresh();
 
 		// alt+left
 		} else if ( e.keyCode === 37 && e.altKey ) {
-			this._applicationController.send( "history", -1 );
+			get( this, "routing" ).history( -1 );
 
 		// alt+right
 		} else if ( e.keyCode === 39 && e.altKey ) {
-			this._applicationController.send( "history", +1 );
+			get( this, "routing" ).history( +1 );
 
 		} else {
 			return;
