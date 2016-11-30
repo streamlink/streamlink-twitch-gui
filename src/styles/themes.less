@@ -29,11 +29,13 @@
  */
 //noinspection LessUnresolvedVariable
 .theme-mix-color( @color: @theme-text-color, @background: @theme-background, @important: false ) {
+	@c: mix( fade( @color, 100% ), fade( @background, 100% ), unit( ( 100 * alpha( @color ) ), percent ) );
+
 	.apply() when ( @important = true ) {
-		color: mix( fade( @color, 100% ), @background, unit( ( 100 * alpha( @color ) ), percent ) ) !important;
+		color: @c !important;
 	}
 	.apply() when ( default() ) {
-		color: mix( fade( @color, 100% ), @background, unit( ( 100 * alpha( @color ) ), percent ) );
+		color: @c;
 	}
 	.apply();
 }

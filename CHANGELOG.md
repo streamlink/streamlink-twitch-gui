@@ -12,6 +12,7 @@ Changelog - Livestreamer Twitch GUI
 - Added alt+left/right hotkeys.
 - Added Streamlink parameter to disable redirection of hosting channels.
 - Fixed "Streamlink" and "Livestreamer via python-pip" issues on Windows. #336
+- Fixed text rendering issues on Windows. #232
 - Fixed stream info bar visibility bug. #342
 - Fixed broked number input fields on MacOS. #282
 - Fixed apply/discard settings buttons being clickable while being hidden.
