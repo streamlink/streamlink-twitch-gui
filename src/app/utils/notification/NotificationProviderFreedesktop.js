@@ -251,6 +251,8 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 	}
 
 	send( data ) {
+		let showActions = this.supportsActions && data.click && data.settings > 0;
+
 		return callMethod(
 			this.exec,
 			"org.freedesktop.Notifications.Notify",
@@ -260,7 +262,7 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 				data.icon,
 				data.title,
 				NotificationProvider.getMessageAsString( data.message ),
-				`[${this.supportsActions && data.click ? strActions : ""}]`,
+				`[${showActions ? strActions : ""}]`,
 				"{}",
 				EXPIRE_SECS
 			],
@@ -286,12 +288,13 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 				resolve( id );
 			}
 		)
-			.then( id => this.registerCallback( data, id ) );
+			.then( id => showActions
+				? this.registerCallback( data, id )
+				: undefined
+			);
 	}
 
 	registerCallback( data, id ) {
-		if ( !this.supportsActions || !data.click ) { return; }
-
 		this.callbacks[ id ] = new NotificationFreedesktopCallback(
 			data.click,
 			setTimeout( () => {

@@ -405,7 +405,8 @@ export default Service.extend( ChannelSettingsMixin, {
 				message: get( stream, "channel.status" ) || ""
 			}) ),
 			icon   : iconGroup,
-			click  : () => this.notificationClick( settings, streams )
+			click  : () => this.notificationClick( settings, streams ),
+			settings
 		});
 	},
 
@@ -420,7 +421,8 @@ export default Service.extend( ChannelSettingsMixin, {
 			title  : get( stream, "channel.display_name" ) + " has started streaming",
 			message: get( stream, "channel.status" ) || "",
 			icon   : get( stream, "logo" ) || get( stream, "channel.logo" ),
-			click  : () => this.notificationClick( settings, [ stream ] )
+			click  : () => this.notificationClick( settings, [ stream ] ),
+			settings
 		});
 	},
 
@@ -429,7 +431,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * @param {Number} settings
 	 * @param {TwitchStream[]} streams
 	 */
-	notificationClick: function( settings, streams ) {
+	notificationClick( settings, streams ) {
 		// always restore the window
 		if ( settings !== 0 ) {
 			toggleMinimize( true );
@@ -464,7 +466,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 	},
 
-	showNotification: function( data ) {
+	showNotification( data ) {
 		let provider = get( this, "settings.notify_provider" );
 
 		showNotification( provider, data )

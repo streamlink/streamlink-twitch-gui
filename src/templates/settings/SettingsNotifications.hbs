@@ -58,7 +58,7 @@
 		{{drop-down value=model.notify_click content=Settings.notify_click class="notifications"}}
 	{{/settings-row}}
 
-	{{#if (bool-and model.notify_grouping model.notify_click)}}
+	{{#if model.notify_grouping}}
 		{{#settings-row
 			"Group click"
 			"Preferred group click action."

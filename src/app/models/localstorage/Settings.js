@@ -256,6 +256,7 @@ export default Model.extend({
 	],
 
 	notify_click_group: [
+		{ id: 0, label: "Do nothing" },
 		{ id: 1, label: "Go to favorites" },
 		{ id: 2, label: "Open all streams" },
 		{ id: 3, label: "Open all streams+chats" }
