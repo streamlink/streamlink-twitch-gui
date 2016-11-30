@@ -118,7 +118,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	startStream( stream, quality ) {
-		get( this, "modal" ).openModal( "stream", this, {
+		get( this, "modal" ).openModal( "streaming", this, {
 			error : null,
 			active: null,
 			abort : false

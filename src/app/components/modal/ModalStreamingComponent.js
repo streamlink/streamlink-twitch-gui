@@ -9,7 +9,7 @@ import { streamprovider } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import qualities from "models/stream/qualities";
 import { openBrowser } from "nwjs/Shell";
-import layout from "templates/components/modal/ModalStreamComponent.hbs";
+import layout from "templates/components/modal/ModalStreamingComponent.hbs";
 
 
 const { readOnly } = computed;
@@ -28,7 +28,7 @@ export default ModalDialogComponent.extend({
 
 	layout,
 
-	"class": "modal-stream",
+	"class": "modal-streaming",
 
 	error : readOnly( "streaming.error" ),
 	active: readOnly( "streaming.active" ),

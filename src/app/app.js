@@ -146,7 +146,7 @@ import ModalConfirmComponent from "components/modal/ModalConfirmComponent";
 import ModalFirstrunComponent from "components/modal/ModalFirstrunComponent";
 import ModalFooterComponent from "components/modal/ModalFooterComponent";
 import ModalHeaderComponent from "components/modal/ModalHeaderComponent";
-import ModalStreamComponent from "components/modal/ModalStreamComponent";
+import ModalStreamingComponent from "components/modal/ModalStreamingComponent";
 import ModalLogComponent from "components/modal/ModalLogComponent";
 import ModalNewreleaseComponent from "components/modal/ModalNewreleaseComponent";
 import ModalQuitComponent from "components/modal/ModalQuitComponent";
@@ -448,7 +448,7 @@ export default Application.create({
 	ModalFirstrunComponent,
 	ModalFooterComponent,
 	ModalHeaderComponent,
-	ModalStreamComponent,
+	ModalStreamingComponent,
 	ModalLogComponent,
 	ModalNewreleaseComponent,
 	ModalQuitComponent,
