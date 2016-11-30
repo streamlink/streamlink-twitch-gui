@@ -12,7 +12,7 @@ const { "display-name": displayName } = main;
 const DBUS_NAME = "org.freedesktop.Notifications";
 const DBUS_PATH = "/org/freedesktop/Notifications";
 
-const CODE_NOTIF_DISMISSED = 2;
+//const CODE_NOTIF_DISMISSED = 2;
 //const CODE_NOTIF_CLOSED = 3;
 
 const EVENT_CLOSED = "closed";
@@ -230,13 +230,9 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 			.then( child => {
 				this.monitorSpawn = child;
 
-				this.events.addListener( EVENT_CLOSED, ( id, code ) => {
+				this.events.addListener( EVENT_CLOSED, ( id/*, code*/ ) => {
 					// look only for registered callbacks
 					if ( !this.callbacks.hasOwnProperty( id ) ) { return; }
-					// execute click callback if user has dismissed the notification
-					if ( !this.supportsActions && code === CODE_NOTIF_DISMISSED ) {
-						this.callbacks[ id ].click();
-					}
 					// remove callback and its expiration timeout
 					this.unregisterCallback( id );
 				});
@@ -294,7 +290,7 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 	}
 
 	registerCallback( data, id ) {
-		if ( !data.click ) { return; }
+		if ( !this.supportsActions || !data.click ) { return; }
 
 		this.callbacks[ id ] = new NotificationFreedesktopCallback(
 			data.click,
