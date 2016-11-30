@@ -23,7 +23,7 @@ export default Component.extend({
 	chat: service(),
 	routing: service( "-routing" ),
 	settings: service(),
-	streamservice: service( "stream" ),
+	streaming: service(),
 
 	layout,
 
@@ -39,8 +39,8 @@ export default Component.extend({
 	clickable: true,
 
 
-	opened: computed( "stream.channel.id", "streamservice.model.length", function() {
-		let model = get( this, "streamservice.model" );
+	opened: computed( "stream.channel.id", "streaming.model.length", function() {
+		let model = get( this, "streaming.model" );
 		let id    = get( this, "stream.channel.id" );
 
 		return model.mapBy( "channel.id" ).indexOf( id ) !== -1;
@@ -150,12 +150,12 @@ export default Component.extend({
 
 	startStream( quality ) {
 		let stream = get( this, "stream" );
-		get( this, "streamservice" ).startStream( stream, quality );
+		get( this, "streaming" ).startStream( stream, quality );
 	},
 
 	closeStream() {
 		let stream = get( this, "stream" );
-		get( this, "streamservice" ).closeStream( stream );
+		get( this, "streaming" ).closeStream( stream );
 	},
 
 	openChat() {

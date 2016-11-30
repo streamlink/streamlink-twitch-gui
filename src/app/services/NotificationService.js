@@ -84,7 +84,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	routing: service( "-routing" ),
 	settings: service(),
 	store: service(),
-	streamservice: service( "stream" ),
+	streaming: service(),
 
 
 	model : [],
@@ -436,7 +436,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			toggleVisibility( true );
 		}
 
-		let streamservice = get( this, "streamservice" );
+		let streaming = get( this, "streaming" );
 
 		switch( settings ) {
 			// followed streams menu
@@ -446,13 +446,13 @@ export default Service.extend( ChannelSettingsMixin, {
 
 			// launch stream
 			case 2:
-				streams.forEach( stream => streamservice.startStream( stream ) );
+				streams.forEach( stream => streaming.startStream( stream ) );
 				break;
 
 			// launch stream + chat
 			case 3:
 				streams.forEach( stream => {
-					streamservice.startStream( stream );
+					streaming.startStream( stream );
 					// don't open the chat twice (startStream may open chat already)
 					if ( get( this, "settings.gui_openchat" ) ) { return; }
 					let chat    = get( this, "chat" );

@@ -12,8 +12,8 @@
 		<div class="spacer"></div>
 	{{/if}}
 	<button type="button" class="btn-settings fa fa-cog" {{action "goto" "settings"}}></button>
-	<button type="button" class="btn-watching btn-indicator {{unless streamservice.model.length 'btn-hidden'}} fa fa-desktop" {{action "goto" "watching"}}>
-		<span class="indicator">{{streamservice.model.length}}</span>
+	<button type="button" class="btn-watching btn-indicator {{unless streaming.model.length 'btn-hidden'}} fa fa-desktop" {{action "goto" "watching"}}>
+		<span class="indicator">{{streaming.model.length}}</span>
 	</button>
 	<button
 		type="button"

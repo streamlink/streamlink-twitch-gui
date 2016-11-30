@@ -23,15 +23,15 @@ const {
 
 
 export default ModalDialogComponent.extend({
-	streamservice: service( "stream" ),
+	streaming: service(),
 	settings: service(),
 
 	layout,
 
 	"class": "modal-stream",
 
-	error : readOnly( "streamservice.error" ),
-	active: readOnly( "streamservice.active" ),
+	error : readOnly( "streaming.error" ),
+	active: readOnly( "streaming.active" ),
 
 	qualities,
 	versionMin: computed( "settings.streamprovider", function() {
@@ -62,18 +62,18 @@ export default ModalDialogComponent.extend({
 		},
 
 		chat( channel ) {
-			get( this, "streamservice" ).openChat( channel );
+			get( this, "streaming" ).openChat( channel );
 		},
 
 		abort() {
-			set( this, "streamservice.abort", true );
-			get( this, "modal" ).closeModal( get( this, "streamservice" ) );
+			set( this, "streaming.abort", true );
+			get( this, "modal" ).closeModal( get( this, "streaming" ) );
 		},
 
 		close() {
-			get( this, "modal" ).closeModal( get( this, "streamservice" ) );
+			get( this, "modal" ).closeModal( get( this, "streaming" ) );
 			schedule( "destroy", this, function() {
-				set( this, "streamservice.active", null );
+				set( this, "streaming.active", null );
 			});
 		},
 

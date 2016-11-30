@@ -15,7 +15,7 @@ export default Component.extend({
 	nwjs: service(),
 	routing: service( "-routing" ),
 	settings: service(),
-	streamservice: service( "stream" ),
+	streaming: service(),
 
 	layout,
 	classNames: [ "title-bar-component" ],

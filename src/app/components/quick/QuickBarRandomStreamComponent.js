@@ -15,7 +15,7 @@ const { "random-max": randomMax } = vars;
 
 export default FormButtonComponent.extend( LanguageFilterMixin, {
 	store: service(),
-	streamservice: service( "stream" ),
+	streaming: service(),
 
 	"class": "btn-info",
 
@@ -83,7 +83,7 @@ export default FormButtonComponent.extend( LanguageFilterMixin, {
 					}
 				})
 				.then(function( stream ) {
-					get( self, "streamservice" ).startStream( stream );
+					get( self, "streaming" ).startStream( stream );
 					success();
 				})
 				.catch(function(){

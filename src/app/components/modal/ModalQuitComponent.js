@@ -13,18 +13,18 @@ const { service } = inject;
 
 
 export default ModalDialogComponent.extend({
-	streamservice: service( "stream" ),
+	streaming: service(),
 
 	layout,
 
 	"class": "modal-quit",
 
-	hasStreams: readOnly( "streamservice.model.length" ),
+	hasStreams: readOnly( "streaming.model.length" ),
 
 
 	actions: {
 		shutdown() {
-			get( this, "streamservice" ).killAll();
+			get( this, "streaming" ).killAll();
 			this.send( "quit" );
 		},
 

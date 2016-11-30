@@ -101,7 +101,7 @@ import SettingsService from "services/SettingsService";
 import AuthService from "services/AuthService";
 import ModalService from "services/ModalService";
 import VersioncheckService from "services/VersioncheckService";
-import StreamService from "services/StreamService";
+import StreamingService from "services/StreamingService";
 import NotificationService from "services/NotificationService";
 import ChatService from "services/ChatService";
 
@@ -399,7 +399,7 @@ export default Application.create({
 	AuthService,
 	ModalService,
 	VersioncheckService,
-	StreamService,
+	StreamingService,
 	NotificationService,
 	ChatService,
 

@@ -13,7 +13,7 @@ const { service } = inject;
 
 export default Controller.extend({
 	auth: service(),
-	streamservice: service( "stream" ),
+	streaming: service(),
 
 	sortedModel: sort( "model", "sortBy" ),
 	sortBy: [ "started:desc" ],
@@ -22,11 +22,11 @@ export default Controller.extend({
 
 	actions: {
 		openDialog( stream ) {
-			get( this, "streamservice" ).startStream( stream );
+			get( this, "streaming" ).startStream( stream );
 		},
 
 		closeStream( stream ) {
-			get( this, "streamservice" ).closeStream( stream );
+			get( this, "streaming" ).closeStream( stream );
 		}
 	}
 });

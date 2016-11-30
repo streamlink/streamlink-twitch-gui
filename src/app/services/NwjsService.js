@@ -16,7 +16,7 @@ const { service } = inject;
 export default Service.extend({
 	modal: service(),
 	settings: service(),
-	streamservice: service( "stream" ),
+	streaming: service(),
 
 
 	reload() {
@@ -44,7 +44,7 @@ export default Service.extend({
 	},
 
 	close() {
-		if ( get( this, "streamservice.model.length" ) ) {
+		if ( get( this, "streaming.model.length" ) ) {
 			get( this, "modal" ).openModal( "quit", this );
 		} else {
 			nwWindow.close( true );
