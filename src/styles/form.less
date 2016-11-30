@@ -17,21 +17,20 @@ input[type="number"] {
 	-webkit-box-shadow: 0 0 0 !important;
 	transition: none;
 
-	.themed({
-		color: @themed-input-color;
-		border-color: @themed-input-border-color;
-		background: @themed-input-background;
+	.theme({
+		.theme-color-and-background( @theme-input-color, @theme-input-background );
+		border-color: @theme-input-border-color;
 
 		&:hover {
-			border-color: @themed-input-border-color-hover;
+			border-color: @theme-input-border-color-hover;
 		}
 
 		&:focus {
-			border-color: @themed-input-border-color-active;
+			border-color: @theme-input-border-color-active;
 		}
 
 		&::-webkit-input-placeholder {
-			color: @themed-input-color-placeholder;
+			.theme-mix-color( @theme-input-color-placeholder, @theme-input-background );
 		}
 	});
 
@@ -50,8 +49,8 @@ input[type="number"] {
 input:disabled {
 	-webkit-user-select: none;
 
-	.themed({
-		opacity: @themed-input-opacity-disabled;
+	.theme({
+		opacity: @theme-input-opacity-disabled;
 	});
 
 	&, & + .input-group-btn > button {

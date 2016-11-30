@@ -29,9 +29,8 @@
 		opacity: 0;
 		transition: opacity @speed ease-out, top @speed ease-out, bottom @speed ease-out;
 
-		.themed({
-			background: @themed-gameitem-overlay-background;
-			color: @themed-gameitem-overlay-color;
+		.theme({
+			.theme-color-and-background( @theme-gameitem-overlay-color, @theme-gameitem-overlay-background );
 		});
 	}
 

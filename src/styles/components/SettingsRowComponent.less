@@ -69,9 +69,8 @@
 			white-space: nowrap;
 
 			&:hover {
-				.themed({
-					color: @themed-settings-descr-docs-color-hover;
-					background: @themed-settings-descr-docs-background-hover;
+				.theme({
+					.theme-color-and-background( @theme-settings-descr-docs-color-hover, @theme-settings-descr-docs-background-hover );
 				});
 			}
 		}
@@ -100,11 +99,11 @@
 	}
 	&:not(:hover) {
 		> :first-child > :not(:first-child) {
-			.themed({
-				color: @themed-settings-descr-color;
+			.theme({
+				.theme-mix-color( @theme-settings-descr-color, @theme-background );
 
 				i.fa {
-					color: @themed-settings-descr-docs-icon-color;
+					.theme-mix-color( @theme-settings-descr-docs-icon-color, @theme-background );
 				}
 			});
 		}

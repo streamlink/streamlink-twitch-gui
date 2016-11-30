@@ -23,9 +23,8 @@
 		opacity: 1;
 		animation: animFadeInTop .333s ease-out 0s 1 normal;
 
-		.themed({
-			background: @themed-modal-base-background;
-			color: @themed-modal-base-color;
+		.theme({
+			.theme-color-and-background( @theme-modal-base-color, @theme-modal-base-background );
 		});
 	}
 
@@ -42,8 +41,8 @@
 		padding: 0;
 
 		i {
-			.themed({
-				color: @themed-modal-body-icon-color;
+			.theme({
+				.theme-mix-color( @theme-modal-body-icon-color, @theme-modal-base-background );
 			});
 		}
 	}
@@ -56,8 +55,8 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 
-		.themed({
-			color: @themed-modal-header-color;
+		.theme({
+			.theme-mix-color( @theme-modal-header-color, @theme-modal-base-background );
 		});
 	}
 
@@ -157,8 +156,8 @@
 			animation: errorLogButtonAnimation .333s ease-out infinite alternate;
 
 			> i {
-				.themed({
-					color: @themed-button-color;
+				.theme({
+					.theme-mix-color( @theme-button-color, @color-danger );
 				});
 			}
 		}
@@ -186,9 +185,9 @@
 
 	> .selecter-selected,
 	> .selecter-options {
-		.themed({
-			color: @themed-modal-qualityselect-color !important;
-			border-color: mix( @themed-button-shading-color, @color, @themed-button-border-color );
+		.theme({
+			.theme-mix-color( @theme-modal-qualityselect-color, @color, true );
+			border-color: mix( @theme-button-shading-color, @color, @theme-button-border-color );
 		});
 	}
 
@@ -205,8 +204,8 @@
 		}
 
 		&:hover {
-			.themed({
-				border-color: mix( @themed-button-shading-color, @color, @themed-button-border-color-hover );
+			.theme({
+				border-color: mix( @theme-button-shading-color, @color, @theme-button-border-color-hover );
 			});
 		}
 	}
@@ -228,8 +227,8 @@
 		color: inherit !important;
 
 		&:not(:last-of-type) {
-			.themed({
-				@border-color: mix( @themed-button-shading-color, @color, @themed-button-border-color-hover );
+			.theme({
+				@border-color: mix( @theme-button-shading-color, @color, @theme-button-border-color-hover );
 				border-bottom-color: fadeOut( @border-color, 50%, relative );
 			});
 		}

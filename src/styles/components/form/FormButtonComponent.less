@@ -8,10 +8,6 @@
 	z-index: initial !important;
 	transition: background .2s ease-out, border-color .2s ease-out;
 
-	.themed({
-		color: @themed-button-color;
-	});
-
 	&,
 	&.btn-primary { .btn-color( @color-primary ); }
 	&.btn-success { .btn-color( @color-success ); }
@@ -39,21 +35,22 @@
 		transition: color .2s ease-out;
 	}
 
-	.themed({
+	// FIXME
+	.theme({
 		> i {
-			color: @themed-button-icon-color;
+			color: @theme-button-icon-color;
 		}
 
 		&:hover > i {
-			color: @themed-button-icon-color-hover;
+			color: @theme-button-icon-color-hover;
 		}
 
 		&:hover:active > i {
-			color: @themed-button-icon-color-active;
+			color: @theme-button-icon-color-active;
 		}
 
 		> svg > circle {
-			stroke: @themed-button-icon-color-active;
+			stroke: @theme-button-icon-color-active;
 		}
 	});
 

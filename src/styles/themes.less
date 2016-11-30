@@ -1,15 +1,19 @@
 
-.themed( @block ) {
+/**
+ * Add selectors for each registered theme and apply theme variables to the provided block
+ */
+//noinspection LessUnresolvedVariable
+.theme( @block ) {
 	.loop( @i, @n ) when( @i <= @n ) {
 		@name: extract( @THEMES, @i );
-		@theme: ~"theme-@{name}";
+		@theme: ~"THEME-@{name}";
 		@theme-ruleset: @@theme;
 
 		html.theme-@{name} & {
 			// apply the theme ruleset (variables container)
 			@theme-ruleset();
 			// rulesets don't return variables, so we need to use a mixin for that
-			.theme-variables();
+			.apply-theme-variables();
 			// apply the passed block
 			@block();
 		}
@@ -17,4 +21,25 @@
 		.loop( ( @i + 1 ), @n );
 	}
 	.loop( 1, length( @THEMES ) );
+}
+
+
+/**
+ * Mix theme colors to avoid transparent colors when possible
+ */
+//noinspection LessUnresolvedVariable
+.theme-mix-color( @color: @theme-text-color, @background: @theme-background, @important: false ) {
+	.apply() when ( @important = true ) {
+		color: mix( fade( @color, 100% ), @background, unit( ( 100 * alpha( @color ) ), percent ) ) !important;
+	}
+	.apply() when ( default() ) {
+		color: mix( fade( @color, 100% ), @background, unit( ( 100 * alpha( @color ) ), percent ) );
+	}
+	.apply();
+}
+
+//noinspection LessUnresolvedVariable
+.theme-color-and-background( @color: @theme-text-color, @background: @theme-background ) {
+	background: @background;
+	.theme-mix-color( @color, @background );
 }

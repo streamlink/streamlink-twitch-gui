@@ -12,8 +12,8 @@
 			margin-top: .5em;
 		}
 
-		.themed({
-			color: @themed-mainmenu-headline-color;
+		.theme({
+			.theme-mix-color( @theme-mainmenu-headline-color, @theme-background );
 		});
 	}
 
@@ -32,15 +32,15 @@
 			text-decoration: none;
 			font-weight: lighter;
 
-			.themed({
-				color: @themed-mainmenu-anchor-color;
+			.theme({
+				.theme-mix-color( @theme-mainmenu-anchor-color, @theme-background );
 
 				&:hover {
-					color: @themed-mainmenu-anchor-color-hover;
+					.theme-mix-color( @theme-mainmenu-anchor-color-hover, @theme-background );
 				}
 
 				&:active, &.active {
-					color: @themed-mainmenu-anchor-color-active;
+					.theme-mix-color( @theme-mainmenu-anchor-color-active, @theme-background );
 				}
 			});
 

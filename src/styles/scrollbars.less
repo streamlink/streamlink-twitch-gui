@@ -12,12 +12,12 @@
 	border: ( ( @scrollbar-size - @scrollbar-thumb-size ) / 2 ) solid transparent;
 	background-clip: content-box !important;
 
-	.themed({
-		background: @themed-scrollbar-background;
+	.theme({
+		background: @theme-scrollbar-background;
 
 		&:hover,
 		&:active {
-			background: @themed-scrollbar-background-hover;
+			background: @theme-scrollbar-background-hover;
 		}
 	});
 }

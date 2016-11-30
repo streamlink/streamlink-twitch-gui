@@ -26,8 +26,8 @@
 			cursor: pointer;
 			transition: opacity .25s ease-out, border-bottom-color .25s ease-out;
 
-			.themed({
-				color: @themed-text-color-alt;
+			.theme({
+				.theme-mix-color( @theme-text-color-alt, @theme-background );
 			});
 
 			&:first-of-type {
@@ -136,8 +136,8 @@
 			margin: 0 0 .5rem calc(@input-btn-size + 2 * @input-btn-outline-size + .5rem) !important;
 			font-size: small;
 
-			.themed({
-				color: @themed-text-color-hint;
+			.theme({
+				.theme-mix-color( @theme-text-color-hint, @theme-background );
 			});
 
 			> .fa {

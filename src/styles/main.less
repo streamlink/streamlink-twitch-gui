@@ -18,9 +18,8 @@ body {
 	font-family: @font-name;
 	cursor: default;
 
-	.themed({
-		background: @themed-background;
-		color: @themed-text-color;
+	.theme({
+		.theme-color-and-background( @theme-text-color, @theme-background );
 	});
 
 	> .wrapper {
@@ -57,9 +56,8 @@ body {
 }
 
 ::selection {
-	.themed({
-		color: @themed-selection-color;
-		background: @themed-selection-background;
+	.theme({
+		.theme-color-and-background( @theme-selection-color, @theme-selection-background );
 	});
 }
 
@@ -76,8 +74,8 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: @font-name;
 	font-weight: lighter;
 
-	.themed({
-		color: @themed-headline-color;
+	.theme({
+		.theme-mix-color( @theme-headline-color, @theme-background );
 	});
 }
 
@@ -93,17 +91,17 @@ p {
 a {
 	text-decoration: underline;
 
-	.themed({
+	.theme({
 		&, &:focus {
-			color: @themed-anchor-color;
+			.theme-mix-color( @theme-anchor-color, @theme-background );
 		}
 
 		&:hover {
-			color: @themed-anchor-color-hover;
+			.theme-mix-color( @theme-anchor-color-hover, @theme-background );
 		}
 
 		&:active:not(.disabled) {
-			color: @themed-anchor-color-active;
+			.theme-mix-color( @theme-anchor-color-active, @theme-background );
 		}
 	});
 
@@ -148,8 +146,8 @@ hr {
 	margin-top: 1em;
 	margin-bottom: 1em;
 
-	.themed({
-		border-top-color: @themed-divider-color;
+	.theme({
+		border-top-color: @theme-divider-color;
 	});
 }
 
@@ -171,15 +169,15 @@ blockquote {
 		font-style: inherit;
 	}
 
-	.themed({
-		border-left-color: @themed-blockquote-border-color;
+	.theme({
+		border-left-color: @theme-blockquote-border-color;
 	});
 }
 
 
 i.fa {
-	.themed({
-		color: @themed-icon-color;
+	.theme({
+		.theme-mix-color( @theme-icon-color, @theme-background );
 	});
 }
 

@@ -12,8 +12,8 @@
 	background-position: center center;
 	background-size: cover;
 
-	.themed({
-		color: @themed-subitem-color;
+	.theme({
+		.theme-mix-color( @theme-subitem-color, @theme-subitem-background );
 	});
 
 	// no dynamic columns for this component
@@ -52,8 +52,8 @@
 			opacity: 0;
 			transition: opacity .2s ease-out;
 
-			.themed({
-				background: @themed-subitem-background;
+			.theme({
+				background: @theme-subitem-background;
 			});
 
 			> button:not(:last-of-type) {
@@ -69,17 +69,17 @@
 	> .info {
 		padding: @padding;
 
-		.themed({
-			background: @themed-subitem-background;
+		.theme({
+			background: @theme-subitem-background;
 		});
 
 		> h3 {
 			margin: 0;
 			font-size: 1.75em;
 
-			.themed({
+			.theme({
 				&, & > a:not(:hover) {
-					color: @themed-subitem-headline-color;
+					.theme-mix-color( @theme-subitem-headline-color, @theme-subitem-background );
 				}
 			});
 		}

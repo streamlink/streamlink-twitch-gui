@@ -15,8 +15,8 @@
 		font: normal normal 15px/26px @font-name;
 		text-align: center;
 
-		.themed({
-			color: @themed-titlebar-title-color;
+		.theme({
+			.theme-mix-color( @theme-titlebar-title-color, @theme-background );
 		});
 	}
 
@@ -50,17 +50,14 @@
 			text-align: center;
 			-webkit-app-region: no-drag;
 
-			.themed({
-				color: @themed-titlebar-button-color;
-				background: @themed-titlebar-button-background;
+			.theme({
+				.theme-color-and-background( @theme-titlebar-button-color, @theme-titlebar-button-background );
 
 				&:hover {
-					color: @themed-titlebar-button-color-hover;
-					background: @themed-titlebar-button-background-hover;
+					.theme-color-and-background( @theme-titlebar-button-color-hover, @theme-titlebar-button-background-hover );
 				}
 				&:hover:active {
-					color: @themed-titlebar-button-color-active;
-					background: @themed-titlebar-button-background-active;
+					.theme-color-and-background( @theme-titlebar-button-color-active, @theme-titlebar-button-background-active );
 				}
 			});
 
@@ -71,14 +68,12 @@
 			}
 
 			&.btn-close {
-				.themed({
+				.theme({
 					&:hover {
-						color: @themed-titlebar-closingbutton-color-hover;
-						background: @themed-titlebar-closingbutton-background-hover;
+						.theme-color-and-background( @theme-titlebar-closingbutton-color-hover, @theme-titlebar-closingbutton-background-hover );
 					}
 					&:hover:active {
-						color: @themed-titlebar-closingbutton-color-active;
-						background: @themed-titlebar-closingbutton-background-active;
+						.theme-color-and-background( @theme-titlebar-closingbutton-color-active, @theme-titlebar-closingbutton-background-active );
 					}
 				});
 			}
@@ -88,19 +83,19 @@
 					color: transparent !important;
 				}
 
-				.themed({
-					-webkit-text-stroke: .05em @themed-titlebar-button-color;
+				.theme({
+					-webkit-text-stroke: .05em @theme-titlebar-button-color;
 
 					&:hover:active {
-						-webkit-text-stroke-color: @themed-titlebar-button-color-active;
-						background: @themed-titlebar-button-background-active;
+						-webkit-text-stroke-color: @theme-titlebar-button-color-active;
+						background: @theme-titlebar-button-background-active;
 					}
 				});
 			}
 
 			&.btn-user-pending {
-				.themed({
-					color: fadeOut( @themed-titlebar-button-color, 50% );
+				.theme({
+					.theme-mix-color( fadeOut( @theme-titlebar-button-color, 50% ), @theme-background );
 				});
 			}
 
@@ -120,16 +115,15 @@
 					border-radius: .2em;
 					font: bold .55em/1.2 @font-name;
 
-					.themed({
-						color: @themed-titlebar-buttonindicator-color;
-						background: @themed-titlebar-buttonindicator-background;
+					.theme({
+						.theme-color-and-background( @theme-titlebar-buttonindicator-color, @theme-titlebar-buttonindicator-background );
 
 						&.indicator-error {
-							background: @themed-titlebar-buttonindicator-background-error;
+							background: @theme-titlebar-buttonindicator-background-error;
 						}
 
 						&.indicator-disabled {
-							background: @themed-titlebar-buttonindicator-background-disabled;
+							background: @theme-titlebar-buttonindicator-background-disabled;
 						}
 					});
 
@@ -172,8 +166,8 @@
 			height: ( @app-padding + @titlebar-size + 4px );
 			margin: -@app-padding 7px 0;
 
-			.themed({
-				background: @themed-titlebar-divider-color;
+			.theme({
+				background: @theme-titlebar-divider-color;
 			});
 		}
 	}

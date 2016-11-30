@@ -56,8 +56,9 @@ main.content-channel {
 			}
 
 			&.opened > button > i {
-				.themed({
-					color: @themed-button-icon-color-active;
+				// FIXME
+				.theme({
+					color: @theme-button-icon-color-active;
 				});
 			}
 		}
@@ -145,9 +146,9 @@ main.content-channel {
 			font-size: 1em;
 			font-weight: lighter;
 
-			.themed({
-				color: @themed-settings-legend-color;
-				border-bottom-color: @themed-settings-legend-border-color;
+			.theme({
+				.theme-mix-color( @theme-settings-legend-color, @theme-background );
+				border-bottom-color: @theme-settings-legend-border-color;
 			});
 		}
 	}

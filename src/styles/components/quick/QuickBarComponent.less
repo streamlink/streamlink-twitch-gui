@@ -30,8 +30,9 @@
 		}
 
 		button.active > i {
-			.themed({
-				color: @themed-button-icon-color-active;
+			// FIXME
+			.theme({
+				color: @theme-button-icon-color-active;
 			});
 		}
 
@@ -74,16 +75,17 @@
 		}
 	}
 
-	.themed({
+	// FIXME
+	.theme({
 		> .btn-open {
-			border-color: @themed-quickbar-open-border-color !important;
-			color: @themed-quickbar-open-color !important;
-			background: @themed-quickbar-open-background !important;
+			border-color: @theme-quickbar-open-border-color !important;
+			color: @theme-quickbar-open-color !important;
+			background: @theme-quickbar-open-background !important;
 		}
 
 		> .btn-open:hover:active,
 		&.opened > .btn-open {
-			color: @themed-quickbar-open-color-active !important;
+			color: @theme-quickbar-open-color-active !important;
 		}
 	});
 

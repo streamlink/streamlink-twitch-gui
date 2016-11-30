@@ -29,8 +29,8 @@ main.content {
 			margin-left: .5em;
 			line-height: 2.5;
 
-			.themed({
-				color: @themed-headline-sub-color;
+			.theme({
+				.theme-mix-color( @theme-headline-sub-color, @theme-background );
 			});
 		}
 	}

@@ -20,28 +20,28 @@
 
 .btn-color( @background ) {
 	.apply-rules( @background ) {
-		background: @background;
-		border-color: mix( @themed-button-shading-color, @background, @themed-button-border-color );
+		.theme-color-and-background( @theme-button-color, @background );
+		border-color: mix( @theme-button-shading-color, @background, @theme-button-border-color );
 
 		&:not(:disabled):hover {
-			background: mix( @themed-button-shading-color, @background, @themed-button-background-hover );
-			border-color: mix( @themed-button-shading-color, @background, @themed-button-border-color-hover );
+			background: mix( @theme-button-shading-color, @background, @theme-button-background-hover );
+			border-color: mix( @theme-button-shading-color, @background, @theme-button-border-color-hover );
 
 			&:active {
-				background: mix( @themed-button-shading-color, @background, @themed-button-background-active );
-				border-color: mix( @themed-button-shading-color, @background, @themed-button-border-color-active );
+				background: mix( @theme-button-shading-color, @background, @theme-button-background-active );
+				border-color: mix( @theme-button-shading-color, @background, @theme-button-border-color-active );
 			}
 		}
 	}
 
 	.apply-btn-color( @background ) when ( isString( @background ) ) {
-		.themed({
+		.theme({
 			.apply-rules( @@background );
 		});
 	}
 
 	.apply-btn-color( @background ) when ( default() ) {
-		.themed({
+		.theme({
 			.apply-rules( @background );
 		});
 	}
@@ -77,9 +77,9 @@
 			opacity: 0;
 			transition: opacity @duration ease-out;
 
-			.themed({
-				color: @themed-streamitem-play-color;
-				-webkit-text-stroke: .025em @themed-streamitem-play-stroke;
+			.theme({
+				color: @theme-streamitem-play-color;
+				-webkit-text-stroke: .025em @theme-streamitem-play-stroke;
 			});
 		}
 

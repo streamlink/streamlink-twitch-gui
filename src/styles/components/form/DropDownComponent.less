@@ -7,8 +7,8 @@
 		font-size: inherit;
 		box-shadow: none;
 
-		.themed({
-			color: @themed-select-color;
+		.theme({
+			.theme-mix-color( @theme-select-color, @theme-select-background );
 		});
 	}
 
@@ -18,9 +18,9 @@
 		border-radius: 0;
 		padding: .2em 1.4em .2em .4em;
 
-		.themed({
-			border-color: @themed-select-border-color;
-			background: @themed-select-background;
+		.theme({
+			border-color: @theme-select-border-color;
+			background: @theme-select-background;
 		});
 
 		&::after {
@@ -40,8 +40,8 @@
 		cursor: pointer;
 
 		&:hover {
-			.themed({
-				border-color: @themed-select-border-color-hover;
+			.theme({
+				border-color: @theme-select-border-color-hover;
 			});
 
 			&::after {
@@ -56,8 +56,8 @@
 	> select:disabled + .selecter-selected {
 		cursor: default;
 
-		.themed({
-			opacity: @themed-select-opacity-disabled;
+		.theme({
+			opacity: @theme-select-opacity-disabled;
 		});
 	}
 
@@ -70,8 +70,8 @@
 	&.open > .selecter-options {
 		border: 1px solid;
 
-		.themed({
-			border-color: @themed-select-items-border-color;
+		.theme({
+			border-color: @theme-select-items-border-color;
 		});
 	}
 
@@ -83,15 +83,15 @@
 		font-size: inherit;
 		cursor: pointer;
 
-		.themed({
-			background: @themed-select-items-background;
+		.theme({
+			background: @theme-select-items-background;
 
 			&:hover {
-				background: @themed-select-items-background-hover;
+				background: @theme-select-items-background-hover;
 			}
 
 			&:not(:last-of-type) {
-				border-bottom: 1px solid @themed-select-items-divider-color;
+				border-bottom: 1px solid @theme-select-items-divider-color;
 			}
 		});
 
@@ -99,8 +99,8 @@
 			font-weight: bold;
 			background: transparent;
 
-			.themed({
-				color: @themed-select-items-selected-color;
+			.theme({
+				.theme-mix-color( @theme-select-items-selected-color, @theme-select-items-background );
 			});
 		}
 	}
