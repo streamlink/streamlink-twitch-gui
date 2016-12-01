@@ -9,7 +9,6 @@ var packageNpm   = PATH.join( root, "package.json" );
 var packageBower = PATH.join( root, "bower.json" );
 
 var dependencyProperties = [ "dependencies", "devDependencies" ];
-var minCommits = 2;
 
 
 module.exports = function() {
@@ -77,55 +76,6 @@ module.exports = function() {
 			});
 	}
 
-	function promiseGitContributors() {
-		return promiseExec( "git", [ "log", "--format=%aN <%cE>" ] )
-			.then(function( output ) {
-				var reRow = /^(.+) <(.+)>$/;
-
-				return output
-					// create commit objects
-					.map(function( row ) {
-						var match = row.match( reRow );
-						return match
-							? { name: match[1], email: match[2], commits: 1 }
-							: null;
-					})
-					.filter(function( commit ) {
-						return commit !== null;
-					})
-					// first: sort commit rows by email address
-					.sort(function( a, b ) {
-						return a.email === b.email
-							? 0
-							: a.email > b.email
-							? -1
-							:  1;
-					})
-					// then: group equal email addresses (build contributor objects)
-					.reduce(function( prev, curr ) {
-						if ( prev.length && prev[ prev.length - 1 ].email === curr.email ) {
-							prev[ prev.length - 1 ].commits++;
-							return prev;
-						} else {
-							return prev.concat( curr );
-						}
-					}, [] )
-					// filter by commit count
-					.filter(function( contributor ) {
-						return contributor.commits >= minCommits;
-					})
-					// sort by commit count
-					.sort(function( a, b ) {
-						return b.commits - a.commits;
-					})
-					// we don't store email addresses
-					.map(function( contributor ) {
-						delete contributor.email;
-						return contributor;
-					});
-			});
-	}
-
 	function promiseDependencies() {
 		function merge( obj, nestedItem ) {
 			Object.keys( nestedItem ).forEach(function( key ) {
@@ -162,16 +112,14 @@ module.exports = function() {
 
 	Promise.all([
 		promisePackageData(),
-		promiseGitContributors(),
 		promiseDependencies(),
 		getDonationData()
 	])
 		.then(function( data ) {
 			callback( null, "module.exports=" + JSON.stringify({
 				"package"     : data[0],
-				"contributors": data[1],
-				"dependencies": data[2],
-				"donation"    : data[3]
+				"dependencies": data[1],
+				"donation"    : data[2]
 			}) );
 		}, callback );
 };

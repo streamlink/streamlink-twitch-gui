@@ -1,5 +1,14 @@
 {
 	"display-name": "Livestreamer Twitch GUI",
 	"app-identifier": "livestreamer-twitch-gui",
-	"nwjs-version": "0.18.8"
+	"nwjs-version": "0.18.8",
+	"urls": {
+		"homepage": "https://github.com/bastimeyer/livestreamer-twitch-gui",
+		"release": "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v{version}",
+		"changelog": "https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/CHANGELOG.md",
+		"wiki": "https://github.com/bastimeyer/livestreamer-twitch-gui/wiki",
+		"bugs": "https://github.com/bastimeyer/livestreamer-twitch-gui/issues",
+		"chat": "https://gitter.im/bastimeyer/livestreamer-twitch-gui",
+		"contributors": "https://github.com/bastimeyer/livestreamer-twitch-gui/graphs/contributors"
+	}
 }

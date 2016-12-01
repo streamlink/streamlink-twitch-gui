@@ -1,22 +1,32 @@
 <main class="content content-about">
 <h2>About</h2>
 <article>
-<h3><i class="fa fa-desktop"></i>Livestreamer Twitch GUI</h3>
+<h3><i class="fa fa-desktop"></i>{{config.display-name}}</h3>
 <dl class="dl-horizontal">
 <dt>Homepage</dt>
-<dd>{{#external-link url=metadata.package.homepage}}{{metadata.package.homepage}}{{/external-link}}</dd>
+<dd>{{#external-link url=config.urls.homepage}}{{config.urls.homepage}}{{/external-link}}</dd>
 <dt>Author</dt>
 <dd>{{metadata.package.author}}</dd>
-<dt>Contributors</dt>
-<dd><ul class="list">{{#each metadata.contributors as |contributor|}}
-<li title="{{contributor.commits}} commits">{{contributor.name}}</li>
-{{/each}}</ul></dd>
+</dl>
+<dl class="dl-horizontal">
 <dt>Version</dt>
-<dd>{{metadata.package.versionstring}}</dd>
+<dd>{{#external-link url=releaseurl}}{{metadata.package.versionstring}}{{/external-link}}</dd>
+<dt>NW.js</dt>
+<dd>{{config.nwjs-version}}</dd>
 <dt>Built</dt>
 <dd>{{metadata.package.built}}</dd>
-<dt>NW.js</dt>
-<dd>{{nwjsVersion}}</dd>
+</dl>
+<dl class="dl-horizontal">
+<dt>Help</dt>
+<dd>{{#external-link url=config.urls.wiki}}Wiki{{/external-link}}</dd>
+<dt>Bugs</dt>
+<dd>{{#external-link url=config.urls.bugs}}Issue tracker{{/external-link}}</dd>
+<dt>Support</dt>
+<dd>{{#external-link url=config.urls.chat}}Gitter{{/external-link}}</dd>
+<dt>Changelog</dt>
+<dd>{{#external-link url=config.urls.changelog}}Changelog{{/external-link}}</dd>
+<dt>Contributors</dt>
+<dd>{{#external-link url=config.urls.contributors}}Contributors{{/external-link}}</dd>
 </dl>
 </article>
 {{#if metadata.donation.length}}
