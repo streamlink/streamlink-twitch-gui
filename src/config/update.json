@@ -1,4 +1,7 @@
 {
 	"check-again": 604800000,
-	"changelog-url": "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v{version}"
+	"githubreleases": {
+		"host": "https://api.github.com",
+		"namespace": "repos/bastimeyer/livestreamer-twitch-gui"
+	}
 }
