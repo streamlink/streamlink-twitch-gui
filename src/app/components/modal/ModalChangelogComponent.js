@@ -1,12 +1,12 @@
 import { get } from "Ember";
-import { update } from "config";
+import { main as config } from "config";
 import { App } from "nwjs/nwGui";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalChangelogComponent.hbs";
 
 
-const { "changelog-url": changelogUrl } = update;
+const { urls: { "release": releaseUrl } } = config;
 const { manifest: { version } } = App;
 
 
@@ -20,10 +20,10 @@ export default ModalDialogComponent.extend({
 
 	actions: {
 		showChangelog( success ) {
-			var version = get( this, "version" );
+			let version = get( this, "version" );
 
-			if ( version && changelogUrl ) {
-				var url = changelogUrl.replace( "{version}", version );
+			if ( version && releaseUrl ) {
+				let url = releaseUrl.replace( "{version}", version );
 				openBrowser( url );
 
 				if ( success instanceof Function ) {
