@@ -2,6 +2,7 @@ import {
 	get,
 	inject
 } from "Ember";
+import { main as config } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import layout from "templates/components/modal/ModalFirstrunComponent.hbs";
 
@@ -17,7 +18,7 @@ export default ModalDialogComponent.extend({
 
 	"class": "modal-firstrun",
 
-	goto: "goto",
+	config,
 
 
 	actions: {

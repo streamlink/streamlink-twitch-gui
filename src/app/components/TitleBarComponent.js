@@ -3,6 +3,7 @@ import {
 	inject,
 	Component
 } from "Ember";
+import { main as config } from "config";
 import layout from "templates/components/TitleBarComponent.hbs";
 
 
@@ -20,6 +21,8 @@ export default Component.extend({
 	layout,
 	classNames: [ "title-bar-component" ],
 	tagName: "header",
+
+	config,
 
 	dev: DEBUG,
 
