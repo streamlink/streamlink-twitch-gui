@@ -60,6 +60,14 @@ const reCall = /^\(uint32 (\d+),?\)$/;
 function callMethod( exec, method, params, onExit, onStdOut ) {
 	let child;
 
+	function kill() {
+		if ( child ) {
+			child.kill();
+		}
+		child = null;
+		process.removeListener( "exit", kill );
+	}
+
 	return new Promise( ( resolve, reject ) => {
 		child = spawn( exec, [
 			"call",
@@ -71,18 +79,15 @@ function callMethod( exec, method, params, onExit, onStdOut ) {
 		child.once( "error", reject );
 		child.on( "exit", code => onExit( code, resolve, reject ) );
 
+		process.on( "exit", kill );
+
 		if ( onStdOut ) {
 			child.stdout.on( "data", new StreamOutputBuffer(
 				line => onStdOut( line, resolve, reject )
 			) );
 		}
 	})
-		.finally( () => {
-			if ( child ) {
-				child.kill();
-			}
-			child = null;
-		});
+		.finally( kill );
 }
 
 
@@ -226,6 +231,9 @@ export default class NotificationProviderFreedesktop extends NotificationProvide
 
 			// kill the monitor child process on page refreshes (dev)
 			window.addEventListener( "beforeunload", onExit, false );
+
+			// kill the monitor child process when the application exits
+			process.on( "exit", () => child.kill() );
 		})
 			.then( child => {
 				this.monitorSpawn = child;
