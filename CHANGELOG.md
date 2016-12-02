@@ -1,4 +1,4 @@
-Changelog - Livestreamer Twitch GUI
+Changelog - Streamlink Twitch GUI
 ===
 
 ## Master
