@@ -2,6 +2,6 @@
 	"check-again": 604800000,
 	"githubreleases": {
 		"host": "https://api.github.com",
-		"namespace": "repos/bastimeyer/livestreamer-twitch-gui"
+		"namespace": "repos/streamlink/streamlink-twitch-gui"
 	}
 }
