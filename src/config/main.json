@@ -1,6 +1,6 @@
 {
-	"display-name": "Livestreamer Twitch GUI",
-	"app-identifier": "livestreamer-twitch-gui",
+	"display-name": "Streamlink Twitch GUI",
+	"app-identifier": "streamlink-twitch-gui",
 	"nwjs-version": "0.18.8",
 	"urls": {
 		"homepage": "https://github.com/bastimeyer/livestreamer-twitch-gui",

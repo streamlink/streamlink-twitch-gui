@@ -1,11 +1,11 @@
 {
-	"name": "livestreamer-twitch-gui",
+	"name": "streamlink-twitch-gui",
 	"version": "0.16.0",
 
 	"main": "index.html",
 
 	"window": {
-		"title": "Livestreamer Twitch GUI",
+		"title": "Streamlink Twitch GUI",
 		"frame": false,
 		"resizable": true,
 		"show": false,
