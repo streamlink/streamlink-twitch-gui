@@ -3,6 +3,16 @@ Changelog - Streamlink Twitch GUI
 
 ## Master
 
+**"Livestreamer Twitch GUI" is now "Streamlink Twitch GUI"**
+
+The application has been renamed and moved to [Streamlink](https://github.com/streamlink/streamlink).  
+Streamlink is a fork of Livestreamer with active development.
+
+Livestreamer will continue to work, but please have in mind that support may be dropped at any time. Streamlink installation instructions can be found [here](https://streamlink.github.io/install.html).
+
+Please be aware that the name of the application's config folder has changed. Informations on how to migrate the old data can be found in the [Wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
+
+
 - Upgraded from legacy NW.js (v0.12.3) to latest stable version (v0.18.8). #275
 - Implemented system for switching between Streamlink and Livestreamer. #331  
   Please re-validate your Streamlink/Livestreamer settings (default is Streamlink).

@@ -7,6 +7,11 @@ Streamlink Twitch GUI
 [![Streamlink Twitch GUI][Preview]][Releases]
 
 
+## The application has been renamed
+
+*Streamlink Twitch GUI*, previously known as *Livestreamer Twitch GUI*, has been renamed in early december 2016. A statement about this change can be found in the thread ["The future of Livestreamer Twitch GUI"][Application-rename].
+
+
 ## Description
 
 This is a graphical user interface (GUI) on top of the [Streamlink][Streamlink] command line interface (CLI).  
@@ -111,3 +116,4 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Package-AUR]: https://aur.archlinux.org/packages/streamlink-twitch-gui "AUR stable package"
   [Package-AUR-git]: https://aur.archlinux.org/packages/streamlink-twitch-gui-git "AUR git package"
   [Package-Homebrew-cask]: https://caskroom.github.io/
+  [Application-rename]: https://github.com/streamlink/streamlink-twitch-gui/issues/331 "The future of Livestreamer Twitch GUI"
