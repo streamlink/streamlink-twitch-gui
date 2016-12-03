@@ -33,6 +33,10 @@
 		> div {
 			animation-direction: reverse;
 		}
+
+		> div * {
+			animation-play-state: paused !important;
+		}
 	}
 
 	.modal-body {
@@ -96,6 +100,10 @@
 				width: 4rem;
 				height: 4rem;
 			}
+		}
+
+		&.fadeOut .loading-spinner-component {
+			display: none;
 		}
 
 		.game {
