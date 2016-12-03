@@ -38,7 +38,7 @@ module.exports = function() {
 				if ( code > 0 ) {
 					reject( new Error( status ) );
 				} else {
-					resolve( data );
+					resolve( String( data ) );
 				}
 			}
 
@@ -70,7 +70,7 @@ module.exports = function() {
 					homepage: json.homepage,
 					author: json.author,
 					version: json.version,
-					versionstring: version,
+					versionstring: version.replace( /^v/, "" ),
 					built: new Date().toISOString()
 				};
 			});
