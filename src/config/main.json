@@ -1,7 +1,7 @@
 {
 	"display-name": "Livestreamer Twitch GUI",
 	"app-identifier": "livestreamer-twitch-gui",
-	"nwjs-version": "0.18.8",
+	"nwjs-version": "0.19.0",
 	"urls": {
 		"homepage": "https://github.com/bastimeyer/livestreamer-twitch-gui",
 		"release": "https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v{version}",

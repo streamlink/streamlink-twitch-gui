@@ -3,7 +3,7 @@ Changelog - Livestreamer Twitch GUI
 
 ## Master
 
-- Upgraded from legacy NW.js (v0.12.3) to latest stable version (v0.18.8). #275
+- Upgraded from legacy NW.js (v0.12.3) to latest stable version (v0.19.0). #275
 - Implemented system for switching between Streamlink and Livestreamer. #331  
   Please re-validate your Streamlink/Livestreamer settings (default is Streamlink).
 - Implemented player presets. #257  
