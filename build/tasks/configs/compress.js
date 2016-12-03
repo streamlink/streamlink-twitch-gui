@@ -26,7 +26,7 @@ module.exports = {
 		options: {
 			mode   : "tgz",
 			level  : 9,
-			archive: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-osx64.tar.gz"
+			archive: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-macOS.tar.gz"
 		},
 		expand : true,
 		cwd    : "<%= dir.releases %>/<%= package.name %>/osx64/<%= package.name %>.app/",
