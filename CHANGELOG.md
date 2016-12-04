@@ -19,6 +19,7 @@ Please be aware that the name of the application's config folder has changed. In
 - Implemented player presets. #257  
   Please check your player settings and choose a player preset for having a configuration that works best with Streamlink or Livestreamer.
 - Implemented new notification system.
+- Added Windows installer.
 - Added alt+left/right hotkeys.
 - Added Streamlink parameter to disable redirection of hosting channels.
 - Fixed "Streamlink" and "Livestreamer via python-pip" issues on Windows. #336
