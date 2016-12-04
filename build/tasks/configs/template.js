@@ -34,5 +34,47 @@ module.exports = {
 		"files": {
 			"<%= dir.travis %>/data/releases.md": "<%= dir.travis %>/templates/releases.md"
 		}
+	},
+
+	"win32installer": {
+		"options": {
+			"data": {
+				"dirroot"    : "<%= dir.root %>",
+				"dirinput"   : "<%= dir.releases %>/<%= package.name %>/win32",
+				"diroutput"  : "<%= dir.dist %>",
+				"filename"   : "<%= package.name %>-v<%= package.version %>-win32-installer.exe",
+				"name"       : "<%= package.name %>",
+				"displayname": "<%= main['display-name'] %>",
+				"version"    : "<%= package.version %>",
+				"author"     : "<%= package.author %>",
+				"homepage"   : "<%= package.homepage %>",
+				"arch"       : "win32"
+			}
+		},
+		"files": {
+			"<%= dir.package %>/win32installer/installer.nsi":
+				"<%= dir.resources %>/package/wininstaller/installer.nsi.tpl"
+		}
+	},
+
+	"win64installer": {
+		"options": {
+			"data": {
+				"dirroot"    : "<%= dir.root %>",
+				"dirinput"   : "<%= dir.releases %>/<%= package.name %>/win64",
+				"diroutput"  : "<%= dir.dist %>",
+				"filename"   : "<%= package.name %>-v<%= package.version %>-win64-installer.exe",
+				"name"       : "<%= package.name %>",
+				"displayname": "<%= main['display-name'] %>",
+				"version"    : "<%= package.version %>",
+				"author"     : "<%= package.author %>",
+				"homepage"   : "<%= package.homepage %>",
+				"arch"       : "win64"
+			}
+		},
+		"files": {
+			"<%= dir.package %>/win64installer/installer.nsi":
+				"<%= dir.resources %>/package/wininstaller/installer.nsi.tpl"
+		}
 	}
 };

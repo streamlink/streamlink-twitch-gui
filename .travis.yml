@@ -10,6 +10,11 @@ git:
 node_js:
   - "6"
 
+addons:
+  apt:
+    packages:
+      - nsis
+
 cache:
   apt: true
   directories:
@@ -35,7 +40,7 @@ script:
 deploy:
   - provider: releases
     api_key: "${RELEASES_API_KEY}"
-    file: dist/*{.tar.gz,.zip,-checksums.txt}
+    file: dist/*{.tar.gz,.zip,.exe,-checksums.txt}
     file_glob: true
     skip_cleanup: true
     on:

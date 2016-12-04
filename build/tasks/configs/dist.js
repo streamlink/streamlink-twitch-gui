@@ -25,5 +25,25 @@ module.exports = {
 		platform: "linux64",
 		tasks: [ "compress:linux64" ],
 		checksum: "<%= compress.linux64.options.archive %>"
+	},
+
+	win32installer: {
+		platform: "win32",
+		tasks: [
+			"clean:package_win32installer",
+			"template:win32installer",
+			"shell:win32installer"
+		],
+		checksum: "<%= dir.dist %>/<%= template.win32installer.options.data.filename %>"
+	},
+
+	win64installer: {
+		platform: "win64",
+		tasks: [
+			"clean:package_win64installer",
+			"template:win64installer",
+			"shell:win64installer"
+		],
+		checksum: "<%= dir.dist %>/<%= template.win64installer.options.data.filename %>"
 	}
 };
