@@ -35,7 +35,7 @@ Example: `choco uninstall streamlink-twitch-gui -y -params '"/Purge"'`
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/streamlink/streamlink-twitch-gui/master/src/img/icon-256.png</iconUrl>
     <dependencies>
-      <dependency id="livestreamer" version="1.12.2"/>
+      <dependency id="streamlink" version="0.1.0"/>
     </dependencies>
     <releaseNotes><%= changelog %></releaseNotes>
   </metadata>
