@@ -89,7 +89,7 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
 
 
 
-  [Preview]: https://cloud.githubusercontent.com/assets/467294/17694798/e23ac324-63a5-11e6-857d-54f8c9228fda.png "Preview image"
+  [Preview]: https://cloud.githubusercontent.com/assets/467294/20868651/ef3a2c42-ba60-11e6-9748-5aeec324f355.png "Preview image"
   [Releases]: https://github.com/streamlink/streamlink-twitch-gui/releases "Streamlink Twitch GUI Releases"
   [Issues]: https://github.com/streamlink/streamlink-twitch-gui/issues "Streamlink Twitch GUI Issues"
   [Wiki]: https://github.com/streamlink/streamlink-twitch-gui/wiki "Streamlink Twitch GUI Wiki"
