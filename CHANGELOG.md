@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.0.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.0.0) (2016-12-04)
 
 **"Livestreamer Twitch GUI" is now "Streamlink Twitch GUI"**
 
@@ -35,7 +35,7 @@ Please be aware that the name of the application's config folder has changed. In
 - Upgraded to Ember/EmberData 2.9
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.16.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.16.0...v1.0.0)
 
 
 ## [v0.16.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.16.0) (2016-10-15)
