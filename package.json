@@ -4,11 +4,11 @@
 	"license": "MIT",
 
 	"author": "Sebastian Meyer",
-	"homepage": "https://github.com/bastimeyer/streamlink-twitch-gui",
+	"homepage": "https://github.com/streamlink/streamlink-twitch-gui",
 
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/bastimeyer/streamlink-twitch-gui.git"
+		"url": "https://github.com/streamlink/streamlink-twitch-gui.git"
 	},
 
 	"dependencies": {
