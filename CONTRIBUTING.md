@@ -1,4 +1,4 @@
-# Contributing to Livestreamer Twitch GUI
+# Contributing to Streamlink Twitch GUI
 
 Want to get involved? Thanks! There are plenty of ways to help!
 
@@ -25,7 +25,7 @@ Feature requests are welcome. But take a moment to find out whether your idea fi
 
 ## Developing and building
 
-Livestreamer Twitch GUI is based on [NW.js][NW.js].  
+Streamlink Twitch GUI is based on [NW.js][NW.js].  
 Please visit the [NW.js website][NW.js-website] if you want to know more about NW.js apps.
 
 Building the application is simple. Please ensure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Npm][npm] (bundled with Node.js) are installed on your system, so all dependencies can be installed and the application can be built and compiled.
@@ -34,8 +34,8 @@ Building the application is simple. Please ensure that the latest stable version
 
 ```bash
 # clone the repository
-git clone https://github.com/bastimeyer/livestreamer-twitch-gui.git
-cd livestreamer-twitch-gui
+git clone https://github.com/streamlink/streamlink-twitch-gui.git
+cd streamlink-twitch-gui
 
 # globally install grunt-cli and bower - may require administrator privileges
 npm install -g grunt-cli bower
@@ -44,7 +44,7 @@ npm install -g grunt-cli bower
 npm install
 ```
 
-Livestreamer Twitch GUI uses [Gruntjs][Gruntjs] and [Webpack][Webpack] as build tools.  
+Streamlink Twitch GUI uses [Gruntjs][Gruntjs] and [Webpack][Webpack] as build tools.  
 To get a list of all available grunt tasks, run `grunt --help`.  
 All task configs can be found in `build/tasks/{configs,custom}`.
 
@@ -90,11 +90,11 @@ Adhering to the following process is the best way to get your work included in t
 1. [Fork][howto-fork] the project, clone your fork, and configure the remotes:
    ```bash
    # Clone your fork of the repo into the current directory
-   git clone git@github.com:<YOUR-USERNAME>/livestreamer-twitch-gui.git
+   git clone git@github.com:<YOUR-USERNAME>/streamlink-twitch-gui.git
    # Navigate to the newly cloned directory
-   cd livestreamer-twitch-gui
+   cd streamlink-twitch-gui
    # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/bastimeyer/livestreamer-twitch-gui.git
+   git remote add upstream https://github.com/streamlink/streamlink-twitch-gui.git
    ```
 
 2. If you cloned a while ago, get the latest changes from upstream
@@ -131,9 +131,9 @@ under the terms of the [MIT License][license].
 This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5bp].
 
 
-  [license]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/LICENSE
-  [issues]: https://github.com/bastimeyer/livestreamer-twitch-gui/issues
-  [issue-template]: https://github.com/bastimeyer/livestreamer-twitch-gui/blob/master/ISSUE_TEMPLATE.md
+  [license]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/LICENSE
+  [issues]: https://github.com/streamlink/streamlink-twitch-gui/issues
+  [issue-template]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/ISSUE_TEMPLATE.md
   [howto-fork]: https://help.github.com/articles/fork-a-repo
   [howto-rebase]: https://help.github.com/articles/interactive-rebase
   [howto-format-commits]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html

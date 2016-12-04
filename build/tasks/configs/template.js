@@ -12,8 +12,8 @@ module.exports = {
 			}
 		},
 		"files": {
-			"<%= dir.package %>/chocolatey/livestreamer-twitch-gui.nuspec":
-				"<%= dir.resources %>/package/chocolatey/livestreamer-twitch-gui.nuspec.tpl",
+			"<%= dir.package %>/chocolatey/streamlink-twitch-gui.nuspec":
+				"<%= dir.resources %>/package/chocolatey/streamlink-twitch-gui.nuspec.tpl",
 			"<%= dir.package %>/chocolatey/tools/chocolateyinstall.ps1":
 				"<%= dir.resources %>/package/chocolatey/tools/chocolateyinstall.ps1.tpl",
 			"<%= dir.package %>/chocolatey/tools/chocolateyuninstall.ps1":

@@ -1,4 +1,4 @@
-$packageName = 'livestreamer-twitch-gui'
+$packageName = 'streamlink-twitch-gui'
 $packageParameters = $env:chocolateyPackageParameters
 
 $desktop = [Environment]::GetFolderPath("Desktop")

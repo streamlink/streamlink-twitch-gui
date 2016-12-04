@@ -1,11 +1,11 @@
 {
-	"name": "livestreamer-twitch-gui-test",
+	"name": "streamlink-twitch-gui-test",
 	"version": "0.0.1",
 
 	"main": "index.html",
 
 	"window": {
-		"title": "Livestreamer Twitch GUI Test",
+		"title": "Streamlink Twitch GUI Test",
 		"frame": true,
 		"resizable": true,
 		"show": false,

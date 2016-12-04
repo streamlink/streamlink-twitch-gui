@@ -1,7 +1,17 @@
-Changelog - Livestreamer Twitch GUI
+Changelog - Streamlink Twitch GUI
 ===
 
 ## Master
+
+**"Livestreamer Twitch GUI" is now "Streamlink Twitch GUI"**
+
+The application has been renamed and moved to [Streamlink](https://github.com/streamlink/streamlink).  
+Streamlink is a fork of Livestreamer with active development.
+
+Livestreamer will continue to work, but please have in mind that support may be dropped at any time. Streamlink installation instructions can be found [here](https://streamlink.github.io/install.html).
+
+Please be aware that the name of the application's config folder has changed. Informations on how to migrate the old data can be found in the [Wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
+
 
 - Upgraded from legacy NW.js (v0.12.3) to latest stable version (v0.19.0). #275
 - Implemented system for switching between Streamlink and Livestreamer. #331  
@@ -24,10 +34,10 @@ Changelog - Livestreamer Twitch GUI
 - Upgraded to Ember/EmberData 2.9
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.16.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.16.0...master)
 
 
-## [v0.16.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.16.0) (2016-10-15)
+## [v0.16.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.16.0) (2016-10-15)
 
 - Added initial support for Streamlink (in addition to Livestreamer).  
   See "The future of Livestreamer Twitch GUI" (#331) for more infos.
@@ -40,28 +50,28 @@ Changelog - Livestreamer Twitch GUI
 - Upgraded to Ember/EmberData 2.8.
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.2...v0.16.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.15.2...v0.16.0)
 
 
-## [v0.15.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.2) (2016-09-16)
+## [v0.15.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.15.2) (2016-09-16)
 
 - Fixed InfiniteScrollMixin using invalid request offsets when refreshing or revisiting the same route. #314
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.1...v0.15.2)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.15.1...v0.15.2)
 
 
-## [v0.15.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.1) (2016-09-15)
+## [v0.15.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.15.1) (2016-09-15)
 
 - Implemented a better workaround for the Livestreamer Client-ID issue. #310
 - Added option to disable Livestreamer authentication. #308
 - Fixed tray icon being invisible on Windows. #312
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.15.0...v0.15.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.15.0...v0.15.1)
 
 
-## [v0.15.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.15.0) (2016-09-15)
+## [v0.15.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.15.0) (2016-09-15)
 
 - Added authentication check to the stream launch routine (see below). #310
 - Added support for custom channel names. #303
@@ -76,19 +86,19 @@ The only workaround for this missing change is forcing all users to log in and l
 Please also see #289 if you think you can help with the organization of a Livestreamer fork. There are several bugs that need to be fixed and some features/ideas that need to be implemented for a better experience. This will benefit all Livestreamer and Livestreamer Twitch GUI users, thank you!
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.2...v0.15.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.14.2...v0.15.0)
 
 
-## [v0.14.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.2) (2016-08-08)
+## [v0.14.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.14.2) (2016-08-08)
 
 - Added 1080p60 quality as fallback to source.  
   Fixes dota2ti streams not working. #283
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.1...v0.14.2)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.14.1...v0.14.2)
 
 
-## [v0.14.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.1) (2016-08-03)
+## [v0.14.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.14.1) (2016-08-03)
 
 - Fixed application launch bug. #278
 - Fixed broken custom Chromium/Chrome executable paths. #270
@@ -99,10 +109,10 @@ Please also see #289 if you think you can help with the organization of a Livest
   https://blog.twitch.tv/-705404e95cc2
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.14.0...v0.14.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.14.0...v0.14.1)
 
 
-## [v0.14.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.14.0) (2016-07-11)
+## [v0.14.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.14.0) (2016-07-11)
 
 - Include ClientID in all API requests.  
   See https://blog.twitch.tv/-afbb8e95f843
@@ -123,10 +133,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Fixed reloading initial error routes.
 
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.13.0...v0.14.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.13.0...v0.14.0)
 
 
-## [v0.13.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.13.0) (2016-03-30)
+## [v0.13.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.13.0) (2016-03-30)
 
 - Implemented hosted streams. #220
 - Implemented detection of duplicated items in infinite scroll lists. #216
@@ -143,19 +153,19 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Fixed infinite scroll on unscaled UHD resolutions. #230
 - Upgraded to Ember/EmberData 2.4.0 LTS
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.12.0...v0.13.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.12.0...v0.13.0)
 
 
-## [v0.12.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.12.0) (2016-02-06)
+## [v0.12.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.12.0) (2016-02-06)
 
 - Re-implemented the authentication system. #209
 - Improved desktop notification failure detection.
 - Fixed OSX cmd+r refresh shortcut. #203
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.2...v0.12.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.11.2...v0.12.0)
 
 
-## [v0.11.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.2) (2016-01-23)
+## [v0.11.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.11.2) (2016-01-23)
 
 - Implemented right click context menus. #180
 - Implemented additional stream click actions. #180
@@ -168,10 +178,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Fixed bug causing scrolling to stop working. #196
 - Fixed blurry application icon on Linux.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.1...v0.11.2)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.11.1...v0.11.2)
 
 
-## [v0.11.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.1) (2015-12-05)
+## [v0.11.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.11.1) (2015-12-05)
 
 - Implemented channel details.
 - Changed details view in stream list items.
@@ -183,10 +193,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Fixed image preloading system issue.
 - Upgraded to Ember/EmberData 2.1.0.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.11.0...v0.11.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.11.0...v0.11.1)
 
 
-## [v0.11.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.11.0) (2015-10-16)
+## [v0.11.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.11.0) (2015-10-16)
 
 - Implemented theme switcher and added dark theme.
 - Implemented menu-related random stream launch button.
@@ -198,19 +208,19 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Fixed subscribe button being visible on all channel pages / popups. #142
 - Fixed text of closing modal dialog.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.10.1...v0.11.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.10.1...v0.11.0)
 
 
-## [v0.10.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.10.1) (2015-09-14)
+## [v0.10.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.10.1) (2015-09-14)
 
 - Fixed livestreamer validation.
 - Fixed image preloader.
 - Fixed application name in gnome panel. #136
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.10.0...v0.10.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.10.0...v0.10.1)
 
 
-## [v0.10.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.10.0) (2015-09-13)
+## [v0.10.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.10.0) (2015-09-13)
 
 - Implemented multiple chat methods. #132
 - Implemented real stream language filters. #133
@@ -223,20 +233,20 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Several bug fixes and improvements.
 - Upgraded application to Ember/Ember-Data 2.0.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.3...v0.10.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.9.3...v0.10.0)
 
 
-## [v0.9.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.3) (2015-08-05)
+## [v0.9.3](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.9.3) (2015-08-05)
 
 - Fixed livestreamer validation failure on OSX. #121
 - Fixed minimize to tray. #122
 - Always show chat button on channel pages. #119
 - Upgraded to NW.js v0.12.3.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.2...v0.9.3)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.9.2...v0.9.3)
 
 
-## [v0.9.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.2) (2015-07-31)
+## [v0.9.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.9.2) (2015-07-31)
 
 - Implemented stream language filters. #113
 - Fully implemented the game following feature. #31
@@ -247,18 +257,18 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Upgraded to NW.js v0.12.2.
 - Some minor bug fixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.1...v0.9.2)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.9.1...v0.9.2)
 
 
-## [v0.9.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.1) (2015-05-27)
+## [v0.9.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.9.1) (2015-05-27)
 
 - Fixed desktop notifications.
 - Added a second livestreamer fallback path on OSX. #99
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.9.0...v0.9.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.9.0...v0.9.1)
 
 
-## [v0.9.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.9.0) (2015-05-25)
+## [v0.9.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.9.0) (2015-05-25)
 
 - Restructured mainmenu (renamed "Your" to "My"):
   - Implemented subscriptions and followed channels+games menus.
@@ -274,10 +284,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Upgraded to Ember-Data 1.0.0-beta.17.
 - Several bug fixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.8.0...v0.9.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.8.0...v0.9.0)
 
 
-## [v0.8.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.8.0) (2015-04-23)
+## [v0.8.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.8.0) (2015-04-23)
 
 - Implemented custom channel settings (see the wrench icon in the upper right corner). #23, #63
 - Implemented channel search function.
@@ -293,19 +303,19 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Upgraded NW.js to v0.12.1 (fixes the HiDPI issues on Windows). #72
 - Several minor bug fixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.3...v0.8.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.7.3...v0.8.0)
 
 
-## [v0.7.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.3) (2015-03-29)
+## [v0.7.3](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.7.3) (2015-03-29)
 
 - Fixed application being hidden after closing it while being minimized. #62
 - Replaced colored tray icons on OSX with grayscale ones.
 - Fixed notification click bug where chat was opened twice in some cases.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.2...v0.7.3)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.7.2...v0.7.3)
 
 
-## [v0.7.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.2) (2015-03-26)
+## [v0.7.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.7.2) (2015-03-26)
 
 - Implemented channel pages.
 - Implemented login via OAuth token. #53  
@@ -322,10 +332,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Upgraded NW.js to v0.12.0.
 - Various other bugfixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.1...v0.7.2)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.7.1...v0.7.2)
 
 
-## [v0.7.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.1) (2015-02-10)
+## [v0.7.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.7.1) (2015-02-10)
 
 - Fixed "Launching stream" dialog being stuck in some cases. See #45 and #38. Thanks @Wraul
 - Fixed invalid aspect ratio of broken preview images.
@@ -333,10 +343,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Changed default application font to Roboto.
 - Some other bugfixes
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.7.0...v0.7.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.7.0...v0.7.1)
 
 
-## [v0.7.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.7.0) (2015-01-22)
+## [v0.7.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.7.0) (2015-01-22)
 
 - Added x64 builds for Windows and OSX (see below).
 - Implemented follow-channel mechanics.
@@ -356,10 +366,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Upgraded to latest stable version of nw.js (node-webkit) v0.11.6.
 - Various other bugfixes and improvements.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.6.1...v0.7.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.6.1...v0.7.0)
 
 
-## [v0.6.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.6.1) (2014-12-12)
+## [v0.6.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.6.1) (2014-12-12)
 
 - **Set the required livestreamer version to v1.11.1 !!!** See #30  
   Twitch had changed their API lately, so livestreamer was unable to launch any streams. This means that you need to [install the latest livestreamer version](https://github.com/chrippa/livestreamer/releases) in order to watch twitch.tv streams. If you're running the old version, the GUI will prompt you to do so.
@@ -378,10 +388,10 @@ Please also see #289 if you think you can help with the organization of a Livest
   - clicking a livestreamer documentation link
   - featured streams having no status text
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.6.0...v0.6.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.6.0...v0.6.1)
 
 
-## [v0.6.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.6.0) (2014-11-15)
+## [v0.6.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.6.0) (2014-11-15)
 
 - Implemented twitch.tv login (due to dependency issues, only the followed channels are currently supported #27)
 - Improved the infinite scroll logic and stream tile layout
@@ -394,10 +404,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Updated node-webkit to v0.11.0 (adds support for high-dpi)
 - Many other small fixes and improvements
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.5.0...v0.6.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.5.0...v0.6.0)
 
 
-## [v0.5.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.5.0) (2014-08-19)
+## [v0.5.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.5.0) (2014-08-19)
 
 - Multi stream support! #13
 - The GUI may now be closed while streams are still running
@@ -411,10 +421,10 @@ Please also see #289 if you think you can help with the organization of a Livest
 - Made the error messages a bit more informative
 - Added application icon for windows
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.4.2...v0.5.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.4.2...v0.5.0)
 
 
-## [v0.4.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.4.2) (2014-08-07)
+## [v0.4.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.4.2) (2014-08-07)
 
 * Added chat button to the "now watching" popup #9
 * Added quality change dropdown to the popup #10
@@ -427,68 +437,68 @@ Please also see #289 if you think you can help with the organization of a Livest
 * Linux builds now include scripts for adding a launcher to the menu
 * Added app-icons to OSX and Linux builds
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.4.1...v0.4.2)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.4.1...v0.4.2)
 
 
-## [v0.4.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.4.1) (2014-06-04)
+## [v0.4.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.4.1) (2014-06-04)
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.4.0...v0.4.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.4.0...v0.4.1)
 
 
-## [v0.4.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.4.0) (2014-05-11)
+## [v0.4.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.4.0) (2014-05-11)
 
 * Implemented the search function
 * Added startscript for linux users
 * Split up the build task into `release` and `dev`. See changelog
 * Added test for checking if livestreamer is set up correctly
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.3.1...v0.4.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.3.1...v0.4.0)
 
 ![image](https://cloud.githubusercontent.com/assets/467294/2937991/b94283f2-d8e8-11e3-9636-1824d17f757a.png)
 
 
-## [v0.3.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.3.1) (2014-05-07)
+## [v0.3.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.3.1) (2014-05-07)
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.3.0...v0.3.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.3.0...v0.3.1)
 
 
-## [v0.3.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.3.0) (2014-02-18)
+## [v0.3.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.3.0) (2014-02-18)
 
 Completely redesigned the app!
 
 Switched to a more neutral style and also removed the scaling layout. There are some elements (like the search bar) which are not yet implemented. These will be added in later releases.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.2.3...v0.3.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.2.3...v0.3.0)
 
 ![image](https://f.cloud.github.com/assets/467294/2199101/065a5a3c-98d1-11e3-810d-73f7ba8859ca.png)
 
 
-## [v0.2.3](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.2.3) (2014-02-12)
+## [v0.2.3](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.2.3) (2014-02-12)
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.2.2...v0.2.3)
-
-
-## [v0.2.2](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.2.2) (2014-02-07)
-
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.2.1...v0.2.2)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.2.2...v0.2.3)
 
 
-## [v0.2.1](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.2.1) (2013-12-30)
+## [v0.2.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.2.2) (2014-02-07)
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.2.1...v0.2.2)
+
+
+## [v0.2.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.2.1) (2013-12-30)
 
 Just a patch release, no new features.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.2.0...v0.2.1)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.2.0...v0.2.1)
 
 
-## [v0.2.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.2.0) (2013-12-21)
+## [v0.2.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.2.0) (2013-12-21)
 
 In this release I've added the settings menu so you can now set the path to where you've installed livestreamer to. You can also change the default stream quality.
 There is currently no validation of the user input and some more fields for customizing the videoplayer are disabled for now. I'm planning to add those things (and also the ability to choose the quality by each stream individually) in the next releases, but thats it for now.
 
-[Changelog](https://github.com/bastimeyer/livestreamer-twitch-gui/compare/v0.1.0...v0.2.0)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v0.1.0...v0.2.0)
 
 
-## [v0.1.0](https://github.com/bastimeyer/livestreamer-twitch-gui/releases/tag/v0.1.0) (2013-12-13)
+## [v0.1.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v0.1.0) (2013-12-13)
 
 There is not much to see, just some core functionality and some design ideas.
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ---------------------------------------------------
-# Livestreamer Twitch GUI - application launch script
+# Streamlink Twitch GUI - application launch script
 # ---------------------------------------------------
 
 
@@ -12,7 +12,7 @@ CHECKNEWVERSIONS=true
 # ==================================================================================================
 
 
-EXEC="livestreamer-twitch-gui"
+EXEC="streamlink-twitch-gui"
 DIR=$(readlink -f "${0}")
 HERE=$(dirname "${DIR}")
 
