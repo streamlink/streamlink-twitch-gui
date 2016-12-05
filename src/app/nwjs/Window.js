@@ -11,12 +11,18 @@ let focused   = true;
 let maximized = false;
 let minimized = false;
 
-nwWindow.on( "focus",      function onFocus()      { focused   = true;  } );
-nwWindow.on( "blur",       function onBlur()       { focused   = false; } );
-nwWindow.on( "maximize",   function onMaximize()   { maximized = true;  } );
-nwWindow.on( "unmaximize", function onUnmaximize() { maximized = false; } );
-nwWindow.on( "minimize",   function onMinimize()   { minimized = true;  } );
-nwWindow.on( "restore",    function onRestore()    { minimized = false; } );
+nwWindow.on( "focus", () => focused = true );
+nwWindow.on( "blur",  () => focused = false );
+nwWindow.on( "maximize", () => maximized = true );
+nwWindow.on( "minimize", () => minimized = true );
+// called when unmaximizing or restoring from minimized state
+nwWindow.on( "restore", () => {
+	if ( minimized ) {
+		minimized = false;
+	} else {
+		maximized = false;
+	}
+});
 
 
 export function toggleVisibility( bool ) {
