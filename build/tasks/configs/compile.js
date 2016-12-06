@@ -9,15 +9,24 @@ module.exports = {
 	},
 
 	osx64: {
-		before: [ "clean:release_osx64" ]
+		before: [ "clean:release_osx64" ],
+		after: [ "shell:permissions_osx64" ]
 	},
 
 	linux32: {
 		before: [ "clean:release_linux32" ],
-		after : [ "copy:linux32scripts", "copy:linux32icons" ]
+		after : [
+			"copy:linux32scripts",
+			"copy:linux32icons",
+			"shell:permissions_linux32"
+		]
 	},
 	linux64: {
 		before: [ "clean:release_linux64" ],
-		after : [ "copy:linux64scripts", "copy:linux64icons" ]
+		after : [
+			"copy:linux64scripts",
+			"copy:linux64icons",
+			"shell:permissions_linux64"
+		]
 	}
 };
