@@ -5,12 +5,26 @@ import {
 
 
 const reSubstitution = /(\{)?\{([a-z]+)}(})?/ig;
+const reCurly        = /(\{+)([^}]+)(}+)/ig;
 const reWhitespace   = /\s+/g;
 const reQuote        = /^['"]$/;
 const reDoubleQuote  = /"|\\$/g;
 const reSingleQuote  = /'|\\$/g;
 const reAll          = /./g;
 const strEscape      = "\\";
+
+
+function fnCurly( all, left, name, right ) {
+	// double the number of curly braces
+	left = `${left}${left}`;
+	right = `${right}${right}`;
+
+	return `${left}${name}${right}`;
+}
+
+function fnEscape( str ) {
+	return `${strEscape}${str}`;
+}
 
 
 class SubstitutionToken {
@@ -34,7 +48,11 @@ class SubstitutionToken {
 	 * @returns {String}
 	 */
 	escape( string ) {
-		return String( string ).replace( this.regexp, c => `${strEscape}${c}` );
+		return String( string )
+			// add double curlies
+			.replace( reCurly, fnCurly )
+			// escape characters
+			.replace( this.regexp, fnEscape );
 	}
 }
 

@@ -224,42 +224,53 @@ test( "Substituted parameters", function( assert ) {
 		title: "foo\'s \"bar\" \\",
 		paramTitleA: "--title \"{title}\"",
 		paramTitleB: "--title \'{title}\'",
-		paramTitleC: "--title {title}"
+		paramTitleC: "--title {title}",
+
+		curlies: "{foo} {{bar}} {{{baz}}} {{qux} {quux}}",
+		paramCurlies: "\"{curlies}\""
 	};
 
 	var foo = new Substitution( "foo", "foo" );
 	var bar = new Substitution( "bar", "bar" );
 	var baz = new Substitution( "baz", "baz" );
 	var title = new Substitution( "title", "title" );
+	var curlies = new Substitution( "curlies", "curlies" );
 
 	var param = new Parameter( "--param", null, "param", [ foo, bar, baz ] );
 
 	var paramTitleA = new Parameter( "--player-args", null, "paramTitleA", [ title ] );
 	var paramTitleB = new Parameter( "--player-args", null, "paramTitleB", [ title ] );
 	var paramTitleC = new Parameter( "--player-args", null, "paramTitleC", [ title ] );
+	var paramTitleD = new Parameter( "-a", null, "paramCurlies", [ curlies ] );
 
 	assert.deepEqual(
-		getParams( obj, [ param ], true ),
+		getParams( obj, [ param ] ),
 		[ "--param", "\\f\\ \\o\\ \\o \"b a r\" \'b a z\'" ],
 		"Parameter value substitution"
 	);
 
 	assert.deepEqual(
-		getParams( obj, [ paramTitleA ], true ),
+		getParams( obj, [ paramTitleA ] ),
 		[ "--player-args", "--title \"foo's \\\"bar\\\" \\\\\"" ],
 		"Only escape double quote chars in double quote strings"
 	);
 
 	assert.deepEqual(
-		getParams( obj, [ paramTitleB ], true ),
+		getParams( obj, [ paramTitleB ] ),
 		[ "--player-args", "--title \'foo\\\'s \"bar\" \\\\\'" ],
 		"Only escape single quote chars in single quote strings"
 	);
 
 	assert.deepEqual(
-		getParams( obj, [ paramTitleC ], true ),
+		getParams( obj, [ paramTitleC ] ),
 		[ "--player-args", "--title \\f\\o\\o\\\'\\s\\ \\\"\\b\\a\\r\\\"\\ \\\\" ],
 		"Escape all chars"
+	);
+
+	assert.deepEqual(
+		getParams( obj, [ paramTitleD ] ),
+		[ "-a", "\"{{foo}} {{{{bar}}}} {{{{{{baz}}}}}} {{{{qux}} {{quux}}}}\"" ],
+		"Escape curly braces"
 	);
 
 });
