@@ -1,5 +1,6 @@
 import { get } from "Ember";
 import { players } from "config";
+import { platform } from "utils/node/platform";
 import whichFallback from "utils/node/fs/whichFallback";
 
 
@@ -69,12 +70,20 @@ export function getPlayerParams( settings ) {
 	let paramlist = Object.keys( params )
 		.map(function( param ) {
 			let paramObj = playerPresetParams.findBy( "name", param );
-			if ( !paramObj ) { return ""; }
+			if ( !paramObj ) { return null; }
+
+			let args = paramObj.args;
+			if ( args instanceof Object ) {
+				args = args[ platform ];
+				if ( !args ) {
+					return null;
+				}
+			}
 
 			switch ( paramObj.type ) {
 				case "boolean":
 					return params[ param ]
-						? paramObj.args
+						? args
 						: null;
 				default:
 					return null;

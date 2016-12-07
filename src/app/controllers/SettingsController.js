@@ -92,7 +92,27 @@ export default Controller.extend( RetryTransitionMixin, {
 		return providers[ streamprovider ][ "name" ];
 	}),
 
-	players,
+	// filter platform dependent player parameters
+	players: computed(function() {
+		let playerlist = {};
+
+		Object.keys( players ).forEach( playername => {
+			let playerObj = Object.assign( {}, players[ playername ] );
+			playerObj.params = playerObj.params
+				.map( param => {
+					param = Object.assign( {}, param );
+					if ( param.args instanceof Object ) {
+						param.args = param.args[ platform.platform ];
+					}
+					return param;
+				})
+				.filter( param => !!param.args );
+			playerlist[ playername ] = playerObj;
+		});
+
+		return playerlist;
+	}),
+
 	playerPresets: computed(function() {
 		let presetList = kPlayers
 			.filter(function( key ) {

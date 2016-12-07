@@ -28,7 +28,11 @@
 				"type": "boolean",
 				"default": true,
 				"text": "Prevent single instance mode",
-				"args": "--no-one-instance"
+				"args": {
+					"win32": "--no-one-instance",
+					"darwin": false,
+					"linux": "--no-one-instance"
+				}
 			},
 			{
 				"name": "close",
