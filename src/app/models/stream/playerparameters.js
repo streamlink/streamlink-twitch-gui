@@ -97,7 +97,9 @@ export function getPlayerParams( settings ) {
 	let res = [ ...paramlist ];
 	// ignore custom parameters if preset is default and no custom player exec is set
 	if ( get( settings, "player_preset" ) !== "default" || get( playerData, "exec" ) !== "" ) {
-		res.push( args );
+		if ( args.length ) {
+			res.push( args );
+		}
 	}
 	res = res.join( " " );
 
