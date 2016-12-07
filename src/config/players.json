@@ -48,7 +48,7 @@
 				"type": "boolean",
 				"default": true,
 				"text": "Set custom title",
-				"args": "--meta-title \"{name} - {game} - {status}\""
+				"args": "--input-title-format \"{name} - {game} - {status}\""
 			},
 			{
 				"name": "minimal",
