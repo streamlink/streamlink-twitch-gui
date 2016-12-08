@@ -19,14 +19,14 @@ input[type="number"] {
 
 	.theme({
 		.theme-color-and-background( @theme-input-color, @theme-input-background );
-		border-color: @theme-input-border-color;
+		.theme-mix( border-color, @theme-input-border-color, @theme-background );
 
 		&:hover {
-			border-color: @theme-input-border-color-hover;
+			.theme-mix( border-color, @theme-input-border-color-hover, @theme-background );
 		}
 
 		&:focus {
-			border-color: @theme-input-border-color-active;
+			.theme-mix( border-color, @theme-input-border-color-active, @theme-background );
 		}
 
 		&::-webkit-input-placeholder {

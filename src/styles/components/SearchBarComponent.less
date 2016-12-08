@@ -11,7 +11,7 @@
 	.theme({
 		&, & > button {
 			background: @theme-searchbar-background;
-			border-color: @theme-searchbar-border-color;
+			.theme-mix( border-color, @theme-searchbar-border-color, @theme-background );
 		}
 	});
 

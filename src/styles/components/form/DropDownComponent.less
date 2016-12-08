@@ -19,8 +19,8 @@
 		padding: .2em 1.4em .2em .4em;
 
 		.theme({
-			border-color: @theme-select-border-color;
 			background: @theme-select-background;
+			.theme-mix( border-color, @theme-select-border-color, @theme-background );
 		});
 
 		&::after {
@@ -41,7 +41,7 @@
 
 		&:hover {
 			.theme({
-				border-color: @theme-select-border-color-hover;
+				.theme-mix( border-color, @theme-select-border-color-hover, @theme-background );
 			});
 
 			&::after {
@@ -71,7 +71,7 @@
 		border: 1px solid;
 
 		.theme({
-			border-color: @theme-select-items-border-color;
+			.theme-mix( border-color, @theme-select-items-border-color, @theme-background );
 		});
 	}
 
@@ -91,7 +91,8 @@
 			}
 
 			&:not(:last-of-type) {
-				border-bottom: 1px solid @theme-select-items-divider-color;
+				border-bottom: 1px solid;
+				.theme-mix( border-bottom-color, @theme-select-items-divider-color, @theme-select-items-background );
 			}
 		});
 

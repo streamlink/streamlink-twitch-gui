@@ -28,16 +28,21 @@
  * Mix theme colors to avoid transparent colors when possible
  */
 //noinspection LessUnresolvedVariable
-.theme-mix-color( @color: @theme-text-color, @background: @theme-background, @important: false ) {
+.theme-mix( @property: color, @color: @theme-text-color, @background: @theme-background, @important: false ) {
 	@c: mix( fade( @color, 100% ), fade( @background, 100% ), unit( ( 100 * alpha( @color ) ), percent ) );
 
 	.apply() when ( @important = true ) {
-		color: @c !important;
+		@{property}: @c !important;
 	}
 	.apply() when ( default() ) {
-		color: @c;
+		@{property}: @c;
 	}
 	.apply();
+}
+
+//noinspection LessUnresolvedVariable
+.theme-mix-color( @color: @theme-text-color, @background: @theme-background, @important: false ) {
+	.theme-mix( color, @color, @background, @important );
 }
 
 //noinspection LessUnresolvedVariable
