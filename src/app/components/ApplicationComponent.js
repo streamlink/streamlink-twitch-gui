@@ -65,6 +65,7 @@ export default Component.extend({
 
 	didInsertElement() {
 		guiSelectable();
+		this.disableGlobalDragAndDrop();
 		this._super( ...arguments );
 	},
 
@@ -89,5 +90,12 @@ export default Component.extend({
 
 		e.preventDefault();
 		e.stopImmediatePropagation();
+	},
+
+	disableGlobalDragAndDrop() {
+		this.$().on( "dragstart dragover dragend dragenter dragleave dragexit drag drop", e => {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		});
 	}
 });
