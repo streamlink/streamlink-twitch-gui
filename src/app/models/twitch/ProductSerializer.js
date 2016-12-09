@@ -2,7 +2,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 
 export default TwitchSerializer.extend({
-	primaryKey: "name",
+	primaryKey: "id",
 
 	modelNameFromPayloadKey() {
 		return "twitchProduct";
