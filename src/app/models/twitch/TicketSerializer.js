@@ -10,5 +10,16 @@ export default TwitchSerializer.extend({
 
 	attrs: {
 		product: { deserialize: "records" }
+	},
+
+	normalize( modelClass, resourceHash ) {
+		let foreignKey = this.store.serializerFor( "twitchProduct" ).primaryKey;
+
+		// copy the ticket's id to the product
+		if ( resourceHash.product ) {
+			resourceHash.product[ foreignKey ] = resourceHash[ this.primaryKey ];
+		}
+
+		return this._super( ...arguments );
 	}
 });
