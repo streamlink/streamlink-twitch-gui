@@ -20,9 +20,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 			unended: true
 		})
 			.then( toArray() )
-			.then(function( records ) {
-				return records.filterBy( "product.ticket_type", "chansub" );
-			})
+			.then( this.filterFetchedContent( "product.ticket_type", "chansub" ) )
 			.then(function( records ) {
 				// The partner_login (channel) reference is loaded asynchronously
 				// just get the PromiseProxy object and wait for it to resolve

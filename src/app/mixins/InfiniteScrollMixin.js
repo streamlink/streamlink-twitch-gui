@@ -7,9 +7,6 @@ import {
 } from "Ember";
 
 
-const { oneWay } = computed;
-
-
 var CSSMediaRule     = window.CSSMediaRule;
 var CSSStyleRule     = window.CSSStyleRule;
 var reMinWidth       = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/;
@@ -99,6 +96,7 @@ export default Mixin.create({
 	 * Fetch offset
 	 */
 	offset: 0,
+	filteredOffset: 0,
 
 	/**
 	 * Don't fetch infinitely.
@@ -143,27 +141,53 @@ export default Mixin.create({
 
 		// reset offset value
 		set( this, "offset", 0 );
+		set( this, "filteredOffset", 0 );
 		this.calcFetchSize();
 	},
 
 	setupController( controller, model ) {
 		this._super( ...arguments );
 
-		// offset: setup oneWay computed property to the value of `contentPath`
+		// offset (current model length)
+		// setup oneWay computed property to the value of `contentPath`
 		let contentPath = get( this, "contentPath" );
 		let path = `${contentPath}.length`;
-		defineProperty( this, "offset", oneWay( path ) );
+		let computedOffset = computed( path, "filteredOffset", () => {
+			// increase model length by number of filtered records
+			return get( this, path ) + get( this, "filteredOffset" );
+		});
+		defineProperty( this, "offset", computedOffset );
 
-		let length = get( this, "offset" );
+
+		let offset = get( this, "offset" );
 		let limit  = get( this, "limit" );
 
 		set( controller, "isFetching", false );
-		set( controller, "hasFetchedAll", length < limit );
+		set( controller, "hasFetchedAll", offset < limit );
 		set( controller, "initialFetchSize", model.length );
 	},
 
 	fetchContent() {
 		return this.model();
+	},
+
+	filterFetchedContent( key, value ) {
+		return records => {
+			let filtered = key instanceof Function
+				? records.filter( key )
+				: records.filterBy( key, value );
+
+			let recordsLength = get( records, "length" );
+			let filteredLength = get( filtered, "length" );
+			let diff = recordsLength - filteredLength;
+
+			// add to filteredOffset, so that next requests don't include the filtered records
+			this.incrementProperty( "filteredOffset", diff );
+			// reduce limit, so that the hasFetchedAll calculation keeps working
+			this.decrementProperty( "limit", diff );
+
+			return filtered;
+		};
 	},
 
 	actions: {
@@ -202,20 +226,23 @@ export default Mixin.create({
 
 			// fetch content
 			this.fetchContent()
-				.then(function( data ) {
+				.then( data => {
+					// read limit again (in case it was modified by a filtered model)
+					let limit = get( this, "limit" );
 					if ( !data || !data.length || data.length < limit ) {
 						set( controller, "hasFetchedAll", true );
 					}
 					if ( data && data.length ) {
 						content.pushObjects( data );
 					}
-					set( controller, "isFetching", false );
 				})
-				.catch(function( err ) {
+				.catch( err => {
 					set( controller, "fetchError", true );
-					set( controller, "isFetching", false );
 					set( controller, "hasFetchedAll", false );
 					return Promise.reject( err );
+				})
+				.finally( () => {
+					set( controller, "isFetching", false );
 				});
 		}
 	}
