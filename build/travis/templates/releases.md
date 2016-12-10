@@ -3,7 +3,7 @@
 
 ### Release highlights (v<%= version %>)
 
-<%= changelog %> / [Wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki) / [Installation instructions](https://github.com/streamlink/streamlink-twitch-gui/wiki/Installation) / [Open issues](https://github.com/streamlink/streamlink-twitch-gui/issues) / [Chat](https://gitter.com/streamlink/streamlink-twitch-gui)
+<%= changelog %> / [Wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki) / [Installation instructions](https://github.com/streamlink/streamlink-twitch-gui/wiki/Installation) / [Open issues](https://github.com/streamlink/streamlink-twitch-gui/issues) / [Project activity](https://github.com/streamlink/streamlink-twitch-gui/pulse/monthly) / [Chat](https://gitter.im/streamlink/streamlink-twitch-gui)
 
 <% if ( donation && donation.length ) { %>
 ### Donate
