@@ -1,6 +1,19 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Fixed file permissions on MacOS and Linux. #210 #349
+- Fixed maximize button only working once. #350
+- Fixed VLC player preset on MacOS. #354 #355
+- Fixed subscriptions page not working correctly. #356
+- Fixed graphics glitches on Windows. #357
+- Fixed drag & drop not being disabled. #359
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.0.0...master)
+
+
 ## [v1.0.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.0.0) (2016-12-04)
 
 **"Livestreamer Twitch GUI" is now "Streamlink Twitch GUI"**
