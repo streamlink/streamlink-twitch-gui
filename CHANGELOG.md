@@ -38,7 +38,7 @@ Please be aware that the name of the application's config folder has changed. In
 - Fixed "Streamlink" and "Livestreamer via python-pip" issues on Windows. #336
 - Fixed text rendering issues on Windows. #232
 - Fixed stream info bar visibility bug. #342
-- Fixed broked number input fields on MacOS. #282
+- Fixed broken number input fields on MacOS. #282
 - Fixed apply/discard settings buttons being clickable while being hidden.
 - Resolved memory leaks (legacy NW.js) #207
 - Resolved incorrect dimensions of maximized window on Windows. (legacy NW.js) #227
