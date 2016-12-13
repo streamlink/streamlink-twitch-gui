@@ -1,5 +1,6 @@
 import { main } from "config";
 import NotificationProvider from "./NotificationProvider";
+import promiseChildprocess from "utils/node/promiseChildprocess";
 import { is64bit } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 import which from "utils/node/fs/which";
@@ -19,6 +20,9 @@ const EXIT_CODE_SUCCESS   = 0;
 //const EXIT_CODE_HIDDEN  = 1;
 const EXIT_CODE_DISMISSED = 2;
 const EXIT_CODE_TIMEOUT   = 3;
+
+
+const MSG_CLICK = "The user clicked on the toast.";
 
 
 export default class NotificationProviderSnoreToast extends NotificationProvider {
@@ -58,26 +62,34 @@ export default class NotificationProviderSnoreToast extends NotificationProvider
 	}
 
 	notify( data ) {
-		return new Promise( ( resolve, reject ) => {
-			let params = [
-				"-appID",
-				displayName,
-				"-silent",
-				"-w",
-				"-t",
-				data.title,
-				"-m",
-				NotificationProvider.getMessageAsString( data.message ),
-				"-p",
-				data.icon
-			];
-			let notification = spawn( this.exec, params );
+		// if notifications are disabled in Windows, the exit code will also be 0
+		// we need to also parse stdout and wait for an expected string to be returned
+		let clicked = false;
 
-			notification.once( "error", reject );
-			notification.once( "exit", code => {
+		return promiseChildprocess(
+			[
+				this.exec,
+				[
+					"-appID",
+					displayName,
+					"-silent",
+					"-w",
+					"-t",
+					data.title,
+					"-m",
+					NotificationProvider.getMessageAsString( data.message ),
+					"-p",
+					data.icon
+				],
+				{
+					// only pipe stdout
+					stdio: [ 1 ]
+				}
+			],
+			( code, resolve, reject ) => {
 				switch ( code ) {
 					case EXIT_CODE_SUCCESS:
-						if ( data.click ) {
+						if ( clicked && data.click ) {
 							data.click();
 						}
 						return resolve();
@@ -91,8 +103,13 @@ export default class NotificationProviderSnoreToast extends NotificationProvider
 					default:
 						return reject();
 				}
-			});
-		});
+			},
+			line => {
+				if ( !clicked && line === MSG_CLICK ) {
+					clicked = true;
+				}
+			}
+		);
 	}
 }
 

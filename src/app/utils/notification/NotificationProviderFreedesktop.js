@@ -1,5 +1,6 @@
 import { main } from "config";
 import NotificationProvider from "./NotificationProvider";
+import promiseChildprocess from "utils/node/promiseChildprocess";
 import which from "utils/node/fs/which";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import { spawn } from "child_process";
@@ -58,36 +59,20 @@ const reCall = /^\(uint32 (\d+),?\)$/;
 
 
 function callMethod( exec, method, params, onExit, onStdOut ) {
-	let child;
-
-	function kill() {
-		if ( child ) {
-			child.kill();
-		}
-		child = null;
-		process.removeListener( "exit", kill );
-	}
-
-	return new Promise( ( resolve, reject ) => {
-		child = spawn( exec, [
-			"call",
-			...commonParams,
-			"--method",
-			method,
-			...params
-		]);
-		child.once( "error", reject );
-		child.on( "exit", code => onExit( code, resolve, reject ) );
-
-		process.on( "exit", kill );
-
-		if ( onStdOut ) {
-			child.stdout.on( "data", new StreamOutputBuffer(
-				line => onStdOut( line, resolve, reject )
-			) );
-		}
-	})
-		.finally( kill );
+	return promiseChildprocess(
+		[
+			exec,
+			[
+				"call",
+				...commonParams,
+				"--method",
+				method,
+				...params
+			]
+		],
+		onExit,
+		onStdOut
+	);
 }
 
 

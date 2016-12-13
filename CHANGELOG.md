@@ -9,6 +9,7 @@ Changelog - Streamlink Twitch GUI
 - Fixed subscriptions page not working correctly. #356
 - Fixed graphics glitches on Windows. #357
 - Fixed drag & drop not being disabled. #359
+- Fixed bug when notifications were disabled in Windows 10. #366
 - Disabled chromium's internal smooth scrolling. #365
 
 
