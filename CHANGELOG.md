@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.0.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.0.1) (2016-12-14)
 
 - Fixed file permissions on MacOS and Linux. #210 #349
 - Fixed maximize button only working once. #350
@@ -13,7 +13,7 @@ Changelog - Streamlink Twitch GUI
 - Disabled chromium's internal smooth scrolling. #365
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.0.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.0.0...v1.0.1)
 
 
 ## [v1.0.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.0.0) (2016-12-04)
