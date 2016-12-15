@@ -44,10 +44,14 @@ Please have in mind, that by using this application you're bypassing any ads run
 
 ## Download
 
-#### Direct download
+[See the Wiki for detailed installation and configuration instructions.][Wiki]
 
-[Directly download the application from the github releases page.][Releases]  
-More informations and installation instructions can be found in the project's [Wiki][Wiki]!!!
+Streamlink Twitch GUI depends on Streamlink.  
+Install [Streamlink][Streamlink] prior to using this application or you won't be able to launch any streams.
+
+#### Archives
+
+[Directly download the application from the github releases page.][Releases]
 
 #### Packages
 
@@ -65,10 +69,6 @@ Homebrew Cask (OS X):
 
 If you want to test the latest unreleased version, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or [here][Contributing].  
 Please don't forget to report any bugs you may encounter. Thank you very much for helping!
-
-#### Notes
-
-Streamlink Twitch GUI depends on Streamlink. Install [Streamlink][Streamlink] prior to using this application or you won't be able to launch any streams.
 
 
 ## Build
