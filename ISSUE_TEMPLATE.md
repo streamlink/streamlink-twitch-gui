@@ -6,6 +6,13 @@
 
 ----
 
+### Checklist
+
+- [x] This is a bug report.
+- [ ] Streamlink is working correctly on my system without using the Twitch GUI.
+- [ ] I tried solving my issue by reading the project's wiki first.
+- [ ] I used the search function to find already opened/closed issues or pull requests.
+
 ### Description
 
 ...
