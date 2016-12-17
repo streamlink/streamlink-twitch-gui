@@ -3,11 +3,12 @@ module.exports = {
 		"options" : {
 			"data" : {
 				"author": "<%= package.author %>",
+				"changelog": "<%= package.changelogEscaped %>",
 				"checksum": "<%= package.checksums.win32.hash %>",
 				"checksum64": "<%= package.checksums.win64.hash %>",
 				"homepage": "<%= package.homepage %>",
-				"name": "<%= package.name %>",
-				"changelog": "<%= package.changelogEscaped %>",
+				"id": "<%= package.name %>",
+				"title": "<%= main['display-name'] %>",
 				"version": "<%= package.version %>"
 			}
 		},

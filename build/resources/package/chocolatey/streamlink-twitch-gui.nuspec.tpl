@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>streamlink-twitch-gui</id>
-    <title><%= name %></title>
+    <id><%= id %></id>
+    <title><%= title %></title>
     <version><%= version %></version>
     <authors><%= author %></authors>
     <owners>Sebastian Meyer, Scott Walters</owners>
