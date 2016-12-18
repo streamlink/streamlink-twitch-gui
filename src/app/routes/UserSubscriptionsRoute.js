@@ -12,7 +12,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 	itemSelector: ".subscription-item-component",
 
 	model() {
-		var store = get( this, "store" );
+		const store = get( this, "store" );
 
 		return store.query( "twitchTicket", {
 			offset : get( this, "offset" ),
@@ -20,41 +20,47 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 			unended: true
 		})
 			.then( toArray() )
+			// filter out unwanted ticket types (eg. twitch turbo)
 			.then( this.filterFetchedContent( "product.ticket_type", "chansub" ) )
-			.then(function( records ) {
-				// The partner_login (channel) reference is loaded asynchronously
-				// just get the PromiseProxy object and wait for it to resolve
-				var channelPromises = records.mapBy( "product.partner_login" );
-				return Promise.all( channelPromises )
-					.then(function( channels ) {
-						// Also load the UserSubscription record (needed for subscription date)
-						// Sadly, this can't be loaded in parallel (channel needs to be loaded)
-						return Promise.all( channels.map(function( channel ) {
-							var id = get( channel, "id" );
-							return store.findExistingRecord( "twitchUserSubscription", id )
-								.catch(function() { return false; })
-								.then(function( record ) {
-									set( channel, "subscribed", record );
-								});
-						}) );
-					})
-					.then(function() {
-						return records;
-					});
-			})
-			.then(function( records ) {
-				var emoticons = records
-					.mapBy( "product.emoticons" )
-					.reduce(function( res, item ) {
-						return res.concat( item.toArray() );
+			// load all channel references asynchronously (get the EmberData.PromiseObject)
+			// and filter out rejected promises (banned channels, etc.)
+			.then( tickets =>
+				Promise.all( tickets
+					.map( ticket =>
+						get( ticket, "product.partner_login" )
+							.catch( () => false )
+					)
+				)
+					.then( () => tickets )
+					.then( this.filterFetchedContent( "product.partner_login.isFulfilled", true ) )
+			)
+			// also load the UserSubscription record (needed for subscription date)
+			// unfortunately, this can't be loaded in parallel (channel needs to be loaded first)
+			.then( tickets =>
+				Promise.all( tickets
+					.map( ticket => get( ticket, "product.partner_login" ) )
+					.map( channel =>
+						store.findExistingRecord( "twitchUserSubscription", get( channel, "id" ) )
+							.catch( () => false )
+							.then( record => set( channel, "subscribed", record ) )
+					)
+				)
+					.then( () => tickets )
+			)
+			.then( tickets => {
+				let emoticons = tickets
+					.map( ticket => get( ticket, "product.emoticons" ) )
+					.reduce( ( res, item ) => {
+						res.push( ...item.toArray() );
+						return res;
 					}, [] );
 
-				var preloadChannelPromise = Promise.resolve( records ).then( preload([
+				let preloadChannelPromise = Promise.resolve( tickets ).then( preload([
 					"product.partner_login.logo",
 					"product.partner_login.profile_banner",
 					"product.partner_login.video_banner"
 				]) );
-				var preloadEmoticonsPromise = Promise.resolve( emoticons ).then( preload(
+				let preloadEmoticonsPromise = Promise.resolve( emoticons ).then( preload(
 					"url"
 				) );
 
@@ -62,9 +68,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 					preloadChannelPromise,
 					preloadEmoticonsPromise
 				])
-					.then(function() {
-						return records;
-					});
+					.then( () => tickets );
 			});
 	}
 });
