@@ -3,7 +3,7 @@
 	"validation-timeout": 10000,
 	"version-min": {
 		"livestreamer": "1.11.1",
-		"streamlink": "0.0.1"
+		"streamlink": "0.2.0"
 	},
 	"download-url": {
 		"livestreamer": "https://github.com/chrippa/livestreamer/releases",
