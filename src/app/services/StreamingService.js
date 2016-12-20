@@ -27,6 +27,8 @@ import {
 import { isFile } from "utils/node/fs/stat";
 import whichFallback from "utils/node/fs/whichFallback";
 import { spawn } from "child_process";
+import { createReadStream } from "fs";
+import { dirname } from "path";
 
 
 const { service } = inject;
@@ -42,6 +44,7 @@ const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 const modelName = "stream";
 
 const reVersion   = /^(streamlink|livestreamer)(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(?:$|\s.*)/i;
+const reShebang   = /^#!(.+)\s*$/;
 const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 const reUnable    = /^error: Unable to open URL: /;
 const reNoStreams = /^error: No streams found on this URL: /;
@@ -277,44 +280,95 @@ export default Service.extend( ChannelSettingsMixin, {
 		let providerCustom = streamproviders[ streamprovider ];
 		let providerConfig = providers[ streamprovider ];
 		let isPython = providerConfig.hasOwnProperty( "python" );
+		let pythonFallback = providerConfig[ "fallback" ];
 
 		// custom or default executable
-		let exec = get( providerCustom, "exec" )
-			|| providerConfig[ "exec" ][ platformName ];
+		let customExec = get( providerCustom, "exec" );
+		let exec = customExec || providerConfig[ "exec" ][ platformName ];
 		if ( !exec ) {
 			return Promise.reject( new Error( "Missing executable name for stream provider" ) );
 		}
 
-		// try to find the executable
-		return whichFallback(
-			exec,
-			providerConfig[ "fallback" ]
-		)
-			.then(function( exec ) {
-				// try to find the pythonscript
-				if ( isPython ) {
-					let pythonscript = get( providerCustom, "pythonscript" )
-						|| providerConfig[ "pythonscript" ][ platformName ];
-
-					return whichFallback(
-						pythonscript,
-						providerConfig[ "pythonscriptfallback" ],
-						isFile
-					)
-						.then(function( pythonscript ) {
-							return { exec, pythonscript };
-						}, function() {
-							throw new NotFoundError( "Could not find Python script." );
-						});
+		return Promise.resolve()
+			// try to find the pythonscript
+			.then( () => {
+				if ( !isPython ) {
+					return null;
 				}
 
-				return { exec, pythonscript: null };
+				let pythonscript = get( providerCustom, "pythonscript" )
+					|| providerConfig[ "pythonscript" ][ platformName ];
 
-			// not found
-			}, function() {
-				let str = isPython ? "Python " : "";
-				throw new NotFoundError( `Could not find ${str}executable.` );
+				return whichFallback(
+					pythonscript,
+					providerConfig[ "pythonscriptfallback" ],
+					isFile
+				)
+					.catch( () => {
+						throw new NotFoundError( "Could not find Python script." );
+					});
+			})
+			// try to get the pythonscript's shebang and prepend its dirname to the fallback list
+			.then( pythonscript => {
+				// don't parse shebang if a custom python exec has been set
+				if ( !isPython || customExec ) {
+					return pythonscript;
+				}
+
+				return this.parsePythonscriptShebang( pythonscript )
+					.then( dir => {
+						if ( pythonFallback[ platformName ].indexOf( dir ) === -1 ) {
+							pythonFallback[ platformName ].unshift( dir );
+						}
+						return pythonscript;
+					});
+			})
+			// try to find the executable
+			.then( pythonscript => {
+				return whichFallback(
+					exec,
+					pythonFallback
+				)
+					.then( exec => ({ exec, pythonscript }) )
+					// not found
+					.catch( () => {
+						let str = isPython ? "Python " : "";
+						throw new NotFoundError( `Could not find ${str}executable.` );
+					});
 			});
+	},
+
+	/**
+	 * @param {String} pythonscript
+	 * @returns {Promise.<String>}
+	 */
+	parsePythonscriptShebang( pythonscript ) {
+		/** @type ReadStream */
+		let filestream;
+		let timeout;
+
+		return new Promise( ( resolve, reject ) => {
+			let onLine = ( line, index ) => {
+				if ( index === 0 ) {
+					let match = reShebang.exec( line );
+					if ( match ) {
+						return resolve( match[ 1 ] );
+					}
+				}
+				reject();
+			};
+
+			filestream = createReadStream( pythonscript );
+			filestream.on( "error", reject );
+			filestream.on( "data", new StreamOutputBuffer( onLine ) );
+
+			timeout = setTimeout( reject, 3000 );
+		})
+			.finally( () => {
+				clearTimeout( timeout );
+				filestream.close();
+			})
+			.then( shebang => dirname( shebang ) );
 	},
 
 	/**
