@@ -27,7 +27,10 @@ import {
 import { isFile } from "utils/node/fs/stat";
 import whichFallback from "utils/node/fs/whichFallback";
 import { spawn } from "child_process";
-import { createReadStream } from "fs";
+import {
+	createReadStream,
+	watch
+} from "fs";
 import { dirname } from "path";
 
 
@@ -105,6 +108,18 @@ function setIfNotNull( objA, objB, key ) {
 }
 
 
+class CacheItem {
+	constructor( file, listener ) {
+		this.file = file;
+		this.watcher = watch( file, listener );
+	}
+
+	close() {
+		this.watcher.close();
+	}
+}
+
+
 export default Service.extend( ChannelSettingsMixin, {
 	chat: service(),
 	modal: service(),
@@ -118,6 +133,33 @@ export default Service.extend( ChannelSettingsMixin, {
 		let store = get( this, "store" );
 		return store.peekAll( modelName );
 	}),
+
+	/**
+	 * Cache object with file watchers
+	 * @type Object.<String,CacheItem>
+	 */
+	cache: {},
+	setupCache( execObj ) {
+		this.clearCache();
+		Object.keys( execObj ).forEach( key =>
+			this.cache[ key ] = new CacheItem( execObj[ key ], () => this.clearCache() )
+		);
+	},
+	clearCache() {
+		Object.keys( this.cache ).forEach( key =>
+			this.cache[ key ].close()
+		);
+		this.cache = {};
+	},
+
+
+	init() {
+		this._super( ...arguments );
+
+		// invalidate cache: listen for all settings changes
+		// changed properties of model relationships and nested attributes don't trigger isDirty
+		get( this, "settings.content" ).on( "didUpdate", () => this.clearCache() );
+	},
 
 
 	startStream( stream, quality ) {
@@ -158,10 +200,8 @@ export default Service.extend( ChannelSettingsMixin, {
 		Promise.resolve()
 			// override record with channel specific settings
 			.then( () => this.getChannelSettings( record, quality ) )
-			// get the exec command
-			.then( () => this.check() )
-			// validate configuration
-			.then( execObj => this.validate( record, execObj ) )
+			// get the exec command and validate
+			.then( () => this.check( record ) )
 			// build parameter array
 			.then( execObj => this.getParameters( record, execObj ) )
 			.then(
@@ -263,11 +303,23 @@ export default Service.extend( ChannelSettingsMixin, {
 
 	/**
 	 * Get the path of the executable and pythonscript
+	 * @param {Stream} record
 	 * @returns {Promise}
 	 */
-	check() {
+	check( record ) {
+		// read properties first (triggers observers)
 		let streamprovider  = get( this, "settings.streamprovider" );
 		let streamproviders = get( this, "settings.streamproviders" );
+
+		// then check for already cached stream provider data
+		let kCache = Object.keys( this.cache );
+		if ( kCache.length ) {
+			// only return paths
+			return Promise.resolve( kCache.reduce( ( obj, key ) => {
+				obj[ key ] = this.cache[ key ].file;
+				return obj;
+			}, {} ) );
+		}
 
 		if (
 			   !providers.hasOwnProperty( streamprovider )
@@ -335,7 +387,8 @@ export default Service.extend( ChannelSettingsMixin, {
 						let str = isPython ? "Python " : "";
 						throw new NotFoundError( `Could not find ${str}executable.` );
 					});
-			});
+			})
+			.then( execObj => this.validate( record, execObj ) );
 	},
 
 	/**
@@ -443,7 +496,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			later( onTimeout, validationTimeout );
 		})
 			.finally( kill )
-			.then(function({ name, version }) {
+			.then( ({ name, version }) => {
 				if ( !versionMin.hasOwnProperty( name ) ) {
 					throw new NotFoundError();
 				}
@@ -451,6 +504,8 @@ export default Service.extend( ChannelSettingsMixin, {
 				if ( version !== getMax([ version, versionMin[ name ] ]) ) {
 					throw new VersionError( version );
 				}
+
+				this.setupCache( execObj );
 
 				return execObj;
 			});
