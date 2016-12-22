@@ -249,6 +249,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		set( this, "error", error || new Error( "Internal error" ) );
 
 		this.clear( record );
+		this.clearCache();
 	},
 
 	onStreamShutdown( record ) {
