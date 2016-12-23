@@ -27,30 +27,29 @@ export default Service.extend({
 
 	check() {
 		// get the installed version
-		var current = get( this, "version" );
+		let current = get( this, "version" );
 		if ( !current ) { return; }
 
-		var self  = this;
-		var store = get( self, "store" );
+		const store = get( this, "store" );
 		store.findRecord( "versioncheck", 1 )
 			.then(
 				// versioncheck record found: existing user
-				this.notFirstRun.bind( this ),
+				record => this.notFirstRun( record ),
 				// versioncheck record not found: new user
-				this.firstRun.bind( this )
+				() => this.firstRun()
 			)
-			.then(function( modalSkipped ) {
+			.then( modalSkipped => {
 				if ( !modalSkipped ) { return; }
 				// go on with new version check if no modal has been opened
-				self.checkForNewRelease();
+				this.checkForNewRelease();
 			});
 	},
 
 	notFirstRun( record ) {
 		set( this, "model", record );
 
-		var current = get( this,   "version" );
-		var version = get( record, "version" );
+		let current = get( this,   "version" );
+		let version = get( record, "version" );
 
 		// if version string is empty, go on (new version)
 		// ignore if version string >= (not <) installed version metadata
@@ -73,17 +72,17 @@ export default Service.extend({
 	},
 
 	firstRun() {
-		var store   = get( this, "store" );
-		var current = get( this, "version" );
+		const store   = get( this, "store" );
+		const version = get( this, "version" );
 
 		// unload automatically created record and create a new one instead
-		var record = store.peekRecord( "versioncheck", 1 );
+		let record = store.peekRecord( "versioncheck", 1 );
 		if ( record ) {
 			store.unloadRecord( record );
 		}
 		record = store.createRecord( "versioncheck", {
-			id     : 1,
-			version: current
+			id: 1,
+			version
 		});
 		record.save();
 
@@ -98,7 +97,7 @@ export default Service.extend({
 		// don't check for new releases if disabled
 		if ( !argVersioncheck ) { return; }
 
-		var checkagain = get( this, "model.checkagain" );
+		let checkagain = get( this, "model.checkagain" );
 		if ( checkagain <= +new Date() ) {
 			this.getReleases();
 		}
@@ -106,7 +105,7 @@ export default Service.extend({
 
 	getReleases() {
 		get( this, "store" ).findRecord( "githubReleases", "latest", { reload: true } )
-			.then( this.checkRelease.bind( this ) );
+			.then( release => this.checkRelease( release ) );
 	},
 
 	checkRelease( release ) {
@@ -128,7 +127,7 @@ export default Service.extend({
 	},
 
 	ignoreRelease() {
-		var record = get( this, "model" );
+		let record = get( this, "model" );
 		record.set( "checkagain", +new Date() + checkAgain );
 
 		return record.save();
