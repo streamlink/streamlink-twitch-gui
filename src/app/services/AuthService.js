@@ -1,6 +1,7 @@
 import {
 	get,
 	set,
+	setProperties,
 	computed,
 	inject,
 	Evented,
@@ -17,10 +18,15 @@ import OAuthResponseRedirect from "root/oauth-redirect.html";
 const { service } = inject;
 const {
 	oauth: {
+		/** @type {String} */
 		"base-uri": baseuri,
+		/** @type {String} */
 		"client-id": clientid,
+		/** @type {Number} */
 		"server-port": serverport,
+		/** @type {String} */
 		"redirect-uri": redirecturi,
+		/** @type {String[]} */
 		"scope": scope
 	}
 } = twitch;
@@ -45,24 +51,24 @@ export default Service.extend( Evented, {
 
 
 	init() {
-		var store = get( this, "store" );
+		const store = get( this, "store" );
+
 		store.findAll( "auth" )
-			.then(function( records ) {
-				return records.content.length
-					? records.objectAt( 0 )
-					: store.createRecord( "auth", { id: 1 } ).save();
-			})
-			.then(function( session ) {
+			.then( records => records.content.length
+				? records.objectAt( 0 )
+				: store.createRecord( "auth", { id: 1 } ).save()
+			)
+			.then( session => {
 				set( this, "session", session );
 
 				// startup auto login
-				var token = get( session, "access_token" );
+				let token = get( session, "access_token" );
 				this.login( token, true )
-					.catch(function() {});
+					.catch( () => {} );
 
 				// trigger event after calling login, so `isPending` can be set first
 				this.trigger( "initialized" );
-			}.bind( this ) );
+			});
 	},
 
 
@@ -132,8 +138,8 @@ export default Service.extend( Evented, {
 
 	/**
 	 * Validate the OAuth response after a login attempt
-	 * @param {string} token
-	 * @param {string} scope
+	 * @param {String} token
+	 * @param {String} scope
 	 * @returns {Promise}
 	 */
 	validateOAuthResponse( token, scope ) {
@@ -149,46 +155,46 @@ export default Service.extend( Evented, {
 
 	/**
 	 * Update the adapter and try to authenticate with the given access token
-	 * @param {string} token
-	 * @param {boolean} isAutoLogin
+	 * @param {String} token
+	 * @param {Boolean} isAutoLogin
 	 * @returns {Promise}
 	 */
 	login( token, isAutoLogin ) {
-		var self = this;
-
 		// no token set
-		if ( !token || !reToken.test( token ) ) { return Promise.reject(); }
+		if ( !token || !reToken.test( token ) ) {
+			return Promise.reject();
+		}
 
 		set( this, "session.isPending", true );
 
 		// tell the twitch adapter to use the token from now on
-		self.updateAdapter( token );
+		this.updateAdapter( token );
 
 		// validate session
-		return self.validateSession()
+		return this.validateSession()
 			// logged in...
-			.then(function( record ) {
-				var promise = isAutoLogin
+			.then( record => {
+				let promise = isAutoLogin
 					? Promise.resolve()
 					// save auth record if this was no auto login
-					: self.sessionSave( token, record );
+					: this.sessionSave( token, record );
 
 				// also don't forget to set the user_name on the auth record (volatile)
-				return promise.then(function() {
-					var name = get( record, "user_name" );
-					set( self, "session.user_name", name );
+				return promise.then( () => {
+					let name = get( record, "user_name" );
+					set( this, "session.user_name", name );
 				});
 			})
 			// SUCCESS
-			.then(function() {
-				set( self, "session.isPending", false );
-				self.trigger( "login", true );
+			.then( () => {
+				set( this, "session.isPending", false );
+				this.trigger( "login", true );
 			})
 			// FAILURE: reset the adapter
-			.catch(function( err ) {
-				self.updateAdapter( null );
-				set( self, "session.isPending", false );
-				self.trigger( "login", false );
+			.catch( err => {
+				this.updateAdapter( null );
+				set( this, "session.isPending", false );
+				this.trigger( "login", false );
 
 				return Promise.reject( err );
 			});
@@ -200,21 +206,22 @@ export default Service.extend( Evented, {
 	 */
 	validateSession() {
 		// validate token
-		var store = get( this, "store" );
+		const store = get( this, "store" );
+
 		return store.findAll( "twitchToken", { reload: true } )
-			.then(function( records ) { return records.objectAt( 0 ); })
-			.then( this.validateToken.bind( this ) );
+			.then( records => records.objectAt( 0 ) )
+			.then( record => this.validateToken( record ) );
 	},
 
 	/**
 	 * Validate access token response
-	 * @param {DS.Model} record
+	 * @param {TwitchToken} record
 	 * @returns {Promise}
 	 */
 	validateToken( record ) {
-		var valid = get( record, "valid" );
-		var name  = get( record, "user_name" );
-		var scope = get( record, "authorization.scopes" );
+		let valid = get( record, "valid" );
+		let name  = get( record, "user_name" );
+		let scope = get( record, "authorization.scopes" );
 
 		return valid === true
 		    && name
@@ -226,7 +233,7 @@ export default Service.extend( Evented, {
 
 	/**
 	 * Received and expected scopes need to be identical
-	 * @param {Array} returnedScope
+	 * @param {String[]} returnedScope
 	 * @returns {boolean}
 	 */
 	validateScope( returnedScope ) {
@@ -237,17 +244,18 @@ export default Service.extend( Evented, {
 
 	/**
 	 * Update the auth record and save it
-	 * @param {string} token
-	 * @param {DS.Model} record
+	 * @param {String} token
+	 * @param {TwitchToken} record
 	 * @returns {Promise}
 	 */
 	sessionSave( token, record ) {
-		var session = get( this, "session" );
-		session.setProperties({
+		let session = get( this, "session" );
+		setProperties( session, {
 			access_token: token,
 			scope       : get( record, "authorization.scopes" ).join( "+" ),
 			date        : new Date()
 		});
+
 		return session.save();
 	},
 
@@ -256,19 +264,20 @@ export default Service.extend( Evented, {
 	 * @returns {Promise}
 	 */
 	sessionReset() {
-		var session = get( this, "session" );
-		session.setProperties({
+		let session = get( this, "session" );
+		setProperties( session, {
 			access_token: null,
 			scope       : null,
 			date        : null,
 			user_name   : null
 		});
+
 		return session.save();
 	},
 
 
 	updateAdapter( token ) {
-		var adapter = get( this, "store" ).adapterFor( "twitch" );
+		let adapter = get( this, "store" ).adapterFor( "twitch" );
 		if ( !adapter ) {
 			throw new Error( "Adapter not found" );
 		}

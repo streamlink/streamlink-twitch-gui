@@ -4,6 +4,10 @@ import {
 } from "EmberData";
 
 
+/**
+ * @class TwitchToken
+ * @extends Model
+ */
 export default Model.extend({
 	// pass through
 	authorization: attr(),

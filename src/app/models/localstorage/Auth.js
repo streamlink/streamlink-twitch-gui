@@ -8,6 +8,10 @@ import {
 } from "EmberData";
 
 
+/**
+ * @class Auth
+ * @extends Model
+ */
 export default Model.extend({
 	access_token: attr( "string" ),
 	scope       : attr( "string" ),
