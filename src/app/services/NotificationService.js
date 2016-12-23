@@ -57,25 +57,34 @@ const iconGroup = isWin
 const cacheTmpDir = tmpdir( cacheDir );
 
 
-function StreamCache( stream ) {
-	this.id    = get( stream, "channel.id" );
-	this.since = get( stream, "created_at" );
-	this.fails = 0;
-}
-
-StreamCache.prototype.findStreamIndex = function( streams ) {
-	for ( var id = this.id, i = 0, l = streams.length; i < l; i++ ) {
-		if ( get( streams[ i ], "channel.id" ) === id ) {
-			return i;
-		}
+class StreamCache {
+	constructor( stream ) {
+		this.id    = get( stream, "channel.id" );
+		this.since = get( stream, "created_at" );
+		this.fails = 0;
 	}
 
-	return -1;
-};
+	/**
+	 * @param {TwitchStream[]} streams
+	 * @returns {Number}
+	 */
+	findStreamIndex( streams ) {
+		for ( let id = this.id, i = 0, l = streams.length; i < l; i++ ) {
+			if ( get( streams[ i ], "channel.id" ) === id ) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
-StreamCache.prototype.isNotNewer = function( stream ) {
-	return this.since >= get( stream, "created_at" );
-};
+	/**
+	 * @param {TwitchStream} stream
+	 * @returns {Boolean}
+	 */
+	isNotNewer( stream ) {
+		return this.since >= get( stream, "created_at" );
+	}
+}
 
 
 export default Service.extend( ChannelSettingsMixin, {
@@ -116,7 +125,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	statusText: computed( "enabled", "paused", "error", function() {
-		var status = !get( this, "enabled" )
+		let status = !get( this, "enabled" )
 			? "disabled"
 			: get( this, "paused" )
 			? "paused"
@@ -133,21 +142,21 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * so it doesn't pop up a new notification on the next query
 	 */
 	_userHasFollowedChannel: on( "init", function() {
-		var self    = this;
-		var store   = get( self, "store" );
-		var follows = store.modelFor( "twitchUserFollowsChannel" );
-		var adapter = store.adapterFor( "twitchUserFollowsChannel" );
+		const store   = get( this, "store" );
+		const follows = store.modelFor( "twitchUserFollowsChannel" );
+		const adapter = store.adapterFor( "twitchUserFollowsChannel" );
 
-		adapter.on( "createRecord", function( store, type, snapshot ) {
-			if ( !get( self, "running" ) ) { return; }
+		adapter.on( "createRecord", ( store, type, snapshot ) => {
+			if ( !get( this, "running" ) ) { return; }
 			if ( type !== follows ) { return; }
 
-			var id = snapshot.id;
+			let id = snapshot.id;
 			// is the followed channel online?
 			store.findRecord( "twitchStream", id, { reload: true } )
-				.then(function( stream ) {
-					var model = get( self, "model" );
-					if ( model.findBy( "id", id ) ) { return; }
+				.then( stream => {
+					/** @type {StreamCache[]} */
+					let model = get( this, "model" );
+					if ( model.find( item => item.id === id ) ) { return; }
 					model.push( new StreamCache( stream ) );
 				});
 		});
@@ -155,12 +164,12 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	_setWindowBadgeLabel() {
-		var label;
+		let label;
 		if ( !get( this, "running" ) || !get( this, "settings.notify_badgelabel" ) ) {
 			label = "";
 
 		} else {
-			var num = get( this, "model.length" );
+			let num = get( this, "model.length" );
 			label = String( num );
 		}
 		// update badge label or remove it
@@ -178,17 +187,16 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	_setupTrayItem: on( "init", function() {
-		var self = this;
-		var menu = getTrayMenu();
-		var item = null;
+		let item = null;
+		const menu = getTrayMenu();
 
-		function createTrayItem() {
-			var enabled = get( self, "enabled" );
+		const createTrayItem = () => {
+			let enabled = get( this, "enabled" );
 			if ( !enabled ) {
 				if ( item ) {
 					menu.items.removeObject( item );
 				}
-				set( self, "paused", false );
+				set( this, "paused", false );
 				return;
 			}
 
@@ -196,14 +204,14 @@ export default Service.extend( ChannelSettingsMixin, {
 				type   : "checkbox",
 				label  : "Pause notifications",
 				tooltip: "Quickly toggle desktop notifications",
-				checked: get( self, "paused" ),
-				click( item ) {
-					set( self, "paused", item.checked );
+				checked: get( this, "paused" ),
+				click  : item => {
+					set( this, "paused", item.checked );
 				}
 			};
 
 			menu.items.unshiftObject( item );
-		}
+		};
 
 		createTrayItem();
 		this.addObserver( "enabled", createTrayItem );
@@ -211,7 +219,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	reset() {
-		var next = get( this, "_next" );
+		let next = get( this, "_next" );
 		if ( next ) {
 			cancel( next );
 		}
@@ -231,7 +239,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		// collect garbage once at the beginning
 		this.gc_icons()
 			// then start
-			.then( this.check.bind( this ) );
+			.then( () => this.check() );
 	},
 
 	check() {
@@ -241,11 +249,11 @@ export default Service.extend( ChannelSettingsMixin, {
 			limit: 100
 		})
 			.then( mapBy( "stream" ) )
-			.then( this.queryCallback.bind( this ) )
-			.then( this.stripDisabledChannels.bind( this ) )
-			.then( this.prepareNotifications.bind( this ) )
-			.then( this.success.bind( this ) )
-			.catch( this.failure.bind( this ) );
+			.then( streams => this.queryCallback( streams ) )
+			.then( streams => this.stripDisabledChannels( streams ) )
+			.then( streams => this.prepareNotifications( streams ) )
+			.then( () => this.success() )
+			.catch( () => this.failure() );
 	},
 
 	success() {
@@ -260,8 +268,8 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 	failure() {
-		var tries = get( this, "_tries" );
-		var interval;
+		let tries = get( this, "_tries" );
+		let interval;
 
 		// did we reach the retry limit yet?
 		if ( ++tries > failsRequests ) {
@@ -278,15 +286,16 @@ export default Service.extend( ChannelSettingsMixin, {
 			interval = intervalRetry;
 		}
 
-		var next = later( this, this.check, interval );
+		let next = later( this, this.check, interval );
 		set( this, "_next", next );
 	},
 
 	queryCallback( streams ) {
-		var model = get( this, "model" );
+		/** @type {StreamCache[]} */
+		let model = get( this, "model" );
 
 		// figure out which streams are new
-		for ( var item, idx, i = 0, l = model.length; i < l; i++ ) {
+		for ( let item, idx, i = 0, l = model.length; i < l; i++ ) {
 			item = model[ i ];
 
 			// "indexOfBy"
@@ -322,9 +331,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 
 		// add new streams afterwards
-		model.pushObjects( streams.map(function( stream ) {
-			return new StreamCache( stream );
-		}) );
+		model.pushObjects( streams.map( stream => new StreamCache( stream ) ) );
 
 		// just fill the cache and return an empty array of new streams on the first run
 		if ( get( this, "_first" ) ) {
@@ -337,29 +344,26 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	stripDisabledChannels( streams ) {
-		var all = get( this, "settings.notify_all" );
+		let all = get( this, "settings.notify_all" );
 
-		return Promise.all( streams.map(function( stream ) {
-			var name = get( stream, "channel.id" );
+		let promiseStreamSettings = streams.map( stream => {
+			let name = get( stream, "channel.id" );
 			return this.loadChannelSettings( name )
-				.then(function( settings ) {
-					return { stream, settings };
-				});
-		}, this ) )
-			.then(function( streams ) {
-				return streams
-					.filter(function( data ) {
-						var enabled = get( data.settings, "notify_enabled" );
-						return all === true
-							// include all, exclude disabled
-							? enabled !== false
-							// exclude all, include enabled
-							: enabled === true;
-					})
-					.map(function( data ) {
-						return data.stream;
-					});
-			});
+				.then( settings => ({ stream, settings }) );
+		});
+
+		return Promise.all( promiseStreamSettings )
+			.then( streams => streams
+				.filter( data => {
+					let enabled = get( data.settings, "notify_enabled" );
+					return all === true
+						// include all, exclude disabled
+						? enabled !== false
+						// exclude all, include enabled
+						: enabled === true;
+				})
+				.map( obj => obj.stream )
+			);
 	},
 
 	prepareNotifications( streams ) {
@@ -373,18 +377,16 @@ export default Service.extend( ChannelSettingsMixin, {
 		} else {
 			// download all channel icons first and save them into a local temp dir...
 			return mkdirp( cacheTmpDir )
-				.then(function( iconTempDir ) {
-					return Promise.all( streams.map(function( stream ) {
+				.then( iconTempDir =>
+					Promise.all( streams.map( stream => {
 						let logo = get( stream, "channel.logo" );
 
 						return download( logo, iconTempDir )
-							.then(function( file ) {
-								// the channel logo is now the local file
-								set( stream, "logo", file );
-								return stream;
-							});
-					}) );
-				})
+							// set the local channel logo on the stream record
+							.then( file => set( stream, "logo", file ) )
+							.then( () => stream );
+					}) )
+				)
 				.then( streams => streams.forEach(
 					stream => this.showNotificationSingle( stream )
 				) );
@@ -395,7 +397,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * Show multiple streams as one notification
 	 * @param {TwitchStream[]} streams
 	 */
-	showNotificationGroup: function( streams ) {
+	showNotificationGroup( streams ) {
 		let settings = get( this, "settings.notify_click_group" );
 
 		this.showNotification({
@@ -414,7 +416,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * Show a notification for each stream
 	 * @param {TwitchStream} stream
 	 */
-	showNotificationSingle: function( stream ) {
+	showNotificationSingle( stream ) {
 		let settings = get( this, "settings.notify_click" );
 
 		this.showNotification({
