@@ -51,6 +51,7 @@ const reShebang   = /^#!(.+)\s*$/;
 const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 const reUnable    = /^error: Unable to open URL: /;
 const reNoStreams = /^error: No streams found on this URL: /;
+const reHosting   = /^hosting was disabled by command line option$/;
 const reNoPlayer  = /^error: Failed to start player: /;
 const reNoPlayer2 = /^error: The default player \(.+\) does not seem to be installed\./;
 const reWarnInsec = /InsecurePlatformWarning: A true SSLContext object is not available\./;
@@ -90,7 +91,7 @@ Warning.prototype = assign( new Error(), { name: "Warning" } );
 function parseError( data ) {
 	if ( reUnable.test( data ) ) {
 		return new UnableToOpenError();
-	} else if ( reNoStreams.test( data ) ) {
+	} else if ( reNoStreams.test( data ) || reHosting.exec( data ) ) {
 		return new NoStreamsFoundError();
 	} else if ( reNoPlayer.test( data ) || reNoPlayer2.test( data ) ) {
 		return new NoPlayerError();
