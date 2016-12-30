@@ -47,7 +47,7 @@ const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 const modelName = "stream";
 
 const reVersion   = /^(streamlink|livestreamer)(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(?:$|\s.*)/i;
-const reShebang   = /^#!(.+)\s*$/;
+const reShebang   = /^#!(['"]?)(.+)\1\s*$/;
 const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 const reUnable    = /^error: Unable to open URL: /;
 const reNoStreams = /^error: No streams found on this URL: /;
@@ -402,7 +402,7 @@ export default Service.extend( ChannelSettingsMixin, {
 				if ( index === 0 ) {
 					let match = reShebang.exec( line );
 					if ( match ) {
-						return resolve( match[ 1 ] );
+						return resolve( match[ 2 ] );
 					}
 				}
 				reject();
