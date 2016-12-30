@@ -5,7 +5,10 @@ import {
 	stat,
 	isExecutable
 } from "utils/node/fs/stat";
-import PATH from "path";
+import { join } from "path";
+
+
+const { isArray } = Array;
 
 
 /**
@@ -20,9 +23,10 @@ import PATH from "path";
  * @param {(String|String[]|PlatformList)} exec
  * @param {(String|String[]|PlatformList)?} fallback
  * @param {Function?} check
+ * @param {Boolean?} fallbackOnly
  * @returns {Promise}
  */
-function whichFallback( exec, fallback, check ) {
+function whichFallback( exec, fallback, check, fallbackOnly ) {
 	// executable parameter is required
 	if ( !exec ) {
 		return Promise.reject( new Error( "Missing executable name" ) );
@@ -32,7 +36,7 @@ function whichFallback( exec, fallback, check ) {
 	}
 
 	// always use a list of names
-	if ( !( exec instanceof Array ) ) {
+	if ( !isArray( exec ) ) {
 		exec = [ exec ];
 	}
 
@@ -41,14 +45,15 @@ function whichFallback( exec, fallback, check ) {
 		check = isExecutable;
 	}
 
+	let promise = fallbackOnly
+		// ignore $PATH
+		? Promise.reject()
+		// get the first executable found in one of the directories registered in $PATH
+		: exec.reduce(function( chain, name ) {
+			return chain.catch( () => which( name, check ) );
+		}, Promise.reject() );
 
-	// check all executables first
-	return exec.reduce(function( chain, name ) {
-		return chain.catch(function() {
-			// first valid file resolves the promise chain
-			return which( name, check );
-		});
-	}, Promise.reject() )
+	return promise
 		.catch(function() {
 			// no fallbacks defined
 			if ( !fallback ) {
@@ -59,7 +64,7 @@ function whichFallback( exec, fallback, check ) {
 			}
 
 			// always use a list of fallbacks
-			if ( !( fallback instanceof Array ) ) {
+			if ( !isArray( fallback ) ) {
 				fallback = [ fallback ];
 			}
 
@@ -67,12 +72,12 @@ function whichFallback( exec, fallback, check ) {
 			return fallback.reduce(function( chain, path ) {
 				return chain.catch(function() {
 					// resolve env vars in fallback path definition
-					var resolvedPath = resolvePath( path );
+					let resolvedPath = resolvePath( path );
 					// check each executable in each fallback path
 					return exec.reduce(function( chain, name ) {
 						return chain.catch(function() {
 							// append filename to path
-							var filePath = PATH.join( resolvedPath, name );
+							let filePath = join( resolvedPath, name );
 							return stat( filePath, check );
 						});
 					}, chain );

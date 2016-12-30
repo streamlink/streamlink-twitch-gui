@@ -361,33 +361,28 @@ export default Service.extend( ChannelSettingsMixin, {
 						throw new NotFoundError( "Could not find Python script." );
 					});
 			})
-			// try to get the pythonscript's shebang and prepend its dirname to the fallback list
-			.then( pythonscript => {
-				// don't parse shebang if a custom python exec has been set
-				if ( !isPython || customExec ) {
-					return pythonscript;
-				}
-
-				return this.parsePythonscriptShebang( pythonscript )
-					.then( dir => {
-						if ( pythonFallback[ platformName ].indexOf( dir ) === -1 ) {
-							pythonFallback[ platformName ].unshift( dir );
-						}
-						return pythonscript;
-					});
-			})
 			// try to find the executable
 			.then( pythonscript => {
-				return whichFallback(
-					exec,
-					pythonFallback
-				)
-					.then( exec => ({ exec, pythonscript }) )
-					// not found
-					.catch( () => {
-						let str = isPython ? "Python " : "";
-						throw new NotFoundError( `Could not find ${str}executable.` );
-					});
+				// look in $PATH first, then use a list of known default paths
+				const findExecutable = () =>
+					whichFallback( exec, pythonFallback )
+						.catch( () => {
+							let str = isPython ? "Python " : "";
+							throw new NotFoundError( `Could not find ${str}executable.` );
+						});
+
+				let promise = !isPython || customExec
+					// don't parse shebang if a custom python exec has been set
+					? findExecutable()
+					// get the pythonscript's shebang and look for the executable in its dirname
+					// don't use the shebang directly, as Windows uses a different python executable
+					: this.parsePythonscriptShebang( pythonscript )
+						.then( dir => whichFallback( exec, dir, null, true ) )
+						// fall back to the default behavior
+						.catch( () => findExecutable() );
+
+				return promise
+					.then( exec => ({ exec, pythonscript }) );
 			})
 			.then( execObj => this.validate( record, execObj ) );
 	},
