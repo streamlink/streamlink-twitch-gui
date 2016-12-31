@@ -82,7 +82,6 @@ Section
 	DetailPrint '${KillCmd}'
 	nsExec::Exec /TIMEOUT=3000 '${KillCmd}'
 
-	RMDir /r $INSTDIR
 	SetOutPath $INSTDIR
 	File /r "<%= dirinput %>\*"
 
@@ -109,8 +108,16 @@ Section "Uninstall"
 	DetailPrint '${KillCmd}'
 	nsExec::Exec /TIMEOUT=3000 '${KillCmd}'
 
-	RMDir /r $INSTDIR
-	delete "$DESKTOP\${DisplayName}.lnk"
+	# Gracefully remove all files and directories
+	<% JSON.parse( files ).files.forEach(function( file ) { %>Delete "$INSTDIR\<%= file %>"
+	<% }) %>
+	<% JSON.parse( files ).directories.forEach(function( dir ) { %>RMDir "$INSTDIR\<%= dir %>"
+	<% }) %>
+	Delete "$INSTDIR\${UninstallerFile}"
+	RMDir "$INSTDIR"
+
+	Delete "$DESKTOP\${DisplayName}.lnk"
+
 	DeleteRegKey HKLM "${RegKeyInstall}"
 	DeleteRegKey HKLM "${RegKeyUninstall}"
 SectionEnd
