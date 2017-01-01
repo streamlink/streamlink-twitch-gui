@@ -26,62 +26,62 @@ function getInstallerFiles( config ) {
 
 
 module.exports = {
-	"releases": {
-		"options": {
-			"data": {
-				"display_name": "<%= main['display-name'] %>",
-				"version": "<%= package.version %>",
-				"homepage": "<%= package.homepage %>",
-				"changelog": "<%= releases.changelog %>",
-				"donation": JSON.parse( process.env.RELEASES_DONATION || "[]" ) || []
+	releases: {
+		options: {
+			data: {
+				display_name: "<%= main['display-name'] %>",
+				version: "<%= package.version %>",
+				homepage: "<%= package.homepage %>",
+				changelog: "<%= releases.changelog %>",
+				donation: JSON.parse( process.env.RELEASES_DONATION || "[]" ) || []
 			}
 		},
-		"files": {
+		files: {
 			"<%= dir.travis %>/data/releases.md": "<%= dir.travis %>/templates/releases.md"
 		}
 	},
 
-	"win32installer": {
-		"options": {
-			"data": {
-				"dirroot"    : "<%= dir.root %>",
-				"dirinput"   : "<%= dir.releases %>/<%= package.name %>/win32",
-				"files"      : "<%= grunt.config( 'template.win32installer.getFiles' )( grunt ) %>",
-				"diroutput"  : "<%= dir.dist %>",
-				"filename"   : "<%= package.name %>-v<%= package.version %>-win32-installer.exe",
-				"name"       : "<%= package.name %>",
-				"displayname": "<%= main['display-name'] %>",
-				"version"    : "<%= package.version %>",
-				"author"     : "<%= package.author %>",
-				"homepage"   : "<%= package.homepage %>",
-				"arch"       : "win32"
+	win32installer: {
+		options: {
+			data: {
+				dirroot    : "<%= dir.root %>",
+				dirinput   : "<%= dir.releases %>/<%= package.name %>/win32",
+				files      : "<%= grunt.config( 'template.win32installer.getFiles' )( grunt ) %>",
+				diroutput  : "<%= dir.dist %>",
+				filename   : "<%= package.name %>-v<%= package.version %>-win32-installer.exe",
+				name       : "<%= package.name %>",
+				displayname: "<%= main['display-name'] %>",
+				version    : "<%= package.version %>",
+				author     : "<%= package.author %>",
+				homepage   : "<%= package.homepage %>",
+				arch       : "win32"
 			}
 		},
-		"getFiles": getInstallerFiles( "win32installer" ),
-		"files": {
+		getFiles: getInstallerFiles( "win32installer" ),
+		files: {
 			"<%= dir.tmp_installer %>/win32installer/installer.nsi":
 				"<%= dir.resources %>/installer/installer.nsi"
 		}
 	},
 
-	"win64installer": {
-		"options": {
-			"data": {
-				"dirroot"    : "<%= dir.root %>",
-				"dirinput"   : "<%= dir.releases %>/<%= package.name %>/win64",
-				"files"      : "<%= grunt.config( 'template.win64installer.getFiles' )( grunt ) %>",
-				"diroutput"  : "<%= dir.dist %>",
-				"filename"   : "<%= package.name %>-v<%= package.version %>-win64-installer.exe",
-				"name"       : "<%= package.name %>",
-				"displayname": "<%= main['display-name'] %>",
-				"version"    : "<%= package.version %>",
-				"author"     : "<%= package.author %>",
-				"homepage"   : "<%= package.homepage %>",
-				"arch"       : "win64"
+	win64installer: {
+		options: {
+			data: {
+				dirroot    : "<%= dir.root %>",
+				dirinput   : "<%= dir.releases %>/<%= package.name %>/win64",
+				files      : "<%= grunt.config( 'template.win64installer.getFiles' )( grunt ) %>",
+				diroutput  : "<%= dir.dist %>",
+				filename   : "<%= package.name %>-v<%= package.version %>-win64-installer.exe",
+				name       : "<%= package.name %>",
+				displayname: "<%= main['display-name'] %>",
+				version    : "<%= package.version %>",
+				author     : "<%= package.author %>",
+				homepage   : "<%= package.homepage %>",
+				arch       : "win64"
 			}
 		},
-		"getFiles": getInstallerFiles( "win64installer" ),
-		"files": {
+		getFiles: getInstallerFiles( "win64installer" ),
+		files: {
 			"<%= dir.tmp_installer %>/win64installer/installer.nsi":
 				"<%= dir.resources %>/installer/installer.nsi"
 		}
