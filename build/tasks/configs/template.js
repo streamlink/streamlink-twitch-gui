@@ -59,8 +59,8 @@ module.exports = {
 		},
 		"getFiles": getInstallerFiles( "win32installer" ),
 		"files": {
-			"<%= dir.package %>/win32installer/installer.nsi":
-				"<%= dir.resources %>/package/wininstaller/installer.nsi.tpl"
+			"<%= dir.tmp_installer %>/win32installer/installer.nsi":
+				"<%= dir.resources %>/installer/installer.nsi"
 		}
 	},
 
@@ -82,8 +82,8 @@ module.exports = {
 		},
 		"getFiles": getInstallerFiles( "win64installer" ),
 		"files": {
-			"<%= dir.package %>/win64installer/installer.nsi":
-				"<%= dir.resources %>/package/wininstaller/installer.nsi.tpl"
+			"<%= dir.tmp_installer %>/win64installer/installer.nsi":
+				"<%= dir.resources %>/installer/installer.nsi"
 		}
 	}
 };

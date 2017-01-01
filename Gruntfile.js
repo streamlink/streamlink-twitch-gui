@@ -17,13 +17,13 @@ module.exports = function( grunt ) {
 			dir: {
 				root: r( "." ),
 				cache: r( "build", "cache" ),
-				package: r( "build", "package" ),
 				releases: r( "build", "releases" ),
 				resources: r( "build", "resources" ),
 				tmp: r( "build", "tmp" ),
 				tmp_dev: r( "build", "tmp", "dev" ),
 				tmp_prod: r( "build", "tmp", "prod" ),
 				tmp_test: r( "build", "tmp", "test" ),
+				tmp_installer: r( "build", "tmp", "installer" ),
 				travis: r( "build", "travis" ),
 				dist: r( "dist" )
 			}

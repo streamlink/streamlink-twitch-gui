@@ -30,7 +30,7 @@ module.exports = {
 	win32installer: {
 		platform: "win32",
 		tasks: [
-			"clean:package_win32installer",
+			"clean:win32installer",
 			"template:win32installer",
 			"shell:win32installer"
 		],
@@ -40,7 +40,7 @@ module.exports = {
 	win64installer: {
 		platform: "win64",
 		tasks: [
-			"clean:package_win64installer",
+			"clean:win64installer",
 			"template:win64installer",
 			"shell:win64installer"
 		],

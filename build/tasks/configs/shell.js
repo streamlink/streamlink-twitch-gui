@@ -10,10 +10,16 @@ module.exports = {
 	},
 
 	win32installer: {
-		command: "makensis -v3 <%= dir.package %>/win32installer/installer.nsi"
+		command: [
+			"mkdir -p \"<%= dir.tmp_installer %>\"",
+			"makensis -v3 \"<%= dir.tmp_installer %>/win32installer/installer.nsi\""
+		].join( " && " )
 	},
 
 	win64installer: {
-		command: "makensis -v3 <%= dir.package %>/win64installer/installer.nsi"
+		command: [
+			"mkdir -p \"<%= dir.tmp_installer %>\"",
+			"makensis -v3 \"<%= dir.tmp_installer %>/win64installer/installer.nsi\""
+		].join( " && " )
 	}
 };

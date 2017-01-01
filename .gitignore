@@ -21,7 +21,6 @@ nbproject
 # builds
 /build/cache/
 /build/releases/
-/build/package/
 /build/tmp/
 /build/travis/data/
 /dist/
