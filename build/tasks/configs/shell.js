@@ -9,13 +9,6 @@ module.exports = {
 		command: "chmod -R g=u,o=u,g-w,o-w <%= dir.releases %>/<%= package.name %>/linux64"
 	},
 
-	chocolatey: {
-		command: [
-			"cd <%= dir.package %>/chocolatey",
-			"choco pack -y"
-		].join( " && " )
-	},
-
 	win32installer: {
 		command: "makensis -v3 <%= dir.package %>/win32installer/installer.nsi"
 	},

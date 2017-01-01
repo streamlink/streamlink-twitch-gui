@@ -26,29 +26,6 @@ function getInstallerFiles( config ) {
 
 
 module.exports = {
-	"chocolatey" : {
-		"options" : {
-			"data" : {
-				"author": "<%= package.author %>",
-				"changelog": "<%= package.changelogEscaped %>",
-				"checksum": "<%= package.checksums.win32.hash %>",
-				"checksum64": "<%= package.checksums.win64.hash %>",
-				"homepage": "<%= package.homepage %>",
-				"id": "<%= package.name %>",
-				"title": "<%= main['display-name'] %>",
-				"version": "<%= package.version %>"
-			}
-		},
-		"files": {
-			"<%= dir.package %>/chocolatey/streamlink-twitch-gui.nuspec":
-				"<%= dir.resources %>/package/chocolatey/streamlink-twitch-gui.nuspec.tpl",
-			"<%= dir.package %>/chocolatey/tools/chocolateyinstall.ps1":
-				"<%= dir.resources %>/package/chocolatey/tools/chocolateyinstall.ps1.tpl",
-			"<%= dir.package %>/chocolatey/tools/chocolateyuninstall.ps1":
-				"<%= dir.resources %>/package/chocolatey/tools/chocolateyuninstall.ps1.tpl"
-		}
-	},
-
 	"releases": {
 		"options": {
 			"data": {
