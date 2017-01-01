@@ -142,9 +142,10 @@ export default Service.extend( ChannelSettingsMixin, {
 	cache: {},
 	setupCache( execObj ) {
 		this.clearCache();
-		Object.keys( execObj ).forEach( key =>
-			this.cache[ key ] = new CacheItem( execObj[ key ], () => this.clearCache() )
-		);
+		Object.keys( execObj ).forEach( key => {
+			if ( !execObj[ key ] ) { return; }
+			this.cache[ key ] = new CacheItem( execObj[ key ], () => this.clearCache() );
+		});
 	},
 	clearCache() {
 		Object.keys( this.cache ).forEach( key =>
