@@ -465,7 +465,7 @@ export default Service.extend( ChannelSettingsMixin, {
 				let match = reVersion.exec( line );
 				if ( match ) {
 					let [ , name, version ] = match;
-					name.toLowerCase();
+					name = name.toLowerCase();
 					resolve({ name, version });
 				} else {
 					reject( new Error( "Invalid version check output" ) );
