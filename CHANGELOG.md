@@ -1,6 +1,21 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Implemented Streamlink/Livestreamer validation cache.
+- Changed the resolving/validation logic of Streamlink.  
+  The correct python executable should now be used on all systems.
+- Set the required min. version of Streamlink to `0.2.0`. #256 #362
+- Fixed subscriptions menu. #377
+- Fixed Streamlink version check regex. #371
+- Fixed a critical bug in the Windows (un)installers.  
+  The old installers have been removed from the previous releases.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.0.1...master)
+
+
 ## [v1.0.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.0.1) (2016-12-14)
 
 - Fixed file permissions on MacOS and Linux. #210 #349
