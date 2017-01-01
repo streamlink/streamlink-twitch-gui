@@ -249,6 +249,6 @@ export default Service.extend({
 		let exec   = params.shift();
 
 		return whichFallback( exec )
-			.then( () => launch( exec, params ) );
+			.then( exec => launch( exec, params ) );
 	}
 });
