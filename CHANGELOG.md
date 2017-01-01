@@ -1,6 +1,14 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Fixed Livestreamer standalone validation. #386
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.1.0...master)
+
+
 ## [v1.1.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.1.0) (2017-01-01)
 
 - Set the required min. version of Streamlink to `0.2.0`. #256 #362  
