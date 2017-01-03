@@ -1,9 +1,9 @@
 import denodify from "utils/node/denodify";
 import { isWin } from "utils/node/platform";
-import FS from "fs";
+import { stat as fsStat } from "fs";
 
 
-const fsStat = denodify( FS.stat );
+const fsStatDenodified = denodify( fsStat );
 
 
 /**
@@ -14,7 +14,7 @@ const fsStat = denodify( FS.stat );
  * @returns {Promise<(String|fs.Stats)>}
  */
 export function stat( path, callback, returnStats ) {
-	var promise = fsStat( path );
+	let promise = fsStatDenodified( path );
 
 	if ( callback instanceof Function ) {
 		return promise.then(function( stats ) {

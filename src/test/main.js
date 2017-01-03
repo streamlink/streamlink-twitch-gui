@@ -23,7 +23,8 @@ require([
 	"tests/InfiniteScrollComponent",
 	"tests/InputBtnComponent",
 	"tests/NumberFieldComponent",
-	"tests/getStreamFromUrl"
+	"tests/getStreamFromUrl",
+	"tests/utils/node/fs/stat"
 ], function() {
 	if ( global._noQUnitBridge ) { return; }
 	if ( global._setupQUnitBridge ) {

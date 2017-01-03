@@ -17,6 +17,7 @@ var j = PATH.join;
 var pRoot = r( ".", "src" );
 var pApp = r( pRoot, "app" );
 var pTest = r( pRoot, "test" );
+var pTestFixtures = r( pTest, "fixtures" );
 var pStyles = r( pRoot, "styles" );
 var pImages = r( pRoot, "img" );
 var pTemplates = r( pRoot, "templates" );
@@ -373,6 +374,10 @@ module.exports = {
 				inject: "body",
 				hash: false,
 				template: r( pTest, "index.html" )
+			}),
+
+			new webpack.DefinePlugin({
+				PATHFIXTURES: JSON.stringify( pTestFixtures )
 			})
 		]
 	},
@@ -409,6 +414,10 @@ module.exports = {
 				inject: "body",
 				hash: false,
 				template: r( pTest, "index.html" )
+			}),
+
+			new webpack.DefinePlugin({
+				PATHFIXTURES: JSON.stringify( pTestFixtures )
 			}),
 
 			new NwjsPlugin({
