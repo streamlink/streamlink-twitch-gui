@@ -24,6 +24,7 @@ require([
 	"tests/InputBtnComponent",
 	"tests/NumberFieldComponent",
 	"tests/getStreamFromUrl",
+	"tests/utils/node/resolvePath",
 	"tests/utils/node/fs/stat",
 	"tests/utils/node/fs/which"
 ], function() {

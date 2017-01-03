@@ -1,8 +1,7 @@
 import { isWin } from "utils/node/platform";
-import PATH from "path";
+import { resolve } from "path";
 
 
-const slice = [].slice;
 const reVarWindows = /%([^%]+)%/g;
 const reVarUnix    = /\$([A-Z_]+)/g;
 
@@ -13,12 +12,12 @@ function fnVarReplace( _, v ) {
 
 function resolvePathFactory( pattern ) {
 	return function resolvePath() {
-		let args = slice.call( arguments );
+		let args = [ ...arguments ];
 		if ( args[ 0 ] ) {
 			args[ 0 ] = args[ 0 ].replace( pattern, fnVarReplace );
 		}
 
-		return PATH.resolve.apply( null, args );
+		return resolve( ...args );
 	};
 }
 
