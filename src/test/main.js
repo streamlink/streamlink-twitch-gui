@@ -24,7 +24,8 @@ require([
 	"tests/InputBtnComponent",
 	"tests/NumberFieldComponent",
 	"tests/getStreamFromUrl",
-	"tests/utils/node/fs/stat"
+	"tests/utils/node/fs/stat",
+	"tests/utils/node/fs/which"
 ], function() {
 	if ( global._noQUnitBridge ) { return; }
 	if ( global._setupQUnitBridge ) {

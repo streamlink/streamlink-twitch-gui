@@ -1,11 +1,9 @@
 import { stat } from "utils/node/fs/stat";
+import { paths } from "utils/node/env-path";
 import {
-	delimiter,
-	sep
+	sep,
+	join
 } from "path";
-
-
-const paths = ( process.env.PATH || process.env.path || "." ).split( delimiter );
 
 
 /**
@@ -23,10 +21,8 @@ function which( file, callback ) {
 	} else {
 		// Start with a rejected promise and build a promise chain with catches.
 		// The first resolving file check will jump to the end of the chain.
-		return paths.reduce(function( chain, path ) {
-			return chain.catch(function() {
-				return stat( `${path}${sep}${file}`, callback );
-			});
+		return paths.reduce( ( chain, path ) => {
+			return chain.catch( () => stat( join( path, file ), callback ) );
 		}, Promise.reject() );
 	}
 }
