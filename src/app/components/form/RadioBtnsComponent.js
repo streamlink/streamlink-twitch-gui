@@ -29,14 +29,14 @@ export default Component.extend({
 	selection: null,
 
 	_updateItems() {
-		var value   = get( this, "value" );
-		var itemKey = get( this, "optionValuePath" );
-		var content = get( this, "content" ) || [];
-		var found   = false;
+		const value   = get( this, "value" );
+		const itemKey = get( this, "optionValuePath" );
+		const content = get( this, "content" ) || [];
+		let found   = false;
 
 		content.forEach(function( item ) {
-			var itemValue = get( item, itemKey );
-			var checked = value === itemValue;
+			const itemValue = get( item, itemKey );
+			const checked = value === itemValue;
 
 			// only check the first item
 			set( item, "checked", checked && !found );
