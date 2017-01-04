@@ -40,7 +40,7 @@ const { compile } = HTMLBars;
 let owner, component;
 
 
-module( "Ember helpers", {
+module( "helpers/helpers", {
 	beforeEach() {
 		owner = buildOwner();
 	},

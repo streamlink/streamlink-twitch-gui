@@ -13,11 +13,6 @@ config.autostart = false;
 
 // load tests and then start
 require([
-	"tests/helpers",
-	"tests/ContentListComponent",
-	"tests/InfiniteScrollComponent",
-	"tests/InputBtnComponent",
-	"tests/NumberFieldComponent",
 	"tests/utils/getStreamFromUrl",
 	"tests/utils/linkparser",
 	"tests/utils/semver",
@@ -29,7 +24,12 @@ require([
 	"tests/utils/node/resolvePath",
 	"tests/utils/node/fs/stat",
 	"tests/utils/node/fs/which",
-	"tests/utils/node/fs/whichFallback"
+	"tests/utils/node/fs/whichFallback",
+	"tests/helpers/helpers",
+	"tests/components/ContentListComponent",
+	"tests/components/InfiniteScrollComponent",
+	"tests/components/InputBtnComponent",
+	"tests/components/NumberFieldComponent"
 ], function() {
 	if ( global._noQUnitBridge ) { return; }
 	if ( global._setupQUnitBridge ) {

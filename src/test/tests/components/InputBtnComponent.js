@@ -29,7 +29,7 @@ const { compile } = HTMLBars;
 let eventDispatcher, owner, context;
 
 
-module( "InputBtnComponent", {
+module( "components/form/InputBtnComponent", {
 	beforeEach() {
 		eventDispatcher = EventDispatcher.create();
 		eventDispatcher.setup( {}, fixtureElement );
@@ -41,6 +41,7 @@ module( "InputBtnComponent", {
 	},
 
 	afterEach() {
+		//noinspection JSUnusedAssignment
 		runDestroy( context );
 		runDestroy( eventDispatcher );
 		runDestroy( owner );
@@ -157,7 +158,7 @@ test( "CheckBoxComponent - without block", function( assert ) {
 
 test( "RadioBtnsComponent - without block", function( assert ) {
 
-	var content = [
+	const content = [
 		{
 			value: 1,
 			label: "foo",
@@ -404,7 +405,7 @@ test( "RadioBtnsComponent - without block", function( assert ) {
 
 test( "RadioBtnsComponent - with block", function( assert ) {
 
-	var content = [
+	const content = [
 		{
 			value: 1,
 			label: "foo"

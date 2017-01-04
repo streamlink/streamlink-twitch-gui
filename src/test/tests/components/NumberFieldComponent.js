@@ -22,7 +22,7 @@ import NumberFieldComponent from "components/form/NumberFieldComponent";
 let eventDispatcher, owner, context;
 
 
-module( "NumberFieldComponent", {
+module( "components/form/NumberFieldComponent", {
 	beforeEach() {
 		eventDispatcher = EventDispatcher.create();
 		eventDispatcher.setup( {}, fixtureElement );
@@ -32,6 +32,7 @@ module( "NumberFieldComponent", {
 	},
 
 	afterEach() {
+		//noinspection JSUnusedAssignment
 		runDestroy( context );
 		runDestroy( eventDispatcher );
 		runDestroy( owner );

@@ -25,7 +25,7 @@ const { compile } = HTMLBars;
 let owner, component;
 
 
-module( "ContentListComponent", {
+module( "components/list/ContentListComponent", {
 	beforeEach() {
 		owner = buildOwner();
 		owner.register( "component:content-list", ContentListComponent );
@@ -35,6 +35,7 @@ module( "ContentListComponent", {
 	},
 
 	afterEach() {
+		//noinspection JSUnusedAssignment
 		runDestroy( component );
 		runDestroy( owner );
 		owner = component = null;
@@ -44,8 +45,8 @@ module( "ContentListComponent", {
 
 test( "Empty content", function( assert ) {
 
-	var content = [];
-	var layout = compile(
+	const content = [];
+	const layout = compile(
 		"{{#content-list content=content as |i|}}{{i}}{{else}}empty{{/content-list}}"
 	);
 	component = Component.extend({ content, layout }).create();
@@ -62,8 +63,8 @@ test( "Empty content", function( assert ) {
 
 test( "New items", function( assert ) {
 
-	var content = [ 1, 2 ];
-	var layout = compile(
+	const content = [ 1, 2 ];
+	const layout = compile(
 		"{{#content-list content=content as |i n|}}{{n}}{{/content-list}}"
 	);
 	component = Component.extend({ content, layout }).create();
@@ -80,8 +81,8 @@ test( "New items", function( assert ) {
 
 test( "Duplicates", function( assert ) {
 
-	var content = [ 1, 2 ];
-	var layout = compile(
+	const content = [ 1, 2 ];
+	const layout = compile(
 		"{{#content-list content=content as |i n d|}}{{d}}{{/content-list}}"
 	);
 	component = Component.extend({ content, layout }).create();
@@ -98,9 +99,9 @@ test( "Duplicates", function( assert ) {
 
 test( "Simple nested duplicates", function( assert ) {
 
-	var done = assert.async();
-	var content = [ { foo: 1 }, { foo: 2 } ];
-	var layout = compile(
+	const done = assert.async();
+	const content = [ { foo: 1 }, { foo: 2 } ];
+	const layout = compile(
 		"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
 	);
 	component = Component.extend({ content, layout }).create();
@@ -124,13 +125,13 @@ test( "Simple nested duplicates", function( assert ) {
 
 test( "Deferred nested duplicates", function( assert ) {
 
-	var done = assert.async();
-	var a = RSVP.defer();
-	var b = RSVP.defer();
+	const done = assert.async();
+	const a = RSVP.defer();
+	const b = RSVP.defer();
 
 	a.resolve( 1 );
-	var content = [ { foo: a.promise } ];
-	var layout = compile(
+	const content = [ { foo: a.promise } ];
+	const layout = compile(
 		"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
 	);
 	component = Component.extend({ content, layout }).create();

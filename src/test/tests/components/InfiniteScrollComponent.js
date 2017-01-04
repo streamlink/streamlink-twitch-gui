@@ -28,7 +28,7 @@ const { compile } = HTMLBars;
 let eventDispatcher, owner, context;
 
 
-module( "InfiniteScrollComponent", {
+module( "components/list/InfiniteScrollComponent", {
 	beforeEach() {
 		eventDispatcher = EventDispatcher.create();
 		eventDispatcher.setup( {}, fixtureElement );
@@ -39,6 +39,7 @@ module( "InfiniteScrollComponent", {
 	},
 
 	afterEach() {
+		//noinspection JSUnusedAssignment
 		runDestroy( context );
 		runDestroy( eventDispatcher );
 		runDestroy( owner );
@@ -97,6 +98,7 @@ test( "Buttons states", function( assert ) {
 
 test( "Clicks", function( assert ) {
 
+	//noinspection JSUnusedAssignment
 	let callbackValue = null;
 	context = Component.extend({
 		layout: compile([
@@ -120,14 +122,14 @@ test( "Clicks", function( assert ) {
 	runAppend( context );
 
 	getElem( context, "button" ).click();
-	assert.equal( callbackValue, true, "Triggers action when clicking in non-loading state" );
+	assert.strictEqual( callbackValue, true, "Triggers action when clicking while not loading" );
 	callbackValue = null;
 
 	run( context, "setProperties", {
 		isFetching: true
 	});
 	getElem( context, "button" ).click();
-	assert.equal( callbackValue, null, "Doesn't trigger action when clicking in loading state" );
+	assert.strictEqual( callbackValue, null, "Doesn't trigger action when clicking while loading" );
 
 });
 
@@ -147,7 +149,7 @@ test( "Non-default parent element", function( assert ) {
 
 	runAppend( context, $scrollChild[0] );
 
-	assert.equal(
+	assert.strictEqual(
 		get( context, "$parent" )[0],
 		$scrollParent[0],
 		"Finds the correct parent element with a scroll bar"
@@ -197,11 +199,11 @@ test( "Event listeners", function( assert ) {
 	runDestroy( context );
 
 	assert.throws(
-		checkListener.bind( null, $main[0], "scroll" ),
+		() => checkListener( $main[0], "scroll" ),
 		"Parent element's scroll listener has been removed"
 	);
 	assert.throws(
-		checkListener.bind( null, window, "resize" ),
+		() => checkListener( window, "resize" ),
 		"Window element's resize listener has been removed"
 	);
 
@@ -222,6 +224,7 @@ test( "Scroll listener", function( assert ) {
 	let $scrollChild = $( "<div>" ).css({
 		height: elemHeight
 	}).appendTo( $scrollParent[0] );
+	//noinspection JSUnusedAssignment
 	let callbackValue = null;
 
 	context = InfiniteScrollComponent.create({
@@ -239,11 +242,11 @@ test( "Scroll listener", function( assert ) {
 
 	$scrollParent[0].scrollTop = scrollTop;
 	$scrollParent.scroll();
-	assert.equal( callbackValue, null, "Doesn't trigger action if below scroll threshold" );
+	assert.strictEqual( callbackValue, null, "Doesn't trigger action if below scroll threshold" );
 
 	$scrollParent[0].scrollTop = scrollTop + 1;
 	$scrollParent.scroll();
-	assert.equal( callbackValue, false, "Triggers action if above scroll threshold" );
+	assert.strictEqual( callbackValue, false, "Triggers action if above scroll threshold" );
 
 	// clean up manually
 	runDestroy( context );
@@ -256,6 +259,7 @@ test( "Scroll listener", function( assert ) {
 test( "Call listener on content reduction", function( assert ) {
 
 	let content = new EmberNativeArray([ 1, 2, 3 ]);
+	//noinspection JSUnusedAssignment
 	let called = false;
 
 	context = InfiniteScrollComponent.create({
@@ -268,11 +272,11 @@ test( "Call listener on content reduction", function( assert ) {
 
 	runAppend( context );
 
-	assert.equal( called, false, "Don't initially trigger the event listener" );
+	assert.strictEqual( called, false, "Don't initially trigger the event listener" );
 
 	run(function() {
 		content.removeAt( 0 );
 	});
-	assert.equal( called, true, "Trigger the event listener after elements have been removed" );
+	assert.strictEqual( called, true, "Trigger the listener after elements have been removed" );
 
 });
