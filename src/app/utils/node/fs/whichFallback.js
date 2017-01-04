@@ -49,12 +49,12 @@ function whichFallback( exec, fallback, check, fallbackOnly ) {
 		// ignore $PATH
 		? Promise.reject()
 		// get the first executable found in one of the directories registered in $PATH
-		: exec.reduce(function( chain, name ) {
+		: exec.reduce( ( chain, name ) => {
 			return chain.catch( () => which( name, check ) );
 		}, Promise.reject() );
 
 	return promise
-		.catch(function() {
+		.catch( () => {
 			// no fallbacks defined
 			if ( !fallback ) {
 				return Promise.reject( new Error( "Executables were not found" ) );
@@ -69,19 +69,14 @@ function whichFallback( exec, fallback, check, fallbackOnly ) {
 			}
 
 			// check all fallback paths now
-			return fallback.reduce(function( chain, path ) {
-				return chain.catch(function() {
-					// resolve env vars in fallback path definition
-					let resolvedPath = resolvePath( path );
-					// check each executable in each fallback path
-					return exec.reduce(function( chain, name ) {
-						return chain.catch(function() {
-							// append filename to path
-							let filePath = join( resolvedPath, name );
-							return stat( filePath, check );
-						});
-					}, chain );
-				});
+			return fallback.reduce( ( chain, path ) => {
+				// resolve env vars in fallback path definition
+				let resolvedPath = resolvePath( path );
+				// check each executable in each fallback path
+				return chain.catch( () => exec.reduce( ( chain, name ) => {
+					// append filename to path
+					return chain.catch( () => stat( join( resolvedPath, name ), check ) );
+				}, chain ) );
 			}, Promise.reject() );
 		});
 }

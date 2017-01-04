@@ -26,7 +26,8 @@ require([
 	"tests/getStreamFromUrl",
 	"tests/utils/node/resolvePath",
 	"tests/utils/node/fs/stat",
-	"tests/utils/node/fs/which"
+	"tests/utils/node/fs/which",
+	"tests/utils/node/fs/whichFallback"
 ], function() {
 	if ( global._noQUnitBridge ) { return; }
 	if ( global._setupQUnitBridge ) {
