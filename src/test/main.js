@@ -13,16 +13,16 @@ config.autostart = false;
 
 // load tests and then start
 require([
-	"tests/semver",
-	"tests/linkparser",
 	"tests/helpers",
-	"tests/ObjectBuffer",
-	"tests/StreamOutputBuffer",
 	"tests/ContentListComponent",
 	"tests/InfiniteScrollComponent",
 	"tests/InputBtnComponent",
 	"tests/NumberFieldComponent",
-	"tests/getStreamFromUrl",
+	"tests/utils/getStreamFromUrl",
+	"tests/utils/linkparser",
+	"tests/utils/semver",
+	"tests/utils/StreamOutputBuffer",
+	"tests/utils/ember/ObjectBuffer",
 	"tests/utils/parameters/Substitution",
 	"tests/utils/parameters/Parameter",
 	"tests/utils/parameters/ParameterCustom",

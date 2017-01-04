@@ -5,14 +5,14 @@ import {
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 
 
-module( "StreamOutputBuffer", {} );
+module( "utils/StreamOutputBuffer" );
 
 
 test( "Single line output", function( assert ) {
 
 	assert.expect( 10 );
 
-	var text;
+	let text;
 
 	function getSingleLine( line, idx, lines ) {
 		assert.strictEqual( lines.length, 1 );
@@ -21,7 +21,7 @@ test( "Single line output", function( assert ) {
 		assert.strictEqual( lines[ idx ], text );
 	}
 
-	var buffer = new StreamOutputBuffer( getSingleLine );
+	const buffer = new StreamOutputBuffer( getSingleLine );
 
 	text = "foo";
 	buffer( `${text}\r\n` );
@@ -43,7 +43,7 @@ test( "Multiple lines in one data chunk", function( assert ) {
 		assert.strictEqual( line, idx === 0 ? "foo" : "bar" );
 	}
 
-	var buffer = new StreamOutputBuffer( getLine );
+	const buffer = new StreamOutputBuffer( getLine );
 	buffer( "foo\r\nbar\r\n" );
 	assert.strictEqual( buffer.getBuffer(), "", "Buffer is empty" );
 
@@ -54,7 +54,7 @@ test( "Buffer incomplete lines", function( assert ) {
 
 	assert.expect( 2 * 2 + 3 );
 
-	var step = 0;
+	let step = 0;
 
 	function getLine( line, idx, lines ) {
 		assert.strictEqual( lines.length, 1 );
@@ -65,7 +65,7 @@ test( "Buffer incomplete lines", function( assert ) {
 		}
 	}
 
-	var buffer = new StreamOutputBuffer( getLine );
+	const buffer = new StreamOutputBuffer( getLine );
 	buffer( "foo\r\nbar" );
 	assert.strictEqual( buffer.getBuffer(), "bar", "Buffer contains incomplete line" );
 	++step;
@@ -81,12 +81,12 @@ test( "Buffer incomplete lines", function( assert ) {
 
 test( "Buffer size", function( assert ) {
 
-	var buffer1 = new StreamOutputBuffer( { maxBuffSize: 1 }, function() {} );
+	const buffer1 = new StreamOutputBuffer( { maxBuffSize: 1 }, function() {} );
 	assert.throws(function() {
 		buffer1( "foo\r\n" );
 	}, Error, "Buffer size limit exceeded" );
 
-	var buffer2 = new StreamOutputBuffer( { maxBuffSize: 3 }, function() {} );
+	const buffer2 = new StreamOutputBuffer( { maxBuffSize: 3 }, function() {} );
 	buffer2( "foo" );
 	assert.strictEqual( buffer2.getBuffer(), "foo" );
 	assert.throws(function() {
@@ -111,7 +111,7 @@ test( "Custom line delimiter", function( assert ) {
 		}
 	}
 
-	var buffer = new StreamOutputBuffer( { delimiter: "|" }, getLine );
+	const buffer = new StreamOutputBuffer( { delimiter: "|" }, getLine );
 	buffer( "foo|bar|baz|" );
 
 });

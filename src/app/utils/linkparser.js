@@ -123,19 +123,19 @@ export function parseString( string ) {
 			: "";
 	}
 
-	var texts = [ string ];
-	var links = [];
+	let texts = [ string ];
+	let links = [];
 
 	// do this for each existing expression
 	kParsers.forEach(function( key ) {
-		var item = parsers[ key ];
-		var re = item.re;
-		var fn = item.fn;
-		var match, linkObj, length;
+		let item = parsers[ key ];
+		let re = item.re;
+		let fn = item.fn;
+		let match, linkObj, length;
 
 		// iterate through all text elements
 		// length will increase on each match by one
-		for ( var current, i = 0; i < texts.length; i++ ) {
+		for ( let current, i = 0; i < texts.length; i++ ) {
 			current = texts[ i ];
 			// reset the lastIndex of the regexp, so it can match multiple times on new strings
 			re.lastIndex = 0;

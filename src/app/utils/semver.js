@@ -1,13 +1,11 @@
-/*
- * Using a custom implementation for comparing semantic version strings
- * - "semver" npm-module too much (would also need to change the build process for node modules)
- * - no reliable bower-modules for this
- */
+// Using a simple custom implementation for comparing semantic version strings
 
-var reSemVer = /^\s*v?(\d+\.\d+\.\d+)(?:-([a-z\d\.]+))?(?:\+([a-z\d\.]+))?\s*$/i;
+const reSemVer = /^\s*v?(\d+\.\d+\.\d+)(?:-([a-z\d.]+))?(?:\+([a-z\d.]+))?\s*$/i;
+
 
 function castToNumber( val ) {
-	var num = Number( val );
+	const num = Number( val );
+
 	return isNaN( num ) ? val : num;
 }
 
@@ -18,8 +16,9 @@ function castToNumber( val ) {
  * @returns {Array|undefined}
  */
 export function tokenize( value ) {
-	var m = String( value ).match( reSemVer );
+	const m = String( value ).match( reSemVer );
 	if ( !m ) { return undefined; }
+
 	return [
 		m[1].split( "." ).map( castToNumber ),
 		m[2] ? m[2].split( "." ).map( castToNumber ) : undefined
@@ -36,8 +35,8 @@ export function tokenize( value ) {
  * @returns {number}
  */
 export function compare( left, right ) {
-	var typeL = !(  left instanceof Array );
-	var typeR = !( right instanceof Array );
+	let typeL = !(  left instanceof Array );
+	let typeR = !( right instanceof Array );
 
 	// only compare two arrays!!!
 	if ( typeL && typeR ) { return 0; }
@@ -45,7 +44,8 @@ export function compare( left, right ) {
 	if ( typeR ) { return  1; }
 
 	// compare each element
-	for ( var l, r, sub, nL = left.length, nR = right.length, i = 0; i < nL && i < nR; i++ ) {
+	let nL = left.length, nR = right.length;
+	for ( let l, r, sub, i = 0; i < nL && i < nR; i++ ) {
 		l = left[ i ];
 		r = right[ i ];
 
@@ -80,6 +80,7 @@ export function compare( left, right ) {
 			if ( l < r ) { return -1; }
 		}
 	}
+
 	// both equal to this point... compare remaining length
 	return nL - nR;
 }
@@ -92,13 +93,12 @@ export function compare( left, right ) {
  * @returns {Object[]}
  */
 function prepare( list, traverse ) {
-	traverse = traverse || function( elem ) { return elem; };
+	traverse = traverse || ( elem => elem );
 
-	return list.map(function( value ) {
-		var token = tokenize( traverse( value ) );
-
-		return { token, value };
-	});
+	return list.map( value => ({
+		token: tokenize( traverse( value ) ),
+		value
+	}) );
 }
 
 
@@ -129,12 +129,8 @@ export function getMax( list, traverse ) {
 export function sort( list, traverse ) {
 	// tokenize once and save original value
 	return prepare( list, traverse )
-	// then sort
-		.sort(function( left, right ) {
-			return compare( left.token, right.token );
-		})
-	// and finally return the original values
-		.map(function( object ) {
-			return object.value;
-		});
+		// then sort
+		.sort( ( left, right ) => compare( left.token, right.token ) )
+		// and finally return the original values
+		.map( obj => obj.value );
 }

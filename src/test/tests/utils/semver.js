@@ -9,7 +9,7 @@ import {
 } from "utils/semver";
 
 
-module( "Semantic versioning", {} );
+module( "utils/semver" );
 
 
 test( "Tokenization", function( assert ) {

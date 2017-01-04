@@ -9,16 +9,16 @@ import {
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 
-module( "ObjectBuffer", {} );
+module( "utils/ember/ObjectBuffer" );
 
 
 test( "Flat ObjectBuffer", function( assert ) {
 
-	var content = {
+	const content = {
 		"foo": "foo",
 		"bar": "bar"
 	};
-	var buffer = ObjectBuffer.create({
+	const buffer = ObjectBuffer.create({
 		content
 	});
 
@@ -148,7 +148,7 @@ test( "Flat ObjectBuffer", function( assert ) {
 
 test( "Nested ObjectBuffer", function( assert ) {
 
-	var content = {
+	const content = {
 		"foo": "foo",
 		"bar": {
 			"baz": "baz",
@@ -157,7 +157,7 @@ test( "Nested ObjectBuffer", function( assert ) {
 			}
 		}
 	};
-	var buffer = ObjectBuffer.create({
+	const buffer = ObjectBuffer.create({
 		content
 	});
 
@@ -353,34 +353,37 @@ test( "Nested ObjectBuffer", function( assert ) {
 
 test( "ObjectBuffer with same nested objects", function( assert ) {
 
-	let contentInnerInner = {
+	const contentInnerInner = {
 		"baz": "qux"
 	};
-	let contentInner = {
+	const contentInner = {
 		"bar": contentInnerInner
 	};
-	let contentOuter = {
+	const contentOuter = {
 		"foo": contentInner
 	};
-	let buffer = ObjectBuffer.create({
+	const buffer = ObjectBuffer.create({
 		content: contentOuter
 	});
 
 	set( buffer, "foo.bar.baz", "foo" );
 	buffer.applyChanges();
 
-	assert.ok(
-		contentOuter.foo.bar === contentInnerInner,
+	assert.strictEqual(
+		contentOuter.foo.bar,
+		contentInnerInner,
 		"Nested object references are not changed"
 	);
 
-	assert.ok(
-		buffer.getContent() === contentOuter,
+	assert.strictEqual(
+		buffer.getContent(),
+		contentOuter,
 		"getOutput() returns the original object"
 	);
 
-	assert.ok(
-		buffer.getContent()[ "foo" ][ "bar" ][ "baz" ] === "foo",
+	assert.strictEqual(
+		buffer.getContent()[ "foo" ][ "bar" ][ "baz" ],
+		"foo",
 		"Nested objects of the original object have been updated"
 	);
 

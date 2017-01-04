@@ -5,7 +5,7 @@ import {
 import { parseString } from "utils/linkparser";
 
 
-module( "Link parsing", {} );
+module( "utils/linkparser" );
 
 
 test( "URLs", function( assert ) {
@@ -254,7 +254,7 @@ test( "Twitter", function( assert ) {
 });
 
 
-QUnit.test( "Subreddit", function( assert ) {
+test( "Subreddit", function( assert ) {
 
 	assert.deepEqual(
 		parseString( "/r/all /r/all/" ),
@@ -301,7 +301,7 @@ QUnit.test( "Subreddit", function( assert ) {
 });
 
 
-QUnit.test( "Reddit user", function( assert ) {
+test( "Reddit user", function( assert ) {
 
 	assert.deepEqual(
 		parseString( "/u/name /u/name/" ),

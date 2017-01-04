@@ -5,7 +5,7 @@ import {
 import getStreamFromUrl from "utils/getStreamFromUrl";
 
 
-module( "Get stream from URL", {} );
+module( "utils/getStreamFromUrl" );
 
 
 test( "Invalid URLs", function( assert ) {
