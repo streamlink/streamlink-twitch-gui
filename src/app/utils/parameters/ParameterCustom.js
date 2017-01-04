@@ -1,4 +1,4 @@
-import Parameter from "utils/Parameter";
+import Parameter from "utils/parameters/Parameter";
 
 
 const reBackslash = /^\\$/;

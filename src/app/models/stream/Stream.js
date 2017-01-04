@@ -17,7 +17,7 @@ import {
 	getPlayerParams
 } from "./playerparameters";
 import qualities from "./qualities";
-import Parameter from "utils/Parameter";
+import Parameter from "utils/parameters/Parameter";
 import {
 	streamprovider,
 	twitch

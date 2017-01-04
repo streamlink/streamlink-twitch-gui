@@ -3,7 +3,7 @@ import {
 	isNone,
 	makeArray
 } from "Ember";
-import Substitution from "utils/Substitution";
+import Substitution from "utils/parameters/Substitution";
 
 
 /**

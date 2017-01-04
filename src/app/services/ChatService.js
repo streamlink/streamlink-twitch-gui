@@ -9,9 +9,9 @@ import {
 	twitch as twitchConfig
 } from "config";
 import { openBrowser } from "nwjs/Shell";
-import Parameter from "utils/Parameter";
-import ParameterCustom from "utils/ParameterCustom";
-import Substitution from "utils/Substitution";
+import Parameter from "utils/parameters/Parameter";
+import ParameterCustom from "utils/parameters/ParameterCustom";
+import Substitution from "utils/parameters/Substitution";
 import whichFallback from "utils/node/fs/whichFallback";
 import { isFile } from "utils/node/fs/stat";
 import { spawn } from "child_process";

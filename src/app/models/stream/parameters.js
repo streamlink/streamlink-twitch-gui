@@ -1,7 +1,7 @@
 import { get } from "Ember";
-import Parameter from "utils/Parameter";
-import ParameterCustom from "utils/ParameterCustom";
-import Substitution from "utils/Substitution";
+import Parameter from "utils/parameters/Parameter";
+import ParameterCustom from "utils/parameters/ParameterCustom";
+import Substitution from "utils/parameters/Substitution";
 
 
 /** @type {Substitution[]} */
