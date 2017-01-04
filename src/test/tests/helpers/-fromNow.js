@@ -19,6 +19,7 @@ import HoursFromNowHelper from "helpers/HoursFromNowHelper";
 import TimeFromNowHelper from "helpers/TimeFromNowHelper";
 
 
+const { now } = Date;
 const { compile } = HTMLBars;
 
 let owner, component;
@@ -34,30 +35,39 @@ module( "helpers/-fromNow", {
 		runDestroy( component );
 		runDestroy( owner );
 		owner = component = null;
+
+		Date.now = now;
 	}
 });
 
 
 test( "Hours from now with interval", function( assert ) {
 
+	assert.expect( 3 );
 	const done = assert.async();
 
 	owner.register( "helper:hours-from-now", HoursFromNowHelper );
 	component = Component.extend({
-		layout: compile( "{{hours-from-now date interval=40}}" )
+		layout: compile( "{{hours-from-now date interval=1}}" )
 	}).create();
 	setOwner( component, owner );
 
-	set( component, "date", +new Date() - 59 * 1000 - 950 );
+	Date.now = () => 0;
+
+	set( component, "date", Date.now() );
 	runAppend( component );
 	assert.equal( getOutput( component ), "just now", "Initial content" );
 
-	run.later(function() {
-		run.scheduleOnce( "afterRender", function() {
-			assert.equal( getOutput( component ), "01m", "Upgraded content" );
+	Date.now = () => 60 * 1000 - 1;
+	run.later( 2, function() {
+		assert.equal( getOutput( component ), "just now", "Almost a minute" );
+
+		Date.now = () => 60 * 1000;
+		run.later( 2, function() {
+			assert.equal( getOutput( component ), "01m", "After a minute" );
 			done();
 		});
-	}, 100 );
+	});
 
 });
 

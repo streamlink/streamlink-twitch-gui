@@ -43,7 +43,7 @@ function formatDays( diff ) {
 
 export default FromNowHelper.extend({
 	_compute( params ) {
-		let diff = +new Date() - params[0];
+		let diff = Date.now() - params[0];
 
 		return diff < minute
 			? "just now"
