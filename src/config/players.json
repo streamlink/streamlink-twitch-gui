@@ -62,7 +62,11 @@
 				"type": "boolean",
 				"default": false,
 				"text": "Minimal player layout",
-				"args": "--qt-minimal-view"
+				"args": {
+					"win32": "--qt-minimal-view",
+					"darwin": false,
+					"linux": "--qt-minimal-view"
+				}
 			}
 		]
 	},
