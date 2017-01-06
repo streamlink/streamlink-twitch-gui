@@ -34,7 +34,7 @@ export default Component.extend({
 
 	// immediately set enabled when disabled property changes
 	_disabledObserver: observer( "disabled", function() {
-		var enabled = get( this, "disabled" )
+		let enabled = get( this, "disabled" )
 			? false
 			: get( this, "isDirty" );
 		set( this, "_enabled", enabled );
@@ -51,9 +51,11 @@ export default Component.extend({
 		if ( get( this, "isDirty" ) ) {
 			set( this, "_enabled", true );
 		} else {
-			this._timeout = later( this, function() {
+			let delay = get( this, "delay" );
+			this._timeout = later( () => {
 				set( this, "_enabled", false );
-			}, get( this, "delay" ) );
+				this._timeout = null;
+			}, delay );
 		}
 	}),
 
