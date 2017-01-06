@@ -17,6 +17,7 @@ import "tests/helpers/format-";
 import "tests/helpers/-fromNow";
 import "tests/helpers/object";
 import "tests/components/PreviewImageComponent";
+import "tests/components/LoadingSpinnerComponent";
 import "tests/components/form/CheckBoxComponent";
 import "tests/components/form/NumberFieldComponent";
 import "tests/components/form/RadioBtnsComponent";
