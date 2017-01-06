@@ -1,36 +1,56 @@
 import {
+	get,
 	set,
-	on,
+	run,
 	Component
 } from "Ember";
 import layout from "templates/components/PreviewImageComponent.hbs";
 
 
+const {
+	next,
+	scheduleOnce
+} = run;
+
+
 export default Component.extend({
 	layout,
 
-	classNames: [],
 	error: false,
 
-	checkError: on( "willInsertElement", function() {
-		var self = this;
-		var img  = this.element.querySelector( "img" );
+	onLoad() {},
+	onError() {},
 
-		function unbind() {
+	willInsertElement() {
+		this._super( ...arguments );
+
+		const setError = () => scheduleOnce( "afterRender", () => {
+			set( this, "error", true );
+		});
+
+		if ( !get( this, "src" ) ) {
+			return setError();
+		}
+
+		const img = this.element.querySelector( "img" );
+
+		const unbind = () => {
 			img.removeEventListener( "error", onError, false );
 			img.removeEventListener( "load",  onLoad,  false );
-		}
+		};
 
-		function onError() {
+		const onLoad = e => {
 			unbind();
-			set( self, "error", true );
-		}
+			next( () => this.onLoad( e ) );
+		};
 
-		function onLoad() {
+		const onError = e => {
 			unbind();
-		}
+			setError();
+			next( () => this.onError( e ) );
+		};
 
 		img.addEventListener( "error", onError, false );
 		img.addEventListener( "load",  onLoad,  false );
-	})
+	}
 });
