@@ -2,10 +2,6 @@
 {{#link-to "channel" channel.id tagName="div" class="logo"}}
 {{preview-image src=channel.logo title=channel.display_name}}
 {{/link-to}}
-<div class="buttons">
-{{form-button action="cancel" class="btn-danger" icon="fa-times" iconanim=true title="Cancel subscription"}}
-{{form-button action="edit" class="btn-hint" icon="fa-pencil" iconanim=true title="Edit subscription"}}
-</div>
 </header>
 <div class="info">
 <h3>{{#link-to "channel" channel.id}}{{channel.detailedName}}{{/link-to}}</h3>
