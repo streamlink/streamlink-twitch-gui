@@ -28,70 +28,55 @@ export default FormButtonComponent.extend( LanguageFilterMixin, {
 	model: "twitchStream",
 	query: null,
 
-	action: "randomStream",
-
 	lock: false,
 
+	action( success, failure ) {
+		if ( get( this, "lock" ) ) { return; }
+		set( this, "lock", true );
 
-	actions: {
-		randomStream( success, failure ) {
-			if ( get( this, "lock" ) ) { return; }
-			set( this, "lock", true );
+		const model = get( this, "model" );
+		const store = get( this, "store" );
 
-			var self  = this;
-			var model = get( self, "model" );
-			var store = get( self, "store" );
+		let query = {
+			// [0, max)
+			offset              : Math.floor( Math.random() * randomMax ),
+			limit               : 1,
+			broadcaster_language: get( this, "broadcaster_language" )
+		};
 
-			var query = {
-				// [0, max)
-				offset              : Math.floor( Math.random() * randomMax ),
-				limit               : 1,
-				broadcaster_language: get( self, "broadcaster_language" )
-			};
-
-			var _query = get( self, "query" );
-			if ( _query ) {
-				query = assign( _query, query );
-			}
-
-			store.query( model, query )
-				.then(function( streams ) {
-					// did we find a stream?
-					var stream = streams.objectAt( 0 );
-					if ( stream ) { return stream; }
-
-					// if not, get number of streams in total
-					let total = get( streams, "meta.total" );
-					if ( !total ) { return Promise.reject(); }
-
-					// decrease offset and query again [0, total)
-					query.offset = Math.floor( Math.random() * total );
-					return store.query( model, query )
-						.then(function( streams ) {
-							return streams.objectAt( 0 );
-						});
-				})
-				.then(function( stream ) {
-					if ( !stream ) { throw new Error(); }
-
-					if ( model === "twitchStreamsFollowed" ) {
-						return get( stream, "stream" );
-					} else if ( model === "twitchStreamsHosted" ) {
-						return get( stream, "target" );
-					} else {
-						return stream;
-					}
-				})
-				.then(function( stream ) {
-					get( self, "streaming" ).startStream( stream );
-					success();
-				})
-				.catch(function(){
-					failure();
-				})
-				.then(function() {
-					set( self, "lock", false );
-				});
+		let _query = get( this, "query" );
+		if ( _query ) {
+			query = assign( _query, query );
 		}
+
+		store.query( model, query )
+			.then( streams => {
+				// did we find a stream?
+				let stream = get( streams, "firstObject" );
+				if ( stream ) { return stream; }
+
+				// if not, get number of streams in total
+				let total = get( streams, "meta.total" );
+				if ( !total ) { return Promise.reject(); }
+
+				// decrease offset and query again [0, total)
+				query.offset = Math.floor( Math.random() * total );
+				return store.query( model, query )
+					.then( streams => get( streams, "firstObject" ) );
+			})
+			.then( stream => {
+				if ( !stream ) { throw new Error(); }
+
+				if ( model === "twitchStreamsFollowed" ) {
+					return get( stream, "stream" );
+				} else if ( model === "twitchStreamsHosted" ) {
+					return get( stream, "target" );
+				} else {
+					return stream;
+				}
+			})
+			.then( stream => get( this, "streaming" ).startStream( stream ) )
+			.then( success, failure )
+			.finally( () => set( this, "lock", false ) );
 	}
 });

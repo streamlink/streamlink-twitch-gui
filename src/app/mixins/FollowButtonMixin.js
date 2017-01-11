@@ -8,8 +8,6 @@ import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
 
 
 export default Mixin.create( TwitchInteractButtonMixin, {
-	action: "follow",
-
 	iconLoading : "fa-question",
 	iconSuccess : "fa-heart",
 	iconFailure : "fa-heart-o",
@@ -23,41 +21,39 @@ export default Mixin.create( TwitchInteractButtonMixin, {
 		return `Follow ${name}`;
 	}),
 
+	isLocked: false,
 
-	actions: {
-		follow( success, failure ) {
-			if ( !this.modelName ) { return; }
-			if ( !get( this, "isValid" ) || get( this, "isLocked" ) ) { return; }
-			set( this, "isLocked", true );
 
-			var self   = this;
-			var store  = get( this, "store" );
-			var model  = get( this, "id" );
-			var record = get( this, "record" );
+	action( success, failure ) {
+		const modelName = this.modelName;
+		if ( !modelName ) { return; }
+		if ( !get( this, "isValid" ) || get( this, "isLocked" ) ) { return; }
+		set( this, "isLocked", true );
 
-			function unlock() { set( self, "isLocked", false ); }
+		const store = get( this, "store" );
+		const id = get( this, "id" );
+		const record = get( this, "record" );
 
-			if ( !record ) {
-				// create a new record and save it
-				record = store.createRecord( this.modelName, { id: model } );
-				record.save()
-					.then(function( record ) {
-						set( self, "record", record );
-					})
-					.then( success, failure )
-					.then( unlock, unlock );
+		let promise;
 
-			} else {
-				// delete the record and save it
-				record.destroyRecord()
-					.then(function() {
-						set( self, "record", false );
-						// also unload it
-						store.unloadRecord( record );
-					})
-					.then( success, failure )
-					.then( unlock, unlock );
-			}
+		if ( !record ) {
+			// create a new record and save it
+			promise = store.createRecord( modelName, { id } )
+				.save()
+				.then( record => set( this, "record", record ) );
+
+		} else {
+			// delete the record and save it
+			promise = record.destroyRecord()
+				.then( () => {
+					set( this, "record", false );
+					// also unload it
+					store.unloadRecord( record );
+				});
 		}
+
+		promise
+			.then( success, failure )
+			.finally( () => set( this, "isLocked", false ) );
 	}
 });

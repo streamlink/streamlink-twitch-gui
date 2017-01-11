@@ -24,9 +24,6 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 
 	isVisible: and( "isValid", "model.partner" ),
 
-	action: "subscribe",
-	openBrowser: "openBrowser",
-
 	classLoading: "btn-primary",
 	classSuccess: "btn-success",
 	classFailure: "btn-primary",
@@ -35,30 +32,26 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 	iconFailure : "fa-credit-card",
 	titleLoading: "",
 	titleSuccess: computed( "name", function() {
-		var name = get( this, "name" );
+		let name = get( this, "name" );
 		return `You are subscribed to ${name}`;
 	}),
 	titleFailure: computed( "name", function() {
-		var name = get( this, "name" );
+		let name = get( this, "name" );
 		return `Subscribe to ${name} now`;
 	}),
 
 
-	actions: {
-		subscribe( success, failure ) {
-			var url  = subscriptionCreateUrl;
-			var name = get( this, "id" );
+	action( success, failure ) {
+		let url = subscriptionCreateUrl;
+		let name = get( this, "id" );
 
-			if ( url && name ) {
-				url = url.replace( "{channel}", name );
-				openBrowser( url );
+		if ( url && name ) {
+			url = url.replace( "{channel}", name );
+			openBrowser( url );
+			success();
 
-				if ( success instanceof Function ) {
-					success();
-				}
-			} else if ( failure instanceof Function ) {
-				failure().catch();
-			}
+		} else {
+			failure();
 		}
 	}
 });

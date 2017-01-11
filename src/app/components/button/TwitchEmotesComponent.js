@@ -25,21 +25,17 @@ export default FormButtonComponent.extend({
 	iconanim: true,
 	title   : "Show available channel emotes",
 
-	action: "openTwitchEmotes",
+	action( success, failure ) {
+		let url = twitchEmotesUrl;
+		let channel = get( this, "channel.id" );
 
-	actions: {
-		openTwitchEmotes( success, failure ) {
-			var url = twitchEmotesUrl;
-			var channel = get( this, "channel.id" );
+		if ( url && channel ) {
+			url = url.replace( "{channel}", channel );
+			openBrowser( url );
+			success();
 
-			if ( url && channel ) {
-				url = url.replace( "{channel}", channel );
-				openBrowser( url );
-				success();
-
-			} else {
-				failure();
-			}
+		} else {
+			failure();
 		}
 	}
 });

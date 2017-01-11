@@ -27,8 +27,6 @@ export default FormButtonComponent.extend({
 	icon: "fa-home",
 	iconanim: true,
 
-	action: "setHomepage",
-
 	url: computed(function() {
 		let router = getOwner( this ).lookup( "router:main" );
 		let location = get( router, "location" );
@@ -41,18 +39,16 @@ export default FormButtonComponent.extend({
 	}),
 
 
-	actions: {
-		setHomepage( success, failure ) {
-			var settings = get( this, "settings.content" );
-			var value    = get( this, "url" );
-			if ( !settings || !value ) {
-				return failure();
-			}
-
-			set( settings, "gui_homepage", value );
-			settings.save()
-				.then( success, failure )
-				.catch();
+	action( success, failure ) {
+		let settings = get( this, "settings.content" );
+		let value    = get( this, "url" );
+		if ( !settings || !value ) {
+			return failure();
 		}
+
+		set( settings, "gui_homepage", value );
+		settings.save()
+			.then( success, failure )
+			.catch( () => {} );
 	}
 });

@@ -9,13 +9,11 @@ export default FormButtonComponent.extend({
 	title   : "Copy channel url to clipboard",
 	iconanim: true,
 
-	action: "share",
+	action( success, failure ) {
+		const url = get( this, "channel.url" );
 
-	actions: {
-		share( success, failure ) {
-			setClipboard( get( this, "channel.url" ) )
-				.then( success, failure )
-				.catch(function() {});
-		}
+		setClipboard( url )
+			.then( success, failure )
+			.catch( () => {} );
 	}
 });

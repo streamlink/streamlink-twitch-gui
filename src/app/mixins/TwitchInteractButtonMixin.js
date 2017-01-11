@@ -13,7 +13,7 @@ const { service } = inject;
 
 function switchProperty( key ) {
 	return computed( "isLoading", "isSuccessful", function() {
-		var property = get( this, "isLoading" )
+		let property = get( this, "isLoading" )
 			? `${key}Loading`
 			: get( this, "isSuccessful" )
 				? `${key}Success`
@@ -57,14 +57,14 @@ export default Mixin.create({
 
 
 	_checkRecord: observer( "isValid", "model", function() {
-		var modelName = this.modelName;
+		const modelName = this.modelName;
 		if ( !modelName ) { return; }
 
 		if ( get( this, "isLoading" ) ) { return; }
 
-		var isValid = get( this, "isValid" );
-		var id      = get( this, "id" );
-		var record  = get( this, "record" );
+		const isValid = get( this, "isValid" );
+		const id      = get( this, "id" );
+		const record  = get( this, "record" );
 		if ( !isValid || !id || record !== null ) { return; }
 
 		setProperties( this, {
@@ -73,10 +73,11 @@ export default Mixin.create({
 			isLocked : true
 		});
 
-		var store = get( this, "store" );
+		const store = get( this, "store" );
+
 		return store.findExistingRecord( modelName, id )
-			.catch(function() { return false; })
-			.then(function( record ) {
+			.catch( () => false )
+			.then( record => {
 				if ( get( this, "isDestroyed" ) ) {
 					return;
 				}
@@ -86,6 +87,6 @@ export default Mixin.create({
 					isLoading: false,
 					isLocked : false
 				});
-			}.bind( this ) );
+			});
 	}).on( "init" )
 });

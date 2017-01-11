@@ -60,8 +60,8 @@ export default Component.extend({
 
 	actions: {
 		click() {
-			let action  = get( this, "action" );
-			if ( !action ) { return; }
+			let action = get( this, "action" );
+			if ( !( action instanceof Function ) ) { return; }
 
 			let animPromises = [];
 
@@ -77,18 +77,7 @@ export default Component.extend({
 				}
 			}
 
-			// handle actions as functions
-			if ( action instanceof Function ) {
-				action( ...animPromises );
-
-			// allow the component to send actions to itself
-			// in case it has been extended and uses its own actions
-			} else if (
-				   this.actions instanceof Object
-				&& this.actions.hasOwnProperty( action )
-			) {
-				this.send( action, ...animPromises );
-			}
+			action.call( this, ...animPromises );
 		}
 	}
 });
