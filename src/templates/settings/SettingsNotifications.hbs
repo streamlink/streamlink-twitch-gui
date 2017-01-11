@@ -13,7 +13,7 @@
 		"Choose the kind of notification"
 		icon="fa-cog"
 	}}
-		{{#form-button class="btn-test-notification" icon="fa-rocket" action="testNotification" iconanim=true}}Test notification{{/form-button}}
+		{{#form-button action=(action "testNotification") class="btn-test-notification" icon="fa-rocket" iconanim=true}}Test notification{{/form-button}}
 		{{#radio-btns
 			name="notify_provider"
 			value=model.notify_provider

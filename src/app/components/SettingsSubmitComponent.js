@@ -24,8 +24,8 @@ export default Component.extend({
 
 	delay: 1000,
 
-	apply: "apply",
-	discard: "discard",
+	apply() {},
+	discard() {},
 
 	_enabled: computed(function() {
 		return get( this, "isDirty" )

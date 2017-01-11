@@ -10,10 +10,10 @@
 		{{/if}}
 	{{/modal-body}}
 	{{#modal-footer}}
-		{{#form-button action="close" class="btn-primary" icon="fa-thumbs-down"}}Return{{/form-button}}
+		{{#form-button action=(action "close") class="btn-primary" icon="fa-thumbs-down"}}Return{{/form-button}}
 		{{#if hasStreams}}
-			{{#form-button action="shutdown" class="btn-danger" icon="fa-power-off"}}Shutdown{{/form-button}}
+			{{#form-button action=(action "shutdown") class="btn-danger" icon="fa-power-off"}}Shutdown{{/form-button}}
 		{{/if}}
-		{{#form-button action="quit" class="btn-success" icon="fa-thumbs-up"}}Quit{{/form-button}}
+		{{#form-button action=(action "quit") class="btn-success" icon="fa-thumbs-up"}}Quit{{/form-button}}
 	{{/modal-footer}}
 </div>

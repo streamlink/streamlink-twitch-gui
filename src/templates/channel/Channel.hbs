@@ -10,7 +10,7 @@
 <span>{{channel.display_name}}</span>
 </h3>
 <div class="settingsicon {{if isSubrouteSettings 'opened'}}">
-{{form-button action="toggleSettings" icon="fa-wrench"}}
+{{form-button action=(action "toggleSettings") icon="fa-wrench"}}
 </div>
 </div>
 {{#if stream}}

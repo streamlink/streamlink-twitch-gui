@@ -19,5 +19,10 @@
 </ul>
 </header>
 {{outlet}}
-{{settings-submit isDirty=model.isDirty disabled=(is-equal currentSubmenu "settings.channels")}}
+{{settings-submit
+	apply=(action "apply")
+	discard=(action "discard")
+	isDirty=model.isDirty
+	disabled=(is-equal currentSubmenu "settings.channels")
+}}
 </main>

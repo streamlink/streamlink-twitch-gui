@@ -5,34 +5,29 @@
 {{#quick-bar}}
 <div class="multibtn sort-method">
 {{form-button
-  action="sortMethod"
-  actionParam="created_at"
+  action=(action "sortMethod" "created_at")
   class=(if (is-equal sortby "created_at") "active")
   icon="fa-calendar"
   title="Sort by date followed"}}
 {{form-button
-  action="sortMethod"
-  actionParam="last_broadcast"
+  action=(action "sortMethod" "last_broadcast")
   class=(if (is-equal sortby "last_broadcast") "active")
   icon="fa-video-camera"
   title="Sort by last broadcast"}}
 {{form-button
-  action="sortMethod"
-  actionParam="login"
+  action=(action "sortMethod" "login")
   class=(if (is-equal sortby "login") "active")
   icon="fa-sign-in"
   title="Sort by last login"}}
 </div>
 <div class="multibtn sort-order">
 {{form-button
-  action="sortOrder"
-  actionParam="desc"
+  action=(action "sortOrder" "desc")
   class=(if (is-equal direction "desc") "active")
   icon="fa-long-arrow-down"
   title="Sort in descending order"}}
 {{form-button
-  action="sortOrder"
-  actionParam="asc"
+  action=(action "sortOrder" "asc")
   class=(if (is-equal direction "asc") "active")
   icon="fa-long-arrow-up"
   title="Sort in ascending order"}}

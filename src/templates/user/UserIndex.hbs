@@ -10,12 +10,12 @@
 <div class="input-group token-form">
 {{input classNames="form-control" readonly=true autofocus=true autoselect=true value=auth.session.access_token title="Your access token"}}
 <span class="input-group-btn">
-{{form-button action="copyToken" icon="fa-copy" iconanim=true title="Copy to clipboard"}}
+{{form-button action=(action "copyToken") icon="fa-copy" iconanim=true title="Copy to clipboard"}}
 </span>
 </div>
 <p class="hint">This key grants access to your Twitch.tv account with these permissions:<br><em>{{scope}}</em><br>Log in again with your password to invalidate it.</p>
 {{else}}
-{{#form-button action="showTokenForm" class="btn-token" icon="fa-key"}}Show access token{{/form-button}}
+{{#form-button action=(action "showTokenForm") class="btn-token" icon="fa-key"}}Show access token{{/form-button}}
 {{/if}}
 </footer>
 {{/if}}

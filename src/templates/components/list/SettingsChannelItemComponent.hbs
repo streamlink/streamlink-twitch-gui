@@ -18,8 +18,8 @@
 <div class="erase">
 <p>Unset custom settings?</p>
 <div class="btns">
-{{#form-button action="confirm" class="btn-success"}}Yes{{/form-button}}
-{{#form-button action="decline" class="btn-danger"}}No{{/form-button}}
+{{#form-button action=(action "confirm") class="btn-success"}}Yes{{/form-button}}
+{{#form-button action=(action "decline") class="btn-danger"}}No{{/form-button}}
 </div>
 </div>
 {{/unless}}

@@ -6,7 +6,7 @@
 		Do you want to configure the application first before you start?
 	{{/modal-body}}
 	{{#modal-footer}}
-		{{#form-button action="start"    class="btn-primary" icon="fa-arrow-left"}}Start now{{/form-button}}
-		{{#form-button action="settings" class="btn-success" icon="fa-cog"       }}Settings{{/form-button}}
+		{{#form-button action=(action "start")    class="btn-primary" icon="fa-arrow-left"}}Start now{{/form-button}}
+		{{#form-button action=(action "settings") class="btn-success" icon="fa-cog"       }}Settings{{/form-button}}
 	{{/modal-footer}}
 </div>

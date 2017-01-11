@@ -36,5 +36,9 @@
 {{/settings-row}}
 </fieldset>
 {{/if}}
-{{settings-submit isDirty=model.buffer.isDirty}}
+{{settings-submit
+	apply=(action "apply")
+	discard=(action "discard")
+	isDirty=model.buffer.isDirty
+}}
 </section>

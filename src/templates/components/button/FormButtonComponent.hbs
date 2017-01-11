@@ -1,7 +1,7 @@
 {{#if isVisible}}
 <button
   type="button"
-  class="btn {{if icon (if hasBlock 'btn-with-icon' 'btn-icon')}} {{unless (is-null _iconAnimState) 'btn-with-anim'}} {{class}}"
+  class="btn {{if icon (if hasBlock 'btn-with-icon' 'btn-icon')}} {{if _status 'btn-with-anim'}} {{class}}"
   title="{{title}}"
   disabled={{disabled}}
   {{action "click"}}

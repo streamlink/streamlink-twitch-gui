@@ -4,7 +4,7 @@
 			{{#modal-header}}Preparing, please wait{{/modal-header}}
 			{{#modal-body class="loading"}}{{loading-spinner}}{{/modal-body}}
 			{{#modal-footer}}
-				{{#form-button action="abort" class="btn-danger" icon="fa-times"}}Abort{{/form-button}}
+				{{#form-button action=(action "abort") class="btn-danger" icon="fa-times"}}Abort{{/form-button}}
 			{{/modal-footer}}
 		{{else}}
 			{{#unless active.success}}
@@ -33,9 +33,9 @@
 			{{/unless}}
 			{{#modal-footer}}
 				<div>
-					{{form-button action="close"    class="btn-primary" icon="fa-arrow-left" title="Continue"}}
-					{{form-button action="shutdown" class="btn-danger"  icon="fa-times"      title="Close stream"}}
-					{{form-button action="toggleLog"
+					{{form-button action=(action "close")    class="btn-primary" icon="fa-arrow-left" title="Continue"}}
+					{{form-button action=(action "shutdown") class="btn-danger"  icon="fa-times"      title="Close stream"}}
+					{{form-button action=(action "toggleLog")
 						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.success::invisible"
 						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
 						title=(if active.showLog "Show stream title" (concat "Show " providername " " (if active.warning "warning" "log")))
@@ -87,9 +87,9 @@
 			{{modal-log class="error" log=active.log}}
 		{{/if}}
 		{{#modal-footer}}
-			{{#form-button action="close" class="btn-danger" icon="fa-times"}}Close{{/form-button}}
+			{{#form-button action=(action "close") class="btn-danger" icon="fa-times"}}Close{{/form-button}}
 			{{#if (bool-or (is-equal error.name "NotFoundError") (is-equal error.name "VersionError"))}}
-				{{#form-button action="download" class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
+				{{#form-button action=(action "download") class="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
 			{{/if}}
 		{{/modal-footer}}
 	{{/unless}}
