@@ -1,14 +1,15 @@
 import {
 	get,
 	set,
-	$,
 	computed,
+	run,
 	Component
 } from "Ember";
 import layout from "templates/components/button/FormButtonComponent.hbs";
 
 
 const { equal } = computed;
+const { scheduleOnce } = run;
 
 const STATE_VOID    = 0;
 const STATE_LOADING = 1;
@@ -19,18 +20,25 @@ const STATE_SUCCESS = 3;
 export default Component.extend({
 	layout,
 
-	// a tagless component is needed because of the `hasBlock` template layer keyword
-	tagName: "",
+	tagName: "button",
+	classNames: [
+		"btn"
+	],
+	classNameBindings: [
+		"_iconClass",
+		"_animClass",
+		"class"
+	],
+	attributeBindings: [
+		"type",
+		"disabled",
+		"title"
+	],
 
-	// workaround for tagless components and isVisible
-	$() {
-		// just select the first child node (the button element)
-		let element = this._renderNode.childNodes[0].firstNode;
-		return $( element );
-	},
-
-	title  : null,
-	"class": null,
+	type: "button",
+	disabled: false,
+	title: null,
+	class: null,
 
 	action: null,
 
@@ -58,35 +66,61 @@ export default Component.extend({
 		});
 	},
 
-	actions: {
-		click() {
-			let action = get( this, "action" );
-			if ( !( action instanceof Function ) ) { return; }
+	/**
+	 * Super dirty hack!!!
+	 * hasBlock is only available as a keyword in the template
+	 * however, we need to know whether the component was invoked with a block or not
+	 * use this computed property which (lazily) sets a (different) hasBlock property here
+	 * this computed property will be called in the template's hasBlock block
+	 */
+	_setHasBlock: computed(function() {
+		scheduleOnce( "afterRender", () => {
+			set( this, "hasBlock", true );
+		});
+	}),
 
-			let hasIconAnim = get( this, "icon" ) && get( this, "iconanim" );
-			let animPromises = [];
+	_iconClass: computed( "icon", "hasBlock", function() {
+		return get( this, "icon" )
+			? get( this, "hasBlock" )
+				? "btn-with-icon"
+				: "btn-icon"
+			: "";
+	}),
 
-			if ( hasIconAnim ) {
-				// success and failure callbacks
-				animPromises.push(
-					data => this._iconAnimation( STATE_SUCCESS, data ),
-					data => this._iconAnimation( STATE_FAILURE, data )
-				);
+	_animClass: computed( "_status", function() {
+		return get( this, "_status" ) !== STATE_VOID
+			? "btn-with-anim"
+			: "";
+	}),
 
-				if ( get( this, "spinner" ) ) {
-					set( this, "_status", STATE_LOADING );
-				}
+
+	click() {
+		let action = get( this, "action" );
+		if ( !( action instanceof Function ) ) { return; }
+
+		let hasIconAnim = get( this, "icon" ) && get( this, "iconanim" );
+		let animPromises = [];
+
+		if ( hasIconAnim ) {
+			// success and failure callbacks
+			animPromises.push(
+				data => this._iconAnimation( STATE_SUCCESS, data ),
+				data => this._iconAnimation( STATE_FAILURE, data )
+			);
+
+			if ( get( this, "spinner" ) ) {
+				set( this, "_status", STATE_LOADING );
 			}
+		}
 
-			// invoke action
-			let returnPromise = action.call( this, ...animPromises );
+		// invoke action
+		let returnPromise = action.call( this, ...animPromises );
 
-			// is returnPromise a "thenable"?
-			if ( hasIconAnim && returnPromise && returnPromise.then instanceof Function ) {
-				returnPromise
-					.then( ...animPromises )
-					.catch( () => {} );
-			}
+		// is returnPromise a "thenable"?
+		if ( hasIconAnim && returnPromise && returnPromise.then instanceof Function ) {
+			returnPromise
+				.then( ...animPromises )
+				.catch( () => {} );
 		}
 	}
 });

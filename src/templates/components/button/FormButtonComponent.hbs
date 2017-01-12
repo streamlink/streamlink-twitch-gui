@@ -1,11 +1,4 @@
-{{#if isVisible}}
-<button
-  type="button"
-  class="btn {{if icon (if hasBlock 'btn-with-icon' 'btn-icon')}} {{if _status 'btn-with-anim'}} {{class}}"
-  title="{{title}}"
-  disabled={{disabled}}
-  {{action "click"}}
->
+{{#if hasBlock}}{{_setHasBlock}}{{/if}}
 {{#if icon}}
 	{{#if isLoading}}
 		{{loading-spinner}}
@@ -14,5 +7,3 @@
 	{{/if}}
 {{/if}}
 {{#if hasBlock}}{{yield}}{{/if}}
-</button>
-{{/if}}
