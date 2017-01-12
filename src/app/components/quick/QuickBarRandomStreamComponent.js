@@ -17,7 +17,7 @@ export default FormButtonComponent.extend( LanguageFilterMixin, {
 	store: service(),
 	streaming: service(),
 
-	"class": "btn-info",
+	classNames: "btn-info",
 
 	title: "Launch random stream",
 

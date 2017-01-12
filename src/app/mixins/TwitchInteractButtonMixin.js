@@ -39,11 +39,13 @@ export default Mixin.create({
 	isLoading: false,
 	isLocked : false,
 
-	"class" : switchProperty( "class" ),
+	_class  : switchProperty( "class" ),
 	icon    : switchProperty( "icon" ),
 	title   : switchProperty( "title" ),
 	iconanim: true,
 	spinner : true,
+
+	classNameBindings: [ "_class" ],
 
 	classLoading: "btn-info",
 	classSuccess: "btn-success",

@@ -4,9 +4,9 @@ import FormButtonComponent from "components/button/FormButtonComponent";
 
 
 export default FormButtonComponent.extend({
-	"class" : "btn-info",
-	icon    : "fa-share-alt",
-	title   : "Copy channel url to clipboard",
+	classNames: [ "btn-info" ],
+	icon: "fa-share-alt",
+	title: "Copy channel url to clipboard",
 	iconanim: true,
 
 	action() {

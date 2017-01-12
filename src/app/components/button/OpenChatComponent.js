@@ -11,9 +11,9 @@ const { service } = inject;
 export default FormButtonComponent.extend({
 	chat: service(),
 
-	"class" : "btn-hint",
-	icon    : "fa-comments",
-	title   : "Open chat",
+	classNames: [ "btn-hint" ],
+	icon: "fa-comments",
+	title: "Open chat",
 	iconanim: true,
 
 	action() {

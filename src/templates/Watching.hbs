@@ -6,7 +6,7 @@
 {{#stream-presentation stream=watching.stream tagName="li" class="watching" clickablePreview=false}}
 <div>
 {{form-button action=(action "openDialog" watching.stream) icon="fa-arrow-up" title="Open dialog"}}
-{{form-button action=(action "closeStream" watching.stream) class="btn-danger" icon="fa-times" title="Close stream"}}
+{{form-button action=(action "closeStream" watching.stream) classNames="btn-danger" icon="fa-times" title="Close stream"}}
 </div>
 <div>
 {{open-chat channel=watching.stream.channel}}

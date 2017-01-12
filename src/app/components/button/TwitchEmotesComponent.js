@@ -20,10 +20,10 @@ export default FormButtonComponent.extend({
 	isEnabled : or( "showButton", "settings.content.gui_twitchemotes" ),
 	isVisible : and( "isEnabled", "channel.partner" ),
 
-	"class" : "btn-neutral",
-	icon    : "fa-smile-o",
+	classNames: [ "btn-neutral" ],
+	icon: "fa-smile-o",
 	iconanim: true,
-	title   : "Show available channel emotes",
+	title: "Show available channel emotes",
 
 	action() {
 		let url = twitchEmotesUrl;

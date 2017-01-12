@@ -14,13 +14,8 @@ const { service } = inject;
 export default FormButtonComponent.extend({
 	settings: service(),
 
-	"class": computed( "isHomepage", function() {
-		let active = get( this, "isHomepage" )
-			? " active"
-			: "";
-
-		return `btn-neutral${active}`;
-	}),
+	classNames: "btn-neutral",
+	classNameBindings: "isHomepage:active",
 
 	title: "Set as homepage",
 
