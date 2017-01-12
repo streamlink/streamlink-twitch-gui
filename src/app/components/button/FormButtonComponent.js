@@ -63,9 +63,10 @@ export default Component.extend({
 			let action = get( this, "action" );
 			if ( !( action instanceof Function ) ) { return; }
 
+			let hasIconAnim = get( this, "icon" ) && get( this, "iconanim" );
 			let animPromises = [];
 
-			if ( get( this, "icon" ) && get( this, "iconanim" ) ) {
+			if ( hasIconAnim ) {
 				// success and failure callbacks
 				animPromises.push(
 					data => this._iconAnimation( STATE_SUCCESS, data ),
@@ -77,7 +78,15 @@ export default Component.extend({
 				}
 			}
 
-			action.call( this, ...animPromises );
+			// invoke action
+			let returnPromise = action.call( this, ...animPromises );
+
+			// is returnPromise a "thenable"?
+			if ( hasIconAnim && returnPromise && returnPromise.then instanceof Function ) {
+				returnPromise
+					.then( ...animPromises )
+					.catch( () => {} );
+			}
 		}
 	}
 });

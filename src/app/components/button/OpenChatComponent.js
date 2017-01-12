@@ -16,12 +16,10 @@ export default FormButtonComponent.extend({
 	title   : "Open chat",
 	iconanim: true,
 
-	action( success, failure ) {
+	action() {
 		const channel = get( this, "channel" );
 		const chat    = get( this, "chat" );
 
-		chat.open( channel )
-			.then( success, failure )
-			.catch( () => {} );
+		return chat.open( channel );
 	}
 });

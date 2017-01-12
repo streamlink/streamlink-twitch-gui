@@ -9,11 +9,9 @@ export default FormButtonComponent.extend({
 	title   : "Copy channel url to clipboard",
 	iconanim: true,
 
-	action( success, failure ) {
+	action() {
 		const url = get( this, "channel.url" );
 
-		setClipboard( url )
-			.then( success, failure )
-			.catch( () => {} );
+		return setClipboard( url );
 	}
 });

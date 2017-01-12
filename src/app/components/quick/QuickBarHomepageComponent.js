@@ -39,16 +39,14 @@ export default FormButtonComponent.extend({
 	}),
 
 
-	action( success, failure ) {
+	action() {
 		let settings = get( this, "settings.content" );
 		let value    = get( this, "url" );
 		if ( !settings || !value ) {
-			return failure();
+			return Promise.reject();
 		}
 
 		set( settings, "gui_homepage", value );
-		settings.save()
-			.then( success, failure )
-			.catch( () => {} );
+		return settings.save();
 	}
 });

@@ -41,17 +41,17 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 	}),
 
 
-	action( success, failure ) {
+	action() {
 		let url = subscriptionCreateUrl;
 		let name = get( this, "id" );
 
 		if ( url && name ) {
 			url = url.replace( "{channel}", name );
 			openBrowser( url );
-			success();
+			return Promise.resolve();
 
 		} else {
-			failure();
+			return Promise.reject();
 		}
 	}
 });
