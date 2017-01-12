@@ -11,10 +11,10 @@ import layout from "templates/components/button/FormButtonComponent.hbs";
 const { equal } = computed;
 const { scheduleOnce } = run;
 
-const STATE_VOID    = 0;
-const STATE_LOADING = 1;
-const STATE_FAILURE = 2;
-const STATE_SUCCESS = 3;
+export const STATE_VOID    = 0;
+export const STATE_LOADING = 1;
+export const STATE_FAILURE = 2;
+export const STATE_SUCCESS = 3;
 
 
 export default Component.extend({
@@ -22,6 +22,7 @@ export default Component.extend({
 
 	tagName: "button",
 	classNames: [
+		"form-button-component",
 		"btn"
 	],
 	classNameBindings: [
