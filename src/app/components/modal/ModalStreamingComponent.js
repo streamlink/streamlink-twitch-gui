@@ -49,16 +49,13 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		download() {
+		download( success, failure ) {
 			let streamprovider = get( this, "settings.streamprovider" );
 			let provider = providers[ streamprovider ][ "type" ];
 
-			if ( downloadUrl[ provider ] ) {
-				openBrowser( downloadUrl[ provider ] );
-				return Promise.resolve();
-			}
-
-			return Promise.reject();
+			openBrowser( downloadUrl[ provider ] )
+				.then( success, failure )
+				.then( () => this.send( "close" ) );
 		},
 
 		abort() {

@@ -50,26 +50,21 @@ export default ListItemComponent.extend({
 
 
 	openBrowser( url ) {
-		var channel = get( this, "channel.id" );
-		if ( !channel ) { return Promise.reject(); }
+		let channel = get( this, "channel.id" );
 
-		url = url.replace( "{channel}", channel );
-		openBrowser( url );
-		return Promise.resolve();
+		return openBrowser( url, {
+			channel
+		});
 	},
 
 
 	actions: {
-		edit( success, failure ) {
-			this.openBrowser( subscriptionEditUrl )
-				.then( success, failure )
-				.catch(function() {});
+		edit() {
+			return this.openBrowser( subscriptionEditUrl );
 		},
 
-		cancel( success, failure ) {
-			this.openBrowser( subscriptionCancelUrl )
-				.then( success, failure )
-				.catch(function() {});
+		cancel() {
+			return this.openBrowser( subscriptionCancelUrl );
 		}
 	}
 });

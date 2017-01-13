@@ -1,3 +1,4 @@
+import "tests/nwjs/Shell";
 import "tests/utils/getStreamFromUrl";
 import "tests/utils/linkparser";
 import "tests/utils/semver";

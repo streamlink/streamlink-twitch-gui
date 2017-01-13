@@ -155,6 +155,7 @@ module.exports = {
 
 				// app folders
 				"config"      : r( pApp, "config" ),
+				"nwjs"        : r( pApp, "nwjs" ),
 				"initializers": r( pApp, "initializers" ),
 				"mixins"      : r( pApp, "mixins" ),
 				"services"    : r( pApp, "services" ),

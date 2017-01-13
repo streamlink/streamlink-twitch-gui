@@ -83,10 +83,7 @@ export default Service.extend({
 
 
 	_openDefaultBrowser( url ) {
-		return new Promise(function( resolve ) {
-			openBrowser( url );
-			next( resolve );
-		});
+		return openBrowser( url );
 	},
 
 

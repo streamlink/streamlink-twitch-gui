@@ -29,12 +29,8 @@ export default FormButtonComponent.extend({
 		let url = twitchEmotesUrl;
 		let channel = get( this, "channel.id" );
 
-		if ( url && channel ) {
-			url = url.replace( "{channel}", channel );
-			openBrowser( url );
-			return Promise.resolve();
-		}
-
-		return Promise.reject();
+		return openBrowser( url, {
+			channel
+		});
 	}
 });

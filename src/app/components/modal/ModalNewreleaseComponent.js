@@ -24,16 +24,12 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		download( success ) {
-			var url = get( this, "versioncheck.downloadURL" );
-			if ( url ) {
-				openBrowser( url );
-				if ( success instanceof Function ) {
-					success();
-				}
-			}
+		download( success, failure ) {
+			let url = get( this, "versioncheck.downloadURL" );
 
-			this.send( "ignore" );
+			openBrowser( url )
+				.then( success, failure )
+				.then( () => this.send( "ignore" ) );
 		},
 
 		ignore() {

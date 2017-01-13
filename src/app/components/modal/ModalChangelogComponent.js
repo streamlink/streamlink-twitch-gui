@@ -19,19 +19,14 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		showChangelog( success ) {
+		showChangelog( success, failure ) {
 			let version = get( this, "version" );
 
-			if ( version && releaseUrl ) {
-				let url = releaseUrl.replace( "{version}", version );
-				openBrowser( url );
-
-				if ( success instanceof Function ) {
-					success();
-				}
-			}
-
-			this.send( "close" );
+			openBrowser( releaseUrl, {
+				version
+			})
+				.then( success, failure )
+				.then( () => this.send( "close" ) );
 		}
 	}
 });

@@ -120,7 +120,8 @@ export default Service.extend( Evented, {
 
 			// open auth url in web browser
 			let url = get( this, "url" );
-			openBrowser( url );
+			openBrowser( url )
+				.catch( reject );
 		})
 			// shut down server and focus the application window when done
 			.finally( () => {

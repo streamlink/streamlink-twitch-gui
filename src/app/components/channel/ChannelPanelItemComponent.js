@@ -50,7 +50,7 @@ export default Component.extend({
 		var menu = Menu.create();
 		menu.items.pushObject({
 			label: "Open in browser",
-			click: openBrowser.bind( null, url )
+			click: () => openBrowser( url )
 		});
 
 		menu.popup( event );
