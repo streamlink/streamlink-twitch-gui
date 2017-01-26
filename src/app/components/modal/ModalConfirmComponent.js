@@ -1,5 +1,6 @@
 import { get } from "Ember";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import HotkeyMixin from "mixins/HotkeyMixin";
 import layout from "templates/components/modal/ModalConfirmComponent.hbs";
 
 
@@ -10,10 +11,17 @@ function actionFactory( action ) {
 }
 
 
-export default ModalDialogComponent.extend({
+export default ModalDialogComponent.extend( HotkeyMixin, {
 	layout,
 
 	"class": "modal-confirm",
+
+	hotkeys: [
+		{
+			code: [ "Enter", "NumpadEnter" ],
+			action: "apply"
+		}
+	],
 
 
 	actions: {

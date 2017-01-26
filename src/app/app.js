@@ -104,6 +104,7 @@ import VersioncheckService from "services/VersioncheckService";
 import StreamingService from "services/StreamingService";
 import NotificationService from "services/NotificationService";
 import ChatService from "services/ChatService";
+import HotkeyService from "services/HotkeyService";
 
 import ApplicationRoute from "routes/ApplicationRoute";
 
@@ -402,6 +403,7 @@ export default Application.create({
 	StreamingService,
 	NotificationService,
 	ChatService,
+	HotkeyService,
 
 
 	// Application

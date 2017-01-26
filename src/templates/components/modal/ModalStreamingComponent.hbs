@@ -33,12 +33,12 @@
 			{{/unless}}
 			{{#modal-footer}}
 				<div>
-					{{form-button action=(action "close")    classNames="btn-primary" icon="fa-arrow-left" title="Continue"}}
-					{{form-button action=(action "shutdown") classNames="btn-danger"  icon="fa-times"      title="Close stream"}}
+					{{form-button action=(action "close")    classNames="btn-primary" icon="fa-arrow-left" title="[Esc] Continue"}}
+					{{form-button action=(action "shutdown") classNames="btn-danger"  icon="fa-times"      title="[Q] Close stream"}}
 					{{form-button action=(action "toggleLog")
 						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.success::invisible"
 						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
-						title=(if active.showLog "Show stream title" (concat "Show " providername " " (if active.warning "warning" "log")))
+						title=(concat "[L] Toggle " providername " log")
 					}}
 				</div>
 				<div>

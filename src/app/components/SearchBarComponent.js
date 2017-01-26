@@ -10,6 +10,7 @@ import {
 	Component
 } from "Ember";
 import { vars } from "config";
+import HotkeyMixin from "mixins/HotkeyMixin";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import layout from "templates/components/SearchBarComponent.hbs" ;
 
@@ -20,7 +21,7 @@ const { next } = run;
 const { "search-history-size": searchHistorySize } = vars;
 
 
-export default Component.extend({
+export default Component.extend( HotkeyMixin, {
 	routing: service( "-routing" ),
 	store: service(),
 
@@ -39,6 +40,13 @@ export default Component.extend({
 	showDropdown: false,
 	filter: "all",
 	query: "",
+
+	hotkeys: [
+		{
+			code: "Slash",
+			action: "focus"
+		}
+	],
 
 
 	init() {
@@ -149,6 +157,10 @@ export default Component.extend({
 
 		refresh() {
 			get( this, "routing" ).refresh();
+		},
+
+		focus() {
+			this.$( "input[type='search']" ).focus();
 		},
 
 		toggleDropdown() {
