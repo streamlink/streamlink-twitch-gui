@@ -18,6 +18,7 @@ import {
 } from "utils/node/platform";
 
 
+const { MAX_SAFE_INTEGER: MAX } = Number;
 const {
 	providers,
 	"default-provider": defaultProvider,
@@ -148,8 +149,8 @@ export default Model.extend({
 	notify_badgelabel   : attr( "boolean", { defaultValue: true } ),
 	hls_live_edge       : attr( "number",  { defaultValue: 3, min: 1, max: 10 } ),
 	hls_segment_threads : attr( "number",  { defaultValue: 1, min: 1, max: 10 } ),
-	retry_open          : attr( "number",  { defaultValue: 1, min: 1, max: 10 } ),
-	retry_streams       : attr( "number",  { defaultValue: 1, min: 0, max: 3 } ),
+	retry_open          : attr( "number",  { defaultValue: 1, min: 1, max: MAX } ),
+	retry_streams       : attr( "number",  { defaultValue: 1, min: 0, max: MAX } ),
 	chat_method         : attr( "string",  { defaultValue: "default" } ),
 	chat_command        : attr( "string",  { defaultValue: "" } ),
 
