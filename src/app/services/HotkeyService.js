@@ -18,6 +18,7 @@ const ignoreElements = [
  * @property {Boolean?} altKey
  * @property {Boolean?} ctrlKey
  * @property {Boolean?} shiftKey
+ * @property {Boolean?} force
  * @property {(Function|String)} action
  */
 
@@ -27,9 +28,7 @@ class HotkeyRegistry {
 	 * @param {Hotkey[]} hotkeys
 	 */
 	constructor( context, hotkeys ) {
-		/** @type {Component} */
 		this.context = context;
-		/** @type {Hotkey[]} */
 		this.hotkeys = hotkeys;
 	}
 }
@@ -66,41 +65,49 @@ export default Service.extend({
 
 	/**
 	 * Find a registered hotkey that matches and execute the action of the one added last
-	 * @param {KeyboardEvent} event
+	 * @param {(KeyboardEvent|jQuery.Event)} event
 	 */
 	trigger( event ) {
-		if ( ignoreElements.some( element => event.target instanceof element ) ) {
-			return;
-		}
-
 		/** @type {KeyboardEvent} */
 		let e = event.originalEvent || event;
 		/** @type {Component} */
 		let context;
-		/** @type {(Function|String)} */
-		let action;
+		/** @type {Hotkey} */
+		let hotkey;
 
+		// find the first matching hotkey
 		let found = this.registries.some( registry => {
-			let hotkey = registry.hotkeys.find( h =>
+			hotkey = registry.hotkeys.find( h =>
 				   ( isArray( h.code ) ? h.code.indexOf( e.code ) !== -1 : h.code === e.code )
 				&& ( h.altKey === undefined || h.altKey === e.altKey )
 				&& ( h.ctrlKey === undefined || h.ctrlKey === e.ctrlKey )
 				&& ( h.shiftKey === undefined || h.shiftKey === e.shiftKey )
 			);
 
-			if ( hotkey ) {
-				context = registry.context;
-				action = hotkey.action;
-				return true;
+			if ( !hotkey ) {
+				return false;
 			}
+
+			context = registry.context;
+			return true;
 		});
 
+		// no registered hotkey matched the keyboard event
 		if ( !found ) {
 			return;
 		}
 
+		// an ignored element is focused and the hotkey is not forced
+		if ( !hotkey.force && ignoreElements.some( element => event.target instanceof element ) ) {
+			return;
+		}
+
+		// stop default behavior
 		event.preventDefault();
 		event.stopImmediatePropagation();
+
+		// execute action
+		let action = hotkey.action;
 
 		if ( typeof action === "string" ) {
 			context.send( action );

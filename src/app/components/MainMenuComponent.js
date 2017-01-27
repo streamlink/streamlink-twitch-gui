@@ -8,6 +8,7 @@ import { isDarwin } from "utils/node/platform";
 import layout from "templates/components/MainMenuComponent.hbs";
 
 
+const { isArray } = Array;
 const { service } = inject;
 
 
@@ -44,16 +45,19 @@ export default Component.extend( HotkeyMixin, {
 	hotkeys: [
 		{
 			code: "F5",
+			force: true,
 			action: refresh
 		},
 		{
 			code: "KeyR",
 			ctrlKey: true,
+			force: true,
 			action: refresh
 		},
 		{
 			code: "ArrowLeft",
 			altKey: true,
+			force: true,
 			action() {
 				get( this, "routing" ).history( -1 );
 			}
@@ -61,6 +65,7 @@ export default Component.extend( HotkeyMixin, {
 		{
 			code: "ArrowRight",
 			altKey: true,
+			force: true,
 			action() {
 				get( this, "routing" ).history( +1 );
 			}
@@ -73,6 +78,7 @@ export default Component.extend( HotkeyMixin, {
 		},
 		...Object.keys( routeHotkeys ).map( route => ({
 			code: routeHotkeys[ route ],
+			force: !isArray( routeHotkeys[ route ] ),
 			action() {
 				get( this, "routing" ).transitionTo( route );
 			}
