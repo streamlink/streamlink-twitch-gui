@@ -6,6 +6,7 @@ import {
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "components/button/FormButtonComponent";
+import HotkeyMixin from "mixins/HotkeyMixin";
 
 
 const { and, or } = computed;
@@ -13,7 +14,7 @@ const { service } = inject;
 const { "emotes-url": twitchEmotesUrl } = twitch;
 
 
-export default FormButtonComponent.extend({
+export default FormButtonComponent.extend( HotkeyMixin, {
 	settings: service(),
 
 	showButton: false,
@@ -23,7 +24,16 @@ export default FormButtonComponent.extend({
 	classNames: [ "btn-neutral" ],
 	icon: "fa-smile-o",
 	iconanim: true,
-	title: "Show available channel emotes",
+	title: "[E] Show available channel emotes",
+
+	hotkeys: [
+		{
+			code: "KeyE",
+			action() {
+				this.click();
+			}
+		}
+	],
 
 	action() {
 		let url = twitchEmotesUrl;

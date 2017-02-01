@@ -7,6 +7,7 @@ import {
 } from "Ember";
 import { streamprovider } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import HotkeyMixin from "mixins/HotkeyMixin";
 import qualities from "models/stream/qualities";
 import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalStreamingComponent.hbs";
@@ -22,7 +23,7 @@ const {
 } = streamprovider;
 
 
-export default ModalDialogComponent.extend({
+export default ModalDialogComponent.extend( HotkeyMixin, {
 	streaming: service(),
 	settings: service(),
 
@@ -46,6 +47,34 @@ export default ModalDialogComponent.extend({
 
 		return providers[ streamprovider ][ "name" ];
 	}),
+
+
+	hotkeys: [
+		{
+			code: [ "Escape", "Backspace" ],
+			action() {
+				if ( get( this, "active" ) ) {
+					this.send( "close" );
+				} else {
+					this.send( "abort" );
+				}
+			}
+		},
+		{
+			code: [ "KeyQ", "KeyX" ],
+			action() {
+				if ( get( this, "active" ) ) {
+					this.send( "shutdown" );
+				} else {
+					this.send( "abort" );
+				}
+			}
+		},
+		{
+			code: "KeyL",
+			action: "toggleLog"
+		}
+	],
 
 
 	actions: {

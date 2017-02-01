@@ -6,13 +6,14 @@ import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
+import HotkeyMixin from "mixins/HotkeyMixin";
 
 
 const { alias, and } = computed;
 const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
 
 
-export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
+export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 	modelName: "twitchUserSubscription",
 
 	// model alias (component attribute)
@@ -33,12 +34,21 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 	titleLoading: "",
 	titleSuccess: computed( "name", function() {
 		let name = get( this, "name" );
-		return `You are subscribed to ${name}`;
+		return `[S] Renew subscription to ${name}`;
 	}),
 	titleFailure: computed( "name", function() {
 		let name = get( this, "name" );
-		return `Subscribe to ${name} now`;
+		return `[S] Subscribe to ${name} now`;
 	}),
+
+	hotkeys: [
+		{
+			code: "KeyS",
+			action() {
+				this.click();
+			}
+		}
+	],
 
 
 	action() {

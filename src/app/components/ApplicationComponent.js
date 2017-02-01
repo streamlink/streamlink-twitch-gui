@@ -6,7 +6,6 @@ import {
 	Component
 } from "Ember";
 import { themes } from "config";
-import { isDarwin } from "utils/node/platform";
 import guiSelectable from "gui/selectable";
 import {
 	enable as enableSmoothScroll,
@@ -23,7 +22,7 @@ const reTheme = /^theme-/;
 
 
 export default Component.extend({
-	routing: service( "-routing" ),
+	hotkey: service(),
 	settings: service(),
 
 	layout,
@@ -70,26 +69,9 @@ export default Component.extend({
 	},
 
 	keyUp( e ) {
-		// f5 or ctrl+r
-		if ( e.keyCode === 116 || e.keyCode ===  82 && e.ctrlKey === true ) {
-			// MacOS has its menubar with its own hotkeys
-			if ( isDarwin ) { return; }
-			get( this, "routing" ).refresh();
+		const HotkeyService = get( this, "hotkey" );
 
-		// alt+left
-		} else if ( e.keyCode === 37 && e.altKey ) {
-			get( this, "routing" ).history( -1 );
-
-		// alt+right
-		} else if ( e.keyCode === 39 && e.altKey ) {
-			get( this, "routing" ).history( +1 );
-
-		} else {
-			return;
-		}
-
-		e.preventDefault();
-		e.stopImmediatePropagation();
+		return HotkeyService.trigger( e );
 	},
 
 	disableGlobalDragAndDrop() {
