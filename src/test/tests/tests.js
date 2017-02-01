@@ -26,3 +26,4 @@ import "tests/components/form/NumberFieldComponent";
 import "tests/components/form/RadioBtnsComponent";
 import "tests/components/list/ContentListComponent";
 import "tests/components/list/InfiniteScrollComponent";
+import "tests/services/HotkeyService";

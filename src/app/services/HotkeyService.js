@@ -114,9 +114,6 @@ export default Service.extend({
 
 		} else if ( action instanceof Function ) {
 			action.call( context );
-
-		} else {
-			throw new Error( "Invalid hotkey action" );
 		}
 	}
 });
