@@ -28,7 +28,7 @@
 	{{#if documentation}}
 		<p class="section">
 			{{#unless (is-null documentationUrl)}}
-				{{documentation-link item=documentation baseUrl=documentationUrl classNames=(if documentationUrl "hoverable" "")}}
+				{{documentation-link item=documentation baseUrl=documentationUrl class=(if documentationUrl "hoverable" "")}}
 			{{else}}
 				{{documentation-link item=documentation classNames="hoverable"}}
 			{{/unless}}

@@ -4,10 +4,11 @@
 {{headline-totals model.meta.total}}
 {{#quick-bar}}
 {{form-button
-  action=(action "toggleAll")
-  classNames=(unless (is-equal all "true") "active")
-  icon="fa-video-camera"
-  title=(if (is-equal all "true") "Show games with live channels" "Show all followed games")}}
+	action=(action "toggleAll")
+	class=(unless (is-equal all "true") "active")
+	icon="fa-video-camera"
+	title=(if (is-equal all "true") "Show games with live channels" "Show all followed games")
+}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>

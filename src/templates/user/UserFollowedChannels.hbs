@@ -6,29 +6,29 @@
 <div class="multibtn sort-method">
 {{form-button
   action=(action "sortMethod" "created_at")
-  classNames=(if (is-equal sortby "created_at") "active")
+  class=(if (is-equal sortby "created_at") "active")
   icon="fa-calendar"
   title="Sort by date followed"}}
 {{form-button
   action=(action "sortMethod" "last_broadcast")
-  classNames=(if (is-equal sortby "last_broadcast") "active")
+  class=(if (is-equal sortby "last_broadcast") "active")
   icon="fa-video-camera"
   title="Sort by last broadcast"}}
 {{form-button
   action=(action "sortMethod" "login")
-  classNames=(if (is-equal sortby "login") "active")
+  class=(if (is-equal sortby "login") "active")
   icon="fa-sign-in"
   title="Sort by last login"}}
 </div>
 <div class="multibtn sort-order">
 {{form-button
   action=(action "sortOrder" "desc")
-  classNames=(if (is-equal direction "desc") "active")
+  class=(if (is-equal direction "desc") "active")
   icon="fa-long-arrow-down"
   title="Sort in descending order"}}
 {{form-button
   action=(action "sortOrder" "asc")
-  classNames=(if (is-equal direction "asc") "active")
+  class=(if (is-equal direction "asc") "active")
   icon="fa-long-arrow-up"
   title="Sort in ascending order"}}
 </div>

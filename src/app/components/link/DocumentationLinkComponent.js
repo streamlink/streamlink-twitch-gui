@@ -29,9 +29,16 @@ export default ExternalLinkComponent.extend({
 	}),
 
 	tagName: "span",
-	classNameBindings: [ ":documentation-link-component", "url:with-url" ],
-	attributeBindings: [ "title" ],
+	classNameBindings: [
+		":documentation-link-component",
+		"url:with-url",
+		"class"
+	],
+	attributeBindings: [
+		"title"
+	],
 
+	class: "",
 	title: computed( "baseUrl", function() {
 		let baseUrl = get( this, "baseUrl" );
 

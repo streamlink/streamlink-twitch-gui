@@ -12,11 +12,12 @@
 {{input type="text" class="form-control" value=token placeholder="Insert access token" autofocus=true}}
 <span class="input-group-btn">
 {{form-button
-  action=(action "signinToken")
-  classNames=(get-param "btn-primary" "btn-info" "btn-danger" "btn-success" index=userStatus)
-  icon=(get-param       "fa-sign-in"  " "        "fa-times"   "fa-check"    index=userStatus)
-  iconanim=true
-  spinner=true}}
+	action=(action "signinToken")
+	class=(get-param "btn-primary" "btn-info" "btn-danger" "btn-success" index=userStatus)
+	icon=(get-param  "fa-sign-in"  " "        "fa-times"   "fa-check"    index=userStatus)
+	iconanim=true
+	spinner=true
+}}
 </span>
 </div>
 {{#unless hasLoginResult}}

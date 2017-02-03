@@ -27,7 +27,8 @@ export default Component.extend({
 	],
 	classNameBindings: [
 		"_iconClass",
-		"_animClass"
+		"_animClass",
+		"class"
 	],
 	attributeBindings: [
 		"type",
@@ -38,6 +39,7 @@ export default Component.extend({
 	type: "button",
 	disabled: false,
 	title: null,
+	class: "",
 
 	action: null,
 
