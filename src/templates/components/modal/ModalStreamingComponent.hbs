@@ -32,7 +32,7 @@
 				{{/modal-body}}
 			{{/unless}}
 			{{#modal-footer}}
-				<div>
+				<div class="button-list-horizontal-wide">
 					{{form-button action=(action "close")    classNames="btn-primary" icon="fa-arrow-left" title="[Esc] Continue"}}
 					{{form-button action=(action "shutdown") classNames="btn-danger"  icon="fa-times"      title="[Q] Close stream"}}
 					{{form-button action=(action "toggleLog")
@@ -41,7 +41,7 @@
 						title=(concat "[L] Toggle " providername " log")
 					}}
 				</div>
-				<div>
+				<div class="button-list-horizontal-wide">
 					{{open-chat channel=active.channel}}
 					{{twitch-emotes channel=active.channel}}
 					{{share-channel channel=active.channel}}

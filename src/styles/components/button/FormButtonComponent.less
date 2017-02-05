@@ -1,28 +1,13 @@
 
-.btn {
-	padding: 0 @button-padding;
-	border-width: @button-border-width;
-	border-radius: 0;
+.form-button-component {
+	display: block;
+	min-width: 2.25em;
+	height: 2.25em;
 	font-size: 1rem;
-	line-height: 2;
-	z-index: initial !important;
-	transition: background .2s ease-out, border-color .2s ease-out;
-
-	&,
-	&.btn-primary { .btn-color( @color-primary ); }
-	&.btn-success { .btn-color( @color-success ); }
-	&.btn-danger  { .btn-color( @color-danger  ); }
-	&.btn-neutral { .btn-color( @color-neutral ); }
-	&.btn-info    { .btn-color( @color-info    ); }
-	&.btn-hint    { .btn-color( @color-hint    ); }
-
-	&:not(:disabled):active {
-		box-shadow: none;
-	}
+	.btn;
 }
 
-.btn-icon {
-	min-width: 2.25em;
+.form-button-component.icon {
 	overflow: hidden;
 
 	> i {
@@ -54,7 +39,7 @@
 		}
 	});
 
-	&.btn-with-anim > i {
+	&.animated > i {
 		@duration: .5s;
 		@easing: ease-out;
 
@@ -68,14 +53,34 @@
 	}
 }
 
-.btn.btn-with-icon {
-	.btn-icon;
+.form-button-component.icon-and-text {
+	.form-button-component.icon;
 
 	min-width: 9em;
 
 	> i,
 	> svg {
+		width: 1em;
 		margin-left: ( -1 * ( 1 + @button-icon-spacing ) );
 		margin-right: @button-icon-spacing;
+	}
+}
+
+.button-list-horizontal {
+	&,
+	&-wide {
+		display: flex;
+	}
+
+	& {
+		> *:not(:last-child) {
+			margin-right: .5rem;
+		}
+	}
+
+	&-wide {
+		> *:not(:last-child) {
+			margin-right: 1rem;
+		}
 	}
 }

@@ -4,11 +4,11 @@
 <ul class="list-unstyled">
 {{#each sortedModel as |watching|}}
 {{#stream-presentation stream=watching.stream tagName="li" class="watching" clickablePreview=false}}
-<div>
+<div class="button-list-horizontal">
 {{form-button action=(action "openDialog" watching.stream) icon="fa-arrow-up" title="Open dialog"}}
 {{form-button action=(action "closeStream" watching.stream) classNames="btn-danger" icon="fa-times" title="Close stream"}}
 </div>
-<div>
+<div class="button-list-horizontal">
 {{open-chat channel=watching.stream.channel disableHotkeys=true}}
 {{share-channel channel=watching.stream.channel disableHotkeys=true}}
 </div>

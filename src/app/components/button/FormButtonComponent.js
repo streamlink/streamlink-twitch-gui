@@ -22,8 +22,7 @@ export default Component.extend({
 
 	tagName: "button",
 	classNames: [
-		"form-button-component",
-		"btn"
+		"form-button-component"
 	],
 	classNameBindings: [
 		"_iconClass",
@@ -83,14 +82,14 @@ export default Component.extend({
 	_iconClass: computed( "icon", "hasBlock", function() {
 		return get( this, "icon" )
 			? get( this, "hasBlock" )
-				? "btn-with-icon"
-				: "btn-icon"
+				? "icon-and-text"
+				: "icon"
 			: "";
 	}),
 
 	_animClass: computed( "_status", function() {
 		return get( this, "_status" ) !== STATE_VOID
-			? "btn-with-anim"
+			? "animated"
 			: "";
 	}),
 
