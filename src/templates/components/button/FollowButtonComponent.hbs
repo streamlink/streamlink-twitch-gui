@@ -1,0 +1,37 @@
+{{form-button
+	classNames="btn-danger confirm-button"
+	icon="fa-heart-o"
+	iconanim=true
+	title=(concat "Unfollow " name)
+	action=(unless isLocked
+		(if isExpanded (action "unfollow"))
+	)
+}}
+{{form-button
+	class=(if isLoading
+		"btn-info"
+		(if isPromptVisible
+			"btn-success"
+			(if isSuccessful "btn-success" "btn-danger")
+		)
+	)
+	isLoading=(if isExpanded false isLoading)
+	icon=(if isPromptVisible
+		"fa-arrow-left"
+		(if isSuccessful "fa-heart" "fa-heart-o")
+	)
+	iconanim=(bool-not isExpanded)
+	title=(if isLoading
+		""
+		(if isPromptVisible
+			(concat "Keep following " name)
+			(concat (if isSuccessful "Unfollow " "Follow ") name)
+		)
+	)
+	action=(unless isLocked
+		(action (if isSuccessful
+			(if isExpanded "collapse" "expand")
+			"follow"
+		))
+	)
+}}

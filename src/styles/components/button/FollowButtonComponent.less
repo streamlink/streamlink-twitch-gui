@@ -1,0 +1,23 @@
+
+.follow-button-component {
+	position: relative;
+	width: 2.25rem;
+	height: 2.25rem;
+
+	> .form-button-component {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+	}
+
+	> .confirm-button {
+		transition: left .2s ease-out;
+	}
+
+	&.expanded {
+		> .confirm-button {
+			left: 100%;
+		}
+	}
+}

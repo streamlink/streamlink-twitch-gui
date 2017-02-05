@@ -1,12 +1,11 @@
 import { computed } from "Ember";
-import FormButtonComponent from "components/button/FormButtonComponent";
-import FollowButtonMixin from "mixins/FollowButtonMixin";
+import FollowButtonComponent from "components/button/FollowButtonComponent";
 
 
 const { alias } = computed;
 
 
-export default FormButtonComponent.extend( FollowButtonMixin, {
+export default FollowButtonComponent.extend({
 	modelName: "twitchUserFollowsGame",
 
 	// model alias (component attribute)

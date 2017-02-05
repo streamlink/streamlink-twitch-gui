@@ -25,6 +25,8 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixi
 
 	isVisible: and( "isValid", "model.partner" ),
 
+	classNameBindings: [ "_class" ],
+
 	classLoading: "btn-primary",
 	classSuccess: "btn-success",
 	classFailure: "btn-primary",
