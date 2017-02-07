@@ -3,14 +3,14 @@
 <p>Logged in as {{auth.session.user_name}}</p>
 <p>since {{format-time auth.session.date "dddd, MMMM Do YYYY, h:mm:ss a"}}</p>
 <p>{{notification.statusText}}</p>
-<button type="button" class="btn btn-with-icon btn-signout" {{action "signout"}}><i class="fa fa-sign-out"></i>Sign out</button>
+{{#form-button classNames="btn-signout" icon="fa-sign-out" action=(action "signout")}}Sign out{{/form-button}}
 {{#if settings.advanced}}
 <footer>
 {{#if showTokenForm}}
 <div class="input-group token-form">
 {{input classNames="form-control" readonly=true autofocus=true autoselect=true value=auth.session.access_token title="Your access token"}}
 <span class="input-group-btn">
-{{form-button action=(action "copyToken") icon="fa-copy" iconanim=true title="Copy to clipboard"}}
+{{form-button action=(action "copyToken") classNames="btn" icon="fa-copy" iconanim=true title="Copy to clipboard"}}
 </span>
 </div>
 <p class="hint">This key grants access to your Twitch.tv account with these permissions:<br><em>{{scope}}</em><br>Log in again with your password to invalidate it.</p>

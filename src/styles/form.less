@@ -57,3 +57,26 @@ input:disabled {
 		cursor: default !important;
 	}
 }
+
+
+.btn {
+	padding: 0 @button-padding;
+	border: @button-border-width solid;
+	border-radius: 0;
+	font-size: 1rem;
+	line-height: 2;
+	z-index: initial !important;
+	transition: background .2s ease-out, border-color .2s ease-out;
+
+	&,
+	&.btn-primary { .btn-color( @color-primary ); }
+	&.btn-success { .btn-color( @color-success ); }
+	&.btn-danger  { .btn-color( @color-danger  ); }
+	&.btn-neutral { .btn-color( @color-neutral ); }
+	&.btn-info    { .btn-color( @color-info    ); }
+	&.btn-hint    { .btn-color( @color-hint    ); }
+
+	&:not(:disabled):active {
+		box-shadow: none;
+	}
+}

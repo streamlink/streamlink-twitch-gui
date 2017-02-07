@@ -45,8 +45,6 @@ export default Mixin.create({
 	iconanim: true,
 	spinner : true,
 
-	classNameBindings: [ "_class" ],
-
 	classLoading: "btn-info",
 	classSuccess: "btn-success",
 	classFailure: "btn-danger",

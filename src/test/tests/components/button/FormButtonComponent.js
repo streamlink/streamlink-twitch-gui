@@ -76,7 +76,7 @@ test( "Basic attributes", assert => {
 		"The button exists"
 	);
 	assert.ok(
-		$btn.hasClass( "btn-icon" ) && !$btn.hasClass( "btn-with-icon" ),
+		$btn.hasClass( "icon" ) && !$btn.hasClass( "icon-and-text" ),
 		"Has non-block button icon class"
 	);
 	assert.ok(
@@ -120,7 +120,7 @@ test( "FormButtonComponent with block", assert => {
 	let $btn = getElem( context, ".form-button-component" );
 
 	assert.ok(
-		$btn.hasClass( "btn-with-icon" ) && !$btn.hasClass( "btn-icon" ),
+		$btn.hasClass( "icon-and-text" ) && !$btn.hasClass( "icon" ),
 		"Has block button icon class"
 	);
 	assert.strictEqual(
@@ -186,7 +186,7 @@ test( "Icon animations", assert => {
 	$btn.click();
 
 	assert.ok(
-		$btn.hasClass( "btn-with-anim" ),
+		$btn.hasClass( "animated" ),
 		"Has button animation class"
 	);
 	assert.ok(
@@ -217,7 +217,7 @@ test( "Icon animations", assert => {
 	run( () => $btn.trigger( "webkitAnimationEnd" ) );
 
 	assert.ok(
-		!$btn.hasClass( "btn-with-anim" ),
+		!$btn.hasClass( "animated" ),
 		"Button does not have the animation class anymore"
 	);
 	assert.strictEqual(
@@ -243,7 +243,7 @@ test( "Icon animations", assert => {
 	$btn.click();
 
 	assert.ok(
-		$btn.hasClass( "btn-with-anim" ),
+		$btn.hasClass( "animated" ),
 		"Has button animation class"
 	);
 	assert.ok(
@@ -274,7 +274,7 @@ test( "Icon animations", assert => {
 	run( () => $btn.trigger( "webkitAnimationEnd" ) );
 
 	assert.ok(
-		!$btn.hasClass( "btn-with-anim" ),
+		!$btn.hasClass( "animated" ),
 		"Button does not have the animation class anymore"
 	);
 	assert.strictEqual(
