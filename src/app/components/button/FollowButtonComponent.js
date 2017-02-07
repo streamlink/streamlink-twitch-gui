@@ -2,6 +2,7 @@ import {
 	get,
 	set,
 	run,
+	on,
 	Component
 } from "Ember";
 import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
@@ -25,12 +26,16 @@ export default Component.extend( TwitchInteractButtonMixin, {
 	isExpanded: false,
 	isPromptVisible: false,
 
+	mouseLeaveTime: 1000,
+	_timeout: null,
+
 	didInsertElement() {
 		this._super( ...arguments );
 		this.$confirmbutton = this.$( ".confirm-button" );
 	},
 
 	expand() {
+		this.$confirmbutton.off( "webkitTransitionEnd" );
 		set( this, "isExpanded", true );
 		set( this, "isPromptVisible", true );
 	},
@@ -38,35 +43,50 @@ export default Component.extend( TwitchInteractButtonMixin, {
 	collapse() {
 		set( this, "isExpanded", false );
 
-		return new Promise( r => this.$confirmbutton.one( "webkitTransitionEnd", r ) )
-			.then( () => set( this, "isPromptVisible", false ) );
+		return new Promise( r => this.$confirmbutton.one( "webkitTransitionEnd", () => {
+			if ( get( this, "isDestroyed" ) ) {
+				return;
+			}
+			set( this, "isPromptVisible", false );
+			r();
+		}) );
 	},
 
 	mouseEnter() {
-		if ( this._clearTimer() ) {
+		// expand when there was a timer (do cleanup) or during collapse transition
+		if (
+			   this._clearTimeout()
+			|| !get( this, "isExpanded" ) && get( this, "isPromptVisible" )
+		) {
 			this.expand();
 		}
 	},
 
 	mouseLeave() {
-		this._clearTimer();
-		if ( get( this, "isExpanded" ) ) {
-			this._timer = later( () => {
-				this._timer = null;
-				this.collapse();
-			}, 1000 );
+		this._clearTimeout();
+
+		if ( !get( this, "isExpanded" ) ) {
+			return;
 		}
+
+		let time = get( this, "mouseLeaveTime" );
+		this._timeout = later( () => {
+			this._timeout = null;
+			this.collapse();
+		}, time || 1000 );
 	},
 
-	_clearTimer() {
-		if ( !this._timer ) {
+	_clearTimeout: on( "willDestroyElement", function() {
+		if ( !this._timeout ) {
 			return false;
 		}
-		cancel( this._timer );
-		this._timer = null;
+
+		cancel( this._timeout );
+		this._timeout = null;
 		this.$confirmbutton.off( "webkitTransitionEnd" );
+
 		return true;
-	},
+	}),
 
 
 	actions: {
