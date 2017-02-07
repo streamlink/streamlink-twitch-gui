@@ -9,7 +9,7 @@
 			All streams have been closed. Do you want to quit now?
 		{{/if}}
 	{{/modal-body}}
-	{{#modal-footer}}
+	{{#modal-footer classNames="button-list-horizontal"}}
 		{{#form-button action=(action "close") classNames="btn-primary" icon="fa-thumbs-down"}}Return{{/form-button}}
 		{{#if hasStreams}}
 			{{#form-button action=(action "shutdown") classNames="btn-danger" icon="fa-power-off"}}Shutdown{{/form-button}}

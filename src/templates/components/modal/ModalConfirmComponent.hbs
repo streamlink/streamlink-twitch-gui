@@ -5,7 +5,7 @@
 	{{#modal-body}}
 		Do you want to apply your changes?
 	{{/modal-body}}
-	{{#modal-footer}}
+	{{#modal-footer classNames="button-list-horizontal"}}
 		{{#form-button action=(action "apply")   classNames="btn-success" icon="fa-check"   iconanim=true}}Apply{{/form-button}}
 		{{#form-button action=(action "discard") classNames="btn-danger"  icon="fa-trash-o" iconanim=true}}Discard{{/form-button}}
 		{{#form-button action=(action "cancel")  classNames="btn-neutral" icon="fa-times"                }}Cancel{{/form-button}}

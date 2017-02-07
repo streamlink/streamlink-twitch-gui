@@ -5,7 +5,7 @@
 	{{#modal-body}}
 		Do you want to download the latest release now? ({{latest}})
 	{{/modal-body}}
-	{{#modal-footer}}
+	{{#modal-footer classNames="button-list-horizontal"}}
 		{{#form-button action=(action "download") classNames="btn-success" icon="fa-download" iconanim=true}}Download{{/form-button}}
 		{{#form-button action=(action "ignore")   classNames="btn-danger"  icon="fa-times"                 }}Ignore{{/form-button}}
 	{{/modal-footer}}
