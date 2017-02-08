@@ -29,7 +29,9 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 	layout,
 
-	"class": "modal-streaming",
+	classNames: [
+		"modal-streaming-component"
+	],
 
 	error : readOnly( "streaming.error" ),
 	active: readOnly( "streaming.active" ),
