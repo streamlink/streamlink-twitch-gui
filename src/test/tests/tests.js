@@ -11,6 +11,7 @@ import "tests/utils/node/resolvePath";
 import "tests/utils/node/fs/stat";
 import "tests/utils/node/fs/which";
 import "tests/utils/node/fs/whichFallback";
+import "tests/utils/node/fs/mkdirp";
 import "tests/helpers/is-";
 import "tests/helpers/bool-";
 import "tests/helpers/math-";

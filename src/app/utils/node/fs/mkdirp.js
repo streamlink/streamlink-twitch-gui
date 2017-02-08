@@ -3,11 +3,24 @@ import {
 	stat,
 	isDirectory
 } from "utils/node/fs/stat";
-import PATH from "path";
-import FS from "fs";
+import { isWin } from "utils/node/platform";
+import { dirname } from "path";
+import {
+	mkdir,
+	W_OK
+} from "fs";
 
 
-const fsMkdir = denodify( FS.mkdir );
+/**
+ * @type {Function}
+ * @returns {Promise}
+ */
+const fsMkdir = denodify( mkdir );
+
+export const check = stats => {
+	return isDirectory( stats )
+	    && ( isWin || ( stats.mode & W_OK ) > 0 );
+};
 
 
 /**
@@ -18,16 +31,25 @@ const fsMkdir = denodify( FS.mkdir );
  */
 function mkdirp( dir ) {
 	return fsMkdir( dir )
-		.catch(function( err ) {
-			if ( err && err.code === "ENOENT" ) {
+		.catch( err => {
+			if ( err && err.code === "EEXIST" ) {
+				// directory already exists
+				return Promise.resolve( dir );
+
+			} else if ( err && err.code === "ENOENT" ) {
 				// recursively try to create the parent folder
-				return mkdirp( PATH.dirname( dir ) )
+				let parent = dirname( dir );
+				if ( parent === dir ) {
+					throw new Error( "Can't create parent folder" );
+				}
+
+				return mkdirp( parent )
 					// try the current folder again
-					.then( fsMkdir.bind( null, dir ) );
+					.then( () => fsMkdir( dir ) );
 
 			} else {
-				// does the dir already exist?
-				return stat( dir, isDirectory );
+				// check if current path is a directory and if it is writable
+				return stat( dir, check );
 			}
 		});
 }
