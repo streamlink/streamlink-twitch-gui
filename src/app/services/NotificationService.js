@@ -471,7 +471,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	showNotification( data ) {
 		let provider = get( this, "settings.notify_provider" );
 
-		showNotification( provider, data )
+		showNotification( provider, data, provider !== "auto" )
 			.catch(function() {});
 	},
 
