@@ -1,9 +1,9 @@
-var TemplateCompiler = require( "../../bower_components/ember/ember-template-compiler" );
-var precompile = TemplateCompiler.precompile;
+const TemplateCompiler = require( "../../bower_components/ember/ember-template-compiler" );
+const { precompile } = TemplateCompiler;
 
 
-module.exports = function( source ) {
-	var precompiled = precompile( source ).toString();
+module.exports = function( content ) {
+	const precompiled = precompile( content ).toString();
 
-	return "module.exports=require('Ember').default.HTMLBars.template(" + precompiled + ");";
+	return `module.exports=require('Ember').default.HTMLBars.template(${precompiled});`;
 };

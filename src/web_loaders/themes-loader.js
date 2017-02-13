@@ -1,34 +1,17 @@
-var PATH = require( "path" );
-var themes = require( "../config/themes.json" );
-
-var themesVarName = "THEMES";
-var themesPath = "themes/";
-
 
 module.exports = function( content ) {
-	this.addDependency( PATH.resolve( "..", "config", "themes.json" ) );
+	const { config, themesVarName, themesPath } = this.query;
 
-	var imports = themes.themes
-		.map(function( theme ) {
-			return "@import \"" + themesPath + theme + "\";";
-		})
+	const themes = require( config );
+	this.addDependency( config );
+
+	const imports = themes.themes
+		.map( theme => `@import "${themesPath}${theme}";` )
 		.join( "\n" );
 
-	var list = themes.themes
-		.map(function( theme ) {
-			return "~\"" + theme + "\"";
-		})
+	const list = themes.themes
+		.map( theme => `~"${theme}"` )
 		.join( ", " );
 
-	return [
-		content,
-		"\n\n\n",
-		imports,
-		"\n",
-		"@",
-		themesVarName,
-		": ",
-		list,
-		";"
-	].join( "" );
+	return `${content}\n\n\n${imports}\n@${themesVarName}: ${list};`;
 };

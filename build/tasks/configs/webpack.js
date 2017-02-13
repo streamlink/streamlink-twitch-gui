@@ -10,8 +10,10 @@ const { tmpdir } = require( "os" );
 
 
 // path definitions
+const pProjectRoot = r( "." );
 const pRoot = r( ".", "src" );
 const pApp = r( pRoot, "app" );
+const pConfig = r( pRoot, "config" );
 const pTest = r( pRoot, "test" );
 const pTestFixtures = r( pTest, "fixtures" );
 const pStyles = r( pRoot, "styles" );
@@ -53,7 +55,12 @@ const commonLoaders = [
 	},
 	{
 		test: /metadata\.js$/,
-		loader: "metadata-loader"
+		loader: "metadata-loader",
+		options: {
+			dependencyProperties: [ "dependencies", "devDependencies" ],
+			packageNpm: r( pProjectRoot, "package.json" ),
+			packageBower: r( pProjectRoot, "bower.json" )
+		}
 	},
 	// Vendor stylesheets (don't parse anything)
 	{
@@ -104,10 +111,19 @@ const commonLoaders = [
 					}
 				},
 				{
-					loader: "flag-icons-loader"
+					loader: "flag-icons-loader",
+					options: {
+						config: r( pConfig, "langs.json" ),
+						ignore: [ "en" ]
+					}
 				},
 				{
-					loader: "themes-loader"
+					loader: "themes-loader",
+					options: {
+						config: r( pConfig, "themes.json" ),
+						themesVarName: "THEMES",
+						themesPath: "themes/"
+					}
 				}
 			]
 		})

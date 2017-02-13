@@ -1,14 +1,13 @@
-module.exports = function( input ) {
-	// dirty, but does its simple job
-	var reFileNameLine  = /^(\s*".+"\s*:\s*)"(.+\.\w+)"(\s*,?\s*)$/;
-	var strFileNameLine = "$1require(\"$2\")$3";
+// dirty, but does its simple job
+const reFileNameLine = /^(\s*".+"\s*:\s*)"(.+\.\w+)"(\s*,?\s*)$/;
+const strFileNameLine = "$1require(\"$2\")$3";
 
-	var output = JSON.stringify( JSON.parse( input ), undefined, "\t" )
+
+module.exports = function( content ) {
+	const output = JSON.stringify( JSON.parse( content ), undefined, "\t" )
 		.split( "\n" )
-		.map(function( line ) {
-			return line.replace( reFileNameLine, strFileNameLine );
-		})
+		.map( line => line.replace( reFileNameLine, strFileNameLine ) )
 		.join( "\n" );
 
-	return "module.exports = " + output + ";";
+	return `module.exports = ${output};`;
 };
