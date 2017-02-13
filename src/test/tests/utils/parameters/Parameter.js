@@ -124,7 +124,7 @@ test( "Substituted parameters", function( assert ) {
 		paramTitleB: "--title \'{title}\'",
 		paramTitleC: "--title {title}",
 
-		curlies: "{foo} {{bar}} {{{baz}}} {{qux} {quux}}",
+		curlies: "} {foo} {{bar}} {{{baz}}} {{qux} {quux}} }{",
 		paramCurlies: "\"{curlies}\""
 	};
 
@@ -167,7 +167,7 @@ test( "Substituted parameters", function( assert ) {
 
 	assert.deepEqual(
 		getParameters( obj, [ paramTitleD ] ),
-		[ "-a", "\"{{foo}} {{{{bar}}}} {{{{{{baz}}}}}} {{{{qux}} {{quux}}}}\"" ],
+		[ "-a", "\"}} {{foo}} {{{{bar}}}} {{{{{{baz}}}}}} {{{{qux}} {{quux}}}} }}{{\"" ],
 		"Escape curly braces"
 	);
 

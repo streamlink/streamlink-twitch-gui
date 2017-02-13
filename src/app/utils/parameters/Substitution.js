@@ -5,7 +5,7 @@ import {
 
 
 const reSubstitution = /(\{)?\{([a-z]+)}(})?/ig;
-const reCurly        = /(\{+)([^}]+)(}+)/ig;
+const reCurly        = /[{}]/ig;
 const reWhitespace   = /\s+/g;
 const reQuote        = /^['"]$/;
 const reDoubleQuote  = /"|\\$/g;
@@ -14,12 +14,8 @@ const reAll          = /./g;
 const strEscape      = "\\";
 
 
-function fnCurly( all, left, name, right ) {
-	// double the number of curly braces
-	left = `${left}${left}`;
-	right = `${right}${right}`;
-
-	return `${left}${name}${right}`;
+function fnCurly( str ) {
+	return `${str}${str}`;
 }
 
 function fnEscape( str ) {
