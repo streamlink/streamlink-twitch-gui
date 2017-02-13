@@ -20,7 +20,7 @@ import {
 	Service
 } from "Ember";
 import followButtonComponentInjector
-	from "inject?mixins/TwitchInteractButtonMixin!components/button/FollowButtonComponent";
+	from "inject-loader?mixins/TwitchInteractButtonMixin!components/button/FollowButtonComponent";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import BoolNotHelper from "helpers/BoolNotHelper";
 

@@ -16,7 +16,7 @@ module.exports = function() {
 
 	this.addDependency( packageNpm );
 	this.addDependency( packageBower );
-	this.cacheable();
+	this.cacheable( false );
 
 	var readFile = denodify( FS.readFile );
 	var readPackageNpm   = readFile( packageNpm ).then( JSON.parse );

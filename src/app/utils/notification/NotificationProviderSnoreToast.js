@@ -9,8 +9,8 @@ import { spawn } from "child_process";
 
 // require binary dependencies
 // avoid using webpack's buggy recursive require.context method and list files explicitly
-import "file?name=bin/win32/snoretoast.exe!snoretoast/bin/x86/SnoreToast.exe";
-import "file?name=bin/win64/snoretoast.exe!snoretoast/bin/x64/SnoreToast.exe";
+import "file-loader?name=bin/win32/snoretoast.exe!snoretoast/bin/x86/SnoreToast.exe";
+import "file-loader?name=bin/win64/snoretoast.exe!snoretoast/bin/x64/SnoreToast.exe";
 
 
 const { "display-name": displayName } = main;

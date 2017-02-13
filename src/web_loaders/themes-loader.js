@@ -6,7 +6,6 @@ var themesPath = "themes/";
 
 
 module.exports = function( content ) {
-	this.cacheable();
 	this.addDependency( PATH.resolve( "..", "config", "themes.json" ) );
 
 	var imports = themes.themes

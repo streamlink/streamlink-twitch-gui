@@ -5,7 +5,6 @@ var ignore = [ "en" ];
 
 
 module.exports = function( content ) {
-	this.cacheable();
 	this.addDependency( PATH.resolve( "..", "config", "langs.json" ) );
 
 	var flagIcons = Object.keys( langs )
