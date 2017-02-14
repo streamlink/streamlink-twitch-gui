@@ -19,6 +19,7 @@ import "tests/helpers/math-";
 import "tests/helpers/format-";
 import "tests/helpers/-fromNow";
 import "tests/helpers/object";
+import "tests/mixins/RefreshRouteMixin";
 import "tests/components/PreviewImageComponent";
 import "tests/components/LoadingSpinnerComponent";
 import "tests/components/SettingsSubmitComponent";

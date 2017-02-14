@@ -16,8 +16,6 @@ export default Route.extend({
 	modal: service(),
 	settings: service(),
 
-	disableAutoRefresh: true,
-
 	model() {
 		var settings = get( this, "settings.content" );
 		return ObjectBuffer.create({

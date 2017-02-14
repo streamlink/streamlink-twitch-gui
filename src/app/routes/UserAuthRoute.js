@@ -11,8 +11,6 @@ const { service } = inject;
 export default Route.extend({
 	auth: service(),
 
-	disableAutoRefresh: true,
-
 	beforeModel( transition ) {
 		// check if user is successfully logged in
 		if ( get( this, "auth.session.isLoggedIn" ) ) {

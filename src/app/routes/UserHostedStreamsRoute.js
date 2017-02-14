@@ -1,11 +1,12 @@
 import { get } from "Ember";
 import UserIndexRoute from "routes/UserIndexRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import RefreshRouteMixin from "mixins/RefreshRouteMixin";
 import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, {
+export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 	itemSelector: ".stream-item-component",
 
 	modelName: "twitchStreamsHosted",

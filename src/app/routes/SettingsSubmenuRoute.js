@@ -7,8 +7,6 @@ import {
 export default Route.extend({
 	controllerName: "settings",
 
-	disableAutoRefresh: true,
-
 	model() {
 		return this.modelFor( "settings" );
 	},

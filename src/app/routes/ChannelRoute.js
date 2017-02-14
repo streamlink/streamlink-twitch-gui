@@ -3,10 +3,11 @@ import {
 	set,
 	Route
 } from "Ember";
+import RefreshRouteMixin from "mixins/RefreshRouteMixin";
 import preload from "utils/preload";
 
 
-export default Route.extend({
+export default Route.extend( RefreshRouteMixin, {
 	model( params ) {
 		var store = get( this, "store" );
 		var id    = get( params, "channel" );

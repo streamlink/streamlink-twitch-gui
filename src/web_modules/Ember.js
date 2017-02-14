@@ -13,6 +13,8 @@ export const set = Ember.set;
 export const getWithDefault = Ember.getWithDefault;
 export const setProperties = Ember.setProperties;
 export const defineProperty = Ember.defineProperty;
+export const addObserver = Ember.addObserver;
+export const removeObserver = Ember.removeObserver;
 
 // functions
 export const getOwner = Ember.getOwner;
@@ -20,6 +22,7 @@ export const setOwner = Ember.setOwner;
 export const isNone = Ember.isNone;
 export const makeArray = Ember.makeArray;
 export const assign = Ember.assign;
+export const sendEvent = Ember.sendEvent;
 
 // libs
 export const $ = Ember.$;
