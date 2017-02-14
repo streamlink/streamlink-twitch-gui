@@ -20,10 +20,12 @@ export default Component.extend({
 	layout,
 
 	tagName: "button",
+	classNames: [
+		"infinite-scroll-component",
+		"form-button-component",
+		"icon-and-text"
+	],
 	classNameBindings: [
-		":btn",
-		":btn-with-icon",
-		":infinite-scroll-component",
 		"hasFetchedAll:hidden"
 	],
 	attributeBindings: [
