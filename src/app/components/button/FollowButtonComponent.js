@@ -1,6 +1,7 @@
 import {
 	get,
 	set,
+	computed,
 	run,
 	on,
 	Component
@@ -9,6 +10,7 @@ import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
 import layout from "templates/components/button/FollowButtonComponent.hbs";
 
 
+const { alias } = computed;
 const { cancel, later } = run;
 
 
@@ -22,6 +24,8 @@ export default Component.extend( TwitchInteractButtonMixin, {
 		"isExpanded:expanded"
 	],
 	title: "",
+
+	isVisible: alias( "isValid" ),
 
 	isExpanded: false,
 	isPromptVisible: false,

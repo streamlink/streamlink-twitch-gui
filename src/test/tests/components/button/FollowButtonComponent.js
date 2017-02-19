@@ -461,3 +461,23 @@ test( "Mouseenter and mouseleave", assert => {
 	}, 2 );
 
 });
+
+
+test( "Logged out", assert => {
+
+	context = FollowButtonComponent.extend({
+		isValid: true
+	}).create();
+
+	setOwner( context, owner );
+	runAppend( context );
+
+	let $followButton = getElem( context );
+
+	assert.ok( $followButton.is( ":visible" ), "Is visible while being logged in" );
+
+	run( () => set( context, "isValid", false ) );
+
+	assert.ok( !$followButton.is( ":visible" ), "Is not visible while being logged out" );
+
+});
