@@ -28,7 +28,8 @@ export default Mixin.create({
 	store: service(),
 
 	isVisible   : alias( "isValid" ),
-	isValid     : and( "model", "auth.session.isLoggedIn" ),
+	isValid     : and( "model", "isLoggedIn" ),
+	isLoggedIn  : bool( "auth.session.isLoggedIn" ),
 	isSuccessful: bool( "record" ),
 
 	model : null,
