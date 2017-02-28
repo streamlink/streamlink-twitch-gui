@@ -19,21 +19,32 @@ const reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
  */
 export default Mixin.create( Evented, {
 	findRecord( store, type, id, snapshot ) {
-		var url = this.buildURL( type, id, snapshot, "findRecord" );
+		const url = this.buildURL( type, id, snapshot, "findRecord" );
+
 		return this.ajax( url, "GET" );
 	},
 
 	findAll( store, type, sinceToken ) {
-		var url   = this.buildURL( type, null, null, "findAll" );
-		var query = sinceToken ? { since: sinceToken } : undefined;
+		const url = this.buildURL( type, null, null, "findAll" );
+		const query = sinceToken ? { since: sinceToken } : undefined;
+
 		return this.ajax( url, "GET", { data: query } );
 	},
 
 	query( store, type, query ) {
-		var url = this.buildURL( type, query, null, "query" );
+		const url = this.buildURL( type, query, null, "query" );
 		query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
+
 		return this.ajax( url, "GET", { data: query } );
 	},
+
+	queryRecord( store, type, query ) {
+		const url = this.buildURL( type, null, null, "queryRecord", query );
+		query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
+
+		return this.ajax( url, "GET", { data: query } );
+	},
+
 
 	createRecordMethod: "POST",
 	createRecord( store, type, snapshot ) {
