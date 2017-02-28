@@ -16,11 +16,11 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 	},
 
 	modelName: "twitchGamesLiveFollowed",
-	modelNameAll: "twitchGamesFollowed",
+	modelNameAll: "twitchGameFollowed",
 
 	model( params ) {
 		// query parameters are strings
-		var modelname = params.all === "true"
+		const modelname = params.all === "true"
 			? this.modelNameAll
 			: this.modelName;
 

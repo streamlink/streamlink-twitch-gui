@@ -46,8 +46,9 @@ import TwitchStreamsHosted from "models/twitch/StreamsHosted";
 import TwitchStreamsHostedSerializer from "models/twitch/StreamsHostedSerializer";
 import TwitchChannelFollowed from "models/twitch/ChannelFollowed";
 import TwitchChannelFollowedSerializer from "models/twitch/ChannelFollowedSerializer";
-import TwitchGamesFollowed from "models/twitch/GamesFollowed";
-import TwitchGamesFollowedSerializer from "models/twitch/GamesFollowedSerializer";
+import TwitchGameFollowed from "models/twitch/GameFollowed";
+import TwitchGameFollowedAdapter from "models/twitch/GameFollowedAdapter";
+import TwitchGameFollowedSerializer from "models/twitch/GameFollowedSerializer";
 import TwitchGamesLiveFollowed from "models/twitch/GamesLiveFollowed";
 import TwitchGamesLiveFollowedSerializer from "models/twitch/GamesLiveFollowedSerializer";
 
@@ -61,9 +62,6 @@ import TwitchSearchChannelSerializer from "models/twitch/SearchChannelSerializer
 import TwitchUser from "models/twitch/User";
 import TwitchUserAdapter from "models/twitch/UserAdapter";
 import TwitchUserSerializer from "models/twitch/UserSerializer";
-import TwitchUserFollowsGame from "models/twitch/UserFollowsGame";
-import TwitchUserFollowsGameAdapter from "models/twitch/UserFollowsGameAdapter";
-import TwitchUserFollowsGameSerializer from "models/twitch/UserFollowsGameSerializer";
 import TwitchUserSubscription from "models/twitch/UserSubscription";
 import TwitchUserSubscriptionSerializer from "models/twitch/UserSubscriptionSerializer";
 
@@ -342,8 +340,9 @@ export default Application.create({
 	TwitchStreamsHostedSerializer,
 	TwitchChannelFollowed,
 	TwitchChannelFollowedSerializer,
-	TwitchGamesFollowed,
-	TwitchGamesFollowedSerializer,
+	TwitchGameFollowed,
+	TwitchGameFollowedAdapter,
+	TwitchGameFollowedSerializer,
 	TwitchGamesLiveFollowed,
 	TwitchGamesLiveFollowedSerializer,
 
@@ -357,9 +356,6 @@ export default Application.create({
 	TwitchUser,
 	TwitchUserAdapter,
 	TwitchUserSerializer,
-	TwitchUserFollowsGame,
-	TwitchUserFollowsGameAdapter,
-	TwitchUserFollowsGameSerializer,
 	TwitchUserSubscription,
 	TwitchUserSubscriptionSerializer,
 
