@@ -35,15 +35,15 @@ import TwitchImageSerializer from "models/twitch/ImageSerializer";
 
 import TwitchGamesTop from "models/twitch/GamesTop";
 import TwitchGamesTopSerializer from "models/twitch/GamesTopSerializer";
-import TwitchStreamsSummary from "models/twitch/StreamsSummary";
-import TwitchStreamsSummarySerializer from "models/twitch/StreamsSummarySerializer";
-import TwitchStreamsFeatured from "models/twitch/StreamsFeatured";
-import TwitchStreamsFeaturedSerializer from "models/twitch/StreamsFeaturedSerializer";
+import TwitchStreamSummary from "models/twitch/StreamSummary";
+import TwitchStreamSummarySerializer from "models/twitch/StreamSummarySerializer";
+import TwitchStreamFeatured from "models/twitch/StreamFeatured";
+import TwitchStreamFeaturedSerializer from "models/twitch/StreamFeaturedSerializer";
 
-import TwitchStreamsFollowed from "models/twitch/StreamsFollowed";
-import TwitchStreamsFollowedSerializer from "models/twitch/StreamsFollowedSerializer";
-import TwitchStreamsHosted from "models/twitch/StreamsHosted";
-import TwitchStreamsHostedSerializer from "models/twitch/StreamsHostedSerializer";
+import TwitchStreamFollowed from "models/twitch/StreamFollowed";
+import TwitchStreamFollowedSerializer from "models/twitch/StreamFollowedSerializer";
+import TwitchStreamHosted from "models/twitch/StreamHosted";
+import TwitchStreamHostedSerializer from "models/twitch/StreamHostedSerializer";
 import TwitchChannelFollowed from "models/twitch/ChannelFollowed";
 import TwitchChannelFollowedSerializer from "models/twitch/ChannelFollowedSerializer";
 import TwitchGameFollowed from "models/twitch/GameFollowed";
@@ -329,15 +329,15 @@ export default Application.create({
 
 	TwitchGamesTop,
 	TwitchGamesTopSerializer,
-	TwitchStreamsSummary,
-	TwitchStreamsSummarySerializer,
-	TwitchStreamsFeatured,
-	TwitchStreamsFeaturedSerializer,
+	TwitchStreamSummary,
+	TwitchStreamSummarySerializer,
+	TwitchStreamFeatured,
+	TwitchStreamFeaturedSerializer,
 
-	TwitchStreamsFollowed,
-	TwitchStreamsFollowedSerializer,
-	TwitchStreamsHosted,
-	TwitchStreamsHostedSerializer,
+	TwitchStreamFollowed,
+	TwitchStreamFollowedSerializer,
+	TwitchStreamHosted,
+	TwitchStreamHostedSerializer,
 	TwitchChannelFollowed,
 	TwitchChannelFollowedSerializer,
 	TwitchGameFollowed,

@@ -9,7 +9,7 @@ import preload from "utils/preload";
 export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 	itemSelector: ".stream-item-component",
 
-	modelName: "twitchStreamsFollowed",
+	modelName: "twitchStreamFollowed",
 
 	model() {
 		return get( this, "store" ).query( this.modelName, {

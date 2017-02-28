@@ -5,7 +5,7 @@ export default TwitchSerializer.extend({
 	primaryKey: "id",
 
 	modelNameFromPayloadKey() {
-		return "twitchStreamsHosted";
+		return "twitchStreamHosted";
 	},
 
 	normalize( modelClass, resourceHash, prop ) {

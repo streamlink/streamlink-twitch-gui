@@ -13,8 +13,8 @@ export default Route.extend( RefreshRouteMixin, {
 		let store = get( this, "store" );
 
 		return Promise.all([
-			store.queryRecord( "twitchStreamsSummary", {} ),
-			store.query( "twitchStreamsFeatured", {
+			store.queryRecord( "twitchStreamSummary", {} ),
+			store.query( "twitchStreamFeatured", {
 				offset: 0,
 				limit : 5
 			})

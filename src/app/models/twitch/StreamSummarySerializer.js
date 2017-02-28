@@ -2,13 +2,17 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 
 export default TwitchSerializer.extend({
+	modelNameFromPayloadKey() {
+		return "twitchStreamSummary";
+	},
+
 	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
 		// always use 1 as id
 		payload[ this.primaryKey ] = 1;
 
 		// fix payload format
 		payload = {
-			twitchStreamsSummary: payload
+			twitchStreamSummary: payload
 		};
 
 		return this._super( store, primaryModelClass, payload, id, requestType );

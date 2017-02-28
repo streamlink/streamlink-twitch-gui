@@ -3,7 +3,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 export default TwitchSerializer.extend({
 	modelNameFromPayloadKey() {
-		return "twitchStreamsFollowed";
+		return "twitchStreamFollowed";
 	},
 
 	attrs: {

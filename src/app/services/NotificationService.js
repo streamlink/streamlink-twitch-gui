@@ -245,7 +245,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	check() {
 		if ( !get( this, "running" ) ) { return; }
 
-		get( this, "store" ).query( "twitchStreamsFollowed", {
+		get( this, "store" ).query( "twitchStreamFollowed", {
 			limit: 100
 		})
 			.then( mapBy( "stream" ) )

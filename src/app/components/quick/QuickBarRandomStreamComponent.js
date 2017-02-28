@@ -67,9 +67,9 @@ export default FormButtonComponent.extend( LanguageFilterMixin, {
 			.then( stream => {
 				if ( !stream ) { throw new Error(); }
 
-				if ( model === "twitchStreamsFollowed" ) {
+				if ( model === "twitchStreamFollowed" ) {
 					return get( stream, "stream" );
-				} else if ( model === "twitchStreamsHosted" ) {
+				} else if ( model === "twitchStreamHosted" ) {
 					return get( stream, "target" );
 				} else {
 					return stream;
