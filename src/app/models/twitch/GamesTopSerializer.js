@@ -11,7 +11,9 @@ export default TwitchSerializer.extend({
 	},
 
 	normalize( modelClass, resourceHash, prop ) {
-		var foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
+		const foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
+
+		// get the id of the embedded TwitchGame record and apply it here
 		resourceHash[ this.primaryKey ] = resourceHash.game[ foreignKey ];
 
 		return this._super( modelClass, resourceHash, prop );

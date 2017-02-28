@@ -9,18 +9,13 @@ export default TwitchSerializer.extend({
 	},
 
 	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
-		var primaryKey = this.primaryKey;
+		const primaryKey = this.primaryKey;
 
-		if ( !payload || !payload[ primaryKey ] ) {
-			payload = {};
-		}
-
-		var record = {};
-		record[ primaryKey ] = payload[ primaryKey ];
-
-		// return an empty payload (ignore all properties)
+		// fix payload format
 		payload = {
-			twitchUserFollowsGame: [ record ]
+			twitchUserFollowsGame: !payload || !payload[ primaryKey ]
+				? null
+				: { [ primaryKey ]: payload[ primaryKey ] }
 		};
 
 		return this._super( store, primaryModelClass, payload, id, requestType );

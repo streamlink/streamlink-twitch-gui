@@ -11,5 +11,5 @@ export default Model.extend({
 	notifications: attr( "boolean" )
 
 }).reopenClass({
-	toString() { return "kraken/users/:user/follows/channels"; }
+	toString() { return "kraken/users/:user_id/follows/channels"; }
 });

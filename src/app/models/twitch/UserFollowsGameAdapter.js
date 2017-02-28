@@ -4,8 +4,8 @@ import TwitchAdapter from "store/TwitchAdapter";
 export default TwitchAdapter.extend({
 	// use custom findRecord URL
 	findRecord( store, type, id, snapshot ) {
-		var url = this.buildURL( type, null, snapshot, "findRecord" );
-		var data = {
+		const url = this.buildURL( type, null, snapshot, "findRecord" );
+		const data = {
 			name: id
 		};
 
@@ -19,8 +19,8 @@ export default TwitchAdapter.extend({
 
 	// use custom createRecord URL
 	createRecord( store, type, snapshot ) {
-		var url = this.buildURL( type, null, snapshot, "createRecord" );
-		var data = {
+		const url = this.buildURL( type, null, snapshot, "createRecord" );
+		const data = {
 			name: snapshot.id
 		};
 
@@ -34,8 +34,8 @@ export default TwitchAdapter.extend({
 
 	// use custom deleteRecord URL
 	deleteRecord( store, type, snapshot ) {
-		var url = this.buildURL( type, null, snapshot, "deleteRecord" );
-		var data = {
+		const url = this.buildURL( type, null, snapshot, "deleteRecord" );
+		const data = {
 			name: snapshot.id
 		};
 

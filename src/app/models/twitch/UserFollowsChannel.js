@@ -5,9 +5,8 @@ import {
 
 
 export default Model.extend({
-	created_at   : attr( "date" ),
-	notifications: attr( "boolean" )
+	created_at: attr( "date" )
 
 }).reopenClass({
-	toString() { return "kraken/users/:user/follows/channels"; }
+	toString() { return "kraken/users/:user_id/follows/channels"; }
 });
