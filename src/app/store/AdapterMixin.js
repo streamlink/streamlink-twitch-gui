@@ -32,7 +32,7 @@ export default Mixin.create( Evented, {
 	},
 
 	query( store, type, query ) {
-		const url = this.buildURL( type, query, null, "query" );
+		const url = this.buildURL( type, null, null, "query", query );
 		query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
 
 		return this.ajax( url, "GET", { data: query } );
