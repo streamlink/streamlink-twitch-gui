@@ -29,10 +29,8 @@ export default Route.extend( RefreshRouteMixin, {
 					.then( channel => ({ channel }) );
 			})
 			// preload images and load the channel panels in parallel
-			.then( ({ stream, channel }) => {
-				const name = get( channel, "name" );
-
-				return Promise.all([
+			.then( ({ stream, channel }) =>
+				Promise.all([
 					// preload images
 					Promise.resolve({ stream, channel })
 						.then( preload([
@@ -41,9 +39,9 @@ export default Route.extend( RefreshRouteMixin, {
 							"channel.video_banner"
 						]) ),
 					// panels are still referenced by channel name in the private API namespace
-					store.findRecord( "twitchChannelPanel", name, { reload: true } )
+					store.query( "twitchChannelPanel", { channel: get( channel, "name" ) } )
 						.then( panels => Promise.all(
-							get( panels, "panels" )
+							panels
 								.filterBy( "kind", "default" )
 								.sortBy( "display_order" )
 								// preload all panel images
@@ -53,8 +51,8 @@ export default Route.extend( RefreshRouteMixin, {
 							)
 						)
 				])
-					.then( ([ , panels ]) => ({ stream, channel, panels }) );
-			});
+					.then( ([ , panels ]) => ({ stream, channel, panels }) )
+			);
 	},
 
 	resetController( controller, isExiting ) {

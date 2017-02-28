@@ -77,9 +77,8 @@ import TwitchProductEmoticon from "models/twitch/ProductEmoticon";
 import TwitchProductEmoticonSerializer from "models/twitch/ProductEmoticonSerializer";
 
 import TwitchChannelPanel from "models/twitch/ChannelPanel";
+import TwitchChannelPanelAdapter from "models/twitch/ChannelPanelAdapter";
 import TwitchChannelPanelSerializer from "models/twitch/ChannelPanelSerializer";
-import TwitchChannelPanelItem from "models/twitch/ChannelPanelItem";
-import TwitchChannelPanelItemSerializer from "models/twitch/ChannelPanelItemSerializer";
 
 import IsEqualHelper from "helpers/IsEqualHelper";
 import IsNullHelper from "helpers/IsNullHelper";
@@ -376,9 +375,8 @@ export default Application.create({
 	TwitchProductEmoticonSerializer,
 
 	TwitchChannelPanel,
+	TwitchChannelPanelAdapter,
 	TwitchChannelPanelSerializer,
-	TwitchChannelPanelItem,
-	TwitchChannelPanelItemSerializer,
 
 
 	// Helpers

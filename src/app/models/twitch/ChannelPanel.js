@@ -1,12 +1,17 @@
 import {
-	hasMany,
+	attr,
 	Model
 } from "EmberData";
 
 
 export default Model.extend({
-	panels: hasMany( "twitchChannelPanelItem" )
+	display_order: attr( "number" ),
+	html_description: attr( "string" ),
+	image: attr( "string" ),
+	kind: attr( "string" ),
+	link: attr( "string" ),
+	title: attr( "string" )
 
 }).reopenClass({
-	toString() { return "api/channels/:id/panels"; }
+	toString() { return "api/channels/:channel/panels"; }
 });
