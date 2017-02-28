@@ -49,8 +49,8 @@ import TwitchChannelFollowedSerializer from "models/twitch/ChannelFollowedSerial
 import TwitchGameFollowed from "models/twitch/GameFollowed";
 import TwitchGameFollowedAdapter from "models/twitch/GameFollowedAdapter";
 import TwitchGameFollowedSerializer from "models/twitch/GameFollowedSerializer";
-import TwitchGamesLiveFollowed from "models/twitch/GamesLiveFollowed";
-import TwitchGamesLiveFollowedSerializer from "models/twitch/GamesLiveFollowedSerializer";
+import TwitchGameFollowedLive from "models/twitch/GameFollowedLive";
+import TwitchGameFollowedLiveSerializer from "models/twitch/GameFollowedLiveSerializer";
 
 import TwitchSearchGame from "models/twitch/SearchGame";
 import TwitchSearchGameSerializer from "models/twitch/SearchGameSerializer";
@@ -343,8 +343,8 @@ export default Application.create({
 	TwitchGameFollowed,
 	TwitchGameFollowedAdapter,
 	TwitchGameFollowedSerializer,
-	TwitchGamesLiveFollowed,
-	TwitchGamesLiveFollowedSerializer,
+	TwitchGameFollowedLive,
+	TwitchGameFollowedLiveSerializer,
 
 	TwitchSearchGame,
 	TwitchSearchGameSerializer,

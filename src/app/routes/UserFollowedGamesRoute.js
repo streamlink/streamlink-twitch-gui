@@ -15,14 +15,14 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 		}
 	},
 
-	modelName: "twitchGamesLiveFollowed",
+	modelNameLive: "twitchGameFollowedLive",
 	modelNameAll: "twitchGameFollowed",
 
 	model( params ) {
 		// query parameters are strings
 		const modelname = params.all === "true"
 			? this.modelNameAll
-			: this.modelName;
+			: this.modelNameLive;
 
 		return get( this, "store" ).query( modelname, {
 			offset: get( this, "offset" ),
