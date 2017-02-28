@@ -5,10 +5,9 @@ import {
 
 
 export default Model.extend({
-	// pass through: don't update the channel record
-	channel   : attr(),
+	//channel: belongsTo( "twitchChannel" ),
 	created_at: attr( "date" )
 
 }).reopenClass({
-	toString() { return "kraken/users/:user/subscriptions"; }
+	toString() { return "kraken/users/:user_id/subscriptions"; }
 });

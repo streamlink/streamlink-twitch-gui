@@ -26,7 +26,7 @@ export default ListItemComponent.extend({
 	attributeBindings: [ "style" ],
 
 	product  : alias( "content.product" ),
-	channel  : alias( "product.partner_login" ),
+	channel  : alias( "product.channel" ),
 	emoticons: alias( "product.emoticons" ),
 
 	style: computed( "channel.profile_banner", "channel.video_banner", function() {
@@ -50,7 +50,7 @@ export default ListItemComponent.extend({
 
 
 	openBrowser( url ) {
-		let channel = get( this, "channel.id" );
+		let channel = get( this, "channel.name" );
 
 		return openBrowser( url, {
 			channel

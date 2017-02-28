@@ -58,6 +58,9 @@ import TwitchSearchStreamSerializer from "models/twitch/SearchStreamSerializer";
 import TwitchSearchChannel from "models/twitch/SearchChannel";
 import TwitchSearchChannelSerializer from "models/twitch/SearchChannelSerializer";
 
+import TwitchUser from "models/twitch/User";
+import TwitchUserAdapter from "models/twitch/UserAdapter";
+import TwitchUserSerializer from "models/twitch/UserSerializer";
 import TwitchUserFollowsChannel from "models/twitch/UserFollowsChannel";
 import TwitchUserFollowsChannelSerializer from "models/twitch/UserFollowsChannelSerializer";
 import TwitchUserFollowsGame from "models/twitch/UserFollowsGame";
@@ -354,6 +357,9 @@ export default Application.create({
 	TwitchSearchChannel,
 	TwitchSearchChannelSerializer,
 
+	TwitchUser,
+	TwitchUserAdapter,
+	TwitchUserSerializer,
 	TwitchUserFollowsChannel,
 	TwitchUserFollowsChannelSerializer,
 	TwitchUserFollowsGame,

@@ -28,17 +28,18 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 				Promise.all( tickets
 					.map( ticket =>
 						get( ticket, "product.partner_login" )
-							.catch( () => false )
+							.then( user => get( user, "channel" ) )
+							.catch( err => { console.log( err ); return false; } )
 					)
 				)
 					.then( () => tickets )
-					.then( this.filterFetchedContent( "product.partner_login.isFulfilled", true ) )
+					.then( this.filterFetchedContent( "product.channel.isFulfilled", true ) )
 			)
 			// also load the UserSubscription record (needed for subscription date)
 			// unfortunately, this can't be loaded in parallel (channel needs to be loaded first)
 			.then( tickets =>
 				Promise.all( tickets
-					.map( ticket => get( ticket, "product.partner_login" ) )
+					.map( ticket => get( ticket, "product.partner_login.channel" ) )
 					.map( channel =>
 						store.findExistingRecord( "twitchUserSubscription", get( channel, "id" ) )
 							.catch( () => false )
@@ -56,9 +57,9 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 					}, [] );
 
 				let preloadChannelPromise = Promise.resolve( tickets ).then( preload([
-					"product.partner_login.logo",
-					"product.partner_login.profile_banner",
-					"product.partner_login.video_banner"
+					"product.channel.logo",
+					"product.channel.profile_banner",
+					"product.channel.video_banner"
 				]) );
 				let preloadEmoticonsPromise = Promise.resolve( emoticons ).then( preload(
 					"url"

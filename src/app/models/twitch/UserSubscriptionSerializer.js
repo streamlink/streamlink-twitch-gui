@@ -7,10 +7,12 @@ export default TwitchSerializer.extend({
 	},
 
 	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
-		var foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
-		payload[ this.primaryKey ] = payload.channel[ foreignKey ];
-		payload.channel = null;
+		const foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
 
+		// get the id of the embedded TwitchChannel record and apply it here
+		payload[ this.primaryKey ] = payload.channel[ foreignKey ];
+
+		// fix payload format
 		payload = {
 			twitchUserSubscription: payload
 		};
