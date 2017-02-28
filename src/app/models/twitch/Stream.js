@@ -56,39 +56,41 @@ export default Model.extend({
 
 
 	title_created_at: computed( "created_at", function() {
-		var created_at = get( this, "created_at" );
-		var moment     = new Moment( created_at );
-		var diff       = moment.diff( new Date(), "days" );
-		var formatted  = moment.format( diff === 0 ? "LTS" : "llll" );
+		const created_at = get( this, "created_at" );
+		const moment = new Moment( created_at );
+		const diff = moment.diff( new Date(), "days" );
+		const formatted = moment.format( diff === 0 ? "LTS" : "llll" );
 
 		return `Online since ${formatted}`;
 	}),
 
 	title_viewers: computed( "viewers", function() {
-		var viewers = get( this, "viewers" );
-		var numerus = viewers === 1 ? " person is watching" : " people are watching";
+		const number = get( this, "viewers" );
+		const text = number === 1
+			? " person is watching"
+			: " people are watching";
 
-		return `${viewers}${numerus}`;
+		return `${number}${text}`;
 	}),
 
 	resolution: computed( "video_height", function() {
 		// assume 16:9
-		var video_height = get( this, "video_height" );
-		var width  = Math.round( ( 16 / 9 ) * video_height );
-		var height = Math.round( video_height );
+		const video_height = get( this, "video_height" );
+		const width = Math.round( ( 16 / 9 ) * video_height );
+		const height = Math.round( video_height );
 
 		return `${width}x${height}`;
 	}),
 
 	fps: computed( "average_fps", function() {
-		var average_fps = get( this, "average_fps" );
+		const average_fps = get( this, "average_fps" );
 
 		if ( !average_fps ) { return null; }
 
-		var fpsRange = fpsRanges.find(function( fpsRange ) {
-			return average_fps >  fpsRange.min
-			    && average_fps <= fpsRange.max;
-		});
+		const fpsRange = fpsRanges.find( fpsRange =>
+			   average_fps > fpsRange.min
+			&& average_fps <= fpsRange.max
+		);
 
 		return fpsRange
 			? fpsRange.target

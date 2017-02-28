@@ -41,14 +41,16 @@ function buffered( attr ) {
 function nocache( attr ) {
 	// use a volatile property
 	return computed(function() {
-		var url = get( this, `${attr}_image` );
+		const url = get( this, `${attr}_image` );
 
 		// use the same timestamp for `time` seconds
-		var key = `${attr}_expiration`;
-		var exp = this[ key ];
-		var now = +new Date();
+		const key = `${attr}_expiration`;
+		const now = +new Date();
+		let exp = this[ key ];
+
 		if ( !exp || exp < now ) {
-			this[ key ] = exp = now + time;
+			exp = now + time;
+			this[ key ] = exp;
 		}
 
 		return getURL( url, exp );

@@ -59,28 +59,36 @@ export default Model.extend({
 
 
 	title_followers: computed( "followers", function() {
-		var followers = get( this, "followers" );
-		var numerus   = followers === 1 ? " person is following" : " people are following";
-		return followers + numerus;
+		const number = get( this, "followers" );
+		const text = number === 1
+			? " person is following"
+			: " people are following";
+
+		return `${number}${text}`;
 	}),
 
 	title_views: computed( "views", function() {
-		var views   = get( this, "views" );
-		var numerus = views === 1 ? " channel view" : " channel views";
-		return views + numerus;
+		const number = get( this, "views" );
+		const text = number === 1
+			? " channel view"
+			: " channel views";
+
+		return `${number}${text}`;
 	}),
 
 
 	has_language: computed( "language", function() {
-		var lang = get( this, "language" );
+		const lang = get( this, "language" );
+
 		return lang && lang !== "other";
 	}),
 
 	has_broadcaster_language: computed( "broadcaster_language", "language", function() {
-		var broadcaster  = get( this, "broadcaster_language" );
-		var language     = get( this, "language" );
-		var mBroadcaster = reLang.exec( broadcaster );
-		var mLanguage    = reLang.exec( language );
+		const broadcaster = get( this, "broadcaster_language" );
+		const language = get( this, "language" );
+		const mBroadcaster = reLang.exec( broadcaster );
+		const mLanguage = reLang.exec( language );
+
 		// show the broadcaster_language only if it is set and
 		// 1. the language is not set or
 		// 2. the language is different from the broadcaster_language
@@ -93,7 +101,7 @@ export default Model.extend({
 	subscribed: null,
 
 	/** @type {(TwitchUserFollowsChannel|boolean)} following */
-	followed  : null
+	followed: null
 
 }).reopenClass({
 	toString() { return "kraken/channels"; }
