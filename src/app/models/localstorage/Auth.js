@@ -19,16 +19,17 @@ export default Model.extend({
 
 
 	// volatile property
-	user_name : null,
+	user_id: null,
+	user_name: null,
 
 	// status properties
 	isPending : false,
-	isLoggedIn: computed( "access_token", "user_name", "isPending", function() {
+	isLoggedIn: computed( "access_token", "user_id", "isPending", function() {
 		let token   = get( this, "access_token" );
-		let name    = get( this, "user_name" );
+		let id      = get( this, "user_id" );
 		let pending = get( this, "isPending" );
 
-		return token && name && !pending;
+		return token && id && !pending;
 	})
 
 }).reopenClass({

@@ -1,6 +1,7 @@
 import {
 	get,
 	set,
+	getProperties,
 	setProperties,
 	computed,
 	inject,
@@ -182,8 +183,9 @@ export default Service.extend( Evented, {
 
 				// also don't forget to set the user_name on the auth record (volatile)
 				return promise.then( () => {
-					let name = get( record, "user_name" );
-					set( this, "session.user_name", name );
+					let { user_id, user_name } = getProperties( record, "user_id", "user_name" );
+					let session = get( this, "session" );
+					setProperties( session, { user_id, user_name } );
 				});
 			})
 			// SUCCESS
@@ -270,6 +272,7 @@ export default Service.extend( Evented, {
 			access_token: null,
 			scope       : null,
 			date        : null,
+			user_id     : null,
 			user_name   : null
 		});
 

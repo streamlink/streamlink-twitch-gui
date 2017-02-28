@@ -70,10 +70,11 @@ export default RESTAdapter.extend( AdapterMixin, {
 						if ( isNone( id ) ) { throw new Error( "Unknown ID" ); }
 						idFound = true;
 						return id;
-					// a user fragment requires the user to be logged in
-					case "user":
-						var user = get( adapter, "auth.session.user_name" );
-						if ( !user ) { throw new Error( "Unknown user" ); }
+					// a user_{id,name} fragment requires the user to be logged in
+					case "user_id":
+					case "user_name":
+						let user = get( adapter, `auth.session.${key}` );
+						if ( !user ) { throw new Error( `Unknown ${key}` ); }
 						return user;
 					// unknown fragment
 					default:

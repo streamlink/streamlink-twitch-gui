@@ -9,8 +9,8 @@ import {
  * @extends Model
  */
 export default Model.extend({
-	// pass through
 	authorization: attr(),
+	user_id: attr( "number" ),
 	user_name: attr( "string" ),
 	valid: attr( "boolean" )
 
