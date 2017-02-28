@@ -143,8 +143,8 @@ export default Service.extend( ChannelSettingsMixin, {
 	 */
 	_userHasFollowedChannel: on( "init", function() {
 		const store   = get( this, "store" );
-		const follows = store.modelFor( "twitchUserFollowsChannel" );
-		const adapter = store.adapterFor( "twitchUserFollowsChannel" );
+		const follows = store.modelFor( "twitchChannelFollowed" );
+		const adapter = store.adapterFor( "twitchChannelFollowed" );
 
 		adapter.on( "createRecord", ( store, type, snapshot ) => {
 			if ( !get( this, "running" ) ) { return; }

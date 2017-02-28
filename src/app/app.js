@@ -44,8 +44,8 @@ import TwitchStreamsFollowed from "models/twitch/StreamsFollowed";
 import TwitchStreamsFollowedSerializer from "models/twitch/StreamsFollowedSerializer";
 import TwitchStreamsHosted from "models/twitch/StreamsHosted";
 import TwitchStreamsHostedSerializer from "models/twitch/StreamsHostedSerializer";
-import TwitchChannelsFollowed from "models/twitch/ChannelsFollowed";
-import TwitchChannelsFollowedSerializer from "models/twitch/ChannelsFollowedSerializer";
+import TwitchChannelFollowed from "models/twitch/ChannelFollowed";
+import TwitchChannelFollowedSerializer from "models/twitch/ChannelFollowedSerializer";
 import TwitchGamesFollowed from "models/twitch/GamesFollowed";
 import TwitchGamesFollowedSerializer from "models/twitch/GamesFollowedSerializer";
 import TwitchGamesLiveFollowed from "models/twitch/GamesLiveFollowed";
@@ -61,8 +61,6 @@ import TwitchSearchChannelSerializer from "models/twitch/SearchChannelSerializer
 import TwitchUser from "models/twitch/User";
 import TwitchUserAdapter from "models/twitch/UserAdapter";
 import TwitchUserSerializer from "models/twitch/UserSerializer";
-import TwitchUserFollowsChannel from "models/twitch/UserFollowsChannel";
-import TwitchUserFollowsChannelSerializer from "models/twitch/UserFollowsChannelSerializer";
 import TwitchUserFollowsGame from "models/twitch/UserFollowsGame";
 import TwitchUserFollowsGameAdapter from "models/twitch/UserFollowsGameAdapter";
 import TwitchUserFollowsGameSerializer from "models/twitch/UserFollowsGameSerializer";
@@ -342,8 +340,8 @@ export default Application.create({
 	TwitchStreamsFollowedSerializer,
 	TwitchStreamsHosted,
 	TwitchStreamsHostedSerializer,
-	TwitchChannelsFollowed,
-	TwitchChannelsFollowedSerializer,
+	TwitchChannelFollowed,
+	TwitchChannelFollowedSerializer,
 	TwitchGamesFollowed,
 	TwitchGamesFollowedSerializer,
 	TwitchGamesLiveFollowed,
@@ -359,8 +357,6 @@ export default Application.create({
 	TwitchUser,
 	TwitchUserAdapter,
 	TwitchUserSerializer,
-	TwitchUserFollowsChannel,
-	TwitchUserFollowsChannelSerializer,
 	TwitchUserFollowsGame,
 	TwitchUserFollowsGameAdapter,
 	TwitchUserFollowsGameSerializer,

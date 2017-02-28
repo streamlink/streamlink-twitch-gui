@@ -3,11 +3,20 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 export default TwitchSerializer.extend({
 	modelNameFromPayloadKey() {
-		return "twitchChannelsFollowed";
+		return "twitchChannelFollowed";
 	},
 
 	attrs: {
 		channel: { deserialize: "records" }
+	},
+
+	normalizeSingleResponse( store, primaryModelClass, payload, id, requestType ) {
+		// fix payload format
+		payload = {
+			twitchChannelFollowed: payload
+		};
+
+		return this._super( store, primaryModelClass, payload, id, requestType );
 	},
 
 	normalize( modelClass, resourceHash, prop ) {

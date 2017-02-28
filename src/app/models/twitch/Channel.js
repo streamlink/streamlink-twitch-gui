@@ -100,7 +100,7 @@ export default Model.extend({
 	/** @type {(TwitchUserSubscription|boolean)} subscribed */
 	subscribed: null,
 
-	/** @type {(TwitchUserFollowsChannel|boolean)} following */
+	/** @type {(TwitchChannelFollowed|boolean)} following */
 	followed: null
 
 }).reopenClass({
