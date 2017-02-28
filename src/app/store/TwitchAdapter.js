@@ -21,7 +21,7 @@ export default RESTAdapter.extend( AdapterMixin, {
 	host: "https://api.twitch.tv",
 	namespace: "",
 	headers: {
-		"Accept": "application/vnd.twitchtv.v3+json",
+		"Accept": "application/vnd.twitchtv.v5+json",
 		"Client-ID": clientId
 	},
 
