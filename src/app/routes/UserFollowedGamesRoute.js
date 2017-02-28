@@ -20,7 +20,8 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 
 	model( params ) {
 		// query parameters are strings
-		const modelname = params.all === "true"
+		const all = params.all === "true";
+		const modelname = all
 			? this.modelNameAll
 			: this.modelNameLive;
 
@@ -29,7 +30,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 			limit : get( this, "limit" )
 		})
 			.then( toArray() )
-			.then( preload( "box.large" ) );
+			.then( preload( all ? "box.large" : "game.box.large" ) );
 	},
 
 	fetchContent() {
