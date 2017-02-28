@@ -12,5 +12,5 @@ export default Model.extend({
 	target: belongsTo( "twitchStream", { async: true } )
 
 }).reopenClass({
-	toString() { return "api/users/:user/followed/hosting"; }
+	toString() { return "api/users/:user_name/followed/hosting"; }
 });
