@@ -14,7 +14,7 @@ export default TwitchSerializer.extend({
 		// fix payload format
 		payload = {
 			twitchChannelPanel: {
-				_id: id,
+				[ this.primaryKey ]: id,
 				panels: payload
 			}
 		};

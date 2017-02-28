@@ -19,17 +19,15 @@
 <dd title="{{channel.title_followers}}">{{format-viewers channel.followers}} ({{format-viewers (math-div channel.followers age)}} per day)</dd>
 <dt><i class="fa fa-line-chart"></i>Views</dt>
 <dd title="{{channel.title_views}}">{{format-viewers channel.views}} ({{format-viewers (math-div channel.views age)}} per day)</dd>
-<dt><i class="fa fa-history"></i>Delay</dt>
-<dd>{{#if (is-gt channel.delay 0)}}{{channel.delay}} seconds{{else}}No additional delay{{/if}}</dd>
 <dt><i class="fa fa-male"></i>Content</dt>
 <dd>{{#if channel.mature}}Inappropriate for children{{else}}No age restrictions{{/if}}</dd>
-{{#if channel.staff}}
-<dt><i class="fa fa-legal"></i>Staff</dt>
-<dd>Twitch.tv staff member</dd>
-{{/if}}
 {{#if stream.hasFormatInfo}}
 <dt><i class="fa fa-film"></i>Format</dt>
 <dd>{{stream.resolution}} @ {{stream.fps}}fps</dd>
+{{/if}}
+{{#if stream}}
+<dt><i class="fa fa-history"></i>Delay</dt>
+<dd>{{#if (is-gt stream.delay 0)}}{{stream.delay}} seconds{{else}}No additional delay{{/if}}</dd>
 {{/if}}
 </dl>
 <div class="button-list-horizontal">
