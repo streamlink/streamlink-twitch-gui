@@ -37,7 +37,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 
 	action() {
 		let url = twitchEmotesUrl;
-		let channel = get( this, "channel.id" );
+		let channel = get( this, "channel.name" );
 
 		return openBrowser( url, {
 			channel

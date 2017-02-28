@@ -55,7 +55,7 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixi
 
 	action() {
 		let url = subscriptionCreateUrl;
-		let channel = get( this, "id" );
+		let channel = get( this, "model.name" );
 
 		return openBrowser( url, {
 			channel
