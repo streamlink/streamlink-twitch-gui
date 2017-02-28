@@ -43,8 +43,11 @@ const fpsRanges = [
 export default Model.extend({
 	average_fps: attr( "number" ),
 	channel: belongsTo( "twitchChannel", { async: false } ),
+	//community_id: attr( "number" ),
 	created_at: attr( "date" ),
+	delay: attr( "number" ),
 	game: attr( "string" ),
+	//is_playlist: attr( "boolean" ),
 	preview: belongsTo( "twitchImage", { async: false } ),
 	video_height: attr( "number" ),
 	viewers: attr( "number" ),

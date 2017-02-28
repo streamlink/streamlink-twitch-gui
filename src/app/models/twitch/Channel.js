@@ -15,11 +15,8 @@ const reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
 
 export default Model.extend({
-	background: attr( "string" ),
-	banner: attr( "string" ),
 	broadcaster_language: attr( "string" ),
 	created_at: attr( "date" ),
-	delay: attr( "number" ),
 	display_name: attr( "string" ),
 	followers: attr( "number" ),
 	game: attr( "string" ),
@@ -30,9 +27,7 @@ export default Model.extend({
 	partner: attr( "boolean" ),
 	profile_banner: attr( "string" ),
 	profile_banner_background_color: attr( "string" ),
-	staff: attr( "boolean" ),
 	status: attr( "string" ),
-	//teams: hasMany( "twitchTeam" ),
 	updated_at: attr( "date" ),
 	url: attr( "string" ),
 	video_banner: attr( "string" ),
