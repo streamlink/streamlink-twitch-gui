@@ -1,6 +1,12 @@
-import Game from "models/twitch/Game";
+import {
+	belongsTo,
+	Model
+} from "EmberData";
 
 
-export default Game.extend().reopenClass({
+export default Model.extend({
+	game: belongsTo( "twitchGame", { async: false } )
+
+}).reopenClass({
 	toString() { return "api/users/:user_name/follows/games"; }
 });

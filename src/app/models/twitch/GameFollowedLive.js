@@ -1,6 +1,15 @@
-import GamesTop from "models/twitch/GamesTop";
+import {
+	attr,
+	belongsTo,
+	Model
+} from "EmberData";
 
 
-export default GamesTop.extend().reopenClass({
+export default Model.extend({
+	channels: attr( "number" ),
+	game: belongsTo( "twitchGameFollowed", { async: false } ),
+	viewers: attr( "number" )
+
+}).reopenClass({
 	toString() { return "api/users/:user_name/follows/games/live"; }
 });

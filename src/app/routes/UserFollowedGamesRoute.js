@@ -2,7 +2,10 @@ import { get } from "Ember";
 import UserIndexRoute from "routes/UserIndexRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
-import { toArray } from "utils/ember/recordArrayMethods";
+import {
+	mapBy,
+	toArray
+} from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
@@ -29,8 +32,11 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 			offset: get( this, "offset" ),
 			limit : get( this, "limit" )
 		})
-			.then( toArray() )
-			.then( preload( all ? "box.large" : "game.box.large" ) );
+			.then( all
+				? toArray()
+				: mapBy( "game" )
+			)
+			.then( preload( "game.box.large" ) );
 	},
 
 	fetchContent() {

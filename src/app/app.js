@@ -33,8 +33,8 @@ import TwitchChannelSerializer from "models/twitch/ChannelSerializer";
 import TwitchImage from "models/twitch/Image";
 import TwitchImageSerializer from "models/twitch/ImageSerializer";
 
-import TwitchGamesTop from "models/twitch/GamesTop";
-import TwitchGamesTopSerializer from "models/twitch/GamesTopSerializer";
+import TwitchGameTop from "models/twitch/GameTop";
+import TwitchGameTopSerializer from "models/twitch/GameTopSerializer";
 import TwitchStreamSummary from "models/twitch/StreamSummary";
 import TwitchStreamSummarySerializer from "models/twitch/StreamSummarySerializer";
 import TwitchStreamFeatured from "models/twitch/StreamFeatured";
@@ -327,8 +327,8 @@ export default Application.create({
 	TwitchImage,
 	TwitchImageSerializer,
 
-	TwitchGamesTop,
-	TwitchGamesTopSerializer,
+	TwitchGameTop,
+	TwitchGameTopSerializer,
 	TwitchStreamSummary,
 	TwitchStreamSummarySerializer,
 	TwitchStreamFeatured,

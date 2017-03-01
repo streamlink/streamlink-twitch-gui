@@ -11,7 +11,7 @@ import preload from "utils/preload";
 export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 	itemSelector: ".game-item-component",
 
-	modelName: "twitchGamesTop",
+	modelName: "twitchGameTop",
 
 	model() {
 		return get( this, "store" ).query( this.modelName, {
