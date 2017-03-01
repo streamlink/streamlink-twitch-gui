@@ -80,7 +80,7 @@ export default Model.extend({
 	hasLanguage: computed( "language", function() {
 		const lang = get( this, "language" );
 
-		return lang && lang !== "other";
+		return !!lang && lang !== "other";
 	}),
 
 	hasBroadcasterLanguage: computed( "broadcaster_language", "language", function() {
@@ -93,7 +93,7 @@ export default Model.extend({
 		// 1. the language is not set or
 		// 2. the language is different from the broadcaster_language
 		//    WITHOUT comparing both lang variants
-		return mBroadcaster && ( !mLanguage || mLanguage[1] !== mBroadcaster[1] );
+		return !!mBroadcaster && ( !mLanguage || mLanguage[1] !== mBroadcaster[1] );
 	}),
 
 

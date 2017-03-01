@@ -152,6 +152,7 @@ module.exports = {
 				"img"         : pImages,
 				"templates"   : pTemplates,
 				"bower"       : pModulesBower,
+				"fixtures"    : pTestFixtures,
 
 				// app folders
 				"config"      : r( pApp, "config" ),

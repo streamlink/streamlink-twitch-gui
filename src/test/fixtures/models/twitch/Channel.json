@@ -1,0 +1,29 @@
+{
+	"by-id": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/channels/1",
+			"method": "GET",
+			"query": null
+		},
+		"response": {
+			"_id": 1,
+			"broadcaster_language": "en",
+			"created_at": "2000-01-01T00:00:00Z",
+			"display_name": "Foo",
+			"followers": 1337,
+			"game": "some game",
+			"language": "en",
+			"logo": "logo",
+			"mature": false,
+			"name": "foo",
+			"partner": false,
+			"profile_banner": null,
+			"profile_banner_background_color": null,
+			"status": "Playing some game",
+			"updated_at": "2000-01-01T00:00:01Z",
+			"url": "https://www.twitch.tv/foo",
+			"video_banner": null,
+			"views": 13337
+		}
+	}
+}
