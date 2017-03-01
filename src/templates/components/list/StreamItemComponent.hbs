@@ -1,7 +1,7 @@
 <header>
-{{#if channel.has_language}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
-<span class="{{unless channel.has_language 'noL'}} {{unless channel.has_broadcaster_language 'noBL'}}">{{#link-to "channel" channel.id}}{{channel.detailedName}}{{/link-to}}</span>
-{{#if channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
+{{#if channel.hasLanguage}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
+<span class="{{unless channel.hasLanguage 'noL'}} {{unless channel.hasBroadcasterLanguage 'noBL'}}">{{#link-to "channel" channel.id}}{{channel.detailedName}}{{/link-to}}</span>
+{{#if channel.hasBroadcasterLanguage}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
 </header>
 {{#stream-preview-image
 	src=content.preview.medium

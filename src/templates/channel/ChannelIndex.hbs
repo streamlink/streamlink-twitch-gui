@@ -11,14 +11,14 @@
 {{/if}}
 <dt><i class="fa fa-calendar"></i>Created</dt>
 <dd>{{format-time channel.created_at "MMMM Do YYYY"}}</dd>
-{{#if channel.has_broadcaster_language}}
+{{#if channel.hasBroadcasterLanguage}}
 <dt><i class="fa fa-language"></i>Language</dt>
 <dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>
 {{/if}}
 <dt><i class="fa fa-heart"></i>Followers</dt>
-<dd title="{{channel.title_followers}}">{{format-viewers channel.followers}} ({{format-viewers (math-div channel.followers age)}} per day)</dd>
+<dd title="{{channel.titleFollowers}}">{{format-viewers channel.followers}} ({{format-viewers (math-div channel.followers age)}} per day)</dd>
 <dt><i class="fa fa-line-chart"></i>Views</dt>
-<dd title="{{channel.title_views}}">{{format-viewers channel.views}} ({{format-viewers (math-div channel.views age)}} per day)</dd>
+<dd title="{{channel.titleViews}}">{{format-viewers channel.views}} ({{format-viewers (math-div channel.views age)}} per day)</dd>
 <dt><i class="fa fa-male"></i>Content</dt>
 <dd>{{#if channel.mature}}Inappropriate for children{{else}}No age restrictions{{/if}}</dd>
 {{#if stream.hasFormatInfo}}

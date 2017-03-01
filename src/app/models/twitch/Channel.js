@@ -58,7 +58,7 @@ export default Model.extend({
 	),
 
 
-	title_followers: computed( "followers", function() {
+	titleFollowers: computed( "followers", function() {
 		const number = get( this, "followers" );
 		const text = number === 1
 			? " person is following"
@@ -67,7 +67,7 @@ export default Model.extend({
 		return `${number}${text}`;
 	}),
 
-	title_views: computed( "views", function() {
+	titleViews: computed( "views", function() {
 		const number = get( this, "views" );
 		const text = number === 1
 			? " channel view"
@@ -77,13 +77,13 @@ export default Model.extend({
 	}),
 
 
-	has_language: computed( "language", function() {
+	hasLanguage: computed( "language", function() {
 		const lang = get( this, "language" );
 
 		return lang && lang !== "other";
 	}),
 
-	has_broadcaster_language: computed( "broadcaster_language", "language", function() {
+	hasBroadcasterLanguage: computed( "broadcaster_language", "language", function() {
 		const broadcaster = get( this, "broadcaster_language" );
 		const language = get( this, "language" );
 		const mBroadcaster = reLang.exec( broadcaster );
