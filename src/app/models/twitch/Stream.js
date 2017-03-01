@@ -55,7 +55,7 @@ export default Model.extend({
 	hasFormatInfo: and( "video_height", "average_fps" ),
 
 
-	title_created_at: computed( "created_at", function() {
+	titleCreatedAt: computed( "created_at", function() {
 		const created_at = get( this, "created_at" );
 		const moment = new Moment( created_at );
 		const diff = moment.diff( new Date(), "days" );
@@ -64,7 +64,7 @@ export default Model.extend({
 		return `Online since ${formatted}`;
 	}),
 
-	title_viewers: computed( "viewers", function() {
+	titleViewers: computed( "viewers", function() {
 		const number = get( this, "viewers" );
 		const text = number === 1
 			? " person is watching"

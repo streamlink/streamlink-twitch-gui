@@ -3,7 +3,7 @@
 <span>{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}</span>
 {{/if}}
 {{/if}}
-<span title="{{stream.title_created_at}}"><i class="fa fa-clock-o"></i>{{hours-from-now stream.created_at interval=60000}}</span>
-<span title="{{stream.title_viewers}}"><i class="fa fa-users"></i>{{format-viewers stream.viewers}}</span>
+<span title="{{stream.titleCreatedAt}}"><i class="fa fa-clock-o"></i>{{hours-from-now stream.created_at interval=60000}}</span>
+<span title="{{stream.titleViewers}}"><i class="fa fa-users"></i>{{format-viewers stream.viewers}}</span>
 <span title="{{stream.channel.titleFollowers}}"><i class="fa fa-heart"></i>{{format-viewers stream.channel.followers}}</span>
 <span title="{{stream.channel.titleViews}}"><i class="fa fa-line-chart"></i>{{format-viewers stream.channel.views}}</span>
