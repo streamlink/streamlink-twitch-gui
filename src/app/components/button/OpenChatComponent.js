@@ -14,7 +14,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 
 	classNames: [ "btn-hint" ],
 	icon: "fa-comments",
-	title: "[C] Open chat",
+	title: "Open chat",
 	iconanim: true,
 
 	hotkeys: [

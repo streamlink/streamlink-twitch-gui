@@ -7,7 +7,7 @@ import HotkeyMixin from "mixins/HotkeyMixin";
 export default FormButtonComponent.extend( HotkeyMixin, {
 	classNames: [ "btn-info" ],
 	icon: "fa-share-alt",
-	title: "[U] Copy channel url to clipboard",
+	title: "Copy channel url to clipboard",
 	iconanim: true,
 
 	hotkeys: [

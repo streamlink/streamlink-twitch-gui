@@ -24,7 +24,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	classNames: [ "btn-neutral" ],
 	icon: "fa-smile-o",
 	iconanim: true,
-	title: "[E] Show available channel emotes",
+	title: "Show available channel emotes",
 
 	hotkeys: [
 		{

@@ -36,11 +36,11 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixi
 	titleLoading: "",
 	titleSuccess: computed( "name", function() {
 		let name = get( this, "name" );
-		return `[S] Renew subscription to ${name}`;
+		return `Renew subscription to ${name}`;
 	}),
 	titleFailure: computed( "name", function() {
 		let name = get( this, "name" );
-		return `[S] Subscribe to ${name} now`;
+		return `Subscribe to ${name} now`;
 	}),
 
 	hotkeys: [

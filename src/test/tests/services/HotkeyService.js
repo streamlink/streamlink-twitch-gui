@@ -421,3 +421,95 @@ test( "Component subclasses with duplicate hotkeys", assert => {
 	$element.trigger( e );
 
 });
+
+
+test( "Component title", assert => {
+
+	const Component = HotkeyComponent.extend({
+		title: "foo"
+	});
+
+	context = Component.create({
+		hotkeys: [ { code: "KeyA" } ]
+	});
+	setOwner( context, owner );
+	runAppend( context );
+	assert.strictEqual(
+		get( context, "title" ),
+		"[A] foo",
+		"Updates the title when hotkey is alphanumerical"
+	);
+	runDestroy( context );
+
+	context = Component.create({
+		hotkeys: [ { code: [ "KeyA", "KeyB" ] } ]
+	});
+	setOwner( context, owner );
+	runAppend( context );
+	assert.strictEqual(
+		get( context, "title" ),
+		"[A] foo",
+		"Updates the title when hotkey has aliases"
+	);
+	runDestroy( context );
+
+	context = Component.create({
+		hotkeys: [ { code: "Escape" } ]
+	});
+	setOwner( context, owner );
+	runAppend( context );
+	assert.strictEqual(
+		get( context, "title" ),
+		"[Esc] foo",
+		"Updates the title when hotkey is found in name map"
+	);
+	runDestroy( context );
+
+	context = Component.create({
+		hotkeys: [ { code: "KeyA", ctrlKey: true } ]
+	});
+	setOwner( context, owner );
+	runAppend( context );
+	assert.strictEqual(
+		get( context, "title" ),
+		"[Ctrl+A] foo",
+		"Updates the title when hotkey is alphanumerical and a modifier is required"
+	);
+	runDestroy( context );
+
+	context = Component.create({
+		hotkeys: [ { code: "KeyA", ctrlKey: true, shiftKey: true, altKey: true } ]
+	});
+	setOwner( context, owner );
+	runAppend( context );
+	assert.strictEqual(
+		get( context, "title" ),
+		"[Ctrl+Shift+Alt+A] foo",
+		"Updates the title when hotkey is alphanumerical and multiple modifiers are required"
+	);
+	runDestroy( context );
+
+	context = Component.create({
+		title: "",
+		hotkeys: [ { code: "KeyA" } ]
+	});
+	setOwner( context, owner );
+	runAppend( context );
+	assert.strictEqual(
+		get( context, "title" ),
+		"",
+		"Doesn't updates the title when title is missing"
+	);
+	runDestroy( context );
+
+	context = Component.create();
+	setOwner( context, owner );
+	runAppend( context );
+	assert.strictEqual(
+		get( context, "title" ),
+		"foo",
+		"Doesn't updates the title when hotkeys are missing"
+	);
+	runDestroy( context );
+
+});
