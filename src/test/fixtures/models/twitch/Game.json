@@ -1,0 +1,20 @@
+{
+	"embedded": {
+		"_id": 1,
+		"name": "some game",
+		"giantbomb_id": 1,
+		"propularity": {},
+		"box": {
+			"large": "box-large.jpg",
+			"medium": "box-medium.jpg",
+			"small": "box-small.jpg",
+			"template": "box-{width}x{height}.jpg"
+		},
+		"logo": {
+			"large": "logo-large.jpg",
+			"medium": "logo-medium.jpg",
+			"small": "logo-small.jpg",
+			"template": "logo-{width}x{height}.jpg"
+		}
+	}
+}

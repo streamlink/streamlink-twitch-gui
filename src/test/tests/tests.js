@@ -20,6 +20,7 @@ import "tests/helpers/format-";
 import "tests/helpers/-fromNow";
 import "tests/helpers/object";
 import "tests/models/twitch/Image";
+import "tests/models/twitch/Game";
 import "tests/models/twitch/Channel";
 import "tests/mixins/RefreshRouteMixin";
 import "tests/components/PreviewImageComponent";
