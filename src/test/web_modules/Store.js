@@ -50,7 +50,11 @@ export function adapterRequest( assert, obj, url, method, query ) {
 
 	assert.strictEqual( url, obj.request.url, "Correct request url" );
 	assert.strictEqual( method, obj.request.method, "Correct request method" );
-	assert.deepEqual( query, obj.request.query || undefined, "Correct request query" );
+	assert.deepEqual(
+		query && query.data || query,
+		obj.request.query || undefined,
+		"Correct request query"
+	);
 
 	return obj.response || {};
 }
