@@ -75,16 +75,12 @@ export default Controller.extend( RetryTransitionMixin, {
 	streamproviders: providers,
 	streamprovidersDropDown: computed(function() {
 		return Object.keys( providers )
-			.filter(function( key ) {
-				// exclude unsupported providers
-				return providers[ key ][ "exec" ][ platform.platform ];
-			})
-			.map(function( key ) {
-				return {
-					id: key,
-					label: providers[ key ][ "label" ]
-				};
-			});
+			// exclude unsupported providers
+			.filter( id => providers[ id ][ "exec" ][ platform.platform ] )
+			.map( id => ({
+				id,
+				label: providers[ id ][ "label" ]
+			}) );
 	}),
 	streamproviderName: computed( "model.streamprovider", function() {
 		let streamprovider = get( this, "model.streamprovider" );
@@ -115,16 +111,14 @@ export default Controller.extend( RetryTransitionMixin, {
 
 	playerPresets: computed(function() {
 		let presetList = kPlayers
-			.filter(function( key ) {
-				return players[ key ][ "exec" ][ platform.platform ]
-				    && players[ key ][ "disabled" ] !== true;
-			})
-			.map(function( key ) {
-				return {
-					id: key,
-					label: players[ key ][ "name" ]
-				};
-			});
+			.filter( id =>
+				   players[ id ][ "exec" ][ platform.platform ]
+				&& players[ id ][ "disabled" ] !== true
+			)
+			.map( id => ({
+				id,
+				label: players[ id ][ "name" ]
+			}) );
 
 		presetList.unshift({
 			id   : "default",
@@ -166,9 +160,8 @@ export default Controller.extend( RetryTransitionMixin, {
 
 
 	chatMethods: computed(function() {
-		return Settings.chat_methods.filter(function( method ) {
-			return !method.disabled;
-		});
+		return Settings.chat_methods
+			.filter( method => !method.disabled );
 	}),
 
 	isChatMethodDefault: equal( "model.chat_method", "default" ),
@@ -178,12 +171,10 @@ export default Controller.extend( RetryTransitionMixin, {
 
 
 	themes: computed(function() {
-		return themesList.map(function( theme ) {
-			return {
-				id   : theme,
-				label: theme.substr( 0, 1 ).toUpperCase() + theme.substr( 1 )
-			};
-		});
+		return themesList.map( id => ({
+			id,
+			label: `${id.substr( 0, 1 ).toUpperCase()}${id.substr( 1 )}`
+		}) );
 	}),
 
 
@@ -191,10 +182,10 @@ export default Controller.extend( RetryTransitionMixin, {
 	hasBothIntegrations  : equal( "model.gui_integration", 3 ),
 
 	_minimizeObserver: observer( "model.gui_integration", function() {
-		var int    = get( this, "model.gui_integration" );
-		var min    = get( this, "model.gui_minimize" );
-		var noTask = ( int & 1 ) === 0;
-		var noTray = ( int & 2 ) === 0;
+		const int = get( this, "model.gui_integration" );
+		const min = get( this, "model.gui_minimize" );
+		const noTask = ( int & 1 ) === 0;
+		const noTray = ( int & 2 ) === 0;
 
 		// make sure that disabled options are not selected
 		if ( noTask && min === 1 ) {
@@ -212,47 +203,43 @@ export default Controller.extend( RetryTransitionMixin, {
 
 	languages: computed(function() {
 		return Object.keys( langs )
-			.filter(function( code ) {
-				return !langs[ code ].disabled;
-			})
-			.map(function( code ) {
-				return {
-					id  : code,
-					lang: langs[ code ][ "lang" ]
-				};
-			});
+			.filter( code => !langs[ code ].disabled )
+			.map( id => ({
+				id,
+				lang: langs[ id ][ "lang" ]
+			}) );
 	}),
 
 
 	// filter available notification providers
-	notifyProvider: function() {
-		return Settings.notify_provider.filter(function( item ) {
-			return isNotificationSupported( item.value );
-		});
-	}.property(),
+	notifyProvider: computed(function() {
+		return Settings.notify_provider
+			.filter( item => isNotificationSupported( item.value ) );
+	}),
 
 
 	actions: {
 		apply( success, failure ) {
-			var modal  = get( this, "modal" );
-			var model  = get( this, "settings.content" );
+			const modal = get( this, "modal" );
+			const settings = get( this, "settings.content" );
 
-			get( this, "model" ).applyChanges( model );
+			get( this, "model" ).applyChanges( settings );
 
-			model.save()
+			settings.save()
 				.then( success, failure )
-				.then( modal.closeModal.bind( modal, this ) )
-				.then( this.retryTransition.bind( this ) )
-				.catch( model.rollbackAttributes.bind( model ) );
+				.then( () => modal.closeModal( this ) )
+				.then( () => this.retryTransition() )
+				.catch( () => settings.rollbackAttributes() );
 		},
 
 		discard( success ) {
-			var modal = get( this, "modal" );
+			const modal = get( this, "modal" );
 			get( this, "model" ).discardChanges();
+
 			Promise.resolve()
 				.then( success )
-				.then( modal.closeModal.bind( modal, this ) )
-				.then( this.retryTransition.bind( this ) );
+				.then( () => modal.closeModal( this ) )
+				.then( () => this.retryTransition() );
 		},
 
 		cancel() {
@@ -261,7 +248,7 @@ export default Controller.extend( RetryTransitionMixin, {
 		},
 
 		checkLanguages( all ) {
-			var filters = get( this, "model.gui_langfilter" );
+			let filters = get( this, "model.gui_langfilter" );
 			Object.keys( filters.content ).forEach(function( key ) {
 				set( filters, key, all );
 			});
@@ -277,6 +264,7 @@ export default Controller.extend( RetryTransitionMixin, {
 				message: "This is a test notification",
 				icon: icon
 			};
+
 			showNotification( provider, notification, provider !== "auto" )
 				.then( success, failure )
 				.catch(function() {});
