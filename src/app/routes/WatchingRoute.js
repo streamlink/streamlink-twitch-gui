@@ -19,7 +19,7 @@ export default Route.extend( RefreshRouteMixin, {
 
 		return Promise.resolve( records )
 			.then( mapBy( "stream" ) )
-			.then( preload( "preview.large_nocache" ) )
+			.then( preload( "preview.largeLatest" ) )
 			// return the original record array
 			.then(function() { return records; });
 	}

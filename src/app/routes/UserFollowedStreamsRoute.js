@@ -17,6 +17,6 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 			limit : get( this, "limit" )
 		})
 			.then( mapBy( "stream" ) )
-			.then( preload( "preview.medium_nocache" ) );
+			.then( preload( "preview.mediumLatest" ) );
 	}
 });

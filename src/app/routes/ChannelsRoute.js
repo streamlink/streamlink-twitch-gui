@@ -21,6 +21,6 @@ export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, RefreshRo
 			broadcaster_language: get( this, "broadcaster_language" )
 		})
 			.then( toArray() )
-			.then( preload( "preview.medium_nocache" ) );
+			.then( preload( "preview.mediumLatest" ) );
 	}
 });

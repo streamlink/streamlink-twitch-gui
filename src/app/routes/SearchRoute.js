@@ -41,7 +41,7 @@ export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 					live : true
 				})
 					.then( mapBy( "game" ) )
-					.then( preload( "box.large_nocache" ) )
+					.then( preload( "box.largeLatest" ) )
 				: Promise.resolve( [] ),
 
 			// search for channels
@@ -63,7 +63,7 @@ export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 					limit : get( this, "limit" )
 				})
 					.then( mapBy( "stream" ) )
-					.then( preload( "preview.medium_nocache" ) )
+					.then( preload( "preview.mediumLatest" ) )
 				: Promise.resolve( [] )
 		])
 			.then( ([ games, channels, streams ]) => ({ games, channels, streams }) );
@@ -80,6 +80,6 @@ export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 			limit : get( this, "limit" )
 		})
 			.then( mapBy( "stream" ) )
-			.then( preload( "preview.medium_nocache" ) );
+			.then( preload( "preview.mediumLatest" ) );
 	}
 });

@@ -34,7 +34,7 @@ export default Route.extend( RefreshRouteMixin, {
 					// preload images
 					Promise.resolve({ stream, channel })
 						.then( preload([
-							"stream.preview.large_nocache",
+							"stream.preview.largeLatest",
 							"channel.logo",
 							"channel.video_banner"
 						]) ),

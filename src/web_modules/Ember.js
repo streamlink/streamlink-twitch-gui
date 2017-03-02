@@ -40,6 +40,7 @@ export const EmberNativeArray = Ember.A;
 export const Application = Ember.Application;
 export const Binding = Ember.Binding;
 export const Component = Ember.Component;
+export const ComputedProperty = Ember.ComputedProperty;
 export const Controller = Ember.Controller;
 export const EventDispatcher = Ember.EventDispatcher;
 export const Evented = Ember.Evented;

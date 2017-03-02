@@ -24,7 +24,7 @@ export default Route.extend( RefreshRouteMixin, {
 				Promise.resolve( featured )
 					.then( preload([
 						"image",
-						"stream.preview.large_nocache"
+						"stream.preview.largeLatest"
 					]) )
 					.then( () => ({ summary, featured }) )
 			);

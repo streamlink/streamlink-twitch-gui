@@ -29,7 +29,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 						: streamPromise;
 
 					// preload the stream's preview image
-					return promise.then( preload( "preview.medium_nocache" ) );
+					return promise.then( preload( "preview.mediumLatest" ) );
 				});
 
 				// wait for everything to resolve and return the hosts list
