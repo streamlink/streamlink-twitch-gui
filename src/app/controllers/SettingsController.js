@@ -236,8 +236,9 @@ export default Controller.extend( RetryTransitionMixin, {
 		apply( success, failure ) {
 			var modal  = get( this, "modal" );
 			var model  = get( this, "settings.content" );
-			var buffer = get( this, "model" ).applyChanges().getContent();
-			model.setProperties( buffer );
+
+			get( this, "model" ).applyChanges( model );
+
 			model.save()
 				.then( success, failure )
 				.then( modal.closeModal.bind( modal, this ) )

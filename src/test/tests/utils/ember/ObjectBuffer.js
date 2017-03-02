@@ -4,7 +4,10 @@ import {
 } from "QUnit";
 import {
 	get,
-	set
+	set,
+	getProperties,
+	addObserver,
+	EmberObject
 } from "Ember";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
@@ -385,6 +388,79 @@ test( "ObjectBuffer with same nested objects", function( assert ) {
 		buffer.getContent()[ "foo" ][ "bar" ][ "baz" ],
 		"foo",
 		"Nested objects of the original object have been updated"
+	);
+
+});
+
+
+test( "Observed properties and reference object", function( assert ) {
+
+	assert.expect( 3 + 2*3 + 2 + 1 );
+
+	const reference = EmberObject.create({
+		"foo": false,
+		"bar": {
+			"baz": false,
+			"qux": {
+				"quux": false
+			}
+		}
+	});
+
+	// shallow copy
+	const content = Object.keys( reference ).reduce( ( obj, key ) => {
+		obj[ key ] = reference[ key ];
+		return obj;
+	}, {} );
+
+	const buffer = ObjectBuffer.create({ content });
+
+	addObserver( buffer, "foo", () => {
+		assert.ok( true, "The buffer's foo property has been changed" );
+	});
+	addObserver( buffer, "bar.baz", () => {
+		assert.ok( true, "The buffer's bar.baz property has been changed" );
+	});
+	addObserver( buffer, "bar.qux.quux", () => {
+		assert.ok( true, "The buffer's bar.qux.quux property has been changed" );
+	});
+
+	addObserver( content, "foo", () => {
+		assert.ok( true, "The content's foo property has been changed" );
+	});
+	addObserver( content, "bar.baz", () => {
+		assert.ok( true, "The content's bar.baz property has been changed" );
+	});
+	addObserver( content, "bar.qux.quux", () => {
+		assert.ok( true, "The content's bar.qux.quux property has been changed" );
+	});
+
+	addObserver( reference, "bar", () => {
+		assert.ok( true, "The reference's baz object was modified" );
+	});
+	addObserver( reference, "bar.qux", () => {
+		assert.ok( true, "The reference's baz.qux object was modified" );
+	});
+
+	set( buffer, "foo", true );
+	set( buffer, "bar.baz", true );
+	set( buffer, "bar.qux.quux", true );
+
+	// triggers observers on the buffer and content
+	buffer.applyChanges( reference );
+
+	assert.deepEqual(
+		getProperties( reference, "foo", "bar" ),
+		{
+			"foo": true,
+			"bar": {
+				"baz": true,
+				"qux": {
+					"quux": true
+				}
+			}
+		},
+		"ObjectBuffer.applyChanges sets properties on the target object"
 	);
 
 });

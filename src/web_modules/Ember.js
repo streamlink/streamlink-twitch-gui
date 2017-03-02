@@ -11,6 +11,7 @@ export default Ember;
 export const get = Ember.get;
 export const set = Ember.set;
 export const getWithDefault = Ember.getWithDefault;
+export const getProperties = Ember.getProperties;
 export const setProperties = Ember.setProperties;
 export const defineProperty = Ember.defineProperty;
 export const addObserver = Ember.addObserver;
