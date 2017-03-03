@@ -68,7 +68,7 @@ export default Mixin.create({
 		if ( !hotkeys.length ) { return; }
 
 		// reverse the array (concatenatedProperties appends similar hotkeys defined by subclasses)
-		HotkeyService.register( this, hotkeys.reverse() );
+		HotkeyService.register( this, hotkeys.slice().reverse() );
 	}),
 
 	_unregisterHotkeys: on( "willDestroyElement", function() {

@@ -423,6 +423,69 @@ test( "Component subclasses with duplicate hotkeys", assert => {
 });
 
 
+test( "Re-inserted components", assert => {
+
+	assert.expect( 3 );
+
+	const MyButton = HotkeyComponent.extend({
+		hotkeys: [
+			{
+				code: "Enter",
+				action() {
+					assert.ok( false, "Action should not be called" );
+				}
+			},
+			{
+				code: "Enter",
+				ctrlKey: true,
+				action() {
+					assert.ok( true, "Action has been called" );
+				}
+			}
+		]
+	});
+
+	owner.register( "component:my-button", MyButton );
+
+
+	context = ApplicationComponent.create({
+		shown: true,
+		layout: compile( "{{#if shown}}{{my-button}}{{/if}}" )
+	});
+	setOwner( context, owner );
+
+	runAppend( context );
+
+	const registries = owner.lookup( "service:hotkey" ).registries;
+	const [ firstHotkeyOne, firstHotkeyTwo ] = registries[0].hotkeys;
+
+	let e;
+	const $element = context.$();
+
+	e = $.Event( "keyup" );
+	e.code = "Enter";
+	e.ctrlKey = true;
+	$element.trigger( e );
+
+	// re-insert component
+	run( () => set( context, "shown", false ) );
+	run( () => set( context, "shown", true ) );
+
+	e = $.Event( "keyup" );
+	e.code = "Enter";
+	e.ctrlKey = true;
+	$element.trigger( e );
+
+	const [ secondHotkeyOne, secondHotkeyTwo ] = registries[0].hotkeys;
+
+	assert.ok(
+		firstHotkeyOne === secondHotkeyOne && firstHotkeyTwo === secondHotkeyTwo,
+		"Hotkey order stays the same"
+	);
+
+});
+
+
 test( "Component title", assert => {
 
 	const Component = HotkeyComponent.extend({
