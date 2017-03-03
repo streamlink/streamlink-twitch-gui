@@ -16,7 +16,8 @@ import {
 	computed,
 	run,
 	Component,
-	EventDispatcher
+	EventDispatcher,
+	Service
 } from "Ember";
 import followButtonComponentInjector
 	from "inject?mixins/TwitchInteractButtonMixin!components/button/FollowButtonComponent";
@@ -44,6 +45,10 @@ module( "components/button/FollowButtonComponent", {
 		eventDispatcher.setup( {}, fixtureElement );
 		owner = buildOwner();
 		owner.register( "event_dispatcher:main", eventDispatcher );
+		owner.register( "service:hotkey", Service.extend({
+			register() {},
+			unregister() {}
+		}) );
 		owner.register( "helper:bool-not", BoolNotHelper );
 		owner.register( "component:loading-spinner", LoadingSpinnerComponent );
 		owner.register( "component:form-button", FormButtonComponent );
@@ -165,7 +170,7 @@ test( "Loading/success states and click actions", assert => {
 
 	assert.strictEqual(
 		$mainButton.prop( "title" ),
-		"Follow foo",
+		"[F] Follow foo",
 		"The main button has the correct title when not following"
 	);
 
@@ -195,7 +200,7 @@ test( "Loading/success states and click actions", assert => {
 
 	assert.strictEqual(
 		$mainButton.prop( "title" ),
-		"Unfollow foo",
+		"[F] Unfollow foo",
 		"The main button has the correct title when following"
 	);
 
@@ -232,13 +237,13 @@ test( "Loading/success states and click actions", assert => {
 
 	assert.strictEqual(
 		$mainButton.prop( "title" ),
-		"Keep following foo",
+		"[F] Keep following foo",
 		"The main button has the correct title when being expanded"
 	);
 
 	assert.strictEqual(
 		$confirmButton.prop( "title" ),
-		"Unfollow foo",
+		"[Ctrl+F] Unfollow foo",
 		"The confirm button has the correct title when being expanded"
 	);
 

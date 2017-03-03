@@ -6,13 +6,14 @@ import {
 	Component
 } from "Ember";
 import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
+import HotkeyMixin from "mixins/HotkeyMixin";
 import layout from "templates/components/button/FollowButtonComponent.hbs";
 
 
 const { cancel, later } = run;
 
 
-export default Component.extend( TwitchInteractButtonMixin, {
+export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 	layout,
 
 	classNames: [
@@ -28,6 +29,22 @@ export default Component.extend( TwitchInteractButtonMixin, {
 
 	mouseLeaveTime: 1000,
 	_timeout: null,
+
+	hotkeys: [
+		{
+			code: "KeyF",
+			action() {
+				this.$( ".main-button" ).click();
+			}
+		},
+		{
+			code: "KeyF",
+			ctrlKey: true,
+			action() {
+				this.$( ".confirm-button" ).click();
+			}
+		}
+	],
 
 	didInsertElement() {
 		this._super( ...arguments );

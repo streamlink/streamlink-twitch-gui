@@ -2,12 +2,13 @@
 	classNames="btn-danger confirm-button"
 	icon="fa-heart-o"
 	iconanim=true
-	title=(concat "Unfollow " name)
+	title=(concat "[Ctrl+F] Unfollow " name)
 	action=(unless isLocked
 		(if isExpanded (action "unfollow"))
 	)
 }}
 {{form-button
+	classNames="main-button"
 	class=(if isLoading
 		"btn-info"
 		(if isPromptVisible
@@ -24,8 +25,8 @@
 	title=(if isLoading
 		""
 		(if isPromptVisible
-			(concat "Keep following " name)
-			(concat (if isSuccessful "Unfollow " "Follow ") name)
+			(concat "[F] Keep following " name)
+			(concat "[F] " (if isSuccessful "Unfollow " "Follow ") name)
 		)
 	)
 	action=(unless isLocked
