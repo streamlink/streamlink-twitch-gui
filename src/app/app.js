@@ -244,22 +244,31 @@ import SettingsController from "controllers/SettingsController";
 import SettingsTemplate from "templates/settings/Settings.hbs";
 import SettingsIndexRoute from "routes/SettingsIndexRoute";
 import SettingsMainRoute from "routes/SettingsSubmenuRoute";
+import SettingsMainController from "controllers/SettingsMainController";
 import SettingsMainTemplate from "templates/settings/SettingsMain.hbs";
 import SettingsStreamsRoute from "routes/SettingsSubmenuRoute";
+import SettingsStreamsController from "controllers/SettingsStreamsController";
 import SettingsStreamsTemplate from "templates/settings/SettingsStreams.hbs";
 import SettingsStreamproviderRoute from "routes/SettingsSubmenuRoute";
+import SettingsStreamproviderController from "controllers/SettingsStreamproviderController";
 import SettingsStreamproviderTemplate from "templates/settings/SettingsStreamprovider.hbs";
 import SettingsPlayerRoute from "routes/SettingsSubmenuRoute";
+import SettingsPlayerController from "controllers/SettingsPlayerController";
 import SettingsPlayerTemplate from "templates/settings/SettingsPlayer.hbs";
 import SettingsChatRoute from "routes/SettingsSubmenuRoute";
+import SettingsChatController from "controllers/SettingsChatController";
 import SettingsChatTemplate from "templates/settings/SettingsChat.hbs";
 import SettingsGuiRoute from "routes/SettingsSubmenuRoute";
+import SettingsGuiController from "controllers/SettingsGuiController";
 import SettingsGuiTemplate from "templates/settings/SettingsGui.hbs";
 import SettingsListsRoute from "routes/SettingsSubmenuRoute";
+import SettingsListsController from "controllers/SettingsListsController";
 import SettingsListsTemplate from "templates/settings/SettingsLists.hbs";
 import SettingsLanguagesRoute from "routes/SettingsSubmenuRoute";
+import SettingsLanguagesController from "controllers/SettingsLanguagesController";
 import SettingsLanguagesTemplate from "templates/settings/SettingsLanguages.hbs";
 import SettingsNotificationsRoute from "routes/SettingsSubmenuRoute";
+import SettingsNotificationsController from "controllers/SettingsNotificationsController";
 import SettingsNotificationsTemplate from "templates/settings/SettingsNotifications.hbs";
 import SettingsChannelsRoute from "routes/SettingsChannelsRoute";
 import SettingsChannelsController from "controllers/SettingsChannelsController";
@@ -549,22 +558,31 @@ export default Application.create({
 	SettingsTemplate,
 	SettingsIndexRoute,
 	SettingsMainRoute,
+	SettingsMainController,
 	SettingsMainTemplate,
 	SettingsStreamsRoute,
+	SettingsStreamsController,
 	SettingsStreamsTemplate,
 	SettingsStreamproviderRoute,
+	SettingsStreamproviderController,
 	SettingsStreamproviderTemplate,
 	SettingsPlayerRoute,
+	SettingsPlayerController,
 	SettingsPlayerTemplate,
 	SettingsChatRoute,
+	SettingsChatController,
 	SettingsChatTemplate,
 	SettingsGuiRoute,
+	SettingsGuiController,
 	SettingsGuiTemplate,
 	SettingsListsRoute,
+	SettingsListsController,
 	SettingsListsTemplate,
 	SettingsLanguagesRoute,
+	SettingsLanguagesController,
 	SettingsLanguagesTemplate,
 	SettingsNotificationsRoute,
+	SettingsNotificationsController,
 	SettingsNotificationsTemplate,
 	SettingsChannelsRoute,
 	SettingsChannelsController,

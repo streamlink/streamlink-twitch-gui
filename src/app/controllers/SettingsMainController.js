@@ -1,0 +1,19 @@
+import {
+	computed,
+	Controller
+} from "Ember";
+import { themes } from "config";
+
+
+const { themes: themesList } = themes;
+
+
+export default Controller.extend({
+	themes: computed(function() {
+		return themesList.map( id => {
+			const label = id.substr( 0, 1 ).toUpperCase() + id.substr( 1 );
+
+			return { id, label };
+		});
+	})
+});

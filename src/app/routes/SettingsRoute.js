@@ -17,7 +17,8 @@ export default Route.extend({
 	settings: service(),
 
 	model() {
-		var settings = get( this, "settings.content" );
+		const settings = get( this, "settings.content" );
+
 		return ObjectBuffer.create({
 			content: settings.toJSON()
 		});
@@ -37,13 +38,14 @@ export default Route.extend({
 			}
 
 			// check whether the user has changed any values
-			if ( !get( this, "controller.model.isDirty" ) ) { return; }
+			const controller = get( this, "controller" );
+			if ( !get( controller, "model.isDirty" ) ) { return; }
 
 			// stay here...
 			previousTransition.abort();
 
 			// and let the user decide
-			get( this, "modal" ).openModal( "confirm", this.controller, {
+			get( this, "modal" ).openModal( "confirm", controller, {
 				previousTransition
 			});
 		}

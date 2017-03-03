@@ -5,8 +5,6 @@ import {
 
 
 export default Route.extend({
-	controllerName: "settings",
-
 	model() {
 		return this.modelFor( "settings" );
 	},

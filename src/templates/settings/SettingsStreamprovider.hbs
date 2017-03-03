@@ -16,14 +16,14 @@
 			<dt>{{#if provider.python}}Python{{else}}{{provider.name}}{{/if}} executable</dt>
 			<dd>{{file-select
 				value=(mut (get (get model.streamproviders key) "exec"))
-				placeholder=(get provider.exec platform.platform)
+				placeholder=(get provider.exec platform)
 				inputClass="form-control"
 			}}</dd>
 			{{#if provider.python}}
 				<dt>{{provider.name}} python script</dt>
 				<dd>{{file-select
 					value=(mut (get (get model.streamproviders key) "pythonscript"))
-					placeholder=(get provider.pythonscript platform.platform)
+					placeholder=(get provider.pythonscript platform)
 					inputClass="form-control"
 				}}</dd>
 			{{/if}}
