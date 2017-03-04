@@ -585,18 +585,21 @@ export default Service.extend( ChannelSettingsMixin, {
 
 			// reject promise on any error output
 			function onStdErr( line ) {
+				line = line.replace( reReplace, "" );
+
 				let error = parseError( line );
 				warnOrReject( line, error );
 			}
 
 			// fulfill promise as soon as the player is launched
 			function onStdOut( line ) {
+				line = line.replace( reReplace, "" );
+
 				let error = parseError( line );
 				if ( error ) {
 					return warnOrReject( line, error );
 				}
 
-				line = line.replace( reReplace, "" );
 				record.pushLog( "stdOut", line );
 
 				if ( rePlayer.test( line ) ) {
