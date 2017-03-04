@@ -25,6 +25,7 @@ import "tests/models/twitch/Game";
 import "tests/models/twitch/Channel";
 import "tests/models/twitch/Stream";
 import "tests/models/twitch/GameTop";
+import "tests/models/twitch/ChannelPanel";
 import "tests/models/twitch/StreamSummary";
 import "tests/models/twitch/StreamFeatured";
 import "tests/mixins/RefreshRouteMixin";

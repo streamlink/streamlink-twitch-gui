@@ -1,0 +1,37 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/api/channels/foo/panels",
+		"method": "GET",
+		"query": {}
+	},
+	"response": [
+		{
+			"_id": 1,
+			"display_order": 1,
+			"kind": "default",
+			"html_description": "description-html-1",
+			"user_id": 1,
+			"data": {
+				"link": "url-1",
+				"image": "image-1",
+				"title": "title-1",
+				"description": "description-markdown-1"
+			},
+			"channel": "foo"
+		},
+		{
+			"_id": 2,
+			"display_order": 2,
+			"kind": "default",
+			"html_description": null,
+			"user_id": 1,
+			"data": {
+				"link": "url-2",
+				"image": "image-2",
+				"title": "",
+				"description": ""
+			},
+			"channel": "foo"
+		}
+	]
+}
