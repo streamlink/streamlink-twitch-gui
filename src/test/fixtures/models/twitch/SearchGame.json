@@ -1,0 +1,25 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/search/games",
+		"method": "GET",
+		"query": {
+			"query": "foo"
+		}
+	},
+	"response": {
+		"games": [
+			{
+				"name": "foo",
+				"_id": 1,
+				"box": {},
+				"logo": {}
+			},
+			{
+				"name": "foobar",
+				"_id": 2,
+				"box": {},
+				"logo": {}
+			}
+		]
+	}
+}
