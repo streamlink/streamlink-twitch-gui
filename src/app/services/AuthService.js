@@ -211,25 +211,24 @@ export default Service.extend( Evented, {
 		// validate token
 		const store = get( this, "store" );
 
-		return store.findAll( "twitchToken", { reload: true } )
-			.then( records => records.objectAt( 0 ) )
+		return store.queryRecord( "twitchRoot", {} )
 			.then( record => this.validateToken( record ) );
 	},
 
 	/**
 	 * Validate access token response
-	 * @param {TwitchToken} record
+	 * @param {TwitchRoot} record
 	 * @returns {Promise}
 	 */
 	validateToken( record ) {
 		let valid = get( record, "valid" );
-		let name  = get( record, "user_name" );
-		let scope = get( record, "authorization.scopes" );
+		let name = get( record, "user_name" );
+		let scopes = get( record, "scopes" );
 
 		return valid === true
 		    && name
 		    && name.length > 0
-		    && this.validateScope( scope )
+		    && this.validateScope( scopes )
 			? Promise.resolve( record )
 			: Promise.reject( new Error( "Invalid access token" ) );
 	},
@@ -248,15 +247,15 @@ export default Service.extend( Evented, {
 	/**
 	 * Update the auth record and save it
 	 * @param {String} token
-	 * @param {TwitchToken} record
+	 * @param {TwitchRoot} record
 	 * @returns {Promise}
 	 */
 	sessionSave( token, record ) {
 		let session = get( this, "session" );
 		setProperties( session, {
 			access_token: token,
-			scope       : get( record, "authorization.scopes" ).join( "+" ),
-			date        : new Date()
+			scope: get( record, "scopes" ).join( "+" ),
+			date: new Date()
 		});
 
 		return session.save();
@@ -270,10 +269,10 @@ export default Service.extend( Evented, {
 		let session = get( this, "session" );
 		setProperties( session, {
 			access_token: null,
-			scope       : null,
-			date        : null,
-			user_id     : null,
-			user_name   : null
+			scope: null,
+			date: null,
+			user_id: null,
+			user_name: null
 		});
 
 		return session.save();

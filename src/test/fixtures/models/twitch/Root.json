@@ -1,0 +1,27 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/",
+		"method": "GET",
+		"query": {}
+	},
+	"response": {
+		"token": {
+			"valid": true,
+			"authorization": {
+				"scopes": [
+					"chat_login",
+					"user_blocks_edit",
+					"user_blocks_read",
+					"user_follows_edit",
+					"user_read",
+					"user_subscriptions"
+				],
+				"created_at": "2000-01-01T00:00:00Z",
+				"updated_at": "2000-01-01T00:00:00Z"
+			},
+			"user_name": "user",
+			"user_id": "1337",
+			"client_id": "foobar"
+		}
+	}
+}

@@ -21,8 +21,8 @@ import GithubReleases from "models/github/Releases";
 import GithubReleasesAdapter from "store/GithubAdapter";
 import GithubReleasesSerializer from "models/github/ReleasesSerializer";
 
-import TwitchToken from "models/twitch/Token";
-import TwitchTokenSerializer from "models/twitch/TokenSerializer";
+import TwitchRoot from "models/twitch/Root";
+import TwitchRootSerializer from "models/twitch/RootSerializer";
 
 import TwitchGame from "models/twitch/Game";
 import TwitchGameSerializer from "models/twitch/GameSerializer";
@@ -315,8 +315,8 @@ export default Application.create({
 
 
 	// Models: twitch
-	TwitchToken,
-	TwitchTokenSerializer,
+	TwitchRoot,
+	TwitchRootSerializer,
 
 	TwitchGame,
 	TwitchGameSerializer,

@@ -5,11 +5,13 @@ import {
 
 
 /**
- * @class TwitchToken
+ * @class TwitchRoot
  * @extends Model
  */
 export default Model.extend({
-	authorization: attr(),
+	created_at: attr( "date" ),
+	scopes: attr( "" ),
+	updated_at: attr( "date" ),
 	user_id: attr( "number" ),
 	user_name: attr( "string" ),
 	valid: attr( "boolean" )
