@@ -24,6 +24,7 @@ import "tests/models/twitch/Image";
 import "tests/models/twitch/Game";
 import "tests/models/twitch/Channel";
 import "tests/models/twitch/Stream";
+import "tests/models/twitch/GameTop";
 import "tests/mixins/RefreshRouteMixin";
 import "tests/components/PreviewImageComponent";
 import "tests/components/LoadingSpinnerComponent";
