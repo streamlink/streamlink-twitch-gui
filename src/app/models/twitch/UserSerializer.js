@@ -21,7 +21,8 @@ export default TwitchSerializer.extend({
 			payload = {
 				twitchUser: {
 					[ this.primaryKey ]: user.name,
-					channel: user._id
+					channel: user._id,
+					stream: user._id
 				}
 			};
 		}
