@@ -11,10 +11,10 @@ export default TwitchSerializer.extend({
 	},
 
 	normalize( modelClass, resourceHash, prop ) {
-		const foreignKey = this.store.serializerFor( "twitchStream" ).primaryKey;
+		const foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
 
-		// get the id of the embedded TwitchStream record and apply it here
-		resourceHash[ this.primaryKey ] = resourceHash.stream[ foreignKey ];
+		// get the id of the embedded TwitchChannel record and apply it here
+		resourceHash[ this.primaryKey ] = resourceHash.stream.channel[ foreignKey ];
 
 		return this._super( modelClass, resourceHash, prop );
 	}
