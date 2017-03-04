@@ -1,20 +1,24 @@
 {{#if content.length}}
-<ul>
-{{#each content as |item index|}}
-{{yield item (is-gte index initial) (has-own-property duplicates index)}}
-{{/each}}
-</ul>
-{{#if infiniteScroll}}
-	{{infinite-scroll
-		content=content
-		isFetching=isFetching
-		hasFetchedAll=hasFetchedAll
-		fetchError=fetchError
-		action=(action "willFetchContent")
-	}}
-{{/if}}
+	<ul>
+		{{#each content as |item index|}}
+			{{yield
+				item
+				(is-gte index lengthInitial)
+				(get-index duplicates index)
+			}}
+		{{/each}}
+	</ul>
+	{{#if infiniteScroll}}
+		{{infinite-scroll
+			content=content
+			isFetching=isFetching
+			hasFetchedAll=hasFetchedAll
+			fetchError=fetchError
+			action=(action "willFetchContent")
+		}}
+	{{/if}}
 {{else if (hasBlock "inverse")}}
-<div>
-{{yield to="inverse"}}
-</div>
+	<div>
+		{{yield to="inverse"}}
+	</div>
 {{/if}}

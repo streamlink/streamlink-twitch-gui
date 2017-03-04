@@ -1,11 +1,10 @@
 import {
 	get,
-	set,
 	setProperties,
-	RSVP,
+	addObserver,
 	computed,
-	observer,
-	Component
+	Component,
+	EmberNativeArray
 } from "Ember";
 import layout from "templates/components/list/ContentListComponent.hbs";
 
@@ -17,17 +16,19 @@ export default Component.extend({
 	layout,
 
 	tagName: "div",
-	classNameBindings: [ ":content-list-component", "float::content-list-nofloat" ],
+	classNames: [
+		"content-list-component"
+	],
+	classNameBindings: [
+		"float::content-list-nofloat"
+	],
 
-	content   : null,
-	compare   : null,
-	duplicates: null,
+	content: null,
+	compare: null,
+	asynchronous: false,
 
 	infiniteScroll: true,
 	float: true,
-
-	length : 0,
-	initial: 0,
 
 
 	isFetching: readOnly( "_targetObject.isFetching" ),
@@ -38,57 +39,60 @@ export default Component.extend({
 	init() {
 		this._super( ...arguments );
 
-		var length = get( this, "content.length" );
 		setProperties( this, {
-			initial   : length,
-			length,
-			duplicates: {}
+			lengthInitial: get( this, "content.length" ),
+			length: 0,
+			duplicates: new EmberNativeArray(),
+			duplicatesMap: new Map()
 		});
 
-		var compare = get( this, "compare" );
-		if ( compare !== null ) {
-			this.checkInitialDuplicates( compare );
-		}
+		addObserver( this, "content.length", this, this.checkDuplicates );
+		this.checkDuplicates();
 	},
 
 
-	_contentLengthObserver: observer( "content.length", function() {
-		var content = get( this, "content" );
-		var compare = get( this, "compare" );
-		var index   = get( this, "length" );
+	checkDuplicates() {
+		// the previous content.length
+		const start = this.length;
 
-		if ( compare !== null ) {
-			content = content.mapBy( compare );
+		// map content
+		const compare = get( this, "compare" );
+		let content = get( this, "content" ).slice( start );
+		content = compare
+			? content.mapBy( compare )
+			: content;
+
+		this.length += get( content, "length" );
+
+		if ( !get( this, "asynchronous" ) ) {
+			this._checkDuplicates( content, start );
+
+		} else {
+			// wait for all potential DS.PromiseObjects to resolve first
+			Promise.all( content )
+				.then( content => this._checkDuplicates( content, start ) );
 		}
-
-		this.checkDuplicates( content, index );
-	}),
-
-	checkInitialDuplicates( compare ) {
-		var content = get( this, "content" ).mapBy( compare );
-		this.checkDuplicates( content, 1 );
 	},
 
-	checkDuplicates( content, index ) {
-		var self       = this;
-		var duplicates = get( this, "duplicates" );
-		var length     = get( content, "length" );
-		var diff       = -length + index - 1;
-
-
-		// wait for all potential DS.PromiseObjects to resolve first
-		RSVP.all( content ).then(function( content ) {
-			for ( var found; index < length; index++ ) {
-				found = content.lastIndexOf( content[ index ], diff );
-				if ( found !== -1 ) {
-					set( duplicates, String( index ), true );
-				}
+	_checkDuplicates( content, start ) {
+		const duplicatesMap = this.duplicatesMap;
+		const newDuplicates = content.map( item => {
+			if ( !duplicatesMap.has( item ) ) {
+				duplicatesMap.set( item, true );
+				return false;
+			} else {
+				return true;
 			}
-
-			self.notifyPropertyChange( "duplicates" );
-			set( self, "length", length );
 		});
+
+		// insert newDuplicates at specific position (function may have been called asynchronously)
+		const length = get( content, "length" );
+		this.duplicates.replace( start, length, newDuplicates );
+
+		// tell ember to update the yielded duplicates in the template's each loop
+		this.notifyPropertyChange( "duplicates" );
 	},
+
 
 	actions: {
 		willFetchContent( force ) {
@@ -100,5 +104,9 @@ export default Component.extend({
 	}
 
 }).reopenClass({
-	positionalParams: [ "content" ]
+	positionalParams: [
+		"content",
+		"compare",
+		"asynchronous"
+	]
 });

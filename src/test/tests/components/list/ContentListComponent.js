@@ -11,151 +11,199 @@ import {
 import {
 	setOwner,
 	HTMLBars,
-	RSVP,
 	run,
-	Component
+	Component,
+	EmberNativeArray
 } from "Ember";
 import ContentListComponent from "components/list/ContentListComponent";
 import IsGteHelper from "helpers/IsGteHelper";
-import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
+import GetIndexHelper from "helpers/GetIndexHelper";
 
 
 const { compile } = HTMLBars;
+const { scheduleOnce } = run;
 
-let owner, component;
+let owner, context;
 
 
 module( "components/list/ContentListComponent", {
 	beforeEach() {
 		owner = buildOwner();
 		owner.register( "component:content-list", ContentListComponent );
-		owner.register( "component:infinite-scroll", Component.extend({}) );
+		owner.register( "component:infinite-scroll", Component.extend() );
 		owner.register( "helper:is-gte", IsGteHelper );
-		owner.register( "helper:has-own-property", HasOwnPropertyHelper );
+		owner.register( "helper:get-index", GetIndexHelper );
 	},
 
 	afterEach() {
 		//noinspection JSUnusedAssignment
-		runDestroy( component );
+		runDestroy( context );
 		runDestroy( owner );
-		owner = component = null;
+		owner = context = null;
 	}
 });
 
 
 test( "Empty content", function( assert ) {
 
-	const content = [];
+	const content = new EmberNativeArray();
 	const layout = compile(
-		"{{#content-list content=content as |i|}}{{i}}{{else}}empty{{/content-list}}"
+		"{{#content-list content as |item|}}{{item}}{{else}}empty{{/content-list}}"
 	);
-	component = Component.extend({ content, layout }).create();
-	setOwner( component, owner );
+	context = Component.extend({ content, layout }).create();
+	setOwner( context, owner );
 
-	runAppend( component );
-	assert.equal( cleanOutput( component ), "empty", "Empty content" );
+	runAppend( context );
+	assert.equal( cleanOutput( context ), "empty", "Empty content" );
 
-	run( content, "pushObject", 1 );
-	assert.equal( cleanOutput( component ), "1", "Non empty content" );
+	run( () => content.pushObject( 1 ) );
+	assert.equal( cleanOutput( context ), "1", "Non empty content" );
 
 });
 
 
 test( "New items", function( assert ) {
 
-	const content = [ 1, 2 ];
+	const content = new EmberNativeArray([ 1, 2 ]);
 	const layout = compile(
-		"{{#content-list content=content as |i n|}}{{n}}{{/content-list}}"
+		"{{#content-list content as |item new|}}{{if new 'Y' 'N'}}{{/content-list}}"
 	);
-	component = Component.extend({ content, layout }).create();
-	setOwner( component, owner );
+	context = Component.extend({ content, layout }).create();
+	setOwner( context, owner );
 
-	runAppend( component );
-	assert.equal( cleanOutput( component ), "falsefalse", "Initial content" );
+	runAppend( context );
+	assert.equal( cleanOutput( context ), "NN", "Initial content" );
 
-	run( content, "pushObjects", [ 3, 4 ] );
-	assert.equal( cleanOutput( component ), "falsefalsetruetrue", "Unique items" );
+	run( () => content.pushObjects([ 3, 4 ]) );
+	assert.equal( cleanOutput( context ), "NNYY", "Unique items" );
 
 });
 
 
 test( "Duplicates", function( assert ) {
 
-	const content = [ 1, 2 ];
+	const content = new EmberNativeArray([ 1, 2 ]);
 	const layout = compile(
-		"{{#content-list content=content as |i n d|}}{{d}}{{/content-list}}"
+		"{{#content-list content as |item new dup|}}{{if dup 'Y' 'N'}}{{/content-list}}"
 	);
-	component = Component.extend({ content, layout }).create();
-	setOwner( component, owner );
+	context = Component.extend({ content, layout }).create();
+	setOwner( context, owner );
 
-	runAppend( component );
-	assert.equal( cleanOutput( component ), "falsefalse", "Initial content" );
+	runAppend( context );
+	assert.equal( cleanOutput( context ), "NN", "Initial content" );
 
-	run( content, "pushObjects", [ 2, 3 ] );
-	assert.equal( cleanOutput( component ), "falsefalsetruefalse", "Duplicates" );
+	run( () => content.pushObjects([ 2, 3 ]) );
+	assert.equal( cleanOutput( context ), "NNYN", "2 is a duplicate" );
+
+	run( () => content.pushObjects([ 1, 2, 3 ]) );
+	assert.equal( cleanOutput( context ), "NNYNYYY", "1, 2 and 3 are duplicates" );
 
 });
 
 
 test( "Simple nested duplicates", function( assert ) {
 
-	const done = assert.async();
-	const content = [ { foo: 1 }, { foo: 2 } ];
+	const content = new EmberNativeArray([ { data: 1 }, { data: 2 } ]);
 	const layout = compile(
-		"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
+		"{{#content-list content 'data' as |item new dup|}}{{if dup 'Y' 'N'}}{{/content-list}}"
 	);
-	component = Component.extend({ content, layout }).create();
-	setOwner( component, owner );
+	context = Component.extend({ content, layout }).create();
+	setOwner( context, owner );
 
-	runAppend( component );
-	assert.equal( cleanOutput( component ), "falsefalse", "Initial content" );
+	runAppend( context );
+	assert.equal( cleanOutput( context ), "NN", "Initial content" );
 
-	run( content, "pushObjects", [ { foo: 2 }, { foo: 3 } ] );
-	run.next(function() {
-		assert.equal(
-			cleanOutput( component ),
-			"falsefalsetruefalse",
-			"Added nested duplicates"
-		);
-		done();
-	});
+	run( () => content.pushObjects([ { data: 2 }, { data: 3 } ]) );
+	assert.equal(
+		cleanOutput( context ),
+		"NNYN",
+		"2 is a nested duplicate"
+	);
+
+	run( () => content.pushObjects([ { data: 1 }, { data: 2 }, { data: 3 } ]) );
+	assert.equal(
+		cleanOutput( context ),
+		"NNYNYYY",
+		"1, 2 and 3 are nested duplicates"
+	);
 
 });
 
 
 test( "Deferred nested duplicates", function( assert ) {
 
-	const done = assert.async();
-	const a = RSVP.defer();
-	const b = RSVP.defer();
+	let resolveA, resolveB, resolveC;
+	const A = new Promise( resolve => resolveA = resolve );
+	const B = new Promise( resolve => resolveB = resolve );
+	const C = new Promise( resolve => resolveC = resolve );
 
-	a.resolve( 1 );
-	const content = [ { foo: a.promise } ];
+	const content = [ { data: Promise.resolve( 1 ) }, { data: Promise.resolve( 1 ) } ];
 	const layout = compile(
-		"{{#content-list content=content compare='foo' as |i n d|}}{{d}}{{/content-list}}"
+		"{{#content-list content 'data' true as |item new dup|}}{{if dup 'Y' 'N'}}{{/content-list}}"
 	);
-	component = Component.extend({ content, layout }).create();
-	setOwner( component, owner );
+	context = Component.extend({ content, layout }).create();
+	setOwner( context, owner );
 
-	runAppend( component );
-	assert.equal( cleanOutput( component ), "false", "Initial content" );
-
-	run( content, "pushObjects", [ { foo: b.promise } ] );
-	run.next(function() {
-		assert.equal( cleanOutput( component ),
-			"falsefalse",
-			"Added unresolved nested duplicate"
-		);
-
-		b.resolve( 1 );
-		run.next(function() {
-			assert.equal( cleanOutput( component ),
-				"falsetrue",
-				"Resolved nested duplicate"
+	const allResolvedAndRendered = () =>
+		Promise.all( content.mapBy( "data" ) )
+			.then( () =>
+				new Promise( resolve =>
+					scheduleOnce( "afterRender", resolve )
+				)
 			);
 
-			done();
+	runAppend( context );
+	assert.equal(
+		cleanOutput( context ),
+		"NN",
+		"Initially, there are no duplicates until checkDuplicates() has run asynchronously"
+	);
+
+	return Promise.resolve()
+		.then( () => allResolvedAndRendered() )
+		.then( () => {
+			assert.equal(
+				cleanOutput( context ),
+				"NY",
+				"Duplicate check has run asynchronously and second item is now a duplicate"
+			);
+
+			run( () => content.pushObjects([ { data: A } ]) );
+			assert.equal(
+				cleanOutput( context ),
+				"NYN",
+				"New pending item is not a duplicate until it has been resolved"
+			);
+
+			resolveA( 1 );
+
+			return allResolvedAndRendered();
+		})
+		.then( () => {
+			assert.equal(
+				cleanOutput( context ),
+				"NYY",
+				"Item has been resolved and is now a duplicate"
+			);
+
+			run( () => content.pushObjects([ { data: B }, { data: C } ]) );
+			assert.equal(
+				cleanOutput( context ),
+				"NYYNN",
+				"New pending items are no duplicates until they have been resolved"
+			);
+
+			resolveB( 2 );
+			resolveC( 1 );
+
+			return allResolvedAndRendered();
+		})
+		.then( () => {
+			assert.equal(
+				cleanOutput( context ),
+				"NYYNY",
+				"Items have been resolved and the last one is a duplicate"
+			);
 		});
-	});
 
 });

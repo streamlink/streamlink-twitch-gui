@@ -15,7 +15,7 @@ import {
 	Component
 } from "Ember";
 import GetParamHelper from "helpers/GetParamHelper";
-import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
+import GetIndexHelper from "helpers/GetIndexHelper";
 
 
 const { compile } = HTMLBars;
@@ -57,21 +57,21 @@ test( "Get param", function( assert ) {
 });
 
 
-test( "Has own property", function( assert ) {
+test( "Get index", function( assert ) {
 
-	owner.register( "helper:has-own-property", HasOwnPropertyHelper );
+	owner.register( "helper:get-index", GetIndexHelper );
 	component = Component.extend({
-		obj   : { foo: true },
-		prop  : "foo",
-		layout: compile( "{{has-own-property obj prop}}" )
+		arr   : [ 1, 2, 3 ],
+		prop  : 1,
+		layout: compile( "{{get-index arr prop}}{{get arr prop}}" )
 	}).create();
 	setOwner( component, owner );
 
 	runAppend( component );
-	assert.equal( getOutput( component ), "true", "Does have its own property" );
-	run( component, "set", "prop", "bar" );
-	assert.equal( getOutput( component ), "false", "Property does not exist" );
-	run( component, "set", "prop", "toString" );
-	assert.equal( getOutput( component ), "false", "Prototype property" );
+	assert.equal( getOutput( component ), "2", "Gets the correcy value" );
+	run( component, "set", "prop", 2 );
+	assert.equal( getOutput( component ), "3", "Change index" );
+	run( component, "set", "prop", 9999 );
+	assert.equal( getOutput( component ), "", "Non-existing index" );
 
 });

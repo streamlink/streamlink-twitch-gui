@@ -94,7 +94,7 @@ import FormatTimeHelper from "helpers/FormatTimeHelper";
 import HoursFromNowHelper from "helpers/HoursFromNowHelper";
 import TimeFromNowHelper from "helpers/TimeFromNowHelper";
 import GetParamHelper from "helpers/GetParamHelper";
-import HasOwnPropertyHelper from "helpers/HasOwnPropertyHelper";
+import GetIndexHelper from "helpers/GetIndexHelper";
 
 import NwjsService from "services/NwjsService";
 import SettingsService from "services/SettingsService";
@@ -401,7 +401,7 @@ export default Application.create({
 	HoursFromNowHelper,
 	TimeFromNowHelper,
 	GetParamHelper,
-	HasOwnPropertyHelper,
+	GetIndexHelper,
 
 	// Services
 	NwjsService,
