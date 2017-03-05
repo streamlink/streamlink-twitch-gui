@@ -18,7 +18,13 @@ export default ListItemComponent.extend({
 
 	classNames: [ "game-item-component" ],
 
-	game: or( "content.game", "content" ),
+	gamePath: "game",
+	game: computed( "content", "gamePath", function() {
+		let content = get( this, "content" );
+		let gamePath = get( this, "gamePath" );
+
+		return get( content, gamePath );
+	}),
 	hasStats: or( "content.channels", "content.viewers" ),
 
 	click() {

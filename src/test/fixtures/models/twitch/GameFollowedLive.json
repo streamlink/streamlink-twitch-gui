@@ -1,0 +1,32 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/api/users/foobar/follows/games/live",
+		"method": "GET",
+		"query": {}
+	},
+	"response": {
+		"_total": 1000,
+		"follows": [
+			{
+				"game": {
+					"_id": 1,
+					"name": "Game A",
+					"box": {},
+					"logo": {}
+				},
+				"channels": 1000,
+				"viewers": 100000
+			},
+			{
+				"game": {
+					"_id": 2,
+					"name": "Game B",
+					"box": {},
+					"logo": {}
+				},
+				"channels": 100,
+				"viewers": 10000
+			}
+		]
+	}
+}
