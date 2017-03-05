@@ -56,5 +56,5 @@ export function adapterRequest( assert, obj, url, method, query ) {
 		"Correct request query"
 	);
 
-	return obj.response;
+	return Promise.resolve( obj.response );
 }

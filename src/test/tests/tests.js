@@ -34,6 +34,7 @@ import "tests/models/twitch/SearchStream";
 import "tests/models/twitch/User";
 import "tests/models/twitch/GameFollowed";
 import "tests/models/twitch/GameFollowedLive";
+import "tests/models/twitch/ChannelFollowed";
 import "tests/mixins/RefreshRouteMixin";
 import "tests/components/PreviewImageComponent";
 import "tests/components/LoadingSpinnerComponent";
