@@ -13,7 +13,7 @@
 {{/quick-bar}}
 </header>
 {{#content-list model as |item isNewItem isDuplicateItem|}}
-{{game-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
+{{game-item content=item gamePath=gamePath isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
 <p>The returned list of followed games is empty.</p>
 <ul class="fa-ul list-empty">

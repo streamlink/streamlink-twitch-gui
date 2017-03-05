@@ -1,0 +1,9 @@
+{
+	"embedded": {
+		"_id": 1,
+		"large": "large.jpg",
+		"medium": "medium.jpg",
+		"small": "small.jpg",
+		"template": "{width}x{height}.jpg"
+	}
+}

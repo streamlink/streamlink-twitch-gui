@@ -14,27 +14,25 @@ export default Route.extend({
 	modal: service(),
 
 	model() {
-		var store  = get( this, "store" );
-		var params = this.paramsFor( "channel" );
-		var id     = params.channel;
+		const store = get( this, "store" );
+		const model = this.modelFor( "channel" );
+		const name = get( model, "channel.name" );
 
-		return store.findRecord( "channelSettings", id )
+		return store.findRecord( "channelSettings", name )
 			.catch(function() {
 				// get the record automatically created by store.findRecord()
-				var record = store.recordForId( "channelSettings", id );
+				const record = store.recordForId( "channelSettings", name );
 				// transition from `root.empty` to `root.loaded.created.uncommitted`
 				record._internalModel.loadedData();
 				return record;
 			})
-			.then(function( record ) {
-				// use a buffer proxy object as model
-				return {
-					model : record,
-					buffer: ObjectBuffer.create({
-						content: record.toJSON()
-					})
-				};
-			});
+			// use a buffer proxy object as model
+			.then( model => ({
+				model,
+				buffer: ObjectBuffer.create({
+					content: model.toJSON()
+				})
+			}) );
 	},
 
 	refresh() {
@@ -43,8 +41,10 @@ export default Route.extend({
 
 	actions: {
 		willTransition( previousTransition ) {
+			const controller = get( this, "controller" );
+
 			// check whether the user has changed any values
-			if ( !get( this, "controller.model.buffer.isDirty" ) ) {
+			if ( !get( controller, "model.buffer.isDirty" ) ) {
 				// don't keep the channelSettings records in cache
 				return get( this, "store" ).unloadAll( "channelSettings" );
 			}
@@ -53,7 +53,7 @@ export default Route.extend({
 			previousTransition.abort();
 
 			// and let the user decide
-			get( this, "modal" ).openModal( "confirm", this.controller, {
+			get( this, "modal" ).openModal( "confirm", controller, {
 				previousTransition
 			});
 		}

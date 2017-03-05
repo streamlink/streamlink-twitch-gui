@@ -1,0 +1,8 @@
+{
+	"embedded": {
+		"regex": "foo",
+		"regex_display": null,
+		"state": "active",
+		"url": "foo.png"
+	}
+}

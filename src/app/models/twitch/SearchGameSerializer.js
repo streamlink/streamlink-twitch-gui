@@ -11,17 +11,16 @@ export default TwitchSerializer.extend({
 	},
 
 	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
-		payload.games = ( payload.games || [] ).map(function( hash ) {
-			return {
-				game: hash
-			};
-		});
+		// fix payload format
+		payload.games = ( payload.games || [] ).map( game => ({ game }) );
 
 		return this._super( store, primaryModelClass, payload, id, requestType );
 	},
 
 	normalize( modelClass, resourceHash, prop ) {
-		var foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
+		const foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
+
+		// get the id of the embedded TwitchGame record and apply it here
 		resourceHash[ this.primaryKey ] = resourceHash.game[ foreignKey ];
 
 		return this._super( modelClass, resourceHash, prop );

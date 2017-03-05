@@ -173,7 +173,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		let store   = get( this, "store" );
 		let channel = get( stream, "channel" );
-		let id      = get( channel, "id" );
+		let id      = get( channel, "name" );
 		let record;
 
 		// is the stream already running?
@@ -287,7 +287,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	getChannelSettings( record, quality ) {
-		let id = get( record, "channel.id" );
+		let id = get( record, "channel.name" );
 
 		return this.loadChannelSettings( id )
 			// override channel specific settings
@@ -564,7 +564,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 			let parameters = [
 				...params,
-				twitchStreamUrl.replace( "{channel}", get( record, "channel.id" ) ),
+				twitchStreamUrl.replace( "{channel}", get( record, "channel.name" ) ),
 				get( record, "streamquality" )
 			];
 

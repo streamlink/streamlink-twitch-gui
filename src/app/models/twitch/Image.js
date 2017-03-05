@@ -24,11 +24,11 @@ function getURL( url, time ) {
  */
 function buffered( attr ) {
 	return computed(function() {
-		let exp = this[ `${attr}_expiration` ];
+		let exp = this[ `expiration_${attr}` ];
 
 		return exp
-			? getURL( get( this, `${attr}_image` ), exp )
-			: get( this, `${attr}_nocache` );
+			? getURL( get( this, `image_${attr}` ), exp )
+			: get( this, `${attr}Latest` );
 	}).volatile();
 }
 
@@ -38,17 +38,19 @@ function buffered( attr ) {
  * @param {String} attr
  * @returns {Ember.ComputedProperty} Volatile computed property
  */
-function nocache( attr ) {
+function latest( attr ) {
 	// use a volatile property
 	return computed(function() {
-		var url = get( this, `${attr}_image` );
+		const url = get( this, `image_${attr}` );
 
 		// use the same timestamp for `time` seconds
-		var key = `${attr}_expiration`;
-		var exp = this[ key ];
-		var now = +new Date();
-		if ( !exp || exp < now ) {
-			this[ key ] = exp = now + time;
+		const key = `expiration_${attr}`;
+		const now = Date.now();
+		let exp = this[ key ];
+
+		if ( !exp || exp <= now ) {
+			exp = now + time;
+			this[ key ] = exp;
 		}
 
 		return getURL( url, exp );
@@ -58,19 +60,24 @@ function nocache( attr ) {
 
 export default Model.extend({
 	// original attributes (renamed)
-	large_image : attr( "string" ),
-	medium_image: attr( "string" ),
-	small_image : attr( "string" ),
+	image_large: attr( "string" ),
+	image_medium: attr( "string" ),
+	image_small: attr( "string" ),
+
+	// expiration times
+	expiration_large: null,
+	expiration_medium: null,
+	expiration_small: null,
 
 	// "request latest image version, but only every X seconds"
-	// should be used by the model hook of all routes
-	large_nocache : nocache( "large" ),
-	medium_nocache: nocache( "medium" ),
-	small_nocache : nocache( "small" ),
+	// should be used by a route's model hook
+	largeLatest: latest( "large" ),
+	mediumLatest: latest( "medium" ),
+	smallLatest: latest( "small" ),
 
 	// "use the previous expiration parameter"
-	// should be used for all image src attributes in the DOM
-	large : buffered( "large" ),
+	// should be used by all image src attributes in the DOM
+	large: buffered( "large" ),
 	medium: buffered( "medium" ),
-	small : buffered( "small" )
+	small: buffered( "small" )
 });

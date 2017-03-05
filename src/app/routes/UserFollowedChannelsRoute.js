@@ -18,7 +18,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 		}
 	},
 
-	modelName: "twitchChannelsFollowed",
+	modelName: "twitchChannelFollowed",
 
 	model( params ) {
 		return get( this, "store" ).query( this.modelName, {

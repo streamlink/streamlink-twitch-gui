@@ -1,0 +1,64 @@
+{
+	"single": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/users/1337/follows/channels/1",
+			"method": "GET",
+			"query": null
+		},
+		"response": {
+			"created_at": "2000-01-01T00:00:00.00000Z",
+			"channel": {
+				"_id": 1
+			},
+			"notifications": false
+		}
+	},
+	"many": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/users/1337/follows/channels",
+			"method": "GET",
+			"query": {}
+		},
+		"response": {
+			"_total": 1000,
+			"follows": [
+				{
+					"created_at": "2000-01-01T00:00:00.00000Z",
+					"channel": {
+						"_id": 1
+					},
+					"notifications": false
+				},
+				{
+					"created_at": "2000-01-01T00:00:00.00000Z",
+					"channel": {
+						"_id": 2
+					},
+					"notifications": true
+				}
+			]
+		}
+	},
+	"create": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/users/1337/follows/channels/1",
+			"method": "PUT",
+			"query": {}
+		},
+		"response": {
+			"created_at": "2000-01-01T00:00:00.00000Z",
+			"channel": {
+				"_id": 1
+			},
+			"notifications": false
+		}
+	},
+	"delete": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/users/1337/follows/channels/1",
+			"method": "DELETE",
+			"query": null
+		},
+		"response": null
+	}
+}

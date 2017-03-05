@@ -12,5 +12,5 @@ export default Model.extend({
 	purchase_profile: attr()
 
 }).reopenClass({
-	toString() { return "api/users/:user/tickets"; }
+	toString() { return "api/users/:user_name/tickets"; }
 });

@@ -1,0 +1,69 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/api/users/foobar/followed/hosting",
+		"method": "GET",
+		"query": { }
+	},
+	"response": {
+		"_links": {},
+		"_total": 1000,
+		"hosts": [
+			{
+				"id": 2,
+				"name": "bar",
+				"display_name": "Bar",
+				"logo": "logo-bar",
+				"target": {
+					"id": "foo",
+					"_id": 1,
+					"channel": {
+						"id": 1,
+						"name": "foo",
+						"display_name": "Foo",
+						"logo": "logo-foo",
+						"url": "url-foo"
+					},
+					"meta_game": "game-foo",
+					"preview": "preview-foo",
+					"title": "title-foo",
+					"url": "url-foo",
+					"preview_urls": {
+						"small": "preview-small-foo",
+						"medium": "preview-medium-foo",
+						"large": "preview-large-foo",
+						"template": "preview-template-foo"
+					},
+					"viewers": 10000
+				}
+			},
+			{
+				"id": 4,
+				"name": "qux",
+				"display_name": "Qux",
+				"logo": "logo-qux",
+				"target": {
+					"id": "baz",
+					"_id": 3,
+					"channel": {
+						"id": 3,
+						"name": "baz",
+						"display_name": "Baz",
+						"logo": "logo-baz",
+						"url": "url-baz"
+					},
+					"meta_game": "game-baz",
+					"preview": "preview-baz",
+					"title": "title-baz",
+					"url": "url-baz",
+					"preview_urls": {
+						"small": "preview-small-baz",
+						"medium": "preview-medium-baz",
+						"large": "preview-large-baz",
+						"template": "preview-template-baz"
+					},
+					"viewers": 1000
+				}
+			}
+		]
+	}
+}

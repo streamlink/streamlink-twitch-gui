@@ -1,0 +1,19 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/search/channels",
+		"method": "GET",
+		"query": {
+			"query": "foo"
+		}
+	},
+	"response": {
+		"channels": [
+			{
+				"_id": 1
+			},
+			{
+				"_id": 2
+			}
+		]
+	}
+}

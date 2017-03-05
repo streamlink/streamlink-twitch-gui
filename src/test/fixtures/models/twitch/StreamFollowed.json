@@ -1,0 +1,26 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/streams/followed",
+		"method": "GET",
+		"query": {}
+	},
+	"response": {
+		"_total": 1000,
+		"streams": [
+			{
+				"_id": 1,
+				"preview": {},
+				"channel": {
+					"_id": 2
+				}
+			},
+			{
+				"_id": 3,
+				"preview": {},
+				"channel": {
+					"_id": 4
+				}
+			}
+		]
+	}
+}

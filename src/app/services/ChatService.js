@@ -50,7 +50,7 @@ export default Service.extend({
 	 */
 	open( channel ) {
 		let url  = twitchChatUrl;
-		let name = get( channel, "id" );
+		let name = get( channel, "name" );
 
 		if ( !url || !name ) {
 			return Promise.reject( new Error( "Missing URL or channel name" ) );

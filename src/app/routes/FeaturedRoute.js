@@ -13,24 +13,21 @@ export default Route.extend( RefreshRouteMixin, {
 		let store = get( this, "store" );
 
 		return Promise.all([
-			store.findAll( "twitchStreamsSummary", { reload: true } )
-				.then( toArray() ),
-			store.query( "twitchStreamsFeatured", {
+			store.queryRecord( "twitchStreamSummary", {} ),
+			store.query( "twitchStreamFeatured", {
 				offset: 0,
 				limit : 5
 			})
 				.then( toArray() )
 		])
-			.then(function([ summary, featured ]) {
-				return Promise.resolve( featured )
+			.then( ([ summary, featured ]) =>
+				Promise.resolve( featured )
 					.then( preload([
 						"image",
-						"stream.preview.large_nocache"
+						"stream.preview.largeLatest"
 					]) )
-					.then(function() {
-						return { summary, featured };
-					});
-			});
+					.then( () => ({ summary, featured }) )
+			);
 	},
 
 	resetController( controller, isExiting ) {

@@ -1,0 +1,53 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/api/users/foobar/tickets",
+		"method": "GET",
+		"query": {}
+	},
+	"response": {
+		"tickets": [
+			{
+				"id": 1,
+				"access_start": "2000-01-01T00:00:00Z",
+				"access_end": "2000-01-01T00:00:00Z",
+				"expired": false,
+				"purchase_profile": {
+					"refundable": false,
+					"will_renew": true,
+					"paid_on": "2000-01-01T00:00:00Z",
+					"expired": false,
+					"payment_provider": "some payment provider",
+					"consecutive_months": 12
+				},
+				"product": {
+					"name": "Subscription to Foo",
+					"short_name": "foo",
+					"ticket_type": "chansub",
+					"owner_name": "foo",
+					"features": {
+						"bitrate_access": []
+					},
+					"interval_number": 1,
+					"recurring": true,
+					"partner_login": "foo",
+					"price": "$4.99",
+					"period": "Month",
+					"emoticons": [
+						{
+							"regex": "bar",
+							"regex_display": null,
+							"state": "active",
+							"url": "emoticon-1.png"
+						},
+						{
+							"regex": "baz",
+							"regex_display": null,
+							"state": "active",
+							"url": "emoticon-2.png"
+						}
+					]
+				}
+			}
+		]
+	}
+}

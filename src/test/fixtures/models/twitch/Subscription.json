@@ -1,0 +1,14 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/users/1337/subscriptions/1",
+		"method": "GET",
+		"query": null
+	},
+	"response": {
+		"created_at": "2000-01-01T00:00:00Z",
+		"_id": "deadbeef",
+		"channel": {
+			"_id": "1"
+		}
+	}
+}

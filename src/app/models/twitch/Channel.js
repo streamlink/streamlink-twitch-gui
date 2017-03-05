@@ -15,11 +15,8 @@ const reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
 
 export default Model.extend({
-	background: attr( "string" ),
-	banner: attr( "string" ),
 	broadcaster_language: attr( "string" ),
 	created_at: attr( "date" ),
-	delay: attr( "number" ),
 	display_name: attr( "string" ),
 	followers: attr( "number" ),
 	game: attr( "string" ),
@@ -30,9 +27,7 @@ export default Model.extend({
 	partner: attr( "boolean" ),
 	profile_banner: attr( "string" ),
 	profile_banner_background_color: attr( "string" ),
-	staff: attr( "boolean" ),
 	status: attr( "string" ),
-	//teams: hasMany( "twitchTeam" ),
 	updated_at: attr( "date" ),
 	url: attr( "string" ),
 	video_banner: attr( "string" ),
@@ -63,42 +58,50 @@ export default Model.extend({
 	),
 
 
-	title_followers: computed( "followers", function() {
-		var followers = get( this, "followers" );
-		var numerus   = followers === 1 ? " person is following" : " people are following";
-		return followers + numerus;
+	titleFollowers: computed( "followers", function() {
+		const number = get( this, "followers" );
+		const text = number === 1
+			? " person is following"
+			: " people are following";
+
+		return `${number}${text}`;
 	}),
 
-	title_views: computed( "views", function() {
-		var views   = get( this, "views" );
-		var numerus = views === 1 ? " channel view" : " channel views";
-		return views + numerus;
+	titleViews: computed( "views", function() {
+		const number = get( this, "views" );
+		const text = number === 1
+			? " channel view"
+			: " channel views";
+
+		return `${number}${text}`;
 	}),
 
 
-	has_language: computed( "language", function() {
-		var lang = get( this, "language" );
-		return lang && lang !== "other";
+	hasLanguage: computed( "language", function() {
+		const lang = get( this, "language" );
+
+		return !!lang && lang !== "other";
 	}),
 
-	has_broadcaster_language: computed( "broadcaster_language", "language", function() {
-		var broadcaster  = get( this, "broadcaster_language" );
-		var language     = get( this, "language" );
-		var mBroadcaster = reLang.exec( broadcaster );
-		var mLanguage    = reLang.exec( language );
+	hasBroadcasterLanguage: computed( "broadcaster_language", "language", function() {
+		const broadcaster = get( this, "broadcaster_language" );
+		const language = get( this, "language" );
+		const mBroadcaster = reLang.exec( broadcaster );
+		const mLanguage = reLang.exec( language );
+
 		// show the broadcaster_language only if it is set and
 		// 1. the language is not set or
 		// 2. the language is different from the broadcaster_language
 		//    WITHOUT comparing both lang variants
-		return mBroadcaster && ( !mLanguage || mLanguage[1] !== mBroadcaster[1] );
+		return !!mBroadcaster && ( !mLanguage || mLanguage[1] !== mBroadcaster[1] );
 	}),
 
 
-	/** @type {(TwitchUserSubscription|boolean)} subscribed */
+	/** @type {(TwitchSubscription|boolean)} subscribed */
 	subscribed: null,
 
-	/** @type {(TwitchUserFollowsChannel|boolean)} following */
-	followed  : null
+	/** @type {(TwitchChannelFollowed|boolean)} following */
+	followed: null
 
 }).reopenClass({
 	toString() { return "kraken/channels"; }

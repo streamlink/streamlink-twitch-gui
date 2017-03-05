@@ -15,21 +15,25 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 		}
 	},
 
-	modelName: "twitchGamesLiveFollowed",
-	modelNameAll: "twitchGamesFollowed",
+	modelNameLive: "twitchGameFollowedLive",
+	modelNameAll: "twitchGameFollowed",
 
 	model( params ) {
 		// query parameters are strings
-		var modelname = params.all === "true"
+		const all = params.all === "true";
+		const modelname = all
 			? this.modelNameAll
-			: this.modelName;
+			: this.modelNameLive;
 
 		return get( this, "store" ).query( modelname, {
 			offset: get( this, "offset" ),
-			limit : get( this, "limit" )
+			limit: get( this, "limit" )
 		})
 			.then( toArray() )
-			.then( preload( "box.large" ) );
+			.then( preload( all
+				? "game.box.large"
+				: "game.game.box.large"
+			) );
 	},
 
 	fetchContent() {

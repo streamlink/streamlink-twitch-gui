@@ -6,7 +6,7 @@ const { alias } = computed;
 
 
 export default FollowButtonComponent.extend({
-	modelName: "twitchUserFollowsChannel",
+	modelName: "twitchChannelFollowed",
 
 	// model alias (component attribute)
 	model    : alias( "channel" ),

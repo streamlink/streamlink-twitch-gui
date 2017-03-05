@@ -2,7 +2,7 @@
 {{stream-preview-image stream=stream clickable=clickablePreview src=stream.preview.large noContextmenu=(bool-not clickablePreview)}}
 </div>
 <div class="info">
-<h3 class="title">{{#if stream.channel.has_language}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{#link-to "channel" stream.channel.id}}{{stream.channel.detailedName}}{{/link-to}}</h3>
+<h3 class="title">{{#if stream.channel.hasLanguage}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{#link-to "channel" stream.channel.id}}{{stream.channel.detailedName}}{{/link-to}}</h3>
 {{#if stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>{{/if}}
 {{stats-row stream=stream}}
 {{embedded-links class="status" text=stream.channel.status}}

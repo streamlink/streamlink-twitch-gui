@@ -9,7 +9,7 @@ import preload from "utils/preload";
 export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 	itemSelector: ".stream-item-component",
 
-	modelName: "twitchStreamsFollowed",
+	modelName: "twitchStreamFollowed",
 
 	model() {
 		return get( this, "store" ).query( this.modelName, {
@@ -17,6 +17,6 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 			limit : get( this, "limit" )
 		})
 			.then( mapBy( "stream" ) )
-			.then( preload( "preview.medium_nocache" ) );
+			.then( preload( "preview.mediumLatest" ) );
 	}
 });

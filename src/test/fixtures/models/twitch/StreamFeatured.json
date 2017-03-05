@@ -1,0 +1,99 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/streams/featured",
+		"method": "GET",
+		"query": { }
+	},
+	"response": {
+		"featured": [
+			{
+				"text": "foo bar",
+				"title": "foo",
+				"sponsored": false,
+				"priority": 5,
+				"scheduled": true,
+				"image": "foo.jpg",
+				"stream": {
+					"game": "game foo",
+					"viewers": 10000,
+					"video_height": 1080,
+					"average_fps": 60,
+					"_id": "1",
+					"delay": 0,
+					"created_at": "2000-01-01T00:00:00Z",
+					"is_playlist": false,
+					"preview": {
+						"large": "foo/large.jpg",
+						"medium": "foo/medium.jpg",
+						"small": "foo/small.jpg",
+						"template": "foo/{width}x{height}.jpg"
+					},
+					"channel": {
+						"_id": "2",
+						"broadcaster_language": "en",
+						"created_at": "2000-01-01T00:00:00Z",
+						"display_name": "Foo",
+						"followers": 1337,
+						"game": "game foo",
+						"language": "en",
+						"logo": "foo.png",
+						"mature": false,
+						"name": "foo",
+						"partner": false,
+						"profile_banner": null,
+						"profile_banner_background_color": null,
+						"status": "Playing game foo",
+						"updated_at": "2000-01-01T00:00:01Z",
+						"url": "https://www.twitch.tv/foo",
+						"video_banner": null,
+						"views": 13337
+					}
+				}
+			},
+			{
+				"text": "baz qux",
+				"title": "bar",
+				"sponsored": true,
+				"priority": 5,
+				"scheduled": true,
+				"image": "bar.jpg",
+				"stream": {
+					"game": "game bar",
+					"viewers": 1000,
+					"video_height": 1080,
+					"average_fps": 60,
+					"_id": "3",
+					"delay": 0,
+					"created_at": "2000-01-01T00:00:00Z",
+					"is_playlist": false,
+					"preview": {
+						"large": "bar/large.jpg",
+						"medium": "bar/medium.jpg",
+						"small": "bar/small.jpg",
+						"template": "bar/{width}x{height}.jpg"
+					},
+					"channel": {
+						"_id": "4",
+						"broadcaster_language": "en",
+						"created_at": "2000-01-01T00:00:00Z",
+						"display_name": "Bar",
+						"followers": 137,
+						"game": "game foo",
+						"language": "en",
+						"logo": "bar.png",
+						"mature": false,
+						"name": "bar",
+						"partner": false,
+						"profile_banner": null,
+						"profile_banner_background_color": null,
+						"status": "Playing game bar",
+						"updated_at": "2000-01-01T00:00:01Z",
+						"url": "https://www.twitch.tv/bar",
+						"video_banner": null,
+						"views": 1337
+					}
+				}
+			}
+		]
+	}
+}

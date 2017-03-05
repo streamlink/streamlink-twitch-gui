@@ -1,0 +1,11 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/streams/summary",
+		"method": "GET",
+		"query": {}
+	},
+	"response": {
+		"channels": 10000,
+		"viewers": 1000000
+	}
+}

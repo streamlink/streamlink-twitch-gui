@@ -1,7 +1,7 @@
 <header>
-{{#if channel.has_language}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
-<span class="{{unless channel.has_language 'noL'}} {{unless channel.has_broadcaster_language 'noBL'}}">{{#link-to "channel" channel.id}}{{channel.detailedName}}{{/link-to}}</span>
-{{#if channel.has_broadcaster_language}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
+{{#if channel.hasLanguage}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
+<span class="{{unless channel.hasLanguage 'noL'}} {{unless channel.hasBroadcasterLanguage 'noBL'}}">{{#link-to "channel" channel.id}}{{channel.detailedName}}{{/link-to}}</span>
+{{#if channel.hasBroadcasterLanguage}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
 </header>
 {{#stream-preview-image
 	src=content.preview.medium
@@ -12,7 +12,7 @@
 	title=(unless expanded (unless infoTitle (if channel.status channel.status "") (if channel.game channel.game "")) "")
 	action=(action "collapse")}}
 {{#if host}}
-<header><div><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.name title=(concat "hosted by " host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</div></header>
+<header><div><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.id title=(concat "hosted by " host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</div></header>
 {{/if}}
 <footer class="{{if (bool-or infoTitle showGame) 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
 <div class="bottom {{unless (bool-or infoTitle showGame) 'hidden'}}">
@@ -38,6 +38,6 @@
 </div>
 {{/stream-preview-image}}
 <footer>
-<span title="{{content.title_created_at}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.created_at interval=60000}}</span>
-<span title="{{content.title_viewers}}">{{format-viewers content.viewers}} <i class="fa fa-users"></i></span>
+<span title="{{content.titleCreatedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.created_at interval=60000}}</span>
+<span title="{{content.titleViewers}}">{{format-viewers content.viewers}} <i class="fa fa-users"></i></span>
 </footer>

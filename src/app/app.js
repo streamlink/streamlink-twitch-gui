@@ -21,35 +21,40 @@ import GithubReleases from "models/github/Releases";
 import GithubReleasesAdapter from "store/GithubAdapter";
 import GithubReleasesSerializer from "models/github/ReleasesSerializer";
 
-import TwitchToken from "models/twitch/Token";
-import TwitchTokenSerializer from "models/twitch/TokenSerializer";
+import TwitchRoot from "models/twitch/Root";
+import TwitchRootSerializer from "models/twitch/RootSerializer";
 
 import TwitchGame from "models/twitch/Game";
 import TwitchGameSerializer from "models/twitch/GameSerializer";
+import TwitchGameTop from "models/twitch/GameTop";
+import TwitchGameTopSerializer from "models/twitch/GameTopSerializer";
+import TwitchGameFollowed from "models/twitch/GameFollowed";
+import TwitchGameFollowedAdapter from "models/twitch/GameFollowedAdapter";
+import TwitchGameFollowedSerializer from "models/twitch/GameFollowedSerializer";
+import TwitchGameFollowedLive from "models/twitch/GameFollowedLive";
+import TwitchGameFollowedLiveSerializer from "models/twitch/GameFollowedLiveSerializer";
+
 import TwitchStream from "models/twitch/Stream";
 import TwitchStreamSerializer from "models/twitch/StreamSerializer";
+import TwitchStreamSummary from "models/twitch/StreamSummary";
+import TwitchStreamSummarySerializer from "models/twitch/StreamSummarySerializer";
+import TwitchStreamFeatured from "models/twitch/StreamFeatured";
+import TwitchStreamFeaturedSerializer from "models/twitch/StreamFeaturedSerializer";
+import TwitchStreamFollowed from "models/twitch/StreamFollowed";
+import TwitchStreamFollowedSerializer from "models/twitch/StreamFollowedSerializer";
+import TwitchStreamHosted from "models/twitch/StreamHosted";
+import TwitchStreamHostedSerializer from "models/twitch/StreamHostedSerializer";
+
 import TwitchChannel from "models/twitch/Channel";
 import TwitchChannelSerializer from "models/twitch/ChannelSerializer";
+import TwitchChannelPanel from "models/twitch/ChannelPanel";
+import TwitchChannelPanelAdapter from "models/twitch/ChannelPanelAdapter";
+import TwitchChannelPanelSerializer from "models/twitch/ChannelPanelSerializer";
+import TwitchChannelFollowed from "models/twitch/ChannelFollowed";
+import TwitchChannelFollowedSerializer from "models/twitch/ChannelFollowedSerializer";
+
 import TwitchImage from "models/twitch/Image";
 import TwitchImageSerializer from "models/twitch/ImageSerializer";
-
-import TwitchGamesTop from "models/twitch/GamesTop";
-import TwitchGamesTopSerializer from "models/twitch/GamesTopSerializer";
-import TwitchStreamsSummary from "models/twitch/StreamsSummary";
-import TwitchStreamsSummarySerializer from "models/twitch/StreamsSummarySerializer";
-import TwitchStreamsFeatured from "models/twitch/StreamsFeatured";
-import TwitchStreamsFeaturedSerializer from "models/twitch/StreamsFeaturedSerializer";
-
-import TwitchStreamsFollowed from "models/twitch/StreamsFollowed";
-import TwitchStreamsFollowedSerializer from "models/twitch/StreamsFollowedSerializer";
-import TwitchStreamsHosted from "models/twitch/StreamsHosted";
-import TwitchStreamsHostedSerializer from "models/twitch/StreamsHostedSerializer";
-import TwitchChannelsFollowed from "models/twitch/ChannelsFollowed";
-import TwitchChannelsFollowedSerializer from "models/twitch/ChannelsFollowedSerializer";
-import TwitchGamesFollowed from "models/twitch/GamesFollowed";
-import TwitchGamesFollowedSerializer from "models/twitch/GamesFollowedSerializer";
-import TwitchGamesLiveFollowed from "models/twitch/GamesLiveFollowed";
-import TwitchGamesLiveFollowedSerializer from "models/twitch/GamesLiveFollowedSerializer";
 
 import TwitchSearchGame from "models/twitch/SearchGame";
 import TwitchSearchGameSerializer from "models/twitch/SearchGameSerializer";
@@ -58,25 +63,18 @@ import TwitchSearchStreamSerializer from "models/twitch/SearchStreamSerializer";
 import TwitchSearchChannel from "models/twitch/SearchChannel";
 import TwitchSearchChannelSerializer from "models/twitch/SearchChannelSerializer";
 
-import TwitchUserFollowsChannel from "models/twitch/UserFollowsChannel";
-import TwitchUserFollowsChannelSerializer from "models/twitch/UserFollowsChannelSerializer";
-import TwitchUserFollowsGame from "models/twitch/UserFollowsGame";
-import TwitchUserFollowsGameAdapter from "models/twitch/UserFollowsGameAdapter";
-import TwitchUserFollowsGameSerializer from "models/twitch/UserFollowsGameSerializer";
-import TwitchUserSubscription from "models/twitch/UserSubscription";
-import TwitchUserSubscriptionSerializer from "models/twitch/UserSubscriptionSerializer";
+import TwitchUser from "models/twitch/User";
+import TwitchUserAdapter from "models/twitch/UserAdapter";
+import TwitchUserSerializer from "models/twitch/UserSerializer";
 
+import TwitchSubscription from "models/twitch/Subscription";
+import TwitchSubscriptionSerializer from "models/twitch/SubscriptionSerializer";
 import TwitchTicket from "models/twitch/Ticket";
 import TwitchTicketSerializer from "models/twitch/TicketSerializer";
 import TwitchProduct from "models/twitch/Product";
 import TwitchProductSerializer from "models/twitch/ProductSerializer";
 import TwitchProductEmoticon from "models/twitch/ProductEmoticon";
 import TwitchProductEmoticonSerializer from "models/twitch/ProductEmoticonSerializer";
-
-import TwitchChannelPanel from "models/twitch/ChannelPanel";
-import TwitchChannelPanelSerializer from "models/twitch/ChannelPanelSerializer";
-import TwitchChannelPanelItem from "models/twitch/ChannelPanelItem";
-import TwitchChannelPanelItemSerializer from "models/twitch/ChannelPanelItemSerializer";
 
 import IsEqualHelper from "helpers/IsEqualHelper";
 import IsNullHelper from "helpers/IsNullHelper";
@@ -326,35 +324,40 @@ export default Application.create({
 
 
 	// Models: twitch
-	TwitchToken,
-	TwitchTokenSerializer,
+	TwitchRoot,
+	TwitchRootSerializer,
 
 	TwitchGame,
 	TwitchGameSerializer,
+	TwitchGameTop,
+	TwitchGameTopSerializer,
+	TwitchGameFollowed,
+	TwitchGameFollowedAdapter,
+	TwitchGameFollowedSerializer,
+	TwitchGameFollowedLive,
+	TwitchGameFollowedLiveSerializer,
+
 	TwitchStream,
 	TwitchStreamSerializer,
+	TwitchStreamSummary,
+	TwitchStreamSummarySerializer,
+	TwitchStreamFeatured,
+	TwitchStreamFeaturedSerializer,
+	TwitchStreamFollowed,
+	TwitchStreamFollowedSerializer,
+	TwitchStreamHosted,
+	TwitchStreamHostedSerializer,
+
 	TwitchChannel,
 	TwitchChannelSerializer,
+	TwitchChannelPanel,
+	TwitchChannelPanelAdapter,
+	TwitchChannelPanelSerializer,
+	TwitchChannelFollowed,
+	TwitchChannelFollowedSerializer,
+
 	TwitchImage,
 	TwitchImageSerializer,
-
-	TwitchGamesTop,
-	TwitchGamesTopSerializer,
-	TwitchStreamsSummary,
-	TwitchStreamsSummarySerializer,
-	TwitchStreamsFeatured,
-	TwitchStreamsFeaturedSerializer,
-
-	TwitchStreamsFollowed,
-	TwitchStreamsFollowedSerializer,
-	TwitchStreamsHosted,
-	TwitchStreamsHostedSerializer,
-	TwitchChannelsFollowed,
-	TwitchChannelsFollowedSerializer,
-	TwitchGamesFollowed,
-	TwitchGamesFollowedSerializer,
-	TwitchGamesLiveFollowed,
-	TwitchGamesLiveFollowedSerializer,
 
 	TwitchSearchGame,
 	TwitchSearchGameSerializer,
@@ -363,25 +366,18 @@ export default Application.create({
 	TwitchSearchChannel,
 	TwitchSearchChannelSerializer,
 
-	TwitchUserFollowsChannel,
-	TwitchUserFollowsChannelSerializer,
-	TwitchUserFollowsGame,
-	TwitchUserFollowsGameAdapter,
-	TwitchUserFollowsGameSerializer,
-	TwitchUserSubscription,
-	TwitchUserSubscriptionSerializer,
+	TwitchUser,
+	TwitchUserAdapter,
+	TwitchUserSerializer,
 
+	TwitchSubscription,
+	TwitchSubscriptionSerializer,
 	TwitchTicket,
 	TwitchTicketSerializer,
 	TwitchProduct,
 	TwitchProductSerializer,
 	TwitchProductEmoticon,
 	TwitchProductEmoticonSerializer,
-
-	TwitchChannelPanel,
-	TwitchChannelPanelSerializer,
-	TwitchChannelPanelItem,
-	TwitchChannelPanelItemSerializer,
 
 
 	// Helpers

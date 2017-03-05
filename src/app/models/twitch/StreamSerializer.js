@@ -11,19 +11,18 @@ export default TwitchSerializer.extend({
 		preview: { deserialize: "records" }
 	},
 
-	/**
-	 * Use the channel name as stream record ID, so we can .refresh() it.
-	 * The adapter will use the ID for building the URL.
-	 */
 	normalize( modelClass, resourceHash, prop ) {
-		var primaryKey        = this.primaryKey;
-		var foreignKeyChannel = this.store.serializerFor( "twitchChannel" ).primaryKey;
-		var foreignKeyImage   = this.store.serializerFor( "twitchImage" ).primaryKey;
-		var name = resourceHash.channel[ foreignKeyChannel ];
+		const foreignKeyChannel = this.store.serializerFor( "twitchChannel" ).primaryKey;
+		const foreignKeyImage = this.store.serializerFor( "twitchImage" ).primaryKey;
 
-		resourceHash[ primaryKey ] = name;
+		// get the id of the embedded TwitchChannel record and apply it here
+		// this is required for refreshing the record so that the correct id is being used
+		const id = resourceHash.channel[ foreignKeyChannel ];
+		resourceHash[ this.primaryKey ] = id;
+
+		// apply the id of this record on the embedded TwitchImage record (preview)
 		if ( resourceHash.preview ) {
-			resourceHash.preview[ foreignKeyImage ] = `stream/preview/${name}`;
+			resourceHash.preview[ foreignKeyImage ] = `stream/preview/${id}`;
 		}
 
 		return this._super( modelClass, resourceHash, prop );

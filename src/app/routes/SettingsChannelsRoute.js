@@ -18,34 +18,36 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 
 
 	model() {
-		var store = get( this, "store" );
+		const store = get( this, "store" );
 
 		return store.findAll( "channelSettings" )
-			.then(function( recordsArray ) {
+			.then( channelSettings => {
 				// we need all channelSettings records, so we can search for specific ones
 				// that have not been added to the controller's model yet
-				this.all = recordsArray.map(function( record ) {
+				this.all = channelSettings.map(function( record ) {
 					// return both channelSettings and twitchChannel records
 					return EmberObject.extend({
 						settings: record,
 						// load the twitchChannel record on demand (PromiseObject)
 						// will be triggered by the first property read-access
 						channel: computed(function() {
-							var id = get( record, "id" );
+							const name = get( record, "id" );
+
 							return PromiseObject.create({
-								promise: store.find( "twitchChannel", id )
+								promise: store.findRecord( "twitchUser", name )
+									.then( user => get( user, "channel" ) )
 									.then( preload( "logo" ) )
 							});
 						})
 					}).create();
 				});
-			}.bind( this ) )
-			.then( this.fetchContent.bind( this ) );
+			})
+			.then( () => this.fetchContent() );
 	},
 
 	fetchContent() {
-		var limit  = get( this, "limit" );
-		var offset = get( this, "offset" );
+		const limit = get( this, "limit" );
+		const offset = get( this, "offset" );
 
 		return Promise.resolve(
 			this.all.slice( offset, offset + limit )

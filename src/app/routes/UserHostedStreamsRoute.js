@@ -9,7 +9,7 @@ import preload from "utils/preload";
 export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 	itemSelector: ".stream-item-component",
 
-	modelName: "twitchStreamsHosted",
+	modelName: "twitchStreamHosted",
 
 	model() {
 		return get( this, "store" ).query( this.modelName, {
@@ -29,7 +29,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 						: streamPromise;
 
 					// preload the stream's preview image
-					return promise.then( preload( "preview.medium_nocache" ) );
+					return promise.then( preload( "preview.mediumLatest" ) );
 				});
 
 				// wait for everything to resolve and return the hosts list

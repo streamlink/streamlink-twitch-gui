@@ -1,0 +1,56 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/games/top",
+		"method": "GET",
+		"query": {}
+	},
+	"response": {
+		"_total": 1000,
+		"top": [
+			{
+				"game": {
+					"name": "Game A",
+					"popularity": 1,
+					"_id": 1,
+					"giantbomb_id": 1,
+					"box": {
+						"large": "game-a/box-large.jpg",
+						"medium": "game-a/box-medium.jpg",
+						"small": "game-a/box-small.jpg",
+						"template": "game-a/box-{width}x{height}.jpg"
+					},
+					"logo": {
+						"large": "game-a/logo-large.jpg",
+						"medium": "game-a/logo-medium.jpg",
+						"small": "game-a/logo-small.jpg",
+						"template": "game-a/logo-{width}x{height}.jpg"
+					}
+				},
+				"viewers": 100000,
+				"channels": 1000
+			},
+			{
+				"game": {
+					"name": "Game B",
+					"popularity": 2,
+					"_id": 2,
+					"giantbomb_id": 2,
+					"box": {
+						"large": "game-b/box-large.jpg",
+						"medium": "game-b/box-medium.jpg",
+						"small": "game-b/box-small.jpg",
+						"template": "game-b/box-{width}x{height}.jpg"
+					},
+					"logo": {
+						"large": "game-b/logo-large.jpg",
+						"medium": "game-b/logo-medium.jpg",
+						"small": "game-b/logo-small.jpg",
+						"template": "game-b/logo-{width}x{height}.jpg"
+					}
+				},
+				"viewers": 10000,
+				"channels": 100
+			}
+		]
+	}
+}

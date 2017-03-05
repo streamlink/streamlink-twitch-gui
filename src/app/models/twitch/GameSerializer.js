@@ -14,14 +14,15 @@ export default TwitchSerializer.extend({
 	},
 
 	normalize( modelClass, resourceHash, prop ) {
-		var name = resourceHash[ this.primaryKey ];
-		var foreignKey = this.store.serializerFor( "twitchImage" ).primaryKey;
+		const id = resourceHash[ this.primaryKey ];
+		const foreignKey = this.store.serializerFor( "twitchImage" ).primaryKey;
 
+		// apply the id of this record to the embedded TwitchImage records (box and logo)
 		if ( resourceHash.box ) {
-			resourceHash.box[ foreignKey ] = `game/box/${name}`;
+			resourceHash.box[ foreignKey ] = `game/box/${id}`;
 		}
 		if ( resourceHash.logo ) {
-			resourceHash.logo[ foreignKey ] = `game/logo/${name}`;
+			resourceHash.logo[ foreignKey ] = `game/logo/${id}`;
 		}
 
 		return this._super( modelClass, resourceHash, prop );

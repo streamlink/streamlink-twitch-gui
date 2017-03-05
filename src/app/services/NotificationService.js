@@ -59,7 +59,7 @@ const cacheTmpDir = tmpdir( cacheDir );
 
 class StreamCache {
 	constructor( stream ) {
-		this.id    = get( stream, "channel.id" );
+		this.id    = get( stream, "id" );
 		this.since = get( stream, "created_at" );
 		this.fails = 0;
 	}
@@ -70,7 +70,7 @@ class StreamCache {
 	 */
 	findStreamIndex( streams ) {
 		for ( let id = this.id, i = 0, l = streams.length; i < l; i++ ) {
-			if ( get( streams[ i ], "channel.id" ) === id ) {
+			if ( get( streams[ i ], "id" ) === id ) {
 				return i;
 			}
 		}
@@ -143,8 +143,8 @@ export default Service.extend( ChannelSettingsMixin, {
 	 */
 	_userHasFollowedChannel: on( "init", function() {
 		const store   = get( this, "store" );
-		const follows = store.modelFor( "twitchUserFollowsChannel" );
-		const adapter = store.adapterFor( "twitchUserFollowsChannel" );
+		const follows = store.modelFor( "twitchChannelFollowed" );
+		const adapter = store.adapterFor( "twitchChannelFollowed" );
 
 		adapter.on( "createRecord", ( store, type, snapshot ) => {
 			if ( !get( this, "running" ) ) { return; }
@@ -245,7 +245,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	check() {
 		if ( !get( this, "running" ) ) { return; }
 
-		get( this, "store" ).query( "twitchStreamsFollowed", {
+		get( this, "store" ).query( "twitchStreamFollowed", {
 			limit: 100
 		})
 			.then( mapBy( "stream" ) )
@@ -347,7 +347,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		let all = get( this, "settings.notify_all" );
 
 		let promiseStreamSettings = streams.map( stream => {
-			let name = get( stream, "channel.id" );
+			let name = get( stream, "channel.name" );
 			return this.loadChannelSettings( name )
 				.then( settings => ({ stream, settings }) );
 		});
@@ -460,7 +460,7 @@ export default Service.extend( ChannelSettingsMixin, {
 					// don't open the chat twice (startStream may open chat already)
 					if ( get( this, "settings.gui_openchat" ) ) { return; }
 					let chat    = get( this, "chat" );
-					let channel = get( stream, "channel.id" );
+					let channel = get( stream, "channel.name" );
 					chat.open( channel )
 						.catch(function() {});
 				});
