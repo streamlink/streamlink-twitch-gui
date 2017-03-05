@@ -97,7 +97,7 @@ export default Model.extend({
 	}),
 
 
-	/** @type {(TwitchUserSubscription|boolean)} subscribed */
+	/** @type {(TwitchSubscription|boolean)} subscribed */
 	subscribed: null,
 
 	/** @type {(TwitchChannelFollowed|boolean)} following */

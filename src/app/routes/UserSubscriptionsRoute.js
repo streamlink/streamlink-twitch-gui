@@ -35,13 +35,13 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 					.then( () => tickets )
 					.then( this.filterFetchedContent( "product.channel.isFulfilled", true ) )
 			)
-			// also load the UserSubscription record (needed for subscription date)
+			// also load the TwitchSubscription record (needed for subscription date)
 			// unfortunately, this can't be loaded in parallel (channel needs to be loaded first)
 			.then( tickets =>
 				Promise.all( tickets
 					.map( ticket => get( ticket, "product.partner_login.channel" ) )
 					.map( channel =>
-						store.findExistingRecord( "twitchUserSubscription", get( channel, "id" ) )
+						store.findExistingRecord( "twitchSubscription", get( channel, "id" ) )
 							.catch( () => false )
 							.then( record => set( channel, "subscribed", record ) )
 					)

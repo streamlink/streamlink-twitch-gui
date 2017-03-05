@@ -3,7 +3,7 @@ import TwitchSerializer from "store/TwitchSerializer";
 
 export default TwitchSerializer.extend({
 	modelNameFromPayloadKey() {
-		return "twitchUserSubscription";
+		return "twitchSubscription";
 	},
 
 	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
@@ -14,7 +14,7 @@ export default TwitchSerializer.extend({
 
 		// fix payload format
 		payload = {
-			twitchUserSubscription: payload
+			twitchSubscription: payload
 		};
 
 		return this._super( store, primaryModelClass, payload, id, requestType );

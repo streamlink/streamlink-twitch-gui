@@ -14,7 +14,7 @@ const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
 
 
 export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixin, {
-	modelName: "twitchUserSubscription",
+	modelName: "twitchSubscription",
 
 	// model alias (component attribute)
 	model    : alias( "channel" ),

@@ -66,9 +66,9 @@ import TwitchSearchChannelSerializer from "models/twitch/SearchChannelSerializer
 import TwitchUser from "models/twitch/User";
 import TwitchUserAdapter from "models/twitch/UserAdapter";
 import TwitchUserSerializer from "models/twitch/UserSerializer";
-import TwitchUserSubscription from "models/twitch/UserSubscription";
-import TwitchUserSubscriptionSerializer from "models/twitch/UserSubscriptionSerializer";
 
+import TwitchSubscription from "models/twitch/Subscription";
+import TwitchSubscriptionSerializer from "models/twitch/SubscriptionSerializer";
 import TwitchTicket from "models/twitch/Ticket";
 import TwitchTicketSerializer from "models/twitch/TicketSerializer";
 import TwitchProduct from "models/twitch/Product";
@@ -360,9 +360,9 @@ export default Application.create({
 	TwitchUser,
 	TwitchUserAdapter,
 	TwitchUserSerializer,
-	TwitchUserSubscription,
-	TwitchUserSubscriptionSerializer,
 
+	TwitchSubscription,
+	TwitchSubscriptionSerializer,
 	TwitchTicket,
 	TwitchTicketSerializer,
 	TwitchProduct,
