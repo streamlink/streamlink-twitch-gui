@@ -129,15 +129,22 @@
 			&:nth-of-type( @{nth} ) { margin-right: 0; }
 		}
 
+		// the first media query should only have a max-width constraint
+		.mediaquery() when ( @i = @min ) {
+			@media ( max-width: @max-width ) {
+				.rules();
+			}
+		}
+
 		// max-width constraint required, so the nth-child rule doesn't get used by other queries
-		.mediaquery() when( @i < @max ) {
-			@media ( max-width: @max-width ) and ( min-width: @min-width ) {
+		.mediaquery() when ( @i > @min ) and ( @i < @max ) {
+			@media ( min-width: @min-width ) and ( max-width: @max-width ) {
 				.rules();
 			}
 		}
 
 		// no max-width constraint on the last media query, so the items can scale from that point
-		.mediaquery() when( @i = @max ) {
+		.mediaquery() when ( @i = @max ) {
 			@media ( min-width: @min-width ) {
 				.rules();
 			}
