@@ -17,12 +17,12 @@ import {
 	Service
 } from "Ember";
 import Stream from "models/twitch/Stream";
+import StreamAdapter from "models/twitch/StreamAdapter";
 import StreamSerializer from "models/twitch/StreamSerializer";
 import Channel from "models/twitch/Channel";
 import ChannelSerializer from "models/twitch/ChannelSerializer";
 import imageInjector from "inject-loader?config!models/twitch/Image";
 import ImageSerializer from "models/twitch/ImageSerializer";
-import TwitchAdapter from "store/TwitchAdapter";
 import TwitchStreamFixtures from "fixtures/models/twitch/Stream.json";
 
 
@@ -42,13 +42,14 @@ module( "models/twitch/Stream", {
 
 		owner.register( "service:auth", Service.extend() );
 		owner.register( "model:twitch-stream", Stream );
+		owner.register( "adapter:twitch-stream", StreamAdapter );
 		owner.register( "serializer:twitch-stream", StreamSerializer );
 		owner.register( "model:twitch-channel", Channel );
 		owner.register( "serializer:twitch-channel", ChannelSerializer );
 		owner.register( "model:twitch-image", TwitchImage );
 		owner.register( "serializer:twitch-image", ImageSerializer );
 
-		env = setupStore( owner, { adapter: TwitchAdapter } );
+		env = setupStore( owner );
 	},
 
 	afterEach() {
@@ -60,7 +61,7 @@ module( "models/twitch/Stream", {
 
 test( "Adapter and Serializer (single)", assert => {
 
-	env.adapter.ajax = ( url, method, query ) =>
+	env.store.adapterFor( "twitchStream" ).ajax = ( url, method, query ) =>
 		adapterRequest( assert, TwitchStreamFixtures[ "single" ], url, method, query );
 
 	return env.store.findRecord( "twitchStream", 1 )
@@ -132,7 +133,7 @@ test( "Adapter and Serializer (single)", assert => {
 
 test( "Adapter and Serializer (many)", assert => {
 
-	env.adapter.ajax = ( url, method, query ) =>
+	env.store.adapterFor( "twitchStream" ).ajax = ( url, method, query ) =>
 		adapterRequest( assert, TwitchStreamFixtures[ "many" ], url, method, query );
 
 	return env.store.query( "twitchStream", {} )
@@ -168,6 +169,75 @@ test( "Adapter and Serializer (many)", assert => {
 				&& env.store.hasRecordForId( "twitchImage", "stream/preview/4" )
 				&& env.store.hasRecordForId( "twitchImage", "stream/preview/6" ),
 				"Has all image records registered in the data store"
+			);
+		});
+
+});
+
+
+test( "Adapter and Serializer (single coalesced request)", assert => {
+
+	env.store.adapterFor( "twitchStream" ).ajax = ( url, method, query ) =>
+		adapterRequest( assert, TwitchStreamFixtures[ "coalesce" ], url, method, query );
+
+	return Promise.all([
+		env.store.findRecord( "twitchStream", 2 ),
+		env.store.findRecord( "twitchStream", 4 )
+	])
+		.then( () => {
+			assert.ok(
+				   env.store.hasRecordForId( "twitchStream", 2 )
+				&& env.store.hasRecordForId( "twitchStream", 4 ),
+				"Has all Stream records registered in the data store"
+			);
+
+			assert.ok(
+				   env.store.hasRecordForId( "twitchChannel", 2 )
+				&& env.store.hasRecordForId( "twitchChannel", 4 ),
+				"Has all Channel records registered in the data store"
+			);
+
+			assert.ok(
+				   env.store.hasRecordForId( "twitchImage", "stream/preview/2" )
+				&& env.store.hasRecordForId( "twitchImage", "stream/preview/4" ),
+				"Has all Image records registered in the data store"
+			);
+		});
+
+});
+
+
+test( "Adapter (multiple coalesced requests)", assert => {
+
+	const adapter = env.store.adapterFor( "twitchStream" );
+	let requests = 0;
+
+	// baseLength = 45 (space for two 10 char ids plus separator)
+	adapter.maxURLLength = 66;
+	adapter.ajax = ( url, method, query ) =>
+		adapterRequest(
+			assert,
+			TwitchStreamFixtures[ "coalesce-multiple" ][ requests++ ],
+			url,
+			method,
+			query
+		);
+
+	const ids = [
+		"1234567890",
+		"1234567891",
+		"1234567892",
+		"1234567893"
+	];
+
+	return Promise.all(
+		ids.map( id => env.store.findRecord( "twitchStream", id ) )
+	)
+		.then( () => {
+			assert.strictEqual(
+				requests,
+				2,
+				"Has made two requests"
 			);
 		});
 

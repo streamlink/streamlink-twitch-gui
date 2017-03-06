@@ -35,6 +35,7 @@ import TwitchGameFollowedLive from "models/twitch/GameFollowedLive";
 import TwitchGameFollowedLiveSerializer from "models/twitch/GameFollowedLiveSerializer";
 
 import TwitchStream from "models/twitch/Stream";
+import TwitchStreamAdapter from "models/twitch/StreamAdapter";
 import TwitchStreamSerializer from "models/twitch/StreamSerializer";
 import TwitchStreamSummary from "models/twitch/StreamSummary";
 import TwitchStreamSummarySerializer from "models/twitch/StreamSummarySerializer";
@@ -338,6 +339,7 @@ export default Application.create({
 	TwitchGameFollowedLiveSerializer,
 
 	TwitchStream,
+	TwitchStreamAdapter,
 	TwitchStreamSerializer,
 	TwitchStreamSummary,
 	TwitchStreamSummarySerializer,
