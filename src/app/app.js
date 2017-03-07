@@ -117,6 +117,7 @@ import IndexRoute from "routes/IndexRoute";
 
 import TitleBarComponent from "components/TitleBarComponent";
 import MainMenuComponent from "components/MainMenuComponent";
+import SubMenuComponent from "components/SubMenuComponent";
 
 import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
@@ -428,6 +429,7 @@ export default Application.create({
 	// Components
 	TitleBarComponent,
 	MainMenuComponent,
+	SubMenuComponent,
 
 	EmbeddedLinksComponent,
 	ExternalLinkComponent,
