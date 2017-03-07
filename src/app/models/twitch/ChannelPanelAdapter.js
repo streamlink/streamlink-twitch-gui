@@ -2,6 +2,12 @@ import TwitchAdapter from "store/TwitchAdapter";
 
 
 export default TwitchAdapter.extend({
+	urlFragments: {
+		channel( type, id, data ) {
+			return data.channel;
+		}
+	},
+
 	query( store, type, query ) {
 		const url = this.buildURL( type, null, null, "query", query );
 		query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
@@ -10,13 +16,6 @@ export default TwitchAdapter.extend({
 	},
 
 	urlForQuery( query, type ) {
-		return this._buildURL( type, query );
-	},
-
-	buildURLFragments( type, query ) {
-		let path = type.toString();
-		path = path.replace( ":channel", query.channel );
-
-		return path.split( "/" );
+		return this._buildURL( type, null, query );
 	}
 });

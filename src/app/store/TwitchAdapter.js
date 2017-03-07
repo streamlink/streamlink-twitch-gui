@@ -1,6 +1,5 @@
 import {
 	get,
-	isNone,
 	inject,
 	observer
 } from "Ember";
@@ -11,8 +10,6 @@ import AdapterMixin from "store/AdapterMixin";
 
 const { service } = inject;
 const { oauth: { "client-id": clientId } } = twitch;
-
-const reURLFragment = /^:(.+)$/;
 
 
 export default RESTAdapter.extend( AdapterMixin, {
@@ -26,6 +23,26 @@ export default RESTAdapter.extend( AdapterMixin, {
 	},
 
 	defaultSerializer: "twitch",
+
+
+	urlFragments: {
+		user_id() {
+			let user_id = get( this, "auth.session.user_id" );
+			if ( !user_id ) {
+				throw new Error( "Unknown user_id" );
+			}
+
+			return user_id;
+		},
+		user_name() {
+			let user_name = get( this, "auth.session.user_name" );
+			if ( !user_name ) {
+				throw new Error( "Unknown user_name" );
+			}
+
+			return user_name;
+		}
+	},
 
 
 	coalesceFindRequests: false,
@@ -63,47 +80,6 @@ export default RESTAdapter.extend( AdapterMixin, {
 		};
 
 		return this.ajax( url, "GET", { data } );
-	},
-
-
-	/**
-	 * Dynamic URL fragments
-	 * @param {DS.Model} type
-	 * @param {string?} id
-	 * @returns {string[]}
-	 */
-	buildURLFragments( type, id ) {
-		var adapter = this;
-		var idFound = false;
-
-		var path = type.toString();
-		var url  = path.split( "/" );
-
-		url = url.map(function( frag ) {
-			return frag.replace( reURLFragment, function( _, key ) {
-				switch ( key ) {
-					case "id":
-						if ( isNone( id ) ) { throw new Error( "Unknown ID" ); }
-						idFound = true;
-						return id;
-					// a user_{id,name} fragment requires the user to be logged in
-					case "user_id":
-					case "user_name":
-						let user = get( adapter, `auth.session.${key}` );
-						if ( !user ) { throw new Error( `Unknown ${key}` ); }
-						return user;
-					// unknown fragment
-					default:
-						throw new Error( `Unknown URL fragment: ${key}` );
-				}
-			});
-		});
-
-		if ( !idFound && !isNone( id ) ) {
-			url.push( id );
-		}
-
-		return url;
 	},
 
 

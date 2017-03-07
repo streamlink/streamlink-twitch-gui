@@ -10,7 +10,8 @@ import {
 } from "EmberData";
 
 
-const reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
+const reURL = /^[a-z]+:\/\/([\w.]+)\/(.+)$/i;
+const reURLFragment = /^:(\w+)$/;
 
 
 /**
@@ -18,6 +19,18 @@ const reURL = /^[a-z]+:\/\/([\w\.]+)\/(.+)$/i;
  * instead of using type.modelName as name
  */
 export default Mixin.create( Evented, {
+	mergedProperties: [ "urlFragments" ],
+
+	urlFragments: {
+		id( type, id ) {
+			if ( isNone( id ) ) {
+				throw new Error( "Unknown ID" );
+			}
+
+			return id;
+		}
+	},
+
 	findRecord( store, type, id, snapshot ) {
 		const url = this.buildURL( type, id, snapshot, "findRecord" );
 
@@ -103,33 +116,55 @@ export default Mixin.create( Evented, {
 
 	/**
 	 * Custom buildURL method with type instead of modelName
-	 * @param {DS.Model} type
-	 * @param {string?} id
-	 * @returns {string}
+	 * @param {Model} type
+	 * @param {(Number|String)?} id
+	 * @param {*?} data
+	 * @returns {String}
 	 */
-	_buildURL( type, id ) {
-		var host = get( this, "host" );
-		var ns   = get( this, "namespace" );
-		var url  = [ host ];
+	_buildURL( type, id, data ) {
+		const host = get( this, "host" );
+		const ns = get( this, "namespace" );
+		const url = [ host ];
 
 		// append the adapter specific namespace
 		if ( ns ) { url.push( ns ); }
 		// append the type fragments (and process the dynamic ones)
-		url.push( ...this.buildURLFragments( type, id ) );
+		url.push( ...this.buildURLFragments( type, id, data ) );
 
 		return url.join( "/" );
 	},
 
 	/**
-	 * Custom method for building URL fragments
-	 * @param {DS.Model} type
-	 * @param {string?} id
-	 * @returns {string[]}
+	 * Dynamic URL fragments
+	 * @param {Model} type
+	 * @param {(Number|String)?} id
+	 * @param {*?} data
+	 * @returns {String[]}
 	 */
-	buildURLFragments( type, id ) {
-		var path = type.toString();
-		var url  = path.split( "/" );
-		if ( !isNone( id ) ) { url.push( id ); }
+	buildURLFragments( type, id, data ) {
+		const urlFragments = get( this, "urlFragments" );
+		let idFound = false;
+
+		const url = type.toString()
+			.split( "/" )
+			.map( fragment => fragment.replace( reURLFragment, ( _, key ) => {
+				if ( key === "id" ) {
+					idFound = true;
+				}
+
+				if ( urlFragments.hasOwnProperty( key ) ) {
+					return urlFragments[ key ].call( this, type, id, data );
+				}
+
+				// unknown fragment
+				throw new Error( `Unknown URL fragment: ${key}` );
+			}) );
+
+		// append ID if no :id fragment was defined and ID exists
+		if ( !idFound && !isNone( id ) ) {
+			url.push( id );
+		}
+
 		return url;
 	},
 
