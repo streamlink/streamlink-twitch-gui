@@ -1,7 +1,10 @@
 import TwitchAdapter from "store/TwitchAdapter";
 
 
-export default TwitchAdapter.extend( {
+export default TwitchAdapter.extend({
+	coalesceFindRequests: true,
+	findManyIdString: "login",
+
 	// use custom findRecord URL
 	findRecord( store, type, id, snapshot ) {
 		const url = this.buildURL( type, null, snapshot, "findRecord" );

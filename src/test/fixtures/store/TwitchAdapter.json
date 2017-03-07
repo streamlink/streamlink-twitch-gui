@@ -1,0 +1,237 @@
+{
+	"coalesce-stream-single": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/streams",
+			"method": "GET",
+			"query": {
+				"channel": "2,4"
+			}
+		},
+		"response": {
+			"streams": [
+				{
+					"_id": 1,
+					"channel": {
+						"_id": 2
+					},
+					"preview": {}
+				},
+				{
+					"_id": 3,
+					"channel": {
+						"_id": 4
+					},
+					"preview": {}
+				}
+			]
+		}
+	},
+	"coalesce-stream-multiple": [
+		{
+			"request": {
+				"url": "https://api.twitch.tv/kraken/streams",
+				"method": "GET",
+				"query": {
+					"channel": "1234567890,1234567891"
+				}
+			},
+			"response": {
+				"streams": [
+					{
+						"_id": 1234567890,
+						"channel": {
+							"_id": 1234567890
+						},
+						"preview": {}
+					},
+					{
+						"_id": 1234567891,
+						"channel": {
+							"_id": 1234567891
+						},
+						"preview": {}
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"url": "https://api.twitch.tv/kraken/streams",
+				"method": "GET",
+				"query": {
+					"channel": "1234567892,1234567893"
+				}
+			},
+			"response": {
+				"streams": [
+					{
+						"_id": 1234567892,
+						"channel": {
+							"_id": 1234567892
+						},
+						"preview": {}
+					},
+					{
+						"_id": 1234567893,
+						"channel": {
+							"_id": 1234567893
+						},
+						"preview": {}
+					}
+				]
+			}
+		}
+	],
+	"coalesce-various-single": {
+		"stream": {
+			"request": {
+				"url": "https://api.twitch.tv/kraken/streams",
+				"method": "GET",
+				"query": {
+					"channel": "2,4"
+				}
+			},
+			"response": {
+				"streams": [
+					{
+						"_id": 1,
+						"channel": {
+							"_id": 2
+						},
+						"preview": {}
+					},
+					{
+						"_id": 3,
+						"channel": {
+							"_id": 4
+						},
+						"preview": {}
+					}
+				]
+			}
+		},
+		"user": {
+			"request": {
+				"url": "https://api.twitch.tv/kraken/users",
+				"method": "GET",
+				"query": {
+					"login": "foo,bar"
+				}
+			},
+			"response": {
+				"users": [
+					{
+						"_id": 1,
+						"name": "foo"
+					},
+					{
+						"_id": 2,
+						"name": "bar"
+					}
+				]
+			}
+		}
+	},
+	"coalesce-various-multiple": {
+		"stream": [
+			{
+				"request": {
+					"url": "https://api.twitch.tv/kraken/streams",
+					"method": "GET",
+					"query": {
+						"channel": "1234567890,1234567891"
+					}
+				},
+				"response": {
+					"streams": [
+						{
+							"_id": 1234567890,
+							"channel": {
+								"_id": 1234567890
+							},
+							"preview": {}
+						},
+						{
+							"_id": 1234567891,
+							"channel": {
+								"_id": 1234567891
+							},
+							"preview": {}
+						}
+					]
+				}
+			},
+			{
+				"request": {
+					"url": "https://api.twitch.tv/kraken/streams",
+					"method": "GET",
+					"query": {
+						"channel": "1234567892,1234567893"
+					}
+				},
+				"response": {
+					"streams": [
+						{
+							"_id": 1234567892,
+							"channel": {
+								"_id": 1234567892
+							},
+							"preview": {}
+						},
+						{
+							"_id": 1234567893,
+							"channel": {
+								"_id": 1234567893
+							},
+							"preview": {}
+						}
+					]
+				}
+			}
+		],
+		"user": [
+			{
+				"request": {
+					"url": "https://api.twitch.tv/kraken/users",
+					"method": "GET",
+					"query": {
+						"login": "foo,bar"
+					}
+				},
+				"response": {
+					"users": [
+						{
+							"_id": 1,
+							"name": "foo"
+						},
+						{
+							"_id": 2,
+							"name": "bar"
+						}
+					]
+				}
+			},
+			{
+				"request": {
+					"url": "https://api.twitch.tv/kraken/users",
+					"method": "GET",
+					"query": {
+						"login": "baz,qux"
+					}
+				},
+				"response": {
+					"users": [
+						{
+							"_id": 3,
+							"name": "baz"
+						},
+						{
+							"_id": 4,
+							"name": "qux"
+						}
+					]
+				}
+			}
+		]
+	}
+}

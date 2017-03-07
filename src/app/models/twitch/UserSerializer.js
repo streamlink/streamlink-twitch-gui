@@ -1,9 +1,6 @@
 import TwitchSerializer from "store/TwitchSerializer";
 
 
-const { isArray } = Array;
-
-
 export default TwitchSerializer.extend({
 	primaryKey: "id",
 
@@ -12,20 +9,13 @@ export default TwitchSerializer.extend({
 	},
 
 	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
-		if ( !payload || !isArray( payload.users ) || payload.users.length !== 1 ) {
-			payload = {
-				twitchUser: null
-			};
-		} else {
-			let user = payload.users[0];
-			payload = {
-				twitchUser: {
-					[ this.primaryKey ]: user.name,
-					channel: user._id,
-					stream: user._id
-				}
-			};
-		}
+		payload = {
+			[ this.modelNameFromPayloadKey() ]: ( payload.users || [] ).map( user => ({
+				[ this.primaryKey ]: user.name,
+				channel: user._id,
+				stream: user._id
+			}) )
+		};
 
 		return this._super( store, primaryModelClass, payload, id, requestType );
 	}

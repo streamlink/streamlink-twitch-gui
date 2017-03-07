@@ -27,6 +27,13 @@ export default RESTAdapter.extend( AdapterMixin, {
 
 	defaultSerializer: "twitch",
 
+
+	coalesceFindRequests: false,
+
+	findManyIdString: null,
+	findManyIdSeparator: ",",
+
+
 	access_token: null,
 	tokenObserver: observer( "access_token", function() {
 		var token = get( this, "access_token" );
@@ -47,6 +54,15 @@ export default RESTAdapter.extend( AdapterMixin, {
 	updateRecordData() {
 		// we don't need to send any data with the request (yet?)
 		return {};
+	},
+
+	findMany( store, type, ids, snapshots ) {
+		const url = this.buildURL( type, null, snapshots, "findMany" );
+		const data = {
+			[ this.findManyIdString ]: ids.join( this.findManyIdSeparator )
+		};
+
+		return this.ajax( url, "GET", { data } );
 	},
 
 
@@ -88,5 +104,55 @@ export default RESTAdapter.extend( AdapterMixin, {
 		}
 
 		return url;
+	},
+
+
+	groupRecordsForFindMany( store, snapshots ) {
+		const snapshotsByType = new Map();
+
+		// group snapshots by type
+		snapshots.forEach( snapshot => {
+			const type = snapshot.type;
+			const typeArray = snapshotsByType.get( type ) || [];
+			typeArray.push( snapshot );
+			snapshotsByType.set( type, typeArray );
+		});
+
+		// build request groups
+		const groups = [];
+		snapshotsByType.forEach( ( snapshotGroup, type ) => {
+			const adapter = store.adapterFor( type.modelName );
+
+			const baseLength = adapter._buildURL( type ).length
+				// "?[findManyIdString]="
+				+ 2 + adapter.findManyIdString.length;
+			const findManyIdSeparatorLength = adapter.findManyIdSeparator.length;
+			const maxLength = adapter.maxURLLength;
+
+			let group = [];
+			let length = baseLength;
+
+			snapshotGroup.forEach( snapshot => {
+				const id = get( snapshot, "record.id" );
+				const idLength = String( id ).length;
+				const separatorLength = group.length === 0 ? 0 : findManyIdSeparatorLength;
+				const newLength = length + separatorLength + idLength;
+
+				if ( newLength <= maxLength ) {
+					group.push( snapshot );
+					length = newLength;
+				} else {
+					groups.push( group );
+					group = [ snapshot ];
+					length = baseLength;
+				}
+			});
+
+			if ( group.length ) {
+				groups.push( group );
+			}
+		});
+
+		return groups;
 	}
 });
