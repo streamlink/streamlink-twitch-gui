@@ -19,7 +19,9 @@ export default Component.extend({
 	layout,
 
 	tagName: "section",
-	classNames: [ "content", "content-panels" ],
+	classNames: [
+		"channel-panels-component"
+	],
 
 	_masonry: on( "didInsertElement", function() {
 		var container = this.$( "ul" )[0];

@@ -214,6 +214,8 @@ import ChannelLoadingTemplate from "templates/Loading.hbs";
 import ChannelIndexRoute from "routes/ChannelIndexRoute";
 import ChannelIndexController from "controllers/ChannelIndexController";
 import ChannelIndexTemplate from "templates/channel/ChannelIndex.hbs";
+import ChannelIndexLoadingRoute from "routes/LoadingRoute";
+import ChannelIndexLoadingTemplate from "templates/Loading.hbs";
 import ChannelSettingsRoute from "routes/ChannelSettingsRoute";
 import ChannelSettingsController from "controllers/ChannelSettingsController";
 import ChannelSettingsTemplate from "templates/channel/ChannelSettings.hbs";
@@ -528,6 +530,8 @@ export default Application.create({
 	ChannelIndexRoute,
 	ChannelIndexController,
 	ChannelIndexTemplate,
+	ChannelIndexLoadingRoute,
+	ChannelIndexLoadingTemplate,
 	ChannelSettingsRoute,
 	ChannelSettingsController,
 	ChannelSettingsTemplate,

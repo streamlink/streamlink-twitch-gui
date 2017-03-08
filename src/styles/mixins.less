@@ -17,6 +17,25 @@
 	white-space: nowrap;
 }
 
+.text-overflow-rows( @rows: 2 ) {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.flexbox( @flex-flow: row; @justify-content: flex-start ) {
+	display: flex;
+	flex-flow: @flex-flow;
+	justify-content: @justify-content;
+
+	> * {
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+}
+
 
 .btn-color( @background ) {
 	.apply-rules( @background ) {

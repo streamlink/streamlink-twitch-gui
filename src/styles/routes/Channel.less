@@ -1,84 +1,66 @@
 
 main.content-channel {
-	overflow-x: hidden;
+	@header-size: 6.5rem;
+	@header-margin: 1rem;
+	@submenu-size: 4rem;
 
-	&.animated > .content:not(.content-loading) {
+	.flexbox( column );
+	overflow-x: hidden;
+	animation: none;
+
+	> :not(.content-loading) {
 		animation: animFadeInRight .333s ease-out;
 	}
 
+	> .content-loading,
+	> section:last-of-type {
+		flex-grow: 1;
+	}
+
+	// move submenu loading spinner up to match teh height of the one of the channel route
+	> .content-loading {
+		margin-top: ( -1 * ( @header-size + @header-margin + @submenu-size ) );
+	}
+
 	> header {
-		margin-bottom: 1em;
+		.flexbox();
+		margin-bottom: @header-margin;
 
 		> .logo {
-			@size: 6.5em;
-
 			display: block;
 			position: relative;
-			width: @size;
-			height: @size;
-			margin-right: .5em;
-			flex-shrink: 0;
-			flex-grow: 0;
+			flex: 0 0 @header-size;
+			height: @header-size;
+			margin-right: .5rem;
 		}
 
-		> div {
-			display: flex;
-			flex-flow: column;
+		> .info {
+			.flexbox( column );
 			flex-grow: 1;
-		}
+			// needed for text-overflow
+			width: 0;
 
-		.title {
-			display: flex;
-			justify-content: space-between;
-			align-items: baseline;
-		}
+			> .title {
+				margin: 0 0 .25em;
+			}
 
-		h3 {
-			margin: 0;
-			flex-grow: 1;
-			.text-overflow();
-		}
+			> .stats {
+				margin-bottom: .25em;
+				.text-overflow();
 
-		.settingsicon {
-			> button {
-				&:extend(.quick-bar-component .form-button-component);
-
-				> i {
-					height: inherit;
-					font-size: inherit;
-					line-height: inherit;
-					vertical-align: inherit;
-				}
-
-				&:active > i:before {
-					content: @fa-var-wrench;
+				> span:not(:first-child) {
+					margin-left: .5rem;
 				}
 			}
 
-			&.opened > button > i {
-				// FIXME
-				.theme({
-					color: @theme-button-icon-color-active;
-				});
+			> .status {
+				flex-grow: 1;
+				.text-overflow-rows( 2 );
 			}
-		}
-
-		.online, .offline {
-			margin: .25em 0;
-		}
-
-		.online {
-			> span:not(:first-of-type) {
-				margin-left: .75em;
-			}
-		}
-
-		.status {
-			flex-grow: 1;
 		}
 	}
 
-	> .content-index {
+	> .content-channel-overview {
 		display: flex;
 		margin-bottom: 2rem;
 
@@ -134,22 +116,38 @@ main.content-channel {
 		}
 	}
 
-	> .content-settings {
+	.content-channel-settings {
+		display: flex;
+		flex-flow: column;
+
+		> * {
+			flex-grow: 0;
+			flex-shrink: 0;
+		}
+
 		> h3 {
 			margin-top: 0;
 		}
 
-		> fieldset > legend {
-			margin: 0 0 1em;
-			padding: 0 0 .25em;
-			border-bottom: 1px solid;
-			font-size: 1em;
-			font-weight: lighter;
+		> fieldset {
+			margin-bottom: 2rem;
 
-			.theme({
-				.theme-mix-color( @theme-settings-legend-color, @theme-background );
-				border-bottom-color: @theme-settings-legend-border-color;
-			});
+			&:last-of-type {
+				flex-grow: 1;
+			}
+
+			> legend {
+				margin: 0 0 1rem;
+				padding: 0 0 .25rem;
+				border-bottom: 1px solid;
+				font-size: 1rem;
+				font-weight: lighter;
+
+				.theme({
+					.theme-mix-color( @theme-settings-legend-color, @theme-background );
+					border-bottom-color: @theme-settings-legend-border-color;
+				});
+			}
 		}
 	}
 }

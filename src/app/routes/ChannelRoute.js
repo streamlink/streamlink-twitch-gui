@@ -1,6 +1,5 @@
 import {
 	get,
-	set,
 	Route
 } from "Ember";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
@@ -28,36 +27,10 @@ export default Route.extend( RefreshRouteMixin, {
 				return store.findRecord( "twitchChannel", id, { reload: true } )
 					.then( channel => ({ channel }) );
 			})
-			// preload images and load the channel panels in parallel
-			.then( ({ stream, channel }) =>
-				Promise.all([
-					// preload images
-					Promise.resolve({ stream, channel })
-						.then( preload([
-							"stream.preview.largeLatest",
-							"channel.logo",
-							"channel.video_banner"
-						]) ),
-					// panels are still referenced by channel name in the private API namespace
-					store.query( "twitchChannelPanel", { channel: get( channel, "name" ) } )
-						.then( panels => Promise.all(
-							panels
-								.filterBy( "kind", "default" )
-								.sortBy( "display_order" )
-								// preload all panel images
-								.map( panel => Promise.resolve( panel )
-									.then( preload( "image" ) )
-								)
-							)
-						)
-				])
-					.then( ([ , panels ]) => ({ stream, channel, panels }) )
-			);
-	},
-
-	resetController( controller, isExiting ) {
-		if ( isExiting ) {
-			set( controller, "isAnimated", false );
-		}
+			.then( preload([
+				"stream.preview.largeLatest",
+				"channel.logo",
+				"channel.video_banner"
+			]) );
 	}
 });
