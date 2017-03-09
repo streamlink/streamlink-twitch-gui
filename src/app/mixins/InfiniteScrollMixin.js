@@ -9,6 +9,7 @@ import {
 
 var CSSMediaRule     = window.CSSMediaRule;
 var CSSStyleRule     = window.CSSStyleRule;
+// lessCSS sorts media queries alphabetically, so we need to reverse the order here
 var reMinWidth       = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/;
 var cachedMinWidths  = {};
 

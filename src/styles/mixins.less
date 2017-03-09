@@ -130,8 +130,9 @@
 		}
 
 		// the first media query should only have a max-width constraint
+		// also include the min-width constraint, so the InfiniteScrollMixin can match the query
 		.mediaquery() when ( @i = @min ) {
-			@media ( max-width: @max-width ) {
+			@media ( min-width: 1px ) and ( max-width: @max-width ) {
 				.rules();
 			}
 		}
