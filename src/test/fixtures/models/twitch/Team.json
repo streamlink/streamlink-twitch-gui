@@ -1,0 +1,94 @@
+{
+	"single": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/teams/foo",
+			"method": "GET",
+			"query": null
+		},
+		"response": {
+			"id": "foo",
+			"users": [
+				{
+					"_id": 1
+				},
+				{
+					"_id": 2
+				}
+			],
+			"background": "background",
+			"banner": "banner",
+			"created_at": "2000-01-01T00:00:00.000Z",
+			"display_name": "Foo",
+			"info": "info",
+			"logo": "logo",
+			"name": "foo",
+			"updated_at": "2000-01-01T00:00:00.000Z"
+		}
+	},
+	"many": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/teams",
+			"method": "GET",
+			"query": {}
+		},
+		"response": {
+			"teams": [
+				{
+					"id": "foo",
+					"background": "background",
+					"banner": "banner",
+					"created_at": "2000-01-01T00:00:00.000Z",
+					"display_name": "Foo",
+					"info": "info",
+					"logo": "logo",
+					"name": "foo",
+					"updated_at": "2000-01-01T00:00:00.000Z"
+				},
+				{
+					"id": "qux",
+					"background": "background",
+					"banner": "banner",
+					"created_at": "2000-01-01T00:00:00.000Z",
+					"display_name": "Qux",
+					"info": "info",
+					"logo": "logo",
+					"name": "qux",
+					"updated_at": "2000-01-01T00:00:00.000Z"
+				}
+			]
+		}
+	},
+	"by-channel": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/channels/bar/teams",
+			"method": "GET",
+			"query": {}
+		},
+		"response": {
+			"teams": [
+				{
+					"id": "foo",
+					"background": "background",
+					"banner": "banner",
+					"created_at": "2000-01-01T00:00:00.000Z",
+					"display_name": "Foo",
+					"info": "info",
+					"logo": "logo",
+					"name": "foo",
+					"updated_at": "2000-01-01T00:00:00.000Z"
+				},
+				{
+					"id": "qux",
+					"background": "background",
+					"banner": "banner",
+					"created_at": "2000-01-01T00:00:00.000Z",
+					"display_name": "Qux",
+					"info": "info",
+					"logo": "logo",
+					"name": "qux",
+					"updated_at": "2000-01-01T00:00:00.000Z"
+				}
+			]
+		}
+	}
+}

@@ -26,6 +26,7 @@ ApplicationRouter.map(function() {
 	this.route( "channels" );
 
 	this.route( "channel", { path: "/channel/:channel" }, function() {
+		this.route( "teams" );
 		this.route( "settings" );
 	});
 
@@ -36,6 +37,11 @@ ApplicationRouter.map(function() {
 		this.route( "hostedStreams" );
 		this.route( "followedChannels" );
 		this.route( "followedGames" );
+	});
+
+	this.route( "team", { path: "/team/:team" }, function() {
+		this.route( "index", { path: "/live" } );
+		this.route( "members", { path: "/members" } );
 	});
 
 	this.route( "settings", function() {

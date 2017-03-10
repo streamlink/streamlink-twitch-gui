@@ -1,0 +1,21 @@
+<main class="content content-team">
+<header>
+{{preview-image src=content.logo title=model.display_name classNames="logo"}}
+<div class="info">
+<h3 class="title">{{model.title}}</h3>
+<div class="stats">
+<span title="Number of team members"><i class="fa fa-users"></i> {{model.users.length}}</span>
+<span title="Date created"><i class="fa fa-calendar"></i> {{format-time model.created_at "llll"}}</span>
+<span title="Modified last"><i class="fa fa-pencil"></i> {{format-time model.updated_at "llll"}}</span>
+</div>
+<div class="status">{{model.infoText}}</div>
+</div>
+</header>
+{{#sub-menu "team" (hash
+	index="Live members"
+	members="All members"
+) as |subroute name|}}
+	{{#link-to (concat "team." subroute) model tagName="li"}}{{name}}{{/link-to}}
+{{/sub-menu}}
+{{outlet}}
+</main>

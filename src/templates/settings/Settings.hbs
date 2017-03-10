@@ -1,8 +1,7 @@
 <main class="content content-settings {{if isAnimated 'animated'}}">
 <h2>Settings</h2>
 <header>
-<ul>
-{{#each-in (hash
+{{sub-menu "settings" (hash
 	main="Main"
 	streams="Streams"
 	streamprovider=streamproviderName
@@ -13,10 +12,7 @@
 	languages="Languages"
 	notifications="Notifications"
 	channels="Channels"
-) as |subroute name|}}
-	{{#link-to (concat "settings." subroute) tagName="li" activeClass="active" inactiveClass="btn-neutral"}}{{name}}{{/link-to}}
-{{/each-in}}
-</ul>
+)}}
 </header>
 {{outlet}}
 {{settings-submit

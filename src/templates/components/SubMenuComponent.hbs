@@ -1,0 +1,9 @@
+{{#if hasBlock}}
+	{{#each-in menus as |subroute name|}}
+		{{yield subroute name}}
+	{{/each-in}}
+{{else}}
+	{{#each-in menus as |subroute name|}}
+		{{#link-to (concat baseroute "." subroute) tagName="li"}}{{name}}{{/link-to}}
+	{{/each-in}}
+{{/if}}

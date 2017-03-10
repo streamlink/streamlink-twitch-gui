@@ -10,41 +10,6 @@
 		flex-shrink: 0;
 	}
 
-	> header > ul {
-		display: flex;
-		margin: 0 0 2rem;
-		padding: 0;
-		list-style: none;
-
-		> li {
-			margin-left: .5rem;
-			padding: .2em .5em .4em;
-			border-bottom: transparent .25em solid;
-			font-size: .91em;
-			font-weight: bold;
-			opacity: .5;
-			cursor: pointer;
-			transition: opacity .25s ease-out, border-bottom-color .25s ease-out;
-
-			.theme({
-				.theme-mix-color( @theme-text-color-alt, @theme-background );
-			});
-
-			&:first-of-type {
-				margin-left: 0;
-			}
-
-			&.active {
-				border-bottom-color: @color-twitch-purple;
-			}
-		}
-
-		&:hover > li,
-		> li.active {
-			opacity: 1;
-		}
-	}
-
 	> fieldset {
 		margin-bottom: @margin;
 	}

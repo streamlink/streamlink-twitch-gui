@@ -1,29 +1,31 @@
-<main class="content content-channel {{if isAnimated 'animated'}}">
+<main class="content content-channel">
 <header>
 <div class="logo">
 {{preview-image src=channel.logo title=channel.display_name}}
 </div>
-<div>
-<div class="title">
-<h3>
+<div class="info">
+<h3 class="title">
 {{#if channel.hasLanguage}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
 <span>{{channel.display_name}}</span>
 </h3>
-<div class="settingsicon {{if isSubrouteSettings 'opened'}}">
-{{form-button action=(action "toggleSettings") icon="fa-wrench"}}
-</div>
-</div>
 {{#if stream}}
-<div class="online">
+<div class="stats online">
 <span title="{{stream.titleCreatedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now stream.created_at interval=60000}}</span>
 <span title="{{stream.titleViewers}}"><i class="fa fa-users"></i> {{format-viewers stream.viewers}}</span>
 <span><i class="fa fa-gamepad"></i> {{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</span>
 </div>
 {{else}}
-<div class="offline"><i class="fa fa-bed"></i> is offline right now</div>
+<div class="stats offline"><i class="fa fa-bed"></i> is offline right now</div>
 {{/if}}
-{{embedded-links tagName="div" class="status" text=channel.status}}
+{{embedded-links text=channel.status classNames="status"}}
 </div>
 </header>
+{{#sub-menu "channel" (hash
+	index="Details"
+	teams="Teams"
+	settings="Settings"
+) as |subroute name|}}
+	{{#link-to (concat "channel." subroute) model tagName="li"}}{{name}}{{/link-to}}
+{{/sub-menu}}
 {{outlet}}
 </main>
