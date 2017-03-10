@@ -22,6 +22,7 @@
 </header>
 {{#sub-menu "channel" (hash
 	index="Details"
+	teams="Teams"
 	settings="Settings"
 ) as |subroute name|}}
 	{{#link-to (concat "channel." subroute) model tagName="li"}}{{name}}{{/link-to}}

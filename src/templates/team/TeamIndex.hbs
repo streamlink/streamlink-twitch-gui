@@ -1,0 +1,7 @@
+<section class="content-team-live">
+{{#content-list model as |item isNewItem|}}
+{{stream-item content=item isNewItem=isNewItem}}
+{{else}}
+<p>The returned list of broadcasting team members is empty.</p>
+{{/content-list}}
+</section>

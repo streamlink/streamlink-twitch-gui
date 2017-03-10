@@ -1,0 +1,7 @@
+<section class="content-team-members">
+{{#content-list model as |item isNewItem|}}
+{{channel-item content=item isNewItem=isNewItem}}
+{{else}}
+<p>The returned list of all team members is empty.</p>
+{{/content-list}}
+</section>

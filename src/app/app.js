@@ -77,6 +77,10 @@ import TwitchProductSerializer from "models/twitch/ProductSerializer";
 import TwitchProductEmoticon from "models/twitch/ProductEmoticon";
 import TwitchProductEmoticonSerializer from "models/twitch/ProductEmoticonSerializer";
 
+import TwitchTeam from "models/twitch/Team";
+import TwitchTeamAdapter from "models/twitch/TeamAdapter";
+import TwitchTeamSerializer from "models/twitch/TeamSerializer";
+
 import IsEqualHelper from "helpers/IsEqualHelper";
 import IsNullHelper from "helpers/IsNullHelper";
 import IsGtHelper from "helpers/IsGtHelper";
@@ -159,6 +163,7 @@ import HeadlineTotalsComponent from "components/list/HeadlineTotalsComponent";
 import InfiniteScrollComponent from "components/list/InfiniteScrollComponent";
 import StreamItemComponent from "components/list/StreamItemComponent";
 import SubscriptionItemComponent from "components/list/SubscriptionItemComponent";
+import TeamItemComponent from "components/list/TeamItemComponent";
 
 import QuickBarComponent from "components/quick/QuickBarComponent";
 import QuickBarHomepageComponent from "components/quick/QuickBarHomepageComponent";
@@ -216,6 +221,10 @@ import ChannelIndexController from "controllers/ChannelIndexController";
 import ChannelIndexTemplate from "templates/channel/ChannelIndex.hbs";
 import ChannelIndexLoadingRoute from "routes/LoadingRoute";
 import ChannelIndexLoadingTemplate from "templates/Loading.hbs";
+import ChannelTeamsRoute from "routes/ChannelTeamsRoute";
+import ChannelTeamsTemplate from "templates/channel/ChannelTeams.hbs";
+import ChannelTeamsLoadingRoute from "routes/LoadingRoute";
+import ChannelTeamsLoadingTemplate from "templates/Loading.hbs";
 import ChannelSettingsRoute from "routes/ChannelSettingsRoute";
 import ChannelSettingsController from "controllers/ChannelSettingsController";
 import ChannelSettingsTemplate from "templates/channel/ChannelSettings.hbs";
@@ -240,6 +249,19 @@ import UserFollowedChannelsTemplate from "templates/user/UserFollowedChannels.hb
 import UserFollowedGamesRoute from "routes/UserFollowedGamesRoute";
 import UserFollowedGamesController from "controllers/UserFollowedGamesController";
 import UserFollowedGamesTemplate from "templates/user/UserFollowedGames.hbs";
+
+import TeamRoute from "routes/TeamRoute";
+import TeamTemplate from "templates/team/Team.hbs";
+import TeamLoadingRoute from "routes/LoadingRoute";
+import TeamLoadingTemplate from "templates/Loading.hbs";
+import TeamIndexRoute from "routes/TeamIndexRoute";
+import TeamIndexTemplate from "templates/team/TeamIndex.hbs";
+import TeamIndexLoadingRoute from "routes/LoadingRoute";
+import TeamIndexLoadingTemplate from "templates/Loading.hbs";
+import TeamMembersRoute from "routes/TeamMembersRoute";
+import TeamMembersTemplate from "templates/team/TeamMembers.hbs";
+import TeamMembersLoadingRoute from "routes/LoadingRoute";
+import TeamMembersLoadingTemplate from "templates/Loading.hbs";
 
 import SettingsRoute from "routes/SettingsRoute";
 import SettingsController from "controllers/SettingsController";
@@ -384,6 +406,10 @@ export default Application.create({
 	TwitchProductEmoticon,
 	TwitchProductEmoticonSerializer,
 
+	TwitchTeam,
+	TwitchTeamAdapter,
+	TwitchTeamSerializer,
+
 
 	// Helpers
 	IsEqualHelper,
@@ -473,6 +499,7 @@ export default Application.create({
 	InfiniteScrollComponent,
 	StreamItemComponent,
 	SubscriptionItemComponent,
+	TeamItemComponent,
 
 	QuickBarComponent,
 	QuickBarHomepageComponent,
@@ -532,6 +559,10 @@ export default Application.create({
 	ChannelIndexTemplate,
 	ChannelIndexLoadingRoute,
 	ChannelIndexLoadingTemplate,
+	ChannelTeamsRoute,
+	ChannelTeamsTemplate,
+	ChannelTeamsLoadingRoute,
+	ChannelTeamsLoadingTemplate,
 	ChannelSettingsRoute,
 	ChannelSettingsController,
 	ChannelSettingsTemplate,
@@ -556,6 +587,19 @@ export default Application.create({
 	UserFollowedGamesRoute,
 	UserFollowedGamesController,
 	UserFollowedGamesTemplate,
+
+	TeamRoute,
+	TeamTemplate,
+	TeamLoadingRoute,
+	TeamLoadingTemplate,
+	TeamIndexRoute,
+	TeamIndexTemplate,
+	TeamIndexLoadingRoute,
+	TeamIndexLoadingTemplate,
+	TeamMembersRoute,
+	TeamMembersTemplate,
+	TeamMembersLoadingRoute,
+	TeamMembersLoadingTemplate,
 
 	SettingsRoute,
 	SettingsController,
