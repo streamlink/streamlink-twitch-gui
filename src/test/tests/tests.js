@@ -41,6 +41,7 @@ import "tests/models/twitch/Subscription";
 import "tests/models/twitch/ProductEmoticon";
 import "tests/models/twitch/Product";
 import "tests/models/twitch/Ticket";
+import "tests/models/twitch/Team";
 import "tests/store/TwitchAdapter";
 import "tests/mixins/RefreshRouteMixin";
 import "tests/components/PreviewImageComponent";

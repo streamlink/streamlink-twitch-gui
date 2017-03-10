@@ -145,7 +145,7 @@ export default Mixin.create( Evented, {
 		const urlFragments = get( this, "urlFragments" );
 		let idFound = false;
 
-		const url = type.toString()
+		const url = String( type )
 			.split( "/" )
 			.map( fragment => fragment.replace( reURLFragment, ( _, key ) => {
 				if ( key === "id" ) {
