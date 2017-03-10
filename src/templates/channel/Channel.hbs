@@ -12,7 +12,7 @@
 <div class="stats online">
 <span title="{{stream.titleCreatedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now stream.created_at interval=60000}}</span>
 <span title="{{stream.titleViewers}}"><i class="fa fa-users"></i> {{format-viewers stream.viewers}}</span>
-<span><i class="fa fa-gamepad"></i> {{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</span>
+{{#if stream.game}}<span><i class="fa fa-gamepad"></i> {{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</span>{{/if}}
 </div>
 {{else}}
 <div class="stats offline"><i class="fa fa-bed"></i> is offline right now</div>
