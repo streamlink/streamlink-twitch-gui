@@ -23,6 +23,10 @@ ApplicationRouter.map(function() {
 		this.route( "game", { path: "/:game" } );
 	});
 
+	this.route( "communities", function() {
+		this.route( "community", { path: "/:community_id" } );
+	});
+
 	this.route( "channels" );
 
 	this.route( "channel", { path: "/channel/:channel" }, function() {

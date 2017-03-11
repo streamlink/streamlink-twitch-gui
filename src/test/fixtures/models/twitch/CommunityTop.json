@@ -1,0 +1,27 @@
+{
+	"request": {
+		"url": "https://api.twitch.tv/kraken/communities/top",
+		"method": "GET",
+		"query": {}
+	},
+	"response": {
+		"_cursor": "foo",
+		"_total": 1000,
+		"communities": [
+			{
+				"avatar_image_url": "avatar-1",
+				"channels": 100,
+				"_id": "deadbeef-1337-4444-beef-1337deadbeef",
+				"name": "First community",
+				"viewers": 100
+			},
+			{
+				"avatar_image_url": "avatar-2",
+				"channels": 10,
+				"_id": "deadc0de-1337-4444-beef-1337deadc0de",
+				"name": "Second community",
+				"viewers": 10
+			}
+		]
+	}
+}
