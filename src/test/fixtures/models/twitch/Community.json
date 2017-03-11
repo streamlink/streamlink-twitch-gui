@@ -1,0 +1,22 @@
+{
+	"by-id": {
+		"request": {
+			"url": "https://api.twitch.tv/kraken/communities/deadbeef-1337-4444-beef-1337deadbeef",
+			"method": "GET",
+			"query": null
+		},
+		"response": {
+			"_id": "deadbeef-1337-4444-beef-1337deadbeef",
+			"owner_id": "1",
+			"name": "Test community",
+			"summary": "A community for testing the model, adapter and serializer",
+			"description": "Markdown description",
+			"description_html": "HTML description",
+			"rules": "Markdown rules",
+			"rules_html": "HTML rules",
+			"language": "EN",
+			"avatar_image_url": "avatar",
+			"cover_image_url": "cover"
+		}
+	}
+}
