@@ -1,0 +1,14 @@
+<main class="content content-communitiescommunity">
+<header>
+<h2>{{model.community.name}}</h2>
+{{headline-totals model.streams.meta.total}}
+{{#quick-bar}}
+{{quick-bar-homepage}}
+{{/quick-bar}}
+</header>
+{{#content-list model.streams as |item isNewItem isDuplicateItem|}}
+{{stream-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem showGame=false}}
+{{else}}
+<p>The returned list of streams of this community is empty.</p>
+{{/content-list}}
+</main>

@@ -81,6 +81,11 @@ import TwitchTeam from "models/twitch/Team";
 import TwitchTeamAdapter from "models/twitch/TeamAdapter";
 import TwitchTeamSerializer from "models/twitch/TeamSerializer";
 
+import TwitchCommunity from "models/twitch/Community";
+import TwitchCommunitySerializer from "models/twitch/CommunitySerializer";
+import TwitchCommunityTop from "models/twitch/CommunityTop";
+import TwitchCommunityTopSerializer from "models/twitch/CommunityTopSerializer";
+
 import IsEqualHelper from "helpers/IsEqualHelper";
 import IsNullHelper from "helpers/IsNullHelper";
 import IsGtHelper from "helpers/IsGtHelper";
@@ -157,6 +162,7 @@ import ModalNewreleaseComponent from "components/modal/ModalNewreleaseComponent"
 import ModalQuitComponent from "components/modal/ModalQuitComponent";
 
 import ContentListComponent from "components/list/ContentListComponent";
+import CommunityItemComponent from "components/list/CommunityItemComponent";
 import ChannelItemComponent from "components/list/ChannelItemComponent";
 import GameItemComponent from "components/list/GameItemComponent";
 import HeadlineTotalsComponent from "components/list/HeadlineTotalsComponent";
@@ -206,6 +212,13 @@ import GamesIndexTemplate from "templates/games/GamesIndex.hbs";
 import GamesGameRoute from "routes/GamesGameRoute";
 import GamesGameController from "controllers/GamesGameController";
 import GamesGameTemplate from "templates/games/GamesGame.hbs";
+
+import CommunitiesLoadingRoute from "routes/LoadingRoute";
+import CommunitiesLoadingTemplate from "templates/Loading.hbs";
+import CommunitiesIndexRoute from "routes/CommunitiesIndexRoute";
+import CommunitiesIndexTemplate from "templates/communities/CommunitiesIndex.hbs";
+import CommunitiesCommunityRoute from "routes/CommunitiesCommunityRoute";
+import CommunitiesCommunityTemplate from "templates/communities/CommunitiesCommunity.hbs";
 
 import ChannelsRoute from "routes/ChannelsRoute";
 import ChannelsController from "controllers/ChannelsController";
@@ -410,6 +423,11 @@ export default Application.create({
 	TwitchTeamAdapter,
 	TwitchTeamSerializer,
 
+	TwitchCommunity,
+	TwitchCommunitySerializer,
+	TwitchCommunityTop,
+	TwitchCommunityTopSerializer,
+
 
 	// Helpers
 	IsEqualHelper,
@@ -493,6 +511,7 @@ export default Application.create({
 	ModalQuitComponent,
 
 	ContentListComponent,
+	CommunityItemComponent,
 	ChannelItemComponent,
 	GameItemComponent,
 	HeadlineTotalsComponent,
@@ -544,6 +563,13 @@ export default Application.create({
 	GamesGameRoute,
 	GamesGameController,
 	GamesGameTemplate,
+
+	CommunitiesLoadingRoute,
+	CommunitiesLoadingTemplate,
+	CommunitiesIndexRoute,
+	CommunitiesIndexTemplate,
+	CommunitiesCommunityRoute,
+	CommunitiesCommunityTemplate,
 
 	ChannelsRoute,
 	ChannelsController,
