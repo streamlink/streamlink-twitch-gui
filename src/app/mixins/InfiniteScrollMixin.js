@@ -7,30 +7,35 @@ import {
 } from "Ember";
 
 
-var CSSMediaRule     = window.CSSMediaRule;
-var CSSStyleRule     = window.CSSStyleRule;
+const CSSMediaRule = window.CSSMediaRule;
+const CSSStyleRule = window.CSSStyleRule;
 // lessCSS sorts media queries alphabetically, so we need to reverse the order here
-var reMinWidth       = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/;
-var cachedMinWidths  = {};
+const reMinWidth = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/;
+const cachedMinWidths = {};
 
-var styleSheetsRules = [].reduce.call( document.styleSheets, function( rules, stylesheet ) {
-	rules.push( ...[].slice.call( stylesheet.rules ) );
+const styleSheetsRules = [ ...document.styleSheets ].reduce( ( rules, stylesheet ) => {
+	rules.push( ...stylesheet.rules );
 	return rules;
 }, [] );
 
-var cssMinWidthRules = [].filter.call( styleSheetsRules, function( rule ) {
-	return rule instanceof CSSMediaRule
-	    && rule.media.length === 1
-	    && reMinWidth.test( rule.media[0] )
-	    && rule.cssRules.length > 0;
-});
-var cachedMinHeights = [].filter.call( styleSheetsRules, function( rule ) {
-	return rule instanceof CSSStyleRule
-	    && rule.style.minHeight !== "";
-}).reduce(function( cache, rule ) {
-	cache[ rule.selectorText ] = parseInt( rule.style.minHeight, 10 );
-	return cache;
-}, {} );
+const cssMinWidthRules = styleSheetsRules
+	.filter( rule =>
+		   rule instanceof CSSMediaRule
+		&& rule.media.length === 1
+		&& reMinWidth.test( rule.media[ 0 ] )
+		&& rule.cssRules.length > 0
+	);
+const cachedMinHeights = styleSheetsRules
+	.filter( rule =>
+		   rule instanceof CSSStyleRule
+		&& rule.style.minHeight !== ""
+	)
+	.reduce( ( cache, rule ) => {
+		rule.selectorText.split( "," ).forEach( selector => {
+			cache[ selector.trim() ] = parseInt( rule.style.minHeight, 10 );
+		});
+		return cache;
+	}, {} );
 
 /**
  * Generate a list of all min-width media queries and their item widths for a specific selector.
@@ -41,20 +46,16 @@ function readMinWidths( selector ) {
 		return cachedMinWidths[ selector ];
 	}
 
-	var data = cssMinWidthRules.filter(function( rule ) {
-		return rule.cssRules[0].selectorText === selector;
-	});
+	let data = cssMinWidthRules.filter( rule => rule.cssRules[ 0 ].selectorText === selector );
 
 	if ( !data.length ) {
 		throw new Error( "Invalid selector" );
 	}
 
-	data = data.map( function( rule ) {
-		return {
-			minWidth: Math.floor( reMinWidth.exec( rule.media[0] )[1] ),
-			numItems: Math.floor( 100 / parseInt( rule.cssRules[0].style.width ) )
-		};
-	});
+	data = data.map( rule => ({
+		minWidth: Math.floor( reMinWidth.exec( rule.media[0] )[1] ),
+		numItems: Math.floor( 100 / parseInt( rule.cssRules[0].style.width ) )
+	}) );
 
 	return ( cachedMinWidths[ selector ] = data );
 }
@@ -67,15 +68,16 @@ function readMinHeights( selector ) {
 }
 
 function getNeededColumns( selector ) {
-	return readMinWidths( selector ).reduce(function( current, next ) {
-		return window.innerWidth < next.minWidth
+	return readMinWidths( selector )
+		.reduce( ( current, next ) => window.innerWidth < next.minWidth
 			? current
-			: next;
-	}).numItems;
+			: next
+		)
+		.numItems;
 }
 
 function getNeededRows( selector ) {
-	var minHeight = readMinHeights( selector );
+	const minHeight = readMinHeights( selector );
 	return 1 + Math.ceil( getItemContainer().clientHeight / minHeight );
 }
 
