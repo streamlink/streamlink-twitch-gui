@@ -17,12 +17,12 @@ export default Route.extend( InfiniteScrollMixin, {
 		const users = get( model, "users" );
 		const overall = get( users, "length" );
 
-		const offset = get( this, "offset" );
+		const offset = get( this, "customOffset" ) || 0;
 		const limit = get( this, "limit" );
 
 		let offsetCalculated = false;
 
-		const fill = start => {
+		const fill = ( streamArray, start ) => {
 			const end = start + limit;
 			const channels = users.slice( start, end );
 
@@ -31,17 +31,20 @@ export default Route.extend( InfiniteScrollMixin, {
 					.catch( () => false )
 			) )
 				.then( toArray() )
+				// filter offline streams
 				.then( streams => streams.filter( Boolean ) )
+				// append to overall list
+				.then( streams => streamArray.concat( streams ) )
+				// fetch more if necessary
 				.then( streams => streams.length >= limit || end >= overall
 					? streams
-					: fill( end )
-						.then( newStreams => streams.concat( newStreams ) )
+					: fill( streams, end )
 				)
 				.then( streams => {
 					// The InfiniteScrollMixin uses a computed property for calculating the offset.
 					// Manually keep track of the offset here...
 					if ( !offsetCalculated ) {
-						set( this, "offset", end );
+						set( this, "customOffset", end );
 						offsetCalculated = true;
 					}
 
@@ -49,7 +52,19 @@ export default Route.extend( InfiniteScrollMixin, {
 				});
 		};
 
-		return fill( offset )
+		return fill( [], offset )
 			.then( preload( "preview.mediumLatest" ) );
+	},
+
+	reload() {
+		set( this, "customOffset", 0 );
+
+		return this._super( ...arguments );
+	},
+
+	deactivate() {
+		set( this, "customOffset", 0 );
+
+		return this._super( ...arguments );
 	}
 });
