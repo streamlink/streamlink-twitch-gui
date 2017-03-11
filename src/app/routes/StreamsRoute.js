@@ -15,11 +15,12 @@ export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, RefreshRo
 	modelName: "twitchStream",
 
 	model() {
-		return get( this, "store" ).query( this.modelName, {
-			offset              : get( this, "offset" ),
-			limit               : get( this, "limit" ),
-			broadcaster_language: get( this, "broadcaster_language" )
-		})
+		const store = get( this, "store" );
+		const offset = get( this, "offset" );
+		const limit = get( this, "limit" );
+		const broadcaster_language = get( this, "broadcaster_language" );
+
+		return store.query( this.modelName, { offset, limit, broadcaster_language })
 			.then( toArray() )
 			.then( preload( "preview.mediumLatest" ) );
 	}

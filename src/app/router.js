@@ -27,7 +27,7 @@ ApplicationRouter.map(function() {
 		this.route( "community", { path: "/:community_id" } );
 	});
 
-	this.route( "channels" );
+	this.route( "streams" );
 
 	this.route( "channel", { path: "/channel/:channel" }, function() {
 		this.route( "teams" );

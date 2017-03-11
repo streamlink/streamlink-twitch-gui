@@ -220,9 +220,8 @@ import CommunitiesIndexTemplate from "templates/communities/CommunitiesIndex.hbs
 import CommunitiesCommunityRoute from "routes/CommunitiesCommunityRoute";
 import CommunitiesCommunityTemplate from "templates/communities/CommunitiesCommunity.hbs";
 
-import ChannelsRoute from "routes/ChannelsRoute";
-import ChannelsController from "controllers/ChannelsController";
-import ChannelsTemplate from "templates/Channels.hbs";
+import StreamsRoute from "routes/StreamsRoute";
+import StreamsTemplate from "templates/Streams.hbs";
 
 import ChannelRoute from "routes/ChannelRoute";
 import ChannelController from "controllers/ChannelController";
@@ -571,9 +570,8 @@ export default Application.create({
 	CommunitiesCommunityRoute,
 	CommunitiesCommunityTemplate,
 
-	ChannelsRoute,
-	ChannelsController,
-	ChannelsTemplate,
+	StreamsRoute,
+	StreamsTemplate,
 
 	ChannelRoute,
 	ChannelController,
