@@ -215,8 +215,13 @@ import GamesGameTemplate from "templates/games/GamesGame.hbs";
 
 import CommunitiesLoadingRoute from "routes/LoadingRoute";
 import CommunitiesLoadingTemplate from "templates/Loading.hbs";
-import CommunitiesIndexRoute from "routes/CommunitiesIndexRoute";
 import CommunitiesIndexTemplate from "templates/communities/CommunitiesIndex.hbs";
+import CommunitiesIndexLoadingRoute from "routes/LoadingRoute";
+import CommunitiesIndexLoadingTemplate from "templates/Loading.hbs";
+import CommunitiesIndexIndexRoute from "routes/CommunitiesIndexIndexRoute";
+import CommunitiesIndexIndexTemplate from "templates/communities/CommunitiesIndexIndex.hbs";
+import CommunitiesIndexAllRoute from "routes/CommunitiesIndexAllRoute";
+import CommunitiesIndexAllTemplate from "templates/communities/CommunitiesIndexAll.hbs";
 import CommunitiesCommunityRoute from "routes/CommunitiesCommunityRoute";
 import CommunitiesCommunityTemplate from "templates/communities/CommunitiesCommunity.hbs";
 
@@ -565,8 +570,13 @@ export default Application.create({
 
 	CommunitiesLoadingRoute,
 	CommunitiesLoadingTemplate,
-	CommunitiesIndexRoute,
 	CommunitiesIndexTemplate,
+	CommunitiesIndexLoadingRoute,
+	CommunitiesIndexLoadingTemplate,
+	CommunitiesIndexIndexRoute,
+	CommunitiesIndexIndexTemplate,
+	CommunitiesIndexAllRoute,
+	CommunitiesIndexAllTemplate,
 	CommunitiesCommunityRoute,
 	CommunitiesCommunityTemplate,
 

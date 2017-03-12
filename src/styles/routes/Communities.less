@@ -1,0 +1,19 @@
+
+main.content.content-communities {
+	.flexbox( column );
+	overflow-x: hidden;
+
+	> :not(.content-loading) {
+		animation: animFadeInRight .333s ease-out;
+	}
+
+	> .content-loading,
+	> section:last-of-type {
+		flex-grow: 1;
+	}
+
+	// move submenu loading spinner up to match the height of the one of the channel route
+	> .content-loading {
+		margin-top: -7rem;
+	}
+}

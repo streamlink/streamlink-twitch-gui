@@ -1,0 +1,5 @@
+{{#content-list model as |item isNewItem isDuplicateItem|}}
+{{community-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
+{{else}}
+<p>The returned list of featured communities is empty.</p>
+{{/content-list}}
