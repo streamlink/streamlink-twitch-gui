@@ -28,7 +28,10 @@ ApplicationRouter.map(function() {
 			this.route( "index", { path: "/featured" } );
 			this.route( "all", { path: "/all" } );
 		});
-		this.route( "community", { path: "/community/:community_id" } );
+		this.route( "community", { path: "/community/:community_id" }, function() {
+			this.route( "index" );
+			this.route( "info" );
+		});
 	});
 
 	this.route( "streams" );

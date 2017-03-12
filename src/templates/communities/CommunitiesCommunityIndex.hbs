@@ -1,0 +1,5 @@
+{{#content-list model as |item isNewItem isDuplicateItem|}}
+{{stream-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
+{{else}}
+<p>The returned list of streams of this community is empty.</p>
+{{/content-list}}

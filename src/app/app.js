@@ -132,6 +132,7 @@ import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
 import LinkComponent from "components/link/LinkComponent";
 import DocumentationLinkComponent from "components/link/DocumentationLinkComponent";
+import FindInternalLinksComponent from "components/link/FindInternalLinksComponent";
 
 import CheckBoxComponent from "components/form/CheckBoxComponent";
 import RadioBtnComponent from "components/form/RadioBtnComponent";
@@ -224,6 +225,12 @@ import CommunitiesIndexAllRoute from "routes/CommunitiesIndexAllRoute";
 import CommunitiesIndexAllTemplate from "templates/communities/CommunitiesIndexAll.hbs";
 import CommunitiesCommunityRoute from "routes/CommunitiesCommunityRoute";
 import CommunitiesCommunityTemplate from "templates/communities/CommunitiesCommunity.hbs";
+import CommunitiesCommunityLoadingRoute from "routes/LoadingRoute";
+import CommunitiesCommunityLoadingTemplate from "templates/Loading.hbs";
+import CommunitiesCommunityIndexRoute from "routes/CommunitiesCommunityIndexRoute";
+import CommunitiesCommunityIndexTemplate from "templates/communities/CommunitiesCommunityIndex.hbs";
+import CommunitiesCommunityInfoRoute from "routes/CommunitiesCommunityInfoRoute";
+import CommunitiesCommunityInfoTemplate from "templates/communities/CommunitiesCommunityInfo.hbs";
 
 import StreamsRoute from "routes/StreamsRoute";
 import StreamsTemplate from "templates/Streams.hbs";
@@ -485,6 +492,7 @@ export default Application.create({
 	ExternalLinkComponent,
 	LinkComponent,
 	DocumentationLinkComponent,
+	FindInternalLinksComponent,
 
 	CheckBoxComponent,
 	RadioBtnComponent,
@@ -579,6 +587,12 @@ export default Application.create({
 	CommunitiesIndexAllTemplate,
 	CommunitiesCommunityRoute,
 	CommunitiesCommunityTemplate,
+	CommunitiesCommunityLoadingRoute,
+	CommunitiesCommunityLoadingTemplate,
+	CommunitiesCommunityIndexRoute,
+	CommunitiesCommunityIndexTemplate,
+	CommunitiesCommunityInfoRoute,
+	CommunitiesCommunityInfoTemplate,
 
 	StreamsRoute,
 	StreamsTemplate,

@@ -15,9 +15,18 @@ export default TwitchSerializer.extend({
 	},
 
 	normalize( modelClass, resourceHash, prop ) {
-		// rename owner_id property
+		// rename properties
 		resourceHash[ "owner" ] = resourceHash[ "owner_id" ];
 		delete resourceHash[ "owner_id" ];
+
+		resourceHash[ "description" ] = resourceHash[ "description_html" ];
+		delete resourceHash[ "description_html" ];
+
+		resourceHash[ "rules" ] = resourceHash[ "rules_html" ];
+		delete resourceHash[ "rules_html" ];
+
+		// fix language format
+		resourceHash[ "language" ] = ( resourceHash[ "language" ] || "" ).toLowerCase();
 
 		return this._super( modelClass, resourceHash, prop );
 	}

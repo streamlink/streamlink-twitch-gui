@@ -1,0 +1,13 @@
+<section class="content-communities-community-info">
+{{preview-image src=model.avatar_image_url title=channel.display_name classNames="logo"}}
+{{#selectable-text classNames="text"}}
+<h3>Created by</h3>
+{{#link-to "channel" model.owner.id}}{{model.owner.display_name}}{{/link-to}}
+<h3>Summary</h3>
+{{embedded-links text=model.summary}}
+<h3>Description</h3>
+{{#find-internal-links classNames="user-content"}}{{{model.description}}}{{/find-internal-links}}
+<h3>Rules</h3>
+{{#find-internal-links classNames="user-content"}}{{{model.rules}}}{{/find-internal-links}}
+{{/selectable-text}}
+</section>

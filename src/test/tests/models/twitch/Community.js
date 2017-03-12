@@ -65,9 +65,9 @@ test( "Adapter and Serializer", assert => {
 					owner: "1",
 					name: "Test community",
 					summary: "A community for testing the model, adapter and serializer",
-					description: "Markdown description",
-					rules: "Markdown rules",
-					language: "EN",
+					description: "HTML description",
+					rules: "HTML rules",
+					language: "en",
 					avatar_image_url: "avatar",
 					cover_image_url: "cover"
 				},
