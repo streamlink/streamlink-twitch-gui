@@ -283,6 +283,8 @@ import TeamIndexRoute from "routes/TeamIndexRoute";
 import TeamIndexTemplate from "templates/team/TeamIndex.hbs";
 import TeamMembersRoute from "routes/TeamMembersRoute";
 import TeamMembersTemplate from "templates/team/TeamMembers.hbs";
+import TeamInfoRoute from "routes/TeamInfoRoute";
+import TeamInfoTemplate from "templates/team/TeamInfo.hbs";
 
 import SettingsRoute from "routes/SettingsRoute";
 import SettingsController from "controllers/SettingsController";
@@ -642,6 +644,8 @@ export default Application.create({
 	TeamIndexTemplate,
 	TeamMembersRoute,
 	TeamMembersTemplate,
+	TeamInfoRoute,
+	TeamInfoTemplate,
 
 	SettingsRoute,
 	SettingsController,

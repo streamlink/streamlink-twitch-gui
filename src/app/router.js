@@ -56,6 +56,7 @@ ApplicationRouter.map(function() {
 	this.route( "team", { path: "/team/:team" }, function() {
 		this.route( "index", { path: "/live" } );
 		this.route( "members", { path: "/members" } );
+		this.route( "info", { path: "/info" } );
 	});
 
 	this.route( "settings", function() {

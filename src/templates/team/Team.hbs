@@ -3,19 +3,19 @@
 {{preview-image src=content.logo title=model.display_name classNames="logo"}}
 <div class="info">
 <h3 class="title">{{model.title}}</h3>
-<div class="stats">
-<span title="Number of team members"><i class="fa fa-users"></i> {{model.users.length}}</span>
-<span title="Date created"><i class="fa fa-calendar"></i> {{format-time model.created_at "llll"}}</span>
-<span title="Modified last"><i class="fa fa-pencil"></i> {{format-time model.updated_at "llll"}}</span>
-</div>
-<div class="status">{{model.infoText}}</div>
+<div class="stats"><i class="fa fa-fw fa-users"></i> Team members: {{model.users.length}}</div>
+<div class="stats"><i class="fa fa-fw fa-calendar"></i> Date created: {{format-time model.created_at "llll"}}</div>
+<div class="stats"><i class="fa fa-fw fa-pencil"></i> Modified last: {{format-time model.updated_at "llll"}}</div>
 </div>
 </header>
 {{#sub-menu "team" (hash
-	index="Live members"
-	members="All members"
+	index="Live Members"
+	members="All Members"
+	info=(if model.info "Team Infos" false)
 ) as |subroute name|}}
-	{{#link-to (concat "team." subroute) model tagName="li"}}{{name}}{{/link-to}}
+	{{#if name}}
+		{{#link-to (concat "team." subroute) model tagName="li"}}{{name}}{{/link-to}}
+	{{/if}}
 {{/sub-menu}}
 {{outlet}}
 </main>

@@ -19,14 +19,5 @@ export default TwitchSerializer.extend({
 		};
 
 		return this._super( store, primaryModelClass, payload, id, requestType );
-	},
-
-	normalize( modelClass, resourceHash, prop ) {
-		// fix payload format
-		//if ( !resourceHash.users ) {
-		//	resourceHash.users = [];
-		//}
-
-		return this._super( modelClass, resourceHash, prop );
 	}
 });

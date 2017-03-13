@@ -223,21 +223,4 @@ test( "Computed properties", assert => {
 		"Shows the display_name attribute when it exists"
 	);
 
-
-	// infoText
-
-	assert.strictEqual(
-		get( record, "infoText" ),
-		"",
-		"Shows an empty text when the info attribute is missing"
-	);
-
-	run( () => set( record, "info", "<p><a href='//localhost'>I'm a link</a> and I'm not</p>" ) );
-	assert.strictEqual(
-		get( record, "infoText" ),
-		"I'm a link and I'm not",
-		"Removes HTML from the info attribute"
-	);
-
 });
-
