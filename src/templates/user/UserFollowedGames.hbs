@@ -1,23 +1,15 @@
 <main class="content content-user content-user-followed-games">
 <header>
-<h2>{{#if (is-equal all "true")}}All Followed Games{{else}}Followed Live Games{{/if}}</h2>
-{{headline-totals model.meta.total}}
+<h2>Followed Games</h2>
 {{#quick-bar}}
-{{form-button
-	action=(action "toggleAll")
-	class=(unless (is-equal all "true") "active")
-	icon="fa-video-camera"
-	title=(if (is-equal all "true") "Show games with live channels" "Show all followed games")
-}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#content-list model as |item isNewItem isDuplicateItem|}}
-{{game-item content=item gamePath=gamePath isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
-{{else}}
-<p>The returned list of followed games is empty.</p>
-<ul class="fa-ul list-empty">
-<li>{{#link-to "games"}}<i class="fa fa-li fa-caret-right"></i>Watch top games{{/link-to}}</li>
-</ul>
-{{/content-list}}
+{{#sub-menu menus=(hash
+	index="Live Games"
+	all="All Games"
+) as |subroute name|}}
+	{{#link-to (concat "user.followedGames." subroute) tagName="li"}}{{name}}{{/link-to}}
+{{/sub-menu}}
+{{outlet}}
 </main>

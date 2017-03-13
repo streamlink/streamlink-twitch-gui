@@ -47,7 +47,10 @@ ApplicationRouter.map(function() {
 		this.route( "followedStreams" );
 		this.route( "hostedStreams" );
 		this.route( "followedChannels" );
-		this.route( "followedGames" );
+		this.route( "followedGames", function() {
+			this.route( "index", { path: "/live" } );
+			this.route( "all", { path: "/all" } );
+		});
 	});
 
 	this.route( "team", { path: "/team/:team" }, function() {

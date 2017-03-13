@@ -271,8 +271,13 @@ import UserFollowedChannelsRoute from "routes/UserFollowedChannelsRoute";
 import UserFollowedChannelsController from "controllers/UserFollowedChannelsController";
 import UserFollowedChannelsTemplate from "templates/user/UserFollowedChannels.hbs";
 import UserFollowedGamesRoute from "routes/UserFollowedGamesRoute";
-import UserFollowedGamesController from "controllers/UserFollowedGamesController";
 import UserFollowedGamesTemplate from "templates/user/UserFollowedGames.hbs";
+import UserFollowedGamesLoadingRoute from "routes/LoadingRoute";
+import UserFollowedGamesLoadingTemplate from "templates/Loading.hbs";
+import UserFollowedGamesIndexRoute from "routes/UserFollowedGamesIndexRoute";
+import UserFollowedGamesIndexTemplate from "templates/user/UserFollowedGamesIndex.hbs";
+import UserFollowedGamesAllRoute from "routes/UserFollowedGamesAllRoute";
+import UserFollowedGamesAllTemplate from "templates/user/UserFollowedGamesAll.hbs";
 
 import TeamRoute from "routes/TeamRoute";
 import TeamTemplate from "templates/team/Team.hbs";
@@ -633,8 +638,13 @@ export default Application.create({
 	UserFollowedChannelsController,
 	UserFollowedChannelsTemplate,
 	UserFollowedGamesRoute,
-	UserFollowedGamesController,
 	UserFollowedGamesTemplate,
+	UserFollowedGamesLoadingRoute,
+	UserFollowedGamesLoadingTemplate,
+	UserFollowedGamesIndexRoute,
+	UserFollowedGamesIndexTemplate,
+	UserFollowedGamesAllRoute,
+	UserFollowedGamesAllTemplate,
 
 	TeamRoute,
 	TeamTemplate,
