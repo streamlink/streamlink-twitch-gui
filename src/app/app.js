@@ -243,12 +243,8 @@ import ChannelLoadingTemplate from "templates/Loading.hbs";
 import ChannelIndexRoute from "routes/ChannelIndexRoute";
 import ChannelIndexController from "controllers/ChannelIndexController";
 import ChannelIndexTemplate from "templates/channel/ChannelIndex.hbs";
-import ChannelIndexLoadingRoute from "routes/LoadingRoute";
-import ChannelIndexLoadingTemplate from "templates/Loading.hbs";
 import ChannelTeamsRoute from "routes/ChannelTeamsRoute";
 import ChannelTeamsTemplate from "templates/channel/ChannelTeams.hbs";
-import ChannelTeamsLoadingRoute from "routes/LoadingRoute";
-import ChannelTeamsLoadingTemplate from "templates/Loading.hbs";
 import ChannelSettingsRoute from "routes/ChannelSettingsRoute";
 import ChannelSettingsController from "controllers/ChannelSettingsController";
 import ChannelSettingsTemplate from "templates/channel/ChannelSettings.hbs";
@@ -285,12 +281,8 @@ import TeamLoadingRoute from "routes/LoadingRoute";
 import TeamLoadingTemplate from "templates/Loading.hbs";
 import TeamIndexRoute from "routes/TeamIndexRoute";
 import TeamIndexTemplate from "templates/team/TeamIndex.hbs";
-import TeamIndexLoadingRoute from "routes/LoadingRoute";
-import TeamIndexLoadingTemplate from "templates/Loading.hbs";
 import TeamMembersRoute from "routes/TeamMembersRoute";
 import TeamMembersTemplate from "templates/team/TeamMembers.hbs";
-import TeamMembersLoadingRoute from "routes/LoadingRoute";
-import TeamMembersLoadingTemplate from "templates/Loading.hbs";
 
 import SettingsRoute from "routes/SettingsRoute";
 import SettingsController from "controllers/SettingsController";
@@ -610,12 +602,8 @@ export default Application.create({
 	ChannelIndexRoute,
 	ChannelIndexController,
 	ChannelIndexTemplate,
-	ChannelIndexLoadingRoute,
-	ChannelIndexLoadingTemplate,
 	ChannelTeamsRoute,
 	ChannelTeamsTemplate,
-	ChannelTeamsLoadingRoute,
-	ChannelTeamsLoadingTemplate,
 	ChannelSettingsRoute,
 	ChannelSettingsController,
 	ChannelSettingsTemplate,
@@ -652,12 +640,8 @@ export default Application.create({
 	TeamLoadingTemplate,
 	TeamIndexRoute,
 	TeamIndexTemplate,
-	TeamIndexLoadingRoute,
-	TeamIndexLoadingTemplate,
 	TeamMembersRoute,
 	TeamMembersTemplate,
-	TeamMembersLoadingRoute,
-	TeamMembersLoadingTemplate,
 
 	SettingsRoute,
 	SettingsController,
