@@ -4,7 +4,7 @@
 <h3>Created by</h3>
 {{#link-to "channel" model.owner.id}}{{model.owner.display_name}}{{/link-to}}
 <h3>Summary</h3>
-{{embedded-links text=model.summary}}
+{{embedded-links text=model.summary classNames="user-content"}}
 <h3>Description</h3>
 {{#find-internal-links classNames="user-content"}}{{{model.description}}}{{/find-internal-links}}
 <h3>Rules</h3>
