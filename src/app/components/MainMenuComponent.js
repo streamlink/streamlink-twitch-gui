@@ -19,12 +19,13 @@ const routeHotkeys = {
 	"settings": "F12",
 	"featured": [ "Numpad1", "Digit1" ],
 	"games": [ "Numpad2", "Digit2" ],
-	"channels": [ "Numpad3", "Digit3" ],
-	"user.subscriptions": [ "Numpad4", "Digit4" ],
-	"user.followedStreams": [ "Numpad5", "Digit5" ],
-	"user.hostedStreams": [ "Numpad6", "Digit6" ],
-	"user.followedChannels": [ "Numpad7", "Digit7" ],
-	"user.followedGames": [ "Numpad8", "Digit8" ]
+	"communities": [ "Numpad3", "Digit3" ],
+	"streams": [ "Numpad4", "Digit4" ],
+	"user.subscriptions": [ "Numpad5", "Digit5" ],
+	"user.followedStreams": [ "Numpad6", "Digit6" ],
+	"user.hostedStreams": [ "Numpad7", "Digit7" ],
+	"user.followedChannels": [ "Numpad8", "Digit8" ],
+	"user.followedGames": [ "Numpad9", "Digit9" ]
 };
 
 function refresh() {
