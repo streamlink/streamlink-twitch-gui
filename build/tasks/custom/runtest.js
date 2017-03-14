@@ -32,7 +32,15 @@ module.exports = function( grunt ) {
 
 		function kill() {
 			if ( nwjs.isAppRunning() ) {
-				nwjs.getAppProcess().kill();
+				var appProcess = nwjs.getAppProcess();
+
+				// workaround for the close event log message
+				appProcess.removeAllListeners( "close" );
+				nwjs._nwProcess = undefined;
+
+				// now kill the child process
+				appProcess.kill();
+
 				grunt.log.debug( "NW.js stopped" );
 				process.removeListener( "exit", kill );
 			}
