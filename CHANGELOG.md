@@ -1,6 +1,30 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Upgraded to Twitch API v5.
+- Implemented Communities. #409
+- Implemented Teams. #93
+- Implemented unfollow channel/game confirmation. #344
+- Implemented basic hotkeys. #399
+- Restructured main menu.
+- Restructured channel pages and the followed games menu.
+- Removed max values from stream launch attempt settings. #401
+- Fixed language filters not being updated after saving settings.
+- Fixed duplicate streams detection.
+- Fixed graphic glitches on Windows. #357
+- Fixed VLC player preset on MacOS. #388
+- Fixed invisible content when shrinking app window beyond its min width. #411
+- Fixed notification types other than "auto" using fallbacks.
+- Fixed substitutions in custom player window titles.
+- Upgraded NW.js to 0.20.0.
+- Several other bugfixes and improvements.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.1.1...master)
+
+
 ## [v1.1.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.1.1) (2017-01-01)
 
 - Fixed Livestreamer standalone validation. #386
