@@ -6,8 +6,8 @@
 		"streamlink": "0.2.0"
 	},
 	"download-url": {
-		"livestreamer": "https://github.com/chrippa/livestreamer/releases",
-		"streamlink": "https://github.com/streamlink/streamlink/releases"
+		"livestreamer": "http://docs.livestreamer.io/install.html",
+		"streamlink": "https://streamlink.github.io/install.html"
 	},
 	"docs-url": {
 		"livestreamer": "http://docs.livestreamer.io/cli.html#cmdoption{item}",
