@@ -7,9 +7,9 @@ Streamlink Twitch GUI
 [![Streamlink Twitch GUI][Preview]][Releases]
 
 
-## The application has been renamed
+## Livestreamer Twitch GUI has been renamed
 
-*Streamlink Twitch GUI*, previously known as *Livestreamer Twitch GUI*, has been renamed in early december 2016. A statement about this change can be found in the thread ["The future of Livestreamer Twitch GUI"][Application-rename].
+*Streamlink Twitch GUI*, previously known as *Livestreamer Twitch GUI*, has been renamed in early december 2016. A comment regarding this change can be found in the thread ["The future of Livestreamer Twitch GUI"][Application-rename].
 
 
 ## Description
@@ -23,23 +23,27 @@ Streamlink Twitch GUI is a [NW.js][NW.js] application, which means that it is a 
 
 ## Features
 
-* Available for Windows, OSX and Linux (for both x86 and x64)
-* Browse streams by popularity or by different games
+* Available for Windows, MacOS and Linux (for both x86 and x64)
+* Supports both Streamlink as well as the deprecated Livestreamer
+* Browse streams by popularity or by different games, communities and teams
+* Watch streams in the video player of your choice
 * Watch multiple streams at once
-* Customizable settings like video players, stream types, stream bufferings and much more
-* Customizable channel settings
 * Integrated Twitch.tv login with access to subscriptions and followed channels and games
 * Follow your favorite channels and games
-* Desktop notifications
-* Multiple chat methods
-* Stream language filters
+* Filter streams by channel or broadcaster language
+* See desktop notifications whenever a followed channel starts broadcasting
+* Join the Twitch chat with different chat applications
+* Rich settings menu with lots of customizations
+* Individual channel settings
+* Customizable presets for player and chat applications
+* Integrated default and dark themes
 
 
 ## Why
 
-One of the reasons people are having bad viewing experiences on [Twitch.tv][Twitch] is the usage of the flash player on their website. With the current generation of web browsers they sadly almost don't have any other choice but using flash for delivering a simple streaming service. There are some platforms and configurations where flash is causing problems though. These problems are low frame rates when watching streams or videos and also the lack of GPU acceleration leading to high CPU + memory usage which can be a big issue especially for mobile desktop devices.  
-With Streamlink Twitch GUI you're not dependent on your browser and flash, so fewer resources are needed. Also all streams can be watched in the video player of your choice, enabling a smooth video playback.  
-Please have in mind, that by using this application you're bypassing any ads run by Twitch (adblock users also do). If you want to support [Twitch][Twitch] or a single broadcaster, please consider buying [Twitch Turbo][TwitchTurbo] or subscribing to the broadcaster's channel. Thank you!
+One of the reasons for having bad viewing experiences on [Twitch.tv][Twitch] is the usage of the flash player or the experimental HTML5 player on their website. On some systems, this is causing major problems like buffering/stuttering or low video playback frame rates. The reason for this is often the lack of GPU acceleration of the web browser and/or high CPU and memory usage, which can be a big issue especially for mobile desktop devices.  
+With Streamlink Twitch GUI you're not dependent on your web browser. Unlike the official Twitch desktop app, Streamlink Twitch GUI doesn't embed the Twitch.tv website, so fewer resources are needed. Streams can be watched in the video player of your choice, enabling a smooth video playback.  
+Please have in mind, that by using this application you're bypassing any ads run by Twitch (adblock users also do). If you want to support [Twitch][Twitch] or a single broadcaster, please consider buying [Twitch Prime][TwitchPrime] or subscribing to the broadcaster's channel in the regular way. Thank you!
 
 
 ## Download
@@ -97,8 +101,8 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Contributing]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CONTRIBUTING.md
   [Changelog]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CHANGELOG.md
   [Streamlink]: https://github.com/streamlink/streamlink "Streamlink"
-  [Twitch]: http://twitch.tv "Twitch.tv"
-  [TwitchTurbo]: http://twitch.tv/products/turbo "Twitch Turbo"
+  [Twitch]: https://twitch.tv "Twitch.tv"
+  [TwitchPrime]: https://twitch.amazon.com/prime "Twitch Prime"
   [NW.js]: https://github.com/nwjs/nw.js "NW.js"
   [EmberJS]: http://emberjs.com/ "EmberJS"
   [Handlebars]: http://handlebarsjs.com/ "Handlebars.js"
