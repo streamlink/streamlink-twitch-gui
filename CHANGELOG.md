@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.2.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.2.0) (2017-03-17)
 
 - Upgraded to Twitch API v5.
 - Implemented Communities. #409
@@ -22,7 +22,7 @@ Changelog - Streamlink Twitch GUI
 - Several other bugfixes and improvements.
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.1.1...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.1.1...v1.2.0)
 
 
 ## [v1.1.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.1.1) (2017-01-01)
