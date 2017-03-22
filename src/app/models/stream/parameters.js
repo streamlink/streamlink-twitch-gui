@@ -23,7 +23,7 @@ export const playerSubstitutions = [
 	),
 	new Substitution(
 		"delay",
-		"channel.delay",
+		"stream.delay",
 		"Additional stream delay in seconds"
 	),
 	new Substitution(
