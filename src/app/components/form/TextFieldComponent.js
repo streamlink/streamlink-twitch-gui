@@ -52,5 +52,14 @@ export default TextField.extend({
 		if ( !this.attrs.autofocus || !this.attrs.autoselect ) { return; }
 
 		this.element.setSelectionRange( 0, this.element.value.length );
+	},
+
+	keyDown( event ) {
+		if ( event.originalEvent.code === "Escape" ) {
+			this.$().trigger( "blur" );
+			return;
+		}
+
+		return this._super( ...arguments );
 	}
 });
