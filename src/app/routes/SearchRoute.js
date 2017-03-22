@@ -4,7 +4,10 @@ import {
 } from "Ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
-import { mapBy } from "utils/ember/recordArrayMethods";
+import {
+	toArray,
+	mapBy
+} from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
@@ -40,8 +43,8 @@ export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 					type : "suggest",
 					live : true
 				})
-					.then( mapBy( "game" ) )
-					.then( preload( "box.largeLatest" ) )
+					.then( toArray() )
+					.then( preload( "game.box.largeLatest" ) )
 				: Promise.resolve( [] ),
 
 			// search for channels
