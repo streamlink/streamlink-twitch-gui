@@ -14,7 +14,7 @@ export default class NotificationProviderNative extends NotificationProvider {
 		return new Promise( ( resolve, reject ) => {
 			let notification = new window.Notification( data.title, {
 				body: NotificationProvider.getMessageAsString( data.message ),
-				icon: data.icon,
+				icon: `file://${data.icon}`,
 				actions: []
 			});
 
