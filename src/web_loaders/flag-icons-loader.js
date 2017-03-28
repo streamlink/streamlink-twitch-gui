@@ -1,23 +1,15 @@
-var PATH = require( "path" );
-var langs = require( "../config/langs.json" );
-
-var ignore = [ "en" ];
-
 
 module.exports = function( content ) {
-	this.cacheable();
-	this.addDependency( PATH.resolve( "..", "config", "langs.json" ) );
+	const { config, ignore } = this.query;
 
-	var flagIcons = Object.keys( langs )
-		.filter(function( key ) {
-			return ignore.indexOf( key ) === -1;
-		})
-		.map(function( key ) {
-			return ".flag-icon(" + langs[ key ].flag + ");";
-		})
+	const langs = require( config );
+	this.addDependency( config );
+
+	const flagIcons = Object.keys( langs )
+		.filter( key => ignore.indexOf( key ) === -1 )
+		.map( key => `.flag-icon(${langs[ key ].flag});` )
 		.sort()
-		.reduce(function( list, line ) {
-			// n^2 (who cares...)
+		.reduce( ( list, line ) => {
 			if ( list.indexOf( line ) === -1 ) {
 				list.push( line );
 			}
@@ -25,5 +17,5 @@ module.exports = function( content ) {
 		}, [] )
 		.join( "\n" );
 
-	return content + "\n\n\n" + flagIcons;
+	return `${content}\n\n\n${flagIcons}`;
 };

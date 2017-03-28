@@ -1,6 +1,6 @@
 import main from "root/config/main.json";
 import dirs from "root/config/dirs.json";
-import files from "!files-from-json!root/config/files.json";
+import files from "!files-from-json-loader!root/config/files.json";
 import vars from "root/config/vars.json";
 import update from "root/config/update.json";
 import themes from "root/config/themes.json";

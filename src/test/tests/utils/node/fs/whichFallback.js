@@ -3,9 +3,10 @@ import {
 	module,
 	test
 } from "QUnit";
-import resolvePathInjector from "inject?utils/node/platform!utils/node/resolvePath";
-import whichInjector from "inject?utils/node/env-path!utils/node/fs/which";
-import whichFallbackInjector from "inject?-utils/node/fs/stat&-path!utils/node/fs/whichFallback";
+import resolvePathInjector from "inject-loader?utils/node/platform!utils/node/resolvePath";
+import whichInjector from "inject-loader?utils/node/env-path!utils/node/fs/which";
+import whichFallbackInjector
+	from "inject-loader?-utils/node/fs/stat&-path!utils/node/fs/whichFallback";
 import { resolve as r } from "path";
 
 

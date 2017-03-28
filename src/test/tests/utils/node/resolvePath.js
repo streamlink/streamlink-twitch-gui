@@ -3,7 +3,7 @@ import {
 	test
 } from "QUnit";
 import * as path from "stub-path";
-import resolvePathInjector from "inject!utils/node/resolvePath";
+import resolvePathInjector from "inject-loader!utils/node/resolvePath";
 
 
 const modulePlatform = "utils/node/platform";

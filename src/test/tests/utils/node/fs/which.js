@@ -4,7 +4,7 @@ import {
 	test
 } from "QUnit";
 import { isWin } from "utils/node/platform";
-import whichInjector from "inject?utils/node/env-path!utils/node/fs/which";
+import whichInjector from "inject-loader?utils/node/env-path!utils/node/fs/which";
 import {
 	isFile,
 	isExecutable
