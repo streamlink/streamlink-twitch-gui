@@ -132,7 +132,7 @@ const commonLoaders = [
 		test: /\.(jpe?g|png|svg|woff2)$/,
 		loader: "file-loader",
 		options: {
-			name: "[path][name].[ext]"
+			name: "assets/[name].[sha512:hash:base64:8].[ext]"
 		}
 	}
 ];
