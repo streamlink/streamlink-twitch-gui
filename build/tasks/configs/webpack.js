@@ -138,8 +138,8 @@ const commonLoaders = [
 ];
 
 
-// only transpile code that isn't supported yet by the currently used NW.js release
-const loaderBabelDev = {
+// the inject-loader used by some tests requires es2015 modules to be transpiled
+const loaderBabelTest = {
 	test: /\.js$/,
 	exclude: [
 		pModulesNpm,
@@ -171,7 +171,6 @@ const loaderBabelProd = {
 			"babel-plugin-transform-es2015-classes",
 			"babel-plugin-transform-es2015-computed-properties",
 			"babel-plugin-transform-es2015-destructuring",
-			"babel-plugin-transform-es2015-modules-commonjs",
 			"babel-plugin-transform-es2015-parameters",
 			"babel-plugin-transform-es2015-shorthand-properties",
 			"babel-plugin-transform-es2015-spread",
@@ -317,7 +316,6 @@ module.exports = {
 
 		module: {
 			rules: [
-				loaderBabelDev,
 				...commonLoaders
 			]
 		},
@@ -458,7 +456,7 @@ module.exports = {
 
 		module: {
 			rules: [
-				loaderBabelDev,
+				loaderBabelTest,
 				...commonLoaders
 			]
 		},
@@ -504,7 +502,7 @@ module.exports = {
 
 		module: {
 			rules: [
-				loaderBabelDev,
+				loaderBabelTest,
 				...commonLoaders
 			]
 		},
