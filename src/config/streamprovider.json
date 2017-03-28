@@ -50,6 +50,8 @@
 					"%PROGRAMFILES(X86)%\\Streamlink\\bin"
 				],
 				"darwin": [
+					"/usr/bin",
+					"/usr/local/bin",
 					"/Library/Frameworks/Python.framework/Versions/Current/bin"
 				],
 				"linux": [
