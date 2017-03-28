@@ -187,8 +187,15 @@ module.exports = {
 	// the grunt-webpack merges the "options" objects with each task config (nested)
 	options: {
 		stats: {
+			children: false,
 			timings: true,
-			children: false
+			warnings: true
+		},
+
+		performance: {
+			hints: "warning",
+			maxEntrypointSize: Infinity,
+			maxAssetSize: Infinity,
 		},
 
 		context: pRoot,
