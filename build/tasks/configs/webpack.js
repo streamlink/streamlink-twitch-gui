@@ -1,5 +1,4 @@
 const webpack = require( "webpack" );
-//const SplitByPathPlugin = require( "webpack-split-by-path" );
 const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
@@ -243,25 +242,41 @@ module.exports = {
 			// don't split the main module into multiple chunks
 			new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
 
-			// split into chunks by module path
-			/*
-			new SplitByPathPlugin([
-				{
-					name: "vendor.bower",
-					path: pModulesBower
-				},
-				{
-					name: "vendor.npm",
-					path: pModulesNpm
-				},
-				{
-					name: "templates",
-					path: pTemplates
+			// Split "main" entry point into webpack manifest, bower/npm bundles and app code.
+			// Select all modules to be bundled and narrow the selection down in each new chunk.
+			// This looks weird and can probably be improved, but it works...
+			new webpack.optimize.CommonsChunkPlugin({
+				name: "vendor.bower",
+				minChunks({ resource }) {
+					return resource
+						&& (
+							   resource.startsWith( pModulesBower )
+							|| resource.startsWith( pModulesNpm )
+							|| resource.startsWith( pTemplates )
+						);
 				}
-			], {
-				manifest: "index"
 			}),
-			*/
+			new webpack.optimize.CommonsChunkPlugin({
+				name: "vendor.npm",
+				minChunks({ resource }) {
+					return resource
+						&& (
+							   resource.startsWith( pModulesNpm )
+							|| resource.startsWith( pTemplates )
+						);
+				}
+			}),
+			new webpack.optimize.CommonsChunkPlugin({
+				name: "templates",
+				minChunks({ resource }) {
+					return resource
+						&& resource.startsWith( pTemplates );
+				}
+			}),
+			new webpack.optimize.CommonsChunkPlugin({
+				name: "manifest",
+				minChunks: Infinity
+			}),
 
 			// don't include css stylesheets in the js bundle
 			cssExtractTextPlugin,
