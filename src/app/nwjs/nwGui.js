@@ -3,7 +3,6 @@ import nwGui from "nw.gui";
 
 export default nwGui;
 
-/* global -Window */
 export const App = nwGui.App;
 export const Clipboard = nwGui.Clipboard;
 export const Menu = nwGui.Menu;

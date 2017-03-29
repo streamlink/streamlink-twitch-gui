@@ -1,0 +1,68 @@
+{
+	"root": true,
+
+	"extends": "eslint:recommended",
+
+	"parserOptions": {
+		"ecmaVersion": 7,
+		"sourceType": "module"
+	},
+
+	"env": {
+		"es6": true,
+		"commonjs": true,
+		"node": true,
+		"browser": true
+	},
+
+	"globals": {
+		"DEBUG": true
+	},
+
+	"rules": {
+		"no-empty": "off",
+		"no-mixed-spaces-and-tabs": "off",
+
+		"indent": [ "error", "tab", {
+			"SwitchCase": 1
+		}],
+		"linebreak-style": [ "error", "unix" ],
+		"max-len": [ "error", 100, {
+			"tabWidth": 4,
+			"ignoreUrls": true
+		}],
+		"no-trailing-spaces": "error",
+		"eol-last": "error",
+
+		"block-spacing": [ "error", "always" ],
+		"keyword-spacing": [ "error", {
+			"before": true,
+			"after": true
+		}],
+		"space-before-blocks": [ "error", "always" ],
+		"brace-style": [ "error", "1tbs", {
+			"allowSingleLine": true
+		}],
+		"curly": [ "error", "all" ],
+		"guard-for-in": "warn",
+
+		"semi": "error",
+		"no-sequences": "error",
+		"quotes": [ "error", "double" ],
+		"prefer-template": "error",
+		"comma-style": [ "error", "last" ],
+		"comma-dangle": [ "error", "never" ],
+
+		"dot-location": [ "error", "property" ],
+		"operator-linebreak": [ "error", "before" ],
+
+		"eqeqeq": "error",
+		"max-depth": [ "error", { "max": 4 } ],
+
+		"new-cap": [ "error", {
+			"capIsNew": false,
+			"properties": false
+		}],
+		"new-parens": "error"
+	}
+}

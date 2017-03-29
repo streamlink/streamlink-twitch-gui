@@ -1,4 +1,4 @@
-/* jshint quotmark:false */
+/* eslint-disable quotes */
 import {
 	module,
 	test
@@ -85,20 +85,20 @@ test( "Substitutions", assert => {
 	);
 
 	assert.equal(
-		substitute( { foo: '";rm -rf / --preserve-root'  }, foo, '"{foo}"', true ),
-		'"\\";rm -rf / --preserve-root"',
+		substitute( { foo: '";rm -rf / --no-preserve-root'  }, foo, '"{foo}"', true ),
+		'"\\";rm -rf / --no-preserve-root"',
 		"Escape double-quotes inside a double-quotes string"
 	);
 
 	assert.equal(
-		substitute( { foo: "';rm -rf / --preserve-root"  }, foo, "'{foo}'", true ),
-		"'\\';rm -rf / --preserve-root'",
+		substitute( { foo: "';rm -rf / --no-preserve-root"  }, foo, "'{foo}'", true ),
+		"'\\';rm -rf / --no-preserve-root'",
 		"Escape single-quotes inside a single-quotes string"
 	);
 
 	assert.equal(
-		substitute( { foo: ";rm -rf / --preserve-root"  }, foo, '{foo}', true ),
-		'\\;\\r\\m\\ \\-\\r\\f\\ \\/\\ \\-\\-\\p\\r\\e\\s\\e\\r\\v\\e\\-\\r\\o\\o\\t',
+		substitute( { foo: ";rm -rf / --no-preserve-root"  }, foo, '{foo}', true ),
+		'\\;\\r\\m\\ \\-\\r\\f\\ \\/\\ \\-\\-\\n\\o\\-\\p\\r\\e\\s\\e\\r\\v\\e\\-\\r\\o\\o\\t',
 		"Escape every character everywhere else"
 	);
 

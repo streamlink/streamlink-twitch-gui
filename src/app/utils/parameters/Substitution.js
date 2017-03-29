@@ -63,7 +63,7 @@ SubstitutionTokenNoQuote.prototype.regexp = reAll;
 
 
 const tokenQuoteMap = {
-	"\'": SubstitutionTokenSingleQuote,
+	"'": SubstitutionTokenSingleQuote,
 	"\"": SubstitutionTokenDoubleQuote
 };
 

@@ -13,7 +13,7 @@ function upgradeLocalstorage() {
 
 	try {
 		old = JSON.parse( old );
-	} catch( e ) {
+	} catch ( e ) {
 		return;
 	}
 

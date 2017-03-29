@@ -3,22 +3,16 @@ default:
 build:
     - "build:dev"
 build:dev:
-    - "jshint:tasks"
-    - "jshint:app"
     - "clean:tmp_dev"
     - "webpack:dev"
 build:prod:
-    - "jshint:tasks"
-    - "jshint:app"
     - "test"
     - "clean:tmp_prod"
     - "webpack:prod"
 test:
-    - "jshint:test"
     - "clean:tmp_test"
     - "webpack:test"
     - "runtest"
 testdev:
-    - "jshint:test"
     - "clean:tmp_test"
     - "webpack:testdev"

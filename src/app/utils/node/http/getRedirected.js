@@ -52,7 +52,7 @@ function promiseRequest( url ) {
 
 			} else if ( status !== 200 ) {
 				// error
-				reject( new Error( "HTTP Error: " + status ) );
+				reject( new Error( `HTTP Error: ${status}` ) );
 
 			} else {
 				// success

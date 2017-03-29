@@ -21,7 +21,7 @@ import {
 const { MAX_SAFE_INTEGER: MAX } = Number;
 const {
 	providers,
-	"default-provider": defaultProvider,
+	"default-provider": defaultProvider
 } = streamprovider;
 const langCodes = Object.keys( langs );
 

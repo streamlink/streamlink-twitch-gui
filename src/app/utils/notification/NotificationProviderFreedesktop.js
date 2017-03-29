@@ -35,7 +35,7 @@ const commonParams = [
 	"--dest",
 	DBUS_NAME,
 	"--object-path",
-	DBUS_PATH,
+	DBUS_PATH
 ];
 
 const strActions = [ ACTION_OPEN_ID, ACTION_OPEN_TEXT, ACTION_DISMISS_ID, ACTION_DISMISS_TEXT ]

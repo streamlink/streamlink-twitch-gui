@@ -72,7 +72,7 @@ test( "Serializer", assert => {
 					id: "game/box/some game",
 					image_large: "box-large.jpg",
 					image_medium: "box-medium.jpg",
-					image_small: "box-small.jpg",
+					image_small: "box-small.jpg"
 				},
 				"The box relation has the correct attributes"
 			);
@@ -83,7 +83,7 @@ test( "Serializer", assert => {
 					id: "game/logo/some game",
 					image_large: "logo-large.jpg",
 					image_medium: "logo-medium.jpg",
-					image_small: "logo-small.jpg",
+					image_small: "logo-small.jpg"
 				},
 				"The logo relation has the correct attributes"
 			);

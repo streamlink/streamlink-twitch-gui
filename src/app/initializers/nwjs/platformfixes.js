@@ -24,7 +24,7 @@ function platformfixes() {
 		try {
 			var newCwd = PATH.dirname( process.execPath );
 			process.chdir( newCwd );
-		} catch( e ) {}
+		} catch ( e ) {}
 	}
 }
 

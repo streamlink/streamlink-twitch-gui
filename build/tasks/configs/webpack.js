@@ -46,6 +46,18 @@ const lessExtractTextPlugin = new ExtractTextPlugin({
 
 const commonLoaders = [
 	{
+		enforce: "pre",
+		test: /\.js$/,
+		loader: "eslint-loader",
+		exclude: [
+			pModulesNpm,
+			pModulesBower
+		],
+		options: {
+			failOnError: true
+		}
+	},
+	{
 		test: /\.hbs$/,
 		loader: "hbs-loader"
 	},
@@ -170,7 +182,7 @@ module.exports = {
 		performance: {
 			hints: "warning",
 			maxEntrypointSize: Infinity,
-			maxAssetSize: Infinity,
+			maxAssetSize: Infinity
 		},
 
 		context: pRoot,

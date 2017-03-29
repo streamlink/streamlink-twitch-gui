@@ -53,7 +53,7 @@ test( "Basic isDirty and disabled states", assert => {
 	context = Component.extend({
 		isDirty: false,
 		disabled: false,
-		layout: compile( "{{settings-submit isDirty=isDirty disabled=disabled}}" ),
+		layout: compile( "{{settings-submit isDirty=isDirty disabled=disabled}}" )
 	}).create();
 	setOwner( context, owner );
 

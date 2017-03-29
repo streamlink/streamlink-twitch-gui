@@ -84,7 +84,7 @@ test( "Adapter and Serializer", assert => {
 						sponsored: false,
 						priority: 5,
 						scheduled: true,
-						image: "foo.jpg",
+						image: "foo.jpg"
 					},
 					{
 						id: "4",
@@ -94,7 +94,7 @@ test( "Adapter and Serializer", assert => {
 						sponsored: true,
 						priority: 5,
 						scheduled: true,
-						image: "bar.jpg",
+						image: "bar.jpg"
 					}
 				],
 				"Models have the correct id and attributes"

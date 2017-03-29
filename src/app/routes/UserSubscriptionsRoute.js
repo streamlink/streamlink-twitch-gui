@@ -29,7 +29,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 					.map( ticket =>
 						get( ticket, "product.partner_login" )
 							.then( user => get( user, "channel" ) )
-							.catch( err => { console.log( err ); return false; } )
+							.catch( () => false )
 					)
 				)
 					.then( () => tickets )

@@ -5,7 +5,7 @@ const reBackslash = /^\\$/;
 const reSpace     = /^ $/;
 const reQuote     = /^["']$/;
 
-const listEscaped = "\\\'\"".split( "" );
+const listEscaped = "\\'\"".split( "" );
 
 
 /**

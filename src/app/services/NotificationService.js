@@ -418,9 +418,10 @@ export default Service.extend( ChannelSettingsMixin, {
 	 */
 	showNotificationSingle( stream ) {
 		let settings = get( this, "settings.notify_click" );
+		let name = get( stream, "channel.display_name" );
 
 		this.showNotification({
-			title  : get( stream, "channel.display_name" ) + " has started streaming",
+			title  : `${name} has started streaming`,
 			message: get( stream, "channel.status" ) || "",
 			icon   : get( stream, "logo" ) || get( stream, "channel.logo" ),
 			click  : () => this.notificationClick( settings, [ stream ] ),
@@ -442,7 +443,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		let streaming = get( this, "streaming" );
 
-		switch( settings ) {
+		switch ( settings ) {
 			// followed streams menu
 			case 1:
 				get( this, "routing" ).transitionTo( "user.followedStreams" );

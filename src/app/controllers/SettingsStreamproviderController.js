@@ -54,5 +54,5 @@ export default Controller.extend({
 
 	retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
 	retryOpenMin    : settingsAttrMeta( "retry_open", "min" ),
-	retryOpenMax    : settingsAttrMeta( "retry_open", "max" ),
+	retryOpenMax    : settingsAttrMeta( "retry_open", "max" )
 });
