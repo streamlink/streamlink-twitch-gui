@@ -1,4 +1,5 @@
 const webpack = require( "webpack" );
+const BabiliPlugin = require( "babili-webpack-plugin" );
 const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
@@ -150,31 +151,6 @@ const loaderBabelTest = {
 		presets: [],
 		plugins: [
 			"babel-plugin-transform-es2015-modules-commonjs"
-		],
-		cacheDirectory: pCacheBabel
-	}
-};
-
-// transpile everything to es5, so uglifyJS can optimize and minimize it
-const loaderBabelProd = {
-	test: /\.js$/,
-	exclude: [
-		pModulesNpm,
-		pModulesBower
-	],
-	loader: "babel-loader",
-	options: {
-		presets: [],
-		plugins: [
-			"babel-plugin-transform-es2015-arrow-functions",
-			"babel-plugin-transform-es2015-block-scoping",
-			"babel-plugin-transform-es2015-classes",
-			"babel-plugin-transform-es2015-computed-properties",
-			"babel-plugin-transform-es2015-destructuring",
-			"babel-plugin-transform-es2015-parameters",
-			"babel-plugin-transform-es2015-shorthand-properties",
-			"babel-plugin-transform-es2015-spread",
-			"babel-plugin-transform-es2015-template-literals"
 		],
 		cacheDirectory: pCacheBabel
 	}
@@ -368,7 +344,6 @@ module.exports = {
 
 		module: {
 			rules: [
-				loaderBabelProd,
 				...commonLoaders,
 				{
 					test: /\.svg$/,
@@ -409,19 +384,8 @@ module.exports = {
 				r( pModulesBower, "ember-data", "ember-data.prod.js" )
 			),
 
-			// minify
-			new webpack.optimize.UglifyJsPlugin({
-				sourceMap: false,
-				compress: {
-					warnings: false
-				},
-				mangle: {
-					props: false
-				},
-				beautify: false,
-				screwIE8: true,
-				preserveComments: /(?:^!|@(?:license|preserve|cc_on))/
-			}),
+			// minifiy and optimize production code
+			new BabiliPlugin(),
 
 			// add license banner
 			new webpack.BannerPlugin({
