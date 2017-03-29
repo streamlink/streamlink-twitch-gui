@@ -1,6 +1,20 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Fixed game search results being empty.
+- Fixed native notifications on MacOS.
+- Fixed custom player title variable {delay}.
+- Fixed escape hotkey on input elements.
+- Added more streamlink fallback paths on MacOS.
+- Upgraded NWjs to 0.21.3.
+- \[dev] Upgraded to Webpack 2.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.2.0...master)
+
+
 ## [v1.2.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.2.0) (2017-03-17)
 
 - Upgraded to Twitch API v5.
