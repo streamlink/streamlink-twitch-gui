@@ -1,21 +1,21 @@
-var PATH      = require( "path" );
-var NwBuilder = require( "nw-builder" );
-var platforms = require( "../common/platforms" );
+const NwBuilder = require( "nw-builder" );
+const platforms = require( "../common/platforms" );
+const { resolve: r } = require( "path" );
 
 
 module.exports = function( grunt ) {
-	var task  = "run";
-	var descr = "Run NW.js";
+	const task = "run";
+	const descr = "Run NW.js";
 
 	grunt.task.registerMultiTask( task, descr, function() {
-		var done    = this.async();
-		var options = this.options({
+		const done = this.async();
+		const options = this.options({
 			platforms: platforms.getPlatforms( [] )
 		});
 
-		options.files = PATH.resolve( process.cwd(), this.data.src );
+		options.files = r( process.cwd(), this.data.src );
 
-		var nw = new NwBuilder( options );
+		const nw = new NwBuilder( options );
 
 		nw.on( "log", grunt.log.writeln );
 		nw.on( "stdout", grunt.log.debug );

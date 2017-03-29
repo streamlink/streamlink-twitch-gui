@@ -1,4 +1,4 @@
-var FS = require( "fs" );
+const { readFile } = require( "fs" );
 
 
 /**
@@ -7,9 +7,9 @@ var FS = require( "fs" );
  * @returns {Promise<String>}
  */
 function getReleaseChangelog( options, packageJSON ) {
-	var version  = packageJSON.version;
-	var reSplit  = /\n## /g;
-	var reFormat = new RegExp([
+	const version = packageJSON.version;
+	const reSplit = /\n## /g;
+	const reFormat = new RegExp([
 		// 1: version match
 		"^\\[v?(\\d+\\.\\d+\\.\\d+(?:-\\S+)?)]",
 		// 2: release link match
@@ -22,8 +22,8 @@ function getReleaseChangelog( options, packageJSON ) {
 		"([\\s\\S]+)$"
 	].join( "" ) );
 
-	return new Promise(function( resolve, reject ) {
-		FS.readFile( options.changelogFile, function( err, content ) {
+	return new Promise( ( resolve, reject ) => {
+		readFile( options.changelogFile, ( err, content ) => {
 			if ( err ) {
 				reject( err );
 			} else {
@@ -31,20 +31,15 @@ function getReleaseChangelog( options, packageJSON ) {
 			}
 		});
 	})
-		.then(function( content ) {
-			var release = content
+		.then( content => {
+			const release = content
 				.split( reSplit )
 				.slice( 1 )
-				.map(function( release ) {
-					return reFormat.exec( release );
-				})
-				.find(function( release ) {
-					return release !== null
-					    && release[1] === version;
-				});
+				.map( release => reFormat.exec( release ) )
+				.find( release => release !== null && release[ 1 ] === version );
 
-			if ( !release || !release[5] ){
-				throw new Error( "Release notes for '" + version + "' not found." );
+			if ( !release || !release[5] ) {
+				throw new Error( `Release notes for '${version}' not found.` );
 			}
 
 			return release[5].trim();

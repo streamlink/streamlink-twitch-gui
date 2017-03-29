@@ -1,25 +1,30 @@
-var files = [
+const files = [
 	"build/tmp/prod/**"
 ];
 
-var filesWin32 = files.concat(
+const filesWin32 = [
+	...files,
 	"!build/tmp/prod/bin/win64/**"
-);
-var filesWin64 = files.concat(
+];
+const filesWin64 = [
+	...files,
 	"!build/tmp/prod/bin/win32/**"
-);
-var filesMacOS = files.concat(
+];
+const filesMacOS = [
+	...files,
 	"!build/tmp/prod/bin/win32/**",
 	"!build/tmp/prod/bin/win64/**"
-);
-var filesLinux32 = files.concat(
+];
+const filesLinux32 = [
+	...files,
 	"!build/tmp/prod/bin/win32/**",
 	"!build/tmp/prod/bin/win64/**"
-);
-var filesLinux64 = files.concat(
+];
+const filesLinux64 = [
+	...files,
 	"!build/tmp/prod/bin/win32/**",
 	"!build/tmp/prod/bin/win64/**"
-);
+];
 
 
 module.exports = {

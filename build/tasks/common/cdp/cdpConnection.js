@@ -1,26 +1,23 @@
-var CDP = require( "chrome-remote-interface" );
+const CDP = require( "chrome-remote-interface" );
 
 
 /**
  * @returns {Promise}
  */
 module.exports = function( options ) {
+	const { host, port } = options;
+
 	function connect() {
-		return CDP({
-			host: options.host,
-			port: options.port
-		});
+		return CDP({ host, port });
 	}
 
 	// wait a second and try to connect at least 3 times before failing
-	var promise = Promise.reject();
+	let promise = Promise.reject();
 	function retry() {
-		return new Promise(function( resolve ) {
-			setTimeout( resolve, 1000 );
-		})
+		return new Promise( resolve => setTimeout( resolve, 1000 ) )
 			.then( connect );
 	}
-	for ( var i = 0, n = 3; i < n; i++ ) {
+	for ( let i = 0, n = 3; i < n; i++ ) {
 		promise = promise.catch( retry );
 	}
 

@@ -1,28 +1,28 @@
-var consoleMethod = "info";
+const consoleMethod = "info";
 
 /**
  * @returns {Promise}
  */
 module.exports = function( grunt, options, cdp ) {
-	var UUID = "qunit_" + Date.now() + "_" + Math.random().toString( 36 ).substring( 2, 15 );
+	const UUID = `qunit_${Date.now()}_${Math.random().toString( 36 ).substring( 2, 15 )}`;
 
 	function promiseQUnitBridge( resolve, reject ) {
-		var started = false;
+		let started = false;
 
 		// wait X seconds for QUnit to start or reject the promise
-		var startTimeout = setTimeout( function() {
+		const startTimeout = setTimeout( () => {
 			reject( "Timeout: Missing QUnit.start() call" );
 		}, options.startTimeout );
 		// wait X seconds for all tests to finish
-		var testTimeout;
+		let testTimeout;
 
 		// listen for qunit messages
-		cdp.on( "Runtime.consoleAPICalled", function( obj ) {
+		cdp.on( "Runtime.consoleAPICalled", obj => {
 			if ( !obj || !obj.type || obj.type !== consoleMethod ) { return; }
-			var params = obj.args;
+			const params = obj.args;
 			if ( !params || params.length !== 3 || params[ 0 ].value !== UUID ) { return; }
-			var event = params[ 1 ].value;
-			var data = JSON.parse( params[ 2 ].value );
+			const event = params[ 1 ].value;
+			const data = JSON.parse( params[ 2 ].value );
 
 			switch ( event ) {
 				case "begin":
@@ -33,7 +33,7 @@ module.exports = function( grunt, options, cdp ) {
 						clearTimeout( startTimeout );
 					}
 
-					testTimeout = setTimeout(function() {
+					testTimeout = setTimeout( () => {
 						reject( "Timeout: The tests did not finish..." );
 					}, options.testTimeout );
 					return;
@@ -42,7 +42,7 @@ module.exports = function( grunt, options, cdp ) {
 					if ( !options.logModules ) { return; }
 
 					grunt.log[ data.failed === 0 ? "ok" : "warn" ](
-						data.name + " (" + data.passed + "/" + data.total + ")"
+						`${data.name} (${data.passed}/${data.total})`
 					);
 					return;
 
@@ -59,18 +59,17 @@ module.exports = function( grunt, options, cdp ) {
 					if ( data.failed === 0 && data.passed === data.total ) {
 						if ( data.total === 0 ) {
 							grunt.log.warn(
-								"0/0 assertions ran (" + data.runtime + "ms)"
+								`0/0 assertions ran (${data.runtime}ms)`
 							);
 						} else if ( data.total > 0 ) {
 							grunt.log.ok(
-								data.total + " assertions passed (" + data.runtime + "ms)"
+								`${data.total} assertions passed (${data.runtime}ms)`
 							);
 						}
 						resolve();
 					} else {
 						grunt.log.warn(
-							  data.failed + "/" + data.total
-							+ " assertions failed (" + data.runtime + "ms)"
+							`${data.failed}/${data.total} assertions failed (${data.runtime}ms)`
 						);
 						reject();
 					}
@@ -86,6 +85,7 @@ module.exports = function( grunt, options, cdp ) {
 			delete global._setupQUnitBridge;
 
 			function logMessage( callback, obj ) {
+				/* eslint-disable no-console */
 				console[ "%METHOD%" ]( "%UUID%", callback, JSON.stringify( obj ) );
 			}
 
@@ -103,7 +103,7 @@ module.exports = function( grunt, options, cdp ) {
 			QUnit.start();
 		}
 
-		var expression = [
+		const expression = [
 			"(function() {",
 			setupQUnit
 				.toString()
@@ -119,14 +119,12 @@ module.exports = function( grunt, options, cdp ) {
 
 		// setup & start QUnit
 		cdp.send( "Runtime.evaluate", { expression: expression } )
-			.then(function() {
+			.then( () => {
 				grunt.log.debug( "QUnit test reporter injected and QUnit started" );
 			});
 	}
 
 
 	return cdp.send( "Runtime.enable" )
-		.then(function() {
-			return new Promise( promiseQUnitBridge );
-		});
+		.then( () => new Promise( promiseQUnitBridge ) );
 };

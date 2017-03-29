@@ -1,4 +1,4 @@
-var r = require( "path" ).resolve;
+const { resolve: r } = require( "path" );
 
 
 module.exports = function( grunt ) {
@@ -11,7 +11,7 @@ module.exports = function( grunt ) {
 	require( "load-grunt-config" )( grunt, {
 		// load config files and avoid file name collisions
 		overridePath: r( "build", "tasks", "configs" ),
-		configPath  : r( "src", "config" ),
+		configPath: r( "src", "config" ),
 
 		data: {
 			dir: {
@@ -30,7 +30,7 @@ module.exports = function( grunt ) {
 		},
 
 		// automatically initialize and load modules on demand
-		init    : true,
+		init: true,
 		jitGrunt: true
 	});
 };

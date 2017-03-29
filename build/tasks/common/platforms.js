@@ -25,30 +25,31 @@ module.exports = {
 	},
 
 	filters: {
-		win  : function( str ) { return   /^win\d+$/.test( str ); },
-		osx  : function( str ) { return   /^osx\d+$/.test( str ); },
-		linux: function( str ) { return /^linux\d+$/.test( str ); },
-		x86  : function( str ) { return    /^\D+32$/.test( str ); },
-		x64  : function( str ) { return    /^\D+64$/.test( str ); }
+		win( str )   { return   /^win\d+$/.test( str ); },
+		osx( str )   { return   /^osx\d+$/.test( str ); },
+		linux( str ) { return /^linux\d+$/.test( str ); },
+		x86( str )   { return    /^\D+32$/.test( str ); },
+		x64( str )   { return    /^\D+64$/.test( str ); }
 	},
 
-	getList: function() {
-		return "Optional platforms: all:x86:x64:" + Object.keys( this.platforms ).join( ":" );
+	getList() {
+		const list = Object.keys( this.platforms ).join( ":" );
+
+		return `Optional platforms: all:x86:x64:${list}`;
 	},
 
 	/**
-	 * @param {string[]} platforms
-	 * @returns {string[]}
+	 * @param {String[]} [platforms]
+	 * @returns {String[]}
 	 */
-	getPlatforms: function( platforms ) {
-		var configs = this.platforms;
-		var filters = this.filters;
-		platforms = [].slice.call( platforms );
+	getPlatforms( platforms ) {
+		const { platforms: configs, filters } = this;
+		platforms = [ ...( platforms || [] ) ];
 
 		// all platforms or platforms by arch
 		if ( platforms.length === 1 ) {
-			var keys = Object.keys( configs );
-			var res;
+			const keys = Object.keys( configs );
+			let res;
 
 			switch ( platforms[0] ) {
 				case "all":
@@ -90,8 +91,9 @@ module.exports = {
 
 		// current platform
 		} else if ( platforms.length === 0 ) {
-			return Object.keys( configs ).filter(function( platform ) {
-				var config = configs[ platform ];
+			return Object.keys( configs ).filter( platform => {
+				const config = configs[ platform ];
+
 				return config.platform === process.platform
 				    && ( config.arch === null || config.arch === process.arch );
 			});
@@ -101,10 +103,9 @@ module.exports = {
 			return platforms;
 		}
 
-		throw new Error(
-			"Invalid platforms. " +
-			"Valid platforms are: all:" + Object.keys( configs ).join( ":" )
-		);
+		const list = Object.keys( configs ).join( ":" );
+
+		throw new Error( `Invalid platforms. Valid platforms are: all:${list}` );
 	},
 
 	/**
@@ -112,10 +113,8 @@ module.exports = {
 	 * @param {string[]} targets
 	 * @returns {string[]}
 	 */
-	getTasks: function( task, targets ) {
+	getTasks( task, targets ) {
 		return this.getPlatforms( targets )
-			.map(function( platform ) {
-				return task + ":" + platform;
-			});
+			.map( platform => `${task}:${platform}` );
 	}
 };

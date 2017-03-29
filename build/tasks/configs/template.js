@@ -5,7 +5,7 @@
  */
 function getInstallerFiles( config ) {
 	return function( grunt ) {
-		var dir = grunt.config( "template." + config + ".options.data.dirinput" );
+		const dir = grunt.config( `template.${config}.options.data.dirinput` );
 
 		function getFiles( filter ) {
 			return grunt.file.expand({

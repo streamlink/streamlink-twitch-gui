@@ -1,22 +1,22 @@
-var platforms = require( "../common/platforms" );
-var tasks = require( "../configs/compile" );
+const platforms = require( "../common/platforms" );
+const tasks = require( "../configs/compile" );
 
 
 module.exports = function( grunt ) {
-	var task  = "compile";
-	var descr = "Compile the built application. " + platforms.getList();
+	const task = "compile";
+	const descr = `Compile the built application. ${platforms.getList()}`;
 
 	grunt.task.registerTask( task, descr, function() {
 		platforms.getPlatforms( arguments )
-			.forEach(function( platform ) {
-				grunt.task.run( []
+			.forEach( platform => {
+				grunt.task.run([
 					// run these tasks before the compilation
-					.concat( tasks[ platform ].before || [] )
+					...( tasks[ platform ].before || [] ),
 					// the actual compile tasks
-					.concat([ "nwjs:" + platform ])
+					`nwjs:${platform}`,
 					// run these tasks after the compilation
-					.concat( tasks[ platform ].after || [] )
-				);
+					...( tasks[ platform ].after || [] )
+				]);
 			});
 	});
 
