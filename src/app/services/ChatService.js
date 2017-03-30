@@ -9,6 +9,7 @@ import {
 	twitch as twitchConfig
 } from "config";
 import { openBrowser } from "nwjs/Shell";
+import Logger from "utils/Logger";
 import Parameter from "utils/parameters/Parameter";
 import ParameterCustom from "utils/parameters/ParameterCustom";
 import Substitution from "utils/parameters/Substitution";
@@ -24,6 +25,8 @@ import {
 const { service } = inject;
 const { next } = run;
 const { "chat-url": twitchChatUrl } = twitchConfig;
+
+const { logDebug, logError } = new Logger( "ChatService" );
 
 
 function launch( exec, params ) {
@@ -48,7 +51,7 @@ export default Service.extend({
 	 * @param channel
 	 * @returns {Promise}
 	 */
-	open( channel ) {
+	async open( channel ) {
 		let url  = twitchChatUrl;
 		let name = get( channel, "name" );
 
@@ -61,28 +64,37 @@ export default Service.extend({
 		let method   = get( this, "settings.chat_method" );
 		let command  = get( this, "settings.chat_command" ).trim();
 
-		switch ( method ) {
-			case "default":
-			case "browser":
-				return this._openDefaultBrowser( url );
-			case "irc":
-				return this._openIRC( channel );
-			case "chromium":
-			case "chrome":
-				return this._openPredefined( command, method, url );
-			case "msie":
-				return this._openMSIE( url );
-			case "chatty":
-				return this._openChatty( command, name );
-			case "custom":
-				return this._openCustom( command, name, url );
-			default:
-				return Promise.reject( new Error( "Invalid chat method" ) );
+		try {
+			switch ( method ) {
+				case "default":
+				case "browser":
+					return await this._openDefaultBrowser( url );
+				case "irc":
+					return await this._openIRC( channel );
+				case "chromium":
+				case "chrome":
+					return await this._openPredefined( command, method, url );
+				case "msie":
+					return await this._openMSIE( url );
+				case "chatty":
+					return await this._openChatty( command, name );
+				case "custom":
+					return await this._openCustom( command, name, url );
+				default:
+					throw new Error( "Invalid chat method" );
+			}
+		} catch ( err ) {
+			await logError( err, { name, method, command } );
+			throw err;
 		}
 	},
 
 
-	_openDefaultBrowser( url ) {
+	async _openDefaultBrowser( url ) {
+		await logDebug( "Opening chat in the system's default browser", {
+			url
+		});
+
 		return openBrowser( url );
 	},
 
@@ -114,6 +126,12 @@ export default Service.extend({
 
 		let params = Parameter.getParameters( context, paramsPredefined );
 
+		await logDebug( "Launching chat application", {
+			name: key,
+			exec: resolvedExec,
+			params
+		});
+
 		return launch( resolvedExec, params );
 	},
 
@@ -142,6 +160,11 @@ export default Service.extend({
 		];
 
 		let params = Parameter.getParameters( context, paramsMSIE );
+
+		await logDebug( "Launching MSIE", {
+			exec: resolvedExec,
+			params
+		});
 
 		return launch( resolvedExec, params );
 	},
@@ -213,6 +236,11 @@ export default Service.extend({
 
 		let params = Parameter.getParameters( context, paramsChatty );
 
+		await logDebug( "Launching Chatty", {
+			exec: resolvedExec,
+			params
+		});
+
 		return launch( resolvedExec, params );
 	},
 
@@ -244,6 +272,11 @@ export default Service.extend({
 		let exec   = params.shift();
 
 		let resolvedExec = await whichFallback( exec );
+
+		await logDebug( "Launching custom chat application", {
+			exec: resolvedExec,
+			params
+		});
 
 		return launch( resolvedExec, params );
 	}

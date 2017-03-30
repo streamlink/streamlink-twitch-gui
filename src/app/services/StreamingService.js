@@ -19,6 +19,7 @@ import {
 	toggleVisibility
 } from "nwjs/Window";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
+import Logger from "utils/Logger";
 import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import {
@@ -43,6 +44,8 @@ const {
 } = streamproviderConfig;
 const { "stream-url": twitchStreamUrl } = twitchConfig;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
+
+const { logDebug, logError, logResolved } = new Logger( "StreamingService" );
 
 const modelName = "stream";
 
@@ -247,11 +250,17 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 	onStreamFailure( record, error ) {
+		if ( !error ) {
+			error = new Error( "Internal error" );
+		}
+
 		set( record, "error", true );
-		set( this, "error", error || new Error( "Internal error" ) );
+		set( this, "error", error );
 
 		this.clear( record );
 		this.clearCache();
+
+		return logError( error, () => record.toJSON({ includeId: true }) );
 	},
 
 	onStreamShutdown( record ) {
@@ -300,6 +309,11 @@ export default Service.extend( ChannelSettingsMixin, {
 					set( record, "strictQuality", true );
 				}
 				setIfNotNull( settings, record, "gui_openchat" );
+
+				return logDebug(
+					"Preparing to launch stream",
+					() => record.toJSON({ includeId: true })
+				);
 			});
 	},
 
@@ -309,7 +323,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * @param {Stream} record
 	 * @returns {Promise}
 	 */
-	check( record ) {
+	async check( record ) {
 		// read properties first (triggers observers)
 		let streamprovider  = get( this, "settings.streamprovider" );
 		let streamproviders = get( this, "settings.streamproviders" );
@@ -324,6 +338,13 @@ export default Service.extend( ChannelSettingsMixin, {
 			}, {} ) );
 		}
 
+		// begin validation
+		await logDebug( "Resolving streaming provider", {
+			provider: streamprovider,
+			config: streamproviders[ streamprovider ]
+		});
+
+		// check for known providers first
 		if (
 			   !providers.hasOwnProperty( streamprovider )
 			|| !streamproviders.hasOwnProperty( streamprovider )
@@ -386,6 +407,7 @@ export default Service.extend( ChannelSettingsMixin, {
 				return promise
 					.then( exec => ({ exec, pythonscript }) );
 			})
+			.then( logResolved( "Found streaming provider" ) )
 			.then( execObj => this.validate( record, execObj ) );
 	},
 
@@ -494,15 +516,15 @@ export default Service.extend( ChannelSettingsMixin, {
 			later( onTimeout, validationTimeout );
 		})
 			.finally( kill )
-			.then( ({ name, version }) => {
+			.then( async ({ name, version }) => {
 				if ( !versionMin.hasOwnProperty( name ) ) {
 					throw new NotFoundError();
 				}
-
 				if ( version !== getMax([ version, versionMin[ name ] ]) ) {
 					throw new VersionError( version );
 				}
 
+				await logDebug( "Validated streaming provider", { name, version } );
 				this.setupCache( execObj );
 
 				return execObj;
@@ -525,12 +547,17 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 
 		return record.getParameters()
-			.then(function( params ) {
+			.then( async params => {
 				let { exec, pythonscript } = execObj;
 
 				if ( pythonscript ) {
 					params.unshift( pythonscript );
 				}
+
+				await logDebug( "Spawning streaming provider process", {
+					exec,
+					params
+				});
 
 				return { exec, params };
 			});
@@ -623,6 +650,19 @@ export default Service.extend( ChannelSettingsMixin, {
 					if ( code !== 0 ) {
 						set( record, "error", true );
 						set( this, "error", new Error( `The process exited with code ${code}` ) );
+						logError(
+							`The streaming provider processes exited with code ${code}`,
+							() => {
+								const log = get( record, "log" )
+									.map( line => line.line );
+
+								return {
+									exec,
+									params,
+									log
+								};
+							}
+						);
 					}
 					this.onStreamShutdown( record );
 				}
