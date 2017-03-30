@@ -1,5 +1,6 @@
 import main from "root/config/main.json";
 import dirs from "root/config/dirs.json";
+import log from "root/config/log.json";
 import files from "!files-from-json-loader!root/config/files.json";
 import vars from "root/config/vars.json";
 import update from "root/config/update.json";
@@ -15,6 +16,7 @@ import chat from "root/config/chat.json";
 export {
 	main,
 	dirs,
+	log,
 	files,
 	vars,
 	update,

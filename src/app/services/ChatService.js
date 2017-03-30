@@ -9,6 +9,7 @@ import {
 	twitch as twitchConfig
 } from "config";
 import { openBrowser } from "nwjs/Shell";
+import Logger from "utils/Logger";
 import Parameter from "utils/parameters/Parameter";
 import ParameterCustom from "utils/parameters/ParameterCustom";
 import Substitution from "utils/parameters/Substitution";
@@ -24,6 +25,8 @@ import {
 const { service } = inject;
 const { next } = run;
 const { "chat-url": twitchChatUrl } = twitchConfig;
+
+const { logDebug, logError } = new Logger( "ChatService" );
 
 
 function launch( exec, params ) {
@@ -48,7 +51,7 @@ export default Service.extend({
 	 * @param channel
 	 * @returns {Promise}
 	 */
-	open( channel ) {
+	async open( channel ) {
 		let url  = twitchChatUrl;
 		let name = get( channel, "name" );
 
@@ -61,28 +64,37 @@ export default Service.extend({
 		let method   = get( this, "settings.chat_method" );
 		let command  = get( this, "settings.chat_command" ).trim();
 
-		switch ( method ) {
-			case "default":
-			case "browser":
-				return this._openDefaultBrowser( url );
-			case "irc":
-				return this._openIRC( channel );
-			case "chromium":
-			case "chrome":
-				return this._openPredefined( command, method, url );
-			case "msie":
-				return this._openMSIE( url );
-			case "chatty":
-				return this._openChatty( command, name );
-			case "custom":
-				return this._openCustom( command, name, url );
-			default:
-				return Promise.reject( new Error( "Invalid chat method" ) );
+		try {
+			switch ( method ) {
+				case "default":
+				case "browser":
+					return await this._openDefaultBrowser( url );
+				case "irc":
+					return await this._openIRC( channel );
+				case "chromium":
+				case "chrome":
+					return await this._openPredefined( command, method, url );
+				case "msie":
+					return await this._openMSIE( url );
+				case "chatty":
+					return await this._openChatty( command, name );
+				case "custom":
+					return await this._openCustom( command, name, url );
+				default:
+					throw new Error( "Invalid chat method" );
+			}
+		} catch ( err ) {
+			await logError( err, { name, method, command } );
+			throw err;
 		}
 	},
 
 
-	_openDefaultBrowser( url ) {
+	async _openDefaultBrowser( url ) {
+		await logDebug( "Opening chat in the system's default browser", {
+			url
+		});
+
 		return openBrowser( url );
 	},
 
@@ -92,7 +104,7 @@ export default Service.extend({
 	},
 
 
-	_openPredefined( command, key, url ) {
+	async _openPredefined( command, key, url ) {
 		if ( !chatConfig.hasOwnProperty( key ) ) {
 			return Promise.reject( new Error( "Missing chat data" ) );
 		}
@@ -106,21 +118,25 @@ export default Service.extend({
 			])
 		];
 
-		let promise = command.length
+		let resolvedExec = command.length
 			// user has set a custom executable path
-			? whichFallback( command )
+			? await whichFallback( command )
 			// no custom command
-			: whichFallback( exec, fallback );
+			: await whichFallback( exec, fallback );
 
-		return promise
-			.then( exec => {
-				let params = Parameter.getParameters( context, paramsPredefined );
-				return launch( exec, params );
-			});
+		let params = Parameter.getParameters( context, paramsPredefined );
+
+		await logDebug( "Launching chat application", {
+			name: key,
+			exec: resolvedExec,
+			params
+		});
+
+		return launch( resolvedExec, params );
 	},
 
 
-	_openMSIE( url ) {
+	async _openMSIE( url ) {
 		if ( !chatConfig.hasOwnProperty( "msie" ) ) {
 			return Promise.reject( new Error( "Missing chat data" ) );
 		}
@@ -130,26 +146,31 @@ export default Service.extend({
 		// the script needs to be inside the application's folder
 		script = join( dirname( process.execPath ), script );
 
-		return Promise.all([
+		let [ resolvedExec ] = await Promise.all([
 			whichFallback( exec, null ),
 			whichFallback( script, null, isFile )
-		])
-			.then( ([ exec ]) => {
-				let context = { args, url, script };
-				let paramsMSIE = [
-					new ParameterCustom( null, "args", [
-						new Substitution( "url", "url" ),
-						new Substitution( "script", "script" )
-					])
-				];
+		]);
 
-				let params = Parameter.getParameters( context, paramsMSIE );
-				return launch( exec, params );
-			});
+		let context = { args, url, script };
+		let paramsMSIE = [
+			new ParameterCustom( null, "args", [
+				new Substitution( "url", "url" ),
+				new Substitution( "script", "script" )
+			])
+		];
+
+		let params = Parameter.getParameters( context, paramsMSIE );
+
+		await logDebug( "Launching MSIE", {
+			exec: resolvedExec,
+			params
+		});
+
+		return launch( resolvedExec, params );
 	},
 
 
-	_openChatty( command, channel ) {
+	async _openChatty( command, channel ) {
 		if ( !chatConfig.hasOwnProperty( "chatty" ) ) {
 			return Promise.reject( new Error( "Missing chat data" ) );
 		}
@@ -195,27 +216,32 @@ export default Service.extend({
 			new ParameterCustom( null, "args", substitutions )
 		];
 
-		let promise = !command
+		let resolvedExec;
+		if ( !command ) {
 			// look for a chatty startscript if no chatty jar file has been set
-			? whichFallback( chattyScript )
+			resolvedExec = await whichFallback( chattyScript );
+
+		} else {
 			// validate java installation and check for existing chatty .jar file
-			: Promise.all([
+			let [ _resolvedExec, jar ] = await Promise.all([
 				whichFallback( javaExec, javaFb ),
 				whichFallback( command, null, isFile )
-			])
-				.then( ([ exec, jar ]) => {
-					// alter command line
-					context.args = `${javaArgs} ${context.args}`;
-					context.command = jar;
-					substitutions.push( new Substitution( "jar", "command" ) );
-					return exec;
-				});
+			]);
+			resolvedExec = _resolvedExec;
+			// alter command line
+			context.args = `${javaArgs} ${context.args}`;
+			context.command = jar;
+			substitutions.push( new Substitution( "jar", "command" ) );
+		}
 
-		return promise
-			.then( exec => {
-				let params = Parameter.getParameters( context, paramsChatty );
-				return launch( exec, params );
-			});
+		let params = Parameter.getParameters( context, paramsChatty );
+
+		await logDebug( "Launching Chatty", {
+			exec: resolvedExec,
+			params
+		});
+
+		return launch( resolvedExec, params );
 	},
 
 
@@ -226,7 +252,7 @@ export default Service.extend({
 		new Substitution( "token", "token", "Twitch access token" )
 	],
 
-	_openCustom( command, channel, url ) {
+	async _openCustom( command, channel, url ) {
 		let user = get( this, "auth.session.user_name" );
 		let token = get( this, "auth.session.access_token" );
 
@@ -245,7 +271,13 @@ export default Service.extend({
 		let params = Parameter.getParameters( context, paramsCustom );
 		let exec   = params.shift();
 
-		return whichFallback( exec )
-			.then( exec => launch( exec, params ) );
+		let resolvedExec = await whichFallback( exec );
+
+		await logDebug( "Launching custom chat application", {
+			exec: resolvedExec,
+			params
+		});
+
+		return launch( resolvedExec, params );
 	}
 });

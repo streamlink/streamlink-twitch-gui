@@ -1,3 +1,4 @@
+import Logger from "utils/Logger";
 import {
 	platform,
 	isWinGte8,
@@ -21,6 +22,8 @@ const providers = {
 };
 const fallbackMap = {};
 const instanceCache = {};
+
+const { logResolved, logRejected } = new Logger( "Notification" );
 
 
 /**
@@ -69,7 +72,8 @@ function notify( provider, data, setupData ) {
 		? instanceCache[ provider ]
 		: ( instanceCache[ provider ] = new providers[ provider ]( setupData ) );
 
-	return providerInstance.notify( data );
+	return providerInstance.notify( data )
+		.then( logResolved( "Showing notification", { provider, setupData, data } ) );
 }
 
 
@@ -114,7 +118,8 @@ export function show( provider, data, noFallback ) {
 				fallbackMap[ provider ] = currentProvider;
 				return notify( currentProvider, data, setupData );
 			})
-			.catch( onError );
+			.catch( onError )
+			.catch( logRejected({ currentProvider, data }) );
 	}
 
 	return testProvider( provider );

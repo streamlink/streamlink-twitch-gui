@@ -1,3 +1,4 @@
+import "./logger";
 import "./localstorage";
 import "./routing-service";
 import "./application-view";

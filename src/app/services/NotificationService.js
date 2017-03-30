@@ -20,6 +20,7 @@ import nwWindow, {
 import { getMenu as getTrayMenu } from "nwjs/Tray";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 import { mapBy } from "utils/ember/recordArrayMethods";
+import Logger from "utils/Logger";
 import {
 	isWin,
 	tmpdir
@@ -50,6 +51,8 @@ const {
 	}
 } = notification;
 const { icons: { "big": bigIcon } } = files;
+
+const { logDebug } = new Logger( "NotificationService" );
 
 const iconGroup = isWin
 	? resolvePath( "%NWJSAPPPATH%", bigIcon )
@@ -440,6 +443,11 @@ export default Service.extend( ChannelSettingsMixin, {
 			toggleMinimize( true );
 			toggleVisibility( true );
 		}
+
+		logDebug( "Notification click", () => ({
+			settings,
+			streams: streams.mapBy( "id" )
+		}) );
 
 		let streaming = get( this, "streaming" );
 

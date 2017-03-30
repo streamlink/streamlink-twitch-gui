@@ -1,14 +1,51 @@
+import minimist from "minimist";
 import { App } from "nwjs/nwGui";
-import { some } from "utils/contains";
+
+
+const ARG_TRAY = "tray";
+const ARG_MAX = "max";
+const ARG_MIN = "min";
+const ARG_RESET_WINDOW = "reset-window";
+const ARG_VERSIONCHECK = "versioncheck";
+const ARG_LOGLEVEL = "loglevel";
+const ARG_LOGFILE = "logfile";
 
 
 const { fullArgv: argv } = App;
 
+const parsed = minimist( argv, {
+	boolean: [
+		ARG_TRAY,
+		ARG_MAX,
+		ARG_MIN,
+		ARG_RESET_WINDOW,
+		ARG_VERSIONCHECK,
+		ARG_LOGFILE
+	],
+	string: [
+		ARG_LOGLEVEL
+	],
+	alias: {
+		[ ARG_TRAY ]: [ "hide", "hidden" ],
+		[ ARG_MAX ]: [ "maximize", "maximized" ],
+		[ ARG_MIN ]: [ "minimize", "maximized" ],
+		[ ARG_LOGLEVEL ]: [ "l" ]
+	},
+	default: {
+		[ ARG_VERSIONCHECK ]: true,
+		[ ARG_LOGLEVEL ]: "",
+		[ ARG_LOGFILE ]: true
+	}
+});
 
-export default argv;
 
-export const tray = some.call( argv, "--tray", "--hide", "--hidden" );
-export const max = some.call( argv, "--max", "--maximize", "--maximized" );
-export const min = some.call( argv, "--min", "--minimize", "--minimized" );
-export const resetwindow = some.call( argv, "--reset-window" );
-export const versioncheck = !some.call( argv, "--no-version-check" );
+export default parsed;
+
+
+export const tray = parsed[ ARG_TRAY ];
+export const max = parsed[ ARG_MAX ];
+export const min = parsed[ ARG_MIN ];
+export const resetwindow = parsed[ ARG_RESET_WINDOW ];
+export const versioncheck = parsed[ ARG_VERSIONCHECK ];
+export const loglevel = parsed[ ARG_LOGLEVEL ];
+export const logfile = parsed[ ARG_LOGFILE ];

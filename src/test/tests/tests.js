@@ -1,6 +1,8 @@
+import "tests/nwjs/argv";
 import "tests/nwjs/Shell";
 import "tests/utils/getStreamFromUrl";
 import "tests/utils/linkparser";
+import "tests/utils/Logger";
 import "tests/utils/semver";
 import "tests/utils/StreamOutputBuffer";
 import "tests/utils/ember/ObjectBuffer";
