@@ -92,7 +92,7 @@ export default Service.extend({
 	},
 
 
-	_openPredefined( command, key, url ) {
+	async _openPredefined( command, key, url ) {
 		if ( !chatConfig.hasOwnProperty( key ) ) {
 			return Promise.reject( new Error( "Missing chat data" ) );
 		}
@@ -106,21 +106,19 @@ export default Service.extend({
 			])
 		];
 
-		let promise = command.length
+		let resolvedExec = command.length
 			// user has set a custom executable path
-			? whichFallback( command )
+			? await whichFallback( command )
 			// no custom command
-			: whichFallback( exec, fallback );
+			: await whichFallback( exec, fallback );
 
-		return promise
-			.then( exec => {
-				let params = Parameter.getParameters( context, paramsPredefined );
-				return launch( exec, params );
-			});
+		let params = Parameter.getParameters( context, paramsPredefined );
+
+		return launch( resolvedExec, params );
 	},
 
 
-	_openMSIE( url ) {
+	async _openMSIE( url ) {
 		if ( !chatConfig.hasOwnProperty( "msie" ) ) {
 			return Promise.reject( new Error( "Missing chat data" ) );
 		}
@@ -130,26 +128,26 @@ export default Service.extend({
 		// the script needs to be inside the application's folder
 		script = join( dirname( process.execPath ), script );
 
-		return Promise.all([
+		let [ resolvedExec ] = await Promise.all([
 			whichFallback( exec, null ),
 			whichFallback( script, null, isFile )
-		])
-			.then( ([ exec ]) => {
-				let context = { args, url, script };
-				let paramsMSIE = [
-					new ParameterCustom( null, "args", [
-						new Substitution( "url", "url" ),
-						new Substitution( "script", "script" )
-					])
-				];
+		]);
 
-				let params = Parameter.getParameters( context, paramsMSIE );
-				return launch( exec, params );
-			});
+		let context = { args, url, script };
+		let paramsMSIE = [
+			new ParameterCustom( null, "args", [
+				new Substitution( "url", "url" ),
+				new Substitution( "script", "script" )
+			])
+		];
+
+		let params = Parameter.getParameters( context, paramsMSIE );
+
+		return launch( resolvedExec, params );
 	},
 
 
-	_openChatty( command, channel ) {
+	async _openChatty( command, channel ) {
 		if ( !chatConfig.hasOwnProperty( "chatty" ) ) {
 			return Promise.reject( new Error( "Missing chat data" ) );
 		}
@@ -195,27 +193,27 @@ export default Service.extend({
 			new ParameterCustom( null, "args", substitutions )
 		];
 
-		let promise = !command
+		let resolvedExec;
+		if ( !command ) {
 			// look for a chatty startscript if no chatty jar file has been set
-			? whichFallback( chattyScript )
+			resolvedExec = await whichFallback( chattyScript );
+
+		} else {
 			// validate java installation and check for existing chatty .jar file
-			: Promise.all([
+			let [ _resolvedExec, jar ] = await Promise.all([
 				whichFallback( javaExec, javaFb ),
 				whichFallback( command, null, isFile )
-			])
-				.then( ([ exec, jar ]) => {
-					// alter command line
-					context.args = `${javaArgs} ${context.args}`;
-					context.command = jar;
-					substitutions.push( new Substitution( "jar", "command" ) );
-					return exec;
-				});
+			]);
+			resolvedExec = _resolvedExec;
+			// alter command line
+			context.args = `${javaArgs} ${context.args}`;
+			context.command = jar;
+			substitutions.push( new Substitution( "jar", "command" ) );
+		}
 
-		return promise
-			.then( exec => {
-				let params = Parameter.getParameters( context, paramsChatty );
-				return launch( exec, params );
-			});
+		let params = Parameter.getParameters( context, paramsChatty );
+
+		return launch( resolvedExec, params );
 	},
 
 
@@ -226,7 +224,7 @@ export default Service.extend({
 		new Substitution( "token", "token", "Twitch access token" )
 	],
 
-	_openCustom( command, channel, url ) {
+	async _openCustom( command, channel, url ) {
 		let user = get( this, "auth.session.user_name" );
 		let token = get( this, "auth.session.access_token" );
 
@@ -245,7 +243,8 @@ export default Service.extend({
 		let params = Parameter.getParameters( context, paramsCustom );
 		let exec   = params.shift();
 
-		return whichFallback( exec )
-			.then( exec => launch( exec, params ) );
+		let resolvedExec = await whichFallback( exec );
+
+		return launch( resolvedExec, params );
 	}
 });
