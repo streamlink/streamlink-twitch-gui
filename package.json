@@ -13,6 +13,7 @@
 
 	"dependencies": {
 		"growly": "1.3.0",
+		"minimist": "1.2.0",
 		"snoretoast": "bastimeyer/snoretoast#binaries"
 	},
 
