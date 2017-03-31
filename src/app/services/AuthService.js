@@ -12,7 +12,7 @@ import { twitch } from "config";
 import nwWindow from "nwjs/Window";
 import { openBrowser } from "nwjs/Shell";
 import { all } from "utils/contains";
-import HttpServer from "utils/node/http/Server";
+import HttpServer from "utils/node/http/HttpServer";
 import OAuthResponseRedirect from "root/oauth-redirect.html";
 
 
