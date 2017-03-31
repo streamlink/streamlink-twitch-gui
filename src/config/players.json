@@ -111,7 +111,7 @@
 				"type": "boolean",
 				"default": true,
 				"text": "Set custom title",
-				"args": "--title \"{name} - {game} - {status}\""
+				"args": "--title \"$>{name} - {game} - {status}\""
 			},
 			{
 				"name": "minimal",
