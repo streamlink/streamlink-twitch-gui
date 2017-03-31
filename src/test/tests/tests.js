@@ -16,6 +16,7 @@ import "tests/utils/node/fs/whichFallback";
 import "tests/utils/node/fs/mkdirp";
 import "tests/utils/node/fs/clearfolder";
 import "tests/utils/node/http/HttpServer";
+import "tests/utils/node/http/getRedirected";
 import "tests/helpers/is-";
 import "tests/helpers/bool-";
 import "tests/helpers/math-";

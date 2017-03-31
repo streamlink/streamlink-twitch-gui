@@ -21,7 +21,7 @@ class Redirection {
 
 
 function mergeURLs( a, b ) {
-	let parsedB = urlParse( a );
+	let parsedB = urlParse( b );
 	// do nothing if second URL contains host
 	if ( parsedB.host ) { return b; }
 
@@ -63,29 +63,31 @@ function promiseRequest( url ) {
 	});
 }
 
-function doRequest( url, num ) {
-	return promiseRequest( url )
-		.catch( data => {
-			if ( !( data instanceof Redirection ) ) {
-				// error
-				return Promise.reject( data );
+async function doRequest( url, num, max ) {
+	try {
+		return await promiseRequest( url );
 
-			} else if ( num > MAX_REDIRECTS ) {
-				// too many redirects
-				return Promise.reject( new Error( "Maximum number of redirects reached" ) );
+	} catch ( err ) {
+		if ( !( err instanceof Redirection ) ) {
+			// error
+			return Promise.reject( err );
 
-			} else {
-				// add current host to url if it's a relative one
-				url = mergeURLs( url, data.dest );
-				// try again with new url
-				return doRequest( url, ++num );
-			}
-		});
+		} else if ( num > max ) {
+			// too many redirects
+			return Promise.reject( new Error( "Maximum number of redirects reached" ) );
+
+		} else {
+			// add current host to url if it's a relative one
+			url = mergeURLs( url, err.dest );
+			// try again with new url
+			return doRequest( url, ++num, max );
+		}
+	}
 }
 
 
-function getRedirected( url ) {
-	return doRequest( url, 1 );
+function getRedirected( url, max = MAX_REDIRECTS ) {
+	return doRequest( url, 1, max );
 }
 
 
