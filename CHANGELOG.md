@@ -3,11 +3,13 @@ Changelog - Streamlink Twitch GUI
 
 ## Master
 
+- Added the new stream qualities to the quality presets. #434
+- Added more streamlink fallback paths on MacOS.
+- Added error/debug message logging.
 - Fixed game search results being empty.
 - Fixed native notifications on MacOS.
-- Fixed custom player title variable {delay}.
-- Fixed escape hotkey on input elements.
-- Added more streamlink fallback paths on MacOS.
+- Fixed custom player title variable `{delay}`.
+- Fixed escape hotkey not working on text input elements.
 - Upgraded NWjs to 0.21.3.
 - \[dev] Upgraded to Webpack 2.
 
