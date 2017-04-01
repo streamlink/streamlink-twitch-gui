@@ -63,11 +63,11 @@ Chocolatey (Windows):
 [`choco install streamlink-twitch-gui`][Package-Chocolatey]
 
 AUR (Arch Linux):  
-[`yaourt -S streamlink-twitch-gui`][Package-AUR]  
-[`yaourt -S streamlink-twitch-gui-git`][Package-AUR-git]
+[`pacaur -S streamlink-twitch-gui`][Package-AUR]  
+[`pacaur -S streamlink-twitch-gui-git`][Package-AUR-git]
 
-Homebrew Cask (OS X):  
-[`brew cask install streamlink-twitch-gui`][Package-Homebrew-cask]  
+Homebrew Cask (MacOS):  
+[`brew cask install streamlink-twitch-gui`][Package-Homebrew-Cask]  
 
 #### Development version
 
@@ -119,5 +119,5 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Package-Chocolatey]: https://chocolatey.org/packages/streamlink-twitch-gui "Chocolatey package"
   [Package-AUR]: https://aur.archlinux.org/packages/streamlink-twitch-gui "AUR stable package"
   [Package-AUR-git]: https://aur.archlinux.org/packages/streamlink-twitch-gui-git "AUR git package"
-  [Package-Homebrew-cask]: https://caskroom.github.io/
+  [Package-Homebrew-Cask]: https://caskroom.github.io/
   [Application-rename]: https://github.com/streamlink/streamlink-twitch-gui/issues/331 "The future of Livestreamer Twitch GUI"
