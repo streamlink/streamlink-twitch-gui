@@ -26,9 +26,11 @@ export default [
 		quality: [
 			"source",
 			"1080p60",
+			"900p60",
 			"720p60",
 			"best",
 			"1080p30",
+			"900p",
 			"720p30",
 			"540p30",
 			"480p30",
@@ -97,8 +99,8 @@ export default [
 		id: "audio",
 		label: "Audio only",
 		quality: [
-			"audio_only",
-			"audio"
+			"audio",
+			"audio_only"
 		].join( "," )
 	}
 ];
