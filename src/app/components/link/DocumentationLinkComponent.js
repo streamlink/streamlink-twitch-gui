@@ -48,9 +48,15 @@ export default ExternalLinkComponent.extend({
 	}),
 
 	url: computed( "baseUrl", "item", function() {
-		var baseUrl = get( this, "baseUrl" );
-		var item    = get( this, "item" );
-		var itemUrl = encodeURIComponent( item );
+		const baseUrl = get( this, "baseUrl" );
+		const item = get( this, "item" );
+		let itemUrl = encodeURIComponent( item );
+
+		// remove leading double dash on Streamlink documentation links
+		let streamprovider = get( this, "settings.streamprovider" );
+		if ( providers[ streamprovider ].type === "streamlink" ) {
+			itemUrl = itemUrl.replace( /^-/, "" );
+		}
 
 		return baseUrl.replace( "{item}", itemUrl );
 	})
