@@ -11,7 +11,10 @@ import {
 	players,
 	langs
 } from "config";
-import qualities from "models/stream/qualities";
+import {
+	qualitiesLivestreamer,
+	qualitiesStreamlink
+} from "models/stream/qualities";
 import {
 	platform as platformName,
 	isWin
@@ -61,7 +64,14 @@ function defaultStreamproviders() {
 }
 
 function defaultQualityPresets() {
-	return qualities.reduce(function( obj, quality ) {
+	return qualitiesLivestreamer.reduce( ( obj, quality ) => {
+		obj[ quality.id ] = "";
+		return obj;
+	}, {} );
+}
+
+function defaultQualities() {
+	return qualitiesStreamlink.reduce( ( obj, quality ) => {
 		obj[ quality.id ] = "";
 		return obj;
 	}, {} );
@@ -115,6 +125,7 @@ export default Model.extend({
 	streamprovider_oauth: attr( "boolean", { defaultValue: true } ),
 	quality             : attr( "string",  { defaultValue: "source" } ),
 	quality_presets     : attr( "",        { defaultValue: defaultQualityPresets } ),
+	qualities           : attr( "",        { defaultValue: defaultQualities } ),
 	player              : attr( "",        { defaultValue: defaultPlayerData } ),
 	player_preset       : attr( "string",  { defaultValue: "default" } ),
 	player_passthrough  : attr( "string",  { defaultValue: "http" } ),
