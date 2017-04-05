@@ -10,7 +10,6 @@ import {
 } from "Ember";
 import {
 	streamprovider as streamproviderConfig,
-	twitch as twitchConfig,
 	vars as varsConfig
 } from "config";
 import {
@@ -42,7 +41,6 @@ const {
 	"version-min": versionMin,
 	"validation-timeout": validationTimeout
 } = streamproviderConfig;
-const { "stream-url": twitchStreamUrl } = twitchConfig;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
 const { logDebug, logError, logResolved } = new Logger( "StreamingService" );
@@ -207,11 +205,9 @@ export default Service.extend( ChannelSettingsMixin, {
 			.then( () => this.getChannelSettings( record, quality ) )
 			// get the exec command and validate
 			.then( () => this.check( record ) )
-			// build parameter array
-			.then( execObj => this.getParameters( record, execObj ) )
 			.then(
 				// launch the stream
-				params => this.launch( record, true, params ),
+				execObj => this.launch( record, true, execObj ),
 				// show error message
 				error => this.onStreamFailure( record, error )
 			);
@@ -568,17 +564,19 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * Run the executable and launch the stream
 	 * @param {Stream} record
 	 * @param {Boolean} firstLaunch
-	 * @param {Object} paramsObj
-	 * @param {String} paramsObj.exec
-	 * @param {String[]} paramsObj.params
+	 * @param {Object} execObj
+	 * @param {String} execObj.exec
+	 * @param {String} execObj.pythonscript
 	 * @returns {Promise}
 	 */
-	launch( record, firstLaunch, paramsObj ) {
+	async launch( record, firstLaunch, execObj ) {
 		// in case the shutdown button was pressed before
 		if ( get( this, "abort" ) ) {
 			this.clear( record );
 			return Promise.reject();
 		}
+
+		const { exec, params } = await this.getParameters( record, execObj );
 
 		return new Promise( ( resolve, reject ) => {
 			record.clearLog();
@@ -586,17 +584,10 @@ export default Service.extend( ChannelSettingsMixin, {
 			set( record, "warning", false );
 			set( this, "active", record );
 
-			let { exec, params } = paramsObj;
 			let spawnQuality = get( record, "quality" );
 
-			let parameters = [
-				...params,
-				twitchStreamUrl.replace( "{channel}", get( record, "channel.name" ) ),
-				get( record, "streamquality" )
-			];
-
 			// spawn the process
-			let child = spawn( exec, parameters, { detached: true } );
+			let child = spawn( exec, params, { detached: true } );
 			set( record, "spawn", child );
 
 
@@ -644,7 +635,7 @@ export default Service.extend( ChannelSettingsMixin, {
 				// quality has been changed
 				let currentQuality = get( record, "quality" );
 				if ( spawnQuality !== currentQuality ) {
-					this.launch( record, false, paramsObj );
+					this.launch( record, false, execObj );
 
 				} else {
 					if ( code !== 0 ) {

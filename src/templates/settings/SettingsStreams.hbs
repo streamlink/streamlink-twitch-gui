@@ -8,20 +8,49 @@
 {{/settings-row}}
 
 {{#if model.advanced}}
-	{{#settings-row
-		"Quality presets"
-		"Customize quality presets."
-		icon="fa-list-ul"
-	}}
-		{{#each qualities as |quality|}}
-			<div class="input-group quality-preset">
-				{{input type="text" classNames="form-control" placeholder=quality.value value=(mut (get model.quality_presets quality.id))}}
-				<span class="input-group-btn">
+	{{#if isStreamlink}}
+		{{#settings-row
+			"Quality presets"
+			"Set a range of stream qualities that will be excluded. Streamlink will then pick the best quality out of the remaining ones."
+			icon="fa-list-ul"
+			notes="The values of the first column exclude qualities. The second column shows the actual quality selection. Please see the wiki and Streamlink's documentation first before making any changes."
+			documentation="--stream-sorting-excludes"
+		}}
+			{{#each qualitiesStreamlink as |quality|}}
+				<div class="quality-preset">
+					{{input
+						type="text"
+						value=(mut (get model.qualities quality.id))
+						placeholder=(if (is-null quality.exclude) "Don't exclude stream qualities" quality.exclude)
+						disabled=(is-null quality.exclude)
+					}}
+					{{input
+						type="text"
+						placeholder=quality.quality
+						disabled=true
+					}}
 					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
-				</span>
-			</div>
-		{{/each}}
-	{{/settings-row}}
+				</div>
+			{{/each}}
+		{{/settings-row}}
+	{{else}}
+		{{#settings-row
+			"Quality presets"
+			"Customize Livestreamer quality presets."
+			icon="fa-list-ul"
+		}}
+			{{#each qualitiesLivestreamer as |quality|}}
+				<div class="quality-preset">
+					{{input
+						type="text"
+						placeholder=quality.quality
+						value=(mut (get model.quality_presets quality.id))
+					}}
+					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
+				</div>
+			{{/each}}
+		{{/settings-row}}
+	{{/if}}
 {{/if}}
 
 {{#settings-row

@@ -116,5 +116,20 @@ export const parameters = [
 		"--retry-streams",
 		null,
 		"settings.retry_streams"
+	),
+	new Parameter(
+		"--stream-sorting-excludes",
+		"isStreamlink",
+		"streamQualitiesExclude"
+	),
+	new Parameter(
+		null,
+		null,
+		"streamUrl"
+	),
+	new Parameter(
+		null,
+		null,
+		"streamQuality"
 	)
 ];

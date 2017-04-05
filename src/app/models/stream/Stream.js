@@ -11,23 +11,31 @@ import {
 	PromiseObject,
 	Model
 } from "EmberData";
+import {
+	streamprovider as streamproviderConfig,
+	twitch as twitchConfig
+} from "config";
 import { parameters } from "./parameters";
 import {
 	getPlayerExec,
 	getPlayerParams
 } from "./playerparameters";
-import qualities from "./qualities";
-import Parameter from "utils/parameters/Parameter";
 import {
-	streamprovider,
-	twitch
-} from "config";
+	qualitiesByIdLivestreamer,
+	qualitiesByIdStreamlink
+} from "models/stream/qualities";
+import Parameter from "utils/parameters/Parameter";
 
 
 const { alias, not } = computed;
 const { service } = inject;
-const { providers } = streamprovider;
-const { oauth: { "client-id": clientId } } = twitch;
+const { providers } = streamproviderConfig;
+const {
+	"stream-url": twitchStreamUrl,
+	oauth: {
+		"client-id": clientId
+	}
+} = twitchConfig;
 
 
 /**
@@ -119,21 +127,46 @@ export default Model.extend({
 		return getPlayerParams( get( this, "settings" ) );
 	}),
 
-	streamquality: computed( "quality", "settings.quality_presets", function() {
-		let quality = get( this, "quality" );
-		let custom = get( this, "settings.quality_presets" );
 
-		// get custom quality list
-		if ( custom.hasOwnProperty( quality ) && custom[ quality ].length > 0 ) {
-			return custom[ quality ];
+	streamQualityPreset: computed( "quality", "isStreamlink", function() {
+		const quality = get( this, "quality" );
+		const isStreamlink = get( this, "isStreamlink" );
+		const qualities = isStreamlink
+			? qualitiesByIdStreamlink
+			: qualitiesByIdLivestreamer;
+
+		return qualities[ quality ]
+		    || qualities[ "source" ];
+	}),
+
+	streamQualitiesExclude: computed( "streamQualityPreset", "settings.qualities", function() {
+		const { id, exclude } = get( this, "streamQualityPreset" );
+		const custom = get( this, "settings.qualities" );
+
+		return custom.hasOwnProperty( id ) && custom[ id ].trim().length > 0
+			? custom[ id ]
+			: exclude;
+	}),
+
+	streamQuality: computed( "streamQualityPreset", "isStreamlink", function() {
+		const { id, quality } = get( this, "streamQualityPreset" );
+
+		if ( get( this, "isStreamlink" ) ) {
+			return quality;
+
+		} else {
+			const custom = get( this, "settings.quality_presets" );
+
+			return custom.hasOwnProperty( id ) && custom[ id ].trim().length > 0
+				? custom[ id ]
+				: quality;
 		}
+	}),
 
-		// get predefined quality list
-		let preset = qualities.findBy( "id", quality );
+	streamUrl: computed( "channel.name", function() {
+		const channel = get( this, "channel.name" );
 
-		return preset
-			? preset.value
-			: qualities.findBy( "id", "source" ).value;
+		return twitchStreamUrl.replace( "{channel}", channel );
 	})
 
 }).reopenClass({
