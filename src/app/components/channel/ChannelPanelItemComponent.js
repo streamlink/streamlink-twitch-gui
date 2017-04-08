@@ -5,6 +5,7 @@ import {
 } from "Ember";
 import Menu from "nwjs/Menu";
 import { openBrowser } from "nwjs/Shell";
+import { set as setClipboard } from "nwjs/Clipboard";
 import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
 
 
@@ -48,10 +49,16 @@ export default Component.extend({
 
 	linkContentMenu( event, url ) {
 		var menu = Menu.create();
-		menu.items.pushObject({
-			label: "Open in browser",
-			click: () => openBrowser( url )
-		});
+		menu.items.pushObjects([
+			{
+				label: "Open in browser",
+				click: () => openBrowser( url )
+			},
+			{
+				label: "Copy link address",
+				click: () => setClipboard( url )
+			}
+		]);
 
 		menu.popup( event );
 	},
