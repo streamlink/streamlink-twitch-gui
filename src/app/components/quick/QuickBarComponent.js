@@ -48,7 +48,7 @@ export default Component.extend({
 
 	mouseLeave() {
 		if ( get( this, "isLocked" ) ) { return; }
-		this.timer = later( set, this, "isOpened", false, 1000 );
+		this.timer = later( () => set( this, "isOpened", false, 1000 ) );
 	},
 
 

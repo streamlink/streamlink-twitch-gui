@@ -81,10 +81,10 @@ export default EmberObject.extend( Evented, {
 
 		if ( obj.submenu ) {
 			data.submenu = new Menu();
-			obj.submenu.forEach(function( submenuObj ) {
+			obj.submenu.forEach( submenuObj => {
 				const submenuItem = this._createMenuItem( submenuObj );
 				data.submenu.append( submenuItem );
-			}, this );
+			});
 		}
 
 		const item = new MenuItem( data );

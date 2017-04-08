@@ -96,7 +96,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 		close() {
 			get( this, "modal" ).closeModal( get( this, "streaming" ) );
-			schedule( "destroy", this, function() {
+			schedule( "destroy", () => {
 				set( this, "streaming.active", null );
 			});
 		},

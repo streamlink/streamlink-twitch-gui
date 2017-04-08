@@ -22,7 +22,7 @@ export default Component.extend({
 	}),
 
 	_logObserver: observer( "log.[]", function() {
-		scheduleOnce( "afterRender", this, "scrollToBottom" );
+		scheduleOnce( "afterRender", () => this.scrollToBottom() );
 	}),
 
 	scrollToBottom: on( "didInsertElement", function() {

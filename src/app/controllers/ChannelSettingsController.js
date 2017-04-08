@@ -25,7 +25,7 @@ export default Controller.extend( RetryTransitionMixin, {
 		const model = get( this, "model.buffer" );
 		const settings = get( this, "settings" );
 
-		original.eachAttribute(function( attr, meta ) {
+		original.eachAttribute( ( attr, meta ) => {
 			const customDefault = meta.options.defaultValue;
 
 			// proxy for setting the custom attr or getting the custom/global attr
@@ -76,7 +76,7 @@ export default Controller.extend( RetryTransitionMixin, {
 
 			defineProperty( this,       attr, attributeProxy );
 			defineProperty( this, `_${attr}`, attributeEnabled );
-		}, this );
+		});
 	}),
 
 	/**
