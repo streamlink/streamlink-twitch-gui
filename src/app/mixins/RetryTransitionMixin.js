@@ -12,7 +12,7 @@ export default Mixin.create({
 	 * @returns {Promise}
 	 */
 	retryTransition( route ) {
-		var transition = get( this, "previousTransition" );
+		const transition = get( this, "previousTransition" );
 
 		if ( !transition ) {
 			return route

@@ -72,9 +72,10 @@ export default Mixin.create( Evented, {
 			});
 	},
 	createRecordData( store, type, snapshot ) {
-		var data = {};
-		var serializer = store.serializerFor( type.modelName );
+		const data = {};
+		const serializer = store.serializerFor( type.modelName );
 		serializer.serializeIntoHash( data, type, snapshot, { includeId: true } );
+
 		return { data: data };
 	},
 
@@ -91,9 +92,10 @@ export default Mixin.create( Evented, {
 			});
 	},
 	updateRecordData( store, type, snapshot ) {
-		var data = {};
-		var serializer = store.serializerFor( type.modelName );
+		const data = {};
+		const serializer = store.serializerFor( type.modelName );
 		serializer.serializeIntoHash( data, type, snapshot );
+
 		return { data: data };
 	},
 
@@ -183,7 +185,7 @@ export default Mixin.create( Evented, {
 	},
 
 	ajaxOptions() {
-		var hash = this._super( ...arguments );
+		const hash = this._super( ...arguments );
 		hash.timeout = 10000;
 		hash.cache = false;
 

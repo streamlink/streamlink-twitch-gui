@@ -31,8 +31,8 @@ export default Component.extend( HotkeyMixin, {
 	 * This will be called synchronously, so we need to copy the element and animate it instead
 	 */
 	willDestroyElement() {
-		var $this  = this.$();
-		var $clone = $this.clone().addClass( "fadeOut" );
+		const $this = this.$();
+		const $clone = $this.clone().addClass( "fadeOut" );
 		$this.parent().append( $clone );
 		$clone.one( "webkitAnimationEnd", function() { $clone.remove(); });
 	},

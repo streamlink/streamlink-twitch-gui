@@ -71,9 +71,10 @@ export default ListItemComponent.extend({
 	 * @returns {boolean} return false if none or all languages are selected
 	 */
 	hasCustomLangFilter: computed( "settings.gui_langfilter", function() {
-		var filters = get( this, "settings.gui_langfilter" );
-		var keys    = Object.keys( filters );
-		var current = filters[ keys.shift() ];
+		const filters = get( this, "settings.gui_langfilter" );
+		const keys = Object.keys( filters );
+		let current = filters[ keys.shift() ];
+
 		return keys.reduce(function( result, value ) {
 			if ( !result ) {
 				value   = filters[ value ];
@@ -86,8 +87,8 @@ export default ListItemComponent.extend({
 
 
 	mouseLeave() {
-		var expanded = get( this, "expanded" );
-		var locked   = get( this, "locked" );
+		const expanded = get( this, "expanded" );
+		const locked = get( this, "locked" );
 		if ( !expanded || locked ) { return; }
 
 		this.clearTimer();

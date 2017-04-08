@@ -48,6 +48,7 @@
 
 		"semi": "error",
 		"no-sequences": "error",
+		"no-var": "error",
 		"quotes": [ "error", "double" ],
 		"prefer-template": "error",
 		"comma-style": [ "error", "last" ],

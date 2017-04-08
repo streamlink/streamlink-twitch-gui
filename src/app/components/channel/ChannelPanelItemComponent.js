@@ -38,7 +38,7 @@ export default Component.extend({
 	},
 
 	contextMenu( event ) {
-		var target = event.target;
+		const target = event.target;
 		if ( target.tagName === "IMG" && target.classList.contains( "withLink" ) ) {
 			return this.linkContentMenu( event, get( this, "panel.link" ) );
 		}
@@ -48,7 +48,7 @@ export default Component.extend({
 	},
 
 	linkContentMenu( event, url ) {
-		var menu = Menu.create();
+		const menu = Menu.create();
 		menu.items.pushObjects([
 			{
 				label: "Open in browser",

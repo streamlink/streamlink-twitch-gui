@@ -13,51 +13,53 @@
 import { isLinux } from "utils/node/platform";
 
 
-var options = {
+const options = {
 	animationTime: 400,
-	stepSize     : 120,
+	stepSize: 120,
 
 	pulseAlgorithm: true,
-	pulseScale    : 4,
+	pulseScale: 4,
 	pulseNormalize: 1,
 
 	accelerationDelta: 20,
-	accelerationMax  : 1,
+	accelerationMax: 1,
 
 	arrowScroll: 50
 };
 
-var enabled = false;
+let enabled = false;
 
 
-var direction = { x: 0, y: 0 };
-var key       = {
-	left    : 37,
-	up      : 38,
-	right   : 39,
-	down    : 40,
+const direction = {
+	x: 0,
+	y: 0
+};
+const key = {
+	left: 37,
+	up: 38,
+	right: 39,
+	down: 40,
 	spacebar: 32,
-	pageup  : 33,
+	pageup: 33,
 	pagedown: 34,
-	end     : 35,
-	home    : 36
+	end: 35,
+	home: 36
 };
 
-var icon = document.createElement( "i" );
+const icon = document.createElement( "i" );
 icon.classList.add( "fa" );
 icon.classList.add( "fa-arrows-alt" );
 icon.classList.add( "middleclick-scroll-icon" );
 
-var isMiddleClickScrolling = false;
+let isMiddleClickScrolling = false;
 
 
 /************************************************
  * SCROLLING
  ************************************************/
-
-var queue = [];
-var pending = false;
-var lastScroll = +new Date();
+let queue = [];
+let pending = false;
+let lastScroll = +new Date();
 
 /**
  * Pushes scroll actions to the scrolling queue.
@@ -66,10 +68,10 @@ function scrollArray( elem, left, top ) {
 	directionCheck( left, top );
 
 	if ( options.accelerationMax !== 1 ) {
-		var now = +new Date();
-		var elapsed = now - lastScroll;
+		const now = +new Date();
+		const elapsed = now - lastScroll;
 		if ( elapsed < options.accelerationDelta ) {
-			var factor = ( 1 + ( 30 / elapsed ) ) / 2;
+			let factor = ( 1 + ( 30 / elapsed ) ) / 2;
 			if ( factor > 1 ) {
 				factor = Math.min( factor, options.accelerationMax );
 				left *= factor;
@@ -93,20 +95,22 @@ function scrollArray( elem, left, top ) {
 		return;
 	}
 
-	var scrollWindow = elem === document.body;
+	const scrollWindow = elem === document.body;
 
 	function step() {
-		var now = +new Date();
-		var scrollX = 0;
-		var scrollY = 0;
+		const now = +new Date();
+		let scrollX = 0;
+		let scrollY = 0;
 
-		for ( var i = 0; i < queue.length; i++ ) {
-			var item     = queue[ i ];
-			var elapsed  = now - item.start;
-			var finished = elapsed >= options.animationTime;
+		for ( let i = 0; i < queue.length; i++ ) {
+			const item = queue[ i ];
+			const elapsed = now - item.start;
+			const finished = elapsed >= options.animationTime;
 
 			// scroll position: [0, 1]
-			var position = finished ? 1 : elapsed / options.animationTime;
+			let position = finished
+				? 1
+				: elapsed / options.animationTime;
 
 			// easing [optional]
 			if ( options.pulseAlgorithm ) {
@@ -114,8 +118,8 @@ function scrollArray( elem, left, top ) {
 			}
 
 			// only need the difference
-			var x = ( item.x * position - item.lastX ) >> 0;
-			var y = ( item.y * position - item.lastY ) >> 0;
+			const x = ( item.x * position - item.lastX ) >> 0;
+			const y = ( item.y * position - item.lastY ) >> 0;
 
 			// add this to the total scrolling
 			scrollX += x;
@@ -172,16 +176,16 @@ function onMousewheel( event ) {
 		return;
 	}
 
-	var target = event.target;
-	var overflowing = overflowingAncestor( target );
+	const target = event.target;
+	let overflowing = overflowingAncestor( target );
 
 	// use default if there's no overflowing element
 	if ( !overflowing ) {
 		return true;
 	}
 
-	var deltaX = event.wheelDeltaX || 0;
-	var deltaY = event.wheelDeltaY || 0;
+	let deltaX = event.wheelDeltaX || 0;
+	let deltaY = event.wheelDeltaY || 0;
 
 	// use wheelDelta if deltaX/Y is not available
 	if ( !deltaX && !deltaY ) {
@@ -207,8 +211,8 @@ function onMousewheel( event ) {
  * @param {KeyboardEvent} event
  */
 function onKeydown( event ) {
-	var target   = event.target;
-	var modifier = event.ctrlKey
+	const target = event.target;
+	const modifier = event.ctrlKey
 		|| event.altKey
 		|| event.metaKey
 		|| event.shiftKey && event.keyCode !== key.spacebar;
@@ -227,10 +231,11 @@ function onKeydown( event ) {
 		return true;
 	}
 
-	var x = 0;
-	var y = 0;
-	var elem = document.querySelector( "main.content" );
-	var clientHeight = !elem || elem === document.body
+	let damt;
+	let x = 0;
+	let y = 0;
+	let elem = document.querySelector( "main.content" );
+	let clientHeight = !elem || elem === document.body
 		? window.innerHeight
 		: elem.clientHeight;
 
@@ -254,7 +259,7 @@ function onKeydown( event ) {
 			y = -elem.scrollTop;
 			break;
 		case key.end:
-			var damt = elem.scrollHeight - elem.scrollTop - clientHeight;
+			damt = elem.scrollHeight - elem.scrollTop - clientHeight;
 			y = damt > 0 ? damt + 10 : 0;
 			break;
 		case key.left:
@@ -286,7 +291,7 @@ function onMousedown( e ) {
 		return;
 	}
 
-	var elem = e.target;
+	let elem = e.target;
 
 	// linux middle mouse shouldn't be overwritten (paste)
 	if ( isLinux && ( elem.tagName === "INPUT" || elem.tagName === "TEXTAREA" ) ) {
@@ -322,19 +327,19 @@ function onMousedown( e ) {
 	icon.style.top  = `${e.clientY}px`;
 	document.body.appendChild( icon );
 
-	var refereceX = e.clientX;
-	var refereceY = e.clientY;
+	const refereceX = e.clientX;
+	const refereceY = e.clientY;
 
-	var speedX = 0;
-	var speedY = 0;
+	let speedX = 0;
+	let speedY = 0;
 
 	// animation loop
-	var last = +new Date();
-	var finished = false;
+	let last = +new Date();
+	let finished = false;
 
 	function step( time ) {
-		var now = time || +new Date();
-		var elapsed = now - last;
+		const now = time || +new Date();
+		const elapsed = now - last;
 		elem.scrollLeft += ( speedX * elapsed ) >> 0;
 		elem.scrollTop  += ( speedY * elapsed ) >> 0;
 		last = now;
@@ -344,12 +349,12 @@ function onMousedown( e ) {
 	}
 	requestAnimationFrame( step );
 
-	var first = true;
+	let first = true;
 
 	function mousemove( e ) {
-		var deltaX = Math.abs( refereceX - e.clientX );
-		var deltaY = Math.abs( refereceY - e.clientY );
-		var movedEnough = Math.max( deltaX, deltaY ) > 10;
+		const deltaX = Math.abs( refereceX - e.clientX );
+		const deltaY = Math.abs( refereceY - e.clientY );
+		const movedEnough = Math.max( deltaX, deltaY ) > 10;
 		if ( first && movedEnough ) {
 			window.addEventListener( "mouseup", remove, false );
 			first = false;
@@ -378,11 +383,11 @@ function onMousedown( e ) {
  * OVERFLOW
  ***********************************************/
 
-var cache = {};
-var cacheAccess    = +new Date();
-var cacheThreshold = 10 * 1000;
-var cacheID        = 0;
-var cacheProperty  = "smoothscrollOverflowID";
+let cache = {};
+let cacheID = 0;
+let cacheAccess = +new Date();
+const cacheThreshold = 10 * 1000;
+const cacheProperty = "smoothscrollOverflowID";
 
 
 function getCacheID( el ) {
@@ -390,13 +395,13 @@ function getCacheID( el ) {
 }
 
 function setCache( elems, overflowing ) {
-	var now = +new Date();
+	const now = +new Date();
 	if ( cacheAccess + cacheThreshold < now ) {
 		cache = {};
 	}
 	cacheAccess = now;
 
-	for ( var i = elems.length; i--; ) {
+	for ( let i = elems.length; i--; ) {
 		cache[ getCacheID( elems[ i ] ) ] = overflowing;
 	}
 
@@ -404,15 +409,15 @@ function setCache( elems, overflowing ) {
 }
 
 function overflowingAncestor( el ) {
-	var elems = [];
+	const elems = [];
 	do {
-		var cached = cache[ getCacheID( el ) ];
+		const cached = cache[ getCacheID( el ) ];
 		if ( cached ) {
 			return setCache( elems, cached );
 		}
 		elems.push( el );
 		if ( el.clientHeight < el.scrollHeight ) {
-			var overflow = getComputedStyle( el, "" ).getPropertyValue( "overflow-y" );
+			const overflow = getComputedStyle( el, "" ).getPropertyValue( "overflow-y" );
 			if ( overflow === "scroll" || overflow === "auto" ) {
 				return setCache( elems, el );
 			}
@@ -448,7 +453,9 @@ function directionCheck( x, y ) {
  * - Michael Herf, http://stereopsis.com/stopping/
  */
 function pulse_( x ) {
-	var val, start, expx;
+	let val;
+	let start;
+	let expx;
 	// test
 	x = x * options.pulseScale;
 

@@ -1,5 +1,5 @@
-var defDelimiter   = /\r\n|\r|\n/g;
-var defMaxBuffSize = 4096;
+const defDelimiter = /\r\n|\r|\n/g;
+const defMaxBuffSize = 4096;
 
 
 /**
@@ -16,9 +16,9 @@ function StreamOutputBuffer( options, callback, thisArg ) {
 		options  = {};
 	}
 
-	var buffer      = "";
-	var delimiter   = options.delimiter   || defDelimiter;
-	var maxBuffSize = options.maxBuffSize || defMaxBuffSize;
+	let buffer = "";
+	const delimiter = options.delimiter || defDelimiter;
+	const maxBuffSize = options.maxBuffSize || defMaxBuffSize;
 
 	function StreamOutputBuffer( data ) {
 		// don't exceed the buffer size limit
@@ -27,7 +27,7 @@ function StreamOutputBuffer( options, callback, thisArg ) {
 		}
 
 		// append output to buffer and split it
-		var lines = ( buffer + String( data ) ).split( delimiter );
+		const lines = ( buffer + String( data ) ).split( delimiter );
 		// set the buffer to the remaining/incomplete line (or to an empty string)
 		buffer = lines.pop();
 

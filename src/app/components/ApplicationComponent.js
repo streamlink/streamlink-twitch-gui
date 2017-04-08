@@ -33,14 +33,14 @@ export default Component.extend({
 	theme: alias( "settings.content.gui_theme" ),
 
 	themeObserver: observer( "themes", "theme", function() {
-		var theme  = get( this, "theme" );
+		let theme = get( this, "theme" );
 
 		if ( themesList.indexOf( theme ) === -1 ) {
 			theme = "default";
 		}
 
-		var list = document.documentElement.classList;
-		[].forEach.call( list, function( name ) {
+		const list = document.documentElement.classList;
+		list.forEach( name => {
 			if ( !reTheme.test( name ) ) { return; }
 			list.remove( name );
 		});

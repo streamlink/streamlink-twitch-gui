@@ -22,7 +22,7 @@ export function runDestroy( destroyed ) {
 }
 
 export function getElem( component, selector ) {
-	var element = get( component, "element" );
+	const element = get( component, "element" );
 	return selector && selector.length
 		? $( selector, element )
 		: $( element );
@@ -37,16 +37,16 @@ export function cleanOutput( component, selector ) {
 }
 
 export function buildOwner( properties ) {
-	var Owner = EmberObject.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
+	const Owner = EmberObject.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
 		init() {
 			this._super.apply( this, arguments );
-			var registry = new Ember.Registry( this._registryOptions );
-			this.__registry__  = registry;
+			const registry = new Ember.Registry( this._registryOptions );
+			this.__registry__ = registry;
 			this.__container__ = registry.container({ owner: this });
 		}
 	});
 
-	var owner = Owner.create( properties || {} );
+	const owner = Owner.create( properties || {} );
 	owner.register( "component-lookup:main", Ember.ComponentLookup );
 
 	return owner;

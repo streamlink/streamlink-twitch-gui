@@ -12,7 +12,7 @@ export default Controller.extend({
 	filter: "",
 
 	modelFiltered: computed( "model.[]", "all", "filter", function() {
-		var filter = get( this, "filter" ).toLowerCase();
+		const filter = get( this, "filter" ).toLowerCase();
 		if ( !reFilter.test( filter ) ) {
 			return get( this, "model" );
 		}
@@ -25,8 +25,8 @@ export default Controller.extend({
 
 	actions: {
 		erase( modelItem ) {
-			var model = get( this, "model" );
-			var settingsRecord = get( modelItem, "settings" );
+			const model = get( this, "model" );
+			const settingsRecord = get( modelItem, "settings" );
 			if ( get( settingsRecord, "isDeleted" ) ) { return; }
 
 			settingsRecord.destroyRecord()

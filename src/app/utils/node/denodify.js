@@ -1,4 +1,4 @@
-var slice = [].slice;
+const slice = [].slice;
 
 
 /**
@@ -14,7 +14,7 @@ function denodify( func, thisArg ) {
 	 * @returns {Promise}
 	 */
 	function denodified() {
-		var args  = slice.call( arguments );
+		const args = slice.call( arguments );
 
 		return new Promise(function( resolve, reject ) {
 			function callback( err, value ) {

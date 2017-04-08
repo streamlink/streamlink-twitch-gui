@@ -55,7 +55,7 @@ export default Component.extend({
 
 	click( event ) {
 		if ( get( this, "clickable" ) ) {
-			var action = event.button === 0
+			const action = event.button === 0
 				// left mouse button
 				? ( event.ctrlKey || event.metaKey
 					// with modifier key

@@ -11,9 +11,9 @@ export default Component.extend({
 	layout,
 
 	content: computed( "text", function() {
-		var text   = get( this, "text" );
-		var parsed = parseString( text );
-		var links  = parsed.links;
+		const text = get( this, "text" );
+		const parsed = parseString( text );
+		const links = parsed.links;
 
 		// merge texts and links
 		return parsed.texts.reduce(function( output, textItem, index ) {

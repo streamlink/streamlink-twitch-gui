@@ -66,14 +66,14 @@ function unignoreNextEvent() {
 
 
 function restoreWindow() {
-	var width  = get( this, "width" );
-	var height = get( this, "height" );
+	const width = get( this, "width" );
+	const height = get( this, "height" );
 	if ( width !== null && height !== null ) {
 		nwWindow.resizeTo( width, height );
 	}
 
-	var x = get( this, "x" );
-	var y = get( this, "y" );
+	const x = get( this, "x" );
+	const y = get( this, "y" );
 	if ( x !== null && y !== null ) {
 		nwWindow.moveTo( x, y );
 	}
@@ -91,7 +91,7 @@ function resetWindow() {
 
 function resetWindowPosition() {
 	// use the DE's main screen and the minimum window size
-	var screen = nwScreen.screens[0].bounds;
+	const screen = nwScreen.screens[ 0 ].bounds;
 	// center the window and don't forget the screen offset
 	nwWindow.width  = manifestWindowWidth;
 	nwWindow.height = manifestWindowHeight;
@@ -111,17 +111,18 @@ function onDisplayBoundsChanged() {
 function isWindowFullyVisible() {
 	if ( !nwScreen.screens ) { return; }
 
-	var x = nwWindow.x;
-	var y = nwWindow.y;
-	var w = nwWindow.width;
-	var h = nwWindow.height;
+	const x = nwWindow.x;
+	const y = nwWindow.y;
+	const w = nwWindow.width;
+	const h = nwWindow.height;
 
 	// the window needs to be fully visible on one screen
 	return nwScreen.screens.some(function( screenObj ) {
-		var bounds = screenObj.bounds;
+		const bounds = screenObj.bounds;
 		// substract screen offset from window position
-		var posX = x - bounds.x;
-		var posY = y - bounds.y;
+		const posX = x - bounds.x;
+		const posY = y - bounds.y;
+
 		// check boundaries
 		return posX >= 0
 			&& posY >= 0
@@ -137,7 +138,7 @@ Application.instanceInitializer({
 	after: [ "ember-data" ],
 
 	initialize( application ) {
-		var store = application.lookup( "service:store" );
+		const store = application.lookup( "service:store" );
 
 		store.findAll( "window" )
 			.then(function( records ) {

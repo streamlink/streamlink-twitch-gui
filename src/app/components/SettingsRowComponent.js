@@ -14,11 +14,7 @@ function getSubstitutionsList( substitutions ) {
 	if ( !( substitutions instanceof Array ) ) { return []; }
 
 	return substitutions.map(function( substitution ) {
-		/** @type {string[]} */
-		var vars = substitution.vars;
-		vars = vars.map(function( name ) {
-			return `{${name}}`;
-		});
+		const vars = substitution.vars.map( name => `{${name}}` );
 
 		return {
 			variable   : vars[0],
@@ -39,7 +35,7 @@ export default Component.extend({
 	documentationUrl: null,
 
 	_substitutions: computed( "substitutions", function() {
-		var substitutions = get( this, "substitutions" );
+		const substitutions = get( this, "substitutions" );
 		return getSubstitutionsList( substitutions );
 	})
 

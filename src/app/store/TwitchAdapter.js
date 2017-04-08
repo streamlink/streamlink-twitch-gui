@@ -53,7 +53,7 @@ export default RESTAdapter.extend( AdapterMixin, {
 
 	access_token: null,
 	tokenObserver: observer( "access_token", function() {
-		var token = get( this, "access_token" );
+		const token = get( this, "access_token" );
 		if ( token === null ) {
 			delete this.headers[ "Authorization" ];
 		} else {

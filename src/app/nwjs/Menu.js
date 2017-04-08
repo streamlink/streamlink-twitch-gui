@@ -47,14 +47,20 @@ export default EmberObject.extend( Evented, {
 
 	_itemsWillChange( observedObj, start, removeCount/*, addCount*/ ) {
 		// remove old menuitems
-		for ( var menu = this.menu, end = start + removeCount; start < end; start++ ) {
+		const menu = this.menu;
+		const end = start + removeCount;
+
+		for ( ; start < end; start++ ) {
 			menu.removeAt( start );
 		}
 	},
 
 	_itemsDidChange( observedObj, start, removeCount, addCount ) {
 		// add new menuitems
-		for ( var menu = this.menu, end = start + addCount, item; start < end; start++ ) {
+		const menu = this.menu;
+		const end = start + addCount;
+
+		for ( let item; start < end; start++ ) {
 			item = this._createMenuItem( observedObj[ start ] );
 			menu.insert( item, start );
 		}
@@ -63,12 +69,12 @@ export default EmberObject.extend( Evented, {
 	},
 
 	_createMenuItem( obj ) {
-		var data = {
-			type   : obj.type || "normal",
+		const data = {
+			type: obj.type || "normal",
 			enabled: obj.enabled === undefined
 				? true
 				: obj.enabled,
-			label  : obj.label,
+			label: obj.label,
 			tooltip: obj.tooltip || "",
 			checked: obj.checked
 		};
@@ -76,7 +82,7 @@ export default EmberObject.extend( Evented, {
 		if ( obj.submenu ) {
 			data.submenu = new Menu();
 			obj.submenu.forEach(function( submenuObj ) {
-				var submenuItem = this._createMenuItem( submenuObj );
+				const submenuItem = this._createMenuItem( submenuObj );
 				data.submenu.append( submenuItem );
 			}, this );
 		}

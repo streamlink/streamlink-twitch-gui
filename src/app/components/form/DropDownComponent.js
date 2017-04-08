@@ -32,7 +32,7 @@ export default Component.extend({
 
 		// TODO: remove Selecter dependency
 
-		var classnames = [].slice.call( this.element.classList )
+		const classnames = [ ...this.element.classList ]
 			.without( "ember-view" )
 			.without( "ember-select" );
 		classnames.unshift( "custom" );
@@ -44,9 +44,9 @@ export default Component.extend({
 	},
 
 	_valueChangedObserver: observer( "value", function() {
-		var content = get( this, "content" );
-		var path    = get( this, "optionValuePath" );
-		var value   = get( this, "value" );
+		const content = get( this, "content" );
+		const path = get( this, "optionValuePath" );
+		const value = get( this, "value" );
 
 		if ( !content.findBy( path, value ) ) {
 			return;
@@ -60,10 +60,10 @@ export default Component.extend({
 	}),
 
 	change() {
-		var index   = this.element.selectedIndex;
-		var content = get( this, "content" );
-		var path    = get( this, "optionValuePath" );
-		var value   = get( content[ index ], path );
+		const index = this.element.selectedIndex;
+		const content = get( this, "content" );
+		const path = get( this, "optionValuePath" );
+		const value = get( content[ index ], path );
 		set( this, "value", value );
 	}
 });

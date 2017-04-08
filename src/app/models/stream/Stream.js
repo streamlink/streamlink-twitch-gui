@@ -90,7 +90,7 @@ export default Model.extend({
 
 
 	kill() {
-		var spawn = get( this, "spawn" );
+		const spawn = get( this, "spawn" );
 		if ( spawn ) {
 			spawn.kill( "SIGTERM" );
 		}

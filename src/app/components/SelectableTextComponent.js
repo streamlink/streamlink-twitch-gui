@@ -15,12 +15,12 @@ export default Component.extend({
 	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
-		var selection = window.getSelection();
-		var selected  = selection.toString();
+		const selection = window.getSelection();
+		const selected = selection.toString();
 
 		if ( !selected.length && event.target.tagName === "A" ) { return; }
 
-		var menu = Menu.create();
+		const menu = Menu.create();
 		menu.items.pushObject({
 			label  : "Copy selection",
 			enabled: selected.length,

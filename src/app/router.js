@@ -81,7 +81,7 @@ ApplicationRouter.reopen({
 	lastRouteName: "index",
 
 	_updateLastRouteName: on( "willTransition", function() {
-		var routeName = get( this, "currentRouteName" );
+		const routeName = get( this, "currentRouteName" );
 		if ( routeName && routeName !== "loading" && routeName !== "error" ) {
 			set( this, "lastRouteName", routeName );
 		}

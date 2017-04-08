@@ -53,7 +53,7 @@ export default Controller.extend( RetryTransitionMixin, {
 	}),
 
 	hasLoginResult: computed( "userStatus", function() {
-		var userStatus = get( this, "userStatus" );
+		const userStatus = get( this, "userStatus" );
 		return ( userStatus & 2 ) > 0;
 	}),
 
@@ -67,7 +67,7 @@ export default Controller.extend( RetryTransitionMixin, {
 
 
 	serverObserver: observer( "auth.server", function() {
-		var authServer = get( this, "auth.server" );
+		const authServer = get( this, "auth.server" );
 		set( this, "loginStatus", authServer ? 1 : 0 );
 	}),
 

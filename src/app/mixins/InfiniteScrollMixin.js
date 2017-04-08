@@ -125,15 +125,15 @@ export default Mixin.create({
 	 * Calculate how many items are needed to completely fill the container
 	 */
 	calcFetchSize() {
-		var itemSel = get( this, "itemSelector" );
-		var offset  = get( this, "offset" );
-		var max     = get( this, "maxLimit" );
-		var columns = getNeededColumns( itemSel );
-		var rows    = getNeededRows( itemSel );
-		var uneven  = offset % columns;
+		const itemSel = get( this, "itemSelector" );
+		const offset = get( this, "offset" );
+		const max = get( this, "maxLimit" );
+		const columns = getNeededColumns( itemSel );
+		const rows = getNeededRows( itemSel );
+		const uneven = offset % columns;
 
 		// fetch size + number of items to fill the last row after a window resize
-		var limit   = ( columns * rows ) + ( uneven > 0 ? columns - uneven : 0 );
+		const limit = ( columns * rows ) + ( uneven > 0 ? columns - uneven : 0 );
 
 		set( this, "limit", Math.min( limit, max ) );
 	},
@@ -153,17 +153,17 @@ export default Mixin.create({
 
 		// offset (current model length)
 		// setup oneWay computed property to the value of `contentPath`
-		let contentPath = get( this, "contentPath" );
-		let path = `${contentPath}.length`;
-		let computedOffset = computed( path, "filteredOffset", () => {
+		const contentPath = get( this, "contentPath" );
+		const path = `${contentPath}.length`;
+		const computedOffset = computed( path, "filteredOffset", () => {
 			// increase model length by number of filtered records
 			return get( this, path ) + get( this, "filteredOffset" );
 		});
 		defineProperty( this, "offset", computedOffset );
 
 
-		let offset = get( this, "offset" );
-		let limit  = get( this, "limit" );
+		const offset = get( this, "offset" );
+		const limit  = get( this, "limit" );
 
 		set( controller, "isFetching", false );
 		set( controller, "hasFetchedAll", offset < limit );
@@ -176,13 +176,13 @@ export default Mixin.create({
 
 	filterFetchedContent( key, value ) {
 		return records => {
-			let filtered = key instanceof Function
+			const filtered = key instanceof Function
 				? records.filter( key )
 				: records.filterBy( key, value );
 
-			let recordsLength = get( records, "length" );
-			let filteredLength = get( filtered, "length" );
-			let diff = recordsLength - filteredLength;
+			const recordsLength = get( records, "length" );
+			const filteredLength = get( filtered, "length" );
+			const diff = recordsLength - filteredLength;
 
 			// add to filteredOffset, so that next requests don't include the filtered records
 			this.incrementProperty( "filteredOffset", diff );
@@ -206,20 +206,20 @@ export default Mixin.create({
 		},
 
 		willFetchContent( force ) {
-			var controller = get( this, "controller" );
-			var isFetching = get( controller, "isFetching" );
-			var fetchedAll = get( controller, "hasFetchedAll" );
+			const controller = get( this, "controller" );
+			const isFetching = get( controller, "isFetching" );
+			const fetchedAll = get( controller, "hasFetchedAll" );
 
 			// we're already busy or finished fetching
 			if ( isFetching || fetchedAll ) { return; }
 
 			this.calcFetchSize();
 
-			var content = get( this, get( this, "contentPath" ) );
-			var offset  = get( this, "offset" );
-			var limit   = get( this, "limit" );
-			var max     = get( this, "maxAutoFetches" );
-			var num     = offset / limit;
+			const content = get( this, get( this, "contentPath" ) );
+			const offset = get( this, "offset" );
+			const limit = get( this, "limit" );
+			const max = get( this, "maxAutoFetches" );
+			const num = offset / limit;
 
 			// don't fetch infinitely
 			if ( !force && num > max ) { return; }

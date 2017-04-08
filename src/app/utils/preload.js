@@ -13,7 +13,7 @@ function preload( withError, list ) {
 		}
 
 		return new Promise(function( resolve, reject ) {
-			var image = new Image();
+			let image = new Image();
 
 			image.addEventListener( "load", function() {
 				image = null;
@@ -39,7 +39,7 @@ function preload( withError, list ) {
 			// create a flat array out of all traversal strings
 			makeArray( list ).reduce(function createPromiseList( promises, traverse ) {
 				// traverse response data
-				var resources = response.mapBy
+				let resources = response.mapBy
 					? response.mapBy( traverse )
 					: makeArray( response ).mapBy( traverse );
 

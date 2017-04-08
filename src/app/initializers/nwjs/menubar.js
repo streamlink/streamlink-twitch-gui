@@ -11,14 +11,14 @@ const { "display-name": displayName } = main;
 export function createNativeMenuBar( routingService ) {
 	if ( !isDarwin ) { return; }
 
-	var menubar = Menu.create({ type: "menubar" });
+	let menubar = Menu.create({ type: "menubar" });
 	menubar.createMacBuiltin( displayName );
 	menubar = menubar.menu;
 
 	// Add a preferences menu item to the main menubar submenu
-	var mainMenu = menubar.items[ 0 ].submenu;
+	const mainMenu = menubar.items[ 0 ].submenu;
 	mainMenu.insert( new MenuItem({ type: "separator" }), 1 );
-	var preferences = new MenuItem({
+	const preferences = new MenuItem({
 		type: "normal",
 		label: "Preferences",
 		key: ",",
@@ -28,8 +28,8 @@ export function createNativeMenuBar( routingService ) {
 	mainMenu.insert( preferences, 2 );
 
 	// Add a refresh menu item to the view menubar submenu
-	var viewMenu = menubar.items[ 2 ].submenu;
-	var refresh = new MenuItem({
+	const viewMenu = menubar.items[ 2 ].submenu;
+	const refresh = new MenuItem({
 		type: "normal",
 		label: "Refresh",
 		key: "r",

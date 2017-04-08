@@ -14,7 +14,7 @@ export default Model.extend({
 	date  : attr( "date" ),
 
 	label: computed( "filter", function() {
-		var filter = get( this, "filter" );
+		const filter = get( this, "filter" );
 		return this.constructor.getLabel( filter );
 	})
 
@@ -36,7 +36,7 @@ export default Model.extend({
 	}),
 
 	getLabel( filter ) {
-		var map = get( this, "filtersmap" );
+		const map = get( this, "filtersmap" );
 		return map.hasOwnProperty( filter )
 			? map[ filter ].label
 			: "All";

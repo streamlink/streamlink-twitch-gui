@@ -38,14 +38,14 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 	qualities,
 	versionMin: computed( "settings.streamprovider", function() {
-		let streamprovider = get( this, "settings.streamprovider" );
-		let type = providers[ streamprovider ][ "type" ];
+		const streamprovider = get( this, "settings.streamprovider" );
+		const type = providers[ streamprovider ][ "type" ];
 
 		return versionMin[ type ];
 	}),
 
 	providername: computed( "settings.streamprovider", function() {
-		let streamprovider = get( this, "settings.streamprovider" );
+		const streamprovider = get( this, "settings.streamprovider" );
 
 		return providers[ streamprovider ][ "name" ];
 	}),
@@ -81,8 +81,8 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 	actions: {
 		download( success, failure ) {
-			let streamprovider = get( this, "settings.streamprovider" );
-			let provider = providers[ streamprovider ][ "type" ];
+			const streamprovider = get( this, "settings.streamprovider" );
+			const provider = providers[ streamprovider ][ "type" ];
 
 			openBrowser( downloadUrl[ provider ] )
 				.then( success, failure )
@@ -102,7 +102,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		},
 
 		shutdown() {
-			var active = get( this, "active" );
+			const active = get( this, "active" );
 			if ( active ) {
 				active.kill();
 			}
@@ -110,7 +110,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		},
 
 		toggleLog() {
-			var active = get( this, "active" );
+			const active = get( this, "active" );
 			if ( active ) {
 				active.toggleProperty( "showLog" );
 			}

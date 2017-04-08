@@ -18,8 +18,8 @@ export default RESTSerializer.extend( EmbeddedRecordsMixin, {
 	extractMeta( store, type, payload ) {
 		if ( !payload ) { return; }
 
-		var primaryKey = this.primaryKey;
-		var data = {};
+		const primaryKey = this.primaryKey;
+		const data = {};
 
 		Object.keys( payload ).forEach(function( key ) {
 			if ( key.charAt( 0 ) === "_" && key !== primaryKey ) {

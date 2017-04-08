@@ -2,7 +2,8 @@ import { Helper } from "Ember";
 
 
 export default Helper.helper(function( params ) {
-	var viewers = Number( params[0] );
+	const viewers = Number( params[ 0 ] );
+
 	return isNaN( viewers )
 		? "0"
 		: viewers >= 1000000

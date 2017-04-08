@@ -5,10 +5,10 @@ import {
 import qualities from "models/stream/qualities";
 
 
-var LS = window.localStorage;
+const LS = window.localStorage;
 
 function upgradeLocalstorage() {
-	var old = LS.getItem( "app" );
+	let old = LS.getItem( "app" );
 	if ( old === null ) { return; }
 
 	try {
@@ -18,7 +18,7 @@ function upgradeLocalstorage() {
 	}
 
 	Object.keys( old ).forEach(function( key ) {
-		var data = {};
+		const data = {};
 		data[ key ] = old[ key ];
 		LS.setItem(
 			key.toLowerCase(),
@@ -30,9 +30,9 @@ function upgradeLocalstorage() {
 }
 
 function upgradeSettings() {
-	var data = JSON.parse( LS.getItem( "settings" ) );
+	const data = JSON.parse( LS.getItem( "settings" ) );
 	if ( !data || !data.settings || !data.settings.records[1] ) { return; }
-	var settings = data.settings.records[1];
+	const settings = data.settings.records[ 1 ];
 
 	if ( typeof settings.gui_minimize !== "number" ) {
 		settings.gui_minimize = 0;
@@ -97,7 +97,7 @@ function upgradeSettings() {
 
 	// remove unused or disabled language filters
 	Object.keys( settings.gui_langfilter || {} ).forEach(function( code ) {
-		var lang = langs[ code ];
+		const lang = langs[ code ];
 		if ( !lang || lang.disabled ) {
 			delete settings.gui_langfilter[ code ];
 		}
@@ -115,10 +115,10 @@ function upgradeSettings() {
 }
 
 function upgradeChannelSettings() {
-	var data = JSON.parse( LS.getItem( "channelsettings" ) );
+	const data = JSON.parse( LS.getItem( "channelsettings" ) );
 	// data key has a dash in it
 	if ( !data || !data[ "channel-settings" ] ) { return; }
-	var channelsettings = data[ "channel-settings" ].records;
+	const channelsettings = data[ "channel-settings" ].records;
 
 	Object.keys( channelsettings ).forEach(function( key ) {
 		let settings = channelsettings[ key ];

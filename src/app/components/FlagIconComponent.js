@@ -18,8 +18,8 @@ export default Component.extend({
 	withCursor: true,
 
 	flag: computed( "lang", function() {
-		var lang  = get( this, "lang" );
-		var code  = langs[ lang ];
+		const lang = get( this, "lang" );
+		const code = langs[ lang ];
 
 		return code
 			? `flag-${code.flag}`
@@ -29,7 +29,7 @@ export default Component.extend({
 	title: computed( "withTitle", "lang", function() {
 		if ( !get( this, "withTitle" ) ) { return ""; }
 
-		var lang  = get( this, "lang" );
+		let lang = get( this, "lang" );
 
 		if ( !langs[ lang ] ) { return ""; }
 		lang = langs[ lang ][ "lang" ];

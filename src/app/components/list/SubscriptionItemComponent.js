@@ -30,7 +30,7 @@ export default ListItemComponent.extend({
 	emoticons: alias( "product.emoticons" ),
 
 	style: computed( "channel.profile_banner", "channel.video_banner", function() {
-		let banner = getWithDefault( this,
+		const banner = getWithDefault( this,
 			"channel.profile_banner",
 			getWithDefault( this, "channel.video_banner", "" )
 		);
@@ -39,18 +39,20 @@ export default ListItemComponent.extend({
 	}),
 
 	hasEnded: computed( "content.access_end", function() {
-		var access_end = get( this, "content.access_end" );
+		const access_end = get( this, "content.access_end" );
+
 		return new Date() > access_end;
 	}).volatile(),
 
 	ends: computed( "content.access_end", function() {
-		var access_end = get( this, "content.access_end" );
+		const access_end = get( this, "content.access_end" );
+
 		return new Moment().to( access_end );
 	}).volatile(),
 
 
 	openBrowser( url ) {
-		let channel = get( this, "channel.name" );
+		const channel = get( this, "channel.name" );
 
 		return openBrowser( url, {
 			channel

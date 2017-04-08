@@ -54,8 +54,8 @@ export default Component.extend( HotkeyMixin, {
 
 		this.content.volatile();
 
-		var store   = get( this, "store" );
-		var filters = store.modelFor( "search" ).filters;
+		const store = get( this, "store" );
+		const filters = store.modelFor( "search" ).filters;
 		set( this, "filters", filters );
 
 		store.findAll( "search" )
@@ -66,13 +66,13 @@ export default Component.extend( HotkeyMixin, {
 
 
 	addRecord( query, filter ) {
-		var store = get( this, "store" );
-		var model = get( this, "model" );
-		var match = model.filter(function( record ) {
-			return query  === get( record, "query" )
-			    && filter === get( record, "filter" );
-		});
-		var record;
+		const store = get( this, "store" );
+		const model = get( this, "model" );
+		const match = model.filter( function( record ) {
+			return query === get( record, "query" )
+				&& filter === get( record, "filter" );
+		} );
+		let record;
 
 		// found a matching record? just update the date property and save the record
 		if ( get( match, "length" ) === 1 ) {
@@ -87,8 +87,8 @@ export default Component.extend( HotkeyMixin, {
 		}
 
 		// create a new record
-		var id = 1 + Number( getWithDefault( model, "lastObject.id", 0 ) );
-		var date = new Date();
+		const id = 1 + Number( getWithDefault( model, "lastObject.id", 0 ) );
+		const date = new Date();
 		record = store.createRecord( "search", {
 			id,
 			query,
@@ -101,7 +101,7 @@ export default Component.extend( HotkeyMixin, {
 	},
 
 	deleteAllRecords() {
-		var model = get( this, "model" );
+		const model = get( this, "model" );
 		model.forEach(function( record ) {
 			record.deleteRecord();
 		});
@@ -164,7 +164,7 @@ export default Component.extend( HotkeyMixin, {
 		},
 
 		toggleDropdown() {
-			var showDropdown = get( this, "showDropdown" );
+			let showDropdown = get( this, "showDropdown" );
 			set( this, "showDropdown", !showDropdown );
 		},
 
@@ -173,10 +173,10 @@ export default Component.extend( HotkeyMixin, {
 		},
 
 		submit() {
-			var query  = get( this, "query" ).trim();
-			var filter = get( this, "filter" );
+			let query = get( this, "query" ).trim();
+			let filter = get( this, "filter" );
 
-			var stream = getStreamFromUrl( query );
+			const stream = getStreamFromUrl( query );
 			if ( stream ) {
 				query  = stream;
 				filter = "channels";
@@ -188,8 +188,8 @@ export default Component.extend( HotkeyMixin, {
 		},
 
 		searchHistory( record ) {
-			var query  = get( record, "query" );
-			var filter = get( record, "filter" );
+			const query = get( record, "query" );
+			const filter = get( record, "filter" );
 			this.doSearch( query, filter );
 		},
 

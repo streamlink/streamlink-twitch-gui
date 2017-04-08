@@ -14,7 +14,7 @@ const attributes = [
 // Can't add attributes on runtime (init()) due to ember's caching policy, so do it this way
 const attrs = {};
 attributes.forEach(function( name ) {
-	var meta = Settings.metaForProperty( name );
+	const meta = Settings.metaForProperty( name );
 	if ( !meta || !meta.isAttribute ) { return; }
 	attrs[ name ] = attr( meta.type, { defaultValue: null } );
 });

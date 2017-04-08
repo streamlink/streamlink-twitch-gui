@@ -4,7 +4,9 @@
  * @returns {boolean}
  */
 export function all() {
-	for ( var i = 0, l = arguments.length; i < l; i++ ) {
+	const l = arguments.length;
+
+	for ( let i = 0; i < l; i++ ) {
 		if ( this.indexOf( arguments[ i ] ) < 0 ) {
 			return false;
 		}
@@ -18,7 +20,9 @@ export function all() {
  * @returns {boolean}
  */
 export function some() {
-	for ( var i = 0, l = arguments.length; i < l; i++ ) {
+	const l = arguments.length;
+
+	for ( let i = 0; i < l; i++ ) {
 		if ( this.indexOf( arguments[ i ] ) >= 0 ) {
 			return true;
 		}

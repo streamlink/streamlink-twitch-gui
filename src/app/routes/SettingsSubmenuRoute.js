@@ -10,12 +10,12 @@ export default Route.extend({
 	},
 
 	activate() {
-		var settingsController = this.controllerFor( "settings" );
+		const settingsController = this.controllerFor( "settings" );
 		set( settingsController, "currentSubmenu", this.routeName );
 	},
 
 	deactivate() {
-		var settingsController = this.controllerFor( "settings" );
+		const settingsController = this.controllerFor( "settings" );
 		set( settingsController, "isAnimated", true );
 	}
 });

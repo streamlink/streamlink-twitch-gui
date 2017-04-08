@@ -49,7 +49,7 @@ export default Route.extend({
 
 		// remove duplicates
 		Object.keys( duplicates ).forEach(function( key ) {
-			var keys = duplicates[ key ];
+			const keys = duplicates[ key ];
 			keys.forEach(function( dup ) {
 				if ( error[ key ] === error[ dup ] ) {
 					delete error[ dup ];
@@ -57,10 +57,10 @@ export default Route.extend({
 			});
 		});
 
-		var props = errorProps.slice();
+		const props = errorProps.slice();
 
 		// handle rejected promises with a passed Error object as reason
-		var reason = get( error, "reason" );
+		const reason = get( error, "reason" );
 		if ( reason instanceof Error ) {
 			error = reason;
 		} else if ( reason !== undefined ) {
@@ -73,9 +73,9 @@ export default Route.extend({
 		}
 
 		// create the model
-		var model = props
+		const model = props
 			.filter(function( key ) {
-				var value = error[ key ];
+				const value = error[ key ];
 				return !isNone( value )
 				    && !( value instanceof Object )
 				    && String( value ).trim().length > 0

@@ -21,15 +21,15 @@ export default Controller.extend( RetryTransitionMixin, {
 	qualities,
 
 	modelObserver: observer( "model", function() {
-		var original = get( this, "model.model" );
-		var model    = get( this, "model.buffer" );
-		var settings = get( this, "settings" );
+		const original = get( this, "model.model" );
+		const model = get( this, "model.buffer" );
+		const settings = get( this, "settings" );
 
 		original.eachAttribute(function( attr, meta ) {
-			var customDefault = meta.options.defaultValue;
+			const customDefault = meta.options.defaultValue;
 
 			// proxy for setting the custom attr or getting the custom/global attr
-			var attributeProxy = computed(
+			const attributeProxy = computed(
 				`model.buffer.${attr}`,
 				`settings.${attr}`,
 				{
@@ -44,7 +44,7 @@ export default Controller.extend( RetryTransitionMixin, {
 					},
 					get() {
 						// return the global value if the custom value is null
-						var val = get( model, attr );
+						const val = get( model, attr );
 						return val === customDefault
 							? get( settings, attr )
 							: val;
@@ -53,7 +53,7 @@ export default Controller.extend( RetryTransitionMixin, {
 			);
 
 			// computed property for enabling/disabling the custom attribute
-			var attributeEnabled = computed(
+			const attributeEnabled = computed(
 				`model.buffer.${attr}`,
 				{
 					set( key, value ) {
@@ -61,8 +61,8 @@ export default Controller.extend( RetryTransitionMixin, {
 						// true  => set attr value to global value (init)
 						value = !!value;
 						set( model, attr, value
-								? get( settings, attr )
-								: null
+							? get( settings, attr )
+							: null
 						);
 						return value;
 					},
@@ -91,7 +91,7 @@ export default Controller.extend( RetryTransitionMixin, {
 		record.setProperties( buffer );
 
 		// check if the record has any values set
-		var isEmpty = true;
+		let isEmpty = true;
 		record.eachAttribute(function( attr, meta ) {
 			if ( get( record, attr ) !== meta.options.defaultValue ) {
 				isEmpty = false;

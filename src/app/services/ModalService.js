@@ -37,7 +37,7 @@ export default Service.extend({
 	},
 
 	closeModal( context, force ) {
-		var _context = get( this, "context" );
+		const _context = get( this, "context" );
 		if ( !force && _context !== null && context !== _context ) { return; }
 
 		setProperties( this, {

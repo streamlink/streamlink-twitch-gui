@@ -8,8 +8,8 @@ import {
 export default Route.extend({
 	actions: {
 		didTransition() {
-			var settingsController = this.controllerFor( "settings" );
-			var goto = get( settingsController, "currentSubmenu" );
+			const settingsController = this.controllerFor( "settings" );
+			let goto = get( settingsController, "currentSubmenu" );
 			if ( !goto ) {
 				goto = "settings.main";
 			}

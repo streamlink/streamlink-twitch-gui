@@ -1,11 +1,11 @@
 export default function() {
-	var selectable = true;
+	let selectable = true;
 
 	document.addEventListener( "selectstart", function( e ) {
 		if ( selectable ) {
 			selectable = false;
 
-			var el = e.target;
+			let el = e.target;
 			if ( /input|textarea/i.test( el.tagName ) ) {
 				return;
 			}
