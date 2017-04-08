@@ -35,7 +35,7 @@ export default Component.extend( HotkeyMixin, {
 	content: sort( "model", "sortBy" ),
 	sortBy: [ "date:desc" ],
 
-	reQuery: /^[a-z0-9]{3,}/i,
+	reQuery: /^\S{3,}/,
 
 	showDropdown: false,
 	filter: "all",
