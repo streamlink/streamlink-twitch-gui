@@ -39,7 +39,7 @@ export default TextField.extend({
 					const before = value.substr( 0, element.selectionStart );
 					const after = value.substr( element.selectionEnd );
 
-					element.value = before + clip + after;
+					element.value = `${before}${clip}${after}`;
 					element.selectionStart = element.selectionEnd = before.length + clip.length;
 				}
 			}

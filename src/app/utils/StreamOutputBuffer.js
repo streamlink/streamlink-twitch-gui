@@ -26,8 +26,10 @@ function StreamOutputBuffer( options, callback, thisArg ) {
 			throw new Error( "Buffer size limit exceeded" );
 		}
 
+		// make sure output is a string
+		data = String( data );
 		// append output to buffer and split it
-		const lines = ( buffer + String( data ) ).split( delimiter );
+		const lines = `${buffer}${data}`.split( delimiter );
 		// set the buffer to the remaining/incomplete line (or to an empty string)
 		buffer = lines.pop();
 
