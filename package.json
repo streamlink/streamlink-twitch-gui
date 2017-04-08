@@ -38,7 +38,7 @@
 		"raw-loader": "0.5.1",
 		"file-loader": "0.10.1",
 		"svgo-loader": "1.2.1",
-		"css-loader": "bastimeyer/css-loader#sourcemap-fix",
+		"css-loader": "0.28.0",
 		"less-loader": "4.0.2",
 		"less": "2.7.2",
 		"less-plugin-clean-css": "1.5.1",
