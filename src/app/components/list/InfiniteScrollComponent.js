@@ -98,11 +98,11 @@ export default Component.extend({
 		let $parent   = $( parent );
 		let action    = get( this, "action" );
 		let threshold = get( this, "threshold" );
-		let listener  = function() {
+		let listener  = () => {
 			if ( this.infiniteScroll( parent, threshold ) ) {
 				action( false );
 			}
-		}.bind( this );
+		};
 
 		set( this, "$parent", $parent );
 		set( this, "listener", listener );

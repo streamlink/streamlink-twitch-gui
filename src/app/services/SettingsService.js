@@ -18,17 +18,16 @@ export default ObjectProxy.extend({
 	init() {
 		this._super( ...arguments );
 
-		var store = get( this, "store" );
+		const store = get( this, "store" );
 
 		store.findAll( "settings" )
-			.then(function( records ) {
-				return records.content.length
-					? records.objectAt( 0 )
-					: store.createRecord( "settings", { id: 1 } ).save();
-			})
-			.then(function( settings ) {
+			.then( records => records.content.length
+				? records.objectAt( 0 )
+				: store.createRecord( "settings", { id: 1 } ).save()
+			)
+			.then( settings => {
 				set( this, "content", settings );
-			}.bind( this ) );
+			});
 	}
 
 }).reopenClass({

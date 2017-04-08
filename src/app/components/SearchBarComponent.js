@@ -59,9 +59,9 @@ export default Component.extend( HotkeyMixin, {
 		set( this, "filters", filters );
 
 		store.findAll( "search" )
-			.then(function( records ) {
+			.then( records => {
 				set( this, "model", records );
-			}.bind( this ) );
+			});
 	},
 
 
@@ -124,23 +124,23 @@ export default Component.extend( HotkeyMixin, {
 
 	_prepareDropdown: on( "didInsertElement", function() {
 		// dropdown
-		var self     = this;
-		var $element = self.$();
-		var dropdown = $element.find( ".searchbar-dropdown" )[0];
-		var button   = $element.find( ".btn-dropdown" )[0];
-		var search   = $element.find( "input[type='search']" ).focus(function() {
-			next( this, this.select );
-		})[0];
+		const $element = this.$();
+		const dropdown = $element.find( ".searchbar-dropdown" )[ 0 ];
+		const button = $element.find( ".btn-dropdown" )[ 0 ];
+		const search = $element.find( "input[type='search']" )
+			.focus(function() {
+				next( this, this.select );
+			})[ 0 ];
 
-		$( document.body ).click(function( event ) {
-			var $target = $( event.target );
+		$( document.body ).click( event => {
+			const $target = $( event.target );
 			// ignore clicks on the input, the dropdown button and on the dropdown itself
 			if (
 				   !$target.closest( search ).length
 				&& !$target.closest( button ).length
 				&& !$target.closest( dropdown ).length
 			) {
-				set( self, "showDropdown", false );
+				set( this, "showDropdown", false );
 			}
 		});
 	}),

@@ -114,7 +114,7 @@ export default Model.extend({
 		return Promise.all([
 			get( this, "playerExec.promise" )
 		])
-			.then( Parameter.getParameters.bind( null, this, parameters ) );
+			.then( () => Parameter.getParameters( this, parameters ) );
 	},
 
 	playerExec: computed( "settings.player", "settings.player_preset", function() {

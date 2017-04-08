@@ -120,23 +120,26 @@ export default Controller.extend( RetryTransitionMixin, {
 
 	actions: {
 		apply( success, failure ) {
-			var modal  = get( this, "modal" );
-			var model  = get( this, "model.model" );
-			var buffer = get( this, "model.buffer" ).applyChanges().getContent();
+			const modal = get( this, "modal" );
+			const model = get( this, "model.model" );
+			const buffer = get( this, "model.buffer" ).applyChanges().getContent();
+
 			this.saveRecord( model, buffer )
 				.then( success, failure )
-				.then( modal.closeModal.bind( modal, this ) )
-				.then( this.retryTransition.bind( this ) )
-				.catch( model.rollbackAttributes.bind( model ) );
+				.then( () => modal.closeModal( this ) )
+				.then( () => this.retryTransition() )
+				.catch( () => model.rollbackAttributes() );
 		},
 
 		discard( success ) {
-			var modal = get( this, "modal" );
+			const modal = get( this, "modal" );
+
 			get( this, "model.buffer" ).discardChanges();
+
 			Promise.resolve()
 				.then( success )
-				.then( modal.closeModal.bind( modal, this ) )
-				.then( this.retryTransition.bind( this ) );
+				.then( () => modal.closeModal( this ) )
+				.then( () => this.retryTransition() );
 		},
 
 		cancel() {

@@ -10,26 +10,27 @@ Store.reopen({
 	 * @param {string|number} id
 	 * @param {Object?} options
 	 * @param {boolean?} options.reload
-	 * @returns {Promise.<DS.Model?>}
+	 * @returns {Promise.<Model>}
 	 */
 	findExistingRecord( modelName, id, options ) {
-		var store = this;
 		options = assign( { reload: true }, options );
 
-		return store.findRecord( modelName, id, options )
-			.catch(function() {
+		return this.findRecord( modelName, id, options )
+			.catch( err => {
 				// unload the generated empty record
-				var record = store.peekRecord( modelName, id );
+				const record = this.peekRecord( modelName, id );
+
 				if ( record ) {
-					store.unloadRecord( record );
+					this.unloadRecord( record );
 				}
-				return Promise.reject();
+
+				return Promise.reject( err );
 			});
 	},
 
 	query() {
 		return this._super( ...arguments )
-			.then(function( recordArray ) {
+			.then( recordArray => {
 				recordArray._unregisterFromManager();
 				return recordArray;
 			});

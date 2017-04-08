@@ -88,19 +88,18 @@ export default Controller.extend( RetryTransitionMixin, {
 			if ( get( this, "isLoggingIn" ) ) { return; }
 			set( this, "loginStatus", 1 );
 
-			var self = this;
-			var auth = get( this, "auth" );
+			const auth = get( this, "auth" );
 
 			auth.signin()
-				.then( function() {
-					set( self, "loginStatus", 3 );
-					self.retryTransition();
+				.then( () => {
+					set( this, "loginStatus", 3 );
+					this.retryTransition();
 				})
-				.catch(function() {
-					set( self, "loginStatus", 2 );
+				.catch( () => {
+					set( this, "loginStatus", 2 );
 					wait( 3000 )()
-						.then(function() {
-							set( self, "loginStatus", 0 );
+						.then( () => {
+							set( this, "loginStatus", 0 );
 						});
 				});
 		},
@@ -110,30 +109,29 @@ export default Controller.extend( RetryTransitionMixin, {
 			if ( get( this, "isLoggingIn" ) ) { return; }
 			set( this, "loginStatus", 5 );
 
-			var self  = this;
-			var token = get( this, "token" );
-			var auth  = get( this, "auth" );
+			const token = get( this, "token" );
+			const auth = get( this, "auth" );
 
 			// show the loading icon for a sec and wait
 			wait( 1000 )()
 				// login attempt
-				.then( auth.login.bind( auth, token, false ) )
+				.then( () => auth.login( token, false ) )
 				// visualize result: update button and icon
-				.then(function() {
-					set( self, "loginStatus", 7 );
+				.then( () => {
+					set( this, "loginStatus", 7 );
 					return wait( 1000 )( true )
 						.then( success );
-				}, function() {
-					set( self, "loginStatus", 6 );
+				}, () => {
+					set( this, "loginStatus", 6 );
 					return wait( 3000 )( false )
 						.then( failure )
-						.catch(function( data ) { return data; });
+						.catch( data => data );
 				})
 				// retry transition on success
-				.then(function( result ) {
-					set( self, "loginStatus", 4 );
+				.then( result => {
+					set( this, "loginStatus", 4 );
 					if ( result ) {
-						self.retryTransition();
+						this.retryTransition();
 					}
 				});
 		},

@@ -34,16 +34,17 @@ export default Component.extend({
 	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
-		var menu = Menu.create();
+		const menu = Menu.create();
+		const url = get( this, "url" );
 
 		menu.items.pushObjects([
 			{
 				label: "Open in browser",
-				click: this.openUrlInBrowser.bind( this )
+				click: () => openBrowser( url )
 			},
 			{
 				label: "Copy URL",
-				click: this.copyUrl.bind( this )
+				click: () => setClipboard( url )
 			}
 		]);
 
@@ -53,16 +54,6 @@ export default Component.extend({
 	openUrl() {
 		let url = get( this, "url" );
 		get( this, "routing" ).openBrowserOrTransitionToChannel( url );
-	},
-
-	openUrlInBrowser() {
-		let url = get( this, "url" );
-		openBrowser( url );
-	},
-
-	copyUrl() {
-		let url = get( this, "url" );
-		setClipboard( url );
 	},
 
 	didInsertElement() {

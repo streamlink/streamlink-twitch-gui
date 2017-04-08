@@ -13,8 +13,7 @@ export default Route.extend({
 	auth: service(),
 
 	beforeModel( transition ) {
-		var self = this;
-		var auth = get( self, "auth" );
+		const auth = get( this, "auth" );
 
 		// check if user is successfully logged in
 		if ( get( auth, "session.isLoggedIn" ) ) { return; }
@@ -22,39 +21,39 @@ export default Route.extend({
 		transition.abort();
 
 		// send user to login form
-		function redirect() {
-			var controller = self.controllerFor( "userAuth" );
+		const redirect = () => {
+			const controller = this.controllerFor( "userAuth" );
 			set( controller, "previousTransition", transition );
-			self.transitionTo( "user.auth" );
-		}
+			this.transitionTo( "user.auth" );
+		};
 
-		function onLogin( success ) {
+		const onLogin = success => {
 			if ( success ) {
 				// send user back to original route
 				transition.retry();
 			} else {
 				redirect();
 			}
-		}
+		};
 
-		function check() {
+		const check = () => {
 			// login not pending?
 			if ( !get( auth, "session.isPending" ) ) {
 				redirect();
 			} else {
 				// show loading screen
-				self.intermediateTransitionTo( "loading" );
+				this.intermediateTransitionTo( "loading" );
 
 				// unregister onLogin callback as soon as the user switches the route
 				// before the callback has fired
-				self.router.one( "didTransition", function() {
+				this.router.one( "didTransition", function() {
 					auth.off( "login", onLogin );
 				});
 
 				// register callback once
 				auth.one( "login", onLogin );
 			}
-		}
+		};
 
 		// session record not yet loaded?
 		if ( !get( auth, "session" ) ) {

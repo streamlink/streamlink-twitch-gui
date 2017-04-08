@@ -81,9 +81,9 @@ export default EmberObject.extend( Evented, {
 			}, this );
 		}
 
-		var item = new MenuItem( data );
+		const item = new MenuItem( data );
 		if ( obj.click ) {
-			item.click = obj.click.bind( null, item, this );
+			item.click = ( ...args ) => obj.click( item, this, ...args );
 		}
 
 		return item;

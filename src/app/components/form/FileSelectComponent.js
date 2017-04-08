@@ -19,15 +19,18 @@ export default Component.extend({
 	disabled: false,
 
 	_createInput: on( "init", function() {
-		var self = this;
-		self._input = $( "<input>" ).addClass( "hidden" ).attr({
-			type: "file",
-			tabindex: -1
-		}).change(function() {
-			if ( !this.value.length ) { return; }
-			set( self, "value", this.value );
-			this.files.clear();
-		});
+		const component = this;
+		this._input = $( "<input>" )
+			.addClass( "hidden" )
+			.attr({
+				type: "file",
+				tabindex: -1
+			})
+			.change(function() {
+				if ( !this.value.length ) { return; }
+				set( component, "value", this.value );
+				this.files.clear();
+			});
 	}),
 
 	actions: {

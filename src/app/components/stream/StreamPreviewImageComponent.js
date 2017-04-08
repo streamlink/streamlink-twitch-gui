@@ -89,31 +89,29 @@ export default Component.extend({
 	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
-		var menu = Menu.create();
+		const menu = Menu.create();
 
-		var quals = qualities.map(function( quality ) {
-			return {
-				label: quality.label,
-				click: this.startStream.bind( this, quality.id )
-			};
-		}, this );
+		const quals = qualities.map( quality => ({
+			label: quality.label,
+			click: () => this.startStream( quality.id )
+		}) );
 
 		if ( get( this, "stream" ) ) {
 			if ( get( this, "opened" ) ) {
 				menu.items.pushObjects([
 					{
-						label  : "Close stream",
-						click  : this.closeStream.bind( this )
+						label: "Close stream",
+						click: () => this.closeStream()
 					},
 					{
-						label  : "Change quality",
+						label: "Change quality",
 						submenu: quals
 					}
 				]);
 			} else {
 				menu.items.pushObjects([
 					{
-						label  : "Launch stream",
+						label: "Launch stream",
 						submenu: quals
 					}
 				]);
@@ -123,11 +121,11 @@ export default Component.extend({
 		menu.items.pushObjects([
 			{
 				label: "Open chat",
-				click: this.openChat.bind( this )
+				click: () => this.openChat()
 			},
 			{
 				label: "Copy channel URL",
-				click: this.copyChannelURL.bind( this )
+				click: () => this.copyChannelURL()
 			}
 		]);
 
@@ -135,11 +133,11 @@ export default Component.extend({
 			menu.items.pushObjects([
 				{
 					label: "Channel page",
-					click: this.gotoChannelPage.bind( this )
+					click: () => this.gotoChannelPage()
 				},
 				{
 					label: "Channel settings",
-					click: this.gotoChannelSettings.bind( this )
+					click: () => this.gotoChannelSettings()
 				}
 			]);
 		}
@@ -177,5 +175,4 @@ export default Component.extend({
 		let name = get( this, "stream.channel.id" );
 		get( this, "routing" ).transitionTo( "channel.settings", name );
 	}
-
 });

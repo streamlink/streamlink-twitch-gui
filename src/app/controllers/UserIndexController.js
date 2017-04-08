@@ -25,15 +25,13 @@ export default Controller.extend({
 	actions: {
 		signout() {
 			get( this, "auth" ).signout()
-				.then(function() {
-					this.transitionToRoute( "user.auth" );
-				}.bind( this ) );
+				.then( () => this.transitionToRoute( "user.auth" ) );
 		},
 
 		copyToken( success, failure ) {
 			setClipboard( get( this, "auth.session.access_token" ) )
 				.then( success, failure )
-				.catch(function() {});
+				.catch( () => {} );
 		},
 
 		showTokenForm() {

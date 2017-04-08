@@ -61,13 +61,13 @@ export default Mixin.create( Evented, {
 
 	createRecordMethod: "POST",
 	createRecord( store, type, snapshot ) {
-		var self   = this;
-		var url    = self.buildURL( type, null, snapshot, "createRecord" );
-		var method = get( self, "createRecordMethod" );
-		var data   = self.createRecordData( store, type, snapshot );
-		return self.ajax( url, method, data )
-			.then(function( data ) {
-				self.trigger( "createRecord", store, type, snapshot );
+		const url = this.buildURL( type, null, snapshot, "createRecord" );
+		const method = get( this, "createRecordMethod" );
+		const data = this.createRecordData( store, type, snapshot );
+
+		return this.ajax( url, method, data )
+			.then( data => {
+				this.trigger( "createRecord", store, type, snapshot );
 				return data;
 			});
 	},
@@ -80,13 +80,13 @@ export default Mixin.create( Evented, {
 
 	updateRecordMethod: "PUT",
 	updateRecord( store, type, snapshot ) {
-		var self   = this;
-		var url    = self.buildURL( type, snapshot.id, snapshot, "updateRecord" );
-		var method = get( self, "updateRecordMethod" );
-		var data   = self.updateRecordData( store, type, snapshot );
-		return self.ajax( url, method, data )
-			.then(function( data ) {
-				self.trigger( "updateRecord", store, type, snapshot );
+		const url = this.buildURL( type, snapshot.id, snapshot, "updateRecord" );
+		const method = get( this, "updateRecordMethod" );
+		const data = this.updateRecordData( store, type, snapshot );
+
+		return this.ajax( url, method, data )
+			.then( data => {
+				this.trigger( "updateRecord", store, type, snapshot );
 				return data;
 			});
 	},
@@ -98,11 +98,11 @@ export default Mixin.create( Evented, {
 	},
 
 	deleteRecord( store, type, snapshot ) {
-		var self = this;
-		var url  = self.buildURL( type, snapshot.id, snapshot, "deleteRecord" );
-		return self.ajax( url, "DELETE" )
-			.then(function( data ) {
-				self.trigger( "deleteRecord", store, type, snapshot );
+		const url = this.buildURL( type, snapshot.id, snapshot, "deleteRecord" );
+
+		return this.ajax( url, "DELETE" )
+			.then( data => {
+				this.trigger( "deleteRecord", store, type, snapshot );
 				return data;
 			});
 	},
@@ -170,14 +170,14 @@ export default Mixin.create( Evented, {
 
 
 	ajax( url ) {
-		var adapter = this;
 		return this._super( ...arguments )
-			.catch(function( err ) {
+			.catch( err => {
 				if ( err instanceof AdapterError ) {
-					var _url = reURL.exec( url );
-					err.host = _url && _url[1] || get( adapter, "host" );
-					err.path = _url && _url[2] || get( adapter, "namespace" );
+					const _url = reURL.exec( url );
+					err.host = _url && _url[1] || get( this, "host" );
+					err.path = _url && _url[2] || get( this, "namespace" );
 				}
+
 				return Promise.reject( err );
 			});
 	},
