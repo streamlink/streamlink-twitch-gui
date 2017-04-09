@@ -1,5 +1,10 @@
-import "ember-data";
-import LS from "bower/ember-localstorage-adapter/localstorage_adapter";
+import LocalStorageAdapter
+	from "ember-localstorage-adapter/addon/adapters/ls-adapter";
+import LocalStorageSerializer
+	from "ember-localstorage-adapter/addon/serializers/ls-serializer";
 
 
-export default LS;
+export {
+	LocalStorageAdapter,
+	LocalStorageSerializer
+};

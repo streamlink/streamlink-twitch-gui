@@ -1,7 +1,5 @@
 import "shim";
 import { Application } from "ember";
-import DS from "ember-data";
-import "ember-data-localstorage";
 
 import "initializers/initializers";
 
@@ -11,12 +9,26 @@ import ApplicationAdapter from "store/TwitchAdapter";
 import BooleanTransform from "store/BooleanTransform";
 
 import Stream from "models/stream/Stream";
+import StreamAdapter from "models/stream/StreamAdapter";
+
 import Window from "models/localstorage/Window";
+import WindowAdapter from "models/localstorage/WindowAdapter";
+import WindowSerializer from "models/localstorage/WindowSerializer";
 import Settings from "models/localstorage/Settings";
+import SettingsAdapter from "models/localstorage/SettingsAdapter";
+import SettingsSerializer from "models/localstorage/SettingsSerializer";
 import Versioncheck from "models/localstorage/Versioncheck";
+import VersioncheckAdapter from "models/localstorage/VersioncheckAdapter";
+import VersioncheckSerializer from "models/localstorage/VersioncheckSerializer";
 import Auth from "models/localstorage/Auth";
+import AuthAdapter from "models/localstorage/AuthAdapter";
+import AuthSerializer from "models/localstorage/AuthSerializer";
 import Search from "models/localstorage/Search";
+import SearchAdapter from "models/localstorage/SearchAdapter";
+import SearchSerializer from "models/localstorage/SearchSerializer";
 import ChannelSettings from "models/localstorage/ChannelSettings";
+import ChannelSettingsAdapter from "models/localstorage/ChannelSettingsAdapter";
+import ChannelSettingsSerializer from "models/localstorage/ChannelSettingsSerializer";
 
 import GithubReleases from "models/github/Releases";
 import GithubReleasesAdapter from "store/GithubAdapter";
@@ -343,28 +355,28 @@ export default Application.create({
 
 	// Models: memory
 	Stream,
-	StreamAdapter: DS.Adapter,
+	StreamAdapter,
 
 
 	// Models: localstorage
 	Window,
-	WindowAdapter: DS.LSAdapter.extend({ namespace: "window" }),
-	WindowSerializer: DS.LSSerializer,
+	WindowAdapter,
+	WindowSerializer,
 	Settings,
-	SettingsAdapter: DS.LSAdapter.extend({ namespace: "settings" }),
-	SettingsSerializer: DS.LSSerializer,
+	SettingsAdapter,
+	SettingsSerializer,
 	Versioncheck,
-	VersioncheckAdapter: DS.LSAdapter.extend({ namespace: "versioncheck" }),
-	VersioncheckSerializer: DS.LSSerializer,
+	VersioncheckAdapter,
+	VersioncheckSerializer,
 	Auth,
-	AuthAdapter: DS.LSAdapter.extend({ namespace: "auth" }),
-	AuthSerializer: DS.LSSerializer,
+	AuthAdapter,
+	AuthSerializer,
 	Search,
-	SearchAdapter: DS.LSAdapter.extend({ namespace: "search" }),
-	SearchSerializer: DS.LSSerializer,
+	SearchAdapter,
+	SearchSerializer,
 	ChannelSettings,
-	ChannelSettingsAdapter: DS.LSAdapter.extend({ namespace: "channelsettings" }),
-	ChannelSettingsSerializer: DS.LSSerializer,
+	ChannelSettingsAdapter,
+	ChannelSettingsSerializer,
 
 
 	// Models: github

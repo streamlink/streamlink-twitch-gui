@@ -3,7 +3,6 @@
 	"dependencies": {
 		"ember": "2.9.1",
 		"ember-data": "2.9.0",
-		"ember-localstorage-adapter": "bastimeyer/ember-localstorage-adapter#ember-data-2.0",
 		"jquery": "3.1.1",
 		"bootstrap": "3.3.1",
 		"font-awesome": "4.7.0",

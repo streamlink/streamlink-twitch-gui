@@ -221,7 +221,11 @@ module.exports = {
 				"store"       : r( pApp, "store" ),
 				"utils"       : r( pApp, "utils" ),
 				"gui"         : r( pApp, "gui" ),
-				"shim"        : r( pRoot, "shim" )
+
+				// explicit lib/module paths
+				"shim"        : r( pRoot, "shim" ),
+				"ember"       : r( pRoot, "web_modules", "ember" ),
+				"ember-data"  : r( pRoot, "web_modules", "ember-data" )
 			}
 		},
 

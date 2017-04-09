@@ -13,6 +13,7 @@ export const belongsTo = EmberData.belongsTo;
 export const hasMany = EmberData.hasMany;
 
 // classes
+export const Adapter = EmberData.Adapter;
 export const AdapterError = EmberData.AdapterError;
 export const BooleanTransform = EmberData.BooleanTransform;
 export const EmbeddedRecordsMixin = EmberData.EmbeddedRecordsMixin;
