@@ -1,9 +1,10 @@
 import { get, computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
-import { themes as themesConfig } from "config";
+import { locales as localesConfig, themes as themesConfig } from "config";
 
 
+const { default: defaultLocale } = localesConfig;
 const defaultTheme = themesConfig.themes[0];
 
 
@@ -27,6 +28,7 @@ export default Fragment.extend({
 	hidebuttons: attr( "boolean", { defaultValue: false } ),
 	homepage: attr( "string", { defaultValue: "/featured" } ),
 	integration: attr( "number", { defaultValue: ATTR_GUI_INTEGRATION_BOTH } ),
+	language: attr( "string",  { defaultValue: defaultLocale } ),
 	minimize: attr( "number", { defaultValue: ATTR_GUI_MINIMIZE_NOOP } ),
 	minimizetotray: attr( "boolean", { defaultValue: false } ),
 	smoothscroll: attr( "boolean", { defaultValue: true } ),

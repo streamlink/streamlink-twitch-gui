@@ -1,5 +1,24 @@
 <fieldset>
 {{#settings-row
+	"Language"
+	"Select the GUI language."
+	icon="fa-language"
+}}
+	{{#drop-down
+		value=model.gui.language
+		content=contentGuiLanguages
+		as |dropdown|
+	}}
+		{{#dropdown.selection as |selection|}}
+			{{flag-icon lang=selection.value withCursor=false}} {{selection.label}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{flag-icon lang=item.value withCursor=false}} {{item.label}}
+		{{/dropdown.list}}
+	{{/drop-down}}
+{{/settings-row}}
+
+{{#settings-row
 	"Settings and features"
 	"Enable hidden settings and features.<br>Does not only apply to the settings menu."
 	icon="fa-unlock-alt"

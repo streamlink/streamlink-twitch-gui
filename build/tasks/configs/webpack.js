@@ -49,9 +49,9 @@ const commonLoaders = [
 	// requires those imports to be ignored
 	{
 		test: /\.js$/,
-		exclude: [
-			pDependencies,
-			r( pRoot, "web_modules" )
+		include: [
+			pRoot,
+			r( pDependencies, "ember-i18n" )
 		],
 		loader: "babel-loader",
 		options: {
@@ -98,6 +98,13 @@ const commonLoaders = [
 	{
 		test: /\.html$/,
 		loader: "raw-loader"
+	},
+	{
+		test: /\.ya?ml$/,
+		loader: [
+			"json-loader",
+			"yaml-loader"
+		]
 	},
 	{
 		test: /metadata\.js$/,
@@ -276,6 +283,7 @@ module.exports = {
 				// app folders
 				"config"      : r( pApp, "config" ),
 				"nwjs"        : r( pApp, "nwjs" ),
+				"locales"     : r( pApp, "locales" ),
 				"initializers": r( pApp, "initializers" ),
 				"instance-initializers": r( pApp, "instance-initializers" ),
 				"services"    : r( pApp, "services" ),
@@ -298,6 +306,7 @@ module.exports = {
 					r( pDependencies, "ember-data-model-fragments", "addon" ),
 				"ember-localstorage-adapter":
 					r( pDependencies, "ember-localstorage-adapter", "addon" ),
+				"ember-i18n$" : r( pRoot, "web_modules", "ember-i18n" ),
 				"qunit$"      : r( pTest, "web_modules", "qunit" ),
 				"ember-qunit$": "ember-qunit",
 				"ember-qunit" : "ember-qunit/lib/ember-qunit",
@@ -352,10 +361,16 @@ module.exports = {
 			lessExtractTextPlugin,
 
 			// ignore all @ember imports (see Ember import polyfill)
-			new webpack.IgnorePlugin( /@ember/, pRoot ),
+			new webpack.IgnorePlugin( /@ember/ ),
 
 			// ignore l10n modules of momentjs
-			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ )
+			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ ),
+
+			// remove ember-i18n's get-locales utility function
+			new webpack.NormalModuleReplacementPlugin(
+				/ember-i18n\/addon\/utils\/get-locales\.js$/,
+				r( pRoot, "web_modules", "ember-i18n", "get-locales.js" )
+			)
 		]
 	},
 
