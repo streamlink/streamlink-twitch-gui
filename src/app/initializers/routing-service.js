@@ -5,7 +5,7 @@ import {
 	makeArray,
 	inject,
 	Application
-} from "Ember";
+} from "ember";
 import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 

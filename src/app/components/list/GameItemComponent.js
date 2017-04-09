@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	inject
-} from "Ember";
+} from "ember";
 import ListItemComponent from "components/list/ListItemComponent";
 import layout from "templates/components/list/GameItemComponent.hbs";
 

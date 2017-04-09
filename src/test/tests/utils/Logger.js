@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import loggerInjector from "inject-loader?-Moment&-utils/node/denodify!utils/Logger";
 import { posix as path } from "path";
 

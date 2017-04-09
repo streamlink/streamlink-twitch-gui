@@ -1,20 +1,20 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
-import { Service } from "Ember";
+} from "store-utils";
+import { Service } from "ember";
 import {
 	Model,
 	RESTSerializer
-} from "EmberData";
+} from "ember-data";
 import Ticket from "models/twitch/Ticket";
 import TicketSerializer from "models/twitch/TicketSerializer";
 import Product from "models/twitch/Product";

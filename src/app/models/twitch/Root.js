@@ -1,7 +1,7 @@
 import {
 	attr,
 	Model
-} from "EmberData";
+} from "ember-data";
 
 
 /**

@@ -1,4 +1,4 @@
-import { Application } from "Ember";
+import { Application } from "ember";
 import ApplicationComponent from "components/ApplicationComponent";
 
 

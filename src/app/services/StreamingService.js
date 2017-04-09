@@ -7,7 +7,7 @@ import {
 	inject,
 	run,
 	Service
-} from "Ember";
+} from "ember";
 import {
 	streamprovider as streamproviderConfig,
 	vars as varsConfig

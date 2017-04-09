@@ -1,11 +1,11 @@
 import {
 	get,
 	computed
-} from "Ember";
+} from "ember";
 import {
 	attr,
 	Model
-} from "EmberData";
+} from "ember-data";
 
 
 /**

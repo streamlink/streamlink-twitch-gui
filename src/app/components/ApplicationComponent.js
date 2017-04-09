@@ -4,7 +4,7 @@ import {
 	inject,
 	observer,
 	Component
-} from "Ember";
+} from "ember";
 import { themes } from "config";
 import guiSelectable from "gui/selectable";
 import {

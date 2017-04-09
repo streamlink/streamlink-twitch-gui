@@ -2,7 +2,7 @@ import {
 	get,
 	inject,
 	Component
-} from "Ember";
+} from "ember";
 import HotkeyMixin from "mixins/HotkeyMixin";
 import { isDarwin } from "utils/node/platform";
 import layout from "templates/components/MainMenuComponent.hbs";

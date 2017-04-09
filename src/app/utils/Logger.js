@@ -1,4 +1,4 @@
-import Moment from "Moment";
+import Moment from "moment";
 import { log as logConfig } from "config";
 import {
 	loglevel as argLoglevel,

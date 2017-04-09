@@ -1,4 +1,4 @@
-import { makeArray } from "Ember";
+import { makeArray } from "ember";
 
 
 function preload( withError, list ) {

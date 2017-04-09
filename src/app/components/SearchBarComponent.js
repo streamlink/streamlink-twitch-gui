@@ -8,7 +8,7 @@ import {
 	run,
 	on,
 	Component
-} from "Ember";
+} from "ember";
 import { vars } from "config";
 import HotkeyMixin from "mixins/HotkeyMixin";
 import getStreamFromUrl from "utils/getStreamFromUrl";

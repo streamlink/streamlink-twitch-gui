@@ -2,7 +2,7 @@ import {
 	get,
 	inject,
 	Component
-} from "Ember";
+} from "ember";
 import Menu from "nwjs/Menu";
 import { openBrowser } from "nwjs/Shell";
 import { set as setClipboard } from "nwjs/Clipboard";

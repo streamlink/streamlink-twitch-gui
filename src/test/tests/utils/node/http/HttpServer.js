@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import httpServerInjector from "inject-loader?http!utils/node/http/HttpServer";
 import { EventEmitter } from "events";
 

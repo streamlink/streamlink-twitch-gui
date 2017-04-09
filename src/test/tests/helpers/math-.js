@@ -1,18 +1,18 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
 	getOutput,
 	buildOwner
-} from "Testutils";
+} from "test-utils";
 import {
 	setOwner,
 	HTMLBars,
 	Component
-} from "Ember";
+} from "ember";
 import MathAddHelper from "helpers/MathAddHelper";
 import MathSubHelper from "helpers/MathSubHelper";
 import MathMulHelper from "helpers/MathMulHelper";

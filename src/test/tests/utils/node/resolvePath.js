@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import * as path from "stub-path";
 import resolvePathInjector from "inject-loader!utils/node/resolvePath";
 

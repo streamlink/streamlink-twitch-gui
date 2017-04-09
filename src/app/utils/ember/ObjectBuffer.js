@@ -7,7 +7,7 @@ import {
 	set,
 	setProperties,
 	ObjectProxy
-} from "Ember";
+} from "ember";
 
 
 function isEmpty( obj ) {

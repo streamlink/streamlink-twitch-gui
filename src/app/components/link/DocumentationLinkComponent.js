@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	inject
-} from "Ember";
+} from "ember";
 import { streamprovider } from "config";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";

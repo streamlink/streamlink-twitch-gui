@@ -1,20 +1,20 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
 	getOutput,
 	buildOwner
-} from "Testutils";
+} from "test-utils";
 import {
 	get,
 	setOwner,
 	HTMLBars,
 	run,
 	Component
-} from "Ember";
+} from "ember";
 import FormatViewersHelper from "helpers/FormatViewersHelper";
 import FormatTimeHelper from "helpers/FormatTimeHelper";
 

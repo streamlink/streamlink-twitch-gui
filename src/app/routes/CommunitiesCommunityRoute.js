@@ -1,7 +1,7 @@
 import {
 	get,
 	Route
-} from "Ember";
+} from "ember";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
 import preload from "utils/preload";
 

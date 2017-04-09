@@ -1,7 +1,7 @@
 import {
 	get,
 	Route
-} from "Ember";
+} from "ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import preload from "utils/preload";
 

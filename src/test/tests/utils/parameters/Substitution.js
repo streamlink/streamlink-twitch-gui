@@ -2,7 +2,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import Substitution from "utils/parameters/Substitution";
 
 

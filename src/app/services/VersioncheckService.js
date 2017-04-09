@@ -3,7 +3,7 @@ import {
 	set,
 	inject,
 	Service
-} from "Ember";
+} from "ember";
 import { update } from "config";
 import { App } from "nwjs/nwGui";
 import { versioncheck as argVersioncheck } from "nwjs/argv";

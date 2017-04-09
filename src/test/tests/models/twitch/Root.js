@@ -1,16 +1,16 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
-import { Service } from "Ember";
+} from "store-utils";
+import { Service } from "ember";
 import Root from "models/twitch/Root";
 import RootSerializer from "models/twitch/RootSerializer";
 import TwitchAdapter from "store/TwitchAdapter";

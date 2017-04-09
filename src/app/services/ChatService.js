@@ -3,7 +3,7 @@ import {
 	inject,
 	run,
 	Service
-} from "Ember";
+} from "ember";
 import {
 	chat as chatConfig,
 	twitch as twitchConfig

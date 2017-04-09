@@ -4,8 +4,8 @@ import {
 	run,
 	on,
 	Component
-} from "Ember";
-import Masonry from "Masonry";
+} from "ember";
+import Masonry from "masonry";
 import layout from "templates/components/channel/ChannelPanelsComponent.hbs";
 
 

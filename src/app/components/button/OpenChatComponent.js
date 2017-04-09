@@ -1,7 +1,7 @@
 import {
 	get,
 	inject
-} from "Ember";
+} from "ember";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import HotkeyMixin from "mixins/HotkeyMixin";
 

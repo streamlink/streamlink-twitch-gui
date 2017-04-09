@@ -1,4 +1,4 @@
-import { get } from "Ember";
+import { get } from "ember";
 import Parameter from "utils/parameters/Parameter";
 import ParameterCustom from "utils/parameters/ParameterCustom";
 import Substitution from "utils/parameters/Substitution";

@@ -2,7 +2,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import resolvePathInjector from "inject-loader?utils/node/platform!utils/node/resolvePath";
 import whichInjector from "inject-loader?utils/node/env-path!utils/node/fs/which";
 import whichFallbackInjector

@@ -5,7 +5,7 @@ import {
 	computed,
 	Component,
 	EmberNativeArray
-} from "Ember";
+} from "ember";
 import layout from "templates/components/list/ContentListComponent.hbs";
 
 

@@ -4,8 +4,8 @@ import {
 	computed,
 	observer,
 	Component
-} from "Ember";
-import {} from "Selecter";
+} from "ember";
+import "selecter";
 import layout from "templates/components/form/DropDownComponent.hbs";
 
 

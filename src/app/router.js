@@ -3,7 +3,7 @@ import {
 	set,
 	on,
 	Router
-} from "Ember";
+} from "ember";
 
 
 const ApplicationRouter = Router.extend();

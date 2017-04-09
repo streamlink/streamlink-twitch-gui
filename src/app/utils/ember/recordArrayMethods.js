@@ -1,7 +1,7 @@
 import {
 	get,
 	set
-} from "Ember";
+} from "ember";
 
 
 const slice = [].slice;

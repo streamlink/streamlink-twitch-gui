@@ -3,7 +3,7 @@ import {
 	getOwner,
 	inject,
 	Route
-} from "Ember";
+} from "ember";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 

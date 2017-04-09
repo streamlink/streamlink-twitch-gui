@@ -1,7 +1,7 @@
 import {
 	EmberObject,
 	Evented
-} from "Ember";
+} from "ember";
 import {
 	Menu,
 	MenuItem

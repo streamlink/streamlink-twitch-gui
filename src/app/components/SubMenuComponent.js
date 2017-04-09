@@ -1,6 +1,6 @@
 import {
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/SubMenuComponent.hbs";
 
 

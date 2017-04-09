@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	Controller
-} from "Ember";
+} from "ember";
 import { streamprovider } from "config";
 import Settings from "models/localstorage/Settings";
 import { platform } from "utils/node/platform";

@@ -5,7 +5,7 @@ import {
 	inject,
 	observer,
 	Mixin
-} from "Ember";
+} from "ember";
 
 
 const { alias, and, bool } = computed;

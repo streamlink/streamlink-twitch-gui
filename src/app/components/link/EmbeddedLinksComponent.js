@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	Component
-} from "Ember";
+} from "ember";
 import { parseString } from "utils/linkparser";
 import layout from "templates/components/link/EmbeddedLinksComponent.hbs";
 

@@ -2,7 +2,7 @@ import {
 	get,
 	inject,
 	Mixin
-} from "Ember";
+} from "ember";
 
 
 const { service } = inject;

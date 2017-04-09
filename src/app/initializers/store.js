@@ -1,5 +1,5 @@
-import { assign } from "Ember";
-import { Store } from "EmberData";
+import { assign } from "ember";
+import { Store } from "ember-data";
 
 
 // no initializer here: just upgrade the application store

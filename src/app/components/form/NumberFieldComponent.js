@@ -3,7 +3,7 @@ import {
 	set,
 	computed,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/form/NumberFieldComponent.hbs";
 
 

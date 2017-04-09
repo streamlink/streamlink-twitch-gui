@@ -2,8 +2,8 @@ import {
 	get,
 	inject,
 	observer
-} from "Ember";
-import { RESTAdapter } from "EmberData";
+} from "ember";
+import { RESTAdapter } from "ember-data";
 import { twitch } from "config";
 import AdapterMixin from "store/AdapterMixin";
 

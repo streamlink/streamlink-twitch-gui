@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 
 

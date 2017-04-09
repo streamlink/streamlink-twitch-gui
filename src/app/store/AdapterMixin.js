@@ -3,11 +3,11 @@ import {
 	isNone,
 	Evented,
 	Mixin
-} from "Ember";
+} from "ember";
 import {
 	AdapterError,
 	InvalidError
-} from "EmberData";
+} from "ember-data";
 
 
 const reURL = /^[a-z]+:\/\/([\w.]+)\/(.+)$/i;

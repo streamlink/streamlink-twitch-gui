@@ -1,7 +1,7 @@
 import {
 	inject,
 	Component
-} from "Ember";
+} from "ember";
 
 
 const { service } = inject;

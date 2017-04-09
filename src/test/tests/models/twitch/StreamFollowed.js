@@ -1,19 +1,19 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
+} from "store-utils";
 import {
 	get,
 	Service
-} from "Ember";
+} from "ember";
 import StreamFollowed from "models/twitch/StreamFollowed";
 import StreamFollowedSerializer from "models/twitch/StreamFollowedSerializer";
 import Stream from "models/twitch/Stream";

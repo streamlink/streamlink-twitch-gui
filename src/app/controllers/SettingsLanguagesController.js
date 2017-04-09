@@ -3,7 +3,7 @@ import {
 	set,
 	computed,
 	Controller
-} from "Ember";
+} from "ember";
 import { langs } from "config";
 import Settings from "models/localstorage/Settings";
 

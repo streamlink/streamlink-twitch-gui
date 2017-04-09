@@ -6,7 +6,7 @@ import {
 	run,
 	on,
 	Mixin
-} from "Ember";
+} from "ember";
 import nwWindow from "nwjs/Window";
 
 

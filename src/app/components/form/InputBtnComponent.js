@@ -1,4 +1,4 @@
-import { Component } from "Ember";
+import { Component } from "ember";
 import layout from "templates/components/form/InputBtnComponent.hbs";
 
 

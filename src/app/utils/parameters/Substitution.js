@@ -1,7 +1,7 @@
 import {
 	get,
 	makeArray
-} from "Ember";
+} from "ember";
 
 
 const reSubstitution = /(\{)?\{([a-z]+)}(})?/ig;

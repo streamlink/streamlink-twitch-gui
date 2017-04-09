@@ -3,7 +3,7 @@ import {
 	computed,
 	inject,
 	LinkComponent
-} from "Ember";
+} from "ember";
 
 
 const { service } = inject;

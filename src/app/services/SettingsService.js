@@ -3,7 +3,7 @@ import {
 	set,
 	inject,
 	ObjectProxy
-} from "Ember";
+} from "ember";
 
 
 const { service } = inject;

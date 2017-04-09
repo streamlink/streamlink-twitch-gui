@@ -3,7 +3,7 @@ import {
 	computed,
 	inject,
 	Component
-} from "Ember";
+} from "ember";
 import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 import Settings from "models/localstorage/Settings";

@@ -1,5 +1,5 @@
-import { Helper } from "Ember";
-import Moment from "Moment";
+import { Helper } from "ember";
+import Moment from "moment";
 
 
 export default Helper.helper(function( params, hash ) {

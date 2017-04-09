@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import mkdirpInjector from "inject-loader?-utils/node/denodify!utils/node/fs/mkdirp";
 import { posix as path } from "path";
 import {

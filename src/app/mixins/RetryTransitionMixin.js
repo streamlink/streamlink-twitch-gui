@@ -2,7 +2,7 @@ import {
 	get,
 	set,
 	Mixin
-} from "Ember";
+} from "ember";
 
 
 export default Mixin.create({

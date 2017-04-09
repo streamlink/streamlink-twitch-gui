@@ -1,7 +1,7 @@
 import {
 	inject,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/modal/ModalServiceComponent.hbs";
 
 

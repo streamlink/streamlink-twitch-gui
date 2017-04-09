@@ -4,7 +4,7 @@ import {
 	computed,
 	inject,
 	run
-} from "Ember";
+} from "ember";
 import { streamprovider } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import HotkeyMixin from "mixins/HotkeyMixin";

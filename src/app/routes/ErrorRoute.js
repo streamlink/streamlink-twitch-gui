@@ -4,8 +4,8 @@ import {
 	isNone,
 	assign,
 	Route
-} from "Ember";
-import { AdapterError } from "EmberData";
+} from "ember";
+import { AdapterError } from "ember-data";
 
 
 const errorProps = [

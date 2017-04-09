@@ -1,19 +1,19 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
+} from "store-utils";
 import {
 	get,
 	Service
-} from "Ember";
+} from "ember";
 import User from "models/twitch/User";
 import UserAdapter from "models/twitch/UserAdapter";
 import UserSerializer from "models/twitch/UserSerializer";

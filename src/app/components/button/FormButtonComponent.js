@@ -4,7 +4,7 @@ import {
 	computed,
 	run,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/button/FormButtonComponent.hbs";
 
 

@@ -1,7 +1,7 @@
 import {
 	run,
 	Helper
-} from "Ember";
+} from "ember";
 
 
 const { cancel, later } = run;

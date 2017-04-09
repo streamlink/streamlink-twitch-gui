@@ -3,7 +3,7 @@ import {
 	computed,
 	inject,
 	Controller
-} from "Ember";
+} from "ember";
 import qualities from "models/stream/qualities";
 
 

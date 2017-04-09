@@ -4,7 +4,7 @@ import {
 	computed,
 	observer,
 	Controller
-} from "Ember";
+} from "ember";
 import Settings from "models/localstorage/Settings";
 
 

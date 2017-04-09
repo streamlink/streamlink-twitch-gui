@@ -1,4 +1,4 @@
-import { BooleanTransform } from "EmberData";
+import { BooleanTransform } from "ember-data";
 
 
 const defaultOptions = { allowNull: true };

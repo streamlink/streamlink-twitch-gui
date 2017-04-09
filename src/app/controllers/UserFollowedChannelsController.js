@@ -1,7 +1,7 @@
 import {
 	set,
 	Controller
-} from "Ember";
+} from "ember";
 
 
 export default Controller.extend({

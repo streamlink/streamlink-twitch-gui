@@ -2,7 +2,7 @@ import {
 	get,
 	getOwner,
 	Route
-} from "Ember";
+} from "ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import LanguageFilterMixin from "mixins/LanguageFilterMixin";
 import { toArray } from "utils/ember/recordArrayMethods";

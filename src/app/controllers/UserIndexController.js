@@ -4,7 +4,7 @@ import {
 	computed,
 	inject,
 	Controller
-} from "Ember";
+} from "ember";
 import { set as setClipboard } from "nwjs/Clipboard";
 
 

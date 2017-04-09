@@ -4,7 +4,7 @@ import {
 	computed,
 	inject,
 	Controller
-} from "Ember";
+} from "ember";
 import { streamprovider } from "config";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 

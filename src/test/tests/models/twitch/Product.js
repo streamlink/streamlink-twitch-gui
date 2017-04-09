@@ -1,23 +1,23 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
+} from "store-utils";
 import {
 	get,
 	Service
-} from "Ember";
+} from "ember";
 import {
 	Model,
 	RESTSerializer
-} from "EmberData";
+} from "ember-data";
 import Product from "models/twitch/Product";
 import ProductSerializer from "models/twitch/ProductSerializer";
 import ProductEmoticon from "models/twitch/ProductEmoticon";

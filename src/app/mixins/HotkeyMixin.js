@@ -4,7 +4,7 @@ import {
 	inject,
 	on,
 	Mixin
-} from "Ember";
+} from "ember";
 
 
 const { isArray } = Array;

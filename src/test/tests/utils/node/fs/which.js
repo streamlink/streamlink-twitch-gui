@@ -2,7 +2,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import { isWin } from "utils/node/platform";
 import whichInjector from "inject-loader?utils/node/env-path!utils/node/fs/which";
 import {

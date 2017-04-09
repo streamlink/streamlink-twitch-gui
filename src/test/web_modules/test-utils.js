@@ -3,7 +3,7 @@ import Ember, {
 	$,
 	run,
 	EmberObject
-} from "Ember";
+} from "ember";
 
 
 const reWhiteSpace = /\s+/g;

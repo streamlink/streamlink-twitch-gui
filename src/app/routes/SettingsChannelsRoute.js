@@ -3,8 +3,8 @@ import {
 	set,
 	computed,
 	EmberObject
-} from "Ember";
-import { PromiseObject } from "EmberData";
+} from "ember";
+import { PromiseObject } from "ember-data";
 import SettingsSubmenuRoute from "routes/SettingsSubmenuRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import preload from "utils/preload";

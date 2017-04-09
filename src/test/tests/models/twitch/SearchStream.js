@@ -1,16 +1,16 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
-import { Service } from "Ember";
+} from "store-utils";
+import { Service } from "ember";
 import SearchStream from "models/twitch/SearchStream";
 import SearchStreamSerializer from "models/twitch/SearchStreamSerializer";
 import Stream from "models/twitch/Stream";

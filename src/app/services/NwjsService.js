@@ -2,7 +2,7 @@ import {
 	get,
 	inject,
 	Service
-} from "Ember";
+} from "ember";
 import nwWindow, {
 	toggleVisibility,
 	toggleMaximize,

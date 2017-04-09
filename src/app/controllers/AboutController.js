@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	Controller
-} from "Ember";
+} from "ember";
 import { main as config } from "config";
 import metadata from "metadata";
 

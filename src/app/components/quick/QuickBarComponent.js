@@ -5,7 +5,7 @@ import {
 	run,
 	on,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/QuickBarComponent.hbs";
 
 

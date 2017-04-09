@@ -2,7 +2,7 @@ import {
 	get,
 	isNone,
 	makeArray
-} from "Ember";
+} from "ember";
 import Substitution from "utils/parameters/Substitution";
 
 

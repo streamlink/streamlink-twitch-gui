@@ -4,7 +4,7 @@ import {
 	computed,
 	getOwner,
 	inject
-} from "Ember";
+} from "ember";
 import FormButtonComponent from "components/button/FormButtonComponent";
 
 

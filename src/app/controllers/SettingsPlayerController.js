@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	Controller
-} from "Ember";
+} from "ember";
 import { players } from "config";
 import { playerSubstitutions } from "models/stream/parameters";
 import { platform } from "utils/node/platform";

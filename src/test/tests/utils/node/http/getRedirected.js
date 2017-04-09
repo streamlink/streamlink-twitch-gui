@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import getRedirectedInjector from "inject-loader?http&https!utils/node/http/getRedirected";
 import { EventEmitter } from "events";
 

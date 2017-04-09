@@ -2,7 +2,7 @@ import {
 	get,
 	inject,
 	Component
-} from "Ember";
+} from "ember";
 import { main as config } from "config";
 import layout from "templates/components/TitleBarComponent.hbs";
 

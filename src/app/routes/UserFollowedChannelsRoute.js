@@ -1,4 +1,4 @@
-import { get } from "Ember";
+import { get } from "ember";
 import UserIndexRoute from "routes/UserIndexRoute";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";

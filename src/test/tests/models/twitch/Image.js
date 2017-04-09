@@ -1,13 +1,13 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
-import { setupStore } from "Store";
-import { get } from "Ember";
+} from "test-utils";
+import { setupStore } from "store-utils";
+import { get } from "ember";
 import imageInjector from "inject-loader?config!models/twitch/Image";
 import ImageSerializer from "models/twitch/ImageSerializer";
 import TwitchImageFixtures from "fixtures/models/twitch/Image.json";

@@ -1,14 +1,14 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
 	getElem,
 	buildOwner,
 	fixtureElement
-} from "Testutils";
+} from "test-utils";
 import {
 	get,
 	set,
@@ -18,7 +18,7 @@ import {
 	Component,
 	EventDispatcher,
 	Service
-} from "Ember";
+} from "ember";
 import followButtonComponentInjector
 	from "inject-loader?mixins/TwitchInteractButtonMixin!components/button/FollowButtonComponent";
 import FormButtonComponent from "components/button/FormButtonComponent";

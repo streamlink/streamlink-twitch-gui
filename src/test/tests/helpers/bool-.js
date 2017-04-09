@@ -1,19 +1,19 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
 	getOutput,
 	buildOwner
-} from "Testutils";
+} from "test-utils";
 import {
 	setOwner,
 	HTMLBars,
 	run,
 	Component
-} from "Ember";
+} from "ember";
 import BoolNotHelper from "helpers/BoolNotHelper";
 import BoolAndHelper from "helpers/BoolAndHelper";
 import BoolOrHelper from "helpers/BoolOrHelper";

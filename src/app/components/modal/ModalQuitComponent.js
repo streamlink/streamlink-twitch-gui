@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	inject
-} from "Ember";
+} from "ember";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import HotkeyMixin from "mixins/HotkeyMixin";
 import nwWindow from "nwjs/Window";

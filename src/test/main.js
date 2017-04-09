@@ -1,8 +1,8 @@
-import "Shim";
+import "shim";
 import QUnit, {
 	config
-} from "QUnit";
-import "EmberTest";
+} from "qunit";
+import "ember-test";
 import "bower/qunit/qunit/qunit.css";
 import "bower/ember/ember-template-compiler";
 

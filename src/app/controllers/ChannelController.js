@@ -1,7 +1,7 @@
 import {
 	computed,
 	Controller
-} from "Ember";
+} from "ember";
 
 
 const { alias } = computed;

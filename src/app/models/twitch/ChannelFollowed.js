@@ -2,7 +2,7 @@ import {
 	attr,
 	belongsTo,
 	Model
-} from "EmberData";
+} from "ember-data";
 
 
 export default Model.extend({

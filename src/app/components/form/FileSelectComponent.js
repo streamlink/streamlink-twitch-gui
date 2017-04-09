@@ -4,7 +4,7 @@ import {
 	$,
 	on,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/form/FileSelectComponent.hbs";
 
 

@@ -1,11 +1,11 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runDestroy,
 	buildOwner
-} from "Testutils";
+} from "test-utils";
 import {
 	set,
 	setOwner,
@@ -14,7 +14,7 @@ import {
 	run,
 	EmberObject,
 	Service
-} from "Ember";
+} from "ember";
 import refreshRouteMixinInjector from "inject-loader?nwjs/Window!mixins/RefreshRouteMixin";
 import { EventEmitter } from "events";
 

@@ -4,7 +4,7 @@ import {
 	computed,
 	observer,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/form/RadioBtnsComponent.hbs";
 
 

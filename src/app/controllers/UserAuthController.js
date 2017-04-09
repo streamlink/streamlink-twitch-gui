@@ -5,7 +5,7 @@ import {
 	inject,
 	observer,
 	Controller
-} from "Ember";
+} from "ember";
 import { twitch } from "config";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 import wait from "utils/wait";

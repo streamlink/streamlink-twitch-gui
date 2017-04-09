@@ -1,7 +1,7 @@
 import {
 	get,
 	Application
-} from "Ember";
+} from "ember";
 import nwWindow, {
 	setShowInTaskbar,
 	toggleMaximize,

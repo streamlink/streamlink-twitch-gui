@@ -1,10 +1,10 @@
-import { computed } from "Ember";
+import { computed } from "ember";
 import {
 	attr,
 	belongsTo,
 	hasMany,
 	Model
-} from "EmberData";
+} from "ember-data";
 
 
 const { alias } = computed;

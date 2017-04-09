@@ -2,11 +2,11 @@ import {
 	get,
 	computed,
 	inject
-} from "Ember";
+} from "ember";
 import {
 	attr,
 	Model
-} from "EmberData";
+} from "ember-data";
 
 
 const { service } = inject;

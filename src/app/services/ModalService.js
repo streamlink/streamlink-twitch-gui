@@ -3,7 +3,7 @@ import {
 	setProperties,
 	computed,
 	Service
-} from "Ember";
+} from "ember";
 
 
 const { notEmpty } = computed;

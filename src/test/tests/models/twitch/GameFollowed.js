@@ -1,19 +1,19 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
+} from "store-utils";
 import {
 	get,
 	Service
-} from "Ember";
+} from "ember";
 import GameFollowed from "models/twitch/GameFollowed";
 import GameFollowedAdapter from "models/twitch/GameFollowedAdapter";
 import GameFollowedSerializer from "models/twitch/GameFollowedSerializer";

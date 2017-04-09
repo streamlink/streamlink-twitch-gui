@@ -4,7 +4,7 @@ import {
 	defineProperty,
 	computed,
 	Mixin
-} from "Ember";
+} from "ember";
 
 
 const CSSMediaRule = window.CSSMediaRule;

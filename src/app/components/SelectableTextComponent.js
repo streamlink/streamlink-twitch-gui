@@ -1,4 +1,4 @@
-import { Component } from "Ember";
+import { Component } from "ember";
 import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 

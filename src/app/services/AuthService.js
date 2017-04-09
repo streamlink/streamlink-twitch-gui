@@ -7,7 +7,7 @@ import {
 	inject,
 	Evented,
 	Service
-} from "Ember";
+} from "ember";
 import { twitch } from "config";
 import nwWindow from "nwjs/Window";
 import { openBrowser } from "nwjs/Shell";

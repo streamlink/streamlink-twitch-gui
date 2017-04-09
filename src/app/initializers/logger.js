@@ -1,4 +1,4 @@
-import Ember from "Ember";
+import Ember from "ember";
 import argv from "nwjs/argv";
 import { isDebug } from "nwjs/debug";
 import Logger from "utils/Logger";

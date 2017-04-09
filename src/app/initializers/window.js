@@ -3,7 +3,7 @@ import {
 	setProperties,
 	run,
 	Application
-} from "Ember";
+} from "ember";
 import { App } from "nwjs/nwGui";
 import nwWindow from "nwjs/Window";
 import nwScreen from "nwjs/Screen";

@@ -1,6 +1,6 @@
 import {
 	Service
-} from "Ember";
+} from "ember";
 
 
 const { isArray } = Array;

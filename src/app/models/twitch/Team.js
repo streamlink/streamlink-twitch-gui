@@ -1,12 +1,12 @@
 import {
 	get,
 	computed
-} from "Ember";
+} from "ember";
 import {
 	attr,
 	hasMany,
 	Model
-} from "EmberData";
+} from "ember-data";
 
 
 export default Model.extend({

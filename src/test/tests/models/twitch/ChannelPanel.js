@@ -1,19 +1,19 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
+} from "store-utils";
 import {
 	get,
 	Service
-} from "Ember";
+} from "ember";
 import ChannelPanel from "models/twitch/ChannelPanel";
 import ChannelPanelAdapter from "models/twitch/ChannelPanelAdapter";
 import ChannelPanelSerializer from "models/twitch/ChannelPanelSerializer";

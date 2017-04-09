@@ -1,2 +1,0 @@
-import "Ember";
-import "EmberData";

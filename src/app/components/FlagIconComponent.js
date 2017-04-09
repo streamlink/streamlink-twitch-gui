@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	Component
-} from "Ember";
+} from "ember";
 import { langs } from "config";
 
 

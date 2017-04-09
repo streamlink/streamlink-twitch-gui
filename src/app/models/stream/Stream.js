@@ -4,13 +4,13 @@ import {
 	computed,
 	inject,
 	observer
-} from "Ember";
+} from "ember";
 import {
 	attr,
 	belongsTo,
 	PromiseObject,
 	Model
-} from "EmberData";
+} from "ember-data";
 import {
 	streamprovider as streamproviderConfig,
 	twitch as twitchConfig

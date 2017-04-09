@@ -4,7 +4,7 @@ import {
 	observer,
 	on,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/modal/ModalLogComponent.hbs";
 
 

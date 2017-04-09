@@ -2,7 +2,7 @@ import {
 	get,
 	computed,
 	Controller
-} from "Ember";
+} from "ember";
 import {
 	main,
 	files

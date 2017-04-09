@@ -1,7 +1,7 @@
 import {
 	get,
 	inject
-} from "Ember";
+} from "ember";
 import ListItemComponent from "components/list/ListItemComponent";
 import layout from "templates/components/list/CommunityItemComponent.hbs";
 

@@ -1,4 +1,4 @@
-import { get } from "Ember";
+import { get } from "ember";
 import { players } from "config";
 import { platform } from "utils/node/platform";
 import whichFallback from "utils/node/fs/whichFallback";

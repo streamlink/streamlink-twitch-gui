@@ -1,7 +1,7 @@
 import {
 	getOwner,
 	Route
-} from "Ember";
+} from "ember";
 
 
 export default Route.extend({

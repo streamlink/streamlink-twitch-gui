@@ -1,20 +1,20 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
 	getOutput,
 	buildOwner
-} from "Testutils";
+} from "test-utils";
 import {
 	set,
 	setOwner,
 	HTMLBars,
 	run,
 	Component
-} from "Ember";
+} from "ember";
 import HoursFromNowHelper from "helpers/HoursFromNowHelper";
 import TimeFromNowHelper from "helpers/TimeFromNowHelper";
 

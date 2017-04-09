@@ -1,4 +1,4 @@
-import { get } from "Ember";
+import { get } from "ember";
 import InputBtnComponent from "components/form/InputBtnComponent";
 
 

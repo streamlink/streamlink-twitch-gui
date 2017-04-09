@@ -1,8 +1,9 @@
-import "Shim";
-import { Application } from "Ember";
-import DS from "EmberData";
-import {} from "EmberDataLS";
-import {} from "initializers/initializers";
+import "shim";
+import { Application } from "ember";
+import DS from "ember-data";
+import "ember-data-localstorage";
+
+import "initializers/initializers";
 
 import Router from "./router";
 

@@ -2,11 +2,11 @@ import {
 	get,
 	getWithDefault,
 	computed
-} from "Ember";
+} from "ember";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import ListItemComponent from "components/list/ListItemComponent";
-import Moment from "Moment";
+import Moment from "moment";
 import layout from "templates/components/list/SubscriptionItemComponent.hbs";
 
 

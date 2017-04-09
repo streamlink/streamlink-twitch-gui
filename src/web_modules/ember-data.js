@@ -1,4 +1,4 @@
-import "Ember";
+import "ember";
 import "bower/ember-data/ember-data";
 
 

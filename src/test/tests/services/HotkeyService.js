@@ -1,13 +1,13 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
 	buildOwner,
 	fixtureElement
-} from "Testutils";
+} from "test-utils";
 import {
 	get,
 	set,
@@ -18,7 +18,7 @@ import {
 	run,
 	Component,
 	EventDispatcher
-} from "Ember";
+} from "ember";
 import HotkeyMixin from "mixins/HotkeyMixin";
 import HotkeyService from "services/HotkeyService";
 

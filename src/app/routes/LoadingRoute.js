@@ -1,4 +1,4 @@
-import { Route } from "Ember";
+import { Route } from "ember";
 
 
 export default Route.extend({});

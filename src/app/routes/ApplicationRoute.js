@@ -3,7 +3,7 @@ import {
 	set,
 	inject,
 	Route
-} from "Ember";
+} from "ember";
 
 
 const { service } = inject;

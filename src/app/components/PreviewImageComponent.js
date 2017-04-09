@@ -3,7 +3,7 @@ import {
 	set,
 	run,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/PreviewImageComponent.hbs";
 
 

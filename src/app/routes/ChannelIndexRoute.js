@@ -2,7 +2,7 @@ import {
 	get,
 	getOwner,
 	Route
-} from "Ember";
+} from "ember";
 import preload from "utils/preload";
 
 

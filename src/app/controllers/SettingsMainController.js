@@ -1,7 +1,7 @@
 import {
 	computed,
 	Controller
-} from "Ember";
+} from "ember";
 import { themes } from "config";
 
 

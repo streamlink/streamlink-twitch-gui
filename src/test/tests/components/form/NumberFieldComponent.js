@@ -1,21 +1,21 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
 	getElem,
 	buildOwner,
 	fixtureElement
-} from "Testutils";
+} from "test-utils";
 import {
 	get,
 	set,
 	setOwner,
 	run,
 	EventDispatcher
-} from "Ember";
+} from "ember";
 import NumberFieldComponent from "components/form/NumberFieldComponent";
 
 

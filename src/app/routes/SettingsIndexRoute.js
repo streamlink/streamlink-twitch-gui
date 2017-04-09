@@ -2,7 +2,7 @@ import {
 	get,
 	set,
 	Route
-} from "Ember";
+} from "ember";
 
 
 export default Route.extend({

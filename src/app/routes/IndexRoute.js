@@ -2,7 +2,7 @@ import {
 	get,
 	inject,
 	Route
-} from "Ember";
+} from "ember";
 
 
 const { service } = inject;

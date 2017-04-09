@@ -1,13 +1,13 @@
 import {
 	get,
 	computed
-} from "Ember";
+} from "ember";
 import {
 	attr,
 	belongsTo,
 	Model
-} from "EmberData";
-import Moment from "Moment";
+} from "ember-data";
+import Moment from "moment";
 
 
 const { and } = computed;

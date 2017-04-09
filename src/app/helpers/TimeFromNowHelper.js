@@ -1,5 +1,5 @@
 import FromNowHelper from "helpers/-FromNowHelper";
-import Moment from "Moment";
+import Moment from "moment";
 
 
 export default FromNowHelper.extend({

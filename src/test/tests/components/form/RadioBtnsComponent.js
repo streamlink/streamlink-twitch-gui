@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
@@ -9,7 +9,7 @@ import {
 	cleanOutput,
 	buildOwner,
 	fixtureElement
-} from "Testutils";
+} from "test-utils";
 import {
 	get,
 	set,
@@ -18,7 +18,7 @@ import {
 	run,
 	Component,
 	EventDispatcher
-} from "Ember";
+} from "ember";
 import RadioBtnComponent from "components/form/RadioBtnComponent";
 import RadioBtnsComponent from "components/form/RadioBtnsComponent";
 

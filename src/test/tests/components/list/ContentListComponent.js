@@ -1,20 +1,20 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
 	cleanOutput,
 	buildOwner
-} from "Testutils";
+} from "test-utils";
 import {
 	setOwner,
 	HTMLBars,
 	run,
 	Component,
 	EmberNativeArray
-} from "Ember";
+} from "ember";
 import ContentListComponent from "components/list/ContentListComponent";
 import IsGteHelper from "helpers/IsGteHelper";
 import GetIndexHelper from "helpers/GetIndexHelper";

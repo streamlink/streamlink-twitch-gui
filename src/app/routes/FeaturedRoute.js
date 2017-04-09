@@ -2,7 +2,7 @@ import {
 	get,
 	set,
 	Route
-} from "Ember";
+} from "ember";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
 import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";

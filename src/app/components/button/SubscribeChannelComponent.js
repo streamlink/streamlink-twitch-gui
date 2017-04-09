@@ -1,7 +1,7 @@
 import {
 	get,
 	computed
-} from "Ember";
+} from "ember";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "components/button/FormButtonComponent";

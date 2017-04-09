@@ -6,7 +6,7 @@ import {
 	run,
 	observer,
 	Component
-} from "Ember";
+} from "ember";
 import layout from "templates/components/list/InfiniteScrollComponent.hbs";
 
 

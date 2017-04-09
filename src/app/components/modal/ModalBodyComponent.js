@@ -1,4 +1,4 @@
-import { Component } from "Ember";
+import { Component } from "ember";
 
 
 export default Component.extend({

@@ -2,7 +2,7 @@ import {
 	get,
 	set,
 	Route
-} from "Ember";
+} from "ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
 import LanguageFilterMixin from "mixins/LanguageFilterMixin";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";

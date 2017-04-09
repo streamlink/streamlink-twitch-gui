@@ -1,4 +1,4 @@
-import { Helper } from "Ember";
+import { Helper } from "ember";
 
 
 function boolNot( value ) {

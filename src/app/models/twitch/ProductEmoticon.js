@@ -1,7 +1,7 @@
 import {
 	attr,
 	Model
-} from "EmberData";
+} from "ember-data";
 
 
 // These records have a different structure in comparison to /kraken/chat/emoticons

@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	runAppend,
 	runDestroy,
@@ -9,7 +9,7 @@ import {
 	cleanOutput,
 	buildOwner,
 	fixtureElement
-} from "Testutils";
+} from "test-utils";
 import {
 	set,
 	setOwner,
@@ -17,7 +17,7 @@ import {
 	run,
 	Component,
 	EventDispatcher
-} from "Ember";
+} from "ember";
 import FormButtonComponent, {
 	STATE_SUCCESS,
 	STATE_FAILURE

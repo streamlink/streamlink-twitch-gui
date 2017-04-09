@@ -8,7 +8,7 @@ import {
 	observer,
 	on,
 	Service
-} from "Ember";
+} from "ember";
 import {
 	files,
 	notification

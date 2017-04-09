@@ -2,7 +2,7 @@ import {
 	get,
 	inject,
 	Component
-} from "Ember";
+} from "ember";
 import HotkeyMixin from "mixins/HotkeyMixin";
 import layout from "templates/components/modal/ModalDialogComponent.hbs";
 

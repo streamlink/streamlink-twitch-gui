@@ -1,4 +1,4 @@
-import { computed } from "Ember";
+import { computed } from "ember";
 import FollowButtonComponent from "components/button/FollowButtonComponent";
 
 

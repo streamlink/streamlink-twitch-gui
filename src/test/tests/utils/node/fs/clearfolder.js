@@ -1,7 +1,7 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import clearfolderInjector from "inject-loader?-utils/node/denodify!utils/node/fs/clearfolder";
 import { posix as path } from "path";
 

@@ -1,14 +1,14 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	get,
 	set,
 	getProperties,
 	addObserver,
 	EmberObject
-} from "Ember";
+} from "ember";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 

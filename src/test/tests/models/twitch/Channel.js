@@ -1,21 +1,21 @@
 import {
 	module,
 	test
-} from "QUnit";
+} from "qunit";
 import {
 	buildOwner,
 	runDestroy
-} from "Testutils";
+} from "test-utils";
 import {
 	setupStore,
 	adapterRequest
-} from "Store";
+} from "store-utils";
 import {
 	get,
 	set,
 	run,
 	Service
-} from "Ember";
+} from "ember";
 import Channel from "models/twitch/Channel";
 import ChannelSerializer from "models/twitch/ChannelSerializer";
 import TwitchAdapter from "store/TwitchAdapter";

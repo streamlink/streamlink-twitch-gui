@@ -3,7 +3,7 @@ import {
 	set,
 	getOwner,
 	Route
-} from "Ember";
+} from "ember";
 import InfiniteScrollMixin from "mixins/InfiniteScrollMixin.js";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
 import preload from "utils/preload";

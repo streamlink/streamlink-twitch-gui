@@ -3,7 +3,7 @@ import {
 	set,
 	assign,
 	inject
-} from "Ember";
+} from "ember";
 import { vars } from "config";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import LanguageFilterMixin from "mixins/LanguageFilterMixin";
