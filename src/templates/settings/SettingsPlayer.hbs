@@ -8,9 +8,9 @@
 {{/settings-row}}
 
 {{#settings-row
-	(if (is-equal model.player_preset "default") "Video player" "Player executable")
+	(if playerPresetDefault "Video player" "Player executable")
 	(if playerPresetDefaultAndPlayerEmpty
-		(concat "If left empty, the player defined in the config file will be used.")
+		"If left empty, the player defined in the config file will be used."
 		"An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths."
 	)
 	icon="fa-tv"
@@ -55,8 +55,8 @@
 
 {{#unless playerPresetDefaultAndPlayerEmpty}}
 	{{#settings-row
-		(if (is-equal model.player_preset "default") "Parameters" "Custom parameters")
-		(if (is-equal model.player_preset "default") "Add player specific parameters." "Set additional custom player parameters.")
+		(if playerPresetDefault "Parameters" "Custom parameters")
+		(if playerPresetDefault "Add player specific parameters." "Set additional custom player parameters.")
 		icon="fa-terminal"
 		documentation="--player-args"
 		substitutions=substitutionsPlayer

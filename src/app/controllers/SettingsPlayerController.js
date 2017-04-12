@@ -9,6 +9,7 @@ import { platform } from "utils/node/platform";
 import { delimiter } from "path";
 
 
+const { equal } = computed;
 const { assign } = Object;
 const { isArray } = Array;
 const kPlayers = Object.keys( players );
@@ -76,14 +77,14 @@ export default Controller.extend({
 		return exec;
 	}),
 
+	playerPresetDefault: equal( "model.player_preset", "default" ),
+
 	playerPresetDefaultAndPlayerEmpty: computed(
-		"model.player_preset",
+		"playerPresetDefault",
 		"model.player.default.exec",
 		function() {
-			let preset = get( this, "model.player_preset" );
-			let player = get( this, "model.player" );
-
-			return preset === "default" && !get( player, "default.exec" );
+			return get( this, "playerPresetDefault" )
+			    && !get( this, "model.player.default.exec" );
 		}
 	)
 });
