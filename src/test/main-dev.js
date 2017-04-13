@@ -1,7 +1,7 @@
 global._noQUnitBridge = true;
 
 import "./main";
-import { start } from "QUnit";
+import { start } from "qunit";
 import nwGui from "nw.gui";
 
 
