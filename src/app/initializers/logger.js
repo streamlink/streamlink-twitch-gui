@@ -1,17 +1,9 @@
 /* global DEBUG */
-import Ember from "ember";
 import argv from "nwjs/argv";
 import Logger from "utils/Logger";
 
 
 const { logDebug, logError } = new Logger( "Application" );
-
-
-const emberOnError = Ember.onerror;
-Ember.onerror = async err => {
-	await logError( err );
-	emberOnError( err );
-};
 
 global.process.on( "uncaughtException", err => {
 	if ( DEBUG ) {
