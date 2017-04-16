@@ -46,8 +46,11 @@ const { logDebug, logError } = new Logger( "StreamingService" );
 
 const modelName = "stream";
 
+const reShebangEnv = /^#!\/usr\/bin\/env\s+(['"]?)(\S+)\1\s*$/;
+const reShebangExpl = /^#!(['"]?)(.+)\1\s*$/;
+const reBashWrapperScript = /^(PYTHONPATH)="(.+)"\s+exec\s+"(.+)"\s+"\$@"\s*$/;
+
 const reVersion   = /^(streamlink|livestreamer)(?:\.exe|-script\.py)? (\d+\.\d+.\d+)(?:$|\s.*)/i;
-const reShebang   = /^#!(['"]?)(.+)\1\s*$/;
 const reReplace   = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
 const reUnable    = /^error: Unable to open URL: /;
 const reNoStreams = /^error: No streams found on this URL: /;
@@ -110,13 +113,17 @@ function setIfNotNull( objA, objB, key ) {
 
 
 class CacheItem {
-	constructor( file, listener ) {
-		this.file = file;
-		this.watcher = watch( file, listener );
+	constructor( data, listener ) {
+		this.data = data;
+		if ( typeof data === "string" ) {
+			this.watcher = watch( data, listener );
+		}
 	}
 
 	close() {
-		this.watcher.close();
+		if ( this.watcher ) {
+			this.watcher.close();
+		}
 	}
 }
 
@@ -141,16 +148,17 @@ export default Service.extend( ChannelSettingsMixin, {
 	 */
 	cache: {},
 	setupCache( execObj ) {
-		this.clearCache();
-		Object.keys( execObj ).forEach( key => {
-			if ( !execObj[ key ] ) { return; }
-			this.cache[ key ] = new CacheItem( execObj[ key ], () => this.clearCache() );
-		});
+		const clear = () => this.clearCache();
+		clear();
+		Object.keys( execObj )
+			.forEach( key => {
+				const value = execObj[ key ];
+				this.cache[ key ] = new CacheItem( value, clear );
+			});
 	},
 	clearCache() {
-		Object.keys( this.cache ).forEach( key =>
-			this.cache[ key ].close()
-		);
+		Object.keys( this.cache )
+			.forEach( key => this.cache[ key ].close() );
 		this.cache = {};
 	},
 
@@ -327,9 +335,8 @@ export default Service.extend( ChannelSettingsMixin, {
 		// then check for already cached stream provider data
 		const kCache = Object.keys( this.cache );
 		if ( kCache.length ) {
-			// only return paths
 			return kCache.reduce( ( obj, key ) => {
-				obj[ key ] = this.cache[ key ].file;
+				obj[ key ] = this.cache[ key ].data;
 				return obj;
 			}, {} );
 		}
@@ -356,18 +363,24 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		// custom or default executable
 		const providerCustomExec = providerCustom[ "exec" ];
-		const providerExec = providerCustomExec || providerConfig[ "exec" ][ platformName ];
+		const providerConfigExec = providerConfig[ "exec" ][ platformName ];
+		const providerExec = providerCustomExec || providerConfigExec;
 		if ( !providerExec ) {
 			throw new Error( "Missing executable name for stream provider" );
 		}
 
+		const execObj = {
+			exec: null,
+			pythonscript: null,
+			env: {}
+		};
+
 		// try to find the pythonscript
-		let pythonscript;
 		if ( isPython ) {
 			try {
 				const providerPythonscript = providerCustom[ "pythonscript" ]
 					|| providerConfig[ "pythonscript" ][ platformName ];
-				pythonscript = await whichFallback(
+				execObj.pythonscript = await whichFallback(
 					providerPythonscript,
 					providerConfig[ "pythonscriptfallback" ],
 					isFile
@@ -378,12 +391,19 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 
 		// try to find the executable
-		let exec;
 		try {
+			if ( providerCustomExec ) {
+				execObj.exec = await whichFallback( providerCustomExec );
+			}
+
 			try {
 				// find the correct interpreter of the python script
-				if ( isPython && !providerCustomExec ) {
-					exec = await this.findPythonscriptInterpreter( providerExec, pythonscript );
+				if ( isPython ) {
+					const parsedExecObj = await this.findPythonscriptInterpreter(
+						execObj.pythonscript,
+						providerConfigExec
+					);
+					Object.assign( execObj, parsedExecObj );
 				} else {
 					// do the normal lookup in the catch block
 					throw null;
@@ -391,31 +411,69 @@ export default Service.extend( ChannelSettingsMixin, {
 			} catch ( e ) {
 				// find the exec with fallback paths if the provider is a standalone version
 				// or if a custom exec has been set or if the shebang parsing method has failed
-				exec = await whichFallback( providerExec, providerConfigFallback );
+				execObj.exec = await whichFallback( providerExec, providerConfigFallback );
 			}
 		} catch ( e ) {
 			const str = isPython ? "Python " : "";
 			throw new NotFoundError( `Could not find ${str}executable.` );
 		}
 
-		const execObj = { exec, pythonscript };
 		await logDebug( "Found streaming provider", execObj );
 
 		return await this.validate( record, execObj );
 	},
 
 	/**
-	 * @param {String} providerExec
-	 * @param {String} pythonscript
-	 * @returns {Promise.<String>}
+	 * Get interpreter of the streaming provider's python script.
+	 * @param {String} file
+	 * @param {String} providerConfigExec
+	 * @param {Boolean?} noRecursion
 	 */
-	async findPythonscriptInterpreter( providerExec, pythonscript ) {
-		const [ [ [ ,, shebang ] ] ] = await readLines( pythonscript, reShebang, 1 );
-		const dir = dirname( shebang );
+	async findPythonscriptInterpreter( file, providerConfigExec, noRecursion ) {
+		let isBashWrapperScript = false;
+		const validate = ( line, index ) => {
+			if ( index === 0 ) {
+				const matchEnv = reShebangEnv.exec( line );
+				const matchExpl = reShebangExpl.exec( line );
+				const shebang = matchEnv && matchEnv[2] || matchExpl && matchExpl[2];
+				if ( shebang && shebang.endsWith( "bash" ) ) {
+					isBashWrapperScript = true;
+				} else if ( matchExpl ) {
+					return matchExpl[2];
+				}
 
-		// don't use the shebang directly: Windows uses a different python executable
-		// look up the custom Windows executable in the returned dir
-		return await whichFallback( providerExec, dir, null, true );
+			} else if ( index === 1 && isBashWrapperScript ) {
+				const match = reBashWrapperScript.exec( line );
+				if ( match ) {
+					return match;
+				}
+			}
+		};
+		const [ [ shebang, wrapperData ] ] = await readLines( file, validate, 2 );
+
+		// the python script is a bash wrapper script
+		if ( isBashWrapperScript && wrapperData && !noRecursion ) {
+			const [ , envVarName, pythonPaths, pythonscript ] = wrapperData;
+			const env = { [ envVarName ]: pythonPaths };
+			// now parse the real python script
+			const { exec } = await this.findPythonscriptInterpreter(
+				pythonscript,
+				providerConfigExec,
+				true
+			);
+
+			return { exec, pythonscript, env };
+
+		} else if ( shebang ) {
+			// don't use the shebang directly: Windows uses a different python executable
+			const pythonPath = dirname( shebang );
+			// look up the custom Windows executable in the shebang's dir
+			const exec = await whichFallback( providerConfigExec, pythonPath, null, true );
+
+			return { exec };
+		}
+
+		throw new Error( "Couldn't validate python script of the selected streaming provider" );
 	},
 
 	/**
@@ -434,7 +492,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			return;
 		}
 
-		const { exec, pythonscript } = execObj;
+		const { exec, pythonscript, env } = execObj;
 		let child;
 
 		function kill() {
@@ -448,7 +506,9 @@ export default Service.extend( ChannelSettingsMixin, {
 				params.unshift( pythonscript );
 			}
 
-			child = spawn( exec, params );
+			child = spawn( exec, params, {
+				env: Object.assign( {}, process.env, env )
+			});
 
 			function onLine( line, idx, lines ) {
 				// be strict: output is just one single line
@@ -521,14 +581,20 @@ export default Service.extend( ChannelSettingsMixin, {
 		}
 
 		const params = await record.getParameters();
-		const { exec, pythonscript } = execObj;
+		const { exec, pythonscript, env } = execObj;
 
 		if ( pythonscript ) {
 			params.unshift( pythonscript );
 		}
 
-		const paramsObj = { exec, params };
+		const paramsObj = {
+			exec,
+			params,
+			env
+		};
 		await logDebug( "Spawning streaming provider process", paramsObj );
+
+		paramsObj.env = Object.assign( {}, process.env, env );
 
 		return paramsObj;
 	},
@@ -550,7 +616,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			return;
 		}
 
-		const { exec, params } = await this.getParameters( record, execObj );
+		const { exec, params, env } = await this.getParameters( record, execObj );
 
 		return new Promise( ( resolve, reject ) => {
 			record.clearLog();
@@ -561,7 +627,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			let spawnQuality = get( record, "quality" );
 
 			// spawn the process
-			let child = spawn( exec, params, { detached: true } );
+			let child = spawn( exec, params, { env, detached: true } );
 			set( record, "spawn", child );
 
 
