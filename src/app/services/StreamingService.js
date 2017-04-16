@@ -25,15 +25,14 @@ import {
 	platform as platformName
 } from "utils/node/platform";
 import { isFile } from "utils/node/fs/stat";
+import readLines from "utils/node/fs/readLines";
 import whichFallback from "utils/node/fs/whichFallback";
 import { spawn } from "child_process";
-import {
-	createReadStream,
-	watch
-} from "fs";
+import { watch } from "fs";
 import { dirname } from "path";
 
 
+const { hasOwnProperty } = {};
 const { service } = inject;
 const { later } = run;
 const {
@@ -43,7 +42,7 @@ const {
 } = streamproviderConfig;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
-const { logDebug, logError, logResolved } = new Logger( "StreamingService" );
+const { logDebug, logError } = new Logger( "StreamingService" );
 
 const modelName = "stream";
 
@@ -165,7 +164,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
-	startStream( stream, quality ) {
+	async startStream( stream, quality ) {
 		get( this, "modal" ).openModal( "streaming", this, {
 			error : null,
 			active: null,
@@ -200,17 +199,18 @@ export default Service.extend( ChannelSettingsMixin, {
 		});
 
 		// begin the stream launch procedure
-		Promise.resolve()
+		try {
 			// override record with channel specific settings
-			.then( () => this.getChannelSettings( record, quality ) )
+			await this.getChannelSettings( record, quality );
 			// get the exec command and validate
-			.then( () => this.check( record ) )
-			.then(
-				// launch the stream
-				execObj => this.launch( record, true, execObj ),
-				// show error message
-				error => this.onStreamFailure( record, error )
-			);
+			const execObj = await this.check( record );
+			// launch the stream
+			await this.launch( record, true, execObj );
+
+		} catch ( err ) {
+			// show error message
+			this.onStreamFailure( record, err );
+		}
 	},
 
 
@@ -321,123 +321,101 @@ export default Service.extend( ChannelSettingsMixin, {
 	 */
 	async check( record ) {
 		// read properties first (triggers observers)
-		let streamprovider  = get( this, "settings.streamprovider" );
-		let streamproviders = get( this, "settings.streamproviders" );
+		const settingsStreamprovider  = get( this, "settings.streamprovider" );
+		const settingsStreamproviders = get( this, "settings.streamproviders" );
 
 		// then check for already cached stream provider data
-		let kCache = Object.keys( this.cache );
+		const kCache = Object.keys( this.cache );
 		if ( kCache.length ) {
 			// only return paths
-			return Promise.resolve( kCache.reduce( ( obj, key ) => {
+			return kCache.reduce( ( obj, key ) => {
 				obj[ key ] = this.cache[ key ].file;
 				return obj;
-			}, {} ) );
+			}, {} );
 		}
 
 		// begin validation
 		await logDebug( "Resolving streaming provider", {
-			provider: streamprovider,
-			config: streamproviders[ streamprovider ]
+			provider: settingsStreamprovider,
+			config: settingsStreamproviders[ settingsStreamprovider ]
 		});
 
 		// check for known providers first
 		if (
-			   !providers.hasOwnProperty( streamprovider )
-			|| !streamproviders.hasOwnProperty( streamprovider )
+			   !hasOwnProperty.call( providers, settingsStreamprovider )
+			|| !hasOwnProperty.call( settingsStreamproviders, settingsStreamprovider )
 		) {
-			return Promise.reject( new Error( "Invalid stream provider" ) );
+			throw new Error( "Invalid stream provider" );
 		}
 
 		// provider objects
-		let providerCustom = streamproviders[ streamprovider ];
-		let providerConfig = providers[ streamprovider ];
-		let isPython = providerConfig.hasOwnProperty( "python" );
-		let pythonFallback = providerConfig[ "fallback" ];
+		const providerCustom = settingsStreamproviders[ settingsStreamprovider ];
+		const providerConfig = providers[ settingsStreamprovider ];
+		const providerConfigFallback = providerConfig[ "fallback" ];
+		const isPython = hasOwnProperty.call( providerConfig, "python" );
 
 		// custom or default executable
-		let customExec = get( providerCustom, "exec" );
-		let exec = customExec || providerConfig[ "exec" ][ platformName ];
-		if ( !exec ) {
-			return Promise.reject( new Error( "Missing executable name for stream provider" ) );
+		const providerCustomExec = providerCustom[ "exec" ];
+		const providerExec = providerCustomExec || providerConfig[ "exec" ][ platformName ];
+		if ( !providerExec ) {
+			throw new Error( "Missing executable name for stream provider" );
 		}
 
-		return Promise.resolve()
-			// try to find the pythonscript
-			.then( () => {
-				if ( !isPython ) {
-					return null;
-				}
-
-				let pythonscript = get( providerCustom, "pythonscript" )
+		// try to find the pythonscript
+		let pythonscript;
+		if ( isPython ) {
+			try {
+				const providerPythonscript = providerCustom[ "pythonscript" ]
 					|| providerConfig[ "pythonscript" ][ platformName ];
-
-				return whichFallback(
-					pythonscript,
+				pythonscript = await whichFallback(
+					providerPythonscript,
 					providerConfig[ "pythonscriptfallback" ],
 					isFile
-				)
-					.catch( () => {
-						throw new NotFoundError( "Could not find Python script." );
-					});
-			})
-			// try to find the executable
-			.then( pythonscript => {
-				// look in $PATH first, then use a list of known default paths
-				const findExecutable = () =>
-					whichFallback( exec, pythonFallback )
-						.catch( () => {
-							let str = isPython ? "Python " : "";
-							throw new NotFoundError( `Could not find ${str}executable.` );
-						});
+				);
+			} catch ( e ) {
+				throw new NotFoundError( "Could not find Python script." );
+			}
+		}
 
-				let promise = !isPython || customExec
-					// don't parse shebang if a custom python exec has been set
-					? findExecutable()
-					// get the pythonscript's shebang and look for the executable in its dirname
-					// don't use the shebang directly, as Windows uses a different python executable
-					: this.parsePythonscriptShebang( pythonscript )
-						.then( dir => whichFallback( exec, dir, null, true ) )
-						// fall back to the default behavior
-						.catch( () => findExecutable() );
+		// try to find the executable
+		let exec;
+		try {
+			try {
+				// find the correct interpreter of the python script
+				if ( isPython && !providerCustomExec ) {
+					exec = await this.findPythonscriptInterpreter( providerExec, pythonscript );
+				} else {
+					// do the normal lookup in the catch block
+					throw null;
+				}
+			} catch ( e ) {
+				// find the exec with fallback paths if the provider is a standalone version
+				// or if a custom exec has been set or if the shebang parsing method has failed
+				exec = await whichFallback( providerExec, providerConfigFallback );
+			}
+		} catch ( e ) {
+			const str = isPython ? "Python " : "";
+			throw new NotFoundError( `Could not find ${str}executable.` );
+		}
 
-				return promise
-					.then( exec => ({ exec, pythonscript }) );
-			})
-			.then( logResolved( "Found streaming provider" ) )
-			.then( execObj => this.validate( record, execObj ) );
+		const execObj = { exec, pythonscript };
+		await logDebug( "Found streaming provider", execObj );
+
+		return await this.validate( record, execObj );
 	},
 
 	/**
+	 * @param {String} providerExec
 	 * @param {String} pythonscript
 	 * @returns {Promise.<String>}
 	 */
-	parsePythonscriptShebang( pythonscript ) {
-		/** @type ReadStream */
-		let filestream;
-		let timeout;
+	async findPythonscriptInterpreter( providerExec, pythonscript ) {
+		const [ [ [ ,, shebang ] ] ] = await readLines( pythonscript, reShebang, 1 );
+		const dir = dirname( shebang );
 
-		return new Promise( ( resolve, reject ) => {
-			let onLine = ( line, index ) => {
-				if ( index === 0 ) {
-					let match = reShebang.exec( line );
-					if ( match ) {
-						return resolve( match[ 2 ] );
-					}
-				}
-				reject();
-			};
-
-			filestream = createReadStream( pythonscript );
-			filestream.on( "error", reject );
-			filestream.on( "data", new StreamOutputBuffer( onLine ) );
-
-			timeout = setTimeout( reject, 3000 );
-		})
-			.finally( () => {
-				clearTimeout( timeout );
-				filestream.close();
-			})
-			.then( shebang => dirname( shebang ) );
+		// don't use the shebang directly: Windows uses a different python executable
+		// look up the custom Windows executable in the returned dir
+		return await whichFallback( providerExec, dir, null, true );
 	},
 
 	/**
@@ -449,14 +427,14 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * @param {String} execObj.pythonscript
 	 * @returns {Promise}
 	 */
-	validate( record, execObj ) {
+	async validate( record, execObj ) {
 		// in case the shutdown button was pressed before
 		if ( get( this, "abort" ) ) {
 			this.clear( record );
-			return Promise.reject();
+			return;
 		}
 
-		let { exec, pythonscript } = execObj;
+		const { exec, pythonscript } = execObj;
 		let child;
 
 		function kill() {
@@ -464,8 +442,8 @@ export default Service.extend( ChannelSettingsMixin, {
 			child = null;
 		}
 
-		return new Promise(function( resolve, reject ) {
-			let params = [ "--version", "--no-version-check" ];
+		return new Promise( ( resolve, reject ) => {
+			const params = [ "--version", "--no-version-check" ];
 			if ( pythonscript ) {
 				params.unshift( pythonscript );
 			}
@@ -535,28 +513,24 @@ export default Service.extend( ChannelSettingsMixin, {
 	 * @param {String} execObj.pythonscript
 	 * @returns {Promise}
 	 */
-	getParameters: function( record, execObj ) {
+	async getParameters( record, execObj ) {
 		// in case the shutdown button was pressed before
 		if ( get( this, "abort" ) ) {
 			this.clear( record );
 			return Promise.reject();
 		}
 
-		return record.getParameters()
-			.then( async params => {
-				let { exec, pythonscript } = execObj;
+		const params = await record.getParameters();
+		const { exec, pythonscript } = execObj;
 
-				if ( pythonscript ) {
-					params.unshift( pythonscript );
-				}
+		if ( pythonscript ) {
+			params.unshift( pythonscript );
+		}
 
-				await logDebug( "Spawning streaming provider process", {
-					exec,
-					params
-				});
+		const paramsObj = { exec, params };
+		await logDebug( "Spawning streaming provider process", paramsObj );
 
-				return { exec, params };
-			});
+		return paramsObj;
 	},
 
 
@@ -573,7 +547,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		// in case the shutdown button was pressed before
 		if ( get( this, "abort" ) ) {
 			this.clear( record );
-			return Promise.reject();
+			return;
 		}
 
 		const { exec, params } = await this.getParameters( record, execObj );
