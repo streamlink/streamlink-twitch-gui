@@ -57,9 +57,7 @@ test( "Timeout", async assert => {
 	})[ "default" ];
 
 	try {
-		const promise = readLines( "foo", null, 1, 1 );
-		await new Promise( resolve => setTimeout( resolve, 2 ) );
-		await promise;
+		await readLines( "foo", null, 1, 1 );
 	} catch ( e ) {
 		assert.strictEqual( e.message, "Timeout", "Rejects if read time has expired" );
 	}
