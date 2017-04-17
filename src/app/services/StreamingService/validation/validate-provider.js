@@ -6,9 +6,6 @@ import {
 	NotFoundError,
 	VersionError
 } from "../errors";
-import { setupCache } from "../cache";
-import { logDebug } from "../logger";
-import isAborted from "../is-aborted";
 import spawn from "../spawn";
 import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
@@ -20,20 +17,17 @@ const {
 	"validation-timeout": validationTimeout
 } = streamproviderConfig;
 
-const reVersion = /^(streamlink|livestreamer)(?:\.exe|-script\.pyw?)? (\d+\.\d+.\d+)(?:$|\s.*)/i;
+const reVersion = /^(streamlink|livestreamer)(?:\.exe|-script\.pyw?)? (\d+\.\d+\.\d+)(?:$|\s.*)/i;
 const params = [ "--version", "--no-version-check" ];
 
 
 /**
  * Validate
  * Runs the executable with the `--version` parameter and reads answer from stderr
- * @param {Stream} stream
  * @param {ExecObj} execObj
  * @returns {Promise}
  */
-export default async function( stream, execObj ) {
-	isAborted( stream );
-
+export default async function( execObj ) {
 	let child;
 
 	const { name, version } = await new Promise( ( resolve, reject ) => {
@@ -63,10 +57,6 @@ export default async function( stream, execObj ) {
 			reject( new Error( `Exit code ${code}` ) );
 		};
 
-		const onTimeout = () => {
-			reject( new Error( "Timeout" ) );
-		};
-
 		// reject on error / exit
 		child.once( "error", reject );
 		child.once( "exit", onExit );
@@ -76,7 +66,7 @@ export default async function( stream, execObj ) {
 		child.stderr.on( "data", new StreamOutputBuffer( onLine ) );
 
 		// kill after a certain time
-		setTimeout( onTimeout, validationTimeout );
+		setTimeout( () => reject( new Error( "Timeout" ) ), validationTimeout );
 	})
 		.finally( () => {
 			if ( child ) {
@@ -93,8 +83,5 @@ export default async function( stream, execObj ) {
 		throw new VersionError( version );
 	}
 
-	await logDebug( "Validated streaming provider", { name, version } );
-	setupCache( execObj );
-
-	return execObj;
+	return { name, version };
 }

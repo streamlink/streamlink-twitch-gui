@@ -1,5 +1,8 @@
 import { streamprovider as streamproviderConfig } from "config";
-import { getCache } from "../cache";
+import {
+	getCache,
+	setupCache
+} from "../cache";
 import { logDebug } from "../logger";
 import { NotFoundError } from "../errors";
 import isAborted from "../is-aborted";
@@ -105,7 +108,13 @@ export default async function( stream, provider, providers ) {
 		throw new NotFoundError( `Could not find ${str}executable.` );
 	}
 
-	await logDebug( "Found streaming provider", execObj );
+	isAborted( stream );
 
-	return await validateProvider( stream, execObj );
+	await logDebug( "Found streaming provider", execObj );
+	const validationData = await validateProvider( execObj );
+	await logDebug( "Validated streaming provider", validationData );
+
+	setupCache( execObj );
+
+	return execObj;
 }
