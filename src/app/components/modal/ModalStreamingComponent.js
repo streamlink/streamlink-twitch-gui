@@ -90,20 +90,24 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		},
 
 		abort() {
-			set( this, "streaming.abort", true );
-			get( this, "modal" ).closeModal( get( this, "streaming" ) );
+			const active = get( this, "active" );
+			if ( active && !get( active, "isDestroyed" ) ) {
+				set( active, "aborted", true );
+			}
+			this.send( "close" );
 		},
 
 		close() {
-			get( this, "modal" ).closeModal( get( this, "streaming" ) );
+			const streamingService = get( this, "streaming" );
+			get( this, "modal" ).closeModal( streamingService );
 			schedule( "destroy", () => {
-				set( this, "streaming.active", null );
+				set( streamingService, "active", null );
 			});
 		},
 
 		shutdown() {
 			const active = get( this, "active" );
-			if ( active ) {
+			if ( active && !get( active, "isDestroyed" ) ) {
 				active.kill();
 			}
 			this.send( "close" );
@@ -111,7 +115,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 		toggleLog() {
 			const active = get( this, "active" );
-			if ( active ) {
+			if ( active && !get( active, "isDestroyed" ) ) {
 				active.toggleProperty( "showLog" );
 			}
 		}

@@ -53,6 +53,7 @@ export default Model.extend({
 
 	/** @property {ChildProcess} spawn */
 	spawn  : null,
+	aborted: false,
 	success: false,
 	error  : false,
 	warning: false,
