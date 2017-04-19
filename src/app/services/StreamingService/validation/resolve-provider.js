@@ -9,26 +9,24 @@ import isAborted from "../is-aborted";
 import ExecObj from "./exec-obj";
 import findPythonscriptInterpreter from "./find-pythonscript-interpreter";
 import validateProvider from "./validate-provider";
-import {
-	platform as platformName
-} from "utils/node/platform";
+import { platform } from "utils/node/platform";
 import { isFile } from "utils/node/fs/stat";
 import whichFallback from "utils/node/fs/whichFallback";
 
 
 const { assign } = Object;
 const { hasOwnProperty } = {};
-const { providers: providersData } = streamproviderConfig;
+const { providers: providersConfData } = streamproviderConfig;
 
 
 /**
  * Get the path of the executable and pythonscript
  * @param {Stream} stream
  * @param {String} provider
- * @param {Object} providers
+ * @param {Object} providersUserData
  * @returns {Promise.<ExecObj>}
  */
-export default async function( stream, provider, providers ) {
+export default async function( stream, provider, providersUserData ) {
 	isAborted( stream );
 
 	await logDebug( "Preparing to launch stream", () => stream.toJSON({ includeId: true }) );
@@ -41,71 +39,75 @@ export default async function( stream, provider, providers ) {
 
 	// check for known providers first
 	if (
-		   !hasOwnProperty.call( providersData, provider )
-		|| !hasOwnProperty.call( providers, provider )
+		   !hasOwnProperty.call( providersConfData, provider )
+		|| !hasOwnProperty.call( providersUserData, provider )
 	) {
 		throw new Error( `Invalid streaming provider: ${provider}` );
 	}
 
 	// provider objects
-	const providerConfData = providersData[ provider ];
-	const providerUserData = providers[ provider ];
+	const providerConfData = providersConfData[ provider ];
+	const providerUserData = providersUserData[ provider ];
 	const isPython = hasOwnProperty.call( providerConfData, "python" );
 
 	await logDebug( "Resolving streaming provider", { provider, providerUserData } );
 
 	// custom or default executable
-	const providerConfDataExec = providerConfData[ "exec" ][ platformName ];
+	const providerConfDataExec = providerConfData[ "exec" ][ platform ];
 	const providerUserDataExec = providerUserData[ "exec" ];
 	const providerExec = providerUserDataExec || providerConfDataExec;
 	if ( !providerExec ) {
 		throw new Error( "Missing executable name for streaming provider" );
 	}
 
+	// the object containing the path to the exec (and pythonscript) and env data
 	const execObj = new ExecObj();
 
 	// try to find the pythonscript
 	if ( isPython ) {
-		const providerConfDataPythonscript = providerConfData[ "pythonscript" ][ platformName ];
+		const providerConfDataPythonscript = providerConfData[ "pythonscript" ][ platform ];
 		const providerUserDataPythonscript = providerUserData[ "pythonscript" ];
+		const providerPythonscript = providerUserDataPythonscript || providerConfDataPythonscript;
+		if ( !providerPythonscript ) {
+			throw new Error( "Missing python script for streaming provider" );
+		}
+
 		try {
+			// resolve pythonscript
 			execObj.pythonscript = await whichFallback(
-				providerUserDataPythonscript || providerConfDataPythonscript,
+				providerPythonscript,
 				providerConfData[ "pythonscriptfallback" ],
 				isFile
 			);
 		} catch ( e ) {
-			throw new NotFoundError( "Could not find Python script." );
+			throw new NotFoundError( "Couldn't find python script" );
+		}
+
+		try {
+			// parse pythonscript and find the correct python interpreter
+			const partialExecObj = await findPythonscriptInterpreter(
+				execObj.pythonscript,
+				providerConfDataExec
+			);
+			// assign the exec and the potentially new pythonscript and custom env
+			assign( execObj, partialExecObj );
+		} catch ( e ) {
+			throw new NotFoundError( "Couldn't validate python script" );
 		}
 	}
 
 	// try to find the executable
 	try {
-		// has custom exec
 		if ( providerUserDataExec ) {
+			// resolve custom exec (even if one was already found by findPythonscriptInterpreter)
 			execObj.exec = await whichFallback( providerUserDataExec );
-		}
-
-		try {
-			// find the correct interpreter of the python script
-			if ( isPython ) {
-				const parsedExecObj = await findPythonscriptInterpreter(
-					execObj.pythonscript,
-					providerConfDataExec
-				);
-				assign( execObj, parsedExecObj );
-			} else {
-				// do the normal lookup in the catch block
-				throw null;
-			}
-		} catch ( e ) {
-			// find the exec with fallback paths if the provider is a standalone version
-			// or if a custom exec has been set or if the shebang parsing method has failed
+		} else if ( !execObj.exec ) {
+			// resolve default exec (if we don't have an exec yet)
 			execObj.exec = await whichFallback( providerExec, providerConfData[ "fallback" ] );
 		}
 	} catch ( e ) {
-		const str = isPython ? "Python " : "";
-		throw new NotFoundError( `Could not find ${str}executable.` );
+		const str = isPython ? "python " : "";
+		throw new NotFoundError( `Couldn't find ${str}executable` );
 	}
 
 	isAborted( stream );

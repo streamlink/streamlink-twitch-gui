@@ -67,3 +67,4 @@ import "tests/services/StreamingService/cache";
 import "tests/services/StreamingService/spawn";
 import "tests/services/StreamingService/validation/find-pythonscript-interpreter";
 import "tests/services/StreamingService/validation/validate-provider";
+import "tests/services/StreamingService/validation/resolve-provider";
