@@ -1,3 +1,4 @@
+import ExecObj from "../exec-obj";
 import readLines from "utils/node/fs/readLines";
 import whichFallback from "utils/node/fs/whichFallback";
 import { dirname } from "path";
@@ -13,6 +14,7 @@ const reBashWrapperScript = /^(PYTHONPATH)="(.+)"\s+exec\s+"(.+)"\s+"\$@"\s*$/;
  * @param {String} file
  * @param {String} providerConfigExec
  * @param {Boolean?} noRecursion
+ * @returns {Promise.<ExecObj>}
  */
 export default async function findPythonscriptInterpreter( file, providerConfigExec, noRecursion ) {
 	let isBashWrapperScript = false;
@@ -47,7 +49,7 @@ export default async function findPythonscriptInterpreter( file, providerConfigE
 			true
 		);
 
-		return { exec, pythonscript, env };
+		return new ExecObj( exec, [ pythonscript ], env );
 
 	} else if ( shebang ) {
 		// don't use the shebang directly: Windows uses a different python executable
@@ -55,7 +57,7 @@ export default async function findPythonscriptInterpreter( file, providerConfigE
 		// look up the custom Windows executable in the shebang's dir
 		const exec = await whichFallback( providerConfigExec, pythonPath, null, true );
 
-		return { exec };
+		return new ExecObj( exec );
 	}
 
 	throw new Error( "Couldn't validate python script of the selected streaming provider" );

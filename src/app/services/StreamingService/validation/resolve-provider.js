@@ -1,4 +1,6 @@
-import { streamprovider as streamproviderConfig } from "config";
+import {
+	streamprovider as streamproviderConfig
+} from "config";
 import {
 	getCache,
 	setupCache
@@ -6,7 +8,7 @@ import {
 import { logDebug } from "../logger";
 import { NotFoundError } from "../errors";
 import isAborted from "../is-aborted";
-import ExecObj from "./exec-obj";
+import ExecObj from "../exec-obj";
 import findPythonscriptInterpreter from "./find-pythonscript-interpreter";
 import validateProvider from "./validate-provider";
 import { platform } from "utils/node/platform";
@@ -14,7 +16,6 @@ import { isFile } from "utils/node/fs/stat";
 import whichFallback from "utils/node/fs/whichFallback";
 
 
-const { assign } = Object;
 const { hasOwnProperty } = {};
 const { providers: providersConfData } = streamproviderConfig;
 
@@ -28,8 +29,6 @@ const { providers: providersConfData } = streamproviderConfig;
  */
 export default async function( stream, provider, providersUserData ) {
 	isAborted( stream );
-
-	await logDebug( "Preparing to launch stream", () => stream.toJSON({ includeId: true }) );
 
 	// then check for already cached stream provider data
 	const cache = getCache();
@@ -72,25 +71,28 @@ export default async function( stream, provider, providersUserData ) {
 			throw new Error( "Missing python script for streaming provider" );
 		}
 
+		let pythonscript;
+
 		try {
 			// resolve pythonscript
-			execObj.pythonscript = await whichFallback(
+			pythonscript = await whichFallback(
 				providerPythonscript,
 				providerConfData[ "pythonscriptfallback" ],
 				isFile
 			);
+			execObj.params = [ pythonscript ];
 		} catch ( e ) {
 			throw new NotFoundError( "Couldn't find python script" );
 		}
 
 		try {
 			// parse pythonscript and find the correct python interpreter
-			const partialExecObj = await findPythonscriptInterpreter(
-				execObj.pythonscript,
+			const newExecObj = await findPythonscriptInterpreter(
+				pythonscript,
 				providerConfDataExec
 			);
-			// assign the exec and the potentially new pythonscript and custom env
-			assign( execObj, partialExecObj );
+			// merge with existing execObj
+			execObj.merge( newExecObj );
 		} catch ( e ) {
 			throw new NotFoundError( "Couldn't validate python script" );
 		}

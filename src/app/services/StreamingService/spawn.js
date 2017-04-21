@@ -7,29 +7,27 @@ const { assign } = Object;
 
 /**
  * @param {ExecObj} execObj
- * @param {String[]} params
+ * @param {String[]} additonalParams
  * @param {Object} options
+ * @returns {ChildProcess}
  */
-export default function( execObj, params, options = {} ) {
-	const { exec, pythonscript, env } = execObj;
+export default function( execObj, additonalParams = [], options = {} ) {
+	let { exec, params, env } = execObj;
 
-	if ( pythonscript ) {
-		params = [ pythonscript, ...( params || [] ) ];
-	}
+	params = [
+		...( params || [] ),
+		...( additonalParams || [] )
+	];
 
 	if ( env ) {
 		options.env = assign( {}, options.env, env );
 	}
 
-	logDebug( "Spawning streaming provider process", {
+	logDebug( "Spawning process", {
 		exec,
 		params,
 		env
 	});
 
-	return spawn(
-		exec,
-		params,
-		options
-	);
+	return spawn( exec, params, options );
 }

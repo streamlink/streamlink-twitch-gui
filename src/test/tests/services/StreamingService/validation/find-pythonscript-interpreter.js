@@ -5,6 +5,7 @@ import {
 import readLinesInjector from "inject-loader?fs!utils/node/fs/readLines";
 import findPythonscriptInterpreterInjector
 	from "inject-loader!services/StreamingService/validation/find-pythonscript-interpreter";
+import ExecObj from "services/StreamingService/exec-obj";
 import { EventEmitter } from "events";
 import {
 	posix,
@@ -39,6 +40,7 @@ test( "Invalid content", async assert => {
 	})[ "default" ];
 
 	const findPythonscriptInterpreter = findPythonscriptInterpreterInjector({
+		"../exec-obj": ExecObj,
 		"utils/node/fs/readLines": readLines,
 		"utils/node/fs/whichFallback": function() {},
 		"path": {
@@ -81,6 +83,7 @@ test( "Pythonscript shebang Posix", async assert => {
 	})[ "default" ];
 
 	const findPythonscriptInterpreter = findPythonscriptInterpreterInjector({
+		"../exec-obj": ExecObj,
 		"utils/node/fs/readLines": readLines,
 		"utils/node/fs/whichFallback": function( execName, fallbackPaths, check, fallbackOnly ) {
 			assert.strictEqual( execName, "exec", "Looks up correct exec name" );
@@ -101,7 +104,15 @@ test( "Pythonscript shebang Posix", async assert => {
 	readStream.emit( "data", "#!/foo/bar/baz\n" );
 	readStream.emit( "end" );
 	result = await promise;
-	assert.propEqual( result, { exec: "/foo/bar/exec" }, "Returns the correct exec path" );
+	assert.propEqual(
+		result,
+		{
+			exec: "/foo/bar/exec",
+			params: null,
+			env: null
+		},
+		"Returns the correct exec path"
+	);
 
 });
 
@@ -121,6 +132,7 @@ test( "Pythonscript shebang Win32", async assert => {
 	})[ "default" ];
 
 	const findPythonscriptInterpreter = findPythonscriptInterpreterInjector({
+		"../exec-obj": ExecObj,
 		"utils/node/fs/readLines": readLines,
 		"utils/node/fs/whichFallback": function( execName, fallbackPaths, check, fallbackOnly ) {
 			assert.strictEqual( execName, "exec", "Looks up correct exec name" );
@@ -141,7 +153,15 @@ test( "Pythonscript shebang Win32", async assert => {
 	readStream.emit( "data", "#!\"C:\\foo\\bar\\baz\"\n" );
 	readStream.emit( "end" );
 	result = await promise;
-	assert.propEqual( result, { exec: "C:\\foo\\bar\\exec" }, "Returns the correct exec path" );
+	assert.propEqual(
+		result,
+		{
+			exec: "C:\\foo\\bar\\exec",
+			params: null,
+			env: null
+		},
+		"Returns the correct exec path"
+	);
 
 });
 
@@ -171,6 +191,7 @@ test( "Bash wrapper script", async assert => {
 	})[ "default" ];
 
 	const findPythonscriptInterpreter = findPythonscriptInterpreterInjector({
+		"../exec-obj": ExecObj,
 		"utils/node/fs/readLines": async function( file, ...args ) {
 			const promise = readLines( file, ...args );
 
@@ -196,7 +217,7 @@ test( "Bash wrapper script", async assert => {
 		resultA,
 		{
 			exec: "/one/two/exec",
-			pythonscript: "/baz/qux",
+			params: [ "/baz/qux" ],
 			env: {
 				PYTHONPATH: "foobar"
 			}
@@ -209,7 +230,7 @@ test( "Bash wrapper script", async assert => {
 		resultB,
 		{
 			exec: "/one/two/exec",
-			pythonscript: "/baz/qux",
+			params: [ "/baz/qux" ],
 			env: {
 				PYTHONPATH: "foobar"
 			}
@@ -235,6 +256,7 @@ test( "Chained bash wrapper scripts", async assert => {
 	})[ "default" ];
 
 	const findPythonscriptInterpreter = findPythonscriptInterpreterInjector({
+		"../exec-obj": ExecObj,
 		"utils/node/fs/readLines": async function() {
 			const promise = readLines( ...arguments );
 			// emit the same file content twice

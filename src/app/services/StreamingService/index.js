@@ -8,7 +8,10 @@ import {
 import {
 	vars as varsConfig
 } from "config";
-import { logError } from "./logger";
+import {
+	logDebug,
+	logError
+} from "./logger";
 import {
 	Aborted,
 	Warning
@@ -114,15 +117,20 @@ export default Service.extend( ChannelSettingsMixin, {
 			// override record with channel specific settings
 			await this.getChannelSettings( stream, quality );
 
+			await logDebug(
+				"Preparing to launch stream",
+				() => stream.toJSON({ includeId: true })
+			);
+
 			// get the exec command and validate
-			const execObj = await resolveProvider(
+			const provider = await resolveProvider(
 				stream,
 				get( this, "settings.streamprovider" ),
 				get( this, "settings.streamproviders" )
 			);
 
 			// launch the stream
-			await this.launch( stream, execObj, true );
+			await this.launch( stream, provider, true );
 
 		} catch ( err ) {
 			if ( err instanceof Aborted ) {

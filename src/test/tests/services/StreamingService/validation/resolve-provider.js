@@ -5,7 +5,7 @@ import {
 import resolveProviderInjector
 	from "inject-loader!services/StreamingService/validation/resolve-provider";
 import { NotFoundError } from "services/StreamingService/errors";
-import ExecObj from "services/StreamingService/validation/exec-obj";
+import ExecObj from "services/StreamingService/exec-obj";
 
 
 const { assign } = Object;
@@ -20,7 +20,7 @@ const commonDeps = {
 	"../errors": {
 		NotFoundError
 	},
-	"./exec-obj": ExecObj,
+	"../exec-obj": ExecObj,
 	"utils/node/fs/stat": {
 		isFile
 	},
@@ -316,7 +316,7 @@ test( "Resolve exec (no pythonscript)", async assert => {
 	try {
 		expected = {
 			exec: "C:\\livestreamer\\livestreamer.exe",
-			pythonscript: null,
+			params: null,
 			env: null
 		};
 		whichFallback = ( exec, fallbacks ) => {
@@ -340,7 +340,7 @@ test( "Resolve exec (no pythonscript)", async assert => {
 	try {
 		expected = {
 			exec: "C:\\custom\\standalone.exe",
-			pythonscript: null,
+			params: null,
 			env: null
 		};
 		whichFallback = ( exec, fallbacks ) => {
@@ -497,13 +497,13 @@ test( "Resolve exec (pythonscript)", async assert => {
 	try {
 		expected = {
 			exec: "/usr/bin/python",
-			pythonscript: "/usr/bin/streamlink",
+			params: [ "/usr/bin/streamlink" ],
 			env: null
 		};
 		findPythonscriptInterpreter = ( pythonscript, exec ) => {
 			assert.strictEqual( pythonscript, "/usr/bin/streamlink", "Uses correct pythonscript" );
 			assert.strictEqual( exec, "python", "Uses correct exec file name" );
-			return { exec: "/usr/bin/python" };
+			return new ExecObj( "/usr/bin/python" );
 		};
 		const result = await resolveProvider( stream, "streamlink", {
 			"streamlink": {}
@@ -517,22 +517,18 @@ test( "Resolve exec (pythonscript)", async assert => {
 	try {
 		expected = {
 			exec: "/usr/bin/python",
-			pythonscript: "/usr/bin/different-streamlink",
-			env: {
-				foo: "bar"
-			}
+			params: [ "/usr/bin/different-streamlink" ],
+			env: { foo: "bar" }
 		};
 		whichFallback = () => "/usr/bin/custom";
 		findPythonscriptInterpreter = ( pythonscript, exec ) => {
 			assert.strictEqual( pythonscript, "/usr/bin/custom", "Uses correct pythonscript" );
 			assert.strictEqual( exec, "python", "Uses correct exec file name" );
-			return {
-				exec: "/usr/bin/python",
-				pythonscript: "/usr/bin/different-streamlink",
-				env: {
-					foo: "bar"
-				}
-			};
+			return new ExecObj(
+				"/usr/bin/python",
+				[ "/usr/bin/different-streamlink" ],
+				{ foo: "bar" }
+			);
 		};
 		const result = await resolveProvider( stream, "streamlink", {
 			"streamlink": {
@@ -583,7 +579,7 @@ test( "Resolve exec (pythonscript)", async assert => {
 	try {
 		expected = {
 			exec: "/usr/bin/custom-exec",
-			pythonscript: "/usr/bin/streamlink",
+			params: [ "/usr/bin/streamlink" ],
 			env: null
 		};
 		let whichFallbackCalls = 0;
@@ -619,10 +615,8 @@ test( "Resolve exec (pythonscript)", async assert => {
 	try {
 		expected = {
 			exec: "/usr/bin/custom-exec",
-			pythonscript: "/usr/bin/different-streamlink",
-			env: {
-				foo: "bar"
-			}
+			params: [ "/usr/bin/different-streamlink" ],
+			env: { foo: "bar" }
 		};
 		let whichFallbackCalls = 0;
 		whichFallback = ( file, fallbacks, check ) => {
@@ -640,13 +634,11 @@ test( "Resolve exec (pythonscript)", async assert => {
 				throw new Error( "Calls whichFallback more than twice" );
 			}
 		};
-		findPythonscriptInterpreter = () => ({
-			exec: "/usr/bin/python",
-			pythonscript: "/usr/bin/different-streamlink",
-			env: {
-				foo: "bar"
-			}
-		});
+		findPythonscriptInterpreter = () => new ExecObj(
+			"/usr/bin/python",
+			[ "/usr/bin/different-streamlink" ],
+			{ foo: "bar" }
+		);
 		const result = await resolveProvider( stream, "streamlink", {
 			"streamlink": {
 				exec: "custom-exec"

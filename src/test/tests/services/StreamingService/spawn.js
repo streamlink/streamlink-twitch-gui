@@ -3,6 +3,7 @@ import {
 	test
 } from "qunit";
 import spawnInjector from "inject-loader!services/StreamingService/spawn";
+import ExecObj from "services/StreamingService/exec-obj";
 
 
 module( "services/StreamingService/spawn" );
@@ -26,20 +27,18 @@ test( "Merge parameters and options", assert => {
 
 	callback = ( command, params, options ) => {
 		assert.strictEqual( command, "foo", "Uses the correct command" );
-		assert.deepEqual( params, [ "bar", "foo", "bar" ], "Prepends the pythonscript param" );
+		assert.deepEqual( params, [ "baz", "foo", "bar" ], "Appends the params" );
 		assert.propEqual(
 			options,
 			{ detached: true, env: { foo: "bar", qux: "quux" } },
 			"Merges the env options property"
 		);
 	};
-	execObj = {
-		exec: "foo",
-		pythonscript: "bar",
-		env: {
-			qux: "quux"
-		}
-	};
+	execObj = new ExecObj(
+		"foo",
+		[ "baz" ],
+		{ qux: "quux" }
+	);
 	spawn( execObj, [ "foo", "bar" ], { detached: true, env: { foo: "bar" } } );
 
 });
