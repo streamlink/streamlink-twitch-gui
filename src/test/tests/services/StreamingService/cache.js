@@ -3,7 +3,7 @@ import {
 	test
 } from "qunit";
 import cacheItemInjector from "inject-loader?fs!services/StreamingService/cache/item";
-import cacheInjector from "inject-loader?./item!services/StreamingService/cache/index";
+import cacheInjector from "inject-loader?./item!services/StreamingService/cache/cache";
 import { EventEmitter } from "events";
 
 
@@ -82,46 +82,43 @@ test( "Cache", assert => {
 		}
 	})[ "default" ];
 
-	const {
-		cache,
-		getCache,
-		setupCache,
-		clearCache
-	} = cacheInjector({
+	const Cache = cacheInjector({
 		"./item": CacheItem
-	});
+	})[ "default" ];
 
-	assert.strictEqual( getCache(), null, "Does not have any cache items initially" );
+	let cache = new Cache();
+
+	assert.strictEqual( cache.get(), null, "Does not have any cache items initially" );
 
 	const fooObj = { foo: "foo" };
 	const barObj = { bar: "bar" };
 
-	setupCache({
+	cache.set({
 		foo: fooObj
 	});
-	assert.deepEqual( Object.keys( cache ), [ "foo" ], "Does have a cache entry for foo" );
-	assert.ok( cache.foo instanceof CacheItem, "cache.foo is a CacheItem" );
-	assert.propEqual( getCache(), { foo: fooObj }, "Returns the correct cache item data" );
+	assert.deepEqual( Object.keys( cache.cache ), [ "foo" ], "Does have a cache entry for foo" );
+	assert.ok( cache.cache.foo instanceof CacheItem, "cache.foo is a CacheItem" );
+	assert.propEqual( cache.get(), { foo: fooObj }, "Returns the correct cache item data" );
 
-	setupCache({
+	cache.set({
 		foo: barObj
 	});
-	assert.propEqual( getCache(), { foo: barObj }, "Returns the new cache item data" );
+	assert.propEqual( cache.get(), { foo: barObj }, "Returns the new cache item data" );
 
-	clearCache();
-	assert.strictEqual( getCache(), null, "Does not have any cache items after clearing" );
+	cache.clear();
+	assert.strictEqual( cache.get(), null, "Does not have any cache items after clearing" );
 
-	setupCache({
+	cache.set({
 		foo: "foo",
 		bar: barObj
 	});
 	assert.propEqual(
-		getCache(),
+		cache.get(),
 		{ foo: "foo", bar: barObj },
 		"Returns the correct cache item data"
 	);
 
-	cache.foo.watcher.emit( "change" );
-	assert.strictEqual( getCache(), null, "Clears the cache when a file watcher changes" );
+	cache.cache.foo.watcher.emit( "change" );
+	assert.strictEqual( cache.get(), null, "Clears the cache when a file watcher changes" );
 
 });

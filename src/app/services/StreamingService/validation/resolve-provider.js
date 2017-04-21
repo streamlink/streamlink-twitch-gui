@@ -1,10 +1,7 @@
 import {
 	streamprovider as streamproviderConfig
 } from "config";
-import {
-	getCache,
-	setupCache
-} from "../cache";
+import { providerCache } from "../cache";
 import { logDebug } from "../logger";
 import { NotFoundError } from "../errors";
 import isAborted from "../is-aborted";
@@ -31,7 +28,7 @@ export default async function( stream, provider, providersUserData ) {
 	isAborted( stream );
 
 	// then check for already cached stream provider data
-	const cache = getCache();
+	const cache = providerCache.get();
 	if ( cache ) {
 		return cache;
 	}
@@ -118,7 +115,7 @@ export default async function( stream, provider, providersUserData ) {
 	const validationData = await validateProvider( execObj );
 	await logDebug( "Validated streaming provider", validationData );
 
-	setupCache( execObj );
+	providerCache.set( execObj );
 
 	return execObj;
 }

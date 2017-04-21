@@ -50,12 +50,14 @@ test( "Cached provider data", async assert => {
 			assert.strictEqual( obj, stream, "Calls isAborted" );
 		},
 		"../cache": {
-			getCache() {
-				assert.ok( true, "Calls getCache" );
-				return cache;
-			},
-			setupCache() {
-				throw new Error( "Calls setupCache" );
+			providerCache: {
+				get() {
+					assert.ok( true, "Calls providerCache.get" );
+					return cache;
+				},
+				set() {
+					throw new Error( "Calls providerCache.set" );
+				}
 			}
 		}
 	}) )[ "default" ];
@@ -75,12 +77,14 @@ test( "Missing provider data", async assert => {
 			assert.strictEqual( obj, stream, "Calls isAborted" );
 		},
 		"../cache": {
-			getCache() {
-				assert.ok( true, "Calls getCache" );
-				return null;
-			},
-			setupCache() {
-				throw new Error( "Calls setupCache" );
+			providerCache: {
+				get() {
+					assert.ok( true, "Calls providerCache.get" );
+					return null;
+				},
+				set() {
+					throw new Error( "Calls providerCache.set" );
+				}
 			}
 		}
 	};
@@ -262,11 +266,13 @@ test( "Resolve exec (no pythonscript)", async assert => {
 			assert.strictEqual( obj, stream, "Calls isAborted" );
 		},
 		"../cache": {
-			getCache() {
-				assert.ok( true, "Calls getCache" );
-				return null;
-			},
-			setupCache: ( ...args ) => setupCache( ...args )
+			providerCache: {
+				get() {
+					assert.ok( true, "Calls providerCache.get" );
+					return null;
+				},
+				set: ( ...args ) => setupCache( ...args )
+			}
 		},
 		"utils/node/fs/whichFallback": ( ...args ) => whichFallback( ...args )
 	}) )[ "default" ];
@@ -378,7 +384,7 @@ test( "Resolve exec (pythonscript)", async assert => {
 		throw new Error();
 	};
 	let setupCache = () => {
-		throw new Error( "Calls setupCache" );
+		throw new Error( "Calls providerCache.set" );
 	};
 
 	const commonTestDeps = {
@@ -386,11 +392,13 @@ test( "Resolve exec (pythonscript)", async assert => {
 			assert.strictEqual( obj, stream, "Calls isAborted" );
 		},
 		"../cache": {
-			getCache() {
-				assert.ok( true, "Calls getCache" );
-				return null;
-			},
-			setupCache: ( ...args ) => setupCache( ...args )
+			providerCache: {
+				get() {
+					assert.ok( true, "Calls providerCache.get" );
+					return null;
+				},
+				set: ( ...args ) => setupCache( ...args )
+			}
 		},
 		"utils/node/fs/whichFallback": ( ...args ) => whichFallback( ...args ),
 		"./find-pythonscript-interpreter": ( ...args ) => findPythonscriptInterpreter( ...args )
