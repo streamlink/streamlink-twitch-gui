@@ -2,8 +2,7 @@ import {
 	module,
 	test
 } from "qunit";
-import validateProviderInjector
-	from "inject-loader!services/StreamingService/validation/validate-provider";
+import validateProviderInjector from "inject-loader!services/StreamingService/provider/validate";
 import spawnInjector from "inject-loader!services/StreamingService/spawn";
 import {
 	ErrorLog,
@@ -43,7 +42,7 @@ class ChildProcess extends EventEmitter {
 }
 
 
-module( "services/StreamingService/validation/validate-provider" );
+module( "services/StreamingService/provider/validate" );
 
 
 test( "Invalid exec", async assert => {

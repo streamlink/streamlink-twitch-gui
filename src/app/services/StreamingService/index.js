@@ -20,7 +20,7 @@ import parseError from "./parse-error";
 import { providerCache } from "./cache";
 import isAborted from "./is-aborted";
 import spawn from "./spawn";
-import resolveProvider from "./validation/resolve-provider";
+import resolveProvider from "./provider/resolve";
 import {
 	setShowInTaskbar,
 	toggleMinimize,

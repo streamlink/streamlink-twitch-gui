@@ -4,7 +4,7 @@ import {
 } from "qunit";
 import readLinesInjector from "inject-loader?fs!utils/node/fs/readLines";
 import findPythonscriptInterpreterInjector
-	from "inject-loader!services/StreamingService/validation/find-pythonscript-interpreter";
+	from "inject-loader!services/StreamingService/provider/find-pythonscript-interpreter";
 import ExecObj from "services/StreamingService/exec-obj";
 import { EventEmitter } from "events";
 import {
@@ -21,7 +21,7 @@ class ReadStream extends EventEmitter {
 }
 
 
-module( "services/StreamingService/validation/find-pythonscript-interpreter" );
+module( "services/StreamingService/provider/find-pythonscript-interpreter" );
 
 
 test( "Invalid content", async assert => {

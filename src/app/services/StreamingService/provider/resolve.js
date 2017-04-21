@@ -7,7 +7,7 @@ import { NotFoundError } from "../errors";
 import isAborted from "../is-aborted";
 import ExecObj from "../exec-obj";
 import findPythonscriptInterpreter from "./find-pythonscript-interpreter";
-import validateProvider from "./validate-provider";
+import validateProvider from "./validate";
 import { platform } from "utils/node/platform";
 import { isFile } from "utils/node/fs/stat";
 import whichFallback from "utils/node/fs/whichFallback";

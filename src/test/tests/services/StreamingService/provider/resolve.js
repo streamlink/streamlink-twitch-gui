@@ -2,8 +2,7 @@ import {
 	module,
 	test
 } from "qunit";
-import resolveProviderInjector
-	from "inject-loader!services/StreamingService/validation/resolve-provider";
+import resolveProviderInjector from "inject-loader!services/StreamingService/provider/resolve";
 import { NotFoundError } from "services/StreamingService/errors";
 import ExecObj from "services/StreamingService/exec-obj";
 
@@ -26,11 +25,11 @@ const commonDeps = {
 	},
 	"utils/node/fs/whichFallback": () => {},
 	"./find-pythonscript-interpreter": () => {},
-	"./validate-provider": () => {}
+	"./validate": () => {}
 };
 
 
-module( "services/StreamingService/validation/resolve-provider" );
+module( "services/StreamingService/provider/resolve" );
 
 
 test( "Cached provider data", async assert => {
