@@ -17,7 +17,7 @@ import {
 	Warning
 } from "./errors";
 import parseError from "./parse-error";
-import { providerCache } from "./cache";
+import { clearCache } from "./cache";
 import isAborted from "./is-aborted";
 import spawn from "./spawn";
 import resolveProvider from "./provider/resolve";
@@ -67,7 +67,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		// invalidate cache: listen for all settings changes
 		// changed properties of model relationships and nested attributes don't trigger isDirty
-		get( this, "settings.content" ).on( "didUpdate", () => providerCache.clear() );
+		get( this, "settings.content" ).on( "didUpdate", clearCache );
 	},
 
 
@@ -185,7 +185,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		set( this, "error", error );
 
 		this.clear( stream );
-		providerCache.clear();
+		clearCache();
 
 		logError( error, () => stream.toJSON({ includeId: true }) );
 	},

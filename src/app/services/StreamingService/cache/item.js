@@ -2,16 +2,19 @@ import { watch } from "fs";
 
 
 export default class CacheItem {
-	constructor( data, listener ) {
+	constructor( data ) {
 		this.data = data;
-		if ( typeof data === "string" ) {
-			this.watcher = watch( data, listener );
-		}
 	}
 
-	close() {
+	watch( listener ) {
+		this.unwatch();
+		this.watcher = watch( this.data, listener );
+	}
+
+	unwatch() {
 		if ( this.watcher ) {
 			this.watcher.close();
+			this.watcher = null;
 		}
 	}
 

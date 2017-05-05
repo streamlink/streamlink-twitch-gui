@@ -4,6 +4,7 @@ import {
 } from "qunit";
 import cacheItemInjector from "inject-loader?fs!services/StreamingService/cache/item";
 import cacheInjector from "inject-loader?./item!services/StreamingService/cache/cache";
+import registryInjector from "inject-loader?./item!services/StreamingService/cache/index";
 import { EventEmitter } from "events";
 
 
@@ -37,29 +38,25 @@ test( "CacheItem", assert => {
 
 	let item;
 
-	const dataObj = { foo: "foo" };
-	item = new CacheItem( dataObj );
+	item = new CacheItem( "foo" );
+	assert.ok( !item.watcher, "Does not have an initial watcher" );
+	assert.strictEqual( item.toValue(), "foo", "Returns the correct data" );
 
-	assert.ok( !item.watcher, "Does not have a watcher when data is not a string" );
-	assert.strictEqual( item.toValue(), dataObj, "Returns the correct data" );
-	item.close();
-
-	const listener = () => {
+	item = new CacheItem( "foo" );
+	item.watch( () => {
 		assert.ok( true, "Calls the watcher listener" );
-	};
-	item = new CacheItem( "foo", listener );
-
+	});
 	assert.ok( item.watcher instanceof Watcher, "Does have a file watcher" );
 	assert.strictEqual( item.toValue(), "foo", "Returns the correct data" );
 	item.watcher.emit( "change" );
-	item.close();
+	item.unwatch();
 
 });
 
 
 test( "Cache", assert => {
 
-	assert.expect( 11 );
+	assert.expect( 14 );
 
 	class Watcher extends EventEmitter {
 		constructor( path, listener ) {
@@ -86,39 +83,77 @@ test( "Cache", assert => {
 		"./item": CacheItem
 	})[ "default" ];
 
-	let cache = new Cache();
+	let cache;
 
+	cache = new Cache();
 	assert.strictEqual( cache.get(), null, "Does not have any cache items initially" );
 
-	const fooObj = { foo: "foo" };
-	const barObj = { bar: "bar" };
-
-	cache.set({
-		foo: fooObj
-	});
+	cache.set({ foo: "foo" });
 	assert.deepEqual( Object.keys( cache.cache ), [ "foo" ], "Does have a cache entry for foo" );
 	assert.ok( cache.cache.foo instanceof CacheItem, "cache.foo is a CacheItem" );
-	assert.propEqual( cache.get(), { foo: fooObj }, "Returns the correct cache item data" );
+	assert.propEqual( cache.get(), { foo: "foo" }, "Returns the correct cache item data" );
 
-	cache.set({
-		foo: barObj
-	});
-	assert.propEqual( cache.get(), { foo: barObj }, "Returns the new cache item data" );
+	cache.set({ foo: "bar" });
+	assert.propEqual( cache.get(), { foo: "bar" }, "Returns the new cache item data" );
 
 	cache.clear();
 	assert.strictEqual( cache.get(), null, "Does not have any cache items after clearing" );
 
+	cache = new Cache( "foo" );
 	cache.set({
 		foo: "foo",
-		bar: barObj
+		bar: "bar"
 	});
+	assert.ok( cache.cache.foo.watcher instanceof Watcher, "Sets up watchers" );
 	assert.propEqual(
 		cache.get(),
-		{ foo: "foo", bar: barObj },
+		{ foo: "foo", bar: "bar" },
 		"Returns the correct cache item data"
 	);
 
 	cache.cache.foo.watcher.emit( "change" );
 	assert.strictEqual( cache.get(), null, "Clears the cache when a file watcher changes" );
+
+	cache = new Cache( "foo" );
+	cache.set({
+		foo: {}
+	});
+	assert.notOk(
+		cache.cache.foo.watcher instanceof Watcher,
+		"Doesn't set up watcher if data is not a string"
+	);
+
+	cache = new Cache( "foo" );
+	cache.set({
+		foo: ""
+	});
+	assert.notOk(
+		cache.cache.foo.watcher instanceof Watcher,
+		"Doesn't set up watcher if data has no length"
+	);
+
+});
+
+
+test( "Cache registry", assert => {
+
+	assert.expect( 4 );
+
+	class Cache {
+		clear() {
+			assert.ok( true, "Called clear" );
+		}
+	}
+
+	const {
+		providerCache,
+		clearCache
+	} = registryInjector({
+		"./cache": Cache
+	});
+
+	assert.ok( providerCache instanceof Cache, "Exports the providerCache object" );
+
+	clearCache();
 
 });

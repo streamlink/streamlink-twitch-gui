@@ -2,9 +2,11 @@ import CacheItem from "./item";
 
 
 export default class Cache {
-	constructor() {
+	constructor( ...watchProperties ) {
 		/** @type {Object.<String,CacheItem>} */
 		this.cache = {};
+		/** @type {String[]} */
+		this.watchProperties = watchProperties;
 	}
 
 	get() {
@@ -23,10 +25,16 @@ export default class Cache {
 		this.clear();
 
 		const cache = this.cache;
+		const watchProperties = this.watchProperties;
 		const callback = () => this.clear();
+
 		Object.keys( obj )
 			.forEach( key => {
-				cache[ key ] = new CacheItem( obj[ key ], callback );
+				const data = obj[ key ];
+				const item = cache[ key ] = new CacheItem( data );
+				if ( typeof data === "string" && data.length && watchProperties.includes( key ) ) {
+					item.watch( callback );
+				}
 			});
 	}
 
@@ -34,7 +42,7 @@ export default class Cache {
 		const cache = this.cache;
 		Object.keys( cache )
 			.forEach( key => {
-				cache[ key ].close();
+				cache[ key ].unwatch();
 				delete cache[ key ];
 			});
 	}
