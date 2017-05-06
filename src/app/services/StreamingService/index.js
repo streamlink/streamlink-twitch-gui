@@ -202,13 +202,16 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 	onStreamEnd( stream ) {
-		// remove stream from store if modal is not opened
-		if (
-			    get( this, "active" ) !== stream
-			&& !get( stream, "error" )
-			&& !get( stream, "isDeleted" )
-		) {
-			stream.destroyRecord();
+		if ( get( this, "active" ) === stream ) {
+			// close modal of the active stream if it has been enabled in the settings
+			if ( get( this, "settings.gui_closestreampopup" ) ) {
+				this.closeStreamModal( stream );
+			}
+		} else {
+			// remove stream from store if modal is not opened
+			if ( !get( stream, "error" ) && !get( stream, "isDeleted" ) ) {
+				stream.destroyRecord();
+			}
 		}
 
 		// restore the GUI

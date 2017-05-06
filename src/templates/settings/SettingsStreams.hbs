@@ -54,10 +54,18 @@
 {{/if}}
 
 {{#settings-row
-	"Stream popup"
+	"Hide stream popup"
 	"When a stream has started."
 	icon="fa-info-circle"
 }}
-	{{check-box "Hide the popup on success" checked=model.gui_hidestreampopup}}
+	{{check-box "Hide the popup after successfully launching a stream" checked=model.gui_hidestreampopup}}
+{{/settings-row}}
+
+{{#settings-row
+	"Close stream popup"
+	"When a stream has ended."
+	icon="fa-info-circle"
+}}
+	{{check-box "Close the popup of an active stream when it ends" checked=model.gui_closestreampopup}}
 {{/settings-row}}
 </fieldset>
