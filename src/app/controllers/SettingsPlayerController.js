@@ -4,7 +4,7 @@ import {
 	Controller
 } from "ember";
 import { players } from "config";
-import { playerSubstitutions } from "models/stream/parameters";
+import substitutionsPlayer from "services/StreamingService/player/substitutions";
 import { platform } from "utils/node/platform";
 import { delimiter } from "path";
 
@@ -16,7 +16,7 @@ const kPlayers = Object.keys( players );
 
 
 export default Controller.extend({
-	substitutionsPlayer: playerSubstitutions,
+	substitutionsPlayer,
 
 	// filter platform dependent player parameters
 	players: computed(function() {

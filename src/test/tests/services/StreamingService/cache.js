@@ -147,12 +147,14 @@ test( "Cache registry", assert => {
 
 	const {
 		providerCache,
+		playerCache,
 		clearCache
 	} = registryInjector({
 		"./cache": Cache
 	});
 
 	assert.ok( providerCache instanceof Cache, "Exports the providerCache object" );
+	assert.ok( playerCache instanceof Cache, "Exports the playerCache object" );
 
 	clearCache();
 

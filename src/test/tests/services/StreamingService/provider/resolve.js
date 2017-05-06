@@ -3,7 +3,7 @@ import {
 	test
 } from "qunit";
 import resolveProviderInjector from "inject-loader!services/StreamingService/provider/resolve";
-import { NotFoundError } from "services/StreamingService/errors";
+import { ProviderError } from "services/StreamingService/errors";
 import ExecObj from "services/StreamingService/exec-obj";
 
 
@@ -17,7 +17,7 @@ const commonDeps = {
 		logDebug() {}
 	},
 	"../errors": {
-		NotFoundError
+		ProviderError
 	},
 	"../exec-obj": ExecObj,
 	"utils/node/fs/stat": {
@@ -284,13 +284,13 @@ test( "Resolve exec (no pythonscript)", async assert => {
 		});
 	} catch ( e ) {
 		assert.ok(
-			e instanceof NotFoundError,
-			"Throws a NotFoundError on unresolvable file"
+			e instanceof ProviderError,
+			"Throws a ProviderError on unresolvable file"
 		);
 		assert.strictEqual(
 			e.message,
 			"Couldn't find executable",
-			"NotFoundError has the correct message"
+			"ProviderError has the correct message"
 		);
 	}
 
@@ -303,13 +303,13 @@ test( "Resolve exec (no pythonscript)", async assert => {
 		});
 	} catch ( e ) {
 		assert.ok(
-			e instanceof NotFoundError,
-			"Throws a NotFoundError on unresolvable file"
+			e instanceof ProviderError,
+			"Throws a ProviderError on unresolvable file"
 		);
 		assert.strictEqual(
 			e.message,
 			"Couldn't find executable",
-			"NotFoundError has the correct message"
+			"ProviderError has the correct message"
 		);
 	}
 
@@ -439,13 +439,13 @@ test( "Resolve exec (pythonscript)", async assert => {
 		await resolveProvider( stream, "streamlink", { "streamlink": {} } );
 	} catch ( e ) {
 		assert.ok(
-			e instanceof NotFoundError,
-			"Throws a NotFoundError on unresolvable file"
+			e instanceof ProviderError,
+			"Throws a ProviderError on unresolvable file"
 		);
 		assert.strictEqual(
 			e.message,
 			"Couldn't find python script",
-			"NotFoundError has the correct message"
+			"ProviderError has the correct message"
 		);
 	}
 
@@ -464,13 +464,13 @@ test( "Resolve exec (pythonscript)", async assert => {
 		});
 	} catch ( e ) {
 		assert.ok(
-			e instanceof NotFoundError,
-			"Throws a NotFoundError on unresolvable file"
+			e instanceof ProviderError,
+			"Throws a ProviderError on unresolvable file"
 		);
 		assert.strictEqual(
 			e.message,
 			"Couldn't find python script",
-			"NotFoundError has the correct message"
+			"ProviderError has the correct message"
 		);
 	}
 
@@ -486,13 +486,13 @@ test( "Resolve exec (pythonscript)", async assert => {
 		});
 	} catch ( e ) {
 		assert.ok(
-			e instanceof NotFoundError,
-			"Throws a NotFoundError on unresolvable pythonscript"
+			e instanceof ProviderError,
+			"Throws a ProviderError on unresolvable pythonscript"
 		);
 		assert.strictEqual(
 			e.message,
 			"Couldn't validate python script",
-			"NotFoundError has the correct message"
+			"ProviderError has the correct message"
 		);
 	}
 
@@ -574,11 +574,11 @@ test( "Resolve exec (pythonscript)", async assert => {
 			}
 		});
 	} catch ( e ) {
-		assert.ok( e instanceof NotFoundError, "Throws a NotFoundError" );
+		assert.ok( e instanceof ProviderError, "Throws a ProviderError" );
 		assert.strictEqual(
 			e.message,
 			"Couldn't find python executable",
-			"NotFoundError has the correct message"
+			"ProviderError has the correct message"
 		);
 	}
 

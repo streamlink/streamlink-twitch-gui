@@ -3,6 +3,7 @@ import {
 	set,
 	computed,
 	inject,
+	run,
 	Service
 } from "ember";
 import {
@@ -12,32 +13,25 @@ import {
 	logDebug,
 	logError
 } from "./logger";
-import {
-	Aborted,
-	Warning
-} from "./errors";
-import parseError from "./parse-error";
+import { Aborted } from "./errors";
 import { clearCache } from "./cache";
-import isAborted from "./is-aborted";
-import spawn from "./spawn";
+import resolvePlayer from "./player/resolve";
 import resolveProvider from "./provider/resolve";
+import launchProvider from "./launch/provider";
 import {
 	setShowInTaskbar,
 	toggleMinimize,
 	toggleVisibility
 } from "nwjs/Window";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
-import StreamOutputBuffer from "utils/StreamOutputBuffer";
 
 
 const { service } = inject;
+const { scheduleOnce } = run;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
 
 const modelName = "stream";
-
-const reReplace = /^\[(?:cli|plugin\.\w+)]\[\S+]\s+/;
-const rePlayer = /^Starting player: \S+/;
 
 
 function setIfNotNull( objA, objB, key ) {
@@ -54,7 +48,6 @@ export default Service.extend( ChannelSettingsMixin, {
 	settings: service(),
 	store: service(),
 
-	error: null,
 	active: null,
 	model: computed(function() {
 		const store = get( this, "store" );
@@ -112,8 +105,14 @@ export default Service.extend( ChannelSettingsMixin, {
 			started: new Date()
 		});
 
+		await this._startStream( stream, quality );
+	},
+
+	async _startStream( stream, quality ) {
 		// begin the stream launch procedure
 		try {
+			set( this, "active", stream );
+
 			// override record with channel specific settings
 			await this.getChannelSettings( stream, quality );
 
@@ -122,37 +121,49 @@ export default Service.extend( ChannelSettingsMixin, {
 				() => stream.toJSON({ includeId: true })
 			);
 
-			// get the exec command and validate
-			const provider = await resolveProvider(
+			// resolve streaming provider
+			const providerObj = await resolveProvider(
 				stream,
 				get( this, "settings.streamprovider" ),
 				get( this, "settings.streamproviders" )
 			);
 
-			// launch the stream
-			await this.launch( stream, provider, true );
+			// resolve player
+			const playerObj = await resolvePlayer(
+				stream,
+				get( this, "settings.player_preset" ),
+				get( this, "settings.player" )
+			);
 
-		} catch ( err ) {
-			if ( err instanceof Aborted ) {
-				return;
-			}
-			// show error message
-			this.onStreamFailure( stream, err );
+			// launch the stream
+			await launchProvider(
+				stream,
+				providerObj,
+				playerObj,
+				() => this.onStreamSuccess( stream )
+			);
+
+		} catch ( error ) {
+			await this.onStreamFailure( stream, error );
+
+		} finally {
+			await this.onStreamEnd( stream );
 		}
 	},
 
 
-	onStreamSuccess( stream, firstLaunch ) {
-		set( stream, "success", true );
-
-		if ( !firstLaunch ) { return; }
+	onStreamSuccess( stream ) {
+		if ( get( stream, "isWatching" ) ) {
+			return;
+		}
+		set( stream, "isWatching", true );
 
 		// setup stream refresh interval
 		this.refreshStream( stream );
 
 		// automatically close modal on success
 		if ( get( this, "settings.gui_hidestreampopup" ) ) {
-			get( this, "modal" ).closeModal( this );
+			this.closeStreamModal( stream );
 		}
 
 		// automatically open chat
@@ -177,39 +188,48 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 	onStreamFailure( stream, error ) {
-		if ( !error ) {
-			error = new Error( "Internal error" );
+		if ( error instanceof Aborted ) {
+			return;
 		}
 
-		set( stream, "error", true );
-		set( this, "error", error );
+		logError( error, () => stream.toJSON({ includeId: true }) );
 
-		this.clear( stream );
+		// clear cache on error
 		clearCache();
 
-		logError( error, () => stream.toJSON({ includeId: true }) );
+		// show error in modal
+		set( stream, "error", error );
 	},
 
-	onStreamShutdown( stream ) {
-		// close the modal only if there was no error and if it belongs to the stream
+	onStreamEnd( stream ) {
+		// remove stream from store if modal is not opened
 		if (
-			   !get( stream, "error" )
-			&& get( this, "active" ) === stream
+			    get( this, "active" ) !== stream
+			&& !get( stream, "error" )
+			&& !get( stream, "isDeleted" )
 		) {
-			get( this, "modal" ).closeModal( this );
+			stream.destroyRecord();
 		}
 
 		// restore the GUI
 		this.minimize( true );
-
-		this.clear( stream );
 	},
 
-	clear( stream ) {
-		// remove the record from the store
-		if ( !get( stream, "isDeleted" ) ) {
-			stream.destroyRecord();
+
+	closeStreamModal( stream ) {
+		if ( get( this, "active" ) !== stream ) {
+			return;
 		}
+
+		get( this, "modal" ).closeModal( this );
+		scheduleOnce( "destroy", () => {
+			set( this, "active", null );
+
+			// remove the record from the store
+			if ( get( stream, "hasEnded" ) && !get( stream, "isDeleted" ) ) {
+				stream.destroyRecord();
+			}
+		});
 	},
 
 
@@ -226,99 +246,6 @@ export default Service.extend( ChannelSettingsMixin, {
 			set( stream, "strictQuality", true );
 		}
 		setIfNotNull( channelSettings, stream, "gui_openchat" );
-	},
-
-
-	/**
-	 * Run the executable and launch the stream
-	 * @param {Stream} stream
-	 * @param {ExecObj} execObj
-	 * @param {Boolean} firstLaunch
-	 * @returns {Promise}
-	 */
-	async launch( stream, execObj, firstLaunch ) {
-		isAborted( stream );
-
-		const params = await stream.getParameters();
-
-		return new Promise( ( resolve, reject ) => {
-			stream.clearLog();
-			set( stream, "success", false );
-			set( stream, "warning", false );
-			set( this, "active", stream );
-
-			const spawnQuality = get( stream, "quality" );
-
-			// spawn the process
-			let child = spawn( execObj, params, { detached: true } );
-			set( stream, "spawn", child );
-
-
-			function warnOrReject( line, error ) {
-				stream.pushLog( "stdErr", line );
-
-				if ( error instanceof Warning ) {
-					set( stream, "warning", true );
-				} else {
-					reject( error || new Error( line ) );
-				}
-			}
-
-			// reject promise on any error output
-			function onStdErr( line ) {
-				line = line.replace( reReplace, "" );
-
-				let error = parseError( line );
-				warnOrReject( line, error );
-			}
-
-			// fulfill promise as soon as the player is launched
-			function onStdOut( line ) {
-				line = line.replace( reReplace, "" );
-
-				const error = parseError( line );
-				if ( error ) {
-					return warnOrReject( line, error );
-				}
-
-				stream.pushLog( "stdOut", line );
-
-				if ( rePlayer.test( line ) ) {
-					// wait for potential error messages to appear in stderr first before resolving
-					setTimeout( resolve, 500 );
-				}
-			}
-
-			child.on( "error", reject );
-			child.on( "exit", code => {
-				// clear up some memory
-				set( stream, "spawn", null );
-				child = null;
-
-				// quality has been changed
-				const currentQuality = get( stream, "quality" );
-				if ( spawnQuality !== currentQuality ) {
-					this.launch( stream, execObj, false );
-
-				} else {
-					if ( code !== 0 && !get( stream, "error" ) ) {
-						this.onStreamFailure(
-							stream,
-							new Error( `The process exited with code ${code}` )
-						);
-					} else {
-						this.onStreamShutdown( stream );
-					}
-				}
-			});
-
-			child.stdout.on( "data", new StreamOutputBuffer( onStdOut ) );
-			child.stderr.on( "data", new StreamOutputBuffer( onStdErr ) );
-		})
-			.then(
-				()    => this.onStreamSuccess( stream, firstLaunch ),
-				error => this.onStreamFailure( stream, error )
-			);
 	},
 
 

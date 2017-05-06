@@ -2,8 +2,8 @@ import {
 	streamprovider as streamproviderConfig
 } from "config";
 import {
-	ErrorLog,
-	NotFoundError,
+	LogError,
+	ProviderError,
 	VersionError
 } from "../errors";
 import spawn from "../spawn";
@@ -36,7 +36,7 @@ export default async function( execObj ) {
 		const onLine = ( line, index, lines ) => {
 			// be strict: output is just one single line
 			if ( index !== 0 || lines.length !== 1 ) {
-				reject( new ErrorLog( "Unexpected version check output", lines ) );
+				reject( new LogError( "Unexpected version check output", lines ) );
 				return;
 			}
 
@@ -47,7 +47,7 @@ export default async function( execObj ) {
 				name = name.toLowerCase();
 				resolve({ name, version });
 			} else {
-				reject( new ErrorLog( "Invalid version check output", lines ) );
+				reject( new LogError( "Invalid version check output", lines ) );
 			}
 		};
 
@@ -76,7 +76,7 @@ export default async function( execObj ) {
 		});
 
 	if ( !hasOwnProperty.call( versionMin, name ) ) {
-		throw new NotFoundError();
+		throw new ProviderError();
 	}
 
 	if ( version !== getMax([ version, versionMin[ name ] ]) ) {

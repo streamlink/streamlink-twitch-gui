@@ -5,8 +5,8 @@ import {
 import validateProviderInjector from "inject-loader!services/StreamingService/provider/validate";
 import spawnInjector from "inject-loader!services/StreamingService/spawn";
 import {
-	ErrorLog,
-	NotFoundError,
+	LogError,
+	ProviderError,
 	VersionError
 } from "services/StreamingService/errors";
 import { getMax } from "utils/semver";
@@ -20,8 +20,8 @@ const logger = {
 };
 const commonValidateProviderDeps = {
 	"../errors": {
-		ErrorLog,
-		NotFoundError,
+		LogError,
+		ProviderError,
 		VersionError
 	},
 	"utils/semver": {
@@ -35,7 +35,7 @@ class ChildProcess extends EventEmitter {
 		super();
 		this.exec = exec;
 		this.params = params;
-		this.option = options;
+		this.options = options;
 		this.stdout = new EventEmitter();
 		this.stderr = new EventEmitter();
 	}
@@ -91,7 +91,7 @@ test( "Invalid exec", async assert => {
 		child.stdout.emit( "data", "foo\n" );
 		await promise;
 	} catch ( e ) {
-		assert.ok( e instanceof ErrorLog, "Throws an ErrorLog on unexpected output on stdout" );
+		assert.ok( e instanceof LogError, "Throws an LogError on unexpected output on stdout" );
 	}
 
 	try {
@@ -99,7 +99,7 @@ test( "Invalid exec", async assert => {
 		child.stdout.emit( "data", "streamlink 1.0.0\n\n" );
 		await promise;
 	} catch ( e ) {
-		assert.ok( e instanceof ErrorLog, "Throws an ErrorLog on unexpected output on stdout" );
+		assert.ok( e instanceof LogError, "Throws an LogError on unexpected output on stdout" );
 	}
 
 	try {
@@ -107,7 +107,7 @@ test( "Invalid exec", async assert => {
 		child.stderr.emit( "data", "foo\n" );
 		await promise;
 	} catch ( e ) {
-		assert.ok( e instanceof ErrorLog, "Throws an ErrorLog on unexpected output on stderr" );
+		assert.ok( e instanceof LogError, "Throws an LogError on unexpected output on stderr" );
 	}
 
 	try {
@@ -115,7 +115,7 @@ test( "Invalid exec", async assert => {
 		child.stderr.emit( "data", "streamlink 1.0.0\n\n" );
 		await promise;
 	} catch ( e ) {
-		assert.ok( e instanceof ErrorLog, "Throws an ErrorLog on unexpected output on stderr" );
+		assert.ok( e instanceof LogError, "Throws an LogError on unexpected output on stderr" );
 	}
 
 	try {
@@ -171,7 +171,7 @@ test( "Invalid provider or version", async assert => {
 		child.stderr.emit( "data", "livestreamer 1.0.0\n" );
 		await promise;
 	} catch ( e ) {
-		assert.ok( e instanceof NotFoundError, "Throws a NotFoundError on invalid provider" );
+		assert.ok( e instanceof ProviderError, "Throws a ProviderError on invalid provider" );
 	}
 
 	try {
@@ -180,7 +180,7 @@ test( "Invalid provider or version", async assert => {
 		await promise;
 	} catch ( e ) {
 		assert.ok( e instanceof VersionError, "Throws a VersionError on invalid version" );
-		assert.strictEqual( e.version, "1.0.0", "VersionError does have the correct version" );
+		assert.strictEqual( e.message, "1.0.0", "VersionError does have the correct version" );
 	}
 
 });

@@ -3,7 +3,7 @@ import {
 } from "config";
 import { providerCache } from "../cache";
 import { logDebug } from "../logger";
-import { NotFoundError } from "../errors";
+import { ProviderError } from "../errors";
 import isAborted from "../is-aborted";
 import ExecObj from "../exec-obj";
 import findPythonscriptInterpreter from "./find-pythonscript-interpreter";
@@ -79,7 +79,7 @@ export default async function( stream, provider, providersUserData ) {
 			);
 			execObj.params = [ pythonscript ];
 		} catch ( e ) {
-			throw new NotFoundError( "Couldn't find python script" );
+			throw new ProviderError( "Couldn't find python script" );
 		}
 
 		try {
@@ -91,7 +91,7 @@ export default async function( stream, provider, providersUserData ) {
 			// merge with existing execObj
 			execObj.merge( newExecObj );
 		} catch ( e ) {
-			throw new NotFoundError( "Couldn't validate python script" );
+			throw new ProviderError( "Couldn't validate python script" );
 		}
 	}
 
@@ -106,7 +106,7 @@ export default async function( stream, provider, providersUserData ) {
 		}
 	} catch ( e ) {
 		const str = isPython ? "python " : "";
-		throw new NotFoundError( `Couldn't find ${str}executable` );
+		throw new ProviderError( `Couldn't find ${str}executable` );
 	}
 
 	isAborted( stream );

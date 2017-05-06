@@ -68,3 +68,6 @@ import "tests/services/StreamingService/spawn";
 import "tests/services/StreamingService/provider/find-pythonscript-interpreter";
 import "tests/services/StreamingService/provider/validate";
 import "tests/services/StreamingService/provider/resolve";
+import "tests/services/StreamingService/player/resolve";
+import "tests/services/StreamingService/launch/parse-error";
+import "tests/services/StreamingService/launch/provider";

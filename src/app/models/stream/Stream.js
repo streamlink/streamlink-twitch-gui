@@ -8,23 +8,16 @@ import {
 import {
 	attr,
 	belongsTo,
-	PromiseObject,
 	Model
 } from "ember-data";
 import {
 	streamprovider as streamproviderConfig,
 	twitch as twitchConfig
 } from "config";
-import { parameters } from "./parameters";
-import {
-	getPlayerExec,
-	getPlayerParams
-} from "./playerparameters";
 import {
 	qualitiesByIdLivestreamer,
 	qualitiesByIdStreamlink
 } from "models/stream/qualities";
-import Parameter from "utils/parameters/Parameter";
 
 
 const { alias, not } = computed;
@@ -38,33 +31,79 @@ const {
 } = twitchConfig;
 
 
+const STATUS_PREPARING = 0;
+const STATUS_ABORTED = 1;
+const STATUS_LAUNCHING = 2;
+const STATUS_WATCHING = 3;
+const STATUS_COMPLETED = 4;
+
+
+function computedStatus( status ) {
+	return computed( "status", {
+		get() {
+			return get( this, "status" ) === status;
+		},
+		set( value ) {
+			if ( value ) {
+				set( this, "status", status );
+				return true;
+			}
+		}
+	});
+}
+
+
 /**
  * @class Stream
  */
 export default Model.extend({
 	/** @property {TwitchStream} stream */
-	stream      : belongsTo( "twitchStream", { async: false } ),
+	stream: belongsTo( "twitchStream", { async: false } ),
 	/** @property {TwitchChannel} channel */
-	channel     : belongsTo( "twitchChannel", { async: false } ),
-	quality     : attr( "string" ),
+	channel: belongsTo( "twitchChannel", { async: false } ),
+	quality: attr( "string" ),
 	gui_openchat: attr( "boolean" ),
-	started     : attr( "date" ),
+	started: attr( "date" ),
 
+
+	// let Streamlink/Livestreamer use the GUI's client-id
+	clientID: `Client-ID=${clientId}`,
+
+	/** @property {String} status */
+	status: STATUS_PREPARING,
 
 	/** @property {ChildProcess} spawn */
-	spawn  : null,
-	aborted: false,
-	success: false,
-	error  : false,
+	spawn: null,
+
+	/** @property {Error} error */
+	error: null,
 	warning: false,
-	log    : null,
+
+	/** @property {Object[]} log */
+	log: null,
 	showLog: false,
 
 
-	auth    : service(),
+	auth: service(),
 	settings: service(),
+	streaming: service(),
+
 
 	session: alias( "auth.session" ),
+
+
+	isPreparing: computedStatus( STATUS_PREPARING ),
+	isAborted: computedStatus( STATUS_ABORTED ),
+	isLaunching: computedStatus( STATUS_LAUNCHING ),
+	isWatching: computedStatus( STATUS_WATCHING ),
+	isCompleted: computedStatus( STATUS_COMPLETED ),
+
+	hasEnded: computed( "status", "error", function() {
+		const status = get( this, "status" );
+		const error = get( this, "error" );
+
+		return !!error || status === STATUS_ABORTED || status === STATUS_COMPLETED;
+	}),
 
 
 	isLivestreamer: not( "isStreamlink" ),
@@ -86,46 +125,20 @@ export default Model.extend({
 	}),
 
 
-	// let Streamlink/Livestreamer use the GUI's client-id
-	clientID: `Client-ID=${clientId}`,
-
-
 	kill() {
-		const spawn = get( this, "spawn" );
-		if ( spawn ) {
-			spawn.kill( "SIGTERM" );
+		if ( this.spawn ) {
+			this.spawn.kill( "SIGTERM" );
 		}
-	},
-
-	clearLog() {
-		return set( this, "log", [] );
 	},
 
 	pushLog( type, line ) {
 		get( this, "log" ).pushObject({ type, line });
 	},
 
+
 	qualityObserver: observer( "quality", function() {
-		// The StreamproviderService knows that it has to spawn a new child process
+		// the StreamingService knows that it has to spawn a new child process
 		this.kill();
-	}),
-
-	getParameters() {
-		// wait for all parameter promises to resolve first
-		return Promise.all([
-			get( this, "playerExec.promise" )
-		])
-			.then( () => Parameter.getParameters( this, parameters ) );
-	},
-
-	playerExec: computed( "settings.player", "settings.player_preset", function() {
-		return PromiseObject.create({
-			promise: getPlayerExec( get( this, "settings" ) )
-		});
-	}),
-
-	playerParams: computed( "settings.player", "settings.player_preset", function() {
-		return getPlayerParams( get( this, "settings" ) );
 	}),
 
 
