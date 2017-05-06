@@ -24,7 +24,7 @@ const { isArray } = Array;
  * @param {(String|String[]|PlatformList)?} fallback
  * @param {Function?} check
  * @param {Boolean?} fallbackOnly
- * @returns {Promise}
+ * @returns {Promise.<String,Error>}
  */
 function whichFallback( exec, fallback, check, fallbackOnly ) {
 	// executable parameter is required

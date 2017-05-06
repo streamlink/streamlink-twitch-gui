@@ -2,25 +2,38 @@ import {
 	get,
 	set,
 	computed,
-	inject,
-	run
+	inject
 } from "ember";
 import { streamprovider } from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import HotkeyMixin from "mixins/HotkeyMixin";
 import qualities from "models/stream/qualities";
+import {
+	LogError,
+	ProviderError,
+	PlayerError,
+	VersionError,
+	UnableToOpenError,
+	NoStreamsFoundError
+} from "services/StreamingService/errors";
 import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalStreamingComponent.hbs";
 
 
 const { readOnly } = computed;
 const { service } = inject;
-const { schedule } = run;
 const {
 	providers,
 	"download-url": downloadUrl,
 	"version-min": versionMin
 } = streamprovider;
+
+
+function computedError( classObj ) {
+	return computed( "active.error", function() {
+		return get( this, "active.error" ) instanceof classObj;
+	});
+}
 
 
 export default ModalDialogComponent.extend( HotkeyMixin, {
@@ -33,8 +46,15 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		"modal-streaming-component"
 	],
 
-	error : readOnly( "streaming.error" ),
 	active: readOnly( "streaming.active" ),
+	error: readOnly( "active.error" ),
+
+	isLogError: computedError( LogError ),
+	isProviderError: computedError( ProviderError ),
+	isPlayerError: computedError( PlayerError ),
+	isVersionError: computedError( VersionError ),
+	isUnableToOpenError: computedError( UnableToOpenError ),
+	isNoStreamsFoundError: computedError( NoStreamsFoundError ),
 
 	qualities,
 	versionMin: computed( "settings.streamprovider", function() {
@@ -59,6 +79,14 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 					this.send( "close" );
 				} else {
 					this.send( "abort" );
+				}
+			}
+		},
+		{
+			code: [ "Enter", "NumpadEnter" ],
+			action() {
+				if ( get( this, "active.hasEnded") ) {
+					this.send( "restart" );
 				}
 			}
 		},
@@ -89,29 +117,46 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 				.then( () => this.send( "close" ) );
 		},
 
-		abort() {
-			set( this, "streaming.abort", true );
-			get( this, "modal" ).closeModal( get( this, "streaming" ) );
-		},
-
 		close() {
-			get( this, "modal" ).closeModal( get( this, "streaming" ) );
-			schedule( "destroy", () => {
-				set( this, "streaming.active", null );
-			});
+			const streamingService = get( this, "streaming" );
+			const active = get( this, "active" );
+			streamingService.closeStreamModal( active );
 		},
 
-		shutdown() {
+		abort() {
 			const active = get( this, "active" );
+			if ( active && !get( active, "isDestroyed" ) ) {
+				set( active, "isAborted", true );
+				active.destroyRecord();
+			}
+			this.send( "close" );
+		},
+
+		async shutdown( success ) {
+			const active = get( this, "active" );
+			if ( success ) {
+				await success();
+			}
 			if ( active ) {
 				active.kill();
 			}
 			this.send( "close" );
 		},
 
+		async restart( success ) {
+			const streamingService = get( this, "streaming" );
+			const active = get( this, "active" );
+			if ( active && !get( active, "isDestroyed" ) ) {
+				if ( success ) {
+					await success();
+				}
+				streamingService._startStream( active );
+			}
+		},
+
 		toggleLog() {
 			const active = get( this, "active" );
-			if ( active ) {
+			if ( active && !get( active, "isDestroyed" ) ) {
 				active.toggleProperty( "showLog" );
 			}
 		}

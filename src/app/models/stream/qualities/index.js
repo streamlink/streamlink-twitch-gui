@@ -1,5 +1,5 @@
-import qualitiesLivestreamer from "./qualities/livestreamer";
-import qualitiesStreamlink from "./qualities/streamlink";
+import qualitiesLivestreamer from "./livestreamer";
+import qualitiesStreamlink from "./streamlink";
 
 
 const createPresetObj = ( presets, preset ) => {

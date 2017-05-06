@@ -137,6 +137,7 @@ export default Model.extend({
 	gui_minimizetotray  : attr( "number",  { defaultValue: false } ),
 	gui_minimize        : attr( "number",  { defaultValue: 0 } ),
 	gui_focusrefresh    : attr( "number",  { defaultValue: 0 } ),
+	gui_closestreampopup: attr( "boolean", { defaultValue: false } ),
 	gui_hidestreampopup : attr( "boolean", { defaultValue: false } ),
 	gui_openchat        : attr( "boolean", { defaultValue: false } ),
 	gui_openchat_context: attr( "boolean", { defaultValue: false } ),
