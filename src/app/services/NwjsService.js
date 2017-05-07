@@ -44,7 +44,8 @@ export default Service.extend({
 	},
 
 	close() {
-		if ( get( this, "streaming.model.length" ) ) {
+		const streams = get( this, "streaming.model" ).toArray();
+		if ( streams.length && streams.some( stream => !get( stream, "hasEnded" ) ) ) {
 			get( this, "modal" ).openModal( "quit", this );
 		} else {
 			nwWindow.close( true );
