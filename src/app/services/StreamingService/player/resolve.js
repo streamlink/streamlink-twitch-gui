@@ -29,13 +29,7 @@ export default async function( stream, player, playersUserData ) {
 	}
 
 	if ( player === defaultProfileName ) {
-		const execObj = new ExecObj();
-		const playersUserDataDefault = playersUserData[ defaultProfileName ] || {};
-		execObj.exec = playersUserDataDefault[ "exec" ] || null;
-		execObj.params = playersUserDataDefault[ "args" ] || null;
-		playerCache.set( execObj );
-
-		return execObj;
+		return getDefaultPlayerProfile( playersUserData );
 	}
 
 	if (
@@ -137,4 +131,27 @@ function getPlayerParams( hasPlayerExecPath, playerConfData, playerUserData ) {
 	}
 
 	return parameters.join( " " );
+}
+
+/**
+ * @param {Object} playersUserData
+ * @param {String?} playersUserData.exec
+ * @param {String?} playersUserData.args
+ * @returns {ExecObj}
+ */
+function getDefaultPlayerProfile( playersUserData ) {
+	const execObj = new ExecObj();
+	const playersUserDataDefault = playersUserData[ defaultProfileName ] || {};
+
+	execObj.exec = playersUserDataDefault[ "exec" ] || null;
+	execObj.params = execObj.exec && playersUserDataDefault[ "args" ] || null;
+
+	// append "{filename}" if it's missing
+	if ( execObj.params && execObj.params.indexOf( "{filename}" ) === -1 ) {
+		execObj.params = `${execObj.params} {filename}`;
+	}
+
+	playerCache.set( execObj );
+
+	return execObj;
 }

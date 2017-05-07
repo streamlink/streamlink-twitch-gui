@@ -61,7 +61,7 @@ test( "Cached player data", async assert => {
 
 test( "Default player profile", async assert => {
 
-	assert.expect( 12 );
+	assert.expect( 16 );
 
 	const stream = {};
 	let expected;
@@ -126,11 +126,29 @@ test( "Default player profile", async assert => {
 		expected = {
 			exec: "foo",
 			env: null,
-			params: "bar"
+			params: "bar {filename}"
 		};
 		const result = await resolvePlayer( stream, "default", {
 			"default": {
 				exec: "foo",
+				args: "bar"
+			}
+		});
+		assert.propEqual( result, expected, "Returns the correct execObj" );
+	} catch ( e ) {
+		throw e;
+	}
+
+	// custom params, but no custom exec
+	try {
+		expected = {
+			exec: null,
+			env: null,
+			params: null
+		};
+		const result = await resolvePlayer( stream, "default", {
+			"default": {
+				exec: null,
 				args: "bar"
 			}
 		});
