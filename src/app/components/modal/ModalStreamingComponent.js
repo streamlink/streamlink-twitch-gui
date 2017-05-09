@@ -132,11 +132,8 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 			this.send( "close" );
 		},
 
-		async shutdown( success ) {
+		async shutdown() {
 			const active = get( this, "active" );
-			if ( success ) {
-				await success();
-			}
 			if ( active ) {
 				active.kill();
 			}
