@@ -147,7 +147,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 				if ( success ) {
 					await success();
 				}
-				streamingService._startStream( active );
+				streamingService.launchStream( active );
 			}
 		},
 

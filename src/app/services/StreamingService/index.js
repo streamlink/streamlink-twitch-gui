@@ -105,16 +105,16 @@ export default Service.extend( ChannelSettingsMixin, {
 			started: new Date()
 		});
 
-		await this._startStream( stream, quality );
+		// override record with channel specific settings
+		await this.getChannelSettings( stream, quality );
+
+		await this.launchStream( stream );
 	},
 
-	async _startStream( stream, quality ) {
+	async launchStream( stream ) {
 		// begin the stream launch procedure
 		try {
 			set( this, "active", stream );
-
-			// override record with channel specific settings
-			await this.getChannelSettings( stream, quality );
 
 			await logDebug(
 				"Preparing to launch stream",
