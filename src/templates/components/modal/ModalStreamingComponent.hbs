@@ -54,7 +54,7 @@
 					}}
 					{{form-button
 						action=(action "toggleLog")
-						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.success::invisible"
+						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.isWatching::invisible"
 						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
 						title=(concat "[L] Toggle " providername " log")
 					}}
