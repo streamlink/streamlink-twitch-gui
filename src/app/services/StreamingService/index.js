@@ -17,7 +17,7 @@ import { Aborted } from "./errors";
 import { clearCache } from "./cache";
 import resolvePlayer from "./player/resolve";
 import resolveProvider from "./provider/resolve";
-import launchProvider from "./launch/provider";
+import launch from "./launch";
 import {
 	setShowInTaskbar,
 	toggleMinimize,
@@ -136,7 +136,7 @@ export default Service.extend( ChannelSettingsMixin, {
 			);
 
 			// launch the stream
-			await launchProvider(
+			await launch(
 				stream,
 				providerObj,
 				playerObj,

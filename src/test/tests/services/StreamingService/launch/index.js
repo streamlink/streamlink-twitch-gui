@@ -9,7 +9,7 @@ import {
 	run,
 	EmberObject
 } from "ember";
-import launchProviderInjector from "inject-loader?-ember!services/StreamingService/launch/provider";
+import launchProviderInjector from "inject-loader?-ember!services/StreamingService/launch";
 import { Warning } from "services/StreamingService/errors";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import { EventEmitter } from "events";
@@ -36,7 +36,7 @@ class ChildProcess extends EventEmitter {
 }
 
 
-module( "services/StreamingService/launch" );
+module( "services/StreamingService/launch/index" );
 
 
 test( "Reject", async assert => {

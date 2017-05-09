@@ -70,4 +70,4 @@ import "tests/services/StreamingService/provider/validate";
 import "tests/services/StreamingService/provider/resolve";
 import "tests/services/StreamingService/player/resolve";
 import "tests/services/StreamingService/launch/parse-error";
-import "tests/services/StreamingService/launch/provider";
+import "tests/services/StreamingService/launch/index";

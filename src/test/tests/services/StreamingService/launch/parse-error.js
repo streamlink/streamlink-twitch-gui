@@ -12,7 +12,7 @@ import {
 import parseError from "services/StreamingService/launch/parse-error";
 
 
-module( "services/StreamingService/parse-error" );
+module( "services/StreamingService/launch/parse-error" );
 
 
 test( "Errors", assert => {
