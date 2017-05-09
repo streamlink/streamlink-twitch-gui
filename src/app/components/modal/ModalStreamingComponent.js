@@ -15,7 +15,8 @@ import {
 	VersionError,
 	UnableToOpenError,
 	NoStreamsFoundError,
-	TimeoutError
+	TimeoutError,
+	HostingError
 } from "services/StreamingService/errors";
 import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalStreamingComponent.hbs";
@@ -57,6 +58,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 	isUnableToOpenError: computedError( UnableToOpenError ),
 	isNoStreamsFoundError: computedError( NoStreamsFoundError ),
 	isTimeoutError: computedError( TimeoutError ),
+	isHostingError: computedError( HostingError ),
 
 	qualities,
 	versionMin: computed( "settings.streamprovider", function() {

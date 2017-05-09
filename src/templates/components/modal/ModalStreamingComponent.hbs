@@ -97,6 +97,9 @@
 		{{else if isTimeoutError}}
 			{{#modal-header}}Error: Timeout{{/modal-header}}
 			{{#modal-body class="error"}}Either {{active.channel.detailedName}} has gone offline, or your connection to Twitch has been interrupted.{{/modal-body}}
+		{{else if isHostingError}}
+			{{#modal-header}}Error: Can't open this stream{{/modal-header}}
+			{{#modal-body class="error"}}{{active.channel.detailedName}} is hosting another channel.{{/modal-body}}
 		{{else}}
 			{{#modal-header}}Error{{/modal-header}}
 			{{#modal-body class="error"}}
