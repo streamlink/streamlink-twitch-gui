@@ -6,6 +6,7 @@ import {
 	PlayerError,
 	UnableToOpenError,
 	NoStreamsFoundError,
+	TimeoutError,
 	HostingError,
 	Warning
 } from "services/StreamingService/errors";
@@ -41,6 +42,12 @@ test( "Errors", assert => {
 	assert.ok(
 		error instanceof NoStreamsFoundError,
 		"Finds the 'no streams found on this URL' error message"
+	);
+
+	error = parseError( "error: Error when reading from stream: Read timeout, exiting" );
+	assert.ok(
+		error instanceof TimeoutError,
+		"Finds the 'read timeout' error message"
 	);
 
 	error = parseError( "hosting was disabled by command line option" );

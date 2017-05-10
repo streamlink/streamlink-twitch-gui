@@ -2,6 +2,7 @@ import {
 	PlayerError,
 	UnableToOpenError,
 	NoStreamsFoundError,
+	TimeoutError,
 	HostingError,
 	Warning
 } from "../errors";
@@ -11,6 +12,7 @@ const errors = [
 	PlayerError,
 	UnableToOpenError,
 	NoStreamsFoundError,
+	TimeoutError,
 	HostingError,
 	Warning
 ];

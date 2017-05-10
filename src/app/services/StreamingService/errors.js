@@ -31,6 +31,11 @@ NoStreamsFoundError.regex = [
 	/^error: No streams found on this URL: /
 ];
 
+export class TimeoutError extends Error {}
+TimeoutError.regex = [
+	/^error: Error when reading from stream: Read timeout, exiting$/
+];
+
 export class HostingError extends Error {}
 HostingError.regex = [
 	/^hosting was disabled by command line option$/

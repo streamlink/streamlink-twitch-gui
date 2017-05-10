@@ -94,6 +94,9 @@
 		{{else if isNoStreamsFoundError}}
 			{{#modal-header}}Error: No streams found{{/modal-header}}
 			{{#modal-body class="error"}}{{providername}} was unable to find the stream.{{/modal-body}}
+		{{else if isTimeoutError}}
+			{{#modal-header}}Error: Timeout{{/modal-header}}
+			{{#modal-body class="error"}}Either {{active.channel.detailedName}} has gone offline, or your connection to Twitch has been interrupted.{{/modal-body}}
 		{{else}}
 			{{#modal-header}}Error{{/modal-header}}
 			{{#modal-body class="error"}}
