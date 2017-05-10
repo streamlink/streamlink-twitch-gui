@@ -41,6 +41,7 @@ function computedError( classObj ) {
 export default ModalDialogComponent.extend( HotkeyMixin, {
 	streaming: service(),
 	settings: service(),
+	store: service(),
 
 	layout,
 
@@ -89,7 +90,9 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		{
 			code: [ "Enter", "NumpadEnter" ],
 			action() {
-				if ( get( this, "active.hasEnded") ) {
+				if ( get( this, "active.isHostedError" ) ) {
+					this.send( "startHosted" );
+				} else if ( get( this, "active.hasEnded") ) {
 					this.send( "restart" );
 				}
 			}
@@ -152,6 +155,31 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 					await success();
 				}
 				streamingService.launchStream( active );
+			}
+		},
+
+		async startHosted( success, failure ) {
+			const streamingService = get( this, "streaming" );
+			const store = get( this, "store" );
+			const active = get( this, "active" );
+			if ( !active || get( active, "isDestroyed" ) ) {
+				return;
+			}
+			const channel = get( this, "active.error.channel" );
+			if ( !channel ) {
+				return;
+			}
+			try {
+				const user = await store.findRecord( "twitchUser", channel );
+				const stream = await get( user, "stream" );
+				if ( success ) {
+					await success();
+				}
+				streamingService.startStream( stream );
+			} catch ( e ) {
+				if ( failure ) {
+					await failure();
+				}
 			}
 		},
 

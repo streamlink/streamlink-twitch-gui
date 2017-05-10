@@ -36,9 +36,16 @@ TimeoutError.regex = [
 	/^error: Error when reading from stream: Read timeout, exiting$/
 ];
 
-export class HostingError extends Error {}
+export class HostingError extends Error {
+	constructor( message, channel ) {
+		super( message );
+		if ( channel ) {
+			this.channel = channel;
+		}
+	}
+}
 HostingError.regex = [
-	/^hosting was disabled by command line option$/
+	/^\S+ is hosting (\S+)$/
 ];
 
 export class Warning extends Error {}
