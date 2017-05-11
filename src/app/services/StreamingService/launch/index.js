@@ -3,7 +3,11 @@ import {
 	set,
 	setProperties
 } from "ember";
-import { Warning } from "../errors";
+import {
+	ExitCodeError,
+	ExitSignalError,
+	Warning
+} from "../errors";
 import isAborted from "../is-aborted";
 import spawn from "../spawn";
 import { parameters } from "../provider/parameters";
@@ -74,9 +78,9 @@ export default async function( stream, provider, player, onSuccess ) {
 					set( stream, "isCompleted", true );
 					resolve();
 				} else if ( signal ) {
-					reject( new Error( `Process exited with signal ${signal}` ) );
+					reject( new ExitSignalError( `Process exited with signal ${signal}` ) );
 				} else {
-					reject( new Error( `Process exited with code ${code}` ) );
+					reject( new ExitCodeError( `Process exited with code ${code}` ) );
 				}
 			}
 

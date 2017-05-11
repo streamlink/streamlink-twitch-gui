@@ -3,6 +3,10 @@ const { from } = Array;
 
 export class Aborted extends Error {}
 
+export class ExitCodeError extends Error {}
+
+export class ExitSignalError extends Error {}
+
 export class LogError extends Error {
 	constructor( message, log ) {
 		super( message );

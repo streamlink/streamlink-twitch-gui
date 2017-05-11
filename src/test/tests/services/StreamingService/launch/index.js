@@ -10,7 +10,11 @@ import {
 	EmberObject
 } from "ember";
 import launchProviderInjector from "inject-loader?-ember!services/StreamingService/launch";
-import { Warning } from "services/StreamingService/errors";
+import {
+	ExitCodeError,
+	ExitSignalError,
+	Warning
+} from "services/StreamingService/errors";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import { EventEmitter } from "events";
 
@@ -19,6 +23,8 @@ const { assign } = Object;
 const parameters = [];
 const commonDeps = {
 	"../errors": {
+		ExitCodeError,
+		ExitSignalError,
 		Warning
 	},
 	"../provider/parameters": {
@@ -97,7 +103,10 @@ test( "Reject", async assert => {
 		child.emit( "exit", 1 );
 		await promise;
 	} catch ( e ) {
-		assert.ok( e instanceof Error, "Rejects if child exits with a code greater than 0" );
+		assert.ok(
+			e instanceof ExitCodeError,
+			"Rejects if child exits with a code greater than 0"
+		);
 		assert.strictEqual(
 			e.message,
 			"Process exited with code 1",
@@ -111,7 +120,10 @@ test( "Reject", async assert => {
 		child.emit( "exit", null, "SIGKILL" );
 		await promise;
 	} catch ( e ) {
-		assert.ok( e instanceof Error, "Rejects if child exits with a signal" );
+		assert.ok(
+			e instanceof ExitSignalError,
+			"Rejects if child exits with a signal"
+		);
 		assert.strictEqual(
 			e.message,
 			"Process exited with signal SIGKILL",

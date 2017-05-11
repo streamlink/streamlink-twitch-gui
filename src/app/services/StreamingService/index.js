@@ -15,6 +15,7 @@ import {
 } from "./logger";
 import {
 	Aborted,
+	ExitSignalError,
 	HostingError
 } from "./errors";
 import { clearCache } from "./cache";
@@ -212,9 +213,10 @@ export default Service.extend( ChannelSettingsMixin, {
 			if ( get( this, "settings.gui_closestreampopup" ) ) {
 				this.closeStreamModal( stream );
 			}
-		} else {
+		} else if ( !get( stream, "isDeleted" ) ) {
+			const error = get( stream, "error" );
 			// remove stream from store if modal is not opened
-			if ( !get( stream, "error" ) && !get( stream, "isDeleted" ) ) {
+			if ( !error || error instanceof ExitSignalError ) {
 				stream.destroyRecord();
 			}
 		}
