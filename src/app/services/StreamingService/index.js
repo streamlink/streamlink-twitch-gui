@@ -13,7 +13,10 @@ import {
 	logDebug,
 	logError
 } from "./logger";
-import { Aborted } from "./errors";
+import {
+	Aborted,
+	HostingError
+} from "./errors";
 import { clearCache } from "./cache";
 import resolvePlayer from "./player/resolve";
 import resolveProvider from "./provider/resolve";
@@ -195,7 +198,9 @@ export default Service.extend( ChannelSettingsMixin, {
 		logError( error, () => stream.toJSON({ includeId: true }) );
 
 		// clear cache on error
-		clearCache();
+		if ( !( error instanceof HostingError ) ) {
+			clearCache();
+		}
 
 		// show error in modal
 		set( stream, "error", error );

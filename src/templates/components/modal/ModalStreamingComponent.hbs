@@ -97,6 +97,9 @@
 		{{else if isTimeoutError}}
 			{{#modal-header}}Error: Timeout{{/modal-header}}
 			{{#modal-body class="error"}}Either {{active.channel.detailedName}} has gone offline, or your connection to Twitch has been interrupted.{{/modal-body}}
+		{{else if isHostingError}}
+			{{#modal-header}}{{active.channel.detailedName}} is hosting another channel{{/modal-header}}
+			{{#modal-body class="error"}}Do you want to switch to {{error.channel}}?{{/modal-body}}
 		{{else}}
 			{{#modal-header}}Error{{/modal-header}}
 			{{#modal-body class="error"}}
@@ -123,6 +126,14 @@
 						icon="fa-download"
 						iconanim=true
 					}}Download{{/form-button}}
+				{{else if isHostingError}}
+					{{#form-button
+						action=(action "startHosted")
+						classNames="btn-success"
+						icon="fa-step-forward"
+						iconanim=true
+						title="[Enter] Switch"
+					}}Switch{{/form-button}}
 				{{else if active.hasEnded}}
 					{{#form-button
 						action=(action "restart")

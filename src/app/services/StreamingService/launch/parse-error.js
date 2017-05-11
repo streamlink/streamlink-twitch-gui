@@ -23,15 +23,13 @@ const errors = [
  * @returns {(Error|null)}
  */
 export default function( data ) {
-	const Class = errors.find( errorClass => {
-		for ( let regex of errorClass.regex ) {
-			if ( regex.test( data ) ) {
-				return errorClass;
+	for ( let ErrorClass of errors ) {
+		for ( let regex of ErrorClass.regex ) {
+			const match = regex.exec( data );
+			if ( match ) {
+				return new ErrorClass( ...match );
 			}
 		}
-	});
-
-	return Class
-		? new Class( data )
-		: null;
+	}
+	return null;
 }
