@@ -13,6 +13,11 @@ import getStreamFromUrl from "utils/getStreamFromUrl";
 const { service } = inject;
 
 
+function resemblesURL( str)  {
+	return typeof str === "string"
+	    && ( str === "" || str[0] === "/" );
+}
+
 
 // RoutingService is not public (yet)
 // Customize it in an Application.instanceInitializer
@@ -26,29 +31,36 @@ const customRoutingService = {
 	 * @param {Object[]?} models
 	 * @param {Object?} queryParams
 	 * @param {Boolean?} shouldReplace
+	 * @return {Promise}
 	 */
 	transitionTo( routeName, models, queryParams, shouldReplace ) {
-		let currentRoute = get( this, "router.currentRouteName" );
-
-		if ( routeName === currentRoute && arguments.length === 1 ) {
-			return this.refresh();
-
-		} else {
-			let router = get( this, "router" );
-			let transition = router._doTransition(
-				routeName,
-				makeArray( models ),
-				queryParams
-					? queryParams.queryParams || queryParams
-					: {}
-			);
-
-			if ( shouldReplace ) {
-				transition.method( "replace" );
+		if ( arguments.length === 1 && resemblesURL( routeName ) ) {
+			if ( routeName === get( this, "router.url" ) ) {
+				return this.refresh();
+			} else {
+				const router = get( this, "router" );
+				return router._doURLTransition( "transitionTo", routeName );
 			}
-
-			return transition;
 		}
+
+		if ( arguments.length === 1 && routeName === get( this, "router.currentRouteName" ) ) {
+			return this.refresh();
+		}
+
+		const router = get( this, "router" );
+		const transition = router._doTransition(
+			routeName,
+			makeArray( models ),
+			queryParams
+				? queryParams.queryParams || queryParams
+				: {}
+		);
+
+		if ( shouldReplace ) {
+			transition.method( "replace" );
+		}
+
+		return transition;
 	},
 
 	/**

@@ -1,8 +1,9 @@
 import Moment from "moment";
 import { log as logConfig } from "config";
 import {
-	loglevel as argLoglevel,
-	logfile as argLogfile
+	argv,
+	ARG_LOGFILE,
+	ARG_LOGLEVEL
 } from "nwjs/argv";
 import { isDebug } from "nwjs/debug";
 import process from "nwjs/process";
@@ -29,7 +30,7 @@ const LOG_LEVEL_DEFAULT = isDebug
 	: LOG_LEVEL_ERROR;
 
 
-const arg = String( argLoglevel || "" ).toLowerCase();
+const arg = String( argv[ ARG_LOGLEVEL ] || "" ).toLowerCase();
 const level = LOG_LEVELS.indexOf( arg ) === -1
 	? LOG_LEVEL_DEFAULT
 	: arg;
@@ -113,7 +114,7 @@ export async function log( level, namespace, data, debug ) {
 		await logMethod( format( level, namespace, data, debug ) );
 	} catch ( e ) {}
 
-	if ( argLogfile ) {
+	if ( argv[ ARG_LOGFILE ] ) {
 		try {
 			if ( !logFilePath ) {
 				const logDir = tmpdir( dir );

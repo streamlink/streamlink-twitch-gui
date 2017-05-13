@@ -1,5 +1,5 @@
 /* global DEBUG */
-import argv from "nwjs/argv";
+import { argv } from "nwjs/argv";
 import Logger from "utils/Logger";
 
 

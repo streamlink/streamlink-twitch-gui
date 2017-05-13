@@ -5,14 +5,17 @@ import {
 	Service
 } from "ember";
 import { update } from "config";
-import { App } from "nwjs/nwGui";
-import { versioncheck as argVersioncheck } from "nwjs/argv";
+import { manifest } from "nwjs/App";
+import {
+	argv,
+	ARG_VERSIONCHECK
+} from "nwjs/argv";
 import { getMax } from "utils/semver";
 
 
 const { service } = inject;
 const { "check-again": checkAgain } = update;
-const { manifest: { version } } = App;
+const { version } = manifest;
 
 
 export default Service.extend({
@@ -63,7 +66,7 @@ export default Service.extend({
 
 		// don't show modal if versioncheck is enabled (manual upgrades)
 		// manual upgrades -> user has (most likely) seen changelog already
-		if ( argVersioncheck ) {
+		if ( argv[ ARG_VERSIONCHECK ] ) {
 			return true;
 		}
 
@@ -95,7 +98,7 @@ export default Service.extend({
 
 	checkForNewRelease() {
 		// don't check for new releases if disabled
-		if ( !argVersioncheck ) { return; }
+		if ( !argv[ ARG_VERSIONCHECK ] ) { return; }
 
 		let checkagain = get( this, "model.checkagain" );
 		if ( checkagain <= +new Date() ) {

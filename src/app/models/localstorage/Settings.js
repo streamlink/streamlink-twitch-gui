@@ -133,6 +133,7 @@ export default Model.extend({
 	player_no_close     : attr( "boolean", { defaultValue: false } ),
 	gui_theme           : attr( "string",  { defaultValue: "default" } ),
 	gui_smoothscroll    : attr( "boolean", { defaultValue: true } ),
+	gui_externalcommands: attr( "boolean", { defaultValue: false } ),
 	gui_integration     : attr( "number",  { defaultValue: 3 } ),
 	gui_minimizetotray  : attr( "number",  { defaultValue: false } ),
 	gui_minimize        : attr( "number",  { defaultValue: 0 } ),

@@ -2,7 +2,7 @@ import {
 	module,
 	test
 } from "qunit";
-import argvInjector from "inject-loader?nwjs/nwGui!nwjs/argv";
+import argvInjector from "inject-loader?nwjs/App!nwjs/argv";
 
 
 module( "nwjs/argv" );
@@ -11,25 +11,13 @@ module( "nwjs/argv" );
 test( "Default values", assert => {
 
 	const argv = argvInjector({
-		"nwjs/nwGui": {
-			App: {
-				fullArgv: []
-			}
+		"nwjs/App": {
+			argv: []
 		}
 	});
 
-	const {
-		tray,
-		max,
-		min,
-		resetwindow,
-		versioncheck,
-		loglevel,
-		logfile
-	} = argv;
-
-	assert.deepEqual(
-		argv[ "default" ],
+	assert.propEqual(
+		argv.argv,
 		{
 			"_": [],
 			"tray": false,
@@ -44,7 +32,9 @@ test( "Default values", assert => {
 			"versioncheck": true,
 			"logfile": true,
 			"loglevel": "",
-			"l": ""
+			"l": "",
+			"goto": "",
+			"launch": ""
 		},
 		"Has the correct parameters"
 	);
@@ -52,66 +42,54 @@ test( "Default values", assert => {
 	assert.deepEqual(
 		Object.keys( argv ).sort(),
 		[
-			"default",
-			"tray",
-			"max",
-			"min",
-			"resetwindow",
-			"versioncheck",
-			"logfile",
-			"loglevel"
+			"argv",
+			"parseCommand",
+			"ARG_GOTO",
+			"ARG_LAUNCH",
+			"ARG_LOGFILE",
+			"ARG_LOGLEVEL",
+			"ARG_MAX",
+			"ARG_MIN",
+			"ARG_RESET_WINDOW",
+			"ARG_TRAY",
+			"ARG_VERSIONCHECK"
 		].sort(),
 		"Exports the correct constants"
 	);
-
-	assert.strictEqual( tray, false, "Exports the tray parameter" );
-	assert.strictEqual( max, false, "Exports the max parameter" );
-	assert.strictEqual( min, false, "Exports the min parameter" );
-	assert.strictEqual( resetwindow, false, "Exports the resetwindow parameter" );
-	assert.strictEqual( versioncheck, true, "Exports the versioncheck parameter" );
-	assert.strictEqual( logfile, true, "Exports the logfile parameter" );
-	assert.strictEqual( loglevel, "", "Exports the loglevel parameter" );
 
 });
 
 
 test( "Custom parameters", assert => {
 
-	const argv = argvInjector({
-		"nwjs/nwGui": {
-			App: {
-				fullArgv: [
-					// boolean without values
-					"--tray",
-					"--max",
-					"--min",
-					"--reset-window",
-					// boolean with "no-" prefix
-					"--no-versioncheck",
-					// boolean with value
-					"--logfile=false",
-					// string
-					"--loglevel",
-					"debug"
-				]
-			}
+	const { argv } = argvInjector({
+		"nwjs/App": {
+			argv: [
+				// boolean without values
+				"--tray",
+				"--max",
+				"--min",
+				"--reset-window",
+				// boolean with "no-" prefix
+				"--no-versioncheck",
+				// boolean with value
+				"--logfile=false",
+				// string
+				"--loglevel",
+				"debug",
+				"--goto",
+				"foo",
+				"--launch",
+				"bar",
+				"positional"
+			]
 		}
 	});
 
-	const {
-		tray,
-		max,
-		min,
-		resetwindow,
-		versioncheck,
-		loglevel,
-		logfile
-	} = argv;
-
-	assert.deepEqual(
-		argv[ "default" ],
+	assert.propEqual(
+		argv,
 		{
-			"_": [],
+			"_": [ "positional" ],
 			"tray": true,
 			"hide": true,
 			"hidden": true,
@@ -124,47 +102,32 @@ test( "Custom parameters", assert => {
 			"versioncheck": false,
 			"logfile": false,
 			"loglevel": "debug",
-			"l": "debug"
+			"l": "debug",
+			"goto": "foo",
+			"launch": "bar"
 		},
 		"Has the correct parameters"
 	);
-
-	assert.strictEqual( tray, true, "Exports the tray parameter" );
-	assert.strictEqual( max, true, "Exports the max parameter" );
-	assert.strictEqual( min, true, "Exports the min parameter" );
-	assert.strictEqual( resetwindow, true, "Exports the resetwindow parameter" );
-	assert.strictEqual( versioncheck, false, "Exports the versioncheck parameter" );
-	assert.strictEqual( logfile, false, "Exports the logfile parameter" );
-	assert.strictEqual( loglevel, "debug", "Exports the loglevel parameter" );
 
 });
 
 
 test( "Aliases", assert => {
 
-	const argv = argvInjector({
-		"nwjs/nwGui": {
-			App: {
-				fullArgv: [
-					"--hide",
-					"--maximize",
-					"--minimize",
-					"-l",
-					"debug"
-				]
-			}
+	const { argv } = argvInjector({
+		"nwjs/App": {
+			argv: [
+				"--hide",
+				"--maximize",
+				"--minimize",
+				"-l",
+				"debug"
+			]
 		}
 	});
 
-	const {
-		tray,
-		max,
-		min,
-		loglevel
-	} = argv;
-
-	assert.deepEqual(
-		argv[ "default" ],
+	assert.propEqual(
+		argv,
 		{
 			"_": [],
 			"tray": true,
@@ -179,14 +142,60 @@ test( "Aliases", assert => {
 			"versioncheck": true,
 			"logfile": true,
 			"loglevel": "debug",
-			"l": "debug"
+			"l": "debug",
+			"goto": "",
+			"launch": ""
 		},
 		"Has the correct parameters"
 	);
 
-	assert.strictEqual( tray, true, "Exports the tray parameter" );
-	assert.strictEqual( max, true, "Exports the max parameter" );
-	assert.strictEqual( min, true, "Exports the min parameter" );
-	assert.strictEqual( loglevel, "debug", "Exports the loglevel parameter" );
+});
+
+
+test( "Parse command", assert => {
+
+	const { parseCommand } = argvInjector({
+		"nwjs/App": {
+			argv: [],
+			manifest: {
+				"chromium-args": "--foo --bar"
+			}
+		}
+	});
+
+	assert.propEqual(
+		parseCommand([
+			"/path/to/executable",
+			"--foo",
+			"--bar",
+			"--user-data-dir=baz",
+			"--no-sandbox",
+			"--flag-switches-begin",
+			"--flag-switches-end",
+			"--goto",
+			"foo",
+			"--launch",
+			"bar"
+		].join( " " ) ),
+		{
+			"_": [],
+			"tray": false,
+			"hide": false,
+			"hidden": false,
+			"max": false,
+			"maximize": false,
+			"maximized": false,
+			"min": false,
+			"minimize": false,
+			"reset-window": false,
+			"versioncheck": true,
+			"logfile": true,
+			"loglevel": "",
+			"l": "",
+			"goto": "foo",
+			"launch": "bar"
+		},
+		"Correctly parses parameters"
+	);
 
 });

@@ -1,13 +1,13 @@
 import { get } from "ember";
 import { main as config } from "config";
-import { App } from "nwjs/nwGui";
+import { manifest } from "nwjs/App";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalChangelogComponent.hbs";
 
 
 const { urls: { "release": releaseUrl } } = config;
-const { manifest: { version } } = App;
+const { version } = manifest;
 
 
 export default ModalDialogComponent.extend({

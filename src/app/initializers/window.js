@@ -4,22 +4,23 @@ import {
 	run,
 	Application
 } from "ember";
-import { App } from "nwjs/nwGui";
+import { manifest } from "nwjs/App";
 import nwWindow from "nwjs/Window";
 import nwScreen from "nwjs/Screen";
-import { resetwindow as argResetwindow } from "nwjs/argv";
+import {
+	argv,
+	ARG_RESET_WINDOW
+} from "nwjs/argv";
 import { isWin } from "utils/node/platform";
 
 
 const { debounce } = run;
 const {
-	manifest: {
-		window: {
-			width: manifestWindowWidth,
-			height: manifestWindowHeight
-		}
+	window: {
+		width: manifestWindowWidth,
+		height: manifestWindowHeight
 	}
-} = App;
+} = manifest;
 
 const timeEvent  = 1000;
 const timeIgnore = 2000;
@@ -148,7 +149,7 @@ Application.instanceInitializer({
 			})
 			.then(function( Window ) {
 				// reset window
-				if ( argResetwindow ) {
+				if ( argv[ ARG_RESET_WINDOW ] ) {
 					resetWindow.call( Window );
 				} else {
 					restoreWindow.call( Window );

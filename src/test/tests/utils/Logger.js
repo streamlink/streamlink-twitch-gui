@@ -6,6 +6,13 @@ import loggerInjector from "inject-loader?-Moment&-utils/node/denodify!utils/Log
 import { posix as path } from "path";
 
 
+const mockArgv = argv => ({
+	argv: argv,
+	ARG_LOGFILE: "logfile",
+	ARG_LOGLEVEL: "loglevel"
+});
+
+
 module( "utils/Logger" );
 
 
@@ -24,10 +31,10 @@ test( "Log levels", assert => {
 	};
 
 	Logger = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "",
 			logfile: false
-		},
+		}),
 		"nwjs/debug": { isDebug: false }
 	}, commonDeps ) );
 	assert.strictEqual(
@@ -42,10 +49,10 @@ test( "Log levels", assert => {
 	);
 
 	Logger = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "",
 			logfile: false
-		},
+		}),
 		"nwjs/debug": { isDebug: true }
 	}, commonDeps ) );
 	assert.strictEqual(
@@ -60,10 +67,10 @@ test( "Log levels", assert => {
 	);
 
 	Logger = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "none",
 			logfile: false
-		},
+		}),
 		"nwjs/debug": { isDebug: false }
 	}, commonDeps ) );
 	assert.strictEqual(
@@ -78,10 +85,10 @@ test( "Log levels", assert => {
 	);
 
 	Logger = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "error",
 			logfile: false
-		},
+		}),
 		"nwjs/debug": { isDebug: false }
 	}, commonDeps ) );
 	assert.strictEqual(
@@ -96,10 +103,10 @@ test( "Log levels", assert => {
 	);
 
 	Logger = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "debug",
 			logfile: false
-		},
+		}),
 		"nwjs/debug": { isDebug: false }
 	}, commonDeps ) );
 	assert.strictEqual(
@@ -114,10 +121,10 @@ test( "Log levels", assert => {
 	);
 
 	Logger = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "foo",
 			logfile: false
-		},
+		}),
 		"nwjs/debug": { isDebug: false }
 	}, commonDeps ) );
 	assert.strictEqual(
@@ -164,17 +171,17 @@ test( "Logging to stdout/stderr", async assert => {
 	};
 
 	const LoggerDebug = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "debug",
 			logfile: false
-		}
+		})
 	}, commonDeps ) );
 
 	const LoggerError = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "error",
 			logfile: false
-		}
+		})
 	}, commonDeps ) );
 
 	await LoggerDebug.log( LoggerDebug.LOG_LEVEL_NONE, "foo", "bar" );
@@ -241,10 +248,10 @@ test( "Logging to file", async assert => {
 				maxAgeDays: 1
 			}
 		},
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "debug",
 			logfile: true
-		},
+		}),
 		"nwjs/debug": { isDebug: false },
 		"nwjs/process": {
 			stdout: {
@@ -367,10 +374,10 @@ test( "Logger class", async assert => {
 	};
 
 	Logger = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "debug",
 			logfile: false
-		}
+		})
 	}, commonDeps ) )[ "default" ];
 
 	const {
@@ -438,10 +445,10 @@ test( "Logger class", async assert => {
 
 
 	Logger = loggerInjector( Object.assign({
-		"nwjs/argv": {
+		"nwjs/argv": mockArgv({
 			loglevel: "error",
 			logfile: false
-		}
+		})
 	}, commonDeps ) )[ "default" ];
 
 	const {
