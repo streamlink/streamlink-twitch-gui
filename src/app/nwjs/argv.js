@@ -37,6 +37,7 @@ const minimistOptions = {
 		[ ARG_TRAY ]: [ "hide", "hidden" ],
 		[ ARG_MAX ]: [ "maximize", "maximized" ],
 		[ ARG_MIN ]: [ "minimize", "maximized" ],
+		[ ARG_VERSIONCHECK ]: [ "version-check" ],
 		[ ARG_LOGLEVEL ]: [ "l" ]
 	},
 	default: {
