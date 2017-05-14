@@ -11,11 +11,9 @@ const ApplicationRouter = Router.extend();
 
 ApplicationRouter.map(function() {
 
-	this.route( "index", { path: "/" } );
-
 	this.route( "watching" );
 
-	this.route( "search", { path: "/search" } );
+	this.route( "search" );
 
 	this.route( "featured" );
 
@@ -24,12 +22,10 @@ ApplicationRouter.map(function() {
 	});
 
 	this.route( "communities", function() {
-		this.route( "index", function() {
-			this.route( "index", { path: "/featured" } );
-			this.route( "all", { path: "/all" } );
+		this.route( "index", { path: "/" }, function() {
+			this.route( "all" );
 		});
 		this.route( "community", { path: "/community/:community_id" }, function() {
-			this.route( "index" );
 			this.route( "info" );
 		});
 	});
@@ -48,15 +44,13 @@ ApplicationRouter.map(function() {
 		this.route( "hostedStreams" );
 		this.route( "followedChannels" );
 		this.route( "followedGames", function() {
-			this.route( "index", { path: "/live" } );
-			this.route( "all", { path: "/all" } );
+			this.route( "all" );
 		});
 	});
 
 	this.route( "team", { path: "/team/:team" }, function() {
-		this.route( "index", { path: "/live" } );
-		this.route( "members", { path: "/members" } );
-		this.route( "info", { path: "/info" } );
+		this.route( "members" );
+		this.route( "info" );
 	});
 
 	this.route( "settings", function() {
