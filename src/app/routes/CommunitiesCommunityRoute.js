@@ -7,11 +7,18 @@ import preload from "utils/preload";
 
 
 export default Route.extend( RefreshRouteMixin, {
-	model( params ) {
+	async model( params ) {
 		const store = get( this, "store" );
 		const { community_id } = params;
 
-		return store.findRecord( "twitchCommunity", community_id, { reload: true } )
-			.then( preload( "avatar_image_url" ) );
+		let record;
+		try {
+			record = await store.findRecord( "twitchCommunity", community_id, { reload: true } );
+		} catch ( e ) {
+			record = await store.queryRecord( "twitchCommunity", { name: community_id } );
+		}
+		await preload( "avatar_image_url" )( record );
+
+		return record;
 	}
 });
