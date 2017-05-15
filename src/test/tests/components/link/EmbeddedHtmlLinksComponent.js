@@ -54,7 +54,7 @@ test( "EmbeddedHtmlLinksComponent", assert => {
 	const EmbeddedHtmlLinksComponent = embeddedHtmlLinksComponentInjector({
 		"nwjs/Clipboard": {
 			set( url ) {
-				assert.strictEqual( url, expectedSetClipboard, "Calls setClipboard" );
+				assert.strictEqual( url, expectedSetClipboard, "Calls setClipboard()" );
 			}
 		},
 		"nwjs/Shell": {
@@ -78,8 +78,8 @@ test( "EmbeddedHtmlLinksComponent", assert => {
 						objs.forEach( obj => obj.click() );
 					}
 				},
-				popup() {
-					assert.ok( true, "Calls menu.popup()" );
+				popup( e ) {
+					assert.strictEqual( e, event, "Calls menu.popup( event )" );
 				}
 			})
 		}
