@@ -1,8 +1,8 @@
 import {
 	get,
-	inject,
-	Component
+	inject
 } from "ember";
+import EmbeddedHtmlLinksComponent from "components/link/EmbeddedHtmlLinksComponent";
 import Menu from "nwjs/Menu";
 import { openBrowser } from "nwjs/Shell";
 import { set as setClipboard } from "nwjs/Clipboard";
@@ -12,30 +12,13 @@ import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
 const { service } = inject;
 
 
-export default Component.extend({
+export default EmbeddedHtmlLinksComponent.extend({
 	routing: service( "-routing" ),
 
 	layout,
 
 	tagName: "li",
 	classNames: [ "channel-panel-item-component" ],
-
-	didInsertElement() {
-		let routing = get( this, "routing" );
-
-		this.$( "a" )
-			.addClass( "external-link" )
-			.each(function() {
-				this.setAttribute( "title", this.href );
-			})
-			.click(function( e ) {
-				e.preventDefault();
-				e.stopImmediatePropagation();
-				routing.openBrowserOrTransitionToChannel( this.href );
-			});
-
-		this._super( ...arguments );
-	},
 
 	contextMenu( event ) {
 		const target = event.target;

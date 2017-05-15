@@ -6,6 +6,15 @@ const nwWindow = Window.get();
 nwWindow.removeAllListeners();
 
 
+// don't open new windows
+nwWindow.on( "new-win-policy", ( frame, url, policy ) => {
+	policy.ignore();
+});
+nwWindow.on( "navigation", ( frame, url, policy ) => {
+	policy.ignore();
+});
+
+
 let hidden    = true;
 let focused   = true;
 let maximized = false;

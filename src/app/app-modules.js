@@ -149,7 +149,7 @@ import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
 import LinkComponent from "components/link/LinkComponent";
 import DocumentationLinkComponent from "components/link/DocumentationLinkComponent";
-import FindInternalLinksComponent from "components/link/FindInternalLinksComponent";
+import EmbeddedHtmlLinksComponent from "components/link/EmbeddedHtmlLinksComponent";
 
 import CheckBoxComponent from "components/form/CheckBoxComponent";
 import RadioBtnComponent from "components/form/RadioBtnComponent";
@@ -504,7 +504,7 @@ export default {
 	ExternalLinkComponent,
 	LinkComponent,
 	DocumentationLinkComponent,
-	FindInternalLinksComponent,
+	EmbeddedHtmlLinksComponent,
 
 	CheckBoxComponent,
 	RadioBtnComponent,

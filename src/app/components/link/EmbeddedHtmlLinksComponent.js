@@ -15,7 +15,6 @@ const { service } = inject;
 
 export default Component.extend({
 	routing: service( "-routing" ),
-	store: service(),
 
 	didInsertElement() {
 		const routing = get( this, "routing" );
@@ -33,10 +32,7 @@ export default Component.extend({
 
 				// internal link
 				if ( channel ) {
-					click = () => get( this, "store" )
-						.findRecord( "twitchUser", channel.toLowerCase() )
-						.then( user => get( user, "channel" ) )
-						.then( channel => routing.transitionTo( "channel", get( channel, "id" ) ) );
+					click = () => routing.transitionTo( "channel", channel );
 
 				// external link
 				} else {
@@ -44,6 +40,9 @@ export default Component.extend({
 					$anchor
 						.addClass( "external-link" )
 						.prop( "title", url )
+						.on( "mouseup mousedown click dblclick keyup keydown keypress", e => {
+							e.preventDefault();
+						})
 						.on( "contextmenu", event => {
 							event.preventDefault();
 							event.stopImmediatePropagation();
@@ -55,7 +54,7 @@ export default Component.extend({
 									click
 								},
 								{
-									label: "Copy address",
+									label: "Copy link address",
 									click: () => setClipboard( url )
 								}
 							]);
@@ -64,13 +63,13 @@ export default Component.extend({
 						});
 				}
 
-				$anchor.click( event => {
+				$anchor.mouseup( event => {
 					event.preventDefault();
 					event.stopImmediatePropagation();
 					click( event );
 				});
 			});
 
-		this._super( ...arguments );
+		return this._super( ...arguments );
 	}
 });
