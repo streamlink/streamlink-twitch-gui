@@ -10,6 +10,8 @@ import layout from "templates/components/link/EmbeddedLinksComponent.hbs";
 export default Component.extend({
 	layout,
 
+	classNames: [ "embedded-links-component" ],
+
 	content: computed( "text", function() {
 		const text = get( this, "text" );
 		const parsed = parseString( text );

@@ -1,11 +1,9 @@
-{{#each content as |item|}}
-	{{#if item.url}}
-		{{#external-link url=item.url}}
-			{{item.text}}
-		{{/external-link}}
-	{{else}}
-		{{item.text}}
-	{{/if}}
-{{else}}
-	{{text}}
-{{/each}}
+{{~#each content as |item|~}}
+	{{~#if item.url~}}
+		{{~#external-link url=item.url~}}
+			{{~item.text~}}
+		{{~/external-link~}}
+	{{~else~}}
+		{{~item.text~}}
+	{{~/if~}}
+{{~/each~}}
