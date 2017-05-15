@@ -62,6 +62,7 @@ import "tests/components/form/NumberFieldComponent";
 import "tests/components/form/RadioBtnsComponent";
 import "tests/components/list/ContentListComponent";
 import "tests/components/list/InfiniteScrollComponent";
+import "tests/components/link/ExternalLinkComponent";
 import "tests/components/link/EmbeddedHtmlLinksComponent";
 import "tests/services/HotkeyService";
 import "tests/services/StreamingService/cache";
