@@ -66,6 +66,7 @@ import "tests/components/list/InfiniteScrollComponent";
 import "tests/components/link/ExternalLinkComponent";
 import "tests/components/link/EmbeddedLinksComponent";
 import "tests/components/link/EmbeddedHtmlLinksComponent";
+import "tests/services/SettingsService";
 import "tests/services/HotkeyService";
 import "tests/services/StreamingService/cache";
 import "tests/services/StreamingService/spawn";
