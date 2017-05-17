@@ -9,6 +9,7 @@ import nwWindow, {
 	toggleMinimize,
 	toggleVisibility
 } from "nwjs/Window";
+import resetWindow from "nwjs/Window/reset";
 import {
 	setShowInTray,
 	hideOnClick
@@ -19,6 +20,7 @@ import {
 	ARG_TRAY,
 	ARG_MIN,
 	ARG_MAX,
+	ARG_RESET_WINDOW,
 	ARG_LAUNCH,
 	ARG_GOTO
 } from "nwjs/argv";
@@ -105,6 +107,9 @@ Application.instanceInitializer({
 			await logDebug( "Received parameters from new application instance", () => argv );
 
 			try {
+				if ( argv[ ARG_RESET_WINDOW ] ) {
+					await resetWindow( true );
+				}
 				// go to a new route (or refresh current one)
 				if ( argv[ ARG_GOTO ] ) {
 					await routingService.transitionTo( argv[ ARG_GOTO ] );

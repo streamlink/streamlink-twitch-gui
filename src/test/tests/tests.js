@@ -51,6 +51,7 @@ import "tests/models/twitch/Team";
 import "tests/models/twitch/Community";
 import "tests/models/twitch/CommunityTop";
 import "tests/store/TwitchAdapter";
+import "tests/initializers/window";
 import "tests/mixins/RefreshRouteMixin";
 import "tests/components/PreviewImageComponent";
 import "tests/components/LoadingSpinnerComponent";

@@ -1,5 +1,7 @@
-import { assign } from "ember";
 import { Store } from "ember-data";
+
+
+const { assign } = Object;
 
 
 // no initializer here: just upgrade the application store
@@ -26,6 +28,22 @@ Store.reopen({
 
 				return Promise.reject( err );
 			});
+	},
+
+	/**
+	 * Look for an already existing record and avoid automatically generating an empty one.
+	 * Instead, create a new one manually if no record was found.
+	 * Use Ember's RSVP promises instead of normal promises / async functions.
+	 * @param {String} modelName
+	 * @param {(Number|String)} id
+	 * @returns {Promise.<Model>}
+	 */
+	findOrCreateRecord( modelName, id = 1 ) {
+		return this.findAll( modelName )
+			.then( recordArray => recordArray.content.length
+				? recordArray.objectAt( 0 )
+				: this.createRecord( modelName, { id } ).save()
+			);
 	},
 
 	query() {
