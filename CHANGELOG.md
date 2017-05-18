@@ -4,7 +4,7 @@ Changelog - Streamlink Twitch GUI
 ## Master
 
 - Implemented a new quality selection method. #434  
-  Please upgrade to Streamlink if you're still using Livestreamer, as it doesn't receive updates anymore and broken stream quality selections can't be fixed.
+  Please upgrade to [Streamlink](https://streamlink.github.io/install.html) if you're still using Livestreamer, as it doesn't receive updates anymore and broken stream quality selections can't be fixed.
 - Rewrote the stream launching system.
 - Added a restart stream dialog that shows up when an active stream ends on its own.  
   This can be disabled in the "Streams" settings menu.
@@ -12,7 +12,11 @@ Changelog - Streamlink Twitch GUI
 - Added support for Streamlink installations via homebrew on MacOS. #440  
   The streamlink-twitch-gui homebrew cask now has streamlink set as a homebrew formula dependency.  
 - Added missing "Copy link address" context menu entries. #436
+- Added option to settings menu to disable restoring the GUI when clicking a notification. #449
+- Added runtime parameters for launching streams, changing routes and resetting the window (see the wiki). #441
+- Fixed window initialization. The maximized state will now be restored between sessions. #324
 - Fixed search bar query validation regex. #437
+- Fixed being able to open external links in another window. #447
 - Fixed old Streamlink documentation URL.
 
 
