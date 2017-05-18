@@ -5,7 +5,6 @@ import {
 } from "ember";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import HotkeyMixin from "mixins/HotkeyMixin";
-import nwWindow from "nwjs/Window";
 import layout from "templates/components/modal/ModalQuitComponent.hbs";
 
 
@@ -14,6 +13,7 @@ const { service } = inject;
 
 
 export default ModalDialogComponent.extend( HotkeyMixin, {
+	nwjs: service(),
 	streaming: service(),
 
 	layout,
@@ -36,7 +36,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		},
 
 		quit() {
-			nwWindow.close( true );
+			get( this, "nwjs" ).quit();
 		}
 	}
 });

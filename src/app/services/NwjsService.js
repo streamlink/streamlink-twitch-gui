@@ -3,6 +3,7 @@ import {
 	inject,
 	Service
 } from "ember";
+import nwApp from "nwjs/App";
 import nwWindow, {
 	toggleVisibility,
 	toggleMaximize,
@@ -48,7 +49,11 @@ export default Service.extend({
 		if ( streams.length && streams.some( stream => !get( stream, "hasEnded" ) ) ) {
 			get( this, "modal" ).openModal( "quit", this );
 		} else {
-			nwWindow.close( true );
+			this.quit();
 		}
+	},
+
+	quit() {
+		nwApp.quit();
 	}
 });
