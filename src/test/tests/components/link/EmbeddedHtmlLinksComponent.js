@@ -45,7 +45,7 @@ module( "components/link/EmbeddedHtmlLinksComponent", {
 
 test( "EmbeddedHtmlLinksComponent", assert => {
 
-	assert.expect( 29 );
+	assert.expect( 40 );
 
 	let event;
 	let expectedSetClipboard;
@@ -111,14 +111,27 @@ test( "EmbeddedHtmlLinksComponent", assert => {
 	const $anchorTwo = $anchors.eq( 1 );
 
 	assert.ok( !$anchorOne.hasClass( "external-link" ), "First link is not external" );
-	// trigger mouseup event
-	event = $.Event( "mouseup" );
+	// trigger mouseup events
+	// left click
+	event = $.Event( "mouseup", { button: 0 } );
 	$anchorOne.trigger( event );
-	assert.ok( event.isDefaultPrevented(), "Default event action is prevented" );
-	assert.ok( event.isImmediatePropagationStopped(), "Event doesn't propagate" );
+	assert.ok( event.isDefaultPrevented(), "Left click: default event action is prevented" );
+	assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
+	// middle click (doesn't execute transition)
+	event = $.Event( "mouseup", { button: 1 } );
+	$anchorOne.trigger( event );
+	assert.ok( !event.isDefaultPrevented(), "Middle click: default event action is not prevented" );
+	assert.ok( !event.isImmediatePropagationStopped(), "Middle click: event does propagate" );
+	// right click (doesn't execute transition)
+	event = $.Event( "mouseup", { button: 2 } );
+	$anchorOne.trigger( event );
+	assert.ok( !event.isDefaultPrevented(), "Right click: default event action is not prevented" );
+	assert.ok( !event.isImmediatePropagationStopped(), "Right click: event does propagate" );
 	// doesn't have a context menu
 	event = $.Event( "contextmenu" );
 	$anchorOne.trigger( event );
+	assert.ok( !event.isDefaultPrevented(), "Contextmenu: default event action is not prevented" );
+	assert.ok( !event.isImmediatePropagationStopped(), "Contextmenu: event does propagate" );
 
 	assert.ok( $anchorTwo.hasClass( "external-link" ), "Second link is external" );
 	assert.strictEqual(
@@ -126,18 +139,29 @@ test( "EmbeddedHtmlLinksComponent", assert => {
 		"https://bar.com/",
 		"Second link has a title property"
 	);
-	// trigger mouseup event
-	event = $.Event( "mouseup" );
+	// trigger mouseup events
+	// left click
+	event = $.Event( "mouseup", { button: 0 } );
 	$anchorTwo.trigger( event );
-	assert.ok( event.isDefaultPrevented(), "Default event action is prevented" );
-	assert.ok( event.isImmediatePropagationStopped(), "Event doesn't propagate" );
+	assert.ok( event.isDefaultPrevented(), "Left click: default event action is prevented" );
+	assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
+	// middle click
+	event = $.Event( "mouseup", { button: 1 } );
+	$anchorTwo.trigger( event );
+	assert.ok( event.isDefaultPrevented(), "Middle click: default event action is prevented" );
+	assert.ok( event.isImmediatePropagationStopped(), "Middle click: event doesn't propagate" );
+	// right click (doesn't execute callback)
+	event = $.Event( "mouseup", { button: 2 } );
+	$anchorTwo.trigger( event );
+	assert.ok( !event.isDefaultPrevented(), "Right click: default event action is not prevented" );
+	assert.ok( !event.isImmediatePropagationStopped(), "Right click: event does propagate" );
 	// has a context menu
 	expectedOpenBrowser = "https://bar.com/";
 	expectedSetClipboard = "https://bar.com/";
 	event = $.Event( "contextmenu" );
 	$anchorTwo.trigger( event );
-	assert.ok( event.isDefaultPrevented(), "Default event action is prevented" );
-	assert.ok( event.isImmediatePropagationStopped(), "Event doesn't propagate" );
+	assert.ok( event.isDefaultPrevented(), "Contextmenu: default event action is prevented" );
+	assert.ok( event.isImmediatePropagationStopped(), "Contextmenu: event doesn't propagate" );
 	// disabled events
 	"mousedown click dblclick keyup keydown keypress"
 		.split( " " )

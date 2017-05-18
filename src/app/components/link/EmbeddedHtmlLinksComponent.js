@@ -28,20 +28,24 @@ export default Component.extend({
 				const { anchor, channel } = obj;
 				const url = anchor.href;
 				const $anchor = $( anchor );
-				let click;
 
-				// internal link
+				// channel link
 				if ( channel ) {
-					click = () => routing.transitionTo( "channel", channel );
+					$anchor.mouseup( event => {
+						// left click
+						if ( event.button !== 0 ) { return; }
+						event.preventDefault();
+						event.stopImmediatePropagation();
+						routing.transitionTo( "channel", channel );
+					});
 
 				// external link
 				} else {
-					click = () => openBrowser( url );
 					$anchor
 						.addClass( "external-link" )
 						.prop( "title", url )
-						.on( "mouseup mousedown click dblclick keyup keydown keypress", e => {
-							e.preventDefault();
+						.on( "mousedown click dblclick keyup keydown keypress", event => {
+							event.preventDefault();
 						})
 						.on( "contextmenu", event => {
 							event.preventDefault();
@@ -51,7 +55,7 @@ export default Component.extend({
 							menu.items.pushObjects([
 								{
 									label: "Open in browser",
-									click
+									click: () => openBrowser( url )
 								},
 								{
 									label: "Copy link address",
@@ -60,14 +64,15 @@ export default Component.extend({
 							]);
 
 							menu.popup( event );
+						})
+						.mouseup( event => {
+							// left or middle click
+							if ( event.button !== 0 && event.button !== 1 ) { return; }
+							event.preventDefault();
+							event.stopImmediatePropagation();
+							openBrowser( url );
 						});
 				}
-
-				$anchor.mouseup( event => {
-					event.preventDefault();
-					event.stopImmediatePropagation();
-					click( event );
-				});
 			});
 
 		return this._super( ...arguments );
