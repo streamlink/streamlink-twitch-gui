@@ -64,7 +64,7 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		// invalidate cache: listen for all settings changes
 		// changed properties of model relationships and nested attributes don't trigger isDirty
-		get( this, "settings.content" ).on( "didUpdate", clearCache );
+		get( this, "settings" ).on( "didUpdate", clearCache );
 	},
 
 

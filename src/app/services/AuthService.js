@@ -53,12 +53,7 @@ export default Service.extend( Evented, {
 
 	init() {
 		const store = get( this, "store" );
-
-		store.findAll( "auth" )
-			.then( records => records.content.length
-				? records.objectAt( 0 )
-				: store.createRecord( "auth", { id: 1 } ).save()
-			)
+		store.findOrCreateRecord( "auth" )
 			.then( session => {
 				set( this, "session", session );
 

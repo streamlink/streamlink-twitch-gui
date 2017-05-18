@@ -1,4 +1,7 @@
 {
+	"time-window-event-debounce": 1000,
+	"time-window-event-ignore": 2000,
+
 	"search-history-size": 50,
 	"random-max": 500,
 

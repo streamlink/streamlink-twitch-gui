@@ -1,135 +1,121 @@
 import {
-	get,
+	getProperties,
 	setProperties,
 	run,
 	Application
 } from "ember";
-import { manifest } from "nwjs/App";
-import nwWindow from "nwjs/Window";
-import nwScreen from "nwjs/Screen";
 import {
-	argv,
-	ARG_RESET_WINDOW
-} from "nwjs/argv";
+	vars as varsConfig
+} from "config";
+import nwWindow from "nwjs/Window";
+import reset from "nwjs/Window/reset";
+import nwScreen from "nwjs/Screen";
 import { isWin } from "utils/node/platform";
 
 
 const { debounce } = run;
 const {
-	window: {
-		width: manifestWindowWidth,
-		height: manifestWindowHeight
-	}
-} = manifest;
+	"time-window-event-debounce": timeDebounce,
+	"time-window-event-ignore": timeIgnore
+} = varsConfig;
+const { screens } = nwScreen;
 
-const timeEvent  = 1000;
-const timeIgnore = 2000;
+
 let ignore = false;
 
 
-function deferEvent( thisArg, fn ) {
-	return function() {
-		debounce( thisArg, fn, ...arguments, timeEvent );
-	};
+function isWindowFullyVisible() {
+	const { x: wX, y: wY, width: wWidth, height: wHeight } = nwWindow;
+
+	// the window needs to be fully visible on one screen
+	return screens.some( screen => {
+		const { bounds: { x: sX, y: sY, width: sWidth, height: sHeight } } = screen;
+
+		// substract screen offset from window position
+		const posX = wX - sX;
+		const posY = wY - sY;
+
+		// check boundaries
+		return posX >= 0
+		    && posY >= 0
+		    && posX + wWidth <= sWidth
+		    && posY + wHeight <= sHeight;
+	});
 }
 
-function save( params ) {
-	setProperties( this, params );
-	this.save();
+
+function debounceEvent( windowRecord, fn ) {
+	return ( ...args ) => debounce( null, fn, windowRecord, ...args, timeDebounce, false );
 }
 
-function onResize( width, height ) {
+
+function unignoreEventListeners() {
+	ignore = false;
+}
+
+function ignoreEventListeners() {
+	ignore = true;
+	debounce( unignoreEventListeners, timeIgnore );
+}
+
+
+function save( windowRecord, data ) {
+	setProperties( windowRecord, data );
+	return windowRecord.save();
+}
+
+
+function onResize( windowRecord, width, height ) {
 	if ( ignore ) { return; }
 	// validate window position
 	if ( !isWindowFullyVisible() ) { return; }
-	save.call( this, { width, height } );
+
+	return save( windowRecord, { width, height } );
 }
 
-function onMove( x, y ) {
+function onMove( windowRecord, x, y ) {
 	if ( ignore ) { return; }
-	// double check: NW.js moves the window to
+	// double check on Windows: NW.js moves the window to
 	// [    -8,    -8] when maximizing...
 	// [-32000,-32000] when minimizing...
 	if ( isWin && ( x === -8 && y === -8 || x === -32000 && x === -32000 ) ) { return; }
 	// validate window position
 	if ( !isWindowFullyVisible() ) { return; }
-	save.call( this, { x, y } );
+
+	return save( windowRecord, { x, y } );
 }
 
-function ignoreNextEvent() {
-	ignore = true;
-	debounce( unignoreNextEvent, timeIgnore );
-}
-
-function unignoreNextEvent() {
-	ignore = false;
+function onMaximize( windowRecord, maximized ) {
+	return save( windowRecord, { maximized } );
 }
 
 
-function restoreWindow() {
-	const width = get( this, "width" );
-	const height = get( this, "height" );
+async function restoreWindowFromRecord( windowRecord ) {
+	const {
+		x, y, width, height, maximized
+	} = getProperties( windowRecord, "x", "y", "width", "height", "maximized" );
+
+	if ( x !== null && y !== null ) {
+		nwWindow.moveTo( x, y );
+	}
+
 	if ( width !== null && height !== null ) {
 		nwWindow.resizeTo( width, height );
 	}
 
-	const x = get( this, "x" );
-	const y = get( this, "y" );
-	if ( x !== null && y !== null ) {
-		nwWindow.moveTo( x, y );
+	await new Promise( resolve => setTimeout( resolve, 0 ) );
+
+	if ( maximized ) {
+		nwWindow.maximize();
 	}
 }
 
-function resetWindow() {
-	save.call( this, {
-		width : null,
-		height: null,
-		x     : null,
-		y     : null
-	});
-}
-
-
-function resetWindowPosition() {
-	// use the DE's main screen and the minimum window size
-	const screen = nwScreen.screens[ 0 ].bounds;
-	// center the window and don't forget the screen offset
-	nwWindow.width  = manifestWindowWidth;
-	nwWindow.height = manifestWindowHeight;
-	nwWindow.x = Math.round( screen.x + ( screen.width  - manifestWindowWidth ) / 2 );
-	nwWindow.y = Math.round( screen.y + ( screen.height - manifestWindowHeight ) / 2 );
-	// also reset the saved window position
-	resetWindow.call( this );
-}
-
-function onDisplayBoundsChanged() {
+async function resetWindowIfOutOfBounds() {
 	// validate window position and reset if it's invalid
-	if ( !isWindowFullyVisible() ) {
-		resetWindowPosition.call( this );
+	const visible = isWindowFullyVisible();
+	if ( !visible ) {
+		await reset();
 	}
-}
-
-function isWindowFullyVisible() {
-	if ( !nwScreen.screens ) { return; }
-
-	const x = nwWindow.x;
-	const y = nwWindow.y;
-	const w = nwWindow.width;
-	const h = nwWindow.height;
-
-	// the window needs to be fully visible on one screen
-	return nwScreen.screens.some(function( screenObj ) {
-		const bounds = screenObj.bounds;
-		// substract screen offset from window position
-		const posX = x - bounds.x;
-		const posY = y - bounds.y;
-
-		// check boundaries
-		return posX >= 0
-			&& posY >= 0
-			&& posX + w <= bounds.width
-			&& posY + h <= bounds.height;
-	});
 }
 
 
@@ -138,41 +124,30 @@ Application.instanceInitializer({
 	before: [ "nwjs" ],
 	after: [ "ember-data" ],
 
-	initialize( application ) {
+	async initialize( application ) {
 		const store = application.lookup( "service:store" );
+		const windowRecord = await store.findOrCreateRecord( "window" );
 
-		store.findAll( "window" )
-			.then(function( records ) {
-				return records.content.length
-					? records.objectAt( 0 )
-					: store.createRecord( "window", { id: 1 } ).save();
-			})
-			.then(function( Window ) {
-				// reset window
-				if ( argv[ ARG_RESET_WINDOW ] ) {
-					resetWindow.call( Window );
-				} else {
-					restoreWindow.call( Window );
-					// validate restored window position and reset if it's invalid
-					if ( !isWindowFullyVisible() ) {
-						resetWindowPosition.call( Window );
-					}
-				}
+		// restore the window before attaching event listeners
+		await restoreWindowFromRecord( windowRecord );
 
-				// listen for screen changes
-				nwScreen.on( "displayBoundsChanged", onDisplayBoundsChanged.bind( Window ) );
+		// listen for maximize and restore events
+		nwWindow.on( "maximize", () => onMaximize( windowRecord, true ) );
+		nwWindow.on(  "restore", () => onMaximize( windowRecord, false ) );
 
-				// also listen for the maximize events
-				// we don't want to save the window size+pos after these events
-				nwWindow.on(   "maximize", ignoreNextEvent );
-				nwWindow.on( "unmaximize", ignoreNextEvent );
-				nwWindow.on(   "minimize", ignoreNextEvent );
-				nwWindow.on(    "restore", ignoreNextEvent );
+		// after these events, NW.js will trigger resizeTo or moveTo, so temporarily ignore those
+		nwWindow.on( "maximize", ignoreEventListeners );
+		nwWindow.on( "minimize", ignoreEventListeners );
 
-				// resize and move events need to be defered
-				// the maximize events are triggered afterwards
-				nwWindow.on( "resize", deferEvent( Window, onResize ) );
-				nwWindow.on(   "move", deferEvent( Window, onMove   ) );
-			});
+		// resize and move events need to be debounced
+		// the maximize events are triggered afterwards
+		nwWindow.on( "resize", debounceEvent( windowRecord, onResize ) );
+		nwWindow.on(   "move", debounceEvent( windowRecord, onMove ) );
+
+		// listen for screen changes
+		nwScreen.on( "displayBoundsChanged", () => resetWindowIfOutOfBounds( windowRecord ) );
+
+		// validate restored window position and reset if it's invalid
+		await resetWindowIfOutOfBounds( windowRecord );
 	}
 });

@@ -42,7 +42,7 @@ export function toggleVisibility( bool ) {
 
 export function toggleMaximize( bool ) {
 	if ( bool === undefined ) { bool = maximized; }
-	nwWindow[ bool ? "unmaximize" : "maximize" ]();
+	nwWindow[ bool ? "restore" : "maximize" ]();
 }
 
 export function toggleMinimize( bool ) {
