@@ -67,5 +67,13 @@
 			{{drop-down value=model.notify_click_group content=Settings.notify_click_group class="notifications"}}
 		{{/settings-row}}
 	{{/if}}
+
+	{{#settings-row
+		"Restore GUI"
+		"Restore from tray or minimized state when performing a notification click action."
+		icon="fa-window-restore"
+	}}
+		{{check-box "Restore when clicking a notification" checked=model.notify_click_restore}}
+	{{/settings-row}}
 {{/if}}
 </fieldset>

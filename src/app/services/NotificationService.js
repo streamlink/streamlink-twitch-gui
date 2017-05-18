@@ -439,7 +439,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	 */
 	notificationClick( settings, streams ) {
 		// always restore the window
-		if ( settings !== 0 ) {
+		if ( settings !== 0 && get( this, "settings.notify_click_restore" ) ) {
 			toggleMinimize( true );
 			toggleVisibility( true );
 		}
