@@ -368,7 +368,7 @@ test( "Resolve exec (no pythonscript)", async assert => {
 
 test( "Resolve exec (pythonscript)", async assert => {
 
-	assert.expect( 64 );
+	assert.expect( 75 );
 
 	const stream = {};
 	const pythonscriptfallback = [
@@ -611,6 +611,41 @@ test( "Resolve exec (pythonscript)", async assert => {
 		const result = await resolveProvider( stream, "streamlink", {
 			"streamlink": {
 				exec: "custom-exec"
+			}
+		});
+		assert.propEqual( result, expected, "Returns the correct execObj" );
+	} catch ( e ) {
+		throw e;
+	}
+
+	// succeed (custom exec and custom malformed pythonscript)
+	try {
+		expected = {
+			exec: "/usr/bin/custom-exec",
+			params: [ "/usr/bin/custom-streamlink" ],
+			env: null
+		};
+		let whichFallbackCalls = 0;
+		whichFallback = ( file, fallbacks, check ) => {
+			if ( ++whichFallbackCalls === 1 ) {
+				assert.strictEqual( file, "/usr/bin/custom-streamlink", "Looks up pythonscript" );
+				assert.strictEqual( fallbacks, pythonscriptfallback, "Uses pythonscriptfallbacks" );
+				assert.strictEqual( check, isFile, "Uses correct file check callback" );
+				return file;
+			} else if ( whichFallbackCalls === 2 ) {
+				assert.strictEqual( file, "/usr/bin/custom-exec", "Looks up custom exec" );
+				assert.strictEqual( fallbacks, undefined, "Doesn't use fallbacks" );
+				assert.strictEqual( check, undefined, "Uses default file check callback" );
+				return file;
+			} else {
+				throw new Error( "Calls whichFallback more than twice" );
+			}
+		};
+		findPythonscriptInterpreter = () => new ExecObj();
+		const result = await resolveProvider( stream, "streamlink", {
+			"streamlink": {
+				exec: "/usr/bin/custom-exec",
+				pythonscript: "/usr/bin/custom-streamlink"
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );

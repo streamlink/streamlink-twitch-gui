@@ -82,11 +82,13 @@ export default async function( stream, provider, providersUserData ) {
 			throw new ProviderError( "Couldn't find python script" );
 		}
 
+		// try to find a python script interpreter if no custom exec has been set
 		try {
 			// parse pythonscript and find the correct python interpreter
 			const newExecObj = await findPythonscriptInterpreter(
 				pythonscript,
-				providerConfDataExec
+				providerConfDataExec,
+				providerUserDataExec
 			);
 			// merge with existing execObj
 			execObj.merge( newExecObj );
@@ -98,7 +100,7 @@ export default async function( stream, provider, providersUserData ) {
 	// try to find the executable
 	try {
 		if ( providerUserDataExec ) {
-			// resolve custom exec (even if one was already found by findPythonscriptInterpreter)
+			// resolve custom exec
 			execObj.exec = await whichFallback( providerUserDataExec );
 		} else if ( !execObj.exec ) {
 			// resolve default exec (if we don't have an exec yet)

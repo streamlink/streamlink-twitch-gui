@@ -11,14 +11,20 @@ const reBashWrapperScript = /^(PYTHONPATH)="(.+)"\s+exec\s+"(.+)"\s+"\$@"\s*$/;
 
 /**
  * Get interpreter of the streaming provider's python script.
- * @param {String} file
- * @param {String} providerConfigExec
+ * @param {String} file Python script path
+ * @param {String} providerConfigExec Provider exec config data
+ * @param {String} providerUserDataExec Custom provider exec path
  * @param {Boolean?} noRecursion
  * @returns {Promise.<ExecObj>}
  */
-export default async function findPythonscriptInterpreter( file, providerConfigExec, noRecursion ) {
+export default async function findPythonscriptInterpreter(
+	file,
+	providerConfigExec,
+	providerUserDataExec,
+	noRecursion
+) {
 	let isBashWrapperScript = false;
-	const validate = ( line, index ) => {
+	function validate( line, index ) {
 		if ( index === 0 ) {
 			const matchEnv = reShebangEnv.exec( line );
 			const matchExpl = reShebangExpl.exec( line );
@@ -35,8 +41,11 @@ export default async function findPythonscriptInterpreter( file, providerConfigE
 				return match;
 			}
 		}
-	};
-	const [ [ shebang, wrapperData ] ] = await readLines( file, validate, 2 );
+	}
+
+	const [ [ shebang, wrapperData ] ] = await readLines( file, validate, 2 )
+		// don't reject: return empty array instead
+		.catch( () => ([ [] ]) );
 
 	// the python script is a bash wrapper script
 	if ( isBashWrapperScript && wrapperData && !noRecursion ) {
@@ -46,6 +55,7 @@ export default async function findPythonscriptInterpreter( file, providerConfigE
 		const { exec } = await findPythonscriptInterpreter(
 			pythonscript,
 			providerConfigExec,
+			providerUserDataExec,
 			true
 		);
 
@@ -58,7 +68,11 @@ export default async function findPythonscriptInterpreter( file, providerConfigE
 		const exec = await whichFallback( providerConfigExec, pythonPath, null, true );
 
 		return new ExecObj( exec );
+
+	} else if ( providerUserDataExec ) {
+		// malformed python script, but custom provider exec
+		return new ExecObj();
 	}
 
-	throw new Error( "Couldn't validate python script of the selected streaming provider" );
+	throw new Error( "Invalid python script" );
 }

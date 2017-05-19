@@ -26,7 +26,7 @@ module( "services/StreamingService/provider/find-pythonscript-interpreter" );
 
 test( "Invalid content", async assert => {
 
-	assert.expect( 4 );
+	assert.expect( 6 );
 
 	const readStream = new ReadStream();
 
@@ -42,7 +42,7 @@ test( "Invalid content", async assert => {
 	const findPythonscriptInterpreter = findPythonscriptInterpreterInjector({
 		"../exec-obj": ExecObj,
 		"utils/node/fs/readLines": readLines,
-		"utils/node/fs/whichFallback": function() {},
+		"utils/node/fs/whichFallback": () => {},
 		"path": {
 			dirname: dirnamePosix
 		}
@@ -63,6 +63,20 @@ test( "Invalid content", async assert => {
 		await promise;
 	} catch ( data ) {
 		assert.ok( true, "Throws an error on invalid file content" );
+	}
+
+	try {
+		const promise = findPythonscriptInterpreter( "/foo/bar", "exec", "custom-exec" );
+		readStream.emit( "data", "foo\n" );
+		readStream.emit( "end" );
+		const result = await promise;
+		assert.propEqual(
+			result,
+			new ExecObj(),
+			"Returns an empty exec object on invalid file content when a custom exec was set"
+		);
+	} catch ( error ) {
+		throw error;
 	}
 
 });
@@ -279,7 +293,7 @@ test( "Chained bash wrapper scripts", async assert => {
 	} catch ( e ) {
 		assert.strictEqual(
 			e.message,
-			"Couldn't validate python script of the selected streaming provider",
+			"Invalid python script",
 			"Throws an error on chained bash wrapper scripts"
 		);
 	}
