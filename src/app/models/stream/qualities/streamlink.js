@@ -27,7 +27,7 @@ export default [
 		id: "high",
 		label: "High",
 		quality: "high,best",
-		exclude: ">720p30,<540p"
+		exclude: ">720p30"
 	},
 
 	// Medium
@@ -35,7 +35,7 @@ export default [
 		id: "medium",
 		label: "Medium",
 		quality: "medium,best",
-		exclude: ">540p30,<480p"
+		exclude: ">540p30"
 	},
 
 	// Low
