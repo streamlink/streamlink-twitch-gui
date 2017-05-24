@@ -27,7 +27,9 @@ const { service } = inject;
 const {
 	providers,
 	"download-url": downloadUrl,
-	"version-min": versionMin
+	validation: {
+		providers: validationProviders
+	}
 } = streamprovider;
 
 
@@ -66,7 +68,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		const streamprovider = get( this, "settings.streamprovider" );
 		const type = providers[ streamprovider ][ "type" ];
 
-		return versionMin[ type ];
+		return validationProviders[ type ][ "version" ];
 	}),
 
 	providername: computed( "settings.streamprovider", function() {

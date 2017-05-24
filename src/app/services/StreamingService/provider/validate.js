@@ -11,13 +11,14 @@ import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 
 
-const { hasOwnProperty } = {};
+const { hasOwnProperty: hasOP } = {};
 const {
-	"version-min": versionMin,
-	"validation-timeout": validationTimeout
+	validation: {
+		timeout: validationTimeout,
+		providers: validationProviders
+	}
 } = streamproviderConfig;
 
-const reVersion = /^(streamlink|livestreamer)(?:\.exe|-script\.pyw?)? (\d+\.\d+\.\d+)(?:$|\s.*)/i;
 const params = [ "--version", "--no-version-check" ];
 
 
@@ -25,27 +26,44 @@ const params = [ "--version", "--no-version-check" ];
  * Validate
  * Runs the executable with the `--version` parameter and reads answer from stderr
  * @param {ExecObj} execObj
+ * @param {Object} providerConfData
+ * @param {String} providerConfData.type
+ * @param {String} providerConfData.flavor
  * @returns {Promise}
  */
-export default async function( execObj ) {
+export default async function( execObj, providerConfData ) {
+	const { type, flavor } = providerConfData;
+	if ( !hasOP.call( validationProviders, type ) ) {
+		throw new ProviderError( "Missing provider validation data" );
+	}
+	const validation = validationProviders[ type ];
+	if ( !hasOP.call( validation, "version" ) || !hasOP.call( validation, "regexp" ) ) {
+		throw new ProviderError( "Invalid provider validation data" );
+	}
+	const regexp = new RegExp(
+		typeof validation.regexp === "string"
+			? validation.regexp
+			: validation.regexp[ flavor ] || validation.regexp[ "default" ],
+		"i"
+	);
+
+
 	let child;
 
-	const { name, version } = await new Promise( ( resolve, reject ) => {
+	const version = await new Promise( ( resolve, reject ) => {
 		child = spawn( execObj, params );
 
 		const onLine = ( line, index, lines ) => {
-			// be strict: output is just one single line
+			// be strict: output is just one single line (in a single onData stdout callback)
 			if ( index !== 0 || lines.length !== 1 ) {
 				reject( new LogError( "Unexpected version check output", lines ) );
 				return;
 			}
 
 			// match the version string
-			const match = reVersion.exec( line );
-			if ( match ) {
-				let [ , name, version ] = match;
-				name = name.toLowerCase();
-				resolve({ name, version });
+			const match = regexp.exec( line );
+			if ( match && match[ 1 ] ) {
+				resolve( match[ 1 ] );
 			} else {
 				reject( new LogError( "Invalid version check output", lines ) );
 			}
@@ -75,13 +93,9 @@ export default async function( execObj ) {
 			}
 		});
 
-	if ( !hasOwnProperty.call( versionMin, name ) ) {
-		throw new ProviderError();
-	}
-
-	if ( version !== getMax([ version, versionMin[ name ] ]) ) {
+	if ( version !== getMax([ version, validation.version ]) ) {
 		throw new VersionError( version );
 	}
 
-	return { name, version };
+	return { version };
 }

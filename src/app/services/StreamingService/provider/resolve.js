@@ -114,7 +114,7 @@ export default async function( stream, provider, providersUserData ) {
 	isAborted( stream );
 
 	await logDebug( "Found streaming provider", execObj );
-	const validationData = await validateProvider( execObj );
+	const validationData = await validateProvider( execObj, providerConfData );
 	await logDebug( "Validated streaming provider", validationData );
 
 	providerCache.set( execObj );
