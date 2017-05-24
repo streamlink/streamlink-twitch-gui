@@ -12,14 +12,14 @@ const reBashWrapperScript = /^(PYTHONPATH)="(.+)"\s+exec\s+"(.+)"\s+"\$@"\s*$/;
 /**
  * Get interpreter of the streaming provider's python script.
  * @param {String} file Python script path
- * @param {String} providerConfigExec Provider exec config data
+ * @param {Object} providerConfData Provider config data
  * @param {String} providerUserDataExec Custom provider exec path
  * @param {Boolean?} noRecursion
  * @returns {Promise.<ExecObj>}
  */
 export default async function findPythonscriptInterpreter(
 	file,
-	providerConfigExec,
+	providerConfData,
 	providerUserDataExec,
 	noRecursion
 ) {
@@ -54,7 +54,7 @@ export default async function findPythonscriptInterpreter(
 		// now parse the real python script
 		const { exec } = await findPythonscriptInterpreter(
 			pythonscript,
-			providerConfigExec,
+			providerConfData,
 			providerUserDataExec,
 			true
 		);
@@ -62,10 +62,18 @@ export default async function findPythonscriptInterpreter(
 		return new ExecObj( exec, [ pythonscript ], env );
 
 	} else if ( shebang ) {
-		// don't use the shebang directly: Windows uses a different python executable
-		const pythonPath = dirname( shebang );
-		// look up the custom Windows executable in the shebang's dir
-		const exec = await whichFallback( providerConfigExec, pythonPath, null, true );
+		let exec;
+		try {
+			// don't use the shebang directly: Windows uses a different python executable
+			const pythonPath = dirname( shebang );
+			// look up the custom Windows executable in the shebang's dir
+			exec = await whichFallback( providerConfData[ "exec" ], pythonPath, null, true );
+
+		} catch ( e ) {
+			// python executable could not be found:
+			// try to look up the returned path (or executable name) now
+			exec = await whichFallback( shebang, providerConfData[ "fallback" ], null, false );
+		}
 
 		return new ExecObj( exec );
 

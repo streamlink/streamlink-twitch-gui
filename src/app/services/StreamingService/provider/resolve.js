@@ -87,7 +87,7 @@ export default async function( stream, provider, providersUserData ) {
 			// parse pythonscript and find the correct python interpreter
 			const newExecObj = await findPythonscriptInterpreter(
 				pythonscript,
-				providerConfDataExec,
+				providerConfData,
 				providerUserDataExec
 			);
 			// merge with existing execObj

@@ -403,26 +403,28 @@ test( "Resolve exec (pythonscript)", async assert => {
 		"./find-pythonscript-interpreter": ( ...args ) => findPythonscriptInterpreter( ...args )
 	};
 
+	const streamlinkConfig = {
+		python: true,
+		exec: {
+			linux: "python"
+		},
+		fallback: {
+			linux: [
+				"/usr/bin",
+				"/usr/local/bin"
+			]
+		},
+		pythonscript: {
+			linux: "streamlink"
+		},
+		pythonscriptfallback
+	};
+
 	let resolveProvider = resolveProviderInjector( assign( {}, commonDeps, commonTestDeps, {
 		"config": {
 			streamprovider: {
 				providers: {
-					streamlink: {
-						python: true,
-						exec: {
-							linux: "python"
-						},
-						fallback: {
-							linux: [
-								"/usr/bin",
-								"/usr/local/bin"
-							]
-						},
-						pythonscript: {
-							linux: "streamlink"
-						},
-						pythonscriptfallback
-					}
+					streamlink: streamlinkConfig
 				}
 			}
 		}
@@ -507,9 +509,9 @@ test( "Resolve exec (pythonscript)", async assert => {
 			params: [ "/usr/bin/streamlink" ],
 			env: null
 		};
-		findPythonscriptInterpreter = ( pythonscript, exec ) => {
+		findPythonscriptInterpreter = ( pythonscript, providerConf ) => {
 			assert.strictEqual( pythonscript, "/usr/bin/streamlink", "Uses correct pythonscript" );
-			assert.strictEqual( exec, "python", "Uses correct exec file name" );
+			assert.strictEqual( providerConf, streamlinkConfig, "Uses correct provider conf" );
 			return new ExecObj( "/usr/bin/python" );
 		};
 		const result = await resolveProvider( stream, "streamlink", {
@@ -528,9 +530,9 @@ test( "Resolve exec (pythonscript)", async assert => {
 			env: { foo: "bar" }
 		};
 		whichFallback = () => "/usr/bin/custom";
-		findPythonscriptInterpreter = ( pythonscript, exec ) => {
+		findPythonscriptInterpreter = ( pythonscript, providerConf ) => {
 			assert.strictEqual( pythonscript, "/usr/bin/custom", "Uses correct pythonscript" );
-			assert.strictEqual( exec, "python", "Uses correct exec file name" );
+			assert.strictEqual( providerConf, streamlinkConfig, "Uses correct provider conf" );
 			return new ExecObj(
 				"/usr/bin/python",
 				[ "/usr/bin/different-streamlink" ],

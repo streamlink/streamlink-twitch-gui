@@ -13,6 +13,7 @@ import {
 } from "path";
 
 
+const { assign } = Object;
 const { dirname: dirnamePosix } = posix;
 const { dirname: dirnameWin32 } = win32;
 
@@ -84,49 +85,96 @@ test( "Invalid content", async assert => {
 
 test( "Pythonscript shebang Posix", async assert => {
 
-	assert.expect( 5 );
+	assert.expect( 16 );
 
-	const readStream = new ReadStream();
-	const readLines = readLinesInjector({
+	let readStream;
+
+	const { default: readLines } = readLinesInjector({
 		fs: {
 			createReadStream( file ) {
 				assert.strictEqual( file, "foo", "Reads the correct file" );
+				readStream = new ReadStream();
 				return readStream;
 			}
 		}
-	})[ "default" ];
+	});
 
-	const findPythonscriptInterpreter = findPythonscriptInterpreterInjector({
+	const deps = {
 		"../exec-obj": ExecObj,
 		"utils/node/fs/readLines": readLines,
-		"utils/node/fs/whichFallback": function( execName, fallbackPaths, check, fallbackOnly ) {
-			assert.strictEqual( execName, "exec", "Looks up correct exec name" );
-			assert.strictEqual( fallbackPaths, "/foo/bar", "Uses correct fallback path" );
-			assert.ok( fallbackOnly, "Only uses fallback paths" );
+		"path": posix
+	};
 
-			return `${fallbackPaths}/${execName}`;
-		},
-		"path": {
-			dirname: dirnamePosix
-		}
-	})[ "default" ];
+	// resolve executable from shebang dirname
+	try {
+		const findPythonscriptInterpreter = findPythonscriptInterpreterInjector( assign({
+			"utils/node/fs/whichFallback": ( execName, fallbackPaths, check, fallbackOnly ) => {
+				assert.strictEqual( execName, "exec", "Looks up correct exec name" );
+				assert.strictEqual( fallbackPaths, "/foo/bar", "Uses correct fallback path" );
+				assert.ok( !check, "Uses default file check function" );
+				assert.ok( fallbackOnly, "Only uses fallback paths" );
+				return `${fallbackPaths}/${execName}`;
+			}
+		}, deps ) )[ "default" ];
 
-	let promise;
-	let result;
+		const promise = findPythonscriptInterpreter( "foo", { exec: "exec" } );
+		readStream.emit( "data", "#!/foo/bar/baz\n" );
+		readStream.emit( "end" );
+		const result = await promise;
+		assert.propEqual(
+			result,
+			{
+				exec: "/foo/bar/exec",
+				params: null,
+				env: null
+			},
+			"Returns the correct exec path"
+		);
+	} catch ( error ) {
+		throw error;
+	}
 
-	promise = findPythonscriptInterpreter( "foo", "exec" );
-	readStream.emit( "data", "#!/foo/bar/baz\n" );
-	readStream.emit( "end" );
-	result = await promise;
-	assert.propEqual(
-		result,
-		{
-			exec: "/foo/bar/exec",
-			params: null,
-			env: null
-		},
-		"Returns the correct exec path"
-	);
+	// resolve full shebang path
+	try {
+		let whichFallbackCalls = 0;
+		const findPythonscriptInterpreter = findPythonscriptInterpreterInjector( assign({
+			"utils/node/fs/whichFallback": ( execName, fallbackPaths, check, fallbackOnly ) => {
+				if ( ++whichFallbackCalls === 1 ) {
+					assert.strictEqual( execName, "exec", "Looks up correct exec name" );
+					assert.strictEqual( fallbackPaths, "/foo/bar", "Uses correct fallback path" );
+					assert.ok( !check, "Uses default file check function" );
+					assert.ok( fallbackOnly, "Only uses fallback paths" );
+					throw new Error();
+
+				} else if ( whichFallbackCalls === 2 ) {
+					assert.strictEqual( execName, "/foo/bar/baz", "Looks up correct exec name" );
+					assert.strictEqual( fallbackPaths, "/qux", "Uses correct fallback paths" );
+					assert.ok( !check, "Uses default file check function" );
+					assert.ok( !fallbackOnly, "Doesn't only use fallback paths" );
+					return execName;
+
+				} else {
+					throw new Error();
+				}
+			}
+		}, deps ) )[ "default" ];
+
+		const promise = findPythonscriptInterpreter( "foo", { exec: "exec", fallback: "/qux" } );
+		readStream.emit( "data", "#!/foo/bar/baz\n" );
+		readStream.emit( "end" );
+		const result = await promise;
+		assert.propEqual(
+			result,
+			{
+				exec: "/foo/bar/baz",
+				params: null,
+				env: null
+			},
+			"Returns the correct exec path"
+		);
+	} catch ( error ) {
+		throw error;
+	}
 
 });
 
@@ -163,7 +211,7 @@ test( "Pythonscript shebang Win32", async assert => {
 	let promise;
 	let result;
 
-	promise = findPythonscriptInterpreter( "foo", "exec" );
+	promise = findPythonscriptInterpreter( "foo", { exec: "exec" } );
 	readStream.emit( "data", "#!\"C:\\foo\\bar\\baz\"\n" );
 	readStream.emit( "end" );
 	result = await promise;
@@ -226,7 +274,7 @@ test( "Bash wrapper script", async assert => {
 		}
 	})[ "default" ];
 
-	const resultA = await findPythonscriptInterpreter( "/foo/bar", "exec" );
+	const resultA = await findPythonscriptInterpreter( "/foo/bar", { exec: "exec" } );
 	assert.propEqual(
 		resultA,
 		{
@@ -239,7 +287,7 @@ test( "Bash wrapper script", async assert => {
 		"Returns the correct exec object (explicit shebang)"
 	);
 
-	const resultB = await findPythonscriptInterpreter( "/bar/foo", "exec" );
+	const resultB = await findPythonscriptInterpreter( "/bar/foo", { exec: "exec" } );
 	assert.propEqual(
 		resultB,
 		{
@@ -289,7 +337,7 @@ test( "Chained bash wrapper scripts", async assert => {
 	})[ "default" ];
 
 	try {
-		await findPythonscriptInterpreter( "/foo/bar", "exec" );
+		await findPythonscriptInterpreter( "/foo/bar", { exec: "exec" } );
 	} catch ( e ) {
 		assert.strictEqual(
 			e.message,
