@@ -17,7 +17,16 @@ export class LogError extends Error {
 
 export class VersionError extends Error {}
 
-export class ProviderError extends Error {}
+export class ProviderError extends Error {
+	constructor( message, error ) {
+		super( message );
+		this.error = error;
+	}
+
+	toString() {
+		return `ProviderError: ${this.message}\n${this.error.message}`;
+	}
+}
 
 export class PlayerError extends Error {}
 PlayerError.regex = [

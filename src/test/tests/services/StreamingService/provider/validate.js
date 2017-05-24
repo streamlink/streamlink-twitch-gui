@@ -7,7 +7,6 @@ import validateProviderInjector from "inject-loader!services/StreamingService/pr
 import spawnInjector from "inject-loader!services/StreamingService/spawn";
 import {
 	LogError,
-	ProviderError,
 	VersionError
 } from "services/StreamingService/errors";
 import { getMax } from "utils/semver";
@@ -27,7 +26,6 @@ const logger = {
 const commonValidateProviderDeps = {
 	"../errors": {
 		LogError,
-		ProviderError,
 		VersionError
 	},
 	"utils/semver": {
@@ -72,11 +70,11 @@ test( "Missing provider data", async assert => {
 		}, deps ) );
 		await validateProvider( {}, { type: "streamlink", flavor: "default" } );
 	} catch ( e ) {
-		assert.ok( e instanceof ProviderError, "Throws a ProviderError" );
+		assert.ok( e instanceof Error, "Throws an Error" );
 		assert.strictEqual(
 			e.message,
 			"Missing provider validation data",
-			"ProviderError has the correct message"
+			"Error has the correct message"
 		);
 	}
 
@@ -95,11 +93,11 @@ test( "Missing provider data", async assert => {
 		}, deps ) );
 		await validateProvider( {}, { type: "streamlink", flavor: "default" } );
 	} catch ( e ) {
-		assert.ok( e instanceof ProviderError, "Throws a ProviderError" );
+		assert.ok( e instanceof Error, "Throws an Error" );
 		assert.strictEqual(
 			e.message,
 			"Invalid provider validation data",
-			"ProviderError has the correct message"
+			"Error has the correct message"
 		);
 	}
 

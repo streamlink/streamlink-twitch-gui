@@ -3,7 +3,6 @@ import {
 } from "config";
 import {
 	LogError,
-	ProviderError,
 	VersionError
 } from "../errors";
 import spawn from "../spawn";
@@ -34,11 +33,11 @@ const params = [ "--version", "--no-version-check" ];
 export default async function( execObj, providerConfData ) {
 	const { type, flavor } = providerConfData;
 	if ( !hasOP.call( validationProviders, type ) ) {
-		throw new ProviderError( "Missing provider validation data" );
+		throw new Error( "Missing provider validation data" );
 	}
 	const validation = validationProviders[ type ];
 	if ( !hasOP.call( validation, "version" ) || !hasOP.call( validation, "regexp" ) ) {
-		throw new ProviderError( "Invalid provider validation data" );
+		throw new Error( "Invalid provider validation data" );
 	}
 	const regexp = new RegExp(
 		typeof validation.regexp === "string"

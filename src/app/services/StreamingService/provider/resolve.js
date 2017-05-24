@@ -78,8 +78,8 @@ export default async function( stream, provider, providersUserData ) {
 				isFile
 			);
 			execObj.params = [ pythonscript ];
-		} catch ( e ) {
-			throw new ProviderError( "Couldn't find python script" );
+		} catch ( error ) {
+			throw new ProviderError( "Couldn't find python script", error );
 		}
 
 		// try to find a python script interpreter if no custom exec has been set
@@ -92,8 +92,8 @@ export default async function( stream, provider, providersUserData ) {
 			);
 			// merge with existing execObj
 			execObj.merge( newExecObj );
-		} catch ( e ) {
-			throw new ProviderError( "Couldn't validate python script" );
+		} catch ( error ) {
+			throw new ProviderError( "Couldn't validate python script", error );
 		}
 	}
 
@@ -106,9 +106,9 @@ export default async function( stream, provider, providersUserData ) {
 			// resolve default exec (if we don't have an exec yet)
 			execObj.exec = await whichFallback( providerExec, providerConfData[ "fallback" ] );
 		}
-	} catch ( e ) {
+	} catch ( error ) {
 		const str = isPython ? "python " : "";
-		throw new ProviderError( `Couldn't find ${str}executable` );
+		throw new ProviderError( `Couldn't find ${str}executable`, error );
 	}
 
 	isAborted( stream );

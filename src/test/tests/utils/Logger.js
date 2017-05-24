@@ -205,10 +205,9 @@ test( "Logging to stdout/stderr", async assert => {
 	stdout = stderr = null;
 
 	let err = new Error( "bar" );
-	err.stack = "baz";
 	await LoggerDebug.log( LoggerDebug.LOG_LEVEL_ERROR, "foo", err );
 	assert.strictEqual( stdout, null, "Doesn't log the error to stdout" );
-	assert.strictEqual( stderr, "[error][foo]\nbaz\n", "Logs the error stack to stderr" );
+	assert.strictEqual( stderr, "[error][foo]\nError: bar\n", "Logs the error to stderr" );
 	stdout = stderr = null;
 
 	await LoggerDebug.log( LoggerDebug.LOG_LEVEL_DEBUG, "foo", "bar", "baz" );
@@ -387,12 +386,11 @@ test( "Logger class", async assert => {
 		logResolved
 	} = new Logger( "foo" );
 
-	error = new Error( "foo" );
-	error.stack = "bar";
+	error = new Error( "bar" );
 	await logError( error, "baz" );
 	assert.strictEqual(
 		stderr,
-		"[error][foo]\nbar\n\"baz\"\n",
+		"[error][foo]\nError: bar\n\"baz\"\n",
 		"Logger.logError"
 	);
 	stdout = stderr = null;
@@ -405,8 +403,7 @@ test( "Logger class", async assert => {
 	);
 	stdout = stderr = null;
 
-	error = new Error( 123 );
-	error.stack = "bar";
+	error = new Error( "bar" );
 	await Promise.reject( error )
 		.catch( logRejected( "baz" ) )
 		.catch( err => {
@@ -414,7 +411,7 @@ test( "Logger class", async assert => {
 		});
 	assert.strictEqual(
 		stderr,
-		"[error][foo]\nbar\n\"baz\"\n",
+		"[error][foo]\nError: bar\n\"baz\"\n",
 		"Logger.logRejected logs to stderr"
 	);
 	stdout = stderr = null;

@@ -95,9 +95,6 @@ export async function log( level, namespace, data, debug ) {
 		return Promise.resolve();
 	}
 
-	if ( data instanceof Error ) {
-		data = String( data.stack || data );
-	}
 	if ( debug ) {
 		debug = LISTEN_TO_DEBUG
 			? debug instanceof Function

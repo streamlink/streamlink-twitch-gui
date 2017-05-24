@@ -77,9 +77,9 @@
 		{{#if isLogError}}
 			{{#modal-header}}Error: Couldn't launch the stream{{/modal-header}}
 			{{#modal-body class="error"}}{{error.message}}{{/modal-body}}
-		{{else if ProviderError}}
+		{{else if isProviderError}}
 			{{#modal-header}}Error: {{providername}} misconfiguration{{/modal-header}}
-			{{#modal-body class="error"}}{{#if error.message}}{{error.message}}<br><br>{{/if}}Please check your settings and/or (re)install {{providername}}.{{/modal-body}}
+			{{#modal-body class="error"}}{{#if error.message}}{{error.message}}{{#if error.error.message}}<br>{{error.error.message}}{{/if}}<br><br>{{/if}}Please check your settings and/or (re)install {{providername}}.{{/modal-body}}
 		{{else if isPlayerError}}
 			{{#modal-header}}Error: Player misconfiguration{{/modal-header}}
 			{{#modal-body class="error"}}Please check your player settings.{{/modal-body}}
