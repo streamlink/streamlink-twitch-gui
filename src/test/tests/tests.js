@@ -68,6 +68,7 @@ import "tests/components/link/EmbeddedLinksComponent";
 import "tests/components/link/EmbeddedHtmlLinksComponent";
 import "tests/services/SettingsService";
 import "tests/services/HotkeyService";
+import "tests/services/ModalService";
 import "tests/services/StreamingService/cache";
 import "tests/services/StreamingService/spawn";
 import "tests/services/StreamingService/provider/find-pythonscript-interpreter";

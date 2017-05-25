@@ -96,6 +96,8 @@ export default Service.extend( ChannelSettingsMixin, {
 			}
 
 			set( this, "active", stream );
+			this.onModalOpened( stream );
+
 			return;
 		}
 
@@ -108,6 +110,8 @@ export default Service.extend( ChannelSettingsMixin, {
 			gui_openchat: get( this, "settings.gui_openchat" ),
 			started: new Date()
 		});
+
+		this.onModalOpened( stream );
 
 		// override record with channel specific settings
 		await this.getChannelSettings( stream, quality );
@@ -226,20 +230,26 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
+	onModalOpened( stream ) {
+		get( this, "modal" ).one( "close", () => {
+			// unset the active property on the next tick (ModalDialogComponent.willDestroyElement)
+			scheduleOnce( "destroy", () => {
+				set( this, "active", null );
+
+				// remove the record from the store
+				if ( get( stream, "hasEnded" ) && !get( stream, "isDeleted" ) ) {
+					stream.destroyRecord();
+				}
+			});
+		});
+	},
+
 	closeStreamModal( stream ) {
 		if ( get( this, "active" ) !== stream ) {
 			return;
 		}
 
 		get( this, "modal" ).closeModal( this );
-		scheduleOnce( "destroy", () => {
-			set( this, "active", null );
-
-			// remove the record from the store
-			if ( get( stream, "hasEnded" ) && !get( stream, "isDeleted" ) ) {
-				stream.destroyRecord();
-			}
-		});
 	},
 
 

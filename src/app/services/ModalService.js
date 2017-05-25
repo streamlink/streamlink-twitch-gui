@@ -1,7 +1,9 @@
 import {
 	get,
 	setProperties,
+	getOwner,
 	computed,
+	Evented,
 	Service
 } from "ember";
 
@@ -16,33 +18,45 @@ function fnModalName( name ) {
 }
 
 
-export default Service.extend({
-	modal  : null,
+export default Service.extend( Evented, {
+	modal: null,
 	context: null,
 
 	isModalOpened: notEmpty( "modal" ),
 
 
 	openModal( modal, context, data ) {
-		let name = modal.replace( reModalName, fnModalName );
+		const opened = get( this, "modal" );
+		if ( opened ) {
+			this.trigger( "close", opened, get( this, "context" ) );
+		}
 
+		const name = modal.replace( reModalName, fnModalName );
 		modal = `modal-${name}`;
-		context = context || null;
 
+		if ( !getOwner( this ).hasRegistration( `component:${modal}` ) ) {
+			throw new Error( `Modal component '${modal}' does not exist` );
+		}
+
+		context = context || null;
 		if ( context && data ) {
 			setProperties( context, data );
 		}
 
 		setProperties( this, { modal, context } );
+		this.trigger( "open", modal, context );
 	},
 
 	closeModal( context, force ) {
 		const _context = get( this, "context" );
-		if ( !force && _context !== null && context !== _context ) { return; }
 
-		setProperties( this, {
-			modal  : null,
-			context: null
-		});
+		if ( force || _context === context && _context !== null ) {
+			this.trigger( "close", get( this, "modal" ), _context );
+
+			setProperties( this, {
+				modal: null,
+				context: null
+			});
+		}
 	}
 });
