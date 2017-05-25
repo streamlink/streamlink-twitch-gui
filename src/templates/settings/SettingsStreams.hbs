@@ -11,23 +11,23 @@
 	{{#if isStreamlink}}
 		{{#settings-row
 			"Quality presets"
-			"Set a range of stream qualities that will be excluded. Streamlink will then pick the best quality out of the remaining ones."
+			"Define precise quality selections by range or by using explicit quality names."
 			icon="fa-list-ul"
-			notes="The values of the first column exclude qualities. The second column shows the actual quality selection. Please see the wiki and Streamlink's documentation first before making any changes."
+			notes="The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the \"best\" or \"worst\" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes."
 			documentation="--stream-sorting-excludes"
 		}}
 			{{#each qualitiesStreamlink as |quality|}}
 				<div class="quality-preset">
 					{{input
 						type="text"
-						value=(mut (get model.qualities quality.id))
+						value=(mut (get (get model.qualities quality.id) "exclude"))
 						placeholder=(if (is-null quality.exclude) "Don't exclude stream qualities" quality.exclude)
 						disabled=(is-null quality.exclude)
 					}}
 					{{input
 						type="text"
+						value=(mut (get (get model.qualities quality.id) "quality"))
 						placeholder=quality.quality
-						disabled=true
 					}}
 					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
 				</div>

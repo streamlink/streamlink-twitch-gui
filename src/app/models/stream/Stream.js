@@ -157,25 +157,35 @@ export default Model.extend({
 		const { id, exclude } = get( this, "streamQualityPreset" );
 		const custom = get( this, "settings.qualities" );
 
-		return custom.hasOwnProperty( id ) && custom[ id ].trim().length > 0
-			? custom[ id ]
+		return custom.hasOwnProperty( id ) && custom[ id ][ "exclude" ].trim().length > 0
+			? custom[ id ][ "exclude" ]
 			: exclude;
 	}),
 
-	streamQuality: computed( "streamQualityPreset", "isStreamlink", function() {
-		const { id, quality } = get( this, "streamQualityPreset" );
+	streamQuality: computed(
+		"streamQualityPreset",
+		"settings.qualities",
+		"settings.quality_presets",
+		"isStreamlink",
+		function() {
+			const { id, quality } = get( this, "streamQualityPreset" );
 
-		if ( get( this, "isStreamlink" ) ) {
-			return quality;
+			if ( get( this, "isStreamlink" ) ) {
+				const custom = get( this, "settings.qualities" );
 
-		} else {
-			const custom = get( this, "settings.quality_presets" );
+				return custom.hasOwnProperty( id ) && custom[ id ][ "quality" ].trim().length > 0
+					? custom[ id ][ "quality" ]
+					: quality;
 
-			return custom.hasOwnProperty( id ) && custom[ id ].trim().length > 0
-				? custom[ id ]
-				: quality;
+			} else {
+				const custom = get( this, "settings.quality_presets" );
+
+				return custom.hasOwnProperty( id ) && custom[ id ].trim().length > 0
+					? custom[ id ]
+					: quality;
+			}
 		}
-	}),
+	),
 
 	streamUrl: computed( "channel.name", function() {
 		const channel = get( this, "channel.name" );

@@ -42,6 +42,15 @@ function upgradeSettings() {
 		settings.gui_homepage = "/user/followedStreams";
 	}
 
+	if ( typeof settings.qualities === "object" && typeof settings.qualities.source === "string" ) {
+		Object.keys( settings.qualities ).forEach( key => {
+			settings.qualities[ key ] = {
+				exclude: settings.qualities[ key ],
+				quality: ""
+			};
+		});
+	}
+
 	// translate old livestreamer data into the executable format
 	if ( typeof settings[ "livestreamer" ] === "string" ) {
 		delete settings[ "livestreamer" ];

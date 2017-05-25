@@ -72,7 +72,10 @@ function defaultQualityPresets() {
 
 function defaultQualities() {
 	return qualitiesStreamlink.reduce( ( obj, quality ) => {
-		obj[ quality.id ] = "";
+		obj[ quality.id ] = {
+			exclude: "",
+			quality: ""
+		};
 		return obj;
 	}, {} );
 }
