@@ -36,7 +36,7 @@ const minimistOptions = {
 	alias: {
 		[ ARG_TRAY ]: [ "hide", "hidden" ],
 		[ ARG_MAX ]: [ "maximize", "maximized" ],
-		[ ARG_MIN ]: [ "minimize", "maximized" ],
+		[ ARG_MIN ]: [ "minimize", "minimized" ],
 		[ ARG_VERSIONCHECK ]: [ "version-check" ],
 		[ ARG_LOGLEVEL ]: [ "l" ]
 	},
