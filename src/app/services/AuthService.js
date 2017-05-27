@@ -9,7 +9,7 @@ import {
 	Service
 } from "ember";
 import { twitch } from "config";
-import nwWindow from "nwjs/Window";
+import { setFocused } from "nwjs/Window";
 import { openBrowser } from "nwjs/Shell";
 import { all } from "utils/contains";
 import HttpServer from "utils/node/http/HttpServer";
@@ -122,7 +122,7 @@ export default Service.extend( Evented, {
 			// shut down server and focus the application window when done
 			.finally( () => {
 				this.abortSignin();
-				nwWindow.focus();
+				setFocused( true );
 			});
 	},
 

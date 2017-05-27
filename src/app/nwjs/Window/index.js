@@ -1,4 +1,5 @@
 import { Window } from "nwjs/nwGui";
+import { manifest } from "nwjs/App";
 
 
 // get the main application window
@@ -15,10 +16,11 @@ nwWindow.on( "navigation", ( frame, url, policy ) => {
 });
 
 
-let hidden    = true;
+let visible   = manifest.window.show;
 let focused   = true;
 let maximized = false;
 let minimized = false;
+
 
 nwWindow.on( "focus", () => focused = true );
 nwWindow.on( "blur",  () => focused = false );
@@ -34,40 +36,74 @@ nwWindow.on( "restore", () => {
 });
 
 
-export function toggleVisibility( bool ) {
-	if ( bool === undefined ) { bool = hidden; }
-	nwWindow[ bool ? "show" : "hide" ]();
-	hidden = !bool;
-}
-
-export function toggleMaximize( bool ) {
-	if ( bool === undefined ) { bool = maximized; }
-	nwWindow[ bool ? "restore" : "maximize" ]();
-}
-
-export function toggleMinimize( bool ) {
-	if ( bool === undefined ) { bool = minimized; }
-	nwWindow[ bool ? "restore" : "minimize" ]();
-}
-
-export function setShowInTaskbar( bool ) {
-	nwWindow.setShowInTaskbar( bool );
-}
-
-export function isHidden() {
-	return hidden;
-}
-
-export function isFocused() {
+export function getFocused() {
 	return focused;
 }
 
-export function isMaximized() {
+export function setFocused( focus ) {
+	if ( focus ) {
+		nwWindow.focus();
+	} else {
+		nwWindow.blur();
+	}
+}
+
+
+export function getVisibility() {
+	return visible;
+}
+
+export function setVisibility( show ) {
+	if ( show && !visible ) {
+		nwWindow.show();
+	} else if ( !show && visible ) {
+		nwWindow.hide();
+	}
+	// no onShow / onHide event callbacks
+	visible = show;
+}
+
+export function toggleVisibility() {
+	setVisibility( !visible );
+}
+
+
+export function getMaximized() {
 	return maximized;
 }
 
-export function isMinimized() {
+export function setMaximized( maximize ) {
+	if ( maximize && !maximized ) {
+		nwWindow.maximize();
+	} else if ( !maximize && maximized ) {
+		nwWindow.restore();
+	}
+}
+
+export function toggleMaximized() {
+	setMaximized( !maximized );
+}
+
+
+export function getMinimized() {
 	return minimized;
+}
+
+export function setMinimized( minimize ) {
+	if ( minimize && !minimized ) {
+		nwWindow.minimize();
+	} else if ( !minimize && minimized ) {
+		nwWindow.restore();
+	}
+}
+
+export function toggleMinimized() {
+	setMinimized( !minimized );
+}
+
+
+export function setShowInTaskbar( show ) {
+	nwWindow.setShowInTaskbar( show );
 }
 
 

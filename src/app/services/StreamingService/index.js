@@ -24,8 +24,8 @@ import resolveProvider from "./provider/resolve";
 import launch from "./launch";
 import {
 	setShowInTaskbar,
-	toggleMinimize,
-	toggleVisibility
+	setMinimized,
+	setVisibility
 } from "nwjs/Window";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 
@@ -279,11 +279,11 @@ export default Service.extend( ChannelSettingsMixin, {
 		switch ( get( this, "settings.gui_minimize" ) ) {
 			// minimize
 			case 1:
-				toggleMinimize( restore );
+				setMinimized( !restore );
 				break;
 			// move to tray: toggle window and taskbar visibility
 			case 2:
-				toggleVisibility( restore );
+				setVisibility( restore );
 				if ( get( this, "settings.isVisibleInTaskbar" ) ) {
 					setShowInTaskbar( restore );
 				}

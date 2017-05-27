@@ -14,8 +14,8 @@ import {
 	notification
 } from "config";
 import nwWindow, {
-	toggleMinimize,
-	toggleVisibility
+	setMinimized,
+	setVisibility
 } from "nwjs/Window";
 import { getMenu as getTrayMenu } from "nwjs/Tray";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
@@ -440,8 +440,8 @@ export default Service.extend( ChannelSettingsMixin, {
 	notificationClick( settings, streams ) {
 		// always restore the window
 		if ( settings !== 0 && get( this, "settings.notify_click_restore" ) ) {
-			toggleMinimize( true );
-			toggleVisibility( true );
+			setMinimized( false );
+			setVisibility( true );
 		}
 
 		logDebug( "Notification click", () => ({

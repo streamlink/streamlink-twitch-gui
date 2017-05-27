@@ -1,6 +1,6 @@
 import { manifest } from "nwjs/App";
 import nwWindow, {
-	isMaximized
+	setMaximized
 } from "nwjs/Window";
 import nwScreen from "nwjs/Screen";
 
@@ -19,8 +19,8 @@ export default async function( unmaximize ) {
 	const { bounds: { x, y, width, height } } = screens[ 0 ];
 
 	// unmaximize before resetting the window size and position
-	if ( unmaximize && isMaximized() ) {
-		nwWindow.restore();
+	if ( unmaximize ) {
+		setMaximized( false );
 	}
 
 	await new Promise( resolve => setTimeout( resolve, 0 ) );

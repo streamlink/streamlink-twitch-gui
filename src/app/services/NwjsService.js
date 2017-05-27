@@ -6,8 +6,8 @@ import {
 import nwApp from "nwjs/App";
 import nwWindow, {
 	toggleVisibility,
-	toggleMaximize,
-	toggleMinimize
+	toggleMaximized,
+	toggleMinimized
 } from "nwjs/Window";
 
 
@@ -34,14 +34,14 @@ export default Service.extend({
 
 		// tray only or both with min2tray: just hide the window
 		if ( integration === 2 || integration === 3 && minimizetotray ) {
-			toggleVisibility( false );
+			toggleVisibility();
 		} else {
-			toggleMinimize( false );
+			toggleMinimized();
 		}
 	},
 
 	maximize() {
-		toggleMaximize();
+		toggleMaximized();
 	},
 
 	close() {

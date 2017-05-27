@@ -1,5 +1,6 @@
 import "tests/nwjs/argv";
 import "tests/nwjs/Shell";
+import "tests/nwjs/Window";
 import "tests/utils/getStreamFromUrl";
 import "tests/utils/linkparser";
 import "tests/utils/Logger";

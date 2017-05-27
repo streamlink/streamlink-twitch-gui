@@ -5,9 +5,10 @@ import {
 import nwApp from "nwjs/App";
 import nwWindow, {
 	setShowInTaskbar,
-	toggleMaximize,
-	toggleMinimize,
-	toggleVisibility
+	setMaximized,
+	setMinimized,
+	setVisibility,
+	setFocused
 } from "nwjs/Window";
 import resetWindow from "nwjs/Window/reset";
 import {
@@ -43,12 +44,12 @@ function onChangeIntegrations( settings ) {
 function setupIntegrations( settings ) {
 	// maximize window
 	if ( argv[ ARG_MAX ] ) {
-		toggleMaximize( false );
+		setMaximized( true );
 	}
 
 	// minimize window
 	if ( argv[ ARG_MIN ] ) {
-		toggleMinimize( false );
+		setMinimized( true );
 	}
 
 	if ( argv[ ARG_TRAY ] ) {
@@ -63,7 +64,7 @@ function setupIntegrations( settings ) {
 		onChangeIntegrations( settings );
 
 		// show application window
-		toggleVisibility( true );
+		setVisibility( true );
 	}
 
 	nwWindow.window.initialized = true;
@@ -134,8 +135,8 @@ Application.instanceInitializer({
 			}
 
 			try {
-				nwWindow.show();
-				nwWindow.focus();
+				setVisibility( true );
+				setFocused( true );
 				nwjsService.close();
 			} catch ( e ) {
 				nwApp.quit();

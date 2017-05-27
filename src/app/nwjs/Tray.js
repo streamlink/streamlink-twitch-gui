@@ -5,9 +5,9 @@ import {
 import { Tray } from "nwjs/nwGui";
 import Menu from "nwjs/Menu";
 import nwWindow, {
+	getVisibility,
 	toggleVisibility,
-	setShowInTaskbar,
-	isHidden
+	setShowInTaskbar
 } from "nwjs/Window";
 import {
 	platform,
@@ -96,7 +96,7 @@ export function setShowInTray( bool, taskbar ) {
 			toggleVisibility();
 			// also toggle taskbar visiblity on click (gui_integration === both)
 			if ( taskbar ) {
-				setShowInTaskbar( !isHidden() );
+				setShowInTaskbar( getVisibility() );
 			}
 		});
 	}
