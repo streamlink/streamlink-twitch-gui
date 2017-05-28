@@ -59,6 +59,7 @@ module.exports = function( grunt ) {
 					} else {
 						const dest = relative( ".", path );
 						grunt.log.ok( `Checksums written to ${dest}` );
+						grunt.log.writeln( checksums );
 						resolve();
 					}
 				});
