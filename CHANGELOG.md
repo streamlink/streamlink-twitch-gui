@@ -1,6 +1,22 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Added back explicit quality selections for Streamlink. #454
+- Fixed misconfiguration of the stream quality exclusion list. #452
+- Fixed Streamlink portable issues on Windows. #451
+- Fixed python executable resolving issues on MacOS/Linux. #459
+- Fixed middle clicks on links on channel pages. #450
+- Fixed ended streams not being removed from the watching list.
+- Fixed streaming provider error messages.
+- Changed new parameters to be also available on app start.
+- Upgraded NW.js to 0.21.6.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.3.0...master)
+
+
 ## [v1.3.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.3.0) (2017-05-18)
 
 - Implemented a new quality selection method. #434  
