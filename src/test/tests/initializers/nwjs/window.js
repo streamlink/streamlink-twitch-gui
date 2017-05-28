@@ -2,7 +2,6 @@ import {
 	module,
 	test
 } from "qunit";
-import { Application } from "ember";
 import { Adapter } from "ember-data";
 import {
 	buildOwner,
@@ -11,7 +10,7 @@ import {
 import { setupStore } from "store-utils";
 import Window from "models/localstorage/Window";
 import resetWindowInjector from "inject-loader!nwjs/Window/reset";
-import windowInitializerInjector from "inject-loader?-ember!initializers/window";
+import windowInitializerInjector from "inject-loader?-ember!initializers/nwjs/window";
 import { EventEmitter } from "events";
 
 
@@ -26,7 +25,7 @@ const manifest = {
 let nwWindow, nwScreen;
 
 
-module( "initializers/window", {
+module( "initializers/nwjs/window", {
 	beforeEach() {
 		owner = buildOwner();
 		owner.register( "model:window", Window );
@@ -77,8 +76,6 @@ module( "initializers/window", {
 	},
 
 	afterEach() {
-		delete Application.instanceInitializers[ "window" ];
-
 		runDestroy( owner );
 		owner = env = null;
 	}
@@ -87,7 +84,7 @@ module( "initializers/window", {
 
 test( "No existing window record", async assert => {
 
-	assert.expect( 8 );
+	assert.expect( 7 );
 
 	owner.register( "adapter:window", Adapter.extend({
 		async findAll() {
@@ -100,7 +97,7 @@ test( "No existing window record", async assert => {
 		}
 	}) );
 
-	windowInitializerInjector({
+	const { default: windowInitializer } = windowInitializerInjector({
 		"config": { vars: {} },
 		"nwjs/Window": nwWindow,
 		"nwjs/Window/reset": () => {
@@ -112,12 +109,7 @@ test( "No existing window record", async assert => {
 		}
 	});
 
-	assert.ok(
-		!!Application.instanceInitializers[ "window" ],
-		"Registers the window instanceInitializer"
-	);
-
-	await Application.instanceInitializers[ "window" ].initialize( owner );
+	await windowInitializer( owner );
 
 	const windowRecord = env.store.peekRecord( "window", 1 );
 	assert.propEqual(
@@ -159,7 +151,7 @@ test( "Existing window record with postition on first screen", async assert => {
 		}
 	}) );
 
-	windowInitializerInjector({
+	const { default: windowInitializer } = windowInitializerInjector({
 		"config": {
 			vars: {
 				"time-window-event-debounce": 1,
@@ -176,7 +168,7 @@ test( "Existing window record with postition on first screen", async assert => {
 		}
 	});
 
-	await Application.instanceInitializers[ "window" ].initialize( owner );
+	await windowInitializer( owner );
 
 	const windowRecord = env.store.peekRecord( "window", 1 );
 	assert.propEqual(
@@ -276,7 +268,7 @@ test( "Existing window record with position on second screen", async assert => {
 		"nwjs/Screen": nwScreen
 	})[ "default" ];
 
-	windowInitializerInjector({
+	const { default: windowInitializer } = windowInitializerInjector({
 		"config": {
 			vars: {
 				"time-window-event-debounce": 1,
@@ -299,7 +291,7 @@ test( "Existing window record with position on second screen", async assert => {
 		throw new Error();
 	});
 
-	await Application.instanceInitializers[ "window" ].initialize( owner );
+	await windowInitializer( owner );
 
 	const windowRecord = env.store.peekRecord( "window", 1 );
 	assert.propEqual(
@@ -418,7 +410,7 @@ test( "Existing window record with position off screen", async assert => {
 		"nwjs/Screen": nwScreen
 	})[ "default" ];
 
-	windowInitializerInjector({
+	const { default: windowInitializer } = windowInitializerInjector({
 		"config": {
 			vars: {
 				"time-window-event-debounce": 1,
@@ -441,7 +433,7 @@ test( "Existing window record with position off screen", async assert => {
 		throw new Error();
 	});
 
-	await Application.instanceInitializers[ "window" ].initialize( owner );
+	await windowInitializer( owner );
 
 	// wait for the debounce time of the events
 	await new Promise( resolve => setTimeout( resolve, 2 ) );
@@ -489,7 +481,7 @@ test( "Debounce events", async assert => {
 		}
 	}) );
 
-	windowInitializerInjector({
+	const { default: windowInitializer } = windowInitializerInjector({
 		"config": {
 			vars: {
 				"time-window-event-debounce": 5,
@@ -506,7 +498,7 @@ test( "Debounce events", async assert => {
 		}
 	});
 
-	await Application.instanceInitializers[ "window" ].initialize( owner );
+	await windowInitializer( owner );
 
 	const windowRecord = env.store.peekRecord( "window", 1 );
 
@@ -555,7 +547,7 @@ test( "Ignore events", async assert => {
 		}
 	}) );
 
-	windowInitializerInjector({
+	const { default: windowInitializer } = windowInitializerInjector({
 		"config": {
 			vars: {
 				"time-window-event-debounce": 1,
@@ -572,7 +564,7 @@ test( "Ignore events", async assert => {
 		}
 	});
 
-	await Application.instanceInitializers[ "window" ].initialize( owner );
+	await windowInitializer( owner );
 
 	const windowRecord = env.store.peekRecord( "window", 1 );
 
@@ -634,7 +626,7 @@ test( "Special window coordinates on Windows", async assert => {
 		}
 	}) );
 
-	windowInitializerInjector({
+	const { default: windowInitializer } = windowInitializerInjector({
 		"config": {
 			vars: {
 				"time-window-event-debounce": 1,
@@ -651,7 +643,7 @@ test( "Special window coordinates on Windows", async assert => {
 		}
 	});
 
-	await Application.instanceInitializers[ "window" ].initialize( owner );
+	await windowInitializer( owner );
 
 	const windowRecord = env.store.peekRecord( "window", 1 );
 

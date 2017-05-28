@@ -15,6 +15,7 @@ import platformfixes from "./platformfixes";
 import { createNativeMenuBar } from "./menubar";
 import onChangeIntegrations from "./integrations";
 import parameterActions from "./parameters";
+import windowInitializer from "./window";
 import Logger from "utils/Logger";
 
 
@@ -35,6 +36,10 @@ Application.instanceInitializer({
 			platformfixes();
 
 			createNativeMenuBar( routingService );
+
+			// restore window position first (while being hidden)
+			await windowInitializer( application );
+
 			try {
 				await parameterActions( argv, settings, application );
 			} catch ( error ) {

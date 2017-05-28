@@ -1,8 +1,7 @@
 import {
 	getProperties,
 	setProperties,
-	run,
-	Application
+	run
 } from "ember";
 import {
 	vars as varsConfig
@@ -119,35 +118,29 @@ async function resetWindowIfOutOfBounds() {
 }
 
 
-Application.instanceInitializer({
-	name: "window",
-	before: [ "nwjs" ],
-	after: [ "ember-data" ],
+export default async function( application ) {
+	const store = application.lookup( "service:store" );
+	const windowRecord = await store.findOrCreateRecord( "window" );
 
-	async initialize( application ) {
-		const store = application.lookup( "service:store" );
-		const windowRecord = await store.findOrCreateRecord( "window" );
+	// restore the window before attaching event listeners
+	await restoreWindowFromRecord( windowRecord );
 
-		// restore the window before attaching event listeners
-		await restoreWindowFromRecord( windowRecord );
+	// listen for maximize and restore events
+	nwWindow.on( "maximize", () => onMaximize( windowRecord, true ) );
+	nwWindow.on(  "restore", () => onMaximize( windowRecord, false ) );
 
-		// listen for maximize and restore events
-		nwWindow.on( "maximize", () => onMaximize( windowRecord, true ) );
-		nwWindow.on(  "restore", () => onMaximize( windowRecord, false ) );
+	// after these events, NW.js will trigger resizeTo or moveTo, so temporarily ignore those
+	nwWindow.on( "maximize", ignoreEventListeners );
+	nwWindow.on( "minimize", ignoreEventListeners );
 
-		// after these events, NW.js will trigger resizeTo or moveTo, so temporarily ignore those
-		nwWindow.on( "maximize", ignoreEventListeners );
-		nwWindow.on( "minimize", ignoreEventListeners );
+	// resize and move events need to be debounced
+	// the maximize events are triggered afterwards
+	nwWindow.on( "resize", debounceEvent( windowRecord, onResize ) );
+	nwWindow.on(   "move", debounceEvent( windowRecord, onMove ) );
 
-		// resize and move events need to be debounced
-		// the maximize events are triggered afterwards
-		nwWindow.on( "resize", debounceEvent( windowRecord, onResize ) );
-		nwWindow.on(   "move", debounceEvent( windowRecord, onMove ) );
+	// listen for screen changes
+	nwScreen.on( "displayBoundsChanged", () => resetWindowIfOutOfBounds( windowRecord ) );
 
-		// listen for screen changes
-		nwScreen.on( "displayBoundsChanged", () => resetWindowIfOutOfBounds( windowRecord ) );
-
-		// validate restored window position and reset if it's invalid
-		await resetWindowIfOutOfBounds( windowRecord );
-	}
-});
+	// validate restored window position and reset if it's invalid
+	await resetWindowIfOutOfBounds( windowRecord );
+}
