@@ -1,6 +1,6 @@
 import { get } from "ember";
 import UserIndexRoute from "routes/UserIndexRoute";
-import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
 import { mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
