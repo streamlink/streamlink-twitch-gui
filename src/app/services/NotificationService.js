@@ -15,7 +15,8 @@ import {
 } from "config";
 import nwWindow, {
 	setMinimized,
-	setVisibility
+	setVisibility,
+	setFocused
 } from "nwjs/Window";
 import { getMenu as getTrayMenu } from "nwjs/Tray";
 import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
@@ -442,6 +443,7 @@ export default Service.extend( ChannelSettingsMixin, {
 		if ( settings !== 0 && get( this, "settings.notify_click_restore" ) ) {
 			setMinimized( false );
 			setVisibility( true );
+			setFocused( true );
 		}
 
 		logDebug( "Notification click", () => ({
