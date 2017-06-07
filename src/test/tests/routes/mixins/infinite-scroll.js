@@ -210,6 +210,11 @@ test( "Default properties", assert => {
 		100,
 		"Has a default maxLimit value of 100"
 	);
+	assert.strictEqual(
+		get( route, "fetchMetadataPath" ),
+		"meta.total",
+		"Looks for the meta.total fetch metadata by default"
+	);
 
 });
 
@@ -378,7 +383,7 @@ test( "Offset, limit and filter", async assert => {
 });
 
 
-test( "WillFetchContent", async assert => {
+test( "WillFetchContent without metadata", async assert => {
 
 	assert.expect( 23 );
 
@@ -561,6 +566,146 @@ test( "WillFetchContent", async assert => {
 			get( model, "length" ),
 			8,
 			"Three more items are added to the model"
+		);
+	} catch ( e ) {
+		throw e;
+	}
+
+});
+
+
+test( "WillFetchContent with metadata", async assert => {
+
+	assert.expect( 18 );
+
+	let response;
+	let limit = 3;
+
+	const { default: InfiniteScrollMixin } = infiniteScrollMixinInjector({
+		"./css": {}
+	});
+
+	const model = new EmberNativeArray();
+	const controller = EmberObject.create();
+
+	const route = Route.extend({
+		setupController( controller, model ) {
+			set( controller, "model", model );
+			set( this, "controller", controller );
+		}
+	}, InfiniteScrollMixin, {
+		calcFetchSize() {
+			assert.ok( true, "Calls calcFetchSize()" );
+			set( this, "_limit", limit );
+		},
+		fetchContent() {
+			assert.ok( true, "Calls fetchContent()" );
+			return response;
+		}
+	}).create();
+
+	await route.beforeModel();
+	route.setupController( controller, model );
+
+	// response with invalid metadata
+	try {
+		model.clear();
+		response = new EmberNativeArray([ { value: 1 }, { value: 2 } ]);
+		set( response, "meta", { total: "foo" } );
+		set( controller, "hasFetchedAll", false );
+		await route.send( "willFetchContent" );
+		assert.propEqual(
+			getProperties( controller, "fetchError", "hasFetchedAll", "isFetching" ),
+			{
+				fetchError: false,
+				hasFetchedAll: true,
+				isFetching: false
+			},
+			"Controller has the correct properties after fetching with invalid metadata"
+		);
+		assert.strictEqual(
+			get( model, "length" ),
+			2,
+			"Three items are added to the model"
+		);
+	} catch ( e ) {
+		throw e;
+	}
+
+	// response with partial content
+	try {
+		model.clear();
+		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
+		set( response, "meta", { total: 5 } );
+		set( controller, "hasFetchedAll", false );
+		await route.send( "willFetchContent" );
+		assert.propEqual(
+			getProperties( controller, "fetchError", "hasFetchedAll", "isFetching" ),
+			{
+				fetchError: false,
+				hasFetchedAll: false,
+				isFetching: false
+			},
+			"Controller has the correct properties after fetching partial content"
+		);
+		assert.strictEqual(
+			get( model, "length" ),
+			3,
+			"Three items are added to the model"
+		);
+	} catch ( e ) {
+		throw e;
+	}
+
+	// response with all content
+	try {
+		model.clear();
+		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
+		set( response, "meta", { total: 3 } );
+		set( controller, "hasFetchedAll", false );
+		await route.send( "willFetchContent" );
+		assert.propEqual(
+			getProperties( controller, "fetchError", "hasFetchedAll", "isFetching" ),
+			{
+				fetchError: false,
+				hasFetchedAll: true,
+				isFetching: false
+			},
+			"Controller has the correct properties after fetching all content"
+		);
+		assert.strictEqual(
+			get( model, "length" ),
+			3,
+			"Three items are added to the model"
+		);
+	} catch ( e ) {
+		throw e;
+	}
+
+	// response with missing content (return 2 items at a limit of 3)
+	try {
+		model.clear();
+		response = new EmberNativeArray([ { value: 1 }, { value: 2 } ]);
+		set( response, "meta", { total: 5 } );
+		setProperties( controller, {
+			hasFetchedAll: false,
+			_filter: 0
+		});
+		await route.send( "willFetchContent" );
+		assert.strictEqual( get( route, "_filter" ), 1, "Increases _filter by one" );
+		assert.propEqual(
+			getProperties( controller, "fetchError", "hasFetchedAll", "isFetching" ),
+			{
+				fetchError: false,
+				hasFetchedAll: false,
+				isFetching: false
+			},
+			"Controller has the correct properties after fetching missing content"
+		);
+		assert.strictEqual(
+			get( model, "length" ),
+			2,
+			"Two items are added to the model"
 		);
 	} catch ( e ) {
 		throw e;

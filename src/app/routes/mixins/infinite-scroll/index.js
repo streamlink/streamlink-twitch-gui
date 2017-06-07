@@ -30,6 +30,12 @@ export default Mixin.create({
 	itemSelector: "",
 
 	/**
+	 * Metadata path of a returned fetchContent() array.
+	 * This may not always be available.
+	 */
+	fetchMetadataPath: "meta.total",
+
+	/**
 	 * Fetch parameters
 	 * Offset will be turned into a computed property on controller initialization.
 	 */
@@ -174,15 +180,43 @@ export default Mixin.create({
 			try {
 				// fetch content
 				const data = await this.fetchContent();
+
 				// read limit again (in case it was modified by a filtered model)
 				const limit = get( this, "limit" );
 				const length = data
 					? get( data, "length" )
 					: 0;
 
-				if ( !length || length < limit ) {
+				// try to get the "total" metadata value
+				let total = null;
+				const metadataPath = get( this, "fetchMetadataPath" );
+				if ( data && metadataPath ) {
+					total = get( data, metadataPath );
+					if ( total !== null ) {
+						total = Number( total );
+						if ( isNaN( total ) || total < 1 ) {
+							total = null;
+						}
+					}
+				}
+				const hasMetadata = total !== null;
+
+				if (
+					// invalid or empty data
+					   !length
+					// has no metadata and not enough data to fill the whole request
+					|| !hasMetadata && length < limit
+					// has metadata and has fetched everything
+					|| hasMetadata && offset + length >= total
+				) {
 					set( controller, "hasFetchedAll", true );
 				}
+
+				// fix offset if content was missing from the response (banned channels, etc.)
+				if ( hasMetadata && length < limit && offset + length < total ) {
+					this.incrementProperty( "_filter", limit - length );
+				}
+
 				if ( length ) {
 					content.pushObjects( data );
 				}
