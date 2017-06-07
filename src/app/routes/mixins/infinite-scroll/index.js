@@ -18,15 +18,24 @@ const { min } = Math;
 export default Mixin.create({
 	/**
 	 * Define the content array location.
-	 * Can't use a binding here!!!
+	 * The content path value is used as a dependency of the dynamic computed offset property.
 	 */
 	contentPath: "controller.model",
 
 	/**
-	 * Fetch offset
+	 * Define an item selector, so the fetch size can be calculated before querying the data.
+	 * The fetch size depends on the window size and css media queries containing this selector.
+	 * Since controllers and components are not set up yet, this needs to be set on the route.
+	 */
+	itemSelector: "",
+
+	/**
+	 * Fetch parameters
+	 * Offset will be turned into a computed property on controller initialization.
 	 */
 	offset: 0,
-	filteredOffset: 0,
+	_limit: 0,
+	_filter: 0,
 
 	/**
 	 * Don't fetch infinitely.
@@ -38,14 +47,10 @@ export default Mixin.create({
 	 */
 	maxLimit: 100,
 
-	/**
-	 * This is actually an ugly concept, but we need to set this data at the route, so we can
-	 * control the fetch size before querying the data. The fetch size depends on the
-	 * window size and css media queries containing this selector. We can't move this
-	 * calculation to the view or to the controller, because they both aren't set up at the
-	 * time where the size is being calculated...
-	 */
-	itemSelector: "",
+
+	limit: computed( "_limit", "_filter", function() {
+		return get( this, "_limit" ) + get( this, "_filter" );
+	}),
 
 
 	/**
@@ -66,44 +71,39 @@ export default Mixin.create({
 			max
 		);
 
-		set( this, "limit", limit );
+		set( this, "_limit", limit );
 	},
 
 
-	beforeModel() {
-		this._super( ...arguments );
+	async beforeModel() {
+		await this._super( ...arguments );
 
 		// reset offset value
 		setProperties( this, {
 			offset: 0,
-			filteredOffset: 0
+			_filter: 0
 		});
 		this.calcFetchSize();
 	},
 
-	setupController( controller, model ) {
+	setupController( controller ) {
 		this._super( ...arguments );
 
 		// offset (current model length)
 		// setup oneWay computed property to the value of `contentPath`
 		const contentPath = get( this, "contentPath" );
 		const path = `${contentPath}.length`;
-		const computedOffset = computed( path, "filteredOffset", () => {
+		const computedOffset = computed( path, "_filter", () => {
 			// increase model length by number of filtered records
-			return get( this, path ) + get( this, "filteredOffset" );
+			return get( this, path ) + get( this, "_filter" );
 		});
 		defineProperty( this, "offset", computedOffset );
 
-
 		const offset = get( this, "offset" );
-		const limit  = get( this, "limit" );
-
-		const hasFetchedAll = offset < limit;
-		const initialFetchSize = get( model, "length" );
+		const limit = get( this, "limit" );
 
 		setProperties( controller, {
-			hasFetchedAll,
-			initialFetchSize,
+			hasFetchedAll: offset < limit,
 			isFetching: false
 		});
 	},
@@ -114,7 +114,7 @@ export default Mixin.create({
 
 	/**
 	 * @param {(String|Function)} key
-	 * @param {*} value
+	 * @param {*} [value]
 	 * @returns {function(Model[])}
 	 */
 	filterFetchedContent( key, value ) {
@@ -128,9 +128,8 @@ export default Mixin.create({
 			const diff = recordsLength - filteredLength;
 
 			// add to filteredOffset, so that next requests don't include the filtered records
-			this.incrementProperty( "filteredOffset", diff );
 			// reduce limit, so that the hasFetchedAll calculation keeps working
-			this.decrementProperty( "limit", diff );
+			this.incrementProperty( "_filter", diff );
 
 			return filtered;
 		};
