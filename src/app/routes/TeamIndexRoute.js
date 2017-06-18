@@ -3,7 +3,7 @@ import {
 	set,
 	Route
 } from "ember";
-import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 

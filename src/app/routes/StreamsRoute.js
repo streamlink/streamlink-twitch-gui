@@ -2,7 +2,7 @@ import {
 	get,
 	Route
 } from "ember";
-import InfiniteScrollMixin from "mixins/InfiniteScrollMixin";
+import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import LanguageFilterMixin from "mixins/LanguageFilterMixin";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
 import { toArray } from "utils/ember/recordArrayMethods";

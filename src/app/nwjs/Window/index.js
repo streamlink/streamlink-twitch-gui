@@ -107,4 +107,8 @@ export function setShowInTaskbar( show ) {
 }
 
 
+/** @type {Window} */
+export const window = nwWindow.window;
+
+
 export default nwWindow;

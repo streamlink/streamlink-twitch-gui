@@ -54,6 +54,7 @@ import "tests/models/twitch/CommunityTop";
 import "tests/store/TwitchAdapter";
 import "tests/initializers/nwjs/window";
 import "tests/mixins/RefreshRouteMixin";
+import "tests/routes/mixins/infinite-scroll";
 import "tests/components/PreviewImageComponent";
 import "tests/components/LoadingSpinnerComponent";
 import "tests/components/SettingsSubmitComponent";
