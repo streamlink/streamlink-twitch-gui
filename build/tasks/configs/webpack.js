@@ -173,7 +173,12 @@ module.exports = {
 	// common options
 	// the grunt-webpack merges the "options" objects with each task config (nested)
 	options: {
+		cache: true,
+
 		stats: {
+			modules: false,
+			chunks: false,
+			chunkModules: false,
 			children: false,
 			timings: true,
 			warnings: true
