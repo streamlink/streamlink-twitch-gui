@@ -5,7 +5,7 @@ import {
 	on,
 	Component
 } from "ember";
-import Masonry from "masonry";
+import Masonry from "masonry-layout";
 import layout from "templates/components/channel/ChannelPanelsComponent.hbs";
 
 

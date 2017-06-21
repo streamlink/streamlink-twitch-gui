@@ -3,7 +3,6 @@ import QUnit, {
 	config
 } from "qunit";
 import "ember-test";
-import "bower/qunit/qunit/qunit.css";
 import "bower/ember/ember-template-compiler";
 
 
