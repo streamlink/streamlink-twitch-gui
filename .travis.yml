@@ -38,7 +38,7 @@ before_install:
 
 install:
   - yarn global add --no-progress --non-interactive bower grunt-cli
-  - yarn install --no-progress --non-interactive
+  - yarn install --pure-lockfile --no-progress --non-interactive
 
 script:
   # test and build
