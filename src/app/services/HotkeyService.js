@@ -49,7 +49,7 @@ export default Service.extend({
 	 * @param {Hotkey[]} hotkeys
 	 */
 	register( context, hotkeys ) {
-		let registry = new HotkeyRegistry( context, hotkeys );
+		const registry = new HotkeyRegistry( context, hotkeys );
 		this.registries.unshift( registry );
 	},
 
@@ -58,7 +58,7 @@ export default Service.extend({
 	 * @param {Component} context
 	 */
 	unregister( context ) {
-		let registry = this.registries.findBy( "context", context );
+		const registry = this.registries.findBy( "context", context );
 		if ( !registry ) { return; }
 		this.registries.removeObject( registry );
 	},
@@ -66,17 +66,18 @@ export default Service.extend({
 	/**
 	 * Find a registered hotkey that matches and execute the action of the one added last
 	 * @param {(KeyboardEvent|jQuery.Event)} event
+	 * @param {Number?} start
 	 */
-	trigger( event ) {
+	trigger( event, start = 0 ) {
 		/** @type {KeyboardEvent} */
-		let e = event.originalEvent || event;
+		const e = event.originalEvent || event;
 		/** @type {Component} */
 		let context;
 		/** @type {Hotkey} */
 		let hotkey;
 
 		// find the first matching hotkey
-		let found = this.registries.some( registry => {
+		const found = this.registries.slice( start ).some( registry => {
 			hotkey = registry.hotkeys.find( h =>
 				   ( isArray( h.code ) ? h.code.indexOf( e.code ) !== -1 : h.code === e.code )
 				&& ( h.altKey === undefined || h.altKey === e.altKey )
@@ -107,13 +108,19 @@ export default Service.extend({
 		event.stopImmediatePropagation();
 
 		// execute action
-		let action = hotkey.action;
+		const { action } = hotkey;
+		let result;
 
 		if ( typeof action === "string" ) {
 			context.send( action );
 
 		} else if ( action instanceof Function ) {
-			action.call( context );
+			result = action.call( context );
+		}
+
+		// bubble event
+		if ( result === true ) {
+			this.trigger( event, start + 1 );
 		}
 	}
 });

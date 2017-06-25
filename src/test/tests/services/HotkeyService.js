@@ -423,6 +423,58 @@ test( "Component subclasses with duplicate hotkeys", assert => {
 });
 
 
+test( "Event bubbling", assert => {
+
+	assert.expect( 3 );
+
+	let result = false;
+	let e;
+
+	const componentA = HotkeyComponent.extend({
+		hotkeys: [{
+			code: "Escape",
+			action() {
+				assert.ok( true, "Calls component-a's action" );
+			}
+		}]
+	});
+
+	const componentB = HotkeyComponent.extend({
+		hotkeys: [{
+			code: "Escape",
+			action() {
+				assert.ok( true, "Calls component-b's action" );
+				return result;
+			}
+		}]
+	});
+
+	owner.register( "component:component-a", componentA );
+	owner.register( "component:component-b", componentB );
+
+
+	context = ApplicationComponent.create({
+		layout: compile( "{{component-a}}{{component-b}}" )
+	});
+	setOwner( context, owner );
+
+	runAppend( context );
+
+	const $element = context.$();
+
+	e = $.Event( "keyup" );
+	e.code = "Escape";
+	$element.trigger( e );
+
+	result = true;
+
+	e = $.Event( "keyup" );
+	e.code = "Escape";
+	$element.trigger( e );
+
+});
+
+
 test( "Re-inserted components", assert => {
 
 	assert.expect( 3 );
