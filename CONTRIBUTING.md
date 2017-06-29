@@ -28,7 +28,7 @@ Feature requests are welcome. But take a moment to find out whether your idea fi
 Streamlink Twitch GUI is based on [NW.js][NW.js].  
 Please visit the [NW.js website][NW.js-website] if you want to know more about NW.js apps.
 
-Building the application is simple. Please ensure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Npm][npm] (bundled with Node.js) are installed on your system, so all dependencies can be installed and the application can be built and compiled.
+Building the application is simple. Please make sure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Yarn][yarn] (or [Npm][npm]) are installed on your system, so all dependencies can be installed and the application can be built and compiled.
 
 ### Setup
 
@@ -37,14 +37,15 @@ Building the application is simple. Please ensure that the latest stable version
 git clone https://github.com/streamlink/streamlink-twitch-gui.git
 cd streamlink-twitch-gui
 
-# globally install grunt-cli and bower - may require administrator privileges
-npm install -g grunt-cli bower
-
-# locally install all npm and bower dependencies
+# install dependencies via yarn (preferred way)
+yarn global add bower grunt-cli # may require administrator privileges
+yarn install
+# or use npm instead (discouraged)
+npm install --global bower grunt-cli # may require administrator privileges
 npm install
 ```
 
-Streamlink Twitch GUI uses [Gruntjs][Gruntjs] and [Webpack][Webpack] as build tools.  
+Streamlink Twitch GUI uses [Gruntjs][Gruntjs] and [Webpack][Webpack] as build tools. This is different from Ember.js based projects that are using ember-cli.  
 To get a list of all available grunt tasks, run `grunt --help`.  
 All task configs can be found in `build/tasks/{configs,custom}`.
 
@@ -61,20 +62,25 @@ Once NW.js has been launched, file watchers will look for any changes being made
 ### Testing
 
 ```bash
+# run tests
 grunt test
-```
 
-Builds the tests and runs them.
+# keep running NW.js, show its window and rebuild tests on change
+grunt testdev
+```
 
 ### Building and compiling
 
 ```bash
+# create a production build and compile it afterwards
 grunt release
+# or run both build steps explicitly
+grunt build:prod compile
 ```
 
-This creates a production build and compiles it afterwards into the `build/releases` folder.
+The final build can be found in the `build/releases` directory.
 
-The `release` task supports multiple *targets* for different platforms. Targets can be set by appending `:target` to the task name (eg. `grunt release:linux64:osx64`). See `build/tasks/common/platforms.js` for all available targets.
+Both `release` and `compile` tasks support multiple *targets* for different platforms. Targets can be set by appending `:target` to the task name (eg. `grunt release:linux64:osx64`). See `build/tasks/common/platforms.js` for all available targets. By default, the currently used platform will be used.
 
 
 ## Pull requests
@@ -142,6 +148,7 @@ This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5
   [NW.js-website]: http://nwjs.io
   [Git]: https://git-scm.com
   [Node.js]: https://nodejs.org
+  [yarn]: https://yarnpkg.com
   [npm]: https://npmjs.org
   [Gruntjs]: http://gruntjs.com
   [Webpack]: https://webpack.github.io
