@@ -116,10 +116,10 @@ export default Service.extend( ChannelSettingsMixin, {
 		// override record with channel specific settings
 		await this.getChannelSettings( stream, quality );
 
-		await this.launchStream( stream );
+		await this.launchStream( stream, true );
 	},
 
-	async launchStream( stream ) {
+	async launchStream( stream, launchChat ) {
 		// begin the stream launch procedure
 		try {
 			set( this, "active", stream );
@@ -148,7 +148,7 @@ export default Service.extend( ChannelSettingsMixin, {
 				stream,
 				providerObj,
 				playerObj,
-				() => this.onStreamSuccess( stream )
+				() => this.onStreamSuccess( stream, launchChat )
 			);
 
 		} catch ( error ) {
@@ -160,7 +160,7 @@ export default Service.extend( ChannelSettingsMixin, {
 	},
 
 
-	onStreamSuccess( stream ) {
+	onStreamSuccess( stream, launchChat ) {
 		if ( get( stream, "isWatching" ) ) {
 			return;
 		}
@@ -176,8 +176,10 @@ export default Service.extend( ChannelSettingsMixin, {
 
 		// automatically open chat
 		if (
+			// do not open chat on stream restarts
+			   launchChat
 			// require open chat setting
-			   get( stream, "gui_openchat" )
+			&& get( stream, "gui_openchat" )
 			&& (
 				// context menu not used
 				   !get( stream, "strictQuality" )
