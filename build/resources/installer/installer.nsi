@@ -68,6 +68,7 @@ VIAddVersionKey "LegalCopyright" "${Author}"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_WELCOME
@@ -78,7 +79,7 @@ VIAddVersionKey "LegalCopyright" "${Author}"
 
 
 # Installer
-Section
+Section "<%= displayname %>" SEC_DEFAULT
 	DetailPrint '${KillCmd}'
 	nsExec::Exec /TIMEOUT=3000 '${KillCmd}'
 
@@ -86,8 +87,6 @@ Section
 	File /r "<%= dirinput %>\*"
 
 	WriteUninstaller "$INSTDIR\${UninstallerFile}"
-
-	CreateShortCut "$DESKTOP\${DisplayName}.lnk" "$INSTDIR\${AppFile}"
 
 	WriteRegStr HKLM "${RegKeyInstall}" "InstallPath" "$INSTDIR"
 	WriteRegStr HKLM "${RegKeyUninstall}" "DisplayName" "${DisplayName}"
@@ -102,6 +101,14 @@ Section
 	IntFmt $0 "0x%08X" $0
 	WriteRegDWORD HKLM "${RegKeyUninstall}" "EstimatedSize" "$0"
 SectionEnd
+
+Section "Create desktop shortcut" SEC_SHORTCUT_DESKTOP
+	${If} ${SectionIsSelected} ${SEC_SHORTCUT_DESKTOP}
+		SetOutPath $INSTDIR
+		CreateShortCut "$DESKTOP\${DisplayName}.lnk" "$INSTDIR\${AppFile}"
+	${EndIf}
+SectionEnd
+
 
 # Uninstaller
 Section "Uninstall"
@@ -125,6 +132,9 @@ SectionEnd
 
 # Functions
 Function .onInit
+	# set default section as read only
+	SectionSetFlags ${SEC_DEFAULT} 17
+
 	${If} $InstDir == ""
 		${If} ${RunningX64}
 			StrCpy $InstDir "$PROGRAMFILES64\${AppDir}\"
