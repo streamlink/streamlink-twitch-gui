@@ -372,6 +372,114 @@ test( "Expand, collapse and disable", assert => {
 });
 
 
+test( "Hotkeys", assert => {
+
+	let e;
+
+	const content = [
+		{
+			id: 1,
+			label: "foo"
+		},
+		{
+			id: 2,
+			label: "bar"
+		},
+		{
+			id: 3,
+			label: "baz"
+		}
+	];
+
+	context = Component.extend({
+		content,
+		value: 1,
+		layout: compile( "{{drop-down value=value content=content}}" ),
+
+		hotkey: service(),
+		keyUp( e ) {
+			return get( this, "hotkey" ).trigger( e );
+		}
+	}).create();
+	setOwner( context, owner );
+	runAppend( context );
+
+	const $context = context.$();
+	const $elem = $context.find( ".drop-down-component" );
+
+	const trigger = code => run( () => {
+		e = $.Event( "keyup" );
+		e.code = code;
+		$context.trigger( e );
+	});
+
+	assert.strictEqual( get( context, "value" ), 1, "Value is 1 initially" );
+	assert.notOk( $elem.hasClass( "expanded" ), "Is not expanded initially" );
+	assert.strictEqual( $elem.attr( "tabindex" ), "0", "Has a tabindex attribute with value 0" );
+
+	trigger( "Space" );
+	assert.notOk( $elem.hasClass( "expanded" ), "Does not react to spacebar when not focused" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	trigger( "ArrowDown" );
+	assert.strictEqual( get( context, "value" ), 1, "Doesn't change value on ArrowDown" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	trigger( "ArrowUp" );
+	assert.strictEqual( get( context, "value" ), 1, "Doesn't change value on ArrowUp" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+
+	// focus
+	$elem.focus();
+
+	trigger( "ArrowDown" );
+	assert.strictEqual( get( context, "value" ), 1, "Needs expanded list on ArrowDown" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	trigger( "ArrowUp" );
+	assert.strictEqual( get( context, "value" ), 1, "Needs expanded list on ArrowUp" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+
+	trigger( "Space" );
+	assert.ok( $elem.hasClass( "expanded" ), "Toggles expansion when focused on Space" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+	trigger( "Space" );
+	assert.notOk( $elem.hasClass( "expanded" ), "Toggles expansion when focused on Space" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+
+	trigger( "Space" );
+
+	trigger( "ArrowDown" );
+	assert.strictEqual( get( context, "value" ), 2, "Changes value to next one on ArrowDown" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+	trigger( "ArrowDown" );
+	assert.strictEqual( get( context, "value" ), 3, "Changes value to next one on ArrowDown" );
+	trigger( "ArrowDown" );
+	assert.strictEqual( get( context, "value" ), 1, "Jumps to first one on ArrowDown" );
+
+	trigger( "ArrowUp" );
+	assert.strictEqual( get( context, "value" ), 3, "Jumps to last one on ArrowUp" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+	trigger( "ArrowUp" );
+	assert.strictEqual( get( context, "value" ), 2, "Changes value to previous one on ArrowUp" );
+	trigger( "ArrowUp" );
+	assert.strictEqual( get( context, "value" ), 1, "Changes value to previous one on ArrowUp" );
+
+	trigger( "Escape" );
+	assert.notOk( $elem.hasClass( "expanded" ), "Collapses list on Escape" );
+	assert.strictEqual( document.activeElement, $elem[0], "Doesn't remove focus on Escape" );
+	trigger( "Escape" );
+	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
+
+});
+
+
 test( "Expand upwards", assert => {
 
 	const $main = $( "<main>" )

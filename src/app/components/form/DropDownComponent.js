@@ -10,6 +10,24 @@ import HotkeyMixin from "mixins/HotkeyMixin";
 import layout from "templates/components/form/DropDownComponent.hbs";
 
 
+function switchSelectionOnArrowKey( change ) {
+	return function() {
+		if ( !this.isFocused() || !get( this, "_isExpanded" ) ) {
+			return true;
+		}
+		const content = get( this, "content" );
+		const selection = get( this, "_selection" );
+		const selIndex = content.indexOf( selection );
+		if ( selIndex === -1 ) {
+			return true;
+		}
+		const newIndex = ( selIndex + change + content.length ) % content.length;
+		const newSelection = content[ newIndex ];
+		set( this, "_selection", newSelection );
+	};
+}
+
+
 export default Component.extend( HotkeyMixin, {
 	layout,
 
@@ -21,7 +39,9 @@ export default Component.extend( HotkeyMixin, {
 		"disabled:disabled",
 		"class"
 	],
+	attributeBindings: [ "tabindex" ],
 
+	tabindex: 0,
 	disabled: false,
 	buttonClass: "",
 
@@ -47,14 +67,40 @@ export default Component.extend( HotkeyMixin, {
 		{
 			code: [ "Escape", "Backspace" ],
 			action() {
-				if ( !get( this, "_isExpanded" ) ) {
-					// let the event bubble up
+				if ( get( this, "_isExpanded" ) ) {
+					set( this, "_isExpanded", false );
+					return false;
+				}
+				if ( this.isFocused() ) {
+					this.$().blur();
+					return false;
+				}
+				// let the event bubble up
+				return true;
+			}
+		},
+		{
+			code: "Space",
+			action() {
+				if ( !this.isFocused() ) {
 					return true;
 				}
-				set( this, "_isExpanded", false );
+				this.send( "toggle" );
 			}
+		},
+		{
+			code: "ArrowUp",
+			action: switchSelectionOnArrowKey( -1 )
+		},
+		{
+			code: "ArrowDown",
+			action: switchSelectionOnArrowKey( +1 )
 		}
 	],
+
+	isFocused() {
+		return this.element.ownerDocument.activeElement === this.element;
+	},
 
 
 	didInsertElement() {

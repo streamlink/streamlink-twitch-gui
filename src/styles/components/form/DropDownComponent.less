@@ -49,8 +49,11 @@
 			text-align: center;
 			transition: opacity .2s ease-out;
 		}
+	}
 
-		&:hover {
+	&:focus,
+	&:hover {
+		> .drop-down-component-selection {
 			.theme({
 				.theme-mix( border-color, @theme-select-border-color-hover, @theme-background );
 			});
