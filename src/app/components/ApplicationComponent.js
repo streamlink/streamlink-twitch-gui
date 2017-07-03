@@ -68,7 +68,7 @@ export default Component.extend({
 		this._super( ...arguments );
 	},
 
-	keyUp( e ) {
+	keyDown( e ) {
 		const HotkeyService = get( this, "hotkey" );
 
 		return HotkeyService.trigger( e );
