@@ -8,6 +8,10 @@ import "bower/ember/ember-template-compiler";
 
 // don't start automatically
 config.autostart = false;
+// check for pollution of the global scope (window)
+config.noglobals = true;
+// hide passed tests
+config.hidepassed = true;
 
 
 // load tests and then start

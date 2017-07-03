@@ -99,9 +99,10 @@ test( "Simple hotkey registrations", assert => {
 		"Only has two hotkey registries"
 	);
 
-	$( fixtureElement ).on( "keyup", e => {
+	const keyupCallback = e => {
 		assert.strictEqual( e.code, "KeyA", "Propagates events if key event doesn't match" );
-	});
+	};
+	$( fixtureElement ).on( "keyup", keyupCallback );
 
 	let e;
 	const $element = context.$();
@@ -120,6 +121,8 @@ test( "Simple hotkey registrations", assert => {
 	e = $.Event( "keyup" );
 	e.code = "KeyA";
 	$element.trigger( e );
+
+	$( fixtureElement ).off( "keyup", keyupCallback );
 
 });
 
@@ -216,7 +219,7 @@ test( "Multiple components with similar hotkeys", assert => {
 			{
 				code: "Enter",
 				action() {
-					assert.ok( false, "Action should not be called" );
+					throw new Error();
 				}
 			}
 		]
@@ -325,7 +328,7 @@ test( "Focus on input element", assert => {
 			{
 				code: "Enter",
 				action() {
-					assert.ok( false, "Action should not be called" );
+					throw new Error();
 				}
 			}
 		]
@@ -376,7 +379,7 @@ test( "Component subclasses with duplicate hotkeys", assert => {
 			{
 				code: "Enter",
 				action() {
-					assert.ok( false, "Action should not be called" );
+					throw new Error();
 				}
 			},
 			{
@@ -503,7 +506,7 @@ test( "Re-inserted components", assert => {
 			{
 				code: "Enter",
 				action() {
-					assert.ok( false, "Action should not be called" );
+					throw new Error();
 				}
 			},
 			{

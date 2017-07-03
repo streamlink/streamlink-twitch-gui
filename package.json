@@ -18,7 +18,7 @@
 		"masonry-layout": "4.2.0",
 		"minimist": "1.2.0",
 		"moment": "2.18.1",
-		"qunitjs": "2.0.1",
+		"qunitjs": "2.3.3",
 		"roboto-fontface": "0.7.0",
 		"snoretoast": "github:bastimeyer/snoretoast#binaries"
 	},
