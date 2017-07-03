@@ -69,6 +69,13 @@ export default Service.extend({
 	 * @param {Number?} start
 	 */
 	trigger( event, start = 0 ) {
+		const { registries } = this;
+		const { length } = registries;
+
+		if ( start >= length ) {
+			return;
+		}
+
 		/** @type {KeyboardEvent} */
 		const e = event.originalEvent || event;
 		/** @type {Component} */
@@ -77,7 +84,8 @@ export default Service.extend({
 		let hotkey;
 
 		// find the first matching hotkey
-		const found = this.registries.slice( start ).some( registry => {
+		for ( ; start < length; start++ ) {
+			let registry = registries[ start ];
 			hotkey = registry.hotkeys.find( h =>
 				   ( isArray( h.code ) ? h.code.indexOf( e.code ) !== -1 : h.code === e.code )
 				&& ( h.altKey === undefined || h.altKey === e.altKey )
@@ -85,16 +93,14 @@ export default Service.extend({
 				&& ( h.shiftKey === undefined || h.shiftKey === e.shiftKey )
 			);
 
-			if ( !hotkey ) {
-				return false;
+			if ( hotkey ) {
+				context = registry.context;
+				break;
 			}
-
-			context = registry.context;
-			return true;
-		});
+		}
 
 		// no registered hotkey matched the keyboard event
-		if ( !found ) {
+		if ( start === length ) {
 			return;
 		}
 
@@ -102,10 +108,6 @@ export default Service.extend({
 		if ( !hotkey.force && ignoreElements.some( element => event.target instanceof element ) ) {
 			return;
 		}
-
-		// stop default behavior
-		event.preventDefault();
-		event.stopImmediatePropagation();
 
 		// execute action
 		const { action } = hotkey;
@@ -121,6 +123,10 @@ export default Service.extend({
 		// bubble event
 		if ( result === true ) {
 			this.trigger( event, start + 1 );
+		} else {
+			// stop default behavior
+			event.preventDefault();
+			event.stopImmediatePropagation();
 		}
 	}
 });

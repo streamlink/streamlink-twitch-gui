@@ -425,25 +425,34 @@ test( "Component subclasses with duplicate hotkeys", assert => {
 
 test( "Event bubbling", assert => {
 
-	assert.expect( 3 );
+	assert.expect( 10 );
 
 	let result = false;
 	let e;
 
 	const componentA = HotkeyComponent.extend({
-		hotkeys: [{
-			code: "Escape",
-			action() {
-				assert.ok( true, "Calls component-a's action" );
+		hotkeys: [
+			{
+				code: "Escape",
+				action() {
+					assert.ok( true, "Calls A's escape action" );
+				}
+			},
+			{
+				code: "Enter",
+				action() {
+					assert.ok( true, "Calls A's enter action" );
+					return true;
+				}
 			}
-		}]
+		]
 	});
 
 	const componentB = HotkeyComponent.extend({
 		hotkeys: [{
 			code: "Escape",
 			action() {
-				assert.ok( true, "Calls component-b's action" );
+				assert.ok( true, "Calls B's escape action" );
 				return result;
 			}
 		}]
@@ -465,12 +474,22 @@ test( "Event bubbling", assert => {
 	e = $.Event( "keyup" );
 	e.code = "Escape";
 	$element.trigger( e );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
 
 	result = true;
 
 	e = $.Event( "keyup" );
 	e.code = "Escape";
 	$element.trigger( e );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+
+	e = $.Event( "keyup" );
+	e.code = "Enter";
+	$element.trigger( e );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
 
 });
 
