@@ -1,0 +1,104 @@
+@import "_mixins";
+
+.section-download {
+	overflow-y: hidden;
+	text-align: center;
+
+	.icon-os {
+		float: left;
+		width: 33.333%;
+		margin: 2rem 0 8rem;
+
+		> a {
+			display: inline-block;
+			font-family: inherit;
+			font-weight: normal;
+			text-decoration: none;
+
+			&::before {
+				display: block;
+				font-family: FontAwesome;
+				transition: font-size .333s ease-out;
+			}
+
+			$scale: 5;
+			$hover: 1.1;
+			$space: 1.15;
+
+			@mixin icons( $base ) {
+				font-size: $base;
+
+				&::before {
+					width: ( $base * $scale * $space );
+					height: ( $base * $scale * $space );
+					font-size: ( $base * $scale );
+					line-height: ( $base * $scale * $space );
+				}
+
+				&:hover,
+				&:active {
+					&::before {
+						font-size: ( $base * $scale * $hover );
+					}
+				}
+			}
+
+			@include icons( 1.5rem );
+
+			@media screen and ( min-width: 550px ) {
+				@include icons( 2rem );
+			}
+
+			@media screen and ( min-width: 750px ) {
+				@include icons( 2.5rem );
+			}
+		}
+	}
+
+	.download-setup {
+		clear: left;
+	}
+
+	.icon-links {
+		@include flexbox();
+		position: relative;
+		justify-content: space-around;
+		width: 25rem;
+		margin: 0 auto;
+
+		a {
+			display: block;
+			font-size: 0;
+			text-decoration: none;
+			font-family: inherit;
+
+			&::before {
+				font-size: 2rem;
+				font-family: FontAwesome;
+			}
+
+			&::after {
+				content: attr( data-text );
+				display: block;
+				position: absolute;
+				top: 4rem;
+				left: 0;
+				right: 0;
+				margin: 0 -10rem;
+				font-size: 1.5rem;
+				white-space: nowrap;
+				text-align: center;
+				opacity: 0;
+				transition: opacity .333s ease-out;
+				pointer-events: none;
+			}
+
+			&:hover,
+			&:active {
+				&::after {
+					opacity: 1;
+				}
+			}
+		}
+	}
+}

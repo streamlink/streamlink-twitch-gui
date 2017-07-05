@@ -1,0 +1,35 @@
+.section-about {
+	text-align: center;
+
+	.preview-image {
+		width: calc( 50% - 1rem );
+		margin: 2rem 0 4rem;
+
+		&:first-of-type {
+			float: left;
+		}
+		&:last-of-type {
+			float: right;
+		}
+	}
+
+	.about-features {
+		clear: both;
+		margin-top: 5rem;
+	}
+
+	ul {
+		width: 100%;
+	}
+
+	@media screen and ( min-width: 750px ) {
+		ul {
+			-moz-column-count: 2;
+			-moz-column-gap: 2rem;
+			-webkit-column-count: 2;
+			-webkit-column-gap: 2rem;
+			column-count: 2;
+			column-gap: 2rem;
+		}
+	}
+}

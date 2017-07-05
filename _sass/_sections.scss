@@ -1,0 +1,19 @@
+@import "_mixins";
+
+section {
+	@include flexbox();
+	justify-content: space-around;
+	align-items: center;
+	min-height: 100vh;
+	overflow-x: hidden;
+
+	&,
+	& a,
+	& a:hover {
+		color: white;
+	}
+
+	.preview-image > img {
+		box-shadow: 0 1em 2em rgba(0, 0, 0, .25);
+	}
+}

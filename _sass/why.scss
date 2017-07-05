@@ -1,0 +1,39 @@
+.section-why {
+	p {
+		&:nth-of-type( odd ) {
+			display: none;
+		}
+	}
+
+	@media screen and ( min-width: 750px ) {
+		h2 {
+			margin: 0 20% 2rem;
+		}
+
+		p {
+			&:nth-of-type( even ) {
+				width: 60%;
+			}
+			&:nth-of-type( odd ) {
+				display: block;
+				clear: both;
+				width: 20%;
+				padding: 0 4rem;
+				font-size: 7rem;
+				line-height: 0;
+				text-align: center;
+				box-sizing: border-box;
+			}
+
+			&:nth-of-type( 4n+1 ),
+			&:nth-of-type( 4n+2 ) {
+				float: right;
+			}
+
+			&:nth-of-type( 4n+3 ),
+			&:nth-of-type( 4n+4 ) {
+				float: left;
+			}
+		}
+	}
+}

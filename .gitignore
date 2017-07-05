@@ -1,0 +1,31 @@
+# OS and editors
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+*.bak
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+nbproject
+*.sublime-project
+*.sublime-workspace
+.idea
+
+# gh-pages
+_site
+.sass-cache
+.jekyll-metadata
+
+# dependencies
+/node_modules/
+/bower_components/
+
+# builds
+/build/cache/
+/build/releases/
+/build/tmp/
+/build/travis/data/
+/dist/

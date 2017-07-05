@@ -1,0 +1,39 @@
+.forkongithub {
+	display: none;
+
+	> a {
+		position: relative;
+		padding: 5px 40px;
+		outline: 1px solid #fff;
+		font: 700 1.5rem/2rem arial,sans-serif;
+		color: #fff;
+		background: #111;
+		text-decoration: none;
+		text-align: center;
+	}
+
+	@media screen and ( min-width: 750px ) {
+		display: block;
+		position: fixed;
+		top: 0;
+		right: 0;
+		width: 200px;
+		height: 200px;
+		overflow: hidden;
+		z-index: 9999;
+
+		> a {
+			position: absolute;
+			width: 200px;
+			top: 60px;
+			right: -60px;
+			transform: rotate( 45deg );
+			-webkit-transform: rotate( 45deg );
+			-ms-transform: rotate( 45deg );
+			-moz-transform: rotate( 45deg );
+			-o-transform: rotate( 45deg );
+			box-shadow: 4px 4px 10px rgba( 0, 0, 0, 0.8 );
+			box-sizing: content-box;
+		}
+	}
+}

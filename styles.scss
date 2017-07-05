@@ -1,0 +1,17 @@
+---
+---
+
+@import "_base";
+@import "_sections";
+@import "_github";
+
+
+{% for node in site.posts reversed %}
+	{% capture id %}{{node.id | remove: "/" | downcase}}{% endcapture %}
+	{% capture bg %}{% if site.colors[node.bg] %}{{site.colors[node.bg]}}{% else %}{{node.bg}}{% endif %}{% endcapture %}
+
+	@import "{{id}}";
+	.section-{{id}} {
+		background-color: {{bg}} !important;
+	}
+{% endfor %}

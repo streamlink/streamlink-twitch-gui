@@ -1,0 +1,103 @@
+$responsive-breakpoints: ( 400px, 550px, 750px, 1000px );
+$header-size-max: 5rem;
+$header-size-min: 3rem;
+
+@mixin headlines( $max ) {
+	$min: 1rem;
+	@each $headline in ( 1, 2, 3, 4, 5, 6 ) {
+		h#{$headline} {
+			font-size: ( $min + ( $max - $min ) * ( 6 - $headline ) / 5 );
+		}
+	}
+}
+
+@mixin responsive-headlines() {
+	$num: length( $responsive-breakpoints );
+	$diff: $header-size-max - $header-size-min;
+	@each $breakpoint in $responsive-breakpoints {
+		@media screen and ( min-width: #{$breakpoint} ) {
+			$index: index( $responsive-breakpoints, $breakpoint );
+			@include headlines( $header-size-min + $diff * ( ( $index - 1 ) / ( $num - 1 ) ) );
+		}
+	}
+}
+
+// fix some unwanted Skeleton definitions
+
+html {
+	font-size: 10px;
+}
+
+html .container {
+	min-width: 360px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+@media screen and ( min-width: 400px ) {
+	html .container {
+		margin-top: 7.5%;
+		margin-bottom: 7.5%;
+	}
+}
+
+@media screen and ( min-width: 550px ) {
+	html .container {
+		margin-top: 5rem;
+		margin-bottom: 5rem;
+	}
+}
+
+h1, h2, h3, h4, h5, h6 {
+	letter-spacing: -.02em;
+}
+
+@include headlines( 2.75rem );
+@include responsive-headlines();
+
+:last-child {
+	margin-bottom: 0;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.no-wrap {
+	white-space: nowrap;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	vertical-align: middle;
+}
+
+ul {
+	list-style: none;
+	text-align: left;
+
+	> li {
+		position: relative;
+		margin-bottom: 0;
+		padding-left: 1rem;
+
+		&::before {
+			content: "\f105";
+			display: block;
+			position: absolute;
+			left: 0;
+			font: 1.5rem/2.4rem FontAwesome;
+		}
+	}
+}
+
+blockquote {
+	margin: 0 0 2rem;
+}
+
+abbr[title] {
+	white-space: nowrap;
+	font-style: italic;
+	text-decoration: none;
+}

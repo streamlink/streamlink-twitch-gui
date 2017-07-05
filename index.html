@@ -1,0 +1,30 @@
+---
+layout: compress
+---
+
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{site.title}}</title>
+<meta name="keywords" content="{{site.keywords}}">
+<meta name="description" content="{{site.description}}">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Raleway:400,300,700">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.css">
+<link rel="stylesheet" href="{{site.baseurl}}/styles.css">
+<link rel="shortcut icon" href="{{site.baseurl}}/favicon.ico" type="image/x-icon">
+</head>
+<body>
+{% for page in site.posts reversed %}
+{% capture id %}{{page.id | remove: "/" | downcase}}{% endcapture %}
+<section class="section-{{id}}"><div class="container">{{page.content}}</div></section>
+{% endfor %}
+<div class="forkongithub"><a href="{{site.source_link}}" target="_blank">Fork on GitHub</a></div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/aos/2.2.0/aos.js"></script>
+<script>AOS.init({duration:750,easing:"ease-out"})</script>
+</body>
+</html>
