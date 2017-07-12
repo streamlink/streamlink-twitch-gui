@@ -19,6 +19,7 @@ import {
 	Component,
 	EventDispatcher
 } from "ember";
+import HotkeyService from "services/HotkeyService";
 import RadioBtnComponent from "components/form/RadioBtnComponent";
 import RadioBtnsComponent from "components/form/RadioBtnsComponent";
 
@@ -34,6 +35,7 @@ module( "components/form/RadioBtnsComponent", {
 		eventDispatcher.setup( {}, fixtureElement );
 		owner = buildOwner();
 		owner.register( "event_dispatcher:main", eventDispatcher );
+		owner.register( "service:hotkey", HotkeyService );
 		owner.register( "component:radio-btn", RadioBtnComponent );
 		owner.register( "component:radio-btns", RadioBtnsComponent );
 	},

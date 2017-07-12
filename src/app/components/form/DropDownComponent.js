@@ -98,10 +98,6 @@ export default Component.extend( HotkeyMixin, {
 		}
 	],
 
-	isFocused() {
-		return this.element.ownerDocument.activeElement === this.element;
-	},
-
 
 	didInsertElement() {
 		const $elem = this.$();

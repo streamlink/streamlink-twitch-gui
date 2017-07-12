@@ -75,5 +75,9 @@ export default Mixin.create({
 		const HotkeyService = get( this, "hotkey" );
 
 		HotkeyService.unregister( this );
-	})
+	}),
+
+	isFocused() {
+		return this.element.ownerDocument.activeElement === this.element;
+	}
 });
