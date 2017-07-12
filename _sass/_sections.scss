@@ -1,9 +1,14 @@
-@import "_mixins";
-
 section {
-	@include flexbox();
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-justify-content: space-around;
+	-webkit-align-items: center;
 	justify-content: space-around;
 	align-items: center;
+
+	width: 100%;
 	min-height: 100vh;
 	overflow-x: hidden;
 
