@@ -1,4 +1,4 @@
-Streamlink Twitch GUI
+[Streamlink Twitch GUI][Website]
 ===
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] [![Gitter IRC][badge-gitter]][Gitter]
 
@@ -14,7 +14,7 @@ Streamlink Twitch GUI
 
 ## Description
 
-This is a graphical user interface (GUI) on top of the [Streamlink][Streamlink] command line interface (CLI).  
+A graphical user interface on top of the [Streamlink][Streamlink] command line interface.  
 
 Streamlink Twitch GUI is a [NW.js][NW.js] application, which means that it is a web application written in JavaScript ([EmberJS][EmberJS]), HTML ([Handlebars][Handlebars]) and CSS ([LessCSS][LessCSS]) and is being run by a [Node.js][Node.js] powered version of [Chromium][Chromium].
 
@@ -23,27 +23,27 @@ Streamlink Twitch GUI is a [NW.js][NW.js] application, which means that it is a 
 
 ## Features
 
-* Available for Windows, MacOS and Linux (for both x86 and x64)
-* Supports both Streamlink as well as the deprecated Livestreamer
-* Browse streams by popularity or by different games, communities and teams
+* Available on Windows, MacOS and Linux
+* Supports both Streamlink and Livestreamer
+* Browse streams by popularity, game, community or team
 * Watch streams in the video player of your choice
 * Watch multiple streams at once
-* Integrated Twitch.tv login with access to subscriptions and followed channels and games
-* Follow your favorite channels and games
-* Filter streams by channel or broadcaster language
-* See desktop notifications whenever a followed channel starts broadcasting
-* Join the Twitch chat with different chat applications
-* Rich settings menu with lots of customizations
+* Access your subscriptions and followed channels or games
+* Filter streams by channel- or broadcasting language
+* Receive desktop notifications when new streams start
+* Join the Twitch chat by using customizable chat applications
+* Rich settings menu with lots of customizations and presets
 * Individual channel settings
-* Customizable presets for player and chat applications
 * Integrated default and dark themes
 
 
 ## Why
 
-One of the reasons for having bad viewing experiences on [Twitch.tv][Twitch] is the usage of the flash player or the experimental HTML5 player on their website. On some systems, this is causing major problems like buffering/stuttering or low video playback frame rates. The reason for this is often the lack of GPU acceleration of the web browser and/or high CPU and memory usage, which can be a big issue especially for mobile desktop devices.  
-With Streamlink Twitch GUI you're not dependent on your web browser. Unlike the official Twitch desktop app, Streamlink Twitch GUI doesn't embed the Twitch.tv website, so fewer resources are needed. Streams can be watched in the video player of your choice, enabling a smooth video playback.  
-Please have in mind, that by using this application you're bypassing any ads run by Twitch (adblock users also do). If you want to support [Twitch][Twitch] or a single broadcaster, please consider buying [Twitch Prime][TwitchPrime] or subscribing to the broadcaster's channel in the regular way. Thank you!
+One of the reasons for having bad viewing experiences on [Twitch.tv][Twitch] is the usage of their HTML5 or Flash video player. Especially on mobile desktop devices, high CPU and memory usage and lack of GPU acceleration of the web browser can cause major issues like buffering, stuttering or low video playback frame rates.
+
+With Streamlink Twitch GUI you're not dependent on your web browser and streams can be watched in the video player of your choice, enabling a smooth video playback. In addition to that, variable stream buffers will help you countering bad network conditions.
+
+Please bear in mind that you're bypassing any ads run by Twitch by using this software. If you want to support [Twitch][Twitch] or a single broadcaster, please consider buying [Twitch Prime][TwitchPrime] or subscribing to the broadcaster's channel. Thank you!
 
 
 ## Download
@@ -93,7 +93,8 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
 
 
 
-  [Preview]: https://cloud.githubusercontent.com/assets/467294/20868651/ef3a2c42-ba60-11e6-9748-5aeec324f355.png "Preview image"
+  [Preview]: https://user-images.githubusercontent.com/467294/28097570-3415020e-66b1-11e7-928d-4b9da35daf13.jpg "Preview image"
+  [Website]: https://streamlink.github.io/streamlink-twitch-gui/ "Streamlink Twitch GUI website"
   [Releases]: https://github.com/streamlink/streamlink-twitch-gui/releases "Streamlink Twitch GUI Releases"
   [Issues]: https://github.com/streamlink/streamlink-twitch-gui/issues "Streamlink Twitch GUI Issues"
   [Wiki]: https://github.com/streamlink/streamlink-twitch-gui/wiki "Streamlink Twitch GUI Wiki"
