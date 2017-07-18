@@ -1,4 +1,4 @@
-import jQuery from "bower/jquery/dist/jquery";
+import jQuery from "jquery/dist/jquery";
 
 
 window.jQuery = window.$ = jQuery;

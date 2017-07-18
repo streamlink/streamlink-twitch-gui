@@ -37,7 +37,7 @@ const resolveLoaderModuleDirectories = [
 
 // exclude modules/files from the js bundle
 const cssExtractTextPlugin = new ExtractTextPlugin({
-	filename: "vendor.css"
+	filename: "[name].css"
 });
 const lessExtractTextPlugin = new ExtractTextPlugin({
 	filename: "main.css"
@@ -77,7 +77,7 @@ const commonLoaders = [
 	// Vendor stylesheets (don't parse anything)
 	{
 		test: /\.css$/,
-		include: pModulesBower,
+		exclude: pStyles,
 		loader: cssExtractTextPlugin.extract({
 			use: [
 				{
@@ -173,7 +173,12 @@ module.exports = {
 	// common options
 	// the grunt-webpack merges the "options" objects with each task config (nested)
 	options: {
+		cache: true,
+
 		stats: {
+			modules: false,
+			chunks: false,
+			chunkModules: false,
 			children: false,
 			timings: true,
 			warnings: true

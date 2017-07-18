@@ -14,14 +14,18 @@ import {
 	get,
 	set,
 	setOwner,
+	$,
 	HTMLBars,
+	inject,
 	run,
 	Component,
 	EventDispatcher
 } from "ember";
+import HotkeyService from "services/HotkeyService";
 import CheckBoxComponent from "components/form/CheckBoxComponent";
 
 
+const { service } = inject;
 const { compile } = HTMLBars;
 
 let eventDispatcher, owner, context;
@@ -33,6 +37,7 @@ module( "components/form/CheckBoxComponent", {
 		eventDispatcher.setup( {}, fixtureElement );
 		owner = buildOwner();
 		owner.register( "event_dispatcher:main", eventDispatcher );
+		owner.register( "service:hotkey", HotkeyService );
 		owner.register( "component:check-box", CheckBoxComponent );
 	},
 
@@ -148,5 +153,70 @@ test( "CheckBoxComponent - without block", function( assert ) {
 		"bar",
 		"The label updates"
 	);
+
+});
+
+
+test( "Hotkeys", assert => {
+
+	let e;
+
+	context = Component.extend({
+		checked: false,
+		disabled: false,
+		layout: compile( "{{check-box 'foo' checked=checked disabled=disabled}}" ),
+
+		hotkey: service(),
+		keyUp( e ) {
+			return get( this, "hotkey" ).trigger( e );
+		}
+	}).create();
+	setOwner( context, owner );
+	runAppend( context );
+
+	const $context = context.$();
+	const $elem = $context.find( ".check-box-component" );
+
+	const trigger = code => run( () => {
+		e = $.Event( "keyup" );
+		e.code = code;
+		$context.trigger( e );
+	});
+
+	assert.notStrictEqual( document.activeElement, $elem[0], "Is not focused initially" );
+	assert.strictEqual( get( context, "checked" ), false, "Is not checked initially" );
+	assert.strictEqual( $elem.attr( "tabindex" ), "0", "Has a tabindex attribute with value 0" );
+
+	trigger( "Space" );
+	assert.strictEqual( get( context, "checked" ), false, "Is still not checked on Space" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+
+	$elem.focus();
+	assert.strictEqual( document.activeElement, $elem[0], "Is focused now" );
+
+	trigger( "Space" );
+	assert.strictEqual( get( context, "checked" ), true, "Is checked on Space" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+	trigger( "Space" );
+	assert.strictEqual( get( context, "checked" ), false, "Is not checked anymore on Space" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+
+	trigger( "Escape" );
+	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
+
+	run( () => set( context, "disabled", true ) );
+	$elem.focus();
+	assert.strictEqual( document.activeElement, $elem[0], "Is focused now" );
+
+	trigger( "Space" );
+	assert.strictEqual( get( context, "checked" ), false, "Is not checked on Space when disabled" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+
+	trigger( "Escape" );
+	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
 
 });
