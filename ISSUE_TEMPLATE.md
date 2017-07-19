@@ -1,7 +1,8 @@
 *Thanks for reporting an issue!*
-*Please read the contribution guidelines first!*
+*Please read the contribution guidelines first! (see the link above)*
 
 *Feel free to use the following template. Be as detailed as possible.*
+*Please see the text preview to avoid unnecessary formatting errors.*
 *Don't forget to remove this text before submitting.*
 
 ----
@@ -9,9 +10,10 @@
 ### Checklist
 
 - [x] This is a bug report.
-- [ ] Streamlink is working correctly on my system without using the Twitch GUI.
+- [ ] This is a feature request.
+- [ ] I understand the difference between *Streamlink* and *Streamlink Twitch GUI*.
 - [ ] I tried solving my issue by reading the project's wiki first.
-- [ ] I used the search function to find already opened/closed issues or pull requests.
+- [ ] I have read the contribution guidelines und used the search function to find already existing threads.
 
 ### Description
 
@@ -27,7 +29,12 @@
 2. ...
 3. ...
 
-### Environment details (operating system, etc.)
+### Environment details
+
+Operating system and version: ...
+Streamlink Twitch GUI version: ...
+Streamlink version: ...
+Configuration details: ...
 
 ...
 
