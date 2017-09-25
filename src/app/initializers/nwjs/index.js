@@ -71,7 +71,8 @@ Application.instanceInitializer({
 		// listen for the close event and show the dialog instead of strictly shutting down
 		nwWindow.on( "close", function() {
 			if ( location.pathname !== "/index.html" ) {
-				return nwApp.quit();
+				process.exit();
+				return;
 			}
 
 			try {
@@ -79,7 +80,7 @@ Application.instanceInitializer({
 				setFocused( true );
 				nwjsService.close();
 			} catch ( e ) {
-				nwApp.quit();
+				process.exit();
 			}
 		});
 	}
