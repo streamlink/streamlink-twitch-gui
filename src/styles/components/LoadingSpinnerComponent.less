@@ -25,6 +25,13 @@
 		stroke-width: unit( ( @stroke * 100 ), % );
 		.anim-spinner();
 
+		// Fix a weird Chromium rendering bug (since NWjs >=0.22.0):
+		// The spinner animation causes its bounding box to change its size, depending on the
+		// current animation frame. Whenever the bounding box shrinks, Chromium doesn't clear the
+		// surrounding pixels, which causes the circle to leave animation artifacts.
+		// Fix this by setting the invalid css outline property here.
+		outline: 1px solid transparent;
+
 		.theme({
 			stroke: @theme-text-color-alt;
 		});
