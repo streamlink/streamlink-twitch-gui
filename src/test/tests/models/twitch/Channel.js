@@ -16,6 +16,11 @@ import {
 	run,
 	Service
 } from "ember";
+import {
+	attr,
+	Model,
+	Adapter
+} from "ember-data";
 import Channel from "models/twitch/Channel";
 import ChannelSerializer from "models/twitch/ChannelSerializer";
 import TwitchAdapter from "store/TwitchAdapter";
@@ -236,5 +241,43 @@ test( "Computed properties", assert => {
 		true,
 		"Does have a broadcaster language when both languages differ"
 	);
+
+});
+
+
+test( "getChannelSettings", async assert => {
+
+	let fail = false;
+
+	const ChannelSettings = Model.extend({
+		foo: attr( "string" )
+	});
+
+	owner.register( "model:channel-settings", ChannelSettings );
+	owner.register( "adapter:channel-settings", Adapter.extend({
+		async findRecord() {
+			if ( fail ) {
+				throw new Error();
+			}
+			return {
+				id: "foo",
+				foo: "bar"
+			};
+		}
+	}) );
+
+	const channel = env.store.createRecord( "twitchChannel", {
+		name: "foo"
+	});
+
+	let channelSettings = await channel.getChannelSettings();
+	assert.propEqual( channelSettings, { foo: "bar" }, "Returns channel settings data" );
+	assert.notOk( env.store.hasRecordForId( "channel-settings", "foo" ), "Unloads record" );
+
+	fail = true;
+
+	channelSettings = await channel.getChannelSettings();
+	assert.propEqual( channelSettings, { foo: null }, "Returns empty channel settings data" );
+	assert.notOk( env.store.hasRecordForId( "channel-settings", "foo" ), "Unloads record" );
 
 });

@@ -1,29 +1,27 @@
-import Logger from "utils/Logger";
+import { logResolved, logRejected } from "../logger";
+import NotificationProviderAuto from "./auto";
+import NotificationProviderSnoreToast from "./snoretoast";
+import NotificationProviderNative from "./native";
+import NotificationProviderFreedesktop from "./freedesktop";
+import NotificationProviderGrowl from "./growl";
+import NotificationProviderRich from "./rich";
 import {
 	platform,
 	isWinGte8,
 	isMountainLion
 } from "utils/node/platform";
-import ProviderAuto from "./notification/NotificationProviderAuto";
-import ProviderSnoreToast from "./notification/NotificationProviderSnoreToast";
-import ProviderNative from "./notification/NotificationProviderNative";
-import ProviderFreedesktop from "./notification/NotificationProviderFreedesktop";
-import ProviderGrowl from "./notification/NotificationProviderGrowl";
-import ProviderRich from "./notification/NotificationProviderRich";
 
 
 const providers = {
-	"auto": ProviderAuto,
-	"snoretoast": ProviderSnoreToast,
-	"native": ProviderNative,
-	"freedesktop": ProviderFreedesktop,
-	"growl": ProviderGrowl,
-	"rich": ProviderRich
+	"auto": NotificationProviderAuto,
+	"snoretoast": NotificationProviderSnoreToast,
+	"native": NotificationProviderNative,
+	"freedesktop": NotificationProviderFreedesktop,
+	"growl": NotificationProviderGrowl,
+	"rich": NotificationProviderRich
 };
 const fallbackMap = {};
 const instanceCache = {};
-
-const { logResolved, logRejected } = new Logger( "Notification" );
 
 
 /**
@@ -84,7 +82,7 @@ function notify( provider, data, setupData ) {
  * @param {Boolean?} noFallback
  * @returns {Promise}
  */
-export function show( provider, data, noFallback ) {
+export function showNotification( provider, data, noFallback ) {
 	// recursively test provider and its fallbacks
 	function testProvider( currentProvider ) {
 		// provider is not working... try to find fallbacks

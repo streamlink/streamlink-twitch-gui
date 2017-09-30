@@ -1,4 +1,4 @@
-import NotificationProvider from "./NotificationProvider";
+import NotificationProvider from "./provider";
 import growly from "growly";
 import { main } from "config";
 import { connect } from "net";

@@ -1,5 +1,5 @@
 import { main } from "config";
-import NotificationProvider from "./NotificationProvider";
+import NotificationProvider from "./provider";
 import promiseChildprocess from "utils/node/promiseChildprocess";
 import which from "utils/node/fs/which";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";

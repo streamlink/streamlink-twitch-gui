@@ -1,5 +1,5 @@
 import { main } from "config";
-import NotificationProvider from "./NotificationProvider";
+import NotificationProvider from "./provider";
 import promiseChildprocess from "utils/node/promiseChildprocess";
 import { is64bit } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";

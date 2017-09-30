@@ -10,8 +10,8 @@ import {
 import Settings from "models/localstorage/Settings";
 import {
 	isSupported as isNotificationSupported,
-	show as showNotification
-} from "utils/Notification";
+	showNotification
+} from "services/NotificationService/provider";
 import { isWin } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 

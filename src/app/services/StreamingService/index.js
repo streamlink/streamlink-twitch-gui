@@ -27,7 +27,6 @@ import {
 	setMinimized,
 	setVisibility
 } from "nwjs/Window";
-import ChannelSettingsMixin from "mixins/ChannelSettingsMixin";
 
 
 const { service } = inject;
@@ -46,7 +45,7 @@ function setIfNotNull( objA, objB, key ) {
 }
 
 
-export default Service.extend( ChannelSettingsMixin, {
+export default Service.extend({
 	chat: service(),
 	modal: service(),
 	settings: service(),
@@ -256,8 +255,8 @@ export default Service.extend( ChannelSettingsMixin, {
 
 
 	async getChannelSettings( stream, quality ) {
-		const id = get( stream, "channel.name" );
-		const channelSettings = await this.loadChannelSettings( id );
+		const channel = get( stream, "channel" );
+		const channelSettings = await channel.getChannelSettings();
 
 		// override channel specific settings
 		if ( quality === undefined ) {

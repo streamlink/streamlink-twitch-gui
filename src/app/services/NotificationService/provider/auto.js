@@ -1,4 +1,4 @@
-import NotificationProvider from "./NotificationProvider";
+import NotificationProvider from "./provider";
 
 
 export default class NotificationProviderAuto extends NotificationProvider {

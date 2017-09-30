@@ -11,5 +11,8 @@
 		"request": 60000,
 		"retry": 1000,
 		"error": 120000
+	},
+	"query": {
+		"limit": 100
 	}
 }

@@ -1,5 +1,5 @@
 import { main } from "config";
-import NotificationProvider from "./NotificationProvider";
+import NotificationProvider from "./provider";
 
 
 const { "display-name": displayName } = main;
