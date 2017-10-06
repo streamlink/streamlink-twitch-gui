@@ -10,7 +10,7 @@ import {
 	iconDownload
 } from "./icons";
 import { logDebug } from "./logger";
-import { showNotification } from "./provider";
+import { showNotification } from "./providers";
 import {
 	ATTR_NOTIFY_CLICK_NOOP,
 	ATTR_NOTIFY_CLICK_FOLLOWED,

@@ -11,7 +11,7 @@ import Settings from "models/localstorage/Settings";
 import {
 	isSupported as isNotificationSupported,
 	showNotification
-} from "services/NotificationService/provider";
+} from "services/NotificationService/providers";
 import { isWin } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 

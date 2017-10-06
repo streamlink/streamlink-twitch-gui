@@ -46,7 +46,7 @@ test( "dispatchNotifications", async assert => {
 		"models/localstorage/Settings": {},
 		"nwjs/Window": {},
 		"./logger": {},
-		"./provider": {},
+		"./providers": {},
 		"./icons": {
 			async iconDownload( stream ) {
 				assert.step( "download" );
@@ -109,7 +109,7 @@ test( "Group and single notifications", async assert => {
 		"models/localstorage/Settings": {},
 		"nwjs/Window": {},
 		"./logger": {},
-		"./provider": {},
+		"./providers": {},
 		"./icons": {
 			iconGroup: "group-icon"
 		}
@@ -199,7 +199,7 @@ test( "Notification click", async assert => {
 	let promise;
 
 	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"./provider": {},
+		"./providers": {},
 		"./icons": {},
 		"models/localstorage/Settings": {
 			ATTR_NOTIFY_CLICK_NOOP,
@@ -359,7 +359,7 @@ test( "Show notficiation", async assert => {
 		"nwjs/Window": {},
 		"./logger": {},
 		"./icons": {},
-		"./provider": {
+		"./providers": {
 			async showNotification( provider, data, notAuto ) {
 				assert.strictEqual( provider, expectedProvider, "Has the correct provider" );
 				assert.strictEqual( data, notification, "Uses the correct notification data" );
