@@ -1,124 +1,42 @@
-import { logResolved, logRejected } from "../logger";
 import NotificationProviderAuto from "./auto";
 import NotificationProviderSnoreToast from "./snoretoast";
 import NotificationProviderNative from "./native";
 import NotificationProviderFreedesktop from "./freedesktop";
 import NotificationProviderGrowl from "./growl";
 import NotificationProviderRich from "./rich";
-import {
-	platform,
-	isWinGte8,
-	isMountainLion
-} from "utils/node/platform";
 
 
-const providers = {
+/**
+ * @interface NotificationProvider
+ */
+/**
+ * @function
+ * @name NotificationProvider.isSupported
+ * @returns {boolean}
+ */
+/**
+ * @function
+ * @name NotificationProvider#setup
+ * @returns {Promise}
+ */
+/**
+ * @function
+ * @name NotificationProvider#notify
+ * @params {NotificationData} data
+ * @returns {Promise}
+ */
+
+
+/** @type {Object.<string, (NotificationProvider|function(new:NotificationProvider))>} */
+export default {
+	// special provider for always using fallbacks
 	"auto": NotificationProviderAuto,
-	"snoretoast": NotificationProviderSnoreToast,
+	// html5 notifications provider that uses the operating system's native notifications
 	"native": NotificationProviderNative,
+	// helper providers for native notifications
+	"snoretoast": NotificationProviderSnoreToast,
 	"freedesktop": NotificationProviderFreedesktop,
+	// non-native providers
 	"growl": NotificationProviderGrowl,
 	"rich": NotificationProviderRich
 };
-const fallbackMap = {};
-const instanceCache = {};
-
-
-/**
- * Check whether a NotificationProvider is supported on the current platform
- * @param {string} provider
- * @returns {boolean}
- */
-export function isSupported( provider ) {
-	if ( !providers.hasOwnProperty( provider ) ) {
-		return false;
-	}
-
-	let platforms = providers[ provider ].platforms;
-	return platforms.hasOwnProperty( platform )
-	    || isWinGte8 && platforms.hasOwnProperty( "win32gte8" )
-	    || isMountainLion && platforms.hasOwnProperty( "mountainlion" );
-}
-
-
-/**
- * Get the name of a fallback provider
- * @param {String} provider
- * @returns {String}
- */
-function getFallback( provider ) {
-	let platforms = providers[ provider ].platforms;
-	if ( isWinGte8 && platforms.hasOwnProperty( "win32gte8" ) ) {
-		return platforms[ "win32gte8" ];
-	}
-	if ( isMountainLion && platforms.hasOwnProperty( "mountainlion" ) ) {
-		return platforms[ "mountainlion" ];
-	}
-	return platforms[ platform ] || null;
-}
-
-
-/**
- * Create a notification
- * @param {String} provider
- * @param {Object} data
- * @param {Object?} setupData
- * @returns {Promise}
- */
-function notify( provider, data, setupData ) {
-	let providerInstance = instanceCache.hasOwnProperty( provider )
-		? instanceCache[ provider ]
-		: ( instanceCache[ provider ] = new providers[ provider ]( setupData ) );
-
-	return providerInstance.notify( data )
-		.then( logResolved( "Showing notification", { provider, setupData, data } ) );
-}
-
-
-/**
- * Tests a NotificationProvider given by name and displays a notification
- * @param {String} provider
- * @param {Object} data
- * @param {Boolean?} noFallback
- * @returns {Promise}
- */
-export function showNotification( provider, data, noFallback ) {
-	// recursively test provider and its fallbacks
-	function testProvider( currentProvider ) {
-		// provider is not working... try to find fallbacks
-		function onError( err ) {
-			// don't use fallbacks
-			if ( noFallback ) {
-				return Promise.reject( err );
-			}
-
-			// get fallback of current provider
-			let fallbackProvider = getFallback( currentProvider );
-
-			// no further fallbacks defined?
-			return !fallbackProvider
-				? Promise.reject( err )
-				: testProvider( fallbackProvider );
-		}
-
-		// optimization: is a fallback for the current provider already known and set up?
-		if ( !noFallback && fallbackMap.hasOwnProperty( currentProvider ) ) {
-			// don't test the current provider twice
-			return notify( fallbackMap[ currentProvider ], data )
-				.catch( onError );
-		}
-
-		// test the current provider
-		return providers[ currentProvider ].test()
-			// current provider is working...
-			.then(function( setupData ) {
-				// add it to the fallbackMap
-				fallbackMap[ provider ] = currentProvider;
-				return notify( currentProvider, data, setupData );
-			})
-			.catch( onError )
-			.catch( logRejected({ currentProvider, data }) );
-	}
-
-	return testProvider( provider );
-}

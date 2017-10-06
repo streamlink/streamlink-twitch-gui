@@ -21,8 +21,8 @@ export const isWin    = platform === "win32";
 export const isDarwin = platform === "darwin";
 export const isLinux  = platform === "linux";
 
+export const isWin7    = isWin && !isVersionGte( "6.2.0" );
 export const isWinGte8 = isWin && isVersionGte( "6.2.0" );
-export const isMountainLion = isDarwin && isVersionGte( "12.0.0" );
 
 
 export const is64bit = arch === "x64";

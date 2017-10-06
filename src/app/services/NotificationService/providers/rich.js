@@ -1,79 +1,84 @@
-import { main } from "config";
-import NotificationProvider from "./provider";
+import {
+	main as mainConfig
+} from "config";
+import {
+	window as Window
+} from "nwjs/Window";
+import { isWin7 } from "utils/node/platform";
 
 
-const { "display-name": displayName } = main;
+const { "display-name": displayName } = mainConfig;
+const notifications = Window.chrome.notifications;
+
+const { isArray } = Array;
 
 
-export default class NotificationProviderRich extends NotificationProvider {
-	constructor() {
-		super();
+/**
+ * Chromium Rich Notifications
+ *   https://developer.chrome.com/apps/richNotifications
+ *
+ * Already replaced by native notifications on macOS and Linux.
+ * On Windows >=8, rich notifications are also pointless due to the native action center
+ * notificaions provided by snoretoast, so only make rich notifications available on Windows 7.
+ *
+ * @class NotificationProviderRich
+ * @implements NotificationProvider
+ */
+export default class NotificationProviderRich {
+	static isSupported() {
+		return isWin7;
+	}
 
-		let clickCallbacks = this.clickCallbacks = [];
-		let provider = this.provider = window.chrome.notifications;
+	async setup() {
+		/** @type {Map<string,Function>} */
+		const callbacks = this.callbacks = new Map();
+		this.index = 0;
 
 		// remove previous event listeners
-		[ "onClosed", "onClicked" ].forEach(function( key ) {
-			let ev = provider[ key ];
-			ev.getListeners().forEach(function( listener ) {
-				ev.removeListener( listener.callback );
-			});
+		[ "onClosed", "onClicked" ].forEach( name => {
+			const event = notifications[ name ];
+			event.getListeners().forEach( listener =>
+				event.removeListener( listener.callback )
+			);
 		});
 
 		// register a global "onClosed" event listener:
 		// remove the click callback once the notification has been closed
-		provider.onClosed.addListener(function( id ) {
-			id = Number( id );
-			if ( isNaN( id ) ) { return; }
-			clickCallbacks.splice( id, 1 );
+		notifications.onClosed.addListener( id => {
+			callbacks.delete( id );
 		});
 
 		// register a global "onClosed" event listener:
 		// execute the click callback and hide the notification
-		provider.onClicked.addListener(function( id ) {
-			let callback = clickCallbacks[ Number( id ) ];
-			if ( callback ) {
-				callback();
+		notifications.onClicked.addListener( id => {
+			if ( callbacks.has( id ) ) {
+				callbacks.get( id )();
 			}
-			provider.clear( id );
+			notifications.clear( id );
 		});
 	}
 
-	static test() {
-		return Promise.resolve();
-	}
+	async notify( data ) {
+		const notification = {
+			title         : data.title,
+			iconUrl       : data.getIconAsFileURI(),
+			contextMessage: displayName,
+			isClickable   : true
+		};
 
-	notify( data ) {
-		return new Promise( resolve => {
-			let notification = {
-				title         : data.title,
-				message       : data.message,
-				iconUrl       : `file://${data.icon}`,
-				contextMessage: displayName,
-				isClickable   : true
-			};
+		// support list notifications
+		if ( isArray( data.message ) ) {
+			notification.type = "list";
+			notification.message = "";
+			notification.items = data.message;
+		} else {
+			notification.type = "basic";
+			notification.message = data.message;
+		}
 
-			// support list notifications
-			if ( Array.isArray( data.message ) ) {
-				notification.type = "list";
-				notification.items = data.message;
-				notification.message = "";
-			} else {
-				notification.type = "basic";
-			}
-
-			// register click callback and create notification
-			this.clickCallbacks.push( data.click );
-			this.provider.create( String( this.clickCallbacks.length - 1 ), notification );
-
-			resolve();
-		});
+		// register click callback and create notification
+		const id = String( ++this.index );
+		this.callbacks.set( id, data.click );
+		notifications.create( id, notification );
 	}
 }
-
-
-NotificationProviderRich.platforms = {
-	win32: null,
-	darwin: null,
-	linux: null
-};

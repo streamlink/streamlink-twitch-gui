@@ -1,3 +1,4 @@
+import Process from "nwjs/process";
 import { spawn } from "child_process";
 
 
@@ -8,7 +9,7 @@ export default function( command, params, options = {} ) {
 	const opt = assign( {}, options );
 
 	if ( opt.env ) {
-		opt.env = assign( {}, process.env, opt.env );
+		opt.env = assign( {}, Process.env, opt.env );
 	}
 
 	return spawn( command, params, opt );

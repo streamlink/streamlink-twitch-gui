@@ -10,7 +10,8 @@ import {
 	iconDownload
 } from "./icons";
 import { logDebug } from "./logger";
-import { showNotification } from "./providers";
+import NotificationData from "./data";
+import { showNotification } from "./provider";
 import {
 	ATTR_NOTIFY_CLICK_NOOP,
 	ATTR_NOTIFY_CLICK_FOLLOWED,
@@ -50,11 +51,11 @@ export default Mixin.create( Evented, {
 
 			} else if ( length > 0 ) {
 				// download all channel icons first and save them into a local temp dir...
-				await Promise.all( streams.map( async stream =>
+				await Promise.all( streams.map( stream =>
 					iconDownload( stream )
 				) );
 				// show all notifications
-				await Promise.all( streams.map( async stream =>
+				await Promise.all( streams.map( stream =>
 					this._showNotificationSingle( stream )
 				) );
 			}
@@ -69,7 +70,7 @@ export default Mixin.create( Evented, {
 	async _showNotificationGroup( streams ) {
 		const settings = get( this, "settings.notify_click_group" );
 
-		return this._showNotification({
+		const data = new NotificationData({
 			title  : "Some followed channels have started streaming",
 			message: streams.map( stream => ({
 				title  : get( stream, "channel.display_name" ),
@@ -79,6 +80,8 @@ export default Mixin.create( Evented, {
 			click  : () => this._notificationClick( settings, streams ),
 			settings
 		});
+
+		return this._showNotification( data );
 	},
 
 	/**
@@ -90,13 +93,15 @@ export default Mixin.create( Evented, {
 		const settings = get( this, "settings.notify_click" );
 		const name = get( stream, "channel.display_name" );
 
-		return this._showNotification({
+		const data = new NotificationData({
 			title  : `${name} has started streaming`,
 			message: get( stream, "channel.status" ) || "",
 			icon   : get( stream, "logo" ) || iconGroup,
 			click  : () => this._notificationClick( settings, [ stream ] ),
 			settings
 		});
+
+		return this._showNotification( data );
 	},
 
 	/**
@@ -144,14 +149,14 @@ export default Mixin.create( Evented, {
 	},
 
 	/**
-	 * @param {Object} notification
+	 * @param {NotificationData} data
 	 * @returns {Promise}
 	 */
-	async _showNotification( notification ) {
+	async _showNotification( data ) {
 		const provider = get( this, "settings.notify_provider" );
 
 		// don't await the notification promise here
-		showNotification( provider, notification, provider !== "auto" )
+		showNotification( provider, data, false )
 			.catch( () => {} );
 	}
 });

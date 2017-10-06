@@ -221,8 +221,16 @@ export default Model.extend({
 			value: "auto",
 			label: {
 				name: "Automatic selection",
-				description: "Detects the best type of notification",
-				notes: "Prefers native notifications, falls back to growl or rich notifications"
+				description: "Tries to find the best notification provider",
+				notes: "Tests all available notification providers in descending order"
+			}
+		},
+		{
+			value: "native",
+			label: {
+				name: "Native notifications",
+				description: "Uses the system's native notification system",
+				notes: "Notifications can be configured in the system preferences"
 			}
 		},
 		{
@@ -230,15 +238,7 @@ export default Model.extend({
 			label: {
 				name: "Windows toast notifications",
 				description: "Native notifications on Windows 8+",
-				notes: "\"Banner notifications\" need to be enabled"
-			}
-		},
-		{
-			value: "native",
-			label: {
-				name: "Native notifications",
-				description: "Chromium's native notification implementation",
-				notes: "Notifications can be configured in your system preferences"
+				notes: "\"Banner notifications\" need to be enabled in the system preferences"
 			}
 		},
 		{
@@ -253,8 +253,8 @@ export default Model.extend({
 			value: "growl",
 			label: {
 				name: "Growl notifications",
-				description: "Third-party notification service for Windows, MacOS and Linux",
-				notes: "Requires Growl to be installed and running on your system"
+				description: "Third-party notification service for Windows, macOS and Linux",
+				notes: "Requires Growl to be installed and running on the system"
 			}
 		},
 		{

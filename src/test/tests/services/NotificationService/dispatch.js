@@ -46,7 +46,7 @@ test( "dispatchNotifications", async assert => {
 		"models/localstorage/Settings": {},
 		"nwjs/Window": {},
 		"./logger": {},
-		"./providers": {},
+		"./provider": {},
 		"./icons": {
 			async iconDownload( stream ) {
 				assert.step( "download" );
@@ -109,7 +109,7 @@ test( "Group and single notifications", async assert => {
 		"models/localstorage/Settings": {},
 		"nwjs/Window": {},
 		"./logger": {},
-		"./providers": {},
+		"./provider": {},
 		"./icons": {
 			iconGroup: "group-icon"
 		}
@@ -199,7 +199,7 @@ test( "Notification click", async assert => {
 	let promise;
 
 	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"./providers": {},
+		"./provider": {},
 		"./icons": {},
 		"models/localstorage/Settings": {
 			ATTR_NOTIFY_CLICK_NOOP,
@@ -359,11 +359,11 @@ test( "Show notficiation", async assert => {
 		"nwjs/Window": {},
 		"./logger": {},
 		"./icons": {},
-		"./providers": {
-			async showNotification( provider, data, notAuto ) {
+		"./provider": {
+			async showNotification( provider, data, newInst ) {
 				assert.strictEqual( provider, expectedProvider, "Has the correct provider" );
 				assert.strictEqual( data, notification, "Uses the correct notification data" );
-				assert.strictEqual( notAuto, provider !== "auto", "Autoprovider is correct" );
+				assert.strictEqual( newInst, false, "Uses cached providers" );
 				promise = new Promise( resolve => setTimeout( resolve, 1 ) );
 				await promise;
 				if ( failShowNotification ) {

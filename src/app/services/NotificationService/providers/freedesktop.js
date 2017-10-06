@@ -1,315 +1,186 @@
-import { main } from "config";
-import NotificationProvider from "./provider";
-import promiseChildprocess from "utils/node/promiseChildprocess";
-import which from "utils/node/fs/which";
-import StreamOutputBuffer from "utils/StreamOutputBuffer";
-import { spawn } from "child_process";
-import { EventEmitter } from "events";
+import {
+	main as mainConfig,
+	notification as notificationConfig
+} from "config";
+import {
+	window as Window
+} from "nwjs/Window";
+import { ATTR_NOTIFY_CLICK_NOOP } from "models/localstorage/Settings";
+import { isLinux } from "utils/node/platform";
+import { sessionBus } from "dbus-native";
 
 
-const { "display-name": displayName } = main;
+const { "display-name": displayName } = mainConfig;
+const {
+	provider: {
+		freedesktop: {
+			expire: EXPIRE_SECS
+		}
+	}
+} = notificationConfig;
 
-// https://developer.gnome.org/notification-spec/
-const DBUS_NAME = "org.freedesktop.Notifications";
-const DBUS_PATH = "/org/freedesktop/Notifications";
+const { setTimeout, clearTimeout } = Window;
 
+// don't use NotificationClosed return codes
 //const CODE_NOTIF_DISMISSED = 2;
 //const CODE_NOTIF_CLOSED = 3;
 
-const EVENT_CLOSED = "closed";
-const EVENT_ACTION = "action";
-
-const TIME_MONITOR_INIT = 3000;
-
-const ACTION_OPEN_ID   = "open";
+const ACTION_OPEN_ID = "open";
 const ACTION_OPEN_TEXT = "Open";
-const ACTION_DISMISS_ID   = "dismiss";
+const ACTION_DISMISS_ID = "dismiss";
 const ACTION_DISMISS_TEXT = "Dismiss";
 
-const EXPIRE_SECS = 3600 * 12;
+const ACTIONS = [ ACTION_OPEN_ID, ACTION_OPEN_TEXT, ACTION_DISMISS_ID, ACTION_DISMISS_TEXT ];
+
 const EXPIRE_MSECS = EXPIRE_SECS * 1000;
 
 
-const commonParams = [
-	"--session",
-	"--dest",
-	DBUS_NAME,
-	"--object-path",
-	DBUS_PATH
-];
-
-const strActions = [ ACTION_OPEN_ID, ACTION_OPEN_TEXT, ACTION_DISMISS_ID, ACTION_DISMISS_TEXT ]
-	.map( item => `'${item}'` )
-	.join( "," );
-
-
-const reDbusName = DBUS_NAME.replace( ".", "\\." );
-const reCapabilities = /^\(\s*(\[.*])\s*,?\s*\)$/;
-const reCapabilityString = /'/g;
-const reMonitorSuccess = [
-	new RegExp( `^Monitoring signals on object ${DBUS_PATH} owned by ${reDbusName}$` ),
-	new RegExp( `^The name ${reDbusName} is owned by .+$` )
-];
-const reMonitorMessage = new RegExp([
-	`^${DBUS_PATH}: `,
-	`${reDbusName}\\.(ActionInvoked|NotificationClosed) `,
-	"\\(uint32 (\\d+), (?:uint32 (\\d+)|'(.+)')\\)$"
-].join( "" ) );
-const reCall = /^\(uint32 (\d+),?\)$/;
-
-
-function callMethod( exec, method, params, onExit, onStdOut ) {
-	return promiseChildprocess(
-		[
-			exec,
-			[
-				"call",
-				...commonParams,
-				"--method",
-				method,
-				...params
-			]
-		],
-		onExit,
-		onStdOut
-	);
-}
-
-
-class NotificationFreedesktopCallback {
+/**
+ * @class NotificationProviderFreedesktopCallback
+ * @property {Function} callback
+ * @property {number} expire
+ */
+class NotificationProviderFreedesktopCallback {
 	/**
-	 * @param {Function} click
-	 * @param {Number} expire
+	 * @param {Function} callback
+	 * @param {number} expire
 	 */
-	constructor( click, expire ) {
-		this.click = click;
+	constructor( callback, expire ) {
+		this.callback = callback;
 		this.expire = expire;
 	}
 }
 
 
-export default class NotificationProviderFreedesktop extends NotificationProvider {
+/**
+ * Freedesktop notifications
+ *   https://developer.gnome.org/notification-spec/
+ *
+ * Use the "dbus-native" module for all DBus communication.
+ * This only requires native node modules in special cases, which have been disabled by webpack.
+ *
+ * @class NotificationProviderFreedesktop
+ * @implements NotificationProvider
+ */
+export default class NotificationProviderFreedesktop {
+	static isSupported() {
+		return isLinux;
+	}
+
 	/**
-	 * @param {String} exec
-	 * @param {Boolean} supportsActions
+	 * Calls a method on the given dbus interface and returns a Promise
+	 * @param {Object} iface
+	 * @param {string} method
+	 * @param {...(*)} args
+	 * @returns {Promise}
 	 */
-	constructor({ exec, supportsActions }) {
-		super();
-		this.exec = exec;
-		this.supportsActions = supportsActions;
-		this.events = new EventEmitter();
-		/** @type {ChildProcess} */
-		this.monitorSpawn = null;
-		/** @type {Object<Number,NotificationFreedesktopCallback>} */
-		this.callbacks = {};
-	}
-
-	static test() {
-		return which( "gdbus" )
-			.then( exec => NotificationProviderFreedesktop.getServerInformation( exec )
-				.then( () => NotificationProviderFreedesktop.getCapabilities( exec ) )
-				.then( supportsActions => ({ exec, supportsActions }) )
-			);
-	}
-
-	static getServerInformation( exec ) {
-		return callMethod(
-			exec,
-			"org.freedesktop.Notifications.GetServerInformation",
-			[],
-			( code, resolve, reject ) => {
-				if ( code === 0 ) {
-					resolve( exec );
+	static async callMethod( iface, method, ...args ) {
+		return await new Promise( ( resolve, reject ) => {
+			iface[ method ]( ...args, ( err, result ) => {
+				if ( err ) {
+					reject( err );
 				} else {
-					reject( new Error( "Could not validate notification server" ) );
+					resolve( result );
 				}
-			}
-		);
+			});
+		});
 	}
 
-	static getCapabilities( exec ) {
-		return callMethod(
-			exec,
-			"org.freedesktop.Notifications.GetCapabilities",
-			[],
-			( code, resolve, reject ) => {
-				if ( code !== 0 ) {
-					reject( new Error( "Could not validate notification server" ) );
-				}
-			},
-			( line, resolve, reject ) => {
-				if ( !line ) { return; }
-
-				let match = reCapabilities.exec( line.trim() );
-				if ( !match ) {
-					return reject( new Error( "Invalid capabilities response" ) );
-				}
-
-				let capabilities = JSON.parse( match[ 1 ].replace( reCapabilityString, "\"" ) );
-				if ( !capabilities || !Array.isArray( capabilities ) ) {
-					return reject( new Error( "Capabilities parsing error" ) );
-				}
-
-				resolve( capabilities.indexOf( "actions" ) !== -1 );
-			}
-		);
-	}
-
-	monitor() {
-		if ( this.monitorSpawn !== null ) {
-			return Promise.resolve();
+	async setup() {
+		// get the session bus
+		const bus = sessionBus();
+		if ( !bus ) {
+			throw new Error( "Could not connect to the DBus session bus" );
 		}
 
-		return new Promise( ( resolve, reject ) => {
-			let params = [ "monitor", ...commonParams ];
-			let child = spawn( this.exec, params );
+		const { callMethod } = NotificationProviderFreedesktop;
 
-			let success = 0;
-			let length = reMonitorSuccess.length;
-			let timeout = setTimeout( reject, TIME_MONITOR_INIT );
-
-			let onStdOut = new StreamOutputBuffer( data => {
-				// wait for all success messages to appear
-				if ( success < length ) {
-					if ( !reMonitorSuccess[ success ].test( data ) ) {
-						reject();
-					} else if ( ++success === length ) {
-						clearTimeout( timeout );
-						resolve( child );
-					}
-					return;
-				}
-
-				// parse messages
-				let match = reMonitorMessage.exec( data );
-				if ( !match ) { return; }
-
-				let [ , signal, id, code, action ] = match;
-				id = Number( id );
-				if ( isNaN( id ) ) { return; }
-
-				switch ( signal ) {
-					case "NotificationClosed":
-						return this.events.emit( EVENT_CLOSED, id, Number( code ) );
-					case "ActionInvoked":
-						return this.events.emit( EVENT_ACTION, id, action );
-				}
-			});
-
-			child.once( "error", reject );
-			child.once( "exit", () => {
-				onExit();
-				reject();
-			});
-			child.stdout.on( "data", onStdOut );
-
-			let onExit = () => {
-				this.events.removeAllListeners();
-				window.removeEventListener( "beforeunload", onExit, false );
-
-				if ( this.monitorSpawn ) {
-					this.monitorSpawn.kill();
-				}
-				this.monitorSpawn = null;
-				Object.keys( this.callbacks ).forEach( id => this.unregisterCallback( id ) );
-			};
-
-			// kill the monitor child process on page refreshes (dev)
-			window.addEventListener( "beforeunload", onExit, false );
-
-			// kill the monitor child process when the application exits
-			process.on( "exit", () => child.kill() );
-		})
-			.then( child => {
-				this.monitorSpawn = child;
-
-				this.events.addListener( EVENT_CLOSED, ( id/*, code*/ ) => {
-					// look only for registered callbacks
-					if ( !this.callbacks.hasOwnProperty( id ) ) { return; }
-					// remove callback and its expiration timeout
-					this.unregisterCallback( id );
-				});
-
-				this.events.addListener( EVENT_ACTION, ( id, action ) => {
-					// look only for registered callbacks
-					if ( !this.callbacks.hasOwnProperty( id ) ) { return; }
-					// execute click callback if user has dismissed the notification
-					if ( this.supportsActions && action === ACTION_OPEN_ID ) {
-						this.callbacks[ id ].click();
-					}
-					// remove callback and its expiration timeout
-					this.unregisterCallback( id );
-				});
-			});
-	}
-
-	send( data ) {
-		let showActions = this.supportsActions && data.click && data.settings > 0;
-
-		return callMethod(
-			this.exec,
-			"org.freedesktop.Notifications.Notify",
-			[
-				displayName,
-				"0",
-				data.icon,
-				data.title,
-				NotificationProvider.getMessageAsString( data.message ),
-				`[${showActions ? strActions : ""}]`,
-				"{}",
-				EXPIRE_SECS
-			],
-			( code, resolve, reject ) => {
-				if ( code !== 0 ) {
-					reject( new Error( "Could not create notification" ) );
-				}
-			},
-			// get notification ID from stdout
-			( line, resolve, reject ) => {
-				if ( !line ) { return; }
-
-				let match = reCall.exec( line );
-				if ( !match ) {
-					return reject( new Error( "Unexpected output" ) );
-				}
-
-				let id = Number( match[ 1 ] );
-				if ( isNaN( id ) ) {
-					return reject( new Error( "Invalid notification ID" ) );
-				}
-
-				resolve( id );
-			}
-		)
-			.then( id => showActions
-				? this.registerCallback( data, id )
-				: undefined
-			);
-	}
-
-	registerCallback( data, id ) {
-		this.callbacks[ id ] = new NotificationFreedesktopCallback(
-			data.click,
-			setTimeout( () => {
-				delete this.callbacks[ id ];
-			}, EXPIRE_MSECS )
+		// get the session bus freedesktop notification interface
+		const iNotification = await callMethod(
+			bus.getService( "org.freedesktop.Notifications" ),
+			"getInterface",
+			"/org/freedesktop/Notifications",
+			"org.freedesktop.Notifications"
 		);
+		this.iNotification = iNotification;
+
+		// check notification server
+		await callMethod( iNotification, "GetServerInformation" );
+
+		// get server capabilities
+		const capabilities = await callMethod( iNotification, "GetCapabilities" );
+		this.supportsActions = capabilities.includes( "actions" );
+
+		/** @type {Map<number,NotificationProviderFreedesktopCallback>} */
+		this.callbacks = new Map();
+
+		iNotification.on( "NotificationClosed", ( id/*, code*/ ) => {
+			if ( !this.callbacks.has( id ) ) { return; }
+			this.unregisterCallback( id );
+		});
+
+		iNotification.on( "ActionInvoked", ( id, action ) => {
+			if ( !this.callbacks.has( id ) ) { return; }
+			if ( this.supportsActions && action === ACTION_OPEN_ID ) {
+				this.callbacks.get( id ).callback();
+			}
+			this.unregisterCallback( id );
+		});
 	}
 
+	/**
+	 * @param {NotificationData} data
+	 * @returns {Promise}
+	 */
+	async notify( data ) {
+		const actions = this.getActions( data );
+
+		const id = await NotificationProviderFreedesktop.callMethod(
+			this.iNotification,
+			"Notify",
+			displayName,
+			0,
+			data.icon,
+			data.title,
+			data.getMessageAsString(),
+			actions,
+			{},
+			EXPIRE_SECS
+		);
+
+		if ( actions.length ) {
+			this.registerCallback( id, data.click );
+		}
+	}
+
+	/**
+	 * @param {NotificationData} data
+	 * @returns {string[]}
+	 */
+	getActions( data ) {
+		const actions = this.supportsActions
+			&& data.click
+			&& data.settings !== ATTR_NOTIFY_CLICK_NOOP;
+
+		return actions
+			? ACTIONS
+			: [];
+	}
+
+	/**
+	 * @param {number} id
+	 * @param {Function} callback
+	 */
+	registerCallback( id, callback ) {
+		const expire = setTimeout( () => this.callbacks.delete( id ), EXPIRE_MSECS );
+		this.callbacks.set( id, new NotificationProviderFreedesktopCallback( callback, expire ) );
+	}
+
+	/**
+	 * @param {number} id
+	 */
 	unregisterCallback( id ) {
-		clearTimeout( this.callbacks[ id ].expire );
-		delete this.callbacks[ id ];
-	}
-
-	notify( data ) {
-		// the notification monitor needs to be launched first
-		return this.monitor()
-			// create the notification
-			.then( () => this.send( data ) );
+		clearTimeout( this.callbacks.get( id ).expire );
+		this.callbacks.delete( id );
 	}
 }
-
-
-NotificationProviderFreedesktop.platforms = {
-	linux: "growl"
-};

@@ -1,71 +1,87 @@
-import NotificationProvider from "./provider";
+import {
+	main as mainConfig,
+	notification as notificationConfig
+} from "config";
 import growly from "growly";
-import { main } from "config";
 import { connect } from "net";
 
 
-const { "display-name": displayName } = main;
+const { "display-name": displayName } = mainConfig;
+const {
+	provider: {
+		growl: {
+			host,
+			ports,
+			timeout
+		}
+	}
+} = notificationConfig;
 
 const reClick = /^click(ed)?$/i;
-const growlPorts = [
-	// default growl port
-	23053,
-	// growl-fork port
-	23052
-];
 
 
-export default class NotificationProviderGrowl extends NotificationProvider {
-	constructor( port ) {
-		super();
-		this.port = port;
+/**
+ * Growl notifications
+ *
+ * Use "growly" module for all growl server communication
+ *
+ * @class NotificationProviderGrowl
+ * @implements NotificationProvider
+ */
+export default class NotificationProviderGrowl {
+	static isSupported() {
+		return true;
 	}
 
-	static test() {
-		return growlPorts.reduce( ( chain, port ) => {
-			return chain.catch( () => NotificationProviderGrowl.checkConnection( port ) );
-		}, Promise.reject() )
-			.then( NotificationProviderGrowl.register );
+	async setup() {
+		for ( let port of ports ) {
+			try {
+				await NotificationProviderGrowl.checkConnection( port );
+				growly.setHost( host, port );
+				await NotificationProviderGrowl.register();
+				return;
+			} catch ( e ) {}
+		}
+		throw new Error( "Could not find growl server" );
 	}
 
+	/**
+	 * @param {number} port
+	 * @returns {Promise}
+	 */
 	static checkConnection( port ) {
+		let connection;
 		return new Promise( ( resolve, reject ) => {
-			let socket = connect( port, "localhost" );
-			socket.setTimeout( 100 );
-
-			socket.on( "connect", () => {
-				socket.end();
-				resolve( port );
-			});
-
-			socket.on( "error", () => {
-				socket.end();
-				reject( new Error( "Could not connect to the growl server" ) );
-			});
-		});
+			connection = connect( port, host );
+			connection.setTimeout( timeout );
+			connection.once( "error", reject );
+			connection.once( "connect", resolve );
+		})
+			.finally( () => connection.end() );
 	}
 
-	static register( port ) {
+	static register() {
 		return new Promise( ( resolve, reject ) => {
-			growly.register( displayName, "", [
-				{ label: displayName }
-			], err => {
+			growly.register( displayName, "", [{ label: displayName }], err => {
 				if ( err ) {
 					reject( err );
 				} else {
-					resolve( port );
+					resolve();
 				}
 			});
 		});
 	}
 
-	notify( data ) {
-		return new Promise( ( resolve, reject ) => {
-			growly.setHost( "localhost", this.port );
-			growly.notify( NotificationProvider.getMessageAsString( data.message ), {
+	/**
+	 * @param {NotificationData} data
+	 * @returns {Promise}
+	 */
+	async notify( data ) {
+		await new Promise( ( resolve, reject ) => {
+			growly.notify( data.getMessageAsString(), {
+				label: displayName,
 				title: data.title,
-				icon: data.icon,
-				label: displayName
+				icon: data.icon
 			}, ( err, action ) => {
 				if ( err ) {
 					reject( err );
@@ -79,10 +95,3 @@ export default class NotificationProviderGrowl extends NotificationProvider {
 		});
 	}
 }
-
-
-NotificationProviderGrowl.platforms = {
-	win32: "rich",
-	darwin: "rich",
-	linux: "rich"
-};
