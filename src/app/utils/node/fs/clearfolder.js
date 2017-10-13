@@ -24,50 +24,57 @@ const fsUnlink = denodify( unlink );
 
 
 /**
- * @param {String[]} files
+ * @param {string[]} files
  * @param {Function} fn
  * @param {...*} args
  * @returns {Promise}
  */
-function execBatchAndIgnoreRejected( files, fn, ...args ) {
+async function execBatchAndIgnoreRejected( files, fn, ...args ) {
+	const promises = files.map( file =>
+		Promise.resolve( fn( file, ...args ) )
+			// always resolve
+			.catch( () => null )
+	);
+
 	// wait for all promises to resolve
-	return Promise.all( files.map( file => fn( file, ...args )
-		// always resolve
-		.catch( () => null )
-	) )
-		// filter out files that "didn't resolve"
-		.then( files => files.filter( file => file !== null ) );
+	const resolvedFiles = await Promise.all( promises );
+
+	// filter out files that "didn't resolve"
+	return resolvedFiles.filter( file => file !== null );
 }
 
 
 /**
  * Delete files in a directory optionally filtered by age
  * @param {String} dir
- * @param {Number?} threshold
+ * @param {number?} threshold
  * @returns {Promise}
  */
-function clearfolder( dir, threshold ) {
-	return fsReaddir( dir )
-		.then( files => {
-			// prepend dir path
-			files = files.map( file => join( dir, file ) );
+async function clearfolder( dir, threshold ) {
+	/** @type {string[]} */
+	let files = await fsReaddir( dir );
 
-			if ( !threshold ) {
-				// just return all files if there is no threshold set
-				const check = stat => isFile( stat );
+	// prepend dir path
+	files = files.map( file => join( dir, file ) );
 
-				return execBatchAndIgnoreRejected( files, stat, check );
+	let resolvedFiles;
 
-			} else {
-				// ignore all files newer than X
-				const now = Date.now();
-				const check = stat => isFile( stat ) && now - stat.mtime > threshold;
+	if ( !threshold ) {
+		// just return all files if there is no threshold set
+		const check = stat => isFile( stat );
 
-				return execBatchAndIgnoreRejected( files, stat, check );
-			}
-		})
-		// delete all matched files
-		.then( files => execBatchAndIgnoreRejected( files, fsUnlink ) );
+		resolvedFiles = await execBatchAndIgnoreRejected( files, stat, check );
+
+	} else {
+		// ignore all files newer than X
+		const now = Date.now();
+		const check = stat => isFile( stat ) && now - stat.mtime > threshold;
+
+		resolvedFiles = await execBatchAndIgnoreRejected( files, stat, check );
+	}
+
+	// delete all matched files
+	await execBatchAndIgnoreRejected( resolvedFiles, fsUnlink );
 }
 
 
