@@ -1,6 +1,7 @@
 import denodify from "utils/node/denodify";
 import { isWin } from "utils/node/platform";
 import { stat as fsStat } from "fs";
+import { resolve } from "path";
 
 
 const fsStatDenodified = denodify( fsStat );
@@ -8,25 +9,22 @@ const fsStatDenodified = denodify( fsStat );
 
 /**
  * Asynchronously get stats of a path in the filesystem and validate it
- * @param {String}    path        The path
- * @param {Function?} callback    Validation callback. First parameter is the stats object
- * @param {Boolean?}  returnStats Return the stats object instead of the path
- * @returns {Promise<(String|fs.Stats)>}
+ * @param {string}    path        The path
+ * @param {Function?} validation  Validation callback. First parameter is the stats object
+ * @param {boolean?}  returnStats Return the stats object instead of the path
+ * @returns {Promise<(string|fs.Stats)>}
  */
-export function stat( path, callback, returnStats ) {
-	let promise = fsStatDenodified( path );
+export async function stat( path, validation, returnStats ) {
+	const resolvedPath = resolve( path );
+	const stats = await fsStatDenodified( resolvedPath );
 
-	if ( callback instanceof Function ) {
-		return promise.then(function( stats ) {
-			return callback( stats )
-				? returnStats ? stats : path
-				: Promise.reject();
-		});
+	if ( validation instanceof Function && !validation( stats ) ) {
+		throw new Error( "Invalid" );
 	}
 
-	return promise.then(function( stats ) {
-		return returnStats ? stats : path;
-	});
+	return returnStats
+		? stats
+		: resolvedPath;
 }
 
 
@@ -40,6 +38,5 @@ export function isFile( stats ) {
 
 export function isExecutable( stats ) {
 	return stats.isFile()
-	    // octal: 0111
-	    && ( isWin || ( stats.mode & 73 ) > 0 );
+	    && ( isWin || ( stats.mode & 0o111 ) > 0 );
 }
