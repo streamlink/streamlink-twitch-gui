@@ -1,144 +1,136 @@
-/* globals PATHFIXTURES */
 import {
 	module,
 	test
 } from "qunit";
-import { isWin } from "utils/node/platform";
-import whichInjector from "inject-loader?utils/node/env-path!utils/node/fs/which";
-import {
-	isFile,
-	isExecutable
-} from "utils/node/fs/stat";
-import { resolve as r } from "path";
-
-
-const moduleEnvPath = "utils/node/env-path";
-
-const pFixtures = r( PATHFIXTURES, "utils", "node", "fs", "which" );
-const pA = r( pFixtures, "one-is-not-executable" );
-const pB = r( pFixtures, "one-is-executable" );
-const fileOne = "one";
-const fileTwo = "two";
-const fileNonExistent = "file-that-does-not-exist";
+import whichInjector from "inject-loader!utils/node/fs/which";
 
 
 module( "utils/node/fs/which" );
 
 
-test( "Relative or absolute path", assert => {
+test( "Relative or absolute path", async assert => {
 
-	assert.expect( 1 );
+	assert.expect( 6 );
 
-	// it's okay to not use the stubbed path module here
-	// PATHFIXTURES already contains the expected path separator
-	const pFile = r( pA, fileOne );
-	const which = whichInjector({
-		[ moduleEnvPath ]: { paths: [] }
-	})[ "default" ];
+	const isFile = () => {};
 
-	return which( pFile, isFile )
-		.then( path => {
-			assert.equal( path, pFile, "Returns file path" );
-		});
+	const { default: which } = whichInjector({
+		"utils/node/env-path": {
+			paths: []
+		},
+		"utils/node/fs/stat": {
+			async stat( dir, callback ) {
+				assert.strictEqual( dir, "foo/bar", "Tries to find foo/bar" );
+				assert.strictEqual( callback, isFile, "Uses correct directory validation" );
+				return dir;
+			}
+		},
+		"path": {
+			sep: "/"
+		}
+	});
 
-});
+	try {
+		await which();
+	} catch ( e ) {
+		assert.strictEqual( e.message, "Missing file" );
+	}
 
+	try {
+		await which( "" );
+	} catch ( e ) {
+		assert.strictEqual( e.message, "Missing file" );
+	}
 
-test( "Non-existing file in single path", assert => {
+	try {
+		await which( "foo", isFile );
+	} catch ( e ) {
+		assert.strictEqual( e.message, "Could not find foo" );
+	}
 
-	assert.expect( 1 );
-
-	const which = whichInjector({
-		[ moduleEnvPath ]: { paths: [ pA ] }
-	})[ "default" ];
-
-	return which( fileNonExistent, isFile )
-		.catch( () => {
-			assert.ok( true, "Rejects promise" );
-		});
-
-});
-
-
-test( "Executable in single path", assert => {
-
-	assert.expect( 1 );
-
-	const which = whichInjector({
-		[ moduleEnvPath ]: { paths: [ pB ] }
-	})[ "default" ];
-
-	return which( fileOne, isExecutable )
-		.then( path => {
-			let expected = r( pB, fileOne );
-			assert.equal( path, expected, "Finds executable and returns absolute path" );
-		});
+	const resolvedPath = await which( "foo/bar", isFile );
+	assert.strictEqual( resolvedPath, "foo/bar", "Finds foo/bar" );
 
 });
 
 
-test( "Non-existing file in multiple paths", assert => {
+test( "Path iteration", async assert => {
 
-	assert.expect( 1 );
+	assert.expect( 26 );
 
-	const which = whichInjector({
-		[ moduleEnvPath ]: { paths: [ pA, pB ] }
-	})[ "default" ];
+	let expected;
 
-	return which( fileNonExistent, isFile )
-		.catch( () => {
-			assert.ok( true, "Rejects promise if file could not be found" );
-		});
+	const isFile = () => {};
 
-});
+	const { default: which } = whichInjector({
+		"utils/node/env-path": {
+			paths: [
+				"/path/to/a",
+				"/path/to/b"
+			]
+		},
+		"utils/node/fs/stat": {
+			async stat( path, callback ) {
+				assert.step( "stat" );
+				assert.step( path );
+				assert.strictEqual( callback, isFile, "Uses correct directory validation" );
+				if ( path !== expected ) {
+					throw new Error( "fail" );
+				}
+				return path;
+			}
+		},
+		"path": {
+			sep: "/",
+			join( ...paths ) {
+				assert.step( "join" );
+				return paths.join( "/" );
+			}
+		}
+	});
 
+	try {
+		await which( "foo", isFile );
+	} catch ( e ) {
+		assert.strictEqual( e.message, "Could not find foo", "Rejects" );
+		assert.checkSteps(
+			[
+				"join", "stat", "/path/to/a/foo",
+				"join", "stat", "/path/to/b/foo"
+			],
+			"Calls functions in correct order"
+		);
+	}
 
-test( "File not in first path", assert => {
+	expected = "/path/to/b/foo";
 
-	assert.expect( 1 );
+	try {
+		const path = await which( "foo", isFile );
+		assert.strictEqual( path, expected, "Resolves with correct path" );
+		assert.checkSteps(
+			[
+				"join", "stat", "/path/to/a/foo",
+				"join", "stat", "/path/to/b/foo"
+			],
+			"Calls functions in correct order"
+		);
+	} catch ( e ) {
+		throw e;
+	}
 
-	const which = whichInjector({
-		[ moduleEnvPath ]: { paths: [ pB, pA ] }
-	})[ "default" ];
+	expected = "/path/to/a/foo";
 
-	return which( fileTwo, isFile )
-		.then( path => {
-			let expected = r( pA, fileTwo );
-			assert.equal( path, expected, "Finds file and returns absolute path" );
-		});
-
-});
-
-
-test( "File with same name in multiple paths", assert => {
-
-	assert.expect( 1 );
-
-	const which = whichInjector({
-		[ moduleEnvPath ]: { paths: [ pA, pB ] }
-	})[ "default" ];
-
-	return which( fileOne, isFile )
-		.then( path => {
-			let expected = r( pA, fileOne );
-			assert.equal( path, expected, "Finds file and returns absolute path" );
-		});
-
-});
-
-
-test( "Executable with same name in multiple paths", assert => {
-
-	assert.expect( 1 );
-
-	const which = whichInjector({
-		[ moduleEnvPath ]: { paths: [ pA, pB ] }
-	})[ "default" ];
-
-	return which( fileOne, isExecutable )
-		.then( path => {
-			let expected = r( isWin ? pA : pB, fileOne );
-			assert.equal( path, expected, "Finds executable and returns absolute path" );
-		});
+	try {
+		const path = await which( "foo", isFile );
+		assert.strictEqual( path, expected, "Resolves with correct path" );
+		assert.checkSteps(
+			[
+				"join", "stat", "/path/to/a/foo"
+			],
+			"Calls functions in correct order"
+		);
+	} catch ( e ) {
+		throw e;
+	}
 
 });
