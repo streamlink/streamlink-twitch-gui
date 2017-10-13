@@ -17,41 +17,45 @@ import {
  */
 const fsMkdir = denodify( mkdir );
 
-export const check = stats => {
+
+export function check( stats ) {
 	return isDirectory( stats )
 	    && ( isWin || ( stats.mode & W_OK ) > 0 );
-};
+}
 
 
 /**
  * simplified and promisified version of node-mkdirp
  * https://github.com/substack/node-mkdirp
- * @param {String} dir
+ * @param {string} dir
  * @returns {Promise}
  */
-function mkdirp( dir ) {
-	return fsMkdir( dir )
-		.catch( err => {
-			if ( err && err.code === "EEXIST" ) {
-				// directory already exists
-				return Promise.resolve( dir );
+async function mkdirp( dir ) {
+	try {
+		// try to create directory
+		await fsMkdir( dir );
 
-			} else if ( err && err.code === "ENOENT" ) {
-				// recursively try to create the parent folder
-				let parent = dirname( dir );
-				if ( parent === dir ) {
-					throw new Error( "Can't create parent folder" );
-				}
+	} catch ( err ) {
+		// directory already exists
+		if ( err && err.code === "EEXIST" ) {
+			return dir;
+		}
 
-				return mkdirp( parent )
-					// try the current folder again
-					.then( () => fsMkdir( dir ) );
-
-			} else {
-				// check if current path is a directory and if it is writable
-				return stat( dir, check );
+		// recursively try to create the parent folder
+		if ( err && err.code === "ENOENT" ) {
+			const parent = dirname( dir );
+			if ( parent === dir ) {
+				throw new Error( "Can't create parent folder" );
 			}
-		});
+
+			await mkdirp( parent );
+			// try the current folder again
+			return await fsMkdir( dir );
+		}
+
+		// check if current directory is a directory and whether it is writable
+		return await stat( dir, check );
+	}
 }
 
 
