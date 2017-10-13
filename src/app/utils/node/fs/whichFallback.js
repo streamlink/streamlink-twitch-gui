@@ -13,25 +13,27 @@ const { isArray } = Array;
 
 /**
  * @typedef {Object} PlatformList
- * @property {(String|String[])} win32
- * @property {(String|String[])} darwin
- * @property {(String|String[])} linux
+ * @property {(string|string[])} win32
+ * @property {(string|string[])} darwin
+ * @property {(string|string[])} linux
  */
 
 /**
  * Check for executables in $PATH or in a list of fallback paths
- * @param {(String|String[]|PlatformList)} exec
- * @param {(String|String[]|PlatformList)?} fallback
+ * @param {(string|string[]|PlatformList)} exec
+ * @param {(string|string[]|PlatformList)?} fallback
  * @param {Function?} check
- * @param {Boolean?} fallbackOnly
- * @returns {Promise.<String,Error>}
+ * @param {boolean?} fallbackOnly
+ * @returns {Promise.<string,Error>}
  */
-function whichFallback( exec, fallback, check, fallbackOnly ) {
+async function whichFallback( exec, fallback, check, fallbackOnly ) {
 	// executable parameter is required
 	if ( !exec ) {
-		return Promise.reject( new Error( "Missing executable name" ) );
+		throw new Error( "Missing executable name" );
+	}
+
 	// get executables for current platform
-	} else if ( exec.hasOwnProperty( platform ) ) {
+	if ( exec.hasOwnProperty( platform ) ) {
 		exec = exec[ platform ];
 	}
 
@@ -45,40 +47,50 @@ function whichFallback( exec, fallback, check, fallbackOnly ) {
 		check = isExecutable;
 	}
 
-	let promise = fallbackOnly
-		// ignore $PATH
-		? Promise.reject()
+	// try to find executable(s) without fallback paths first
+	if ( !fallbackOnly ) {
 		// get the first executable found in one of the directories registered in $PATH
-		: exec.reduce( ( chain, name ) => {
-			return chain.catch( () => which( name, check ) );
-		}, Promise.reject() );
+		for ( const name of exec ) {
+			try {
+				const resolvedPath = await which( name, check );
+				if ( resolvedPath ) {
+					return resolvedPath;
+				}
+			} catch ( e ) {}
+		}
+	}
 
-	return promise
-		.catch( () => {
-			// no fallbacks defined
-			if ( !fallback ) {
-				return Promise.reject( new Error( "Executables were not found" ) );
-			// get fallbacks for current platform
-			} else if ( fallback.hasOwnProperty( platform ) ) {
-				fallback = fallback[ platform ];
-			}
+	// no fallbacks defined
+	if ( !fallback ) {
+		throw new Error( "Executables were not found" );
+	}
 
-			// always use a list of fallbacks
-			if ( !isArray( fallback ) ) {
-				fallback = [ fallback ];
-			}
+	// get fallbacks for current platform
+	if ( fallback.hasOwnProperty( platform ) ) {
+		fallback = fallback[ platform ];
+	}
 
-			// check all fallback paths now
-			return fallback.reduce( ( chain, path ) => {
-				// resolve env vars in fallback path definition
-				let resolvedPath = resolvePath( path );
-				// check each executable in each fallback path
-				return chain.catch( () => exec.reduce( ( chain, name ) => {
-					// append filename to path
-					return chain.catch( () => stat( join( resolvedPath, name ), check ) );
-				}, chain ) );
-			}, Promise.reject() );
-		});
+	// always use a list of fallbacks
+	if ( !isArray( fallback ) ) {
+		fallback = [ fallback ];
+	}
+
+	// check all fallback paths now
+	for ( const path of fallback ) {
+		// resolve env vars in fallback path definition
+		const fallbackPath = resolvePath( path );
+		// check each executable in each fallback path
+		for ( const name of exec ) {
+			try {
+				const resolvedPath = await stat( join( fallbackPath, name ), check );
+				if ( resolvedPath ) {
+					return resolvedPath;
+				}
+			} catch ( e ) {}
+		}
+	}
+
+	throw new Error( "Executables were not found" );
 }
 
 
