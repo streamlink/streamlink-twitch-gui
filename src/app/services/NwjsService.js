@@ -53,6 +53,6 @@ export default Service.extend({
 	},
 
 	quit() {
-		process.exit();
+		nwWindow.close( true );
 	}
 });
