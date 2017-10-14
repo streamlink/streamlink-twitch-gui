@@ -2,119 +2,139 @@ import {
 	module,
 	test
 } from "qunit";
-import clearfolderInjector from "inject-loader?-utils/node/denodify!utils/node/fs/clearfolder";
+import clearfolderInjector from "inject-loader!utils/node/fs/clearfolder";
 import { posix as path } from "path";
 
 
-module( "utils/node/fs/clearfolder" );
+let originalDateNow;
 
 
-test( "Invalid directory", assert => {
+module( "utils/node/fs/clearfolder", {
+	beforeEach() {
+		originalDateNow = Date.now;
+	},
+	afterEach() {
+		Date.now = originalDateNow;
+	}
+});
 
-	assert.expect( 1 );
 
-	const clearfolder = clearfolderInjector({
+test( "Invalid directory", async assert => {
+
+	assert.expect( 2 );
+
+	const { default: clearfolder } = clearfolderInjector({
+		"utils/node/denodify": fn => fn,
 		"utils/node/fs/stat": {
 			isFile() {},
-			stat() {
-				assert.ok( false, "Never calls stat" );
+			async stat() {
+				throw new Error( "Should not get called" );
 			}
 		},
 		path,
 		fs: {
-			readdir( _, callback ) {
-				callback( new Error( "Not a directory" ) );
+			async readdir( dir ) {
+				assert.strictEqual( dir, "/foo", "Tries to read the correct directory" );
+				throw new Error( "fail readdir" );
 			},
 			unlink() {}
 		}
-	})[ "default" ];
+	});
 
-	return clearfolder( "/" )
-		.catch( err => {
-			assert.ok( err instanceof Error, "Rejects the promise" );
-		});
+	try {
+		await clearfolder( "/foo" );
+	} catch ( e ) {
+		assert.strictEqual( e.message, "fail readdir", "Rejects on invalid directory" );
+	}
 
 });
 
 
-test( "All files", assert => {
+test( "All files", async assert => {
 
-	assert.expect( 1 );
+	assert.expect( 4 );
 
-	let deleted = [];
+	const deleted = [];
 
-	const clearfolder = clearfolderInjector({
+	const { default: clearfolder } = clearfolderInjector({
+		"utils/node/denodify": fn => fn,
 		"utils/node/fs/stat": {
 			isFile( stats ) {
 				return stats.isFile();
 			},
-			stat( file, check ) {
-				return Promise.resolve({
+			async stat( file, check ) {
+				const stats = {
 					isFile() {
 						// bar is not a file
 						return file !== "/dir/bar";
 					}
-				})
-					.then( stats => check( stats )
-						? file
-						: Promise.reject()
-					);
+				};
+				if ( check( stats ) ) {
+					return file;
+				} else {
+					throw new Error();
+				}
 			}
 		},
 		path,
 		fs: {
-			readdir( _, callback ) {
-				callback( null, [
+			async readdir() {
+				return [
 					"foo",
 					"bar",
 					"baz"
-				]);
+				];
 			},
-			unlink( file, callback ) {
-				// deleting baz failes
+			async unlink( file ) {
+				assert.step( file );
+
+				// deleting baz fails
 				if ( file === "/dir/baz" ) {
-					callback( new Error() );
+					throw new Error();
 
 				} else {
 					deleted.push( file );
-					callback( null, file );
+					return file;
 				}
 			}
 		}
-	})[ "default" ];
+	});
 
-	return clearfolder( "/dir" )
-		.then( () => {
-			assert.deepEqual(
-				deleted,
-				[
-					"/dir/foo"
-				],
-				"Deletes the correct files and ignores failed attempts"
-			);
-		});
+	await clearfolder( "/dir" );
+	assert.checkSteps(
+		[
+			"/dir/foo",
+			"/dir/baz"
+		],
+		"Tries to delete all files"
+	);
+	assert.propEqual(
+		deleted,
+		[
+			"/dir/foo"
+		],
+		"Deletes the correct files and ignores failed attempts"
+	);
 
 });
 
 
-test( "File age threshold", assert => {
+test( "File age threshold", async assert => {
 
-	assert.expect( 1 );
+	assert.expect( 2 );
 
 	const threshold = 100;
 
-	const now = Date.now;
 	Date.now = () => 1000;
 
-	let deleted = [];
-
-	const clearfolder = clearfolderInjector({
+	const { default: clearfolder } = clearfolderInjector({
+		"utils/node/denodify": fn => fn,
 		"utils/node/fs/stat": {
 			isFile( stats ) {
 				return stats.isFile();
 			},
-			stat( file, check ) {
-				return Promise.resolve({
+			async stat( file, check ) {
+				const stats = {
 					mtime: file === "/dir/foo"
 						// foo is newer than X (don't delete)
 						? Date.now() - ( threshold / 2 )
@@ -124,46 +144,41 @@ test( "File age threshold", assert => {
 						// bar is not a file
 						return file !== "/dir/bar";
 					}
-				})
-					.then( stats => check( stats )
-						? file
-						: Promise.reject()
-					);
+				};
+				if ( check( stats ) ) {
+					return file;
+				} else {
+					throw new Error();
+				}
 			}
 		},
 		path,
 		fs: {
-			readdir( _, callback ) {
-				callback( null, [
+			async readdir() {
+				return [
 					"foo",
 					"bar",
 					"baz"
-				]);
+				];
 			},
-			unlink( file, callback ) {
+			async unlink( file ) {
 				if ( file === "/dir/bar" ) {
-					callback( new Error() );
-
-				} else {
-					deleted.push( file );
-					callback( null, file );
+					throw new Error();
 				}
+
+				assert.step( file );
+
+				return file;
 			}
 		}
-	})[ "default" ];
+	});
 
-	return clearfolder( "/dir", threshold )
-		.finally( () => {
-			Date.now = now;
-		})
-		.then( () => {
-			assert.deepEqual(
-				deleted,
-				[
-					"/dir/baz"
-				],
-				"Deletes files not newer than X and ignores failed attempts"
-			);
-		});
+	await clearfolder( "/dir", threshold );
+	assert.checkSteps(
+		[
+			"/dir/baz"
+		],
+		"Deletes files not newer than X and ignores failed attempts"
+	);
 
 });

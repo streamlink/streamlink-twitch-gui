@@ -1,102 +1,148 @@
-/* globals PATHFIXTURES */
 import {
 	module,
 	test
 } from "qunit";
-import { isWin } from "utils/node/platform";
-import {
-	stat,
-	isFile,
-	isExecutable,
-	isDirectory
-} from "utils/node/fs/stat";
-import { Stats } from "fs";
-import { resolve as r } from "path";
-
-
-const pFixtures = r( PATHFIXTURES, "utils", "node", "fs", "stat" );
-const pNoFile = r( pFixtures, "file-that-does-not-exist" );
-const pFile = r( pFixtures, "file" );
-const pExecutable = r( pFixtures, "executable" );
-const pDirectory = r( pFixtures, "directory" );
+import statInjector from "inject-loader!utils/node/fs/stat";
 
 
 module( "utils/node/fs/stat" );
 
 
-test( "Non existing file", assert => {
+test( "Without callback", async assert => {
 
-	assert.expect( 1 );
-	return stat( pNoFile )
-		.catch( () => {
-			assert.ok( true, "Rejects promise on non existing files" );
-		});
+	assert.expect( 9 );
 
-});
+	let fail = true;
 
+	const statsObj = {};
 
-test( "isFile", assert => {
+	const { stat } = statInjector({
+		"utils/node/denodify": fn => fn,
+		"utils/node/platform": {},
+		"path": {
+			resolve( path ) {
+				assert.strictEqual( path, "/foo/bar", "Resolves path first" );
+				return path;
+			}
+		},
+		"fs": {
+			async stat( path ) {
+				assert.strictEqual( path, "/foo/bar", "Calls fs.stat" );
+				if ( fail ) {
+					throw new Error( "fail" );
+				}
+				return statsObj;
+			}
+		}
+	});
 
-	assert.expect( 1 );
-	return stat( pFile, isFile )
-		.then( path => {
-			assert.equal( path, pFile, "Returns file path" );
-		});
+	try {
+		await stat( "/foo/bar" );
+	} catch ( e ) {
+		assert.strictEqual( e.message, "fail", "Rejects on stat failure" );
+	}
 
-});
+	fail = false;
 
+	try {
+		const resolvedPath = await stat( "/foo/bar" );
+		assert.strictEqual( resolvedPath, "/foo/bar", "Resolves with path" );
+	} catch ( e ) {
+		throw e;
+	}
 
-test( "isExecutable", assert => {
-
-	assert.expect( 1 );
-	return stat( pExecutable, isExecutable )
-		.then( path => {
-			assert.equal( path, pExecutable, "Returns executable path" );
-		});
-
-});
-
-
-test( "not isExecutable", assert => {
-
-	assert.expect( 1 );
-	return stat( pFile, isExecutable )
-		.then( () => {
-			assert.ok( isWin, "File is not an executable" );
-		}, () => {
-			assert.ok( !isWin, "File is not an executable" );
-		});
-
-});
-
-
-test( "isDirectory", assert => {
-
-	assert.expect( 1 );
-	return stat( pDirectory, isDirectory )
-		.then( path => {
-			assert.equal( path, pDirectory, "Returns directory path" );
-		});
+	try {
+		const stats = await stat( "/foo/bar", null, true );
+		assert.strictEqual( stats, statsObj, "Resolves with stats object" );
+	} catch ( e ) {
+		throw e;
+	}
 
 });
 
 
-test( "No callback", assert => {
+test( "With callback", async assert => {
 
-	assert.expect( 1 );
-	return stat( pFile )
-		.then( path => {
-			assert.equal( path, pFile, "Returns file path" );
-		});
+	assert.expect( 3 );
+
+	let fail = true;
+
+	class Stats {
+		validate() {
+			return !fail;
+		}
+	}
+
+	const { stat } = statInjector({
+		"utils/node/denodify": fn => fn,
+		"utils/node/platform": {},
+		"path": {
+			resolve( path ) {
+				return path;
+			}
+		},
+		"fs": {
+			async stat() {
+				return new Stats();
+			}
+		}
+	});
+
+	try {
+		await stat( "/foo/bar", stats => stats.validate() );
+	} catch ( e ) {
+		assert.strictEqual( e.message, "Invalid", "Rejects if callback fails" );
+	}
+
+	fail = false;
+
+	try {
+		const resolvedPath = await stat( "/foo/bar", stats => stats.validate() );
+		assert.strictEqual( resolvedPath, "/foo/bar", "Resolves if callback succeeds" );
+		const stats = await stat( "/foo/bar", stats => stats.validate(), true );
+		assert.ok( stats instanceof Stats, "Resolves with stats object" );
+	} catch ( e ) {
+		throw e;
+	}
+
 });
 
 
-test( "Return stats object", assert => {
+test( "Validation callbacks", assert => {
 
-	assert.expect( 1 );
-	return stat( pFile, null, true )
-		.then( statsObj => {
-			assert.ok( statsObj instanceof Stats, "is instance of fs.Stats" );
-		});
+	const { isDirectory, isFile, isExecutable: isExecWin } = statInjector({
+		"utils/node/denodify": () => {},
+		"path": {},
+		"fs": {},
+		"utils/node/platform": {
+			isWin: true
+		}
+	});
+
+	const { isExecutable: isExecPosix } = statInjector({
+		"utils/node/denodify": () => {},
+		"path": {},
+		"fs": {},
+		"utils/node/platform": {
+			isWin: false
+		}
+	});
+
+	assert.notOk( isDirectory({ isDirectory() { return false; } }), "Is not a directory" );
+	assert.ok( isDirectory({ isDirectory() { return true; } }), "Is a directory" );
+
+	assert.notOk( isFile({ isFile() { return false; } }), "Is not a file" );
+	assert.ok( isFile({ isFile() { return true; } }), "Is a file" );
+
+	assert.notOk( isExecWin({ isFile() { return false; }, mode: 0 }), "Isn't an executable" );
+	assert.ok( isExecWin({ isFile() { return true; }, mode: 0 }), "Is an executable" );
+
+	assert.notOk( isExecPosix({ isFile() { return false; }, mode: 0 }), "Isn't an executable" );
+	assert.notOk( isExecPosix({ isFile() { return false; }, mode: 0o111 }), "Isn't an executable" );
+	assert.notOk( isExecPosix({ isFile() { return true; }, mode: 0 }), "Is not executable" );
+	assert.ok( isExecPosix({ isFile() { return true; }, mode: 0o111 }), "Is an executable" );
+	assert.ok( isExecPosix({ isFile() { return true; }, mode: 0o100 }), "Is an executable" );
+	assert.ok( isExecPosix({ isFile() { return true; }, mode: 0o010 }), "Is an executable" );
+	assert.ok( isExecPosix({ isFile() { return true; }, mode: 0o001 }), "Is an executable" );
 
 });
