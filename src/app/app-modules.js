@@ -313,9 +313,9 @@ import SettingsMainTemplate from "templates/settings/SettingsMain.hbs";
 import SettingsStreamsRoute from "routes/SettingsSubmenuRoute";
 import SettingsStreamsController from "controllers/SettingsStreamsController";
 import SettingsStreamsTemplate from "templates/settings/SettingsStreams.hbs";
-import SettingsStreamproviderRoute from "routes/SettingsSubmenuRoute";
-import SettingsStreamproviderController from "controllers/SettingsStreamproviderController";
-import SettingsStreamproviderTemplate from "templates/settings/SettingsStreamprovider.hbs";
+import SettingsStreamingRoute from "routes/SettingsSubmenuRoute";
+import SettingsStreamingController from "controllers/SettingsStreamingController";
+import SettingsStreamingTemplate from "templates/settings/SettingsStreaming.hbs";
 import SettingsPlayerRoute from "routes/SettingsSubmenuRoute";
 import SettingsPlayerController from "controllers/SettingsPlayerController";
 import SettingsPlayerTemplate from "templates/settings/SettingsPlayer.hbs";
@@ -670,9 +670,9 @@ export default {
 	SettingsStreamsRoute,
 	SettingsStreamsController,
 	SettingsStreamsTemplate,
-	SettingsStreamproviderRoute,
-	SettingsStreamproviderController,
-	SettingsStreamproviderTemplate,
+	SettingsStreamingRoute,
+	SettingsStreamingController,
+	SettingsStreamingTemplate,
 	SettingsPlayerRoute,
 	SettingsPlayerController,
 	SettingsPlayerTemplate,
