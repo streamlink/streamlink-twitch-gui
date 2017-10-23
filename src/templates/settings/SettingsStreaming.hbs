@@ -1,28 +1,31 @@
 <fieldset>
 {{#settings-row
 	"Streamlink / Livestreamer"
-	"Choose a streaming provider and set custom executable location(s)."
+	"Choose a streaming provider and set custom executable locations."
 	icon="fa-cog"
 	notes="An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths."
-	requires=(if (get (get providers model.streamprovider) "python") (concat "Python " (get (get providers model.streamprovider) "python")))
+	requires=(if
+		(get (get providers model.streaming.provider) "python")
+		(concat "Python " (get (get providers model.streaming.provider) "python"))
+	)
 }}
 	{{drop-down
-		value=model.streamprovider
+		value=model.streaming.provider
 		content=providersDropDown
 		class="streaming-providers-dropdown"
 	}}
 	{{#each-in providers as |key provider|}}
-		<dl class="streaming-providers-list {{unless (is-equal key model.streamprovider) 'hidden'}}">
+		<dl class="streaming-providers-list {{unless (is-equal key model.streaming.provider) 'hidden'}}">
 			<dt>{{#if provider.python}}Python{{else}}{{provider.name}}{{/if}} executable</dt>
 			<dd>{{file-select
-				value=(mut (get (get model.streamproviders key) "exec"))
+				value=(mut (get (get model.streaming.providers key) "exec"))
 				placeholder=(get provider.exec platform)
 				inputClass="form-control"
 			}}</dd>
 			{{#if provider.python}}
 				<dt>{{provider.name}} python script</dt>
 				<dd>{{file-select
-					value=(mut (get (get model.streamproviders key) "pythonscript"))
+					value=(mut (get (get model.streaming.providers key) "pythonscript"))
 					placeholder=(get provider.pythonscript platform)
 					inputClass="form-control"
 				}}</dd>
@@ -31,7 +34,7 @@
 				<dt>Custom {{provider.name}} parameters</dt>
 				<dd>{{input
 					type="text"
-					value=(mut (get (get model.streamproviders key) "params"))
+					value=(mut (get (get model.streaming.providers key) "params"))
 					classNames="col-xs-12"
 					placeholder="Add custom parameters"
 				}}</dd>
@@ -47,28 +50,28 @@
 		icon="fa-filter"
 		documentation="--player-passthrough"
 	}}
-		{{drop-down value=model.player_passthrough content=Settings.passthrough optionValuePath="value"}}
+		{{drop-down value=model.streaming.player_passthrough content=SettingsStreaming.player_passthrough optionValuePath="value"}}
 	{{/settings-row}}
 
-	{{#if (is-equal model.player_passthrough "http")}}
+	{{#if (is-equal model.streaming.player_passthrough "http")}}
 		{{#settings-row
 			"Reconnect"
 			"In case the connection has dropped."
 			icon="fa-refresh"
 			documentation="--player-continuous-http"
 		}}
-			{{check-box "Reconnect to stream" checked=model.player_reconnect}}
+			{{check-box "Reconnect to stream" checked=model.streaming.player_reconnect}}
 		{{/settings-row}}
 	{{/if}}
 
-	{{#unless (is-equal model.player_passthrough "hls")}}
+	{{#unless (is-equal model.streaming.player_passthrough "hls")}}
 		{{#settings-row
 			"HLS live edge"
 			"Lowering the value will reduce stream latency, but may also cause buffering."
 			icon="fa-bolt"
 			documentation="--hls-live-edge"
 		}}
-			{{number-field value=model.hls_live_edge default=hlsLiveEdgeDefault min=hlsLiveEdgeMin max=hlsLiveEdgeMax}}
+			{{number-field value=model.streaming.hls_live_edge default=hlsLiveEdgeDefault min=hlsLiveEdgeMin max=hlsLiveEdgeMax}}
 		{{/settings-row}}
 
 		{{#settings-row
@@ -77,7 +80,7 @@
 			icon="fa-sort-amount-asc"
 			documentation="--hls-segment-threads"
 		}}
-			{{number-field value=model.hls_segment_threads default=hlsSegmentThreadsDefault min=hlsSegmentThreadsMin max=hlsSegmentThreadsMax}}
+			{{number-field value=model.streaming.hls_segment_threads default=hlsSegmentThreadsDefault min=hlsSegmentThreadsMin max=hlsSegmentThreadsMax}}
 		{{/settings-row}}
 	{{/unless}}
 {{/if}}
@@ -88,7 +91,7 @@
 	icon="fa-sign-in"
 	documentation="--twitch-oauth-token"
 }}
-	{{check-box "Authenticate when launching a stream" checked=model.streamprovider_oauth}}
+	{{check-box "Authenticate when launching a stream" checked=model.streaming.oauth}}
 {{/settings-row}}
 
 {{#settings-row
@@ -97,7 +100,7 @@
 	icon="fa-rocket"
 	documentation="--retry-open"
 }}
-	{{number-field value=model.retry_open default=retryOpenDefault min=retryOpenMin max=retryOpenMax}}
+	{{number-field value=model.streaming.retry_open default=retryOpenDefault min=retryOpenMin max=retryOpenMax}}
 {{/settings-row}}
 
 {{#settings-row
@@ -106,6 +109,6 @@
 	icon="fa-hourglass-half"
 	documentation="--retry-streams"
 }}
-	{{number-field value=model.retry_streams default=retryStreamsDefault min=retryStreamsMin max=retryStreamsMax}}
+	{{number-field value=model.streaming.retry_streams default=retryStreamsDefault min=retryStreamsMin max=retryStreamsMax}}
 {{/settings-row}}
 </fieldset>

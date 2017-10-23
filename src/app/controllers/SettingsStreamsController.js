@@ -16,13 +16,12 @@ const { providers } = streamingConfig;
 
 
 export default Controller.extend({
-	isStreamlink: computed( "model.streamprovider", function() {
-		const provider = get( this, "model.streamprovider" );
-		if ( !provider || !providers.hasOwnProperty( provider ) ) {
-			throw new Error( "Invalid stream provider" );
-		}
+	// can't use the fragment's isStreamlink computed property here
+	// the controller's model is an ObjectBuffer instance
+	isStreamlink: computed( "model.streaming.provider", function() {
+		const provider = get( this, "model.streaming.provider" );
 
-		return providers[ provider ].type === "streamlink";
+		return providers[ provider ][ "type" ] === "streamlink";
 	}),
 
 	qualitiesLivestreamer,

@@ -11,7 +11,6 @@ import {
 	Model
 } from "ember-data";
 import {
-	streaming as streamingConfig,
 	twitch as twitchConfig
 } from "config";
 import {
@@ -22,7 +21,6 @@ import {
 
 const { alias, not } = computed;
 const { service } = inject;
-const { providers } = streamingConfig;
 const {
 	"stream-url": twitchStreamUrl,
 	oauth: {
@@ -107,22 +105,15 @@ export default Model.extend({
 
 
 	isLivestreamer: not( "isStreamlink" ),
-	isStreamlink: computed(function() {
-		const provider = get( this, "settings.streamprovider" );
-		if ( !provider || !providers.hasOwnProperty( provider ) ) {
-			throw new Error( "Invalid stream provider" );
-		}
-
-		return providers[ provider ][ "type" ] === "streamlink";
-	}),
+	isStreamlink: alias( "settings.streaming.isStreamlink" ),
 
 
 	customParameters: computed(function() {
-		const provider  = get( this, "settings.streamprovider" );
-		const providers = get( this, "settings.streamproviders" );
+		const provider  = get( this, "settings.streaming.provider" );
+		const providers = get( this, "settings.streaming.providers" );
 
 		return get( providers, `${provider}.params` ) || "";
-	}),
+	}).volatile(),
 
 
 	kill() {

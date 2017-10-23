@@ -27,7 +27,6 @@ import layout from "templates/components/modal/ModalStreamingComponent.hbs";
 const { readOnly } = computed;
 const { service } = inject;
 const {
-	providers,
 	"download-url": downloadUrl,
 	validation: {
 		providers: validationProviders
@@ -66,18 +65,13 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 	isHostingError: computedError( HostingError ),
 
 	qualities,
-	versionMin: computed( "settings.streamprovider", function() {
-		const provider = get( this, "settings.streamprovider" );
-		const type = providers[ provider ][ "type" ];
+	versionMin: computed( "settings.streaming.providerType", function() {
+		const type = get( this, "settings.streaming.providerType" );
 
 		return validationProviders[ type ][ "version" ];
 	}),
 
-	providername: computed( "settings.streamprovider", function() {
-		const provider = get( this, "settings.streamprovider" );
-
-		return providers[ provider ][ "name" ];
-	}),
+	providerName: readOnly( "settings.streaming.providerName" ),
 
 
 	hotkeys: [
@@ -120,8 +114,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 	actions: {
 		download( success, failure ) {
-			const provider = get( this, "settings.streamprovider" );
-			const type = providers[ provider ][ "type" ];
+			const type = get( this, "settings.streaming.providerType" );
 
 			openBrowser( downloadUrl[ type ] )
 				.then( success, failure )

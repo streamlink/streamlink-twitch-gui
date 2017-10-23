@@ -37,48 +37,48 @@ export const parameters = [
 	new Parameter(
 		"--player-passthrough",
 		"stream.settings.advanced",
-		"stream.settings.player_passthrough"
+		"stream.settings.streaming.player_passthrough"
 	),
 	new Parameter(
 		"--player-continuous-http",
 		[
-			"stream.settings.player_reconnect",
+			"stream.settings.streaming.player_reconnect",
 			function() {
-				return get( this, "stream.settings.player_passthrough" ) === "http";
+				return get( this, "stream.settings.streaming.player_passthrough" ) === "http";
 			}
 		]
 	),
 	new Parameter(
 		"--player-no-close",
-		"stream.settings.player_no_close"
+		"stream.settings.streaming.player_no_close"
 	),
 	new Parameter(
 		"--twitch-oauth-token",
 		[
 			"stream.session.isLoggedIn",
-			"stream.settings.streamprovider_oauth"
+			"stream.settings.streaming.oauth"
 		],
 		"stream.session.access_token"
 	),
 	new Parameter(
 		"--hls-live-edge",
 		"stream.settings.advanced",
-		"stream.settings.hls_live_edge"
+		"stream.settings.streaming.hls_live_edge"
 	),
 	new Parameter(
 		"--hls-segment-threads",
 		"stream.settings.advanced",
-		"stream.settings.hls_segment_threads"
+		"stream.settings.streaming.hls_segment_threads"
 	),
 	new Parameter(
 		"--retry-open",
 		null,
-		"stream.settings.retry_open"
+		"stream.settings.streaming.retry_open"
 	),
 	new Parameter(
 		"--retry-streams",
 		null,
-		"stream.settings.retry_streams"
+		"stream.settings.streaming.retry_streams"
 	),
 	new Parameter(
 		"--stream-sorting-excludes",

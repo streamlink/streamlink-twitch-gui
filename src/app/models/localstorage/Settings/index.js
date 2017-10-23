@@ -8,59 +8,14 @@ import {
 } from "ember-data";
 import { fragment } from "model-fragments";
 import {
-	streaming as streamingConfig,
 	players as playersConfig
 } from "config";
 import {
 	qualitiesLivestreamer,
 	qualitiesStreamlink
 } from "models/stream/qualities";
-import {
-	platform as platformName,
-	isWin
-} from "utils/node/platform";
+import { isWin } from "utils/node/platform";
 
-
-const { MAX_SAFE_INTEGER: MAX } = Number;
-const {
-	providers,
-	"default-provider": defaultProvider
-} = streamingConfig;
-
-
-
-function defaultStreamprovider() {
-	let supported = Object.keys( providers )
-		.filter(function( provider ) {
-			return providers[ provider ][ "exec" ][ platformName ];
-		});
-
-	let indexDefault = supported.indexOf( defaultProvider );
-	if ( indexDefault !== -1 ) {
-		return supported[ indexDefault ];
-	}
-
-	return supported[0] || defaultProvider;
-}
-
-function defaultStreamproviders() {
-	return Object.keys( providers )
-		.reduce(function( obj, provider ) {
-			let providerObject = providers[ provider ];
-
-			let item = {
-				exec: "",
-				params: ""
-			};
-			if ( providerObject[ "python" ] ) {
-				item.pythonscript = "";
-			}
-
-			obj[ provider ] = item;
-
-			return obj;
-		}, {} );
-}
 
 function defaultQualityPresets() {
 	return qualitiesLivestreamer.reduce( ( obj, quality ) => {
@@ -119,17 +74,12 @@ export const ATTR_NOTIFY_CLICK_STREAMANDCHAT = 3;
  */
 export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
-	streamprovider      : attr( "string",  { defaultValue: defaultStreamprovider } ),
-	streamproviders     : attr( "",        { defaultValue: defaultStreamproviders } ),
-	streamprovider_oauth: attr( "boolean", { defaultValue: true } ),
+	streaming: fragment( "settingsStreaming", { defaultValue: {} } ),
 	quality             : attr( "string",  { defaultValue: "source" } ),
 	quality_presets     : attr( "",        { defaultValue: defaultQualityPresets } ),
 	qualities           : attr( "",        { defaultValue: defaultQualities } ),
 	player              : attr( "",        { defaultValue: defaultPlayerData } ),
 	player_preset       : attr( "string",  { defaultValue: "default" } ),
-	player_passthrough  : attr( "string",  { defaultValue: "http" } ),
-	player_reconnect    : attr( "boolean", { defaultValue: true } ),
-	player_no_close     : attr( "boolean", { defaultValue: false } ),
 	gui_theme           : attr( "string",  { defaultValue: "default" } ),
 	gui_smoothscroll    : attr( "boolean", { defaultValue: true } ),
 	gui_externalcommands: attr( "boolean", { defaultValue: false } ),
@@ -161,10 +111,6 @@ export default Model.extend({
 	notify_click_group  : attr( "number",  { defaultValue: 1 } ),
 	notify_click_restore: attr( "boolean", { defaultValue: true } ),
 	notify_badgelabel   : attr( "boolean", { defaultValue: true } ),
-	hls_live_edge       : attr( "number",  { defaultValue: 3, min: 1, max: 10 } ),
-	hls_segment_threads : attr( "number",  { defaultValue: 1, min: 1, max: 10 } ),
-	retry_open          : attr( "number",  { defaultValue: 1, min: 1, max: MAX } ),
-	retry_streams       : attr( "number",  { defaultValue: 1, min: 0, max: MAX } ),
 	chat_method         : attr( "string",  { defaultValue: "default" } ),
 	chat_command        : attr( "string",  { defaultValue: "" } ),
 
@@ -180,12 +126,6 @@ export default Model.extend({
 }).reopenClass({
 
 	toString() { return "Settings"; },
-
-	passthrough: [
-		{ value: "http", label: "http" },
-		{ value: "rtmp", label: "rtmp" },
-		{ value: "hls",  label: "hls" }
-	],
 
 	// bitwise IDs: both & 1 && both & 2
 	integration: [

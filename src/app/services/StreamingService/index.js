@@ -129,10 +129,11 @@ export default Service.extend({
 			);
 
 			// resolve streaming provider
+			const settingsStreaming = get( this, "settings.streaming" ).toJSON();
 			const providerObj = await resolveProvider(
 				stream,
-				get( this, "settings.streamprovider" ),
-				get( this, "settings.streamproviders" )
+				settingsStreaming.provider,
+				settingsStreaming.providers
 			);
 
 			// resolve player

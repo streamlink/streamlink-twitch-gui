@@ -6,7 +6,7 @@ import {
 import {
 	streaming as streamingConfig
 } from "config";
-import Settings from "models/localstorage/Settings";
+import SettingsStreaming from "models/localstorage/Settings/streaming";
 import { platform } from "utils/node/platform";
 
 
@@ -15,13 +15,13 @@ const { providers } = streamingConfig;
 
 function settingsAttrMeta( attr, prop ) {
 	return computed(function() {
-		return Settings.metaForProperty( attr ).options[ prop ];
+		return SettingsStreaming.metaForProperty( attr ).options[ prop ];
 	});
 }
 
 
 export default Controller.extend({
-	Settings,
+	SettingsStreaming,
 	platform,
 	providers,
 
@@ -35,26 +35,28 @@ export default Controller.extend({
 			}) );
 	}),
 
-	providerName: computed( "model.streamprovider", function() {
-		const provider = get( this, "model.streamprovider" );
+	// can't use the fragment's providerName computed property here
+	// the controller's model is an ObjectBuffer instance
+	providerName: computed( "model.streaming.provider", function() {
+		const provider = get( this, "model.streaming.provider" );
 
 		return providers[ provider ][ "name" ];
 	}),
 
 
 	hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
-	hlsLiveEdgeMin    : settingsAttrMeta( "hls_live_edge", "min" ),
-	hlsLiveEdgeMax    : settingsAttrMeta( "hls_live_edge", "max" ),
+	hlsLiveEdgeMin: settingsAttrMeta( "hls_live_edge", "min" ),
+	hlsLiveEdgeMax: settingsAttrMeta( "hls_live_edge", "max" ),
 
 	hlsSegmentThreadsDefault: settingsAttrMeta( "hls_segment_threads", "defaultValue" ),
-	hlsSegmentThreadsMin    : settingsAttrMeta( "hls_segment_threads", "min" ),
-	hlsSegmentThreadsMax    : settingsAttrMeta( "hls_segment_threads", "max" ),
+	hlsSegmentThreadsMin: settingsAttrMeta( "hls_segment_threads", "min" ),
+	hlsSegmentThreadsMax: settingsAttrMeta( "hls_segment_threads", "max" ),
 
 	retryStreamsDefault: settingsAttrMeta( "retry_streams", "defaultValue" ),
-	retryStreamsMin    : settingsAttrMeta( "retry_streams", "min" ),
-	retryStreamsMax    : settingsAttrMeta( "retry_streams", "max" ),
+	retryStreamsMin: settingsAttrMeta( "retry_streams", "min" ),
+	retryStreamsMax: settingsAttrMeta( "retry_streams", "max" ),
 
 	retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
-	retryOpenMin    : settingsAttrMeta( "retry_open", "min" ),
-	retryOpenMax    : settingsAttrMeta( "retry_open", "max" )
+	retryOpenMin: settingsAttrMeta( "retry_open", "min" ),
+	retryOpenMax: settingsAttrMeta( "retry_open", "max" )
 });

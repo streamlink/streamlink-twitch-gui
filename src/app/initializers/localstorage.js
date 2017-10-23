@@ -6,6 +6,8 @@ import qualities from "models/stream/qualities";
 
 
 const LS = window.localStorage;
+const { hasOwnProperty } = {};
+
 
 function upgradeLocalstorage() {
 	let old = LS.getItem( "app" );
@@ -51,13 +53,9 @@ function upgradeSettings() {
 		});
 	}
 
-	// translate old livestreamer data into the executable format
-	if ( typeof settings[ "livestreamer" ] === "string" ) {
-		delete settings[ "livestreamer" ];
-	}
-	if ( typeof settings[ "livestreamer_params" ] === "string" ) {
-		delete settings[ "livestreamer_params" ];
-	}
+	// remove old livestreamer data
+	delete settings[ "livestreamer" ];
+	delete settings[ "livestreamer_params" ];
 
 	// translate old player data into the player presets format
 	if ( typeof settings.player === "string" ) {
@@ -90,20 +88,6 @@ function upgradeSettings() {
 		});
 	}
 
-	let renamedProps = {
-		"livestreamer_oauth": "streamprovider_oauth",
-		"gui_flagsvisible": "stream_show_flag",
-		"gui_gamevisible" : "stream_show_info",
-		"gui_streamclick_mid": "stream_click_middle",
-		"gui_streamclick_mod": "stream_click_modify"
-	};
-
-	Object.keys( renamedProps ).forEach(function( key ) {
-		if ( !settings.hasOwnProperty( key ) ) { return; }
-		settings[ renamedProps[ key ] ] = settings[ key ];
-		delete settings[ key ];
-	});
-
 	// remove unused or disabled language filters
 	Object.keys( settings.gui_langfilter || {} ).forEach(function( code ) {
 		const lang = langs[ code ];
@@ -120,8 +104,63 @@ function upgradeSettings() {
 	// map quality number IDs to strings
 	_upgradeQuality( settings );
 
+	// move old attributes
+	moveAttributes( settings, {
+		livestreamer_oauth: "streaming.oauth",
+		gui_flagsvisible: "stream_show_flag",
+		gui_gamevisible: "stream_show_info",
+		gui_streamclick_mid: "stream_click_middle",
+		gui_streamclick_mod: "stream_click_modify"
+	});
+
+	// use new "streaming" model fragment
+	moveAttributesIntoFragment( settings, "streaming", {
+		streamprovider: "provider",
+		streamproviders: "providers",
+		streamprovider_oauth: "oauth",
+		player_passthrough: "player_passthrough",
+		player_reconnect: "player_reconnect",
+		player_no_close: "player_no_close",
+		hls_live_edge: "hls_live_edge",
+		hls_segment_threads: "hls_segment_threads",
+		retry_open: "retry_open",
+		retry_streams: "retry_streams"
+	});
+
 	LS.setItem( "settings", JSON.stringify( data ) );
 }
+
+
+function moveAttributes( settings, attributes ) {
+	for ( const [ oldAttr, newAttrPath ] of Object.entries( attributes ) ) {
+		if ( !hasOwnProperty.call( settings, oldAttr ) ) { continue; }
+		const path = newAttrPath.split( "." );
+		const newAttr = path.pop();
+		let obj = settings;
+		for ( const elem of path ) {
+			if ( !hasOwnProperty.call( obj, elem ) ) {
+				obj[ elem ] = {};
+			}
+			obj = obj[ elem ];
+		}
+		obj[ newAttr ] = settings[ oldAttr ];
+		delete settings[ oldAttr ];
+	}
+}
+
+// Similar to moveAttributes, but faster (everything belongs to the same fragment)
+function moveAttributesIntoFragment( settings, fragment, attributes ) {
+	if ( !hasOwnProperty.call( settings, fragment ) ) {
+		settings[ fragment ] = {};
+	}
+	const fragmentObj = settings[ fragment ];
+	for ( const [ oldAttr, newAttr ] of Object.entries( attributes ) ) {
+		if ( !hasOwnProperty.call( settings, oldAttr ) ) { continue; }
+		fragmentObj[ newAttr ] = settings[ oldAttr ];
+		delete settings[ oldAttr ];
+	}
+}
+
 
 function upgradeChannelSettings() {
 	const data = JSON.parse( LS.getItem( "channelsettings" ) );
