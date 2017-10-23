@@ -3,12 +3,14 @@ import {
 	computed,
 	Controller
 } from "ember";
-import { streamprovider } from "config";
+import {
+	streaming as streamingConfig
+} from "config";
 import Settings from "models/localstorage/Settings";
 import { platform } from "utils/node/platform";
 
 
-const { providers } = streamprovider;
+const { providers } = streamingConfig;
 
 
 function settingsAttrMeta( attr, prop ) {

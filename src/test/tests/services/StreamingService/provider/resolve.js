@@ -41,7 +41,7 @@ test( "Cached provider data", async assert => {
 
 	const resolveProvider = resolveProviderInjector( assign( {}, commonDeps, {
 		"config": {
-			streamprovider: {
+			streaming: {
 				providers: {}
 			}
 		},
@@ -92,7 +92,7 @@ test( "Missing provider data", async assert => {
 
 	let resolveProvider = resolveProviderInjector( assign( {}, commonDeps, commonTestDeps, {
 		"config": {
-			streamprovider: {
+			streaming: {
 				providers: {
 					streamlink: {
 						exec: {
@@ -136,7 +136,7 @@ test( "Missing provider data", async assert => {
 
 	resolveProvider = resolveProviderInjector( assign( {}, commonTestDeps, commonDeps, {
 		"config": {
-			streamprovider: {
+			streaming: {
 				providers: {
 					streamlink: {
 						exec: {
@@ -163,7 +163,7 @@ test( "Missing provider data", async assert => {
 
 	resolveProvider = resolveProviderInjector( assign( {}, commonTestDeps, commonDeps, {
 		"config": {
-			streamprovider: {
+			streaming: {
 				providers: {
 					streamlink: {
 						python: true,
@@ -194,7 +194,7 @@ test( "Missing provider data", async assert => {
 
 	resolveProvider = resolveProviderInjector( assign( {}, commonTestDeps, commonDeps, {
 		"config": {
-			streamprovider: {
+			streaming: {
 				providers: {
 					streamlink: {
 						python: true,
@@ -243,7 +243,7 @@ test( "Resolve exec (no pythonscript)", async assert => {
 
 	const resolveProvider = resolveProviderInjector( assign( {}, commonDeps, {
 		"config": {
-			streamprovider: {
+			streaming: {
 				providers: {
 					"livestreamer-standalone": {
 						exec: {
@@ -422,7 +422,7 @@ test( "Resolve exec (pythonscript)", async assert => {
 
 	let resolveProvider = resolveProviderInjector( assign( {}, commonDeps, commonTestDeps, {
 		"config": {
-			streamprovider: {
+			streaming: {
 				providers: {
 					streamlink: streamlinkConfig
 				}

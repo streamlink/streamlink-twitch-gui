@@ -3,14 +3,16 @@ import {
 	computed,
 	Controller
 } from "ember";
-import { streamprovider as streamproviderConfig } from "config";
+import {
+	streaming as streamingConfig
+} from "config";
 import qualities, {
 	qualitiesLivestreamer,
 	qualitiesStreamlink
 } from "models/stream/qualities";
 
 
-const { providers } = streamproviderConfig;
+const { providers } = streamingConfig;
 
 
 export default Controller.extend({

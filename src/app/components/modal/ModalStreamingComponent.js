@@ -4,7 +4,9 @@ import {
 	computed,
 	inject
 } from "ember";
-import { streamprovider } from "config";
+import {
+	streaming as streamingConfig
+} from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import HotkeyMixin from "mixins/HotkeyMixin";
 import qualities from "models/stream/qualities";
@@ -30,7 +32,7 @@ const {
 	validation: {
 		providers: validationProviders
 	}
-} = streamprovider;
+} = streamingConfig;
 
 
 function computedError( classObj ) {

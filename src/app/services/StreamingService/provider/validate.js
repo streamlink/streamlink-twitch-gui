@@ -1,5 +1,5 @@
 import {
-	streamprovider as streamproviderConfig
+	streaming as streamingConfig
 } from "config";
 import {
 	LogError,
@@ -16,7 +16,7 @@ const {
 		timeout: validationTimeout,
 		providers: validationProviders
 	}
-} = streamproviderConfig;
+} = streamingConfig;
 
 const params = [ "--version", "--no-version-check" ];
 

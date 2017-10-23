@@ -7,9 +7,9 @@ import {
 	Model
 } from "ember-data";
 import {
-	streamprovider,
-	players,
-	langs
+	streaming as streamingConfig,
+	players as playersConfig,
+	langs as langsConfig
 } from "config";
 import {
 	qualitiesLivestreamer,
@@ -25,8 +25,8 @@ const { MAX_SAFE_INTEGER: MAX } = Number;
 const {
 	providers,
 	"default-provider": defaultProvider
-} = streamprovider;
-const langCodes = Object.keys( langs );
+} = streamingConfig;
+const langCodes = Object.keys( langsConfig );
 
 
 
@@ -81,9 +81,9 @@ function defaultQualities() {
 }
 
 function defaultPlayerData() {
-	return Object.keys( players )
+	return Object.keys( playersConfig )
 		.map(function( player ) {
-			let params = players[ player ][ "params" ]
+			let params = playersConfig[ player ][ "params" ]
 				.reduce(function( obj, param ) {
 					obj[ param.name ] = param.default;
 					return obj;
@@ -110,7 +110,7 @@ function defaultPlayerData() {
 
 function defaultLangFilterValue() {
 	return langCodes.reduce(function( obj, code ) {
-		if ( !langs[ code ].disabled ) {
+		if ( !langsConfig[ code ].disabled ) {
 			obj[ code ] = true;
 		}
 		return obj;

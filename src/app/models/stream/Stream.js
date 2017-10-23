@@ -11,7 +11,7 @@ import {
 	Model
 } from "ember-data";
 import {
-	streamprovider as streamproviderConfig,
+	streaming as streamingConfig,
 	twitch as twitchConfig
 } from "config";
 import {
@@ -22,7 +22,7 @@ import {
 
 const { alias, not } = computed;
 const { service } = inject;
-const { providers } = streamproviderConfig;
+const { providers } = streamingConfig;
 const {
 	"stream-url": twitchStreamUrl,
 	oauth: {

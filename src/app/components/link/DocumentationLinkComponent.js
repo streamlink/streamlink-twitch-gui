@@ -3,7 +3,9 @@ import {
 	computed,
 	inject
 } from "ember";
-import { streamprovider } from "config";
+import {
+	streaming as streamingConfig
+} from "config";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";
 
@@ -12,7 +14,7 @@ const { service } = inject;
 const {
 	providers,
 	"docs-url": docsUrl
-} = streamprovider;
+} = streamingConfig;
 
 
 export default ExternalLinkComponent.extend({
