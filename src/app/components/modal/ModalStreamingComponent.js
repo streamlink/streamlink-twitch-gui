@@ -67,16 +67,16 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 	qualities,
 	versionMin: computed( "settings.streamprovider", function() {
-		const streamprovider = get( this, "settings.streamprovider" );
-		const type = providers[ streamprovider ][ "type" ];
+		const provider = get( this, "settings.streamprovider" );
+		const type = providers[ provider ][ "type" ];
 
 		return validationProviders[ type ][ "version" ];
 	}),
 
 	providername: computed( "settings.streamprovider", function() {
-		const streamprovider = get( this, "settings.streamprovider" );
+		const provider = get( this, "settings.streamprovider" );
 
-		return providers[ streamprovider ][ "name" ];
+		return providers[ provider ][ "name" ];
 	}),
 
 
@@ -120,10 +120,10 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 	actions: {
 		download( success, failure ) {
-			const streamprovider = get( this, "settings.streamprovider" );
-			const provider = providers[ streamprovider ][ "type" ];
+			const provider = get( this, "settings.streamprovider" );
+			const type = providers[ provider ][ "type" ];
 
-			openBrowser( downloadUrl[ provider ] )
+			openBrowser( downloadUrl[ type ] )
 				.then( success, failure )
 				.then( () => this.send( "close" ) );
 		},

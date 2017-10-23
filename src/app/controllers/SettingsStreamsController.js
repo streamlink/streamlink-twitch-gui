@@ -17,12 +17,12 @@ const { providers } = streamingConfig;
 
 export default Controller.extend({
 	isStreamlink: computed( "model.streamprovider", function() {
-		let streamprovider = get( this, "model.streamprovider" );
-		if ( !streamprovider || !providers.hasOwnProperty( streamprovider ) ) {
+		const provider = get( this, "model.streamprovider" );
+		if ( !provider || !providers.hasOwnProperty( provider ) ) {
 			throw new Error( "Invalid stream provider" );
 		}
 
-		return providers[ streamprovider ].type === "streamlink";
+		return providers[ provider ].type === "streamlink";
 	}),
 
 	qualitiesLivestreamer,

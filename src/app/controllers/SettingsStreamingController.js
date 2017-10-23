@@ -23,9 +23,9 @@ function settingsAttrMeta( attr, prop ) {
 export default Controller.extend({
 	Settings,
 	platform,
-	streamproviders: providers,
+	providers,
 
-	streamprovidersDropDown: computed(function() {
+	providersDropDown: computed(function() {
 		return Object.keys( providers )
 			// exclude unsupported providers
 			.filter( id => providers[ id ][ "exec" ][ platform ] )
@@ -35,10 +35,10 @@ export default Controller.extend({
 			}) );
 	}),
 
-	streamproviderName: computed( "model.streamprovider", function() {
-		let streamprovider = get( this, "model.streamprovider" );
+	providerName: computed( "model.streamprovider", function() {
+		const provider = get( this, "model.streamprovider" );
 
-		return providers[ streamprovider ][ "name" ];
+		return providers[ provider ][ "name" ];
 	}),
 
 

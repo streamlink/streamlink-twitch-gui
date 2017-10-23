@@ -108,20 +108,20 @@ export default Model.extend({
 
 	isLivestreamer: not( "isStreamlink" ),
 	isStreamlink: computed(function() {
-		let streamprovider = get( this, "settings.streamprovider" );
-		if ( !streamprovider || !providers.hasOwnProperty( streamprovider ) ) {
+		const provider = get( this, "settings.streamprovider" );
+		if ( !provider || !providers.hasOwnProperty( provider ) ) {
 			throw new Error( "Invalid stream provider" );
 		}
 
-		return providers[ streamprovider ].type === "streamlink";
+		return providers[ provider ][ "type" ] === "streamlink";
 	}),
 
 
 	customParameters: computed(function() {
-		let streamprovider  = get( this, "settings.streamprovider" );
-		let streamproviders = get( this, "settings.streamproviders" );
+		const provider  = get( this, "settings.streamprovider" );
+		const providers = get( this, "settings.streamproviders" );
 
-		return get( streamproviders, `${streamprovider}.params` ) || "";
+		return get( providers, `${provider}.params` ) || "";
 	}),
 
 

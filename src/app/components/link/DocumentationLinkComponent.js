@@ -24,8 +24,8 @@ export default ExternalLinkComponent.extend({
 
 	// default baseUrl
 	baseUrl: computed( "settings.streamprovider", function() {
-		let streamprovider = get( this, "settings.streamprovider" );
-		let type = providers[ streamprovider ].type;
+		const provider = get( this, "settings.streamprovider" );
+		const type = providers[ provider ][ "type" ];
 
 		return docsUrl[ type ];
 	}),
@@ -42,9 +42,7 @@ export default ExternalLinkComponent.extend({
 
 	class: "",
 	title: computed( "baseUrl", function() {
-		let baseUrl = get( this, "baseUrl" );
-
-		return baseUrl
+		return get( this, "baseUrl" )
 			? "Read the documentation in your web browser"
 			: "";
 	}),
@@ -55,8 +53,8 @@ export default ExternalLinkComponent.extend({
 		let itemUrl = encodeURIComponent( item );
 
 		// remove leading double dash on Streamlink documentation links
-		let streamprovider = get( this, "settings.streamprovider" );
-		if ( providers[ streamprovider ].type === "streamlink" ) {
+		const provider = get( this, "settings.streamprovider" );
+		if ( providers[ provider ][ "type" ] === "streamlink" ) {
 			itemUrl = itemUrl.replace( /^-/, "" );
 		}
 
