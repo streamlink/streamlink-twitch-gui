@@ -16,23 +16,28 @@ import Stream from "models/stream/Stream";
 import StreamAdapter from "models/stream/StreamAdapter";
 
 import Window from "models/localstorage/Window";
-import WindowAdapter from "models/localstorage/WindowAdapter";
-import WindowSerializer from "models/localstorage/WindowSerializer";
+import WindowAdapter from "models/localstorage/Window/adapter";
+import WindowSerializer from "models/localstorage/Window/serializer";
+
 import Settings from "models/localstorage/Settings";
-import SettingsAdapter from "models/localstorage/SettingsAdapter";
-import SettingsSerializer from "models/localstorage/SettingsSerializer";
+import SettingsAdapter from "models/localstorage/Settings/adapter";
+import SettingsSerializer from "models/localstorage/Settings/serializer";
+
 import Versioncheck from "models/localstorage/Versioncheck";
-import VersioncheckAdapter from "models/localstorage/VersioncheckAdapter";
-import VersioncheckSerializer from "models/localstorage/VersioncheckSerializer";
+import VersioncheckAdapter from "models/localstorage/Versioncheck/adapter";
+import VersioncheckSerializer from "models/localstorage/Versioncheck/serializer";
+
 import Auth from "models/localstorage/Auth";
-import AuthAdapter from "models/localstorage/AuthAdapter";
-import AuthSerializer from "models/localstorage/AuthSerializer";
+import AuthAdapter from "models/localstorage/Auth/adapter";
+import AuthSerializer from "models/localstorage/Auth/serializer";
+
 import Search from "models/localstorage/Search";
-import SearchAdapter from "models/localstorage/SearchAdapter";
-import SearchSerializer from "models/localstorage/SearchSerializer";
+import SearchAdapter from "models/localstorage/Search/adapter";
+import SearchSerializer from "models/localstorage/Search/serializer";
+
 import ChannelSettings from "models/localstorage/ChannelSettings";
-import ChannelSettingsAdapter from "models/localstorage/ChannelSettingsAdapter";
-import ChannelSettingsSerializer from "models/localstorage/ChannelSettingsSerializer";
+import ChannelSettingsAdapter from "models/localstorage/ChannelSettings/adapter";
+import ChannelSettingsSerializer from "models/localstorage/ChannelSettings/serializer";
 
 import GithubReleases from "models/github/Releases";
 import GithubReleasesAdapter from "store/GithubAdapter";
@@ -361,18 +366,23 @@ export default {
 	Window,
 	WindowAdapter,
 	WindowSerializer,
+
 	Settings,
 	SettingsAdapter,
 	SettingsSerializer,
+
 	Versioncheck,
 	VersioncheckAdapter,
 	VersioncheckSerializer,
+
 	Auth,
 	AuthAdapter,
 	AuthSerializer,
+
 	Search,
 	SearchAdapter,
 	SearchSerializer,
+
 	ChannelSettings,
 	ChannelSettingsAdapter,
 	ChannelSettingsSerializer,
