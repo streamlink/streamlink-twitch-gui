@@ -22,6 +22,7 @@ import WindowSerializer from "models/localstorage/Window/serializer";
 import Settings from "models/localstorage/Settings";
 import SettingsAdapter from "models/localstorage/Settings/adapter";
 import SettingsSerializer from "models/localstorage/Settings/serializer";
+import SettingsLangfilter from "models/localstorage/Settings/langfilter";
 
 import Versioncheck from "models/localstorage/Versioncheck";
 import VersioncheckAdapter from "models/localstorage/Versioncheck/adapter";
@@ -370,6 +371,7 @@ export default {
 	Settings,
 	SettingsAdapter,
 	SettingsSerializer,
+	SettingsLangfilter,
 
 	Versioncheck,
 	VersioncheckAdapter,

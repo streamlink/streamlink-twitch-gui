@@ -6,10 +6,10 @@ import {
 	attr,
 	Model
 } from "ember-data";
+import { fragment } from "model-fragments";
 import {
 	streaming as streamingConfig,
-	players as playersConfig,
-	langs as langsConfig
+	players as playersConfig
 } from "config";
 import {
 	qualitiesLivestreamer,
@@ -26,7 +26,6 @@ const {
 	providers,
 	"default-provider": defaultProvider
 } = streamingConfig;
-const langCodes = Object.keys( langsConfig );
 
 
 
@@ -108,15 +107,6 @@ function defaultPlayerData() {
 		} );
 }
 
-function defaultLangFilterValue() {
-	return langCodes.reduce(function( obj, code ) {
-		if ( !langsConfig[ code ].disabled ) {
-			obj[ code ] = true;
-		}
-		return obj;
-	}, {} );
-}
-
 
 export const ATTR_NOTIFY_CLICK_NOOP = 0;
 export const ATTR_NOTIFY_CLICK_FOLLOWED = 1;
@@ -155,7 +145,7 @@ export default Model.extend({
 	gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 	gui_layout          : attr( "string",  { defaultValue: "tile" } ),
 	gui_filterstreams   : attr( "boolean", { defaultValue: false } ),
-	gui_langfilter      : attr( "",        { defaultValue: defaultLangFilterValue } ),
+	gui_langfilter      : fragment( "settingsLangfilter", { defaultValue: {} } ),
 	gui_vodcastfilter   : attr( "boolean", { defaultValue: true } ),
 	stream_info         : attr( "number",  { defaultValue: 0 } ),
 	stream_show_flag    : attr( "boolean", { defaultValue: false } ),

@@ -20,9 +20,10 @@ export default Mixin.create({
 
 			let filters = get( this, "settings.gui_langfilter" );
 			if ( !filters ) { return; }
+			filters = filters.toJSON();
 
-			let keys     = Object.keys( filters );
-			let filtered = keys.filter(function( lang ) {
+			const keys = Object.keys( filters );
+			const filtered = keys.filter(function( lang ) {
 				return filters[ lang ];
 			});
 
