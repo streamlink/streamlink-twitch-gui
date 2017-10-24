@@ -10,29 +10,8 @@ import { fragment } from "model-fragments";
 import {
 	players as playersConfig
 } from "config";
-import {
-	qualitiesLivestreamer,
-	qualitiesStreamlink
-} from "models/stream/qualities";
 import { isWin } from "utils/node/platform";
 
-
-function defaultQualityPresets() {
-	return qualitiesLivestreamer.reduce( ( obj, quality ) => {
-		obj[ quality.id ] = "";
-		return obj;
-	}, {} );
-}
-
-function defaultQualities() {
-	return qualitiesStreamlink.reduce( ( obj, quality ) => {
-		obj[ quality.id ] = {
-			exclude: "",
-			quality: ""
-		};
-		return obj;
-	}, {} );
-}
 
 function defaultPlayerData() {
 	return Object.keys( playersConfig )
@@ -75,9 +54,6 @@ export const ATTR_NOTIFY_CLICK_STREAMANDCHAT = 3;
 export default Model.extend({
 	advanced            : attr( "boolean", { defaultValue: false } ),
 	streaming: fragment( "settingsStreaming", { defaultValue: {} } ),
-	quality             : attr( "string",  { defaultValue: "source" } ),
-	quality_presets     : attr( "",        { defaultValue: defaultQualityPresets } ),
-	qualities           : attr( "",        { defaultValue: defaultQualities } ),
 	player              : attr( "",        { defaultValue: defaultPlayerData } ),
 	player_preset       : attr( "string",  { defaultValue: "default" } ),
 	gui_theme           : attr( "string",  { defaultValue: "default" } ),

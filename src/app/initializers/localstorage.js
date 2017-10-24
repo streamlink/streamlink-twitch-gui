@@ -44,13 +44,9 @@ function upgradeSettings() {
 		settings.gui_homepage = "/user/followedStreams";
 	}
 
+	// remove old qualities setting (pre-exclusion streamlink/livestreamer quality selection)
 	if ( typeof settings.qualities === "object" && typeof settings.qualities.source === "string" ) {
-		Object.keys( settings.qualities ).forEach( key => {
-			settings.qualities[ key ] = {
-				exclude: settings.qualities[ key ],
-				quality: ""
-			};
-		});
+		delete settings[ "qualities" ];
 	}
 
 	// remove old livestreamer data
@@ -101,9 +97,6 @@ function upgradeSettings() {
 		settings.notify_provider = "native";
 	}
 
-	// map quality number IDs to strings
-	_upgradeQuality( settings );
-
 	// move old attributes
 	moveAttributes( settings, {
 		livestreamer_oauth: "streaming.oauth",
@@ -117,6 +110,9 @@ function upgradeSettings() {
 	moveAttributesIntoFragment( settings, "streaming", {
 		streamprovider: "provider",
 		streamproviders: "providers",
+		quality: "quality",
+		qualities: "qualities",
+		quality_presets: "qualitiesOld",
 		streamprovider_oauth: "oauth",
 		player_passthrough: "player_passthrough",
 		player_reconnect: "player_reconnect",
@@ -126,6 +122,9 @@ function upgradeSettings() {
 		retry_open: "retry_open",
 		retry_streams: "retry_streams"
 	});
+
+	// translate old quality ID setting
+	qualityIdToName( settings.streaming );
 
 	LS.setItem( "settings", JSON.stringify( data ) );
 }
@@ -172,18 +171,18 @@ function upgradeChannelSettings() {
 		let settings = channelsettings[ key ];
 
 		// map quality number IDs to strings
-		_upgradeQuality( settings );
+		qualityIdToName( settings );
 	});
 
 	LS.setItem( "channelsettings", JSON.stringify( data ) );
 }
 
-function _upgradeQuality( settings ) {
-	if ( !settings.hasOwnProperty( "quality" ) ) { return; }
-	if ( settings.quality === null ) { return; }
-	if ( !qualities.hasOwnProperty( settings.quality || 0 ) ) { return; }
+function qualityIdToName( obj ) {
+	if ( !hasOwnProperty.call( obj, "quality" ) ) { return; }
+	if ( obj.quality === null ) { return; }
+	if ( !hasOwnProperty.call( qualities, obj.quality || 0 ) ) { return; }
 
-	settings.quality = qualities[ settings.quality || 0 ].id;
+	obj.quality = qualities[ obj.quality || 0 ].id;
 }
 
 

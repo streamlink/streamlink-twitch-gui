@@ -21,6 +21,10 @@ export default Fragment.extend({
 	provider: attr( "string", { defaultValue: "streamlink" } ),
 	providers: fragment( "settingsStreamingProviders", { defaultValue: {} } ),
 
+	quality: attr( "string", { defaultValue: "source" } ),
+	qualities: fragment( "settingsStreamingQualities", { defaultValue: {} } ),
+	qualitiesOld: fragment( "settingsStreamingQualitiesOld", { defaultValue: {} } ),
+
 	oauth: attr( "boolean", { defaultValue: true } ),
 	player_passthrough: attr( "string", { defaultValue: "http" } ),
 	player_reconnect: attr( "boolean", { defaultValue: true } ),

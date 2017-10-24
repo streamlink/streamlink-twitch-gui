@@ -133,6 +133,7 @@ export default Model.extend({
 	}),
 
 
+	// get the default quality object of the selected quality and streaming provider
 	streamQualityPreset: computed( "quality", "isStreamlink", function() {
 		const quality = get( this, "quality" );
 		const isStreamlink = get( this, "isStreamlink" );
@@ -144,34 +145,45 @@ export default Model.extend({
 		    || qualities[ "source" ];
 	}),
 
-	streamQualitiesExclude: computed( "streamQualityPreset", "settings.qualities", function() {
-		const { id, exclude } = get( this, "streamQualityPreset" );
-		const custom = get( this, "settings.qualities" );
+	// get the --stream-sorting-excludes parameter value (Streamlink)
+	streamQualitiesExclude: computed(
+		"streamQualityPreset",
+		"settings.streaming.qualities",
+		function() {
+			const { id, exclude } = get( this, "streamQualityPreset" );
+			const custom = get( this, "settings.streaming.qualities" ).toJSON();
 
-		return custom.hasOwnProperty( id ) && custom[ id ][ "exclude" ].trim().length > 0
-			? custom[ id ][ "exclude" ]
-			: exclude;
-	}),
+			return custom.hasOwnProperty( id )
+			    && String( custom[ id ][ "exclude" ] || "" ).trim().length > 0
+				? custom[ id ][ "exclude" ]
+				: exclude;
+		}
+	),
 
+	// get the stream quality selection (for both Streamlink and Livestreamer)
 	streamQuality: computed(
 		"streamQualityPreset",
-		"settings.qualities",
-		"settings.quality_presets",
+		"settings.streaming.qualities",
+		"settings.streaming.qualitiesOld",
 		"isStreamlink",
 		function() {
 			const { id, quality } = get( this, "streamQualityPreset" );
 
 			if ( get( this, "isStreamlink" ) ) {
-				const custom = get( this, "settings.qualities" );
+				const custom = get( this, "settings.streaming.qualities" ).toJSON();
 
-				return custom.hasOwnProperty( id ) && custom[ id ][ "quality" ].trim().length > 0
+				// get the quality attribute of the streamlink quality fragment
+				return custom.hasOwnProperty( id )
+				    && String( custom[ id ][ "quality" ] || "" ).trim().length > 0
 					? custom[ id ][ "quality" ]
 					: quality;
 
 			} else {
-				const custom = get( this, "settings.quality_presets" );
+				const custom = get( this, "settings.streaming.qualitiesOld" ).toJSON();
 
-				return custom.hasOwnProperty( id ) && custom[ id ].trim().length > 0
+				// get the value of the livestreamer quality attribute
+				return custom.hasOwnProperty( id )
+				    && String( custom[ id ] || "" ).trim().length > 0
 					? custom[ id ]
 					: quality;
 			}
