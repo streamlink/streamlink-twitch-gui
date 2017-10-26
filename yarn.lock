@@ -3866,9 +3866,9 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
-nw-builder@3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-3.4.1.tgz#7be4f3297d83681722eac066e71baed52f90c5e1"
+nw-builder@3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-3.5.1.tgz#a88dfca86e53a5610139ce9bd0b7c91b860e4bac"
   dependencies:
     archiver "^1.3.0"
     boxen "^1.1.0"
@@ -3884,6 +3884,7 @@ nw-builder@3.4.1:
     platform-overrides "~1.0.1"
     plist "^2.0.1"
     progress "~1.1.7"
+    rcedit "^0.9.0"
     recursive-readdir-sync "^1.0.6"
     request "~2.81.0"
     rimraf "^2.5.2"
@@ -4571,6 +4572,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+rcedit@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/rcedit/-/rcedit-0.9.0.tgz#3910df57345399e2b0325f4a519007f89e55ef1c"
 
 read-all-stream@^3.0.0:
   version "3.1.0"
