@@ -84,7 +84,6 @@ import "tests/services/StreamingService/player/resolve";
 import "tests/services/StreamingService/launch/parse-error";
 import "tests/services/StreamingService/launch/index";
 import "tests/services/NotificationService/providers/auto";
-import "tests/services/NotificationService/providers/freedesktop";
 import "tests/services/NotificationService/providers/growl";
 import "tests/services/NotificationService/providers/native";
 import "tests/services/NotificationService/providers/rich";

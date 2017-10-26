@@ -10,7 +10,6 @@
 	},
 	"dependencies": {
 		"bootstrap": "3.3.1",
-		"dbus-native": "github:sidorares/node-dbus#9b464a1c99ce149dd660e1e88382318d248dff60",
 		"ember-localstorage-adapter": "1.0.0",
 		"flag-icon-css": "2.8.0",
 		"font-awesome": "4.7.0",

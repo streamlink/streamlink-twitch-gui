@@ -1,7 +1,10 @@
 import {
 	window as Window
 } from "nwjs/Window";
-import { isDarwin } from "utils/node/platform";
+import {
+	isDarwin,
+	isLinux
+} from "utils/node/platform";
 
 
 const { Notification } = Window;
@@ -27,19 +30,12 @@ const { Notification } = Window;
  *   since Chromium 61 (NWjs 0.25) behind a feature flag
  *   https://crbug.com/676220
  *
- * Issues:
- *   - "settings" action button can't be disabled
- *     Clicking the settings action will open a new NWjs window that tries to load Chromium's
- *     settings page, which doesn't exist in NWjs and is therefore empty.
- *     This is "acceptable" on macOS (native notifications would require 3rd party applications),
- *     but on Linux, we have the freedesktop provider that can set the correct actions.
- *
  * @class NotificationProviderNative
  * @implements NotificationProvider
  */
 export default class NotificationProviderNative {
 	static isSupported() {
-		return isDarwin;
+		return isDarwin || isLinux;
 	}
 
 	async setup() {}
@@ -56,7 +52,10 @@ export default class NotificationProviderNative {
 				actions: []
 			});
 
-			notification.addEventListener( "click", () => data.click() );
+			notification.addEventListener( "click", () => data.click instanceof Function
+				? data.click()
+				: null
+			);
 			notification.addEventListener( "show", () => resolve() );
 			notification.addEventListener( "error", () =>
 				reject( new Error( "Could not show notification" ) )

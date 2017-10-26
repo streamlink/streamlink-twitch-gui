@@ -1,7 +1,6 @@
 import NotificationProviderAuto from "./auto";
 import NotificationProviderSnoreToast from "./snoretoast";
 import NotificationProviderNative from "./native";
-import NotificationProviderFreedesktop from "./freedesktop";
 import NotificationProviderGrowl from "./growl";
 import NotificationProviderRich from "./rich";
 
@@ -35,7 +34,6 @@ export default {
 	"native": NotificationProviderNative,
 	// helper providers for native notifications
 	"snoretoast": NotificationProviderSnoreToast,
-	"freedesktop": NotificationProviderFreedesktop,
 	// non-native providers
 	"growl": NotificationProviderGrowl,
 	"rich": NotificationProviderRich

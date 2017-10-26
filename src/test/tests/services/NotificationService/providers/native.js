@@ -20,7 +20,8 @@ test( "isSupported", assert => {
 			window: {}
 		},
 		"utils/node/platform": {
-			isDarwin: true
+			isDarwin: true,
+			isLinux: false
 		}
 	})[ "default" ];
 
@@ -31,7 +32,20 @@ test( "isSupported", assert => {
 			window: {}
 		},
 		"utils/node/platform": {
-			isDarwin: false
+			isDarwin: false,
+			isLinux: true
+		}
+	})[ "default" ];
+
+	assert.ok( NotificationProviderNative.isSupported(), "Supported on Linux" );
+
+	NotificationProviderNative = notificationProviderNativeInjector({
+		"nwjs/Window": {
+			window: {}
+		},
+		"utils/node/platform": {
+			isDarwin: false,
+			isLinux: false
 		}
 	})[ "default" ];
 
@@ -57,7 +71,7 @@ test( "setup", async assert => {
 
 test( "notify", async assert => {
 
-	assert.expect( 6 );
+	assert.expect( 8 );
 
 	let notification;
 	let expectedMessage;
@@ -109,6 +123,17 @@ test( "notify", async assert => {
 		{ title: "baz" }
 	];
 	expectedMessage = "bar, baz";
+
+	try {
+		const promise = inst.notify( data );
+		notification.dispatchEvent( new Event( "show" ) );
+		await promise;
+		notification.dispatchEvent( new Event( "click" ) );
+	} catch ( e ) {
+		throw e;
+	}
+
+	data.click = null;
 
 	try {
 		const promise = inst.notify( data );
