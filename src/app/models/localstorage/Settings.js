@@ -156,6 +156,7 @@ export default Model.extend({
 	gui_layout          : attr( "string",  { defaultValue: "tile" } ),
 	gui_filterstreams   : attr( "boolean", { defaultValue: false } ),
 	gui_langfilter      : attr( "",        { defaultValue: defaultLangFilterValue } ),
+	gui_vodcastfilter   : attr( "boolean", { defaultValue: true } ),
 	stream_info         : attr( "number",  { defaultValue: 0 } ),
 	stream_show_flag    : attr( "boolean", { defaultValue: false } ),
 	stream_show_info    : attr( "boolean", { defaultValue: false } ),

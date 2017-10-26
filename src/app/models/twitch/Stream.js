@@ -42,6 +42,7 @@ const fpsRanges = [
 
 export default Model.extend({
 	average_fps: attr( "number" ),
+	broadcast_platform: attr( "string" ),
 	channel: belongsTo( "twitchChannel", { async: false } ),
 	//community_id: attr( "number" ),
 	created_at: attr( "date" ),
@@ -49,10 +50,18 @@ export default Model.extend({
 	game: attr( "string" ),
 	//is_playlist: attr( "boolean" ),
 	preview: belongsTo( "twitchImage", { async: false } ),
+	stream_type: attr( "string" ),
 	video_height: attr( "number" ),
 	viewers: attr( "number" ),
 
 	hasFormatInfo: and( "video_height", "average_fps" ),
+
+
+	// both properties are not documented in the v5 API
+	isVodcast: computed( "broadcast_platform", "stream_type", function() {
+		return get( this, "broadcast_platform" ) === "watch_party"
+		    || get( this, "stream_type" ) === "watch_party";
+	}),
 
 
 	titleCreatedAt: computed( "created_at", function() {

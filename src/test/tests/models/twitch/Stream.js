@@ -13,6 +13,7 @@ import {
 import {
 	get,
 	set,
+	setProperties,
 	run,
 	Service
 } from "ember";
@@ -71,11 +72,13 @@ test( "Adapter and Serializer (single)", assert => {
 				{
 					id: "2",
 					average_fps: 60,
+					broadcast_platform: "live",
 					channel: "2",
 					created_at: "2000-01-01T00:00:00.000Z",
 					delay: 0,
 					game: "some game",
 					preview: "stream/preview/2",
+					stream_type: "live",
 					video_height: 1080,
 					viewers: 1000
 				},
@@ -178,6 +181,29 @@ test( "Adapter and Serializer (many)", assert => {
 test( "Computed properties", assert => {
 
 	const record = env.store.createRecord( "twitchStream", {} );
+
+
+	// vodcast
+
+	assert.notOk( get( record, "isVodcast" ), "Not a vodcast" );
+
+	run( () => setProperties( record, {
+		broadcast_platform: "watch_party",
+		stream_type: "live"
+	}) );
+	assert.ok( get( record, "isVodcast" ), "Is a vodcast now" );
+
+	run( () => setProperties( record, {
+		broadcast_platform: "live",
+		stream_type: "watch_party"
+	}) );
+	assert.ok( get( record, "isVodcast" ), "Is still a vodcast" );
+
+	run( () => setProperties( record, {
+		broadcast_platform: "live",
+		stream_type: "live"
+	}) );
+	assert.notOk( get( record, "isVodcast" ), "Not a vodcast anymore" );
 
 
 	// titleCreatedAt

@@ -9,7 +9,7 @@ import ListItemComponent from "components/list/ListItemComponent";
 import layout from "templates/components/list/StreamItemComponent.hbs";
 
 
-const { alias, equal, notEmpty } = computed;
+const { alias, equal, notEmpty, or } = computed;
 const { cancel, later } = run;
 
 
@@ -24,7 +24,7 @@ export default ListItemComponent.extend({
 		"settings.stream_show_info:show-info",
 		"infoGame:info-game",
 		"infoTitle:info-title",
-		"faded:faded",
+		"_faded:faded",
 		"expanded:expanded"
 	],
 
@@ -38,6 +38,9 @@ export default ListItemComponent.extend({
 
 	infoGame : equal( "settings.stream_info", 0 ),
 	infoTitle: equal( "settings.stream_info", 1 ),
+
+
+	_faded: or( "faded", "fadeVodcast" ),
 
 
 	faded: computed(
@@ -83,6 +86,12 @@ export default ListItemComponent.extend({
 			}
 			return result;
 		}, false );
+	}),
+
+
+	fadeVodcast: computed( "content.isVodcast", "settings.gui_vodcastfilter", function() {
+		return get( this, "content.isVodcast" )
+			&& get( this, "settings.gui_vodcastfilter" );
 	}),
 
 

@@ -39,5 +39,6 @@
 {{/stream-preview-image}}
 <footer>
 <span title="{{content.titleCreatedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.created_at interval=60000}}</span>
+{{#if content.isVodcast}}<span class="vodcast-indicator" title="Vodcast"><i class="fa fa-recycle"></i></span>{{/if}}
 <span title="{{content.titleViewers}}">{{format-viewers content.viewers}} <i class="fa fa-users"></i></span>
 </footer>

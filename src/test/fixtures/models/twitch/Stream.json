@@ -9,6 +9,7 @@
 			"stream": {
 				"_id": 1,
 				"average_fps": 60,
+				"broadcast_platform": "live",
 				"channel": {
 					"_id": 2,
 					"broadcaster_language": "en",
@@ -40,6 +41,7 @@
 					"small": "small.jpg",
 					"template": "{width}x{height}.jpg"
 				},
+				"stream_type": "live",
 				"video_height": 1080,
 				"viewers": 1000
 			}

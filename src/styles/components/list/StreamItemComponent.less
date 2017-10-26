@@ -65,6 +65,19 @@
 				.theme-mix-color( @theme-streamitem-footer-icon-color, @theme-streamitem-overlay-background );
 			}
 		});
+
+		> span {
+			&:not(.vodcast-indicator) {
+				flex-basis: 45%;
+			}
+			&.vodcast-indicator {
+				flex-basis: 10%;
+				text-align: center;
+			}
+			&:last-of-type {
+				text-align: right;
+			}
+		}
 	}
 
 	> .preview {

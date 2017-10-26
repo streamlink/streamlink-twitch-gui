@@ -29,6 +29,10 @@
 <dt><i class="fa fa-history"></i>Delay</dt>
 <dd>{{#if (is-gt stream.delay 0)}}{{stream.delay}} seconds{{else}}No additional delay{{/if}}</dd>
 {{/if}}
+{{#if stream.isVodcast}}
+<dt><i class="fa fa-recycle"></i>Vodcast</dt>
+<dd>Stream is a Vodcast</dd>
+{{/if}}
 </dl>
 <div class="button-list-horizontal">
 {{open-chat channel=channel}}
