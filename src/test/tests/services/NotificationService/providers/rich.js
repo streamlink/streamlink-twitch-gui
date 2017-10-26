@@ -54,7 +54,9 @@ test( "isSupported", assert => {
 
 test( "setup", async assert => {
 
-	assert.expect( 15 );
+	assert.expect( 18 );
+
+	let expectedClear;
 
 	class RichNotificationEvent {
 		constructor() {
@@ -86,7 +88,7 @@ test( "setup", async assert => {
 		onClosed: new RichNotificationEvent(),
 		onClicked: new RichNotificationEvent(),
 		clear( id ) {
-			assert.strictEqual( id, "2", "Clears second notification" );
+			assert.strictEqual( id, expectedClear, `Clears notification ${expectedClear}` );
 		}
 	};
 
@@ -127,22 +129,32 @@ test( "setup", async assert => {
 	);
 
 	inst.callbacks.set( "1", () => {
-		throw new Error();
+		assert.ok( false, "Should never get called" );
 	});
 	inst.callbacks.set( "2", () => {
 		assert.ok( true, "Calls click callback" );
 	});
-	assert.strictEqual( inst.callbacks.size, 2, "Register callbacks with ID '1' and '2'" );
+	inst.callbacks.set( "3", null );
+	assert.strictEqual( inst.callbacks.size, 3, "Register callbacks with ID '1', '2' and '3'" );
 
 	// trigger a notification close event on the first notification
 	notifications.onClosed.trigger( "1" );
 	assert.notOk( inst.callbacks.has( "1" ), "Callback '1' has been removed" );
 	assert.ok( inst.callbacks.has( "2" ), "Callback '2' still exists" );
 
+	// trigger a notification click event on the second notification
+	expectedClear = "2";
 	notifications.onClicked.trigger( "2" );
 	assert.ok( inst.callbacks.has( "2" ), "Callback '2' still exists after clicking '2'" );
 	notifications.onClosed.trigger( "2" );
 	assert.notOk( inst.callbacks.has( "2" ), "Callback '2' is now deleted after closing '2'" );
+
+	// trigger a notification click event on the third notification (no callback)
+	expectedClear = "3";
+	notifications.onClicked.trigger( "3" );
+	assert.ok( inst.callbacks.has( "3" ), "Callback '3' still exists after clicking '3'" );
+	notifications.onClosed.trigger( "3" );
+	assert.notOk( inst.callbacks.has( "3" ), "Callback '3' is now deleted after closing '3'" );
 
 });
 

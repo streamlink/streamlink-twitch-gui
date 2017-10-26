@@ -52,7 +52,10 @@ export default class NotificationProviderRich {
 		// execute the click callback and hide the notification
 		notifications.onClicked.addListener( id => {
 			if ( callbacks.has( id ) ) {
-				callbacks.get( id )();
+				const callback = callbacks.get( id );
+				if ( callback instanceof Function ) {
+					callback();
+				}
 			}
 			notifications.clear( id );
 		});
