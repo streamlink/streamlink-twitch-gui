@@ -30,7 +30,7 @@ import NotificationProviderRich from "./rich";
 export default {
 	// special provider for always using fallbacks
 	"auto": NotificationProviderAuto,
-	// html5 notifications provider that uses the operating system's native notifications
+	// notifications provider that uses the operating system's native notifications
 	"native": NotificationProviderNative,
 	// helper providers for native notifications
 	"snoretoast": NotificationProviderSnoreToast,
