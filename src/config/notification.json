@@ -11,5 +11,25 @@
 		"request": 60000,
 		"retry": 1000,
 		"error": 120000
+	},
+	"query": {
+		"limit": 100
+	},
+	"provider": {
+		"snoretoast": {
+			"timeoutSetup": 3000,
+			"timeoutNotify": 60000
+		},
+		"freedesktop": {
+			"expire": 43200
+		},
+		"growl": {
+			"host": "localhost",
+			"ports": [
+				23053,
+				23052
+			],
+			"timeout": 100
+		}
 	}
 }

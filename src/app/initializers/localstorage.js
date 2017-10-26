@@ -113,8 +113,8 @@ function upgradeSettings() {
 	});
 
 	// update notification provider
-	if ( settings.notify_provider === "libnotify" ) {
-		settings.notify_provider = "freedesktop";
+	if ( [ "libnotify", "freedesktop" ].includes( settings.notify_provider ) ) {
+		settings.notify_provider = "native";
 	}
 
 	// map quality number IDs to strings

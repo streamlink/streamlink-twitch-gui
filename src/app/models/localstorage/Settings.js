@@ -118,6 +118,12 @@ function defaultLangFilterValue() {
 }
 
 
+export const ATTR_NOTIFY_CLICK_NOOP = 0;
+export const ATTR_NOTIFY_CLICK_FOLLOWED = 1;
+export const ATTR_NOTIFY_CLICK_STREAM = 2;
+export const ATTR_NOTIFY_CLICK_STREAMANDCHAT = 3;
+
+
 /**
  * @class Settings
  */
@@ -215,8 +221,16 @@ export default Model.extend({
 			value: "auto",
 			label: {
 				name: "Automatic selection",
-				description: "Detects the best type of notification",
-				notes: "Prefers native notifications, falls back to growl or rich notifications"
+				description: "Tries to find the best notification provider",
+				notes: "Tests all available notification providers in descending order"
+			}
+		},
+		{
+			value: "native",
+			label: {
+				name: "Native notifications",
+				description: "Uses the system's native notification system",
+				notes: "Notifications can be configured in the system preferences"
 			}
 		},
 		{
@@ -224,31 +238,15 @@ export default Model.extend({
 			label: {
 				name: "Windows toast notifications",
 				description: "Native notifications on Windows 8+",
-				notes: "\"Banner notifications\" need to be enabled"
-			}
-		},
-		{
-			value: "native",
-			label: {
-				name: "Native notifications",
-				description: "Chromium's native notification implementation",
-				notes: "Notifications can be configured in your system preferences"
-			}
-		},
-		{
-			value: "freedesktop",
-			label: {
-				name: "Freedesktop notifications",
-				description: "Native notifications on Linux",
-				notes: "Implementation of the Desktop Notifications Specification"
+				notes: "\"Banner notifications\" need to be enabled in the system preferences"
 			}
 		},
 		{
 			value: "growl",
 			label: {
 				name: "Growl notifications",
-				description: "Third-party notification service for Windows, MacOS and Linux",
-				notes: "Requires Growl to be installed and running on your system"
+				description: "Third-party notification service for Windows, macOS and Linux",
+				notes: "Requires Growl to be installed and running on the system"
 			}
 		},
 		{
@@ -267,17 +265,17 @@ export default Model.extend({
 	],
 
 	notify_click: [
-		{ id: 0, label: "Do nothing" },
-		{ id: 1, label: "Go to favorites" },
-		{ id: 2, label: "Open stream" },
-		{ id: 3, label: "Open stream+chat" }
+		{ id: ATTR_NOTIFY_CLICK_NOOP, label: "Do nothing" },
+		{ id: ATTR_NOTIFY_CLICK_FOLLOWED, label: "Go to favorites" },
+		{ id: ATTR_NOTIFY_CLICK_STREAM, label: "Open stream" },
+		{ id: ATTR_NOTIFY_CLICK_STREAMANDCHAT, label: "Open stream+chat" }
 	],
 
 	notify_click_group: [
-		{ id: 0, label: "Do nothing" },
-		{ id: 1, label: "Go to favorites" },
-		{ id: 2, label: "Open all streams" },
-		{ id: 3, label: "Open all streams+chats" }
+		{ id: ATTR_NOTIFY_CLICK_NOOP, label: "Do nothing" },
+		{ id: ATTR_NOTIFY_CLICK_FOLLOWED, label: "Go to favorites" },
+		{ id: ATTR_NOTIFY_CLICK_STREAM, label: "Open all streams" },
+		{ id: ATTR_NOTIFY_CLICK_STREAMANDCHAT, label: "Open all streams+chats" }
 	],
 
 	chat_methods: [

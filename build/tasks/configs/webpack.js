@@ -286,7 +286,10 @@ module.exports = {
 			lessExtractTextPlugin,
 
 			// ignore l10n modules of momentjs
-			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ )
+			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ ),
+
+			// ignore abstract-socket (and its binding dependency)
+			new webpack.IgnorePlugin( /abstract-socket/, /dbus-native/ )
 		]
 	},
 
@@ -460,7 +463,10 @@ module.exports = {
 
 			new webpack.DefinePlugin({
 				PATHFIXTURES: JSON.stringify( pTestFixtures )
-			})
+			}),
+
+			// ignore Windows binary dependencies in tests
+			new webpack.IgnorePlugin( /\.exe$/ )
 		]
 	},
 
@@ -515,7 +521,10 @@ module.exports = {
 				log: true,
 				logStdOut: false,
 				logStdErr: false
-			})
+			}),
+
+			// ignore Windows binary dependencies in tests
+			new webpack.IgnorePlugin( /\.exe$/ )
 		],
 
 		watch: true,

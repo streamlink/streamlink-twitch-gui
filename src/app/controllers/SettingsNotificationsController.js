@@ -7,11 +7,13 @@ import {
 	main,
 	files
 } from "config";
+import { isDebug } from "nwjs/debug";
 import Settings from "models/localstorage/Settings";
+import NotificationData from "services/NotificationService/data";
 import {
-	isSupported as isNotificationSupported,
-	show as showNotification
-} from "utils/Notification";
+	isSupported,
+	showNotification
+} from "services/NotificationService/provider";
 import { isWin } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 
@@ -26,22 +28,23 @@ export default Controller.extend({
 	// filter available notification providers
 	notifyProvider: computed(function() {
 		return Settings.notify_provider
-			.filter( item => isNotificationSupported( item.value ) );
+			.filter( item => isSupported( item.value ) || item.value === "auto" );
 	}),
 
 	actions: {
 		testNotification( success, failure ) {
-			let provider = get( this, "model.notify_provider" );
-			let icon = isWin && !DEBUG
+			const provider = get( this, "model.notify_provider" );
+			const icon = isWin && !isDebug
 				? resolvePath( "%NWJSAPPPATH%", bigIcon )
 				: resolvePath( bigIcon );
-			let notification = {
+
+			const data = new NotificationData({
 				title: displayName,
 				message: "This is a test notification",
 				icon: icon
-			};
+			});
 
-			showNotification( provider, notification, provider !== "auto" )
+			showNotification( provider, data, true )
 				.then( success, failure )
 				.catch( () => {} );
 		}

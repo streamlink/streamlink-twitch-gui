@@ -101,7 +101,29 @@ export default Model.extend({
 	subscribed: null,
 
 	/** @type {(TwitchChannelFollowed|boolean)} following */
-	followed: null
+	followed: null,
+
+	/**
+	 * Load channel specific settings
+	 * @returns {Promise<Object>}
+	 */
+	getChannelSettings() {
+		const store = get( this, "store" );
+		const id = get( this, "name" );
+
+		// For a very weird reason, exceptions thrown by store.findRecord() are not being caught
+		// when using an async function and a try/catch block with the await keyword.
+		// So use a regular promise chain here instead.
+		return store.findRecord( "channelSettings", id )
+			.catch( () => store.recordForId( "channelSettings", id ) )
+			.then( record => {
+				// get the record's data and then unload it
+				const data = record.toJSON();
+				store.unloadRecord( record );
+
+				return data;
+			});
+	}
 
 }).reopenClass({
 	toString() { return "kraken/channels"; }
