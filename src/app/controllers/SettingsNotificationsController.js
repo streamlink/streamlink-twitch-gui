@@ -8,7 +8,7 @@ import {
 	files
 } from "config";
 import { isDebug } from "nwjs/debug";
-import Settings from "models/localstorage/Settings";
+import SettingsNotification from "models/localstorage/Settings/notification";
 import NotificationData from "services/NotificationService/data";
 import {
 	isSupported,
@@ -23,17 +23,17 @@ const { icons: { big: bigIcon } } = files;
 
 
 export default Controller.extend({
-	Settings,
+	SettingsNotification,
 
 	// filter available notification providers
-	notifyProvider: computed(function() {
-		return Settings.notify_provider
+	providers: computed(function() {
+		return SettingsNotification.providers
 			.filter( item => isSupported( item.value ) || item.value === "auto" );
 	}),
 
 	actions: {
 		testNotification( success, failure ) {
-			const provider = get( this, "model.notify_provider" );
+			const provider = get( this, "model.notification.provider" );
 			const icon = isWin && !isDebug
 				? resolvePath( "%NWJSAPPPATH%", bigIcon )
 				: resolvePath( bigIcon );

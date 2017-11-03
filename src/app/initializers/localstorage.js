@@ -92,11 +92,6 @@ function upgradeSettings() {
 		}
 	});
 
-	// update notification provider
-	if ( [ "libnotify", "freedesktop" ].includes( settings.notify_provider ) ) {
-		settings.notify_provider = "native";
-	}
-
 	// move old attributes
 	moveAttributes( settings, {
 		livestreamer_oauth: "streaming.oauth",
@@ -123,8 +118,25 @@ function upgradeSettings() {
 		retry_streams: "retry_streams"
 	});
 
+	// use new "notification" model fragment
+	moveAttributesIntoFragment( settings, "notification", {
+		notify_enabled: "enabled",
+		notify_provider: "provider",
+		notify_all: "filter",
+		notify_grouping: "grouping",
+		notify_click: "click",
+		notify_click_group: "click_group",
+		notify_click_restore: "click_restore",
+		notify_badgelabel: "badgelabel"
+	});
+
 	// translate old quality ID setting
 	qualityIdToName( settings.streaming );
+
+	// rename old notification provider names
+	if ( [ "libnotify", "freedesktop" ].includes( settings.notification.provider ) ) {
+		settings.notification.provider = "native";
+	}
 
 	LS.setItem( "settings", JSON.stringify( data ) );
 }

@@ -20,7 +20,7 @@ export default Mixin.create( Evented, {
 	// will be overridden by NotificationService
 	running: false,
 
-	_badgeEnabled: and( "running", "settings.notify_badgelabel" ),
+	_badgeEnabled: and( "running", "settings.notification.badgelabel" ),
 
 	_badgeEnabledObserver: observer( "_badgeEnabled", function() {
 		if ( !get( this, "_badgeEnabled" ) ) {

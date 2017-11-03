@@ -21,7 +21,7 @@
 	{{check-box "Open chat when the stream starts" checked=gui_openchat disabled=(bool-not _gui_openchat)}}
 {{/settings-row}}
 </fieldset>
-{{#if settings.notify_enabled}}
+{{#if settings.notification.enabled}}
 <fieldset>
 <legend>Desktop notifications</legend>
 {{#settings-row

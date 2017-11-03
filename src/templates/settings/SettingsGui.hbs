@@ -60,7 +60,7 @@
 		"On the task bar icon or dock icon.<br>Has to be supported by your OS and requires enabled desktop notifications."
 		icon="fa-tag"
 	}}
-		{{check-box "Show number of streaming favorites" checked=model.notify_badgelabel disabled=(bool-not model.notify_enabled)}}
+		{{check-box "Show number of streaming favorites" checked=model.notification.badgelabel disabled=(bool-not model.notification.enabled)}}
 	{{/settings-row}}
 {{/if}}
 

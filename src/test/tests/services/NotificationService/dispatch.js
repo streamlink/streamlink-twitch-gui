@@ -23,7 +23,9 @@ module( "services/NotificationService/dispatch", {
 
 		owner.register( "service:chat", Service.extend() );
 		owner.register( "service:-routing", Service.extend() );
-		owner.register( "service:settings", Service.extend() );
+		owner.register( "service:settings", Service.extend({
+			notification: {}
+		}) );
 		owner.register( "service:streaming", Service.extend() );
 	},
 	afterEach() {
@@ -43,7 +45,7 @@ test( "dispatchNotifications", async assert => {
 	const expectedNotif = [];
 
 	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"models/localstorage/Settings": {},
+		"models/localstorage/Settings/notification": {},
 		"nwjs/Window": {},
 		"./logger": {},
 		"./provider": {},
@@ -69,11 +71,11 @@ test( "dispatchNotifications", async assert => {
 	const settings = owner.lookup( "service:settings" );
 	const service = owner.lookup( "service:notification" );
 
-	set( settings, "notify_grouping", true );
+	set( settings, "notification.grouping", true );
 	await service.dispatchNotifications([ streamA, streamB ]);
 	assert.checkSteps( [ "group" ], "Shows group notification" );
 
-	set( settings, "notify_grouping", false );
+	set( settings, "notification.grouping", false );
 	expectedDownload.push( streamA, streamB );
 	expectedNotif.push( streamA, streamB );
 	await service.dispatchNotifications([ streamA, streamB ]);
@@ -106,7 +108,7 @@ test( "Group and single notifications", async assert => {
 	};
 
 	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"models/localstorage/Settings": {},
+		"models/localstorage/Settings/notification": {},
 		"nwjs/Window": {},
 		"./logger": {},
 		"./provider": {},
@@ -145,7 +147,7 @@ test( "Group and single notifications", async assert => {
 		click: () => {},
 		settings: expectedSettings
 	};
-	set( settings, "notify_click_group", expectedSettings );
+	set( settings, "notification.click_group", expectedSettings );
 	notification = await service._showNotificationGroup([ streamA, streamB ]);
 	notification.click();
 
@@ -159,7 +161,7 @@ test( "Group and single notifications", async assert => {
 		click: () => {},
 		settings: expectedSettings
 	};
-	set( settings, "notify_click", expectedSettings );
+	set( settings, "notification.click", expectedSettings );
 	notification = await service._showNotificationSingle( streamA );
 	notification.click();
 
@@ -173,7 +175,7 @@ test( "Group and single notifications", async assert => {
 		click: () => {},
 		settings: expectedSettings
 	};
-	set( settings, "notify_click", expectedSettings );
+	set( settings, "notification.click", expectedSettings );
 	notification = await service._showNotificationSingle( streamB );
 	notification.click();
 
@@ -201,7 +203,7 @@ test( "Notification click", async assert => {
 	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
 		"./provider": {},
 		"./icons": {},
-		"models/localstorage/Settings": {
+		"models/localstorage/Settings/notification": {
 			ATTR_NOTIFY_CLICK_NOOP,
 			ATTR_NOTIFY_CLICK_FOLLOWED,
 			ATTR_NOTIFY_CLICK_STREAM,
@@ -258,7 +260,9 @@ test( "Notification click", async assert => {
 	});
 
 	const settings = owner.lookup( "service:settings" ).reopen({
-		notify_click_restore: false,
+		notification: {
+			click_restore: false
+		},
 		gui_openchat: false
 	});
 	const service = owner.lookup( "service:notification" );
@@ -296,7 +300,7 @@ test( "Notification click", async assert => {
 	);
 
 	// restore
-	set( settings, "notify_click_restore", true );
+	set( settings, "notification.click_restore", true );
 	const restoreSteps = [ "setMinimized", "setVisibility", "setFocused" ];
 
 	service._notificationClick( ATTR_NOTIFY_CLICK_NOOP, [ streamA, streamB ] );
@@ -333,7 +337,7 @@ test( "Notification click", async assert => {
 
 	// fail stream or chat
 	fail = true;
-	set( settings, "notify_click_restore", false );
+	set( settings, "notification.click_restore", false );
 	expectedStreams.push( streamA, streamB );
 	expectedChats.push( channelA, channelB );
 	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
@@ -355,7 +359,7 @@ test( "Show notficiation", async assert => {
 	let promise, expectedProvider;
 
 	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"models/localstorage/Settings": {},
+		"models/localstorage/Settings/notification": {},
 		"nwjs/Window": {},
 		"./logger": {},
 		"./icons": {},
@@ -379,12 +383,12 @@ test( "Show notficiation", async assert => {
 	const service = owner.lookup( "service:notification" );
 
 	expectedProvider = "provider";
-	set( settings, "notify_provider", expectedProvider );
+	set( settings, "notification.provider", expectedProvider );
 	service._showNotification( notification );
 	await promise;
 
 	expectedProvider = "auto";
-	set( settings, "notify_provider", expectedProvider );
+	set( settings, "notification.provider", expectedProvider );
 	service._showNotification( notification );
 	await promise;
 

@@ -4,25 +4,29 @@ import {
 } from "ember-data";
 import Settings from "models/localstorage/Settings";
 import SettingsStreaming from "models/localstorage/Settings/streaming";
+import SettingsNotification from "models/localstorage/Settings/notification";
 
 
+/**
+ * @type {Object.<string,[(Model|Fragment),string,string]>}
+ */
 const attributes = {
-	quality: SettingsStreaming,
-	gui_openchat: Settings,
-	notify_enabled: Settings
+	quality: [ SettingsStreaming, "quality", "streaming.quality" ],
+	gui_openchat: [ Settings, "gui_openchat", "gui_openchat" ],
+	notify_enabled: [ SettingsNotification, "enabled", "notification.enabled" ]
 };
 
-// Can't add attributes on runtime (init()) due to ember's caching policy, so do it this way
-const properties = Object.keys( attributes )
-	.reduce( ( obj, name ) => {
-		const meta = attributes[ name ].metaForProperty( name );
-		if ( meta && meta.isAttribute ) {
-			obj[ name ] = attr( meta.type, { defaultValue: null } );
-		}
-		return obj;
-	}, {} );
+for ( const [ name, [ settings, prop, settingsPath ] ] of Object.entries( attributes ) ) {
+	const meta = settings.metaForProperty( prop );
+	if ( !meta || !meta.isAttribute ) { continue; }
+
+	attributes[ name ] = attr( meta.type, {
+		defaultValue: null,
+		settingsPath
+	});
+}
 
 
-export default Model.extend( properties ).reopenClass({
+export default Model.extend( attributes ).reopenClass({
 	toString() { return "ChannelSettings"; }
 });

@@ -42,12 +42,6 @@ function defaultPlayerData() {
 }
 
 
-export const ATTR_NOTIFY_CLICK_NOOP = 0;
-export const ATTR_NOTIFY_CLICK_FOLLOWED = 1;
-export const ATTR_NOTIFY_CLICK_STREAM = 2;
-export const ATTR_NOTIFY_CLICK_STREAMANDCHAT = 3;
-
-
 /**
  * @class Settings
  */
@@ -79,16 +73,9 @@ export default Model.extend({
 	stream_click_middle : attr( "number",  { defaultValue: 2 } ),
 	stream_click_modify : attr( "number",  { defaultValue: 4 } ),
 	channel_name        : attr( "number",  { defaultValue: 3 } ),
-	notify_enabled      : attr( "boolean", { defaultValue: true } ),
-	notify_provider     : attr( "string",  { defaultValue: "auto" } ),
-	notify_all          : attr( "boolean", { defaultValue: true } ),
-	notify_grouping     : attr( "boolean", { defaultValue: true } ),
-	notify_click        : attr( "number",  { defaultValue: 1 } ),
-	notify_click_group  : attr( "number",  { defaultValue: 1 } ),
-	notify_click_restore: attr( "boolean", { defaultValue: true } ),
-	notify_badgelabel   : attr( "boolean", { defaultValue: true } ),
 	chat_method         : attr( "string",  { defaultValue: "default" } ),
 	chat_command        : attr( "string",  { defaultValue: "" } ),
+	notification: fragment( "settingsNotification", { defaultValue: {} } ),
 
 
 	isVisibleInTaskbar: computed( "gui_integration", function() {
@@ -121,68 +108,6 @@ export default Model.extend({
 		{ value:  60000, label: "After one minute" },
 		{ value: 120000, label: "After two minutes" },
 		{ value: 300000, label: "After five minutes" }
-	],
-
-	notify_provider: [
-		{
-			value: "auto",
-			label: {
-				name: "Automatic selection",
-				description: "Tries to find the best notification provider",
-				notes: "Tests all available notification providers in descending order"
-			}
-		},
-		{
-			value: "native",
-			label: {
-				name: "Native notifications",
-				description: "Uses the system's native notification system",
-				notes: "Notifications can be configured in the system preferences"
-			}
-		},
-		{
-			value: "snoretoast",
-			label: {
-				name: "Windows toast notifications",
-				description: "Native notifications on Windows 8+",
-				notes: "\"Banner notifications\" need to be enabled in the system preferences"
-			}
-		},
-		{
-			value: "growl",
-			label: {
-				name: "Growl notifications",
-				description: "Third-party notification service for Windows, macOS and Linux",
-				notes: "Requires Growl to be installed and running on the system"
-			}
-		},
-		{
-			value: "rich",
-			label: {
-				name: "Rich notifications",
-				description: "Chromium rich notifications",
-				notes: "Rendered by the application itself"
-			}
-		}
-	],
-
-	notify_all: [
-		{ value: true,  label: "Show all except disabled ones" },
-		{ value: false, label: "Ignore all except enabled ones" }
-	],
-
-	notify_click: [
-		{ id: ATTR_NOTIFY_CLICK_NOOP, label: "Do nothing" },
-		{ id: ATTR_NOTIFY_CLICK_FOLLOWED, label: "Go to favorites" },
-		{ id: ATTR_NOTIFY_CLICK_STREAM, label: "Open stream" },
-		{ id: ATTR_NOTIFY_CLICK_STREAMANDCHAT, label: "Open stream+chat" }
-	],
-
-	notify_click_group: [
-		{ id: ATTR_NOTIFY_CLICK_NOOP, label: "Do nothing" },
-		{ id: ATTR_NOTIFY_CLICK_FOLLOWED, label: "Go to favorites" },
-		{ id: ATTR_NOTIFY_CLICK_STREAM, label: "Open all streams" },
-		{ id: ATTR_NOTIFY_CLICK_STREAMANDCHAT, label: "Open all streams+chats" }
 	],
 
 	chat_methods: [

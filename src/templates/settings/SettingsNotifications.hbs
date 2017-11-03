@@ -4,10 +4,10 @@
 	"When favorites start streaming."
 	icon="fa-bullhorn"
 }}
-	{{check-box "Enable desktop notifications" checked=model.notify_enabled}}
+	{{check-box "Enable desktop notifications" checked=model.notification.enabled}}
 {{/settings-row}}
 
-{{#if model.notify_enabled}}
+{{#if model.notification.enabled}}
 	{{#settings-row
 		"Notification type"
 		"Choose the kind of notification"
@@ -15,9 +15,9 @@
 	}}
 		{{#form-button action=(action "testNotification") classNames="btn-test-notification" icon="fa-rocket" iconanim=true}}Test notification{{/form-button}}
 		{{#radio-btns
-			name="notify_provider"
-			value=model.notify_provider
-			content=notifyProvider
+			name="notificationproviders"
+			value=model.notification.provider
+			content=providers
 			as |radiobtn label|
 		}}
 			<div class="notification-provider-item">
@@ -33,9 +33,9 @@
 		icon="fa-eyedropper"
 	}}
 		{{#radio-btns
-			name="notify_all"
-			value=model.notify_all
-			content=Settings.notify_all
+			name="notificationfilter"
+			value=model.notification.filter
+			content=SettingsNotification.filter
 			as |radiobtn label|
 		}}
 			<div>{{component radiobtn label}}</div>
@@ -47,7 +47,7 @@
 		"Merge multiple notifications."
 		icon="fa-folder-open-o"
 	}}
-		{{check-box "Only show one notification at a time" checked=model.notify_grouping}}
+		{{check-box "Only show one notification at a time" checked=model.notification.grouping}}
 	{{/settings-row}}
 
 	{{#settings-row
@@ -55,16 +55,16 @@
 		"Preferred click action."
 		icon="fa-hand-pointer-o"
 	}}
-		{{drop-down value=model.notify_click content=Settings.notify_click class="notifications"}}
+		{{drop-down value=model.notification.click content=SettingsNotification.click class="notifications"}}
 	{{/settings-row}}
 
-	{{#if model.notify_grouping}}
+	{{#if model.notification.grouping}}
 		{{#settings-row
 			"Group click"
 			"Preferred group click action."
 			icon="fa-hand-pointer-o"
 		}}
-			{{drop-down value=model.notify_click_group content=Settings.notify_click_group class="notifications"}}
+			{{drop-down value=model.notification.click_group content=SettingsNotification.click_group class="notifications"}}
 		{{/settings-row}}
 	{{/if}}
 
@@ -73,7 +73,7 @@
 		"Restore from tray or minimized state when performing a notification click action."
 		icon="fa-window-restore"
 	}}
-		{{check-box "Restore when clicking a notification" checked=model.notify_click_restore}}
+		{{check-box "Restore when clicking a notification" checked=model.notification.click_restore}}
 	{{/settings-row}}
 {{/if}}
 </fieldset>
