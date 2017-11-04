@@ -57,22 +57,9 @@ export default Model.extend({
 	gui_minimizetotray  : attr( "number",  { defaultValue: false } ),
 	gui_minimize        : attr( "number",  { defaultValue: 0 } ),
 	gui_focusrefresh    : attr( "number",  { defaultValue: 0 } ),
-	gui_closestreampopup: attr( "boolean", { defaultValue: false } ),
-	gui_hidestreampopup : attr( "boolean", { defaultValue: false } ),
-	gui_openchat        : attr( "boolean", { defaultValue: false } ),
-	gui_openchat_context: attr( "boolean", { defaultValue: false } ),
-	gui_twitchemotes    : attr( "boolean", { defaultValue: false } ),
 	gui_homepage        : attr( "string",  { defaultValue: "/featured" } ),
 	gui_layout          : attr( "string",  { defaultValue: "tile" } ),
-	gui_filterstreams   : attr( "boolean", { defaultValue: false } ),
-	gui_langfilter      : fragment( "settingsLangfilter", { defaultValue: {} } ),
-	gui_vodcastfilter   : attr( "boolean", { defaultValue: true } ),
-	stream_info         : attr( "number",  { defaultValue: 0 } ),
-	stream_show_flag    : attr( "boolean", { defaultValue: false } ),
-	stream_show_info    : attr( "boolean", { defaultValue: false } ),
-	stream_click_middle : attr( "number",  { defaultValue: 2 } ),
-	stream_click_modify : attr( "number",  { defaultValue: 4 } ),
-	channel_name        : attr( "number",  { defaultValue: 3 } ),
+	streams: fragment( "settingsStreams", { defaultValue: {} } ),
 	chat_method         : attr( "string",  { defaultValue: "default" } ),
 	chat_command        : attr( "string",  { defaultValue: "" } ),
 	notification: fragment( "settingsNotification", { defaultValue: {} } ),
@@ -120,31 +107,5 @@ export default Model.extend({
 		{ id: "msie",     label: "Internet Explorer", disabled: !isWin },
 		{ id: "chatty",   label: "Chatty" },
 		{ id: "custom",   label: "Custom application" }
-	],
-
-	gui_filterstreams: [
-		{ value: false, label: "Fade out streams" },
-		{ value: true,  label: "Filter out streams" }
-	],
-
-	stream_info: [
-		{ id: 0, label: "Game being played" },
-		{ id: 1, label: "Stream title" }
-	],
-
-	stream_click: [
-		{ id: 0, key: "disabled", label: "Do nothing" },
-		{ id: 1, key: "launch",   label: "Launch stream" },
-		{ id: 2, key: "chat",     label: "Open chat" },
-		{ id: 3, key: "channel",  label: "Go to channel page" },
-		{ id: 4, key: "settings", label: "Go to channel settings" }
-	],
-
-	// bitwise
-	channel_name: [
-		{ id: 3, label: "Show both" },
-		{ id: 1, label: "Show custom names" },
-		{ id: 2, label: "Show original names" }
 	]
-
 });

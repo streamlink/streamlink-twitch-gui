@@ -263,7 +263,9 @@ test( "Notification click", async assert => {
 		notification: {
 			click_restore: false
 		},
-		gui_openchat: false
+		streams: {
+			chat_open: false
+		}
 	});
 	const service = owner.lookup( "service:notification" );
 
@@ -292,11 +294,11 @@ test( "Notification click", async assert => {
 	);
 
 	expectedStreams.push( streamA, streamB );
-	set( settings, "gui_openchat", true );
+	set( settings, "streams.chat_open", true );
 	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
 	assert.checkSteps(
 		[ "logDebug", "startStream", "startStream" ],
-		"Only starts streams when gui_openchat is set to true"
+		"Launches streams only when settings.streams.chat_open is set to true"
 	);
 
 	// restore
@@ -323,12 +325,12 @@ test( "Notification click", async assert => {
 	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
 	assert.checkSteps(
 		[ "logDebug", ...restoreSteps, "startStream", "startStream" ],
-		"Only starts streams when gui_openchat is set to true"
+		"Launches streams only when settings.streams.chat_open is set to true"
 	);
 
 	expectedStreams.push( streamA, streamB );
 	expectedChats.push( channelA, channelB );
-	set( settings, "gui_openchat", false );
+	set( settings, "streams.chat_open", false );
 	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
 	assert.checkSteps(
 		[ "logDebug", ...restoreSteps, "startStream", "chat", "startStream", "chat" ],

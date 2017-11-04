@@ -4,7 +4,7 @@
 	"Channel name localizations."
 	icon="fa-language"
 }}
-	{{drop-down value=model.channel_name content=Settings.channel_name}}
+	{{drop-down value=model.streams.name content=SettingsStreams.name_list}}
 {{/settings-row}}
 
 {{#settings-row
@@ -12,7 +12,7 @@
 	"Indicating the broadcaster language."
 	icon="fa-flag"
 }}
-	{{check-box "Flags are always visible" checked=model.stream_show_flag}}
+	{{check-box "Flags are always visible" checked=model.streams.show_flag}}
 {{/settings-row}}
 
 {{#settings-row
@@ -20,7 +20,7 @@
 	"Makes vodcasts less visible, as an additional indicator."
 	icon="fa-recycle"
 }}
-	{{check-box "Fade out Vodcasts" checked=model.gui_vodcastfilter}}
+	{{check-box "Fade out Vodcasts" checked=model.streams.filter_vodcast}}
 {{/settings-row}}
 
 {{#settings-row
@@ -28,9 +28,23 @@
 	"Bottom bar inside the stream preview."
 	icon="fa-info"
 }}
-	{{check-box "Info bar is always visible" checked=model.stream_show_info}}
-	<p>What should be displayed?</p>
-	{{drop-down class="stream-click" value=model.stream_info content=Settings.stream_info}}
+	{{check-box "Info bar is always visible" checked=model.streams.show_info}}
+{{/settings-row}}
+
+{{#settings-row
+	"Info bar content"
+	"What should be displayed?"
+	icon="fa-info"
+}}
+	{{#radio-btns
+		name="settings-streams-info"
+		value=model.streams.info
+		content=SettingsStreams.info
+		optionValuePath="id"
+		as |radiobtn label|
+	}}
+		<div>{{component radiobtn label}}</div>
+	{{/radio-btns}}
 {{/settings-row}}
 
 {{#settings-row
@@ -39,8 +53,8 @@
 	icon="fa-hand-pointer-o"
 }}
 	<p>{{unless isDarwin "CTRL" "CMD"}} + Primary mouse button</p>
-	{{drop-down class="stream-click" value=model.stream_click_modify content=Settings.stream_click}}
+	{{drop-down class="stream-click" value=model.streams.click_modify content=SettingsStreams.click}}
 	<p>Middle mouse button</p>
-	{{drop-down class="stream-click" value=model.stream_click_middle content=Settings.stream_click}}
+	{{drop-down class="stream-click" value=model.streams.click_middle content=SettingsStreams.click}}
 {{/settings-row}}
 </fieldset>

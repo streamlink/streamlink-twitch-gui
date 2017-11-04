@@ -55,8 +55,8 @@
 	"While launching streams."
 	icon="fa-comment"
 }}
-	<div>{{check-box "Automatically open chat" checked=model.gui_openchat}}</div>
-	<div>{{check-box "Don't open chat while launching streams via the context menu" checked=model.gui_openchat_context isVisible=model.gui_openchat}}</div>
+	<div>{{check-box "Automatically open chat" checked=model.streams.chat_open}}</div>
+	<div>{{check-box "Don't open chat while launching streams via the context menu" checked=model.streams.chat_open_context disabled=(bool-not model.streams.chat_open)}}</div>
 {{/settings-row}}
 
 {{#settings-row
@@ -64,6 +64,6 @@
 	"Button that opens up twitchemotes.com."
 	icon="fa-smile-o"
 }}
-	{{check-box "Show emotes button in stream popups" checked=model.gui_twitchemotes}}
+	{{check-box "Show emotes button in stream popups" checked=model.streams.twitchemotes}}
 {{/settings-row}}
 </fieldset>

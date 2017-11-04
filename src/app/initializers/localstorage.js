@@ -84,21 +84,13 @@ function upgradeSettings() {
 		});
 	}
 
-	// remove unused or disabled language filters
-	Object.keys( settings.gui_langfilter || {} ).forEach(function( code ) {
-		const lang = langs[ code ];
-		if ( !lang || lang.disabled ) {
-			delete settings.gui_langfilter[ code ];
-		}
-	});
-
 	// move old attributes
 	moveAttributes( settings, {
 		livestreamer_oauth: "streaming.oauth",
-		gui_flagsvisible: "stream_show_flag",
-		gui_gamevisible: "stream_show_info",
-		gui_streamclick_mid: "stream_click_middle",
-		gui_streamclick_mod: "stream_click_modify"
+		gui_flagsvisible: "streams.show_flag",
+		gui_gamevisible: "streams.show_info",
+		gui_streamclick_mid: "streams.click_middle",
+		gui_streamclick_mod: "streams.click_modify"
 	});
 
 	// use new "streaming" model fragment
@@ -118,6 +110,24 @@ function upgradeSettings() {
 		retry_streams: "retry_streams"
 	});
 
+	// use new "streams" model fragment
+	moveAttributesIntoFragment( settings, "streams", {
+		channel_name: "name",
+		gui_closestreampopup: "modal_close_end",
+		gui_hidestreampopup: "modal_close_launch",
+		gui_openchat: "chat_open",
+		gui_openchat_context: "chat_open_context",
+		gui_twitchemotes: "twitchemotes",
+		gui_vodcastfilter: "filter_vodcast",
+		gui_filterstreams: "filter_languages",
+		gui_langfilter: "languages",
+		stream_show_flag: "show_flag",
+		stream_show_info: "show_info",
+		stream_info: "info",
+		stream_click_middle: "click_middle",
+		stream_click_modify: "click_modify"
+	});
+
 	// use new "notification" model fragment
 	moveAttributesIntoFragment( settings, "notification", {
 		notify_enabled: "enabled",
@@ -132,6 +142,16 @@ function upgradeSettings() {
 
 	// translate old quality ID setting
 	qualityIdToName( settings.streaming );
+
+	// remove unused or disabled streams language filters
+	if ( typeof settings.streams.languages === "object" ) {
+		for ( const [ code ] of Object.entries( settings.streams.languages ) ) {
+			const lang = langs[ code ];
+			if ( !lang || lang.disabled ) {
+				delete settings.streams.languages[ code ];
+			}
+		}
+	}
 
 	// rename old notification provider names
 	if ( [ "libnotify", "freedesktop" ].includes( settings.notification.provider ) ) {

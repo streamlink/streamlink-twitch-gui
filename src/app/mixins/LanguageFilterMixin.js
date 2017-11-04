@@ -13,21 +13,16 @@ export default Mixin.create({
 	settings: service(),
 
 	broadcaster_language: computed(
-		"settings.gui_filterstreams",
-		"settings.gui_langfilter",
+		"settings.streams.filter_languages",
+		"settings.streams.languages",
 		function() {
-			if ( !get( this, "settings.gui_filterstreams" ) ) { return; }
+			if ( !get( this, "settings.streams.filter_languages" ) ) { return; }
 
-			let filters = get( this, "settings.gui_langfilter" );
-			if ( !filters ) { return; }
-			filters = filters.toJSON();
-
+			const filters = get( this, "settings.streams.languages" ).toJSON();
 			const keys = Object.keys( filters );
-			const filtered = keys.filter(function( lang ) {
-				return filters[ lang ];
-			});
+			const filtered = keys.filter( lang => filters[ lang ] );
 
-			// ignore everything (un)checked
+			// ignore if all languages are (un)checked
 			return filtered.length > 0 && filtered.length !== keys.length
 				? filtered.join( "," )
 				: undefined;

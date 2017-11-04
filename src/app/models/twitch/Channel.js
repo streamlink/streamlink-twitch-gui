@@ -7,6 +7,11 @@ import {
 	attr,
 	Model
 } from "ember-data";
+import {
+	ATTR_STREAMS_NAME_CUSTOM,
+	ATTR_STREAMS_NAME_ORIGINAL,
+	ATTR_STREAMS_NAME_BOTH
+} from "models/localstorage/Settings/streams";
 
 
 const { service } = inject;
@@ -45,14 +50,17 @@ export default Model.extend({
 		"name",
 		"display_name",
 		"hasCustomDisplayName",
-		"settings.content.channel_name",
+		"settings.streams.name",
 		function() {
-			switch ( get( this, "settings.content.channel_name" ) ) {
-				case 1: return get( this, "display_name" );
-				case 2: return get( this, "name" );
-				case 3: return get( this, "hasCustomDisplayName" )
-					? `${get( this, "display_name" )} (${get( this, "name" )})`
-					: get( this, "display_name" );
+			switch ( get( this, "settings.streams.name" ) ) {
+				case ATTR_STREAMS_NAME_CUSTOM:
+					return get( this, "display_name" );
+				case ATTR_STREAMS_NAME_ORIGINAL:
+					return get( this, "name" );
+				case ATTR_STREAMS_NAME_BOTH:
+					return get( this, "hasCustomDisplayName" )
+						? `${get( this, "display_name" )} (${get( this, "name" )})`
+						: get( this, "display_name" );
 			}
 		}
 	),

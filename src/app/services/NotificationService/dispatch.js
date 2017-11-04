@@ -135,7 +135,8 @@ export default Mixin.create( Evented, {
 
 		} else if ( action === ATTR_NOTIFY_CLICK_STREAMANDCHAT ) {
 			const streaming = get( this, "streaming" );
-			const openchat = get( this, "settings.gui_openchat" );
+			// TODO: check individual channel settings
+			const openchat = get( this, "settings.streams.chat_open" );
 			const chat = get( this, "chat" );
 			streams.forEach( stream => {
 				streaming.startStream( stream ).catch( () => {} );

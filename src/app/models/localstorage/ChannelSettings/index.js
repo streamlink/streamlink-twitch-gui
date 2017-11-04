@@ -2,8 +2,8 @@ import {
 	attr,
 	Model
 } from "ember-data";
-import Settings from "models/localstorage/Settings";
 import SettingsStreaming from "models/localstorage/Settings/streaming";
+import SettingsStreams from "models/localstorage/Settings/streams";
 import SettingsNotification from "models/localstorage/Settings/notification";
 
 
@@ -12,7 +12,7 @@ import SettingsNotification from "models/localstorage/Settings/notification";
  */
 const attributes = {
 	quality: [ SettingsStreaming, "quality", "streaming.quality" ],
-	gui_openchat: [ Settings, "gui_openchat", "gui_openchat" ],
+	gui_openchat: [ SettingsStreams, "chat_open", "streams.chat_open" ],
 	notify_enabled: [ SettingsNotification, "enabled", "notification.enabled" ]
 };
 

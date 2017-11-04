@@ -1,9 +1,9 @@
 import { Controller } from "ember";
-import Settings from "models/localstorage/Settings";
+import SettingsStreams from "models/localstorage/Settings/streams";
 import { isDarwin } from "utils/node/platform";
 
 
 export default Controller.extend({
-	Settings,
+	SettingsStreams,
 	isDarwin
 });

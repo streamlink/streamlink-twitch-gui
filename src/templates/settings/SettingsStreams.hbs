@@ -58,7 +58,7 @@
 	"When a stream has started."
 	icon="fa-info-circle"
 }}
-	{{check-box "Hide the popup after successfully launching a stream" checked=model.gui_hidestreampopup}}
+	{{check-box "Hide the popup after successfully launching a stream" checked=model.streams.modal_close_launch}}
 {{/settings-row}}
 
 {{#settings-row
@@ -66,6 +66,6 @@
 	"When a stream has ended."
 	icon="fa-info-circle"
 }}
-	{{check-box "Close the popup of an active stream when it ends" checked=model.gui_closestreampopup}}
+	{{check-box "Close the popup of an active stream when it ends" checked=model.streams.modal_close_end}}
 {{/settings-row}}
 </fieldset>

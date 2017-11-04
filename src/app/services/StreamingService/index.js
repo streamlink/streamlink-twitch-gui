@@ -106,7 +106,7 @@ export default Service.extend({
 			channel,
 			stream: twitchStream,
 			quality: get( this, "settings.streaming.quality" ),
-			gui_openchat: get( this, "settings.gui_openchat" ),
+			gui_openchat: get( this, "settings.streams.chat_open" ),
 			started: new Date()
 		});
 
@@ -170,7 +170,7 @@ export default Service.extend({
 		this.refreshStream( stream );
 
 		// automatically close modal on success
-		if ( get( this, "settings.gui_hidestreampopup" ) ) {
+		if ( get( this, "settings.streams.modal_close_launch" ) ) {
 			this.closeStreamModal( stream );
 		}
 
@@ -184,7 +184,7 @@ export default Service.extend({
 				// context menu not used
 				   !get( stream, "strictQuality" )
 				// or context menu setting disabled
-				|| !get( this, "settings.gui_openchat_context" )
+				|| !get( this, "settings.streams.chat_open_context" )
 			)
 		) {
 			const channel = get( stream, "channel" );
@@ -216,7 +216,7 @@ export default Service.extend({
 	onStreamEnd( stream ) {
 		if ( get( this, "active" ) === stream ) {
 			// close modal of the active stream if it has been enabled in the settings
-			if ( get( this, "settings.gui_closestreampopup" ) ) {
+			if ( get( this, "settings.streams.modal_close_end" ) ) {
 				this.closeStreamModal( stream );
 			}
 		} else if ( !get( stream, "isDeleted" ) ) {

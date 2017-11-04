@@ -18,8 +18,8 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	settings: service(),
 
 	showButton: false,
-	isEnabled : or( "showButton", "settings.content.gui_twitchemotes" ),
-	isVisible : and( "isEnabled", "channel.partner" ),
+	isEnabled: or( "showButton", "settings.streams.twitchemotes" ),
+	isVisible: and( "isEnabled", "channel.partner" ),
 
 	classNames: [ "btn-neutral" ],
 	icon: "fa-smile-o",

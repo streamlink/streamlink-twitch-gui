@@ -28,7 +28,8 @@ import SettingsStreamingProvider from "models/localstorage/Settings/streamingPro
 import SettingsStreamingQualities from "models/localstorage/Settings/streamingQualities";
 import SettingsStreamingQualitiesOld from "models/localstorage/Settings/streamingQualitiesOld";
 import SettingsStreamingQuality from "models/localstorage/Settings/streamingQuality";
-import SettingsLangfilter from "models/localstorage/Settings/langfilter";
+import SettingsStreams from "models/localstorage/Settings/streams";
+import SettingsStreamsLanguages from "models/localstorage/Settings/streamsLanguages";
 import SettingsNotification from "models/localstorage/Settings/notification";
 
 import Versioncheck from "models/localstorage/Versioncheck";
@@ -384,7 +385,8 @@ export default {
 	SettingsStreamingQualities,
 	SettingsStreamingQualitiesOld,
 	SettingsStreamingQuality,
-	SettingsLangfilter,
+	SettingsStreams,
+	SettingsStreamsLanguages,
 	SettingsNotification,
 
 	Versioncheck,

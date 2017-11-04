@@ -6,6 +6,10 @@ import {
 	on
 } from "ember";
 import ListItemComponent from "components/list/ListItemComponent";
+import {
+	ATTR_STREAMS_INFO_GAME,
+	ATTR_STREAMS_INFO_TITLE
+} from "models/localstorage/Settings/streams";
 import layout from "templates/components/list/StreamItemComponent.hbs";
 
 
@@ -20,8 +24,8 @@ export default ListItemComponent.extend({
 		":stream-item-component",
 		"showGame:show-game",
 		"host:show-host",
-		"settings.stream_show_flag:show-flag",
-		"settings.stream_show_info:show-info",
+		"settings.streams.show_flag:show-flag",
+		"settings.streams.show_info:show-info",
 		"infoGame:info-game",
 		"infoTitle:info-title",
 		"_faded:faded",
@@ -36,62 +40,70 @@ export default ListItemComponent.extend({
 
 	showGame: notEmpty( "channel.game" ),
 
-	infoGame : equal( "settings.stream_info", 0 ),
-	infoTitle: equal( "settings.stream_info", 1 ),
+	infoGame: equal( "settings.streams.info", ATTR_STREAMS_INFO_GAME ),
+	infoTitle: equal( "settings.streams.info", ATTR_STREAMS_INFO_TITLE ),
 
 
 	_faded: or( "faded", "fadeVodcast" ),
 
 
 	faded: computed(
-		"settings.gui_langfilter",
+		"settings.streams.filter_languages",
+		"settings.streams.languages",
 		"content.channel.language",
 		"content.channel.broadcaster_language",
+		"hasCustomLangFilter",
 		function() {
-			if ( get( this, "settings.gui_filterstreams" ) ) {
+			if ( get( this, "settings.streams.filter_languages" ) ) {
 				return false;
 			}
 
-			let filter = get( this, "settings.gui_langfilter" );
-			let clang  = get( this, "channel.language" );
-			let blang  = get( this, "channel.broadcaster_language" );
+			const languages = get( this, "settings.streams.languages" ).toJSON();
+			const clang = get( this, "channel.language" );
+			const blang = get( this, "channel.broadcaster_language" );
 
 			// a channel language needs to be set
-			return clang
-				&& (
-					// fade out if
-					// no broadcaster language is set and channel language is filtered out
-					   !blang && filter[ clang ] === false
-					// OR broadcaster language is set and filtered out (ignore channel language)
-					||  blang && filter[ blang ] === false
-					// OR broadcaster language is set to "other" and a filter has been set
-					||  blang === "other" && get( this, "hasCustomLangFilter" )
-				);
+			if ( clang ) {
+				// fade out if
+				// no broadcaster language is set and channel language is filtered out
+				if ( !blang && languages[ clang ] === false ) {
+					return true;
+				}
+				// OR broadcaster language is set and filtered out (ignore channel language)
+				if ( blang && languages[ blang ] === false ) {
+					return true;
+				}
+				// OR broadcaster language is set to "other" and a filter has been set
+				if ( blang === "other" && get( this, "hasCustomLangFilter" ) ) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 	),
 
 	/**
 	 * @returns {boolean} return false if none or all languages are selected
 	 */
-	hasCustomLangFilter: computed( "settings.gui_langfilter", function() {
-		const filters = get( this, "settings.gui_langfilter" );
-		const keys = Object.keys( filters );
-		let current = filters[ keys.shift() ];
+	hasCustomLangFilter: computed( "settings.streams.languages", function() {
+		const languages = get( this, "settings.streams.languages" ).toJSON();
 
-		return keys.reduce(function( result, value ) {
-			if ( !result ) {
-				value   = filters[ value ];
-				result  = current !== value;
-				current = value;
+		const iterator = Object.entries( languages );
+		let { value: previous } = iterator.next();
+		for ( const [ language ] of iterator ) {
+			if ( previous !== language ) {
+				return true;
 			}
-			return result;
-		}, false );
+			previous = language;
+		}
+		return false;
 	}),
 
 
-	fadeVodcast: computed( "content.isVodcast", "settings.gui_vodcastfilter", function() {
+	fadeVodcast: computed( "content.isVodcast", "settings.streams.filter_vodcast", function() {
 		return get( this, "content.isVodcast" )
-			&& get( this, "settings.gui_vodcastfilter" );
+		    && get( this, "settings.streams.filter_vodcast" );
 	}),
 
 
