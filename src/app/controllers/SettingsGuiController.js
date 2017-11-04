@@ -5,34 +5,46 @@ import {
 	observer,
 	Controller
 } from "ember";
-import Settings from "models/localstorage/Settings";
+import SettingsGui, {
+	ATTR_GUI_INTEGRATION_TASKBAR,
+	ATTR_GUI_INTEGRATION_TRAY,
+	ATTR_GUI_INTEGRATION_BOTH,
+	ATTR_GUI_MINIMIZE_MINIMIZE,
+	ATTR_GUI_MINIMIZE_TRAY
+} from "models/localstorage/Settings/gui";
 
 
 const { equal } = computed;
 
 
 export default Controller.extend({
-	Settings,
+	SettingsGui,
 
-	hasTaskBarIntegration: equal( "model.gui_integration", 1 ),
-	hasBothIntegrations  : equal( "model.gui_integration", 3 ),
+	hasTaskBarIntegration: equal( "model.gui.integration", ATTR_GUI_INTEGRATION_TASKBAR ),
+	hasBothIntegrations: equal( "model.gui.integration", ATTR_GUI_INTEGRATION_BOTH ),
 
-	_minimizeObserver: observer( "model.gui_integration", function() {
-		const int = get( this, "model.gui_integration" );
-		const min = get( this, "model.gui_minimize" );
-		const noTask = ( int & 1 ) === 0;
-		const noTray = ( int & 2 ) === 0;
+	_integrationObserver: observer( "model.gui.integration", function() {
+		const integration = get( this, "model.gui.integration" );
+		const minimize = get( this, "model.gui.minimize" );
+		const noTask = ( integration & ATTR_GUI_INTEGRATION_TASKBAR ) === 0;
+		const noTray = ( integration & ATTR_GUI_INTEGRATION_TRAY ) === 0;
 
 		// make sure that disabled options are not selected
-		if ( noTask && min === 1 ) {
-			set( this, "model.gui_minimize", 2 );
+		if ( noTask && minimize === ATTR_GUI_MINIMIZE_MINIMIZE ) {
+			set( this, "model.gui.minimize", ATTR_GUI_MINIMIZE_TRAY );
 		}
-		if ( noTray && min === 2 ) {
-			set( this, "model.gui_minimize", 1 );
+		if ( noTray && minimize === ATTR_GUI_MINIMIZE_TRAY ) {
+			set( this, "model.gui.minimize", ATTR_GUI_MINIMIZE_MINIMIZE );
 		}
 
 		// enable/disable buttons
-		set( Settings, "minimize.1.disabled", noTask );
-		set( Settings, "minimize.2.disabled", noTray );
+		const minimizeIdMinimize = SettingsGui.minimize.findIndex( ({ id }) =>
+			id === ATTR_GUI_MINIMIZE_MINIMIZE
+		);
+		const minimizeIdTray = SettingsGui.minimize.findIndex( ({ id }) =>
+			id === ATTR_GUI_MINIMIZE_TRAY
+		);
+		set( SettingsGui, `minimize.${minimizeIdMinimize}.disabled`, noTask );
+		set( SettingsGui, `minimize.${minimizeIdTray}.disabled`, noTray );
 	})
 });

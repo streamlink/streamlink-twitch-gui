@@ -55,9 +55,11 @@ test( "Application window focus gain", assert => {
 		isModalOpened: false
 	});
 	const SettingsService = Service.extend({
-		gui_focusrefresh: computed(function() {
-			return threshold;
-		}).volatile()
+		gui: {
+			focusrefresh: computed(function() {
+				return threshold;
+			}).volatile()
+		}
 	});
 	const route = EmberObject.extend( RefreshRouteMixin, {
 		_refreshOnFocusGain() {

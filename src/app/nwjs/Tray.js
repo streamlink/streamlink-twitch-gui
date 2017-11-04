@@ -94,7 +94,7 @@ export function setShowInTray( bool, taskbar ) {
 	if ( bool ) {
 		show(function() {
 			toggleVisibility();
-			// also toggle taskbar visiblity on click (gui_integration === both)
+			// also toggle taskbar visiblity on click (settings.gui.integration === both)
 			if ( taskbar ) {
 				setShowInTaskbar( getVisibility() );
 			}

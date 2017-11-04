@@ -1,11 +1,12 @@
 import {
 	get,
-	computed,
 	inject,
 	observer,
 	Component
 } from "ember";
-import { themes } from "config";
+import {
+	themes as themesConfig
+} from "config";
 import guiSelectable from "gui/selectable";
 import {
 	enable as enableSmoothScroll,
@@ -14,9 +15,8 @@ import {
 import layout from "templates/components/ApplicationComponent.hbs";
 
 
-const { alias } = computed;
 const { service } = inject;
-const { themes: themesList } = themes;
+const { themes } = themesConfig;
 
 const reTheme = /^theme-/;
 
@@ -30,12 +30,10 @@ export default Component.extend({
 	tagName: "body",
 	classNames: [ "wrapper", "vertical" ],
 
-	theme: alias( "settings.content.gui_theme" ),
+	themeObserver: observer( "settings.gui.theme", function() {
+		let theme = get( this, "settings.gui.theme" );
 
-	themeObserver: observer( "themes", "theme", function() {
-		let theme = get( this, "theme" );
-
-		if ( themesList.indexOf( theme ) === -1 ) {
+		if ( !themes.includes( theme ) ) {
 			theme = "default";
 		}
 
@@ -48,8 +46,8 @@ export default Component.extend({
 		list.add( `theme-${theme}` );
 	}).on( "init" ),
 
-	smoothscrollObserver: observer( "settings.content.gui_smoothscroll", function() {
-		if ( get( this, "settings.content.gui_smoothscroll" ) ) {
+	smoothscrollObserver: observer( "settings.gui.smoothscroll", function() {
+		if ( get( this, "settings.gui.smoothscroll" ) ) {
 			enableSmoothScroll();
 		} else {
 			disableSmoothScroll();

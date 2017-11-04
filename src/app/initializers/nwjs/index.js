@@ -1,5 +1,6 @@
 import {
 	get,
+	addObserver,
 	Application
 } from "ember";
 import nwApp from "nwjs/App";
@@ -46,15 +47,16 @@ Application.instanceInitializer({
 				await logError( error );
 			}
 
-			// listen for changes to integration settings
-			settings.addObserver( "gui_integration", settings, onChangeIntegrations );
+			// observe changes to integration settings
+			const settingsGui = get( settings, "gui" );
+			addObserver( settingsGui, "integration", () => onChangeIntegrations( settings ) );
 
 			nwWindow.window.initialized = true;
 		});
 
 		// react to secondary application launch attempts
 		nwApp.on( "open", async command => {
-			if ( !get( settings, "advanced" ) || !get( settings, "gui_externalcommands" ) ) {
+			if ( !get( settings, "advanced" ) || !get( settings, "gui.externalcommands" ) ) {
 				return;
 			}
 			const argv = parseCommand( command );

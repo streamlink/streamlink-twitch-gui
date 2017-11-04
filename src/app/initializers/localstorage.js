@@ -36,14 +36,6 @@ function upgradeSettings() {
 	if ( !data || !data.settings || !data.settings.records[1] ) { return; }
 	const settings = data.settings.records[ 1 ];
 
-	if ( typeof settings.gui_minimize !== "number" ) {
-		settings.gui_minimize = 0;
-	}
-
-	if ( settings.gui_homepage === "/user/following" ) {
-		settings.gui_homepage = "/user/followedStreams";
-	}
-
 	// remove old qualities setting (pre-exclusion streamlink/livestreamer quality selection)
 	if ( typeof settings.qualities === "object" && typeof settings.qualities.source === "string" ) {
 		delete settings[ "qualities" ];
@@ -93,6 +85,18 @@ function upgradeSettings() {
 		gui_streamclick_mod: "streams.click_modify"
 	});
 
+	// use new "gui" model fragment
+	moveAttributesIntoFragment( settings, "gui", {
+		gui_externalcommands: "externalcommands",
+		gui_focusrefresh: "focusrefresh",
+		gui_homepage: "homepage",
+		gui_integration: "integration",
+		gui_minimize: "minimize",
+		gui_minimizetotray: "minimizetotray",
+		gui_smoothscroll: "smoothscroll",
+		gui_theme: "theme"
+	});
+
 	// use new "streaming" model fragment
 	moveAttributesIntoFragment( settings, "streaming", {
 		streamprovider: "provider",
@@ -139,6 +143,17 @@ function upgradeSettings() {
 		notify_click_restore: "click_restore",
 		notify_badgelabel: "badgelabel"
 	});
+
+	// fix old gui related attribute values
+	if ( typeof settings.gui.minimize !== "number" ) {
+		settings.gui.minimize = 0;
+	}
+	if ( typeof settings.gui.minimizetotray !== "boolean" ) {
+		settings.gui.minimizetotray = !!settings.gui.minimizetotray;
+	}
+	if ( settings.gui.homepage === "/user/following" ) {
+		settings.gui.homepage = "/user/followedStreams";
+	}
 
 	// translate old quality ID setting
 	qualityIdToName( settings.streaming );

@@ -27,6 +27,10 @@ import {
 	setMinimized,
 	setVisibility
 } from "nwjs/Window";
+import {
+	ATTR_GUI_MINIMIZE_MINIMIZE,
+	ATTR_GUI_MINIMIZE_TRAY
+} from "models/localstorage/Settings/gui";
 
 
 const { service } = inject;
@@ -278,15 +282,15 @@ export default Service.extend({
 	},
 
 	minimize( restore ) {
-		switch ( get( this, "settings.gui_minimize" ) ) {
+		switch ( get( this, "settings.gui.minimize" ) ) {
 			// minimize
-			case 1:
+			case ATTR_GUI_MINIMIZE_MINIMIZE:
 				setMinimized( !restore );
 				break;
 			// move to tray: toggle window and taskbar visibility
-			case 2:
+			case ATTR_GUI_MINIMIZE_TRAY:
 				setVisibility( restore );
-				if ( get( this, "settings.isVisibleInTaskbar" ) ) {
+				if ( get( this, "settings.gui.isVisibleInTaskbar" ) ) {
 					setShowInTaskbar( restore );
 				}
 				break;

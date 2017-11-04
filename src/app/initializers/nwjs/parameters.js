@@ -37,10 +37,12 @@ export default async function( argv, settings, application ) {
 	}
 
 	if ( argv[ ARG_TRAY ] ) {
+		const isVisibleInTaskbar = get( settings, "gui.isVisibleInTaskbar" );
+		const isVisibleInTray = get( settings, "gui.isVisibleInTray" );
 		// show tray icon (and taskbar item)
-		setShowInTray( true, get( settings, "isVisibleInTaskbar" ) );
+		setShowInTray( true, isVisibleInTaskbar );
 		// remove the tray icon after clicking it if it's disabled in the settings
-		if ( !get( settings, "isVisibleInTray" ) ) {
+		if ( !isVisibleInTray ) {
 			hideOnClick();
 		}
 	} else {

@@ -13,7 +13,10 @@
 	"Select a GUI color theme."
 	icon="fa-paint-brush"
 }}
-	{{drop-down value=model.gui_theme content=themes}}
+	{{drop-down
+		value=model.gui.theme
+		content=themes
+	}}
 {{/settings-row}}
 
 {{#settings-row
@@ -21,7 +24,7 @@
 	"Enable or disable smooth scrolling."
 	icon="fa-arrows-alt"
 }}
-	{{check-box "Enable smooth scrolling" checked=model.gui_smoothscroll}}
+	{{check-box "Enable smooth scrolling" checked=model.gui.smoothscroll}}
 {{/settings-row}}
 
 {{#settings-row

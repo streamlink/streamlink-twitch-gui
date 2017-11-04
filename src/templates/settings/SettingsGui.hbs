@@ -5,9 +5,9 @@
 	icon="fa-puzzle-piece"
 }}
 	{{#radio-btns
-		name="gui_integration"
-		value=model.gui_integration
-		content=Settings.integration
+		name="settings-gui-integration"
+		value=model.gui.integration
+		content=SettingsGui.integration
 		optionValuePath="id"
 		classNames="radio-btns-group"
 		as |radiobtn label|
@@ -22,9 +22,9 @@
 	icon="fa-minus"
 }}
 	{{#radio-btns
-		name="gui_minimize"
-		value=model.gui_minimize
-		content=Settings.minimize
+		name="settings-gui-minimize"
+		value=model.gui.minimize
+		content=SettingsGui.minimize
 		optionValuePath="id"
 		classNames="radio-btns-group"
 		as |radiobtn label|
@@ -39,7 +39,7 @@
 		"Minimize button click behavior."
 		icon="fa-minus-square"
 	}}
-		{{check-box "Minimize to tray" checked=model.gui_minimizetotray}}
+		{{check-box "Minimize to tray" checked=model.gui.minimizetotray}}
 	{{/settings-row}}
 {{/if}}
 
@@ -50,7 +50,7 @@
 		icon="fa-terminal"
 		notes="See the wiki for a list of available actions and parameters."
 	}}
-		{{check-box "Allow external commands" checked=model.gui_externalcommands}}
+		{{check-box "Allow external commands" checked=model.gui.externalcommands}}
 	{{/settings-row}}
 {{/if}}
 
@@ -69,6 +69,10 @@
 	"Automatically refresh when the application window regains focus."
 	icon="fa-refresh"
 }}
-	{{drop-down value=model.gui_focusrefresh content=Settings.gui_focusrefresh optionValuePath="value"}}
+	{{drop-down
+		value=model.gui.focusrefresh
+		content=SettingsGui.focusrefresh
+		optionValuePath="value"
+	}}
 {{/settings-row}}
 </fieldset>
