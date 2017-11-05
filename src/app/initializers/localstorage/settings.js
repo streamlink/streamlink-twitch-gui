@@ -1,41 +1,19 @@
 import {
-	players,
-	langs
+	players as playersConfig,
+	langs as langsConfig
 } from "config";
+import {
+	moveAttributes,
+	moveAttributesIntoFragment,
+	qualityIdToName
+} from "./utils";
 import qualities from "models/stream/qualities";
 
 
-const LS = window.localStorage;
 const { hasOwnProperty } = {};
 
 
-function upgradeLocalstorage() {
-	let old = LS.getItem( "app" );
-	if ( old === null ) { return; }
-
-	try {
-		old = JSON.parse( old );
-	} catch ( e ) {
-		return;
-	}
-
-	Object.keys( old ).forEach(function( key ) {
-		const data = {};
-		data[ key ] = old[ key ];
-		LS.setItem(
-			key.toLowerCase(),
-			JSON.stringify( data )
-		);
-	});
-
-	LS.removeItem( "app" );
-}
-
-function upgradeSettings() {
-	const data = JSON.parse( LS.getItem( "settings" ) );
-	if ( !data || !data.settings || !data.settings.records[1] ) { return; }
-	const settings = data.settings.records[ 1 ];
-
+function removeOldData( settings ) {
 	// remove old qualities setting (pre-exclusion streamlink/livestreamer quality selection)
 	if ( typeof settings.qualities === "object" && typeof settings.qualities.source === "string" ) {
 		delete settings[ "qualities" ];
@@ -44,7 +22,11 @@ function upgradeSettings() {
 	// remove old livestreamer data
 	delete settings[ "livestreamer" ];
 	delete settings[ "livestreamer_params" ];
+}
 
+
+// TODO: remove this
+function updatePlayerData( settings ) {
 	// translate old player data into the player presets format
 	if ( typeof settings.player === "string" ) {
 		settings.player = {
@@ -58,7 +40,7 @@ function upgradeSettings() {
 
 	// make sure that default player params are set/updated once a new one gets added
 	if ( typeof settings.player === "object" ) {
-		Object.keys( players ).forEach(function( name ) {
+		Object.keys( playersConfig ).forEach(function( name ) {
 			if ( !settings.player.hasOwnProperty( name ) ) {
 				settings.player[ name ] = {
 					"exec": "",
@@ -66,17 +48,20 @@ function upgradeSettings() {
 					"params": {}
 				};
 			}
-			let playerParams = settings.player[ name ].params;
+			const playerParams = settings.player[ name ].params;
 			// iterate player preset params
-			players[ name ].params.forEach(function( param ) {
+			playersConfig[ name ].params.forEach(function( param ) {
 				// don't overwrite already existing values
 				if ( playerParams.hasOwnProperty( param.name ) ) { return; }
 				playerParams[ param.name ] = param.default;
 			});
 		});
 	}
+}
 
-	// move old attributes
+
+function updateAttributes( settings ) {
+	// move old attributes (will be overwritten by new attributes if they exist)
 	moveAttributes( settings, {
 		livestreamer_oauth: "streaming.oauth",
 		gui_flagsvisible: "streams.show_flag",
@@ -143,96 +128,46 @@ function upgradeSettings() {
 		notify_click_restore: "click_restore",
 		notify_badgelabel: "badgelabel"
 	});
+}
+
+
+function fixAttributes( settings ) {
+	const { gui, streaming, streams, notification } = settings;
 
 	// fix old gui related attribute values
-	if ( typeof settings.gui.minimize !== "number" ) {
-		settings.gui.minimize = 0;
+	if ( hasOwnProperty.call( gui, "minimize" ) && typeof gui.minimize !== "number" ) {
+		gui.minimize = 0;
 	}
-	if ( typeof settings.gui.minimizetotray !== "boolean" ) {
-		settings.gui.minimizetotray = !!settings.gui.minimizetotray;
+	if ( hasOwnProperty.call( gui, "minimizetotray" ) && typeof gui.minimizetotray !== "boolean" ) {
+		gui.minimizetotray = !!gui.minimizetotray;
 	}
-	if ( settings.gui.homepage === "/user/following" ) {
-		settings.gui.homepage = "/user/followedStreams";
+	if ( hasOwnProperty.call( gui, "homepage" ) && gui.homepage === "/user/following" ) {
+		gui.homepage = "/user/followedStreams";
 	}
 
 	// translate old quality ID setting
-	qualityIdToName( settings.streaming );
+	qualityIdToName( streaming, qualities );
 
 	// remove unused or disabled streams language filters
-	if ( typeof settings.streams.languages === "object" ) {
-		for ( const [ code ] of Object.entries( settings.streams.languages ) ) {
-			const lang = langs[ code ];
+	if ( typeof streams.languages === "object" ) {
+		for ( const [ code ] of Object.entries( streams.languages ) ) {
+			const lang = langsConfig[ code ];
 			if ( !lang || lang.disabled ) {
-				delete settings.streams.languages[ code ];
+				delete streams.languages[ code ];
 			}
 		}
 	}
 
 	// rename old notification provider names
-	if ( [ "libnotify", "freedesktop" ].includes( settings.notification.provider ) ) {
-		settings.notification.provider = "native";
-	}
-
-	LS.setItem( "settings", JSON.stringify( data ) );
-}
-
-
-function moveAttributes( settings, attributes ) {
-	for ( const [ oldAttr, newAttrPath ] of Object.entries( attributes ) ) {
-		if ( !hasOwnProperty.call( settings, oldAttr ) ) { continue; }
-		const path = newAttrPath.split( "." );
-		const newAttr = path.pop();
-		let obj = settings;
-		for ( const elem of path ) {
-			if ( !hasOwnProperty.call( obj, elem ) ) {
-				obj[ elem ] = {};
-			}
-			obj = obj[ elem ];
-		}
-		obj[ newAttr ] = settings[ oldAttr ];
-		delete settings[ oldAttr ];
-	}
-}
-
-// Similar to moveAttributes, but faster (everything belongs to the same fragment)
-function moveAttributesIntoFragment( settings, fragment, attributes ) {
-	if ( !hasOwnProperty.call( settings, fragment ) ) {
-		settings[ fragment ] = {};
-	}
-	const fragmentObj = settings[ fragment ];
-	for ( const [ oldAttr, newAttr ] of Object.entries( attributes ) ) {
-		if ( !hasOwnProperty.call( settings, oldAttr ) ) { continue; }
-		fragmentObj[ newAttr ] = settings[ oldAttr ];
-		delete settings[ oldAttr ];
+	if ( [ "libnotify", "freedesktop" ].includes( notification.provider ) ) {
+		notification.provider = "native";
 	}
 }
 
 
-function upgradeChannelSettings() {
-	const data = JSON.parse( LS.getItem( "channelsettings" ) );
-	// data key has a dash in it
-	if ( !data || !data[ "channel-settings" ] ) { return; }
-	const channelsettings = data[ "channel-settings" ].records;
-
-	Object.keys( channelsettings ).forEach(function( key ) {
-		let settings = channelsettings[ key ];
-
-		// map quality number IDs to strings
-		qualityIdToName( settings );
-	});
-
-	LS.setItem( "channelsettings", JSON.stringify( data ) );
+export default function( settings ) {
+	removeOldData( settings );
+	updatePlayerData( settings );
+	updateAttributes( settings );
+	fixAttributes( settings );
 }
-
-function qualityIdToName( obj ) {
-	if ( !hasOwnProperty.call( obj, "quality" ) ) { return; }
-	if ( obj.quality === null ) { return; }
-	if ( !hasOwnProperty.call( qualities, obj.quality || 0 ) ) { return; }
-
-	obj.quality = qualities[ obj.quality || 0 ].id;
-}
-
-
-upgradeLocalstorage();
-upgradeSettings();
-upgradeChannelSettings();
