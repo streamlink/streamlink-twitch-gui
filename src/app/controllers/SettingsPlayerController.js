@@ -1,90 +1,85 @@
 import {
 	get,
 	computed,
+	inject,
 	Controller
 } from "ember";
-import { players } from "config";
+import {
+	players as playersConfig
+} from "config";
 import substitutionsPlayer from "services/StreamingService/player/substitutions";
 import { platform } from "utils/node/platform";
 import { delimiter } from "path";
 
 
 const { equal } = computed;
+const { service } = inject;
 const { assign } = Object;
 const { isArray } = Array;
-const kPlayers = Object.keys( players );
 
 
 export default Controller.extend({
+	store: service(),
+
 	substitutionsPlayer,
 
 	// filter platform dependent player parameters
 	players: computed(function() {
-		return kPlayers
-			.reduce( ( playerlist, playername ) => {
-				let playerObj = assign( {}, players[ playername ] );
-				playerObj.params = playerObj.params
-					.map( param => {
-						param = assign( {}, param );
-						if ( param.args instanceof Object ) {
-							param.args = param.args[ platform ];
-						}
+		const list = {};
+		for ( const [ id, player ] of Object.entries( playersConfig ) ) {
+			const obj = list[ id ] = assign( {}, player );
+			obj.params = obj.params
+				.map( param => {
+					param = assign( {}, param );
+					if ( param.args instanceof Object ) {
+						param.args = param.args[ platform ];
+					}
 
-						return param;
-					})
-					.filter( param => !!param.args );
+					return param;
+				})
+				.filter( param => !!param.args );
+		}
 
-				playerlist[ playername ] = playerObj;
-
-				return playerlist;
-			}, {} );
+		return list;
 	}),
 
 	playerPresets: computed(function() {
-		let presetList = kPlayers
-			.filter( id =>
-				   players[ id ][ "exec" ][ platform ]
-				&& players[ id ][ "disabled" ] !== true
-			)
-			.map( id => ({
-				id,
-				label: players[ id ][ "name" ]
-			}) );
-
-		presetList.unshift({
-			id   : "default",
+		const presets = [{
+			id: "default",
 			label: "No preset"
-		});
+		}];
+		for ( const [ id, { name: label, exec, disabled } ] of Object.entries( playersConfig ) ) {
+			if ( disabled || !exec[ platform ] ) { continue; }
+			presets.push({ id, label });
+		}
 
-		return presetList;
+		return presets;
 	}),
 
-	playerPlaceholder: computed( "model.player_preset", function() {
-		let preset = get( this, "model.player_preset" );
-		if ( preset === "default" || !players[ preset ] ) {
+	playerPlaceholder: computed( "model.streaming.player", function() {
+		const player = get( this, "model.streaming.player" );
+		if ( player === "default" || !playersConfig[ player ] ) {
 			return "Leave blank for default player";
 		}
 
-		let exec = players[ preset ][ "exec" ][ platform ];
+		const exec = playersConfig[ player ][ "exec" ][ platform ];
 		if ( !exec ) {
 			return "Leave blank for default location";
 		}
 
-		if ( isArray( exec ) ) {
-			exec = exec.join( `${delimiter} ` );
-		}
-
-		return exec;
+		return isArray( exec )
+			? exec.join( `${delimiter} ` )
+			: exec;
 	}),
 
-	playerPresetDefault: equal( "model.player_preset", "default" ),
+	playerPresetDefault: equal( "model.streaming.player", "default" ),
 
 	playerPresetDefaultAndPlayerEmpty: computed(
 		"playerPresetDefault",
-		"model.player.default.exec",
+		"model.streaming.players.default.exec",
 		function() {
 			return get( this, "playerPresetDefault" )
-			    && !get( this, "model.player.default.exec" );
+			    && !get( this, "model.streaming.players.default.exec" );
 		}
 	)
 });

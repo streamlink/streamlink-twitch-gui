@@ -25,6 +25,9 @@ export default Fragment.extend({
 	qualities: fragment( "settingsStreamingQualities", { defaultValue: {} } ),
 	qualitiesOld: fragment( "settingsStreamingQualitiesOld", { defaultValue: {} } ),
 
+	player: attr( "string", { defaultValue: "default" } ),
+	players: fragment( "settingsStreamingPlayers", { defaultValue: {} } ),
+
 	oauth: attr( "boolean", { defaultValue: true } ),
 	player_passthrough: attr( "string", { defaultValue: "http" } ),
 	player_reconnect: attr( "boolean", { defaultValue: true } ),

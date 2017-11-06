@@ -518,9 +518,7 @@ test( "Resolve parameters", async assert => {
 		};
 		const result = await resolvePlayer( stream, "mpv", {
 			mpv: {
-				params: {
-					foo: true
-				}
+				foo: true
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
@@ -538,9 +536,7 @@ test( "Resolve parameters", async assert => {
 		const result = await resolvePlayer( stream, "mpv", {
 			mpv: {
 				args: "--bar --baz",
-				params: {
-					foo: true
-				}
+				foo: true
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
@@ -567,9 +563,7 @@ test( "Resolve parameters", async assert => {
 		};
 		const result = await resolvePlayer( stream, "mpv", {
 			mpv: {
-				params: {
-					foo: true
-				}
+				foo: true
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
@@ -596,9 +590,7 @@ test( "Resolve parameters", async assert => {
 		};
 		const result = await resolvePlayer( stream, "mpv", {
 			mpv: {
-				params: {
-					foo: true
-				}
+				foo: true
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );

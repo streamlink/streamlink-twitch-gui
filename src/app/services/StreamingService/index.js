@@ -132,8 +132,9 @@ export default Service.extend({
 				() => stream.toJSON({ includeId: true })
 			);
 
-			// resolve streaming provider
 			const settingsStreaming = get( this, "settings.streaming" ).toJSON();
+
+			// resolve streaming provider
 			const providerObj = await resolveProvider(
 				stream,
 				settingsStreaming.provider,
@@ -143,8 +144,8 @@ export default Service.extend({
 			// resolve player
 			const playerObj = await resolvePlayer(
 				stream,
-				get( this, "settings.player_preset" ),
-				get( this, "settings.player" )
+				settingsStreaming.player,
+				settingsStreaming.players
 			);
 
 			// launch the stream

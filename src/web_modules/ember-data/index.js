@@ -26,5 +26,6 @@ export const PromiseObject = EmberData.PromiseObject;
 export const RESTAdapter = EmberData.RESTAdapter;
 export const RESTSerializer = EmberData.RESTSerializer;
 export const RootState = EmberData.RootState;
+export const Snapshot = EmberData.Snapshot;
 export const Store = EmberData.Store;
 export const Transform = EmberData.Transform;

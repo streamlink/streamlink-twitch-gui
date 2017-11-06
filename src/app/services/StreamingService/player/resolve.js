@@ -84,23 +84,28 @@ export default async function( stream, player, playersUserData ) {
 /**
  * Build the player parameter string out of the preset and custom params
  * This is a single string being used as the provider's --player-args parameter value
- * @param {Boolean} hasPlayerExecPath
+ * @param {boolean} hasPlayerExecPath
  * @param {Object} playerConfData
  * @param {Object[]} playerConfData.params
  * @param {Object} playerUserData
- * @returns {String}
+ * @param {string?} playerUserData.args
+ * @returns {string}
  */
 function getPlayerParams( hasPlayerExecPath, playerConfData, playerUserData ) {
-	let { args, params } = playerUserData;
-	params = params || {};
+	const parameters = [];
 
-	/**
-	 * The list of predefined player parameters
-	 * @type {String[]} paramlist
-	 */
-	const parameters = playerConfData.params
+	// add custom user parameters at the beginning if the player exec path is known
+	if ( hasPlayerExecPath ) {
+		const { args } = playerUserData;
+		if ( args ) {
+			parameters.push( args );
+		}
+	}
+
+	// add player specific parameters
+	playerConfData.params
 		.map( param => {
-			let { args, name, type } = param;
+			let { name, type, args } = param;
 
 			if ( args instanceof Object ) {
 				if ( !hasOwnProperty.call( args, platform ) ) {
@@ -111,19 +116,15 @@ function getPlayerParams( hasPlayerExecPath, playerConfData, playerUserData ) {
 
 			switch ( type ) {
 				case "boolean":
-					return params[ name ]
+					return playerUserData[ name ]
 						? args
 						: null;
 				default:
 					throw new Error( `Invalid or unsupported parameter type: ${type}` );
 			}
 		})
-		.filter( param => param !== null );
-
-	// append custom user parameters if the player exec path is known
-	if ( args && hasPlayerExecPath ) {
-		parameters.unshift( args );
-	}
+		.filter( param => param !== null )
+		.forEach( param => parameters.push( param ) );
 
 	// append "{filename}" if it's missing
 	if ( !parameters.includes( "{filename}" ) ) {

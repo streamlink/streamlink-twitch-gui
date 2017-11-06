@@ -29,6 +29,10 @@ import SettingsStreamingProvider from "models/localstorage/Settings/streamingPro
 import SettingsStreamingQualities from "models/localstorage/Settings/streamingQualities";
 import SettingsStreamingQualitiesOld from "models/localstorage/Settings/streamingQualitiesOld";
 import SettingsStreamingQuality from "models/localstorage/Settings/streamingQuality";
+import SettingsStreamingPlayers from "models/localstorage/Settings/streamingPlayers";
+import SettingsStreamingPlayer from "models/localstorage/Settings/streamingPlayer";
+import SettingsStreamingPlayerSerializer
+	from "models/localstorage/Settings/streamingPlayerSerializer";
 import SettingsStreams from "models/localstorage/Settings/streams";
 import SettingsStreamsLanguages from "models/localstorage/Settings/streamsLanguages";
 import SettingsNotification from "models/localstorage/Settings/notification";
@@ -387,6 +391,9 @@ export default {
 	SettingsStreamingQualities,
 	SettingsStreamingQualitiesOld,
 	SettingsStreamingQuality,
+	SettingsStreamingPlayers,
+	SettingsStreamingPlayer,
+	SettingsStreamingPlayerSerializer,
 	SettingsStreams,
 	SettingsStreamsLanguages,
 	SettingsNotification,

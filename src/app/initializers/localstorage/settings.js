@@ -1,5 +1,4 @@
 import {
-	players as playersConfig,
 	langs as langsConfig
 } from "config";
 import {
@@ -22,41 +21,6 @@ function removeOldData( settings ) {
 	// remove old livestreamer data
 	delete settings[ "livestreamer" ];
 	delete settings[ "livestreamer_params" ];
-}
-
-
-// TODO: remove this
-function updatePlayerData( settings ) {
-	// translate old player data into the player presets format
-	if ( typeof settings.player === "string" ) {
-		settings.player = {
-			"default": {
-				"exec": settings[ "player" ] || "",
-				"args": settings[ "player_params" ] || ""
-			}
-		};
-		delete settings[ "player_params" ];
-	}
-
-	// make sure that default player params are set/updated once a new one gets added
-	if ( typeof settings.player === "object" ) {
-		Object.keys( playersConfig ).forEach(function( name ) {
-			if ( !settings.player.hasOwnProperty( name ) ) {
-				settings.player[ name ] = {
-					"exec": "",
-					"args": "",
-					"params": {}
-				};
-			}
-			const playerParams = settings.player[ name ].params;
-			// iterate player preset params
-			playersConfig[ name ].params.forEach(function( param ) {
-				// don't overwrite already existing values
-				if ( playerParams.hasOwnProperty( param.name ) ) { return; }
-				playerParams[ param.name ] = param.default;
-			});
-		});
-	}
 }
 
 
@@ -148,6 +112,9 @@ function fixAttributes( settings ) {
 	// translate old quality ID setting
 	qualityIdToName( streaming, qualities );
 
+	// translate old players data
+	fixStreamingPlayers( streaming, settings );
+
 	// remove unused or disabled streams language filters
 	if ( typeof streams.languages === "object" ) {
 		for ( const [ code ] of Object.entries( streams.languages ) ) {
@@ -165,9 +132,47 @@ function fixAttributes( settings ) {
 }
 
 
+function fixStreamingPlayers( streaming, settings ) {
+	// translate old player data into the player presets format
+	if ( typeof settings[ "player" ] === "string" ) {
+		streaming.player = "default";
+		streaming.players = streaming.players || {};
+		if ( !hasOwnProperty.call( streaming.players, "default" ) ) {
+			streaming.players[ "default" ] = {
+				exec: settings[ "player" ] || null,
+				args: settings[ "player_params" ] || null
+			};
+		}
+		delete settings[ "player" ];
+		delete settings[ "player_params" ];
+	}
+
+	// translate old player preset data into the new format
+	if ( typeof settings[ "player" ] === "object" ) {
+		const players = streaming.players = streaming.players || {};
+		for ( const [ name, data ] of Object.entries( settings.player ) ) {
+			const player = hasOwnProperty.call( players, name )
+				? players[ name ]
+				: ( players[ name ] = {} );
+			player[ "exec" ] = data[ "exec" ] || null;
+			player[ "args" ] = data[ "args" ] || null;
+			for ( const [ key, value ] of Object.entries( data[ "params" ] || {} ) ) {
+				player[ key ] = value;
+			}
+		}
+		delete settings[ "player" ];
+	}
+
+	// translate old player preset selection
+	if ( typeof settings[ "player_preset" ] === "string" ) {
+		streaming.player = settings[ "player_preset" ];
+		delete settings[ "player_preset" ];
+	}
+}
+
+
 export default function( settings ) {
 	removeOldData( settings );
-	updatePlayerData( settings );
 	updateAttributes( settings );
 	fixAttributes( settings );
 }

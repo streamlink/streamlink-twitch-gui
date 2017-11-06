@@ -256,7 +256,9 @@ test( "Fixes attributes", assert => {
 		},
 		notification: {
 			provider: "freedesktop"
-		}
+		},
+		player: "foo",
+		player_params: "bar"
 	};
 	updateSettings( a );
 	assert.propEqual(
@@ -268,7 +270,14 @@ test( "Fixes attributes", assert => {
 				homepage: "/user/followedStreams"
 			},
 			streaming: {
-				quality: "high"
+				quality: "high",
+				player: "default",
+				players: {
+					"default": {
+						exec: "foo",
+						args: "bar"
+					}
+				}
 			},
 			streams: {
 				languages: {
@@ -281,6 +290,39 @@ test( "Fixes attributes", assert => {
 			}
 		},
 		"Removes all old and unused attributes"
+	);
+
+	const b = {
+		player: {
+			foo: {
+				params: {
+					foo: "foo",
+					bar: "bar"
+				}
+			}
+		},
+		player_preset: "foo"
+	};
+	updateSettings( b );
+	assert.propEqual(
+		b,
+		{
+			gui: {},
+			streaming: {
+				player: "foo",
+				players: {
+					foo: {
+						exec: null,
+						args: null,
+						foo: "foo",
+						bar: "bar"
+					}
+				}
+			},
+			streams: {},
+			notification: {}
+		},
+		"Fixes old player preset structure"
 	);
 
 });
