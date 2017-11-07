@@ -64,6 +64,16 @@
 		{{/settings-row}}
 	{{/if}}
 
+	{{#settings-row
+		"Keep player window"
+		"After the stream has ended."
+		icon="fa-caret-square-o-right"
+		notes=(concat "The player itself may prevent " providerName " to close it. Please see the player settings as well.")
+		documentation="--player-no-close"
+	}}
+		{{check-box "Do not close the player" checked=model.streaming.player_no_close}}
+	{{/settings-row}}
+
 	{{#unless (is-equal model.streaming.player_passthrough "hls")}}
 		{{#settings-row
 			"HLS live edge"
