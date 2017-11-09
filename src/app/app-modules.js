@@ -35,6 +35,10 @@ import SettingsStreamingPlayerSerializer
 	from "models/localstorage/Settings/streamingPlayerSerializer";
 import SettingsStreams from "models/localstorage/Settings/streams";
 import SettingsStreamsLanguages from "models/localstorage/Settings/streamsLanguages";
+import SettingsChat from "models/localstorage/Settings/chat";
+import SettingsChatProviders from "models/localstorage/Settings/chatProviders";
+import SettingsChatProvider from "models/localstorage/Settings/chatProvider";
+import SettingsChatProviderSerializer from "models/localstorage/Settings/chatProviderSerializer";
 import SettingsNotification from "models/localstorage/Settings/notification";
 
 import Versioncheck from "models/localstorage/Versioncheck";
@@ -396,6 +400,10 @@ export default {
 	SettingsStreamingPlayerSerializer,
 	SettingsStreams,
 	SettingsStreamsLanguages,
+	SettingsChat,
+	SettingsChatProviders,
+	SettingsChatProvider,
+	SettingsChatProviderSerializer,
 	SettingsNotification,
 
 	Versioncheck,

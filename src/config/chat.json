@@ -1,12 +1,15 @@
 {
+	"browser": {
+		"label": "Default browser"
+	},
 	"chromium": {
-		"args": "\"--app={url}\"",
+		"label": "Chromium",
 		"exec": {
 			"win32": "chrome.exe",
 			"darwin": "Chromium",
 			"linux": [
-				"chromium-browser",
 				"chromium",
+				"chromium-browser",
 				"chromium-dev",
 				"chromium-continuous-bin",
 				"chromium-snapshot-bin"
@@ -26,10 +29,28 @@
 				"/usr/local/bin",
 				"/opt/chromium"
 			]
-		}
+		},
+		"attributes": [
+			{
+				"name": "exec",
+				"title": "Chromium executable",
+				"description": "Set a custom Chromium executable path.",
+				"icon": "fa-cog",
+				"type": "string",
+				"isFile": true
+			},
+			{
+				"name": "args",
+				"title": "Chromium parameters",
+				"description": "Set additional parameters.",
+				"icon": "fa-terminal",
+				"type": "string",
+				"isArgs": true
+			}
+		]
 	},
 	"chrome": {
-		"args": "\"--app={url}\"",
+		"label": "Google Chrome",
 		"exec": {
 			"win32": "chrome.exe",
 			"darwin": "Google Chrome",
@@ -56,18 +77,47 @@
 				"/opt/google/chrome",
 				"/opt/google/chrome-unstable"
 			]
-		}
+		},
+		"attributes": [
+			{
+				"name": "exec",
+				"title": "Google Chrome executable",
+				"description": "Set a custom Google Chrome executable path.",
+				"icon": "fa-cog",
+				"type": "string",
+				"isFile": true
+			},
+			{
+				"name": "args",
+				"title": "Google Chrome parameters",
+				"description": "Set additional parameters.",
+				"icon": "fa-terminal",
+				"type": "string",
+				"isArgs": true
+			}
+		]
 	},
 	"msie": {
-		"args": "\"{script}\" \"{url}\"",
-		"exec": "cscript.exe",
-		"script": "msie-minimal.vbs"
+		"label": "Internet Explorer",
+		"exec": {
+			"win32": "cscript.exe",
+			"darwin": false,
+			"linux": false
+		},
+		"fallback": {
+			"win32": [
+				"%WINDIR%\\SysWOW64",
+				"%WINDIR%\\system32"
+			],
+			"darwin": false,
+			"linux": false
+		},
+		"data": {
+			"script": "%NWJSAPPPATH%\\msie-minimal.vbs"
+		}
 	},
 	"chatty": {
-		"chatty-args": "-connect -single -user \"{user}\" -token \"{token}\" -channel \"{channel}\"",
-		"chatty-args-noauth": "-connect -single -channel \"{channel}\"",
-		"chatty-script": "chatty",
-		"args": "-jar \"{jar}\"",
+		"label": "Chatty",
 		"exec": {
 			"win32": "javaw.exe",
 			"darwin": "java",
@@ -90,6 +140,83 @@
 				"/usr/bin",
 				"/etc/alternatives"
 			]
-		}
+		},
+		"jar": {
+			"win32": "chatty.jar",
+			"darwin": "chatty.jar",
+			"linux": "chatty.jar"
+		},
+		"jarfallback": {
+			"win32": [],
+			"darwin": [],
+			"linux": [
+				"/usr/share/chatty"
+			]
+		},
+		"attributes": [
+			{
+				"name": "exec",
+				"title": "Java executable",
+				"description": "Set a custom java executable path.",
+				"icon": "fa-cog",
+				"type": "string",
+				"isFile": true
+			},
+			{
+				"name": "jar",
+				"title": "Chatty .jar file",
+				"description": "Set a custom chatty.jar path.",
+				"icon": "fa-cog",
+				"type": "string",
+				"isFile": true
+			},
+			{
+				"name": "instance",
+				"title": "Single instance mode",
+				"description": "Requires at least version 0.8.2b2.",
+				"icon": "fa-clone",
+				"type": "boolean",
+				"defaultValue": true,
+				"text": "Enable single instance mode"
+			},
+			{
+				"name": "auth",
+				"title": "Authenticate",
+				"description": "Let Chatty re-use the auth data.",
+				"icon": "fa-sign-in",
+				"type": "boolean",
+				"defaultValue": true,
+				"text": "Sign in automatically"
+			},
+			{
+				"name": "args",
+				"title": "Custom Chatty parameters",
+				"description": "Set additional parameters.",
+				"icon": "fa-terminal",
+				"type": "string",
+				"isArgs": true
+			}
+		]
+	},
+	"custom": {
+		"label": "Custom application",
+		"attributes": [
+			{
+				"name": "exec",
+				"title": "Application executable",
+				"description": "Set the path to the executable.",
+				"icon": "fa-cog",
+				"type": "string",
+				"isFile": true
+			},
+			{
+				"name": "args",
+				"title": "Application parameters",
+				"description": "Set application parameters.",
+				"icon": "fa-terminal",
+				"type": "string",
+				"isArgs": true
+			}
+		]
 	}
 }

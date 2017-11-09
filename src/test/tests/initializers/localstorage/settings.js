@@ -35,7 +35,8 @@ test( "Removes old attributes", assert => {
 			medium: "baz",
 			low: "qux",
 			audio: "quux"
-		}
+		},
+		chat_command: "foobar"
 	};
 	updateSettings( a );
 	assert.propEqual(
@@ -44,6 +45,7 @@ test( "Removes old attributes", assert => {
 			gui: {},
 			streaming: {},
 			streams: {},
+			chat: {},
 			notification: {}
 		},
 		"Removes all old and unused attributes"
@@ -75,6 +77,7 @@ test( "Updates attributes", assert => {
 				click_middle: 1,
 				click_modify: 2
 			},
+			chat: {},
 			notification: {}
 		},
 		"Updates attributes and creates fragments if necessary"
@@ -106,6 +109,7 @@ test( "Updates attributes", assert => {
 			},
 			streaming: {},
 			streams: {},
+			chat: {},
 			notification: {}
 		},
 		"Updates gui attributes and creates gui fragment if necessary"
@@ -147,6 +151,7 @@ test( "Updates attributes", assert => {
 				retry_streams: 1
 			},
 			streams: {},
+			chat: {},
 			notification: {}
 		},
 		"Updates streaming attributes and creates streaming fragment if necessary"
@@ -196,9 +201,28 @@ test( "Updates attributes", assert => {
 				click_middle: 2,
 				click_modify: 4
 			},
+			chat: {},
 			notification: {}
 		},
 		"Updates streams attributes and creates streams fragment if necessary"
+	);
+
+	const chatSettings = {
+		chat_method: "foo"
+	};
+	updateSettings( chatSettings );
+	assert.propEqual(
+		chatSettings,
+		{
+			gui: {},
+			streaming: {},
+			streams: {},
+			chat: {
+				provider: "foo"
+			},
+			notification: {}
+		},
+		"Updates chat attributes and creates chat fragment if necessary"
 	);
 
 	const notificationSettings = {
@@ -218,6 +242,7 @@ test( "Updates attributes", assert => {
 			gui: {},
 			streaming: {},
 			streams: {},
+			chat: {},
 			notification: {
 				enabled: true,
 				provider: "native",
@@ -285,6 +310,7 @@ test( "Fixes attributes", assert => {
 					en: false
 				}
 			},
+			chat: {},
 			notification: {
 				provider: "native"
 			}
@@ -320,6 +346,7 @@ test( "Fixes attributes", assert => {
 				}
 			},
 			streams: {},
+			chat: {},
 			notification: {}
 		},
 		"Fixes old player preset structure"
