@@ -143,7 +143,8 @@ export default Mixin.create( Evented, {
 				// don't open the chat twice (startStream may open chat already)
 				if ( !openchat ) {
 					const channel = get( stream, "channel" );
-					chat.open( channel ).catch( () => {} );
+					chat.openChat( channel )
+						.catch( () => {} );
 				}
 			});
 		}

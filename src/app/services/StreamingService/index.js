@@ -194,7 +194,7 @@ export default Service.extend({
 		) {
 			const channel = get( stream, "channel" );
 			const chat = get( this, "chat" );
-			chat.open( channel )
+			chat.openChat( channel )
 				.catch( () => {} );
 		}
 
