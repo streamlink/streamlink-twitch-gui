@@ -1,54 +1,54 @@
 <fieldset>
 {{#settings-row
-	"Chat method"
-	"Choose your preferred chat method."
+	"Chat application"
+	"Choose your preferred chat application."
 	icon="fa-twitch"
-	notes=(if isChatMethodDefault "Choosing the default browser may result in unwanted, non-minimal window sizes.")
+	notes=(if (is-equal model.chat.provider "browser")
+		"Choosing the default browser may result in unwanted, non-minimal window sizes."
+	)
 }}
-	{{drop-down value=model.chat_method content=chatMethods class="chat-method"}}
+	{{drop-down
+		value=model.chat.provider
+		content=providersDropDown
+	}}
 {{/settings-row}}
 
-{{#if isChatMethodChatty}}
-	{{#settings-row
-		"Chatty"
-		"Set the path to the Chatty .jar file."
-		icon="fa-cog"
-		defaultValue=(if isChatMethodChatty "\"chatty\" start script (read from $PATH)")
-		requires=(if isChatMethodChatty "Chatty >= 0.8.2b2")
-	}}
-		{{file-select
-			value=model.chat_command
-			inputClass="form-control"
-			placeholder="Chatty .jar file path"
+{{#each providerAttributes as |attributes name|}}
+	{{#each attributes as |attribute|}}
+		{{#settings-row
+			attribute.options.title
+			attribute.options.description
+			icon=attribute.options.icon
+			substitutions=(if attribute.options.isArgs userArgsSubstitutions)
+			isVisible=(is-equal model.chat.provider name)
 		}}
-	{{/settings-row}}
-{{else if isChatMethodCustom}}
-	{{#settings-row
-		"Chat application"
-		"Set a custom chat application command."
-		icon="fa-cog"
-		substitutions=substitutionsChatCustom
-		example="/path/to/app --token \"{token}\" --channel \"{channel}\""
-	}}
-		{{file-select
-			value=model.chat_command
-			inputClass="form-control"
-			placeholder="Custom chat application command"
-		}}
-	{{/settings-row}}
-{{else unless (bool-or isChatMethodDefault isChatMethodMSIE)}}
-	{{#settings-row
-		"Executable location"
-		"Choose a custom executable of your selected browser. If left blank, default installation paths are assumed."
-		icon="fa-cog"
-	}}
-		{{file-select
-			value=model.chat_command
-			inputClass="form-control"
-			placeholder="Custom browser executable"
-		}}
-	{{/settings-row}}
-{{/if}}
+			{{#if (is-equal attribute.type "string")}}
+				{{#if attribute.options.isFile}}
+					{{file-select
+						value=(mut (get (get model.chat.providers name) attribute.name))
+						inputClass="form-control"
+						placeholder=(if (is-equal name "custom")
+							"Setting an executable path is required"
+							(get (get chatConfig name) attribute.name)
+						)
+					}}
+				{{else}}
+					{{input
+						type="text"
+						classNames="col-xs-12"
+						value=(mut (get (get model.chat.providers name) attribute.name))
+						placeholder=(if attribute.options.isArgs "Set additional parameters")
+					}}
+				{{/if}}
+			{{else if (is-equal attribute.type "boolean")}}
+				{{check-box
+					attribute.options.text
+					checked=(mut (get (get model.chat.providers name) attribute.name))
+				}}
+			{{/if}}
+		{{/settings-row}}
+	{{/each}}
+{{/each}}
 
 {{#settings-row
 	"Open chat"

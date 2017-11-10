@@ -169,8 +169,9 @@ export default Component.extend({
 	},
 
 	openChat() {
-		let channel = get( this, "stream.channel" );
-		get( this, "chat" ).open( channel );
+		const chat = get( this, "chat" );
+		const channel = get( this, "stream.channel" );
+		chat.openChat( channel );
 	},
 
 	copyChannelURL() {

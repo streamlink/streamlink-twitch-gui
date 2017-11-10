@@ -249,7 +249,7 @@ test( "Notification click", async assert => {
 		}
 	});
 	owner.lookup( "service:chat" ).reopen({
-		async open( channel ) {
+		async openChat( channel ) {
 			assert.step( "chat" );
 			assert.strictEqual( channel, expectedChats.shift(), "Opens correct chat channel" );
 			if ( fail ) {

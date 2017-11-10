@@ -3,9 +3,15 @@ import {
 	set,
 	$,
 	on,
+	computed,
 	Component
 } from "ember";
+import { platform } from "utils/node/platform";
 import layout from "templates/components/form/FileSelectComponent.hbs";
+
+
+const { hasOwnProperty } = {};
+const { isArray } = Array;
 
 
 export default Component.extend({
@@ -15,8 +21,25 @@ export default Component.extend({
 	classNames: [ "input-group" ],
 
 	value: "",
-	placeholder: "",
 	disabled: false,
+
+	placeholder: computed({
+		set( key, value ) {
+			if ( typeof value === "string" ) {
+				return value;
+			}
+
+			if ( typeof value !== "object" || !hasOwnProperty.call( value, platform ) ) {
+				return "Leave blank for default path";
+			}
+
+			value = value[ platform ];
+
+			return isArray( value )
+				? value[ 0 ]
+				: value;
+		}
+	}),
 
 	_createInput: on( "init", function() {
 		const component = this;

@@ -1,12 +1,12 @@
 import PolymorphicFragmentSerializer from "store/PolymorphicFragmentSerializer";
 import {
-	players,
+	providers,
 	typeKey
-} from "./streamingPlayer";
+} from "./chatProvider";
 
 
 export default PolymorphicFragmentSerializer.extend({
-	models: players,
-	modelBaseName: "settings-streaming-player",
+	models: providers,
+	modelBaseName: "settings-chat-provider",
 	typeKey
 });

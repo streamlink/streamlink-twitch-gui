@@ -19,7 +19,6 @@
 		"masonry-layout": "4.2.0",
 		"minimist": "1.2.0",
 		"moment": "2.18.1",
-		"qunitjs": "2.4.0",
 		"roboto-fontface": "0.8.0",
 		"snoretoast": "github:bastimeyer/snoretoast#binaries"
 	},
@@ -50,7 +49,9 @@
 		"less-plugin-clean-css": "1.5.1",
 		"load-grunt-config": "0.19.2",
 		"nw-builder": "3.5.1",
+		"qunitjs": "2.4.1",
 		"raw-loader": "0.5.1",
+		"sinon": "4.1.2",
 		"svgo-loader": "1.2.1",
 		"webpack": "3.3.0"
 	},

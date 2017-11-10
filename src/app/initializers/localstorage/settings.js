@@ -21,6 +21,9 @@ function removeOldData( settings ) {
 	// remove old livestreamer data
 	delete settings[ "livestreamer" ];
 	delete settings[ "livestreamer_params" ];
+
+	// remove old chat data
+	delete settings[ "chat_command" ];
 }
 
 
@@ -79,6 +82,11 @@ function updateAttributes( settings ) {
 		stream_info: "info",
 		stream_click_middle: "click_middle",
 		stream_click_modify: "click_modify"
+	});
+
+	// use new "chat" model fragment
+	moveAttributesIntoFragment( settings, "chat", {
+		chat_method: "provider"
 	});
 
 	// use new "notification" model fragment
