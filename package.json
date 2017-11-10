@@ -51,6 +51,7 @@
 		"load-grunt-config": "0.19.2",
 		"nw-builder": "3.5.1",
 		"raw-loader": "0.5.1",
+		"sinon": "4.1.2",
 		"svgo-loader": "1.2.1",
 		"webpack": "3.3.0"
 	},
