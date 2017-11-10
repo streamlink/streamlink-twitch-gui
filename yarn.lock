@@ -4625,9 +4625,9 @@ quick-temp@^0.1.0, quick-temp@^0.1.3:
     rimraf "^2.5.4"
     underscore.string "~3.3.4"
 
-qunitjs@2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/qunitjs/-/qunitjs-2.4.0.tgz#58f3a81e846687f2e7f637c5bedc9c267f887261"
+qunitjs@2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/qunitjs/-/qunitjs-2.4.1.tgz#88aba055a9e2ec3dbebfaad02471b2cb002c530b"
   dependencies:
     chokidar "1.6.1"
     commander "2.9.0"
