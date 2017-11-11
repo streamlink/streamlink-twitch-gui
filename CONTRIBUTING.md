@@ -66,7 +66,7 @@ Once NW.js has been launched, file watchers will look for any changes being made
 grunt test
 
 # keep running NW.js, show its window and rebuild tests on change
-grunt testdev
+grunt test:dev
 ```
 
 ### Building and compiling
