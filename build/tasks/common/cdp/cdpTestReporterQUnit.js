@@ -8,6 +8,7 @@ module.exports = function( grunt, options, cdp ) {
 
 	function promiseQUnitBridge( resolve, reject ) {
 		let started = false;
+		let done = false;
 
 		// wait X seconds for QUnit to start or reject the promise
 		const startTimeout = setTimeout( () => {
@@ -16,64 +17,81 @@ module.exports = function( grunt, options, cdp ) {
 		// wait X seconds for all tests to finish
 		let testTimeout;
 
+		const failures = [];
+
+		function onBegin() {
+			if ( started === true ) { return; }
+			started = true;
+
+			if ( startTimeout ) {
+				clearTimeout( startTimeout );
+			}
+
+			testTimeout = setTimeout( () => {
+				reject( "Timeout: The tests did not finish..." );
+			}, options.testTimeout );
+		}
+
+		function onTestDone({ name, failed, passed, total, assertions, runtime }) {
+			if ( failed === 0 ) { return; }
+			failures.push( `[test] ${name||"Global"} (${passed}/${total}) (${runtime}ms)` );
+			assertions.forEach( ( { result, message }, idx ) => {
+				if ( result ) { return; }
+				failures.push( `[assertion ${idx+1}] ${message}` );
+			});
+		}
+
+		function onModuleDone({ name, failed, passed, total, runtime }) {
+			grunt.log[ failed === 0 ? "ok" : "warn" ](
+				`${failed?"[module] ":""}${name||"Global"} (${passed}/${total}) (${runtime}ms)`
+			);
+			if ( failures.length ) {
+				failures.splice( 0, failures.length ).forEach( line => grunt.log.warn( line ) );
+			}
+		}
+
+		function onDone({ failed, passed, total, runtime }) {
+			done = true;
+
+			if ( testTimeout ) {
+				clearTimeout( testTimeout );
+			}
+
+			if ( total > 0 ) {
+				grunt.log.writeln( "" );
+			}
+
+			// resolve or reject the promise
+			if ( failed === 0 && passed === total ) {
+				if ( total === 0 ) {
+					grunt.log.warn( `0/0 assertions ran (${runtime}ms)` );
+				} else if ( total > 0 ) {
+					grunt.log.ok( `${total} assertions passed (${runtime}ms)` );
+				}
+				resolve();
+			} else {
+				grunt.log.warn( `${failed}/${total} assertions failed (${runtime}ms)` );
+				reject();
+			}
+		}
+
+		const eventCallbacks = {
+			"begin": onBegin,
+			"testDone": onTestDone,
+			"moduleDone": onModuleDone,
+			"done": onDone
+		};
+
 		// listen for qunit messages
 		cdp.on( "Runtime.consoleAPICalled", obj => {
-			if ( !obj || !obj.type || obj.type !== consoleMethod ) { return; }
+			if ( done || !obj || !obj.type || obj.type !== consoleMethod ) { return; }
 			const params = obj.args;
 			if ( !params || params.length !== 3 || params[ 0 ].value !== UUID ) { return; }
 			const event = params[ 1 ].value;
 			const data = JSON.parse( params[ 2 ].value );
 
-			switch ( event ) {
-				case "begin":
-					if ( started === true ) { return; }
-					started = true;
-
-					if ( startTimeout ) {
-						clearTimeout( startTimeout );
-					}
-
-					testTimeout = setTimeout( () => {
-						reject( "Timeout: The tests did not finish..." );
-					}, options.testTimeout );
-					return;
-
-				case "moduleDone":
-					if ( !options.logModules ) { return; }
-
-					grunt.log[ data.failed === 0 ? "ok" : "warn" ](
-						`${data.name} (${data.passed}/${data.total})`
-					);
-					return;
-
-				case "done":
-					if ( testTimeout ) {
-						clearTimeout( testTimeout );
-					}
-
-					if ( options.logModules && data.total > 0 ) {
-						grunt.log.writeln( "" );
-					}
-
-					// resolve or reject the promise
-					if ( data.failed === 0 && data.passed === data.total ) {
-						if ( data.total === 0 ) {
-							grunt.log.warn(
-								`0/0 assertions ran (${data.runtime}ms)`
-							);
-						} else if ( data.total > 0 ) {
-							grunt.log.ok(
-								`${data.total} assertions passed (${data.runtime}ms)`
-							);
-						}
-						resolve();
-					} else {
-						grunt.log.warn(
-							`${data.failed}/${data.total} assertions failed (${data.runtime}ms)`
-						);
-						reject();
-					}
-					return;
+			if ( eventCallbacks[ event ] ) {
+				eventCallbacks[ event ]( data );
 			}
 		});
 

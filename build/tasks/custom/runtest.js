@@ -15,7 +15,6 @@ module.exports = function( grunt ) {
 		const options = this.options({
 			startTimeout: 5000,
 			testTimeout: 300000,
-			logModules: true,
 			host: "localhost",
 			port: 8000
 		});
