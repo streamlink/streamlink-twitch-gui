@@ -1,6 +1,28 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Reimplemented the notification system.
+- Reimplemented the chat system.
+- Reimplemented the settings structure.
+- Added Vodcast indicators. #478
+- Added desktop shortcut option to the Windows installers. #483
+- Fixed application window focus when clicking a notification. #465
+- Fixed banned channels breaking the infinite scroll mechanism. #466
+- Fixed login issues when using multiple accounts. #474
+- Fixed chat application opening again when restarting a stream. #475
+- Fixed tooltips showing channel IDs instead of their name.
+- Fixed channel page layout with empty descriptions. #498
+- Fixed application closing correctly sometimes.
+- Upgraded NW.js to 0.26.1
+- \[dev] Switched from npm to yarn.
+- \[dev] Added a TODO list.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.3.1...master)
+
+
 ## [v1.3.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.3.1) (2017-05-28)
 
 - Added back explicit quality selections for Streamlink. #454
