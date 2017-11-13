@@ -22,6 +22,10 @@ function removeOldData( settings ) {
 	delete settings[ "livestreamer" ];
 	delete settings[ "livestreamer_params" ];
 
+	// remove old streaming data
+	delete settings[ "player_passthrough" ];
+	delete settings[ "player_reconnect" ];
+
 	// remove old chat data
 	delete settings[ "chat_command" ];
 }
@@ -57,8 +61,6 @@ function updateAttributes( settings ) {
 		qualities: "qualities",
 		quality_presets: "qualitiesOld",
 		streamprovider_oauth: "oauth",
-		player_passthrough: "player_passthrough",
-		player_reconnect: "player_reconnect",
 		player_no_close: "player_no_close",
 		hls_live_edge: "hls_live_edge",
 		hls_segment_threads: "hls_segment_threads",

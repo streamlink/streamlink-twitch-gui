@@ -43,74 +43,66 @@
 	{{/each-in}}
 {{/settings-row}}
 
-{{#if model.advanced}}
-	{{#settings-row
-		"Stream type"
-		"The player has to support the selected stream type."
-		icon="fa-filter"
-		documentation="--player-passthrough"
+{{#settings-row
+	"Player input"
+	"Defines the method of how the stream data is being fed into the player."
+	icon="fa-file-video-o"
+	notes="Please see the wiki for detailed informations about this option. Different parameters will be set, depending on the selection. The player needs to support the selected method."
+	documentation=playerInputDocumentation
+}}
+	{{#radio-btns
+		value=model.streaming.player_input
+		content=SettingsStreaming.player_input
+		as |radiobtn label|
 	}}
-		{{drop-down
-			value=model.streaming.player_passthrough
-			content=SettingsStreaming.player_passthrough
-			optionValuePath="value"
-		}}
-	{{/settings-row}}
+		<div class="settings-provider-item">
+			{{component radiobtn label.name}}
+			<p class="description">{{label.description}}</p>
+		</div>
+	{{/radio-btns}}
+{{/settings-row}}
+</fieldset>
 
-	{{#settings-row
-		"Reconnect"
-		"In case the connection has dropped."
-		icon="fa-refresh"
-		documentation="--player-continuous-http"
+<fieldset>
+{{#settings-row
+	"HLS live edge"
+	"Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering."
+	icon="fa-bolt"
+	documentation="--hls-live-edge"
+}}
+	{{number-field
+		value=model.streaming.hls_live_edge
+		default=hlsLiveEdgeDefault
+		min=hlsLiveEdgeMin
+		max=hlsLiveEdgeMax
+		disabled=playerInputPassthrough
 	}}
-		{{check-box
-			"Reconnect to stream"
-			checked=model.streaming.player_reconnect
-			disabled=(bool-not (is-equal model.streaming.player_passthrough "http"))
-		}}
-	{{/settings-row}}
+{{/settings-row}}
 
-	{{#settings-row
-		"Keep player window"
-		"After the stream has ended."
-		icon="fa-caret-square-o-right"
-		notes=(concat "The player itself may prevent " providerName " to close it. Please see the player settings as well.")
-		documentation="--player-no-close"
+{{#settings-row
+	"HLS segment threads"
+	"Number of threads used for downloading and processing stream segments."
+	icon="fa-sort-amount-asc"
+	documentation="--hls-segment-threads"
+}}
+	{{number-field
+		value=model.streaming.hls_segment_threads
+		default=hlsSegmentThreadsDefault
+		min=hlsSegmentThreadsMin
+		max=hlsSegmentThreadsMax
+		disabled=playerInputPassthrough
 	}}
-		{{check-box "Do not close the player" checked=model.streaming.player_no_close}}
-	{{/settings-row}}
+{{/settings-row}}
 
-	{{#settings-row
-		"HLS live edge"
-		"Lowering the value will reduce stream latency, but may also cause buffering."
-		icon="fa-bolt"
-		notes=""
-		documentation="--hls-live-edge"
-	}}
-		{{number-field
-			value=model.streaming.hls_live_edge
-			default=hlsLiveEdgeDefault
-			min=hlsLiveEdgeMin
-			max=hlsLiveEdgeMax
-			disabled=(is-equal model.streaming.player_passthrough "hls")
-		}}
-	{{/settings-row}}
-
-	{{#settings-row
-		"HLS segment threads"
-		"Number of threads used for downloading and processing stream segments."
-		icon="fa-sort-amount-asc"
-		documentation="--hls-segment-threads"
-	}}
-		{{number-field
-			value=model.streaming.hls_segment_threads
-			default=hlsSegmentThreadsDefault
-			min=hlsSegmentThreadsMin
-			max=hlsSegmentThreadsMax
-			disabled=(is-equal model.streaming.player_passthrough "hls")
-		}}
-	{{/settings-row}}
-{{/if}}
+{{#settings-row
+	"Keep player window"
+	"After the stream has ended."
+	icon="fa-caret-square-o-right"
+	notes=(concat "The player itself may prevent " providerName " to close it. Please see the player settings as well.")
+	documentation="--player-no-close"
+}}
+	{{check-box "Do not close the player" checked=model.streaming.player_no_close}}
+{{/settings-row}}
 
 {{#settings-row
 	"Twitch.tv login"

@@ -67,6 +67,9 @@ export default Model.extend({
 	// let Streamlink/Livestreamer use the GUI's client-id
 	clientID: `Client-ID=${clientId}`,
 
+	// passthrough type (twitch streams are HLS)
+	playerInputPassthrough: "hls",
+
 	/** @property {String} status */
 	status: STATUS_PREPARING,
 

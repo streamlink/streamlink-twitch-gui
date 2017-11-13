@@ -6,10 +6,13 @@ import {
 import {
 	streaming as streamingConfig
 } from "config";
-import SettingsStreaming from "models/localstorage/Settings/streaming";
+import SettingsStreaming, {
+	ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH as inputPassthrough
+} from "models/localstorage/Settings/streaming";
 import { platform } from "utils/node/platform";
 
 
+const { equal } = computed;
 const { providers } = streamingConfig;
 
 
@@ -43,6 +46,13 @@ export default Controller.extend({
 		return providers[ provider ][ "name" ];
 	}),
 
+	playerInputDocumentation: computed( "model.streaming.player_input", function() {
+		const input = get( this, "model.streaming.player_input" );
+
+		return SettingsStreaming.player_input.findBy( "value", input ).label.documentation;
+	}),
+
+	playerInputPassthrough: equal( "model.streaming.player_input", inputPassthrough ),
 
 	hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
 	hlsLiveEdgeMin: settingsAttrMeta( "hls_live_edge", "min" ),

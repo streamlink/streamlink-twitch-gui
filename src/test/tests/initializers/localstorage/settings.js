@@ -142,8 +142,6 @@ test( "Updates attributes", assert => {
 				qualities: { bar: 2 },
 				qualitiesOld: { baz: 3 },
 				oauth: true,
-				player_passthrough: "http",
-				player_reconnect: true,
 				player_no_close: false,
 				hls_live_edge: 3,
 				hls_segment_threads: 2,

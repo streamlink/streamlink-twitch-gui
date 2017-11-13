@@ -2,6 +2,18 @@ import { get } from "ember";
 import playerSubstitutions from "services/StreamingService/player/substitutions";
 import Parameter from "utils/parameters/Parameter";
 import ParameterCustom from "utils/parameters/ParameterCustom";
+import {
+	ATTR_STREAMING_PLAYER_INPUT_FIFO,
+	ATTR_STREAMING_PLAYER_INPUT_HTTP,
+	ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH
+} from "models/localstorage/Settings/streaming";
+
+
+function playerInput( attr ) {
+	return function() {
+		return get( this, "stream.settings.streaming.player_input" ) === attr;
+	};
+}
 
 
 /** @type {Parameter[]} */
@@ -35,18 +47,17 @@ export const parameters = [
 		playerSubstitutions
 	),
 	new Parameter(
-		"--player-passthrough",
-		"stream.settings.advanced",
-		"stream.settings.streaming.player_passthrough"
+		"--player-fifo",
+		playerInput( ATTR_STREAMING_PLAYER_INPUT_FIFO )
 	),
 	new Parameter(
 		"--player-continuous-http",
-		[
-			"stream.settings.streaming.player_reconnect",
-			function() {
-				return get( this, "stream.settings.streaming.player_passthrough" ) === "http";
-			}
-		]
+		playerInput( ATTR_STREAMING_PLAYER_INPUT_HTTP )
+	),
+	new Parameter(
+		"--player-passthrough",
+		playerInput( ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH ),
+		"stream.playerInputPassthrough"
 	),
 	new Parameter(
 		"--player-no-close",
