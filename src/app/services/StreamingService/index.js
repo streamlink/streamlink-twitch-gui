@@ -41,10 +41,10 @@ const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 const modelName = "stream";
 
 
-function setIfNotNull( objA, objB, key ) {
-	let val = get( objA, key );
+function setIfNotNull( objA, keyA, objB, keyB ) {
+	const val = get( objB, keyB );
 	if ( val !== null ) {
-		set( objB, key, val );
+		set( objA, keyA, val );
 	}
 }
 
@@ -110,7 +110,7 @@ export default Service.extend({
 			channel,
 			stream: twitchStream,
 			quality: get( this, "settings.streaming.quality" ),
-			gui_openchat: get( this, "settings.streams.chat_open" ),
+			chat_open: get( this, "settings.streams.chat_open" ),
 			started: new Date()
 		});
 
@@ -184,7 +184,7 @@ export default Service.extend({
 			// do not open chat on stream restarts
 			   launchChat
 			// require open chat setting
-			&& get( stream, "gui_openchat" )
+			&& get( stream, "chat_open" )
 			&& (
 				// context menu not used
 				   !get( stream, "strictQuality" )
@@ -266,13 +266,13 @@ export default Service.extend({
 
 		// override channel specific settings
 		if ( quality === undefined ) {
-			setIfNotNull( channelSettings, stream, "quality" );
+			setIfNotNull( stream, "quality", channelSettings, "streaming_quality" );
 			set( stream, "strictQuality", false );
 		} else {
 			set( stream, "quality", quality );
 			set( stream, "strictQuality", true );
 		}
-		setIfNotNull( channelSettings, stream, "gui_openchat" );
+		setIfNotNull( stream, "chat_open", channelSettings, "streams_chat_open" );
 	},
 
 

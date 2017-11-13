@@ -11,9 +11,9 @@ import SettingsNotification from "models/localstorage/Settings/notification";
  * @type {Object.<string,[(Model|Fragment),string,string]>}
  */
 const attributes = {
-	quality: [ SettingsStreaming, "quality", "streaming.quality" ],
-	gui_openchat: [ SettingsStreams, "chat_open", "streams.chat_open" ],
-	notify_enabled: [ SettingsNotification, "enabled", "notification.enabled" ]
+	streaming_quality: [ SettingsStreaming, "quality", "streaming.quality" ],
+	streams_chat_open: [ SettingsStreams, "chat_open", "streams.chat_open" ],
+	notification_enabled: [ SettingsNotification, "enabled", "notification.enabled" ]
 };
 
 for ( const [ name, [ settings, prop, settingsPath ] ] of Object.entries( attributes ) ) {
@@ -22,6 +22,7 @@ for ( const [ name, [ settings, prop, settingsPath ] ] of Object.entries( attrib
 
 	attributes[ name ] = attr( meta.type, {
 		defaultValue: null,
+		// the ChannelSettingsController needs this attribute option
 		settingsPath
 	});
 }

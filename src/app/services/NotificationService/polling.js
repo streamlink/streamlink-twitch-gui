@@ -221,7 +221,7 @@ export default Mixin.create( Evented, {
 		// get a list of all streams and their channel's individual settings
 		const streamSettingsObjects = await Promise.all( streams.map( async stream => {
 			const channel = get( stream, "channel" );
-			const { notify_enabled: settings } = await channel.getChannelSettings();
+			const { notification_enabled: settings } = await channel.getChannelSettings();
 
 			return { stream, settings };
 		}) );

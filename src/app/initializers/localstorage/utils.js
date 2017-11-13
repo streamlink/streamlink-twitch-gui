@@ -33,13 +33,27 @@ export function moveAttributesIntoFragment( settings, fragment, attributes ) {
 }
 
 
-export function qualityIdToName( obj, qualities ) {
-	if ( !hasOwnProperty.call( obj, "quality" ) ) { return; }
+export function qualityIdToName( obj, qualities, key = "quality", setDefault = true ) {
+	if ( !hasOwnProperty.call( obj, key ) ) { return; }
 
-	let { quality } = obj;
+	let { [ key ]: quality } = obj;
+
+	// quality may be null (channel settings without custom value)
+	if ( quality === null ) {
+		if ( !setDefault ) {
+			return;
+		}
+		quality = 0;
+
+	} else if ( qualities.find( q => q.id === quality ) ) {
+		// quality found, everything is fine
+		return;
+	}
+
+	// unexpected value: set to the default value (the first defined quality)
 	if ( !hasOwnProperty.call( qualities, quality ) ) {
 		quality = 0;
 	}
 
-	obj.quality = qualities[ quality ].id;
+	obj[ key ] = qualities[ quality ].id;
 }

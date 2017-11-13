@@ -466,9 +466,9 @@ test( "Filter streams", async assert => {
 
 	set( settings, "notification.filter", true );
 	streams = await service._filterStreams([
-		new TwitchStream( 1, { notify_enabled: null } ),
-		new TwitchStream( 2, { notify_enabled: true } ),
-		new TwitchStream( 3, { notify_enabled: false } )
+		new TwitchStream( 1, { notification_enabled: null } ),
+		new TwitchStream( 2, { notification_enabled: true } ),
+		new TwitchStream( 3, { notification_enabled: false } )
 	]);
 	assert.propEqual(
 		streams.map( stream => stream.id ),
@@ -478,9 +478,9 @@ test( "Filter streams", async assert => {
 
 	set( settings, "notification.filter", false );
 	streams = await service._filterStreams([
-		new TwitchStream( 1, { notify_enabled: null } ),
-		new TwitchStream( 2, { notify_enabled: true } ),
-		new TwitchStream( 3, { notify_enabled: false } )
+		new TwitchStream( 1, { notification_enabled: null } ),
+		new TwitchStream( 2, { notification_enabled: true } ),
+		new TwitchStream( 3, { notification_enabled: false } )
 	]);
 	assert.propEqual(
 		streams.map( stream => stream.id ),

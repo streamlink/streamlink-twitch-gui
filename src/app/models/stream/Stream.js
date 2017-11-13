@@ -60,7 +60,7 @@ export default Model.extend({
 	/** @property {TwitchChannel} channel */
 	channel: belongsTo( "twitchChannel", { async: false } ),
 	quality: attr( "string" ),
-	gui_openchat: attr( "boolean" ),
+	chat_open: attr( "boolean" ),
 	started: attr( "date" ),
 
 

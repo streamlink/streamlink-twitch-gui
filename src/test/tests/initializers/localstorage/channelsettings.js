@@ -18,20 +18,72 @@ test( "ChannelSettings", assert => {
 		]
 	});
 
-	const a = {};
-	updateChannelSettings( a );
-	assert.propEqual( a, {}, "Does nothing on empty objects" );
+	const oldAttrs = {
+		quality: null,
+		gui_openchat: true,
+		notify_enabled: false
+	};
+	updateChannelSettings( oldAttrs );
+	assert.propEqual(
+		oldAttrs,
+		{
+			streaming_quality: null,
+			streams_chat_open: true,
+			notification_enabled: false
+		},
+		"Renames old attributes"
+	);
 
-	const b = { quality: null };
-	updateChannelSettings( b );
-	assert.propEqual( b, { quality: "foo" }, "Uses first available quality if it is unknown" );
+	const newAttrs = {
+		streaming_quality: null,
+		streams_chat_open: true,
+		notification_enabled: false
+	};
+	updateChannelSettings( newAttrs );
+	assert.propEqual(
+		newAttrs,
+		{
+			streaming_quality: null,
+			streams_chat_open: true,
+			notification_enabled: false
+		},
+		"Doesn't change new attributes"
+	);
 
-	const c = { quality: 0 };
-	updateChannelSettings( c );
-	assert.propEqual( c, { quality: "foo" }, "Sets the correct quality id by index" );
+	const emptyAttrs = {};
+	updateChannelSettings( emptyAttrs );
+	assert.propEqual( emptyAttrs, {}, "Does nothing with empty objects" );
 
-	const d = { quality: 1 };
-	updateChannelSettings( d );
-	assert.propEqual( d, { quality: "bar" }, "Sets the correct quality id by index" );
+	const qualityNull = { quality: null };
+	updateChannelSettings( qualityNull );
+	assert.propEqual(
+		qualityNull,
+		{ streaming_quality: null },
+		"Doesn't change null value quality"
+	);
+
+	const qualityIndexFirst = { quality: 0 };
+	updateChannelSettings( qualityIndexFirst );
+	assert.propEqual(
+		qualityIndexFirst,
+		{ streaming_quality: "foo" },
+		"Sets the correct quality id by index"
+	);
+
+	const qualityIndexSecond = { quality: 1 };
+	updateChannelSettings( qualityIndexSecond );
+	assert.propEqual(
+		qualityIndexSecond,
+		{ streaming_quality: "bar" },
+		"Sets the correct quality id by index"
+	);
+
+	const qualityName = { quality: "foo" };
+	updateChannelSettings( qualityName );
+	assert.propEqual(
+		qualityName,
+		{ streaming_quality: "foo" },
+		"Doesn't change the quality if it's already correct"
+	);
 
 });

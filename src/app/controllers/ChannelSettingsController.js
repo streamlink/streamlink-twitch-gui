@@ -64,7 +64,7 @@ export default Controller.extend( RetryTransitionMixin, {
 						// true  => set attr value to global value (init)
 						value = !!value;
 						set( model, attr, value
-							? get( settings, attr )
+							? get( settings, settingsPath )
 							: null
 						);
 						return value;
