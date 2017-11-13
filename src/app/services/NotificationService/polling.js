@@ -216,22 +216,22 @@ export default Mixin.create( Evented, {
 	 * @returns {Promise<TwitchStream[]>}
 	 */
 	async _filterStreams( streams ) {
-		const notifyAll = get( this, "settings.notify_all" );
+		const filter = get( this, "settings.notification.filter" );
 
 		// get a list of all streams and their channel's individual settings
 		const streamSettingsObjects = await Promise.all( streams.map( async stream => {
 			const channel = get( stream, "channel" );
-			const settings = await channel.getChannelSettings();
+			const { notification_enabled: settings } = await channel.getChannelSettings();
 
 			return { stream, settings };
 		}) );
 
 		return streamSettingsObjects
-			.filter( ({ settings: { notify_enabled } }) => notifyAll === true
+			.filter( ({ settings }) => filter === true
 				// include all, exclude disabled (blacklist)
-				? notify_enabled !== false
+				? settings !== false
 				// exclude all, include enabled (whitelist)
-				: notify_enabled === true
+				: settings === true
 			)
 			.map( obj => obj.stream );
 	}

@@ -2,7 +2,9 @@ import {
 	module,
 	test
 } from "qunit";
-import { streamprovider } from "config";
+import {
+	streaming as streamingConfig
+} from "config";
 import validateProviderInjector from "inject-loader!services/StreamingService/provider/validate";
 import spawnInjector from "inject-loader!services/StreamingService/spawn";
 import {
@@ -19,7 +21,7 @@ const {
 	validation: {
 		providers: validationProviders
 	}
-} = streamprovider;
+} = streamingConfig;
 const logger = {
 	logDebug() {}
 };
@@ -60,7 +62,7 @@ test( "Missing provider data", async assert => {
 	try {
 		const { default: validateProvider } = validateProviderInjector( assign({
 			"config": {
-				streamprovider: {
+				streaming: {
 					validation: {
 						timeout: 1,
 						providers: {}
@@ -81,7 +83,7 @@ test( "Missing provider data", async assert => {
 	try {
 		const { default: validateProvider } = validateProviderInjector( assign({
 			"config": {
-				streamprovider: {
+				streaming: {
 					validation: {
 						timeout: 1,
 						providers: {
@@ -114,7 +116,7 @@ test( "Invalid exec", async assert => {
 
 	const validateProvider = validateProviderInjector( assign({
 		"config": {
-			streamprovider: {
+			streaming: {
 				validation: {
 					timeout: 5,
 					providers: {
@@ -217,7 +219,7 @@ test( "Version output matching", async assert => {
 
 	const { default: validateProvider } = validateProviderInjector( assign({
 		"config": {
-			streamprovider: {
+			streaming: {
 				validation: {
 					timeout: 5,
 					providers: validationProviders

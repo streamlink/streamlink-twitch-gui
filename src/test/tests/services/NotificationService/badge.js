@@ -35,7 +35,9 @@ test( "Badge", assert => {
 	const owner = buildOwner();
 
 	owner.register( "service:settings", Service.extend({
-		notify_badgelabel: false
+		notification: {
+			badgelabel: false
+		}
 	}) );
 	owner.register( "service:notification", Service.extend( NotificationServiceBadgeMixin ) );
 
@@ -45,7 +47,7 @@ test( "Badge", assert => {
 	// doesn't update the label when not running or disabled in settings
 	service.trigger( "streams-all", [ {}, {} ] );
 
-	run( () => set( settings, "notify_badgelabel", true ) );
+	run( () => set( settings, "notification.badgelabel", true ) );
 
 	// doesn't update the label when enabled, but not running
 	service.trigger( "streams-all", [ {}, {} ] );
@@ -60,10 +62,10 @@ test( "Badge", assert => {
 
 	// clears label when it gets disabled
 	expected = "";
-	run( () => set( settings, "notify_badgelabel", false ) );
+	run( () => set( settings, "notification.badgelabel", false ) );
 
 	// doesn't reset label, requires a new streams-all event
-	run( () => set( settings, "notify_badgelabel", true ) );
+	run( () => set( settings, "notification.badgelabel", true ) );
 	expected = "1";
 	service.trigger( "streams-all", [ {} ] );
 

@@ -3,24 +3,25 @@ import {
 	computed,
 	Controller
 } from "ember";
-import { streamprovider as streamproviderConfig } from "config";
+import {
+	streaming as streamingConfig
+} from "config";
 import qualities, {
 	qualitiesLivestreamer,
 	qualitiesStreamlink
 } from "models/stream/qualities";
 
 
-const { providers } = streamproviderConfig;
+const { providers } = streamingConfig;
 
 
 export default Controller.extend({
-	isStreamlink: computed( "model.streamprovider", function() {
-		let streamprovider = get( this, "model.streamprovider" );
-		if ( !streamprovider || !providers.hasOwnProperty( streamprovider ) ) {
-			throw new Error( "Invalid stream provider" );
-		}
+	// can't use the fragment's isStreamlink computed property here
+	// the controller's model is an ObjectBuffer instance
+	isStreamlink: computed( "model.streaming.provider", function() {
+		const provider = get( this, "model.streaming.provider" );
 
-		return providers[ streamprovider ].type === "streamlink";
+		return providers[ provider ][ "type" ] === "streamlink";
 	}),
 
 	qualitiesLivestreamer,

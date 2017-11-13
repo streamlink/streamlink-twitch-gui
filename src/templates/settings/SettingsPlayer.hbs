@@ -4,7 +4,7 @@
 	"Use a predefined player configuration."
 	icon="fa-play-circle-o"
 }}
-	{{drop-down value=model.player_preset content=playerPresets class="player-preset-dropdown"}}
+	{{drop-down value=model.streaming.player content=playerPresets class="player-preset-dropdown"}}
 {{/settings-row}}
 
 {{#settings-row
@@ -19,34 +19,34 @@
 	documentation="--player"
 }}
 	{{file-select
-		value=(mut (get (get model.player model.player_preset) "exec"))
+		value=(mut (get (get model.streaming.players model.streaming.player) "exec"))
 		inputClass="form-control"
 		placeholder=playerPlaceholder
 	}}
 {{/settings-row}}
 
 {{#each-in players as |playername player|}}
-	{{#each player.params as |field|}}
+	{{#each player.params as |param|}}
 		{{#settings-row
-			field.title
-			field.description
-			icon=(if field.icon
-				field.icon
+			param.title
+			param.description
+			icon=(if param.icon
+				param.icon
 				(get
 					(hash
 						boolean="fa-check"
 					)
-					field.type
+					param.type
 				)
 			)
-			documentation=field.args
+			documentation=param.args
 			documentationUrl=""
-			isVisible=(is-equal playername model.player_preset)
+			isVisible=(is-equal playername model.streaming.player)
 		}}
-			{{#if (is-equal field.type "boolean")}}
+			{{#if (is-equal param.type "boolean")}}
 				{{check-box
-					(if field.text field.text field.title)
-					checked=(mut (get (get (get model.player model.player_preset) "params") field.name))
+					(if param.text param.text param.title)
+					checked=(mut (get (get model.streaming.players model.streaming.player) param.name))
 				}}
 			{{/if}}
 		{{/settings-row}}
@@ -64,19 +64,9 @@
 		{{input
 			type="text"
 			classNames="col-xs-12"
-			value=(mut (get (get model.player model.player_preset) "args"))
+			value=(mut (get (get model.streaming.players model.streaming.player) "args"))
 			placeholder="Add custom player parameters"
 		}}
 	{{/settings-row}}
 {{/unless}}
-
-
-{{#settings-row
-	"Keep player window"
-	"After the stream has ended."
-	icon="fa-caret-square-o-right"
-	documentation="--player-no-close"
-}}
-	{{check-box "Do not close the player" checked=model.player_no_close}}
-{{/settings-row}}
 </fieldset>

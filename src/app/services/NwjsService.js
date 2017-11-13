@@ -8,6 +8,10 @@ import nwWindow, {
 	toggleMaximized,
 	toggleMinimized
 } from "nwjs/Window";
+import {
+	ATTR_GUI_INTEGRATION_TRAY,
+	ATTR_GUI_INTEGRATION_BOTH
+} from "models/localstorage/Settings/gui";
 
 
 const { service } = inject;
@@ -28,11 +32,15 @@ export default Service.extend({
 	},
 
 	minimize() {
-		let integration    = get( this, "settings.gui_integration" );
-		let minimizetotray = get( this, "settings.gui_minimizetotray" );
+		const integration = get( this, "settings.gui.integration" );
+		const minimizetotray = get( this, "settings.gui.minimizetotray" );
 
-		// tray only or both with min2tray: just hide the window
-		if ( integration === 2 || integration === 3 && minimizetotray ) {
+		// hide the window when in tray-only-mode or in both-mode with min2tray setting enabled
+		if (
+			   integration === ATTR_GUI_INTEGRATION_TRAY
+			|| integration === ATTR_GUI_INTEGRATION_BOTH
+			&& minimizetotray
+		) {
 			toggleVisibility();
 		} else {
 			toggleMinimized();

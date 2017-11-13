@@ -16,23 +16,46 @@ import Stream from "models/stream/Stream";
 import StreamAdapter from "models/stream/StreamAdapter";
 
 import Window from "models/localstorage/Window";
-import WindowAdapter from "models/localstorage/WindowAdapter";
-import WindowSerializer from "models/localstorage/WindowSerializer";
+import WindowAdapter from "models/localstorage/Window/adapter";
+import WindowSerializer from "models/localstorage/Window/serializer";
+
 import Settings from "models/localstorage/Settings";
-import SettingsAdapter from "models/localstorage/SettingsAdapter";
-import SettingsSerializer from "models/localstorage/SettingsSerializer";
+import SettingsAdapter from "models/localstorage/Settings/adapter";
+import SettingsSerializer from "models/localstorage/Settings/serializer";
+import SettingsGui from "models/localstorage/Settings/gui";
+import SettingsStreaming from "models/localstorage/Settings/streaming";
+import SettingsStreamingProviders from "models/localstorage/Settings/streamingProviders";
+import SettingsStreamingProvider from "models/localstorage/Settings/streamingProvider";
+import SettingsStreamingQualities from "models/localstorage/Settings/streamingQualities";
+import SettingsStreamingQualitiesOld from "models/localstorage/Settings/streamingQualitiesOld";
+import SettingsStreamingQuality from "models/localstorage/Settings/streamingQuality";
+import SettingsStreamingPlayers from "models/localstorage/Settings/streamingPlayers";
+import SettingsStreamingPlayer from "models/localstorage/Settings/streamingPlayer";
+import SettingsStreamingPlayerSerializer
+	from "models/localstorage/Settings/streamingPlayerSerializer";
+import SettingsStreams from "models/localstorage/Settings/streams";
+import SettingsStreamsLanguages from "models/localstorage/Settings/streamsLanguages";
+import SettingsChat from "models/localstorage/Settings/chat";
+import SettingsChatProviders from "models/localstorage/Settings/chatProviders";
+import SettingsChatProvider from "models/localstorage/Settings/chatProvider";
+import SettingsChatProviderSerializer from "models/localstorage/Settings/chatProviderSerializer";
+import SettingsNotification from "models/localstorage/Settings/notification";
+
 import Versioncheck from "models/localstorage/Versioncheck";
-import VersioncheckAdapter from "models/localstorage/VersioncheckAdapter";
-import VersioncheckSerializer from "models/localstorage/VersioncheckSerializer";
+import VersioncheckAdapter from "models/localstorage/Versioncheck/adapter";
+import VersioncheckSerializer from "models/localstorage/Versioncheck/serializer";
+
 import Auth from "models/localstorage/Auth";
-import AuthAdapter from "models/localstorage/AuthAdapter";
-import AuthSerializer from "models/localstorage/AuthSerializer";
+import AuthAdapter from "models/localstorage/Auth/adapter";
+import AuthSerializer from "models/localstorage/Auth/serializer";
+
 import Search from "models/localstorage/Search";
-import SearchAdapter from "models/localstorage/SearchAdapter";
-import SearchSerializer from "models/localstorage/SearchSerializer";
+import SearchAdapter from "models/localstorage/Search/adapter";
+import SearchSerializer from "models/localstorage/Search/serializer";
+
 import ChannelSettings from "models/localstorage/ChannelSettings";
-import ChannelSettingsAdapter from "models/localstorage/ChannelSettingsAdapter";
-import ChannelSettingsSerializer from "models/localstorage/ChannelSettingsSerializer";
+import ChannelSettingsAdapter from "models/localstorage/ChannelSettings/adapter";
+import ChannelSettingsSerializer from "models/localstorage/ChannelSettings/serializer";
 
 import GithubReleases from "models/github/Releases";
 import GithubReleasesAdapter from "store/GithubAdapter";
@@ -313,9 +336,9 @@ import SettingsMainTemplate from "templates/settings/SettingsMain.hbs";
 import SettingsStreamsRoute from "routes/SettingsSubmenuRoute";
 import SettingsStreamsController from "controllers/SettingsStreamsController";
 import SettingsStreamsTemplate from "templates/settings/SettingsStreams.hbs";
-import SettingsStreamproviderRoute from "routes/SettingsSubmenuRoute";
-import SettingsStreamproviderController from "controllers/SettingsStreamproviderController";
-import SettingsStreamproviderTemplate from "templates/settings/SettingsStreamprovider.hbs";
+import SettingsStreamingRoute from "routes/SettingsSubmenuRoute";
+import SettingsStreamingController from "controllers/SettingsStreamingController";
+import SettingsStreamingTemplate from "templates/settings/SettingsStreaming.hbs";
 import SettingsPlayerRoute from "routes/SettingsSubmenuRoute";
 import SettingsPlayerController from "controllers/SettingsPlayerController";
 import SettingsPlayerTemplate from "templates/settings/SettingsPlayer.hbs";
@@ -361,18 +384,40 @@ export default {
 	Window,
 	WindowAdapter,
 	WindowSerializer,
+
 	Settings,
 	SettingsAdapter,
 	SettingsSerializer,
+	SettingsGui,
+	SettingsStreaming,
+	SettingsStreamingProviders,
+	SettingsStreamingProvider,
+	SettingsStreamingQualities,
+	SettingsStreamingQualitiesOld,
+	SettingsStreamingQuality,
+	SettingsStreamingPlayers,
+	SettingsStreamingPlayer,
+	SettingsStreamingPlayerSerializer,
+	SettingsStreams,
+	SettingsStreamsLanguages,
+	SettingsChat,
+	SettingsChatProviders,
+	SettingsChatProvider,
+	SettingsChatProviderSerializer,
+	SettingsNotification,
+
 	Versioncheck,
 	VersioncheckAdapter,
 	VersioncheckSerializer,
+
 	Auth,
 	AuthAdapter,
 	AuthSerializer,
+
 	Search,
 	SearchAdapter,
 	SearchSerializer,
+
 	ChannelSettings,
 	ChannelSettingsAdapter,
 	ChannelSettingsSerializer,
@@ -670,9 +715,9 @@ export default {
 	SettingsStreamsRoute,
 	SettingsStreamsController,
 	SettingsStreamsTemplate,
-	SettingsStreamproviderRoute,
-	SettingsStreamproviderController,
-	SettingsStreamproviderTemplate,
+	SettingsStreamingRoute,
+	SettingsStreamingController,
+	SettingsStreamingTemplate,
 	SettingsPlayerRoute,
 	SettingsPlayerController,
 	SettingsPlayerTemplate,

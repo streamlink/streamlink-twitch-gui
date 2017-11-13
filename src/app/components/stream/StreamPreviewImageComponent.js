@@ -5,18 +5,21 @@ import {
 	Component
 } from "ember";
 import Menu from "nwjs/Menu";
-import { set as setClipboard } from "nwjs/Clipboard";
-import Settings from "models/localstorage/Settings";
+import {
+	set as setClipboard
+} from "nwjs/Clipboard";
+import {
+	ATTR_STREAMS_CLICK_NOOP,
+	ATTR_STREAMS_CLICK_LAUNCH,
+	ATTR_STREAMS_CLICK_CHAT,
+	ATTR_STREAMS_CLICK_CHANNEL,
+	ATTR_STREAMS_CLICK_SETTINGS
+} from "models/localstorage/Settings/streams";
 import qualities from "models/stream/qualities";
 import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
 
 
 const { service } = inject;
-
-const actions = Settings.stream_click.reduce(function( obj, item ) {
-	obj[ item.key ] = item.id;
-	return obj;
-}, {} );
 
 
 export default Component.extend({
@@ -28,12 +31,20 @@ export default Component.extend({
 	layout,
 
 	tagName: "div",
-	classNameBindings: [ ":preview", "class", "opened:opened" ],
-	attributeBindings: [ "title", "noMiddleclickScroll:data-no-middleclick-scroll" ],
+	classNameBindings: [
+		":preview",
+		"class",
+		"opened:opened"
+	],
+	attributeBindings: [
+		"title",
+		"noMiddleclickScroll:data-no-middleclick-scroll"
+	],
 	"class": "",
-	noMiddleclickScroll: computed( "settings.stream_click_middle", function() {
+
+	noMiddleclickScroll: computed( "settings.streams.click_middle", function() {
 		// true or null
-		return get( this, "settings.stream_click_middle" ) !== actions.disabled || null;
+		return get( this, "settings.streams.click_middle" ) !== ATTR_STREAMS_CLICK_NOOP || null;
 	}),
 
 	clickable: true,
@@ -59,24 +70,25 @@ export default Component.extend({
 				// left mouse button
 				? ( event.ctrlKey || event.metaKey
 					// with modifier key
-					? get( this, "settings.stream_click_modify" )
+					? get( this, "settings.streams.click_modify" )
 					// without modifier keys (default action)
-					: actions.launch
+					: ATTR_STREAMS_CLICK_LAUNCH
 				)
-				: event.button === 1
-				// middle mouse button
-				? get( this, "settings.stream_click_middle" )
-				// everything else (no action)
-				: -1;
+				: ( event.button === 1
+					// middle mouse button
+					? get( this, "settings.streams.click_middle" )
+					// everything else (no action)
+					: ATTR_STREAMS_CLICK_NOOP
+				);
 
 			switch ( action ) {
-				case actions.launch:
+				case ATTR_STREAMS_CLICK_LAUNCH:
 					return this.startStream();
-				case actions.chat:
+				case ATTR_STREAMS_CLICK_CHAT:
 					return this.openChat();
-				case actions.channel:
+				case ATTR_STREAMS_CLICK_CHANNEL:
 					return this.gotoChannelPage();
-				case actions.settings:
+				case ATTR_STREAMS_CLICK_SETTINGS:
 					return this.gotoChannelSettings();
 			}
 		}
@@ -157,8 +169,9 @@ export default Component.extend({
 	},
 
 	openChat() {
-		let channel = get( this, "stream.channel" );
-		get( this, "chat" ).open( channel );
+		const chat = get( this, "chat" );
+		const channel = get( this, "stream.channel" );
+		chat.openChat( channel );
 	},
 
 	copyChannelURL() {

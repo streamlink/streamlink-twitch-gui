@@ -27,6 +27,10 @@ import {
 	setMinimized,
 	setVisibility
 } from "nwjs/Window";
+import {
+	ATTR_GUI_MINIMIZE_MINIMIZE,
+	ATTR_GUI_MINIMIZE_TRAY
+} from "models/localstorage/Settings/gui";
 
 
 const { service } = inject;
@@ -37,10 +41,10 @@ const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 const modelName = "stream";
 
 
-function setIfNotNull( objA, objB, key ) {
-	let val = get( objA, key );
+function setIfNotNull( objA, keyA, objB, keyB ) {
+	const val = get( objB, keyB );
 	if ( val !== null ) {
-		set( objB, key, val );
+		set( objA, keyA, val );
 	}
 }
 
@@ -105,8 +109,8 @@ export default Service.extend({
 			id,
 			channel,
 			stream: twitchStream,
-			quality: get( this, "settings.quality" ),
-			gui_openchat: get( this, "settings.gui_openchat" ),
+			quality: get( this, "settings.streaming.quality" ),
+			chat_open: get( this, "settings.streams.chat_open" ),
 			started: new Date()
 		});
 
@@ -128,18 +132,20 @@ export default Service.extend({
 				() => stream.toJSON({ includeId: true })
 			);
 
+			const settingsStreaming = get( this, "settings.streaming" ).toJSON();
+
 			// resolve streaming provider
 			const providerObj = await resolveProvider(
 				stream,
-				get( this, "settings.streamprovider" ),
-				get( this, "settings.streamproviders" )
+				settingsStreaming.provider,
+				settingsStreaming.providers
 			);
 
 			// resolve player
 			const playerObj = await resolvePlayer(
 				stream,
-				get( this, "settings.player_preset" ),
-				get( this, "settings.player" )
+				settingsStreaming.player,
+				settingsStreaming.players
 			);
 
 			// launch the stream
@@ -169,7 +175,7 @@ export default Service.extend({
 		this.refreshStream( stream );
 
 		// automatically close modal on success
-		if ( get( this, "settings.gui_hidestreampopup" ) ) {
+		if ( get( this, "settings.streams.modal_close_launch" ) ) {
 			this.closeStreamModal( stream );
 		}
 
@@ -178,17 +184,17 @@ export default Service.extend({
 			// do not open chat on stream restarts
 			   launchChat
 			// require open chat setting
-			&& get( stream, "gui_openchat" )
+			&& get( stream, "chat_open" )
 			&& (
 				// context menu not used
 				   !get( stream, "strictQuality" )
 				// or context menu setting disabled
-				|| !get( this, "settings.gui_openchat_context" )
+				|| !get( this, "settings.streams.chat_open_context" )
 			)
 		) {
 			const channel = get( stream, "channel" );
 			const chat = get( this, "chat" );
-			chat.open( channel )
+			chat.openChat( channel )
 				.catch( () => {} );
 		}
 
@@ -215,7 +221,7 @@ export default Service.extend({
 	onStreamEnd( stream ) {
 		if ( get( this, "active" ) === stream ) {
 			// close modal of the active stream if it has been enabled in the settings
-			if ( get( this, "settings.gui_closestreampopup" ) ) {
+			if ( get( this, "settings.streams.modal_close_end" ) ) {
 				this.closeStreamModal( stream );
 			}
 		} else if ( !get( stream, "isDeleted" ) ) {
@@ -260,13 +266,13 @@ export default Service.extend({
 
 		// override channel specific settings
 		if ( quality === undefined ) {
-			setIfNotNull( channelSettings, stream, "quality" );
+			setIfNotNull( stream, "quality", channelSettings, "streaming_quality" );
 			set( stream, "strictQuality", false );
 		} else {
 			set( stream, "quality", quality );
 			set( stream, "strictQuality", true );
 		}
-		setIfNotNull( channelSettings, stream, "gui_openchat" );
+		setIfNotNull( stream, "chat_open", channelSettings, "streams_chat_open" );
 	},
 
 
@@ -277,15 +283,15 @@ export default Service.extend({
 	},
 
 	minimize( restore ) {
-		switch ( get( this, "settings.gui_minimize" ) ) {
+		switch ( get( this, "settings.gui.minimize" ) ) {
 			// minimize
-			case 1:
+			case ATTR_GUI_MINIMIZE_MINIMIZE:
 				setMinimized( !restore );
 				break;
 			// move to tray: toggle window and taskbar visibility
-			case 2:
+			case ATTR_GUI_MINIMIZE_TRAY:
 				setVisibility( restore );
-				if ( get( this, "settings.isVisibleInTaskbar" ) ) {
+				if ( get( this, "settings.gui.isVisibleInTaskbar" ) ) {
 					setShowInTaskbar( restore );
 				}
 				break;

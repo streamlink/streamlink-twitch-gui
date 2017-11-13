@@ -28,7 +28,7 @@ export default Service.extend(
 		error: false,
 		paused: false,
 
-		enabled: and( "auth.session.isLoggedIn", "settings.notify_enabled" ),
+		enabled: and( "auth.session.isLoggedIn", "settings.notification.enabled" ),
 
 		running: computed( "enabled", "paused", function() {
 			return get( this, "enabled" ) && !get( this, "paused" );

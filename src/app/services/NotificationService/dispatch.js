@@ -17,7 +17,7 @@ import {
 	ATTR_NOTIFY_CLICK_FOLLOWED,
 	ATTR_NOTIFY_CLICK_STREAM,
 	ATTR_NOTIFY_CLICK_STREAMANDCHAT
-} from "models/localstorage/Settings";
+} from "models/localstorage/Settings/notification";
 import {
 	setMinimized,
 	setVisibility,
@@ -45,7 +45,7 @@ export default Mixin.create( Evented, {
 			if ( !streams ) { return; }
 			const length = get( streams, "length" );
 
-			if ( length > 1 && get( this, "settings.notify_grouping" ) ) {
+			if ( length > 1 && get( this, "settings.notification.grouping" ) ) {
 				// merge multiple notifications and show a single one
 				await this._showNotificationGroup( streams );
 
@@ -68,7 +68,7 @@ export default Mixin.create( Evented, {
 	 * @returns {Promise}
 	 */
 	async _showNotificationGroup( streams ) {
-		const settings = get( this, "settings.notify_click_group" );
+		const settings = get( this, "settings.notification.click_group" );
 
 		const data = new NotificationData({
 			title  : "Some followed channels have started streaming",
@@ -90,7 +90,7 @@ export default Mixin.create( Evented, {
 	 * @returns {Promise}
 	 */
 	async _showNotificationSingle( stream ) {
-		const settings = get( this, "settings.notify_click" );
+		const settings = get( this, "settings.notification.click" );
 		const name = get( stream, "channel.display_name" );
 
 		const data = new NotificationData({
@@ -120,7 +120,7 @@ export default Mixin.create( Evented, {
 		}) );
 
 		// restore the window
-		if ( get( this, "settings.notify_click_restore" ) ) {
+		if ( get( this, "settings.notification.click_restore" ) ) {
 			setMinimized( false );
 			setVisibility( true );
 			setFocused( true );
@@ -135,14 +135,16 @@ export default Mixin.create( Evented, {
 
 		} else if ( action === ATTR_NOTIFY_CLICK_STREAMANDCHAT ) {
 			const streaming = get( this, "streaming" );
-			const openchat = get( this, "settings.gui_openchat" );
+			// TODO: check individual channel settings
+			const openchat = get( this, "settings.streams.chat_open" );
 			const chat = get( this, "chat" );
 			streams.forEach( stream => {
 				streaming.startStream( stream ).catch( () => {} );
 				// don't open the chat twice (startStream may open chat already)
 				if ( !openchat ) {
 					const channel = get( stream, "channel" );
-					chat.open( channel ).catch( () => {} );
+					chat.openChat( channel )
+						.catch( () => {} );
 				}
 			});
 		}
@@ -153,7 +155,7 @@ export default Mixin.create( Evented, {
 	 * @returns {Promise}
 	 */
 	async _showNotification( data ) {
-		const provider = get( this, "settings.notify_provider" );
+		const provider = get( this, "settings.notification.provider" );
 
 		// don't await the notification promise here
 		showNotification( provider, data, false )

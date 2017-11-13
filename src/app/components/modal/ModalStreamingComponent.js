@@ -4,7 +4,9 @@ import {
 	computed,
 	inject
 } from "ember";
-import { streamprovider } from "config";
+import {
+	streaming as streamingConfig
+} from "config";
 import ModalDialogComponent from "components/modal/ModalDialogComponent";
 import HotkeyMixin from "mixins/HotkeyMixin";
 import qualities from "models/stream/qualities";
@@ -25,12 +27,11 @@ import layout from "templates/components/modal/ModalStreamingComponent.hbs";
 const { readOnly } = computed;
 const { service } = inject;
 const {
-	providers,
 	"download-url": downloadUrl,
 	validation: {
 		providers: validationProviders
 	}
-} = streamprovider;
+} = streamingConfig;
 
 
 function computedError( classObj ) {
@@ -64,18 +65,13 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 	isHostingError: computedError( HostingError ),
 
 	qualities,
-	versionMin: computed( "settings.streamprovider", function() {
-		const streamprovider = get( this, "settings.streamprovider" );
-		const type = providers[ streamprovider ][ "type" ];
+	versionMin: computed( "settings.streaming.providerType", function() {
+		const type = get( this, "settings.streaming.providerType" );
 
 		return validationProviders[ type ][ "version" ];
 	}),
 
-	providername: computed( "settings.streamprovider", function() {
-		const streamprovider = get( this, "settings.streamprovider" );
-
-		return providers[ streamprovider ][ "name" ];
-	}),
+	providerName: readOnly( "settings.streaming.providerName" ),
 
 
 	hotkeys: [
@@ -118,10 +114,9 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 	actions: {
 		download( success, failure ) {
-			const streamprovider = get( this, "settings.streamprovider" );
-			const provider = providers[ streamprovider ][ "type" ];
+			const type = get( this, "settings.streaming.providerType" );
 
-			openBrowser( downloadUrl[ provider ] )
+			openBrowser( downloadUrl[ type ] )
 				.then( success, failure )
 				.then( () => this.send( "close" ) );
 		},

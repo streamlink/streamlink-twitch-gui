@@ -26,12 +26,15 @@ export default Controller.extend( RetryTransitionMixin, {
 		const settings = get( this, "settings" );
 
 		original.eachAttribute( ( attr, meta ) => {
-			const customDefault = meta.options.defaultValue;
+			const {
+				defaultValue: customDefault,
+				settingsPath
+			} = meta.options;
 
 			// proxy for setting the custom attr or getting the custom/global attr
 			const attributeProxy = computed(
 				`model.buffer.${attr}`,
-				`settings.${attr}`,
+				`settings.${settingsPath}`,
 				{
 					set( key, value, oldValue ) {
 						// don't accept changes if disabled
@@ -46,7 +49,7 @@ export default Controller.extend( RetryTransitionMixin, {
 						// return the global value if the custom value is null
 						const val = get( model, attr );
 						return val === customDefault
-							? get( settings, attr )
+							? get( settings, settingsPath )
 							: val;
 					}
 				}
@@ -61,7 +64,7 @@ export default Controller.extend( RetryTransitionMixin, {
 						// true  => set attr value to global value (init)
 						value = !!value;
 						set( model, attr, value
-							? get( settings, attr )
+							? get( settings, settingsPath )
 							: null
 						);
 						return value;

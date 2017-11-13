@@ -1,3 +1,9 @@
 body {
 	overflow-y: scroll;
 }
+
+/* fix line height in the test module dropdown */
+#qunit-modulefilter-dropdown-list .clickable {
+	display: inline-block;
+	width: 100%;
+}

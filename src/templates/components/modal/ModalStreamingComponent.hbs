@@ -18,7 +18,7 @@
 				{{#modal-header}}
 					Launching: {{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
 				{{/modal-header}}
-				{{#modal-body class="launching"}}Waiting for {{providername}} to launch the stream...{{/modal-body}}
+				{{#modal-body class="launching"}}Waiting for {{providerName}} to launch the stream...{{/modal-body}}
 				{{modal-log class="launching" log=active.log}}
 			{{else if active.isWatching}}
 				{{#modal-header}}
@@ -56,7 +56,7 @@
 						action=(action "toggleLog")
 						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.isWatching::invisible"
 						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
-						title=(concat "[L] Toggle " providername " log")
+						title=(concat "[L] Toggle " providerName " log")
 					}}
 				</div>
 				<div class="button-list-horizontal-wide">
@@ -78,22 +78,22 @@
 			{{#modal-header}}Error: Couldn't launch the stream{{/modal-header}}
 			{{#modal-body class="error"}}{{error.message}}{{/modal-body}}
 		{{else if isProviderError}}
-			{{#modal-header}}Error: {{providername}} misconfiguration{{/modal-header}}
-			{{#modal-body class="error"}}{{#if error.message}}{{error.message}}{{#if error.error.message}}<br>{{error.error.message}}{{/if}}<br><br>{{/if}}Please check your settings and/or (re)install {{providername}}.{{/modal-body}}
+			{{#modal-header}}Error: {{providerName}} misconfiguration{{/modal-header}}
+			{{#modal-body class="error"}}{{#if error.message}}{{error.message}}{{#if error.error.message}}<br>{{error.error.message}}{{/if}}<br><br>{{/if}}Please check your settings and/or (re)install {{providerName}}.{{/modal-body}}
 		{{else if isPlayerError}}
 			{{#modal-header}}Error: Player misconfiguration{{/modal-header}}
 			{{#modal-body class="error"}}Please check your player settings.{{/modal-body}}
 		{{else if isVersionError}}
-			{{#modal-header}}Error: Invalid {{providername}} version{{/modal-header}}
+			{{#modal-header}}Error: Invalid {{providerName}} version{{/modal-header}}
 			{{#modal-body class="error"}}
 				Your version v{{error.message}} doesn't match the min. requirements (v{{versionMin}}).
 			{{/modal-body}}
 		{{else if isUnableToOpenError}}
 			{{#modal-header}}Error: Unable to open stream{{/modal-header}}
-			{{#modal-body class="error"}}{{providername}} was unable to open the stream.{{/modal-body}}
+			{{#modal-body class="error"}}{{providerName}} was unable to open the stream.{{/modal-body}}
 		{{else if isNoStreamsFoundError}}
 			{{#modal-header}}Error: No streams found{{/modal-header}}
-			{{#modal-body class="error"}}{{providername}} was unable to find the stream.{{/modal-body}}
+			{{#modal-body class="error"}}{{providerName}} was unable to find the stream.{{/modal-body}}
 		{{else if isTimeoutError}}
 			{{#modal-header}}Error: Timeout{{/modal-header}}
 			{{#modal-body class="error"}}Either {{active.channel.detailedName}} has gone offline, or your connection to Twitch has been interrupted.{{/modal-body}}

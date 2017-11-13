@@ -28,8 +28,8 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 
 	action() {
 		const channel = get( this, "channel" );
-		const chat    = get( this, "chat" );
+		const chat = get( this, "chat" );
 
-		return chat.open( channel );
+		return chat.openChat( channel );
 	}
 });

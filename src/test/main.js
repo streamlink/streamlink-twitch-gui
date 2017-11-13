@@ -2,6 +2,7 @@ import "shim";
 import QUnit, {
 	config
 } from "qunit";
+import "qunit/assertion-helpers";
 import "ember-test";
 import "bower/ember/ember-template-compiler";
 

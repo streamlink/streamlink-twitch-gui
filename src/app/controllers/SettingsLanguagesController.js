@@ -4,26 +4,28 @@ import {
 	computed,
 	Controller
 } from "ember";
-import { langs } from "config";
-import Settings from "models/localstorage/Settings";
+import {
+	langs as langsConfig
+} from "config";
+import SettingsStreams from "models/localstorage/Settings/streams";
 
 
 export default Controller.extend({
-	Settings,
+	SettingsStreams,
 
 	languages: computed(function() {
-		return Object.keys( langs )
-			.filter( code => !langs[ code ].disabled )
+		return Object.keys( langsConfig )
+			.filter( code => !langsConfig[ code ].disabled )
 			.map( id => ({
 				id,
-				lang: langs[ id ][ "lang" ]
+				lang: langsConfig[ id ][ "lang" ]
 			}) );
 	}),
 
 
 	actions: {
 		checkLanguages( all ) {
-			let filters = get( this, "model.gui_langfilter" );
+			const filters = get( this, "model.streams.filter_languages" );
 			Object.keys( filters.content )
 				.forEach( key => set( filters, key, all ) );
 		}

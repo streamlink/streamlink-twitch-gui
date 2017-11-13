@@ -87,7 +87,7 @@ export default Mixin.create({
 
 	_refreshFocusGain() {
 		const last = this[ PROP_LAST ];
-		const time = get( this, "settings.gui_focusrefresh" );
+		const time = get( this, "settings.gui.focusrefresh" );
 		if ( !time || !last || Date.now() < last + time ) { return; }
 
 		// defer the refresh if a modal dialog is opened

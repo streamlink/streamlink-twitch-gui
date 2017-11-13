@@ -1,5 +1,5 @@
 import {
-	streamprovider as streamproviderConfig
+	streaming as streamingConfig
 } from "config";
 import { providerCache } from "../cache";
 import { logDebug } from "../logger";
@@ -14,7 +14,7 @@ import whichFallback from "utils/node/fs/whichFallback";
 
 
 const { hasOwnProperty } = {};
-const { providers: providersConfData } = streamproviderConfig;
+const { providers: providersConfData } = streamingConfig;
 
 
 /**

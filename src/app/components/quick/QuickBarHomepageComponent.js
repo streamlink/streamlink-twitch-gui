@@ -29,8 +29,8 @@ export default FormButtonComponent.extend({
 		return location.getURL();
 	}).volatile(),
 
-	isHomepage: computed( "url", "settings.gui_homepage", function() {
-		return get( this, "url" ) === get( this, "settings.gui_homepage" );
+	isHomepage: computed( "url", "settings.gui.homepage", function() {
+		return get( this, "url" ) === get( this, "settings.gui.homepage" );
 	}),
 
 
@@ -41,7 +41,7 @@ export default FormButtonComponent.extend({
 			return Promise.reject();
 		}
 
-		set( settings, "gui_homepage", value );
+		set( settings, "gui.homepage", value );
 		return settings.save();
 	}
 });

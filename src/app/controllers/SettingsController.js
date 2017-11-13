@@ -1,16 +1,13 @@
 import {
 	get,
 	set,
-	computed,
 	inject,
 	Controller
 } from "ember";
-import { streamprovider } from "config";
 import RetryTransitionMixin from "mixins/RetryTransitionMixin";
 
 
 const { service } = inject;
-const { providers } = streamprovider;
 
 
 export default Controller.extend( RetryTransitionMixin, {
@@ -18,15 +15,6 @@ export default Controller.extend( RetryTransitionMixin, {
 	settings: service(),
 
 	isAnimated: false,
-
-
-	// TODO: remove this once Livestreamer support gets dropped
-	// this property is being used by the main menu
-	streamproviderName: computed( "model.streamprovider", function() {
-		let streamprovider = get( this, "model.streamprovider" );
-
-		return providers[ streamprovider ][ "name" ];
-	}),
 
 
 	actions: {

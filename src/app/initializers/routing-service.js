@@ -92,11 +92,12 @@ const customRoutingService = {
 	},
 
 	homepage( noHistoryEntry ) {
-		let homepage = get( this, "settings.gui_homepage" );
-		let method = noHistoryEntry
+		const router = get( this, "router" );
+		const homepage = get( this, "settings.gui.homepage" );
+		const method = noHistoryEntry
 			? "replaceWith"
 			: "transitionTo";
-		get( this, "router" )[ method ]( homepage || "/featured" );
+		router[ method ]( homepage || "/featured" );
 	},
 
 	openBrowserOrTransitionToChannel( url ) {

@@ -2,6 +2,18 @@ import { get } from "ember";
 import playerSubstitutions from "services/StreamingService/player/substitutions";
 import Parameter from "utils/parameters/Parameter";
 import ParameterCustom from "utils/parameters/ParameterCustom";
+import {
+	ATTR_STREAMING_PLAYER_INPUT_FIFO,
+	ATTR_STREAMING_PLAYER_INPUT_HTTP,
+	ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH
+} from "models/localstorage/Settings/streaming";
+
+
+function playerInput( attr ) {
+	return function() {
+		return get( this, "stream.settings.streaming.player_input" ) === attr;
+	};
+}
 
 
 /** @type {Parameter[]} */
@@ -35,50 +47,49 @@ export const parameters = [
 		playerSubstitutions
 	),
 	new Parameter(
-		"--player-passthrough",
-		"stream.settings.advanced",
-		"stream.settings.player_passthrough"
+		"--player-fifo",
+		playerInput( ATTR_STREAMING_PLAYER_INPUT_FIFO )
 	),
 	new Parameter(
 		"--player-continuous-http",
-		[
-			"stream.settings.player_reconnect",
-			function() {
-				return get( this, "stream.settings.player_passthrough" ) === "http";
-			}
-		]
+		playerInput( ATTR_STREAMING_PLAYER_INPUT_HTTP )
+	),
+	new Parameter(
+		"--player-passthrough",
+		playerInput( ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH ),
+		"stream.playerInputPassthrough"
 	),
 	new Parameter(
 		"--player-no-close",
-		"stream.settings.player_no_close"
+		"stream.settings.streaming.player_no_close"
 	),
 	new Parameter(
 		"--twitch-oauth-token",
 		[
 			"stream.session.isLoggedIn",
-			"stream.settings.streamprovider_oauth"
+			"stream.settings.streaming.oauth"
 		],
 		"stream.session.access_token"
 	),
 	new Parameter(
 		"--hls-live-edge",
 		"stream.settings.advanced",
-		"stream.settings.hls_live_edge"
+		"stream.settings.streaming.hls_live_edge"
 	),
 	new Parameter(
 		"--hls-segment-threads",
 		"stream.settings.advanced",
-		"stream.settings.hls_segment_threads"
+		"stream.settings.streaming.hls_segment_threads"
 	),
 	new Parameter(
 		"--retry-open",
 		null,
-		"stream.settings.retry_open"
+		"stream.settings.streaming.retry_open"
 	),
 	new Parameter(
 		"--retry-streams",
 		null,
-		"stream.settings.retry_streams"
+		"stream.settings.streaming.retry_streams"
 	),
 	new Parameter(
 		"--stream-sorting-excludes",

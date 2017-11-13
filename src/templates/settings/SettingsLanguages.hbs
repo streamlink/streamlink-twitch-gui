@@ -3,15 +3,15 @@
 	"Filter streams"
 	"Apply a language filter to all stream lists (except followed streams)."
 	icon="fa-filter"
-	notes=(unless model.gui_filterstreams
+	notes=(unless model.streams.filter_languages
 		"List all streams, fade out the ones not matching."
 		"Only list streams matching the language selection."
 	)
 }}
 	{{#radio-btns
 		name="filterstreams"
-		value=model.gui_filterstreams
-		content=Settings.gui_filterstreams
+		value=model.streams.filter_languages
+		content=SettingsStreams.filter_languages
 		as |radiobtn label|
 	}}
 		<div>{{component radiobtn label}}</div>
@@ -27,7 +27,7 @@
 	<ul class="list-unstyled filter-lang">
 		{{#each languages as |language|}}
 			<li>
-				{{#check-box checked=(mut (get model.gui_langfilter language.id))}}
+				{{#check-box checked=(mut (get model.streams.languages language.id))}}
 					{{flag-icon lang=language.id withTitle=false withCursor=false}} {{language.lang}}<span class="lang-code">({{language.id}})</span>
 				{{/check-box}}
 			</li>

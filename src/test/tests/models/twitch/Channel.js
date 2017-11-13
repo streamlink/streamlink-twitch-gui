@@ -21,7 +21,7 @@ import {
 	Model,
 	Adapter
 } from "ember-data";
-import Channel from "models/twitch/Channel";
+import channelInjector from "inject-loader?-ember&-ember-data!models/twitch/Channel";
 import ChannelSerializer from "models/twitch/ChannelSerializer";
 import TwitchAdapter from "store/TwitchAdapter";
 import TwitchChannelFixtures from "fixtures/models/twitch/Channel.json";
@@ -29,13 +29,27 @@ import TwitchChannelFixtures from "fixtures/models/twitch/Channel.json";
 
 let owner, env;
 
+const ATTR_STREAMS_NAME_CUSTOM = 1;
+const ATTR_STREAMS_NAME_ORIGINAL = 2;
+const ATTR_STREAMS_NAME_BOTH = ATTR_STREAMS_NAME_CUSTOM | ATTR_STREAMS_NAME_ORIGINAL;
+
 
 module( "models/twitch/Channel", {
 	beforeEach() {
 		owner = buildOwner();
 
+		const { default: Channel } = channelInjector({
+			"models/localstorage/Settings/streams": {
+				ATTR_STREAMS_NAME_CUSTOM,
+				ATTR_STREAMS_NAME_ORIGINAL,
+				ATTR_STREAMS_NAME_BOTH
+			}
+		});
+
 		owner.register( "service:auth", Service.extend() );
-		owner.register( "service:settings", Service.extend() );
+		owner.register( "service:settings", Service.extend({
+			streams: {}
+		}) );
 		owner.register( "model:twitch-channel", Channel );
 		owner.register( "serializer:twitch-channel", ChannelSerializer );
 
@@ -120,21 +134,21 @@ test( "Computed properties", assert => {
 
 	const settings = owner.lookup( "service:settings" );
 
-	run( () => set( settings, "content", { channel_name: 1 } ) );
+	run( () => set( settings, "streams.name", ATTR_STREAMS_NAME_CUSTOM ) );
 	assert.strictEqual(
 		get( record, "detailedName" ),
 		"bar",
 		"Only shows the channel name when settings.channel_name is 1"
 	);
 
-	run( () => set( settings, "content.channel_name", 2 ) );
+	run( () => set( settings, "streams.name", ATTR_STREAMS_NAME_ORIGINAL ) );
 	assert.strictEqual(
 		get( record, "detailedName" ),
 		"foo",
 		"Only shows the channel display_name when settings.channel_name is 2"
 	);
 
-	run( () => set( settings, "content.channel_name", 3 ) );
+	run( () => set( settings, "streams.name", ATTR_STREAMS_NAME_BOTH ) );
 	assert.strictEqual(
 		get( record, "detailedName" ),
 		"bar (foo)",

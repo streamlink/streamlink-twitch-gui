@@ -3,16 +3,17 @@ import {
 	computed,
 	inject
 } from "ember";
-import { streamprovider } from "config";
+import {
+	streaming as streamingConfig
+} from "config";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";
 
 
 const { service } = inject;
 const {
-	providers,
 	"docs-url": docsUrl
-} = streamprovider;
+} = streamingConfig;
 
 
 export default ExternalLinkComponent.extend({
@@ -21,9 +22,8 @@ export default ExternalLinkComponent.extend({
 	settings: service(),
 
 	// default baseUrl
-	baseUrl: computed( "settings.streamprovider", function() {
-		let streamprovider = get( this, "settings.streamprovider" );
-		let type = providers[ streamprovider ].type;
+	baseUrl: computed( "settings.streaming.providerType", function() {
+		const type = get( this, "settings.streaming.providerType" );
 
 		return docsUrl[ type ];
 	}),
@@ -40,9 +40,7 @@ export default ExternalLinkComponent.extend({
 
 	class: "",
 	title: computed( "baseUrl", function() {
-		let baseUrl = get( this, "baseUrl" );
-
-		return baseUrl
+		return get( this, "baseUrl" )
 			? "Read the documentation in your web browser"
 			: "";
 	}),
@@ -52,9 +50,8 @@ export default ExternalLinkComponent.extend({
 		const item = get( this, "item" );
 		let itemUrl = encodeURIComponent( item );
 
-		// remove leading double dash on Streamlink documentation links
-		let streamprovider = get( this, "settings.streamprovider" );
-		if ( providers[ streamprovider ].type === "streamlink" ) {
+		// remove leading double dash from Streamlink documentation links
+		if ( get( this, "settings.streaming.isStreamlink" ) ) {
 			itemUrl = itemUrl.replace( /^-/, "" );
 		}
 

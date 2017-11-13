@@ -3,12 +3,16 @@
 <legend>Stream</legend>
 {{#settings-row
 	"Quality"
-	"Priorize this quality over the default one."
+	"Set a channel specific streaming quality."
 	icon="fa-eye"
 	toggle=true
-	enabled=_quality
+	enabled=_streaming_quality
 }}
-	{{drop-down value=quality content=qualities disabled=(bool-not _quality)}}
+	{{drop-down
+		value=streaming_quality
+		content=qualities
+		disabled=(bool-not _streaming_quality)
+	}}
 {{/settings-row}}
 
 {{#settings-row
@@ -16,25 +20,36 @@
 	"Automatically open chat."
 	icon="fa-comments"
 	toggle=true
-	enabled=_gui_openchat
+	enabled=_streams_chat_open
 }}
-	{{check-box "Open chat when the stream starts" checked=gui_openchat disabled=(bool-not _gui_openchat)}}
+	{{check-box
+		"Open chat when the stream starts"
+		checked=streams_chat_open
+		disabled=(bool-not _streams_chat_open)
+	}}
 {{/settings-row}}
 </fieldset>
-{{#if settings.notify_enabled}}
+
+{{#if settings.notification.enabled}}
 <fieldset>
 <legend>Desktop notifications</legend>
 {{#settings-row
 	"Notifications"
-	"When the channel starts streaming.<br>Channel needs to be followed."
+	"When the channel starts streaming."
 	icon="fa-bullhorn"
+	notes="Channel needs to be followed."
 	toggle=true
-	enabled=_notify_enabled
+	enabled=_notification_enabled
 }}
-	{{check-box "Receive notifications for this channel" checked=notify_enabled disabled=(bool-not _notify_enabled)}}
+	{{check-box
+		"Enable desktop notifications"
+		checked=notification_enabled
+		disabled=(bool-not _notification_enabled)
+	}}
 {{/settings-row}}
 </fieldset>
 {{/if}}
+
 {{settings-submit
 	apply=(action "apply")
 	discard=(action "discard")

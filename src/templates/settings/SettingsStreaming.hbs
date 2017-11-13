@@ -1,0 +1,143 @@
+<fieldset>
+{{#settings-row
+	"Streamlink / Livestreamer"
+	"Choose a streaming provider and set custom executable locations."
+	icon="fa-cog"
+	notes="An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths."
+	requires=(if
+		(get (get providers model.streaming.provider) "python")
+		(concat "Python " (get (get providers model.streaming.provider) "python"))
+	)
+}}
+	{{drop-down
+		value=model.streaming.provider
+		content=providersDropDown
+		class="streaming-providers-dropdown"
+	}}
+	{{#each-in providers as |key provider|}}
+		<dl class="streaming-providers-list {{unless (is-equal key model.streaming.provider) 'hidden'}}">
+			<dt>{{#if provider.python}}Python{{else}}{{provider.name}}{{/if}} executable</dt>
+			<dd>{{file-select
+				value=(mut (get (get model.streaming.providers key) "exec"))
+				placeholder=(get provider.exec platform)
+				inputClass="form-control"
+			}}</dd>
+			{{#if provider.python}}
+				<dt>{{provider.name}} python script</dt>
+				<dd>{{file-select
+					value=(mut (get (get model.streaming.providers key) "pythonscript"))
+					placeholder=(get provider.pythonscript platform)
+					inputClass="form-control"
+				}}</dd>
+			{{/if}}
+			{{#if model.advanced}}
+				<dt>Custom {{provider.name}} parameters</dt>
+				<dd>{{input
+					type="text"
+					value=(mut (get (get model.streaming.providers key) "params"))
+					classNames="col-xs-12"
+					placeholder="Add custom parameters"
+				}}</dd>
+			{{/if}}
+		</dl>
+	{{/each-in}}
+{{/settings-row}}
+
+{{#settings-row
+	"Player input"
+	"Defines the method of how the stream data is being fed into the player."
+	icon="fa-file-video-o"
+	notes="Please see the wiki for detailed informations about this option. Different parameters will be set, depending on the selection. The player needs to support the selected method."
+	documentation=playerInputDocumentation
+}}
+	{{#radio-btns
+		value=model.streaming.player_input
+		content=SettingsStreaming.player_input
+		as |radiobtn label|
+	}}
+		<div class="settings-provider-item">
+			{{component radiobtn label.name}}
+			<p class="description">{{label.description}}</p>
+		</div>
+	{{/radio-btns}}
+{{/settings-row}}
+</fieldset>
+
+<fieldset>
+{{#settings-row
+	"HLS live edge"
+	"Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering."
+	icon="fa-bolt"
+	documentation="--hls-live-edge"
+}}
+	{{number-field
+		value=model.streaming.hls_live_edge
+		default=hlsLiveEdgeDefault
+		min=hlsLiveEdgeMin
+		max=hlsLiveEdgeMax
+		disabled=playerInputPassthrough
+	}}
+{{/settings-row}}
+
+{{#settings-row
+	"HLS segment threads"
+	"Number of threads used for downloading and processing stream segments."
+	icon="fa-sort-amount-asc"
+	documentation="--hls-segment-threads"
+}}
+	{{number-field
+		value=model.streaming.hls_segment_threads
+		default=hlsSegmentThreadsDefault
+		min=hlsSegmentThreadsMin
+		max=hlsSegmentThreadsMax
+		disabled=playerInputPassthrough
+	}}
+{{/settings-row}}
+
+{{#settings-row
+	"Keep player window"
+	"After the stream has ended."
+	icon="fa-caret-square-o-right"
+	notes=(concat "The player itself may prevent " providerName " to close it. Please see the player settings as well.")
+	documentation="--player-no-close"
+}}
+	{{check-box "Do not close the player" checked=model.streaming.player_no_close}}
+{{/settings-row}}
+
+{{#settings-row
+	"Twitch.tv login"
+	(concat "Allow " providerName " to use the Twitch.tv oauth token while being logged in.")
+	icon="fa-sign-in"
+	documentation="--twitch-oauth-token"
+}}
+	{{check-box "Authenticate when launching a stream" checked=model.streaming.oauth}}
+{{/settings-row}}
+
+{{#settings-row
+	"Launch attempts"
+	"Number of stream launch attempts."
+	icon="fa-rocket"
+	documentation="--retry-open"
+}}
+	{{number-field
+		value=model.streaming.retry_open
+		default=retryOpenDefault
+		min=retryOpenMin
+		max=retryOpenMax
+	}}
+{{/settings-row}}
+
+{{#settings-row
+	"Retry delay"
+	"Time in seconds between each attempt."
+	icon="fa-hourglass-half"
+	documentation="--retry-streams"
+}}
+	{{number-field
+		value=model.streaming.retry_streams
+		default=retryStreamsDefault
+		min=retryStreamsMin
+		max=retryStreamsMax
+	}}
+{{/settings-row}}
+</fieldset>

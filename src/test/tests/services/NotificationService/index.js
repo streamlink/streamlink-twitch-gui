@@ -36,7 +36,9 @@ test( "NotificationService", assert => {
 		}
 	}) );
 	owner.register( "service:settings", Service.extend({
-		notify_enabled: false
+		notification: {
+			enabled: false
+		}
 	}) );
 	owner.register( "service:notification", NotificationService );
 
@@ -50,7 +52,7 @@ test( "NotificationService", assert => {
 	assert.notOk( get( service, "running" ), "Is not running when being logged out or disabled" );
 	assert.strictEqual( get( service, "statusText" ), "Desktop notifications are disabled" );
 
-	run( () => set( settings, "notify_enabled", true ) );
+	run( () => set( settings, "notification.enabled", true ) );
 	assert.notOk( get( service, "running" ), "Is not running when being logged out and enabled" );
 
 	run( () => set( auth, "session.isLoggedIn", true ) );
@@ -64,7 +66,7 @@ test( "NotificationService", assert => {
 	assert.notOk( get( service, "running" ), "Is not running when paused" );
 	assert.strictEqual( get( service, "statusText" ), "Desktop notifications are paused" );
 
-	run( () => set( settings, "notify_enabled", false ) );
+	run( () => set( settings, "notification.enabled", false ) );
 	assert.notOk( get( service, "running" ), "Is not running when being logged in and disabled" );
 	run( () => set( service, "paused", false ) );
 	assert.notOk( get( service, "running" ), "Still not running when unpausing again" );
