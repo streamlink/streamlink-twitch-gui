@@ -69,6 +69,9 @@ AUR (Arch Linux):
 Homebrew Cask (MacOS):  
 [`brew cask install streamlink-twitch-gui`][Package-Homebrew-Cask]  
 
+Solus:  
+[`sudo eopkg install streamlink-twitch-gui`][Package-Eopkg]
+
 #### Development version
 
 If you want to test the latest unreleased version, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or [here][Contributing].  
@@ -121,5 +124,6 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Package-Chocolatey]: https://chocolatey.org/packages/streamlink-twitch-gui "Chocolatey package"
   [Package-AUR]: https://aur.archlinux.org/packages/streamlink-twitch-gui "AUR stable package"
   [Package-AUR-git]: https://aur.archlinux.org/packages/streamlink-twitch-gui-git "AUR git package"
+  [Package-Eopkg]: https://dev.solus-project.com/source/streamlink-twitch-gui/ "Solus eopkg package"
   [Package-Homebrew-Cask]: https://caskroom.github.io/
   [Application-rename]: https://github.com/streamlink/streamlink-twitch-gui/issues/331 "The future of Livestreamer Twitch GUI"
