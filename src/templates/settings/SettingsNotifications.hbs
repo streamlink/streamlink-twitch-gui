@@ -7,73 +7,108 @@
 	{{check-box "Enable desktop notifications" checked=model.notification.enabled}}
 {{/settings-row}}
 
-{{#if model.notification.enabled}}
-	{{#settings-row
-		"Notification type"
-		"Choose the kind of notification"
-		icon="fa-cog"
+{{#settings-row
+	"Notification type"
+	"Choose the kind of notification"
+	icon="fa-cog"
+}}
+	{{#form-button
+		action=(action "testNotification")
+		classNames="btn-test-notification"
+		icon="fa-rocket"
+		iconanim=true
+		disabled=(bool-not model.notification.enabled)
+	~}}
+		Test notification
+	{{~/form-button}}
+	{{#radio-btns
+		name="notificationproviders"
+		value=model.notification.provider
+		content=providers
+		as |radiobtn label|
 	}}
-		{{#form-button action=(action "testNotification") classNames="btn-test-notification" icon="fa-rocket" iconanim=true}}Test notification{{/form-button}}
-		{{#radio-btns
-			name="notificationproviders"
-			value=model.notification.provider
-			content=providers
-			as |radiobtn label|
-		}}
-			<div class="notification-provider-item">
-				{{component radiobtn label.name}}
-				<p class="description">{{#if label.notes}}<i class="fa fa-question-circle" title={{label.notes}}></i> {{/if}}{{label.description}}</p>
-			</div>
-		{{/radio-btns}}
-	{{/settings-row}}
+		<div class="notification-provider-item">
+			{{component
+				radiobtn
+				label.name
+				disabled=(bool-not model.notification.enabled)
+			}}
+			<p class="description">{{#if label.notes}}<i class="fa fa-question-circle" title={{label.notes}}></i> {{/if}}{{label.description}}</p>
+		</div>
+	{{/radio-btns}}
+{{/settings-row}}
 
-	{{#settings-row
-		"Channel filter"
-		"Notifications can be turned on/off individually in a channel's settings menu."
-		icon="fa-eyedropper"
+{{#settings-row
+	"Channel filter"
+	"Notifications can be turned on/off individually in a channel's settings menu."
+	icon="fa-eyedropper"
+}}
+	{{#radio-btns
+		name="notificationfilter"
+		value=model.notification.filter
+		content=SettingsNotification.filter
+		as |radiobtn label|
 	}}
-		{{#radio-btns
-			name="notificationfilter"
-			value=model.notification.filter
-			content=SettingsNotification.filter
-			as |radiobtn label|
-		}}
-			<div>{{component radiobtn label}}</div>
-		{{/radio-btns}}
-	{{/settings-row}}
+		<div>
+			{{component
+				radiobtn
+				label
+				disabled=(bool-not model.notification.enabled)
+			}}
+		</div>
+	{{/radio-btns}}
+{{/settings-row}}
 
-	{{#settings-row
-		"Grouping"
-		"Merge multiple notifications."
-		icon="fa-folder-open-o"
+{{#settings-row
+	"Grouping"
+	"Merge multiple notifications."
+	icon="fa-folder-open-o"
+}}
+	{{check-box
+		"Only show one notification at a time"
+		checked=model.notification.grouping
+		disabled=(bool-not model.notification.enabled)
 	}}
-		{{check-box "Only show one notification at a time" checked=model.notification.grouping}}
-	{{/settings-row}}
+{{/settings-row}}
 
-	{{#settings-row
-		"Notification click"
-		"Preferred click action."
-		icon="fa-hand-pointer-o"
+{{#settings-row
+	"Notification click"
+	"Preferred click action."
+	icon="fa-hand-pointer-o"
+}}
+	{{drop-down
+		value=model.notification.click
+		content=SettingsNotification.click
+		disabled=(bool-not model.notification.enabled)
+		class="notifications"
 	}}
-		{{drop-down value=model.notification.click content=SettingsNotification.click class="notifications"}}
-	{{/settings-row}}
+{{/settings-row}}
 
-	{{#if model.notification.grouping}}
-		{{#settings-row
-			"Group click"
-			"Preferred group click action."
-			icon="fa-hand-pointer-o"
-		}}
-			{{drop-down value=model.notification.click_group content=SettingsNotification.click_group class="notifications"}}
-		{{/settings-row}}
-	{{/if}}
-
-	{{#settings-row
-		"Restore GUI"
-		"Restore from tray or minimized state when performing a notification click action."
-		icon="fa-window-restore"
+{{#settings-row
+	"Group click"
+	"Preferred group click action."
+	icon="fa-hand-pointer-o"
+}}
+	{{drop-down
+		value=model.notification.click_group
+		content=SettingsNotification.click_group
+		disabled=(bool-or
+			(bool-not model.notification.enabled)
+			(bool-not model.notification.grouping)
+		)
+		class="notifications"
 	}}
-		{{check-box "Restore when clicking a notification" checked=model.notification.click_restore}}
-	{{/settings-row}}
-{{/if}}
+{{/settings-row}}
+
+{{#settings-row
+	"Restore GUI"
+	"Restore from tray or minimized state when performing a notification click action."
+	icon="fa-window-restore"
+}}
+	{{check-box
+		"Restore when clicking a notification"
+		checked=model.notification.click_restore
+		disabled=(bool-not model.notification.enabled)
+	}}
+{{/settings-row}}
 </fieldset>

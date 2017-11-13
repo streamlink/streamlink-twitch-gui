@@ -1,7 +1,7 @@
 <fieldset>
 {{#settings-row
 	"Chat application"
-	"Choose your preferred chat application."
+	"Choose the chat application."
 	icon="fa-twitch"
 	notes=(if (is-equal model.chat.provider "browser")
 		"Choosing the default browser may result in unwanted, non-minimal window sizes."
@@ -49,14 +49,27 @@
 		{{/settings-row}}
 	{{/each}}
 {{/each}}
+</fieldset>
 
+<fieldset>
 {{#settings-row
 	"Open chat"
 	"While launching streams."
 	icon="fa-comment"
 }}
-	<div>{{check-box "Automatically open chat" checked=model.streams.chat_open}}</div>
-	<div>{{check-box "Don't open chat while launching streams via the context menu" checked=model.streams.chat_open_context disabled=(bool-not model.streams.chat_open)}}</div>
+	<div>
+		{{check-box
+			"Automatically open chat"
+			checked=model.streams.chat_open
+		}}
+	</div>
+	<div>
+		{{check-box
+			"Don't open chat while launching streams via the context menu"
+			checked=model.streams.chat_open_context
+			disabled=(bool-not model.streams.chat_open)
+		}}
+	</div>
 {{/settings-row}}
 
 {{#settings-row

@@ -1,3 +1,16 @@
+{{#if model.advanced}}
+<fieldset>
+	{{#settings-row
+		"Command line actions"
+		"Listen to signals sent by second application instances."
+		icon="fa-terminal"
+		notes="See the wiki for a list of available actions and parameters."
+	}}
+		{{check-box "Allow external commands" checked=model.gui.externalcommands}}
+	{{/settings-row}}
+</fieldset>
+{{/if}}
+
 <fieldset>
 {{#settings-row
 	"OS integration"
@@ -18,7 +31,7 @@
 
 {{#settings-row
 	"Minimize GUI"
-	"When the videoplayer opens."
+	"When the video player opens."
 	icon="fa-minus"
 }}
 	{{#radio-btns
@@ -33,36 +46,34 @@
 	{{/radio-btns}}
 {{/settings-row}}
 
-{{#if hasBothIntegrations}}
-	{{#settings-row
-		"Minimize button"
-		"Minimize button click behavior."
-		icon="fa-minus-square"
+{{#settings-row
+	"Minimize button"
+	"Click behavior."
+	icon="fa-minus-square"
+}}
+	{{check-box
+		"Minimize to tray"
+		checked=model.gui.minimizetotray
+		disabled=(bool-not hasBothIntegrations)
 	}}
-		{{check-box "Minimize to tray" checked=model.gui.minimizetotray}}
-	{{/settings-row}}
-{{/if}}
+{{/settings-row}}
 
-{{#if model.advanced}}
-	{{#settings-row
-		"Command line actions"
-		"Listen to signals sent by second application instances."
-		icon="fa-terminal"
-		notes="See the wiki for a list of available actions and parameters."
+{{#settings-row
+	"Application badge"
+	"On the taskbar/dock icon."
+	icon="fa-tag"
+	notes="This has to be supported by the operating system or desktop environment."
+	requires="Taskbar OS integration and desktop notifications have to be enabled."
+}}
+	{{check-box
+		"Show number of streaming favorites"
+		checked=model.notification.badgelabel
+		disabled=(bool-or
+			(bool-not (bool-or hasTaskBarIntegration hasBothIntegrations))
+			(bool-not model.notification.enabled)
+		)
 	}}
-		{{check-box "Allow external commands" checked=model.gui.externalcommands}}
-	{{/settings-row}}
-{{/if}}
-
-{{#if (bool-or hasTaskBarIntegration hasBothIntegrations)}}
-	{{#settings-row
-		"Application badge"
-		"On the task bar icon or dock icon.<br>Has to be supported by your OS and requires enabled desktop notifications."
-		icon="fa-tag"
-	}}
-		{{check-box "Show number of streaming favorites" checked=model.notification.badgelabel disabled=(bool-not model.notification.enabled)}}
-	{{/settings-row}}
-{{/if}}
+{{/settings-row}}
 
 {{#settings-row
 	"Refresh content"

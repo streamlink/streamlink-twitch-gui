@@ -46,23 +46,29 @@
 {{#if model.advanced}}
 	{{#settings-row
 		"Stream type"
-		"Make sure your player does support the selected stream type."
+		"The player has to support the selected stream type."
 		icon="fa-filter"
 		documentation="--player-passthrough"
 	}}
-		{{drop-down value=model.streaming.player_passthrough content=SettingsStreaming.player_passthrough optionValuePath="value"}}
+		{{drop-down
+			value=model.streaming.player_passthrough
+			content=SettingsStreaming.player_passthrough
+			optionValuePath="value"
+		}}
 	{{/settings-row}}
 
-	{{#if (is-equal model.streaming.player_passthrough "http")}}
-		{{#settings-row
-			"Reconnect"
-			"In case the connection has dropped."
-			icon="fa-refresh"
-			documentation="--player-continuous-http"
+	{{#settings-row
+		"Reconnect"
+		"In case the connection has dropped."
+		icon="fa-refresh"
+		documentation="--player-continuous-http"
+	}}
+		{{check-box
+			"Reconnect to stream"
+			checked=model.streaming.player_reconnect
+			disabled=(bool-not (is-equal model.streaming.player_passthrough "http"))
 		}}
-			{{check-box "Reconnect to stream" checked=model.streaming.player_reconnect}}
-		{{/settings-row}}
-	{{/if}}
+	{{/settings-row}}
 
 	{{#settings-row
 		"Keep player window"
@@ -74,25 +80,36 @@
 		{{check-box "Do not close the player" checked=model.streaming.player_no_close}}
 	{{/settings-row}}
 
-	{{#unless (is-equal model.streaming.player_passthrough "hls")}}
-		{{#settings-row
-			"HLS live edge"
-			"Lowering the value will reduce stream latency, but may also cause buffering."
-			icon="fa-bolt"
-			documentation="--hls-live-edge"
+	{{#settings-row
+		"HLS live edge"
+		"Lowering the value will reduce stream latency, but may also cause buffering."
+		icon="fa-bolt"
+		notes=""
+		documentation="--hls-live-edge"
+	}}
+		{{number-field
+			value=model.streaming.hls_live_edge
+			default=hlsLiveEdgeDefault
+			min=hlsLiveEdgeMin
+			max=hlsLiveEdgeMax
+			disabled=(is-equal model.streaming.player_passthrough "hls")
 		}}
-			{{number-field value=model.streaming.hls_live_edge default=hlsLiveEdgeDefault min=hlsLiveEdgeMin max=hlsLiveEdgeMax}}
-		{{/settings-row}}
+	{{/settings-row}}
 
-		{{#settings-row
-			"HLS segment threads"
-			"Number of threads used for downloading and processing stream segments."
-			icon="fa-sort-amount-asc"
-			documentation="--hls-segment-threads"
+	{{#settings-row
+		"HLS segment threads"
+		"Number of threads used for downloading and processing stream segments."
+		icon="fa-sort-amount-asc"
+		documentation="--hls-segment-threads"
+	}}
+		{{number-field
+			value=model.streaming.hls_segment_threads
+			default=hlsSegmentThreadsDefault
+			min=hlsSegmentThreadsMin
+			max=hlsSegmentThreadsMax
+			disabled=(is-equal model.streaming.player_passthrough "hls")
 		}}
-			{{number-field value=model.streaming.hls_segment_threads default=hlsSegmentThreadsDefault min=hlsSegmentThreadsMin max=hlsSegmentThreadsMax}}
-		{{/settings-row}}
-	{{/unless}}
+	{{/settings-row}}
 {{/if}}
 
 {{#settings-row
@@ -110,7 +127,12 @@
 	icon="fa-rocket"
 	documentation="--retry-open"
 }}
-	{{number-field value=model.streaming.retry_open default=retryOpenDefault min=retryOpenMin max=retryOpenMax}}
+	{{number-field
+		value=model.streaming.retry_open
+		default=retryOpenDefault
+		min=retryOpenMin
+		max=retryOpenMax
+	}}
 {{/settings-row}}
 
 {{#settings-row
@@ -119,6 +141,11 @@
 	icon="fa-hourglass-half"
 	documentation="--retry-streams"
 }}
-	{{number-field value=model.streaming.retry_streams default=retryStreamsDefault min=retryStreamsMin max=retryStreamsMax}}
+	{{number-field
+		value=model.streaming.retry_streams
+		default=retryStreamsDefault
+		min=retryStreamsMin
+		max=retryStreamsMax
+	}}
 {{/settings-row}}
 </fieldset>
