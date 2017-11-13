@@ -13,6 +13,6 @@ test:
     - "clean:tmp_test"
     - "webpack:test"
     - "runtest"
-testdev:
+test:dev:
     - "clean:tmp_test"
     - "webpack:testdev"

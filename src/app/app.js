@@ -1,7 +1,7 @@
 import "shim";
 import { Application } from "ember";
-
-import "initializers";
+import "./logger";
+import "./initializers";
 import modules from "./app-modules";
 
 

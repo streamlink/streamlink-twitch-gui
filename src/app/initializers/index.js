@@ -1,4 +1,3 @@
-import "./logger";
 import "./localstorage";
 import "./store";
 import "./routing-service";
