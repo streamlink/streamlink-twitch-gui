@@ -14,6 +14,9 @@ const { default: updateSettings } = updateSettingsInjector( {
 			fr: { disabled: true }
 		}
 	},
+	"models/localstorage/Settings/streamingPlayer": {
+		typeKey: "type"
+	},
 	"models/stream/qualities": [
 		{ id: "source" },
 		{ id: "high" }
@@ -318,6 +321,10 @@ test( "Fixes attributes", assert => {
 
 	const b = {
 		player: {
+			"default": {
+				exec: "foo",
+				args: "bar"
+			},
 			foo: {
 				params: {
 					foo: "foo",
@@ -335,7 +342,12 @@ test( "Fixes attributes", assert => {
 			streaming: {
 				player: "foo",
 				players: {
+					"default": {
+						exec: "foo",
+						args: "bar"
+					},
 					foo: {
+						type: "settings-streaming-player-foo",
 						exec: null,
 						args: null,
 						foo: "foo",

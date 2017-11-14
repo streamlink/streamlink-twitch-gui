@@ -6,6 +6,9 @@ import {
 	moveAttributesIntoFragment,
 	qualityIdToName
 } from "./utils";
+import {
+	typeKey as streamingPlayerTypeKey
+} from "models/localstorage/Settings/streamingPlayer";
 import qualities from "models/stream/qualities";
 
 
@@ -164,6 +167,9 @@ function fixStreamingPlayers( streaming, settings ) {
 			const player = hasOwnProperty.call( players, name )
 				? players[ name ]
 				: ( players[ name ] = {} );
+			if ( name !== "default" ) {
+				player[ streamingPlayerTypeKey ] = `settings-streaming-player-${name}`;
+			}
 			player[ "exec" ] = data[ "exec" ] || null;
 			player[ "args" ] = data[ "args" ] || null;
 			for ( const [ key, value ] of Object.entries( data[ "params" ] || {} ) ) {
