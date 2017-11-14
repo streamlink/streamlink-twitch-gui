@@ -198,6 +198,55 @@
 			}
 		]
 	},
+	"chatty-standalone": {
+		"label": "Chatty (Standalone)",
+		"exec": {
+			"win32": "Chatty.exe",
+			"darwin": false,
+			"linux": false
+		},
+		"fallback": {
+			"win32": [],
+			"darwin": false,
+			"linux": false
+		},
+		"attributes": [
+			{
+				"name": "exec",
+				"title": "Chatty executable",
+				"description": "Set the path to the Chatty executable.",
+				"icon": "fa-cog",
+				"type": "string",
+				"isFile": true
+			},
+			{
+				"name": "instance",
+				"title": "Single instance mode",
+				"description": "Requires at least version 0.8.2b2.",
+				"icon": "fa-clone",
+				"type": "boolean",
+				"defaultValue": true,
+				"text": "Enable single instance mode"
+			},
+			{
+				"name": "auth",
+				"title": "Authenticate",
+				"description": "Let Chatty re-use the auth data.",
+				"icon": "fa-sign-in",
+				"type": "boolean",
+				"defaultValue": true,
+				"text": "Sign in automatically"
+			},
+			{
+				"name": "args",
+				"title": "Custom Chatty parameters",
+				"description": "Set additional parameters.",
+				"icon": "fa-terminal",
+				"type": "string",
+				"isArgs": true
+			}
+		]
+	},
 	"custom": {
 		"label": "Custom application",
 		"attributes": [
