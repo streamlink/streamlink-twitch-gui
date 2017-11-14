@@ -1,7 +1,7 @@
 <h1>{{displayName}}</h1>
 <div class="logo" {{action "homepage"}}></div>
 {{search-bar}}
-<nav class="buttons">
+<nav class="buttons buttons-main">
 	<button
 		type="button"
 		class="{{if auth.session.isLoggedIn 'btn-user' 'btn-no-user'}} {{if auth.session.isPending 'btn-user-pending'}} {{if notification.enabled 'btn-indicator'}} fa fa-user"
@@ -21,8 +21,10 @@
 	<button type="button" class="btn-reload fa fa-refresh" {{action "nwjs" "reload"}}></button>
 	<button type="button" class="btn-devtools fa fa-code" {{action "nwjs" "devTools"}}></button>
 </nav>
-<nav class="buttons buttons-window">
-	<button type="button" class="btn-min fa fa-minus" {{action "nwjs" "minimize"}}></button>
-	<button type="button" class="btn-max fa fa-plus" {{action "nwjs" "maximize"}}></button>
-	<button type="button" class="btn-close fa fa-times" {{action "nwjs" "close"}}></button>
+<nav class="buttons buttons-window {{if settings.gui.hidebuttons 'buttons-hidden'}}">
+	<div>
+		<button type="button" class="btn-min fa fa-minus" {{action "nwjs" "minimize"}}></button>
+		<button type="button" class="btn-max fa fa-plus" {{action "nwjs" "maximize"}}></button>
+		<button type="button" class="btn-close fa fa-times" {{action "nwjs" "close"}}></button>
+	</div>
 </nav>

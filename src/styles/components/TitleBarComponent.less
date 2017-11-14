@@ -50,15 +50,15 @@
 		margin: 0;
 
 		// divider
-		&:not(:last-of-type) {
-			padding-right: @divider-spacing;
-			margin-right: @divider-spacing;
+		&:not(.buttons-main) {
+			padding-left: @divider-spacing;
+			margin-left: @divider-spacing;
 
-			&::after {
+			&::before {
 				content: "";
 				display: block;
 				position: absolute;
-				right: 0;
+				left: 0;
 				width: @divider-width;
 				top: ( -1 * @padding-top );
 				bottom: -4px;
@@ -69,7 +69,43 @@
 			}
 		}
 
-		> button {
+		&.buttons-window {
+			transition: margin-left @anim-length ease-in, padding-left @anim-length ease-in;
+
+			&::before {
+				opacity: 1;
+				// set width to 0 after the opacity transition has finished
+				transition: width 0.001s, opacity @anim-length ease-in;
+			}
+
+			> div {
+				display: flex;
+				width: ( 3 * @btn-width );
+				overflow: hidden;
+				transition: width @anim-length ease-in;
+			}
+		}
+
+		&.buttons-hidden {
+			margin-left: 0;
+			padding-left: 0;
+
+			&::before,
+			> div {
+				width: 0;
+			}
+
+			&::before {
+				opacity: 0;
+				transition-delay: @anim-length, 0s;
+			}
+
+			button {
+				-webkit-app-region: drag;
+			}
+		}
+
+		button {
 			flex-shrink: 0;
 			width: @btn-width;
 			padding: 0;

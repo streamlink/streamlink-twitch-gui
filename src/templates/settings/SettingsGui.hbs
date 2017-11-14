@@ -46,6 +46,16 @@
 	{{/radio-btns}}
 {{/settings-row}}
 
+{{#if model.advanced}}
+	{{#settings-row
+		"Hide window buttons"
+		"Hide minimize, maximize and close buttons."
+		icon="fa-square"
+	}}
+		{{check-box "Hide buttons" checked=model.gui.hidebuttons}}
+	{{/settings-row}}
+{{/if}}
+
 {{#settings-row
 	"Minimize button"
 	"Click behavior."
@@ -54,7 +64,10 @@
 	{{check-box
 		"Minimize to tray"
 		checked=model.gui.minimizetotray
-		disabled=(bool-not hasBothIntegrations)
+		disabled=(bool-or
+			(bool-not hasBothIntegrations)
+			model.gui.hidebuttons
+		)
 	}}
 {{/settings-row}}
 

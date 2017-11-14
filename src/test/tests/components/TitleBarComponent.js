@@ -74,6 +74,11 @@ module( "components/TitleBarComponent", {
 			transitionTo: this.routingTransitionToSpy,
 			homepage: this.routingHomepageSpy
 		}) );
+		this.owner.register( "service:settings", Service.extend({
+			gui: {
+				hidebuttons: false
+			}
+		}) );
 		this.owner.register( "service:streaming", Service.extend({
 			model: []
 		}) );
@@ -121,6 +126,16 @@ test( "TitleBarComponent", function( assert ) {
 	assert.ok( this.nwjsMaximizeSpy.calledOnce, "Clicking maximize button maximizes the window" );
 	getElem( this.subject, ".btn-close" ).click();
 	assert.ok( this.nwjsCloseSpy.calledOnce, "Clicking close button closes the window" );
+
+	assert.notOk(
+		getElem( this.subject, ".buttons-window" ).hasClass( "buttons-hidden" ),
+		"Window buttons are not hidden by default"
+	);
+	run( () => set( this.subject, "settings.gui.hidebuttons", true ) );
+	assert.ok(
+		getElem( this.subject, ".buttons-window" ).hasClass( "buttons-hidden" ),
+		"Window buttons are now hidden"
+	);
 
 	assert.ok(
 		getElem( this.subject, ".buttons-debug" ).hasClass( "hidden" ),

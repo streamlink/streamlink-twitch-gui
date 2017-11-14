@@ -20,6 +20,7 @@ export default Component.extend({
 	notification: service(),
 	nwjs: service(),
 	routing: service( "-routing" ),
+	settings: service(),
 	streaming: service(),
 
 	layout,

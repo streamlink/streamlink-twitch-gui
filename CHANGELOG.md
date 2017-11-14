@@ -8,6 +8,7 @@ Changelog - Streamlink Twitch GUI
 - Reimplemented the settings structure.
 - Added Vodcast indicators. #478
 - Added desktop shortcut option to the Windows installers. #483
+- Added option to GUI settings to hide window control buttons. #505
 - Fixed application window focus when clicking a notification. #465
 - Fixed banned channels breaking the infinite scroll mechanism. #466
 - Fixed login issues when using multiple accounts. #474
