@@ -31,11 +31,6 @@ export default async function( argv, settings, application ) {
 		setMaximized( true );
 	}
 
-	// minimize window
-	if ( argv[ ARG_MIN ] ) {
-		setMinimized( true );
-	}
-
 	if ( argv[ ARG_TRAY ] ) {
 		const isVisibleInTaskbar = get( settings, "gui.isVisibleInTaskbar" );
 		const isVisibleInTray = get( settings, "gui.isVisibleInTray" );
@@ -51,6 +46,11 @@ export default async function( argv, settings, application ) {
 
 		// show application window
 		setVisibility( true );
+	}
+
+	// minimize window (after the visibility has changed)
+	if ( argv[ ARG_MIN ] ) {
+		setMinimized( true );
 	}
 
 	// go to a new route (or refresh current one)
