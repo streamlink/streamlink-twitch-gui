@@ -16,7 +16,7 @@ config.hidepassed = true;
 
 
 // load tests and then start
-require( [ "tests/tests" ], function() {
+require( [ "tests" ], function() {
 	if ( global._noQUnitBridge ) { return; }
 	if ( global._setupQUnitBridge ) {
 		// bridge injected, set it up and start QUnit
