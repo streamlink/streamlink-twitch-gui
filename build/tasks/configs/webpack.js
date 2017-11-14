@@ -462,8 +462,7 @@ module.exports = {
 			}),
 
 			new webpack.DefinePlugin({
-				DEBUG: false,
-				PATHFIXTURES: JSON.stringify( pTestFixtures )
+				DEBUG: false
 			}),
 
 			// ignore Windows binary dependencies in tests
@@ -512,8 +511,7 @@ module.exports = {
 			}),
 
 			new webpack.DefinePlugin({
-				DEBUG: false,
-				PATHFIXTURES: JSON.stringify( pTestFixtures )
+				DEBUG: false
 			}),
 
 			new NwjsPlugin({
