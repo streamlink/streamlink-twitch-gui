@@ -1,13 +1,18 @@
 import {
 	get,
+	computed,
 	inject,
 	Component
 } from "ember";
-import { main as config } from "config";
+import {
+	main as mainConfig
+} from "config";
+import { isDebug } from "nwjs/debug";
 import layout from "templates/components/TitleBarComponent.hbs";
 
 
 const { service } = inject;
+const { "display-name": displayName } = mainConfig;
 
 
 export default Component.extend({
@@ -15,18 +20,29 @@ export default Component.extend({
 	notification: service(),
 	nwjs: service(),
 	routing: service( "-routing" ),
-	settings: service(),
 	streaming: service(),
 
 	layout,
 	classNames: [ "title-bar-component" ],
 	tagName: "header",
 
-	config,
+	displayName,
+	isDebug,
 
-	dev: DEBUG,
+	userTitle: computed(
+		"auth.session.isLoggedIn",
+		"auth.session.user_name",
+		"notification.statusText",
+		function() {
+			if ( !get( this, "auth.session.isLoggedIn" ) ) {
+				return "You're not logged in";
+			}
+			const user = get( this, "auth.session.user_name" );
+			const notifications = get( this, "notification.statusText" );
 
-	nl: "\n",
+			return `Logged in as ${user}\n${notifications}`;
+		}
+	),
 
 
 	actions: {

@@ -66,6 +66,7 @@ import "tests/routes/mixins/infinite-scroll";
 import "tests/components/PreviewImageComponent";
 import "tests/components/LoadingSpinnerComponent";
 import "tests/components/SettingsSubmitComponent";
+import "tests/components/TitleBarComponent";
 import "tests/components/button/FormButtonComponent";
 import "tests/components/button/FollowButtonComponent";
 import "tests/components/form/CheckBoxComponent";

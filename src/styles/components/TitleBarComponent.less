@@ -1,14 +1,24 @@
 
 .title-bar-component {
+	@btn-width: ( @titlebar-size + 6px );
+	@divider-width: 1px;
+	@divider-spacing: 7px;
+	@anim-length: .333s;
+
+	@padding-top: @app-padding;
+
 	display: flex;
 	width: 100%;
 	height: @titlebar-height;
+	padding: @padding-top ( @app-padding - 4px ) @padding-top @menu-width;
 	-webkit-app-region: drag;
 	animation: animFadeInTop .333s ease-out;
 
 	> h1 {
 		position: absolute;
-		width: 100%;
+		left: 0;
+		right: 0;
+		top: 0;
 		height: 0;
 		margin: 0;
 		overflow: visible;
@@ -21,14 +31,11 @@
 	}
 
 	> .logo {
-		@width: 140px;
-		@height: 46px;
-		@align-top: 9px;
-		@align-left: 3px;
-
+		position: absolute;
+		left: ( @app-padding - 3px );
+		top: ( @app-padding - 9px );
 		width: 140px;
 		height: 46px;
-		margin: ( @app-padding - @align-top ) ( @menu-width - @width - @app-padding + @align-left ) 0 ( @app-padding - @align-left );
 		background: url("../../img/Twitch_Logo_Purple.png") 0 0 no-repeat;
 		background-size: 100%;
 		cursor: pointer;
@@ -36,18 +43,39 @@
 	}
 
 	> .buttons {
+		position: relative;
 		display: flex;
-		flex-direction: row-reverse;
+		flex-shrink: 0;
 		height: @titlebar-size;
-		margin: @app-padding ( @app-padding - 4px ) 0 2.5em;
+		margin: 0;
+
+		// divider
+		&:not(:last-of-type) {
+			padding-right: @divider-spacing;
+			margin-right: @divider-spacing;
+
+			&::after {
+				content: "";
+				display: block;
+				position: absolute;
+				right: 0;
+				width: @divider-width;
+				top: ( -1 * @padding-top );
+				bottom: -4px;
+
+				.theme({
+					background: @theme-titlebar-divider-color;
+				});
+			}
+		}
 
 		> button {
-			width: ( @titlebar-size + 6px );
-			height: @titlebar-size;
+			flex-shrink: 0;
+			width: @btn-width;
 			padding: 0;
 			font-size: @titlebar-btn-fontsize;
 			line-height: ( @titlebar-size - 2px );
-			text-align: center;
+			transition: width @anim-length ease-in;
 			-webkit-app-region: no-drag;
 
 			.theme({
@@ -61,7 +89,18 @@
 				}
 			});
 
+			&::before {
+				display: block;
+				width: @btn-width;
+				text-align: center;
+			}
+
+			&.btn-hidden {
+				width: 0;
+			}
+
 			// adjust wrong line heights for these button icons... blaming font awesome <3
+			// TODO: revisit this when implementing FA5
 			&.btn-max,
 			&.btn-min {
 				line-height: ( @titlebar-size + 2px );
@@ -100,11 +139,8 @@
 			}
 
 			&.btn-indicator {
-				@anim-length: .333s;
-
 				position: relative;
 				overflow: hidden;
-				transition: width @anim-length ease-in;
 
 				> .indicator {
 					display: block;
@@ -114,6 +150,10 @@
 					padding: 0 .2em;
 					border-radius: .2em;
 					font: bold .55em/1.2 @font-name;
+					opacity: 1;
+					z-index: 1;
+					// show indicator with a slight delay
+					transition: opacity .001s @anim-length, z-index .001s @anim-length;
 
 					.theme({
 						.theme-color-and-background( @theme-titlebar-buttonindicator-color, @theme-titlebar-buttonindicator-background );
@@ -127,13 +167,8 @@
 						}
 					});
 
-					opacity: 1;
-					z-index: 1;
-					// "show" with delay
-					transition: opacity .001s @anim-length, z-index .001s @anim-length;
-
 					&.fa {
-						font-family: FontAwesome;
+						font-family: "FontAwesome", sans-serif;
 						font-weight: normal;
 					}
 
@@ -142,33 +177,13 @@
 					}
 				}
 
-				// keep the icon centered during the animation
-				&::before {
-					display: block;
-					padding: 0 .3em;
-				}
-
-				&.btn-hidden {
-					width: 0;
-
-					// "hide" instantly
-					> .indicator {
-						opacity: 0;
-						z-index: -1;
-						transition-delay: 0s;
-					}
+				// hide indicator instantly
+				&.btn-hidden > .indicator {
+					opacity: 0;
+					z-index: -1;
+					transition-delay: 0s;
 				}
 			}
-		}
-
-		> .spacer {
-			width: 1px;
-			height: ( @app-padding + @titlebar-size + 4px );
-			margin: -@app-padding 7px 0;
-
-			.theme({
-				background: @theme-titlebar-divider-color;
-			});
 		}
 	}
 }

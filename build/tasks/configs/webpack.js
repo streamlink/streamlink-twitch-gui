@@ -462,6 +462,7 @@ module.exports = {
 			}),
 
 			new webpack.DefinePlugin({
+				DEBUG: false,
 				PATHFIXTURES: JSON.stringify( pTestFixtures )
 			}),
 
@@ -511,6 +512,7 @@ module.exports = {
 			}),
 
 			new webpack.DefinePlugin({
+				DEBUG: false,
 				PATHFIXTURES: JSON.stringify( pTestFixtures )
 			}),
 
