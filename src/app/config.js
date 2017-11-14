@@ -1,30 +1,13 @@
-import main from "root/config/main.json";
-import dirs from "root/config/dirs.json";
-import log from "root/config/log.json";
-import files from "!files-from-json-loader!root/config/files.json";
-import vars from "root/config/vars.json";
-import update from "root/config/update.json";
-import themes from "root/config/themes.json";
-import langs from "root/config/langs.json";
-import streaming from "root/config/streaming.json";
-import players from "root/config/players.json";
-import twitch from "root/config/twitch.json";
-import notification from "root/config/notification.json";
-import chat from "root/config/chat.json";
-
-
-export {
-	main,
-	dirs,
-	log,
-	files,
-	vars,
-	update,
-	themes,
-	langs,
-	streaming,
-	players,
-	twitch,
-	notification,
-	chat
-};
+export { default as main } from "../config/main.json";
+export { default as dirs } from "../config/dirs.json";
+export { default as log } from "../config/log.json";
+export { default as files } from "!files-from-json-loader!../config/files.json";
+export { default as vars } from "../config/vars.json";
+export { default as update } from "../config/update.json";
+export { default as themes } from "../config/themes.json";
+export { default as langs } from "../config/langs.json";
+export { default as streaming } from "../config/streaming.json";
+export { default as players } from "../config/players.json";
+export { default as twitch } from "../config/twitch.json";
+export { default as notification } from "../config/notification.json";
+export { default as chat } from "../config/chat.json";
