@@ -109,7 +109,7 @@ function updateAttributes( settings ) {
 
 
 function fixAttributes( settings ) {
-	const { gui, streaming, streams, notification } = settings;
+	const { gui, streaming, streams, chat, notification } = settings;
 
 	// fix old gui related attribute values
 	if ( hasOwnProperty.call( gui, "minimize" ) && typeof gui.minimize !== "number" ) {
@@ -127,6 +127,11 @@ function fixAttributes( settings ) {
 
 	// translate old players data
 	fixStreamingPlayers( streaming, settings );
+
+	// fix old chat data
+	if ( hasOwnProperty.call( chat, "provider" ) && chat.provider === "default" ) {
+		chat.provider = "browser";
+	}
 
 	// remove unused or disabled streams language filters
 	if ( typeof streams.languages === "object" ) {

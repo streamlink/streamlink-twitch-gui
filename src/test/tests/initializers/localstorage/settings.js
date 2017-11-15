@@ -280,6 +280,9 @@ test( "Fixes attributes", assert => {
 				nl: true
 			}
 		},
+		chat: {
+			provider: "default"
+		},
 		notification: {
 			provider: "freedesktop"
 		},
@@ -311,7 +314,9 @@ test( "Fixes attributes", assert => {
 					en: false
 				}
 			},
-			chat: {},
+			chat: {
+				provider: "browser"
+			},
 			notification: {
 				provider: "native"
 			}
