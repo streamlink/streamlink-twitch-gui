@@ -47,17 +47,17 @@ export default Mixin.create( Evented, {
 
 			if ( length > 1 && get( this, "settings.notification.grouping" ) ) {
 				// merge multiple notifications and show a single one
-				await this._showNotificationGroup( streams );
+				const data = this._getNotificationDataGroup( streams );
+				await this._showNotification( data );
 
 			} else if ( length > 0 ) {
-				// download all channel icons first and save them into a local temp dir...
-				await Promise.all( streams.map( stream =>
-					iconDownload( stream )
-				) );
-				// show all notifications
-				await Promise.all( streams.map( stream =>
-					this._showNotificationSingle( stream )
-				) );
+				await Promise.all( streams.map( async stream => {
+					// download channel icon first and save it into a local temp dir...
+					await iconDownload( stream );
+					// show notification
+					const data = this._getNotificationDataSingle( stream );
+					await this._showNotification( data );
+				}) );
 			}
 		}
 	),
@@ -65,51 +65,48 @@ export default Mixin.create( Evented, {
 	/**
 	 * Show multiple streams as one notification
 	 * @param {TwitchStream[]} streams
-	 * @returns {Promise}
+	 * @returns {NotificationData}
 	 */
-	async _showNotificationGroup( streams ) {
+	_getNotificationDataGroup( streams ) {
 		const settings = get( this, "settings.notification.click_group" );
 
-		const data = new NotificationData({
-			title  : "Some followed channels have started streaming",
+		return new NotificationData({
+			title: "Some followed channels have started streaming",
 			message: streams.map( stream => ({
-				title  : get( stream, "channel.display_name" ),
+				title: get( stream, "channel.display_name" ),
 				message: get( stream, "channel.status" ) || ""
 			}) ),
-			icon   : iconGroup,
-			click  : () => this._notificationClick( settings, streams ),
+			icon: iconGroup,
+			click: () => this._notificationClick( streams, settings ),
 			settings
 		});
-
-		return this._showNotification( data );
 	},
 
 	/**
 	 * Show a notification for each stream
 	 * @param {TwitchStream} stream
-	 * @returns {Promise}
+	 * @returns {NotificationData}
 	 */
-	async _showNotificationSingle( stream ) {
+	_getNotificationDataSingle( stream ) {
 		const settings = get( this, "settings.notification.click" );
 		const name = get( stream, "channel.display_name" );
 
-		const data = new NotificationData({
-			title  : `${name} has started streaming`,
+		return new NotificationData({
+			title: `${name} has started streaming`,
 			message: get( stream, "channel.status" ) || "",
-			icon   : get( stream, "logo" ) || iconGroup,
-			click  : () => this._notificationClick( settings, [ stream ] ),
+			icon: get( stream, "logo" ) || iconGroup,
+			click: () => this._notificationClick( [ stream ], settings ),
 			settings
 		});
-
-		return this._showNotification( data );
 	},
 
 	/**
 	 * Notfication click callback
-	 * @param {Number} action
 	 * @param {TwitchStream[]} streams
+	 * @param {Number} action
+	 * @returns {Promise}
 	 */
-	_notificationClick( action, streams ) {
+	async _notificationClick( streams, action ) {
 		if ( action === ATTR_NOTIFY_CLICK_NOOP ) {
 			return;
 		}
@@ -131,22 +128,41 @@ export default Mixin.create( Evented, {
 
 		} else if ( action === ATTR_NOTIFY_CLICK_STREAM ) {
 			const streaming = get( this, "streaming" );
-			streams.forEach( stream => streaming.startStream( stream ).catch( () => {} ) );
+			await Promise.all( streams.map( async stream => {
+				// don't await startStream promise and ignore errors
+				streaming.startStream( stream )
+					.catch( () => {} );
+			}) );
 
 		} else if ( action === ATTR_NOTIFY_CLICK_STREAMANDCHAT ) {
 			const streaming = get( this, "streaming" );
-			// TODO: check individual channel settings
-			const openchat = get( this, "settings.streams.chat_open" );
+			const openGlobal = get( this, "settings.streams.chat_open" );
 			const chat = get( this, "chat" );
-			streams.forEach( stream => {
-				streaming.startStream( stream ).catch( () => {} );
-				// don't open the chat twice (startStream may open chat already)
-				if ( !openchat ) {
-					const channel = get( stream, "channel" );
-					chat.openChat( channel )
-						.catch( () => {} );
+
+			await Promise.all( streams.map( async stream => {
+				const channel = get( stream, "channel" );
+				const { streams_chat_open: openChannel } = await channel.getChannelSettings();
+
+				// don't await startStream promise and ignore errors
+				streaming.startStream( stream )
+					.catch( () => {} );
+
+				// TODO: refactor startStream and add another parameter to force opening the chat
+				// chat was already opened by startStream() if
+				// 1. openGlobal is false and openChannel is true
+				// 2. openGlobal is true and openChannel is null
+				// 3. openGlobal is true and openChannel is true
+				// so open it only if
+				// 4. openGlobal is false and openChannel is null
+				// 5. openGlobal is false and openChannel is false
+				// 6. openGlobal is true and openChannel is false
+				if ( openGlobal && openChannel === null || openChannel === true ) {
+					return;
 				}
-			});
+				// don't await openChat promise and ignore errors
+				chat.openChat( channel )
+					.catch( () => {} );
+			}) );
 		}
 	},
 

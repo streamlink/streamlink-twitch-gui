@@ -2,6 +2,7 @@ import {
 	module,
 	test
 } from "qunit";
+import sinon from "sinon";
 import {
 	buildOwner,
 	runDestroy
@@ -11,87 +12,168 @@ import {
 	Service
 } from "ember";
 import notificationServiceDispatchMixinInjector
-	from "inject-loader?-ember!services/NotificationService/dispatch";
-
-
-let owner;
+// eslint-disable-next-line max-len
+	from "inject-loader?-ember&-./data&-models/localstorage/Settings/notification!services/NotificationService/dispatch";
+import {
+	ATTR_NOTIFY_CLICK_NOOP,
+	ATTR_NOTIFY_CLICK_FOLLOWED,
+	ATTR_NOTIFY_CLICK_STREAM,
+	ATTR_NOTIFY_CLICK_STREAMANDCHAT
+} from "models/localstorage/Settings/notification";
 
 
 module( "services/NotificationService/dispatch", {
 	beforeEach() {
-		owner = buildOwner();
+		this.owner = buildOwner();
 
-		owner.register( "service:chat", Service.extend() );
-		owner.register( "service:-routing", Service.extend() );
-		owner.register( "service:settings", Service.extend({
-			notification: {}
+		this.iconDownloadStub = sinon.stub();
+		this.logDebugSpy = sinon.spy();
+		this.showNotificationStub = sinon.stub();
+		this.setMinimizedSpy = sinon.spy();
+		this.setVisibilitySpy = sinon.spy();
+		this.setFocusedSpy = sinon.spy();
+		this.transitionToSpy = sinon.spy();
+		this.openChatStub = sinon.stub();
+		this.startStreamStub = sinon.stub();
+
+		const { default: subject } = notificationServiceDispatchMixinInjector({
+			"./icons": {
+				iconGroup: "group-icon-path",
+				iconDownload: this.iconDownloadStub
+			},
+			"./logger": {
+				logDebug: this.logDebugSpy
+			},
+			"./provider": {
+				showNotification: this.showNotificationStub
+			},
+			"nwjs/Window": {
+				setMinimized: this.setMinimizedSpy,
+				setVisibility: this.setVisibilitySpy,
+				setFocused: this.setFocusedSpy
+			}
+		});
+
+		this.owner.register( "service:notification", Service.extend( subject ) );
+		this.owner.register( "service:chat", Service.extend({
+			openChat: this.openChatStub
 		}) );
-		owner.register( "service:streaming", Service.extend() );
+		this.owner.register( "service:-routing", Service.extend({
+			transitionTo: this.transitionToSpy
+		}) );
+		this.owner.register( "service:settings", Service.extend({
+			notification: {},
+			streams: {}
+		}) );
+		this.owner.register( "service:streaming", Service.extend({
+			startStream: this.startStreamStub
+		}) );
+
+		this.subject = this.owner.lookup( "service:notification" );
 	},
+
 	afterEach() {
-		runDestroy( owner );
-		owner = null;
+		runDestroy( this.owner );
 	}
 });
 
 
-test( "dispatchNotifications", async assert => {
+test( "dispatchNotifications", async function( assert ) {
 
-	assert.expect( 12 );
+	/** @type Sinon.SinonStub icon */
+	const icon = this.iconDownloadStub;
+	const group = sinon.stub();
+	const single = sinon.stub();
+	const show = sinon.spy();
 
-	const streamA = {};
-	const streamB = {};
-	const expectedDownload = [];
-	const expectedNotif = [];
+	function reset() {
+		single.reset();
+		group.reset();
+		icon.reset();
+		show.reset();
+	}
 
-	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"models/localstorage/Settings/notification": {},
-		"nwjs/Window": {},
-		"./logger": {},
-		"./provider": {},
-		"./icons": {
-			async iconDownload( stream ) {
-				assert.step( "download" );
-				assert.strictEqual( stream, expectedDownload.shift(), "Downloads stream icon" );
-			}
-		}
+	this.subject.reopen({
+		_getNotificationDataGroup: group,
+		_getNotificationDataSingle: single,
+		_showNotification: show
 	});
 
-	owner.register( "service:notification", Service.extend( NotificationServiceDispatchMixin, {
-		async _showNotificationGroup( streams ) {
-			assert.step( "group" );
-			assert.propEqual( streams, [ streamA, streamB ], "Shows group notification" );
-		},
-		async _showNotificationSingle( stream ) {
-			assert.step( "single" );
-			assert.strictEqual( stream, expectedNotif.shift(), "Shows the single notification" );
-		}
-	}) );
+	const streamA = { foo: 1 };
+	const streamB = { bar: 2 };
 
-	const settings = owner.lookup( "service:settings" );
-	const service = owner.lookup( "service:notification" );
+	// don't do anything on missing streams
+	await this.subject.dispatchNotifications();
+	assert.notOk( single.called, "Does not create single notification" );
+	assert.notOk( group.called, "Does not create group notification" );
+	assert.notOk( icon.called, "Does not download icons" );
+	assert.notOk( show.called, "Does not show notifications" );
 
-	set( settings, "notification.grouping", true );
-	await service.dispatchNotifications([ streamA, streamB ]);
-	assert.checkSteps( [ "group" ], "Shows group notification" );
+	// don't do anything on empty streams
+	await this.subject.dispatchNotifications( [] );
+	assert.notOk( single.called, "Does not create single notification" );
+	assert.notOk( group.called, "Does not create group notification" );
+	assert.notOk( icon.called, "Does not download icons" );
+	assert.notOk( show.called, "Does not show notifications" );
 
-	set( settings, "notification.grouping", false );
-	expectedDownload.push( streamA, streamB );
-	expectedNotif.push( streamA, streamB );
-	await service.dispatchNotifications([ streamA, streamB ]);
-	assert.checkSteps(
-		[ "download", "download", "single", "single" ],
-		"Shows two single notifications"
+	// enable grouping
+	set( this.subject, "settings.notification.grouping", true );
+
+	// show single notification on a single stream if grouping is enabled
+	single.returns({ one: 1 });
+	await this.subject.dispatchNotifications([ streamA ]);
+	assert.notOk( group.called, "Does not create group notification" );
+	assert.propEqual( icon.args, [ [ streamA ] ], "Downloads icon" );
+	assert.propEqual( single.args, [ [ streamA ] ], "Creates single notification" );
+	assert.ok( icon.calledBefore( single ), "Downloads icon first" );
+	assert.propEqual( show.lastCall.args, [{ one: 1 }], "Shows notification" );
+	reset();
+
+	// show a group notification on multiple streams if grouping is enabled
+	group.returns({ two: 2 });
+	await this.subject.dispatchNotifications([ streamA, streamB ]);
+	assert.notOk( single.called, "Does not show single notification" );
+	assert.propEqual( group.lastCall.args, [ [ streamA, streamB ] ], "Shows group notification" );
+	assert.notOk( icon.called, "Does not download icons" );
+	assert.propEqual( show.lastCall.args, [{ two: 2 }], "Shows notification" );
+	reset();
+
+	// disable grouping
+	set( this.subject, "settings.notification.grouping", false );
+
+	// show multiple single notifications if grouping is disabled
+	single.onFirstCall().returns({ three: 3 });
+	single.onSecondCall().returns({ four: 4 });
+	await this.subject.dispatchNotifications([ streamA, streamB ]);
+	assert.notOk( group.called, "Does not create group notification" );
+	assert.propEqual( icon.args, [ [ streamA ], [ streamB ] ], "Downloads icons" );
+	assert.propEqual( single.args, [ [ streamA ], [ streamB ] ], "Creates single notifications" );
+	assert.ok( icon.firstCall.calledBefore( single.firstCall ), "Downloads icons first" );
+	assert.ok( icon.lastCall.calledBefore( single.lastCall ), "Downloads icons first" );
+	assert.propEqual( show.args, [ [{ three: 3 }], [{ four: 4 }] ], "Shows both notification" );
+	reset();
+
+	// fail icon download
+	icon.onFirstCall().rejects( new Error( "fail" ) );
+	icon.onSecondCall().resolves();
+	single.withArgs( streamA ).returns({ five: 5 });
+	single.withArgs( streamB ).returns({ six: 6 });
+	await assert.rejects(
+		this.subject.dispatchNotifications([ streamA, streamB ]),
+		new Error( "fail" ),
+		"Rejects on download error, but tries to show all notifications"
 	);
+	assert.notOk( group.called, "Does not create group notification" );
+	assert.propEqual( icon.args, [ [ streamA ], [ streamB ] ], "Downloads all icons" );
+	assert.propEqual( single.args, [ [ streamB ] ], "Creates second single notification" );
+	assert.propEqual( show.args, [ [{ six: 6 }] ], "Shows second notification" );
 
 });
 
 
-test( "Group and single notifications", async assert => {
+test( "Group and single notification data", function( assert ) {
 
-	assert.expect( 9 );
-
-	let expectedNotification, expectedSettings, expectedStreams;
+	/** @type {NotificationData} notification */
 	let notification;
 
 	const streamA = {
@@ -107,34 +189,17 @@ test( "Group and single notifications", async assert => {
 		}
 	};
 
-	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"models/localstorage/Settings/notification": {},
-		"nwjs/Window": {},
-		"./logger": {},
-		"./provider": {},
-		"./icons": {
-			iconGroup: "group-icon"
-		}
+	const click = sinon.spy();
+
+	this.subject.reopen({
+		_notificationClick: click
 	});
 
-	owner.register( "service:notification", Service.extend( NotificationServiceDispatchMixin, {
-		async _showNotification( data ) {
-			assert.propEqual( data, expectedNotification, "Shows the notification" );
-			return data;
-		},
-		_notificationClick( settings, streams ) {
-			assert.strictEqual( settings, expectedSettings, "Calls notification click callback" );
-			assert.propEqual( streams, expectedStreams, "Has the correct streams on click" );
-		}
-	}) );
-
-	const settings = owner.lookup( "service:settings" );
-	const service = owner.lookup( "service:notification" );
-
 	// show group notification
-	expectedStreams = [ streamA, streamB ];
-	expectedSettings = 1;
-	expectedNotification = {
+	set( this.subject, "settings.notification.click_group", 1 );
+	notification = this.subject._getNotificationDataGroup([ streamA, streamB ]);
+	notification.click();
+	assert.propEqual( notification, {
 		title: "Some followed channels have started streaming",
 		message: [{
 			title: "foo",
@@ -143,260 +208,159 @@ test( "Group and single notifications", async assert => {
 			title: "bar",
 			message: ""
 		}],
-		icon: "group-icon",
+		icon: "group-icon-path",
 		click: () => {},
-		settings: expectedSettings
-	};
-	set( settings, "notification.click_group", expectedSettings );
-	notification = await service._showNotificationGroup([ streamA, streamB ]);
-	notification.click();
+		settings: 1
+	}, "Returns correct group notification data" );
+	assert.propEqual( click.args, [ [ [ streamA, streamB ], 1 ] ], "Group click callback" );
+	click.reset();
 
-	// show single notification
-	expectedStreams = [ streamA ];
-	expectedSettings = 2;
-	expectedNotification = {
+	// show single notification with logo
+	set( this.subject, "settings.notification.click", 2 );
+	notification = this.subject._getNotificationDataSingle( streamA );
+	notification.click();
+	assert.propEqual( notification, {
 		title: "foo has started streaming",
 		message: "123",
 		icon: "logo",
 		click: () => {},
-		settings: expectedSettings
-	};
-	set( settings, "notification.click", expectedSettings );
-	notification = await service._showNotificationSingle( streamA );
-	notification.click();
+		settings: 2
+	}, "Returns correct single notification data" );
+	assert.propEqual( click.args, [ [ [ streamA ], 2 ] ], "Single click callback" );
+	click.reset();
 
-	// show single notification
-	expectedStreams = [ streamB ];
-	expectedSettings = 3;
-	expectedNotification = {
+	// show single notification without logo
+	set( this.subject, "settings.notification.click", 3 );
+	notification = this.subject._getNotificationDataSingle( streamB );
+	notification.click();
+	assert.propEqual( notification, {
 		title: "bar has started streaming",
 		message: "",
-		icon: "group-icon",
+		icon: "group-icon-path",
 		click: () => {},
-		settings: expectedSettings
+		settings: 3
+	}, "Returns correct single notification data with group icon" );
+	assert.propEqual( click.args, [ [ [ streamB ], 3 ] ], "Single click callback" );
+
+});
+
+
+test( "Notification click", async function( assert ) {
+
+	this.startStreamStub.rejects();
+	this.openChatStub.rejects();
+
+	const reset = () => {
+		this.logDebugSpy.reset();
+		this.transitionToSpy.reset();
+		this.setMinimizedSpy.reset();
+		this.setVisibilitySpy.reset();
+		this.setFocusedSpy.reset();
+		this.startStreamStub.resetHistory();
+		this.openChatStub.resetHistory();
 	};
-	set( settings, "notification.click", expectedSettings );
-	notification = await service._showNotificationSingle( streamB );
-	notification.click();
+
+	class Channel {
+		constructor( settings ) {
+			this.settings = settings;
+		}
+		async getChannelSettings() {
+			return this.settings;
+		}
+	}
+
+	const cA = new Channel({ streams_chat_open: null });
+	const cB = new Channel({ streams_chat_open: false });
+	const cC = new Channel({ streams_chat_open: true });
+	const sA = { channel: cA };
+	const sB = { channel: cB };
+	const sC = { channel: cC };
+
+	// noop
+	await this.subject._notificationClick( [ sA, sB ], ATTR_NOTIFY_CLICK_NOOP );
+	assert.notOk( this.logDebugSpy.called, "Doesn't do anything" );
+	reset();
+
+	// restore GUI (only test ATTR_NOTIFY_CLICK_FOLLOWED)
+	set( this.subject, "settings.notification.click_restore", true );
+
+	// transitionTo with restore option
+	await this.subject._notificationClick( [ sA, sB ], ATTR_NOTIFY_CLICK_FOLLOWED );
+	assert.ok( this.logDebugSpy.called, "Logs click" );
+	assert.propEqual( this.transitionToSpy.args, [ [ "user.followedStreams" ] ], "Shows followed" );
+	assert.propEqual( this.setMinimizedSpy.args, [ [ false ] ], "Restore" );
+	assert.ok( this.setMinimizedSpy.calledBefore( this.transitionToSpy ), "Restore first" );
+	assert.propEqual( this.setVisibilitySpy.args, [ [ true ] ], "Unhide" );
+	assert.ok( this.setVisibilitySpy.calledBefore( this.transitionToSpy ), "Unhide first" );
+	assert.propEqual( this.setFocusedSpy.args, [ [ true ] ], "Focus" );
+	assert.ok( this.setFocusedSpy.calledBefore( this.transitionToSpy ), "Focus first" );
+	reset();
+
+	// disable restore option for now
+	set( this.subject, "settings.notification.click_restore", false );
+
+	// transitionTo
+	await this.subject._notificationClick( [ sA, sB ], ATTR_NOTIFY_CLICK_FOLLOWED );
+	assert.ok( this.logDebugSpy.called, "Logs click" );
+	assert.notOk( this.setMinimizedSpy.called, "Does not restore" );
+	assert.notOk( this.setVisibilitySpy.called, "Does not unhide" );
+	assert.notOk( this.setFocusedSpy.called, "Does not focus" );
+	assert.propEqual( this.transitionToSpy.args, [ [ "user.followedStreams" ] ], "Shows followed" );
+	reset();
+
+	// launch streams and always resolve
+	await this.subject._notificationClick( [ sA, sB, sC ], ATTR_NOTIFY_CLICK_STREAM );
+	assert.ok( this.logDebugSpy.called, "Logs click" );
+	assert.propEqual( this.startStreamStub.args, [ [ sA ], [ sB ], [ sC ] ], "Launches streams" );
+	reset();
+
+	// launch streams+chats and always resolve (global open_chat is false)
+	set( this.subject, "settings.streams.chat_open", false );
+	await this.subject._notificationClick( [ sA, sB, sC ], ATTR_NOTIFY_CLICK_STREAMANDCHAT );
+	assert.ok( this.logDebugSpy.called, "Logs click" );
+	assert.propEqual( this.startStreamStub.args, [ [ sA ], [ sB ], [ sC ] ], "Launches streams" );
+	assert.propEqual( this.openChatStub.args, [ [ cA ], [ cB ] ], "Opens chats A and B" );
+	reset();
+
+	// launch streams+chats and always resolve (global open_chat is true)
+	set( this.subject, "settings.streams.chat_open", true );
+	await this.subject._notificationClick( [ sA, sB, sC ], ATTR_NOTIFY_CLICK_STREAMANDCHAT );
+	assert.ok( this.logDebugSpy.called, "Logs click" );
+	assert.propEqual( this.startStreamStub.args, [ [ sA ], [ sB ], [ sC ] ], "Launches streams" );
+	assert.propEqual( this.openChatStub.args, [ [ cB ] ], "Opens chat B" );
 
 });
 
 
-test( "Notification click", async assert => {
+test( "Show notficiation", async function( assert ) {
 
-	const ATTR_NOTIFY_CLICK_NOOP = 0;
-	const ATTR_NOTIFY_CLICK_FOLLOWED = 1;
-	const ATTR_NOTIFY_CLICK_STREAM = 2;
-	const ATTR_NOTIFY_CLICK_STREAMANDCHAT = 3;
+	const settings = this.owner.lookup( "service:settings" );
+	set( settings, "notification.provider", "provider" );
 
-	const channelA = {};
-	const channelB = {};
-	const streamA = { channel: channelA };
-	const streamB = { channel: channelB };
+	const notification = { foo: 1 };
 
-	let expectedChats = [];
-	let expectedStreams = [];
-
-	let fail = false;
-	let promise;
-
-	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"./provider": {},
-		"./icons": {},
-		"models/localstorage/Settings/notification": {
-			ATTR_NOTIFY_CLICK_NOOP,
-			ATTR_NOTIFY_CLICK_FOLLOWED,
-			ATTR_NOTIFY_CLICK_STREAM,
-			ATTR_NOTIFY_CLICK_STREAMANDCHAT
-		},
-		"nwjs/Window": {
-			setMinimized( val ) {
-				assert.step( "setMinimized" );
-				assert.strictEqual( val, false, "Unminimized window" );
-			},
-			setVisibility( val ) {
-				assert.step( "setVisibility" );
-				assert.strictEqual( val, true, "Shows window" );
-			},
-			setFocused( val ) {
-				assert.step( "setFocused" );
-				assert.strictEqual( val, true, "Focuses window" );
-			}
-		},
-		"./logger": {
-			logDebug() {
-				assert.step( "logDebug" );
-			}
-		}
-	});
-
-	owner.register( "service:notification", Service.extend( NotificationServiceDispatchMixin ) );
-
-	owner.lookup( "service:-routing" ).reopen({
-		transitionTo( route ) {
-			assert.step( "transitionTo" );
-			assert.strictEqual( route, "user.followedStreams", "Transitions to followed streams" );
-		}
-	});
-	owner.lookup( "service:streaming" ).reopen({
-		async startStream( stream ) {
-			assert.step( "startStream" );
-			assert.strictEqual( stream, expectedStreams.shift(), "Launches correct stream" );
-			if ( fail ) {
-				promise = new Promise( resolve => setTimeout( resolve, 1 ) );
-				throw new Error( "fail" );
-			}
-		}
-	});
-	owner.lookup( "service:chat" ).reopen({
-		async openChat( channel ) {
-			assert.step( "chat" );
-			assert.strictEqual( channel, expectedChats.shift(), "Opens correct chat channel" );
-			if ( fail ) {
-				promise = new Promise( resolve => setTimeout( resolve, 1 ) );
-				throw new Error( "fail" );
-			}
-		}
-	});
-
-	const settings = owner.lookup( "service:settings" ).reopen({
-		notification: {
-			click_restore: false
-		},
-		streams: {
-			chat_open: false
-		}
-	});
-	const service = owner.lookup( "service:notification" );
-
-	service._notificationClick( ATTR_NOTIFY_CLICK_NOOP, [ streamA, streamB ] );
-	assert.checkSteps( [], "Doesn't do anything" );
-
-	service._notificationClick( ATTR_NOTIFY_CLICK_FOLLOWED, [ streamA, streamB ] );
-	assert.checkSteps(
-		[ "logDebug", "transitionTo" ],
-		"Transitions to the followed streams route"
+	// resolve
+	this.showNotificationStub.resolves();
+	await this.subject._showNotification( notification );
+	assert.propEqual(
+		this.showNotificationStub.args,
+		[ [ "provider", notification, false ] ],
+		"Shows notification"
 	);
+	this.showNotificationStub.reset();
 
-	expectedStreams.push( streamA, streamB );
-	service._notificationClick( ATTR_NOTIFY_CLICK_STREAM, [ streamA, streamB ] );
-	assert.checkSteps(
-		[ "logDebug", "startStream", "startStream" ],
-		"Opens all streams"
-	);
+	// reject
+	this.showNotificationStub.rejects();
+	await this.subject._showNotification( notification );
+	assert.ok( this.showNotificationStub.called, "Doesn't reject when showNotification rejects" );
+	this.showNotificationStub.reset();
 
-	expectedStreams.push( streamA, streamB );
-	expectedChats.push( channelA, channelB );
-	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
-	assert.checkSteps(
-		[ "logDebug", "startStream", "chat", "startStream", "chat" ],
-		"Opens all streams and chats"
-	);
-
-	expectedStreams.push( streamA, streamB );
-	set( settings, "streams.chat_open", true );
-	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
-	assert.checkSteps(
-		[ "logDebug", "startStream", "startStream" ],
-		"Launches streams only when settings.streams.chat_open is set to true"
-	);
-
-	// restore
-	set( settings, "notification.click_restore", true );
-	const restoreSteps = [ "setMinimized", "setVisibility", "setFocused" ];
-
-	service._notificationClick( ATTR_NOTIFY_CLICK_NOOP, [ streamA, streamB ] );
-	assert.checkSteps( [], "Doesn't do anything" );
-
-	service._notificationClick( ATTR_NOTIFY_CLICK_FOLLOWED, [ streamA, streamB ] );
-	assert.checkSteps(
-		[ "logDebug", ...restoreSteps, "transitionTo" ],
-		"Transitions to the followed streams route"
-	);
-
-	expectedStreams.push( streamA, streamB );
-	service._notificationClick( ATTR_NOTIFY_CLICK_STREAM, [ streamA, streamB ] );
-	assert.checkSteps(
-		[ "logDebug", ...restoreSteps, "startStream", "startStream" ],
-		"Opens all streams"
-	);
-
-	expectedStreams.push( streamA, streamB );
-	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
-	assert.checkSteps(
-		[ "logDebug", ...restoreSteps, "startStream", "startStream" ],
-		"Launches streams only when settings.streams.chat_open is set to true"
-	);
-
-	expectedStreams.push( streamA, streamB );
-	expectedChats.push( channelA, channelB );
-	set( settings, "streams.chat_open", false );
-	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
-	assert.checkSteps(
-		[ "logDebug", ...restoreSteps, "startStream", "chat", "startStream", "chat" ],
-		"Opens all streams and chats"
-	);
-
-	// fail stream or chat
-	fail = true;
-	set( settings, "notification.click_restore", false );
-	expectedStreams.push( streamA, streamB );
-	expectedChats.push( channelA, channelB );
-	service._notificationClick( ATTR_NOTIFY_CLICK_STREAMANDCHAT, [ streamA, streamB ] );
-	await promise;
-	assert.checkSteps(
-		[ "logDebug", "startStream", "chat", "startStream", "chat" ],
-		"Tries to open all streams and chats"
-	);
-
-});
-
-
-test( "Show notficiation", async assert => {
-
-	assert.expect( 9 );
-
-	const notification = {};
-	let failShowNotification = false;
-	let promise, expectedProvider;
-
-	const { default: NotificationServiceDispatchMixin } = notificationServiceDispatchMixinInjector({
-		"models/localstorage/Settings/notification": {},
-		"nwjs/Window": {},
-		"./logger": {},
-		"./icons": {},
-		"./provider": {
-			async showNotification( provider, data, newInst ) {
-				assert.strictEqual( provider, expectedProvider, "Has the correct provider" );
-				assert.strictEqual( data, notification, "Uses the correct notification data" );
-				assert.strictEqual( newInst, false, "Uses cached providers" );
-				promise = new Promise( resolve => setTimeout( resolve, 1 ) );
-				await promise;
-				if ( failShowNotification ) {
-					throw new Error( "fail" );
-				}
-			}
-		}
-	});
-
-	owner.register( "service:notification", Service.extend( NotificationServiceDispatchMixin ) );
-
-	const settings = owner.lookup( "service:settings" );
-	const service = owner.lookup( "service:notification" );
-
-	expectedProvider = "provider";
-	set( settings, "notification.provider", expectedProvider );
-	service._showNotification( notification );
-	await promise;
-
-	expectedProvider = "auto";
-	set( settings, "notification.provider", expectedProvider );
-	service._showNotification( notification );
-	await promise;
-
-	// fail (doesn't throw exceptions)
-	failShowNotification = true;
-	service._showNotification( notification );
-	await promise;
+	// reject later
+	let reject;
+	const promise = new Promise( ( _, r ) => reject = r );
+	this.showNotificationStub.returns( promise );
+	await this.subject._showNotification( notification );
+	reject();
+	assert.ok( this.showNotificationStub.called, "Doesn't reject when showNotification rejects" );
 
 });
