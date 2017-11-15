@@ -7,10 +7,16 @@ const StreamOutputBuffer = require( "../app/utils/StreamOutputBuffer" );
 module.exports = function() {
 	const callback = this.async();
 
-	const { dependencyProperties, packageNpm, packageBower } = this.query;
+	const {
+		dependencyProperties,
+		packageNpm,
+		packageBower,
+		donationConfigFile
+	} = this.query;
 
 	this.addDependency( packageNpm );
 	this.addDependency( packageBower );
+	this.addDependency( donationConfigFile );
 	this.cacheable( false );
 
 	const readFile = denodify( FS.readFile );
@@ -89,9 +95,9 @@ module.exports = function() {
 	}
 
 	function getDonationData() {
-		return process.env.hasOwnProperty( "RELEASES_DONATION" )
-			? JSON.parse( process.env.RELEASES_DONATION )
-			: [];
+		return readFile( donationConfigFile )
+			.then( JSON.parse )
+			.then( data => data[ "donation" ] );
 	}
 
 

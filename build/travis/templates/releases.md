@@ -11,6 +11,6 @@
 If you think that this application is helpful, please consider supporting the creator by donating.
 Thank you very much!
 
-<% donation.forEach(function( item ) { %>* [<%= item.text %>](<%= item.url %>)<% if ( item.coinaddress ) { %> (`<%= item.coinaddress %>`)<% } %>
+<% JSON.parse( donation ).forEach(function( item ) { %>* [<%= item.text %>](<%= item.url %>)<% if ( item.coinaddress ) { %> (`<%= item.coinaddress %>`)<% } %>
 <% }) %>
 <% } %>

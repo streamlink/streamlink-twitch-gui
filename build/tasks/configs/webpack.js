@@ -71,7 +71,8 @@ const commonLoaders = [
 		options: {
 			dependencyProperties: [ "dependencies", "devDependencies" ],
 			packageNpm: r( pProjectRoot, "package.json" ),
-			packageBower: r( pProjectRoot, "bower.json" )
+			packageBower: r( pProjectRoot, "bower.json" ),
+			donationConfigFile: r( pConfig, "main.json" )
 		}
 	},
 	// Vendor stylesheets (don't parse anything)
