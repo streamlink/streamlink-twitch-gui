@@ -42,7 +42,7 @@
 		"grunt-template": "1.0.0",
 		"grunt-webpack": "github:bastimeyer/grunt-webpack#v3/nested-plugin-templates",
 		"html-webpack-plugin": "2.29.0",
-		"inject-loader": "github:plasticine/inject-loader#8be6a68e46c5382a45eb5d2c247866b5b925eb5b",
+		"inject-loader": "3.0.1",
 		"json-loader": "0.5.4",
 		"less": "2.7.2",
 		"less-loader": "4.0.5",
