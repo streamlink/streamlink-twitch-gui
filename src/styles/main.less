@@ -40,17 +40,18 @@ body {
 
 
 * {
-	-webkit-user-select: none;
+	user-select: none;
 }
 
 [data-selectable] {
 	&, & :not([data-not-selectable]) {
 		cursor: text;
-		-webkit-user-select: initial;
+		user-select: text !important;
 	}
 	a:not([data-not-selectable]) {
 		&, & * {
 			cursor: pointer;
+			user-select: all !important;
 		}
 	}
 }

@@ -7,7 +7,6 @@ import {
 import {
 	themes as themesConfig
 } from "config";
-import guiSelectable from "gui/selectable";
 import {
 	enable as enableSmoothScroll,
 	disable as disableSmoothScroll
@@ -61,7 +60,6 @@ export default Component.extend({
 	},
 
 	didInsertElement() {
-		guiSelectable();
 		this.disableGlobalDragAndDrop();
 		this._super( ...arguments );
 	},
