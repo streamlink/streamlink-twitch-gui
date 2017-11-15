@@ -1,4 +1,4 @@
-const reUrl = /^(?:https?:\/\/)?(?:(?:www|secure)\.)?twitch\.tv\/(\w+)(?:\/profile)?$/;
+const reUrl = /^(?:https?:\/\/)?(?:(?:www|secure|go)\.)?twitch\.tv\/(\w+)(?:\/profile)?$/;
 const blacklist = [ "directory", "login", "signup", "logout", "settings" ];
 
 

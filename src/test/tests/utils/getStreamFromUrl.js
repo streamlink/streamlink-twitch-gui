@@ -41,6 +41,7 @@ test( "Valid URLs", function( assert ) {
 	assert.equal( getStreamFromUrl( "twitch.tv/name" ), "name" );
 	assert.equal( getStreamFromUrl( "www.twitch.tv/name" ), "name" );
 	assert.equal( getStreamFromUrl( "secure.twitch.tv/name" ), "name" );
+	assert.equal( getStreamFromUrl( "go.twitch.tv/name" ), "name" );
 	assert.equal( getStreamFromUrl( "http://twitch.tv/name" ), "name" );
 	assert.equal( getStreamFromUrl( "https://twitch.tv/name" ), "name" );
 	assert.equal( getStreamFromUrl( "twitch.tv/name/profile" ), "name" );
