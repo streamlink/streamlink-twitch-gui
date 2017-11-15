@@ -143,12 +143,17 @@
 		},
 		"jar": {
 			"win32": "chatty.jar",
-			"darwin": "chatty.jar",
+			"darwin": [
+				"Chatty.jar",
+				"chatty.jar"
+			],
 			"linux": "chatty.jar"
 		},
 		"jarfallback": {
-			"win32": [],
-			"darwin": [],
+			"win32": false,
+			"darwin": [
+				"/Applications/Chatty"
+			],
 			"linux": [
 				"/usr/share/chatty"
 			]
