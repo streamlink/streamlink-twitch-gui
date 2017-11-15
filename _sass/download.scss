@@ -58,7 +58,6 @@
 	}
 
 	.icon-links {
-		width: 25rem;
 		margin: 0 auto;
 
 		a {
@@ -70,6 +69,9 @@
 			font-family: inherit;
 
 			&::before {
+				display: block;
+				width: 2rem;
+				height: 2rem;
 				font-size: 2rem;
 				font-family: FontAwesome;
 			}
@@ -95,6 +97,10 @@
 				&::after {
 					opacity: 1;
 				}
+			}
+
+			&.fa-file-text::before {
+				font-size: 1.725rem;
 			}
 		}
 	}
