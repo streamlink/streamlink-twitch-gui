@@ -226,7 +226,6 @@ module.exports = {
 				"components"  : r( pApp, "components" ),
 				"store"       : r( pApp, "store" ),
 				"utils"       : r( pApp, "utils" ),
-				"gui"         : r( pApp, "gui" ),
 
 				// explicit lib/module paths
 				"shim"        : r( pRoot, "shim" ),

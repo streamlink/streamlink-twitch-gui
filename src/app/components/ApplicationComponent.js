@@ -10,7 +10,7 @@ import {
 import {
 	enable as enableSmoothScroll,
 	disable as disableSmoothScroll
-} from "gui/smoothscroll";
+} from "smoothscroll";
 import layout from "templates/components/ApplicationComponent.hbs";
 
 
