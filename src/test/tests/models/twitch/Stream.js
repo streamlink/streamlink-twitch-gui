@@ -41,7 +41,6 @@ module( "models/twitch/Stream", {
 	beforeEach() {
 		owner = buildOwner();
 
-		owner.register( "service:auth", Service.extend() );
 		owner.register( "model:twitch-stream", Stream );
 		owner.register( "adapter:twitch-stream", StreamAdapter );
 		owner.register( "serializer:twitch-stream", StreamSerializer );
@@ -49,6 +48,13 @@ module( "models/twitch/Stream", {
 		owner.register( "serializer:twitch-channel", ChannelSerializer );
 		owner.register( "model:twitch-image", TwitchImage );
 		owner.register( "serializer:twitch-image", ImageSerializer );
+
+		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:settings", Service.extend({
+			streams: {
+				vodcast_regexp: ""
+			}
+		}) );
 
 		env = setupStore( owner );
 	},
@@ -180,30 +186,47 @@ test( "Adapter and Serializer (many)", assert => {
 
 test( "Computed properties", assert => {
 
-	const record = env.store.createRecord( "twitchStream", {} );
+	const channel = env.store.createRecord( "twitchChannel", {
+		status: ""
+	});
+	const record = env.store.createRecord( "twitchStream", { channel } );
 
 
 	// vodcast
 
+	assert.ok( get( record, "reVodcast" ) instanceof RegExp, "Has a default vodcast RegExp" );
+
+	set( record, "settings.streams.vodcast_regexp", " " );
+	assert.strictEqual( get( record, "reVodcast" ), null, "Returns null on empty RegExp" );
+
+	set( record, "settings.streams.vodcast_regexp", "(" );
+	assert.strictEqual( get( record, "reVodcast" ), null, "Returns null on invalid RegExp" );
+
+	set( record, "settings.streams.vodcast_regexp", "I'm a vodcast" );
+	assert.ok( get( record, "reVodcast" ).test( "I'M A VODCAST" ), "Has a custom vodcast RegExp" );
+
 	assert.notOk( get( record, "isVodcast" ), "Not a vodcast" );
 
-	run( () => setProperties( record, {
+	setProperties( record, {
 		broadcast_platform: "watch_party",
 		stream_type: "live"
-	}) );
+	});
 	assert.ok( get( record, "isVodcast" ), "Is a vodcast now" );
 
-	run( () => setProperties( record, {
+	setProperties( record, {
 		broadcast_platform: "live",
 		stream_type: "watch_party"
-	}) );
+	});
 	assert.ok( get( record, "isVodcast" ), "Is still a vodcast" );
 
-	run( () => setProperties( record, {
+	setProperties( record, {
 		broadcast_platform: "live",
 		stream_type: "live"
-	}) );
+	});
 	assert.notOk( get( record, "isVodcast" ), "Not a vodcast anymore" );
+
+	set( record, "channel.status", "I'm a vodcast" );
+	assert.ok( get( record, "isVodcast" ), "Is a vodcast because of its title" );
 
 
 	// titleCreatedAt

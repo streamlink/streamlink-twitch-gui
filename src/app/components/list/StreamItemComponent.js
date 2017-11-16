@@ -102,8 +102,8 @@ export default ListItemComponent.extend({
 
 
 	fadeVodcast: computed( "content.isVodcast", "settings.streams.filter_vodcast", function() {
-		return get( this, "content.isVodcast" )
-		    && get( this, "settings.streams.filter_vodcast" );
+		return get( this, "settings.streams.filter_vodcast" )
+		    && get( this, "content.isVodcast" );
 	}),
 
 

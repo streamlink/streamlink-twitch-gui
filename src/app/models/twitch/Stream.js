@@ -1,6 +1,7 @@
 import {
 	get,
-	computed
+	computed,
+	inject
 } from "ember";
 import {
 	attr,
@@ -8,9 +9,19 @@ import {
 	Model
 } from "ember-data";
 import Moment from "moment";
+import { DEFAULT_VODCAST_REGEXP } from "models/localstorage/Settings/streams";
 
 
 const { and } = computed;
+const { service } = inject;
+
+
+/**
+ * @typedef {Object} FPSRange
+ * @property {Number} target
+ * @property {Number} min
+ * @property {Number} max
+ */
 
 /**
  * Try to fix the weird fps numbers received from twitch...
@@ -32,13 +43,6 @@ const fpsRanges = [
 	{ target: 144, min: 142, max: 146 }
 ];
 
-/**
- * @typedef {Object} FPSRange
- * @property {Number} target
- * @property {Number} min
- * @property {Number} max
- */
-
 
 export default Model.extend({
 	average_fps: attr( "number" ),
@@ -54,14 +58,47 @@ export default Model.extend({
 	video_height: attr( "number" ),
 	viewers: attr( "number" ),
 
-	hasFormatInfo: and( "video_height", "average_fps" ),
 
+	settings: service(),
+
+
+	reVodcast: computed( "settings.streams.vodcast_regexp", function() {
+		const vodcast_regexp = get( this, "settings.streams.vodcast_regexp" );
+		if ( vodcast_regexp.length && !vodcast_regexp.trim().length ) {
+			return null;
+		}
+		try {
+			return new RegExp( vodcast_regexp || DEFAULT_VODCAST_REGEXP, "i" );
+		} catch ( e ) {
+			return null;
+		}
+	}),
 
 	// both properties are not documented in the v5 API
-	isVodcast: computed( "broadcast_platform", "stream_type", function() {
-		return get( this, "broadcast_platform" ) === "watch_party"
-		    || get( this, "stream_type" ) === "watch_party";
-	}),
+	isVodcast: computed(
+		"broadcast_platform",
+		"stream_type",
+		"reVodcast",
+		"channel.status",
+		function() {
+			if (
+				   get( this, "broadcast_platform" ) === "watch_party"
+				|| get( this, "stream_type" ) === "watch_party"
+			) {
+				return true;
+			}
+
+			const reVodcast = get( this, "reVodcast" );
+			const status = get( this, "channel.status" );
+
+			return reVodcast && status
+				? reVodcast.test( status )
+				: false;
+		}
+	),
+
+
+	hasFormatInfo: and( "video_height", "average_fps" ),
 
 
 	titleCreatedAt: computed( "created_at", function() {

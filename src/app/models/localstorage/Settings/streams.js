@@ -18,6 +18,9 @@ export const ATTR_STREAMS_CLICK_CHAT = 2;
 export const ATTR_STREAMS_CLICK_CHANNEL = 3;
 export const ATTR_STREAMS_CLICK_SETTINGS = 4;
 
+// eslint-disable-next-line max-len
+export const DEFAULT_VODCAST_REGEXP = "\\b(not live|re-?(run|streaming)|(vod-?|re-?broad)cast(ing)?)\\b";
+
 
 export default Fragment.extend({
 	name: attr( "number", { defaultValue: ATTR_STREAMS_NAME_BOTH } ),
@@ -30,6 +33,8 @@ export default Fragment.extend({
 	twitchemotes: attr( "boolean", { defaultValue: false } ),
 
 	filter_vodcast: attr( "boolean", { defaultValue: true } ),
+	vodcast_regexp: attr( "string", { defaultValue: "" } ),
+
 	filter_languages: attr( "boolean", { defaultValue: false } ),
 	languages: fragment( "settingsStreamsLanguages", { defaultValue: {} } ),
 

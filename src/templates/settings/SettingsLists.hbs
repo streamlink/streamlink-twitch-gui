@@ -23,6 +23,23 @@
 	{{check-box "Fade out Vodcasts" checked=model.streams.filter_vodcast}}
 {{/settings-row}}
 
+{{#if model.advanced}}
+	{{#settings-row
+		"Custom Vodcast filtering"
+		"Find untagged Vodcasts/Rebroadcasts."
+		icon="fa-search"
+		notes="A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression."
+	}}
+		{{input
+			type="text"
+			value=model.streams.vodcast_regexp
+			placeholder=DEFAULT_VODCAST_REGEXP
+			class="col-xs-12"
+		}}
+	{{/settings-row}}
+{{/if}}
+
+
 {{#settings-row
 	"Info bar"
 	"Bottom bar inside the stream preview."
