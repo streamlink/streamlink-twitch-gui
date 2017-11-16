@@ -26,7 +26,7 @@ Changelog - Streamlink Twitch GUI
 - Fixed some tooltips showing a channel's ID instead of its name.
 - Fixed channel page layout with empty descriptions. #498
 - Fixed application not closing correctly sometimes.
-- Upgraded NW.js to 0.26.1
+- Upgraded NW.js to 0.26.6 (Chromium 62.0.3202.94 / Node 9.1.0)
 - \[dev] Switched from npm to yarn.
 - \[dev] Added a TODO list.
 
