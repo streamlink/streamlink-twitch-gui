@@ -1,5 +1,5 @@
 import { get } from "ember";
-import UserIndexRoute from "routes/UserIndexRoute";
+import UserIndexRoute from "./UserIndexRoute";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import RefreshRouteMixin from "mixins/RefreshRouteMixin";
 import { toArray } from "utils/ember/recordArrayMethods";

@@ -5,7 +5,7 @@ import {
 	EmberObject
 } from "ember";
 import { PromiseObject } from "ember-data";
-import SettingsSubmenuRoute from "routes/SettingsSubmenuRoute";
+import SettingsSubmenuRoute from "./SettingsSubmenuRoute";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import preload from "utils/preload";
 
