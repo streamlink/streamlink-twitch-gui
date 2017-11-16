@@ -52,7 +52,25 @@
 		{{/settings-row}}
 	{{/if}}
 {{/if}}
+</fieldset>
 
+<fieldset class="{{unless model.advanced 'hidden'}}">
+{{#settings-row
+	"Custom Vodcast filtering"
+	"Find untagged Vodcasts/Rebroadcasts."
+	icon="fa-search"
+	notes="A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression."
+}}
+	{{input
+		type="text"
+		value=model.streams.vodcast_regexp
+		placeholder=DEFAULT_VODCAST_REGEXP
+		class="col-xs-12"
+	}}
+{{/settings-row}}
+</fieldset>
+
+<fieldset>
 {{#settings-row
 	"Hide stream popup"
 	"When a stream has started."

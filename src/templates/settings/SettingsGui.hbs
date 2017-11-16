@@ -1,16 +1,3 @@
-{{#if model.advanced}}
-<fieldset>
-	{{#settings-row
-		"Command line actions"
-		"Listen to signals sent by second application instances."
-		icon="fa-terminal"
-		notes="See the wiki for a list of available actions and parameters."
-	}}
-		{{check-box "Allow external commands" checked=model.gui.externalcommands}}
-	{{/settings-row}}
-</fieldset>
-{{/if}}
-
 <fieldset>
 {{#settings-row
 	"OS integration"

@@ -10,6 +10,7 @@ import qualities, {
 	qualitiesLivestreamer,
 	qualitiesStreamlink
 } from "models/stream/qualities";
+import { DEFAULT_VODCAST_REGEXP } from "models/localstorage/Settings/streams";
 
 
 const { providers } = streamingConfig;
@@ -26,5 +27,7 @@ export default Controller.extend({
 
 	qualitiesLivestreamer,
 	qualitiesStreamlink,
-	qualities
+	qualities,
+
+	DEFAULT_VODCAST_REGEXP
 });
