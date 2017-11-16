@@ -3,7 +3,9 @@ import {
 	getWithDefault,
 	computed
 } from "ember";
-import { twitch } from "config";
+import {
+	twitch as twitchConfig
+} from "config";
 import { openBrowser } from "nwjs/Shell";
 import ListItemComponent from "components/list/ListItemComponent";
 import Moment from "moment";
@@ -16,7 +18,7 @@ const {
 		"edit-url": subscriptionEditUrl,
 		"cancel-url": subscriptionCancelUrl
 	}
-} = twitch;
+} = twitchConfig;
 
 
 export default ListItemComponent.extend({
@@ -50,9 +52,25 @@ export default ListItemComponent.extend({
 		return new Moment().to( access_end );
 	}).volatile(),
 
+	subbedFor: computed(
+		"content.purchase_profile.consecutive_months",
+		"channel.subscribed.created_at",
+		function() {
+			const months = Number( get( this, "content.purchase_profile.consecutive_months" ) );
+			if ( !isNaN( months ) && months > 0 ) {
+				return months;
+			}
+			const started = get( this, "channel.subscribed.created_at" );
+
+			return started
+				? new Moment().diff( new Moment( started ), "months" )
+				: 0;
+		}
+	),
+
 
 	openBrowser( url ) {
-		const channel = get( this, "channel.name" );
+		const channel = get( this, "product.short_name" );
 
 		return openBrowser( url, {
 			channel
