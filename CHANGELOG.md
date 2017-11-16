@@ -3,9 +3,19 @@ Changelog - Streamlink Twitch GUI
 
 ## Master
 
-- Reimplemented the notification system.
-- Reimplemented the chat system.
-- Reimplemented the settings structure.
+- Changed default Streamlink (and Livestreamer) parameters.  
+  Please see the "Player input" option in the "Streaming" settings menu and make sure that your player supports the selected method.  
+- Re-implemented the chat system.  
+  Please select the desired chat application in the chat settings menu.  
+  Old chat settings won't be used.
+- Re-implemented the notifications system.  
+  - Now queries the API several times if more channels are streaming than one API response can contain.  
+  - Uses Chromium's new freedesktop notification implementation on Linux.
+- Re-implemented application settings.  
+  - Cleaned up the internal settings data structure.
+  - Renamed and reordered settings submenus.
+  - Moved certain settings to different submenus.
+- Re-implemented several other components and modules.
 - Added Vodcast indicators. #478
 - Added desktop shortcut option to the Windows installers. #483
 - Added option to GUI settings to hide window control buttons. #505
@@ -13,9 +23,9 @@ Changelog - Streamlink Twitch GUI
 - Fixed banned channels breaking the infinite scroll mechanism. #466
 - Fixed login issues when using multiple accounts. #474
 - Fixed chat application opening again when restarting a stream. #475
-- Fixed tooltips showing channel IDs instead of their name.
+- Fixed some tooltips showing a channel's ID instead of its name.
 - Fixed channel page layout with empty descriptions. #498
-- Fixed application closing correctly sometimes.
+- Fixed application not closing correctly sometimes.
 - Upgraded NW.js to 0.26.1
 - \[dev] Switched from npm to yarn.
 - \[dev] Added a TODO list.
