@@ -2,186 +2,293 @@ import {
 	module,
 	test
 } from "qunit";
+import sinon from "sinon";
 import {
 	runDestroy,
 	buildOwner
 } from "test-utils";
 import {
 	set,
-	setOwner,
 	sendEvent,
 	computed,
-	run,
 	EmberObject,
 	Service
 } from "ember";
-import refreshRouteMixinInjector from "inject-loader?nwjs/Window!mixins/RefreshRouteMixin";
+import refreshMixinInjector from "inject-loader?-ember!routes/mixins/refresh";
 import { EventEmitter } from "events";
 
 
-const nwWindow = new EventEmitter();
-const {
-	"default": RefreshRouteMixin,
-	PROP_LAST,
-	PROP_DEFER
-} = refreshRouteMixinInjector({
-	"nwjs/Window": nwWindow
-});
-
-
-let dateNow;
-let owner;
+const { hasOwnProperty } = {};
 
 
 module( "routes/mixins/refresh", {
 	beforeEach() {
-		dateNow = Date.now;
-		owner = buildOwner();
+		this.clock = sinon.useFakeTimers({
+			target: window
+		});
+		this.events = new EventEmitter();
+
+		this.threshold = 1000;
+		this.refreshes = 0;
+
+		const {
+			default: RefreshMixin,
+			PROP_LAST,
+			PROP_DEFER,
+			TIME_DEBOUNCE
+		} = refreshMixinInjector({
+			"nwjs/Window": {
+				__esModule: true,
+				default: this.events,
+				window
+			}
+		});
+
+		this.PROP_LAST = PROP_LAST;
+		this.PROP_DEFER = PROP_DEFER;
+		this.TIME_DEBOUNCE = TIME_DEBOUNCE;
+
+		const ModalService = Service.extend({
+			isModalOpened: false
+		});
+		const SettingsService = Service.extend({
+			gui: {
+				focusrefresh: computed( () => this.threshold ).volatile()
+			}
+		});
+		const Route = EmberObject.extend( RefreshMixin );
+
+		this.owner = buildOwner();
+		this.owner.register( "service:modal", ModalService );
+		this.owner.register( "service:settings", SettingsService );
+		this.owner.register( "route:route", Route );
+
+		this.subject = this.owner.lookup( "route:route" );
+
+		this.refreshSpy = sinon.spy( this.subject, "refresh" );
 	},
+
 	afterEach() {
-		runDestroy( owner );
-		owner = null;
-		Date.now = dateNow;
+		this.clock.restore();
+		runDestroy( this.owner );
 	}
 });
 
 
-test( "Application window focus gain", assert => {
+test( "Activate", function( assert ) {
 
-	let threshold = 10;
-	let refreshes = 0;
+	const { subject, events, PROP_LAST, PROP_DEFER } = this;
 
-	const ModalService = Service.extend({
-		isModalOpened: false
-	});
-	const SettingsService = Service.extend({
-		gui: {
-			focusrefresh: computed(function() {
-				return threshold;
-			}).volatile()
-		}
-	});
-	const route = EmberObject.extend( RefreshRouteMixin, {
-		_refreshOnFocusGain() {
-			this._refreshFocusGain();
-		},
-		_refreshOnFocusLoss() {
-			this._refreshFocusLoss();
-		},
-		refresh() {
-			++refreshes;
-			return this._super( ...arguments );
-		}
-	}).create();
-
-	owner.register( "service:modal", ModalService );
-	owner.register( "service:settings", SettingsService );
-	setOwner( route, owner );
-
-
-	// initial
-
-	assert.ok(
-		!route.hasOwnProperty( PROP_LAST ) && !route.hasOwnProperty( PROP_DEFER ),
+	assert.notOk(
+		   hasOwnProperty.call( subject, PROP_LAST )
+		|| hasOwnProperty.call( subject, PROP_DEFER ),
 		"Does not have refresh properties set unless activated"
 	);
 
-
-	// entering the route
-
-	sendEvent( route, "activate" );
-
+	sendEvent( subject, "activate" );
 	assert.ok(
-		route.hasOwnProperty( PROP_LAST ) && route.hasOwnProperty( PROP_DEFER ),
+		   hasOwnProperty.call( subject, PROP_LAST )
+		&& hasOwnProperty.call( subject, PROP_DEFER ),
 		"Does have refresh properties set after being activated"
 	);
-	assert.deepEqual(
-		nwWindow.eventNames(),
+	assert.propEqual(
+		events.eventNames(),
 		[ "focus", "restore", "blur", "minimize" ],
-		"The nwWindow object has all required events registered"
+		"All required events are registered"
 	);
 
-	nwWindow.emit( "focus" );
-	nwWindow.emit( "restore" );
-	assert.strictEqual(
-		refreshes,
-		0,
-		"Doesn't refresh on focus/restore while still being focused"
-	);
+	subject[ PROP_LAST ] = 123;
+	sendEvent( subject, "activate" );
+	assert.strictEqual( subject[ PROP_LAST ], 123, "Doesn't initialize twice" );
+
+});
 
 
-	// refresh route when regaining focus
+test( "Debounce events", function( assert ) {
 
-	Date.now = () => 100;
-	nwWindow.emit( "blur" );
-	assert.strictEqual( route[ PROP_LAST ], 100, "Remembers time on focus loss" );
+	const { subject, events, clock, TIME_DEBOUNCE } = this;
 
-	Date.now = () => 109;
-	nwWindow.emit( "focus" );
-	assert.strictEqual( refreshes, 0, "Doesn't refresh when time diff is smaller than threshold" );
+	const onFocusGain = sinon.stub( subject, "_refreshOnFocusGain" );
+	const onFocusLoss = sinon.stub( subject, "_refreshOnFocusLoss" );
 
-	Date.now = () => 100;
-	nwWindow.emit( "minimize" );
-	assert.strictEqual( route[ PROP_LAST ], 100, "Remembers time when getting minimized" );
+	sendEvent( subject, "activate" );
 
-	Date.now = () => 110;
-	nwWindow.emit( "restore" );
-	assert.strictEqual( refreshes, 1, "Refreshes when time diff is gte threshold" );
+	// single focus event
+	clock.setSystemTime( 0 );
+	events.emit( "focus" );
+	clock.tick( TIME_DEBOUNCE - 1 );
+	assert.notOk( onFocusGain.called, "Hasn't called onFocusGain yet" );
+	clock.tick( 1 );
+	assert.ok( onFocusGain.called, "Has called onFocusGain now" );
+	onFocusGain.resetHistory();
 
-	threshold = 0;
-	refreshes = 0;
+	// single restore event
+	clock.setSystemTime( 0 );
+	events.emit( "restore" );
+	clock.tick( TIME_DEBOUNCE - 1 );
+	assert.notOk( onFocusGain.called, "Hasn't called onFocusGain yet" );
+	clock.tick( 1 );
+	assert.ok( onFocusGain.called, "Has called onFocusGain now" );
+	onFocusGain.resetHistory();
 
-	Date.now = () => 100;
-	nwWindow.emit( "blur" );
-	Date.now = () => 110;
-	nwWindow.emit( "focus" );
-	assert.strictEqual( refreshes, 0, "Doesn't refresh when threshold is zero" );
+	// single blur event
+	clock.setSystemTime( 0 );
+	events.emit( "blur" );
+	clock.tick( TIME_DEBOUNCE - 1 );
+	assert.notOk( onFocusLoss.called, "Hasn't called onFocusLoss yet" );
+	clock.tick( 1 );
+	assert.ok( onFocusLoss.called, "Has called onFocusLoss now" );
+	onFocusLoss.resetHistory();
+
+	// single minimize event
+	clock.setSystemTime( 0 );
+	events.emit( "minimize" );
+	clock.tick( TIME_DEBOUNCE - 1 );
+	assert.notOk( onFocusLoss.called, "Hasn't called onFocusLoss yet" );
+	clock.tick( 1 );
+	assert.ok( onFocusLoss.called, "Has called onFocusLoss now" );
+	onFocusLoss.resetHistory();
+
+	// focus and restore events
+	clock.setSystemTime( 0 );
+	events.emit( "focus" );
+	clock.tick( TIME_DEBOUNCE - 1 );
+	events.emit( "restore" );
+	clock.tick( TIME_DEBOUNCE - 1 );
+	assert.notOk( onFocusGain.called, "Hasn't called onFocusGain yet" );
+	clock.tick( 1 );
+	assert.ok( onFocusGain.called, "Has called onFocusGain now" );
+	onFocusGain.resetHistory();
+
+	// blur and minimize events
+	clock.setSystemTime( 0 );
+	events.emit( "blur" );
+	clock.tick( TIME_DEBOUNCE - 1 );
+	events.emit( "minimize" );
+	clock.tick( TIME_DEBOUNCE - 1 );
+	assert.notOk( onFocusLoss.called, "Hasn't called onFocusLoss yet" );
+	clock.tick( 1 );
+	assert.ok( onFocusLoss.called, "Has called onFocusLoss now" );
+	onFocusLoss.resetHistory();
+
+});
 
 
-	// opened modal dialog
+test( "Refresh", function( assert ) {
+
+	const { subject, events, clock, TIME_DEBOUNCE, PROP_LAST } = this;
+
+	assert.ok( this.threshold > TIME_DEBOUNCE, "Threshold is greater than debounce time" );
+
+	sendEvent( subject, "activate" );
+
+	events.emit( "focus" );
+	events.emit( "restore" );
+	clock.tick( TIME_DEBOUNCE );
+	assert.notOk( this.refreshSpy.called, "Doesn't refresh on focus/restore without focus loss" );
+
+	// blur
+	this.refreshSpy.reset();
+	clock.setSystemTime( 0 );
+	events.emit( "blur" );
+	clock.tick( TIME_DEBOUNCE );
+	assert.strictEqual( subject[ PROP_LAST ], TIME_DEBOUNCE, "Remembers blur time" );
+
+	// focus too early
+	clock.setSystemTime( this.threshold - 1 );
+	events.emit( "focus" );
+	clock.tick( TIME_DEBOUNCE );
+	assert.notOk( this.refreshSpy.called, "Doesn't refresh when focused too early" );
+
+	// focus
+	clock.setSystemTime( this.threshold );
+	events.emit( "focus" );
+	clock.tick( TIME_DEBOUNCE );
+	assert.ok( this.refreshSpy.calledOnce, "Refreshes once focus threshold has been reached" );
+
+	// minimize
+	this.refreshSpy.reset();
+	clock.setSystemTime( 0 );
+	events.emit( "minimize" );
+	clock.tick( TIME_DEBOUNCE );
+	assert.strictEqual( subject[ PROP_LAST ], TIME_DEBOUNCE, "Remembers minimize time" );
+
+	// restore too early
+	clock.setSystemTime( this.threshold - 1 );
+	events.emit( "restore" );
+	clock.tick( TIME_DEBOUNCE );
+	assert.notOk( this.refreshSpy.called, "Doesn't refresh when restored too early" );
+
+	// restore
+	clock.setSystemTime( this.threshold );
+	events.emit( "restore" );
+	clock.tick( TIME_DEBOUNCE );
+	assert.ok( this.refreshSpy.calledOnce, "Refreshes once restore threshold has been reached" );
+
+	// disable refresh logic
+	this.refreshSpy.reset();
+	clock.setSystemTime( 0 );
+	this.threshold = 0;
+	events.emit( "blur" );
+	clock.tick( TIME_DEBOUNCE );
+	events.emit( "focus" );
+	clock.tick( TIME_DEBOUNCE );
+	assert.notOk( this.refreshSpy.called, "Doesn't refresh when threshold is zero" );
+
+});
+
+
+test( "Modal dialog", function( assert ) {
+
+	const { subject, events, clock, threshold, TIME_DEBOUNCE, PROP_DEFER } = this;
+
+	sendEvent( subject, "activate" );
 
 	function regainFocusWithModalDialog() {
-		threshold = 10;
-		refreshes = 0;
-		run( () => set( route, "modal.isModalOpened", true ) );
+		clock.setSystemTime( 0 );
+		set( subject, "modal.isModalOpened", true );
 
-		Date.now = () => 100;
-		nwWindow.emit( "blur" );
-		Date.now = () => 110;
-		nwWindow.emit( "focus" );
+		events.emit( "blur" );
+		clock.tick( TIME_DEBOUNCE );
+		clock.tick( threshold );
+		events.emit( "focus" );
+		clock.tick( TIME_DEBOUNCE );
 	}
 
 	regainFocusWithModalDialog();
-	assert.strictEqual( refreshes, 0, "Doesn't refresh when modal is opened" );
-	assert.strictEqual( route[ PROP_DEFER ], true, "Defers route refresh when modal is opened" );
+	assert.notOk( this.refreshSpy.called, "Doesn't refresh if modal is opened" );
+	assert.strictEqual( subject[ PROP_DEFER ], true, "Defers refresh if modal is opened" );
 
-	run( () => set( route, "modal.isModalOpened", false ) );
-	assert.strictEqual( refreshes, 1, "Refreshes when modal gets closed" );
-	assert.strictEqual( route[ PROP_DEFER ], false, "Doen't defer events when modal closes" );
-
-	regainFocusWithModalDialog();
-	route.refresh();
-	assert.strictEqual( route[ PROP_DEFER ], false, "Doesn't defer events after refreshing" );
+	set( subject, "modal.isModalOpened", false );
+	assert.ok( this.refreshSpy.calledOnce, "Refreshes when modal gets closed" );
+	assert.strictEqual( subject[ PROP_DEFER ], false, "Doesn't defer after closing the modal" );
 
 	regainFocusWithModalDialog();
+	subject.refresh();
+	this.refreshSpy.reset();
+	assert.strictEqual( subject[ PROP_DEFER ], false, "Doesn't defer after refreshing" );
+	set( subject, "modal.isModalOpened", false );
+	assert.notOk( this.refreshSpy.called, "Doesn't refresh when modal gets closed afterwards" );
+
+});
 
 
-	// leaving the route
+test( "Deactivate", function( assert ) {
 
-	sendEvent( route, "deactivate" );
+	const { subject, events, PROP_LAST, PROP_DEFER } = this;
+
+	set( subject, "modal.isModalOpened", true );
+	sendEvent( subject, "activate" );
+	sendEvent( subject, "deactivate" );
 
 	assert.ok(
-		!route.hasOwnProperty( PROP_LAST ) && !route.hasOwnProperty( PROP_DEFER ),
+		   !hasOwnProperty.call( subject, PROP_LAST )
+		&& !hasOwnProperty.call( subject, PROP_DEFER ),
 		"Does not have refresh properties set anymore after being deactivated"
 	);
-	assert.deepEqual(
-		nwWindow.eventNames(),
-		[],
-		"The nwWindow object doesn't have any events registered anymore after deactivating"
-	);
+	assert.propEqual( events.eventNames(), [], "Unregisters events when deactivating route" );
 
-	run( () => set( route, "modal.isModalOpened", false ) );
-
-	assert.strictEqual( refreshes, 0, "Doesn't try to refresh when modal closes after leaving" );
+	set( subject, "modal.isModalOpened", false );
+	assert.notOk( this.refreshSpy.called, "Doesn't refresh when modal closes" );
 
 });
