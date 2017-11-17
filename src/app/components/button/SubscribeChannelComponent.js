@@ -5,7 +5,7 @@ import {
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "components/button/FormButtonComponent";
-import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
+import TwitchInteractButtonMixin from "../mixins/twitch-interact-button";
 import HotkeyMixin from "mixins/HotkeyMixin";
 
 
