@@ -6,15 +6,15 @@
 
 {{#if games.length}}
 {{#if notFiltered}}<h3>Games</h3>{{/if}}
-{{#content-list games infiniteScroll=false classNames="search-games" as |item|}}
-{{game-item content=item}}
+{{#content-list games infiniteScroll=(bool-not notFiltered) classNames="search-games" as |item isNewItem isDuplicate|}}
+{{game-item content=item isNewItem=(if notFiltered false isNewItem) isDuplicate=isDuplicate}}
 {{/content-list}}
 {{/if}}
 
 {{#if channels.length}}
 {{#if notFiltered}}<h3>Channels</h3>{{/if}}
-{{#content-list channels infiniteScroll=false classNames="search-channels" as |item|}}
-{{channel-item content=item}}
+{{#content-list channels infiniteScroll=(bool-not notFiltered) classNames="search-channels" as |item isNewItem isDuplicate|}}
+{{channel-item content=item isNewItem=(if notFiltered false isNewItem) isDuplicate=isDuplicate}}
 {{/content-list}}
 {{/if}}
 

@@ -25,6 +25,7 @@ Changelog - Streamlink Twitch GUI
 - Fixed chat application opening again when restarting a stream. #475
 - Fixed some tooltips showing a channel's ID instead of its name.
 - Fixed channel page layout with empty descriptions. #498
+- Fixed infinite scrolling in the search results.
 - Fixed application not closing correctly sometimes.
 - Upgraded NW.js to 0.26.6 (Chromium 62.0.3202.94 / Node 9.1.0)
 - \[dev] Switched from npm to yarn.
