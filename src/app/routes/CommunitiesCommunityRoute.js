@@ -17,7 +17,7 @@ export default Route.extend( RefreshMixin, {
 		} catch ( e ) {
 			record = await store.queryRecord( "twitchCommunity", { name: community_id } );
 		}
-		await preload( "avatar_image_url" )( record );
+		await preload( record, "avatar_image_url" );
 
 		return record;
 	}

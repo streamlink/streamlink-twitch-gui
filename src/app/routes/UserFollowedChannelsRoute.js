@@ -28,7 +28,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshMixin, {
 			direction: params.direction || "desc"
 		})
 			.then( mapBy( "channel" ) )
-			.then( preload( "logo" ) );
+			.then( records => preload( records, "logo" ) );
 	},
 
 	fetchContent() {

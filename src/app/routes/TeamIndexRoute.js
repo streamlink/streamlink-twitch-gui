@@ -53,7 +53,7 @@ export default Route.extend( InfiniteScrollMixin, {
 		};
 
 		return fill( [], offset )
-			.then( preload( "preview.mediumLatest" ) );
+			.then( records => preload( records, "preview.mediumLatest" ) );
 	},
 
 	reload() {

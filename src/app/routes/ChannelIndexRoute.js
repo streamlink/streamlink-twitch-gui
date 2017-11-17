@@ -17,9 +17,7 @@ export default Route.extend({
 				.filterBy( "kind", "default" )
 				.sortBy( "display_order" )
 				// preload all panel images
-				.map( panel => Promise.resolve( panel )
-					.then( preload( "image" ) )
-				)
+				.map( panel => preload( panel, "image" ) )
 			) )
 			.then( panels => ({ stream, channel, panels }) );
 	},

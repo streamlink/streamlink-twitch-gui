@@ -12,6 +12,6 @@ export default Route.extend( RefreshMixin, {
 		const { team } = params;
 
 		return store.findRecord( "twitchTeam", team, { reload: true } )
-			.then( preload( "logo" ) );
+			.then( record => preload( record, "logo" ) );
 	}
 });

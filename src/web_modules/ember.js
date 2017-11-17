@@ -38,6 +38,7 @@ export const run = Ember.run;
 // classes
 export const EmberNativeArray = Ember.A;
 export const Application = Ember.Application;
+export const ArrayProxy = Ember.ArrayProxy;
 export const Binding = Ember.Binding;
 export const Component = Ember.Component;
 export const ComputedProperty = Ember.ComputedProperty;

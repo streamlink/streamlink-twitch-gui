@@ -21,6 +21,6 @@ export default Route.extend( InfiniteScrollMixin, {
 
 		return Promise.all( channels )
 			.then( toArray() )
-			.then( preload( "logo" ) );
+			.then( records => preload( records, "logo" ) );
 	}
 });

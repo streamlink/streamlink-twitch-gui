@@ -22,7 +22,7 @@ export default Route.extend( RefreshMixin, {
 		])
 			.then( ([ summary, featured ]) =>
 				Promise.resolve( featured )
-					.then( preload([
+					.then( records => preload( records, [
 						"image",
 						"stream.preview.largeLatest"
 					]) )

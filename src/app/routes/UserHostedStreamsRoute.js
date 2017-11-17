@@ -30,7 +30,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshMixin, {
 							: stream.reload();
 
 						return promise
-							.then( preload( "preview.mediumLatest" ) );
+							.then( records => preload( records, "preview.mediumLatest" ) );
 					});
 
 				// wait for everything to resolve and return the hosts list

@@ -36,7 +36,7 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 							return PromiseObject.create({
 								promise: store.findRecord( "twitchUser", name )
 									.then( user => get( user, "channel" ) )
-									.then( preload( "logo" ) )
+									.then( channel => preload( channel, "logo" ) )
 							});
 						})
 					}).create();

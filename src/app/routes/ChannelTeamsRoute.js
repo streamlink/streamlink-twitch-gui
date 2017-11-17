@@ -16,6 +16,6 @@ export default Route.extend( InfiniteScrollMixin, {
 		const { channel } = this.modelFor( "channel" );
 
 		return store.query( this.modelName, { channel: get( channel, "id" ) } )
-			.then( preload( "logo" ) );
+			.then( records => preload( records, "logo" ) );
 	}
 });

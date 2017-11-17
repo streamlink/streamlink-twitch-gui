@@ -29,7 +29,7 @@ export default Route.extend( InfiniteScrollMixin, FilterLanguagesMixin, {
 			community_id
 		})
 			.then( toArray() )
-			.then( preload( "preview.mediumLatest" ) );
+			.then( records => preload( records, "preview.mediumLatest" ) );
 	},
 
 	refresh() {

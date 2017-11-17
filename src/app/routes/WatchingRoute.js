@@ -19,7 +19,7 @@ export default Route.extend( RefreshMixin, {
 
 		return Promise.resolve( records )
 			.then( mapBy( "stream" ) )
-			.then( preload( "preview.largeLatest" ) )
+			.then( records => preload( records, "preview.largeLatest" ) )
 			// return the original record array
 			.then(function() { return records; });
 	}

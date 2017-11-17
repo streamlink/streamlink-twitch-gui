@@ -56,14 +56,12 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 						return res;
 					}, [] );
 
-				let preloadChannelPromise = Promise.resolve( tickets ).then( preload([
+				const preloadChannelPromise = preload( tickets, [
 					"product.channel.logo",
 					"product.channel.profile_banner",
 					"product.channel.video_banner"
-				]) );
-				let preloadEmoticonsPromise = Promise.resolve( emoticons ).then( preload(
-					"url"
-				) );
+				]);
+				const preloadEmoticonsPromise = preload( emoticons, "url" );
 
 				return Promise.all([
 					preloadChannelPromise,

@@ -44,7 +44,7 @@ export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 					live : true
 				})
 					.then( toArray() )
-					.then( preload( "game.box.largeLatest" ) )
+					.then( records => preload( records, "game.box.largeLatest" ) )
 				: Promise.resolve( [] ),
 
 			// search for channels
@@ -55,7 +55,7 @@ export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 					limit : 10
 				})
 					.then( mapBy( "channel" ) )
-					.then( preload( "logo" ) )
+					.then( records => preload( records, "logo" ) )
 				: Promise.resolve( [] ),
 
 			// search for streams
@@ -66,7 +66,7 @@ export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 					limit : get( this, "limit" )
 				})
 					.then( mapBy( "stream" ) )
-					.then( preload( "preview.mediumLatest" ) )
+					.then( records => preload( records, "preview.mediumLatest" ) )
 				: Promise.resolve( [] )
 		])
 			.then( ([ games, channels, streams ]) => ({ games, channels, streams }) );
@@ -83,6 +83,6 @@ export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 			limit : get( this, "limit" )
 		})
 			.then( mapBy( "stream" ) )
-			.then( preload( "preview.mediumLatest" ) );
+			.then( records => preload( records, "preview.mediumLatest" ) );
 	}
 });

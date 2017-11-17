@@ -37,11 +37,11 @@ export default Route.extend( RefreshMixin, {
 		}
 
 		const model = { stream, channel };
-		await preload([
+		await preload( model, [
 			"stream.preview.largeLatest",
 			"channel.logo",
 			"channel.video_banner"
-		])( model );
+		]);
 
 		return model;
 	}
