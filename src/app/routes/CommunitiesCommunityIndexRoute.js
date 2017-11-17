@@ -4,12 +4,12 @@ import {
 	Route
 } from "ember";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import LanguageFilterMixin from "mixins/LanguageFilterMixin";
+import FilterLanguagesMixin from "./mixins/filter-languages";
 import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default Route.extend( InfiniteScrollMixin, LanguageFilterMixin, {
+export default Route.extend( InfiniteScrollMixin, FilterLanguagesMixin, {
 	itemSelector: ".stream-item-component",
 
 	modelName: "twitchStream",
