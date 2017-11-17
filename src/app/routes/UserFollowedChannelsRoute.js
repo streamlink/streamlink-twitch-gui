@@ -27,7 +27,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshMixin, {
 			sortby   : params.sortby || "created_at",
 			direction: params.direction || "desc"
 		})
-			.then( mapBy( "channel" ) )
+			.then( records => mapBy( records, "channel" ) )
 			.then( records => preload( records, "logo" ) );
 	},
 

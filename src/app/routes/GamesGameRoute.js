@@ -26,7 +26,7 @@ export default Route.extend( InfiniteScrollMixin, FilterLanguagesMixin, RefreshM
 			limit               : get( this, "limit" ),
 			broadcaster_language: get( this, "broadcaster_language" )
 		})
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			.then( records => preload( records, "preview.mediumLatest" ) );
 	},
 

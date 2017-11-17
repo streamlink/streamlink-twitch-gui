@@ -18,7 +18,7 @@ export default Route.extend( RefreshMixin, {
 		let records = get( this, "streaming.model" );
 
 		return Promise.resolve( records )
-			.then( mapBy( "stream" ) )
+			.then( records => mapBy( records, "stream" ) )
 			.then( records => preload( records, "preview.largeLatest" ) )
 			// return the original record array
 			.then(function() { return records; });

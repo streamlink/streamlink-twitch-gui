@@ -4,24 +4,22 @@ import {
 } from "ember";
 
 
-const slice = [].slice;
-
-
 function factory( fn ) {
-	return function() {
-		let args = slice.call( arguments );
+	/**
+	 * @param {Enumerable} enumerable
+	 * @param {...*} args
+	 * @returns {Array}
+	 */
+	return function( enumerable, ...args ) {
+		const meta = get( enumerable, "meta" );
 
-		return function( recordArray ) {
-			let meta = get( recordArray, "meta" );
+		enumerable = enumerable[ fn ]( ...args );
 
-			recordArray = recordArray[ fn ]( ...args );
+		if ( meta ) {
+			set( enumerable, "meta", meta );
+		}
 
-			if ( meta ) {
-				set( recordArray, "meta", meta );
-			}
-
-			return recordArray;
-		};
+		return enumerable;
 	};
 }
 

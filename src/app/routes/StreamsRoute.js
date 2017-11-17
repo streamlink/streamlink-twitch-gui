@@ -21,7 +21,7 @@ export default Route.extend( InfiniteScrollMixin, FilterLanguagesMixin, RefreshM
 		const broadcaster_language = get( this, "broadcaster_language" );
 
 		return store.query( this.modelName, { offset, limit, broadcaster_language })
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			.then( records => preload( records, "preview.mediumLatest" ) );
 	}
 });

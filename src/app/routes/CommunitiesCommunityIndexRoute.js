@@ -28,7 +28,7 @@ export default Route.extend( InfiniteScrollMixin, FilterLanguagesMixin, {
 			broadcaster_language,
 			community_id
 		})
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			.then( records => preload( records, "preview.mediumLatest" ) );
 	},
 

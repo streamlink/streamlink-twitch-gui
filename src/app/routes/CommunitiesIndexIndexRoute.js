@@ -22,7 +22,7 @@ export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 		const featured = get( this, "featured" );
 
 		return store.query( "twitchCommunityTop", { cursor, limit, featured } )
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			.then( records => preload( records, "avatar_image_url" ) )
 			.then( records => {
 				const cursor = get( records, "meta.cursor" );

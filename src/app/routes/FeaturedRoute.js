@@ -18,7 +18,7 @@ export default Route.extend( RefreshMixin, {
 				offset: 0,
 				limit : 5
 			})
-				.then( toArray() )
+				.then( records => toArray( records ) )
 		])
 			.then( ([ summary, featured ]) =>
 				Promise.resolve( featured )

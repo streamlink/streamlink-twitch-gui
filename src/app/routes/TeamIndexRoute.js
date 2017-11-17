@@ -30,7 +30,7 @@ export default Route.extend( InfiniteScrollMixin, {
 				store.findRecord( "twitchStream", get( channel, "id" ), { reload: true } )
 					.catch( () => false )
 			) )
-				.then( toArray() )
+				.then( records => toArray( records ) )
 				// filter offline streams
 				.then( streams => streams.filter( Boolean ) )
 				// append to overall list

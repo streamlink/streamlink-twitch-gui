@@ -16,7 +16,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshMixin, {
 			offset: get( this, "offset" ),
 			limit: get( this, "limit" )
 		})
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			.then( records => {
 				// The target (stream) reference is loaded asynchronously
 				// just get the PromiseProxy object and wait for it to resolve

@@ -20,7 +20,7 @@ export default Route.extend( InfiniteScrollMixin, {
 			.slice( offset, offset + limit );
 
 		return Promise.all( channels )
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			.then( records => preload( records, "logo" ) );
 	}
 });

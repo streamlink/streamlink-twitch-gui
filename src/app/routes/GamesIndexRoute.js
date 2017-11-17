@@ -18,7 +18,7 @@ export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 			offset: get( this, "offset" ),
 			limit : get( this, "limit" )
 		})
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			.then( records => preload( records, "game.box.large" ) );
 	}
 });

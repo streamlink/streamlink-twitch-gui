@@ -18,7 +18,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshMixin, {
 		const limit = get( this, "limit" );
 
 		return store.query( this.modelName, { offset, limit } )
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			.then( records => preload( records, this.preloadPath ) );
 	}
 });

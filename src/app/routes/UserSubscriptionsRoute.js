@@ -19,7 +19,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 			limit  : get( this, "limit" ),
 			unended: true
 		})
-			.then( toArray() )
+			.then( records => toArray( records ) )
 			// filter out unwanted ticket types (eg. twitch turbo)
 			.then( this.filterFetchedContent( "product.ticket_type", "chansub" ) )
 			// load all channel references asynchronously (get the EmberData.PromiseObject)
