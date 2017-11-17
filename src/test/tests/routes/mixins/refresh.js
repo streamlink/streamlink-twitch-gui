@@ -33,7 +33,7 @@ let dateNow;
 let owner;
 
 
-module( "mixins/RefreshRouteMixin", {
+module( "routes/mixins/refresh", {
 	beforeEach() {
 		dateNow = Date.now;
 		owner = buildOwner();

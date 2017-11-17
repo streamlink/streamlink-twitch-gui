@@ -1,12 +1,12 @@
 import { get } from "ember";
 import UserIndexRoute from "./UserIndexRoute";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import RefreshRouteMixin from "mixins/RefreshRouteMixin";
+import RefreshMixin from "./mixins/refresh";
 import { mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
+export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshMixin, {
 	itemSelector: ".channel-item-component",
 
 	queryParams: {

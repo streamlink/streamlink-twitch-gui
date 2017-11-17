@@ -10,7 +10,6 @@ importAll( require.context( "./helpers/", true, /\.js$/ ) );
 importAll( require.context( "./models/", true, /\.js$/ ) );
 importAll( require.context( "./store/", true, /\.js$/ ) );
 importAll( require.context( "./initializers/", true, /\.js$/ ) );
-importAll( require.context( "./mixins/", true, /\.js$/ ) );
 importAll( require.context( "./routes/", true, /\.js$/ ) );
 importAll( require.context( "./components/", true, /\.js$/ ) );
 importAll( require.context( "./services/", true, /\.js$/ ) );

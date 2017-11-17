@@ -3,7 +3,7 @@ import {
 	Route
 } from "ember";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import RefreshRouteMixin from "mixins/RefreshRouteMixin";
+import RefreshMixin from "./mixins/refresh";
 import {
 	toArray,
 	mapBy
@@ -16,7 +16,7 @@ function filterMatches( filter, value ) {
 }
 
 
-export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
+export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 	contentPath: "controller.model.streams",
 
 	itemSelector: ".stream-item-component",

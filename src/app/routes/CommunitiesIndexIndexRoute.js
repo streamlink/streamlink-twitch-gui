@@ -5,12 +5,12 @@ import {
 	Route
 } from "ember";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import RefreshRouteMixin from "mixins/RefreshRouteMixin";
+import RefreshMixin from "./mixins/refresh";
 import preload from "utils/preload";
 import { toArray } from "utils/ember/recordArrayMethods";
 
 
-export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
+export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 	itemSelector: ".community-item-component",
 
 	featured: true,

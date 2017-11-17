@@ -3,12 +3,12 @@ import {
 	Route
 } from "ember";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import RefreshRouteMixin from "mixins/RefreshRouteMixin";
+import RefreshMixin from "./mixins/refresh";
 import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
+export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
 	itemSelector: ".game-item-component",
 
 	modelName: "twitchGameTop",

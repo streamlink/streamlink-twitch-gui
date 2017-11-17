@@ -2,11 +2,11 @@ import {
 	get,
 	Route
 } from "ember";
-import RefreshRouteMixin from "mixins/RefreshRouteMixin";
+import RefreshMixin from "./mixins/refresh";
 import preload from "utils/preload";
 
 
-export default Route.extend( RefreshRouteMixin, {
+export default Route.extend( RefreshMixin, {
 	model( params ) {
 		const store = get( this, "store" );
 		const { team } = params;
