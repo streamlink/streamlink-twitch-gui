@@ -105,11 +105,15 @@ export default Mixin.create({
 		});
 		defineProperty( this, "offset", computedOffset );
 
-		const offset = get( this, "offset" );
+		// length=offset on the first fetch
+		const length = get( this, "offset" );
 		const limit = get( this, "limit" );
+		const data = get( this, contentPath );
+		const total = this._getTotal( data );
+		const hasFetchedAll = this._calcHasFetchedAll( length, 0, limit, total );
 
 		setProperties( controller, {
-			hasFetchedAll: offset < limit,
+			hasFetchedAll,
 			isFetching: false
 		});
 	},
@@ -140,6 +144,38 @@ export default Mixin.create({
 			return filtered;
 		};
 	},
+
+
+	/**
+	 * @param {Object} data
+	 * @returns {(number|null)}
+	 */
+	_getTotal( data ) {
+		// try to get the "total" metadata value
+		const metadataPath = get( this, "fetchMetadataPath" );
+		if ( !data || !metadataPath ) {
+			return null;
+		}
+		const total = get( data, metadataPath );
+		if ( total === null ) {
+			return null;
+		}
+		const parsed = Number( total );
+		if ( isNaN( parsed ) || parsed < 1 ) {
+			return null;
+		}
+		return parsed;
+	},
+
+	_calcHasFetchedAll( length, offset, limit, total ) {
+		// invalid or empty data
+		return !length
+			// has no metadata and not enough data to fill the whole request
+			|| total === null && length < limit
+			// has metadata and has fetched everything
+			|| total !== null && offset + length >= total;
+	},
+
 
 	actions: {
 		willTransition() {
@@ -186,34 +222,14 @@ export default Mixin.create({
 				const length = data
 					? get( data, "length" )
 					: 0;
+				const total = this._getTotal( data );
 
-				// try to get the "total" metadata value
-				let total = null;
-				const metadataPath = get( this, "fetchMetadataPath" );
-				if ( data && metadataPath ) {
-					total = get( data, metadataPath );
-					if ( total !== null ) {
-						total = Number( total );
-						if ( isNaN( total ) || total < 1 ) {
-							total = null;
-						}
-					}
-				}
-				const hasMetadata = total !== null;
-
-				if (
-					// invalid or empty data
-					   !length
-					// has no metadata and not enough data to fill the whole request
-					|| !hasMetadata && length < limit
-					// has metadata and has fetched everything
-					|| hasMetadata && offset + length >= total
-				) {
+				if ( this._calcHasFetchedAll( length, offset, limit, total ) ) {
 					set( controller, "hasFetchedAll", true );
 				}
 
 				// fix offset if content was missing from the response (banned channels, etc.)
-				if ( hasMetadata && length < limit && offset + length < total ) {
+				if ( total !== null && length < limit && offset + length < total ) {
 					this.incrementProperty( "_filter", limit - length );
 				}
 
