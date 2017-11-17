@@ -1,4 +1,4 @@
-import ListItemComponent from "components/list/ListItemComponent";
+import ListItemComponent from "./ListItemComponent";
 import layout from "templates/components/list/ChannelItemComponent.hbs";
 
 

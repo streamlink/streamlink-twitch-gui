@@ -4,7 +4,7 @@ import {
 } from "ember";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
-import FormButtonComponent from "components/button/FormButtonComponent";
+import FormButtonComponent from "./FormButtonComponent";
 import TwitchInteractButtonMixin from "../mixins/twitch-interact-button";
 import HotkeyMixin from "../mixins/hotkey";
 

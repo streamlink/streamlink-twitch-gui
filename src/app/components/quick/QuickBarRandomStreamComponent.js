@@ -5,7 +5,7 @@ import {
 	inject
 } from "ember";
 import { vars } from "config";
-import FormButtonComponent from "components/button/FormButtonComponent";
+import FormButtonComponent from "../button/FormButtonComponent";
 import FilterLanguagesMixin from "routes/mixins/filter-languages";
 
 

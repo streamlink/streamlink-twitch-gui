@@ -2,7 +2,7 @@ import {
 	get,
 	inject
 } from "ember";
-import EmbeddedHtmlLinksComponent from "components/link/EmbeddedHtmlLinksComponent";
+import EmbeddedHtmlLinksComponent from "../link/EmbeddedHtmlLinksComponent";
 import Menu from "nwjs/Menu";
 import { openBrowser } from "nwjs/Shell";
 import { set as setClipboard } from "nwjs/Clipboard";

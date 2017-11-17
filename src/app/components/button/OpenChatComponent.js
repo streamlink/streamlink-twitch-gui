@@ -2,7 +2,7 @@ import {
 	get,
 	inject
 } from "ember";
-import FormButtonComponent from "components/button/FormButtonComponent";
+import FormButtonComponent from "./FormButtonComponent";
 import HotkeyMixin from "../mixins/hotkey";
 
 

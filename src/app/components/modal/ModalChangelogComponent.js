@@ -1,7 +1,7 @@
 import { get } from "ember";
 import { main as config } from "config";
 import { manifest } from "nwjs/App";
-import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import ModalDialogComponent from "./ModalDialogComponent";
 import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalChangelogComponent.hbs";
 

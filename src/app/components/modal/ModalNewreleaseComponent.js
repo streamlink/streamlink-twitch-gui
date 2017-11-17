@@ -3,7 +3,7 @@ import {
 	computed,
 	inject
 } from "ember";
-import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import ModalDialogComponent from "./ModalDialogComponent";
 import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalNewreleaseComponent.hbs";
 
