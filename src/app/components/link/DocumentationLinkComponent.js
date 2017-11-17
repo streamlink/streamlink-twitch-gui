@@ -6,7 +6,7 @@ import {
 import {
 	streaming as streamingConfig
 } from "config";
-import ExternalLinkComponent from "components/link/ExternalLinkComponent";
+import ExternalLinkComponent from "./ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";
 
 

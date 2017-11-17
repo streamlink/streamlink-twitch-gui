@@ -4,7 +4,7 @@ import {
 	inject,
 	Controller
 } from "ember";
-import RetryTransitionMixin from "mixins/RetryTransitionMixin";
+import RetryTransitionMixin from "./mixins/retry-transition";
 
 
 const { service } = inject;

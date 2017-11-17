@@ -5,8 +5,8 @@ import {
 } from "ember";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
-import FormButtonComponent from "components/button/FormButtonComponent";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import FormButtonComponent from "./FormButtonComponent";
+import HotkeyMixin from "../mixins/hotkey";
 
 
 const { and, or } = computed;

@@ -8,7 +8,7 @@ import {
 	Controller
 } from "ember";
 import qualities from "models/stream/qualities";
-import RetryTransitionMixin from "mixins/RetryTransitionMixin";
+import RetryTransitionMixin from "./mixins/retry-transition";
 
 
 const { service } = inject;

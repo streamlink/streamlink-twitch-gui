@@ -7,8 +7,8 @@ import {
 import {
 	streaming as streamingConfig
 } from "config";
-import ModalDialogComponent from "components/modal/ModalDialogComponent";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import ModalDialogComponent from "./ModalDialogComponent";
+import HotkeyMixin from "../mixins/hotkey";
 import qualities from "models/stream/qualities";
 import {
 	LogError,

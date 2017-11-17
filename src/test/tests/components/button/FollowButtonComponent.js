@@ -20,7 +20,7 @@ import {
 	Service
 } from "ember";
 import followButtonComponentInjector
-	from "inject-loader?mixins/TwitchInteractButtonMixin!components/button/FollowButtonComponent";
+	from "inject-loader?../mixins/twitch-interact-button!components/button/FollowButtonComponent";
 import FormButtonComponent from "components/button/FormButtonComponent";
 import BoolNotHelper from "helpers/BoolNotHelper";
 
@@ -35,7 +35,7 @@ const LoadingSpinnerComponent = Component.extend({
 	classNames: [ "loading-spinner-component" ]
 });
 const FollowButtonComponent = followButtonComponentInjector({
-	"mixins/TwitchInteractButtonMixin": { "default": {} }
+	"../mixins/twitch-interact-button": { "default": {} }
 })[ "default" ];
 
 

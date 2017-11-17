@@ -7,7 +7,7 @@ import {
 	Controller
 } from "ember";
 import { twitch } from "config";
-import RetryTransitionMixin from "mixins/RetryTransitionMixin";
+import RetryTransitionMixin from "./mixins/retry-transition";
 import wait from "utils/wait";
 
 

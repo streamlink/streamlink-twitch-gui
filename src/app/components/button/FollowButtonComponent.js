@@ -5,8 +5,8 @@ import {
 	on,
 	Component
 } from "ember";
-import TwitchInteractButtonMixin from "mixins/TwitchInteractButtonMixin";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import TwitchInteractButtonMixin from "../mixins/twitch-interact-button";
+import HotkeyMixin from "../mixins/hotkey";
 import layout from "templates/components/button/FollowButtonComponent.hbs";
 
 

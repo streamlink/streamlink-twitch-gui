@@ -1,4 +1,4 @@
-import UserFollowedGamesIndexRoute from "routes/UserFollowedGamesIndexRoute";
+import UserFollowedGamesIndexRoute from "./UserFollowedGamesIndexRoute";
 
 
 export default UserFollowedGamesIndexRoute.extend({

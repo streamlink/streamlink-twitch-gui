@@ -2,8 +2,8 @@ import {
 	get,
 	inject
 } from "ember";
-import FormButtonComponent from "components/button/FormButtonComponent";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import FormButtonComponent from "./FormButtonComponent";
+import HotkeyMixin from "../mixins/hotkey";
 
 
 const { service } = inject;

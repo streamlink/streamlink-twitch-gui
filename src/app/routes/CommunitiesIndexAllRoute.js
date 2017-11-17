@@ -1,4 +1,4 @@
-import CommunitiesIndexIndexRoute from "routes/CommunitiesIndexIndexRoute";
+import CommunitiesIndexIndexRoute from "./CommunitiesIndexIndexRoute";
 
 
 export default CommunitiesIndexIndexRoute.extend({

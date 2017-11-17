@@ -3,8 +3,8 @@ import {
 	computed,
 	inject
 } from "ember";
-import ModalDialogComponent from "components/modal/ModalDialogComponent";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import ModalDialogComponent from "./ModalDialogComponent";
+import HotkeyMixin from "../mixins/hotkey";
 import layout from "templates/components/modal/ModalQuitComponent.hbs";
 
 

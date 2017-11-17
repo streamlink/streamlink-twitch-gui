@@ -5,7 +5,7 @@ import {
 	run,
 	on
 } from "ember";
-import ListItemComponent from "components/list/ListItemComponent";
+import ListItemComponent from "./ListItemComponent";
 import {
 	ATTR_STREAMS_INFO_GAME,
 	ATTR_STREAMS_INFO_TITLE

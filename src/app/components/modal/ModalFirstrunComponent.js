@@ -3,7 +3,7 @@ import {
 	inject
 } from "ember";
 import { main as config } from "config";
-import ModalDialogComponent from "components/modal/ModalDialogComponent";
+import ModalDialogComponent from "./ModalDialogComponent";
 import layout from "templates/components/modal/ModalFirstrunComponent.hbs";
 
 

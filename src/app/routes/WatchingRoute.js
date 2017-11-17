@@ -3,7 +3,7 @@ import {
 	inject,
 	Route
 } from "ember";
-import RefreshRouteMixin from "mixins/RefreshRouteMixin";
+import RefreshMixin from "./mixins/refresh";
 import { mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
@@ -11,7 +11,7 @@ import preload from "utils/preload";
 const { service } = inject;
 
 
-export default Route.extend( RefreshRouteMixin, {
+export default Route.extend( RefreshMixin, {
 	streaming: service(),
 
 	model() {

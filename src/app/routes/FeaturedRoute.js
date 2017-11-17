@@ -3,12 +3,12 @@ import {
 	set,
 	Route
 } from "ember";
-import RefreshRouteMixin from "mixins/RefreshRouteMixin";
+import RefreshMixin from "./mixins/refresh";
 import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default Route.extend( RefreshRouteMixin, {
+export default Route.extend( RefreshMixin, {
 	model() {
 		let store = get( this, "store" );
 

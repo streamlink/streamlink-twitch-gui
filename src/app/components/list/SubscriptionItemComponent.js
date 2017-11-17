@@ -7,7 +7,7 @@ import {
 	twitch as twitchConfig
 } from "config";
 import { openBrowser } from "nwjs/Shell";
-import ListItemComponent from "components/list/ListItemComponent";
+import ListItemComponent from "./ListItemComponent";
 import Moment from "moment";
 import layout from "templates/components/list/SubscriptionItemComponent.hbs";
 

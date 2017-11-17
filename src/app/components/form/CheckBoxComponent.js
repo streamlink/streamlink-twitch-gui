@@ -1,5 +1,5 @@
 import { get } from "ember";
-import InputBtnComponent from "components/form/InputBtnComponent";
+import InputBtnComponent from "./InputBtnComponent";
 
 
 export default InputBtnComponent.extend({

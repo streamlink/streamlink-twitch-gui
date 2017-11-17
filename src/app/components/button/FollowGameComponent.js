@@ -1,5 +1,5 @@
 import { computed } from "ember";
-import FollowButtonComponent from "components/button/FollowButtonComponent";
+import FollowButtonComponent from "./FollowButtonComponent";
 
 
 const { alias } = computed;

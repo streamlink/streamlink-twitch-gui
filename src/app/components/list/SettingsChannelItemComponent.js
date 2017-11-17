@@ -2,7 +2,7 @@ import {
 	get,
 	set
 } from "ember";
-import ListItemComponent from "components/list/ListItemComponent";
+import ListItemComponent from "./ListItemComponent";
 import layout from "templates/components/list/SettingsChannelItemComponent.hbs";
 
 

@@ -5,7 +5,7 @@ import {
 	getOwner,
 	inject
 } from "ember";
-import FormButtonComponent from "components/button/FormButtonComponent";
+import FormButtonComponent from "../button/FormButtonComponent";
 
 
 const { service } = inject;

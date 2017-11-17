@@ -10,7 +10,7 @@ import {
 	Component
 } from "ember";
 import { vars } from "config";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import HotkeyMixin from "./mixins/hotkey";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import layout from "templates/components/SearchBarComponent.hbs" ;
 

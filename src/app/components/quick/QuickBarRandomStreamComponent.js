@@ -5,15 +5,15 @@ import {
 	inject
 } from "ember";
 import { vars } from "config";
-import FormButtonComponent from "components/button/FormButtonComponent";
-import LanguageFilterMixin from "mixins/LanguageFilterMixin";
+import FormButtonComponent from "../button/FormButtonComponent";
+import FilterLanguagesMixin from "routes/mixins/filter-languages";
 
 
 const { service } = inject;
 const { "random-max": randomMax } = vars;
 
 
-export default FormButtonComponent.extend( LanguageFilterMixin, {
+export default FormButtonComponent.extend( FilterLanguagesMixin, {
 	store: service(),
 	streaming: service(),
 
