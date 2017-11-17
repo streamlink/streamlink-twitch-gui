@@ -1,7 +1,7 @@
 import { get } from "ember";
 import { set as setClipboard } from "nwjs/Clipboard";
 import FormButtonComponent from "components/button/FormButtonComponent";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import HotkeyMixin from "../mixins/hotkey";
 
 
 export default FormButtonComponent.extend( HotkeyMixin, {

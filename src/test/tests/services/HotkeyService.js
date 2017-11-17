@@ -19,7 +19,7 @@ import {
 	Component,
 	EventDispatcher
 } from "ember";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import HotkeyMixin from "components/mixins/hotkey";
 import HotkeyService from "services/HotkeyService";
 
 

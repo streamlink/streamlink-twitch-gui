@@ -2,7 +2,7 @@ import {
 	get,
 	Component
 } from "ember";
-import HotkeyMixin from "mixins/HotkeyMixin";
+import HotkeyMixin from "../mixins/hotkey";
 import layout from "templates/components/form/InputBtnComponent.hbs";
 
 
