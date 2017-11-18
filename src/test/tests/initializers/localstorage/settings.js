@@ -5,29 +5,42 @@ import {
 import updateSettingsInjector from "inject-loader?-./utils!initializers/localstorage/settings";
 
 
-const { default: updateSettings } = updateSettingsInjector( {
-	config: {
-		players: {},
-		langs: {
-			de: {},
-			en: {},
-			fr: { disabled: true }
-		}
-	},
-	"models/localstorage/Settings/streamingPlayer": {
-		typeKey: "type"
-	},
-	"models/stream/qualities": [
-		{ id: "source" },
-		{ id: "high" }
-	]
-} );
+module( "initializers/localstorage/settings", {
+	beforeEach() {
+		const self = this;
+
+		const { default: updateSettings } = updateSettingsInjector({
+			config: {
+				players: {},
+				langs: {
+					de: {},
+					en: {},
+					fr: { disabled: true }
+				}
+			},
+			"models/localstorage/Settings/streamingPlayer": {
+				typeKey: "type"
+			},
+			"models/stream/qualities": [
+				{ id: "source" },
+				{ id: "high" }
+			],
+			"utils/node/platform": {
+				get isWin7() {
+					return self.isWin7;
+				}
+			}
+		});
+
+		this.isWin7 = false;
+		this.updateSettings = updateSettings;
+	}
+});
 
 
-module( "initializers/localstorage/settings" );
+test( "Removes old attributes", function( assert ) {
 
-
-test( "Removes old attributes", assert => {
+	const updateSettings = this.updateSettings;
 
 	const a = {
 		livestreamer: "foo",
@@ -57,7 +70,9 @@ test( "Removes old attributes", assert => {
 });
 
 
-test( "Updates attributes", assert => {
+test( "Updates attributes", function( assert ) {
+
+	const updateSettings = this.updateSettings;
 
 	const oldRecyclableSettings = {
 		livestreamer_oauth: true,
@@ -261,7 +276,9 @@ test( "Updates attributes", assert => {
 });
 
 
-test( "Fixes attributes", assert => {
+test( "Fixes attributes", function( assert ) {
+
+	const updateSettings = this.updateSettings;
 
 	const a = {
 		gui: {
@@ -365,6 +382,42 @@ test( "Fixes attributes", assert => {
 			notification: {}
 		},
 		"Fixes old player preset structure"
+	);
+
+	const notificationProviderRich = {
+		notification: {
+			provider: "rich"
+		}
+	};
+	this.isWin7 = true;
+	updateSettings( notificationProviderRich );
+	assert.propEqual(
+		notificationProviderRich,
+		{
+			gui: {},
+			streaming: {},
+			streams: {},
+			chat: {},
+			notification: {
+				provider: "rich"
+			}
+		},
+		"Doesn't change notification.provider from rich to auto if on win7"
+	);
+	this.isWin7 = false;
+	updateSettings( notificationProviderRich );
+	assert.propEqual(
+		notificationProviderRich,
+		{
+			gui: {},
+			streaming: {},
+			streams: {},
+			chat: {},
+			notification: {
+				provider: "auto"
+			}
+		},
+		"Changes notification.provider from rich to auto if not on win7"
 	);
 
 });

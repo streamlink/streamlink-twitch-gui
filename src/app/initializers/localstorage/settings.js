@@ -10,6 +10,7 @@ import {
 	typeKey as streamingPlayerTypeKey
 } from "models/localstorage/Settings/streamingPlayer";
 import qualities from "models/stream/qualities";
+import { isWin7 } from "utils/node/platform";
 
 
 const { hasOwnProperty } = {};
@@ -146,6 +147,8 @@ function fixAttributes( settings ) {
 	// rename old notification provider names
 	if ( [ "libnotify", "freedesktop" ].includes( notification.provider ) ) {
 		notification.provider = "native";
+	} else if ( !isWin7 && notification.provider === "rich" ) {
+		notification.provider = "auto";
 	}
 }
 
