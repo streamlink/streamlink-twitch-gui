@@ -4,6 +4,11 @@
 	@max-width: 18rem;
 	@max-height: 10rem;
 
+	@border-width: 1px;
+	@padding-vertical: 3px;
+	@padding-horizontal: 6px;
+	@icon-width: 1.8em;
+
 	display: inline-block;
 	position: relative;
 	min-width: @min-width;
@@ -11,17 +16,13 @@
 
 	> .drop-down-component-selection,
 	> .drop-down-component-list {
-		border: .1rem solid;
+		border: @border-width solid;
 		.theme({
 			.theme-mix-color( @theme-select-color, @theme-select-background );
 		});
 	}
 
 	> .drop-down-component-selection {
-		@padding-vertical: .2em;
-		@padding-horizontal: .4em;
-		@icon-width: 1.8em;
-
 		position: relative;
 		padding: @padding-vertical @icon-width @padding-vertical @padding-horizontal;
 		.text-overflow();
@@ -37,7 +38,7 @@
 			@scale: ( 1 / @font-size );
 
 			content: @fa-var-chevron-down;
-			display: inline-block;
+			display: block;
 			position: absolute;
 			top: 0;
 			bottom: 0;
@@ -45,7 +46,7 @@
 			width: ( @icon-width * @scale );
 			padding: @padding-vertical 0;
 			opacity: @button-icon-opacity;
-			font: unit( @font-size, em )/2 FontAwesome;
+			font: unit( @font-size, em )/@line-height-computed FontAwesome;
 			text-align: center;
 			transition: opacity .2s ease-out;
 		}
@@ -107,7 +108,7 @@
 
 	> .drop-down-component-list > li {
 		display: block;
-		padding: .2em .4em;
+		padding: @padding-vertical @padding-horizontal;
 		cursor: pointer;
 
 		.theme({
@@ -116,7 +117,7 @@
 			}
 
 			&:not(:last-of-type) {
-				border-bottom: .1rem solid;
+				border-bottom: @border-width solid;
 				.theme-mix( border-bottom-color, @theme-select-items-divider-color, @theme-select-items-background );
 			}
 		});
@@ -154,12 +155,12 @@
 	> .drop-down-component-selection,
 	> .drop-down-component-selection::after,
 	> .drop-down-component-list > li {
-		line-height: unit( @button-size );
+		padding: 0;
+		line-height: unit( @button-size, rem );
 	}
 
 	> .drop-down-component-selection {
 		height: 100%;
-		padding: 0;
 		font-size: 1rem;
 
 		&::before {
@@ -186,7 +187,6 @@
 
 	> .drop-down-component-list > li {
 		height: calc( @button-size - .1rem );
-		padding: 0;
 
 		&:not(:last-of-type) {
 			.theme({
