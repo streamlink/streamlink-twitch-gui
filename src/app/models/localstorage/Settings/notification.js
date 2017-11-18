@@ -12,6 +12,7 @@ export default Fragment.extend({
 	enabled: attr( "boolean", { defaultValue: true } ),
 	provider: attr( "string", { defaultValue: "auto" } ),
 	filter: attr( "boolean", { defaultValue: true } ),
+	filter_vodcasts: attr( "boolean", { defaultValue: true } ),
 	grouping: attr( "boolean", { defaultValue: true } ),
 	click: attr( "number", { defaultValue: 1 } ),
 	click_group: attr( "number", { defaultValue: 1 } ),

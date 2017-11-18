@@ -217,6 +217,10 @@ export default Mixin.create( Evented, {
 	 */
 	async _filterStreams( streams ) {
 		const filter = get( this, "settings.notification.filter" );
+		const filter_vodcasts = get( this, "settings.notification.filter_vodcasts" );
+
+		// filter vodcasts before loading channel settings
+		streams = streams.filter( stream => filter_vodcasts ? !get( stream, "isVodcast" ) : true );
 
 		// get a list of all streams and their channel's individual settings
 		const streamSettingsObjects = await Promise.all( streams.map( async stream => {

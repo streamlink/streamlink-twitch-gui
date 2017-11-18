@@ -437,8 +437,6 @@ test( "Query streams", async assert => {
 
 test( "Filter streams", async assert => {
 
-	assert.expect( 2 );
-
 	let streams;
 
 	const { default: NotificationPollingMixin } = notificationPollingMixinInjector({
@@ -451,8 +449,9 @@ test( "Filter streams", async assert => {
 	owner.register( "service:notification", Service.extend( NotificationPollingMixin ) );
 
 	class TwitchStream {
-		constructor( id, settings ) {
+		constructor( id, isVodcast, settings ) {
 			this.id = id;
+			this.isVodcast = isVodcast;
 			this.channel = {
 				async getChannelSettings() {
 					return settings;
@@ -461,31 +460,52 @@ test( "Filter streams", async assert => {
 		}
 	}
 
+	const twitchStreams = [
+		new TwitchStream( 1, false, { notification_enabled: null } ),
+		new TwitchStream( 2, false, { notification_enabled: true } ),
+		new TwitchStream( 3, false, { notification_enabled: false } ),
+		new TwitchStream( 4, true, { notification_enabled: null } ),
+		new TwitchStream( 5, true, { notification_enabled: true } ),
+		new TwitchStream( 6, true, { notification_enabled: false } )
+	];
+
 	const service = owner.lookup( "service:notification" );
 	const settings = owner.lookup( "service:settings" );
 
+	set( settings, "notification.filter_vodcasts", false );
+
 	set( settings, "notification.filter", true );
-	streams = await service._filterStreams([
-		new TwitchStream( 1, { notification_enabled: null } ),
-		new TwitchStream( 2, { notification_enabled: true } ),
-		new TwitchStream( 3, { notification_enabled: false } )
-	]);
+	streams = await service._filterStreams( twitchStreams );
 	assert.propEqual(
 		streams.map( stream => stream.id ),
-		[ 1, 2 ],
-		"Return unknown and enabled channels"
+		[ 1, 2, 4, 5 ],
+		"Return unknown and enabled streams and ignore vodcast settings"
 	);
 
 	set( settings, "notification.filter", false );
-	streams = await service._filterStreams([
-		new TwitchStream( 1, { notification_enabled: null } ),
-		new TwitchStream( 2, { notification_enabled: true } ),
-		new TwitchStream( 3, { notification_enabled: false } )
-	]);
+	streams = await service._filterStreams( twitchStreams );
+	assert.propEqual(
+		streams.map( stream => stream.id ),
+		[ 2, 5 ],
+		"Return enabled streams and ignore vodcast settings"
+	);
+
+	set( settings, "notification.filter_vodcasts", true );
+
+	set( settings, "notification.filter", true );
+	streams = await service._filterStreams( twitchStreams );
+	assert.propEqual(
+		streams.map( stream => stream.id ),
+		[ 1, 2 ],
+		"Return unknown, enabled and live streams"
+	);
+
+	set( settings, "notification.filter", false );
+	streams = await service._filterStreams( twitchStreams );
 	assert.propEqual(
 		streams.map( stream => stream.id ),
 		[ 2 ],
-		"Return enabled channels"
+		"Return enabled and live streams"
 	);
 
 });

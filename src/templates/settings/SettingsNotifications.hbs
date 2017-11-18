@@ -60,6 +60,14 @@
 {{/settings-row}}
 
 {{#settings-row
+	"Filter Vodcasts"
+	"Only include live streams."
+	icon="fa-recycle"
+}}
+	{{check-box "Ignore Vodcasts" checked=model.notification.filter_vodcasts}}
+{{/settings-row}}
+
+{{#settings-row
 	"Grouping"
 	"Merge multiple notifications."
 	icon="fa-folder-open-o"
