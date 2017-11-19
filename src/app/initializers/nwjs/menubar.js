@@ -22,7 +22,7 @@ export function createNativeMenuBar( routingService ) {
 		type: "normal",
 		label: "Preferences",
 		key: ",",
-		modifier: "cmd"
+		modifiers: "cmd"
 	});
 	preferences.click = () => routingService.transitionTo( "settings" );
 	mainMenu.insert( preferences, 2 );
