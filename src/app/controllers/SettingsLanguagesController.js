@@ -25,9 +25,11 @@ export default Controller.extend({
 
 	actions: {
 		checkLanguages( all ) {
-			const filters = get( this, "model.streams.filter_languages" );
-			Object.keys( filters.content )
-				.forEach( key => set( filters, key, all ) );
+			const filters = get( this, "model.streams.languages" );
+			const languages = get( this, "languages" );
+			for ( const { id } of languages ) {
+				set( filters, id, all );
+			}
 		}
 	}
 });
