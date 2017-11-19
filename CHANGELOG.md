@@ -1,6 +1,48 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+This is a patch of today's [`v1.4.0`](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.0) release with fixes to the broken macOS archives. The following changelog has been copied here.
+
+- Changed default Streamlink (and Livestreamer) parameters.  
+  Please see the "Player input" option in the "Streaming" settings menu and make sure that your player supports the selected method.  
+- Re-implemented the chat system.  
+  Please select the desired chat application in the chat settings menu.  
+  Old chat settings won't be used.
+- Re-implemented the notifications system.  
+  - Now queries the API several times if more channels are streaming than one API response can contain.  
+  - Uses Chromium's new freedesktop notification implementation on Linux.
+- Re-implemented application settings.  
+  - Cleaned up the internal settings data structure.
+  - Renamed and reordered settings submenus.
+  - Moved certain settings to different submenus.
+- Re-implemented several other components and modules.
+- Added Vodcast indicators. #478
+- Added desktop shortcut option to the Windows installers. #483
+- Added option to GUI settings to hide window control buttons. #505
+- Fixed some tooltips showing a channel's ID instead of its name.
+- Fixed application not closing correctly sometimes.
+- Fixed infinite scrolling in the search results.
+- Fixed application window focus when clicking a notification. #465
+- Fixed banned channels breaking the infinite scroll mechanism. #466
+- Fixed login issues when using multiple accounts. #474
+- Fixed chat application opening again when restarting a stream. #475
+- Fixed channel page layout with empty descriptions. #498
+- Fixed global menubar preferences hotkey on macOS. #508
+- Upgraded to NW.js 0.26.6 (Chromium 62.0.3202.94 / Node 9.1.0)
+- \[dev] Switched from npm to yarn.
+- \[dev] Added a TODO list.
+
+Since 1.4.0:
+
+- Fixed broken macOS archives. #509
+- Fixed (un)check all languages not working. #510
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.4.0...master)
+
+
 ## [v1.4.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.0) (2017-11-19)
 
 - Changed default Streamlink (and Livestreamer) parameters.  
