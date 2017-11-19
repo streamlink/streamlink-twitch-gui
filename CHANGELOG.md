@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.4.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.0) (2017-11-19)
 
 - Changed default Streamlink (and Livestreamer) parameters.  
   Please see the "Player input" option in the "Streaming" settings menu and make sure that your player supports the selected method.  
@@ -33,7 +33,7 @@ Changelog - Streamlink Twitch GUI
 - \[dev] Added a TODO list.
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.3.1...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.3.1...v1.4.0)
 
 
 ## [v1.3.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.3.1) (2017-05-28)
