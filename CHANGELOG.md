@@ -1,9 +1,10 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.4.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.1) (2017-11-19)
 
-This is a patch of today's [`v1.4.0`](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.0) release with fixes to the broken macOS archives. The following changelog has been copied here.
+This is a patch of today's [`v1.4.0`](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.0) release with fixes to the broken macOS archive.  
+The changelog has been copied here.
 
 - Changed default Streamlink (and Livestreamer) parameters.  
   Please see the "Player input" option in the "Streaming" settings menu and make sure that your player supports the selected method.  
@@ -34,13 +35,13 @@ This is a patch of today's [`v1.4.0`](https://github.com/streamlink/streamlink-t
 - \[dev] Switched from npm to yarn.
 - \[dev] Added a TODO list.
 
-Since 1.4.0:
+Since v1.4.0:
 
 - Fixed broken macOS archives. #509
 - Fixed (un)check all languages not working. #510
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.4.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.3.1...v1.4.1)
 
 
 ## [v1.4.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.0) (2017-11-19)
