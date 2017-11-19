@@ -19,15 +19,16 @@ Changelog - Streamlink Twitch GUI
 - Added Vodcast indicators. #478
 - Added desktop shortcut option to the Windows installers. #483
 - Added option to GUI settings to hide window control buttons. #505
+- Fixed some tooltips showing a channel's ID instead of its name.
+- Fixed application not closing correctly sometimes.
+- Fixed infinite scrolling in the search results.
 - Fixed application window focus when clicking a notification. #465
 - Fixed banned channels breaking the infinite scroll mechanism. #466
 - Fixed login issues when using multiple accounts. #474
 - Fixed chat application opening again when restarting a stream. #475
-- Fixed some tooltips showing a channel's ID instead of its name.
 - Fixed channel page layout with empty descriptions. #498
-- Fixed infinite scrolling in the search results.
-- Fixed application not closing correctly sometimes.
-- Upgraded NW.js to 0.26.6 (Chromium 62.0.3202.94 / Node 9.1.0)
+- Fixed global menubar preferences hotkey on macOS. #508
+- Upgraded to NW.js 0.26.6 (Chromium 62.0.3202.94 / Node 9.1.0)
 - \[dev] Switched from npm to yarn.
 - \[dev] Added a TODO list.
 
