@@ -12,7 +12,7 @@ module.exports = {
 
 	osx64archive: {
 		platform: "osx64",
-		tasks: [ "compress:osx64" ],
+		tasks: [ "shell:compressMacOSarchive" ],
 		checksum: "<%= compress.osx64.options.archive %>"
 	},
 

@@ -22,6 +22,10 @@ module.exports = {
 		dest   : "<%= package.name %>"
 	},
 
+	// broken due to symlinks inside the NW.js app folder
+	// symlinks are supported by archiver ^2.0.0, but grunt-contrib-compress still uses ^1.3.0
+	// see the shell:compressMacOSarchive task instead
+	// the other tasks still use the options.archive value defined here, so don't remove it
 	osx64: {
 		options: {
 			mode   : "tgz",
