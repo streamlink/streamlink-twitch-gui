@@ -1,115 +1,84 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
-	runAppend,
-	runDestroy,
-	getOutput,
-	buildOwner
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	setOwner,
-	HTMLBars,
-	run,
-	Component
-} from "ember";
 import IsEqualHelper from "helpers/IsEqualHelper";
 import IsNullHelper from "helpers/IsNullHelper";
 import IsGtHelper from "helpers/IsGtHelper";
 import IsGteHelper from "helpers/IsGteHelper";
 
 
-const { compile } = HTMLBars;
-
-let owner, component;
-
-
-module( "helpers/is-", {
-	beforeEach() {
-		owner = buildOwner();
-	},
-
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( component );
-		runDestroy( owner );
-		owner = component = null;
-	}
+moduleForComponent( "helpers/is-", {
+	integration: true,
+	resolver: buildResolver({
+		IsEqualHelper,
+		IsNullHelper,
+		IsGtHelper,
+		IsGteHelper
+	})
 });
 
 
 test( "Is equal", function( assert ) {
 
-	owner.register( "helper:is-equal", IsEqualHelper );
-	component = Component.extend({
-		valA  : "foo",
-		valB  : "foo",
-		valC  : "foo",
-		layout: compile( "{{is-equal valA valB valC}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", "foo" );
+	this.set( "valB", "foo" );
+	this.set( "valC", "foo" );
+	this.render( hbs`{{is-equal valA valB valC}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), "true", "Equal values" );
-	run( component, "set", "valC", "bar" );
-	assert.equal( getOutput( component ), "false", "Unequal values" );
+	assert.strictEqual( this.$().text(), "true", "Equal values" );
+
+	this.set( "valC", "bar" );
+	assert.strictEqual( this.$().text(), "false", "Unequal values" );
 
 });
 
 
 test( "Is null", function( assert ) {
 
-	owner.register( "helper:is-null", IsNullHelper );
-	component = Component.extend({
-		valA  : null,
-		valB  : null,
-		valC  : null,
-		layout: compile( "{{is-null valA valB valC}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", null );
+	this.set( "valB", null );
+	this.set( "valC", null );
+	this.render( hbs`{{is-null valA valB valC}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), "true", "All values are null" );
-	run( component, "set", "valC", false );
-	assert.equal( getOutput( component ), "false", "Some values are not null" );
+	assert.strictEqual( this.$().text(), "true", "All values are null" );
+
+	this.set( "valC", false );
+	assert.strictEqual( this.$().text(), "false", "Some values are not null" );
 
 });
 
 
 test( "Is greater than", function( assert ) {
 
-	owner.register( "helper:is-gt", IsGtHelper );
-	component = Component.extend({
-		valA  : 2,
-		valB  : 1,
-		layout: compile( "{{is-gt valA valB}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", 2 );
+	this.set( "valB", 1 );
+	this.render( hbs`{{is-gt valA valB}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), "true", "2 is greater than 1" );
-	run( component, "set", "valA", 0 );
-	assert.equal( getOutput( component ), "false", "0 is not greater than 1" );
+	assert.strictEqual( this.$().text(), "true", "2 is greater than 1" );
+
+	this.set( "valA", 0 );
+	assert.strictEqual( this.$().text(), "false", "0 is not greater than 1" );
 
 });
 
 
 test( "Is greater than or equal", function( assert ) {
 
-	owner.register( "helper:is-gte", IsGteHelper );
-	component = Component.extend({
-		valA  : 2,
-		valB  : 1,
-		layout: compile( "{{is-gte valA valB}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", 2 );
+	this.set( "valB", 1 );
+	this.render( hbs`{{is-gte valA valB}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), "true", "2 is greater than or equal 1" );
-	run( component, "set", "valA", 1 );
-	assert.equal( getOutput( component ), "true", "1 is greater than or equal 1" );
-	run( component, "set", "valA", 0 );
-	assert.equal( getOutput( component ), "false", "0 is not greater than or equal 1" );
+	assert.strictEqual( this.$().text(), "true", "2 is greater than or equal 1" );
+
+	this.set( "valA", 1 );
+	assert.strictEqual( this.$().text(), "true", "1 is greater than or equal 1" );
+
+	this.set( "valA", 0 );
+	assert.strictEqual( this.$().text(), "false", "0 is not greater than or equal 1" );
 
 });
