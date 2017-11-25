@@ -21,7 +21,7 @@ export default Component.extend({
 	onLoad() {},
 	onError() {},
 
-	willInsertElement() {
+	didInsertElement() {
 		this._super( ...arguments );
 
 		const setError = () => scheduleOnce( "afterRender", () => {

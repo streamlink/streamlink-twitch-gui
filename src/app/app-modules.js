@@ -155,6 +155,7 @@ import ChatService from "services/ChatService";
 import HotkeyService from "services/HotkeyService";
 
 import ApplicationRoute from "routes/ApplicationRoute";
+import ApplicationTemplate from "templates/Application.hbs";
 
 import LoadingRoute from "routes/LoadingRoute";
 import LoadingTemplate from "templates/Loading.hbs";
@@ -530,6 +531,7 @@ export default {
 
 	// Application
 	ApplicationRoute,
+	ApplicationTemplate,
 
 	LoadingRoute,
 	LoadingTemplate,

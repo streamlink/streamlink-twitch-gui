@@ -240,6 +240,10 @@ module.exports = {
 			]
 		},
 
+		module: {
+			noParse: /bower_components\/.+\/ember(-data)?(\.(debug|prod))?\.js$/
+		},
+
 		plugins: [
 			// don't split the main module into multiple chunks
 			new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),

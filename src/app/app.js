@@ -6,7 +6,7 @@ import modules from "./app-modules";
 
 
 export default Application.create( modules, {
-	rootElement: document.documentElement,
+	rootElement: "body",
 
 	toString() { return "App"; }
 });

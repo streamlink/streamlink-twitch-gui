@@ -1,5 +1,5 @@
 
-html, body {
+html, body, body > div {
 	width: 100%;
 	height: 100%;
 	min-width: 960px;
@@ -21,10 +21,6 @@ body {
 	.theme({
 		.theme-color-and-background( @theme-text-color, @theme-background );
 	});
-
-	> .wrapper {
-		flex: 1;
-	}
 }
 
 .wrapper {
@@ -35,6 +31,14 @@ body {
 	&.vertical {
 		display: flex;
 		flex-flow: column nowrap;
+	}
+}
+
+body > div {
+	.wrapper.vertical;
+
+	> .wrapper {
+		flex: 1;
 	}
 }
 
