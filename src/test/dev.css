@@ -7,3 +7,12 @@ body {
 	display: inline-block;
 	width: 100%;
 }
+
+/* use the same rules as #qunit-fixture */
+#ember-testing {
+	position: absolute;
+	top: -10000px;
+	left: -10000px;
+	width: 1000px;
+	height: 1000px;
+}

@@ -43,6 +43,7 @@ export const Binding = Ember.Binding;
 export const Component = Ember.Component;
 export const ComputedProperty = Ember.ComputedProperty;
 export const Controller = Ember.Controller;
+export const DefaultResolver = Ember.DefaultResolver;
 export const EventDispatcher = Ember.EventDispatcher;
 export const Evented = Ember.Evented;
 export const Helper = Ember.Helper;

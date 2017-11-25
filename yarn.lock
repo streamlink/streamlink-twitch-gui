@@ -1875,12 +1875,22 @@ ember-localstorage-adapter@1.0.0:
     ember-cli-babel "^5.1.6"
     ember-runtime-enumerable-includes-polyfill "^1.0.1"
 
+ember-qunit@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/ember-qunit/-/ember-qunit-2.2.0.tgz#3cdf400031c93a38de781a7304819738753b7f99"
+  dependencies:
+    ember-test-helpers "^0.6.3"
+
 ember-runtime-enumerable-includes-polyfill@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/ember-runtime-enumerable-includes-polyfill/-/ember-runtime-enumerable-includes-polyfill-1.0.4.tgz#16a7612e347a2edf07da8b2f2f09dbfee70deba0"
   dependencies:
     ember-cli-babel "^5.1.6"
     ember-cli-version-checker "^1.1.6"
+
+ember-test-helpers@0.6.3, ember-test-helpers@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/ember-test-helpers/-/ember-test-helpers-0.6.3.tgz#f864cdf6f4e75f3f8768d6537785b5ab6e82d907"
 
 emojis-list@^2.0.0:
   version "2.1.0"

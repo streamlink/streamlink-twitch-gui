@@ -1,11 +1,14 @@
 import Ember, {
-	get,
-	$,
 	run,
-	EmberObject
+	HTMLBars,
+	DefaultResolver,
+	EmberObject,
+	Router
 } from "ember";
+import $ from "jquery";
 
 
+const { compile } = HTMLBars;
 const reWhiteSpace = /\s+/g;
 
 
@@ -22,7 +25,7 @@ export function runDestroy( destroyed ) {
 }
 
 export function getElem( component, selector ) {
-	const element = get( component, "element" );
+	const element = component.element || component._element;
 	return selector && selector.length
 		? $( selector, element )
 		: $( element );
@@ -36,18 +39,104 @@ export function cleanOutput( component, selector ) {
 	return getOutput( component, selector ).replace( reWhiteSpace, "" );
 }
 
-export function buildOwner( properties ) {
-	const Owner = EmberObject.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin, {
-		init() {
-			this._super.apply( this, arguments );
-			const registry = new Ember.Registry( this._registryOptions );
-			this.__registry__ = registry;
-			this.__container__ = registry.container({ owner: this });
+export function checkListeners( elem, event, listener ) {
+	const events = $._data( elem, "events" );
+	if ( events ) {
+		const listeners = events[ event ];
+		if ( listeners ) {
+			return listeners.some( obj => obj.handler === listener );
 		}
+	}
+	return false;
+}
+
+
+function exposeRegistryMethodsWithoutDeprecations( container ) {
+	const methods = [
+		"register",
+		"unregister",
+		"resolve",
+		"normalize",
+		"typeInjection",
+		"injection",
+		"factoryInjection",
+		"factoryTypeInjection",
+		"has",
+		"options",
+		"optionsForType"
+	];
+
+	function exposeRegistryMethod( container, method ) {
+		if ( method in container ) {
+			container[ method ] = function() {
+				return container._registry[ method ].apply( container._registry, arguments );
+			};
+		}
+	}
+
+	for ( let i = 0, l = methods.length; i < l; i++ ) {
+		exposeRegistryMethod( container, methods[ i ] );
+	}
+}
+
+export function buildOwner( resolver ) {
+	let fallbackRegistry, registry, container;
+	const namespace = EmberObject.create({
+		Resolver: { create() { return resolver; } }
 	});
 
-	const owner = Owner.create( properties || {} );
-	owner.register( "component-lookup:main", Ember.ComponentLookup );
+	fallbackRegistry = Ember.Application.buildRegistry( namespace );
+	fallbackRegistry.register( "component-lookup:main", Ember.ComponentLookup );
+
+	fallbackRegistry.register( "router:main", Router.extend({
+		location: "none"
+	}) );
+
+	registry = new Ember.Registry({
+		fallback: fallbackRegistry
+	});
+
+	Ember.ApplicationInstance.setupRegistry( registry );
+
+	// these properties are set on the fallback registry by `buildRegistry`
+	// and on the primary registry within the ApplicationInstance constructor
+	// but we need to manually recreate them since ApplicationInstance's are not
+	// exposed externally
+	registry.normalizeFullName = fallbackRegistry.normalizeFullName;
+	registry.makeToString = fallbackRegistry.makeToString;
+	registry.describe = fallbackRegistry.describe;
+
+	const Owner = EmberObject.extend( Ember._RegistryProxyMixin, Ember._ContainerProxyMixin );
+	const owner = Owner.create({
+		__registry__: registry,
+		__container__: null
+	});
+
+	container = registry.container({ owner: owner });
+	owner.__container__ = container;
+
+	exposeRegistryMethodsWithoutDeprecations( container );
 
 	return owner;
+}
+
+
+/**
+ * @param {String[]} strings
+ * @param {...*} vars
+ */
+export function hbs( strings, ...vars ) {
+	const arr = [ ...strings ];
+	const l = vars.length;
+	for ( let i = 0; i < l; i++ ) {
+		arr.splice( 2 * i + 1, 0, String( vars[ i ] ) );
+	}
+
+	return compile( arr.join( "" ) );
+}
+
+export function buildResolver( namespace ) {
+	return DefaultResolver.create({
+		namespace
+	});
 }

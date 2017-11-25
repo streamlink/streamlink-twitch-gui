@@ -229,7 +229,13 @@ module.exports = {
 				// explicit lib/module paths
 				"shim"        : r( pRoot, "shim" ),
 				"ember"       : r( pRoot, "web_modules", "ember" ),
-				"ember-data"  : r( pRoot, "web_modules", "ember-data" )
+				"ember-data"  : r( pRoot, "web_modules", "ember-data" ),
+				"qunit$"      : r( pTest, "web_modules", "qunit" ),
+				"ember-qunit$": "ember-qunit",
+				"ember-qunit" : "ember-qunit/lib/ember-qunit",
+				"ember-test-helpers$": "ember-test-helpers",
+				"ember-test-helpers" : "ember-test-helpers/lib/ember-test-helpers",
+				"require"     : r( pTest, "web_modules", "require" )
 			}
 		},
 
