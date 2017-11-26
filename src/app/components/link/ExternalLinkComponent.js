@@ -43,9 +43,9 @@ export default Component.extend({
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		const routingService = get( this, "routing" );
 		const channel = get( this, "channel" );
 		if ( channel ) {
+			const routingService = get( this, "routing" );
 			routingService.transitionTo( "channel", channel );
 		} else {
 			const url = get( this, "url" );

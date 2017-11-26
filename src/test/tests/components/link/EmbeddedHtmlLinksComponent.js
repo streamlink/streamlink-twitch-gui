@@ -1,167 +1,171 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
+import sinon from "sinon";
 import {
-	runAppend,
-	runDestroy,
-	getElem,
-	buildOwner,
-	fixtureElement
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	setOwner,
-	$,
-	HTMLBars,
-	Component,
-	EventDispatcher,
-	Service
-} from "ember";
+import { Service } from "ember";
+import $ from "jquery";
 import embeddedHtmlLinksComponentInjector
 	from "inject-loader?-utils/getStreamFromUrl!components/link/EmbeddedHtmlLinksComponent";
 
-const { compile } = HTMLBars;
 
-let eventDispatcher, owner, context;
-
-
-module( "components/link/EmbeddedHtmlLinksComponent", {
+moduleForComponent( "components/link/EmbeddedHtmlLinksComponent", {
+	integration: true,
+	resolver: buildResolver({}),
 	beforeEach() {
-		eventDispatcher = EventDispatcher.create();
-		eventDispatcher.setup( {}, fixtureElement );
-		owner = buildOwner();
-		owner.register( "event_dispatcher:main", eventDispatcher );
-	},
+		this.clipboardSetStub = sinon.stub();
+		this.openBrowserStub = sinon.stub();
+		this.menuItemsStub = sinon.stub();
+		this.menuPopupStub = sinon.stub();
+		this.transitionToStub = sinon.stub();
 
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( eventDispatcher );
-		runDestroy( owner );
-		owner = context = null;
+		const { default: EmbeddedHtmlLinksComponent } = embeddedHtmlLinksComponentInjector({
+			"nwjs/Clipboard": {
+				set: this.clipboardSetStub
+			},
+			"nwjs/Shell": {
+				openBrowser: this.openBrowserStub
+			},
+			"nwjs/Menu": {
+				create: () => ({
+					items: {
+						pushObjects: this.menuItemsStub
+					},
+					popup: this.menuPopupStub
+				})
+			}
+		});
+		const RoutingService = Service.extend({
+			transitionTo: this.transitionToStub
+		});
+
+		this.registry.register( "component:embedded-html-links", EmbeddedHtmlLinksComponent );
+		this.registry.register( "service:-routing", RoutingService );
 	}
 });
 
 
-test( "EmbeddedHtmlLinksComponent", assert => {
-
-	assert.expect( 40 );
+test( "EmbeddedHtmlLinksComponent", function( assert ) {
 
 	let event;
-	let expectedSetClipboard;
-	let expectedOpenBrowser;
 
-	const EmbeddedHtmlLinksComponent = embeddedHtmlLinksComponentInjector({
-		"nwjs/Clipboard": {
-			set( url ) {
-				assert.strictEqual( url, expectedSetClipboard, "Calls setClipboard()" );
-			}
-		},
-		"nwjs/Shell": {
-			openBrowser( url ) {
-				assert.strictEqual( url, expectedOpenBrowser, "Calls openBrowser()" );
-			}
-		},
-		"nwjs/Menu": {
-			create: () => ({
-				items: {
-					pushObjects( objs ) {
-						assert.ok( Array.isArray( objs ), "Creates a context menu" );
-						assert.propEqual(
-							objs.mapBy( "label" ),
-							[
-								"Open in browser",
-								"Copy link address"
-							],
-							"Context menu has the correct item labels"
-						);
-						objs.forEach( obj => obj.click() );
-					}
-				},
-				popup( e ) {
-					assert.strictEqual( e, event, "Calls menu.popup( event )" );
-				}
-			})
-		}
-	})[ "default" ];
-	owner.register( "component:embedded-html-links", EmbeddedHtmlLinksComponent );
+	this.render( hbs`
+		{{~#embedded-html-links~}}
+			<a href="https://twitch.tv/foo">foo</a><br>
+			<a href="https://bar.com/">bar.com</a>
+		{{~/embedded-html-links~}}
+	` );
 
-	owner.register( "service:-routing", Service.extend({
-		transitionTo( route, model ) {
-			assert.strictEqual( route, "channel", "Transitions to the channel route" );
-			assert.strictEqual( model, "foo", "Channel has the correct model" );
-		}
-	}) );
-
-	context = Component.extend({
-		content: [
-			"<a href='https://twitch.tv/foo'>foo</a>",
-			"<a href='https://bar.com'>bar.com</a>"
-		].join( "<br>\n" ),
-		layout: compile( "{{#embedded-html-links}}{{{content}}}{{/embedded-html-links}}" )
-	}).create();
-	setOwner( context, owner );
-
-	runAppend( context );
-
-	expectedOpenBrowser = "https://bar.com/";
-
-	const $anchors = getElem( context, "a" );
+	const $anchors = this.$( "a" );
 	const $anchorOne = $anchors.eq( 0 );
 	const $anchorTwo = $anchors.eq( 1 );
 
-	assert.ok( !$anchorOne.hasClass( "external-link" ), "First link is not external" );
-	// trigger mouseup events
-	// left click
-	event = $.Event( "mouseup", { button: 0 } );
-	$anchorOne.trigger( event );
-	assert.ok( event.isDefaultPrevented(), "Left click: default event action is prevented" );
-	assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
-	// middle click (doesn't execute transition)
-	event = $.Event( "mouseup", { button: 1 } );
-	$anchorOne.trigger( event );
-	assert.ok( !event.isDefaultPrevented(), "Middle click: default event action is not prevented" );
-	assert.ok( !event.isImmediatePropagationStopped(), "Middle click: event does propagate" );
-	// right click (doesn't execute transition)
-	event = $.Event( "mouseup", { button: 2 } );
-	$anchorOne.trigger( event );
-	assert.ok( !event.isDefaultPrevented(), "Right click: default event action is not prevented" );
-	assert.ok( !event.isImmediatePropagationStopped(), "Right click: event does propagate" );
-	// doesn't have a context menu
-	event = $.Event( "contextmenu" );
-	$anchorOne.trigger( event );
-	assert.ok( !event.isDefaultPrevented(), "Contextmenu: default event action is not prevented" );
-	assert.ok( !event.isImmediatePropagationStopped(), "Contextmenu: event does propagate" );
-
+	assert.notOk( $anchorOne.hasClass( "external-link" ), "First link is not external" );
+	assert.strictEqual(
+		$anchorOne.prop( "title" ),
+		"",
+		"First link doesn't have a title property"
+	);
 	assert.ok( $anchorTwo.hasClass( "external-link" ), "Second link is external" );
 	assert.strictEqual(
 		$anchorTwo.prop( "title" ),
 		"https://bar.com/",
 		"Second link has a title property"
 	);
+
+	// anchor 1
+	// trigger mouseup events
+	// left click
+	event = $.Event( "mouseup", { button: 0 } );
+	$anchorOne.trigger( event );
+	assert.ok( event.isDefaultPrevented(), "Left click: default event is prevented" );
+	assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
+	assert.propEqual( this.transitionToStub.args, [ [ "channel", "foo" ] ], "Opens channel page" );
+	assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
+	this.transitionToStub.resetHistory();
+	// middle click (doesn't execute transition)
+	event = $.Event( "mouseup", { button: 1 } );
+	$anchorOne.trigger( event );
+	assert.notOk( event.isDefaultPrevented(), "Middle click: default event is not prevented" );
+	assert.notOk( event.isImmediatePropagationStopped(), "Middle click: event does propagate" );
+	assert.notOk( this.transitionToStub.called, "Doesn't open channel page on non-left-click" );
+	assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
+	// right click (doesn't execute transition)
+	event = $.Event( "mouseup", { button: 2 } );
+	$anchorOne.trigger( event );
+	assert.notOk( event.isDefaultPrevented(), "Right click: default event is not prevented" );
+	assert.notOk( event.isImmediatePropagationStopped(), "Right click: event does propagate" );
+	assert.notOk( this.transitionToStub.called, "Doesn't open channel page on non-left-click" );
+	assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
+	// doesn't have a context menu
+	event = $.Event( "contextmenu" );
+	$anchorOne.trigger( event );
+	assert.notOk( event.isDefaultPrevented(), "Contextmenu: default event is not prevented" );
+	assert.notOk( event.isImmediatePropagationStopped(), "Contextmenu: event does propagate" );
+	assert.notOk( this.transitionToStub.called, "Doesn't open channel page on contextmenu" );
+	assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
+	assert.notOk( this.menuItemsStub.called, "Doesn't create menu items" );
+	assert.notOk( this.menuPopupStub.called, "Doesn't pop up context menu" );
+
+	// anchor 2
 	// trigger mouseup events
 	// left click
 	event = $.Event( "mouseup", { button: 0 } );
 	$anchorTwo.trigger( event );
-	assert.ok( event.isDefaultPrevented(), "Left click: default event action is prevented" );
+	assert.ok( event.isDefaultPrevented(), "Left click: default event is prevented" );
 	assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
+	assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
+	assert.propEqual( this.openBrowserStub.args, [ [ "https://bar.com/" ] ], "Opens browser" );
+	this.openBrowserStub.resetHistory();
 	// middle click
 	event = $.Event( "mouseup", { button: 1 } );
 	$anchorTwo.trigger( event );
-	assert.ok( event.isDefaultPrevented(), "Middle click: default event action is prevented" );
+	assert.ok( event.isDefaultPrevented(), "Middle click: default event is prevented" );
 	assert.ok( event.isImmediatePropagationStopped(), "Middle click: event doesn't propagate" );
+	assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
+	assert.propEqual( this.openBrowserStub.args, [ [ "https://bar.com/" ] ], "Opens browser" );
+	this.openBrowserStub.resetHistory();
 	// right click (doesn't execute callback)
 	event = $.Event( "mouseup", { button: 2 } );
 	$anchorTwo.trigger( event );
-	assert.ok( !event.isDefaultPrevented(), "Right click: default event action is not prevented" );
-	assert.ok( !event.isImmediatePropagationStopped(), "Right click: event does propagate" );
+	assert.notOk( event.isDefaultPrevented(), "Right click: default event is not prevented" );
+	assert.notOk( event.isImmediatePropagationStopped(), "Right click: event does propagate" );
+	assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
+	assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
 	// has a context menu
-	expectedOpenBrowser = "https://bar.com/";
-	expectedSetClipboard = "https://bar.com/";
 	event = $.Event( "contextmenu" );
 	$anchorTwo.trigger( event );
 	assert.ok( event.isDefaultPrevented(), "Contextmenu: default event action is prevented" );
 	assert.ok( event.isImmediatePropagationStopped(), "Contextmenu: event doesn't propagate" );
+	assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
+	assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
+	assert.propEqual( this.menuItemsStub.args, [ [
+		[
+			{
+				label: "Open in browser",
+				click() {}
+			},
+			{
+				label: "Copy link address",
+				click() {}
+			}
+		]
+	] ], "Creates context menu items" );
+	assert.strictEqual( this.menuPopupStub.args[0][0], event, "Opens the context menu" );
+
+	assert.notOk( this.openBrowserStub.called, "Browser hasn't been opened yet" );
+	assert.notOk( this.clipboardSetStub.called, "Set clipboard hasn't been called yet" );
+
+	this.menuItemsStub.args[0][0][0].click();
+	assert.propEqual( this.openBrowserStub.args, [ [ "https://bar.com/" ] ], "Opens browser" );
+
+	this.menuItemsStub.args[0][0][1].click();
+	assert.propEqual( this.clipboardSetStub.args, [ [ "https://bar.com/" ] ], "Sets clipboard" );
+
 	// disabled events
 	"mousedown click dblclick keyup keydown keypress"
 		.split( " " )
@@ -169,8 +173,8 @@ test( "EmbeddedHtmlLinksComponent", assert => {
 			const eventOne = $.Event( name );
 			const eventTwo = $.Event( name );
 			$anchorOne.trigger( eventOne );
-			assert.ok(
-				!eventOne.isDefaultPrevented(),
+			assert.notOk(
+				eventOne.isDefaultPrevented(),
 				`First link: default ${name} action is not prevented`
 			);
 			$anchorTwo.trigger( eventTwo );
