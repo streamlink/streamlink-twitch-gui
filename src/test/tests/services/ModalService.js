@@ -1,54 +1,40 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
 	get,
-	setOwner,
 	inject,
 	run,
-	HTMLBars,
 	Component
 } from "ember";
 import {
-	buildOwner,
-	runDestroy,
-	runAppend,
-	cleanOutput
+	buildResolver,
+	cleanOutput,
+	hbs
 } from "test-utils";
 import ModalService from "services/ModalService";
 import ModalServiceComponent from "components/modal/ModalServiceComponent";
 
 
 const { service } = inject;
-const { compile } = HTMLBars;
 
 
-let owner, context;
-
-
-module( "services/ModalService", {
-	beforeEach() {
-		owner = buildOwner();
-		owner.register( "service:modal", ModalService );
-		owner.register( "component:modal-service", ModalServiceComponent );
-	},
-
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( owner );
-		owner = context = null;
-	}
+moduleForComponent( "services/ModalService", {
+	integration: true,
+	resolver: buildResolver({
+		ModalServiceComponent,
+		ModalService
+	})
 });
 
 
-test( "ModalService", assert => {
+test( "ModalService", function( assert ) {
 
 	assert.expect( 14 );
 
-	const modalService = owner.lookup( "service:modal" );
-	owner.register( "component:modal-foo", Component.extend() );
+	const modalService = this.container.lookup( "service:modal" );
+	this.registry.register( "component:modal-foo", Component.extend() );
 
 	let context;
 	const throwOnClose = () => {
@@ -138,44 +124,39 @@ test( "ModalService", assert => {
 });
 
 
-test( "ModalServiceComponent", assert => {
+test( "ModalServiceComponent", function( assert ) {
 
-	const modalService = owner.lookup( "service:modal" );
-	owner.register( "component:modal-foo", Component.extend({
+	const modalService = this.container.lookup( "service:modal" );
+	this.registry.register( "component:modal-foo", Component.extend({
 		modal: service(),
-		layout: compile( "{{modal.context.foo}}" )
+		layout: hbs`{{modal.context.foo}}`
 	}) );
-	owner.register( "component:modal-bar", Component.extend({
+	this.registry.register( "component:modal-bar", Component.extend({
 		modal: service(),
-		layout: compile( "{{modal.context.bar}}" )
+		layout: hbs`{{modal.context.bar}}`
 	}) );
 
 	const contextFoo = { foo: "foo" };
 	const contextBar = { bar: "bar" };
 
-	context = Component.extend({
-		layout: compile( "{{modal-service}}" )
-	}).create();
-	setOwner( context, owner );
+	this.render( hbs`{{modal-service}}` );
 
-	runAppend( context );
-
-	assert.strictEqual( cleanOutput( context ), "", "Doesn't show a modal dialog initially" );
+	assert.strictEqual( cleanOutput( this ), "", "Doesn't show a modal dialog initially" );
 
 	run( () => modalService.openModal( "foo", contextFoo ) );
 	assert.ok( get( modalService, "isModalOpened" ), "The foo modal is opened" );
-	assert.strictEqual( cleanOutput( context ), "foo", "Shows the foo modal" );
+	assert.strictEqual( cleanOutput( this ), "foo", "Shows the foo modal" );
 
 	run( () => modalService.closeModal( contextFoo ) );
 	assert.notOk( get( modalService, "isModalOpened" ), "The foo modal is closed" );
-	assert.strictEqual( cleanOutput( context ), "", "Doesn't show the foo modal anymore" );
+	assert.strictEqual( cleanOutput( this ), "", "Doesn't show the foo modal anymore" );
 
 	run( () => modalService.openModal( "bar", contextBar ) );
 	assert.ok( get( modalService, "isModalOpened" ), "The bar modal is opened" );
-	assert.strictEqual( cleanOutput( context ), "bar", "Shows the bar modal" );
+	assert.strictEqual( cleanOutput( this ), "bar", "Shows the bar modal" );
 
 	run( () => modalService.openModal( "foo", contextFoo ) );
 	assert.ok( get( modalService, "isModalOpened" ), "The foo modal is opened again" );
-	assert.strictEqual( cleanOutput( context ), "foo", "Shows the foo modal again" );
+	assert.strictEqual( cleanOutput( this ), "foo", "Shows the foo modal again" );
 
 });
