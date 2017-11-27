@@ -13,8 +13,6 @@ import layout from "templates/components/list/InfiniteScrollComponent.hbs";
 const { or } = computed;
 const { scheduleOnce } = run;
 
-const $window = $( window );
-
 
 export default Component.extend({
 	layout,
@@ -49,11 +47,11 @@ export default Component.extend({
 	_contentLength: 0,
 	// check for available space if items were removed from the content array
 	_contentObserver: observer( "content.length", function() {
-		let length = get( this, "content.length" );
+		const length = get( this, "content.length" );
 		if ( length >= this._contentLength ) { return; }
 		this._contentLength = length;
 
-		let listener = get( this, "listener" );
+		const listener = get( this, "listener" );
 		if ( !listener ) { return; }
 		// wait for the DOM to upgrade
 		scheduleOnce( "afterRender", listener );
@@ -72,12 +70,13 @@ export default Component.extend({
 	didInsertElement() {
 		this._super( ...arguments );
 
-		let body = document.body;
-		let documentElement = document.documentElement;
+		const element = this.element;
+		const document = element.ownerDocument;
+		const body = document.body;
+		const documentElement = document.documentElement;
 
 		// find first parent node which has a scroll bar
-		let overflow;
-		let parent = get( this, "element" );
+		let parent = element;
 		while ( ( parent = parent.parentNode ) ) {
 			// stop at the document body
 			if ( parent === body || parent === documentElement ) {
@@ -89,17 +88,19 @@ export default Component.extend({
 				continue;
 			}
 			// finally check the overflow-y css property if a scroll bar is available
-			overflow = getComputedStyle( parent, "" ).getPropertyValue( "overflow-y" );
+			const overflow = getComputedStyle( parent, "" ).getPropertyValue( "overflow-y" );
 			if ( overflow === "scroll" || overflow === "auto" ) {
 				break;
 			}
 		}
 
-		let $parent   = $( parent );
-		let action    = get( this, "action" );
-		let threshold = get( this, "threshold" );
-		let listener  = () => {
-			if ( this.infiniteScroll( parent, threshold ) ) {
+		const $window = $( document.defaultView );
+		const $parent = $( parent );
+		const action = get( this, "action" );
+		const threshold = get( this, "threshold" );
+		const { infiniteScroll } = this;
+		const listener = () => {
+			if ( infiniteScroll( parent, threshold ) ) {
 				action( false );
 			}
 		};
@@ -115,8 +116,9 @@ export default Component.extend({
 	willDestroyElement() {
 		this._super( ...arguments );
 
-		let $parent = get( this, "$parent" );
-		let listener = get( this, "listener" );
+		const $window = $( this.element.ownerDocument.defaultView );
+		const $parent = get( this, "$parent" );
+		const listener = get( this, "listener" );
 		$parent.off( "scroll", listener );
 		$window.off( "resize", listener );
 		set( this, "$parent", null );
@@ -125,8 +127,8 @@ export default Component.extend({
 
 
 	infiniteScroll( elem, percentage ) {
-		let threshold = percentage * elem.clientHeight;
-		let remaining = elem.scrollHeight - elem.clientHeight - elem.scrollTop;
+		const threshold = percentage * elem.clientHeight;
+		const remaining = elem.scrollHeight - elem.clientHeight - elem.scrollTop;
 
 		return remaining <= threshold;
 	}
