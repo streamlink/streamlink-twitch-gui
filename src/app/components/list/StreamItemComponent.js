@@ -89,14 +89,19 @@ export default ListItemComponent.extend({
 	hasCustomLangFilter: computed( "settings.streams.languages", function() {
 		const languages = get( this, "settings.streams.languages" ).toJSON();
 
-		const iterator = Object.entries( languages );
-		let { value: previous } = iterator.next();
-		for ( const [ language ] of iterator ) {
-			if ( previous !== language ) {
+		const keys = Object.entries( languages );
+		if ( !keys.length ) {
+			return false;
+		}
+
+		let [ , previous ] = keys.shift();
+		for ( const [ , key ] of keys ) {
+			if ( previous !== key ) {
 				return true;
 			}
-			previous = language;
+			previous = key;
 		}
+
 		return false;
 	}),
 
