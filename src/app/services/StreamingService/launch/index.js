@@ -74,7 +74,7 @@ export default async function( stream, provider, player, onSuccess ) {
 					return launch();
 				}
 
-				if ( code === 0 ) {
+				if ( code === 0 || code === 130 ) {
 					set( stream, "isCompleted", true );
 					resolve();
 				} else if ( signal ) {
@@ -128,7 +128,7 @@ export default async function( stream, provider, player, onSuccess ) {
 
 		// make sure to always kill the child process
 		try {
-			if ( child ) {
+			if ( child && !child.killed ) {
 				child.kill();
 			}
 		} catch ( e ) {}
