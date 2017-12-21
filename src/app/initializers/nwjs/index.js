@@ -3,7 +3,9 @@ import {
 	addObserver,
 	Application
 } from "ember";
-import nwApp from "nwjs/App";
+import nwApp, {
+	quit
+} from "nwjs/App";
 import nwWindow, {
 	setVisibility,
 	setFocused
@@ -82,7 +84,7 @@ Application.instanceInitializer({
 				setFocused( true );
 				nwjsService.close();
 			} catch ( e ) {
-				nwWindow.close( true );
+				quit();
 			}
 		});
 	}

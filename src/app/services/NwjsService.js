@@ -3,6 +3,7 @@ import {
 	inject,
 	Service
 } from "ember";
+import { quit } from "nwjs/App";
 import nwWindow, {
 	toggleVisibility,
 	toggleMaximized,
@@ -61,6 +62,6 @@ export default Service.extend({
 	},
 
 	quit() {
-		nwWindow.close( true );
+		quit();
 	}
 });
