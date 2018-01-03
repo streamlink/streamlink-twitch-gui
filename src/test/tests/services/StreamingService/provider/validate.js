@@ -2,11 +2,11 @@ import {
 	module,
 	test
 } from "qunit";
+import sinon from "sinon";
 import {
 	streaming as streamingConfig
 } from "config";
 import validateProviderInjector from "inject-loader!services/StreamingService/provider/validate";
-import spawnInjector from "inject-loader!services/StreamingService/spawn";
 import {
 	LogError,
 	VersionError
@@ -16,338 +16,367 @@ import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import { EventEmitter } from "events";
 
 
-const { assign } = Object;
-const {
-	validation: {
-		providers: validationProviders
-	}
-} = streamingConfig;
-const logger = {
-	logDebug() {}
-};
-const commonValidateProviderDeps = {
-	"../errors": {
-		LogError,
-		VersionError
-	},
-	"utils/semver": {
-		getMax
-	},
-	"utils/StreamOutputBuffer": StreamOutputBuffer
-};
-
-class ChildProcess extends EventEmitter {
-	constructor( exec, params, options ) {
-		super();
-		this.exec = exec;
-		this.params = params;
-		this.options = options;
-		this.stdout = new EventEmitter();
-		this.stderr = new EventEmitter();
-	}
-}
+const { validation: { providers: validationProviders } } = streamingConfig;
 
 
-module( "services/StreamingService/provider/validate" );
+module( "services/StreamingService/provider/validate", {
+	beforeEach() {
+		this.clock = sinon.useFakeTimers({
+			target: window
+		});
 
+		class ChildProcess extends EventEmitter {
+			constructor() {
+				super();
+				this.stdout = new EventEmitter();
+				this.stderr = new EventEmitter();
+				this.killed = false;
+			}
 
-test( "Missing provider data", async assert => {
+			kill() {}
+		}
 
-	assert.expect( 4 );
+		this.spawnStub = sinon.stub().callsFake( () => {
+			this.child = new ChildProcess();
+			this.childKillSpy = sinon.spy( this.child, "kill" );
 
-	const deps = assign({
-		"../spawn": () => {}
-	}, commonValidateProviderDeps );
+			return this.child;
+		});
 
-	try {
-		const { default: validateProvider } = validateProviderInjector( assign({
+		this.providers = Object.assign( {}, validationProviders );
+
+		const { default: validateProvider } = validateProviderInjector({
 			"config": {
 				streaming: {
 					validation: {
-						timeout: 1,
-						providers: {}
+						timeout: 1000,
+						providers: this.providers
 					}
 				}
-			}
-		}, deps ) );
-		await validateProvider( {}, { type: "streamlink", flavor: "default" } );
-	} catch ( e ) {
-		assert.ok( e instanceof Error, "Throws an Error" );
-		assert.strictEqual(
-			e.message,
-			"Missing provider validation data",
-			"Error has the correct message"
-		);
+			},
+			"../errors": {
+				LogError,
+				VersionError
+			},
+			"../spawn": this.spawnStub,
+			"utils/semver": {
+				getMax
+			},
+			"utils/StreamOutputBuffer": StreamOutputBuffer
+		});
+
+		this.validateProvider = validateProvider;
+	},
+
+	afterEach() {
+		this.clock.restore();
+	}
+});
+
+
+test( "Missing provider data", async function( assert ) {
+
+	// temporarily remove provider data
+	const providers = {};
+	for ( const [ name, data ] of Object.entries( this.providers ) ) {
+		providers[ name ] = data;
+		delete this.providers[ name ];
 	}
 
-	try {
-		const { default: validateProvider } = validateProviderInjector( assign({
-			"config": {
-				streaming: {
-					validation: {
-						timeout: 1,
-						providers: {
-							streamlink: {}
-						}
-					}
-				}
-			}
-		}, deps ) );
-		await validateProvider( {}, { type: "streamlink", flavor: "default" } );
-	} catch ( e ) {
-		assert.ok( e instanceof Error, "Throws an Error" );
-		assert.strictEqual(
-			e.message,
-			"Invalid provider validation data",
-			"Error has the correct message"
-		);
+	await assert.rejects(
+		this.validateProvider( {}, { type: "streamlink", flavor: "default" } ),
+		new Error( "Missing provider validation data" ),
+		"Throws error on missing provider validation data"
+	);
+	assert.notOk( this.spawnStub.called, "Doesn't spawn child process" );
+
+	this.providers.streamlink = {};
+	await assert.rejects(
+		this.validateProvider( {}, { type: "streamlink", flavor: "default" } ),
+		new Error( "Invalid provider validation data" ),
+		"Throws error on invalid provider validation data"
+	);
+	assert.notOk( this.spawnStub.called, "Doesn't spawn child process" );
+
+	// copy providers back
+	for ( const [ name, data ] of Object.entries( providers ) ) {
+		this.providers[ name ] = data;
 	}
 
 });
 
 
-test( "Invalid exec", async assert => {
+test( "Spawn error", async function( assert ) {
 
-	assert.expect( 20 );
-
-	let child;
-	const execObj = { exec: "foo" };
-	const conf = { type: "streamlink", flavor: "default" };
-
-	const validateProvider = validateProviderInjector( assign({
-		"config": {
-			streaming: {
-				validation: {
-					timeout: 5,
-					providers: {
-						streamlink: {
-							version: "1.0.0",
-							regexp: "(\\d+\\.\\d+\\.\\d+)"
-						}
-					}
-				}
-			}
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, { type: "streamlink", flavor: "default" } );
+			this.child.killed = true;
+			this.child.emit( "error", new Error( "fail" ) );
+			await promise;
 		},
-		"../spawn": spawnInjector({
-			"./logger": logger,
-			"utils/node/child_process/spawn": ( ...args ) => {
-				child = new class extends ChildProcess {
-					kill() {
-						assert.ok( true, "Calls child.kill" );
-					}
-				}( ...args );
-				return child;
-			}
-		})[ "default" ]
-	}, commonValidateProviderDeps ) )[ "default" ];
-
-	try {
-		const promise = validateProvider( execObj, conf );
-		assert.strictEqual( child.exec, "foo", "Child has the correct exec property" );
-		assert.deepEqual(
-			child.params,
-			[ "--version", "--no-version-check" ],
-			"Child has the correct params property"
-		);
-		child.emit( "error", new Error( "foo" ) );
-		await promise;
-	} catch ( e ) {
-		assert.strictEqual( e.message, "foo", "Rejects on error" );
-	}
-
-	try {
-		const promise = validateProvider( execObj, conf );
-		child.stdout.emit( "data", "foo\n" );
-		await promise;
-	} catch ( e ) {
-		assert.ok( e instanceof LogError, "Throws a LogError on unexpected output on stdout" );
-		assert.strictEqual( e.message, "Invalid version check output", "Correct error message" );
-	}
-
-	try {
-		const promise = validateProvider( execObj, conf );
-		child.stdout.emit( "data", "1.0.0\n\n" );
-		await promise;
-	} catch ( e ) {
-		assert.ok( e instanceof LogError, "Throws a LogError on unexpected output on stdout" );
-		assert.strictEqual( e.message, "Unexpected version check output", "Correct error message" );
-	}
-
-	try {
-		const promise = validateProvider( execObj, conf );
-		child.stderr.emit( "data", "foo\n" );
-		await promise;
-	} catch ( e ) {
-		assert.ok( e instanceof LogError, "Throws a LogError on unexpected output on stderr" );
-		assert.strictEqual( e.message, "Invalid version check output", "Correct error message" );
-	}
-
-	try {
-		const promise = validateProvider( execObj, conf );
-		child.stderr.emit( "data", "1.0.0\n\n" );
-		await promise;
-	} catch ( e ) {
-		assert.ok( e instanceof LogError, "Throws a LogError on unexpected output on stderr" );
-		assert.strictEqual( e.message, "Unexpected version check output", "Correct error message" );
-	}
-
-	try {
-		const promise = validateProvider( execObj, conf );
-		child.emit( "exit", 1 );
-		await promise;
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Exit code 1", "Rejects on exit codes greater than 0" );
-	}
-
-	try {
-		const promise = validateProvider( execObj, conf );
-		await new Promise( resolve => setTimeout( resolve, 10 ) );
-		await promise;
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Timeout", "Rejects on timeout" );
-	}
+		new Error( "fail" ),
+		"Rejects on error"
+	);
+	assert.notOk( this.childKillSpy.called, "Doesn't unnecessarily kill child on initial error" );
 
 });
 
 
-test( "Version output matching", async assert => {
+test( "Spawn parameters", async function( assert ) {
 
-	assert.expect( 34 );
+	try {
+		const promise = this.validateProvider(
+			{ exec: "foo" },
+			{ type: "streamlink", flavor: "default" }
+		);
+		this.child.emit( "error", new Error( "fail" ) );
+		await promise;
+	} catch ( e ) {}
 
-	let child;
-	const execObj = { exec: "foo" };
+	assert.propEqual(
+		this.spawnStub.args,
+		[[
+			{ exec: "foo" },
+			[ "--version", "--no-version-check" ]
+		]],
+		"Calls spawn with correct arguments"
+	);
 
-	const { default: validateProvider } = validateProviderInjector( assign({
-		"config": {
-			streaming: {
-				validation: {
-					timeout: 5,
-					providers: validationProviders
-				}
-			}
+});
+
+
+test( "Stdout error", async function( assert ) {
+
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, { type: "streamlink", flavor: "default" } );
+			this.child.stdout.emit( "data", "foo\n" );
+			await promise;
 		},
-		"../spawn": spawnInjector({
-			"./logger": logger,
-			"utils/node/child_process/spawn": ( ...args ) => {
-				child = new class extends ChildProcess {
-					kill() {
-						assert.ok( true, "Calls child.kill" );
-					}
-				}( ...args );
-				return child;
-			}
-		})[ "default" ]
-	}, commonValidateProviderDeps ) );
+		new LogError( "Invalid version check output", [] ),
+		"Throws a LogError on unexpected output on stdout"
+	);
+	assert.propEqual( this.childKillSpy.args, [[ "SIGKILL" ]], "Kills child process" );
 
-	const streamlinkDefault = { type: "streamlink", flavor: "default" };
-	const livestreamerDefault = { type: "livestreamer", flavor: "default" };
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, { type: "streamlink", flavor: "default" } );
+			this.child.stdout.emit( "data", "streamlink 1.0.0\n\n" );
+			await promise;
+		},
+		new LogError( "Unexpected version check output", [] ),
+		"Throws a LogError on unexpected output on stdout"
+	);
+	assert.propEqual( this.childKillSpy.args, [[ "SIGKILL" ]], "Kills child process" );
+
+});
+
+
+test( "Stderr error", async function( assert ) {
+
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, { type: "streamlink", flavor: "default" } );
+			this.child.stderr.emit( "data", "foo\n" );
+			await promise;
+		},
+		new LogError( "Invalid version check output", [] ),
+		"Throws a LogError on unexpected output on stderr"
+	);
+	assert.propEqual( this.childKillSpy.args, [[ "SIGKILL" ]], "Kills child process" );
+
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, { type: "streamlink", flavor: "default" } );
+			this.child.stderr.emit( "data", "streamlink 1.0.0\n\n" );
+			await promise;
+		},
+		new LogError( "Unexpected version check output", [] ),
+		"Throws a LogError on unexpected output on stderr"
+	);
+	assert.propEqual( this.childKillSpy.args, [[ "SIGKILL" ]], "Kills child process" );
+
+});
+
+
+test( "Exit codes", async function( assert ) {
+
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, { type: "streamlink", flavor: "default" } );
+			this.child.killed = true;
+			this.child.emit( "exit", 0 );
+			this.child.emit( "error", new Error( "no error" ) );
+			await promise;
+		},
+		new Error( "no error" ),
+		"Ignores exit code 0"
+	);
+
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, { type: "streamlink", flavor: "default" } );
+			this.child.killed = true;
+			this.child.emit( "exit", 1 );
+			await promise;
+		},
+		new Error( "Exit code 1" ),
+		"Rejects on exit codes greater than 0"
+	);
+	assert.notOk( this.childKillSpy.called, "Doesn't unnecessarily kill child on exit code" );
+
+});
+
+
+test( "Timeout", async function( assert ) {
+
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, { type: "streamlink", flavor: "default" } );
+			this.clock.tick( 2000 );
+			await promise;
+		},
+		new Error( "Timeout" ),
+		"Rejects on timeout"
+	);
+	assert.propEqual( this.childKillSpy.args, [[ "SIGKILL" ]], "Kills child process" );
+
+});
+
+
+test( "Version error", async function( assert ) {
+
+	const streamlink = { type: "streamlink", flavor: "default" };
+	const livestreamer = { type: "livestreamer", flavor: "default" };
+
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, streamlink );
+			this.child.stderr.emit( "data", "streamlink 0.1.0\n" );
+			await promise;
+		},
+		new VersionError( "0.1.0" ),
+		"Throws a VersionError on old streamlink output"
+	);
+
+	await assert.rejects(
+		async () => {
+			const promise = this.validateProvider( {}, livestreamer );
+			this.child.stderr.emit( "data", "livestreamer 1.11.0\n" );
+			await promise;
+		},
+		new VersionError( "1.11.0" ),
+		"Throws a VersionError on old livestreamer output"
+	);
+
+});
+
+
+test( "Version match", async function( assert ) {
+
+	const validate = async ( data, actual, expected, message ) => {
+		const promise = this.validateProvider( {}, data );
+		this.child.stderr.emit( "data", actual );
+		const { version } = await promise;
+		assert.strictEqual( version, expected, message );
+	};
+
+	const streamlink = { type: "streamlink", flavor: "default" };
+	const livestreamer = { type: "livestreamer", flavor: "default" };
 	const livestreamerStandalone = { type: "livestreamer", flavor: "standalone" };
 
-	// reject
+	// streamlink
 
-	try {
-		const promise = validateProvider( execObj, streamlinkDefault );
-		child.stderr.emit( "data", "livestreamer 0.0.0\n" );
-		await promise;
-	} catch ( e ) {
-		assert.ok( e instanceof LogError, "Throws a LogError on invalid streamlink output" );
-	}
+	await validate(
+		streamlink,
+		"streamlink 0.2.0\n",
+		"0.2.0",
+		"Matches simple streamlink output"
+	);
+	await validate(
+		streamlink,
+		"streamlink.exe 0.2.0\n",
+		"0.2.0",
+		"Matches streamlink exe on Windows"
+	);
+	await validate(
+		streamlink,
+		"streamlink-script.py 0.2.0\n",
+		"0.2.0",
+		"Matches streamlink python script"
+	);
+	await validate(
+		streamlink,
+		"streamlink-script.pyw 0.2.0\n",
+		"0.2.0",
+		"Matches streamlink python script on Windows"
+	);
+	await validate(
+		streamlink,
+		"python3-streamlink 0.2.0\n",
+		"0.2.0",
+		"Matches streamlink with script name containing specific python version"
+	);
+	await validate(
+		streamlink,
+		"streamlink 0.2.0 foobar\n",
+		"0.2.0",
+		"Matches streamlink output with additional content"
+	);
 
-	try {
-		const promise = validateProvider( execObj, streamlinkDefault );
-		child.stderr.emit( "data", "streamlink 0.0.0\n" );
-		await promise;
-	} catch ( e ) {
-		assert.ok( e instanceof VersionError, "Throws a VersionError on old streamlink output" );
-	}
+	// livestreamer
 
-	// resolve
+	await validate(
+		livestreamer,
+		"livestreamer 1.11.1\n",
+		"1.11.1",
+		"Matches simple livestreamer output"
+	);
+	await validate(
+		livestreamer,
+		"livestreamer.exe 1.11.1\n",
+		"1.11.1",
+		"Matches livestreamer exe on Windows"
+	);
+	await validate(
+		livestreamer,
+		"livestreamer-script.py 1.11.1\n",
+		"1.11.1",
+		"Matches livestreamer python script"
+	);
+	await validate(
+		livestreamer,
+		"livestreamer-script.pyw 1.11.1\n",
+		"1.11.1",
+		"Matches livestreamer python script on Windows"
+	);
+	await validate(
+		livestreamer,
+		"python3-livestreamer 1.11.1\n",
+		"1.11.1",
+		"Matches livestreamer with script name containing specific python version"
+	);
+	await validate(
+		livestreamer,
+		"livestreamer 1.11.1 foobar\n",
+		"1.11.1",
+		"Matches livestreamer output with additional content"
+	);
 
-	try {
-		const promise1 = validateProvider( execObj, streamlinkDefault );
-		child.stderr.emit( "data", "streamlink 100.0.0\n" );
-		const { version: version1 } = await promise1;
-		assert.strictEqual( version1, "100.0.0", "Matches simple streamlink output" );
+	// livestreamer standalone
 
-		const promise2 = validateProvider( execObj, streamlinkDefault );
-		child.stderr.emit( "data", "streamlink.exe 100.0.0\n" );
-		const { version: version2 } = await promise2;
-		assert.strictEqual( version2, "100.0.0", "Matches streamlink exe on Windows" );
-
-		const promise3 = validateProvider( execObj, streamlinkDefault );
-		child.stderr.emit( "data", "streamlink-script.py 100.0.0\n" );
-		const { version: version3 } = await promise3;
-		assert.strictEqual( version3, "100.0.0", "Matches streamlink python script" );
-
-		const promise4 = validateProvider( execObj, streamlinkDefault );
-		child.stderr.emit( "data", "streamlink-script.pyw 100.0.0\n" );
-		const { version: version4 } = await promise4;
-		assert.strictEqual( version4, "100.0.0", "Matches streamlink python script" );
-
-		const promise5 = validateProvider( execObj, streamlinkDefault );
-		child.stderr.emit( "data", "streamlink 100.0.0 foobar\n" );
-		const { version: version5 } = await promise5;
-		assert.strictEqual( version5, "100.0.0", "Matches streamlink output with added content" );
-	} catch ( error ) {
-		throw error;
-	}
-
-	try {
-		const promise1 = validateProvider( execObj, livestreamerDefault );
-		child.stderr.emit( "data", "livestreamer 100.0.0\n" );
-		const { version: version1 } = await promise1;
-		assert.strictEqual( version1, "100.0.0", "Matches simple livestreamer output" );
-
-		const promise2 = validateProvider( execObj, livestreamerDefault );
-		child.stderr.emit( "data", "livestreamer.exe 100.0.0\n" );
-		const { version: version2 } = await promise2;
-		assert.strictEqual( version2, "100.0.0", "Matches livestreamer exe on Windows" );
-
-		const promise3 = validateProvider( execObj, livestreamerDefault );
-		child.stderr.emit( "data", "livestreamer-script.py 100.0.0\n" );
-		const { version: version3 } = await promise3;
-		assert.strictEqual( version3, "100.0.0", "Matches livestreamer python script" );
-
-		const promise4 = validateProvider( execObj, livestreamerDefault );
-		child.stderr.emit( "data", "livestreamer-script.pyw 100.0.0\n" );
-		const { version: version4 } = await promise4;
-		assert.strictEqual( version4, "100.0.0", "Matches livestreamer python script" );
-
-		const promise5 = validateProvider( execObj, livestreamerDefault );
-		child.stderr.emit( "data", "livestreamer 100.0.0 foobar\n" );
-		const { version: version5 } = await promise5;
-		assert.strictEqual( version5, "100.0.0", "Matches livestreamer output with added content" );
-	} catch ( error ) {
-		throw error;
-	}
-
-	try {
-		const promise1 = validateProvider( execObj, livestreamerStandalone );
-		child.stderr.emit( "data", "livestreamer 100.0.0\n" );
-		const { version: version1 } = await promise1;
-		assert.strictEqual( version1, "100.0.0", "Matches simple livestreamer output" );
-
-		const promise2 = validateProvider( execObj, livestreamerStandalone );
-		child.stderr.emit( "data", "livestreamer.exe 100.0.0\n" );
-		const { version: version2 } = await promise2;
-		assert.strictEqual( version2, "100.0.0", "Matches livestreamer exe on Windows" );
-
-		const promise3 = validateProvider( execObj, livestreamerStandalone );
-		child.stderr.emit( "data", "livestreamer-script.py 100.0.0\n" );
-		const { version: version3 } = await promise3;
-		assert.strictEqual( version3, "100.0.0", "Matches livestreamer python script" );
-
-		const promise4 = validateProvider( execObj, livestreamerStandalone );
-		child.stderr.emit( "data", "livestreamer-script.pyw 100.0.0\n" );
-		const { version: version4 } = await promise4;
-		assert.strictEqual( version4, "100.0.0", "Matches livestreamer python script" );
-
-		const promise5 = validateProvider( execObj, livestreamerStandalone );
-		child.stderr.emit( "data", "livestreamer 100.0.0 foobar\n" );
-		const { version: version5 } = await promise5;
-		assert.strictEqual( version5, "100.0.0", "Matches livestreamer output with added content" );
-	} catch ( error ) {
-		throw error;
-	}
+	await validate(
+		livestreamerStandalone,
+		"livestreamer 1.11.1\n",
+		"1.11.1",
+		"Matches simple livestreamer standalone output"
+	);
+	await validate(
+		livestreamerStandalone,
+		"livestreamer.exe 1.11.1\n",
+		"1.11.1",
+		"Matches livestreamer standaline exe output"
+	);
 
 });
