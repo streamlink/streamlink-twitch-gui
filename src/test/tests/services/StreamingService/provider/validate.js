@@ -282,89 +282,78 @@ test( "Version match", async function( assert ) {
 		assert.strictEqual( version, expected, message );
 	};
 
-	const streamlink = { type: "streamlink", flavor: "default" };
-	const livestreamer = { type: "livestreamer", flavor: "default" };
-	const livestreamerStandalone = { type: "livestreamer", flavor: "standalone" };
+	// streamlink + livestreamer
 
-	// streamlink
+	for ( const [ name, [ minVersion, provider ] ] of Object.entries({
+		streamlink: [ "0.2.0", { type: "streamlink", flavor: "default" } ],
+		livestreamer: [ "1.11.1", { type: "livestreamer", flavor: "default" } ]
+	}) ) {
+		await validate(
+			provider,
+			`${name} ${minVersion}\n`,
+			minVersion,
+			`Matches simple ${name} output`
+		);
+		await validate(
+			provider,
+			`${name}.exe ${minVersion}\n`,
+			minVersion,
+			`Matches ${name} exe on Windows`
+		);
+		await validate(
+			provider,
+			`${name}-script.py ${minVersion}\n`,
+			minVersion,
+			`Matches ${name} python script`
+		);
+		await validate(
+			provider,
+			`${name}-script.pyw ${minVersion}\n`,
+			minVersion,
+			`Matches ${name} python script on Windows`
+		);
+		await validate(
+			provider,
+			`python-${name} ${minVersion}\n`,
+			minVersion,
+			`Matches ${name} with script name containing python`
+		);
+		await validate(
+			provider,
+			`python3-${name} ${minVersion}\n`,
+			minVersion,
+			`Matches ${name} with script name containing specific python version`
+		);
+		await validate(
+			provider,
+			`${name} ${minVersion}-1\n`,
+			minVersion,
+			`Matches ${name} output with pre-release information`
+		);
+		await validate(
+			provider,
+			`${name} ${minVersion}+gdeadbeef\n`,
+			minVersion,
+			`Matches ${name} output with build information`
+		);
+		await validate(
+			provider,
+			`${name} ${minVersion}-1+gdeadbeef\n`,
+			minVersion,
+			`Matches ${name} output with pre-release and build information`
+		);
+		await validate(
+			provider,
+			`${name} ${minVersion} foobar\n`,
+			minVersion,
+			`Matches ${name} output with additional content`
+		);
+	}
 
-	await validate(
-		streamlink,
-		"streamlink 0.2.0\n",
-		"0.2.0",
-		"Matches simple streamlink output"
-	);
-	await validate(
-		streamlink,
-		"streamlink.exe 0.2.0\n",
-		"0.2.0",
-		"Matches streamlink exe on Windows"
-	);
-	await validate(
-		streamlink,
-		"streamlink-script.py 0.2.0\n",
-		"0.2.0",
-		"Matches streamlink python script"
-	);
-	await validate(
-		streamlink,
-		"streamlink-script.pyw 0.2.0\n",
-		"0.2.0",
-		"Matches streamlink python script on Windows"
-	);
-	await validate(
-		streamlink,
-		"python3-streamlink 0.2.0\n",
-		"0.2.0",
-		"Matches streamlink with script name containing specific python version"
-	);
-	await validate(
-		streamlink,
-		"streamlink 0.2.0 foobar\n",
-		"0.2.0",
-		"Matches streamlink output with additional content"
-	);
-
-	// livestreamer
-
-	await validate(
-		livestreamer,
-		"livestreamer 1.11.1\n",
-		"1.11.1",
-		"Matches simple livestreamer output"
-	);
-	await validate(
-		livestreamer,
-		"livestreamer.exe 1.11.1\n",
-		"1.11.1",
-		"Matches livestreamer exe on Windows"
-	);
-	await validate(
-		livestreamer,
-		"livestreamer-script.py 1.11.1\n",
-		"1.11.1",
-		"Matches livestreamer python script"
-	);
-	await validate(
-		livestreamer,
-		"livestreamer-script.pyw 1.11.1\n",
-		"1.11.1",
-		"Matches livestreamer python script on Windows"
-	);
-	await validate(
-		livestreamer,
-		"python3-livestreamer 1.11.1\n",
-		"1.11.1",
-		"Matches livestreamer with script name containing specific python version"
-	);
-	await validate(
-		livestreamer,
-		"livestreamer 1.11.1 foobar\n",
-		"1.11.1",
-		"Matches livestreamer output with additional content"
-	);
 
 	// livestreamer standalone
+
+	const livestreamerStandalone = { type: "livestreamer", flavor: "standalone" };
 
 	await validate(
 		livestreamerStandalone,

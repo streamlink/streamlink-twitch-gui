@@ -13,11 +13,11 @@
 		"providers": {
 			"streamlink": {
 				"version": "0.2.0",
-				"regexp": "^(?:python\\d*-)?streamlink(?:\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|\\s.*)"
+				"regexp": "^(?:python\\d*-)?streamlink(?:\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|[\\s+-].*)"
 			},
 			"livestreamer": {
 				"version": "1.11.1",
-				"regexp": "^(?:python\\d*-)?livestreamer(?:\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|\\s.*)"
+				"regexp": "^(?:python\\d*-)?livestreamer(?:\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|[\\s+-].*)"
 			}
 		}
 	},
