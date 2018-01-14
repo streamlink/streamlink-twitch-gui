@@ -125,3 +125,27 @@ streaming:
     retry-streams:
         title: Retry delay
         description: Time in seconds between each attempt.
+streams:
+    quality:
+        title: Preferred quality
+        description: Choose the default stream quality.
+    qualitypresets:
+        title: Quality presets
+        description: Define precise quality selections by range or by using explicit quality names.
+        notes: The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the "best" or "worst" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes.
+        dont-exclude: Don't exclude stream qualities
+    qualitypresets-livestreamer:
+        title: Quality presets
+        description: Customize Livestreamer quality presets.
+    vodcast-regexp:
+        title: Custom Vodcast filtering
+        description: Find untagged Vodcasts/Rebroadcasts.
+        notes: A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression.
+    modal-close-launch:
+        title: Hide stream popup
+        description: When a stream has started.
+        checkbox: Hide the popup after successfully launching a stream
+    modal-close-end:
+        title: Close stream popup
+        description: When a stream has ended.
+        checkbox: Close the popup of an active stream when it ends
