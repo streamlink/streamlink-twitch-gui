@@ -149,3 +149,41 @@ streams:
         title: Close stream popup
         description: When a stream has ended.
         checkbox: Close the popup of an active stream when it ends
+lists:
+    channelname:
+        title: Custom channel names
+        description: Channel name localizations.
+        values:
+            custom: Show custom names
+            original: Show original names
+            both: Show both
+    show-flag:
+        title: Flags
+        description: Indicating the broadcaster language.
+        checkbox: Flags are always visible
+    filter-vodcast:
+        title: Fade out Vodcasts
+        description: Makes vodcasts less visible, as an additional indicator.
+        checkbox: Fade out Vodcasts
+    show-info:
+        title: Info bar
+        description: Bottom bar inside the stream preview.
+        checkbox: Info bar is always visible
+    info:
+        title: Info bar content
+        description: What should be displayed?
+        values:
+            game: Game being played
+            title: Stream title
+    click:
+        title: Click behavior
+        description: Additional stream image click actions.
+        ctrl: CTRL + Primary mouse button
+        cmd: CMD + Primary mouse button
+        middle: Middle mouse button
+        values:
+            noop: Do nothing
+            launch: Launch stream
+            chat: Open chat
+            channel: Go to channel page
+            settings: Go to channel settings

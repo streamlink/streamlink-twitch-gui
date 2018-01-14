@@ -1,42 +1,59 @@
 <fieldset>
 {{#settings-row
-	"Custom channel names"
-	"Channel name localizations."
+	(t "settings.lists.channelname.title")
+	(t "settings.lists.channelname.description")
 	icon="fa-language"
 }}
-	{{drop-down
+	{{#drop-down
 		value=model.streams.name
 		content=contentStreamsName
+		as |dropdown|
+	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.lists.channelname.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.lists.channelname.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.lists.show-flag.title")
+	(t "settings.lists.show-flag.description")
+	icon="fa-flag"
+}}
+	{{check-box
+		(t "settings.lists.show-flag.checkbox")
+		checked=model.streams.show_flag
 	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Flags"
-	"Indicating the broadcaster language."
-	icon="fa-flag"
-}}
-	{{check-box "Flags are always visible" checked=model.streams.show_flag}}
-{{/settings-row}}
-
-{{#settings-row
-	"Fade out Vodcasts"
-	"Makes vodcasts less visible, as an additional indicator."
+	(t "settings.lists.filter-vodcast.title")
+	(t "settings.lists.filter-vodcast.description")
 	icon="fa-recycle"
 }}
-	{{check-box "Fade out Vodcasts" checked=model.streams.filter_vodcast}}
+	{{check-box
+		(t "settings.lists.filter-vodcast.checkbox")
+		checked=model.streams.filter_vodcast
+	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Info bar"
-	"Bottom bar inside the stream preview."
+	(t "settings.lists.show-info.title")
+	(t "settings.lists.show-info.description")
 	icon="fa-info"
 }}
-	{{check-box "Info bar is always visible" checked=model.streams.show_info}}
+	{{check-box
+		(t "settings.lists.show-info.checkbox")
+		checked=model.streams.show_info
+	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Info bar content"
-	"What should be displayed?"
+	(t "settings.lists.info.title")
+	(t "settings.lists.info.description")
 	icon="fa-info"
 }}
 	{{#radio-buttons
@@ -44,26 +61,46 @@
 		content=contentStreamsInfo
 		as |item|
 	}}
-		<div>{{item.button}}</div>
+		<div>
+			{{item.button
+				(t (concat "settings.lists.info.values." item.label))
+			}}
+		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
-	"Click behavior"
-	"Additional stream image click actions."
+	(t "settings.lists.click.title")
+	(t "settings.lists.click.description")
 	icon="fa-hand-pointer-o"
 }}
-	<p>{{unless isDarwin "CTRL" "CMD"}} + Primary mouse button</p>
-	{{drop-down
+	<p>{{t (unless isDarwin "settings.lists.click.ctrl" "settings.lists.click.cmd")}}</p>
+	{{#drop-down
 		value=model.streams.click_modify
 		content=contentStreamsClick
 		class="stream-click"
+		as |dropdown|
 	}}
-	<p>Middle mouse button</p>
-	{{drop-down
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.lists.click.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.lists.click.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
+	<p>{{t "settings.lists.click.middle"}}</p>
+	{{#drop-down
 		value=model.streams.click_middle
 		content=contentStreamsClick
 		class="stream-click"
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.lists.click.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.lists.click.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 </fieldset>
