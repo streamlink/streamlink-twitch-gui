@@ -73,3 +73,55 @@ gui:
             one: After one minute
             two: After two minutes
             five: After five minutes
+streaming:
+    provider:
+        title: Streamlink / Livestreamer
+        description: Choose a streaming provider and set custom executable locations.
+        notes: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
+        executable:
+            python: Python executable
+            livestreamer-standalone: Livestreamer executable
+        python-script:
+            streamlink: Streamlink python script
+            livestreamer: Livestreamer python script
+        parameters:
+            title: Custom parameters
+            placeholder: Add custom parameters
+    playerinput:
+        title: Player input
+        description: Defines the method of how the stream data is being fed into the player.
+        notes: Please see the wiki for detailed informations about this option. Different parameters will be set, depending on the selection. The player needs to support the selected method.
+        values:
+            stdin:
+                label: Standard input
+                description: Writes the stream to the player's standard input channel.
+            fifo:
+                label: Named pipe
+                description: Writes the stream to a named pipe, where the player reads from.
+            http:
+                label: HTTP
+                description: Launches a local HTTP server where the player reads from.
+            passthrough:
+                label: HLS (passthrough)
+                description: Lets the player download and buffer the stream by itself.
+    hls-live-edge:
+        title: HLS live edge
+        description: Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering.
+    hls-segment-threads:
+        title: HLS segment threads
+        description: Number of threads used for downloading and processing stream segments.
+    player-no-close:
+        title: Keep player window
+        description: After the stream has ended.
+        notes: The player itself may prevent {{provider}} to close it. Please see the player settings as well.
+        checkbox: Do not close the player
+    oauth:
+        title: Twitch.tv login
+        description: Allow {{provider}} to use the Twitch.tv oauth token while being logged in.
+        checkbox: Authenticate when launching a stream
+    retry-open:
+        title: Launch attempts
+        description: Number of stream launch attempts.
+    retry-streams:
+        title: Retry delay
+        description: Time in seconds between each attempt.

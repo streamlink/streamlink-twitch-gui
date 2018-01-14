@@ -1,9 +1,9 @@
 <fieldset>
 {{#settings-row
-	"Streamlink / Livestreamer"
-	"Choose a streaming provider and set custom executable locations."
+	(t "settings.streaming.provider.title")
+	(t "settings.streaming.provider.description")
 	icon="fa-cog"
-	notes="An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths."
+	notes=(t "settings.streaming.provider.notes")
 	requires=(if
 		(get (get providers model.streaming.provider) "python")
 		(concat "Python " (get (get providers model.streaming.provider) "python"))
@@ -16,38 +16,54 @@
 	}}
 	{{#each-in providers as |key provider|}}
 		<dl class="streaming-providers-list {{unless (is-equal key model.streaming.provider) 'hidden'}}">
-			<dt>{{#if provider.python}}Python{{else}}{{provider.name}}{{/if}} executable</dt>
-			<dd>{{file-select
-				value=(mut (get (get model.streaming.providers key) "exec"))
-				placeholder=(get provider.exec platform)
-				inputClass="form-control"
-			}}</dd>
-			{{#if provider.python}}
-				<dt>{{provider.name}} python script</dt>
-				<dd>{{file-select
-					value=(mut (get (get model.streaming.providers key) "pythonscript"))
-					placeholder=(get provider.pythonscript platform)
+			<dt>
+				{{#if provider.python}}
+					{{t "settings.streaming.provider.executable.python"}}
+				{{else}}
+					{{t (concat "settings.streaming.provider.executable." key)}}
+				{{/if}}
+			</dt>
+			<dd>
+				{{file-select
+					value=(mut (get (get model.streaming.providers key) "exec"))
+					placeholder=(get provider.exec platform)
 					inputClass="form-control"
-				}}</dd>
+				}}
+			</dd>
+			{{#if provider.python}}
+				<dt>
+					{{t (concat "settings.streaming.provider.python-script." key)}}
+				</dt>
+				<dd>
+					{{file-select
+						value=(mut (get (get model.streaming.providers key) "pythonscript"))
+						placeholder=(get provider.pythonscript platform)
+						inputClass="form-control"
+					}}
+				</dd>
 			{{/if}}
 			{{#if model.advanced}}
-				<dt>Custom {{provider.name}} parameters</dt>
-				<dd>{{input
-					type="text"
-					value=(mut (get (get model.streaming.providers key) "params"))
-					classNames="col-xs-12"
-					placeholder="Add custom parameters"
-				}}</dd>
+				<dt>
+					{{t "settings.streaming.provider.parameters.title"}}
+				</dt>
+				<dd>
+					{{input
+						type="text"
+						value=(mut (get (get model.streaming.providers key) "params"))
+						classNames="col-xs-12"
+						placeholder=(t "settings.streaming.provider.parameters.placeholder")
+					}}
+				</dd>
 			{{/if}}
 		</dl>
 	{{/each-in}}
 {{/settings-row}}
 
 {{#settings-row
-	"Player input"
-	"Defines the method of how the stream data is being fed into the player."
+	(t "settings.streaming.playerinput.title")
+	(t "settings.streaming.playerinput.description")
 	icon="fa-file-video-o"
-	notes="Please see the wiki for detailed informations about this option. Different parameters will be set, depending on the selection. The player needs to support the selected method."
+	notes=(t "settings.streaming.playerinput.notes")
 	documentation=playerInputDocumentation
 }}
 	{{#radio-buttons
@@ -56,8 +72,10 @@
 		as |item|
 	}}
 		<div class="input-btn-with-description">
-			{{item.button item.label.name}}
-			<p class="description">{{item.label.description}}</p>
+			{{item.button
+				(t (concat "settings.streaming.playerinput.values." item.value ".label"))
+			}}
+			<p class="description">{{t (concat "settings.streaming.playerinput.values." item.value ".description")}}</p>
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
@@ -65,8 +83,8 @@
 
 <fieldset>
 {{#settings-row
-	"HLS live edge"
-	"Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering."
+	(t "settings.streaming.hls-live-edge.title")
+	(t "settings.streaming.hls-live-edge.description")
 	icon="fa-bolt"
 	documentation="--hls-live-edge"
 }}
@@ -80,8 +98,8 @@
 {{/settings-row}}
 
 {{#settings-row
-	"HLS segment threads"
-	"Number of threads used for downloading and processing stream segments."
+	(t "settings.streaming.hls-segment-threads.title")
+	(t "settings.streaming.hls-segment-threads.description")
 	icon="fa-sort-amount-asc"
 	documentation="--hls-segment-threads"
 }}
@@ -95,27 +113,33 @@
 {{/settings-row}}
 
 {{#settings-row
-	"Keep player window"
-	"After the stream has ended."
+	(t "settings.streaming.player-no-close.title")
+	(t "settings.streaming.player-no-close.description")
 	icon="fa-caret-square-o-right"
-	notes=(concat "The player itself may prevent " providerName " to close it. Please see the player settings as well.")
+	notes=(t "settings.streaming.player-no-close.notes" provider=providerName)
 	documentation="--player-no-close"
 }}
-	{{check-box "Do not close the player" checked=model.streaming.player_no_close}}
+	{{check-box
+		(t "settings.streaming.player-no-close.checkbox")
+		checked=model.streaming.player_no_close
+	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Twitch.tv login"
-	(concat "Allow " providerName " to use the Twitch.tv oauth token while being logged in.")
+	(t "settings.streaming.oauth.title")
+	(t "settings.streaming.oauth.description" provider=providerName)
 	icon="fa-sign-in"
 	documentation="--twitch-oauth-token"
 }}
-	{{check-box "Authenticate when launching a stream" checked=model.streaming.oauth}}
+	{{check-box
+		(t "settings.streaming.oauth.checkbox")
+		checked=model.streaming.oauth
+	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Launch attempts"
-	"Number of stream launch attempts."
+	(t "settings.streaming.retry-open.title")
+	(t "settings.streaming.retry-open.description")
 	icon="fa-rocket"
 	documentation="--retry-open"
 }}
@@ -128,8 +152,8 @@
 {{/settings-row}}
 
 {{#settings-row
-	"Retry delay"
-	"Time in seconds between each attempt."
+	(t "settings.streaming.retry-streams.title")
+	(t "settings.streaming.retry-streams.description")
 	icon="fa-hourglass-half"
 	documentation="--retry-streams"
 }}

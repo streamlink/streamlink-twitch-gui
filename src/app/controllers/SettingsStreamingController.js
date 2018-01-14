@@ -46,7 +46,7 @@ export default Controller.extend({
 	playerInputDocumentation: computed( "model.streaming.player_input", function() {
 		const input = get( this, "model.streaming.player_input" );
 
-		return contentStreamingPlayerInput.findBy( "id", input ).label.documentation;
+		return contentStreamingPlayerInput.findBy( "id", input ).documentation;
 	}),
 
 	playerInputPassthrough: equal( "model.streaming.player_input", inputPassthrough ),
