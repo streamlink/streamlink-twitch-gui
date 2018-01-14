@@ -1,0 +1,38 @@
+menu:
+    header: Settings
+    main: Main
+    gui: GUI
+    streaming: Streaming
+    player: Player
+    streams: Streams
+    chat: Chat
+    lists: Lists
+    languages: Languages
+    notifications: Notifications
+    channels: Channels
+main:
+    language:
+        title: Language
+        description: Select the GUI language.
+    advanced:
+        title: Settings and features
+        description: Enable hidden settings and features.<br>Does not only apply to the settings menu.
+        checkbox: Enable advanced settings and features
+    homepage:
+        title: Home page
+        description: Menu to load first or when clicking the logo.
+        text:
+            first: See the menu bar in the top right corner of each page.
+            second: Click the home button to make it the new home page.
+    theme:
+        title: Theme
+        description: Select a GUI color theme.
+    scrolling:
+        title: Scrolling
+        description: Enable or disable smooth scrolling.
+        checkbox: Enable smooth scrolling
+    externalcommands:
+        title: Command line actions
+        description: Listen to signals sent by second application instances.
+        notes: See the wiki for a list of available actions and parameters.
+        checkbox: Allow external commands

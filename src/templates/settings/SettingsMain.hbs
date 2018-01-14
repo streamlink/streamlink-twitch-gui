@@ -1,7 +1,7 @@
 <fieldset>
 {{#settings-row
-	"Language"
-	"Select the GUI language."
+	(t "settings.main.language.title")
+	(t "settings.main.language.description")
 	icon="fa-language"
 }}
 	{{#drop-down
@@ -19,26 +19,32 @@
 {{/settings-row}}
 
 {{#settings-row
-	"Settings and features"
-	"Enable hidden settings and features.<br>Does not only apply to the settings menu."
+	(t "settings.main.advanced.title")
+	(t "settings.main.advanced.description")
 	icon="fa-unlock-alt"
 }}
-	{{check-box "Enable advanced settings and features" checked=model.advanced}}
+	{{check-box
+		(t "settings.main.advanced.checkbox")
+		checked=model.advanced
+	}}
 {{/settings-row}}
 </fieldset>
 
 <fieldset>
 {{#settings-row
-	"Home page"
-	"Menu to load first or when clicking the logo."
+	(t "settings.main.homepage.title")
+	(t "settings.main.homepage.description")
 	icon="fa-home"
 }}
-	<em class="small">See the menu bar in the top right corner of each page.<br>Click the home button to make it the new home page.</em>
+	<em class="small">
+		{{t "settings.main.homepage.text.first"}}<br>
+		{{t "settings.main.homepage.text.second"}}
+	</em>
 {{/settings-row}}
 
 {{#settings-row
-	"Theme"
-	"Select a GUI color theme."
+	(t "settings.main.theme.title")
+	(t "settings.main.theme.description")
 	icon="fa-paint-brush"
 }}
 	{{drop-down
@@ -48,21 +54,27 @@
 {{/settings-row}}
 
 {{#settings-row
-	"Scrolling"
-	"Enable or disable smooth scrolling."
+	(t "settings.main.scrolling.title")
+	(t "settings.main.scrolling.description")
 	icon="fa-arrows-alt"
 }}
-	{{check-box "Enable smooth scrolling" checked=model.gui.smoothscroll}}
+	{{check-box
+		(t "settings.main.scrolling.checkbox")
+		checked=model.gui.smoothscroll
+	}}
 {{/settings-row}}
 
 {{#if model.advanced}}
 	{{#settings-row
-		"Command line actions"
-		"Listen to signals sent by second application instances."
+		(t "settings.main.externalcommands.title")
+		(t "settings.main.externalcommands.description")
 		icon="fa-terminal"
-		notes="See the wiki for a list of available actions and parameters."
+		notes=(t "settings.main.externalcommands.notes")
 	}}
-		{{check-box "Allow external commands" checked=model.gui.externalcommands}}
+		{{check-box
+			(t "settings.main.externalcommands.checkbox")
+			checked=model.gui.externalcommands
+		}}
 	{{/settings-row}}
 {{/if}}
 </fieldset>
