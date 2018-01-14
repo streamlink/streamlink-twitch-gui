@@ -36,3 +36,40 @@ main:
         description: Listen to signals sent by second application instances.
         notes: See the wiki for a list of available actions and parameters.
         checkbox: Allow external commands
+gui:
+    integration:
+        title: OS integration
+        description: Where to access the GUI from.
+        values:
+            both: Both
+            taskbar: Taskbar
+            tray: Tray
+    minimize:
+        title: Minimize GUI
+        description: When the video player opens.
+        values:
+            noop: Do nothing
+            minimize: Minimize
+            tray: Move to tray
+    hidebuttons:
+        title: Hide window buttons
+        description: Hide minimize, maximize and close buttons.
+        checkbox: Hide buttons
+    minimizetotray:
+        title: Minimize button
+        description: Click behavior.
+        checkbox: Minimize to tray
+    badgelabel:
+        title: Application badge
+        description: On the taskbar/dock icon.
+        notes: This has to be supported by the operating system or desktop environment.
+        requires: Taskbar OS integration and desktop notifications have to be enabled.
+        checkbox: Show number of streaming favorites
+    focusrefresh:
+        title: Refresh content
+        description: Automatically refresh when the application window regains focus.
+        values:
+            none: Don't refresh
+            one: After one minute
+            two: After two minutes
+            five: After five minutes

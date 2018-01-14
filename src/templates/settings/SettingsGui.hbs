@@ -1,7 +1,7 @@
 <fieldset>
 {{#settings-row
-	"OS integration"
-	"Where to access the GUI from."
+	(t "settings.gui.integration.title")
+	(t "settings.gui.integration.description")
 	icon="fa-puzzle-piece"
 }}
 	{{#radio-buttons
@@ -10,13 +10,16 @@
 		classNames="group"
 		as |item|
 	}}
-		{{item.button classNames="btn btn-neutral"}}
+		{{item.button
+			(t (concat "settings.gui.integration.values." item.label))
+			classNames="btn btn-neutral"
+		}}
 	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
-	"Minimize GUI"
-	"When the video player opens."
+	(t "settings.gui.minimize.title")
+	(t "settings.gui.minimize.description")
 	icon="fa-minus"
 }}
 	{{#radio-buttons
@@ -26,27 +29,33 @@
 		classNames="group"
 		as |item|
 	}}
-		{{item.button classNames="btn btn-neutral"}}
+		{{item.button
+			(t (concat "settings.gui.minimize.values." item.label))
+			classNames="btn btn-neutral"
+		}}
 	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#if model.advanced}}
 	{{#settings-row
-		"Hide window buttons"
-		"Hide minimize, maximize and close buttons."
+		(t "settings.gui.hidebuttons.title")
+		(t "settings.gui.hidebuttons.description")
 		icon="fa-square"
 	}}
-		{{check-box "Hide buttons" checked=model.gui.hidebuttons}}
+		{{check-box
+			(t "settings.gui.hidebuttons.checkbox")
+			checked=model.gui.hidebuttons
+		}}
 	{{/settings-row}}
 {{/if}}
 
 {{#settings-row
-	"Minimize button"
-	"Click behavior."
+	(t "settings.gui.minimizetotray.title")
+	(t "settings.gui.minimizetotray.description")
 	icon="fa-minus-square"
 }}
 	{{check-box
-		"Minimize to tray"
+		(t "settings.gui.minimizetotray.checkbox")
 		checked=model.gui.minimizetotray
 		disabled=(bool-or
 			(bool-not hasBothIntegrations)
@@ -56,14 +65,14 @@
 {{/settings-row}}
 
 {{#settings-row
-	"Application badge"
-	"On the taskbar/dock icon."
+	(t "settings.gui.badgelabel.title")
+	(t "settings.gui.badgelabel.description")
 	icon="fa-tag"
-	notes="This has to be supported by the operating system or desktop environment."
-	requires="Taskbar OS integration and desktop notifications have to be enabled."
+	notes=(t "settings.gui.badgelabel.notes")
+	requires=(t "settings.gui.badgelabel.requires")
 }}
 	{{check-box
-		"Show number of streaming favorites"
+		(t "settings.gui.badgelabel.checkbox")
 		checked=model.notification.badgelabel
 		disabled=(bool-or
 			(bool-not (bool-or hasTaskBarIntegration hasBothIntegrations))
@@ -73,13 +82,21 @@
 {{/settings-row}}
 
 {{#settings-row
-	"Refresh content"
-	"Automatically refresh when the application window regains focus."
+	(t "settings.gui.focusrefresh.title")
+	(t "settings.gui.focusrefresh.description")
 	icon="fa-refresh"
 }}
-	{{drop-down
+	{{#drop-down
 		value=model.gui.focusrefresh
 		content=contentGuiFocusrefresh
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.gui.focusrefresh.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.gui.focusrefresh.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 </fieldset>
