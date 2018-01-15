@@ -125,6 +125,91 @@ streaming:
     retry-streams:
         title: Retry delay
         description: Time in seconds between each attempt.
+player:
+    preset:
+        title: Player preset
+        description: Use a predefined player configuration.
+    executable:
+        default:
+            title: Video player
+            description: If left empty, the player defined in the config file will be used.
+            default-value: VLC (unconfigured)
+            notes: Parameters can be added here, but should be set in the parameters field instead. See below for a list of available variables.
+            placeholder: Leave blank for default player
+        preset:
+            title: Player executable
+            description: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
+            placeholder: Leave blank for default location
+    args:
+        default:
+            title: Parameters
+            description: Add player specific parameters.
+        preset:
+            title: Custom parameters
+            description: Set additional custom player parameters.
+        placeholder: Add custom player parameters
+    players:
+        default:
+            label: No preset
+        vlc:
+            label: VLC media player
+            attributes:
+                instance:
+                    title: Single instance mode
+                    description: View multiple streams in different player windows.
+                    checkbox: Prevent single instance mode
+                close:
+                    title: Close player
+                    description: Prevents stacking up empty player windows.
+                    checkbox: Allow the player to get closed
+                title:
+                    title: Player window title
+                    description: Show the channel name, game being played and stream title.
+                    checkbox: Set custom title
+                minimal:
+                    title: Layout
+                    description: Hide player controls. Can also be toggled by pressing CTRL+H.
+                    checkbox: Minimal player layout
+        mpv:
+            label: MPV
+            attributes:
+                close:
+                    title: Close player
+                    description: Prevents stacking up empty player windows.
+                    checkbox: Allow the player to get closed
+                title:
+                    title: Player window title
+                    description: Show the channel name, game being played and stream title.
+                    checkbox: Set custom title
+                minimal:
+                    title: Layout
+                    description: Don't show player window decorations.
+                    checkbox: Minimal player layout
+                window:
+                    title: Force window
+                    description: Fixes potential issues with audio-only streams.
+                    checkbox: Always show player window
+                seeking:
+                    title: Seeking
+                    description: Enables jumping forwards/backwards in the stream cache.
+                    checkbox: Enable seeking
+                no-cache:
+                    title: No player cache
+                    description: Speed up stream launch time.
+                    checkbox: Don't use the additional player cache
+        mpc:
+            label: Media Player Classic - Home Cinema
+            attributes:
+                instance:
+                    title: Single instance mode
+                    description: View multiple streams in different player windows.
+                    checkbox: Prevent single instance mode
+                close:
+                    title: Close player
+                    description: Prevents stacking up empty player windows.
+                    checkbox: Allow the player to get closed
+        potplayer:
+            label: Daum PotPlayer
 streams:
     quality:
         title: Preferred quality
