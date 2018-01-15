@@ -20,9 +20,9 @@ export default Controller.extend({
 	contentChatProvider: computed(function() {
 		const list = [];
 		for ( const [ id ] of providers ) {
-			const { label, exec } = chatConfig[ id ];
+			const { exec } = chatConfig[ id ];
 			if ( exec instanceof Object && !exec[ platform ] ) { continue; }
-			list.push({ id, label });
+			list.push({ id });
 		}
 		return list;
 	}),

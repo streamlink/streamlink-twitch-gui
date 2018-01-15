@@ -149,6 +149,91 @@ streams:
         title: Close stream popup
         description: When a stream has ended.
         checkbox: Close the popup of an active stream when it ends
+chat:
+    provider:
+        title: Chat application
+        description: Choose the chat application.
+        notes-browser: Choosing the default browser may result in unwanted, non-minimal window sizes.
+        file-placeholder: Setting an executable path is required
+        params-placeholder: Set additional parameters
+        providers:
+            browser:
+                label: Default browser
+            chromium:
+                label: Chromium
+                attributes:
+                    exec:
+                        title: Chromium executable
+                        description: Set a custom Chromium executable path.
+                    args:
+                        title: Chromium parameters
+                        description: Set additional parameters.
+            chrome:
+                label: Google Chrome
+                attributes:
+                    exec:
+                        title: Google Chrome executable
+                        description: Set a custom Google Chrome executable path.
+                    args:
+                        title: Google Chrome parameters
+                        description: Set additional parameters.
+            msie:
+                label: Internet Explorer
+            chatty:
+                label: Chatty
+                attributes:
+                    exec:
+                        title: Java executable
+                        description: Set a custom java executable path.
+                    jar:
+                        title: Chatty .jar file
+                        description: Set a custom chatty.jar path.
+                    instance:
+                        title: Single instance mode
+                        description: Requires at least version 0.8.2b2.
+                        checkbox: Enable single instance mode
+                    auth:
+                        title: Authenticate
+                        description: Let Chatty re-use the auth data.
+                        checkbox: Sign in automatically
+                    args:
+                        title: Custom Chatty parameters
+                        description: Set additional parameters.
+            chatty-standalone:
+                label: Chatty (Standalone)
+                attributes:
+                    exec:
+                        title: Chatty executable
+                        description: Set the path to the Chatty executable.
+                    instance:
+                        title: Single instance mode
+                        description: Requires at least version 0.8.2b2.
+                        checkbox: Enable single instance mode
+                    auth:
+                        title: Authenticate
+                        description: Let Chatty re-use the auth data.
+                        checkbox: Sign in automatically
+                    args:
+                        title: Custom Chatty parameters
+                        description: Set additional parameters.
+            custom:
+                label: Custom application
+                attributes:
+                    exec:
+                        title: Application executable
+                        description: Set the path to the executable.
+                    args:
+                        title: Application parameters
+                        description: Set application parameters.
+    chat-open:
+        title: Open chat
+        description: While launching streams.
+        checkbox: Automatically open chat
+        checkbox-context: Don't open chat while launching streams via the context menu
+    twitchemotes:
+        title: Twitch emotes
+        description: Button that opens up twitchemotes.com.
+        checkbox: Show emotes button in stream popups
 lists:
     channelname:
         title: Custom channel names
