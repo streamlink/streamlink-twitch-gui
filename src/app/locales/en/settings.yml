@@ -253,3 +253,7 @@ notifications:
         title: Restore GUI
         description: Restore from tray or minimized state when performing a notification click action.
         checkbox: Restore when clicking a notification
+channels:
+    find: Find channel
+    none: No channels found.
+    empty: No custom channel settings set.

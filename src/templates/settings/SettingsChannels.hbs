@@ -1,12 +1,12 @@
 <fieldset>
 {{#if model.length}}
-<div class="channel-search">{{input type="search" value=filter placeholder="Find channel"}}</div>
+<div class="channel-search">{{input type="search" value=filter placeholder=(t "settings.channels.find")}}</div>
 {{/if}}
 {{#content-list modelFiltered as |item|}}
 {{settings-channel-item content=item.channel erase=(action "erase" item)}}
 {{else if filter}}
-<p>No channels found.</p>
+<p>{{t "settings.channels.none"}}</p>
 {{else}}
-<p>No custom channel settings set.</p>
+<p>{{t "settings.channels.empty"}}</p>
 {{/content-list}}
 </fieldset>
