@@ -1,5 +1,6 @@
 import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { main, files } from "config";
 import { isDebug } from "nwjs/debug";
 import SettingsNotification from "models/localstorage/Settings/notification";
@@ -23,6 +24,8 @@ export default Controller.extend({
 	contentNotificationClick,
 	contentNotificationClickGroup,
 
+	i18n: service(),
+
 	// filter available notification providers
 	contentNotificationProviders: computed(function() {
 		return SettingsNotification.providers
@@ -31,15 +34,17 @@ export default Controller.extend({
 
 	actions: {
 		testNotification( success, failure ) {
+			const i18n = get( this, "i18n" );
 			const provider = get( this, "model.notification.provider" );
+			const message = i18n.t( "settings.notifications.provider.test.message" ).toString();
 			const icon = isWin && !isDebug
 				? resolvePath( "%NWJSAPPPATH%", bigIcon )
 				: resolvePath( bigIcon );
 
 			const data = new NotificationData({
 				title: displayName,
-				message: "This is a test notification",
-				icon: icon
+				icon: icon,
+				message
 			});
 
 			showNotification( provider, data, true )

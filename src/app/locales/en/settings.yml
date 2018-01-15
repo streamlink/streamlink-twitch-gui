@@ -187,3 +187,69 @@ lists:
             chat: Open chat
             channel: Go to channel page
             settings: Go to channel settings
+notifications:
+    enabled:
+        title: Notifications
+        description: When favorites start streaming.
+        checkbox: Enable desktop notifications
+    provider:
+        title: Notification type
+        description: Choose the kind of notification
+        test:
+            button: Test notification
+            message: This is a test notification
+        providers:
+            auto:
+                name: Automatic selection
+                description: Tries to find the best notification provider
+                notes: Tests all available notification providers in descending order
+            native:
+                name: Native notifications
+                description: Uses the system's native notification system
+                notes: Notifications can be configured in the system preferences
+            snoretoast:
+                name: Windows toast notifications
+                description: Native notifications on Windows 8+
+                notes: \"Banner notifications\" need to be enabled in the system preferences
+            growl:
+                name: Growl notifications
+                description: Third-party notification service for Windows, macOS and Linux
+                notes: Requires Growl to be installed and running on the system
+            rich:
+                name: Rich notifications
+                description: Chromium rich notifications
+                notes: Rendered by the application itself
+    filter:
+        title: Channel filter
+        description: Notifications can be turned on/off individually in a channel's settings menu.
+        values:
+            blacklist: Show all except disabled ones
+            whitelist: Ignore all except enabled ones
+    filter-vodcasts:
+        title: Filter Vodcasts
+        description: Only include live streams.
+        checkbox: Ignore Vodcasts
+    grouping:
+        title: Grouping
+        description: Merge multiple notifications.
+        checkbox: Only show one notification at a time
+    click:
+        title: Notification click
+        description: Preferred click action.
+        values:
+            noop: Do nothing
+            followed: Go to favorites
+            stream: Open stream
+            stream-and-chat: Open stream+chat
+    click-group:
+        title: Group click
+        description: Preferred group click action.
+        values:
+            noop: Do nothing
+            followed: Go to favorites
+            stream: Open all streams
+            stream-and-chat: Open all streams+chats
+    click-restore:
+        title: Restore GUI
+        description: Restore from tray or minimized state when performing a notification click action.
+        checkbox: Restore when clicking a notification
