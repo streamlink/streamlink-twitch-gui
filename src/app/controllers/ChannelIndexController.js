@@ -1,13 +1,15 @@
 import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
-import { langs } from "config";
+import { inject as service } from "@ember/service";
 
 
 const day = 24 * 3600 * 1000;
 
 
 export default Controller.extend({
+	i18n: service(),
+
 	stream: alias( "model.stream" ),
 	channel: alias( "model.channel" ),
 	panels: alias( "model.panels" ),
@@ -18,11 +20,12 @@ export default Controller.extend({
 		return ( new Date() - createdAt ) / day;
 	}),
 
-	language: computed( "channel.broadcaster_language", function() {
+	language: computed( "i18n.locale", "channel.broadcaster_language", function() {
+		const i18n = get( this, "i18n" );
 		const blang = get( this, "channel.broadcaster_language" );
 
-		return langs.hasOwnProperty( blang )
-			? langs[ blang ][ "lang" ]
+		return blang && i18n.exists( `languages.${blang}` )
+			? i18n.t( `languages.${blang}` ).toString()
 			: "";
 	})
 });

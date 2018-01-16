@@ -1,8 +1,8 @@
 <fieldset>
 {{#settings-row
-	"Filter streams"
-	"Apply a language filter to all stream menus."
-	notes="Does not affect the 'Live Streams' menu of the 'My' section."
+	(t "settings.languages.filter.title")
+	(t "settings.languages.filter.description")
+	notes=(t "settings.languages.filter.notes")
 	icon="fa-filter"
 }}
 	{{#radio-buttons
@@ -11,27 +11,29 @@
 		as |item|
 	}}
 		<div class="input-btn-with-description">
-			{{item.button item.label.text}}
-			<div class="description">{{item.label.description}}</div>
+			{{item.button
+				(t (concat "settings.languages.filter.values." item.label ".text"))
+			}}
+			<div class="description">{{t (concat "settings.languages.filter.values." item.label ".description")}}</div>
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
-	"Languages"
-	"Broadcaster language, or if not set, the channel language."
+	(t "settings.languages.languages.title")
+	(t "settings.languages.languages.description")
 	icon="fa-language"
-	notes="Select all languages to disable filtering."
+	notes=(t "settings.languages.languages.notes")
 }}
 	<ul class="list-unstyled filter-lang">
-		{{#each languages as |language|}}
+		{{#each languages as |id|}}
 			<li>
-				{{#check-box checked=(mut (get model.streams.languages language.id))}}
-					{{flag-icon lang=language.id withTitle=false withCursor=false}} {{language.lang}}<span class="lang-code">({{language.id}})</span>
+				{{#check-box checked=(mut (get model.streams.languages id))}}
+					{{flag-icon lang=id withTitle=false withCursor=false}} {{t (concat "languages." id)}}<span class="lang-code">({{id}})</span>
 				{{/check-box}}
 			</li>
 		{{/each}}
 	</ul>
-	<div><a href="#" {{action "checkLanguages" true}}>Check all</a> / <a href="#" {{action "checkLanguages" false}}>Uncheck all</a></div>
+	<div><a href="#" {{action "checkLanguages" true}}>{{t "settings.languages.languages.check-all"}}</a> / <a href="#" {{action "checkLanguages" false}}>{{t "settings.languages.languages.uncheck-all"}}</a></div>
 {{/settings-row}}
 </fieldset>

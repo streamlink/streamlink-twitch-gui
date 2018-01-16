@@ -1,12 +1,21 @@
 <main class="content content-watching">
 {{#if model.length}}
-<h2>You're watching</h2>
+<h2>{{t "routes.watching.header"}}</h2>
 <ul class="list-unstyled">
 {{#each sortedModel as |watching|}}
 {{#stream-presentation stream=watching.stream tagName="li" class="watching" clickablePreview=false}}
 <div class="button-list-horizontal">
-{{form-button action=(action "openDialog" watching.stream) icon="fa-arrow-up" title="Open dialog"}}
-{{form-button action=(action "closeStream" watching.stream) classNames="btn-danger" icon="fa-times" title="Close stream"}}
+{{form-button
+	action=(action "openDialog" watching.stream)
+	icon="fa-arrow-up"
+	title=(t "routes.watching.buttons.open")
+}}
+{{form-button
+	action=(action "closeStream" watching.stream)
+	classNames="btn-danger"
+	icon="fa-times"
+	title=(t "routes.watching.buttons.close")
+}}
 </div>
 <div class="button-list-horizontal">
 {{open-chat channel=watching.stream.channel disableHotkeys=true}}
@@ -17,12 +26,12 @@
 {{/each}}
 </ul>
 {{else}}
-<h2>All streams have been closed</h2>
-<p>What to do next?</p>
+<h2>{{t "routes.watching.empty.header"}}</h2>
+<p>{{t "routes.watching.empty.next"}}</p>
 <ul class="fa-ul list-empty">
-<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
+<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.featured"}}{{/link-to}}</li>
 {{#if auth.session.isLoggedIn}}
-<li>{{#link-to "user.followedStreams"}}<i class="fa fa-li fa-caret-right"></i>Watch your followed streams{{/link-to}}</li>
+<li>{{#link-to "user.followedStreams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.followed"}}{{/link-to}}</li>
 {{/if}}
 </ul>
 {{/if}}

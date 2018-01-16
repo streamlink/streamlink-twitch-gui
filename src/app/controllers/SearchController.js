@@ -10,13 +10,6 @@ export default Controller.extend({
 	streams : alias( "model.streams" ),
 	channels: alias( "model.channels" ),
 
-	filterlabel: computed( "filter", function() {
-		const filter = get( this, "filter" );
-		const SearchModel = this.store.modelFor( "search" );
-
-		return SearchModel.getLabel( filter );
-	}),
-
 	notFiltered: equal( "filter", "all" ),
 
 	emptyGames   : empty( "games" ),

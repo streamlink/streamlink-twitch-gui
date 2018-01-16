@@ -1,14 +1,14 @@
 <main class="content content-communities">
 <header>
-<h2>Top Communities</h2>
+<h2>{{t "routes.communities.header"}}</h2>
 {{headline-totals model.meta.total}}
 {{#quick-bar}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
 {{#sub-menu menus=(hash
-	index="Featured Communities"
-	all="All Communities"
+	index=(t "routes.communities.menu.featured")
+	all=(t "routes.communities.menu.all")
 ) as |subroute name|}}
 	{{#link-to (concat "communities.index." subroute) tagName="li"}}{{name}}{{/link-to}}
 {{/sub-menu}}

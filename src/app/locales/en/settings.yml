@@ -357,6 +357,24 @@ lists:
             chat: Open chat
             channel: Go to channel page
             settings: Go to channel settings
+languages:
+    filter:
+        title: Filter streams
+        description: Apply a language filter to all stream lists (except followed streams).
+        notes: Does not affect the 'Live Streams' menu of the 'My' section.
+        values:
+            fade:
+                text: Fade out streams
+                description: Show all streams, fade out ones not matching the language selection.
+            filter:
+                text: Filter out streams
+                description: Only show streams matching the language selection.
+    languages:
+        title: Languages
+        description: Broadcaster language, or if not set, the channel language.
+        notes: Select all languages to disable filtering.
+        check-all: Check all
+        uncheck-all: Uncheck all
 notifications:
     enabled:
         title: Notifications

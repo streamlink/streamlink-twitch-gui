@@ -2,6 +2,6 @@
 {{#content-list model as |item isNewItem isDuplicateItem|}}
 {{team-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<p>The returned list of teams is empty.</p>
+<p>{{t "routes.channel.teams.empty"}}</p>
 {{/content-list}}
 </section>

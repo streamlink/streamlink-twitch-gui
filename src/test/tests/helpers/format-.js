@@ -61,7 +61,7 @@ test( "Format time", function( assert ) {
 
 	this.set( "time", time );
 	this.set( "format", "D" );
-	this.render( hbs`{{format-time time format=format}}` );
+	this.render( hbs`{{format-time time format}}` );
 
 	assert.strictEqual(
 		this.$().text(),

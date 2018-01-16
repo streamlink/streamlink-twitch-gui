@@ -1,6 +1,6 @@
 <main class="content content-user content-user-subscriptions">
 <header>
-<h2>Subscriptions</h2>
+<h2>{{t "routes.user.subscriptions.header"}}</h2>
 {{#quick-bar}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
@@ -8,7 +8,7 @@
 {{#content-list model as |item isNewItem isDuplicateItem|}}
 {{subscription-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<p>You don't have any channel subscriptions.</p>
-<p>Directly support broadcasters by subscribing to their channel.</p>
+<p>{{t "routes.user.subscriptions.empty.first"}}</p>
+<p>{{t "routes.user.subscriptions.empty.second"}}</p>
 {{/content-list}}
 </main>

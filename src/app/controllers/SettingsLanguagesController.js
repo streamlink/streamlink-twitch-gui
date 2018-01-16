@@ -12,11 +12,7 @@ export default Controller.extend({
 
 	languages: computed(function() {
 		return Object.keys( langsConfig )
-			.filter( code => !langsConfig[ code ].disabled )
-			.map( id => ({
-				id,
-				lang: langsConfig[ id ][ "lang" ]
-			}) );
+			.filter( code => !langsConfig[ code ].disabled );
 	}),
 
 
@@ -24,7 +20,7 @@ export default Controller.extend({
 		checkLanguages( all ) {
 			const filters = get( this, "model.streams.languages" );
 			const languages = get( this, "languages" );
-			for ( const { id } of languages ) {
+			for ( const id of languages ) {
 				set( filters, id, all );
 			}
 		}

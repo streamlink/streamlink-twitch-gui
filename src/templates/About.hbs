@@ -1,38 +1,38 @@
 <main class="content content-about">
-<h2>About</h2>
+<h2>{{t "routes.about.about.header"}}</h2>
 <article>
 <h3><i class="fa fa-desktop"></i>{{config.display-name}}</h3>
 <dl class="dl-horizontal">
-<dt>Homepage</dt>
+<dt>{{t "routes.about.about.homepage"}}</dt>
 <dd>{{#external-link url=config.urls.homepage}}{{config.urls.homepage}}{{/external-link}}</dd>
-<dt>Author</dt>
+<dt>{{t "routes.about.about.author"}}</dt>
 <dd>{{metadata.package.author}}</dd>
 </dl>
 <dl class="dl-horizontal">
-<dt>Version</dt>
+<dt>{{t "routes.about.about.version"}}</dt>
 <dd>{{#external-link url=releaseurl}}{{metadata.package.versionstring}}{{/external-link}}</dd>
-<dt>NW.js</dt>
+<dt>{{t "routes.about.about.nwjs"}}</dt>
 <dd>{{config.nwjs-version}}</dd>
-<dt>Built</dt>
+<dt>{{t "routes.about.about.built"}}</dt>
 <dd>{{metadata.package.built}}</dd>
 </dl>
 <dl class="dl-horizontal">
-<dt>Help</dt>
-<dd>{{#external-link url=config.urls.wiki}}Wiki{{/external-link}}</dd>
-<dt>Bugs</dt>
-<dd>{{#external-link url=config.urls.bugs}}Issue tracker{{/external-link}}</dd>
-<dt>Support</dt>
-<dd>{{#external-link url=config.urls.chat}}Gitter{{/external-link}}</dd>
-<dt>Changelog</dt>
-<dd>{{#external-link url=config.urls.changelog}}Changelog{{/external-link}}</dd>
-<dt>Contributors</dt>
-<dd>{{#external-link url=config.urls.contributors}}Contributors{{/external-link}}</dd>
+<dt>{{t "routes.about.about.help"}}</dt>
+<dd>{{#external-link url=config.urls.wiki}}{{t "routes.about.about.wiki"}}{{/external-link}}</dd>
+<dt>{{t "routes.about.about.bugs"}}</dt>
+<dd>{{#external-link url=config.urls.bugs}}{{t "routes.about.about.issue-tracker"}}{{/external-link}}</dd>
+<dt>{{t "routes.about.about.support"}}</dt>
+<dd>{{#external-link url=config.urls.chat}}{{t "routes.about.about.gitter"}}{{/external-link}}</dd>
+<dt>{{t "routes.about.about.changelog"}}</dt>
+<dd>{{#external-link url=config.urls.changelog}}{{t "routes.about.about.changelog"}}{{/external-link}}</dd>
+<dt>{{t "routes.about.about.contributors"}}</dt>
+<dd>{{#external-link url=config.urls.contributors}}{{t "routes.about.about.contributors"}}{{/external-link}}</dd>
 </dl>
 </article>
 {{#if metadata.donation.length}}
 <article>
-<h3><i class="fa fa-heart"></i>Support &amp; donate</h3>
-<p class="text-donation">If you think that this application is helpful, please consider supporting the creator by donating.<br>Thank you very much!</p>
+<h3><i class="fa fa-heart"></i>{{t "routes.about.donation.header"}}</h3>
+<p class="text-donation">{{t "routes.about.donation.text"}}</p>
 <dl class="dl-horizontal">
 {{#each metadata.donation as |item|}}
 <dt><i class="fa fa-angle-right"></i></dt>
@@ -42,7 +42,7 @@
 </article>
 {{/if}}
 <article>
-<h3><i class="fa fa-sitemap"></i>Third party applications</h3>
+<h3><i class="fa fa-sitemap"></i>{{t "routes.about.dependencies.header"}}</h3>
 <dl class="dl-horizontal">
 {{#each dependencies as |elem|}}
 <dt>{{elem.title}}</dt>

@@ -1,13 +1,13 @@
 <main class="content content-user content-user-followed-games">
 <header>
-<h2>Followed Games</h2>
+<h2>{{t "routes.user.followedGames.header"}}</h2>
 {{#quick-bar}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
 {{#sub-menu menus=(hash
-	index="Live Games"
-	all="All Games"
+	index=(t "routes.user.followedGames.menu.live")
+	all=(t "routes.user.followedGames.menu.all")
 ) as |subroute name|}}
 	{{#link-to (concat "user.followedGames." subroute) tagName="li"}}{{name}}{{/link-to}}
 {{/sub-menu}}

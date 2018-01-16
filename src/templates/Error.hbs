@@ -1,6 +1,6 @@
 {{#selectable-text tagName="main" class="content content-error"}}
-<h2>Error</h2>
-<h4>There was an error while trying to display this page.</h4>
+<h2>{{t "routes.error.header"}}</h2>
+<h4>{{t "routes.error.text"}}</h4>
 <dl class="dl-horizontal">
 {{#each model as |row|}}
 <dt>{{row.key}}</dt>

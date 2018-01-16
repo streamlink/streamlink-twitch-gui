@@ -1,8 +1,8 @@
 {{#content-list model as |item isNewItem isDuplicateItem|}}
 {{game-item content=item gamePath="game.game" isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<p>The returned list of followed live games is empty.</p>
+<p>{{t "routes.user.followedGames.live.empty.text"}}</p>
 <ul class="fa-ul list-empty">
-<li>{{#link-to "games"}}<i class="fa fa-li fa-caret-right"></i>Watch top games{{/link-to}}</li>
+<li>{{#link-to "games"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.user.followedGames.live.empty.games"}}{{/link-to}}</li>
 </ul>
 {{/content-list}}

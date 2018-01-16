@@ -7,8 +7,8 @@
 {{/quick-bar}}
 </header>
 {{#sub-menu menus=(hash
-	index="Live Streams"
-	info="Community Infos"
+	index=(t "routes.community.menu.streams")
+	info=(t "routes.community.menu.info")
 ) as |subroute name|}}
 	{{#link-to (concat "communities.community." subroute) tagName="li"}}{{name}}{{/link-to}}
 {{/sub-menu}}
