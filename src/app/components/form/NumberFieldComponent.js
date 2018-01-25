@@ -1,15 +1,14 @@
 import {
 	get,
 	set,
-	computed,
+	on,
 	Component
 } from "ember";
 import layout from "templates/components/form/NumberFieldComponent.hbs";
 
 
-const min = Math.min;
-const max = Math.max;
-const isInteger = Number.isInteger;
+const { min, max } = Math;
+const { isNaN, isInteger, MIN_SAFE_INTEGER, MAX_SAFE_INTEGER } = Number;
 
 
 export default Component.extend({
@@ -18,107 +17,92 @@ export default Component.extend({
 	tagName: "div",
 	classNames: [ "number-field-component" ],
 
-	"default": null,
+	value: null,
+	defaultValue: null,
 	disabled: false,
+	min: MIN_SAFE_INTEGER,
+	max: MAX_SAFE_INTEGER,
 
-	didInsertElement: function() {
-		this._input = this.$( "input" )[0];
-		this._super.apply( this, arguments );
-	},
-
-	parse( value ) {
-		let min = get( this, "min" );
-		let max = get( this, "max" );
-		value = parseInt( value, 10 );
-
-		if ( isNaN( value ) ) {
-			if ( this._value !== null ) {
-				value = this._value;
-			} else {
-				let defValue = get( this, "default" );
-				if ( defValue !== null ) {
-					value = defValue;
-				} else {
-					value = ( ( min / 2 ) + ( max / 2 ) ) >> 0;
-				}
-			}
-
-		} else {
-			if ( !isInteger( value ) ) {
-				value = value >> 0;
-			}
-
-			if ( value > max ) {
-				value = max;
-			} else if ( value < min ) {
-				value = min;
-			}
-		}
-
-		return value;
-	},
-
-	_min: Number.MIN_SAFE_INTEGER,
-	min: computed({
-		get() {
-			return this._min;
-		},
-		set( key, value ) {
-			value = Number( value );
-			if ( isNaN( value ) ) {
-				throw new Error( "Minimum value must be a number" );
-			} else if ( !isInteger( value ) ) {
-				value = value >> 0;
-			}
-
-			return ( this._min = value );
-		}
-	}),
-
-	_max: Number.MAX_SAFE_INTEGER,
-	max: computed({
-		get() {
-			return this._max;
-		},
-		set( key, value ) {
-			value = Number( value );
-			if ( isNaN( value ) ) {
-				throw new Error( "Maximum value must be a number" );
-			} else if ( !Number.isInteger( value ) ) {
-				value = value >> 0;
-			}
-
-			return ( this._max = value );
-		}
-	}),
-
+	_prevValue: null,
 	_value: null,
-	value: computed({
-		get() {
-			return this._value;
-		},
-		set( key, value ) {
-			return ( this._value = this.parse( value ) );
-		}
+
+	_update: on( "init", "didReceiveAttrs", function() {
+		this._super( ...arguments );
+		const value = get( this, "value" );
+		const parsedValue = this._parse( value );
+		this._prevValue = value;
+		set( this, "_value", String( parsedValue ) );
 	}),
+
+	didInsertElement() {
+		this._super( ...arguments );
+		this._input = this.element.querySelector( "input" );
+	},
+
+	_parse( value ) {
+		let numValue = Number( value );
+
+		// is the new value not a number?
+		if ( isNaN( numValue ) ) {
+			// use previous value if it exists
+			const prevValue = this._prevValue;
+			if ( prevValue !== null && !isNaN( Number( prevValue ) ) ) {
+				return prevValue;
+			}
+
+			// otherwise, get the default value
+			const defaultValue = get( this, "defaultValue" );
+			if ( defaultValue !== null && !isNaN( Number( defaultValue ) ) ) {
+				return defaultValue;
+			}
+
+			const min = get( this, "min" );
+			const max = get( this, "max" );
+
+			// or the average of min and max values if no default value exists either
+			return ( ( min / 2 ) + ( max / 2 ) ) >> 0;
+		}
+
+		// only accept integers
+		if ( !isInteger( numValue ) ) {
+			numValue = numValue >> 0;
+		}
+
+		const min = get( this, "min" );
+		const max = get( this, "max" );
+
+		// maximum and minimum
+		return numValue <= max
+			? numValue >= min
+			? numValue
+			: min
+			: max;
+	},
+
 
 	actions: {
 		increase() {
 			if ( get( this, "disabled" ) ) { return; }
-			let value = get( this, "value" );
-			set( this, "value", min( ++value, get( this, "max" ) ) );
+			const maxValue = get( this, "max" );
+			const currentValue = get( this, "value" );
+			const value = min( currentValue + 1, maxValue );
+			this.attrs.value.update( value );
 		},
 
 		decrease() {
 			if ( get( this, "disabled" ) ) { return; }
-			let value = get( this, "value" );
-			set( this, "value", max( --value, get( this, "min" ) ) );
+			const minValue = get( this, "min" );
+			const currentValue = get( this, "value" );
+			const value = max( currentValue - 1, minValue );
+			this.attrs.value.update( value );
 		},
 
 		blur() {
-			let value = this.parse( this._input.value );
-			set( this, "value", value );
-			this._input.value = value;
+			if ( get( this, "disabled" ) ) { return; }
+			const inputValue = this._input.value;
+			const value = this._parse( inputValue );
+			this._input.value = String( value );
+			this.attrs.value.update( value );
 		}
 	}
 });
