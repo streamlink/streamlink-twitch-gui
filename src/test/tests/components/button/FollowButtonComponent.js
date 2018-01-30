@@ -1,24 +1,19 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
-import {
-	runAppend,
-	runDestroy,
-	getElem,
-	buildOwner,
-	fixtureElement
-} from "test-utils";
+} from "ember-qunit";
 import {
 	get,
 	set,
-	setOwner,
 	computed,
 	run,
 	Component,
-	EventDispatcher,
 	Service
 } from "ember";
+import sinon from "sinon";
+import {
+	buildResolver
+} from "test-utils";
 import followButtonComponentInjector
 	from "inject-loader?../mixins/twitch-interact-button!components/button/FollowButtonComponent";
 import FormButtonComponent from "components/button/FormButtonComponent";
@@ -26,89 +21,59 @@ import BoolNotHelper from "helpers/BoolNotHelper";
 
 
 const { alias } = computed;
-const { later } = run;
 
-
-let eventDispatcher, owner, context;
-
-const LoadingSpinnerComponent = Component.extend({
-	classNames: [ "loading-spinner-component" ]
+const { default: FollowButtonComponent } = followButtonComponentInjector({
+	"../mixins/twitch-interact-button": {}
 });
-const FollowButtonComponent = followButtonComponentInjector({
-	"../mixins/twitch-interact-button": { "default": {} }
-})[ "default" ];
 
 
-module( "components/button/FollowButtonComponent", {
+moduleForComponent( "follow-button", "components/button/FollowButtonComponent", {
+	unit: true,
+	needs: [
+		"component:form-button",
+		"helper:bool-not"
+	],
+	resolver: buildResolver({
+		FollowButtonComponent: FollowButtonComponent.extend({
+			isLocked: alias( "isLoading" )
+		}),
+		FormButtonComponent,
+		BoolNotHelper
+	}),
 	beforeEach() {
-		eventDispatcher = EventDispatcher.create();
-		eventDispatcher.setup( {}, fixtureElement );
-		owner = buildOwner();
-		owner.register( "event_dispatcher:main", eventDispatcher );
-		owner.register( "service:hotkey", Service.extend({
+		const HotkeyService = Service.extend({
 			register() {},
 			unregister() {}
-		}) );
-		owner.register( "helper:bool-not", BoolNotHelper );
-		owner.register( "component:loading-spinner", LoadingSpinnerComponent );
-		owner.register( "component:form-button", FormButtonComponent );
-	},
+		});
+		const LoadingSpinnerComponent = Component.extend({
+			classNames: [ "loading-spinner-component" ]
+		});
 
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( eventDispatcher );
-		runDestroy( owner );
-		owner = context = null;
+		this.register( "service:hotkey", HotkeyService );
+		this.register( "component:loading-spinner", LoadingSpinnerComponent );
 	}
 });
 
 
-test( "Loading/success states and click actions", assert => {
+test( "Loading/success states and click actions", function( assert ) {
 
-	//noinspection JSUnusedAssignment
-	let lastActionCalled = null;
-
-	context = FollowButtonComponent.extend({
-		isLocked: alias( "isLoading" ),
-		actions: {
-			expand() {
-				//noinspection JSUnusedAssignment
-				lastActionCalled = "expand";
-				return this._super( ...arguments );
-			},
-
-			collapse() {
-				//noinspection JSUnusedAssignment
-				lastActionCalled = "collapse";
-				return this._super( ...arguments );
-			},
-
-			follow() {
-				//noinspection JSUnusedAssignment
-				lastActionCalled = "follow";
-				// stub original behavior
-				set( this, "isSuccessful", true );
-			},
-
-			unfollow() {
-				//noinspection JSUnusedAssignment
-				lastActionCalled = "unfollow";
-				// stub original behavior
-				set( this, "isSuccessful", false );
-				this.collapse();
-			}
-		}
-	}).create({
+	const subject = this.subject({
 		name: "foo",
 		isSuccessful: false,
 		isLoading: true
 	});
 
-	setOwner( context, owner );
-	runAppend( context );
+	const expand = sinon.spy( subject.actions, "expand" );
+	const collapse = sinon.spy( subject.actions, "collapse" );
+	const follow = sinon.stub( subject.actions, "follow" ).callsFake( () => {
+		set( subject, "isSuccessful", true );
+	});
+	const unfollow = sinon.stub( subject.actions, "unfollow" ).callsFake( () => {
+		set( subject, "isSuccessful", false );
+		subject.collapse();
+	});
 
-	let $followButton = getElem( context );
+	let $followButton = this.$();
 	let $mainButton = $followButton.find( ".form-button-component:not(.confirm-button)" );
 	let $confirmButton = $followButton.find( ".form-button-component.confirm-button" );
 
@@ -145,16 +110,15 @@ test( "Loading/success states and click actions", assert => {
 
 	$mainButton.click();
 	$confirmButton.click();
-	assert.strictEqual(
-		lastActionCalled,
-		null,
+	assert.notOk(
+		expand.called || collapse.called || follow.called || unfollow.called,
 		"No actions are being called when clicking any button while loading"
 	);
 
 
 	// loaded: not following
 
-	run( () => set( context, "isLoading", false ) );
+	run( () => set( subject, "isLoading", false ) );
 
 	assert.strictEqual(
 		$followButton.find( ".loading-spinner-component" ).length,
@@ -175,19 +139,17 @@ test( "Loading/success states and click actions", assert => {
 	);
 
 	$confirmButton.click();
-	assert.strictEqual(
-		lastActionCalled,
-		null,
+	assert.notOk(
+		expand.called || collapse.called || follow.called || unfollow.called,
 		"The confirm button does not have an action while not being expanded"
 	);
 
 	run( () => $mainButton.click() );
-	assert.strictEqual(
-		lastActionCalled,
-		"follow",
+	assert.ok(
+		follow.called,
 		"Follow action was called when clicking while not following"
 	);
-	lastActionCalled = null;
+	follow.resetHistory();
 
 
 	// now following
@@ -205,24 +167,21 @@ test( "Loading/success states and click actions", assert => {
 	);
 
 	$confirmButton.click();
-	assert.strictEqual(
-		lastActionCalled,
-		null,
+	assert.notOk(
+		expand.called || collapse.called || follow.called || unfollow.called,
 		"The confirm button does not have an action while not being expanded"
 	);
-	lastActionCalled = null;
 
 
 	// expand
 
 	run( () => $mainButton.click() );
 
-	assert.strictEqual(
-		lastActionCalled,
-		"expand",
+	assert.ok(
+		expand.called,
 		"Expand action was called when clicking while following"
 	);
-	lastActionCalled = null;
+	expand.reset();
 
 	assert.ok(
 		$followButton.hasClass( "expanded" ),
@@ -258,12 +217,11 @@ test( "Loading/success states and click actions", assert => {
 
 	run( () => $confirmButton.click() );
 
-	assert.strictEqual(
-		lastActionCalled,
-		"unfollow",
+	assert.ok(
+		unfollow.called,
 		"Unfollow action was called when clicking the confirm button in expanded state"
 	);
-	lastActionCalled = null;
+	unfollow.resetHistory();
 
 	assert.ok(
 		!$followButton.hasClass( "expanded" ),
@@ -288,17 +246,16 @@ test( "Loading/success states and click actions", assert => {
 	// collapse (from expanded state again)
 
 	run( () => {
-		set( context, "isSuccessful", true );
-		context.expand();
+		set( subject, "isSuccessful", true );
+		subject.expand();
 	});
 
 	$mainButton.click();
-	assert.strictEqual(
-		lastActionCalled,
-		"collapse",
+	assert.ok(
+		collapse.called,
 		"Collapse action was called when clicking the main button in expanded state"
 	);
-	lastActionCalled = null;
+	collapse.reset();
 
 	assert.ok(
 		   $mainButton.hasClass( "btn-success" )
@@ -317,152 +274,122 @@ test( "Loading/success states and click actions", assert => {
 });
 
 
-test( "Mouseenter and mouseleave", assert => {
+test( "Mouseenter and mouseleave", async function( assert ) {
 
-	const done = assert.async();
-
-	context = FollowButtonComponent.create({
+	const mouseLeaveTime = 1;
+	const subject = this.subject({
 		isSuccessful: true,
-		mouseLeaveTime: 1
+		mouseLeaveTime
 	});
-
-	setOwner( context, owner );
-	runAppend( context );
-
-	let $elem = getElem( context );
-
+	const $elem = this.$();
 
 	// initial state
-
 	assert.ok(
-		   get( context, "isExpanded" ) === false
-		&& get( context, "isPromptVisible" ) === false,
+		   get( subject, "isExpanded" ) === false
+		&& get( subject, "isPromptVisible" ) === false,
 		"Prompt is hidden initially"
 	);
 
 	run( () => $elem.trigger( "mouseleave" ) );
-
 	assert.strictEqual(
-		context._timeout,
+		subject._timeout,
 		null,
 		"Does not have a timer when leaving and not expanded"
 	);
 
-
 	// expand
-
-	run( () => context.expand() );
-
+	run( () => subject.expand() );
 	assert.ok(
-		   get( context, "isExpanded" ) === true
-		&& get( context, "isPromptVisible" ) === true,
+		   get( subject, "isExpanded" ) === true
+		&& get( subject, "isPromptVisible" ) === true,
 		"Prompt is visible when expanded"
 	);
-
 	assert.strictEqual(
-		context._timeout,
+		subject._timeout,
 		null,
 		"Does not have a timer"
 	);
 
-
 	// leave and re-enter before transition
-
 	run( () => $elem.trigger( "mouseleave" ) );
-
 	assert.ok(
-		   get( context, "isExpanded" ) === true
-		&& get( context, "isPromptVisible" ) === true,
+		   get( subject, "isExpanded" ) === true
+		&& get( subject, "isPromptVisible" ) === true,
 		"Prompt is still visible immediately after leaving"
 	);
-
 	assert.notStrictEqual(
-		context._timeout,
+		subject._timeout,
 		null,
 		"Does have a timer when leaving"
 	);
 
 	run( () => $elem.trigger( "mouseenter" ) );
-
 	assert.ok(
-		   get( context, "isExpanded" ) === true
-		&& get( context, "isPromptVisible" ) === true,
+		   get( subject, "isExpanded" ) === true
+		&& get( subject, "isPromptVisible" ) === true,
 		"Prompt is still visible when re-entering before the transition"
 	);
 	assert.strictEqual(
-		context._timeout,
+		subject._timeout,
 		null,
 		"Does not have a timer anymore"
 	);
 
-
 	// leave and re-enter during transition
-
 	run( () => $elem.trigger( "mouseleave" ) );
-
 	assert.notStrictEqual(
-		context._timeout,
+		subject._timeout,
 		null,
 		"Does have a timer before the transition"
 	);
 
-	later( () => {
+	await new Promise( resolve => setTimeout( resolve, mouseLeaveTime + 1 ) );
 
-		assert.ok(
-			   get( context, "isExpanded" ) === false
-			&& get( context, "isPromptVisible" ) === true,
-			"The prompt is fading out after the set time when leaving"
-		);
+	assert.ok(
+		   get( subject, "isExpanded" ) === false
+		&& get( subject, "isPromptVisible" ) === true,
+		"The prompt is fading out after the set time when leaving"
+	);
+	assert.strictEqual(
+		subject._timeout,
+		null,
+		"Does not have a timer during the transition"
+	);
 
-		assert.strictEqual(
-			context._timeout,
-			null,
-			"Does not have a timer during the transition"
-		);
-
-		run( () => $elem.trigger( "mouseenter" ) );
-
-		assert.ok(
-			   get( context, "isExpanded" ) === true
-			&& get( context, "isPromptVisible" ) === true,
-			"Prompt is not fading anymore when re-entering during transition"
-		);
-
-		assert.strictEqual(
-			context._timeout,
-			null,
-			"Does not have a timer after re-entering"
-		);
+	run( () => $elem.trigger( "mouseenter" ) );
+	assert.ok(
+		   get( subject, "isExpanded" ) === true
+		&& get( subject, "isPromptVisible" ) === true,
+		"Prompt is not fading anymore when re-entering during transition"
+	);
+	assert.strictEqual(
+		subject._timeout,
+		null,
+		"Does not have a timer after re-entering"
+	);
 
 
-		// leave
+	// leave
+	run( () => $elem.trigger( "mouseleave" ) );
 
-		run( () => $elem.trigger( "mouseleave" ) );
+	await new Promise( resolve => setTimeout( resolve, mouseLeaveTime + 1 ) );
 
-		later( () => {
+	assert.ok(
+		   get( subject, "isExpanded" ) === false
+		&& get( subject, "isPromptVisible" ) === true,
+		"The prompt is fading out after the set time when leaving"
+	);
+	assert.strictEqual(
+		subject._timeout,
+		null,
+		"There is no timer during the transition"
+	);
 
-			assert.ok(
-				   get( context, "isExpanded" ) === false
-				&& get( context, "isPromptVisible" ) === true,
-				"The prompt is fading out after the set time when leaving"
-			);
-
-			assert.strictEqual(
-				context._timeout,
-				null,
-				"There is no timer during the transition"
-			);
-
-			run( () => context.$confirmbutton.trigger( "webkitTransitionEnd" ) );
-
-			assert.ok(
-				   get( context, "isExpanded" ) === false
-				&& get( context, "isPromptVisible" ) === false,
-				"When the transition completes, the prompt is hidden"
-			);
-
-			done();
-		}, 2 );
-	}, 2 );
+	run( () => subject.$confirmbutton.trigger( "webkitTransitionEnd" ) );
+	assert.ok(
+		   get( subject, "isExpanded" ) === false
+		&& get( subject, "isPromptVisible" ) === false,
+		"When the transition completes, the prompt is hidden"
+	);
 
 });
