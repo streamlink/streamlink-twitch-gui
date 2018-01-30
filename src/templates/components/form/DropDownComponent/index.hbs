@@ -1,0 +1,31 @@
+{{#if hasBlock}}
+	{{yield (hash
+		selection=(component "drop-down-selection"
+			selection=selection
+			optionValuePath=optionValuePath
+			optionLabelPath=optionLabelPath
+			action=(action "toggle")
+		)
+		list=(component "drop-down-list"
+			expanded=expanded
+			content=content
+			selection=selection
+			optionValuePath=optionValuePath
+			optionLabelPath=optionLabelPath
+		)
+	)}}
+{{else}}
+	{{drop-down-selection
+		selection=selection
+		optionValuePath=optionValuePath
+		optionLabelPath=optionLabelPath
+		action=(action "toggle")
+	}}
+	{{drop-down-list
+		expanded=expanded
+		content=content
+		selection=selection
+		optionValuePath=optionValuePath
+		optionLabelPath=optionLabelPath
+	}}
+{{/if}}

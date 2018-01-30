@@ -175,10 +175,12 @@ import LinkComponent from "components/link/LinkComponent";
 import DocumentationLinkComponent from "components/link/DocumentationLinkComponent";
 import EmbeddedHtmlLinksComponent from "components/link/EmbeddedHtmlLinksComponent";
 
-import CheckBoxComponent from "components/form/CheckBoxComponent";
-import RadioBtnComponent from "components/form/RadioBtnComponent";
-import RadioBtnsComponent from "components/form/RadioBtnsComponent";
 import DropDownComponent from "components/form/DropDownComponent";
+import DropDownSelectionComponent from "components/form/DropDownComponent/selection";
+import DropDownListComponent from "components/form/DropDownComponent/list";
+import RadioButtonsComponent from "components/form/RadioButtonsComponent";
+import RadioButtonsItemComponent from "components/form/RadioButtonsComponent/item";
+import CheckBoxComponent from "components/form/CheckBoxComponent";
 import FileSelectComponent from "components/form/FileSelectComponent";
 import TextFieldComponent from "components/form/TextFieldComponent";
 import NumberFieldComponent from "components/form/NumberFieldComponent";
@@ -553,10 +555,12 @@ export default {
 	DocumentationLinkComponent,
 	EmbeddedHtmlLinksComponent,
 
-	CheckBoxComponent,
-	RadioBtnComponent,
-	RadioBtnsComponent,
 	DropDownComponent,
+	DropDownSelectionComponent,
+	DropDownListComponent,
+	RadioButtonsComponent,
+	RadioButtonsItemComponent,
+	CheckBoxComponent,
 	FileSelectComponent,
 	TextFieldComponent,
 	NumberFieldComponent,

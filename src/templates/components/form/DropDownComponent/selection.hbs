@@ -1,0 +1,13 @@
+{{#if hasBlock}}
+	{{yield (hash
+		hasSelection=(if selection true false)
+		label=(get selection optionLabelPath)
+		value=(get selection optionValuePath)
+		placeholder=placeholder
+	)}}
+{{else}}
+	{{if selection
+		(get selection optionLabelPath)
+		placeholder
+	}}
+{{/if}}
