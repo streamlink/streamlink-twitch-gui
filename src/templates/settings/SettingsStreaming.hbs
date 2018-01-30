@@ -11,7 +11,7 @@
 }}
 	{{drop-down
 		value=model.streaming.provider
-		content=providersDropDown
+		content=contentStreamingProvider
 		class="streaming-providers-dropdown"
 	}}
 	{{#each-in providers as |key provider|}}
@@ -50,16 +50,16 @@
 	notes="Please see the wiki for detailed informations about this option. Different parameters will be set, depending on the selection. The player needs to support the selected method."
 	documentation=playerInputDocumentation
 }}
-	{{#radio-btns
+	{{#radio-buttons
 		value=model.streaming.player_input
-		content=SettingsStreaming.player_input
-		as |radiobtn label|
+		content=contentStreamingPlayerInput
+		as |item|
 	}}
 		<div class="settings-provider-item">
-			{{component radiobtn label.name}}
-			<p class="description">{{label.description}}</p>
+			{{item.button item.label.name}}
+			<p class="description">{{item.label.description}}</p>
 		</div>
-	{{/radio-btns}}
+	{{/radio-buttons}}
 {{/settings-row}}
 </fieldset>
 

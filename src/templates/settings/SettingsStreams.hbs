@@ -4,7 +4,10 @@
 	"Choose the default stream quality."
 	icon="fa-eye"
 }}
-	{{drop-down value=model.streaming.quality content=qualities}}
+	{{drop-down
+		value=model.streaming.quality
+		content=contentStreamingQuality
+	}}
 {{/settings-row}}
 
 {{#if model.advanced}}

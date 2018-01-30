@@ -4,7 +4,10 @@
 	"Channel name localizations."
 	icon="fa-language"
 }}
-	{{drop-down value=model.streams.name content=SettingsStreams.name_list}}
+	{{drop-down
+		value=model.streams.name
+		content=contentStreamsName
+	}}
 {{/settings-row}}
 
 {{#settings-row
@@ -36,15 +39,13 @@
 	"What should be displayed?"
 	icon="fa-info"
 }}
-	{{#radio-btns
-		name="settings-streams-info"
+	{{#radio-buttons
 		value=model.streams.info
-		content=SettingsStreams.info
-		optionValuePath="id"
-		as |radiobtn label|
+		content=contentStreamsInfo
+		as |item|
 	}}
-		<div>{{component radiobtn label}}</div>
-	{{/radio-btns}}
+		<div>{{item.button}}</div>
+	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
@@ -53,8 +54,16 @@
 	icon="fa-hand-pointer-o"
 }}
 	<p>{{unless isDarwin "CTRL" "CMD"}} + Primary mouse button</p>
-	{{drop-down class="stream-click" value=model.streams.click_modify content=SettingsStreams.click}}
+	{{drop-down
+		value=model.streams.click_modify
+		content=contentStreamsClick
+		class="stream-click"
+	}}
 	<p>Middle mouse button</p>
-	{{drop-down class="stream-click" value=model.streams.click_middle content=SettingsStreams.click}}
+	{{drop-down
+		value=model.streams.click_middle
+		content=contentStreamsClick
+		class="stream-click"
+	}}
 {{/settings-row}}
 </fieldset>

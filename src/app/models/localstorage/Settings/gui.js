@@ -61,9 +61,9 @@ export default Fragment.extend({
 	],
 
 	focusrefresh: [
-		{ value: ATTR_GUI_FOCUSREFRESH_NONE, label: "Don't refresh" },
-		{ value: ATTR_GUI_FOCUSREFRESH_ONE, label: "After one minute" },
-		{ value: ATTR_GUI_FOCUSREFRESH_TWO, label: "After two minutes" },
-		{ value: ATTR_GUI_FOCUSREFRESH_FIVE, label: "After five minutes" }
+		{ id: ATTR_GUI_FOCUSREFRESH_NONE, label: "Don't refresh" },
+		{ id: ATTR_GUI_FOCUSREFRESH_ONE, label: "After one minute" },
+		{ id: ATTR_GUI_FOCUSREFRESH_TWO, label: "After two minutes" },
+		{ id: ATTR_GUI_FOCUSREFRESH_FIVE, label: "After five minutes" }
 	]
 });

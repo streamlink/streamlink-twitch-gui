@@ -9,11 +9,11 @@
 }}
 	{{drop-down
 		value=model.chat.provider
-		content=providersDropDown
+		content=contentChatProvider
 	}}
 {{/settings-row}}
 
-{{#each providerAttributes as |attributes name|}}
+{{#each-in providerAttributes as |name attributes|}}
 	{{#each attributes as |attribute|}}
 		{{#settings-row
 			attribute.options.title
@@ -48,7 +48,7 @@
 			{{/if}}
 		{{/settings-row}}
 	{{/each}}
-{{/each}}
+{{/each-in}}
 </fieldset>
 
 <fieldset>

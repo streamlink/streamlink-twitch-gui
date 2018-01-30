@@ -43,7 +43,7 @@ export default Controller.extend({
 		return list;
 	}),
 
-	playerPresets: computed(function() {
+	contentStreamingPlayer: computed(function() {
 		const presets = [{
 			id: "default",
 			label: "No preset"

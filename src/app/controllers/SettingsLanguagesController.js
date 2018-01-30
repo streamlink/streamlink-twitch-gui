@@ -10,8 +10,13 @@ import {
 import SettingsStreams from "models/localstorage/Settings/streams";
 
 
+const {
+	filterLanguages: contentStreamsFilterLanguages
+} = SettingsStreams;
+
+
 export default Controller.extend({
-	SettingsStreams,
+	contentStreamsFilterLanguages,
 
 	languages: computed(function() {
 		return Object.keys( langsConfig )

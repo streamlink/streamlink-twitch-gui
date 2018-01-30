@@ -6,7 +6,8 @@ import {
 import {
 	streaming as streamingConfig
 } from "config";
-import SettingsStreaming, {
+import {
+	default as SettingsStreaming,
 	ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH as inputPassthrough
 } from "models/localstorage/Settings/streaming";
 import { platform } from "utils/node/platform";
@@ -14,6 +15,9 @@ import { platform } from "utils/node/platform";
 
 const { equal } = computed;
 const { providers } = streamingConfig;
+const {
+	playerInput: contentStreamingPlayerInput
+} = SettingsStreaming;
 
 
 function settingsAttrMeta( attr, prop ) {
@@ -24,11 +28,11 @@ function settingsAttrMeta( attr, prop ) {
 
 
 export default Controller.extend({
-	SettingsStreaming,
 	platform,
 	providers,
+	contentStreamingPlayerInput,
 
-	providersDropDown: computed(function() {
+	contentStreamingProvider: computed(function() {
 		return Object.keys( providers )
 			// exclude unsupported providers
 			.filter( id => providers[ id ][ "exec" ][ platform ] )
@@ -49,7 +53,7 @@ export default Controller.extend({
 	playerInputDocumentation: computed( "model.streaming.player_input", function() {
 		const input = get( this, "model.streaming.player_input" );
 
-		return SettingsStreaming.player_input.findBy( "value", input ).label.documentation;
+		return contentStreamingPlayerInput.findBy( "id", input ).label.documentation;
 	}),
 
 	playerInputPassthrough: equal( "model.streaming.player_input", inputPassthrough ),

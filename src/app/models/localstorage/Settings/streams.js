@@ -47,15 +47,15 @@ export default Fragment.extend({
 
 }).reopenClass({
 
-	name_list: [
+	contentName: [
 		{ id: ATTR_STREAMS_NAME_BOTH, label: "Show both" },
 		{ id: ATTR_STREAMS_NAME_CUSTOM, label: "Show custom names" },
 		{ id: ATTR_STREAMS_NAME_ORIGINAL, label: "Show original names" }
 	],
 
-	filter_languages: [
-		{ value: false, label: "Fade out streams" },
-		{ value: true, label: "Filter out streams" }
+	filterLanguages: [
+		{ id: false, label: "Fade out streams" },
+		{ id: true, label: "Filter out streams" }
 	],
 
 	info: [

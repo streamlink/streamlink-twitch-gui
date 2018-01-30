@@ -23,7 +23,7 @@ export default Controller.extend({
 	chatConfig,
 	userArgsSubstitutions,
 
-	providersDropDown: computed(function() {
+	contentChatProvider: computed(function() {
 		const list = [];
 		for ( const [ id ] of providers ) {
 			const { label, exec } = chatConfig[ id ];
@@ -36,12 +36,12 @@ export default Controller.extend({
 	// EmberData (2.9) is stupid and uses an internal Map implementation that is not iterable
 	// so we can't iterate SettingsChatProvider.attributes in the template
 	providerAttributes: computed(function() {
-		const map = new Map();
+		const map = {};
 		for ( const [ id, provider ] of providers ) {
 			const attrs = [];
 			const attributes = get( provider, "attributes" );
 			attributes.forEach( attribute => attrs.push( attribute ) );
-			map.set( id, attrs );
+			map[ id ] = attrs;
 		}
 		return map;
 	})

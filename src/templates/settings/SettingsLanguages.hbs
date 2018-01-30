@@ -8,14 +8,13 @@
 		"Only list streams matching the language selection."
 	)
 }}
-	{{#radio-btns
-		name="filterstreams"
+	{{#radio-buttons
 		value=model.streams.filter_languages
-		content=SettingsStreams.filter_languages
-		as |radiobtn label|
+		content=contentStreamsFilterLanguages
+		as |item|
 	}}
-		<div>{{component radiobtn label}}</div>
-	{{/radio-btns}}
+		<div>{{item.button}}</div>
+	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
