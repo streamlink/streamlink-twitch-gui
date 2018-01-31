@@ -1,6 +1,0 @@
-{
-	"name": "streamlink-twitch-gui",
-	"dependencies": {
-		"ember": "2.11.3"
-	}
-}

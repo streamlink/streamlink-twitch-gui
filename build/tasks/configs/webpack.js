@@ -20,15 +20,13 @@ const pTestFixtures = r( pTest, "fixtures" );
 const pStyles = r( pRoot, "styles" );
 const pImages = r( pRoot, "img" );
 const pTemplates = r( pRoot, "templates" );
-const pModulesBower = r( ".", "bower_components" );
-const pModulesNpm = r( ".", "node_modules" );
+const pDependencies = r( ".", "node_modules" );
 const pCacheBabel = r( tmpdir(), "babel-cache" );
 
 
 const resolveModuleDirectories = [
 	"web_modules",
-	"node_modules",
-	"bower_components"
+	"node_modules"
 ];
 const resolveLoaderModuleDirectories = [
 	"web_loaders",
@@ -49,7 +47,7 @@ const commonLoaders = [
 	// Ember-Data
 	{
 		test: /\.js$/,
-		include: r( pModulesNpm, "ember-data", "addon" ),
+		include: r( pDependencies, "ember-data", "addon" ),
 		loader: "babel-loader",
 		options: {
 			presets: [],
@@ -70,10 +68,7 @@ const commonLoaders = [
 		enforce: "pre",
 		test: /\.js$/,
 		loader: "eslint-loader",
-		exclude: [
-			pModulesNpm,
-			pModulesBower
-		],
+		exclude: pDependencies,
 		options: {
 			failOnError: true
 		}
@@ -91,8 +86,7 @@ const commonLoaders = [
 		loader: "metadata-loader",
 		options: {
 			dependencyProperties: [ "dependencies", "devDependencies" ],
-			packageNpm: r( pProjectRoot, "package.json" ),
-			packageBower: r( pProjectRoot, "bower.json" ),
+			packageJson: r( pProjectRoot, "package.json" ),
 			donationConfigFile: r( pConfig, "main.json" )
 		}
 	},
@@ -176,7 +170,7 @@ const commonLoaders = [
 const loadersEmberProductionBuild = [
 	{
 		test: /\.js$/,
-		include: r( pModulesNpm, "ember-data", "addon" ),
+		include: r( pDependencies, "ember-data", "addon" ),
 		loader: "babel-loader",
 		options: {
 			presets: [],
@@ -207,10 +201,7 @@ const loadersEmberProductionBuild = [
 // the inject-loader used by some tests requires es2015 modules to be transpiled
 const loaderBabelTest = {
 	test: /\.js$/,
-	exclude: [
-		pModulesNpm,
-		pModulesBower
-	],
+	exclude: pDependencies,
 	loader: "babel-loader",
 	options: {
 		presets: [],
@@ -262,7 +253,6 @@ module.exports = {
 				"styles"      : pStyles,
 				"img"         : pImages,
 				"templates"   : pTemplates,
-				"bower"       : pModulesBower,
 				"fixtures"    : pTestFixtures,
 
 				// app folders
@@ -284,9 +274,9 @@ module.exports = {
 				"ember"       : r( pRoot, "web_modules", "ember" ),
 				"ember-data$" : r( pRoot, "web_modules", "ember-data" ),
 				"ember-data/version$": r( pRoot, "web_modules", "ember-data", "version" ),
-				"ember-data/app": r( pModulesNpm, "ember-data", "app" ),
-				"ember-data"  : r( pModulesNpm, "ember-data", "addon" ),
-				"ember-inflector": r( pModulesNpm, "ember-inflector", "addon" ),
+				"ember-data/app": r( pDependencies, "ember-data", "app" ),
+				"ember-data"  : r( pDependencies, "ember-data", "addon" ),
+				"ember-inflector": r( pDependencies, "ember-inflector", "addon" ),
 				"qunit$"      : r( pTest, "web_modules", "qunit" ),
 				"ember-qunit$": "ember-qunit",
 				"ember-qunit" : "ember-qunit/lib/ember-qunit",
@@ -304,33 +294,22 @@ module.exports = {
 		},
 
 		module: {
-			noParse: /bower_components\/.+\/ember(-data)?(\.(debug|prod))?\.js$/
+			noParse: /\/ember-source\/dist\/ember\.(debug|prod)\.js$/
 		},
 
 		plugins: [
 			// don't split the main module into multiple chunks
 			new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
 
-			// Split "main" entry point into webpack manifest, bower/npm bundles and app code.
+			// Split "main" entry point into webpack manifest, dependency bundles and app code.
 			// Select all modules to be bundled and narrow the selection down in each new chunk.
 			// This looks weird and can probably be improved, but it works...
 			new webpack.optimize.CommonsChunkPlugin({
-				name: "vendor.bower",
+				name: "dependencies",
 				minChunks({ resource }) {
 					return resource
 						&& (
-							   resource.startsWith( pModulesBower )
-							|| resource.startsWith( pModulesNpm )
-							|| resource.startsWith( pTemplates )
-						);
-				}
-			}),
-			new webpack.optimize.CommonsChunkPlugin({
-				name: "vendor.npm",
-				minChunks({ resource }) {
-					return resource
-						&& (
-							   resource.startsWith( pModulesNpm )
+							   resource.startsWith( pDependencies )
 							|| resource.startsWith( pTemplates )
 						);
 				}
@@ -352,10 +331,7 @@ module.exports = {
 			lessExtractTextPlugin,
 
 			// ignore l10n modules of momentjs
-			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ ),
-
-			// ignore abstract-socket (and its binding dependency)
-			new webpack.IgnorePlugin( /abstract-socket/, /dbus-native/ )
+			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ )
 		]
 	},
 
@@ -467,8 +443,8 @@ module.exports = {
 
 			// use non-debug versions of ember and ember-data in production builds
 			new webpack.NormalModuleReplacementPlugin(
-				/\/ember\/ember\.debug\.js$/,
-				r( pModulesBower, "ember", "ember.prod.js" )
+				/\/ember-source\/dist\/ember\.debug\.js$/,
+				r( pDependencies, "ember-source", "dist", "ember.prod.js" )
 			),
 
 			// minifiy and optimize production code

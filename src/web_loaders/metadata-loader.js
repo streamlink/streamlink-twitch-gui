@@ -9,19 +9,16 @@ module.exports = function() {
 
 	const {
 		dependencyProperties,
-		packageNpm,
-		packageBower,
+		packageJson,
 		donationConfigFile
 	} = this.query;
 
-	this.addDependency( packageNpm );
-	this.addDependency( packageBower );
+	this.addDependency( packageJson );
 	this.addDependency( donationConfigFile );
 	this.cacheable( false );
 
 	const readFile = denodify( FS.readFile );
-	const readPackageNpm = readFile( packageNpm ).then( JSON.parse );
-	const readPackageBower = readFile( packageBower ).then( JSON.parse );
+	const readPackageJson = readFile( packageJson ).then( JSON.parse );
 
 
 	function promiseExec( exec, params ) {
@@ -60,7 +57,7 @@ module.exports = function() {
 
 	function promisePackageData() {
 		return Promise.all([
-			readPackageNpm,
+			readPackageJson,
 			promiseExec( "git", [ "describe", "--tags" ] )
 		])
 			.then( ([ json, version ]) => ({
@@ -79,17 +76,10 @@ module.exports = function() {
 			return obj;
 		}
 
-		return Promise.all([
-			readPackageBower,
-			readPackageNpm
-		])
-			.then( files => files
-				// find dependencies
-				.map( json => dependencyProperties
-					.map( property => json[ property ] || {} )
-					.reduce( merge, {} )
-				)
-				// merge all dependencies
+		return readPackageJson
+			// merge dependencies
+			.then( json => dependencyProperties
+				.map( property => json[ property ] || {} )
 				.reduce( merge, {} )
 			);
 	}

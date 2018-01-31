@@ -19,7 +19,6 @@ cache:
   apt: true
   directories:
     - node_modules
-    - bower_components
     - build/cache
   yarn: true
 
@@ -37,7 +36,7 @@ before_install:
     yarn --version
 
 install:
-  - yarn global add --no-progress --non-interactive bower grunt-cli
+  - yarn global add --no-progress --non-interactive grunt-cli
   - yarn install --pure-lockfile --no-progress --non-interactive
 
 script:

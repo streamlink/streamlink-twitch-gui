@@ -84,7 +84,7 @@ Building the application on your own is simple. Just make sure that the latest s
 Then run the following lines from the path of your cloned repository to install all dependencies and to start the build process. You will then find the built executable inside the `build/releases` folder. See [here][Contributing] for more detailed instructions.
 
 ```bash
-yarn global add bower grunt-cli
+yarn global add grunt-cli
 yarn install
 grunt release
 ```

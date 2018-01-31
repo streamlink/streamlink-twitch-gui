@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"bootstrap": "3.3.1",
+		"ember-source": "2.11.3",
 		"ember-data": "2.11.3",
 		"ember-data-model-fragments": "2.11.5",
 		"ember-inflector": "1.12.1",
@@ -64,7 +65,6 @@
 		"webpack": "3.3.0"
 	},
 	"scripts": {
-		"postinstall": "bower install",
 		"build": "grunt release",
 		"test": "grunt test"
 	}
