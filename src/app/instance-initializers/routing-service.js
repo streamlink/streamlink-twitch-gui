@@ -3,8 +3,7 @@ import {
 	set,
 	getOwner,
 	makeArray,
-	inject,
-	Application
+	inject
 } from "ember";
 import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
@@ -113,11 +112,11 @@ const customRoutingService = {
 };
 
 
-Application.instanceInitializer({
+export default {
 	name: "routing-service",
 
 	initialize( application ) {
 		let routingService = application.lookup( "service:-routing" );
 		routingService.reopen( customRoutingService );
 	}
-});
+};

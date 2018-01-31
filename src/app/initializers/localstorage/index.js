@@ -1,11 +1,10 @@
-import { Application } from "ember";
 import LS from "./localstorage";
 import updateNamespaces from "./namespaces";
 import updateSettings from "./settings";
 import updateChannelSettings from "./channelsettings";
 
 
-Application.instanceInitializer({
+export default {
 	name: "localstorage",
 	before: "ember-data",
 
@@ -32,4 +31,4 @@ Application.instanceInitializer({
 			LS.setItem( "channelsettings", JSON.stringify( data ) );
 		} catch ( e ) {}
 	}
-});
+};

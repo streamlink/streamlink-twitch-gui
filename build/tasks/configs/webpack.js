@@ -217,6 +217,7 @@ module.exports = {
 				"config"      : r( pApp, "config" ),
 				"nwjs"        : r( pApp, "nwjs" ),
 				"initializers": r( pApp, "initializers" ),
+				"instance-initializers": r( pApp, "instance-initializers" ),
 				"services"    : r( pApp, "services" ),
 				"helpers"     : r( pApp, "helpers" ),
 				"models"      : r( pApp, "models" ),

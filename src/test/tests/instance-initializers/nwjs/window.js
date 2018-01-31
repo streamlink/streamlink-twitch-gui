@@ -10,7 +10,7 @@ import {
 import { setupStore } from "store-utils";
 import Window from "models/localstorage/Window";
 import resetWindowInjector from "inject-loader!nwjs/Window/reset";
-import windowInitializerInjector from "inject-loader?-ember!initializers/nwjs/window";
+import windowInitializerInjector from "inject-loader?-ember!instance-initializers/nwjs/window";
 import { EventEmitter } from "events";
 
 

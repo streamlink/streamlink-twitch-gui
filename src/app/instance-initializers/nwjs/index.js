@@ -1,7 +1,6 @@
 import {
 	get,
-	addObserver,
-	Application
+	addObserver
 } from "ember";
 import nwApp, {
 	quit
@@ -25,7 +24,7 @@ import Logger from "utils/Logger";
 const { logDebug, logError } = new Logger( "NWjs EmberJS initializer" );
 
 
-Application.instanceInitializer({
+export default {
 	name: "nwjs",
 
 	initialize( application ) {
@@ -88,4 +87,4 @@ Application.instanceInitializer({
 			}
 		});
 	}
-});
+};

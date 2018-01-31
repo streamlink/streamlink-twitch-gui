@@ -1,4 +1,3 @@
-import { Application } from "ember";
 import {
 	ArrayTransform,
 	FragmentArrayTransform,
@@ -6,7 +5,7 @@ import {
 } from "model-fragments";
 
 
-Application.initializer({
+export default {
 	name: "fragmentTransform",
 	before: "ember-data",
 
@@ -15,4 +14,4 @@ Application.initializer({
 		application.register( "transform:fragment-array", FragmentArrayTransform );
 		application.register( "transform:array", ArrayTransform );
 	}
-});
+};

@@ -1,9 +1,8 @@
-import { Application } from "ember";
 import { players } from "models/localstorage/Settings/streamingPlayer";
 import Serializer from "models/localstorage/Settings/streamingPlayerSerializer";
 
 
-Application.initializer({
+export default {
 	name: "settings-streaming-player",
 
 	initialize( application ) {
@@ -12,4 +11,4 @@ Application.initializer({
 			application.register( `serializer:settings-streaming-player-${type}`, Serializer );
 		}
 	}
-});
+};

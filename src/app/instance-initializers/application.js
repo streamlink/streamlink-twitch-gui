@@ -1,8 +1,7 @@
 import {
 	get,
 	$,
-	addObserver,
-	Application
+	addObserver
 } from "ember";
 import {
 	themes as themesConfig
@@ -17,7 +16,7 @@ const { themes: themesList } = themesConfig;
 const reTheme = /^theme-/;
 
 
-Application.instanceInitializer({
+export default {
 	name: "application",
 	before: "nwjs",
 
@@ -58,4 +57,4 @@ Application.instanceInitializer({
 				e.stopImmediatePropagation();
 			});
 	}
-});
+};
