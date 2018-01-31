@@ -1,8 +1,6 @@
 import "ember";
-import "bower/ember-data/ember-data";
-
-
-const EmberData = window.DS;
+import "ember-inflector";
+import EmberData from "ember-data/index";
 
 
 export default EmberData;

@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 const LessPluginCleanCSS = require( "less-plugin-clean-css" );
 const NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
+const emberFeatures = require( "../../../src/config/ember-features.json" );
 const { resolve: r } = require( "path" );
 const { tmpdir } = require( "os" );
 
@@ -45,6 +46,26 @@ const lessExtractTextPlugin = new ExtractTextPlugin({
 
 
 const commonLoaders = [
+	// Ember-Data
+	{
+		test: /\.js$/,
+		include: r( pModulesNpm, "ember-data", "addon" ),
+		loader: "babel-loader",
+		options: {
+			presets: [],
+			plugins: [
+				[ require( "babel-plugin-feature-flags" ), {
+					import: {
+						module: "ember-data/-private/features"
+					},
+					features: emberFeatures
+				} ],
+				require( "babel6-plugin-strip-heimdall" ),
+				require( "babel6-plugin-strip-class-callcheck" )
+			],
+			cacheDirectory: pCacheBabel
+		}
+	},
 	{
 		enforce: "pre",
 		test: /\.js$/,
@@ -152,6 +173,37 @@ const commonLoaders = [
 ];
 
 
+const loadersEmberProductionBuild = [
+	{
+		test: /\.js$/,
+		include: r( pModulesNpm, "ember-data", "addon" ),
+		loader: "babel-loader",
+		options: {
+			presets: [],
+			plugins: [
+				// https://github.com/emberjs/data/blob/v2.11.3/lib/stripped-build-plugins.js#L48
+				[ require( "babel-plugin-filter-imports" ), {
+					imports: {
+						"ember-data/-private/debug": [
+							"instrument",
+							"assert",
+							"assertPolymorphicType",
+							"debug",
+							"deprecate",
+							"info",
+							"runInDebug",
+							"warn",
+							"debugSeal"
+						]
+					}
+				}]
+			],
+			cacheDirectory: pCacheBabel
+		}
+	}
+];
+
+
 // the inject-loader used by some tests requires es2015 modules to be transpiled
 const loaderBabelTest = {
 	test: /\.js$/,
@@ -230,7 +282,11 @@ module.exports = {
 				// explicit lib/module paths
 				"shim"        : r( pRoot, "shim" ),
 				"ember"       : r( pRoot, "web_modules", "ember" ),
-				"ember-data"  : r( pRoot, "web_modules", "ember-data" ),
+				"ember-data$" : r( pRoot, "web_modules", "ember-data" ),
+				"ember-data/version$": r( pRoot, "web_modules", "ember-data", "version" ),
+				"ember-data/app": r( pModulesNpm, "ember-data", "app" ),
+				"ember-data"  : r( pModulesNpm, "ember-data", "addon" ),
+				"ember-inflector": r( pModulesNpm, "ember-inflector", "addon" ),
 				"qunit$"      : r( pTest, "web_modules", "qunit" ),
 				"ember-qunit$": "ember-qunit",
 				"ember-qunit" : "ember-qunit/lib/ember-qunit",
@@ -378,6 +434,7 @@ module.exports = {
 
 		module: {
 			rules: [
+				...loadersEmberProductionBuild,
 				...commonLoaders,
 				{
 					test: /\.svg$/,
@@ -412,10 +469,6 @@ module.exports = {
 			new webpack.NormalModuleReplacementPlugin(
 				/\/ember\/ember\.debug\.js$/,
 				r( pModulesBower, "ember", "ember.prod.js" )
-			),
-			new webpack.NormalModuleReplacementPlugin(
-				/\/ember-data\/ember-data\.js$/,
-				r( pModulesBower, "ember-data", "ember-data.prod.js" )
 			),
 
 			// minifiy and optimize production code
