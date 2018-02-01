@@ -7,11 +7,11 @@
 		},
 		"response": {
 			"stream": {
-				"_id": 1,
+				"_id": 2,
 				"average_fps": 60,
 				"broadcast_platform": "live",
 				"channel": {
-					"_id": 2,
+					"_id": 1,
 					"broadcaster_language": "en",
 					"created_at": "2000-01-01T00:00:00Z",
 					"display_name": "Foo",

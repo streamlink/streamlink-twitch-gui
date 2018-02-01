@@ -129,15 +129,15 @@ test( "Adapter and Serializer", assert => {
 			return get( records, "firstObject.target" )
 				.then( () => {
 					assert.ok(
-						env.store.hasRecordForId( "twitchStream", "2" ),
+						env.store.hasRecordForId( "twitchStream", "1" ),
 						"Store has a Stream record registered after accessing the first target"
 					);
 					assert.ok(
-						env.store.hasRecordForId( "twitchChannel", "2" ),
+						env.store.hasRecordForId( "twitchChannel", "1" ),
 						"Store has a Channel record registered after accessing the first target"
 					);
 					assert.ok(
-						env.store.hasRecordForId( "twitchImage", "stream/preview/2" ),
+						env.store.hasRecordForId( "twitchImage", "stream/preview/1" ),
 						"Store has a Image record registered after accessing the first target"
 					);
 				});

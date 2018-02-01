@@ -39,13 +39,14 @@ module( "models/twitch/ProductEmoticon", {
 test( "Serializer", assert => {
 
 	// TwitchProductEmoticon is just an embedded model
+	// ignore the queried record id
 
-	env.adapter.findRecord = () =>
+	env.adapter.queryRecord = () =>
 		Promise.resolve({
 			twitchProductEmoticon: TwitchProductEmoticonFixtures[ "embedded" ]
 		});
 
-	return env.store.findRecord( "twitchProductEmoticon", 1 )
+	return env.store.queryRecord( "twitchProductEmoticon", 1 )
 		.then( record => {
 			assert.deepEqual(
 				record.toJSON({ includeId: true }),

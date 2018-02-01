@@ -71,19 +71,20 @@ test( "Adapter and Serializer (single)", assert => {
 	env.store.adapterFor( "twitchStream" ).ajax = ( url, method, query ) =>
 		adapterRequest( assert, TwitchStreamFixtures[ "single" ], url, method, query );
 
+	// stream query IDs are actually channel IDs
 	return env.store.findRecord( "twitchStream", 1 )
 		.then( record => {
 			assert.deepEqual(
 				record.toJSON({ includeId: true }),
 				{
-					id: "2",
+					id: "1",
 					average_fps: 60,
 					broadcast_platform: "live",
-					channel: "2",
+					channel: "1",
 					created_at: "2000-01-01T00:00:00.000Z",
 					delay: 0,
 					game: "some game",
-					preview: "stream/preview/2",
+					preview: "stream/preview/1",
 					stream_type: "live",
 					video_height: 1080,
 					viewers: 1000
@@ -94,7 +95,7 @@ test( "Adapter and Serializer (single)", assert => {
 			assert.deepEqual(
 				get( record, "channel" ).toJSON({ includeId: true }),
 				{
-					id: "2",
+					id: "1",
 					broadcaster_language: "en",
 					created_at: "2000-01-01T00:00:00.000Z",
 					display_name: "Foo",
@@ -119,7 +120,7 @@ test( "Adapter and Serializer (single)", assert => {
 			assert.deepEqual(
 				get( record, "preview" ).toJSON({ includeId: true }),
 				{
-					id: "stream/preview/2",
+					id: "stream/preview/1",
 					image_large: "large.jpg",
 					image_medium: "medium.jpg",
 					image_small: "small.jpg"
@@ -128,11 +129,11 @@ test( "Adapter and Serializer (single)", assert => {
 			);
 
 			assert.ok(
-				env.store.hasRecordForId( "twitchChannel", 2 ),
+				env.store.hasRecordForId( "twitchChannel", 1 ),
 				"Store has a TwitchChannel record of the the embedded channel data"
 			);
 			assert.ok(
-				env.store.hasRecordForId( "twitchImage", "stream/preview/2" ),
+				env.store.hasRecordForId( "twitchImage", "stream/preview/1" ),
 				"Store has a TwitchImage record of the the embedded preview image data"
 			);
 		});

@@ -71,8 +71,9 @@ module( "models/twitch/Product", {
 test( "Serializer and partner_login relation", assert => {
 
 	// TwitchProduct is just an embedded model
+	// ignore the queried record id
 
-	env.adapter.findRecord = () =>
+	env.adapter.queryRecord = () =>
 		Promise.resolve({
 			twitchProduct: TwitchProductFixtures[ "embedded" ]
 		});
@@ -83,12 +84,12 @@ test( "Serializer and partner_login relation", assert => {
 	env.store.adapterFor( "twitch-channel" ).ajax = ( url, method, query ) =>
 		adapterRequest( assert, TwitchChannelFixtures[ "by-id" ], url, method, query );
 
-	return env.store.findRecord( "twitchProduct", 1 )
+	return env.store.queryRecord( "twitchProduct", 1 )
 		.then( record => {
 			assert.deepEqual(
 				record.toJSON({ includeId: true }),
 				{
-					id: "1",
+					id: "product foo",
 					short_name: "foo",
 					ticket_type: "chansub",
 					owner_name: "foo",
@@ -109,7 +110,7 @@ test( "Serializer and partner_login relation", assert => {
 			);
 
 			assert.ok(
-				env.store.hasRecordForId( "twitchProduct", 1 ),
+				env.store.hasRecordForId( "twitchProduct", "product foo" ),
 				"Has the new Product record registered in the data store"
 			);
 

@@ -47,13 +47,14 @@ module( "models/twitch/Game", {
 test( "Serializer", assert => {
 
 	// TwitchGame is just an embedded model
+	// ignore the queried record id
 
-	env.adapter.findRecord = () =>
+	env.adapter.queryRecord = () =>
 		Promise.resolve({
 			twitchGame: TwitchGameFixtures[ "embedded" ]
 		});
 
-	return env.store.findRecord( "twitchGame", 1 )
+	return env.store.queryRecord( "twitchGame", 1 )
 		.then( record => {
 			assert.deepEqual(
 				record.toJSON({ includeId: true }),
