@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"bootstrap": "3.3.1",
-		"ember-source": "2.13.4",
+		"ember-source": "2.15.3",
 		"ember-data": "2.12.2",
 		"ember-data-model-fragments": "2.11.5",
 		"ember-inflector": "1.12.1",
