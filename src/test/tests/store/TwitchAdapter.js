@@ -40,6 +40,7 @@ module( "store/TwitchAdapter", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-stream", Stream );
 		owner.register( "adapter:twitch-stream", StreamAdapter );
 		owner.register( "serializer:twitch-stream", StreamSerializer );

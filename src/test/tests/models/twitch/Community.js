@@ -31,6 +31,7 @@ module( "models/twitch/Community", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-community", Community );
 		owner.register( "adapter:twitch-community", TwitchAdapter.extend() );
 		owner.register( "serializer:twitch-community", CommunitySerializer );

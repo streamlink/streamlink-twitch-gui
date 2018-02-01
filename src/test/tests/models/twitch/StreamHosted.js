@@ -46,6 +46,7 @@ module( "models/twitch/StreamHosted", {
 				user_name: "foobar"
 			}
 		}) );
+		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-stream-hosted", StreamHosted );
 		owner.register( "adapter:twitch-stream-hosted", TwitchAdapter.extend() );
 		owner.register( "serializer:twitch-stream-hosted", StreamHostedSerializer );

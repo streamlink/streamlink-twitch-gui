@@ -41,6 +41,7 @@ module( "models/twitch/Product", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-product", Product );
 		owner.register( "serializer:twitch-product", ProductSerializer.extend({
 			modelNameFromPayloadKey() {

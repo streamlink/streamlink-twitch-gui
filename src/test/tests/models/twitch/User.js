@@ -44,6 +44,7 @@ module( "models/twitch/User", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-user", User );
 		owner.register( "adapter:twitch-user", UserAdapter );
 		owner.register( "serializer:twitch-user", UserSerializer );

@@ -32,6 +32,7 @@ module( "models/twitch/Team", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-team", Team );
 		owner.register( "adapter:twitch-team", TeamAdapter );
 		owner.register( "serializer:twitch-team", TeamSerializer );
