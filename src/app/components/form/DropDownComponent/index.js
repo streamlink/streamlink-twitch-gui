@@ -3,31 +3,11 @@ import {
 	set
 } from "ember";
 import Selectable from "../-selectable";
-import HotkeyMixin from "../../mixins/hotkey";
+import IsFocusedMixin from "../../mixins/is-focused";
 import layout from "templates/components/form/DropDownComponent/index.hbs";
 
 
-function switchSelectionOnArrowKey( change ) {
-	return function() {
-		if ( !get( this, "expanded" ) || !this.isFocused() ) {
-			return true;
-		}
-
-		const content = get( this, "content" );
-		const selection = get( this, "selection" );
-		const selIndex = content.indexOf( selection );
-		if ( selIndex === -1 ) {
-			return true;
-		}
-
-		const newIndex = ( selIndex + change + content.length ) % content.length;
-		const newSelection = content[ newIndex ];
-		set( this, "selection", newSelection );
-	};
-}
-
-
-export default Selectable.extend( HotkeyMixin, {
+export default Selectable.extend( IsFocusedMixin, {
 	layout,
 
 	tagName: "div",
@@ -43,40 +23,54 @@ export default Selectable.extend( HotkeyMixin, {
 	expanded: false,
 
 
-	hotkeys: [
-		{
-			code: [ "Escape", "Backspace" ],
-			action() {
+	keyDown( event ) {
+		event = event.originalEvent || event;
+		switch ( event.code ) {
+			case "Escape":
+			case "Backspace":
 				if ( get( this, "expanded" ) ) {
 					set( this, "expanded", false );
 					return false;
 				}
-				if ( this.isFocused() ) {
+				if ( this._isFocused() ) {
 					this.$().blur();
 					return false;
 				}
-				// let the event bubble up
-				return true;
-			}
-		},
-		{
-			code: "Space",
-			action() {
-				if ( !this.isFocused() ) {
-					return true;
+				return;
+
+			case "Space":
+				if ( this._isFocused() ) {
+					this.send( "toggle" );
+					return false;
 				}
-				this.send( "toggle" );
-			}
-		},
-		{
-			code: "ArrowUp",
-			action: switchSelectionOnArrowKey( -1 )
-		},
-		{
-			code: "ArrowDown",
-			action: switchSelectionOnArrowKey( +1 )
+				return;
+
+			case "ArrowUp":
+				return this._switchSelectionOnArrowKey( -1 );
+
+			case "ArrowDown":
+				return this._switchSelectionOnArrowKey( 1 );
 		}
-	],
+	},
+
+	_switchSelectionOnArrowKey( change ) {
+		if ( !get( this, "expanded" ) || !this._isFocused() ) {
+			return;
+		}
+
+		const content = get( this, "content" );
+		const selection = get( this, "selection" );
+		const selIndex = content.indexOf( selection );
+		if ( selIndex === -1 ) {
+			return;
+		}
+
+		const newIndex = ( selIndex + change + content.length ) % content.length;
+		const newSelection = content[ newIndex ];
+		set( this, "selection", newSelection );
+
+		return false;
+	},
 
 
 	actions: {

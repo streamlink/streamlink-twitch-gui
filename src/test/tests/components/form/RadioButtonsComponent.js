@@ -8,9 +8,9 @@ import {
 } from "ember";
 import {
 	buildResolver,
-	hbs
+	hbs,
+	triggerKeyDown
 } from "test-utils";
-import HotkeyService from "services/HotkeyService";
 import RadioButtonsComponent from "components/form/RadioButtonsComponent";
 import RadioButtonsItemComponent from "components/form/RadioButtonsComponent/item";
 import IsEqualHelper from "helpers/IsEqualHelper";
@@ -19,14 +19,11 @@ import IsEqualHelper from "helpers/IsEqualHelper";
 moduleForComponent( "components/form/RadioButtonsComponent", {
 	integration: true,
 	resolver: buildResolver({
-		HotkeyService,
 		RadioButtonsComponent,
 		RadioButtonsItemComponent,
 		IsEqualHelper
 	}),
 	beforeEach() {
-		this.inject.service( "hotkey" );
-
 		this.getItems = () => this.$( ".radio-buttons-item-component" );
 		this.getLabels = () => this.getItems()
 			.toArray()
@@ -131,5 +128,55 @@ test( "Custom component and child-component blocks", function( assert ) {
 	assert.propEqual( this.getLabels(), [ "foo: 1 (n - y)", "bar: 2 (y - n)" ], "Custom labels" );
 	assert.propEqual( this.getChecked(), [ false, true ], "Items have correct checked states" );
 	assert.propEqual( this.getDisabled(), [ true, false ], "items have correct disabled states" );
+
+});
+
+
+test( "Hotkeys", function( assert ) {
+
+	let e;
+
+	const content = [{
+		id: 1,
+		label: "foo"
+	}, {
+		id: 2,
+		label: "bar"
+	}];
+
+	this.setProperties({
+		content,
+		selection: content[0]
+	});
+	this.render( hbs`{{radio-buttons content=content selection=selection}}` );
+
+	const $elems = this.$( ".radio-buttons-item-component" );
+	const $elemTwo = $elems.eq( 1 );
+
+	assert.propEqual(
+		$elems.toArray().map( elem => $( elem ).attr( "tabindex" ) ),
+		[ "0", "0" ],
+		"All items have a tabindex attribute with value 0"
+	);
+
+	e = triggerKeyDown( $elemTwo, "Space" );
+	assert.strictEqual( this.get( "selection" ), content[0], "Ignores Space if not focused" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+
+	$elemTwo.focus();
+	assert.strictEqual( document.activeElement, $elemTwo.get( 0 ), "Second item is now focused" );
+
+	e = triggerKeyDown( $elemTwo, "Space" );
+	assert.strictEqual( this.get( "selection" ), content[1], "Changes selection if focused" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+	e = triggerKeyDown( $elemTwo, "Space" );
+	assert.strictEqual( this.get( "selection" ), content[1], "Keeps selection" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+
+	triggerKeyDown( $elemTwo, "Escape" );
+	assert.notStrictEqual( document.activeElement, $elemTwo.get( 0 ), "Removes focus on Escape" );
 
 });

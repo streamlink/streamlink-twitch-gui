@@ -4,22 +4,17 @@ import {
 } from "ember-qunit";
 import {
 	buildResolver,
-	hbs
+	hbs,
+	triggerKeyDown
 } from "test-utils";
-import $ from "jquery";
-import HotkeyService from "services/HotkeyService";
 import CheckBoxComponent from "components/form/CheckBoxComponent";
 
 
 moduleForComponent( "components/form/CheckBoxComponent", {
 	integration: true,
 	resolver: buildResolver({
-		CheckBoxComponent,
-		HotkeyService
-	}),
-	beforeEach() {
-		this.inject.service( "hotkey" );
-	}
+		CheckBoxComponent
+	})
 });
 
 
@@ -71,15 +66,7 @@ test( "CheckBoxComponent - without block", function( assert ) {
 
 test( "Hotkeys", function( assert ) {
 
-	let event;
-	const hotkeyService = this.container.lookup( "service:hotkey" );
-
-	function trigger( code ) {
-		const event = $.Event( "keyup" );
-		event.code = code;
-		hotkeyService.trigger( event );
-		return event;
-	}
+	let e;
 
 	this.set( "checked", false );
 	this.set( "disabled", false );
@@ -92,36 +79,36 @@ test( "Hotkeys", function( assert ) {
 	assert.notOk( this.get( "checked" ), "Is not checked initially" );
 	assert.strictEqual( $elem.attr( "tabindex" ), "0", "Has a tabindex attribute with value 0" );
 
-	event = trigger( "Space" );
+	e = triggerKeyDown( $elem, "Space" );
 	assert.notOk( this.get( "checked" ), "Is still not checked on Space" );
-	assert.notOk( event.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( event.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
 	$elem.focus();
 	assert.strictEqual( document.activeElement, $elem[0], "Is focused now" );
 
-	event = trigger( "Space" );
+	e = triggerKeyDown( $elem, "Space" );
 	assert.ok( this.get( "checked" ), "Is checked on Space" );
-	assert.ok( event.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( event.isImmediatePropagationStopped(), "Stops event's propagation" );
-	event = trigger( "Space" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+	e = triggerKeyDown( $elem, "Space" );
 	assert.notOk( this.get( "checked" ), "Is not checked anymore on Space" );
-	assert.ok( event.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( event.isImmediatePropagationStopped(), "Stops event's propagation" );
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
 
-	trigger( "Escape" );
+	triggerKeyDown( $elem, "Escape" );
 	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
 
 	this.set( "disabled", true );
 	$elem.focus();
 	assert.strictEqual( document.activeElement, $elem[0], "Is focused now" );
 
-	event = trigger( "Space" );
+	e = triggerKeyDown( $elem, "Space" );
 	assert.notOk( this.get( "checked" ), "Is not checked on Space while being disabled" );
-	assert.notOk( event.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( event.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
-	trigger( "Escape" );
+	triggerKeyDown( $elem, "Escape" );
 	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
 
 });

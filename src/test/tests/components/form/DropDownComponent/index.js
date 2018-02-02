@@ -4,15 +4,14 @@ import {
 } from "ember-qunit";
 import {
 	buildResolver,
-	hbs
+	hbs,
+	triggerKeyDown
 } from "test-utils";
 import {
-	get,
 	$,
 	run,
 	EmberNativeArray
 } from "ember";
-import HotkeyService from "services/HotkeyService";
 import IsEqualHelper from "helpers/IsEqualHelper";
 import DropDownComponent from "components/form/DropDownComponent";
 import DropDownSelectionComponent from "components/form/DropDownComponent/selection";
@@ -22,25 +21,12 @@ import DropDownListComponent from "components/form/DropDownComponent/list";
 moduleForComponent( "components/form/DropDownComponent", {
 	integration: true,
 	resolver: buildResolver({
-		HotkeyService,
 		DropDownComponent,
 		DropDownSelectionComponent,
 		DropDownListComponent,
 		IsEqualHelper
 	}),
 	beforeEach() {
-		const $context = this.$();
-
-		this.inject.service( "hotkey" );
-		const hotkeyService = get( this, "hotkey" );
-		$context.on( "keyup", e => hotkeyService.trigger( e ) );
-		this.trigger = data => {
-			const event = $.Event( "keyup" );
-			Object.assign( event, data );
-			run( () => $context.trigger( event ) );
-			return event;
-		};
-
 		this.getLabel = () => this.$( ".drop-down-selection-component" ).text().trim();
 		this.getItems = () => this.$( ".drop-down-list-component" )
 			.children();
@@ -261,63 +247,63 @@ test( "Hotkeys", function( assert ) {
 	assert.notOk( $list.hasClass( "expanded" ), "Is not expanded initially" );
 	assert.strictEqual( $elem.attr( "tabindex" ), "0", "Has a tabindex attribute with value 0" );
 
-	e = this.trigger({ code: "Space" });
+	e = triggerKeyDown( $elem, "Space" );
 	assert.notOk( $list.hasClass( "expanded" ), "Does not react to spacebar when not focused" );
 	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
-	e = this.trigger({ code: "ArrowDown" });
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+	e = triggerKeyDown( $elem, "ArrowDown" );
 	assert.strictEqual( this.get( "selection" ), content[0], "Doesn't change on ArrowDown" );
 	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
-	e = this.trigger({ code: "ArrowUp" });
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+	e = triggerKeyDown( $elem, "ArrowUp" );
 	assert.strictEqual( this.get( "selection" ), content[0], "Doesn't change on ArrowUp" );
 	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
 	$elem.focus();
 
-	e = this.trigger({ code: "ArrowDown" });
+	e = triggerKeyDown( $elem, "ArrowDown" );
 	assert.strictEqual( this.get( "selection" ), content[0], "Needs expanded list on ArrowDown" );
 	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
-	e = this.trigger({ code: "ArrowUp" });
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+	e = triggerKeyDown( $elem, "ArrowUp" );
 	assert.strictEqual( this.get( "selection" ), content[0], "Needs expanded list on ArrowUp" );
 	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
-	e = this.trigger({ code: "Space" });
+	e = triggerKeyDown( $elem, "Space" );
 	assert.ok( $list.hasClass( "expanded" ), "Toggles expansion when focused on Space" );
 	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
-	e = this.trigger({ code: "Space" });
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+	e = triggerKeyDown( $elem, "Space" );
 	assert.notOk( $list.hasClass( "expanded" ), "Toggles expansion when focused on Space" );
 	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
 
-	this.trigger({ code: "Space" });
+	triggerKeyDown( $elem, "Space" );
 
-	e = this.trigger({ code: "ArrowDown" });
+	e = triggerKeyDown( $elem, "ArrowDown" );
 	assert.strictEqual( this.get( "selection" ), content[1], "Selects next item on ArrowDown" );
 	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
-	this.trigger({ code: "ArrowDown" });
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+	triggerKeyDown( $elem, "ArrowDown" );
 	assert.strictEqual( this.get( "selection" ), content[2], "Selects next item again" );
-	this.trigger({ code: "ArrowDown" });
+	triggerKeyDown( $elem, "ArrowDown" );
 	assert.strictEqual( this.get( "selection" ), content[0], "Jumps to first item on list end" );
 
-	e = this.trigger({ code: "ArrowUp" });
+	e = triggerKeyDown( $elem, "ArrowUp" );
 	assert.strictEqual( this.get( "selection" ), content[2], "Jumps to last item on ArrowUp" );
 	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
-	this.trigger({ code: "ArrowUp" });
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+	triggerKeyDown( $elem, "ArrowUp" );
 	assert.strictEqual( this.get( "selection" ), content[1], "Selects previous item on ArrowUp" );
-	this.trigger({ code: "ArrowUp" });
+	triggerKeyDown( $elem, "ArrowUp" );
 	assert.strictEqual( this.get( "selection" ), content[0], "Selects previous item again" );
 
-	this.trigger({ code: "Escape" });
+	triggerKeyDown( $elem, "Escape" );
 	assert.notOk( $list.hasClass( "expanded" ), "Collapses list on Escape" );
 	assert.strictEqual( document.activeElement, $elem[0], "Doesn't remove focus on Escape" );
-	this.trigger({ code: "Escape" });
+	triggerKeyDown( $elem, "Escape" );
 	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on second Escape" );
 
 });

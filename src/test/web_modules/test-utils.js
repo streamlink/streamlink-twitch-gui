@@ -1,11 +1,12 @@
-import Ember, {
+import {
+	default as Ember,
+	$,
 	run,
 	HTMLBars,
 	DefaultResolver,
 	EmberObject,
 	Router
 } from "ember";
-import $ from "jquery";
 
 
 const { compile } = HTMLBars;
@@ -48,6 +49,14 @@ export function checkListeners( elem, event, listener ) {
 		}
 	}
 	return false;
+}
+
+export function triggerKeyDown( $elem, code ) {
+	const event = $.Event( "keydown" );
+	Object.assign( event, { code } );
+	run( () => $elem.trigger( event ) );
+
+	return event;
 }
 
 
