@@ -1,11 +1,13 @@
+import Component from "@ember/component";
 import {
 	get,
 	set,
-	observer,
+	observer
+} from "@ember/object";
+import {
 	addObserver,
-	removeObserver,
-	Component
-} from "ember";
+	removeObserver
+} from "@ember/object/observers";
 
 
 export default Component.extend({

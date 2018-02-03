@@ -1,13 +1,10 @@
-import { computed } from "ember";
+import { alias } from "@ember/object/computed";
 import {
 	attr,
 	belongsTo,
 	hasMany,
 	Model
 } from "ember-data";
-
-
-const { alias } = computed;
 
 
 export default Model.extend({

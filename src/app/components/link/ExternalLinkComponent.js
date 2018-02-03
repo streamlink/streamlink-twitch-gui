@@ -1,16 +1,15 @@
+import Component from "@ember/component";
 import {
 	get,
-	computed,
-	inject,
-	Component
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
-
-
-const { service } = inject;
 
 
 export default Component.extend({

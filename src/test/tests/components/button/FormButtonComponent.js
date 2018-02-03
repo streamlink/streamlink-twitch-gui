@@ -7,10 +7,8 @@ import {
 	buildResolver,
 	hbs
 } from "test-utils";
-import {
-	run,
-	Component
-} from "ember";
+import Component from "@ember/component";
+import { run } from "@ember/runloop";
 import {
 	default as FormButtonComponent,
 	STATE_SUCCESS,

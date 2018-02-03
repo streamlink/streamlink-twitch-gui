@@ -1,17 +1,17 @@
 import {
 	get,
-	computed,
-	inject,
-	observer,
-	on,
-	Evented,
-	Mixin
-} from "ember";
+	observer
+} from "@ember/object";
+import { and } from "@ember/object/computed";
+import {
+	default as Evented,
+	on
+} from "@ember/object/evented";
+import Mixin from "@ember/object/mixin";
+import {
+	inject as service
+} from "@ember/service";
 import nwWindow from "nwjs/Window";
-
-
-const { and } = computed;
-const { service } = inject;
 
 
 export default Mixin.create( Evented, {

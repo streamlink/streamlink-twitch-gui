@@ -1,15 +1,13 @@
-import {
-	default as Ember,
-	$,
-	run,
-	HTMLBars,
-	DefaultResolver,
-	EmberObject,
-	Router
-} from "ember";
+import GlobalsResolver from "@ember/application/globals-resolver";
+import EmberObject from "@ember/object";
+import Router from "@ember/routing/router";
+import { run } from "@ember/runloop";
+import TemplateCompiler from "ember-source/dist/ember-template-compiler";
+import $ from "jquery";
 
 
-const { compile } = HTMLBars;
+const { compile } = TemplateCompiler;
+const Ember = window.Ember;
 const reWhiteSpace = /\s+/g;
 
 
@@ -145,7 +143,7 @@ export function hbs( strings, ...vars ) {
 }
 
 export function buildResolver( namespace ) {
-	return DefaultResolver.create({
+	return GlobalsResolver.create({
 		namespace
 	});
 }

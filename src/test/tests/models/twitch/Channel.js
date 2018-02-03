@@ -12,16 +12,17 @@ import {
 } from "store-utils";
 import {
 	get,
-	set,
-	run,
-	Service
-} from "ember";
+	set
+} from "@ember/object";
+import { run } from "@ember/runloop";
+import Service from "@ember/service";
 import {
 	attr,
 	Model,
 	Adapter
 } from "ember-data";
-import channelInjector from "inject-loader?-ember&-ember-data!models/twitch/Channel";
+import channelInjector
+	from "inject-loader?models/localstorage/Settings/streams!models/twitch/Channel";
 import ChannelSerializer from "models/twitch/ChannelSerializer";
 import TwitchAdapter from "store/TwitchAdapter";
 import TwitchChannelFixtures from "fixtures/models/twitch/Channel.json";

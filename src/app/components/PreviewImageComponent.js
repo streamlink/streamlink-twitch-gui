@@ -1,16 +1,13 @@
+import Component from "@ember/component";
 import {
 	get,
-	set,
-	run,
-	Component
-} from "ember";
-import layout from "templates/components/PreviewImageComponent.hbs";
-
-
-const {
+	set
+} from "@ember/object";
+import {
 	next,
 	scheduleOnce
-} = run;
+} from "@ember/runloop";
+import layout from "templates/components/PreviewImageComponent.hbs";
 
 
 export default Component.extend({

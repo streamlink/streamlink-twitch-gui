@@ -3,11 +3,13 @@ import {
 	set,
 	getProperties,
 	setProperties,
-	computed,
-	inject,
-	Evented,
-	Service
-} from "ember";
+	computed
+} from "@ember/object";
+import Evented from "@ember/object/evented";
+import {
+	default as Service,
+	inject as service
+} from "@ember/service";
 import { twitch } from "config";
 import { setFocused } from "nwjs/Window";
 import { openBrowser } from "nwjs/Shell";
@@ -16,7 +18,6 @@ import HttpServer from "utils/node/http/HttpServer";
 import OAuthResponseRedirect from "root/oauth-redirect.html";
 
 
-const { service } = inject;
 const {
 	oauth: {
 		/** @type {String} */

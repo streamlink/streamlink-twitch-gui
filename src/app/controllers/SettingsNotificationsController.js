@@ -1,8 +1,8 @@
+import Controller from "@ember/controller";
 import {
 	get,
-	computed,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
 import {
 	main,
 	files

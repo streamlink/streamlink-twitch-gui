@@ -10,10 +10,8 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import {
-	get,
-	Service
-} from "ember";
+import { get } from "@ember/object";
+import Service from "@ember/service";
 import GameFollowedLive from "models/twitch/GameFollowedLive";
 import GameFollowedLiveSerializer from "models/twitch/GameFollowedLiveSerializer";
 import GameFollowed from "models/twitch/GameFollowed";

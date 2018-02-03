@@ -3,13 +3,13 @@ import {
 	test
 } from "ember-qunit";
 import sinon from "sinon";
+import { A as EmberNativeArray } from "@ember/array";
 import {
 	set,
-	setProperties,
-	$,
-	run,
-	EmberNativeArray
-} from "ember";
+	setProperties
+} from "@ember/object";
+import { run } from "@ember/runloop";
+import $ from "jquery";
 import {
 	buildResolver,
 	runDestroy

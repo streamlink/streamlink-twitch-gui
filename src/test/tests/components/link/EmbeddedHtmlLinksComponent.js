@@ -7,7 +7,7 @@ import {
 	buildResolver,
 	hbs
 } from "test-utils";
-import { Service } from "ember";
+import Service from "@ember/service";
 import $ from "jquery";
 import embeddedHtmlLinksComponentInjector
 	from "inject-loader?-utils/getStreamFromUrl!components/link/EmbeddedHtmlLinksComponent";

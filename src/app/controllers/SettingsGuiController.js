@@ -1,10 +1,10 @@
+import Controller from "@ember/controller";
 import {
 	get,
 	set,
-	computed,
-	observer,
-	Controller
-} from "ember";
+	observer
+} from "@ember/object";
+import { equal } from "@ember/object/computed";
 import {
 	default as SettingsGui,
 	ATTR_GUI_INTEGRATION_TASKBAR,
@@ -15,7 +15,6 @@ import {
 } from "models/localstorage/Settings/gui";
 
 
-const { equal } = computed;
 const {
 	integration: contentGuiIntegration,
 	minimize: contentGuiMinimize,

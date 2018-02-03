@@ -7,11 +7,9 @@ import {
 	hbs,
 	triggerKeyDown
 } from "test-utils";
-import {
-	$,
-	run,
-	EmberNativeArray
-} from "ember";
+import { A as EmberNativeArray } from "@ember/array";
+import { run } from "@ember/runloop";
+import $ from "jquery";
 import IsEqualHelper from "helpers/IsEqualHelper";
 import DropDownComponent from "components/form/DropDownComponent";
 import DropDownSelectionComponent from "components/form/DropDownComponent/selection";

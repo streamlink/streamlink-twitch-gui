@@ -1,12 +1,9 @@
+import { get } from "@ember/object";
 import {
-	get,
-	inject
-} from "ember";
+	inject as service
+} from "@ember/service";
 import FormButtonComponent from "./FormButtonComponent";
 import HotkeyMixin from "../mixins/hotkey";
-
-
-const { service } = inject;
 
 
 export default FormButtonComponent.extend( HotkeyMixin, {

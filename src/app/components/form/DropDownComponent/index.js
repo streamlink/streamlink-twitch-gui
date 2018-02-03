@@ -1,7 +1,7 @@
 import {
 	get,
 	set
-} from "ember";
+} from "@ember/object";
 import Selectable from "../-selectable";
 import IsFocusedMixin from "../../mixins/is-focused";
 import layout from "templates/components/form/DropDownComponent/index.hbs";

@@ -3,12 +3,10 @@ import {
 	test
 } from "ember-qunit";
 import sinon from "sinon";
-import {
-	set,
-	run,
-	Component,
-	Service
-} from "ember";
+import Component from "@ember/component";
+import { set } from "@ember/object";
+import { run } from "@ember/runloop";
+import Service from "@ember/service";
 import { buildResolver } from "test-utils";
 import titleBarComponentInjector
 	from "inject-loader?config&nwjs/debug!components/TitleBarComponent";

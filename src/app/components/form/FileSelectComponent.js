@@ -1,11 +1,11 @@
+import Component from "@ember/component";
 import {
 	get,
 	set,
-	$,
-	on,
-	computed,
-	Component
-} from "ember";
+	computed
+} from "@ember/object";
+import { on } from "@ember/object/evented";
+import $ from "jquery";
 import { platform } from "utils/node/platform";
 import layout from "templates/components/form/FileSelectComponent.hbs";
 

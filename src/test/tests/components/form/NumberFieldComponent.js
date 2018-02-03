@@ -6,7 +6,7 @@ import {
 	buildResolver,
 	hbs
 } from "test-utils";
-import { run } from "ember";
+import { run } from "@ember/runloop";
 import NumberFieldComponent from "components/form/NumberFieldComponent";
 
 

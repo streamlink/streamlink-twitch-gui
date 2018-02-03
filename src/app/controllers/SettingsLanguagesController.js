@@ -1,9 +1,9 @@
+import Controller from "@ember/controller";
 import {
 	get,
 	set,
-	computed,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
 import {
 	langs as langsConfig
 } from "config";

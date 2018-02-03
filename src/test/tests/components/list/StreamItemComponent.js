@@ -8,9 +8,9 @@ import {
 } from "test-utils";
 import {
 	get,
-	set,
-	Service
-} from "ember";
+	set
+} from "@ember/object";
+import Service from "@ember/service";
 import StreamItemComponent from "components/list/StreamItemComponent";
 
 

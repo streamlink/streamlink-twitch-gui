@@ -1,8 +1,6 @@
-import {
-	get,
-	isNone,
-	makeArray
-} from "ember";
+import { makeArray } from "@ember/array";
+import { get } from "@ember/object";
+import { isNone } from "@ember/utils";
 import Substitution from "utils/parameters/Substitution";
 
 

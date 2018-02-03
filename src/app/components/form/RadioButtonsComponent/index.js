@@ -1,4 +1,4 @@
-import { set } from "ember";
+import { set } from "@ember/object";
 import Selectable from "../-selectable";
 import layout from "templates/components/form/RadioButtonsComponent.hbs";
 

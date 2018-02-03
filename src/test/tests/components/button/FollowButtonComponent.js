@@ -2,14 +2,14 @@ import {
 	moduleForComponent,
 	test
 } from "ember-qunit";
+import Component from "@ember/component";
 import {
 	get,
-	set,
-	computed,
-	run,
-	Component,
-	Service
-} from "ember";
+	set
+} from "@ember/object";
+import { alias } from "@ember/object/computed";
+import { run } from "@ember/runloop";
+import Service from "@ember/service";
 import sinon from "sinon";
 import {
 	buildResolver
@@ -19,8 +19,6 @@ import followButtonComponentInjector
 import FormButtonComponent from "components/button/FormButtonComponent";
 import BoolNotHelper from "helpers/BoolNotHelper";
 
-
-const { alias } = computed;
 
 const { default: FollowButtonComponent } = followButtonComponentInjector({
 	"../mixins/twitch-interact-button": {}

@@ -1,4 +1,4 @@
-import { Controller } from "ember";
+import Controller from "@ember/controller";
 
 
 export default Controller.extend({

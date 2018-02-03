@@ -1,15 +1,15 @@
 import {
 	get,
-	set,
-	assign,
-	inject
-} from "ember";
+	set
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import { vars } from "config";
 import FormButtonComponent from "../button/FormButtonComponent";
 import FilterLanguagesMixin from "routes/mixins/filter-languages";
 
 
-const { service } = inject;
 const { "random-max": randomMax } = vars;
 
 
@@ -46,7 +46,7 @@ export default FormButtonComponent.extend( FilterLanguagesMixin, {
 
 		let _query = get( this, "query" );
 		if ( _query ) {
-			query = assign( _query, query );
+			query = Object.assign( _query, query );
 		}
 
 		store.query( model, query )

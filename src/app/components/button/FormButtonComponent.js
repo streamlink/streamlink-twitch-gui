@@ -1,15 +1,13 @@
+import Component from "@ember/component";
 import {
 	get,
 	set,
-	computed,
-	run,
-	Component
-} from "ember";
+	computed
+} from "@ember/object";
+import { equal } from "@ember/object/computed";
+import { scheduleOnce } from "@ember/runloop";
 import layout from "templates/components/button/FormButtonComponent.hbs";
 
-
-const { equal } = computed;
-const { scheduleOnce } = run;
 
 export const STATE_VOID    = 0;
 export const STATE_LOADING = 1;

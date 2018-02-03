@@ -10,7 +10,7 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import { Service } from "ember";
+import Service from "@ember/service";
 import Root from "models/twitch/Root";
 import RootSerializer from "models/twitch/RootSerializer";
 import TwitchAdapter from "store/TwitchAdapter";

@@ -1,4 +1,4 @@
-import { Helper } from "ember";
+import { helper } from "@ember/component/helper";
 
 
-export default Helper.helper( ([ arr, key ]) => arr[ key ] );
+export default helper( ([ arr, key ]) => arr[ key ] );

@@ -1,8 +1,10 @@
 import {
 	get,
-	computed,
-	inject
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import {
 	streaming as streamingConfig
 } from "config";
@@ -10,7 +12,6 @@ import ExternalLinkComponent from "./ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";
 
 
-const { service } = inject;
 const {
 	"docs-url": docsUrl
 } = streamingConfig;

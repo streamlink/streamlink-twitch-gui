@@ -2,10 +2,8 @@ import {
 	moduleForComponent,
 	test
 } from "ember-qunit";
-import {
-	$,
-	run
-} from "ember";
+import { run } from "@ember/runloop";
+import $ from "jquery";
 import {
 	buildResolver,
 	hbs,

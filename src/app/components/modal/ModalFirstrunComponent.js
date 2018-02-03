@@ -1,13 +1,10 @@
+import { get } from "@ember/object";
 import {
-	get,
-	inject
-} from "ember";
+	inject as service
+} from "@ember/service";
 import { main as config } from "config";
 import ModalDialogComponent from "./ModalDialogComponent";
 import layout from "templates/components/modal/ModalFirstrunComponent.hbs";
-
-
-const { service } = inject;
 
 
 export default ModalDialogComponent.extend({

@@ -7,7 +7,7 @@ import {
 	buildResolver,
 	hbs
 } from "test-utils";
-import { Component } from "ember";
+import Component from "@ember/component";
 import $ from "jquery";
 import HotkeyMixin from "components/mixins/hotkey";
 import HotkeyService from "services/HotkeyService";

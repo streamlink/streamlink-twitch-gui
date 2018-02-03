@@ -7,11 +7,9 @@ import {
 	cleanOutput,
 	hbs
 } from "test-utils";
-import {
-	run,
-	Component,
-	EmberNativeArray
-} from "ember";
+import { A as EmberNativeArray } from "@ember/array";
+import Component from "@ember/component";
+import { run } from "@ember/runloop";
 import ContentListComponent from "components/list/ContentListComponent";
 import IsGteHelper from "helpers/IsGteHelper";
 import GetIndexHelper from "helpers/GetIndexHelper";

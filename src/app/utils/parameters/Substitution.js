@@ -1,7 +1,5 @@
-import {
-	get,
-	makeArray
-} from "ember";
+import { makeArray } from "@ember/array";
+import { get } from "@ember/object";
 
 
 const reSubstitution = /(\{)?\{([a-z]+)}(})?/ig;

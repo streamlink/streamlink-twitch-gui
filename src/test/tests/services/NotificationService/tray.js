@@ -6,15 +6,15 @@ import {
 	buildOwner,
 	runDestroy
 } from "test-utils";
+import { A as EmberNativeArray } from "@ember/array";
 import {
 	get,
-	set,
-	run,
-	EmberNativeArray,
-	Service
-} from "ember";
+	set
+} from "@ember/object";
+import { run } from "@ember/runloop";
+import Service from "@ember/service";
 import notificationServiceTrayMixinInjector
-	from "inject-loader?-ember!services/NotificationService/tray";
+	from "inject-loader?nwjs/Tray!services/NotificationService/tray";
 
 
 module( "services/NotificationService/tray" );

@@ -1,7 +1,5 @@
-import {
-	get,
-	Component
-} from "ember";
+import Component from "@ember/component";
+import { get } from "@ember/object";
 import layout from "templates/components/form/DropDownComponent/selection.hbs";
 
 

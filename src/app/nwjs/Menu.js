@@ -1,7 +1,5 @@
-import {
-	EmberObject,
-	Evented
-} from "ember";
+import EmberObject from "@ember/object";
+import Evented from "@ember/object/evented";
 import {
 	Menu,
 	MenuItem

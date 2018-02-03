@@ -6,12 +6,9 @@ import {
 	buildResolver,
 	hbs
 } from "test-utils";
-import { run } from "ember";
+import { scheduleOnce } from "@ember/runloop";
 import PreviewImageComponent from "components/PreviewImageComponent";
 import transparentImage from "transparent-image";
-
-
-const { scheduleOnce } = run;
 
 
 moduleForComponent( "components/PreviewImageComponent", {

@@ -1,8 +1,5 @@
-import { computed } from "ember";
+import { alias } from "@ember/object/computed";
 import FollowButtonComponent from "./FollowButtonComponent";
-
-
-const { alias } = computed;
 
 
 export default FollowButtonComponent.extend({

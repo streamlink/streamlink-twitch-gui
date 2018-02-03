@@ -1,13 +1,10 @@
+import { getOwner } from "@ember/application";
+import { get } from "@ember/object";
+import Route from "@ember/routing/route";
 import {
-	get,
-	getOwner,
-	inject,
-	Route
-} from "ember";
+	inject as service
+} from "@ember/service";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
-
-
-const { service } = inject;
 
 
 export default Route.extend({

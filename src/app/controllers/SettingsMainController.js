@@ -1,7 +1,5 @@
-import {
-	computed,
-	Controller
-} from "ember";
+import Controller from "@ember/controller";
+import { computed } from "@ember/object";
 import { themes } from "config";
 
 

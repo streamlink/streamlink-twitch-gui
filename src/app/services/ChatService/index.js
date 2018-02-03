@@ -1,17 +1,18 @@
 import {
 	get,
-	getProperties,
-	inject,
-	on,
-	Service
-} from "ember";
+	getProperties
+} from "@ember/object";
+import { on } from "@ember/object/evented";
+import {
+	default as Service,
+	inject as service
+} from "@ember/service";
 import {
 	chat as chatConfig
 } from "config";
 import providers from "./providers";
 
 
-const { service } = inject;
 const { hasOwnProperty } = {};
 
 

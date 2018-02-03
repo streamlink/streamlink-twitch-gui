@@ -1,4 +1,4 @@
-import { get } from "ember";
+import { get } from "@ember/object";
 import { setShowInTaskbar } from "nwjs/Window";
 import { setShowInTray } from "nwjs/Tray";
 

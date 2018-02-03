@@ -1,7 +1,7 @@
 import {
 	get,
 	set
-} from "ember";
+} from "@ember/object";
 import ListItemComponent from "./ListItemComponent";
 import layout from "templates/components/list/SettingsChannelItemComponent.hbs";
 

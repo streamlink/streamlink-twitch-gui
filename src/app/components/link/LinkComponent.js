@@ -1,12 +1,11 @@
 import {
 	get,
-	computed,
-	inject,
-	LinkComponent
-} from "ember";
-
-
-const { service } = inject;
+	computed
+} from "@ember/object";
+import LinkComponent from "@ember/routing/link-component";
+import {
+	inject as service
+} from "@ember/service";
 
 
 // reopen and don't extend: this class may be used globally

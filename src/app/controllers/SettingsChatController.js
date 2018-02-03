@@ -1,9 +1,11 @@
+import Controller from "@ember/controller";
 import {
 	get,
-	computed,
-	inject,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import {
 	chat as chatConfig
 } from "config";
@@ -12,7 +14,6 @@ import ChatProviderBasic from "services/ChatService/providers/-basic";
 import { platform } from "utils/node/platform";
 
 
-const { service } = inject;
 const { userArgsSubstitutions } = ChatProviderBasic;
 
 

@@ -8,13 +8,13 @@ import {
 	buildOwner
 } from "test-utils";
 import {
+	default as EmberObject,
 	set,
-	sendEvent,
-	computed,
-	EmberObject,
-	Service
-} from "ember";
-import refreshMixinInjector from "inject-loader?-ember!routes/mixins/refresh";
+	computed
+} from "@ember/object";
+import { sendEvent } from "@ember/object/events";
+import Service from "@ember/service";
+import refreshMixinInjector from "inject-loader?nwjs/Window!routes/mixins/refresh";
 import { EventEmitter } from "events";
 
 

@@ -2,8 +2,8 @@ import {
 	get,
 	set,
 	computed,
-	EmberObject
-} from "ember";
+	default as EmberObject
+} from "@ember/object";
 import { PromiseObject } from "ember-data";
 import SettingsSubmenuRoute from "./SettingsSubmenuRoute";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";

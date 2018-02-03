@@ -1,7 +1,7 @@
 import {
 	get,
 	set
-} from "ember";
+} from "@ember/object";
 
 
 function factory( fn ) {

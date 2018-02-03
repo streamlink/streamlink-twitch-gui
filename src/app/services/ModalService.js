@@ -1,11 +1,11 @@
+import { getOwner } from "@ember/application";
 import {
 	get,
 	setProperties,
-	getOwner,
-	computed,
-	Evented,
-	Service
-} from "ember";
+	computed
+} from "@ember/object";
+import Evented from "@ember/object/evented";
+import Service from "@ember/service";
 
 
 const { notEmpty } = computed;

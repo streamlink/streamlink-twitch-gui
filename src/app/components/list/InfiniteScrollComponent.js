@@ -1,17 +1,13 @@
+import Component from "@ember/component";
 import {
 	get,
 	set,
-	$,
-	computed,
-	run,
-	observer,
-	Component
-} from "ember";
+	observer
+} from "@ember/object";
+import { or } from "@ember/object/computed";
+import { scheduleOnce } from "@ember/runloop";
+import $ from "jquery";
 import layout from "templates/components/list/InfiniteScrollComponent.hbs";
-
-
-const { or } = computed;
-const { scheduleOnce } = run;
 
 
 export default Component.extend({

@@ -1,8 +1,8 @@
 import {
 	getProperties,
-	setProperties,
-	run
-} from "ember";
+	setProperties
+} from "@ember/object";
+import { debounce } from "@ember/runloop";
 import {
 	vars as varsConfig
 } from "config";
@@ -12,7 +12,6 @@ import nwScreen from "nwjs/Screen";
 import { isWin } from "utils/node/platform";
 
 
-const { debounce } = run;
 const {
 	"time-window-event-debounce": timeDebounce,
 	"time-window-event-ignore": timeIgnore

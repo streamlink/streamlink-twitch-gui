@@ -1,7 +1,5 @@
-import {
-	get,
-	Route
-} from "ember";
+import { get } from "@ember/object";
+import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import RefreshMixin from "./mixins/refresh";
 import { toArray } from "utils/ember/recordArrayMethods";

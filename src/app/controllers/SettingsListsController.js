@@ -1,4 +1,4 @@
-import { Controller } from "ember";
+import Controller from "@ember/controller";
 import SettingsStreams from "models/localstorage/Settings/streams";
 import { isDarwin } from "utils/node/platform";
 

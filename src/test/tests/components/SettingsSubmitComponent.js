@@ -7,7 +7,7 @@ import {
 	buildResolver,
 	hbs
 } from "test-utils";
-import { Component } from "ember";
+import Component from "@ember/component";
 import SettingsSubmitComponent from "components/SettingsSubmitComponent";
 
 

@@ -2,11 +2,11 @@ import {
 	module,
 	test
 } from "qunit";
+import { setOwner } from "@ember/application";
 import {
 	get,
-	set,
-	setOwner
-} from "ember";
+	set
+} from "@ember/object";
 import {
 	attr,
 	Adapter,

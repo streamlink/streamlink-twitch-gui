@@ -1,7 +1,7 @@
 import {
 	get,
 	computed
-} from "ember";
+} from "@ember/object";
 import {
 	attr,
 	Model

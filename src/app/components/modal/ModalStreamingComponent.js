@@ -1,9 +1,12 @@
 import {
 	get,
 	set,
-	computed,
-	inject
-} from "ember";
+	computed
+} from "@ember/object";
+import { readOnly } from "@ember/object/computed";
+import {
+	inject as service
+} from "@ember/service";
 import {
 	streaming as streamingConfig
 } from "config";
@@ -24,8 +27,6 @@ import { openBrowser } from "nwjs/Shell";
 import layout from "templates/components/modal/ModalStreamingComponent.hbs";
 
 
-const { readOnly } = computed;
-const { service } = inject;
 const {
 	"download-url": downloadUrl,
 	validation: {

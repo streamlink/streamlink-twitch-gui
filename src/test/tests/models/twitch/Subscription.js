@@ -10,7 +10,7 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import { Service } from "ember";
+import Service from "@ember/service";
 import Subscription from "models/twitch/Subscription";
 import SubscriptionSerializer from "models/twitch/SubscriptionSerializer";
 import Channel from "models/twitch/Channel";

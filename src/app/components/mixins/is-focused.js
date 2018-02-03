@@ -1,4 +1,4 @@
-import { Mixin } from "ember";
+import Mixin from "@ember/object/mixin";
 
 
 export default Mixin.create({

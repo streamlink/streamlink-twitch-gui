@@ -10,10 +10,8 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import {
-	get,
-	Service
-} from "ember";
+import { get } from "@ember/object";
+import Service from "@ember/service";
 import ChannelPanel from "models/twitch/ChannelPanel";
 import ChannelPanelAdapter from "models/twitch/ChannelPanelAdapter";
 import ChannelPanelSerializer from "models/twitch/ChannelPanelSerializer";

@@ -2,14 +2,18 @@ import {
 	get,
 	setProperties,
 	computed,
-	inject,
-	observer,
-	Mixin
-} from "ember";
+	observer
+} from "@ember/object";
+import {
+	alias,
+	and,
+	bool
+} from "@ember/object/computed";
+import Mixin from "@ember/object/mixin";
+import {
+	inject as service
+} from "@ember/service";
 
-
-const { alias, and, bool } = computed;
-const { service } = inject;
 
 function switchProperty( key ) {
 	return computed( "isLoading", "isSuccessful", function() {

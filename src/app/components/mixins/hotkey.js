@@ -1,15 +1,15 @@
 import {
 	get,
-	set,
-	inject,
-	on,
-	Mixin
-} from "ember";
+	set
+} from "@ember/object";
+import { on } from "@ember/object/evented";
+import Mixin from "@ember/object/mixin";
+import {
+	inject as service
+} from "@ember/service";
 
 
 const { isArray } = Array;
-const { service } = inject;
-
 
 const reName = /^Key/;
 const nameMap = {

@@ -1,15 +1,12 @@
+import { get } from "@ember/object";
 import {
-	get,
-	inject
-} from "ember";
+	inject as service
+} from "@ember/service";
 import EmbeddedHtmlLinksComponent from "../link/EmbeddedHtmlLinksComponent";
 import Menu from "nwjs/Menu";
 import { openBrowser } from "nwjs/Shell";
 import { set as setClipboard } from "nwjs/Clipboard";
 import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
-
-
-const { service } = inject;
 
 
 export default EmbeddedHtmlLinksComponent.extend({

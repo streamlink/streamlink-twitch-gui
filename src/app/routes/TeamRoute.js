@@ -1,7 +1,5 @@
-import {
-	get,
-	Route
-} from "ember";
+import { get } from "@ember/object";
+import Route from "@ember/routing/route";
 import RefreshMixin from "./mixins/refresh";
 import preload from "utils/preload";
 

@@ -1,7 +1,11 @@
 import {
 	get,
 	computed
-} from "ember";
+} from "@ember/object";
+import {
+	alias,
+	and
+} from "@ember/object/computed";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "./FormButtonComponent";
@@ -9,7 +13,6 @@ import TwitchInteractButtonMixin from "../mixins/twitch-interact-button";
 import HotkeyMixin from "../mixins/hotkey";
 
 
-const { alias, and } = computed;
 const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
 
 

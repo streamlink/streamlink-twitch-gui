@@ -1,14 +1,13 @@
+import { getOwner } from "@ember/application";
 import {
 	get,
 	set,
-	computed,
-	getOwner,
-	inject
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import FormButtonComponent from "../button/FormButtonComponent";
-
-
-const { service } = inject;
 
 
 export default FormButtonComponent.extend({

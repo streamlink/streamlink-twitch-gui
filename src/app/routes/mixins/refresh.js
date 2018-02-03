@@ -1,19 +1,19 @@
+import { get } from "@ember/object";
+import { on } from "@ember/object/evented";
+import Mixin from "@ember/object/mixin";
 import {
-	get,
 	addObserver,
-	removeObserver,
-	inject,
-	run,
-	on,
-	Mixin
-} from "ember";
+	removeObserver
+} from "@ember/object/observers";
+import { debounce } from "@ember/runloop";
+import {
+	inject as service
+} from "@ember/service";
 import nwWindow, {
 	window as Window
 } from "nwjs/Window";
 
 
-const { service } = inject;
-const { debounce } = run;
 const { hasOwnProperty } = {};
 const { Date } = Window;
 

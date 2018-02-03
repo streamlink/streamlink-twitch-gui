@@ -1,12 +1,12 @@
+import Controller from "@ember/controller";
 import {
 	get,
-	computed,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
+import { alias } from "@ember/object/computed";
 import { langs } from "config";
 
 
-const { alias } = computed;
 const day = 24 * 3600 * 1000;
 
 

@@ -1,14 +1,15 @@
 import {
 	get,
-	inject,
 	observer
-} from "ember";
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import { RESTAdapter } from "ember-data";
 import { twitch } from "config";
 import AdapterMixin from "store/AdapterMixin";
 
 
-const { service } = inject;
 const { oauth: { "client-id": clientId } } = twitch;
 
 

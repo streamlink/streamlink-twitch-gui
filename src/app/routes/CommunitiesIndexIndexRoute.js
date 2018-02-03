@@ -1,9 +1,9 @@
+import { getOwner } from "@ember/application";
 import {
 	get,
-	set,
-	getOwner,
-	Route
-} from "ember";
+	set
+} from "@ember/object";
+import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import RefreshMixin from "./mixins/refresh";
 import preload from "utils/preload";

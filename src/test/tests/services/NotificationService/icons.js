@@ -3,7 +3,8 @@ import {
 	test
 } from "qunit";
 import notificationIconsMixinInjector
-	from "inject-loader?-ember!services/NotificationService/icons";
+// eslint-disable-next-line max-len
+	from "inject-loader?config&utils/node/platform&utils/node/resolvePath&utils/node/fs/mkdirp&utils/node/fs/clearfolder&utils/node/fs/download!services/NotificationService/icons";
 
 
 module( "services/NotificationService/icons" );

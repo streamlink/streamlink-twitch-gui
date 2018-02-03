@@ -13,10 +13,10 @@ import {
 import {
 	get,
 	set,
-	setProperties,
-	run,
-	Service
-} from "ember";
+	setProperties
+} from "@ember/object";
+import { run } from "@ember/runloop";
+import Service from "@ember/service";
 import Stream from "models/twitch/Stream";
 import StreamAdapter from "models/twitch/StreamAdapter";
 import StreamSerializer from "models/twitch/StreamSerializer";

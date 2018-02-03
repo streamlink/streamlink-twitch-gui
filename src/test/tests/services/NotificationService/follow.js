@@ -7,10 +7,8 @@ import {
 	runDestroy
 } from "test-utils";
 import { setupStore } from "store-utils";
-import {
-	set,
-	Service
-} from "ember";
+import { set } from "@ember/object";
+import Service from "@ember/service";
 import {
 	Model,
 	RESTAdapter,

@@ -10,7 +10,7 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import { Service } from "ember";
+import Service from "@ember/service";
 import StreamSummary from "models/twitch/StreamSummary";
 import StreamSummarySerializer from "models/twitch/StreamSummarySerializer";
 import TwitchAdapter from "store/TwitchAdapter";

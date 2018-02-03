@@ -1,4 +1,4 @@
-import { get } from "ember";
+import { get } from "@ember/object";
 import { main as config } from "config";
 import { manifest } from "nwjs/App";
 import ModalDialogComponent from "./ModalDialogComponent";

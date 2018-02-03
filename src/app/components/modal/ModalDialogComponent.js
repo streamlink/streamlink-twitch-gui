@@ -1,13 +1,10 @@
+import Component from "@ember/component";
+import { get } from "@ember/object";
 import {
-	get,
-	inject,
-	Component
-} from "ember";
+	inject as service
+} from "@ember/service";
 import HotkeyMixin from "../mixins/hotkey";
 import layout from "templates/components/modal/ModalDialogComponent.hbs";
-
-
-const { service } = inject;
 
 
 export default Component.extend( HotkeyMixin, {

@@ -1,8 +1,6 @@
-import {
-	get,
-	$,
-	addObserver
-} from "ember";
+import { get } from "@ember/object";
+import { addObserver } from "@ember/object/observers";
+import $ from "jquery";
 import {
 	themes as themesConfig
 } from "config";

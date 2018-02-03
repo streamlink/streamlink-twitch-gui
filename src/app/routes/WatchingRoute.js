@@ -1,14 +1,11 @@
+import { get } from "@ember/object";
+import Route from "@ember/routing/route";
 import {
-	get,
-	inject,
-	Route
-} from "ember";
+	inject as service
+} from "@ember/service";
 import RefreshMixin from "./mixins/refresh";
 import { mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
-
-
-const { service } = inject;
 
 
 export default Route.extend( RefreshMixin, {

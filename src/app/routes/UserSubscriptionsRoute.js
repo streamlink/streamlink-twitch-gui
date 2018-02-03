@@ -1,7 +1,7 @@
 import {
 	get,
 	set
-} from "ember";
+} from "@ember/object";
 import UserIndexRoute from "./UserIndexRoute";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import { toArray } from "utils/ember/recordArrayMethods";

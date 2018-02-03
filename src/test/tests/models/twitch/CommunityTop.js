@@ -10,10 +10,8 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import {
-	get,
-	Service
-} from "ember";
+import { get } from "@ember/object";
+import Service from "@ember/service";
 import CommunityTop from "models/twitch/CommunityTop";
 import CommunityTopSerializer from "models/twitch/CommunityTopSerializer";
 import TwitchAdapter from "store/TwitchAdapter";

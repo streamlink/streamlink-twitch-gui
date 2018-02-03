@@ -1,8 +1,9 @@
+import Controller from "@ember/controller";
 import {
 	get,
-	computed,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
+import { equal } from "@ember/object/computed";
 import {
 	streaming as streamingConfig
 } from "config";
@@ -13,7 +14,6 @@ import {
 import { platform } from "utils/node/platform";
 
 
-const { equal } = computed;
 const { providers } = streamingConfig;
 const {
 	playerInput: contentStreamingPlayerInput

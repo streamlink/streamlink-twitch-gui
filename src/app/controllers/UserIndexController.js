@@ -1,14 +1,13 @@
+import Controller from "@ember/controller";
 import {
 	get,
 	set,
-	computed,
-	inject,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import { set as setClipboard } from "nwjs/Clipboard";
-
-
-const { service } = inject;
 
 
 export default Controller.extend({

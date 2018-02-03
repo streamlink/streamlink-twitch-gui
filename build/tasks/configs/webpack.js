@@ -44,6 +44,24 @@ const lessExtractTextPlugin = new ExtractTextPlugin({
 
 
 const commonLoaders = [
+	// Ember import polyfill
+	// translates `import foo from "@ember/bar"` into `Ember.baz`
+	// requires those imports to be ignored
+	{
+		test: /\.js$/,
+		exclude: [
+			pDependencies,
+			r( pRoot, "web_modules" )
+		],
+		loader: "babel-loader",
+		options: {
+			presets: [],
+			plugins: [
+				require( "babel-plugin-ember-modules-api-polyfill" )
+			],
+			cacheDirectory: pCacheBabel
+		}
+	},
 	// Ember-Data
 	{
 		test: /\.js$/,
@@ -329,6 +347,9 @@ module.exports = {
 			// don't include css stylesheets in the js bundle
 			cssExtractTextPlugin,
 			lessExtractTextPlugin,
+
+			// ignore all @ember imports (see Ember import polyfill)
+			new webpack.IgnorePlugin( /@ember/, pRoot ),
 
 			// ignore l10n modules of momentjs
 			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ )

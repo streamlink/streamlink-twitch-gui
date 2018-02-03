@@ -1,8 +1,8 @@
 import {
 	get,
-	setProperties,
-	Route
-} from "ember";
+	setProperties
+} from "@ember/object";
+import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import RefreshMixin from "./mixins/refresh";
 import {

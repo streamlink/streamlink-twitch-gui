@@ -1,4 +1,3 @@
-import "ember";
 import "ember-inflector";
 import EmberData from "ember-data/index";
 

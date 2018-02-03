@@ -1,15 +1,14 @@
+import { getOwner } from "@ember/application";
+import { makeArray } from "@ember/array";
 import {
 	get,
-	set,
-	getOwner,
-	makeArray,
-	inject
-} from "ember";
+	set
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
-
-
-const { service } = inject;
 
 
 function resemblesURL( str)  {

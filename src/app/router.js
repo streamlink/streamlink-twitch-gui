@@ -1,9 +1,9 @@
 import {
 	get,
-	set,
-	on,
-	Router
-} from "ember";
+	set
+} from "@ember/object";
+import { on } from "@ember/object/evented";
+import Router from "@ember/routing/router";
 
 
 const ApplicationRouter = Router.extend();

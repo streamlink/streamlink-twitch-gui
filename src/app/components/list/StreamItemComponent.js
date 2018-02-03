@@ -1,20 +1,25 @@
 import {
 	get,
 	set,
-	computed,
-	run,
-	on
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	alias,
+	equal,
+	notEmpty,
+	or
+} from "@ember/object/computed";
+import { on } from "@ember/object/evented";
+import {
+	cancel,
+	later
+} from "@ember/runloop";
 import ListItemComponent from "./ListItemComponent";
 import {
 	ATTR_STREAMS_INFO_GAME,
 	ATTR_STREAMS_INFO_TITLE
 } from "models/localstorage/Settings/streams";
 import layout from "templates/components/list/StreamItemComponent.hbs";
-
-
-const { alias, equal, notEmpty, or } = computed;
-const { cancel, later } = run;
 
 
 export default ListItemComponent.extend({

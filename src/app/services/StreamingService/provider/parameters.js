@@ -1,4 +1,4 @@
-import { get } from "ember";
+import { get } from "@ember/object";
 import playerSubstitutions from "services/StreamingService/player/substitutions";
 import Parameter from "utils/parameters/Parameter";
 import ParameterCustom from "utils/parameters/ParameterCustom";

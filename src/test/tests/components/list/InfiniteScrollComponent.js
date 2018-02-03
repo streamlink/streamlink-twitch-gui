@@ -7,11 +7,9 @@ import {
 	checkListeners,
 	hbs
 } from "test-utils";
-import {
-	run,
-	EmberNativeArray,
-	Component
-} from "ember";
+import { A as EmberNativeArray } from "@ember/array";
+import Component from "@ember/component";
+import { run } from "@ember/runloop";
 import InfiniteScrollComponent from "components/list/InfiniteScrollComponent";
 
 

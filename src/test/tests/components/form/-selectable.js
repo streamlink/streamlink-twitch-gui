@@ -2,11 +2,11 @@ import {
 	moduleForComponent,
 	test
 } from "ember-qunit";
+import { A as EmberNativeArray } from "@ember/array";
 import {
 	get,
-	set,
-	EmberNativeArray
-} from "ember";
+	set
+} from "@ember/object";
 import {
 	buildResolver,
 	runDestroy

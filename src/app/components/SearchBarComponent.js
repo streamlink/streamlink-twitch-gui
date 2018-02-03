@@ -1,23 +1,22 @@
+import Component from "@ember/component";
 import {
 	get,
 	set,
-	getWithDefault,
-	$,
-	computed,
-	inject,
-	run,
-	on,
-	Component
-} from "ember";
+	getWithDefault
+} from "@ember/object";
+import { sort } from "@ember/object/computed";
+import { on } from "@ember/object/evented";
+import { next } from "@ember/runloop";
+import {
+	inject as service
+} from "@ember/service";
+import $ from "jquery";
 import { vars } from "config";
 import HotkeyMixin from "./mixins/hotkey";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import layout from "templates/components/SearchBarComponent.hbs" ;
 
 
-const { sort } = computed;
-const { service } = inject;
-const { next } = run;
 const { "search-history-size": searchHistorySize } = vars;
 
 

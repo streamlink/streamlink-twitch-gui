@@ -4,18 +4,19 @@ import {
 } from "qunit";
 import sinon from "sinon";
 import {
+	default as EmberObject,
 	get,
 	getProperties,
-	setProperties,
-	EmberObject
-} from "ember";
-import launchProviderInjector from "inject-loader?-ember!services/StreamingService/launch";
+	setProperties
+} from "@ember/object";
+import launchProviderInjector
+// eslint-disable-next-line max-len
+	from "inject-loader?../is-aborted&../spawn&../provider/parameters&./parse-error&utils/parameters/Parameter!services/StreamingService/launch";
 import {
 	ExitCodeError,
 	ExitSignalError,
 	Warning
 } from "services/StreamingService/errors";
-import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import { EventEmitter } from "events";
 
 
@@ -60,7 +61,6 @@ module( "services/StreamingService/launch/index", {
 			},
 			"../is-aborted": this.isAbortedSpy,
 			"../spawn": this.spawnStub,
-			"utils/StreamOutputBuffer": StreamOutputBuffer,
 			"utils/parameters/Parameter": {
 				getParameters: this.getParametersStub
 			}

@@ -1,10 +1,7 @@
+import Component from "@ember/component";
 import {
-	inject,
-	Component
-} from "ember";
-
-
-const { service } = inject;
+	inject as service
+} from "@ember/service";
 
 
 export default Component.extend({

@@ -1,7 +1,7 @@
-import { Helper } from "ember";
+import { helper } from "@ember/component/helper";
 
 
-export default Helper.helper(function( params ) {
+export default helper(function( params ) {
 	const viewers = Number( params[ 0 ] );
 
 	return isNaN( viewers )

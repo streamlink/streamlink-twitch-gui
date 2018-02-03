@@ -1,9 +1,9 @@
+import Component from "@ember/component";
 import {
 	get,
-	set,
-	on,
-	Component
-} from "ember";
+	set
+} from "@ember/object";
+import { on } from "@ember/object/evented";
 import layout from "templates/components/form/NumberFieldComponent.hbs";
 
 
