@@ -10,7 +10,6 @@
 import Router from "./router";
 
 import ApplicationAdapter from "store/TwitchAdapter";
-import BooleanTransform from "store/BooleanTransform";
 
 import Stream from "models/stream/Stream";
 import StreamAdapter from "models/stream/StreamAdapter";
@@ -375,7 +374,6 @@ export default {
 
 	// Store
 	ApplicationAdapter,
-	BooleanTransform,
 
 
 	// Models: memory
