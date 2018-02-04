@@ -2,7 +2,7 @@ import {
 	module,
 	test
 } from "qunit";
-import { Adapter } from "ember-data";
+import Adapter from "ember-data/adapter";
 import {
 	buildOwner,
 	runDestroy

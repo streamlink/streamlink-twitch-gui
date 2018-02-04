@@ -5,7 +5,7 @@ import { isNone } from "@ember/utils";
 import {
 	AdapterError,
 	InvalidError
-} from "ember-data";
+} from "ember-data/adapters/errors";
 
 
 const reURL = /^[a-z]+:\/\/([\w.]+)\/(.+)$/i;

@@ -12,10 +12,8 @@ import {
 } from "store-utils";
 import { get } from "@ember/object";
 import Service from "@ember/service";
-import {
-	Model,
-	RESTSerializer
-} from "ember-data";
+import Model from "ember-data/model";
+import RESTSerializer from "ember-data/serializers/rest";
 import Product from "models/twitch/Product";
 import ProductSerializer from "models/twitch/ProductSerializer";
 import ProductEmoticon from "models/twitch/ProductEmoticon";

@@ -14,7 +14,7 @@ import {
 import { on } from "@ember/object/evented";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
-import { RESTAdapter } from "ember-data";
+import RESTAdapter from "ember-data/adapters/rest";
 import notificationPollingMixinInjector
 	from "inject-loader?config&./cache&./icons&./logger!services/NotificationService/polling";
 import StreamFollowed from "models/twitch/StreamFollowed";

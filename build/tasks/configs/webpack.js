@@ -290,7 +290,6 @@ module.exports = {
 				// explicit lib/module paths
 				"shim"        : r( pRoot, "shim" ),
 				"ember"       : r( pRoot, "web_modules", "ember" ),
-				"ember-data$" : r( pRoot, "web_modules", "ember-data" ),
 				"ember-data/version$": r( pRoot, "web_modules", "ember-data", "version" ),
 				"ember-data/app": r( pDependencies, "ember-data", "app" ),
 				"ember-data"  : r( pDependencies, "ember-data", "addon" ),

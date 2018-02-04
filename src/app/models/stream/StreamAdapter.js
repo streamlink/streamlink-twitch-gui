@@ -1,4 +1,1 @@
-import { Adapter } from "ember-data";
-
-
-export default Adapter;
+export { default } from "ember-data/adapter";

@@ -1,4 +1,4 @@
-import { Store } from "ember-data";
+import Store from "ember-data/store";
 
 
 const { assign } = Object;

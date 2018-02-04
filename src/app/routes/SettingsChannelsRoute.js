@@ -4,10 +4,16 @@ import {
 	computed,
 	default as EmberObject
 } from "@ember/object";
-import { PromiseObject } from "ember-data";
+import ObjectProxy from "@ember/object/proxy";
+import PromiseProxyMixin from "@ember/object/promise-proxy-mixin";
 import SettingsSubmenuRoute from "./SettingsSubmenuRoute";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import preload from "utils/preload";
+
+
+// build our own PromiseObject in order to avoid importing from a private ember-data module
+// TODO: import from @ember-data/promise-proxies once it becomes available
+const PromiseObject = ObjectProxy.extend( PromiseProxyMixin );
 
 
 export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {

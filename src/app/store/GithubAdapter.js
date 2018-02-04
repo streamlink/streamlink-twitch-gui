@@ -1,4 +1,4 @@
-import { RESTAdapter } from "ember-data";
+import RESTAdapter from "ember-data/adapters/rest";
 import { update as config } from "config";
 import AdapterMixin from "store/AdapterMixin";
 

@@ -9,11 +9,9 @@ import {
 import { setupStore } from "store-utils";
 import { set } from "@ember/object";
 import Service from "@ember/service";
-import {
-	Model,
-	RESTAdapter,
-	RESTSerializer
-} from "ember-data";
+import RESTAdapter from "ember-data/adapters/rest";
+import Model from "ember-data/model";
+import RESTSerializer from "ember-data/serializers/rest";
 import AdapterMixin from "store/AdapterMixin";
 import notificationFollowMixinInjector
 	from "inject-loader?./cache!services/NotificationService/follow";

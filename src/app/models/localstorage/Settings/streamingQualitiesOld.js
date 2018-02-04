@@ -1,4 +1,4 @@
-import { attr } from "ember-data";
+import attr from "ember-data/attr";
 import { Fragment } from "model-fragments";
 import { qualitiesLivestreamer } from "models/stream/qualities/index";
 

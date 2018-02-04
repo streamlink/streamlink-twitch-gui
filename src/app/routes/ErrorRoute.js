@@ -4,7 +4,7 @@ import {
 } from "@ember/object";
 import Route from "@ember/routing/route";
 import { isNone } from "@ember/utils";
-import { AdapterError } from "ember-data";
+import { AdapterError } from "ember-data/adapters/errors";
 
 
 const errorProps = [

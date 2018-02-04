@@ -2,7 +2,7 @@ import {
 	get,
 	computed
 } from "@ember/object";
-import { attr } from "ember-data";
+import attr from "ember-data/attr";
 import {
 	Fragment,
 	fragment
