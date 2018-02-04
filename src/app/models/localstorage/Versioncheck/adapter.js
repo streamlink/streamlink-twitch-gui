@@ -1,4 +1,4 @@
-import { LocalStorageAdapter } from "ember-data-localstorage";
+import LocalStorageAdapter from "ember-localstorage-adapter/adapters/ls-adapter";
 
 
 export default LocalStorageAdapter.extend({
