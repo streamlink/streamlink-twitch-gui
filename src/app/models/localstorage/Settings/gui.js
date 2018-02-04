@@ -3,7 +3,7 @@ import {
 	computed
 } from "@ember/object";
 import attr from "ember-data/attr";
-import { Fragment } from "model-fragments";
+import Fragment from "ember-data-model-fragments/fragment";
 import {
 	themes as themesConfig
 } from "config";

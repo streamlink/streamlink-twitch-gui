@@ -1,6 +1,6 @@
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
-import { fragment } from "model-fragments";
+import { fragment } from "ember-data-model-fragments/attributes";
 
 
 /**

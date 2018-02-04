@@ -1,5 +1,5 @@
 import attr from "ember-data/attr";
-import { Fragment } from "model-fragments";
+import Fragment from "ember-data-model-fragments/fragment";
 
 
 export const ATTR_NOTIFY_CLICK_NOOP = 0;

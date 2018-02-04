@@ -294,6 +294,8 @@ module.exports = {
 				"ember-data/app": r( pDependencies, "ember-data", "app" ),
 				"ember-data"  : r( pDependencies, "ember-data", "addon" ),
 				"ember-inflector": r( pDependencies, "ember-inflector", "addon" ),
+				"ember-data-model-fragments":
+					r( pDependencies, "ember-data-model-fragments", "addon" ),
 				"qunit$"      : r( pTest, "web_modules", "qunit" ),
 				"ember-qunit$": "ember-qunit",
 				"ember-qunit" : "ember-qunit/lib/ember-qunit",
