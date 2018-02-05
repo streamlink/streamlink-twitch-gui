@@ -5,7 +5,6 @@ const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 const LessPluginCleanCSS = require( "less-plugin-clean-css" );
 const NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
-const emberFeatures = require( "../../../src/config/ember-features.json" );
 const { resolve: r } = require( "path" );
 const { tmpdir } = require( "os" );
 
@@ -22,6 +21,86 @@ const pImages = r( pRoot, "img" );
 const pTemplates = r( pRoot, "templates" );
 const pDependencies = r( ".", "node_modules" );
 const pCacheBabel = r( tmpdir(), "babel-cache" );
+
+
+// ember, ember-data and ember addons related stuff
+// TODO: clean up this whole webpack config mess
+const BabelEmberModules = require( "babel-plugin-ember-modules-api-polyfill" );
+const BabelFeatureFlags = require( "babel-plugin-feature-flags" );
+const BabelStripHeimdall = require( "babel6-plugin-strip-heimdall" );
+const BabelFilterImports = require( "babel-plugin-filter-imports" );
+const BabelRemoveImports = require( "ember-data/lib/transforms/babel-plugin-remove-imports" );
+const BabelDebugMacros = require( "babel-plugin-debug-macros" ).default;
+const BabelTransformBlockScoping = require( "babel-plugin-transform-es2015-block-scoping" );
+const BabelStripClassCallcheck = require( "babel6-plugin-strip-class-callcheck" );
+const emberFeatures = require( "../../../src/config/ember-features.json" );
+const emberFilteredImports = {
+	"ember-data/-debug": [
+		"instrument",
+		"assertPolymorphicType"
+	]
+};
+
+// Ember import polyfill
+// translates `import foo from "@ember/bar"` into `Ember.baz`
+// requires those imports to be ignored
+const emberLoader = {
+	test: /\.js$/,
+	include: [
+		pRoot,
+		{
+			test: /ember/,
+			include: pDependencies,
+			exclude: r( pDependencies, "ember-source" )
+		}
+	],
+	loader: "babel-loader",
+	options: {
+		plugins: [ BabelEmberModules ],
+		cacheDirectory: pCacheBabel
+	}
+};
+
+// Ember-Data
+// https://github.com/emberjs/data/blob/v2.16.3/lib/stripped-build-plugins.js
+// https://github.com/emberjs/data/blob/v2.16.3/lib/babel-build.js
+function emberDataLoader( isProduction ) {
+	return {
+		test: /\.js$/,
+		include: r( pDependencies, "ember-data" ),
+		loader: "babel-loader",
+		options: {
+			plugins: [
+				[ BabelFeatureFlags, {
+					import: {
+						module: "ember-data/-private/features"
+					},
+					features: emberFeatures
+				} ],
+				[ BabelStripHeimdall ],
+				[ BabelFilterImports, { imports: emberFilteredImports } ],
+				[ BabelRemoveImports, emberFilteredImports ],
+				[ BabelDebugMacros, {
+					envFlags: {
+						source: "@glimmer/env",
+						flags: { DEBUG: !isProduction }
+					},
+					externalizeHelpers: {
+						global: "Ember"
+					},
+					debugTools: {
+						source: "@ember/debug"
+					}
+				} ],
+				[ BabelTransformBlockScoping, { throwIfClosureRequired: true } ],
+				[ BabelStripClassCallcheck ]
+			],
+			cacheDirectory: pCacheBabel
+		}
+	};
+}
+const emberDataDevLoader = emberDataLoader( false );
+const emberDataProdLoader = emberDataLoader( true );
 
 
 const resolveModuleDirectories = [
@@ -44,44 +123,6 @@ const lessExtractTextPlugin = new ExtractTextPlugin({
 
 
 const commonLoaders = [
-	// Ember import polyfill
-	// translates `import foo from "@ember/bar"` into `Ember.baz`
-	// requires those imports to be ignored
-	{
-		test: /\.js$/,
-		exclude: [
-			pDependencies,
-			r( pRoot, "web_modules" )
-		],
-		loader: "babel-loader",
-		options: {
-			presets: [],
-			plugins: [
-				require( "babel-plugin-ember-modules-api-polyfill" )
-			],
-			cacheDirectory: pCacheBabel
-		}
-	},
-	// Ember-Data
-	{
-		test: /\.js$/,
-		include: r( pDependencies, "ember-data", "addon" ),
-		loader: "babel-loader",
-		options: {
-			presets: [],
-			plugins: [
-				[ require( "babel-plugin-feature-flags" ), {
-					import: {
-						module: "ember-data/-private/features"
-					},
-					features: emberFeatures
-				} ],
-				require( "babel6-plugin-strip-heimdall" ),
-				require( "babel6-plugin-strip-class-callcheck" )
-			],
-			cacheDirectory: pCacheBabel
-		}
-	},
 	{
 		enforce: "pre",
 		test: /\.js$/,
@@ -185,44 +226,12 @@ const commonLoaders = [
 ];
 
 
-const loadersEmberProductionBuild = [
-	{
-		test: /\.js$/,
-		include: r( pDependencies, "ember-data", "addon" ),
-		loader: "babel-loader",
-		options: {
-			presets: [],
-			plugins: [
-				// https://github.com/emberjs/data/blob/v2.11.3/lib/stripped-build-plugins.js#L48
-				[ require( "babel-plugin-filter-imports" ), {
-					imports: {
-						"ember-data/-private/debug": [
-							"instrument",
-							"assert",
-							"assertPolymorphicType",
-							"debug",
-							"deprecate",
-							"info",
-							"runInDebug",
-							"warn",
-							"debugSeal"
-						]
-					}
-				}]
-			],
-			cacheDirectory: pCacheBabel
-		}
-	}
-];
-
-
 // the inject-loader used by some tests requires es2015 modules to be transpiled
-const loaderBabelTest = {
+const testLoader = {
 	test: /\.js$/,
 	exclude: pDependencies,
 	loader: "babel-loader",
 	options: {
-		presets: [],
 		plugins: [
 			"babel-plugin-transform-es2015-modules-commonjs"
 		],
@@ -382,6 +391,8 @@ module.exports = {
 
 		module: {
 			rules: [
+				emberLoader,
+				emberDataDevLoader,
 				...commonLoaders
 			]
 		},
@@ -434,7 +445,8 @@ module.exports = {
 
 		module: {
 			rules: [
-				...loadersEmberProductionBuild,
+				emberLoader,
+				emberDataProdLoader,
 				...commonLoaders,
 				{
 					test: /\.svg$/,
@@ -507,7 +519,9 @@ module.exports = {
 
 		module: {
 			rules: [
-				loaderBabelTest,
+				testLoader,
+				emberLoader,
+				emberDataDevLoader,
 				...commonLoaders
 			]
 		},
@@ -556,7 +570,9 @@ module.exports = {
 
 		module: {
 			rules: [
-				loaderBabelTest,
+				testLoader,
+				emberLoader,
+				emberDataDevLoader,
 				...commonLoaders
 			]
 		},
