@@ -31,6 +31,7 @@ module( "models/twitch/ChannelFollowed", {
 				user_id: 1337
 			}
 		}) );
+		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-channel-followed", ChannelFollowed );
 		owner.register( "serializer:twitch-channel-followed", ChannelFollowedSerializer );
 		owner.register( "model:twitch-channel", Channel );
@@ -46,126 +47,116 @@ module( "models/twitch/ChannelFollowed", {
 });
 
 
-test( "Adapter and Serializer (single)", assert => {
+test( "Adapter and Serializer (single)", async function( assert ) {
 
 	env.adapter.ajax = ( url, method, query ) =>
 		adapterRequest( assert, TwitchChannelFollowedFixtures[ "single" ], url, method, query );
 
-	return env.store.findRecord( "twitchChannelFollowed", 1 )
-		.then( record => {
-			assert.deepEqual(
-				record.toJSON({ includeId: true }),
-				{
-					id: "1",
-					channel: "1",
-					created_at: "2000-01-01T00:00:00.000Z",
-					notifications: false
-				},
-				"Models have the correct id and attributes"
-			);
+	const record = await env.store.findRecord( "twitchChannelFollowed", 1 );
 
-			assert.ok(
-				env.store.hasRecordForId( "twitchChannelFollowed", "1" ),
-				"Has all ChannelFollowed records registered in the data store"
-			);
-
-			assert.ok(
-				env.store.hasRecordForId( "twitchChannel", "1" ),
-				"Has all Channel records registered in the data store"
-			);
-		});
+	assert.propEqual(
+		record.toJSON({ includeId: true }),
+		{
+			id: "1",
+			channel: "1",
+			created_at: "2000-01-01T00:00:00.000Z",
+			notifications: false
+		},
+		"Models have the correct id and attributes"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchChannelFollowed" ).mapBy( "id" ),
+		[ "1" ],
+		"Has all ChannelFollowed records registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchChannel" ).mapBy( "id" ),
+		[ "1" ],
+		"Has all Channel records registered in the data store"
+	);
 
 });
 
 
-test( "Adapter and Serializer (many)", assert => {
+test( "Adapter and Serializer (many)", async function( assert ) {
 
 	env.adapter.ajax = ( url, method, query ) =>
 		adapterRequest( assert, TwitchChannelFollowedFixtures[ "many" ], url, method, query );
 
-	return env.store.query( "twitchChannelFollowed", {} )
-		.then( records => {
-			assert.deepEqual(
-				records.map( record => record.toJSON({ includeId: true }) ),
-				[
-					{
-						id: "1",
-						channel: "1",
-						created_at: "2000-01-01T00:00:00.000Z",
-						notifications: false
-					},
-					{
-						id: "2",
-						channel: "2",
-						created_at: "2000-01-01T00:00:00.000Z",
-						notifications: true
-					}
-				],
-				"Models have the correct id and attributes"
-			);
+	const records = await env.store.query( "twitchChannelFollowed", {} );
 
-			assert.ok(
-				   env.store.hasRecordForId( "twitchChannelFollowed", "1" )
-				&& env.store.hasRecordForId( "twitchChannelFollowed", "2" ),
-				"Has all ChannelFollowed records registered in the data store"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchChannel", "1" )
-				&& env.store.hasRecordForId( "twitchChannel", "2" ),
-				"Has all Channel records registered in the data store"
-			);
-		});
+	assert.deepEqual(
+		records.map( record => record.toJSON({ includeId: true }) ),
+		[
+			{
+				id: "1",
+				channel: "1",
+				created_at: "2000-01-01T00:00:00.000Z",
+				notifications: false
+			},
+			{
+				id: "2",
+				channel: "2",
+				created_at: "2000-01-01T00:00:00.000Z",
+				notifications: true
+			}
+		],
+		"Models have the correct id and attributes"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchChannelFollowed" ).mapBy( "id" ),
+		[ "1", "2" ],
+		"Has all ChannelFollowed records registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchChannel" ).mapBy( "id" ),
+		[ "1", "2" ],
+		"Has all Channel records registered in the data store"
+	);
 
 });
 
 
-test( "Create and delete records", assert => {
+test( "Create and delete records", async function( assert ) {
 
-	let action = "create";
+	const { create: fixturesCreate, delete: fixturesDelete } = TwitchChannelFollowedFixtures;
 
-	env.adapter.ajax = ( url, method, query ) =>
-		adapterRequest( assert, TwitchChannelFollowedFixtures[ action ], url, method, query );
+	env.adapter.ajax = ( ...args ) => adapterRequest( assert, fixturesCreate, ...args );
+	const record = await env.store.createRecord( "twitchChannelFollowed", { id: 1 } ).save();
 
-	return env.store.createRecord( "twitchChannelFollowed", { id: 1 } )
-		.save()
-		.then( record => {
-			assert.deepEqual(
-				record.toJSON({ includeId: true }),
-				{
-					id: "1",
-					channel: "1",
-					created_at: "2000-01-01T00:00:00.000Z",
-					notifications: false
-				},
-				"Record has the correct id and attributes"
-			);
+	assert.propEqual(
+		record.toJSON({ includeId: true }),
+		{
+			id: "1",
+			channel: "1",
+			created_at: "2000-01-01T00:00:00.000Z",
+			notifications: false
+		},
+		"Record has the correct id and attributes"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchChannelFollowed" ).mapBy( "id" ),
+		[ "1" ],
+		"Has the new ChannelFollowed record registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchChannel" ).mapBy( "id" ),
+		[ "1" ],
+		"Has the Channel record registered in the data store"
+	);
 
-			assert.ok(
-				env.store.hasRecordForId( "twitchChannelFollowed", 1 ),
-				"Has the new ChannelFollowed record registered in the data store"
-			);
+	env.adapter.ajax = ( ...args ) => adapterRequest( assert, fixturesDelete, ...args );
+	await record.destroyRecord();
 
-			assert.ok(
-				env.store.hasRecordForId( "twitchChannel", 1 ),
-				"Has the Channel record registered in the data store"
-			);
-
-
-			action = "delete";
-
-			return record.destroyRecord();
-		})
-		.then( () => {
-			assert.ok(
-				!env.store.hasRecordForId( "twitchChannelFollowed", 1 ),
-				"Does not have the new ChannelFollowed record registered in the data store anymore"
-			);
-
-			assert.ok(
-				env.store.hasRecordForId( "twitchChannel", 1 ),
-				"Still has the Channel record registered in the data store"
-			);
-		});
+	assert.propEqual(
+		env.store.peekAll( "twitchChannelFollowed" ).mapBy( "id" ),
+		[],
+		"Does not have the new ChannelFollowed record registered in the data store anymore"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchChannel" ).mapBy( "id" ),
+		[ "1" ],
+		"Still has the Channel record registered in the data store"
+	);
 
 });
