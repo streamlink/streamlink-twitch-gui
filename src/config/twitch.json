@@ -1,6 +1,6 @@
 {
 	"stream-url": "twitch.tv/{channel}",
-	"chat-url": "https://www.twitch.tv/{channel}/chat",
+	"chat-url": "https://www.twitch.tv/popout/{channel}/chat",
 	"emotes-url": "https://twitchemotes.com/channel/{channel}",
 	"subscription": {
 		"create-url": "https://www.twitch.tv/{channel}/subscribe",
