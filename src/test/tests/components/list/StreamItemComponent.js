@@ -1,73 +1,135 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
-	buildOwner,
-	runDestroy
+	buildResolver,
+	hbs
 } from "test-utils";
 import {
 	get,
-	set
+	set,
+	setProperties
 } from "@ember/object";
+import { run } from "@ember/runloop";
 import Service from "@ember/service";
 import StreamItemComponent from "components/list/StreamItemComponent";
 
 
-// TODO: add proper tests (unit/integration) after merging the ember-upgrade branch (ember >= 2.10)
-module( "components/list/StreamItemComponent", {
+moduleForComponent( "stream-item", "components/list/StreamItemComponent", {
+	unit: true,
+	resolver: buildResolver({
+		StreamItemComponent
+	}),
 	beforeEach() {
-		this.owner = buildOwner();
-		this.owner.register( "service:settings", Service.extend() );
-		this.owner.register( "component:stream-item", StreamItemComponent );
-	},
-	afterEach() {
-		runDestroy( this.owner );
+		this.register( "service:settings", Service.extend({
+			hasStreamsLanguagesSelection: true,
+			streams: {
+				filter_languages: false,
+				filter_vodcast: false,
+				languages: {
+					toJSON: () => ({
+						de: true,
+						en: true,
+						fr: false
+					})
+				}
+			}
+		}) );
 	}
 });
 
 
-test( "hasCustomLangFilter", function( assert ) {
+test( "faded", function( assert ) {
 
-	const settings = this.owner.lookup( "service:settings" );
-
-	function setLanguages( languages ) {
-		set( settings, "streams", {
-			languages: { toJSON: () => languages }
-		});
-	}
-
-	const subject = this.owner.lookup( "component:stream-item" );
-
-	setLanguages( {} );
-	assert.notOk( get( subject, "hasCustomLangFilter" ), "No filter is set" );
-
-	setLanguages({
-		a: true,
-		b: true,
-		c: true
+	const subject = this.subject({
+		content: {
+			channel: {
+				language: undefined,
+				broadcaster_language: undefined
+			}
+		}
 	});
-	assert.notOk( get( subject, "hasCustomLangFilter" ), "Doesn't have a custom lang filter" );
 
-	setLanguages({
-		a: false,
-		b: false,
-		c: false
-	});
-	assert.notOk( get( subject, "hasCustomLangFilter" ), "Doesn't have a custom lang filter" );
+	assert.notOk( get( subject, "faded" ), "Not faded if channel language is missing" );
 
-	setLanguages({
-		a: true,
-		b: true,
-		c: false
-	});
-	assert.ok( get( subject, "hasCustomLangFilter" ), "Has a custom lang filter" );
+	set( subject, "content.channel.language", "en" );
+	assert.notOk( get( subject, "faded" ), "Not faded if language has been enabled" );
 
-	setLanguages({
-		a: false,
-		b: false,
-		c: true
+	set( subject, "content.channel.language", "fr" );
+	assert.ok( get( subject, "faded" ), "Faded if language has been disabled" );
+
+	set( subject, "content.channel.broadcaster_language", "de" );
+	assert.notOk( get( subject, "faded" ), "Not faded if broadcaster language has been enabled" );
+
+	set( subject, "content.channel.broadcaster_language", "fr" );
+	assert.ok( get( subject, "faded" ), "Faded if broadcaster language has been disabled" );
+
+	set( subject, "content.channel.language", "en" );
+	set( subject, "content.channel.broadcaster_language", "other" );
+	assert.ok( get( subject, "faded" ), "Faded if broadcaster language is 'other'" );
+
+	set( subject, "settings.hasStreamsLanguagesSelection", false );
+	assert.notOk( get( subject, "faded" ), "Not faded if no custom stream language selection" );
+
+	set( subject, "settings.hasStreamsLanguagesSelection", true );
+	set( subject, "settings.streams.filter_languages", true );
+	assert.notOk( get( subject, "faded" ), "Not faded if filtering is enabled" );
+
+});
+
+
+test( "fadedVodcast", function( assert ) {
+
+	const subject = this.subject({
+		content: {
+			isVodcast: false
+		}
 	});
-	assert.ok( get( subject, "hasCustomLangFilter" ), "Has a custom lang filter" );
+
+	assert.notOk( get( subject, "fadedVodcast" ), "Not faded if it's not a vodcast" );
+
+	set( subject, "content.isVodcast", true );
+	assert.notOk( get( subject, "fadedVodcast" ), "Not faded if vodcast filtering is disabled" );
+
+	set( subject, "settings.streams.filter_vodcast", true );
+	assert.ok( get( subject, "fadedVodcast" ), "Faded if vodcast filtering is enabled" );
+
+	set( subject, "content.isVodcast", false );
+	assert.notOk( get( subject, "fadedVodcast" ), "Not faded if not a vodcast anymore" );
+
+});
+
+
+test( "isFaded element class", function( assert ) {
+
+	const subject = this.subject({
+		layout: hbs``,
+		faded: false,
+		fadedVodcast: false
+	});
+
+	this.render();
+	const $elem = this.$();
+
+	assert.notOk( $elem.hasClass( "faded" ), "Not faded if faded and fadedVodcast are falsy" );
+
+	run( () => setProperties( subject, {
+		faded: true,
+		fadedVodcast: false
+	}) );
+	assert.ok( $elem.hasClass( "faded" ), "Faded if faded or fadedVodcast are truthy" );
+
+	run( () => setProperties( subject, {
+		faded: false,
+		fadedVodcast: true
+	}) );
+	assert.ok( $elem.hasClass( "faded" ), "Faded if faded or fadedVodcast are truthy" );
+
+	run( () => setProperties( subject, {
+		faded: true,
+		fadedVodcast: true
+	}) );
+	assert.ok( $elem.hasClass( "faded" ), "Faded if faded or fadedVodcast are truthy" );
 
 });
