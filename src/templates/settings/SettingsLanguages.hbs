@@ -1,19 +1,19 @@
 <fieldset>
 {{#settings-row
 	"Filter streams"
-	"Apply a language filter to all stream lists (except followed streams)."
+	"Apply a language filter to all stream menus."
+	notes="Does not affect the 'Live Streams' menu of the 'My' section."
 	icon="fa-filter"
-	notes=(unless model.streams.filter_languages
-		"List all streams, fade out the ones not matching."
-		"Only list streams matching the language selection."
-	)
 }}
 	{{#radio-buttons
 		value=model.streams.filter_languages
 		content=contentStreamsFilterLanguages
 		as |item|
 	}}
-		<div>{{item.button}}</div>
+		<div class="input-btn-with-description">
+			{{item.button item.label.text}}
+			<div class="description">{{item.label.description}}</div>
+		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
 

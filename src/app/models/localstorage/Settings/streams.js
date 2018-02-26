@@ -52,8 +52,20 @@ export default Fragment.extend({
 	],
 
 	filterLanguages: [
-		{ id: false, label: "Fade out streams" },
-		{ id: true, label: "Filter out streams" }
+		{
+			id: false,
+			label: {
+				text: "Fade out streams",
+				description: "Show all streams, fade out ones not matching the language selection."
+			}
+		},
+		{
+			id: true,
+			label: {
+				text: "Filter out streams",
+				description: "Only show streams matching the language selection."
+			}
+		}
 	],
 
 	info: [
