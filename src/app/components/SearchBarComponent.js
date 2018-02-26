@@ -51,7 +51,7 @@ export default Component.extend( HotkeyMixin, {
 	init() {
 		this._super( ...arguments );
 
-		this.content.volatile();
+		//this.content.volatile();
 
 		const store = get( this, "store" );
 		const filters = store.modelFor( "search" ).filters;
