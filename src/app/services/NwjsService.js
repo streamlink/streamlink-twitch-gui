@@ -1,8 +1,8 @@
+import { get } from "@ember/object";
 import {
-	get,
-	inject,
-	Service
-} from "ember";
+	default as Service,
+	inject as service
+} from "@ember/service";
 import { quit } from "nwjs/App";
 import nwWindow, {
 	toggleVisibility,
@@ -13,9 +13,6 @@ import {
 	ATTR_GUI_INTEGRATION_TRAY,
 	ATTR_GUI_INTEGRATION_BOTH
 } from "models/localstorage/Settings/gui";
-
-
-const { service } = inject;
 
 
 export default Service.extend({

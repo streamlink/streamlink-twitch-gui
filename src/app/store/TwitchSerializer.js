@@ -1,7 +1,5 @@
-import {
-	EmbeddedRecordsMixin,
-	RESTSerializer
-} from "ember-data";
+import EmbeddedRecordsMixin from "ember-data/serializers/embedded-records-mixin";
+import RESTSerializer from "ember-data/serializers/rest";
 
 
 export default RESTSerializer.extend( EmbeddedRecordsMixin, {

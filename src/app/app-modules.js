@@ -10,7 +10,6 @@
 import Router from "./router";
 
 import ApplicationAdapter from "store/TwitchAdapter";
-import BooleanTransform from "store/BooleanTransform";
 
 import Stream from "models/stream/Stream";
 import StreamAdapter from "models/stream/StreamAdapter";
@@ -155,6 +154,7 @@ import ChatService from "services/ChatService";
 import HotkeyService from "services/HotkeyService";
 
 import ApplicationRoute from "routes/ApplicationRoute";
+import ApplicationTemplate from "templates/Application.hbs";
 
 import LoadingRoute from "routes/LoadingRoute";
 import LoadingTemplate from "templates/Loading.hbs";
@@ -174,10 +174,12 @@ import LinkComponent from "components/link/LinkComponent";
 import DocumentationLinkComponent from "components/link/DocumentationLinkComponent";
 import EmbeddedHtmlLinksComponent from "components/link/EmbeddedHtmlLinksComponent";
 
-import CheckBoxComponent from "components/form/CheckBoxComponent";
-import RadioBtnComponent from "components/form/RadioBtnComponent";
-import RadioBtnsComponent from "components/form/RadioBtnsComponent";
 import DropDownComponent from "components/form/DropDownComponent";
+import DropDownSelectionComponent from "components/form/DropDownComponent/selection";
+import DropDownListComponent from "components/form/DropDownComponent/list";
+import RadioButtonsComponent from "components/form/RadioButtonsComponent";
+import RadioButtonsItemComponent from "components/form/RadioButtonsComponent/item";
+import CheckBoxComponent from "components/form/CheckBoxComponent";
 import FileSelectComponent from "components/form/FileSelectComponent";
 import TextFieldComponent from "components/form/TextFieldComponent";
 import NumberFieldComponent from "components/form/NumberFieldComponent";
@@ -372,7 +374,6 @@ export default {
 
 	// Store
 	ApplicationAdapter,
-	BooleanTransform,
 
 
 	// Models: memory
@@ -530,6 +531,7 @@ export default {
 
 	// Application
 	ApplicationRoute,
+	ApplicationTemplate,
 
 	LoadingRoute,
 	LoadingTemplate,
@@ -551,10 +553,12 @@ export default {
 	DocumentationLinkComponent,
 	EmbeddedHtmlLinksComponent,
 
-	CheckBoxComponent,
-	RadioBtnComponent,
-	RadioBtnsComponent,
 	DropDownComponent,
+	DropDownSelectionComponent,
+	DropDownListComponent,
+	RadioButtonsComponent,
+	RadioButtonsItemComponent,
+	CheckBoxComponent,
 	FileSelectComponent,
 	TextFieldComponent,
 	NumberFieldComponent,

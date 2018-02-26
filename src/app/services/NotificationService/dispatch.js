@@ -1,10 +1,12 @@
+import { get } from "@ember/object";
 import {
-	get,
-	inject,
-	on,
-	Evented,
-	Mixin
-} from "ember";
+	default as Evented,
+	on
+} from "@ember/object/evented";
+import Mixin from "@ember/object/mixin";
+import {
+	inject as service
+} from "@ember/service";
 import {
 	iconGroup,
 	iconDownload
@@ -23,9 +25,6 @@ import {
 	setVisibility,
 	setFocused
 } from "nwjs/Window";
-
-
-const { service } = inject;
 
 
 export default Mixin.create( Evented, {

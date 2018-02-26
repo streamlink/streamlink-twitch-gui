@@ -1,15 +1,15 @@
+import Component from "@ember/component";
 import {
 	get,
 	set,
-	computed,
-	run,
-	on,
-	Component
-} from "ember";
+	computed
+} from "@ember/object";
+import { on } from "@ember/object/evented";
+import {
+	cancel,
+	later
+} from "@ember/runloop";
 import layout from "templates/components/QuickBarComponent.hbs";
-
-
-const { cancel, later } = run;
 
 
 export default Component.extend({

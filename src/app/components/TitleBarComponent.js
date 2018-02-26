@@ -1,9 +1,11 @@
+import Component from "@ember/component";
 import {
 	get,
-	computed,
-	inject,
-	Component
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import {
 	main as mainConfig
 } from "config";
@@ -11,7 +13,6 @@ import { isDebug } from "nwjs/debug";
 import layout from "templates/components/TitleBarComponent.hbs";
 
 
-const { service } = inject;
 const { "display-name": displayName } = mainConfig;
 
 

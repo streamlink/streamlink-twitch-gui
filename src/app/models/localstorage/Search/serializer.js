@@ -1,1 +1,1 @@
-export { LocalStorageSerializer as default } from "ember-data-localstorage";
+export { default } from "ember-localstorage-adapter/serializers/ls-serializer";

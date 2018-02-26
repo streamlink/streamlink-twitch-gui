@@ -1,9 +1,8 @@
-import { Application } from "ember";
 import { providers } from "models/localstorage/Settings/chatProvider";
 import Serializer from "models/localstorage/Settings/chatProviderSerializer";
 
 
-Application.initializer({
+export default {
 	name: "settings-chat-provider",
 
 	initialize( application ) {
@@ -12,4 +11,4 @@ Application.initializer({
 			application.register( `serializer:settings-chat-provider-${type}`, Serializer );
 		}
 	}
-});
+};

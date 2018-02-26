@@ -1,7 +1,5 @@
-import {
-	get,
-	Route
-} from "ember";
+import { get } from "@ember/object";
+import Route from "@ember/routing/route";
 import RefreshMixin from "./mixins/refresh";
 import preload from "utils/preload";
 
@@ -28,9 +26,6 @@ export default Route.extend( RefreshMixin, {
 				stream = await store.findRecord( "twitchStream", id, { reload: true } );
 				channel = get( stream, "channel" );
 			} catch ( e ) {
-				// let the stream record transition from root.loading into root.empty
-				// so that it can be reloaded later on... fixes #89
-				store.recordForId( "twitchStream", id )._internalModel.notFound();
 				// if the channel is not online, just find and return the channel record
 				channel = await store.findRecord( "twitchChannel", id, { reload: true } );
 			}

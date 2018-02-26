@@ -1,4 +1,4 @@
-import { get } from "ember";
+import { get } from "@ember/object";
 import InputBtnComponent from "./InputBtnComponent";
 
 

@@ -9,14 +9,14 @@ import {
 import { setupStore } from "store-utils";
 import {
 	get,
-	set,
-	run,
-	on,
-	Service
-} from "ember";
-import { RESTAdapter } from "ember-data";
+	set
+} from "@ember/object";
+import { on } from "@ember/object/evented";
+import { run } from "@ember/runloop";
+import Service from "@ember/service";
+import RESTAdapter from "ember-data/adapters/rest";
 import notificationPollingMixinInjector
-	from "inject-loader?-ember!services/NotificationService/polling";
+	from "inject-loader?config&./cache&./icons&./logger!services/NotificationService/polling";
 import StreamFollowed from "models/twitch/StreamFollowed";
 import StreamFollowedSerializer from "models/twitch/StreamFollowedSerializer";
 import Stream from "models/twitch/Stream";

@@ -1,9 +1,11 @@
 import {
 	get,
-	set,
-	inject,
-	Service
-} from "ember";
+	set
+} from "@ember/object";
+import {
+	default as Service,
+	inject as service
+} from "@ember/service";
 import { update } from "config";
 import { manifest } from "nwjs/App";
 import {
@@ -13,7 +15,6 @@ import {
 import { getMax } from "utils/semver";
 
 
-const { service } = inject;
 const { "check-again": checkAgain } = update;
 const { version } = manifest;
 

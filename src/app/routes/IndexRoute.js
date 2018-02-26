@@ -1,11 +1,8 @@
+import { get } from "@ember/object";
+import Route from "@ember/routing/route";
 import {
-	get,
-	inject,
-	Route
-} from "ember";
-
-
-const { service } = inject;
+	inject as service
+} from "@ember/service";
 
 
 export default Route.extend({

@@ -10,10 +10,8 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import {
-	get,
-	Service
-} from "ember";
+import { get } from "@ember/object";
+import Service from "@ember/service";
 import User from "models/twitch/User";
 import UserAdapter from "models/twitch/UserAdapter";
 import UserSerializer from "models/twitch/UserSerializer";
@@ -44,6 +42,7 @@ module( "models/twitch/User", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-user", User );
 		owner.register( "adapter:twitch-user", UserAdapter );
 		owner.register( "serializer:twitch-user", UserSerializer );
@@ -114,15 +113,15 @@ test( "Adapter and Serializer", assert => {
 				.then( () => get( record, "stream" ) )
 				.then( () => {
 					assert.ok(
-						env.store.hasRecordForId( "twitchStream", "2" ),
+						env.store.hasRecordForId( "twitchStream", "1" ),
 						"Store does have a stream record registered after accessing the stream"
 					);
 					assert.ok(
-						env.store.hasRecordForId( "twitchChannel", "2" ),
+						env.store.hasRecordForId( "twitchChannel", "1" ),
 						"Store does have a channel record registered after accessing the channel"
 					);
 					assert.ok(
-						env.store.hasRecordForId( "twitchImage", "stream/preview/2" ),
+						env.store.hasRecordForId( "twitchImage", "stream/preview/1" ),
 						"Store does have an image record registered after accessing the stream"
 					);
 				});

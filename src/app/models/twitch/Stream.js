@@ -1,19 +1,16 @@
 import {
 	get,
-	computed,
-	inject
-} from "ember";
+	computed
+} from "@ember/object";
+import { and } from "@ember/object/computed";
 import {
-	attr,
-	belongsTo,
-	Model
-} from "ember-data";
+	inject as service
+} from "@ember/service";
+import attr from "ember-data/attr";
+import Model from "ember-data/model";
+import { belongsTo } from "ember-data/relationships";
 import Moment from "moment";
 import { DEFAULT_VODCAST_REGEXP } from "models/localstorage/Settings/streams";
-
-
-const { and } = computed;
-const { service } = inject;
 
 
 /**

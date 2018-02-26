@@ -7,7 +7,7 @@ import {
 	runDestroy
 } from "test-utils";
 import { setupStore } from "store-utils";
-import { get } from "ember";
+import { get } from "@ember/object";
 import imageInjector from "inject-loader?config!models/twitch/Image";
 import ImageSerializer from "models/twitch/ImageSerializer";
 import TwitchImageFixtures from "fixtures/models/twitch/Image.json";

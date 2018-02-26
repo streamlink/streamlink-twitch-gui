@@ -2,7 +2,7 @@ import {
 	get,
 	set,
 	setProperties
-} from "ember";
+} from "@ember/object";
 import {
 	ExitCodeError,
 	ExitSignalError,

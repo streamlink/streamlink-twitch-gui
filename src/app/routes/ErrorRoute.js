@@ -1,11 +1,10 @@
 import {
 	get,
-	set,
-	isNone,
-	assign,
-	Route
-} from "ember";
-import { AdapterError } from "ember-data";
+	set
+} from "@ember/object";
+import Route from "@ember/routing/route";
+import { isNone } from "@ember/utils";
+import { AdapterError } from "ember-data/adapters/errors";
 
 
 const errorProps = [
@@ -39,7 +38,7 @@ export default Route.extend({
 
 		// if it's an AdapterError, just use the first error object
 		if ( error instanceof AdapterError ) {
-			assign( error, error.errors[0] || {} );
+			Object.assign( error, error.errors[0] || {} );
 		}
 
 		// choose a better error name

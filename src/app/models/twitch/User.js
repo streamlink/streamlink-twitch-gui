@@ -1,7 +1,5 @@
-import {
-	belongsTo,
-	Model
-} from "ember-data";
+import Model from "ember-data/model";
+import { belongsTo } from "ember-data/relationships";
 
 
 /**

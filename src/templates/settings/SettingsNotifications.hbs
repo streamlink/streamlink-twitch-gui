@@ -21,21 +21,19 @@
 	~}}
 		Test notification
 	{{~/form-button}}
-	{{#radio-btns
-		name="notificationproviders"
+	{{#radio-buttons
 		value=model.notification.provider
-		content=providers
-		as |radiobtn label|
+		content=contentNotificationProviders
+		as |item|
 	}}
 		<div class="settings-provider-item">
-			{{component
-				radiobtn
-				label.name
+			{{item.button
+				item.label.name
 				disabled=(bool-not model.notification.enabled)
 			}}
-			<p class="description">{{#if label.notes}}<i class="fa fa-question-circle" title={{label.notes}}></i> {{/if}}{{label.description}}</p>
+			<p class="description">{{#if item.label.notes}}<i class="fa fa-question-circle" title={{item.label.notes}}></i> {{/if}}{{item.label.description}}</p>
 		</div>
-	{{/radio-btns}}
+	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
@@ -43,20 +41,17 @@
 	"Notifications can be turned on/off individually in a channel's settings menu."
 	icon="fa-eyedropper"
 }}
-	{{#radio-btns
-		name="notificationfilter"
+	{{#radio-buttons
 		value=model.notification.filter
-		content=SettingsNotification.filter
-		as |radiobtn label|
+		content=contentNotificationFilter
+		as |item|
 	}}
 		<div>
-			{{component
-				radiobtn
-				label
+			{{item.button
 				disabled=(bool-not model.notification.enabled)
 			}}
 		</div>
-	{{/radio-btns}}
+	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
@@ -86,7 +81,7 @@
 }}
 	{{drop-down
 		value=model.notification.click
-		content=SettingsNotification.click
+		content=contentNotificationClick
 		disabled=(bool-not model.notification.enabled)
 		class="notifications"
 	}}
@@ -99,7 +94,7 @@
 }}
 	{{drop-down
 		value=model.notification.click_group
-		content=SettingsNotification.click_group
+		content=contentNotificationClickGroup
 		disabled=(bool-or
 			(bool-not model.notification.enabled)
 			(bool-not model.notification.grouping)

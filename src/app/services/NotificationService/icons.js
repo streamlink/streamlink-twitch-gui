@@ -1,7 +1,7 @@
 import {
 	get,
 	set
-} from "ember";
+} from "@ember/object";
 import {
 	files as filesConfig,
 	notification as notificationConfig

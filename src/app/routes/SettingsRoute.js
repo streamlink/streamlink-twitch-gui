@@ -1,13 +1,13 @@
 import {
 	get,
-	set,
-	inject,
-	Route
-} from "ember";
+	set
+} from "@ember/object";
+import Route from "@ember/routing/route";
+import {
+	inject as service
+} from "@ember/service";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
-
-const { service } = inject;
 
 const reRouteNames = /^settings\.\w+$/;
 

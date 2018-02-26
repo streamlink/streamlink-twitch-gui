@@ -1,9 +1,9 @@
 import {
 	get,
 	set,
-	observer,
-	Mixin
-} from "ember";
+	observer
+} from "@ember/object";
+import Mixin from "@ember/object/mixin";
 import { getMenu } from "nwjs/Tray";
 
 

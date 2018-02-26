@@ -1,0 +1,17 @@
+{{#if hasBlock}}
+	{{#each content as |item|}}
+		<li class="{{if (is-equal item selection) 'selected'}}" {{action "change" item bubbles=false}}>
+			{{yield (hash
+				isSelected=(is-equal item selection)
+				label=(get item optionLabelPath)
+				value=(get item optionValuePath)
+			)}}
+		</li>
+	{{/each}}
+{{else}}
+	{{#each content as |item|}}
+		<li class="{{if (is-equal item selection) 'selected'}}" {{action "change" item bubbles=false}}>
+			{{get item optionLabelPath}}
+		</li>
+	{{/each}}
+{{/if}}

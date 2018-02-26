@@ -1,8 +1,6 @@
-import { attr } from "ember-data";
-import {
-	Fragment,
-	fragment
-} from "model-fragments";
+import attr from "ember-data/attr";
+import Fragment from "ember-data-model-fragments/fragment";
+import { fragment } from "ember-data-model-fragments/attributes";
 
 
 export const ATTR_STREAMS_NAME_CUSTOM = 1;
@@ -47,15 +45,15 @@ export default Fragment.extend({
 
 }).reopenClass({
 
-	name_list: [
+	contentName: [
 		{ id: ATTR_STREAMS_NAME_BOTH, label: "Show both" },
 		{ id: ATTR_STREAMS_NAME_CUSTOM, label: "Show custom names" },
 		{ id: ATTR_STREAMS_NAME_ORIGINAL, label: "Show original names" }
 	],
 
-	filter_languages: [
-		{ value: false, label: "Fade out streams" },
-		{ value: true, label: "Filter out streams" }
+	filterLanguages: [
+		{ id: false, label: "Fade out streams" },
+		{ id: true, label: "Filter out streams" }
 	],
 
 	info: [

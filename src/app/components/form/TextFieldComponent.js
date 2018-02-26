@@ -1,4 +1,4 @@
-import { TextField } from "ember";
+import TextField from "@ember/component/text-field";
 import Menu from "nwjs/Menu";
 import {
 	get as getClipboard,

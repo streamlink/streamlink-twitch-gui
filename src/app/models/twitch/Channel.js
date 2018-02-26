@@ -1,20 +1,18 @@
 import {
 	get,
-	computed,
-	inject
-} from "ember";
+	computed
+} from "@ember/object";
 import {
-	attr,
-	Model
-} from "ember-data";
+	inject as service
+} from "@ember/service";
+import attr from "ember-data/attr";
+import Model from "ember-data/model";
 import {
 	ATTR_STREAMS_NAME_CUSTOM,
 	ATTR_STREAMS_NAME_ORIGINAL,
 	ATTR_STREAMS_NAME_BOTH
 } from "models/localstorage/Settings/streams";
 
-
-const { service } = inject;
 
 const reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 

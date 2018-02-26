@@ -1,4 +1,4 @@
-import { Helper } from "ember";
+import { helper } from "@ember/component/helper";
 
 
 function mathMul( valueA, valueB ) {
@@ -6,6 +6,6 @@ function mathMul( valueA, valueB ) {
 }
 
 
-export default Helper.helper(function( params ) {
+export default helper(function( params ) {
 	return params.reduce( mathMul );
 });

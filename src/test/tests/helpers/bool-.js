@@ -1,96 +1,79 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
-	runAppend,
-	runDestroy,
-	getOutput,
-	buildOwner
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	setOwner,
-	HTMLBars,
-	run,
-	Component
-} from "ember";
 import BoolNotHelper from "helpers/BoolNotHelper";
 import BoolAndHelper from "helpers/BoolAndHelper";
 import BoolOrHelper from "helpers/BoolOrHelper";
 
 
-const { compile } = HTMLBars;
-
-let owner, component;
-
-
-module( "helpers/bool-", {
-	beforeEach() {
-		owner = buildOwner();
-	},
-
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( component );
-		runDestroy( owner );
-		owner = component = null;
-	}
+moduleForComponent( "helpers/bool-", {
+	integration: true,
+	resolver: buildResolver({
+		BoolNotHelper,
+		BoolAndHelper,
+		BoolOrHelper
+	})
 });
 
 
 test( "Bool not", function( assert ) {
 
-	owner.register( "helper:bool-not", BoolNotHelper );
-	component = Component.extend({
-		valA  : false,
-		valB  : null,
-		valC  : undefined,
-		valD  : "",
-		layout: compile( "{{bool-not valA valB valC valD}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", false );
+	this.set( "valB", null );
+	this.set( "valC", undefined );
+	this.set( "valD", "" );
+	this.render( hbs`{{bool-not valA valB valC valD}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), "true", "All values are falsey" );
-	run( component, "set", "valA", true );
-	assert.equal( getOutput( component ), "false", "Not all values are falsey" );
+	assert.strictEqual( this.$().text(), "true", "All values are falsey" );
+
+	this.set( "valA", true );
+	assert.equal( this.$().text(), "false", "Not all values are falsey" );
 
 });
 
 
 test( "Bool and", function( assert ) {
 
-	owner.register( "helper:bool-and", BoolAndHelper );
-	component = Component.extend({
-		valA  : true,
-		valB  : true,
-		layout: compile( "{{bool-and valA valB}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", false );
+	this.set( "valB", false );
+	this.set( "valC", false );
+	this.render( hbs`{{bool-and valA valB valC}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), "true", "A and B" );
-	run( component, "set", "valA", false );
-	assert.equal( getOutput( component ), "false", "not A and B" );
+	assert.strictEqual( this.$().text(), "false", "not A and not B and not C" );
+
+	this.set( "valA", true );
+	assert.strictEqual( this.$().text(), "false", "A and not B and not C" );
+
+	this.set( "valB", true );
+	assert.strictEqual( this.$().text(), "false", "A and B and not C" );
+
+	this.set( "valC", true );
+	assert.strictEqual( this.$().text(), "true", "A and B and C" );
 
 });
 
 
 test( "Bool or", function( assert ) {
 
-	owner.register( "helper:bool-or", BoolOrHelper );
-	component = Component.extend({
-		valA  : true,
-		valB  : true,
-		layout: compile( "{{bool-or valA valB}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", true );
+	this.set( "valB", true );
+	this.set( "valC", true );
+	this.render( hbs`{{bool-or valA valB valC}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), "true", "A or B" );
-	run( component, "set", "valA", false );
-	assert.equal( getOutput( component ), "true", "A or B" );
-	run( component, "set", "valB", false );
-	assert.equal( getOutput( component ), "false", "not A or B" );
+	assert.strictEqual( this.$().text(), "true", "A or B or C" );
+
+	this.set( "valA", false );
+	assert.strictEqual( this.$().text(), "true", "not A or B or C" );
+
+	this.set( "valB", false );
+	assert.strictEqual( this.$().text(), "true", "not A or not B or C" );
+
+	this.set( "valC", false );
+	assert.strictEqual( this.$().text(), "false", "not A or not B or not C" );
 
 });

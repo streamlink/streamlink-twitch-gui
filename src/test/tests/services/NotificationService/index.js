@@ -8,11 +8,12 @@ import {
 } from "test-utils";
 import {
 	get,
-	set,
-	run,
-	Service
-} from "ember";
-import notificationServiceInjector from "inject-loader?-ember!services/NotificationService";
+	set
+} from "@ember/object";
+import { run } from "@ember/runloop";
+import Service from "@ember/service";
+import notificationServiceInjector
+	from "inject-loader?./polling&./dispatch&./badge&./tray&./follow!services/NotificationService";
 
 
 module( "services/NotificationService/index" );

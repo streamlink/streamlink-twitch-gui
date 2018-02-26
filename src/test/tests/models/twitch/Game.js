@@ -7,7 +7,7 @@ import {
 	runDestroy
 } from "test-utils";
 import { setupStore } from "store-utils";
-import { get } from "ember";
+import { get } from "@ember/object";
 import Game from "models/twitch/Game";
 import GameSerializer from "models/twitch/GameSerializer";
 import imageInjector from "inject-loader?config!models/twitch/Image";
@@ -47,13 +47,14 @@ module( "models/twitch/Game", {
 test( "Serializer", assert => {
 
 	// TwitchGame is just an embedded model
+	// ignore the queried record id
 
-	env.adapter.findRecord = () =>
+	env.adapter.queryRecord = () =>
 		Promise.resolve({
 			twitchGame: TwitchGameFixtures[ "embedded" ]
 		});
 
-	return env.store.findRecord( "twitchGame", 1 )
+	return env.store.queryRecord( "twitchGame", 1 )
 		.then( record => {
 			assert.deepEqual(
 				record.toJSON({ includeId: true }),

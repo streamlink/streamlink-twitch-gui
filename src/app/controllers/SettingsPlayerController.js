@@ -1,9 +1,12 @@
+import Controller from "@ember/controller";
 import {
 	get,
-	computed,
-	inject,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
+import { equal } from "@ember/object/computed";
+import {
+	inject as service
+} from "@ember/service";
 import {
 	players as playersConfig
 } from "config";
@@ -12,8 +15,6 @@ import { platform } from "utils/node/platform";
 import { delimiter } from "path";
 
 
-const { equal } = computed;
-const { service } = inject;
 const { assign } = Object;
 const { isArray } = Array;
 
@@ -43,7 +44,7 @@ export default Controller.extend({
 		return list;
 	}),
 
-	playerPresets: computed(function() {
+	contentStreamingPlayer: computed(function() {
 		const presets = [{
 			id: "default",
 			label: "No preset"

@@ -1,102 +1,67 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
-	runAppend,
-	runDestroy,
-	getOutput,
-	buildOwner
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	setOwner,
-	HTMLBars,
-	Component
-} from "ember";
 import MathAddHelper from "helpers/MathAddHelper";
 import MathSubHelper from "helpers/MathSubHelper";
 import MathMulHelper from "helpers/MathMulHelper";
 import MathDivHelper from "helpers/MathDivHelper";
 
 
-const { compile } = HTMLBars;
-
-let owner, component;
-
-
-module( "helpers/math-", {
-	beforeEach() {
-		owner = buildOwner();
-	},
-
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( component );
-		runDestroy( owner );
-		owner = component = null;
-	}
+moduleForComponent( "helpers/math-", {
+	integration: true,
+	resolver: buildResolver({
+		MathAddHelper,
+		MathSubHelper,
+		MathMulHelper,
+		MathDivHelper
+	})
 });
 
 
 test( "Math add", function( assert ) {
 
-	owner.register( "helper:math-add", MathAddHelper );
-	component = Component.extend({
-		valA  : 1,
-		valB  : 2,
-		layout: compile( "{{math-add valA valB}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", 1 );
+	this.set( "valB", 2 );
+	this.render( hbs`{{math-add valA valB}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), 3, "1 + 2 = 3" );
+	assert.strictEqual( this.$().text(), "3", "1 + 2 = 3" );
 
 });
 
 
 test( "Math sub", function( assert ) {
 
-	owner.register( "helper:math-sub", MathSubHelper );
-	component = Component.extend({
-		valA  : 1,
-		valB  : 2,
-		layout: compile( "{{math-sub valA valB}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", 1 );
+	this.set( "valB", 2 );
+	this.render( hbs`{{math-sub valA valB}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), -1, "1 - 2 = -1" );
+	assert.strictEqual( this.$().text(), "-1", "1 - 2 = -1" );
 
 });
 
 
 test( "Math mul", function( assert ) {
 
-	owner.register( "helper:math-mul", MathMulHelper );
-	component = Component.extend({
-		valA  : 7,
-		valB  : 7,
-		layout: compile( "{{math-mul valA valB}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", 7 );
+	this.set( "valB", 7 );
+	this.render( hbs`{{math-mul valA valB}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), 49, "7 * 7 = 49" );
+	assert.strictEqual( this.$().text(), "49", "7 * 7 = 49" );
 
 });
 
 
 test( "Math div", function( assert ) {
 
-	owner.register( "helper:math-div", MathDivHelper );
-	component = Component.extend({
-		valA  : 12,
-		valB  : 3,
-		layout: compile( "{{math-div valA valB}}" )
-	}).create();
-	setOwner( component, owner );
+	this.set( "valA", 12 );
+	this.set( "valB", 3 );
+	this.render( hbs`{{math-div valA valB}}` );
 
-	runAppend( component );
-	assert.equal( getOutput( component ), 4, "12 / 3 = 4" );
+	assert.strictEqual( this.$().text(), "4", "12 / 3 = 4" );
 
 });

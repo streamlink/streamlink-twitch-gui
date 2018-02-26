@@ -1,12 +1,11 @@
 import {
 	get,
-	computed,
-	inject,
-	Mixin
-} from "ember";
-
-
-const { service } = inject;
+	computed
+} from "@ember/object";
+import Mixin from "@ember/object/mixin";
+import {
+	inject as service
+} from "@ember/service";
 
 
 export default Mixin.create({

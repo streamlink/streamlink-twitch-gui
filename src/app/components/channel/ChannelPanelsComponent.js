@@ -1,16 +1,12 @@
+import Component from "@ember/component";
+import { get } from "@ember/object";
+import { on } from "@ember/object/evented";
+import { scheduleOnce } from "@ember/runloop";
 import {
-	get,
-	inject,
-	run,
-	on,
-	Component
-} from "ember";
+	inject as service
+} from "@ember/service";
 import Masonry from "masonry-layout";
 import layout from "templates/components/channel/ChannelPanelsComponent.hbs";
-
-
-const { service } = inject;
-const { scheduleOnce } = run;
 
 
 export default Component.extend({

@@ -1,17 +1,22 @@
+import Controller from "@ember/controller";
 import {
 	get,
 	set,
-	computed,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
 import {
 	langs as langsConfig
 } from "config";
 import SettingsStreams from "models/localstorage/Settings/streams";
 
 
+const {
+	filterLanguages: contentStreamsFilterLanguages
+} = SettingsStreams;
+
+
 export default Controller.extend({
-	SettingsStreams,
+	contentStreamsFilterLanguages,
 
 	languages: computed(function() {
 		return Object.keys( langsConfig )

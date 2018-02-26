@@ -1,0 +1,27 @@
+
+{{#if hasBlock}}
+	{{#each content as |item|}}
+		{{yield (hash
+			button=(component "radio-buttons-item"
+				label=(get item optionLabelPath)
+				checked=(is-equal item selection)
+				disabled=item.disabled
+				action=(action "change" item bubbles=false)
+			)
+			label=(get item optionLabelPath)
+			value=(get item optionValuePath)
+			checked=(is-equal item selection)
+			disabled=item.disabled
+		)}}
+	{{/each}}
+{{else}}
+	{{#each content as |item|}}
+		{{#radio-buttons-item
+			checked=(is-equal item selection)
+			disabled=item.disabled
+			action=(action "change" item bubbles=false)
+		}}
+			{{get item optionLabelPath}}
+		{{/radio-buttons-item}}
+	{{/each}}
+{{/if}}

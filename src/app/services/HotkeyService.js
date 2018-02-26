@@ -1,6 +1,4 @@
-import {
-	Service
-} from "ember";
+import Service from "@ember/service";
 
 
 const { isArray } = Array;

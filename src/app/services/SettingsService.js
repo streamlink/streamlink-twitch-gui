@@ -1,13 +1,12 @@
 import {
 	get,
-	set,
-	inject,
-	Evented,
-	ObjectProxy
-} from "ember";
-
-
-const { service } = inject;
+	set
+} from "@ember/object";
+import Evented from "@ember/object/evented";
+import ObjectProxy from "@ember/object/proxy";
+import {
+	inject as service
+} from "@ember/service";
 
 
 // A service object is just a regular object, so we can use an ObjectProxy as well

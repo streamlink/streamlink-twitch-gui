@@ -3,9 +3,9 @@ import {
 	set,
 	setProperties,
 	defineProperty,
-	computed,
-	Mixin
-} from "ember";
+	computed
+} from "@ember/object";
+import Mixin from "@ember/object/mixin";
 import {
 	getNeededColumns,
 	getNeededRows

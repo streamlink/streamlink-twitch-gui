@@ -7,13 +7,11 @@ import {
 	buildOwner,
 	runDestroy
 } from "test-utils";
-import {
-	set,
-	Service
-} from "ember";
+import { set } from "@ember/object";
+import Service from "@ember/service";
 import notificationServiceDispatchMixinInjector
 // eslint-disable-next-line max-len
-	from "inject-loader?-ember&-./data&-models/localstorage/Settings/notification!services/NotificationService/dispatch";
+	from "inject-loader?./icons&./logger&./provider&nwjs/Window!services/NotificationService/dispatch";
 import {
 	ATTR_NOTIFY_CLICK_NOOP,
 	ATTR_NOTIFY_CLICK_FOLLOWED,

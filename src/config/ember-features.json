@@ -1,0 +1,11 @@
+{
+	"ds-improved-ajax": false,
+	"ds-pushpayload-return": false,
+	"ds-extended-errors": false,
+	"ds-overhaul-references": false,
+	"ds-payload-type-hooks": false,
+	"ds-check-should-serialize-relationships": true,
+	"ds-rollback-attribute": false,
+	"ds-serialize-id": true,
+	"ds-deprecate-store-serialize": true
+}

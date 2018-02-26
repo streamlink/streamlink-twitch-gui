@@ -1,20 +1,26 @@
 import {
 	get,
 	set,
-	computed,
-	run,
-	on
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	alias,
+	and,
+	equal,
+	notEmpty,
+	or
+} from "@ember/object/computed";
+import { on } from "@ember/object/evented";
+import {
+	cancel,
+	later
+} from "@ember/runloop";
 import ListItemComponent from "./ListItemComponent";
 import {
 	ATTR_STREAMS_INFO_GAME,
 	ATTR_STREAMS_INFO_TITLE
 } from "models/localstorage/Settings/streams";
 import layout from "templates/components/list/StreamItemComponent.hbs";
-
-
-const { alias, equal, notEmpty, or } = computed;
-const { cancel, later } = run;
 
 
 export default ListItemComponent.extend({
@@ -28,7 +34,7 @@ export default ListItemComponent.extend({
 		"settings.streams.show_info:show-info",
 		"infoGame:info-game",
 		"infoTitle:info-title",
-		"_faded:faded",
+		"isFaded:faded",
 		"expanded:expanded"
 	],
 
@@ -44,17 +50,24 @@ export default ListItemComponent.extend({
 	infoTitle: equal( "settings.streams.info", ATTR_STREAMS_INFO_TITLE ),
 
 
-	_faded: or( "faded", "fadeVodcast" ),
+	isFaded: or( "faded", "fadedVodcast" ),
 
+	fadedVodcast: and( "content.isVodcast", "settings.streams.filter_vodcast" ),
 
 	faded: computed(
 		"settings.streams.filter_languages",
 		"settings.streams.languages",
-		"content.channel.language",
-		"content.channel.broadcaster_language",
-		"hasCustomLangFilter",
+		"settings.hasStreamsLanguagesSelection",
+		"channel.language",
+		"channel.broadcaster_language",
 		function() {
 			if ( get( this, "settings.streams.filter_languages" ) ) {
+				return false;
+			}
+
+			// don't fade if the user has selected none or all languages
+			const hasLangSelection = get( this, "settings.hasStreamsLanguagesSelection" );
+			if ( !hasLangSelection ) {
 				return false;
 			}
 
@@ -73,8 +86,8 @@ export default ListItemComponent.extend({
 				if ( blang && languages[ blang ] === false ) {
 					return true;
 				}
-				// OR broadcaster language is set to "other" and a filter has been set
-				if ( blang === "other" && get( this, "hasCustomLangFilter" ) ) {
+				// OR broadcaster language is set to "other"
+				if ( blang === "other" ) {
 					return true;
 				}
 			}
@@ -82,34 +95,6 @@ export default ListItemComponent.extend({
 			return false;
 		}
 	),
-
-	/**
-	 * @returns {boolean} return false if none or all languages are selected
-	 */
-	hasCustomLangFilter: computed( "settings.streams.languages", function() {
-		const languages = get( this, "settings.streams.languages" ).toJSON();
-
-		const keys = Object.entries( languages );
-		if ( !keys.length ) {
-			return false;
-		}
-
-		let [ , previous ] = keys.shift();
-		for ( const [ , key ] of keys ) {
-			if ( previous !== key ) {
-				return true;
-			}
-			previous = key;
-		}
-
-		return false;
-	}),
-
-
-	fadeVodcast: computed( "content.isVodcast", "settings.streams.filter_vodcast", function() {
-		return get( this, "settings.streams.filter_vodcast" )
-		    && get( this, "content.isVodcast" );
-	}),
 
 
 	mouseLeave() {

@@ -1,11 +1,8 @@
+import Component from "@ember/component";
 import {
-	inject,
-	Component
-} from "ember";
+	inject as service
+} from "@ember/service";
 import layout from "templates/components/modal/ModalServiceComponent.hbs";
-
-
-const { service } = inject;
 
 
 export default Component.extend({

@@ -10,10 +10,8 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import {
-	get,
-	Service
-} from "ember";
+import { get } from "@ember/object";
+import Service from "@ember/service";
 import StreamFollowed from "models/twitch/StreamFollowed";
 import StreamFollowedSerializer from "models/twitch/StreamFollowedSerializer";
 import Stream from "models/twitch/Stream";

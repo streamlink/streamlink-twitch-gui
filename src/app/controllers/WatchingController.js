@@ -1,14 +1,10 @@
+import Controller from "@ember/controller";
+import { get } from "@ember/object";
+import { sort } from "@ember/object/computed";
 import {
-	get,
-	computed,
-	inject,
-	Controller
-} from "ember";
+	inject as service
+} from "@ember/service";
 import qualities from "models/stream/qualities";
-
-
-const { sort } = computed;
-const { service } = inject;
 
 
 export default Controller.extend({

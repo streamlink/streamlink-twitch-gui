@@ -4,7 +4,6 @@ import QUnit, {
 } from "qunit";
 import "qunit/assertion-helpers";
 import "ember-test";
-import "bower/ember/ember-template-compiler";
 
 
 // don't start automatically

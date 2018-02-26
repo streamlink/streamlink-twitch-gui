@@ -1,4 +1,4 @@
-import { get } from "ember";
+import { get } from "@ember/object";
 import UserIndexRoute from "./UserIndexRoute";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import RefreshMixin from "./mixins/refresh";

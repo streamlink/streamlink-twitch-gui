@@ -1,12 +1,13 @@
+import Controller from "@ember/controller";
 import {
 	get,
-	computed,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
 import {
 	streaming as streamingConfig
 } from "config";
-import qualities, {
+import {
+	default as qualities,
 	qualitiesLivestreamer,
 	qualitiesStreamlink
 } from "models/stream/qualities";
@@ -27,7 +28,7 @@ export default Controller.extend({
 
 	qualitiesLivestreamer,
 	qualitiesStreamlink,
-	qualities,
+	contentStreamingQuality: qualities,
 
 	DEFAULT_VODCAST_REGEXP
 });

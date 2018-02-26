@@ -2,17 +2,17 @@ import {
 	module,
 	test
 } from "qunit";
-import Ember, {
+import { A as EmberNativeArray } from "@ember/array";
+import {
+	default as EmberObject,
 	get,
 	getProperties,
 	set,
-	setProperties,
-	EmberObject,
-	EmberNativeArray,
-	Route
-} from "ember";
+	setProperties
+} from "@ember/object";
+import Route from "@ember/routing/route";
 import cssInfiniteScrollMixinInjector from "inject-loader!routes/mixins/infinite-scroll/css";
-import infiniteScrollMixinInjector from "inject-loader?-ember!routes/mixins/infinite-scroll";
+import infiniteScrollMixinInjector from "inject-loader?./css!routes/mixins/infinite-scroll";
 
 
 let testing;
@@ -21,11 +21,11 @@ let testing;
 module( "routes/mixins/infinite-scroll", {
 	beforeEach() {
 		// TODO: globally set testing to true
-		testing = Ember.testing;
-		Ember.testing = true;
+		testing = window.Ember.testing;
+		window.Ember.testing = true;
 	},
 	afterEach() {
-		Ember.testing = testing;
+		window.Ember.testing = testing;
 	}
 });
 

@@ -1,13 +1,10 @@
+import { get } from "@ember/object";
+import { on } from "@ember/object/evented";
+import Mixin from "@ember/object/mixin";
 import {
-	get,
-	inject,
-	on,
-	Mixin
-} from "ember";
+	inject as service
+} from "@ember/service";
 import { cacheAdd } from "./cache";
-
-
-const { service } = inject;
 
 
 export default Mixin.create({

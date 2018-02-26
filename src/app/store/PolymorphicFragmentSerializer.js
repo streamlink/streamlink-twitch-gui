@@ -1,4 +1,4 @@
-import { JSONSerializer } from "ember-data";
+import JSONSerializer from "ember-data/serializers/json";
 
 
 const { hasOwnProperty } = {};

@@ -1,11 +1,13 @@
 import {
 	get,
 	set,
-	computed,
-	inject,
-	run,
-	Service
-} from "ember";
+	computed
+} from "@ember/object";
+import { scheduleOnce } from "@ember/runloop";
+import {
+	default as Service,
+	inject as service
+} from "@ember/service";
 import {
 	vars as varsConfig
 } from "config";
@@ -33,8 +35,6 @@ import {
 } from "models/localstorage/Settings/gui";
 
 
-const { service } = inject;
-const { scheduleOnce } = run;
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
 

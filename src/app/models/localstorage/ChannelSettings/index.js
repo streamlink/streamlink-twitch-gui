@@ -1,7 +1,5 @@
-import {
-	attr,
-	Model
-} from "ember-data";
+import attr from "ember-data/attr";
+import Model from "ember-data/model";
 import SettingsStreaming from "models/localstorage/Settings/streaming";
 import SettingsStreams from "models/localstorage/Settings/streams";
 import SettingsNotification from "models/localstorage/Settings/notification";

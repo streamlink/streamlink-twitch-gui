@@ -1,9 +1,11 @@
+import Component from "@ember/component";
 import {
 	get,
-	computed,
-	inject,
-	Component
-} from "ember";
+	computed
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import Menu from "nwjs/Menu";
 import {
 	set as setClipboard
@@ -17,9 +19,6 @@ import {
 } from "models/localstorage/Settings/streams";
 import qualities from "models/stream/qualities";
 import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
-
-
-const { service } = inject;
 
 
 export default Component.extend({

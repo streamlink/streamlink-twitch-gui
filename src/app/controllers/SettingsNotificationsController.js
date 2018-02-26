@@ -1,8 +1,8 @@
+import Controller from "@ember/controller";
 import {
 	get,
-	computed,
-	Controller
-} from "ember";
+	computed
+} from "@ember/object";
 import {
 	main,
 	files
@@ -20,13 +20,20 @@ import resolvePath from "utils/node/resolvePath";
 
 const { "display-name": displayName } = main;
 const { icons: { big: bigIcon } } = files;
+const {
+	filter: contentNotificationFilter,
+	click: contentNotificationClick,
+	clickGroup: contentNotificationClickGroup
+} = SettingsNotification;
 
 
 export default Controller.extend({
-	SettingsNotification,
+	contentNotificationFilter,
+	contentNotificationClick,
+	contentNotificationClickGroup,
 
 	// filter available notification providers
-	providers: computed(function() {
+	contentNotificationProviders: computed(function() {
 		return SettingsNotification.providers
 			.filter( item => isSupported( item.value ) || item.value === "auto" );
 	}),

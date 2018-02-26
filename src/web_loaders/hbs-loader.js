@@ -1,4 +1,4 @@
-const TemplateCompiler = require( "../../bower_components/ember/ember-template-compiler" );
+const TemplateCompiler = require( "ember-source/dist/ember-template-compiler" );
 const { precompile } = TemplateCompiler;
 
 

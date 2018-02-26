@@ -1,9 +1,9 @@
 import {
 	get,
 	computed
-} from "ember";
-import { attr } from "ember-data";
-import { Fragment } from "model-fragments";
+} from "@ember/object";
+import attr from "ember-data/attr";
+import Fragment from "ember-data-model-fragments/fragment";
 import {
 	themes as themesConfig
 } from "config";
@@ -61,9 +61,9 @@ export default Fragment.extend({
 	],
 
 	focusrefresh: [
-		{ value: ATTR_GUI_FOCUSREFRESH_NONE, label: "Don't refresh" },
-		{ value: ATTR_GUI_FOCUSREFRESH_ONE, label: "After one minute" },
-		{ value: ATTR_GUI_FOCUSREFRESH_TWO, label: "After two minutes" },
-		{ value: ATTR_GUI_FOCUSREFRESH_FIVE, label: "After five minutes" }
+		{ id: ATTR_GUI_FOCUSREFRESH_NONE, label: "Don't refresh" },
+		{ id: ATTR_GUI_FOCUSREFRESH_ONE, label: "After one minute" },
+		{ id: ATTR_GUI_FOCUSREFRESH_TWO, label: "After two minutes" },
+		{ id: ATTR_GUI_FOCUSREFRESH_FIVE, label: "After five minutes" }
 	]
 });

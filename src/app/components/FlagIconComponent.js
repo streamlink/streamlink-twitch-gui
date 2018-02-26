@@ -1,8 +1,8 @@
+import Component from "@ember/component";
 import {
 	get,
-	computed,
-	Component
-} from "ember";
+	computed
+} from "@ember/object";
 import { langs } from "config";
 
 

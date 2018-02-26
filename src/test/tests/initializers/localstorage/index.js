@@ -59,17 +59,7 @@ test( "Application instance initializer", assert => {
 
 	const expectedChannelSettings = [ { baz: 3 }, { qux: 4 } ];
 
-	instanceInitializerInjector( {
-		"ember": {
-			Application: {
-				instanceInitializer({ name, before, initialize }) {
-					assert.strictEqual( name, "localstorage", "Has a name" );
-					assert.strictEqual( before, "ember-data", "Runs before ember-data" );
-					assert.ok( initialize instanceof Function, "Has an initializer function" );
-					initialize();
-				}
-			}
-		},
+	const { default: { name, before, initialize } } = instanceInitializerInjector({
 		"./localstorage": LS,
 		"./namespaces": ls => {
 			assert.step( "updateNamespaces" );
@@ -88,6 +78,11 @@ test( "Application instance initializer", assert => {
 			);
 		}
 	});
+
+	assert.strictEqual( name, "localstorage", "Has a name" );
+	assert.strictEqual( before, "ember-data", "Runs before ember-data" );
+	assert.ok( initialize instanceof Function, "Has an initializer function" );
+	initialize();
 
 	assert.checkSteps([
 		"updateNamespaces",

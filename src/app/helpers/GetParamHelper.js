@@ -1,6 +1,6 @@
-import { Helper } from "ember";
+import { helper } from "@ember/component/helper";
 
 
-export default Helper.helper(function( params, hash ) {
+export default helper(function( params, hash ) {
 	return params[ hash.index ];
 });

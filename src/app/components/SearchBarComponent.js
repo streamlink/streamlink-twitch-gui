@@ -1,26 +1,30 @@
+import Component from "@ember/component";
 import {
 	get,
 	set,
-	getWithDefault,
-	$,
-	computed,
-	inject,
-	run,
-	on,
-	Component
-} from "ember";
-import { vars } from "config";
+	getWithDefault
+} from "@ember/object";
+import { sort } from "@ember/object/computed";
+import { on } from "@ember/object/evented";
+import { next } from "@ember/runloop";
+import {
+	inject as service
+} from "@ember/service";
+import $ from "jquery";
+import {
+	vars as varsConfig
+} from "config";
 import HotkeyMixin from "./mixins/hotkey";
+import Search from "models/localstorage/Search";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import layout from "templates/components/SearchBarComponent.hbs" ;
 
 
-const { sort } = computed;
-const { service } = inject;
-const { next } = run;
-const { "search-history-size": searchHistorySize } = vars;
+const { "search-history-size": searchHistorySize } = varsConfig;
+const { filters } = Search;
 
 
+// TODO: rewrite SearchBarComponent and Search model
 export default Component.extend( HotkeyMixin, {
 	routing: service( "-routing" ),
 	store: service(),
@@ -35,11 +39,14 @@ export default Component.extend( HotkeyMixin, {
 	content: sort( "model", "sortBy" ),
 	sortBy: [ "date:desc" ],
 
+	showDropdown: false,
+
+	query: "",
 	reQuery: /^\S{3,}/,
 
-	showDropdown: false,
+	filters,
 	filter: "all",
-	query: "",
+
 
 	hotkeys: [
 		{
@@ -52,12 +59,7 @@ export default Component.extend( HotkeyMixin, {
 	init() {
 		this._super( ...arguments );
 
-		this.content.volatile();
-
 		const store = get( this, "store" );
-		const filters = store.modelFor( "search" ).filters;
-		set( this, "filters", filters );
-
 		store.findAll( "search" )
 			.then( records => {
 				set( this, "model", records );
@@ -65,50 +67,42 @@ export default Component.extend( HotkeyMixin, {
 	},
 
 
-	addRecord( query, filter ) {
+	async addRecord( query, filter ) {
 		const store = get( this, "store" );
 		const model = get( this, "model" );
-		const match = model.filter( function( record ) {
-			return query === get( record, "query" )
-				&& filter === get( record, "filter" );
-		} );
+		const match = model.filter( record =>
+			    query === get( record, "query" )
+			&& filter === get( record, "filter" )
+		);
 		let record;
 
-		// found a matching record? just update the date property and save the record
+		// found a matching record? just update the date property, save the record and return
 		if ( get( match, "length" ) === 1 ) {
 			set( match[0], "date", new Date() );
-			return match[0].save();
+			await match[0].save();
+			return;
 		}
 
 		// we don't want to store more than X records
 		if ( get( model, "length" ) >= searchHistorySize ) {
-			// delete the oldest record
-			model.sortBy( "date" ).shiftObject().destroyRecord();
+			const oldestRecord = model.sortBy( "date" ).shiftObject();
+			await oldestRecord.destroyRecord();
 		}
 
 		// create a new record
 		const id = 1 + Number( getWithDefault( model, "lastObject.id", 0 ) );
 		const date = new Date();
-		record = store.createRecord( "search", {
-			id,
-			query,
-			filter,
-			date
-		});
-		record.save().then(function () {
-			model.addObject( record );
-		});
+		record = store.createRecord( "search", { id, query, filter, date } );
+		await record.save();
+		model.addObject( record );
 	},
 
-	deleteAllRecords() {
-		const model = get( this, "model" );
-		model.forEach(function( record ) {
-			record.deleteRecord();
-		});
+	async deleteAllRecords() {
 		// delete all records at once and then clear the record array
-		model.save().then(function() {
-			model.clear();
-		});
+		const model = get( this, "model" );
+		model.forEach( record => record.deleteRecord() );
+		await model.save();
+		model.clear();
 	},
 
 	doSearch( query, filter ) {
@@ -164,7 +158,7 @@ export default Component.extend( HotkeyMixin, {
 		},
 
 		toggleDropdown() {
-			let showDropdown = get( this, "showDropdown" );
+			const showDropdown = get( this, "showDropdown" );
 			set( this, "showDropdown", !showDropdown );
 		},
 

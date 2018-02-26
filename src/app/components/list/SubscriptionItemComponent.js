@@ -2,7 +2,8 @@ import {
 	get,
 	getWithDefault,
 	computed
-} from "ember";
+} from "@ember/object";
+import { alias } from "@ember/object/computed";
 import {
 	twitch as twitchConfig
 } from "config";
@@ -12,7 +13,6 @@ import Moment from "moment";
 import layout from "templates/components/list/SubscriptionItemComponent.hbs";
 
 
-const { alias } = computed;
 const {
 	subscription: {
 		"edit-url": subscriptionEditUrl,

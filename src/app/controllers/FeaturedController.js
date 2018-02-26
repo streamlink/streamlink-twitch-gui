@@ -1,12 +1,9 @@
+import Controller from "@ember/controller";
 import {
 	get,
-	set,
-	computed,
-	Controller
-} from "ember";
-
-
-const { alias } = computed;
+	set
+} from "@ember/object";
+import { alias } from "@ember/object/computed";
 
 
 export default Controller.extend({

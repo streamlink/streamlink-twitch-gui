@@ -1,5 +1,5 @@
 import DS from "ember-data";
-import "initializers/store";
+import "store";
 
 
 export function setupStore( owner, options ) {

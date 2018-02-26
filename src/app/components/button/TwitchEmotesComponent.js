@@ -1,16 +1,17 @@
+import { get } from "@ember/object";
 import {
-	get,
-	computed,
-	inject
-} from "ember";
+	and,
+	or
+} from "@ember/object/computed";
+import {
+	inject as service
+} from "@ember/service";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "./FormButtonComponent";
 import HotkeyMixin from "../mixins/hotkey";
 
 
-const { and, or } = computed;
-const { service } = inject;
 const { "emotes-url": twitchEmotesUrl } = twitch;
 
 

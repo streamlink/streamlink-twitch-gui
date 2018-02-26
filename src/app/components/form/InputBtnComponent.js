@@ -1,41 +1,37 @@
-import {
-	get,
-	Component
-} from "ember";
-import HotkeyMixin from "../mixins/hotkey";
+import Component from "@ember/component";
+import { get } from "@ember/object";
+import IsFocusedMixin from "../mixins/is-focused";
 import layout from "templates/components/form/InputBtnComponent.hbs";
 
 
-export default Component.extend( HotkeyMixin, {
+export default Component.extend( IsFocusedMixin, {
 	layout,
 
 	tagName: "label",
 	classNames: [ "input-btn-component" ],
 	classNameBindings: [ "checked", "disabled" ],
 	attributeBindings: [ "tabindex" ],
-
 	tabindex: 0,
 
-	hotkeys: [
-		{
-			code: "Escape",
-			action() {
-				if ( !this.isFocused() ) {
-					return true;
+
+	keyDown( event ) {
+		event = event.originalEvent || event;
+		switch ( event.code ) {
+			case "Escape":
+				if ( this._isFocused() ) {
+					this.$().blur();
+					return false;
 				}
-				this.$().blur();
-			}
-		},
-		{
-			code: "Space",
-			action() {
-				if ( !this.isFocused() || get( this, "disabled" ) ) {
-					return true;
+				return;
+
+			case "Space":
+				if ( this._isFocused() && !get( this, "disabled" ) ) {
+					this.click();
+					return false;
 				}
-				this.click();
-			}
+				return;
 		}
-	]
+	}
 
 }).reopenClass({
 	positionalParams: [ "label" ]

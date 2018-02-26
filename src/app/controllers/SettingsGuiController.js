@@ -1,11 +1,12 @@
+import Controller from "@ember/controller";
 import {
 	get,
 	set,
-	computed,
-	observer,
-	Controller
-} from "ember";
-import SettingsGui, {
+	observer
+} from "@ember/object";
+import { equal } from "@ember/object/computed";
+import {
+	default as SettingsGui,
 	ATTR_GUI_INTEGRATION_TASKBAR,
 	ATTR_GUI_INTEGRATION_TRAY,
 	ATTR_GUI_INTEGRATION_BOTH,
@@ -14,11 +15,17 @@ import SettingsGui, {
 } from "models/localstorage/Settings/gui";
 
 
-const { equal } = computed;
+const {
+	integration: contentGuiIntegration,
+	minimize: contentGuiMinimize,
+	focusrefresh: contentGuiFocusrefresh
+} = SettingsGui;
 
 
 export default Controller.extend({
-	SettingsGui,
+	contentGuiIntegration,
+	contentGuiMinimize,
+	contentGuiFocusrefresh,
 
 	hasTaskBarIntegration: equal( "model.gui.integration", ATTR_GUI_INTEGRATION_TASKBAR ),
 	hasBothIntegrations: equal( "model.gui.integration", ATTR_GUI_INTEGRATION_BOTH ),
@@ -38,13 +45,7 @@ export default Controller.extend({
 		}
 
 		// enable/disable buttons
-		const minimizeIdMinimize = SettingsGui.minimize.findIndex( ({ id }) =>
-			id === ATTR_GUI_MINIMIZE_MINIMIZE
-		);
-		const minimizeIdTray = SettingsGui.minimize.findIndex( ({ id }) =>
-			id === ATTR_GUI_MINIMIZE_TRAY
-		);
-		set( SettingsGui, `minimize.${minimizeIdMinimize}.disabled`, noTask );
-		set( SettingsGui, `minimize.${minimizeIdTray}.disabled`, noTray );
+		set( contentGuiMinimize[ ATTR_GUI_MINIMIZE_MINIMIZE ], "disabled", noTask );
+		set( contentGuiMinimize[ ATTR_GUI_MINIMIZE_TRAY ], "disabled", noTray );
 	})
 });

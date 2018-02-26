@@ -1,18 +1,17 @@
 import {
 	get,
-	computed,
-	inject,
-	Service
-} from "ember";
+	computed
+} from "@ember/object";
+import { and } from "@ember/object/computed";
+import {
+	default as Service,
+	inject as service
+} from "@ember/service";
 import NotificationServicePollingMixin from "./polling";
 import NotificationServiceDispatchMixin from "./dispatch";
 import NotificationServiceBadgeMixin from "./badge";
 import NotificationServiceFollowMixin from "./follow";
 import NotificationServiceTrayMixin from "./tray";
-
-
-const { and } = computed;
-const { service } = inject;
 
 
 export default Service.extend(

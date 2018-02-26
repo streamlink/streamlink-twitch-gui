@@ -1,5 +1,5 @@
-import { attr } from "ember-data";
-import { Fragment } from "model-fragments";
+import attr from "ember-data/attr";
+import Fragment from "ember-data-model-fragments/fragment";
 
 
 export const ATTR_NOTIFY_CLICK_NOOP = 0;
@@ -23,7 +23,7 @@ export default Fragment.extend({
 
 	providers: [
 		{
-			value: "auto",
+			id: "auto",
 			label: {
 				name: "Automatic selection",
 				description: "Tries to find the best notification provider",
@@ -31,7 +31,7 @@ export default Fragment.extend({
 			}
 		},
 		{
-			value: "native",
+			id: "native",
 			label: {
 				name: "Native notifications",
 				description: "Uses the system's native notification system",
@@ -39,7 +39,7 @@ export default Fragment.extend({
 			}
 		},
 		{
-			value: "snoretoast",
+			id: "snoretoast",
 			label: {
 				name: "Windows toast notifications",
 				description: "Native notifications on Windows 8+",
@@ -47,7 +47,7 @@ export default Fragment.extend({
 			}
 		},
 		{
-			value: "growl",
+			id: "growl",
 			label: {
 				name: "Growl notifications",
 				description: "Third-party notification service for Windows, macOS and Linux",
@@ -55,7 +55,7 @@ export default Fragment.extend({
 			}
 		},
 		{
-			value: "rich",
+			id: "rich",
 			label: {
 				name: "Rich notifications",
 				description: "Chromium rich notifications",
@@ -65,8 +65,8 @@ export default Fragment.extend({
 	],
 
 	filter: [
-		{ value: true, label: "Show all except disabled ones" },
-		{ value: false, label: "Ignore all except enabled ones" }
+		{ id: true, label: "Show all except disabled ones" },
+		{ id: false, label: "Ignore all except enabled ones" }
 	],
 
 	click: [
@@ -76,7 +76,7 @@ export default Fragment.extend({
 		{ id: ATTR_NOTIFY_CLICK_STREAMANDCHAT, label: "Open stream+chat" }
 	],
 
-	click_group: [
+	clickGroup: [
 		{ id: ATTR_NOTIFY_CLICK_NOOP, label: "Do nothing" },
 		{ id: ATTR_NOTIFY_CLICK_FOLLOWED, label: "Go to favorites" },
 		{ id: ATTR_NOTIFY_CLICK_STREAM, label: "Open all streams" },

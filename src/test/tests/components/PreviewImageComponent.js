@@ -1,151 +1,110 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
-	runAppend,
-	runDestroy,
-	getElem,
-	buildOwner,
-	fixtureElement
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	setOwner,
-	HTMLBars,
-	run,
-	Component,
-	EventDispatcher
-} from "ember";
+import { scheduleOnce } from "@ember/runloop";
 import PreviewImageComponent from "components/PreviewImageComponent";
-import src from "transparent-image";
+import transparentImage from "transparent-image";
 
 
-const { scheduleOnce } = run;
-const { compile } = HTMLBars;
-
-let eventDispatcher, owner, context;
-
-
-module( "components/PreviewImageComponent", {
-	beforeEach() {
-		eventDispatcher = EventDispatcher.create();
-		eventDispatcher.setup( {}, fixtureElement );
-		owner = buildOwner();
-		owner.register( "event_dispatcher:main", eventDispatcher );
-		owner.register( "component:preview-image", PreviewImageComponent );
-	},
-
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( eventDispatcher );
-		runDestroy( owner );
-		owner = context = null;
-	}
+moduleForComponent( "components/PreviewImageComponent", {
+	integration: true,
+	resolver: buildResolver({
+		PreviewImageComponent
+	})
 });
 
 
-test( "Valid image source", assert => {
+test( "Valid image source", function( assert ) {
 
 	const done = assert.async();
 
-	let title = "bar";
-	context = Component.extend({
-		src,
-		title,
-		onLoad() {
-			assert.ok(
-				getElem( context, ".previewImage" ).get( 0 ) instanceof HTMLImageElement,
-				"Image loads correctly"
-			);
-			done();
-		},
-		onError() {
-			assert.ok( false, "Should not fail" );
-		},
-		layout: compile( "{{preview-image src=src title=title onLoad=onLoad onError=onError}}" )
-	}).create();
-	setOwner( context, owner );
-
-	runAppend( context );
+	this.set( "src", transparentImage );
+	this.set( "title", "bar" );
+	this.set( "onLoad", () => {
+		assert.ok(
+			this.$( ".previewImage" ).get( 0 ) instanceof HTMLImageElement,
+			"Image loads correctly"
+		);
+		done();
+	});
+	this.set( "onError", () => {
+		assert.ok( false, "Should not fail" );
+		done();
+	});
+	this.render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` );
 
 	assert.ok(
-		getElem( context, "img" ).get( 0 ) instanceof HTMLImageElement,
+		this.$( "img" ).get( 0 ) instanceof HTMLImageElement,
 		"Has an image element before loading"
 	);
 	assert.equal(
-		getElem( context, "img" ).eq( 0 ).attr( "src" ),
-		src,
+		this.$( "img" ).eq( 0 ).attr( "src" ),
+		transparentImage,
 		"Has the correct image source"
 	);
 	assert.equal(
-		getElem( context, "img" ).eq( 0 ).attr( "title" ),
-		title,
+		this.$( "img" ).eq( 0 ).attr( "title" ),
+		"bar",
 		"Has the correct element title"
 	);
 
 });
 
 
-test( "Invalid image source", assert => {
+test( "Invalid image source", function( assert ) {
 
 	const done = assert.async();
 
-	let src = "./foo";
-	let title = "bar";
-	context = Component.extend({
-		src,
-		title,
-		onLoad() {
-			assert.ok( false, "Should not load" );
-		},
-		onError() {
-			assert.ok(
-				getElem( context, ".previewError" ).get( 0 ),
-				"Is in error state"
-			);
-			assert.equal(
-				getElem( context, ".previewError" ).eq( 0 ).attr( "title" ),
-				title,
-				"Error element has a title"
-			);
-			done();
-		},
-		layout: compile( "{{preview-image src=src title=title onLoad=onLoad onError=onError}}" )
-	}).create();
-	setOwner( context, owner );
+	this.set( "src", "./foo" );
+	this.set( "title", "bar" );
+	this.set( "onLoad", () => {
+		assert.ok( false, "Should not load" );
+		done();
+	});
+	this.set( "onError", () => {
+		assert.ok(
+			this.$( ".previewError" ).get( 0 ),
+			"Is in error state"
+		);
+		assert.equal(
+			this.$( ".previewError" ).eq( 0 ).attr( "title" ),
+			"bar",
+			"Error element has a title"
+		);
+		done();
+	});
 
-	runAppend( context );
+	this.render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` );
 
 	assert.ok(
-		getElem( context, "img" ).get( 0 ) instanceof HTMLImageElement,
+		this.$( "img" ).get( 0 ) instanceof HTMLImageElement,
 		"Has an image element before loading"
 	);
 
 });
 
 
-test( "Missing image source", assert => {
+test( "Missing image source", function( assert ) {
 
 	const done = assert.async();
 
-	context = Component.extend({
-		src,
-		layout: compile( "{{preview-image}}" )
-	}).create();
-	setOwner( context, owner );
-
-	runAppend( context );
+	this.set( "src", transparentImage );
+	this.render( hbs`{{preview-image}}` );
 
 	assert.strictEqual(
-		getElem( context, "img" ).get( 0 ),
+		this.$( "img" ).get( 0 ),
 		undefined,
 		"Does not have an image element"
 	);
 
 	scheduleOnce( "afterRender", () => {
 		assert.ok(
-			getElem( context, ".previewError" ).get( 0 ),
+			this.$( ".previewError" ).get( 0 ),
 			"Is in error state"
 		);
 		done();

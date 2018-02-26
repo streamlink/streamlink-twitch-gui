@@ -1,5 +1,5 @@
-import { attr } from "ember-data";
-import { Fragment } from "model-fragments";
+import attr from "ember-data/attr";
+import Fragment from "ember-data-model-fragments/fragment";
 import {
 	players as playersConfig
 } from "config";

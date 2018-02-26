@@ -38,10 +38,10 @@ git clone https://github.com/streamlink/streamlink-twitch-gui.git
 cd streamlink-twitch-gui
 
 # install dependencies via yarn (preferred way)
-yarn global add bower grunt-cli # may require administrator privileges
+yarn global add grunt-cli # may require administrator privileges
 yarn install
 # or use npm instead (discouraged)
-npm install --global bower grunt-cli # may require administrator privileges
+npm install --global grunt-cli # may require administrator privileges
 npm install
 ```
 

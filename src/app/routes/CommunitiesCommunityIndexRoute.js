@@ -1,8 +1,6 @@
-import {
-	get,
-	getOwner,
-	Route
-} from "ember";
+import { getOwner } from "@ember/application";
+import { get } from "@ember/object";
+import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import FilterLanguagesMixin from "./mixins/filter-languages";
 import { toArray } from "utils/ember/recordArrayMethods";

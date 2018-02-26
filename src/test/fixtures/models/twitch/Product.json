@@ -1,6 +1,6 @@
 {
 	"embedded": {
-		"id": 1,
+		"id": "product foo",
 		"name": "Subscription to Foo",
 		"short_name": "foo",
 		"ticket_type": "chansub",

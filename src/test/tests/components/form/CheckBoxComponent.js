@@ -1,222 +1,114 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
-	runAppend,
-	runDestroy,
-	getElem,
-	cleanOutput,
-	buildOwner,
-	fixtureElement
+	buildResolver,
+	hbs,
+	triggerKeyDown
 } from "test-utils";
-import {
-	get,
-	set,
-	setOwner,
-	$,
-	HTMLBars,
-	inject,
-	run,
-	Component,
-	EventDispatcher
-} from "ember";
-import HotkeyService from "services/HotkeyService";
 import CheckBoxComponent from "components/form/CheckBoxComponent";
 
 
-const { service } = inject;
-const { compile } = HTMLBars;
-
-let eventDispatcher, owner, context;
-
-
-module( "components/form/CheckBoxComponent", {
-	beforeEach() {
-		eventDispatcher = EventDispatcher.create();
-		eventDispatcher.setup( {}, fixtureElement );
-		owner = buildOwner();
-		owner.register( "event_dispatcher:main", eventDispatcher );
-		owner.register( "service:hotkey", HotkeyService );
-		owner.register( "component:check-box", CheckBoxComponent );
-	},
-
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( eventDispatcher );
-		runDestroy( owner );
-		owner = context = null;
-	}
+moduleForComponent( "components/form/CheckBoxComponent", {
+	integration: true,
+	resolver: buildResolver({
+		CheckBoxComponent
+	})
 });
 
 
 test( "CheckBoxComponent", function( assert ) {
 
-	context = Component.extend({
-		checked: true,
-		disabled: false,
-		layout: compile(
-			"{{#check-box checked=checked disabled=disabled}}foo{{/check-box}}"
-		)
-	}).create();
-	setOwner( context, owner );
+	this.set( "checked", true );
+	this.set( "disabled", false );
+	this.render( hbs`{{#check-box checked=checked disabled=disabled}}foo{{/check-box}}` );
+	const $elem = this.$( ".check-box-component" );
 
-	// initial
-	runAppend( context );
-	assert.equal(
-		cleanOutput( context, ".check-box-component" ),
-		"foo",
-		"The CheckBoxComponent has a label"
-	);
-	assert.equal(
-		getElem( context, ".check-box-component" ).hasClass( "checked" ),
-		true,
-		"The CheckBoxComponent's checked state is set on initialization"
-	);
+	assert.ok( $elem.get( 0 ) instanceof HTMLElement, "Component renders" );
+	assert.strictEqual( $elem.text(), "foo", "Has a label" );
+	assert.ok( $elem.hasClass( "checked" ), "Is checked initially" );
 
 	// set to false in context
-	run(function() {
-		set( context, "checked", false );
-	});
-	assert.equal(
-		getElem( context, ".check-box-component" ).hasClass( "checked" ),
-		false,
-		"The CheckBoxComponent reacts to changes of the checked attribute"
-	);
+	this.set( "checked", false );
+	assert.notOk( $elem.hasClass( "checked" ), "Is not checked anymore after binding has changed" );
 
 	// toggle by clicking the CheckBoxComponent
-	run(function() {
-		getElem( context, ".check-box-component" ).click();
-	});
-	assert.equal(
-		getElem( context, ".check-box-component" ).hasClass( "checked" ),
-		true,
-		"The CheckBoxComponent was clicked and checked is now true"
-	);
-	assert.equal(
-		get( context, "checked" ),
-		true,
-		"The context's checked variable is true as well"
-	);
+	$elem.click();
+	assert.ok( $elem.hasClass( "checked" ), "Clicking toggles checked state" );
+	assert.ok( this.get( "checked" ), "Clicking also updated binding" );
 
 	// disable CheckBoxComponent
-	run(function() {
-		set( context, "disabled", true );
-	});
-	assert.equal(
-		getElem( context, ".check-box-component" ).hasClass( "disabled" ),
-		true,
-		"The CheckBoxComponent is now disabled"
-	);
+	this.set( "disabled", true );
+	assert.ok( $elem.hasClass( "disabled" ), "Is now disabled" );
 
 	// try to click the disabled CheckBoxComponent
-	run(function() {
-		getElem( context, ".check-box-component" ).click();
-	});
-	assert.equal(
-		getElem( context, ".check-box-component" ).hasClass( "checked" ),
-		true,
-		"The disabled CheckBoxComponent can't be clicked"
-	);
-	assert.equal(
-		get( context, "checked" ),
-		true,
-		"The context's checked variable is still true"
-	);
+	$elem.click();
+	assert.ok( $elem.hasClass( "checked" ), "Clicking while being disabled doesn't do anything" );
+	assert.ok( this.get( "checked" ), "The binding also doesn't change" );
 
 });
 
 
 test( "CheckBoxComponent - without block", function( assert ) {
 
-	context = Component.extend({
-		label: "foo",
-		layout: compile(
-			"{{check-box label}}"
-		)
-	}).create();
-	setOwner( context, owner );
+	this.set( "label", "foo" );
+	this.render( hbs`{{check-box label}}` );
+	const $elem = this.$( ".check-box-component" );
 
-	runAppend( context );
-	assert.equal(
-		cleanOutput( context, ".check-box-component" ),
-		"foo",
-		"The CheckBoxComponent has a label"
-	);
+	assert.strictEqual( $elem.text(), "foo", "Has a label" );
 
-	run(function() {
-		set( context, "label", "bar" );
-	});
-	assert.equal(
-		cleanOutput( context, ".check-box-component" ),
-		"bar",
-		"The label updates"
-	);
+	this.set( "label", "bar" );
+	assert.strictEqual( $elem.text(), "bar", "Label gets updated" );
 
 });
 
 
-test( "Hotkeys", assert => {
+test( "Hotkeys", function( assert ) {
 
 	let e;
 
-	context = Component.extend({
-		checked: false,
-		disabled: false,
-		layout: compile( "{{check-box 'foo' checked=checked disabled=disabled}}" ),
+	this.set( "checked", false );
+	this.set( "disabled", false );
+	this.render( hbs`{{check-box "foo" checked=checked disabled=disabled}}` );
 
-		hotkey: service(),
-		keyUp( e ) {
-			return get( this, "hotkey" ).trigger( e );
-		}
-	}).create();
-	setOwner( context, owner );
-	runAppend( context );
-
-	const $context = context.$();
-	const $elem = $context.find( ".check-box-component" );
-
-	const trigger = code => run( () => {
-		e = $.Event( "keyup" );
-		e.code = code;
-		$context.trigger( e );
-	});
+	const $elem = this.$( ".check-box-component" );
+	const document = $elem.get( 0 ).ownerDocument;
 
 	assert.notStrictEqual( document.activeElement, $elem[0], "Is not focused initially" );
-	assert.strictEqual( get( context, "checked" ), false, "Is not checked initially" );
+	assert.notOk( this.get( "checked" ), "Is not checked initially" );
 	assert.strictEqual( $elem.attr( "tabindex" ), "0", "Has a tabindex attribute with value 0" );
 
-	trigger( "Space" );
-	assert.strictEqual( get( context, "checked" ), false, "Is still not checked on Space" );
+	e = triggerKeyDown( $elem, "Space" );
+	assert.notOk( this.get( "checked" ), "Is still not checked on Space" );
 	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
 	$elem.focus();
 	assert.strictEqual( document.activeElement, $elem[0], "Is focused now" );
 
-	trigger( "Space" );
-	assert.strictEqual( get( context, "checked" ), true, "Is checked on Space" );
+	e = triggerKeyDown( $elem, "Space" );
+	assert.ok( this.get( "checked" ), "Is checked on Space" );
 	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
-	trigger( "Space" );
-	assert.strictEqual( get( context, "checked" ), false, "Is not checked anymore on Space" );
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+	e = triggerKeyDown( $elem, "Space" );
+	assert.notOk( this.get( "checked" ), "Is not checked anymore on Space" );
 	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
 
-	trigger( "Escape" );
+	triggerKeyDown( $elem, "Escape" );
 	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
 
-	run( () => set( context, "disabled", true ) );
+	this.set( "disabled", true );
 	$elem.focus();
 	assert.strictEqual( document.activeElement, $elem[0], "Is focused now" );
 
-	trigger( "Space" );
-	assert.strictEqual( get( context, "checked" ), false, "Is not checked on Space when disabled" );
+	e = triggerKeyDown( $elem, "Space" );
+	assert.notOk( this.get( "checked" ), "Is not checked on Space while being disabled" );
 	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
-	trigger( "Escape" );
+	triggerKeyDown( $elem, "Escape" );
 	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
 
 });

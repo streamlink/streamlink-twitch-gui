@@ -1,4 +1,4 @@
-import { get } from "ember";
+import { get } from "@ember/object";
 import ModalDialogComponent from "./ModalDialogComponent";
 import HotkeyMixin from "../mixins/hotkey";
 import layout from "templates/components/modal/ModalConfirmComponent.hbs";

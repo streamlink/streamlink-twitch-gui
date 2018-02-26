@@ -4,16 +4,14 @@
 	"Where to access the GUI from."
 	icon="fa-puzzle-piece"
 }}
-	{{#radio-btns
-		name="settings-gui-integration"
+	{{#radio-buttons
 		value=model.gui.integration
-		content=SettingsGui.integration
-		optionValuePath="id"
-		classNames="radio-btns-group"
-		as |radiobtn label|
+		content=contentGuiIntegration
+		classNames="group"
+		as |item|
 	}}
-		{{component radiobtn label classNames="btn btn-neutral"}}
-	{{/radio-btns}}
+		{{item.button classNames="btn btn-neutral"}}
+	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
@@ -21,16 +19,15 @@
 	"When the video player opens."
 	icon="fa-minus"
 }}
-	{{#radio-btns
+	{{#radio-buttons
 		name="settings-gui-minimize"
 		value=model.gui.minimize
-		content=SettingsGui.minimize
-		optionValuePath="id"
-		classNames="radio-btns-group"
-		as |radiobtn label|
+		content=contentGuiMinimize
+		classNames="group"
+		as |item|
 	}}
-		{{component radiobtn label classNames="btn btn-neutral"}}
-	{{/radio-btns}}
+		{{item.button classNames="btn btn-neutral"}}
+	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#if model.advanced}}
@@ -82,8 +79,7 @@
 }}
 	{{drop-down
 		value=model.gui.focusrefresh
-		content=SettingsGui.focusrefresh
-		optionValuePath="value"
+		content=contentGuiFocusrefresh
 	}}
 {{/settings-row}}
 </fieldset>

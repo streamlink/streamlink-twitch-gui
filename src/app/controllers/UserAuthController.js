@@ -1,17 +1,18 @@
+import Controller from "@ember/controller";
 import {
 	get,
 	set,
 	computed,
-	inject,
-	observer,
-	Controller
-} from "ember";
+	observer
+} from "@ember/object";
+import {
+	inject as service
+} from "@ember/service";
 import { twitch } from "config";
 import RetryTransitionMixin from "./mixins/retry-transition";
 import wait from "utils/wait";
 
 
-const { service } = inject;
 const { oauth: { scope } } = twitch;
 
 

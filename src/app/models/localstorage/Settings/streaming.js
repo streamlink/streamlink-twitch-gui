@@ -1,12 +1,10 @@
 import {
 	get,
 	computed
-} from "ember";
-import { attr } from "ember-data";
-import {
-	Fragment,
-	fragment
-} from "model-fragments";
+} from "@ember/object";
+import attr from "ember-data/attr";
+import Fragment from "ember-data-model-fragments/fragment";
+import { fragment } from "ember-data-model-fragments/attributes";
 import {
 	streaming as streamingConfig
 } from "config";
@@ -56,9 +54,9 @@ export default Fragment.extend({
 
 }).reopenClass({
 
-	player_input: [
+	playerInput: [
 		{
-			value: ATTR_STREAMING_PLAYER_INPUT_STDIN,
+			id: ATTR_STREAMING_PLAYER_INPUT_STDIN,
 			label: {
 				name: "Standard input",
 				description: "Writes the stream to the player's standard input channel.",
@@ -66,7 +64,7 @@ export default Fragment.extend({
 			}
 		},
 		{
-			value: ATTR_STREAMING_PLAYER_INPUT_FIFO,
+			id: ATTR_STREAMING_PLAYER_INPUT_FIFO,
 			label: {
 				name: "Named pipe",
 				description: "Writes the stream to a named pipe, where the player reads from.",
@@ -74,7 +72,7 @@ export default Fragment.extend({
 			}
 		},
 		{
-			value: ATTR_STREAMING_PLAYER_INPUT_HTTP,
+			id: ATTR_STREAMING_PLAYER_INPUT_HTTP,
 			label: {
 				name: "HTTP",
 				description: "Launches a local HTTP server where the player reads from.",
@@ -82,7 +80,7 @@ export default Fragment.extend({
 			}
 		},
 		{
-			value: ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH,
+			id: ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH,
 			label: {
 				name: "HLS (passthrough)",
 				description: "Lets the player download and buffer the stream by itself.",

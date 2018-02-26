@@ -1,652 +1,476 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
+import sinon from "sinon";
 import {
-	runAppend,
-	runDestroy,
-	buildOwner,
-	fixtureElement
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	get,
-	set,
-	setOwner,
-	$,
-	HTMLBars,
-	inject,
-	run,
-	Component,
-	EventDispatcher
-} from "ember";
+import Component from "@ember/component";
+import $ from "jquery";
 import HotkeyMixin from "components/mixins/hotkey";
 import HotkeyService from "services/HotkeyService";
 
 
-const { compile } = HTMLBars;
-const { service } = inject;
-
-
-let eventDispatcher, owner, context;
-
-const HotkeyComponent = Component.extend( HotkeyMixin );
-const ApplicationComponent = Component.extend({
-	hotkey: service(),
-	keyUp( e ) {
-		return get( this, "hotkey" ).trigger( e );
-	}
-});
-
-
-module( "services/HotkeyService", {
+moduleForComponent( "services/HotkeyService", {
+	integration: true,
+	resolver: buildResolver({
+		HotkeyService
+	}),
 	beforeEach() {
-		eventDispatcher = EventDispatcher.create();
-		eventDispatcher.setup( {}, fixtureElement );
-		owner = buildOwner();
-		owner.register( "event_dispatcher:main", eventDispatcher );
-		owner.register( "service:hotkey", HotkeyService );
-	},
+		this.inject.service( "hotkey" );
+		const hotkeyService = this.get( "hotkey" );
 
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( eventDispatcher );
-		runDestroy( owner );
-		owner = context = null;
+		const $context = this.$();
+		$context.on( "keyup", e => hotkeyService.trigger( e ) );
+
+		this.trigger = ( data, $elem ) => {
+			const event = $.Event( "keyup" );
+			Object.assign( event, data );
+			( $elem || $context ).trigger( event );
+			return event;
+		};
 	}
 });
 
 
-test( "Simple hotkey registrations", assert => {
+test( "Simple hotkey registrations", function( assert ) {
 
-	assert.expect( 4 );
+	const actionA = sinon.stub();
+	const actionB = sinon.stub();
+	const listener = sinon.stub();
 
-	owner.register( "component:component-a", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					assert.ok( true, "Action is called" );
-				}
-			}
-		]
+	this.registry.register( "component:component-a", Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Enter",
+			action: actionA
+		}]
 	}) );
-	owner.register( "component:component-b", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Escape",
-				action: "foo"
-			}
-		],
+	this.registry.register( "component:component-b", Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Escape",
+			action: "foo"
+		}],
 		actions: {
-			foo() {
-				assert.ok( true, "Action is called" );
-			}
+			foo: actionB
 		}
 	}) );
-	owner.register( "component:component-c", HotkeyComponent.extend({}) );
+	this.registry.register( "component:component-c", Component.extend( HotkeyMixin, {} ) );
 
-	context = ApplicationComponent.create({
-		layout: compile( "{{component-a}}{{component-b}}{{component-c}}" )
-	});
-	setOwner( context, owner );
-
-	runAppend( context );
+	this.render( hbs`{{component-a}}{{component-b}}{{component-c}}` );
+	$( this._element.parentNode ).on( "keyup", listener );
 
 	assert.strictEqual(
-		get( owner.lookup( "service:hotkey" ), "registries.length" ),
+		this.get( "hotkey.registries.length" ),
 		2,
 		"Only has two hotkey registries"
 	);
 
-	const keyupCallback = e => {
-		assert.strictEqual( e.code, "KeyA", "Propagates events if key event doesn't match" );
-	};
-	$( fixtureElement ).on( "keyup", keyupCallback );
+	this.trigger({ code: "Enter" });
+	assert.ok( actionA.calledOnce, "Executes component A action" );
+	assert.notOk( actionB.called, "Doesn't execute component B action" );
+	assert.notOk( listener.called, "Doesn't propagate matching events" );
+	actionA.resetHistory();
 
-	let e;
-	const $element = context.$();
+	this.trigger({ code: "Escape" });
+	assert.notOk( actionA.called, "Doesn't execute component A action" );
+	assert.ok( actionB.calledOnce, "Executes component B action" );
+	assert.notOk( listener.called, "Doesn't propagate matching events" );
+	actionB.resetHistory();
 
-	// first hotkey with action as function
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
+	this.trigger({ code: "KeyA" });
+	assert.notOk( actionA.called, "Doesn't execute component A action" );
+	assert.notOk( actionB.called, "Doesn't execute component B action" );
+	assert.strictEqual( listener.args[0][0].code, "KeyA", "Propagates non-matching events" );
 
-	// second hotkey with action as string
-	e = $.Event( "keyup" );
-	e.code = "Escape";
-	$element.trigger( e );
-
-	// non-matching hotkey
-	e = $.Event( "keyup" );
-	e.code = "KeyA";
-	$element.trigger( e );
-
-	$( fixtureElement ).off( "keyup", keyupCallback );
+	$( this._element.parentNode ).off( "keyup", listener );
 
 });
 
 
-test( "Hotkeys with modifiers", assert => {
+test( "Hotkeys with modifiers", function( assert ) {
 
-	assert.expect( 1 );
+	const action = sinon.stub();
 
-	owner.register( "component:component-a", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Escape",
-				altKey: true,
-				ctrlKey: true,
-				shiftKey: true,
-				action() {
-					assert.ok( true, "Action is called" );
-				}
-			}
-		]
-	}) );
-
-	context = ApplicationComponent.create({
-		layout: compile( "{{component-a}}" )
-	});
-	setOwner( context, owner );
-
-	runAppend( context );
-
-	let e;
-	const $element = context.$();
-
-	// does not trigger when the altKey, ctrlKey and shiftKey are not pressed
-	e = $.Event( "keyup" );
-	e.code = "Escape";
-	e.altKey = false;
-	e.ctrlKey = false;
-	e.shiftKey = false;
-	$element.trigger( e );
-
-	// triggers the hotkey
-	e = $.Event( "keyup" );
-	e.code = "Escape";
-	e.altKey = true;
-	e.ctrlKey = true;
-	e.shiftKey = true;
-	$element.trigger( e );
-
-});
-
-
-test( "Hotkeys with multiple codes", assert => {
-
-	assert.expect( 2 );
-
-	owner.register( "component:component-a", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: [ "Enter", "Escape" ],
-				action() {
-					assert.ok( true, "Action is called" );
-				}
-			}
-		]
-	}) );
-
-	context = ApplicationComponent.create({
-		layout: compile( "{{component-a}}" )
-	});
-	setOwner( context, owner );
-
-	runAppend( context );
-
-	let e;
-	const $element = context.$();
-
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
-
-	e = $.Event( "keyup" );
-	e.code = "Escape";
-	$element.trigger( e );
-
-});
-
-
-test( "Multiple components with similar hotkeys", assert => {
-
-	assert.expect( 1 );
-
-	owner.register( "component:component-a", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					throw new Error();
-				}
-			}
-		]
-	}) );
-	owner.register( "component:component-b", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					assert.ok( true, "Action has been called" );
-				}
-			}
-		]
-	}) );
-	owner.register( "component:component-c", HotkeyComponent.extend({
-		disableHotkeys: true,
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					assert.ok( false, "Action should not be called" );
-				}
-			}
-		]
-	}) );
-
-	context = ApplicationComponent.create({
-		layout: compile( "{{component-a}}{{component-b}}{{component-c}}" )
-	});
-	setOwner( context, owner );
-
-	runAppend( context );
-
-	let e;
-	const $element = context.$();
-
-	// always call the hotkey action of the newest component
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
-
-});
-
-
-test( "Removed hotkey components", assert => {
-
-	assert.expect( 4 );
-
-	owner.register( "component:component-a", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					assert.ok( true, "Action has been called" );
-				}
-			}
-		]
-	}) );
-
-	context = ApplicationComponent.create({
-		show: false,
-		layout: compile( "{{#if show}}{{component-a}}{{/if}}" )
-	});
-	setOwner( context, owner );
-
-	runAppend( context );
-
-	let e;
-	const $element = context.$();
-	const hotkeyService = owner.lookup( "service:hotkey" );
-
-	// do not call action
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
-
-	assert.strictEqual( get( hotkeyService, "registries.length" ), 0, "Has no actions registered" );
-
-	run( () => set( context, "show", true ) );
-
-	// call action
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
-
-	assert.strictEqual( get( hotkeyService, "registries.length" ), 1, "Has one action registered" );
-
-	run( () => set( context, "show", false ) );
-
-	// don't call action
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
-
-	assert.strictEqual( get( hotkeyService, "registries.length" ), 0, "Has no actions registered" );
-
-});
-
-
-test( "Focus on input element", assert => {
-
-	assert.expect( 1 );
-
-	owner.register( "component:component-a", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					throw new Error();
-				}
-			}
-		]
-	}) );
-	owner.register( "component:component-b", HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Escape",
-				force: true,
-				action() {
-					assert.ok( true, "Action has been called" );
-				}
-			}
-		]
-	}) );
-
-	context = ApplicationComponent.create({
-		layout: compile( "<input type='text'>{{component-a}}{{component-b}}" )
-	});
-	setOwner( context, owner );
-
-	runAppend( context );
-
-	let e;
-	const $element = context.$( "input" );
-
-	$element.focus();
-
-	// do not call action
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
-
-	// call action
-	e = $.Event( "keyup" );
-	e.code = "Escape";
-	$element.trigger( e );
-
-});
-
-
-test( "Component subclasses with duplicate hotkeys", assert => {
-
-	assert.expect( 2 );
-
-	const ParentComponent = HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					throw new Error();
-				}
-			},
-			{
-				code: "Escape",
-				action() {
-					assert.ok( true, "Action has been called" );
-				}
-			}
-		]
-	});
-	const ChildComponent = ParentComponent.extend({
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					assert.ok( true, "Action has been called" );
-				}
-			}
-		]
-	});
-
-	owner.register( "component:component-a", ChildComponent );
-
-	context = ApplicationComponent.create({
-		layout: compile( "{{component-a}}" )
-	});
-	setOwner( context, owner );
-
-	runAppend( context );
-
-	let e;
-	const $element = context.$();
-
-	// call action of child component
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
-
-	// call action of parent component
-	e = $.Event( "keyup" );
-	e.code = "Escape";
-	$element.trigger( e );
-
-});
-
-
-test( "Event bubbling", assert => {
-
-	assert.expect( 10 );
-
-	let result = false;
-	let e;
-
-	const componentA = HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Escape",
-				action() {
-					assert.ok( true, "Calls A's escape action" );
-				}
-			},
-			{
-				code: "Enter",
-				action() {
-					assert.ok( true, "Calls A's enter action" );
-					return true;
-				}
-			}
-		]
-	});
-
-	const componentB = HotkeyComponent.extend({
+	this.registry.register( "component:component-a", Component.extend( HotkeyMixin, {
 		hotkeys: [{
 			code: "Escape",
-			action() {
-				assert.ok( true, "Calls B's escape action" );
-				return result;
-			}
+			altKey: true,
+			ctrlKey: true,
+			shiftKey: true,
+			action
+		}]
+	}) );
+
+	this.render( hbs`{{component-a}}` );
+
+	this.trigger({
+		code: "Escape",
+		altKey: false,
+		ctrlKey: false,
+		shiftKey: false
+	});
+	assert.notOk( action.called, "Doesn't trigger action on non-matching modifiers" );
+
+	this.trigger({
+		code: "Escape",
+		altKey: true,
+		ctrlKey: true,
+		shiftKey: true
+	});
+	assert.ok( action.called, "Triggers action on matching modifiers" );
+
+});
+
+
+test( "Hotkeys with multiple codes", function( assert ) {
+
+	const action = sinon.stub();
+
+	this.registry.register( "component:component-a", Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: [ "Enter", "Escape" ],
+			action
+		}]
+	}) );
+
+	this.render( hbs`{{component-a}}` );
+
+	this.trigger({ code: "Enter" });
+	assert.ok( action.called, "Executes action on Enter" );
+
+	this.trigger({ code: "Escape" });
+	assert.ok( action.calledTwice, "Executes action on Escape" );
+
+});
+
+
+test( "Multiple components with similar hotkeys", function( assert ) {
+
+	const actionA = sinon.stub();
+	const actionB = sinon.stub();
+	const actionC = sinon.stub();
+
+	this.registry.register( "component:component-a", Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Enter",
+			action: actionA
+		}]
+	}) );
+	this.registry.register( "component:component-b", Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Enter",
+			action: actionB
+		}]
+	}) );
+	this.registry.register( "component:component-c", Component.extend( HotkeyMixin, {
+		disableHotkeys: true,
+		hotkeys: [{
+			code: "Enter",
+			action: actionC
+		}]
+	}) );
+
+	this.render( hbs`{{component-a}}{{component-b}}{{component-c}}` );
+
+	this.trigger({ code: "Enter" });
+	assert.notOk( actionA.called, "Doesn't call all matching actions" );
+	assert.ok( actionB.called, "Call first matching action" );
+	assert.notOk( actionC.called, "Doesn't call disabled actions" );
+
+});
+
+
+test( "Removed hotkey components", function( assert ) {
+
+	const action = sinon.stub();
+
+	this.registry.register( "component:component-a", Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Enter",
+			action
+		}]
+	}) );
+
+	this.set( "shown", false );
+	this.render( hbs`{{#if shown}}{{component-a}}{{/if}}` );
+
+	assert.strictEqual( this.get( "hotkey.registries.length" ), 0, "Has no actions registered" );
+	this.trigger({ code: "Enter" });
+	assert.notOk( action.called, "Doesn't execute action" );
+
+	this.set( "shown", true );
+
+	assert.strictEqual( this.get( "hotkey.registries.length" ), 1, "Has one action registered" );
+	this.trigger({ code: "Enter" });
+	assert.ok( action.calledOnce, "Execute action" );
+	action.resetHistory();
+
+	this.set( "shown", false );
+
+	assert.strictEqual( this.get( "hotkey.registries.length" ), 0, "Has no actions registered" );
+	this.trigger({ code: "Enter" });
+	assert.notOk( action.called, "Doesn't execute action" );
+
+});
+
+
+test( "Focus on input element", function( assert ) {
+
+	const actionA = sinon.stub();
+	const actionB = sinon.stub();
+
+	this.registry.register( "component:component-a", Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Enter",
+			action: actionA
+		}]
+	}) );
+	this.registry.register( "component:component-b", Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Escape",
+			force: true,
+			action: actionB
+		}]
+	}) );
+
+	this.render( hbs`<input type="text">{{component-a}}{{component-b}}` );
+	const $input = this.$( "input" );
+
+	$input.focus();
+
+	this.trigger( { code: "Enter" }, $input );
+	assert.notOk( actionA.called, "Doesn't execute actions when an input element is focused" );
+	assert.notOk( actionB.called, "Doesn't execute actions when an input element is focused" );
+
+	this.trigger( { code: "Escape" }, $input );
+	assert.notOk( actionA.called, "Doesn't execute actions when an input element is focused" );
+	assert.ok( actionB.calledOnce, "Executes actions when the force flag is set" );
+
+});
+
+
+test( "Component subclasses with duplicate hotkeys", function( assert ) {
+
+	const actionA = sinon.stub();
+	const actionB = sinon.stub();
+	const actionC = sinon.stub();
+
+	const ParentComponent = Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Enter",
+			action: actionA
+		}, {
+			code: "Escape",
+			action: actionB
+		}]
+	});
+	const ChildComponent = ParentComponent.extend({
+		hotkeys: [{
+			code: "Enter",
+			action: actionC
 		}]
 	});
 
-	owner.register( "component:component-a", componentA );
-	owner.register( "component:component-b", componentB );
+	this.registry.register( "component:component-a", ChildComponent );
 
+	this.render( hbs`{{component-a}}` );
 
-	context = ApplicationComponent.create({
-		layout: compile( "{{component-a}}{{component-b}}" )
-	});
-	setOwner( context, owner );
+	this.trigger({ code: "Enter" });
+	assert.notOk( actionA.called, "Doesn't call parent's Enter action" );
+	assert.notOk( actionB.called, "Doesn't call parent's Escape action" );
+	assert.ok( actionC.calledOnce, "Calls child's Enter action" );
+	actionC.resetHistory();
 
-	runAppend( context );
-
-	const $element = context.$();
-
-	e = $.Event( "keyup" );
-	e.code = "Escape";
-	$element.trigger( e );
-	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
-
-	result = true;
-
-	e = $.Event( "keyup" );
-	e.code = "Escape";
-	$element.trigger( e );
-	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
-
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	$element.trigger( e );
-	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	this.trigger({ code: "Escape" });
+	assert.notOk( actionA.called, "Doesn't call parent's Enter action" );
+	assert.ok( actionB.calledOnce, "Calls parent's Escape action" );
+	assert.notOk( actionC.called, "Doesn't call child's Enter action" );
 
 });
 
 
-test( "Re-inserted components", assert => {
+test( "Event bubbling", function( assert ) {
 
-	assert.expect( 3 );
+	const actionA = sinon.stub();
+	const actionB = sinon.stub().returns( true );
+	const actionC = sinon.stub();
+	let e;
 
-	const MyButton = HotkeyComponent.extend({
-		hotkeys: [
-			{
-				code: "Enter",
-				action() {
-					throw new Error();
-				}
-			},
-			{
-				code: "Enter",
-				ctrlKey: true,
-				action() {
-					assert.ok( true, "Action has been called" );
-				}
-			}
-		]
+	const componentA = Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Escape",
+			action: actionA
+		}, {
+			code: "Enter",
+			action: actionB
+		}]
 	});
 
-	owner.register( "component:my-button", MyButton );
-
-
-	context = ApplicationComponent.create({
-		shown: true,
-		layout: compile( "{{#if shown}}{{my-button}}{{/if}}" )
+	const componentB = Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Escape",
+			action: actionC
+		}]
 	});
-	setOwner( context, owner );
 
-	runAppend( context );
+	this.registry.register( "component:component-a", componentA );
+	this.registry.register( "component:component-b", componentB );
 
-	const registries = owner.lookup( "service:hotkey" ).registries;
+	this.render( hbs`{{component-a}}{{component-b}}` );
+
+	e = this.trigger({ code: "Escape" });
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+	assert.notOk( actionA.called, "Doesn't call parent's Escape action" );
+	assert.notOk( actionB.called, "Doesn't call parent's Enter action" );
+	assert.ok( actionC.calledOnce, "Calls child's Escape action" );
+	actionC.resetHistory();
+
+	actionC.returns( true );
+
+	e = this.trigger({ code: "Escape" });
+	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+	assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+	assert.ok( actionA.calledOnce, "Calls parent's Escape action" );
+	assert.notOk( actionB.called, "Doesn't call parent's Enter action" );
+	assert.ok( actionC.calledOnce, "Calls child's Escape action" );
+	actionA.resetHistory();
+	actionC.resetHistory();
+
+	e = this.trigger({ code: "Enter" });
+	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+	assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+	assert.notOk( actionA.calledOnce, "Doesn't call parent's Escape action" );
+	assert.ok( actionB.called, "Calls parent's Enter action" );
+	assert.notOk( actionC.calledOnce, "Doesn't call child's Escape action" );
+
+});
+
+
+test( "Re-inserted components", function( assert ) {
+
+	const actionA = sinon.stub();
+	const actionB = sinon.stub();
+
+	const MyButton = Component.extend( HotkeyMixin, {
+		hotkeys: [{
+			code: "Enter",
+			action: actionA
+		}, {
+			code: "Enter",
+			ctrlKey: true,
+			action: actionB
+		}]
+	});
+
+	this.registry.register( "component:my-button", MyButton );
+
+
+	this.set( "shown", true );
+	this.render( hbs`{{#if shown}}{{my-button}}{{/if}}` );
+
+	const registries = this.get( "hotkey.registries" );
 	const [ firstHotkeyOne, firstHotkeyTwo ] = registries[0].hotkeys;
 
-	let e;
-	const $element = context.$();
-
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	e.ctrlKey = true;
-	$element.trigger( e );
+	this.trigger({
+		code: "Enter",
+		ctrlKey: true
+	});
 
 	// re-insert component
-	run( () => set( context, "shown", false ) );
-	run( () => set( context, "shown", true ) );
+	this.set( "shown", false );
+	this.set( "shown", true );
 
-	e = $.Event( "keyup" );
-	e.code = "Enter";
-	e.ctrlKey = true;
-	$element.trigger( e );
+	this.trigger({
+		code: "Enter",
+		ctrlKey: true
+	});
 
 	const [ secondHotkeyOne, secondHotkeyTwo ] = registries[0].hotkeys;
 
-	assert.ok(
-		firstHotkeyOne === secondHotkeyOne && firstHotkeyTwo === secondHotkeyTwo,
-		"Hotkey order stays the same"
-	);
+	assert.strictEqual( firstHotkeyOne, secondHotkeyOne, "Hotkey order stays the same" );
+	assert.strictEqual( firstHotkeyTwo, secondHotkeyTwo, "Hotkey order stays the same" );
 
 });
 
 
-test( "Component title", assert => {
+test( "Component title", function( assert ) {
 
-	const Component = HotkeyComponent.extend({
-		title: "foo"
-	});
+	this.registry.register( "component:component-a", Component.extend( HotkeyMixin, {
+		attributeBindings: [ "title" ]
+	}) );
 
-	context = Component.create({
-		hotkeys: [ { code: "KeyA" } ]
+	this.setProperties({
+		title: "foo",
+		hotkeys: [{ code: "KeyA" }]
 	});
-	setOwner( context, owner );
-	runAppend( context );
+	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
-		get( context, "title" ),
+		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"[A] foo",
 		"Updates the title when hotkey is alphanumerical"
 	);
-	runDestroy( context );
+	this.clearRender();
 
-	context = Component.create({
-		hotkeys: [ { code: [ "KeyA", "KeyB" ] } ]
-	});
-	setOwner( context, owner );
-	runAppend( context );
+	this.set( "hotkeys", [{ code: [ "KeyA", "KeyB" ] }] );
+	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
-		get( context, "title" ),
+		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"[A] foo",
 		"Updates the title when hotkey has aliases"
 	);
-	runDestroy( context );
+	this.clearRender();
 
-	context = Component.create({
-		hotkeys: [ { code: "Escape" } ]
-	});
-	setOwner( context, owner );
-	runAppend( context );
+	this.set( "hotkeys", [{ code: "Escape" }] );
+	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
-		get( context, "title" ),
+		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"[Esc] foo",
 		"Updates the title when hotkey is found in name map"
 	);
-	runDestroy( context );
+	this.clearRender();
 
-	context = Component.create({
-		hotkeys: [ { code: "KeyA", ctrlKey: true } ]
-	});
-	setOwner( context, owner );
-	runAppend( context );
+	this.set( "hotkeys", [{ code: "KeyA", ctrlKey: true }] );
+	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
-		get( context, "title" ),
+		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"[Ctrl+A] foo",
 		"Updates the title when hotkey is alphanumerical and a modifier is required"
 	);
-	runDestroy( context );
+	this.clearRender();
 
-	context = Component.create({
-		hotkeys: [ { code: "KeyA", ctrlKey: true, shiftKey: true, altKey: true } ]
-	});
-	setOwner( context, owner );
-	runAppend( context );
+	this.set( "hotkeys", [{ code: "KeyA", ctrlKey: true, shiftKey: true, altKey: true }] );
+	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
-		get( context, "title" ),
+		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"[Ctrl+Shift+Alt+A] foo",
 		"Updates the title when hotkey is alphanumerical and multiple modifiers are required"
 	);
-	runDestroy( context );
+	this.clearRender();
 
-	context = Component.create({
+	this.setProperties({
 		title: "",
-		hotkeys: [ { code: "KeyA" } ]
+		hotkeys: [{ code: "KeyA" }]
 	});
-	setOwner( context, owner );
-	runAppend( context );
+	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
-		get( context, "title" ),
+		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"",
-		"Doesn't updates the title when title is missing"
+		"Doesn't update the title when title is missing"
 	);
-	runDestroy( context );
+	this.clearRender();
 
-	context = Component.create();
-	setOwner( context, owner );
-	runAppend( context );
+	this.setProperties({
+		title: "foo",
+		hotkeys: []
+	});
+	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
-		get( context, "title" ),
+		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"foo",
-		"Doesn't updates the title when hotkeys are missing"
+		"Doesn't update the title when hotkeys are missing"
 	);
-	runDestroy( context );
 
 });

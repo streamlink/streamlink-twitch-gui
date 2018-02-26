@@ -7,11 +7,9 @@ import {
 	buildOwner,
 	runDestroy
 } from "test-utils";
-import {
-	Evented,
-	Service
-} from "ember";
-import chatServiceInjector from "inject-loader?-ember!services/ChatService";
+import Evented from "@ember/object/evented";
+import Service from "@ember/service";
+import chatServiceInjector from "inject-loader?config&./providers!services/ChatService";
 
 
 function _buildFakeModel( data ) {

@@ -4,7 +4,11 @@
 	"Use a predefined player configuration."
 	icon="fa-play-circle-o"
 }}
-	{{drop-down value=model.streaming.player content=playerPresets class="player-preset-dropdown"}}
+	{{drop-down
+		value=model.streaming.player
+		content=contentStreamingPlayer
+		class="player-preset-dropdown"
+	}}
 {{/settings-row}}
 
 {{#settings-row

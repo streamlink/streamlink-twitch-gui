@@ -1,221 +1,88 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
+import sinon from "sinon";
 import {
-	runAppend,
-	runDestroy,
-	getElem,
-	buildOwner,
-	fixtureElement
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	get,
-	set,
-	setOwner,
-	$,
-	HTMLBars,
-	run,
-	Component,
-	EventDispatcher
-} from "ember";
+import Component from "@ember/component";
 import SettingsSubmitComponent from "components/SettingsSubmitComponent";
 
 
-const { later } = run;
-const { compile } = HTMLBars;
-
-let eventDispatcher, owner, context;
-
-
-module( "components/SettingsSubmitComponent", {
+moduleForComponent( "components/SettingsSubmitComponent", {
+	integration: true,
+	resolver: buildResolver({
+		SettingsSubmitComponent,
+		FormButtonComponent: Component.extend()
+	}),
 	beforeEach() {
-		eventDispatcher = EventDispatcher.create();
-		eventDispatcher.setup( {}, fixtureElement );
-		owner = buildOwner();
-		owner.register( "event_dispatcher:main", eventDispatcher );
-		owner.register( "component:settings-submit", SettingsSubmitComponent );
-		owner.register( "component:form-button", Component.extend({}) );
+		this.fakeTimer = sinon.useFakeTimers({
+			toFake: [ "Date", "setTimeout", "clearTimeout" ],
+			target: window
+		});
 	},
-
 	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( eventDispatcher );
-		runDestroy( owner );
-		owner = context = null;
+		this.fakeTimer.restore();
 	}
 });
 
 
-test( "Basic isDirty and disabled states", assert => {
+test( "Basic isDirty and disabled states", function( assert ) {
 
-	context = Component.extend({
-		isDirty: false,
-		disabled: false,
-		layout: compile( "{{settings-submit isDirty=isDirty disabled=disabled}}" )
-	}).create();
-	setOwner( context, owner );
+	this.set( "isDirty", false );
+	this.set( "disabled", false );
+	this.render( hbs`{{settings-submit isDirty=isDirty disabled=disabled delay=1000}}` );
 
-	runAppend( context );
+	const $elem = this.$( ".settings-submit-component" );
+	assert.ok( $elem.hasClass( "faded" ), "Is faded in its default state" );
 
-	const $elem = getElem( context, ".settings-submit-component" );
-	assert.ok(
-		$elem.hasClass( "faded" ),
-		"Is faded in its default state"
-	);
+	this.set( "isDirty", true );
+	assert.notOk( $elem.hasClass( "faded" ), "Is not faded after becoming dirty" );
 
-	run( () => set( context, "isDirty", true ) );
-	assert.ok(
-		!$elem.hasClass( "faded" ),
-		"Is not faded when isDirty"
-	);
+	this.set( "disabled", true );
+	assert.ok( $elem.hasClass( "faded" ), "Is faded after getting disabled" );
 
-	run( () => set( context, "disabled", true ) );
-	assert.ok(
-		$elem.hasClass( "faded" ),
-		"Is faded when disabled"
-	);
+	this.set( "isDirty", false );
+	this.fakeTimer.tick( 1000 );
+	assert.ok( $elem.hasClass( "faded" ), "Nothing happens while being disabled" );
 
-	run( () => set( context, "disabled", false ) );
-	assert.ok(
-		!$elem.hasClass( "faded" ),
-		"Is not faded anymore when re-enabled"
-	);
+	this.set( "isDirty", true );
+	this.set( "disabled", false );
+	assert.notOk( $elem.hasClass( "faded" ), "Is not faded anymore after re-enabling" );
 
 });
 
 
-test( "Delayed fading", assert => {
+test( "Delayed fading", function( assert ) {
 
-	const done = assert.async();
-	const delay = 1;
+	this.set( "isDirty", true );
+	this.render( hbs`{{settings-submit isDirty=isDirty disabled=false delay=1000}}` );
+	const $elem = this.$( ".settings-submit-component" );
 
-	const $parent = $( "<div>" ).appendTo( fixtureElement );
+	assert.notOk( $elem.hasClass( "faded" ), "Is not faded initially" );
 
-	context = SettingsSubmitComponent.create({
-		isDirty: true,
-		disabled: false,
-		delay
-	});
-	setOwner( context, owner );
-	runAppend( context, $parent );
+	this.set( "isDirty", false );
+	assert.notOk( $elem.hasClass( "faded" ), "Is not yet faded" );
 
-	assert.strictEqual(
-		get( context, "_enabled" ),
-		true,
-		"Is not faded initially"
-	);
-	assert.strictEqual(
-		context._timeout,
-		null,
-		"Does not have a timer"
-	);
+	this.fakeTimer.tick( 999 );
+	assert.notOk( $elem.hasClass( "faded" ), "Is still not faded" );
 
-	run( () => set( context, "isDirty", false ) );
+	this.fakeTimer.tick( 1 );
+	assert.ok( $elem.hasClass( "faded" ), "Is faded after the delay" );
 
-	assert.strictEqual(
-		get( context, "_enabled" ),
-		true,
-		"Is still not faded"
-	);
-	assert.notStrictEqual(
-		context._timeout,
-		null,
-		"Does have a timer now"
-	);
+	this.set( "isDirty", true );
+	assert.notOk( $elem.hasClass( "faded" ), "Is not faded immediately when becoming dirty" );
 
-	later( () => {
-		run( () => {
-			assert.strictEqual(
-				get( context, "_enabled" ),
-				false,
-				"Is faded after the delay"
-			);
-			assert.strictEqual(
-				context._timeout,
-				null,
-				"Does not have a timer anymore"
-			);
+	this.set( "isDirty", false );
+	this.fakeTimer.tick( 500 );
+	this.set( "isDirty", true );
+	this.fakeTimer.tick( 500 );
+	assert.notOk( $elem.hasClass( "faded" ), "Timer gets cancelled" );
 
-			// clean up manually
-			runDestroy( context );
-			$parent.remove();
-
-			done();
-		});
-	}, delay );
-
-});
-
-
-
-test( "Delayed cancelled fading", assert => {
-
-	const done = assert.async();
-	const delay = 1;
-
-	const $parent = $( "<div>" ).appendTo( fixtureElement );
-
-	context = SettingsSubmitComponent.create({
-		isDirty: true,
-		disabled: false,
-		delay
-	});
-	setOwner( context, owner );
-	runAppend( context, $parent );
-
-	assert.strictEqual(
-		get( context, "_enabled" ),
-		true,
-		"Is not faded initially"
-	);
-	assert.strictEqual(
-		context._timeout,
-		null,
-		"Does not have a timer"
-	);
-
-	run( () => set( context, "isDirty", false ) );
-
-	assert.strictEqual(
-		get( context, "_enabled" ),
-		true,
-		"Is still not faded"
-	);
-	assert.notStrictEqual(
-		context._timeout,
-		null,
-		"Does have a timer now"
-	);
-
-	run( () => set( context, "isDirty", true ) );
-
-	assert.strictEqual(
-		get( context, "_enabled" ),
-		true,
-		"Is not faded"
-	);
-	assert.strictEqual(
-		context._timeout,
-		null,
-		"Does not have a timer"
-	);
-
-	later( () => {
-		run( () => {
-			assert.strictEqual(
-				get( context, "_enabled" ),
-				true,
-				"Is still not faded"
-			);
-
-			// clean up manually
-			runDestroy( context );
-			$parent.remove();
-
-			done();
-		});
-	}, delay );
+	this.set( "isDirty", false );
+	this.clearRender();
+	this.fakeTimer.tick( 1000 );
 
 });

@@ -6,13 +6,11 @@ import {
 	buildOwner,
 	runDestroy
 } from "test-utils";
-import {
-	set,
-	run,
-	Service
-} from "ember";
+import { set } from "@ember/object";
+import { run } from "@ember/runloop";
+import Service from "@ember/service";
 import notificationServiceBadgeMixinInjector
-	from "inject-loader?-ember!services/NotificationService/badge";
+	from "inject-loader?nwjs/Window!services/NotificationService/badge";
 
 
 module( "services/NotificationService/badge" );

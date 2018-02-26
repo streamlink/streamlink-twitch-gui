@@ -8,14 +8,16 @@
 <div class="searchbar-dropdown {{unless showDropdown 'hidden'}}">
 <section class="filters">
 <div>Filter results</div>
-{{#radio-btns
+{{#radio-buttons
 	name="searchfilters"
 	value=filter
 	content=filters
-	as |radiobtn label|
+	as |item|
 }}
-{{#component radiobtn classNames="default btn radio-btn-searchbar-filter"}}{{label}}{{/component}}
-{{/radio-btns}}
+	{{#item.button classNames="default btn radio-buttons-item-searchbar-filter"}}
+		{{item.label}}
+	{{/item.button}}
+{{/radio-buttons}}
 </section>
 {{#if model.length}}
 <section class="recent">

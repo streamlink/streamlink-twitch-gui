@@ -1,16 +1,16 @@
+import Component from "@ember/component";
 import {
 	get,
-	set,
-	run,
-	on,
-	Component
-} from "ember";
+	set
+} from "@ember/object";
+import { on } from "@ember/object/evented";
+import {
+	cancel,
+	later
+} from "@ember/runloop";
 import TwitchInteractButtonMixin from "../mixins/twitch-interact-button";
 import HotkeyMixin from "../mixins/hotkey";
 import layout from "templates/components/button/FollowButtonComponent.hbs";
-
-
-const { cancel, later } = run;
 
 
 export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {

@@ -3,8 +3,8 @@ import {
 	test
 } from "qunit";
 import sinon from "sinon";
-import { ArrayProxy } from "ember";
-import preloadInjector from "inject-loader?-ember!utils/preload";
+import ArrayProxy from "@ember/array/proxy";
+import preloadInjector from "inject-loader?nwjs/Window!utils/preload";
 
 
 module( "utils/preload", {

@@ -10,10 +10,8 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import {
-	get,
-	Service
-} from "ember";
+import { get } from "@ember/object";
+import Service from "@ember/service";
 import GameFollowed from "models/twitch/GameFollowed";
 import GameFollowedAdapter from "models/twitch/GameFollowedAdapter";
 import GameFollowedSerializer from "models/twitch/GameFollowedSerializer";
@@ -61,145 +59,147 @@ module( "models/twitch/GameFollowed", {
 });
 
 
-test( "Adapter and Serializer (single)", assert => {
+test( "Adapter and Serializer (single)", async function( assert ) {
 
 	env.store.adapterFor( "twitchGameFollowed" ).ajax = ( url, method, query ) =>
 		adapterRequest( assert, TwitchGameFollowedFixtures[ "single" ], url, method, query );
 
-	return env.store.findRecord( "twitchGameFollowed", "some game" )
-		.then( record => {
-			assert.deepEqual(
-				record.toJSON({ includeId: true }),
-				{
-					id: "some game",
-					game: "some game"
-				},
-				"Record has the correct id and attributes"
-			);
+	const record = await env.store.findRecord( "twitchGameFollowed", "some game" );
 
-			assert.ok(
-				env.store.hasRecordForId( "twitchGame", "some game" ),
-				"Has the Game record registered in the data store"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchImage", "game/box/some game" )
-				&& env.store.hasRecordForId( "twitchImage", "game/logo/some game" ),
-				"Has all image records registered in the data store"
-			);
-		});
+	assert.propEqual(
+		record.toJSON({ includeId: true }),
+		{
+			id: "some game",
+			game: "some game"
+		},
+		"Record has the correct id and attributes"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchGameFollowed" ).mapBy( "id" ),
+		[ "some game" ],
+		"Has all GameFollowed records registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchGame" ).mapBy( "id" ),
+		[ "some game" ],
+		"Has all Game records registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchImage" ).mapBy( "id" ),
+		[
+			"game/box/some game",
+			"game/logo/some game"
+		],
+		"Has all image records registered in the data store"
+	);
 
 });
 
 
-test( "Adapter and Serializer (many)", assert => {
+test( "Adapter and Serializer (many)", async function( assert ) {
 
 	env.store.adapterFor( "twitchGameFollowed" ).ajax = ( url, method, query ) =>
 		adapterRequest( assert, TwitchGameFollowedFixtures[ "many" ], url, method, query );
 
-	return env.store.query( "twitchGameFollowed", {} )
-		.then( records => {
-			assert.strictEqual(
-				get( records, "length" ),
-				2,
-				"Returns all records"
-			);
+	const records = await env.store.query( "twitchGameFollowed", {} );
 
-			assert.strictEqual(
-				get( records, "meta.total" ),
-				1000,
-				"Recordarray has metadata with total number of games"
-			);
-
-			assert.deepEqual(
-				records.map( record => record.toJSON({ includeId: true }) ),
-				[
-					{
-						id: "game a",
-						game: "game a"
-					},
-					{
-						id: "game b",
-						game: "game b"
-					}
-				],
-				"Models have the correct id and attributes"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchGame", "game a" )
-				&& env.store.hasRecordForId( "twitchGame", "game b" ),
-				"Has all Game records registered in the data store"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchImage", "game/box/game a" )
-				&& env.store.hasRecordForId( "twitchImage", "game/logo/game a" )
-				&& env.store.hasRecordForId( "twitchImage", "game/box/game b" )
-				&& env.store.hasRecordForId( "twitchImage", "game/logo/game b" ),
-				"Has all Image records registered in the data store"
-			);
-		});
+	assert.strictEqual(
+		get( records, "length" ),
+		2,
+		"Returns all records"
+	);
+	assert.strictEqual(
+		get( records, "meta.total" ),
+		1000,
+		"Recordarray has metadata with total number of games"
+	);
+	assert.deepEqual(
+		records.map( record => record.toJSON({ includeId: true }) ),
+		[
+			{
+				id: "game a",
+				game: "game a"
+			},
+			{
+				id: "game b",
+				game: "game b"
+			}
+		],
+		"Models have the correct id and attributes"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchGameFollowed" ).mapBy( "id" ),
+		[ "game a", "game b" ],
+		"Has all GameFollowed records registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchGame" ).mapBy( "id" ),
+		[ "game a", "game b" ],
+		"Has all Game records registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchImage" ).mapBy( "id" ),
+		[
+			"game/box/game a",
+			"game/logo/game a",
+			"game/box/game b",
+			"game/logo/game b"
+		],
+		"Has all image records registered in the data store"
+	);
 
 });
 
 
-test( "Create and delete records", assert => {
+test( "Create and delete records", async function( assert ) {
 
-	let action = "create";
+	const { create: fixturesCreate, delete: fixturesDelete } = TwitchGameFollowedFixtures;
+	const adapter = env.store.adapterFor( "twitchGameFollowed" );
 
-	env.store.adapterFor( "twitchGameFollowed" ).ajax = ( url, method, query ) =>
-		adapterRequest( assert, TwitchGameFollowedFixtures[ action ], url, method, query );
+	adapter.ajax = ( ...args ) => adapterRequest( assert, fixturesCreate, ...args );
+	const record = await env.store.createRecord( "twitchGameFollowed", { id: "new game" } ).save();
 
-	return env.store.createRecord( "twitchGameFollowed", { id: "new game" } )
-		.save()
-		.then( record => {
-			assert.deepEqual(
-				record.toJSON({ includeId: true }),
-				{
-					id: "new game",
-					game: "new game"
-				},
-				"Record has the correct id and attributes"
-			);
+	assert.propEqual(
+		record.toJSON({ includeId: true }),
+		{
+			id: "new game",
+			game: "new game"
+		},
+		"Record has the correct id and attributes"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchGameFollowed" ).mapBy( "id" ),
+		[ "new game" ],
+		"Has the new GameFollowed record registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchGame" ).mapBy( "id" ),
+		[ "new game" ],
+		"Has the Game record registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchImage" ).mapBy( "id" ),
+		[ "game/box/new game", "game/logo/new game" ],
+		"Has all image records registered in the data store"
+	);
 
-			assert.ok(
-				env.store.hasRecordForId( "twitchGameFollowed", "new game" ),
-				"Has the new GameFollowed record registered in the data store"
-			);
+	adapter.ajax = ( ...args ) => adapterRequest( assert, fixturesDelete, ...args );
+	await record.destroyRecord();
 
-			assert.ok(
-				env.store.hasRecordForId( "twitchGame", "new game" ),
-				"Has the Game record registered in the data store"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchImage", "game/box/new game" )
-				&& env.store.hasRecordForId( "twitchImage", "game/logo/new game" ),
-				"Has all image records registered in the data store"
-			);
-
-
-			action = "delete";
-
-			return record.destroyRecord();
-		})
-		.then( () => {
-			assert.ok(
-				!env.store.hasRecordForId( "twitchGameFollowed", "new game" ),
-				"Does not have the new GameFollowed record registered in the data store anymore"
-			);
-
-			assert.ok(
-				env.store.hasRecordForId( "twitchGame", "new game" ),
-				"Still has the Game record registered in the data store"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchImage", "game/box/new game" )
-				&& env.store.hasRecordForId( "twitchImage", "game/logo/new game" ),
-				"Still has all image records registered in the data store"
-			);
-		});
+	assert.propEqual(
+		env.store.peekAll( "twitchGameFollowed" ).mapBy( "id" ),
+		[],
+		"Has the new GameFollowed record registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchGame" ).mapBy( "id" ),
+		[ "new game" ],
+		"Has the Game record registered in the data store"
+	);
+	assert.propEqual(
+		env.store.peekAll( "twitchImage" ).mapBy( "id" ),
+		[ "game/box/new game", "game/logo/new game" ],
+		"Has all image records registered in the data store"
+	);
 
 });

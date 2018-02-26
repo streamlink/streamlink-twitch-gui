@@ -1,11 +1,6 @@
-import {
-	computed,
-	Component
-} from "ember";
+import Component from "@ember/component";
+import { gte } from "@ember/object/computed";
 import layout from "templates/components/list/HeadlineTotalsComponent.hbs";
-
-
-const { gte } = computed;
 
 
 export default Component.extend({

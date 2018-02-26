@@ -1,7 +1,5 @@
-import {
-	Fragment,
-	fragment
-} from "model-fragments";
+import Fragment from "ember-data-model-fragments/fragment";
+import { fragment } from "ember-data-model-fragments/attributes";
 import { qualitiesStreamlink } from "models/stream/qualities/index";
 
 

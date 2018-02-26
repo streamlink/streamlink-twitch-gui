@@ -1,7 +1,5 @@
-import {
-	get,
-	makeArray
-} from "ember";
+import { makeArray } from "@ember/array";
+import { get } from "@ember/object";
 import {
 	window as Window
 } from "nwjs/Window";

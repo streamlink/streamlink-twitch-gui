@@ -1,69 +1,40 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
-	runAppend,
-	runDestroy,
-	getElem,
-	buildOwner,
-	fixtureElement
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	setOwner,
-	HTMLBars,
-	Component,
-	EventDispatcher,
-	Service
-} from "ember";
+import Service from "@ember/service";
 import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
 import externalLinkComponentInjector
 	from "inject-loader?-utils/getStreamFromUrl!components/link/ExternalLinkComponent";
 
-const { compile } = HTMLBars;
 
-let eventDispatcher, owner, context;
-
-
-module( "components/link/EmbeddedLinksComponent", {
+moduleForComponent( "components/link/EmbeddedLinksComponent", {
+	integration: true,
+	resolver: buildResolver({
+		EmbeddedLinksComponent
+	}),
 	beforeEach() {
-		eventDispatcher = EventDispatcher.create();
-		eventDispatcher.setup( {}, fixtureElement );
-		owner = buildOwner();
-		owner.register( "event_dispatcher:main", eventDispatcher );
-		owner.register( "component:embedded-links", EmbeddedLinksComponent );
-	},
-
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( eventDispatcher );
-		runDestroy( owner );
-		owner = context = null;
+		const { default: ExternalLinkComponent } = externalLinkComponentInjector({
+			"nwjs/Clipboard": {},
+			"nwjs/Shell": {},
+			"nwjs/Menu": {}
+		});
+		this.registry.register( "component:external-link", ExternalLinkComponent );
+		this.registry.register( "service:-routing", Service.extend() );
 	}
 });
 
 
-test( "EmbeddedLinksComponent", assert => {
+test( "EmbeddedLinksComponent", function( assert ) {
 
-	const ExternalLinkComponent = externalLinkComponentInjector({
-		"nwjs/Clipboard": {},
-		"nwjs/Shell": {},
-		"nwjs/Menu": {}
-	})[ "default" ];
-	owner.register( "component:external-link", ExternalLinkComponent );
+	this.set( "text", "foo https://twitch.tv/foo bar https://bar.com baz @baz qux" );
+	this.render( hbs`{{embedded-links text=text}}` );
 
-	owner.register( "service:-routing", Service.extend() );
-
-	context = Component.extend({
-		text: "foo https://twitch.tv/foo bar https://bar.com baz @baz qux",
-		layout: compile( "{{embedded-links text=text}}" )
-	}).create();
-	setOwner( context, owner );
-
-	runAppend( context );
-
-	const $component = getElem( context, ".embedded-links-component" );
+	const $component = this.$( ".embedded-links-component" );
 	const $anchors = $component.find( ".external-link-component" );
 	assert.strictEqual( $anchors.length, 3, "Renders all ExternalLinkComponents" );
 	assert.ok( !$anchors.slice( 0, 1 ).hasClass( "external-link" ), "First link is internal" );

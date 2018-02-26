@@ -1,57 +1,27 @@
 import {
-	module,
+	moduleForComponent,
 	test
-} from "qunit";
+} from "ember-qunit";
 import {
-	runAppend,
-	runDestroy,
-	getElem,
-	buildOwner,
-	fixtureElement
+	buildResolver,
+	hbs
 } from "test-utils";
-import {
-	setOwner,
-	HTMLBars,
-	Component,
-	EventDispatcher
-} from "ember";
 import LoadingSpinnerComponent from "components/LoadingSpinnerComponent";
 
 
-const { compile } = HTMLBars;
-
-let eventDispatcher, owner, context;
-
-
-module( "components/LoadingSpinnerComponent", {
-	beforeEach() {
-		eventDispatcher = EventDispatcher.create();
-		eventDispatcher.setup( {}, fixtureElement );
-		owner = buildOwner();
-		owner.register( "event_dispatcher:main", eventDispatcher );
-		owner.register( "component:loading-spinner", LoadingSpinnerComponent );
-	},
-
-	afterEach() {
-		//noinspection JSUnusedAssignment
-		runDestroy( context );
-		runDestroy( eventDispatcher );
-		runDestroy( owner );
-		owner = context = null;
-	}
+moduleForComponent( "components/LoadingSpinnerComponent", {
+	integration: true,
+	resolver: buildResolver({
+		LoadingSpinnerComponent
+	})
 });
 
 
-test( "LoadingSpinnerComponent", assert => {
+test( "LoadingSpinnerComponent", function( assert ) {
 
-	context = Component.extend({
-		layout: compile( "{{loading-spinner}}" )
-	}).create();
-	setOwner( context, owner );
+	this.render( hbs`{{loading-spinner}}` );
 
-	runAppend( context );
-
-	const $elem = getElem( context, "svg.loading-spinner-component" );
+	const $elem = this.$( "svg.loading-spinner-component" );
 
 	assert.ok(
 		$elem.get( 0 ) instanceof SVGElement,

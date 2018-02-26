@@ -10,7 +10,7 @@ import {
 	setupStore,
 	adapterRequest
 } from "store-utils";
-import { Service } from "ember";
+import Service from "@ember/service";
 import SearchStream from "models/twitch/SearchStream";
 import SearchStreamSerializer from "models/twitch/SearchStreamSerializer";
 import Stream from "models/twitch/Stream";

@@ -1,4 +1,4 @@
-import { Helper } from "ember";
+import { helper } from "@ember/component/helper";
 
 
 function boolNot( value ) {
@@ -6,6 +6,6 @@ function boolNot( value ) {
 }
 
 
-export default Helper.helper(function( params ) {
+export default helper(function( params ) {
 	return params.every( boolNot );
 });

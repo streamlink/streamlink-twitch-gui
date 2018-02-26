@@ -2,14 +2,18 @@ import {
 	get,
 	set,
 	computed,
-	inject,
 	observer
-} from "ember";
+} from "@ember/object";
 import {
-	attr,
-	belongsTo,
-	Model
-} from "ember-data";
+	alias,
+	not
+} from "@ember/object/computed";
+import {
+	inject as service
+} from "@ember/service";
+import attr from "ember-data/attr";
+import Model from "ember-data/model";
+import { belongsTo } from "ember-data/relationships";
 import {
 	twitch as twitchConfig
 } from "config";
@@ -19,8 +23,6 @@ import {
 } from "models/stream/qualities";
 
 
-const { alias, not } = computed;
-const { service } = inject;
 const {
 	"stream-url": twitchStreamUrl,
 	oauth: {

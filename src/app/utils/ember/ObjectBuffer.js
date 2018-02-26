@@ -5,9 +5,9 @@
 import {
 	get,
 	set,
-	setProperties,
-	ObjectProxy
-} from "ember";
+	setProperties
+} from "@ember/object";
+import ObjectProxy from "@ember/object/proxy";
 
 
 function isEmpty( obj ) {

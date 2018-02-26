@@ -1,7 +1,5 @@
-import {
-	set,
-	Route
-} from "ember";
+import { set } from "@ember/object";
+import Route from "@ember/routing/route";
 
 
 export default Route.extend({
