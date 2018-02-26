@@ -1,8 +1,6 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
 import sinon from "sinon";
+
 import chatProviderInjector from "inject-loader!services/ChatService/providers/-provider";
 import chatProviderBrowserInjector from "inject-loader!services/ChatService/providers/browser";
 

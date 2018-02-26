@@ -1,16 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import {
-	setupStore,
-	adapterRequest
-} from "store-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { setupStore, adapterRequest } from "store-utils";
 import Service from "@ember/service";
+
 import SearchGame from "models/twitch/SearchGame";
 import SearchGameSerializer from "models/twitch/SearchGameSerializer";
 import Game from "models/twitch/Game";

@@ -1,8 +1,5 @@
 import Helper from "@ember/component/helper";
-import {
-	cancel,
-	later
-} from "@ember/runloop";
+import { cancel, later } from "@ember/runloop";
 
 
 export default Helper.extend({

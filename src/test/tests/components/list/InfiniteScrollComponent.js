@@ -1,15 +1,9 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	checkListeners,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, checkListeners, hbs } from "test-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import Component from "@ember/component";
 import { run } from "@ember/runloop";
+
 import InfiniteScrollComponent from "components/list/InfiniteScrollComponent";
 
 

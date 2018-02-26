@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import statInjector from "inject-loader!utils/node/fs/stat";
 
 

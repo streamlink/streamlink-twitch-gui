@@ -1,12 +1,7 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
 import sinon from "sinon";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+
 import HoursFromNowHelper from "helpers/HoursFromNowHelper";
 
 

@@ -1,29 +1,20 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	cleanOutput,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, cleanOutput, hbs } from "test-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import Component from "@ember/component";
-import { run } from "@ember/runloop";
+import { run, scheduleOnce } from "@ember/runloop";
+
 import ContentListComponent from "components/list/ContentListComponent";
-import IsGteHelper from "helpers/IsGteHelper";
 import GetIndexHelper from "helpers/GetIndexHelper";
-
-
-const { scheduleOnce } = run;
+import IsGteHelper from "helpers/IsGteHelper";
 
 
 moduleForComponent( "components/list/ContentListComponent", {
 	integration: true,
 	resolver: buildResolver({
 		ContentListComponent,
-		IsGteHelper,
-		GetIndexHelper
+		GetIndexHelper,
+		IsGteHelper
 	}),
 	beforeEach() {
 		this.registry.register( "component:infinite-scroll", Component.extend() );

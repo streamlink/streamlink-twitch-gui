@@ -1,17 +1,9 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import {
-	get,
-	set
-} from "@ember/object";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { get, set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
+
 import notificationServiceInjector
 	from "inject-loader?./polling&./dispatch&./badge&./tray&./follow!services/NotificationService";
 

@@ -1,11 +1,6 @@
-import {
-	getProperties,
-	setProperties
-} from "@ember/object";
+import { getProperties, setProperties } from "@ember/object";
 import { debounce } from "@ember/runloop";
-import {
-	vars as varsConfig
-} from "config";
+import { vars as varsConfig } from "config";
 import nwWindow from "nwjs/Window";
 import reset from "nwjs/Window/reset";
 import nwScreen from "nwjs/Screen";

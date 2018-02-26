@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import notificationProviderRichInjector
 	from "inject-loader!services/NotificationService/providers/chrome-notifications";
 import NotificationData from "services/NotificationService/data";

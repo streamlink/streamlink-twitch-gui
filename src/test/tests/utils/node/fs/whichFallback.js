@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import whichFallbackInjector from "inject-loader!utils/node/fs/whichFallback";
 
 

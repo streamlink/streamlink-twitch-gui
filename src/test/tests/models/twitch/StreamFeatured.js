@@ -1,17 +1,9 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import {
-	setupStore,
-	adapterRequest
-} from "store-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { setupStore, adapterRequest } from "store-utils";
 import { get } from "@ember/object";
 import Service from "@ember/service";
+
 import StreamFeatured from "models/twitch/StreamFeatured";
 import StreamFeaturedSerializer from "models/twitch/StreamFeaturedSerializer";
 import Stream from "models/twitch/Stream";

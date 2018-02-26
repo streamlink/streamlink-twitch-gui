@@ -1,9 +1,5 @@
 import Component from "@ember/component";
-import {
-	get,
-	set,
-	observer
-} from "@ember/object";
+import { get, set, observer } from "@ember/object";
 import { or } from "@ember/object/computed";
 import { scheduleOnce } from "@ember/runloop";
 import $ from "jquery";

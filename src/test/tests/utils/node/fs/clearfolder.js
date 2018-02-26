@@ -1,9 +1,7 @@
-import {
-	module,
-	test
-} from "qunit";
-import clearfolderInjector from "inject-loader!utils/node/fs/clearfolder";
+import { module, test } from "qunit";
 import { posix as path } from "path";
+
+import clearfolderInjector from "inject-loader!utils/node/fs/clearfolder";
 
 
 let originalDateNow;

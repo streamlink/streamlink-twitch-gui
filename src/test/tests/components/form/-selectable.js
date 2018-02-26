@@ -1,16 +1,8 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, runDestroy } from "test-utils";
 import { A as EmberNativeArray } from "@ember/array";
-import {
-	get,
-	set
-} from "@ember/object";
-import {
-	buildResolver,
-	runDestroy
-} from "test-utils";
+import { get, set } from "@ember/object";
+
 import SelectableComponent from "components/form/-selectable";
 
 

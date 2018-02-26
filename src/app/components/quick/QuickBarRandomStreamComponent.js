@@ -1,10 +1,5 @@
-import {
-	get,
-	set
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { get, set } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { vars } from "config";
 import FormButtonComponent from "../button/FormButtonComponent";
 import FilterLanguagesMixin from "routes/mixins/filter-languages";

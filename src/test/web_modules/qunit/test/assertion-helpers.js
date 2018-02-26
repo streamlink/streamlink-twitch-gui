@@ -1,7 +1,4 @@
-import QUnit, {
-	module,
-	test
-} from "qunit";
+import { default as QUnit, module, test } from "qunit";
 import sinon from "sinon";
 
 

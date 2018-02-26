@@ -1,11 +1,6 @@
 import { get } from "@ember/object";
-import {
-	and,
-	or
-} from "@ember/object/computed";
-import {
-	inject as service
-} from "@ember/service";
+import { and, or } from "@ember/object/computed";
+import { inject as service } from "@ember/service";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "./FormButtonComponent";

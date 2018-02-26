@@ -1,12 +1,6 @@
-import {
-	get,
-	computed
-} from "@ember/object";
+import { get, computed } from "@ember/object";
 import { and } from "@ember/object/computed";
-import {
-	default as Service,
-	inject as service
-} from "@ember/service";
+import { default as Service, inject as service } from "@ember/service";
 import NotificationServicePollingMixin from "./polling";
 import NotificationServiceDispatchMixin from "./dispatch";
 import NotificationServiceBadgeMixin from "./badge";

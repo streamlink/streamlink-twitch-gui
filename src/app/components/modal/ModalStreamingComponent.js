@@ -1,15 +1,7 @@
-import {
-	get,
-	set,
-	computed
-} from "@ember/object";
+import { get, set, computed } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
-import {
-	inject as service
-} from "@ember/service";
-import {
-	streaming as streamingConfig
-} from "config";
+import { inject as service } from "@ember/service";
+import { streaming as streamingConfig } from "config";
 import ModalDialogComponent from "./ModalDialogComponent";
 import HotkeyMixin from "../mixins/hotkey";
 import qualities from "models/stream/qualities";

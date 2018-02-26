@@ -1,7 +1,4 @@
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import Route from "@ember/routing/route";
 import RefreshMixin from "./mixins/refresh";
 import { toArray } from "utils/ember/recordArrayMethods";

@@ -1,11 +1,6 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
+
 import MathAddHelper from "helpers/MathAddHelper";
 import MathSubHelper from "helpers/MathSubHelper";
 import MathMulHelper from "helpers/MathMulHelper";

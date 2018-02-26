@@ -1,6 +1,4 @@
-import {
-	streaming as streamingConfig
-} from "config";
+import { streaming as streamingConfig } from "config";
 import { providerCache } from "../cache";
 import { logDebug } from "../logger";
 import { ProviderError } from "../errors";

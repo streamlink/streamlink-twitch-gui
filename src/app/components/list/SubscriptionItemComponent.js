@@ -1,12 +1,6 @@
-import {
-	get,
-	getWithDefault,
-	computed
-} from "@ember/object";
+import { get, getWithDefault, computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
-import {
-	twitch as twitchConfig
-} from "config";
+import { twitch as twitchConfig } from "config";
 import { openBrowser } from "nwjs/Shell";
 import ListItemComponent from "./ListItemComponent";
 import Moment from "moment";

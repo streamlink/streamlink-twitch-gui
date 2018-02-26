@@ -1,7 +1,4 @@
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import Mixin from "@ember/object/mixin";
 
 

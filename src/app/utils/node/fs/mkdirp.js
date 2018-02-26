@@ -1,14 +1,8 @@
 import denodify from "utils/node/denodify";
-import {
-	stat,
-	isDirectory
-} from "utils/node/fs/stat";
+import { stat, isDirectory } from "utils/node/fs/stat";
 import { isWin } from "utils/node/platform";
 import { dirname } from "path";
-import {
-	mkdir,
-	W_OK
-} from "fs";
+import { mkdir, W_OK } from "fs";
 
 
 /**

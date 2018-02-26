@@ -1,9 +1,6 @@
 import ChatProvider from "./-provider";
 import resolvePath from "utils/node/resolvePath";
-import {
-	stat,
-	isFile
-} from "utils/node/fs/stat";
+import { stat, isFile } from "utils/node/fs/stat";
 import whichFallback from "utils/node/fs/whichFallback";
 import Parameter from "utils/parameters/Parameter";
 

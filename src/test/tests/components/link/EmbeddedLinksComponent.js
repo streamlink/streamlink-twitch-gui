@@ -1,12 +1,7 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
 import Service from "@ember/service";
+
 import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
 import externalLinkComponentInjector
 	from "inject-loader?-utils/getStreamFromUrl!components/link/ExternalLinkComponent";

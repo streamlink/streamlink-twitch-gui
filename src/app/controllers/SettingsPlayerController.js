@@ -1,15 +1,8 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	computed
-} from "@ember/object";
+import { get, computed } from "@ember/object";
 import { equal } from "@ember/object/computed";
-import {
-	inject as service
-} from "@ember/service";
-import {
-	players as playersConfig
-} from "config";
+import { inject as service } from "@ember/service";
+import { players as playersConfig } from "config";
 import substitutionsPlayer from "services/StreamingService/player/substitutions";
 import { platform } from "utils/node/platform";
 import { delimiter } from "path";

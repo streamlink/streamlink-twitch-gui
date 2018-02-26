@@ -1,9 +1,6 @@
 import { stat } from "utils/node/fs/stat";
 import { paths } from "utils/node/env-path";
-import {
-	sep,
-	join
-} from "path";
+import { sep, join } from "path";
 
 
 /**

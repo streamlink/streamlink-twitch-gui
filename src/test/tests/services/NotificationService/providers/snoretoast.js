@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import notificationProviderSnoreToastInjector
 	from "inject-loader!services/NotificationService/providers/snoretoast";
 import NotificationData from "services/NotificationService/data";

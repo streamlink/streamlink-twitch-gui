@@ -1,8 +1,5 @@
 import Component from "@ember/component";
-import {
-	computed,
-	observer
-} from "@ember/object";
+import { computed, observer } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { scheduleOnce } from "@ember/runloop";
 import layout from "templates/components/modal/ModalLogComponent.hbs";

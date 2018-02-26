@@ -1,9 +1,5 @@
 import { getOwner } from "@ember/application";
-import {
-	get,
-	setProperties,
-	computed
-} from "@ember/object";
+import { get, setProperties, computed } from "@ember/object";
 import Evented from "@ember/object/evented";
 import Service from "@ember/service";
 

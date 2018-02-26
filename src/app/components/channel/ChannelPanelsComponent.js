@@ -2,9 +2,7 @@ import Component from "@ember/component";
 import { get } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { scheduleOnce } from "@ember/runloop";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import Masonry from "masonry-layout";
 import layout from "templates/components/channel/ChannelPanelsComponent.hbs";
 

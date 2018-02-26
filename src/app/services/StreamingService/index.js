@@ -1,34 +1,14 @@
-import {
-	get,
-	set,
-	computed
-} from "@ember/object";
+import { get, set, computed } from "@ember/object";
 import { scheduleOnce } from "@ember/runloop";
-import {
-	default as Service,
-	inject as service
-} from "@ember/service";
-import {
-	vars as varsConfig
-} from "config";
-import {
-	logDebug,
-	logError
-} from "./logger";
-import {
-	Aborted,
-	ExitSignalError,
-	HostingError
-} from "./errors";
+import { default as Service, inject as service } from "@ember/service";
+import { vars as varsConfig } from "config";
+import { logDebug, logError } from "./logger";
+import { Aborted, ExitSignalError, HostingError } from "./errors";
 import { clearCache } from "./cache";
 import resolvePlayer from "./player/resolve";
 import resolveProvider from "./provider/resolve";
 import launch from "./launch";
-import {
-	setShowInTaskbar,
-	setMinimized,
-	setVisibility
-} from "nwjs/Window";
+import { setShowInTaskbar, setMinimized, setVisibility } from "nwjs/Window";
 import {
 	ATTR_GUI_MINIMIZE_MINIMIZE,
 	ATTR_GUI_MINIMIZE_TRAY

@@ -1,19 +1,13 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs,
-	triggerKeyDown
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs, triggerKeyDown } from "test-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import { run } from "@ember/runloop";
 import $ from "jquery";
-import IsEqualHelper from "helpers/IsEqualHelper";
+
 import DropDownComponent from "components/form/DropDownComponent";
 import DropDownSelectionComponent from "components/form/DropDownComponent/selection";
 import DropDownListComponent from "components/form/DropDownComponent/list";
+import IsEqualHelper from "helpers/IsEqualHelper";
 
 
 moduleForComponent( "components/form/DropDownComponent", {

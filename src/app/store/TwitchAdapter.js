@@ -1,10 +1,5 @@
-import {
-	get,
-	observer
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { get, observer } from "@ember/object";
+import { inject as service } from "@ember/service";
 import RESTAdapter from "ember-data/adapters/rest";
 import { twitch } from "config";
 import AdapterMixin from "store/AdapterMixin";

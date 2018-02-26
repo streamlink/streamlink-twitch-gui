@@ -1,13 +1,5 @@
-import {
-	get,
-	set,
-	setProperties
-} from "@ember/object";
-import {
-	ExitCodeError,
-	ExitSignalError,
-	Warning
-} from "../errors";
+import { get, set, setProperties } from "@ember/object";
+import { ExitCodeError, ExitSignalError, Warning } from "../errors";
 import isAborted from "../is-aborted";
 import spawn from "../spawn";
 import { parameters } from "../provider/parameters";

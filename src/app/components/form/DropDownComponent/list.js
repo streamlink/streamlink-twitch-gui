@@ -1,10 +1,5 @@
 import Component from "@ember/component";
-import {
-	get,
-	set,
-	setProperties,
-	observer
-} from "@ember/object";
+import { get, set, setProperties, observer } from "@ember/object";
 import $ from "jquery";
 import layout from "templates/components/form/DropDownComponent/list.hbs";
 

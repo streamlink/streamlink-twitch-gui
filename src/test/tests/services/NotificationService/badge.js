@@ -1,14 +1,9 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import { set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
+
 import notificationServiceBadgeMixinInjector
 	from "inject-loader?nwjs/Window!services/NotificationService/badge";
 

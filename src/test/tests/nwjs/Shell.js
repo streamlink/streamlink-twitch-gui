@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import shellInjector from "inject-loader!nwjs/Shell";
 
 

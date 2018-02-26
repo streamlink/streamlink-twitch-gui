@@ -1,13 +1,7 @@
 import denodify from "utils/node/denodify";
-import {
-	stat,
-	isFile
-} from "utils/node/fs/stat";
+import { stat, isFile } from "utils/node/fs/stat";
 import { join } from "path";
-import {
-	readdir,
-	unlink
-} from "fs";
+import { readdir, unlink } from "fs";
 
 
 /**

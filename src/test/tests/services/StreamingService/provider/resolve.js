@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import resolveProviderInjector from "inject-loader!services/StreamingService/provider/resolve";
 import { ProviderError } from "services/StreamingService/errors";
 import ExecObj from "services/StreamingService/exec-obj";

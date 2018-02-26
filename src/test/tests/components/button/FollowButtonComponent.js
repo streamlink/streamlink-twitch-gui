@@ -1,19 +1,12 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver } from "test-utils";
 import Component from "@ember/component";
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import { alias } from "@ember/object/computed";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
 import sinon from "sinon";
-import {
-	buildResolver
-} from "test-utils";
+
 import followButtonComponentInjector
 	from "inject-loader?../mixins/twitch-interact-button!components/button/FollowButtonComponent";
 import FormButtonComponent from "components/button/FormButtonComponent";

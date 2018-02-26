@@ -1,7 +1,4 @@
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import FilterLanguagesMixin from "./mixins/filter-languages";

@@ -1,12 +1,6 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	set,
-	computed
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { get, set, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { set as setClipboard } from "nwjs/Clipboard";
 
 

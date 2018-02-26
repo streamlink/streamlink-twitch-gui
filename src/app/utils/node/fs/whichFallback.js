@@ -1,10 +1,7 @@
 import { platform } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 import which from "utils/node/fs/which";
-import {
-	stat,
-	isExecutable
-} from "utils/node/fs/stat";
+import { stat, isExecutable } from "utils/node/fs/stat";
 import { join } from "path";
 
 

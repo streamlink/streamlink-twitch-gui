@@ -1,15 +1,6 @@
-import {
-	get,
-	set
-} from "@ember/object";
-import {
-	files as filesConfig,
-	notification as notificationConfig
-} from "config";
-import {
-	isWin,
-	tmpdir
-} from "utils/node/platform";
+import { get, set } from "@ember/object";
+import { files as filesConfig, notification as notificationConfig } from "config";
+import { isWin, tmpdir } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 import mkdirp from "utils/node/fs/mkdirp";
 import clearfolder from "utils/node/fs/clearfolder";

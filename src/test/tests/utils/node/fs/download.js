@@ -1,17 +1,9 @@
-import {
-	module,
-	test
-} from "qunit";
-import downloadInjector from "inject-loader?-url!utils/node/fs/download";
-//import { EventEmitter } from "events";
-import {
-	posix as path
-} from "path";
-import {
-	Readable,
-	Writable
-} from "stream";
+import { module, test } from "qunit";
+import { posix as path } from "path";
+import { Readable, Writable } from "stream";
 import { parse } from "url";
+
+import downloadInjector from "inject-loader?-url!utils/node/fs/download";
 
 
 module( "utils/node/fs/download" );

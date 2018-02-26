@@ -1,7 +1,4 @@
-import {
-	moveAttributes,
-	qualityIdToName
-} from "./utils";
+import { moveAttributes, qualityIdToName } from "./utils";
 import qualities from "models/stream/qualities";
 
 

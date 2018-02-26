@@ -1,9 +1,7 @@
-import {
-	module,
-	test
-} from "qunit";
-import onShutdownInjector from "inject-loader!utils/node/onShutdown";
+import { module, test } from "qunit";
 import { EventEmitter } from "events";
+
+import onShutdownInjector from "inject-loader!utils/node/onShutdown";
 
 
 const events = [ "exit", "SIGTERM", "SIGHUP" ];

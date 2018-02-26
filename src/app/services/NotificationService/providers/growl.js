@@ -1,7 +1,4 @@
-import {
-	main as mainConfig,
-	notification as notificationConfig
-} from "config";
+import { main as mainConfig, notification as notificationConfig } from "config";
 import growly from "growly";
 import { connect } from "net";
 

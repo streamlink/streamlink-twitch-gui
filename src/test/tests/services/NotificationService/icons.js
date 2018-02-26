@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import notificationIconsMixinInjector
 // eslint-disable-next-line max-len
 	from "inject-loader?config&utils/node/platform&utils/node/resolvePath&utils/node/fs/mkdirp&utils/node/fs/clearfolder&utils/node/fs/download!services/NotificationService/icons";

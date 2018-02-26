@@ -1,12 +1,7 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	computed
-} from "@ember/object";
+import { get, computed } from "@ember/object";
 import { equal } from "@ember/object/computed";
-import {
-	streaming as streamingConfig
-} from "config";
+import { streaming as streamingConfig } from "config";
 import {
 	default as SettingsStreaming,
 	ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH as inputPassthrough
@@ -15,9 +10,7 @@ import { platform } from "utils/node/platform";
 
 
 const { providers } = streamingConfig;
-const {
-	playerInput: contentStreamingPlayerInput
-} = SettingsStreaming;
+const { playerInput: contentStreamingPlayerInput } = SettingsStreaming;
 
 
 function settingsAttrMeta( attr, prop ) {

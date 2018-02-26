@@ -1,8 +1,5 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	computed
-} from "@ember/object";
+import { get, computed } from "@ember/object";
 import { main as config } from "config";
 import metadata from "metadata";
 

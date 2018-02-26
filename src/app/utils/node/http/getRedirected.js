@@ -1,9 +1,6 @@
 import { get as httpGet } from "http";
 import { get as httpsGet } from "https";
-import {
-	parse as urlParse,
-	format as urlFormat
-} from "url";
+import { parse as urlParse, format as urlFormat } from "url";
 
 
 const MAX_REDIRECTS = 3;

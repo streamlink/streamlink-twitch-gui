@@ -1,9 +1,6 @@
 import EmberObject from "@ember/object";
 import Evented from "@ember/object/evented";
-import {
-	Menu,
-	MenuItem
-} from "nwjs/nwGui";
+import { Menu, MenuItem } from "nwjs/nwGui";
 
 
 export default EmberObject.extend( Evented, {

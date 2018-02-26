@@ -1,12 +1,6 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs,
-	triggerKeyDown
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs, triggerKeyDown } from "test-utils";
+
 import CheckBoxComponent from "components/form/CheckBoxComponent";
 
 

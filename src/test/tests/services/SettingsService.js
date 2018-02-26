@@ -1,20 +1,12 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { setupStore } from "store-utils";
 import { setOwner } from "@ember/application";
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import Adapter from "ember-data/adapter";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import { setupStore } from "store-utils";
+
 import SettingsService from "services/SettingsService";
 
 

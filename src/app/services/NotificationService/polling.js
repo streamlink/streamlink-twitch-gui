@@ -1,32 +1,12 @@
-import {
-	A as EmberNativeArray
-} from "@ember/array";
-import {
-	get,
-	set,
-	setProperties,
-	observer
-} from "@ember/object";
+import { A as EmberNativeArray } from "@ember/array";
+import { get, set, setProperties, observer } from "@ember/object";
 import Evented from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
-import {
-	cancel,
-	later
-} from "@ember/runloop";
-import {
-	inject as service
-} from "@ember/service";
-import {
-	notification as notificationConfig
-} from "config";
-import {
-	cacheClear,
-	cacheFill
-} from "./cache";
-import {
-	iconDirCreate,
-	iconDirClear
-} from "./icons";
+import { cancel, later } from "@ember/runloop";
+import { inject as service } from "@ember/service";
+import { notification as notificationConfig } from "config";
+import { cacheClear, cacheFill } from "./cache";
+import { iconDirCreate, iconDirClear } from "./icons";
 import { logError } from "./logger";
 
 

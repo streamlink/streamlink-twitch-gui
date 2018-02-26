@@ -1,11 +1,6 @@
-import {
-	A as EmberNativeArray
-} from "@ember/array";
+import { A as EmberNativeArray } from "@ember/array";
 import Component from "@ember/component";
-import {
-	get,
-	setProperties
-} from "@ember/object";
+import { get, setProperties } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { addObserver } from "@ember/object/observers";
 import layout from "templates/components/list/ContentListComponent.hbs";

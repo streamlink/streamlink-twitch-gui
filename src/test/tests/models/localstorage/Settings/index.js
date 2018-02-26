@@ -1,19 +1,14 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import { sendEvent } from "@ember/object/events";
 import { run } from "@ember/runloop";
 import attr from "ember-data/attr";
 import { fragment } from "ember-data-model-fragments/attributes";
 import Fragment from "ember-data-model-fragments/fragment";
 import ModelFragmentsInitializer from "initializers/model-fragments";
+
 import Settings from "models/localstorage/Settings";
 
 

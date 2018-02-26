@@ -1,17 +1,8 @@
-import {
-	get,
-	set
-} from "@ember/object";
-import {
-	default as Service,
-	inject as service
-} from "@ember/service";
+import { get, set } from "@ember/object";
+import { default as Service, inject as service } from "@ember/service";
 import { update } from "config";
 import { manifest } from "nwjs/App";
-import {
-	argv,
-	ARG_VERSIONCHECK
-} from "nwjs/argv";
+import { argv, ARG_VERSIONCHECK } from "nwjs/argv";
 import { getMax } from "utils/semver";
 
 

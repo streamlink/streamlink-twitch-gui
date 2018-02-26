@@ -1,14 +1,9 @@
-import {
-	module,
-	test
-} from "qunit";
-import sinon from "sinon";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import Evented from "@ember/object/evented";
 import Service from "@ember/service";
+import sinon from "sinon";
+
 import chatServiceInjector from "inject-loader?config&./providers!services/ChatService";
 
 

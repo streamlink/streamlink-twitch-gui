@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import spawnInjector from "inject-loader!services/StreamingService/spawn";
 import ExecObj from "services/StreamingService/exec-obj";
 

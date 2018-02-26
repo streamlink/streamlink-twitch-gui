@@ -1,11 +1,6 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	computed
-} from "@ember/object";
-import {
-	streaming as streamingConfig
-} from "config";
+import { get, computed } from "@ember/object";
+import { streaming as streamingConfig } from "config";
 import {
 	default as qualities,
 	qualitiesLivestreamer,

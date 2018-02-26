@@ -1,19 +1,12 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+import { EventEmitter } from "events";
 import sinon from "sinon";
-import {
-	streaming as streamingConfig
-} from "config";
+
+import { streaming as streamingConfig } from "config";
 import validateProviderInjector from "inject-loader!services/StreamingService/provider/validate";
-import {
-	LogError,
-	VersionError
-} from "services/StreamingService/errors";
+import { LogError, VersionError } from "services/StreamingService/errors";
 import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
-import { EventEmitter } from "events";
 
 
 const { validation: { providers: validationProviders } } = streamingConfig;

@@ -1,10 +1,6 @@
 import Moment from "moment";
 import { log as logConfig } from "config";
-import {
-	argv,
-	ARG_LOGFILE,
-	ARG_LOGLEVEL
-} from "nwjs/argv";
+import { argv, ARG_LOGFILE, ARG_LOGLEVEL } from "nwjs/argv";
 import { isDebug } from "nwjs/debug";
 import process from "nwjs/process";
 import denodify from "utils/node/denodify";

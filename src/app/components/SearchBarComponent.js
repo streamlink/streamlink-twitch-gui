@@ -1,19 +1,11 @@
 import Component from "@ember/component";
-import {
-	get,
-	set,
-	getWithDefault
-} from "@ember/object";
+import { get, set, getWithDefault } from "@ember/object";
 import { sort } from "@ember/object/computed";
 import { on } from "@ember/object/evented";
 import { next } from "@ember/runloop";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import $ from "jquery";
-import {
-	vars as varsConfig
-} from "config";
+import { vars as varsConfig } from "config";
 import HotkeyMixin from "./mixins/hotkey";
 import Search from "models/localstorage/Search";
 import getStreamFromUrl from "utils/getStreamFromUrl";

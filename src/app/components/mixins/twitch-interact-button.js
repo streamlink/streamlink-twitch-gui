@@ -1,18 +1,7 @@
-import {
-	get,
-	setProperties,
-	computed,
-	observer
-} from "@ember/object";
-import {
-	alias,
-	and,
-	bool
-} from "@ember/object/computed";
+import { get, setProperties, computed, observer } from "@ember/object";
+import { alias, and, bool } from "@ember/object/computed";
 import Mixin from "@ember/object/mixin";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 
 
 function switchProperty( key ) {

@@ -1,10 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+import { EventEmitter } from "events";
+
 import promiseChildProcessInjector
 	from "inject-loader?-utils/StreamOutputBuffer!utils/node/child_process/promise";
-import { EventEmitter } from "events";
 
 
 class ChildProcess extends EventEmitter {

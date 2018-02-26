@@ -1,13 +1,6 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	set,
-	computed,
-	observer
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { get, set, computed, observer } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { twitch } from "config";
 import RetryTransitionMixin from "./mixins/retry-transition";
 import wait from "utils/wait";

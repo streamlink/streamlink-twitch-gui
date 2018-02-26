@@ -1,7 +1,4 @@
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";

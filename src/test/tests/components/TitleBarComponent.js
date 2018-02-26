@@ -1,13 +1,11 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import sinon from "sinon";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver } from "test-utils";
 import Component from "@ember/component";
 import { set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
-import { buildResolver } from "test-utils";
+import sinon from "sinon";
+
 import titleBarComponentInjector
 	from "inject-loader?config&nwjs/debug!components/TitleBarComponent";
 

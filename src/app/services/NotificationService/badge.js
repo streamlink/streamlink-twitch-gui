@@ -1,16 +1,8 @@
-import {
-	get,
-	observer
-} from "@ember/object";
+import { get, observer } from "@ember/object";
 import { and } from "@ember/object/computed";
-import {
-	default as Evented,
-	on
-} from "@ember/object/evented";
+import { default as Evented, on } from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import nwWindow from "nwjs/Window";
 
 

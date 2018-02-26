@@ -1,10 +1,8 @@
 import { get } from "@ember/object";
-import {
-	default as Service,
-	inject as service
-} from "@ember/service";
+import { default as Service, inject as service } from "@ember/service";
 import { quit } from "nwjs/App";
-import nwWindow, {
+import {
+	default as nwWindow,
 	toggleVisibility,
 	toggleMaximized,
 	toggleMinimized

@@ -1,11 +1,9 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+import { EventEmitter } from "events";
+
 import notificationProviderGrowlInjector
 	from "inject-loader!services/NotificationService/providers/growl";
 import NotificationData from "services/NotificationService/data";
-import { EventEmitter } from "events";
 
 
 const config = {

@@ -11,10 +11,9 @@ const qualitiesByIdStreamlink = qualitiesStreamlink.reduce( createPresetObj, {} 
 
 
 export {
+	qualitiesStreamlink as default,
 	qualitiesLivestreamer,
 	qualitiesStreamlink,
 	qualitiesByIdLivestreamer,
 	qualitiesByIdStreamlink
 };
-
-export default qualitiesStreamlink;

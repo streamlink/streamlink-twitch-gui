@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import resolvePlayerInjector from "inject-loader!services/StreamingService/player/resolve";
 import { PlayerError } from "services/StreamingService/errors";
 import ExecObj from "services/StreamingService/exec-obj";

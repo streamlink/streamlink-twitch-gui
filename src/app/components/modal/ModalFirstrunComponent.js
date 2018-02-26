@@ -1,7 +1,5 @@
 import { get } from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import { main as config } from "config";
 import ModalDialogComponent from "./ModalDialogComponent";
 import layout from "templates/components/modal/ModalFirstrunComponent.hbs";

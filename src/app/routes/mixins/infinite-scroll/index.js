@@ -1,15 +1,6 @@
-import {
-	get,
-	set,
-	setProperties,
-	defineProperty,
-	computed
-} from "@ember/object";
+import { get, set, setProperties, defineProperty, computed } from "@ember/object";
 import Mixin from "@ember/object/mixin";
-import {
-	getNeededColumns,
-	getNeededRows
-} from "./css";
+import { getNeededColumns, getNeededRows } from "./css";
 
 
 const { min } = Math;

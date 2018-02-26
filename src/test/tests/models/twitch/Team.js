@@ -1,21 +1,10 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import {
-	setupStore,
-	adapterRequest
-} from "store-utils";
-import {
-	get,
-	set
-} from "@ember/object";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { setupStore, adapterRequest } from "store-utils";
+import { get, set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
+
 import Team from "models/twitch/Team";
 import TeamAdapter from "models/twitch/TeamAdapter";
 import TeamSerializer from "models/twitch/TeamSerializer";

@@ -1,8 +1,6 @@
 /* eslint-disable quotes */
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import Substitution from "utils/parameters/Substitution";
 
 

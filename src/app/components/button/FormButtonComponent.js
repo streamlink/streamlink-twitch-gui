@@ -1,9 +1,5 @@
 import Component from "@ember/component";
-import {
-	get,
-	set,
-	computed
-} from "@ember/object";
+import { get, set, computed } from "@ember/object";
 import { equal } from "@ember/object/computed";
 import { scheduleOnce } from "@ember/runloop";
 import layout from "templates/components/button/FormButtonComponent.hbs";

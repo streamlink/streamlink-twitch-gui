@@ -1,7 +1,5 @@
 import { get } from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import ListItemComponent from "./ListItemComponent";
 import layout from "templates/components/list/CommunityItemComponent.hbs";
 

@@ -1,19 +1,14 @@
-import {
-	module,
-	test
-} from "qunit";
-import Adapter from "ember-data/adapter";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
+import Adapter from "ember-data/adapter";
+import { EventEmitter } from "events";
+
 import Window from "models/localstorage/Window";
 import resetWindowInjector from "inject-loader!nwjs/Window/reset";
 import windowInitializerInjector
 // eslint-disable-next-line max-len
 	from "inject-loader?config&nwjs/Window&nwjs/Window/reset&nwjs/Screen&utils/node/platform!instance-initializers/nwjs/window";
-import { EventEmitter } from "events";
 
 
 let owner, env;

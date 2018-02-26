@@ -1,12 +1,7 @@
 import { getOwner } from "@ember/application";
 import { makeArray } from "@ember/array";
-import {
-	get,
-	set
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { get, set } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 

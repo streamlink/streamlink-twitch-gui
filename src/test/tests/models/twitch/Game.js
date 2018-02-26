@@ -1,13 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
 import { get } from "@ember/object";
+
 import Game from "models/twitch/Game";
 import GameSerializer from "models/twitch/GameSerializer";
 import imageInjector from "inject-loader?config!models/twitch/Image";

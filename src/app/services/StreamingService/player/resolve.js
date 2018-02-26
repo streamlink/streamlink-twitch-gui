@@ -1,6 +1,4 @@
-import {
-	players as playersConfData
-} from "config";
+import { players as playersConfData } from "config";
 import { logDebug } from "../logger";
 import { playerCache } from "../cache";
 import { PlayerError } from "../errors";

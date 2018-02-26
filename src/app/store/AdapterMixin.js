@@ -2,10 +2,7 @@ import { get } from "@ember/object";
 import Evented from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
 import { isNone } from "@ember/utils";
-import {
-	AdapterError,
-	InvalidError
-} from "ember-data/adapters/errors";
+import { AdapterError, InvalidError } from "ember-data/adapters/errors";
 
 
 const reURL = /^[a-z]+:\/\/([\w.]+)\/(.+)$/i;

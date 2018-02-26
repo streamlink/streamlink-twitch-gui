@@ -1,6 +1,4 @@
-import {
-	notification as notificationConfig
-} from "config";
+import { notification as notificationConfig } from "config";
 import NotificationStreamCacheItem from "./item";
 
 

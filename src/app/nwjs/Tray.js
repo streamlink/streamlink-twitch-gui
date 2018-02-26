@@ -1,18 +1,13 @@
-import {
-	main,
-	files
-} from "config";
+import { main, files } from "config";
 import { Tray } from "nwjs/nwGui";
 import Menu from "nwjs/Menu";
-import nwWindow, {
+import {
+	default as nwWindow,
 	getVisibility,
 	toggleVisibility,
 	setShowInTaskbar
 } from "nwjs/Window";
-import {
-	platform,
-	isWin
-} from "utils/node/platform";
+import { platform, isWin } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 
 

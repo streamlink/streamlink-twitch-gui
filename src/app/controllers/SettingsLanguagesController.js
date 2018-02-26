@@ -1,18 +1,10 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	set,
-	computed
-} from "@ember/object";
-import {
-	langs as langsConfig
-} from "config";
+import { get, set, computed } from "@ember/object";
+import { langs as langsConfig } from "config";
 import SettingsStreams from "models/localstorage/Settings/streams";
 
 
-const {
-	filterLanguages: contentStreamsFilterLanguages
-} = SettingsStreams;
+const { filterLanguages: contentStreamsFilterLanguages } = SettingsStreams;
 
 
 export default Controller.extend({

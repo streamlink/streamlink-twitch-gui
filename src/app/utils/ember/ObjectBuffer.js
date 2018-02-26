@@ -2,11 +2,7 @@
  * Based on https://github.com/movableink/buffered-proxy
  * Written by Kris Selden for Yapp Labs, published by Luke Melia
  */
-import {
-	get,
-	set,
-	setProperties
-} from "@ember/object";
+import { get, set, setProperties } from "@ember/object";
 import ObjectProxy from "@ember/object/proxy";
 
 

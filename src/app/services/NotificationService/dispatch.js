@@ -1,16 +1,8 @@
 import { get } from "@ember/object";
-import {
-	default as Evented,
-	on
-} from "@ember/object/evented";
+import { default as Evented, on } from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
-import {
-	inject as service
-} from "@ember/service";
-import {
-	iconGroup,
-	iconDownload
-} from "./icons";
+import { inject as service } from "@ember/service";
+import { iconGroup, iconDownload } from "./icons";
 import { logDebug } from "./logger";
 import NotificationData from "./data";
 import { showNotification } from "./provider";
@@ -20,11 +12,7 @@ import {
 	ATTR_NOTIFY_CLICK_STREAM,
 	ATTR_NOTIFY_CLICK_STREAMANDCHAT
 } from "models/localstorage/Settings/notification";
-import {
-	setMinimized,
-	setVisibility,
-	setFocused
-} from "nwjs/Window";
+import { setMinimized, setVisibility, setFocused } from "nwjs/Window";
 
 
 export default Mixin.create( Evented, {

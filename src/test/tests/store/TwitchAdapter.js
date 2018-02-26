@@ -1,16 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import {
-	setupStore,
-	adapterRequest
-} from "store-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { setupStore, adapterRequest } from "store-utils";
 import Service from "@ember/service";
+
 import TwitchAdapter from "store/TwitchAdapter";
 import Stream from "models/twitch/Stream";
 import StreamAdapter from "models/twitch/StreamAdapter";

@@ -1,26 +1,11 @@
-import {
-	get,
-	set,
-	computed,
-	observer
-} from "@ember/object";
-import {
-	alias,
-	not
-} from "@ember/object/computed";
-import {
-	inject as service
-} from "@ember/service";
+import { get, set, computed, observer } from "@ember/object";
+import { alias, not } from "@ember/object/computed";
+import { inject as service } from "@ember/service";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
-import {
-	twitch as twitchConfig
-} from "config";
-import {
-	qualitiesByIdLivestreamer,
-	qualitiesByIdStreamlink
-} from "models/stream/qualities";
+import { twitch as twitchConfig } from "config";
+import { qualitiesByIdLivestreamer, qualitiesByIdStreamlink } from "models/stream/qualities";
 
 
 const {

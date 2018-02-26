@@ -1,16 +1,11 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+import { EventEmitter } from "events";
+import { posix, win32 } from "path";
+
 import readLinesInjector from "inject-loader?fs!utils/node/fs/readLines";
 import findPythonscriptInterpreterInjector
 	from "inject-loader!services/StreamingService/provider/find-pythonscript-interpreter";
 import ExecObj from "services/StreamingService/exec-obj";
-import { EventEmitter } from "events";
-import {
-	posix,
-	win32
-} from "path";
 
 
 const { assign } = Object;

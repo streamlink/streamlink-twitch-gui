@@ -1,14 +1,7 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	computed
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
-import {
-	chat as chatConfig
-} from "config";
+import { get, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
+import { chat as chatConfig } from "config";
 import { providers } from "models/localstorage/Settings/chatProvider";
 import ChatProviderBasic from "services/ChatService/providers/-basic";
 import { platform } from "utils/node/platform";

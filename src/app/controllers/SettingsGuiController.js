@@ -1,9 +1,5 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	set,
-	observer
-} from "@ember/object";
+import { get, set, observer } from "@ember/object";
 import { equal } from "@ember/object/computed";
 import {
 	default as SettingsGui,

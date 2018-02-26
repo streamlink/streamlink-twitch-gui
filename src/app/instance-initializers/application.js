@@ -1,13 +1,8 @@
 import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
 import $ from "jquery";
-import {
-	themes as themesConfig
-} from "config";
-import {
-	enable as enableSmoothScroll,
-	disable as disableSmoothScroll
-} from "smoothscroll";
+import { themes as themesConfig } from "config";
+import { enable as enableSmoothScroll, disable as disableSmoothScroll } from "smoothscroll";
 
 
 const { themes: themesList } = themesConfig;

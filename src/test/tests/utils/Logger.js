@@ -1,9 +1,7 @@
-import {
-	module,
-	test
-} from "qunit";
-import loggerInjector from "inject-loader?-Moment&-utils/node/denodify!utils/Logger";
+import { module, test } from "qunit";
 import { posix as path } from "path";
+
+import loggerInjector from "inject-loader?-Moment&-utils/node/denodify!utils/Logger";
 
 
 const mockArgv = argv => ({

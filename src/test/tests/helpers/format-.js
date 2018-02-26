@@ -1,11 +1,6 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
+
 import FormatViewersHelper from "helpers/FormatViewersHelper";
 import FormatTimeHelper from "helpers/FormatTimeHelper";
 

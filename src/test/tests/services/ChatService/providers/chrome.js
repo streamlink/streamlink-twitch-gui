@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import chatProviderChromeInjector from "inject-loader!services/ChatService/providers/chrome";
 
 

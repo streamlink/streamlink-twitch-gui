@@ -1,13 +1,7 @@
-import {
-	main as mainConfig,
-	notification as notificationConfig
-} from "config";
+import { main as mainConfig, notification as notificationConfig } from "config";
 import Process from "nwjs/process";
 import promiseChildprocess from "utils/node/child_process/promise";
-import {
-	is64bit,
-	isWinGte8
-} from "utils/node/platform";
+import { is64bit, isWinGte8 } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 import which from "utils/node/fs/which";
 import snoretoastBinaries from "snoretoast-binaries";

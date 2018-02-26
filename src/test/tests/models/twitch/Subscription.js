@@ -1,16 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import {
-	setupStore,
-	adapterRequest
-} from "store-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { setupStore, adapterRequest } from "store-utils";
 import Service from "@ember/service";
+
 import Subscription from "models/twitch/Subscription";
 import SubscriptionSerializer from "models/twitch/SubscriptionSerializer";
 import Channel from "models/twitch/Channel";

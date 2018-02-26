@@ -1,8 +1,6 @@
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
-import {
-	langs as langsConfig
-} from "config";
+import { langs as langsConfig } from "config";
 
 
 const attributes = {};

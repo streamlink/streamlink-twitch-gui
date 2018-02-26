@@ -1,9 +1,5 @@
 import minimist from "minimist";
-import {
-	argv as appArgv,
-	filteredArgv,
-	manifest
-} from "nwjs/App";
+import { argv as appArgv, filteredArgv, manifest } from "nwjs/App";
 import Parameter from "utils/parameters/Parameter";
 import ParameterCustom from "utils/parameters/ParameterCustom";
 

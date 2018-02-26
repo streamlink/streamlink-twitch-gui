@@ -1,20 +1,12 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
 import RESTAdapter from "ember-data/adapters/rest";
+
 import notificationPollingMixinInjector
 	from "inject-loader?config&./cache&./icons&./logger!services/NotificationService/polling";
 import StreamFollowed from "models/twitch/StreamFollowed";

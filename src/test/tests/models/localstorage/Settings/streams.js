@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import { DEFAULT_VODCAST_REGEXP } from "models/localstorage/Settings/streams";
 
 

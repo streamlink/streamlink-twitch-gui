@@ -1,20 +1,7 @@
-import {
-	get,
-	set,
-	computed
-} from "@ember/object";
-import {
-	alias,
-	and,
-	equal,
-	notEmpty,
-	or
-} from "@ember/object/computed";
+import { get, set, computed } from "@ember/object";
+import { alias, and, equal, notEmpty, or } from "@ember/object/computed";
 import { on } from "@ember/object/evented";
-import {
-	cancel,
-	later
-} from "@ember/runloop";
+import { cancel, later } from "@ember/runloop";
 import ListItemComponent from "./ListItemComponent";
 import {
 	ATTR_STREAMS_INFO_GAME,

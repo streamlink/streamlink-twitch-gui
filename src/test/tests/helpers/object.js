@@ -1,11 +1,6 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
+
 import GetParamHelper from "helpers/GetParamHelper";
 import GetIndexHelper from "helpers/GetIndexHelper";
 

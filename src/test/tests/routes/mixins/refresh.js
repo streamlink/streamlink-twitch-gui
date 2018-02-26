@@ -1,21 +1,12 @@
-import {
-	module,
-	test
-} from "qunit";
-import sinon from "sinon";
-import {
-	runDestroy,
-	buildOwner
-} from "test-utils";
-import {
-	default as EmberObject,
-	set,
-	computed
-} from "@ember/object";
+import { module, test } from "qunit";
+import { runDestroy, buildOwner } from "test-utils";
+import { default as EmberObject, set, computed } from "@ember/object";
 import { sendEvent } from "@ember/object/events";
 import Service from "@ember/service";
-import refreshMixinInjector from "inject-loader?nwjs/Window!routes/mixins/refresh";
 import { EventEmitter } from "events";
+import sinon from "sinon";
+
+import refreshMixinInjector from "inject-loader?nwjs/Window!routes/mixins/refresh";
 
 
 const { hasOwnProperty } = {};

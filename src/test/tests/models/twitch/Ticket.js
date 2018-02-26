@@ -1,18 +1,10 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import {
-	setupStore,
-	adapterRequest
-} from "store-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { setupStore, adapterRequest } from "store-utils";
 import Service from "@ember/service";
 import Model from "ember-data/model";
 import RESTSerializer from "ember-data/serializers/rest";
+
 import Ticket from "models/twitch/Ticket";
 import TicketSerializer from "models/twitch/TicketSerializer";
 import Product from "models/twitch/Product";

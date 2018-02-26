@@ -1,6 +1,4 @@
-import {
-	twitch as twitchConfig
-} from "config";
+import { twitch as twitchConfig } from "config";
 import launch from "../launch";
 import Parameter from "utils/parameters/Parameter";
 

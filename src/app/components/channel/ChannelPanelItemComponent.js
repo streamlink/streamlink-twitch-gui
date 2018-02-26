@@ -1,7 +1,5 @@
 import { get } from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import EmbeddedHtmlLinksComponent from "../link/EmbeddedHtmlLinksComponent";
 import Menu from "nwjs/Menu";
 import { openBrowser } from "nwjs/Shell";

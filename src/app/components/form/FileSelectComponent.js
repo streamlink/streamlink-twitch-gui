@@ -1,9 +1,5 @@
 import Component from "@ember/component";
-import {
-	get,
-	set,
-	computed
-} from "@ember/object";
+import { get, set, computed } from "@ember/object";
 import { on } from "@ember/object/evented";
 import $ from "jquery";
 import { platform } from "utils/node/platform";

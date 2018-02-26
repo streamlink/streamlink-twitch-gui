@@ -1,8 +1,6 @@
 import Fragment from "ember-data-model-fragments/fragment";
 import { fragment } from "ember-data-model-fragments/attributes";
-import {
-	streaming as streamingConfig
-} from "config";
+import { streaming as streamingConfig } from "config";
 
 
 const { providers } = streamingConfig;

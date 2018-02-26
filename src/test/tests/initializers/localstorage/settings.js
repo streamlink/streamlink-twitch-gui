@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import updateSettingsInjector from "inject-loader?-./utils!initializers/localstorage/settings";
 
 

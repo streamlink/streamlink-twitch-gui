@@ -1,16 +1,8 @@
 import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
-import nwApp, {
-	quit
-} from "nwjs/App";
-import nwWindow, {
-	setVisibility,
-	setFocused
-} from "nwjs/Window";
-import {
-	argv,
-	parseCommand
-} from "nwjs/argv";
+import { default as nwApp, quit } from "nwjs/App";
+import { default as nwWindow, setVisibility, setFocused } from "nwjs/Window";
+import { argv, parseCommand } from "nwjs/argv";
 import platformfixes from "./platformfixes";
 import { createNativeMenuBar } from "./menubar";
 import onChangeIntegrations from "./integrations";

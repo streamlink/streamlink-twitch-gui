@@ -1,18 +1,9 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
-import {
-	get,
-	set,
-	setProperties
-} from "@ember/object";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
+import { get, set, setProperties } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
+
 import StreamItemComponent from "components/list/StreamItemComponent";
 
 

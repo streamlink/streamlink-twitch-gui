@@ -1,14 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
 import sinon from "sinon";
-import {
-	default as EmberObject,
-	get,
-	getProperties,
-	setProperties
-} from "@ember/object";
+import { default as EmberObject, get, getProperties, setProperties } from "@ember/object";
+import { EventEmitter } from "events";
+
 import launchProviderInjector
 // eslint-disable-next-line max-len
 	from "inject-loader?../is-aborted&../spawn&../provider/parameters&./parse-error&utils/parameters/Parameter!services/StreamingService/launch";
@@ -17,7 +11,6 @@ import {
 	ExitSignalError,
 	Warning
 } from "services/StreamingService/errors";
-import { EventEmitter } from "events";
 
 
 module( "services/StreamingService/launch/index", {

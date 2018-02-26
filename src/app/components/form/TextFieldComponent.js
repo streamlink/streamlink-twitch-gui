@@ -1,9 +1,6 @@
 import TextField from "@ember/component/text-field";
 import Menu from "nwjs/Menu";
-import {
-	get as getClipboard,
-	set as setClipboard
-} from "nwjs/Clipboard";
+import { get as getClipboard, set as setClipboard } from "nwjs/Clipboard";
 
 
 export default TextField.extend({

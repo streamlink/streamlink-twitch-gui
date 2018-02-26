@@ -1,19 +1,11 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import sinon from "sinon";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, runDestroy } from "test-utils";
 import { A as EmberNativeArray } from "@ember/array";
-import {
-	set,
-	setProperties
-} from "@ember/object";
+import { set, setProperties } from "@ember/object";
 import { run } from "@ember/runloop";
 import $ from "jquery";
-import {
-	buildResolver,
-	runDestroy
-} from "test-utils";
+import sinon from "sinon";
+
 import DropDownListComponent from "components/form/DropDownComponent/list";
 import IsEqualHelper from "helpers/IsEqualHelper";
 

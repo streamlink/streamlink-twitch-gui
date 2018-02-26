@@ -1,12 +1,6 @@
 import { getOwner } from "@ember/application";
-import {
-	get,
-	set,
-	computed
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { get, set, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
 import FormButtonComponent from "../button/FormButtonComponent";
 
 

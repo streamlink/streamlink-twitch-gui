@@ -1,11 +1,6 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
+
 import BoolNotHelper from "helpers/BoolNotHelper";
 import BoolAndHelper from "helpers/BoolAndHelper";
 import BoolOrHelper from "helpers/BoolOrHelper";

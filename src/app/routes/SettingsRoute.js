@@ -1,11 +1,6 @@
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import Route from "@ember/routing/route";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 

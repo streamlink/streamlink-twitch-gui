@@ -1,8 +1,6 @@
 import { makeArray } from "@ember/array";
 import { get } from "@ember/object";
-import {
-	window as Window
-} from "nwjs/Window";
+import { window as Window } from "nwjs/Window";
 
 
 const { Image } = Window;

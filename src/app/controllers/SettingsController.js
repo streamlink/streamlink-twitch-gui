@@ -1,11 +1,6 @@
 import Controller from "@ember/controller";
-import {
-	get,
-	set
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { get, set } from "@ember/object";
+import { inject as service } from "@ember/service";
 import RetryTransitionMixin from "./mixins/retry-transition";
 
 

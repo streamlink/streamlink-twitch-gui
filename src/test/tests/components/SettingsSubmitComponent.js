@@ -1,13 +1,8 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import sinon from "sinon";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
 import Component from "@ember/component";
+import sinon from "sinon";
+
 import SettingsSubmitComponent from "components/SettingsSubmitComponent";
 
 

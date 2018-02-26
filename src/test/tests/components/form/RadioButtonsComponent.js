@@ -1,14 +1,8 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs, triggerKeyDown } from "test-utils";
 import { run } from "@ember/runloop";
 import $ from "jquery";
-import {
-	buildResolver,
-	hbs,
-	triggerKeyDown
-} from "test-utils";
+
 import RadioButtonsComponent from "components/form/RadioButtonsComponent";
 import RadioButtonsItemComponent from "components/form/RadioButtonsComponent/item";
 import IsEqualHelper from "helpers/IsEqualHelper";

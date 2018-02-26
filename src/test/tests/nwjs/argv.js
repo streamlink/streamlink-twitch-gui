@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import argvInjector from "inject-loader?nwjs/App!nwjs/argv";
 
 

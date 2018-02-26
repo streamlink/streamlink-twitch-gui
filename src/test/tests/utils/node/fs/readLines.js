@@ -1,9 +1,7 @@
-import {
-	module,
-	test
-} from "qunit";
-import readLinesInjector from "inject-loader?fs!utils/node/fs/readLines";
+import { module, test } from "qunit";
 import { EventEmitter } from "events";
+
+import readLinesInjector from "inject-loader?fs!utils/node/fs/readLines";
 
 
 module( "utils/node/fs/readLines" );

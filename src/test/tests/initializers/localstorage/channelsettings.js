@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import updateChannelSettingsInjector
 	from "inject-loader?-./utils!initializers/localstorage/channelsettings";
 

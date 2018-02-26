@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import whichInjector from "inject-loader!utils/node/fs/which";
 
 

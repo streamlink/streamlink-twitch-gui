@@ -1,11 +1,6 @@
-import {
-	get,
-	set,
-	computed,
-	default as EmberObject
-} from "@ember/object";
-import ObjectProxy from "@ember/object/proxy";
+import { default as EmberObject, get, set, computed } from "@ember/object";
 import PromiseProxyMixin from "@ember/object/promise-proxy-mixin";
+import ObjectProxy from "@ember/object/proxy";
 import SettingsSubmenuRoute from "./SettingsSubmenuRoute";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import preload from "utils/preload";

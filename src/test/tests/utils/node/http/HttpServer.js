@@ -1,9 +1,7 @@
-import {
-	module,
-	test
-} from "qunit";
-import httpServerInjector from "inject-loader?http!utils/node/http/HttpServer";
+import { module, test } from "qunit";
 import { EventEmitter } from "events";
+
+import httpServerInjector from "inject-loader?http!utils/node/http/HttpServer";
 
 
 class FakeHttpServer extends EventEmitter {

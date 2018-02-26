@@ -1,14 +1,9 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import sinon from "sinon";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
 import Component from "@ember/component";
 import { run } from "@ember/runloop";
+import sinon from "sinon";
+
 import {
 	default as FormButtonComponent,
 	STATE_SUCCESS,

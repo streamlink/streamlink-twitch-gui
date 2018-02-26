@@ -1,20 +1,15 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
 import { set } from "@ember/object";
 import Service from "@ember/service";
 import RESTAdapter from "ember-data/adapters/rest";
 import Model from "ember-data/model";
 import RESTSerializer from "ember-data/serializers/rest";
-import AdapterMixin from "store/AdapterMixin";
+
 import notificationFollowMixinInjector
 	from "inject-loader?./cache!services/NotificationService/follow";
+import AdapterMixin from "store/AdapterMixin";
 
 
 let owner, env;

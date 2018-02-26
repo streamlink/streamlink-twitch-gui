@@ -1,14 +1,9 @@
-import {
-	module,
-	test
-} from "qunit";
-import sinon from "sinon";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import { set } from "@ember/object";
 import Service from "@ember/service";
+import sinon from "sinon";
+
 import notificationServiceDispatchMixinInjector
 // eslint-disable-next-line max-len
 	from "inject-loader?./icons&./logger&./provider&nwjs/Window!services/NotificationService/dispatch";

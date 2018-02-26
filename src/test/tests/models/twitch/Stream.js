@@ -1,22 +1,10 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
-import {
-	setupStore,
-	adapterRequest
-} from "store-utils";
-import {
-	get,
-	set,
-	setProperties
-} from "@ember/object";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
+import { setupStore, adapterRequest } from "store-utils";
+import { get, set, setProperties } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
+
 import Stream from "models/twitch/Stream";
 import StreamAdapter from "models/twitch/StreamAdapter";
 import StreamSerializer from "models/twitch/StreamSerializer";

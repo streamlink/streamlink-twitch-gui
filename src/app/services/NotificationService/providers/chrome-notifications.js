@@ -1,6 +1,4 @@
-import {
-	window as Window
-} from "nwjs/Window";
+import { window as Window } from "nwjs/Window";
 
 
 const notifications = Window.chrome.notifications;

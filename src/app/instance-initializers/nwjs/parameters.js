@@ -7,16 +7,9 @@ import {
 	ARG_LAUNCH,
 	ARG_GOTO
 } from "nwjs/argv";
-import {
-	setMaximized,
-	setMinimized,
-	setVisibility
-} from "nwjs/Window";
+import { setMaximized, setMinimized, setVisibility } from "nwjs/Window";
 import resetWindow from "nwjs/Window/reset";
-import {
-	setShowInTray,
-	hideOnClick
-} from "nwjs/Tray";
+import { setShowInTray, hideOnClick } from "nwjs/Tray";
 import onChangeIntegrations from "./integrations";
 
 

@@ -1,11 +1,5 @@
-import {
-	get,
-	computed
-} from "@ember/object";
-import {
-	alias,
-	and
-} from "@ember/object/computed";
+import { get, computed } from "@ember/object";
+import { alias, and } from "@ember/object/computed";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "./FormButtonComponent";

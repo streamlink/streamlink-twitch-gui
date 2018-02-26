@@ -1,7 +1,5 @@
 import { manifest } from "nwjs/App";
-import nwWindow, {
-	setMaximized
-} from "nwjs/Window";
+import { default as nwWindow, setMaximized } from "nwjs/Window";
 import nwScreen from "nwjs/Screen";
 
 

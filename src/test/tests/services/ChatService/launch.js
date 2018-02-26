@@ -1,10 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
-import sinon from "sinon";
-import launchInjector from "inject-loader!services/ChatService/launch";
+import { module, test } from "qunit";
 import { EventEmitter } from "events";
+import sinon from "sinon";
+
+import launchInjector from "inject-loader!services/ChatService/launch";
 
 
 module( "services/ChatService/launch", {

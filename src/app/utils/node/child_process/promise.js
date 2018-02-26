@@ -1,6 +1,4 @@
-import {
-	window as Window
-} from "nwjs/Window";
+import { window as Window } from "nwjs/Window";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 import onShutdown from "utils/node/onShutdown";
 import { spawn } from "child_process";

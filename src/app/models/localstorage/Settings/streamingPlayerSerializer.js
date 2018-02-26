@@ -1,8 +1,5 @@
 import PolymorphicFragmentSerializer from "store/PolymorphicFragmentSerializer";
-import {
-	players,
-	typeKey
-} from "./streamingPlayer";
+import { players, typeKey } from "./streamingPlayer";
 
 
 export default PolymorphicFragmentSerializer.extend({

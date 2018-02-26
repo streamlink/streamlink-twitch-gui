@@ -1,18 +1,10 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, cleanOutput, hbs } from "test-utils";
 import Component from "@ember/component";
 import { get } from "@ember/object";
 import { run } from "@ember/runloop";
-import {
-	inject as service
-} from "@ember/service";
-import {
-	buildResolver,
-	cleanOutput,
-	hbs
-} from "test-utils";
+import { inject as service } from "@ember/service";
+
 import ModalService from "services/ModalService";
 import ModalServiceComponent from "components/modal/ModalServiceComponent";
 

@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import instanceInitializerInjector from "inject-loader!initializers/localstorage";
 
 

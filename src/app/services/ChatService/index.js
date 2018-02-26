@@ -1,15 +1,7 @@
-import {
-	get,
-	getProperties
-} from "@ember/object";
+import { get, getProperties } from "@ember/object";
 import { on } from "@ember/object/evented";
-import {
-	default as Service,
-	inject as service
-} from "@ember/service";
-import {
-	chat as chatConfig
-} from "config";
+import { default as Service, inject as service } from "@ember/service";
+import { chat as chatConfig } from "config";
 import providers from "./providers";
 
 

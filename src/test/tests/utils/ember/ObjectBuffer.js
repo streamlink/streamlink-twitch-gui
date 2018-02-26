@@ -1,14 +1,7 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	default as EmberObject,
-	get,
-	set,
-	getProperties
-} from "@ember/object";
+import { module, test } from "qunit";
+import { default as EmberObject, get, set, getProperties } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
+
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 

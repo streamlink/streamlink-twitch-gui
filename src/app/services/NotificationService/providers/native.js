@@ -1,8 +1,5 @@
 import NotificationProviderChromeNotifications from "./chrome-notifications";
-import {
-	isDarwin,
-	isLinux
-} from "utils/node/platform";
+import { isDarwin, isLinux } from "utils/node/platform";
 
 
 /**

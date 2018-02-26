@@ -1,10 +1,5 @@
-import {
-	streaming as streamingConfig
-} from "config";
-import {
-	LogError,
-	VersionError
-} from "../errors";
+import { streaming as streamingConfig } from "config";
+import { LogError, VersionError } from "../errors";
 import spawn from "../spawn";
 import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";

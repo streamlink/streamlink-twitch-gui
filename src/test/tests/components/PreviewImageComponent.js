@@ -1,14 +1,9 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
 import { scheduleOnce } from "@ember/runloop";
-import PreviewImageComponent from "components/PreviewImageComponent";
 import transparentImage from "transparent-image";
+
+import PreviewImageComponent from "components/PreviewImageComponent";
 
 
 moduleForComponent( "components/PreviewImageComponent", {

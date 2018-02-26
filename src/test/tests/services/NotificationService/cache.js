@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import CacheItem from "services/NotificationService/cache/item";
 import cacheInjector from "inject-loader?config!services/NotificationService/cache";
 

@@ -1,10 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
-import sinon from "sinon";
-import appInjector from "inject-loader!nwjs/App";
+import { module, test } from "qunit";
 import { EventEmitter } from "events";
+import sinon from "sinon";
+
+import appInjector from "inject-loader!nwjs/App";
 
 
 module( "nwjs/App" );

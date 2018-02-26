@@ -1,7 +1,4 @@
-import {
-	get,
-	computed
-} from "@ember/object";
+import { get, computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 

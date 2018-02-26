@@ -1,7 +1,4 @@
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import Router from "@ember/routing/router";
 

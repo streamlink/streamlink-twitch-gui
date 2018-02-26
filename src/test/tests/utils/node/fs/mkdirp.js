@@ -1,13 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
-import mkdirpInjector from "inject-loader!utils/node/fs/mkdirp";
+import { module, test } from "qunit";
+import { R_OK, W_OK } from "fs";
 import { posix as path } from "path";
-import {
-	R_OK,
-	W_OK
-} from "fs";
+
+import mkdirpInjector from "inject-loader!utils/node/fs/mkdirp";
 
 
 module( "utils/node/fs/mkdirp" );

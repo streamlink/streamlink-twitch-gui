@@ -1,12 +1,7 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
+
 import ProductEmoticon from "models/twitch/ProductEmoticon";
 import ProductEmoticonSerializer from "models/twitch/ProductEmoticonSerializer";
 import TwitchProductEmoticonFixtures from "fixtures/models/twitch/ProductEmoticon.json";

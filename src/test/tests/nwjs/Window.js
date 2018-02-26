@@ -1,9 +1,7 @@
-import {
-	module,
-	test
-} from "qunit";
-import nwWindowInjector from "inject-loader!nwjs/Window";
+import { module, test } from "qunit";
 import { EventEmitter } from "events";
+
+import nwWindowInjector from "inject-loader!nwjs/Window";
 
 
 class Window extends EventEmitter {

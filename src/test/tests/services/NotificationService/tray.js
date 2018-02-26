@@ -1,18 +1,10 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	buildOwner,
-	runDestroy
-} from "test-utils";
+import { module, test } from "qunit";
+import { buildOwner, runDestroy } from "test-utils";
 import { A as EmberNativeArray } from "@ember/array";
-import {
-	get,
-	set
-} from "@ember/object";
+import { get, set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
+
 import notificationServiceTrayMixinInjector
 	from "inject-loader?nwjs/Tray!services/NotificationService/tray";
 

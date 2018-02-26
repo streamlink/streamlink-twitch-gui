@@ -1,8 +1,5 @@
 import Component from "@ember/component";
-import {
-	get,
-	computed
-} from "@ember/object";
+import { get, computed } from "@ember/object";
 import layout from "templates/components/SettingsRowComponent.hbs";
 
 

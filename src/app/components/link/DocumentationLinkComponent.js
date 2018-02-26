@@ -1,20 +1,11 @@
-import {
-	get,
-	computed
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
-import {
-	streaming as streamingConfig
-} from "config";
+import { get, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
+import { streaming as streamingConfig } from "config";
 import ExternalLinkComponent from "./ExternalLinkComponent";
 import layout from "templates/components/link/DocumentationLinkComponent.hbs";
 
 
-const {
-	"docs-url": docsUrl
-} = streamingConfig;
+const { "docs-url": docsUrl } = streamingConfig;
 
 
 export default ExternalLinkComponent.extend({

@@ -1,15 +1,8 @@
 import Component from "@ember/component";
-import {
-	get,
-	computed
-} from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { get, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
 import Menu from "nwjs/Menu";
-import {
-	set as setClipboard
-} from "nwjs/Clipboard";
+import { set as setClipboard } from "nwjs/Clipboard";
 import {
 	ATTR_STREAMS_CLICK_NOOP,
 	ATTR_STREAMS_CLICK_LAUNCH,

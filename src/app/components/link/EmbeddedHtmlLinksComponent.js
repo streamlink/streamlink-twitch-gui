@@ -1,8 +1,6 @@
 import Component from "@ember/component";
 import { get } from "@ember/object";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import $ from "jquery";
 import { set as setClipboard } from "nwjs/Clipboard";
 import Menu from "nwjs/Menu";

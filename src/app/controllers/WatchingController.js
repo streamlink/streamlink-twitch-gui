@@ -1,9 +1,7 @@
 import Controller from "@ember/controller";
 import { get } from "@ember/object";
 import { sort } from "@ember/object/computed";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import qualities from "models/stream/qualities";
 
 

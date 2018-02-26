@@ -1,14 +1,9 @@
-import {
-	moduleForComponent,
-	test
-} from "ember-qunit";
-import sinon from "sinon";
-import {
-	buildResolver,
-	hbs
-} from "test-utils";
+import { moduleForComponent, test } from "ember-qunit";
+import { buildResolver, hbs } from "test-utils";
 import Component from "@ember/component";
 import $ from "jquery";
+import sinon from "sinon";
+
 import HotkeyMixin from "components/mixins/hotkey";
 import HotkeyService from "services/HotkeyService";
 

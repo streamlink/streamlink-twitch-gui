@@ -1,8 +1,5 @@
 import PolymorphicFragmentSerializer from "store/PolymorphicFragmentSerializer";
-import {
-	providers,
-	typeKey
-} from "./chatProvider";
+import { providers, typeKey } from "./chatProvider";
 
 
 export default PolymorphicFragmentSerializer.extend({

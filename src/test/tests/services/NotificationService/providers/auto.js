@@ -1,7 +1,5 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
+
 import NotificationProviderAuto from "services/NotificationService/providers/auto";
 
 

@@ -1,11 +1,6 @@
-import {
-	get,
-	computed
-} from "@ember/object";
+import { get, computed } from "@ember/object";
 import { and } from "@ember/object/computed";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";

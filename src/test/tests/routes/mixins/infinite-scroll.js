@@ -1,16 +1,8 @@
-import {
-	module,
-	test
-} from "qunit";
+import { module, test } from "qunit";
 import { A as EmberNativeArray } from "@ember/array";
-import {
-	default as EmberObject,
-	get,
-	getProperties,
-	set,
-	setProperties
-} from "@ember/object";
+import { default as EmberObject, get, getProperties, set, setProperties } from "@ember/object";
 import Route from "@ember/routing/route";
+
 import cssInfiniteScrollMixinInjector from "inject-loader!routes/mixins/infinite-scroll/css";
 import infiniteScrollMixinInjector from "inject-loader?./css!routes/mixins/infinite-scroll";
 

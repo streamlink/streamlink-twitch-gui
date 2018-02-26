@@ -1,12 +1,6 @@
-import {
-	module,
-	test
-} from "qunit";
-import {
-	tokenize as t,
-	getMax as m,
-	sort as s
-} from "utils/semver";
+import { module, test } from "qunit";
+
+import { tokenize as t, getMax as m, sort as s } from "utils/semver";
 
 
 module( "utils/semver" );

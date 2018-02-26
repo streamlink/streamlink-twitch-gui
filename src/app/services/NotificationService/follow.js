@@ -1,9 +1,7 @@
 import { get } from "@ember/object";
 import { on } from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
-import {
-	inject as service
-} from "@ember/service";
+import { inject as service } from "@ember/service";
 import { cacheAdd } from "./cache";
 
 

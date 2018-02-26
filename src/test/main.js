@@ -1,7 +1,5 @@
 import "shim";
-import QUnit, {
-	config
-} from "qunit";
+import { default as QUnit, config } from "qunit";
 import "qunit/assertion-helpers";
 import "ember-test";
 

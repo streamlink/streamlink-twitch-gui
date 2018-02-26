@@ -1,15 +1,6 @@
-import {
-	get,
-	set,
-	getProperties,
-	setProperties,
-	computed
-} from "@ember/object";
+import { get, set, getProperties, setProperties, computed } from "@ember/object";
 import Evented from "@ember/object/evented";
-import {
-	default as Service,
-	inject as service
-} from "@ember/service";
+import { default as Service, inject as service } from "@ember/service";
 import { twitch } from "config";
 import { setFocused } from "nwjs/Window";
 import { openBrowser } from "nwjs/Shell";

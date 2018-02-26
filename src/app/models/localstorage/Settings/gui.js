@@ -1,12 +1,7 @@
-import {
-	get,
-	computed
-} from "@ember/object";
+import { get, computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
-import {
-	themes as themesConfig
-} from "config";
+import { themes as themesConfig } from "config";
 
 
 const defaultTheme = themesConfig.themes[0];
