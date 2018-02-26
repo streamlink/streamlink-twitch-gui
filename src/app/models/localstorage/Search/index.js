@@ -20,15 +20,15 @@ export default Model.extend({
 	toString() { return "Search"; },
 
 	filters: [
-		{ label: "All", value: "all" },
-		{ label: "Game", value: "games" },
-		{ label: "Channel", value: "channels" },
-		{ label: "Stream", value: "streams" }
+		{ label: "All", id: "all" },
+		{ label: "Game", id: "games" },
+		{ label: "Channel", id: "channels" },
+		{ label: "Stream", id: "streams" }
 	],
 
 	filtersmap: computed(function() {
-		return this.filters.reduce(function( map, filter ) {
-			map[ filter.value ] = filter;
+		return this.filters.reduce( ( map, filter ) => {
+			map[ filter.id ] = filter;
 			return map;
 		}, {} );
 	}),
