@@ -9,6 +9,7 @@ import {
 	set
 } from "@ember/object";
 import { sendEvent } from "@ember/object/events";
+import { run } from "@ember/runloop";
 import attr from "ember-data/attr";
 import { fragment } from "ember-data-model-fragments/attributes";
 import Fragment from "ember-data-model-fragments/fragment";
@@ -73,7 +74,7 @@ test( "Serializer", function( assert ) {
 });
 
 
-test( "hasStreamsLanguagesSelection", function( assert ) {
+test( "hasStreamsLanguagesSelection on didUpdate", function( assert ) {
 
 	const settings = this.env.store.createRecord( "settings", { id: 1 } );
 
@@ -106,7 +107,7 @@ test( "hasStreamsLanguagesSelection", function( assert ) {
 		"Doesn't have a custom language selection anymore"
 	);
 
-	const settingsTwo = this.env.store.createRecord( "settings", {
+	const settingsTwo = run( () => this.env.store.createRecord( "settings", {
 		id: 2,
 		streams: {
 			languages: {
@@ -115,7 +116,7 @@ test( "hasStreamsLanguagesSelection", function( assert ) {
 				fr: false
 			}
 		}
-	});
+	}) );
 
 	assert.ok(
 		get( settingsTwo, "hasStreamsLanguagesSelection" ),
