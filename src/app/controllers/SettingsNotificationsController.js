@@ -26,7 +26,7 @@ export default Controller.extend({
 	// filter available notification providers
 	contentNotificationProviders: computed(function() {
 		return SettingsNotification.providers
-			.filter( item => isSupported( item.value ) || item.value === "auto" );
+			.filter( item => isSupported( item.id ) || item.id === "auto" );
 	}),
 
 	actions: {
