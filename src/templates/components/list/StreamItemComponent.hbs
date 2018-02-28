@@ -16,7 +16,7 @@
 {{/if}}
 <footer class="{{if (bool-or infoTitle showGame) 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
 <div class="bottom {{unless (bool-or infoTitle showGame) 'hidden'}}">
-<div class="info-game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}</div>
+<div class="info-game">{{#if channel.game}}<i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}{{/if}}</div>
 <div class="info-title"><i></i><span>{{channel.status}}</span></div>
 </div>
 <div class="details">
