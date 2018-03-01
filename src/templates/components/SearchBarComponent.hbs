@@ -1,13 +1,13 @@
 <button type="button" class="btn-nav fa fa-chevron-left" {{action "back"}}></button>
 <button type="button" class="btn-nav fa fa-chevron-right" {{action "forward"}}></button>
 <button type="button" class="btn-nav fa fa-refresh" {{action "refresh"}}></button>
-{{input type="search" placeholder="Search" value=query required=true enter="submit"}}
+{{input type="search" placeholder=(t "components.search-bar.placeholder") value=query required=true enter="submit"}}
 <button type="button" class="btn-small btn-context-valid fa fa-times" {{action "clear"}}></button>
 <button type="button" class="btn-small btn-context-valid fa fa-search" {{action "submit"}}></button>
 <button type="button" class="btn-small btn-dropdown fa fa-chevron-down" {{action "toggleDropdown"}}></button>
 <div class="searchbar-dropdown {{unless showDropdown 'hidden'}}">
 <section class="filters">
-<div>Filter results</div>
+<div>{{t "components.search-bar.filter"}}</div>
 {{#radio-buttons
 	name="searchfilters"
 	value=filter
@@ -15,20 +15,20 @@
 	as |item|
 }}
 	{{#item.button classNames="default btn radio-buttons-item-searchbar-filter"}}
-		{{item.label}}
+		{{t (concat "components.search-bar.filters." item.value)}}
 	{{/item.button}}
 {{/radio-buttons}}
 </section>
 {{#if model.length}}
 <section class="recent">
 <header>
-<div>Recent queries</div>
+<div>{{t "components.search-bar.recent"}}</div>
 <div class="clear" {{action "clearHistory"}}><i class="fa fa-trash-o"></i></div>
 </header>
 <ul class="list-unstyled">
 {{#each content as |history|}}
 <li {{action "searchHistory" history}}>
-<div class="filter">{{history.label}}</div>
+<div class="filter">{{t (concat "components.search-bar.filters." history.filter)}}</div>
 <div class="query">{{history.query}}</div>
 <div class="date">{{time-from-now history.date false interval=60000}}</div>
 </li>

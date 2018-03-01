@@ -6,6 +6,6 @@
 {{#if content.hasLanguage}}{{flag-icon type="channel" lang=content.language}}{{/if}}
 <span>{{#link-to "channel" content.id}}{{content.detailedName}}{{/link-to}}</span>
 </header>
-<div class="game"><i class="fa fa-gamepad"></i> {{#if content.game}}{{#link-to "games.game" content.game}}{{content.game}}{{/link-to}}{{else}}<span>no game set yet</span>{{/if}}</div>
+<div class="game"><i class="fa fa-gamepad"></i> {{#if content.game}}{{#link-to "games.game" content.game}}{{content.game}}{{/link-to}}{{else}}<span>{{t "components.channel-item.game-missing"}}</span>{{/if}}</div>
 {{#if content.status}}{{embedded-links tagName="div" class="status" text=content.status}}{{/if}}
 </div>

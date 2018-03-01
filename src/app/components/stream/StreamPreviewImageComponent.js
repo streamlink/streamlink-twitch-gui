@@ -16,6 +16,7 @@ import layout from "templates/components/stream/StreamPreviewImageComponent.hbs"
 
 export default Component.extend({
 	chat: service(),
+	i18n: service(),
 	routing: service( "-routing" ),
 	settings: service(),
 	streaming: service(),
@@ -93,6 +94,7 @@ export default Component.extend({
 	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
+		const i18n = get( this, "i18n" );
 		const menu = Menu.create();
 
 		const quals = qualities.map( quality => ({
@@ -104,18 +106,18 @@ export default Component.extend({
 			if ( get( this, "opened" ) ) {
 				menu.items.pushObjects([
 					{
-						label: "Close stream",
+						label: i18n.t( "contextmenu.close-stream" ).toString(),
 						click: () => this.closeStream()
 					},
 					{
-						label: "Change quality",
+						label: i18n.t( "contextmenu.change-quality" ).toString(),
 						submenu: quals
 					}
 				]);
 			} else {
 				menu.items.pushObjects([
 					{
-						label: "Launch stream",
+						label: i18n.t( "contextmenu.launch-stream" ).toString(),
 						submenu: quals
 					}
 				]);
@@ -124,11 +126,11 @@ export default Component.extend({
 
 		menu.items.pushObjects([
 			{
-				label: "Open chat",
+				label: i18n.t( "contextmenu.open-chat" ).toString(),
 				click: () => this.openChat()
 			},
 			{
-				label: "Copy channel URL",
+				label: i18n.t( "contextmenu.copy-channel-url" ).toString(),
 				click: () => this.copyChannelURL()
 			}
 		]);
@@ -136,11 +138,11 @@ export default Component.extend({
 		if ( !this.attrs.contextmenuNoGotos ) {
 			menu.items.pushObjects([
 				{
-					label: "Channel page",
+					label: i18n.t( "contextmenu.channel-page" ).toString(),
 					click: () => this.gotoChannelPage()
 				},
 				{
-					label: "Channel settings",
+					label: i18n.t( "contextmenu.channel-settings" ).toString(),
 					click: () => this.gotoChannelSettings()
 				}
 			]);

@@ -20,6 +20,7 @@ moduleForComponent( "components/link/EmbeddedLinksComponent", {
 		});
 		this.registry.register( "component:external-link", ExternalLinkComponent );
 		this.registry.register( "service:-routing", Service.extend() );
+		this.registry.register( "service:i18n", Service.extend() );
 	}
 });
 

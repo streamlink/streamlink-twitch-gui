@@ -14,7 +14,7 @@
 	action=(action "collapse")
 }}
 {{#if host}}
-<header><div><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.id title=(concat "hosted by " host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</div></header>
+<header><div><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.id title=(t "components.stream-item.hosted-by" name=host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</div></header>
 {{/if}}
 <footer class="{{if (bool-or infoTitle showGame) 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
 <div class="bottom {{unless (bool-or infoTitle showGame) 'hidden'}}">
@@ -26,7 +26,7 @@
 {{#if content.hasFormatInfo}}
 <div class="stats">
 <div class="resolution"><i class="fa fa-film"></i> {{content.resolution}}</div>
-<div class="fps">{{content.fps}} fps <i class="fa fa-eye"></i></div>
+<div class="fps">{{t "components.stream-item.fps" fps=content.fps}} <i class="fa fa-eye"></i></div>
 </div>
 {{/if}}
 <div class="status">
@@ -35,12 +35,12 @@
 </div>
 </div>
 </footer>
-<div class="btn-expand" title="{{unless expanded 'Show stream details' (if locked 'Unlock details view' 'Lock details view')}}" {{action "expand" bubbles=false}}>
+<div class="btn-expand" title="{{t (concat 'components.stream-item.details.' (unless expanded 'show' (if locked 'unlock' 'lock')))}}" {{action "expand" bubbles=false}}>
 <i class="fa {{unless expanded 'fa-chevron-up' (if locked 'fa-lock' 'fa-unlock-alt')}}"></i>
 </div>
 {{/stream-preview-image}}
 <footer>
 <span title="{{content.titleCreatedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.created_at interval=60000}}</span>
-{{#if content.isVodcast}}<span class="vodcast-indicator" title="Vodcast"><i class="fa fa-recycle"></i></span>{{/if}}
+{{#if content.isVodcast}}<span class="vodcast-indicator" title="{{t 'components.stream-item.vodcast'}}"><i class="fa fa-recycle"></i></span>{{/if}}
 <span title="{{content.titleViewers}}">{{format-viewers content.viewers}} <i class="fa fa-users"></i></span>
 </footer>

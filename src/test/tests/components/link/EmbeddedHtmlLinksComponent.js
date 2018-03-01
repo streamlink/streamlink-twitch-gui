@@ -1,5 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs } from "test-utils";
+import { I18nService } from "i18n-utils";
 import Service from "@ember/service";
 import $ from "jquery";
 import sinon from "sinon";
@@ -10,7 +11,9 @@ import embeddedHtmlLinksComponentInjector
 
 moduleForComponent( "components/link/EmbeddedHtmlLinksComponent", {
 	integration: true,
-	resolver: buildResolver({}),
+	resolver: buildResolver({
+		I18nService
+	}),
 	beforeEach() {
 		this.clipboardSetStub = sinon.stub();
 		this.openBrowserStub = sinon.stub();
@@ -141,11 +144,11 @@ test( "EmbeddedHtmlLinksComponent", function( assert ) {
 	assert.propEqual( this.menuItemsStub.args, [ [
 		[
 			{
-				label: "Open in browser",
+				label: "contextmenu.open-in-browser",
 				click() {}
 			},
 			{
-				label: "Copy link address",
+				label: "contextmenu.copy-link-address",
 				click() {}
 			}
 		]

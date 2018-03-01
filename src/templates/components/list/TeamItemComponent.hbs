@@ -3,6 +3,6 @@
 {{/link-to}}
 <div class="info">
 <header><i class="fa fa-fw fa-users"></i> {{#link-to "team" content.id}}{{content.title}}{{/link-to}}</header>
-<div class="stats"><span title="Date created"><i class="fa fa-fw fa-calendar"></i> {{format-time content.created_at "llll"}}</span></div>
-<div class="stats"><span title="Modified last"><i class="fa fa-fw fa-pencil"></i> {{format-time content.updated_at "llll"}}</span></div>
+<div class="stats"><span title="{{t "components.team-item.created-at.title"}}"><i class="fa fa-fw fa-calendar"></i> {{format-time content.created_at (t "components.team-item.created-at.format")}}</span></div>
+<div class="stats"><span title="{{t "components.team-item.updated-at.title"}}"><i class="fa fa-fw fa-pencil"></i> {{format-time content.updated_at (t "components.team-item.updated-at.format")}}</span></div>
 </div>

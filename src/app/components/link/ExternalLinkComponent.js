@@ -8,6 +8,7 @@ import getStreamFromUrl from "utils/getStreamFromUrl";
 
 
 export default Component.extend({
+	i18n: service(),
 	routing: service( "-routing" ),
 
 	tagName: "a",
@@ -57,14 +58,15 @@ export default Component.extend({
 
 		const menu = Menu.create();
 		const url = get( this, "url" );
+		const i18n = get( this, "i18n" );
 
 		menu.items.pushObjects([
 			{
-				label: "Open in browser",
+				label: i18n.t( "contextmenu.open-in-browser" ).toString(),
 				click: () => openBrowser( url )
 			},
 			{
-				label: "Copy link address",
+				label: i18n.t( "contextmenu.copy-link-address" ).toString(),
 				click: () => setClipboard( url )
 			}
 		]);

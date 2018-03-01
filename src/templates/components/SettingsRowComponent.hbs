@@ -2,15 +2,15 @@
 	<p><i class="fa {{icon}}"></i> {{#if toggle}}{{check-box title checked=enabled}}{{else}}{{title}}{{/if}}</p>
 	<p>{{{description}}}</p>
 	{{#if notes}}
-		<p class="section"><i class="fa fa-exclamation-circle"></i>Notes</p>
+		<p class="section"><i class="fa fa-exclamation-circle"></i>{{t "components.settings-row.notes"}}</p>
 		<p>{{notes}}</p>
 	{{/if}}
 	{{#if defaultValue}}
-		<p class="section"><i class="fa fa-chevron-circle-right"></i>Default</p>
+		<p class="section"><i class="fa fa-chevron-circle-right"></i>{{t "components.settings-row.default"}}</p>
 		<p>{{defaultValue}}</p>
 	{{/if}}
 	{{#if _substitutions.length}}
-		<p class="section"><i class="fa fa-info-circle"></i>Available variables (<i class="fa fa-question cursor-help" title="The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped. Some applications are able to read unnecessarily escaped characters in their parameters list and will work as expected, but others will not. Make sure to set all variables inside single or double quoted strings.&#10;&#10;Correct usage:&#10;-a &quot;{a}&quot; -b &quot;{b1}{b2}&quot; &quot;-c={c}&quot;"></i>)</p>
+		<p class="section"><i class="fa fa-info-circle"></i>{{t "components.settings-row.variables.title"}} (<i class="fa fa-question cursor-help" title={{t "components.settings-row.variables.help"}}></i>)</p>
 		<ul class="list-unstyled substitutions-list">
 			{{#each _substitutions as |substitution|}}
 				<li class="hoverable cursor-help" title="{{substitution.description}}">{{substitution.variable}}</li>
@@ -18,11 +18,11 @@
 		</ul>
 	{{/if}}
 	{{#if requires}}
-		<p class="section"><i class="fa fa-exclamation-circle"></i>Requires</p>
+		<p class="section"><i class="fa fa-exclamation-circle"></i>{{t "components.settings-row.requires"}}</p>
 		<p>{{requires}}</p>
 	{{/if}}
 	{{#if example}}
-		<p class="section"><i class="fa fa-question-circle"></i>Example</p>
+		<p class="section"><i class="fa fa-question-circle"></i>{{t "components.settings-row.example"}}</p>
 		<p class="text-overflow"><span class="hoverable">{{example}}</span></p>
 	{{/if}}
 	{{#if documentation}}

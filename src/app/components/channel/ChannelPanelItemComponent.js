@@ -8,6 +8,7 @@ import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
 
 
 export default EmbeddedHtmlLinksComponent.extend({
+	i18n: service(),
 	routing: service( "-routing" ),
 
 	layout,
@@ -26,14 +27,15 @@ export default EmbeddedHtmlLinksComponent.extend({
 	},
 
 	linkContentMenu( event, url ) {
+		const i18n = get( this, "i18n" );
 		const menu = Menu.create();
 		menu.items.pushObjects([
 			{
-				label: "Open in browser",
+				label: i18n.t( "contextmenu.open-in-browser" ).toString(),
 				click: () => openBrowser( url )
 			},
 			{
-				label: "Copy link address",
+				label: i18n.t( "contextmenu.copy-link-address" ).toString(),
 				click: () => setClipboard( url )
 			}
 		]);

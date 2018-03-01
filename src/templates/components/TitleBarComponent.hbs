@@ -5,7 +5,10 @@
 	<button
 		type="button"
 		class="{{if auth.session.isLoggedIn 'btn-user' 'btn-no-user'}} {{if auth.session.isPending 'btn-user-pending'}} {{if notification.enabled 'btn-indicator'}} fa fa-user"
-		title="{{userTitle}}"
+		title="{{unless auth.session.isLoggedIn
+			(t "components.title-bar.loggedout")
+			(t "components.title-bar.loggedin" name=auth.session.user_name status=notification.statusText)
+		}}"
 		{{action "goto" "user.index"}}
 	>
 		{{#if notification.enabled}}

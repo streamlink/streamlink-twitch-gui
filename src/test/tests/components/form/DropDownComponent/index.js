@@ -1,5 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs, triggerKeyDown } from "test-utils";
+import { I18nService } from "i18n-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import { run } from "@ember/runloop";
 import $ from "jquery";
@@ -16,7 +17,8 @@ moduleForComponent( "components/form/DropDownComponent", {
 		DropDownComponent,
 		DropDownSelectionComponent,
 		DropDownListComponent,
-		IsEqualHelper
+		IsEqualHelper,
+		I18nService
 	}),
 	beforeEach() {
 		this.getLabel = () => this.$( ".drop-down-selection-component" ).text().trim();
@@ -75,7 +77,11 @@ test( "DOM nodes, selection and labels", function( assert ) {
 
 	// unset selection (unknown selection)
 	this.set( "selection", null );
-	assert.strictEqual( this.getLabel(), "Please choose", "Shows placeholder selection label" );
+	assert.strictEqual(
+		this.getLabel(),
+		"components.drop-down-selection.placeholder",
+		"Shows placeholder selection label"
+	);
 	assert.propEqual( this.getSelections(), [ false, false, false ], "No item is selected" );
 
 	// set a matching selection

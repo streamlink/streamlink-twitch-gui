@@ -1,9 +1,12 @@
 import Component from "@ember/component";
 import { get, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { langs } from "config";
 
 
 export default Component.extend({
+	i18n: service(),
+
 	tagName: "i",
 	classNames: [ "flag-icon-component" ],
 	classNameBindings: [ "flag", "withCursor::no-cursor" ],
@@ -26,18 +29,17 @@ export default Component.extend({
 	title: computed( "withTitle", "lang", function() {
 		if ( !get( this, "withTitle" ) ) { return ""; }
 
-		let lang = get( this, "lang" );
+		const i18n = get( this, "i18n" );
+		const type = get( this, "type" );
+		const langId = get( this, "lang" );
+		const path = `languages.${langId}`;
 
-		if ( !langs[ lang ] ) { return ""; }
-		lang = langs[ lang ][ "lang" ];
-
-		switch ( get( this, "type" ) ) {
-			case "channel":
-				return `The channel's language is ${lang}`;
-			case "broadcaster":
-				return `The broadcaster's language is ${lang}`;
-			default:
-				return "";
+		if ( type !== "channel" && type !== "broadcaster" || !i18n.exists( path ) ) {
+			return "";
 		}
+
+		return i18n.t( `components.flag-icon.${type}`, {
+			lang: i18n.t( path ).toString()
+		}).toString();
 	})
 });

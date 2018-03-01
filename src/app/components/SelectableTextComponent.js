@@ -1,9 +1,13 @@
 import Component from "@ember/component";
+import { get } from "@ember/object";
+import { inject as service } from "@ember/service";
 import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 
 
 export default Component.extend({
+	i18n: service(),
+
 	tagName: "div",
 
 	classNameBindings: [ "class" ],
@@ -22,7 +26,7 @@ export default Component.extend({
 
 		const menu = Menu.create();
 		menu.items.pushObject({
-			label  : "Copy selection",
+			label: get( this, "i18n" ).t( "contextmenu.copy-selection" ).toString(),
 			enabled: selected.length,
 			click() {
 				setClipboard( selected );

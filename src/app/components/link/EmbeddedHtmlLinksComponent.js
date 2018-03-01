@@ -9,10 +9,15 @@ import getStreamFromUrl from "utils/getStreamFromUrl";
 
 
 export default Component.extend({
+	i18n: service(),
 	routing: service( "-routing" ),
 
 	didInsertElement() {
+		const i18n = get( this, "i18n" );
 		const routing = get( this, "routing" );
+
+		const labelOpenInBrowser = i18n.t( "contextmenu.open-in-browser" ).toString();
+		const labelCopyLinkAddress = i18n.t( "contextmenu.copy-link-address" ).toString();
 
 		[ ...this.element.querySelectorAll( "a" ) ]
 			.map( anchor => ({
@@ -49,11 +54,11 @@ export default Component.extend({
 						const menu = Menu.create();
 						menu.items.pushObjects([
 							{
-								label: "Open in browser",
+								label: labelOpenInBrowser,
 								click: () => openBrowser( url )
 							},
 							{
-								label: "Copy link address",
+								label: labelCopyLinkAddress,
 								click: () => setClipboard( url )
 							}
 						]);

@@ -43,7 +43,7 @@ export default ListItemComponent.extend({
 	ends: computed( "content.access_end", function() {
 		const access_end = get( this, "content.access_end" );
 
-		return new Moment().to( access_end );
+		return new Moment().to( access_end, true );
 	}).volatile(),
 
 	subbedFor: computed(

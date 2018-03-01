@@ -1,5 +1,5 @@
 import Component from "@ember/component";
-import { get, computed } from "@ember/object";
+import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { main as mainConfig } from "config";
 import { isDebug } from "nwjs/debug";
@@ -23,22 +23,6 @@ export default Component.extend({
 
 	displayName,
 	isDebug,
-
-	userTitle: computed(
-		"auth.session.isLoggedIn",
-		"auth.session.user_name",
-		"notification.statusText",
-		function() {
-			if ( !get( this, "auth.session.isLoggedIn" ) ) {
-				return "You're not logged in";
-			}
-			const user = get( this, "auth.session.user_name" );
-			const notifications = get( this, "notification.statusText" );
-
-			return `Logged in as ${user}\n${notifications}`;
-		}
-	),
-
 
 	actions: {
 		goto() {
