@@ -1,0 +1,71 @@
+action:
+    close: Close
+changelog:
+    header: "You just upgraded to v{{version}}"
+    body: Do you want to see what's new and read the changelog now?
+    action:
+        show: Changelog
+confirm:
+    header: Please confirm
+    body: Do you want to apply your changes?
+    action:
+        apply: Apply
+        discard: Discard
+        cancel: Cancel
+firstrun:
+    header: "Thanks for using {{name}}!"
+    body: Do you want to configure the application first before you start?
+    action:
+        start: Start now
+        settings: Settings
+newrelease:
+    header: "You're using an outdated version: {{version}}"
+    body: "Do you want to download the latest release now? ({{version}})"
+    action:
+        download: Download
+        ignore: Ignore
+quit:
+    header: Are you sure you want to quit?
+    body:
+        streams: By choosing shutdown, all streams will be closed, too.
+        no-streams: All streams have been closed. Do you want to quit now?
+    action:
+        close: Return
+        shutdown: Shutdown
+        quit: Quit
+streaming:
+    header:
+        preparing: "Preparing, please wait"
+        launching: "Launching: "
+        watching: "Watching: "
+        ended: "Stream ended: "
+        error:
+            log: "Error: Couldn't launch the stream"
+            provider: "Error: {{provider}} misconfiguration"
+            player: "Error: Player misconfiguration"
+            version: "Error: Invalid {{provider}} version"
+            unable-to-open: "Error: Unable to open stream"
+            no-streams-found: "Error: No streams found"
+            timeout: "Error: Timeout"
+            hosting: "{{name}} is hosting another channel"
+            internal: "Error"
+    body:
+        launching: "Waiting for {{provider}} to launch the stream..."
+        ended: "Do you want to restart the stream now?"
+        error:
+            provider: "Please check your settings and/or (re)install {{provider}}."
+            player: "Please check your player settings."
+            version: "The version v{{version}} doesn't match the min. requirements (v{{required}})."
+            unable-to-open: "{{provider}} was unable to open the stream."
+            no-streams-found: "{{provider}} was unable to find the stream."
+            timeout: "Either {{name}} has gone offline, or your connection to Twitch has been interrupted."
+            hosting: "Do you want to switch to {{name}}?"
+            internal: "Internal error"
+    action:
+        abort: Abort
+        continue: Continue
+        download: Download
+        log: Toggle {{provider}} log
+        restart: Restart
+        shutdown: Close stream
+        start-hosted: Switch

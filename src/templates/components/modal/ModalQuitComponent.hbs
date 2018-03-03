@@ -1,19 +1,37 @@
 <div>
 	{{#modal-header}}
-		Are you sure you want to quit?
+		{{t "modal.quit.header"}}
 	{{/modal-header}}
 	{{#modal-body}}
 		{{#if hasStreams}}
-			By choosing shutdown, all streams will be closed, too.
+			{{t "modal.quit.body.streams"}}
 		{{else}}
-			All streams have been closed. Do you want to quit now?
+			{{t "modal.quit.body.no-streams"}}
 		{{/if}}
 	{{/modal-body}}
 	{{#modal-footer classNames="button-list-horizontal"}}
-		{{#form-button action=(action "close") classNames="btn-primary" icon="fa-thumbs-down"}}Return{{/form-button}}
+		{{#form-button
+			action=(action "close")
+			classNames="btn-primary"
+			icon="fa-thumbs-down"
+		}}
+			{{t "modal.quit.action.close"}}
+		{{/form-button}}
 		{{#if hasStreams}}
-			{{#form-button action=(action "shutdown") classNames="btn-danger" icon="fa-power-off"}}Shutdown{{/form-button}}
+			{{#form-button
+				action=(action "shutdown")
+				classNames="btn-danger"
+				icon="fa-power-off"
+			}}
+				{{t "modal.quit.action.shutdown"}}
+			{{/form-button}}
 		{{/if}}
-		{{#form-button action=(action "quit") classNames="btn-success" icon="fa-thumbs-up"}}Quit{{/form-button}}
+		{{#form-button
+			action=(action "quit")
+			classNames="btn-success"
+			icon="fa-thumbs-up"
+		}}
+			{{t "modal.quit.action.quit"}}
+		{{/form-button}}
 	{{/modal-footer}}
 </div>

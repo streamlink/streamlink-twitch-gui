@@ -1,28 +1,40 @@
 <div>
 	{{#unless error}}
 		{{#if active.isPreparing}}
-			{{#modal-header}}Preparing, please wait{{/modal-header}}
-			{{#modal-body class="loading"}}{{loading-spinner}}{{/modal-body}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.preparing"}}
+			{{/modal-header}}
+			{{#modal-body class="loading"}}
+				{{loading-spinner}}
+			{{/modal-body}}
 			{{#modal-footer}}
-				{{#form-button action=(action "abort") classNames="btn-danger" icon="fa-times"}}Abort{{/form-button}}
+				{{#form-button
+					action=(action "abort")
+					classNames="btn-danger"
+					icon="fa-times"
+				}}
+					{{t "modal.streaming.action.abort"}}
+				{{/form-button}}
 			{{/modal-footer}}
 		{{else if active.hasEnded}}
 			{{#modal-header}}
-				Stream ended: {{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
+				{{t "modal.streaming.header.ended"}}{{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
 			{{/modal-header}}
 			{{#modal-body}}
-				Do you want to restart the stream now?
+				{{t "modal.streaming.body.ended"}}
 			{{/modal-body}}
 		{{else}}
 			{{#if active.isLaunching}}
 				{{#modal-header}}
-					Launching: {{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
+					{{t "modal.streaming.header.launching"}}{{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
 				{{/modal-header}}
-				{{#modal-body class="launching"}}Waiting for {{providerName}} to launch the stream...{{/modal-body}}
+				{{#modal-body class="launching"}}
+					{{t "modal.streaming.body.launching" provider=providerName}}
+				{{/modal-body}}
 				{{modal-log class="launching" log=active.log}}
 			{{else if active.isWatching}}
 				{{#modal-header}}
-					Watching: {{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
+					{{t "modal.streaming.header.watching"}}{{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
 				{{/modal-header}}
 				{{#modal-body}}
 					{{#if active.stream.game}}
@@ -44,19 +56,29 @@
 						action=(action "close")
 						classNames="btn-primary"
 						icon="fa-arrow-left"
-						title="[Esc] Continue"
+						title=(hotkey-title
+							"modal.streaming.action.continue"
+							(find-by hotkeys "name" "close")
+						)
 					}}
 					{{form-button
 						action=(action "shutdown")
 						classNames="btn-danger"
 						icon="fa-times"
-						title="[Q] Close stream"
+						title=(hotkey-title
+							"modal.streaming.action.shutdown"
+							(find-by hotkeys "name" "shutdown")
+						)
 					}}
 					{{form-button
 						action=(action "toggleLog")
 						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.isWatching::invisible"
 						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
-						title=(concat "[L] Toggle " providerName " log")
+						title=(hotkey-title
+							"modal.streaming.action.log"
+							(find-by hotkeys "name" "log")
+							provider=providerName
+						)
 					}}
 				</div>
 				<div class="button-list-horizontal-wide">
@@ -75,35 +97,78 @@
 		{{/if}}
 	{{else}}
 		{{#if isLogError}}
-			{{#modal-header}}Error: Couldn't launch the stream{{/modal-header}}
-			{{#modal-body class="error"}}{{error.message}}{{/modal-body}}
-		{{else if isProviderError}}
-			{{#modal-header}}Error: {{providerName}} misconfiguration{{/modal-header}}
-			{{#modal-body class="error"}}{{#if error.message}}{{error.message}}{{#if error.error.message}}<br>{{error.error.message}}{{/if}}<br><br>{{/if}}Please check your settings and/or (re)install {{providerName}}.{{/modal-body}}
-		{{else if isPlayerError}}
-			{{#modal-header}}Error: Player misconfiguration{{/modal-header}}
-			{{#modal-body class="error"}}Please check your player settings.{{/modal-body}}
-		{{else if isVersionError}}
-			{{#modal-header}}Error: Invalid {{providerName}} version{{/modal-header}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.log"}}
+			{{/modal-header}}
 			{{#modal-body class="error"}}
-				Your version v{{error.message}} doesn't match the min. requirements (v{{versionMin}}).
+				{{error.message}}
+			{{/modal-body}}
+		{{else if isProviderError}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.provider" provider=providerName}}
+			{{/modal-header}}
+			{{#modal-body class="error"}}
+				{{#if error.message}}
+					{{error.message}}
+					{{#if error.error.message}}
+						<br>{{error.error.message}}
+					{{/if}}
+					<br><br>
+				{{/if}}
+				{{t "modal.streaming.body.error.provider"}}
+			{{/modal-body}}
+		{{else if isPlayerError}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.player"}}
+			{{/modal-header}}
+			{{#modal-body class="error"}}
+				{{t "modal.streaming.body.error.player"}}
+			{{/modal-body}}
+		{{else if isVersionError}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.version" provider=providerName}}
+			{{/modal-header}}
+			{{#modal-body class="error"}}
+				{{t "modal.streaming.body.error.version" version=error.message required=versionMin}}
 			{{/modal-body}}
 		{{else if isUnableToOpenError}}
-			{{#modal-header}}Error: Unable to open stream{{/modal-header}}
-			{{#modal-body class="error"}}{{providerName}} was unable to open the stream.{{/modal-body}}
-		{{else if isNoStreamsFoundError}}
-			{{#modal-header}}Error: No streams found{{/modal-header}}
-			{{#modal-body class="error"}}{{providerName}} was unable to find the stream.{{/modal-body}}
-		{{else if isTimeoutError}}
-			{{#modal-header}}Error: Timeout{{/modal-header}}
-			{{#modal-body class="error"}}Either {{active.channel.detailedName}} has gone offline, or your connection to Twitch has been interrupted.{{/modal-body}}
-		{{else if isHostingError}}
-			{{#modal-header}}{{active.channel.detailedName}} is hosting another channel{{/modal-header}}
-			{{#modal-body class="error"}}Do you want to switch to {{error.channel}}?{{/modal-body}}
-		{{else}}
-			{{#modal-header}}Error{{/modal-header}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.unable-to-open"}}
+			{{/modal-header}}
 			{{#modal-body class="error"}}
-				{{#if error.message}}{{error.message}}{{else}}Internal error{{/if}}
+				{{t "modal.streaming.body.error.unable-to-open" provider=providerName}}
+			{{/modal-body}}
+		{{else if isNoStreamsFoundError}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.no-streams-found"}}
+			{{/modal-header}}
+			{{#modal-body class="error"}}
+				{{t "modal.streaming.body.error.no-streams-found" provider=providerName}}
+			{{/modal-body}}
+		{{else if isTimeoutError}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.timeout"}}
+			{{/modal-header}}
+			{{#modal-body class="error"}}
+				{{t "modal.streaming.body.error.timeout" name=active.channel.detailedName}}
+			{{/modal-body}}
+		{{else if isHostingError}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.hosting" name=active.channel.detailedName}}
+			{{/modal-header}}
+			{{#modal-body class="error"}}
+				{{t "modal.streaming.body.error.hosting" name=error.channel}}
+			{{/modal-body}}
+		{{else}}
+			{{#modal-header}}
+				{{t "modal.streaming.header.error.internal"}}
+			{{/modal-header}}
+			{{#modal-body class="error"}}
+				{{#if error.message}}
+					{{error.message}}
+				{{else}}
+					{{t "modal.streaming.body.error.internal"}}
+				{{/if}}
 			{{/modal-body}}
 		{{/if}}
 		{{#if active.log.length}}
@@ -117,31 +182,48 @@
 					action=(action "shutdown")
 					classNames="btn-danger"
 					icon="fa-times"
-					title="[Esc] Close"
-				}}Close{{/form-button}}
+					title=(hotkey-title
+						"modal.action.close"
+						(find-by hotkeys "name" "close")
+					)
+				}}
+					{{t "modal.action.close"}}
+				{{/form-button}}
 				{{#if (bool-or isNotFoundError isVersionError)}}
 					{{#form-button
 						action=(action "download")
 						classNames="btn-success"
 						icon="fa-download"
 						iconanim=true
-					}}Download{{/form-button}}
+					}}
+						{{t "modal.streaming.action.download"}}
+					{{/form-button}}
 				{{else if isHostingError}}
 					{{#form-button
 						action=(action "startHosted")
 						classNames="btn-success"
 						icon="fa-step-forward"
 						iconanim=true
-						title="[Enter] Switch"
-					}}Switch{{/form-button}}
+						title=(hotkey-title
+							"modal.streaming.action.start-hosted"
+							(find-by hotkeys "name" "confirm")
+						)
+					}}
+						{{t "modal.streaming.action.start-hosted"}}
+					{{/form-button}}
 				{{else if active.hasEnded}}
 					{{#form-button
 						action=(action "restart")
 						classNames="btn-success"
 						icon="fa-play"
 						iconanim=true
-						title="[Enter] Restart"
-					}}Restart{{/form-button}}
+						title=(hotkey-title
+							"modal.streaming.action.restart"
+							(find-by hotkeys "name" "confirm")
+						)
+					}}
+						{{t "modal.streaming.action.restart"}}
+					{{/form-button}}
 				{{/if}}
 			</div>
 		{{/modal-footer}}
