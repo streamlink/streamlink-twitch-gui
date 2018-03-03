@@ -88,11 +88,19 @@
 					{{subscribe-channel channel=active.channel}}
 					{{follow-channel channel=active.channel}}
 				</div>
-				{{drop-down
+				{{#drop-down
 					value=active.quality
 					content=qualities
 					class="stream-quality-dropdown"
+					as |dropdown|
 				}}
+					{{#dropdown.selection as |selection|}}
+						{{t (concat "qualities." selection.value)}}
+					{{/dropdown.selection}}
+					{{#dropdown.list as |item|}}
+						{{t (concat "qualities." item.value)}}
+					{{/dropdown.list}}
+				{{/drop-down}}
 			{{/modal-footer}}
 		{{/if}}
 	{{else}}

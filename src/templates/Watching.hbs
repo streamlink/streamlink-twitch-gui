@@ -21,7 +21,19 @@
 {{open-chat channel=watching.stream.channel disableHotkeys=true}}
 {{share-channel channel=watching.stream.channel disableHotkeys=true}}
 </div>
-{{drop-down value=watching.quality content=qualities class="stream-quality-dropdown"}}
+{{#drop-down
+	value=watching.quality
+	content=qualities
+	class="stream-quality-dropdown"
+	as |dropdown|
+}}
+	{{#dropdown.selection as |selection|}}
+		{{t (concat "qualities." selection.value)}}
+	{{/dropdown.selection}}
+	{{#dropdown.list as |item|}}
+		{{t (concat "qualities." item.value)}}
+	{{/dropdown.list}}
+{{/drop-down}}
 {{/stream-presentation}}
 {{/each}}
 </ul>

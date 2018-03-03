@@ -8,11 +8,19 @@
 	toggle=true
 	enabled=_streaming_quality
 }}
-	{{drop-down
+	{{#drop-down
 		value=streaming_quality
 		content=qualities
 		disabled=(bool-not _streaming_quality)
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "qualities." selection.value)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "qualities." item.value)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 
 {{#settings-row

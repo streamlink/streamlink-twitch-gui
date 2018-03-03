@@ -4,10 +4,18 @@
 	(t "settings.streams.quality.description")
 	icon="fa-eye"
 }}
-	{{drop-down
+	{{#drop-down
 		value=model.streaming.quality
 		content=contentStreamingQuality
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "qualities." selection.value)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "qualities." item.value)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 
 {{#if model.advanced}}
@@ -32,7 +40,7 @@
 						value=(mut (get (get model.streaming.qualities quality.id) "quality"))
 						placeholder=quality.quality
 					}}
-					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
+					<button type="button" tabindex="-1" class="btn">{{t (concat "qualities." quality.id)}}</button>
 				</div>
 			{{/each}}
 		{{/settings-row}}
@@ -49,7 +57,7 @@
 						placeholder=quality.quality
 						value=(mut (get model.streaming.qualitiesOld quality.id))
 					}}
-					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
+					<button type="button" tabindex="-1" class="btn">{{t (concat "qualities." quality.id)}}</button>
 				</div>
 			{{/each}}
 		{{/settings-row}}

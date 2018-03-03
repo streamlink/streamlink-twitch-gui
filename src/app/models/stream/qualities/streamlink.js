@@ -17,7 +17,6 @@ export default [
 	// Source
 	{
 		id: "source",
-		label: "Source",
 		quality: "best",
 		exclude: null
 	},
@@ -25,7 +24,6 @@ export default [
 	// High
 	{
 		id: "high",
-		label: "High",
 		quality: "high,best",
 		exclude: ">720p30"
 	},
@@ -33,7 +31,6 @@ export default [
 	// Medium
 	{
 		id: "medium",
-		label: "Medium",
 		quality: "medium,best",
 		exclude: ">540p30"
 	},
@@ -41,7 +38,6 @@ export default [
 	// Low
 	{
 		id: "low",
-		label: "Low",
 		quality: "low,best",
 		exclude: ">360p30"
 	},
@@ -49,7 +45,6 @@ export default [
 	// Audio
 	{
 		id: "audio",
-		label: "Audio only",
 		quality: "audio,audio_only",
 		exclude: null
 	}
