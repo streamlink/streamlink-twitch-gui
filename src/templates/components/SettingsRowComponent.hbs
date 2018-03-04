@@ -13,7 +13,7 @@
 		<p class="section"><i class="fa fa-info-circle"></i>{{t "components.settings-row.variables.title"}} (<i class="fa fa-question cursor-help" title={{t "components.settings-row.variables.help"}}></i>)</p>
 		<ul class="list-unstyled substitutions-list">
 			{{#each _substitutions as |substitution|}}
-				<li class="hoverable cursor-help" title="{{substitution.description}}">{{substitution.variable}}</li>
+				<li class="hoverable cursor-help" title={{t substitution.description}}>{{substitution.variable}}</li>
 			{{/each}}
 		</ul>
 	{{/if}}

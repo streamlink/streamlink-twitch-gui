@@ -148,6 +148,14 @@ player:
             title: Custom parameters
             description: Set additional custom player parameters.
         placeholder: Add custom player parameters
+        substitutions:
+            channel: Channel name
+            status: Channel status text
+            game: Name of the game being played
+            delay: Additional stream delay in seconds
+            created: Online since
+            viewers: Number of current viewers
+            views: Total number of views
     players:
         default:
             label: No preset
@@ -244,6 +252,12 @@ chat:
         providers:
             browser:
                 label: Default browser
+            basic:
+                substitutions:
+                    url: The channel's chat URL on Twitch.tv
+                    channel: The channel name
+                    user: Your user name (if logged in)
+                    token: Your access token (if logged in)
             chromium:
                 label: Chromium
                 attributes:
