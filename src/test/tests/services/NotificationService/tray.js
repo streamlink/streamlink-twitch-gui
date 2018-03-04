@@ -1,5 +1,6 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
+import { I18nService } from "i18n-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import { get, set } from "@ember/object";
 import { run } from "@ember/runloop";
@@ -31,6 +32,7 @@ test( "Tray menu item", assert => {
 	});
 
 	const owner = buildOwner();
+	owner.register( "service:i18n", I18nService );
 	owner.register( "service:notification", Service.extend( NotificationServiceTrayMixin ) );
 
 	const service = owner.lookup( "service:notification" );
@@ -42,8 +44,8 @@ test( "Tray menu item", assert => {
 		items.toArray(),
 		[{
 			type   : "checkbox",
-			label  : "Pause notifications",
-			tooltip: "Quickly toggle desktop notifications",
+			label  : "services.notification.tray.pause.label",
+			tooltip: "services.notification.tray.pause.tooltip",
 			checked: false,
 			click  : () => {}
 		}],

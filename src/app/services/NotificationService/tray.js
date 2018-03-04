@@ -1,5 +1,6 @@
 import { get, set, observer } from "@ember/object";
 import Mixin from "@ember/object/mixin";
+import { inject as service } from "@ember/service";
 import { getMenu } from "nwjs/Tray";
 
 
@@ -7,6 +8,8 @@ const { items } = getMenu();
 
 
 export default Mixin.create({
+	i18n: service(),
+
 	_trayMenuItem: null,
 
 	// will be overridden by NotificationService
@@ -27,12 +30,13 @@ export default Mixin.create({
 			}
 
 		} else if ( !item ) {
+			const i18n = get( this, "i18n" );
 			const paused = get( this, "paused" );
 
 			item = {
 				type   : "checkbox",
-				label  : "Pause notifications",
-				tooltip: "Quickly toggle desktop notifications",
+				label  : i18n.t( "services.notification.tray.pause.label" ).toString(),
+				tooltip: i18n.t( "services.notification.tray.pause.tooltip" ).toString(),
 				checked: paused,
 				click  : item => {
 					set( this, "paused", item.checked );

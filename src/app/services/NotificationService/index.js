@@ -16,6 +16,7 @@ export default Service.extend(
 	NotificationServiceTrayMixin,
 	{
 		auth: service(),
+		i18n: service(),
 		settings: service(),
 
 		error: false,
@@ -34,15 +35,16 @@ export default Service.extend(
 		},
 
 		statusText: computed( "enabled", "paused", "error", function() {
+			const i18n = get( this, "i18n" );
 			const status = !get( this, "enabled" )
 				? "disabled"
 				: get( this, "paused" )
 					? "paused"
 					: get( this, "error" )
-						? "offline"
+						? "error"
 						: "enabled";
 
-			return `Desktop notifications are ${status}`;
+			return i18n.t( `services.notification.status.${status}` ).toString();
 		})
 	}
 );
