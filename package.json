@@ -21,7 +21,7 @@
 		"jquery": "3.2.1",
 		"masonry-layout": "4.2.0",
 		"minimist": "1.2.0",
-		"moment": "2.18.1",
+		"moment": "2.21.0",
 		"roboto-fontface": "0.8.0",
 		"snoretoast": "github:bastimeyer/snoretoast#binaries"
 	},
