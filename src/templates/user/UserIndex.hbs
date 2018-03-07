@@ -1,7 +1,7 @@
 <main class="content content-user content-user-index">
 <div class="bigicon"><i class="fa fa-user"></i></div>
 <p>Logged in as {{auth.session.user_name}}</p>
-<p>since {{format-time auth.session.date "dddd, MMMM Do YYYY, h:mm:ss a"}}</p>
+<p>since {{format-time auth.session.date "LLLL"}}</p>
 <p>{{notification.statusText}}</p>
 {{#form-button classNames="btn-signout" icon="fa-sign-out" action=(action "signout")}}Sign out{{/form-button}}
 {{#if settings.advanced}}

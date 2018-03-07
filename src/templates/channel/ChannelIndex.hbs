@@ -16,7 +16,7 @@
 <dd>{{channel.name}}</dd>
 {{/if}}
 <dt><i class="fa fa-calendar"></i>Created</dt>
-<dd>{{format-time channel.created_at "MMMM Do YYYY"}}</dd>
+<dd>{{format-time channel.created_at "LL"}}</dd>
 {{#if channel.hasBroadcasterLanguage}}
 <dt><i class="fa fa-language"></i>Language</dt>
 <dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>

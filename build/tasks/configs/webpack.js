@@ -6,6 +6,7 @@ const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 const LessPluginCleanCSS = require( "less-plugin-clean-css" );
 const NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
 const emberFeatures = require( "../../../src/config/ember-features.json" );
+const locales = require( "../../../src/config/locales.json" );
 const { resolve: r } = require( "path" );
 const { tmpdir } = require( "os" );
 
@@ -22,6 +23,10 @@ const pImages = r( pRoot, "img" );
 const pTemplates = r( pRoot, "templates" );
 const pDependencies = r( ".", "node_modules" );
 const pCacheBabel = r( tmpdir(), "babel-cache" );
+
+
+// regexp for filtering locale config file imports (momentjs, ember-i18n, etc.)
+const reLocales = new RegExp( `(${Object.keys( locales.locales ).join( "|" )})\.js$`, "i" );
 
 
 const resolveModuleDirectories = [
@@ -324,7 +329,10 @@ module.exports = {
 		},
 
 		module: {
-			noParse: /\/ember-source\/dist\/ember\.(debug|prod)\.js$/
+			noParse: [
+				/\/ember-source\/dist\/ember\.(debug|prod)\.js$/,
+				/\/moment\/moment\.js$/
+			]
 		},
 
 		plugins: [
@@ -363,13 +371,16 @@ module.exports = {
 			// ignore all @ember imports (see Ember import polyfill)
 			new webpack.IgnorePlugin( /@ember/ ),
 
-			// ignore l10n modules of momentjs
-			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ ),
-
 			// remove ember-i18n's get-locales utility function
 			new webpack.NormalModuleReplacementPlugin(
 				/ember-i18n\/addon\/utils\/get-locales\.js$/,
 				r( pRoot, "web_modules", "ember-i18n", "get-locales.js" )
+			),
+
+			// only import locale configs of available locales
+			new webpack.ContextReplacementPlugin(
+				/moment\/locale/,
+				reLocales
 			)
 		]
 	},
