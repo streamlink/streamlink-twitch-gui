@@ -11,6 +11,8 @@ import sinon from "sinon";
 import followButtonComponentInjector
 	from "inject-loader?../mixins/twitch-interact-button!components/button/FollowButtonComponent";
 import FormButtonComponent from "components/button/FormButtonComponent";
+import HotkeyTitleHelper from "helpers/HotkeyTitleHelper";
+import FindByHelper from "helpers/FindByHelper";
 import BoolNotHelper from "helpers/BoolNotHelper";
 
 
@@ -24,6 +26,8 @@ moduleForComponent( "follow-button", "components/button/FollowButtonComponent", 
 	needs: [
 		"component:form-button",
 		"service:i18n",
+		"helper:hotkey-title",
+		"helper:find-by",
 		"helper:bool-not"
 	],
 	resolver: buildResolver({
@@ -32,6 +36,8 @@ moduleForComponent( "follow-button", "components/button/FollowButtonComponent", 
 		}),
 		FormButtonComponent,
 		I18nService,
+		HotkeyTitleHelper,
+		FindByHelper,
 		BoolNotHelper
 	}),
 	beforeEach() {
@@ -128,7 +134,7 @@ test( "Loading/success states and click actions", function( assert ) {
 
 	assert.strictEqual(
 		$mainButton.prop( "title" ),
-		"[F] Follow foo",
+		"[F] components.follow-button.follow{\"name\":\"foo\"}",
 		"The main button has the correct title when not following"
 	);
 
@@ -156,7 +162,7 @@ test( "Loading/success states and click actions", function( assert ) {
 
 	assert.strictEqual(
 		$mainButton.prop( "title" ),
-		"[F] Unfollow foo",
+		"[F] components.follow-button.unfollow{\"name\":\"foo\"}",
 		"The main button has the correct title when following"
 	);
 
@@ -190,13 +196,13 @@ test( "Loading/success states and click actions", function( assert ) {
 
 	assert.strictEqual(
 		$mainButton.prop( "title" ),
-		"[F] Keep following foo",
+		"[F] components.follow-button.keep{\"name\":\"foo\"}",
 		"The main button has the correct title when being expanded"
 	);
 
 	assert.strictEqual(
 		$confirmButton.prop( "title" ),
-		"[Ctrl+F] Unfollow foo",
+		"[hotkeys.modifiers.ctrl+F] components.follow-button.confirm{\"name\":\"foo\"}",
 		"The confirm button has the correct title when being expanded"
 	);
 

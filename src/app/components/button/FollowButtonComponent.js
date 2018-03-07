@@ -2,12 +2,15 @@ import Component from "@ember/component";
 import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
+import { inject as service } from "@ember/service";
 import TwitchInteractButtonMixin from "../mixins/twitch-interact-button";
 import HotkeyMixin from "../mixins/hotkey";
 import layout from "templates/components/button/FollowButtonComponent.hbs";
 
 
 export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
+	i18n: service(),
+
 	layout,
 
 	classNames: [
@@ -16,7 +19,6 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 	classNameBindings: [
 		"isExpanded:expanded"
 	],
-	title: "",
 
 	isExpanded: false,
 	isPromptVisible: false,
@@ -26,12 +28,14 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 
 	hotkeys: [
 		{
+			name: "main",
 			code: "KeyF",
 			action() {
 				this.$( ".main-button" ).click();
 			}
 		},
 		{
+			name: "confirm",
 			code: "KeyF",
 			ctrlKey: true,
 			action() {

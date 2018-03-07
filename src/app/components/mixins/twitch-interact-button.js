@@ -35,7 +35,6 @@ export default Mixin.create({
 
 	_class  : switchProperty( "class" ),
 	icon    : switchProperty( "icon" ),
-	title   : switchProperty( "title" ),
 	iconanim: true,
 	spinner : true,
 
@@ -45,9 +44,6 @@ export default Mixin.create({
 	iconLoading : "fa-question",
 	iconSuccess : "fa-check",
 	iconFailure : "fa-times",
-	titleLoading: "",
-	titleSuccess: "",
-	titleFailure: "",
 
 
 	_checkRecord: observer( "isValid", "model", function() {

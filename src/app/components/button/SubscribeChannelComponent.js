@@ -30,14 +30,19 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixi
 	iconLoading : "fa-credit-card",
 	iconSuccess : "fa-credit-card",
 	iconFailure : "fa-credit-card",
-	titleLoading: "",
-	titleSuccess: computed( "name", function() {
-		let name = get( this, "name" );
-		return `Renew subscription to ${name}`;
-	}),
-	titleFailure: computed( "name", function() {
-		let name = get( this, "name" );
-		return `Subscribe to ${name} now`;
+
+	_title: computed( "i18n.locale", "isLoading", "isSuccessful", "name", function() {
+		if ( get( this, "isLoading" ) ) {
+			return "";
+		}
+
+		const i18n = get( this, "i18n" );
+		const key = get( this, "isSuccessful" )
+			? "components.subscribe-channel.title-renew"
+			: "components.subscribe-channel.title-new";
+		const name = get( this, "name" );
+
+		return i18n.t( key, { name } ).toString();
 	}),
 
 	hotkeys: [

@@ -9,6 +9,11 @@ file-select:
 flag-icon:
     channel: "The channel's language is {{lang}}"
     broadcaster: "The broadcaster's language is {{lang}}"
+follow-button:
+    follow: "Follow {{name}}"
+    unfollow: "Unfollow {{name}}"
+    confirm: "Unfollow {{name}}"
+    keep: "Keep following {{name}}"
 infinite-scroll:
     error: Error
     loading: Loading
@@ -31,6 +36,8 @@ main-menu:
         header: Misc
         settings: Settings
         about: About
+open-chat:
+    title: Open chat
 quick-bar-homepage:
     title: Set as homepage
 quick-bar-random-stream:
@@ -66,6 +73,8 @@ settings-row:
 settings-submit:
     apply: Apply
     discard: Discard
+share-channel:
+    title: Copy channel url to clipboard
 stream-item:
     hosted-by: "hosted by {{name}}"
     fps: "{{fps}} fps"
@@ -74,6 +83,9 @@ stream-item:
         lock: Lock details view
         unlock: Unlock details view
     vodcast: Vodcast
+subscribe-channel:
+    title-new: "Subscribe to {{name}} now"
+    title-renew: "Renew subscription to {{name}}"
 subscription-item:
     cancel: Cancel subscription
     edit: Edit subscription
@@ -108,3 +120,5 @@ title-bar:
     loggedin: |
         Logged in as {{name}}
         {{status}}
+twitch-emotes:
+    title: Show available channel emotes

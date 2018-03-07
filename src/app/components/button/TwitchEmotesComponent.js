@@ -1,6 +1,7 @@
 import { get } from "@ember/object";
 import { and, or } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
+import { translationMacro as t } from "ember-i18n/addon";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "./FormButtonComponent";
@@ -20,7 +21,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	classNames: [ "btn-neutral" ],
 	icon: "fa-smile-o",
 	iconanim: true,
-	title: "Show available channel emotes",
+	_title: t( "components.twitch-emotes.title" ),
 
 	hotkeys: [
 		{
