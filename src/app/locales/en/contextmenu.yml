@@ -1,3 +1,9 @@
+tray:
+    toggle: Toggle window
+    close: Close application
+macOS:
+    preferences: Preferences
+    refresh: Refresh
 channel-page: Channel page
 channel-settings: Channel settings
 change-quality: Change quality

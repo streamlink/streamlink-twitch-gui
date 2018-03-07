@@ -1,14 +1,13 @@
 import Component from "@ember/component";
 import { get, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 
 
 export default Component.extend({
-	i18n: service(),
+	nwjs: service(),
 	routing: service( "-routing" ),
 
 	tagName: "a",
@@ -56,21 +55,18 @@ export default Component.extend({
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		const menu = Menu.create();
 		const url = get( this, "url" );
-		const i18n = get( this, "i18n" );
+		const nwjs = get( this, "nwjs" );
 
-		menu.items.pushObjects([
+		nwjs.contextMenu( event, [
 			{
-				label: i18n.t( "contextmenu.open-in-browser" ).toString(),
+				label: [ "contextmenu.open-in-browser" ],
 				click: () => openBrowser( url )
 			},
 			{
-				label: i18n.t( "contextmenu.copy-link-address" ).toString(),
+				label: [ "contextmenu.copy-link-address" ],
 				click: () => setClipboard( url )
 			}
 		]);
-
-		menu.popup( event );
 	}
 });

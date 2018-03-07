@@ -1,12 +1,11 @@
 import Component from "@ember/component";
 import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
-import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 
 
 export default Component.extend({
-	i18n: service(),
+	nwjs: service(),
 
 	tagName: "div",
 
@@ -24,15 +23,13 @@ export default Component.extend({
 
 		if ( !selected.length && event.target.tagName === "A" ) { return; }
 
-		const menu = Menu.create();
-		menu.items.pushObject({
-			label: get( this, "i18n" ).t( "contextmenu.copy-selection" ).toString(),
+		const nwjs = get( this, "nwjs" );
+		nwjs.contextMenu( event, [{
+			label: [ "contextmenu.copy-selection" ],
 			enabled: selected.length,
 			click() {
 				setClipboard( selected );
 			}
-		});
-
-		menu.popup( event );
+		}] );
 	}
 });

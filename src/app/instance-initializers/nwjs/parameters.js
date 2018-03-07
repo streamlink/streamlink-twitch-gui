@@ -9,11 +9,10 @@ import {
 } from "nwjs/argv";
 import { setMaximized, setMinimized, setVisibility } from "nwjs/Window";
 import resetWindow from "nwjs/Window/reset";
-import { setShowInTray, hideOnClick } from "nwjs/Tray";
 import onChangeIntegrations from "./integrations";
 
 
-export default async function( argv, settings, application ) {
+export default async function( application, argv ) {
 	// reset window
 	if ( argv[ ARG_RESET_WINDOW ] ) {
 		await resetWindow( true );
@@ -25,17 +24,14 @@ export default async function( argv, settings, application ) {
 	}
 
 	if ( argv[ ARG_TRAY ] ) {
-		const isVisibleInTaskbar = get( settings, "gui.isVisibleInTaskbar" );
-		const isVisibleInTray = get( settings, "gui.isVisibleInTray" );
-		// show tray icon (and taskbar item)
-		setShowInTray( true, isVisibleInTaskbar );
-		// remove the tray icon after clicking it if it's disabled in the settings
-		if ( !isVisibleInTray ) {
-			hideOnClick();
-		}
+		const nwjs = application.lookup( "service:nwjs" );
+		const settings = application.lookup( "service:settings" );
+		const removeOnClick = !get( settings, "gui.isVisibleInTray" );
+		nwjs.setShowInTray( true, removeOnClick );
+
 	} else {
 		// show tray and taskbar item depending on settings
-		onChangeIntegrations( settings );
+		onChangeIntegrations( application );
 
 		// show application window
 		setVisibility( true );

@@ -3,21 +3,16 @@ import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
 import $ from "jquery";
 import { set as setClipboard } from "nwjs/Clipboard";
-import Menu from "nwjs/Menu";
 import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 
 
 export default Component.extend({
-	i18n: service(),
+	nwjs: service(),
 	routing: service( "-routing" ),
 
 	didInsertElement() {
-		const i18n = get( this, "i18n" );
 		const routing = get( this, "routing" );
-
-		const labelOpenInBrowser = i18n.t( "contextmenu.open-in-browser" ).toString();
-		const labelCopyLinkAddress = i18n.t( "contextmenu.copy-link-address" ).toString();
 
 		[ ...this.element.querySelectorAll( "a" ) ]
 			.map( anchor => ({
@@ -51,19 +46,17 @@ export default Component.extend({
 						event.preventDefault();
 						event.stopImmediatePropagation();
 
-						const menu = Menu.create();
-						menu.items.pushObjects([
+						const nwjs = get( this, "nwjs" );
+						nwjs.contextMenu( event, [
 							{
-								label: labelOpenInBrowser,
+								label: [ "contextmenu.open-in-browser" ],
 								click: () => openBrowser( url )
 							},
 							{
-								label: labelCopyLinkAddress,
+								label: [ "contextmenu.copy-link-address" ],
 								click: () => setClipboard( url )
 							}
 						]);
-
-						menu.popup( event );
 					})
 					.mouseup( event => {
 						// left or middle click

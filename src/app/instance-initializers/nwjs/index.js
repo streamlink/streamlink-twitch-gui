@@ -4,11 +4,11 @@ import { default as nwApp, quit } from "nwjs/App";
 import { default as nwWindow, setVisibility, setFocused } from "nwjs/Window";
 import { argv, parseCommand } from "nwjs/argv";
 import platformfixes from "./platformfixes";
-import { createNativeMenuBar } from "./menubar";
 import onChangeIntegrations from "./integrations";
 import parameterActions from "./parameters";
 import windowInitializer from "./window";
 import Logger from "utils/Logger";
+import { isDarwin } from "utils/node/platform";
 
 
 const { logDebug, logError } = new Logger( "NWjs EmberJS initializer" );
@@ -16,10 +16,10 @@ const { logDebug, logError } = new Logger( "NWjs EmberJS initializer" );
 
 export default {
 	name: "nwjs",
+	after: "i18n",
 
 	initialize( application ) {
 		const nwjsService = application.lookup( "service:nwjs" );
-		const routingService = application.lookup( "service:-routing" );
 		const settings = application.lookup( "service:settings" );
 
 		// initialize all the NWjs stuff
@@ -27,20 +27,23 @@ export default {
 			// try to fix issues on certain platforms first
 			platformfixes();
 
-			createNativeMenuBar( routingService );
+			// build macOS native menubar
+			if ( isDarwin ) {
+				application.lookup( "nwjs:menubar" );
+			}
 
 			// restore window position first (while being hidden)
 			await windowInitializer( application );
 
 			try {
-				await parameterActions( argv, settings, application );
+				await parameterActions( application, argv );
 			} catch ( error ) {
 				await logError( error );
 			}
 
 			// observe changes to integration settings
 			const settingsGui = get( settings, "gui" );
-			addObserver( settingsGui, "integration", () => onChangeIntegrations( settings ) );
+			addObserver( settingsGui, "integration", () => onChangeIntegrations( application ) );
 
 			nwWindow.window.initialized = true;
 		});
@@ -55,7 +58,7 @@ export default {
 			await logDebug( "Received parameters from new application instance", () => argv );
 
 			try {
-				await parameterActions( argv, settings, application );
+				await parameterActions( application, argv );
 			} catch ( error ) {
 				await logError( error );
 			}

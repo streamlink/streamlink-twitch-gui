@@ -1,7 +1,6 @@
 import Component from "@ember/component";
 import { get, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import Menu from "nwjs/Menu";
 import { set as setClipboard } from "nwjs/Clipboard";
 import {
 	ATTR_STREAMS_CLICK_NOOP,
@@ -16,7 +15,7 @@ import layout from "templates/components/stream/StreamPreviewImageComponent.hbs"
 
 export default Component.extend({
 	chat: service(),
-	i18n: service(),
+	nwjs: service(),
 	routing: service( "-routing" ),
 	settings: service(),
 	streaming: service(),
@@ -94,61 +93,61 @@ export default Component.extend({
 	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
-		const i18n = get( this, "i18n" );
-		const menu = Menu.create();
+		const nwjs = get( this, "nwjs" );
+		const items = [];
 
 		const quals = qualities.map( quality => ({
-			label: quality.label,
+			label: [ `qualities.${quality.id}` ],
 			click: () => this.startStream( quality.id )
 		}) );
 
 		if ( get( this, "stream" ) ) {
 			if ( get( this, "opened" ) ) {
-				menu.items.pushObjects([
+				items.push(
 					{
-						label: i18n.t( "contextmenu.close-stream" ).toString(),
+						label: [ "contextmenu.close-stream" ],
 						click: () => this.closeStream()
 					},
 					{
-						label: i18n.t( "contextmenu.change-quality" ).toString(),
+						label: [ "contextmenu.change-quality" ],
 						submenu: quals
 					}
-				]);
+				);
 			} else {
-				menu.items.pushObjects([
+				items.push(
 					{
-						label: i18n.t( "contextmenu.launch-stream" ).toString(),
+						label: [ "contextmenu.launch-stream" ],
 						submenu: quals
 					}
-				]);
+				);
 			}
 		}
 
-		menu.items.pushObjects([
+		items.push(
 			{
-				label: i18n.t( "contextmenu.open-chat" ).toString(),
+				label: [ "contextmenu.open-chat" ],
 				click: () => this.openChat()
 			},
 			{
-				label: i18n.t( "contextmenu.copy-channel-url" ).toString(),
+				label: [ "contextmenu.copy-channel-url" ],
 				click: () => this.copyChannelURL()
 			}
-		]);
+		);
 
 		if ( !this.attrs.contextmenuNoGotos ) {
-			menu.items.pushObjects([
+			items.push(
 				{
-					label: i18n.t( "contextmenu.channel-page" ).toString(),
+					label: [ "contextmenu.channel-page" ],
 					click: () => this.gotoChannelPage()
 				},
 				{
-					label: i18n.t( "contextmenu.channel-settings" ).toString(),
+					label: [ "contextmenu.channel-settings" ],
 					click: () => this.gotoChannelSettings()
 				}
-			]);
+			);
 		}
 
-		menu.popup( event );
+		nwjs.contextMenu( event, items );
 	},
 
 
