@@ -1,5 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs } from "test-utils";
+import { I18nService } from "i18n-utils";
 import Component from "@ember/component";
 import $ from "jquery";
 import sinon from "sinon";
@@ -11,7 +12,8 @@ import HotkeyService from "services/HotkeyService";
 moduleForComponent( "services/HotkeyService", {
 	integration: true,
 	resolver: buildResolver({
-		HotkeyService
+		HotkeyService,
+		I18nService
 	}),
 	beforeEach() {
 		this.inject.service( "hotkey" );
@@ -401,7 +403,7 @@ test( "Component title", function( assert ) {
 		title: "foo",
 		hotkeys: [{ code: "KeyA" }]
 	});
-	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
+	this.render( hbs`{{component-a _title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
 		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"[A] foo",
@@ -410,7 +412,7 @@ test( "Component title", function( assert ) {
 	this.clearRender();
 
 	this.set( "hotkeys", [{ code: [ "KeyA", "KeyB" ] }] );
-	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
+	this.render( hbs`{{component-a _title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
 		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"[A] foo",
@@ -419,28 +421,28 @@ test( "Component title", function( assert ) {
 	this.clearRender();
 
 	this.set( "hotkeys", [{ code: "Escape" }] );
-	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
+	this.render( hbs`{{component-a _title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
 		this.$( "*" ).eq( 0 ).prop( "title" ),
-		"[Esc] foo",
-		"Updates the title when hotkey is found in name map"
+		"[hotkeys.keys.Escape] foo",
+		"Updates the title when hotkey is named"
 	);
 	this.clearRender();
 
 	this.set( "hotkeys", [{ code: "KeyA", ctrlKey: true }] );
-	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
+	this.render( hbs`{{component-a _title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
 		this.$( "*" ).eq( 0 ).prop( "title" ),
-		"[Ctrl+A] foo",
+		"[hotkeys.modifiers.ctrl+A] foo",
 		"Updates the title when hotkey is alphanumerical and a modifier is required"
 	);
 	this.clearRender();
 
 	this.set( "hotkeys", [{ code: "KeyA", ctrlKey: true, shiftKey: true, altKey: true }] );
-	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
+	this.render( hbs`{{component-a _title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
 		this.$( "*" ).eq( 0 ).prop( "title" ),
-		"[Ctrl+Shift+Alt+A] foo",
+		"[hotkeys.modifiers.ctrl+hotkeys.modifiers.shift+hotkeys.modifiers.alt+A] foo",
 		"Updates the title when hotkey is alphanumerical and multiple modifiers are required"
 	);
 	this.clearRender();
@@ -449,7 +451,7 @@ test( "Component title", function( assert ) {
 		title: "",
 		hotkeys: [{ code: "KeyA" }]
 	});
-	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
+	this.render( hbs`{{component-a _title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
 		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"",
@@ -461,11 +463,23 @@ test( "Component title", function( assert ) {
 		title: "foo",
 		hotkeys: []
 	});
-	this.render( hbs`{{component-a title=title hotkeys=hotkeys}}` );
+	this.render( hbs`{{component-a _title=title hotkeys=hotkeys}}` );
 	assert.strictEqual(
 		this.$( "*" ).eq( 0 ).prop( "title" ),
 		"foo",
 		"Doesn't update the title when hotkeys are missing"
+	);
+	this.clearRender();
+
+	this.setProperties({
+		title: "foo",
+		hotkeys: [{ code: "KeyA" }]
+	});
+	this.render( hbs`{{component-a _title=title hotkeys=hotkeys disableHotkeys=true}}` );
+	assert.strictEqual(
+		this.$( "*" ).eq( 0 ).prop( "title" ),
+		"foo",
+		"Doesn't update the title when disableHotkeys is set to true"
 	);
 
 });

@@ -1,5 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver } from "test-utils";
+import { I18nService } from "i18n-utils";
 import Component from "@ember/component";
 import { get, set } from "@ember/object";
 import { alias } from "@ember/object/computed";
@@ -22,6 +23,7 @@ moduleForComponent( "follow-button", "components/button/FollowButtonComponent", 
 	unit: true,
 	needs: [
 		"component:form-button",
+		"service:i18n",
 		"helper:bool-not"
 	],
 	resolver: buildResolver({
@@ -29,6 +31,7 @@ moduleForComponent( "follow-button", "components/button/FollowButtonComponent", 
 			isLocked: alias( "isLoading" )
 		}),
 		FormButtonComponent,
+		I18nService,
 		BoolNotHelper
 	}),
 	beforeEach() {

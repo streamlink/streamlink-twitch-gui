@@ -143,6 +143,8 @@ import HoursFromNowHelper from "helpers/HoursFromNowHelper";
 import TimeFromNowHelper from "helpers/TimeFromNowHelper";
 import GetParamHelper from "helpers/GetParamHelper";
 import GetIndexHelper from "helpers/GetIndexHelper";
+import FindByHelper from "helpers/FindByHelper";
+import HotkeyTitleHelper from "helpers/HotkeyTitleHelper";
 
 import I18nService from "services/I18nService";
 import NwjsService from "services/NwjsService";
@@ -518,6 +520,8 @@ export default {
 	TimeFromNowHelper,
 	GetParamHelper,
 	GetIndexHelper,
+	FindByHelper,
+	HotkeyTitleHelper,
 
 
 	// Services
