@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
+import { I18nService } from "i18n-utils";
 import { get } from "@ember/object";
 import Service from "@ember/service";
 import Model from "ember-data/model";
@@ -29,6 +30,7 @@ module( "models/twitch/Product", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:i18n", I18nService );
 		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-product", Product );
 		owner.register( "serializer:twitch-product", ProductSerializer.extend({

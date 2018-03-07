@@ -37,6 +37,10 @@ const fpsRanges = [
 
 
 export default Model.extend({
+	i18n: service(),
+	settings: service(),
+
+
 	average_fps: attr( "number" ),
 	broadcast_platform: attr( "string" ),
 	channel: belongsTo( "twitchChannel", { async: false } ),
@@ -49,9 +53,6 @@ export default Model.extend({
 	stream_type: attr( "string" ),
 	video_height: attr( "number" ),
 	viewers: attr( "number" ),
-
-
-	settings: service(),
 
 
 	reVodcast: computed( "settings.streams.vodcast_regexp", function() {
@@ -93,22 +94,22 @@ export default Model.extend({
 	hasFormatInfo: and( "video_height", "average_fps" ),
 
 
-	titleCreatedAt: computed( "created_at", function() {
+	titleCreatedAt: computed( "i18n.locale", "created_at", function() {
+		const i18n = get( this, "i18n" );
 		const created_at = get( this, "created_at" );
 		const moment = new Moment( created_at );
-		const diff = moment.diff( new Date(), "days" );
-		const formatted = moment.format( diff === 0 ? "LTS" : "llll" );
+		const last24h = moment.diff( new Date(), "days" ) === 0;
+		const path = `models.twitch.stream.created-at.${last24h ? "less" : "more"}-than-24h`;
+		const format = i18n.t( path ).toString();
 
-		return `Online since ${formatted}`;
+		return moment.format( format );
 	}),
 
-	titleViewers: computed( "viewers", function() {
-		const number = get( this, "viewers" );
-		const text = number === 1
-			? " person is watching"
-			: " people are watching";
+	titleViewers: computed( "i18n.locale", "viewers", function() {
+		const i18n = get( this, "i18n" );
+		const count = get( this, "viewers" );
 
-		return `${number}${text}`;
+		return i18n.t( "models.twitch.stream.viewers", { count } );
 	}),
 
 	resolution: computed( "video_height", function() {

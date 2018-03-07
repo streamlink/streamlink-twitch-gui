@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
+import { I18nService } from "i18n-utils";
 import Service from "@ember/service";
 
 import SearchChannel from "models/twitch/SearchChannel";
@@ -19,6 +20,7 @@ module( "models/twitch/SearchChannel", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:i18n", I18nService );
 		owner.register( "model:twitch-search-channel", SearchChannel );
 		owner.register( "serializer:twitch-search-channel", SearchChannelSerializer );
 		owner.register( "model:twitch-channel", Channel );

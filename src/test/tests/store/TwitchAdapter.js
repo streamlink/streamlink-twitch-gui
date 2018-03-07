@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
+import { I18nService } from "i18n-utils";
 import Service from "@ember/service";
 
 import TwitchAdapter from "store/TwitchAdapter";
@@ -32,6 +33,7 @@ module( "store/TwitchAdapter", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:i18n", I18nService );
 		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-stream", Stream );
 		owner.register( "adapter:twitch-stream", StreamAdapter );

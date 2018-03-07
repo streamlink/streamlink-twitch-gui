@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
+import { I18nService } from "i18n-utils";
 import { get, set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
@@ -35,6 +36,7 @@ module( "models/twitch/Channel", {
 		});
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:i18n", I18nService );
 		owner.register( "service:settings", Service.extend({
 			streams: {}
 		}) );
@@ -156,14 +158,14 @@ test( "Computed properties", assert => {
 	run( () => set( record, "followers", 1 ) );
 	assert.strictEqual(
 		get( record, "titleFollowers" ),
-		"1 person is following",
+		"models.twitch.channel.followers{\"count\":1}",
 		"Shows the correct title when one person is following"
 	);
 
 	run( () => set( record, "followers", 2 ) );
 	assert.strictEqual(
 		get( record, "titleFollowers" ),
-		"2 people are following",
+		"models.twitch.channel.followers{\"count\":2}",
 		"Shows the correct title when more people are following"
 	);
 
@@ -173,14 +175,14 @@ test( "Computed properties", assert => {
 	run( () => set( record, "views", 1 ) );
 	assert.strictEqual(
 		get( record, "titleViews" ),
-		"1 channel view",
+		"models.twitch.channel.views{\"count\":1}",
 		"Shows the correct title when channel has one view"
 	);
 
 	run( () => set( record, "views", 2 ) );
 	assert.strictEqual(
 		get( record, "titleViews" ),
-		"2 channel views",
+		"models.twitch.channel.views{\"count\":2}",
 		"Shows the correct title when channel has more views"
 	);
 
