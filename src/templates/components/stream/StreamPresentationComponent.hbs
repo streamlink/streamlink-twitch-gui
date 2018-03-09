@@ -1,5 +1,11 @@
 <div class="image">
-{{stream-preview-image stream=stream clickable=clickablePreview src=stream.preview.large noContextmenu=(bool-not clickablePreview)}}
+{{stream-preview-image
+	stream=stream
+	channel=stream.channel
+	clickable=clickablePreview
+	src=stream.preview.large
+	noContextmenu=(bool-not clickablePreview)
+}}
 </div>
 <div class="info">
 <h3 class="title">{{#if stream.channel.hasLanguage}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{#link-to "channel" stream.channel.id}}{{stream.channel.detailedName}}{{/link-to}}</h3>

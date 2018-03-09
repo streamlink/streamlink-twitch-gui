@@ -42,9 +42,9 @@ export default Component.extend({
 	clickable: true,
 
 
-	opened: computed( "stream.channel.id", "streaming.model.length", function() {
-		let model = get( this, "streaming.model" );
-		let id    = get( this, "stream.channel.id" );
+	opened: computed( "channel.id", "streaming.model.length", function() {
+		const model = get( this, "streaming.model" );
+		const id    = get( this, "channel.id" );
 
 		return model.mapBy( "channel.id" ).indexOf( id ) !== -1;
 	}),
@@ -151,33 +151,37 @@ export default Component.extend({
 
 
 	startStream( quality ) {
-		let stream = get( this, "stream" );
-		get( this, "streaming" ).startStream( stream, quality );
+		const streaming = get( this, "streaming" );
+		const stream = get( this, "stream" );
+		streaming.startStream( stream, quality );
 	},
 
 	closeStream() {
-		let stream = get( this, "stream" );
-		get( this, "streaming" ).closeStream( stream );
+		const streaming = get( this, "streaming" );
+		const stream = get( this, "stream" );
+		streaming.closeStream( stream );
 	},
 
 	openChat() {
 		const chat = get( this, "chat" );
-		const channel = get( this, "stream.channel" );
+		const channel = get( this, "channel" );
 		chat.openChat( channel );
 	},
 
 	copyChannelURL() {
-		let url = get( this, "stream.channel.url" );
+		const url = get( this, "channel.url" );
 		setClipboard( url );
 	},
 
 	gotoChannelPage() {
-		let name = get( this, "stream.channel.id" );
-		get( this, "routing" ).transitionTo( "channel", name );
+		const routing = get( this, "routing" );
+		const id = get( this, "channel.id" );
+		routing.transitionTo( "channel", id );
 	},
 
 	gotoChannelSettings() {
-		let name = get( this, "stream.channel.id" );
-		get( this, "routing" ).transitionTo( "channel.settings", name );
+		const routing = get( this, "routing" );
+		const id = get( this, "channel.id" );
+		routing.transitionTo( "channel.settings", id );
 	}
 });

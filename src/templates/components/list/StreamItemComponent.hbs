@@ -6,11 +6,13 @@
 {{#stream-preview-image
 	src=content.preview.medium
 	stream=content
+	channel=content.channel
 	clickable=(bool-not expanded)
 	tagName="section"
 	class=(if expanded "expanded")
 	title=(unless expanded (unless infoTitle (if channel.status channel.status "") (if channel.game channel.game "")) "")
-	action=(action "collapse")}}
+	action=(action "collapse")
+}}
 {{#if host}}
 <header><div><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.id title=(concat "hosted by " host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</div></header>
 {{/if}}
