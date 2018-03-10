@@ -42,6 +42,21 @@
 </article>
 {{/if}}
 <article>
+<h3><i class="fa fa-language"></i>{{t "routes.about.translations.header"}}</h3>
+<dl class="dl-horizontal">
+{{#each-in localesConfig.locales as |code language|}}
+<dt>{{t (concat "languages." code)}}</dt>
+<dd>
+<ul class="list-unstyled">
+{{#each (get localesConfig.contributors code) as |contributor|}}
+<li>{{contributor.name}}{{#if contributor.github}} (<i class="fa fa-github"></i> {{#external-link url=(concat "https://github.com/" contributor.github)}}{{contributor.github}}{{/external-link}}){{/if}}</li>
+{{/each}}
+</ul>
+</dd>
+{{/each-in}}
+</dl>
+</article>
+<article>
 <h3><i class="fa fa-sitemap"></i>{{t "routes.about.dependencies.header"}}</h3>
 <dl class="dl-horizontal">
 {{#each dependencies as |elem|}}
