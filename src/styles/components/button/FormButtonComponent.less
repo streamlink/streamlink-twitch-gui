@@ -54,15 +54,23 @@
 }
 
 .form-button-component.icon-and-text {
+	// fa-fw
+	@icon-width: ( 18em / 14 );
+	@padding: ( @icon-width + 2 * @button-icon-spacing + @button-padding );
+
 	.form-button-component.icon;
 
-	min-width: 9em;
+	box-sizing: content-box;
+	min-width: 5em;
+	padding-left: @padding;
+	padding-right: @padding;
 
 	> i,
 	> svg {
-		width: 1em;
-		margin-left: ( -1 * ( 1 + @button-icon-spacing ) );
-		margin-right: @button-icon-spacing;
+		display: inline-block;
+		width: @icon-width;
+		margin-left: ( -1 * ( @icon-width + @button-icon-spacing ) );
+		text-align: center;
 	}
 }
 
