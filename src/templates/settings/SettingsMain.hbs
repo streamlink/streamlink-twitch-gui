@@ -47,10 +47,18 @@
 	(t "settings.main.theme.description")
 	icon="fa-paint-brush"
 }}
-	{{drop-down
+	{{#drop-down
 		value=model.gui.theme
 		content=contentGuiTheme
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "themes." selection.value)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "themes." item.value)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 
 {{#settings-row

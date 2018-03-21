@@ -17,10 +17,6 @@ export default Controller.extend({
 	}),
 
 	contentGuiTheme: computed(function() {
-		return themes.map( id => {
-			const label = id.substr( 0, 1 ).toUpperCase() + id.substr( 1 );
-
-			return { id, label };
-		});
+		return themes.map( id => ({ id }) );
 	})
 });
