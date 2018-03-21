@@ -1,17 +1,17 @@
 <main class="content content-settings {{if isAnimated 'animated'}}">
-<h2>Settings</h2>
+<h2>{{t "settings.menu.header"}}</h2>
 <header>
 {{sub-menu "settings" (hash
-	main="Main"
-	gui="GUI"
-	streaming="Streaming"
-	player="Player"
-	streams="Streams"
-	chat="Chat"
-	lists="Lists"
-	languages="Languages"
-	notifications="Notifications"
-	channels="Channels"
+	main=(t "settings.menu.main")
+	gui=(t "settings.menu.gui")
+	streaming=(t "settings.menu.streaming")
+	player=(t "settings.menu.player")
+	streams=(t "settings.menu.streams")
+	chat=(t "settings.menu.chat")
+	lists=(t "settings.menu.lists")
+	languages=(t "settings.menu.languages")
+	notifications=(t "settings.menu.notifications")
+	channels=(t "settings.menu.channels")
 )}}
 </header>
 {{outlet}}

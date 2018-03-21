@@ -1,17 +1,22 @@
 import Controller from "@ember/controller";
 import { computed } from "@ember/object";
-import { themes } from "config";
+import { locales as localesConfig, themes as themesConfig } from "config";
 
 
-const { themes: themesList } = themes;
+const { locales } = localesConfig;
+const { themes } = themesConfig;
 
 
 export default Controller.extend({
-	contentGuiTheme: computed(function() {
-		return themesList.map( id => {
-			const label = id.substr( 0, 1 ).toUpperCase() + id.substr( 1 );
+	contentGuiLanguages: computed(function() {
+		return Object.keys( locales )
+			.map( key => ({
+				id: key,
+				label: locales[ key ]
+			}) );
+	}),
 
-			return { id, label };
-		});
+	contentGuiTheme: computed(function() {
+		return themes.map( id => ({ id }) );
 	})
 });

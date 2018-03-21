@@ -1,0 +1,124 @@
+channel-item:
+    game-missing: no game set yet
+documentation-link:
+    title: Read the documentation online
+drop-down-selection:
+    placeholder: Please choose
+file-select:
+    placeholder: Leave blank for default path
+flag-icon:
+    channel: "The channel's language is {{lang}}"
+    broadcaster: "The broadcaster's language is {{lang}}"
+follow-button:
+    follow: "Follow {{name}}"
+    unfollow: "Unfollow {{name}}"
+    confirm: "Unfollow {{name}}"
+    keep: "Keep following {{name}}"
+infinite-scroll:
+    error: Error
+    loading: Loading
+    fetch: Fetch more
+main-menu:
+    browse:
+        header: Browse
+        featured: Featured
+        games: Games
+        communities: Communities
+        streams: Streams
+    my:
+        header: My
+        subscriptions: Subscriptions
+        live-streams: Live Streams
+        hosted-streams: Hosted Streams
+        channels: Channels
+        games: Games
+    misc:
+        header: Misc
+        settings: Settings
+        about: About
+open-chat:
+    title: Open chat
+quick-bar-homepage:
+    title: Set as homepage
+quick-bar-random-stream:
+    title: Launch random stream
+search-bar:
+    placeholder: Search
+    filter: Filter results
+    filters:
+        all: All
+        games: Games
+        channels: Channels
+        streams: Streams
+    recent: Recent queries
+settings-channel-item:
+    settings: Settings
+    erase: Unset
+    confirmation: Unset custom settings?
+    confirm: Yes
+    decline: No
+settings-row:
+    notes: Notes
+    default: Default
+    requires: Requires
+    example: Example
+    variables:
+        title: Available variables
+        # tooltip (whitespace sensitive)
+        help: |
+            The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped. Some applications are able to read unnecessarily escaped characters in their parameters list and will work as expected, but others will not. Make sure to set all variables inside single or double quoted strings.
+
+            Correct usage:
+            -a "{a}" -b "{b1}{b2}" "-c={c}"
+settings-submit:
+    apply: Apply
+    discard: Discard
+share-channel:
+    title: Copy channel url to clipboard
+stream-item:
+    hosted-by: "hosted by {{name}}"
+    fps: "{{fps}} fps"
+    details:
+        show: Show stream details
+        lock: Lock details view
+        unlock: Unlock details view
+    vodcast: Vodcast
+subscribe-channel:
+    title-new: "Subscribe to {{name}} now"
+    title-renew: "Renew subscription to {{name}}"
+subscription-item:
+    cancel: Cancel subscription
+    edit: Edit subscription
+    access:
+        # new Moment(subscription.access_end).format(...)
+        title: "LLLL"
+        ended: "Has ended"
+        # time = new Moment().to(subscription.access_end, true)
+        renews: "Will be renewed in {{time}}"
+        # time = new Moment().to(subscription.access_end, true)
+        ends: "Will end in {{time}}"
+    subscribed: You are subscribed
+    support: Directly supports the channel
+    # new Moment(subscription.created_at).format(...)
+    since: "[Since] LLLL"
+    duration:
+        one: Subscribed for one month
+        other: Subscribed for {{count}} months
+    no-emoticons: This channel doesn't have any emoticons (yet)
+team-item:
+    created-at:
+        title: "Date created"
+        # new Moment(team.created_at).format(...)
+        format: "llll"
+    updated-at:
+        title: "Modified last"
+        # new Moment(team.updated_at).format(...)
+        format: "llll"
+title-bar:
+    loggedout: Not logged in
+    # tooltip (whitespace sensitive)
+    loggedin: |
+        Logged in as {{name}}
+        {{status}}
+twitch-emotes:
+    title: Show available channel emotes

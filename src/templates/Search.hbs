@@ -1,25 +1,25 @@
 <main class="content content-search">
-<h2>{{filterlabel}} search results: <span>{{query}}</span></h2>
+<h2>{{t (concat "routes.search.header." filter)}}<span>{{query}}</span></h2>
 {{#if noResults}}
-<section class="noresults">Your query didn't match anything...</section>
+<section class="noresults">{{t "routes.search.empty"}}</section>
 {{/if}}
 
 {{#if games.length}}
-{{#if notFiltered}}<h3>Games</h3>{{/if}}
+{{#if notFiltered}}<h3>{{t "routes.search.subheader.games"}}</h3>{{/if}}
 {{#content-list games infiniteScroll=(bool-not notFiltered) classNames="search-games" as |item isNewItem isDuplicate|}}
 {{game-item content=item isNewItem=(if notFiltered false isNewItem) isDuplicate=isDuplicate}}
 {{/content-list}}
 {{/if}}
 
 {{#if channels.length}}
-{{#if notFiltered}}<h3>Channels</h3>{{/if}}
+{{#if notFiltered}}<h3>{{t "routes.search.subheader.channels"}}</h3>{{/if}}
 {{#content-list channels infiniteScroll=(bool-not notFiltered) classNames="search-channels" as |item isNewItem isDuplicate|}}
 {{channel-item content=item isNewItem=(if notFiltered false isNewItem) isDuplicate=isDuplicate}}
 {{/content-list}}
 {{/if}}
 
 {{#if streams.length}}
-{{#if notFiltered}}<h3>Streams</h3>{{/if}}
+{{#if notFiltered}}<h3>{{t "routes.search.subheader.streams"}}</h3>{{/if}}
 {{#content-list streams classNames="search-streams" as |item isNewItem isDuplicate|}}
 {{stream-item content=item isNewItem=isNewItem isDuplicate=isDuplicate}}
 {{/content-list}}

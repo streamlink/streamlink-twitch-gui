@@ -11,15 +11,15 @@
 </header>
 {{#unless dialog}}
 <div>
-<p><i class="fa fa-fw fa-cog"></i> {{#link-to "channel.settings" content.id}}Settings{{/link-to}}</p>
-<p><i class="fa fa-fw fa-eraser"></i> <a href="#" {{action "eraseDialog"}}>Unset</a></p>
+<p><i class="fa fa-fw fa-cog"></i> {{#link-to "channel.settings" content.id}}{{t "components.settings-channel-item.settings"}}{{/link-to}}</p>
+<p><i class="fa fa-fw fa-eraser"></i> <a href="#" {{action "eraseDialog"}}>{{t "components.settings-channel-item.erase"}}</a></p>
 </div>
 {{else}}
 <div class="erase">
-<p>Unset custom settings?</p>
+<p>{{t "components.settings-channel-item.confirmation"}}</p>
 <div class="button-list-horizontal">
-{{#form-button action=(action "confirm") classNames="btn-success"}}Yes{{/form-button}}
-{{#form-button action=(action "decline") classNames="btn-danger"}}No{{/form-button}}
+{{#form-button action=(action "confirm") classNames="btn-success"}}{{t "components.settings-channel-item.confirm"}}{{/form-button}}
+{{#form-button action=(action "decline") classNames="btn-danger"}}{{t "components.settings-channel-item.decline"}}{{/form-button}}
 </div>
 </div>
 {{/unless}}

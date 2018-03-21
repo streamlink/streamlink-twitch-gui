@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
+import { I18nService } from "i18n-utils";
 import Service from "@ember/service";
 
 import ChannelFollowed from "models/twitch/ChannelFollowed";
@@ -23,6 +24,7 @@ module( "models/twitch/ChannelFollowed", {
 				user_id: 1337
 			}
 		}) );
+		owner.register( "service:i18n", I18nService );
 		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-channel-followed", ChannelFollowed );
 		owner.register( "serializer:twitch-channel-followed", ChannelFollowedSerializer );

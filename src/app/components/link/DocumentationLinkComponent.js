@@ -9,9 +9,10 @@ const { "docs-url": docsUrl } = streamingConfig;
 
 
 export default ExternalLinkComponent.extend({
-	layout,
-
+	i18n: service(),
 	settings: service(),
+
+	layout,
 
 	// default baseUrl
 	baseUrl: computed( "settings.streaming.providerType", function() {
@@ -31,9 +32,9 @@ export default ExternalLinkComponent.extend({
 	],
 
 	class: "",
-	title: computed( "baseUrl", function() {
+	title: computed( "i18n.locale", "baseUrl", function() {
 		return get( this, "baseUrl" )
-			? "Read the documentation in your web browser"
+			? get( this, "i18n" ).t( "components.documentation-link.title" )
 			: "";
 	}),
 

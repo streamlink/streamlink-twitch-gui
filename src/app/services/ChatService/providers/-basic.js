@@ -13,11 +13,13 @@ const { chatUrl } = ChatProvider;
  */
 export default class ChatProviderBasic extends ChatProvider {
 	static get userArgsSubstitutions() {
+		const base = "settings.chat.provider.providers.basic.substitutions";
+
 		return [
-			new Substitution( "url", "url", "The channel's chat URL on Twitch.tv" ),
-			new Substitution( "channel", "channel", "The channel name" ),
-			new Substitution( "user", "user", "Your user name (if logged in)" ),
-			new Substitution( "token", "token", "Your access token (if logged in)" )
+			new Substitution( "url", "url", `${base}.url` ),
+			new Substitution( "channel", "channel", `${base}.channel` ),
+			new Substitution( "user", "user", `${base}.user` ),
+			new Substitution( "token", "token", `${base}.token` )
 		];
 	}
 

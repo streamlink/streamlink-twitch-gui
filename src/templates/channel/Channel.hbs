@@ -15,15 +15,15 @@
 {{#if stream.game}}<span><i class="fa fa-gamepad"></i> {{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</span>{{/if}}
 </div>
 {{else}}
-<div class="stats offline"><i class="fa fa-bed"></i> is offline right now</div>
+<div class="stats offline"><i class="fa fa-bed"></i> {{t "routes.channel.offline"}}</div>
 {{/if}}
 {{embedded-links text=channel.status classNames="status"}}
 </div>
 </header>
 {{#sub-menu "channel" (hash
-	index="Details"
-	teams="Teams"
-	settings="Settings"
+	index=(t "routes.channel.menu.details")
+	teams=(t "routes.channel.menu.teams")
+	settings=(t "routes.channel.menu.settings")
 ) as |subroute name|}}
 	{{#link-to (concat "channel." subroute) model tagName="li"}}{{name}}{{/link-to}}
 {{/sub-menu}}

@@ -1,12 +1,13 @@
 import { get } from "@ember/object";
 import { setShowInTaskbar } from "nwjs/Window";
-import { setShowInTray } from "nwjs/Tray";
 
 
-export default function( settings ) {
+export default function( application ) {
+	const nwjs = application.lookup( "service:nwjs" );
+	const settings = application.lookup( "service:settings" );
 	const taskbar = get( settings, "gui.isVisibleInTaskbar" );
 	const tray = get( settings, "gui.isVisibleInTray" );
 
 	setShowInTaskbar( taskbar );
-	setShowInTray( tray, taskbar );
+	nwjs.setShowInTray( tray );
 }

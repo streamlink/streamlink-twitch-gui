@@ -22,7 +22,6 @@ export default [
 	// refresh rate and is therefore unable to detect 1080p60 as the best quality.
 	{
 		id: "source",
-		label: "Source",
 		quality: [
 			"source",
 			"1080p60",
@@ -46,7 +45,6 @@ export default [
 	// Include qualities without framerates, so they have higher priority than best at the end.
 	{
 		id: "high",
-		label: "High",
 		quality: [
 			"high",
 			"720p30",
@@ -63,7 +61,6 @@ export default [
 	// Include qualities without framerates, so they have higher priority than worst at the end.
 	{
 		id: "medium",
-		label: "Medium",
 		quality: [
 			"medium",
 			"480p30",
@@ -80,7 +77,6 @@ export default [
 	// Include qualities without framerates, so they have higher priority than worst at the end.
 	{
 		id: "low",
-		label: "Low",
 		quality: [
 			"low",
 			"360p30",
@@ -97,7 +93,6 @@ export default [
 	// No fallback qualities.
 	{
 		id: "audio",
-		label: "Audio only",
 		quality: [
 			"audio",
 			"audio_only"

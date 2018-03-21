@@ -23,6 +23,11 @@ Please try to be as detailed as possible in your report too. What is your enviro
 Feature requests are welcome. But take a moment to find out whether your idea fits with the scope and aims of the project. It's up to *you* to make a strong case to convince the project's developers of the merits of this feature. Please provide as much detail and context as possible.
 
 
+## Translating
+
+Please see the detailed translation guidelines on the project's [wiki][wiki].
+
+
 ## Developing and building
 
 Streamlink Twitch GUI is based on [NW.js][NW.js].  
@@ -140,6 +145,7 @@ This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5
   [license]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/LICENSE
   [issues]: https://github.com/streamlink/streamlink-twitch-gui/issues
   [issue-template]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/ISSUE_TEMPLATE.md
+  [wiki]: https://github.com/streamlink/streamlink-twitch-gui/wiki
   [howto-fork]: https://help.github.com/articles/fork-a-repo
   [howto-rebase]: https://help.github.com/articles/interactive-rebase
   [howto-format-commits]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html

@@ -1,25 +1,40 @@
 <fieldset>
 {{#settings-row
-	"Player preset"
-	"Use a predefined player configuration."
+	(t "settings.player.preset.title")
+	(t "settings.player.preset.description")
 	icon="fa-play-circle-o"
 }}
-	{{drop-down
+	{{#drop-down
 		value=model.streaming.player
 		content=contentStreamingPlayer
 		class="player-preset-dropdown"
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.player.players." selection.value ".label")}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.player.players." item.value ".label")}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 
 {{#settings-row
-	(if playerPresetDefault "Video player" "Player executable")
+	(if playerPresetDefault
+		(t "settings.player.executable.default.title")
+		(t "settings.player.executable.preset.title")
+	)
 	(if playerPresetDefaultAndPlayerEmpty
-		"If left empty, the player defined in the config file will be used."
-		"An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths."
+		(t "settings.player.executable.default.description")
+		(t "settings.player.executable.preset.description")
 	)
 	icon="fa-tv"
-	defaultValue=(if playerPresetDefaultAndPlayerEmpty "VLC (unconfigured)")
-	notes=(unless playerPresetDefaultAndPlayerEmpty "Parameters can be added here, but should be set in the parameters field instead. See below for a list of available variables.")
+	defaultValue=(if playerPresetDefaultAndPlayerEmpty
+		(t "settings.player.executable.default.default-value")
+	)
+	notes=(unless playerPresetDefaultAndPlayerEmpty
+		(t "settings.player.executable.default.notes")
+	)
 	documentation="--player"
 }}
 	{{file-select
@@ -32,8 +47,8 @@
 {{#each-in players as |playername player|}}
 	{{#each player.params as |param|}}
 		{{#settings-row
-			param.title
-			param.description
+			(t (concat "settings.player.players." playername ".attributes." param.name ".title"))
+			(t (concat "settings.player.players." playername ".attributes." param.name ".description"))
 			icon=(if param.icon
 				param.icon
 				(get
@@ -49,7 +64,7 @@
 		}}
 			{{#if (is-equal param.type "boolean")}}
 				{{check-box
-					(if param.text param.text param.title)
+					(t (concat "settings.player.players." playername ".attributes." param.name ".checkbox"))
 					checked=(mut (get (get model.streaming.players model.streaming.player) param.name))
 				}}
 			{{/if}}
@@ -59,8 +74,14 @@
 
 {{#unless playerPresetDefaultAndPlayerEmpty}}
 	{{#settings-row
-		(if playerPresetDefault "Parameters" "Custom parameters")
-		(if playerPresetDefault "Add player specific parameters." "Set additional custom player parameters.")
+		(if playerPresetDefault
+			(t "settings.player.args.default.title")
+			(t "settings.player.args.preset.title")
+		)
+		(if playerPresetDefault
+			(t "settings.player.args.default.description")
+			(t "settings.player.args.preset.description")
+		)
 		icon="fa-terminal"
 		documentation="--player-args"
 		substitutions=substitutionsPlayer
@@ -69,7 +90,7 @@
 			type="text"
 			classNames="col-xs-12"
 			value=(mut (get (get model.streaming.players model.streaming.player) "args"))
-			placeholder="Add custom player parameters"
+			placeholder=(t "settings.player.args.placeholder")
 		}}
 	{{/settings-row}}
 {{/unless}}

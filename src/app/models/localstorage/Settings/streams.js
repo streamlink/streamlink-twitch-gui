@@ -46,38 +46,26 @@ export default Fragment.extend({
 }).reopenClass({
 
 	contentName: [
-		{ id: ATTR_STREAMS_NAME_BOTH, label: "Show both" },
-		{ id: ATTR_STREAMS_NAME_CUSTOM, label: "Show custom names" },
-		{ id: ATTR_STREAMS_NAME_ORIGINAL, label: "Show original names" }
+		{ id: ATTR_STREAMS_NAME_BOTH, label: "both" },
+		{ id: ATTR_STREAMS_NAME_CUSTOM, label: "custom" },
+		{ id: ATTR_STREAMS_NAME_ORIGINAL, label: "original" }
 	],
 
 	filterLanguages: [
-		{
-			id: false,
-			label: {
-				text: "Fade out streams",
-				description: "Show all streams, fade out ones not matching the language selection."
-			}
-		},
-		{
-			id: true,
-			label: {
-				text: "Filter out streams",
-				description: "Only show streams matching the language selection."
-			}
-		}
+		{ id: false, label: "fade" },
+		{ id: true, label: "filter" }
 	],
 
 	info: [
-		{ id: ATTR_STREAMS_INFO_GAME, label: "Game being played" },
-		{ id: ATTR_STREAMS_INFO_TITLE, label: "Stream title" }
+		{ id: ATTR_STREAMS_INFO_GAME, label: "game" },
+		{ id: ATTR_STREAMS_INFO_TITLE, label: "title" }
 	],
 
 	click: [
-		{ id: ATTR_STREAMS_CLICK_NOOP, key: "disabled", label: "Do nothing" },
-		{ id: ATTR_STREAMS_CLICK_LAUNCH, key: "launch", label: "Launch stream" },
-		{ id: ATTR_STREAMS_CLICK_CHAT, key: "chat", label: "Open chat" },
-		{ id: ATTR_STREAMS_CLICK_CHANNEL, key: "channel", label: "Go to channel page" },
-		{ id: ATTR_STREAMS_CLICK_SETTINGS, key: "settings", label: "Go to channel settings" }
+		{ id: ATTR_STREAMS_CLICK_NOOP, label: "noop" },
+		{ id: ATTR_STREAMS_CLICK_LAUNCH, label: "launch" },
+		{ id: ATTR_STREAMS_CLICK_CHAT, label: "chat" },
+		{ id: ATTR_STREAMS_CLICK_CHANNEL, label: "channel" },
+		{ id: ATTR_STREAMS_CLICK_SETTINGS, label: "settings" }
 	]
 });

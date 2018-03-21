@@ -1,36 +1,41 @@
 <main class="content content-user content-user-followed-channels">
 <header>
-<h2>Followed Channels</h2>
+<h2>{{t "routes.user.followedChannels.header"}}</h2>
 {{headline-totals model.meta.total}}
 {{#quick-bar}}
 <div class="multibtn sort-method">
 {{form-button
-  action=(action "sortMethod" "created_at")
-  class=(if (is-equal sortby "created_at") "active")
-  icon="fa-calendar"
-  title="Sort by date followed"}}
+	action=(action "sortMethod" "created_at")
+	class=(if (is-equal sortby "created_at") "active")
+	icon="fa-calendar"
+	title=(t "routes.user.followedChannels.buttons.sort-by-followed")
+}}
 {{form-button
-  action=(action "sortMethod" "last_broadcast")
-  class=(if (is-equal sortby "last_broadcast") "active")
-  icon="fa-video-camera"
-  title="Sort by last broadcast"}}
+	action=(action "sortMethod" "last_broadcast")
+	class=(if (is-equal sortby "last_broadcast") "active")
+	icon="fa-video-camera"
+	title=(t "routes.user.followedChannels.buttons.sort-by-broadcast")
+}}
 {{form-button
-  action=(action "sortMethod" "login")
-  class=(if (is-equal sortby "login") "active")
-  icon="fa-sign-in"
-  title="Sort by last login"}}
+	action=(action "sortMethod" "login")
+	class=(if (is-equal sortby "login") "active")
+	icon="fa-sign-in"
+	title=(t "routes.user.followedChannels.buttons.sort-by-login")
+}}
 </div>
 <div class="multibtn sort-order">
 {{form-button
-  action=(action "sortOrder" "desc")
-  class=(if (is-equal direction "desc") "active")
-  icon="fa-long-arrow-down"
-  title="Sort in descending order"}}
+	action=(action "sortOrder" "desc")
+	class=(if (is-equal direction "desc") "active")
+	icon="fa-long-arrow-down"
+	title=(t "routes.user.followedChannels.buttons.sort-desc")
+}}
 {{form-button
-  action=(action "sortOrder" "asc")
-  class=(if (is-equal direction "asc") "active")
-  icon="fa-long-arrow-up"
-  title="Sort in ascending order"}}
+	action=(action "sortOrder" "asc")
+	class=(if (is-equal direction "asc") "active")
+	icon="fa-long-arrow-up"
+	title=(t "routes.user.followedChannels.buttons.sort-asc")
+}}
 </div>
 {{quick-bar-homepage}}
 {{/quick-bar}}
@@ -38,6 +43,6 @@
 {{#content-list model as |item isNewItem isDuplicateItem|}}
 {{channel-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<p>The returned list of followed channels is empty.</p>
+<p>{{t "routes.user.followedChannels.empty"}}</p>
 {{/content-list}}
 </main>

@@ -10,12 +10,11 @@ import embeddedHtmlLinksComponentInjector
 
 moduleForComponent( "components/link/EmbeddedHtmlLinksComponent", {
 	integration: true,
-	resolver: buildResolver({}),
+	resolver: buildResolver( {} ),
 	beforeEach() {
 		this.clipboardSetStub = sinon.stub();
 		this.openBrowserStub = sinon.stub();
-		this.menuItemsStub = sinon.stub();
-		this.menuPopupStub = sinon.stub();
+		this.contextMenuStub = sinon.stub();
 		this.transitionToStub = sinon.stub();
 
 		const { default: EmbeddedHtmlLinksComponent } = embeddedHtmlLinksComponentInjector({
@@ -24,21 +23,17 @@ moduleForComponent( "components/link/EmbeddedHtmlLinksComponent", {
 			},
 			"nwjs/Shell": {
 				openBrowser: this.openBrowserStub
-			},
-			"nwjs/Menu": {
-				create: () => ({
-					items: {
-						pushObjects: this.menuItemsStub
-					},
-					popup: this.menuPopupStub
-				})
 			}
+		});
+		const NwjsService = Service.extend({
+			contextMenu: this.contextMenuStub
 		});
 		const RoutingService = Service.extend({
 			transitionTo: this.transitionToStub
 		});
 
 		this.registry.register( "component:embedded-html-links", EmbeddedHtmlLinksComponent );
+		this.registry.register( "service:nwjs", NwjsService );
 		this.registry.register( "service:-routing", RoutingService );
 	}
 });
@@ -103,8 +98,7 @@ test( "EmbeddedHtmlLinksComponent", function( assert ) {
 	assert.notOk( event.isImmediatePropagationStopped(), "Contextmenu: event does propagate" );
 	assert.notOk( this.transitionToStub.called, "Doesn't open channel page on contextmenu" );
 	assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
-	assert.notOk( this.menuItemsStub.called, "Doesn't create menu items" );
-	assert.notOk( this.menuPopupStub.called, "Doesn't pop up context menu" );
+	assert.notOk( this.contextMenuStub.called, "Doesn't open context menu" );
 
 	// anchor 2
 	// trigger mouseup events
@@ -138,27 +132,27 @@ test( "EmbeddedHtmlLinksComponent", function( assert ) {
 	assert.ok( event.isImmediatePropagationStopped(), "Contextmenu: event doesn't propagate" );
 	assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
 	assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
-	assert.propEqual( this.menuItemsStub.args, [ [
+	assert.propEqual( this.contextMenuStub.args, [ [
+		event,
 		[
 			{
-				label: "Open in browser",
+				label: [ "contextmenu.open-in-browser" ],
 				click() {}
 			},
 			{
-				label: "Copy link address",
+				label: [ "contextmenu.copy-link-address" ],
 				click() {}
 			}
 		]
-	] ], "Creates context menu items" );
-	assert.strictEqual( this.menuPopupStub.args[0][0], event, "Opens the context menu" );
+	] ], "Opens context menu" );
 
 	assert.notOk( this.openBrowserStub.called, "Browser hasn't been opened yet" );
 	assert.notOk( this.clipboardSetStub.called, "Set clipboard hasn't been called yet" );
 
-	this.menuItemsStub.args[0][0][0].click();
+	this.contextMenuStub.args[0][1][0].click();
 	assert.propEqual( this.openBrowserStub.args, [ [ "https://bar.com/" ] ], "Opens browser" );
 
-	this.menuItemsStub.args[0][0][1].click();
+	this.contextMenuStub.args[0][1][1].click();
 	assert.propEqual( this.clipboardSetStub.args, [ [ "https://bar.com/" ] ], "Sets clipboard" );
 
 	// disabled events

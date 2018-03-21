@@ -1,7 +1,7 @@
 {{#if fetchError}}
-<i class="fa fa-bolt"></i>Error
+<i class="fa fa-bolt"></i>{{t "components.infinite-scroll.error"}}
 {{else if isLocked}}
-{{loading-spinner}}Loading
+{{loading-spinner}}{{t "components.infinite-scroll.loading"}}
 {{else}}
-<i class="fa fa-arrow-down"></i>Fetch more
+<i class="fa fa-arrow-down"></i>{{t "components.infinite-scroll.fetch"}}
 {{/if}}

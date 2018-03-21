@@ -1,6 +1,6 @@
 <main class="content content-user content-user-followed-streams">
 <header>
-<h2>Followed Streams</h2>
+<h2>{{t "routes.user.followedStreams.header"}}</h2>
 {{headline-totals model.meta.total}}
 {{#quick-bar}}
 {{quick-bar-random-stream model="twitchStreamFollowed"}}
@@ -10,10 +10,10 @@
 {{#content-list model as |item isNewItem isDuplicateItem|}}
 {{stream-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem faded=false}}
 {{else}}
-<p>The returned list of followed streams is empty.</p>
+<p>{{t "routes.user.followedStreams.empty.text"}}</p>
 <ul class="fa-ul list-empty">
-<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>Watch currently featured streams{{/link-to}}</li>
-<li>{{#link-to "streams"}}<i class="fa fa-li fa-caret-right"></i>Watch top streams{{/link-to}}</li>
+<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.user.followedStreams.empty.featured"}}{{/link-to}}</li>
+<li>{{#link-to "streams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.user.followedStreams.empty.streams"}}{{/link-to}}</li>
 </ul>
 {{/content-list}}
 </main>

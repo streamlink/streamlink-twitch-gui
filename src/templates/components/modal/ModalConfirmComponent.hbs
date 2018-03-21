@@ -1,13 +1,33 @@
 <div>
 	{{#modal-header}}
-		Please confirm
+		{{t "modal.confirm.header"}}
 	{{/modal-header}}
 	{{#modal-body}}
-		Do you want to apply your changes?
+		{{t "modal.confirm.body"}}
 	{{/modal-body}}
 	{{#modal-footer classNames="button-list-horizontal"}}
-		{{#form-button action=(action "apply")   classNames="btn-success" icon="fa-check"   iconanim=true}}Apply{{/form-button}}
-		{{#form-button action=(action "discard") classNames="btn-danger"  icon="fa-trash-o" iconanim=true}}Discard{{/form-button}}
-		{{#form-button action=(action "cancel")  classNames="btn-neutral" icon="fa-times"                }}Cancel{{/form-button}}
+		{{#form-button
+			action=(action "apply")
+			classNames="btn-success"
+			icon="fa-check"
+			iconanim=true
+		}}
+			{{t "modal.confirm.action.apply"}}
+		{{/form-button}}
+		{{#form-button
+			action=(action "discard")
+			classNames="btn-danger"
+			icon="fa-trash-o"
+			iconanim=true
+		}}
+			{{t "modal.confirm.action.discard"}}
+		{{/form-button}}
+		{{#form-button
+			action=(action "cancel")
+			classNames="btn-neutral"
+			icon="fa-times"
+		}}
+			{{t "modal.confirm.action.cancel"}}
+		{{/form-button}}
 	{{/modal-footer}}
 </div>

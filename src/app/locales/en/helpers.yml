@@ -1,0 +1,9 @@
+hours-from-now:
+    now: "just now"
+    minutes: "{{minutes}}m"
+    hours:
+        simple: "{{hours}}h"
+        extended: "{{hours}}h{{minutes}}m"
+    days:
+        simple: "{{days}}d"
+        extended: "{{days}}d{{hours}}h"

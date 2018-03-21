@@ -1,0 +1,18 @@
+tray:
+    toggle: Toggle window
+    close: Close application
+macOS:
+    preferences: Preferences
+    refresh: Refresh
+channel-page: Channel page
+channel-settings: Channel settings
+change-quality: Change quality
+close-stream: Close stream
+copy: Copy
+copy-channel-url: Copy channel URL
+copy-link-address: Copy link address
+copy-selection: Copy selection
+launch-stream: Launch stream
+open-chat: Open chat
+open-in-browser: Open in browser
+paste: Paste

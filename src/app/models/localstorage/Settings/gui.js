@@ -1,9 +1,10 @@
 import { get, computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
-import { themes as themesConfig } from "config";
+import { locales as localesConfig, themes as themesConfig } from "config";
 
 
+const { default: defaultLocale } = localesConfig;
 const defaultTheme = themesConfig.themes[0];
 
 
@@ -27,6 +28,7 @@ export default Fragment.extend({
 	hidebuttons: attr( "boolean", { defaultValue: false } ),
 	homepage: attr( "string", { defaultValue: "/featured" } ),
 	integration: attr( "number", { defaultValue: ATTR_GUI_INTEGRATION_BOTH } ),
+	language: attr( "string",  { defaultValue: defaultLocale } ),
 	minimize: attr( "number", { defaultValue: ATTR_GUI_MINIMIZE_NOOP } ),
 	minimizetotray: attr( "boolean", { defaultValue: false } ),
 	smoothscroll: attr( "boolean", { defaultValue: true } ),
@@ -44,21 +46,21 @@ export default Fragment.extend({
 }).reopenClass({
 
 	integration: [
-		{ id: ATTR_GUI_INTEGRATION_BOTH, label: "Both" },
-		{ id: ATTR_GUI_INTEGRATION_TASKBAR, label: "Taskbar" },
-		{ id: ATTR_GUI_INTEGRATION_TRAY, label: "Tray" }
+		{ id: ATTR_GUI_INTEGRATION_BOTH, label: "both" },
+		{ id: ATTR_GUI_INTEGRATION_TASKBAR, label: "taskbar" },
+		{ id: ATTR_GUI_INTEGRATION_TRAY, label: "tray" }
 	],
 
 	minimize: [
-		{ id: ATTR_GUI_MINIMIZE_NOOP, label: "Do nothing", disabled: false },
-		{ id: ATTR_GUI_MINIMIZE_MINIMIZE, label: "Minimize", disabled: false },
-		{ id: ATTR_GUI_MINIMIZE_TRAY, label: "Move to tray", disabled: false }
+		{ id: ATTR_GUI_MINIMIZE_NOOP, label: "noop", disabled: false },
+		{ id: ATTR_GUI_MINIMIZE_MINIMIZE, label: "minimize", disabled: false },
+		{ id: ATTR_GUI_MINIMIZE_TRAY, label: "tray", disabled: false }
 	],
 
 	focusrefresh: [
-		{ id: ATTR_GUI_FOCUSREFRESH_NONE, label: "Don't refresh" },
-		{ id: ATTR_GUI_FOCUSREFRESH_ONE, label: "After one minute" },
-		{ id: ATTR_GUI_FOCUSREFRESH_TWO, label: "After two minutes" },
-		{ id: ATTR_GUI_FOCUSREFRESH_FIVE, label: "After five minutes" }
+		{ id: ATTR_GUI_FOCUSREFRESH_NONE, label: "none" },
+		{ id: ATTR_GUI_FOCUSREFRESH_ONE, label: "one" },
+		{ id: ATTR_GUI_FOCUSREFRESH_TWO, label: "two" },
+		{ id: ATTR_GUI_FOCUSREFRESH_FIVE, label: "five" }
 	]
 });

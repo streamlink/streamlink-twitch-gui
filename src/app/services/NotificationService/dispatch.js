@@ -17,6 +17,7 @@ import { setMinimized, setVisibility, setFocused } from "nwjs/Window";
 
 export default Mixin.create( Evented, {
 	chat: service(),
+	i18n: service(),
 	routing: service( "-routing" ),
 	settings: service(),
 	streaming: service(),
@@ -55,10 +56,11 @@ export default Mixin.create( Evented, {
 	 * @returns {NotificationData}
 	 */
 	_getNotificationDataGroup( streams ) {
+		const i18n = get( this, "i18n" );
 		const settings = get( this, "settings.notification.click_group" );
 
 		return new NotificationData({
-			title: "Some followed channels have started streaming",
+			title: i18n.t( "services.notification.dispatch.group" ).toString(),
 			message: streams.map( stream => ({
 				title: get( stream, "channel.display_name" ),
 				message: get( stream, "channel.status" ) || ""
@@ -75,11 +77,12 @@ export default Mixin.create( Evented, {
 	 * @returns {NotificationData}
 	 */
 	_getNotificationDataSingle( stream ) {
+		const i18n = get( this, "i18n" );
 		const settings = get( this, "settings.notification.click" );
 		const name = get( stream, "channel.display_name" );
 
 		return new NotificationData({
-			title: `${name} has started streaming`,
+			title: i18n.t( "services.notification.dispatch.single", { name } ).toString(),
 			message: get( stream, "channel.status" ) || "",
 			icon: get( stream, "logo" ) || iconGroup,
 			click: () => this._notificationClick( [ stream ], settings ),

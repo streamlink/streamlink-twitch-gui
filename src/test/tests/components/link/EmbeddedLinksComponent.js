@@ -15,10 +15,10 @@ moduleForComponent( "components/link/EmbeddedLinksComponent", {
 	beforeEach() {
 		const { default: ExternalLinkComponent } = externalLinkComponentInjector({
 			"nwjs/Clipboard": {},
-			"nwjs/Shell": {},
-			"nwjs/Menu": {}
+			"nwjs/Shell": {}
 		});
 		this.registry.register( "component:external-link", ExternalLinkComponent );
+		this.registry.register( "service:nwjs", Service.extend() );
 		this.registry.register( "service:-routing", Service.extend() );
 	}
 });

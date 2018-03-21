@@ -13,6 +13,7 @@ const { isArray } = Array;
 
 
 export default Controller.extend({
+	i18n: service(),
 	store: service(),
 
 	substitutionsPlayer,
@@ -38,27 +39,32 @@ export default Controller.extend({
 	}),
 
 	contentStreamingPlayer: computed(function() {
+		const i18n = get( this, "i18n" );
+
 		const presets = [{
 			id: "default",
-			label: "No preset"
+			label: i18n.t( "settings.player.players.default.label" ).toString()
 		}];
-		for ( const [ id, { name: label, exec, disabled } ] of Object.entries( playersConfig ) ) {
+		for ( const [ id, { exec, disabled } ] of Object.entries( playersConfig ) ) {
 			if ( disabled || !exec[ platform ] ) { continue; }
-			presets.push({ id, label });
+			// TODO: remove label property after rewriting DropDownComponent
+			presets.push({ id, label: id });
 		}
 
 		return presets;
 	}),
 
-	playerPlaceholder: computed( "model.streaming.player", function() {
+	playerPlaceholder: computed( "i18n.locale", "model.streaming.player", function() {
+		const i18n = get( this, "i18n" );
+
 		const player = get( this, "model.streaming.player" );
 		if ( player === "default" || !playersConfig[ player ] ) {
-			return "Leave blank for default player";
+			return i18n.t( "settings.player.executable.default.placeholder" ).toString();
 		}
 
 		const exec = playersConfig[ player ][ "exec" ][ platform ];
 		if ( !exec ) {
-			return "Leave blank for default location";
+			return i18n.t( "settings.player.executable.preset.placeholder" ).toString();
 		}
 
 		return isArray( exec )

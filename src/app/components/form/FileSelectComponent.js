@@ -1,6 +1,7 @@
 import Component from "@ember/component";
 import { get, set, computed } from "@ember/object";
 import { on } from "@ember/object/evented";
+import { inject as service } from "@ember/service";
 import $ from "jquery";
 import { platform } from "utils/node/platform";
 import layout from "templates/components/form/FileSelectComponent.hbs";
@@ -11,6 +12,8 @@ const { isArray } = Array;
 
 
 export default Component.extend({
+	i18n: service(),
+
 	layout,
 
 	tagName: "div",
@@ -26,7 +29,7 @@ export default Component.extend({
 			}
 
 			if ( typeof value !== "object" || !hasOwnProperty.call( value, platform ) ) {
-				return "Leave blank for default path";
+				return get( this, "i18n" ).t( "components.file-select.placeholder" ).toString();
 			}
 
 			value = value[ platform ];

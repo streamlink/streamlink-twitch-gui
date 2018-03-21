@@ -1,5 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, checkListeners, hbs } from "test-utils";
+import { I18nService, THelper } from "i18n-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import Component from "@ember/component";
 import { run } from "@ember/runloop";
@@ -10,7 +11,9 @@ import InfiniteScrollComponent from "components/list/InfiniteScrollComponent";
 moduleForComponent( "components/list/InfiniteScrollComponent", {
 	integration: true,
 	resolver: buildResolver({
-		InfiniteScrollComponent
+		InfiniteScrollComponent,
+		I18nService,
+		THelper
 	}),
 	beforeEach() {
 		this.registry.register( "component:loading-spinner", Component.extend({}) );
@@ -18,7 +21,7 @@ moduleForComponent( "components/list/InfiniteScrollComponent", {
 });
 
 
-test( "Buttons states", function( assert ) {
+test( "Button states", function( assert ) {
 
 	this.setProperties({
 		content: [],
@@ -39,7 +42,11 @@ test( "Buttons states", function( assert ) {
 	` );
 	const $elem = this.$( ".infinite-scroll-component" );
 
-	assert.strictEqual( $elem.text().trim(), "Fetch more", "Initial state" );
+	assert.strictEqual(
+		$elem.text().trim(),
+		"components.infinite-scroll.fetch",
+		"Initial state"
+	);
 	assert.strictEqual( $elem.attr( "disabled" ), undefined, "No disabled attr" );
 
 	this.setProperties({
@@ -47,7 +54,11 @@ test( "Buttons states", function( assert ) {
 		hasFetchedAll: false,
 		fetchError: false
 	});
-	assert.strictEqual( $elem.text().trim(), "Loading", "Loading state" );
+	assert.strictEqual(
+		$elem.text().trim(),
+		"components.infinite-scroll.loading",
+		"Loading state"
+	);
 	assert.strictEqual( $elem.attr( "disabled" ), "disabled", "Disabled attr" );
 
 	this.setProperties({
@@ -55,7 +66,11 @@ test( "Buttons states", function( assert ) {
 		hasFetchedAll: false,
 		fetchError: true
 	});
-	assert.strictEqual( $elem.text().trim(), "Error", "Error state" );
+	assert.strictEqual(
+		$elem.text().trim(),
+		"components.infinite-scroll.error",
+		"Error state"
+	);
 
 	this.setProperties({
 		isFetching: false,

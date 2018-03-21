@@ -1,15 +1,34 @@
 <main class="content content-user content-user-auth">
 <div class="bigicon"><i class="fa fa-user"></i></div>
 {{#if isLoggingIn}}
-{{#form-button action=(action "abort") classNames="btn-danger" icon="fa-times"}}Abort{{/form-button}}
+{{#form-button
+	action=(action "abort")
+	classNames="btn-danger"
+	icon="fa-times"
+}}
+	{{t "routes.user.auth.abort"}}
+{{/form-button}}
 {{else}}
-{{#form-button action=(action "signin") classNames="btn-signin" icon="fa-sign-in" disabled=hasUserInteraction}}Sign in{{/form-button}}
+{{#form-button
+	action=(action "signin")
+	classNames="btn-signin"
+	icon="fa-sign-in"
+	disabled=hasUserInteraction
+}}
+	{{t "routes.user.auth.sign-in"}}
+{{/form-button}}
 {{/if}}
 <footer>
 {{#if settings.advanced}}
 {{#if showTokenForm}}
 <div class="input-group token-form">
-{{input type="text" class="form-control" value=token placeholder="Insert access token" autofocus=true}}
+{{input
+	type="text"
+	class="form-control"
+	value=token
+	placeholder=(t "routes.user.auth.token.placeholder")
+	autofocus=true
+}}
 <span class="input-group-btn">
 {{form-button
 	action=(action "signinToken")
@@ -22,14 +41,21 @@
 </span>
 </div>
 {{#unless hasLoginResult}}
-<p class="hint">Log in to your Twitch.tv account by using an access token.<br>Make sure that it matches the following permissions:<br><em>{{scope}}</em></p>
+<p class="hint">{{t "routes.user.auth.token.hint.first"}}<br>{{t "routes.user.auth.token.hint.second"}}<br><em>{{scope}}</em></p>
 {{/unless}}
 {{else}}
-{{#form-button action=(action "showTokenForm") classNames="btn-token" icon="fa-key" disabled=hasUserInteraction}}Use access token{{/form-button}}
+{{#form-button
+	action=(action "showTokenForm")
+	classNames="btn-token"
+	icon="fa-key"
+	disabled=hasUserInteraction
+}}
+	{{t "routes.user.auth.token.show-form"}}
+{{/form-button}}
 {{/if}}
 {{/if}}
 {{#if showFailMessage}}
-<p class="fail">Authentication failed. Please try again.</p>
+<p class="fail">{{t "routes.user.auth.fail"}}</p>
 {{/if}}
 </footer>
 </main>

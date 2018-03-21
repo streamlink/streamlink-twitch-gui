@@ -1,4 +1,5 @@
 import { get } from "@ember/object";
+import { translationMacro as t } from "ember-i18n/addon";
 import { set as setClipboard } from "nwjs/Clipboard";
 import FormButtonComponent from "./FormButtonComponent";
 import HotkeyMixin from "../mixins/hotkey";
@@ -7,7 +8,7 @@ import HotkeyMixin from "../mixins/hotkey";
 export default FormButtonComponent.extend( HotkeyMixin, {
 	classNames: [ "btn-info" ],
 	icon: "fa-share-alt",
-	title: "Copy channel url to clipboard",
+	_title: t( "components.share-channel.title" ),
 	iconanim: true,
 
 	hotkeys: [

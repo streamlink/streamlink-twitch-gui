@@ -1,5 +1,6 @@
 import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { translationMacro as t } from "ember-i18n/addon";
 import FormButtonComponent from "./FormButtonComponent";
 import HotkeyMixin from "../mixins/hotkey";
 
@@ -9,7 +10,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 
 	classNames: [ "btn-hint" ],
 	icon: "fa-comments",
-	title: "Open chat",
+	_title: t( "components.open-chat.title" ),
 	iconanim: true,
 
 	hotkeys: [

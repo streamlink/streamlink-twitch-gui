@@ -1,9 +1,12 @@
 import TextField from "@ember/component/text-field";
-import Menu from "nwjs/Menu";
+import { get } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { get as getClipboard, set as setClipboard } from "nwjs/Clipboard";
 
 
 export default TextField.extend({
+	nwjs: service(),
+
 	attributeBindings: [ "autoselect:data-selectable" ],
 
 	autoselect: false,
@@ -16,12 +19,10 @@ export default TextField.extend({
 		const end = element.selectionEnd;
 
 		const clip = getClipboard();
-
-		const menu = Menu.create();
-
-		menu.items.pushObjects([
+		const nwjs = get( this, "nwjs" );
+		nwjs.contextMenu( event, [
 			{
-				label  : "Copy",
+				label: [ "contextmenu.copy" ],
 				enabled: start !== end,
 				click() {
 					const selected = element.value.substr( start, end - start );
@@ -29,7 +30,7 @@ export default TextField.extend({
 				}
 			},
 			{
-				label  : "Paste",
+				label: [ "contextmenu.paste" ],
 				enabled: !element.readOnly && !element.disabled && clip && clip.length,
 				click() {
 					const value = element.value;
@@ -41,8 +42,6 @@ export default TextField.extend({
 				}
 			}
 		]);
-
-		menu.popup( event );
 	},
 
 	focusIn() {

@@ -1,5 +1,6 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
+import { I18nService } from "i18n-utils";
 import { set } from "@ember/object";
 import Service from "@ember/service";
 import sinon from "sinon";
@@ -51,6 +52,7 @@ module( "services/NotificationService/dispatch", {
 		this.owner.register( "service:chat", Service.extend({
 			openChat: this.openChatStub
 		}) );
+		this.owner.register( "service:i18n", I18nService );
 		this.owner.register( "service:-routing", Service.extend({
 			transitionTo: this.transitionToSpy
 		}) );
@@ -193,7 +195,7 @@ test( "Group and single notification data", function( assert ) {
 	notification = this.subject._getNotificationDataGroup([ streamA, streamB ]);
 	notification.click();
 	assert.propEqual( notification, {
-		title: "Some followed channels have started streaming",
+		title: "services.notification.dispatch.group",
 		message: [{
 			title: "foo",
 			message: "123"
@@ -213,7 +215,7 @@ test( "Group and single notification data", function( assert ) {
 	notification = this.subject._getNotificationDataSingle( streamA );
 	notification.click();
 	assert.propEqual( notification, {
-		title: "foo has started streaming",
+		title: "services.notification.dispatch.single{\"name\":\"foo\"}",
 		message: "123",
 		icon: "logo",
 		click: () => {},
@@ -227,7 +229,7 @@ test( "Group and single notification data", function( assert ) {
 	notification = this.subject._getNotificationDataSingle( streamB );
 	notification.click();
 	assert.propEqual( notification, {
-		title: "bar has started streaming",
+		title: "services.notification.dispatch.single{\"name\":\"bar\"}",
 		message: "",
 		icon: "group-icon-path",
 		click: () => {},

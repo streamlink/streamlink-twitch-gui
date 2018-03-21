@@ -1,6 +1,6 @@
 <main class="wrapper vertical content content-featured {{if isAnimated 'animated'}}">
 <header>
-<h2>Featured Channels</h2>
+<h2>{{t "routes.featured.header"}}</h2>
 {{#quick-bar}}
 {{quick-bar-homepage}}
 {{/quick-bar}}
@@ -21,7 +21,7 @@
 <i class="cursor fa fa-caret-down cursor-hover"></i>
 </ul>
 {{else}}
-<section class="error-message">The featured streams list could not be loaded!</section>
+<section class="error-message">{{t "routes.featured.empty"}}</section>
 {{/if}}
-<section class="globalstats">There are {{summary.viewers}} people watching {{summary.channels}} live streams right now!</section>
+<section class="globalstats">{{t "routes.featured.summary" viewers=summary.viewers channels=summary.channels}}</section>
 </main>

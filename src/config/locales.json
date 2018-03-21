@@ -1,0 +1,14 @@
+{
+	"default": "en",
+	"locales": {
+		"en": "English"
+	},
+	"contributors": {
+		"en": [
+			{
+				"name": "Sebastian Meyer",
+				"github": "bastimeyer"
+			}
+		]
+	}
+}

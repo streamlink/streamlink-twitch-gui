@@ -1,41 +1,44 @@
 import Substitution from "utils/parameters/Substitution";
 
 
+const base = "settings.player.args.substitutions";
+
+
 /** @type {Substitution[]} */
 export default [
 	new Substitution(
 		[ "name", "channel", "channelname" ],
 		"stream.channel.display_name",
-		"Channel name"
+		`${base}.channel`
 	),
 	new Substitution(
 		[ "status", "title" ],
 		"stream.channel.status",
-		"Channel status text"
+		`${base}.status`
 	),
 	new Substitution(
 		[ "game", "gamename" ],
 		"stream.stream.game",
-		"Name of the game being played"
+		`${base}.game`
 	),
 	new Substitution(
 		"delay",
 		"stream.stream.delay",
-		"Additional stream delay in seconds"
+		`${base}.delay`
 	),
 	new Substitution(
 		[ "online", "since", "created" ],
 		"stream.stream.created_at",
-		"Online since"
+		`${base}.created`
 	),
 	new Substitution(
 		[ "viewers", "current" ],
 		"stream.stream.viewers",
-		"Number of current viewers"
+		`${base}.viewers`
 	),
 	new Substitution(
 		[ "views", "overall" ],
 		"stream.channel.views",
-		"Total number of views"
+		`${base}.views`
 	)
 ];

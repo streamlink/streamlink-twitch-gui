@@ -1,12 +1,13 @@
 import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
-import { main as config } from "config";
+import { main as config, locales as localesConfig } from "config";
 import metadata from "metadata";
 
 
 export default Controller.extend({
 	metadata,
 	config,
+	localesConfig,
 
 	releaseurl: computed( "config.urls.release", "metadata.package.version", function() {
 		let release = get( this, "config.urls.release" );

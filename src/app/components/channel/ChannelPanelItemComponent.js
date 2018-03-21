@@ -1,13 +1,13 @@
 import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
 import EmbeddedHtmlLinksComponent from "../link/EmbeddedHtmlLinksComponent";
-import Menu from "nwjs/Menu";
 import { openBrowser } from "nwjs/Shell";
 import { set as setClipboard } from "nwjs/Clipboard";
 import layout from "templates/components/channel/ChannelPanelItemComponent.hbs";
 
 
 export default EmbeddedHtmlLinksComponent.extend({
+	nwjs: service(),
 	routing: service( "-routing" ),
 
 	layout,
@@ -26,19 +26,17 @@ export default EmbeddedHtmlLinksComponent.extend({
 	},
 
 	linkContentMenu( event, url ) {
-		const menu = Menu.create();
-		menu.items.pushObjects([
+		const nwjs = get( this, "nwjs" );
+		nwjs.contextMenu( event, [
 			{
-				label: "Open in browser",
+				label: [ "contextmenu.open-in-browser" ],
 				click: () => openBrowser( url )
 			},
 			{
-				label: "Copy link address",
+				label: [ "contextmenu.copy-link-address" ],
 				click: () => setClipboard( url )
 			}
 		]);
-
-		menu.popup( event );
 	},
 
 	actions: {

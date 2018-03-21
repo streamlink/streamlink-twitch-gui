@@ -1,15 +1,18 @@
 <fieldset>
 {{#settings-row
-	"Notifications"
-	"When favorites start streaming."
+	(t "settings.notifications.enabled.title")
+	(t "settings.notifications.enabled.description")
 	icon="fa-bullhorn"
 }}
-	{{check-box "Enable desktop notifications" checked=model.notification.enabled}}
+	{{check-box
+		(t "settings.notifications.enabled.checkbox")
+		checked=model.notification.enabled
+	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Notification type"
-	"Choose the kind of notification"
+	(t "settings.notifications.provider.title")
+	(t "settings.notifications.provider.description")
 	icon="fa-cog"
 }}
 	{{#form-button
@@ -19,7 +22,7 @@
 		iconanim=true
 		disabled=(bool-not model.notification.enabled)
 	~}}
-		Test notification
+		{{t "settings.notifications.provider.test.button"}}
 	{{~/form-button}}
 	{{#radio-buttons
 		value=model.notification.provider
@@ -28,17 +31,20 @@
 	}}
 		<div class="input-btn-with-description">
 			{{item.button
-				item.label.name
+				(t (concat "settings.notifications.provider.providers." item.value ".name"))
 				disabled=(bool-not model.notification.enabled)
 			}}
-			<p class="description">{{#if item.label.notes}}<i class="fa fa-question-circle" title={{item.label.notes}}></i> {{/if}}{{item.label.description}}</p>
+			<p class="description">
+				<i class="fa fa-question-circle" title={{t (concat "settings.notifications.provider.providers." item.value ".notes")}}></i>
+				{{t (concat "settings.notifications.provider.providers." item.value ".description")}}
+			</p>
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row
-	"Channel filter"
-	"Notifications can be turned on/off individually in a channel's settings menu."
+	(t "settings.notifications.filter.title")
+	(t "settings.notifications.filter.description")
 	icon="fa-eyedropper"
 }}
 	{{#radio-buttons
@@ -48,6 +54,7 @@
 	}}
 		<div>
 			{{item.button
+				(t (concat "settings.notifications.filter.values." item.label))
 				disabled=(bool-not model.notification.enabled)
 			}}
 		</div>
@@ -55,44 +62,55 @@
 {{/settings-row}}
 
 {{#settings-row
-	"Filter Vodcasts"
-	"Only include live streams."
+	(t "settings.notifications.filter-vodcasts.title")
+	(t "settings.notifications.filter-vodcasts.description")
 	icon="fa-recycle"
 }}
-	{{check-box "Ignore Vodcasts" checked=model.notification.filter_vodcasts}}
+	{{check-box
+		(t "settings.notifications.filter-vodcasts.checkbox")
+		checked=model.notification.filter_vodcasts
+	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Grouping"
-	"Merge multiple notifications."
+	(t "settings.notifications.grouping.title")
+	(t "settings.notifications.grouping.description")
 	icon="fa-folder-open-o"
 }}
 	{{check-box
-		"Only show one notification at a time"
+		(t "settings.notifications.grouping.checkbox")
 		checked=model.notification.grouping
 		disabled=(bool-not model.notification.enabled)
 	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Notification click"
-	"Preferred click action."
+	(t "settings.notifications.click.title")
+	(t "settings.notifications.click.description")
 	icon="fa-hand-pointer-o"
 }}
-	{{drop-down
+	{{#drop-down
 		value=model.notification.click
 		content=contentNotificationClick
 		disabled=(bool-not model.notification.enabled)
 		class="notifications"
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.notifications.click.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.notifications.click.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 
 {{#settings-row
-	"Group click"
-	"Preferred group click action."
+	(t "settings.notifications.click-group.title")
+	(t "settings.notifications.click-group.description")
 	icon="fa-hand-pointer-o"
 }}
-	{{drop-down
+	{{#drop-down
 		value=model.notification.click_group
 		content=contentNotificationClickGroup
 		disabled=(bool-or
@@ -100,16 +118,24 @@
 			(bool-not model.notification.grouping)
 		)
 		class="notifications"
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.notifications.click-group.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.notifications.click-group.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 
 {{#settings-row
-	"Restore GUI"
-	"Restore from tray or minimized state when performing a notification click action."
+	(t "settings.notifications.click-restore.title")
+	(t "settings.notifications.click-restore.description")
 	icon="fa-window-restore"
 }}
 	{{check-box
-		"Restore when clicking a notification"
+		(t "settings.notifications.click-restore.checkbox")
 		checked=model.notification.click_restore
 		disabled=(bool-not model.notification.enabled)
 	}}

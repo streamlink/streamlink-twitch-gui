@@ -1,29 +1,37 @@
 <section class="content-channel-settings">
 <fieldset>
-<legend>Stream</legend>
+<legend>{{t "routes.channel.settings.stream.header"}}</legend>
 {{#settings-row
-	"Quality"
-	"Set a channel specific streaming quality."
+	(t "routes.channel.settings.stream.quality.title")
+	(t "routes.channel.settings.stream.quality.description")
 	icon="fa-eye"
 	toggle=true
 	enabled=_streaming_quality
 }}
-	{{drop-down
+	{{#drop-down
 		value=streaming_quality
 		content=qualities
 		disabled=(bool-not _streaming_quality)
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "qualities." selection.value)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "qualities." item.value)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 
 {{#settings-row
-	"Chat"
-	"Automatically open chat."
+	(t "routes.channel.settings.stream.chat.title")
+	(t "routes.channel.settings.stream.chat.description")
 	icon="fa-comments"
 	toggle=true
 	enabled=_streams_chat_open
 }}
 	{{check-box
-		"Open chat when the stream starts"
+		(t "routes.channel.settings.stream.chat.checkbox")
 		checked=streams_chat_open
 		disabled=(bool-not _streams_chat_open)
 	}}
@@ -32,17 +40,17 @@
 
 {{#if settings.notification.enabled}}
 <fieldset>
-<legend>Desktop notifications</legend>
+<legend>{{t "routes.channel.settings.notifications.header"}}</legend>
 {{#settings-row
-	"Notifications"
-	"When the channel starts streaming."
+	(t "routes.channel.settings.notifications.enabled.title")
+	(t "routes.channel.settings.notifications.enabled.description")
 	icon="fa-bullhorn"
-	notes="Channel needs to be followed."
+	notes=(t "routes.channel.settings.notifications.enabled.notes")
 	toggle=true
 	enabled=_notification_enabled
 }}
 	{{check-box
-		"Enable desktop notifications"
+		(t "routes.channel.settings.notifications.enabled.checkbox")
 		checked=notification_enabled
 		disabled=(bool-not _notification_enabled)
 	}}

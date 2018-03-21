@@ -1,5 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver } from "test-utils";
+import { I18nService, THelper } from "i18n-utils";
 import Component from "@ember/component";
 import { set } from "@ember/object";
 import { run } from "@ember/runloop";
@@ -22,8 +23,14 @@ const { default: TitleBarComponent } = titleBarComponentInjector({
 
 moduleForComponent( "title-bar", "components/TitleBarComponent", {
 	unit: true,
+	needs: [
+		"service:i18n",
+		"helper:t"
+	],
 	resolver: buildResolver({
-		TitleBarComponent
+		TitleBarComponent,
+		I18nService,
+		THelper
 	}),
 	beforeEach() {
 		this.nwjsDevToolsSpy = sinon.spy();
@@ -167,7 +174,7 @@ test( "TitleBarComponent", function( assert ) {
 
 	assert.strictEqual(
 		$elem.find( ".btn-user" ).attr( "title" ),
-		"Logged in as user\nNotifications are enabled",
+		"components.title-bar.loggedin{\"name\":\"user\",\"status\":\"Notifications are enabled\"}",
 		"The user button does have the correct title while being logged in"
 	);
 
@@ -239,7 +246,7 @@ test( "TitleBarComponent", function( assert ) {
 
 	assert.strictEqual(
 		$elem.find( ".btn-no-user" ).attr( "title" ),
-		"You're not logged in",
+		"components.title-bar.loggedout",
 		"The no-user button does have the correct title while not being logged in"
 	);
 

@@ -6,6 +6,7 @@ const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 const LessPluginCleanCSS = require( "less-plugin-clean-css" );
 const NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
 const emberFeatures = require( "../../../src/config/ember-features.json" );
+const locales = require( "../../../src/config/locales.json" );
 const { resolve: r } = require( "path" );
 const { tmpdir } = require( "os" );
 
@@ -22,6 +23,10 @@ const pImages = r( pRoot, "img" );
 const pTemplates = r( pRoot, "templates" );
 const pDependencies = r( ".", "node_modules" );
 const pCacheBabel = r( tmpdir(), "babel-cache" );
+
+
+// regexp for filtering locale config file imports (momentjs, ember-i18n, etc.)
+const reLocales = new RegExp( `(${Object.keys( locales.locales ).join( "|" )})\.js$`, "i" );
 
 
 const resolveModuleDirectories = [
@@ -49,9 +54,9 @@ const commonLoaders = [
 	// requires those imports to be ignored
 	{
 		test: /\.js$/,
-		exclude: [
-			pDependencies,
-			r( pRoot, "web_modules" )
+		include: [
+			pRoot,
+			r( pDependencies, "ember-i18n" )
 		],
 		loader: "babel-loader",
 		options: {
@@ -98,6 +103,13 @@ const commonLoaders = [
 	{
 		test: /\.html$/,
 		loader: "raw-loader"
+	},
+	{
+		test: /\.ya?ml$/,
+		loader: [
+			"json-loader",
+			"yaml-loader"
+		]
 	},
 	{
 		test: /metadata\.js$/,
@@ -276,6 +288,7 @@ module.exports = {
 				// app folders
 				"config"      : r( pApp, "config" ),
 				"nwjs"        : r( pApp, "nwjs" ),
+				"locales"     : r( pApp, "locales" ),
 				"initializers": r( pApp, "initializers" ),
 				"instance-initializers": r( pApp, "instance-initializers" ),
 				"services"    : r( pApp, "services" ),
@@ -298,6 +311,7 @@ module.exports = {
 					r( pDependencies, "ember-data-model-fragments", "addon" ),
 				"ember-localstorage-adapter":
 					r( pDependencies, "ember-localstorage-adapter", "addon" ),
+				"ember-i18n$" : r( pRoot, "web_modules", "ember-i18n" ),
 				"qunit$"      : r( pTest, "web_modules", "qunit" ),
 				"ember-qunit$": "ember-qunit",
 				"ember-qunit" : "ember-qunit/lib/ember-qunit",
@@ -315,7 +329,10 @@ module.exports = {
 		},
 
 		module: {
-			noParse: /\/ember-source\/dist\/ember\.(debug|prod)\.js$/
+			noParse: [
+				/\/ember-source\/dist\/ember\.(debug|prod)\.js$/,
+				/\/moment\/moment\.js$/
+			]
 		},
 
 		plugins: [
@@ -352,10 +369,19 @@ module.exports = {
 			lessExtractTextPlugin,
 
 			// ignore all @ember imports (see Ember import polyfill)
-			new webpack.IgnorePlugin( /@ember/, pRoot ),
+			new webpack.IgnorePlugin( /@ember/ ),
 
-			// ignore l10n modules of momentjs
-			new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ )
+			// remove ember-i18n's get-locales utility function
+			new webpack.NormalModuleReplacementPlugin(
+				/ember-i18n\/addon\/utils\/get-locales\.js$/,
+				r( pRoot, "web_modules", "ember-i18n", "get-locales.js" )
+			),
+
+			// only import locale configs of available locales
+			new webpack.ContextReplacementPlugin(
+				/moment\/locale/,
+				reLocales
+			)
 		]
 	},
 

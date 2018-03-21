@@ -1,21 +1,42 @@
 <main class="content content-user content-user-index">
 <div class="bigicon"><i class="fa fa-user"></i></div>
-<p>Logged in as {{auth.session.user_name}}</p>
-<p>since {{format-time auth.session.date "dddd, MMMM Do YYYY, h:mm:ss a"}}</p>
+<p>{{t "routes.user.index.logged-in" name=auth.session.user_name}}</p>
+<p>{{format-time auth.session.date (t "routes.user.index.since")}}</p>
 <p>{{notification.statusText}}</p>
-{{#form-button classNames="btn-signout" icon="fa-sign-out" action=(action "signout")}}Sign out{{/form-button}}
+{{#form-button classNames="btn-signout" icon="fa-sign-out" action=(action "signout")}}
+	{{t "routes.user.index.sign-out"}}
+{{/form-button}}
 {{#if settings.advanced}}
 <footer>
 {{#if showTokenForm}}
 <div class="input-group token-form">
-{{input classNames="form-control" readonly=true autofocus=true autoselect=true value=auth.session.access_token title="Your access token"}}
+{{input
+	classNames="form-control"
+	readonly=true
+	autofocus=true
+	autoselect=true
+	value=auth.session.access_token
+	title=(t "routes.user.index.token.title")
+}}
 <span class="input-group-btn">
-{{form-button action=(action "copyToken") classNames="btn" icon="fa-copy" iconanim=true title="Copy to clipboard"}}
+{{form-button
+	action=(action "copyToken")
+	classNames="btn"
+	icon="fa-copy"
+	iconanim=true
+	title=(t "routes.user.index.token.copy")
+}}
 </span>
 </div>
-<p class="hint">This key grants access to your Twitch.tv account with these permissions:<br><em>{{scope}}</em><br>Log in again with your password to invalidate it.</p>
+<p class="hint">{{t "routes.user.index.token.hint.first"}}<br><em>{{scope}}</em><br>{{t "routes.user.index.token.hint.second"}}</p>
 {{else}}
-{{#form-button action=(action "showTokenForm") classNames="btn-token" icon="fa-key"}}Show access token{{/form-button}}
+{{#form-button
+	action=(action "showTokenForm")
+	classNames="btn-token"
+	icon="fa-key"
+}}
+	{{t "routes.user.index.token.show"}}
+{{/form-button}}
 {{/if}}
 </footer>
 {{/if}}

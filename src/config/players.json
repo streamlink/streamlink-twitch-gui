@@ -1,6 +1,5 @@
 {
 	"vlc": {
-		"name": "VLC media player",
 		"exec": {
 			"win32": "vlc.exe",
 			"darwin": "VLC",
@@ -22,12 +21,9 @@
 		"params": [
 			{
 				"name": "instance",
-				"title": "Single instance mode",
-				"description": "View multiple streams in different player windows.",
 				"icon": "fa-clone",
 				"type": "boolean",
 				"default": true,
-				"text": "Prevent single instance mode",
 				"args": {
 					"win32": "--no-one-instance",
 					"darwin": false,
@@ -36,32 +32,23 @@
 			},
 			{
 				"name": "close",
-				"title": "Close player",
-				"description": "Prevents stacking up empty player windows.",
 				"icon": "fa-times",
 				"type": "boolean",
 				"default": true,
-				"text": "Allow the player to get closed",
 				"args": "--play-and-exit"
 			},
 			{
 				"name": "title",
-				"title": "Player window title",
-				"description": "Show the channel name, game being played and stream title.",
 				"icon": "fa-font",
 				"type": "boolean",
 				"default": true,
-				"text": "Set custom title",
 				"args": "--input-title-format \"{name} - {game} - {status}\""
 			},
 			{
 				"name": "minimal",
-				"title": "Layout",
-				"description": "Hide player controls. Can also be toggled by pressing CTRL+H.",
 				"icon": "fa-image",
 				"type": "boolean",
 				"default": false,
-				"text": "Minimal player layout",
 				"args": {
 					"win32": "--qt-minimal-view",
 					"darwin": false,
@@ -71,7 +58,6 @@
 		]
 	},
 	"mpv": {
-		"name": "MPV",
 		"exec": {
 			"win32": "mpv.exe",
 			"darwin": "mpv",
@@ -95,68 +81,49 @@
 		"params": [
 			{
 				"name": "close",
-				"title": "Close player",
-				"description": "Prevents stacking up empty player windows.",
 				"icon": "fa-times",
 				"type": "boolean",
 				"default": true,
-				"text": "Allow the player to get closed",
 				"args": "--keep-open=no"
 			},
 			{
 				"name": "title",
-				"title": "Player window title",
-				"description": "Show the channel name, game being played and stream title.",
 				"icon": "fa-font",
 				"type": "boolean",
 				"default": true,
-				"text": "Set custom title",
 				"args": "--title \"$>{name} - {game} - {status}\""
 			},
 			{
 				"name": "minimal",
-				"title": "Layout",
-				"description": "Don't show player window decorations.",
 				"icon": "fa-square-o",
 				"type": "boolean",
 				"default": false,
-				"text": "Minimal player layout",
 				"args": "--no-border"
 			},
 			{
 				"name": "window",
-				"title": "Force window",
-				"description": "Fixes potential issues with audio-only streams.",
 				"icon": "fa-image",
 				"type": "boolean",
 				"default": true,
-				"text": "Always show player window",
 				"args": "--force-window"
 			},
 			{
 				"name": "seeking",
-				"title": "Seeking",
-				"description": "Enables jumping forwards/backwards in the stream cache.",
 				"icon": "fa-forward",
 				"type": "boolean",
 				"default": true,
-				"text": "Enable seeking",
 				"args": "--force-seekable=yes --hr-seek=yes --hr-seek-framedrop=yes"
 			},
 			{
 				"name": "no-cache",
-				"title": "No player cache",
-				"description": "Speed up stream launch time.",
 				"icon": "fa-hourglass-half",
 				"type": "boolean",
 				"default": false,
-				"text": "Don't use the additional player cache",
 				"args": "--no-cache"
 			}
 		]
 	},
 	"mpc": {
-		"name": "Media Player Classic - Home Cinema",
 		"exec": {
 			"win32": [
 				"mpc-hc64.exe",
@@ -180,28 +147,22 @@
 		"params": [
 			{
 				"name": "instance",
-				"title": "Single instance mode",
-				"description": "View multiple streams in different player windows.",
 				"icon": "fa-clone",
 				"type": "boolean",
 				"default": true,
-				"text": "Prevent single instance mode",
+				"text": "",
 				"args": "/new"
 			},
 			{
 				"name": "close",
-				"title": "Close player",
-				"description": "Prevents stacking up empty player windows.",
 				"icon": "fa-times",
 				"type": "boolean",
 				"default": true,
-				"text": "Allow the player to get closed",
 				"args": "/play /close"
 			}
 		]
 	},
 	"potplayer": {
-		"name": "Daum PotPlayer",
 		"exec": {
 			"win32": [
 				"PotPlayerMini64.exe",

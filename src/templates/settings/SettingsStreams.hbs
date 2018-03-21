@@ -1,22 +1,30 @@
 <fieldset>
 {{#settings-row
-	"Preferred quality"
-	"Choose the default stream quality."
+	(t "settings.streams.quality.title")
+	(t "settings.streams.quality.description")
 	icon="fa-eye"
 }}
-	{{drop-down
+	{{#drop-down
 		value=model.streaming.quality
 		content=contentStreamingQuality
+		as |dropdown|
 	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "qualities." selection.value)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "qualities." item.value)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
 {{/settings-row}}
 
 {{#if model.advanced}}
 	{{#if isStreamlink}}
 		{{#settings-row
-			"Quality presets"
-			"Define precise quality selections by range or by using explicit quality names."
+			(t "settings.streams.qualitypresets.title")
+			(t "settings.streams.qualitypresets.description")
 			icon="fa-list-ul"
-			notes="The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the \"best\" or \"worst\" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes."
+			notes=(t "settings.streams.qualitypresets.notes")
 			documentation="--stream-sorting-excludes"
 		}}
 			{{#each qualitiesStreamlink as |quality|}}
@@ -24,7 +32,7 @@
 					{{input
 						type="text"
 						value=(mut (get (get model.streaming.qualities quality.id) "exclude"))
-						placeholder=(if (is-null quality.exclude) "Don't exclude stream qualities" quality.exclude)
+						placeholder=(if (is-null quality.exclude) (t "settings.streams.qualitypresets.dont-exclude") quality.exclude)
 						disabled=(is-null quality.exclude)
 					}}
 					{{input
@@ -32,14 +40,14 @@
 						value=(mut (get (get model.streaming.qualities quality.id) "quality"))
 						placeholder=quality.quality
 					}}
-					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
+					<button type="button" tabindex="-1" class="btn">{{t (concat "qualities." quality.id)}}</button>
 				</div>
 			{{/each}}
 		{{/settings-row}}
 	{{else}}
 		{{#settings-row
-			"Quality presets"
-			"Customize Livestreamer quality presets."
+			(t "settings.streams.qualitypresets.qualitypresets-livestreamer.title")
+			(t "settings.streams.qualitypresets.qualitypresets-livestreamer.description")
 			icon="fa-list-ul"
 		}}
 			{{#each qualitiesLivestreamer as |quality|}}
@@ -49,7 +57,7 @@
 						placeholder=quality.quality
 						value=(mut (get model.streaming.qualitiesOld quality.id))
 					}}
-					<button type="button" tabindex="-1" class="btn">{{quality.label}}</button>
+					<button type="button" tabindex="-1" class="btn">{{t (concat "qualities." quality.id)}}</button>
 				</div>
 			{{/each}}
 		{{/settings-row}}
@@ -59,10 +67,10 @@
 
 <fieldset class="{{unless model.advanced 'hidden'}}">
 {{#settings-row
-	"Custom Vodcast filtering"
-	"Find untagged Vodcasts/Rebroadcasts."
+	(t "settings.streams.vodcast-regexp.title")
+	(t "settings.streams.vodcast-regexp.description")
 	icon="fa-search"
-	notes="A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression."
+	notes=(t "settings.streams.vodcast-regexp.notes")
 }}
 	{{input
 		type="text"
@@ -75,18 +83,24 @@
 
 <fieldset>
 {{#settings-row
-	"Hide stream popup"
-	"When a stream has started."
+	(t "settings.streams.modal-close-launch.title")
+	(t "settings.streams.modal-close-launch.description")
 	icon="fa-info-circle"
 }}
-	{{check-box "Hide the popup after successfully launching a stream" checked=model.streams.modal_close_launch}}
+	{{check-box
+		(t "settings.streams.modal-close-launch.checkbox")
+		checked=model.streams.modal_close_launch
+	}}
 {{/settings-row}}
 
 {{#settings-row
-	"Close stream popup"
-	"When a stream has ended."
+	(t "settings.streams.modal-close-end.title")
+	(t "settings.streams.modal-close-end.description")
 	icon="fa-info-circle"
 }}
-	{{check-box "Close the popup of an active stream when it ends" checked=model.streams.modal_close_end}}
+	{{check-box
+		(t "settings.streams.modal-close-end.checkbox")
+		checked=model.streams.modal_close_end
+	}}
 {{/settings-row}}
 </fieldset>

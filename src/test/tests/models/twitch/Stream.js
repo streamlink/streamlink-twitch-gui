@@ -1,9 +1,12 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
+import { I18nService } from "i18n-utils";
 import { get, set, setProperties } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
+import Moment from "moment";
+import sinon from "sinon";
 
 import Stream from "models/twitch/Stream";
 import StreamAdapter from "models/twitch/StreamAdapter";
@@ -27,6 +30,12 @@ let owner, env;
 
 module( "models/twitch/Stream", {
 	beforeEach() {
+		this.fakeTimer = sinon.useFakeTimers({
+			toFake: [ "Date" ],
+			target: window
+		});
+		this.momentFormatStub = sinon.stub( Moment.prototype, "format" );
+
 		owner = buildOwner();
 
 		owner.register( "model:twitch-stream", Stream );
@@ -38,6 +47,7 @@ module( "models/twitch/Stream", {
 		owner.register( "serializer:twitch-image", ImageSerializer );
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:i18n", I18nService );
 		owner.register( "service:settings", Service.extend({
 			streams: {
 				vodcast_regexp: ""
@@ -48,6 +58,9 @@ module( "models/twitch/Stream", {
 	},
 
 	afterEach() {
+		this.fakeTimer.restore();
+		this.momentFormatStub.restore();
+
 		runDestroy( owner );
 		owner = env = null;
 	}
@@ -173,7 +186,7 @@ test( "Adapter and Serializer (many)", assert => {
 });
 
 
-test( "Computed properties", assert => {
+test( "Computed properties", function( assert ) {
 
 	const channel = env.store.createRecord( "twitchChannel", {
 		status: ""
@@ -220,16 +233,22 @@ test( "Computed properties", assert => {
 
 	// titleCreatedAt
 
-	run( () => set( record, "created_at", new Date( Date.now() - 3600*1*1000 ) ) );
-	assert.ok(
-		/^Online since \d+:\d+:\d+ [AP]M$/.test( get( record, "titleCreatedAt" ) ),
-		"Shows a shorthand title for streams running less than 24h"
+	const day = 3600 * 24 * 1000;
+	this.fakeTimer.setSystemTime( 2 * day );
+	this.momentFormatStub.returnsArg( 0 );
+
+	run( () => set( record, "created_at", new Date( Date.now() - 1 ) ) );
+	assert.strictEqual(
+		get( record, "titleCreatedAt" ),
+		"models.twitch.stream.created-at.less-than-24h",
+		"Shows a shorthand title for streams running for less than 24h"
 	);
 
-	run( () => set( record, "created_at", new Date( Date.now() - 3600*24*1000 ) ) );
-	assert.ok(
-		/^Online since \w+, \w+ \d+, \d{4} \d+:\d+ [AP]M$/.test( get( record, "titleCreatedAt" ) ),
-		"Shows an extended title for streams running more than 24h"
+	run( () => set( record, "created_at", new Date( Date.now() - day ) ) );
+	assert.strictEqual(
+		get( record, "titleCreatedAt" ),
+		"models.twitch.stream.created-at.more-than-24h",
+		"Shows an extended title for streams running for more than 24h"
 	);
 
 
@@ -238,14 +257,14 @@ test( "Computed properties", assert => {
 	run( () => set( record, "viewers", 1 ) );
 	assert.strictEqual(
 		get( record, "titleViewers" ),
-		"1 person is watching",
+		"models.twitch.stream.viewers{\"count\":1}",
 		"Shows the correct title when one person is watching"
 	);
 
 	run( () => set( record, "viewers", 2 ) );
 	assert.strictEqual(
 		get( record, "titleViewers" ),
-		"2 people are watching",
+		"models.twitch.stream.viewers{\"count\":2}",
 		"Shows the correct title when more than one person is watching"
 	);
 

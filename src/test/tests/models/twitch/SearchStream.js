@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
+import { I18nService } from "i18n-utils";
 import Service from "@ember/service";
 
 import SearchStream from "models/twitch/SearchStream";
@@ -30,6 +31,7 @@ module( "models/twitch/SearchStream", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
+		owner.register( "service:i18n", I18nService );
 		owner.register( "model:twitch-search-stream", SearchStream );
 		owner.register( "serializer:twitch-search-stream", SearchStreamSerializer );
 		owner.register( "model:twitch-stream", Stream );

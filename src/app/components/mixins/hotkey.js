@@ -1,58 +1,37 @@
-import { get, set } from "@ember/object";
+import { get, computed } from "@ember/object";
 import { on } from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
 import { inject as service } from "@ember/service";
+import formatTitle from "services/HotkeyService/title";
 
 
 const { isArray } = Array;
 
-const reName = /^Key/;
-const nameMap = {
-	"Escape": "Esc",
-	"slash": "/"
-};
-const kNameMap = Object.keys( nameMap );
-
 
 export default Mixin.create({
+	i18n: service(),
 	hotkey: service(),
 
 	concatenatedProperties: "hotkeys",
 	disableHotkeys: false,
 
-	init() {
-		this._super( ...arguments );
+	title: computed( "_title", function() {
+		const title = get( this, "_title" );
 
-		let title = get( this, "title" );
 		if (
-			   title
-			&& isArray( this.hotkeys )
-			&& this.hotkeys.length
-			&& !get( this, "disableHotkeys" )
+			   !title
+			|| !isArray( this.hotkeys )
+			|| !this.hotkeys.length
+			|| get( this, "disableHotkeys" )
 		) {
-			let { code, altKey, ctrlKey, shiftKey } = this.hotkeys[ 0 ];
-
-			let modifier = "";
-			if ( ctrlKey ) {
-				modifier += "Ctrl+";
-			}
-			if ( shiftKey ) {
-				modifier += "Shift+";
-			}
-			if ( altKey ) {
-				modifier += "Alt+";
-			}
-
-			if ( isArray( code ) ) {
-				code = code[0];
-			}
-			let key = kNameMap.indexOf( code ) !== -1
-				? nameMap[ code ]
-				: code.replace( reName, "" );
-
-			set( this, "title", `[${modifier}${key}] ${title}` );
+			return title;
 		}
-	},
+
+		const i18n = get( this, "i18n" );
+		const hotkey = this.hotkeys[ 0 ];
+
+		return formatTitle( i18n, title, hotkey );
+	}),
 
 	_registerHotkeys: on( "didInsertElement", function() {
 		if ( get( this, "disableHotkeys" ) ) { return; }
@@ -70,9 +49,5 @@ export default Mixin.create({
 		const HotkeyService = get( this, "hotkey" );
 
 		HotkeyService.unregister( this );
-	}),
-
-	isFocused() {
-		return this.element.ownerDocument.activeElement === this.element;
-	}
+	})
 });

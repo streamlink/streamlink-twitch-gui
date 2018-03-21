@@ -1,5 +1,5 @@
 {{#content-list model as |item isNewItem isDuplicateItem|}}
 {{community-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
 {{else}}
-<p>The returned list of all communities is empty.</p>
+<p>{{t "routes.communities.all.empty"}}</p>
 {{/content-list}}

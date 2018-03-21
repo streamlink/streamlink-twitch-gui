@@ -13,6 +13,10 @@ const reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
 
 export default Model.extend({
+	i18n: service(),
+	settings: service(),
+
+
 	broadcaster_language: attr( "string" ),
 	created_at: attr( "date" ),
 	display_name: attr( "string" ),
@@ -30,9 +34,6 @@ export default Model.extend({
 	url: attr( "string" ),
 	video_banner: attr( "string" ),
 	views: attr( "number" ),
-
-
-	settings: service(),
 
 
 	hasCustomDisplayName: computed( "name", "display_name", function() {
@@ -59,22 +60,18 @@ export default Model.extend({
 	),
 
 
-	titleFollowers: computed( "followers", function() {
-		const number = get( this, "followers" );
-		const text = number === 1
-			? " person is following"
-			: " people are following";
+	titleFollowers: computed( "i18n.locale", "followers", function() {
+		const i18n = get( this, "i18n" );
+		const count = get( this, "followers" );
 
-		return `${number}${text}`;
+		return i18n.t( "models.twitch.channel.followers", { count } );
 	}),
 
-	titleViews: computed( "views", function() {
-		const number = get( this, "views" );
-		const text = number === 1
-			? " channel view"
-			: " channel views";
+	titleViews: computed( "i18n.locale", "views", function() {
+		const i18n = get( this, "i18n" );
+		const count = get( this, "views" );
 
-		return `${number}${text}`;
+		return i18n.t( "models.twitch.channel.views", { count } );
 	}),
 
 
