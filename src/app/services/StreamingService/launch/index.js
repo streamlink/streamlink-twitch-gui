@@ -66,7 +66,7 @@ export default async function( stream, provider, player, onSuccess ) {
 					return launch();
 				}
 
-				if ( code === 0 || code === 130 ) {
+				if ( code === 0 || code === 130 || signal === "SIGTERM" || signal === "SIGINT" ) {
 					set( stream, "isCompleted", true );
 					resolve();
 				} else if ( signal ) {

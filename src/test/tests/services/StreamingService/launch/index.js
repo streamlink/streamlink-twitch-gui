@@ -145,6 +145,40 @@ test( "Exit code 130 (SIGINT)", async function( assert ) {
 });
 
 
+test( "SIGTERM", async function( assert ) {
+
+	const stream = this.Stream.create();
+	const promise = this.launchProvider( stream, {}, {}, () => {} );
+
+	assert.strictEqual( stream.spawn, this.child, "stream.spawn is the child object" );
+
+	this.child.emit( "exit", null, "SIGTERM" );
+	this.child.killed = true;
+	await promise;
+
+	assert.notOk( this.killChildSpy.called, "Child process has already terminated" );
+	assert.strictEqual( stream.spawn, null, "stream.spawn is null once resolved" );
+
+});
+
+
+test( "SIGINT", async function( assert ) {
+
+	const stream = this.Stream.create();
+	const promise = this.launchProvider( stream, {}, {}, () => {} );
+
+	assert.strictEqual( stream.spawn, this.child, "stream.spawn is the child object" );
+
+	this.child.emit( "exit", null, "SIGINT" );
+	this.child.killed = true;
+	await promise;
+
+	assert.notOk( this.killChildSpy.called, "Child process has already terminated" );
+	assert.strictEqual( stream.spawn, null, "stream.spawn is null once resolved" );
+
+});
+
+
 test( "Signals", async function( assert ) {
 
 	const stream = this.Stream.create();
