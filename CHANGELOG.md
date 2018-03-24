@@ -1,6 +1,21 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Upgraded from Ember 2 to Ember 3. #519  
+  Improves loading and rendering times.
+- Implemented i18n support. #529  
+  Translations can be submitted now.
+- Fixed opacity of stream preview images. #534
+- Fixed bug resulting in blank pages. #517
+- Fixed streaming provider exit code issues.
+- Fixed streaming provider validation issues. #524
+- Added support for future Streamlink validation changes.
+- Fixed copy channel URL context menu on channel pages. #546
+- Removed Bower build dependency. #519
+
+
 ## [v1.4.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.1) (2017-11-19)
 
 This is a patch of today's [`v1.4.0`](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.0) release with fixes to the broken macOS archive.  
