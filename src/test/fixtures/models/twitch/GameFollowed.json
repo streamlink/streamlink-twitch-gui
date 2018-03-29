@@ -1,11 +1,9 @@
 {
 	"single": {
 		"request": {
-			"url": "https://api.twitch.tv/api/users/foobar/follows/games/isFollowing",
+			"url": "https://api.twitch.tv/api/users/foobar/follows/games/some game",
 			"method": "GET",
-			"query": {
-				"name": "some game"
-			}
+			"query": null
 		},
 		"response": {
 			"_id": 1,
@@ -40,11 +38,9 @@
 	},
 	"create": {
 		"request": {
-			"url": "https://api.twitch.tv/api/users/foobar/follows/games/follow",
+			"url": "https://api.twitch.tv/api/users/foobar/follows/games/new game",
 			"method": "PUT",
-			"query": {
-				"name": "new game"
-			}
+			"query": {}
 		},
 		"response": {
 			"_id": 1,
@@ -55,11 +51,9 @@
 	},
 	"delete": {
 		"request": {
-			"url": "https://api.twitch.tv/api/users/foobar/follows/games/unfollow",
+			"url": "https://api.twitch.tv/api/users/foobar/follows/games/new game",
 			"method": "DELETE",
-			"query": {
-				"name": "new game"
-			}
+			"query": null
 		},
 		"response": null
 	}

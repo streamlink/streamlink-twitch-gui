@@ -68,7 +68,6 @@ import TwitchGameSerializer from "models/twitch/GameSerializer";
 import TwitchGameTop from "models/twitch/GameTop";
 import TwitchGameTopSerializer from "models/twitch/GameTopSerializer";
 import TwitchGameFollowed from "models/twitch/GameFollowed";
-import TwitchGameFollowedAdapter from "models/twitch/GameFollowedAdapter";
 import TwitchGameFollowedSerializer from "models/twitch/GameFollowedSerializer";
 import TwitchGameFollowedLive from "models/twitch/GameFollowedLive";
 import TwitchGameFollowedLiveSerializer from "models/twitch/GameFollowedLiveSerializer";
@@ -443,7 +442,6 @@ export default {
 	TwitchGameTop,
 	TwitchGameTopSerializer,
 	TwitchGameFollowed,
-	TwitchGameFollowedAdapter,
 	TwitchGameFollowedSerializer,
 	TwitchGameFollowedLive,
 	TwitchGameFollowedLiveSerializer,

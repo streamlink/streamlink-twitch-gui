@@ -5,12 +5,12 @@ import { get } from "@ember/object";
 import Service from "@ember/service";
 
 import GameFollowed from "models/twitch/GameFollowed";
-import GameFollowedAdapter from "models/twitch/GameFollowedAdapter";
 import GameFollowedSerializer from "models/twitch/GameFollowedSerializer";
 import Game from "models/twitch/Game";
 import GameSerializer from "models/twitch/GameSerializer";
 import imageInjector from "inject-loader?config!models/twitch/Image";
 import ImageSerializer from "models/twitch/ImageSerializer";
+import TwitchAdapter from "store/TwitchAdapter";
 import TwitchGameFollowedFixtures from "fixtures/models/twitch/GameFollowed.json";
 
 
@@ -34,14 +34,13 @@ module( "models/twitch/GameFollowed", {
 			}
 		}) );
 		owner.register( "model:twitch-game-followed", GameFollowed );
-		owner.register( "adapter:twitch-game-followed", GameFollowedAdapter );
 		owner.register( "serializer:twitch-game-followed", GameFollowedSerializer );
 		owner.register( "model:twitch-game", Game );
 		owner.register( "serializer:twitch-game", GameSerializer );
 		owner.register( "model:twitch-image", TwitchImage );
 		owner.register( "serializer:twitch-image", ImageSerializer );
 
-		env = setupStore( owner );
+		env = setupStore( owner, { adapter: TwitchAdapter } );
 	},
 
 	afterEach() {
