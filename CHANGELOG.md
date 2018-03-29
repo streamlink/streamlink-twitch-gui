@@ -9,10 +9,12 @@ Changelog - Streamlink Twitch GUI
   Translations can be submitted now.
 - Fixed opacity of stream preview images. #534
 - Fixed bug resulting in blank pages. #517
+- Fixed follow game buttons (Twitch API changes). #549
 - Fixed streaming provider exit code issues.
 - Fixed streaming provider validation issues. #524
 - Added support for future Streamlink validation changes.
 - Fixed copy channel URL context menu on channel pages. #546
+- Changed chat URL for all web browser based chat providers. #536
 - Removed Bower build dependency. #519
 
 
