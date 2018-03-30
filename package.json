@@ -13,7 +13,7 @@
 		"ember-source": "3.0.0",
 		"ember-data": "2.12.2",
 		"ember-data-model-fragments": "2.11.5",
-		"ember-i18n": "5.1.0",
+		"ember-i18n": "5.2.0",
 		"ember-inflector": "1.12.1",
 		"ember-localstorage-adapter": "1.0.0",
 		"flag-icon-css": "2.8.0",
