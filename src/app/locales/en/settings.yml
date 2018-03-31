@@ -14,6 +14,8 @@ main:
     language:
         title: Language
         description: Select the GUI language.
+        labels:
+            auto: "System ({{label}})"
     advanced:
         title: Settings and features
         description: Enable hidden settings and features.<br>Does not only apply to the settings menu.

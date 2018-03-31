@@ -7,13 +7,22 @@
 	{{#drop-down
 		value=model.gui.language
 		content=contentGuiLanguages
+		classNames="dropdown-language"
 		as |dropdown|
 	}}
 		{{#dropdown.selection as |selection|}}
-			{{flag-icon lang=selection.value withCursor=false}} {{selection.label}}
+			{{#if (is-equal selection.value "auto")}}
+				<i class="fa fa-globe icon-lang-auto"></i> {{t "settings.main.language.labels.auto" label=selection.label}}
+			{{else}}
+				{{flag-icon lang=selection.value withCursor=false}} {{selection.label}}
+			{{/if}}
 		{{/dropdown.selection}}
 		{{#dropdown.list as |item|}}
-			{{flag-icon lang=item.value withCursor=false}} {{item.label}}
+			{{#if (is-equal item.value "auto")}}
+				<i class="fa fa-globe icon-lang-auto"></i> {{t "settings.main.language.labels.auto" label=item.label}}
+			{{else}}
+				{{flag-icon lang=item.value withCursor=false}} {{item.label}}
+			{{/if}}
 		{{/dropdown.list}}
 	{{/drop-down}}
 {{/settings-row}}
