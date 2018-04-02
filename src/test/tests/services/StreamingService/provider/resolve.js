@@ -1,694 +1,879 @@
 import { module, test } from "qunit";
+import sinon from "sinon";
 
 import resolveProviderInjector from "inject-loader!services/StreamingService/provider/resolve";
 import { ProviderError } from "services/StreamingService/errors";
 import ExecObj from "services/StreamingService/exec-obj";
 
 
-const { assign } = Object;
+const stream = {};
 const isFile = () => {};
-const commonDeps = {
-	"utils/node/platform": {
-		platform: "linux"
-	},
-	"../logger": {
-		logDebug() {}
-	},
-	"../errors": {
-		ProviderError
-	},
-	"../exec-obj": ExecObj,
-	"utils/node/fs/stat": {
-		isFile
-	},
-	"utils/node/fs/whichFallback": () => {},
-	"./find-pythonscript-interpreter": () => {},
-	"./validate": () => {}
-};
 
 
-module( "services/StreamingService/provider/resolve" );
+module( "services/StreamingService/provider/resolve", {
+	beforeEach() {
+		// predefined config for most of the tests
+		this.provider = "streamlink-provider";
+		this.platform = "linux";
+		this.config = {
+			[ this.provider ]: {
+				python: true,
+				exec: {
+					[ this.platform ]: "python"
+				},
+				fallback: {
+					[ this.platform ]: [ "/usr/bin" ]
+				},
+				pythonscript: {
+					[ this.platform ]: "streamlink-script"
+				},
+				pythonscriptfallback: [ "/usr/bin" ]
+			}
+		};
+
+		// spys and stubs
+		this.isAbortedSpy = sinon.spy();
+		this.getProviderCacheStub = sinon.stub().returns( null );
+		this.setProviderCacheStub = sinon.stub();
+		this.logDebugSpy = sinon.spy();
+		this.whichFallbackStub = sinon.stub();
+		this.findPythonscriptInterpreterStub = sinon.stub();
+		this.validateProviderStub = sinon.stub().returnsArg( 0 );
+
+		// subject
+		this.subject = () => resolveProviderInjector({
+			"config": {
+				streaming: {
+					providers: this.config
+				}
+			},
+			"../is-aborted": this.isAbortedSpy,
+			"../cache": {
+				providerCache: {
+					get: this.getProviderCacheStub,
+					set: this.setProviderCacheStub
+				}
+			},
+			"../errors": {
+				ProviderError
+			},
+			"../exec-obj": ExecObj,
+			"../logger": {
+				logDebug: this.logDebugSpy
+			},
+			"./find-pythonscript-interpreter": this.findPythonscriptInterpreterStub,
+			"./validate": this.validateProviderStub,
+			"utils/node/platform": {
+				platform: this.platform
+			},
+			"utils/node/fs/whichFallback": this.whichFallbackStub,
+			"utils/node/fs/stat": {
+				isFile
+			}
+		})[ "default" ];
+	}
+});
 
 
-test( "Cached provider data", async assert => {
-
-	assert.expect( 3 );
+/**
+ * Return already cached provider data
+ */
+test( "Cached provider data", async function( assert ) {
 
 	const cache = {};
-	const stream = {};
+	this.getProviderCacheStub.returns( cache );
 
-	const resolveProvider = resolveProviderInjector( assign( {}, commonDeps, {
-		"config": {
-			streaming: {
-				providers: {}
-			}
-		},
-		"../is-aborted": obj => {
-			assert.strictEqual( obj, stream, "Calls isAborted" );
-		},
-		"../cache": {
-			providerCache: {
-				get() {
-					assert.ok( true, "Calls providerCache.get" );
-					return cache;
-				},
-				set() {
-					throw new Error( "Calls providerCache.set" );
-				}
-			}
-		}
-	}) )[ "default" ];
+	const resolveProvider = this.subject();
 
-	const result = await resolveProvider( stream, "", {} );
-	assert.strictEqual( result, cache, "Returns cache if it is available" );
+	assert.strictEqual(
+		await resolveProvider( stream, "", {} ),
+		cache,
+		"Returns cache if it is available"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Gets provider cache once" );
+	assert.notOk( this.whichFallbackStub.called, "Doesn't look up provider files" );
+	assert.notOk( this.validateProviderStub.called, "Doesn't validate provider" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
 
 });
 
 
-test( "Missing provider data", async assert => {
+/**
+ * Check for existing provider configs
+ */
+test( "Invalid streaming provider", async function( assert ) {
 
-	assert.expect( 18 );
+	this.config = { [ this.provider ]: {} };
 
-	const commonTestDeps = {
-		"../is-aborted": obj => {
-			assert.strictEqual( obj, stream, "Calls isAborted" );
-		},
-		"../cache": {
-			providerCache: {
-				get() {
-					assert.ok( true, "Calls providerCache.get" );
-					return null;
-				},
-				set() {
-					throw new Error( "Calls providerCache.set" );
-				}
-			}
-		}
-	};
+	const resolveProvider = this.subject();
 
-	const stream = {};
+	await assert.rejects(
+		resolveProvider( stream, this.provider, {} ),
+		new Error( "Invalid streaming provider: streamlink-provider" ),
+		"Throws error on missing provider user data"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Gets provider cache once" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
 
-	let resolveProvider = resolveProviderInjector( assign( {}, commonDeps, commonTestDeps, {
-		"config": {
-			streaming: {
-				providers: {
-					streamlink: {
-						exec: {
-							linux: null
-						}
-					}
-				}
-			}
-		}
-	}) )[ "default" ];
+	this.isAbortedSpy.reset();
+	this.getProviderCacheStub.resetHistory();
 
-	try {
-		await resolveProvider( stream, "streamlink", {} );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Invalid streaming provider: streamlink",
-			"Throws error on missing provider data"
-		);
-	}
-
-	try {
-		await resolveProvider( stream, "livestreamer", { livestreamer: {} } );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Invalid streaming provider: livestreamer",
-			"Throws error on missing provider data"
-		);
-	}
-
-	try {
-		await resolveProvider( stream, "streamlink", { streamlink: {} } );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Missing executable name for streaming provider",
-			"Throws error on missing provider exec conf data or user data"
-		);
-	}
-
-	resolveProvider = resolveProviderInjector( assign( {}, commonTestDeps, commonDeps, {
-		"config": {
-			streaming: {
-				providers: {
-					streamlink: {
-						exec: {
-							linux: "streamlink"
-						}
-					}
-				}
-			}
-		},
-		"utils/node/platform": {
-			platform: "win32"
-		}
-	}) )[ "default" ];
-
-	try {
-		await resolveProvider( stream, "streamlink", { streamlink: {} } );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Missing executable name for streaming provider",
-			"Throws error on missing exec for current platform"
-		);
-	}
-
-	resolveProvider = resolveProviderInjector( assign( {}, commonTestDeps, commonDeps, {
-		"config": {
-			streaming: {
-				providers: {
-					streamlink: {
-						python: true,
-						exec: {
-							linux: "python"
-						},
-						pythonscript: {
-							linux: null
-						}
-					}
-				}
-			}
-		},
-		"utils/node/platform": {
-			platform: "linux"
-		}
-	}) )[ "default" ];
-
-	try {
-		await resolveProvider( stream, "streamlink", { streamlink: {} } );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Missing python script for streaming provider",
-			"Throws error on missing pythonscript"
-		);
-	}
-
-	resolveProvider = resolveProviderInjector( assign( {}, commonTestDeps, commonDeps, {
-		"config": {
-			streaming: {
-				providers: {
-					streamlink: {
-						python: true,
-						exec: {
-							win32: "python"
-						},
-						pythonscript: {
-							linux: "streamlink"
-						}
-					}
-				}
-			}
-		},
-		"utils/node/platform": {
-			platform: "win32"
-		}
-	}) )[ "default" ];
-
-	try {
-		await resolveProvider( stream, "streamlink", { streamlink: {} } );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Missing python script for streaming provider",
-			"Throws error on missing pythonscript for current platform"
-		);
-	}
+	await assert.rejects(
+		resolveProvider( stream, "livestreamer", { livestreamer: {} } ),
+		new Error( "Invalid streaming provider: livestreamer" ),
+		"Throws error on invalid provider data"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Gets provider cache once" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
 
 });
 
 
-test( "Resolve exec (no pythonscript)", async assert => {
+/**
+ * Check for existing provider exec configs for current platform
+ */
+test( "Missing executable name for streaming provider", async function( assert ) {
 
-	assert.expect( 22 );
+	let resolveProvider;
+	const providerUserData = {};
 
-	const stream = {};
-
-	let expected;
-
-	let whichFallback = () => {
-		throw new Error();
-	};
-	let setupCache = () => {
-		throw new Error( "Calls setupCache" );
-	};
-
-	const resolveProvider = resolveProviderInjector( assign( {}, commonDeps, {
-		"config": {
-			streaming: {
-				providers: {
-					"livestreamer-standalone": {
-						exec: {
-							win32: "livestreamer.exe"
-						},
-						fallback: {
-							win32: [
-								"C:\\livestreamer"
-							]
-						}
-					}
-				}
+	this.config = {
+		[ this.provider ]: {
+			exec: {
+				[ this.platform ]: null
 			}
-		},
-		"utils/node/platform": {
-			platform: "win32"
-		},
-		"../is-aborted": obj => {
-			assert.strictEqual( obj, stream, "Calls isAborted" );
-		},
-		"../cache": {
-			providerCache: {
-				get() {
-					assert.ok( true, "Calls providerCache.get" );
-					return null;
-				},
-				set: ( ...args ) => setupCache( ...args )
-			}
-		},
-		"utils/node/fs/whichFallback": ( ...args ) => whichFallback( ...args )
-	}) )[ "default" ];
-
-
-	// fail (no custom exec)
-	try {
-		await resolveProvider( stream, "livestreamer-standalone", {
-			"livestreamer-standalone": {}
-		});
-	} catch ( e ) {
-		assert.ok(
-			e instanceof ProviderError,
-			"Throws a ProviderError on unresolvable file"
-		);
-		assert.strictEqual(
-			e.message,
-			"Couldn't find executable",
-			"ProviderError has the correct message"
-		);
-	}
-
-	// fail (custom exec)
-	try {
-		await resolveProvider( stream, "livestreamer-standalone", {
-			"livestreamer-standalone": {
-				exec: "C:\\non-existing\\livestreamer.exe"
-			}
-		});
-	} catch ( e ) {
-		assert.ok(
-			e instanceof ProviderError,
-			"Throws a ProviderError on unresolvable file"
-		);
-		assert.strictEqual(
-			e.message,
-			"Couldn't find executable",
-			"ProviderError has the correct message"
-		);
-	}
-
-	setupCache = obj => {
-		assert.propEqual( obj, expected, "Sets up cache with correct execObj" );
+		}
 	};
 
-	// succeed (no custom exec)
-	try {
-		expected = {
-			exec: "C:\\livestreamer\\livestreamer.exe",
-			params: null,
-			env: null
-		};
-		whichFallback = ( exec, fallbacks ) => {
-			assert.strictEqual( exec, "livestreamer.exe", "Looks up the correct exec" );
-			assert.propEqual(
-				fallbacks,
-				{ win32: [ "C:\\livestreamer" ] },
-				"Uses correct fallback paths"
-			);
-			return "C:\\livestreamer\\livestreamer.exe";
-		};
-		const result = await resolveProvider( stream, "livestreamer-standalone", {
-			"livestreamer-standalone": {}
-		});
-		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	resolveProvider = this.subject();
 
-	// succeed (custom exec)
-	try {
-		expected = {
-			exec: "C:\\custom\\standalone.exe",
-			params: null,
-			env: null
-		};
-		whichFallback = ( exec, fallbacks ) => {
-			assert.strictEqual( exec, "C:\\custom\\standalone.exe", "Looks up the correct exec" );
-			assert.strictEqual( fallbacks, undefined, "Doesn't use fallback paths" );
-			return exec;
-		};
-		const result = await resolveProvider( stream, "livestreamer-standalone", {
-			"livestreamer-standalone": {
-				exec: "C:\\custom\\standalone.exe"
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new Error( "Missing executable name for streaming provider" ),
+		"Throws error on missing provider (user) conf exec data"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Gets provider cache once" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
+
+	this.isAbortedSpy.reset();
+	this.getProviderCacheStub.resetHistory();
+	this.logDebugSpy.reset();
+
+
+	this.config = {
+		[ this.provider ]: {
+			exec: {
+				linux: "streamlink-exec"
 			}
-		});
-		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+		}
+	};
+	this.platform = "win32";
+
+	resolveProvider = this.subject();
+
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new Error( "Missing executable name for streaming provider" ),
+		"Throws error on missing exec for current platform"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Gets provider cache once" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
 
 });
 
 
-test( "Resolve exec (pythonscript)", async assert => {
+/**
+ * Check for existing provider python script configs for current platform
+ */
+test( "Missing python script for streaming provider", async function( assert ) {
 
-	assert.expect( 75 );
+	let resolveProvider;
+	const providerUserData = {};
 
-	const stream = {};
-	const pythonscriptfallback = [
-		"/usr/bin",
-		"/usr/local/bin"
-	];
-
-	let expected;
-
-	let whichFallback;
-	let findPythonscriptInterpreter = () => {
-		throw new Error();
-	};
-	let setupCache = () => {
-		throw new Error( "Calls providerCache.set" );
-	};
-
-	const commonTestDeps = {
-		"../is-aborted": obj => {
-			assert.strictEqual( obj, stream, "Calls isAborted" );
-		},
-		"../cache": {
-			providerCache: {
-				get() {
-					assert.ok( true, "Calls providerCache.get" );
-					return null;
-				},
-				set: ( ...args ) => setupCache( ...args )
+	this.config = {
+		[ this.provider ]: {
+			python: true,
+			exec: {
+				[ this.platform ]: "python"
+			},
+			pythonscript: {
+				[ this.platform ]: null
 			}
-		},
-		"utils/node/fs/whichFallback": ( ...args ) => whichFallback( ...args ),
-		"./find-pythonscript-interpreter": ( ...args ) => findPythonscriptInterpreter( ...args )
+		}
 	};
 
-	const streamlinkConfig = {
-		python: true,
-		exec: {
-			linux: "python"
-		},
-		fallback: {
-			linux: [
-				"/usr/bin",
-				"/usr/local/bin"
+	resolveProvider = this.subject();
+
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new Error( "Missing python script for streaming provider" ),
+		"Throws error on missing pythonscript"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Gets provider cache once" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
+
+	this.isAbortedSpy.reset();
+	this.getProviderCacheStub.resetHistory();
+	this.logDebugSpy.reset();
+
+
+	this.config = {
+		[ this.provider ]: {
+			python: true,
+			exec: {
+				win32: "python"
+			},
+			pythonscript: {
+				linux: "streamlink-script"
+			}
+		}
+	};
+	this.platform = "win32";
+
+	resolveProvider = this.subject();
+
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new Error( "Missing python script for streaming provider" ),
+		"Throws error on missing pythonscript for current platform"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Gets provider cache once" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
+
+});
+
+
+/**
+ * Reject and resolve default standalone provider exec
+ */
+test( "Standalone - Default exec", async function( assert ) {
+
+	const error = new Error( "Executables were not found" );
+	const providerUserData = {};
+
+	this.provider = "livestreamer-standalone";
+	this.platform = "win32";
+	this.config = {
+		[ this.provider ]: {
+			exec: {
+				[ this.platform ]: "livestreamer.exe"
+			},
+			fallback: {
+				[ this.platform ]: [
+					"C:\\livestreamer"
+				]
+			}
+		}
+	};
+
+	const resolveProvider = this.subject();
+
+
+	// reject
+
+	this.whichFallbackStub.throws( error );
+
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new ProviderError( "Couldn't find executable", error ),
+		"Throws a ProviderError on unresolvable file"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[
+			this.config[ this.provider ].exec[ this.platform ],
+			this.config[ this.provider ].fallback
+		]],
+		"Calls whichFallback with correct exec and fallbacks"
+	);
+	assert.notOk( this.validateProviderStub.called, "Doesn't validate provider" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
+
+	this.isAbortedSpy.reset();
+	this.getProviderCacheStub.resetHistory();
+	this.logDebugSpy.reset();
+	this.whichFallbackStub.reset();
+
+
+	// resolve
+
+	this.whichFallbackStub.returns( "C:\\livestreamer\\livestreamer.exe" );
+	const expected = {
+		exec: "C:\\livestreamer\\livestreamer.exe",
+		params: null,
+		env: null
+	};
+
+	assert.propEqual(
+		await resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		expected,
+		"Returns the correct execObj"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [ [ stream] , [ stream ] ], "Calls isAborted twice" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[
+			this.config[ this.provider ].exec[ this.platform ],
+			this.config[ this.provider ].fallback
+		]],
+		"Calls whichFallback with correct exec and fallbacks"
+	);
+	assert.propEqual(
+		this.validateProviderStub.args,
+		[[ expected, this.config[ this.provider ] ]],
+		"Validates the resolved provider"
+	);
+	assert.propEqual(
+		this.setProviderCacheStub.args,
+		[[ expected ]],
+		"Sets up cache with correct execObj"
+	);
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[
+			[ "Resolving streaming provider", { provider: this.provider, providerUserData } ],
+			[ "Found streaming provider", expected ],
+			[ "Validated streaming provider", expected ]
+		],
+		"Logs provider name and user data, and logs resolved and validated data"
+	);
+
+});
+
+
+/**
+ * Reject and resolve custom standalone provider exec
+ */
+test( "Standalone - Custom exec", async function( assert ) {
+
+	const error = new Error( "Executables were not found" );
+	let providerUserData;
+
+	this.provider = "livestreamer-standalone";
+	this.platform = "win32";
+	this.config = {
+		[ this.provider ]: {
+			exec: {
+				[ this.platform ]: "livestreamer.exe"
+			},
+			fallback: {
+				[ this.platform ]: [
+					"C:\\livestreamer"
+				]
+			}
+		}
+	};
+
+	const resolveProvider = this.subject();
+
+
+	// reject
+
+	providerUserData = { exec: "C:\\non-existing\\livestreamer.exe" };
+	this.whichFallbackStub.throws( error );
+
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new ProviderError( "Couldn't find executable", error ),
+		"Throws a ProviderError on unresolvable file"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[ providerUserData.exec ]],
+		"Calls whichFallback with correct exec and no fallbacks"
+	);
+	assert.notOk( this.validateProviderStub.called, "Doesn't validate provider" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
+
+	this.isAbortedSpy.reset();
+	this.getProviderCacheStub.resetHistory();
+	this.logDebugSpy.reset();
+	this.whichFallbackStub.reset();
+
+
+	// resolve
+
+	providerUserData = { exec: "C:\\custom\\standalone.exe" };
+	this.whichFallbackStub.returns( providerUserData.exec );
+
+	const expected = {
+		exec: "C:\\custom\\standalone.exe",
+		params: null,
+		env: null
+	};
+	assert.propEqual(
+		await resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		expected,
+		"Returns the correct execObj"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [ [ stream] , [ stream ] ], "Calls isAborted twice" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[ providerUserData.exec ]],
+		"Calls whichFallback with correct exec and no fallbacks"
+	);
+	assert.propEqual(
+		this.validateProviderStub.args,
+		[[ expected, this.config[ this.provider ] ]],
+		"Validates the resolved provider"
+	);
+	assert.propEqual(
+		this.setProviderCacheStub.args,
+		[[ expected ]],
+		"Sets up cache with correct execObj"
+	);
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[
+			[ "Resolving streaming provider", { provider: this.provider, providerUserData } ],
+			[ "Found streaming provider", expected ],
+			[ "Validated streaming provider", expected ]
+		],
+		"Logs provider name and user data, and logs resolved and validated data"
+	);
+
+});
+
+
+/**
+ * Check for existing python script and validate it
+ */
+test( "Python - Invalid python script", async function( assert ) {
+
+	const errorWhich = new Error( "Executables were not found" );
+	const errorInterpret = new Error( "Invalid python script" );
+	const providerUserData = {};
+
+	const resolveProvider = this.subject();
+
+
+	// reject (unkown python script)
+
+	this.whichFallbackStub.throws( errorWhich );
+
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new ProviderError( "Couldn't find python script", errorWhich ),
+		"Throws a ProviderError on unresolvable file"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[
+			this.config[ this.provider ].pythonscript[ this.platform ],
+			this.config[ this.provider ].pythonscriptfallback,
+			isFile
+		]],
+		"Calls whichFallback with correct pythonscript, fallbacks and file check method"
+	);
+	assert.notOk(
+		this.findPythonscriptInterpreterStub.called,
+		"Doesn't call findPythonscriptInterpreter"
+	);
+	assert.notOk( this.validateProviderStub.called, "Doesn't validate provider" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
+
+	this.isAbortedSpy.reset();
+	this.getProviderCacheStub.resetHistory();
+	this.logDebugSpy.reset();
+	this.whichFallbackStub.reset();
+
+
+	// reject (invalid python script)
+
+	this.whichFallbackStub.returns( "/usr/bin/streamlink" );
+	this.findPythonscriptInterpreterStub.throws( errorInterpret );
+
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new ProviderError( "Couldn't validate python script", errorInterpret ),
+		"Throws a ProviderError on unresolvable pythonscript"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[
+			this.config[ this.provider ].pythonscript[ this.platform ],
+			this.config[ this.provider ].pythonscriptfallback,
+			isFile
+		]],
+		"Calls whichFallback with correct pythonscript, fallbacks and file check method"
+	);
+	assert.propEqual(
+		this.findPythonscriptInterpreterStub.args,
+		[[
+			"/usr/bin/streamlink",
+			this.config[ this.provider ],
+			undefined
+		]],
+		"Calls findPythonscriptInterpreter"
+	);
+	assert.notOk( this.validateProviderStub.called, "Doesn't validate provider" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
+
+});
+
+
+/**
+ * Resolve default python script and its returned executable
+ */
+test( "Python - Default python exec/script", async function( assert ) {
+
+	const providerUserData = {};
+
+	const resolveProvider = this.subject();
+
+	this.whichFallbackStub.returns( "/usr/bin/streamlink" );
+	this.findPythonscriptInterpreterStub.returns( new ExecObj( "/usr/bin/python" ) );
+	const expected = new ExecObj( "/usr/bin/python", [ "/usr/bin/streamlink" ], null );
+
+	assert.propEqual(
+		await resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		expected,
+		"Resolves python script and its executable"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [ [ stream] , [ stream ] ], "Calls isAborted twice" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[
+			this.config[ this.provider ].pythonscript[ this.platform ],
+			this.config[ this.provider ].pythonscriptfallback,
+			isFile
+		]],
+		"Only calls whichFallback once with correct pythonscript, fallbacks and file check method"
+	);
+	assert.propEqual(
+		this.findPythonscriptInterpreterStub.args,
+		[[
+			"/usr/bin/streamlink",
+			this.config[ this.provider ],
+			undefined
+		]],
+		"Calls findPythonscriptInterpreter"
+	);
+	assert.propEqual(
+		this.validateProviderStub.args,
+		[[ expected, this.config[ this.provider ] ]],
+		"Validates the resolved provider"
+	);
+	assert.propEqual(
+		this.setProviderCacheStub.args,
+		[[ expected ]],
+		"Sets up cache with correct execObj"
+	);
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[
+			[ "Resolving streaming provider", { provider: this.provider, providerUserData } ],
+			[ "Found streaming provider", expected ],
+			[ "Validated streaming provider", expected ]
+		],
+		"Logs provider name and user data, and logs resolved and validated data"
+	);
+
+});
+
+
+/**
+ * Resolve and reject custom python script and custom python executable
+ */
+test( "Python - Custom python exec/script", async function( assert ) {
+
+	const error = new Error( "Executables were not found" );
+	const providerUserData = {
+		exec: "/usr/local/bin/python",
+		pythonscript: "/usr/local/bin/streamlink"
+	};
+
+	this.whichFallbackStub.onCall( 0 ).returns( providerUserData.pythonscript );
+	this.whichFallbackStub.onCall( 1 ).returns( providerUserData.exec );
+	this.findPythonscriptInterpreterStub.returns( new ExecObj( "/usr/bin/python" ) );
+
+	const resolveProvider = this.subject();
+
+
+	// resolve
+
+	const expected = new ExecObj( "/usr/local/bin/python", [ "/usr/local/bin/streamlink" ], null );
+	assert.propEqual(
+		await resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		expected,
+		"Resolves python script and its executable"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [ [ stream] , [ stream ] ], "Calls isAborted twice" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[
+			[
+				providerUserData.pythonscript,
+				this.config[ this.provider ].pythonscriptfallback,
+				isFile
+			],
+			[
+				providerUserData.exec
 			]
-		},
-		pythonscript: {
-			linux: "streamlink"
-		},
-		pythonscriptfallback
-	};
+		],
+		"Calls whichFallback with custom pythonscript and fb, then with custom exec and no fb"
+	);
+	assert.propEqual(
+		this.findPythonscriptInterpreterStub.args,
+		[[
+			"/usr/local/bin/streamlink",
+			this.config[ this.provider ],
+			"/usr/local/bin/python"
+		]],
+		"Calls findPythonscriptInterpreter"
+	);
+	assert.propEqual(
+		this.validateProviderStub.args,
+		[[ expected, this.config[ this.provider ] ]],
+		"Validates the resolved provider"
+	);
+	assert.propEqual(
+		this.setProviderCacheStub.args,
+		[[ expected ]],
+		"Sets up cache with correct execObj"
+	);
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[
+			[ "Resolving streaming provider", { provider: this.provider, providerUserData } ],
+			[ "Found streaming provider", expected ],
+			[ "Validated streaming provider", expected ]
+		],
+		"Logs provider name and user data, and logs resolved and validated data"
+	);
 
-	let resolveProvider = resolveProviderInjector( assign( {}, commonDeps, commonTestDeps, {
-		"config": {
-			streaming: {
-				providers: {
-					streamlink: streamlinkConfig
-				}
-			}
-		}
-	}) )[ "default" ];
+	this.isAbortedSpy.reset();
+	this.getProviderCacheStub.resetHistory();
+	this.logDebugSpy.reset();
+	this.whichFallbackStub.resetHistory();
+	this.findPythonscriptInterpreterStub.resetHistory();
+	this.validateProviderStub.resetHistory();
+	this.setProviderCacheStub.resetHistory();
 
-	// fail (no custom pythonscript)
-	try {
-		whichFallback = ( pythonscript, fallbacks, check ) => {
-			assert.strictEqual( pythonscript, "streamlink", "Looks up default pythonscript" );
-			assert.strictEqual( fallbacks, pythonscriptfallback, "Uses correct fallback paths" );
-			assert.strictEqual( check, isFile, "Uses correct file check callback" );
-			throw new Error();
-		};
-		await resolveProvider( stream, "streamlink", { "streamlink": {} } );
-	} catch ( e ) {
-		assert.ok(
-			e instanceof ProviderError,
-			"Throws a ProviderError on unresolvable file"
-		);
-		assert.strictEqual(
-			e.message,
-			"Couldn't find python script",
-			"ProviderError has the correct message"
-		);
-	}
 
-	// fail (custom pythonscript)
-	try {
-		whichFallback = ( pythonscript, fallbacks, check ) => {
-			assert.strictEqual( pythonscript, "foo", "Looks up custom pythonscript" );
-			assert.strictEqual( fallbacks, pythonscriptfallback, "Uses correct fallback paths" );
-			assert.strictEqual( check, isFile, "Uses correct file check callback" );
-			throw new Error();
-		};
-		await resolveProvider( stream, "streamlink", {
-			"streamlink": {
-				pythonscript: "foo"
-			}
-		});
-	} catch ( e ) {
-		assert.ok(
-			e instanceof ProviderError,
-			"Throws a ProviderError on unresolvable file"
-		);
-		assert.strictEqual(
-			e.message,
-			"Couldn't find python script",
-			"ProviderError has the correct message"
-		);
-	}
+	// reject
 
-	whichFallback = () => "/usr/bin/streamlink";
+	this.whichFallbackStub.onCall( 1 ).throws( error );
 
-	// fail (findPythonscriptInterpreter)
-	try {
-		findPythonscriptInterpreter = () => {
-			throw new Error();
-		};
-		await resolveProvider( stream, "streamlink", {
-			"streamlink": {}
-		});
-	} catch ( e ) {
-		assert.ok(
-			e instanceof ProviderError,
-			"Throws a ProviderError on unresolvable pythonscript"
-		);
-		assert.strictEqual(
-			e.message,
-			"Couldn't validate python script",
-			"ProviderError has the correct message"
-		);
-	}
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		new ProviderError( "Couldn't find python executable", error ),
+		"Throws a ProviderError on invalid custom exec"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [[ stream ]], "Calls isAborted once" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[
+			[
+				providerUserData.pythonscript,
+				this.config[ this.provider ].pythonscriptfallback,
+				isFile
+			],
+			[
+				providerUserData.exec
+			]
+		],
+		"Calls whichFallback with custom pythonscript and fb, then with custom exec and no fb"
+	);
+	assert.propEqual(
+		this.findPythonscriptInterpreterStub.args,
+		[[
+			"/usr/local/bin/streamlink",
+			this.config[ this.provider ],
+			"/usr/local/bin/python"
+		]],
+		"Calls findPythonscriptInterpreter"
+	);
+	assert.notOk( this.validateProviderStub.called, "Doesn't validate provider" );
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[[ "Resolving streaming provider", { provider: this.provider, providerUserData } ]],
+		"Logs provider name and user data"
+	);
 
-	setupCache = obj => {
-		assert.propEqual( obj, expected, "Sets up cache with correct execObj" );
-	};
+});
 
-	// succeed (simple pythonscript)
-	try {
-		expected = {
-			exec: "/usr/bin/python",
-			params: [ "/usr/bin/streamlink" ],
-			env: null
-		};
-		findPythonscriptInterpreter = ( pythonscript, providerConf ) => {
-			assert.strictEqual( pythonscript, "/usr/bin/streamlink", "Uses correct pythonscript" );
-			assert.strictEqual( providerConf, streamlinkConfig, "Uses correct provider conf" );
-			return new ExecObj( "/usr/bin/python" );
-		};
-		const result = await resolveProvider( stream, "streamlink", {
-			"streamlink": {}
-		});
-		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
 
-	// succeed (bash wrapper script)
-	try {
-		expected = {
-			exec: "/usr/bin/python",
-			params: [ "/usr/bin/different-streamlink" ],
-			env: { foo: "bar" }
-		};
-		whichFallback = () => "/usr/bin/custom";
-		findPythonscriptInterpreter = ( pythonscript, providerConf ) => {
-			assert.strictEqual( pythonscript, "/usr/bin/custom", "Uses correct pythonscript" );
-			assert.strictEqual( providerConf, streamlinkConfig, "Uses correct provider conf" );
-			return new ExecObj(
-				"/usr/bin/python",
-				[ "/usr/bin/different-streamlink" ],
-				{ foo: "bar" }
-			);
-		};
-		const result = await resolveProvider( stream, "streamlink", {
-			"streamlink": {
-				pythonscript: "custom"
-			}
-		});
-		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+/**
+ * Resolve python script and executable from bash wrapper script data
+ */
+test( "Python - Bash wrapper script", async function( assert ) {
 
-	// fail (custom exec and simple pythonscript or bash wrapper script)
-	try {
-		let whichFallbackCalls = 0;
-		whichFallback = ( file, fallbacks, check ) => {
-			if ( ++whichFallbackCalls === 1 ) {
-				assert.strictEqual( file, "streamlink", "Looks up pythonscript first" );
-				assert.strictEqual( fallbacks, pythonscriptfallback, "Uses pythonscriptfallbacks" );
-				assert.strictEqual( check, isFile, "Uses correct file check callback" );
-				return "/usr/bin/streamlink";
-			} else if ( whichFallbackCalls === 2 ) {
-				assert.strictEqual( file, "custom-exec", "Looks up custom exec afterwards" );
-				assert.strictEqual( fallbacks, undefined, "Doesn't use fallbacks" );
-				assert.strictEqual( check, undefined, "Uses default file check callback" );
-				throw new Error();
-			} else {
-				throw new Error( "Calls whichFallback more than twice" );
-			}
-		};
-		findPythonscriptInterpreter = () => ({
-			exec: "/usr/bin/python"
-		});
-		await resolveProvider( stream, "streamlink", {
-			"streamlink": {
-				exec: "custom-exec"
-			}
-		});
-	} catch ( e ) {
-		assert.ok( e instanceof ProviderError, "Throws a ProviderError" );
-		assert.strictEqual(
-			e.message,
-			"Couldn't find python executable",
-			"ProviderError has the correct message"
-		);
-	}
+	const providerUserData = {};
+	const expected = new ExecObj(
+		"/usr/bin/different-python",
+		[ "/usr/bin/different-streamlink-script" ],
+		{ foo: "bar" }
+	);
 
-	// succeed (custom exec and simple pythonscript)
-	try {
-		expected = {
-			exec: "/usr/bin/custom-exec",
-			params: [ "/usr/bin/streamlink" ],
-			env: null
-		};
-		let whichFallbackCalls = 0;
-		whichFallback = ( file, fallbacks, check ) => {
-			if ( ++whichFallbackCalls === 1 ) {
-				assert.strictEqual( file, "streamlink", "Looks up pythonscript first" );
-				assert.strictEqual( fallbacks, pythonscriptfallback, "Uses pythonscriptfallbacks" );
-				assert.strictEqual( check, isFile, "Uses correct file check callback" );
-				return "/usr/bin/streamlink";
-			} else if ( whichFallbackCalls === 2 ) {
-				assert.strictEqual( file, "custom-exec", "Looks up custom exec afterwards" );
-				assert.strictEqual( fallbacks, undefined, "Doesn't use fallbacks" );
-				assert.strictEqual( check, undefined, "Uses default file check callback" );
-				return "/usr/bin/custom-exec";
-			} else {
-				throw new Error( "Calls whichFallback more than twice" );
-			}
-		};
-		findPythonscriptInterpreter = () => ({
-			exec: "/usr/bin/python"
-		});
-		const result = await resolveProvider( stream, "streamlink", {
-			"streamlink": {
-				exec: "custom-exec"
-			}
-		});
-		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	this.whichFallbackStub.returns( "/usr/bin/streamlink-script" );
+	this.findPythonscriptInterpreterStub.returns( expected );
 
-	// succeed (custom exec and custom malformed pythonscript)
-	try {
-		expected = {
-			exec: "/usr/bin/custom-exec",
-			params: [ "/usr/bin/custom-streamlink" ],
-			env: null
-		};
-		let whichFallbackCalls = 0;
-		whichFallback = ( file, fallbacks, check ) => {
-			if ( ++whichFallbackCalls === 1 ) {
-				assert.strictEqual( file, "/usr/bin/custom-streamlink", "Looks up pythonscript" );
-				assert.strictEqual( fallbacks, pythonscriptfallback, "Uses pythonscriptfallbacks" );
-				assert.strictEqual( check, isFile, "Uses correct file check callback" );
-				return file;
-			} else if ( whichFallbackCalls === 2 ) {
-				assert.strictEqual( file, "/usr/bin/custom-exec", "Looks up custom exec" );
-				assert.strictEqual( fallbacks, undefined, "Doesn't use fallbacks" );
-				assert.strictEqual( check, undefined, "Uses default file check callback" );
-				return file;
-			} else {
-				throw new Error( "Calls whichFallback more than twice" );
-			}
-		};
-		findPythonscriptInterpreter = () => new ExecObj();
-		const result = await resolveProvider( stream, "streamlink", {
-			"streamlink": {
-				exec: "/usr/bin/custom-exec",
-				pythonscript: "/usr/bin/custom-streamlink"
-			}
-		});
-		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	const resolveProvider = this.subject();
 
-	// succeed (custom exec and bash wrapper script)
-	try {
-		expected = {
-			exec: "/usr/bin/custom-exec",
-			params: [ "/usr/bin/different-streamlink" ],
-			env: { foo: "bar" }
-		};
-		let whichFallbackCalls = 0;
-		whichFallback = ( file, fallbacks, check ) => {
-			if ( ++whichFallbackCalls === 1 ) {
-				assert.strictEqual( file, "streamlink", "Looks up pythonscript first" );
-				assert.strictEqual( fallbacks, pythonscriptfallback, "Uses pythonscriptfallbacks" );
-				assert.strictEqual( check, isFile, "Uses correct file check callback" );
-				return "/usr/bin/streamlink";
-			} else if ( whichFallbackCalls === 2 ) {
-				assert.strictEqual( file, "custom-exec", "Looks up custom exec afterwards" );
-				assert.strictEqual( fallbacks, undefined, "Doesn't use fallbacks" );
-				assert.strictEqual( check, undefined, "Uses default file check callback" );
-				return "/usr/bin/custom-exec";
-			} else {
-				throw new Error( "Calls whichFallback more than twice" );
-			}
-		};
-		findPythonscriptInterpreter = () => new ExecObj(
-			"/usr/bin/python",
-			[ "/usr/bin/different-streamlink" ],
-			{ foo: "bar" }
-		);
-		const result = await resolveProvider( stream, "streamlink", {
-			"streamlink": {
-				exec: "custom-exec"
-			}
-		});
-		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+
+	assert.propEqual(
+		await resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		expected,
+		"Resolves python script and its executable"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [ [ stream] , [ stream ] ], "Calls isAborted twice" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[
+			this.config[ this.provider ].pythonscript[ this.platform ],
+			this.config[ this.provider ].pythonscriptfallback,
+			isFile
+		]],
+		"Only calls whichFallback once with correct pythonscript, fallbacks and file check method"
+	);
+	assert.propEqual(
+		this.findPythonscriptInterpreterStub.args,
+		[[
+			"/usr/bin/streamlink-script",
+			this.config[ this.provider ],
+			undefined
+		]],
+		"Calls findPythonscriptInterpreter"
+	);
+	assert.propEqual(
+		this.validateProviderStub.args,
+		[[ expected, this.config[ this.provider ] ]],
+		"Validates the resolved provider"
+	);
+	assert.propEqual(
+		this.setProviderCacheStub.args,
+		[[ expected ]],
+		"Sets up cache with correct execObj"
+	);
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[
+			[ "Resolving streaming provider", { provider: this.provider, providerUserData } ],
+			[ "Found streaming provider", expected ],
+			[ "Validated streaming provider", expected ]
+		],
+		"Logs provider name and user data, and logs resolved and validated data"
+	);
+
+});
+
+
+/**
+ * Reject on provider validation fail
+ */
+test( "Provider validation", async function( assert ) {
+
+	const error = new Error( "Validation error" );
+	const providerUserData = {};
+
+	const resolveProvider = this.subject();
+
+	this.whichFallbackStub.returns( "/usr/bin/streamlink" );
+	this.findPythonscriptInterpreterStub.returns( new ExecObj( "/usr/bin/python" ) );
+	this.validateProviderStub.throws( error );
+	const expected = new ExecObj( "/usr/bin/python", [ "/usr/bin/streamlink" ], null );
+
+	await assert.rejects(
+		resolveProvider( stream, this.provider, { [ this.provider ]: providerUserData } ),
+		error,
+		"Throws validation error"
+	);
+	assert.propEqual( this.isAbortedSpy.args, [ [ stream] , [ stream ] ], "Calls isAborted twice" );
+	assert.ok( this.getProviderCacheStub.calledOnce, "Tries to get provider cache once" );
+	assert.propEqual(
+		this.whichFallbackStub.args,
+		[[
+			this.config[ this.provider ].pythonscript[ this.platform ],
+			this.config[ this.provider ].pythonscriptfallback,
+			isFile
+		]],
+		"Only calls whichFallback once with correct pythonscript, fallbacks and file check method"
+	);
+	assert.propEqual(
+		this.findPythonscriptInterpreterStub.args,
+		[[
+			"/usr/bin/streamlink",
+			this.config[ this.provider ],
+			undefined
+		]],
+		"Calls findPythonscriptInterpreter"
+	);
+	assert.propEqual(
+		this.validateProviderStub.args,
+		[[ expected, this.config[ this.provider ] ]],
+		"Validates the resolved provider"
+	);
+	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
+	assert.propEqual(
+		this.logDebugSpy.args,
+		[
+			[ "Resolving streaming provider", { provider: this.provider, providerUserData } ],
+			[ "Found streaming provider", expected ]
+		],
+		"Logs provider name and user data, and logs resolved and validated data"
+	);
 
 });
