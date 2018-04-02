@@ -18,6 +18,9 @@ Changelog - Streamlink Twitch GUI
 - Removed Bower build dependency. #519
 
 
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.4.1...master)
+
+
 ## [v1.4.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.1) (2017-11-19)
 
 This is a patch of today's [`v1.4.0`](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.0) release with fixes to the broken macOS archive.  
