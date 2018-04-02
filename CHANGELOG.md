@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.5.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.5.0) (2018-04-02)
 
 - Upgraded from Ember 2 to Ember 3. #519  
   Improves loading and rendering times.
@@ -18,7 +18,7 @@ Changelog - Streamlink Twitch GUI
 - Removed Bower build dependency. #519
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.4.1...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.4.1...v1.5.0)
 
 
 ## [v1.4.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.4.1) (2017-11-19)
