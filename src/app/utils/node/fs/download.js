@@ -1,12 +1,9 @@
-import { window as Window } from "nwjs/Window";
 import mkdirp from "utils/node/fs/mkdirp";
 import getRedirected from "utils/node/http/getRedirected";
 import { basename, resolve as pathResolve } from "path";
 import { WriteStream } from "fs";
+import { setTimeout, clearTimeout } from "timers";
 import { parse as urlParse } from "url";
-
-
-const { setTimeout, clearTimeout } = Window;
 
 
 /**

@@ -1,272 +1,334 @@
 import { module, test } from "qunit";
+import sinon from "sinon";
+
+import downloadInjector from "inject-loader?-url!utils/node/fs/download";
 import { posix as path } from "path";
 import { Readable, Writable } from "stream";
 import { parse } from "url";
 
-import downloadInjector from "inject-loader?-url!utils/node/fs/download";
 
+module( "utils/node/fs/download", {
+	beforeEach() {
+		const self = this;
+		this.readable = null;
+		this.writable = null;
 
-module( "utils/node/fs/download" );
+		class ReadStream extends Readable {
+			_read() {}
+			_destroy( err, callback ) {
+				callback();
+				self.readable = null;
+			}
+		}
 
+		class WriteStream extends Writable {
+			_write( chunk, encoding, callback ) {
+				callback();
+			}
+			_destroy( err, callback ) {
+				callback();
+				self.writable = null;
+			}
+		}
 
-test( "Parameters", async assert => {
+		this.mkdirpStub = sinon.stub();
 
-	const { default: download } = downloadInjector({
-		path,
-		"nwjs/Window": { window: {} },
-		"utils/node/fs/mkdirp": () => {},
-		"utils/node/http/getRedirected": () => {},
-		"fs": {}
-	});
+		this.setTimeoutStub = sinon.stub().callsFake( callback => {
+			process.nextTick( callback );
+			return 1234;
+		});
+		this.clearTimeoutSpy = sinon.spy();
 
-	try {
-		await download();
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Invalid download URL", "Rejects on invalid url" );
+		this.readableStub = sinon.stub().callsFake( ( ...args ) =>
+			this.readable = new ReadStream( ...args )
+		);
+		this.readableDestoySpy = sinon.spy( ReadStream.prototype, "_destroy" );
+
+		this.writableStub = sinon.stub().callsFake( ( ...args ) =>
+			this.writable = new WriteStream( ...args )
+		);
+		this.writableWriteSpy = sinon.spy( WriteStream.prototype, "_write" );
+		this.writableDestoySpy = sinon.spy( WriteStream.prototype, "_destroy" );
+
+		this.subject = () => downloadInjector({
+			path,
+			"utils/node/fs/mkdirp": this.mkdirpStub,
+			"utils/node/http/getRedirected": this.readableStub,
+			"fs": {
+				WriteStream: this.writableStub
+			},
+			"timers": {
+				setTimeout: this.setTimeoutStub,
+				clearTimeout: this.clearTimeoutSpy
+			}
+		})[ "default" ];
 	}
+});
 
-	try {
-		await download( "foo" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Invalid download URL", "Rejects on invalid url" );
-	}
 
-	try {
-		await download({ protocol: "", host: "", pathname: "" });
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Invalid download URL", "Rejects on invalid url" );
-	}
+test( "Parameters", async function( assert ) {
 
-	try {
-		await download( "http://foo/bar" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Invalid directory", "Rejects on invalid directory" );
-	}
+	const download = this.subject();
 
-	try {
-		await download( "http://foo/bar", "" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Invalid directory", "Rejects on invalid directory" );
-	}
+	await assert.rejects(
+		download(),
+		new Error( "Invalid download URL" ),
+		"Rejects on invalid URL"
+	);
 
-	try {
-		await download( "http://foo/bar", { dir: "" } );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Invalid directory", "Rejects on invalid directory" );
-	}
+	await assert.rejects(
+		download( "foo" ),
+		new Error( "Invalid download URL" ),
+		"Rejects on invalid URL"
+	);
+
+	await assert.rejects(
+		download({ protocol: "", host: "", pathname: "" }),
+		new Error( "Invalid download URL" ),
+		"Rejects on invalid URL"
+	);
+
+	await assert.rejects(
+		download( "http://foo/bar", "" ),
+		new Error( "Invalid directory" ),
+		"Rejects on invalid directory"
+	);
+
+	await assert.rejects(
+		download( "http://foo/bar" ),
+		new Error( "Invalid directory" ),
+		"Rejects on invalid directory"
+	);
+
+	await assert.rejects(
+		download( "http://foo/bar", { dir: "" } ),
+		new Error( "Invalid directory" ),
+		"Rejects on invalid directory"
+	);
+
+	assert.notOk( this.mkdirpStub.called, "Doesn't create download directory" );
+	assert.notOk( this.writableStub.called, "Doesn't create WriteStream" );
+	assert.notOk( this.readableStub.called, "Doesn't create ReadStream" );
+	assert.notOk( this.setTimeoutStub.called, "Doesn't set timeout" );
 
 });
 
 
-test( "Download", async assert => {
+test( "Write error", async function( assert ) {
 
-	assert.expect( 52 );
+	const error = new Error( "write error" );
+	const download = this.subject();
 
-	let url;
-	let dest;
-	let expectedUrl;
-	let expectedDest;
+	// explicit dest
+	const promise = download( "https://host/path", { dir: "/foo/bar", name: "name" } );
+	await new Promise( resolve => process.nextTick( resolve ) );
 
-	let readable;
-	let writable;
+	assert.propEqual( this.mkdirpStub.args, [[ "/foo/bar" ]], "Creates download directory" );
+	assert.propEqual( this.writableStub.args, [[ "/foo/bar/name" ]], "Creates new WriteStream" );
+	assert.propEqual(
+		this.readableStub.args,
+		[[ parse( "https://host/path" ) ]],
+		"Creates new ReadStream"
+	);
+	assert.ok(
+		this.writableStub.calledBefore( this.readableStub ),
+		"Creates WriteStream before ReadStream"
+	);
+	assert.notOk( this.setTimeoutStub.called, "Doesn't set a timeout callback if time is not set" );
+	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
+	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
 
-	const { default: download } = downloadInjector({
-		path,
-		"nwjs/Window": {
-			window: {
-				setTimeout( callback, time ) {
-					assert.step( "setTimeout" );
-					assert.ok( callback instanceof Function, "Sets the timeout" );
-					assert.strictEqual( time, 1000, "Sets the correct time" );
-					callback();
-					return 1234;
-				},
-				clearTimeout( time ) {
-					assert.step( "clearTimeout" );
-					assert.strictEqual( time, 1234, "Clears the correct timeout" );
-				}
-			}
-		},
-		"utils/node/fs/mkdirp": async path => {
-			assert.strictEqual( path, "/foo/bar", "Tries to create download directory" );
-			return path;
-		},
-		"utils/node/http/getRedirected": async url => {
-			assert.propEqual( url, expectedUrl, "Calls getRedirected" );
-			readable = new class extends Readable {
-				constructor() {
-					super( arguments );
-					assert.step( "read create" );
-				}
-				_read() {}
-				_destroy( err, callback ) {
-					assert.step( "read end" );
-					callback();
-					readable = null;
-				}
-			}();
-			return readable;
-		},
-		"fs": {
-			WriteStream: class extends Writable {
-				constructor( path ) {
-					super( arguments );
-					writable = this;
-					assert.step( "write create" );
-					assert.ok(
-						expectedDest instanceof RegExp
-							? expectedDest.test( path )
-							: path === expectedDest,
-						"Creates new WriteStream"
-					);
-				}
-				_write( chunk, encoding, callback ) {
-					assert.step( String( chunk ) );
-					callback();
-				}
-				_destroy( err, callback ) {
-					assert.step( "write end" );
-					callback();
-					writable = null;
-				}
-			}
-		}
-	});
+	this.writable.emit( "error", error );
 
-	// explicit file name
-	// write error
+	await assert.rejects( promise, error, "Rejects on write error" );
 
-	url = "https://host/path";
-	dest = { dir: "/foo/bar", name: "name" };
-	expectedUrl = parse( url );
-	expectedDest = "/foo/bar/name";
+	assert.notOk( this.writableWriteSpy.called, "Doesn't write on error" );
+	assert.notOk( this.clearTimeoutSpy.called, "Doesn't call clearTimeout" );
+	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
+	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
+	assert.ok(
+		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
+		"Destroys ReadStream before WriteStream"
+	);
 
-	try {
-		const promise = download( url, dest );
-		await new Promise( resolve => setTimeout( resolve, 10 ) );
-		writable.emit( "error", new Error( "fail write" ) );
-		await promise;
-	} catch ( e ) {
-		assert.strictEqual( e.message, "fail write", "Rejects on write error" );
-		assert.checkSteps(
-			[
-				"write create",
-				"read create",
-				"read end",
-				"write end"
-			],
-			"Has the correct order of write and read stream events and method calls"
-		);
-	}
+});
+
+
+test( "Read error", async function( assert ) {
+
+	const error = new Error( "read error" );
+	const download = this.subject();
 
 	// url basename as file name
-	// read error
+	const promise = download( "https://host/my/file", "/foo/bar" );
+	await new Promise( resolve => process.nextTick( resolve ) );
 
-	url = "https://host/my/file";
-	dest = "/foo/bar";
-	expectedUrl = parse( url );
-	expectedDest = "/foo/bar/file";
+	assert.propEqual( this.mkdirpStub.args, [[ "/foo/bar" ]], "Creates download directory" );
+	assert.propEqual( this.writableStub.args, [[ "/foo/bar/file" ]], "Creates new WriteStream" );
+	assert.propEqual(
+		this.readableStub.args,
+		[[ parse( "https://host/my/file" ) ]],
+		"Creates new ReadStream"
+	);
+	assert.ok(
+		this.writableStub.calledBefore( this.readableStub ),
+		"Creates WriteStream before ReadStream"
+	);
+	assert.notOk( this.setTimeoutStub.called, "Doesn't set a timeout callback if time is not set" );
+	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
+	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
 
-	try {
-		const promise = download( url, dest );
-		await new Promise( resolve => setTimeout( resolve, 10 ) );
-		readable.emit( "error", new Error( "read write" ) );
-		await promise;
-	} catch ( e ) {
-		assert.strictEqual( e.message, "read write", "Rejects on read error" );
-		assert.checkSteps(
-			[
-				"write create",
-				"read create",
-				"read end",
-				"write end"
-			],
-			"Has the correct order of write and read stream events and method calls"
-		);
-	}
+	this.readable.emit( "error", error );
+
+	await assert.rejects( promise, error, "Rejects on read error" );
+
+	assert.notOk( this.writableWriteSpy.called, "Doesn't write on error" );
+	assert.notOk( this.clearTimeoutSpy.called, "Doesn't call clearTimeout" );
+	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
+	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
+	assert.ok(
+		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
+		"Destroys ReadStream before WriteStream"
+	);
+
+});
+
+
+test( "Timeout", async function( assert ) {
+
+	const download = this.subject();
 
 	// url basename as file name
-	// timeout
+	const promise = download( "https://host/my/file", "/foo/bar", 1000 );
+	await new Promise( resolve => process.nextTick( resolve ) );
 
-	url = "https://host/my/file";
-	dest = "/foo/bar";
-	expectedUrl = parse( url );
-	expectedDest = "/foo/bar/file";
+	assert.propEqual( this.mkdirpStub.args, [[ "/foo/bar" ]], "Creates download directory" );
+	assert.propEqual( this.writableStub.args, [[ "/foo/bar/file" ]], "Creates new WriteStream" );
+	assert.propEqual(
+		this.readableStub.args,
+		[[ parse( "https://host/my/file" ) ]],
+		"Creates new ReadStream"
+	);
+	assert.propEqual(
+		this.setTimeoutStub.args,
+		[[ new Function(), 1000 ]],
+		"Sets timeout if time parameter is set"
+	);
+	assert.ok(
+		this.writableStub.calledBefore( this.readableStub ),
+		"Creates WriteStream before ReadStream"
+	);
+	assert.ok(
+		this.setTimeoutStub.calledAfter( this.readableStub ),
+		"Sets timeout after creating ReadStream"
+	);
+	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
+	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
 
-	try {
-		const promise = download( url, dest, 1000 );
-		await new Promise( resolve => setTimeout( resolve, 10 ) );
-		await promise;
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Timeout", "Rejects on timeout" );
-		assert.checkSteps(
-			[
-				"write create",
-				"read create",
-				"setTimeout",
-				"clearTimeout",
-				"read end",
-				"write end"
-			],
-			"Has the correct order of write and read stream events and method calls"
-		);
-	}
+	await assert.rejects( promise, new Error( "Timeout" ), "Rejects on timeout" );
+
+	assert.notOk( this.writableWriteSpy.called, "Doesn't write on error" );
+	assert.propEqual( this.clearTimeoutSpy.args, [[ 1234 ]], "Clears timeout" );
+	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
+	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
+	assert.ok(
+		this.clearTimeoutSpy.calledBefore( this.readableDestoySpy ),
+		"Clears timeout before destroying ReadStream"
+	);
+	assert.ok(
+		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
+		"Destroys ReadStream before WriteStream"
+	);
+
+});
+
+
+test( "Unpipe", async function( assert ) {
+
+	const error = new Error( "I/O error" );
+	const expectedDest = /^\/foo\/bar\/\d+\.download$/;
+
+	const download = this.subject();
 
 	// no file name and no url basename
-	// unpipe
+	const promise = download( "https://host/", "/foo/bar" );
+	await new Promise( resolve => process.nextTick( resolve ) );
 
-	url = "https://host/";
-	dest = "/foo/bar";
-	expectedUrl = parse( url );
-	expectedDest = /^\/foo\/bar\/\d+\.download$/;
+	assert.propEqual( this.mkdirpStub.args, [[ "/foo/bar" ]], "Creates download directory" );
+	assert.ok( expectedDest.test( this.writableStub.args[0][0] ), "Creates new WriteStream" );
+	assert.propEqual(
+		this.readableStub.args,
+		[[ parse( "https://host/" ) ]],
+		"Creates new ReadStream"
+	);
+	assert.ok(
+		this.writableStub.calledBefore( this.readableStub ),
+		"Creates WriteStream before ReadStream"
+	);
+	assert.notOk( this.setTimeoutStub.called, "Doesn't set a timeout callback if time is not set" );
+	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
+	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
 
-	try {
-		const promise = download( url, dest );
-		await new Promise( resolve => setTimeout( resolve, 10 ) );
-		readable.emit( "unpipe" );
-		await promise;
-	} catch ( e ) {
-		assert.strictEqual( e.message, "I/O error", "Rejects on stream unpiping" );
-		assert.checkSteps(
-			[
-				"write create",
-				"read create",
-				"read end",
-				"write end"
-			],
-			"Has the correct order of write and read stream events and method calls"
-		);
-	}
+	this.readable.emit( "unpipe" );
+
+	await assert.rejects( promise, error, "Rejects on stream unpiping" );
+
+	assert.notOk( this.writableWriteSpy.called, "Doesn't write on error" );
+	assert.notOk( this.clearTimeoutSpy.called, "Doesn't call clearTimeout" );
+	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
+	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
+	assert.ok(
+		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
+		"Destroys ReadStream before WriteStream"
+	);
+
+});
+
+
+test( "Download", async function( assert ) {
+
+	const download = this.subject();
 
 	// url basename as file name
-	// success
+	const promise = download( "https://host/my/file", "/foo/bar" );
+	await new Promise( resolve => process.nextTick( resolve ) );
 
-	url = "https://host/my/file";
-	dest = "/foo/bar";
-	expectedUrl = parse( url );
-	expectedDest = "/foo/bar/file";
+	assert.propEqual( this.mkdirpStub.args, [[ "/foo/bar" ]], "Creates download directory" );
+	assert.propEqual( this.writableStub.args, [[ "/foo/bar/file" ]], "Creates new WriteStream" );
+	assert.propEqual(
+		this.readableStub.args,
+		[[ parse( "https://host/my/file" ) ]],
+		"Creates new ReadStream"
+	);
+	assert.ok(
+		this.writableStub.calledBefore( this.readableStub ),
+		"Creates WriteStream before ReadStream"
+	);
+	assert.notOk( this.setTimeoutStub.called, "Doesn't set a timeout callback if time is not set" );
+	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
+	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
 
-	try {
-		const promise = download( expectedUrl, dest );
-		await new Promise( resolve => setTimeout( resolve, 10 ) );
-		readable.push( "foo" );
-		readable.push( "bar" );
-		readable.emit( "end" );
-		const path = await promise;
-		assert.strictEqual( path, expectedDest, "Resolves with correct path" );
-		assert.checkSteps(
-			[
-				"write create",
-				"read create",
-				"foo",
-				"bar",
-				"read end",
-				"write end"
-			],
-			"Has the correct order of write and read stream events and method calls"
-		);
-	} catch ( e ) {
-		throw e;
-	}
+	this.readable.push( "foo" );
+	this.readable.push( "bar" );
+	this.readable.emit( "end" );
+
+	await promise;
+
+	assert.propEqual(
+		this.writableWriteSpy.args.map( args => String( args[0] ) ),
+		[ "foo", "bar" ],
+		"Writes all stream chunks"
+	);
+	assert.notOk( this.clearTimeoutSpy.called, "Doesn't call clearTimeout" );
+	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
+	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
+	assert.ok(
+		this.writableWriteSpy.calledBefore( this.readableDestoySpy ),
+		"Writes all stream chunks before destroying the ReadStream"
+	);
+	assert.ok(
+		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
+		"Destroys ReadStream before WriteStream"
+	);
 
 });
