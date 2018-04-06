@@ -1,20 +1,20 @@
-import denodify from "utils/node/denodify";
 import { stat, isFile } from "utils/node/fs/stat";
 import { join } from "path";
 import { readdir, unlink } from "fs";
+import { promisify } from "util";
 
 
 /**
  * @type {Function}
  * @returns {Promise}
  */
-const fsReaddir = denodify( readdir );
+const fsReaddir = promisify( readdir );
 
 /**
  * @type {Function}
  * @returns {Promise}
  */
-const fsUnlink = denodify( unlink );
+const fsUnlink = promisify( unlink );
 
 
 /**
@@ -68,7 +68,7 @@ async function clearfolder( dir, threshold ) {
 	}
 
 	// delete all matched files
-	await execBatchAndIgnoreRejected( resolvedFiles, fsUnlink );
+	return await execBatchAndIgnoreRejected( resolvedFiles, fsUnlink );
 }
 
 
