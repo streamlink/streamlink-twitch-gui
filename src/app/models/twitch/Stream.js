@@ -35,6 +35,8 @@ const fpsRanges = [
 	{ target: 144, min: 142, max: 146 }
 ];
 
+const reRerun = /rerun|watch_party/;
+
 
 export default Model.extend({
 	i18n: service(),
@@ -75,8 +77,8 @@ export default Model.extend({
 		"channel.status",
 		function() {
 			if (
-				   get( this, "broadcast_platform" ) === "watch_party"
-				|| get( this, "stream_type" ) === "watch_party"
+				   reRerun.test( get( this, "broadcast_platform" ) )
+				|| reRerun.test( get( this, "stream_type" ) )
 			) {
 				return true;
 			}

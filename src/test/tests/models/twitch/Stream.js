@@ -216,10 +216,22 @@ test( "Computed properties", function( assert ) {
 	assert.ok( get( record, "isVodcast" ), "Is a vodcast now" );
 
 	setProperties( record, {
+		broadcast_platform: "rerun",
+		stream_type: "live"
+	});
+	assert.ok( get( record, "isVodcast" ), "Is still vodcast/rerun" );
+
+	setProperties( record, {
 		broadcast_platform: "live",
 		stream_type: "watch_party"
 	});
 	assert.ok( get( record, "isVodcast" ), "Is still a vodcast" );
+
+	setProperties( record, {
+		broadcast_platform: "live",
+		stream_type: "rerun"
+	});
+	assert.ok( get( record, "isVodcast" ), "Is still a vodcast/rerun" );
 
 	setProperties( record, {
 		broadcast_platform: "live",
