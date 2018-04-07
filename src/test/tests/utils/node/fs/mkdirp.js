@@ -1,117 +1,91 @@
 import { module, test } from "qunit";
+import sinon from "sinon";
 import { R_OK, W_OK } from "fs";
 import { posix as path } from "path";
 
-import mkdirpInjector from "inject-loader!utils/node/fs/mkdirp";
+import mkdirpInjector from "inject-loader?-util!utils/node/fs/mkdirp";
 
 
-module( "utils/node/fs/mkdirp" );
+module( "utils/node/fs/mkdirp", {
+	beforeEach() {
+		this.statStub = sinon.stub();
+		this.fsMkdirStub = sinon.stub();
 
-
-test( "No directory", async assert => {
-
-	assert.expect( 3 );
-
-	const { default: mkdirp } = mkdirpInjector({
-		"utils/node/denodify": fn => fn,
-		"utils/node/platform": { isWin: false },
-		"utils/node/fs/stat": {
-			isDirectory() {},
-			async stat( dir ) {
-				assert.strictEqual( dir, "/foo/bar", "Tries to validate directory" );
-				throw new Error( "fail stat" );
+		this.subject = isWin => mkdirpInjector({
+			"utils/node/platform": {
+				isWin: !!isWin
+			},
+			"utils/node/fs/stat": {
+				isDirectory: stats => stats.isDirectory(),
+				stat: this.statStub
+			},
+			path,
+			fs: {
+				W_OK,
+				mkdir: this.fsMkdirStub
 			}
-		},
-		path,
-		fs: {
-			W_OK,
-			async mkdir( dir ) {
-				assert.strictEqual( dir, "/foo/bar", "Tries to create directory" );
-				throw new Error( "fail mkdir" );
-			}
-		}
-	});
-
-	try {
-		await mkdirp( "/foo/bar" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "fail stat", "Rejects with an error" );
+		});
 	}
+});
+
+
+test( "No directory", async function( assert ) {
+
+	const errorMkdir = new Error( "mkdir fail" );
+	const errorStat = new Error( "stat fail" );
+
+	const { default: mkdirp } = this.subject();
+
+	this.statStub.rejects( errorStat );
+	this.fsMkdirStub.callsFake( ( dir, callback ) => callback( errorMkdir ) );
+
+	await assert.rejects( mkdirp( "/foo/bar" ), errorStat, "Rejects on existing file" );
+	assert.ok( this.fsMkdirStub.calledWith( "/foo/bar" ), "/foo/bar", "Tries to create directory" );
+	assert.ok( this.statStub.calledWith( "/foo/bar" ), "Tries to validate directory" );
 
 });
 
 
-test( "Already existing directory", async assert => {
+test( "Already existing directory", async function( assert ) {
 
-	assert.expect( 1 );
+	const error = new Error();
+	error.code = "EEXIST";
 
-	const { default: mkdirp } = mkdirpInjector({
-		"utils/node/denodify": fn => fn,
-		"utils/node/platform": { isWin: false },
-		"utils/node/fs/stat": {
-			isDirectory() {},
-			async stat() {
-				throw new Error( "Should not get called" );
-			}
-		},
-		path,
-		fs: {
-			W_OK,
-			async mkdir() {
-				const err = new Error();
-				err.code = "EEXIST";
-				throw err;
-			}
-		}
-	});
+	const { default: mkdirp } = this.subject();
+
+	this.fsMkdirStub.callsFake( ( dir, callback ) => callback( error ) );
 
 	const dir = await mkdirp( "/foo/bar" );
 	assert.strictEqual( dir, "/foo/bar", "Resolves with correct path" );
+	assert.ok( this.fsMkdirStub.calledWith( "/foo/bar" ), "/foo/bar", "Tries to create directory" );
+	assert.notOk( this.statStub.called, "Doesn't call stat" );
 
 });
 
 
-test( "New directory", async assert => {
+test( "New directory", async function( assert ) {
 
-	assert.expect( 3 );
-
-	const paths = [];
 	const existing = [ "/foo" ];
+	const error = new Error();
+	error.code = "ENOENT";
 
-	const { default: mkdirp } = mkdirpInjector({
-		"utils/node/denodify": fn => fn,
-		"utils/node/platform": { isWin: false },
-		"utils/node/fs/stat": {
-			isDirectory() {},
-			async stat() {
-				throw new Error( "Should not get called" );
-			}
-		},
-		path,
-		fs: {
-			W_OK,
-			async mkdir( dir ) {
-				paths.push( dir );
+	const { default: mkdirp } = this.subject();
 
-				// parent does not exist
-				if ( !existing.includes( path.dirname( dir ) ) ) {
-					const err = new Error();
-					err.code = "ENOENT";
-					throw err;
-				}
-
-				// create new folder
-				existing.push( dir );
-
-				return dir;
-			}
+	this.fsMkdirStub.callsFake( ( dir, callback ) => {
+		// parent does not exist
+		if ( !existing.includes( path.dirname( dir ) ) ) {
+			callback( error );
+		} else {
+			// create new folder
+			existing.push( dir );
+			callback( null, dir );
 		}
 	});
 
 	const dir = await mkdirp( "/foo/bar/baz/qux" );
 	assert.strictEqual( dir, "/foo/bar/baz/qux", "Returns path" );
 	assert.propEqual(
-		paths,
+		this.fsMkdirStub.args.map( args => args[0] ),
 		[
 			"/foo/bar/baz/qux",
 			"/foo/bar/baz",
@@ -131,89 +105,46 @@ test( "New directory", async assert => {
 		],
 		"Checks all required parent directories"
 	);
+	assert.notOk( this.statStub.called, "Doesn't call stat" );
 
 });
 
 
-test( "Non-writable parent directory", async assert => {
+test( "Non-writable parent directory", async function( assert ) {
 
-	assert.expect( 3 );
+	const errorStat = new Error( "stat fail" );
 
-	const dirs = [];
+	const { default: mkdirp } = this.subject();
 
-	const { default: mkdirp } = mkdirpInjector({
-		"utils/node/denodify": fn => fn,
-		"utils/node/platform": { isWin: false },
-		"utils/node/fs/stat": {
-			isDirectory() {},
-			async stat( dir ) {
-				assert.strictEqual( dir, "/foo", "Checks whether parent dir is writable" );
-
-				throw new Error( "stat fail" );
-			}
-		},
-		path,
-		fs: {
-			W_OK,
-			async mkdir( dir ) {
-				dirs.push( dir );
-
-				const err = new Error();
-				// parent dir /foo exists, but is not writable
-				err.code = dir === "/foo"
-					? "EACCES"
-					: "ENOENT";
-				throw err;
-			}
-		}
+	this.statStub.rejects( errorStat );
+	this.fsMkdirStub.callsFake( ( dir, callback ) => {
+		const err = new Error();
+		// parent dir /foo exists, but is not writable
+		err.code = dir === "/foo"
+			? "EACCES"
+			: "ENOENT";
+		callback( err );
 	});
 
-	try {
-		await mkdirp( "/foo/bar" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "stat fail", "Rejects if parent dir not writable" );
-		assert.propEqual(
-			dirs,
-			[
-				"/foo/bar",
-				"/foo"
-			],
-			"Tries to create all parent directories"
-		);
-	}
+	await assert.rejects(
+		mkdirp( "/foo/bar" ),
+		errorStat,
+		"Rejects if parent dir not writable"
+	);
+	assert.propEqual(
+		this.fsMkdirStub.args.map( args => args[0] ),
+		[ "/foo/bar", "/foo" ],
+		"Tries to create all parent directories"
+	);
+	assert.ok( this.statStub.calledWith( "/foo" ), "Checks whether parent dir is writable" );
 
 });
 
 
-test( "Directory check function", async assert => {
+test( "Directory check function", async function( assert ) {
 
-	const { check: checkPosix } = mkdirpInjector({
-		"utils/node/platform": { isWin: false },
-		"utils/node/fs/stat": {
-			isDirectory( stats ) {
-				return stats.isDirectory();
-			},
-			stat() {}
-		},
-		path,
-		fs: {
-			W_OK
-		}
-	});
-
-	const { check: checkWin } = mkdirpInjector({
-		"utils/node/platform": { isWin: true },
-		"utils/node/fs/stat": {
-			isDirectory( stats ) {
-				return stats.isDirectory();
-			},
-			stat() {}
-		},
-		path,
-		fs: {
-			W_OK
-		}
-	});
+	const { check: checkPosix } = this.subject( false );
+	const { check: checkWin } = this.subject( true );
 
 	assert.ok(
 		checkPosix({
@@ -223,16 +154,16 @@ test( "Directory check function", async assert => {
 		"Writable dir on POSIX"
 	);
 
-	assert.ok(
-		!checkPosix({
+	assert.notOk(
+		checkPosix({
 			mode: R_OK,
 			isDirectory() { return true; }
 		}),
 		"Non-writable dir on POSIX"
 	);
 
-	assert.ok(
-		!checkPosix({
+	assert.notOk(
+		checkPosix({
 			mode: W_OK,
 			isDirectory() { return false; }
 		}),
@@ -247,8 +178,8 @@ test( "Directory check function", async assert => {
 		"Dir on Windows"
 	);
 
-	assert.ok(
-		!checkWin({
+	assert.notOk(
+		checkWin({
 			mode: R_OK,
 			isDirectory() { return false; }
 		}),
