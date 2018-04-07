@@ -3,12 +3,12 @@ import { log as logConfig } from "config";
 import { argv, ARG_LOGFILE, ARG_LOGLEVEL } from "nwjs/argv";
 import { isDebug } from "nwjs/debug";
 import process from "nwjs/process";
-import denodify from "utils/node/denodify";
 import { tmpdir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
 import clearfolder from "utils/node/fs/clearfolder";
 import { resolve as resolvePath } from "path";
 import { appendFile } from "fs";
+import { promisify } from "util";
 
 
 export const LOG_LEVEL_NONE = "none";
@@ -47,19 +47,19 @@ const {
  * @type {Function}
  * @returns {Promise}
  */
-const fsAppendFile = denodify( appendFile );
+const fsAppendFile = promisify( appendFile );
 
 /**
  * @type {Function}
  * @returns {Promise}
  */
-const writeStdOut = denodify( process.stdout.write.bind( process.stdout ) );
+const writeStdOut = promisify( process.stdout.write.bind( process.stdout ) );
 
 /**
  * @type {Function}
  * @returns {Promise}
  */
-const writeStdErr = denodify( process.stderr.write.bind( process.stderr ) );
+const writeStdErr = promisify( process.stderr.write.bind( process.stderr ) );
 
 
 const logFileName = new Moment().format( filename );
