@@ -1,5 +1,6 @@
 import { module, test } from "qunit";
 import sinon from "sinon";
+import { twitch as twitchConfig } from "config";
 
 import chatProviderInjector
 	from "inject-loader?-utils/parameters/Parameter!services/ChatService/providers/-provider";
@@ -21,9 +22,7 @@ module( "services/ChatService/providers/chatty", {
 
 		const { default: ChatProvider } = chatProviderInjector({
 			"config": {
-				"twitch": {
-					"chat-url": "https://twitch.tv/{channel}/chat"
-				}
+				"twitch": twitchConfig
 			},
 			"../launch": this.launch
 		});

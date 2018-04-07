@@ -1,5 +1,6 @@
 import { module, test } from "qunit";
 import sinon from "sinon";
+import { twitch as twitchConfig } from "config";
 
 import chatProviderInjector
 	from "inject-loader?-utils/parameters/Parameter!services/ChatService/providers/-provider";
@@ -19,9 +20,7 @@ module( "services/ChatService/providers/-java", {
 
 		const { default: ChatProvider } = chatProviderInjector({
 			"config": {
-				"twitch": {
-					"chat-url": "https://twitch.tv/{channel}/chat"
-				}
+				"twitch": twitchConfig
 			},
 			"../launch": this.launch
 		});
@@ -129,7 +128,7 @@ test( "User attributes", async function( assert ) {
 			[
 				"-jar",
 				"/foo/app.jar",
-				"--url=https://twitch.tv/baz/chat",
+				"--url=https://www.twitch.tv/popout/baz/chat",
 				"--channel",
 				"baz",
 				"--user",

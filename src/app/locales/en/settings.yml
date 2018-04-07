@@ -251,9 +251,26 @@ chat:
         notes-browser: Choosing the default browser may result in unwanted, non-minimal window sizes.
         file-placeholder: Setting an executable path is required
         params-placeholder: Set additional parameters
+        url:
+            default:
+                label: Default chat URL
+                description: The application's default chat URL (popout).
+            popout:
+                label: Popout chat URL
+                description: Used by the popout mode on Twitch's website.
+            embed:
+                label: Embedded chat URL
+                description: Meant for embedding the chat into other websites.
+            canonical:
+                label: Canonical chat URL
+                description: Old canonical URL which has been used previously.
         providers:
             browser:
                 label: Default browser
+                attributes:
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
             basic:
                 substitutions:
                     url: The channel's chat URL on Twitch.tv
@@ -269,6 +286,9 @@ chat:
                     args:
                         title: Chromium parameters
                         description: Set additional parameters.
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
             chrome:
                 label: Google Chrome
                 attributes:
@@ -278,8 +298,15 @@ chat:
                     args:
                         title: Google Chrome parameters
                         description: Set additional parameters.
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
             msie:
                 label: Internet Explorer
+                attributes:
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
             chatty:
                 label: Chatty
                 attributes:
@@ -326,6 +353,9 @@ chat:
                     args:
                         title: Application parameters
                         description: Set application parameters.
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
     chat-open:
         title: Open chat
         description: While launching streams.

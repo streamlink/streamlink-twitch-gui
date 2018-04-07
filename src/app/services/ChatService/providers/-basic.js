@@ -4,9 +4,6 @@ import ParameterCustom from "utils/parameters/ParameterCustom";
 import Substitution from "utils/parameters/Substitution";
 
 
-const { chatUrl } = ChatProvider;
-
-
 /**
  * @class ChatProviderBasic
  * @implements ChatProvider
@@ -37,11 +34,10 @@ export default class ChatProviderBasic extends ChatProvider {
 		];
 	}
 
-	_getRuntimeContext( twitchChannel, session ) {
-		const { name: channel } = twitchChannel;
+	_getRuntimeContext( { name: channel }, session ) {
 		const { user_name: user, access_token: token, isLoggedIn } = session;
-		const url = chatUrl.replace( "{channel}", channel );
+		const url = this._getUrl( channel );
 
-		return Object.assign( { url, channel, user, token, isLoggedIn }, this.context );
+		return Object.assign( {}, this.context, { url, channel, user, token, isLoggedIn } );
 	}
 }

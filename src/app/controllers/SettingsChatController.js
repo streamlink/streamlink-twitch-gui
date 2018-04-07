@@ -1,12 +1,13 @@
 import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { chat as chatConfig } from "config";
+import { chat as chatConfig, twitch as twitchConfig } from "config";
 import { providers } from "models/localstorage/Settings/chatProvider";
 import ChatProviderBasic from "services/ChatService/providers/-basic";
 import { platform } from "utils/node/platform";
 
 
+const { "chat-url": twitchChatUrl } = twitchConfig;
 const { userArgsSubstitutions } = ChatProviderBasic;
 
 
@@ -25,6 +26,11 @@ export default Controller.extend({
 			list.push({ id });
 		}
 		return list;
+	}),
+
+	contentChatUrl: computed(function() {
+		return Object.keys( twitchChatUrl )
+			.map( id => ({ id }) );
 	}),
 
 	// EmberData (2.9) is stupid and uses an internal Map implementation that is not iterable

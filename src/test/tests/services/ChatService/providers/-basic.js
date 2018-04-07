@@ -1,5 +1,6 @@
 import { module, test } from "qunit";
 import sinon from "sinon";
+import { twitch as twitchConfig } from "config";
 
 import chatProviderInjector
 	from "inject-loader?-utils/parameters/Parameter!services/ChatService/providers/-provider";
@@ -15,9 +16,7 @@ module( "services/ChatService/providers/-basic", {
 
 		const { default: ChatProvider } = chatProviderInjector({
 			"config": {
-				"twitch": {
-					"chat-url": "https://twitch.tv/{channel}/chat"
-				}
+				"twitch": twitchConfig
 			},
 			"../launch": this.launch
 		});
@@ -88,10 +87,11 @@ test( "User attributes", async function( assert ) {
 	await provider.setup({
 		exec: "foo",
 		fallback: "/bar",
-		attributes: [ { name: "exec" }, { name: "args" } ]
+		attributes: [ { name: "exec" }, { name: "args" }, { name: "url" } ]
 	}, {
 		exec: "bar",
-		args: "\"--url={url}\" --channel \"{channel}\" --user \"{user}\" --token \"{token}\""
+		args: "\"--url={url}\" --channel \"{channel}\" --user \"{user}\" --token \"{token}\"",
+		url: "embed"
 	});
 	await provider.launch({
 		name: "baz"
@@ -111,7 +111,7 @@ test( "User attributes", async function( assert ) {
 		[
 			"/bar/bar",
 			[
-				"--url=https://twitch.tv/baz/chat",
+				"--url=https://www.twitch.tv/embed/baz/chat",
 				"--channel",
 				"baz",
 				"--user",
@@ -136,10 +136,11 @@ test( "User attributes and no session data", async function( assert ) {
 	await provider.setup({
 		exec: "foo",
 		fallback: "/bar",
-		attributes: [ { name: "exec" }, { name: "args" } ]
+		attributes: [ { name: "exec" }, { name: "args" }, { name: "url" } ]
 	}, {
 		exec: "foo",
-		args: "\"--url={url}\" --channel \"{channel}\" --user \"{user}\" --token \"{token}\""
+		args: "\"--url={url}\" --channel \"{channel}\" --user \"{user}\" --token \"{token}\"",
+		url: "canonical"
 	});
 	await provider.launch({ name: "baz" });
 
@@ -148,7 +149,7 @@ test( "User attributes and no session data", async function( assert ) {
 		[
 			"foo",
 			[
-				"--url=https://twitch.tv/baz/chat",
+				"--url=https://www.twitch.tv/baz/chat",
 				"--channel",
 				"baz",
 				"--user",

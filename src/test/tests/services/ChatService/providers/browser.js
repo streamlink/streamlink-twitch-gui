@@ -1,34 +1,33 @@
 import { module, test } from "qunit";
 import sinon from "sinon";
+import { twitch as twitchConfig } from "config";
 
 import chatProviderInjector from "inject-loader!services/ChatService/providers/-provider";
 import chatProviderBrowserInjector from "inject-loader!services/ChatService/providers/browser";
 
 
 module( "services/ChatService/providers/browser", {
-	beforeEach( assert ) {
-		this.openBrowser = sinon.stub();
+	beforeEach() {
+		this.openExternalSpy = sinon.stub();
+		this.launchSpy = sinon.spy();
+		this.getParametersSpy = sinon.spy();
 
 		const { default: ChatProvider } = chatProviderInjector({
 			"config": {
-				"twitch": {
-					"chat-url": "https://twitch.tv/{channel}/chat"
-				}
+				"twitch": twitchConfig
 			},
-			"../launch": () => {
-				assert.ok( false, "Should not get called" );
-			},
-			"utils/parameters/Parameter": class {
-				static getParameters() {
-					assert.ok( false, "Should not get called" );
-				}
+			"../launch": this.launchSpy,
+			"utils/parameters/Parameter": {
+				getParameters: this.getParametersSpy
 			}
 		});
 
 		const { default: ChatProviderBrowser } = chatProviderBrowserInjector({
 			"./-provider": ChatProvider,
-			"nwjs/Shell": {
-				openBrowser: this.openBrowser
+			"nwjs/nwGui": {
+				Shell: {
+					openExternal: this.openExternalSpy
+				}
 			}
 		});
 
@@ -37,24 +36,99 @@ module( "services/ChatService/providers/browser", {
 });
 
 
-test( "Opens chat in default browser", async function( assert ) {
-
-	this.openBrowser.resolves();
+test( "Default attributes", async function( assert ) {
 
 	/** @type ChatProviderBrowser */
 	const provider = new this.subject();
-	await provider.setup();
-	await provider.launch({ name: "bar" });
+	await provider.setup({});
+	await provider.launch({ name: "foo" });
 
-	assert.strictEqual(
-		this.openBrowser.getCall(0).args[0],
-		"https://twitch.tv/{channel}/chat",
-		"Uses the configured Twitch chat URL"
-	);
 	assert.propEqual(
-		this.openBrowser.getCall(0).args[1],
-		{ channel: "bar" },
-		"Sets the channel variable"
+		this.openExternalSpy.args,
+		[[ "https://www.twitch.tv/popout/foo/chat" ]],
+		"Uses the configured default Twitch chat URL"
+	);
+	assert.notOk( this.getParametersSpy.called, "Doesn't call getParameters" );
+	assert.notOk( this.launchSpy.called, "Doesn't call launch" );
+
+});
+
+
+test( "User attributes: default", async function( assert ) {
+
+	/** @type ChatProviderBrowser */
+	const provider = new this.subject();
+	await provider.setup({
+		attributes: [{ name: "url" }]
+	}, {
+		url: "default"
+	});
+	await provider.launch({ name: "foo" });
+
+	assert.propEqual(
+		this.openExternalSpy.args,
+		[[ "https://www.twitch.tv/popout/foo/chat" ]],
+		"Uses the configured Twitch chat URL for profile default"
+	);
+
+});
+
+
+test( "User attributes: popout", async function( assert ) {
+
+	/** @type ChatProviderBrowser */
+	const provider = new this.subject();
+	await provider.setup({
+		attributes: [{ name: "url" }]
+	}, {
+		url: "popout"
+	});
+	await provider.launch({ name: "foo" });
+
+	assert.propEqual(
+		this.openExternalSpy.args,
+		[[ "https://www.twitch.tv/popout/foo/chat" ]],
+		"Uses the configured Twitch chat URL for profile popout"
+	);
+
+});
+
+
+test( "User attributes: embed", async function( assert ) {
+
+	/** @type ChatProviderBrowser */
+	const provider = new this.subject();
+	await provider.setup({
+		attributes: [{ name: "url" }]
+	}, {
+		url: "embed"
+	});
+	await provider.launch({ name: "foo" });
+
+	assert.propEqual(
+		this.openExternalSpy.args,
+		[[ "https://www.twitch.tv/embed/foo/chat" ]],
+		"Uses the configured Twitch chat URL for profile embed"
+	);
+
+});
+
+
+test( "User attributes: canonical", async function( assert ) {
+
+	/** @type ChatProviderBrowser */
+	const provider = new this.subject();
+	await provider.setup({
+		attributes: [{ name: "url" }]
+	}, {
+		url: "canonical"
+	});
+	await provider.launch({ name: "foo" });
+
+	assert.propEqual(
+		this.openExternalSpy.args,
+		[[ "https://www.twitch.tv/foo/chat" ]],
+		"Uses the configured Twitch chat URL for profile canonical"
 	);
 
 });

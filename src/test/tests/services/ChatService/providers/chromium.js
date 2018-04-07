@@ -1,5 +1,6 @@
 import { module, test } from "qunit";
 import sinon from "sinon";
+import { twitch as twitchConfig } from "config";
 
 import chatProviderInjector
 	from "inject-loader?-utils/parameters/Parameter!services/ChatService/providers/-provider";
@@ -17,9 +18,7 @@ module( "services/ChatService/providers/chromium", {
 
 		const { default: ChatProvider } = chatProviderInjector({
 			"config": {
-				"twitch": {
-					"chat-url": "https://twitch.tv/{channel}/chat"
-				}
+				"twitch": twitchConfig
 			},
 			"../launch": this.launch
 		});
@@ -63,7 +62,7 @@ test( "Default attributes", async function( assert ) {
 		[
 			"/foo/chromium",
 			[
-				"--app=https://twitch.tv/baz/chat"
+				"--app=https://www.twitch.tv/popout/baz/chat"
 			]
 		],
 		"Spawns correct executable with default parameters"
@@ -84,11 +83,13 @@ test( "User attributes", async function( assert ) {
 		fallback: "/foo",
 		attributes: [
 			{ name: "exec" },
-			{ name: "args" }
+			{ name: "args" },
+			{ name: "url" }
 		]
 	}, {
 		exec: "chromium-unstable",
-		args: "\"--user-data-dir=/qux/{channel}\""
+		args: "\"--user-data-dir=/qux/{channel}\"",
+		url: "popout"
 	});
 	await provider.launch({
 		name: "baz"
@@ -104,7 +105,7 @@ test( "User attributes", async function( assert ) {
 		[
 			"/bar/chromium-unstable",
 			[
-				"--app=https://twitch.tv/baz/chat",
+				"--app=https://www.twitch.tv/popout/baz/chat",
 				"--user-data-dir=/qux/baz"
 			]
 		],

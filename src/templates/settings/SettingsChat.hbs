@@ -40,6 +40,19 @@
 							(get (get chatConfig name) attribute.name)
 						)
 					}}
+				{{else if attribute.options.isUrl}}
+					{{#radio-buttons
+						value=(mut (get (get model.chat.providers name) attribute.name))
+						content=contentChatUrl
+						as |item|
+					}}
+						<div class="input-btn-with-description">
+							{{item.button (t (concat "settings.chat.provider.url." item.value ".label"))}}
+							<p class="description">
+								{{t (concat "settings.chat.provider.url." item.value ".description")}}
+							</p>
+						</div>
+					{{/radio-buttons}}
 				{{else}}
 					{{input
 						type="text"

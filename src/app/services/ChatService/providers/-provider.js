@@ -3,9 +3,10 @@ import launch from "../launch";
 import Parameter from "utils/parameters/Parameter";
 
 
-const { "chat-url": chatUrl } = twitchConfig;
+const { "chat-url": twitchChatUrl } = twitchConfig;
 const { getParameters } = Parameter;
 const { isArray } = Array;
+const { hasOwnProperty } = {};
 
 
 /**
@@ -16,10 +17,6 @@ const { isArray } = Array;
  * @property {Parameter[]} parameters
  */
 export default class ChatProvider {
-	static get chatUrl() {
-		return chatUrl;
-	}
-
 	/**
 	 * Perform a one time setup
 	 * @param {Object} config
@@ -108,5 +105,21 @@ export default class ChatProvider {
 	// eslint-disable-next-line no-unused-vars
 	_getRuntimeContext( channel, session ) {
 		return this.context;
+	}
+
+	/**
+	 * Get the Twitch chat URL
+	 * @param {string} channel
+	 * @returns {string}
+	 */
+	_getUrl( channel ) {
+		const chat = hasOwnProperty.call( this.context, "url" )
+			? this.context.url
+			: "default";
+		const url = hasOwnProperty.call( twitchChatUrl, chat )
+			? twitchChatUrl[ chat ]
+			: twitchChatUrl.default;
+
+		return url.replace( "{channel}", channel );
 	}
 }

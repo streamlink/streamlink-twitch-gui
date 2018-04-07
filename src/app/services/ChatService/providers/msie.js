@@ -5,9 +5,6 @@ import whichFallback from "utils/node/fs/whichFallback";
 import Parameter from "utils/parameters/Parameter";
 
 
-const { chatUrl } = ChatProvider;
-
-
 /**
  * @class ChatProviderMsie
  * @implements ChatProvider
@@ -35,9 +32,9 @@ export default class ChatProviderMsie extends ChatProvider {
 	}
 
 	// noinspection JSCheckFunctionSignatures
-	_getRuntimeContext( channel ) {
-		const url = chatUrl.replace( "{channel}", channel.name );
+	_getRuntimeContext({ name: channel }) {
+		const url = this._getUrl( channel );
 
-		return Object.assign( { url }, this.context );
+		return Object.assign( {}, this.context, { url } );
 	}
 }

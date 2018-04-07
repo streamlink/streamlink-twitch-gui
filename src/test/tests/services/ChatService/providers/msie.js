@@ -1,5 +1,6 @@
 import { module, test } from "qunit";
 import sinon from "sinon";
+import { twitch as twitchConfig } from "config";
 
 import chatProviderInjector
 	from "inject-loader?-utils/parameters/Parameter!services/ChatService/providers/-provider";
@@ -17,9 +18,7 @@ module( "services/ChatService/providers/msie", {
 
 		const { default: ChatProvider } = chatProviderInjector({
 			"config": {
-				"twitch": {
-					"chat-url": "https://twitch.tv/{channel}/chat"
-				}
+				"twitch": twitchConfig
 			},
 			"../launch": this.launch
 		});
@@ -82,7 +81,7 @@ test( "Default attributes", async function( assert ) {
 		this.launch.getCall(0).args,
 		[
 			"C:\\baz",
-			[ "C:\\foo\\bar", "https://twitch.tv/qux/chat" ]
+			[ "C:\\foo\\bar", "https://www.twitch.tv/popout/qux/chat" ]
 		],
 		"Spawns child process and uses the correct params"
 	);

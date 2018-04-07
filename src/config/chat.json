@@ -1,5 +1,15 @@
 {
-	"browser": {},
+	"browser": {
+		"attributes": [
+			{
+				"name": "url",
+				"icon": "fa-link",
+				"type": "string",
+				"isUrl": true,
+				"defaultValue": "default"
+			}
+		]
+	},
 	"chromium": {
 		"exec": {
 			"win32": "chrome.exe",
@@ -39,6 +49,13 @@
 				"icon": "fa-terminal",
 				"type": "string",
 				"isArgs": true
+			},
+			{
+				"name": "url",
+				"icon": "fa-link",
+				"type": "string",
+				"isUrl": true,
+				"defaultValue": "default"
 			}
 		]
 	},
@@ -82,6 +99,13 @@
 				"icon": "fa-terminal",
 				"type": "string",
 				"isArgs": true
+			},
+			{
+				"name": "url",
+				"icon": "fa-link",
+				"type": "string",
+				"isUrl": true,
+				"defaultValue": "default"
 			}
 		]
 	},
@@ -101,7 +125,16 @@
 		},
 		"data": {
 			"script": "%NWJSAPPPATH%\\msie-minimal.vbs"
-		}
+		},
+		"attributes": [
+			{
+				"name": "url",
+				"icon": "fa-link",
+				"type": "string",
+				"isUrl": true,
+				"defaultValue": "default"
+			}
+		]
 	},
 	"chatty": {
 		"exec": {
@@ -228,6 +261,13 @@
 				"icon": "fa-terminal",
 				"type": "string",
 				"isArgs": true
+			},
+			{
+				"name": "url",
+				"icon": "fa-link",
+				"type": "string",
+				"isUrl": true,
+				"defaultValue": "default"
 			}
 		]
 	}
