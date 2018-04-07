@@ -1,6 +1,6 @@
 const CP = require( "child_process" );
 const FS = require( "fs" );
-const denodify = require( "../app/utils/node/denodify" );
+const promisify = require( "util.promisify" );
 const StreamOutputBuffer = require( "../app/utils/StreamOutputBuffer" );
 
 
@@ -17,7 +17,11 @@ module.exports = function() {
 	this.addDependency( donationConfigFile );
 	this.cacheable( false );
 
-	const readFile = denodify( FS.readFile );
+	/**
+	 * @type {Function}
+	 * @returns {Promise}
+	 */
+	const readFile = promisify( FS.readFile );
 	const readPackageJson = readFile( packageJson ).then( JSON.parse );
 
 
