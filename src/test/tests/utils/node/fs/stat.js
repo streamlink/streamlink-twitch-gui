@@ -1,130 +1,98 @@
 import { module, test } from "qunit";
+import sinon from "sinon";
+import { posix as path } from "path";
 
-import statInjector from "inject-loader!utils/node/fs/stat";
+import statInjector from "inject-loader?-util!utils/node/fs/stat";
 
 
-module( "utils/node/fs/stat" );
+module( "utils/node/fs/stat", {
+	beforeEach() {
+		this.resolveStub = sinon.stub().callsFake( ( ...args ) => path.resolve( ...args ) );
+		this.statStub = sinon.stub();
+
+		this.subject = isWin => statInjector({
+			"utils/node/platform": {
+				isWin: !!isWin
+			},
+			"path": {
+				resolve: this.resolveStub
+			},
+			"fs": {
+				stat: this.statStub
+			}
+		});
+	}
+});
 
 
-test( "Without callback", async assert => {
+test( "Without callback", async function( assert ) {
 
-	assert.expect( 9 );
-
-	let fail = true;
-
+	const error = new Error( "fail" );
 	const statsObj = {};
 
-	const { stat } = statInjector({
-		"utils/node/denodify": fn => fn,
-		"utils/node/platform": {},
-		"path": {
-			resolve( path ) {
-				assert.strictEqual( path, "/foo/bar", "Resolves path first" );
-				return path;
-			}
-		},
-		"fs": {
-			async stat( path ) {
-				assert.strictEqual( path, "/foo/bar", "Calls fs.stat" );
-				if ( fail ) {
-					throw new Error( "fail" );
-				}
-				return statsObj;
-			}
-		}
-	});
+	const { stat } = this.subject();
 
-	try {
-		await stat( "/foo/bar" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "fail", "Rejects on stat failure" );
-	}
+	this.statStub.callsFake( ( dir, callback ) => callback( error ) );
 
-	fail = false;
+	await assert.rejects( stat( "/foo/bar" ), error, "Rejects on stat failure" );
+	assert.ok( this.resolveStub.calledWith( "/foo/bar" ), "Resolves path" );
+	assert.ok( this.resolveStub.calledBefore( this.statStub ), "Resolves path before stat" );
+	assert.ok( this.statStub.calledWith( "/foo/bar" ), "Calls stat with correct path" );
 
-	try {
-		const resolvedPath = await stat( "/foo/bar" );
-		assert.strictEqual( resolvedPath, "/foo/bar", "Resolves with path" );
-	} catch ( e ) {
-		throw e;
-	}
+	this.statStub.reset();
+	this.statStub.callsFake( ( dir, callback ) => callback( null, statsObj ) );
 
-	try {
-		const stats = await stat( "/foo/bar", null, true );
-		assert.strictEqual( stats, statsObj, "Resolves with stats object" );
-	} catch ( e ) {
-		throw e;
-	}
+	const resolvedPath = await stat( "/foo/bar" );
+	assert.strictEqual( resolvedPath, "/foo/bar", "Resolves with path" );
+
+	const stats = await stat( "/foo/bar", null, true );
+	assert.strictEqual( stats, statsObj, "Resolves with stats object" );
 
 });
 
 
-test( "With callback", async assert => {
-
-	assert.expect( 3 );
-
-	let fail = true;
+test( "With callback", async function( assert ) {
 
 	class Stats {
+		constructor( success ) {
+			this.success = success;
+		}
 		validate() {
-			return !fail;
+			return this.success;
 		}
 	}
+	const paths = {
+		"/foo/bar": new Stats( false ),
+		"/foo/qux": new Stats( true )
+	};
+	const check = stats => stats.validate();
 
-	const { stat } = statInjector({
-		"utils/node/denodify": fn => fn,
-		"utils/node/platform": {},
-		"path": {
-			resolve( path ) {
-				return path;
-			}
-		},
-		"fs": {
-			async stat() {
-				return new Stats();
-			}
-		}
-	});
+	const { stat } = this.subject();
 
-	try {
-		await stat( "/foo/bar", stats => stats.validate() );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Invalid", "Rejects if callback fails" );
-	}
+	this.statStub.callsFake( ( dir, callback ) => callback( null, paths[ dir ] ) );
 
-	fail = false;
-
-	try {
-		const resolvedPath = await stat( "/foo/bar", stats => stats.validate() );
-		assert.strictEqual( resolvedPath, "/foo/bar", "Resolves if callback succeeds" );
-		const stats = await stat( "/foo/bar", stats => stats.validate(), true );
-		assert.ok( stats instanceof Stats, "Resolves with stats object" );
-	} catch ( e ) {
-		throw e;
-	}
+	await assert.rejects(
+		stat( "/foo/bar", check ),
+		new Error( "Invalid" ),
+		"Rejects if callback fails"
+	);
+	assert.strictEqual(
+		await stat( "/foo/qux", check ),
+		"/foo/qux",
+		"Resolves if callback succeeds"
+	);
+	assert.ok(
+		await stat( "/foo/qux", check, true ) instanceof Stats,
+		"Resolves with stats object"
+	);
 
 });
 
 
-test( "Validation callbacks", assert => {
+test( "Validation callbacks", function( assert ) {
 
-	const { isDirectory, isFile, isExecutable: isExecWin } = statInjector({
-		"utils/node/denodify": () => {},
-		"path": {},
-		"fs": {},
-		"utils/node/platform": {
-			isWin: true
-		}
-	});
-
-	const { isExecutable: isExecPosix } = statInjector({
-		"utils/node/denodify": () => {},
-		"path": {},
-		"fs": {},
-		"utils/node/platform": {
-			isWin: false
-		}
-	});
+	const { isDirectory, isFile, isExecutable: isExecWin } = this.subject( true );
+	const { isExecutable: isExecPosix } = this.subject( false );
 
 	assert.notOk( isDirectory({ isDirectory() { return false; } }), "Is not a directory" );
 	assert.ok( isDirectory({ isDirectory() { return true; } }), "Is a directory" );

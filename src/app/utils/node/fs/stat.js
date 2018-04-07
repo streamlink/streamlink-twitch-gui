@@ -1,10 +1,10 @@
-import denodify from "utils/node/denodify";
 import { isWin } from "utils/node/platform";
 import { stat as fsStat } from "fs";
 import { resolve } from "path";
+import { promisify } from "util";
 
 
-const fsStatDenodified = denodify( fsStat );
+const fsStatPromisified = promisify( fsStat );
 
 
 /**
@@ -16,7 +16,7 @@ const fsStatDenodified = denodify( fsStat );
  */
 export async function stat( path, validation, returnStats ) {
 	const resolvedPath = resolve( path );
-	const stats = await fsStatDenodified( resolvedPath );
+	const stats = await fsStatPromisified( resolvedPath );
 
 	if ( validation instanceof Function && !validation( stats ) ) {
 		throw new Error( "Invalid" );
