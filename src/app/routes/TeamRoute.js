@@ -5,11 +5,10 @@ import preload from "utils/preload";
 
 
 export default Route.extend( RefreshRouteMixin, {
-	model( params ) {
+	async model({ team }) {
 		const store = get( this, "store" );
-		const { team } = params;
+		const record = await store.findRecord( "twitchTeam", team, { reload: true } );
 
-		return store.findRecord( "twitchTeam", team, { reload: true } )
-			.then( record => preload( record, "logo" ) );
+		return await preload( record, "logo" );
 	}
 });

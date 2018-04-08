@@ -5,19 +5,21 @@ import preload from "utils/preload";
 
 
 export default Route.extend({
-	model() {
+	async model() {
 		const store = get( this, "store" );
 		const { stream, channel } = this.modelFor( "channel" );
+		const name = get( channel, "name" );
 
 		// panels are still referenced by channel name in the private API namespace
-		return store.query( "twitchChannelPanel", { channel: get( channel, "name" ) } )
-			.then( panels => Promise.all( panels
-				.filterBy( "kind", "default" )
-				.sortBy( "display_order" )
-				// preload all panel images
-				.map( panel => preload( panel, "image" ) )
-			) )
-			.then( panels => ({ stream, channel, panels }) );
+		const records = await store.query( "twitchChannelPanel", { channel: name } );
+		const panels = await Promise.all( records
+			.filterBy( "kind", "default" )
+			.sortBy( "display_order" )
+			// preload all panel images
+			.map( panel => preload( panel, "image" ) )
+		);
+
+		return { stream, channel, panels };
 	},
 
 	refresh() {
