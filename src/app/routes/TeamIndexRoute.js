@@ -1,4 +1,4 @@
-import { get, set } from "@ember/object";
+import { get } from "@ember/object";
 import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
 import { toArray } from "utils/ember/recordArrayMethods";
@@ -8,60 +8,51 @@ import preload from "utils/preload";
 export default Route.extend( InfiniteScrollMixin, {
 	itemSelector: ".stream-item-component",
 
-	model() {
+	beforeModel() {
+		this.customOffset = 0;
+
+		return this._super( ...arguments );
+	},
+
+	async model() {
 		const store = get( this, "store" );
+		const limit = get( this, "limit" );
 		const model = this.modelFor( "team" );
 		const users = get( model, "users" );
-		const overall = get( users, "length" );
-
-		const offset = get( this, "customOffset" ) || 0;
-		const limit = get( this, "limit" );
+		const length = get( users, "length" );
 
 		let offsetCalculated = false;
+		const options = { reload: true };
 
-		const fill = ( streamArray, start ) => {
+		const fill = async ( streams, start ) => {
 			const end = start + limit;
-			const channels = users.slice( start, end );
-
-			return Promise.all( channels.map( channel =>
-				store.findRecord( "twitchStream", get( channel, "id" ), { reload: true } )
+			const records = await Promise.all( users
+				.slice( start, end )
+				.map( channel => store.findRecord( "twitchStream", get( channel, "id" ), options )
 					.catch( () => false )
-			) )
-				.then( records => toArray( records ) )
-				// filter offline streams
-				.then( streams => streams.filter( Boolean ) )
-				// append to overall list
-				.then( streams => streamArray.concat( streams ) )
-				// fetch more if necessary
-				.then( streams => streams.length >= limit || end >= overall
-					? streams
-					: fill( streams, end )
 				)
-				.then( streams => {
-					// The InfiniteScrollMixin uses a computed property for calculating the offset.
-					// Manually keep track of the offset here...
-					if ( !offsetCalculated ) {
-						set( this, "customOffset", end );
-						offsetCalculated = true;
-					}
+			);
 
-					return streams;
-				});
+			// filter offline streams and append to overall list
+			streams.push( ...toArray( records ).filter( Boolean ) );
+
+			// fetch more if necessary
+			if ( streams.length < limit && end < length ) {
+				streams = await fill( streams, end );
+			}
+
+			// The InfiniteScrollMixin uses a computed property for calculating the offset.
+			// Manually keep track of the offset here...
+			if ( !offsetCalculated ) {
+				this.customOffset = end;
+				offsetCalculated = true;
+			}
+
+			return streams;
 		};
 
-		return fill( [], offset )
-			.then( records => preload( records, "preview.mediumLatest" ) );
-	},
+		const records = await fill( [], this.customOffset );
 
-	reload() {
-		set( this, "customOffset", 0 );
-
-		return this._super( ...arguments );
-	},
-
-	deactivate() {
-		set( this, "customOffset", 0 );
-
-		return this._super( ...arguments );
+		return await preload( records, "preview.mediumLatest" );
 	}
 });
