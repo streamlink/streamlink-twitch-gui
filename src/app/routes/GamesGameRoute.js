@@ -1,35 +1,29 @@
-import { get, set } from "@ember/object";
+import { set } from "@ember/object";
 import Route from "@ember/routing/route";
-import InfiniteScrollMixin from "./mixins/infinite-scroll";
+import InfiniteScrollOffsetMixin from "./mixins/infinite-scroll/offset";
 import FilterLanguagesMixin from "./mixins/filter-languages";
 import RefreshRouteMixin from "./mixins/refresh";
-import { toArray } from "utils/ember/recordArrayMethods";
-import preload from "utils/preload";
 
 
-export default Route.extend( InfiniteScrollMixin, FilterLanguagesMixin, RefreshRouteMixin, {
+export default Route.extend( InfiniteScrollOffsetMixin, FilterLanguagesMixin, RefreshRouteMixin, {
 	itemSelector: ".stream-item-component",
-
 	modelName: "twitchStream",
+	modelPreload: "preview.mediumLatest",
 
-	model( params ) {
-		if ( arguments.length > 0 ) {
-			set( this, "game", get( params || {}, "game" ) );
-		}
+	async model({ game }) {
+		const model = await this._super({ game });
 
-		return get( this, "store" ).query( this.modelName, {
-			game                : get( this, "game" ),
-			offset              : get( this, "offset" ),
-			limit               : get( this, "limit" ),
-			broadcaster_language: get( this, "broadcaster_language" )
-		})
-			.then( records => toArray( records ) )
-			.then( records => preload( records, "preview.mediumLatest" ) );
+		return { game, model };
 	},
 
-	setupController( controller ) {
-		this._super( ...arguments );
+	async fetchContent() {
+		const { model } = await this.model({});
 
-		set( controller, "game", get( this, "game" ) );
+		return model;
+	},
+
+	setupController( controller, { game, model }, ...args ) {
+		this._super( controller, model, ...args );
+		set( controller, "game", game );
 	}
 });

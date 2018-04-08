@@ -1,19 +1,17 @@
 import { get } from "@ember/object";
 import Route from "@ember/routing/route";
-import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import preload from "utils/preload";
+import InfiniteScrollOffsetMixin from "./mixins/infinite-scroll/offset";
 
 
-export default Route.extend( InfiniteScrollMixin, {
+export default Route.extend( InfiniteScrollOffsetMixin, {
 	itemSelector: ".team-item-component",
-
 	modelName: "twitchTeam",
+	modelPreload: "logo",
 
 	model() {
-		const store = get( this, "store" );
-		const { channel } = this.modelFor( "channel" );
+		const { channel: parentModel } = this.modelFor( "channel" );
+		const channel = get( parentModel, "id" );
 
-		return store.query( this.modelName, { channel: get( channel, "id" ) } )
-			.then( records => preload( records, "logo" ) );
+		return this._super({ channel });
 	}
 });

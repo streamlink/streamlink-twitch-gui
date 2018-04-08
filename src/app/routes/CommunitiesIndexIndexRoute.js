@@ -1,43 +1,21 @@
 import { getOwner } from "@ember/application";
-import { get, set } from "@ember/object";
 import Route from "@ember/routing/route";
-import InfiniteScrollMixin from "./mixins/infinite-scroll";
+import InfiniteScrollCursorMixin from "./mixins/infinite-scroll/cursor";
 import RefreshRouteMixin from "./mixins/refresh";
-import preload from "utils/preload";
-import { toArray } from "utils/ember/recordArrayMethods";
 
 
-export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
+export default Route.extend( InfiniteScrollCursorMixin, RefreshRouteMixin, {
 	itemSelector: ".community-item-component",
+	modelName: "twitchCommunityTop",
+	modelPreload: "avatar_image_url",
 
 	featured: true,
 
 	model() {
-		const store = get( this, "store" );
-		const cursor = get( this, "cursor" );
-		const limit = get( this, "limit" );
-		const featured = get( this, "featured" );
-
-		return store.query( "twitchCommunityTop", { cursor, limit, featured } )
-			.then( records => toArray( records ) )
-			.then( records => preload( records, "avatar_image_url" ) )
-			.then( records => {
-				const cursor = get( records, "meta.cursor" );
-				set( this, "cursor", cursor );
-
-				return records;
-			});
-	},
-
-	deactivate() {
-		set( this, "cursor", null );
-
-		return this._super( ...arguments );
+		return this._super({ featured: this.featured });
 	},
 
 	refresh() {
-		set( this, "cursor", null );
-
 		return getOwner( this ).lookup( "route:communitiesIndex" ).refresh();
 	}
 });

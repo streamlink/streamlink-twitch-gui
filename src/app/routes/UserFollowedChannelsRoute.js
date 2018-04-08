@@ -1,13 +1,14 @@
-import { get } from "@ember/object";
+import { getProperties } from "@ember/object";
 import UserIndexRoute from "./UserIndexRoute";
-import InfiniteScrollMixin from "./mixins/infinite-scroll";
+import InfiniteScrollOffsetMixin from "./mixins/infinite-scroll/offset";
 import RefreshRouteMixin from "./mixins/refresh";
-import { mapBy } from "utils/ember/recordArrayMethods";
-import preload from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
+export default UserIndexRoute.extend( InfiniteScrollOffsetMixin, RefreshRouteMixin, {
 	itemSelector: ".channel-item-component",
+	modelName: "twitchChannelFollowed",
+	modelMapBy: "channel",
+	modelPreload: "logo",
 
 	queryParams: {
 		sortby: {
@@ -18,23 +19,14 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 		}
 	},
 
-	modelName: "twitchChannelFollowed",
 
-	model( params ) {
-		return get( this, "store" ).query( this.modelName, {
-			offset   : get( this, "offset" ),
-			limit    : get( this, "limit" ),
-			sortby   : params.sortby || "created_at",
-			direction: params.direction || "desc"
-		})
-			.then( records => mapBy( records, "channel" ) )
-			.then( records => preload( records, "logo" ) );
+	model({ sortby = "created_at", direction = "desc" }) {
+		return this._super({ sortby, direction });
 	},
 
 	fetchContent() {
-		return this.model({
-			sortby   : get( this, "controller.sortby" ),
-			direction: get( this, "controller.direction" )
-		});
+		const params = getProperties( this.controller, "sortby", "direction" );
+
+		return this.model( params );
 	}
 });
