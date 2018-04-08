@@ -2,12 +2,12 @@ import { getOwner } from "@ember/application";
 import { get, set } from "@ember/object";
 import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import RefreshMixin from "./mixins/refresh";
+import RefreshRouteMixin from "./mixins/refresh";
 import preload from "utils/preload";
 import { toArray } from "utils/ember/recordArrayMethods";
 
 
-export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
+export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 	itemSelector: ".community-item-component",
 
 	featured: true,
