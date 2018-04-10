@@ -159,8 +159,8 @@ import HotkeyService from "services/HotkeyService";
 import ApplicationRoute from "routes/ApplicationRoute";
 import ApplicationTemplate from "templates/Application.hbs";
 
-import LoadingRoute from "routes/LoadingRoute";
-import LoadingTemplate from "templates/Loading.hbs";
+import LoadingRoute from "ui/routes/loading/route";
+import LoadingTemplate from "ui/routes/loading/template.hbs";
 
 import ErrorRoute from "routes/ErrorRoute";
 import ErrorTemplate from "templates/Error.hbs";
@@ -250,8 +250,7 @@ import SearchRoute from "routes/SearchRoute";
 import SearchController from "controllers/SearchController";
 import SearchTemplate from "templates/Search.hbs";
 
-import GamesLoadingRoute from "routes/LoadingRoute";
-import GamesLoadingTemplate from "templates/Loading.hbs";
+import GamesLoadingRoute from "ui/routes/loading/route";
 import GamesIndexRoute from "routes/GamesIndexRoute";
 import GamesIndexController from "controllers/GamesIndexController";
 import GamesIndexTemplate from "templates/games/GamesIndex.hbs";
@@ -259,19 +258,16 @@ import GamesGameRoute from "routes/GamesGameRoute";
 import GamesGameController from "controllers/GamesGameController";
 import GamesGameTemplate from "templates/games/GamesGame.hbs";
 
-import CommunitiesLoadingRoute from "routes/LoadingRoute";
-import CommunitiesLoadingTemplate from "templates/Loading.hbs";
+import CommunitiesLoadingRoute from "ui/routes/loading/route";
 import CommunitiesIndexTemplate from "templates/communities/CommunitiesIndex.hbs";
-import CommunitiesIndexLoadingRoute from "routes/LoadingRoute";
-import CommunitiesIndexLoadingTemplate from "templates/Loading.hbs";
+import CommunitiesIndexLoadingRoute from "ui/routes/loading/route";
 import CommunitiesIndexIndexRoute from "routes/CommunitiesIndexIndexRoute";
 import CommunitiesIndexIndexTemplate from "templates/communities/CommunitiesIndexIndex.hbs";
 import CommunitiesIndexAllRoute from "routes/CommunitiesIndexAllRoute";
 import CommunitiesIndexAllTemplate from "templates/communities/CommunitiesIndexAll.hbs";
 import CommunitiesCommunityRoute from "routes/CommunitiesCommunityRoute";
 import CommunitiesCommunityTemplate from "templates/communities/CommunitiesCommunity.hbs";
-import CommunitiesCommunityLoadingRoute from "routes/LoadingRoute";
-import CommunitiesCommunityLoadingTemplate from "templates/Loading.hbs";
+import CommunitiesCommunityLoadingRoute from "ui/routes/loading/route";
 import CommunitiesCommunityIndexRoute from "routes/CommunitiesCommunityIndexRoute";
 import CommunitiesCommunityIndexTemplate from "templates/communities/CommunitiesCommunityIndex.hbs";
 import CommunitiesCommunityInfoRoute from "routes/CommunitiesCommunityInfoRoute";
@@ -283,8 +279,7 @@ import StreamsTemplate from "templates/Streams.hbs";
 import ChannelRoute from "routes/ChannelRoute";
 import ChannelController from "controllers/ChannelController";
 import ChannelTemplate from "templates/channel/Channel.hbs";
-import ChannelLoadingRoute from "routes/LoadingRoute";
-import ChannelLoadingTemplate from "templates/Loading.hbs";
+import ChannelLoadingRoute from "ui/routes/loading/route";
 import ChannelIndexRoute from "routes/ChannelIndexRoute";
 import ChannelIndexController from "controllers/ChannelIndexController";
 import ChannelIndexTemplate from "templates/channel/ChannelIndex.hbs";
@@ -294,8 +289,7 @@ import ChannelSettingsRoute from "routes/ChannelSettingsRoute";
 import ChannelSettingsController from "controllers/ChannelSettingsController";
 import ChannelSettingsTemplate from "templates/channel/ChannelSettings.hbs";
 
-import UserLoadingRoute from "routes/LoadingRoute";
-import UserLoadingTemplate from "templates/Loading.hbs";
+import UserLoadingRoute from "ui/routes/loading/route";
 import UserIndexRoute from "routes/UserIndexRoute";
 import UserIndexController from "controllers/UserIndexController";
 import UserIndexTemplate from "templates/user/UserIndex.hbs";
@@ -313,8 +307,7 @@ import UserFollowedChannelsController from "controllers/UserFollowedChannelsCont
 import UserFollowedChannelsTemplate from "templates/user/UserFollowedChannels.hbs";
 import UserFollowedGamesRoute from "routes/UserFollowedGamesRoute";
 import UserFollowedGamesTemplate from "templates/user/UserFollowedGames.hbs";
-import UserFollowedGamesLoadingRoute from "routes/LoadingRoute";
-import UserFollowedGamesLoadingTemplate from "templates/Loading.hbs";
+import UserFollowedGamesLoadingRoute from "ui/routes/loading/route";
 import UserFollowedGamesIndexRoute from "routes/UserFollowedGamesIndexRoute";
 import UserFollowedGamesIndexTemplate from "templates/user/UserFollowedGamesIndex.hbs";
 import UserFollowedGamesAllRoute from "routes/UserFollowedGamesAllRoute";
@@ -322,8 +315,7 @@ import UserFollowedGamesAllTemplate from "templates/user/UserFollowedGamesAll.hb
 
 import TeamRoute from "routes/TeamRoute";
 import TeamTemplate from "templates/team/Team.hbs";
-import TeamLoadingRoute from "routes/LoadingRoute";
-import TeamLoadingTemplate from "templates/Loading.hbs";
+import TeamLoadingRoute from "ui/routes/loading/route";
 import TeamIndexRoute from "routes/TeamIndexRoute";
 import TeamIndexTemplate from "templates/team/TeamIndex.hbs";
 import TeamMembersRoute from "routes/TeamMembersRoute";
@@ -635,7 +627,6 @@ export default {
 	SearchTemplate,
 
 	GamesLoadingRoute,
-	GamesLoadingTemplate,
 	GamesIndexRoute,
 	GamesIndexController,
 	GamesIndexTemplate,
@@ -644,10 +635,8 @@ export default {
 	GamesGameTemplate,
 
 	CommunitiesLoadingRoute,
-	CommunitiesLoadingTemplate,
 	CommunitiesIndexTemplate,
 	CommunitiesIndexLoadingRoute,
-	CommunitiesIndexLoadingTemplate,
 	CommunitiesIndexIndexRoute,
 	CommunitiesIndexIndexTemplate,
 	CommunitiesIndexAllRoute,
@@ -655,7 +644,6 @@ export default {
 	CommunitiesCommunityRoute,
 	CommunitiesCommunityTemplate,
 	CommunitiesCommunityLoadingRoute,
-	CommunitiesCommunityLoadingTemplate,
 	CommunitiesCommunityIndexRoute,
 	CommunitiesCommunityIndexTemplate,
 	CommunitiesCommunityInfoRoute,
@@ -668,7 +656,6 @@ export default {
 	ChannelController,
 	ChannelTemplate,
 	ChannelLoadingRoute,
-	ChannelLoadingTemplate,
 	ChannelIndexRoute,
 	ChannelIndexController,
 	ChannelIndexTemplate,
@@ -679,7 +666,6 @@ export default {
 	ChannelSettingsTemplate,
 
 	UserLoadingRoute,
-	UserLoadingTemplate,
 	UserIndexRoute,
 	UserIndexController,
 	UserIndexTemplate,
@@ -698,7 +684,6 @@ export default {
 	UserFollowedGamesRoute,
 	UserFollowedGamesTemplate,
 	UserFollowedGamesLoadingRoute,
-	UserFollowedGamesLoadingTemplate,
 	UserFollowedGamesIndexRoute,
 	UserFollowedGamesIndexTemplate,
 	UserFollowedGamesAllRoute,
@@ -707,7 +692,6 @@ export default {
 	TeamRoute,
 	TeamTemplate,
 	TeamLoadingRoute,
-	TeamLoadingTemplate,
 	TeamIndexRoute,
 	TeamIndexTemplate,
 	TeamMembersRoute,
