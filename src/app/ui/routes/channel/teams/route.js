@@ -1,6 +1,6 @@
 import { get } from "@ember/object";
 import Route from "@ember/routing/route";
-import InfiniteScrollOffsetMixin from "./mixins/infinite-scroll/offset";
+import InfiniteScrollOffsetMixin from "routes/mixins/infinite-scroll/offset";
 
 
 export default Route.extend( InfiniteScrollOffsetMixin, {

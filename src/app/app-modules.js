@@ -276,18 +276,18 @@ import CommunitiesCommunityInfoTemplate from "templates/communities/CommunitiesC
 import StreamsRoute from "routes/StreamsRoute";
 import StreamsTemplate from "templates/Streams.hbs";
 
-import ChannelRoute from "routes/ChannelRoute";
-import ChannelController from "controllers/ChannelController";
-import ChannelTemplate from "templates/channel/Channel.hbs";
+import ChannelRoute from "ui/routes/channel/route";
+import ChannelController from "ui/routes/channel/controller";
+import ChannelTemplate from "ui/routes/channel/template.hbs";
 import ChannelLoadingRoute from "ui/routes/loading/route";
-import ChannelIndexRoute from "routes/ChannelIndexRoute";
-import ChannelIndexController from "controllers/ChannelIndexController";
-import ChannelIndexTemplate from "templates/channel/ChannelIndex.hbs";
-import ChannelTeamsRoute from "routes/ChannelTeamsRoute";
-import ChannelTeamsTemplate from "templates/channel/ChannelTeams.hbs";
-import ChannelSettingsRoute from "routes/ChannelSettingsRoute";
-import ChannelSettingsController from "controllers/ChannelSettingsController";
-import ChannelSettingsTemplate from "templates/channel/ChannelSettings.hbs";
+import ChannelIndexRoute from "ui/routes/channel/index/route";
+import ChannelIndexController from "ui/routes/channel/index/controller";
+import ChannelIndexTemplate from "ui/routes/channel/index/template.hbs";
+import ChannelTeamsRoute from "ui/routes/channel/teams/route";
+import ChannelTeamsTemplate from "ui/routes/channel/teams/template.hbs";
+import ChannelSettingsRoute from "ui/routes/channel/settings/route";
+import ChannelSettingsController from "ui/routes/channel/settings/controller";
+import ChannelSettingsTemplate from "ui/routes/channel/settings/template.hbs";
 
 import UserLoadingRoute from "ui/routes/loading/route";
 import UserIndexRoute from "routes/UserIndexRoute";
