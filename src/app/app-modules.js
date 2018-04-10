@@ -250,13 +250,11 @@ import SearchRoute from "routes/SearchRoute";
 import SearchController from "controllers/SearchController";
 import SearchTemplate from "templates/Search.hbs";
 
-import GamesLoadingRoute from "ui/routes/loading/route";
-import GamesIndexRoute from "routes/GamesIndexRoute";
-import GamesIndexController from "controllers/GamesIndexController";
-import GamesIndexTemplate from "templates/games/GamesIndex.hbs";
-import GamesGameRoute from "routes/GamesGameRoute";
-import GamesGameController from "controllers/GamesGameController";
-import GamesGameTemplate from "templates/games/GamesGame.hbs";
+import GamesLoadingRoute from "ui/routes/games/loading/route";
+import GamesIndexRoute from "ui/routes/games/index/route";
+import GamesIndexTemplate from "ui/routes/games/index/template.hbs";
+import GamesGameRoute from "ui/routes/games/game/route";
+import GamesGameTemplate from "ui/routes/games/game/template.hbs";
 
 import CommunitiesLoadingRoute from "ui/routes/communities/loading/route";
 import CommunitiesIndexTemplate from "ui/routes/communities/index/template.hbs";
@@ -628,10 +626,8 @@ export default {
 
 	GamesLoadingRoute,
 	GamesIndexRoute,
-	GamesIndexController,
 	GamesIndexTemplate,
 	GamesGameRoute,
-	GamesGameController,
 	GamesGameTemplate,
 
 	CommunitiesLoadingRoute,
