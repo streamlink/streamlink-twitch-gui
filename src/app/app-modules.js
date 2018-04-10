@@ -311,15 +311,15 @@ import UserFollowedGamesIndexTemplate from "templates/user/UserFollowedGamesInde
 import UserFollowedGamesAllRoute from "routes/UserFollowedGamesAllRoute";
 import UserFollowedGamesAllTemplate from "templates/user/UserFollowedGamesAll.hbs";
 
-import TeamRoute from "routes/TeamRoute";
-import TeamTemplate from "templates/team/Team.hbs";
-import TeamLoadingRoute from "ui/routes/loading/route";
-import TeamIndexRoute from "routes/TeamIndexRoute";
-import TeamIndexTemplate from "templates/team/TeamIndex.hbs";
-import TeamMembersRoute from "routes/TeamMembersRoute";
-import TeamMembersTemplate from "templates/team/TeamMembers.hbs";
-import TeamInfoRoute from "routes/TeamInfoRoute";
-import TeamInfoTemplate from "templates/team/TeamInfo.hbs";
+import TeamRoute from "ui/routes/team/route";
+import TeamTemplate from "ui/routes/team/template.hbs";
+import TeamLoadingRoute from "ui/routes/team/loading/route";
+import TeamIndexRoute from "ui/routes/team/index/route";
+import TeamIndexTemplate from "ui/routes/team/index/template.hbs";
+import TeamMembersRoute from "ui/routes/team/members/route";
+import TeamMembersTemplate from "ui/routes/team/members/template.hbs";
+import TeamInfoRoute from "ui/routes/team/info/route";
+import TeamInfoTemplate from "ui/routes/team/info/template.hbs";
 
 import SettingsRoute from "ui/routes/settings/route";
 import SettingsController from "ui/routes/settings/controller";
