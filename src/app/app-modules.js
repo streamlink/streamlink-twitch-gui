@@ -156,16 +156,16 @@ import NotificationService from "services/NotificationService";
 import ChatService from "services/ChatService";
 import HotkeyService from "services/HotkeyService";
 
-import ApplicationRoute from "routes/ApplicationRoute";
-import ApplicationTemplate from "templates/Application.hbs";
+import ApplicationRoute from "ui/routes/application/route";
+import ApplicationTemplate from "ui/routes/application/template.hbs";
 
 import LoadingRoute from "ui/routes/loading/route";
 import LoadingTemplate from "ui/routes/loading/template.hbs";
 
-import ErrorRoute from "routes/ErrorRoute";
-import ErrorTemplate from "templates/Error.hbs";
+import ErrorRoute from "ui/routes/error/route";
+import ErrorTemplate from "ui/routes/error/template.hbs";
 
-import IndexRoute from "routes/IndexRoute";
+import IndexRoute from "ui/routes/index/route";
 
 import TitleBarComponent from "components/TitleBarComponent";
 import MainMenuComponent from "components/MainMenuComponent";
@@ -238,17 +238,17 @@ import SettingsRowComponent from "components/SettingsRowComponent";
 import SettingsChannelItemComponent from "components/list/SettingsChannelItemComponent";
 import SettingsSubmitComponent from "components/SettingsSubmitComponent";
 
-import FeaturedRoute from "routes/FeaturedRoute";
-import FeaturedController from "controllers/FeaturedController";
-import FeaturedTemplate from "templates/Featured.hbs";
+import FeaturedRoute from "ui/routes/featured/route";
+import FeaturedController from "ui/routes/featured/controller";
+import FeaturedTemplate from "ui/routes/featured/template.hbs";
 
-import WatchingRoute from "routes/WatchingRoute";
-import WatchingController from "controllers/WatchingController";
-import WatchingTemplate from "templates/Watching.hbs";
+import WatchingRoute from "ui/routes/watching/route";
+import WatchingController from "ui/routes/watching/controller";
+import WatchingTemplate from "ui/routes/watching/template.hbs";
 
-import SearchRoute from "routes/SearchRoute";
-import SearchController from "controllers/SearchController";
-import SearchTemplate from "templates/Search.hbs";
+import SearchRoute from "ui/routes/search/route";
+import SearchController from "ui/routes/search/controller";
+import SearchTemplate from "ui/routes/search/template.hbs";
 
 import GamesLoadingRoute from "ui/routes/games/loading/route";
 import GamesIndexRoute from "ui/routes/games/index/route";
@@ -271,8 +271,8 @@ import CommunitiesCommunityIndexTemplate from "ui/routes/communities/community/i
 import CommunitiesCommunityInfoRoute from "ui/routes/communities/community/info/route";
 import CommunitiesCommunityInfoTemplate from "ui/routes/communities/community/info/template.hbs";
 
-import StreamsRoute from "routes/StreamsRoute";
-import StreamsTemplate from "templates/Streams.hbs";
+import StreamsRoute from "ui/routes/streams/route";
+import StreamsTemplate from "ui/routes/streams/template.hbs";
 
 import ChannelRoute from "ui/routes/channel/route";
 import ChannelController from "ui/routes/channel/controller";
@@ -355,8 +355,8 @@ import SettingsChannelsRoute from "ui/routes/settings/channels/route";
 import SettingsChannelsController from "ui/routes/settings/channels/controller";
 import SettingsChannelsTemplate from "ui/routes/settings/channels/template.hbs";
 
-import AboutController from "controllers/AboutController";
-import AboutTemplate from "templates/About.hbs";
+import AboutController from "ui/routes/about/controller";
+import AboutTemplate from "ui/routes/about/template.hbs";
 
 
 export default {
