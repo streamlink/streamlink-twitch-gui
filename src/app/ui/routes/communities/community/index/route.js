@@ -1,8 +1,8 @@
 import { getOwner } from "@ember/application";
 import { get } from "@ember/object";
 import Route from "@ember/routing/route";
-import InfiniteScrollOffsetMixin from "./mixins/infinite-scroll/offset";
-import FilterLanguagesMixin from "./mixins/filter-languages";
+import InfiniteScrollOffsetMixin from "routes/mixins/infinite-scroll/offset";
+import FilterLanguagesMixin from "routes/mixins/filter-languages";
 
 
 export default Route.extend( InfiniteScrollOffsetMixin, FilterLanguagesMixin, {

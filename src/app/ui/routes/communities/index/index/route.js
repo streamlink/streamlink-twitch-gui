@@ -1,7 +1,7 @@
 import { getOwner } from "@ember/application";
 import Route from "@ember/routing/route";
-import InfiniteScrollCursorMixin from "./mixins/infinite-scroll/cursor";
-import RefreshRouteMixin from "./mixins/refresh";
+import InfiniteScrollCursorMixin from "routes/mixins/infinite-scroll/cursor";
+import RefreshRouteMixin from "routes/mixins/refresh";
 
 
 export default Route.extend( InfiniteScrollCursorMixin, RefreshRouteMixin, {
