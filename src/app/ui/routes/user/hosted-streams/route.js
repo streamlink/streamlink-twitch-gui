@@ -1,7 +1,7 @@
 import { get } from "@ember/object";
-import UserIndexRoute from "./UserIndexRoute";
-import InfiniteScrollOffsetMixin from "./mixins/infinite-scroll/offset";
-import RefreshRouteMixin from "./mixins/refresh";
+import UserIndexRoute from "../index/route";
+import InfiniteScrollOffsetMixin from "routes/mixins/infinite-scroll/offset";
+import RefreshRouteMixin from "routes/mixins/refresh";
 import preload from "utils/preload";
 
 

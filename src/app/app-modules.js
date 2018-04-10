@@ -287,29 +287,28 @@ import ChannelSettingsRoute from "ui/routes/channel/settings/route";
 import ChannelSettingsController from "ui/routes/channel/settings/controller";
 import ChannelSettingsTemplate from "ui/routes/channel/settings/template.hbs";
 
-import UserLoadingRoute from "ui/routes/loading/route";
-import UserIndexRoute from "routes/UserIndexRoute";
-import UserIndexController from "controllers/UserIndexController";
-import UserIndexTemplate from "templates/user/UserIndex.hbs";
-import UserAuthRoute from "routes/UserAuthRoute";
-import UserAuthController from "controllers/UserAuthController";
-import UserAuthTemplate from "templates/user/UserAuth.hbs";
-import UserSubscriptionsRoute from "routes/UserSubscriptionsRoute";
-import UserSubscriptionsTemplate from "templates/user/UserSubscriptions.hbs";
-import UserFollowedStreamsRoute from "routes/UserFollowedStreamsRoute";
-import UserFollowedStreamsTemplate from "templates/user/UserFollowedStreams.hbs";
-import UserHostedStreamsRoute from "routes/UserHostedStreamsRoute";
-import UserHostedStreamsTemplate from "templates/user/UserHostedStreams.hbs";
-import UserFollowedChannelsRoute from "routes/UserFollowedChannelsRoute";
-import UserFollowedChannelsController from "controllers/UserFollowedChannelsController";
-import UserFollowedChannelsTemplate from "templates/user/UserFollowedChannels.hbs";
-import UserFollowedGamesRoute from "routes/UserFollowedGamesRoute";
-import UserFollowedGamesTemplate from "templates/user/UserFollowedGames.hbs";
-import UserFollowedGamesLoadingRoute from "ui/routes/loading/route";
-import UserFollowedGamesIndexRoute from "routes/UserFollowedGamesIndexRoute";
-import UserFollowedGamesIndexTemplate from "templates/user/UserFollowedGamesIndex.hbs";
-import UserFollowedGamesAllRoute from "routes/UserFollowedGamesAllRoute";
-import UserFollowedGamesAllTemplate from "templates/user/UserFollowedGamesAll.hbs";
+import UserLoadingRoute from "ui/routes/user/loading/route";
+import UserIndexRoute from "ui/routes/user/index/route";
+import UserIndexController from "ui/routes/user/index/controller";
+import UserIndexTemplate from "ui/routes/user/index/template.hbs";
+import UserAuthRoute from "ui/routes/user/auth/route";
+import UserAuthController from "ui/routes/user/auth/controller";
+import UserAuthTemplate from "ui/routes/user/auth/template.hbs";
+import UserSubscriptionsRoute from "ui/routes/user/subscriptions/route";
+import UserSubscriptionsTemplate from "ui/routes/user/subscriptions/template.hbs";
+import UserFollowedStreamsRoute from "ui/routes/user/followed-streams/route";
+import UserFollowedStreamsTemplate from "ui/routes/user/followed-streams/template.hbs";
+import UserHostedStreamsRoute from "ui/routes/user/hosted-streams/route";
+import UserHostedStreamsTemplate from "ui/routes/user/hosted-streams/template.hbs";
+import UserFollowedChannelsRoute from "ui/routes/user/followed-channels/route";
+import UserFollowedChannelsController from "ui/routes/user/followed-channels/controller";
+import UserFollowedChannelsTemplate from "ui/routes/user/followed-channels/template.hbs";
+import UserFollowedGamesTemplate from "ui/routes/user/followed-games/template.hbs";
+import UserFollowedGamesLoadingRoute from "ui/routes/user/followed-games/loading/route";
+import UserFollowedGamesIndexRoute from "ui/routes/user/followed-games/index/route";
+import UserFollowedGamesIndexTemplate from "ui/routes/user/followed-games/index/template.hbs";
+import UserFollowedGamesAllRoute from "ui/routes/user/followed-games/all/route";
+import UserFollowedGamesAllTemplate from "ui/routes/user/followed-games/all/template.hbs";
 
 import TeamRoute from "ui/routes/team/route";
 import TeamTemplate from "ui/routes/team/template.hbs";
@@ -677,7 +676,6 @@ export default {
 	UserFollowedChannelsRoute,
 	UserFollowedChannelsController,
 	UserFollowedChannelsTemplate,
-	UserFollowedGamesRoute,
 	UserFollowedGamesTemplate,
 	UserFollowedGamesLoadingRoute,
 	UserFollowedGamesIndexRoute,
