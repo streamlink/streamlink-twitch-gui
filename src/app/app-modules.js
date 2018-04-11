@@ -170,11 +170,11 @@ import TitleBarComponent from "ui/components/title-bar/component";
 import MainMenuComponent from "ui/components/main-menu/component";
 import SubMenuComponent from "ui/components/sub-menu/component";
 
-import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
-import ExternalLinkComponent from "components/link/ExternalLinkComponent";
-import LinkComponent from "components/link/LinkComponent";
-import DocumentationLinkComponent from "components/link/DocumentationLinkComponent";
-import EmbeddedHtmlLinksComponent from "components/link/EmbeddedHtmlLinksComponent";
+import EmbeddedLinksComponent from "ui/components/link/embedded-links/component";
+import ExternalLinkComponent from "ui/components/link/external-link/component";
+import LinkComponent from "ui/components/link/link/component";
+import DocumentationLinkComponent from "ui/components/link/documentation-link/component";
+import EmbeddedHtmlLinksComponent from "ui/components/link/embedded-html-links/component";
 
 import DropDownComponent from "components/form/DropDownComponent";
 import DropDownSelectionComponent from "components/form/DropDownComponent/selection";
@@ -186,13 +186,13 @@ import FileSelectComponent from "components/form/FileSelectComponent";
 import TextFieldComponent from "components/form/TextFieldComponent";
 import NumberFieldComponent from "components/form/NumberFieldComponent";
 
-import FollowChannelComponent from "components/button/FollowChannelComponent";
-import FollowGameComponent from "components/button/FollowGameComponent";
-import FormButtonComponent from "components/button/FormButtonComponent";
-import OpenChatComponent from "components/button/OpenChatComponent";
-import ShareChannelComponent from "components/button/ShareChannelComponent";
-import SubscribeChannelComponent from "components/button/SubscribeChannelComponent";
-import TwitchEmotesComponent from "components/button/TwitchEmotesComponent";
+import FollowChannelComponent from "ui/components/button/follow-channel/component";
+import FollowGameComponent from "ui/components/button/follow-game/component";
+import FormButtonComponent from "ui/components/button/form-button/component";
+import OpenChatComponent from "ui/components/button/open-chat/component";
+import ShareChannelComponent from "ui/components/button/share-channel/component";
+import SubscribeChannelComponent from "ui/components/button/subscribe-channel/component";
+import TwitchEmotesComponent from "ui/components/button/twitch-emotes/component";
 
 import ModalServiceComponent from "components/modal/ModalServiceComponent";
 import ModalBodyComponent from "components/modal/ModalBodyComponent";
@@ -216,16 +216,16 @@ import StreamItemComponent from "components/list/StreamItemComponent";
 import SubscriptionItemComponent from "components/list/SubscriptionItemComponent";
 import TeamItemComponent from "components/list/TeamItemComponent";
 
-import QuickBarComponent from "components/quick/QuickBarComponent";
-import QuickBarHomepageComponent from "components/quick/QuickBarHomepageComponent";
-import QuickBarRandomStreamComponent from "components/quick/QuickBarRandomStreamComponent";
+import QuickBarComponent from "ui/components/quick/quick-bar/component";
+import QuickBarHomepageComponent from "ui/components/quick/quick-bar-homepage/component";
+import QuickBarRandomStreamComponent from "ui/components/quick/quick-bar-random-stream/component";
 
-import ChannelPanelsComponent from "components/channel/ChannelPanelsComponent";
-import ChannelPanelItemComponent from "components/channel/ChannelPanelItemComponent";
+import ChannelPanelsComponent from "ui/components/channel/channel-panels/component";
+import ChannelPanelItemComponent from "ui/components/channel/channel-panel-item/component";
 
-import StatsRowComponent from "components/stream/StatsRowComponent";
-import StreamPresentationComponent from "components/stream/StreamPresentationComponent";
-import StreamPreviewImageComponent from "components/stream/StreamPreviewImageComponent";
+import StatsRowComponent from "ui/components/stream/stats-row/component";
+import StreamPresentationComponent from "ui/components/stream/stream-presentation/component";
+import StreamPreviewImageComponent from "ui/components/stream/stream-preview-image/component";
 
 import FlagIconComponent from "ui/components/flag-icon/component";
 import LoadingSpinnerComponent from "ui/components/loading-spinner/component";
