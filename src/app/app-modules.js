@@ -56,9 +56,9 @@ import ChannelSettings from "models/localstorage/ChannelSettings";
 import ChannelSettingsAdapter from "models/localstorage/ChannelSettings/adapter";
 import ChannelSettingsSerializer from "models/localstorage/ChannelSettings/serializer";
 
-import GithubReleases from "models/github/Releases";
-import GithubReleasesAdapter from "store/GithubAdapter";
-import GithubReleasesSerializer from "models/github/ReleasesSerializer";
+import GithubReleases from "data/models/github/releases/model";
+import GithubReleasesAdapter from "data/models/github/releases/adapter";
+import GithubReleasesSerializer from "data/models/github/releases/serializer";
 
 import TwitchRoot from "data/models/twitch/root/model";
 import TwitchRootSerializer from "data/models/twitch/root/serializer";
