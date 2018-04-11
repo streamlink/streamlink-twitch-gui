@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import { on } from "@ember/object/evented";
-import layout from "templates/components/LoadingSpinnerComponent.hbs";
+import layout from "./template.hbs";
 
 
 export default Component.extend({

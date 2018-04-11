@@ -8,7 +8,7 @@ import Service from "@ember/service";
 import sinon from "sinon";
 
 import titleBarComponentInjector
-	from "inject-loader?config&nwjs/debug!components/TitleBarComponent";
+	from "inject-loader?config&nwjs/debug!ui/components/title-bar/component";
 
 
 const { default: TitleBarComponent } = titleBarComponentInjector({
@@ -21,7 +21,7 @@ const { default: TitleBarComponent } = titleBarComponentInjector({
 });
 
 
-moduleForComponent( "title-bar", "components/TitleBarComponent", {
+moduleForComponent( "title-bar", "ui/components/title-bar", {
 	unit: true,
 	needs: [
 		"service:i18n",

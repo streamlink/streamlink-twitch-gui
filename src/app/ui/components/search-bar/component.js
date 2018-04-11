@@ -6,10 +6,10 @@ import { next } from "@ember/runloop";
 import { inject as service } from "@ember/service";
 import $ from "jquery";
 import { vars as varsConfig } from "config";
-import HotkeyMixin from "./mixins/hotkey";
+import HotkeyMixin from "components/mixins/hotkey";
 import Search from "models/localstorage/Search";
 import getStreamFromUrl from "utils/getStreamFromUrl";
-import layout from "templates/components/SearchBarComponent.hbs" ;
+import layout from "./template.hbs" ;
 
 
 const { "search-history-size": searchHistorySize } = varsConfig;

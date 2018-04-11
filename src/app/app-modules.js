@@ -167,9 +167,9 @@ import ErrorTemplate from "ui/routes/error/template.hbs";
 
 import IndexRoute from "ui/routes/index/route";
 
-import TitleBarComponent from "components/TitleBarComponent";
-import MainMenuComponent from "components/MainMenuComponent";
-import SubMenuComponent from "components/SubMenuComponent";
+import TitleBarComponent from "ui/components/title-bar/component";
+import MainMenuComponent from "ui/components/main-menu/component";
+import SubMenuComponent from "ui/components/sub-menu/component";
 
 import EmbeddedLinksComponent from "components/link/EmbeddedLinksComponent";
 import ExternalLinkComponent from "components/link/ExternalLinkComponent";
@@ -228,15 +228,15 @@ import StatsRowComponent from "components/stream/StatsRowComponent";
 import StreamPresentationComponent from "components/stream/StreamPresentationComponent";
 import StreamPreviewImageComponent from "components/stream/StreamPreviewImageComponent";
 
-import FlagIconComponent from "components/FlagIconComponent";
-import LoadingSpinnerComponent from "components/LoadingSpinnerComponent";
-import PreviewImageComponent from "components/PreviewImageComponent";
-import SearchBarComponent from "components/SearchBarComponent";
-import SelectableTextComponent from "components/SelectableTextComponent";
+import FlagIconComponent from "ui/components/flag-icon/component";
+import LoadingSpinnerComponent from "ui/components/loading-spinner/component";
+import PreviewImageComponent from "ui/components/preview-image/component";
+import SearchBarComponent from "ui/components/search-bar/component";
+import SelectableTextComponent from "ui/components/selectable-text/component";
 
-import SettingsRowComponent from "components/SettingsRowComponent";
+import SettingsRowComponent from "ui/components/settings-row/component";
 import SettingsChannelItemComponent from "components/list/SettingsChannelItemComponent";
-import SettingsSubmitComponent from "components/SettingsSubmitComponent";
+import SettingsSubmitComponent from "ui/components/settings-submit/component";
 
 import FeaturedRoute from "ui/routes/featured/route";
 import FeaturedController from "ui/routes/featured/controller";

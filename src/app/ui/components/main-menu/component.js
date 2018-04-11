@@ -1,9 +1,9 @@
 import Component from "@ember/component";
 import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
-import HotkeyMixin from "./mixins/hotkey";
+import HotkeyMixin from "components/mixins/hotkey";
 import { isDarwin } from "utils/node/platform";
-import layout from "templates/components/MainMenuComponent.hbs";
+import layout from "./template.hbs";
 
 
 const { isArray } = Array;

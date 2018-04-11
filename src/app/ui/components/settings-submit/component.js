@@ -2,7 +2,7 @@ import Component from "@ember/component";
 import { get, set, computed, observer } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
-import layout from "templates/components/SettingsSubmitComponent.hbs";
+import layout from "./template.hbs";
 
 
 export default Component.extend({

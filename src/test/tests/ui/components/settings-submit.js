@@ -4,10 +4,10 @@ import { I18nService, THelper } from "i18n-utils";
 import Component from "@ember/component";
 import sinon from "sinon";
 
-import SettingsSubmitComponent from "components/SettingsSubmitComponent";
+import SettingsSubmitComponent from "ui/components/settings-submit/component";
 
 
-moduleForComponent( "components/SettingsSubmitComponent", {
+moduleForComponent( "ui/components/settings-submit", {
 	integration: true,
 	resolver: buildResolver({
 		SettingsSubmitComponent,

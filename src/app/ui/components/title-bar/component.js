@@ -3,7 +3,7 @@ import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { main as mainConfig } from "config";
 import { isDebug } from "nwjs/debug";
-import layout from "templates/components/TitleBarComponent.hbs";
+import layout from "./template.hbs";
 
 
 const { "display-name": displayName } = mainConfig;

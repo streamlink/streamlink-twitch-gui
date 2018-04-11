@@ -3,10 +3,10 @@ import { buildResolver, hbs } from "test-utils";
 import { scheduleOnce } from "@ember/runloop";
 import transparentImage from "transparent-image";
 
-import PreviewImageComponent from "components/PreviewImageComponent";
+import PreviewImageComponent from "ui/components/preview-image/component";
 
 
-moduleForComponent( "components/PreviewImageComponent", {
+moduleForComponent( "ui/components/preview-image", {
 	integration: true,
 	resolver: buildResolver({
 		PreviewImageComponent

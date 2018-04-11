@@ -1,10 +1,10 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs } from "test-utils";
 
-import LoadingSpinnerComponent from "components/LoadingSpinnerComponent";
+import LoadingSpinnerComponent from "ui/components/loading-spinner/component";
 
 
-moduleForComponent( "components/LoadingSpinnerComponent", {
+moduleForComponent( "ui/components/loading-spinner", {
 	integration: true,
 	resolver: buildResolver({
 		LoadingSpinnerComponent
