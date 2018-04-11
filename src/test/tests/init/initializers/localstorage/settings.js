@@ -19,10 +19,12 @@ module( "init/initializers/localstorage/settings", {
 			"data/models/settings/streaming/player/fragment": {
 				typeKey: "type"
 			},
-			"models/stream/qualities": [
-				{ id: "source" },
-				{ id: "high" }
-			],
+			"data/models/stream/model": {
+				qualities: [
+					{ id: "source" },
+					{ id: "high" }
+				]
+			},
 			"utils/node/platform": {
 				get isWin7() {
 					return self.isWin7;

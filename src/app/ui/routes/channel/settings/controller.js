@@ -1,7 +1,7 @@
 import Controller from "@ember/controller";
 import { get, set, defineProperty, computed, observer } from "@ember/object";
 import { inject as service } from "@ember/service";
-import qualities from "models/stream/qualities";
+import { qualities } from "data/models/stream/model";
 import RetryTransitionMixin from "ui/routes/-mixins/controllers/retry-transition";
 
 

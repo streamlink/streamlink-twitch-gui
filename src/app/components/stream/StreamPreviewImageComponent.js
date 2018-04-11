@@ -9,7 +9,7 @@ import {
 	ATTR_STREAMS_CLICK_CHANNEL,
 	ATTR_STREAMS_CLICK_SETTINGS
 } from "data/models/settings/streams/fragment";
-import qualities from "models/stream/qualities";
+import { qualities } from "data/models/stream/model";
 import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
 
 

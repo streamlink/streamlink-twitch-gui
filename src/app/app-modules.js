@@ -11,8 +11,8 @@ import Router from "./router";
 
 import ApplicationAdapter from "data/models/application/adapter";
 
-import Stream from "models/stream/Stream";
-import StreamAdapter from "models/stream/StreamAdapter";
+import Stream from "data/models/stream/model";
+import StreamAdapter from "data/models/stream/adapter";
 
 import Window from "data/models/window/model";
 import WindowAdapter from "data/models/window/adapter";

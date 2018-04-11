@@ -1,6 +1,6 @@
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
-import { qualitiesLivestreamer } from "models/stream/qualities/index";
+import { qualitiesLivestreamer } from "data/models/stream/model";
 
 
 const attributes = {};

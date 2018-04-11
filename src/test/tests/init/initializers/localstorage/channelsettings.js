@@ -10,10 +10,12 @@ module( "init/initializers/localstorage/channelsettings" );
 test( "ChannelSettings", assert => {
 
 	const { default: updateChannelSettings } = updateChannelSettingsInjector({
-		"models/stream/qualities": [
-			{ id: "foo" },
-			{ id: "bar" }
-		]
+		"data/models/stream/model": {
+			qualities: [
+				{ id: "foo" },
+				{ id: "bar" }
+			]
+		}
 	});
 
 	const oldAttrs = {

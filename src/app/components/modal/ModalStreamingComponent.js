@@ -4,7 +4,7 @@ import { inject as service } from "@ember/service";
 import { streaming as streamingConfig } from "config";
 import ModalDialogComponent from "./ModalDialogComponent";
 import HotkeyMixin from "../mixins/hotkey";
-import qualities from "models/stream/qualities";
+import { qualities } from "data/models/stream/model";
 import {
 	LogError,
 	ProviderError,

@@ -2,10 +2,10 @@ import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
 import { streaming as streamingConfig } from "config";
 import {
-	default as qualities,
+	qualities,
 	qualitiesLivestreamer,
 	qualitiesStreamlink
-} from "models/stream/qualities";
+} from "data/models/stream/model";
 import { DEFAULT_VODCAST_REGEXP } from "data/models/settings/streams/fragment";
 
 

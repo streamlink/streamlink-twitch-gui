@@ -1,5 +1,5 @@
 import { moveAttributes, qualityIdToName } from "./utils";
-import qualities from "models/stream/qualities";
+import { qualities } from "data/models/stream/model";
 
 
 export default function( channelsettings ) {

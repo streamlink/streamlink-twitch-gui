@@ -1,7 +1,7 @@
 import { langs as langsConfig } from "config";
 import { moveAttributes, moveAttributesIntoFragment, qualityIdToName } from "./utils";
 import { typeKey as streamingPlayerTypeKey } from "data/models/settings/streaming/player/fragment";
-import qualities from "models/stream/qualities";
+import { qualities } from "data/models/stream/model";
 import { isWin7 } from "utils/node/platform";
 
 

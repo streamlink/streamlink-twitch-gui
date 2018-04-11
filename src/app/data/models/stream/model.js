@@ -5,7 +5,8 @@ import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
 import { twitch as twitchConfig } from "config";
-import { qualitiesByIdLivestreamer, qualitiesByIdStreamlink } from "models/stream/qualities";
+import qualitiesStreamlink from "./-qualities/streamlink";
+import qualitiesLivestreamer from "./-qualities/livestreamer";
 
 
 const {
@@ -23,6 +24,14 @@ const STATUS_WATCHING = 3;
 const STATUS_COMPLETED = 4;
 
 
+const createPresetObj = ( presets, preset ) => {
+	presets[ preset.id ] = preset;
+	return presets;
+};
+const qualitiesByIdStreamlink = qualitiesStreamlink.reduce( createPresetObj, {} );
+const qualitiesByIdLivestreamer = qualitiesLivestreamer.reduce( createPresetObj, {} );
+
+
 function computedStatus( status ) {
 	return computed( "status", {
 		get() {
@@ -36,6 +45,13 @@ function computedStatus( status ) {
 		}
 	});
 }
+
+
+export {
+	qualitiesStreamlink as qualities,
+	qualitiesStreamlink,
+	qualitiesLivestreamer
+};
 
 
 /**
