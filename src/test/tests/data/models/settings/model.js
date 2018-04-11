@@ -9,10 +9,10 @@ import { fragment } from "ember-data-model-fragments/attributes";
 import Fragment from "ember-data-model-fragments/fragment";
 import ModelFragmentsInitializer from "init/initializers/model-fragments";
 
-import Settings from "models/localstorage/Settings";
+import Settings from "data/models/settings/model";
 
 
-module( "models/localstorage/Settings", {
+module( "data/models/settings", {
 	beforeEach() {
 		const owner = this.owner = buildOwner();
 

@@ -6,7 +6,7 @@ import ListItemComponent from "./ListItemComponent";
 import {
 	ATTR_STREAMS_INFO_GAME,
 	ATTR_STREAMS_INFO_TITLE
-} from "models/localstorage/Settings/streams";
+} from "data/models/settings/streams/fragment";
 import layout from "templates/components/list/StreamItemComponent.hbs";
 
 

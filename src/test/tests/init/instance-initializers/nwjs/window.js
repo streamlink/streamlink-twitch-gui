@@ -4,7 +4,7 @@ import { setupStore } from "store-utils";
 import Adapter from "ember-data/adapter";
 import { EventEmitter } from "events";
 
-import Window from "models/localstorage/Window";
+import Window from "data/models/window/model";
 import resetWindowInjector from "inject-loader!nwjs/Window/reset";
 import windowInitializerInjector
 // eslint-disable-next-line max-len

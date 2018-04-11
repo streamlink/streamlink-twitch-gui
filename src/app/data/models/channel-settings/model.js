@@ -1,8 +1,8 @@
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
-import SettingsStreaming from "models/localstorage/Settings/streaming";
-import SettingsStreams from "models/localstorage/Settings/streams";
-import SettingsNotification from "models/localstorage/Settings/notification";
+import SettingsStreaming from "data/models/settings/streaming/fragment";
+import SettingsStreams from "data/models/settings/streams/fragment";
+import SettingsNotification from "data/models/settings/notification/fragment";
 
 
 /**

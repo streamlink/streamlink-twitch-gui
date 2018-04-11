@@ -1,7 +1,7 @@
 import Controller from "@ember/controller";
 import { get, set, computed } from "@ember/object";
 import { langs as langsConfig } from "config";
-import SettingsStreams from "models/localstorage/Settings/streams";
+import SettingsStreams from "data/models/settings/streams/fragment";
 
 
 const { filterLanguages: contentStreamsFilterLanguages } = SettingsStreams;

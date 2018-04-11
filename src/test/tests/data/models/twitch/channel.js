@@ -10,7 +10,7 @@ import attr from "ember-data/attr";
 import Model from "ember-data/model";
 
 import channelInjector
-	from "inject-loader?models/localstorage/Settings/streams!data/models/twitch/channel/model";
+	from "inject-loader?data/models/settings/streams/fragment!data/models/twitch/channel/model";
 import ChannelSerializer from "data/models/twitch/channel/serializer";
 import TwitchAdapter from "data/models/twitch/adapter";
 import TwitchChannelFixtures from "fixtures/data/models/twitch/channel.json";
@@ -28,7 +28,7 @@ module( "data/models/twitch/channel", {
 		owner = buildOwner();
 
 		const { default: Channel } = channelInjector({
-			"models/localstorage/Settings/streams": {
+			"data/models/settings/streams/fragment": {
 				ATTR_STREAMS_NAME_CUSTOM,
 				ATTR_STREAMS_NAME_ORIGINAL,
 				ATTR_STREAMS_NAME_BOTH

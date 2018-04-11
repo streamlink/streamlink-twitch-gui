@@ -1,5 +1,5 @@
 import Controller from "@ember/controller";
-import SettingsStreams from "models/localstorage/Settings/streams";
+import SettingsStreams from "data/models/settings/streams/fragment";
 import { isDarwin } from "utils/node/platform";
 
 

@@ -6,7 +6,7 @@ import {
 	ATTR_STREAMS_NAME_CUSTOM,
 	ATTR_STREAMS_NAME_ORIGINAL,
 	ATTR_STREAMS_NAME_BOTH
-} from "models/localstorage/Settings/streams";
+} from "data/models/settings/streams/fragment";
 
 
 const reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;

@@ -6,7 +6,7 @@ import {
 	qualitiesLivestreamer,
 	qualitiesStreamlink
 } from "models/stream/qualities";
-import { DEFAULT_VODCAST_REGEXP } from "models/localstorage/Settings/streams";
+import { DEFAULT_VODCAST_REGEXP } from "data/models/settings/streams/fragment";
 
 
 const { providers } = streamingConfig;

@@ -16,7 +16,7 @@ module( "init/initializers/localstorage/settings", {
 					fr: { disabled: true }
 				}
 			},
-			"models/localstorage/Settings/streamingPlayer": {
+			"data/models/settings/streaming/player/fragment": {
 				typeKey: "type"
 			},
 			"models/stream/qualities": [

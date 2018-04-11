@@ -5,7 +5,7 @@ import { streaming as streamingConfig } from "config";
 import {
 	default as SettingsStreaming,
 	ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH as inputPassthrough
-} from "models/localstorage/Settings/streaming";
+} from "data/models/settings/streaming/fragment";
 import { platform } from "utils/node/platform";
 
 

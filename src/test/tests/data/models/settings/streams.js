@@ -1,9 +1,9 @@
 import { module, test } from "qunit";
 
-import { DEFAULT_VODCAST_REGEXP } from "models/localstorage/Settings/streams";
+import { DEFAULT_VODCAST_REGEXP } from "data/models/settings/streams/fragment";
 
 
-module( "models/localstorage/Settings/streams" );
+module( "data/models/settings/streams" );
 
 
 test( "Default Vodcast RegExp", assert => {

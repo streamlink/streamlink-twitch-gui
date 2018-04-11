@@ -8,7 +8,6 @@ importAll( require.context( "./nwjs/", true, /\.js$/ ) );
 importAll( require.context( "./utils/", true, /\.js$/ ) );
 importAll( require.context( "./helpers/", true, /\.js$/ ) );
 importAll( require.context( "./data/", true, /\.js$/ ) );
-importAll( require.context( "./models/", true, /\.js$/ ) );
 importAll( require.context( "./init/", true, /\.js$/ ) );
 importAll( require.context( "./ui/", true, /\.js$/ ) );
 importAll( require.context( "./components/", true, /\.js$/ ) );

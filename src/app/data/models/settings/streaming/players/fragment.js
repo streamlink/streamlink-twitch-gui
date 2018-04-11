@@ -1,7 +1,7 @@
 import Fragment from "ember-data-model-fragments/fragment";
 import { fragment } from "ember-data-model-fragments/attributes";
 import { players as playersConfig } from "config";
-import { typeKey } from "./streamingPlayer";
+import { typeKey } from "../player/fragment";
 
 
 const attributes = {

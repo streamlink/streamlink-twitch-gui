@@ -11,7 +11,7 @@ import {
 import {
 	ATTR_GUI_INTEGRATION_TRAY,
 	ATTR_GUI_INTEGRATION_BOTH
-} from "models/localstorage/Settings/gui";
+} from "data/models/settings/gui/fragment";
 
 
 export default Service.extend({

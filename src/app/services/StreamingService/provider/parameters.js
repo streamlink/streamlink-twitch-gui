@@ -6,7 +6,7 @@ import {
 	ATTR_STREAMING_PLAYER_INPUT_FIFO,
 	ATTR_STREAMING_PLAYER_INPUT_HTTP,
 	ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH
-} from "models/localstorage/Settings/streaming";
+} from "data/models/settings/streaming/fragment";
 
 
 function playerInput( attr ) {

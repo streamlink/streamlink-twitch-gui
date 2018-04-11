@@ -1,5 +1,5 @@
-import { players } from "models/localstorage/Settings/streamingPlayer";
-import Serializer from "models/localstorage/Settings/streamingPlayerSerializer";
+import { players } from "data/models/settings/streaming/player/fragment";
+import Serializer from "data/models/settings/streaming/player/serializer";
 
 
 export default {

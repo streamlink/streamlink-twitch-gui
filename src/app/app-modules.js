@@ -14,47 +14,46 @@ import ApplicationAdapter from "data/models/application/adapter";
 import Stream from "models/stream/Stream";
 import StreamAdapter from "models/stream/StreamAdapter";
 
-import Window from "models/localstorage/Window";
-import WindowAdapter from "models/localstorage/Window/adapter";
-import WindowSerializer from "models/localstorage/Window/serializer";
+import Window from "data/models/window/model";
+import WindowAdapter from "data/models/window/adapter";
+import WindowSerializer from "data/models/window/serializer";
 
-import Settings from "models/localstorage/Settings";
-import SettingsAdapter from "models/localstorage/Settings/adapter";
-import SettingsSerializer from "models/localstorage/Settings/serializer";
-import SettingsGui from "models/localstorage/Settings/gui";
-import SettingsStreaming from "models/localstorage/Settings/streaming";
-import SettingsStreamingProviders from "models/localstorage/Settings/streamingProviders";
-import SettingsStreamingProvider from "models/localstorage/Settings/streamingProvider";
-import SettingsStreamingQualities from "models/localstorage/Settings/streamingQualities";
-import SettingsStreamingQualitiesOld from "models/localstorage/Settings/streamingQualitiesOld";
-import SettingsStreamingQuality from "models/localstorage/Settings/streamingQuality";
-import SettingsStreamingPlayers from "models/localstorage/Settings/streamingPlayers";
-import SettingsStreamingPlayer from "models/localstorage/Settings/streamingPlayer";
-import SettingsStreamingPlayerSerializer
-	from "models/localstorage/Settings/streamingPlayerSerializer";
-import SettingsStreams from "models/localstorage/Settings/streams";
-import SettingsStreamsLanguages from "models/localstorage/Settings/streamsLanguages";
-import SettingsChat from "models/localstorage/Settings/chat";
-import SettingsChatProviders from "models/localstorage/Settings/chatProviders";
-import SettingsChatProvider from "models/localstorage/Settings/chatProvider";
-import SettingsChatProviderSerializer from "models/localstorage/Settings/chatProviderSerializer";
-import SettingsNotification from "models/localstorage/Settings/notification";
+import Settings from "data/models/settings/model";
+import SettingsAdapter from "data/models/settings/adapter";
+import SettingsSerializer from "data/models/settings/serializer";
+import SettingsGui from "data/models/settings/gui/fragment";
+import SettingsStreaming from "data/models/settings/streaming/fragment";
+import SettingsStreamingProviders from "data/models/settings/streaming/providers/fragment";
+import SettingsStreamingProvider from "data/models/settings/streaming/provider/fragment";
+import SettingsStreamingQualities from "data/models/settings/streaming/qualities/fragment";
+import SettingsStreamingQualitiesOld from "data/models/settings/streaming/qualities-old/fragment";
+import SettingsStreamingQuality from "data/models/settings/streaming/quality/fragment";
+import SettingsStreamingPlayers from "data/models/settings/streaming/players/fragment";
+import SettingsStreamingPlayer from "data/models/settings/streaming/player/fragment";
+import SettingsStreamingPlayerSerializer from "data/models/settings/streaming/player/serializer";
+import SettingsStreams from "data/models/settings/streams/fragment";
+import SettingsStreamsLanguages from "data/models/settings/streams/languages/fragment";
+import SettingsChat from "data/models/settings/chat/fragment";
+import SettingsChatProviders from "data/models/settings/chat/providers/fragment";
+import SettingsChatProvider from "data/models/settings/chat/provider/fragment";
+import SettingsChatProviderSerializer from "data/models/settings/chat/provider/serializer";
+import SettingsNotification from "data/models/settings/notification/fragment";
 
-import Versioncheck from "models/localstorage/Versioncheck";
-import VersioncheckAdapter from "models/localstorage/Versioncheck/adapter";
-import VersioncheckSerializer from "models/localstorage/Versioncheck/serializer";
+import Versioncheck from "data/models/versioncheck/model";
+import VersioncheckAdapter from "data/models/versioncheck/adapter";
+import VersioncheckSerializer from "data/models/versioncheck/serializer";
 
-import Auth from "models/localstorage/Auth";
-import AuthAdapter from "models/localstorage/Auth/adapter";
-import AuthSerializer from "models/localstorage/Auth/serializer";
+import Auth from "data/models/auth/model";
+import AuthAdapter from "data/models/auth/adapter";
+import AuthSerializer from "data/models/auth/serializer";
 
-import Search from "models/localstorage/Search";
-import SearchAdapter from "models/localstorage/Search/adapter";
-import SearchSerializer from "models/localstorage/Search/serializer";
+import Search from "data/models/search/model";
+import SearchAdapter from "data/models/search/adapter";
+import SearchSerializer from "data/models/search/serializer";
 
-import ChannelSettings from "models/localstorage/ChannelSettings";
-import ChannelSettingsAdapter from "models/localstorage/ChannelSettings/adapter";
-import ChannelSettingsSerializer from "models/localstorage/ChannelSettings/serializer";
+import ChannelSettings from "data/models/channel-settings/model";
+import ChannelSettingsAdapter from "data/models/channel-settings/adapter";
+import ChannelSettingsSerializer from "data/models/channel-settings/serializer";
 
 import GithubReleases from "data/models/github/releases/model";
 import GithubReleasesAdapter from "data/models/github/releases/adapter";

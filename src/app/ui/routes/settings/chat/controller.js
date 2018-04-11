@@ -2,7 +2,7 @@ import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { chat as chatConfig, twitch as twitchConfig } from "config";
-import { providers } from "models/localstorage/Settings/chatProvider";
+import { providers } from "data/models/settings/chat/provider/fragment";
 import ChatProviderBasic from "services/ChatService/providers/-basic";
 import { platform } from "utils/node/platform";
 

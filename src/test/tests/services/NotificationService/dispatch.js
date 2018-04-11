@@ -13,7 +13,7 @@ import {
 	ATTR_NOTIFY_CLICK_FOLLOWED,
 	ATTR_NOTIFY_CLICK_STREAM,
 	ATTR_NOTIFY_CLICK_STREAMANDCHAT
-} from "models/localstorage/Settings/notification";
+} from "data/models/settings/notification/fragment";
 
 
 module( "services/NotificationService/dispatch", {

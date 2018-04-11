@@ -1,5 +1,5 @@
-import { providers } from "models/localstorage/Settings/chatProvider";
-import Serializer from "models/localstorage/Settings/chatProviderSerializer";
+import { providers } from "data/models/settings/chat/provider/fragment";
+import Serializer from "data/models/settings/chat/provider/serializer";
 
 
 export default {

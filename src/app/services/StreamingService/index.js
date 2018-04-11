@@ -12,7 +12,7 @@ import { setShowInTaskbar, setMinimized, setVisibility } from "nwjs/Window";
 import {
 	ATTR_GUI_MINIMIZE_MINIMIZE,
 	ATTR_GUI_MINIMIZE_TRAY
-} from "models/localstorage/Settings/gui";
+} from "data/models/settings/gui/fragment";
 
 
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;

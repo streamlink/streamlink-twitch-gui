@@ -8,7 +8,7 @@ import {
 	ATTR_STREAMS_CLICK_CHAT,
 	ATTR_STREAMS_CLICK_CHANNEL,
 	ATTR_STREAMS_CLICK_SETTINGS
-} from "models/localstorage/Settings/streams";
+} from "data/models/settings/streams/fragment";
 import qualities from "models/stream/qualities";
 import layout from "templates/components/stream/StreamPreviewImageComponent.hbs";
 

@@ -7,7 +7,7 @@ import { inject as service } from "@ember/service";
 import $ from "jquery";
 import { vars as varsConfig } from "config";
 import HotkeyMixin from "components/mixins/hotkey";
-import Search from "models/localstorage/Search";
+import Search from "data/models/search/model";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import layout from "./template.hbs" ;
 
