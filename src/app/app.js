@@ -12,11 +12,11 @@ function initialize( require, fn ) {
 }
 
 initialize(
-	require.context( "./initializers/", true, /^.\x2F([^\x2F]+(\x2Findex)?)\.js$/ ),
+	require.context( "init/initializers/", true, /^.\x2F([^\x2F]+(\x2Findex)?)\.js$/ ),
 	({ default: module }) => Application.initializer( module )
 );
 initialize(
-	require.context( "./instance-initializers/", true, /^.\x2F([^\x2F]+(\x2Findex)?)\.js$/ ),
+	require.context( "init/instance-initializers/", true, /^.\x2F([^\x2F]+(\x2Findex)?)\.js$/ ),
 	({ default: module }) => Application.instanceInitializer( module )
 );
 

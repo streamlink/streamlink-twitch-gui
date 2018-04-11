@@ -1,9 +1,9 @@
 import { module, test } from "qunit";
 
-import updateNamespaces from "initializers/localstorage/namespaces";
+import updateNamespaces from "init/initializers/localstorage/namespaces";
 
 
-module( "initializers/localstorage/namespaces" );
+module( "init/initializers/localstorage/namespaces" );
 
 
 test( "App namespace does not exist", assert => {

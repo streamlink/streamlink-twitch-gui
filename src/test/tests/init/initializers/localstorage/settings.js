@@ -1,9 +1,9 @@
 import { module, test } from "qunit";
 
-import updateSettingsInjector from "inject-loader?-./utils!initializers/localstorage/settings";
+import updateSettingsInjector from "inject-loader?-./utils!init/initializers/localstorage/settings";
 
 
-module( "initializers/localstorage/settings", {
+module( "init/initializers/localstorage/settings", {
 	beforeEach() {
 		const self = this;
 

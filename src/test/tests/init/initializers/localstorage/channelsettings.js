@@ -1,10 +1,10 @@
 import { module, test } from "qunit";
 
 import updateChannelSettingsInjector
-	from "inject-loader?-./utils!initializers/localstorage/channelsettings";
+	from "inject-loader?-./utils!init/initializers/localstorage/channelsettings";
 
 
-module( "initializers/localstorage/channelsettings" );
+module( "init/initializers/localstorage/channelsettings" );
 
 
 test( "ChannelSettings", assert => {

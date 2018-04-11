@@ -1,9 +1,9 @@
 import { module, test } from "qunit";
 
-import instanceInitializerInjector from "inject-loader!initializers/localstorage";
+import instanceInitializerInjector from "inject-loader!init/initializers/localstorage";
 
 
-module( "initializers/localstorage/index" );
+module( "init/initializers/localstorage/index" );
 
 
 test( "Application instance initializer", assert => {

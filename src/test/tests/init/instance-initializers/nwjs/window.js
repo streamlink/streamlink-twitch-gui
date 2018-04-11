@@ -8,7 +8,7 @@ import Window from "models/localstorage/Window";
 import resetWindowInjector from "inject-loader!nwjs/Window/reset";
 import windowInitializerInjector
 // eslint-disable-next-line max-len
-	from "inject-loader?config&nwjs/Window&nwjs/Window/reset&nwjs/Screen&utils/node/platform!instance-initializers/nwjs/window";
+	from "inject-loader?config&nwjs/Window&nwjs/Window/reset&nwjs/Screen&utils/node/platform!init/instance-initializers/nwjs/window";
 
 
 let owner, env;
@@ -22,7 +22,7 @@ const manifest = {
 let nwWindow, nwScreen;
 
 
-module( "initializers/nwjs/window", {
+module( "init/instance-initializers/nwjs/window", {
 	beforeEach() {
 		owner = buildOwner();
 		owner.register( "model:window", Window );
