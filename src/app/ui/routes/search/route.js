@@ -1,7 +1,7 @@
 import { get, setProperties } from "@ember/object";
 import Route from "@ember/routing/route";
-import InfiniteScrollMixin from "routes/mixins/infinite-scroll";
-import RefreshRouteMixin from "routes/mixins/refresh";
+import InfiniteScrollMixin from "ui/routes/-mixins/routes/infinite-scroll";
+import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 import { toArray, mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 

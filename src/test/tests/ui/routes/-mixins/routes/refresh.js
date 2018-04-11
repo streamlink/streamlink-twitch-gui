@@ -6,13 +6,13 @@ import Service from "@ember/service";
 import { EventEmitter } from "events";
 import sinon from "sinon";
 
-import refreshMixinInjector from "inject-loader?nwjs/Window!routes/mixins/refresh";
+import refreshMixinInjector from "inject-loader?nwjs/Window!ui/routes/-mixins/routes/refresh";
 
 
 const { hasOwnProperty } = {};
 
 
-module( "routes/mixins/refresh", {
+module( "ui/routes/-mixins/routes/refresh", {
 	beforeEach() {
 		this.clock = sinon.useFakeTimers({
 			target: window

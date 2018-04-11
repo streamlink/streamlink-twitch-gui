@@ -1,7 +1,7 @@
 import Controller from "@ember/controller";
 import { get, set } from "@ember/object";
 import { inject as service } from "@ember/service";
-import RetryTransitionMixin from "controllers/mixins/retry-transition";
+import RetryTransitionMixin from "ui/routes/-mixins/controllers/retry-transition";
 
 
 export default Controller.extend( RetryTransitionMixin, {

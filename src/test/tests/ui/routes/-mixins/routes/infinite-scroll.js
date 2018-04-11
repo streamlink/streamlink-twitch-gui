@@ -3,14 +3,16 @@ import { A as EmberNativeArray } from "@ember/array";
 import { default as EmberObject, get, getProperties, set, setProperties } from "@ember/object";
 import Route from "@ember/routing/route";
 
-import cssInfiniteScrollMixinInjector from "inject-loader!routes/mixins/infinite-scroll/css";
-import infiniteScrollMixinInjector from "inject-loader?./css!routes/mixins/infinite-scroll";
+import cssInfiniteScrollMixinInjector
+	from "inject-loader!ui/routes/-mixins/routes/infinite-scroll/css";
+import infiniteScrollMixinInjector
+	from "inject-loader?./css!ui/routes/-mixins/routes/infinite-scroll";
 
 
 let testing;
 
 
-module( "routes/mixins/infinite-scroll", {
+module( "ui/routes/-mixins/routes/infinite-scroll", {
 	beforeEach() {
 		// TODO: globally set testing to true
 		testing = window.Ember.testing;

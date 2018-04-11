@@ -1,6 +1,6 @@
 import { get } from "@ember/object";
 import Route from "@ember/routing/route";
-import InfiniteScrollMixin from "routes/mixins/infinite-scroll";
+import InfiniteScrollMixin from "ui/routes/-mixins/routes/infinite-scroll";
 import preload from "utils/preload";
 
 

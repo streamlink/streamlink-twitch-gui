@@ -3,7 +3,7 @@ import { inject as service } from "@ember/service";
 import { translationMacro as t } from "ember-i18n/addon";
 import { vars } from "config";
 import FormButtonComponent from "../button/FormButtonComponent";
-import FilterLanguagesMixin from "routes/mixins/filter-languages";
+import FilterLanguagesMixin from "ui/routes/-mixins/routes/filter-languages";
 
 
 const { "random-max": randomMax } = vars;
