@@ -18,7 +18,6 @@ const pApp = r( pRoot, "app" );
 const pConfig = r( pRoot, "config" );
 const pTest = r( pRoot, "test" );
 const pTestFixtures = r( pTest, "fixtures" );
-const pStyles = r( pRoot, "styles" );
 const pImages = r( pRoot, "img" );
 const pTemplates = r( pRoot, "templates" );
 const pDependencies = r( ".", "node_modules" );
@@ -114,7 +113,6 @@ const commonLoaders = [
 	// Vendor stylesheets (don't parse anything)
 	{
 		test: /\.css$/,
-		exclude: pStyles,
 		use: [
 			MiniCssExtractPlugin.loader,
 			{
@@ -131,7 +129,7 @@ const commonLoaders = [
 	// Application stylesheets (extract fonts and images)
 	{
 		test: /app\.less$/,
-		include: pStyles,
+		include: pRoot,
 		use: [
 			MiniCssExtractPlugin.loader,
 			{
@@ -298,7 +296,6 @@ module.exports = {
 			alias: {
 				// folder aliases
 				"root"        : pRoot,
-				"styles"      : pStyles,
 				"img"         : pImages,
 				"templates"   : pTemplates,
 				"fixtures"    : pTestFixtures,

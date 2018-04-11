@@ -25,5 +25,5 @@ global.process.on( "uncaughtException", function( err ) {
 });
 
 
-require( "styles/app" );
+require( "ui/styles/app" );
 require( "./app" );
