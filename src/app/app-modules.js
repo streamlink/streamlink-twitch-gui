@@ -9,7 +9,7 @@
 
 import Router from "./router";
 
-import ApplicationAdapter from "store/TwitchAdapter";
+import ApplicationAdapter from "data/models/application/adapter";
 
 import Stream from "models/stream/Stream";
 import StreamAdapter from "models/stream/StreamAdapter";
@@ -60,69 +60,69 @@ import GithubReleases from "models/github/Releases";
 import GithubReleasesAdapter from "store/GithubAdapter";
 import GithubReleasesSerializer from "models/github/ReleasesSerializer";
 
-import TwitchRoot from "models/twitch/Root";
-import TwitchRootSerializer from "models/twitch/RootSerializer";
+import TwitchRoot from "data/models/twitch/root/model";
+import TwitchRootSerializer from "data/models/twitch/root/serializer";
 
-import TwitchGame from "models/twitch/Game";
-import TwitchGameSerializer from "models/twitch/GameSerializer";
-import TwitchGameTop from "models/twitch/GameTop";
-import TwitchGameTopSerializer from "models/twitch/GameTopSerializer";
-import TwitchGameFollowed from "models/twitch/GameFollowed";
-import TwitchGameFollowedSerializer from "models/twitch/GameFollowedSerializer";
-import TwitchGameFollowedLive from "models/twitch/GameFollowedLive";
-import TwitchGameFollowedLiveSerializer from "models/twitch/GameFollowedLiveSerializer";
+import TwitchGame from "data/models/twitch/game/model";
+import TwitchGameSerializer from "data/models/twitch/game/serializer";
+import TwitchGameTop from "data/models/twitch/game-top/model";
+import TwitchGameTopSerializer from "data/models/twitch/game-top/serializer";
+import TwitchGameFollowed from "data/models/twitch/game-followed/model";
+import TwitchGameFollowedSerializer from "data/models/twitch/game-followed/serializer";
+import TwitchGameFollowedLive from "data/models/twitch/game-followed-live/model";
+import TwitchGameFollowedLiveSerializer from "data/models/twitch/game-followed-live/serializer";
 
-import TwitchStream from "models/twitch/Stream";
-import TwitchStreamAdapter from "models/twitch/StreamAdapter";
-import TwitchStreamSerializer from "models/twitch/StreamSerializer";
-import TwitchStreamSummary from "models/twitch/StreamSummary";
-import TwitchStreamSummarySerializer from "models/twitch/StreamSummarySerializer";
-import TwitchStreamFeatured from "models/twitch/StreamFeatured";
-import TwitchStreamFeaturedSerializer from "models/twitch/StreamFeaturedSerializer";
-import TwitchStreamFollowed from "models/twitch/StreamFollowed";
-import TwitchStreamFollowedSerializer from "models/twitch/StreamFollowedSerializer";
-import TwitchStreamHosted from "models/twitch/StreamHosted";
-import TwitchStreamHostedSerializer from "models/twitch/StreamHostedSerializer";
+import TwitchStream from "data/models/twitch/stream/model";
+import TwitchStreamAdapter from "data/models/twitch/stream/adapter";
+import TwitchStreamSerializer from "data/models/twitch/stream/serializer";
+import TwitchStreamSummary from "data/models/twitch/stream-summary/model";
+import TwitchStreamSummarySerializer from "data/models/twitch/stream-summary/serializer";
+import TwitchStreamFeatured from "data/models/twitch/stream-featured/model";
+import TwitchStreamFeaturedSerializer from "data/models/twitch/stream-featured/serializer";
+import TwitchStreamFollowed from "data/models/twitch/stream-followed/model";
+import TwitchStreamFollowedSerializer from "data/models/twitch/stream-followed/serializer";
+import TwitchStreamHosted from "data/models/twitch/stream-hosted/model";
+import TwitchStreamHostedSerializer from "data/models/twitch/stream-hosted/serializer";
 
-import TwitchChannel from "models/twitch/Channel";
-import TwitchChannelSerializer from "models/twitch/ChannelSerializer";
-import TwitchChannelPanel from "models/twitch/ChannelPanel";
-import TwitchChannelPanelAdapter from "models/twitch/ChannelPanelAdapter";
-import TwitchChannelPanelSerializer from "models/twitch/ChannelPanelSerializer";
-import TwitchChannelFollowed from "models/twitch/ChannelFollowed";
-import TwitchChannelFollowedSerializer from "models/twitch/ChannelFollowedSerializer";
+import TwitchChannel from "data/models/twitch/channel/model";
+import TwitchChannelSerializer from "data/models/twitch/channel/serializer";
+import TwitchChannelPanel from "data/models/twitch/channel-panel/model";
+import TwitchChannelPanelAdapter from "data/models/twitch/channel-panel/adapter";
+import TwitchChannelPanelSerializer from "data/models/twitch/channel-panel/serializer";
+import TwitchChannelFollowed from "data/models/twitch/channel-followed/model";
+import TwitchChannelFollowedSerializer from "data/models/twitch/channel-followed/serializer";
 
-import TwitchImage from "models/twitch/Image";
-import TwitchImageSerializer from "models/twitch/ImageSerializer";
+import TwitchImage from "data/models/twitch/image/model";
+import TwitchImageSerializer from "data/models/twitch/image/serializer";
 
-import TwitchSearchGame from "models/twitch/SearchGame";
-import TwitchSearchGameSerializer from "models/twitch/SearchGameSerializer";
-import TwitchSearchStream from "models/twitch/SearchStream";
-import TwitchSearchStreamSerializer from "models/twitch/SearchStreamSerializer";
-import TwitchSearchChannel from "models/twitch/SearchChannel";
-import TwitchSearchChannelSerializer from "models/twitch/SearchChannelSerializer";
+import TwitchSearchGame from "data/models/twitch/search-game/model";
+import TwitchSearchGameSerializer from "data/models/twitch/search-game/serializer";
+import TwitchSearchStream from "data/models/twitch/search-stream/model";
+import TwitchSearchStreamSerializer from "data/models/twitch/search-stream/serializer";
+import TwitchSearchChannel from "data/models/twitch/search-channel/model";
+import TwitchSearchChannelSerializer from "data/models/twitch/search-channel/serializer";
 
-import TwitchUser from "models/twitch/User";
-import TwitchUserAdapter from "models/twitch/UserAdapter";
-import TwitchUserSerializer from "models/twitch/UserSerializer";
+import TwitchUser from "data/models/twitch/user/model";
+import TwitchUserAdapter from "data/models/twitch/user/adapter";
+import TwitchUserSerializer from "data/models/twitch/user/serializer";
 
-import TwitchSubscription from "models/twitch/Subscription";
-import TwitchSubscriptionSerializer from "models/twitch/SubscriptionSerializer";
-import TwitchTicket from "models/twitch/Ticket";
-import TwitchTicketSerializer from "models/twitch/TicketSerializer";
-import TwitchProduct from "models/twitch/Product";
-import TwitchProductSerializer from "models/twitch/ProductSerializer";
-import TwitchProductEmoticon from "models/twitch/ProductEmoticon";
-import TwitchProductEmoticonSerializer from "models/twitch/ProductEmoticonSerializer";
+import TwitchSubscription from "data/models/twitch/subscription/model";
+import TwitchSubscriptionSerializer from "data/models/twitch/subscription/serializer";
+import TwitchTicket from "data/models/twitch/ticket/model";
+import TwitchTicketSerializer from "data/models/twitch/ticket/serializer";
+import TwitchProduct from "data/models/twitch/product/model";
+import TwitchProductSerializer from "data/models/twitch/product/serializer";
+import TwitchProductEmoticon from "data/models/twitch/product-emoticon/model";
+import TwitchProductEmoticonSerializer from "data/models/twitch/product-emoticon/serializer";
 
-import TwitchTeam from "models/twitch/Team";
-import TwitchTeamAdapter from "models/twitch/TeamAdapter";
-import TwitchTeamSerializer from "models/twitch/TeamSerializer";
+import TwitchTeam from "data/models/twitch/team/model";
+import TwitchTeamAdapter from "data/models/twitch/team/adapter";
+import TwitchTeamSerializer from "data/models/twitch/team/serializer";
 
-import TwitchCommunity from "models/twitch/Community";
-import TwitchCommunitySerializer from "models/twitch/CommunitySerializer";
-import TwitchCommunityTop from "models/twitch/CommunityTop";
-import TwitchCommunityTopSerializer from "models/twitch/CommunityTopSerializer";
+import TwitchCommunity from "data/models/twitch/community/model";
+import TwitchCommunitySerializer from "data/models/twitch/community/serializer";
+import TwitchCommunityTop from "data/models/twitch/community-top/model";
+import TwitchCommunityTopSerializer from "data/models/twitch/community-top/serializer";
 
 import THelper from "helpers/THelper";
 import IsEqualHelper from "helpers/IsEqualHelper";

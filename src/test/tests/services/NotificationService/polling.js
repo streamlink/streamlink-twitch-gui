@@ -10,14 +10,14 @@ import RESTAdapter from "ember-data/adapters/rest";
 
 import notificationPollingMixinInjector
 	from "inject-loader?config&./cache&./icons&./logger!services/NotificationService/polling";
-import StreamFollowed from "models/twitch/StreamFollowed";
-import StreamFollowedSerializer from "models/twitch/StreamFollowedSerializer";
-import Stream from "models/twitch/Stream";
-import StreamSerializer from "models/twitch/StreamSerializer";
-import Channel from "models/twitch/Channel";
-import ChannelSerializer from "models/twitch/ChannelSerializer";
-import imageInjector from "inject-loader?config!models/twitch/Image";
-import ImageSerializer from "models/twitch/ImageSerializer";
+import StreamFollowed from "data/models/twitch/stream-followed/model";
+import StreamFollowedSerializer from "data/models/twitch/stream-followed/serializer";
+import Stream from "data/models/twitch/stream/model";
+import StreamSerializer from "data/models/twitch/stream/serializer";
+import Channel from "data/models/twitch/channel/model";
+import ChannelSerializer from "data/models/twitch/channel/serializer";
+import imageInjector from "inject-loader?config!data/models/twitch/image/model";
+import ImageSerializer from "data/models/twitch/image/serializer";
 
 
 const { later } = run;

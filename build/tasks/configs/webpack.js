@@ -307,6 +307,7 @@ module.exports = {
 				"init"        : r( pApp, "init" ),
 				"services"    : r( pApp, "services" ),
 				"helpers"     : r( pApp, "helpers" ),
+				"data"        : r( pApp, "data" ),
 				"models"      : r( pApp, "models" ),
 				"ui"          : r( pApp, "ui" ),
 				"components"  : r( pApp, "components" ),
