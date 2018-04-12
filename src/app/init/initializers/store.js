@@ -54,3 +54,11 @@ Store.reopen({
 			});
 	}
 });
+
+
+export default {
+	name: "ember-data-store",
+	after: "ember-data",
+
+	initialize() {}
+};

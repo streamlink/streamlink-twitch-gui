@@ -3,7 +3,6 @@ import "jquery";
 import "ember-source/dist/ember.debug";
 import Application from "@ember/application";
 import "./logger";
-import "./store";
 import modules from "./app-modules";
 
 
