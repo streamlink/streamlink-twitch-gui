@@ -206,15 +206,15 @@ import ModalLogComponent from "ui/components/modal/modal-log/component";
 import ModalNewreleaseComponent from "ui/components/modal/modal-newrelease/component";
 import ModalQuitComponent from "ui/components/modal/modal-quit/component";
 
-import ContentListComponent from "components/list/ContentListComponent";
-import CommunityItemComponent from "components/list/CommunityItemComponent";
-import ChannelItemComponent from "components/list/ChannelItemComponent";
-import GameItemComponent from "components/list/GameItemComponent";
-import HeadlineTotalsComponent from "components/list/HeadlineTotalsComponent";
-import InfiniteScrollComponent from "components/list/InfiniteScrollComponent";
-import StreamItemComponent from "components/list/StreamItemComponent";
-import SubscriptionItemComponent from "components/list/SubscriptionItemComponent";
-import TeamItemComponent from "components/list/TeamItemComponent";
+import ContentListComponent from "ui/components/list/content-list/component";
+import CommunityItemComponent from "ui/components/list/community-item/component";
+import ChannelItemComponent from "ui/components/list/channel-item/component";
+import GameItemComponent from "ui/components/list/game-item/component";
+import HeadlineTotalsComponent from "ui/components/list/headline-totals/component";
+import InfiniteScrollComponent from "ui/components/list/infinite-scroll/component";
+import StreamItemComponent from "ui/components/list/stream-item/component";
+import SubscriptionItemComponent from "ui/components/list/subscription-item/component";
+import TeamItemComponent from "ui/components/list/team-item/component";
 
 import QuickBarComponent from "ui/components/quick/quick-bar/component";
 import QuickBarHomepageComponent from "ui/components/quick/quick-bar-homepage/component";
@@ -234,7 +234,7 @@ import SearchBarComponent from "ui/components/search-bar/component";
 import SelectableTextComponent from "ui/components/selectable-text/component";
 
 import SettingsRowComponent from "ui/components/settings-row/component";
-import SettingsChannelItemComponent from "components/list/SettingsChannelItemComponent";
+import SettingsChannelItemComponent from "ui/components/list/settings-channel-item/component";
 import SettingsSubmitComponent from "ui/components/settings-submit/component";
 
 import FeaturedRoute from "ui/routes/featured/route";

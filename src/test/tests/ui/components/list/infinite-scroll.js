@@ -5,10 +5,10 @@ import { A as EmberNativeArray } from "@ember/array";
 import Component from "@ember/component";
 import { run } from "@ember/runloop";
 
-import InfiniteScrollComponent from "components/list/InfiniteScrollComponent";
+import InfiniteScrollComponent from "ui/components/list/infinite-scroll/component";
 
 
-moduleForComponent( "components/list/InfiniteScrollComponent", {
+moduleForComponent( "ui/components/list/infinite-scroll", {
 	integration: true,
 	resolver: buildResolver({
 		InfiniteScrollComponent,

@@ -2,12 +2,12 @@ import { get, set, computed } from "@ember/object";
 import { alias, and, equal, notEmpty, or } from "@ember/object/computed";
 import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
-import ListItemComponent from "./ListItemComponent";
+import ListItemComponent from "../-list-item/component";
 import {
 	ATTR_STREAMS_INFO_GAME,
 	ATTR_STREAMS_INFO_TITLE
 } from "data/models/settings/streams/fragment";
-import layout from "templates/components/list/StreamItemComponent.hbs";
+import layout from "./template.hbs";
 
 
 export default ListItemComponent.extend({

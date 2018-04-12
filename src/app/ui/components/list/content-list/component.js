@@ -3,7 +3,7 @@ import Component from "@ember/component";
 import { get, setProperties } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { addObserver } from "@ember/object/observers";
-import layout from "templates/components/list/ContentListComponent.hbs";
+import layout from "./template.hbs";
 
 
 export default Component.extend({

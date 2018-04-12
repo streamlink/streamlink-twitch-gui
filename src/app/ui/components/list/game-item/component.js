@@ -1,8 +1,8 @@
 import { get, computed } from "@ember/object";
 import { or } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
-import ListItemComponent from "./ListItemComponent";
-import layout from "templates/components/list/GameItemComponent.hbs";
+import ListItemComponent from "../-list-item/component";
+import layout from "./template.hbs";
 
 
 export default ListItemComponent.extend({

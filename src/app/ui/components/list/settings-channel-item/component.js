@@ -1,6 +1,6 @@
 import { get, set } from "@ember/object";
-import ListItemComponent from "./ListItemComponent";
-import layout from "templates/components/list/SettingsChannelItemComponent.hbs";
+import ListItemComponent from "../-list-item/component";
+import layout from "./template.hbs";
 
 
 export default ListItemComponent.extend({

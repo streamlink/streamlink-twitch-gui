@@ -3,7 +3,7 @@ import { get, set, observer } from "@ember/object";
 import { or } from "@ember/object/computed";
 import { scheduleOnce } from "@ember/runloop";
 import $ from "jquery";
-import layout from "templates/components/list/InfiniteScrollComponent.hbs";
+import layout from "./template.hbs";
 
 
 export default Component.extend({

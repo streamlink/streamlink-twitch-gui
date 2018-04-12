@@ -4,10 +4,10 @@ import { get, set, setProperties } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
 
-import StreamItemComponent from "components/list/StreamItemComponent";
+import StreamItemComponent from "ui/components/list/stream-item/component";
 
 
-moduleForComponent( "stream-item", "components/list/StreamItemComponent", {
+moduleForComponent( "stream-item", "ui/components/list/stream-item", {
 	unit: true,
 	resolver: buildResolver({
 		StreamItemComponent

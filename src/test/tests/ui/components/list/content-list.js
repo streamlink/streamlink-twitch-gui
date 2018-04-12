@@ -4,12 +4,12 @@ import { A as EmberNativeArray } from "@ember/array";
 import Component from "@ember/component";
 import { run, scheduleOnce } from "@ember/runloop";
 
-import ContentListComponent from "components/list/ContentListComponent";
+import ContentListComponent from "ui/components/list/content-list/component";
 import GetIndexHelper from "helpers/GetIndexHelper";
 import IsGteHelper from "helpers/IsGteHelper";
 
 
-moduleForComponent( "components/list/ContentListComponent", {
+moduleForComponent( "ui/components/list/content-list", {
 	integration: true,
 	resolver: buildResolver({
 		ContentListComponent,

@@ -2,9 +2,9 @@ import { get, getWithDefault, computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
 import { twitch as twitchConfig } from "config";
 import { openBrowser } from "nwjs/Shell";
-import ListItemComponent from "./ListItemComponent";
+import ListItemComponent from "../-list-item/component";
 import Moment from "moment";
-import layout from "templates/components/list/SubscriptionItemComponent.hbs";
+import layout from "./template.hbs";
 
 
 const {
