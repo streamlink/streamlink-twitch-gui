@@ -2,7 +2,7 @@ import { get, observer } from "@ember/object";
 import { inject as service } from "@ember/service";
 import RESTAdapter from "ember-data/adapters/rest";
 import { twitch } from "config";
-import AdapterMixin from "store/AdapterMixin";
+import AdapterMixin from "data/models/-mixins/adapter";
 
 
 const { oauth: { "client-id": clientId } } = twitch;

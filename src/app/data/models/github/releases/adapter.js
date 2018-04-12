@@ -1,6 +1,6 @@
 import RESTAdapter from "ember-data/adapters/rest";
 import { update as config } from "config";
-import AdapterMixin from "store/AdapterMixin";
+import AdapterMixin from "data/models/-mixins/adapter";
 
 
 const { githubreleases: { host, namespace } } = config;

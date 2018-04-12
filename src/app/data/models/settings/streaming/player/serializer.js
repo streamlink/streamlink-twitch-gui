@@ -1,4 +1,4 @@
-import PolymorphicFragmentSerializer from "store/PolymorphicFragmentSerializer";
+import PolymorphicFragmentSerializer from "data/models/-mixins/polymorphic-fragment-serializer";
 import { players, typeKey } from "./fragment";
 
 

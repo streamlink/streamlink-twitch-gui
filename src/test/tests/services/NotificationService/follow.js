@@ -9,7 +9,7 @@ import RESTSerializer from "ember-data/serializers/rest";
 
 import notificationFollowMixinInjector
 	from "inject-loader?./cache!services/NotificationService/follow";
-import AdapterMixin from "store/AdapterMixin";
+import AdapterMixin from "data/models/-mixins/adapter";
 
 
 let owner, env;
