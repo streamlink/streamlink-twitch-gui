@@ -5,7 +5,7 @@ import $ from "jquery";
 
 import RadioButtonsComponent from "ui/components/form/radio-buttons/component";
 import RadioButtonsItemComponent from "ui/components/form/radio-buttons-item/component";
-import IsEqualHelper from "helpers/IsEqualHelper";
+import { helper as IsEqualHelper } from "ui/components/helper/is-equal";
 
 
 moduleForComponent( "ui/components/form/radio-buttons", {

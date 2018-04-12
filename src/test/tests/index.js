@@ -6,7 +6,6 @@ function importAll( r ) {
 importAll( require.context( "qunit/test/", true, /\.js$/ ) );
 importAll( require.context( "./nwjs/", true, /\.js$/ ) );
 importAll( require.context( "./utils/", true, /\.js$/ ) );
-importAll( require.context( "./helpers/", true, /\.js$/ ) );
 importAll( require.context( "./data/", true, /\.js$/ ) );
 importAll( require.context( "./init/", true, /\.js$/ ) );
 importAll( require.context( "./ui/", true, /\.js$/ ) );

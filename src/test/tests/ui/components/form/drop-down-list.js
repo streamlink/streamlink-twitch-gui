@@ -7,7 +7,7 @@ import $ from "jquery";
 import sinon from "sinon";
 
 import DropDownListComponent from "ui/components/form/drop-down-list/component";
-import IsEqualHelper from "helpers/IsEqualHelper";
+import { helper as IsEqualHelper } from "ui/components/helper/is-equal";
 
 
 moduleForComponent( "drop-down-list", "ui/components/form/drop-down-list", {

@@ -8,7 +8,7 @@ import $ from "jquery";
 import DropDownComponent from "ui/components/form/drop-down/component";
 import DropDownSelectionComponent from "ui/components/form/drop-down-selection/component";
 import DropDownListComponent from "ui/components/form/drop-down-list/component";
-import IsEqualHelper from "helpers/IsEqualHelper";
+import { helper as IsEqualHelper } from "ui/components/helper/is-equal";
 
 
 moduleForComponent( "ui/components/form/drop-down", {

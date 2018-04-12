@@ -5,8 +5,8 @@ import Component from "@ember/component";
 import { run, scheduleOnce } from "@ember/runloop";
 
 import ContentListComponent from "ui/components/list/content-list/component";
-import GetIndexHelper from "helpers/GetIndexHelper";
-import IsGteHelper from "helpers/IsGteHelper";
+import { helper as GetIndexHelper } from "ui/components/helper/get-index";
+import { helper as IsGteHelper } from "ui/components/helper/is-gte";
 
 
 moduleForComponent( "ui/components/list/content-list", {
