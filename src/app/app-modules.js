@@ -194,17 +194,17 @@ import ShareChannelComponent from "ui/components/button/share-channel/component"
 import SubscribeChannelComponent from "ui/components/button/subscribe-channel/component";
 import TwitchEmotesComponent from "ui/components/button/twitch-emotes/component";
 
-import ModalServiceComponent from "components/modal/ModalServiceComponent";
-import ModalBodyComponent from "components/modal/ModalBodyComponent";
-import ModalChangelogComponent from "components/modal/ModalChangelogComponent";
-import ModalConfirmComponent from "components/modal/ModalConfirmComponent";
-import ModalFirstrunComponent from "components/modal/ModalFirstrunComponent";
-import ModalFooterComponent from "components/modal/ModalFooterComponent";
-import ModalHeaderComponent from "components/modal/ModalHeaderComponent";
-import ModalStreamingComponent from "components/modal/ModalStreamingComponent";
-import ModalLogComponent from "components/modal/ModalLogComponent";
-import ModalNewreleaseComponent from "components/modal/ModalNewreleaseComponent";
-import ModalQuitComponent from "components/modal/ModalQuitComponent";
+import ModalServiceComponent from "ui/components/modal/modal-service/component";
+import ModalBodyComponent from "ui/components/modal/modal-body/component";
+import ModalChangelogComponent from "ui/components/modal/modal-changelog/component";
+import ModalConfirmComponent from "ui/components/modal/modal-confirm/component";
+import ModalFirstrunComponent from "ui/components/modal/modal-firstrun/component";
+import ModalFooterComponent from "ui/components/modal/modal-footer/component";
+import ModalHeaderComponent from "ui/components/modal/modal-header/component";
+import ModalStreamingComponent from "ui/components/modal/modal-streaming/component";
+import ModalLogComponent from "ui/components/modal/modal-log/component";
+import ModalNewreleaseComponent from "ui/components/modal/modal-newrelease/component";
+import ModalQuitComponent from "ui/components/modal/modal-quit/component";
 
 import ContentListComponent from "components/list/ContentListComponent";
 import CommunityItemComponent from "components/list/CommunityItemComponent";

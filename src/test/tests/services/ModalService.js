@@ -6,7 +6,7 @@ import { run } from "@ember/runloop";
 import { inject as service } from "@ember/service";
 
 import ModalService from "services/ModalService";
-import ModalServiceComponent from "components/modal/ModalServiceComponent";
+import ModalServiceComponent from "ui/components/modal/modal-service/component";
 
 
 moduleForComponent( "services/ModalService", {

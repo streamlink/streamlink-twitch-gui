@@ -1,9 +1,9 @@
 import { get } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
-import ModalDialogComponent from "./ModalDialogComponent";
+import ModalDialogComponent from "../modal-dialog/component";
 import { openBrowser } from "nwjs/Shell";
-import layout from "templates/components/modal/ModalNewreleaseComponent.hbs";
+import layout from "./template.hbs";
 
 
 export default ModalDialogComponent.extend({

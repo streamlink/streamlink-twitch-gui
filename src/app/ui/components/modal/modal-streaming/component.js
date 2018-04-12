@@ -2,8 +2,8 @@ import { get, set, computed } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import { streaming as streamingConfig } from "config";
-import ModalDialogComponent from "./ModalDialogComponent";
-import HotkeyMixin from "../mixins/hotkey";
+import ModalDialogComponent from "../modal-dialog/component";
+import HotkeyMixin from "components/mixins/hotkey";
 import { qualities } from "data/models/stream/model";
 import {
 	LogError,
@@ -16,7 +16,7 @@ import {
 	HostingError
 } from "services/StreamingService/errors";
 import { openBrowser } from "nwjs/Shell";
-import layout from "templates/components/modal/ModalStreamingComponent.hbs";
+import layout from "./template.hbs";
 
 
 const {

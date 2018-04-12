@@ -1,8 +1,8 @@
 import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { main as config } from "config";
-import ModalDialogComponent from "./ModalDialogComponent";
-import layout from "templates/components/modal/ModalFirstrunComponent.hbs";
+import ModalDialogComponent from "../modal-dialog/component";
+import layout from "./template.hbs";
 
 
 export default ModalDialogComponent.extend({
