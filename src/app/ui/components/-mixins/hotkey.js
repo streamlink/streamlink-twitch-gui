@@ -2,7 +2,7 @@ import { get, computed } from "@ember/object";
 import { on } from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
 import { inject as service } from "@ember/service";
-import formatTitle from "services/HotkeyService/title";
+import formatTitle from "services/hotkey/title";
 
 
 const { isArray } = Array;

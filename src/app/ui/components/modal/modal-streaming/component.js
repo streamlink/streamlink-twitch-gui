@@ -14,7 +14,7 @@ import {
 	NoStreamsFoundError,
 	TimeoutError,
 	HostingError
-} from "services/StreamingService/errors";
+} from "services/streaming/errors";
 import { openBrowser } from "nwjs/Shell";
 import layout from "./template.hbs";
 

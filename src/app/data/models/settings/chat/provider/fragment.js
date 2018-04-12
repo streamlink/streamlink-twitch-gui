@@ -1,7 +1,7 @@
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
 import { chat as chatConfig } from "config";
-import chatProviders from "services/ChatService/providers";
+import chatProviders from "services/chat/providers";
 
 
 const typeKey = "type";

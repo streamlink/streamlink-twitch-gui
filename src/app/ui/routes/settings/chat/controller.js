@@ -3,7 +3,7 @@ import { get, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { chat as chatConfig, twitch as twitchConfig } from "config";
 import { providers } from "data/models/settings/chat/provider/fragment";
-import ChatProviderBasic from "services/ChatService/providers/-basic";
+import ChatProviderBasic from "services/chat/providers/-basic";
 import { platform } from "utils/node/platform";
 
 

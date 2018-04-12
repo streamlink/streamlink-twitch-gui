@@ -4,8 +4,8 @@ import { inject as service } from "@ember/service";
 import { main, files } from "config";
 import { isDebug } from "nwjs/debug";
 import SettingsNotification from "data/models/settings/notification/fragment";
-import NotificationData from "services/NotificationService/data";
-import { isSupported, showNotification } from "services/NotificationService/provider";
+import NotificationData from "services/notification/data";
+import { isSupported, showNotification } from "services/notification/provider";
 import { isWin } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 

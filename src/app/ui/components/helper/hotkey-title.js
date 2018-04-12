@@ -1,7 +1,7 @@
 import Helper from "@ember/component/helper";
 import { get, observer } from "@ember/object";
 import { inject as service } from "@ember/service";
-import formatTitle from "services/HotkeyService/title";
+import formatTitle from "services/hotkey/title";
 
 
 export const helper = Helper.extend({

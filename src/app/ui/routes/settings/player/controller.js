@@ -3,7 +3,7 @@ import { get, computed } from "@ember/object";
 import { equal } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import { players as playersConfig } from "config";
-import substitutionsPlayer from "services/StreamingService/player/substitutions";
+import substitutionsPlayer from "services/streaming/player/substitutions";
 import { platform } from "utils/node/platform";
 import { delimiter } from "path";
 

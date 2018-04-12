@@ -144,16 +144,16 @@ import { helper as GetIndexHelper } from "ui/components/helper/get-index";
 import { helper as FindByHelper } from "ui/components/helper/find-by";
 import { helper as HotkeyTitleHelper } from "ui/components/helper/hotkey-title";
 
-import I18nService from "services/I18nService";
-import NwjsService from "services/NwjsService";
-import SettingsService from "services/SettingsService";
-import AuthService from "services/AuthService";
-import ModalService from "services/ModalService";
-import VersioncheckService from "services/VersioncheckService";
-import StreamingService from "services/StreamingService";
-import NotificationService from "services/NotificationService";
-import ChatService from "services/ChatService";
-import HotkeyService from "services/HotkeyService";
+import I18nService from "services/i18n";
+import NwjsService from "services/nwjs";
+import SettingsService from "services/settings";
+import AuthService from "services/auth";
+import ModalService from "services/modal";
+import VersioncheckService from "services/versioncheck";
+import StreamingService from "services/streaming/service";
+import NotificationService from "services/notification/service";
+import ChatService from "services/chat/service";
+import HotkeyService from "services/hotkey/service";
 
 import ApplicationRoute from "ui/routes/application/route";
 import ApplicationTemplate from "ui/routes/application/template.hbs";
