@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import { get } from "@ember/object";
-import IsFocusedMixin from "components/mixins/is-focused";
+import IsFocusedMixin from "ui/components/-mixins/is-focused";
 import layout from "./template.hbs";
 
 

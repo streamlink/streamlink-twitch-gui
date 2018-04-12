@@ -5,7 +5,7 @@ import Component from "@ember/component";
 import $ from "jquery";
 import sinon from "sinon";
 
-import HotkeyMixin from "components/mixins/hotkey";
+import HotkeyMixin from "ui/components/-mixins/hotkey";
 import HotkeyService from "services/HotkeyService";
 
 

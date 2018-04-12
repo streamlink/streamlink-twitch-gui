@@ -3,8 +3,8 @@ import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
 import { inject as service } from "@ember/service";
-import TwitchInteractButtonMixin from "components/mixins/twitch-interact-button";
-import HotkeyMixin from "components/mixins/hotkey";
+import TwitchInteractButtonMixin from "ui/components/-mixins/twitch-interact-button";
+import HotkeyMixin from "ui/components/-mixins/hotkey";
 import layout from "./template.hbs";
 
 

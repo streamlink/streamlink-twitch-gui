@@ -10,7 +10,7 @@ import sinon from "sinon";
 
 import followButtonComponentInjector
 // eslint-disable-next-line max-len
-	from "inject-loader?components/mixins/twitch-interact-button!ui/components/button/-follow-button/component";
+	from "inject-loader?ui/components/-mixins/twitch-interact-button!ui/components/button/-follow-button/component";
 import FormButtonComponent from "ui/components/button/form-button/component";
 import HotkeyTitleHelper from "helpers/HotkeyTitleHelper";
 import FindByHelper from "helpers/FindByHelper";
@@ -18,7 +18,7 @@ import BoolNotHelper from "helpers/BoolNotHelper";
 
 
 const { default: FollowButtonComponent } = followButtonComponentInjector({
-	"components/mixins/twitch-interact-button": {}
+	"ui/components/-mixins/twitch-interact-button": {}
 });
 
 

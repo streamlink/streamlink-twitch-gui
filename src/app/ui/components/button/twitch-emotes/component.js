@@ -5,7 +5,7 @@ import { translationMacro as t } from "ember-i18n/addon";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "../form-button/component";
-import HotkeyMixin from "components/mixins/hotkey";
+import HotkeyMixin from "ui/components/-mixins/hotkey";
 
 
 const { "emotes-url": twitchEmotesUrl } = twitch;

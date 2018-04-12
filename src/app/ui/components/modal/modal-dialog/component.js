@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
-import HotkeyMixin from "components/mixins/hotkey";
+import HotkeyMixin from "ui/components/-mixins/hotkey";
 import layout from "./template.hbs";
 
 

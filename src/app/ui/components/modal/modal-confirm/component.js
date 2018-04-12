@@ -1,6 +1,6 @@
 import { get } from "@ember/object";
 import ModalDialogComponent from "../modal-dialog/component";
-import HotkeyMixin from "components/mixins/hotkey";
+import HotkeyMixin from "ui/components/-mixins/hotkey";
 import layout from "./template.hbs";
 
 

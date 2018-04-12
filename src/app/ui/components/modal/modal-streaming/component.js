@@ -3,7 +3,7 @@ import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import { streaming as streamingConfig } from "config";
 import ModalDialogComponent from "../modal-dialog/component";
-import HotkeyMixin from "components/mixins/hotkey";
+import HotkeyMixin from "ui/components/-mixins/hotkey";
 import { qualities } from "data/models/stream/model";
 import {
 	LogError,

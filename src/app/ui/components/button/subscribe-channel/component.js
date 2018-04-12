@@ -3,8 +3,8 @@ import { alias, and } from "@ember/object/computed";
 import { twitch } from "config";
 import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "../form-button/component";
-import TwitchInteractButtonMixin from "components/mixins/twitch-interact-button";
-import HotkeyMixin from "components/mixins/hotkey";
+import TwitchInteractButtonMixin from "ui/components/-mixins/twitch-interact-button";
+import HotkeyMixin from "ui/components/-mixins/hotkey";
 
 
 const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
