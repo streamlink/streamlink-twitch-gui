@@ -4,7 +4,7 @@ import { on } from "@ember/object/evented";
 import { inject as service } from "@ember/service";
 import $ from "jquery";
 import { platform } from "utils/node/platform";
-import layout from "templates/components/form/FileSelectComponent.hbs";
+import layout from "./template.hbs";
 
 
 const { hasOwnProperty } = {};

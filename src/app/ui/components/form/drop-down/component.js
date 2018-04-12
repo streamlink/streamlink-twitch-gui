@@ -1,7 +1,7 @@
 import { get, set } from "@ember/object";
-import Selectable from "../-selectable";
-import IsFocusedMixin from "../../mixins/is-focused";
-import layout from "templates/components/form/DropDownComponent/index.hbs";
+import Selectable from "../-selectable/component";
+import IsFocusedMixin from "components/mixins/is-focused";
+import layout from "./template.hbs";
 
 
 export default Selectable.extend( IsFocusedMixin, {

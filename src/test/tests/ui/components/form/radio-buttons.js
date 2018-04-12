@@ -3,12 +3,12 @@ import { buildResolver, hbs, triggerKeyDown } from "test-utils";
 import { run } from "@ember/runloop";
 import $ from "jquery";
 
-import RadioButtonsComponent from "components/form/RadioButtonsComponent";
-import RadioButtonsItemComponent from "components/form/RadioButtonsComponent/item";
+import RadioButtonsComponent from "ui/components/form/radio-buttons/component";
+import RadioButtonsItemComponent from "ui/components/form/radio-buttons-item/component";
 import IsEqualHelper from "helpers/IsEqualHelper";
 
 
-moduleForComponent( "components/form/RadioButtonsComponent", {
+moduleForComponent( "ui/components/form/radio-buttons", {
 	integration: true,
 	resolver: buildResolver({
 		RadioButtonsComponent,

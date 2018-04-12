@@ -5,13 +5,13 @@ import { A as EmberNativeArray } from "@ember/array";
 import { run } from "@ember/runloop";
 import $ from "jquery";
 
-import DropDownComponent from "components/form/DropDownComponent";
-import DropDownSelectionComponent from "components/form/DropDownComponent/selection";
-import DropDownListComponent from "components/form/DropDownComponent/list";
+import DropDownComponent from "ui/components/form/drop-down/component";
+import DropDownSelectionComponent from "ui/components/form/drop-down-selection/component";
+import DropDownListComponent from "ui/components/form/drop-down-list/component";
 import IsEqualHelper from "helpers/IsEqualHelper";
 
 
-moduleForComponent( "components/form/DropDownComponent", {
+moduleForComponent( "ui/components/form/drop-down", {
 	integration: true,
 	resolver: buildResolver({
 		DropDownComponent,

@@ -176,15 +176,15 @@ import LinkComponent from "ui/components/link/link/component";
 import DocumentationLinkComponent from "ui/components/link/documentation-link/component";
 import EmbeddedHtmlLinksComponent from "ui/components/link/embedded-html-links/component";
 
-import DropDownComponent from "components/form/DropDownComponent";
-import DropDownSelectionComponent from "components/form/DropDownComponent/selection";
-import DropDownListComponent from "components/form/DropDownComponent/list";
-import RadioButtonsComponent from "components/form/RadioButtonsComponent";
-import RadioButtonsItemComponent from "components/form/RadioButtonsComponent/item";
-import CheckBoxComponent from "components/form/CheckBoxComponent";
-import FileSelectComponent from "components/form/FileSelectComponent";
-import TextFieldComponent from "components/form/TextFieldComponent";
-import NumberFieldComponent from "components/form/NumberFieldComponent";
+import DropDownComponent from "ui/components/form/drop-down/component";
+import DropDownSelectionComponent from "ui/components/form/drop-down-selection/component";
+import DropDownListComponent from "ui/components/form/drop-down-list/component";
+import RadioButtonsComponent from "ui/components/form/radio-buttons/component";
+import RadioButtonsItemComponent from "ui/components/form/radio-buttons-item/component";
+import CheckBoxComponent from "ui/components/form/check-box/component";
+import FileSelectComponent from "ui/components/form/file-select/component";
+import TextFieldComponent from "ui/components/form/text-field/component";
+import NumberFieldComponent from "ui/components/form/number-field/component";
 
 import FollowChannelComponent from "ui/components/button/follow-channel/component";
 import FollowGameComponent from "ui/components/button/follow-game/component";

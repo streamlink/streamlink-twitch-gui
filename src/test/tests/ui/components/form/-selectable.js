@@ -3,10 +3,10 @@ import { buildResolver, runDestroy } from "test-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import { get, set } from "@ember/object";
 
-import SelectableComponent from "components/form/-selectable";
+import SelectableComponent from "ui/components/form/-selectable/component";
 
 
-moduleForComponent( "selectable", "components/form/-selectable", {
+moduleForComponent( "selectable", "ui/components/form/-selectable", {
 	unit: true,
 	resolver: buildResolver({
 		SelectableComponent

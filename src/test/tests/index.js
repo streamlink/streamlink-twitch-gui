@@ -10,5 +10,4 @@ importAll( require.context( "./helpers/", true, /\.js$/ ) );
 importAll( require.context( "./data/", true, /\.js$/ ) );
 importAll( require.context( "./init/", true, /\.js$/ ) );
 importAll( require.context( "./ui/", true, /\.js$/ ) );
-importAll( require.context( "./components/", true, /\.js$/ ) );
 importAll( require.context( "./services/", true, /\.js$/ ) );

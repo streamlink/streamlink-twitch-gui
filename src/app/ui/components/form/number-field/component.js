@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
-import layout from "templates/components/form/NumberFieldComponent.hbs";
+import layout from "./template.hbs";
 
 
 const { min, max } = Math;

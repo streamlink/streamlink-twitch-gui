@@ -2,10 +2,10 @@ import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs } from "test-utils";
 import { run } from "@ember/runloop";
 
-import NumberFieldComponent from "components/form/NumberFieldComponent";
+import NumberFieldComponent from "ui/components/form/number-field/component";
 
 
-moduleForComponent( "components/form/NumberFieldComponent", {
+moduleForComponent( "ui/components/form/number-field", {
 	integration: true,
 	resolver: buildResolver({
 		NumberFieldComponent

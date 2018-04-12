@@ -1,10 +1,10 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs, triggerKeyDown } from "test-utils";
 
-import CheckBoxComponent from "components/form/CheckBoxComponent";
+import CheckBoxComponent from "ui/components/form/check-box/component";
 
 
-moduleForComponent( "components/form/CheckBoxComponent", {
+moduleForComponent( "ui/components/form/check-box", {
 	integration: true,
 	resolver: buildResolver({
 		CheckBoxComponent

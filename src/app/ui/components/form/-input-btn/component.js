@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { get } from "@ember/object";
-import IsFocusedMixin from "../mixins/is-focused";
-import layout from "templates/components/form/InputBtnComponent.hbs";
+import IsFocusedMixin from "components/mixins/is-focused";
+import layout from "./template.hbs";
 
 
 export default Component.extend( IsFocusedMixin, {

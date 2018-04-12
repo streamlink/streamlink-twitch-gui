@@ -6,11 +6,11 @@ import { run } from "@ember/runloop";
 import $ from "jquery";
 import sinon from "sinon";
 
-import DropDownListComponent from "components/form/DropDownComponent/list";
+import DropDownListComponent from "ui/components/form/drop-down-list/component";
 import IsEqualHelper from "helpers/IsEqualHelper";
 
 
-moduleForComponent( "drop-down-list", "components/form/DropDownComponent/list", {
+moduleForComponent( "drop-down-list", "ui/components/form/drop-down-list", {
 	unit: true,
 	needs: [ "helper:is-equal" ],
 	resolver: buildResolver({
