@@ -9,15 +9,15 @@ class NwjsPlugin {
 			flavor: "sdk",
 			platforms: platforms.getPlatforms( [] )
 		});
-		this.built = false;
+		this.launched = false;
 	}
 
 	apply( compiler ) {
-		compiler.plugin( "done", () => {
-			if ( !this.built ) {
+		compiler.hooks.done.tap( "NwjsPlugin", () => {
+			if ( !this.launched ) {
 				this.run();
 			}
-			this.built = true;
+			this.launched = true;
 		});
 	}
 

@@ -2,7 +2,7 @@ export { default as main } from "../config/main.json";
 export { default as dirs } from "../config/dirs.json";
 export { default as log } from "../config/log.json";
 export { default as locales } from "../config/locales.json";
-export { default as files } from "!files-from-json-loader!../config/files.json";
+export { default as files } from "files-from-json-loader?file=../config/files.json!files-from-json";
 export { default as vars } from "../config/vars.json";
 export { default as update } from "../config/update.json";
 export { default as themes } from "../config/themes.json";

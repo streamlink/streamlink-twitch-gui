@@ -1,8 +1,8 @@
 const webpack = require( "webpack" );
-const BabiliPlugin = require( "babili-webpack-plugin" );
 const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 const CopyWebpackPlugin = require( "copy-webpack-plugin" );
-const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
+const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
+const OptimizeCssAssetsPlugin = require( "optimize-css-assets-webpack-plugin" );
 const LessPluginCleanCSS = require( "less-plugin-clean-css" );
 const NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
 const emberFeatures = require( "../../../src/config/ember-features.json" );
@@ -37,15 +37,6 @@ const resolveLoaderModuleDirectories = [
 	"web_loaders",
 	...resolveModuleDirectories
 ];
-
-
-// exclude modules/files from the js bundle
-const cssExtractTextPlugin = new ExtractTextPlugin({
-	filename: "[name].css"
-});
-const lessExtractTextPlugin = new ExtractTextPlugin({
-	filename: "main.css"
-});
 
 
 const commonLoaders = [
@@ -124,67 +115,65 @@ const commonLoaders = [
 	{
 		test: /\.css$/,
 		exclude: pStyles,
-		loader: cssExtractTextPlugin.extract({
-			use: [
-				{
-					loader: "css-loader",
-					options: {
-						sourceMap: true,
-						minify: false,
-						url: false,
-						import: false
-					}
+		use: [
+			MiniCssExtractPlugin.loader,
+			{
+				loader: "css-loader",
+				options: {
+					sourceMap: true,
+					minify: false,
+					url: false,
+					import: false
 				}
-			]
-		})
+			}
+		]
 	},
 	// Application stylesheets (extract fonts and images)
 	{
 		test: /app\.less$/,
 		include: pStyles,
-		loader: lessExtractTextPlugin.extract({
-			use: [
-				{
-					loader: "css-loader",
-					options: {
-						sourceMap: true,
-						minify: true,
-						url: true,
-						import: false
-					}
-				},
-				{
-					loader: "less-loader",
-					options: {
-						sourceMap: true,
-						strictMath: true,
-						strictUnits: true,
-						relativeUrls: true,
-						noIeCompat: true,
-						lessPlugins: [
-							new LessPluginCleanCSS({
-								advanced: true
-							})
-						]
-					}
-				},
-				{
-					loader: "flag-icons-loader",
-					options: {
-						config: r( pConfig, "langs.json" ),
-						ignore: [ "en" ]
-					}
-				},
-				{
-					loader: "themes-loader",
-					options: {
-						config: r( pConfig, "themes.json" ),
-						themesVarName: "THEMES",
-						themesPath: "themes/"
-					}
+		use: [
+			MiniCssExtractPlugin.loader,
+			{
+				loader: "css-loader",
+				options: {
+					sourceMap: true,
+					minify: true,
+					url: true,
+					import: false
 				}
-			]
-		})
+			},
+			{
+				loader: "less-loader",
+				options: {
+					sourceMap: true,
+					strictMath: true,
+					strictUnits: true,
+					relativeUrls: true,
+					noIeCompat: true,
+					lessPlugins: [
+						new LessPluginCleanCSS({
+							advanced: true
+						})
+					]
+				}
+			},
+			{
+				loader: "flag-icons-loader",
+				options: {
+					config: r( pConfig, "langs.json" ),
+					ignore: [ "en" ]
+				}
+			},
+			{
+				loader: "themes-loader",
+				options: {
+					config: r( pConfig, "themes.json" ),
+					themesVarName: "THEMES",
+					themesPath: "themes/"
+				}
+			}
+		]
 	},
 	// Assets
 	{
@@ -243,11 +232,36 @@ const loaderBabelTest = {
 };
 
 
+// for some reason, this can't be set in grunt-webpack's options object, so add references manually
+const optimization = {
+	runtimeChunk: true,
+	splitChunks: {
+		chunks: "all",
+		cacheGroups: {
+			vendors: {
+				name: "vendor",
+				test: pDependencies
+			},
+			template: {
+				name: "template",
+				test: /\.hbs$/
+			},
+			test: {
+				name: "test",
+				test: pTest
+			}
+		}
+	}
+};
+
+
 module.exports = {
 	// common options
 	// the grunt-webpack merges the "options" objects with each task config (nested)
 	options: {
 		cache: true,
+
+		mode: "development",
 
 		stats: {
 			modules: false,
@@ -336,37 +350,12 @@ module.exports = {
 		},
 
 		plugins: [
-			// don't split the main module into multiple chunks
-			new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
-
-			// Split "main" entry point into webpack manifest, dependency bundles and app code.
-			// Select all modules to be bundled and narrow the selection down in each new chunk.
-			// This looks weird and can probably be improved, but it works...
-			new webpack.optimize.CommonsChunkPlugin({
-				name: "dependencies",
-				minChunks({ resource }) {
-					return resource
-						&& (
-							   resource.startsWith( pDependencies )
-							|| resource.startsWith( pTemplates )
-						);
-				}
-			}),
-			new webpack.optimize.CommonsChunkPlugin({
-				name: "templates",
-				minChunks({ resource }) {
-					return resource
-						&& resource.startsWith( pTemplates );
-				}
-			}),
-			new webpack.optimize.CommonsChunkPlugin({
-				name: "manifest",
-				minChunks: Infinity
-			}),
+			new webpack.optimize.SplitChunksPlugin(),
 
 			// don't include css stylesheets in the js bundle
-			cssExtractTextPlugin,
-			lessExtractTextPlugin,
+			new MiniCssExtractPlugin({
+				filename: "[name].css"
+			}),
 
 			// ignore all @ember imports (see Ember import polyfill)
 			new webpack.IgnorePlugin( /@ember/ ),
@@ -395,6 +384,8 @@ module.exports = {
 		output: {
 			path: "<%= dir.tmp_dev %>"
 		},
+
+		optimization,
 
 		resolve: {
 			modules: [
@@ -445,9 +436,13 @@ module.exports = {
 
 
 	prod: {
+		mode: "production",
+
 		output: {
 			path: "<%= dir.tmp_prod %>"
 		},
+
+		optimization,
 
 		resolve: {
 			modules: [
@@ -498,7 +493,13 @@ module.exports = {
 			),
 
 			// minifiy and optimize production code
-			new BabiliPlugin(),
+			new OptimizeCssAssetsPlugin({
+				cssProcessorOptions: {
+					preset: [ "default", {
+						svgo: false
+					}]
+				}
+			}),
 
 			// add license banner
 			new webpack.BannerPlugin({
@@ -518,6 +519,8 @@ module.exports = {
 		output: {
 			path: "<%= dir.tmp_test %>"
 		},
+
+		optimization,
 
 		resolve: {
 			modules: [
@@ -564,6 +567,8 @@ module.exports = {
 		output: {
 			path: "<%= dir.tmp_test %>"
 		},
+
+		optimization,
 
 		entry: "main-dev",
 		devtool: "source-map",
