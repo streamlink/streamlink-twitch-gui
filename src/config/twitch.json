@@ -3,8 +3,7 @@
 	"chat-url": {
 		"default": "https://www.twitch.tv/popout/{channel}/chat",
 		"popout": "https://www.twitch.tv/popout/{channel}/chat",
-		"embed": "https://www.twitch.tv/embed/{channel}/chat",
-		"canonical": "https://www.twitch.tv/{channel}/chat"
+		"embed": "https://www.twitch.tv/embed/{channel}/chat"
 	},
 	"emotes-url": "https://twitchemotes.com/channel/{channel}",
 	"subscription": {

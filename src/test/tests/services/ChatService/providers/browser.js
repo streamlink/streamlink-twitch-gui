@@ -54,6 +54,26 @@ test( "Default attributes", async function( assert ) {
 });
 
 
+test( "User attributes: non-existent", async function( assert ) {
+
+	/** @type ChatProviderBrowser */
+	const provider = new this.subject();
+	await provider.setup({
+		attributes: [{ name: "url" }]
+	}, {
+		url: "non-existent"
+	});
+	await provider.launch({ name: "foo" });
+
+	assert.propEqual(
+		this.openExternalSpy.args,
+		[[ "https://www.twitch.tv/popout/foo/chat" ]],
+		"Uses the configured Twitch chat URL for profile default"
+	);
+
+});
+
+
 test( "User attributes: default", async function( assert ) {
 
 	/** @type ChatProviderBrowser */
@@ -109,26 +129,6 @@ test( "User attributes: embed", async function( assert ) {
 		this.openExternalSpy.args,
 		[[ "https://www.twitch.tv/embed/foo/chat" ]],
 		"Uses the configured Twitch chat URL for profile embed"
-	);
-
-});
-
-
-test( "User attributes: canonical", async function( assert ) {
-
-	/** @type ChatProviderBrowser */
-	const provider = new this.subject();
-	await provider.setup({
-		attributes: [{ name: "url" }]
-	}, {
-		url: "canonical"
-	});
-	await provider.launch({ name: "foo" });
-
-	assert.propEqual(
-		this.openExternalSpy.args,
-		[[ "https://www.twitch.tv/foo/chat" ]],
-		"Uses the configured Twitch chat URL for profile canonical"
 	);
 
 });

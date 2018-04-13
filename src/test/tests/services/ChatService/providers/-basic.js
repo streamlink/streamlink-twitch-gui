@@ -140,7 +140,7 @@ test( "User attributes and no session data", async function( assert ) {
 	}, {
 		exec: "foo",
 		args: "\"--url={url}\" --channel \"{channel}\" --user \"{user}\" --token \"{token}\"",
-		url: "canonical"
+		url: "popout"
 	});
 	await provider.launch({ name: "baz" });
 
@@ -149,7 +149,7 @@ test( "User attributes and no session data", async function( assert ) {
 		[
 			"foo",
 			[
-				"--url=https://www.twitch.tv/baz/chat",
+				"--url=https://www.twitch.tv/popout/baz/chat",
 				"--channel",
 				"baz",
 				"--user",

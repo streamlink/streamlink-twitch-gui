@@ -261,9 +261,6 @@ chat:
             embed:
                 label: Embedded chat URL
                 description: Meant for embedding the chat into other websites.
-            canonical:
-                label: Canonical chat URL
-                description: Old canonical URL which has been used previously.
         providers:
             browser:
                 label: Default browser
