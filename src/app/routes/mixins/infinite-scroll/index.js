@@ -114,26 +114,25 @@ export default Mixin.create({
 	},
 
 	/**
+	 * @param {Model[]} records
 	 * @param {(String|Function)} key
 	 * @param {*} [value]
-	 * @returns {function(Model[])}
+	 * @returns {Model[]}
 	 */
-	filterFetchedContent( key, value ) {
-		return records => {
-			const filtered = key instanceof Function
-				? records.filter( key )
-				: records.filterBy( key, value );
+	filterFetchedContent( records, key, value ) {
+		const filtered = key instanceof Function
+			? records.filter( key )
+			: records.filterBy( key, value );
 
-			const recordsLength = get( records, "length" );
-			const filteredLength = get( filtered, "length" );
-			const diff = recordsLength - filteredLength;
+		const recordsLength = get( records, "length" );
+		const filteredLength = get( filtered, "length" );
+		const diff = recordsLength - filteredLength;
 
-			// add to filteredOffset, so that next requests don't include the filtered records
-			// reduce limit, so that the hasFetchedAll calculation keeps working
-			this.incrementProperty( "_filter", diff );
+		// add to filteredOffset, so that next requests don't include the filtered records
+		// reduce limit, so that the hasFetchedAll calculation keeps working
+		this.incrementProperty( "_filter", diff );
 
-			return filtered;
-		};
+		return filtered;
 	},
 
 

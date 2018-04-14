@@ -325,8 +325,10 @@ test( "Offset, limit and filter", async assert => {
 	model.clear();
 	set( route, "_filter", 0 );
 
-	const filterA = route.filterFetchedContent( item => item.value % 2 === 1 );
-	model.pushObjects( filterA([ { value: 1 }, { value: 2 }, { value: 3 } ]) );
+	model.pushObjects( route.filterFetchedContent(
+		[ { value: 1 }, { value: 2 }, { value: 3 } ],
+		item => item.value % 2 === 1
+	) );
 	assert.strictEqual(
 		get( route, "_filter" ),
 		1,
@@ -344,8 +346,11 @@ test( "Offset, limit and filter", async assert => {
 		"offset is the sum of added and filtered items"
 	);
 
-	const filterB = route.filterFetchedContent( "value", 3 );
-	model.pushObjects( filterB([ { value: 1 }, { value: 2 }, { value: 3 } ]) );
+	model.pushObjects( route.filterFetchedContent(
+		[ { value: 1 }, { value: 2 }, { value: 3 } ],
+		"value",
+		3
+	) );
 	// 1 old + 2 new
 	assert.strictEqual(
 		get( route, "_filter" ),
