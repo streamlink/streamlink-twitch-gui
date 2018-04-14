@@ -259,6 +259,8 @@ module.exports = {
 	// common options
 	// the grunt-webpack merges the "options" objects with each task config (nested)
 	options: {
+		target: "node-webkit",
+
 		cache: true,
 
 		mode: "development",
@@ -283,6 +285,8 @@ module.exports = {
 		output: {
 			// name each file by their entry module name
 			filename: "[name].js",
+			// fix default value for node-webkit targets ("global"), which breaks NW.js
+			globalObject: "window",
 			// don't use the webpack:// protocol in sourcemaps
 			devtoolModuleFilenameTemplate: "/[resource-path]"
 		},
@@ -394,7 +398,6 @@ module.exports = {
 			]
 		},
 
-		target: "node-webkit",
 		devtool: "source-map",
 
 		module: {
@@ -450,8 +453,6 @@ module.exports = {
 				...resolveModuleDirectories
 			]
 		},
-
-		target: "node-webkit",
 
 		module: {
 			rules: [
@@ -532,8 +533,6 @@ module.exports = {
 			}
 		},
 
-		target: "node-webkit",
-
 		module: {
 			rules: [
 				loaderBabelTest,
@@ -582,8 +581,6 @@ module.exports = {
 				"tests": r( pTest, "tests" )
 			}
 		},
-
-		target: "node-webkit",
 
 		module: {
 			rules: [
