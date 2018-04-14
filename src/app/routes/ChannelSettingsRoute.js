@@ -11,17 +11,10 @@ export default Route.extend({
 	async model() {
 		const store = get( this, "store" );
 		const parentModel = this.modelFor( "channel" );
-		const name = get( parentModel, "channel.name" );
+		const id = get( parentModel, "channel.name" );
 
-		let model;
-		try {
-			model = await store.findRecord( "channelSettings", name );
-		} catch ( e ) {
-			// get the record automatically created by store.findRecord()
-			model = store.recordForId( "channelSettings", name );
-			// transition from `root.empty` to `root.loaded.created.uncommitted`
-			model._internalModel.loadedData();
-		}
+		const model = await store.findRecord( "channelSettings", id )
+			.catch( () => store.recordForId( "channelSettings", id ) );
 
 		// use a buffer proxy object as model
 		const content = model.toJSON();
