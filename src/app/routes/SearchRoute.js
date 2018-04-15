@@ -1,7 +1,7 @@
 import { get, setProperties } from "@ember/object";
 import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import RefreshMixin from "./mixins/refresh";
+import RefreshRouteMixin from "./mixins/refresh";
 import { toArray, mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
@@ -32,7 +32,7 @@ const fetchMethods = {
 };
 
 
-export default Route.extend( InfiniteScrollMixin, RefreshMixin, {
+export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 	queryParams: {
 		filter: {
 			refreshModel: true,

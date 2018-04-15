@@ -1,15 +1,14 @@
 import { get } from "@ember/object";
 import Route from "@ember/routing/route";
-import RefreshMixin from "./mixins/refresh";
+import RefreshRouteMixin from "./mixins/refresh";
 import preload from "utils/preload";
 
 
-export default Route.extend( RefreshMixin, {
-	model( params ) {
+export default Route.extend( RefreshRouteMixin, {
+	async model({ team }) {
 		const store = get( this, "store" );
-		const { team } = params;
+		const record = await store.findRecord( "twitchTeam", team, { reload: true } );
 
-		return store.findRecord( "twitchTeam", team, { reload: true } )
-			.then( record => preload( record, "logo" ) );
+		return await preload( record, "logo" );
 	}
 });

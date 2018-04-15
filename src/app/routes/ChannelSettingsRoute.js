@@ -8,26 +8,19 @@ import ObjectBuffer from "utils/ember/ObjectBuffer";
 export default Route.extend({
 	modal: service(),
 
-	model() {
+	async model() {
 		const store = get( this, "store" );
-		const model = this.modelFor( "channel" );
-		const name = get( model, "channel.name" );
+		const parentModel = this.modelFor( "channel" );
+		const id = get( parentModel, "channel.name" );
 
-		return store.findRecord( "channelSettings", name )
-			.catch(function() {
-				// get the record automatically created by store.findRecord()
-				const record = store.recordForId( "channelSettings", name );
-				// transition from `root.empty` to `root.loaded.created.uncommitted`
-				record._internalModel.loadedData();
-				return record;
-			})
-			// use a buffer proxy object as model
-			.then( model => ({
-				model,
-				buffer: ObjectBuffer.create({
-					content: model.toJSON()
-				})
-			}) );
+		const model = await store.findRecord( "channelSettings", id )
+			.catch( () => store.recordForId( "channelSettings", id ) );
+
+		// use a buffer proxy object as model
+		const content = model.toJSON();
+		const buffer = ObjectBuffer.create({ content });
+
+		return { model, buffer };
 	},
 
 	refresh() {

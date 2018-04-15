@@ -1,13 +1,13 @@
 import { get } from "@ember/object";
 import Route from "@ember/routing/route";
-import RefreshMixin from "./mixins/refresh";
+import RefreshRouteMixin from "./mixins/refresh";
 import preload from "utils/preload";
 
 
 const reNum = /^\d+$/;
 
 
-export default Route.extend( RefreshMixin, {
+export default Route.extend( RefreshRouteMixin, {
 	async model( params ) {
 		const store = get( this, "store" );
 		let { channel: id } = params;

@@ -18,41 +18,37 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 	all: null,
 
 
-	model() {
+	async model() {
 		const store = get( this, "store" );
+		const channelSettings = await store.findAll( "channelSettings" );
 
-		return store.findAll( "channelSettings" )
-			.then( channelSettings => {
-				// we need all channelSettings records, so we can search for specific ones
-				// that have not been added to the controller's model yet
-				this.all = channelSettings.map(function( record ) {
-					// return both channelSettings and twitchChannel records
-					return EmberObject.extend({
-						settings: record,
-						// load the twitchChannel record on demand (PromiseObject)
-						// will be triggered by the first property read-access
-						channel: computed(function() {
-							const name = get( record, "id" );
+		// we need all channelSettings records, so we can search for specific ones
+		// that have not been added to the controller's model yet
+		this.all = channelSettings.map( record =>
+			// return both channelSettings and twitchChannel records
+			EmberObject.extend({
+				settings: record,
+				// load the twitchChannel record on demand (PromiseObject)
+				// will be triggered by the first property read-access
+				channel: computed(function() {
+					const id = get( record, "id" );
+					const promise = store.findRecord( "twitchUser", id )
+						.then( user => get( user, "channel" ) )
+						.then( record => preload( record, "logo" ) );
 
-							return PromiseObject.create({
-								promise: store.findRecord( "twitchUser", name )
-									.then( user => get( user, "channel" ) )
-									.then( channel => preload( channel, "logo" ) )
-							});
-						})
-					}).create();
-				});
-			})
-			.then( () => this.fetchContent() );
+					return PromiseObject.create({ promise });
+				})
+			}).create()
+		);
+
+		return await this.fetchContent();
 	},
 
-	fetchContent() {
+	async fetchContent() {
 		const limit = get( this, "limit" );
 		const offset = get( this, "offset" );
 
-		return Promise.resolve(
-			this.all.slice( offset, offset + limit )
-		);
+		return this.all.slice( offset, offset + limit );
 	},
 
 	setupController( controller ) {

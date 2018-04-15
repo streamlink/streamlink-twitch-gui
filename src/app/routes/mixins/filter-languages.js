@@ -21,5 +21,11 @@ export default Mixin.create({
 				? filtered.join( "," )
 				: undefined;
 		}
-	)
+	),
+
+	model( params ) {
+		const broadcaster_language = get( this, "broadcaster_language" );
+
+		return this._super( Object.assign( params || {}, { broadcaster_language } ) );
+	}
 });

@@ -1,70 +1,67 @@
 import { get, set } from "@ember/object";
 import UserIndexRoute from "./UserIndexRoute";
-import InfiniteScrollMixin from "./mixins/infinite-scroll";
-import { toArray } from "utils/ember/recordArrayMethods";
+import InfiniteScrollOffsetMixin from "./mixins/infinite-scroll/offset";
 import preload from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, {
+export default UserIndexRoute.extend( InfiniteScrollOffsetMixin, {
 	itemSelector: ".subscription-item-component",
+	modelName: "twitchTicket",
 
-	model() {
+	async model() {
 		const store = get( this, "store" );
 
-		return store.query( "twitchTicket", {
-			offset : get( this, "offset" ),
-			limit  : get( this, "limit" ),
-			unended: true
-		})
-			.then( records => toArray( records ) )
-			// filter out unwanted ticket types (eg. twitch turbo)
-			.then( this.filterFetchedContent( "product.ticket_type", "chansub" ) )
-			// load all channel references asynchronously (get the EmberData.PromiseObject)
-			// and filter out rejected promises (banned channels, etc.)
-			.then( tickets =>
-				Promise.all( tickets
-					.map( ticket =>
-						get( ticket, "product.partner_login" )
-							.then( user => get( user, "channel" ) )
-							.catch( () => false )
-					)
-				)
-					.then( () => tickets )
-					.then( this.filterFetchedContent( "product.channel.isFulfilled", true ) )
-			)
-			// also load the TwitchSubscription record (needed for subscription date)
-			// unfortunately, this can't be loaded in parallel (channel needs to be loaded first)
-			.then( tickets =>
-				Promise.all( tickets
-					.map( ticket => get( ticket, "product.partner_login.channel" ) )
-					.map( channel =>
-						store.findExistingRecord( "twitchSubscription", get( channel, "id" ) )
-							.catch( () => false )
-							.then( record => set( channel, "subscribed", record ) )
-					)
-				)
-					.then( () => tickets )
-			)
-			.then( tickets => {
-				let emoticons = tickets
-					.map( ticket => get( ticket, "product.emoticons" ) )
-					.reduce( ( res, item ) => {
-						res.push( ...item.toArray() );
-						return res;
-					}, [] );
+		// request the subscriptions by offset
+		let tickets = await this._super({ unended: true });
 
-				const preloadChannelPromise = preload( tickets, [
-					"product.channel.logo",
-					"product.channel.profile_banner",
-					"product.channel.video_banner"
-				]);
-				const preloadEmoticonsPromise = preload( emoticons, "url" );
+		// filter out unwanted ticket types (eg. twitch turbo)
+		tickets = this.filterFetchedContent( tickets, "product.ticket_type", "chansub" );
 
-				return Promise.all([
-					preloadChannelPromise,
-					preloadEmoticonsPromise
-				])
-					.then( () => tickets );
-			});
+		// load all channel references asynchronously (get the EmberData.PromiseObject)
+		await Promise.all( tickets
+			.map( async ticket => {
+				try {
+					await get( ticket, "product.partner_login" );
+					await get( ticket, "product.channel" );
+				} catch ( e ) {}
+			})
+		);
+		// and filter out rejected promises (banned channels, etc.)
+		tickets = this.filterFetchedContent( tickets, "product.channel.isFulfilled", true );
+
+		// also load the TwitchSubscription record (needed for subscription date)
+		// unfortunately, this can't be loaded in parallel (channel needs to be loaded first)
+		await Promise.all( tickets
+			.map( async ticket => {
+				let subscription;
+				try {
+					const id = get( ticket, "product.channel.id" );
+					subscription = store.findExistingRecord( "twitchSubscription", id );
+				} catch ( e ) {
+					subscription = false;
+				}
+				set( ticket, "product.channel.subscribed", subscription );
+			})
+		);
+
+		// get a list of emoticons of all fetched subscriptions
+		const emoticons = tickets
+			.map( ticket => get( ticket, "product.emoticons" ) )
+			.reduce( ( res, item ) => {
+				res.push( ...item.toArray() );
+				return res;
+			}, [] );
+
+		// load subscription assets and emoticons in parallel
+		await Promise.all([
+			preload( tickets, [
+				"product.channel.logo",
+				"product.channel.profile_banner",
+				"product.channel.video_banner"
+			]),
+			preload( emoticons, "url" )
+		]);
+
+		return tickets;
 	}
 });

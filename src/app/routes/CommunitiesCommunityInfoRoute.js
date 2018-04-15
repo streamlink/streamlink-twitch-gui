@@ -4,11 +4,11 @@ import Route from "@ember/routing/route";
 
 
 export default Route.extend({
-	model() {
+	async model() {
 		const model = this.modelFor( "communitiesCommunity" );
+		await get( model, "owner" );
 
-		return get( model, "owner" )
-			.then( () => model );
+		return model;
 	},
 
 	refresh() {

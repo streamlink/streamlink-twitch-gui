@@ -1,30 +1,26 @@
 import { get, set } from "@ember/object";
 import Route from "@ember/routing/route";
-import RefreshMixin from "./mixins/refresh";
-import { toArray } from "utils/ember/recordArrayMethods";
+import RefreshRouteMixin from "./mixins/refresh";
 import preload from "utils/preload";
 
 
-export default Route.extend( RefreshMixin, {
-	model() {
-		let store = get( this, "store" );
+export default Route.extend( RefreshRouteMixin, {
+	async model() {
+		const store = get( this, "store" );
 
-		return Promise.all([
+		const [ summary, featured ] = await Promise.all([
 			store.queryRecord( "twitchStreamSummary", {} ),
 			store.query( "twitchStreamFeatured", {
 				offset: 0,
 				limit : 5
 			})
-				.then( records => toArray( records ) )
-		])
-			.then( ([ summary, featured ]) =>
-				Promise.resolve( featured )
-					.then( records => preload( records, [
-						"image",
-						"stream.preview.largeLatest"
-					]) )
-					.then( () => ({ summary, featured }) )
-			);
+		]);
+		await preload( featured, [
+			"image",
+			"stream.preview.largeLatest"
+		]);
+
+		return { summary, featured };
 	},
 
 	resetController( controller, isExiting ) {
