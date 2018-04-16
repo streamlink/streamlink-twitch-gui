@@ -3,7 +3,8 @@ import "jquery";
 import "ember-source/dist/ember.debug";
 import Application from "@ember/application";
 import "./logger";
-import modules from "./app-modules";
+import Router from "./router";
+import app from "ember-app";
 
 
 function initialize( require, fn ) {
@@ -20,8 +21,9 @@ initialize(
 );
 
 
-export default Application.create( modules, {
+export default Application.create( app, {
 	rootElement: "body",
+	Router,
 
 	toString() { return "App"; }
 });

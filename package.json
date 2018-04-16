@@ -66,7 +66,7 @@
 		"sinon": "4.1.2",
 		"svgo-loader": "1.2.1",
 		"util.promisify": "1.0.0",
-		"webpack": "4.5.0",
+		"webpack": "4.6.0",
 		"yaml-loader": "0.5.0"
 	},
 	"scripts": {

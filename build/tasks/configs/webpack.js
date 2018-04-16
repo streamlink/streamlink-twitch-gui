@@ -38,6 +38,13 @@ const resolveLoaderModuleDirectories = [
 
 
 const commonLoaders = [
+	{
+		test: /ember-app\.js$/,
+		loader: "ember-app-loader",
+		options: {
+			context: pApp
+		}
+	},
 	// Ember import polyfill
 	// translates `import foo from "@ember/bar"` into `Ember.baz`
 	// requires those imports to be ignored
