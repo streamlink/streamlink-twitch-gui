@@ -4,6 +4,7 @@ import EmbeddedHtmlLinksComponent from "ui/components/link/embedded-html-links/c
 import { openBrowser } from "nwjs/Shell";
 import { set as setClipboard } from "nwjs/Clipboard";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default EmbeddedHtmlLinksComponent.extend({

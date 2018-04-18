@@ -6,6 +6,7 @@ import { inject as service } from "@ember/service";
 import TwitchInteractButtonMixin from "ui/components/-mixins/twitch-interact-button";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {

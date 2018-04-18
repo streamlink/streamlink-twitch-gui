@@ -1,6 +1,7 @@
 import Component from "@ember/component";
 import { get, computed } from "@ember/object";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 /**

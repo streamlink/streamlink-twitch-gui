@@ -3,6 +3,7 @@ import { inject as service } from "@ember/service";
 import { streaming as streamingConfig } from "config";
 import ExternalLinkComponent from "../external-link/component";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 const { "docs-url": docsUrl } = streamingConfig;

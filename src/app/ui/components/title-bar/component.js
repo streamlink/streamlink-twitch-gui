@@ -4,6 +4,7 @@ import { inject as service } from "@ember/service";
 import { main as mainConfig } from "config";
 import { isDebug } from "nwjs/debug";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 const { "display-name": displayName } = mainConfig;

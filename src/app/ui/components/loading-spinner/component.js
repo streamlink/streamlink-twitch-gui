@@ -1,6 +1,7 @@
 import Component from "@ember/component";
 import { on } from "@ember/object/evented";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default Component.extend({

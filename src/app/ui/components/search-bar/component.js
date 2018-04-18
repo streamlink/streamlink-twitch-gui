@@ -9,7 +9,8 @@ import { vars as varsConfig } from "config";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 import Search from "data/models/search/model";
 import getStreamFromUrl from "utils/getStreamFromUrl";
-import layout from "./template.hbs" ;
+import layout from "./template.hbs";
+import "./styles.less";
 
 
 const { "search-history-size": searchHistorySize } = varsConfig;

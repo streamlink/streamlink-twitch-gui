@@ -3,6 +3,7 @@ import { get, set, computed } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default Component.extend({

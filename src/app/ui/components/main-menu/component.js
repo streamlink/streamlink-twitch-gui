@@ -4,6 +4,7 @@ import { inject as service } from "@ember/service";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 import { isDarwin } from "utils/node/platform";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 const { isArray } = Array;

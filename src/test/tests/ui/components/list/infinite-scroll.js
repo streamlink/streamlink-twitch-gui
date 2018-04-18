@@ -193,6 +193,12 @@ test( "Scroll listener", function( assert ) {
 	});
 
 	this.render( hbs`
+		<style>
+			/* Make sure component stylesheets don't interfere with the test */
+			.infinite-scroll-component {
+				margin: 0 !important;
+			}
+		</style>
 		<div class="parent" style="height: ${viewHeight}px; overflow-y: auto">
 			<div class="child" style="height: ${elemHeight}px">
 				{{infinite-scroll action=action threshold=threshold}}

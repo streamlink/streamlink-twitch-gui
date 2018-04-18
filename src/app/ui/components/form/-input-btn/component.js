@@ -2,6 +2,7 @@ import Component from "@ember/component";
 import { get } from "@ember/object";
 import IsFocusedMixin from "ui/components/-mixins/is-focused";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default Component.extend( IsFocusedMixin, {

@@ -2,6 +2,7 @@ import { get, set } from "@ember/object";
 import Selectable from "../-selectable/component";
 import IsFocusedMixin from "ui/components/-mixins/is-focused";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default Selectable.extend( IsFocusedMixin, {

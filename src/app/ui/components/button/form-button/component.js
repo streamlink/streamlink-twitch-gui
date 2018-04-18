@@ -3,6 +3,7 @@ import { get, set, computed } from "@ember/object";
 import { equal } from "@ember/object/computed";
 import { scheduleOnce } from "@ember/runloop";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export const STATE_VOID    = 0;

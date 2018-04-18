@@ -179,6 +179,16 @@ test( "Expand upwards", function( assert ) {
 			.drop-down-list-component > li {
 				height: 100px;
 			}
+			/* Make sure component stylesheets don't interfere with the test */
+			.drop-down-component,
+			.drop-down-selection-component,
+			.drop-down-list-component,
+			.drop-down-list-component > li {
+				margin: 0 !important;
+				padding: 0 !important;
+				border: 0 !important;
+				max-height: unset !important;
+			}
 		</style>
 		<main>
 			<div class="spacing"></div>

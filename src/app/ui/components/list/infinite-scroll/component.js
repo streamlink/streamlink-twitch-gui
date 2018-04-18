@@ -4,6 +4,7 @@ import { or } from "@ember/object/computed";
 import { scheduleOnce } from "@ember/runloop";
 import $ from "jquery";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default Component.extend({

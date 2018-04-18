@@ -8,6 +8,7 @@ import {
 	ATTR_STREAMS_INFO_TITLE
 } from "data/models/settings/streams/fragment";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default ListItemComponent.extend({

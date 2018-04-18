@@ -2,6 +2,7 @@ import Component from "@ember/component";
 import { get, set } from "@ember/object";
 import { next, scheduleOnce } from "@ember/runloop";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default Component.extend({

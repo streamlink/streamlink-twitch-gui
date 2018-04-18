@@ -2,6 +2,7 @@ import Component from "@ember/component";
 import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 const { min, max } = Math;

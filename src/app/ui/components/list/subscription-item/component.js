@@ -5,6 +5,7 @@ import { openBrowser } from "nwjs/Shell";
 import ListItemComponent from "../-list-item/component";
 import Moment from "moment";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 const {

@@ -4,6 +4,7 @@ import { get, setProperties } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { addObserver } from "@ember/object/observers";
 import layout from "./template.hbs";
+import "./styles.less";
 
 
 export default Component.extend({
