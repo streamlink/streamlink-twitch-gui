@@ -134,7 +134,7 @@ const commonLoaders = [
 	},
 	// Application stylesheets (extract fonts and images)
 	{
-		test: /app\.less$/,
+		test: /\.less$/,
 		include: pRoot,
 		use: [
 			MiniCssExtractPlugin.loader,
@@ -163,21 +163,23 @@ const commonLoaders = [
 				}
 			},
 			{
-				loader: "flag-icons-loader",
-				options: {
-					config: r( pConfig, "langs.json" ),
-					ignore: [ "en" ]
-				}
-			},
-			{
 				loader: "themes-loader",
 				options: {
 					config: r( pConfig, "themes.json" ),
 					themesVarName: "THEMES",
-					themesPath: "themes/"
+					themesPath: "~ui/styles/themes/"
 				}
 			}
 		]
+	},
+	{
+		enforce: "pre",
+		test: /\/flag-icon\/styles\.less$/,
+		loader: "flag-icons-loader",
+		options: {
+			config: r( pConfig, "langs.json" ),
+			ignore: [ "en" ]
+		}
 	},
 	// Assets
 	{

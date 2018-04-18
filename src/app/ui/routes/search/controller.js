@@ -1,6 +1,7 @@
 import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
 import { alias, empty, equal } from "@ember/object/computed";
+import "./styles.less";
 
 
 export default Controller.extend({

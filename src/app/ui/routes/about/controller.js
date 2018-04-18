@@ -2,6 +2,7 @@ import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
 import { main as config, locales as localesConfig } from "config";
 import metadata from "metadata";
+import "./styles.less";
 
 
 export default Controller.extend({
