@@ -56,7 +56,6 @@
 		"json-loader": "0.5.7",
 		"less": "2.7.2",
 		"less-loader": "4.1.0",
-		"less-plugin-clean-css": "1.5.1",
 		"load-grunt-config": "0.19.2",
 		"loader-utils": "1.1.0",
 		"nw-builder": "3.5.1",

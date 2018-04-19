@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
 const OptimizeCssAssetsPlugin = require( "optimize-css-assets-webpack-plugin" );
-const LessPluginCleanCSS = require( "less-plugin-clean-css" );
 const NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
 const emberFeatures = require( "../../../src/config/ember-features.json" );
 const locales = require( "../../../src/config/locales.json" );
@@ -142,7 +141,7 @@ const commonLoaders = [
 				loader: "css-loader",
 				options: {
 					sourceMap: true,
-					minify: true,
+					minify: false,
 					url: true,
 					import: false
 				}
@@ -154,12 +153,7 @@ const commonLoaders = [
 					strictMath: true,
 					strictUnits: true,
 					relativeUrls: true,
-					noIeCompat: true,
-					lessPlugins: [
-						new LessPluginCleanCSS({
-							advanced: true
-						})
-					]
+					noIeCompat: true
 				}
 			},
 			{
