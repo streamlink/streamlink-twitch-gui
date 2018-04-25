@@ -164,7 +164,7 @@ user:
         empty:
             text: The returned list of followed streams is empty.
             featured: Watch currently featured streams
-            strams: Watch top streams
+            streams: Watch top streams
     hostedStreams:
         header: Hosted Streams
         empty:
