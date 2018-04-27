@@ -1,8 +1,4 @@
-import "shim";
-import "jquery";
-import "ember-source/dist/ember.debug";
 import Application from "@ember/application";
-import "./logger";
 import Router from "./router";
 import app from "ember-app";
 
