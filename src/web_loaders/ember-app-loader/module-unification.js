@@ -14,6 +14,12 @@ const TYPES = {
 	helper: {
 		suffix: "Helper"
 	},
+	initializer: {
+		suffix: "Initializer"
+	},
+	"instance-initializer": {
+		suffix: "Instanceinitializer"
+	},
 	model: {
 		suffix: ""
 	},
@@ -41,6 +47,14 @@ const COLLECTIONS = {
 		types: [ "component", "helper"/*, "template"*/ ],
 		noNestedNames: true
 	},
+	initializers: {
+		defaultType: "initializer",
+		types: [ "initializer" ]
+	},
+	"instance-initializers": {
+		defaultType: "instance-initializer",
+		types: [ "instance-initializer" ]
+	},
 	models: {
 		defaultType: "model",
 		types: [ "model", "adapter", "serializer", "fragment" ]
@@ -61,6 +75,7 @@ const COLLECTIONS = {
 
 const GROUPS = {
 	data: [ "models", "transforms" ],
+	init: [ "initializers", "instance-initializers" ],
 	ui: [ "components", "routes" ]
 };
 

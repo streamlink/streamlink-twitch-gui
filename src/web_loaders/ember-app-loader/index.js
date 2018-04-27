@@ -9,6 +9,7 @@
  * - Doesn't support private collections (ignores those collections and modules)
  * - Has a customized list of supported types and collection types
  * - Infinitely nests module names (with exceptions in the components collection)
+ * - Imports and runs initializers and instance initializers
  */
 
 const IMPORTS = require( "./imports" );

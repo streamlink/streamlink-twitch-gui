@@ -65,7 +65,8 @@ module.exports = function parse( files, getModuleExports ) {
 			if ( !collection.types.includes( end ) ) {
 				return false;
 			}
-			const { suffix, noEsModule } = TYPES[ end ];
+			const type = end;
+			const { suffix, noEsModule } = TYPES[ type ];
 			const name = getModuleName(
 				segments.slice( 0, -1 ),
 				collection.noNestedNames,
@@ -82,7 +83,14 @@ module.exports = function parse( files, getModuleExports ) {
 					throw new Error( `Invalid export of module: ${path}` );
 				}
 
-				return { name, path, exportName: noEsModule ? null : "default" };
+				return {
+					name,
+					type,
+					path,
+					exportName: noEsModule
+						? null
+						: "default"
+				};
 			});
 
 		} else {
@@ -92,14 +100,22 @@ module.exports = function parse( files, getModuleExports ) {
 				// does it have a default export or is it not an es-module?
 				if ( !exportNames.length || exportNames.includes( "default" ) ) {
 					// then it is the collection's default type
-					const { suffix } = TYPES[ collection.defaultType ];
+					const type = collection.defaultType;
+					const { suffix } = TYPES[ type ];
 					const name = getModuleName(
 						segments,
 						collection.noNestedNames,
 						suffix
 					);
 
-					return { name, path, exportName: !exportNames.length ? null : "default" };
+					return {
+						name,
+						type,
+						path,
+						exportName: !exportNames.length
+							? null
+							: "default"
+					};
 				}
 
 				const types = collection.types.filter( type => exportNames.includes( type ) );
@@ -114,7 +130,12 @@ module.exports = function parse( files, getModuleExports ) {
 					TYPES[ type ].suffix
 				);
 
-				return { name, path, exportName: type};
+				return {
+					name,
+					type,
+					path,
+					exportName: type
+				};
 			});
 		}
 	});
