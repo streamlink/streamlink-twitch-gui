@@ -35,6 +35,10 @@ export default {
 			// restore window position first (while being hidden)
 			await windowInitializer( application );
 
+			// add "initialized" class name to the document element just before showing the window
+			const document = application.lookup( "service:-document" );
+			document.documentElement.classList.add( "initialized" );
+
 			try {
 				await parameterActions( application, argv );
 			} catch ( error ) {

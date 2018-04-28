@@ -4,7 +4,11 @@
 
 .main-menu-component {
 	width: @menu-width;
-	animation: animFadeInLeft .333s ease-out;
+	animation: animFadeInLeft @anim-content-duration ease-out paused;
+
+	html.initialized & {
+		animation-play-state: running;
+	}
 
 	h3 {
 		margin: 0 0 .2em @app-padding;

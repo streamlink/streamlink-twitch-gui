@@ -15,7 +15,11 @@
 	height: @titlebar-height;
 	padding: @padding-top ( @app-padding - 4px ) @padding-top @menu-width;
 	-webkit-app-region: drag;
-	animation: animFadeInTop .333s ease-out;
+	animation: animFadeInTop @anim-content-duration ease-out paused;
+
+	html.initialized & {
+		animation-play-state: running;
+	}
 
 	> h1 {
 		position: absolute;
