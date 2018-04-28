@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 
 import parse from "root/web_loaders/ember-app-loader/parse";
+import checkDuplicates from "root/web_loaders/ember-app-loader/check-duplicates";
 import build from "root/web_loaders/ember-app-loader/build";
 
 
@@ -713,7 +714,7 @@ test( "Module name nesting", async function( assert ) {
 test( "Duplicates", function( assert ) {
 
 	assert.throws(
-		() => build([
+		() => checkDuplicates([
 			{
 				name: "FooComponent",
 				type: "component",
@@ -748,9 +749,9 @@ Application.instanceInitializer(require("init/instance-initializers/bar.js"));
 
 
 export default {
+	FooComponent: require("ui/components/foo.js")["default"],
 	BarHelper: require("ui/components/bar.js")["helper"],
-	BazTemplate: require("ui/routes/baz/template.hbs"),
-	FooComponent: require("ui/components/foo.js")["default"]
+	BazTemplate: require("ui/routes/baz/template.hbs")
 };`
 		.trim();
 
