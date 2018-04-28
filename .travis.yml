@@ -8,7 +8,7 @@ git:
   depth: 9999999
 
 node_js:
-  - 6
+  - lts/*
 
 addons:
   apt:
