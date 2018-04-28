@@ -1,0 +1,103 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+@import (reference) "~font-awesome/less/variables.less";
+
+
+.input-btn-component {
+	> i {
+		@line: ( @input-btn-size * @line-height-base );
+		@size: ( @input-btn-size + 2 * @input-btn-outline-size );
+
+		display: inline-block;
+		position: relative;
+		width: @input-btn-size;
+		height: @input-btn-size;
+		margin: 0 @input-btn-outline-size ( ( @line - @size ) / 2 );
+		visibility: hidden;
+		vertical-align: middle;
+		cursor: inherit;
+
+		// ::before => box
+		// ::after  => icon
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			visibility: visible;
+			overflow: hidden;
+			font: @input-btn-size/1 FontAwesome;
+			color: inherit;
+			text-align: center;
+			cursor: inherit;
+		}
+
+		&::before {
+			outline: @input-btn-outline-size solid;
+			transition: outline-color .1s ease-out;
+		}
+
+		&::after {
+			opacity: 0;
+			transition: opacity .1s ease-out;
+		}
+	}
+
+	&.checked:not(.disabled) > i::after {
+		opacity: 1;
+	}
+
+	// label text
+	> span {
+		display: inline-block;
+		margin: 0 0 0 .5em;
+		font-weight: normal;
+	}
+
+	& {
+		cursor: pointer;
+	}
+	&.disabled {
+		cursor: default;
+	}
+
+	.theme({
+		> i {
+			.theme-mix-color( @theme-input-btn-color, @theme-input-btn-background );
+
+			&::before {
+				outline-color: @theme-input-btn-border-color;
+				background: @theme-input-btn-background;
+			}
+		}
+
+		&:not(.disabled):focus,
+		&:not(.disabled):hover {
+			> i::before {
+				outline-color: @theme-input-btn-border-color-hover;
+			}
+			&:active > i::before {
+				outline-color: @theme-input-btn-border-color-active;
+			}
+		}
+
+		&.disabled {
+			> i::before,
+			&.checked > i::after,
+			> span {
+				opacity: @theme-input-btn-opacity-disabled;
+			}
+		}
+	});
+}
+
+// check-box and radio-buttons-item have different icons
+.check-box-component > i::after {
+	content: @fa-var-check;
+}
+.radio-buttons-item-component > i::after {
+	content: @fa-var-times;
+}

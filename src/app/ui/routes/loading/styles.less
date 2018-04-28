@@ -1,0 +1,22 @@
+@import (reference) "~ui/styles/config";
+
+
+main.content.content-loading {
+	@size: 6rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	overflow: hidden;
+
+	> .loading-spinner-component {
+		position: relative;
+		width: @size;
+		height: @size;
+
+		> circle {
+			stroke: @color-primary;
+		}
+	}
+}

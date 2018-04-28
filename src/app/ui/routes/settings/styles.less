@@ -1,0 +1,150 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/mixins";
+@import (reference) "~ui/styles/themes";
+@import (reference) "~ui/routes/application/styles/animations";
+
+
+.content-settings {
+	@margin: 2rem;
+
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
+
+	> * {
+		flex-shrink: 0;
+	}
+
+	> fieldset {
+		margin-bottom: @margin;
+	}
+
+	> fieldset:last-of-type {
+		flex-grow: 1;
+	}
+
+	&.animated > fieldset {
+		-webkit-animation: animFadeInRight @anim-content-duration ease-out;
+	}
+
+	.channel-search {
+		margin-bottom: 1.5rem;
+	}
+
+	.radio-buttons-component.group > label {
+		max-width: 10em;
+		font-size: .9em;
+		line-height: 1.8;
+	}
+
+	.drop-down-component {
+		min-width: 15em;
+	}
+
+	.drop-down-component.dropdown-language {
+		min-width: 17.5em;
+
+		.icon-lang-auto {
+			width: @flag-icon-width;
+			text-align: center;
+		}
+	}
+
+	.filter-lang {
+		display: flex;
+		flex-flow: row wrap;
+
+		> li {
+			flex: 15em 0 0;
+
+			.lang-code {
+				display: inline-block;
+				margin-left: .25em;
+				font-size: .8em;
+			}
+		}
+	}
+
+	.quality-preset {
+		display: flex;
+		align-items: stretch;
+		margin-bottom: .5rem;
+
+		> input {
+			&:first-of-type {
+				flex: 1 1;
+			}
+
+			&:last-of-type {
+				border-right: 0;
+			}
+
+			&:nth-of-type(2) {
+				width: 10rem;
+				border-left: 0;
+			}
+
+			&:disabled {
+				opacity: 1;
+			}
+
+			&:first-of-type:disabled::-webkit-input-placeholder {
+				.theme({
+					@color: fadeout( @theme-input-color-placeholder, percentage( @theme-input-opacity-disabled ), relative );
+					.theme-mix( color, @color, @theme-input-background );
+				});
+			}
+		}
+
+		> button {
+			width: 6rem;
+			border: 0;
+			cursor: default;
+		}
+	}
+
+	.player-preset-dropdown {
+		max-width: 20rem;
+	}
+
+	.streaming-providers-dropdown {
+		max-width: 15rem;
+		margin-bottom: 1rem !important;
+	}
+
+	.streaming-providers-list {
+		.clearfix;
+
+		> dt {
+			font-size: small;
+			margin-bottom: .125rem;
+		}
+
+		> dd:not(:last-of-type) {
+			margin-bottom: 1rem;
+		}
+	}
+
+	.form-button-component.btn-test-notification {
+		margin-bottom: 1em;
+	}
+
+	.input-btn-with-description {
+		> label {
+			margin-bottom: 0;
+		}
+
+		> .description {
+			margin: 0 0 .5rem calc(@input-btn-size + 2 * @input-btn-outline-size + .5rem) !important;
+			font-size: small;
+
+			.theme({
+				.theme-mix-color( @theme-text-color-hint, @theme-background );
+			});
+
+			> .fa {
+				cursor: help;
+			}
+		}
+	}
+}

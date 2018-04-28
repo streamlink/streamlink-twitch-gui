@@ -1,0 +1,42 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/mixins";
+
+
+.channel-item-component {
+	@logo: 6.5em;
+
+	min-height: 91px;
+	display: flex;
+	margin-bottom: 1.5em;
+	.dynamic-elems-per-row( 2, @content-width, 4%, @additional-width );
+
+	> .logo {
+		display: block;
+		position: relative;
+		width: @logo;
+		height: @logo;
+		flex-shrink: 0;
+		cursor: pointer;
+	}
+
+	> .text {
+		width: calc( 100% - @logo );
+		margin: 0 .5em;
+
+		> * {
+			.text-overflow();
+		}
+
+		> header {
+			margin: 0 0 .5em;
+		}
+
+		> .game {
+			margin: 0 0 .25em;
+		}
+
+		> .status {
+			height: unit( @line-height-base, em );
+		}
+	}
+}

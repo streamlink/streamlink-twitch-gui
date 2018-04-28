@@ -1,0 +1,69 @@
+@import (reference) "~ui/styles/mixins";
+
+
+main.content.content-team {
+	@header-size: 6.5rem;
+	@header-margin: 1rem;
+	@submenu-size: 4rem;
+
+	.flexbox( column );
+	overflow-x: hidden;
+	animation: none;
+
+	> :not(.content-loading) {
+		animation: animFadeInRight .333s ease-out;
+	}
+
+	> .content-loading,
+	> section:last-of-type {
+		flex-grow: 1;
+	}
+
+	// move submenu loading spinner up to match teh height of the one of the channel route
+	> .content-loading {
+		margin-top: ( -1 * ( @header-size + @header-margin + @submenu-size ) );
+	}
+
+	> header {
+		.flexbox();
+		margin-bottom: @header-margin;
+
+		> .logo {
+			display: block;
+			position: relative;
+			flex: 0 0 @header-size;
+			height: @header-size;
+			margin-right: .5rem;
+		}
+
+		> .info {
+			flex-grow: 1;
+
+			> .title {
+				margin: 0 0 .25em;
+			}
+		}
+	}
+
+	> .content-team-info {
+		max-width: 35rem;
+		margin-bottom: 4rem;
+
+		> h3 {
+			margin-top: 0;
+		}
+
+		> .user-content {
+			overflow-x: hidden;
+			text-overflow: ellipsis;
+
+			h1, h2, h3 {
+				font-size: 1.25rem;
+			}
+
+			b, strong {
+				font-weight: inherit;
+			}
+		}
+	}
+}

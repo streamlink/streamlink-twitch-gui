@@ -1,0 +1,80 @@
+
+@import "~bootstrap/less/variables";
+
+
+// main font family name
+@font-name: "Roboto";
+
+
+// twitch.tv colors
+@color-twitch-purple      : rgb( 100,  65, 165 );
+@color-twitch-purple-light: rgb( 185, 163, 227 );
+@color-twitch-grey-dark   : rgb(  38,  38,  38 );
+@color-twitch-grey-light  : rgb( 241, 241, 241 );
+
+// @color-twitch-purple: h = 261, s = 61%, v = 65%
+// keep the same saturation and value
+@color-red   : mix( @color-twitch-purple, spin( @color-twitch-purple, -261 ), 20% );
+@color-yellow: mix( @color-twitch-purple, spin( @color-twitch-purple, -203 ), 20% );
+@color-green : mix( @color-twitch-purple, spin( @color-twitch-purple, -166 ), 20% );
+@color-teal  : mix( @color-twitch-purple, spin( @color-twitch-purple,  -81 ), 20% );
+@color-blue  : mix( @color-twitch-purple, spin( @color-twitch-purple,  -51 ), 20% );
+@color-purple: mix( @color-twitch-purple, spin( @color-twitch-purple,    0 ), 20% );
+
+// brand colors
+@color-primary: @color-purple;
+@color-success: @color-green;
+@color-danger : @color-red;
+@color-neutral: @color-blue;
+@color-info   : @color-yellow;
+@color-hint   : @color-teal;
+
+
+@app-width: 960px;
+@app-height: 540px;
+@app-padding: 30px;
+
+@menu-width: 200px;
+
+@scrollbar-size: 16px;
+@scrollbar-thumb-size: 4px;
+
+@content-width: ( @app-width - @menu-width - 2 * @scrollbar-size );
+@additional-width: ( @app-width - @content-width );
+
+@titlebar-size: 28px;
+@titlebar-height: ( 2 * @app-padding + @titlebar-size );
+@titlebar-buttons-width: 400px;
+@titlebar-btn-fontsize: 20px;
+
+@searchbar-btn-size: @titlebar-size;
+@searchbar-padding: .333rem;
+@searchbar-dropdown-max-items: 5;
+@searchbar-dropdown-font-size: .95rem;
+@searchbar-dropdown-line-height: 1.3;
+
+@button-size: 2.25em;
+@button-border-width: 1px;
+@button-padding: .4em;
+@button-icon-size: 1.25em;
+@button-icon-spacing: .25em;
+@button-icon-opacity: .5;
+@button-icon-opacity-hover: .75;
+@button-icon-opacity-active: 1;
+
+@input-btn-size: @font-size-base;
+@input-btn-outline-size: 1px;
+
+@anim-sidebar-speed: .2s;
+@anim-sidebar-easing: ease-out;
+@anim-content-duration: .333s;
+@anim-list-item-duration: .333s;
+@anim-list-item-offset-min: ( @anim-content-duration * 1 / 2 );
+@anim-list-item-offset-max: 1s;
+
+
+// We're using strict parsing settings, so we need to use a custom implementation.
+// This is based on ~flag-icon-css/less/flag-icon-base.less
+// It also saves some space, since we're ignoring the 1x1 format flags...
+@flag-icon-svg-path: "~flag-icon-css/flags/4x3";
+@flag-icon-width: unit( ( 4 / 3 ), em );

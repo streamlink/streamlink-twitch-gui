@@ -1,0 +1,127 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/mixins";
+@import (reference) "~ui/styles/themes";
+
+
+.content-user-auth,
+.content-user-index {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: center;
+
+	.bigicon {
+		font-size: 10rem;
+		line-height: 1;
+		text-align: center;
+		z-index: -1;
+
+		& ~ p {
+			margin-bottom: .75em;
+
+			&:not(:last-of-type) {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.token-form {
+		@button-width: 2.25em;
+
+		width: 24em;
+
+		input {
+			text-align: center;
+			text-indent: @button-width;
+			cursor: text;
+		}
+
+		button {
+			min-width: @button-width !important;
+			line-height: 2 !important;
+		}
+	}
+
+	footer {
+		display: flex;
+		flex-flow: column nowrap;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
+		height: 6.5em;
+		margin-top: 3em;
+	}
+
+	p.hint {
+		margin-top: .5em;
+		font-size: .9em;
+		text-align: center;
+
+		.theme({
+			.theme-mix-color( @theme-text-color-hint, @theme-background );
+		});
+	}
+}
+
+.content-user {
+	.btn-signin, .btn-signout {
+		width: 8em;
+		z-index: 2 !important;
+	}
+
+	.btn-token {
+		width: 14em;
+		.btn-color( @color-hint );
+	}
+}
+
+.content-user-auth {
+	footer {
+		> .fail {
+			margin-top: 1em;
+			text-align: center;
+		}
+	}
+
+	i.fa-spin {
+		font-size: 1em;
+		line-height: 1;
+	}
+}
+
+.content-user-followed-streams,
+.content-user-followed-games {
+	.list-empty {
+		margin-top: .5em;
+
+		a {
+			text-decoration: none;
+		}
+	}
+}
+
+.content-user-followed-channels {
+	> header {
+		margin-bottom: 1em;
+	}
+}
+
+.content-user-followed-games {
+	.flexbox( column );
+	overflow-x: hidden;
+	animation: none;
+
+	> :not(.content-loading) {
+		animation: animFadeInRight .333s ease-out;
+	}
+
+	> .content-loading,
+	> section:last-of-type {
+		flex-grow: 1;
+	}
+
+	// move submenu loading spinner up to match the height of the one of the channel route
+	> .content-loading {
+		margin-top: -7rem;
+	}
+}

@@ -1,0 +1,29 @@
+@import (reference) "~ui/styles/config";
+
+
+.settings-submit-component {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 2rem;
+	overflow: hidden;
+
+	> .form-button-component {
+		margin: 0 .5rem;
+		transition: opacity @anim-content-duration ease-out, transform @anim-content-duration ease-out;
+	}
+
+	&.faded > .form-button-component {
+		opacity: 0;
+		transform: translateY( 3rem );
+		-webkit-animation: settings-submit-component-buttons @anim-content-duration 1 ease-out alternate both;
+	}
+}
+
+@-webkit-keyframes settings-submit-component-buttons {
+	0%, 99.9999% {
+		visibility: visible;
+	}
+	100% {
+		visibility: hidden;
+	}
+}

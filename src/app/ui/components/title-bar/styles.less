@@ -1,0 +1,228 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+
+
+.title-bar-component {
+	@btn-width: ( @titlebar-size + 6px );
+	@divider-width: 1px;
+	@divider-spacing: 7px;
+	@anim-length: .333s;
+
+	@padding-top: @app-padding;
+
+	display: flex;
+	width: 100%;
+	height: @titlebar-height;
+	padding: @padding-top ( @app-padding - 4px ) @padding-top @menu-width;
+	-webkit-app-region: drag;
+	animation: animFadeInTop .333s ease-out;
+
+	> h1 {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		height: 0;
+		margin: 0;
+		overflow: visible;
+		font: normal normal 15px/26px @font-name;
+		text-align: center;
+
+		.theme({
+			.theme-mix-color( @theme-titlebar-title-color, @theme-background );
+		});
+	}
+
+	> .logo {
+		position: absolute;
+		left: ( @app-padding - 3px );
+		top: ( @app-padding - 9px );
+		width: 140px;
+		height: 46px;
+		background: url("~img/Twitch_Logo_Purple.png") 0 0 no-repeat;
+		background-size: 100%;
+		cursor: pointer;
+		-webkit-app-region: no-drag;
+	}
+
+	> .buttons {
+		position: relative;
+		display: flex;
+		flex-shrink: 0;
+		height: @titlebar-size;
+		margin: 0;
+
+		// divider
+		&:not(.buttons-main) {
+			padding-left: @divider-spacing;
+			margin-left: @divider-spacing;
+
+			&::before {
+				content: "";
+				display: block;
+				position: absolute;
+				left: 0;
+				width: @divider-width;
+				top: ( -1 * @padding-top );
+				bottom: -4px;
+
+				.theme({
+					background: @theme-titlebar-divider-color;
+				});
+			}
+		}
+
+		&.buttons-window {
+			transition: margin-left @anim-length ease-in, padding-left @anim-length ease-in;
+
+			&::before {
+				opacity: 1;
+				// set width to 0 after the opacity transition has finished
+				transition: width 0.001s, opacity @anim-length ease-in;
+			}
+
+			> div {
+				display: flex;
+				width: ( 3 * @btn-width );
+				overflow: hidden;
+				transition: width @anim-length ease-in;
+			}
+		}
+
+		&.buttons-hidden {
+			margin-left: 0;
+			padding-left: 0;
+
+			&::before,
+			> div {
+				width: 0;
+			}
+
+			&::before {
+				opacity: 0;
+				transition-delay: @anim-length, 0s;
+			}
+
+			button {
+				-webkit-app-region: drag;
+			}
+		}
+
+		button {
+			flex-shrink: 0;
+			width: @btn-width;
+			padding: 0;
+			font-size: @titlebar-btn-fontsize;
+			line-height: ( @titlebar-size - 2px );
+			transition: width @anim-length ease-in;
+			-webkit-app-region: no-drag;
+
+			.theme({
+				.theme-color-and-background( @theme-titlebar-button-color, @theme-titlebar-button-background );
+
+				&:hover {
+					.theme-color-and-background( @theme-titlebar-button-color-hover, @theme-titlebar-button-background-hover );
+				}
+				&:hover:active {
+					.theme-color-and-background( @theme-titlebar-button-color-active, @theme-titlebar-button-background-active );
+				}
+			});
+
+			&::before {
+				display: block;
+				width: @btn-width;
+				text-align: center;
+			}
+
+			&.btn-hidden {
+				width: 0;
+			}
+
+			// adjust wrong line heights for these button icons... blaming font awesome <3
+			// TODO: revisit this when implementing FA5
+			&.btn-max,
+			&.btn-min {
+				line-height: ( @titlebar-size + 2px );
+			}
+
+			&.btn-close {
+				.theme({
+					&:hover {
+						.theme-color-and-background( @theme-titlebar-closingbutton-color-hover, @theme-titlebar-closingbutton-background-hover );
+					}
+					&:hover:active {
+						.theme-color-and-background( @theme-titlebar-closingbutton-color-active, @theme-titlebar-closingbutton-background-active );
+					}
+				});
+			}
+
+			&.btn-no-user {
+				&, &:active {
+					color: transparent !important;
+				}
+
+				.theme({
+					-webkit-text-stroke: .05em @theme-titlebar-button-color;
+
+					&:hover:active {
+						-webkit-text-stroke-color: @theme-titlebar-button-color-active;
+						background: @theme-titlebar-button-background-active;
+					}
+				});
+			}
+
+			&.btn-user-pending {
+				.theme({
+					.theme-mix-color( fadeOut( @theme-titlebar-button-color, 50% ), @theme-background );
+				});
+			}
+
+			&.btn-indicator {
+				position: relative;
+				overflow: hidden;
+
+				> .indicator {
+					display: block;
+					position: absolute;
+					right: .2em;
+					bottom: .2em;
+					padding: 0 .2em;
+					border-radius: .2em;
+					font: bold .55em/1.2 @font-name;
+					opacity: 1;
+					z-index: 1;
+					// show indicator with a slight delay
+					transition: opacity .001s @anim-length, z-index .001s @anim-length;
+
+					.theme({
+						.theme-color-and-background( @theme-titlebar-buttonindicator-color, @theme-titlebar-buttonindicator-background );
+
+						&.indicator-error {
+							background: @theme-titlebar-buttonindicator-background-error;
+						}
+
+						&.indicator-disabled {
+							background: @theme-titlebar-buttonindicator-background-disabled;
+						}
+					});
+
+					&.fa {
+						font-family: "FontAwesome", sans-serif;
+						font-weight: normal;
+					}
+
+					&.fa-bullhorn {
+						transform: scaleX(.75);
+					}
+				}
+
+				// hide indicator instantly
+				&.btn-hidden > .indicator {
+					opacity: 0;
+					z-index: -1;
+					transition-delay: 0s;
+				}
+			}
+		}
+	}
+}

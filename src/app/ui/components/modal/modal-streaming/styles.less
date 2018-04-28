@@ -1,0 +1,98 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+
+
+.modal-streaming-component {
+	@content-height: 3.1rem;
+
+	> div {
+		min-height: 18.5rem;
+	}
+
+	header,
+	.modal-body.launching,
+	.modal-body.error {
+		margin-bottom: .5rem;
+	}
+
+	.modal-body.loading {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		// vertically center loading spinner
+		margin-top: .75rem;
+
+		> .loading-spinner-component {
+			width: 4rem;
+			height: 4rem;
+		}
+	}
+
+	&.fadeOut .loading-spinner-component {
+		display: none;
+	}
+
+	.game {
+		margin-bottom: .5em;
+	}
+
+	header,
+	.game {
+		> a {
+			text-decoration: none !important;
+
+			&:not(:hover) {
+				color: inherit;
+			}
+		}
+	}
+
+	.stats-row-component {
+		width: 50%;
+		margin-bottom: .5em;
+	}
+
+	.content {
+		min-height: @content-height;
+		max-height: 6rem;
+		overflow: auto;
+	}
+
+	.modal-log {
+		height: @content-height;
+		overflow: auto;
+		font-size: .8em;
+
+		&.launching,
+		&.error {
+			height: ( @content-height + 1rem );
+		}
+
+		> ul {
+			margin: 0;
+
+			> .error {
+				color: @color-danger;
+			}
+		}
+	}
+
+	footer {
+		justify-content: space-between;
+	}
+
+	.btn-log.btn-danger {
+		@keyframes errorLogButtonAnimation {
+			from { background: lighten( @color-danger, 10% ); }
+			to { background: darken( @color-danger, 10% ); }
+		}
+
+		animation: errorLogButtonAnimation .333s ease-out infinite alternate;
+
+		> i {
+			.theme({
+				.theme-mix-color( @theme-button-color, @color-danger );
+			});
+		}
+	}
+}

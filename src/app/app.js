@@ -1,28 +1,11 @@
-import "shim";
-import "jquery";
-import "ember-source/dist/ember.debug";
 import Application from "@ember/application";
-import "./logger";
-import "./store";
-import modules from "./app-modules";
+import Router from "./router";
+import app from "ember-app";
 
 
-function initialize( require, fn ) {
-	require.keys().forEach( ( ...args ) => fn( require( ...args ) ) );
-}
-
-initialize(
-	require.context( "./initializers/", true, /^.\x2F([^\x2F]+(\x2Findex)?)\.js$/ ),
-	({ default: module }) => Application.initializer( module )
-);
-initialize(
-	require.context( "./instance-initializers/", true, /^.\x2F([^\x2F]+(\x2Findex)?)\.js$/ ),
-	({ default: module }) => Application.instanceInitializer( module )
-);
-
-
-export default Application.create( modules, {
+export default Application.create( app, {
 	rootElement: "body",
+	Router,
 
 	toString() { return "App"; }
 });

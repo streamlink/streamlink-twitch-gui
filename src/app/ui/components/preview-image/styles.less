@@ -1,0 +1,32 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~font-awesome/less/variables.less";
+
+
+.previewImage,
+.previewError {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.previewError {
+	background: @color-twitch-purple;
+
+	&::before {
+		content: @fa-var-twitch;
+		display: block;
+		position: absolute;
+		top: 50%;
+		left: 0;
+		right: 0;
+		font: 4.5em/.1 FontAwesome;
+		color: #fff !important;
+		text-align: center;
+		opacity: 1;
+		transition: opacity .333s ease-out;
+	}
+}

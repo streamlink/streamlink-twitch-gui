@@ -1,0 +1,45 @@
+@import (reference) "~ui/styles/mixins";
+
+
+.content-watching {
+	.list-empty {
+		margin-top: .5em;
+
+		a {
+			text-decoration: none;
+		}
+	}
+
+	.stream-presentation-component {
+		margin-bottom: 2rem;
+
+		> .image {
+			> .preview {
+				.block-aspect-ratio( ( 16 / 9 ) );
+			}
+		}
+
+		> .info {
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: space-between;
+
+			> :not(.status) {
+				flex-grow: 0;
+			}
+
+			> .status {
+				flex: 1 1;
+				margin: .5em 0;
+				overflow: auto;
+				word-break: break-word;
+			}
+
+			> .buttons {
+				display: flex;
+				justify-content: space-between;
+				width: 20rem;
+			}
+		}
+	}
+}

@@ -1,0 +1,59 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+@import (reference) "~font-awesome/less/variables.less";
+@import (reference) "~ui/components/button/form-button/styles";
+
+
+.radio-buttons-component {
+	&.group {
+		display: flex;
+
+		> .radio-buttons-item-component {
+			display: block;
+			flex: 1;
+			margin: 0 0 0 .5em;
+			transition: opacity .2s ease-out;
+
+			&:first-of-type {
+				margin-left: 0;
+			}
+
+			> i {
+				&:extend(.form-button-component.icon-and-text > i);
+
+				&::before {
+					display: none;
+				}
+
+				&::after {
+					content: @fa-var-check;
+					transition: opacity .2s ease-out;
+				}
+			}
+
+			> span {
+				margin-left: 0;
+			}
+
+			&:not(.checked):hover {
+				> i::after {
+					opacity: .5;
+				}
+				&:active > i::after {
+					opacity: .75;
+				}
+			}
+
+			&.disabled {
+				opacity: .5;
+			}
+
+			// FIXME
+			.theme({
+				> i::after {
+					color: @theme-button-color;
+				}
+			});
+		}
+	}
+}

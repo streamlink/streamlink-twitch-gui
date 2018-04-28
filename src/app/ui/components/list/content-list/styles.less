@@ -1,0 +1,54 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/mixins";
+@import (reference) "~ui/routes/application/styles/animations";
+
+
+.content-list-component {
+	> ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		overflow: hidden;
+	}
+
+	&:not(.content-list-nofloat) {
+		> ul {
+			.clearfix();
+		}
+
+		> ul > li {
+			float: left;
+		}
+	}
+
+	> ul > li {
+		&:not(.newItem) {
+			@min: @anim-list-item-offset-min;
+			@max: @anim-list-item-offset-max;
+			@num: 24;
+			@inc: ( ( @max - @min ) / @num );
+
+			// let all list items be faded in and use an animation delay:
+			// we need to wait for the container animation to finish
+			animation: animFadeInBottom @anim-list-item-duration @min ease-out both;
+
+			// increase the animation delay for each element...
+			.loop( @i ) when ( @i <= @num ) {
+				@nth: ~"@{i}";
+				&:nth-of-type( @{nth} ) {
+					animation-delay: ( @min + @i * @inc );
+				}
+				.loop( ( @i + 1 ) );
+			}
+			// ...until the max number of elements is reached
+			// and use a static max delay time for all remaining elements
+			.loop( @i ) when ( @i > @num ) {
+				@nth: ~"n+@{i}";
+				&:nth-of-type( @{nth} ) {
+					animation-delay: @max;
+				}
+			}
+			.loop( 1 );
+		}
+	}
+}

@@ -1,0 +1,77 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+
+
+.modal-dialog-component {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 10000;
+	background: fade( #000, 50% );
+	opacity: 1;
+	animation: animFadeIn .333s ease-out 0s 1 normal;
+
+	> div {
+		display: flex;
+		flex-flow: column nowrap;
+		width: 45rem;
+		min-height: 16rem;
+		padding: 2rem;
+		opacity: 1;
+		animation: animFadeInTop .333s ease-out 0s 1 normal;
+
+		.theme({
+			.theme-color-and-background( @theme-modal-base-color, @theme-modal-base-background );
+		});
+	}
+
+	&.fadeOut {
+		&,
+		> div {
+			animation-direction: reverse;
+		}
+
+		> div * {
+			animation-play-state: paused !important;
+		}
+	}
+
+	.modal-body {
+		flex: 1 0;
+		position: static;
+		padding: 0;
+
+		i {
+			.theme({
+				.theme-mix-color( @theme-modal-body-icon-color, @theme-modal-base-background );
+			});
+		}
+	}
+
+	header {
+		font-size: 2em;
+		font-weight: lighter;
+		margin-bottom: 1rem;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+
+		.theme({
+			.theme-mix-color( @theme-modal-header-color, @theme-modal-base-background );
+		});
+	}
+
+	footer {
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: flex-start;
+		align-items: flex-end;
+		margin-top: 2rem;
+	}
+}

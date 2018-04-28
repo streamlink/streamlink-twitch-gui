@@ -1,0 +1,58 @@
+@import (reference) "~ui/styles/config";
+
+
+.flag-icon-component {
+	display: inline-block;
+	width: @flag-icon-width;
+	height: 1em;
+	line-height: 1;
+	-webkit-filter: saturate(.75) brightness(.85);
+	transition: -webkit-filter .2s ease-out;
+
+	&:not(.no-cursor) {
+		cursor: help;
+	}
+
+	&::before {
+		content: "\00a0";
+		display: inline-block;
+		width: 100%;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-position: 50%;
+		background-size: contain;
+	}
+
+	&:hover {
+		-webkit-filter: saturate(1) brightness(1);
+	}
+}
+
+.flag-icon(@country) {
+	.flag-@{country}::before {
+		background-image: ~"url(@{flag-icon-svg-path}/@{country}.svg)";
+	}
+}
+
+// special "en - us/gb" flag
+.flag-en {
+	&::before,
+	&::after {
+		width: 50%;
+		background-size: cover;
+	}
+
+	&::before {
+		background-position: 0 50%;
+		background-image: ~"url(@{flag-icon-svg-path}/us.svg)";
+	}
+
+	&::after {
+		content: "\00a0";
+		display: inline-block;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-position: 100% 50%;
+		background-image: ~"url(@{flag-icon-svg-path}/gb.svg)";
+	}
+}

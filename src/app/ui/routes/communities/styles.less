@@ -1,0 +1,71 @@
+@import (reference) "~ui/styles/mixins";
+
+
+main.content.content-communities,
+main.content.content-communities-community {
+	.flexbox( column );
+	overflow-x: hidden;
+	animation: none;
+
+	> :not(.content-loading) {
+		animation: animFadeInRight .333s ease-out;
+	}
+
+	> .content-loading,
+	> section:last-of-type {
+		flex-grow: 1;
+	}
+
+	// move submenu loading spinner up to match the height of the one of the channel route
+	> .content-loading {
+		margin-top: -7rem;
+	}
+}
+
+main.content.content-communities-community {
+	@logo-size: 15.125rem;
+
+	> header {
+		.flag-icon-component {
+			margin-right: .25em;
+		}
+	}
+
+	> .content-communities-community-info {
+		display: flex;
+		align-items: flex-start;
+
+		> .logo {
+			position: relative;
+			flex: 0 0 @logo-size;
+			margin: 0 2rem 2rem 0;
+			.block-aspect-ratio( ( 272 / 380 ) );
+		}
+
+		> .text {
+			max-width: 35rem;
+			margin-bottom: 4rem;
+
+			> h3 {
+				margin-bottom: .5em;
+
+				&:first-of-type {
+					margin-top: 0;
+				}
+			}
+
+			> .user-content {
+				overflow-x: hidden;
+				text-overflow: ellipsis;
+
+				h1, h2, h3 {
+					font-size: 1.25rem;
+				}
+
+				b, strong {
+					font-weight: inherit;
+				}
+			}
+		}
+	}
+}

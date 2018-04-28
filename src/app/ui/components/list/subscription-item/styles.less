@@ -1,0 +1,119 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+
+
+.subscription-item-component {
+	@size: 6.5rem;
+	@padding: 1.5rem;
+	@emoticon-size: 2rem;
+
+	display: flex;
+	flex-flow: column;
+	position: relative;
+	min-height: 264px;
+	margin-bottom: 2em;
+	background-position: center center;
+	background-size: cover;
+
+	.theme({
+		.theme-mix-color( @theme-subitem-color, @theme-subitem-background );
+	});
+
+	// no dynamic columns for this component
+	// this media query is required by InfiniteScrollRouteMixin, though
+	@media (min-width: 1px) {
+		width: 100%;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	> header {
+		display: flex;
+		flex-flow: row nowrap;
+		align-items: flex-start;
+		justify-content: space-between;
+		flex: 1 0;
+		margin: @padding;
+
+		> .logo {
+			display: block;
+			position: relative;
+			width: @size;
+			height: @size;
+			margin: 0;
+			cursor: pointer;
+		}
+
+		> .buttons {
+			display: flex;
+			flex-flow: row-reverse nowrap;
+			align-items: flex-start;
+			margin: 0;
+			padding: .5em;
+			opacity: 0;
+			transition: opacity .2s ease-out;
+
+			.theme({
+				background: @theme-subitem-background;
+			});
+
+			> button:not(:last-of-type) {
+				margin-left: .5em;
+			}
+		}
+	}
+
+	&:hover > header > .buttons {
+		opacity: 1;
+	}
+
+	> .info {
+		padding: @padding;
+
+		.theme({
+			background: @theme-subitem-background;
+		});
+
+		> h3 {
+			margin: 0;
+			font-size: 1.75em;
+
+			.theme({
+				&, & > a:not(:hover) {
+					.theme-mix-color( @theme-subitem-headline-color, @theme-subitem-background );
+				}
+			});
+		}
+
+		> .subscription {
+			margin: .5em 0;
+
+			> span {
+				display: inline-block;
+				margin-right: 2em;
+			}
+		}
+
+		> .emoticons {
+			display: flex;
+			justify-content: flex-start;
+			min-height: @emoticon-size;
+
+			> li {
+				margin-right: .5em;
+
+				> img {
+					width: auto;
+					height: @emoticon-size;
+				}
+
+				&.no-emoticons {
+					font-style: italic;
+					line-height: @emoticon-size;
+				}
+			}
+		}
+	}
+}

@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
 const OptimizeCssAssetsPlugin = require( "optimize-css-assets-webpack-plugin" );
-const LessPluginCleanCSS = require( "less-plugin-clean-css" );
 const NwjsPlugin = require( "../common/nwjs-webpack-plugin" );
 const emberFeatures = require( "../../../src/config/ember-features.json" );
 const locales = require( "../../../src/config/locales.json" );
@@ -18,9 +17,7 @@ const pApp = r( pRoot, "app" );
 const pConfig = r( pRoot, "config" );
 const pTest = r( pRoot, "test" );
 const pTestFixtures = r( pTest, "fixtures" );
-const pStyles = r( pRoot, "styles" );
 const pImages = r( pRoot, "img" );
-const pTemplates = r( pRoot, "templates" );
 const pDependencies = r( ".", "node_modules" );
 const pCacheBabel = r( tmpdir(), "babel-cache" );
 
@@ -40,6 +37,13 @@ const resolveLoaderModuleDirectories = [
 
 
 const commonLoaders = [
+	{
+		test: /ember-app\.js$/,
+		loader: "ember-app-loader",
+		options: {
+			context: pApp
+		}
+	},
 	// Ember import polyfill
 	// translates `import foo from "@ember/bar"` into `Ember.baz`
 	// requires those imports to be ignored
@@ -114,7 +118,6 @@ const commonLoaders = [
 	// Vendor stylesheets (don't parse anything)
 	{
 		test: /\.css$/,
-		exclude: pStyles,
 		use: [
 			MiniCssExtractPlugin.loader,
 			{
@@ -130,15 +133,15 @@ const commonLoaders = [
 	},
 	// Application stylesheets (extract fonts and images)
 	{
-		test: /app\.less$/,
-		include: pStyles,
+		test: /\.less$/,
+		include: pRoot,
 		use: [
 			MiniCssExtractPlugin.loader,
 			{
 				loader: "css-loader",
 				options: {
 					sourceMap: true,
-					minify: true,
+					minify: false,
 					url: true,
 					import: false
 				}
@@ -150,19 +153,7 @@ const commonLoaders = [
 					strictMath: true,
 					strictUnits: true,
 					relativeUrls: true,
-					noIeCompat: true,
-					lessPlugins: [
-						new LessPluginCleanCSS({
-							advanced: true
-						})
-					]
-				}
-			},
-			{
-				loader: "flag-icons-loader",
-				options: {
-					config: r( pConfig, "langs.json" ),
-					ignore: [ "en" ]
+					noIeCompat: true
 				}
 			},
 			{
@@ -170,10 +161,19 @@ const commonLoaders = [
 				options: {
 					config: r( pConfig, "themes.json" ),
 					themesVarName: "THEMES",
-					themesPath: "themes/"
+					themesPath: "~ui/styles/themes/"
 				}
 			}
 		]
+	},
+	{
+		enforce: "pre",
+		test: /\/flag-icon\/styles\.less$/,
+		loader: "flag-icons-loader",
+		options: {
+			config: r( pConfig, "langs.json" ),
+			ignore: [ "en" ]
+		}
 	},
 	// Assets
 	{
@@ -298,24 +298,17 @@ module.exports = {
 			alias: {
 				// folder aliases
 				"root"        : pRoot,
-				"styles"      : pStyles,
 				"img"         : pImages,
-				"templates"   : pTemplates,
 				"fixtures"    : pTestFixtures,
 
-				// app folders
+				// app aliases
 				"config"      : r( pApp, "config" ),
-				"nwjs"        : r( pApp, "nwjs" ),
+				"data"        : r( pApp, "data" ),
+				"init"        : r( pApp, "init" ),
 				"locales"     : r( pApp, "locales" ),
-				"initializers": r( pApp, "initializers" ),
-				"instance-initializers": r( pApp, "instance-initializers" ),
+				"nwjs"        : r( pApp, "nwjs" ),
 				"services"    : r( pApp, "services" ),
-				"helpers"     : r( pApp, "helpers" ),
-				"models"      : r( pApp, "models" ),
-				"controllers" : r( pApp, "controllers" ),
-				"routes"      : r( pApp, "routes" ),
-				"components"  : r( pApp, "components" ),
-				"store"       : r( pApp, "store" ),
+				"ui"          : r( pApp, "ui" ),
 				"utils"       : r( pApp, "utils" ),
 
 				// explicit lib/module paths

@@ -1,0 +1,49 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+
+
+.number-field-component {
+	display: inline-flex;
+	height: 2rem;
+
+	> input {
+		width: 5rem;
+		border-right: 0;
+
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			display: none;
+		}
+	}
+
+	> .spin-buttons {
+		display: flex;
+		flex-flow: column;
+
+		> .spin-button {
+			display: block;
+			width: 2rem;
+			padding: 0;
+			background: @color-twitch-purple;
+			font: 1em/1 FontAwesome;
+			text-align: center;
+			cursor: pointer;
+
+			> i.fa {
+				color: #fff;
+			}
+		}
+	}
+
+	> input:disabled,
+	> input:read-only {
+		+ .spin-buttons {
+			> .spin-button {
+				.theme({
+					opacity: @theme-input-opacity-disabled;
+				});
+			}
+		}
+	}
+}

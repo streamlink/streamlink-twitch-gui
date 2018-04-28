@@ -1,0 +1,44 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+
+
+.sub-menu-component {
+	@item-size: 2rem;
+	@border-size: .25rem;
+
+	display: flex;
+	height: @item-size;
+	margin: 0 0 2rem;
+	padding: 0;
+	list-style: none;
+
+	> li {
+		margin-left: .5rem;
+		height: @item-size;
+		padding: .2rem .5rem 0;
+		border-bottom: transparent @border-size solid;
+		font-size: .91rem;
+		line-height: @line-height-base;
+		font-weight: bold;
+		opacity: .5;
+		cursor: pointer;
+		transition: opacity .25s ease-out, border-bottom-color .25s ease-out;
+
+		.theme({
+			.theme-mix-color( @theme-text-color-alt, @theme-background );
+		});
+
+		&:first-of-type {
+			margin-left: 0;
+		}
+
+		&.active {
+			border-bottom-color: @color-twitch-purple;
+		}
+	}
+
+	&:hover > li,
+	> li.active {
+		opacity: 1;
+	}
+}

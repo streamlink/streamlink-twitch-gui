@@ -1,0 +1,100 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/mixins";
+@import (reference) "~ui/styles/themes";
+@import (reference) "~ui/routes/application/styles/animations";
+@import (reference) "~ui/routes/application/styles/form";
+
+
+.form-button-component {
+	display: block;
+	min-width: @button-size;
+	height: @button-size;
+	font-size: 1rem;
+	.btn;
+}
+
+.form-button-component.icon {
+	overflow: hidden;
+
+	> i {
+		width: 1em;
+		height: 1em;
+		font-size: @button-icon-size;
+		line-height: ( 1 / unit( @button-icon-size ) );
+		text-align: center;
+		vertical-align: middle;
+		transition: color .2s ease-out;
+	}
+
+	// FIXME
+	.theme({
+		> i {
+			color: @theme-button-icon-color;
+		}
+
+		&:hover > i {
+			color: @theme-button-icon-color-hover;
+		}
+
+		&:hover:active > i {
+			color: @theme-button-icon-color-active;
+		}
+
+		> svg > circle {
+			stroke: @theme-button-icon-color-active;
+		}
+	});
+
+	&.animated > i {
+		@duration: .5s;
+		@easing: ease-out;
+
+		&.anim-success {
+			animation: animIconSuccess @duration @easing;
+		}
+
+		&.anim-failure {
+			animation: animIconFailure @duration @easing;
+		}
+	}
+}
+
+.form-button-component.icon-and-text {
+	// fa-fw
+	@icon-width: ( 18em / 14 );
+	@padding: ( @icon-width + 2 * @button-icon-spacing + @button-padding );
+
+	.form-button-component.icon;
+
+	box-sizing: content-box;
+	min-width: 5em;
+	padding-left: @padding;
+	padding-right: @padding;
+
+	> i,
+	> svg {
+		display: inline-block;
+		width: @icon-width;
+		margin-left: ( -1 * ( @icon-width + @button-icon-spacing ) );
+		text-align: center;
+	}
+}
+
+.button-list-horizontal {
+	&,
+	&-wide {
+		display: flex;
+	}
+
+	& {
+		> *:not(:last-child) {
+			margin-right: .5rem;
+		}
+	}
+
+	&-wide {
+		> *:not(:last-child) {
+			margin-right: 1rem;
+		}
+	}
+}

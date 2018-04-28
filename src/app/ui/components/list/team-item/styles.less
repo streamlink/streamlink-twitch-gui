@@ -1,0 +1,31 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/mixins";
+
+
+.team-item-component {
+	@logo: 6.5rem;
+
+	min-height: 91px;
+	margin-bottom: 1.5rem;
+	.flexbox();
+	.dynamic-elems-per-row( 2, @content-width, 4%, @additional-width );
+
+	> .logo {
+		display: block;
+		position: relative;
+		width: @logo;
+		height: @logo;
+		cursor: pointer;
+	}
+
+	> .info {
+		flex-grow: 1;
+		width: 0;
+		margin: 0 .5rem;
+
+		> header {
+			margin: 0 0 .5rem;
+			.text-overflow();
+		}
+	}
+}

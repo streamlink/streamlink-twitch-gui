@@ -1,0 +1,58 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/mixins";
+@import (reference) "~ui/styles/themes";
+
+
+.settings-channel-item-component {
+	@size: 5rem;
+
+	min-height: 70px;
+	display: flex;
+	flex-flow: row nowrap;
+	margin-bottom: 1.5rem;
+	.dynamic-elems-per-row( 3, @content-width, 4%, @additional-width );
+
+	> .loading-spinner-component {
+		@factor: 2.5;
+
+		position: relative;
+		width: ( @size / @factor );
+		height: ( @size / @factor );
+		margin: ( @size / ( @factor * 2 ) ) auto;
+
+		.theme({
+			> circle {
+				stroke: @color-primary;
+			}
+		});
+	}
+
+	> .logo {
+		display: block;
+		position: relative;
+		width: @size;
+		height: @size;
+		margin-right: .5rem;
+		flex-shrink: 0;
+		cursor: pointer;
+	}
+
+	> .text {
+		display: flex;
+		flex-flow: column nowrap;
+		flex-grow: 1;
+		justify-content: space-between;
+
+		p {
+			margin: 0;
+		}
+
+		.erase {
+			font-size: .9em;
+		}
+
+		.form-button-component {
+			font-size: .8rem;
+		}
+	}
+}

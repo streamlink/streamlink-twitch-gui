@@ -1,0 +1,86 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/themes";
+
+
+.loading-spinner-component {
+	// no SVG2 / SVG-Strokes yet: can't set stroke-alignment: inner
+	// so just reduce radius by stroke width
+	@stroke: .075;
+	@duration: 1.5s;
+
+	// radius = 50% - strokeWidth
+	// radius attribute will be set by the component after inserting the element into the DOM
+	// it can't be set via CSS
+	@radius: ( .5 - @stroke );
+
+	@btn-stroke: .1;
+	@btn-radius: ( .5 - @btn-stroke );
+
+	width: 1em;
+	height: 1em;
+	// fixes rendering/flushing issue by forcing a complete redraw on each frame
+	outline: 1px solid transparent;
+	animation: anim-loading-spinner-rotate ( @duration * 3 ) linear infinite;
+
+	> circle {
+		fill: transparent;
+		stroke-linecap: round;
+		stroke-width: unit( ( @stroke * 100 ), % );
+		.anim-spinner();
+
+		// Fix a weird Chromium rendering bug (since NWjs >=0.22.0):
+		// The spinner animation causes its bounding box to change its size, depending on the
+		// current animation frame. Whenever the bounding box shrinks, Chromium doesn't clear the
+		// surrounding pixels, which causes the circle to leave animation artifacts.
+		// Fix this by setting the invalid css outline property here.
+		outline: 1px solid transparent;
+
+		.theme({
+			stroke: @theme-text-color-alt;
+		});
+	}
+
+
+	@keyframes anim-loading-spinner-rotate {
+		100% {
+			transform: rotate(720deg);
+		}
+	}
+
+	.anim-spinner( @suffix: ~"", @variable: ~"radius" ) {
+		@name: ~"anim-loading-spinner-dash@{suffix}";
+
+		animation: @name @duration ease-in-out infinite;
+
+		@keyframes @name {
+			@circumference:     ( 2.0 * pi() * @@variable );
+			@circumference_1_4: ( 0.25 * @circumference );
+			@circumference_3_4: ( 0.75 * @circumference );
+
+			0% {
+				stroke-dasharray: 0 @circumference;
+				stroke-dashoffset: @circumference_1_4;
+			}
+			50% {
+				stroke-dasharray: @circumference_3_4 @circumference_1_4;
+				stroke-dashoffset: 0;
+			}
+			100% {
+				stroke-dasharray: 0 @circumference;
+				stroke-dashoffset: -@circumference_3_4;
+			}
+		}
+	}
+
+	.form-button-component > & {
+		// fix vertical alignment
+		position: relative;
+		top: .125em;
+
+		> circle {
+			// spinner inside button has a different stroke width (also needs different animation)
+			stroke-width: unit( ( @btn-stroke * 100 ), % );
+			.anim-spinner( ~"-btn", ~"btn-radius" );
+		}
+	}
+}

@@ -1,0 +1,36 @@
+@import (reference) "~ui/styles/mixins";
+
+
+.content-about {
+	@width: 15rem;
+	@margin-data: ( @width + 1 );
+
+	article {
+		.clearfix();
+	}
+
+	h3 > i.fa {
+		margin-right: .333em;
+	}
+
+	.dl-horizontal {
+		> dt {
+			width: @width;
+		}
+		> dd {
+			margin-left: @margin-data;
+		}
+	}
+
+	.text-donation {
+		width: 24rem;
+		margin-left: @margin-data;
+	}
+
+	.coinaddress {
+		display: inline-block;
+		margin-left: 1em;
+		font-size: smaller;
+		font-style: italic;
+	}
+}

@@ -1,0 +1,95 @@
+@import (reference) "~ui/styles/config";
+@import (reference) "~ui/styles/mixins";
+@import (reference) "~ui/styles/themes";
+@import (reference) "~font-awesome/less/variables.less";
+
+
+.content-featured {
+	overflow-x: hidden;
+
+	> .error-message {
+		flex-grow: 1;
+	}
+
+	> .stream-presentation-component {
+		flex: 1;
+		margin-bottom: 2rem;
+
+		> .image {
+			overflow: hidden;
+			.stream-hover();
+		}
+	}
+
+	&.animated {
+		> .stream-presentation-component {
+			animation: animFadeInRight .5s ease-out;
+		}
+	}
+
+	> .channels {
+		@width: 18%;
+		@num: 5;
+		@spacing: ( ( 100% - ( @num * @width ) ) / ( @num - 1 ) );
+
+		display: flex;
+		justify-content: space-between;
+		position: relative;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		> li {
+			position: relative;
+			width: @width;
+			cursor: pointer;
+			.block-aspect-ratio( ( 16 / 9 ) );
+
+			.loop( @i ) when( @i =< @num ) {
+				@left: ( ( @width / 2 ) + ( ( @i - 1 ) * ( @width + @spacing ) ) );
+
+				&:nth-of-type( @{i} ) {
+					&.active ~ .cursor {
+						left: @left;
+					}
+					&:hover ~ .cursor-hover {
+						left: @left !important;
+					}
+				}
+
+				.loop( ( @i + 1 ) );
+			}
+			.loop( 1 );
+		}
+
+		> .cursor {
+			display: block;
+			position: absolute;
+			left: ( @width / 2 );
+			top: -.75em;
+			width: 1em;
+			height: 1em;
+			margin-left: -.5em;
+			font-size: 1.75em;
+			color: @color-twitch-purple;
+			text-align: center;
+			transition: left .2s ease-in-out;
+
+			&.cursor-hover {
+				opacity: .5;
+			}
+		}
+	}
+
+	> .globalstats {
+		height: 3em;
+		line-height: 3em;
+		text-align: center;
+	}
+
+	> .channels,
+	> .globalstats {
+		@delay: ( @anim-content-duration / 2 );
+		animation: animFadeInRight @anim-content-duration @delay ease-out both;
+	}
+}
