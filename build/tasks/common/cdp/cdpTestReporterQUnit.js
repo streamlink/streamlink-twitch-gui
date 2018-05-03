@@ -1,10 +1,10 @@
-const consoleMethod = "info";
-
 /**
  * @returns {Promise}
  */
 module.exports = function( grunt, options, cdp ) {
 	const UUID = `qunit_${Date.now()}_${Math.random().toString( 36 ).substring( 2, 15 )}`;
+	const consoleMethod = "info";
+
 
 	function promiseQUnitBridge( resolve, reject ) {
 		let started = false;
@@ -143,6 +143,45 @@ module.exports = function( grunt, options, cdp ) {
 	}
 
 
+	function promiseCoverage( resolve, reject ) {
+		cdp.send( "Runtime.evaluate", {
+			expression: "window.__coverage__?JSON.stringify(window.__coverage__):false"
+		})
+			.then( ({ result: { type, value } }) => {
+				if ( type !== "string" || !value ) { return; }
+
+				const dir = grunt.config( "dir.tmp_coverage" );
+				const watermarks = grunt.config( "coverage.watermarks" );
+				const reporter = grunt.config( "coverage.reporter" );
+
+				const libCoverage = require( "istanbul-lib-coverage" );
+				const libReport = require( "istanbul-lib-report" );
+				const libSourceMaps = require( "istanbul-lib-source-maps" );
+				const reports = require( "istanbul-reports" );
+
+				const report = JSON.parse( value );
+				const map = libCoverage.createCoverageMap( report );
+				const sourceMapCache = libSourceMaps.createSourceMapStore();
+				map.data = sourceMapCache.transformCoverage(
+					libCoverage.createCoverageMap( map.data )
+				).map.data;
+				const tree = libReport.summarizers.pkg( map );
+				const context = libReport.createContext({ dir, watermarks });
+
+				reporter.forEach( reporter => {
+					tree.visit( reports.create( reporter, {
+						skipEmpty: false
+					}), context );
+				});
+
+				grunt.log.writeln( "" );
+				grunt.log.ok( "Coverage data written" );
+			})
+			.then( resolve, reject );
+	}
+
+
 	return cdp.send( "Runtime.enable" )
-		.then( () => new Promise( promiseQUnitBridge ) );
+		.then( () => new Promise( promiseQUnitBridge ) )
+		.then( () => new Promise( promiseCoverage ) );
 };

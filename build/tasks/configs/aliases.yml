@@ -9,6 +9,10 @@ build:prod:
     - "test"
     - "clean:tmp_prod"
     - "webpack:prod"
+build:prod:coverage:
+    - "test:coverage"
+    - "clean:tmp_prod"
+    - "webpack:prod"
 test:
     - "clean:tmp_test"
     - "webpack:test"
@@ -16,3 +20,8 @@ test:
 test:dev:
     - "clean:tmp_test"
     - "webpack:testdev"
+test:coverage:
+    - "clean:tmp_test"
+    - "clean:tmp_coverage"
+    - "webpack:coverage"
+    - "runtest"

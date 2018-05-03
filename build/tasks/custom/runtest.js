@@ -13,7 +13,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( task, descr, function() {
 		const done = this.async();
 		const options = this.options({
-			startTimeout: 5000,
+			startTimeout: 10000,
 			testTimeout: 300000,
 			host: "localhost",
 			port: 8000

@@ -32,10 +32,12 @@
 		"babel-plugin-ember-modules-api-polyfill": "2.3.0",
 		"babel-plugin-feature-flags": "0.3.1",
 		"babel-plugin-filter-imports": "2.0.0",
+		"babel-plugin-istanbul": "4.1.6",
 		"babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
 		"babel6-plugin-strip-class-callcheck": "6.0.0",
 		"babel6-plugin-strip-heimdall": "6.0.1",
 		"chrome-remote-interface": "0.25.5",
+		"codecov": "3.0.1",
 		"copy-webpack-plugin": "4.5.1",
 		"css-loader": "0.28.11",
 		"ember-qunit": "2.2.0",
@@ -52,6 +54,10 @@
 		"grunt-webpack": "github:bastimeyer/grunt-webpack#af17880",
 		"html-webpack-plugin": "3.2.0",
 		"inject-loader": "4.0.1",
+		"istanbul-lib-coverage": "1.2.0",
+		"istanbul-lib-report": "1.1.4",
+		"istanbul-lib-source-maps": "1.2.4",
+		"istanbul-reports": "1.4.0",
 		"json-loader": "0.5.7",
 		"less": "3.0.2",
 		"less-loader": "4.1.0",
@@ -71,6 +77,7 @@
 	},
 	"scripts": {
 		"build": "grunt release",
-		"test": "grunt test"
+		"test": "grunt test",
+		"codecov": "codecov"
 	}
 }

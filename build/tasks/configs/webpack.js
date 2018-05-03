@@ -231,6 +231,25 @@ const loaderBabelTest = {
 	}
 };
 
+const loaderBabelCoverage = {
+	test: /\.js$/,
+	exclude: pDependencies,
+	loader: "babel-loader",
+	options: {
+		presets: [],
+		plugins: [
+			"babel-plugin-transform-es2015-modules-commonjs",
+			[ "babel-plugin-istanbul", {
+				exclude: [
+					"**/test/**/*.js",
+					"**/web_modules/**/*.js"
+				]
+			}]
+		],
+		cacheDirectory: pCacheBabel
+	}
+};
+
 
 // for some reason, this can't be set in grunt-webpack's options object, so add references manually
 const optimization = {
@@ -551,6 +570,52 @@ module.exports = {
 
 			// ignore Windows binary dependencies in tests
 			new webpack.IgnorePlugin( /\.exe$/ )
+		]
+	},
+
+
+	coverage: {
+		output: {
+			path: "<%= dir.tmp_test %>"
+		},
+
+		optimization,
+
+		entry: "main-coverage",
+		devtool: "inline-source-map",
+
+		resolve: {
+			modules: [
+				pTest,
+				...resolveModuleDirectories
+			],
+			alias: {
+				"tests": r( pTest, "tests" )
+			}
+		},
+
+		module: {
+			rules: [
+				loaderBabelCoverage,
+				...commonLoaders
+			]
+		},
+
+		plugins: [
+			// NW.js package.json
+			new CopyWebpackPlugin([
+				{ from: r( pTest, "package.json" ) }
+			]),
+
+			new HtmlWebpackPlugin({
+				inject: "body",
+				hash: false,
+				template: r( pTest, "index.html" )
+			}),
+
+			new webpack.DefinePlugin({
+				DEBUG: false
+			})
 		]
 	},
 
