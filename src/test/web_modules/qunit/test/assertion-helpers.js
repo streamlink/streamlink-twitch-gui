@@ -67,7 +67,7 @@ test( "assert.rejects", async assert => {
 	const value = "bar";
 
 	// resolves without expectations
-	pushResultSpy.reset();
+	pushResultSpy.resetHistory();
 	const pFailNoExp = QUnit.assert.rejects.call( API, Promise.resolve( 123 ) );
 	assert.ok( pFailNoExp instanceof Promise, "Returns a promise" );
 	assert.ok( await pFailNoExp.then( () => true ), "Promise always fulfills" );
@@ -79,7 +79,7 @@ test( "assert.rejects", async assert => {
 	}], "Pushes result to the test" );
 
 	// resolves with expectations
-	pushResultSpy.reset();
+	pushResultSpy.resetHistory();
 	const pFailExp = QUnit.assert.rejects.call( API, Promise.resolve( 123 ), error, "foo" );
 	assert.ok( pFailExp instanceof Promise, "Returns a promise" );
 	assert.ok( await pFailExp.then( () => true ), "Promise always fulfills" );
@@ -91,7 +91,7 @@ test( "assert.rejects", async assert => {
 	}], "Pushes result to the test" );
 
 	// rejects without expectations
-	pushResultSpy.reset();
+	pushResultSpy.resetHistory();
 	const pSucceedNoExp = QUnit.assert.rejects.call( API, Promise.reject( error ) );
 	assert.ok( pSucceedNoExp instanceof Promise, "Returns a promise" );
 	assert.ok( await pSucceedNoExp.then( () => true ), "Promise always fulfills" );
@@ -103,7 +103,7 @@ test( "assert.rejects", async assert => {
 	}], "Pushes result to the test" );
 
 	// rejects with expectations and no custom message
-	pushResultSpy.reset();
+	pushResultSpy.resetHistory();
 	const pSucceedExp = QUnit.assert.rejects.call( API, Promise.reject( error ), error );
 	assert.ok( pSucceedExp instanceof Promise, "Returns a promise" );
 	assert.ok( await pSucceedExp.then( () => true ), "Promise always fulfills" );
@@ -115,7 +115,7 @@ test( "assert.rejects", async assert => {
 	}], "Pushes result to the test" );
 
 	// rejects with expectations and custom message
-	pushResultSpy.reset();
+	pushResultSpy.resetHistory();
 	const pSucceedExpMsg = QUnit.assert.rejects.call( API, Promise.reject( error ), error, "bar" );
 	assert.ok( pSucceedExpMsg instanceof Promise, "Returns a promise" );
 	assert.ok( await pSucceedExpMsg.then( () => true ), "Promise always fulfills" );
@@ -127,7 +127,7 @@ test( "assert.rejects", async assert => {
 	}], "Pushes result to the test" );
 
 	// executes async function which returns a rejected promise
-	pushResultSpy.reset();
+	pushResultSpy.resetHistory();
 	const pSucceedFuncExp = QUnit.assert.rejects.call( API, async () => { throw error; }, error );
 	assert.ok( pSucceedFuncExp instanceof Promise, "Returns a promise" );
 	assert.ok( await pSucceedFuncExp.then( () => true ), "Promise always fulfills" );
@@ -139,7 +139,7 @@ test( "assert.rejects", async assert => {
 	}], "Pushes result to the test" );
 
 	// expectation is a constructor
-	pushResultSpy.reset();
+	pushResultSpy.resetHistory();
 	const pSucceedExpConst = QUnit.assert.rejects.call( API, Promise.reject( foo ), Foo );
 	assert.ok( pSucceedExpConst instanceof Promise, "Returns a promise" );
 	assert.ok( await pSucceedExpConst.then( () => true ), "Promise always fulfills" );
@@ -151,7 +151,7 @@ test( "assert.rejects", async assert => {
 	}], "Pushes result to the test" );
 
 	// expectation is something else
-	pushResultSpy.reset();
+	pushResultSpy.resetHistory();
 	const pSucceedExpUnknown = QUnit.assert.rejects.call( API, Promise.reject( value ), value );
 	assert.ok( pSucceedExpUnknown instanceof Promise, "Returns a promise" );
 	assert.ok( await pSucceedExpUnknown.then( () => true ), "Promise always fulfills" );

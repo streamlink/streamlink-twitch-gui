@@ -75,22 +75,22 @@ module( "services/notification/dispatch", {
 test( "dispatchNotifications", async function( assert ) {
 
 	/** @type Sinon.SinonStub icon */
-	const icon = this.iconDownloadStub;
-	const group = sinon.stub();
-	const single = sinon.stub();
-	const show = sinon.spy();
+	const iconStub = this.iconDownloadStub;
+	const groupStub = sinon.stub();
+	const singleStub = sinon.stub();
+	const showSpy = sinon.spy();
 
 	function reset() {
-		single.reset();
-		group.reset();
-		icon.reset();
-		show.reset();
+		singleStub.reset();
+		groupStub.reset();
+		iconStub.reset();
+		showSpy.resetHistory();
 	}
 
 	this.subject.reopen({
-		_getNotificationDataGroup: group,
-		_getNotificationDataSingle: single,
-		_showNotification: show
+		_getNotificationDataGroup: groupStub,
+		_getNotificationDataSingle: singleStub,
+		_showNotification: showSpy
 	});
 
 	const streamA = { foo: 1 };
@@ -98,69 +98,77 @@ test( "dispatchNotifications", async function( assert ) {
 
 	// don't do anything on missing streams
 	await this.subject.dispatchNotifications();
-	assert.notOk( single.called, "Does not create single notification" );
-	assert.notOk( group.called, "Does not create group notification" );
-	assert.notOk( icon.called, "Does not download icons" );
-	assert.notOk( show.called, "Does not show notifications" );
+	assert.notOk( singleStub.called, "Does not create single notification" );
+	assert.notOk( groupStub.called, "Does not create group notification" );
+	assert.notOk( iconStub.called, "Does not download icons" );
+	assert.notOk( showSpy.called, "Does not show notifications" );
 
 	// don't do anything on empty streams
 	await this.subject.dispatchNotifications( [] );
-	assert.notOk( single.called, "Does not create single notification" );
-	assert.notOk( group.called, "Does not create group notification" );
-	assert.notOk( icon.called, "Does not download icons" );
-	assert.notOk( show.called, "Does not show notifications" );
+	assert.notOk( singleStub.called, "Does not create single notification" );
+	assert.notOk( groupStub.called, "Does not create group notification" );
+	assert.notOk( iconStub.called, "Does not download icons" );
+	assert.notOk( showSpy.called, "Does not show notifications" );
 
 	// enable grouping
 	set( this.subject, "settings.notification.grouping", true );
 
 	// show single notification on a single stream if grouping is enabled
-	single.returns({ one: 1 });
+	singleStub.returns({ one: 1 });
 	await this.subject.dispatchNotifications([ streamA ]);
-	assert.notOk( group.called, "Does not create group notification" );
-	assert.propEqual( icon.args, [ [ streamA ] ], "Downloads icon" );
-	assert.propEqual( single.args, [ [ streamA ] ], "Creates single notification" );
-	assert.ok( icon.calledBefore( single ), "Downloads icon first" );
-	assert.propEqual( show.lastCall.args, [{ one: 1 }], "Shows notification" );
+	assert.notOk( groupStub.called, "Does not create group notification" );
+	assert.propEqual( iconStub.args, [ [ streamA ] ], "Downloads icon" );
+	assert.propEqual( singleStub.args, [ [ streamA ] ], "Creates single notification" );
+	assert.ok( iconStub.calledBefore( singleStub ), "Downloads icon first" );
+	assert.propEqual( showSpy.lastCall.args, [{ one: 1 }], "Shows notification" );
 	reset();
 
 	// show a group notification on multiple streams if grouping is enabled
-	group.returns({ two: 2 });
+	groupStub.returns({ two: 2 });
 	await this.subject.dispatchNotifications([ streamA, streamB ]);
-	assert.notOk( single.called, "Does not show single notification" );
-	assert.propEqual( group.lastCall.args, [ [ streamA, streamB ] ], "Shows group notification" );
-	assert.notOk( icon.called, "Does not download icons" );
-	assert.propEqual( show.lastCall.args, [{ two: 2 }], "Shows notification" );
+	assert.notOk( singleStub.called, "Does not show single notification" );
+	assert.propEqual(
+		groupStub.lastCall.args,
+		[ [ streamA, streamB ] ],
+		"Shows group notification"
+	);
+	assert.notOk( iconStub.called, "Does not download icons" );
+	assert.propEqual( showSpy.lastCall.args, [{ two: 2 }], "Shows notification" );
 	reset();
 
 	// disable grouping
 	set( this.subject, "settings.notification.grouping", false );
 
 	// show multiple single notifications if grouping is disabled
-	single.onFirstCall().returns({ three: 3 });
-	single.onSecondCall().returns({ four: 4 });
+	singleStub.onFirstCall().returns({ three: 3 });
+	singleStub.onSecondCall().returns({ four: 4 });
 	await this.subject.dispatchNotifications([ streamA, streamB ]);
-	assert.notOk( group.called, "Does not create group notification" );
-	assert.propEqual( icon.args, [ [ streamA ], [ streamB ] ], "Downloads icons" );
-	assert.propEqual( single.args, [ [ streamA ], [ streamB ] ], "Creates single notifications" );
-	assert.ok( icon.firstCall.calledBefore( single.firstCall ), "Downloads icons first" );
-	assert.ok( icon.lastCall.calledBefore( single.lastCall ), "Downloads icons first" );
-	assert.propEqual( show.args, [ [{ three: 3 }], [{ four: 4 }] ], "Shows both notification" );
+	assert.notOk( groupStub.called, "Does not create group notification" );
+	assert.propEqual( iconStub.args, [ [ streamA ], [ streamB ] ], "Downloads icons" );
+	assert.propEqual(
+		singleStub.args,
+		[ [ streamA ], [ streamB ] ],
+		"Creates single notifications"
+	);
+	assert.ok( iconStub.firstCall.calledBefore( singleStub.firstCall ), "Downloads icons first" );
+	assert.ok( iconStub.lastCall.calledBefore( singleStub.lastCall ), "Downloads icons first" );
+	assert.propEqual( showSpy.args, [ [{ three: 3 }], [{ four: 4 }] ], "Shows both notification" );
 	reset();
 
 	// fail icon download
-	icon.onFirstCall().rejects( new Error( "fail" ) );
-	icon.onSecondCall().resolves();
-	single.withArgs( streamA ).returns({ five: 5 });
-	single.withArgs( streamB ).returns({ six: 6 });
+	iconStub.onFirstCall().rejects( new Error( "fail" ) );
+	iconStub.onSecondCall().resolves();
+	singleStub.withArgs( streamA ).returns({ five: 5 });
+	singleStub.withArgs( streamB ).returns({ six: 6 });
 	await assert.rejects(
 		this.subject.dispatchNotifications([ streamA, streamB ]),
 		new Error( "fail" ),
 		"Rejects on download error, but tries to show all notifications"
 	);
-	assert.notOk( group.called, "Does not create group notification" );
-	assert.propEqual( icon.args, [ [ streamA ], [ streamB ] ], "Downloads all icons" );
-	assert.propEqual( single.args, [ [ streamB ] ], "Creates second single notification" );
-	assert.propEqual( show.args, [ [{ six: 6 }] ], "Shows second notification" );
+	assert.notOk( groupStub.called, "Does not create group notification" );
+	assert.propEqual( iconStub.args, [ [ streamA ], [ streamB ] ], "Downloads all icons" );
+	assert.propEqual( singleStub.args, [ [ streamB ] ], "Creates second single notification" );
+	assert.propEqual( showSpy.args, [ [{ six: 6 }] ], "Shows second notification" );
 
 });
 
@@ -183,10 +191,10 @@ test( "Group and single notification data", function( assert ) {
 		}
 	};
 
-	const click = sinon.spy();
+	const clickSpy = sinon.spy();
 
 	this.subject.reopen({
-		_notificationClick: click
+		_notificationClick: clickSpy
 	});
 
 	// show group notification
@@ -206,8 +214,8 @@ test( "Group and single notification data", function( assert ) {
 		click: () => {},
 		settings: 1
 	}, "Returns correct group notification data" );
-	assert.propEqual( click.args, [ [ [ streamA, streamB ], 1 ] ], "Group click callback" );
-	click.reset();
+	assert.propEqual( clickSpy.args, [ [ [ streamA, streamB ], 1 ] ], "Group click callback" );
+	clickSpy.resetHistory();
 
 	// show single notification with logo
 	set( this.subject, "settings.notification.click", 2 );
@@ -220,8 +228,8 @@ test( "Group and single notification data", function( assert ) {
 		click: () => {},
 		settings: 2
 	}, "Returns correct single notification data" );
-	assert.propEqual( click.args, [ [ [ streamA ], 2 ] ], "Single click callback" );
-	click.reset();
+	assert.propEqual( clickSpy.args, [ [ [ streamA ], 2 ] ], "Single click callback" );
+	clickSpy.resetHistory();
 
 	// show single notification without logo
 	set( this.subject, "settings.notification.click", 3 );
@@ -234,7 +242,7 @@ test( "Group and single notification data", function( assert ) {
 		click: () => {},
 		settings: 3
 	}, "Returns correct single notification data with group icon" );
-	assert.propEqual( click.args, [ [ [ streamB ], 3 ] ], "Single click callback" );
+	assert.propEqual( clickSpy.args, [ [ [ streamB ], 3 ] ], "Single click callback" );
 
 });
 
@@ -245,11 +253,11 @@ test( "Notification click", async function( assert ) {
 	this.openChatStub.rejects();
 
 	const reset = () => {
-		this.logDebugSpy.reset();
-		this.transitionToSpy.reset();
-		this.setMinimizedSpy.reset();
-		this.setVisibilitySpy.reset();
-		this.setFocusedSpy.reset();
+		this.logDebugSpy.resetHistory();
+		this.transitionToSpy.resetHistory();
+		this.setMinimizedSpy.resetHistory();
+		this.setVisibilitySpy.resetHistory();
+		this.setFocusedSpy.resetHistory();
 		this.startStreamStub.resetHistory();
 		this.openChatStub.resetHistory();
 	};

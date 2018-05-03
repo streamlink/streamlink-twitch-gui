@@ -61,8 +61,8 @@ test( "preloadImage", async function( assert ) {
 	await promiseFoo;
 	assert.ok( true, "Resolves on load" );
 
-	this.imageAddEventListenerSpy.reset();
-	this.imageSrcSpy.reset();
+	this.imageAddEventListenerSpy.resetHistory();
+	this.imageSrcSpy.resetHistory();
 
 	const promiseBar = this.preloadImage( "bar" );
 	// error

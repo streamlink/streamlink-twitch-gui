@@ -179,7 +179,7 @@ test( "Refresh", function( assert ) {
 	assert.notOk( this.refreshSpy.called, "Doesn't refresh on focus/restore without focus loss" );
 
 	// blur
-	this.refreshSpy.reset();
+	this.refreshSpy.resetHistory();
 	clock.setSystemTime( 0 );
 	events.emit( "blur" );
 	clock.tick( TIME_DEBOUNCE );
@@ -198,7 +198,7 @@ test( "Refresh", function( assert ) {
 	assert.ok( this.refreshSpy.calledOnce, "Refreshes once focus threshold has been reached" );
 
 	// minimize
-	this.refreshSpy.reset();
+	this.refreshSpy.resetHistory();
 	clock.setSystemTime( 0 );
 	events.emit( "minimize" );
 	clock.tick( TIME_DEBOUNCE );
@@ -217,7 +217,7 @@ test( "Refresh", function( assert ) {
 	assert.ok( this.refreshSpy.calledOnce, "Refreshes once restore threshold has been reached" );
 
 	// disable refresh logic
-	this.refreshSpy.reset();
+	this.refreshSpy.resetHistory();
 	clock.setSystemTime( 0 );
 	this.threshold = 0;
 	events.emit( "blur" );
@@ -256,7 +256,7 @@ test( "Modal dialog", function( assert ) {
 
 	regainFocusWithModalDialog();
 	subject.refresh();
-	this.refreshSpy.reset();
+	this.refreshSpy.resetHistory();
 	assert.strictEqual( subject[ PROP_DEFER ], false, "Doesn't defer after refreshing" );
 	set( subject, "modal.isModalOpened", false );
 	assert.notOk( this.refreshSpy.called, "Doesn't refresh when modal gets closed afterwards" );

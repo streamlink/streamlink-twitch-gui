@@ -62,7 +62,7 @@
 		"optimize-css-assets-webpack-plugin": "4.0.0",
 		"qunitjs": "2.4.1",
 		"raw-loader": "0.5.1",
-		"sinon": "4.1.2",
+		"sinon": "5.0.3",
 		"svgo-loader": "1.2.1",
 		"util.promisify": "1.0.0",
 		"webpack": "4.6.0",

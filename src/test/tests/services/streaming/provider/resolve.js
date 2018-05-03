@@ -117,7 +117,7 @@ test( "Invalid streaming provider", async function( assert ) {
 	assert.ok( this.getProviderCacheStub.calledOnce, "Gets provider cache once" );
 	assert.notOk( this.setProviderCacheStub.called, "Doesn't set provider cache" );
 
-	this.isAbortedSpy.reset();
+	this.isAbortedSpy.resetHistory();
 	this.getProviderCacheStub.resetHistory();
 
 	await assert.rejects(
@@ -164,9 +164,9 @@ test( "Missing executable name for streaming provider", async function( assert )
 		"Logs provider name and user data"
 	);
 
-	this.isAbortedSpy.reset();
+	this.isAbortedSpy.resetHistory();
 	this.getProviderCacheStub.resetHistory();
-	this.logDebugSpy.reset();
+	this.logDebugSpy.resetHistory();
 
 
 	this.config = {
@@ -233,9 +233,9 @@ test( "Missing python script for streaming provider", async function( assert ) {
 		"Logs provider name and user data"
 	);
 
-	this.isAbortedSpy.reset();
+	this.isAbortedSpy.resetHistory();
 	this.getProviderCacheStub.resetHistory();
-	this.logDebugSpy.reset();
+	this.logDebugSpy.resetHistory();
 
 
 	this.config = {
@@ -323,9 +323,9 @@ test( "Standalone - Default exec", async function( assert ) {
 		"Logs provider name and user data"
 	);
 
-	this.isAbortedSpy.reset();
+	this.isAbortedSpy.resetHistory();
 	this.getProviderCacheStub.resetHistory();
-	this.logDebugSpy.reset();
+	this.logDebugSpy.resetHistory();
 	this.whichFallbackStub.reset();
 
 
@@ -427,9 +427,9 @@ test( "Standalone - Custom exec", async function( assert ) {
 		"Logs provider name and user data"
 	);
 
-	this.isAbortedSpy.reset();
+	this.isAbortedSpy.resetHistory();
 	this.getProviderCacheStub.resetHistory();
-	this.logDebugSpy.reset();
+	this.logDebugSpy.resetHistory();
 	this.whichFallbackStub.reset();
 
 
@@ -522,9 +522,9 @@ test( "Python - Invalid python script", async function( assert ) {
 		"Logs provider name and user data"
 	);
 
-	this.isAbortedSpy.reset();
+	this.isAbortedSpy.resetHistory();
 	this.getProviderCacheStub.resetHistory();
-	this.logDebugSpy.reset();
+	this.logDebugSpy.resetHistory();
 	this.whichFallbackStub.reset();
 
 
@@ -701,9 +701,9 @@ test( "Python - Custom python exec/script", async function( assert ) {
 		"Logs provider name and user data, and logs resolved and validated data"
 	);
 
-	this.isAbortedSpy.reset();
+	this.isAbortedSpy.resetHistory();
 	this.getProviderCacheStub.resetHistory();
-	this.logDebugSpy.reset();
+	this.logDebugSpy.resetHistory();
 	this.whichFallbackStub.resetHistory();
 	this.findPythonscriptInterpreterStub.resetHistory();
 	this.validateProviderStub.resetHistory();

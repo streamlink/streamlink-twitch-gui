@@ -64,12 +64,12 @@ test( "Loading/success states and click actions", function( assert ) {
 		isLoading: true
 	});
 
-	const expand = sinon.spy( subject.actions, "expand" );
-	const collapse = sinon.spy( subject.actions, "collapse" );
-	const follow = sinon.stub( subject.actions, "follow" ).callsFake( () => {
+	const expandSpy = sinon.spy( subject.actions, "expand" );
+	const collapseSpy = sinon.spy( subject.actions, "collapse" );
+	const followStub = sinon.stub( subject.actions, "follow" ).callsFake( () => {
 		set( subject, "isSuccessful", true );
 	});
-	const unfollow = sinon.stub( subject.actions, "unfollow" ).callsFake( () => {
+	const unfollowStub = sinon.stub( subject.actions, "unfollow" ).callsFake( () => {
 		set( subject, "isSuccessful", false );
 		subject.collapse();
 	});
@@ -112,7 +112,7 @@ test( "Loading/success states and click actions", function( assert ) {
 	$mainButton.click();
 	$confirmButton.click();
 	assert.notOk(
-		expand.called || collapse.called || follow.called || unfollow.called,
+		expandSpy.called || collapseSpy.called || followStub.called || unfollowStub.called,
 		"No actions are being called when clicking any button while loading"
 	);
 
@@ -141,16 +141,16 @@ test( "Loading/success states and click actions", function( assert ) {
 
 	$confirmButton.click();
 	assert.notOk(
-		expand.called || collapse.called || follow.called || unfollow.called,
+		expandSpy.called || collapseSpy.called || followStub.called || unfollowStub.called,
 		"The confirm button does not have an action while not being expanded"
 	);
 
 	run( () => $mainButton.click() );
 	assert.ok(
-		follow.called,
+		followStub.called,
 		"Follow action was called when clicking while not following"
 	);
-	follow.resetHistory();
+	followStub.resetHistory();
 
 
 	// now following
@@ -169,7 +169,7 @@ test( "Loading/success states and click actions", function( assert ) {
 
 	$confirmButton.click();
 	assert.notOk(
-		expand.called || collapse.called || follow.called || unfollow.called,
+		expandSpy.called || collapseSpy.called || followStub.called || unfollowStub.called,
 		"The confirm button does not have an action while not being expanded"
 	);
 
@@ -179,10 +179,10 @@ test( "Loading/success states and click actions", function( assert ) {
 	run( () => $mainButton.click() );
 
 	assert.ok(
-		expand.called,
+		expandSpy.called,
 		"Expand action was called when clicking while following"
 	);
-	expand.reset();
+	expandSpy.resetHistory();
 
 	assert.ok(
 		$followButton.hasClass( "expanded" ),
@@ -219,10 +219,10 @@ test( "Loading/success states and click actions", function( assert ) {
 	run( () => $confirmButton.click() );
 
 	assert.ok(
-		unfollow.called,
+		unfollowStub.called,
 		"Unfollow action was called when clicking the confirm button in expanded state"
 	);
-	unfollow.resetHistory();
+	unfollowStub.resetHistory();
 
 	assert.ok(
 		!$followButton.hasClass( "expanded" ),
@@ -253,10 +253,10 @@ test( "Loading/success states and click actions", function( assert ) {
 
 	$mainButton.click();
 	assert.ok(
-		collapse.called,
+		collapseSpy.called,
 		"Collapse action was called when clicking the main button in expanded state"
 	);
-	collapse.reset();
+	collapseSpy.resetHistory();
 
 	assert.ok(
 		   $mainButton.hasClass( "btn-success" )
