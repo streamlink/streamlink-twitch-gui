@@ -77,7 +77,7 @@ test( "Button states", function( assert ) {
 		hasFetchedAll: true,
 		fetchError: false
 	});
-	assert.ok( $elem.is( ":visible" ), "Hide when hasFetchedAll" );
+	assert.ok( $elem.hasClass( "hidden" ), "Hide when hasFetchedAll" );
 
 });
 
