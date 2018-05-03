@@ -25,6 +25,10 @@ module.exports = {
 		"<%= dir.tmp_test %>/**",
 		"!<%= dir.tmp_test %>"
 	],
+	tmp_coverage: [
+		"<%= dir.tmp_coverage %>/**",
+		"!<%= dir.tmp_coverage %>"
+	],
 
 	cache: [
 		"<%= dir.cache %>/**",

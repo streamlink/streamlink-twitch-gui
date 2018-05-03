@@ -41,7 +41,7 @@ install:
 
 script:
   # test and build
-  - grunt build:prod
+  - grunt build:prod:coverage
   # compile and package
   - if [ -n "${TRAVIS_TAG}" ]; then build/travis/package.sh; fi
 
