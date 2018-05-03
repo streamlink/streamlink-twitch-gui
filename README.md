@@ -1,6 +1,6 @@
 [Streamlink Twitch GUI][Website]
 ===
-[![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] [![Gitter IRC][badge-gitter]][Gitter]
+[![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] [![Build status][badge-travis]][Travis-CI] [![Code coverage][badge-codecov]][Codecov] [![Gitter IRC][badge-gitter]][Gitter]
 
 **A multi platform [Twitch.tv][Twitch] browser for [Streamlink][Streamlink]**
 
@@ -101,6 +101,8 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Releases]: https://github.com/streamlink/streamlink-twitch-gui/releases "Streamlink Twitch GUI Releases"
   [Issues]: https://github.com/streamlink/streamlink-twitch-gui/issues "Streamlink Twitch GUI Issues"
   [Wiki]: https://github.com/streamlink/streamlink-twitch-gui/wiki "Streamlink Twitch GUI Wiki"
+  [Travis-CI]: https://travis-ci.org/streamlink/streamlink-twitch-gui "Travis CI"
+  [Codecov]: https://codecov.io/gh/streamlink/streamlink-twitch-gui "Codecov"
   [Gitter]: https://gitter.im/streamlink/streamlink-twitch-gui "Gitter IRC"
   [Contributing]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CONTRIBUTING.md
   [Changelog]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CHANGELOG.md
@@ -117,9 +119,11 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Node.js]: https://nodejs.org "Node.js"
   [yarn]: https://yarnpkg.com "Fast, reliable, and secure dependency management."
   [npm]: https://npmjs.org "Node Packaged Modules"
-  [badge-platforms]: https://img.shields.io/badge/platform-win%20%7C%20osx%20%7C%20linux-green.svg?style=flat-square "Supported platforms"
+  [badge-platforms]: https://img.shields.io/badge/platform-win%20%7C%20mac%20%7C%20linux-green.svg?style=flat-square "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/streamlink/streamlink-twitch-gui.svg?style=flat-square "Latest release"
   [badge-issues]: https://img.shields.io/github/issues/streamlink/streamlink-twitch-gui.svg?style=flat-square "Open issues"
+  [badge-travis]: https://img.shields.io/travis/streamlink/streamlink-twitch-gui.svg?style=flat-square
+  [badge-codecov]: https://img.shields.io/codecov/c/github/streamlink/streamlink-twitch-gui.svg?style=flat-square
   [badge-gitter]: https://img.shields.io/gitter/room/streamlink/streamlink-twitch-gui.svg?style=flat-square "Gitter IRC"
   [Package-Chocolatey]: https://chocolatey.org/packages/streamlink-twitch-gui "Chocolatey package"
   [Package-AUR]: https://aur.archlinux.org/packages/streamlink-twitch-gui "AUR stable package"
