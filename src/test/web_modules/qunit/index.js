@@ -1,5 +1,5 @@
-import QUnit from "qunitjs";
-import "qunitjs/qunit/qunit.css";
+import QUnit from "qunit/qunit/qunit";
+import "qunit/qunit/qunit.css";
 
 
 export default QUnit;

@@ -20,7 +20,8 @@ QUnit.assert.checkSteps = function() {
 
 
 /**
- * Alternative to assert.throw, which doesn't support async functions or promises
+ * Replace QUnit's stupid assert.rejects implementation which doesn't make any sense...
+ * This method properly returns a promise, so async tests can be used with await assert.rejects()
  * @param {(Promise|Function)} promise
  * @param {(Object|Function)} expected
  * @param {string} [message]

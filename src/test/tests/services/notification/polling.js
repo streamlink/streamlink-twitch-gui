@@ -152,6 +152,8 @@ test( "Start / reset", async assert => {
 	run( () => set( service, "running", true ) );
 	await service._pollPromise;
 
+	assert.clearSteps();
+
 });
 
 
@@ -359,6 +361,8 @@ test( "Polling results", async assert => {
 	});
 	expectedErr = "streams-all";
 	await service._pollResult( allStreams, true );
+
+	assert.clearSteps();
 
 });
 
