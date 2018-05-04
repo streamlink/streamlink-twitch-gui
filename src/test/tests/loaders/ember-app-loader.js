@@ -88,7 +88,7 @@ test( "Explicit types", async function( assert ) {
 			"ui/components/foo/serializer.js": [ "default" ],
 			"ui/components/foo/controller.js": [ "default" ],
 			"ui/components/foo/route.js": [ "default" ],
-			"ui/components/foo/template.hbs": [],
+			"ui/components/foo/template.hbs": [ "default" ],
 			"ui/components/foo/service.js": [ "default" ],
 			"ui/components/foo/transform.js": [ "default" ]
 		}),
@@ -132,7 +132,7 @@ test( "Explicit types", async function( assert ) {
 			"data/models/foo/serializer.js": [ "default" ],
 			"data/models/foo/controller.js": [ "default" ],
 			"data/models/foo/route.js": [ "default" ],
-			"data/models/foo/template.hbs": [],
+			"data/models/foo/template.hbs": [ "default" ],
 			"data/models/foo/service.js": [ "default" ],
 			"data/models/foo/transform.js": [ "default" ]
 		}),
@@ -186,7 +186,7 @@ test( "Explicit types", async function( assert ) {
 			"ui/routes/foo/serializer.js": [ "default" ],
 			"ui/routes/foo/controller.js": [ "default" ],
 			"ui/routes/foo/route.js": [ "default" ],
-			"ui/routes/foo/template.hbs": [],
+			"ui/routes/foo/template.hbs": [ "default" ],
 			"ui/routes/foo/service.js": [ "default" ],
 			"ui/routes/foo/transform.js": [ "default" ]
 		}),
@@ -215,7 +215,7 @@ test( "Explicit types", async function( assert ) {
 				name: "FooTemplate",
 				type: "template",
 				path: "ui/routes/foo/template.hbs",
-				exportName: null
+				exportName: "default"
 			},
 			false,
 			false
@@ -235,7 +235,7 @@ test( "Explicit types", async function( assert ) {
 			"init/initializers/foo/serializer.js": [ "default" ],
 			"init/initializers/foo/controller.js": [ "default" ],
 			"init/initializers/foo/route.js": [ "default" ],
-			"init/initializers/foo/template.hbs": [],
+			"init/initializers/foo/template.hbs": [ "default" ],
 			"init/initializers/foo/service.js": [ "default" ],
 			"init/initializers/foo/transform.js": [ "default" ]
 		}),
@@ -274,7 +274,7 @@ test( "Explicit types", async function( assert ) {
 			"init/instance-initializers/foo/serializer.js": [ "default" ],
 			"init/instance-initializers/foo/controller.js": [ "default" ],
 			"init/instance-initializers/foo/route.js": [ "default" ],
-			"init/instance-initializers/foo/template.hbs": [],
+			"init/instance-initializers/foo/template.hbs": [ "default" ],
 			"init/instance-initializers/foo/service.js": [ "default" ],
 			"init/instance-initializers/foo/transform.js": [ "default" ]
 		}),
@@ -313,7 +313,7 @@ test( "Explicit types", async function( assert ) {
 			"services/foo/serializer.js": [ "default" ],
 			"services/foo/controller.js": [ "default" ],
 			"services/foo/route.js": [ "default" ],
-			"services/foo/template.hbs": [],
+			"services/foo/template.hbs": [ "default" ],
 			"services/foo/service.js": [ "default" ],
 			"services/foo/transform.js": [ "default" ]
 		}),
@@ -352,7 +352,7 @@ test( "Explicit types", async function( assert ) {
 			"data/transforms/foo/serializer.js": [ "default" ],
 			"data/transforms/foo/controller.js": [ "default" ],
 			"data/transforms/foo/route.js": [ "default" ],
-			"data/transforms/foo/template.hbs": [],
+			"data/transforms/foo/template.hbs": [ "default" ],
 			"data/transforms/foo/service.js": [ "default" ],
 			"data/transforms/foo/transform.js": [ "default" ]
 		}),
@@ -386,18 +386,10 @@ test( "Invalid export of explicit types", async function( assert ) {
 
 	await assert.rejects(
 		this.subject({
-			"data/models/foo/model.js": [ "foo" ]
+			"data/models/foo/model.js": [ "model" ]
 		}),
 		new Error( "Invalid export of module: data/models/foo/model.js" ),
 		"Rejects on missing default export"
-	);
-
-	await assert.rejects(
-		this.subject({
-			"ui/routes/foo/template.hbs": [ "default" ]
-		}),
-		new Error( "Invalid export of module: ui/routes/foo/template.hbs" ),
-		"Rejects on invalid export"
 	);
 
 });
@@ -585,6 +577,167 @@ test( "Implicit types", async function( assert ) {
 });
 
 
+test( "CommonJS modules", async function( assert ) {
+
+	assert.propEqual(
+		await this.subject({
+			"ui/components/foo/component.js": [],
+			"ui/components/foo/helper.js": [],
+			"init/initializers/foo/initializer.js": [],
+			"init/instance-initializers/foo/instance-initializer.js": [],
+			"data/models/foo/adapter.js": [],
+			"data/models/foo/fragment.js": [],
+			"data/models/foo/model.js": [],
+			"data/models/foo/serializer.js": [],
+			"ui/routes/foo/controller.js": [],
+			"ui/routes/foo/route.js": [],
+			"ui/routes/foo/template.hbs": [],
+			"services/foo/service.js": [],
+			"data/transforms/foo/transform.js": []
+		}),
+		[
+			{
+				name: "FooComponent",
+				type: "component",
+				path: "ui/components/foo/component.js",
+				exportName: null
+			},
+			{
+				name: "FooHelper",
+				type: "helper",
+				path: "ui/components/foo/helper.js",
+				exportName: null
+			},
+			{
+				name: "FooInitializer",
+				type: "initializer",
+				path: "init/initializers/foo/initializer.js",
+				exportName: null
+			},
+			{
+				name: "FooInstanceinitializer",
+				type: "instance-initializer",
+				path: "init/instance-initializers/foo/instance-initializer.js",
+				exportName: null
+			},
+			{
+				name: "FooAdapter",
+				type: "adapter",
+				path: "data/models/foo/adapter.js",
+				exportName: null
+			},
+			{
+				name: "Foo",
+				type: "fragment",
+				path: "data/models/foo/fragment.js",
+				exportName: null
+			},
+			{
+				name: "Foo",
+				type: "model",
+				path: "data/models/foo/model.js",
+				exportName: null
+			},
+			{
+				name: "FooSerializer",
+				type: "serializer",
+				path: "data/models/foo/serializer.js",
+				exportName: null
+			},
+			{
+				name: "FooController",
+				type: "controller",
+				path: "ui/routes/foo/controller.js",
+				exportName: null
+			},
+			{
+				name: "FooRoute",
+				type: "route",
+				path: "ui/routes/foo/route.js",
+				exportName: null
+			},
+			{
+				name: "FooTemplate",
+				type: "template",
+				path: "ui/routes/foo/template.hbs",
+				exportName: null
+			},
+			{
+				name: "FooService",
+				type: "service",
+				path: "services/foo/service.js",
+				exportName: null
+			},
+			{
+				name: "FooTransform",
+				type: "transform",
+				path: "data/transforms/foo/transform.js",
+				exportName: null
+			}
+		],
+		"Explicit types with CommonJS modules"
+	);
+
+	assert.propEqual(
+		await this.subject({
+			"ui/components/foo.js": [],
+			"init/initializers/foo.js": [],
+			"init/instance-initializers/foo.js": [],
+			"data/models/foo.js": [],
+			"ui/routes/foo.js": [],
+			"services/foo.js": [],
+			"data/transforms/foo.js": []
+		}),
+		[
+			{
+				name: "FooComponent",
+				type: "component",
+				path: "ui/components/foo.js",
+				exportName: null
+			},
+			{
+				name: "FooInitializer",
+				type: "initializer",
+				path: "init/initializers/foo.js",
+				exportName: null
+			},
+			{
+				name: "FooInstanceinitializer",
+				type: "instance-initializer",
+				path: "init/instance-initializers/foo.js",
+				exportName: null
+			},
+			{
+				name: "Foo",
+				type: "model",
+				path: "data/models/foo.js",
+				exportName: null
+			},
+			{
+				name: "FooRoute",
+				type: "route",
+				path: "ui/routes/foo.js",
+				exportName: null
+			},
+			{
+				name: "FooService",
+				type: "service",
+				path: "services/foo.js",
+				exportName: null
+			},
+			{
+				name: "FooTransform",
+				type: "transform",
+				path: "data/transforms/foo.js",
+				exportName: null
+			}
+		],
+		"Implicit types with CommonJS modules"
+	);
+
+});
+
+
 test( "Module name nesting", async function( assert ) {
 
 	assert.propEqual(
@@ -598,7 +751,7 @@ test( "Module name nesting", async function( assert ) {
 			"ui/components/foo/bar/baz/helper.js": [ "default" ],
 			"ui/routes/foo/bar/baz/controller.js": [ "default" ],
 			"ui/routes/foo/bar/baz/route.js": [ "default" ],
-			"ui/routes/foo/bar/baz/template.hbs": [],
+			"ui/routes/foo/bar/baz/template.hbs": [ "default" ],
 			"services/foo/bar/baz/service.js": [ "default" ]
 		}),
 		[
@@ -660,7 +813,7 @@ test( "Module name nesting", async function( assert ) {
 				name: "FooBarBazTemplate",
 				type: "template",
 				path: "ui/routes/foo/bar/baz/template.hbs",
-				exportName: null
+				exportName: "default"
 			},
 			{
 				name: "FooBarBazService",

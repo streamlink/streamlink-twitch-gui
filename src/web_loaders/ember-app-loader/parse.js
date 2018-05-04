@@ -66,7 +66,7 @@ module.exports = function parse( files, getModuleExports ) {
 				return false;
 			}
 			const type = end;
-			const { suffix, noEsModule } = TYPES[ type ];
+			const { suffix } = TYPES[ type ];
 			const name = getModuleName(
 				segments.slice( 0, -1 ),
 				collection.noNestedNames,
@@ -76,10 +76,8 @@ module.exports = function parse( files, getModuleExports ) {
 			// module is an explicit type
 			// validate its exports
 			return getModuleExports( path ).then( exportNames => {
-				if (
-					    noEsModule &&  exportNames.length
-					|| !noEsModule && !exportNames.includes( "default" )
-				) {
+				// module has to be a commonJS module or a es6 module with at least a default export
+				if ( exportNames.length && !exportNames.includes( "default" ) ) {
 					throw new Error( `Invalid export of module: ${path}` );
 				}
 
@@ -87,7 +85,7 @@ module.exports = function parse( files, getModuleExports ) {
 					name,
 					type,
 					path,
-					exportName: noEsModule
+					exportName: !exportNames.length
 						? null
 						: "default"
 				};

@@ -33,8 +33,7 @@ const TYPES = {
 		suffix: "Service"
 	},
 	template: {
-		suffix: "Template",
-		noEsModule: true
+		suffix: "Template"
 	},
 	transform: {
 		suffix: "Transform"
