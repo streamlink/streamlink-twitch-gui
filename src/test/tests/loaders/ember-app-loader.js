@@ -886,6 +886,28 @@ test( "Duplicates", function( assert ) {
 		"Throws on duplicate modules"
 	);
 
+	const modules = [
+		{
+			name: "Baz",
+			type: "route",
+			path: "ui/routes/baz.js",
+			exportName: "default"
+		},
+		{
+			name: "FooComponent",
+			type: "component",
+			path: "ui/components/foo.js",
+			exportName: "default"
+		},
+		{
+			name: "Bar",
+			type: "model",
+			path: "data/models/bar.js",
+			exportName: "default"
+		}
+	];
+	assert.propEqual( checkDuplicates( modules ), modules, "Keeps the sort order" );
+
 });
 
 
