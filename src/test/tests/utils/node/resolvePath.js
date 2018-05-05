@@ -1,51 +1,64 @@
 import { module, test } from "qunit";
-import * as path from "stub-path";
 
 import resolvePathInjector from "inject-loader!utils/node/resolvePath";
 
 
-const modulePlatform = "utils/node/platform";
-
-const resolvePathPosix = resolvePathInjector({
-	[ modulePlatform ]: { isWin: false },
-	path
-})[ "default" ];
-const resolvePathWin = resolvePathInjector({
-	[ modulePlatform ]: { isWin: true },
-	path
-})[ "default" ];
-
-
-let ENV;
-
-
 module( "utils/node/resolvePath", {
 	beforeEach() {
-		ENV = process.env;
+		this._env = process.env;
 	},
+
 	afterEach() {
-		process.env = ENV;
+		process.env = this._env;
 	}
 });
 
 
-test( "Resolve path POSIX", assert => {
+test( "Resolve path POSIX", function( assert ) {
 
-	assert.deepEqual( resolvePathPosix( "/foo", "bar/baz" ), "/foo/bar/baz", "No env vars" );
+	const { default: r } = resolvePathInjector({
+		"utils/node/platform": {
+			isWin: false
+		},
+		path: {
+			resolve( ...args ) {
+				return args.join( "/" );
+			}
+		}
+	});
+
+	assert.strictEqual( r(), "", "No arguments" );
+	assert.strictEqual( r( undefined ), "", "Empty arguments" );
+	assert.strictEqual( r( null ), "", "Empty arguments" );
+	assert.strictEqual( r( "/foo", "bar/baz" ), "/foo/bar/baz", "No env vars" );
 
 	process.env = { FOO: "/foo" };
-	assert.equal( resolvePathPosix( "$FOO", "bar/baz" ), "/foo/bar/baz", "Existing env var" );
-	assert.equal( resolvePathPosix( "$QUX", "bar/baz" ), "/bar/baz", "Non existing env var" );
+	assert.strictEqual( r( "$FOO", "bar/baz" ), "/foo/bar/baz", "Existing env var" );
+	assert.strictEqual( r( "$QUX", "bar/baz" ), "/bar/baz", "Non existing env var" );
 
 });
 
 
-test( "Resolve path Windows", assert => {
+test( "Resolve path Windows", function( assert ) {
 
-	assert.equal( resolvePathWin( "/foo", "bar/baz" ), "/foo/bar/baz", "No env vars" );
+	const { default: r } = resolvePathInjector({
+		"utils/node/platform": {
+			isWin: true
+		},
+		path: {
+			resolve( ...args ) {
+				return args.join( "\\" );
+			}
+		}
+	});
 
-	process.env = { FOO: "/foo" };
-	assert.equal( resolvePathWin( "%FOO%", "bar/baz" ), "/foo/bar/baz", "Existing env var" );
-	assert.equal( resolvePathWin( "%QUX%", "bar/baz" ), "/bar/baz", "Non existing env var" );
+	assert.strictEqual( r(), "", "No arguments" );
+	assert.strictEqual( r( undefined ), "", "Empty arguments" );
+	assert.strictEqual( r( null ), "", "Empty arguments" );
+	assert.strictEqual( r( "C:\\foo", "bar\\baz" ), "C:\\foo\\bar\\baz", "No env vars" );
+
+	process.env = { FOO: "D:\\foo" };
+	assert.strictEqual( r( "%FOO%", "bar\\baz" ), "D:\\foo\\bar\\baz", "Existing env var" );
+	assert.strictEqual( r( "%QUX%", "bar\\baz" ), "\\bar\\baz", "Non existing env var" );
 
 });

@@ -11,11 +11,12 @@ function fnVarReplace( _, v ) {
 }
 
 function resolvePathFactory( pattern ) {
-	return function resolvePath() {
-		let args = [ ...arguments ];
-		if ( args[ 0 ] ) {
-			args[ 0 ] = args[ 0 ].replace( pattern, fnVarReplace );
+	return function resolvePath( ...args ) {
+		if ( !args.length ) {
+			return "";
 		}
+
+		args[0] = String( args[0] || "" ).replace( pattern, fnVarReplace );
 
 		return resolve( ...args );
 	};
