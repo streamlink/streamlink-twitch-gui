@@ -1,7 +1,7 @@
+import semver from "semver";
 import { streaming as streamingConfig } from "config";
 import { LogError, VersionError } from "../errors";
 import spawn from "../spawn";
-import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 
 
@@ -87,7 +87,7 @@ export default async function( execObj, providerConfData ) {
 			}
 		});
 
-	if ( version !== getMax([ version, validation.version ]) ) {
+	if ( semver.lt( version, validation.version ) ) {
 		throw new VersionError( version );
 	}
 

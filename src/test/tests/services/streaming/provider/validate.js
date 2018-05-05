@@ -3,9 +3,8 @@ import { EventEmitter } from "events";
 import sinon from "sinon";
 
 import { streaming as streamingConfig } from "config";
-import validateProviderInjector from "inject-loader!services/streaming/provider/validate";
+import validateProviderInjector from "inject-loader?-semver!services/streaming/provider/validate";
 import { LogError, VersionError } from "services/streaming/errors";
-import { getMax } from "utils/semver";
 import StreamOutputBuffer from "utils/StreamOutputBuffer";
 
 
@@ -52,9 +51,6 @@ module( "services/streaming/provider/validate", {
 				VersionError
 			},
 			"../spawn": this.spawnStub,
-			"utils/semver": {
-				getMax
-			},
 			"utils/StreamOutputBuffer": StreamOutputBuffer
 		});
 

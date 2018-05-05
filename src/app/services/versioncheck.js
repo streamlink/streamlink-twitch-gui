@@ -1,9 +1,9 @@
 import { get, set } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
+import semver from "semver";
 import { update } from "config";
 import { manifest } from "nwjs/App";
 import { argv, ARG_VERSIONCHECK } from "nwjs/argv";
-import { getMax } from "utils/semver";
 
 
 const { "check-again": checkAgain } = update;
@@ -46,9 +46,9 @@ export default Service.extend({
 		let current = get( this,   "version" );
 		let version = get( record, "version" );
 
-		// if version string is empty, go on (new version)
-		// ignore if version string >= (not <) installed version metadata
-		if ( version && getMax([ version, current ]) === version ) {
+		// if previous version string is empty, don't skip (new version)
+		// skip if previous version is gte current version (read from metadata)
+		if ( version && semver.gte( version, current ) ) {
 			return true;
 		}
 
@@ -109,7 +109,7 @@ export default Service.extend({
 		let current = `v${version}`;
 
 		// no new release? check again in a few days
-		if ( current === getMax([ current, latest ]) ) {
+		if ( semver.gte( current, latest ) ) {
 			return this.ignoreRelease();
 		}
 

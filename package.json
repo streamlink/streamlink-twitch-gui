@@ -24,6 +24,7 @@
 		"minimist": "1.2.0",
 		"moment": "2.21.0",
 		"roboto-fontface": "0.8.0",
+		"semver": "5.5.0",
 		"snoretoast": "github:bastimeyer/snoretoast#binaries"
 	},
 	"devDependencies": {
