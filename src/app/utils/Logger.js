@@ -3,12 +3,15 @@ import { log as logConfig } from "config";
 import { argv, ARG_LOGFILE, ARG_LOGLEVEL } from "nwjs/argv";
 import { isDebug } from "nwjs/debug";
 import process from "nwjs/process";
-import { tmpdir } from "utils/node/platform";
+import { logdir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
 import clearfolder from "utils/node/fs/clearfolder";
-import { resolve as resolvePath } from "path";
-import { appendFile } from "fs";
+import { join } from "path";
+import { appendFile as fsAppendFile } from "fs";
 import { promisify } from "util";
+
+
+const { filename, maxAgeDays } = logConfig;
 
 
 export const LOG_LEVEL_NONE = "none";
@@ -37,17 +40,11 @@ export const LISTEN_TO_ERROR = idxLevel >= LOG_LEVELS.indexOf( LOG_LEVEL_ERROR )
 export const LISTEN_TO_DEBUG = idxLevel >= LOG_LEVELS.indexOf( LOG_LEVEL_DEBUG );
 
 
-const {
-	dir,
-	filename,
-	maxAgeDays
-} = logConfig;
-
 /**
  * @type {Function}
  * @returns {Promise}
  */
-const fsAppendFile = promisify( appendFile );
+const appendFile = promisify( fsAppendFile );
 
 /**
  * @type {Function}
@@ -110,13 +107,12 @@ export async function log( level, namespace, data, debug ) {
 	if ( argv[ ARG_LOGFILE ] ) {
 		try {
 			if ( !logFilePath ) {
-				const logDir = tmpdir( dir );
-				await mkdirp( logDir );
-				await clearfolder( logDir, maxAgeDays * 24 * 3600 * 1000 );
+				await mkdirp( logdir );
+				await clearfolder( logdir, maxAgeDays * 24 * 3600 * 1000 );
 
-				logFilePath = resolvePath( logDir, logFileName );
+				logFilePath = join( logdir, logFileName );
 			}
-			await fsAppendFile( logFilePath, formatFile( level, namespace, data, debug ) );
+			await appendFile( logFilePath, formatFile( level, namespace, data, debug ) );
 		} catch ( e ) {}
 	}
 }

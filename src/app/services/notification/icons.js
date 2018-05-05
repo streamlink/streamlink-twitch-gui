@@ -1,20 +1,21 @@
 import { get, set } from "@ember/object";
 import { files as filesConfig, notification as notificationConfig } from "config";
-import { isWin, tmpdir } from "utils/node/platform";
+import { isWin, cachedir } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
 import mkdirp from "utils/node/fs/mkdirp";
 import clearfolder from "utils/node/fs/clearfolder";
 import download from "utils/node/fs/download";
+import { join } from "path";
 
 
 const { icons: { big: bigIcon } } = filesConfig;
 const {
 	cache: {
-		dir: cacheDir,
+		dir: cacheName,
 		time: cacheTime
 	}
 } = notificationConfig;
-const cacheTmpDir = tmpdir( cacheDir );
+const iconCacheDir = join( cachedir, cacheName );
 
 
 export const iconGroup = isWin
@@ -25,7 +26,7 @@ export const iconGroup = isWin
  * @returns {Promise}
  */
 export async function iconDirCreate() {
-	await mkdirp( cacheTmpDir );
+	await mkdirp( iconCacheDir );
 }
 
 /**
@@ -33,7 +34,7 @@ export async function iconDirCreate() {
  */
 export async function iconDirClear() {
 	try {
-		await clearfolder( cacheTmpDir, cacheTime );
+		await clearfolder( iconCacheDir, cacheTime );
 	} catch ( e ) {}
 }
 
@@ -48,7 +49,7 @@ export async function iconDownload( stream ) {
 	}
 
 	const logo = get( stream, "channel.logo" );
-	const file = await download( logo, cacheTmpDir );
+	const file = await download( logo, iconCacheDir );
 
 	// set the local channel logo on the twitchStream record
 	set( stream, "logo", file );

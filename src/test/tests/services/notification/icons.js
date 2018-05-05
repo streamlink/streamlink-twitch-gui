@@ -1,92 +1,128 @@
 import { module, test } from "qunit";
+import sinon from "sinon";
+import { posix as path } from "path";
 
 import notificationIconsMixinInjector
 // eslint-disable-next-line max-len
-	from "inject-loader?config&utils/node/platform&utils/node/resolvePath&utils/node/fs/mkdirp&utils/node/fs/clearfolder&utils/node/fs/download!services/notification/icons";
+	from "inject-loader?config&utils/node/platform&utils/node/resolvePath&utils/node/fs/mkdirp&utils/node/fs/clearfolder&utils/node/fs/download&path!services/notification/icons";
 
 
-module( "services/notification/icons" );
+
+module( "services/notification/icons", {
+	beforeEach() {
+		this.resolvePathStub = sinon.stub().callsFake( ( ...paths ) => paths.join( "/" ) );
+		this.mkdirpStub = sinon.stub();
+		this.clearfolderStub = sinon.stub();
+		this.downloadStub = sinon.stub();
+
+		this.subject = isWin => notificationIconsMixinInjector({
+			path,
+			config: {
+				files: {
+					icons: {
+						big: "bigIconPath"
+					}
+				},
+				notification: {
+					cache: {
+						dir: "icons",
+						time: 1234
+					}
+				}
+			},
+			"utils/node/platform": {
+				isWin,
+				cachedir: "/home/user/.cache/my-app"
+			},
+			"utils/node/resolvePath": this.resolvePathStub,
+			"utils/node/fs/mkdirp": this.mkdirpStub,
+			"utils/node/fs/clearfolder": this.clearfolderStub,
+			"utils/node/fs/download": this.downloadStub
+		});
+	}
+});
 
 
-test( "NotificationService icons", async assert => {
+test( "NotificationService icons", async function( assert ) {
 
-	assert.expect( 10 );
+	const error = new Error( "fail" );
 
-	const config = {
-		files: { icons: { big: "bigIconPath" } },
-		notification: {
-			cache: {
-				dir: "iconCacheDir",
-				time: 1234
-			}
-		}
-	};
-
-	let callsClear = 0;
 	const {
 		iconGroup,
 		iconDirCreate,
 		iconDirClear,
 		iconDownload
-	} = notificationIconsMixinInjector({
-		config,
-		"utils/node/platform": {
-			isWin: false,
-			tmpdir( dir ) {
-				assert.strictEqual( dir, "iconCacheDir", "Calls tmpdir" );
-				return dir;
-			}
-		},
-		"utils/node/resolvePath": ( ...paths ) => {
-			assert.propEqual( paths, [ "bigIconPath" ], "Calls resolvePath" );
-			return paths.join( "/" );
-		},
-		"utils/node/fs/mkdirp": dir => {
-			assert.strictEqual( dir, "iconCacheDir", "Calls mkdirp" );
-		},
-		"utils/node/fs/clearfolder": ( dir, time ) => {
-			if ( ++callsClear > 1 ) {
-				throw new Error();
-			}
-			assert.strictEqual( dir, "iconCacheDir", "Calls clearfolder" );
-			assert.strictEqual( time, 1234, "Clears with correct cache time" );
-		},
-		"utils/node/fs/download": ( url, dir ) => {
-			assert.strictEqual( url, "logo", "Calls download" );
-			assert.strictEqual( dir, "iconCacheDir", "Downloads into correct dir" );
-			return "file";
-		}
-	});
+	} = this.subject( false );
 
 	assert.strictEqual( iconGroup, "bigIconPath", "Exports the correct iconGroup constant" );
 
+	this.mkdirpStub.rejects( error );
+	await assert.rejects( iconDirCreate(), error, "Rejects on mkdirp failure" );
+	assert.ok(
+		this.mkdirpStub.calledWithExactly( "/home/user/.cache/my-app/icons" ),
+		"Tries to create correct icon cache dir"
+	);
+
+	this.mkdirpStub.reset();
+	this.mkdirpStub.resolves();
 	await iconDirCreate();
+	assert.ok(
+		this.mkdirpStub.calledWithExactly( "/home/user/.cache/my-app/icons" ),
+		"Creates correct icon cache dir"
+	);
 
+	this.clearfolderStub.rejects( error );
 	await iconDirClear();
-	// ignore errors
+	assert.ok(
+		this.clearfolderStub.calledWithExactly( "/home/user/.cache/my-app/icons", 1234 ),
+		"Always resolves iconDirClear"
+	);
+
+	this.clearfolderStub.reset();
+	this.clearfolderStub.resolves();
 	await iconDirClear();
+	assert.ok(
+		this.clearfolderStub.calledWithExactly( "/home/user/.cache/my-app/icons", 1234 ),
+		"Always resolves iconDirClear"
+	);
 
-	let stream = { channel: { logo: "logo" } };
+	const stream = { channel: { logo: "logo-url" } };
+	this.downloadStub.rejects( error );
+	await assert.rejects(
+		iconDownload( stream ),
+		error,
+		"Rejects on download failure"
+	);
+	assert.ok(
+		this.downloadStub.calledWithExactly( "logo-url", "/home/user/.cache/my-app/icons" ),
+		"Downloads logo into cache directory"
+	);
+	assert.strictEqual( stream.logo, undefined, "Doesn't set logo property on failure" );
+
+	this.downloadStub.reset();
+	this.downloadStub.resolves( "file-path" );
 	await iconDownload( stream );
-	assert.strictEqual( stream.logo, "file", "Sets the logo property on the stream record" );
+	assert.ok(
+		this.downloadStub.calledWithExactly( "logo-url", "/home/user/.cache/my-app/icons" ),
+		"Downloads logo into cache directory"
+	);
+	assert.strictEqual( stream.logo, "file-path", "Sets the logo property on the stream record" );
 
-	// don't download twice
+	this.downloadStub.resetHistory();
 	await iconDownload( stream );
+	assert.notOk( this.downloadStub.called, "Doesn't try to download icons twice" );
+
+});
 
 
-	notificationIconsMixinInjector({
-		config,
-		"utils/node/platform": {
-			isWin: true,
-			tmpdir() {}
-		},
-		"utils/node/resolvePath": ( ...paths ) => {
-			assert.propEqual(
-				paths,
-				[ "%NWJSAPPPATH%", "bigIconPath" ],
-				"Exports the correct iconGroup constant on Windows"
-			);
-		}
-	});
+test( "Windows icon path", async function( assert ) {
+
+	const { iconGroup } = this.subject( true );
+
+	assert.strictEqual(
+		iconGroup,
+		"%NWJSAPPPATH%/bigIconPath",
+		"Exports the correct iconGroup constant on Windows"
+	);
 
 });
