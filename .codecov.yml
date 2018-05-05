@@ -1,10 +1,10 @@
 codecov:
-  notify:
-    require_ci_to_pass: true
+    notify:
+        require_ci_to_pass: true
 comment:
-  behavior: default
-  layout: header, diff
-  require_changes: false
+    behavior: default
+    layout: header, diff
+    require_changes: false
 coverage:
     range: "0..100"
     round: down
@@ -16,3 +16,6 @@ coverage:
         project:
             default:
                 target: 50
+parsers:
+    javascript:
+        enable_partials: yes
