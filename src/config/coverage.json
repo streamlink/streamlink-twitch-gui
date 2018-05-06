@@ -1,5 +1,19 @@
 {
-	"reporter": [ "lcov" ],
+	"reporters": [
+		{
+			"name": "html",
+			"options": {
+				"subdir": "html-report",
+				"skipEmpty": false
+			}
+		},
+		{
+			"name": "json",
+			"options": {
+				"file": "coverage.json"
+			}
+		}
+	],
 	"watermarks": {
 		"lines": [ 80, 95 ],
 		"functions": [ 80, 95 ],

@@ -150,9 +150,11 @@ module.exports = function( grunt, options, cdp ) {
 			.then( ({ result: { type, value } }) => {
 				if ( type !== "string" || !value ) { return; }
 
+				grunt.log.writeln( "" );
+
 				const dir = grunt.config( "dir.tmp_coverage" );
 				const watermarks = grunt.config( "coverage.watermarks" );
-				const reporter = grunt.config( "coverage.reporter" );
+				const reporters = grunt.config( "coverage.reporters" );
 
 				const libCoverage = require( "istanbul-lib-coverage" );
 				const libReport = require( "istanbul-lib-report" );
@@ -168,14 +170,11 @@ module.exports = function( grunt, options, cdp ) {
 				const tree = libReport.summarizers.pkg( map );
 				const context = libReport.createContext({ dir, watermarks });
 
-				reporter.forEach( reporter => {
-					tree.visit( reports.create( reporter, {
-						skipEmpty: false
-					}), context );
+				reporters.forEach( ({ name, options }) => {
+					const report = reports.create( name, options );
+					tree.visit( report, context );
+					grunt.log.ok( `Coverage reporter run: ${name}` );
 				});
-
-				grunt.log.writeln( "" );
-				grunt.log.ok( "Coverage data written" );
 			})
 			.then( resolve, reject );
 	}

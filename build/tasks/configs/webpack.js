@@ -241,8 +241,7 @@ const loaderBabelCoverage = {
 			"babel-plugin-transform-es2015-modules-commonjs",
 			[ "babel-plugin-istanbul", {
 				exclude: [
-					"**/test/**/*.js",
-					"**/web_modules/**/*.js"
+					"**/src/web_modules/**"
 				]
 			}]
 		],

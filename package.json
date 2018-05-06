@@ -79,6 +79,7 @@
 	"scripts": {
 		"build": "grunt release",
 		"test": "grunt test",
-		"codecov": "codecov"
+		"coverage": "grunt test:coverage && xdg-open build/tmp/coverage/html-report/index.html",
+		"codecov": "codecov -f build/tmp/coverage/coverage.json"
 	}
 }

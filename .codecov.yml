@@ -1,21 +1,29 @@
 codecov:
     notify:
-        require_ci_to_pass: true
+        require_ci_to_pass: yes
 comment:
     behavior: default
     layout: header, diff
-    require_changes: false
+    require_changes: no
 coverage:
     range: "0..100"
     round: down
     precision: 2
-    notify: false
     status:
-        changes: false
-        patch: false
+        changes: no
+        patch: no
         project:
-            default:
+            default: no
+            app:
                 target: 50
+                threshold: 1
+                paths:
+                    - "!src/test/"
+            tests:
+                target: 98
+                threshold: 0
+                paths:
+                    - "src/test/"
 parsers:
     javascript:
         enable_partials: yes
