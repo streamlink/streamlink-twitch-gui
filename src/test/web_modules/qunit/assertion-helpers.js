@@ -20,6 +20,33 @@ QUnit.assert.checkSteps = function() {
 
 
 /**
+ * Checks if all arguments are set in order
+ * This custom assertion has been implemented because of sinon's broken callOrder assertion when
+ * checking spies and stubs which have been called multiple times
+ * @param {any[]} values
+ * @param {string?} message
+ */
+QUnit.assert.order = function( values, message = "Has the correct order" ) {
+	if ( !Array.isArray( values ) || values.length === 0 ) {
+		this.test.pushResult({
+			result: false,
+			actual: values,
+			expected: "An array with at least one element",
+			message
+		});
+
+	} else {
+		const result = values.every( ( value, index, array ) => index === 0
+			? true
+			: value > array[ index - 1 ]
+		);
+
+		this.test.pushResult({ result, actual: values, expected: null, message });
+	}
+};
+
+
+/**
  * Replace QUnit's stupid assert.rejects implementation which doesn't make any sense...
  * This method properly returns a promise, so async tests can be used with await assert.rejects()
  * @param {(Promise|Function)} promise

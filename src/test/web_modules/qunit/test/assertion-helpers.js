@@ -47,6 +47,77 @@ test( "assert.checkSteps", assert => {
 });
 
 
+test( "assert.order", assert => {
+
+	const API = {
+		test: {
+			pushResult() {}
+		}
+	};
+
+	const pushResultSpy = sinon.spy( API.test, "pushResult" );
+
+	QUnit.assert.order.call( API, [ 1, 2, 3 ] );
+	assert.ok(
+		pushResultSpy.calledWithExactly({
+			result: true,
+			actual: [ 1, 2, 3 ],
+			expected: null,
+			message: "Has the correct order"
+		}),
+		"Succeeds"
+	);
+	pushResultSpy.resetHistory();
+
+	QUnit.assert.order.call( API, [ 1, 3, 2 ], "Custom message" );
+	assert.ok(
+		pushResultSpy.calledWithExactly({
+			result: false,
+			actual: [ 1, 3, 2 ],
+			expected: null,
+			message: "Custom message"
+		}),
+		"Fails"
+	);
+	pushResultSpy.resetHistory();
+
+	QUnit.assert.order.call( API, [ 1 ], "Custom message" );
+	assert.ok(
+		pushResultSpy.calledWithExactly({
+			result: true,
+			actual: [ 1 ],
+			expected: null,
+			message: "Custom message"
+		}),
+		"Succeeds with one element"
+	);
+	pushResultSpy.resetHistory();
+
+	QUnit.assert.order.call( API, [], "Custom message" );
+	assert.ok(
+		pushResultSpy.calledWithExactly({
+			result: false,
+			actual: [],
+			expected: "An array with at least one element",
+			message: "Custom message"
+		}),
+		"Fails with no elements"
+	);
+
+	QUnit.assert.order.call( API, {}, "Custom message" );
+	assert.ok(
+		pushResultSpy.calledWithExactly({
+			result: false,
+			actual: {},
+			expected: "An array with at least one element",
+			message: "Custom message"
+		}),
+		"Fails with invalid values"
+	);
+
+});
+
+
 test( "assert.rejects", async assert => {
 
 	const API = {
