@@ -1,7 +1,7 @@
 /**
  * @returns {Promise}
  */
-module.exports = function( grunt, options, cdp ) {
+module.exports = function( grunt, options, cdp, isCoverage ) {
 	const UUID = `qunit_${Date.now()}_${Math.random().toString( 36 ).substring( 2, 15 )}`;
 	const consoleMethod = "info";
 
@@ -144,11 +144,17 @@ module.exports = function( grunt, options, cdp ) {
 
 
 	function promiseCoverage( resolve, reject ) {
+		if ( !isCoverage ) {
+			return resolve();
+		}
+
 		cdp.send( "Runtime.evaluate", {
 			expression: "window.__coverage__?JSON.stringify(window.__coverage__):false"
 		})
 			.then( ({ result: { type, value } }) => {
-				if ( type !== "string" || !value ) { return; }
+				if ( type !== "string" || !value || !value.length ) {
+					throw new Error( "Error while reading coverage data" );
+				}
 
 				grunt.log.writeln( "" );
 

@@ -18,6 +18,7 @@ module.exports = function( grunt ) {
 			host: "localhost",
 			port: 8000
 		});
+		const isCoverage = !!this.flags.coverage;
 
 
 		const nwjsOptions = Object.assign( {}, grunt.config.process( nwjsTaskOptions ), {
@@ -74,7 +75,7 @@ module.exports = function( grunt ) {
 						grunt.log.debug( `Connected to ${options.host}:${options.port}` );
 
 						// set up and start QUnit
-						return cdpTestReporterQUnit( grunt, options, cdp );
+						return cdpTestReporterQUnit( grunt, options, cdp, isCoverage );
 					})
 					// resolve on a successful test run
 					.then( resolve, reject );

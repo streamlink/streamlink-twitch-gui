@@ -24,4 +24,4 @@ test:coverage:
     - "clean:tmp_test"
     - "clean:tmp_coverage"
     - "webpack:coverage"
-    - "runtest"
+    - "runtest:coverage"
