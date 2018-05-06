@@ -11,12 +11,6 @@ const Ember = window.Ember;
 const reWhiteSpace = /\s+/g;
 
 
-export const fixtureElement = "#qunit-fixture";
-
-export function runAppend( view, element ) {
-	run( view, "appendTo", element || fixtureElement );
-}
-
 export function runDestroy( destroyed ) {
 	if ( destroyed ) {
 		run( destroyed, "destroy" );
