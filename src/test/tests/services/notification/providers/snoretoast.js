@@ -1,3 +1,4 @@
+// TODO: properly rewrite tests by using sinon
 import { module, test } from "qunit";
 
 import notificationProviderSnoreToastInjector
@@ -119,12 +120,14 @@ test( "setup", async assert => {
 
 	expectedPath = [ "%NWJSAPPPATH%", "bin", "win32", "snoretoast.exe" ];
 
-	try {
-		const inst = new NotificationProviderSnoreToast();
-		await inst.setup();
-	} catch ( e ) {
-		assert.strictEqual( e.message, "fail which", "Can't verify binary" );
-	}
+	await assert.rejects(
+		async () => {
+			const inst = new NotificationProviderSnoreToast();
+			await inst.setup();
+		},
+		new Error( "fail which" ),
+		"Can't verify binary"
+	);
 
 	NotificationProviderSnoreToast = notificationProviderSnoreToastInjector( Object.assign({
 		"utils/node/platform": {
@@ -134,40 +137,44 @@ test( "setup", async assert => {
 
 	expectedPath = [ "%NWJSAPPPATH%", "bin", "win64", "snoretoast.exe" ];
 
-	try {
-		const inst = new NotificationProviderSnoreToast();
-		await inst.setup();
-	} catch ( e ) {
-		assert.strictEqual( e.message, "fail which", "Can't verify binary" );
-	}
+	await assert.rejects(
+		async () => {
+			const inst = new NotificationProviderSnoreToast();
+			await inst.setup();
+		},
+		new Error( "fail which" ),
+		"Can't verify binary"
+	);
 
 	failWhich = false;
 
-	try {
-		const inst = new NotificationProviderSnoreToast();
-		await inst.setup();
-	} catch ( e ) {
-		assert.strictEqual( e.message, "fail process", "Can't execute binary" );
-	}
+	await assert.rejects(
+		async () => {
+			const inst = new NotificationProviderSnoreToast();
+			await inst.setup();
+		},
+		new Error( "fail process" ),
+		"Can't execute binary"
+	);
 
 	failProcess = false;
 
-	try {
-		const inst = new NotificationProviderSnoreToast();
-		await inst.setup();
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Could not install application shortcut", "Shortcut fail" );
-	}
+	await assert.rejects(
+		async () => {
+			const inst = new NotificationProviderSnoreToast();
+			await inst.setup();
+		},
+		new Error( "Could not install application shortcut" ),
+		"Shortcut fail"
+	);
 
 	exitCode = 0;
 
-	try {
+	await ( async () => {
 		const inst = new NotificationProviderSnoreToast();
 		await inst.setup();
 		assert.strictEqual( inst.exec, "C:\\bar\\bin\\win64\\snoretoast.exe", "Has exec path" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });
 

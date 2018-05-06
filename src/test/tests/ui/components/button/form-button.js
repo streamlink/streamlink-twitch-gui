@@ -209,12 +209,11 @@ test( "Icon failure animation", async function( assert ) {
 		"Icon does not have the animation failure class anymore"
 	);
 
-	try {
-		await failurePromise;
-		assert.ok( false, "Resolves the failure promise" );
-	} catch ( data ) {
-		assert.strictEqual( data, failurePromiseData, "The failure promise always rejects" );
-	}
+	await assert.rejects(
+		failurePromise,
+		failurePromiseData,
+		"The failure promise always rejects"
+	);
 
 });
 
@@ -259,10 +258,7 @@ test( "Click actions return a Promise", async function( assert ) {
 	this.set( "_iconAnimation", failureStub );
 	$btn.click();
 	failureReject();
-	try {
-		await failurePromise;
-		assert.ok( false, "Resolves failure" );
-	} catch ( e ) {}
+	await assert.rejects( failurePromise );
 	assert.propEqual( failureStub.args, [ [ STATE_FAILURE, 456 ] ], "Calls icon failure callback" );
 
 });

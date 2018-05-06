@@ -1,4 +1,5 @@
 import { module, test } from "qunit";
+import sinon from "sinon";
 
 import instanceInitializerInjector from "inject-loader!init/initializers/localstorage/initializer";
 
@@ -26,75 +27,76 @@ test( "Application instance initializer", assert => {
 		}
 	};
 
+	const getItemStub = sinon.stub();
+	const setItemStub = sinon.stub();
+	const namespacesSpy = sinon.spy();
+	const settingsSpy = sinon.spy();
+	const channelsettingsSpy = sinon.spy();
+
+	getItemStub.throws( new Error( "Requests unexpected localstorage namespace" ) );
+	getItemStub.withArgs( "settings" ).callsFake( () => JSON.stringify( settings ) );
+	getItemStub.withArgs( "channelsettings" ).callsFake( () => JSON.stringify( channelsettings ) );
+
+	setItemStub.throws( new Error( "Sets an unexpected localstorage namespace" ) );
+
 	const LS = {
-		getItem( item ) {
-			assert.step( "getItem" );
-			assert.step( item );
-			if ( item === "settings" ) {
-				return JSON.stringify( settings );
-			} else if ( item === "channelsettings" ) {
-				return JSON.stringify( channelsettings );
-			} else {
-				assert.ok( false, "Requests unexpected localstorage namespace" );
-			}
-		},
-		setItem( item, string ) {
-			assert.step( "setItem" );
-			assert.step( item );
-			if ( item === "settings" ) {
-				assert.strictEqual( string, JSON.stringify( settings ), "Sets settings data" );
-			} else if ( item === "channelsettings" ) {
-				assert.strictEqual(
-					string,
-					JSON.stringify( channelsettings ),
-					"Sets channel settings data"
-				);
-			} else {
-				assert.ok( false, "Sets an unexpected localstorage namespace" );
-			}
-		}
+		getItem: getItemStub,
+		setItem: setItemStub
 	};
 
-	const expectedChannelSettings = [ { baz: 3 }, { qux: 4 } ];
-
-	const { default: { name, before, initialize } } = instanceInitializerInjector({
+	const { default: { name, before, initialize } } = instanceInitializerInjector( {
 		"./localstorage": LS,
-		"./namespaces": ls => {
-			assert.step( "updateNamespaces" );
-			assert.strictEqual( ls, LS );
-		},
-		"./settings": settings => {
-			assert.step( "updateSettings" );
-			assert.propEqual( settings, { foo: 1 }, "Uses correct settings object" );
-		},
-		"./channelsettings": channelsettings => {
-			assert.step( "updateChannelSettings" );
-			assert.propEqual(
-				channelsettings,
-				expectedChannelSettings.shift(),
-				"Uses correct channel settings object"
-			);
-		}
+		"./namespaces": namespacesSpy,
+		"./settings": settingsSpy,
+		"./channelsettings": channelsettingsSpy
 	});
 
 	assert.strictEqual( name, "localstorage", "Has a name" );
 	assert.strictEqual( before, "ember-data", "Runs before ember-data" );
 	assert.ok( initialize instanceof Function, "Has an initializer function" );
+
 	initialize();
 
-	assert.checkSteps([
-		"updateNamespaces",
-		"getItem",
-		"settings",
-		"updateSettings",
-		"setItem",
-		"settings",
-		"getItem",
-		"channelsettings",
-		"updateChannelSettings",
-		"updateChannelSettings",
-		"setItem",
-		"channelsettings"
-	], "Executes everything in the correct order" );
+	assert.ok(
+		namespacesSpy.calledWithExactly( LS ),
+		"Updates namespace first"
+	);
+	assert.ok(
+		getItemStub.getCall( 0 ).calledWith( "settings" ),
+		"Gets settings"
+	);
+	assert.propEqual(
+		settingsSpy.args,
+		[ [ { foo: 1 } ] ],
+		"Updates settings"
+	);
+	assert.ok(
+		setItemStub.getCall( 0 ).calledWith( "settings", JSON.stringify( settings ) ),
+		"Writes settings"
+	);
+	assert.ok(
+		getItemStub.getCall( 1 ).calledWith( "channelsettings" ),
+		"Gets channel settings"
+	);
+	assert.propEqual(
+		channelsettingsSpy.args,
+		[ [ { baz: 3 } ], [ { qux: 4 } ] ],
+		"Updates each channel settings object"
+	);
+	assert.ok(
+		setItemStub.getCall( 1 ).calledWith( "channelsettings", JSON.stringify( channelsettings ) ),
+		"Writes channel settings"
+	);
+
+	assert.order([
+		namespacesSpy.callIds[0],
+		getItemStub.callIds[0],
+		settingsSpy.callIds[0],
+		setItemStub.callIds[0],
+		getItemStub.callIds[1],
+		channelsettingsSpy.callIds[0],
+		channelsettingsSpy.callIds[1],
+		setItemStub.callIds[1]
+	], "Calls methods in correct order" );
 
 });

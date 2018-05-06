@@ -1,3 +1,4 @@
+// TODO: properly rewrite tests by using sinon
 import { module, test } from "qunit";
 import { EventEmitter } from "events";
 import { posix, win32 } from "path";
@@ -44,24 +45,28 @@ test( "Invalid content", async assert => {
 		}
 	})[ "default" ];
 
-	try {
-		const promise = findPythonscriptInterpreter( "/foo/bar", "exec" );
-		readStream.emit( "end" );
-		await promise;
-	} catch ( data ) {
-		assert.ok( true, "Throws an error on missing file content" );
-	}
+	await assert.rejects(
+		async () => {
+			const promise = findPythonscriptInterpreter( "/foo/bar", "exec" );
+			readStream.emit( "end" );
+			await promise;
+		},
+		new Error( "Invalid python script" ),
+		"Throws an error on missing file content"
+	);
 
-	try {
-		const promise = findPythonscriptInterpreter( "/foo/bar", "exec" );
-		readStream.emit( "data", "foo\n" );
-		readStream.emit( "end" );
-		await promise;
-	} catch ( data ) {
-		assert.ok( true, "Throws an error on invalid file content" );
-	}
+	await assert.rejects(
+		async () => {
+			const promise = findPythonscriptInterpreter( "/foo/bar", "exec" );
+			readStream.emit( "data", "foo\n" );
+			readStream.emit( "end" );
+			await promise;
+		},
+		new Error( "Invalid python script" ),
+		"Throws an error on invalid file content"
+	);
 
-	try {
+	await ( async () => {
 		const promise = findPythonscriptInterpreter( "/foo/bar", "exec", "custom-exec" );
 		readStream.emit( "data", "foo\n" );
 		readStream.emit( "end" );
@@ -71,9 +76,7 @@ test( "Invalid content", async assert => {
 			new ExecObj(),
 			"Returns an empty exec object on invalid file content when a custom exec was set"
 		);
-	} catch ( error ) {
-		throw error;
-	}
+	})();
 
 });
 
@@ -101,7 +104,7 @@ test( "Pythonscript shebang Posix", async assert => {
 	};
 
 	// resolve executable from shebang dirname
-	try {
+	await ( async () => {
 		const findPythonscriptInterpreter = findPythonscriptInterpreterInjector( assign({
 			"utils/node/fs/whichFallback": ( execName, fallbackPaths, check, fallbackOnly ) => {
 				assert.strictEqual( execName, "exec", "Looks up correct exec name" );
@@ -125,12 +128,10 @@ test( "Pythonscript shebang Posix", async assert => {
 			},
 			"Returns the correct exec path"
 		);
-	} catch ( error ) {
-		throw error;
-	}
+	})();
 
 	// resolve full shebang path
-	try {
+	await ( async () => {
 		let whichFallbackCalls = 0;
 		const findPythonscriptInterpreter = findPythonscriptInterpreterInjector( assign({
 			"utils/node/fs/whichFallback": ( execName, fallbackPaths, check, fallbackOnly ) => {
@@ -167,9 +168,7 @@ test( "Pythonscript shebang Posix", async assert => {
 			},
 			"Returns the correct exec path"
 		);
-	} catch ( error ) {
-		throw error;
-	}
+	})();
 
 });
 
@@ -331,14 +330,10 @@ test( "Chained bash wrapper scripts", async assert => {
 		}
 	})[ "default" ];
 
-	try {
-		await findPythonscriptInterpreter( "/foo/bar", { exec: "exec" } );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Invalid python script",
-			"Throws an error on chained bash wrapper scripts"
-		);
-	}
+	await assert.rejects(
+		findPythonscriptInterpreter( "/foo/bar", { exec: "exec" } ),
+		new Error( "Invalid python script" ),
+		"Throws an error on chained bash wrapper scripts"
+	);
 
 });

@@ -1,4 +1,5 @@
 import { module, test } from "qunit";
+import sinon from "sinon";
 import { EventEmitter } from "events";
 
 import httpServerInjector from "inject-loader?http!utils/node/http/HttpServer";
@@ -70,54 +71,47 @@ test( "Setup and shutdown", assert => {
 
 test( "Route matching", assert => {
 
-	assert.expect( 11 );
-
 	const server = new HttpServer( 8000 );
-	let requestFoo = new FakeHttpRequest( "GET", "/foo" );
-	let responseFoo = new FakeHttpResponse();
-	let requestBaz = new FakeHttpRequest( "GET", "/baz/baz/baz" );
-	let responseBaz = new FakeHttpResponse();
-	let requestQux = new FakeHttpRequest( "GET", "/qux" );
-	let responseQux = new FakeHttpResponse();
+	const requestFoo = new FakeHttpRequest( "GET", "/foo" );
+	const responseFoo = new FakeHttpResponse();
+	const requestBaz = new FakeHttpRequest( "GET", "/baz/baz/baz" );
+	const responseBaz = new FakeHttpResponse();
+	const requestQux = new FakeHttpRequest( "GET", "/qux" );
+	const responseQux = new FakeHttpResponse();
 
-	server.onRequest( "GET", "/bar", () => {
-		assert.ok( false, "Will never call the GET /bar route callback" );
-	});
+	const requestGetBarSpy = sinon.spy();
+	const requestPostFooSpy = sinon.spy();
+	const requestGetFooOneStub = sinon.stub().returns( undefined );
+	const requestGetFooTwoStub = sinon.stub().returns( true );
+	const requestGetFooThreeSpy = sinon.spy();
+	const requestGetBazSpy = sinon.spy();
 
-	server.onRequest( "POST", "/foo", () => {
-		assert.ok( false, "Will never call the POST /foo route callback" );
-	});
-
-	server.onRequest( "GET", "/foo", ( req, res ) => {
-		assert.ok( true, "Has called the first GET /foo route callback" );
-		assert.strictEqual( req, requestFoo, "Passes the correct request object" );
-		assert.strictEqual( res, responseFoo, "Passes the correct response object" );
-	});
-
-	server.onRequest( "GET", "/foo", ( req, res ) => {
-		assert.ok( true, "Has called the second GET /foo route callback" );
-		assert.strictEqual( req, requestFoo, "Passes the correct request object" );
-		assert.strictEqual( res, responseFoo, "Passes the correct response object" );
-		return true;
-	});
-
-	server.onRequest( "GET", "/foo", () => {
-		assert.ok( false, "Will never call the third GET /foo route callback" );
-	});
-
-	server.onRequest( "GET", "/foo", () => {
-		assert.ok( false, "Will never call the third GET /foo route callback" );
-	});
-
-	server.onRequest( "GET", /\/baz.+/, ( req, res ) => {
-		assert.ok( true, "Matches regexp routes" );
-		assert.strictEqual( req, requestBaz, "Passes the correct request object" );
-		assert.strictEqual( res, responseBaz, "Passes the correct response object" );
-	});
+	server.onRequest( "GET", "/bar", requestGetBarSpy );
+	server.onRequest( "POST", "/foo", requestPostFooSpy );
+	server.onRequest( "GET", "/foo", requestGetFooOneStub );
+	server.onRequest( "GET", "/foo", requestGetFooTwoStub );
+	server.onRequest( "GET", "/foo", requestGetFooThreeSpy );
+	server.onRequest( "GET", /\/baz.+/, requestGetBazSpy );
 
 	server.server.emit( "request", requestFoo, responseFoo );
 	server.server.emit( "request", requestQux, responseQux );
 	server.server.emit( "request", requestBaz, responseBaz );
+
+	assert.notOk( requestGetBarSpy.called, "Will never call the GET /bar route callback" );
+	assert.notOk( requestPostFooSpy.called, "Will never call the POST /foo route callback" );
+	assert.ok(
+		requestGetFooOneStub.calledWithExactly( requestFoo, responseFoo ),
+		"Has called the first GET /foo route callback"
+	);
+	assert.ok(
+		requestGetFooTwoStub.calledWithExactly( requestFoo, responseFoo ),
+		"Has called the second GET /foo route callback"
+	);
+	assert.notOk( requestGetFooThreeSpy.called, "Never calls the third GET /foo route callback" );
+	assert.ok(
+		requestGetBazSpy.calledWithExactly( requestBaz, responseBaz ),
+		"Matches regexp routes"
+	);
 
 	assert.strictEqual( responseQux.statusCode, 404, "Returns 404 code on unmatched routes" );
 	assert.strictEqual( responseQux.message, "404", "Writes 404 message on unmatched routes" );

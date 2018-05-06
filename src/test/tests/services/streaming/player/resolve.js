@@ -1,3 +1,4 @@
+// TODO: properly rewrite tests by using sinon
 import { module, test } from "qunit";
 
 import resolvePlayerInjector from "inject-loader!services/streaming/player/resolve";
@@ -88,7 +89,7 @@ test( "Default player profile", async assert => {
 	}) )[ "default" ];
 
 	// no user config
-	try {
+	await ( async () => {
 		expected = {
 			exec: null,
 			env: null,
@@ -98,12 +99,10 @@ test( "Default player profile", async assert => {
 			"default": {}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// custom exec
-	try {
+	await ( async () => {
 		expected = {
 			exec: "foo",
 			env: null,
@@ -115,12 +114,10 @@ test( "Default player profile", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// custom params
-	try {
+	await ( async () => {
 		expected = {
 			exec: "foo",
 			env: null,
@@ -133,12 +130,10 @@ test( "Default player profile", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// custom params, but no custom exec
-	try {
+	await ( async () => {
 		expected = {
 			exec: null,
 			env: null,
@@ -151,9 +146,7 @@ test( "Default player profile", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });
 
@@ -189,15 +182,11 @@ test( "Missing player data", async assert => {
 		}
 	}) )[ "default" ];
 
-	try {
-		await resolvePlayer( stream, "mpv", { mpv: {} } );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Invalid player profile: mpv",
-			"Throws error on missing player data"
-		);
-	}
+	await assert.rejects(
+		resolvePlayer( stream, "mpv", { mpv: {} } ),
+		new PlayerError( "Invalid player profile: mpv" ),
+		"Throws error on missing player data"
+	);
 
 	resolvePlayer = resolvePlayerInjector( assign( {}, commonDeps, commonTestDeps, {
 		"config": {
@@ -211,32 +200,24 @@ test( "Missing player data", async assert => {
 		}
 	}) )[ "default" ];
 
-	try {
-		await resolvePlayer( stream, "mpv", {} );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Invalid player profile: mpv",
-			"Throws error on missing player data"
-		);
-	}
+	await assert.rejects(
+		resolvePlayer( stream, "mpv", {} ),
+		new PlayerError( "Invalid player profile: mpv" ),
+		"Throws error on missing player data"
+	);
 
-	try {
-		await resolvePlayer( stream, "mpv", { mpv: { exec: null } } );
-	} catch ( e ) {
-		assert.strictEqual(
-			e.message,
-			"Missing player executable name",
-			"Throws error on missing player exec conf data or user data"
-		);
-	}
+	await assert.rejects(
+		resolvePlayer( stream, "mpv", { mpv: { exec: null } } ),
+		new PlayerError( "Missing player executable name" ),
+		"Throws error on missing player exec conf data or user data"
+	);
 
 });
 
 
 test( "Resolve exec", async assert => {
 
-	assert.expect( 20 );
+	assert.expect( 18 );
 
 	const stream = {};
 
@@ -282,47 +263,31 @@ test( "Resolve exec", async assert => {
 
 
 	// fail (no custom exec)
-	try {
-		await resolvePlayer( stream, "mpv", {
+	await assert.rejects(
+		resolvePlayer( stream, "mpv", {
 			"mpv": {}
-		});
-	} catch ( e ) {
-		assert.ok(
-			e instanceof PlayerError,
-			"Throws a NotFoundError on unresolvable file"
-		);
-		assert.strictEqual(
-			e.message,
-			"Couldn't find player executable",
-			"PlayerError has the correct message"
-		);
-	}
+		}),
+		new PlayerError( "Couldn't find player executable" ),
+		"Throws a PlayerError on unresolvable file"
+	);
 
 	// fail (custom exec)
-	try {
-		await resolvePlayer( stream, "mpv", {
+	await assert.rejects(
+		resolvePlayer( stream, "mpv", {
 			"mpv": {
 				exec: "/usr/bin/mpv"
 			}
-		});
-	} catch ( e ) {
-		assert.ok(
-			e instanceof PlayerError,
-			"Throws a PlayerError on unresolvable file"
-		);
-		assert.strictEqual(
-			e.message,
-			"Couldn't find player executable",
-			"PlayerError has the correct message"
-		);
-	}
+		}),
+		new PlayerError( "Couldn't find player executable" ),
+		"Throws a PlayerError on unresolvable file"
+	);
 
 	setupCache = obj => {
 		assert.propEqual( obj, expected, "Sets up cache with correct execObj" );
 	};
 
 	// succeed (no custom exec)
-	try {
+	await ( async () => {
 		expected = {
 			exec: "/usr/bin/mpv",
 			params: "{filename}",
@@ -341,12 +306,10 @@ test( "Resolve exec", async assert => {
 			"mpv": {}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// succeed (custom exec)
-	try {
+	await ( async () => {
 		expected = {
 			exec: "/usr/bin/mpv",
 			params: "{filename}",
@@ -367,16 +330,14 @@ test( "Resolve exec", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });
 
 
 test( "Resolve parameters", async assert => {
 
-	assert.expect( 32 );
+	assert.expect( 30 );
 
 	const stream = {};
 	const config = {
@@ -420,21 +381,13 @@ test( "Resolve parameters", async assert => {
 
 
 	// fail (no player params)
-	try {
-		await resolvePlayer( stream, "mpv", {
+	await assert.rejects(
+		resolvePlayer( stream, "mpv", {
 			mpv: {}
-		});
-	} catch ( e ) {
-		assert.ok(
-			e instanceof PlayerError,
-			"Throws a PlayerError on missing player params"
-		);
-		assert.strictEqual(
-			e.message,
-			"Error while generating player parameters",
-			"Error has the correct message"
-		);
-	}
+		}),
+		new PlayerError( "Error while generating player parameters" ),
+		"Throws a PlayerError on missing player params"
+	);
 
 	config.params = [
 		{
@@ -443,21 +396,13 @@ test( "Resolve parameters", async assert => {
 	];
 
 	// fail (invalid parameter type)
-	try {
-		await resolvePlayer( stream, "mpv", {
+	await assert.rejects(
+		resolvePlayer( stream, "mpv", {
 			mpv: {}
-		});
-	} catch ( e ) {
-		assert.ok(
-			e instanceof PlayerError,
-			"Throws a PlayerError on invalid or unsupported player parameter"
-		);
-		assert.strictEqual(
-			e.message,
-			"Error while generating player parameters",
-			"Error has the correct message"
-		);
-	}
+		}),
+		new PlayerError( "Error while generating player parameters" ),
+		"Throws a PlayerError on invalid or unsupported player parameter"
+	);
 
 	setupCache = obj => {
 		assert.propEqual( obj, expected, "Sets up cache with correct execObj" );
@@ -466,7 +411,7 @@ test( "Resolve parameters", async assert => {
 	config.params = [];
 
 	// succeed (no params)
-	try {
+	await ( async () => {
 		expected = {
 			exec: null,
 			env: null,
@@ -476,9 +421,7 @@ test( "Resolve parameters", async assert => {
 			mpv: {}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	config.params = [
 		{
@@ -489,7 +432,7 @@ test( "Resolve parameters", async assert => {
 	];
 
 	// succeed (disabled boolean parameter)
-	try {
+	await ( async () => {
 		expected = {
 			exec: null,
 			env: null,
@@ -503,12 +446,10 @@ test( "Resolve parameters", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// succeed (enabled boolean parameter)
-	try {
+	await ( async () => {
 		expected = {
 			exec: null,
 			env: null,
@@ -520,12 +461,10 @@ test( "Resolve parameters", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// succeed (custom user parameters)
-	try {
+	await ( async () => {
 		expected = {
 			exec: null,
 			env: null,
@@ -538,9 +477,7 @@ test( "Resolve parameters", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	config.params = [
 		{
@@ -553,7 +490,7 @@ test( "Resolve parameters", async assert => {
 	];
 
 	// succeed (missing platform specific parameters)
-	try {
+	await ( async () => {
 		expected = {
 			exec: null,
 			env: null,
@@ -565,9 +502,7 @@ test( "Resolve parameters", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	config.params = [
 		{
@@ -580,7 +515,7 @@ test( "Resolve parameters", async assert => {
 	];
 
 	// succeed (missing platform specific parameters)
-	try {
+	await ( async () => {
 		expected = {
 			exec: null,
 			env: null,
@@ -592,8 +527,6 @@ test( "Resolve parameters", async assert => {
 			}
 		});
 		assert.propEqual( result, expected, "Returns the correct execObj" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });

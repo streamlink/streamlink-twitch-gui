@@ -1,3 +1,4 @@
+// TODO: properly rewrite tests by using sinon
 import { module, test } from "qunit";
 
 import whichFallbackInjector from "inject-loader!utils/node/fs/whichFallback";
@@ -35,59 +36,55 @@ test( "No fallback", async assert => {
 		}
 	});
 
-	try {
-		await whichFallback( "" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Missing executable name", "Rejects on missing executable" );
-	}
+	await assert.rejects(
+		whichFallback( "" ),
+		new Error( "Missing executable name" ),
+		"Rejects on missing executable"
+	);
 
-	try {
-		await whichFallback( "foo" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Executables were not found", "Rejects" );
-		assert.checkSteps( [ "foo" ], "Calls which() in correct order" );
-	}
+	await assert.rejects(
+		whichFallback( "foo" ),
+		new Error( "Executables were not found" ),
+		"Rejects"
+	);
+	assert.checkSteps( [ "foo" ], "Calls which() in correct order" );
 
-	try {
-		await whichFallback([ "foo", "bar" ]);
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Executables were not found", "Rejects" );
-		assert.checkSteps( [ "foo", "bar" ], "Calls which() in correct order" );
-	}
+	await assert.rejects(
+		whichFallback([ "foo", "bar" ]),
+		new Error( "Executables were not found" ),
+		"Rejects"
+	);
+	assert.checkSteps( [ "foo", "bar" ], "Calls which() in correct order" );
 
-	try {
-		await whichFallback({ linux: "foo", darwin: "bar" });
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Executables were not found", "Rejects" );
-		assert.checkSteps( [ "foo" ], "Calls which() in correct order" );
-	}
+	await assert.rejects(
+		whichFallback({ linux: "foo", darwin: "bar" }),
+		new Error( "Executables were not found" ),
+		"Rejects"
+	);
+	assert.checkSteps( [ "foo" ], "Calls which() in correct order" );
 
-	try {
-		await whichFallback({ linux: [ "foo", "baz" ], darwin: "bar" });
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Executables were not found", "Rejects" );
-		assert.checkSteps( [ "foo", "baz" ], "Calls which() in correct order" );
-	}
+	await assert.rejects(
+		whichFallback({ linux: [ "foo", "baz" ], darwin: "bar" }),
+		new Error( "Executables were not found" ),
+		"Rejects"
+	);
+	assert.checkSteps( [ "foo", "baz" ], "Calls which() in correct order" );
 
 	expected = "bar";
 
-	try {
+	await ( async () => {
 		const resolvedPath = await whichFallback([ "foo", "bar", "baz" ]);
 		assert.strictEqual( resolvedPath, "bar", "Resolves with correct path" );
 		assert.checkSteps( [ "foo", "bar" ], "Calls which() in correct order" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	isExecutable = () => false;
 
-	try {
+	await ( async () => {
 		const resolvedPath = await whichFallback( "bar", null, isExecutable );
 		assert.strictEqual( resolvedPath, "bar", "Resolves with correct path" );
 		assert.checkSteps( [ "bar" ], "Calls which() in correct order" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });
 
@@ -131,38 +128,38 @@ test( "Fallback only", async assert => {
 		}
 	});
 
-	try {
-		await whichFallback( "a", "/A", null, true );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Executables were not found", "Rejects" );
-		assert.checkSteps(
-			[
-				"resolvePath", "/A",
-				"join", "stat", "/A/a"
-			],
-			"Calls methods in correct order"
-		);
-	}
+	await assert.rejects(
+		whichFallback( "a", "/A", null, true ),
+		new Error( "Executables were not found" ),
+		"Rejects"
+	);
+	assert.checkSteps(
+		[
+			"resolvePath", "/A",
+			"join", "stat", "/A/a"
+		],
+		"Calls methods in correct order"
+	);
 
-	try {
-		await whichFallback( [ "a", "b" ], [ "/A", "/B" ], null, true );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Executables were not found", "Rejects" );
-		assert.checkSteps(
-			[
-				"resolvePath", "/A",
-				"join", "stat", "/A/a",
-				"join", "stat", "/A/b",
-				"resolvePath", "/B",
-				"join", "stat", "/B/a",
-				"join", "stat", "/B/b"
-			],
-			"Calls methods in correct order"
-		);
-	}
+	await assert.rejects(
+		whichFallback( [ "a", "b" ], [ "/A", "/B" ], null, true ),
+		new Error( "Executables were not found" ),
+		"Rejects"
+	);
+	assert.checkSteps(
+		[
+			"resolvePath", "/A",
+			"join", "stat", "/A/a",
+			"join", "stat", "/A/b",
+			"resolvePath", "/B",
+			"join", "stat", "/B/a",
+			"join", "stat", "/B/b"
+		],
+		"Calls methods in correct order"
+	);
 
-	try {
-		await whichFallback(
+	await assert.rejects(
+		whichFallback(
 			[ "a", "b" ],
 			{
 				linux: [ "/A", "/B" ],
@@ -170,25 +167,25 @@ test( "Fallback only", async assert => {
 			},
 			null,
 			true
-		);
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Executables were not found", "Rejects" );
-		assert.checkSteps(
-			[
-				"resolvePath", "/A",
-				"join", "stat", "/A/a",
-				"join", "stat", "/A/b",
-				"resolvePath", "/B",
-				"join", "stat", "/B/a",
-				"join", "stat", "/B/b"
-			],
-			"Calls methods in correct order"
-		);
-	}
+		),
+		new Error( "Executables were not found" ),
+		"Rejects"
+	);
+	assert.checkSteps(
+		[
+			"resolvePath", "/A",
+			"join", "stat", "/A/a",
+			"join", "stat", "/A/b",
+			"resolvePath", "/B",
+			"join", "stat", "/B/a",
+			"join", "stat", "/B/b"
+		],
+		"Calls methods in correct order"
+	);
 
 	expected = "/B/b";
 
-	try {
+	await ( async () => {
 		const path = await whichFallback( [ "a", "b", "c" ], [ "/A", "/B", "/C" ], null, true );
 		assert.strictEqual( path, expected, "Resolves" );
 		assert.checkSteps(
@@ -203,13 +200,11 @@ test( "Fallback only", async assert => {
 			],
 			"Calls methods in correct order"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	isExecutable = () => false;
 
-	try {
+	await ( async () => {
 		const path = await whichFallback( "b", "/B", isExecutable, true );
 		assert.strictEqual( path, expected, "Resolves" );
 		assert.checkSteps(
@@ -219,9 +214,7 @@ test( "Fallback only", async assert => {
 			],
 			"Calls methods in correct order"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });
 
@@ -265,28 +258,28 @@ test( "With fallback", async assert => {
 		"utils/node/fs/which": check( "which" )
 	});
 
-	try {
-		await whichFallback( [ "a", "b" ], [ "/A", "/B" ] );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Executables were not found", "Rejects" );
-		assert.checkSteps(
-			[
-				"which", "a",
-				"which", "b",
-				"resolvePath", "/A",
-				"join", "stat", "/A/a",
-				"join", "stat", "/A/b",
-				"resolvePath", "/B",
-				"join", "stat", "/B/a",
-				"join", "stat", "/B/b"
-			],
-			"Calls methods in correct order"
-		);
-	}
+	await assert.rejects(
+		whichFallback( [ "a", "b" ], [ "/A", "/B" ] ),
+		new Error( "Executables were not found" ),
+		"Rejects"
+	);
+	assert.checkSteps(
+		[
+			"which", "a",
+			"which", "b",
+			"resolvePath", "/A",
+			"join", "stat", "/A/a",
+			"join", "stat", "/A/b",
+			"resolvePath", "/B",
+			"join", "stat", "/B/a",
+			"join", "stat", "/B/b"
+		],
+		"Calls methods in correct order"
+	);
 
 	expected = "b";
 
-	try {
+	await ( async () => {
 		const resolvedPath = await whichFallback( [ "a", "b" ], [ "/A", "/B" ] );
 		assert.strictEqual( resolvedPath, expected, "Resolves" );
 		assert.checkSteps(
@@ -296,13 +289,11 @@ test( "With fallback", async assert => {
 			],
 			"Calls methods in correct order"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	expected = "/B/a";
 
-	try {
+	await ( async () => {
 		const resolvedPath = await whichFallback( [ "a", "b" ], [ "/A", "/B" ] );
 		assert.strictEqual( resolvedPath, expected, "Resolves" );
 		assert.checkSteps(
@@ -317,8 +308,6 @@ test( "With fallback", async assert => {
 			],
 			"Calls methods in correct order"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });

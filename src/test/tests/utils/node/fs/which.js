@@ -1,3 +1,4 @@
+// TODO: properly rewrite tests by using sinon
 import { module, test } from "qunit";
 
 import whichInjector from "inject-loader!utils/node/fs/which";
@@ -28,23 +29,23 @@ test( "Relative or absolute path", async assert => {
 		}
 	});
 
-	try {
-		await which();
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Missing file" );
-	}
+	await assert.rejects(
+		which(),
+		new Error( "Missing file" ),
+		"Rejects on missing file"
+	);
 
-	try {
-		await which( "" );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Missing file" );
-	}
+	await assert.rejects(
+		which( "" ),
+		new Error( "Missing file" ),
+		"Rejects on empty file"
+	);
 
-	try {
-		await which( "foo", isFile );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Could not find foo" );
-	}
+	await assert.rejects(
+		which( "foo", isFile ),
+		new Error( "Could not find foo" ),
+		"Rejects if file can't be found"
+	);
 
 	const resolvedPath = await which( "foo/bar", isFile );
 	assert.strictEqual( resolvedPath, "foo/bar", "Finds foo/bar" );
@@ -87,22 +88,22 @@ test( "Path iteration", async assert => {
 		}
 	});
 
-	try {
-		await which( "foo", isFile );
-	} catch ( e ) {
-		assert.strictEqual( e.message, "Could not find foo", "Rejects" );
-		assert.checkSteps(
-			[
-				"join", "stat", "/path/to/a/foo",
-				"join", "stat", "/path/to/b/foo"
-			],
-			"Calls functions in correct order"
-		);
-	}
+	await assert.rejects(
+		which( "foo", isFile ),
+		new Error( "Could not find foo" ),
+		"Rejects"
+	);
+	assert.checkSteps(
+		[
+			"join", "stat", "/path/to/a/foo",
+			"join", "stat", "/path/to/b/foo"
+		],
+		"Calls functions in correct order"
+	);
 
 	expected = "/path/to/b/foo";
 
-	try {
+	await ( async () => {
 		const path = await which( "foo", isFile );
 		assert.strictEqual( path, expected, "Resolves with correct path" );
 		assert.checkSteps(
@@ -112,13 +113,11 @@ test( "Path iteration", async assert => {
 			],
 			"Calls functions in correct order"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	expected = "/path/to/a/foo";
 
-	try {
+	await ( async () => {
 		const path = await which( "foo", isFile );
 		assert.strictEqual( path, expected, "Resolves with correct path" );
 		assert.checkSteps(
@@ -127,8 +126,6 @@ test( "Path iteration", async assert => {
 			],
 			"Calls functions in correct order"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });

@@ -14,28 +14,26 @@ moduleForComponent( "ui/components/preview-image", {
 });
 
 
-test( "Valid image source", function( assert ) {
+test( "Valid image source", async function( assert ) {
 
-	const done = assert.async();
+	assert.expect( 4 );
 
-	this.set( "src", transparentImage );
-	this.set( "title", "bar" );
-	this.set( "onLoad", () => {
+	await new Promise( ( resolve, reject ) => {
+		this.set( "src", transparentImage );
+		this.set( "title", "bar" );
+		this.set( "onLoad", resolve );
+		this.set( "onError", reject );
+		this.render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` );
+
 		assert.ok(
-			this.$( ".previewImage" ).get( 0 ) instanceof HTMLImageElement,
-			"Image loads correctly"
+			this.$( "img" ).get( 0 ) instanceof HTMLImageElement,
+			"Has an image element before loading"
 		);
-		done();
 	});
-	this.set( "onError", () => {
-		assert.ok( false, "Should not fail" );
-		done();
-	});
-	this.render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` );
 
 	assert.ok(
-		this.$( "img" ).get( 0 ) instanceof HTMLImageElement,
-		"Has an image element before loading"
+		this.$( ".previewImage" ).get( 0 ) instanceof HTMLImageElement,
+		"Image loads correctly"
 	);
 	assert.equal(
 		this.$( "img" ).eq( 0 ).attr( "src" ),
@@ -51,34 +49,31 @@ test( "Valid image source", function( assert ) {
 });
 
 
-test( "Invalid image source", function( assert ) {
+test( "Invalid image source", async function( assert ) {
 
-	const done = assert.async();
+	assert.expect( 3 );
 
-	this.set( "src", "./foo" );
-	this.set( "title", "bar" );
-	this.set( "onLoad", () => {
-		assert.ok( false, "Should not load" );
-		done();
-	});
-	this.set( "onError", () => {
+	await new Promise( ( resolve, reject ) => {
+		this.set( "src", "./foo" );
+		this.set( "title", "bar" );
+		this.set( "onLoad", reject );
+		this.set( "onError", resolve );
+		this.render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` );
+
 		assert.ok(
-			this.$( ".previewError" ).get( 0 ),
-			"Is in error state"
+			this.$( "img" ).get( 0 ) instanceof HTMLImageElement,
+			"Has an image element before loading"
 		);
-		assert.equal(
-			this.$( ".previewError" ).eq( 0 ).attr( "title" ),
-			"bar",
-			"Error element has a title"
-		);
-		done();
 	});
-
-	this.render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` );
 
 	assert.ok(
-		this.$( "img" ).get( 0 ) instanceof HTMLImageElement,
-		"Has an image element before loading"
+		this.$( ".previewError" ).get( 0 ),
+		"Is in error state"
+	);
+	assert.equal(
+		this.$( ".previewError" ).eq( 0 ).attr( "title" ),
+		"bar",
+		"Error element has a title"
 	);
 
 });

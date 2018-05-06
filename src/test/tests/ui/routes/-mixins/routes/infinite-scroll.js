@@ -1,3 +1,4 @@
+// TODO: properly rewrite tests by using sinon
 import { module, test } from "qunit";
 import { A as EmberNativeArray } from "@ember/array";
 import { default as EmberObject, get, getProperties, set, setProperties } from "@ember/object";
@@ -54,7 +55,7 @@ test( "CSS", assert => {
 		return module;
 	}
 
-	try {
+	( () => {
 		const {
 			cssMinWidthRules,
 			cachedMinHeights
@@ -62,11 +63,9 @@ test( "CSS", assert => {
 
 		assert.propEqual( cssMinWidthRules, [], "Empty min width rules" );
 		assert.propEqual( cachedMinHeights, {}, "Empty cached min heights" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
-	try {
+	( () => {
 		const {
 			cssMinWidthRules
 		} = inject( `
@@ -86,11 +85,9 @@ test( "CSS", assert => {
 			],
 			"Finds all media rules containing min-width and optional max-width constraints"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
-	try {
+	( () => {
 		const {
 			cachedMinHeights
 		} = inject( ".foo, .bar { min-height: 100px; } .baz { min-height: 200px; }" );
@@ -104,11 +101,9 @@ test( "CSS", assert => {
 			},
 			"Finds multiple min-height declarations"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
-	try {
+	( () => {
 		const {
 			getNeededColumns
 		} = inject( `
@@ -125,11 +120,9 @@ test( "CSS", assert => {
 		assert.strictEqual( getNeededColumns( ".foo", 250 ), 2, "2 columns at 250" );
 		assert.strictEqual( getNeededColumns( ".foo", 249 ), 2, "2 columns at 249" );
 		assert.throws( () => getNeededColumns( ".bar", 1000 ), Error, "Invalid selector" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
-	try {
+	( () => {
 		let calls = 0;
 		const {
 			getNeededRows
@@ -155,9 +148,7 @@ test( "CSS", assert => {
 		assert.strictEqual( getNeededRows( ".foo", ".qux" ), 9, "9 rows at 750" );
 		assert.strictEqual( getNeededRows( ".foo" ), 11, "11 100px rows at 1000" );
 		assert.strictEqual( getNeededRows( ".baz" ), 6, "6 200px rows at 1000" );
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });
 
@@ -441,7 +432,7 @@ test( "WillFetchContent without metadata", async assert => {
 	await route.send( "willFetchContent" );
 
 	// fetch error
-	try {
+	await ( async () => {
 		response = Promise.reject();
 		set( controller, "hasFetchedAll", false );
 		const promise = route.send( "willFetchContent", true );
@@ -469,15 +460,13 @@ test( "WillFetchContent without metadata", async assert => {
 			2,
 			"No items are added to the model on an error"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// no force required anymore
 	limit = 3;
 
 	// invalid response
-	try {
+	await ( async () => {
 		response = null;
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
@@ -495,12 +484,10 @@ test( "WillFetchContent without metadata", async assert => {
 			2,
 			"No items are added to the model on an invalid response"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// empty response
-	try {
+	await ( async () => {
 		response = [];
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
@@ -518,12 +505,10 @@ test( "WillFetchContent without metadata", async assert => {
 			2,
 			"No items are added to the model on an empty response"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// response with enough content
-	try {
+	await ( async () => {
 		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
@@ -541,14 +526,12 @@ test( "WillFetchContent without metadata", async assert => {
 			5,
 			"Three items are added to the model"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	limit = 10;
 
 	// response with not enough content
-	try {
+	await ( async () => {
 		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
@@ -566,9 +549,7 @@ test( "WillFetchContent without metadata", async assert => {
 			8,
 			"Three more items are added to the model"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });
 
@@ -607,7 +588,7 @@ test( "WillFetchContent with metadata", async assert => {
 	route.setupController( controller, model );
 
 	// response with invalid metadata
-	try {
+	await ( async () => {
 		model.clear();
 		response = new EmberNativeArray([ { value: 1 }, { value: 2 } ]);
 		set( response, "meta", { total: "foo" } );
@@ -627,12 +608,10 @@ test( "WillFetchContent with metadata", async assert => {
 			2,
 			"Three items are added to the model"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// response with partial content
-	try {
+	await ( async () => {
 		model.clear();
 		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
 		set( response, "meta", { total: 5 } );
@@ -652,12 +631,10 @@ test( "WillFetchContent with metadata", async assert => {
 			3,
 			"Three items are added to the model"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// response with all content
-	try {
+	await ( async () => {
 		model.clear();
 		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
 		set( response, "meta", { total: 3 } );
@@ -677,12 +654,10 @@ test( "WillFetchContent with metadata", async assert => {
 			3,
 			"Three items are added to the model"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 	// response with missing content (return 2 items at a limit of 3)
-	try {
+	await ( async () => {
 		model.clear();
 		response = new EmberNativeArray([ { value: 1 }, { value: 2 } ]);
 		set( response, "meta", { total: 5 } );
@@ -706,8 +681,6 @@ test( "WillFetchContent with metadata", async assert => {
 			2,
 			"Two items are added to the model"
 		);
-	} catch ( e ) {
-		throw e;
-	}
+	})();
 
 });
