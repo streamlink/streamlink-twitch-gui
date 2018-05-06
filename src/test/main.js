@@ -13,7 +13,7 @@ config.hidepassed = true;
 
 
 // load tests and then start
-require( [ "tests" ], function() {
+require( [ "tests" ], /* istanbul ignore next */ function() {
 	if ( global._noQUnitBridge ) { return; }
 	if ( global._setupQUnitBridge ) {
 		// bridge injected, set it up and start QUnit
