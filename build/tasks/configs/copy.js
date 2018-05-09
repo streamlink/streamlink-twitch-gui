@@ -13,14 +13,14 @@ module.exports = {
 	},
 
 	linux32scripts: {
-		options: { mode: 493 }, // 0755 (js strict mode)
+		options: { mode: 0o755 },
 		expand : true,
 		flatten: true,
 		src    : "<%= dir.resources %>/linux/*.sh",
 		dest   : "<%= dir.releases %>/<%= package.name %>/linux32/"
 	},
 	linux64scripts: {
-		options: { mode: 493 }, // 0755 (js strict mode)
+		options: { mode: 0o755 },
 		expand : true,
 		flatten: true,
 		src    : "<%= dir.resources %>/linux/*.sh",
