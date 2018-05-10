@@ -507,6 +507,7 @@ module.exports = {
 			// minifiy and optimize production code
 			new OptimizeCssAssetsPlugin({
 				cssProcessorOptions: {
+					autoprefixer: false,
 					preset: [ "default", {
 						svgo: false
 					}]
