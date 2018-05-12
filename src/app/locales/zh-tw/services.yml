@@ -1,0 +1,13 @@
+notification:
+    dispatch:
+        single: "{{name}} has started streaming"
+        group: Some followed channels have started streaming
+    status:
+        disabled: Desktop notifications are disabled
+        enabled: Desktop notifications are enabled
+        error: Desktop notifications are offline
+        paused: Desktop notifications are paused
+    tray:
+        pause:
+            label: Pause notifications
+            tooltip: Quickly toggle desktop notifications

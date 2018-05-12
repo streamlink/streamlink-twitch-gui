@@ -1,0 +1,8 @@
+modifiers:
+    ctrl: Ctrl
+    shift: Shift
+    alt: Alt
+keys:
+    Enter: Enter
+    Escape: Esc
+    Slash: "/"

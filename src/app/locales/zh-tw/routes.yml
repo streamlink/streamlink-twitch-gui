@@ -1,0 +1,218 @@
+error:
+    header: Error
+    text: There was an error while trying to display this page.
+about:
+    about:
+        header: About
+        homepage: Homepage
+        author: Author
+        version: Version
+        nwjs: NW.js
+        built: Built
+        help: Help
+        wiki: Wiki
+        bugs: Bugs
+        issue-tracker: Issue tracker
+        support: Support
+        gitter: Gitter
+        changelog: Changelog
+        contributors: Contributors
+    donation:
+        header: Support & donate
+        text: If you think that this application is helpful, please consider supporting the creator by donating.<br>Thank you very much!
+    translations:
+        header: Translations
+    dependencies:
+        header: Third party applications
+featured:
+    header: Featured Channels
+    empty: The featured channels list could not be loaded!
+    summary: There are {{viewers}} people watching {{channels}} live streams right now!
+games:
+    header: Top Games
+    empty: The returned list of top games is empty.
+game:
+    empty: The returned list of streams of this game is empty.
+communities:
+    header: Top Communities
+    menu:
+        featured: Featured Communities
+        all: All Communities
+    featured:
+        empty: The returned list of featured communities is empty.
+    all:
+        empty: The returned list of all communities is empty.
+community:
+    menu:
+        streams: Live Streams
+        info: Community Infos
+    streams:
+        empty: The returned list of streams of this community is empty.
+    info:
+        created-by: Created by
+        summary: Summary
+        description: Description
+        rules: Rules
+streams:
+    header: Top Streams
+    empty: The returned list of top streams is empty.
+channel:
+    menu:
+        details: Details
+        teams: Teams
+        settings: Settings
+    offline: is offline right now
+    details:
+        header: Channel statistics
+        name:
+            title: Name
+        created-at:
+            title: Created
+            # new Moment(channel.created_at).format(...)
+            format: "LL"
+        language:
+            title: Language
+        followers:
+            title: Followers
+            data: "{{followers}} ({{day}} per day)"
+        views:
+            title: Views
+            data: "{{views}} ({{day}} per day)"
+        content:
+            title: Content
+            mature: Inappropriate for children
+            ffa: No age restrictions
+        format:
+            title: Format
+            data: "{{resolution}} @ {{fps}}fps"
+        delay:
+            title: Delay
+            # static "zero" property
+            data:
+                zero: No additional delay
+                one: One second
+                other: "{{count}} seconds"
+        vodcast:
+            title: Vodcast
+            data: Stream is a Vodcast
+    teams:
+        empty: The returned list of teams is empty.
+    settings:
+        stream:
+            header: Stream
+            quality:
+                title: Quality
+                description: Set a channel specific streaming quality.
+            chat:
+                title: Chat
+                description: Automatically open chat.
+                checkbox: Open chat when the stream starts
+        notifications:
+            header: Desktop notifications
+            enabled:
+                title: Notifications
+                description: When the channel starts streaming.
+                notes: Channel needs to be followed.
+                checkbox: Enable desktop notifications
+team:
+    header:
+        members: "Team members: {{num}}"
+        # new Moment(team.created_at).format(...)
+        created-at: "[Date created:] llll"
+        # new Moment(team.updated_at).format(...)
+        updated-at: "[Modified last:] llll"
+    menu:
+        live: Live Members
+        all: All Members
+        info: Team Infos
+    live:
+        empty: The returned list of broadcasting team members is empty.
+    all:
+        empty: The returned list of all team members is empty.
+    info:
+        header: Infos
+user:
+    index:
+        logged-in: "Logged in as {{name}}"
+        # new Moment(auth.session.date).format(...)
+        since: "[since] LLLL"
+        sign-out: Sign out
+        token:
+            title: Your access token
+            show: Show access token
+            copy: Copy to clipboard
+            hint:
+                first: "This key grants access to your Twitch.tv account with these permissions:"
+                second: Log in again with your password to invalidate it.
+    auth:
+        abort: Abort
+        sign-in: Sign in
+        token:
+            show-form: Use access token
+            placeholder: Insert access token
+            hint:
+                first: Log in to your Twitch.tv account by using an access token.
+                second: "Make sure that it matches the following permissions:"
+        fail: Authentication failed. Please try again.
+    subscriptions:
+        header: Subscriptions
+        empty:
+            first: You don't have any channel subscriptions.
+            second: Directly support broadcasters by subscribing to their channel.
+    followedStreams:
+        header: Followed Streams
+        empty:
+            text: The returned list of followed streams is empty.
+            hosted: Watch streams being hosted by your followed channels
+            featured: Watch currently featured streams
+            streams: Watch top streams
+    hostedStreams:
+        header: Hosted Streams
+        empty:
+            text: The returned list of hosted streams is empty.
+            followed: Watch your followed streams
+            featured: Watch currently featured streams
+            streams: Watch top streams
+    followedChannels:
+        header: Followed Channels
+        buttons:
+            sort-by-followed: Sort by date followed
+            sort-by-broadcast: Sort by last broadcast
+            sort-by-login: Sort by last login
+            sort-desc: Sort in descending order
+            sort-asc: Sort in ascending order
+        empty: The returned list of followed channels is empty.
+    followedGames:
+        header: Followed Games
+        menu:
+            live: Live Games
+            all: All Games
+        live:
+            empty:
+                text: The returned list of followed live games is empty.
+                games: Watch top games
+        all:
+            empty:
+                text: The returned list of followed games is empty.
+                games: Watch top games
+search:
+    header:
+        all: All search results
+        games: "Game search results: "
+        channels: "Stream search results: "
+        streams: "Stream search results: "
+    subheader:
+        games: Games
+        channels: Channels
+        streams: Streams
+    empty: Your query didn't match anything...
+watching:
+    header: You're watching
+    buttons:
+        open: Open dialog
+        close: Close stream
+    empty:
+        header: All streams have been closed
+        next: What to do next?
+        featured: Watch currently featured streams
+        followed: Watch your followed streams
