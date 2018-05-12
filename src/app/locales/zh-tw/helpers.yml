@@ -1,5 +1,5 @@
 hours-from-now:
-    now: "just now"
+    now: "剛剛"
     minutes: "{{minutes}}m"
     hours:
         simple: "{{hours}}h"
