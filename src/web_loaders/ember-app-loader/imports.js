@@ -5,7 +5,7 @@ module.exports = [
 	},
 	{
 		dir: "init",
-		regex: /^init[\/\\]((?:instance-)?initializer)s[\/\\]([^\/\\]+([\/\\]\1)?)\.js$/
+		regex: /^init\/((?:instance-)?initializer)s\/([^\/]+(\/\1)?)\.js$/
 	},
 	{
 		dir: "ui",
@@ -13,6 +13,6 @@ module.exports = [
 	},
 	{
 		dir: "services",
-		regex: /^(service)s[\/\\]([^\/\\]+([\/\\]\1)?)\.js$/
+		regex: /^(service)s\/([^\/]+(\/\1)?)\.js$/
 	}
 ];

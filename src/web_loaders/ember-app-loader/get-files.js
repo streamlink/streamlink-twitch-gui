@@ -1,4 +1,4 @@
-const { join } = require( "path" );
+const { join, posix: { join: joinPosix } } = require( "path" );
 
 
 module.exports = function getFiles( cachedFs, context, { dir, regex } ) {
@@ -8,15 +8,15 @@ module.exports = function getFiles( cachedFs, context, { dir, regex } ) {
 
 		for ( const item of cachedFs.readdirSync( contextpath ) ) {
 			const fullpath = join( contextpath, item );
-			const itempath = join( dir, item );
+			const importpath = joinPosix( dir, item );
 			const stat = cachedFs.statSync( fullpath );
 
 			if ( stat.isFile() ) {
-				if ( regex.test( itempath ) ) {
-					files.push( itempath );
+				if ( regex.test( importpath ) ) {
+					files.push( importpath );
 				}
 			} else if ( stat.isDirectory() ) {
-				files.push( ...getFilesRecursively( itempath ) );
+				files.push( ...getFilesRecursively( importpath ) );
 			}
 		}
 

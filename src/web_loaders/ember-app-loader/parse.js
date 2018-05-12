@@ -1,4 +1,4 @@
-const { sep } = require( "path" );
+const { posix: { sep } } = require( "path" );
 const { TYPES, COLLECTIONS, GROUPS } = require( "./module-unification" );
 
 
