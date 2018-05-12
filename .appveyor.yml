@@ -1,0 +1,29 @@
+platform: x64
+
+environment:
+  matrix:
+    - node_version: LTS
+
+cache:
+  - node_modules
+  - "%LOCALAPPDATA%\\Yarn"
+  - "build\\cache"
+
+install:
+  - ps: 'Install-Product node $env:node_version'
+  - yarn global add --no-progress --non-interactive grunt-cli
+  - yarn install --pure-lockfile --no-progress --non-interactive
+
+build: off
+
+test_script:
+  # test and build
+  - grunt build:prod
+
+notifications:
+  - provider: Webhook
+    url:
+      secure: 5ip/pQiIhyIanb2C3Tjg+hiohwH1y79DARM+6FRks3hdTpZPX5jNRatsmBrnuI9s7qu+s9EwvPOFQCQGTlw9eA==
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: true
