@@ -1,6 +1,5 @@
 import { compileTemplate } from "ember-i18n/addon";
 import missingMessage from "ember-i18n/addon/utils/i18n/missing-message";
-import { locales as localesConfig } from "config";
 
 
 // dynamically import locales data
@@ -12,7 +11,13 @@ const importLocales = require.context(
 );
 
 
-const { locales } = localesConfig;
+function getImports( regEx, callback ) {
+	for ( const key of importLocales.keys() ) {
+		const match = regEx.exec( key );
+		if ( !match ) { continue; }
+		callback( key, match );
+	}
+}
 
 
 export default {
@@ -25,31 +30,28 @@ export default {
 		application.register( "util:i18n/compile-template", compileTemplate );
 		application.register( "util:i18n/missing-message", missingMessage );
 
-		// create translation objects
 		const translations = new Map();
-		for ( const [ locale ] of Object.entries( locales ) ) {
-			translations.set( locale, {} );
-		}
+		const ensureTranslationObject = locale => {
+			if ( !translations.has( locale ) ) {
+				translations.set( locale, {} );
+			}
+		};
 
-		const reTranslations = /^.\/([^\/]+)\/([\w-]+)\.yml$/;
-		for ( const key of importLocales.keys() ) {
-			// only import translations from known locales
-			const match = reTranslations.exec( key );
-			if ( !match ) { continue; }
-			const [ , locale, namespace ] = match;
-			if ( !translations.has( locale ) ) { continue; }
-
-			// import translation namespaces
-			translations.get( locale )[ namespace ] = importLocales( key );
-		}
-
-		for ( const [ locale ] of Object.entries( locales ) ) {
-			// import locale config and register it
+		// import all locale configs and register them
+		getImports( /^.\/([^\/]+)\/config\.js$/, ( key, [ , locale ] ) => {
+			ensureTranslationObject( locale );
 			const { default: config } = importLocales( `./${locale}/config.js` );
 			application.register( `locale:${locale}/config`, config );
+		});
 
-			// register locale translations and add them to the i18n service
-			const translation = translations.get( locale );
+		// import all translation namespaces and build a translation object for each locale
+		getImports( /^.\/([^\/]+)\/([\w-]+)\.yml$/, ( key, [ , locale, namespace ] ) => {
+			ensureTranslationObject( locale );
+			translations.get( locale )[ namespace ] = importLocales( key );
+		});
+
+		// register locale translation objects and add them to the i18n service
+		for ( const [ locale, translation ] of translations ) {
 			application.register( `locale:${locale}/translations`, translation );
 			i18nService.addTranslations( locale, translation );
 		}
