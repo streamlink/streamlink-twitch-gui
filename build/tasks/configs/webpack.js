@@ -168,7 +168,7 @@ const commonLoaders = [
 	},
 	{
 		enforce: "pre",
-		test: /\/flag-icon\/styles\.less$/,
+		test: /[\/\\]flag-icon[\/\\]styles\.less$/,
 		loader: "flag-icons-loader",
 		options: {
 			config: r( pConfig, "langs.json" ),
@@ -359,8 +359,8 @@ module.exports = {
 
 		module: {
 			noParse: [
-				/\/ember-source\/dist\/ember\.(debug|prod)\.js$/,
-				/\/moment\/moment\.js$/
+				/[\/\\]ember-source[\/\\]dist[\/\\]ember\.(debug|prod)\.js$/,
+				/[\/\\]moment[\/\\]moment\.js$/
 			]
 		},
 
@@ -377,13 +377,13 @@ module.exports = {
 
 			// remove ember-i18n's get-locales utility function
 			new webpack.NormalModuleReplacementPlugin(
-				/ember-i18n\/addon\/utils\/get-locales\.js$/,
+				/ember-i18n[\/\\]addon[\/\\]utils[\/\\]get-locales\.js$/,
 				r( pRoot, "web_modules", "ember-i18n", "get-locales.js" )
 			),
 
 			// only import locale configs of available locales
 			new webpack.ContextReplacementPlugin(
-				/moment\/locale/,
+				/moment[\/\\]locale/,
 				reLocales
 			)
 		]
@@ -500,7 +500,7 @@ module.exports = {
 
 			// use non-debug versions of ember and ember-data in production builds
 			new webpack.NormalModuleReplacementPlugin(
-				/\/ember-source\/dist\/ember\.debug\.js$/,
+				/[\/\\]ember-source[\/\\]dist[\/\\]ember\.debug\.js$/,
 				r( pDependencies, "ember-source", "dist", "ember.prod.js" )
 			),
 
