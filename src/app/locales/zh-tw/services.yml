@@ -1,13 +1,13 @@
 notification:
     dispatch:
-        single: "{{name}} has started streaming"
-        group: Some followed channels have started streaming
+        single: "{{name}} 已開始實況"
+        group: 追蹤的頻道已開始實況
     status:
-        disabled: Desktop notifications are disabled
-        enabled: Desktop notifications are enabled
-        error: Desktop notifications are offline
-        paused: Desktop notifications are paused
+        disabled: 已停用桌面通知
+        enabled: 已啟用桌面通知
+        error: 桌面通知已離線 # FIXME: not sure for this translation
+        paused: 已暫停桌面通知
     tray:
         pause:
-            label: Pause notifications
-            tooltip: Quickly toggle desktop notifications
+            label: 暫停通知
+            tooltip: 快速停/啟用桌面通知
