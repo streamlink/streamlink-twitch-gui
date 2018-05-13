@@ -1,490 +1,490 @@
 menu:
-    header: Settings
-    main: Main
-    gui: GUI
-    streaming: Streaming
-    player: Player
-    streams: Streams
-    chat: Chat
-    lists: Lists
-    languages: Languages
-    notifications: Notifications
-    channels: Channels
+    header: 設定
+    main: 主要
+    gui: 介面
+    streaming: 串流
+    player: 播放器
+    streams: 實況
+    chat: 聊天室
+    lists: 列表
+    languages: 語言
+    notifications: 通知
+    channels: 頻道設定
 main:
     language:
-        title: Language
-        description: Select the GUI language.
+        title: 語系
+        description: 設定介面語系
         labels:
-            auto: "System ({{label}})"
+            auto: "系統預設 ({{label}})"
     advanced:
-        title: Settings and features
-        description: Enable hidden settings and features.<br>Does not only apply to the settings menu.
-        checkbox: Enable advanced settings and features
+        title: 設定及功能
+        description: 啟用隱藏設定及功能 # FiXME: not sure for this translation
+        checkbox: 啟用進階設定及功能
     homepage:
-        title: Home page
-        description: Menu to load first or when clicking the logo.
+        title: 首頁
+        description: 點擊左上方 Logo 及程式打開後第一個顯示的頁面
         text:
-            first: See the menu bar in the top right corner of each page.
-            second: Click the home button to make it the new home page.
+            first: 每一頁的右上方
+            second: 點擊首頁圖示來設定為首頁
     theme:
-        title: Theme
-        description: Select a GUI color theme.
+        title: 佈景主題
+        description: 選擇一個介面主題
     scrolling:
-        title: Scrolling
-        description: Enable or disable smooth scrolling.
-        checkbox: Enable smooth scrolling
+        title: 捲動
+        description: 啟用/停用平滑捲動
+        checkbox: 啟用平滑捲動
     externalcommands:
-        title: Command line actions
-        description: Listen to signals sent by second application instances.
-        notes: See the wiki for a list of available actions and parameters.
-        checkbox: Allow external commands
+        title: 外部命令
+        description: 監聽另外一隻程式所送出的命令
+        notes: 詳細命令與參數請參考 wiki
+        checkbox: 允許外部命令
 gui:
     integration:
-        title: OS integration
-        description: Where to access the GUI from.
+        title: 作業系統整合
+        description: 存取介面的地方 # FiXME: not sure for this translation
         values:
-            both: Both
-            taskbar: Taskbar
-            tray: Tray
+            both: 兩者皆是
+            taskbar: 工作列
+            tray: 通知區域圖示
     minimize:
-        title: Minimize GUI
-        description: When the video player opens.
+        title: 最小化介面
+        description: 當播放器打開時最小化
         values:
-            noop: Do nothing
-            minimize: Minimize
-            tray: Move to tray
+            noop: 不作任何動作
+            minimize: 最小化
+            tray: 至通知區域
     hidebuttons:
-        title: Hide window buttons
-        description: Hide minimize, maximize and close buttons.
-        checkbox: Hide buttons
+        title: 隱藏視窗按鈕
+        description: 隱藏最小化、最大化及關閉按鈕
+        checkbox: 隱藏視窗按鈕
     minimizetotray:
-        title: Minimize button
-        description: Click behavior.
-        checkbox: Minimize to tray
+        title: 最小化按鈕
+        description: 點擊最小化的動作
+        checkbox: 最小化至通知區域
     badgelabel:
-        title: Application badge
-        description: On the taskbar/dock icon.
-        notes: This has to be supported by the operating system or desktop environment.
-        requires: Taskbar OS integration and desktop notifications have to be enabled.
-        checkbox: Show number of streaming favorites
+        title: 應用程式圖示標籤
+        description: 顯示於工作列/Dock上的圖示
+        notes: 需要作業系統或桌面環境支援
+        requires: 需啟用工作列作業系統整合及桌面通知
+        checkbox: 顯示目前實況中的追隨頻道數量
     focusrefresh:
-        title: Refresh content
-        description: Automatically refresh when the application window regains focus.
+        title: 重新整理
+        description: 當程式取得焦點時自動重新整理內容
         values:
-            none: Don't refresh
-            one: After one minute
-            two: After two minutes
-            five: After five minutes
+            none: 不要重新整理
+            one: 1 分鐘後
+            two: 2 分鐘後
+            five: 5 分鐘後
 streaming:
     provider:
         title: Streamlink / Livestreamer
-        description: Choose a streaming provider and set custom executable locations.
-        notes: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
+        description: 選擇一個串流提供元件並設定執行檔路徑
+        notes: 若系統路徑 $PATH 或程式介面搜尋路徑找不到，則需手動指定執行檔路徑
         executable:
-            python: Python executable
-            livestreamer-standalone: Livestreamer executable
+            python: Python 執行檔
+            livestreamer-standalone: Livestreamer 執行檔
         python-script:
-            streamlink: Streamlink python script
-            livestreamer: Livestreamer python script
+            streamlink: Streamlink python 腳本
+            livestreamer: Livestreamer python 腳本
         parameters:
-            title: Custom parameters
-            placeholder: Add custom parameters
+            title: 自訂參數
+            placeholder: 加入自訂參數
     playerinput:
-        title: Player input
-        description: Defines the method of how the stream data is being fed into the player.
-        notes: Please see the wiki for detailed informations about this option. Different parameters will be set, depending on the selection. The player needs to support the selected method.
+        title: 播放器輸入
+        description: 設定播放器如何讀取串流資料
+        notes: 詳細請參考 wiki，有多個參數可設定，播放器需支援所選的方法
         values:
             stdin:
-                label: Standard input
-                description: Writes the stream to the player's standard input channel.
+                label: 標準輸入
+                description: 將串流寫入播放器的標準輸入
             fifo:
-                label: Named pipe
-                description: Writes the stream to a named pipe, where the player reads from.
+                label: 具名管道
+                description: 將串流寫入播放器可讀取的具名管道
             http:
                 label: HTTP
-                description: Launches a local HTTP server where the player reads from.
+                description: 開啟一個本地 HTTP 伺服器讓播放器讀取
             passthrough:
                 label: HLS (passthrough)
-                description: Lets the player download and buffer the stream by itself.
+                description: 讓播放器自下載及緩衝串流
     hls-live-edge:
         title: HLS live edge
-        description: Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering.
+        description: 數值越小串流延遲越小，但可能會造成播放器緩衝
     hls-segment-threads:
-        title: HLS segment threads
-        description: Number of threads used for downloading and processing stream segments.
+        title: HLS 片段執行緒
+        description: 用來下載及處理串流片段的執行緒數量
     player-no-close:
-        title: Keep player window
-        description: After the stream has ended.
-        notes: The player itself may prevent {{provider}} to close it. Please see the player settings as well.
-        checkbox: Do not close the player
+        title: 保留播放器視窗
+        description: 當串流結束後保留播放器
+        notes: 播放器可能會阻擋 {{provider}} 關閉它，請參考播放器設定
+        checkbox: 不要關閉播放器
     oauth:
-        title: Twitch.tv login
-        description: Allow {{provider}} to use the Twitch.tv oauth token while being logged in.
-        checkbox: Authenticate when launching a stream
+        title: 登入 Twitch.tv
+        description: 允許 {{provider}} 使用 Twitch.tv 認證金鑰來登入
+        checkbox: 開啟串流時使用認證
     retry-open:
-        title: Launch attempts
-        description: Number of stream launch attempts.
+        title: 嘗試開啟
+        description: 串流嘗試開啟次數
     retry-streams:
-        title: Retry delay
-        description: Time in seconds between each attempt.
+        title: 重試延遲
+        description: 每次重試之間的延遲秒數
 player:
     preset:
-        title: Player preset
-        description: Use a predefined player configuration.
+        title: 播放器配置
+        description: 預設的播放器設定
     executable:
         default:
-            title: Video player
-            description: If left empty, the player defined in the config file will be used.
-            default-value: VLC (unconfigured)
-            notes: Parameters can be added here, but should be set in the parameters field instead. See below for a list of available variables.
-            placeholder: Leave blank for default player
+            title: 播放器
+            description: 留空以使用設定檔內的播放器設定
+            default-value: 預設為 VLC
+            notes: 此處可加入播放器參數，但建議設定在參數欄位，請參考下方可用變數
+            placeholder: 留空以使用預設播放器
         preset:
-            title: Player executable
-            description: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
-            placeholder: Leave blank for default location
+            title: 播放器執行檔
+            description: 若系統路徑 $PATH 或程式介面搜尋路徑找不到，則需手動指定執行檔路徑
+            placeholder: 留空以使用預設路徑
     args:
         default:
-            title: Parameters
-            description: Add player specific parameters.
+            title: 參數
+            description: 加入播放器參數
         preset:
-            title: Custom parameters
-            description: Set additional custom player parameters.
-        placeholder: Add custom player parameters
+            title: 自訂參數
+            description: 加入額外的播放器參數
+        placeholder: 加入播放器參數
         substitutions:
-            channel: Channel name
-            status: Channel status text
-            game: Name of the game being played
-            delay: Additional stream delay in seconds
-            created: Online since
-            viewers: Number of current viewers
-            views: Total number of views
+            channel: 頻道名稱
+            status: 頻道狀態文字
+            game: 播放中的遊戲名稱
+            delay: 額外的串流延遲秒數
+            created: 上線時間
+            viewers: 觀眾人數
+            views: 總觀看次數
     players:
         default:
-            label: No preset
+            label: 不使用預設定
         vlc:
-            label: VLC media player
+            label: VLC 媒體播放器
             attributes:
                 instance:
-                    title: Single instance mode
-                    description: View multiple streams in different player windows.
-                    checkbox: Prevent single instance mode
+                    title: 單一個體模式
+                    description: 在不同的播放器視窗中觀看實況
+                    checkbox: 避免使用單一個體模式
                 close:
-                    title: Close player
-                    description: Prevents stacking up empty player windows.
-                    checkbox: Allow the player to get closed
+                    title: 關閉播放器
+                    description: 避免堆積空的播放器視窗
+                    checkbox: 允許播放器被關閉
                 title:
-                    title: Player window title
-                    description: Show the channel name, game being played and stream title.
-                    checkbox: Set custom title
+                    title: 播放器視窗標題
+                    description: 顯示頻道名稱、遊戲名稱及實況名稱於標題
+                    checkbox: 設定標題
                 minimal:
-                    title: Layout
-                    description: Hide player controls. Can also be toggled by pressing CTRL+H.
-                    checkbox: Minimal player layout
+                    title: 播放器排版
+                    description: 隱藏播放器控制按鈕，可用 Ctrl+H 切換
+                    checkbox: 最小化播放器排版
         mpv:
             label: MPV
             attributes:
                 close:
-                    title: Close player
-                    description: Prevents stacking up empty player windows.
-                    checkbox: Allow the player to get closed
+                    title: 關閉播放器
+                    description: 避免堆積空的播放器視窗
+                    checkbox: 允許播放器被關閉
                 title:
-                    title: Player window title
-                    description: Show the channel name, game being played and stream title.
-                    checkbox: Set custom title
+                    title: 播放器視窗標題
+                    description: 顯示頻道名稱、遊戲名稱及實況名稱於標題
+                    checkbox: 設定標題
                 minimal:
-                    title: Layout
-                    description: Don't show player window decorations.
-                    checkbox: Minimal player layout
+                    title: 播放器排版
+                    description: 不要顯示播放器的裝飾
+                    checkbox: 最小化播放器排版
                 window:
-                    title: Force window
-                    description: Fixes potential issues with audio-only streams.
-                    checkbox: Always show player window
+                    title: 強制顯示視窗
+                    description: 修正只有音訊的實況可能會造成的問題
+                    checkbox: 強制顯示播放器視窗
                 seeking:
-                    title: Seeking
-                    description: Enables jumping forwards/backwards in the stream cache.
-                    checkbox: Enable seeking
+                    title: 跳轉
+                    description: 啟用可在快取過的串流中跳轉
+                    checkbox: 啟用跳轉
                 no-cache:
-                    title: No player cache
-                    description: Speed up stream launch time.
-                    checkbox: Don't use the additional player cache
+                    title: 停用播放器快取
+                    description: 加速串流開啟時間
+                    checkbox: 不額外使用播放器快取
         mpc:
             label: Media Player Classic - Home Cinema
             attributes:
                 instance:
-                    title: Single instance mode
-                    description: View multiple streams in different player windows.
-                    checkbox: Prevent single instance mode
+                    title: 單一個體模式
+                    description: 在不同的播放器視窗中觀看實況
+                    checkbox: 避免使用單一個體模式
                 close:
-                    title: Close player
-                    description: Prevents stacking up empty player windows.
-                    checkbox: Allow the player to get closed
+                    title: 關閉播放器
+                    description: 避免堆積空的播放器視窗
+                    checkbox: 允許播放器被關閉
         potplayer:
             label: Daum PotPlayer
 streams:
     quality:
-        title: Preferred quality
-        description: Choose the default stream quality.
+        title: 偏好畫質
+        description: 選擇預設的實況畫質
     qualitypresets:
-        title: Quality presets
-        description: Define precise quality selections by range or by using explicit quality names.
-        notes: The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the "best" or "worst" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes.
-        dont-exclude: Don't exclude stream qualities
+        title: 畫質配置
+        description: 使用畫質範圍設定或是特定的畫質設定
+        notes: 第2欄顯示實際選擇的畫質，從"最佳畫質"到"最差畫質"中排除第1欄中指定的畫質或畫質範圍，修改前請先查詢 wiki 及 Streamlink 的文件
+        dont-exclude: 不排除實況畫質
     qualitypresets-livestreamer:
-        title: Quality presets
-        description: Customize Livestreamer quality presets.
+        title: 畫質配置
+        description: 自訂 Livestreamer 的畫質配置
     vodcast-regexp:
-        title: Custom Vodcast filtering
-        description: Find untagged Vodcasts/Rebroadcasts.
-        notes: A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression.
+        title: 自訂 Vodcast 過濾
+        description: 尋找未標籤的 VOD/重播
+        notes: 使用 JavaScript 的正規表達式(區分大小寫) 來過濾實況標題，使用空字串來停用過濾
     modal-close-launch:
-        title: Hide stream popup
-        description: When a stream has started.
-        checkbox: Hide the popup after successfully launching a stream
+        title: 隱藏實況對話框
+        description: 當打開實況時會彈出對話框
+        checkbox: 成功打開實況時自動隱藏對話框
     modal-close-end:
-        title: Close stream popup
-        description: When a stream has ended.
-        checkbox: Close the popup of an active stream when it ends
+        title: 關閉實況對話框
+        description: 當實況結束時關閉對話框
+        checkbox: 當實況結束時自動關閉對話框
 chat:
     provider:
-        title: Chat application
-        description: Choose the chat application.
-        notes-browser: Choosing the default browser may result in unwanted, non-minimal window sizes.
-        file-placeholder: Setting an executable path is required
-        params-placeholder: Set additional parameters
+        title: 聊天室軟體
+        description: 選擇聊天室軟體
+        notes-browser: 選擇預設瀏覽器可能會產生預期外的視窗大小
+        file-placeholder: 需設定執行檔路徑
+        params-placeholder: 設定額外參數
         url:
             default:
-                label: Default chat URL
-                description: The application's default chat URL (popout).
+                label: 預設聊天室網址
+                description: 程式的預設聊天室網址(popout 浮動視窗)
             popout:
-                label: Popout chat URL
-                description: Used by the popout mode on Twitch's website.
+                label: 浮動視窗聊天室網址
+                description: Twitch 網站使用的浮動視窗模式
             embed:
-                label: Embedded chat URL
-                description: Meant for embedding the chat into other websites.
+                label: 內嵌聊天室網址
+                description: 使用嵌入聊天室的網址
         providers:
             browser:
-                label: Default browser
+                label: 預設瀏覽器
                 attributes:
                     url:
-                        title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        title: 聊天室網址
+                        description: 要打開何種 Twitch 聊天室網址
             basic:
                 substitutions:
-                    url: The channel's chat URL on Twitch.tv
-                    channel: The channel name
-                    user: Your user name (if logged in)
-                    token: Your access token (if logged in)
+                    url: Twitch.tv 上的頻道聊天室網址
+                    channel: 頻道名稱
+                    user: 使用者名稱 (若有登入)
+                    token: 存取金鑰 (若有登入)
             chromium:
                 label: Chromium
                 attributes:
                     exec:
-                        title: Chromium executable
-                        description: Set a custom Chromium executable path.
+                        title: Chromium 執行檔路徑
+                        description: 設定 Chromium 執行檔路徑
                     args:
-                        title: Chromium parameters
-                        description: Set additional parameters.
+                        title: Chromium 參數
+                        description: 設定額外參數
                     url:
-                        title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        title: 聊天室網址
+                        description: 要打開何種 Twitch 聊天室網址
             chrome:
                 label: Google Chrome
                 attributes:
                     exec:
-                        title: Google Chrome executable
-                        description: Set a custom Google Chrome executable path.
+                        title: Google Chrome 執行檔路徑
+                        description: 設定 Google Chrome 執行檔路徑
                     args:
-                        title: Google Chrome parameters
-                        description: Set additional parameters.
+                        title: Google Chrome 參數
+                        description: 設定額外參數
                     url:
-                        title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        title: 聊天室網址
+                        description: 要打開何種 Twitch 聊天室網址
             msie:
                 label: Internet Explorer
                 attributes:
                     url:
-                        title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        title: 聊天室網址
+                        description: 要打開何種 Twitch 聊天室網址
             chatty:
                 label: Chatty
                 attributes:
                     exec:
-                        title: Java executable
-                        description: Set a custom java executable path.
+                        title: Java 執行檔路徑
+                        description: 設定 java 執行檔路徑
                     jar:
-                        title: Chatty .jar file
-                        description: Set a custom chatty.jar path.
+                        title: Chatty .jar 檔路徑
+                        description: 設定 chatty.jar 路徑
                     instance:
-                        title: Single instance mode
-                        description: Requires at least version 0.8.2b2.
-                        checkbox: Enable single instance mode
+                        title: 單一個體模式
+                        description: 需 v0.8.2b2 版以上
+                        checkbox: 啟用單一個體模式
                     auth:
-                        title: Authenticate
-                        description: Let Chatty re-use the auth data.
-                        checkbox: Sign in automatically
+                        title: 認證
+                        description: 讓 Chatty 使用認證資料
+                        checkbox: 自動登入
                     args:
-                        title: Custom Chatty parameters
-                        description: Set additional parameters.
+                        title: 自訂 Chatty 參數
+                        description: 設定額外參數
             chatty-standalone:
                 label: Chatty (Standalone)
                 attributes:
                     exec:
-                        title: Chatty executable
-                        description: Set the path to the Chatty executable.
+                        title: Chatty 執行檔路徑
+                        description: 設定 Chatty 執行檔路徑
                     instance:
-                        title: Single instance mode
-                        description: Requires at least version 0.8.2b2.
-                        checkbox: Enable single instance mode
+                        title: 單一個體模式
+                        description: 需 v0.8.2b2 版以上
+                        checkbox: 啟用單一個體模式
                     auth:
-                        title: Authenticate
-                        description: Let Chatty re-use the auth data.
-                        checkbox: Sign in automatically
+                        title: 認證
+                        description: 讓 Chatty 使用認證資料
+                        checkbox: 自動登入
                     args:
-                        title: Custom Chatty parameters
-                        description: Set additional parameters.
+                        title: 自訂 Chatty 參數
+                        description: 設定額外參數
             custom:
-                label: Custom application
+                label: 自訂程式
                 attributes:
                     exec:
-                        title: Application executable
-                        description: Set the path to the executable.
+                        title: 程式執行檔路徑
+                        description: 設定程式執行檔路徑
                     args:
-                        title: Application parameters
-                        description: Set application parameters.
+                        title: 程式參數
+                        description: 設定程式參數
                     url:
-                        title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        title: 聊天室網址
+                        description: 要打開何種 Twitch 聊天室網址
     chat-open:
-        title: Open chat
-        description: While launching streams.
-        checkbox: Automatically open chat
-        checkbox-context: Don't open chat while launching streams via the context menu
+        title: 開啟聊天室
+        description: 開啟實況時打開聊天室
+        checkbox: 開啟實況時自動打開聊天室
+        checkbox-context: 從右鍵選單打開實況時，不要打開聊天室
     twitchemotes:
-        title: Twitch emotes
-        description: Button that opens up twitchemotes.com.
-        checkbox: Show emotes button in stream popups
+        title: Twitch 表情
+        description: 打開 twitchemotes.com 的按鈕
+        checkbox: 在實況對話框顯示表情按鈕
 lists:
     channelname:
-        title: Custom channel names
-        description: Channel name localizations.
+        title: 自訂頻道名稱
+        description: 頻道名稱在地化
         values:
-            custom: Show custom names
-            original: Show original names
-            both: Show both
+            custom: 顯示自訂名稱
+            original: 顯示原始頻道名稱
+            both: 全部顯示
     show-flag:
-        title: Flags
-        description: Indicating the broadcaster language.
-        checkbox: Flags are always visible
+        title: 旗幟
+        description: 標示實況主的語言
+        checkbox: 總是顯示旗幟
     filter-vodcast:
-        title: Fade out Vodcasts
-        description: Makes vodcasts less visible, as an additional indicator.
-        checkbox: Fade out Vodcasts
+        title: 淡出重播頻道 (Vodcasts)
+        description: 使重播頻道較不明顯
+        checkbox: 淡出重播頻道
     show-info:
-        title: Info bar
-        description: Bottom bar inside the stream preview.
-        checkbox: Info bar is always visible
+        title: 資訊列
+        description: 實況預覽圖下方的資訊列
+        checkbox: 永遠顯示資訊列
     info:
-        title: Info bar content
-        description: What should be displayed?
+        title: 資訊列內容
+        description: 資訊列要顯示什麼？
         values:
-            game: Game being played
-            title: Stream title
+            game: 正在玩的遊戲
+            title: 實況標題
     click:
-        title: Click behavior
-        description: Additional stream image click actions.
-        ctrl: CTRL + Primary mouse button
-        cmd: CMD + Primary mouse button
-        middle: Middle mouse button
+        title: 點擊行為
+        description: 實況預覽圖的額外點擊動作
+        ctrl: Ctrl + 滑鼠主要按鈕
+        cmd: CMD + 滑鼠主要按鈕
+        middle: 滑鼠中鍵
         values:
-            noop: Do nothing
-            launch: Launch stream
-            chat: Open chat
-            channel: Go to channel page
-            settings: Go to channel settings
+            noop: 不動作
+            launch: 開啟實況
+            chat: 開啟聊天室
+            channel: 移至頻道資訊頁
+            settings: 移至頻道設定頁
 languages:
     filter:
-        title: Filter streams
-        description: Apply a language filter to all stream lists (except followed streams).
-        notes: Does not affect the 'Live Streams' menu of the 'My' section.
+        title: 過濾實況
+        description: 使用語言來過濾所有實況列表 (已追蹤的除外)
+        notes: 我的實況不受影響
         values:
             fade:
-                text: Fade out streams
-                description: Show all streams, fade out ones not matching the language selection.
+                text: 淡出實況頻道
+                description: 顯示所有實況，未選擇的語言頻道淡出
             filter:
-                text: Filter out streams
-                description: Only show streams matching the language selection.
+                text: 過濾顯示實況頻道
+                description: 只顯示所選語言的頻道
     languages:
-        title: Languages
-        description: Broadcaster language, or if not set, the channel language.
-        notes: Select all languages to disable filtering.
-        check-all: Check all
-        uncheck-all: Uncheck all
+        title: 語言
+        description: 實況主語言，若未設定，則為頻道語言
+        notes: 選擇所有語言來關閉過濾功能
+        check-all: 全部勾選
+        uncheck-all: 全部取消
 notifications:
     enabled:
-        title: Notifications
-        description: When favorites start streaming.
-        checkbox: Enable desktop notifications
+        title: 桌面通知
+        description: 當追隨的實況開始時通知
+        checkbox: 啟用桌面通知
     provider:
-        title: Notification type
-        description: Choose the kind of notification
+        title: 通知類型
+        description: 選擇通知的類型
         test:
-            button: Test notification
-            message: This is a test notification
+            button: 測試通知
+            message: 這是測試用通知訊息
         providers:
             auto:
-                name: Automatic selection
-                description: Tries to find the best notification provider
-                notes: Tests all available notification providers in descending order
+                name: 自動選擇
+                description: 嘗試使用最適合的通知提供元件
+                notes: 會逐一測試所有可用的通知提供元件
             native:
-                name: Native notifications
-                description: Uses the system's native notification system
-                notes: Notifications can be configured in the system preferences
+                name: 原生通知
+                description: 使用作業系統原生通知系統
+                notes: 可以從系統設定中調整通知設定
             snoretoast:
-                name: Windows toast notifications
-                description: Native notifications on Windows 8+
-                notes: \"Banner notifications\" need to be enabled in the system preferences
+                name: Windows 快顯通知
+                description: Windows 8 以上的原生通知系統
+                notes: "需打開系統設定中的 \"通知橫幅\""
             growl:
-                name: Growl notifications
-                description: Third-party notification service for Windows, macOS and Linux
-                notes: Requires Growl to be installed and running on the system
+                name: Growl 通知
+                description: 第三方通知服務，支援 Windows、macOS 及 Linux
+                notes: 作業系統需安裝 Growl
             rich:
-                name: Rich notifications
-                description: Chromium rich notifications
-                notes: Rendered by the application itself
+                name: Rich 通知
+                description: Chromium rich 通知
+                notes: 程式自行顯示
     filter:
-        title: Channel filter
-        description: Notifications can be turned on/off individually in a channel's settings menu.
+        title: 頻道過濾
+        description: 頻道設定內可獨立設定桌面通知開關
         values:
-            blacklist: Show all except disabled ones
-            whitelist: Ignore all except enabled ones
+            blacklist: 顯示全部並隱藏停用的
+            whitelist: 忽略全部只顯示啟用的
     filter-vodcasts:
-        title: Filter Vodcasts
-        description: Only include live streams.
-        checkbox: Ignore Vodcasts
+        title: 過濾重播
+        description: 只顯示實況
+        checkbox: 忽略重播
     grouping:
-        title: Grouping
-        description: Merge multiple notifications.
-        checkbox: Only show one notification at a time
+        title: 群組化
+        description: 合併多個桌面通知
+        checkbox: 同一時間只合併顯示一則通知
     click:
-        title: Notification click
-        description: Preferred click action.
+        title: 點擊通知
+        description: 選擇點擊的動作
         values:
-            noop: Do nothing
-            followed: Go to favorites
-            stream: Open stream
-            stream-and-chat: Open stream+chat
+            noop: 不動作
+            followed: 跳轉至追隨實況頁面
+            stream: 打開實況
+            stream-and-chat: 打開實況+聊天室
     click-group:
-        title: Group click
-        description: Preferred group click action.
+        title: 點擊群組通知
+        description: 選擇點擊群組通知的動作
         values:
-            noop: Do nothing
-            followed: Go to favorites
-            stream: Open all streams
-            stream-and-chat: Open all streams+chats
+            noop: 不動作
+            followed: 跳轉至追隨實況頁面
+            stream: 打開所有實況
+            stream-and-chat: 打開所有實況+聊天室
     click-restore:
-        title: Restore GUI
-        description: Restore from tray or minimized state when performing a notification click action.
-        checkbox: Restore when clicking a notification
+        title: 還原介面
+        description: 點擊通知時從通知區域圖示或最小化還原至一般視窗
+        checkbox: 點擊通知時還原介面
 channels:
-    find: Find channel
-    none: No channels found.
-    empty: No custom channel settings set.
+    find: 搜尋頻道
+    none: 找無頻道
+    empty: 目前無自訂頻道設定
