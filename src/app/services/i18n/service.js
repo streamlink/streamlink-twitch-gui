@@ -1,7 +1,7 @@
 import { get, set, observer } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { Service } from "ember-i18n/addon";
-import systemLocale from "utils/systemLocale";
+import systemLocale from "./system-locale";
 
 
 export default Service.extend({
