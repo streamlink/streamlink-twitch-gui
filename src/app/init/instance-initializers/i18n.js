@@ -15,7 +15,8 @@ function getImports( regEx, callback ) {
 	for ( const key of importLocales.keys() ) {
 		const match = regEx.exec( key );
 		if ( !match ) { continue; }
-		callback( key, match );
+		const imported = importLocales( key );
+		callback( imported, match );
 	}
 }
 
@@ -38,16 +39,15 @@ export default {
 		};
 
 		// import all locale configs and register them
-		getImports( /^.\/([^\/]+)\/config\.js$/, ( key, [ , locale ] ) => {
+		getImports( /^.\/([^\/]+)\/config\.js$/, ( { default: imported }, [ , locale ] ) => {
 			ensureTranslationObject( locale );
-			const { default: config } = importLocales( `./${locale}/config.js` );
-			application.register( `locale:${locale}/config`, config );
+			application.register( `locale:${locale}/config`, imported );
 		});
 
 		// import all translation namespaces and build a translation object for each locale
-		getImports( /^.\/([^\/]+)\/([\w-]+)\.yml$/, ( key, [ , locale, namespace ] ) => {
+		getImports( /^.\/([^\/]+)\/([\w-]+)\.yml$/, ( imported, [ , locale, namespace ] ) => {
 			ensureTranslationObject( locale );
-			translations.get( locale )[ namespace ] = importLocales( key );
+			translations.get( locale )[ namespace ] = imported;
 		});
 
 		// register locale translation objects and add them to the i18n service

@@ -3,6 +3,7 @@ import { buildResolver, hbs } from "test-utils";
 import sinon from "sinon";
 
 import { helper as TimeFromNowHelper } from "ui/components/helper/time-from-now";
+import Moment from "moment";
 
 
 moduleForComponent( "ui/components/helper/time-from-now", {
@@ -10,6 +11,9 @@ moduleForComponent( "ui/components/helper/time-from-now", {
 	resolver: buildResolver({
 		TimeFromNowHelper
 	}),
+	before() {
+		Moment.locale( "en" );
+	},
 	beforeEach() {
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "Date", "setTimeout", "clearTimeout" ],
