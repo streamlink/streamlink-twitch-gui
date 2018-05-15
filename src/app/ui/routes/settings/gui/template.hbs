@@ -7,13 +7,11 @@
 	{{#radio-buttons
 		value=model.gui.integration
 		content=contentGuiIntegration
-		classNames="group"
 		as |item|
 	}}
-		{{item.button
-			(t (concat "settings.gui.integration.values." item.label))
-			classNames="btn btn-neutral"
-		}}
+		<div>
+			{{item.button (t (concat "settings.gui.integration.values." item.label))}}
+		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
 
@@ -26,13 +24,11 @@
 		name="settings-gui-minimize"
 		value=model.gui.minimize
 		content=contentGuiMinimize
-		classNames="group"
 		as |item|
 	}}
-		{{item.button
-			(t (concat "settings.gui.minimize.values." item.label))
-			classNames="btn btn-neutral"
-		}}
+		<div>
+			{{item.button (t (concat "settings.gui.minimize.values." item.label))}}
+		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
 
