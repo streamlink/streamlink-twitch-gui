@@ -1,6 +1,8 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
+import sinon from "sinon";
+import { run } from "@ember/runloop";
 import Adapter from "ember-data/adapter";
 import { EventEmitter } from "events";
 
@@ -11,31 +13,33 @@ import windowInitializerInjector
 	from "inject-loader?config&nwjs/Window&nwjs/Window/reset&nwjs/Screen&utils/node/platform!init/instance-initializers/nwjs/window";
 
 
-let owner, env;
-
-const manifest = {
-	window: {
-		width: 960,
-		height: 540
-	}
-};
-let nwWindow, nwScreen;
-
-
 module( "init/instance-initializers/nwjs/window", {
 	beforeEach() {
-		owner = buildOwner();
-		owner.register( "model:window", Window );
+		this.owner = buildOwner();
+		this.env = setupStore( this.owner );
 
-		env = setupStore( owner );
+		this.fakeTimer = sinon.useFakeTimers({
+			//toFake: [ "Date", "setTimeout", "clearTimeout" ],
+			target: window
+		});
 
-		nwWindow = new EventEmitter();
+		const manifest = {
+			window: {
+				width: 960,
+				height: 540
+			}
+		};
+
+		const nwWindow = new EventEmitter();
 		nwWindow.x = 0;
 		nwWindow.y = 0;
 		nwWindow.width = manifest.window.width;
 		nwWindow.height = manifest.window.height;
 		nwWindow.maximize = () => {
 			nwWindow.emit( "maximize" );
+		};
+		nwWindow.minimize = () => {
+			nwWindow.emit( "minimize" );
 		};
 		nwWindow.restore = () => {
 			nwWindow.emit( "restore" );
@@ -51,7 +55,7 @@ module( "init/instance-initializers/nwjs/window", {
 			nwWindow.emit( "resize", width, height );
 		};
 
-		nwScreen = new EventEmitter();
+		const nwScreen = new EventEmitter();
 		nwScreen.screens = [
 			{
 				bounds: {
@@ -70,45 +74,61 @@ module( "init/instance-initializers/nwjs/window", {
 				}
 			}
 		];
+
+		this.nwWindow = nwWindow;
+		this.nwScreen = nwScreen;
+
+		this.saveStub = sinon.stub().callsFake( async function() {
+			return this;
+		});
+		this.owner.register( "model:window", Window.extend({
+			save: this.saveStub
+		}) );
+
+		const { default: resetWindow } = resetWindowInjector({
+			"nwjs/App": { manifest },
+			"nwjs/Window": nwWindow,
+			"nwjs/Screen": nwScreen
+		});
+
+		this.subject = async ( findAll, isWin = false ) => {
+			this.findAllStub = sinon.stub().callsFake( async () => findAll ? [ findAll ] : [] );
+
+			this.owner.register( "adapter:window", Adapter.extend({
+				findAll: this.findAllStub
+			}) );
+
+			const { default: windowInitializer } = windowInitializerInjector({
+				"config": {
+					"vars": {
+						"time-window-event-debounce": 1000,
+						"time-window-event-ignore": 2000
+					}
+				},
+				"nwjs/Window": nwWindow,
+				"nwjs/Window/reset": resetWindow,
+				"nwjs/Screen": nwScreen,
+				"utils/node/platform": { isWin }
+			});
+			await windowInitializer( this.owner );
+		};
 	},
 
 	afterEach() {
-		runDestroy( owner );
-		owner = env = null;
+		runDestroy( this.owner );
+		this.owner = this.env = this.nwWindow = this.nwScreen = null;
+		this.fakeTimer.restore();
 	}
 });
 
 
-test( "No existing window record", async assert => {
+test( "Non-existing window record", async function( assert ) {
 
-	assert.expect( 7 );
+	await this.subject();
 
-	owner.register( "adapter:window", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls adapter.findAll()" );
-			return [];
-		},
-		async createRecord() {
-			assert.ok( true, "Calls adapter.createRecord()" );
-			return { id: 1 };
-		}
-	}) );
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
 
-	const { default: windowInitializer } = windowInitializerInjector({
-		"config": { vars: {} },
-		"nwjs/Window": nwWindow,
-		"nwjs/Window/reset": () => {
-			throw new Error();
-		},
-		"nwjs/Screen": nwScreen,
-		"utils/node/platform": {
-			isWin: false
-		}
-	});
-
-	await windowInitializer( owner );
-
-	const windowRecord = env.store.peekRecord( "window", 1 );
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -122,52 +142,35 @@ test( "No existing window record", async assert => {
 		"A window record has been created"
 	);
 
-	assert.strictEqual( nwWindow.x, 0, "nwWindow's x property has not been updated" );
-	assert.strictEqual( nwWindow.y, 0, "nwWindow's y property has not been updated" );
-	assert.strictEqual( nwWindow.width, 960, "nwWindow's width property has not been updated" );
-	assert.strictEqual( nwWindow.height, 540, "nwWindow's height property has not been updated" );
+	assert.strictEqual( this.nwWindow.x, 0, "x property has not been updated" );
+	assert.strictEqual( this.nwWindow.y, 0, "y property has not been updated" );
+	assert.strictEqual( this.nwWindow.width, 960, "width property has not been updated" );
+	assert.strictEqual( this.nwWindow.height, 540, "height property has not been updated" );
 
 });
 
 
-test( "Existing window record with postition on first screen", async assert => {
+test( "Existing window record with postition on first screen", async function( assert ) {
 
-	assert.expect( 16 );
+	const maximizeSpy = sinon.spy();
+	const restoreSpy = sinon.spy();
+	this.nwWindow.on( "maximize", maximizeSpy );
+	this.nwWindow.on( "restore", restoreSpy );
 
-	owner.register( "adapter:window", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls adapter.findAll()" );
-			return [{
-				id: "1",
-				x: 100,
-				y: 100,
-				width: 1440,
-				height: 810,
-				maximized: false
-			}];
-		}
-	}) );
-
-	const { default: windowInitializer } = windowInitializerInjector({
-		"config": {
-			vars: {
-				"time-window-event-debounce": 1,
-				"time-window-event-ignore": 1
-			}
-		},
-		"nwjs/Window": nwWindow,
-		"nwjs/Window/reset": () => {
-			throw new Error();
-		},
-		"nwjs/Screen": nwScreen,
-		"utils/node/platform": {
-			isWin: false
-		}
+	await this.subject({
+		id: "1",
+		x: 100,
+		y: 100,
+		width: 1440,
+		height: 810,
+		maximized: false
 	});
 
-	await windowInitializer( owner );
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
+	assert.notOk( maximizeSpy.called, "Doesn't call maximize" );
+	assert.notOk( restoreSpy.called, "Doesn't call restore" );
 
-	const windowRecord = env.store.peekRecord( "window", 1 );
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -181,17 +184,18 @@ test( "Existing window record with postition on first screen", async assert => {
 		"A window record with id 1 exists"
 	);
 
-	assert.strictEqual( nwWindow.x, 100, "nwWindow's x property has been updated" );
-	assert.strictEqual( nwWindow.y, 100, "nwWindow's y property has been updated" );
-	assert.strictEqual( nwWindow.width, 1440, "nwWindow's width property has been updated" );
-	assert.strictEqual( nwWindow.height, 810, "nwWindow's height property has been updated" );
+	assert.strictEqual( this.nwWindow.x, 100, "x property has been updated" );
+	assert.strictEqual( this.nwWindow.y, 100, "y property has been updated" );
+	assert.strictEqual( this.nwWindow.width, 1440, "width property has been updated" );
+	assert.strictEqual( this.nwWindow.height, 810, "height property has been updated" );
 
 	// move window off the screen
-	nwWindow.moveTo( 481, 271 );
+	run( () => this.nwWindow.moveTo( 481, 271 ) );
 
 	// wait for the debounce time of the move event
-	await new Promise( resolve => setTimeout( resolve, 2 ) );
+	this.fakeTimer.tick( 1000 );
 
+	assert.ok( this.saveStub.notCalled, "Doesn't update record if moved off the screen" );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -205,18 +209,21 @@ test( "Existing window record with postition on first screen", async assert => {
 		"The window record doesn't get updated if moved off the screen"
 	);
 
-	assert.strictEqual( nwWindow.x, 481, "nwWindow's x property has been updated" );
-	assert.strictEqual( nwWindow.y, 271, "nwWindow's y property has been updated" );
-	assert.strictEqual( nwWindow.width, 1440, "nwWindow's width property has been updated" );
-	assert.strictEqual( nwWindow.height, 810, "nwWindow's height property has been updated" );
+	assert.strictEqual( this.nwWindow.x, 481, "x property has been updated" );
+	assert.strictEqual( this.nwWindow.y, 271, "y property has been updated" );
+	assert.strictEqual( this.nwWindow.width, 1440, "width property has been updated" );
+	assert.strictEqual( this.nwWindow.height, 810, "height property has been updated" );
 
 	// resize window so that parts of it are off the screen
-	nwWindow.x = nwWindow.y = 100;
-	nwWindow.resizeTo( 1920, 1080 );
+	run( () => {
+		this.nwWindow.x = this.nwWindow.y = 100;
+		this.nwWindow.resizeTo( 1920, 1080 );
+	});
 
 	// wait for the debounce time of the resize event
-	await new Promise( resolve => setTimeout( resolve, 2 ) );
+	this.fakeTimer.tick( 1000 );
 
+	assert.ok( this.saveStub.notCalled, "Doesn't update record if resized off the screen" );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -230,67 +237,35 @@ test( "Existing window record with postition on first screen", async assert => {
 		"The window record doesn't get updated if resized off the screen"
 	);
 
-	assert.strictEqual( nwWindow.x, 100, "nwWindow's x property has been updated" );
-	assert.strictEqual( nwWindow.y, 100, "nwWindow's y property has been updated" );
-	assert.strictEqual( nwWindow.width, 1920, "nwWindow's width property has been updated" );
-	assert.strictEqual( nwWindow.height, 1080, "nwWindow's height property has been updated" );
+	assert.strictEqual( this.nwWindow.x, 100, "x property has been updated" );
+	assert.strictEqual( this.nwWindow.y, 100, "y property has been updated" );
+	assert.strictEqual( this.nwWindow.width, 1920, "width property has been updated" );
+	assert.strictEqual( this.nwWindow.height, 1080, "height property has been updated" );
 
 });
 
 
-test( "Existing window record with position on second screen", async assert => {
+test( "Existing window record with position on second screen", async function( assert ) {
 
-	assert.expect( 21 );
+	const maximizeSpy = sinon.spy();
+	const restoreSpy = sinon.spy();
+	this.nwWindow.on( "maximize", maximizeSpy );
+	this.nwWindow.on( "restore", restoreSpy );
 
-	owner.register( "adapter:window", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls adapter.findAll()" );
-			return [{
-				id: "1",
-				x: 2020,
-				y: 100,
-				width: 1440,
-				height: 810,
-				maximized: true
-			}];
-		},
-		async updateRecord() {
-			assert.ok( true, "Calls adapter.updateRecord()" );
-		}
-	}) );
-
-	const resetWindow = resetWindowInjector({
-		"nwjs/App": { manifest },
-		"nwjs/Window": nwWindow,
-		"nwjs/Screen": nwScreen
-	})[ "default" ];
-
-	const { default: windowInitializer } = windowInitializerInjector({
-		"config": {
-			vars: {
-				"time-window-event-debounce": 1,
-				"time-window-event-ignore": 1
-			}
-		},
-		"nwjs/Window": nwWindow,
-		"nwjs/Window/reset": resetWindow,
-		"nwjs/Screen": nwScreen,
-		"utils/node/platform": {
-			isWin: false
-		}
+	await this.subject({
+		id: "1",
+		x: 2020,
+		y: 100,
+		width: 1440,
+		height: 810,
+		maximized: true
 	});
 
-	nwWindow.on( "maximize", () => {
-		assert.ok( true, "Calls nwWindow.maximize() once" );
-	});
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
+	assert.ok( maximizeSpy.calledOnce, "Calls maximize once" );
+	assert.notOk( restoreSpy.called, "Doesn't call restore" );
 
-	nwWindow.on( "restore", () => {
-		throw new Error();
-	});
-
-	await windowInitializer( owner );
-
-	const windowRecord = env.store.peekRecord( "window", 1 );
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -304,13 +279,13 @@ test( "Existing window record with position on second screen", async assert => {
 		"A window record with id 1 exists"
 	);
 
-	assert.strictEqual( nwWindow.x, 2020, "nwWindow's x property has been updated" );
-	assert.strictEqual( nwWindow.y, 100, "nwWindow's y property has been updated" );
-	assert.strictEqual( nwWindow.width, 1440, "nwWindow's width property has been updated" );
-	assert.strictEqual( nwWindow.height, 810, "nwWindow's height property has been updated" );
+	assert.strictEqual( this.nwWindow.x, 2020, "x property has been updated" );
+	assert.strictEqual( this.nwWindow.y, 100, "y property has been updated" );
+	assert.strictEqual( this.nwWindow.width, 1440, "width property has been updated" );
+	assert.strictEqual( this.nwWindow.height, 810, "height property has been updated" );
 
 	// remove second screen (window is now out of bounds)
-	const secondScreen = nwScreen.screens.pop();
+	const secondScreen = this.nwScreen.screens.pop();
 
 	// require all three events to be triggered after triggering displayBoundsChanged
 	let resolveMove, resolveResize;
@@ -318,21 +293,22 @@ test( "Existing window record with position on second screen", async assert => {
 		new Promise( r => resolveMove = r ),
 		new Promise( r => resolveResize = r )
 	]);
-	nwWindow.once( "move", () => {
-		assert.ok( true, "Calls nwWindow.moveTo()" );
-		resolveMove();
-	});
-	nwWindow.once( "resize", () => {
-		assert.ok( true, "Calls nwWindow.resizeTo()" );
-		resolveResize();
-	});
+	const moveStub = sinon.stub().callsFake( resolveMove );
+	const resizeStub = sinon.stub().callsFake( resolveResize );
+	this.nwWindow.once( "move", moveStub );
+	this.nwWindow.once( "resize", resizeStub );
 
-	nwScreen.emit( "displayBoundsChanged" );
+	run( () => this.nwScreen.emit( "displayBoundsChanged" ) );
 	await promise;
+	assert.ok( moveStub.calledOnce, "Emits move event once" );
+	assert.ok( resizeStub.calledOnce, "Emits resize event once" );
+
+	assert.notOk( this.saveStub.called, "Hasn't called updateRecord yet" );
 
 	// wait for the debounce time of the events
-	await new Promise( resolve => setTimeout( resolve, 2 ) );
+	this.fakeTimer.tick( 1000 );
 
+	assert.ok( this.saveStub.calledTwice, "Has called updateRecord twice (resize+move)" );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -346,19 +322,22 @@ test( "Existing window record with position on second screen", async assert => {
 		"Resets the window record if the screens change and the window is out of bounds"
 	);
 
-	assert.strictEqual( nwWindow.x, 480, "nwWindow's x property has been reset" );
-	assert.strictEqual( nwWindow.y, 270, "nwWindow's y property has been reset" );
-	assert.strictEqual( nwWindow.width, 960, "nwWindow's width property has been reset" );
-	assert.strictEqual( nwWindow.height, 540, "nwWindow's height property has been reset" );
+	assert.strictEqual( this.nwWindow.x, 480, "x property has been reset" );
+	assert.strictEqual( this.nwWindow.y, 270, "y property has been reset" );
+	assert.strictEqual( this.nwWindow.width, 960, "width property has been reset" );
+	assert.strictEqual( this.nwWindow.height, 540, "height property has been reset" );
+
+	this.saveStub.resetHistory();
 
 	// move window between two screens
-	nwScreen.screens.push( secondScreen );
-	nwWindow.x = 1440;
-	nwWindow.emit( "move", nwWindow.x, nwWindow.y );
+	this.nwScreen.screens.push( secondScreen );
+	this.nwWindow.x = 1440;
+	run( () => this.nwWindow.emit( "move", this.nwWindow.x, this.nwWindow.y ) );
 
 	// wait for the debounce time of the move event
-	await new Promise( resolve => setTimeout( resolve, 2 ) );
+	this.fakeTimer.tick( 1000 );
 
+	assert.notOk( this.saveStub.called, "Hasn't called updateRecord" );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -372,70 +351,42 @@ test( "Existing window record with position on second screen", async assert => {
 		"Doesn't upgrade the window record if the windows gets moved between two screens"
 	);
 
-	assert.strictEqual( nwWindow.x, 1440, "nwWindow's x property has been set" );
-	assert.strictEqual( nwWindow.y, 270, "nwWindow's y property has been set" );
-	assert.strictEqual( nwWindow.width, 960, "nwWindow's width property has been set" );
-	assert.strictEqual( nwWindow.height, 540, "nwWindow's height property has been set" );
+	assert.strictEqual( this.nwWindow.x, 1440, "x property has been set" );
+	assert.strictEqual( this.nwWindow.y, 270, "y property has been set" );
+	assert.strictEqual( this.nwWindow.width, 960, "width property has been set" );
+	assert.strictEqual( this.nwWindow.height, 540, "height property has been set" );
 
 });
 
 
-test( "Existing window record with position off screen", async assert => {
+test( "Existing window record with position off screen", async function( assert ) {
 
-	assert.expect( 9 );
+	const maximizeSpy = sinon.spy();
+	const restoreSpy = sinon.spy();
+	this.nwWindow.on( "maximize", maximizeSpy );
+	this.nwWindow.on( "restore", restoreSpy );
 
-	owner.register( "adapter:window", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls adapter.findAll()" );
-			return [{
-				id: "1",
-				x: -10000,
-				y: -10000,
-				width: 1920,
-				height: 1080,
-				maximized: true
-			}];
-		},
-		async updateRecord() {
-			assert.ok( true, "Calls adapter.updateRecord()" );
-		}
-	}) );
-
-	const resetWindow = resetWindowInjector({
-		"nwjs/App": { manifest },
-		"nwjs/Window": nwWindow,
-		"nwjs/Screen": nwScreen
-	})[ "default" ];
-
-	const { default: windowInitializer } = windowInitializerInjector({
-		"config": {
-			vars: {
-				"time-window-event-debounce": 1,
-				"time-window-event-ignore": 1
-			}
-		},
-		"nwjs/Window": nwWindow,
-		"nwjs/Window/reset": resetWindow,
-		"nwjs/Screen": nwScreen,
-		"utils/node/platform": {
-			isWin: false
-		}
+	await this.subject({
+		id: "1",
+		x: -10000,
+		y: -10000,
+		width: 1920,
+		height: 1080,
+		maximized: true
 	});
 
-	nwWindow.on( "maximize", () => {
-		assert.ok( true, "Calls nwWindow.maximize()" );
-	});
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
+	assert.ok( maximizeSpy.calledOnce, "Calls maximize once" );
+	assert.notOk( restoreSpy.called, "Doesn't call restore" );
 
-	nwWindow.on( "restore", () => {
-		throw new Error();
-	});
-
-	await windowInitializer( owner );
+	assert.notOk( this.saveStub.called, "Hasn't called updateRecord" );
 
 	// wait for the debounce time of the events
-	await new Promise( resolve => setTimeout( resolve, 2 ) );
+	this.fakeTimer.tick( 2000 );
 
-	const windowRecord = env.store.peekRecord( "window", 1 );
+	assert.ok( this.saveStub.calledTwice, "Has called updateRecord twice (move+resize)" );
+
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -449,64 +400,91 @@ test( "Existing window record with position off screen", async assert => {
 		"Resets the window record when resetting the application window"
 	);
 
-	assert.strictEqual( nwWindow.x, 480, "nwWindow's x property has been updated" );
-	assert.strictEqual( nwWindow.y, 270, "nwWindow's y property has been updated" );
-	assert.strictEqual( nwWindow.width, 960, "nwWindow's width property has been updated" );
-	assert.strictEqual( nwWindow.height, 540, "nwWindow's height property has been updated" );
+	assert.strictEqual( this.nwWindow.x, 480, "x property has been updated" );
+	assert.strictEqual( this.nwWindow.y, 270, "y property has been updated" );
+	assert.strictEqual( this.nwWindow.width, 960, "width property has been updated" );
+	assert.strictEqual( this.nwWindow.height, 540, "height property has been updated" );
 
 });
 
 
-test( "Debounce events", async assert => {
+test( "Maximize and restore", async function( assert ) {
 
-	assert.expect( 4 );
-
-	owner.register( "adapter:window", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls adapter.findAll()" );
-			return [{
-				id: "1",
-				x: 480,
-				y: 270,
-				width: 960,
-				height: 540,
-				maximized: false
-			}];
-		},
-		async updateRecord() {
-			assert.ok( true, "Calls adapter.updateRecord()" );
-		}
-	}) );
-
-	const { default: windowInitializer } = windowInitializerInjector({
-		"config": {
-			vars: {
-				"time-window-event-debounce": 5,
-				"time-window-event-ignore": 1
-			}
-		},
-		"nwjs/Window": nwWindow,
-		"nwjs/Window/reset": () => {
-			throw new Error();
-		},
-		"nwjs/Screen": nwScreen,
-		"utils/node/platform": {
-			isWin: false
-		}
+	await this.subject({
+		id: "1",
+		x: 480,
+		y: 270,
+		width: 960,
+		height: 540,
+		maximized: false
 	});
 
-	await windowInitializer( owner );
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
 
-	const windowRecord = env.store.peekRecord( "window", 1 );
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
+
+	run( () => this.nwWindow.maximize() );
+
+	assert.ok( this.saveStub.calledOnce, "Updates window record on maximize" );
+	assert.propEqual(
+		windowRecord.toJSON({ includeId: true }),
+		{
+			id: "1",
+			x: 480,
+			y: 270,
+			width: 960,
+			height: 540,
+			maximized: true
+		},
+		"Saves maximized state on maximize"
+	);
+
+	this.saveStub.resetHistory();
+	run( () => this.nwWindow.restore() );
+
+	assert.ok( this.saveStub.calledOnce, "Updates window record on restore" );
+	assert.propEqual(
+		windowRecord.toJSON({ includeId: true }),
+		{
+			id: "1",
+			x: 480,
+			y: 270,
+			width: 960,
+			height: 540,
+			maximized: false
+		},
+		"Saves maximized state on restore"
+	);
+
+});
+
+
+test( "Debounce events", async function( assert ) {
+
+	await this.subject({
+		id: "1",
+		x: 480,
+		y: 270,
+		width: 960,
+		height: 540,
+		maximized: false
+	});
+
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
 
 	for ( let i = 0; i < 3; i++ ) {
-		nwWindow.emit( "move", 0, 0 );
-		nwWindow.emit( "resize", 1920, 1080 );
-		await new Promise( resolve => setTimeout( resolve, 1 ) );
+		run( () => {
+			this.nwWindow.emit( "move", 0, 0 );
+			this.nwWindow.emit( "resize", 1920, 1080 );
+		});
+		this.fakeTimer.tick( 999 );
 	}
 
-	await new Promise( resolve => setTimeout( resolve, 5 ) );
+	assert.notOk( this.saveStub.called, "Hasn't called updateRecord yet" );
+	this.fakeTimer.tick( 1 );
+	assert.ok( this.saveStub.calledTwice, "Has called updateRecord twice (move+resize)" );
 
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -523,61 +501,90 @@ test( "Debounce events", async assert => {
 });
 
 
-test( "Ignore events", async assert => {
+test( "Ignore events on minimize", async function( assert ) {
 
-	assert.expect( 7 );
-
-	owner.register( "adapter:window", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls adapter.findAll()" );
-			return [{
-				id: "1",
-				x: 480,
-				y: 270,
-				width: 960,
-				height: 540,
-				maximized: true
-			}];
-		},
-		async updateRecord() {
-			assert.ok( true, "Calls adapter.updateRecord()" );
-		}
-	}) );
-
-	const { default: windowInitializer } = windowInitializerInjector({
-		"config": {
-			vars: {
-				"time-window-event-debounce": 1,
-				"time-window-event-ignore": 5
-			}
-		},
-		"nwjs/Window": nwWindow,
-		"nwjs/Window/reset": () => {
-			throw new Error();
-		},
-		"nwjs/Screen": nwScreen,
-		"utils/node/platform": {
-			isWin: false
-		}
+	await this.subject({
+		id: "1",
+		x: 480,
+		y: 270,
+		width: 960,
+		height: 540,
+		maximized: false
 	});
 
-	await windowInitializer( owner );
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
 
-	const windowRecord = env.store.peekRecord( "window", 1 );
+	// minimize
+	run( () => this.nwWindow.minimize() );
+	assert.notOk( this.saveStub.called, "Hasn't called updateRecord yet" );
 
-	for ( let event of [ "minimize", "maximize" ] ) {
-		// maximize triggers updateRecord() separately
-		nwWindow.emit( event );
-		// those events will be ignored
-		nwWindow.emit( "move", 0, 0 );
-		nwWindow.emit( "resize", 1920, 1080 );
-		await new Promise( resolve => setTimeout( resolve, 5 ) );
-		// these events won't be ignored
-		nwWindow.emit( "move", 0, 0 );
-		nwWindow.emit( "resize", 1920, 1080 );
-		await new Promise( resolve => setTimeout( resolve, 2 ) );
-	}
+	// those events will be ignored
+	run( () => {
+		this.nwWindow.emit( "move", 0, 0 );
+		this.nwWindow.emit( "resize", 1920, 1080 );
+	});
+	this.fakeTimer.tick( 1000 );
+	assert.notOk( this.saveStub.called, "Hasn't called updateRecord yet" );
 
+	// these events won't be ignored
+	run( () => {
+		this.nwWindow.emit( "move", 0, 0 );
+		this.nwWindow.emit( "resize", 1920, 1080 );
+	});
+	this.fakeTimer.tick( 1000 );
+	assert.ok( this.saveStub.calledTwice, "Has called updateRecord twice" );
+
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
+	assert.propEqual(
+		windowRecord.toJSON({ includeId: true }),
+		{
+			id: "1",
+			x: 0,
+			y: 0,
+			width: 1920,
+			height: 1080,
+			maximized: false
+		},
+		"Updates the window record only after the event ignore time expires"
+	);
+
+});
+
+
+test( "Ignore events on maximize", async function( assert ) {
+
+	await this.subject({
+		id: "1",
+		x: 480,
+		y: 270,
+		width: 960,
+		height: 540,
+		maximized: false
+	});
+
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
+
+	// maximize (calls updateRecord() separately)
+	run( () => this.nwWindow.maximize() );
+	assert.ok( this.saveStub.calledOnce, "Has called updateRecord once" );
+
+	// those events will be ignored
+	run( () => {
+		this.nwWindow.emit( "move", 0, 0 );
+		this.nwWindow.emit( "resize", 1920, 1080 );
+	});
+	this.fakeTimer.tick( 1000 );
+	assert.ok( this.saveStub.calledOnce, "Has called updateRecord still once" );
+
+	// these events won't be ignored
+	run( () => {
+		this.nwWindow.emit( "move", 0, 0 );
+		this.nwWindow.emit( "resize", 1920, 1080 );
+	});
+	this.fakeTimer.tick( 1000 );
+	assert.ok( this.saveStub.calledThrice, "Has called updateRecord thrice" );
+
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
 		{
@@ -594,11 +601,9 @@ test( "Ignore events", async assert => {
 });
 
 
-test( "Special window coordinates on Windows", async assert => {
+test( "Special window coordinates on Windows", async function( assert ) {
 
-	assert.expect( 3 );
-
-	nwScreen.screens = [
+	this.nwScreen.screens = [
 		{
 			bounds: {
 				x: -64000,
@@ -609,46 +614,26 @@ test( "Special window coordinates on Windows", async assert => {
 		}
 	];
 
-	owner.register( "adapter:window", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls adapter.findAll()" );
-			return [{
-				id: "1",
-				x: 480,
-				y: 270,
-				width: 960,
-				height: 540,
-				maximized: false
-			}];
-		}
-	}) );
+	await this.subject({
+		id: "1",
+		x: 480,
+		y: 270,
+		width: 960,
+		height: 540,
+		maximized: false
+	}, true );
 
-	const { default: windowInitializer } = windowInitializerInjector({
-		"config": {
-			vars: {
-				"time-window-event-debounce": 1,
-				"time-window-event-ignore": 1
-			}
-		},
-		"nwjs/Window": nwWindow,
-		"nwjs/Window/reset": () => {
-			throw new Error();
-		},
-		"nwjs/Screen": nwScreen,
-		"utils/node/platform": {
-			isWin: true
-		}
+	assert.ok( this.findAllStub.calledOnce, "Calls findAll once" );
+
+	const windowRecord = this.env.store.peekRecord( "window", 1 );
+
+	run( () => {
+		this.nwWindow.x = -8;
+		this.nwWindow.y = -8;
+		this.nwWindow.emit( "move", this.nwWindow.x, this.nwWindow.y );
 	});
 
-	await windowInitializer( owner );
-
-	const windowRecord = env.store.peekRecord( "window", 1 );
-
-	nwWindow.x = -8;
-	nwWindow.y = -8;
-	nwWindow.emit( "move", nwWindow.x, nwWindow.y );
-
-	await new Promise( resolve => setTimeout( resolve, 2 ) );
+	this.fakeTimer.tick( 1000 );
 
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),
@@ -663,11 +648,13 @@ test( "Special window coordinates on Windows", async assert => {
 		"Doesn't update the window record"
 	);
 
-	nwWindow.x = -32000;
-	nwWindow.y = -32000;
-	nwWindow.emit( "move", nwWindow.x, nwWindow.y );
+	run( () => {
+		this.nwWindow.x = -32000;
+		this.nwWindow.y = -32000;
+		this.nwWindow.emit( "move", this.nwWindow.x, this.nwWindow.y );
+	});
 
-	await new Promise( resolve => setTimeout( resolve, 2 ) );
+	this.fakeTimer.tick( 1000 );
 
 	assert.propEqual(
 		windowRecord.toJSON({ includeId: true }),

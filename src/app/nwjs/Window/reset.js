@@ -21,7 +21,7 @@ export default async function( unmaximize ) {
 		setMaximized( false );
 	}
 
-	await new Promise( resolve => setTimeout( resolve, 0 ) );
+	await new Promise( resolve => process.nextTick( resolve ) );
 
 	// reset window: use the default window size and move it to the main screen's center
 	nwWindow.resizeTo(

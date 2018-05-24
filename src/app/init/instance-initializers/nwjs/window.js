@@ -96,7 +96,7 @@ async function restoreWindowFromRecord( windowRecord ) {
 		nwWindow.resizeTo( width, height );
 	}
 
-	await new Promise( resolve => setTimeout( resolve, 0 ) );
+	await new Promise( resolve => process.nextTick( resolve ) );
 
 	if ( maximized ) {
 		nwWindow.maximize();
