@@ -42,9 +42,6 @@ async function downloadPromise( url, path, time ) {
 		if ( !incomingMessage.destroyed ) {
 			incomingMessage.destroy();
 		}
-		if ( !writeStream.destroyed ) {
-			writeStream.destroy();
-		}
 	}
 }
 

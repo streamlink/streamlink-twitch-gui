@@ -42,13 +42,12 @@ module( "utils/node/fs/download", {
 		this.readableStub = sinon.stub().callsFake( ( ...args ) =>
 			this.readable = new ReadStream( ...args )
 		);
-		this.readableDestoySpy = sinon.spy( ReadStream.prototype, "_destroy" );
+		this.readableDestroySpy = sinon.spy( ReadStream.prototype, "_destroy" );
 
 		this.writableStub = sinon.stub().callsFake( ( ...args ) =>
 			this.writable = new WriteStream( ...args )
 		);
 		this.writableWriteSpy = sinon.spy( WriteStream.prototype, "_write" );
-		this.writableDestoySpy = sinon.spy( WriteStream.prototype, "_destroy" );
 
 		this.subject = () => downloadInjector({
 			path,
@@ -135,8 +134,7 @@ test( "Write error", async function( assert ) {
 		"Creates WriteStream before ReadStream"
 	);
 	assert.notOk( this.setTimeoutStub.called, "Doesn't set a timeout callback if time is not set" );
-	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
-	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
+	assert.notOk( this.readableDestroySpy.called, "Hasn't called readable.destory yet" );
 
 	this.writable.emit( "error", error );
 
@@ -144,12 +142,7 @@ test( "Write error", async function( assert ) {
 
 	assert.notOk( this.writableWriteSpy.called, "Doesn't write on error" );
 	assert.notOk( this.clearTimeoutSpy.called, "Doesn't call clearTimeout" );
-	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
-	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
-	assert.ok(
-		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
-		"Destroys ReadStream before WriteStream"
-	);
+	assert.ok( this.readableDestroySpy.calledOnce, "Has called readable.destory" );
 
 });
 
@@ -175,8 +168,7 @@ test( "Read error", async function( assert ) {
 		"Creates WriteStream before ReadStream"
 	);
 	assert.notOk( this.setTimeoutStub.called, "Doesn't set a timeout callback if time is not set" );
-	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
-	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
+	assert.notOk( this.readableDestroySpy.called, "Hasn't called readable.destory yet" );
 
 	this.readable.emit( "error", error );
 
@@ -184,12 +176,7 @@ test( "Read error", async function( assert ) {
 
 	assert.notOk( this.writableWriteSpy.called, "Doesn't write on error" );
 	assert.notOk( this.clearTimeoutSpy.called, "Doesn't call clearTimeout" );
-	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
-	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
-	assert.ok(
-		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
-		"Destroys ReadStream before WriteStream"
-	);
+	assert.ok( this.readableDestroySpy.calledOnce, "Has called readable.destory" );
 
 });
 
@@ -222,22 +209,16 @@ test( "Timeout", async function( assert ) {
 		this.setTimeoutStub.calledAfter( this.readableStub ),
 		"Sets timeout after creating ReadStream"
 	);
-	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
-	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
+	assert.notOk( this.readableDestroySpy.called, "Hasn't called readable.destory yet" );
 
 	await assert.rejects( promise, new Error( "Timeout" ), "Rejects on timeout" );
 
 	assert.notOk( this.writableWriteSpy.called, "Doesn't write on error" );
 	assert.propEqual( this.clearTimeoutSpy.args, [[ 1234 ]], "Clears timeout" );
-	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
-	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
+	assert.ok( this.readableDestroySpy.calledOnce, "Has called readable.destory" );
 	assert.ok(
-		this.clearTimeoutSpy.calledBefore( this.readableDestoySpy ),
+		this.clearTimeoutSpy.calledBefore( this.readableDestroySpy ),
 		"Clears timeout before destroying ReadStream"
-	);
-	assert.ok(
-		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
-		"Destroys ReadStream before WriteStream"
 	);
 
 });
@@ -266,8 +247,7 @@ test( "Unpipe", async function( assert ) {
 		"Creates WriteStream before ReadStream"
 	);
 	assert.notOk( this.setTimeoutStub.called, "Doesn't set a timeout callback if time is not set" );
-	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
-	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
+	assert.notOk( this.readableDestroySpy.called, "Hasn't called readable.destory yet" );
 
 	this.readable.emit( "unpipe" );
 
@@ -275,12 +255,7 @@ test( "Unpipe", async function( assert ) {
 
 	assert.notOk( this.writableWriteSpy.called, "Doesn't write on error" );
 	assert.notOk( this.clearTimeoutSpy.called, "Doesn't call clearTimeout" );
-	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
-	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
-	assert.ok(
-		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
-		"Destroys ReadStream before WriteStream"
-	);
+	assert.ok( this.readableDestroySpy.calledOnce, "Has called readable.destory" );
 
 });
 
@@ -305,8 +280,7 @@ test( "Download", async function( assert ) {
 		"Creates WriteStream before ReadStream"
 	);
 	assert.notOk( this.setTimeoutStub.called, "Doesn't set a timeout callback if time is not set" );
-	assert.notOk( this.writableDestoySpy.called, "Hasn't called writable.destory yet" );
-	assert.notOk( this.readableDestoySpy.called, "Hasn't called readable.destory yet" );
+	assert.notOk( this.readableDestroySpy.called, "Hasn't called readable.destory yet" );
 
 	this.readable.push( "foo" );
 	this.readable.push( "bar" );
@@ -320,15 +294,10 @@ test( "Download", async function( assert ) {
 		"Writes all stream chunks"
 	);
 	assert.notOk( this.clearTimeoutSpy.called, "Doesn't call clearTimeout" );
-	assert.ok( this.readableDestoySpy.calledOnce, "Has called readable.destory" );
-	assert.ok( this.writableDestoySpy.calledOnce, "Has called writable.destory" );
+	assert.ok( this.readableDestroySpy.calledOnce, "Has called readable.destory" );
 	assert.ok(
-		this.writableWriteSpy.calledBefore( this.readableDestoySpy ),
+		this.writableWriteSpy.calledBefore( this.readableDestroySpy ),
 		"Writes all stream chunks before destroying the ReadStream"
-	);
-	assert.ok(
-		this.readableDestoySpy.calledBefore( this.writableDestoySpy ),
-		"Destroys ReadStream before WriteStream"
 	);
 
 });
