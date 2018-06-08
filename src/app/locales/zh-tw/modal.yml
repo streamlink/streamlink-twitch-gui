@@ -68,4 +68,4 @@ streaming:
         log: 顯示/隱藏 {{provider}} 記錄
         restart: 重新啟動
         shutdown: 中斷實況
-        start-hosted: 切換 # FIXME: not sure for this translation
+        start-hosted: 切換

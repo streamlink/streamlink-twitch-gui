@@ -18,7 +18,7 @@ main:
             auto: "系統預設 ({{label}})"
     advanced:
         title: 設定及功能
-        description: 啟用隱藏設定及功能 # FiXME: not sure for this translation
+        description: 啟用隱藏設定及功能
         checkbox: 啟用進階設定及功能
     homepage:
         title: 首頁
@@ -41,7 +41,7 @@ main:
 gui:
     integration:
         title: 作業系統整合
-        description: 存取介面的地方 # FiXME: not sure for this translation
+        description: 存取介面的地方
         values:
             both: 兩者皆是
             taskbar: 工作列

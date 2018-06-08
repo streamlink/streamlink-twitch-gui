@@ -5,7 +5,7 @@ notification:
     status:
         disabled: 已停用桌面通知
         enabled: 已啟用桌面通知
-        error: 桌面通知已離線 # FIXME: not sure for this translation
+        error: 桌面通知已離線
         paused: 已暫停桌面通知
     tray:
         pause:
