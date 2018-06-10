@@ -1,0 +1,17 @@
+twitch:
+    channel:
+        followers:
+            one: "有 1 位追蹤者"
+            other: "有 {{count}} 位追蹤者"
+        views:
+            one: "總觀看次數: 1 "
+            other: "總觀看次數: {{count}}"
+    stream:
+        created-at:
+            # new Moment(stream.created_at).format(...)
+            less-than-24h: "[從] LTS 開始"
+            # new Moment(stream.created_at).format(...)
+            more-than-24h: "[從] llll 開始"
+        viewers:
+            one: "目前有 1 位觀眾"
+            other: "目前有 {{count}} 位觀眾"

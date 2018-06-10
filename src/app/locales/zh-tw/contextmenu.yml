@@ -1,0 +1,18 @@
+tray:
+    toggle: 顯示/隱藏視窗
+    close: 關閉
+macOS:
+    preferences: 偏好設定
+    refresh: 重新整理
+channel-page: 頻道頁面
+channel-settings: 頻道設定
+change-quality: 品質
+close-stream: 關閉實況
+copy: 複製
+copy-channel-url: 複製頻道網址
+copy-link-address: 複製連結網址
+copy-selection: 複製
+launch-stream: 開啟實況
+open-chat: 開啟聊天室
+open-in-browser: 在瀏覽器中打開
+paste: 貼上

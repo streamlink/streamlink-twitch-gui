@@ -1,0 +1,218 @@
+error:
+    header: 錯誤
+    text: 讀取頁面時發生錯誤
+about:
+    about:
+        header: 關於
+        homepage: 首頁
+        author: 作者
+        version: 版本
+        nwjs: NW.js
+        built: 建置
+        help: 說明
+        wiki: Wiki
+        bugs: Bugs
+        issue-tracker: 問題回報
+        support: 支援
+        gitter: Gitter
+        changelog: 更新日誌
+        contributors: 貢獻者
+    donation:
+        header: 支持 & 贊助
+        text: 如果您覺得此軟體對您有幫助<br>請考慮透過贊助作者表達支持<br>非常感謝您！
+    translations:
+        header: 翻譯
+    dependencies:
+        header: 第三方元件
+featured:
+    header: 精選頻道
+    empty: 精選頻道無法載入！
+    summary: 有 {{viewers}} 位觀眾正在收看 {{channels}} 個頻道實況！
+games:
+    header: 熱門遊戲
+    empty: 無熱門遊戲
+game:
+    empty: 目前無此遊戲實況
+communities:
+    header: 熱門社群
+    menu:
+        featured: 精選社群
+        all: 所有社群
+    featured:
+        empty: 目前無精選社群
+    all:
+        empty: 目前無社群
+community:
+    menu:
+        streams: 實況中
+        info: 社群資訊
+    streams:
+        empty: 此社群目前無實況頻道
+    info:
+        created-by: 建立者
+        summary: 總覽
+        description: 描述
+        rules: 規則
+streams:
+    header: 熱門實況
+    empty: 目前無熱門實況
+channel:
+    menu:
+        details: 資訊
+        teams: 團隊
+        settings: 設定
+    offline: 目前離線中
+    details:
+        header: 頻道統計
+        name:
+            title: 名稱
+        created-at:
+            title: 建立時間
+            # new Moment(channel.created_at).format(...)
+            format: "LL"
+        language:
+            title: 語言
+        followers:
+            title: 追蹤者
+            data: "{{followers}} ({{day}}人/日)"
+        views:
+            title: 觀看次數
+            data: "{{views}} ({{day}}/日)"
+        content:
+            title: 內容
+            mature: 頻道僅適合成人觀看
+            ffa: 無年齡限制
+        format:
+            title: 格式
+            data: "{{resolution}} @ {{fps}}fps"
+        delay:
+            title: 延遲
+            # static "zero" property
+            data:
+                zero: 無設定延遲
+                one: 1 秒
+                other: "{{count}} 秒"
+        vodcast:
+            title: 重播
+            data: 實況重播
+    teams:
+        empty: 目前無團隊
+    settings:
+        stream:
+            header: 實況
+            quality:
+                title: 品質
+                description: 針對此頻道設定實況品質
+            chat:
+                title: 聊天室
+                description: 自動開啟聊天室
+                checkbox: 當開啟實況時，自動開啟聊天室
+        notifications:
+            header: 桌面通知
+            enabled:
+                title: 通知
+                description: 當實況開始時通知
+                notes: 需要追蹤頻道
+                checkbox: 啟用桌面通知
+team:
+    header:
+        members: "團隊成員: {{num}}"
+        # new Moment(team.created_at).format(...)
+        created-at: "[建立日期:] llll"
+        # new Moment(team.updated_at).format(...)
+        updated-at: "[最後更新:] llll"
+    menu:
+        live: 實況中成員
+        all: 所有成員
+        info: 團隊資訊
+    live:
+        empty: 目前無實況中成員
+    all:
+        empty: 目前無成員
+    info:
+        header: 資訊
+user:
+    index:
+        logged-in: "{{name}} 已登入"
+        # new Moment(auth.session.date).format(...)
+        since: "[從] LLLL"
+        sign-out: 登出
+        token:
+            title: 存取金鑰
+            show: 顯示存取金鑰
+            copy: 複製
+            hint:
+                first: "此金鑰會存取您 Twitch.tv 帳號中的下列權限:"
+                second: 重新登入以重置金鑰
+    auth:
+        abort: 取消
+        sign-in: 登入
+        token:
+            show-form: 使用存取金鑰
+            placeholder: 填入存取金鑰
+            hint:
+                first: 使用存取金鑰登入 Twitch.tv 帳號
+                second: "請確認金鑰擁有下列權限:"
+        fail: 認證失敗，請重試
+    subscriptions:
+        header: 訂閱
+        empty:
+            first: 您目前無任何訂閱頻道
+            second: 訂閱頻道以直接支持實況主
+    followedStreams:
+        header: 追蹤中實況
+        empty:
+            text: 目前無追蹤中實況
+            hosted: 觀看追蹤頻道正在轉播中的實況
+            featured: 觀看目前的精選實況
+            streams: 觀看熱門實況
+    hostedStreams:
+        header: 轉播實況
+        empty:
+            text: 目前無轉播實況
+            followed: 觀看追蹤中實況
+            featured: 觀看目前的精選實況
+            streams: 觀看熱門實況
+    followedChannels:
+        header: 已追隨的頻道
+        buttons:
+            sort-by-followed: 以追隨日期排序
+            sort-by-broadcast: 以最後開始實況排序
+            sort-by-login: 以最後登入排序
+            sort-desc: 降冪排序
+            sort-asc: 升冪排序
+        empty: 目前無追隨頻道
+    followedGames:
+        header: 追隨的遊戲
+        menu:
+            live: 實況中遊戲
+            all: 所有遊戲
+        live:
+            empty:
+                text: 目前無追隨的實況中遊戲
+                games: 觀看熱門實況
+        all:
+            empty:
+                text: 目前無追隨的遊戲
+                games: 觀看熱門實況
+search:
+    header:
+        all: "搜尋結果: "
+        games: "遊戲搜尋結果: "
+        channels: "頻道搜尋結果: "
+        streams: "實況搜尋結果: "
+    subheader:
+        games: 遊戲
+        channels: 頻道
+        streams: 實況
+    empty: 查無資訊
+watching:
+    header: 正在收看
+    buttons:
+        open: 開啟對話框
+        close: 關閉實況
+    empty:
+        header: 所有實況已關閉
+        next: 下一步?
+        featured: 觀看目前精選實況
+        followed: 觀看已追隨實況

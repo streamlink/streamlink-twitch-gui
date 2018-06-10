@@ -1,0 +1,124 @@
+channel-item:
+    game-missing: 尚未設定遊戲
+documentation-link:
+    title: 檢視線上文件
+drop-down-selection:
+    placeholder: 請選擇
+file-select:
+    placeholder: 留空為預設路徑
+flag-icon:
+    channel: "頻道語言: {{lang}}"
+    broadcaster: "實況主語言: {{lang}}"
+follow-button:
+    follow: "追隨 {{name}}"
+    unfollow: "停止追隨 {{name}}"
+    confirm: "確認停止追隨 {{name}}"
+    keep: "繼續追隨 {{name}}"
+infinite-scroll:
+    error: 錯誤
+    loading: 載入中
+    fetch: 載入更多
+main-menu:
+    browse:
+        header: 瀏覽
+        featured: 精選
+        games: 遊戲
+        communities: 社群
+        streams: 實況中
+    my:
+        header: 我的
+        subscriptions: 訂閱
+        live-streams: 實況
+        hosted-streams: 轉播
+        channels: 頻道
+        games: 遊戲
+    misc:
+        header: 其他
+        settings: 設定
+        about: 關於
+open-chat:
+    title: 開啟聊天室
+quick-bar-homepage:
+    title: 設為首頁
+quick-bar-random-stream:
+    title: 開啟隨機實況
+search-bar:
+    placeholder: 搜尋
+    filter: 過濾器
+    filters:
+        all: 全部
+        games: 遊戲
+        channels: 頻道
+        streams: 實況
+    recent: 最近查詢
+settings-channel-item:
+    settings: 設定
+    erase: 清除
+    confirmation: 清除自定設定?
+    confirm: 是
+    decline: 否
+settings-row:
+    notes: Notes
+    default: 備註
+    requires: 需求
+    example: 範例
+    variables:
+        title: 可用參數
+        # tooltip (whitespace sensitive)
+        help: |
+            變數內容將會被逸出，如果沒有使用引號括住字串，每個字元都會被逸出。部分程式能處理參數中不必要的逸出字元，但有些不行，請確保變數皆放在單引號或雙引號中。
+
+            Correct usage:
+            -a "{a}" -b "{b1}{b2}" "-c={c}"
+settings-submit:
+    apply: 套用
+    discard: 復原
+share-channel:
+    title: 複製頻道網址
+stream-item:
+    hosted-by: "{{name}} 轉播中"
+    fps: "{{fps}} fps"
+    details:
+        show: 顯示頻道資訊
+        lock: 鎖定詳細資訊
+        unlock: 解鎖詳細資訊
+    vodcast: VOD
+subscribe-channel:
+    title-new: "立即訂閱 {{name}}"
+    title-renew: "更新訂閱 {{name}}"
+subscription-item:
+    cancel: 不續訂
+    edit: 編輯訂閱
+    access:
+        # new Moment(subscription.access_end).format(...)
+        title: "LLLL"
+        ended: "已經結束訂閱"
+        # time = new Moment().to(subscription.access_end, true)
+        renews: "於 {{time}} 後更新"
+        # time = new Moment().to(subscription.access_end, true)
+        ends: "於 {{time}} 後停止訂閱"
+    subscribed: 已訂閱
+    support: 直接贊助這個實況頻道
+    # new Moment(subscription.created_at).format(...)
+    since: "[從] LLLL"
+    duration:
+        one: 已訂閱 1 個月
+        other: 已訂閱 {{count}} 個月
+    no-emoticons: 此頻道尚未有自訂表情符號
+team-item:
+    created-at:
+        title: "建立日期"
+        # new Moment(team.created_at).format(...)
+        format: "llll"
+    updated-at:
+        title: "最後更新日期"
+        # new Moment(team.updated_at).format(...)
+        format: "llll"
+title-bar:
+    loggedout: 尚未登入
+    # tooltip (whitespace sensitive)
+    loggedin: |
+        {{name}} 已登入
+        {{status}}
+twitch-emotes:
+    title: 顯示頻道可用的表情符號

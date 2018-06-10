@@ -1,0 +1,71 @@
+action:
+    close: 關閉
+changelog:
+    header: "已更新為 v{{version}}"
+    body: 察看最新消息及更新日誌?
+    action:
+        show: 更新日誌
+confirm:
+    header: 請確認
+    body: 套用變更?
+    action:
+        apply: 套用
+        discard: 復原
+        cancel: 取消
+firstrun:
+    header: "感謝使用 {{name}}!"
+    body: 開始使用前需要先進行設定嗎?
+    action:
+        start: 直接開始
+        settings: 設定
+newrelease:
+    header: "目前版本為 v{{version}}，版本已過時"
+    body: "需要下載新版嗎? ({{version}})"
+    action:
+        download: 下載
+        ignore: 忽略
+quit:
+    header: 是否要離開?
+    body:
+        streams: 選擇關閉將會中斷所有觀看中的實況
+        no-streams: 實況將會中斷，請確認是否要離開?
+    action:
+        close: 返回
+        shutdown: 關閉
+        quit: 離開
+streaming:
+    header:
+        preparing: "準備中，請稍候"
+        launching: "讀取中: "
+        watching: "收看中: "
+        ended: "實況已結束: "
+        error:
+            log: "錯誤: 無法讀取實況"
+            provider: "錯誤: {{provider}} 設定錯誤"
+            player: "錯誤: 播放器設定錯誤"
+            version: "錯誤: {{provider}} 版本不符"
+            unable-to-open: "錯誤: 無法開啟實況"
+            no-streams-found: "錯誤: 找不到實況"
+            timeout: "錯誤: 已逾時"
+            hosting: "{{name}} 正在轉播其他頻道"
+            internal: "錯誤"
+    body:
+        launching: "等待 {{provider}} 讀取實況中..."
+        ended: "重新啟動實況?"
+        error:
+            provider: "請檢查你的設定或重新安裝 {{provider}}."
+            player: "請檢查你的播放器設定"
+            version: "目前版本 v{{version}} 不符合最低版本需求 (v{{required}})"
+            unable-to-open: "{{provider}} 無法開啟實況"
+            no-streams-found: "{{provider}} 無法找到實況"
+            timeout: "{{name}} 已離線或與 Twitch 的連線中斷"
+            hosting: "切換至 {{name}}?"
+            internal: "內部錯誤"
+    action:
+        abort: 中斷
+        continue: 繼續
+        download: 下載
+        log: 顯示/隱藏 {{provider}} 記錄
+        restart: 重新啟動
+        shutdown: 中斷實況
+        start-hosted: 切換
