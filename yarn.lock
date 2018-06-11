@@ -5049,9 +5049,9 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
-nw-builder@3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-3.5.2.tgz#327ae60e818aa153967824a1f05460583ad103d3"
+nw-builder@3.5.4:
+  version "3.5.4"
+  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-3.5.4.tgz#01941a42c93e33da02ece1ed7e36facfaa14ba74"
   dependencies:
     archiver "^2.1.1"
     boxen "^1.1.0"
