@@ -1,4 +1,4 @@
-import { set } from "@ember/object";
+import { get, set } from "@ember/object";
 import Route from "@ember/routing/route";
 import InfiniteScrollOffsetMixin from "ui/routes/-mixins/routes/infinite-scroll/offset";
 import FilterLanguagesMixin from "ui/routes/-mixins/routes/filter-languages";
@@ -17,7 +17,8 @@ export default Route.extend( InfiniteScrollOffsetMixin, FilterLanguagesMixin, Re
 	},
 
 	async fetchContent() {
-		const { model } = await this.model({});
+		const game = get( this.controller, "game" );
+		const { model } = await this.model({ game });
 
 		return model;
 	},
