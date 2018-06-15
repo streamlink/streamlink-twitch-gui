@@ -59,7 +59,8 @@ test( "Resets provider instance and setup maps on settings update", function( as
 		"config": {
 			"chat": {}
 		},
-		"./providers": {}
+		"./providers": {},
+		"./logger": {}
 	});
 
 	this.owner.register( "service:chat", ChatService );
@@ -88,12 +89,19 @@ test( "Resets provider instance and setup maps on settings update", function( as
 
 test( "Rejects missing provider data", async function( assert ) {
 
+	const logDebugStub = sinon.stub().resolves();
+	const logErrorStub = sinon.stub().resolves();
+
 	const { default: ChatService } = chatServiceInjector({
 		"config": {
 			"chat": {}
 		},
 		"./providers": {
 			"qux": {}
+		},
+		"./logger": {
+			logDebug: logDebugStub,
+			logError: logErrorStub
 		}
 	});
 
@@ -107,17 +115,24 @@ test( "Rejects missing provider data", async function( assert ) {
 		chatService._getChatProvider(),
 		new Error( "Invalid provider: unknown" )
 	);
+	assert.notOk( logDebugStub.called, "Doesn't call logDebug" );
+	assert.notOk( logErrorStub.called, "Doesn't call logError" );
 
 	settingsService.chat.provider = "qux";
 	await assert.rejects(
 		chatService._getChatProvider(),
 		new Error( "Missing chat provider settings: qux" )
 	);
+	assert.notOk( logDebugStub.called, "Doesn't call logDebug" );
+	assert.notOk( logErrorStub.called, "Doesn't call logError" );
 
 });
 
 
 test( "Awaits provider setup", async function( assert ) {
+
+	const logDebugStub = sinon.stub().resolves();
+	const logErrorStub = sinon.stub().resolves();
 
 	class ChatProviderFoo {
 		async setup() {}
@@ -142,6 +157,10 @@ test( "Awaits provider setup", async function( assert ) {
 		},
 		"./providers": {
 			foo: ChatProviderFoo
+		},
+		"./logger": {
+			logDebug: logDebugStub,
+			logError: logErrorStub
 		}
 	});
 
@@ -156,8 +175,12 @@ test( "Awaits provider setup", async function( assert ) {
 	chatProviderFooSetup.resolves( new Promise( resolve => resolveFooSetup = resolve ) );
 
 	const promiseOne = chatService._getChatProvider();
+
+	// wait for logDebug promise to fulfill
+	await new Promise( resolve => process.nextTick( resolve ) );
+
 	assert.strictEqual( chatProviderFooSetup.callCount, 1, "Calls foo.setup" );
-	assert.propEqual( chatProviderFooSetup.getCall(0).args, [
+	assert.propEqual( chatProviderFooSetup.args, [[
 		{
 			exec: "foo",
 			attributes: [{ name: "foo" }]
@@ -165,14 +188,18 @@ test( "Awaits provider setup", async function( assert ) {
 		{
 			foo: true
 		}
-	], "Called foo.setup with correct arguments" );
+	]], "Called foo.setup with correct arguments" );
 	assert.strictEqual( providerInstanceMap.size, 1, "Instance map has one entry" );
 	assert.strictEqual( providerSetupMap.size, 1, "Setup map has one entry" );
+	assert.ok( logDebugStub.calledWith( "Resolving chat provider" ), "Calls logDebug" );
+	assert.notOk( logErrorStub.called, "Doesn't call logError" );
 
 	const promiseTwo = chatService._getChatProvider();
 	assert.strictEqual( chatProviderFooSetup.callCount, 1, "Does not call foo.setup twice" );
 	assert.strictEqual( providerInstanceMap.size, 1, "Instance map has one entry" );
 	assert.strictEqual( providerSetupMap.size, 1, "Setup map has one entry" );
+	assert.ok( logDebugStub.calledOnce, "Only calls logDebug once" );
+	assert.notOk( logErrorStub.called, "Doesn't call logError" );
 
 	resolveFooSetup();
 
@@ -192,6 +219,9 @@ test( "Awaits provider setup", async function( assert ) {
 
 test( "Opens chat", async function( assert ) {
 
+	const logDebugStub = sinon.stub().resolves();
+	const logErrorStub = sinon.stub().resolves();
+
 	class ChatProviderFoo {
 		async setup() {}
 		async launch() {}
@@ -206,6 +236,10 @@ test( "Opens chat", async function( assert ) {
 		},
 		"./providers": {
 			foo: ChatProviderFoo
+		},
+		"./logger": {
+			logDebug: logDebugStub,
+			logError: logErrorStub
 		}
 	});
 
@@ -221,7 +255,15 @@ test( "Opens chat", async function( assert ) {
 
 	const promiseOne = chatService.openChat( twitchChannel );
 
-	// for for _getChatProvider promise to fulfill
+	assert.propEqual( logDebugStub.args, [[
+		"Preparing to launch chat",
+		{
+			channel: "bar",
+			user: "user"
+		}
+	]], "Logs preparing to launch chat" );
+
+	// wait for _getChatProvider promise to fulfill
 	await new Promise( resolve => process.nextTick( resolve ) );
 
 	assert.strictEqual( chatProviderFooLaunch.callCount, 1, "Calls foo.launch" );
@@ -235,12 +277,28 @@ test( "Opens chat", async function( assert ) {
 			isLoggedIn: true
 		}
 	], "Calls foo.launch with correct parameters" );
+	assert.propEqual( logDebugStub.args.slice( 1 ), [[
+		"Resolving chat provider",
+		{
+			provider: "foo",
+			providerUserData: {
+				foo: true
+			}
+		}
+	]], "Log resolving chat provider" );
+	assert.notOk( logErrorStub.called, "Doesn't call logError" );
 
 	resolveFooLaunch();
 	await promiseOne;
 
+	logDebugStub.resetHistory();
+	logErrorStub.resetHistory();
+
 	// reject if provider.launch fails
-	chatProviderFooLaunch.rejects( new Error( "Launch failed" ) );
-	await assert.rejects( chatService.openChat( twitchChannel ), new Error( "Launch failed" ) );
+	const error = new Error( "Launch failed" );
+	chatProviderFooLaunch.rejects( error );
+	await assert.rejects( chatService.openChat( twitchChannel ), error );
+	assert.ok( logDebugStub.calledWith( "Preparing to launch chat" ), "Logs preparing to launch" );
+	assert.ok( logErrorStub.calledWithExactly( error ), "Calls logError with error" );
 
 });

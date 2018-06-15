@@ -3,6 +3,7 @@ import { on } from "@ember/object/evented";
 import { default as Service, inject as service } from "@ember/service";
 import { chat as chatConfig } from "config";
 import providers from "./providers";
+import { logDebug, logError } from "./logger";
 
 
 const { hasOwnProperty } = {};
@@ -27,16 +28,26 @@ export default Service.extend({
 	}),
 
 	async openChat( twitchChannel ) {
-		/** @type {ChatProvider} */
-		const provider = await this._getChatProvider();
-
 		/** @type {{name: string}} */
 		const channelData = twitchChannel.toJSON();
 		const session = get( this, "auth.session" );
 		/** @type {Object} */
 		const sessionData = getProperties( session, "access_token", "user_name", "isLoggedIn" );
 
-		await provider.launch( channelData, sessionData );
+		await logDebug( "Preparing to launch chat", {
+			channel: channelData.name,
+			user: sessionData.user_name
+		});
+
+		try {
+			/** @type {ChatProvider} */
+			const provider = await this._getChatProvider();
+			await provider.launch( channelData, sessionData );
+
+		} catch ( error ) {
+			await logError( error );
+			throw error;
+		}
 	},
 
 	async _getChatProvider() {
@@ -59,6 +70,15 @@ export default Service.extend({
 			// create instance
 			inst = new providers[ provider ]();
 			providerInstanceMap.set( provider, inst );
+
+			await logDebug(
+				"Resolving chat provider",
+				{
+					provider,
+					providerUserData: providersUserData[ provider ]
+				}
+			);
+
 			// execute async setup method
 			setup = inst.setup( chatConfig[ provider ], providersUserData[ provider ] );
 			providerSetupMap.set( provider, setup );
