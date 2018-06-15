@@ -47,6 +47,7 @@ export default class ChatProvider {
 		await launch( this.exec, params );
 	}
 
+	/* istanbul ignore next */
 	/**
 	 * Resolve the provider's executable path
 	 * @param {Object} config
@@ -80,6 +81,7 @@ export default class ChatProvider {
 		return context;
 	}
 
+	/* istanbul ignore next */
 	/**
 	 * Define the provider's parameters list
 	 * @param {Object} config
@@ -92,6 +94,7 @@ export default class ChatProvider {
 		return [];
 	}
 
+	/* istanbul ignore next */
 	/**
 	 * Get the runtime context object
 	 * @param {Object} channel
