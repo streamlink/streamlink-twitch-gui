@@ -13,7 +13,7 @@
 - [ ] This is a feature request.
 - [ ] I understand the difference between *Streamlink* and *Streamlink Twitch GUI*.
 - [ ] I tried solving my issue by reading the project's wiki first.
-- [ ] I have read the contribution guidelines und used the search function to find already existing threads.
+- [ ] I have read the contribution guidelines and used the search function to find already existing threads.
 
 ### Description
 
