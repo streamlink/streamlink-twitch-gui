@@ -19,9 +19,12 @@ export default {
 	initialize( application ) {
 		const i18n = application.lookup( "service:i18n" );
 
-		addObserver( i18n, "locale", () => {
+		const updateMomentLocale = () => {
 			const locale = get( i18n, "locale" ).toLowerCase();
 			Moment.locale( locale );
-		});
+		};
+
+		updateMomentLocale();
+		addObserver( i18n, "locale", updateMomentLocale );
 	}
 };
