@@ -200,8 +200,9 @@ export default Service.extend({
 
 	onStreamEnd( stream ) {
 		if ( get( this, "active" ) === stream ) {
+			const error = get( stream, "error" );
 			// close modal of the active stream if it has been enabled in the settings
-			if ( get( this, "settings.streams.modal_close_end" ) ) {
+			if ( !error && get( this, "settings.streams.modal_close_end" ) ) {
 				this.closeStreamModal( stream );
 			}
 		} else if ( !get( stream, "isDeleted" ) ) {
