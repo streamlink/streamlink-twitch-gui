@@ -55,7 +55,15 @@ export default Service.extend({
 		const model = get( this, "model" );
 		const stream = model.findBy( "stream", twitchStream );
 		if ( !stream ) { return false; }
-		stream.kill();
+
+		// remove from list if the stream has already ended (eg. with an error)
+		// TODO: refactor this
+		if ( get( stream, "hasEnded" ) && !get( stream, "isDeleted" ) ) {
+			stream.destroyRecord();
+		} else {
+			stream.kill();
+		}
+
 		return true;
 	},
 
