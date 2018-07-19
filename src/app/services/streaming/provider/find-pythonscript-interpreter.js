@@ -1,11 +1,12 @@
 import ExecObj from "../exec-obj";
 import readLines from "utils/node/fs/readLines";
 import whichFallback from "utils/node/fs/whichFallback";
-import { dirname } from "path";
+import { isWin } from "utils/node/platform";
+import { basename, dirname } from "path";
 
 
-const reShebangEnv = /^#!\/usr\/bin\/env\s+(['"]?)(\S+)\1\s*$/;
-const reShebangExpl = /^#!(['"]?)(.+)\1\s*$/;
+const reShebangEnv = /^#!\/usr\/bin\/env\s+(['"]?)(\S+)\1$/;
+const reShebangExpl = /^#!(['"]?)(.+)\1$/;
 const reBashWrapperScript = /^(PYTHONPATH)="(.+)"\s+exec\s+"(.+)"\s+"\$@"\s*$/;
 
 
@@ -28,11 +29,13 @@ export default async function findPythonscriptInterpreter(
 		if ( index === 0 ) {
 			const matchEnv = reShebangEnv.exec( line );
 			const matchExpl = reShebangExpl.exec( line );
-			const shebang = matchEnv && matchEnv[2] || matchExpl && matchExpl[2];
-			if ( shebang && shebang.endsWith( "bash" ) ) {
-				isBashWrapperScript = true;
-			} else if ( matchExpl ) {
-				return matchExpl[2];
+			const shebang = ( matchEnv && matchEnv[2] || matchExpl && matchExpl[2] || "" ).trim();
+			if ( shebang ) {
+				if ( !shebang.endsWith( "bash" ) ) {
+					return shebang;
+				} else {
+					isBashWrapperScript = true;
+				}
 			}
 
 		} else if ( index === 1 && isBashWrapperScript ) {
@@ -63,16 +66,23 @@ export default async function findPythonscriptInterpreter(
 
 	} else if ( shebang ) {
 		let exec;
-		try {
-			// don't use the shebang directly: Windows uses a different python executable
-			const pythonPath = dirname( shebang );
-			// look up the custom Windows executable in the shebang's dir
-			exec = await whichFallback( providerConfData[ "exec" ], pythonPath, null, true );
 
-		} catch ( e ) {
-			// python executable could not be found:
-			// try to look up the returned path (or executable name) now
+		if ( !isWin ) {
 			exec = await whichFallback( shebang, providerConfData[ "fallback" ], null, false );
+
+		} else {
+			try {
+				// don't use the shebang directly: Windows requires a different python executable
+				const pythonPath = dirname( shebang );
+				// look up the default Windows executable in the shebang's dir
+				exec = await whichFallback( providerConfData[ "exec" ], pythonPath, null, true );
+
+			} catch ( e ) {
+				// python executable could not be found:
+				// try to regularly look up the executable name now
+				const name = basename( shebang );
+				exec = await whichFallback( name, providerConfData[ "fallback" ], null, false );
+			}
 		}
 
 		return new ExecObj( exec );
