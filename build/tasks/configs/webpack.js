@@ -438,8 +438,8 @@ module.exports = {
 				argv: "--remote-debugging-port=8888",
 				rerunOnExit: true,
 				log: true,
-				logStdOut: false,
-				logStdErr: false
+				logStdOut: true,
+				logStdErr: true
 			})
 		],
 
@@ -668,8 +668,8 @@ module.exports = {
 				argv: "--remote-debugging-port=8888",
 				rerunOnExit: true,
 				log: true,
-				logStdOut: false,
-				logStdErr: false
+				logStdOut: true,
+				logStdErr: true
 			}),
 
 			// ignore Windows binary dependencies in tests

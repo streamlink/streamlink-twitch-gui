@@ -59,6 +59,8 @@ module.exports = function( grunt ) {
 			process.on( "exit", kill );
 
 			nwjs.on( "log", grunt.log.writeln.bind( grunt.log ) );
+			nwjs.on( "stdout", grunt.log.writeln.bind( grunt.log ) );
+			nwjs.on( "stderr", grunt.log.writeln.bind( grunt.log ) );
 
 			// listen for the appstart event
 			nwjs.on( "appstart", () => {

@@ -17,9 +17,9 @@ module.exports = function( grunt ) {
 
 		const nw = new NwBuilder( options );
 
-		nw.on( "log", grunt.log.writeln );
-		nw.on( "stdout", grunt.log.debug );
-		nw.on( "stderr", grunt.log.debug );
+		nw.on( "log", grunt.log.writeln.bind( grunt.log ) );
+		nw.on( "stdout", grunt.log.writeln.bind( grunt.log ) );
+		nw.on( "stderr", grunt.log.writeln.bind( grunt.log ) );
 
 		nw.run().then( done, grunt.fail.fatal );
 	});
