@@ -1,10 +1,17 @@
 {
 	"default": "en",
 	"locales": {
+		"de": "Deutsch",
 		"en": "English",
 		"zh-tw": "Traditional Chinese"
 	},
 	"contributors": {
+		"de": [
+			{
+				"name": "Sebastian Meyer",
+				"github": "bastimeyer"
+			}
+		],
 		"en": [
 			{
 				"name": "Sebastian Meyer",

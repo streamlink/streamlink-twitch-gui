@@ -1,0 +1,124 @@
+channel-item:
+    game-missing: kein Spiel ausgewählt
+documentation-link:
+    title: Dokumentation online durchlesen
+drop-down-selection:
+    placeholder: Bitte wählen
+file-select:
+    placeholder: Leer lassen für Standardpfad
+flag-icon:
+    channel: "Die Sprache des Kanals ist {{lang}}"
+    broadcaster: "Die Sprache des Broadcasters ist {{lang}}"
+follow-button:
+    follow: "{{name}} folgen"
+    unfollow: "{{name}} nicht mehr folgen"
+    confirm: "{{name}} nicht mehr folgen"
+    keep: "{{name}} weiterhin folgen"
+infinite-scroll:
+    error: Fehler
+    loading: Lade
+    fetch: Mehr laden
+main-menu:
+    browse:
+        header: Durchsuchen
+        featured: Vorgestellt
+        games: Spiele
+        communities: Communitys
+        streams: Streams
+    my:
+        header: Meine
+        subscriptions: Abonnements
+        live-streams: Live Streams
+        hosted-streams: Hosts
+        channels: Kanäle
+        games: Spiele
+    misc:
+        header: Sonstiges
+        settings: Einstellungen
+        about: Über
+open-chat:
+    title: Chat öffnen
+quick-bar-homepage:
+    title: Als Startseite setzen
+quick-bar-random-stream:
+    title: Zufälligen Stream starten
+search-bar:
+    placeholder: Suchen
+    filter: Ergebnisse filtern
+    filters:
+        all: Alles
+        games: Spiele
+        channels: Kanäle
+        streams: Streams
+    recent: Vorige Suchanfragen
+settings-channel-item:
+    settings: Einstellungen
+    erase: Löschen
+    confirmation: Einstellungen löschen?
+    confirm: Ja
+    decline: Nein
+settings-row:
+    notes: Bemerkungen
+    default: Standardwert
+    requires: Benötigt
+    example: Beispiel
+    variables:
+        title: Verfügbare Variablen
+        # tooltip (whitespace sensitive)
+        help: |
+            Der Inhalt jeder Variable wird escaped. Bei Verwendung außerhalb von Anführungszeichen wird jedes Zeichen escaped. Einige Anwendungen sind in der Lage, unnötig escapte Zeichen in ihrer Parameterliste zu lesen und funktionieren wie erwartet, andere jedoch nicht. Stelle sicher, dass alle Variablen in einfachen oder doppelten Anführungszeichen gesetzt sind.
+
+            Korrekte Verwendung:
+            -a "{a}" -b "{b1}{b2}" "-c={c}"
+settings-submit:
+    apply: Anwenden
+    discard: Verwerfen
+share-channel:
+    title: URL des Kanals in die Zwischenablage kopieren
+stream-item:
+    hosted-by: "gehosted von {{name}}"
+    fps: "{{fps}} fps"
+    details:
+        show: Streamdetails anzeigen
+        lock: Detailansicht sperren
+        unlock: Detailansicht entsperren
+    vodcast: Vodcast
+subscribe-channel:
+    title-new: "{{name}} jetzt abonnieren"
+    title-renew: "Abonnement von {{name}} erneuern"
+subscription-item:
+    cancel: Abonnement beenden
+    edit: Abonnement bearbeiten
+    access:
+        # new Moment(subscription.access_end).format(...)
+        title: "LLLL"
+        ended: "Ist beendet"
+        # time = new Moment().to(subscription.access_end, true)
+        renews: "Wird erneuert in {{time}}"
+        # time = new Moment().to(subscription.access_end, true)
+        ends: "Wird enden in {{time}}"
+    subscribed: Du hast den Kanal abonniert
+    support: Unterstützt den Kanal
+    # new Moment(subscription.created_at).format(...)
+    since: "[Seit] LLLL"
+    duration:
+        one: Abonniert seit einem Monat
+        other: Abonniert seit {{count}} Monaten
+    no-emoticons: Dieser Kanal hat (noch) keine Emoticons
+team-item:
+    created-at:
+        title: "Erstellt am"
+        # new Moment(team.created_at).format(...)
+        format: "llll"
+    updated-at:
+        title: "Zuletzt modifiziert"
+        # new Moment(team.updated_at).format(...)
+        format: "llll"
+title-bar:
+    loggedout: Nicht eingeloggt
+    # tooltip (whitespace sensitive)
+    loggedin: |
+        Eingeloggt als {{name}}
+        {{status}}
+twitch-emotes:
+    title: Zeige verfügbare Emoticons des Kanals

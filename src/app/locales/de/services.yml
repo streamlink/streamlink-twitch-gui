@@ -1,0 +1,13 @@
+notification:
+    dispatch:
+        single: "{{name}} hat begonnen, zu streamen"
+        group: Einige deiner gefolgten Kanäle haben begonnen, zu streamen
+    status:
+        disabled: Desktop-Benachrichtigungen sind deaktiviert
+        enabled: Desktop-Benachrichtigungen sind aktiviert
+        error: Desktop-Benachrichtigungen sind offline
+        paused: Desktop-Benachrichtigungen sind pausiert
+    tray:
+        pause:
+            label: Benachrichtigungen pausieren
+            tooltip: "Desktop-Benachrichtigungen temporär ein-/ausschalten"
