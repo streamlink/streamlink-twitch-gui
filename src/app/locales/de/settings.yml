@@ -463,7 +463,7 @@ notifications:
     grouping:
         title: Gruppieren
         description: Mehrere Benachrichtigungen zusammenfassen.
-        checkbox: Nur eine Benachrichtigungen auf einmal anzeigen
+        checkbox: Nur eine Benachrichtigung auf einmal anzeigen
     click:
         title: Klick auf Benachrichtigungen
         description: Bevorzugte Klick-Aktion.
@@ -487,4 +487,4 @@ notifications:
 channels:
     find: Kanal finden
     none: Keine Kanäle gefunden.
-    empty: Keine benutzerdefinierten Kanäleinstellungen gesetzt.
+    empty: Keine benutzerdefinierten Kanaleinstellungen gesetzt.
