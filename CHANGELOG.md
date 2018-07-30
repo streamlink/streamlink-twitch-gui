@@ -1,6 +1,31 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Added support for selecting the chat URL.
+- Added more debug logging to the ChatService.
+- Added translations for locale "zh-tw". #567
+- Added translations for locale "de". #590
+- Changed default chat URL for web browser chat applications. #536
+- Changed log and cache directories on macOS and Linux. 5f66c1ea
+- Fixed logic for resolving the python executable on macOS and Linux. #589
+- Fixed infinite scroll mechanic while browsing games. #575
+- Fixed stream popup also being auto-closed on error. #560
+- Fixed close button in watching list not removing streams. #467
+- Fixed Vodcast detection (Twitch API change).
+- Fixed Streamlink output regex for Streamlink >=0.13.0 <0.14.0
+- Fixed startup animation being too early on slower systems.
+- Fixed typos in localization keys of the "en" locale. #557, 839c308c
+- Fixed race condition when downloading notification icons.
+- Set Noto Sans as additional fallback system font (for CJK texts).
+- Upgraded to Webpack 4.
+- Implemented custom Ember module unification system for Webpack.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.5.0...master)
+
+
 ## [v1.5.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.5.0) (2018-04-02)
 
 - Upgraded from Ember 2 to Ember 3. #519  
