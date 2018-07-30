@@ -1,0 +1,18 @@
+tray:
+    toggle: "Fenster ein-/ausblenden"
+    close: Anwendung schließen
+macOS:
+    preferences: Einstellungen
+    refresh: Aktualisieren
+channel-page: Kanalseite
+channel-settings: Kanaleinstellungen
+change-quality: Qualität ändern
+close-stream: Stream schließen
+copy: Kopieren
+copy-channel-url: URL des Kanals kopieren
+copy-link-address: Linkadresse kopieren
+copy-selection: Auswahl kopieren
+launch-stream: Stream starten
+open-chat: Chat öffnen
+open-in-browser: Im Browser öffnen
+paste: Einfügen

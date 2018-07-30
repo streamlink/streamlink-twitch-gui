@@ -1,0 +1,71 @@
+action:
+    close: Schließen
+changelog:
+    header: "Du hast zu v{{version}} geupgradet"
+    body: Möchtest du sehen was neu ist und den Changelog durchlesen?
+    action:
+        show: Changelog
+confirm:
+    header: Bitte bestätigen
+    body: Möchtest du die Änderungen anwenden?
+    action:
+        apply: Anwenden
+        discard: Verwerfen
+        cancel: Abbrechen
+firstrun:
+    header: "Danke für das Verwenden von {{name}}!"
+    body: Möchtest du die Anwendung zuerst konfigurieren, bevor du startest?
+    action:
+        start: Jetzt starten
+        settings: Einstellungen
+newrelease:
+    header: "Du verwendest eine alte Version: {{version}}"
+    body: "Möchtest du die neueste Version jetzt herunterladen? ({{version}})"
+    action:
+        download: Herunterladen
+        ignore: Ignorieren
+quit:
+    header: Anwendung wirklich schließen?
+    body:
+        streams: Wähle 'Beenden', um auch alle Streams zu schließen.
+        no-streams: Alle Streams wurden geschlossen. Anwendung jetzt schließen?
+    action:
+        close: Zurück
+        shutdown: Beenden
+        quit: Schließen
+streaming:
+    header:
+        preparing: "Bereite vor, bitte warten"
+        launching: "Starte: "
+        watching: "Du schaust: "
+        ended: "Stream beendet: "
+        error:
+            log: "Fehler: Konnte Stream nicht starten"
+            provider: "Fehler: {{provider}} Fehlkonfiguration"
+            player: "Fehler: Fehlkonfiguration des Players"
+            version: "Fehler: Ungültige {{provider}} Version"
+            unable-to-open: "Fehler: Konnte Stream nicht öffnen"
+            no-streams-found: "Fehler: Keine Streams gefunden"
+            timeout: "Fehler: Timeout"
+            hosting: "{{name}} hostet einen anderen Kanal"
+            internal: "Fehler"
+    body:
+        launching: "Warte darauf, dass {{provider}} den Stream startet..."
+        ended: "Möchtest du den Stream jetzt neu starten?"
+        error:
+            provider: "Bitte Einstellungen überprüfen und/oder {{provider}} (neu) installieren."
+            player: "Bitte prüfe deine Playereinstellungen."
+            version: "Die Version v{{version}} entspricht nicht den Mindestvorraussetzungen (v{{required}})."
+            unable-to-open: "{{provider}} konnte den Stream nicht öffnen."
+            no-streams-found: "{{provider}} konnte den Stream nicht finden."
+            timeout: "Entweder ist {{name}} nun offline, oder deine Verbindung zu Twitch wurde unterbrochen."
+            hosting: "Möchtest du zu {{name}} wechseln?"
+            internal: "Interner Fehler"
+    action:
+        abort: Abbrechen
+        continue: Weiter
+        download: Herunterladen
+        log: "{{provider}} Logansicht ein-/ausschalten"
+        restart: Neu starten
+        shutdown: Stream schließen
+        start-hosted: Wechseln
