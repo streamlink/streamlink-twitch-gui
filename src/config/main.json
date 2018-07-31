@@ -29,6 +29,10 @@
 			"text": "Dogecoin",
 			"url": "https://blockchain.info/qr?data=DGkVP7AMUHr2TbVnWy6QyZqSMvCkeEo1ab",
 			"coinaddress": "DGkVP7AMUHr2TbVnWy6QyZqSMvCkeEo1ab"
+		},
+		{
+			"text": "OpenCollective (Streamlink)",
+			"url": "https://opencollective.com/streamlink"
 		}
 	]
 }
