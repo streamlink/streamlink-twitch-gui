@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.6.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.6.0) (2018-08-01)
 
 - Changed default chat URL for web browser chat applications. #536
 - Changed log and cache directories on macOS and Linux. See 5f66c1ea.
@@ -25,7 +25,7 @@ Changelog - Streamlink Twitch GUI
 - Lots of internal changes and improvements.
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.5.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.5.0...v1.6.0)
 
 
 ## [v1.5.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.5.0) (2018-04-02)
