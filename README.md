@@ -23,7 +23,7 @@ Streamlink Twitch GUI is a [NW.js][NW.js] application, which means that it is a 
 
 ## Features
 
-* Available on Windows, MacOS and Linux
+* Available on Windows, macOS and Linux
 * Supports both Streamlink and Livestreamer
 * Browse streams by popularity, game, community or team
 * Watch streams in the video player of your choice
@@ -48,31 +48,13 @@ Please bear in mind that you're bypassing any ads run by Twitch by using this so
 
 ## Download
 
-[See the Wiki for detailed installation and configuration instructions.][Wiki]
+### Stable release
 
-Streamlink Twitch GUI depends on Streamlink.  
-Install [Streamlink][Streamlink] prior to using this application or you won't be able to launch any streams.
+[**Visit the project's wiki**][Wiki] for detailed installation and configuration guides, or just see the [GitHub releases][Releases] page if you don't need help. The wiki also includes a list of supported packages for your platform.
 
-#### Archives
+Please remember that **Streamlink Twitch GUI**, as the name already suggests, is only a graphical user interface (GUI) built on top of **Streamlink**. This means that [Streamlink][Streamlink] has to be installed on your system in order to be able to launch streams. Once again, see the [wiki][Wiki] if you need help, as it also covers installing Streamlink.
 
-[Directly download the application from the github releases page.][Releases]
-
-#### Packages
-
-Chocolatey (Windows):  
-[`choco install streamlink-twitch-gui`][Package-Chocolatey]
-
-AUR (Arch Linux):  
-[`pacaur -S streamlink-twitch-gui`][Package-AUR]  
-[`pacaur -S streamlink-twitch-gui-git`][Package-AUR-git]
-
-Homebrew Cask (MacOS):  
-[`brew cask install streamlink-twitch-gui`][Package-Homebrew-Cask]  
-
-Solus:  
-[`sudo eopkg install streamlink-twitch-gui`][Package-Eopkg]
-
-#### Development version
+### Development version
 
 If you want to test the latest unreleased version, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or [here][Contributing].  
 Please don't forget to report any bugs you may encounter. Thank you very much for helping!
@@ -107,7 +89,7 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Gitter]: https://gitter.im/streamlink/streamlink-twitch-gui "Gitter IRC"
   [Contributing]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CONTRIBUTING.md
   [Changelog]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CHANGELOG.md
-  [Streamlink]: https://github.com/streamlink/streamlink "Streamlink"
+  [Streamlink]: https://streamlink.github.io/ "Streamlink"
   [Twitch]: https://twitch.tv "Twitch.tv"
   [TwitchPrime]: https://twitch.amazon.com/prime "Twitch Prime"
   [NW.js]: https://github.com/nwjs/nw.js "NW.js"
@@ -127,9 +109,4 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [badge-appveyor]: https://img.shields.io/appveyor/ci/bastimeyer/streamlink-twitch-gui.svg?style=flat-square
   [badge-codecov]: https://img.shields.io/codecov/c/github/streamlink/streamlink-twitch-gui.svg?style=flat-square
   [badge-gitter]: https://img.shields.io/gitter/room/streamlink/streamlink-twitch-gui.svg?style=flat-square "Gitter IRC"
-  [Package-Chocolatey]: https://chocolatey.org/packages/streamlink-twitch-gui "Chocolatey package"
-  [Package-AUR]: https://aur.archlinux.org/packages/streamlink-twitch-gui "AUR stable package"
-  [Package-AUR-git]: https://aur.archlinux.org/packages/streamlink-twitch-gui-git "AUR git package"
-  [Package-Eopkg]: https://dev.solus-project.com/source/streamlink-twitch-gui/ "Solus eopkg package"
-  [Package-Homebrew-Cask]: https://caskroom.github.io/
   [Application-rename]: https://github.com/streamlink/streamlink-twitch-gui/issues/331 "The future of Livestreamer Twitch GUI"
