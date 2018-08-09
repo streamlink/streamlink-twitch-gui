@@ -55,11 +55,15 @@ export default ListItemComponent.extend({
 			if ( !isNaN( months ) && months > 0 ) {
 				return months;
 			}
-			const started = get( this, "channel.subscribed.created_at" );
 
-			return started
-				? new Moment().diff( new Moment( started ), "months" )
-				: 0;
+			const started = get( this, "channel.subscribed.created_at" );
+			if ( !started ) {
+				return 0;
+			}
+
+			const diff = new Moment().diff( new Moment( started ), "months", true );
+
+			return Math.ceil( diff );
 		}
 	),
 

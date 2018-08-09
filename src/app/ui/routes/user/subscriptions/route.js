@@ -36,7 +36,7 @@ export default UserIndexRoute.extend( InfiniteScrollOffsetMixin, {
 				let subscription;
 				try {
 					const id = get( ticket, "product.channel.id" );
-					subscription = store.findExistingRecord( "twitchSubscription", id );
+					subscription = await store.findExistingRecord( "twitchSubscription", id );
 				} catch ( e ) {
 					subscription = false;
 				}
