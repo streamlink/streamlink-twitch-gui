@@ -93,10 +93,10 @@ subscription-item:
         # new Moment(subscription.access_end).format(...)
         title: "LLLL"
         ended: "Has ended"
-        # time = new Moment().to(subscription.access_end, true)
-        renews: "Will be renewed in {{time}}"
-        # time = new Moment().to(subscription.access_end, true)
-        ends: "Will end in {{time}}"
+        # time = new Moment().to(subscription.access_end)
+        renews: "Will be renewed {{time}}"
+        # time = new Moment().to(subscription.access_end)
+        ends: "Will end {{time}}"
     subscribed: You are subscribed
     support: Directly supports the channel
     # new Moment(subscription.created_at).format(...)

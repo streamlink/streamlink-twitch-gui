@@ -93,9 +93,9 @@ subscription-item:
         # new Moment(subscription.access_end).format(...)
         title: "LLLL"
         ended: "已經結束訂閱"
-        # time = new Moment().to(subscription.access_end, true)
+        # time = new Moment().to(subscription.access_end)
         renews: "於 {{time}} 後更新"
-        # time = new Moment().to(subscription.access_end, true)
+        # time = new Moment().to(subscription.access_end)
         ends: "於 {{time}} 後停止訂閱"
     subscribed: 已訂閱
     support: 直接贊助這個實況頻道

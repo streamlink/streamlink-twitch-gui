@@ -93,10 +93,10 @@ subscription-item:
         # new Moment(subscription.access_end).format(...)
         title: "LLLL"
         ended: "Ist beendet"
-        # time = new Moment().to(subscription.access_end, true)
-        renews: "Wird erneuert in {{time}}"
-        # time = new Moment().to(subscription.access_end, true)
-        ends: "Wird enden in {{time}}"
+        # time = new Moment().to(subscription.access_end)
+        renews: "Wird erneuert {{time}}"
+        # time = new Moment().to(subscription.access_end)
+        ends: "Wird enden {{time}}"
     subscribed: Du hast den Kanal abonniert
     support: Unterstützt den Kanal
     # new Moment(subscription.created_at).format(...)
