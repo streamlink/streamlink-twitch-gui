@@ -155,6 +155,9 @@ test( "macOS", function( assert ) {
 
 test( "Linux", function( assert ) {
 
+	process.env.XDG_CACHE_HOME = "";
+	process.env.XDG_DATA_HOME = "";
+
 	const {
 		isWin,
 		isDarwin,
