@@ -1,6 +1,5 @@
-const NwBuilder = require( "nw-builder" );
-const platforms = require( "./platforms" );
-const nwjsOptions = require( "../configs/nwjs" ).options;
+const platforms = require( "../../common/platforms" );
+const nwjsOptions = require( "../../configs/nwjs" ).options;
 
 
 class NwjsPlugin {
@@ -22,6 +21,7 @@ class NwjsPlugin {
 	}
 
 	run() {
+		const NwBuilder = require( "nw-builder" );
 		const options = this.options;
 
 		function log( msg ) {
