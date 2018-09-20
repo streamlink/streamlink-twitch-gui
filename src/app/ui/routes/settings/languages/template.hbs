@@ -11,9 +11,7 @@
 		as |item|
 	}}
 		<div class="input-btn-with-description">
-			{{item.button
-				(t (concat "settings.languages.filter.values." item.label ".text"))
-			}}
+			{{item.button label=(t (concat "settings.languages.filter.values." item.label ".text"))}}
 			<div class="description">{{t (concat "settings.languages.filter.values." item.label ".description")}}</div>
 		</div>
 	{{/radio-buttons}}

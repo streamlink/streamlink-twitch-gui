@@ -79,8 +79,6 @@ const ObjectBuffer = ObjectProxy.extend({
 
 		if ( previous === value ) { return value; }
 
-		this.propertyWillChange( key );
-
 		if ( current === value ) {
 			delete buffer[ key ];
 			if ( isEmpty( buffer ) ) {
@@ -91,7 +89,7 @@ const ObjectBuffer = ObjectProxy.extend({
 			set( this, "_hasChanges", true );
 		}
 
-		this.propertyDidChange( key );
+		this.notifyPropertyChange( key );
 		return value;
 	},
 
@@ -138,9 +136,8 @@ const ObjectBuffer = ObjectProxy.extend({
 		});
 
 		Object.keys( buffer ).forEach( key => {
-			this.propertyWillChange( key );
 			delete buffer[ key ];
-			this.propertyDidChange( key );
+			this.notifyPropertyChange( key );
 		});
 
 		set( this, "_hasChanges", false );

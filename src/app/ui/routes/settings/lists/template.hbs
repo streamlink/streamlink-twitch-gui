@@ -62,9 +62,7 @@
 		as |item|
 	}}
 		<div>
-			{{item.button
-				(t (concat "settings.lists.info.values." item.label))
-			}}
+			{{item.button label=(t (concat "settings.lists.info.values." item.label))}}
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
