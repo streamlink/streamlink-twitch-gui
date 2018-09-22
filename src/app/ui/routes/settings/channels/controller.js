@@ -1,5 +1,6 @@
 import Controller from "@ember/controller";
 import { get, computed } from "@ember/object";
+import { run } from "@ember/runloop";
 
 
 const reFilter = /^\w+$/;
@@ -26,8 +27,9 @@ export default Controller.extend({
 			const settingsRecord = get( modelItem, "settings" );
 			if ( get( settingsRecord, "isDeleted" ) ) { return; }
 
-			settingsRecord.destroyRecord()
-				.then(function() {
+			run( () => settingsRecord.destroyRecord() )
+				.then( () => {
+					settingsRecord.unloadRecord();
 					model.removeObject( modelItem );
 				});
 		}

@@ -2,7 +2,7 @@ import Component from "@ember/component";
 import { get, set, getWithDefault } from "@ember/object";
 import { sort } from "@ember/object/computed";
 import { on } from "@ember/object/evented";
-import { next } from "@ember/runloop";
+import { run, next } from "@ember/runloop";
 import { inject as service } from "@ember/service";
 import $ from "jquery";
 import { vars as varsConfig } from "config";
@@ -79,7 +79,9 @@ export default Component.extend( HotkeyMixin, {
 		// we don't want to store more than X records
 		if ( get( model, "length" ) >= searchHistorySize ) {
 			const oldestRecord = model.sortBy( "date" ).shiftObject();
-			await oldestRecord.destroyRecord();
+			// TODO: wait for ED fix that unloads records after destroying them
+			await run( () => oldestRecord.destroyRecord() );
+			run( () => oldestRecord.unloadRecord() );
 		}
 
 		// create a new record

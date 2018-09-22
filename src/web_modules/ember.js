@@ -1,2 +1,4 @@
-// needed for ember addons (eg. ember-data) which are importing the "ember" module
+import "ember-source/dist/ember.debug";
+
+
 export default window.Ember;

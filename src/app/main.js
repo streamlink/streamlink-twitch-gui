@@ -27,6 +27,6 @@ global.process.on( "uncaughtException", function( err ) {
 
 require( "shim" );
 require( "jquery" );
-require( "ember-source/dist/ember.debug" );
+require( "ember" );
 require( "./logger" );
 require( "./app" );
