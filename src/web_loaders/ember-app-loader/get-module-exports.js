@@ -8,7 +8,7 @@ const HarmonyExportImportedSpecifierDependency
 
 module.exports = function getModuleExportsFactory( loaderContext ) {
 	return path => new Promise( ( resolve, reject ) => {
-		loaderContext.loadModule( path, ( error, source, sourceMap, { dependencies } ) => {
+		loaderContext.loadModule( path, ( error, source, sourceMap, { dependencies } = {} ) => {
 			if ( error || !dependencies ) {
 				return reject( error );
 			}
