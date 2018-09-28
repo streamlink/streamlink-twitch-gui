@@ -43,6 +43,7 @@
 		"codecov": "3.0.1",
 		"copy-webpack-plugin": "4.5.1",
 		"css-loader": "0.28.11",
+		"ember-compatibility-helpers": "1.0.2",
 		"ember-qunit": "2.2.0",
 		"ember-test-helpers": "0.6.3",
 		"eslint": "4.19.1",

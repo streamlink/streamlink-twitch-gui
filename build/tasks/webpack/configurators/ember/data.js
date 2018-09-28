@@ -1,8 +1,6 @@
 const { resolve: r } = require( "path" );
 const { pRoot, pDependencies, pCacheBabel } = require( "../../paths" );
 
-const webpack = require( "webpack" );
-
 
 /**
  * EmberData
@@ -18,6 +16,7 @@ module.exports = function( config, isProd ) {
 		"ember-inflector": r( pDependencies, "ember-inflector", "addon" ),
 		"ember-data-model-fragments": r( pDependencies, "ember-data-model-fragments", "addon" ),
 		"ember-localstorage-adapter": r( pDependencies, "ember-localstorage-adapter", "addon" ),
+		"@ember/ordered-set": r( pDependencies, "@ember", "ordered-set", "addon" ),
 		"ember-copy": r( pDependencies, "ember-copy", "addon" )
 	});
 
@@ -81,13 +80,4 @@ module.exports = function( config, isProd ) {
 			]
 		}
 	});
-
-	// custom `@ember/ordered-set` module
-	// https://github.com/emberjs/ember-ordered-set/blob/v1.0.1/addon/index.js#L157
-	config.plugins.push(
-		new webpack.NormalModuleReplacementPlugin(
-			/@ember[\/\\]ordered-set/,
-			r( pRoot, "web_modules", "@ember", "ordered-set.js" )
-		)
-	);
 };

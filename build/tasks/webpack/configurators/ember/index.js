@@ -1,6 +1,7 @@
 function buildEmberConfig( config, isProd ) {
 	require( "./app" )( config, isProd );
 	require( "./source" )( config, isProd );
+	require( "./compatibility-helpers" )( config, isProd );
 	require( "./data" )( config, isProd );
 	require( "./i18n" )( config, isProd );
 }
