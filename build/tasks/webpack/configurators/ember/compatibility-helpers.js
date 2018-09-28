@@ -1,8 +1,9 @@
 const { resolve: r } = require( "path" );
-const { pDependencies, pCacheBabel } = require( "../../paths" );
+const { pRoot, pDependencies, pCacheBabel } = require( "../../paths" );
 const { "ember-source": emberVersion } = require( "../../../../../package.json" ).dependencies;
 
 const { gte, satisfies } = require( "semver" );
+const webpack = require( "webpack" );
 
 
 /**
@@ -57,4 +58,12 @@ module.exports = function( config ) {
 			]
 		}
 	});
+
+	config.plugins.push(
+		// replacement for ember-cli module that gives modules access to build flags
+		new webpack.NormalModuleReplacementPlugin(
+			/ember-get-config/,
+			r( pRoot, "web_modules", "ember-get-config.js" )
+		)
+	);
 };

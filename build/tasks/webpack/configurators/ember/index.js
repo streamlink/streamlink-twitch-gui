@@ -3,6 +3,7 @@ function buildEmberConfig( config, isProd ) {
 	require( "./source" )( config, isProd );
 	require( "./compatibility-helpers" )( config, isProd );
 	require( "./data" )( config, isProd );
+	require( "./decorators" )( config, isProd );
 	require( "./i18n" )( config, isProd );
 }
 
