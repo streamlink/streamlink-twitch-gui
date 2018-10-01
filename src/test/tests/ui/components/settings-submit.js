@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs } from "test-utils";
-import { I18nService, THelper } from "i18n-utils";
+import { FakeI18nService, FakeTHelper } from "i18n-utils";
 import Component from "@ember/component";
 import sinon from "sinon";
 
@@ -12,8 +12,8 @@ moduleForComponent( "ui/components/settings-submit", {
 	resolver: buildResolver({
 		SettingsSubmitComponent,
 		FormButtonComponent: Component.extend(),
-		I18nService,
-		THelper
+		I18nService: FakeI18nService,
+		THelper: FakeTHelper
 	}),
 	beforeEach() {
 		this.fakeTimer = sinon.useFakeTimers({

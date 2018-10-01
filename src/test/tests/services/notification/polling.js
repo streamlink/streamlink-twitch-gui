@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
-import { I18nService } from "i18n-utils";
+import { FakeI18nService } from "i18n-utils";
 import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { run } from "@ember/runloop";
@@ -47,7 +47,7 @@ module( "services/notification/polling", {
 
 		env = setupStore( owner, { adapter: RESTAdapter } );
 
-		owner.register( "service:i18n", I18nService );
+		owner.register( "service:i18n", FakeI18nService );
 		owner.register( "service:settings", Service.extend({
 			notification: {}
 		}) );

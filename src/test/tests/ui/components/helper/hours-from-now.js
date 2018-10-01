@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs } from "test-utils";
-import { I18nService } from "i18n-utils";
+import { FakeI18nService } from "i18n-utils";
 import { setOwner } from "@ember/application";
 import sinon from "sinon";
 
@@ -11,7 +11,7 @@ moduleForComponent( "ui/components/helper/hours-from-now", {
 	integration: true,
 	resolver: buildResolver({
 		HoursFromNowHelper,
-		I18nService
+		I18nService: FakeI18nService
 	}),
 	beforeEach() {
 		this.fakeTimer = sinon.useFakeTimers({

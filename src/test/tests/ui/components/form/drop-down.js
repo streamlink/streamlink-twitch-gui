@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs, triggerKeyDown } from "test-utils";
-import { I18nService } from "i18n-utils";
+import { FakeI18nService } from "i18n-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import { run } from "@ember/runloop";
 import $ from "jquery";
@@ -18,7 +18,7 @@ moduleForComponent( "ui/components/form/drop-down", {
 		DropDownSelectionComponent,
 		DropDownListComponent,
 		IsEqualHelper,
-		I18nService
+		I18nService: FakeI18nService
 	}),
 	beforeEach() {
 		this.getLabel = () => this.$( ".drop-down-selection-component" ).text().trim();

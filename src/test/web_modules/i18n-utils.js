@@ -6,7 +6,7 @@ import { default as Service, inject as service } from "@ember/service";
 /**
  * Fake I18nService for testing translations
  */
-export const I18nService = Service.extend({
+export const FakeI18nService = Service.extend({
 	locale: "en",
 
 	t( key, data ) {
@@ -22,7 +22,7 @@ export const I18nService = Service.extend({
 /**
  * Fake Translation helper which doesn't use a data EmberObject with an unknownProperty function
  */
-export const THelper = Helper.extend({
+export const FakeTHelper = Helper.extend({
 	i18n: service(),
 
 	compute( [ key ], data ) {

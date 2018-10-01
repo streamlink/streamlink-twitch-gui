@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { I18nService, THelper } from "i18n-utils";
+import { FakeI18nService, FakeTHelper } from "i18n-utils";
 import Component from "@ember/component";
 import { set } from "@ember/object";
 import { run } from "@ember/runloop";
@@ -29,8 +29,8 @@ moduleForComponent( "title-bar", "ui/components/title-bar", {
 	],
 	resolver: buildResolver({
 		TitleBarComponent,
-		I18nService,
-		THelper
+		I18nService: FakeI18nService,
+		THelper: FakeTHelper
 	}),
 	beforeEach() {
 		this.nwjsDevToolsSpy = sinon.spy();

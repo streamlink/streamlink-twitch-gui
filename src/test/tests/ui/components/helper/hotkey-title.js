@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs } from "test-utils";
-import { I18nService } from "i18n-utils";
+import { FakeI18nService } from "i18n-utils";
 
 import { helper as HotkeyTitleHelper } from "ui/components/helper/hotkey-title";
 
@@ -9,7 +9,7 @@ moduleForComponent( "ui/components/helper/hotkey-title", {
 	integration: true,
 	resolver: buildResolver({
 		HotkeyTitleHelper,
-		I18nService
+		I18nService: FakeI18nService
 	})
 });
 
