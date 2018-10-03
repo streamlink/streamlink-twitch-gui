@@ -15,8 +15,10 @@ export default Component.extend( IsFocusedMixin, {
 	tabindex: 0,
 
 
+	/**
+	 * @param {KeyboardEvent} event
+	 */
 	keyDown( event ) {
-		event = event.originalEvent || event;
 		switch ( event.code ) {
 			case "Escape":
 				if ( this._isFocused() ) {
