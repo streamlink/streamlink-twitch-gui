@@ -26,7 +26,7 @@
 				"default": true,
 				"args": {
 					"win32": "--no-one-instance",
-					"darwin": false,
+					"darwin": null,
 					"linux": "--no-one-instance"
 				}
 			},
@@ -51,7 +51,7 @@
 				"default": false,
 				"args": {
 					"win32": "--qt-minimal-view",
-					"darwin": false,
+					"darwin": null,
 					"linux": "--qt-minimal-view"
 				}
 			}
