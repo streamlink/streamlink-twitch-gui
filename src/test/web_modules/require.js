@@ -1,6 +1,4 @@
-window.requirejs = {
-	entries: window.Ember.__loader.registry
-};
+import Ember from "ember";
 
 
-export default window.Ember.__loader.require;
+export default Ember.__loader.require;

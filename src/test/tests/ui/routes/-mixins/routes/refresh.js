@@ -43,9 +43,9 @@ module( "ui/routes/-mixins/routes/refresh", {
 			isModalOpened: false
 		});
 		const SettingsService = Service.extend({
-			gui: {
+			gui: EmberObject.extend({
 				focusrefresh: computed( () => this.threshold ).volatile()
-			}
+			}).create()
 		});
 		const Route = EmberObject.extend( RefreshMixin );
 

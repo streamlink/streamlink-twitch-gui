@@ -15,6 +15,7 @@ export default UserIndexRoute.extend( InfiniteScrollOffsetMixin, RefreshRouteMix
 			.mapBy( "target" )
 			.uniqBy( "id" )
 			.map( async streamPromise => {
+				await streamPromise.promise;
 				const stream = streamPromise.content;
 				if ( get( stream, "isLoading" ) ) {
 					await streamPromise;

@@ -50,8 +50,11 @@ export default TextField.extend({
 		this.element.setSelectionRange( 0, this.element.value.length );
 	},
 
+	/**
+	 * @param {KeyboardEvent} event
+	 */
 	keyDown( event ) {
-		if ( event.originalEvent.code === "Escape" ) {
+		if ( event.code === "Escape" ) {
 			this.$().trigger( "blur" );
 			return;
 		}

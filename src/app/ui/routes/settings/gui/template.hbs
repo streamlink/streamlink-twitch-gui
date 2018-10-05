@@ -10,7 +10,7 @@
 		as |item|
 	}}
 		<div>
-			{{item.button (t (concat "settings.gui.integration.values." item.label))}}
+			{{item.button label=(t (concat "settings.gui.integration.values." item.label))}}
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
@@ -27,7 +27,7 @@
 		as |item|
 	}}
 		<div>
-			{{item.button (t (concat "settings.gui.minimize.values." item.label))}}
+			{{item.button label=(t (concat "settings.gui.minimize.values." item.label))}}
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}

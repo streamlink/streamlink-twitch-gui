@@ -14,7 +14,7 @@ export default Route.extend({
 	actions: {
 		error( error, transition ) {
 			transition.abort();
-			set( this, "router.errorTransition", transition );
+			set( this, "_router.errorTransition", transition );
 			return true;
 		}
 	}

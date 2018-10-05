@@ -1,7 +1,7 @@
 <button type="button" class="btn-nav fa fa-chevron-left" {{action "back"}}></button>
 <button type="button" class="btn-nav fa fa-chevron-right" {{action "forward"}}></button>
 <button type="button" class="btn-nav fa fa-refresh" {{action "refresh"}}></button>
-{{input type="search" placeholder=(t "components.search-bar.placeholder") value=query required=true enter="submit"}}
+{{input type="search" placeholder=(t "components.search-bar.placeholder") value=query required=true enter=(action "submit")}}
 <button type="button" class="btn-small btn-context-valid fa fa-times" {{action "clear"}}></button>
 <button type="button" class="btn-small btn-context-valid fa fa-search" {{action "submit"}}></button>
 <button type="button" class="btn-small btn-dropdown fa fa-chevron-down" {{action "toggleDropdown"}}></button>

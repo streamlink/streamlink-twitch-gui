@@ -72,9 +72,7 @@
 		as |item|
 	}}
 		<div class="input-btn-with-description">
-			{{item.button
-				(t (concat "settings.streaming.playerinput.values." item.value ".label"))
-			}}
+			{{item.button label=(t (concat "settings.streaming.playerinput.values." item.value ".label"))}}
 			<p class="description">{{t (concat "settings.streaming.playerinput.values." item.value ".description")}}</p>
 		</div>
 	{{/radio-buttons}}

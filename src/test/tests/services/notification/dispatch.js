@@ -1,6 +1,6 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
-import { I18nService } from "i18n-utils";
+import { FakeI18nService } from "i18n-utils";
 import { set } from "@ember/object";
 import Service from "@ember/service";
 import sinon from "sinon";
@@ -51,7 +51,7 @@ module( "services/notification/dispatch", {
 		this.owner.register( "service:chat", Service.extend({
 			openChat: this.openChatStub
 		}) );
-		this.owner.register( "service:i18n", I18nService );
+		this.owner.register( "service:i18n", FakeI18nService );
 		this.owner.register( "service:-routing", Service.extend({
 			transitionTo: this.transitionToSpy
 		}) );

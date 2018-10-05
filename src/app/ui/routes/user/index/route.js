@@ -5,6 +5,7 @@ import { inject as service } from "@ember/service";
 
 export default Route.extend({
 	auth: service(),
+	router: service(),
 
 	beforeModel( transition ) {
 		const auth = get( this, "auth" );
@@ -40,7 +41,7 @@ export default Route.extend({
 
 				// unregister onLogin callback as soon as the user switches the route
 				// before the callback has fired
-				this.router.one( "didTransition", function() {
+				this.router._router.one( "didTransition", function() {
 					auth.off( "login", onLogin );
 				});
 

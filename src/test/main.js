@@ -1,7 +1,8 @@
 import "shim";
 import { default as QUnit, config } from "qunit";
 import "qunit/assertion-helpers";
-import "ember-test";
+// TODO: fix import paths
+import "./web_modules/ember-test";
 
 
 // don't start automatically

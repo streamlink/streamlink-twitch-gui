@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
-import { I18nService } from "i18n-utils";
+import { FakeI18nService } from "i18n-utils";
 import { get, set, setProperties } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
@@ -47,7 +47,7 @@ module( "data/models/twitch/stream", {
 		owner.register( "serializer:twitch-image", ImageSerializer );
 
 		owner.register( "service:auth", Service.extend() );
-		owner.register( "service:i18n", I18nService );
+		owner.register( "service:i18n", FakeI18nService );
 		owner.register( "service:settings", Service.extend({
 			streams: {
 				vodcast_regexp: ""

@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { I18nService } from "i18n-utils";
+import { FakeI18nService } from "i18n-utils";
 import Component from "@ember/component";
 import { get, set } from "@ember/object";
 import { alias } from "@ember/object/computed";
@@ -36,7 +36,7 @@ moduleForComponent( "follow-button", "ui/components/button/-follow-button", {
 			isLocked: alias( "isLoading" )
 		}),
 		FormButtonComponent,
-		I18nService,
+		I18nService: FakeI18nService,
 		HotkeyTitleHelper,
 		FindByHelper,
 		BoolNotHelper

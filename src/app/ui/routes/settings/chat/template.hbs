@@ -47,7 +47,7 @@
 						as |item|
 					}}
 						<div class="input-btn-with-description">
-							{{item.button (t (concat "settings.chat.provider.url." item.value ".label"))}}
+							{{item.button label=(t (concat "settings.chat.provider.url." item.value ".label"))}}
 							<p class="description">
 								{{t (concat "settings.chat.provider.url." item.value ".description")}}
 							</p>

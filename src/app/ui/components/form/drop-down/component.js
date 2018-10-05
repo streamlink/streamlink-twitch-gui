@@ -21,8 +21,10 @@ export default Selectable.extend( IsFocusedMixin, {
 	expanded: false,
 
 
+	/**
+	 * @param {KeyboardEvent} event
+	 */
 	keyDown( event ) {
-		event = event.originalEvent || event;
 		switch ( event.code ) {
 			case "Escape":
 			case "Backspace":

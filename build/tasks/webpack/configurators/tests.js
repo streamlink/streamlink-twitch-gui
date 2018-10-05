@@ -53,8 +53,6 @@ module.exports = {
 	coverage( config ) {
 		this._aliases( config );
 
-		// code instrumentalization via babel-plugin-istanbul
-		// the inject-loader used by some tests requires es2015 modules to be transpiled
 		config.module.rules.unshift({
 			test: /\.js$/,
 			exclude: pDependencies,
@@ -62,12 +60,14 @@ module.exports = {
 			options: {
 				presets: [],
 				plugins: [
+					// the inject-loader used by some tests requires es2015 modules to be transpiled
 					"babel-plugin-transform-es2015-modules-commonjs",
+					// code instrumentation via babel-plugin-istanbul
 					[ "babel-plugin-istanbul", {
 						exclude: [
 							"**/src/web_modules/**"
 						]
-					}]
+					} ]
 				],
 				cacheDirectory: pCacheBabel
 			}

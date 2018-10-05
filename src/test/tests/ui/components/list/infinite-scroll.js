@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, checkListeners, hbs } from "test-utils";
-import { I18nService, THelper } from "i18n-utils";
+import { FakeI18nService, FakeTHelper } from "i18n-utils";
 import { A as EmberNativeArray } from "@ember/array";
 import Component from "@ember/component";
 import { run } from "@ember/runloop";
@@ -12,8 +12,8 @@ moduleForComponent( "ui/components/list/infinite-scroll", {
 	integration: true,
 	resolver: buildResolver({
 		InfiniteScrollComponent,
-		I18nService,
-		THelper
+		I18nService: FakeI18nService,
+		THelper: FakeTHelper
 	}),
 	beforeEach() {
 		this.registry.register( "component:loading-spinner", Component.extend({}) );

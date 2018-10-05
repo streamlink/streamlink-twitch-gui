@@ -6,7 +6,7 @@ export default function( stream ) {
 	if ( get( stream, "isAborted" ) ) {
 		// remove the record from the store
 		if ( !get( stream, "isDeleted" ) ) {
-			stream.destroyRecord();
+			stream.destroyStream();
 		}
 
 		throw new Aborted();

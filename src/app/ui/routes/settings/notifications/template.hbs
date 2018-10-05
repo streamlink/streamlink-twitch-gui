@@ -31,7 +31,7 @@
 	}}
 		<div class="input-btn-with-description">
 			{{item.button
-				(t (concat "settings.notifications.provider.providers." item.value ".name"))
+				label=(t (concat "settings.notifications.provider.providers." item.value ".name"))
 				disabled=(bool-not model.notification.enabled)
 			}}
 			<p class="description">
@@ -54,7 +54,7 @@
 	}}
 		<div>
 			{{item.button
-				(t (concat "settings.notifications.filter.values." item.label))
+				label=(t (concat "settings.notifications.filter.values." item.label))
 				disabled=(bool-not model.notification.enabled)
 			}}
 		</div>

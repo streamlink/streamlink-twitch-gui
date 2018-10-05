@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from "ember-qunit";
 import { buildResolver, hbs } from "test-utils";
-import { I18nService } from "i18n-utils";
+import { FakeI18nService } from "i18n-utils";
 import Component from "@ember/component";
 import $ from "jquery";
 import sinon from "sinon";
@@ -13,7 +13,7 @@ moduleForComponent( "services/hotkey", {
 	integration: true,
 	resolver: buildResolver({
 		HotkeyService,
-		I18nService
+		I18nService: FakeI18nService
 	}),
 	beforeEach() {
 		this.inject.service( "hotkey" );
