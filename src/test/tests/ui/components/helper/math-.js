@@ -1,5 +1,8 @@
-import { moduleForComponent, test } from "ember-qunit";
-import { buildResolver, hbs } from "test-utils";
+import { module, test } from "qunit";
+import { setupRenderingTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import { render } from "@ember/test-helpers";
+import hbs from "htmlbars-inline-precompile";
 
 import { helper as MathAddHelper } from "ui/components/helper/math-add";
 import { helper as MathSubHelper } from "ui/components/helper/math-sub";
@@ -7,56 +10,58 @@ import { helper as MathMulHelper } from "ui/components/helper/math-mul";
 import { helper as MathDivHelper } from "ui/components/helper/math-div";
 
 
-moduleForComponent( "ui/components/helper/math-", {
-	integration: true,
-	resolver: buildResolver({
-		MathAddHelper,
-		MathSubHelper,
-		MathMulHelper,
-		MathDivHelper
-	})
-});
+module( "ui/components/helper/math-", function( hooks ) {
+	setupRenderingTest( hooks, {
+		resolver: buildResolver({
+			MathAddHelper,
+			MathSubHelper,
+			MathMulHelper,
+			MathDivHelper
+		})
+	});
 
 
-test( "Math add", function( assert ) {
+	test( "Math add", async function( assert ) {
+		this.setProperties({
+			valA: 1,
+			valB: 2
+		});
+		await render( hbs`{{math-add valA valB}}` );
 
-	this.set( "valA", 1 );
-	this.set( "valB", 2 );
-	this.render( hbs`{{math-add valA valB}}` );
-
-	assert.strictEqual( this.$().text(), "3", "1 + 2 = 3" );
-
-});
-
-
-test( "Math sub", function( assert ) {
-
-	this.set( "valA", 1 );
-	this.set( "valB", 2 );
-	this.render( hbs`{{math-sub valA valB}}` );
-
-	assert.strictEqual( this.$().text(), "-1", "1 - 2 = -1" );
-
-});
+		assert.strictEqual( this.element.innerText, "3", "1 + 2 = 3" );
+	});
 
 
-test( "Math mul", function( assert ) {
+	test( "Math sub", async function( assert ) {
+		this.setProperties({
+			valA: 1,
+			valB: 2
+		});
+		await render( hbs`{{math-sub valA valB}}` );
 
-	this.set( "valA", 7 );
-	this.set( "valB", 7 );
-	this.render( hbs`{{math-mul valA valB}}` );
-
-	assert.strictEqual( this.$().text(), "49", "7 * 7 = 49" );
-
-});
+		assert.strictEqual( this.element.innerText, "-1", "1 - 2 = -1" );
+	});
 
 
-test( "Math div", function( assert ) {
+	test( "Math mul", async function( assert ) {
+		this.setProperties({
+			valA: 7,
+			valB: 7
+		});
+		await render( hbs`{{math-mul valA valB}}` );
 
-	this.set( "valA", 12 );
-	this.set( "valB", 3 );
-	this.render( hbs`{{math-div valA valB}}` );
+		assert.strictEqual( this.element.innerText, "49", "7 * 7 = 49" );
+	});
 
-	assert.strictEqual( this.$().text(), "4", "12 / 3 = 4" );
+
+	test( "Math div", async function( assert ) {
+		this.setProperties({
+			valA: 12,
+			valB: 3
+		});
+		await render( hbs`{{math-div valA valB}}` );
+
+		assert.strictEqual( this.element.innerText, "4", "12 / 3 = 4" );
+	});
 
 });
