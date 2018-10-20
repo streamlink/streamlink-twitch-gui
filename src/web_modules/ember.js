@@ -7,5 +7,8 @@ window.requirejs = {
 };
 window.requireModule = window.Ember.__loader.require;
 
+// make sure EmberENV exists
+window.EmberENV = window.Ember.ENV || {};
+
 
 export default window.Ember;

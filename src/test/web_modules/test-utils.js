@@ -136,7 +136,7 @@ export function hbs( strings, ...vars ) {
 	return compile( arr.join( "" ) );
 }
 
-export function buildResolver( namespace ) {
+export function buildResolver( namespace = {} ) {
 	return GlobalsResolver.create({
 		namespace
 	});
