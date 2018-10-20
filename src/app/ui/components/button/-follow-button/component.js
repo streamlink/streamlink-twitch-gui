@@ -1,7 +1,6 @@
 import Component from "@ember/component";
 import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
-import { cancel, later } from "@ember/runloop";
 import { inject as service } from "@ember/service";
 import TwitchInteractButtonMixin from "ui/components/-mixins/twitch-interact-button";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
@@ -85,11 +84,10 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 			return;
 		}
 
-		let time = get( this, "mouseLeaveTime" );
-		this._timeout = later( () => {
+		this._timeout = setTimeout( () => {
 			this._timeout = null;
 			this.collapse();
-		}, time || 1000 );
+		}, this.mouseLeaveTime );
 	},
 
 	_clearTimeout: on( "willDestroyElement", function() {
@@ -97,7 +95,7 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 			return false;
 		}
 
-		cancel( this._timeout );
+		clearTimeout( this._timeout );
 		this._timeout = null;
 		this.$confirmbutton.off( "webkitTransitionEnd" );
 
