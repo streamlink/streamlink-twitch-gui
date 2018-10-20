@@ -1,19 +1,28 @@
-import { moduleForComponent, test } from "ember-qunit";
-import { buildResolver, hbs } from "test-utils";
-import { get, set, setProperties } from "@ember/object";
-import { run } from "@ember/runloop";
+import { module, test } from "qunit";
+import { setupRenderingTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import { render } from "@ember/test-helpers";
+import hbs from "htmlbars-inline-precompile";
+
+import { set } from "@ember/object";
 import Service from "@ember/service";
 
 import StreamItemComponent from "ui/components/list/stream-item/component";
 
 
-moduleForComponent( "stream-item", "ui/components/list/stream-item", {
-	unit: true,
-	resolver: buildResolver({
-		StreamItemComponent
-	}),
-	beforeEach() {
-		this.register( "service:settings", Service.extend({
+// TODO: finish stream-item-component tests
+module( "ui/components/list/stream-item", function( hooks ) {
+	setupRenderingTest( hooks, {
+		resolver: buildResolver({
+			StreamItemComponent: StreamItemComponent.extend({
+				// remove layout for now
+				layout: hbs``
+			})
+		})
+	});
+
+	hooks.beforeEach(function() {
+		this.owner.register( "service:settings", Service.extend({
 			hasStreamsLanguagesSelection: true,
 			streams: {
 				filter_languages: false,
@@ -27,100 +36,107 @@ moduleForComponent( "stream-item", "ui/components/list/stream-item", {
 				}
 			}
 		}) );
-	}
-});
+	});
 
 
-test( "faded", function( assert ) {
-
-	const subject = this.subject({
-		content: {
-			channel: {
-				language: undefined,
-				broadcaster_language: undefined
+	test( "faded", function( assert ) {
+		const Subject = this.owner.factoryFor( "component:stream-item" );
+		const subject = Subject.create({
+			content: {
+				channel: {
+					language: undefined,
+					broadcaster_language: undefined
+				}
 			}
-		}
+		});
+
+		assert.notOk( subject.faded, "Not faded if channel language is missing" );
+
+		set( subject, "content.channel.language", "en" );
+		assert.notOk( subject.faded, "Not faded if language has been enabled" );
+
+		set( subject, "content.channel.language", "fr" );
+		assert.ok( subject.faded, "Faded if language has been disabled" );
+
+		set( subject, "content.channel.broadcaster_language", "de" );
+		assert.notOk( subject.faded, "Not faded if broadcaster language has been enabled" );
+
+		set( subject, "content.channel.broadcaster_language", "fr" );
+		assert.ok( subject.faded, "Faded if broadcaster language has been disabled" );
+
+		set( subject, "content.channel.language", "en" );
+		set( subject, "content.channel.broadcaster_language", "other" );
+		assert.ok( subject.faded, "Faded if broadcaster language is 'other'" );
+
+		set( subject, "settings.hasStreamsLanguagesSelection", false );
+		assert.notOk( subject.faded, "Not faded if no custom stream language selection" );
+
+		set( subject, "settings.hasStreamsLanguagesSelection", true );
+		set( subject, "settings.streams.filter_languages", true );
+		assert.notOk( subject.faded, "Not faded if filtering is enabled" );
 	});
 
-	assert.notOk( get( subject, "faded" ), "Not faded if channel language is missing" );
 
-	set( subject, "content.channel.language", "en" );
-	assert.notOk( get( subject, "faded" ), "Not faded if language has been enabled" );
+	test( "fadedVodcast", function( assert ) {
+		const Subject = this.owner.factoryFor( "component:stream-item" );
+		const subject = Subject.create({
+			content: {
+				isVodcast: false
+			}
+		});
 
-	set( subject, "content.channel.language", "fr" );
-	assert.ok( get( subject, "faded" ), "Faded if language has been disabled" );
+		assert.notOk( subject.fadedVodcast, "Not faded if it's not a vodcast" );
 
-	set( subject, "content.channel.broadcaster_language", "de" );
-	assert.notOk( get( subject, "faded" ), "Not faded if broadcaster language has been enabled" );
+		set( subject, "content.isVodcast", true );
+		assert.notOk( subject.fadedVodcast, "Not faded if vodcast filtering is disabled" );
 
-	set( subject, "content.channel.broadcaster_language", "fr" );
-	assert.ok( get( subject, "faded" ), "Faded if broadcaster language has been disabled" );
+		set( subject, "settings.streams.filter_vodcast", true );
+		assert.ok( subject.fadedVodcast, "Faded if vodcast filtering is enabled" );
 
-	set( subject, "content.channel.language", "en" );
-	set( subject, "content.channel.broadcaster_language", "other" );
-	assert.ok( get( subject, "faded" ), "Faded if broadcaster language is 'other'" );
-
-	set( subject, "settings.hasStreamsLanguagesSelection", false );
-	assert.notOk( get( subject, "faded" ), "Not faded if no custom stream language selection" );
-
-	set( subject, "settings.hasStreamsLanguagesSelection", true );
-	set( subject, "settings.streams.filter_languages", true );
-	assert.notOk( get( subject, "faded" ), "Not faded if filtering is enabled" );
-
-});
-
-
-test( "fadedVodcast", function( assert ) {
-
-	const subject = this.subject({
-		content: {
-			isVodcast: false
-		}
+		set( subject, "content.isVodcast", false );
+		assert.notOk( subject.fadedVodcast, "Not faded if not a vodcast anymore" );
 	});
 
-	assert.notOk( get( subject, "fadedVodcast" ), "Not faded if it's not a vodcast" );
 
-	set( subject, "content.isVodcast", true );
-	assert.notOk( get( subject, "fadedVodcast" ), "Not faded if vodcast filtering is disabled" );
+	test( "isFaded element class", async function( assert ) {
+		this.setProperties({
+			faded: false,
+			fadedVodcast: false
+		});
+		await render( hbs`{{stream-item faded=faded fadedVodcast=fadedVodcast}}` );
+		const elem = this.element.querySelector( ".stream-item-component" );
 
-	set( subject, "settings.streams.filter_vodcast", true );
-	assert.ok( get( subject, "fadedVodcast" ), "Faded if vodcast filtering is enabled" );
+		assert.notOk(
+			elem.classList.contains( "faded" ),
+			"Not faded if faded and fadedVodcast are falsy"
+		);
 
-	set( subject, "content.isVodcast", false );
-	assert.notOk( get( subject, "fadedVodcast" ), "Not faded if not a vodcast anymore" );
+		this.setProperties({
+			faded: true,
+			fadedVodcast: false
+		});
+		assert.ok(
+			elem.classList.contains( "faded" ),
+			"Faded if faded or fadedVodcast are truthy"
+		);
 
-});
+		this.setProperties({
+			faded: false,
+			fadedVodcast: true
+		});
+		assert.ok(
+			elem.classList.contains( "faded" ),
+			"Faded if faded or fadedVodcast are truthy"
+		);
 
-
-test( "isFaded element class", function( assert ) {
-
-	const subject = this.subject({
-		layout: hbs``,
-		faded: false,
-		fadedVodcast: false
+		this.setProperties({
+			faded: true,
+			fadedVodcast: true
+		});
+		assert.ok(
+			elem.classList.contains( "faded" ),
+			"Faded if faded or fadedVodcast are truthy"
+		);
 	});
-
-	this.render();
-	const $elem = this.$();
-
-	assert.notOk( $elem.hasClass( "faded" ), "Not faded if faded and fadedVodcast are falsy" );
-
-	run( () => setProperties( subject, {
-		faded: true,
-		fadedVodcast: false
-	}) );
-	assert.ok( $elem.hasClass( "faded" ), "Faded if faded or fadedVodcast are truthy" );
-
-	run( () => setProperties( subject, {
-		faded: false,
-		fadedVodcast: true
-	}) );
-	assert.ok( $elem.hasClass( "faded" ), "Faded if faded or fadedVodcast are truthy" );
-
-	run( () => setProperties( subject, {
-		faded: true,
-		fadedVodcast: true
-	}) );
-	assert.ok( $elem.hasClass( "faded" ), "Faded if faded or fadedVodcast are truthy" );
 
 });
