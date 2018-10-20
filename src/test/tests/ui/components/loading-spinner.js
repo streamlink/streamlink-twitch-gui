@@ -1,38 +1,48 @@
-import { moduleForComponent, test } from "ember-qunit";
-import { buildResolver, hbs } from "test-utils";
+import { module, test } from "qunit";
+import { setupRenderingTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import { render } from "@ember/test-helpers";
+import hbs from "htmlbars-inline-precompile";
 
 import LoadingSpinnerComponent from "ui/components/loading-spinner/component";
 
 
-moduleForComponent( "ui/components/loading-spinner", {
-	integration: true,
-	resolver: buildResolver({
-		LoadingSpinnerComponent
-	})
-});
+module( "ui/components/loading-spinner", function( hooks ) {
+	setupRenderingTest( hooks, {
+		resolver: buildResolver({
+			LoadingSpinnerComponent
+		})
+	});
 
 
-test( "LoadingSpinnerComponent", function( assert ) {
+	test( "LoadingSpinnerComponent", async function( assert ) {
+		await render( hbs`
+			<style>
+				.loading-spinner-component > circle {
+					stroke-width: 10% !important;
+				}
+			</style>
+			{{loading-spinner}}
+		` );
 
-	this.render( hbs`{{loading-spinner}}` );
+		const elem = this.element.querySelector( ".loading-spinner-component" );
 
-	const $elem = this.$( "svg.loading-spinner-component" );
+		assert.ok(
+			elem instanceof SVGElement,
+			"Finds the loading spinner"
+		);
 
-	assert.ok(
-		$elem.get( 0 ) instanceof SVGElement,
-		"Finds the loading spinner"
-	);
+		assert.strictEqual(
+			elem.getAttribute( "viewBox" ),
+			"0 0 1 1",
+			"SVG element has a viewBox attribute"
+		);
 
-	assert.notEqual(
-		$elem.eq( 0 ).attr( "viewBox" ),
-		undefined,
-		"SVG element has a viewBox attribute"
-	);
-
-	assert.notEqual(
-		$elem.find( "circle" ).eq( 0 ).attr( "r" ),
-		undefined,
-		"Circle has a radius attribute"
-	);
+		assert.strictEqual(
+			elem.querySelector( "circle" ).getAttribute( "r" ),
+			"40%",
+			"Circle has a radius attribute"
+		);
+	});
 
 });
