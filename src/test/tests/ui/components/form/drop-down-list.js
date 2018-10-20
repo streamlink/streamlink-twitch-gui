@@ -1,120 +1,154 @@
-import { moduleForComponent, test } from "ember-qunit";
-import { buildResolver, runDestroy } from "test-utils";
-import { A as EmberNativeArray } from "@ember/array";
-import { set, setProperties } from "@ember/object";
-import { run } from "@ember/runloop";
-import $ from "jquery";
+import { module, test } from "qunit";
+import { setupRenderingTest } from "ember-qunit";
+import { buildResolver, checkListeners } from "test-utils";
+import { render, clearRender, click } from "@ember/test-helpers";
+import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
+
+import { A as EmberNativeArray } from "@ember/array";
 
 import DropDownListComponent from "ui/components/form/drop-down-list/component";
 import { helper as IsEqualHelper } from "ui/components/helper/is-equal";
 
 
-moduleForComponent( "drop-down-list", "ui/components/form/drop-down-list", {
-	unit: true,
-	needs: [ "helper:is-equal" ],
-	resolver: buildResolver({
-		DropDownListComponent,
-		IsEqualHelper
-	})
-});
-
-
-test( "Expand and collapse", function( assert ) {
-
-	const subject = this.subject();
-	const action = sinon.spy( subject.actions, "change" );
-	const content = new EmberNativeArray([{
-		id: 1,
-		label: "foo"
-	}, {
-		id: 2,
-		label: "bar"
-	}, {
-		id: 3,
-		label: "baz"
-	}]);
-
-	setProperties( subject, {
-		content,
-		selection: content[1],
-		optionValuePath: "id",
-		optionLabelPath: "label"
+module( "ui/components/form/drop-down-list", function( hooks ) {
+	setupRenderingTest( hooks, {
+		resolver: buildResolver({
+			IsEqualHelper
+		})
 	});
 
-	this.render();
-
-	let clickListener;
-	const body = this._element.ownerDocument.body;
-	const $list = this.$();
-
-	const checkListener = ( event, listener ) => {
-		const events = $._data( body, "events" );
-		if ( events ) {
-			const listeners = events[ event ];
-			if ( listeners ) {
-				return listeners.some( obj => obj.handler === listener );
+	hooks.beforeEach(function() {
+		const testContext = this;
+		const changeSpy = sinon.spy();
+		this.changeSpy = changeSpy;
+		this.clickListener = null;
+		const Subject = DropDownListComponent.extend({
+			actions: {
+				change() {
+					// sinon-stub with callsFake receives a wrong _super method here
+					changeSpy.apply( this, arguments );
+					return this._super( this, ...arguments );
+				}
 			}
-		}
-		return false;
-	};
+		});
+		Object.defineProperty( Subject.prototype, "_clickListener", {
+			get() {
+				return testContext.clickListener;
+			},
+			set( value ) {
+				testContext.clickListener = value;
+				return value;
+			}
+		});
+		this.owner.register( "component:drop-down-list", Subject );
+	});
 
-	// initial state
-	assert.notOk( $list.hasClass( "expanded" ), "Is not expanded initially" );
-	assert.notOk( subject._clickListener, "Doesn't have a click listener" );
 
-	// expand
-	run( () => set( subject, "expanded", true ) );
-	clickListener = subject._clickListener;
-	assert.ok( $list.hasClass( "expanded" ), "List is expanded after clicking the selection" );
-	assert.ok( clickListener, "Does have a click listener" );
-	assert.ok(
-		checkListener( "click", clickListener ),
-		"Has a click listener registered on the document body"
-	);
+	test( "Expand and collapse", async function( assert ) {
+		const content = new EmberNativeArray([{
+			id: 1,
+			label: "foo"
+		}, {
+			id: 2,
+			label: "bar"
+		}, {
+			id: 3,
+			label: "baz"
+		}]);
 
-	// collapse by clicking an item
-	run( () => this.$( "li" ).eq( 1 ).click() );
-	assert.strictEqual( action.args[0][0], content[1], "Passes second item as click action param" );
-	assert.notOk( $list.hasClass( "expanded" ), "List collapsed after clicking an item" );
-	assert.notOk( subject._clickListener, "Doesn't have a click listener anymore" );
-	assert.notOk(
-		checkListener( "click", clickListener ),
-		"Old click listener is not registered on the document body anymore as well"
-	);
+		this.setProperties({
+			content,
+			selection: content[1],
+			optionValuePath: "id",
+			optionLabelPath: "label",
+			expanded: false
+		});
 
-	// collapse by clicking an external node
-	run( () => set( subject, "expanded", true ) );
-	clickListener = subject._clickListener;
-	assert.ok( $list.hasClass( "expanded" ), "Is expanded now" );
-	assert.ok( clickListener, "Does have a click listener" );
-	assert.ok(
-		checkListener( "click", clickListener ),
-		"Has a click listener registered on the document body"
-	);
+		await render( hbs`
+			{{drop-down-list
+				content=content
+				selection=selection
+				optionValuePath=optionValuePath
+				optionLabelPath=optionLabelPath
+				expanded=expanded
+			}}
+		` );
 
-	run( () => $( body ).click() );
-	assert.notOk( $list.hasClass( "expanded" ), "List collapsed after clicking the document body" );
-	assert.notOk( subject._clickListener, "Doesn't have a click listener anymore" );
-	assert.notOk(
-		checkListener( "click", clickListener ),
-		"Old click listener is not registered on the document body anymore as well"
-	);
+		let clickListener;
+		const list = this.element.querySelector( ".drop-down-list-component" );
+		const body = list.ownerDocument.body;
 
-	// component destruction
-	run( () => set( subject, "expanded", true ) );
-	clickListener = subject._clickListener;
-	assert.ok( $list.hasClass( "expanded" ), "Is expanded now" );
-	assert.ok( clickListener, "Does have a click listener" );
-	assert.ok(
-		checkListener( "click", clickListener ),
-		"Has a click listener registered on the document body"
-	);
-	runDestroy( subject );
-	assert.notOk( subject._clickListener, "Removes click listener on destruction" );
-	assert.notOk(
-		checkListener( "click", clickListener ),
-		"Old click listener is not registered on the document body anymore as well"
-	);
+		// initial state
+		assert.notOk( list.classList.contains( "expanded" ), "Is not expanded initially" );
+		assert.notOk( this.clickListener, "Doesn't have a click listener" );
+
+		// expand
+		this.set( "expanded", true );
+		clickListener = this.clickListener;
+		assert.ok(
+			list.classList.contains( "expanded" ),
+			"List is expanded after clicking the selection"
+		);
+		assert.ok( clickListener, "Does have a click listener" );
+		assert.ok(
+			checkListeners( body, "click", clickListener ),
+			"Has a click listener registered on the document body"
+		);
+
+		// collapse by clicking an item
+		await click( list.querySelector( "li:nth-of-type(2)" ) );
+		assert.strictEqual(
+			this.changeSpy.args[ 0 ][ 0 ],
+			content[ 1 ],
+			"Passes second item as click action param"
+		);
+		assert.notOk(
+			list.classList.contains( "expanded" ),
+			"List collapsed after clicking an item"
+		);
+		assert.notOk( this.clickListener, "Doesn't have a click listener anymore" );
+		assert.notOk(
+			checkListeners( body, "click", clickListener ),
+			"Old click listener is not registered on the document body anymore as well"
+		);
+
+		// collapse by clicking an external node
+		this.set( "expanded", true );
+		clickListener = this.clickListener;
+		assert.ok( list.classList.contains( "expanded" ), "Is expanded now" );
+		assert.ok( clickListener, "Does have a click listener" );
+		assert.ok(
+			checkListeners( body, "click", clickListener ),
+			"Has a click listener registered on the document body"
+		);
+
+		await click( body );
+		assert.notOk(
+			list.classList.contains( "expanded" ),
+			"List collapsed after clicking the document body"
+		);
+		assert.notOk( this.clickListener, "Doesn't have a click listener anymore" );
+		assert.notOk(
+			checkListeners( body, "click", clickListener ),
+			"Old click listener is not registered on the document body anymore as well"
+		);
+
+		// component destruction
+		this.set( "expanded", true );
+		clickListener = this.clickListener;
+		assert.ok( list.classList.contains( "expanded" ), "Is expanded now" );
+		assert.ok( clickListener, "Does have a click listener" );
+		assert.ok(
+			checkListeners( body, "click", clickListener ),
+			"Has a click listener registered on the document body"
+		);
+		await clearRender();
+		assert.notOk( this.clickListener, "Removes click listener on destruction" );
+		assert.notOk(
+			checkListeners( body, "click", clickListener ),
+			"Old click listener is not registered on the document body anymore as well"
+		);
+	});
 
 });

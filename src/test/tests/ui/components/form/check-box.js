@@ -1,108 +1,117 @@
-import { moduleForComponent, test } from "ember-qunit";
-import { buildResolver, hbs, triggerKeyDown } from "test-utils";
+import { module, test } from "qunit";
+import { setupRenderingTest } from "ember-qunit";
+// TODO: use triggerKeyEvent of @ember/test-helpers once the event gets returned
+import { buildResolver, triggerKeyDown } from "test-utils";
+import { render, click, focus } from "@ember/test-helpers";
+import hbs from "htmlbars-inline-precompile";
 
 import CheckBoxComponent from "ui/components/form/check-box/component";
 
 
-moduleForComponent( "ui/components/form/check-box", {
-	integration: true,
-	resolver: buildResolver({
-		CheckBoxComponent
-	})
-});
+module( "ui/components/form/check-box", function( hooks ) {
+	setupRenderingTest( hooks, {
+		resolver: buildResolver({
+			CheckBoxComponent
+		})
+	});
 
 
-test( "CheckBoxComponent", function( assert ) {
+	test( "CheckBoxComponent", async function( assert ) {
+		this.setProperties({
+			checked: true,
+			disabled: false
+		});
+		await render( hbs`
+			{{#check-box checked=checked disabled=disabled}}foo{{/check-box}}
+		` );
+		const elem = this.element.querySelector( ".check-box-component" );
 
-	this.set( "checked", true );
-	this.set( "disabled", false );
-	this.render( hbs`{{#check-box checked=checked disabled=disabled}}foo{{/check-box}}` );
-	const $elem = this.$( ".check-box-component" );
+		assert.ok( elem instanceof HTMLElement, "Component renders" );
+		assert.strictEqual( elem.innerText, "foo", "Has a label" );
+		assert.ok( elem.classList.contains( "checked" ), "Is checked initially" );
 
-	assert.ok( $elem.get( 0 ) instanceof HTMLElement, "Component renders" );
-	assert.strictEqual( $elem.text(), "foo", "Has a label" );
-	assert.ok( $elem.hasClass( "checked" ), "Is checked initially" );
+		// set to false in context
+		this.set( "checked", false );
+		assert.notOk(
+			elem.classList.contains( "checked" ),
+			"Is not checked anymore on binding change"
+		);
 
-	// set to false in context
-	this.set( "checked", false );
-	assert.notOk( $elem.hasClass( "checked" ), "Is not checked anymore after binding has changed" );
+		// toggle by clicking the CheckBoxComponent
+		await click( elem );
+		assert.ok( elem.classList.contains( "checked" ), "Clicking toggles checked state" );
+		assert.ok( this.get( "checked" ), "Clicking also updated binding" );
 
-	// toggle by clicking the CheckBoxComponent
-	$elem.click();
-	assert.ok( $elem.hasClass( "checked" ), "Clicking toggles checked state" );
-	assert.ok( this.get( "checked" ), "Clicking also updated binding" );
+		// disable CheckBoxComponent
+		this.set( "disabled", true );
+		assert.ok( elem.classList.contains( "disabled" ), "Is now disabled" );
 
-	// disable CheckBoxComponent
-	this.set( "disabled", true );
-	assert.ok( $elem.hasClass( "disabled" ), "Is now disabled" );
-
-	// try to click the disabled CheckBoxComponent
-	$elem.click();
-	assert.ok( $elem.hasClass( "checked" ), "Clicking while being disabled doesn't do anything" );
-	assert.ok( this.get( "checked" ), "The binding also doesn't change" );
-
-});
-
-
-test( "CheckBoxComponent - without block", function( assert ) {
-
-	this.set( "label", "foo" );
-	this.render( hbs`{{check-box label}}` );
-	const $elem = this.$( ".check-box-component" );
-
-	assert.strictEqual( $elem.text(), "foo", "Has a label" );
-
-	this.set( "label", "bar" );
-	assert.strictEqual( $elem.text(), "bar", "Label gets updated" );
-
-});
+		// try to click the disabled CheckBoxComponent
+		await click( elem );
+		assert.ok( elem.classList.contains( "checked" ), "No click action while being disabled" );
+		assert.ok( this.get( "checked" ), "The binding also doesn't change" );
+	});
 
 
-test( "Hotkeys", function( assert ) {
+	test( "CheckBoxComponent - without block", async function( assert ) {
+		this.set( "label", "foo" );
+		await render( hbs`{{check-box label}}` );
+		const elem = this.element.querySelector( ".check-box-component" );
 
-	let e;
+		assert.strictEqual( elem.innerText, "foo", "Has a label" );
 
-	this.set( "checked", false );
-	this.set( "disabled", false );
-	this.render( hbs`{{check-box "foo" checked=checked disabled=disabled}}` );
+		this.set( "label", "bar" );
+		assert.strictEqual( elem.innerText, "bar", "Label gets updated" );
+	});
 
-	const $elem = this.$( ".check-box-component" );
-	const document = $elem.get( 0 ).ownerDocument;
 
-	assert.notStrictEqual( document.activeElement, $elem[0], "Is not focused initially" );
-	assert.notOk( this.get( "checked" ), "Is not checked initially" );
-	assert.strictEqual( $elem.attr( "tabindex" ), "0", "Has a tabindex attribute with value 0" );
+	test( "Hotkeys", async function( assert ) {
+		let e;
 
-	e = triggerKeyDown( $elem, "Space" );
-	assert.notOk( this.get( "checked" ), "Is still not checked on Space" );
-	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		this.setProperties({
+			checked: false,
+			disabled: false
+		});
+		await render( hbs`{{check-box "foo" checked=checked disabled=disabled}}` );
 
-	$elem.focus();
-	assert.strictEqual( document.activeElement, $elem[0], "Is focused now" );
+		const elem = this.element.querySelector( ".check-box-component" );
+		const document = elem.ownerDocument;
 
-	e = triggerKeyDown( $elem, "Space" );
-	assert.ok( this.get( "checked" ), "Is checked on Space" );
-	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-	e = triggerKeyDown( $elem, "Space" );
-	assert.notOk( this.get( "checked" ), "Is not checked anymore on Space" );
-	assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-	assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.notStrictEqual( document.activeElement, elem, "Is not focused initially" );
+		assert.notOk( this.get( "checked" ), "Is not checked initially" );
+		assert.strictEqual( elem.getAttribute( "tabindex" ), "0", "Tabindex attribute is 0" );
 
-	triggerKeyDown( $elem, "Escape" );
-	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
+		e = triggerKeyDown( elem, "Space" );
+		assert.notOk( this.get( "checked" ), "Is still not checked on Space" );
+		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
-	this.set( "disabled", true );
-	$elem.focus();
-	assert.strictEqual( document.activeElement, $elem[0], "Is focused now" );
+		await focus( elem );
+		assert.strictEqual( document.activeElement, elem, "Is focused now" );
 
-	e = triggerKeyDown( $elem, "Space" );
-	assert.notOk( this.get( "checked" ), "Is not checked on Space while being disabled" );
-	assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-	assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		e = triggerKeyDown( elem, "Space" );
+		assert.ok( this.get( "checked" ), "Is checked on Space" );
+		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		e = triggerKeyDown( elem, "Space" );
+		assert.notOk( this.get( "checked" ), "Is not checked anymore on Space" );
+		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
+		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
 
-	triggerKeyDown( $elem, "Escape" );
-	assert.notStrictEqual( document.activeElement, $elem[0], "Removes focus on Escape" );
+		triggerKeyDown( elem, "Escape" );
+		assert.notStrictEqual( document.activeElement, elem, "Removes focus on Escape" );
+
+		this.set( "disabled", true );
+		await focus( elem );
+		assert.strictEqual( document.activeElement, elem, "Is focused now" );
+
+		e = triggerKeyDown( elem, "Space" );
+		assert.notOk( this.get( "checked" ), "Is not checked on Space while being disabled" );
+		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
+		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+
+		triggerKeyDown( elem, "Escape" );
+		assert.notStrictEqual( document.activeElement, elem, "Removes focus on Escape" );
+	});
 
 });
