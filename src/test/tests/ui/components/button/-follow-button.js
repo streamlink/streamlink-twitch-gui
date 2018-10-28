@@ -1,6 +1,6 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
-import { buildResolver } from "test-utils";
+import { buildResolver, triggerEventSync } from "test-utils";
 import { FakeI18nService } from "i18n-utils";
 import { render, click, triggerEvent } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
@@ -9,10 +9,7 @@ import sinon from "sinon";
 import Component from "@ember/component";
 import { set } from "@ember/object";
 import { alias } from "@ember/object/computed";
-import { run } from "@ember/runloop";
 import Service from "@ember/service";
-// TODO: use triggerEvent of @ember/test-helpers once mouseenter and mouseleave events are fixed
-import $ from "jquery";
 
 // eslint-disable-next-line max-len
 import followButtonComponentInjector from "inject-loader?ui/components/-mixins/twitch-interact-button!ui/components/button/-follow-button/component";
@@ -333,7 +330,6 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 		const getState = () => ([ this.get( "isExpanded" ), this.get( "isPromptVisible" ) ]);
 
 		const elem = this.element.querySelector( ".follow-button-component" );
-		const $elem = $( elem );
 
 		// initial state
 		assert.propEqual(
@@ -342,7 +338,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 			"Prompt is hidden initially"
 		);
 
-		run( () => $elem.trigger( "mouseleave" ) );
+		triggerEventSync( elem, "mouseleave" );
 		assert.notOk( this.timeout, "Does not have a timer when leaving and not expanded" );
 
 		// expand
@@ -355,7 +351,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 		assert.notOk( this.timeout, "Does not have a timer" );
 
 		// leave and re-enter before transition
-		run( () => $elem.trigger( "mouseleave" ) );
+		triggerEventSync( elem, "mouseleave" );
 		assert.propEqual(
 			getState(),
 			[ true, true ],
@@ -363,7 +359,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 		);
 		assert.ok( this.timeout, "Does have a timer when leaving" );
 
-		run( () => $elem.trigger( "mouseenter" ) );
+		triggerEventSync( elem, "mouseenter" );
 		assert.propEqual(
 			getState(),
 			[ true, true ],
@@ -372,7 +368,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 		assert.notOk( this.timeout, "Does not have a timer anymore" );
 
 		// leave and re-enter during transition
-		run( () => $elem.trigger( "mouseleave" ) );
+		triggerEventSync( elem, "mouseleave" );
 		assert.ok( this.timeout, "Does have a timer before the transition" );
 
 		await new Promise( resolve => setTimeout( resolve, mouseLeaveTime + 1 ) );
@@ -384,7 +380,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 		);
 		assert.notOk( this.timeout, "Does not have a timer during the transition" );
 
-		run( () => $elem.trigger( "mouseenter" ) );
+		triggerEventSync( elem, "mouseenter" );
 		assert.propEqual(
 			getState(),
 			[ true, true ],
@@ -393,7 +389,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 		assert.notOk( this.timeout, "Does not have a timer after re-entering" );
 
 		// leave
-		run( () => $elem.trigger( "mouseleave" ) );
+		triggerEventSync( elem, "mouseleave" );
 
 		await new Promise( resolve => setTimeout( resolve, mouseLeaveTime + 1 ) );
 

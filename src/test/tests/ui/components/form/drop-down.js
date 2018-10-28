@@ -1,7 +1,6 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
-// TODO: use triggerKeyEvent of @ember/test-helpers once the event gets returned
-import { buildResolver, triggerKeyDown } from "test-utils";
+import { buildResolver, triggerKeyEventSync } from "test-utils";
 import { FakeI18nService } from "i18n-utils";
 import { render, click, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
@@ -262,41 +261,41 @@ module( "ui/components/form/drop-down", function( hooks ) {
 		assert.notOk( list.classList.contains( "expanded" ), "Is not expanded initially" );
 		assert.strictEqual( elem.getAttribute( "tabindex" ), "0", "Tabindex attribute is 0" );
 
-		e = triggerKeyDown( elem, "Space" );
+		e = triggerKeyEventSync( elem, "Space" );
 		assert.notOk(
 			list.classList.contains( "expanded" ),
 			"Does not react to spacebar when not focused"
 		);
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
-		e = triggerKeyDown( elem, "ArrowDown" );
+		e = triggerKeyEventSync( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[0], "Doesn't change on ArrowDown" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
-		e = triggerKeyDown( elem, "ArrowUp" );
+		e = triggerKeyEventSync( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[0], "Doesn't change on ArrowUp" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
 		await focus( elem );
 
-		e = triggerKeyDown( elem, "ArrowDown" );
+		e = triggerKeyEventSync( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[0], "No new selection on ArrowDown" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
-		e = triggerKeyDown( elem, "ArrowUp" );
+		e = triggerKeyEventSync( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[0], "No new selection on ArrowUp" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
-		e = triggerKeyDown( elem, "Space" );
+		e = triggerKeyEventSync( elem, "Space" );
 		assert.ok(
 			list.classList.contains( "expanded" ),
 			"Toggles expansion when focused on Space"
 		);
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-		e = triggerKeyDown( elem, "Space" );
+		e = triggerKeyEventSync( elem, "Space" );
 		assert.notOk(
 			list.classList.contains( "expanded" ),
 			"Toggles expansion when focused on Space"
@@ -304,30 +303,30 @@ module( "ui/components/form/drop-down", function( hooks ) {
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
 
-		triggerKeyDown( elem, "Space" );
+		triggerKeyEventSync( elem, "Space" );
 
-		e = triggerKeyDown( elem, "ArrowDown" );
+		e = triggerKeyEventSync( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[1], "Selects next item on ArrowDown" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-		triggerKeyDown( elem, "ArrowDown" );
+		triggerKeyEventSync( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[2], "Selects next item again" );
-		triggerKeyDown( elem, "ArrowDown" );
+		triggerKeyEventSync( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[0], "Jumps to first item at the end" );
 
-		e = triggerKeyDown( elem, "ArrowUp" );
+		e = triggerKeyEventSync( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[2], "Jumps to last item on ArrowUp" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-		triggerKeyDown( elem, "ArrowUp" );
+		triggerKeyEventSync( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[1], "Selects prev item on ArrowUp" );
-		triggerKeyDown( elem, "ArrowUp" );
+		triggerKeyEventSync( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[0], "Selects previous item again" );
 
-		triggerKeyDown( elem, "Escape" );
+		triggerKeyEventSync( elem, "Escape" );
 		assert.notOk( list.classList.contains( "expanded" ), "Collapses list on Escape" );
 		assert.strictEqual( document.activeElement, elem, "Doesn't remove focus on Escape" );
-		triggerKeyDown( elem, "Escape" );
+		triggerKeyEventSync( elem, "Escape" );
 		assert.notStrictEqual( document.activeElement, elem, "Removes focus on second Escape" );
 	});
 

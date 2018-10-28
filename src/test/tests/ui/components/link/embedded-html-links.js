@@ -1,13 +1,11 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
-import { buildResolver } from "test-utils";
+import { buildResolver, triggerEventSync } from "test-utils";
 import { render } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
 
 import Service from "@ember/service";
-// TODO: use @ember/test-helpers once event will be returned from helper method
-import $ from "jquery";
 
 import embeddedHtmlLinksComponentInjector
 	from "inject-loader?-utils/getStreamFromUrl!ui/components/link/embedded-html-links/component";
@@ -56,8 +54,6 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 		` );
 
 		const [ anchorOne, anchorTwo ] = this.element.querySelectorAll( "a" );
-		const $anchorOne = $( anchorOne );
-		const $anchorTwo = $( anchorTwo );
 
 		assert.notOk(
 			anchorOne.classList.contains( "external-link" ),
@@ -80,8 +76,7 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 
 		// anchor 1
 		// left click
-		event = $.Event( "click", { button: 0 } );
-		$anchorOne.trigger( event );
+		event = triggerEventSync( anchorOne, "click", { button: 0 } );
 		assert.ok( event.isDefaultPrevented(), "Left click: default event is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
 		assert.propEqual(
@@ -92,8 +87,7 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 		assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
 		this.transitionToStub.resetHistory();
 		// middle click
-		event = $.Event( "click", { button: 1 } );
-		$anchorOne.trigger( event );
+		event = triggerEventSync( anchorOne, "click", { button: 1 } );
 		assert.ok( event.isDefaultPrevented(), "Middle click: default event is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Middle click: event doesn't propagate" );
 		assert.propEqual(
@@ -104,15 +98,13 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 		assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
 		this.transitionToStub.resetHistory();
 		// right click (doesn't execute transition)
-		event = $.Event( "click", { button: 2 } );
-		$anchorOne.trigger( event );
+		event = triggerEventSync( anchorOne, "mouseup", { button: 2 } );
 		assert.ok( event.isDefaultPrevented(), "Right click: default event is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Right click: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't open channel page on non-left-click" );
 		assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
 		// doesn't have a context menu
-		event = $.Event( "contextmenu" );
-		$anchorOne.trigger( event );
+		event = triggerEventSync( anchorOne, "contextmenu" );
 		assert.notOk( event.isDefaultPrevented(), "Contextmenu: default event is not prevented" );
 		assert.notOk( event.isImmediatePropagationStopped(), "Contextmenu: event does propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't open channel page on contextmenu" );
@@ -121,31 +113,27 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 
 		// anchor 2
 		// left click
-		event = $.Event( "click", { button: 0 } );
-		$anchorTwo.trigger( event );
+		event = triggerEventSync( anchorTwo, "click", { button: 0 } );
 		assert.ok( event.isDefaultPrevented(), "Left click: default event is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
 		assert.propEqual( this.openBrowserStub.args, [ [ "https://bar.com/" ] ], "Opens browser" );
 		this.openBrowserStub.resetHistory();
 		// middle click
-		event = $.Event( "click", { button: 1 } );
-		$anchorTwo.trigger( event );
+		event = triggerEventSync( anchorTwo, "click", { button: 1 } );
 		assert.ok( event.isDefaultPrevented(), "Middle click: default event is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Middle click: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
 		assert.propEqual( this.openBrowserStub.args, [ [ "https://bar.com/" ] ], "Opens browser" );
 		this.openBrowserStub.resetHistory();
 		// right click (doesn't execute callback)
-		event = $.Event( "click", { button: 2 } );
-		$anchorTwo.trigger( event );
+		event = triggerEventSync( anchorTwo, "click", { button: 2 } );
 		assert.ok( event.isDefaultPrevented(), "Right click: default event is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Right click: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
 		assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
 		// has a context menu
-		event = $.Event( "contextmenu" );
-		$anchorTwo.trigger( event );
+		event = triggerEventSync( anchorTwo, "contextmenu" );
 		assert.ok( event.isDefaultPrevented(), "Contextmenu: default event action is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Contextmenu: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
@@ -177,14 +165,12 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 		"mousedown mouseup keyup keydown keypress"
 			.split( " " )
 			.forEach( name => {
-				const eventOne = $.Event( name );
-				const eventTwo = $.Event( name );
-				$anchorOne.trigger( eventOne );
+				const eventOne = triggerEventSync( anchorOne, name );
 				assert.ok(
 					eventOne.isDefaultPrevented(),
 					`First link: default ${name} action is prevented`
 				);
-				$anchorTwo.trigger( eventTwo );
+				const eventTwo = triggerEventSync( anchorTwo, name );
 				assert.ok(
 					eventTwo.isDefaultPrevented(),
 					`Second link: default ${name} action is prevented`

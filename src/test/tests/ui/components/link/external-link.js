@@ -1,13 +1,11 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
-import { buildResolver } from "test-utils";
+import { buildResolver, triggerEventSync } from "test-utils";
 import { render } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
 
 import Service from "@ember/service";
-// TODO: use @ember/test-helpers once event will be returned from helper method
-import $ from "jquery";
 
 import externalLinkComponentInjector
 	from "inject-loader?-utils/getStreamFromUrl!ui/components/link/external-link/component";
@@ -52,7 +50,6 @@ module( "ui/components/link/external-link", function( hooks ) {
 		this.set( "text", "foo" );
 		await render( hbs`{{#external-link url=url}}{{text}}{{/external-link}}` );
 		const component = this.element.querySelector( ".external-link-component" );
-		const $component = $( component );
 
 		assert.ok( component instanceof HTMLAnchorElement, "Component renders" );
 		assert.strictEqual( component.innerText, "foo", "Component has the correct content" );
@@ -64,8 +61,7 @@ module( "ui/components/link/external-link", function( hooks ) {
 		assert.strictEqual( component.getAttribute( "href" ), "#", "Has the correct href attr" );
 
 		// trigger click event
-		event = $.Event( "click" );
-		$component.trigger( event );
+		event = triggerEventSync( component, "click" );
 		assert.ok( event.isDefaultPrevented(), "Default event action is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Event doesn't propagate" );
 		assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
@@ -76,8 +72,7 @@ module( "ui/components/link/external-link", function( hooks ) {
 		);
 
 		// doesn't have a context menu
-		event = $.Event( "contextmenu" );
-		$component.trigger( event );
+		event = triggerEventSync( component, "contextmenu" );
 		assert.notOk( event.isDefaultPrevented(), "Default event action is not prevented" );
 		assert.notOk( event.isImmediatePropagationStopped(), "Event propagates" );
 		assert.notOk( this.contextMenuStub.called, "Doesn't open context menu" );
@@ -91,7 +86,6 @@ module( "ui/components/link/external-link", function( hooks ) {
 		this.set( "text", "foo" );
 		await render( hbs`{{#external-link url=url}}{{text}}{{/external-link}}` );
 		const component = this.element.querySelector( ".external-link-component" );
-		const $component = $( component );
 
 		assert.ok( component instanceof HTMLAnchorElement, "Component renders" );
 		assert.strictEqual( component.innerText, "foo", "Component has the correct content" );
@@ -100,8 +94,7 @@ module( "ui/components/link/external-link", function( hooks ) {
 		assert.strictEqual( component.getAttribute( "href" ), "#", "Has the correct href attr" );
 
 		// trigger click event
-		event = $.Event( "click" );
-		$component.trigger( event );
+		event = triggerEventSync( component, "click" );
 		assert.ok( event.isDefaultPrevented(), "Default event action is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Event doesn't propagate" );
 		assert.propEqual( this.openBrowserStub.args, [ [ "https://bar.com/" ] ], "Opens browser" );
@@ -110,8 +103,7 @@ module( "ui/components/link/external-link", function( hooks ) {
 		this.openBrowserStub.resetHistory();
 
 		// has a context menu
-		event = $.Event( "contextmenu" );
-		$component.trigger( event );
+		event = triggerEventSync( component, "contextmenu" );
 		assert.ok( event.isDefaultPrevented(), "Default event action is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Event doesn't propagate" );
 		assert.propEqual( this.contextMenuStub.args, [ [
