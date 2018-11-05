@@ -8,6 +8,7 @@ about:
         author: Autor
         version: Version
         nwjs: NW.js
+        arch: Architektur
         built: Erstellt
         help: Hilfe
         wiki: Wiki

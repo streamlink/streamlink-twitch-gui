@@ -8,6 +8,7 @@ about:
         author: 作者
         version: 版本
         nwjs: NW.js
+        arch: Architecture
         built: 建置
         help: 說明
         wiki: Wiki
