@@ -1,7 +1,8 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { render, blur, click } from "@ember/test-helpers";
+import { blur } from "event-utils";
+import { render, click } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
 import { run } from "@ember/runloop";
