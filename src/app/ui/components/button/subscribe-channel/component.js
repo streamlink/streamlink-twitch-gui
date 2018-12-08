@@ -47,7 +47,7 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixi
 
 	hotkeys: [
 		{
-			code: "KeyS",
+			key: "s",
 			action() {
 				this.click();
 			}

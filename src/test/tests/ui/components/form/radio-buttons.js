@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
-import { buildResolver, triggerKeyEventSync } from "test-utils";
+import { buildResolver } from "test-utils";
+import { triggerKeyDownEvent } from "event-utils";
 import { render, click, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
@@ -176,7 +177,7 @@ module( "ui/components/form/radio-buttons", function( hooks ) {
 			"All items have a tabindex attribute with value 0"
 		);
 
-		e = triggerKeyEventSync( elemTwo, "Space" );
+		e = await triggerKeyDownEvent( elemTwo, "Space" );
 		assert.strictEqual( this.get( "selection" ), content[0], "Ignores Space if not focused" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
@@ -188,16 +189,16 @@ module( "ui/components/form/radio-buttons", function( hooks ) {
 			"Second item is now focused"
 		);
 
-		e = triggerKeyEventSync( elemTwo, "Space" );
+		e = await triggerKeyDownEvent( elemTwo, "Space" );
 		assert.strictEqual( this.get( "selection" ), content[1], "Changes selection if focused" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-		e = triggerKeyEventSync( elemTwo, "Space" );
+		e = await triggerKeyDownEvent( elemTwo, "Space" );
 		assert.strictEqual( this.get( "selection" ), content[1], "Keeps selection" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
 
-		triggerKeyEventSync( elemTwo, "Escape" );
+		await triggerKeyDownEvent( elemTwo, "Escape" );
 		assert.notStrictEqual(
 			document.activeElement,
 			elemTwo,

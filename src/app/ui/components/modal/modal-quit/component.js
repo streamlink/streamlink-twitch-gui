@@ -18,7 +18,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 	hotkeys: [
 		{
-			code: [ "Enter", "NumpadEnter" ],
+			key: "Enter",
 			action: "shutdown"
 		}
 	],

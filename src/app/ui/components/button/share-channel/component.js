@@ -13,7 +13,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 
 	hotkeys: [
 		{
-			code: "KeyU",
+			key: "u",
 			action() {
 				this.click();
 			}

@@ -29,14 +29,14 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 	hotkeys: [
 		{
 			name: "main",
-			code: "KeyF",
+			key: "f",
 			action() {
 				this.$( ".main-button" ).click();
 			}
 		},
 		{
 			name: "confirm",
-			code: "KeyF",
+			key: "f",
 			ctrlKey: true,
 			action() {
 				this.$( ".confirm-button" ).click();

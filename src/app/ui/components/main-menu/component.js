@@ -15,15 +15,15 @@ const routeHotkeys = {
 	"watching": "F10",
 	"user.auth": "F11",
 	"settings": "F12",
-	"featured": [ "Numpad1", "Digit1" ],
-	"games": [ "Numpad2", "Digit2" ],
-	"communities": [ "Numpad3", "Digit3" ],
-	"streams": [ "Numpad4", "Digit4" ],
-	"user.subscriptions": [ "Numpad5", "Digit5" ],
-	"user.followedStreams": [ "Numpad6", "Digit6" ],
-	"user.hostedStreams": [ "Numpad7", "Digit7" ],
-	"user.followedChannels": [ "Numpad8", "Digit8" ],
-	"user.followedGames": [ "Numpad9", "Digit9" ]
+	"featured": "1",
+	"games": "2",
+	"communities": "3",
+	"streams": "4",
+	"user.subscriptions": "5",
+	"user.followedStreams": "6",
+	"user.hostedStreams": "7",
+	"user.followedChannels": "8",
+	"user.followedGames": "9"
 };
 
 function refresh() {
@@ -43,18 +43,18 @@ export default Component.extend( HotkeyMixin, {
 
 	hotkeys: [
 		{
-			code: "F5",
+			key: "F5",
 			force: true,
 			action: refresh
 		},
 		{
-			code: "KeyR",
+			key: "r",
 			ctrlKey: true,
 			force: true,
 			action: refresh
 		},
 		{
-			code: "ArrowLeft",
+			key: "ArrowLeft",
 			altKey: true,
 			force: true,
 			action() {
@@ -62,7 +62,7 @@ export default Component.extend( HotkeyMixin, {
 			}
 		},
 		{
-			code: "ArrowRight",
+			key: "ArrowRight",
 			altKey: true,
 			force: true,
 			action() {
@@ -70,13 +70,13 @@ export default Component.extend( HotkeyMixin, {
 			}
 		},
 		{
-			code: [ "Digit0", "Numpad0" ],
+			key: "0",
 			action() {
 				get( this, "routing" ).homepage();
 			}
 		},
 		...Object.keys( routeHotkeys ).map( route => ({
-			code: routeHotkeys[ route ],
+			key: routeHotkeys[ route ],
 			force: !isArray( routeHotkeys[ route ] ),
 			action() {
 				get( this, "routing" ).transitionTo( route );

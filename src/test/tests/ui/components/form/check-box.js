@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
-import { buildResolver, triggerKeyEventSync } from "test-utils";
+import { buildResolver } from "test-utils";
+import { triggerKeyDownEvent } from "event-utils";
 import { render, click, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
@@ -80,7 +81,7 @@ module( "ui/components/form/check-box", function( hooks ) {
 		assert.notOk( this.get( "checked" ), "Is not checked initially" );
 		assert.strictEqual( elem.getAttribute( "tabindex" ), "0", "Tabindex attribute is 0" );
 
-		e = triggerKeyEventSync( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, "Space" );
 		assert.notOk( this.get( "checked" ), "Is still not checked on Space" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
@@ -88,28 +89,28 @@ module( "ui/components/form/check-box", function( hooks ) {
 		await focus( elem );
 		assert.strictEqual( document.activeElement, elem, "Is focused now" );
 
-		e = triggerKeyEventSync( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, "Space" );
 		assert.ok( this.get( "checked" ), "Is checked on Space" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-		e = triggerKeyEventSync( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, "Space" );
 		assert.notOk( this.get( "checked" ), "Is not checked anymore on Space" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
 
-		triggerKeyEventSync( elem, "Escape" );
+		await triggerKeyDownEvent( elem, "Escape" );
 		assert.notStrictEqual( document.activeElement, elem, "Removes focus on Escape" );
 
 		this.set( "disabled", true );
 		await focus( elem );
 		assert.strictEqual( document.activeElement, elem, "Is focused now" );
 
-		e = triggerKeyEventSync( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, "Space" );
 		assert.notOk( this.get( "checked" ), "Is not checked on Space while being disabled" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
-		triggerKeyEventSync( elem, "Escape" );
+		await triggerKeyDownEvent( elem, "Escape" );
 		assert.notStrictEqual( document.activeElement, elem, "Removes focus on Escape" );
 	});
 

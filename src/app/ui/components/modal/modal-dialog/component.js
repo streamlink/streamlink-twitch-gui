@@ -18,7 +18,7 @@ export default Component.extend( HotkeyMixin, {
 
 	hotkeys: [
 		{
-			code: [ "Escape", "Backspace" ],
+			key: [ "Escape", "Backspace" ],
 			action: "close"
 		}
 	],

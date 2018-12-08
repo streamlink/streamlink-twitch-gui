@@ -19,7 +19,7 @@ export default Component.extend( IsFocusedMixin, {
 	 * @param {KeyboardEvent} event
 	 */
 	keyDown( event ) {
-		switch ( event.code ) {
+		switch ( event.key ) {
 			case "Escape":
 				if ( this._isFocused() ) {
 					this.$().blur();

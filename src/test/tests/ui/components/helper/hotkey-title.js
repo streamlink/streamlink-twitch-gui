@@ -20,7 +20,7 @@ module( "ui/components/helper/hotkey-title", function( hooks ) {
 	test( "HotkeyTitleHelper", async function( assert ) {
 		this.setProperties({
 			hotkey: {
-				code: "Enter",
+				key: "Enter",
 				ctrlKey: true,
 				shiftKey: true
 			}
