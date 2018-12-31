@@ -1,4 +1,4 @@
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 import Component from "@ember/component";
 import { get, setProperties } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
@@ -37,7 +37,7 @@ export default Component.extend({
 		setProperties( this, {
 			lengthInitial: get( this, "content.length" ),
 			length: 0,
-			duplicates: new EmberNativeArray(),
+			duplicates: A(),
 			duplicatesMap: new Map()
 		});
 

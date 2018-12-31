@@ -1,4 +1,4 @@
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 import { default as EmberObject, get } from "@ember/object";
 import Evented from "@ember/object/evented";
 import { inject as service } from "@ember/service";
@@ -13,7 +13,7 @@ export default EmberObject.extend( Evented, {
 			type: this.type || "contextmenu"
 		});
 
-		this.items = new EmberNativeArray();
+		this.items = A();
 		this.items.addArrayObserver( this, {
 			willChange: this._itemsWillChange,
 			didChange : this._itemsDidChange

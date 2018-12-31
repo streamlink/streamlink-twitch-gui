@@ -2,7 +2,7 @@ import { module, test } from "qunit";
 import { setupTest } from "ember-qunit";
 import { buildResolver, runDestroy } from "test-utils";
 
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 import { set } from "@ember/object";
 
 import SelectableComponent from "ui/components/form/-selectable/component";
@@ -33,7 +33,7 @@ module( "ui/components/form/-selectable", function( hooks ) {
 			data: 4,
 			label: "qux"
 		};
-		const content = new EmberNativeArray([ dataOne, dataTwo, dataThree ]);
+		const content = A([ dataOne, dataTwo, dataThree ]);
 
 		const Subject = this.owner.factoryFor( "component:-selectable" );
 		const subject = Subject.create({

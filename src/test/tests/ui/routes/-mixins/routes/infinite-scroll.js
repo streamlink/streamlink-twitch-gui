@@ -1,6 +1,6 @@
 // TODO: properly rewrite tests by using sinon
 import { module, test } from "qunit";
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 import { default as EmberObject, get, getProperties, set, setProperties } from "@ember/object";
 import Route from "@ember/routing/route";
 
@@ -273,7 +273,7 @@ test( "Offset, limit and filter", async assert => {
 		"./css": {}
 	});
 
-	const model = new EmberNativeArray([
+	const model = A([
 		{ value: 1 },
 		{ value: 2 }
 	]);
@@ -384,7 +384,7 @@ test( "WillFetchContent without metadata", async assert => {
 		"./css": {}
 	});
 
-	const model = new EmberNativeArray([
+	const model = A([
 		{ value: 1 },
 		{ value: 2 }
 	]);
@@ -509,7 +509,7 @@ test( "WillFetchContent without metadata", async assert => {
 
 	// response with enough content
 	await ( async () => {
-		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
+		response = A([ { value: 1 }, { value: 2 }, { value: 3 } ]);
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
 		assert.propEqual(
@@ -532,7 +532,7 @@ test( "WillFetchContent without metadata", async assert => {
 
 	// response with not enough content
 	await ( async () => {
-		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
+		response = A([ { value: 1 }, { value: 2 }, { value: 3 } ]);
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
 		assert.propEqual(
@@ -565,7 +565,7 @@ test( "WillFetchContent with metadata", async assert => {
 		"./css": {}
 	});
 
-	const model = new EmberNativeArray();
+	const model = A();
 	const controller = EmberObject.create();
 
 	const route = Route.extend({
@@ -590,7 +590,7 @@ test( "WillFetchContent with metadata", async assert => {
 	// response with invalid metadata
 	await ( async () => {
 		model.clear();
-		response = new EmberNativeArray([ { value: 1 }, { value: 2 } ]);
+		response = A([ { value: 1 }, { value: 2 } ]);
 		set( response, "meta", { total: "foo" } );
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
@@ -613,7 +613,7 @@ test( "WillFetchContent with metadata", async assert => {
 	// response with partial content
 	await ( async () => {
 		model.clear();
-		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
+		response = A([ { value: 1 }, { value: 2 }, { value: 3 } ]);
 		set( response, "meta", { total: 5 } );
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
@@ -636,7 +636,7 @@ test( "WillFetchContent with metadata", async assert => {
 	// response with all content
 	await ( async () => {
 		model.clear();
-		response = new EmberNativeArray([ { value: 1 }, { value: 2 }, { value: 3 } ]);
+		response = A([ { value: 1 }, { value: 2 }, { value: 3 } ]);
 		set( response, "meta", { total: 3 } );
 		set( controller, "hasFetchedAll", false );
 		await route.send( "willFetchContent" );
@@ -659,7 +659,7 @@ test( "WillFetchContent with metadata", async assert => {
 	// response with missing content (return 2 items at a limit of 3)
 	await ( async () => {
 		model.clear();
-		response = new EmberNativeArray([ { value: 1 }, { value: 2 } ]);
+		response = A([ { value: 1 }, { value: 2 } ]);
 		set( response, "meta", { total: 5 } );
 		setProperties( controller, {
 			hasFetchedAll: false,

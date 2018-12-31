@@ -1,4 +1,4 @@
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 import { get, set, setProperties, observer } from "@ember/object";
 import Evented from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
@@ -150,7 +150,7 @@ export default Mixin.create( Evented, {
 	 */
 	async _pollQuery() {
 		const store = get( this, "store" );
-		const allStreams = new EmberNativeArray();
+		const allStreams = A();
 
 		// eslint-disable-next-line no-constant-condition
 		while ( true ) {

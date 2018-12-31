@@ -4,7 +4,7 @@ import { buildResolver, cleanOutput } from "test-utils";
 import { render } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 import Component from "@ember/component";
 import { run, scheduleOnce } from "@ember/runloop";
 
@@ -25,7 +25,7 @@ module( "ui/components/list/content-list", function( hooks ) {
 
 
 	test( "Empty content", async function( assert ) {
-		const content = new EmberNativeArray();
+		const content = A();
 
 		this.set( "content", content );
 		await render( hbs`
@@ -44,7 +44,7 @@ module( "ui/components/list/content-list", function( hooks ) {
 
 
 	test( "New items", async function( assert ) {
-		const content = new EmberNativeArray([ 1, 2 ]);
+		const content = A([ 1, 2 ]);
 
 		this.set( "content", content );
 		await render( hbs`
@@ -61,7 +61,7 @@ module( "ui/components/list/content-list", function( hooks ) {
 
 
 	test( "Duplicates", async function( assert ) {
-		const content = new EmberNativeArray([ 1, 2 ]);
+		const content = A([ 1, 2 ]);
 
 		this.set( "content", content );
 		await render( hbs`
@@ -81,7 +81,7 @@ module( "ui/components/list/content-list", function( hooks ) {
 
 
 	test( "Simple nested duplicates", async function( assert ) {
-		const content = new EmberNativeArray([ { data: 1 }, { data: 2 } ]);
+		const content = A([ { data: 1 }, { data: 2 } ]);
 
 		this.set( "content", content );
 		await render( hbs`
@@ -108,7 +108,7 @@ module( "ui/components/list/content-list", function( hooks ) {
 		const d = new Promise( resolve => resolveD = resolve );
 
 		// same promise in initial content array
-		const content = new EmberNativeArray([
+		const content = A([
 			{ data: a },
 			{ data: a }
 		]);
