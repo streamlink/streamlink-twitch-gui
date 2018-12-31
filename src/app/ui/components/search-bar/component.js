@@ -43,7 +43,7 @@ export default Component.extend( HotkeyMixin, {
 
 	hotkeys: [
 		{
-			code: "Slash",
+			key: "/",
 			action: "focus"
 		}
 	],

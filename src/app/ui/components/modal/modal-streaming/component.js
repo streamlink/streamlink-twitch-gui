@@ -71,7 +71,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 	hotkeys: [
 		{
 			name: "close",
-			code: [ "Escape", "Backspace" ],
+			key: [ "Escape", "Backspace" ],
 			action() {
 				if ( get( this, "active" ) ) {
 					this.send( "close" );
@@ -82,7 +82,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		},
 		{
 			name: "confirm",
-			code: [ "Enter", "NumpadEnter" ],
+			key: "Enter",
 			action() {
 				if ( get( this, "active.isHostedError" ) ) {
 					this.send( "startHosted" );
@@ -93,7 +93,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		},
 		{
 			name: "shutdown",
-			code: [ "KeyQ", "KeyX" ],
+			key: [ "q", "x" ],
 			action() {
 				if ( get( this, "active" ) ) {
 					this.send( "shutdown" );
@@ -104,7 +104,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		},
 		{
 			name: "log",
-			code: "KeyL",
+			key: "l",
 			action: "toggleLog"
 		}
 	],

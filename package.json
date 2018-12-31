@@ -28,6 +28,7 @@
 		"snoretoast": "github:bastimeyer/snoretoast#binaries"
 	},
 	"devDependencies": {
+		"@ember/test-helpers": "0.7.27",
 		"@ember-decorators/argument": "0.8.21",
 		"babel-core": "6.26.3",
 		"babel-eslint": "10.0.1",
@@ -49,8 +50,7 @@
 		"css-loader": "0.28.11",
 		"ember-compatibility-helpers": "1.0.2",
 		"ember-decorators": "2.5.1",
-		"ember-qunit": "2.2.0",
-		"ember-test-helpers": "0.6.3",
+		"ember-qunit": "3.5.1",
 		"eslint": "4.19.1",
 		"eslint-loader": "2.0.0",
 		"file-loader": "1.1.11",

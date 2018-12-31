@@ -1,34 +1,38 @@
-import { moduleForComponent, test } from "ember-qunit";
-import { buildResolver, hbs } from "test-utils";
+import { module, test } from "qunit";
+import { setupRenderingTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
 import { FakeI18nService } from "i18n-utils";
+import { render } from "@ember/test-helpers";
+import hbs from "htmlbars-inline-precompile";
 
 import { helper as HotkeyTitleHelper } from "ui/components/helper/hotkey-title";
 
 
-moduleForComponent( "ui/components/helper/hotkey-title", {
-	integration: true,
-	resolver: buildResolver({
-		HotkeyTitleHelper,
-		I18nService: FakeI18nService
-	})
-});
-
-
-test( "HotkeyTitleHelper", function( assert ) {
-
-	this.setProperties({
-		hotkey: {
-			code: "Enter",
-			ctrlKey: true,
-			shiftKey: true
-		}
+module( "ui/components/helper/hotkey-title", function( hooks ) {
+	setupRenderingTest( hooks, {
+		resolver: buildResolver({
+			HotkeyTitleHelper,
+			I18nService: FakeI18nService
+		})
 	});
-	this.render( hbs`{{hotkey-title "foo" hotkey foo="bar"}}` );
 
-	assert.strictEqual(
-		this.$().text().trim(),
-		"[hotkeys.modifiers.ctrl+hotkeys.modifiers.shift+hotkeys.keys.Enter] foo{\"foo\":\"bar\"}",
-		"Sets the correct title with hotkey data and translation data"
-	);
+
+	test( "HotkeyTitleHelper", async function( assert ) {
+		this.setProperties({
+			hotkey: {
+				key: "Enter",
+				ctrlKey: true,
+				shiftKey: true
+			}
+		});
+		await render( hbs`{{hotkey-title "foo" hotkey foo="bar"}}` );
+
+		assert.strictEqual(
+			this.element.innerText,
+			// eslint-disable-next-line quotes
+			'[hotkeys.modifiers.ctrl+hotkeys.modifiers.shift+hotkeys.keys.Enter] foo{"foo":"bar"}',
+			"Sets the correct title with hotkey data and translation data"
+		);
+	});
 
 });

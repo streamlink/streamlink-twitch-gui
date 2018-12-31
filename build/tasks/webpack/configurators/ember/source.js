@@ -18,13 +18,14 @@ module.exports = function( config, isProd ) {
 		include: [
 			// all app modules
 			pRoot,
-			// all ember dependencies except ember itself and ember-data (has its own config)
+			// all ember dependencies except ember itself and ones which have their own configs
 			{
 				test: /ember/,
 				include: pDependencies,
 				exclude: [
 					r( pDependencies, "ember-source" ),
-					r( pDependencies, "ember-data" )
+					r( pDependencies, "ember-data" ),
+					r( pDependencies, "ember-qunit" )
 				]
 			}
 		],
@@ -50,7 +51,8 @@ module.exports = function( config, isProd ) {
 		// Does not match:
 		// `@ember-foo` (other (related) namespaces should not be matched)
 		// `@ember/ordered-set` (is a real module in the same namespace)
-		new webpack.IgnorePlugin( /@ember(?!-|\/ordered-set)/ )
+		// `@ember/test-helpers` (is a real module in the same namespace)
+		new webpack.IgnorePlugin( /@ember(?!-|\/(ordered-set|test-helpers))/ )
 	);
 
 	// never parse the ember-source module

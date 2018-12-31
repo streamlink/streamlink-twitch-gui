@@ -54,7 +54,7 @@ export default TextField.extend({
 	 * @param {KeyboardEvent} event
 	 */
 	keyDown( event ) {
-		if ( event.code === "Escape" ) {
+		if ( event.key === "Escape" ) {
 			this.$().trigger( "blur" );
 			return;
 		}

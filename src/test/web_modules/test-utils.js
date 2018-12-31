@@ -43,12 +43,18 @@ export function checkListeners( elem, event, listener ) {
 	return false;
 }
 
-export function triggerKeyDown( $elem, code ) {
-	const event = $.Event( "keydown" );
-	Object.assign( event, { code } );
-	run( () => $elem.trigger( event ) );
+// TODO: use @ember/test-helpers once event gets returned from helper method
+//       and once mouseenter and mouseleave events have been fixed
+export function triggerEventSync( elem, event, data ) {
+	const e = $.Event( event );
+	Object.assign( e, data );
+	run( () => $( elem ).trigger( e ) );
 
-	return event;
+	return e;
+}
+
+export function triggerKeyEventSync( elem, code, event = "keydown", data = {} ) {
+	return triggerEventSync( elem, event, Object.assign( {}, data, { code } ) );
 }
 
 
@@ -136,7 +142,7 @@ export function hbs( strings, ...vars ) {
 	return compile( arr.join( "" ) );
 }
 
-export function buildResolver( namespace ) {
+export function buildResolver( namespace = {} ) {
 	return GlobalsResolver.create({
 		namespace
 	});

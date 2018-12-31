@@ -1,16 +1,11 @@
 const { isArray } = Array;
-const reName = /^(Key|Digit)/;
 const separator = "+";
 
 
 /**
  * @param {I18nService} i18n
  * @param {string} title
- * @param {Object} hotkey
- * @param {string} hotkey.code
- * @param {boolean} hotkey.ctrlKey
- * @param {boolean} hotkey.shiftKey
- * @param {boolean} hotkey.altKey
+ * @param {Hotkey} hotkey
  * @returns {string}
  */
 export default function( i18n, title, hotkey ) {
@@ -26,15 +21,15 @@ export default function( i18n, title, hotkey ) {
 		modifiers.push( i18n.t( "hotkeys.modifiers.alt" ).toString() );
 	}
 
-	const keyCode = isArray( hotkey.code )
-		? hotkey.code[0]
-		: hotkey.code;
-	const key = reName.test( keyCode )
-		? keyCode.replace( reName, "" )
-		: i18n.t( `hotkeys.keys.${keyCode}` ).toString();
+	const key = isArray( hotkey.key )
+		? hotkey.key[0]
+		: hotkey.key;
+	const keyName = key.length === 1
+		? key.toUpperCase()
+		: i18n.t( `hotkeys.keys.${key}` ).toString();
 	const modifier = modifiers.length
 		? `${modifiers.join( separator )}${separator}`
 		: "";
 
-	return `[${modifier}${key}] ${title}`;
+	return `[${modifier}${keyName}] ${title}`;
 }

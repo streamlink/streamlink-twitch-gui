@@ -1,103 +1,106 @@
-import { moduleForComponent, test } from "ember-qunit";
-import { buildResolver, hbs } from "test-utils";
-import { scheduleOnce } from "@ember/runloop";
+import { module, test } from "qunit";
+import { setupRenderingTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import { render } from "@ember/test-helpers";
+import hbs from "htmlbars-inline-precompile";
 import transparentImage from "transparent-image";
+
+import { scheduleOnce } from "@ember/runloop";
 
 import PreviewImageComponent from "ui/components/preview-image/component";
 
 
-moduleForComponent( "ui/components/preview-image", {
-	integration: true,
-	resolver: buildResolver({
-		PreviewImageComponent
-	})
-});
+module( "ui/components/preview-image", function( hooks ) {
+	setupRenderingTest( hooks, {
+		resolver: buildResolver({
+			PreviewImageComponent
+		})
+	});
 
 
-test( "Valid image source", async function( assert ) {
+	test( "Valid image source", async function( assert ) {
+		assert.expect( 4 );
 
-	assert.expect( 4 );
+		await new Promise( async ( resolve, reject ) => {
+			this.setProperties({
+				src: transparentImage,
+				title: "bar",
+				onLoad: resolve,
+				onError: reject
+			});
+			await render( hbs`
+				{{preview-image src=src title=title onLoad=onLoad onError=onError}}
+			` );
 
-	await new Promise( ( resolve, reject ) => {
-		this.set( "src", transparentImage );
-		this.set( "title", "bar" );
-		this.set( "onLoad", resolve );
-		this.set( "onError", reject );
-		this.render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` );
+			assert.ok(
+				this.element.querySelector( "img" ),
+				"Has an image element before loading"
+			);
+		});
 
 		assert.ok(
-			this.$( "img" ).get( 0 ) instanceof HTMLImageElement,
-			"Has an image element before loading"
+			this.element.querySelector( ".previewImage" ) instanceof HTMLImageElement,
+			"Image loads correctly"
+		);
+		assert.strictEqual(
+			this.element.querySelector( "img" ).getAttribute( "src" ),
+			transparentImage,
+			"Has the correct image source"
+		);
+		assert.strictEqual(
+			this.element.querySelector( "img" ).getAttribute( "title" ),
+			"bar",
+			"Has the correct element title"
 		);
 	});
 
-	assert.ok(
-		this.$( ".previewImage" ).get( 0 ) instanceof HTMLImageElement,
-		"Image loads correctly"
-	);
-	assert.equal(
-		this.$( "img" ).eq( 0 ).attr( "src" ),
-		transparentImage,
-		"Has the correct image source"
-	);
-	assert.equal(
-		this.$( "img" ).eq( 0 ).attr( "title" ),
-		"bar",
-		"Has the correct element title"
-	);
 
-});
+	test( "Invalid image source", async function( assert ) {
+		assert.expect( 3 );
 
+		await new Promise( async ( resolve, reject ) => {
+			this.setProperties({
+				src: "./foo",
+				title: "bar",
+				onLoad: reject,
+				onError: resolve
+			});
+			await render( hbs`
+				{{preview-image src=src title=title onLoad=onLoad onError=onError}}
+			` );
 
-test( "Invalid image source", async function( assert ) {
-
-	assert.expect( 3 );
-
-	await new Promise( ( resolve, reject ) => {
-		this.set( "src", "./foo" );
-		this.set( "title", "bar" );
-		this.set( "onLoad", reject );
-		this.set( "onError", resolve );
-		this.render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` );
+			assert.ok(
+				this.element.querySelector( "img" ),
+				"Has an image element before loading"
+			);
+		});
 
 		assert.ok(
-			this.$( "img" ).get( 0 ) instanceof HTMLImageElement,
-			"Has an image element before loading"
-		);
-	});
-
-	assert.ok(
-		this.$( ".previewError" ).get( 0 ),
-		"Is in error state"
-	);
-	assert.equal(
-		this.$( ".previewError" ).eq( 0 ).attr( "title" ),
-		"bar",
-		"Error element has a title"
-	);
-
-});
-
-
-test( "Missing image source", function( assert ) {
-
-	const done = assert.async();
-
-	this.set( "src", transparentImage );
-	this.render( hbs`{{preview-image}}` );
-
-	assert.strictEqual(
-		this.$( "img" ).get( 0 ),
-		undefined,
-		"Does not have an image element"
-	);
-
-	scheduleOnce( "afterRender", () => {
-		assert.ok(
-			this.$( ".previewError" ).get( 0 ),
+			this.element.querySelector( ".previewError" ),
 			"Is in error state"
 		);
-		done();
+		assert.strictEqual(
+			this.element.querySelector( ".previewError" ).getAttribute( "title" ),
+			"bar",
+			"Error element has a title"
+		);
+	});
+
+
+	test( "Missing image source", async function( assert ) {
+		await render( hbs`{{preview-image}}` );
+
+		assert.notOk(
+			this.element.querySelector( "img" ),
+			"Does not have an image element"
+		);
+
+		await new Promise( resolve => scheduleOnce( "afterRender", resolve ) );
+
+		assert.ok(
+			this.element.querySelector( ".previewError" ),
+			"Is in error state"
+		);
 	});
 
 });

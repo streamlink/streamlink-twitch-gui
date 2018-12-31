@@ -32,10 +32,6 @@ module.exports = {
 			"tests": r( pTest, "tests" ),
 			"fixtures": pTestFixtures,
 			"qunit$": r( pTest, "web_modules", "qunit" ),
-			"ember-qunit$": "ember-qunit",
-			"ember-qunit": "ember-qunit/lib/ember-qunit",
-			"ember-test-helpers$": "ember-test-helpers",
-			"ember-test-helpers": "ember-test-helpers/lib/ember-test-helpers",
 			"require": r( pTest, "web_modules", "require" )
 		});
 	},

@@ -5,6 +5,7 @@ function buildEmberConfig( config, isProd ) {
 	require( "./data" )( config, isProd );
 	require( "./decorators" )( config, isProd );
 	require( "./i18n" )( config, isProd );
+	require( "./tests" )( config );
 }
 
 

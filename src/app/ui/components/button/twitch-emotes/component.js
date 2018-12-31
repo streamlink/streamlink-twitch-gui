@@ -25,7 +25,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 
 	hotkeys: [
 		{
-			code: "KeyE",
+			key: "e",
 			action() {
 				this.click();
 			}

@@ -12,7 +12,7 @@ const ignoreElements = [
 
 /**
  * @typedef {Object} Hotkey
- * @property {(String|String[])} code
+ * @property {(String|String[])} key
  * @property {Boolean?} altKey
  * @property {Boolean?} ctrlKey
  * @property {Boolean?} shiftKey
@@ -85,7 +85,7 @@ export default Service.extend({
 		for ( ; start < length; start++ ) {
 			let registry = registries[ start ];
 			hotkey = registry.hotkeys.find( h =>
-				   ( isArray( h.code ) ? h.code.indexOf( e.code ) !== -1 : h.code === e.code )
+				   ( isArray( h.key ) ? h.key.includes( e.key ) : h.key === e.key )
 				&& ( h.altKey === undefined || h.altKey === e.altKey )
 				&& ( h.ctrlKey === undefined || h.ctrlKey === e.ctrlKey )
 				&& ( h.shiftKey === undefined || h.shiftKey === e.shiftKey )

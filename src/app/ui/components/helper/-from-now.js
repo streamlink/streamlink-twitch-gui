@@ -1,11 +1,11 @@
 import Helper from "@ember/component/helper";
-import { cancel, later } from "@ember/runloop";
+import { run } from "@ember/runloop";
 
 
 export const helper = Helper.extend({
 	compute( params, hash ) {
 		if ( hash.interval ) {
-			this._interval = later( this, "recompute", hash.interval );
+			this._interval = setTimeout( () => run( () => this.recompute() ), hash.interval );
 		}
 
 		return this._compute( ...arguments );
@@ -13,7 +13,8 @@ export const helper = Helper.extend({
 
 	destroy() {
 		if ( this._interval ) {
-			cancel( this._interval );
+			clearTimeout( this._interval );
+			this._interval = null;
 		}
 
 		this._super( ...arguments );
