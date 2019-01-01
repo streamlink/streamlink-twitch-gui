@@ -14,7 +14,14 @@ export default Route.extend({
 		const id = get( parentModel, "channel.name" );
 
 		const model = await store.findRecord( "channelSettings", id )
-			.catch( () => store.recordForId( "channelSettings", id ) );
+			.catch( () => {
+				// get the record automatically created by store.findRecord()
+				const model = store.recordForId( "channelSettings", id );
+				// transition from `root.empty` to `root.loaded.created.uncommitted`
+				model._internalModel.loadedData();
+
+				return model;
+			});
 
 		// use a buffer proxy object as model
 		const content = model.toJSON();
