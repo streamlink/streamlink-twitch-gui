@@ -35,7 +35,7 @@ export default Component.extend( HotkeyMixin, {
 	showDropdown: false,
 
 	query: "",
-	reQuery: /^\S{3,}/,
+	reQuery: /^\S+/,
 
 	filters,
 	filter: "all",
