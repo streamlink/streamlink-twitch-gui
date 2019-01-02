@@ -17,6 +17,18 @@ module( "ui/components/preview-image", function( hooks ) {
 		})
 	});
 
+	hooks.before(function() {
+		this.webRequestCallback = () => ({ cancel: true });
+		window.chrome.webRequest.onBeforeRequest.addListener(
+			this.webRequestCallback,
+			{ urls: [ "http://blocked/request" ] }
+		);
+	});
+
+	hooks.after(function() {
+		window.chrome.webRequest.onBeforeRequest.removeListener( this.webRequestCallback );
+	});
+
 
 	test( "Valid image source", async function( assert ) {
 		assert.expect( 4 );
@@ -60,7 +72,7 @@ module( "ui/components/preview-image", function( hooks ) {
 
 		await new Promise( async ( resolve, reject ) => {
 			this.setProperties({
-				src: "./foo",
+				src: "http://blocked/request",
 				title: "bar",
 				onLoad: reject,
 				onError: resolve
