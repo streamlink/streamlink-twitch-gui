@@ -1,5 +1,6 @@
 import { get, set } from "@ember/object";
 import Route from "@ember/routing/route";
+import { inject as service } from "@ember/service";
 import { isNone } from "@ember/utils";
 import { AdapterError } from "ember-data/adapters/errors";
 
@@ -22,6 +23,8 @@ const duplicates = {
 
 
 export default Route.extend({
+	router: service(),
+
 	/**
 	 * Do all the error display stuff here instead of using an error controller.
 	 * A route for errors is needed anyway.
@@ -88,6 +91,6 @@ export default Route.extend({
 	},
 
 	deactivate() {
-		set( this, "router.errorTransition", null );
+		set( this, "router._router.errorTransition", null );
 	}
 });
