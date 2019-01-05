@@ -107,7 +107,7 @@ const customRoutingService = {
 
 
 export default {
-	name: "routing-service",
+	name: "routing",
 
 	initialize( application ) {
 		let routingService = application.lookup( "service:-routing" );
