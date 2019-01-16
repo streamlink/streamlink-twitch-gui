@@ -169,18 +169,20 @@ test( "Parse command", assert => {
 	});
 
 	assert.propEqual(
+		// this is unfortunately how NW.js passes through the command line string from second
+		// application starts: parameters with leading dashes get moved to the beginning
 		parseCommand([
 			"/path/to/executable",
+			"--goto",
+			"--unrecognized-parameter-name",
 			"--foo",
 			"--bar",
 			"--user-data-dir=baz",
 			"--no-sandbox",
+			"--no-zygote",
 			"--flag-switches-begin",
 			"--flag-switches-end",
-			"--goto",
-			"foo",
-			"--launch",
-			"bar"
+			"foo"
 		].join( " " ) ),
 		{
 			"_": [],
@@ -200,7 +202,7 @@ test( "Parse command", assert => {
 			"loglevel": "",
 			"l": "",
 			"goto": "foo",
-			"launch": "bar"
+			"launch": ""
 		},
 		"Correctly parses parameters"
 	);
