@@ -12,8 +12,7 @@ import $ from "jquery";
  * @return {Promise<Event>} resolves when the application is settled
  */
 export async function triggerEvent( target, eventType, options ) {
-	const e = $.Event( eventType );
-	Object.assign( e, options );
+	const e = $.Event( eventType, options );
 	run( () => $( target ).trigger( e ) );
 
 	return e;
