@@ -14,7 +14,8 @@ export default Component.extend({
 	auth: service(),
 	notification: service(),
 	nwjs: service(),
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 	settings: service(),
 	streaming: service(),
 
@@ -27,11 +28,11 @@ export default Component.extend({
 
 	actions: {
 		goto() {
-			get( this, "routing" ).transitionTo( ...arguments );
+			this.router.transitionTo( ...arguments );
 		},
 
 		homepage() {
-			get( this, "routing" ).homepage();
+			this.router.homepage();
 		},
 
 		nwjs( method ) {

@@ -6,7 +6,8 @@ import "./styles.less";
 
 
 export default ListItemComponent.extend({
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 
 	layout,
 
@@ -14,6 +15,6 @@ export default ListItemComponent.extend({
 
 	click() {
 		let community = get( this, "content.id" );
-		get( this, "routing" ).transitionTo( "communities.community", community );
+		this.router.transitionTo( "communities.community", community );
 	}
 });

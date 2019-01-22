@@ -1,5 +1,4 @@
 import Component from "@ember/component";
-import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 import { isDarwin } from "utils/node/platform";
@@ -26,15 +25,17 @@ const routeHotkeys = {
 	"user.followedGames": "9"
 };
 
+/** @this {MainMenuComponent} */
 function refresh() {
-	// MacOS has its menubar with its own refresh hotkey
+	// macOS has a menu bar with its own refresh hotkey
 	if ( isDarwin ) { return; }
-	get( this, "routing" ).refresh();
+	this.router.refresh();
 }
 
 
-export default Component.extend( HotkeyMixin, {
-	routing: service( "-routing" ),
+export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
+	/** @type {RouterService} */
+	router: service(),
 
 	layout,
 
@@ -57,29 +58,33 @@ export default Component.extend( HotkeyMixin, {
 			key: "ArrowLeft",
 			altKey: true,
 			force: true,
+			/** @this {MainMenuComponent} */
 			action() {
-				get( this, "routing" ).history( -1 );
+				this.router.history( -1 );
 			}
 		},
 		{
 			key: "ArrowRight",
 			altKey: true,
 			force: true,
+			/** @this {MainMenuComponent} */
 			action() {
-				get( this, "routing" ).history( +1 );
+				this.router.history( +1 );
 			}
 		},
 		{
 			key: "0",
+			/** @this {MainMenuComponent} */
 			action() {
-				get( this, "routing" ).homepage();
+				this.router.homepage();
 			}
 		},
 		...Object.keys( routeHotkeys ).map( route => ({
 			key: routeHotkeys[ route ],
 			force: !isArray( routeHotkeys[ route ] ),
+			/** @this {MainMenuComponent} */
 			action() {
-				get( this, "routing" ).transitionTo( route );
+				this.router.transitionTo( route );
 			}
 		}) )
 	]

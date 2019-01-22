@@ -65,7 +65,7 @@ module( "ui/components/title-bar", function( hooks ) {
 			maximize: this.nwjsMaximizeSpy,
 			close: this.nwjsCloseSpy
 		}) );
-		this.owner.register( "service:-routing", Service.extend({
+		this.owner.register( "service:router", Service.extend({
 			transitionTo: this.routingTransitionToSpy,
 			homepage: this.routingHomepageSpy
 		}) );

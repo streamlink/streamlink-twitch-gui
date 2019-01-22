@@ -9,7 +9,8 @@ import getStreamFromUrl from "utils/getStreamFromUrl";
 
 export default Component.extend({
 	nwjs: service(),
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 
 	didInsertElement() {
 		/** @type {HTMLAnchorElement[]} */
@@ -29,8 +30,7 @@ export default Component.extend({
 				event.stopImmediatePropagation();
 				if ( event.button === 0 || event.button === 1 ) {
 					if ( channel ) {
-						const routing = get( this, "routing" );
-						routing.transitionTo( "channel", channel );
+						this.router.transitionTo( "channel", channel );
 					} else {
 						openBrowser( url );
 					}

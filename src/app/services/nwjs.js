@@ -8,6 +8,7 @@ import {
 	toggleMaximized,
 	toggleMinimized
 } from "nwjs/Window";
+import { openBrowser } from "nwjs/Shell";
 import {
 	ATTR_GUI_INTEGRATION_TRAY,
 	ATTR_GUI_INTEGRATION_BOTH
@@ -30,6 +31,10 @@ export default Service.extend({
 
 	devTools() {
 		nwWindow.showDevTools();
+	},
+
+	openBrowser( url ) {
+		return openBrowser( url );
 	},
 
 	minimize() {

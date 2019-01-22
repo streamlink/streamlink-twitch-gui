@@ -33,13 +33,13 @@ module( "ui/components/link/external-link", function( hooks ) {
 		const NwjsService = Service.extend({
 			contextMenu: this.contextMenuStub
 		});
-		const RoutingService = Service.extend({
+		const RouterService = Service.extend({
 			transitionTo: this.transitionToStub
 		});
 
 		this.owner.register( "component:external-link", ExternalLinkComponent );
 		this.owner.register( "service:nwjs", NwjsService );
-		this.owner.register( "service:-routing", RoutingService );
+		this.owner.register( "service:router", RouterService );
 	});
 
 

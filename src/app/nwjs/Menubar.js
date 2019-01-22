@@ -10,7 +10,8 @@ const { "display-name": displayName } = mainConfig;
 
 export default EmberObject.extend({
 	i18n: service(),
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 
 	init() {
 		this._buildMenubar();
@@ -22,7 +23,6 @@ export default EmberObject.extend({
 
 	_buildMenubar() {
 		const i18n = get( this, "i18n" );
-		const routing = get( this, "routing" );
 
 		const menubar = new Menu({ type: "menubar" });
 		menubar.createMacBuiltin( displayName, {
@@ -39,7 +39,7 @@ export default EmberObject.extend({
 			key: ",",
 			modifiers: "cmd"
 		});
-		preferences.click = () => routing.transitionTo( "settings" );
+		preferences.click = () => this.router.transitionTo( "settings" );
 		mainMenu.insert( preferences, 2 );
 
 		// add a refresh menu item to the view menubar submenu
@@ -50,7 +50,7 @@ export default EmberObject.extend({
 			key: "r",
 			modifiers: "cmd"
 		});
-		refresh.click = () => routing.refresh();
+		refresh.click = () => this.router.refresh();
 		viewMenu.insert( refresh, 0 );
 
 		// set native window menu

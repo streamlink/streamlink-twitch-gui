@@ -8,7 +8,8 @@ import getStreamFromUrl from "utils/getStreamFromUrl";
 
 export default Component.extend({
 	nwjs: service(),
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 
 	tagName: "a",
 	classNameBindings: [
@@ -39,8 +40,7 @@ export default Component.extend({
 
 		const channel = get( this, "channel" );
 		if ( channel ) {
-			const routingService = get( this, "routing" );
-			routingService.transitionTo( "channel", channel );
+			this.router.transitionTo( "channel", channel );
 		} else {
 			const url = get( this, "url" );
 			openBrowser( url );

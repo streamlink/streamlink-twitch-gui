@@ -1,7 +1,9 @@
+import Application from "@ember/application";
 import GlobalsResolver from "@ember/application/globals-resolver";
 import EmberObject from "@ember/object";
 import Router from "@ember/routing/router";
 import { run } from "@ember/runloop";
+import { getApplication, setApplication, getResolver, setResolver } from "@ember/test-helpers";
 import TemplateCompiler from "ember-source/dist/ember-template-compiler";
 import $ from "jquery";
 
@@ -145,5 +147,32 @@ export function hbs( strings, ...vars ) {
 export function buildResolver( namespace = {} ) {
 	return GlobalsResolver.create({
 		namespace
+	});
+}
+
+export function buildFakeApplication( hooks, namespace = {} ) {
+	let oldApplication;
+	let oldResolver;
+
+	hooks.before(function() {
+		oldApplication = getApplication();
+		oldResolver = getResolver();
+
+		const resolver = buildResolver( namespace );
+		const application = Application.create({
+			autoboot: false,
+			rootElement: "#ember-testing",
+			Resolver: {
+				create: () => resolver
+			}
+		});
+
+		setResolver( resolver );
+		setApplication( application );
+	});
+
+	hooks.after(function() {
+		setApplication( oldApplication );
+		setResolver( oldResolver );
 	});
 }
