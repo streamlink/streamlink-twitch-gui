@@ -1,5 +1,4 @@
 import Component from "@ember/component";
-import { get } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { scheduleOnce } from "@ember/runloop";
 import { inject as service } from "@ember/service";
@@ -8,7 +7,8 @@ import layout from "./template.hbs";
 
 
 export default Component.extend({
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 
 	layout,
 
@@ -30,7 +30,7 @@ export default Component.extend({
 
 	actions: {
 		openBrowser( url ) {
-			get( this, "routing" ).openBrowserOrTransitionToChannel( url );
+			this.router.openBrowserOrTransitionToChannel( url );
 		}
 	}
 });

@@ -16,7 +16,8 @@ import layout from "./template.hbs";
 export default Component.extend({
 	chat: service(),
 	nwjs: service(),
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 	settings: service(),
 	streaming: service(),
 
@@ -175,14 +176,12 @@ export default Component.extend({
 	},
 
 	gotoChannelPage() {
-		const routing = get( this, "routing" );
 		const id = get( this, "channel.id" );
-		routing.transitionTo( "channel", id );
+		this.router.transitionTo( "channel", id );
 	},
 
 	gotoChannelSettings() {
-		const routing = get( this, "routing" );
 		const id = get( this, "channel.id" );
-		routing.transitionTo( "channel.settings", id );
+		this.router.transitionTo( "channel.settings", id );
 	}
 });

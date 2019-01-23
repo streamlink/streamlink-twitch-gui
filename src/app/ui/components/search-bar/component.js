@@ -19,7 +19,8 @@ const { filters } = Search;
 
 // TODO: rewrite SearchBarComponent and Search model
 export default Component.extend( HotkeyMixin, {
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 	store: service(),
 
 	layout,
@@ -104,10 +105,7 @@ export default Component.extend( HotkeyMixin, {
 		set( this, "showDropdown", false );
 		this.addRecord( query, filter );
 
-		get( this, "routing" ).transitionTo( "search", [], {
-			filter,
-			query
-		});
+		this.router.transitionTo( "search", [], { filter, query } );
 	},
 
 
@@ -137,15 +135,15 @@ export default Component.extend( HotkeyMixin, {
 
 	actions: {
 		back() {
-			get( this, "routing" ).history( -1 );
+			this.router.history( -1 );
 		},
 
 		forward() {
-			get( this, "routing" ).history( +1 );
+			this.router.history( +1 );
 		},
 
 		refresh() {
-			get( this, "routing" ).refresh();
+			this.router.refresh();
 		},
 
 		focus() {

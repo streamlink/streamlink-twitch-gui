@@ -6,7 +6,7 @@ import { triggerKeyDownEvent } from "event-utils";
 import { render, click, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 
 import DropDownComponent from "ui/components/form/drop-down/component";
 import DropDownSelectionComponent from "ui/components/form/drop-down-selection/component";
@@ -40,7 +40,7 @@ module( "ui/components/form/drop-down", function( hooks ) {
 
 
 	test( "DOM nodes, selection and labels", async function( assert ) {
-		const content = new EmberNativeArray([{
+		const content = A([{
 			label: "foo",
 			anotherLabel: "FOO"
 		}, {
@@ -162,7 +162,7 @@ module( "ui/components/form/drop-down", function( hooks ) {
 
 
 	test( "Expand upwards", async function( assert ) {
-		const content = new EmberNativeArray([{
+		const content = A([{
 			id: 1,
 			label: "foo"
 		}, {

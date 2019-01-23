@@ -9,7 +9,8 @@ import "./styles.less";
 
 export default EmbeddedHtmlLinksComponent.extend({
 	nwjs: service(),
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 
 	layout,
 
@@ -42,7 +43,7 @@ export default EmbeddedHtmlLinksComponent.extend({
 
 	actions: {
 		openBrowser( url ) {
-			get( this, "routing" ).openBrowserOrTransitionToChannel( url );
+			this.router.openBrowserOrTransitionToChannel( url );
 		}
 	}
 });

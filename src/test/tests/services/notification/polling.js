@@ -1,7 +1,10 @@
+// TODO: properly rewrite tests using ember-qunit and sinon
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
 import { FakeI18nService } from "i18n-utils";
+import sinon from "sinon";
+
 import { get, set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { run } from "@ember/runloop";
@@ -284,85 +287,83 @@ test( "Polling", async assert => {
 
 test( "Polling results", async assert => {
 
-	assert.expect( 35 );
-
 	const allStreams = [ { id: 1 }, { id: 2 } ];
-	let newStreams, filteredStreams, expectedErr;
+	const newStreams = [ ...allStreams ];
+	const filteredStreams = [ ...newStreams ];
+	let error;
+
+	const logErrorSpy = sinon.spy();
+	const cacheFillStub = sinon.stub().callsFake( () => newStreams );
+	const filterStreamsStub = sinon.stub().callsFake( async () => filteredStreams );
+	const onStreamsAllSpy = sinon.spy();
+	const onStreamsNewSpy = sinon.spy();
+	const onStreamsFilteredSpy = sinon.spy();
 
 	const { default: NotificationPollingMixin } = notificationPollingMixinInjector({
 		config,
 		"./logger": {
-			logError( err ) {
-				assert.strictEqual( err.message, expectedErr, "Logs the caught error" );
-			}
+			logError: logErrorSpy
 		},
 		"./cache": {
-			cacheFill( streams, firstRun ) {
-				assert.step( "cacheFill" );
-				assert.strictEqual( streams, allStreams, "Passes all streams to cacheFill" );
-				assert.strictEqual( firstRun, true, "Passes the firstRun param to cacheFill" );
-				newStreams = [ ...streams ];
-				return newStreams;
-			}
+			cacheFill: cacheFillStub
 		}
 	});
 
 	owner.register( "service:notification", Service.extend( NotificationPollingMixin, {
-		async _filterStreams( streams ) {
-			assert.step( "filterStreams" );
-			assert.strictEqual( streams, newStreams, "Passes new streams to filterStreams" );
-			filteredStreams = [ ...streams ];
-			return filteredStreams;
-		},
-		_onAllStreams: on( "streams-all", function( streams ) {
-			assert.strictEqual( streams, allStreams, "Triggers streams-all" );
-			assert.step( "streams-all" );
-		}),
-		_onNewStreams: on( "streams-new", function( streams ) {
-			assert.strictEqual( streams, newStreams, "Triggers streams-new" );
-			assert.step( "streams-new" );
-		}),
-		_onFilteredStreams: on( "streams-filtered", function( streams ) {
-			assert.strictEqual( streams, filteredStreams, "Triggers streams-filtered" );
-			assert.step( "streams-filtered" );
-		})
+		_filterStreams: filterStreamsStub,
+		_onAllStreams: on( "streams-all", onStreamsAllSpy ),
+		_onNewStreams: on( "streams-new", onStreamsNewSpy ),
+		_onFilteredStreams: on( "streams-filtered", onStreamsFilteredSpy )
 	}) );
 
 	const service = owner.lookup( "service:notification" );
 
 	// success
+
 	await service._pollResult( allStreams, true );
-	assert.checkSteps(
-		[ "streams-all", "cacheFill", "streams-new", "filterStreams", "streams-filtered" ],
-		"Has the correct method and event order"
+	assert.ok( onStreamsAllSpy.calledOnceWithExactly( allStreams ), "Triggers streams-all" );
+	assert.ok( cacheFillStub.calledOnceWithExactly( allStreams, true ), "Calls cacheFill" );
+	assert.ok( onStreamsNewSpy.calledOnceWithExactly( newStreams ), "Triggers streams-new" );
+	assert.ok(
+		filterStreamsStub.calledOnceWithExactly( newStreams ),
+		"Passes new streams to filterStreams"
+	);
+	assert.ok(
+		onStreamsFilteredSpy.calledOnceWithExactly( filteredStreams ),
+		"Triggers streams-filtered"
+	);
+	sinon.assert.callOrder(
+		onStreamsAllSpy,
+		cacheFillStub,
+		onStreamsNewSpy,
+		filterStreamsStub,
+		onStreamsFilteredSpy
 	);
 
 	// catch all exceptions thrown by event listeners
-	service.reopen({
-		_onFilteredStreamsFailure: on( "streams-filtered", () => {
-			throw new Error( "streams-filtered" );
-		})
-	});
-	expectedErr = "streams-filtered";
-	await service._pollResult( allStreams, true );
 
+	error = new Error( "streams-filtered" );
 	service.reopen({
-		_onNewStreamsFailure: on( "streams-new", () => {
-			throw new Error( "streams-new" );
-		})
+		_onFilteredStreamsFailure: on( "streams-filtered", () => { throw error; } )
 	});
-	expectedErr = "streams-new";
 	await service._pollResult( allStreams, true );
+	assert.ok( logErrorSpy.calledOnceWith( error ), "Logs the streams-filtered error" );
+	logErrorSpy.resetHistory();
 
+	error = new Error( "streams-new" );
 	service.reopen({
-		_onAllStreamsFailure: on( "streams-all", () => {
-			throw new Error( "streams-all" );
-		})
+		_onNewStreamsFailure: on( "streams-new", () => { throw error; } )
 	});
-	expectedErr = "streams-all";
 	await service._pollResult( allStreams, true );
+	assert.ok( logErrorSpy.calledOnceWith( error ), "Logs the streams-new error" );
+	logErrorSpy.resetHistory();
 
-	assert.clearSteps();
+	error = new Error( "streams-all" );
+	service.reopen({
+		_onAllStreamsFailure: on( "streams-all", () => { throw error; } )
+	});
+	await service._pollResult( allStreams, true );
+	assert.ok( logErrorSpy.calledOnceWith( error ), "Logs the streams-all error" );
 
 });
 

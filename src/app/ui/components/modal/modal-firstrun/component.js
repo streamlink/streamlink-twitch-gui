@@ -6,7 +6,8 @@ import layout from "./template.hbs";
 
 
 export default ModalDialogComponent.extend({
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 	versioncheck: service(),
 
 	layout,
@@ -18,7 +19,7 @@ export default ModalDialogComponent.extend({
 
 	actions: {
 		settings() {
-			get( this, "routing" ).transitionTo( "settings" );
+			this.router.transitionTo( "settings" );
 			this.send( "start" );
 		},
 

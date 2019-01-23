@@ -18,7 +18,8 @@ import { setMinimized, setVisibility, setFocused } from "nwjs/Window";
 export default Mixin.create( Evented, {
 	chat: service(),
 	i18n: service(),
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 	settings: service(),
 	streaming: service(),
 
@@ -114,7 +115,7 @@ export default Mixin.create( Evented, {
 		}
 
 		if ( action === ATTR_NOTIFY_CLICK_FOLLOWED ) {
-			get( this, "routing" ).transitionTo( "user.followedStreams" );
+			this.router.transitionTo( "user.followedStreams" );
 
 		} else if ( action === ATTR_NOTIFY_CLICK_STREAM ) {
 			const streaming = get( this, "streaming" );

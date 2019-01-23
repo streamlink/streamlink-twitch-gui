@@ -26,7 +26,7 @@ module( "ui/components/link/embedded-links", function( hooks ) {
 
 	hooks.beforeEach(function() {
 		this.owner.register( "service:nwjs", Service.extend() );
-		this.owner.register( "service:-routing", Service.extend() );
+		this.owner.register( "service:router", Service.extend() );
 	});
 
 

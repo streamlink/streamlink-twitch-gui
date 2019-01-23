@@ -7,7 +7,8 @@ import "./styles.less";
 
 
 export default ListItemComponent.extend({
-	routing: service( "-routing" ),
+	/** @type {RouterService} */
+	router: service(),
 
 	layout,
 
@@ -24,6 +25,6 @@ export default ListItemComponent.extend({
 
 	click() {
 		let game = get( this, "game.name" );
-		get( this, "routing" ).transitionTo( "games.game", game );
+		this.router.transitionTo( "games.game", game );
 	}
 });

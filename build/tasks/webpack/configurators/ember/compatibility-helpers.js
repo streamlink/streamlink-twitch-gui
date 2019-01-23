@@ -1,6 +1,6 @@
 const { resolve: r } = require( "path" );
 const { pRoot, pDependencies, pCacheBabel } = require( "../../paths" );
-const { "ember-source": emberVersion } = require( "../../../../../package.json" ).dependencies;
+const { version: emberVersion } = require( "ember-source/package.json" );
 
 const { gte, satisfies } = require( "semver" );
 const webpack = require( "webpack" );

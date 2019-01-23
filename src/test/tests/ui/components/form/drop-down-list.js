@@ -5,7 +5,7 @@ import { render, clearRender, click } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
 
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 
 import DropDownListComponent from "ui/components/form/drop-down-list/component";
 import { helper as IsEqualHelper } from "ui/components/helper/is-equal";
@@ -46,7 +46,7 @@ module( "ui/components/form/drop-down-list", function( hooks ) {
 
 
 	test( "Expand and collapse", async function( assert ) {
-		const content = new EmberNativeArray([{
+		const content = A([{
 			id: 1,
 			label: "foo"
 		}, {

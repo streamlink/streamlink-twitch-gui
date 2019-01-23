@@ -85,9 +85,5 @@ export default Route.extend({
 				};
 			});
 		set( controller, "model", model );
-	},
-
-	deactivate() {
-		set( this, "router.errorTransition", null );
 	}
 });

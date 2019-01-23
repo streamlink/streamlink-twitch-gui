@@ -5,7 +5,7 @@ import { FakeI18nService, FakeTHelper } from "i18n-utils";
 import { render, clearRender, click, triggerEvent } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 import Component from "@ember/component";
 import { run } from "@ember/runloop";
 
@@ -246,7 +246,7 @@ module( "ui/components/list/infinite-scroll", function( hooks ) {
 
 
 	test( "Call listener on content reduction", async function( assert ) {
-		const content = new EmberNativeArray([ 1, 2, 3 ]);
+		const content = A([ 1, 2, 3 ]);
 		let called = false;
 
 		this.setProperties({

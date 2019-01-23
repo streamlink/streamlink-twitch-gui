@@ -52,7 +52,7 @@ module( "services/notification/dispatch", {
 			openChat: this.openChatStub
 		}) );
 		this.owner.register( "service:i18n", FakeI18nService );
-		this.owner.register( "service:-routing", Service.extend({
+		this.owner.register( "service:router", Service.extend({
 			transitionTo: this.transitionToSpy
 		}) );
 		this.owner.register( "service:settings", Service.extend({

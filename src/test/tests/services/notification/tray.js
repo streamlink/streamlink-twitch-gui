@@ -2,7 +2,7 @@ import { module, test } from "qunit";
 import { setupTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
 
-import { A as EmberNativeArray } from "@ember/array";
+import { A } from "@ember/array";
 import { set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
@@ -18,7 +18,7 @@ module( "services/notification/tray", function( hooks ) {
 	});
 
 	hooks.beforeEach(function() {
-		this.items = new EmberNativeArray();
+		this.items = A();
 		this.owner.register( "service:nwjs", Service.extend({
 			addTrayMenuItem: item => this.items.unshiftObject( item ),
 			removeTrayMenuItem: item => this.items.removeObject( item )
