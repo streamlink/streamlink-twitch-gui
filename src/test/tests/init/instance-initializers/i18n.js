@@ -7,7 +7,7 @@ import I18nInstanceInitializer from "init/instance-initializers/i18n";
 import { locales as localesConfig } from "config";
 
 
-module( "init/instance-initializer/i18n", {
+module( "init/instance-initializers/i18n", {
 	beforeEach() {
 		this.addTranslationsSpy = sinon.spy();
 

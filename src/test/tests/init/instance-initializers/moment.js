@@ -8,7 +8,7 @@ import momentInstanceInitializerInjector
 	from "inject-loader?moment!init/instance-initializers/moment";
 
 
-module( "init/instance-initializer/moment", {
+module( "init/instance-initializers/moment", {
 	beforeEach() {
 		this.momentLocaleSpy = sinon.spy();
 
