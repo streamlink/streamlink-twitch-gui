@@ -59,7 +59,7 @@ let isMiddleClickScrolling = false;
  ************************************************/
 let queue = [];
 let pending = false;
-let lastScroll = +new Date();
+let lastScroll = window.performance.now();
 
 /**
  * Pushes scroll actions to the scrolling queue.
@@ -68,7 +68,7 @@ function scrollArray( elem, left, top ) {
 	directionCheck( left, top );
 
 	if ( options.accelerationMax !== 1 ) {
-		const now = +new Date();
+		const now = window.performance.now();
 		const elapsed = now - lastScroll;
 		if ( elapsed < options.accelerationDelta ) {
 			let factor = ( 1 + ( 30 / elapsed ) ) / 2;
@@ -78,7 +78,7 @@ function scrollArray( elem, left, top ) {
 				top  *= factor;
 			}
 		}
-		lastScroll = +new Date();
+		lastScroll = window.performance.now();
 	}
 
 	// push a scroll command
@@ -87,7 +87,7 @@ function scrollArray( elem, left, top ) {
 		y    : top,
 		lastX: left < 0 ? 0.99 : -0.99,
 		lastY: top  < 0 ? 0.99 : -0.99,
-		start: +new Date()
+		start: window.performance.now()
 	});
 
 	// don't act if there's a pending queue
@@ -97,8 +97,7 @@ function scrollArray( elem, left, top ) {
 
 	const scrollWindow = elem === document.body;
 
-	function step() {
-		const now = +new Date();
+	function step( now ) {
 		let scrollX = 0;
 		let scrollY = 0;
 
@@ -184,6 +183,8 @@ function onMousewheel( event ) {
 		return true;
 	}
 
+	event.preventDefault();
+
 	let deltaX = event.wheelDeltaX || 0;
 	let deltaY = event.wheelDeltaY || 0;
 
@@ -203,7 +204,6 @@ function onMousewheel( event ) {
 	}
 
 	scrollArray( overflowing, -deltaX, -deltaY );
-	event.preventDefault();
 }
 
 /**
@@ -334,11 +334,10 @@ function onMousedown( e ) {
 	let speedY = 0;
 
 	// animation loop
-	let last = +new Date();
+	let last = window.performance.now();
 	let finished = false;
 
-	function step( time ) {
-		const now = time || +new Date();
+	function step( now ) {
 		const elapsed = now - last;
 		elem.scrollLeft += ( speedX * elapsed ) >> 0;
 		elem.scrollTop  += ( speedY * elapsed ) >> 0;
@@ -487,19 +486,32 @@ function pulse( x ) {
 }
 
 
+/***********************************************
+ * Export
+ ***********************************************/
+
+const listeners = {
+	"mousewheel": onMousewheel,
+	"mousedown": onMousedown,
+	"keydown": onKeydown
+};
+
+
 export function enable() {
 	if ( enabled ) { return; }
-	window.addEventListener( "mousewheel", onMousewheel, false );
-	window.addEventListener( "mousedown", onMousedown, false );
-	window.addEventListener( "keydown", onKeydown, false );
+	for ( const [ event, listener ] of Object.entries( listeners ) ) {
+		// mousewheel events on the window/document/body are passive by default since Chromium 65
+		// and the default action can't be prevented
+		// https://bugs.chromium.org/p/chromium/issues/detail?id=889846#c13
+		window.addEventListener( event, listener, { passive: false } );
+	}
 	enabled = true;
 }
 
 export function disable() {
 	if ( !enabled ) { return; }
-	window.removeEventListener( "mousewheel", onMousewheel, false );
-	window.removeEventListener( "mousedown", onMousedown, false );
-	window.removeEventListener( "keydown", onKeydown, false );
-	cache = {};
+	for ( const [ event, listener ] of Object.entries( listeners ) ) {
+		window.removeEventListener( event, listener );
+	}
 	enabled = false;
 }
