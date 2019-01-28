@@ -47,7 +47,9 @@ module.exports = function( config, isProd ) {
 					features: {}
 				} ],
 				require( "babel6-plugin-strip-heimdall" ),
-				[ require( "babel-plugin-filter-imports" ), filteredImports ],
+				[ require( "babel-plugin-filter-imports" ), {
+					imports: filteredImports
+				} ],
 				[ require( "../../plugins/babel-plugin-remove-imports" ), filteredImports ],
 				[ require( "@babel/plugin-transform-block-scoping" ).default, {
 					throwIfClosureRequired: true
