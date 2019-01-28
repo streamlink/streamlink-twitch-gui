@@ -17,7 +17,7 @@ module.exports = {
 			options: {
 				presets: [],
 				plugins: [
-					"babel-plugin-transform-es2015-modules-commonjs"
+					"@babel/plugin-transform-modules-commonjs"
 				],
 				cacheDirectory: pCacheBabel
 			}
@@ -57,7 +57,7 @@ module.exports = {
 				presets: [],
 				plugins: [
 					// the inject-loader used by some tests requires es2015 modules to be transpiled
-					"babel-plugin-transform-es2015-modules-commonjs",
+					"@babel/plugin-transform-modules-commonjs",
 					// code instrumentation via babel-plugin-istanbul
 					[ "babel-plugin-istanbul", {
 						exclude: [

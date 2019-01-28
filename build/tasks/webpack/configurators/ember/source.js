@@ -36,9 +36,11 @@ module.exports = function( config, isProd ) {
 			plugins: [
 				// translate @ember imports (requires imports to be ignored in webpack - see below)
 				require( "babel-plugin-ember-modules-api-polyfill" ),
-				// transform class properties and decorators
-				require( "babel-plugin-transform-decorators-legacy" ).default,
-				require( "babel-plugin-transform-class-properties" )
+				// transform decorators
+				[ require( "@babel/plugin-proposal-decorators" ).default, {
+					decoratorsBeforeExport: true
+				} ],
+				require( "@babel/plugin-proposal-class-properties" ).default
 			]
 		}
 	});
