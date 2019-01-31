@@ -1,5 +1,6 @@
 const { resolve: r } = require( "path" );
-const { pRoot, pDependencies, pCacheBabel } = require( "../../paths" );
+const { pRoot, pDependencies } = require( "../../paths" );
+const { buildBabelConfig } = require( "../../utils" );
 
 const webpack = require( "webpack" );
 
@@ -30,19 +31,17 @@ module.exports = function( config, isProd ) {
 			}
 		],
 		loader: "babel-loader",
-		options: {
-			cacheDirectory: pCacheBabel,
-			presets: [],
+		options: buildBabelConfig({
 			plugins: [
 				// translate @ember imports (requires imports to be ignored in webpack - see below)
-				require( "babel-plugin-ember-modules-api-polyfill" ),
+				"babel-plugin-ember-modules-api-polyfill",
 				// transform decorators
-				[ require( "@babel/plugin-proposal-decorators" ).default, {
+				[ "@babel/plugin-proposal-decorators", {
 					decoratorsBeforeExport: true
 				} ],
-				require( "@babel/plugin-proposal-class-properties" ).default
+				"@babel/plugin-proposal-class-properties"
 			]
-		}
+		})
 	});
 
 	config.plugins.push(

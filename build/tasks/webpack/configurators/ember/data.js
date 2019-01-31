@@ -1,5 +1,6 @@
 const { resolve: r } = require( "path" );
-const { pRoot, pDependencies, pCacheBabel } = require( "../../paths" );
+const { pRoot, pDependencies } = require( "../../paths" );
+const { buildBabelConfig } = require( "../../utils" );
 
 
 /**
@@ -32,29 +33,32 @@ module.exports = function( config, isProd ) {
 		]
 	};
 
+	// these babel plugins have to be imported here
+	const babelPluginStripHeimdall = require( "babel6-plugin-strip-heimdall" );
+	const babelPluginStripClassCallcheck = require( "babel6-plugin-strip-class-callcheck" );
+	const babelPluginRemoveImports = require( "../../plugins/babel-plugin-remove-imports" );
+
 	config.module.rules.push({
 		test: /\.js$/,
 		include: r( pDependencies, "ember-data" ),
 		loader: "babel-loader",
-		options: {
-			cacheDirectory: pCacheBabel,
-			presets: [],
+		options: buildBabelConfig({
 			plugins: [
-				[ require( "babel-plugin-feature-flags" ), {
+				[ "babel-plugin-feature-flags", {
 					import: {
 						module: "ember-data/-private/features"
 					},
 					features: {}
 				} ],
-				require( "babel6-plugin-strip-heimdall" ),
-				[ require( "babel-plugin-filter-imports" ), {
+				babelPluginStripHeimdall,
+				[ "babel-plugin-filter-imports", {
 					imports: filteredImports
 				} ],
-				[ require( "../../plugins/babel-plugin-remove-imports" ), filteredImports ],
-				[ require( "@babel/plugin-transform-block-scoping" ).default, {
+				[ babelPluginRemoveImports, filteredImports ],
+				[ "@babel/plugin-transform-block-scoping", {
 					throwIfClosureRequired: true
 				} ],
-				[ require( "babel-plugin-debug-macros" ), {
+				[ "babel-plugin-debug-macros", {
 					flags: [
 						{
 							source: "@glimmer/env",
@@ -73,13 +77,13 @@ module.exports = function( config, isProd ) {
 						assertPredicateIndex: 1
 					}
 				} ],
-				[ require( "babel-plugin-ember-modules-api-polyfill" ), {
+				[ "babel-plugin-ember-modules-api-polyfill", {
 					blacklist: {
 						"@ember/debug": [ "assert", "deprecate", "warn" ]
 					}
 				} ],
-				require( "babel6-plugin-strip-class-callcheck" )
+				babelPluginStripClassCallcheck
 			]
-		}
+		})
 	});
 };

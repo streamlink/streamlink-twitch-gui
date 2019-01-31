@@ -72,6 +72,7 @@
 		"less-loader": "4.1.0",
 		"load-grunt-config": "0.19.2",
 		"loader-utils": "1.1.0",
+		"lodash": "4.17.11",
 		"mini-css-extract-plugin": "0.4.0",
 		"nw-builder": "3.5.7",
 		"optimize-css-assets-webpack-plugin": "4.0.1",

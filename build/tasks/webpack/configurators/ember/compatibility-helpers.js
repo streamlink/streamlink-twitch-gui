@@ -1,5 +1,6 @@
 const { resolve: r } = require( "path" );
-const { pRoot, pDependencies, pCacheBabel } = require( "../../paths" );
+const { pRoot, pDependencies } = require( "../../paths" );
+const { buildBabelConfig } = require( "../../utils" );
 const { version: emberVersion } = require( "ember-source/package.json" );
 
 const { gte, satisfies } = require( "semver" );
@@ -18,14 +19,12 @@ module.exports = function( config ) {
 			r( pDependencies, "ember-data" )
 		],
 		loader: "babel-loader",
-		options: {
-			cacheDirectory: pCacheBabel,
-			presets: [],
+		options: buildBabelConfig({
 			plugins: [
-				[ require( "ember-compatibility-helpers/comparision-plugin" ), {
+				[ "ember-compatibility-helpers/comparision-plugin", {
 					emberVersion
 				} ],
-				[ require( "babel-plugin-debug-macros" ), {
+				[ "babel-plugin-debug-macros", {
 					flags: [{
 						source: "ember-compatibility-helpers",
 						flags: {
@@ -56,7 +55,7 @@ module.exports = function( config ) {
 					}
 				} ]
 			]
-		}
+		})
 	});
 
 	config.plugins.push(

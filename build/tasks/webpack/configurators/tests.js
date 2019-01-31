@@ -1,5 +1,6 @@
 const { resolve: r } = require( "path" );
-const { pTest, pTestFixtures, pDependencies, pCacheBabel } = require( "../paths" );
+const { pTest, pTestFixtures, pDependencies } = require( "../paths" );
+const { buildBabelConfig } = require( "../utils" );
 
 const webpack = require( "webpack" );
 
@@ -14,13 +15,11 @@ module.exports = {
 			test: /\.js$/,
 			exclude: pDependencies,
 			loader: "babel-loader",
-			options: {
-				presets: [],
+			options: buildBabelConfig({
 				plugins: [
 					"@babel/plugin-transform-modules-commonjs"
-				],
-				cacheDirectory: pCacheBabel
-			}
+				]
+			})
 		});
 
 		// ignore Windows binary dependencies in tests
@@ -53,8 +52,7 @@ module.exports = {
 			test: /\.js$/,
 			exclude: pDependencies,
 			loader: "babel-loader",
-			options: {
-				presets: [],
+			options: buildBabelConfig({
 				plugins: [
 					// the inject-loader used by some tests requires es2015 modules to be transpiled
 					"@babel/plugin-transform-modules-commonjs",
@@ -64,9 +62,8 @@ module.exports = {
 							"**/src/web_modules/**"
 						]
 					} ]
-				],
-				cacheDirectory: pCacheBabel
-			}
+				]
+			})
 		});
 	}
 };

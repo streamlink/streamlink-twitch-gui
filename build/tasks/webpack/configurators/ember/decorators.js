@@ -1,5 +1,6 @@
 const { resolve: r } = require( "path" );
-const { pDependencies, pCacheBabel } = require( "../../paths" );
+const { pDependencies } = require( "../../paths" );
+const { buildBabelConfig } = require( "../../utils" );
 
 const webpack = require( "webpack" );
 
@@ -9,11 +10,9 @@ module.exports = function( config, isProd ) {
 		test: /\.js$/,
 		include: r( pDependencies, "@ember-decorators" ),
 		loader: "babel-loader",
-		options: {
-			cacheDirectory: pCacheBabel,
-			presets: [],
+		options: buildBabelConfig({
 			plugins: [
-				[ require( "babel-plugin-debug-macros" ), {
+				[ "babel-plugin-debug-macros", {
 					flags: [
 						{
 							source: "@glimmer/env",
@@ -39,13 +38,13 @@ module.exports = function( config, isProd ) {
 						assertPredicateIndex: 1
 					}
 				} ],
-				[ require( "babel-plugin-ember-modules-api-polyfill" ), {
+				[ "babel-plugin-ember-modules-api-polyfill", {
 					blacklist: {
 						"@ember/debug": [ "assert", "deprecate", "warn" ]
 					}
 				} ]
 			]
-		}
+		})
 	});
 
 	config.plugins.push(
