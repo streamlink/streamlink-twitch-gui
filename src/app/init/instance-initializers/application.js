@@ -15,6 +15,7 @@ export default {
 
 	initialize( application ) {
 		const document = application.lookup( "service:-document" );
+		const RouterService = application.lookup( "service:router" );
 		const SettingsService = application.lookup( "service:settings" );
 		const HotkeyService = application.lookup( "service:hotkey" );
 		const rootElement = get( application, "rootElement" );
@@ -43,7 +44,21 @@ export default {
 			}
 		});
 
+		function history( e, go ) {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			RouterService.history( go );
+		}
+
 		$( rootElement )
+			.on( "mouseup", e => {
+				if ( e.buttons & 0b01000 ) {
+					return history( e, -1 );
+				}
+				if ( e.buttons & 0b10000 ) {
+					return history( e, +1 );
+				}
+			})
 			.on( "keyup", e => HotkeyService.trigger( e ) )
 			.on( "dragstart dragover dragend dragenter dragleave dragexit drag drop", e => {
 				e.preventDefault();

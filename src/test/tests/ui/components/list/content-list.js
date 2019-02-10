@@ -6,7 +6,7 @@ import hbs from "htmlbars-inline-precompile";
 
 import { A } from "@ember/array";
 import Component from "@ember/component";
-import { run, scheduleOnce } from "@ember/runloop";
+import { run } from "@ember/runloop";
 
 import ContentListComponent from "ui/components/list/content-list/component";
 import { helper as GetIndexHelper } from "ui/components/helper/get-index";
@@ -114,7 +114,8 @@ module( "ui/components/list/content-list", function( hooks ) {
 		]);
 		const allResolvedAndRendered = async () => {
 			await Promise.all( content.mapBy( "data" ) );
-			return new Promise( resolve => scheduleOnce( "afterRender", resolve ) );
+			// trigger a runloop
+			run( () => {} );
 		};
 
 		this.set( "content", content );

@@ -13,7 +13,6 @@ html {
 body {
 	position: relative;
 	margin: 0;
-	overflow: hidden;
 	font-size: inherit;
 	font-family: @font-name;
 	cursor: default;
@@ -27,6 +26,7 @@ body {
 	&.horizontal {
 		display: flex;
 		flex-flow: row nowrap;
+		overflow: hidden;
 	}
 	&.vertical {
 		display: flex;
