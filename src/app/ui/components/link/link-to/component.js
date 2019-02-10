@@ -24,6 +24,30 @@ export default LinkComponent.extend({
 		return this._active ? this.activeClass : false;
 	}),
 
+	/**
+	 * Checks whether the link is active because of an active child route.
+	 * The `current-when` property which overrides the active state is not supported, since it's
+	 * not being used in this project (at this present time).
+	 * @returns {boolean}
+	 */
+	_isActiveAncestor() {
+		const currentState = this._routing.currentState;
+		/* istanbul ignore next */
+		if ( !currentState ) {
+			return false;
+		}
+
+		/** @type {{name: string}[]} */
+		const { routeInfos } = currentState.routerJsState;
+		const routeInfosAncestors = routeInfos.slice( 0, -1 );
+		const routeInfosLeafName = routeInfos[ routeInfos.length - 1 ].name;
+		const routeName = this.qualifiedRouteName;
+
+		return routeInfosLeafName !== routeName
+		    && routeInfosLeafName !== `${routeName}.index`
+		    && routeInfosAncestors.find( ({ name }) => name === routeName );
+	},
+
 	_invoke( e ) {
 		// prevent new windows from being opened
 		if ( e.buttons & 6 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey ) {
@@ -31,7 +55,9 @@ export default LinkComponent.extend({
 			e.stopImmediatePropagation();
 		}
 
-		if ( !this._active ) {
+		// perform default action if link is inactive
+		// or if it is active, but only because of an active child route
+		if ( !this._active || this._isActiveAncestor() ) {
 			return this._super( ...arguments );
 		}
 
