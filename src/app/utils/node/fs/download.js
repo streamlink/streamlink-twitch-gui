@@ -23,8 +23,8 @@ async function downloadPromise( url, path, time ) {
 
 		await new Promise( ( resolve, reject ) => {
 			writeStream.once( "error", reject );
+			writeStream.once( "finish", resolve );
 
-			incomingMessage.once( "end", resolve );
 			incomingMessage.once( "error", reject );
 			incomingMessage.once( "unpipe", () => reject( new Error( "I/O error" ) ) );
 
@@ -39,6 +39,7 @@ async function downloadPromise( url, path, time ) {
 		if ( timeout ) {
 			clearTimeout( timeout );
 		}
+		/* istanbul ignore else */
 		if ( !incomingMessage.destroyed ) {
 			incomingMessage.destroy();
 		}

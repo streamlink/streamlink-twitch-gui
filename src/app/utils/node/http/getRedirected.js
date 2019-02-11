@@ -83,6 +83,11 @@ async function doRequest( url, num, max ) {
 }
 
 
+/**
+ * @param {string} url
+ * @param {number?} max
+ * @returns {Promise<ReadableStream>}
+ */
 function getRedirected( url, max = MAX_REDIRECTS ) {
 	return doRequest( url, 1, max );
 }

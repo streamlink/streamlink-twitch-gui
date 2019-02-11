@@ -14,6 +14,10 @@ module( "utils/node/fs/download", {
 		this.writable = null;
 
 		class ReadStream extends Readable {
+			constructor() {
+				super( ...arguments );
+				this.on( "end", self.readEndSpy );
+			}
 			_read() {}
 			_destroy( err, callback ) {
 				callback();
@@ -22,6 +26,10 @@ module( "utils/node/fs/download", {
 		}
 
 		class WriteStream extends Writable {
+			constructor() {
+				super( ...arguments );
+				this.on( "finish", self.writeFinishSpy );
+			}
 			_write( chunk, encoding, callback ) {
 				callback();
 			}
@@ -43,11 +51,13 @@ module( "utils/node/fs/download", {
 			this.readable = new ReadStream( ...args )
 		);
 		this.readableDestroySpy = sinon.spy( ReadStream.prototype, "_destroy" );
+		this.readEndSpy = sinon.spy();
 
 		this.writableStub = sinon.stub().callsFake( ( ...args ) =>
 			this.writable = new WriteStream( ...args )
 		);
 		this.writableWriteSpy = sinon.spy( WriteStream.prototype, "_write" );
+		this.writeFinishSpy = sinon.spy();
 
 		this.subject = () => downloadInjector({
 			path,
@@ -288,6 +298,10 @@ test( "Download", async function( assert ) {
 
 	await promise;
 
+	assert.ok(
+		this.readEndSpy.calledBefore( this.writeFinishSpy ),
+		"Read stream ends before write stream finishes"
+	);
 	assert.propEqual(
 		this.writableWriteSpy.args.map( args => String( args[0] ) ),
 		[ "foo", "bar" ],
