@@ -288,7 +288,7 @@ export default Service.extend({
 	},
 
 	refreshStream( stream ) {
-		if ( get( stream, "isDeleted" ) ) {
+		if ( stream.isDestroyed || stream.isDeleted ) {
 			return;
 		}
 
