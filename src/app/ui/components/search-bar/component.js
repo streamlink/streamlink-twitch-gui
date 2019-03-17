@@ -105,7 +105,7 @@ export default Component.extend( HotkeyMixin, {
 		set( this, "showDropdown", false );
 		this.addRecord( query, filter );
 
-		this.router.transitionTo( "search", [], { filter, query } );
+		this.router.transitionTo( "search", { queryParams: { filter, query } } );
 	},
 
 
