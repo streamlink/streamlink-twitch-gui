@@ -82,6 +82,7 @@ streaming:
         notes: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
         executable:
             python: Python executable
+            streamlinkw: Streamlink executable
             livestreamer-standalone: Livestreamer executable
         python-script:
             streamlink: Streamlink python script

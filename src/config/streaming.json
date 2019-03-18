@@ -69,6 +69,23 @@
 				]
 			}
 		},
+		"streamlinkw": {
+			"type": "streamlink",
+			"flavor": "windows",
+			"name": "Streamlink",
+			"label": "Streamlink (Windows)",
+			"exec": {
+				"win32": "streamlinkw.exe",
+				"darwin": false,
+				"linux": false
+			},
+			"fallback": {
+				"win32": [
+					"%PROGRAMFILES%\\Streamlink\\bin",
+					"%PROGRAMFILES(X86)%\\Streamlink\\bin"
+				]
+			}
+		},
 		"livestreamer": {
 			"type": "livestreamer",
 			"flavor": "default",
