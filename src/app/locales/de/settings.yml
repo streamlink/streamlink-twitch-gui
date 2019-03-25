@@ -121,6 +121,10 @@ streaming:
         title: Twitch.tv Login
         description: Erlaube {{provider}}, den Twitch.tv OAuth Zugangsschlüssel zu benutzen, während du eingeloggt bist.
         checkbox: Authentifizieren beim Starten des Streams
+    disable-ads:
+        title: Werbung
+        description: Lässt den Stream einfrieren während der Kanal Werbung zeigt. Bitte lies das Wiki für weitere Informationen.
+        checkbox: Eingebettete Streamwerbung überspringen
     retry-open:
         title: Startversuche
         description: Anzahl der Stream Startversuche.

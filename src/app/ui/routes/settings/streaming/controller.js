@@ -7,6 +7,7 @@ import {
 	ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH as inputPassthrough
 } from "data/models/settings/streaming/fragment";
 import { platform } from "utils/node/platform";
+import isStreamlinkMixin from "../-mixins/is-streamlink";
 
 
 const { providers } = streamingConfig;
@@ -20,7 +21,7 @@ function settingsAttrMeta( attr, prop ) {
 }
 
 
-export default Controller.extend({
+export default Controller.extend( isStreamlinkMixin, {
 	platform,
 	providers,
 	contentStreamingPlayerInput,

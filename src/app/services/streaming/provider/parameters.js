@@ -72,6 +72,13 @@ export const parameters = [
 		"stream.session.access_token"
 	),
 	new Parameter(
+		"--twitch-disable-ads",
+		[
+			"stream.isStreamlink",
+			"stream.settings.streaming.disable_ads"
+		]
+	),
+	new Parameter(
 		"--hls-live-edge",
 		"stream.settings.advanced",
 		"stream.settings.streaming.hls_live_edge"
