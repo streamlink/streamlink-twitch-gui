@@ -1,3 +1,6 @@
+import { HTML as decodeHTML } from "entities/lib/decode";
+
+
 const { isArray } = Array;
 
 
@@ -19,10 +22,23 @@ const { isArray } = Array;
 export default class NotificationData {
 	constructor({ title, message, icon, click, settings }) {
 		this.title = title;
-		this.message = message;
+		this.message = this.decodeMessage( message );
 		this.icon = icon;
 		this.click = click;
 		this.settings = settings;
+	}
+
+	/**
+	 * @param {(string|NotificationDataMessageList[])} message
+	 * @returns {(string|NotificationDataMessageList[])}
+	 */
+	decodeMessage( message ) {
+		return isArray( message )
+			? message.map( ({ title, message }) => ({
+				title,
+				message: decodeHTML( message )
+			}) )
+			: decodeHTML( message );
 	}
 
 	/**
