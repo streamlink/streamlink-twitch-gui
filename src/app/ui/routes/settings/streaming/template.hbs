@@ -136,6 +136,19 @@
 {{/settings-row}}
 
 {{#settings-row
+	(t "settings.streaming.disable-ads.title")
+	(t "settings.streaming.disable-ads.description")
+	icon="fa-money"
+	documentation="--twitch-disable-ads"
+}}
+	{{check-box
+		(t "settings.streaming.disable-ads.checkbox")
+		checked=model.streaming.disable_ads
+		disabled=(bool-not isStreamlink)
+	}}
+{{/settings-row}}
+
+{{#settings-row
 	(t "settings.streaming.retry-open.title")
 	(t "settings.streaming.retry-open.description")
 	icon="fa-rocket"

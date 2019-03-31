@@ -122,6 +122,10 @@ streaming:
         title: Twitch.tv login
         description: Allow {{provider}} to use the Twitch.tv oauth token while being logged in.
         checkbox: Authenticate when launching a stream
+    disable-ads:
+        title: Advertisements
+        description: This will let the stream freeze while the channel is showing advertisements. See the wiki for more information.
+        checkbox: Skip advertisements embedded into streams
     retry-open:
         title: Launch attempts
         description: Number of stream launch attempts.
