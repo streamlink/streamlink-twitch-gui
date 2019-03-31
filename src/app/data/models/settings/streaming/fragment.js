@@ -3,11 +3,14 @@ import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
 import { fragment } from "ember-data-model-fragments/attributes";
 import { streaming as streamingConfig } from "config";
+import { isWin } from "utils/node/platform";
 
 
 const { equal } = computed;
 const { providers } = streamingConfig;
 const { MAX_SAFE_INTEGER: MAX } = Number;
+
+const defaultProvider = isWin ? "streamlinkw" : "streamlink";
 
 
 export const ATTR_STREAMING_PLAYER_INPUT_STDIN = "stdin";
@@ -17,7 +20,7 @@ export const ATTR_STREAMING_PLAYER_INPUT_PASSTHROUGH = "passthrough";
 
 
 export default Fragment.extend({
-	provider: attr( "string", { defaultValue: "streamlink" } ),
+	provider: attr( "string", { defaultValue: defaultProvider } ),
 	providers: fragment( "settingsStreamingProviders", { defaultValue: {} } ),
 
 	quality: attr( "string", { defaultValue: "source" } ),
