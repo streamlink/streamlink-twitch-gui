@@ -12,7 +12,7 @@
 		"timeout": 10000,
 		"providers": {
 			"streamlink": {
-				"version": "0.2.0",
+				"version": "1.1.0",
 				"regexp": "^(?:python\\d*-)?streamlink(?:\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|[\\s+-].*)"
 			},
 			"livestreamer": {

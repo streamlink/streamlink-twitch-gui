@@ -274,7 +274,7 @@ test( "Version match", async function( assert ) {
 	// streamlink + livestreamer
 
 	for ( const [ name, [ minVersion, provider ] ] of Object.entries({
-		streamlink: [ "0.2.0", { type: "streamlink", flavor: "default" } ],
+		streamlink: [ "1.1.0", { type: "streamlink", flavor: "default" } ],
 		livestreamer: [ "1.11.1", { type: "livestreamer", flavor: "default" } ]
 	}) ) {
 		await validate(
