@@ -27,24 +27,26 @@
 {{#if hasEnded}}
 	{{t "components.subscription-item.access.ended"}}
 {{else if content.purchase_profile.will_renew}}
-	{{t "components.subscription-item.access.renews" time=ends}}
+	{{t "components.subscription-item.access.renews" time=content.ends}}
 {{else}}
-	{{t "components.subscription-item.access.ends" time=ends}}
+	{{t "components.subscription-item.access.ends" time=content.ends}}
 {{/if}}
 </span>
 {{else}}
 <span><i class="fa fa-credit-card"></i> {{t "components.subscription-item.subscribed"}}</span>
 {{/if}}
 <span title={{t "components.subscription-item.support"}}>
-<i class="fa fa-money"></i> {{product.price}} / {{product.period}}
+<i class="fa fa-money"></i> {{content.product.price}} / {{content.product.period}}
 </span>
-<span title={{format-time channel.subscribed.created_at (t "components.subscription-item.since")}}>
-<i class="fa fa-calendar"></i> {{t "components.subscription-item.duration" count=subbedFor}}
+<span title={{format-time content.access_start (t "components.subscription-item.since")}}>
+<i class="fa fa-calendar"></i> {{t "components.subscription-item.duration" count=content.subbedFor}}
 </span>
 </div>
 <ul class="list-unstyled emoticons">
-{{#each emoticons as |emoticon|}}
-<li><img title={{emoticon.id}} src={{emoticon.url}}></li>
+{{#each content.product.emoticons as |emoticon|}}
+{{#if emoticon.isActive}}
+<li><img title={{emoticon.title}} alt="" src={{emoticon.url}}></li>
+{{/if}}
 {{else}}
 <li class="no-emoticons">{{t "components.subscription-item.no-emoticons"}}</li>
 {{/each}}

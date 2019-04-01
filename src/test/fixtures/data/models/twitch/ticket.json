@@ -8,24 +8,22 @@
 		"tickets": [
 			{
 				"id": 1,
-				"access_start": "2000-01-01T00:00:00Z",
-				"access_end": "2000-01-01T00:00:00Z",
+				"access_start": null,
+				"access_end": "2000-02-01T00:00:00Z",
+				"is_gift": false,
+				"paid_upgrade": null,
 				"expired": false,
-				"purchase_profile": {
-					"refundable": false,
-					"will_renew": true,
-					"paid_on": "2000-01-01T00:00:00Z",
-					"expired": false,
-					"payment_provider": "some payment provider",
-					"consecutive_months": 12
-				},
+				"purchase_profile": null,
 				"product": {
 					"name": "Subscription to Foo",
 					"short_name": "foo",
 					"ticket_type": "chansub",
 					"owner_name": "foo",
 					"features": {
-						"bitrate_access": []
+						"bitrate_access": [],
+						"tier": "1000",
+						"emoticon_set_ids": [ 1234 ],
+						"base_emoticon_set_id": 1234
 					},
 					"interval_number": 1,
 					"recurring": true,
@@ -34,18 +32,77 @@
 					"period": "Month",
 					"emoticons": [
 						{
-							"regex": "bar",
+							"regex": "foo",
 							"regex_display": null,
 							"state": "active",
 							"url": "emoticon-1.png"
 						},
 						{
-							"regex": "baz",
-							"regex_display": null,
+							"regex": "be?ar",
+							"regex_display": "bar",
 							"state": "active",
 							"url": "emoticon-2.png"
+						},
+						{
+							"regex": "baz",
+							"regex_display": null,
+							"state": "inactive",
+							"url": "emoticon-3.png"
 						}
 					]
+				}
+			},
+			{
+				"id": 2,
+				"access_start": "1999-01-01T00:00:00Z",
+				"access_end": "2000-02-01T00:00:00Z",
+				"is_gift": false,
+				"paid_upgrade": null,
+				"expired": false,
+				"purchase_profile": null,
+				"product": {
+					"name": "Subscription to Bar",
+					"short_name": "bar",
+					"ticket_type": "chansub",
+					"owner_name": "bar",
+					"features": null,
+					"interval_number": 1,
+					"recurring": true,
+					"partner_login": "bar",
+					"price": "$4.99",
+					"period": "Month",
+					"emoticons": []
+				}
+			},
+			{
+				"id": 3,
+				"access_start": "1999-01-01T00:00:00Z",
+				"access_end": "2000-02-01T00:00:00Z",
+				"is_gift": false,
+				"paid_upgrade": null,
+				"expired": false,
+				"purchase_profile": {
+					"refundable": false,
+					"will_renew": true,
+					"paid_on": "2000-01-01T00:00:00Z",
+					"expired": false,
+					"renewal_date": "2000-02-01T00:00:00Z",
+					"payment_provider": "some payment provider",
+					"platform": "web",
+					"consecutive_months": 6
+				},
+				"product": {
+					"name": "Subscription to Baz",
+					"short_name": "baz",
+					"ticket_type": "chansub",
+					"owner_name": "baz",
+					"features": null,
+					"interval_number": 1,
+					"recurring": true,
+					"partner_login": "baz",
+					"price": "$4.99",
+					"period": "Month",
+					"emoticons": []
 				}
 			}
 		]

@@ -1,4 +1,3 @@
-import { get, set } from "@ember/object";
 import UserIndexRoute from "../index/route";
 import InfiniteScrollOffsetMixin from "ui/routes/-mixins/routes/infinite-scroll/offset";
 import preload from "utils/preload";
@@ -9,8 +8,6 @@ export default UserIndexRoute.extend( InfiniteScrollOffsetMixin, {
 	modelName: "twitchTicket",
 
 	async model() {
-		const store = get( this, "store" );
-
 		// request the subscriptions by offset
 		let tickets = await this._super({ unended: true });
 
@@ -18,35 +15,14 @@ export default UserIndexRoute.extend( InfiniteScrollOffsetMixin, {
 		tickets = this.filterFetchedContent( tickets, "product.ticket_type", "chansub" );
 
 		// load all channel references asynchronously (get the EmberData.PromiseObject)
-		await Promise.all( tickets
-			.map( async ticket => {
-				try {
-					await get( ticket, "product.partner_login" );
-					await get( ticket, "product.channel" );
-				} catch ( e ) {}
-			})
-		);
+		await Promise.all( tickets.map( ticket => ticket.loadChannel() ) );
 		// and filter out rejected promises (banned channels, etc.)
-		tickets = this.filterFetchedContent( tickets, "product.channel.isFulfilled", true );
-
-		// also load the TwitchSubscription record (needed for subscription date)
-		// unfortunately, this can't be loaded in parallel (channel needs to be loaded first)
-		await Promise.all( tickets
-			.map( async ticket => {
-				let subscription;
-				try {
-					const id = get( ticket, "product.channel.id" );
-					subscription = await store.findExistingRecord( "twitchSubscription", id );
-				} catch ( e ) {
-					subscription = false;
-				}
-				set( ticket, "product.channel.subscribed", subscription );
-			})
-		);
+		tickets = this.filterFetchedContent( tickets, "channel.isFulfilled", true );
 
 		// get a list of emoticons of all fetched subscriptions
 		const emoticons = tickets
-			.map( ticket => get( ticket, "product.emoticons" ) )
+			.map( ticket => ticket.product.emoticons )
+			.filter( emoticon => emoticon.isActive )
 			.reduce( ( res, item ) => {
 				res.push( ...item.toArray() );
 				return res;

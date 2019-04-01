@@ -33,8 +33,8 @@ export default Service.extend({
 		nwWindow.showDevTools();
 	},
 
-	openBrowser( url ) {
-		return openBrowser( url );
+	openBrowser( ...args ) {
+		return openBrowser( ...args );
 	},
 
 	minimize() {

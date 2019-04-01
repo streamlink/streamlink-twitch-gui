@@ -8,17 +8,11 @@ export default TwitchSerializer.extend({
 		return "twitchTicket";
 	},
 
-	attrs: {
-		product: { deserialize: "records" }
-	},
-
 	normalize( modelClass, resourceHash ) {
-		let foreignKey = this.store.serializerFor( "twitchProduct" ).primaryKey;
-
-		// copy the ticket's id to the product
-		if ( resourceHash.product ) {
-			resourceHash.product[ foreignKey ] = resourceHash[ this.primaryKey ];
-		}
+		// copy the partner_login info from the product fragment to the ticket
+		// EDMF doesn't support model relationships
+		const product = resourceHash.product;
+		resourceHash[ "partner_login" ] = product && product[ "partner_login" ];
 
 		return this._super( ...arguments );
 	}
