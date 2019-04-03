@@ -384,6 +384,26 @@ test( "Fixes attributes", function( assert ) {
 		"Fixes old player preset structure"
 	);
 
+	const c = {
+		gui: {
+			homepage: "/communities/all"
+		}
+	};
+	updateSettings( c );
+	assert.propEqual(
+		c,
+		{
+			gui: {
+				homepage: "/communities"
+			},
+			streaming: {},
+			streams: {},
+			chat: {},
+			notification: {}
+		},
+		"Fixes homepage of removed all communities route"
+	);
+
 	const notificationProviderRich = {
 		notification: {
 			provider: "rich"

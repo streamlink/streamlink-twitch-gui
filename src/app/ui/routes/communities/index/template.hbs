@@ -6,11 +6,9 @@
 {{quick-bar-homepage}}
 {{/quick-bar}}
 </header>
-{{#sub-menu menus=(hash
-	index=(t "routes.communities.menu.featured")
-	all=(t "routes.communities.menu.all")
-) as |subroute name|}}
-	{{#link-to (concat "communities.index." subroute) tagName="li"}}{{name}}{{/link-to}}
-{{/sub-menu}}
-{{outlet}}
+{{#content-list model as |item isNewItem isDuplicateItem|}}
+{{community-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
+{{else}}
+<p>{{t "routes.communities.empty"}}</p>
+{{/content-list}}
 </main>

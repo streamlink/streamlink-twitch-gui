@@ -36,13 +36,7 @@ game:
     empty: 目前無此遊戲實況
 communities:
     header: 熱門社群
-    menu:
-        featured: 精選社群
-        all: 所有社群
-    featured:
-        empty: 目前無精選社群
-    all:
-        empty: 目前無社群
+    empty: 目前無社群
 community:
     menu:
         streams: 實況中

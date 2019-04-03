@@ -36,13 +36,7 @@ game:
     empty: Die Liste der Streams dieses Spiels ist leer.
 communities:
     header: Top-Communitys
-    menu:
-        featured: Vorgestellte Communitys
-        all: Alle Communitys
-    featured:
-        empty: Die Liste der vorgestellten Communitys ist leer.
-    all:
-        empty: Die Liste aller Communitys ist leer.
+    empty: Die Liste der Communitys ist leer.
 community:
     menu:
         streams: Live Streams

@@ -111,8 +111,12 @@ function fixAttributes( settings ) {
 	if ( hasOwnProperty.call( gui, "minimizetotray" ) && typeof gui.minimizetotray !== "boolean" ) {
 		gui.minimizetotray = !!gui.minimizetotray;
 	}
-	if ( hasOwnProperty.call( gui, "homepage" ) && gui.homepage === "/user/following" ) {
-		gui.homepage = "/user/followedStreams";
+	if ( hasOwnProperty.call( gui, "homepage" ) ) {
+		if ( gui.homepage === "/user/following" ) {
+			gui.homepage = "/user/followedStreams";
+		} else if ( gui.homepage === "/communities/all" ) {
+			gui.homepage = "/communities";
+		}
 	}
 
 	// translate old quality ID setting

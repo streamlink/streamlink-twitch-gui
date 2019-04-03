@@ -36,13 +36,7 @@ game:
     empty: The returned list of streams of this game is empty.
 communities:
     header: Top Communities
-    menu:
-        featured: Featured Communities
-        all: All Communities
-    featured:
-        empty: The returned list of featured communities is empty.
-    all:
-        empty: The returned list of all communities is empty.
+    empty: The returned list of communities is empty.
 community:
     menu:
         streams: Live Streams

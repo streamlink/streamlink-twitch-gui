@@ -9,9 +9,6 @@ export default EmberRouter.extend().map(function() {
 		this.route( "game", { path: "/:game" } );
 	});
 	this.route( "communities", function() {
-		this.route( "index", { path: "/" }, function() {
-			this.route( "all" );
-		});
 		this.route( "community", { path: "/community/:community_id" }, function() {
 			this.route( "info" );
 		});
