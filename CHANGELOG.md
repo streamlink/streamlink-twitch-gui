@@ -25,7 +25,7 @@ Changelog - Streamlink Twitch GUI
 - Fixed refresh route logic.
 - Fixed stream data polling issue in StreamingService.
 - Fixed time related translations in "de" locale.
-- Upgraded to NW.js version 0.37.0. #603, #615
+- Upgraded to NW.js 0.37.2 (Chromium 73.0.3683.86 / Node 11.13.0). #603
 - Upgraded to Ember 3.7 and EmberData 3.3.
 - Various other dependency upgrades.
 - Lots of internal changes and improvements.
