@@ -3,12 +3,12 @@ Changelog - Streamlink Twitch GUI
 
 ## Master
 
-- \[IMPORTANT\] Bumped Streamlink's version requirement to `1.1.0`. #618  
+* :warning: Set Streamlink's version requirement to `1.1.0`. #618  
   Upgrade to the latest Streamlink version [here](https://streamlink.github.io/install.html) or see the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
-- \[IMPORTANT\] Added new streaming provider `Streamlink (Windows)`. #618  
+* :warning: Added new streaming provider `Streamlink (Windows)`. #618  
   This is the new default streaming provider on Windows and is required when using a Streamlink version newer than `0.14.2`.  
   Previous users of Streamlink Twitch GUI on Windows will have to switch manually from `Streamlink` to `Streamlink (Windows)` or will have to apply the workaround mentioned in #618.
-- \[IMPORTANT\] Removed bash wrapper launch script from Linux builds.  
+* :warning: Removed bash wrapper launch script from Linux builds.  
   Please remove and re-add menu shortcuts once (see included scripts).
 
 
@@ -29,6 +29,9 @@ Changelog - Streamlink Twitch GUI
 - Upgraded to Ember 3.7 and EmberData 3.3.
 - Various other dependency upgrades.
 - Lots of internal changes and improvements.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.6.0...master)
 
 
 ## [v1.6.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.6.0) (2018-08-01)
