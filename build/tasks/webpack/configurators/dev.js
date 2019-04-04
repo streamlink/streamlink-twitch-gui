@@ -6,7 +6,7 @@ const NwjsPlugin = require( "../plugins/nwjs" );
  * Configurations for creating and running development builds
  */
 module.exports = {
-	_dev( config, path ) {
+	_dev( config, path, gruntconfig ) {
 		// watch and rebuild
 		Object.assign( config, {
 			watch: true,
@@ -16,8 +16,8 @@ module.exports = {
 
 		// launch NW.js after a successful build
 		config.plugins.push(
-			new NwjsPlugin({
-				files: `<%= dir.${path} %>/**`,
+			new NwjsPlugin( gruntconfig, {
+				files: `${gruntconfig.dir[ path ]}/**`,
 				argv: "--remote-debugging-port=8888",
 				rerunOnExit: true,
 				log: true,
@@ -36,8 +36,8 @@ module.exports = {
 		);
 	},
 
-	dev( config ) {
-		this._dev( config, "tmp_dev" );
+	dev( config, ...args ) {
+		this._dev( config, "tmp_dev", ...args );
 		this._debug( config, true );
 	},
 
@@ -49,8 +49,8 @@ module.exports = {
 		this._debug( config, false );
 	},
 
-	testdev( config ) {
-		this._dev( config, "tmp_test" );
+	testdev( config, ...args ) {
+		this._dev( config, "tmp_test", ...args );
 		this._debug( config, false );
 	},
 

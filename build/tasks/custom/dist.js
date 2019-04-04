@@ -91,9 +91,7 @@ module.exports = function( grunt ) {
 		// read changelog
 		getReleaseChangelog( { changelogFile: changelogFile }, grunt.config.get( "package" ) )
 			.then( data => {
-				grunt.config.set( "releases", {
-					changelog: data
-				});
+				grunt.config.set( "template.releases.options.data.changelog", data );
 				tasks.push( "template:releases" );
 			})
 			.then( () => {

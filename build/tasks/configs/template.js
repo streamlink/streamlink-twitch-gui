@@ -32,7 +32,6 @@ module.exports = {
 				display_name: "<%= main['display-name'] %>",
 				version: "<%= package.version %>",
 				homepage: "<%= package.homepage %>",
-				changelog: "<%= releases.changelog %>",
 				donation: "<%= JSON.stringify( main['donation'] ) %>"
 			}
 		},

@@ -5,17 +5,18 @@ const webpack = require( "webpack" );
  * Generic production build configurations
  */
 module.exports = {
-	prod( config ) {
+	prod( config, gruntconfig ) {
 		// add license banners
-		// TODO: fix build date information (reproducible builds)
+		const banner = [
+			gruntconfig.main[ "display-name" ],
+			`@version v${gruntconfig.package.version}`,
+			`@date ${new Date().toISOString()}`,
+			`@copyright ${gruntconfig.package.author}`
+		].join( "\n" );
+
 		config.plugins.push(
 			new webpack.BannerPlugin({
-				banner: [
-					"<%= main['display-name'] %>",
-					"@version v<%= package.version %>",
-					"@date <%= grunt.template.today('yyyy-mm-dd') %>",
-					"@copyright <%= package.author %>"
-				].join( "\n" ),
+				banner,
 				entryOnly: true
 			})
 		);

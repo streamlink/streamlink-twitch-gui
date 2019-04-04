@@ -1,10 +1,9 @@
 const platforms = require( "../../common/platforms" );
-const nwjsOptions = require( "../../configs/nwjs" ).options;
 
 
 class NwjsPlugin {
-	constructor( options ) {
-		this.options = Object.assign( {}, nwjsOptions, options, {
+	constructor( gruntconfig, options ) {
+		this.options = Object.assign( {}, gruntconfig.nwjs.options, options, {
 			flavor: "sdk",
 			platforms: platforms.getPlatforms( [] )
 		});

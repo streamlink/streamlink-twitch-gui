@@ -52,26 +52,32 @@ module.exports = function() {
 
 	// get target config objects
 	for ( const [ target, targetConfig ] of Object.entries( targets ) ) {
-		// first, deeply clone common config object
-		const config = copyDeep( {}, defaultConfig );
+		// return a target function, so grunt-webpack passes the grunt config + instance as params
+		targets[ target ] = ( ...args ) => {
+			// first, deeply clone common config object
+			const config = copyDeep( {}, defaultConfig );
 
-		// copy the target's config onto it
-		copyDeep( config, targetConfig );
+			// copy the target's config onto it
+			// targets can be functions which will receive the grunt config + instance as params
+			copyDeep( config, typeof targetConfig === "function"
+				? targetConfig( ...args )
+				: targetConfig
+			);
 
-		// then apply configurators
-		for ( const configurator of configurators ) {
-			// first the configurator's common target
-			if ( hasOwnProperty.call( configurator, "common" ) ) {
-				configurator[ "common" ]( config );
+			// then apply configurators and also pass the grunt config + instance
+			for ( const configurator of configurators ) {
+				// first the configurator's common target
+				if ( hasOwnProperty.call( configurator, "common" ) ) {
+					configurator[ "common" ]( config, ...args );
+				}
+				// then the configurator's specific target
+				if ( hasOwnProperty.call( configurator, target ) ) {
+					configurator[ target ]( config, ...args );
+				}
 			}
-			// then the configurator's specific target
-			if ( hasOwnProperty.call( configurator, target ) ) {
-				configurator[ target ]( config );
-			}
-		}
 
-		// and replace with old config
-		targets[ target ] = config;
+			return config;
+		};
 	}
 
 
