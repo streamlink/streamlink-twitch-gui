@@ -1,6 +1,36 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- \[IMPORTANT\] Bumped Streamlink's version requirement to `1.1.0`. #618  
+  Upgrade to the latest Streamlink version [here](https://streamlink.github.io/install.html) or see the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
+- \[IMPORTANT\] Added new streaming provider `Streamlink (Windows)`. #618  
+  This is the new default streaming provider on Windows and is required when using a Streamlink version newer than `0.14.2`.  
+  Previous users of Streamlink Twitch GUI on Windows will have to switch manually from `Streamlink` to `Streamlink (Windows)` or will have to apply the workaround mentioned in #618.
+- \[IMPORTANT\] Removed bash wrapper launch script from Linux builds.  
+  Please remove and re-add menu shortcuts once (see included scripts).
+
+
+- Added an option for skipping embedded stream advertisements. #621  
+  See the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki) for more information about this.
+- Added mouse navigation buttons. #492
+- Added architecture info to about page. #606
+- Fixed not being able to save custom channel settings. #595
+- Fixed VLC config on macOS. #600
+- Fixed search bar input validation issue. #610
+- Fixed NW.js runtime parameter parsing. #613
+- Fixed undecoded HTML entities in desktop notifications. #626
+- Fixed subscription date and month counter. #627
+- Fixed refresh route logic.
+- Fixed stream data polling issue in StreamingService.
+- Fixed time related translations in "de" locale.
+- Upgraded to NW.js version 0.37.0. #603, #615
+- Upgraded to Ember 3.7 and EmberData 3.3.
+- Various other dependency upgrades.
+- Lots of internal changes and improvements.
+
+
 ## [v1.6.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.6.0) (2018-08-01)
 
 - Changed default chat URL for web browser chat applications. #536
