@@ -16,6 +16,7 @@ Changelog - Streamlink Twitch GUI
   See the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki) for more information about this.
 - Added mouse navigation buttons. #492
 - Added architecture info to about page. #606
+- Removed featured communities (only shows all communities now).
 - Fixed not being able to watch unpartnered channels in specific qualities. #481
 - Fixed not being able to save custom channel settings. #595
 - Fixed VLC config on macOS. #600
@@ -24,6 +25,7 @@ Changelog - Streamlink Twitch GUI
 - Fixed undecoded HTML entities in desktop notifications. #626
 - Fixed subscription date and month counter. #627
 - Fixed refresh route logic.
+- Fixed race condition in desktop notification icon downloader.
 - Fixed stream data polling issue in StreamingService.
 - Fixed time related translations in "de" locale.
 - Upgraded to NW.js 0.37.2 (Chromium 73.0.3683.86 / Node 11.13.0). #603
