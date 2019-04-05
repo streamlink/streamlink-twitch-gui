@@ -16,6 +16,7 @@ Changelog - Streamlink Twitch GUI
   See the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki) for more information about this.
 - Added mouse navigation buttons. #492
 - Added architecture info to about page. #606
+- Fixed not being able to watch unpartnered channels in specific qualities. #481
 - Fixed not being able to save custom channel settings. #595
 - Fixed VLC config on macOS. #600
 - Fixed search bar input validation issue. #610

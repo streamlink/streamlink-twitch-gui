@@ -24,21 +24,21 @@ export default [
 	// High
 	{
 		id: "high",
-		quality: "high,best",
+		quality: "high,best,best-unfiltered",
 		exclude: ">720p30"
 	},
 
 	// Medium
 	{
 		id: "medium",
-		quality: "medium,best",
+		quality: "medium,best,best-unfiltered",
 		exclude: ">540p30"
 	},
 
 	// Low
 	{
 		id: "low",
-		quality: "low,best",
+		quality: "low,best,best-unfiltered",
 		exclude: ">360p30"
 	},
 
