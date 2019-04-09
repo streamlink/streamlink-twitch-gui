@@ -6,16 +6,14 @@ import {
 	default as nwWindow,
 	toggleVisibility,
 	toggleMaximized,
-	toggleMinimized
+	toggleMinimized,
+	toggleShowInTaskbar
 } from "nwjs/Window";
 import { openBrowser } from "nwjs/Shell";
-import {
-	ATTR_GUI_INTEGRATION_TRAY,
-	ATTR_GUI_INTEGRATION_BOTH
-} from "data/models/settings/gui/fragment";
+import { ATTR_GUI_INTEGRATION_TRAY } from "data/models/settings/gui/fragment";
 
 
-export default Service.extend({
+export default Service.extend( /** @class NwjsService */ {
 	modal: service(),
 	settings: service(),
 	streaming: service(),
@@ -38,15 +36,15 @@ export default Service.extend({
 	},
 
 	minimize() {
-		const integration = get( this, "settings.gui.integration" );
-		const minimizetotray = get( this, "settings.gui.minimizetotray" );
+		const { integration, minimizetotray } = this.settings.content.gui;
 
 		// hide the window when in tray-only-mode or in both-mode with min2tray setting enabled
 		if (
 			   integration === ATTR_GUI_INTEGRATION_TRAY
-			|| integration === ATTR_GUI_INTEGRATION_BOTH
+			|| ( integration & ATTR_GUI_INTEGRATION_TRAY ) > 0
 			&& minimizetotray
 		) {
+			toggleShowInTaskbar();
 			toggleVisibility();
 		} else {
 			toggleMinimized();

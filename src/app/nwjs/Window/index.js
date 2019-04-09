@@ -16,7 +16,8 @@ nwWindow.on( "navigation", ( frame, url, policy ) => {
 });
 
 
-let visible   = manifest.window.show;
+let visible   = manifest.window[ "show" ];
+let taskbar   = manifest.window[ "show_in_taskbar" ];
 let focused   = true;
 let maximized = false;
 let minimized = false;
@@ -102,8 +103,18 @@ export function toggleMinimized() {
 }
 
 
+export function getShowInTaskbar() {
+	return taskbar;
+}
+
 export function setShowInTaskbar( show ) {
 	nwWindow.setShowInTaskbar( show );
+	// no onShowInTaskbar event callback
+	taskbar = show;
+}
+
+export function toggleShowInTaskbar() {
+	setShowInTaskbar( !taskbar );
 }
 
 
