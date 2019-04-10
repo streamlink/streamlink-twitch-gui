@@ -44,8 +44,9 @@ export default async function( application, argv ) {
 
 	// go to a new route (or refresh current one)
 	if ( argv[ ARG_GOTO ] ) {
-		const routingService = application.lookup( "service:-routing" );
-		await routingService.transitionTo( argv[ ARG_GOTO ] );
+		/** @type {RouterService} */
+		const routerService = application.lookup( "service:router" );
+		await routerService.transitionTo( argv[ ARG_GOTO ] );
 	}
 
 	// launch a stream by user name

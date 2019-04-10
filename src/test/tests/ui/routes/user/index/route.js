@@ -159,7 +159,7 @@ module( "ui/routes/user/index/route", function( hooks ) {
 
 		const RouterService = this.owner.lookup( "service:router" );
 
-		RouterService.trigger( "routeDidChange" );
+		RouterService.trigger( "routeWillChange" );
 		AuthService.trigger( "login", true );
 
 		assert.notOk( this.retrySpy.called, "Doesn't retry transition if route was changed" );

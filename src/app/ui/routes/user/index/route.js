@@ -42,8 +42,8 @@ export default Route.extend({
 		// show loading screen
 		this.intermediateTransitionTo( "loading" );
 
-		// remove onLogin listener if the user leaves the current route before it was called
-		addListener( this.router, "routeDidChange", this, "_removeOnLoginListener", true );
+		// remove onLogin listener if the user attempts to leave the current route early
+		addListener( this.router, "routeWillChange", this, "_removeOnLoginListener", true );
 
 		// register callback once
 		addListener( this.auth, "login", this, "_onLogin", true );
