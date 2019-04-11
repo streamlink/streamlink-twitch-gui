@@ -25,6 +25,15 @@ global.process.on( "uncaughtException", function( err ) {
 });
 
 
+// "pre-load" certain native node modules
+// prevents a bug on Windows which causes all methods of stream.Writable.prototype to be missing
+// on stream.Duplex.prototype, more specifically stream.Duplex.prototype.cork. Also related to
+// all classes which extend stream.Duplex, like net.Socket.
+// See https://github.com/streamlink/streamlink-twitch-gui/issues/628#issuecomment-481510654
+require( "stream" );
+require( "net" );
+
+
 require( "shim" );
 require( "jquery" );
 require( "ember" );
