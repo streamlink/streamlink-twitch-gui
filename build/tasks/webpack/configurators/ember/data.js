@@ -33,11 +33,6 @@ module.exports = function( config, isProd ) {
 		]
 	};
 
-	// these babel plugins have to be imported here
-	const babelPluginStripHeimdall = require( "babel6-plugin-strip-heimdall" );
-	const babelPluginStripClassCallcheck = require( "babel6-plugin-strip-class-callcheck" );
-	const babelPluginRemoveImports = require( "../../plugins/babel-plugin-remove-imports" );
-
 	config.module.rules.push({
 		test: /\.js$/,
 		include: r( pDependencies, "ember-data" ),
@@ -50,11 +45,11 @@ module.exports = function( config, isProd ) {
 					},
 					features: {}
 				} ],
-				babelPluginStripHeimdall,
+				require.resolve( "babel6-plugin-strip-heimdall" ),
 				[ "babel-plugin-filter-imports", {
 					imports: filteredImports
 				} ],
-				[ babelPluginRemoveImports, filteredImports ],
+				[ require.resolve( "../../plugins/babel-plugin-remove-imports" ), filteredImports ],
 				[ "@babel/plugin-transform-block-scoping", {
 					throwIfClosureRequired: true
 				} ],
@@ -82,7 +77,7 @@ module.exports = function( config, isProd ) {
 						"@ember/debug": [ "assert", "deprecate", "warn" ]
 					}
 				} ],
-				babelPluginStripClassCallcheck
+				require.resolve( "babel6-plugin-strip-class-callcheck" )
 			]
 		})
 	});

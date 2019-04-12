@@ -11,8 +11,8 @@
 	"dependencies": {
 		"bootstrap": "3.3.1",
 		"ember-source": "3.7.1",
-		"ember-data": "3.3.2",
-		"ember-data-model-fragments": "3.3.0",
+		"ember-data": "3.5.2",
+		"ember-data-model-fragments": "4.0.0",
 		"ember-i18n": "5.2.0",
 		"ember-inflector": "3.0.0",
 		"ember-localstorage-adapter": "github:bastimeyer/ember-localstorage-adapter#ember-copy",
