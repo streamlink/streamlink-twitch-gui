@@ -38,6 +38,7 @@ module.exports = {
 			"ui": r( pApp, "ui" ),
 			"utils": r( pApp, "utils" )
 		},
+		extensions: [ ".wasm", ".mjs", ".js", ".json", ".ts" ],
 		modules: [
 			...resolveModuleDirectories
 		]

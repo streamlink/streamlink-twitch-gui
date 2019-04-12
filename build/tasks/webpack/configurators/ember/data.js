@@ -14,6 +14,8 @@ module.exports = function( config, isProd ) {
 		"ember-data/version$": r( pRoot, "web_modules", "ember-data", "version" ),
 		"ember-data/app": r( pDependencies, "ember-data", "app" ),
 		"ember-data": r( pDependencies, "ember-data", "addon" ),
+		"ember-fetch": r( pDependencies, "ember-fetch", "addon" ),
+		"fetch": r( pRoot, "web_modules", "fetch" ),
 		"ember-inflector": r( pDependencies, "ember-inflector", "addon" ),
 		"ember-data-model-fragments": r( pDependencies, "ember-data-model-fragments", "addon" ),
 		"ember-localstorage-adapter": r( pDependencies, "ember-localstorage-adapter", "addon" ),
@@ -34,7 +36,7 @@ module.exports = function( config, isProd ) {
 	};
 
 	config.module.rules.push({
-		test: /\.js$/,
+		test: /\.[jt]s$/,
 		include: r( pDependencies, "ember-data" ),
 		loader: "babel-loader",
 		options: buildBabelConfig({
@@ -77,7 +79,9 @@ module.exports = function( config, isProd ) {
 						"@ember/debug": [ "assert", "deprecate", "warn" ]
 					}
 				} ],
-				require.resolve( "babel6-plugin-strip-class-callcheck" )
+				require.resolve( "babel6-plugin-strip-class-callcheck" ),
+				"@babel/plugin-proposal-class-properties",
+				"@babel/plugin-transform-typescript"
 			]
 		})
 	});

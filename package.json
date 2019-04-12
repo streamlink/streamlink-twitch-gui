@@ -11,8 +11,9 @@
 	"dependencies": {
 		"bootstrap": "3.3.1",
 		"ember-source": "3.7.1",
-		"ember-data": "3.5.2",
+		"ember-data": "3.9.0",
 		"ember-data-model-fragments": "4.0.0",
+		"ember-fetch": "6.5.0",
 		"ember-i18n": "5.2.0",
 		"ember-inflector": "3.0.0",
 		"ember-localstorage-adapter": "github:bastimeyer/ember-localstorage-adapter#ember-copy",
@@ -34,6 +35,7 @@
 		"@babel/plugin-proposal-decorators": "7.3.0",
 		"@babel/plugin-transform-block-scoping": "7.2.0",
 		"@babel/plugin-transform-modules-commonjs": "7.2.0",
+		"@babel/plugin-transform-typescript": "7.4.0",
 		"@ember/test-helpers": "0.7.27",
 		"@ember-decorators/argument": "0.8.21",
 		"babel-eslint": "10.0.1",
