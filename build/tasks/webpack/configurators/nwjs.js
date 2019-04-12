@@ -21,7 +21,7 @@ module.exports = {
 		// generate the index.html
 		config.plugins.push(
 			new HtmlWebpackPlugin({
-				inject: "head",
+				inject: "body",
 				hash: false,
 				template: resolve( path, "index.html" )
 			})
