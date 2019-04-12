@@ -2,7 +2,8 @@ import { get } from "@ember/object";
 import Evented from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
 import { isNone } from "@ember/utils";
-import { AdapterError, InvalidError } from "ember-data/adapters/errors";
+import { AdapterError, InvalidError, TimeoutError } from "ember-data/adapters/errors";
+import fetch from "fetch";
 
 
 const reURL = /^[a-z]+:\/\/([\w.]+)\/(.+)$/i;
@@ -15,6 +16,8 @@ const reURLFragment = /^:(\w+)$/;
  */
 export default Mixin.create( Evented, {
 	mergedProperties: [ "urlFragments" ],
+
+	useFetch: true,
 
 	urlFragments: {
 		id( type, id ) {
@@ -180,11 +183,22 @@ export default Mixin.create( Evented, {
 	},
 
 	ajaxOptions() {
-		const hash = this._super( ...arguments );
-		hash.timeout = 10000;
-		hash.cache = false;
+		const options = this._super( ...arguments );
+		options.cache = "no-cache";
 
-		return hash;
+		return options;
+	},
+
+	_fetchRequest( options ) {
+		return new Promise( ( resolve, reject ) => {
+			const timeout = setTimeout( () => {
+				reject( new TimeoutError() );
+			}, options.timeout || 10000 );
+
+			fetch( options.url, options )
+				.finally( () => clearTimeout( timeout ) )
+				.then( resolve, reject );
+		});
 	},
 
 	isSuccess( status, headers, payload ) {
