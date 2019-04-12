@@ -18,7 +18,7 @@ export default Component.extend({
 	],
 
 	_masonry: on( "didInsertElement", function() {
-		const container = this.$( "ul" )[ 0 ];
+		const container = this.element.querySelector( "ul" );
 		scheduleOnce( "afterRender", function() {
 			return new Masonry( container, {
 				itemSelector: ".channel-panel-item-component",
