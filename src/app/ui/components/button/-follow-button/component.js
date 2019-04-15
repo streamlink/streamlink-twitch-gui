@@ -31,7 +31,7 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 			name: "main",
 			key: "f",
 			action() {
-				this.$( ".main-button" ).click();
+				this.mainbutton.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
 			}
 		},
 		{
@@ -39,18 +39,19 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 			key: "f",
 			ctrlKey: true,
 			action() {
-				this.$( ".confirm-button" ).click();
+				this.confirmbutton.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
 			}
 		}
 	],
 
 	didInsertElement() {
 		this._super( ...arguments );
-		this.$confirmbutton = this.$( ".confirm-button" );
+		this.mainbutton = this.element.querySelector( ".main-button" );
+		this.confirmbutton = this.element.querySelector( ".confirm-button" );
 	},
 
 	expand() {
-		this.$confirmbutton.off( "webkitTransitionEnd" );
+		this._removeListener();
 		set( this, "isExpanded", true );
 		set( this, "isPromptVisible", true );
 	},
@@ -58,13 +59,21 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 	collapse() {
 		set( this, "isExpanded", false );
 
-		return new Promise( r => this.$confirmbutton.one( "webkitTransitionEnd", () => {
-			if ( get( this, "isDestroyed" ) ) {
-				return;
-			}
-			set( this, "isPromptVisible", false );
-			r();
-		}) );
+		return new Promise( resolve => {
+			this._listener = () => {
+				this._listener = null;
+				if ( this.isDestroyed ) {
+					return;
+				}
+				set( this, "isPromptVisible", false );
+				resolve();
+			};
+			this.confirmbutton.addEventListener(
+				"webkitTransitionEnd",
+				this._listener,
+				{ once: true }
+			);
+		});
 	},
 
 	mouseEnter() {
@@ -97,10 +106,17 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 
 		clearTimeout( this._timeout );
 		this._timeout = null;
-		this.$confirmbutton.off( "webkitTransitionEnd" );
+		this._removeListener();
 
 		return true;
 	}),
+
+	_removeListener() {
+		if ( this._listener ) {
+			this.confirmbutton.removeEventListener( "webkitTransitionEnd", this._listener );
+			this._listener = null;
+		}
+	},
 
 
 	actions: {
