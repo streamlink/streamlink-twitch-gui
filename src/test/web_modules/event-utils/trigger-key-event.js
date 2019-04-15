@@ -86,7 +86,7 @@ function keyCodeFromKey( key ) {
 
 /**
  * Triggers a keyboard event of given type in the target element.
- * Based on @ember/test-helpers, but uses jQuery for now
+ * Based on @ember/test-helpers, but simplified and also returns its fired event
  *
  * @param {string|Element} target the element or selector to trigger the event on
  * @param {'keydown' | 'keyup' | 'keypress'} eventType the type of event to trigger
