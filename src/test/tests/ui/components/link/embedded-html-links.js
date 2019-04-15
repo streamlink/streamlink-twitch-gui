@@ -1,7 +1,12 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { triggerEvent } from "event-utils";
+import {
+	stubDOMEvents,
+	isDefaultPrevented,
+	isImmediatePropagationStopped,
+	triggerEvent
+} from "event-utils";
 import { render } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
@@ -15,6 +20,8 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 	setupRenderingTest( hooks, {
 		resolver: buildResolver()
 	});
+
+	stubDOMEvents( hooks );
 
 	hooks.beforeEach(function() {
 		this.clipboardSetSpy = sinon.stub();
@@ -40,7 +47,7 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 
 
 	test( "EmbeddedHtmlLinksComponent", async function( assert ) {
-		let event;
+		let e;
 
 		await render( hbs`
 			{{~#embedded-html-links~}}
@@ -72,9 +79,9 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 
 		// anchor 1
 		// left click
-		event = await triggerEvent( anchorOne, "click", { button: 0 } );
-		assert.ok( event.isDefaultPrevented(), "Left click: default event is prevented" );
-		assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
+		e = await triggerEvent( anchorOne, "click", { button: 0 } );
+		assert.ok( isDefaultPrevented( e ), "Left click: default event is prevented" );
+		assert.ok( isImmediatePropagationStopped( e ), "Left click: event doesn't propagate" );
 		assert.propEqual(
 			this.transitionToStub.args,
 			[ [ "channel", "foo" ] ],
@@ -83,9 +90,9 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 		assert.notOk( this.openBrowserSpy.called, "Doesn't open browser" );
 		this.transitionToStub.resetHistory();
 		// middle click
-		event = await triggerEvent( anchorOne, "click", { button: 1 } );
-		assert.ok( event.isDefaultPrevented(), "Middle click: default event is prevented" );
-		assert.ok( event.isImmediatePropagationStopped(), "Middle click: event doesn't propagate" );
+		e = await triggerEvent( anchorOne, "click", { button: 1 } );
+		assert.ok( isDefaultPrevented( e ), "Middle click: default event is prevented" );
+		assert.ok( isImmediatePropagationStopped( e ), "Middle click: event doesn't propagate" );
 		assert.propEqual(
 			this.transitionToStub.args,
 			[ [ "channel", "foo" ] ],
@@ -94,48 +101,48 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 		assert.notOk( this.openBrowserSpy.called, "Doesn't open browser" );
 		this.transitionToStub.resetHistory();
 		// right click (doesn't execute transition)
-		event = await triggerEvent( anchorOne, "click", { button: 2 } );
-		assert.ok( event.isDefaultPrevented(), "Right click: default event is prevented" );
-		assert.ok( event.isImmediatePropagationStopped(), "Right click: event doesn't propagate" );
+		e = await triggerEvent( anchorOne, "click", { button: 2 } );
+		assert.ok( isDefaultPrevented( e ), "Right click: default event is prevented" );
+		assert.ok( isImmediatePropagationStopped( e ), "Right click: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't open channel page on non-left-click" );
 		assert.notOk( this.openBrowserSpy.called, "Doesn't open browser" );
 		// doesn't have a context menu
-		event = await triggerEvent( anchorOne, "contextmenu" );
-		assert.notOk( event.isDefaultPrevented(), "Contextmenu: default event is not prevented" );
-		assert.notOk( event.isImmediatePropagationStopped(), "Contextmenu: event does propagate" );
+		e = await triggerEvent( anchorOne, "contextmenu" );
+		assert.notOk( isDefaultPrevented( e ), "Contextmenu: default event is not prevented" );
+		assert.notOk( isImmediatePropagationStopped( e ), "Contextmenu: event does propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't open channel page on contextmenu" );
 		assert.notOk( this.openBrowserSpy.called, "Doesn't open browser" );
 		assert.notOk( this.contextMenuStub.called, "Doesn't open context menu" );
 
 		// anchor 2
 		// left click
-		event = await triggerEvent( anchorTwo, "click", { button: 0 } );
-		assert.ok( event.isDefaultPrevented(), "Left click: default event is prevented" );
-		assert.ok( event.isImmediatePropagationStopped(), "Left click: event doesn't propagate" );
+		e = await triggerEvent( anchorTwo, "click", { button: 0 } );
+		assert.ok( isDefaultPrevented( e ), "Left click: default event is prevented" );
+		assert.ok( isImmediatePropagationStopped( e ), "Left click: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
 		assert.propEqual( this.openBrowserSpy.args, [ [ "https://bar.com/" ] ], "Opens browser" );
 		this.openBrowserSpy.resetHistory();
 		// middle click
-		event = await triggerEvent( anchorTwo, "click", { button: 1 } );
-		assert.ok( event.isDefaultPrevented(), "Middle click: default event is prevented" );
-		assert.ok( event.isImmediatePropagationStopped(), "Middle click: event doesn't propagate" );
+		e = await triggerEvent( anchorTwo, "click", { button: 1 } );
+		assert.ok( isDefaultPrevented( e ), "Middle click: default event is prevented" );
+		assert.ok( isImmediatePropagationStopped( e ), "Middle click: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
 		assert.propEqual( this.openBrowserSpy.args, [ [ "https://bar.com/" ] ], "Opens browser" );
 		this.openBrowserSpy.resetHistory();
 		// right click (doesn't execute callback)
-		event = await triggerEvent( anchorTwo, "click", { button: 2 } );
-		assert.ok( event.isDefaultPrevented(), "Right click: default event is prevented" );
-		assert.ok( event.isImmediatePropagationStopped(), "Right click: event doesn't propagate" );
+		e = await triggerEvent( anchorTwo, "click", { button: 2 } );
+		assert.ok( isDefaultPrevented( e ), "Right click: default event is prevented" );
+		assert.ok( isImmediatePropagationStopped( e ), "Right click: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
 		assert.notOk( this.openBrowserSpy.called, "Doesn't open browser" );
 		// has a context menu
-		event = await triggerEvent( anchorTwo, "contextmenu" );
-		assert.ok( event.isDefaultPrevented(), "Contextmenu: default event action is prevented" );
-		assert.ok( event.isImmediatePropagationStopped(), "Contextmenu: event doesn't propagate" );
+		e = await triggerEvent( anchorTwo, "contextmenu" );
+		assert.ok( isDefaultPrevented( e ), "Contextmenu: default event action is prevented" );
+		assert.ok( isImmediatePropagationStopped( e ), "Contextmenu: event doesn't propagate" );
 		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
 		assert.notOk( this.openBrowserSpy.called, "Doesn't open browser" );
 		assert.propEqual( this.contextMenuStub.args, [ [
-			event,
+			e,
 			[
 				{
 					label: [ "contextmenu.open-in-browser" ],
@@ -163,12 +170,12 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 			.map( async name => {
 				const eventOne = await triggerEvent( anchorOne, name );
 				assert.ok(
-					eventOne.isDefaultPrevented(),
+					isDefaultPrevented( eventOne ),
 					`First link: default ${name} action is prevented`
 				);
 				const eventTwo = await triggerEvent( anchorTwo, name );
 				assert.ok(
-					eventTwo.isDefaultPrevented(),
+					isDefaultPrevented( eventTwo ),
 					`Second link: default ${name} action is prevented`
 				);
 			}) );

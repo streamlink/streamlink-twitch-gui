@@ -1,7 +1,9 @@
 import Component from "@ember/component";
 import { inject as service } from "@ember/service";
-import $ from "jquery";
 import getStreamFromUrl from "utils/getStreamFromUrl";
+
+
+const DISABLED_EVENTS = "mousedown mouseup keyup keydown keypress".split( " " );
 
 
 export default Component.extend({
@@ -13,17 +15,18 @@ export default Component.extend({
 	didInsertElement() {
 		/** @type {HTMLAnchorElement[]} */
 		const anchors = Array.from( this.element.querySelectorAll( "a" ) );
-		anchors.forEach( anchor => {
-			const $anchor = $( anchor );
+		for ( const anchor of anchors ) {
 			const url = anchor.href;
 			const channel = getStreamFromUrl( url );
 
-			$anchor.on( "mousedown mouseup keyup keydown keypress", event => {
-				event.preventDefault();
-				event.stopImmediatePropagation();
-			});
+			for ( const eventName of DISABLED_EVENTS ) {
+				anchor.addEventListener( eventName, event => {
+					event.preventDefault();
+					event.stopImmediatePropagation();
+				});
+			}
 
-			$anchor.on( "click", event => {
+			anchor.addEventListener( "click", /** @type {MouseEvent} */ event => {
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				if ( event.button === 0 || event.button === 1 ) {
@@ -40,7 +43,7 @@ export default Component.extend({
 				anchor.classList.add( "external-link" );
 				anchor.title = url;
 
-				$anchor.on( "contextmenu", event => {
+				anchor.addEventListener( "contextmenu", /** @type {MouseEvent} */ event => {
 					event.preventDefault();
 					event.stopImmediatePropagation();
 
@@ -56,7 +59,7 @@ export default Component.extend({
 					]);
 				});
 			}
-		});
+		}
 
 		return this._super( ...arguments );
 	}
