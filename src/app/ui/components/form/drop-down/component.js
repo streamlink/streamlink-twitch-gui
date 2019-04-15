@@ -1,11 +1,11 @@
 import { get, set } from "@ember/object";
 import Selectable from "../-selectable/component";
-import IsFocusedMixin from "ui/components/-mixins/is-focused";
+import isFocused from "utils/is-focused";
 import layout from "./template.hbs";
 import "./styles.less";
 
 
-export default Selectable.extend( IsFocusedMixin, {
+export default Selectable.extend({
 	layout,
 
 	tagName: "div",
@@ -32,14 +32,14 @@ export default Selectable.extend( IsFocusedMixin, {
 					set( this, "expanded", false );
 					return false;
 				}
-				if ( this._isFocused() ) {
+				if ( isFocused( this.element ) ) {
 					this.$().blur();
 					return false;
 				}
 				return;
 
 			case " ":
-				if ( this._isFocused() ) {
+				if ( isFocused( this.element ) ) {
 					this.send( "toggle" );
 					return false;
 				}
@@ -54,7 +54,7 @@ export default Selectable.extend( IsFocusedMixin, {
 	},
 
 	_switchSelectionOnArrowKey( change ) {
-		if ( !get( this, "expanded" ) || !this._isFocused() ) {
+		if ( !get( this, "expanded" ) || !isFocused( this.element ) ) {
 			return;
 		}
 

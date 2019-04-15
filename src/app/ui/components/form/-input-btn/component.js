@@ -1,10 +1,10 @@
 import Component from "@ember/component";
-import IsFocusedMixin from "ui/components/-mixins/is-focused";
+import isFocused from "utils/is-focused";
 import layout from "./template.hbs";
 import "./styles.less";
 
 
-export default Component.extend( IsFocusedMixin, {
+export default Component.extend({
 	layout,
 
 	tagName: "label",
@@ -20,14 +20,14 @@ export default Component.extend( IsFocusedMixin, {
 	keyDown( event ) {
 		switch ( event.key ) {
 			case "Escape":
-				if ( this._isFocused() ) {
+				if ( isFocused( this.element ) ) {
 					this.$().blur();
 					return false;
 				}
 				return;
 
 			case " ":
-				if ( this._isFocused() && !this.disabled ) {
+				if ( isFocused( this.element ) && !this.disabled ) {
 					this.click();
 					return false;
 				}
