@@ -5,7 +5,6 @@ import Router from "@ember/routing/router";
 import { run } from "@ember/runloop";
 import { getApplication, setApplication, getResolver, setResolver } from "@ember/test-helpers";
 import TemplateCompiler from "ember-source/dist/ember-template-compiler";
-import $ from "jquery";
 
 
 const { compile } = TemplateCompiler;
@@ -22,41 +21,16 @@ export function runDestroy( destroyed ) {
 export function getElem( component, selector ) {
 	const element = component.element || component._element;
 	return selector && selector.length
-		? $( selector, element )
-		: $( element );
+		? element.querySelector( selector )
+		: element;
 }
 
 export function getOutput( component, selector ) {
-	return getElem( component, selector ).text();
+	return getElem( component, selector ).innerText;
 }
 
 export function cleanOutput( component, selector ) {
 	return getOutput( component, selector ).replace( reWhiteSpace, "" );
-}
-
-export function checkListeners( elem, event, listener ) {
-	const events = $._data( elem, "events" );
-	if ( events ) {
-		const listeners = events[ event ];
-		if ( listeners ) {
-			return listeners.some( obj => obj.handler === listener );
-		}
-	}
-	return false;
-}
-
-// TODO: use @ember/test-helpers once event gets returned from helper method
-//       and once mouseenter and mouseleave events have been fixed
-export function triggerEventSync( elem, event, data ) {
-	const e = $.Event( event );
-	Object.assign( e, data );
-	run( () => $( elem ).trigger( e ) );
-
-	return e;
-}
-
-export function triggerKeyEventSync( elem, code, event = "keydown", data = {} ) {
-	return triggerEventSync( elem, event, Object.assign( {}, data, { code } ) );
 }
 
 
