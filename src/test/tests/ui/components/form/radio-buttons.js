@@ -177,7 +177,7 @@ module( "ui/components/form/radio-buttons", function( hooks ) {
 			"All items have a tabindex attribute with value 0"
 		);
 
-		e = await triggerKeyDownEvent( elemTwo, "Space" );
+		e = await triggerKeyDownEvent( elemTwo, " " );
 		assert.strictEqual( this.get( "selection" ), content[0], "Ignores Space if not focused" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
@@ -189,11 +189,11 @@ module( "ui/components/form/radio-buttons", function( hooks ) {
 			"Second item is now focused"
 		);
 
-		e = await triggerKeyDownEvent( elemTwo, "Space" );
+		e = await triggerKeyDownEvent( elemTwo, " " );
 		assert.strictEqual( this.get( "selection" ), content[1], "Changes selection if focused" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-		e = await triggerKeyDownEvent( elemTwo, "Space" );
+		e = await triggerKeyDownEvent( elemTwo, " " );
 		assert.strictEqual( this.get( "selection" ), content[1], "Keeps selection" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );

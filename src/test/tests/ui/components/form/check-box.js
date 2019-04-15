@@ -81,7 +81,7 @@ module( "ui/components/form/check-box", function( hooks ) {
 		assert.notOk( this.get( "checked" ), "Is not checked initially" );
 		assert.strictEqual( elem.getAttribute( "tabindex" ), "0", "Tabindex attribute is 0" );
 
-		e = await triggerKeyDownEvent( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk( this.get( "checked" ), "Is still not checked on Space" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
@@ -89,11 +89,11 @@ module( "ui/components/form/check-box", function( hooks ) {
 		await focus( elem );
 		assert.strictEqual( document.activeElement, elem, "Is focused now" );
 
-		e = await triggerKeyDownEvent( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, " " );
 		assert.ok( this.get( "checked" ), "Is checked on Space" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-		e = await triggerKeyDownEvent( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk( this.get( "checked" ), "Is not checked anymore on Space" );
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
@@ -105,7 +105,7 @@ module( "ui/components/form/check-box", function( hooks ) {
 		await focus( elem );
 		assert.strictEqual( document.activeElement, elem, "Is focused now" );
 
-		e = await triggerKeyDownEvent( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk( this.get( "checked" ), "Is not checked on Space while being disabled" );
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );

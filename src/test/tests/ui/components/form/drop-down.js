@@ -262,7 +262,7 @@ module( "ui/components/form/drop-down", function( hooks ) {
 		assert.notOk( list.classList.contains( "expanded" ), "Is not expanded initially" );
 		assert.strictEqual( elem.getAttribute( "tabindex" ), "0", "Tabindex attribute is 0" );
 
-		e = await triggerKeyDownEvent( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk(
 			list.classList.contains( "expanded" ),
 			"Does not react to spacebar when not focused"
@@ -289,14 +289,14 @@ module( "ui/components/form/drop-down", function( hooks ) {
 		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
 		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
 
-		e = await triggerKeyDownEvent( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, " " );
 		assert.ok(
 			list.classList.contains( "expanded" ),
 			"Toggles expansion when focused on Space"
 		);
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
-		e = await triggerKeyDownEvent( elem, "Space" );
+		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk(
 			list.classList.contains( "expanded" ),
 			"Toggles expansion when focused on Space"
@@ -304,7 +304,7 @@ module( "ui/components/form/drop-down", function( hooks ) {
 		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
 		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
 
-		await triggerKeyDownEvent( elem, "Space" );
+		await triggerKeyDownEvent( elem, " " );
 
 		e = await triggerKeyDownEvent( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[1], "Selects next item on ArrowDown" );

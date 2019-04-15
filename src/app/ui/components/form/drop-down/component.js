@@ -38,7 +38,7 @@ export default Selectable.extend( IsFocusedMixin, {
 				}
 				return;
 
-			case "Space":
+			case " ":
 				if ( this._isFocused() ) {
 					this.send( "toggle" );
 					return false;

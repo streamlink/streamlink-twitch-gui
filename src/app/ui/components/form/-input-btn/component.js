@@ -1,5 +1,4 @@
 import Component from "@ember/component";
-import { get } from "@ember/object";
 import IsFocusedMixin from "ui/components/-mixins/is-focused";
 import layout from "./template.hbs";
 import "./styles.less";
@@ -27,8 +26,8 @@ export default Component.extend( IsFocusedMixin, {
 				}
 				return;
 
-			case "Space":
-				if ( this._isFocused() && !get( this, "disabled" ) ) {
+			case " ":
+				if ( this._isFocused() && !this.disabled ) {
 					this.click();
 					return false;
 				}
