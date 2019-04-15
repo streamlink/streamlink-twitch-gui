@@ -33,7 +33,7 @@ export default Selectable.extend({
 					return false;
 				}
 				if ( isFocused( this.element ) ) {
-					this.$().blur();
+					this.element.blur();
 					return false;
 				}
 				return;

@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import { get, set, setProperties, observer } from "@ember/object";
-import $ from "jquery";
+import { scheduleOnce } from "@ember/runloop";
 import layout from "./template.hbs";
 
 
@@ -19,16 +19,8 @@ export default Component.extend({
 	upwards: false,
 
 
-	didInsertElement() {
-		this._$elem = this.$();
-		this._$parent = this._$elem.parent();
-		this._offsetParent = this._$parent.offsetParent().get( 0 );
-		this._super( ...arguments );
-	},
-
 	willDestroyElement() {
 		this._removeClickListener();
-		this._$elem = this._$parent = this._offsetParent = null;
 		this._super( ...arguments );
 	},
 
@@ -41,31 +33,37 @@ export default Component.extend({
 			return;
 		}
 
-		this._calcExpansionDirection();
+		// DOM needs to update first before the element's size can be calculated
+		scheduleOnce( "afterRender", () => this._calcExpansionDirection() );
 
 		// register a click event listener on the document body that closes the drop-down-list
-		this._clickListener = event => {
+		this._clickListener = ({ target }) => {
 			// ignore clicks on the DropDownComponent
-			const distance = $( event.target ).closest( this.element ).length;
-			if ( !distance ) {
-				set( this, "expanded", false );
+			if ( !this.element.contains( target ) ) {
+				setProperties( this, {
+					expanded: false,
+					upwards: false
+				});
 			}
 		};
-		$( this.element.ownerDocument.body ).on( "click", this._clickListener );
+		this.element.ownerDocument.body.addEventListener( "click", this._clickListener );
 	}),
 
 	_removeClickListener() {
 		// unregister click event listener
 		if ( this._clickListener ) {
-			$( this.element.ownerDocument.body ).off( "click", this._clickListener );
+			this.element.ownerDocument.body.removeEventListener( "click", this._clickListener );
 			this._clickListener = null;
 		}
 	},
 
 	_calcExpansionDirection() {
-		const parentHeight = this._offsetParent.offsetHeight;
-		const positionTop = this._$parent.position().top;
-		const listHeight = this._$elem.height();
+		const element = this.element;
+		const parent = element.parentElement;
+		const parentHeight = parent.offsetParent.offsetHeight;
+		const positionTop = parent.offsetTop;
+		const { marginTop, marginBottom } = getComputedStyle( element );
+		const listHeight = element.offsetHeight + parseInt( marginTop ) + parseInt( marginBottom );
 		const isOverflowing = parentHeight - positionTop < listHeight;
 		set( this, "upwards", isOverflowing );
 	},

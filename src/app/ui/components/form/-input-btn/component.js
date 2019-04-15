@@ -21,7 +21,7 @@ export default Component.extend({
 		switch ( event.key ) {
 			case "Escape":
 				if ( isFocused( this.element ) ) {
-					this.$().blur();
+					this.element.blur();
 					return false;
 				}
 				return;

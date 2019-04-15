@@ -1,7 +1,12 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { triggerKeyDownEvent } from "event-utils";
+import {
+	stubDOMEvents,
+	isDefaultPrevented,
+	isPropagationStopped,
+	triggerKeyDownEvent
+} from "event-utils";
 import { render, click, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
@@ -18,6 +23,8 @@ module( "ui/components/form/radio-buttons", function( hooks ) {
 			IsEqualHelper
 		})
 	});
+
+	stubDOMEvents( hooks );
 
 	hooks.beforeEach(function() {
 		this.getItems = () => Array.from(
@@ -179,8 +186,8 @@ module( "ui/components/form/radio-buttons", function( hooks ) {
 
 		e = await triggerKeyDownEvent( elemTwo, " " );
 		assert.strictEqual( this.get( "selection" ), content[0], "Ignores Space if not focused" );
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isPropagationStopped( e ), "Doesn't stop event's propagation" );
 
 		await focus( elemTwo );
 		assert.strictEqual(
@@ -191,12 +198,12 @@ module( "ui/components/form/radio-buttons", function( hooks ) {
 
 		e = await triggerKeyDownEvent( elemTwo, " " );
 		assert.strictEqual( this.get( "selection" ), content[1], "Changes selection if focused" );
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isPropagationStopped( e ), "Stops event's propagation" );
 		e = await triggerKeyDownEvent( elemTwo, " " );
 		assert.strictEqual( this.get( "selection" ), content[1], "Keeps selection" );
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isPropagationStopped( e ), "Stops event's propagation" );
 
 		await triggerKeyDownEvent( elemTwo, "Escape" );
 		assert.notStrictEqual(

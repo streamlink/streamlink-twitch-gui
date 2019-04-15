@@ -1,6 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
-import { buildResolver, checkListeners } from "test-utils";
+import { buildResolver } from "test-utils";
+import { stubDOMEvents, hasListener } from "event-utils";
 import { render, clearRender, click } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
@@ -17,6 +18,8 @@ module( "ui/components/form/drop-down-list", function( hooks ) {
 			IsEqualHelper
 		})
 	});
+
+	stubDOMEvents( hooks );
 
 	hooks.beforeEach(function() {
 		const testContext = this;
@@ -92,7 +95,7 @@ module( "ui/components/form/drop-down-list", function( hooks ) {
 		);
 		assert.ok( clickListener, "Does have a click listener" );
 		assert.ok(
-			checkListeners( body, "click", clickListener ),
+			hasListener( body, "click", clickListener ),
 			"Has a click listener registered on the document body"
 		);
 
@@ -109,7 +112,7 @@ module( "ui/components/form/drop-down-list", function( hooks ) {
 		);
 		assert.notOk( this.clickListener, "Doesn't have a click listener anymore" );
 		assert.notOk(
-			checkListeners( body, "click", clickListener ),
+			hasListener( body, "click", clickListener ),
 			"Old click listener is not registered on the document body anymore as well"
 		);
 
@@ -119,7 +122,7 @@ module( "ui/components/form/drop-down-list", function( hooks ) {
 		assert.ok( list.classList.contains( "expanded" ), "Is expanded now" );
 		assert.ok( clickListener, "Does have a click listener" );
 		assert.ok(
-			checkListeners( body, "click", clickListener ),
+			hasListener( body, "click", clickListener ),
 			"Has a click listener registered on the document body"
 		);
 
@@ -130,7 +133,7 @@ module( "ui/components/form/drop-down-list", function( hooks ) {
 		);
 		assert.notOk( this.clickListener, "Doesn't have a click listener anymore" );
 		assert.notOk(
-			checkListeners( body, "click", clickListener ),
+			hasListener( body, "click", clickListener ),
 			"Old click listener is not registered on the document body anymore as well"
 		);
 
@@ -140,13 +143,13 @@ module( "ui/components/form/drop-down-list", function( hooks ) {
 		assert.ok( list.classList.contains( "expanded" ), "Is expanded now" );
 		assert.ok( clickListener, "Does have a click listener" );
 		assert.ok(
-			checkListeners( body, "click", clickListener ),
+			hasListener( body, "click", clickListener ),
 			"Has a click listener registered on the document body"
 		);
 		await clearRender();
 		assert.notOk( this.clickListener, "Removes click listener on destruction" );
 		assert.notOk(
-			checkListeners( body, "click", clickListener ),
+			hasListener( body, "click", clickListener ),
 			"Old click listener is not registered on the document body anymore as well"
 		);
 	});
