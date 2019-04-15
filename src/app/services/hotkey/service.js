@@ -63,7 +63,7 @@ export default Service.extend({
 
 	/**
 	 * Find a registered hotkey that matches and execute the action of the one added last
-	 * @param {(KeyboardEvent|jQuery.Event)} event
+	 * @param {KeyboardEvent} event
 	 * @param {Number?} start
 	 */
 	trigger( event, start = 0 ) {
@@ -74,8 +74,6 @@ export default Service.extend({
 			return;
 		}
 
-		/** @type {KeyboardEvent} */
-		const e = event.originalEvent || event;
 		/** @type {Component} */
 		let context;
 		/** @type {Hotkey} */
@@ -85,10 +83,10 @@ export default Service.extend({
 		for ( ; start < length; start++ ) {
 			let registry = registries[ start ];
 			hotkey = registry.hotkeys.find( h =>
-				   ( isArray( h.key ) ? h.key.includes( e.key ) : h.key === e.key )
-				&& ( h.altKey === undefined || h.altKey === e.altKey )
-				&& ( h.ctrlKey === undefined || h.ctrlKey === e.ctrlKey )
-				&& ( h.shiftKey === undefined || h.shiftKey === e.shiftKey )
+				   ( isArray( h.key ) ? h.key.includes( event.key ) : h.key === event.key )
+				&& ( h.altKey === undefined || h.altKey === event.altKey )
+				&& ( h.ctrlKey === undefined || h.ctrlKey === event.ctrlKey )
+				&& ( h.shiftKey === undefined || h.shiftKey === event.shiftKey )
 			);
 
 			if ( hotkey ) {
