@@ -1,6 +1,6 @@
 import { module, test } from "qunit";
 import { runDestroy, buildOwner } from "test-utils";
-import { default as EmberObject, set, computed } from "@ember/object";
+import { default as EmberObject, set } from "@ember/object";
 import { sendEvent } from "@ember/object/events";
 import Service from "@ember/service";
 import { EventEmitter } from "events";
@@ -39,12 +39,15 @@ module( "ui/routes/-mixins/routes/refresh", {
 		this.PROP_DEFER = PROP_DEFER;
 		this.TIME_DEBOUNCE = TIME_DEBOUNCE;
 
+		const testContext = this;
 		const ModalService = Service.extend({
 			isModalOpened: false
 		});
 		const SettingsService = Service.extend({
 			gui: EmberObject.extend({
-				focusrefresh: computed( () => this.threshold ).volatile()
+				get focusrefresh() {
+					return testContext.threshold;
+				}
 			}).create()
 		});
 		const Route = EmberObject.extend( RefreshMixin );

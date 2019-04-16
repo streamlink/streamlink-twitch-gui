@@ -117,12 +117,12 @@ export default Model.extend({
 	}),
 
 
-	customParameters: computed(function() {
+	get customParameters() {
 		const provider  = get( this, "settings.streaming.provider" );
 		const providers = get( this, "settings.streaming.providers" );
 
 		return get( providers, `${provider}.params` ) || "";
-	}).volatile(),
+	},
 
 
 	kill() {

@@ -1,5 +1,5 @@
-import { getOwner } from "@ember/application";
-import { get, set, computed } from "@ember/object";
+import { set } from "@ember/object";
+import { equal } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import { translationMacro as t } from "ember-i18n/addon";
 import FormButtonComponent from "ui/components/button/form-button/component";
@@ -7,6 +7,7 @@ import FormButtonComponent from "ui/components/button/form-button/component";
 
 export default FormButtonComponent.extend({
 	i18n: service(),
+	router: service(),
 	settings: service(),
 
 	classNames: "btn-neutral",
@@ -17,26 +18,15 @@ export default FormButtonComponent.extend({
 	icon: "fa-home",
 	iconanim: true,
 
-	url: computed(function() {
-		let router = getOwner( this ).lookup( "router:main" );
-		let location = get( router, "location" );
-
-		return location.getURL();
-	}).volatile(),
-
-	isHomepage: computed( "url", "settings.gui.homepage", function() {
-		return get( this, "url" ) === get( this, "settings.gui.homepage" );
-	}),
+	isHomepage: equal( "router.currentURL", "settings.content.gui.homepage" ),
 
 
 	action() {
-		let settings = get( this, "settings.content" );
-		let value    = get( this, "url" );
-		if ( !settings || !value ) {
-			return Promise.reject();
-		}
-
+		/** @type {Settings} */
+		const settings = this.settings.content;
+		const value = this.router.currentURL;
 		set( settings, "gui.homepage", value );
+
 		return settings.save();
 	}
 });

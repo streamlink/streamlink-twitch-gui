@@ -1,4 +1,3 @@
-import { get, computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { vars } from "config";
@@ -14,42 +13,37 @@ function getURL( url, time ) {
 /**
  * Return the image URL with an already set expiration time.
  * Or create a new expiration time if it hasn't been set yet.
- * @param {String} attr
- * @returns {Ember.ComputedProperty} Volatile computed property
+ * @param {string} attr
+ * @returns {string}
  */
 function buffered( attr ) {
-	return computed(function() {
-		let exp = this[ `expiration_${attr}` ];
+	const exp = this[ `expiration_${attr}` ];
 
-		return exp
-			? getURL( get( this, `image_${attr}` ), exp )
-			: get( this, `${attr}Latest` );
-	}).volatile();
+	return exp
+		? getURL( this[ `image_${attr}` ], exp )
+		: this[ `${attr}Latest` ];
 }
 
 /**
  * Return the image URL with an expiration parameter, so the latest version will be requested.
  * Update the expiration timer only once every X seconds.
- * @param {String} attr
- * @returns {Ember.ComputedProperty} Volatile computed property
+ * @param {string} attr
+ * @returns {string}
  */
 function latest( attr ) {
-	// use a volatile property
-	return computed(function() {
-		const url = get( this, `image_${attr}` );
+	const url = this[ `image_${attr}` ];
 
-		// use the same timestamp for `time` seconds
-		const key = `expiration_${attr}`;
-		const now = Date.now();
-		let exp = this[ key ];
+	// use the same timestamp for `time` seconds
+	const key = `expiration_${attr}`;
+	const now = Date.now();
+	let exp = this[ key ];
 
-		if ( !exp || exp <= now ) {
-			exp = now + time;
-			this[ key ] = exp;
-		}
+	if ( !exp || exp <= now ) {
+		exp = now + time;
+		this[ key ] = exp;
+	}
 
-		return getURL( url, exp );
-	}).volatile();
+	return getURL( url, exp );
 }
 
 
@@ -66,13 +60,25 @@ export default Model.extend({
 
 	// "request latest image version, but only every X seconds"
 	// should be used by a route's model hook
-	largeLatest: latest( "large" ),
-	mediumLatest: latest( "medium" ),
-	smallLatest: latest( "small" ),
+	get largeLatest() {
+		return latest.call( this, "large" );
+	},
+	get mediumLatest() {
+		return latest.call( this, "medium" );
+	},
+	get smallLatest() {
+		return latest.call( this, "small" );
+	},
 
 	// "use the previous expiration parameter"
 	// should be used by all image src attributes in the DOM
-	large: buffered( "large" ),
-	medium: buffered( "medium" ),
-	small: buffered( "small" )
+	get large() {
+		return buffered.call( this, "large" );
+	},
+	get medium() {
+		return buffered.call( this, "medium" );
+	},
+	get small() {
+		return buffered.call( this, "small" );
+	}
 });
