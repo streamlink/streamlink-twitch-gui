@@ -1,5 +1,5 @@
 import Component from "@ember/component";
-import { get, set, computed, observer } from "@ember/object";
+import { set, observer } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
 import layout from "./template.hbs";
@@ -17,19 +17,21 @@ export default Component.extend({
 
 	delay: 1000,
 
+	_enabled: false,
+
 	apply() {},
 	discard() {},
 
-	_enabled: computed(function() {
-		return get( this, "isDirty" )
-			&& !get( this, "disabled" );
-	}),
+	init() {
+		this._super( ...arguments );
+		set( this, "_enabled", this.isDirty && !this.disabled );
+	},
 
 	// immediately set enabled when disabled property changes
 	_disabledObserver: observer( "disabled", function() {
-		let enabled = get( this, "disabled" )
+		const enabled = this.disabled
 			? false
-			: get( this, "isDirty" );
+			: this.isDirty;
 		set( this, "_enabled", enabled );
 	}),
 
@@ -37,18 +39,17 @@ export default Component.extend({
 	// isDirty === false: wait and then set to false
 	_timeout: null,
 	_isDirtyObserver: observer( "isDirty", function() {
-		if ( get( this, "disabled" ) ) { return; }
+		if ( this.disabled ) { return; }
 
 		this._clearTimeout();
 
-		if ( get( this, "isDirty" ) ) {
+		if ( this.isDirty ) {
 			set( this, "_enabled", true );
 		} else {
-			let delay = get( this, "delay" );
 			this._timeout = later( () => {
 				set( this, "_enabled", false );
 				this._timeout = null;
-			}, delay );
+			}, this.delay );
 		}
 	}),
 
