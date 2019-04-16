@@ -32,6 +32,7 @@ export default ListItemComponent.extend({
 	expanded: false,
 	locked  : false,
 	timer   : null,
+	ignoreLanguageFading: false,
 
 	showGame: notEmpty( "channel.game" ),
 
@@ -44,11 +45,16 @@ export default ListItemComponent.extend({
 	fadedVodcast: and( "content.isVodcast", "settings.content.streams.filter_vodcast" ),
 
 	faded: computed(
+		"ignoreLanguageFading",
 		"settings.content.streams.filter_languages",
 		"settings.content.streams.language",
 		"channel.language",
 		"channel.broadcaster_language",
 		function() {
+			if ( this.ignoreLanguageFading ) {
+				return false;
+			}
+
 			const { filter_languages, language } = this.settings.content.streams;
 
 			if ( filter_languages !== ATTR_FILTER_LANGUAGES_FADE ) {

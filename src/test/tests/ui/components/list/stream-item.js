@@ -5,6 +5,7 @@ import { render } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
 import { set } from "@ember/object";
+import { run } from "@ember/runloop";
 import Service from "@ember/service";
 
 import StreamItemComponent from "ui/components/list/stream-item/component";
@@ -69,6 +70,12 @@ module( "ui/components/list/stream-item", function( hooks ) {
 
 		set( subject, "settings.content.streams.filter_languages", ATTR_FILTER_LANGUAGES_NOOP );
 		assert.notOk( subject.faded, "Not faded if fading is disabled" );
+
+		set( subject, "settings.content.streams.filter_languages", ATTR_FILTER_LANGUAGES_FADE );
+		assert.ok( subject.faded, "Faded again if fading is enabled" );
+
+		set( subject, "ignoreLanguageFading", true );
+		assert.notOk( subject.faded, "Not faded anymore if ignoreLanguageFading is true" );
 	});
 
 
@@ -94,44 +101,46 @@ module( "ui/components/list/stream-item", function( hooks ) {
 
 
 	test( "isFaded element class", async function( assert ) {
+		const SettingsService = this.owner.lookup( "service:settings" );
 		this.setProperties({
-			faded: false,
-			fadedVodcast: false
+			ignoreLanguageFading: false,
+			content: {
+				isVodcast: false,
+				channel: {
+					language: "en"
+				}
+			}
 		});
-		await render( hbs`{{stream-item faded=faded fadedVodcast=fadedVodcast}}` );
+		await render( hbs`
+			{{stream-item content=content ignoreLanguageFading=ignoreLanguageFading}}
+		` );
 		const elem = this.element.querySelector( ".stream-item-component" );
 
 		assert.notOk(
 			elem.classList.contains( "faded" ),
-			"Not faded if faded and fadedVodcast are falsy"
+			"Not faded if faded and fadedVodcast are false"
 		);
 
-		this.setProperties({
-			faded: true,
-			fadedVodcast: false
+		run( () => {
+			set( this, "content.isVodcast", true );
+			set( SettingsService, "content.streams.filter_vodcast", true );
 		});
-		assert.ok(
-			elem.classList.contains( "faded" ),
-			"Faded if faded or fadedVodcast are truthy"
-		);
+		assert.ok( elem.classList.contains( "faded" ), "Faded if fadedVodcast is true" );
 
-		this.setProperties({
-			faded: false,
-			fadedVodcast: true
+		run( () => {
+			set( this, "content.channel.language", "other" );
 		});
-		assert.ok(
-			elem.classList.contains( "faded" ),
-			"Faded if faded or fadedVodcast are truthy"
-		);
+		assert.ok( elem.classList.contains( "faded" ), "Faded if faded and fadedVodcast are true" );
 
-		this.setProperties({
-			faded: true,
-			fadedVodcast: true
+		run( () => {
+			set( this, "content.isVodcast", false );
 		});
-		assert.ok(
-			elem.classList.contains( "faded" ),
-			"Faded if faded or fadedVodcast are truthy"
-		);
+		assert.ok( elem.classList.contains( "faded" ), "Faded if faded is true" );
+
+		run( () => {
+			set( this, "ignoreLanguageFading", true );
+		});
+		assert.notOk( elem.classList.contains( "faded" ), "Not faded if ignoreLanguageFading" );
 	});
 
 });
