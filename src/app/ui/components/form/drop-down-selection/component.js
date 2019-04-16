@@ -14,7 +14,15 @@ export default Component.extend({
 	classNames: [ "drop-down-selection-component" ],
 	classNameBindings: [ "class" ],
 
-	placeholder: t( "components.drop-down-selection.placeholder" ),
+	_defaultPlaceholder: t( "components.drop-down-selection.placeholder" ),
+	_placeholder: null,
+
+	get placeholder() {
+		return this._placeholder || this._defaultPlaceholder;
+	},
+	set placeholder( value ) {
+		this._placeholder = value;
+	},
 
 	click() {
 		get( this, "action" )();

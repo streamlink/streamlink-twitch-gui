@@ -1,7 +1,8 @@
 import Component from "@ember/component";
-import { get, set, computed } from "@ember/object";
+import { set } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { inject as service } from "@ember/service";
+import { translationMacro as t } from "ember-i18n/addon";
 import { platform } from "utils/node/platform";
 import layout from "./template.hbs";
 
@@ -21,23 +22,24 @@ export default Component.extend({
 	value: "",
 	disabled: false,
 
-	placeholder: computed({
-		set( key, value ) {
-			if ( typeof value === "string" ) {
-				return value;
-			}
+	_defaultPlaceholder: t( "components.file-select.placeholder" ),
+	_placeholder: null,
 
-			if ( typeof value !== "object" || !hasOwnProperty.call( value, platform ) ) {
-				return get( this, "i18n" ).t( "components.file-select.placeholder" ).toString();
-			}
+	get placeholder() {
+		return this._placeholder || this._defaultPlaceholder;
+	},
+	set placeholder( value ) {
+		if ( typeof value === "string" ) {
+			this._placeholder = value;
 
+		} else if ( typeof value === "object" && hasOwnProperty.call( value, platform ) ) {
 			value = value[ platform ];
 
-			return isArray( value )
+			this._placeholder = isArray( value )
 				? value[ 0 ]
 				: value;
 		}
-	}),
+	},
 
 	_createInput: on( "didInsertElement", function() {
 		const input = this.element.ownerDocument.createElement( "input" );
@@ -54,7 +56,7 @@ export default Component.extend({
 
 	actions: {
 		selectfile() {
-			if ( !get( this, "disabled" ) ) {
+			if ( !this.disabled ) {
 				this._input.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
 			}
 		}
