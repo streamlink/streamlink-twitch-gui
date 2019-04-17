@@ -7,7 +7,7 @@ import {
 	ARG_LAUNCH,
 	ARG_GOTO
 } from "nwjs/argv";
-import { setMaximized, setMinimized, setVisibility } from "nwjs/Window";
+import { setMaximized, setMinimized, setVisibility, setShowInTaskbar } from "nwjs/Window";
 import resetWindow from "nwjs/Window/reset";
 import onChangeIntegrations from "./integrations";
 
@@ -28,6 +28,7 @@ export default async function( application, argv ) {
 		const settings = application.lookup( "service:settings" );
 		const removeOnClick = !get( settings, "gui.isVisibleInTray" );
 		nwjs.setShowInTray( true, removeOnClick );
+		setShowInTaskbar( false );
 
 	} else {
 		// show tray and taskbar item depending on settings
