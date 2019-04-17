@@ -98,7 +98,9 @@ export default class ParameterCustom extends Parameter {
 
 					// not in quotation mode?
 				} else {
-					clearBuffer();
+					if ( i > 0 && reSpace.test( str.charAt( i - 1 ) ) ) {
+						clearBuffer();
+					}
 					// set quotation mode
 					quoted = char;
 				}

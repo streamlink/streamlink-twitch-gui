@@ -207,4 +207,46 @@ test( "Parse command", assert => {
 		"Correctly parses parameters"
 	);
 
+	assert.propEqual(
+		// this is unfortunately how NW.js passes through the command line string from second
+		// application starts: parameters with leading dashes get moved to the beginning
+		parseCommand([
+			"\"C:\\path\\to\\executable\"",
+			"--goto",
+			"--unrecognized-parameter-name",
+			"--foo",
+			"--bar",
+			"--user-data-dir=\"C:\\foo bar\\baz\"",
+			"--no-sandbox",
+			"--no-zygote",
+			"--flag-switches-begin",
+			"--flag-switches-end",
+			"--nwapp=\"C:\\qux quux\"",
+			"--file-url-path-alias=\"gen=C:\\path\\to\\\\gen\"",
+			"--original-process-start-time=123456789",
+			"foo"
+		].join( " " ) ),
+		{
+			"_": [],
+			"tray": false,
+			"hide": false,
+			"hidden": false,
+			"max": false,
+			"maximize": false,
+			"maximized": false,
+			"min": false,
+			"minimize": false,
+			"minimized": false,
+			"reset-window": false,
+			"versioncheck": true,
+			"version-check": true,
+			"logfile": true,
+			"loglevel": "",
+			"l": "",
+			"goto": "foo",
+			"launch": ""
+		},
+		"Correctly parses parameters on Windows"
+	);
+
 });
