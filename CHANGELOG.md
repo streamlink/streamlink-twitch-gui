@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.7.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.7.1) (2019-04-17)
 
 - Fixed login issues on Windows. #628
 - Fixed pin to taskbar issues on Windows. #629
@@ -12,8 +12,10 @@ Changelog - Streamlink Twitch GUI
 - Made hotkeys aware of keyboard layouts (was changed in v1.7.0).
 - Upgraded NW.js to 0.37.4. #628, #629, #634
 
+Please also see the changelog of the [`v1.7.0`](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.7.0) release, if you're upgrading from an older version.
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.7.0...master)
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.7.0...v1.7.1)
 
 
 ## [v1.7.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.7.0) (2019-04-05)
