@@ -1,7 +1,8 @@
 import minimist from "minimist";
-import { argv as appArgv, filteredArgv, manifest } from "nwjs/App";
+import { argv as appArgv, filteredArgv, manifest, dataPath } from "nwjs/App";
 import Parameter from "utils/parameters/Parameter";
 import ParameterCustom from "utils/parameters/ParameterCustom";
+import { dirname } from "path";
 
 
 export const ARG_TRAY = "tray";
@@ -110,6 +111,13 @@ export function parseCommand( command ) {
 			command = command.substr( 0, pos ) + command.substr( pos + chromiumArgs.length );
 		}
 	}
+	// Remove user data dir parameter from the command line.
+	// This is terribly broken on macOS, as NW.js doesn't use quotation marks for paths including
+	// a space character here, which means that the string can't be parsed.
+	const userDataDir = dirname( dataPath );
+	command = command
+		.replace( `--user-data-dir=${userDataDir}`, "" )
+		.replace( `--user-data-dir="${userDataDir}"`, "" );
 
 	const argv = getParameters( { command }, parameters )
 		.slice( 1 )

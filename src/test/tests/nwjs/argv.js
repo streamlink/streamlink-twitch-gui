@@ -1,6 +1,8 @@
 import { module, test } from "qunit";
 
-import argvInjector from "inject-loader?nwjs/App!nwjs/argv";
+import { posix as pathPosix, win32 as pathWin32 } from "path";
+
+import argvInjector from "inject-loader?nwjs/App&path!nwjs/argv";
 
 
 module( "nwjs/argv" );
@@ -9,6 +11,7 @@ module( "nwjs/argv" );
 test( "Default values", assert => {
 
 	const argv = argvInjector({
+		"path": pathPosix,
 		"nwjs/App": {
 			argv: []
 		}
@@ -63,6 +66,7 @@ test( "Default values", assert => {
 test( "Custom parameters", assert => {
 
 	const { argv } = argvInjector({
+		"path": pathPosix,
 		"nwjs/App": {
 			argv: [
 				// boolean without values
@@ -117,6 +121,7 @@ test( "Custom parameters", assert => {
 test( "Aliases", assert => {
 
 	const { argv } = argvInjector({
+		"path": pathPosix,
 		"nwjs/App": {
 			argv: [
 				"--hide",
@@ -157,31 +162,33 @@ test( "Aliases", assert => {
 });
 
 
-test( "Parse command", assert => {
+test( "Parse command on Linux", assert => {
 
 	const { parseCommand } = argvInjector({
+		"path": pathPosix,
 		"nwjs/App": {
 			argv: [],
 			manifest: {
 				"chromium-args": "--foo --bar"
-			}
+			},
+			dataPath: "/home/user/.config/appname/Default"
 		}
 	});
 
 	assert.propEqual(
-		// this is unfortunately how NW.js passes through the command line string from second
-		// application starts: parameters with leading dashes get moved to the beginning
 		parseCommand([
 			"/path/to/executable",
 			"--goto",
 			"--unrecognized-parameter-name",
 			"--foo",
 			"--bar",
-			"--user-data-dir=baz",
+			"--user-data-dir=/home/user/.config/appname",
 			"--no-sandbox",
 			"--no-zygote",
 			"--flag-switches-begin",
 			"--flag-switches-end",
+			"--nwapp=/tmp/nwjs-tmp",
+			"--file-url-path-alias=/gen=/path/to/app/gen",
 			"foo"
 		].join( " " ) ),
 		{
@@ -207,9 +214,78 @@ test( "Parse command", assert => {
 		"Correctly parses parameters"
 	);
 
+});
+
+
+test( "Parse command on macOS", assert => {
+
+	const { parseCommand } = argvInjector({
+		"path": pathPosix,
+		"nwjs/App": {
+			argv: [],
+			manifest: {
+				"chromium-args": "--foo --bar"
+			},
+			dataPath: "/Users/user/Library/Application Support/appname/Default"
+		}
+	});
+
 	assert.propEqual(
-		// this is unfortunately how NW.js passes through the command line string from second
-		// application starts: parameters with leading dashes get moved to the beginning
+		parseCommand([
+			"/Applications/appname.app/Contents/MacOS/nwjs",
+			"--goto",
+			"--unrecognized-parameter-name",
+			"--foo",
+			"--bar",
+			"--user-data-dir=/Users/user/Library/Application Support/appname",
+			"--no-sandbox",
+			"--no-zygote",
+			"--flag-switches-begin",
+			"--flag-switches-end",
+			"--nwapp=/Applications/appname.app/Contents/Resources/app.nw",
+			"--file-url-path-alias=/gen=/path/to/app/gen",
+			"foo"
+		].join( " " ) ),
+		{
+			"_": [],
+			"tray": false,
+			"hide": false,
+			"hidden": false,
+			"max": false,
+			"maximize": false,
+			"maximized": false,
+			"min": false,
+			"minimize": false,
+			"minimized": false,
+			"reset-window": false,
+			"versioncheck": true,
+			"version-check": true,
+			"logfile": true,
+			"loglevel": "",
+			"l": "",
+			"goto": "foo",
+			"launch": ""
+		},
+		"Correctly parses parameters"
+	);
+
+});
+
+
+test( "Parse command on Windows", assert => {
+
+	const { parseCommand } = argvInjector({
+		"path": pathWin32,
+		"nwjs/App": {
+			argv: [],
+			manifest: {
+				"chromium-args": "--foo --bar"
+			},
+			dataPath: "C:\\foo bar\\baz\\Default"
+		}
+	});
+
+	assert.propEqual(
 		parseCommand([
 			"\"C:\\path\\to\\executable\"",
 			"--goto",
@@ -246,7 +322,7 @@ test( "Parse command", assert => {
 			"goto": "foo",
 			"launch": ""
 		},
-		"Correctly parses parameters on Windows"
+		"Correctly parses parameters"
 	);
 
 });

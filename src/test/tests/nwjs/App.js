@@ -13,7 +13,8 @@ test( "Exported properties", assert => {
 	const App = Object.assign( new EventEmitter(), {
 		argv: {},
 		filteredArgv: {},
-		manifest: {}
+		manifest: {},
+		dataPath: "data path"
 	});
 	const removeAllListenersSpy = sinon.spy( App, "removeAllListeners" );
 
@@ -26,6 +27,7 @@ test( "Exported properties", assert => {
 		argv,
 		filteredArgv,
 		manifest,
+		dataPath,
 		quit
 	} = appInjector({
 		"./nwGui": nwGui,
@@ -37,6 +39,7 @@ test( "Exported properties", assert => {
 	assert.strictEqual( argv, nwGui.App.argv, "Exports the argv" );
 	assert.strictEqual( filteredArgv, nwGui.App.filteredArgv, "Exports the filteredArgv" );
 	assert.strictEqual( manifest, nwGui.App.manifest, "Exports the manifest" );
+	assert.strictEqual( dataPath, "data path", "Exports the dataPath" );
 	assert.ok( quit instanceof Function, "Exports the quit function" );
 
 });
