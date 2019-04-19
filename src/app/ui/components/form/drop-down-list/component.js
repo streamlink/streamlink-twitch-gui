@@ -1,35 +1,29 @@
 import Component from "@ember/component";
-import { get, set, setProperties, observer } from "@ember/object";
+import { set, setProperties, action } from "@ember/object";
 import { scheduleOnce } from "@ember/runloop";
-import layout from "./template.hbs";
+import { className, classNames, layout, tagName } from "@ember-decorators/component";
+import { observes, on } from "@ember-decorators/object";
+import template from "./template.hbs";
 
 
-export default Component.extend({
-	layout,
-
-	tagName: "ul",
-	classNames: [ "drop-down-list-component" ],
-	classNameBindings: [
-		"expanded:expanded",
-		"upwards:expanded-upwards",
-		"class"
-	],
-
-	expanded: false,
-	upwards: false,
+@layout( template )
+@tagName( "ui" )
+@classNames( "drop-down-list-component" )
+export default class DropDownListComponent extends Component {
+	@className
+	class = "";
+	@className
+	expanded = false;
+	@className( "expanded-upwards" )
+	upwards = false;
 
 
-	willDestroyElement() {
-		this._removeClickListener();
-		this._super( ...arguments );
-	},
-
-
-	_expandedObserver: observer( "expanded", function() {
+	@observes( "expanded" )
+	_expandedObserver() {
 		// always remove click listener
 		this._removeClickListener();
 
-		if ( !get( this, "expanded" ) ) {
+		if ( !this.expanded ) {
 			return;
 		}
 
@@ -47,15 +41,16 @@ export default Component.extend({
 			}
 		};
 		this.element.ownerDocument.body.addEventListener( "click", this._clickListener );
-	}),
+	}
 
+	@on( "willDestroyElement" )
 	_removeClickListener() {
 		// unregister click event listener
 		if ( this._clickListener ) {
 			this.element.ownerDocument.body.removeEventListener( "click", this._clickListener );
 			this._clickListener = null;
 		}
-	},
+	}
 
 	_calcExpansionDirection() {
 		const element = this.element;
@@ -66,16 +61,15 @@ export default Component.extend({
 		const listHeight = element.offsetHeight + parseInt( marginTop ) + parseInt( marginBottom );
 		const isOverflowing = parentHeight - positionTop < listHeight;
 		set( this, "upwards", isOverflowing );
-	},
-
-
-	actions: {
-		change( item ) {
-			if ( get( this, "disabled" ) ) { return; }
-			setProperties( this, {
-				expanded: false,
-				selection: item
-			});
-		}
 	}
-});
+
+
+	@action
+	change( item ) {
+		if ( this.disabled ) { return; }
+		setProperties( this, {
+			expanded: false,
+			selection: item
+		});
+	}
+}

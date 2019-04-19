@@ -2,21 +2,35 @@ import Component from "@ember/component";
 import { set, computed } from "@ember/object";
 import { or } from "@ember/object/computed";
 import { scheduleOnce } from "@ember/runloop";
+import { attribute, className, classNames, layout, tagName } from "@ember-decorators/component";
 import isFocused from "utils/is-focused";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 import "./styles.less";
 
 
-export default Component.extend({
-	layout,
+@layout( template )
+@tagName( "label" )
+@classNames( "input-btn-component" )
+export default class InputBtnComponent extends Component {
+	static positionalParams = [ "label" ];
 
-	tagName: "label",
-	classNames: [ "input-btn-component" ],
-	classNameBindings: [ "checked", "disabled", "_blockOrLabel::no-label" ],
-	attributeBindings: [ "tabindex", "title" ],
-	tabindex: 0,
+	label;
 
-	_blockOrLabel: or( "hasBlock", "label" ),
+	@attribute
+	tabindex = 0;
+
+	@attribute
+	title;
+
+	@className
+	checked = false;
+
+	@className
+	disabled = false;
+
+	@or( "hasBlock", "label" )
+	@className( "", "no-label" )
+	_blockOrLabel;
 
 	/**
 	 * Super dirty hack!!!
@@ -25,11 +39,12 @@ export default Component.extend({
 	 * use this computed property which (lazily) sets a (different) hasBlock property here
 	 * this computed property will be called in the template's hasBlock block
 	 */
-	_setHasBlock: computed(function() {
+	@computed(function() {
 		scheduleOnce( "afterRender", () => {
 			set( this, "hasBlock", true );
 		});
-	}),
+	})
+	_setHasBlock;
 
 	/**
 	 * @param {KeyboardEvent} event
@@ -51,7 +66,4 @@ export default Component.extend({
 				return;
 		}
 	}
-
-}).reopenClass({
-	positionalParams: [ "label" ]
-});
+}

@@ -1,12 +1,11 @@
-import { get } from "@ember/object";
+import { classNames } from "@ember-decorators/component";
 import InputBtnComponent from "../-input-btn/component";
 
 
-export default InputBtnComponent.extend({
-	classNames: [ "check-box-component" ],
-
+@classNames( "check-box-component" )
+export default class CheckBoxComponent extends InputBtnComponent {
 	click() {
-		if ( get( this, "disabled" ) ) { return; }
+		if ( this.disabled ) { return; }
 		this.toggleProperty( "checked" );
 	}
-});
+}

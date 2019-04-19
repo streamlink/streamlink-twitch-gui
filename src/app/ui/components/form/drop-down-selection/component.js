@@ -1,31 +1,35 @@
 import Component from "@ember/component";
-import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { translationMacro as t } from "ember-i18n/addon";
-import layout from "./template.hbs";
+import { className, classNames, layout, tagName } from "@ember-decorators/component";
+import { t } from "ember-i18n/decorator";
+import template from "./template.hbs";
 
 
-export default Component.extend({
-	i18n: service(),
+@layout( template )
+@tagName( "div" )
+@classNames( "drop-down-selection-component" )
+export default class DropDownSelectionComponent extends Component {
+	/** @type {I18nService} */
+	@service i18n;
 
-	layout,
+	@className
+	class = "";
 
-	tagName: "div",
-	classNames: [ "drop-down-selection-component" ],
-	classNameBindings: [ "class" ],
+	@t( "components.drop-down-selection.placeholder" )
+	_defaultPlaceholder;
 
-	_defaultPlaceholder: t( "components.drop-down-selection.placeholder" ),
-	_placeholder: null,
+	_placeholder = null;
 
 	get placeholder() {
 		return this._placeholder || this._defaultPlaceholder;
-	},
+	}
 	set placeholder( value ) {
 		this._placeholder = value;
-	},
+	}
 
 	click() {
-		get( this, "action" )();
+		this.action();
+
 		return false;
 	}
-});
+}

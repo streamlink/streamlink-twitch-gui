@@ -1,25 +1,24 @@
-import { get, set } from "@ember/object";
-import Selectable from "../-selectable/component";
+import { set, action } from "@ember/object";
+import { attribute, className, classNames, layout, tagName } from "@ember-decorators/component";
+import SelectableComponent from "../-selectable/component";
 import isFocused from "utils/is-focused";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 import "./styles.less";
 
 
-export default Selectable.extend({
-	layout,
+@layout( template )
+@tagName( "div" )
+@classNames( "drop-down-component" )
+export default class DropDownComponent extends SelectableComponent {
+	@className
+	class = "";
+	@className
+	disabled = false;
 
-	tagName: "div",
-	classNames: [ "drop-down-component" ],
-	classNameBindings: [
-		"disabled:disabled",
-		"class"
-	],
-	attributeBindings: [ "tabindex" ],
-	tabindex: 0,
+	@attribute
+	tabindex = 0;
 
-	disabled: false,
-	expanded: false,
-
+	expanded = false;
 
 	/**
 	 * @param {KeyboardEvent} event
@@ -28,7 +27,7 @@ export default Selectable.extend({
 		switch ( event.key ) {
 			case "Escape":
 			case "Backspace":
-				if ( get( this, "expanded" ) ) {
+				if ( this.expanded ) {
 					set( this, "expanded", false );
 					return false;
 				}
@@ -51,16 +50,15 @@ export default Selectable.extend({
 			case "ArrowDown":
 				return this._switchSelectionOnArrowKey( 1 );
 		}
-	},
+	}
 
 	_switchSelectionOnArrowKey( change ) {
-		if ( !get( this, "expanded" ) || !isFocused( this.element ) ) {
+		if ( !this.expanded || !isFocused( this.element ) ) {
 			return;
 		}
 
-		const content = get( this, "content" );
-		const selection = get( this, "selection" );
-		const selIndex = content.indexOf( selection );
+		const content = this.content;
+		const selIndex = content.indexOf( this.selection );
 		if ( selIndex === -1 ) {
 			return;
 		}
@@ -70,16 +68,15 @@ export default Selectable.extend({
 		set( this, "selection", newSelection );
 
 		return false;
-	},
+	}
 
 
-	actions: {
-		toggle() {
-			if ( get( this, "disabled" ) ) {
-				set( this, "expanded", false );
-			} else {
-				this.toggleProperty( "expanded" );
-			}
+	@action
+	toggle() {
+		if ( this.disabled ) {
+			set( this, "expanded", false );
+		} else {
+			this.toggleProperty( "expanded" );
 		}
 	}
-});
+}

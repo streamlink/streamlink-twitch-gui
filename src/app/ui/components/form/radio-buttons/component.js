@@ -1,18 +1,16 @@
-import { set } from "@ember/object";
-import Selectable from "../-selectable/component";
-import layout from "./template.hbs";
+import { set, action } from "@ember/object";
+import { classNames, layout, tagName } from "@ember-decorators/component";
+import SelectableComponent from "../-selectable/component";
+import template from "./template.hbs";
 import "./styles.less";
 
 
-export default Selectable.extend({
-	layout,
-
-	tagName: "div",
-	classNames: [ "radio-buttons-component" ],
-
-	actions: {
-		change( item ) {
-			set( this, "selection", item );
-		}
+@layout( template )
+@tagName( "div" )
+@classNames( "radio-buttons-component" )
+export default class RadioButtonsComponent extends SelectableComponent {
+	@action
+	change( item ) {
+		set( this, "selection", item );
 	}
-});
+}

@@ -1,18 +1,21 @@
 import TextField from "@ember/component/text-field";
 import { inject as service } from "@ember/service";
+import { attribute } from "@ember-decorators/component";
 import t from "translation-key";
 
 
-export default TextField.extend({
+export default class TextFieldComponent extends TextField {
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
 
-	attributeBindings: [ "autoselect:data-selectable" ],
+	@attribute( "data-selectable" )
+	autoselect = false;
 
-	autoselect: false,
+	autofocus = false;
+	noContextmenu = false;
 
 	contextMenu( event ) {
-		if ( this.attrs.noContextmenu ) { return; }
+		if ( this.noContextmenu ) { return; }
 
 		const element = this.element;
 		const start = element.selectionStart;
@@ -42,13 +45,13 @@ export default TextField.extend({
 				}
 			}
 		]);
-	},
+	}
 
 	focusIn() {
-		if ( !this.attrs.autofocus || !this.attrs.autoselect ) { return; }
+		if ( !this.autofocus || !this.autoselect ) { return; }
 
 		this.element.setSelectionRange( 0, this.element.value.length );
-	},
+	}
 
 	/**
 	 * @param {KeyboardEvent} event
@@ -59,6 +62,6 @@ export default TextField.extend({
 			return;
 		}
 
-		return this._super( ...arguments );
+		return super.keyDown( ...arguments );
 	}
-});
+}
