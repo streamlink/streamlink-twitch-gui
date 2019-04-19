@@ -8,7 +8,10 @@ const webpack = require( "webpack" );
 module.exports = function( config, grunt, isProd ) {
 	config.module.rules.push({
 		test: /\.js$/,
-		include: r( pDependencies, "@ember-decorators" ),
+		include: [
+			r( pDependencies, "@ember-decorators" ),
+			r( pDependencies, "ember-decorators-polyfill" )
+		],
 		loader: "babel-loader",
 		options: buildBabelConfig({
 			plugins: [

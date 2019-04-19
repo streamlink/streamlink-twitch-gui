@@ -14,5 +14,8 @@ window.requirejs = {
 };
 window.requireModule = Ember.__loader.require;
 
+// polyfill Ember's native decorators
+require( "ember-decorators-polyfill/vendor/ember-decorators-polyfill" );
+
 
 export default Ember;
