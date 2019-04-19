@@ -1,5 +1,4 @@
 import { get, computed } from "@ember/object";
-import { macro } from "@ember-decorators/object/computed";
 
 
 function mapPropertiesByHash( object, hash ) {
@@ -11,11 +10,13 @@ function mapPropertiesByHash( object, hash ) {
 }
 
 
-export const t = macro( ( key, interpolations = {} ) => {
-	return computed( "i18n.locale", ...Object.values( interpolations ), function() {
+export const t = function( key, interpolations = {} ) {
+	const values = Object.values( interpolations );
+
+	return computed( "i18n.locale", ...values, function() {
 		/** @type {I18nService} */
 		const i18n = this.i18n;
 
 		return i18n.t( key, mapPropertiesByHash( this, interpolations ) );
 	});
-});
+};
