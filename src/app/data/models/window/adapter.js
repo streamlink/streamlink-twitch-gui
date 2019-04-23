@@ -1,6 +1,6 @@
 import LocalStorageAdapter from "ember-localstorage-adapter/adapters/ls-adapter";
 
 
-export default LocalStorageAdapter.extend({
-	namespace: "window"
-});
+export default class WindowAdapter extends LocalStorageAdapter {
+	namespace = "window";
+}

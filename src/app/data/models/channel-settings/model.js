@@ -3,31 +3,31 @@ import Model from "ember-data/model";
 import SettingsStreaming from "data/models/settings/streaming/fragment";
 import SettingsStreams from "data/models/settings/streams/fragment";
 import SettingsNotification from "data/models/settings/notification/fragment";
+import { name } from "utils/decorators";
 
 
-/**
- * @type {Object.<string,[(Model|Fragment),string,string]>}
- */
-const attributes = {
-	streaming_quality: [ SettingsStreaming, "quality", "streaming.quality" ],
-	streaming_low_latency: [ SettingsStreaming, "low_latency", "streaming.low_latency" ],
-	streaming_disable_ads: [ SettingsStreaming, "disable_ads", "streaming.disable_ads" ],
-	streams_chat_open: [ SettingsStreams, "chat_open", "streams.chat_open" ],
-	notification_enabled: [ SettingsNotification, "enabled", "notification.enabled" ]
-};
+const settingsAttribute = ( Settings, attribute, settingsPath ) => () => {
+	const meta = Settings.metaForProperty( attribute );
+	if ( !meta || !meta.isAttribute ) { return; }
 
-for ( const [ name, [ settings, prop, settingsPath ] ] of Object.entries( attributes ) ) {
-	const meta = settings.metaForProperty( prop );
-	if ( !meta || !meta.isAttribute ) { continue; }
-
-	attributes[ name ] = attr( meta.type, {
+	return attr( meta.type, {
 		defaultValue: null,
 		// the ChannelSettingsController needs this attribute option
 		settingsPath
 	});
+};
+
+
+@name( "ChannelSettings" )
+export default class ChannelSettings extends Model {
+	@settingsAttribute( SettingsStreaming, "quality", "streaming.quality" )
+	streaming_quality;
+	@settingsAttribute( SettingsStreaming, "low_latency", "streaming.low_latency" )
+	streaming_low_latency;
+	@settingsAttribute( SettingsStreaming, "disable_ads", "streaming.disable_ads" )
+	streaming_disable_ads;
+	@settingsAttribute( SettingsStreams, "chat_open", "streams.chat_open" )
+	streams_chat_open;
+	@settingsAttribute( SettingsNotification, "enabled", "notification.enabled" )
+	notification_enabled;
 }
-
-
-export default Model.extend( attributes ).reopenClass({
-	toString() { return "ChannelSettings"; }
-});

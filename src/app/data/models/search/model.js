@@ -1,39 +1,47 @@
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
+import { name } from "utils/decorators";
 
 
-export default Model.extend({
-	query : attr( "string" ),
-	filter: attr( "string" ),
-	date  : attr( "date" ),
+const { hasOwnProperty } = {};
 
-	label: computed( "filter", function() {
-		const filter = get( this, "filter" );
-		return this.constructor.getLabel( filter );
-	})
 
-}).reopenClass({
-	toString() { return "Search"; },
-
-	filters: [
+@name( "Search" )
+export default class Search extends Model {
+	static filters = [
 		{ label: "All", id: "all" },
 		{ label: "Game", id: "games" },
 		{ label: "Channel", id: "channels" },
 		{ label: "Stream", id: "streams" }
-	],
+	];
 
-	filtersmap: computed(function() {
+	@computed()
+	static get filtersmap() {
 		return this.filters.reduce( ( map, filter ) => {
 			map[ filter.id ] = filter;
+
 			return map;
 		}, {} );
-	}),
+	}
 
-	getLabel( filter ) {
-		const map = get( this, "filtersmap" );
-		return map.hasOwnProperty( filter )
-			? map[ filter ].label
+	static getLabel( filter ) {
+		const { filtersmap } = this;
+
+		return hasOwnProperty.call( filtersmap, filter )
+			? filtersmap[ filter ].label
 			: "All";
 	}
-});
+
+	@attr( "string" )
+	query;
+	@attr( "string" )
+	filter;
+	@attr( "date" )
+	date;
+
+	@computed( "filter" )
+	get label() {
+		return this.constructor.getLabel( this.filter );
+	}
+}

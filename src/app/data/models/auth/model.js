@@ -1,28 +1,28 @@
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
+import { name } from "utils/decorators";
 
 
-export default Model.extend( /** @class Auth */ {
-	access_token: attr( "string" ),
-	scope       : attr( "string" ),
-	date        : attr( "date" ),
+@name( "Auth" )
+export default class Auth extends Model {
+	@attr( "string" )
+	access_token;
+	@attr( "string" )
+	scope;
+	@attr( "date" )
+	date;
 
 
-	// volatile property
-	user_id: null,
-	user_name: null,
+	// runtime "attributes"
+	user_id = null;
+	user_name = null;
 
 	// status properties
-	isPending : false,
-	isLoggedIn: computed( "access_token", "user_id", "isPending", function() {
-		let token   = get( this, "access_token" );
-		let id      = get( this, "user_id" );
-		let pending = get( this, "isPending" );
+	isPending = false;
 
-		return token && id && !pending;
-	})
-
-}).reopenClass({
-	toString() { return "Auth"; }
-});
+	@computed( "access_token", "user_id", "isPending" )
+	get isLoggedIn() {
+		return this.access_token && this.user_id && !this.isPending;
+	}
+}
