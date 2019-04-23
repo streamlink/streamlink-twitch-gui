@@ -219,20 +219,24 @@ class HotkeyRegistry {
 }
 
 
-/**
- * @class HotkeyService
- */
-export default Service.extend({
+export default class HotkeyService extends Service {
 	/** @type {I18nService} */
-	i18n: service(),
+	@service i18n;
 	/** @type {SettingsService} */
-	settings: service(),
+	@service settings;
+
+	/** @type {HotkeysMap} */
+	hotkeys = new Map();
+
+	/** @type {HotkeyRegistry[]} */
+	registries = [];
+
+	/** @type {KeyboardLayoutMap} */
+	layoutMap = new Map();
 
 	init() {
-		this._super( ...arguments );
+		super.init( ...arguments );
 
-		this.registries = [];
-		this.hotkeys = new Map();
 		hotkeysMapBuild( this.hotkeys );
 		const hotkeysMapUpdate = () => {
 			const userData = this.settings.content && this.settings.content.hotkeys;
@@ -264,16 +268,7 @@ export default Service.extend({
 		const resetLayoutMap = async () => this.layoutMap = await navigator.keyboard.getLayoutMap();
 		//navigator.keyboard.addEventListener( "layoutchange", resetLayoutMap );
 		this.settings.on( "didUpdate", resetLayoutMap );
-	},
-
-	/** @type {HotkeysMap} */
-	hotkeys: null,
-
-	/** @type {HotkeyRegistry[]} */
-	registries: null,
-
-	/** @type {KeyboardLayoutMap} */
-	layoutMap: null,
+	}
 
 	/**
 	 * Register hotkeys of a component
@@ -304,7 +299,7 @@ export default Service.extend({
 		}
 
 		this.registries.unshift( ...registries );
-	},
+	}
 
 	/**
 	 * Remove all hotkeys registered by a component
@@ -319,7 +314,7 @@ export default Service.extend({
 				l--;
 			}
 		}
-	},
+	}
 
 	/**
 	 * Find a registered hotkey that matches and execute the action of the one added last
@@ -345,7 +340,7 @@ export default Service.extend({
 				break;
 			}
 		}
-	},
+	}
 
 	/**
 	 * @param {string} namespace
@@ -358,7 +353,7 @@ export default Service.extend({
 
 		return hotkeys.has( id )
 		    && hotkeys.get( id ).find( hotkey => !hotkey.disabled && hotkey.code !== null );
-	},
+	}
 
 	/**
 	 * @param {HotkeyComponent} context
@@ -372,7 +367,7 @@ export default Service.extend({
 				return hotkey;
 			}
 		}
-	},
+	}
 
 	/**
 	 * @param {Hotkey} hotkey
@@ -406,4 +401,4 @@ export default Service.extend({
 			? `[${str}] ${title}`
 			: str;
 	}
-});
+}

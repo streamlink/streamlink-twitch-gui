@@ -1,5 +1,5 @@
 import { getOwner } from "@ember/application";
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
 import { quit } from "nwjs/App";
 import { Clipboard, Shell } from "nwjs/nwGui";
@@ -18,29 +18,34 @@ const { hasOwnProperty } = {};
 const reVariable = /{(\w+)}/g;
 
 
-export default Service.extend( /** @class NwjsService */ {
-	modal: service(),
-	settings: service(),
-	streaming: service(),
+export default class NwjsService extends Service {
+	/** @type {ModalService} */
+	@service modal;
+	/** @type {SettingsService} */
+	@service settings;
+	/** @type {StreamingService} */
+	@service streaming;
 
 
 	/** @type {NWJS_Helpers.clip} */
-	clipboard: computed(function() {
+	@computed()
+	get clipboard() {
 		return Clipboard.get();
-	}),
+	}
 
-	tray: computed(function() {
+	@computed()
+	get tray() {
 		return getOwner( this ).lookup( "nwjs:tray" );
-	}),
+	}
 
 
 	reload() {
 		nwWindow.reloadIgnoringCache();
-	},
+	}
 
 	devTools() {
 		nwWindow.showDevTools();
-	},
+	}
 
 	/**
 	 * @param {string} url
@@ -62,7 +67,7 @@ export default Service.extend( /** @class NwjsService */ {
 		});
 
 		Shell.openExternal( url );
-	},
+	}
 
 	minimize() {
 		const { integration, minimizetotray } = this.settings.content.gui;
@@ -78,31 +83,32 @@ export default Service.extend( /** @class NwjsService */ {
 		} else {
 			toggleMinimized();
 		}
-	},
+	}
 
 	maximize() {
 		toggleMaximized();
-	},
+	}
 
 	focus( focus = true ) {
 		setFocused( focus );
 	},
 
 	close() {
-		const streams = get( this, "streaming.model" ).toArray();
-		if ( streams.length && streams.some( stream => !get( stream, "hasEnded" ) ) ) {
-			get( this, "modal" ).openModal( "quit", this );
+		/** @type {Stream[]} */
+		const streams = this.streaming.model.toArray();
+		if ( streams.length && streams.some( stream => !stream.hasEnded ) ) {
+			this.modal.openModal( "quit", this );
 		} else {
 			this.quit();
 		}
-	},
+	}
 
 	quit() {
 		quit();
-	},
+	}
 
 	setShowInTray( visible, removeOnClick ) {
-		const tray = get( this, "tray" );
+		const tray = this.tray;
 		if ( visible ) {
 			tray._createTray();
 			if ( removeOnClick ) {
@@ -111,7 +117,7 @@ export default Service.extend( /** @class NwjsService */ {
 		} else {
 			tray._removeTray();
 		}
-	},
+	}
 
 	contextMenu( event, items ) {
 		event.preventDefault();
@@ -120,19 +126,19 @@ export default Service.extend( /** @class NwjsService */ {
 		const menu = getOwner( this ).lookup( "nwjs:menu" );
 		menu.items.pushObjects( items );
 		menu.menu.popup( event.x, event.y );
-	},
+	}
 
 	addTrayMenuItem( item, position ) {
-		const tray = get( this, "tray" );
+		const tray = this.tray;
 		if ( position === undefined ) {
 			tray.menu.items.unshiftObject( item );
 		} else {
 			tray.menu.items.insertAt( position, item );
 		}
-	},
+	}
 
 	removeTrayMenuItem( item ) {
-		const tray = get( this, "tray" );
+		const tray = this.tray;
 		tray.menu.items.removeObject( item );
 	}
-});
+}

@@ -1,6 +1,6 @@
 import { A } from "@ember/array";
 import { getOwner } from "@ember/application";
-import { set, setProperties } from "@ember/object";
+import { setProperties } from "@ember/object";
 import { notEmpty } from "@ember/object/computed";
 import Evented from "@ember/object/evented";
 import Service from "@ember/service";
@@ -14,18 +14,12 @@ import Service from "@ember/service";
  */
 
 
-/** */
-export default Service.extend( Evented, /** @class ModalService */ {
+export default class ModalService extends Service.extend( Evented ) {
 	/** @type {ModalServiceEntry[]} */
-	modals: null,
+	modals = A();
 
-	isModalOpened: notEmpty( "modals" ),
-
-	init() {
-		this._super( ...arguments );
-		set( this, "modals", A() );
-	},
-
+	@notEmpty( "modals" )
+	isModalOpened;
 
 	/**
 	 * @param {string} name
@@ -77,7 +71,7 @@ export default Service.extend( Evented, /** @class ModalService */ {
 		}
 
 		return context;
-	},
+	}
 
 	/**
 	 * @param {(Object|null)} context
@@ -98,7 +92,7 @@ export default Service.extend( Evented, /** @class ModalService */ {
 				this.trigger( "close", n, c );
 			}
 		}
-	},
+	}
 
 	promiseModal( name, context, ...args ) {
 		return new Promise( resolve => {
@@ -110,7 +104,7 @@ export default Service.extend( Evented, /** @class ModalService */ {
 			this.on( "close", onClose );
 			context = this.openModal( name, context, ...args );
 		});
-	},
+	}
 
 	/**
 	 * @param {string?} name
@@ -125,4 +119,4 @@ export default Service.extend( Evented, /** @class ModalService */ {
 			|| !context && n === name
 		);
 	}
-});
+}

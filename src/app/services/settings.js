@@ -1,26 +1,27 @@
-import { get, set } from "@ember/object";
+import { set } from "@ember/object";
 import Evented from "@ember/object/evented";
 import ObjectProxy from "@ember/object/proxy";
 import { inject as service } from "@ember/service";
+import { on } from "@ember-decorators/object";
 
 
 // A service object is just a regular object, so we can use an ObjectProxy as well
-export default ObjectProxy.extend( Evented, {
-	store: service(),
+export default class SettingsService extends ObjectProxy.extend( Evented ) {
+	static isServiceFactory = true;
 
-	content: null,
+	/** @type {DS.Store} */
+	@service store;
 
-	init() {
-		const store = get( this, "store" );
-		// don't use async functions here and use Ember RSVP promises instead
-		store.findOrCreateRecord( "settings" )
-			.then( settings => {
-				set( this, "content", settings );
-				settings.on( "didUpdate", ( ...args ) => this.trigger( "didUpdate", ...args ) );
-				this.trigger( "initialized" );
-			});
+	/** @type {Settings} */
+	content = null;
+
+	@on( "init" )
+	async _initContent() {
+		/** @type {Settings} */
+		const settings = await this.store.findOrCreateRecord( "settings" );
+		set( this, "content", settings );
+
+		settings.on( "didUpdate", ( ...args ) => this.trigger( "didUpdate", ...args ) );
+		this.trigger( "initialized" );
 	}
-
-}).reopenClass({
-	isServiceFactory: true
-});
+}
