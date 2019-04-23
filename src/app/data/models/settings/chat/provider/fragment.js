@@ -1,3 +1,4 @@
+import { defineProperty } from "@ember/object";
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
 import { chat as chatConfig } from "config";
@@ -9,7 +10,7 @@ const providers = new Map();
 
 
 // chat providers don't share common attributes
-const SettingsChatProvider = Fragment.extend();
+class SettingsChatProvider extends Fragment {}
 
 
 const { hasOwnProperty } = {};
@@ -19,7 +20,7 @@ for ( const [ id ] of Object.entries( chatProviders ) ) {
 	// a chat provider needs to have a config object (at least a label is required)
 	if ( !hasOwnProperty.call( chatConfig, id ) ) { continue; }
 
-	const providerAttributes = {};
+	const provider = class extends SettingsChatProvider {};
 
 	// dynamic fragment attributes defined in the chat config file
 	const { attributes } = chatConfig[ id ];
@@ -28,11 +29,11 @@ for ( const [ id ] of Object.entries( chatProviders ) ) {
 			const { name, type } = param;
 			// set the whole config object as attribute options object
 			// this will be used in the SettingsChatRoute template via attribute.options.property
-			providerAttributes[ name ] = attr( type, param );
+			const prop = attr( type, param );
+			defineProperty( provider.prototype, name, prop );
 		}
 	}
 
-	const provider = SettingsChatProvider.extend( providerAttributes );
 	providers.set( id, provider );
 }
 

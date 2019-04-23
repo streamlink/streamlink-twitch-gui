@@ -1,11 +1,14 @@
+import { defineProperty } from "@ember/object";
 import Fragment from "ember-data-model-fragments/fragment";
 import { fragment } from "ember-data-model-fragments/attributes";
 import { hotkeys as hotkeysConfig } from "config";
 import { typeKey } from "./namespace/fragment";
 
 
-const attributes = {};
-for ( const [ namespaceName, { actions } ] of Object.entries( hotkeysConfig ) ) {
+class SettingsHotkeys extends Fragment {}
+
+for ( const [ type, { actions } ] of Object.entries( hotkeysConfig ) ) {
+	let hasActions = false;
 	const defaultValue = {};
 	for ( const [ action, hotkey ] of Object.entries( actions ) ) {
 		if ( typeof hotkey === "string" ) { continue; }
@@ -13,16 +16,20 @@ for ( const [ namespaceName, { actions } ] of Object.entries( hotkeysConfig ) ) 
 			primary: {},
 			secondary: {}
 		};
+		hasActions = true;
 	}
 	// namespaces without actions should not exist
-	if ( !Object.keys( defaultValue ).length ) { continue; }
-	defaultValue[ typeKey ] = `settings-hotkeys-namespace-${namespaceName}`;
-	attributes[ namespaceName ] = fragment( "settings-hotkeys-namespace", {
-		defaultValue,
+	if ( !hasActions ) { continue; }
+
+	const prop = fragment( "settings-hotkeys-namespace", {
+		defaultValue: Object.assign( defaultValue, {
+			[ typeKey ]: `settings-hotkeys-namespace-${type}`
+		}),
 		polymorphic: true,
 		typeKey
 	});
+	defineProperty( SettingsHotkeys.prototype, type, prop );
 }
 
 
-export default Fragment.extend( attributes );
+export default SettingsHotkeys;

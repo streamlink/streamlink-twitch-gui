@@ -1,12 +1,15 @@
+import { defineProperty } from "@ember/object";
 import Fragment from "ember-data-model-fragments/fragment";
 import { fragment } from "ember-data-model-fragments/attributes";
 import { qualities } from "data/models/stream/model";
 
 
-const attributes = {};
+class SettingsStreamingQualities extends Fragment {}
+
 for ( const { id } of qualities ) {
-	attributes[ id ] = fragment( "settingsStreamingQuality", { defaultValue: {} } );
+	const prop = fragment( "settings-streaming-quality", { defaultValue: {} } );
+	defineProperty( SettingsStreamingQualities.prototype, id, prop );
 }
 
 
-export default Fragment.extend( attributes );
+export default SettingsStreamingQualities;

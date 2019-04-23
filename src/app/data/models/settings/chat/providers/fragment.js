@@ -1,19 +1,22 @@
+import { defineProperty } from "@ember/object";
 import Fragment from "ember-data-model-fragments/fragment";
 import { fragment } from "ember-data-model-fragments/attributes";
-import { typeKey } from "../provider/fragment";
 import chatProviders from "services/chat/providers";
+import { typeKey } from "../provider/fragment";
 
 
-const attributes = {};
+class SettingsChatProviders extends Fragment {}
+
 for ( const [ type ] of Object.entries( chatProviders ) ) {
-	attributes[ type ] = fragment( "settings-chat-provider", {
+	const prop = fragment( "settings-chat-provider", {
 		defaultValue: {
 			[ typeKey ]: `settings-chat-provider-${type}`
 		},
 		polymorphic: true,
 		typeKey
 	});
+	defineProperty( SettingsChatProviders.prototype, type, prop );
 }
 
 
-export default Fragment.extend( attributes );
+export default SettingsChatProviders;

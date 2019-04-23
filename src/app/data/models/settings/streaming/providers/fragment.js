@@ -1,3 +1,4 @@
+import { defineProperty } from "@ember/object";
 import Fragment from "ember-data-model-fragments/fragment";
 import { fragment } from "ember-data-model-fragments/attributes";
 import { streaming as streamingConfig } from "config";
@@ -5,10 +6,12 @@ import { streaming as streamingConfig } from "config";
 
 const { providers } = streamingConfig;
 
-const attributes = {};
+class SettingsStreamingProviders extends Fragment {}
+
 for ( const [ provider ] of Object.entries( providers ) ) {
-	attributes[ provider ] = fragment( "settingsStreamingProvider", { defaultValue: {} } );
+	const prop = fragment( "settings-streaming-provider", { defaultValue: {} } );
+	defineProperty( SettingsStreamingProviders.prototype, provider, prop );
 }
 
 
-export default Fragment.extend( attributes );
+export default SettingsStreamingProviders;

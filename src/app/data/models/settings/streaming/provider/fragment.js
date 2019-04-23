@@ -2,8 +2,11 @@ import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
 
 
-export default Fragment.extend({
-	exec: attr( "string" ),
-	params: attr( "string" ),
-	pythonscript: attr( "string" )
-});
+export default class SettingsStreamingProvider extends Fragment {
+	@attr( "string" )
+	exec;
+	@attr( "string" )
+	params;
+	@attr( "string" )
+	pythonscript;
+}

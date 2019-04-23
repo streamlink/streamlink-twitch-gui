@@ -1,5 +1,6 @@
-import Fragment from "ember-data-model-fragments/fragment";
+import { defineProperty } from "@ember/object";
 import { fragment } from "ember-data-model-fragments/attributes";
+import Fragment from "ember-data-model-fragments/fragment";
 import { hotkeys as hotkeysConfig } from "config";
 
 
@@ -7,18 +8,22 @@ const typeKey = "type";
 const namespaces = new Map();
 
 
-const SettingsHotkeysNamespace = Fragment.extend();
+class SettingsHotkeysNamespace extends Fragment {}
 
 
 for ( const [ namespaceName, { actions } ] of Object.entries( hotkeysConfig ) ) {
-	const attributes = {};
+	const namespace = class extends SettingsHotkeysNamespace {};
+
+	let hasActions = false;
 	for ( const [ action, hotkeys ] of Object.entries( actions ) ) {
 		if ( typeof hotkeys === "string" ) { continue; }
-		attributes[ action ] = fragment( "settings-hotkeys-action", { defaultValue: {} } );
+		const prop = fragment( "settings-hotkeys-action" );
+		defineProperty( namespace.prototype, action, prop );
+		hasActions = true;
 	}
 	// namespaces without actions should not exist
-	if ( !Object.keys( attributes ).length ) { continue; }
-	const namespace = SettingsHotkeysNamespace.extend( attributes );
+	if ( !hasActions ) { continue; }
+
 	namespaces.set( namespaceName, namespace );
 }
 
