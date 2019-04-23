@@ -38,7 +38,9 @@ module( "data/models/twitch/channel", {
 		owner.register( "service:auth", Service.extend() );
 		owner.register( "service:i18n", FakeI18nService );
 		owner.register( "service:settings", Service.extend({
-			streams: {}
+			content: {
+				streams: {}
+			}
 		}) );
 		owner.register( "model:twitch-channel", Channel );
 		owner.register( "serializer:twitch-channel", ChannelSerializer );
@@ -122,7 +124,7 @@ test( "Computed properties", assert => {
 
 	// detailedName
 
-	const settings = owner.lookup( "service:settings" );
+	const settings = owner.lookup( "service:settings" ).content;
 
 	run( () => set( settings, "streams.name", ATTR_STREAMS_NAME_CUSTOM ) );
 	assert.strictEqual(

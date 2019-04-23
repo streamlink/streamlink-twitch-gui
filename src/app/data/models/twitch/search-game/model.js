@@ -1,10 +1,11 @@
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
+import { name } from "utils/decorators";
 
 
-export default Model.extend({
-	game: belongsTo( "twitchGame", { async: false } )
-
-}).reopenClass({
-	toString() { return "kraken/search/games"; }
-});
+@name( "kraken/search/games" )
+export default class TwitchSearchGame extends Model {
+	/** @type {TwitchGame} */
+	@belongsTo( "twitch-game", { async: false } )
+	game;
+}

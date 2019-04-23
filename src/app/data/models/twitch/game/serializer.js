@@ -1,21 +1,19 @@
 import TwitchSerializer from "data/models/twitch/serializer";
 
 
-export default TwitchSerializer.extend({
-	primaryKey: "name",
+export default class TwitchGameSerializer extends TwitchSerializer {
+	primaryKey = "name";
 
-	modelNameFromPayloadKey() {
-		return "twitchGame";
-	},
+	modelNameFromPayloadKey = () => "twitch-game";
 
-	attrs: {
+	attrs = {
 		box: { deserialize: "records" },
 		logo: { deserialize: "records" }
-	},
+	};
 
 	normalize( modelClass, resourceHash, prop ) {
 		const id = resourceHash[ this.primaryKey ];
-		const foreignKey = this.store.serializerFor( "twitchImage" ).primaryKey;
+		const foreignKey = this.store.serializerFor( "twitch-image" ).primaryKey;
 
 		// apply the id of this record to the embedded TwitchImage records (box and logo)
 		if ( resourceHash.box ) {
@@ -25,6 +23,6 @@ export default TwitchSerializer.extend({
 			resourceHash.logo[ foreignKey ] = `game/logo/${id}`;
 		}
 
-		return this._super( modelClass, resourceHash, prop );
+		return super.normalize( modelClass, resourceHash, prop );
 	}
-});
+}

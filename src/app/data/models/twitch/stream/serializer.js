@@ -1,19 +1,17 @@
 import TwitchSerializer from "data/models/twitch/serializer";
 
 
-export default TwitchSerializer.extend({
-	modelNameFromPayloadKey() {
-		return "twitchStream";
-	},
+export default class TwitchStreamSerializer extends TwitchSerializer {
+	modelNameFromPayloadKey = () => "twitch-stream";
 
-	attrs: {
+	attrs = {
 		channel: { deserialize: "records" },
 		preview: { deserialize: "records" }
-	},
+	};
 
 	normalize( modelClass, resourceHash, prop ) {
-		const foreignKeyChannel = this.store.serializerFor( "twitchChannel" ).primaryKey;
-		const foreignKeyImage = this.store.serializerFor( "twitchImage" ).primaryKey;
+		const foreignKeyChannel = this.store.serializerFor( "twitch-channel" ).primaryKey;
+		const foreignKeyImage = this.store.serializerFor( "twitch-image" ).primaryKey;
 
 		// get the id of the embedded TwitchChannel record and apply it here
 		// this is required for refreshing the record so that the correct id is being used
@@ -25,6 +23,6 @@ export default TwitchSerializer.extend({
 			resourceHash.preview[ foreignKeyImage ] = `stream/preview/${id}`;
 		}
 
-		return this._super( modelClass, resourceHash, prop );
+		return super.normalize( modelClass, resourceHash, prop );
 	}
-});
+}

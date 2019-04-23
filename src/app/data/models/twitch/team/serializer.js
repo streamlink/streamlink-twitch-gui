@@ -1,16 +1,14 @@
 import TwitchSerializer from "data/models/twitch/serializer";
 
 
-export default TwitchSerializer.extend({
-	primaryKey: "name",
+export default class TwitchTeamSerializer extends TwitchSerializer {
+	primaryKey = "name";
 
-	modelNameFromPayloadKey() {
-		return "twitchTeam";
-	},
+	modelNameFromPayloadKey = () => "twitch-team";
 
-	attrs: {
+	attrs = {
 		users: { deserialize: "records" }
-	},
+	};
 
 	normalizeSingleResponse( store, primaryModelClass, payload, id, requestType ) {
 		// fix payload format
@@ -18,6 +16,6 @@ export default TwitchSerializer.extend({
 			[ this.modelNameFromPayloadKey() ]: payload
 		};
 
-		return this._super( store, primaryModelClass, payload, id, requestType );
+		return super.normalizeSingleResponse( store, primaryModelClass, payload, id, requestType );
 	}
-});
+}

@@ -2,10 +2,10 @@ import EmbeddedRecordsMixin from "ember-data/serializers/embedded-records-mixin"
 import RESTSerializer from "ember-data/serializers/rest";
 
 
-export default RESTSerializer.extend( EmbeddedRecordsMixin, {
-	isNewSerializerAPI: true,
+export default class TwitchSerializer extends RESTSerializer.extend( EmbeddedRecordsMixin ) {
+	isNewSerializerAPI = true;
 
-	primaryKey: "_id",
+	primaryKey = "_id";
 
 	/**
 	 * All underscored properties contain metadata (except the primaryKey)
@@ -19,7 +19,7 @@ export default RESTSerializer.extend( EmbeddedRecordsMixin, {
 		const primaryKey = this.primaryKey;
 		const data = {};
 
-		Object.keys( payload ).forEach(function( key ) {
+		Object.keys( payload ).forEach( key => {
 			if ( key.charAt( 0 ) === "_" && key !== primaryKey ) {
 				data[ key.substr( 1 ) ] = payload[ key ];
 				delete payload[ key ];
@@ -28,4 +28,4 @@ export default RESTSerializer.extend( EmbeddedRecordsMixin, {
 
 		return data;
 	}
-});
+}

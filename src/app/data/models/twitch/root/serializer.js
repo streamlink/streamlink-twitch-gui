@@ -1,10 +1,8 @@
 import TwitchSerializer from "data/models/twitch/serializer";
 
 
-export default TwitchSerializer.extend({
-	modelNameFromPayloadKey() {
-		return "twitchRoot";
-	},
+export default class TwitchRootSerializer extends TwitchSerializer {
+	modelNameFromPayloadKey = () => "twitch-root";
 
 	normalize( modelClass, resourceHash, prop ) {
 		// add an ID to the record
@@ -16,6 +14,6 @@ export default TwitchSerializer.extend({
 		resourceHash.created_at = created_at;
 		resourceHash.updated_at = updated_at;
 
-		return this._super( modelClass, resourceHash, prop );
+		return super.normalize( modelClass, resourceHash, prop );
 	}
-});
+}

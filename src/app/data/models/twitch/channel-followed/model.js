@@ -1,13 +1,16 @@
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
+import { name } from "utils/decorators";
 
 
-export default Model.extend({
-	channel: belongsTo( "twitchChannel", { async: false } ),
-	created_at: attr( "date" ),
-	notifications: attr( "boolean" )
-
-}).reopenClass({
-	toString() { return "kraken/users/:user_id/follows/channels"; }
-});
+@name( "kraken/users/:user_id/follows/channels" )
+export default class TwitchChannelFollowed extends Model {
+	/** @type {TwitchChannel} */
+	@belongsTo( "twitch-channel", { async: false } )
+	channel;
+	@attr( "date" )
+	created_at;
+	@attr( "boolean" )
+	notifications;
+}

@@ -49,8 +49,10 @@ module( "data/models/twitch/stream", {
 		owner.register( "service:auth", Service.extend() );
 		owner.register( "service:i18n", FakeI18nService );
 		owner.register( "service:settings", Service.extend({
-			streams: {
-				vodcast_regexp: ""
+			content: {
+				streams: {
+					vodcast_regexp: ""
+				}
 			}
 		}) );
 
@@ -192,19 +194,20 @@ test( "Computed properties", function( assert ) {
 		status: ""
 	});
 	const record = env.store.createRecord( "twitchStream", { channel } );
+	const settings = owner.lookup( "service:settings" ).content;
 
 
 	// vodcast
 
 	assert.ok( get( record, "reVodcast" ) instanceof RegExp, "Has a default vodcast RegExp" );
 
-	set( record, "settings.streams.vodcast_regexp", " " );
+	set( settings, "streams.vodcast_regexp", " " );
 	assert.strictEqual( get( record, "reVodcast" ), null, "Returns null on empty RegExp" );
 
-	set( record, "settings.streams.vodcast_regexp", "(" );
+	set( settings, "streams.vodcast_regexp", "(" );
 	assert.strictEqual( get( record, "reVodcast" ), null, "Returns null on invalid RegExp" );
 
-	set( record, "settings.streams.vodcast_regexp", "I'm a vodcast" );
+	set( settings, "streams.vodcast_regexp", "I'm a vodcast" );
 	assert.ok( get( record, "reVodcast" ).test( "I'M A VODCAST" ), "Has a custom vodcast RegExp" );
 
 	assert.notOk( get( record, "isVodcast" ), "Not a vodcast" );

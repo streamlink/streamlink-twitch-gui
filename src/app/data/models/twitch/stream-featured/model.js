@@ -1,17 +1,24 @@
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
+import { name } from "utils/decorators";
 
 
-export default Model.extend({
-	image: attr( "string" ),
-	priority: attr( "number" ),
-	scheduled: attr( "boolean" ),
-	sponsored: attr( "boolean" ),
-	stream: belongsTo( "twitchStream", { async: false } ),
-	text: attr( "string" ),
-	title: attr( "string" )
-
-}).reopenClass({
-	toString() { return "kraken/streams/featured"; }
-});
+@name( "kraken/streams/featured" )
+export default class TwitchStreamFeatured extends Model {
+	@attr( "string" )
+	image;
+	@attr( "number" )
+	priority;
+	@attr( "boolean" )
+	scheduled;
+	@attr( "boolean" )
+	sponsored;
+	/** @type {TwitchStream} */
+	@belongsTo( "twitch-stream", { async: false } )
+	stream;
+	@attr( "string" )
+	text;
+	@attr( "string" )
+	title;
+}

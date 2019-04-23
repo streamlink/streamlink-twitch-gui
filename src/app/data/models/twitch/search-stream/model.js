@@ -1,10 +1,11 @@
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
+import { name } from "utils/decorators";
 
 
-export default Model.extend({
-	stream: belongsTo( "twitchStream", { async: false } )
-
-}).reopenClass({
-	toString() { return "kraken/search/streams"; }
-});
+@name( "kraken/search/streams" )
+export default class TwitchSearchStream extends Model {
+	/** @type {TwitchStream} */
+	@belongsTo( "twitch-stream", { async: false } )
+	stream;
+}

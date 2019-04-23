@@ -1,14 +1,18 @@
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
+import { name } from "utils/decorators";
 
 
-export default Model.extend({
-	//channel: belongsTo( "twitchChannel" ),
-	//is_gift: attr( "boolean" ),
-	//sender: attr( "number or string???" ),
-	//sub_plan: attr( "string" ),
-	created_at: attr( "date" )
-
-}).reopenClass({
-	toString() { return "kraken/users/:user_id/subscriptions"; }
-});
+@name( "kraken/users/:user_id/subscriptions" )
+export default class TwitchSubscription extends Model {
+	//@belongsTo( "twitch-channel" )
+	//channel;
+	//@attr( "boolean" )
+	//is_gift;
+	//@attr( "number or string???" )
+	//sender;
+	//@attr( "string" )
+	//sub_plan;
+	@attr( "date" )
+	created_at;
+}
