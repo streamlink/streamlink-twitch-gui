@@ -1,9 +1,10 @@
-import PolymorphicFragmentSerializer from "data/models/-mixins/polymorphic-fragment-serializer";
+import PolymorphicFragmentSerializer
+	from "data/models/-serializers/polymorphic-fragment-serializer";
 import { namespaces, typeKey } from "./fragment";
 
 
-export default PolymorphicFragmentSerializer.extend({
-	models: namespaces,
-	modelBaseName: "settings-hotkeys-namespace",
-	typeKey
-});
+export default class SettingsHotkeysNamespaceSerializer extends PolymorphicFragmentSerializer {
+	models = namespaces;
+	modelBaseName = "settings-hotkeys-namespace";
+	typeKey = typeKey;
+}

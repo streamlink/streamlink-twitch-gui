@@ -4,14 +4,14 @@ import JSONSerializer from "ember-data/serializers/json";
 const { hasOwnProperty } = {};
 
 
-export default JSONSerializer.extend({
+export default class PolymorphicFragmentSerializer extends JSONSerializer {
 	/**
 	 * @param {Snapshot} snapshot
 	 * @param {Model} snapshot.record
 	 * @returns {Object}
 	 */
 	serialize({ record }) {
-		const json = this._super( ...arguments );
+		const json = super.serialize( ...arguments );
 		const { models, modelBaseName, typeKey } = this;
 
 		for ( const [ type, model ] of models ) {
@@ -22,7 +22,7 @@ export default JSONSerializer.extend({
 		}
 
 		return json;
-	},
+	}
 
 	/**
 	 * Fix removal of the `typeKey` property
@@ -32,11 +32,11 @@ export default JSONSerializer.extend({
 	 */
 	extractAttributes( modelClass, data ) {
 		const { typeKey } = this;
-		const attributes = this._super( ...arguments );
+		const attributes = super.extractAttributes( ...arguments );
 		if ( data && hasOwnProperty.call( data, typeKey ) ) {
 			attributes[ typeKey ] = data[ typeKey ];
 		}
 
 		return attributes;
 	}
-});
+}

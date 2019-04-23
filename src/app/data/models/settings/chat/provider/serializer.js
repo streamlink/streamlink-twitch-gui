@@ -1,9 +1,10 @@
-import PolymorphicFragmentSerializer from "data/models/-mixins/polymorphic-fragment-serializer";
+import PolymorphicFragmentSerializer
+	from "data/models/-serializers/polymorphic-fragment-serializer";
 import { providers, typeKey } from "./fragment";
 
 
-export default PolymorphicFragmentSerializer.extend({
-	models: providers,
-	modelBaseName: "settings-chat-provider",
-	typeKey
-});
+export default class SettingsChatProviderSerializer extends PolymorphicFragmentSerializer {
+	models = providers;
+	modelBaseName = "settings-chat-provider";
+	typeKey = typeKey;
+}
