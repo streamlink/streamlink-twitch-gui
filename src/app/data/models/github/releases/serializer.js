@@ -1,16 +1,14 @@
 import RESTSerializer from "ember-data/serializers/rest";
 
 
-export default RESTSerializer.extend({
-	modelNameFromPayloadKey() {
-		return "githubReleases";
-	},
+export default class GithubReleasesSerializer extends RESTSerializer {
+	modelNameFromPayloadKey = () => "github-releases";
 
 	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
 		payload = {
-			githubReleases: payload
+			[ this.modelNameFromPayloadKey() ]: payload
 		};
 
-		return this._super( store, primaryModelClass, payload, id, requestType );
+		return super.normalizeResponse( store, primaryModelClass, payload, id, requestType );
 	}
-});
+}
