@@ -1,11 +1,13 @@
-import { get, set, computed, observer } from "@ember/object";
+import { set, computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
+import { observes } from "@ember-decorators/object";
 import { twitch as twitchConfig } from "config";
 import qualities from "./-qualities";
+import { name } from "utils/decorators";
 
 
 const { "stream-url": twitchStreamUrl } = twitchConfig;
@@ -18,33 +20,32 @@ const STATUS_WATCHING = 3;
 const STATUS_COMPLETED = 4;
 
 
+const { hasOwnProperty } = {};
+
 const qualitiesById = qualities.reduce( ( presets, preset ) => {
 	presets[ preset.id ] = preset;
 	return presets;
 }, {} );
 
-
-function computedStatus( status ) {
-	return computed( "status", {
-		get() {
-			return get( this, "status" ) === status;
-		},
-		set( value ) {
-			if ( value ) {
-				set( this, "status", status );
-				return true;
-			}
+const computedStatus = status => computed( "status", {
+	get() {
+		return this.status === status;
+	},
+	set( value ) {
+		if ( value ) {
+			set( this, "status", status );
+			return true;
 		}
-	});
-}
+	}
+});
 
 function cpQualityFromPresetOrCustomValue( key ) {
 	/** @this {Stream} */
-	return function() {
+	return computed( "streamQualityPreset", "settings.content.streaming.qualities", function() {
 		const { id, [ key ]: defaultValue } = this.streamQualityPreset;
 		const custom = this.settings.content.streaming.qualities.toJSON();
 
-		if ( custom.hasOwnProperty( id ) ) {
+		if ( hasOwnProperty.call( custom, id ) ) {
 			const customValue = String( custom[ id ][ key ] || "" ).trim();
 			if ( customValue.length ) {
 				return customValue;
@@ -52,7 +53,7 @@ function cpQualityFromPresetOrCustomValue( key ) {
 		}
 
 		return defaultValue;
-	};
+	});
 }
 
 
@@ -62,116 +63,121 @@ export {
 };
 
 
-/**
- * @class Stream
- */
-export default Model.extend({
-	/** @property {TwitchStream} stream */
-	stream: belongsTo( "twitchStream", { async: false } ),
-	/** @property {TwitchChannel} channel */
-	channel: belongsTo( "twitchChannel", { async: false } ),
-	quality: attr( "string" ),
-	low_latency: attr( "boolean" ),
-	disable_ads: attr( "boolean" ),
-	chat_open: attr( "boolean" ),
-	started: attr( "date" ),
+@name( "Stream" )
+export default class Stream extends Model {
+	/** @type {AuthService} */
+	@service auth;
+	/** @type {SettingsService} */
+	@service settings;
+	/** @type {StreamingService} */
+	@service streaming;
+
+	/** @type {TwitchStream} */
+	@belongsTo( "twitch-stream", { async: false } )
+	stream;
+	/** @type {TwitchChannel} */
+	@belongsTo( "twitch-channel", { async: false } )
+	channel;
+	@attr( "string" )
+	quality;
+	@attr( "boolean" )
+	low_latency;
+	@attr( "boolean" )
+	disable_ads;
+	@attr( "boolean" )
+	chat_open;
+	@attr( "date" )
+	started;
 
 
 	// passthrough type (twitch streams are HLS)
-	playerInputPassthrough: "hls",
+	playerInputPassthrough = "hls";
 
-	/** @property {String} status */
-	status: STATUS_PREPARING,
+	/** @type {boolean} */
+	strictQuality = false;
 
-	/** @property {ChildProcess} spawn */
-	spawn: null,
+	/** @type {number} */
+	status = STATUS_PREPARING;
 
-	/** @property {Error} error */
-	error: null,
-	warning: false,
+	/** @type {ChildProcess} */
+	spawn = null;
 
-	/** @property {Object[]} log */
-	log: null,
-	showLog: false,
+	/** @type {Error} */
+	error = null;
+	warning = false;
+
+	/** @type {Object[]} */
+	log = null;
+	showLog = false;
+
+	/** @type {Auth} */
+	@alias( "auth.session" )
+	session;
 
 
-	auth: service(),
-	settings: service(),
-	streaming: service(),
+	@computedStatus( STATUS_PREPARING )
+	isPreparing;
+	@computedStatus( STATUS_ABORTED )
+	isAborted;
+	@computedStatus( STATUS_LAUNCHING )
+	isLaunching;
+	@computedStatus( STATUS_WATCHING )
+	isWatching;
+	@computedStatus( STATUS_COMPLETED )
+	isCompleted;
 
-
-	session: alias( "auth.session" ),
-
-
-	isPreparing: computedStatus( STATUS_PREPARING ),
-	isAborted: computedStatus( STATUS_ABORTED ),
-	isLaunching: computedStatus( STATUS_LAUNCHING ),
-	isWatching: computedStatus( STATUS_WATCHING ),
-	isCompleted: computedStatus( STATUS_COMPLETED ),
-
-	hasEnded: computed( "status", "error", function() {
-		const status = get( this, "status" );
-		const error = get( this, "error" );
-
-		return !!error || status === STATUS_ABORTED || status === STATUS_COMPLETED;
-	}),
+	@computed( "status", "error" )
+	get hasEnded() {
+		return !!this.error
+		    || this.status === STATUS_ABORTED
+		    || this.status === STATUS_COMPLETED;
+	}
 
 
 	get customParameters() {
-		const provider  = get( this, "settings.streaming.provider" );
-		const providers = get( this, "settings.streaming.providers" );
+		const { provider, providers } = this.settings.content.streaming;
 
-		return get( providers, `${provider}.params` ) || "";
-	},
+		return hasOwnProperty.call( providers, provider )
+			? providers[ provider ].params || ""
+			: "";
+	}
 
 
 	kill() {
 		if ( this.spawn ) {
 			this.spawn.kill( "SIGTERM" );
 		}
-	},
+	}
 
 	pushLog( type, line ) {
-		get( this, "log" ).pushObject({ type, line });
-	},
+		this.log.pushObject({ type, line });
+	}
 
 
-	qualityObserver: observer( "quality", function() {
+	@observes( "quality" )
+	qualityObserver() {
 		// the StreamingService knows that it has to spawn a new child process
 		this.kill();
-	}),
+	}
 
 
 	// get the default quality object of the selected quality and streaming provider
-	streamQualityPreset: computed( "quality", function() {
-		const quality = get( this, "quality" );
-
-		return qualitiesById[ quality ]
+	@computed( "quality" )
+	get streamQualityPreset() {
+		return qualitiesById[ this.quality ]
 		    || qualitiesById[ "source" ];
-	}),
+	}
 
 	// get the --stream-sorting-excludes parameter value
-	streamQualitiesExclude: computed(
-		"streamQualityPreset",
-		"settings.content.streaming.qualities",
-		cpQualityFromPresetOrCustomValue( "exclude" )
-	),
+	@cpQualityFromPresetOrCustomValue( "exclude" )
+	streamQualitiesExclude;
 
 	// get the stream quality selection
-	streamQuality: computed(
-		"streamQualityPreset",
-		"settings.content.streaming.qualities",
-		cpQualityFromPresetOrCustomValue( "quality" )
-	),
+	@cpQualityFromPresetOrCustomValue( "quality" )
+	streamQuality;
 
-	streamUrl: computed( "channel.name", function() {
-		const channel = get( this, "channel.name" );
-
-		return twitchStreamUrl.replace( "{channel}", channel );
-	})
-
-}).reopenClass({
-
-	toString() { return "Stream"; }
-
-});
+	@computed( "channel.name" )
+	get streamUrl() {
+		return twitchStreamUrl.replace( "{channel}", this.channel.name );
+	}
+}
