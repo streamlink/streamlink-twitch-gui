@@ -1,7 +1,7 @@
 import TwitchAdapter from "data/models/twitch/adapter";
 
 
-export default TwitchAdapter.extend({
-	coalesceFindRequests: true,
-	findManyIdString: "channel"
-});
+export default class TwitchStreamAdapter extends TwitchAdapter {
+	coalesceFindRequests = true;
+	findManyIdString = "channel";
+}

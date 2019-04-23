@@ -1,118 +1,115 @@
-import { get } from "@ember/object";
 import Evented from "@ember/object/evented";
-import Mixin from "@ember/object/mixin";
-import { isNone } from "@ember/utils";
+import RESTAdapter from "ember-data/adapters/rest";
 import { AdapterError, InvalidError, TimeoutError } from "ember-data/adapters/errors";
 import fetch from "fetch";
+import { descriptor, urlFragments } from "utils/decorators";
 
 
 const reURL = /^[a-z]+:\/\/([\w.]+)\/(.+)$/i;
 const reURLFragment = /^:(\w+)$/;
 
+const { hasOwnProperty } = {};
 
-/**
- * Adapter mixin for using static model names
- * instead of using type.modelName as name
- */
-export default Mixin.create( Evented, {
-	mergedProperties: [ "urlFragments" ],
 
-	useFetch: true,
-
-	urlFragments: {
-		id( type, id ) {
-			if ( isNone( id ) ) {
-				throw new Error( "Unknown ID" );
-			}
-
-			return id;
+@urlFragments({
+	id( type, id ) {
+		if ( id === null || id === undefined ) {
+			throw new Error( "Unknown ID" );
 		}
-	},
+
+		return id;
+	}
+})
+/**
+ * Adapter for using static model names
+ * instead of using type.modelName as name
+ * TODO: Change this and get the URL from the model's adapter instead of the model's toString().
+ *       EmberData has added a more dynamic system for configuring request URLs a long time ago...
+ */
+export default class CustomRESTAdapter extends RESTAdapter.extend( Evented ) {
+	@descriptor({ value: true })
+	useFetch;
+
 
 	findRecord( store, type, id, snapshot ) {
 		const url = this.buildURL( type, id, snapshot, "findRecord" );
 
 		return this.ajax( url, "GET" );
-	},
+	}
 
 	findAll( store, type, sinceToken ) {
 		const url = this.buildURL( type, null, null, "findAll" );
 		const query = sinceToken ? { since: sinceToken } : undefined;
 
 		return this.ajax( url, "GET", { data: query } );
-	},
+	}
 
 	query( store, type, query ) {
 		const url = this.buildURL( type, null, null, "query", query );
 		query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
 
 		return this.ajax( url, "GET", { data: query } );
-	},
+	}
 
 	queryRecord( store, type, query ) {
 		const url = this.buildURL( type, null, null, "queryRecord", query );
 		query = this.sortQueryParams ? this.sortQueryParams( query ) : query;
 
 		return this.ajax( url, "GET", { data: query } );
-	},
+	}
 
 
-	createRecordMethod: "POST",
-	createRecord( store, type, snapshot ) {
+	createRecordMethod = "POST";
+	async createRecord( store, type, snapshot ) {
 		const url = this.buildURL( type, null, snapshot, "createRecord" );
-		const method = get( this, "createRecordMethod" );
 		const data = this.createRecordData( store, type, snapshot );
 
-		return this.ajax( url, method, data )
-			.then( data => {
-				this.trigger( "createRecord", store, type, snapshot );
-				return data;
-			});
-	},
+		const payload = await this.ajax( url, this.createRecordMethod, data );
+		this.trigger( "createRecord", store, type, snapshot );
+
+		return payload;
+	}
 	createRecordData( store, type, snapshot ) {
 		const data = {};
 		const serializer = store.serializerFor( type.modelName );
 		serializer.serializeIntoHash( data, type, snapshot, { includeId: true } );
 
 		return { data: data };
-	},
+	}
 
-	updateRecordMethod: "PUT",
-	updateRecord( store, type, snapshot ) {
+	updateRecordMethod = "PUT";
+	async updateRecord( store, type, snapshot ) {
 		const url = this.buildURL( type, snapshot.id, snapshot, "updateRecord" );
-		const method = get( this, "updateRecordMethod" );
 		const data = this.updateRecordData( store, type, snapshot );
 
-		return this.ajax( url, method, data )
-			.then( data => {
-				this.trigger( "updateRecord", store, type, snapshot );
-				return data;
-			});
-	},
+		const payload = await this.ajax( url, this.updateRecordMethod, data );
+		this.trigger( "updateRecord", store, type, snapshot );
+
+		return payload;
+	}
 	updateRecordData( store, type, snapshot ) {
 		const data = {};
 		const serializer = store.serializerFor( type.modelName );
 		serializer.serializeIntoHash( data, type, snapshot );
 
 		return { data: data };
-	},
+	}
 
-	deleteRecord( store, type, snapshot ) {
+	async deleteRecord( store, type, snapshot ) {
 		const url = this.buildURL( type, snapshot.id, snapshot, "deleteRecord" );
 
-		return this.ajax( url, "DELETE" )
-			.then( data => {
-				this.trigger( "deleteRecord", store, type, snapshot );
-				return data;
-			});
-	},
+		const payload = await this.ajax( url, "DELETE" );
+		this.trigger( "deleteRecord", store, type, snapshot );
+
+		return payload;
+	}
 
 
 	urlForCreateRecord( modelName, snapshot ) {
 		// Why does Ember-Data do this?
 		// the id is missing on BuildURLMixin.urlForCreateRecord
 		return this._buildURL( modelName, snapshot.id );
-	},
+	}
 
 	/**
 	 * Custom buildURL method with type instead of modelName
@@ -122,17 +119,16 @@ export default Mixin.create( Evented, {
 	 * @returns {String}
 	 */
 	_buildURL( type, id, data ) {
-		const host = get( this, "host" );
-		const ns = get( this, "namespace" );
+		const { host, namespace } = this;
 		const url = [ host ];
 
 		// append the adapter specific namespace
-		if ( ns ) { url.push( ns ); }
+		if ( namespace ) { url.push( namespace ); }
 		// append the type fragments (and process the dynamic ones)
 		url.push( ...this.buildURLFragments( type, id, data ) );
 
 		return url.join( "/" );
-	},
+	}
 
 	/**
 	 * Dynamic URL fragments
@@ -142,7 +138,7 @@ export default Mixin.create( Evented, {
 	 * @returns {String[]}
 	 */
 	buildURLFragments( type, id, data ) {
-		const urlFragments = get( this, "urlFragments" );
+		const urlFragments = this.constructor.urlFragments;
 		let idFound = false;
 
 		const url = String( type )
@@ -152,7 +148,7 @@ export default Mixin.create( Evented, {
 					idFound = true;
 				}
 
-				if ( urlFragments.hasOwnProperty( key ) ) {
+				if ( hasOwnProperty.call( urlFragments, key ) ) {
 					return urlFragments[ key ].call( this, type, id, data );
 				}
 
@@ -161,33 +157,35 @@ export default Mixin.create( Evented, {
 			}) );
 
 		// append ID if no :id fragment was defined and ID exists
-		if ( !idFound && !isNone( id ) ) {
+		if ( !idFound && id !== null && id !== undefined ) {
 			url.push( id );
 		}
 
 		return url;
-	},
+	}
 
 
-	ajax( url ) {
-		return this._super( ...arguments )
-			.catch( err => {
-				if ( err instanceof AdapterError ) {
-					const _url = reURL.exec( url );
-					err.host = _url && _url[1] || get( this, "host" );
-					err.path = _url && _url[2] || get( this, "namespace" );
-				}
+	async ajax( url ) {
+		try {
+			return await super.ajax( ...arguments );
 
-				return Promise.reject( err );
-			});
-	},
+		} catch ( err ) {
+			if ( err instanceof AdapterError ) {
+				const _url = reURL.exec( url );
+				err.host = _url && _url[1] || this.host;
+				err.path = _url && _url[2] || this.namespace;
+			}
+
+			throw err;
+		}
+	}
 
 	ajaxOptions() {
-		const options = this._super( ...arguments );
+		const options = super.ajaxOptions( ...arguments );
 		options.cache = "no-cache";
 
 		return options;
-	},
+	}
 
 	_fetchRequest( options ) {
 		return new Promise( ( resolve, reject ) => {
@@ -199,12 +197,12 @@ export default Mixin.create( Evented, {
 				.finally( () => clearTimeout( timeout ) )
 				.then( resolve, reject );
 		});
-	},
+	}
 
 	isSuccess( status, headers, payload ) {
-		return this._super( ...arguments )
+		return super.isSuccess( ...arguments )
 		    && ( payload ? !payload.error : true );
-	},
+	}
 
 	handleResponse( status, headers, payload ) {
 		if ( this.isSuccess( status, headers, payload ) ) {
@@ -220,5 +218,4 @@ export default Mixin.create( Evented, {
 			status
 		}]);
 	}
-
-});
+}

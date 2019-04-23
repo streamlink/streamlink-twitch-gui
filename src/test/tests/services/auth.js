@@ -4,7 +4,6 @@ import { buildResolver } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
 import sinon from "sinon";
 
-import { observer } from "@ember/object";
 import { on } from "@ember/object/evented";
 import Service from "@ember/service";
 import Adapter from "ember-data/adapter";
@@ -90,17 +89,17 @@ module( "services/auth", function( hooks ) {
 		this.sessionFindAllStub = sinon.stub().resolves( [] );
 		this.sessionCreateStub = sinon.stub().resolves();
 		this.sessionSaveStub = sinon.stub().resolves();
-		this.owner.register( "adapter:auth", Adapter.extend({
-			findAll: context.sessionFindAllStub,
-			createRecord: context.sessionCreateStub,
-			updateRecord: context.sessionSaveStub
-		}) );
-		this.owner.register( "adapter:twitch", TwitchAdapter.extend({
-			tokenObserver: observer( "access_token", function() {
-				context.setAccessTokenSpy.call( this, this.access_token );
-			})
-		}) );
-		this.owner.register( "adapter:twitch-root", TwitchAdapter.extend({
+		this.owner.register( "adapter:auth", class extends Adapter {
+			findAll = context.sessionFindAllStub;
+			createRecord = context.sessionCreateStub;
+			updateRecord = context.sessionSaveStub;
+		});
+		this.owner.register( "adapter:twitch", class extends TwitchAdapter {
+			static set access_token( value ) {
+				context.setAccessTokenSpy.call( this, value );
+			}
+		});
+		this.owner.register( "adapter:twitch-root", class extends TwitchAdapter {
 			async ajax( ...args ) {
 				return adapterRequest(
 					assert,
@@ -108,7 +107,7 @@ module( "services/auth", function( hooks ) {
 					...args
 				);
 			}
-		}) );
+		});
 
 		// HttpServer
 		this.fakeHttpServer = null;

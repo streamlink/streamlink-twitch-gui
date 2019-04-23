@@ -1,11 +1,11 @@
 import TwitchAdapter from "data/models/twitch/adapter";
 
 
-export default TwitchAdapter.extend({
+export default class TwitchUserAdapter extends TwitchAdapter {
 	// automatically turns multiple findRecord calls into a single findMany call
-	coalesceFindRequests: true,
+	coalesceFindRequests = true;
 	// and uses "login" as query string parameter for the IDs, as defined by the TwitchAdapter
-	findManyIdString: "login",
+	findManyIdString = "login";
 
 	/**
 	 * @param {DS.Store} store
@@ -20,8 +20,8 @@ export default TwitchAdapter.extend({
 			login: id
 		};
 
-		return this.ajax( url, "GET", { data: data } );
-	},
+		return this.ajax( url, "GET", { data } );
+	}
 
 	/**
 	 * @param {string} id
@@ -30,7 +30,7 @@ export default TwitchAdapter.extend({
 	 */
 	urlForFindRecord( id, type ) {
 		return this._buildURL( type );
-	},
+	}
 
 	/**
 	 * @param {DS.Store} store
@@ -46,7 +46,7 @@ export default TwitchAdapter.extend({
 		const url = this.buildURL( type, null, null, "queryRecord", query );
 
 		return this.ajax( url, "GET", { data: query } );
-	},
+	}
 
 	/**
 	 * @param {Object} query
@@ -56,4 +56,4 @@ export default TwitchAdapter.extend({
 	urlForQueryRecord( query, type ) {
 		return this._buildURL( type );
 	}
-});
+}

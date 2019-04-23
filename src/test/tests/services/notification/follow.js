@@ -1,14 +1,14 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
+
 import { set } from "@ember/object";
 import Service from "@ember/service";
-import RESTAdapter from "ember-data/adapters/rest";
 import Model from "ember-data/model";
 import RESTSerializer from "ember-data/serializers/rest";
 
 import notificationFollowMixinInjector from "inject-loader?./cache!services/notification/follow";
-import AdapterMixin from "data/models/-mixins/adapter";
+import CustomRESTAdapter from "data/models/-adapters/custom-rest";
 
 
 let owner, env;
@@ -23,7 +23,7 @@ module( "services/notification/follow", {
 		owner.register( "model:twitch-stream", Model.extend() );
 		owner.register( "serializer:twitch-stream", RESTSerializer.extend() );
 
-		env = setupStore( owner, { adapter: RESTAdapter.extend( AdapterMixin ) } );
+		env = setupStore( owner, { adapter: CustomRESTAdapter } );
 	},
 
 	afterEach() {

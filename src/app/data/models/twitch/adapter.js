@@ -1,73 +1,78 @@
-import { get, observer } from "@ember/object";
+import { alias } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
-import RESTAdapter from "ember-data/adapters/rest";
 import { twitch } from "config";
-import AdapterMixin from "data/models/-mixins/adapter";
+import CustomRESTAdapter from "data/models/-adapters/custom-rest";
+import { urlFragments } from "utils/decorators";
 
 
 const { oauth: { "client-id": clientId } } = twitch;
 
 
-export default RESTAdapter.extend( AdapterMixin, {
-	auth: service(),
+@urlFragments({
+	/** @this {TwitchAdapter} */
+	user_id() {
+		const user_id = this.auth.session.user_id;
+		if ( !user_id ) {
+			throw new Error( "Unknown user_id" );
+		}
 
-	host: "https://api.twitch.tv",
-	namespace: "",
-	headers: {
+		return user_id;
+	},
+	/** @this {TwitchAdapter} */
+	user_name() {
+		const user_name = this.auth.session.user_name;
+		if ( !user_name ) {
+			throw new Error( "Unknown user_name" );
+		}
+
+		return user_name;
+	}
+})
+export default class TwitchAdapter extends CustomRESTAdapter {
+	/** @type {AuthService} */
+	@service auth;
+
+	defaultSerializer = "twitch";
+
+	host = "https://api.twitch.tv";
+	namespace = "";
+
+
+	static headers = {
 		"Accept": "application/vnd.twitchtv.v5+json",
 		"Client-ID": clientId
-	},
+	};
 
-	defaultSerializer: "twitch",
-
-
-	urlFragments: {
-		user_id() {
-			let user_id = get( this, "auth.session.user_id" );
-			if ( !user_id ) {
-				throw new Error( "Unknown user_id" );
-			}
-
-			return user_id;
-		},
-		user_name() {
-			let user_name = get( this, "auth.session.user_name" );
-			if ( !user_name ) {
-				throw new Error( "Unknown user_name" );
-			}
-
-			return user_name;
-		}
-	},
-
-
-	coalesceFindRequests: false,
-
-	findManyIdString: null,
-	findManyIdSeparator: ",",
-
-
-	access_token: null,
-	tokenObserver: observer( "access_token", function() {
-		const token = get( this, "access_token" );
-		if ( token === null ) {
+	static set access_token( value ) {
+		if ( value === null ) {
 			delete this.headers[ "Authorization" ];
 		} else {
-			this.headers[ "Authorization" ] = `OAuth ${token}`;
+			this.headers[ "Authorization" ] = `OAuth ${value}`;
 		}
-	}),
+	}
+
+	@alias( "constructor.access_token" )
+	access_token;
+	@alias( "constructor.headers" )
+	headers;
 
 
-	createRecordMethod: "PUT",
+	coalesceFindRequests = false;
+
+	findManyIdString = null;
+	findManyIdSeparator = ",";
+
+
+	createRecordMethod = "PUT";
 	createRecordData() {
 		// we don't need to send any data with the request (yet?)
 		return {};
-	},
+	}
 
 	updateRecordData() {
 		// we don't need to send any data with the request (yet?)
 		return {};
-	},
+	}
 
 	findMany( store, type, ids, snapshots ) {
 		const url = this.buildURL( type, null, snapshots, "findMany" );
@@ -76,7 +81,7 @@ export default RESTAdapter.extend( AdapterMixin, {
 		};
 
 		return this.ajax( url, "GET", { data } );
-	},
+	}
 
 
 	groupRecordsForFindMany( store, snapshots ) {
@@ -105,7 +110,7 @@ export default RESTAdapter.extend( AdapterMixin, {
 			let length = baseLength;
 
 			snapshotGroup.forEach( snapshot => {
-				const id = get( snapshot, "record.id" );
+				const id = snapshot.record.id;
 				const idLength = String( id ).length;
 				const separatorLength = group.length === 0 ? 0 : findManyIdSeparatorLength;
 				const newLength = length + separatorLength + idLength;
@@ -127,4 +132,4 @@ export default RESTAdapter.extend( AdapterMixin, {
 
 		return groups;
 	}
-});
+}
