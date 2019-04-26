@@ -14,13 +14,13 @@ const {
 } = SettingsStreams;
 
 
-export default Controller.extend({
-	contentStreamingQuality,
-	contentStreamsName,
-	contentStreamsInfo,
-	contentStreamsClick,
+export default class SettingsStreamsController extends Controller {
+	contentStreamingQuality = contentStreamingQuality;
+	contentStreamsName = contentStreamsName;
+	contentStreamsInfo = contentStreamsInfo;
+	contentStreamsClick = contentStreamsClick;
 
-	DEFAULT_VODCAST_REGEXP,
+	DEFAULT_VODCAST_REGEXP = DEFAULT_VODCAST_REGEXP;
 
-	isDarwin
-});
+	isDarwin = isDarwin;
+}

@@ -12,14 +12,17 @@ const { assign } = Object;
 const { isArray } = Array;
 
 
-export default Controller.extend({
-	i18n: service(),
-	store: service(),
+export default class SettingsPlayerController extends Controller {
+	/** @type {I18nService} */
+	@service i18n;
+	/** @type {DS.Store} */
+	@service store;
 
-	substitutionsPlayer,
+	substitutionsPlayer = substitutionsPlayer;
 
 	// filter platform dependent player parameters
-	players: computed(function() {
+	@computed()
+	get players() {
 		const list = {};
 		for ( const [ id, player ] of Object.entries( playersConfig ) ) {
 			const obj = list[ id ] = assign( {}, player );
@@ -36,14 +39,13 @@ export default Controller.extend({
 		}
 
 		return list;
-	}),
+	}
 
-	contentStreamingPlayer: computed(function() {
-		const i18n = get( this, "i18n" );
-
+	@computed()
+	get contentStreamingPlayer() {
 		const presets = [{
 			id: "default",
-			label: i18n.t( "settings.player.players.default.label" ).toString()
+			label: this.i18n.t( "settings.player.players.default.label" ).toString()
 		}];
 		for ( const [ id, { exec, disabled } ] of Object.entries( playersConfig ) ) {
 			if ( disabled || !exec[ platform ] ) { continue; }
@@ -52,34 +54,31 @@ export default Controller.extend({
 		}
 
 		return presets;
-	}),
+	}
 
-	playerPlaceholder: computed( "i18n.locale", "model.streaming.player", function() {
-		const i18n = get( this, "i18n" );
-
+	@computed( "i18n.locale", "model.streaming.player" )
+	get playerPlaceholder() {
 		const player = get( this, "model.streaming.player" );
 		if ( player === "default" || !playersConfig[ player ] ) {
-			return i18n.t( "settings.player.executable.default.placeholder" ).toString();
+			return this.i18n.t( "settings.player.executable.default.placeholder" ).toString();
 		}
 
 		const exec = playersConfig[ player ][ "exec" ][ platform ];
 		if ( !exec ) {
-			return i18n.t( "settings.player.executable.preset.placeholder" ).toString();
+			return this.i18n.t( "settings.player.executable.preset.placeholder" ).toString();
 		}
 
 		return isArray( exec )
 			? exec.join( `${delimiter} ` )
 			: exec;
-	}),
+	}
 
-	playerPresetDefault: equal( "model.streaming.player", "default" ),
+	@equal( "model.streaming.player", "default" )
+	playerPresetDefault;
 
-	playerPresetDefaultAndPlayerEmpty: computed(
-		"playerPresetDefault",
-		"model.streaming.players.default.exec",
-		function() {
-			return get( this, "playerPresetDefault" )
-			    && !get( this, "model.streaming.players.default.exec" );
-		}
-	)
-});
+	@computed( "playerPresetDefault", "model.streaming.players.default.exec" )
+	get playerPresetDefaultAndPlayerEmpty() {
+		return this.playerPresetDefault
+		    && !get( this, "model.streaming.players.default.exec" );
+	}
+}

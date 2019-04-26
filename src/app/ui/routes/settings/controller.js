@@ -1,45 +1,45 @@
 import Controller from "@ember/controller";
-import { get, set } from "@ember/object";
+import { set, action } from "@ember/object";
 import { inject as service } from "@ember/service";
 import RetryTransitionMixin from "ui/routes/-mixins/controllers/retry-transition";
 import "./styles.less";
 
 
-export default Controller.extend( RetryTransitionMixin, {
-	modal: service(),
-	settings: service(),
+export default class SettingsController extends Controller.extend( RetryTransitionMixin ) {
+	/** @type {ModalService} */
+	@service modal;
+	/** @type {SettingsService} */
+	@service settings;
 
-	isAnimated: false,
+	isAnimated = false;
 
 
-	actions: {
-		apply( success, failure ) {
-			const modal = get( this, "modal" );
-			const settings = get( this, "settings.content" );
+	@action
+	apply( success, failure ) {
+		const settings = this.settings.content;
 
-			get( this, "model" ).applyChanges( settings );
+		this.model.applyChanges( settings );
 
-			settings.save()
-				.then( success, failure )
-				.then( () => modal.closeModal( this ) )
-				.then( () => this.retryTransition() )
-				.catch( () => settings.rollbackAttributes() );
-		},
-
-		discard( success ) {
-			const modal = get( this, "modal" );
-
-			get( this, "model" ).discardChanges();
-
-			Promise.resolve()
-				.then( success )
-				.then( () => modal.closeModal( this ) )
-				.then( () => this.retryTransition() );
-		},
-
-		cancel() {
-			set( this, "previousTransition", null );
-			get( this, "modal" ).closeModal( this );
-		}
+		settings.save()
+			.then( success, failure )
+			.then( () => this.modal.closeModal( this ) )
+			.then( () => this.retryTransition() )
+			.catch( () => settings.rollbackAttributes() );
 	}
-});
+
+	@action
+	discard( success ) {
+		this.model.discardChanges();
+
+		Promise.resolve()
+			.then( success )
+			.then( () => this.modal.closeModal( this ) )
+			.then( () => this.retryTransition() );
+	}
+
+	@action
+	cancel() {
+		set( this, "previousTransition", null );
+		this.modal.closeModal( this );
+	}
+}

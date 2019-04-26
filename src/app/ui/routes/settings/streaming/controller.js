@@ -20,12 +20,13 @@ function settingsAttrMeta( attr, prop ) {
 }
 
 
-export default Controller.extend({
-	platform,
-	providers,
-	contentStreamingPlayerInput,
+export default class SettingsStreamingController extends Controller {
+	platform = platform;
+	providers = providers;
+	contentStreamingPlayerInput = contentStreamingPlayerInput;
 
-	contentStreamingProvider: computed(function() {
+	@computed()
+	get contentStreamingProvider() {
 		return Object.keys( providers )
 			// exclude unsupported providers
 			.filter( id => providers[ id ][ "exec" ][ platform ] )
@@ -33,37 +34,52 @@ export default Controller.extend({
 				id,
 				label: providers[ id ][ "label" ]
 			}) );
-	}),
+	}
 
 	// can't use the fragment's providerName computed property here
 	// the controller's model is an ObjectBuffer instance
-	providerName: computed( "model.streaming.provider", function() {
+	@computed( "model.streaming.provider" )
+	get providerName() {
 		const provider = get( this, "model.streaming.provider" );
 
 		return providers[ provider ][ "name" ];
-	}),
+	}
 
-	playerInputDocumentation: computed( "model.streaming.player_input", function() {
+	@computed( "model.streaming.player_input" )
+	get playerInputDocumentation() {
 		const input = get( this, "model.streaming.player_input" );
 
 		return contentStreamingPlayerInput.findBy( "id", input ).documentation;
-	}),
+	}
 
-	playerInputPassthrough: equal( "model.streaming.player_input", inputPassthrough ),
+	@equal( "model.streaming.player_input", inputPassthrough )
+	playerInputPassthrough;
 
-	hlsLiveEdgeDefault: settingsAttrMeta( "hls_live_edge", "defaultValue" ),
-	hlsLiveEdgeMin: settingsAttrMeta( "hls_live_edge", "min" ),
-	hlsLiveEdgeMax: settingsAttrMeta( "hls_live_edge", "max" ),
+	@settingsAttrMeta( "hls_live_edge", "defaultValue" )
+	hlsLiveEdgeDefault;
+	@settingsAttrMeta( "hls_live_edge", "min" )
+	hlsLiveEdgeMin;
+	@settingsAttrMeta( "hls_live_edge", "max" )
+	hlsLiveEdgeMax;
 
-	hlsSegmentThreadsDefault: settingsAttrMeta( "hls_segment_threads", "defaultValue" ),
-	hlsSegmentThreadsMin: settingsAttrMeta( "hls_segment_threads", "min" ),
-	hlsSegmentThreadsMax: settingsAttrMeta( "hls_segment_threads", "max" ),
+	@settingsAttrMeta( "hls_segment_threads", "defaultValue" )
+	hlsSegmentThreadsDefault;
+	@settingsAttrMeta( "hls_segment_threads", "min" )
+	hlsSegmentThreadsMin;
+	@settingsAttrMeta( "hls_segment_threads", "max" )
+	hlsSegmentThreadsMax;
 
-	retryStreamsDefault: settingsAttrMeta( "retry_streams", "defaultValue" ),
-	retryStreamsMin: settingsAttrMeta( "retry_streams", "min" ),
-	retryStreamsMax: settingsAttrMeta( "retry_streams", "max" ),
+	@settingsAttrMeta( "retry_streams", "defaultValue" )
+	retryStreamsDefault;
+	@settingsAttrMeta( "retry_streams", "min" )
+	retryStreamsMin;
+	@settingsAttrMeta( "retry_streams", "max" )
+	retryStreamsMax;
 
-	retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
-	retryOpenMin: settingsAttrMeta( "retry_open", "min" ),
-	retryOpenMax: settingsAttrMeta( "retry_open", "max" )
-});
+	@settingsAttrMeta( "retry_open", "defaultValue" )
+	retryOpenDefault;
+	@settingsAttrMeta( "retry_open", "min" )
+	retryOpenMin;
+	@settingsAttrMeta( "retry_open", "max" )
+	retryOpenMax;
+}

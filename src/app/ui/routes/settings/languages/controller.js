@@ -7,12 +7,13 @@ import SettingsStreams from "data/models/settings/streams/fragment";
 const { filterLanguages: contentStreamsFilterLanguages } = SettingsStreams;
 
 
-export default Controller.extend({
-	contentStreamsFilterLanguages,
+export default class SettingsLanguagesController extends Controller {
+	contentStreamsFilterLanguages = contentStreamsFilterLanguages;
 
-	languages: computed(function() {
+	@computed()
+	get languages() {
 		return Object.keys( langsConfig )
 			.filter( code => !langsConfig[ code ].disabled )
 			.map( code => ({ id: code, label: code }) );
-	})
-});
+	}
+}

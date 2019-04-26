@@ -1,5 +1,5 @@
 import Controller from "@ember/controller";
-import { get, computed } from "@ember/object";
+import { get, computed, action } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { main as mainConfig } from "config";
 import SettingsNotification from "data/models/settings/notification/fragment";
@@ -16,34 +16,35 @@ const {
 } = SettingsNotification;
 
 
-export default Controller.extend({
-	contentNotificationFilter,
-	contentNotificationClick,
-	contentNotificationClickGroup,
+export default class SettingsNotificationsController extends Controller {
+	/** @type {I18nService} */
+	@service i18n;
 
-	i18n: service(),
+	contentNotificationFilter = contentNotificationFilter;
+	contentNotificationClick = contentNotificationClick;
+	contentNotificationClickGroup = contentNotificationClickGroup;
 
 	// filter available notification providers
-	contentNotificationProviders: computed(function() {
+	@computed()
+	get contentNotificationProviders() {
 		return SettingsNotification.providers
 			.filter( item => isSupported( item.id ) || item.id === "auto" );
-	}),
-
-	actions: {
-		testNotification( success, failure ) {
-			const i18n = get( this, "i18n" );
-			const provider = get( this, "model.notification.provider" );
-			const message = i18n.t( "settings.notifications.provider.test.message" ).toString();
-
-			const data = new NotificationData({
-				title: displayName,
-				icon,
-				message
-			});
-
-			showNotification( provider, data, true )
-				.then( success, failure )
-				.catch( () => {} );
-		}
 	}
-});
+
+
+	@action
+	testNotification( success, failure ) {
+		const provider = get( this, "model.notification.provider" );
+		const message = this.i18n.t( "settings.notifications.provider.test.message" ).toString();
+
+		const data = new NotificationData({
+			title: displayName,
+			icon,
+			message
+		});
+
+		showNotification( provider, data, true )
+			.then( success, failure )
+			.catch( () => {} );
+	}
+}

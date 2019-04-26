@@ -8,10 +8,11 @@ const { locales } = localesConfig;
 const { themes } = themesConfig;
 
 
-export default Controller.extend({
-	systemThemeId: "system",
+export default class SettingsMainController extends Controller {
+	systemThemeId = "system";
 
-	contentGuiLanguages: computed(function() {
+	@computed()
+	get contentGuiLanguages() {
 		const compare = new Intl.Collator( "en", { sensitivity: "base" } ).compare;
 		const languages = Object.keys( locales )
 			.map( key => ({
@@ -25,9 +26,10 @@ export default Controller.extend({
 		languages.unshift({ id: "auto", label: locales[ systemLocale ] });
 
 		return languages;
-	}),
+	}
 
-	contentGuiTheme: computed(function() {
+	@computed()
+	get contentGuiTheme() {
 		return [ this.systemThemeId, ...themes ].map( id => ({ id }) );
-	})
-});
+	}
+}
