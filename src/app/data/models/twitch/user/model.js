@@ -18,4 +18,22 @@ export default class TwitchUser extends Model {
 	/** @type {PromiseObject<TwitchStream>} */
 	@belongsTo( "twitch-stream", { async: true } )
 	stream;
+
+	/**
+	 * @returns {Promise<TwitchChannel>}
+	 */
+	async loadChannel() {
+		await this.channel.promise;
+
+		return this.channel.content;
+	}
+
+	/**
+	 * @returns {Promise<TwitchStream>}
+	 */
+	async loadStream() {
+		await this.stream.promise;
+
+		return this.stream.content;
+	}
 }

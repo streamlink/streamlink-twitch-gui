@@ -4,7 +4,6 @@ import { buildResolver } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
 import { FakeI18nService } from "i18n-utils";
 
-import { get } from "@ember/object";
 import Service from "@ember/service";
 
 import TwitchUser from "data/models/twitch/user/model";
@@ -65,6 +64,7 @@ module( "data/models/twitch/user", function( hooks ) {
 		store.adapterFor( "twitch-user" ).ajax = ( ...args ) =>
 			adapterRequest( assert, TwitchUserFixtures[ "find-record" ], ...args );
 
+		/** @type {TwitchUser} */
 		const record = await store.findRecord( "twitch-user", "foo" );
 
 		assert.propEqual(
@@ -89,13 +89,13 @@ module( "data/models/twitch/user", function( hooks ) {
 			"Does not have an image record registered in the data store"
 		);
 
-		await get( record, "channel" );
+		await record.loadChannel();
 		assert.ok(
 			store.hasRecordForId( "twitch-channel", "1" ),
 			"Store does have a channel record registered after accessing the channel"
 		);
 
-		await get( record, "stream" );
+		await record.loadStream();
 		assert.ok(
 			store.hasRecordForId( "twitch-stream", "1" ),
 			"Store does have a stream record registered after accessing the stream"

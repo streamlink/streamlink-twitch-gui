@@ -12,14 +12,12 @@ export default class ChannelRoute extends Route.extend( RefreshRouteMixin ) {
 
 		if ( !/^\d+$/.test( id ) ) {
 			/** @type {TwitchUser} */
-			const user = await this.store.findRecord( "twitch-user", id );
+			const user = await this.store.queryRecord( "twitch-user", id );
 			try {
-				await user.stream.promise;
-				stream = user.stream.content;
+				stream = await user.loadStream();
 				channel = stream.channel;
 			} catch ( e ) {
-				await user.channel.promise;
-				channel = user.channel.content;
+				channel = await user.loadChannel();
 			}
 
 		} else {

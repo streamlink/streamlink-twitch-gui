@@ -22,10 +22,8 @@ class SettingsChannelsItem {
 	 */
 	async _getChannel() {
 		/** @type {TwitchUser} */
-		const user = await this.store.findRecord( "twitch-user", this.settings.id );
-		await user.channel.promise;
-		/** @type {TwitchChannel} */
-		const channel = user.channel.content;
+		const user = await this.store.queryRecord( "twitch-user", this.settings.id );
+		const channel = await user.loadChannel();
 		await preload( channel, "logo" );
 
 		return channel;
