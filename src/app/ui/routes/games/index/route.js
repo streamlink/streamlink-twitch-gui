@@ -3,8 +3,9 @@ import InfiniteScrollOffsetMixin from "ui/routes/-mixins/routes/infinite-scroll/
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 
 
-export default Route.extend( InfiniteScrollOffsetMixin, RefreshRouteMixin, {
-	itemSelector: ".game-item-component",
-	modelName: "twitchGameTop",
-	modelPreload: "game.box.large"
-});
+export default class GamesIndexRoute
+extends Route.extend( InfiniteScrollOffsetMixin, RefreshRouteMixin ) {
+	itemSelector = ".game-item-component";
+	modelName = "twitch-game-top";
+	modelPreload = "game.box.large";
+}

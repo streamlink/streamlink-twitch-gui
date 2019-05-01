@@ -1,4 +1,4 @@
-import { get, setProperties } from "@ember/object";
+import { setProperties } from "@ember/object";
 import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "ui/routes/-mixins/routes/infinite-scroll";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
@@ -32,8 +32,8 @@ const fetchMethods = {
 };
 
 
-export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
-	queryParams: {
+export default class SearchRoute extends Route.extend( InfiniteScrollMixin, RefreshRouteMixin ) {
+	queryParams = {
 		filter: {
 			refreshModel: true,
 			replace: false
@@ -42,7 +42,11 @@ export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 			refreshModel: true,
 			replace: false
 		}
-	},
+	};
+
+	contentPath;
+	itemSelector;
+	fetchMethod;
 
 
 	beforeModel() {
@@ -55,8 +59,8 @@ export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 			fetchMethod: fetchMethods[ filter ]
 		});
 
-		return this._super( ...arguments );
-	},
+		return super.beforeModel( ...arguments );
+	}
 
 	async model( params ) {
 		const [ games, channels, streams ] = await Promise.all([
@@ -66,59 +70,70 @@ export default Route.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 		]);
 
 		return { games, channels, streams };
-	},
+	}
 
 	fetchContent() {
-		const fetchMethod = get( this, "fetchMethod" );
-		const filter = get( this, "controller.filter" );
-		const query = get( this, "controller.query" );
+		const fetchMethod = this.fetchMethod;
+		const { filter, query } = this.controller;
 
 		return this[ fetchMethod ]({ filter, query });
-	},
+	}
 
 
+	/**
+	 * @param filter
+	 * @param query
+	 * @returns {Promise<TwitchGame[]>}
+	 */
 	async fetchGames({ filter, query }) {
 		if ( !filterMatches( filter, "games" ) ) {
 			return [];
 		}
 
-		const store = get( this, "store" );
-		const records = await store.query( "twitchSearchGame", {
+		const records = await this.store.query( "twitch-search-game", {
 			type: "suggest",
 			live: true,
 			query
 		});
 
 		return await preload( toArray( records ), "game.box.largeLatest" );
-	},
+	}
 
+	/**
+	 * @param filter
+	 * @param query
+	 * @returns {Promise<TwitchChannel[]>}
+	 */
 	async fetchChannels({ filter, query }) {
 		if ( !filterMatches( filter, "channels" ) ) {
 			return [];
 		}
 
-		const store = get( this, "store" );
-		const records = await store.query( "twitchSearchChannel", {
-			offset: get( this, "offset" ),
-			limit: get( this, "limit" ),
+		const records = await this.store.query( "twitch-search-channel", {
+			offset: this.offset,
+			limit: this.limit,
 			query
 		});
 
 		return await preload( mapBy( records, "channel" ), "logo" );
-	},
+	}
 
+	/**
+	 * @param filter
+	 * @param query
+	 * @returns {Promise<TwitchStream[]>}
+	 */
 	async fetchStreams({ filter, query }) {
 		if ( !filterMatches( filter, "streams" ) ) {
 			return [];
 		}
 
-		const store = get( this, "store" );
-		const records = await store.query( "twitchSearchStream", {
-			offset: get( this, "offset" ),
-			limit: get( this, "limit" ),
+		const records = await this.store.query( "twitch-search-stream", {
+			offset: this.offset,
+			limit: this.limit,
 			query
 		});
 
 		return await preload( mapBy( records, "stream" ), "preview.mediumLatest" );
 	}
-});
+}

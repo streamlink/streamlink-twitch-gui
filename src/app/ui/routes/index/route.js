@@ -1,7 +1,7 @@
 import Route from "@ember/routing/route";
 
 
-export default Route.extend({
+export default class IndexRoute extends Route {
 	beforeModel( transition ) {
 		// access to this route is restricted
 		// but don't block the initial transition
@@ -9,4 +9,4 @@ export default Route.extend({
 			transition.abort();
 		}
 	}
-});
+}

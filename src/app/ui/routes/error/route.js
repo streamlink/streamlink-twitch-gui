@@ -1,3 +1,4 @@
+/* globals DEBUG */
 import { get, set, getProperties } from "@ember/object";
 import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";
@@ -25,8 +26,9 @@ const duplicates = {
 };
 
 
-export default Route.extend({
-	router: service(),
+export default class ErrorRoute extends Route {
+	/** @type {RouterService} */
+	@service router;
 
 	/**
 	 * Do all the error display stuff here instead of using an error controller.
@@ -35,7 +37,7 @@ export default Route.extend({
 	 * @param {Error} error
 	 */
 	setupController( controller, error ) {
-		this._super( controller );
+		super.setupController( controller );
 
 		error = error || new Error( "Unknown error" );
 
@@ -100,4 +102,4 @@ export default Route.extend({
 				: () => getProperties( trans.to, "name", "params" )
 		);
 	}
-});
+}

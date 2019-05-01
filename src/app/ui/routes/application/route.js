@@ -2,15 +2,15 @@ import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";
 
 
-export default Route.extend({
+export default class ApplicationRoute extends Route {
 	/** @type {AuthService} */
-	auth: service(),
+	@service auth;
 	/** @type {VersioncheckService} */
-	versioncheck: service(),
+	@service versioncheck;
 
 	init() {
-		this._super( ...arguments );
+		super.init( ...arguments );
 		this.auth.autoLogin();
 		this.versioncheck.check();
 	}
-});
+}

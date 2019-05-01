@@ -1,16 +1,16 @@
-import { get, set } from "@ember/object";
+import { set } from "@ember/object";
 import Route from "@ember/routing/route";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 import preload from "utils/preload";
 
 
-export default Route.extend( RefreshRouteMixin, {
+export default class FeaturedRoute extends Route.extend( RefreshRouteMixin ) {
 	async model() {
-		const store = get( this, "store" );
+		const store = this.store;
 
 		const [ summary, featured ] = await Promise.all([
-			store.queryRecord( "twitchStreamSummary", {} ),
-			store.query( "twitchStreamFeatured", {
+			store.queryRecord( "twitch-stream-summary", {} ),
+			store.query( "twitch-stream-featured", {
 				offset: 0,
 				limit : 5
 			})
@@ -20,11 +20,11 @@ export default Route.extend( RefreshRouteMixin, {
 		]);
 
 		return { summary, featured };
-	},
+	}
 
 	resetController( controller, isExiting ) {
 		if ( isExiting ) {
 			set( controller, "isAnimated", false );
 		}
 	}
-});
+}

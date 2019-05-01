@@ -1,34 +1,33 @@
-import { get } from "@ember/object";
 import Route from "@ember/routing/route";
 import InfiniteScrollMixin from "ui/routes/-mixins/routes/infinite-scroll";
 import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default Route.extend( InfiniteScrollMixin, {
-	itemSelector: ".stream-item-component",
+export default class TeamIndexRoute extends Route.extend( InfiniteScrollMixin ) {
+	itemSelector = ".stream-item-component";
 
 	beforeModel() {
 		this.customOffset = 0;
 
-		return this._super( ...arguments );
-	},
+		return super.beforeModel( ...arguments );
+	}
 
 	async model() {
-		const store = get( this, "store" );
-		const limit = get( this, "limit" );
+		const store = this.store;
+		const limit = this.limit;
 		const model = this.modelFor( "team" );
-		const users = get( model, "users" );
-		const length = get( users, "length" );
+		const channels = model.users;
+		const length = channels.length;
 
 		let offsetCalculated = false;
 		const options = { reload: true };
 
 		const fill = async ( streams, start ) => {
 			const end = start + limit;
-			const records = await Promise.all( users
+			const records = await Promise.all( channels
 				.slice( start, end )
-				.map( channel => store.findRecord( "twitchStream", get( channel, "id" ), options )
+				.map( channel => store.findRecord( "twitch-stream", channel.id, options )
 					.catch( () => false )
 				)
 			);
@@ -55,4 +54,4 @@ export default Route.extend( InfiniteScrollMixin, {
 
 		return await preload( records, "preview.mediumLatest" );
 	}
-});
+}

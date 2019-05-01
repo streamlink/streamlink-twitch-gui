@@ -4,8 +4,9 @@ import FilterLanguagesMixin from "ui/routes/-mixins/routes/filter-languages";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 
 
-export default Route.extend( InfiniteScrollOffsetMixin, FilterLanguagesMixin, RefreshRouteMixin, {
-	itemSelector: ".stream-item-component",
-	modelName: "twitchStream",
-	modelPreload: "preview.mediumLatest"
-});
+export default class StreamsRoute
+extends Route.extend( InfiniteScrollOffsetMixin, FilterLanguagesMixin, RefreshRouteMixin ) {
+	itemSelector = ".stream-item-component";
+	modelName = "twitch-stream";
+	modelPreload = "preview.mediumLatest";
+}
