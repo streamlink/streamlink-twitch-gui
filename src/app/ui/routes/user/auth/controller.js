@@ -1,26 +1,28 @@
 import Controller from "@ember/controller";
-import { get, set, computed, observer } from "@ember/object";
+import { set, computed, action } from "@ember/object";
+import { later } from "@ember/runloop";
 import { inject as service } from "@ember/service";
-import { twitch } from "config";
+import { observes } from "@ember-decorators/object";
+import { twitch as twitchConfig } from "config";
 import RetryTransitionMixin from "ui/routes/-mixins/controllers/retry-transition";
-import wait from "utils/wait";
 
 
-const { oauth: { scope } } = twitch;
+const { oauth: { scope } } = twitchConfig;
 
 
-export default Controller.extend( RetryTransitionMixin, {
-	auth: service(),
-	settings: service(),
+export default class UserAuthController extends Controller.extend( RetryTransitionMixin ) {
+	/** @type {AuthService} */
+	@service auth;
+	/** @type {SettingsService} */
+	@service settings;
 
 	retryTransition() {
 		// use "user.index" as default route
-		return this._super( "user.index" );
-	},
+		return super.retryTransition( "user.index" );
+	}
 
-	token: "",
-
-	scope: scope.join( ", " ),
+	token = "";
+	scope = scope.join( ", " );
 
 	/**
 	 * 0 000: start
@@ -32,107 +34,114 @@ export default Controller.extend( RetryTransitionMixin, {
 	 * 6 110: token - failure
 	 * 7 111: token - success
 	 */
-	loginStatus: 0,
+	loginStatus = 0;
 
-	userStatus: computed( "loginStatus", function() {
-		return get( this, "loginStatus" ) & 3;
-	}),
+	@computed( "loginStatus" )
+	get userStatus() {
+		return this.loginStatus & 0b011;
+	}
 
-	hasUserInteraction: computed( "userStatus", function() {
-		return get( this, "userStatus" ) > 0;
-	}),
+	@computed( "userStatus" )
+	get hasUserInteraction() {
+		return this.userStatus > 0;
+	}
 
-	isLoggingIn: computed( "loginStatus", function() {
-		return get( this, "loginStatus" ) === 1;
-	}),
+	@computed( "loginStatus" )
+	get isLoggingIn() {
+		return this.loginStatus === 1;
+	}
 
-	hasLoginResult: computed( "userStatus", function() {
-		const userStatus = get( this, "userStatus" );
-		return ( userStatus & 2 ) > 0;
-	}),
+	@computed( "userStatus" )
+	get hasLoginResult() {
+		return ( this.userStatus & 0b010 ) > 0;
+	}
 
-	showFailMessage: computed( "userStatus", function() {
-		return get( this, "userStatus" ) === 2;
-	}),
+	@computed( "userStatus" )
+	get isFailMessageVisible() {
+		return this.userStatus === 0b010;
+	}
 
-	showTokenForm: computed( "loginStatus", function() {
-		return get( this, "loginStatus" ) & 4;
-	}),
+	@computed( "loginStatus" )
+	get isTokenFormVisible() {
+		return this.loginStatus & 0b100;
+	}
 
 
-	serverObserver: observer( "auth.server", function() {
-		const authServer = get( this, "auth.server" );
+	@observes( "auth.server" )
+	serverObserver() {
+		const authServer = this.auth.server;
 		set( this, "loginStatus", authServer ? 1 : 0 );
-	}),
+	}
 
 
 	resetProperties() {
 		set( this, "token", "" );
 		set( this, "loginStatus", 0 );
-	},
+	}
 
 
-	actions: {
-		showTokenForm() {
-			set( this, "loginStatus", 4 );
-		},
+	@action
+	showTokenForm() {
+		set( this, "loginStatus", 4 );
+	}
 
-		// login via user and password
-		signin() {
-			if ( get( this, "isLoggingIn" ) ) { return; }
-			set( this, "loginStatus", 1 );
+	// login via user and password
+	@action
+	async signin() {
+		if ( this.isLoggingIn ) { return; }
+		set( this, "loginStatus", 1 );
 
-			const auth = get( this, "auth" );
+		try {
+			await this.auth.signin();
+			set( this, "loginStatus", 3 );
+			this.retryTransition();
 
-			auth.signin()
-				.then( () => {
-					set( this, "loginStatus", 3 );
-					this.retryTransition();
-				})
-				.catch( () => {
-					set( this, "loginStatus", 2 );
-					wait( 3000 )()
-						.then( () => {
-							set( this, "loginStatus", 0 );
-						});
-				});
-		},
-
-		// login via access token
-		signinToken( success, failure ) {
-			if ( get( this, "isLoggingIn" ) ) { return; }
-			set( this, "loginStatus", 5 );
-
-			const token = get( this, "token" );
-			const auth = get( this, "auth" );
-
-			// show the loading icon for a sec and wait
-			wait( 1000 )()
-				// login attempt
-				.then( () => auth.login( token, false ) )
-				// visualize result: update button and icon
-				.then( () => {
-					set( this, "loginStatus", 7 );
-					return wait( 1000 )( true )
-						.then( success );
-				}, () => {
-					set( this, "loginStatus", 6 );
-					return wait( 3000 )( false )
-						.then( failure )
-						.catch( data => data );
-				})
-				// retry transition on success
-				.then( result => {
-					set( this, "loginStatus", 4 );
-					if ( result ) {
-						this.retryTransition();
-					}
-				});
-		},
-
-		// abort sign in with username + password
-		abort() {
-			get( this, "auth" ).abortSignin();
+		} catch ( e ) {
+			set( this, "loginStatus", 2 );
+			await new Promise( r => later( r, 3000 ) );
+			set( this, "loginStatus", 0 );
 		}
 	}
-});
+
+	// login via access token
+	@action
+	async signinToken( success, failure ) {
+		if ( this.isLoggingIn ) { return; }
+		set( this, "loginStatus", 5 );
+
+		const token = this.token;
+
+		// show the loading icon for a sec and wait
+		await new Promise( r => later( r, 1000 ) );
+
+		let successful = false;
+		try {
+			// login attempt
+			await this.auth.login( token, false );
+
+			// visualize result: update button and icon
+			set( this, "loginStatus", 7 );
+			await new Promise( r => later( r, 1000 ) );
+			await success();
+			successful = true;
+
+		} catch ( e ) {
+			set( this, "loginStatus", 6 );
+			await new Promise( r => later( r, 3000 ) );
+			await failure();
+
+		} finally {
+			set( this, "loginStatus", 4 );
+			// retry transition on success
+			if ( successful ) {
+				this.retryTransition();
+			}
+		}
+	}
+
+	// abort sign in with username + password
+	@action
+	abort() {
+		this.auth.abortSignin();
+	}
+}

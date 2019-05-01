@@ -20,7 +20,7 @@
 {{/if}}
 <footer>
 {{#if settings.advanced}}
-{{#if showTokenForm}}
+{{#if isTokenFormVisible}}
 <div class="input-group token-form">
 {{input
 	type="text"
@@ -54,7 +54,7 @@
 {{/form-button}}
 {{/if}}
 {{/if}}
-{{#if showFailMessage}}
+{{#if isFailMessageVisible}}
 <p class="fail">{{t "routes.user.auth.fail"}}</p>
 {{/if}}
 </footer>

@@ -4,10 +4,11 @@ import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";
 
 
-export default Route.extend({
-	auth: service(),
+export default class UserIndexRoute extends Route {
+	/** @type {AuthService} */
+	@service auth;
 	/** @type {RouterService} */
-	router: service(),
+	@service router;
 
 	beforeModel( transition ) {
 		/** @type {Auth} */
@@ -25,13 +26,13 @@ export default Route.extend({
 		} else {
 			this._waitForLogin();
 		}
-	},
+	}
 
 	_redirectToLoginForm() {
 		const controller = this.controllerFor( "userAuth" );
 		set( controller, "previousTransition", this._transition );
 		this.router.transitionTo( "user.auth" );
-	},
+	}
 
 	_waitForLogin() {
 		// no ongoing login? prompt user to log in.
@@ -47,11 +48,11 @@ export default Route.extend({
 
 		// register callback once
 		addListener( this.auth, "login", this, "_onLogin", true );
-	},
+	}
 
 	_removeOnLoginListener() {
 		removeListener( this.auth, "login", this, "_onLogin" );
-	},
+	}
 
 	_onLogin( success ) {
 		this._removeOnLoginListener();
@@ -62,4 +63,4 @@ export default Route.extend({
 			this._redirectToLoginForm();
 		}
 	}
-});
+}

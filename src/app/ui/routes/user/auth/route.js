@@ -1,23 +1,28 @@
-import { get } from "@ember/object";
+import { action } from "@ember/object";
 import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";
 
 
-export default Route.extend({
-	auth: service(),
+export default class UserAuthRoute extends Route {
+	/** @type {AuthService} */
+	@service auth;
+	/** @type {RouterService} */
+	@service router;
 
 	beforeModel( transition ) {
-		// check if user is successfully logged in
-		if ( get( this, "auth.session.isLoggedIn" ) ) {
-			transition.abort();
-			this.transitionTo( "user.index" );
-		}
-	},
+		/** @type {Auth} */
+		const session = this.auth.session;
 
-	actions: {
-		willTransition() {
-			this.controller.send( "abort" );
-			this.controller.resetProperties();
+		// check if user is successfully logged in
+		if ( session && session.isLoggedIn ) {
+			transition.abort();
+			this.router.transitionTo( "user.index" );
 		}
 	}
-});
+
+	@action
+	willTransition() {
+		this.controller.send( "abort" );
+		this.controller.resetProperties();
+	}
+}

@@ -1,47 +1,50 @@
 import Controller from "@ember/controller";
-import { set, computed } from "@ember/object";
+import { set, computed, action } from "@ember/object";
 import { inject as service } from "@ember/service";
 
 
-export default Controller.extend({
+export default class UserIndexController extends Controller {
 	/** @type {AuthService} */
-	auth: service(),
+	@service auth;
 	/** @type {NotificationService} */
-	notification: service(),
+	@service notification;
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
 	/** @type {RouterService} */
-	router: service(),
+	@service router;
 	/** @type {SettingsService} */
-	settings: service(),
+	@service settings;
 
-	scope: computed( "auth.session.scope", function() {
+	isTokenFormVisible = false;
+
+	@computed( "auth.session.scope" )
+	get scope() {
+		/** @type {Auth} */
 		const { session } = this.auth;
 
 		return session && session.scope
 			? session.scope.split( "+" ).join( ", " )
 			: "";
-	}),
+	}
 
-	showTokenForm: false,
+	@action
+	async signout() {
+		await this.auth.signout();
+		this.router.transitionTo( "user.auth" );
+	}
 
-	actions: {
-		async signout() {
-			await this.auth.signout();
-			this.router.transitionTo( "user.auth" );
-		},
-
-		async copyToken( success, failure ) {
-			try {
-				this.nwjs.clipboard.set( this.auth.session.access_token );
-				await success();
-			} catch ( err ) {
-				await failure( err );
-			}
-		},
-
-		showTokenForm() {
-			set( this, "showTokenForm", true );
+	@action
+	async copyToken( success, failure ) {
+		try {
+			this.nwjs.clipboard.set( this.auth.session.access_token );
+			await success();
+		} catch ( err ) {
+			await failure( err );
 		}
 	}
-});
+
+	@action
+	showTokenForm() {
+		set( this, "isTokenFormVisible", true );
+	}
+}

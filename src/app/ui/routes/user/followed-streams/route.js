@@ -6,13 +6,14 @@ import { mapBy } from "utils/ember/recordArrayMethods";
 import { preload } from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
-	itemSelector: ".stream-item-component",
+export default class UserFollowedStreamsRoute
+extends UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin ) {
+	itemSelector = ".stream-item-component";
 
 	// Guard against infinite API queries in case Twitch's query offset implemention breaks.
 	// Assume that nobody has followed so many channels that more than 500 (5*maxLimit) streams
 	// are online at the same time.
-	maxQueries: 5,
+	maxQueries = 5;
 
 	/**
 	 * Twitch doesn't sort the followed streams response anymore:
@@ -43,7 +44,7 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 
 		// return the first infinite scroll result as initial model data
 		return await this.fetchContent();
-	},
+	}
 
 	/**
 	 * @returns {Promise<TwitchStreamFollowed[]>}
@@ -57,10 +58,10 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
 		};
 
 		return await preload( streams, "preview.mediumLatest" );
-	},
+	}
 
 	deactivate() {
 		this._super( ...arguments );
 		this.all = null;
 	}
-});
+}
