@@ -1,22 +1,23 @@
 import { getOwner } from "@ember/application";
-import { get } from "@ember/object";
+import { action } from "@ember/object";
 import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 
-export default Route.extend({
-	modal: service(),
+export default class ChannelSettingsRoute extends Route {
+	/** @type {ModalService} */
+	@service modal;
 
 	async model() {
-		const store = get( this, "store" );
+		const store = this.store;
 		const parentModel = this.modelFor( "channel" );
-		const id = get( parentModel, "channel.name" );
+		const id = parentModel.channel.name;
 
-		const model = await store.findRecord( "channelSettings", id )
+		const model = await store.findRecord( "channel-settings", id )
 			.catch( () => {
 				// get the record automatically created by store.findRecord()
-				const model = store.recordForId( "channelSettings", id );
+				const model = store.recordForId( "channel-settings", id );
 				// transition from `root.empty` to `root.loaded.created.uncommitted`
 				model.transitionTo( "loaded.created.uncommitted" );
 
@@ -28,29 +29,28 @@ export default Route.extend({
 		const buffer = ObjectBuffer.create({ content });
 
 		return { model, buffer };
-	},
+	}
 
 	refresh() {
 		return getOwner( this ).lookup( "route:channel" ).refresh();
-	},
-
-	actions: {
-		willTransition( previousTransition ) {
-			const controller = get( this, "controller" );
-
-			// check whether the user has changed any values
-			if ( !get( controller, "model.buffer.isDirty" ) ) {
-				// don't keep the channelSettings records in cache
-				return get( this, "store" ).unloadAll( "channelSettings" );
-			}
-
-			// stay here...
-			previousTransition.abort();
-
-			// and let the user decide
-			get( this, "modal" ).openModal( "confirm", controller, {
-				previousTransition
-			});
-		}
 	}
-});
+
+	@action
+	willTransition( previousTransition ) {
+		const controller = this.controller;
+
+		// check whether the user has changed any values
+		if ( !controller.model.buffer.isDirty ) {
+			// don't keep the channelSettings records in cache
+			return this.store.unloadAll( "channel-settings" );
+		}
+
+		// stay here...
+		previousTransition.abort();
+
+		// and let the user decide
+		this.modal.openModal( "confirm", controller, {
+			previousTransition
+		});
+	}
+}

@@ -1,33 +1,34 @@
-import { get } from "@ember/object";
 import Route from "@ember/routing/route";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 import preload from "utils/preload";
 
 
-const reNum = /^\d+$/;
-
-
-export default Route.extend( RefreshRouteMixin, {
-	async model( params ) {
-		const store = get( this, "store" );
-		let { channel: id } = params;
+export default class ChannelRoute extends Route.extend( RefreshRouteMixin ) {
+	async model({ channel: id }) {
+		/** @type {TwitchStream} */
 		let stream;
+		/** @type {TwitchChannel} */
 		let channel;
 
-		if ( !reNum.test( id ) ) {
-			const user = await store.findRecord( "twitchUser", id );
+		if ( !/^\d+$/.test( id ) ) {
+			/** @type {TwitchUser} */
+			const user = await this.store.findRecord( "twitch-user", id );
 			try {
-				stream = await get( user, "stream" );
-			} catch ( e ) {}
-			channel = await get( user, "channel" );
+				await user.stream.promise;
+				stream = user.stream.content;
+				channel = stream.channel;
+			} catch ( e ) {
+				await user.channel.promise;
+				channel = user.channel.content;
+			}
 
 		} else {
 			try {
-				stream = await store.findRecord( "twitchStream", id, { reload: true } );
-				channel = get( stream, "channel" );
+				stream = await this.store.findRecord( "twitch-stream", id, { reload: true } );
+				channel = stream.channel;
 			} catch ( e ) {
 				// if the channel is not online, just find and return the channel record
-				channel = await store.findRecord( "twitchChannel", id, { reload: true } );
+				channel = await this.store.findRecord( "twitch-channel", id, { reload: true } );
 			}
 		}
 
@@ -40,4 +41,4 @@ export default Route.extend( RefreshRouteMixin, {
 
 		return model;
 	}
-});
+}

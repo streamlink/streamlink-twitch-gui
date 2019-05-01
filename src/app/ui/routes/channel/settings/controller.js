@@ -1,20 +1,26 @@
 import Controller from "@ember/controller";
-import { get, set, defineProperty, computed, observer } from "@ember/object";
+import { get, set, defineProperty, computed, action } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { observes } from "@ember-decorators/object";
 import { qualities } from "data/models/stream/model";
 import RetryTransitionMixin from "ui/routes/-mixins/controllers/retry-transition";
 
 
-export default Controller.extend( RetryTransitionMixin, {
-	modal: service(),
-	settings: service(),
+export default class ChannelSettingsController extends Controller.extend( RetryTransitionMixin ) {
+	/** @type {ModalService} */
+	@service modal;
+	/** @type {SettingsService} */
+	@service settings;
 
-	qualities,
+	qualities = qualities;
 
-	modelObserver: observer( "model", function() {
-		const original = get( this, "model.model" );
-		const model = get( this, "model.buffer" );
-		const settings = get( this, "settings" );
+	/** @type {{model: ChannelSettings, buffer: ObjectBuffer}} */
+	model;
+
+	@observes( "model" )
+	modelObserver() {
+		const { model: original, buffer: model } = this.model;
+		const settings = this.settings;
 
 		original.eachAttribute( ( attr, meta ) => {
 			const {
@@ -71,7 +77,7 @@ export default Controller.extend( RetryTransitionMixin, {
 			defineProperty( this,       attr, attributeProxy );
 			defineProperty( this, `_${attr}`, attributeEnabled );
 		});
-	}),
+	}
 
 	/**
 	 * Prevent pollution:
@@ -111,35 +117,36 @@ export default Controller.extend( RetryTransitionMixin, {
 					record.transitionTo( "loaded.created.uncommitted" );
 				});
 		}
-	},
+	}
 
-	actions: {
-		apply( success, failure ) {
-			const modal = get( this, "modal" );
-			const model = get( this, "model.model" );
-			const buffer = get( this, "model.buffer" ).applyChanges().getContent();
+	@action
+	async apply( success, failure ) {
+		const model = this.model.model;
+		const buffer = this.model.buffer.applyChanges().getContent();
 
-			this.saveRecord( model, buffer )
-				.then( success, failure )
-				.then( () => modal.closeModal( this ) )
-				.then( () => this.retryTransition() )
-				.catch( () => model.rollbackAttributes() );
-		},
+		try {
+			await this.saveRecord( model, buffer );
+			await success();
+			this.modal.closeModal( this );
+			this.retryTransition();
 
-		discard( success ) {
-			const modal = get( this, "modal" );
-
-			get( this, "model.buffer" ).discardChanges();
-
-			Promise.resolve()
-				.then( success )
-				.then( () => modal.closeModal( this ) )
-				.then( () => this.retryTransition() );
-		},
-
-		cancel() {
-			set( this, "previousTransition", null );
-			get( this, "modal" ).closeModal( this );
+		} catch ( e ) {
+			await failure();
+			model.rollbackAttributes();
 		}
 	}
-});
+
+	@action
+	async discard( success ) {
+		this.model.buffer.discardChanges();
+		await success();
+		this.modal.closeModal( this );
+		this.retryTransition();
+	}
+
+	@action
+	cancel() {
+		set( this, "previousTransition", null );
+		this.modal.closeModal( this );
+	}
+}
