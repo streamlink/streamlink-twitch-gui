@@ -1,10 +1,9 @@
 import Component from "@ember/component";
-import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { set as setClipboard } from "nwjs/Clipboard";
 
 
 export default Component.extend({
+	/** @type {NwjsService} */
 	nwjs: service(),
 
 	tagName: "div",
@@ -23,12 +22,11 @@ export default Component.extend({
 
 		if ( !selected.length && event.target.tagName === "A" ) { return; }
 
-		const nwjs = get( this, "nwjs" );
-		nwjs.contextMenu( event, [{
+		this.nwjs.contextMenu( event, [{
 			label: [ "contextmenu.copy-selection" ],
 			enabled: selected.length,
 			click() {
-				setClipboard( selected );
+				this.nwjs.clipboard.set( selected );
 			}
 		}] );
 	}

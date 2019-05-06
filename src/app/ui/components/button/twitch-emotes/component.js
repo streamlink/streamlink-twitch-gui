@@ -1,9 +1,7 @@
-import { get } from "@ember/object";
 import { and, or } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import { translationMacro as t } from "ember-i18n/addon";
 import { twitch } from "config";
-import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "../form-button/component";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 
@@ -12,6 +10,8 @@ const { "emotes-url": twitchEmotesUrl } = twitch;
 
 
 export default FormButtonComponent.extend( HotkeyMixin, {
+	/** @type {NwjsService} */
+	nwjs: service(),
 	settings: service(),
 
 	showButton: false,
@@ -32,12 +32,14 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 		}
 	],
 
-	action() {
-		let url = twitchEmotesUrl;
-		let channel = get( this, "channel.name" );
-
-		return openBrowser( url, {
-			channel
-		});
+	async action( success, failure ) {
+		try {
+			this.nwjs.openBrowser( twitchEmotesUrl, {
+				channel: this.channel.name
+			});
+			await success();
+		} catch ( err ) {
+			await failure( err );
+		}
 	}
 });

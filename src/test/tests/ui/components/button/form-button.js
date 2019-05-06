@@ -87,7 +87,8 @@ module( "ui/components/button/form-button", function( hooks ) {
 
 	test( "Icon success animation", async function( assert ) {
 		/** @type {Function|null} */
-		let success;
+		let success = null;
+		let successPromise;
 		const successPromiseData = {};
 
 		this.set( "action", _success => success = _success );
@@ -102,8 +103,11 @@ module( "ui/components/button/form-button", function( hooks ) {
 		` );
 		const btn = this.element.querySelector( ".form-button-component" );
 
-		// click and succeed
-		success = null;
+		assert.notOk(
+			btn.querySelector( ".loading-spinner-component" ),
+			"Is not showing the loading spinner initially"
+		);
+
 		await click( btn );
 
 		assert.ok( btn.classList.contains( "animated" ), "Has animation class" );
@@ -114,10 +118,7 @@ module( "ui/components/button/form-button", function( hooks ) {
 		assert.ok( success instanceof Function, "Action has success callback" );
 
 		// let the action succeed
-		run( () => success( successPromiseData ).then( data => {
-			assert.strictEqual( data, successPromiseData, "Resolves with correct data" );
-			assert.step( "success" );
-		}) );
+		successPromise = run( () => success( successPromiseData ) );
 
 		assert.notOk(
 			btn.querySelector( ".loading-spinner-component" ),
@@ -144,17 +145,31 @@ module( "ui/components/button/form-button", function( hooks ) {
 			"Icon does not have the animation success class anymore"
 		);
 
-		// noinspection JSUnusedAssignment
-		assert.verifySteps(
-			[ "success" ],
-			"The success promise always resolves"
+		assert.strictEqual(
+			await successPromise,
+			successPromiseData,
+			"Success callback resolves with correct data"
+		);
+
+		// let the action succeed again
+		successPromise = run( () => success( successPromiseData ) );
+
+		assert.notOk(
+			btn.classList.contains( "animated" ),
+			"Button does not have the animation class again"
+		);
+		assert.strictEqual(
+			await successPromise,
+			successPromiseData,
+			"Success callback resolves with correct data again"
 		);
 	});
 
 
 	test( "Icon failure animation", async function( assert ) {
 		/** @type {Function|null} */
-		let failure;
+		let failure = null;
+		let failurePromise;
 		const failurePromiseData = {};
 
 		this.set( "action", ( _success, _failure ) => failure = _failure );
@@ -169,8 +184,11 @@ module( "ui/components/button/form-button", function( hooks ) {
 		` );
 		const btn = this.element.querySelector( ".form-button-component" );
 
-		// click and fail
-		failure = null;
+		assert.notOk(
+			btn.querySelector( ".loading-spinner-component" ),
+			"Is not showing the loading spinner initially"
+		);
+
 		await click( btn );
 
 		assert.ok( btn.classList.contains( "animated" ), "Has button animation class" );
@@ -181,10 +199,9 @@ module( "ui/components/button/form-button", function( hooks ) {
 		assert.ok( failure instanceof Function, "Action has failure callback" );
 
 		// let the action fail
-		run( () => failure( failurePromiseData ).catch( data => {
-			assert.strictEqual( data, failurePromiseData, "Rejects with correct data" );
-			assert.step( "failure" );
-		}) );
+		failurePromise = run( () => failure( failurePromiseData )
+			.then( /* istanbul ignore next */ () => null, e => e )
+		);
 
 		assert.notOk(
 			btn.querySelector( ".loading-spinner-component" ),
@@ -211,9 +228,25 @@ module( "ui/components/button/form-button", function( hooks ) {
 			"Icon does not have the animation failure class anymore"
 		);
 
-		await assert.verifySteps(
-			[ "failure" ],
-			"The failure promise always rejects"
+		assert.strictEqual(
+			await failurePromise,
+			failurePromiseData,
+			"Failure callback rejects with correct data"
+		);
+
+		// let the action fail again
+		failurePromise = run( () => failure( failurePromiseData )
+			.then( /* istanbul ignore next */ () => null, e => e )
+		);
+
+		assert.notOk(
+			btn.classList.contains( "animated" ),
+			"Button does not have the animation class again"
+		);
+		assert.strictEqual(
+			await failurePromise,
+			failurePromiseData,
+			"Failure callback rejects with correct data again"
 		);
 	});
 
@@ -232,7 +265,7 @@ module( "ui/components/button/form-button", function( hooks ) {
 			action: actionResult,
 			icon: "fa-times",
 			iconanim: true,
-			_iconAnimation() {}
+			_iconAnimation: null
 		});
 		await render( hbs`
 			{{form-button

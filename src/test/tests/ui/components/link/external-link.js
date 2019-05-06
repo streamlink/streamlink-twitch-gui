@@ -7,31 +7,28 @@ import sinon from "sinon";
 
 import Service from "@ember/service";
 
-import externalLinkComponentInjector
-	from "inject-loader?-utils/getStreamFromUrl!ui/components/link/external-link/component";
+import ExternalLinkComponent from "ui/components/link/external-link/component";
 
 
 module( "ui/components/link/external-link", function( hooks ) {
 	setupRenderingTest( hooks, {
-		resolver: buildResolver()
+		resolver: buildResolver({
+			ExternalLinkComponent
+		})
 	});
 
 	hooks.beforeEach(function() {
-		this.clipboardSetStub = sinon.stub();
-		this.openBrowserStub = sinon.stub();
+		this.clipboardSetSpy = sinon.stub();
+		this.openBrowserSpy = sinon.stub();
 		this.contextMenuStub = sinon.stub();
 		this.transitionToStub = sinon.stub();
 
-		const { default: ExternalLinkComponent } = externalLinkComponentInjector({
-			"nwjs/Clipboard": {
-				set: this.clipboardSetStub
-			},
-			"nwjs/Shell": {
-				openBrowser: this.openBrowserStub
-			}
-		});
 		const NwjsService = Service.extend({
-			contextMenu: this.contextMenuStub
+			contextMenu: this.contextMenuStub,
+			openBrowser: this.openBrowserSpy,
+			clipboard: {
+				set: this.clipboardSetSpy
+			}
 		});
 		const RouterService = Service.extend({
 			transitionTo: this.transitionToStub
@@ -64,7 +61,7 @@ module( "ui/components/link/external-link", function( hooks ) {
 		event = triggerEventSync( component, "click" );
 		assert.ok( event.isDefaultPrevented(), "Default event action is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Event doesn't propagate" );
-		assert.notOk( this.openBrowserStub.called, "Doesn't open browser" );
+		assert.notOk( this.openBrowserSpy.called, "Doesn't open browser" );
 		assert.propEqual(
 			this.transitionToStub.args,
 			[ [ "channel", "foo" ] ],
@@ -97,10 +94,10 @@ module( "ui/components/link/external-link", function( hooks ) {
 		event = triggerEventSync( component, "click" );
 		assert.ok( event.isDefaultPrevented(), "Default event action is prevented" );
 		assert.ok( event.isImmediatePropagationStopped(), "Event doesn't propagate" );
-		assert.propEqual( this.openBrowserStub.args, [ [ "https://bar.com/" ] ], "Opens browser" );
+		assert.propEqual( this.openBrowserSpy.args, [ [ "https://bar.com/" ] ], "Opens browser" );
 		assert.notOk( this.transitionToStub.called, "Does not transition to different route" );
 
-		this.openBrowserStub.resetHistory();
+		this.openBrowserSpy.resetHistory();
 
 		// has a context menu
 		event = triggerEventSync( component, "contextmenu" );
@@ -120,19 +117,19 @@ module( "ui/components/link/external-link", function( hooks ) {
 			]
 		] ], "Opens context menu" );
 
-		assert.notOk( this.openBrowserStub.called, "Browser hasn't been opened yet" );
-		assert.notOk( this.clipboardSetStub.called, "Set clipboard hasn't been called yet" );
+		assert.notOk( this.openBrowserSpy.called, "Browser hasn't been opened yet" );
+		assert.notOk( this.clipboardSetSpy.called, "Set clipboard hasn't been called yet" );
 
 		this.contextMenuStub.args[0][1][0].click();
 		assert.propEqual(
-			this.openBrowserStub.args,
+			this.openBrowserSpy.args,
 			[ [ "https://bar.com/" ] ],
 			"Opens browser"
 		);
 
 		this.contextMenuStub.args[0][1][1].click();
 		assert.propEqual(
-			this.clipboardSetStub.args,
+			this.clipboardSetSpy.args,
 			[ [ "https://bar.com/" ] ],
 			"Sets clipboard"
 		);

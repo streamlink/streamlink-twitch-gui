@@ -1,7 +1,6 @@
 import Component from "@ember/component";
 import { get, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { set as setClipboard } from "nwjs/Clipboard";
 import {
 	ATTR_STREAMS_CLICK_NOOP,
 	ATTR_STREAMS_CLICK_LAUNCH,
@@ -15,6 +14,7 @@ import layout from "./template.hbs";
 
 export default Component.extend({
 	chat: service(),
+	/** @type {NwjsService} */
 	nwjs: service(),
 	/** @type {RouterService} */
 	router: service(),
@@ -94,7 +94,6 @@ export default Component.extend({
 	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
 
-		const nwjs = get( this, "nwjs" );
 		const items = [];
 
 		const quals = qualities.map( quality => ({
@@ -148,7 +147,7 @@ export default Component.extend({
 			);
 		}
 
-		nwjs.contextMenu( event, items );
+		this.nwjs.contextMenu( event, items );
 	},
 
 
@@ -171,8 +170,7 @@ export default Component.extend({
 	},
 
 	copyChannelURL() {
-		const url = get( this, "channel.url" );
-		setClipboard( url );
+		this.nwjs.clipboard.set( this.channel.url );
 	},
 
 	gotoChannelPage() {

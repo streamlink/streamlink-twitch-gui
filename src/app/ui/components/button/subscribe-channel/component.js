@@ -1,7 +1,7 @@
 import { get, computed } from "@ember/object";
 import { alias, and } from "@ember/object/computed";
+import { inject as service } from "@ember/service";
 import { twitch } from "config";
-import { openBrowser } from "nwjs/Shell";
 import FormButtonComponent from "../form-button/component";
 import TwitchInteractButtonMixin from "ui/components/-mixins/twitch-interact-button";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
@@ -11,6 +11,8 @@ const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
 
 
 export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixin, {
+	nwjs: service(),
+
 	modelName: "twitchSubscription",
 
 	// model alias (component attribute)
@@ -54,13 +56,14 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixi
 		}
 	],
 
-
-	action() {
-		let url = subscriptionCreateUrl;
-		let channel = get( this, "model.name" );
-
-		return openBrowser( url, {
-			channel
-		});
+	async action( success, failure ) {
+		try {
+			this.nwjs.openBrowser( subscriptionCreateUrl, {
+				channel: this.model.name
+			});
+			await success();
+		} catch ( err ) {
+			await failure( err );
+		}
 	}
 });

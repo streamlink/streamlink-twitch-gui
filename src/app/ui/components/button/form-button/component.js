@@ -12,6 +12,7 @@ export const STATE_FAILURE = 2;
 export const STATE_SUCCESS = 3;
 
 
+// TODO: rewrite this component
 export default Component.extend({
 	layout,
 
@@ -98,9 +99,25 @@ export default Component.extend({
 
 		if ( hasIconAnim ) {
 			// success and failure callbacks
+			let iconAnimSuccessCalled = false;
+			let iconAnimFailureCalled = false;
 			animPromises.push(
-				data => this._iconAnimation( STATE_SUCCESS, data ),
-				data => this._iconAnimation( STATE_FAILURE, data )
+				data => {
+					if ( iconAnimSuccessCalled ) {
+						return Promise.resolve( data );
+					} else {
+						iconAnimSuccessCalled = true;
+						return this._iconAnimation( STATE_SUCCESS, data );
+					}
+				},
+				data => {
+					if ( iconAnimFailureCalled ) {
+						return Promise.reject( data );
+					} else {
+						iconAnimFailureCalled = true;
+						return this._iconAnimation( STATE_FAILURE, data );
+					}
+				}
 			);
 
 			if ( get( this, "spinner" ) ) {

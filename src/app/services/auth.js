@@ -3,7 +3,6 @@ import Evented from "@ember/object/evented";
 import { default as Service, inject as service } from "@ember/service";
 import { twitch } from "config";
 import { setFocused } from "nwjs/Window";
-import { openBrowser } from "nwjs/Shell";
 import { all } from "utils/contains";
 import HttpServer from "utils/node/http/HttpServer";
 import OAuthResponseRedirect from "root/oauth-redirect.html";
@@ -28,6 +27,8 @@ const reToken = /^[a-z\d]{30}$/i;
 
 
 export default Service.extend( Evented, {
+	/** @type {NwjsService} */
+	nwjs: service(),
 	store: service(),
 
 	session: null,
@@ -107,9 +108,11 @@ export default Service.extend( Evented, {
 			});
 
 			// open auth url in web browser
-			let url = get( this, "url" );
-			openBrowser( url )
-				.catch( reject );
+			try {
+				this.nwjs.openBrowser( this.url );
+			} catch ( err ) {
+				reject( err );
+			}
 		})
 			// shut down server and focus the application window when done
 			.finally( () => {

@@ -7,16 +7,10 @@ import hbs from "htmlbars-inline-precompile";
 import Service from "@ember/service";
 
 import EmbeddedLinksComponent from "ui/components/link/embedded-links/component";
-import externalLinkComponentInjector
-	from "inject-loader?-utils/getStreamFromUrl!ui/components/link/external-link/component";
+import ExternalLinkComponent from "ui/components/link/external-link/component";
 
 
 module( "ui/components/link/embedded-links", function( hooks ) {
-	const { default: ExternalLinkComponent } = externalLinkComponentInjector({
-		"nwjs/Clipboard": {},
-		"nwjs/Shell": {}
-	});
-
 	setupRenderingTest( hooks, {
 		resolver: buildResolver({
 			EmbeddedLinksComponent,

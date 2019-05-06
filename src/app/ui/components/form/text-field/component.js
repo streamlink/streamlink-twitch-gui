@@ -1,10 +1,9 @@
 import TextField from "@ember/component/text-field";
-import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { get as getClipboard, set as setClipboard } from "nwjs/Clipboard";
 
 
 export default TextField.extend({
+	/** @type {NwjsService} */
 	nwjs: service(),
 
 	attributeBindings: [ "autoselect:data-selectable" ],
@@ -18,15 +17,15 @@ export default TextField.extend({
 		const start = element.selectionStart;
 		const end = element.selectionEnd;
 
-		const clip = getClipboard();
-		const nwjs = get( this, "nwjs" );
+		const nwjs = this.nwjs;
+		const clip = nwjs.clipboard.get();
 		nwjs.contextMenu( event, [
 			{
 				label: [ "contextmenu.copy" ],
 				enabled: start !== end,
 				click() {
 					const selected = element.value.substr( start, end - start );
-					setClipboard( selected );
+					nwjs.clipboard.set( selected );
 				}
 			},
 			{

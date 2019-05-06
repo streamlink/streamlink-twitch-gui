@@ -23,11 +23,19 @@ module( "services/nwjs", function( hooks ) {
 
 	hooks.beforeEach(function() {
 		this.quitSpy = sinon.spy();
-		this.openBrowserSpy = sinon.spy();
+		this.openExternalSpy = sinon.spy();
 		this.toggleVisibilitySpy = sinon.spy();
 		this.toggleMinimizedSpy = sinon.spy();
 		this.toggleMaximizedSpy = sinon.spy();
 		this.toggleShowInTaskbarSpy = sinon.spy();
+
+		let clipboard;
+		this.clipboardGetStub = sinon.stub().callsFake( () => clipboard );
+		this.clipboardSetStub = sinon.stub().callsFake( data => clipboard = data );
+		this.getClipboardStub = sinon.stub().returns({
+			get: this.clipboardGetStub,
+			set: this.clipboardSetStub
+		});
 
 		const guiSettings = this.guiSettings = {
 			integration: ATTR_GUI_INTEGRATION_BOTH,
@@ -51,8 +59,13 @@ module( "services/nwjs", function( hooks ) {
 			"nwjs/App": {
 				quit: this.quitSpy
 			},
-			"nwjs/Shell": {
-				openBrowser: this.openBrowserSpy
+			"nwjs/nwGui": {
+				Clipboard: {
+					get: this.getClipboardStub
+				},
+				Shell: {
+					openExternal: this.openExternalSpy
+				}
 			},
 			"nwjs/Window": {
 				toggleVisibility: this.toggleVisibilitySpy,
@@ -129,8 +142,56 @@ module( "services/nwjs", function( hooks ) {
 		/** @type {NwjsService} */
 		const NwjsService = this.owner.lookup( "service:nwjs" );
 
-		const args = [ 1, 2, 3 ];
-		NwjsService.openBrowser( ...args );
-		assert.ok( this.openBrowserSpy.calledOnceWithExactly( ...args ), "Calls openBrowser" );
+		assert.throws(
+			() => NwjsService.openBrowser(),
+			new Error( "Missing URL" ),
+			"Throws if url is missing"
+		);
+		assert.notOk( this.openExternalSpy.called, "Doesn't open browser on error" );
+
+		NwjsService.openBrowser( "https://foo.bar/" );
+		assert.ok(
+			this.openExternalSpy.calledOnceWithExactly( "https://foo.bar/" ),
+			"Opens browser with simple URL"
+		);
+		this.openExternalSpy.resetHistory();
+
+		assert.throws(
+			() => NwjsService.openBrowser( "https://foo.bar/{foo}" ),
+			new Error( "Missing value for key 'foo'" ),
+			"Throws if variables are not defined"
+		);
+		assert.notOk( this.openExternalSpy.called, "Doesn't open browser on error" );
+
+		assert.throws(
+			() => NwjsService.openBrowser( "https://foo.bar/{foo}", { bar: "bar" } ),
+			new Error( "Missing value for key 'foo'" ),
+			"Throws if variable is missing"
+		);
+		assert.notOk( this.openExternalSpy.called, "Doesn't open browser on error" );
+
+		NwjsService.openBrowser( "https://foo.bar/{foo}/{bar}", { foo: "foo", bar: "bar" } );
+		assert.ok(
+			this.openExternalSpy.calledOnceWithExactly( "https://foo.bar/foo/bar" ),
+			"Opens browser with substituted URL"
+		);
+	});
+
+
+	test( "Clipboard", function( assert ) {
+		/** @type {NwjsService} */
+		const NwjsService = this.owner.lookup( "service:nwjs" );
+
+		assert.notOk(
+			this.getClipboardStub.called,
+			"Doesn't initialize clipboard without property access"
+		);
+
+		NwjsService.clipboard.set( "foo" );
+		assert.ok( this.getClipboardStub.called, "Initializes clipboard on first property access" );
+		assert.ok( this.clipboardSetStub.called, "clipboard.set was called" );
+
+		assert.strictEqual( NwjsService.clipboard.get(), "foo", "Gets correct clipboard value" );
+		assert.ok( this.clipboardGetStub.called, "clipboard.get was called" );
 	});
 });

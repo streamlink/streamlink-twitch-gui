@@ -1,12 +1,13 @@
 import Controller from "@ember/controller";
 import { get, set, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { set as setClipboard } from "nwjs/Clipboard";
 
 
 export default Controller.extend({
 	auth: service(),
 	notification: service(),
+	/** @type {NwjsService} */
+	nwjs: service(),
 	settings: service(),
 
 	scope: computed( "auth.session.scope", function() {
@@ -21,10 +22,13 @@ export default Controller.extend({
 				.then( () => this.transitionToRoute( "user.auth" ) );
 		},
 
-		copyToken( success, failure ) {
-			setClipboard( get( this, "auth.session.access_token" ) )
-				.then( success, failure )
-				.catch( () => {} );
+		async copyToken( success, failure ) {
+			try {
+				this.nwjs.clipboard.set( this.auth.session.access_token );
+				await success();
+			} catch ( err ) {
+				await failure( err );
+			}
 		},
 
 		showTokenForm() {

@@ -1,12 +1,11 @@
 import Component from "@ember/component";
 import { get, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { set as setClipboard } from "nwjs/Clipboard";
-import { openBrowser } from "nwjs/Shell";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 
 
 export default Component.extend({
+	/** @type {NwjsService} */
 	nwjs: service(),
 	/** @type {RouterService} */
 	router: service(),
@@ -42,8 +41,7 @@ export default Component.extend({
 		if ( channel ) {
 			this.router.transitionTo( "channel", channel );
 		} else {
-			const url = get( this, "url" );
-			openBrowser( url );
+			this.nwjs.openBrowser( this.url );
 		}
 	},
 
@@ -55,17 +53,15 @@ export default Component.extend({
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		const url = get( this, "url" );
-		const nwjs = get( this, "nwjs" );
-
-		nwjs.contextMenu( event, [
+		const url = this.url;
+		this.nwjs.contextMenu( event, [
 			{
 				label: [ "contextmenu.open-in-browser" ],
-				click: () => openBrowser( url )
+				click: () => this.nwjs.openBrowser( url )
 			},
 			{
 				label: [ "contextmenu.copy-link-address" ],
-				click: () => setClipboard( url )
+				click: () => this.nwjs.clipboard.set( url )
 			}
 		]);
 	}

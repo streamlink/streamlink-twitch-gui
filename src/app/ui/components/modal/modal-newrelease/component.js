@@ -1,12 +1,12 @@
-import { get } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import ModalDialogComponent from "../modal-dialog/component";
-import { openBrowser } from "nwjs/Shell";
 import layout from "./template.hbs";
 
 
 export default ModalDialogComponent.extend({
+	/** @type {NwjsService} */
+	nwjs: service(),
 	versioncheck: service(),
 
 	layout,
@@ -18,16 +18,18 @@ export default ModalDialogComponent.extend({
 
 
 	actions: {
-		download( success, failure ) {
-			let url = get( this, "versioncheck.downloadURL" );
-
-			openBrowser( url )
-				.then( success, failure )
-				.then( () => this.send( "ignore" ) );
+		async download( success, failure ) {
+			try {
+				this.nwjs.openBrowser( this.versioncheck.downloadURL );
+				await success();
+				this.send( "ignore" );
+			} catch ( err ) {
+				await failure( err );
+			}
 		},
 
 		ignore() {
-			get( this, "versioncheck" ).ignoreRelease();
+			this.versioncheck.ignoreRelease();
 			this.send( "close" );
 		}
 	}

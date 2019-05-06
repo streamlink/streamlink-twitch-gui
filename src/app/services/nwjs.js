@@ -2,6 +2,7 @@ import { getOwner } from "@ember/application";
 import { get, computed } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
 import { quit } from "nwjs/App";
+import { Clipboard, Shell } from "nwjs/nwGui";
 import {
 	default as nwWindow,
 	toggleVisibility,
@@ -9,14 +10,23 @@ import {
 	toggleMinimized,
 	toggleShowInTaskbar
 } from "nwjs/Window";
-import { openBrowser } from "nwjs/Shell";
 import { ATTR_GUI_INTEGRATION_TRAY } from "data/models/settings/gui/fragment";
+
+
+const { hasOwnProperty } = {};
+const reVariable = /{(\w+)}/g;
 
 
 export default Service.extend( /** @class NwjsService */ {
 	modal: service(),
 	settings: service(),
 	streaming: service(),
+
+
+	/** @type {NWJS_Helpers.clip} */
+	clipboard: computed(function() {
+		return Clipboard.get();
+	}),
 
 	tray: computed(function() {
 		return getOwner( this ).lookup( "nwjs:tray" );
@@ -31,8 +41,26 @@ export default Service.extend( /** @class NwjsService */ {
 		nwWindow.showDevTools();
 	},
 
-	openBrowser( ...args ) {
-		return openBrowser( ...args );
+	/**
+	 * @param {string} url
+	 * @param {Object<string,string>?} vars
+	 * @returns {string}
+	 */
+	openBrowser( url, vars ) {
+		if ( !url ) {
+			throw new Error( "Missing URL" );
+		}
+
+		const hasVars = vars && typeof vars === "object";
+		url = url.replace( reVariable, ( _, name ) => {
+			if ( !hasVars || !hasOwnProperty.call( vars, name ) ) {
+				throw new Error( `Missing value for key '${name}'` );
+			}
+
+			return vars[ name ];
+		});
+
+		Shell.openExternal( url );
 	},
 
 	minimize() {

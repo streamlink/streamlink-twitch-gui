@@ -1,13 +1,12 @@
 import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
 import EmbeddedHtmlLinksComponent from "ui/components/link/embedded-html-links/component";
-import { openBrowser } from "nwjs/Shell";
-import { set as setClipboard } from "nwjs/Clipboard";
 import layout from "./template.hbs";
 import "./styles.less";
 
 
 export default EmbeddedHtmlLinksComponent.extend({
+	/** @type {NwjsService} */
 	nwjs: service(),
 	/** @type {RouterService} */
 	router: service(),
@@ -28,15 +27,14 @@ export default EmbeddedHtmlLinksComponent.extend({
 	},
 
 	linkContentMenu( event, url ) {
-		const nwjs = get( this, "nwjs" );
-		nwjs.contextMenu( event, [
+		this.nwjs.contextMenu( event, [
 			{
 				label: [ "contextmenu.open-in-browser" ],
-				click: () => openBrowser( url )
+				click: () => this.nwjs.openBrowser( url )
 			},
 			{
 				label: [ "contextmenu.copy-link-address" ],
-				click: () => setClipboard( url )
+				click: () => this.nwjs.clipboard.set( url )
 			}
 		]);
 	},

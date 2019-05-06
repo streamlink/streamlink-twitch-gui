@@ -15,7 +15,6 @@ import {
 	TimeoutError,
 	HostingError
 } from "services/streaming/errors";
-import { openBrowser } from "nwjs/Shell";
 import layout from "./template.hbs";
 import "./styles.less";
 
@@ -36,6 +35,8 @@ function computedError( classObj ) {
 
 
 export default ModalDialogComponent.extend( HotkeyMixin, {
+	/** @type {NwjsService} */
+	nwjs: service(),
 	streaming: service(),
 	settings: service(),
 	store: service(),
@@ -111,12 +112,15 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 
 
 	actions: {
-		download( success, failure ) {
-			const type = get( this, "settings.streaming.providerType" );
-
-			openBrowser( downloadUrl[ type ] )
-				.then( success, failure )
-				.then( () => this.send( "close" ) );
+		async download( success, failure ) {
+			try {
+				const providerType = this.settings.content.streaming.providerType;
+				this.nwjs.openBrowser( downloadUrl[ providerType ] );
+				await success();
+				this.send( "close" );
+			} catch ( err ) {
+				await failure( err );
+			}
 		},
 
 		close() {
