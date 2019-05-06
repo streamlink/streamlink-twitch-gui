@@ -114,7 +114,7 @@ export default Service.extend( /** @class NwjsService */ {
 
 		const menu = getOwner( this ).lookup( "nwjs:menu" );
 		menu.items.pushObjects( items );
-		menu.menu.popup( event.originalEvent.x, event.originalEvent.y );
+		menu.menu.popup( event.x, event.y );
 	},
 
 	addTrayMenuItem( item, position ) {

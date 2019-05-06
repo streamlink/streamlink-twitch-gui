@@ -2,9 +2,8 @@ import Component from "@ember/component";
 import { get, set, getWithDefault } from "@ember/object";
 import { sort } from "@ember/object/computed";
 import { on } from "@ember/object/evented";
-import { run, next } from "@ember/runloop";
+import { run } from "@ember/runloop";
 import { inject as service } from "@ember/service";
-import $ from "jquery";
 import { vars as varsConfig } from "config";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 import Search from "data/models/search/model";
@@ -111,21 +110,20 @@ export default Component.extend( HotkeyMixin, {
 
 	_prepareDropdown: on( "didInsertElement", function() {
 		// dropdown
-		const $element = this.$();
-		const dropdown = $element.find( ".searchbar-dropdown" )[ 0 ];
-		const button = $element.find( ".btn-dropdown" )[ 0 ];
-		const search = $element.find( "input[type='search']" )
-			.focus(function() {
-				next( this, this.select );
-			})[ 0 ];
+		const element = this.element;
+		const dropdown = element.querySelector( ".searchbar-dropdown" );
+		const button = element.querySelector( ".btn-dropdown" );
+		const search = element.querySelector( "input[type='search']" );
 
-		$( document.body ).click( event => {
-			const $target = $( event.target );
+		search.addEventListener( "focus", ({ target }) => target.select() );
+
+		element.ownerDocument.body.addEventListener( "click", ({ target }) => {
 			// ignore clicks on the input, the dropdown button and on the dropdown itself
 			if (
-				   !$target.closest( search ).length
-				&& !$target.closest( button ).length
-				&& !$target.closest( dropdown ).length
+				   this.showDropdown
+				&& !search.contains( target )
+				&& !button.contains( target )
+				&& !dropdown.contains( target )
 			) {
 				set( this, "showDropdown", false );
 			}
@@ -147,7 +145,7 @@ export default Component.extend( HotkeyMixin, {
 		},
 
 		focus() {
-			this.$( "input[type='search']" ).focus();
+			this.element.querySelector( "input[type='search']" ).focus();
 		},
 
 		toggleDropdown() {

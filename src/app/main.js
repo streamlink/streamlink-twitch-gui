@@ -35,7 +35,6 @@ require( "net" );
 
 
 require( "shim" );
-require( "jquery" );
 require( "ember" );
 require( "./logger" );
 require( "./app" );

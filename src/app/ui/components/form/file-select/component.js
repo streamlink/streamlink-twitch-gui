@@ -2,7 +2,6 @@ import Component from "@ember/component";
 import { get, set, computed } from "@ember/object";
 import { on } from "@ember/object/evented";
 import { inject as service } from "@ember/service";
-import $ from "jquery";
 import { platform } from "utils/node/platform";
 import layout from "./template.hbs";
 
@@ -40,25 +39,23 @@ export default Component.extend({
 		}
 	}),
 
-	_createInput: on( "init", function() {
-		const component = this;
-		this._input = $( "<input>" )
-			.addClass( "hidden" )
-			.attr({
-				type: "file",
-				tabindex: -1
-			})
-			.change(function() {
-				if ( !this.value.length ) { return; }
-				set( component, "value", this.value );
-				this.files.clear();
-			});
+	_createInput: on( "didInsertElement", function() {
+		const input = this.element.ownerDocument.createElement( "input" );
+		input.classList.add( "hidden" );
+		input.setAttribute( "type", "file" );
+		input.setAttribute( "tabindex", "-1" );
+		input.addEventListener( "change", () => {
+			if ( !input.value.length ) { return; }
+			set( this, "value", input.value );
+			input.files.clear();
+		});
+		this._input = input;
 	}),
 
 	actions: {
 		selectfile() {
 			if ( !get( this, "disabled" ) ) {
-				this._input.click();
+				this._input.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
 			}
 		}
 	}

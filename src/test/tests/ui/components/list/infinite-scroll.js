@@ -1,7 +1,8 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
-import { buildResolver, checkListeners } from "test-utils";
+import { buildResolver } from "test-utils";
 import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { stubDOMEvents, hasListener } from "event-utils";
 import { render, clearRender, click, triggerEvent } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
@@ -21,6 +22,8 @@ module( "ui/components/list/infinite-scroll", function( hooks ) {
 			THelper: FakeTHelper
 		})
 	});
+
+	stubDOMEvents( hooks );
 
 
 	test( "Button states", async function( assert ) {
@@ -142,7 +145,7 @@ module( "ui/components/list/infinite-scroll", function( hooks ) {
 		await render( hbs`
 			<div class="parent" style="height: 100px; overflow-y: auto">
 				<div class="child" style="height: 1000px">
-					{{infinite-scroll $parent=$parent listener=listener}}
+					{{infinite-scroll _parent=parent _listener=listener}}
 				</div>
 			</div>
 		` );
@@ -150,47 +153,47 @@ module( "ui/components/list/infinite-scroll", function( hooks ) {
 		const listener = this.get( "listener" );
 
 		assert.strictEqual(
-			this.get( "$parent" )[0],
+			this.get( "parent" ),
 			parent,
 			"Finds the correct parent element with a scroll bar"
 		);
 		assert.ok(
-			checkListeners( parent, "scroll", listener ),
+			hasListener( parent, "scroll", listener ),
 			"Parent has a scroll listener"
 		);
 		assert.ok(
-			checkListeners( window, "resize", listener ),
+			hasListener( window, "resize", listener ),
 			"Window has a resize listener"
 		);
 
 		await clearRender();
 		assert.notOk(
-			checkListeners( parent, "scroll", listener ),
+			hasListener( parent, "scroll", listener ),
 			"Unregisters scroll listener"
 		);
 		assert.notOk(
-			checkListeners( window, "resize", listener ),
+			hasListener( window, "resize", listener ),
 			"Unregisters resize listener"
 		);
 
 		// main.content parent
 		await render( hbs`
 			<main class="content">
-				{{infinite-scroll $parent=$parent}}
+				{{infinite-scroll _parent=parent}}
 			</main>
 		` );
 		assert.strictEqual(
-			this.get( "$parent" )[0],
+			this.get( "parent" ),
 			this.element.querySelector( "main" ),
 			"Uses main.content as fallback parent if it is available"
 		);
 
 		// document.body parent
 		await render( hbs`
-			{{infinite-scroll $parent=$parent}}
+			{{infinite-scroll _parent=parent}}
 		` );
 		assert.strictEqual(
-			this.get( "$parent" )[0],
+			this.get( "parent" ),
 			document.body,
 			"Uses the document body as ultimate fallback parent"
 		);

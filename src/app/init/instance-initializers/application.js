@@ -1,6 +1,5 @@
 import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
-import $ from "jquery";
 import { themes as themesConfig } from "config";
 import { enable as enableSmoothScroll, disable as disableSmoothScroll } from "smoothscroll";
 
@@ -18,7 +17,7 @@ export default {
 		const RouterService = application.lookup( "service:router" );
 		const SettingsService = application.lookup( "service:settings" );
 		const HotkeyService = application.lookup( "service:hotkey" );
-		const rootElement = get( application, "rootElement" );
+		const rootElement = document.querySelector( application.rootElement );
 		const classList = document.documentElement.classList;
 
 		addObserver( SettingsService, "gui.theme", SettingsService, function() {
@@ -49,20 +48,24 @@ export default {
 			e.stopImmediatePropagation();
 			RouterService.history( go );
 		}
+		rootElement.addEventListener( "mouseup", e => {
+			if ( e.buttons & 0b01000 ) {
+				return history( e, -1 );
+			}
+			if ( e.buttons & 0b10000 ) {
+				return history( e, +1 );
+			}
+		});
 
-		$( rootElement )
-			.on( "mouseup", e => {
-				if ( e.buttons & 0b01000 ) {
-					return history( e, -1 );
-				}
-				if ( e.buttons & 0b10000 ) {
-					return history( e, +1 );
-				}
-			})
-			.on( "keyup", e => HotkeyService.trigger( e ) )
-			.on( "dragstart dragover dragend dragenter dragleave dragexit drag drop", e => {
-				e.preventDefault();
-				e.stopImmediatePropagation();
-			});
+		rootElement.addEventListener( "keyup", e => HotkeyService.trigger( e ) );
+
+		const events = "dragstart dragover dragend dragenter dragleave dragexit drag drop";
+		const disableDrag = e => {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		};
+		for ( const e of events.split( " " ) ) {
+			rootElement.addEventListener( e, disableDrag );
+		}
 	}
 };

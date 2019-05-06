@@ -2,7 +2,12 @@ import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
 import { FakeI18nService } from "i18n-utils";
-import { triggerKeyDownEvent } from "event-utils";
+import {
+	stubDOMEvents,
+	isDefaultPrevented,
+	isPropagationStopped,
+	triggerKeyDownEvent
+} from "event-utils";
 import { render, click, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
@@ -24,6 +29,8 @@ module( "ui/components/form/drop-down", function( hooks ) {
 			I18nService: FakeI18nService
 		})
 	});
+
+	stubDOMEvents( hooks );
 
 	hooks.beforeEach(function() {
 		this.getLabel = () => this.element.querySelector( ".drop-down-selection-component" )
@@ -267,49 +274,49 @@ module( "ui/components/form/drop-down", function( hooks ) {
 			list.classList.contains( "expanded" ),
 			"Does not react to spacebar when not focused"
 		);
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isPropagationStopped( e ), "Doesn't stop event's propagation" );
 		e = await triggerKeyDownEvent( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[0], "Doesn't change on ArrowDown" );
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isPropagationStopped( e ), "Doesn't stop event's propagation" );
 		e = await triggerKeyDownEvent( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[0], "Doesn't change on ArrowUp" );
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isPropagationStopped( e ), "Doesn't stop event's propagation" );
 
 		await focus( elem );
 
 		e = await triggerKeyDownEvent( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[0], "No new selection on ArrowDown" );
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isPropagationStopped( e ), "Doesn't stop event's propagation" );
 		e = await triggerKeyDownEvent( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[0], "No new selection on ArrowUp" );
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isPropagationStopped( e ), "Doesn't stop event's propagation" );
 
 		e = await triggerKeyDownEvent( elem, " " );
 		assert.ok(
 			list.classList.contains( "expanded" ),
 			"Toggles expansion when focused on Space"
 		);
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isPropagationStopped( e ), "Stops event's propagation" );
 		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk(
 			list.classList.contains( "expanded" ),
 			"Toggles expansion when focused on Space"
 		);
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isPropagationStopped( e ), "Stops event's propagation" );
 
 		await triggerKeyDownEvent( elem, " " );
 
 		e = await triggerKeyDownEvent( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[1], "Selects next item on ArrowDown" );
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isPropagationStopped( e ), "Stops event's propagation" );
 		await triggerKeyDownEvent( elem, "ArrowDown" );
 		assert.strictEqual( this.get( "selection" ), content[2], "Selects next item again" );
 		await triggerKeyDownEvent( elem, "ArrowDown" );
@@ -317,8 +324,8 @@ module( "ui/components/form/drop-down", function( hooks ) {
 
 		e = await triggerKeyDownEvent( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[2], "Jumps to last item on ArrowUp" );
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isPropagationStopped( e ), "Stops event's propagation" );
 		await triggerKeyDownEvent( elem, "ArrowUp" );
 		assert.strictEqual( this.get( "selection" ), content[1], "Selects prev item on ArrowUp" );
 		await triggerKeyDownEvent( elem, "ArrowUp" );

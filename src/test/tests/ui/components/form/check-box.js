@@ -1,7 +1,12 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { triggerKeyDownEvent } from "event-utils";
+import {
+	stubDOMEvents,
+	isDefaultPrevented,
+	isPropagationStopped,
+	triggerKeyDownEvent
+} from "event-utils";
 import { render, click, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
@@ -14,6 +19,8 @@ module( "ui/components/form/check-box", function( hooks ) {
 			CheckBoxComponent
 		})
 	});
+
+	stubDOMEvents( hooks );
 
 
 	test( "CheckBoxComponent", async function( assert ) {
@@ -83,20 +90,20 @@ module( "ui/components/form/check-box", function( hooks ) {
 
 		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk( this.get( "checked" ), "Is still not checked on Space" );
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isPropagationStopped( e ), "Doesn't stop event's propagation" );
 
 		await focus( elem );
 		assert.strictEqual( document.activeElement, elem, "Is focused now" );
 
 		e = await triggerKeyDownEvent( elem, " " );
 		assert.ok( this.get( "checked" ), "Is checked on Space" );
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isPropagationStopped( e ), "Stops event's propagation" );
 		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk( this.get( "checked" ), "Is not checked anymore on Space" );
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isPropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isPropagationStopped( e ), "Stops event's propagation" );
 
 		await triggerKeyDownEvent( elem, "Escape" );
 		assert.notStrictEqual( document.activeElement, elem, "Removes focus on Escape" );
@@ -107,8 +114,8 @@ module( "ui/components/form/check-box", function( hooks ) {
 
 		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk( this.get( "checked" ), "Is not checked on Space while being disabled" );
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isPropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isPropagationStopped( e ), "Doesn't stop event's propagation" );
 
 		await triggerKeyDownEvent( elem, "Escape" );
 		assert.notStrictEqual( document.activeElement, elem, "Removes focus on Escape" );

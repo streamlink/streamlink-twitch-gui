@@ -2,7 +2,12 @@ import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
 import { FakeI18nService } from "i18n-utils";
-import { triggerKeyDownEvent } from "event-utils";
+import {
+	stubDOMEvents,
+	isDefaultPrevented,
+	isImmediatePropagationStopped,
+	triggerKeyDownEvent
+} from "event-utils";
 import { render, clearRender, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
@@ -21,20 +26,22 @@ module( "services/hotkey", function( hooks ) {
 		})
 	});
 
+	stubDOMEvents( hooks );
+
 	hooks.before(function() {
 		this.Component = Component.extend( HotkeyMixin );
 	});
 
 	hooks.beforeEach(function() {
 		this.parentlistener = sinon.spy();
-		this.$().parent().on( "keydown", this.parentlistener );
+		this.element.parentElement.addEventListener( "keydown", this.parentlistener );
 
 		const hotkeyService = this.owner.lookup( "service:hotkey" );
-		this.$().on( "keydown", e => hotkeyService.trigger( e ) );
+		this.element.addEventListener( "keydown", e => hotkeyService.trigger( e ) );
 	});
 
 	hooks.afterEach(function() {
-		this.$().parent().off( "keydown", this.parentlistener );
+		this.element.parentElement.removeEventListener( "keydown", this.parentlistener );
 	});
 
 
@@ -306,8 +313,8 @@ module( "services/hotkey", function( hooks ) {
 		await render( hbs`{{component-a}}{{component-b}}` );
 
 		e = await triggerKeyDownEvent( this.element, "Escape" );
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isImmediatePropagationStopped( e ), "Stops event's propagation" );
 		assert.notOk( actionA.called, "Doesn't call parent's Escape action" );
 		assert.notOk( actionB.called, "Doesn't call parent's Enter action" );
 		assert.ok( actionC.calledOnce, "Calls child's Escape action" );
@@ -316,8 +323,8 @@ module( "services/hotkey", function( hooks ) {
 		actionC.returns( true );
 
 		e = await triggerKeyDownEvent( this.element, "Escape" );
-		assert.ok( e.isDefaultPrevented(), "Prevents event's default action" );
-		assert.ok( e.isImmediatePropagationStopped(), "Stops event's propagation" );
+		assert.ok( isDefaultPrevented( e ), "Prevents event's default action" );
+		assert.ok( isImmediatePropagationStopped( e ), "Stops event's propagation" );
 		assert.ok( actionA.calledOnce, "Calls parent's Escape action" );
 		assert.notOk( actionB.called, "Doesn't call parent's Enter action" );
 		assert.ok( actionC.calledOnce, "Calls child's Escape action" );
@@ -325,8 +332,8 @@ module( "services/hotkey", function( hooks ) {
 		actionC.resetHistory();
 
 		e = await triggerKeyDownEvent( this.element, "Enter" );
-		assert.notOk( e.isDefaultPrevented(), "Doesn't prevent event's default action" );
-		assert.notOk( e.isImmediatePropagationStopped(), "Doesn't stop event's propagation" );
+		assert.notOk( isDefaultPrevented( e ), "Doesn't prevent event's default action" );
+		assert.notOk( isImmediatePropagationStopped( e ), "Doesn't stop event's propagation" );
 		assert.notOk( actionA.calledOnce, "Doesn't call parent's Escape action" );
 		assert.ok( actionB.called, "Calls parent's Enter action" );
 		assert.notOk( actionC.calledOnce, "Doesn't call child's Escape action" );

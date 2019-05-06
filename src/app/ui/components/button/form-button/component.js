@@ -51,14 +51,14 @@ export default Component.extend({
 	_iconAnimation( status, data ) {
 		return new Promise( ( resolve, reject ) => {
 			set( this, "_status", status );
-			this.$().one( "webkitAnimationEnd", () => {
+			this.element.addEventListener( "webkitAnimationEnd", () => {
 				set( this, "_status", STATE_VOID );
 				if ( status === STATE_SUCCESS ) {
 					resolve( data );
 				} else {
 					reject( data );
 				}
-			});
+			}, { once: true } );
 		});
 	},
 

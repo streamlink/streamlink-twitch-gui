@@ -2,7 +2,6 @@ import Component from "@ember/component";
 import { get, set, observer } from "@ember/object";
 import { or } from "@ember/object/computed";
 import { scheduleOnce } from "@ember/runloop";
-import $ from "jquery";
 import layout from "./template.hbs";
 import "./styles.less";
 
@@ -25,7 +24,7 @@ export default Component.extend({
 	],
 
 	threshold: 2 / 3,
-	listener: null,
+	_listener: null,
 
 	type: "button",
 	isLocked: or( "isFetching", "hasFetchedAll" ),
@@ -44,7 +43,7 @@ export default Component.extend({
 		if ( length >= this._contentLength ) { return; }
 		this._contentLength = length;
 
-		const listener = get( this, "listener" );
+		const listener = get( this, "_listener" );
 		if ( !listener ) { return; }
 		// wait for the DOM to upgrade
 		scheduleOnce( "afterRender", listener );
@@ -87,8 +86,6 @@ export default Component.extend({
 			}
 		}
 
-		const $window = $( document.defaultView );
-		const $parent = $( parent );
 		const action = get( this, "action" );
 		const threshold = get( this, "threshold" );
 		const { infiniteScroll } = this;
@@ -98,24 +95,23 @@ export default Component.extend({
 			}
 		};
 
-		set( this, "$parent", $parent );
-		set( this, "listener", listener );
+		// use Ember.set here, so that these properties can be properly bound in the component test
+		set( this, "_parent", parent );
+		set( this, "_listener", listener );
 
-		$parent.on( "scroll", listener );
-		$window.on( "resize", listener );
+		parent.addEventListener( "scroll", listener );
+		document.defaultView.addEventListener( "resize", listener );
 	},
 
 
 	willDestroyElement() {
 		this._super( ...arguments );
 
-		const $window = $( this.element.ownerDocument.defaultView );
-		const $parent = get( this, "$parent" );
-		const listener = get( this, "listener" );
-		$parent.off( "scroll", listener );
-		$window.off( "resize", listener );
-		set( this, "$parent", null );
-		set( this, "listener", null );
+		const listener = this._listener;
+		this._parent.removeEventListener( "scroll", listener );
+		this.element.ownerDocument.defaultView.removeEventListener( "resize", listener );
+		set( this, "_parent", null );
+		set( this, "_listener", null );
 	},
 
 

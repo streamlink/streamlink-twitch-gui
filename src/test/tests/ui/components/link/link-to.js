@@ -1,7 +1,12 @@
 import { module, test } from "qunit";
 import { setupApplicationTest } from "ember-qunit";
 import { buildFakeApplication } from "test-utils";
-import { triggerEvent } from "event-utils";
+import {
+	stubDOMEvents,
+	isDefaultPrevented,
+	isImmediatePropagationStopped,
+	triggerEvent
+} from "event-utils";
 import { click, visit, currentRouteName } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
@@ -43,6 +48,7 @@ module( "ui/components/link/link-to", function( hooks ) {
 	});
 
 	setupApplicationTest( hooks );
+	stubDOMEvents( hooks );
 
 	hooks.beforeEach(function() {
 		RoutingInstanceInitializer.initialize( this.owner );
@@ -172,6 +178,8 @@ module( "ui/components/link/link-to", function( hooks ) {
 	});
 
 	test( "Prevent new windows from being opened", async function( assert ) {
+		let e;
+
 		this.owner.lookup( "route:foo" ).reopen({
 			async model() {
 				throw new Error( "fail" );
@@ -181,27 +189,26 @@ module( "ui/components/link/link-to", function( hooks ) {
 		await visit( "/" );
 		const foo = this.element.querySelector( "a:first-of-type" );
 
-		let e;
 		e = await triggerEvent( foo, "click", { buttons: 1 } );
-		assert.ok( e.isDefaultPrevented(), "Prevents default on left click" );
-		assert.notOk( e.isImmediatePropagationStopped(), "Continues propagation on left click" );
+		assert.ok( isDefaultPrevented( e ), "Prevents default on left click" );
+		assert.notOk( isImmediatePropagationStopped( e ), "Continues propagation on left click" );
 		e = await triggerEvent( foo, "click", { buttons: 2 } );
-		assert.ok( e.isDefaultPrevented(), "Prevents default on middle click" );
-		assert.ok( e.isImmediatePropagationStopped(), "Stops propagation on middle click" );
+		assert.ok( isDefaultPrevented( e ), "Prevents default on middle click" );
+		assert.ok( isImmediatePropagationStopped( e ), "Stops propagation on middle click" );
 		e = await triggerEvent( foo, "click", { buttons: 4 } );
-		assert.ok( e.isDefaultPrevented(), "Prevents default on right click" );
-		assert.ok( e.isImmediatePropagationStopped(), "Stops propagation on right click" );
+		assert.ok( isDefaultPrevented( e ), "Prevents default on right click" );
+		assert.ok( isImmediatePropagationStopped( e ), "Stops propagation on right click" );
 		e = await triggerEvent( foo, "click", { shiftKey: true } );
-		assert.ok( e.isDefaultPrevented(), "Prevents default on shiftKey" );
-		assert.ok( e.isImmediatePropagationStopped(), "Stops propagation on shiftKey" );
+		assert.ok( isDefaultPrevented( e ), "Prevents default on shiftKey" );
+		assert.ok( isImmediatePropagationStopped( e ), "Stops propagation on shiftKey" );
 		e = await triggerEvent( foo, "click", { ctrlKey: true } );
-		assert.ok( e.isDefaultPrevented(), "Prevents default on ctrlKey" );
-		assert.ok( e.isImmediatePropagationStopped(), "Stops propagation on ctrlKey" );
+		assert.ok( isDefaultPrevented( e ), "Prevents default on ctrlKey" );
+		assert.ok( isImmediatePropagationStopped( e ), "Stops propagation on ctrlKey" );
 		e = await triggerEvent( foo, "click", { altKey: true } );
-		assert.ok( e.isDefaultPrevented(), "Prevents default on altKey" );
-		assert.ok( e.isImmediatePropagationStopped(), "Stops propagation on altKey" );
+		assert.ok( isDefaultPrevented( e ), "Prevents default on altKey" );
+		assert.ok( isImmediatePropagationStopped( e ), "Stops propagation on altKey" );
 		e = await triggerEvent( foo, "click", { metaKey: true } );
-		assert.ok( e.isDefaultPrevented(), "Prevents default on metaKey" );
-		assert.ok( e.isImmediatePropagationStopped(), "Stops propagation on metaKey" );
+		assert.ok( isDefaultPrevented( e ), "Prevents default on metaKey" );
+		assert.ok( isImmediatePropagationStopped( e ), "Stops propagation on metaKey" );
 	});
 });
