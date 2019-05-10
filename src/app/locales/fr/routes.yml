@@ -20,7 +20,7 @@ about:
         contributors: Contributeurs
     donation:
         header: Donner & Soutenir
-        text: ISi vous pensez que cette application est utile, veuillez envisager de soutenir le créateur en faisant un don.<b>Merci beaucoup ! 
+        text: Si vous pensez que cette application est utile, veuillez envisager de soutenir le créateur en faisant un don.<b>Merci beaucoup ! 
     translations:
         header: Traductions
     dependencies:
@@ -40,7 +40,7 @@ communities:
 community:
     menu:
         streams: Streams en live
-        info: Infos sur la communauté
+        info: Infos sur les streams en live
     streams:
         empty: La liste des streams de cette communauté est vide.
     info:
@@ -53,7 +53,7 @@ streams:
     empty: La liste des top Streams retournée est vide
 channel:
     menu:
-        details: Details
+        details: Détails
         teams: Équipes
         settings: Paramètres
     offline: est hors ligne actuellement
@@ -89,7 +89,7 @@ channel:
                 other: "{{count}} secondes"
         vodcast:
             title: Vodcast
-            data: Le stream est un cast d'une VOD
+            data: Le stream est un vodcast
     teams:
         empty: La liste des équipes retournée est vide.
     settings:

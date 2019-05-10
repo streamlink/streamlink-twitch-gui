@@ -27,7 +27,7 @@ newrelease:
 quit:
     header: Êtes-vous sûr de vouloir quitter ?
     body:
-        streams: En choisissant d'arrêter, tous les streams seront coupés, aussi.
+        streams: En choisissant d'arrêter, tous les streams seront coupés.
         no-streams: Tous les streams ont été coupés. Voulez-vous quitter maintenant ?
     action:
         close: Retour
