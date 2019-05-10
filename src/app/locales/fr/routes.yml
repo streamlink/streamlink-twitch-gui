@@ -1,0 +1,213 @@
+error:
+    header: Erreur
+    text: Une erreur est survenue en tente d'afficher cette page.
+about:
+    about:
+        header: À propos
+        homepage: Page d'accueil
+        author: Autueur
+        version: Version
+        nwjs: NW.js
+        arch: Architecture
+        built: Built
+        help: Aide
+        wiki: Wiki
+        bugs: Bugs
+        issue-tracker: Suivi des problèmes
+        support: Support
+        gitter: Gitter
+        changelog: Changelog
+        contributors: Contributeurs
+    donation:
+        header: Donner & Soutenir
+        text: ISi vous pensez que cette application est utile, veuillez envisager de soutenir le créateur en faisant un don.<b>Merci beaucoup ! 
+    translations:
+        header: Traductions
+    dependencies:
+        header: Application tierces
+featured:
+    header: Chaînes mises en avant
+    empty: La liste des chaînes mises en avant n'a pas pu être chargée!
+    summary: Il y actuellement {{viewers}} personnes en train de regarder {{channels}} !
+games:
+    header: Top Jeux
+    empty: La liste des top jeux retournée est vide.
+game:
+    empty: La liste des streams de ce jeu est vide.
+communities:
+    header: Top Communautés
+    empty: La liste des top communautés retournée est vide.
+community:
+    menu:
+        streams: Streams en live
+        info: Infos sur la communauté
+    streams:
+        empty: La liste des streams de cette communauté est vide.
+    info:
+        created-by: Créé par
+        summary: Résumé
+        description: Description
+        rules: Règles
+streams:
+    header: Top Streams
+    empty: La liste des top Streams retournée est vide
+channel:
+    menu:
+        details: Details
+        teams: Équipes
+        settings: Paramètres
+    offline: est hors ligne actuellement
+    details:
+        header: Statistiques de la chaîne
+        name:
+            title: Nom
+        created-at:
+            title: Crée
+            # new Moment(channel.created_at).format(...)
+            format: "LL"
+        language:
+            title: Langue
+        followers:
+            title: Followers
+            data: "{{followers}} ({{day}} par jour)"
+        views:
+            title: Vues
+            data: "{{views}} ({{day}} par jour)"
+        content:
+            title: COntenu
+            mature: Inadapté aux enfants
+            ffa: Pas de restriction d'âge
+        format:
+            title: Format
+            data: "{{resolution}} @ {{fps}}fps"
+        delay:
+            title: Délai
+            # static "zero" property
+            data:
+                zero: Pas de délai additionnel
+                one: Une seconde
+                other: "{{count}} secondes"
+        vodcast:
+            title: Vodcast
+            data: Le stream est un cast d'une VOD
+    teams:
+        empty: La liste des équipes retournée est vide.
+    settings:
+        stream:
+            header: Stream
+            quality:
+                title: Qualité
+                description: Configurer la qualité d'un stream spécifique.
+            chat:
+                title: Chat
+                description: Ouvrir automatiquement le chat.
+                checkbox: Ouvrir le chat quand le stream commence
+        notifications:
+            header: Notifications sur le Bureau
+            enabled:
+                title: Notifications
+                description: Quand le strea commence.
+                notes: Il faut suivre la chaîne.
+                checkbox: Activer les notifications sur le Bureau
+team:
+    header:
+        members: "Membres de l'équipe: {{num}}"
+        # new Moment(team.created_at).format(...)
+        created-at: "[Créée le:] llll"
+        # new Moment(team.updated_at).format(...)
+        updated-at: "[Dernière modification le:] llll"
+    menu:
+        live: Membres en live
+        all: Tous les membres
+        info: Informations de l'équipe
+    live:
+        empty: La liste des membres en live retournée est vide.
+    all:
+        empty: La liste de tous les membres retournée est vide.
+    info:
+        header: Infos
+user:
+    index:
+        logged-in: "Connecté(e) en tant que {{name}}"
+        # new Moment(auth.session.date).format(...)
+        since: "[since] LLLL"
+        sign-out: Se déconnecter
+        token:
+            title: Votre token d'accès
+            show: Voir le token d'accès
+            copy: Copier dans le presse-papiers
+            hint:
+                first: "Cette clé donne accès à votre compte Twitch.tv avec ces permissions :"
+                second: Connectez-vous à nouveau avec votre mot de passe pour l'invalider.
+    auth:
+        abort: Abandonner
+        sign-in: Se connecter
+        token:
+            show-form: Utiliser le token d'accès
+            placeholder: Insérer le token d'accès
+            hint:
+                first: Connectez-vous à votre compte Twitch.tv en utilisant un token d'accès.
+                second: "Assurez-vous qu'il correspond aux permissions suivantes :"
+        fail: L'authentification a échoué. Veuillez réessayer.
+    subscriptions:
+        header: Abonnements
+        empty:
+            first: Vous n'avez aucun abonnement.
+            second: Soutenez directement les streameurs en vous abonnant à leur chaîne.
+    followedStreams:
+        header: Stream suivis
+        empty:
+            text: La liste retournée des streams est vide
+            hosted: Regarder les streams hébergés par les chaînes que vous suivez
+            featured: Regarder les flux actuellement mis en avant
+            streams: Regarder les top streams
+    hostedStreams:
+        header: Streams hébergés
+        empty:
+            text: La liste retournée des streams hébergés est vide.
+            followed: Regardez vos chaînes suivies
+            featured: Regarder les streams actuellement mis en avant
+            streams: Regarder les top streams
+    followedChannels:
+        header: Chaînes suivies
+        buttons:
+            sort-by-followed: Trier par date de suivi
+            sort-by-broadcast: Trier par la date de dernière diffusion
+            sort-by-login: Trier par la date de dernière connexion
+            sort-desc: Trier par ordre décroissant
+            sort-asc: Trier par ordre croissant
+        empty: La liste retournée des chînes suivie est vide.
+    followedGames:
+        header: Jeux suivis
+        menu:
+            live: Jeux en live
+            all: Tous les jeux
+        live:
+            empty:
+                text: La liste retournée de tous les jeux en live est vide.
+                games: Regarder les top jeux
+        all:
+            empty:
+                text: La liste retournée des jeux suivis est vide.
+                games: Regarder les top jeux
+search:
+    header:
+        all: Tous les résultat de la recherche
+        games: "Résultat de la recherche de jeux: "
+        channels: "Résultat de la recherche de chaînes: "
+        streams: "Résultat de la recherche de streams: "
+    subheader:
+        games: Jeux
+        channels: Chaînes
+        streams: Streams
+    empty: Votre requête n'a renvoyé aucun résultat...
+watching:
+    header: Vous regardez
+    buttons:
+        open: Ouvrir la boite de dialogue
+        close: Fermer le stream
+    empty:
+        header: Tous les stream ont été fermés
+        next: Que faire ensuite ?
+        featured: Regarder les stream actuellement mis en avant
+        followed: Regardez vos stream suivis

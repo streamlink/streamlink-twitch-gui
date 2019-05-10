@@ -1,0 +1,124 @@
+channel-item:
+    game-missing: pas de jeu configuré
+documentation-link:
+    title: Lire la documentation en ligne
+drop-down-selection:
+    placeholder: Choisissez
+file-select:
+    placeholder: Laisse vide pour le chemin par défaut
+flag-icon:
+    channel: "La langue de la chaîne est {{lang}}"
+    broadcaster: "La langue du diffuseur est {{lang}}"
+follow-button:
+    follow: "Suivre {{name}}"
+    unfollow: "Ne plus suivre {{name}}"
+    confirm: "Ne plus suivre {{name}}"
+    keep: "Continuer à suivre {{name}}"
+infinite-scroll:
+    error: Erreur
+    loading: Chargement
+    fetch: Aller plus loin
+main-menu:
+    browse:
+        header: Parcourir
+        featured: En avant
+        games: Jeux
+        communities: Communautés
+        streams: Streams
+    my:
+        header: Mes
+        subscriptions: Abonnements
+        live-streams: Streams live
+        hosted-streams: Streams Hébergés
+        channels: Chaînes
+        games: Jeux
+    misc:
+        header: Divers
+        settings: Paramètres
+        about: À propos
+open-chat:
+    title: Ouvrir le chat
+quick-bar-homepage:
+    title: Définir comme page d'accueil
+quick-bar-random-stream:
+    title: Lancer un stream aléatoire
+search-bar:
+    placeholder: Chercher
+    filter: Filtrer les résultats
+    filters:
+        all: Tous
+        games: Jeux
+        channels: Chaînes
+        streams: Streams
+    recent: Recherches récentes
+settings-channel-item:
+    settings: Paramètres
+    erase: Désactiver
+    confirmation: Désactiver les paramètres personnalisés?
+    confirm: Oui
+    decline: Non
+settings-row:
+    notes: Notes
+    default: Défaut
+    requires: Requiert
+    example: Exemple
+    variables:
+        title: Variables disponibles
+        # Infobulle (sensible aux whitespaces)
+        help: |
+            Le contenu de chaque variable sera échappé. S'il est utilisé en dehors des chaînes de caractères citées, chaque caractère sera échappé. Certaines applications sont capables de lire les caractères inutilement échappés dans leur liste de paramètres et fonctionneront comme prévu, mais d'autres ne le feront pas. Assurez-vous de définir toutes les variables à l'intérieur de chaînes de caractères simples ou doubles.
+
+            Correct usage:
+            -a "{a}" -b "{b1}{b2}" "-c={c}"
+settings-submit:
+    apply: Appliquer
+    discard: Annuler
+share-channel:
+    title: Copier l'url de la chaîne dans le presse-papiers
+stream-item:
+    hosted-by: "hébérgé par {{name}}"
+    fps: "{{fps}} fps"
+    details:
+        show: Voir les détails du stream
+        lock: Verrouiller la vue de détails
+        unlock: Déverrouiller la vue de détails
+    vodcast: Vodcast
+subscribe-channel:
+    title-new: "S'abonner à {{name}} maintenant"
+    title-renew: "Renouveler l'abonnement à {{name}}"
+subscription-item:
+    cancel: Annuler l'abonnement
+    edit: Modifier l'abonnement
+    access:
+        # new Moment(subscription.access_end).format(...)
+        title: "LLLL"
+        ended: "Est terminé"
+        # time = new Moment().to(subscription.access_end)
+        renews: "Sera renouvelé {{time}}"
+        # time = new Moment().to(subscription.access_end)
+        ends: "Se terminera {{time}}"
+    subscribed: Vou êtes abonné
+    support: Soutient directement le créateur
+    # new Moment(subscription.created_at).format(...)
+    since: "[Depuis] LLLL"
+    duration:
+        one: Abonné pour un mois
+        other: Abonné pour {{count}} mois
+    no-emoticons: Cette chaîne n'a pas (encore) d'émoticons
+team-item:
+    created-at:
+        title: "Date de création"
+        # new Moment(team.created_at).format(...)
+        format: "llll"
+    updated-at:
+        title: "Dernière modification"
+        # new Moment(team.updated_at).format(...)
+        format: "llll"
+title-bar:
+    loggedout: Non connecté(e)
+    # infobulle (senseible aux whitespaces)
+    loggedin: |
+        Connecté(e) en tant que {{name}}
+        {{status}}
+twitch-emotes:
+    title: Voir les émotes de la chaîne disponibles

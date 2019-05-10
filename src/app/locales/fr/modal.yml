@@ -1,0 +1,71 @@
+action:
+    close: Fermer
+changelog:
+    header: "Vous avez mis à jour vers la version v{{version}}"
+    body: Voulez-vous voir ce qu'il y a de nouveau et lire le changelog maintenant ?
+    action:
+        show: Changelog
+confirm:
+    header: Confirmez
+    body: Voulez-vous appliquer vos changements?
+    action:
+        apply: Appliquer
+        discard: Abandonner
+        cancel: Annuler
+firstrun:
+    header: "Merci d'utiliser {{name}}!"
+    body: Voulez-vous d'abord configurer l'application avant de commencer ?
+    action:
+        start: Commencer maintenant
+        settings: Paramètres
+newrelease:
+    header: "Vous utilisez une version obsolète: {{version}}"
+    body: "Voulez-vous télécharger la dernière version maintenant ? ({{version}})"
+    action:
+        download: Télécharger
+        ignore: Ignorer
+quit:
+    header: Êtes-vous sûr de vouloir quitter ?
+    body:
+        streams: En choisissant d'arrêter, tous les streams seront coupés, aussi.
+        no-streams: Tous les streams ont été coupés. Voulez-vous quitter maintenant ?
+    action:
+        close: Retour
+        shutdown: Arrêter
+        quit: Quitter
+streaming:
+    header:
+        preparing: "Prépartion, veuillez patientez"
+        launching: "Lancement: "
+        watching: "En visionnage: "
+        ended: "Le stream est terminé: "
+        error:
+            log: "Erreur: impossible de lancer le stream"
+            provider: "Erreur: {{provider}} configuration incorrecte"
+            player: "Erreur: Configuration incorrecte du lecteur"
+            version: "Erreur: Version {{provider}} incorrecte"
+            unable-to-open: "Erreur: Impossible d'ouvrir le stream"
+            no-streams-found: "Erreur: Aucun sream trouvé"
+            timeout: "Erreur: Timeout"
+            hosting: "{{name}} héberge une autre chaîne"
+            internal: "Erreur"
+    body:
+        launching: "En attente de {{provider}} de lancer le stream..."
+        ended: "Voulez-vous relancer le stream maintenant ?"
+        error:
+            provider: "Veuillez vérifier vos paramètre et/ou (ré)installer {{provider}}."
+            player: "Veuillez vérifier les paramètres du lecteur."
+            version: "La version v{{version}} ne remplit pas les exigences minimales. (v{{required}})."
+            unable-to-open: "{{provider}} n'a pas réussi à ouvrir le stream."
+            no-streams-found: "{{provider}} n'a pas réussi à trouver le stream."
+            timeout: "Soit {{name}} est hors ligne, soit votre connexion à Twitch a été interrompue."
+            hosting: "Voulez-vous changer pour {{name}}?"
+            internal: "Erreur interne"
+    action:
+        abort: Abandonner
+        continue: Continue
+        download: Télécharger
+        log: Activer/désactiver les logs {{provider}} 
+        restart: Redémarrer
+        shutdown: Fermer le stream
+        start-hosted: Basculer
