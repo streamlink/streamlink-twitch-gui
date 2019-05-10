@@ -1,0 +1,495 @@
+menu:
+    header: Paramètres
+    main: Principal
+    gui: Interface
+    streaming: Streaming
+    player: Joueur
+    streams: Streams
+    chat: Chat
+    lists: Listes
+    languages: Langages
+    notifications: Notifications
+    channels: Chaînes
+main:
+    language:
+        title: Langue
+        description: Sélectionnez la langue de l'interface.
+        labels:
+            auto: "Système ({{label}})"
+    advanced:
+        title: Réglages et fonctionnalités
+        description: Activer les paramètres et fonctions cachés.<br>Ne s'applique pas seulement au menu Paramètres.
+        checkbox: Activer les paramètres et fonctions avancés
+    homepage:
+        title: Page d'accueil
+        description: Menu à charger en premier ou en cliquant sur le logo.
+        text:
+            first: Voir la barre de menu en haut à droite de chaque page.
+            second: Cliquez sur le bouton Accueil pour en faire la nouvelle page d'accueil.
+    theme:
+        title: Thème
+        description: Sélectionnez un thème de couleur pour l'interface.
+    scrolling:
+        title: Défilement
+        description: Activer ou désactiver le défilement en douceur.
+        checkbox: Activer le défilement en douceur
+    externalcommands:
+        title: Actions en ligne de commande
+        description: Écoutez les commandes envoyées par d'autres instances de l'application.
+        notes: Voir le wiki pour une liste des actions et paramètres disponibles.
+        checkbox: Autoriser les commandes externes
+gui:
+    integration:
+        title: Intégration avec l'OS
+        description: À partir d'où accèder à l'interface.
+        values:
+            both: Both
+            taskbar: Barre des programmes
+            tray: Barre des tâchs
+    minimize:
+        title: Réduire l'interface
+        description: Quand le lecteur s'ouvre.
+        values:
+            noop: Ne rien faire
+            minimize: Réduire
+            tray: Dans la barre des tâches
+    hidebuttons:
+        title: Masquer les boutons de fenêtre
+        description: Masquer les boutons de réduction, d'agrandissement et de fermeture.
+        checkbox: Masquer les boutons
+    minimizetotray:
+        title: Bouton réduire
+        description: Comportement lors d'un clic.
+        checkbox: Réduire dans la barre des tâches
+    badgelabel:
+        title: Badge d'application
+        description: Sur l'icône de la barre des tâches.
+        notes: Ceci doit être pris en charge par le système d'exploitation ou l'environnement de bureau.
+        requires: L'intégration du système d'exploitation de la barre des tâches et les notifications sur le bureau doivent être activées.
+        checkbox: Afficher le nombre de stream favoris
+    focusrefresh:
+        title: Rafraîchir le contenu
+        description: Rafraîchir automatiquement au retour sur l'application.
+        values:
+            none: Ne pas rafraîchir
+            one: Après une minute
+            two: Après deux minutes
+            five: Après cinq minutes
+streaming:
+    provider:
+        title: Streamlink / Livestreamer
+        description: Choisissez un fournisseur de streaming et définissez des emplacements exécutables personnalisés.
+        notes: Un chemin explicite doit être défini si le fichier ne peut pas être trouvé dans la variable d'environnement $PATH du système ou dans la liste des chemins de repli de l'interface.
+        executable:
+            python: Éxcutable Python
+            streamlinkw: Éxcutable Streamlink
+            livestreamer-standalone: Éxcutable livestreamer
+        python-script:
+            streamlink: Script python Streamlink
+            livestreamer: Script python liveastreamer
+        parameters:
+            title: Paramètres personnalisés
+            placeholder: Ajouter des paramètres personnalisés
+    playerinput:
+        title: Entrée du lecteur
+        description: Définit la méthode d'introduction des données de stream dans le lecteur.
+        notes: Veuillez consulter le wiki pour plus d'informations sur cette option. Différents paramètres seront réglés en fonction de la sélection. Le lecteur doit prendre en charge la méthode sélectionnée.
+        values:
+            stdin:
+                label: Entrée standard
+                description: Écrit le flux sur le canal d'entrée standard du lecteur.
+            fifo:
+                label: Tube nommé
+                description: Envoi le stream dans un pipe, depuis lequel le lecteur lit
+            http:
+                label: HTTP
+                description: Lance un serveur HTTP en local, depuis lequel le lecteur lit
+            passthrough:
+                label: HLS (passthrough)
+                description: Laisse le lecteur lui-même télécharger et mettre en tampon le stream
+    hls-live-edge:
+        title: HLS live edge
+        description: Diminuer la valeur réduira la latence du flux, mais peut également provoquer une mise en mémoire tampon. Selon la configuration du lecteur, il peut y avoir une autre couche de mémoire tampon.
+    hls-segment-threads:
+        title: HLS segment threads
+        description: Nombre de threads utilisés pour le téléchargement et le traitement des segments de stream.
+    player-no-close:
+        title: Garder la fenêtre du lecteur
+        description: Après la fin du stream.
+        notes: Le lecteur lui-même peut empêcher {{provider}}} de le fermer. Veuillez également consulter les paramètres du lecteur.
+        checkbox: Ne pas fermer la fenêtre du lecteur
+    oauth:
+        title: Login Twitch.tv 
+        description: Autoriser {{{provider}}} à utiliser le token oauth Twitch.tv  lorsque vous êtes connecté.
+        checkbox: S'authentifier lors du lancement d'un stream
+    disable-ads:
+        title: Publicité
+        description: Ceci laissera le stream se figer pendant que la chaîne affiche des publicités. Voir le wiki pour plus d'informations.
+        checkbox: Ignorer les publicités intégrées dans les flux
+    retry-open:
+        title: Tentatives de lancement
+        description: Nombre de tentatives de lancement de stream.
+    retry-streams:
+        title: Délai de réessai
+        description: Temps en secondes entre chaque tentative.
+player:
+    preset:
+        title: Préréglage du lecteur
+        description: Utiliser une configuration de lecteur prédéfinie.
+    executable:
+        default:
+            title: Lecteur vidéo
+            description: Si laissé vide, le lecteur défini dans le fichier de configuration sera utilisé.
+            default-value: VLC (non-configuré)
+            notes: Les paramètres peuvent être ajoutés ici, mais doivent être définis dans le champ paramètres à la place. Voir ci-dessous pour une liste des variables disponibles.
+            placeholder: Laisser vide pour le lecteur par défaut
+        preset:
+            title: Exécutable du lecteur
+            description: Un chemin explicite doit être défini si le fichier ne peut pas être trouvé dans la variable d'environnement $PATH du système ou dans la liste des chemins de secours de l'interface.
+            placeholder: Laisser vide pour le chemin par défaut
+    args:
+        default:
+            title: Paramètres
+            description: Ajouter des paramètres spécifiques au lecteur.
+        preset:
+            title: Paramètres personnalisés.
+            description: Définir d'autres paramètres de lecteur personnalisés
+        placeholder: Ajouter des paramètres de lecteur personnalisés
+        substitutions:
+            channel: Nom de la chaîne
+            status: Statut de la chaîne
+            game: Num du jeu joué
+            delay: Délai additionnel du stream en secondes
+            created: En ligne depuis
+            viewers: Nombre de viewers actuel
+            views: Nombre total de vues
+    players:
+        default:
+            label: Par défaut
+        vlc:
+            label: VLC media player
+            attributes:
+                instance:
+                    title: Mode une instance
+                    description: Regarder plusieurs stream dans différentes fenêtre de lecteur.
+                    checkbox: Empêcher le mode une instance
+                close:
+                    title: Fermer le lecteur
+                    description: Empêche l'empilement de fenêtres de lecteur vides.
+                    checkbox: Permet au lecteur d'être fermé
+                title:
+                    title: Titre de la fenêtre du lecteur
+                    description: Afficher le nom de la chaîne, le nom du jeu joué et le titre du stream.
+                    checkbox: Définir un titre personnalisé
+                minimal:
+                    title: Diposition
+                    description: Masquer les controles du lecteur. Peut aussi être activé/désactivé en appuyant sur CTRL+H.
+                    checkbox: Affichage lecteur minimal
+        mpv:
+            label: MPV
+            attributes:
+                close:
+                    title: Fermer lecteur
+                    description: Prevents stacking up empty player windows.
+                    checkbox: Allow the player to get closed
+                title:
+                    title: Player window title
+                    description: Show the channel name, game being played and stream title.
+                    checkbox: Set custom title
+                minimal:
+                    title: Layout
+                    description: Don't show player window decorations.
+                    checkbox: Minimal player layout
+                window:
+                    title: Force window
+                    description: Fixes potential issues with audio-only streams.
+                    checkbox: Always show player window
+                seeking:
+                    title: Seeking
+                    description: Enables jumping forwards/backwards in the stream cache.
+                    checkbox: Enable seeking
+                no-cache:
+                    title: No player cache
+                    description: Speed up stream launch time.
+                    checkbox: Don't use the additional player cache
+        mpc:
+            label: Media Player Classic - Home Cinema
+            attributes:
+                instance:
+                    title: Single instance mode
+                    description: View multiple streams in different player windows.
+                    checkbox: Prevent single instance mode
+                close:
+                    title: Close player
+                    description: Prevents stacking up empty player windows.
+                    checkbox: Allow the player to get closed
+        potplayer:
+            label: Daum PotPlayer
+streams:
+    quality:
+        title: Preferred quality
+        description: Choose the default stream quality.
+    qualitypresets:
+        title: Quality presets
+        description: Define precise quality selections by range or by using explicit quality names.
+        notes: The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the "best" or "worst" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes.
+        dont-exclude: Don't exclude stream qualities
+    qualitypresets-livestreamer:
+        title: Quality presets
+        description: Customize Livestreamer quality presets.
+    vodcast-regexp:
+        title: Custom Vodcast filtering
+        description: Find untagged Vodcasts/Rebroadcasts.
+        notes: A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression.
+    modal-close-launch:
+        title: Hide stream popup
+        description: When a stream has started.
+        checkbox: Hide the popup after successfully launching a stream
+    modal-close-end:
+        title: Close stream popup
+        description: When a stream has ended.
+        checkbox: Close the popup of an active stream when it ends
+chat:
+    provider:
+        title: Chat application
+        description: Choose the chat application.
+        notes-browser: Choosing the default browser may result in unwanted, non-minimal window sizes.
+        file-placeholder: Setting an executable path is required
+        params-placeholder: Set additional parameters
+        url:
+            default:
+                label: Default chat URL
+                description: The application's default chat URL (popout).
+            popout:
+                label: Popout chat URL
+                description: Used by the popout mode on Twitch's website.
+            embed:
+                label: Embedded chat URL
+                description: Meant for embedding the chat into other websites.
+        providers:
+            browser:
+                label: Default browser
+                attributes:
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
+            basic:
+                substitutions:
+                    url: The channel's chat URL on Twitch.tv
+                    channel: The channel name
+                    user: Your user name (if logged in)
+                    token: Your access token (if logged in)
+            chromium:
+                label: Chromium
+                attributes:
+                    exec:
+                        title: Chromium executable
+                        description: Set a custom Chromium executable path.
+                    args:
+                        title: Chromium parameters
+                        description: Set additional parameters.
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
+            chrome:
+                label: Google Chrome
+                attributes:
+                    exec:
+                        title: Google Chrome executable
+                        description: Set a custom Google Chrome executable path.
+                    args:
+                        title: Google Chrome parameters
+                        description: Set additional parameters.
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
+            msie:
+                label: Internet Explorer
+                attributes:
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
+            chatty:
+                label: Chatty
+                attributes:
+                    exec:
+                        title: Java executable
+                        description: Set a custom java executable path.
+                    jar:
+                        title: Chatty .jar file
+                        description: Set a custom chatty.jar path.
+                    instance:
+                        title: Single instance mode
+                        description: Requires at least version 0.8.2b2.
+                        checkbox: Enable single instance mode
+                    auth:
+                        title: Authenticate
+                        description: Let Chatty re-use the auth data.
+                        checkbox: Sign in automatically
+                    args:
+                        title: Custom Chatty parameters
+                        description: Set additional parameters.
+            chatty-standalone:
+                label: Chatty (Standalone)
+                attributes:
+                    exec:
+                        title: Chatty executable
+                        description: Set the path to the Chatty executable.
+                    instance:
+                        title: Single instance mode
+                        description: Requires at least version 0.8.2b2.
+                        checkbox: Enable single instance mode
+                    auth:
+                        title: Authenticate
+                        description: Let Chatty re-use the auth data.
+                        checkbox: Sign in automatically
+                    args:
+                        title: Custom Chatty parameters
+                        description: Set additional parameters.
+            custom:
+                label: Custom application
+                attributes:
+                    exec:
+                        title: Application executable
+                        description: Set the path to the executable.
+                    args:
+                        title: Application parameters
+                        description: Set application parameters.
+                    url:
+                        title: Chat URL
+                        description: Which Twitch chat URL to use.
+    chat-open:
+        title: Open chat
+        description: While launching streams.
+        checkbox: Automatically open chat
+        checkbox-context: Don't open chat while launching streams via the context menu
+    twitchemotes:
+        title: Twitch emotes
+        description: Button that opens up twitchemotes.com.
+        checkbox: Show emotes button in stream popups
+lists:
+    channelname:
+        title: Custom channel names
+        description: Channel name localizations.
+        values:
+            custom: Show custom names
+            original: Show original names
+            both: Show both
+    show-flag:
+        title: Flags
+        description: Indicating the broadcaster language.
+        checkbox: Flags are always visible
+    filter-vodcast:
+        title: Fade out Vodcasts
+        description: Makes vodcasts less visible, as an additional indicator.
+        checkbox: Fade out Vodcasts
+    show-info:
+        title: Info bar
+        description: Bottom bar inside the stream preview.
+        checkbox: Info bar is always visible
+    info:
+        title: Info bar content
+        description: What should be displayed?
+        values:
+            game: Game being played
+            title: Stream title
+    click:
+        title: Click behavior
+        description: Additional stream image click actions.
+        ctrl: CTRL + Primary mouse button
+        cmd: CMD + Primary mouse button
+        middle: Middle mouse button
+        values:
+            noop: Do nothing
+            launch: Launch stream
+            chat: Open chat
+            channel: Go to channel page
+            settings: Go to channel settings
+languages:
+    filter:
+        title: Filter streams
+        description: Apply a language filter to all stream lists (except followed streams).
+        notes: Does not affect the 'Live Streams' menu of the 'My' section.
+        values:
+            fade:
+                text: Fade out streams
+                description: Show all streams, fade out ones not matching the language selection.
+            filter:
+                text: Filter out streams
+                description: Only show streams matching the language selection.
+    languages:
+        title: Languages
+        description: Broadcaster language, or if not set, the channel language.
+        notes: Select all languages to disable filtering.
+        check-all: Check all
+        uncheck-all: Uncheck all
+notifications:
+    enabled:
+        title: Notifications
+        description: When favorites start streaming.
+        checkbox: Enable desktop notifications
+    provider:
+        title: Notification type
+        description: Choose the kind of notification
+        test:
+            button: Test notification
+            message: This is a test notification
+        providers:
+            auto:
+                name: Automatic selection
+                description: Tries to find the best notification provider
+                notes: Tests all available notification providers in descending order
+            native:
+                name: Native notifications
+                description: Uses the system's native notification system
+                notes: Notifications can be configured in the system preferences
+            snoretoast:
+                name: Windows toast notifications
+                description: Native notifications on Windows 8+
+                notes: \"Banner notifications\" need to be enabled in the system preferences
+            growl:
+                name: Growl notifications
+                description: Third-party notification service for Windows, macOS and Linux
+                notes: Requires Growl to be installed and running on the system
+            rich:
+                name: Rich notifications
+                description: Chromium rich notifications
+                notes: Rendered by the application itself
+    filter:
+        title: Channel filter
+        description: Notifications can be turned on/off individually in a channel's settings menu.
+        values:
+            blacklist: Show all except disabled ones
+            whitelist: Ignore all except enabled ones
+    filter-vodcasts:
+        title: Filter Vodcasts
+        description: Only include live streams.
+        checkbox: Ignore Vodcasts
+    grouping:
+        title: Grouping
+        description: Merge multiple notifications.
+        checkbox: Only show one notification at a time
+    click:
+        title: Notification click
+        description: Preferred click action.
+        values:
+            noop: Do nothing
+            followed: Go to favorites
+            stream: Open stream
+            stream-and-chat: Open stream+chat
+    click-group:
+        title: Group click
+        description: Preferred group click action.
+        values:
+            noop: Do nothing
+            followed: Go to favorites
+            stream: Open all streams
+            stream-and-chat: Open all streams+chats
+    click-restore:
+        title: Restore GUI
+        description: Restore from tray or minimized state when performing a notification click action.
+        checkbox: Restore when clicking a notification
+channels:
+    find: Find channel
+    none: No channels found.
+    empty: No custom channel settings set.
