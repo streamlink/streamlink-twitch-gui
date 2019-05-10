@@ -3,6 +3,7 @@
 	"locales": {
 		"de": "Deutsch",
 		"en": "English",
+		"fr": "Français",
 		"zh-tw": "中文 繁體"
 	},
 	"contributors": {
@@ -16,6 +17,12 @@
 			{
 				"name": "Sebastian Meyer",
 				"github": "bastimeyer"
+			}
+		],
+		"fr": [
+			{
+				"name": "Simon P.",
+				"github": "selbiselbi"
 			}
 		],
 		"zh-tw":[
