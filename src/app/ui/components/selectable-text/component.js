@@ -1,19 +1,19 @@
 import Component from "@ember/component";
 import { inject as service } from "@ember/service";
+import { attribute, className, tagName } from "@ember-decorators/component";
 import t from "translation-key";
 
 
-export default Component.extend({
+@tagName( "div" )
+export default class SelectableTextComponent extends Component {
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
 
-	tagName: "div",
+	@className
+	class = "";
 
-	classNameBindings: [ "class" ],
-	attributeBindings: [ "selectable:data-selectable" ],
-
-	"class"   : "",
-	selectable: true,
+	@attribute( "data-selectable" )
+	selectable = true;
 
 	contextMenu( event ) {
 		if ( this.attrs.noContextmenu ) { return; }
@@ -31,4 +31,4 @@ export default Component.extend({
 			}
 		}] );
 	}
-});
+}

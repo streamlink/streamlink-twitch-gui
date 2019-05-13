@@ -1,14 +1,15 @@
 import Component from "@ember/component";
-import { get, set, getWithDefault } from "@ember/object";
+import { set, action } from "@ember/object";
 import { sort } from "@ember/object/computed";
-import { on } from "@ember/object/evented";
 import { run } from "@ember/runloop";
 import { inject as service } from "@ember/service";
+import { classNames, layout, tagName } from "@ember-decorators/component";
+import { on } from "@ember-decorators/object";
 import { vars as varsConfig } from "config";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 import Search from "data/models/search/model";
 import getStreamFromUrl from "utils/getStreamFromUrl";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 import "./styles.less";
 
 
@@ -17,95 +18,92 @@ const { filters } = Search;
 
 
 // TODO: rewrite SearchBarComponent and Search model
-export default Component.extend( HotkeyMixin, {
+@layout( template )
+@tagName( "nav" )
+@classNames( "search-bar-component" )
+export default class SearchBarComponent extends Component.extend( HotkeyMixin ) {
 	/** @type {RouterService} */
-	router: service(),
-	store: service(),
+	@service router;
+	/** @type {DS.Store} */
+	@service store;
 
-	layout,
-	tagName: "nav",
-	classNames: [ "search-bar-component" ],
+	/** @type {DS.RecordArray} */
+	model = null;
 
-	// the record array (will be set by init())
-	model: null,
-	// needed by SortableMixin's arrangedContent
-	content: sort( "model", "sortBy" ),
-	sortBy: [ "date:desc" ],
+	@sort( "model", "sortBy" )
+	content;
+	sortBy = [ "date:desc" ];
 
-	showDropdown: false,
+	showDropdown = false;
 
-	query: "",
-	reQuery: /^\S+/,
+	query = "";
+	reQuery = /^\S+/;
 
-	filters,
-	filter: "all",
+	filters = filters;
+	filter = "all";
 
 
-	hotkeysNamespace: "searchbar",
-	hotkeys: {
+	hotkeysNamespace = "searchbar";
+	hotkeys = {
 		focus: "focus"
-	},
+	};
 
 
-	init() {
-		this._super( ...arguments );
-
-		const store = get( this, "store" );
-		store.findAll( "search" )
-			.then( records => {
-				set( this, "model", records );
-			});
-	},
+	@on( "init" )
+	async _setModel() {
+		const records = await this.store.findAll( "search" );
+		set( this, "model", records );
+	}
 
 
 	async addRecord( query, filter ) {
-		const store = get( this, "store" );
-		const model = get( this, "model" );
+		const model = this.model;
 		const match = model.filter( record =>
-			    query === get( record, "query" )
-			&& filter === get( record, "filter" )
+			    query === record.query
+			&& filter === record.filter
 		);
 		let record;
 
 		// found a matching record? just update the date property, save the record and return
-		if ( get( match, "length" ) === 1 ) {
+		if ( match.length === 1 ) {
 			set( match[0], "date", new Date() );
 			await match[0].save();
 			return;
 		}
 
 		// we don't want to store more than X records
-		if ( get( model, "length" ) >= searchHistorySize ) {
+		if ( model.length >= searchHistorySize ) {
 			const oldestRecord = model.sortBy( "date" ).shiftObject();
 			await run( () => oldestRecord.destroyRecord() );
 		}
 
 		// create a new record
-		const id = 1 + Number( getWithDefault( model, "lastObject.id", 0 ) );
+		const id = 1 + Number( model.lastObject.id || 0 );
 		const date = new Date();
-		record = store.createRecord( "search", { id, query, filter, date } );
+		record = this.store.createRecord( "search", { id, query, filter, date } );
 		await record.save();
 		model.addObject( record );
-	},
+	}
 
 	async deleteAllRecords() {
 		// delete all records at once and then clear the record array
-		const model = get( this, "model" );
+		const model = this.model;
 		model.forEach( record => record.deleteRecord() );
 		await model.save();
 		model.clear();
 		this.store.unloadAll( "search" );
-	},
+	}
 
 	doSearch( query, filter ) {
 		set( this, "showDropdown", false );
 		this.addRecord( query, filter );
 
 		this.router.transitionTo( "search", { queryParams: { filter, query } } );
-	},
+	}
 
 
-	_prepareDropdown: on( "didInsertElement", function() {
+	@on( "didInsertElement" )
+	_prepareDropdown() {
 		// dropdown
 		const element = this.element;
 		const dropdown = element.querySelector( ".searchbar-dropdown" );
@@ -125,58 +123,62 @@ export default Component.extend( HotkeyMixin, {
 				set( this, "showDropdown", false );
 			}
 		});
-	}),
+	}
 
 
-	actions: {
-		back() {
-			this.router.history( -1 );
-		},
+	@action
+	back() {
+		this.router.history( -1 );
+	}
 
-		forward() {
-			this.router.history( +1 );
-		},
+	@action
+	forward() {
+		this.router.history( +1 );
+	}
 
-		refresh() {
-			this.router.refresh();
-		},
+	@action
+	refresh() {
+		this.router.refresh();
+	}
 
-		focus() {
-			this.element.querySelector( "input[type='search']" ).focus();
-		},
+	@action
+	focus() {
+		this.element.querySelector( "input[type='search']" ).focus();
+	}
 
-		toggleDropdown() {
-			const showDropdown = get( this, "showDropdown" );
-			set( this, "showDropdown", !showDropdown );
-		},
+	@action
+	toggleDropdown() {
+		set( this, "showDropdown", !this.showDropdown );
+	}
 
-		clear() {
-			set( this, "query", "" );
-		},
+	@action
+	clear() {
+		set( this, "query", "" );
+	}
 
-		submit() {
-			let query = get( this, "query" ).trim();
-			let filter = get( this, "filter" );
+	@action
+	submit() {
+		let query = this.query.trim();
+		let filter = this.filter;
 
-			const stream = getStreamFromUrl( query );
-			if ( stream ) {
-				query  = stream;
-				filter = "channels";
-			}
+		const stream = getStreamFromUrl( query );
+		if ( stream ) {
+			query = stream;
+			filter = "channels";
+		}
 
-			if ( this.reQuery.test( query ) ) {
-				this.doSearch( query, filter );
-			}
-		},
-
-		searchHistory( record ) {
-			const query = get( record, "query" );
-			const filter = get( record, "filter" );
+		if ( this.reQuery.test( query ) ) {
 			this.doSearch( query, filter );
-		},
-
-		clearHistory() {
-			this.deleteAllRecords();
 		}
 	}
-});
+
+	@action
+	searchHistory( record ) {
+		this.doSearch( record.query, record.filter );
+	}
+
+	@action
+	clearHistory() {
+		this.deleteAllRecords();
+	}
+}

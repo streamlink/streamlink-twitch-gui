@@ -1,22 +1,22 @@
 import Component from "@ember/component";
-import { on } from "@ember/object/evented";
-import layout from "./template.hbs";
+import { attribute, classNames, layout, tagName } from "@ember-decorators/component";
+import { on } from "@ember-decorators/object";
+import template from "./template.hbs";
 import "./styles.less";
 
 
-export default Component.extend({
-	layout,
+@layout( template )
+@tagName( "svg" )
+@classNames( "loading-spinner-component" )
+export default class LoadingSpinnerComponent extends Component {
+	@attribute
+	viewBox = "0 0 1 1";
 
-	tagName: "svg",
-	attributeBindings: [ "viewBox" ],
-	classNames: [ "loading-spinner-component" ],
-
-	viewBox: "0 0 1 1",
-
-	_setRadiusAttribute: on( "didInsertElement", function() {
+	@on( "didInsertElement" )
+	_setRadiusAttribute() {
 		let circle = this.element.querySelector( "circle" );
 		let strokeWidth = window.getComputedStyle( circle ).strokeWidth;
 		let radius = 50 - parseFloat( strokeWidth );
 		circle.setAttribute( "r", `${radius}%` );
-	})
-});
+	}
+}

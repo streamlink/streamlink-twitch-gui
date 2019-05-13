@@ -1,32 +1,37 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { langs } from "config";
+import { attribute, className, classNames, tagName } from "@ember-decorators/component";
+import { langs as langsConfig } from "config";
 import "./styles.less";
 
 
-export default Component.extend({
-	i18n: service(),
+@tagName( "i" )
+@classNames( "flag-icon-component" )
+export default class FlagIconComponent extends Component {
+	/** @type {I18nService} */
+	@service i18n;
 
-	tagName: "i",
-	classNames: [ "flag-icon-component" ],
-	classNameBindings: [ "flag", "withCursor::no-cursor" ],
-	attributeBindings: [ "title" ],
+	lang;
+	type;
+	withTitle = true;
 
-	lang: null,
-	type: null,
-	withTitle : true,
-	withCursor: true,
+	@className( "", "no-cursor" )
+	withCursor = true;
 
-	flag: computed( "lang", function() {
-		const code = langs[ this.lang ];
+	@className
+	@computed( "lang" )
+	get flag() {
+		const code = langsConfig[ this.lang ];
 
 		return code
 			? `flag-${code.flag}`
 			: null;
-	}),
+	}
 
-	title: computed( "withTitle", "lang", function() {
+	@attribute
+	@computed( "withTitle", "lang", "i18n.locale" )
+	get title() {
 		if ( !this.withTitle ) {
 			return "";
 		}
@@ -42,5 +47,5 @@ export default Component.extend({
 		return type === "channel"
 			? i18n.t( "components.flag-icon.channel", { lang } ).toString()
 			: i18n.t( "components.flag-icon.broadcaster", { lang } ).toString();
-	})
-});
+	}
+}

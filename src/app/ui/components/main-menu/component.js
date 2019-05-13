@@ -1,8 +1,9 @@
 import Component from "@ember/component";
 import { inject as service } from "@ember/service";
+import { classNames, layout, tagName } from "@ember-decorators/component";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 import { isDarwin } from "utils/node/platform";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 import "./styles.less";
 
 
@@ -19,17 +20,15 @@ const hotkeyActionRouteMap = {
 };
 
 
-export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
+@layout( template )
+@tagName( "aside" )
+@classNames( "main-menu-component" )
+export default class MainMenuComponent extends Component.extend( HotkeyMixin ) {
 	/** @type {RouterService} */
-	router: service(),
+	@service router;
 
-	layout,
-
-	classNames: [ "main-menu-component" ],
-	tagName: "aside",
-
-	hotkeysNamespace: "navigation",
-	hotkeys: {
+	hotkeysNamespace = "navigation";
+	hotkeys = {
 		/** @this {MainMenuComponent} */
 		refresh() {
 			// macOS has a menu bar with its own refresh hotkey
@@ -56,4 +55,4 @@ export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
 				}
 			}), {} )
 	}
-});
+}

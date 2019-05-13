@@ -1,42 +1,48 @@
 import Component from "@ember/component";
-import { get } from "@ember/object";
+import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { classNames, layout, tagName } from "@ember-decorators/component";
 import { main as mainConfig } from "config";
 import { isDebug } from "nwjs/debug";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 import "./styles.less";
 
 
 const { "display-name": displayName } = mainConfig;
 
 
-export default Component.extend({
-	auth: service(),
-	notification: service(),
-	nwjs: service(),
+@layout( template )
+@tagName( "header" )
+@classNames( "title-bar-component" )
+export default class TitleBarComponent extends Component {
+	/** @type {AuthService} */
+	@service auth;
+	/** @type {NotificationService} */
+	@service notification;
+	/** @type {NwjsService} */
+	@service nwjs;
 	/** @type {RouterService} */
-	router: service(),
-	settings: service(),
-	streaming: service(),
+	@service router;
+	/** @type {SettingsService} */
+	@service settings;
+	/** @type {StreamingService} */
+	@service streaming;
 
-	layout,
-	classNames: [ "title-bar-component" ],
-	tagName: "header",
+	displayName = displayName;
+	isDebug = isDebug;
 
-	displayName,
-	isDebug,
-
-	actions: {
-		goto() {
-			this.router.transitionTo( ...arguments );
-		},
-
-		homepage() {
-			this.router.homepage();
-		},
-
-		nwjs( method ) {
-			get( this, "nwjs" )[ method ]();
-		}
+	@action
+	goto() {
+		this.router.transitionTo( ...arguments );
 	}
-});
+
+	@action
+	homepage() {
+		this.router.homepage();
+	}
+
+	@action
+	nwjsAction( method ) {
+		this.nwjs[ method ]();
+	}
+}

@@ -1,22 +1,15 @@
 import Component from "@ember/component";
-import layout from "./template.hbs";
+import { classNames, layout, tagName } from "@ember-decorators/component";
+import template from "./template.hbs";
 import "./styles.less";
 
 
-export default Component.extend({
-	layout,
+@layout( template )
+@tagName( "ul" )
+@classNames( "sub-menu-component" )
+export default class SubMenuComponent extends Component {
+	static positionalParams = [ "baseroute", "menus" ];
 
-	tagName: "ul",
-	classNames: [
-		"sub-menu-component"
-	],
-
-	baseroute: null,
-	menus: null
-
-}).reopenClass({
-	positionalParams: [
-		"baseroute",
-		"menus"
-	]
-});
+	baseroute = null;
+	menus = null;
+}

@@ -21,13 +21,13 @@
 	<button type="button" class="btn-settings fa fa-cog" {{action "goto" "settings"}}></button>
 </nav>
 <nav class="buttons buttons-debug {{unless isDebug 'hidden'}}">
-	<button type="button" class="btn-reload fa fa-refresh" {{action "nwjs" "reload"}}></button>
-	<button type="button" class="btn-devtools fa fa-code" {{action "nwjs" "devTools"}}></button>
+	<button type="button" class="btn-reload fa fa-refresh" {{action "nwjsAction" "reload"}}></button>
+	<button type="button" class="btn-devtools fa fa-code" {{action "nwjsAction" "devTools"}}></button>
 </nav>
 <nav class="buttons buttons-window {{if settings.gui.hidebuttons 'buttons-hidden'}}">
 	<div>
-		<button type="button" class="btn-min fa fa-minus" {{action "nwjs" "minimize"}}></button>
-		<button type="button" class="btn-max fa fa-plus" {{action "nwjs" "maximize"}}></button>
-		<button type="button" class="btn-close fa fa-times" {{action "nwjs" "close"}}></button>
+		<button type="button" class="btn-min fa fa-minus" {{action "nwjsAction" "minimize"}}></button>
+		<button type="button" class="btn-max fa fa-plus" {{action "nwjsAction" "maximize"}}></button>
+		<button type="button" class="btn-close fa fa-times" {{action "nwjsAction" "close"}}></button>
 	</div>
 </nav>
