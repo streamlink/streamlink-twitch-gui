@@ -8,9 +8,11 @@ const hour   = 60 * minute;
 const day    = 24 * hour;
 
 
-export const helper = FromNowHelper.extend({
-	i18n: service(),
-	settings: service(),
+export const helper = class HoursFromNowHelper extends FromNowHelper {
+	/** @type {I18nService} */
+	@service i18n;
+	/** @type {SettingsService} */
+	@service settings;
 
 	_compute( [ time = 0 ] ) {
 		const diff = Date.now() - time;
@@ -60,4 +62,4 @@ export const helper = FromNowHelper.extend({
 			}
 		}
 	}
-});
+};
