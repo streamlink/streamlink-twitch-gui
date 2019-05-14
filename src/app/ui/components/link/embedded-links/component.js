@@ -1,21 +1,20 @@
 import Component from "@ember/component";
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
+import { classNames, layout } from "@ember-decorators/component";
 import { parseString } from "utils/linkparser";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 
 
-export default Component.extend({
-	layout,
-
-	classNames: [ "embedded-links-component" ],
-
-	content: computed( "text", function() {
-		const text = get( this, "text" );
-		const parsed = parseString( text );
+@layout( template )
+@classNames( "embedded-links-component" )
+export default class EmbeddedLinksComponent extends Component {
+	@computed( "text" )
+	get content() {
+		const parsed = parseString( this.text );
 		const links = parsed.links;
 
 		// merge texts and links
-		return parsed.texts.reduce(function( output, textItem, index ) {
+		return parsed.texts.reduce( ( output, textItem, index ) => {
 			if ( textItem.length ) {
 				output.push({ text: textItem });
 			}
@@ -24,5 +23,5 @@ export default Component.extend({
 			}
 			return output;
 		}, [] );
-	})
-});
+	}
+}

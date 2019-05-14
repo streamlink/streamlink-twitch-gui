@@ -1,57 +1,57 @@
 import Component from "@ember/component";
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { attribute, className, classNames, tagName } from "@ember-decorators/component";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import t from "translation-key";
 
 
-export default Component.extend({
+@tagName( "a" )
+@classNames( "external-link-component" )
+export default class ExternalLinkComponent extends Component {
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
 	/** @type {RouterService} */
-	router: service(),
+	@service router;
 
-	tagName: "a",
-	classNameBindings: [
-		":external-link-component",
-		"channel::external-link"
-	],
-	attributeBindings: [
-		"href",
-		"title",
-		"tabindex"
-	],
+	@attribute
+	href = "#";
+	@attribute
+	tabindex = -1;
 
-	href: "#",
-	tabindex: -1,
+	@className( "", "external-link" )
+	@computed( "url" )
+	get channel() {
+		return getStreamFromUrl( this.url );
+	}
 
-	channel: computed( "url", function() {
-		const url = get( this, "url" );
-		return getStreamFromUrl( url );
-	}),
-
-	title: computed( "url", "channel", function() {
-		return get( this, "channel" )
+	@attribute
+	@computed( "url", "channel" )
+	get title() {
+		return this.channel
 			? null
-			: get( this, "url" );
-	}),
+			: this.url;
+	}
 
+	/**
+	 * @param {MouseEvent} event
+	 */
 	click( event ) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		const channel = get( this, "channel" );
-		if ( channel ) {
-			this.router.transitionTo( "channel", channel );
-		} else {
+		if ( this.channel ) {
+			this.router.transitionTo( "channel", this.channel );
+		} else if ( this.url ) {
 			this.nwjs.openBrowser( this.url );
 		}
-	},
+	}
 
+	/**
+	 * @param {MouseEvent} event
+	 */
 	contextMenu( event ) {
-		if ( get( this, "channel" ) ) {
-			return;
-		}
+		if ( this.channel ) { return; }
 
 		event.preventDefault();
 		event.stopImmediatePropagation();
@@ -68,4 +68,4 @@ export default Component.extend({
 			}
 		]);
 	}
-});
+}

@@ -1,5 +1,6 @@
 import Component from "@ember/component";
 import { inject as service } from "@ember/service";
+import { on } from "@ember-decorators/object";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import t from "translation-key";
 
@@ -7,13 +8,14 @@ import t from "translation-key";
 const DISABLED_EVENTS = "mousedown mouseup keyup keydown keypress".split( " " );
 
 
-export default Component.extend({
+export default class EmbeddedHtmlLinksComponent extends Component {
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
 	/** @type {RouterService} */
-	router: service(),
+	@service router;
 
-	didInsertElement() {
+	@on( "didInsertElement" )
+	_onDidInsertElement() {
 		/** @type {HTMLAnchorElement[]} */
 		const anchors = Array.from( this.element.querySelectorAll( "a" ) );
 		for ( const anchor of anchors ) {
@@ -63,7 +65,5 @@ export default Component.extend({
 				});
 			}
 		}
-
-		return this._super( ...arguments );
 	}
-});
+}
