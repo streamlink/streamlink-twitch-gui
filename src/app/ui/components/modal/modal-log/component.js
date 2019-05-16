@@ -1,27 +1,26 @@
+import { A } from "@ember/array";
 import Component from "@ember/component";
-import { computed, observer } from "@ember/object";
-import { on } from "@ember/object/evented";
+import { classNames, layout, tagName } from "@ember-decorators/component";
+import { observes, on } from "@ember-decorators/object";
 import { scheduleOnce } from "@ember/runloop";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 
 
-export default Component.extend({
-	layout,
+@layout( template )
+@tagName( "section" )
+@classNames( "modal-log-component" )
+export default class ModalLogComponent extends Component {
+	log = A();
 
-	tagName: "section",
-	classNames: [ "modal-log-component" ],
-
-	log: computed(function() {
-		return [];
-	}),
-
-	_logObserver: observer( "log.[]", function() {
+	@observes( "log.[]" )
+	_logObserver() {
 		scheduleOnce( "afterRender", () => this.scrollToBottom() );
-	}),
+	}
 
-	scrollToBottom: on( "didInsertElement", function() {
+	@on( "didInsertElement" )
+	scrollToBottom() {
 		const elem = this.element;
 		if ( !elem ) { return; }
 		elem.scrollTop = Math.max( 0, elem.scrollHeight - elem.clientHeight );
-	})
-});
+	}
+}

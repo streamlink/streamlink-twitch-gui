@@ -1,14 +1,18 @@
 import Component from "@ember/component";
+import { readOnly } from "@ember/object/computed";
+import { className, classNames, layout } from "@ember-decorators/component";
 import { inject as service } from "@ember/service";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 import "./styles.less";
 
 
-export default Component.extend({
+@layout( template )
+@classNames( "modal-service-component" )
+export default class ModalServiceComponent extends Component {
 	/** @type {ModalService} */
-	modal: service(),
+	@service modal;
 
-	layout,
-	classNames: "modal-service-component",
-	classNameBindings: [ "modal.isModalOpened:active" ]
-});
+	@className( "active" )
+	@readOnly( "modal.isModalOpened" )
+	isActive
+}
