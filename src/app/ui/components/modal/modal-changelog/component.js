@@ -1,34 +1,34 @@
+import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { classNames, layout } from "@ember-decorators/component";
 import { main as mainConfig } from "config";
 import ModalDialogComponent from "../modal-dialog/component";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 
 
 const { urls: { "release": releaseUrl } } = mainConfig;
 
 
-export default ModalDialogComponent.extend( /** @class ModalChangelogComponent */ {
+@layout( template )
+@classNames( "modal-changelog-component" )
+export default class ModalChangelogComponent extends ModalDialogComponent {
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
+	/** @type {VersioncheckService} */
+	@service versioncheck;
 
 	/** @type {VersioncheckService} */
-	modalContext: null,
+	modalContext;
 
-	layout,
-	classNames: [ "modal-changelog-component" ],
-
-
-	actions: {
-		/** @this {ModalChangelogComponent} */
-		async showChangelog( success, failure ) {
-			try {
-				const { version } = this.modalContext;
-				this.nwjs.openBrowser( releaseUrl, { version } );
-				await success();
-				this.send( "close" );
-			} catch ( err ) /* istanbul ignore next */ {
-				await failure( err );
-			}
+	@action
+	async showChangelog( success, failure ) {
+		try {
+			const { version } = this.modalContext;
+			this.nwjs.openBrowser( releaseUrl, { version } );
+			await success();
+			this.send( "close" );
+		} catch ( err ) /* istanbul ignore next */ {
+			await failure( err );
 		}
 	}
-});
+}

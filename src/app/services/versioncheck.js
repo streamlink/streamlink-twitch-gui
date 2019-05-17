@@ -13,32 +13,32 @@ const { "check-again": checkAgain, "show-debug-message": showDebugMessage } = up
 const { version } = manifest;
 
 
-export default Service.extend( /** @class VersioncheckService */ {
+export default class VersioncheckService extends Service {
 	/** @type {ModalService} */
-	modal: service(),
+	@service modal;
 	/** @type {DS.Store} */
-	store: service(),
+	@service store;
 
-	version,
+	version = version;
 
 	/** @type {Versioncheck} */
-	model: null,
+	model = null;
 	/** @type {GithubReleases} */
-	release: null,
+	release = null;
 
 
 	async check() {
 		const existinguser = await this._getRecord();
 		await this._showDebugMessage();
 		await this._check( existinguser );
-	},
+	}
 
 	async ignoreRelease() {
 		const { model } = this;
 		set( model, "checkagain", Date.now() + checkAgain );
 
 		await model.save();
-	},
+	}
 
 
 	async _getRecord() {
@@ -68,7 +68,7 @@ export default Service.extend( /** @class VersioncheckService */ {
 		set( this, "model", record );
 
 		return existinguser;
-	},
+	}
 
 	async _showDebugMessage() {
 		if ( !isDebug || isDevelopment ) { return; }
@@ -79,7 +79,7 @@ export default Service.extend( /** @class VersioncheckService */ {
 		await this.modal.promiseModal( "debug", { buildVersion, displayName }, null, 1000 );
 		set( model, "showdebugmessage", Date.now() + showDebugMessage );
 		await model.save();
-	},
+	}
 
 	/**
 	 * @param {boolean} existinguser
@@ -109,12 +109,12 @@ export default Service.extend( /** @class VersioncheckService */ {
 
 		// go on with new version check if no modal was opened
 		await this._checkForNewRelease();
-	},
+	}
 
 	_openModalAndCheckForNewRelease( name ) {
 		this.modal.promiseModal( name, this )
 			.then( () => this._checkForNewRelease() );
-	},
+	}
 
 	async _checkForNewRelease() {
 		// don't check for new releases if disabled or re-check threshold not yet reached
@@ -130,4 +130,4 @@ export default Service.extend( /** @class VersioncheckService */ {
 
 		this.modal.openModal( "newrelease", this );
 	}
-});
+}

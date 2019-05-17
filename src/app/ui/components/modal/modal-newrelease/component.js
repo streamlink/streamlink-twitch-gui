@@ -1,35 +1,35 @@
+import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { classNames, layout } from "@ember-decorators/component";
 import ModalDialogComponent from "../modal-dialog/component";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 
 
-export default ModalDialogComponent.extend( /** @class ModalNewreleaseComponent */ {
+@layout( template )
+@classNames( "modal-newrelease-component" )
+export default class ModalNewreleaseComponent extends ModalDialogComponent {
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
+	/** @type {VersioncheckService} */
+	@service versioncheck;
 
 	/** @type {VersioncheckService} */
-	modalContext: null,
+	modalContext;
 
-	layout,
-	classNames: [ "modal-newrelease-component" ],
-
-
-	actions: {
-		/** @this {ModalNewreleaseComponent} */
-		async download( success, failure ) {
-			try {
-				this.nwjs.openBrowser( this.modalContext.release.html_url );
-				await success();
-				this.send( "ignore" );
-			} catch ( err ) /* istanbul ignore next */ {
-				await failure( err );
-			}
-		},
-
-		/** @this {ModalNewreleaseComponent} */
-		ignore() {
-			this.modalContext.ignoreRelease();
-			this.send( "close" );
+	@action
+	async download( success, failure ) {
+		try {
+			this.nwjs.openBrowser( this.modalContext.release.html_url );
+			await success();
+			this.send( "ignore" );
+		} catch ( err ) /* istanbul ignore next */ {
+			await failure( err );
 		}
 	}
-});
+
+	@action
+	ignore() {
+		this.modalContext.ignoreRelease();
+		this.send( "close" );
+	}
+}

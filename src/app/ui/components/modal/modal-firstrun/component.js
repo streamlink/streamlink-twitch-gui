@@ -1,24 +1,24 @@
+import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { classNames, layout } from "@ember-decorators/component";
 import { main as mainConfig } from "config";
 import ModalDialogComponent from "../modal-dialog/component";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 
 
-export default ModalDialogComponent.extend( /** @class ModalFirstrunComponent */ {
+@layout( template )
+@classNames( "modal-firstrun-component" )
+export default class ModalFirstrunComponent extends ModalDialogComponent {
 	/** @type {RouterService} */
-	router: service(),
+	@service router;
+	/** @type {VersioncheckService} */
+	@service versioncheck;
 
-	layout,
-	classNames: [ "modal-firstrun-component" ],
+	name = mainConfig[ "display-name" ];
 
-	name: mainConfig[ "display-name" ],
-
-
-	actions: {
-		/** @this {ModalFirstrunComponent} */
-		settings() {
-			this.router.transitionTo( "settings" );
-			this.send( "close" );
-		}
+	@action
+	settings() {
+		this.router.transitionTo( "settings" );
+		this.send( "close" );
 	}
-});
+}

@@ -120,21 +120,21 @@ module( "services/versioncheck", function( hooks ) {
 		});
 		this.owner.register( "service:versioncheck", VersioncheckService );
 
-		this.owner.register( "service:nwjs", Service.extend({
-			openBrowser: context.openBrowserSpy
-		}) );
-		this.owner.register( "service:router", Service.extend({
-			transitionTo: context.transitionToSpy
-		}) );
+		this.owner.register( "service:nwjs", class extends Service {
+			openBrowser = context.openBrowserSpy;
+		} );
+		this.owner.register( "service:router", class extends Service {
+			transitionTo = context.transitionToSpy;
+		} );
 
-		this.owner.register( "adapter:versioncheck", Adapter.extend({
-			findRecord: context.versioncheckFindRecordStub,
-			createRecord: context.versioncheckCreateRecordStub,
-			updateRecord: context.versioncheckUpdateRecordStub
-		}) );
-		this.owner.register( "adapter:github-releases", GithubReleasesAdapter.extend({
-			ajax: context.releasesAjaxStub
-		}) );
+		this.owner.register( "adapter:versioncheck", class extends Adapter {
+			findRecord = context.versioncheckFindRecordStub;
+			createRecord = context.versioncheckCreateRecordStub;
+			updateRecord = context.versioncheckUpdateRecordStub;
+		} );
+		this.owner.register( "adapter:github-releases", class extends GithubReleasesAdapter {
+			ajax = context.releasesAjaxStub;
+		} );
 	});
 
 	hooks.afterEach(function() {
