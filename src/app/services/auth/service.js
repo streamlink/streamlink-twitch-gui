@@ -24,26 +24,27 @@ const {
 const reToken = /^[a-z\d]{30}$/i;
 
 
-export default Service.extend( Evented, /** @class AuthService */ {
+export default class AuthService extends Service.extend( Evented ) {
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
 	/** @type {DS.Store} */
-	store: service(),
+	@service store;
 
 	/** @type {Auth} */
-	session: null,
+	session = null;
 	/** @type {HttpServer} */
-	server: null,
+	server = null;
 
 
-	url: computed(function() {
+	@computed()
+	get url() {
 		const redirect = redirecturi.replace( "{server-port}", String( serverport ) );
 
 		return baseuri
 			.replace( "{client-id}", clientid )
 			.replace( "{redirect-uri}", encodeURIComponent( redirect ) )
 			.replace( "{scope}", expectedScopes.join( "+" ) );
-	}),
+	}
 
 
 	async autoLogin() {
@@ -63,13 +64,13 @@ export default Service.extend( Evented, /** @class AuthService */ {
 		// then perform auto-login afterwards
 		await this.login( access_token, true )
 			.catch( /* istanbul ignore next */ () => {} );
-	},
+	}
 
 	async _loadSession() {
 		/** @type {Auth} */
 		const session = await this.store.findOrCreateRecord( "auth" );
 		set( this, "session", session );
-	},
+	}
 
 
 	/**
@@ -79,7 +80,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 	async signout() {
 		this._updateAdapter( null );
 		await this._sessionReset();
-	},
+	}
 
 	/**
 	 * Open OAuth url in browser
@@ -128,14 +129,14 @@ export default Service.extend( Evented, /** @class AuthService */ {
 				this.abortSignin();
 				this.nwjs.focus( true );
 			});
-	},
+	}
 
 	abortSignin() {
 		const { server } = this;
 		if ( !server ) { return; }
 		server.close();
 		set( this, "server", null );
-	},
+	}
 
 	/**
 	 * Validate the OAuth response after a login attempt
@@ -150,7 +151,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 		}
 
 		return await this.login( token, false );
-	},
+	}
 
 	/**
 	 * Update the adapter and try to authenticate with the given access token
@@ -190,7 +191,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 			set( session, "isPending", false );
 			this.trigger( "login", success );
 		}
-	},
+	}
 
 	/**
 	 * Adapter was updated. Now check if the access token is valid.
@@ -206,7 +207,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 		}
 
 		return twitchRoot;
-	},
+	}
 
 	/**
 	 * Received and expected scopes need to be identical
@@ -216,7 +217,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 	_validateScope( returnedScopes ) {
 		return Array.isArray( returnedScopes )
 		    && expectedScopes.every( item => returnedScopes.includes( item ) );
-	},
+	}
 
 
 	/**
@@ -232,7 +233,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 		setProperties( session, { access_token, scope, date } );
 
 		await session.save();
-	},
+	}
 
 	/**
 	 * Clear auth record and save it
@@ -249,7 +250,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 		});
 
 		await session.save();
-	},
+	}
 
 	/**
 	 * @param {string} token
@@ -258,4 +259,4 @@ export default Service.extend( Evented, /** @class AuthService */ {
 		const adapter = this.store.adapterFor( "twitch" );
 		set( adapter, "access_token", token );
 	}
-});
+}

@@ -31,12 +31,12 @@ module( "ui/routes/application", function( hooks ) {
 		this.autoLoginSpy = sinon.spy();
 		this.versionCheckSpy = sinon.spy();
 
-		this.owner.register( "service:auth", Service.extend({
-			autoLogin: context.autoLoginSpy
-		}) );
-		this.owner.register( "service:versioncheck", Service.extend({
-			check: context.versionCheckSpy
-		}) );
+		this.owner.register( "service:auth", class extends Service {
+			autoLogin = context.autoLoginSpy;
+		});
+		this.owner.register( "service:versioncheck", class extends Service {
+			check = context.versionCheckSpy;
+		});
 	});
 
 	test( "Auto login and version check", async function( assert ) {

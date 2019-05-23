@@ -4,9 +4,9 @@ import { buildResolver } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
 import sinon from "sinon";
 
-import { on } from "@ember/object/evented";
 import Service from "@ember/service";
 import Adapter from "ember-data/adapter";
+import { on } from "@ember-decorators/object";
 import { EventEmitter } from "events";
 import { Stream, Writable } from "stream";
 
@@ -137,14 +137,16 @@ module( "services/auth", function( hooks ) {
 		const { default: AuthService } = authServiceInjector({
 			"utils/node/http/HttpServer": context.httpServerStub
 		});
-		this.owner.register( "service:auth", AuthService.extend({
-			_onLogin: on( "login", function( ...args ) {
+		this.owner.register( "service:auth", class extends AuthService {
+			@on( "login" )
+			_onLogin( ...args ) {
 				context.onLoginSpy.call( this, ...args );
-			}),
-			_onInitialized: on( "initialized", function( ...args ) {
+			}
+			@on( "initialized" )
+			_onInitialized( ...args ) {
 				context.onInitializedSpy.call( this, ...args );
-			})
-		}) );
+			}
+		} );
 	});
 
 

@@ -91,7 +91,7 @@ export default class NwjsService extends Service {
 
 	focus( focus = true ) {
 		setFocused( focus );
-	},
+	}
 
 	close() {
 		/** @type {Stream[]} */
