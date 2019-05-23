@@ -1,8 +1,9 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
+import sinon from "sinon";
+
 import Evented from "@ember/object/evented";
 import Service from "@ember/service";
-import sinon from "sinon";
 
 import chatServiceInjector from "inject-loader?config&./providers!services/chat/service";
 
@@ -21,20 +22,22 @@ function _buildFakeModel( data ) {
 module( "services/chat", {
 	beforeEach() {
 		const AuthService = Service.extend({
-			session: {
+			session: _buildFakeModel({
 				access_token: "token",
 				user_name: "user",
 				isLoggedIn: true
-			}
+			})
 		});
 		const SettingsService = Service.extend( Evented, {
-			chat: {
-				provider: "foo",
-				providers: _buildFakeModel({
-					foo: {
-						foo: true
-					}
-				})
+			content: {
+				chat: {
+					provider: "foo",
+					providers: _buildFakeModel({
+						foo: {
+							foo: true
+						}
+					})
+				}
 			}
 		});
 
@@ -110,7 +113,7 @@ test( "Rejects missing provider data", async function( assert ) {
 	const chatService = this.owner.lookup( "service:chat" );
 	const settingsService = this.owner.lookup( "service:settings" );
 
-	settingsService.chat.provider = "unknown";
+	settingsService.content.chat.provider = "unknown";
 	await assert.rejects(
 		chatService._getChatProvider(),
 		new Error( "Invalid provider: unknown" )
@@ -118,7 +121,7 @@ test( "Rejects missing provider data", async function( assert ) {
 	assert.notOk( logDebugStub.called, "Doesn't call logDebug" );
 	assert.notOk( logErrorStub.called, "Doesn't call logError" );
 
-	settingsService.chat.provider = "qux";
+	settingsService.content.chat.provider = "qux";
 	await assert.rejects(
 		chatService._getChatProvider(),
 		new Error( "Missing chat provider settings: qux" )

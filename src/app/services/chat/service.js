@@ -1,6 +1,5 @@
-import { get, getProperties } from "@ember/object";
-import { on } from "@ember/object/evented";
 import { default as Service, inject as service } from "@ember/service";
+import { on } from "@ember-decorators/object";
 import { chat as chatConfig } from "config";
 import providers from "./providers";
 import { logDebug, logError } from "./logger";
@@ -15,48 +14,51 @@ export const providerInstanceMap = new Map();
 export const providerSetupMap = new Map();
 
 
-export default Service.extend({
-	auth: service(),
-	settings: service(),
+export default class ChatService extends Service {
+	/** @type {AuthService} */
+	@service auth;
+	/** @type {SettingsService} */
+	@service settings;
 
-	_resetProviders: on( "init", function() {
-		const settingsService = get( this, "settings" );
-		settingsService.on( "didUpdate", () => {
+	@on( "init" )
+	_resetProviders() {
+		this.settings.on( "didUpdate", () => {
 			providerInstanceMap.clear();
 			providerSetupMap.clear();
 		});
-	}),
+	}
 
+	/**
+	 * @param {TwitchChannel} twitchChannel
+	 * @returns {Promise}
+	 */
 	async openChat( twitchChannel ) {
-		/** @type {{name: string}} */
 		const channelData = twitchChannel.toJSON();
-		const session = get( this, "auth.session" );
-		/** @type {Object} */
-		const sessionData = getProperties( session, "access_token", "user_name", "isLoggedIn" );
+		const { access_token, user_name, isLoggedIn } = this.auth.session.toJSON();
 
 		await logDebug( "Preparing to launch chat", {
 			channel: channelData.name,
-			user: sessionData.user_name
+			user: user_name
 		});
 
 		try {
 			/** @type {ChatProvider} */
 			const provider = await this._getChatProvider();
-			await provider.launch( channelData, sessionData );
+			await provider.launch( channelData, { access_token, user_name, isLoggedIn } );
 
 		} catch ( error ) {
 			await logError( error );
 			throw error;
 		}
-	},
+	}
 
 	async _getChatProvider() {
-		const provider = get( this, "settings.chat.provider" );
+		const provider = this.settings.content.chat.provider;
 		if ( !hasOwnProperty.call( providers, provider ) ) {
 			throw new Error( `Invalid provider: ${provider}` );
 		}
 
-		const providersUserData = get( this, "settings.chat.providers" ).toJSON();
+		const providersUserData = this.settings.content.chat.providers.toJSON();
 		if ( !hasOwnProperty.call( providersUserData, provider ) ) {
 			throw new Error( `Missing chat provider settings: ${provider}` );
 		}
@@ -92,4 +94,4 @@ export default Service.extend({
 
 		return inst;
 	}
-});
+}
