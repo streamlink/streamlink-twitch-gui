@@ -65,7 +65,7 @@ streaming:
         abort: Abandonner
         continue: Continue
         download: Télécharger
-        log: Activer/désactiver les logs {{provider}} 
+        log: Activer/désactiver les logs {{provider}}
         restart: Redémarrer
         shutdown: Fermer le stream
         start-hosted: Basculer

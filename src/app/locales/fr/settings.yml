@@ -119,7 +119,7 @@ streaming:
         notes: Le lecteur lui-même peut empêcher {{provider}}} de le fermer. Veuillez également consulter les paramètres du lecteur.
         checkbox: Ne pas fermer la fenêtre du lecteur
     oauth:
-        title: Login Twitch.tv 
+        title: Login Twitch.tv
         description: Autoriser {{{provider}}} à utiliser le token oauth Twitch.tv  lorsque vous êtes connecté.
         checkbox: S'authentifier lors du lancement d'un stream
     disable-ads:
@@ -238,7 +238,7 @@ streams:
         title: Préréglages de qualité
         description: Personnaliser les préreglages de qualité de Livestreamer.
     vodcast-regexp:
-        title: Filtrage Vodcast personnalisé 
+        title: Filtrage Vodcast personnalisé
         description: Trouver des Vodcast/Rebroadcasts non-taggés.
         notes: Une expression régulière conforme à JavaScript (insensible à la casse), appliquée au titre du flux. Pour désactiver le filtrage, entrez une chaîne vide ou une expression régulière invalide.
     modal-close-launch:
@@ -373,7 +373,7 @@ lists:
         description: Emplacements des noms de chaînes.
         values:
             custom: Afficher les noms personnalisés
-            original: Afficher les noms originaux       
+            original: Afficher les noms originaux
             both: Afficher les deux
     show-flag:
         title: Drapeaux
@@ -456,7 +456,7 @@ notifications:
                 description: Notification rich de Chromium
                 notes: Rendue par l'application elle-même
     filter:
-        title: Filtre de chaîne 
+        title: Filtre de chaîne
         description: Les notification peuvent être activées/désactivées individuellement dans les paramètres de la chaîne
         values:
             blacklist: Tout afficher sauf celles désactivées
