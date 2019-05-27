@@ -74,7 +74,7 @@ channel:
             title: Vues
             data: "{{views}} ({{day}} par jour)"
         content:
-            title: COntenu
+            title: Contenu
             mature: Inadapté aux enfants
             ffa: Pas de restriction d'âge
         format:
