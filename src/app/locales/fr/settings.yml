@@ -204,6 +204,7 @@ player:
                     title: Forcer la fenêtre
                     description: Régles de potentiels problèmes avec les stream en audio uniquement.
                     checkbox: Toujours afficher la fenêtre du lecteur
+                seeking:
                     title: Avancer/Reculer
                     description: Active la fonction avancer/reculer dans le cache du stream
                     checkbox: Activer avancer/reculer
