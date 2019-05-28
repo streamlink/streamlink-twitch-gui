@@ -40,7 +40,7 @@ communities:
 community:
     menu:
         streams: Streams en live
-        info: Infos sur les streams en live
+        info: Infos communauté
     streams:
         empty: La liste des streams de cette communauté est vide.
     info:
