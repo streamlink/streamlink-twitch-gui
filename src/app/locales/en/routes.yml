@@ -40,7 +40,7 @@ communities:
 community:
     menu:
         streams: Live Streams
-        info: Live Streams infos
+        info: Community Infos
     streams:
         empty: The returned list of streams of this community is empty.
     info:
