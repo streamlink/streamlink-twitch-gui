@@ -56,7 +56,8 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 			{{~/embedded-html-links~}}
 		` );
 
-		const [ anchorOne, anchorTwo ] = this.element.querySelectorAll( "a" );
+		const anchors = this.element.querySelectorAll( "a" );
+		const [ anchorOne, anchorTwo ] = anchors;
 
 		assert.notOk(
 			anchorOne.classList.contains( "external-link" ),
@@ -75,6 +76,10 @@ module( "ui/components/link/embedded-html-links", function( hooks ) {
 			anchorTwo.title,
 			"https://bar.com/",
 			"Second link has a title property"
+		);
+		assert.ok(
+			Array.from( anchors ).every( e => e.tabIndex === -1 ),
+			"All anchors have their tabIndex set to -1"
 		);
 
 		// anchor 1

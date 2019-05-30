@@ -7,6 +7,8 @@ export default LinkComponent.extend({
 	/** @type {RouterService} */
 	router: service(),
 
+	tabindex: -1,
+
 	_active: computed(
 		"_routing.currentState",
 		"_routing.currentRouteName",

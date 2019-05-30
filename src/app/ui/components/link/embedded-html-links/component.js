@@ -38,6 +38,8 @@ export default Component.extend({
 				}
 			});
 
+			anchor.tabIndex = -1;
+
 			// external link
 			if ( !channel ) {
 				anchor.classList.add( "external-link" );

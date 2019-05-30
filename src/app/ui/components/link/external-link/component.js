@@ -17,10 +17,12 @@ export default Component.extend({
 	],
 	attributeBindings: [
 		"href",
-		"title"
+		"title",
+		"tabindex"
 	],
 
 	href: "#",
+	tabindex: -1,
 
 	channel: computed( "url", function() {
 		const url = get( this, "url" );

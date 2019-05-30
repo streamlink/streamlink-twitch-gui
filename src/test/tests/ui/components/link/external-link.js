@@ -64,6 +64,7 @@ module( "ui/components/link/external-link", function( hooks ) {
 		);
 		assert.notOk( component.title, "Internal links don't have a title" );
 		assert.strictEqual( component.getAttribute( "href" ), "#", "Has the correct href attr" );
+		assert.strictEqual( component.tabIndex, -1, "TabIndex is set to -1" );
 
 		// trigger click event
 		e = await triggerEvent( component, "click" );
@@ -97,6 +98,7 @@ module( "ui/components/link/external-link", function( hooks ) {
 		assert.ok( component.classList.contains( "external-link" ), "Is an external link" );
 		assert.strictEqual( component.title, "https://bar.com/", "Has a title" );
 		assert.strictEqual( component.getAttribute( "href" ), "#", "Has the correct href attr" );
+		assert.strictEqual( component.tabIndex, -1, "TabIndex is set to -1" );
 
 		// trigger click event
 		e = await triggerEvent( component, "click" );

@@ -39,6 +39,10 @@ module( "ui/components/link/embedded-links", function( hooks ) {
 			anchors.slice( 1 ).every( e => e.classList.contains( "external-link" ) ),
 			"Other links are external"
 		);
+		assert.ok(
+			anchors.every( e => e.tabIndex === -1 ),
+			"All anchors have their tabIndex set to -1"
+		);
 		assert.strictEqual(
 			component.innerText,
 			"foo https://twitch.tv/foo bar https://bar.com baz @baz qux",

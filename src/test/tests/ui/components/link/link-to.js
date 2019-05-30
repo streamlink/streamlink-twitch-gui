@@ -211,4 +211,13 @@ module( "ui/components/link/link-to", function( hooks ) {
 		assert.ok( isDefaultPrevented( e ), "Prevents default on metaKey" );
 		assert.ok( isImmediatePropagationStopped( e ), "Stops propagation on metaKey" );
 	});
+
+	test( "TabIndex", async function( assert ) {
+		await visit( "/" );
+
+		assert.ok(
+			Array.from( this.element.querySelectorAll( "a" ) ).every( e => e.tabIndex === -1 ),
+			"Link-to components have tabIndex set to -1 by default"
+		);
+	});
 });
