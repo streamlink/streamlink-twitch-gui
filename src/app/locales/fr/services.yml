@@ -1,0 +1,13 @@
+notification:
+    dispatch:
+        single: "{{name}} a commencé un stream"
+        group: Certain des chaînes que vous suivez ont commencé à stremer
+    status:
+        disabled: Les notifications sur le Bureau sont désactivées
+        enabled: Les notifications sur le Bureau sont activées
+        error: Les notifications sur le Bureau sont hors ligne
+        paused: Les notifications sur le Bureau sont suspendues
+    tray:
+        pause:
+            label: Suspendre les notifications
+            tooltip: Activer/désactiver rapidement les notifications sur le bureau

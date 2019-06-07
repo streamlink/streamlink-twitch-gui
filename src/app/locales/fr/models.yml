@@ -1,0 +1,17 @@
+twitch:
+    channel:
+        followers:
+            one: "Une personne suit cette chaîne"
+            other: "{{count}} personnes suivent cette chaîne"
+        views:
+            one: "Une vue de la chaîne"
+            other: "{{count}} vues de la chaîne"
+    stream:
+        created-at:
+            # new Moment(stream.created_at).format(...)
+            less-than-24h: "[Online since] LTS"
+            # new Moment(stream.created_at).format(...)
+            more-than-24h: "[Online since] llll"
+        viewers:
+            one: "Une perosonne est en train de regarder"
+            other: "{{count}} personnes sont en train de regarder"
