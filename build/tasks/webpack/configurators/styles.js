@@ -17,8 +17,7 @@ module.exports = {
 				{
 					loader: "css-loader",
 					options: {
-						sourceMap: true,
-						minify: false,
+						sourceMap: false,
 						url: false,
 						import: false
 					}
@@ -36,7 +35,6 @@ module.exports = {
 					loader: "css-loader",
 					options: {
 						sourceMap: true,
-						minify: false,
 						url: true,
 						import: false
 					}
