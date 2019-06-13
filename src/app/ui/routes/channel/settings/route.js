@@ -18,7 +18,7 @@ export default Route.extend({
 				// get the record automatically created by store.findRecord()
 				const model = store.recordForId( "channelSettings", id );
 				// transition from `root.empty` to `root.loaded.created.uncommitted`
-				model._internalModel.loadedData();
+				model.transitionTo( "loaded.created.uncommitted" );
 
 				return model;
 			});
