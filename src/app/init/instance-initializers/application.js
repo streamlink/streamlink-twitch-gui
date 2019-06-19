@@ -57,7 +57,12 @@ export default {
 			}
 		});
 
-		rootElement.addEventListener( "keyup", e => HotkeyService.trigger( e ) );
+		const reHotkeyIgnoreTags = /^(INPUT|TEXTAREA)$/;
+		rootElement.addEventListener( "keyup", e => {
+			if ( !reHotkeyIgnoreTags.test( e.target.nodeName ) ) {
+				HotkeyService.trigger( e );
+			}
+		});
 
 		const events = "dragstart dragover dragend dragenter dragleave dragexit drag drop";
 		const disableDrag = e => {
