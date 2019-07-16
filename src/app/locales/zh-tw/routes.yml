@@ -34,20 +34,6 @@ games:
     empty: 無熱門遊戲
 game:
     empty: 目前無此遊戲實況
-communities:
-    header: 熱門社群
-    empty: 目前無社群
-community:
-    menu:
-        streams: 實況中
-        info: 社群資訊
-    streams:
-        empty: 此社群目前無實況頻道
-    info:
-        created-by: 建立者
-        summary: 總覽
-        description: 描述
-        rules: 規則
 streams:
     header: 熱門實況
     empty: 目前無熱門實況

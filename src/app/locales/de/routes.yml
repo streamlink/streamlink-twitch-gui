@@ -34,20 +34,6 @@ games:
     empty: Die Liste der Top-Spiele ist leer.
 game:
     empty: Die Liste der Streams dieses Spiels ist leer.
-communities:
-    header: Top-Communitys
-    empty: Die Liste der Communitys ist leer.
-community:
-    menu:
-        streams: Live Streams
-        info: Community Infos
-    streams:
-        empty: Die Liste der Streams dieser Community ist leer.
-    info:
-        created-by: Erstellt von
-        summary: Zusammenfassung
-        description: Beschreibung
-        rules: Regeln
 streams:
     header: Top-Streams
     empty: Die Liste der Top-Streams ist leer.

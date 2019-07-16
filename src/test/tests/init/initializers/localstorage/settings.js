@@ -386,7 +386,7 @@ test( "Fixes attributes", function( assert ) {
 
 	const c = {
 		gui: {
-			homepage: "/communities/all"
+			homepage: "/communities"
 		}
 	};
 	updateSettings( c );
@@ -394,14 +394,34 @@ test( "Fixes attributes", function( assert ) {
 		c,
 		{
 			gui: {
-				homepage: "/communities"
+				homepage: "/"
 			},
 			streaming: {},
 			streams: {},
 			chat: {},
 			notification: {}
 		},
-		"Fixes homepage of removed all communities route"
+		"Fixes homepage of removed communities route"
+	);
+
+	const d = {
+		gui: {
+			homepage: "/communities/all"
+		}
+	};
+	updateSettings( d );
+	assert.propEqual(
+		d,
+		{
+			gui: {
+				homepage: "/"
+			},
+			streaming: {},
+			streams: {},
+			chat: {},
+			notification: {}
+		},
+		"Fixes homepage of removed communities route"
 	);
 
 	const notificationProviderRich = {

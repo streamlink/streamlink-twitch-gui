@@ -46,7 +46,6 @@ export default Model.extend({
 	average_fps: attr( "number" ),
 	broadcast_platform: attr( "string" ),
 	channel: belongsTo( "twitchChannel", { async: false } ),
-	//community_id: attr( "number" ),
 	created_at: attr( "date" ),
 	delay: attr( "number" ),
 	game: attr( "string" ),

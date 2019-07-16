@@ -34,20 +34,6 @@ games:
     empty: The returned list of top games is empty.
 game:
     empty: The returned list of streams of this game is empty.
-communities:
-    header: Top Communities
-    empty: The returned list of communities is empty.
-community:
-    menu:
-        streams: Live Streams
-        info: Community Infos
-    streams:
-        empty: The returned list of streams of this community is empty.
-    info:
-        created-by: Created by
-        summary: Summary
-        description: Description
-        rules: Rules
 streams:
     header: Top Streams
     empty: The returned list of top streams is empty.

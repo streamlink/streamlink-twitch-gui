@@ -34,20 +34,6 @@ games:
     empty: La liste des top jeux retournée est vide.
 game:
     empty: La liste des streams de ce jeu est vide.
-communities:
-    header: Top Communautés
-    empty: La liste des top communautés retournée est vide.
-community:
-    menu:
-        streams: Streams en live
-        info: Infos communauté
-    streams:
-        empty: La liste des streams de cette communauté est vide.
-    info:
-        created-by: Créé par
-        summary: Résumé
-        description: Description
-        rules: Règles
 streams:
     header: Top Streams
     empty: La liste des top Streams retournée est vide

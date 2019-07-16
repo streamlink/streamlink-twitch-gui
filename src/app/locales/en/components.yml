@@ -23,7 +23,6 @@ main-menu:
         header: Browse
         featured: Featured
         games: Games
-        communities: Communities
         streams: Streams
     my:
         header: My

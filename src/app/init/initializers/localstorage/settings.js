@@ -114,8 +114,8 @@ function fixAttributes( settings ) {
 	if ( hasOwnProperty.call( gui, "homepage" ) ) {
 		if ( gui.homepage === "/user/following" ) {
 			gui.homepage = "/user/followedStreams";
-		} else if ( gui.homepage === "/communities/all" ) {
-			gui.homepage = "/communities";
+		} else if ( /^\/communities($|\/.*)/.test( gui.homepage ) ) {
+			gui.homepage = "/";
 		}
 	}
 

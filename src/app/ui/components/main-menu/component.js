@@ -16,7 +16,6 @@ const routeHotkeys = {
 	"settings": "F12",
 	"featured": "1",
 	"games": "2",
-	"communities": "3",
 	"streams": "4",
 	"user.subscriptions": "5",
 	"user.followedStreams": "6",
