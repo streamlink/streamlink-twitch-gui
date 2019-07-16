@@ -87,6 +87,9 @@
 		"webpack": "4.28.4",
 		"yaml-loader": "0.5.0"
 	},
+	"resolutions": {
+		"sinon/nise/just-extend": "^4.0.0"
+	},
 	"scripts": {
 		"build": "grunt release",
 		"test": "grunt test",
