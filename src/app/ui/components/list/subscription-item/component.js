@@ -36,7 +36,7 @@ export default ListItemComponent.extend({
 
 
 	openBrowser( url ) {
-		const channel = get( this, "product.short_name" );
+		const channel = get( this, "content.product.short_name" );
 
 		return this.nwjs.openBrowser( url, {
 			channel
