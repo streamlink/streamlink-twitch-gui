@@ -78,7 +78,7 @@
 		"mini-css-extract-plugin": "0.4.0",
 		"nw-builder": "3.5.7",
 		"optimize-css-assets-webpack-plugin": "5.0.1",
-		"qunit": "2.6.0",
+		"qunit": "2.6.2",
 		"raw-loader": "0.5.1",
 		"sinon": "5.0.3",
 		"svgo": "1.2.2",
