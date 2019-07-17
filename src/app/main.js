@@ -34,7 +34,6 @@ require( "stream" );
 require( "net" );
 
 
-require( "shim" );
 require( "ember" );
 require( "./logger" );
 require( "./app" );

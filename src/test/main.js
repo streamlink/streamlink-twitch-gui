@@ -1,4 +1,3 @@
-import "shim";
 import { default as QUnit, config } from "qunit";
 import "qunit/assertion-helpers";
 // TODO: fix import paths

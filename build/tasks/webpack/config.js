@@ -28,7 +28,6 @@ module.exports = {
 			"img": pImages,
 
 			// app aliases
-			"shim": r( pRoot, "shim" ),
 			"config": r( pApp, "config" ),
 			"data": r( pApp, "data" ),
 			"init": r( pApp, "init" ),
