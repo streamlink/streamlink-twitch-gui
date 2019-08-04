@@ -1,6 +1,12 @@
 {
+	"prefix": "theme-",
+	"system": {
+		"no-preference": "light",
+		"light": "light",
+		"dark": "dark"
+	},
 	"themes": [
-		"default",
+		"light",
 		"dark"
 	]
 }
