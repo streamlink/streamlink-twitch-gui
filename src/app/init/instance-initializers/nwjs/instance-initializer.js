@@ -1,5 +1,6 @@
 import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
+import { scheduleOnce } from "@ember/runloop";
 import { default as nwApp, quit } from "nwjs/App";
 import { default as nwWindow, setVisibility, setFocused } from "nwjs/Window";
 import { argv, parseCommand } from "nwjs/argv";
@@ -19,10 +20,26 @@ export default {
 	after: "i18n",
 
 	initialize( application ) {
-		const nwjsService = application.lookup( "service:nwjs" );
+		/** @type {NwjsService} */
+		const nwjs = application.lookup( "service:nwjs" );
+		/** @type {RouterService} */
+		const router = application.lookup( "service:router" );
+		/** @type {SettingsService} */
 		const settings = application.lookup( "service:settings" );
 
+		// add event listener before routing starts
+		const indexRoutePromise = new Promise( resolve => {
+			const listener = transition => {
+				if ( transition.to && transition.to.name === "index" ) {
+					router.off( "routeDidChange", listener );
+					resolve( transition );
+				}
+			};
+			router.on( "routeDidChange", listener );
+		});
+
 		// initialize all the NWjs stuff
+		// and wait until Ember has started rendering and routing
 		settings.one( "initialized", async () => {
 			// try to fix issues on certain platforms first
 			platformfixes();
@@ -35,11 +52,24 @@ export default {
 			// restore window position first (while being hidden)
 			await windowInitializer( application );
 
+			// wait until Ember has rendered the app for the first time (window is still hidden)
+			await new Promise( resolve => scheduleOnce( "afterRender", resolve ) );
+			// assume that NW.js doesn't render a white page anymore after the next two frames
+			for ( let i = 0; i < 2; i++ ) {
+				await new Promise( resolve => requestAnimationFrame( resolve ) );
+			}
+
+			// wait until the IndexRoute is loaded
+			await indexRoutePromise;
+			// then load the user's homepage, but don't await the completion of the transition
+			router.homepage( true );
+
 			// add "initialized" class name to the document element just before showing the window
 			const document = application.lookup( "service:-document" );
 			document.documentElement.classList.add( "initialized" );
 
 			try {
+				// window will be shown depending on the used parameters
 				await parameterActions( application, argv );
 			} catch ( error ) {
 				await logError( error );
@@ -78,7 +108,7 @@ export default {
 			try {
 				setVisibility( true );
 				setFocused( true );
-				nwjsService.close();
+				nwjs.close();
 			} catch ( e ) {
 				quit();
 			}
