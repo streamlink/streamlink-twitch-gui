@@ -1,6 +1,22 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Removed "Communities" (feature was already removed by Twitch). #652
+- Added translations for locale "fr". #642
+- Fixed white page being shown while app is loading.
+- Fixed shrinking stream thumbnails when pressing TAB. #645
+- Fixed channel settings not loading when re-visiting route. #646
+- Fixed hotkeys while having an input element focused. #647
+- Fixed undefined URL when clicking edit/cancel subscription button. #651
+- Upgraded lots of dependencies and removed jQuery.
+- Upgraded to EmberData 3.9.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.7.1...master)
+
+
 ## [v1.7.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.7.1) (2019-04-17)
 
 - Fixed login issues on Windows. #628
