@@ -28,11 +28,11 @@ export default {
 		const settings = application.lookup( "service:settings" );
 
 		// add event listener before routing starts
-		const indexRoutePromise = new Promise( resolve => {
+		const routingPromise = new Promise( resolve => {
 			const listener = transition => {
-				if ( transition.to && transition.to.name === "index" ) {
+				if ( transition.to ) {
 					router.off( "routeDidChange", listener );
-					resolve( transition );
+					resolve( transition.to.name );
 				}
 			};
 			router.on( "routeDidChange", listener );
@@ -59,10 +59,12 @@ export default {
 				await new Promise( resolve => requestAnimationFrame( resolve ) );
 			}
 
-			// wait until the IndexRoute is loaded
-			await indexRoutePromise;
+			// wait until the target route is loaded
+			const routeName = await routingPromise;
 			// then load the user's homepage, but don't await the completion of the transition
-			router.homepage( true );
+			if ( routeName === "index" ) {
+				router.homepage( true );
+			}
 
 			// add "initialized" class name to the document element just before showing the window
 			const document = application.lookup( "service:-document" );
