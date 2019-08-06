@@ -59,7 +59,7 @@ export default Service.extend({
 		// remove from list if the stream has already ended (eg. with an error)
 		// TODO: refactor this
 		if ( get( stream, "hasEnded" ) && !get( stream, "isDeleted" ) ) {
-			stream.destroyStream();
+			stream.destroyRecord();
 		} else {
 			stream.kill();
 		}
@@ -80,7 +80,7 @@ export default Service.extend({
 
 		// is the stream already running?
 		if ( store.hasRecordForId( modelName, id ) ) {
-			stream = store.recordForId( modelName, id );
+			stream = store.peekRecord( modelName, id );
 
 			if ( quality !== undefined && get( stream, "quality" ) !== quality ) {
 				set( stream, "quality", quality );
@@ -217,7 +217,7 @@ export default Service.extend({
 			const error = get( stream, "error" );
 			// remove stream from store if modal is not opened
 			if ( !error || error instanceof ExitSignalError ) {
-				stream.destroyStream();
+				stream.destroyRecord();
 			}
 		}
 
@@ -234,7 +234,7 @@ export default Service.extend({
 
 				// remove the record from the store
 				if ( get( stream, "hasEnded" ) && !get( stream, "isDeleted" ) ) {
-					stream.destroyStream();
+					stream.destroyRecord();
 				}
 			});
 		});

@@ -102,7 +102,8 @@ export default Controller.extend( RetryTransitionMixin, {
 
 		} else {
 			// tell the adapter to remove the record
-			return record.destroyRecord()
+			record.deleteRecord();
+			return record.save()
 				.then(function() {
 					// but return back to `root.loaded.created.uncommitted`.
 					// At this point, the record has already been removed from the store, but

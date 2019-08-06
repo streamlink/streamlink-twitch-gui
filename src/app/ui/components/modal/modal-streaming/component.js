@@ -133,7 +133,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 			const active = get( this, "active" );
 			if ( active && !get( active, "isDestroyed" ) ) {
 				set( active, "isAborted", true );
-				active.destroyStream();
+				active.destroyRecord();
 			}
 			this.send( "close" );
 		},

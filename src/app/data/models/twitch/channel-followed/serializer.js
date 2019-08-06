@@ -10,21 +10,30 @@ export default TwitchSerializer.extend({
 		channel: { deserialize: "records" }
 	},
 
-	normalizeSingleResponse( store, primaryModelClass, payload, id, requestType ) {
+	normalizeArrayResponse( store, primaryModelClass, payload, id, requestType ) {
+		const foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
+
 		// fix payload format
-		payload = {
-			twitchChannelFollowed: payload
-		};
+		const follows = ( payload.follows /* istanbul ignore next */ || [] );
+		delete payload.follows;
+		payload[ this.modelNameFromPayloadKey() ] = follows.map( data => {
+			data[ this.primaryKey ] = data.channel[ foreignKey ];
+			return data;
+		});
 
 		return this._super( store, primaryModelClass, payload, id, requestType );
 	},
 
-	normalize( modelClass, resourceHash, prop ) {
+	normalizeSingleResponse( store, primaryModelClass, payload, id, requestType ) {
 		const foreignKey = this.store.serializerFor( "twitchChannel" ).primaryKey;
 
-		// get the id of the embedded TwitchChannel record and apply it here
-		resourceHash[ this.primaryKey ] = resourceHash.channel[ foreignKey ];
+		// fix payload format
+		payload[ this.primaryKey ] = payload.channel[ foreignKey ];
+		delete payload.channel;
+		payload = {
+			[ this.modelNameFromPayloadKey() ]: payload
+		};
 
-		return this._super( modelClass, resourceHash, prop );
+		return this._super( store, primaryModelClass, payload, id, requestType );
 	}
 });
