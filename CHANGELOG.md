@@ -4,12 +4,16 @@ Changelog - Streamlink Twitch GUI
 ## Master
 
 - Removed "Communities" (feature was already removed by Twitch). #652
+- Added automatic light/dark theme selection. Needs to be supported by the OS.
 - Added translations for locale "fr". #642
 - Fixed white page being shown while app is loading.
+- Fixed errors not being logged correctly.
+- Fixed broken stream popup when re-launching streams. #637
 - Fixed shrinking stream thumbnails when pressing TAB. #645
 - Fixed channel settings not loading when re-visiting route. #646
 - Fixed hotkeys while having an input element focused. #647
-- Fixed undefined URL when clicking edit/cancel subscription button. #651
+- Fixed undefined channel name in the edit/cancel subscription URL. #651
+- Upgraded NW.js to 0.40.0 (Chromium 76.0.3809.87 / Node 12.6.0).
 - Upgraded lots of dependencies and removed jQuery.
 - Upgraded to EmberData 3.9.
 
