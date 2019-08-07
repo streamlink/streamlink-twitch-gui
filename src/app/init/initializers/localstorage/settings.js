@@ -118,6 +118,9 @@ function fixAttributes( settings ) {
 			gui.homepage = "/";
 		}
 	}
+	if ( gui.theme === "default" ) {
+		gui.theme = "system";
+	}
 
 	// translate old quality ID setting
 	qualityIdToName( streaming, qualities );

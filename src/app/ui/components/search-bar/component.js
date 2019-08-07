@@ -79,9 +79,7 @@ export default Component.extend( HotkeyMixin, {
 		// we don't want to store more than X records
 		if ( get( model, "length" ) >= searchHistorySize ) {
 			const oldestRecord = model.sortBy( "date" ).shiftObject();
-			// TODO: wait for ED fix that unloads records after destroying them
 			await run( () => oldestRecord.destroyRecord() );
-			run( () => oldestRecord.unloadRecord() );
 		}
 
 		// create a new record
@@ -98,6 +96,7 @@ export default Component.extend( HotkeyMixin, {
 		model.forEach( record => record.deleteRecord() );
 		await model.save();
 		model.clear();
+		this.store.unloadAll( "search" );
 	},
 
 	doSearch( query, filter ) {

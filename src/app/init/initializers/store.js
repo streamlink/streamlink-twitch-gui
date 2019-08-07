@@ -1,7 +1,35 @@
+import Model from "ember-data/model";
 import Store from "ember-data/store";
 
 
 const { assign } = Object;
+
+
+/*
+ * Make EmberData unload records after destroying them.
+ * This is important when trying to create a new record with the same ID after destroying a previous
+ * one and has unfortunately been broken in EmberData since a very long time and is still not fixed.
+ * There are a lot of related issues, like the destruction of relationship attributes, etc:
+ * https://github.com/emberjs/data/issues/5006
+ * https://github.com/emberjs/data/issues/5014
+ * https://github.com/emberjs/data/pull/6147#issuecomment-501896335
+ * https://github.com/emberjs/data/blob/v3.9.0/addon/-private/system/model/internal-model.ts#L488-L511
+ *
+ * As a future reminder for myself:
+ * This "bugfix" is also the reason why certain serializers are explicitly removing relationship
+ *   attributes now from the payload when creating records. See Twitch{Channel,Game}Followed.
+ *   Without the serializer workarounds, this destroyRecord "bugfix" will cause the related
+ *   tests to fail during the destruction of the test context's owner and store.
+ */
+Model.reopen({
+	async destroyRecord() {
+		const ret = await this._super( ...arguments );
+		this.unloadRecord();
+		this._internalModel.destroySync();
+
+		return ret;
+	}
+});
 
 
 // no initializer here: just upgrade the application store

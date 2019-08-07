@@ -162,14 +162,10 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 			}
 			set( this, "isLocked", true );
 
-			const store = get( this, "store" );
-
 			// delete the record and save it
 			record.destroyRecord()
 				.then( () => {
 					set( this, "record", false );
-					// also unload it
-					store.unloadRecord( record );
 				})
 				.then( success, failure )
 				.then( () => this.collapse() )

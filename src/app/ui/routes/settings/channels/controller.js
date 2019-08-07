@@ -29,7 +29,6 @@ export default Controller.extend({
 
 			run( () => settingsRecord.destroyRecord() )
 				.then( () => {
-					settingsRecord.unloadRecord();
 					model.removeObject( modelItem );
 				});
 		}

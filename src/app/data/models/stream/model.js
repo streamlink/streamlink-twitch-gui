@@ -1,6 +1,5 @@
 import { get, set, computed, observer } from "@ember/object";
 import { alias, not } from "@ember/object/computed";
-import { run } from "@ember/runloop";
 import { inject as service } from "@ember/service";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
@@ -201,13 +200,7 @@ export default Model.extend({
 		const channel = get( this, "channel.name" );
 
 		return twitchStreamUrl.replace( "{channel}", channel );
-	}),
-
-	async destroyStream() {
-		// TODO: wait for ED fix that unloads records after destroying them
-		await run( () => this.destroyRecord() );
-		run( () => this.unloadRecord() );
-	}
+	})
 
 }).reopenClass({
 
