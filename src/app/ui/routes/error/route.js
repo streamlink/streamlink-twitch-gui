@@ -1,8 +1,12 @@
-import { get, set } from "@ember/object";
+import { get, set, getProperties } from "@ember/object";
 import Route from "@ember/routing/route";
+import { inject as service } from "@ember/service";
 import { isNone } from "@ember/utils";
 import { AdapterError } from "ember-data/adapters/errors";
+import Logger from "utils/Logger";
 
+
+const { logError } = new Logger( "ErrorRoute" );
 
 const errorProps = [
 	"name",
@@ -22,6 +26,8 @@ const duplicates = {
 
 
 export default Route.extend({
+	router: service(),
+
 	/**
 	 * Do all the error display stuff here instead of using an error controller.
 	 * A route for errors is needed anyway.
@@ -85,5 +91,13 @@ export default Route.extend({
 				};
 			});
 		set( controller, "model", model );
+
+		// log error
+		const trans = this.router._router.errorTransition;
+		logError( `${error}`,
+			!trans
+				? undefined
+				: () => getProperties( trans.to, "name", "params" )
+		);
 	}
 });

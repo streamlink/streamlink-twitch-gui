@@ -1,23 +1,29 @@
 /* global DEBUG */
+/* eslint-disable no-console */
 import { argv } from "nwjs/argv";
 import Logger from "utils/Logger";
 
 
 const { logDebug, logError } = new Logger( "Application" );
 
-global.process.on( "uncaughtException", err => {
+
+const onError = async ( type, err, debug ) => {
 	if ( DEBUG ) {
-		/* eslint-disable no-console */
-		console.error( err );
-	} else {
-		logError( err );
+		console.error( type, err, debug );
 	}
-});
+	try {
+		await logError( type ? `${type}: ${err}` : err, debug );
+	} catch ( e ) {}
+};
+
+
+process.on( "uncaughtException", e => onError( "uncaughtException", e ) );
+window.addEventListener( "unhandledrejection", e => onError( e.type, e.reason, e.promise ) );
+window.addEventListener( "error", e => onError( "error", e ) );
 
 // don't log parameters when running a dev build via grunt
-if ( !DEBUG ) {
-	logDebug( "Parameters", argv );
-} else {
-	/* eslint-disable no-console */
+if ( DEBUG ) {
 	console.debug( argv );
+} else {
+	logDebug( "Parameters", argv );
 }
