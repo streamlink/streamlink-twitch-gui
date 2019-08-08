@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.8.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.8.0) (2019-08-08)
 
 - Removed "Communities" (feature was already removed by Twitch). #652
 - Added automatic light/dark theme selection. Needs to be supported by the OS.
@@ -18,7 +18,7 @@ Changelog - Streamlink Twitch GUI
 - Upgraded to EmberData 3.9.
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.7.1...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.7.1...v1.8.0)
 
 
 ## [v1.7.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.7.1) (2019-04-17)
