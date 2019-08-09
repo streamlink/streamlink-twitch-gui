@@ -26,6 +26,6 @@ export default Controller.extend({
 	}),
 
 	contentGuiTheme: computed(function() {
-		return [ "system", ...themes ].map( id => ({ id }) );
+		return themes.map( id => ({ id }) );
 	})
 });

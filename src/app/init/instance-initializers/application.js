@@ -1,6 +1,11 @@
 import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
+import { themes as themesConfig } from "config";
 import { enable as enableSmoothScroll, disable as disableSmoothScroll } from "smoothscroll";
+
+
+const { themes: themesList } = themesConfig;
+const reTheme = /^theme-/;
 
 
 export default {
@@ -13,6 +18,22 @@ export default {
 		const SettingsService = application.lookup( "service:settings" );
 		const HotkeyService = application.lookup( "service:hotkey" );
 		const rootElement = document.querySelector( application.rootElement );
+		const classList = document.documentElement.classList;
+
+		addObserver( SettingsService, "gui.theme", SettingsService, function() {
+			let theme = get( this, "gui.theme" );
+
+			if ( themesList.indexOf( theme ) === -1 ) {
+				theme = "default";
+			}
+
+			classList.forEach( name => {
+				if ( !reTheme.test( name ) ) { return; }
+				classList.remove( name );
+			});
+
+			classList.add( `theme-${theme}` );
+		});
 
 		addObserver( SettingsService, "gui.smoothscroll", SettingsService, function() {
 			if ( get( this, "gui.smoothscroll" ) ) {
