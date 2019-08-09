@@ -1,6 +1,25 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+This is a critical bugfix release for the crashing Windows builds since v1.8.0 which downgrades the used NW.js version. See #656 for more information.
+
+If you've already upgraded to v1.8.0, regardless the OS, you may see an NW.js downgrade error message (once) in the future. This can be ignored. Deleting the user-data-dir, which will wipe your settings and login, before upgrading to v1.8.1 and downgrading NW.js is also an option.
+
+If you're coming from v1.7.1, you can ignore all of this.
+
+Once again, I apologize for the inconveniences.
+
+Please see the full changelog of the [v1.8.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.8.0) release!
+
+- Downgraded NW.js to 0.39.3 (Chromium 75.0.3770.142 / Node 12.6.0).
+- Reverted automatic theme selection (dependent on Chromium 76).
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.8.0...master)
+
+
 ## [v1.8.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.8.0) (2019-08-08)
 
 - Removed "Communities" (feature was already removed by Twitch). #652
