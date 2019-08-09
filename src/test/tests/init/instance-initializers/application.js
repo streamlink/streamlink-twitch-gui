@@ -14,10 +14,12 @@ import sinon from "sinon";
 
 import { set } from "@ember/object";
 import Router from "@ember/routing/router";
+import { run } from "@ember/runloop";
 import Service from "@ember/service";
 
 import applicationInstanceInitializerInjector
 	from "inject-loader?smoothscroll!init/instance-initializers/application";
+import { themes as themesConfig } from "config";
 
 
 module( "init/instance-initializers/application", function( hooks ) {
@@ -34,6 +36,7 @@ module( "init/instance-initializers/application", function( hooks ) {
 
 		SettingsService: Service.extend({
 			gui: {
+				theme: "foo",
 				smoothscroll: false
 			}
 		})
@@ -69,6 +72,39 @@ module( "init/instance-initializers/application", function( hooks ) {
 		);
 
 		ApplicationInstanceInitializer.initialize( this.owner );
+	});
+
+
+	test( "Themes", async function( assert ) {
+		await visit( "/" );
+
+		const element = this.owner.lookup( "service:-document" ).documentElement;
+		const settingsService = this.owner.lookup( "service:settings" );
+
+		element.classList.add( "irrelevant-class" );
+		assert.propEqual(
+			Array.from( element.classList.values() ),
+			[ "irrelevant-class" ],
+			"No theme set initially"
+		);
+
+		run( () => set( settingsService, "gui.theme", "unknown" ) );
+		assert.propEqual(
+			Array.from( element.classList.values() ),
+			[ "irrelevant-class", "theme-default" ],
+			"Chooses the default theme for unknown themes"
+		);
+
+		for ( const theme of themesConfig.themes ) {
+			run( () => set( settingsService, "gui.theme", theme ) );
+			assert.propEqual(
+				Array.from( element.classList.values() ),
+				[ "irrelevant-class", `theme-${theme}` ],
+				`Supports the ${theme} theme and properly sets and removes theme class names`
+			);
+		}
+
+		element.classList.remove( "irrelevant-class" );
 	});
 
 	test( "Smoothscroll", async function( assert ) {

@@ -1,6 +1,10 @@
 import { get, computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
+import { themes as themesConfig } from "config";
+
+
+const defaultTheme = themesConfig.themes[0];
 
 
 export const ATTR_GUI_INTEGRATION_TASKBAR = 1;
@@ -27,7 +31,7 @@ export default Fragment.extend({
 	minimize: attr( "number", { defaultValue: ATTR_GUI_MINIMIZE_NOOP } ),
 	minimizetotray: attr( "boolean", { defaultValue: false } ),
 	smoothscroll: attr( "boolean", { defaultValue: true } ),
-	theme: attr( "string", { defaultValue: "system" } ),
+	theme: attr( "string", { defaultValue: defaultTheme } ),
 
 
 	isVisibleInTaskbar: computed( "integration", function() {
