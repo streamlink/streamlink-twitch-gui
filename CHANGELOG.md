@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.8.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.8.1) (2019-08-09)
 
 This is a critical bugfix release for the crashing Windows builds since v1.8.0 which downgrades the used NW.js version. See #656 for more information.
 
@@ -17,7 +17,7 @@ Please see the full changelog of the [v1.8.0](https://github.com/streamlink/stre
 - Reverted automatic theme selection (dependent on Chromium 76).
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.8.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.8.0...v1.8.1)
 
 
 ## [v1.8.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.8.0) (2019-08-08)
