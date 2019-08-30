@@ -84,7 +84,7 @@
 		"svgo": "1.2.2",
 		"svgo-loader": "2.1.0",
 		"util.promisify": "1.0.0",
-		"webpack": "4.28.4",
+		"webpack": "4.39.3",
 		"yaml-loader": "0.5.0"
 	},
 	"resolutions": {
