@@ -71,7 +71,8 @@
 			"darwin": [
 				"/Applications/mpv.app/Contents/MacOS",
 				"/usr/bin",
-				"/usr/local/bin"
+				"/usr/local/bin",
+				"/opt/local/bin"
 			],
 			"linux": [
 				"/usr/bin",
