@@ -11,7 +11,10 @@
 				"%PROGRAMFILES(X86)%\\VideoLAN\\VLC"
 			],
 			"darwin": [
-				"/Applications/VLC.app/Contents/MacOS"
+				"/Applications/VLC.app/Contents/MacOS",
+				"$HOME/Applications/VLC.app/Contents/MacOS",
+				"/usr/local/bin",
+				"/opt/local/bin"
 			],
 			"linux": [
 				"/usr/bin",
@@ -70,8 +73,10 @@
 			],
 			"darwin": [
 				"/Applications/mpv.app/Contents/MacOS",
+				"$HOME/Applications/mpv.app/Contents/MacOS",
 				"/usr/bin",
-				"/usr/local/bin"
+				"/usr/local/bin",
+				"/opt/local/bin"
 			],
 			"linux": [
 				"/usr/bin",
