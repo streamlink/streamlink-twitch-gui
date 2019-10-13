@@ -20,7 +20,7 @@ about:
         contributors: Contributors
     donation:
         header: Support & donate
-        text: If you think that this application is helpful, please consider supporting the creator by donating.<br>Thank you very much!
+        text: If you think that this application is helpful, please consider supporting its creator by donating.<br>Thank you very much!
     translations:
         header: Translations
     dependencies:

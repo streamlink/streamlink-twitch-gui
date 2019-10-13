@@ -13,26 +13,21 @@
 	},
 	"donation": [
 		{
+			"text": "GitHub Sponsors",
+			"url": "https://github.com/users/bastimeyer/sponsorship"
+		},
+		{
 			"text": "Paypal",
 			"url": "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YUCGRLVALHS8C&item_name=Streamlink%20Twitch%20GUI"
 		},
 		{
-			"text": "Flattr",
-			"url": "https://flattr.com/thing/3956088"
+			"text": "OpenCollective (Streamlink)",
+			"url": "https://opencollective.com/streamlink"
 		},
 		{
 			"text": "Bitcoin",
 			"url": "https://blockchain.info/qr?data=1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8",
 			"coinaddress": "1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8"
-		},
-		{
-			"text": "Dogecoin",
-			"url": "https://blockchain.info/qr?data=DGkVP7AMUHr2TbVnWy6QyZqSMvCkeEo1ab",
-			"coinaddress": "DGkVP7AMUHr2TbVnWy6QyZqSMvCkeEo1ab"
-		},
-		{
-			"text": "OpenCollective (Streamlink)",
-			"url": "https://opencollective.com/streamlink"
 		}
 	]
 }
