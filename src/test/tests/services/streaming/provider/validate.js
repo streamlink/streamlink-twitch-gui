@@ -237,7 +237,6 @@ test( "Timeout", async function( assert ) {
 test( "Version error", async function( assert ) {
 
 	const streamlink = { type: "streamlink", flavor: "default" };
-	const livestreamer = { type: "livestreamer", flavor: "default" };
 
 	await assert.rejects(
 		async () => {
@@ -247,16 +246,6 @@ test( "Version error", async function( assert ) {
 		},
 		new VersionError( "0.1.0" ),
 		"Throws a VersionError on old streamlink output"
-	);
-
-	await assert.rejects(
-		async () => {
-			const promise = this.validateProvider( {}, livestreamer );
-			this.child.stderr.emit( "data", "livestreamer 1.11.0\n" );
-			await promise;
-		},
-		new VersionError( "1.11.0" ),
-		"Throws a VersionError on old livestreamer output"
 	);
 
 });
@@ -271,90 +260,58 @@ test( "Version match", async function( assert ) {
 		assert.strictEqual( version, expected, message );
 	};
 
-	// streamlink + livestreamer
+	const provider = { type: "streamlink", flavor: "default" };
+	const minVersion = "1.1.0";
+	const versionStrings = [
+		[
+			"streamlink {v}\n",
+			"Matches simple streamlink output"
+		],
+		[
+			"streamlink.exe {v}\n",
+			"Matches streamlink.exe output on Windows"
+		],
+		[
+			"streamlink-script.py {v}\n",
+			"Matches streamlink python entry script"
+		],
+		[
+			"streamlink-script.pyw {v}\n",
+			"Matches streamlink python entry script on Windows"
+		],
+		[
+			"python-streamlink {v}\n",
+			"Matches streamlink with prepending python name"
+		],
+		[
+			"python3-streamlink {v}\n",
+			"Matches streamlink with prepending python version"
+		],
+		[
+			"streamlink {v}-1\n",
+			"Matches streamlink output with pre-release-information"
+		],
+		[
+			"streamlink {v}+gdeadbeef\n",
+			"Matches streamlink output with build information"
+		],
+		[
+			"streamlink {v}-1+gdeadbeef\n",
+			"Matches streamlink output with pre-release and build information"
+		],
+		[
+			"streamlink {v} foobar\n",
+			"Matches streamlink output with additional content"
+		]
+	];
 
-	for ( const [ name, [ minVersion, provider ] ] of Object.entries({
-		streamlink: [ "1.1.0", { type: "streamlink", flavor: "default" } ],
-		livestreamer: [ "1.11.1", { type: "livestreamer", flavor: "default" } ]
-	}) ) {
+	for ( const [ versionString, message ] of versionStrings ) {
 		await validate(
 			provider,
-			`${name} ${minVersion}\n`,
+			versionString.replace( "{v}", minVersion ),
 			minVersion,
-			`Matches simple ${name} output`
-		);
-		await validate(
-			provider,
-			`${name}.exe ${minVersion}\n`,
-			minVersion,
-			`Matches ${name} exe on Windows`
-		);
-		await validate(
-			provider,
-			`${name}-script.py ${minVersion}\n`,
-			minVersion,
-			`Matches ${name} python script`
-		);
-		await validate(
-			provider,
-			`${name}-script.pyw ${minVersion}\n`,
-			minVersion,
-			`Matches ${name} python script on Windows`
-		);
-		await validate(
-			provider,
-			`python-${name} ${minVersion}\n`,
-			minVersion,
-			`Matches ${name} with script name containing python`
-		);
-		await validate(
-			provider,
-			`python3-${name} ${minVersion}\n`,
-			minVersion,
-			`Matches ${name} with script name containing specific python version`
-		);
-		await validate(
-			provider,
-			`${name} ${minVersion}-1\n`,
-			minVersion,
-			`Matches ${name} output with pre-release information`
-		);
-		await validate(
-			provider,
-			`${name} ${minVersion}+gdeadbeef\n`,
-			minVersion,
-			`Matches ${name} output with build information`
-		);
-		await validate(
-			provider,
-			`${name} ${minVersion}-1+gdeadbeef\n`,
-			minVersion,
-			`Matches ${name} output with pre-release and build information`
-		);
-		await validate(
-			provider,
-			`${name} ${minVersion} foobar\n`,
-			minVersion,
-			`Matches ${name} output with additional content`
+			message
 		);
 	}
-
-
-	// livestreamer standalone
-
-	const livestreamerStandalone = { type: "livestreamer", flavor: "standalone" };
-
-	await validate(
-		livestreamerStandalone,
-		"livestreamer 1.11.1\n",
-		"1.11.1",
-		"Matches simple livestreamer standalone output"
-	);
-	await validate(
-		livestreamerStandalone,
-		"livestreamer.exe 1.11.1\n",
-		"1.11.1",
-		"Matches livestreamer standaline exe output"
-	);
 
 });

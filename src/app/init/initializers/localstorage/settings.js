@@ -1,5 +1,6 @@
 import { langs as langsConfig } from "config";
 import { moveAttributes, moveAttributesIntoFragment, qualityIdToName } from "./utils";
+import { defaultProvider } from "data/models/settings/streaming/fragment";
 import { typeKey as streamingPlayerTypeKey } from "data/models/settings/streaming/player/fragment";
 import { qualities } from "data/models/stream/model";
 import { isWin7 } from "utils/node/platform";
@@ -13,10 +14,27 @@ function removeOldData( settings ) {
 	if ( typeof settings.qualities === "object" && typeof settings.qualities.source === "string" ) {
 		delete settings[ "qualities" ];
 	}
+	if ( typeof settings.streaming === "object" ) {
+		const { streaming } = settings;
+		// remove livestreamer streaming providers
+		if ( typeof streaming.providers === "object" ) {
+			const { providers } = streaming;
+			for ( const key of Object.keys( providers ) ) {
+				if ( /^livestreamer/.test( key ) ) {
+					delete providers[ key ];
+				}
+			}
+		}
+		// remove old backported livestreamer qualities
+		if ( typeof streaming.qualitiesOld === "object" ) {
+			delete streaming.qualitiesOld;
+		}
+	}
 
 	// remove old livestreamer data
 	delete settings[ "livestreamer" ];
 	delete settings[ "livestreamer_params" ];
+	delete settings[ "quality_presets" ];
 
 	// remove old streaming data
 	delete settings[ "player_passthrough" ];
@@ -55,7 +73,6 @@ function updateAttributes( settings ) {
 		streamproviders: "providers",
 		quality: "quality",
 		qualities: "qualities",
-		quality_presets: "qualitiesOld",
 		streamprovider_oauth: "oauth",
 		player_no_close: "player_no_close",
 		hls_live_edge: "hls_live_edge",
@@ -122,6 +139,11 @@ function fixAttributes( settings ) {
 	// TODO: remove this after upgrading to Chromium >=76 and re-adding the ThemeService
 	if ( gui.theme === "system" ) {
 		gui.theme = "default";
+	}
+
+	// fix streaming provider selection
+	if ( /^livestreamer/.test( streaming.provider ) ) {
+		streaming.provider = defaultProvider;
 	}
 
 	// translate old quality ID setting

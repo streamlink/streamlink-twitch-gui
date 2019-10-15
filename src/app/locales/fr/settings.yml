@@ -77,16 +77,14 @@ gui:
             five: Après cinq minutes
 streaming:
     provider:
-        title: Streamlink / Livestreamer
+        title: Fournisseur de streaming
         description: Choisissez un fournisseur de streaming et définissez des emplacements exécutables personnalisés.
         notes: Un chemin explicite doit être défini si le fichier ne peut pas être trouvé dans la variable d'environnement $PATH du système ou dans la liste des chemins de repli de l'interface.
         executable:
             python: Éxcutable Python
             streamlinkw: Éxcutable Streamlink
-            livestreamer-standalone: Éxcutable livestreamer
         python-script:
             streamlink: Script python Streamlink
-            livestreamer: Script python liveastreamer
         parameters:
             title: Paramètres personnalisés
             placeholder: Ajouter des paramètres personnalisés
@@ -234,9 +232,6 @@ streams:
         description: Définir des sélections de qualité précises par plage ou en utilisant des noms de qualité explicites.
         notes : La deuxième colonne affiche la sélection de la qualité réelle. Les qualités ou les gammes de qualité de la première colonne seront exclues des alias de sélection "best" ou "worst". Veuillez consulter le wiki et la documentation de Streamlink avant d'apporter des modifications.
         dont-exclude: Ne pas exclure les qualités de streaming
-    qualitypresets-livestreamer:
-        title: Préréglages de qualité
-        description: Personnaliser les préreglages de qualité de Livestreamer.
     vodcast-regexp:
         title: Filtrage Vodcast personnalisé
         description: Trouver des Vodcast/Rebroadcasts non-taggés.
