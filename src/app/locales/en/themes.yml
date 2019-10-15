@@ -1,2 +1,3 @@
-default: Default
+system: System settings
+light: Light
 dark: Dark

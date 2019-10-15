@@ -109,7 +109,7 @@ test( "Updates attributes", function( assert ) {
 		gui_minimize: 0,
 		gui_minimizetotray: false,
 		gui_smoothscroll: true,
-		gui_theme: "default"
+		gui_theme: "system"
 	};
 	updateSettings( guiSettings );
 	assert.propEqual(
@@ -123,7 +123,7 @@ test( "Updates attributes", function( assert ) {
 				minimize: 0,
 				minimizetotray: false,
 				smoothscroll: true,
-				theme: "default"
+				theme: "system"
 			},
 			streaming: {},
 			streams: {},
@@ -422,6 +422,26 @@ test( "Fixes attributes", function( assert ) {
 			notification: {}
 		},
 		"Fixes homepage of removed communities route"
+	);
+
+	const guiDefaultTheme = {
+		gui: {
+			theme: "default"
+		}
+	};
+	updateSettings( guiDefaultTheme );
+	assert.propEqual(
+		guiDefaultTheme,
+		{
+			gui: {
+				theme: "system"
+			},
+			streaming: {},
+			streams: {},
+			chat: {},
+			notification: {}
+		},
+		"Fixes old default theme name"
 	);
 
 	const notificationProviderRich = {

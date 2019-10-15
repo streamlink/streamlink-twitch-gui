@@ -1,2 +1,3 @@
-default: Standard
+system: Systemeinstellungen
+light: Hell
 dark: Dunkel
