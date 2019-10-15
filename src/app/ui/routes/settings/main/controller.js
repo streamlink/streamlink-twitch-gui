@@ -9,6 +9,8 @@ const { themes } = themesConfig;
 
 
 export default Controller.extend({
+	systemThemeId: "system",
+
 	contentGuiLanguages: computed(function() {
 		const compare = new Intl.Collator( "en", { sensitivity: "base" } ).compare;
 		const languages = Object.keys( locales )
@@ -26,6 +28,6 @@ export default Controller.extend({
 	}),
 
 	contentGuiTheme: computed(function() {
-		return [ "system", ...themes ].map( id => ({ id }) );
+		return [ this.systemThemeId, ...themes ].map( id => ({ id }) );
 	})
 });

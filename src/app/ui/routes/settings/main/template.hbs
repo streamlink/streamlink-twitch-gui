@@ -41,20 +41,10 @@
 
 <fieldset>
 {{#settings-row
-	(t "settings.main.homepage.title")
-	(t "settings.main.homepage.description")
-	icon="fa-home"
-}}
-	<em class="small">
-		{{t "settings.main.homepage.text.first"}}<br>
-		{{t "settings.main.homepage.text.second"}}
-	</em>
-{{/settings-row}}
-
-{{#settings-row
 	(t "settings.main.theme.title")
 	(t "settings.main.theme.description")
 	icon="fa-paint-brush"
+	notes=(if (is-equal model.gui.theme systemThemeId) (t "settings.main.theme.notes-system") "")
 }}
 	{{#drop-down
 		value=model.gui.theme
@@ -68,6 +58,17 @@
 			{{t (concat "themes." item.value)}}
 		{{/dropdown.list}}
 	{{/drop-down}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.main.homepage.title")
+	(t "settings.main.homepage.description")
+	icon="fa-home"
+}}
+	<em class="small">
+		{{t "settings.main.homepage.text.first"}}<br>
+		{{t "settings.main.homepage.text.second"}}
+	</em>
 {{/settings-row}}
 
 {{#settings-row

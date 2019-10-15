@@ -29,6 +29,7 @@ main:
     theme:
         title: Theme
         description: Select a GUI color theme.
+        notes-system: This has to be supported by the operating system or desktop environment.
     scrolling:
         title: Scrolling
         description: Enable or disable smooth scrolling.

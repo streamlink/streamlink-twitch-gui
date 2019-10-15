@@ -29,6 +29,7 @@ main:
     theme:
         title: Thème
         description: Sélectionnez un thème de couleur pour l'interface.
+        notes-system: Ceci doit être pris en charge par le système d'exploitation ou l'environnement de bureau.
     scrolling:
         title: Défilement
         description: Activer ou désactiver le défilement en douceur.
