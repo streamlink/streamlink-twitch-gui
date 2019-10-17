@@ -29,6 +29,7 @@ main:
     theme:
         title: 佈景主題
         description: 選擇一個介面主題
+        notes-system: 需要作業系統或桌面環境支援
     scrolling:
         title: 捲動
         description: 啟用/停用平滑捲動

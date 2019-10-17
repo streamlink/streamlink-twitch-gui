@@ -44,6 +44,10 @@ export default {
 			// try to fix issues on certain platforms first
 			platformfixes();
 
+			// load app theme
+			const themeService = application.lookup( "service:theme" );
+			themeService.initialize();
+
 			// build macOS native menubar
 			if ( isDarwin ) {
 				application.lookup( "nwjs:menubar" );

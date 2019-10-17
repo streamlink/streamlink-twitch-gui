@@ -118,10 +118,8 @@ function fixAttributes( settings ) {
 			gui.homepage = "/";
 		}
 	}
-	// temporary downgrade logic
-	// TODO: remove this after upgrading to Chromium >=76 and re-adding the ThemeService
-	if ( gui.theme === "system" ) {
-		gui.theme = "default";
+	if ( gui.theme === "default" ) {
+		gui.theme = "system";
 	}
 
 	// translate old quality ID setting

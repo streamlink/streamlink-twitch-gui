@@ -29,6 +29,7 @@ main:
     theme:
         title: Farbgebung
         description: Wähle die Farbe des GUIs.
+        notes-system: Muss vom Betriebssystem, bzw. der Desktopumgebung unterstützt werden.
     scrolling:
         title: Scrollen
         description: "Sanftes Scrollen ein-/ausschalten."
