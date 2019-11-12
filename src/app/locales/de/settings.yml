@@ -78,16 +78,14 @@ gui:
             five: Nach fünf Minuten
 streaming:
     provider:
-        title: Streamlink / Livestreamer
+        title: Streamingprovider
         description: Wähle einen Streamingprovider und passe Programmdateipfade an.
         notes: Ein expliziter Pfad muss gesetzt werden, wenn die Datei nicht in den Pfaden der $PATH Umgebungsvariable des Systems oder in den Alternativpfaden gefunden werden kann.
         executable:
             python: Python Programmdatei
             streamlinkw: Streamlink Programmdatei
-            livestreamer-standalone: Livestreamer Programmdatei
         python-script:
             streamlink: Streamlink Pythonscript
-            livestreamer: Livestreamer Pythonscript
         parameters:
             title: Benutzerdefinierte Parameter
             placeholder: Setzte benutzerdefinierte Parameter
@@ -235,9 +233,6 @@ streams:
         description: Definiere eine präzise Auswahl der Qualität in einem bestimmten Bereich oder durch Aufzählung von expliziten Namen.
         notes: Die zweite Spalte zeigt die eigentliche Qualitätsauswahl. Werte aus der ersten Spalte werden von den "best" oder "worst" Selektoren herausgefiltert. Bitte lies das Wiki und Streamlinks Dokumentation bevor du Änderungen vornimmst.
         dont-exclude: Keine Streamqualitäten filtern
-    qualitypresets-livestreamer:
-        title: Qualitätsvoreinstellungen
-        description: Livestreamers Qualitätsvoreinstellungen.
     vodcast-regexp:
         title: Benutzerdefinierte Vodcast Filter
         description: Nicht markierte Vodcasts/Aufzeichnungen finden.

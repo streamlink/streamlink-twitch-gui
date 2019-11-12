@@ -31,8 +31,7 @@ export const parameters = [
 		"--no-version-check"
 	),
 	new Parameter(
-		"--twitch-disable-hosting",
-		"stream.isStreamlink"
+		"--twitch-disable-hosting"
 	),
 	new Parameter(
 		"--player",
@@ -73,10 +72,7 @@ export const parameters = [
 	),
 	new Parameter(
 		"--twitch-disable-ads",
-		[
-			"stream.isStreamlink",
-			"stream.settings.streaming.disable_ads"
-		]
+		"stream.settings.streaming.disable_ads"
 	),
 	new Parameter(
 		"--hls-live-edge",
@@ -100,7 +96,7 @@ export const parameters = [
 	),
 	new Parameter(
 		"--stream-sorting-excludes",
-		"stream.isStreamlink",
+		null,
 		"stream.streamQualitiesExclude"
 	),
 	new Parameter(

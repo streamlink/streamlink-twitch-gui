@@ -1,11 +1,9 @@
 {
 	"default-provider": "streamlink",
 	"download-url": {
-		"livestreamer": "http://docs.livestreamer.io/install.html",
 		"streamlink": "https://streamlink.github.io/install.html"
 	},
 	"docs-url": {
-		"livestreamer": "http://docs.livestreamer.io/cli.html#cmdoption{item}",
 		"streamlink": "https://streamlink.github.io/cli.html#cmdoption{item}"
 	},
 	"validation": {
@@ -14,10 +12,6 @@
 			"streamlink": {
 				"version": "1.1.0",
 				"regexp": "^(?:python\\d*-)?streamlink(?:\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|[\\s+-].*)"
-			},
-			"livestreamer": {
-				"version": "1.11.1",
-				"regexp": "^(?:python\\d*-)?livestreamer(?:\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|[\\s+-].*)"
 			}
 		}
 	},
@@ -83,63 +77,6 @@
 				"win32": [
 					"%PROGRAMFILES%\\Streamlink\\bin",
 					"%PROGRAMFILES(X86)%\\Streamlink\\bin"
-				]
-			}
-		},
-		"livestreamer": {
-			"type": "livestreamer",
-			"flavor": "default",
-			"name": "Livestreamer",
-			"label": "Livestreamer",
-			"python": ">=2.6 <3 || >=3.3",
-			"exec": {
-				"win32": "pythonw.exe",
-				"darwin": "python",
-				"linux": "python"
-			},
-			"fallback": {
-				"win32": [],
-				"darwin": [
-					"/usr/bin",
-					"/usr/local/bin",
-					"/Library/Frameworks/Python.framework/Versions/Current/bin",
-					"/opt/local/bin"
-				],
-				"linux": [
-					"/usr/bin",
-					"/usr/local/bin"
-				]
-			},
-			"pythonscript": {
-				"win32": "livestreamer-script.py",
-				"darwin": "livestreamer",
-				"linux": "livestreamer"
-			},
-			"pythonscriptfallback": {
-				"win32": [],
-				"darwin": [
-					"/Library/Frameworks/Python.framework/Versions/Current/bin"
-				],
-				"linux": [
-					"/usr/bin",
-					"/usr/local/bin"
-				]
-			}
-		},
-		"livestreamer-standalone": {
-			"type": "livestreamer",
-			"flavor": "standalone",
-			"name": "Livestreamer",
-			"label": "Livestreamer (Standalone)",
-			"exec": {
-				"win32": "livestreamer.exe",
-				"darwin": false,
-				"linux": false
-			},
-			"fallback": {
-				"win32": [
-					"%PROGRAMFILES%\\Livestreamer",
-					"%PROGRAMFILES(X86)%\\Livestreamer"
 				]
 			}
 		}

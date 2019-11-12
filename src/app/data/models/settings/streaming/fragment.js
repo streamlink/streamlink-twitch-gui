@@ -10,8 +10,8 @@ const { equal } = computed;
 const { providers } = streamingConfig;
 const { MAX_SAFE_INTEGER: MAX } = Number;
 
-const defaultProvider = isWin ? "streamlinkw" : "streamlink";
 
+export const defaultProvider = isWin ? "streamlinkw" : "streamlink";
 
 export const ATTR_STREAMING_PLAYER_INPUT_STDIN = "stdin";
 export const ATTR_STREAMING_PLAYER_INPUT_FIFO = "fifo";
@@ -25,7 +25,6 @@ export default Fragment.extend({
 
 	quality: attr( "string", { defaultValue: "source" } ),
 	qualities: fragment( "settingsStreamingQualities", { defaultValue: {} } ),
-	qualitiesOld: fragment( "settingsStreamingQualitiesOld", { defaultValue: {} } ),
 
 	player: attr( "string", { defaultValue: "default" } ),
 	players: fragment( "settingsStreamingPlayers", { defaultValue: {} } ),

@@ -16,6 +16,9 @@ module( "init/initializers/localstorage/settings", {
 					fr: { disabled: true }
 				}
 			},
+			"data/models/settings/streaming/fragment": {
+				defaultProvider: "streamlink"
+			},
 			"data/models/settings/streaming/player/fragment": {
 				typeKey: "type"
 			},
@@ -45,6 +48,7 @@ test( "Removes old attributes", function( assert ) {
 	const a = {
 		livestreamer: "foo",
 		livestreamer_params: "bar",
+		quality_presets: {},
 		qualities: {
 			source: "foo",
 			high: "bar",
@@ -65,6 +69,53 @@ test( "Removes old attributes", function( assert ) {
 			notification: {}
 		},
 		"Removes all old and unused attributes"
+	);
+
+	const b = {
+		streaming: {
+			providers: {
+				"livestreamer": {
+					exec: "foo"
+				},
+				"livestreamer-standalone": {
+					exec: "bar"
+				},
+				"streamlink": {
+					exec: "baz"
+				},
+				"streamlinkw": {
+					exec: "qux"
+				}
+			},
+			qualitiesOld: {
+				source: "foo",
+				high: "bar",
+				medium: "baz",
+				low: "qux",
+				audio: "quux"
+			}
+		}
+	};
+	updateSettings( b );
+	assert.propEqual(
+		b,
+		{
+			gui: {},
+			streaming: {
+				providers: {
+					streamlink: {
+						exec: "baz"
+					},
+					streamlinkw: {
+						exec: "qux"
+					}
+				}
+			},
+			streams: {},
+			chat: {},
+			notification: {}
+		},
+		"Removes old livestreamer attributes"
 	);
 
 });
@@ -158,7 +209,6 @@ test( "Updates attributes", function( assert ) {
 				providers: { foo: 1 },
 				quality: "source",
 				qualities: { bar: 2 },
-				qualitiesOld: { baz: 3 },
 				oauth: true,
 				player_no_close: false,
 				hls_live_edge: 3,
@@ -442,6 +492,26 @@ test( "Fixes attributes", function( assert ) {
 			notification: {}
 		},
 		"Fixes old default theme name"
+	);
+
+	const streamingProviderLivestreamer = {
+		streaming: {
+			provider: "livestreamer"
+		}
+	};
+	updateSettings( streamingProviderLivestreamer );
+	assert.propEqual(
+		streamingProviderLivestreamer,
+		{
+			streaming: {
+				provider: "streamlink"
+			},
+			gui: {},
+			streams: {},
+			chat: {},
+			notification: {}
+		},
+		"Changes streaming provider from livestreamer to default value (streamlink)"
 	);
 
 	const notificationProviderRich = {

@@ -78,16 +78,14 @@ gui:
             five: After five minutes
 streaming:
     provider:
-        title: Streamlink / Livestreamer
+        title: Streaming provider
         description: Choose a streaming provider and set custom executable locations.
         notes: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
         executable:
             python: Python executable
             streamlinkw: Streamlink executable
-            livestreamer-standalone: Livestreamer executable
         python-script:
             streamlink: Streamlink python script
-            livestreamer: Livestreamer python script
         parameters:
             title: Custom parameters
             placeholder: Add custom parameters
@@ -235,9 +233,6 @@ streams:
         description: Define precise quality selections by range or by using explicit quality names.
         notes: The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the "best" or "worst" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes.
         dont-exclude: Don't exclude stream qualities
-    qualitypresets-livestreamer:
-        title: Quality presets
-        description: Customize Livestreamer quality presets.
     vodcast-regexp:
         title: Custom Vodcast filtering
         description: Find untagged Vodcasts/Rebroadcasts.

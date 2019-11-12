@@ -78,16 +78,14 @@ gui:
             five: 5 分鐘後
 streaming:
     provider:
-        title: Streamlink / Livestreamer
+        title: 流媒體提供商
         description: 選擇一個串流提供元件並設定執行檔路徑
         notes: 若系統路徑 $PATH 或程式介面搜尋路徑找不到，則需手動指定執行檔路徑
         executable:
             python: Python 執行檔
             streamlinkw: Streamlink 執行檔
-            livestreamer-standalone: Livestreamer 執行檔
         python-script:
             streamlink: Streamlink python 腳本
-            livestreamer: Livestreamer python 腳本
         parameters:
             title: 自訂參數
             placeholder: 加入自訂參數
@@ -231,9 +229,6 @@ streams:
         description: 使用畫質範圍設定或是特定的畫質設定
         notes: 第2欄顯示實際選擇的畫質，從"最佳畫質"到"最差畫質"中排除第1欄中指定的畫質或畫質範圍，修改前請先查詢 wiki 及 Streamlink 的文件
         dont-exclude: 不排除實況畫質
-    qualitypresets-livestreamer:
-        title: 畫質配置
-        description: 自訂 Livestreamer 的畫質配置
     vodcast-regexp:
         title: 自訂 Vodcast 過濾
         description: 尋找未標籤的 VOD/重播

@@ -19,49 +19,30 @@
 {{/settings-row}}
 
 {{#if model.advanced}}
-	{{#if isStreamlink}}
-		{{#settings-row
-			(t "settings.streams.qualitypresets.title")
-			(t "settings.streams.qualitypresets.description")
-			icon="fa-list-ul"
-			notes=(t "settings.streams.qualitypresets.notes")
-			documentation="--stream-sorting-excludes"
-		}}
-			{{#each qualitiesStreamlink as |quality|}}
-				<div class="quality-preset">
-					{{input
-						type="text"
-						value=(mut (get (get model.streaming.qualities quality.id) "exclude"))
-						placeholder=(if (is-null quality.exclude) (t "settings.streams.qualitypresets.dont-exclude") quality.exclude)
-						disabled=(is-null quality.exclude)
-					}}
-					{{input
-						type="text"
-						value=(mut (get (get model.streaming.qualities quality.id) "quality"))
-						placeholder=quality.quality
-					}}
-					<button type="button" tabindex="-1" class="btn">{{t (concat "qualities." quality.id)}}</button>
-				</div>
-			{{/each}}
-		{{/settings-row}}
-	{{else}}
-		{{#settings-row
-			(t "settings.streams.qualitypresets-livestreamer.title")
-			(t "settings.streams.qualitypresets-livestreamer.description")
-			icon="fa-list-ul"
-		}}
-			{{#each qualitiesLivestreamer as |quality|}}
-				<div class="quality-preset">
-					{{input
-						type="text"
-						placeholder=quality.quality
-						value=(mut (get model.streaming.qualitiesOld quality.id))
-					}}
-					<button type="button" tabindex="-1" class="btn">{{t (concat "qualities." quality.id)}}</button>
-				</div>
-			{{/each}}
-		{{/settings-row}}
-	{{/if}}
+	{{#settings-row
+		(t "settings.streams.qualitypresets.title")
+		(t "settings.streams.qualitypresets.description")
+		icon="fa-list-ul"
+		notes=(t "settings.streams.qualitypresets.notes")
+		documentation="--stream-sorting-excludes"
+	}}
+		{{#each contentStreamingQuality as |quality|}}
+			<div class="quality-preset">
+				{{input
+					type="text"
+					value=(mut (get (get model.streaming.qualities quality.id) "exclude"))
+					placeholder=(if (is-null quality.exclude) (t "settings.streams.qualitypresets.dont-exclude") quality.exclude)
+					disabled=(is-null quality.exclude)
+				}}
+				{{input
+					type="text"
+					value=(mut (get (get model.streaming.qualities quality.id) "quality"))
+					placeholder=quality.quality
+				}}
+				<button type="button" tabindex="-1" class="btn">{{t (concat "qualities." quality.id)}}</button>
+			</div>
+		{{/each}}
+	{{/settings-row}}
 {{/if}}
 </fieldset>
 

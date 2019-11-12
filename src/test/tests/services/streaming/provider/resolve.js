@@ -278,16 +278,16 @@ test( "Standalone - Default exec", async function( assert ) {
 	const error = new Error( "Executables were not found" );
 	const providerUserData = {};
 
-	this.provider = "livestreamer-standalone";
+	this.provider = "streamlinkw";
 	this.platform = "win32";
 	this.config = {
 		[ this.provider ]: {
 			exec: {
-				[ this.platform ]: "livestreamer.exe"
+				[ this.platform ]: "streamlinkw.exe"
 			},
 			fallback: {
 				[ this.platform ]: [
-					"C:\\livestreamer"
+					"C:\\streamlink"
 				]
 			}
 		}
@@ -331,9 +331,9 @@ test( "Standalone - Default exec", async function( assert ) {
 
 	// resolve
 
-	this.whichFallbackStub.returns( "C:\\livestreamer\\livestreamer.exe" );
+	this.whichFallbackStub.returns( "C:\\streamlink\\streamlinkw.exe" );
 	const expected = {
-		exec: "C:\\livestreamer\\livestreamer.exe",
+		exec: "C:\\streamlink\\streamlinkw.exe",
 		params: null,
 		env: null
 	};
@@ -384,16 +384,16 @@ test( "Standalone - Custom exec", async function( assert ) {
 	const error = new Error( "Executables were not found" );
 	let providerUserData;
 
-	this.provider = "livestreamer-standalone";
+	this.provider = "streamlinkw";
 	this.platform = "win32";
 	this.config = {
 		[ this.provider ]: {
 			exec: {
-				[ this.platform ]: "livestreamer.exe"
+				[ this.platform ]: "streamlinkw.exe"
 			},
 			fallback: {
 				[ this.platform ]: [
-					"C:\\livestreamer"
+					"C:\\streamlink"
 				]
 			}
 		}
@@ -404,7 +404,7 @@ test( "Standalone - Custom exec", async function( assert ) {
 
 	// reject
 
-	providerUserData = { exec: "C:\\non-existing\\livestreamer.exe" };
+	providerUserData = { exec: "C:\\non-existing\\streamlinkw.exe" };
 	this.whichFallbackStub.throws( error );
 
 	await assert.rejects(
