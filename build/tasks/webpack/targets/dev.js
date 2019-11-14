@@ -1,5 +1,5 @@
 module.exports = {
-	devtool: "source-map",
+	devtool: "inline-source-map",
 
 	output: {
 		path: "<%= dir.tmp_dev %>"
