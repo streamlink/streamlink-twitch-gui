@@ -109,6 +109,13 @@ test( "Spawn error", async function( assert ) {
 	);
 	assert.notOk( this.childKillSpy.called, "Doesn't unnecessarily kill child on initial error" );
 
+	// don't create a childprocess instance
+	this.spawnStub.throws( new Error( "fail2" ) );
+	await assert.rejects(
+		this.validateProvider( {}, { type: "streamlink", flavor: "default" } ),
+		new Error( "fail2" ),
+		"Rejects on thrown error"
+	);
 });
 
 

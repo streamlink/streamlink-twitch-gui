@@ -81,7 +81,7 @@ export default async function( execObj, providerConfData ) {
 		setTimeout( () => reject( new Error( "Timeout" ) ), validationTimeout );
 	})
 		.finally( () => {
-			if ( !child.killed ) {
+			if ( child && !child.killed ) {
 				child.kill( "SIGKILL" );
 				child = null;
 			}
