@@ -194,7 +194,11 @@ player:
                 title:
                     title: Titre de la fenêtre du lecteur
                     description: Afficher le nom de la chaîne, le nom du jeu joué et le titre du stream.
-                    checkbox: Définir un titre personnalisé
+                    checkbox: Définir un titre de fenêtre personnalisé
+                media-title:
+                    title: Titre du média
+                    description: Afficher le nom de la chaîne, le nom du jeu joué et le titre du stream.
+                    checkbox: Définir un titre de média personnalisé
                 minimal:
                     title: Disposition
                     description: Ne montrez pas les décorations des fenêtres des joueurs..

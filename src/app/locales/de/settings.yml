@@ -194,7 +194,11 @@ player:
                 title:
                     title: Player Fenstertitel
                     description: Zeige den Kanalnamen, das gespielte Spiel und den Streamtitel.
-                    checkbox: Setze einen benutzerdefinierten Titel
+                    checkbox: Setze einen benutzerdefinierten Fenstertitel
+                media-title:
+                    title: Medientitel
+                    description: Zeige den Kanalnamen, das gespielte Spiel und den Streamtitel.
+                    checkbox: Setze einen benutzerdefinierten Medientitel
                 minimal:
                     title: Layout
                     description: Verstecke Fensterdekorationen des Players.

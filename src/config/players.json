@@ -99,6 +99,13 @@
 				"args": "--title \"$>{name} - {game} - {status}\""
 			},
 			{
+				"name": "media-title",
+				"icon": "fa-file-video-o",
+				"type": "boolean",
+				"default": true,
+				"args": "--force-media-title \"{name} - {game} - {status}\""
+			},
+			{
 				"name": "minimal",
 				"icon": "fa-square-o",
 				"type": "boolean",

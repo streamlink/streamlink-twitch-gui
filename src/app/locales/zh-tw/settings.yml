@@ -190,7 +190,11 @@ player:
                 title:
                     title: 播放器視窗標題
                     description: 顯示頻道名稱、遊戲名稱及實況名稱於標題
-                    checkbox: 設定標題
+                    checkbox: 設定視窗標題
+                media-title:
+                    title: 媒體標題
+                    description: 顯示頻道名稱、遊戲名稱及實況名稱於標題
+                    checkbox: 設置媒體標題
                 minimal:
                     title: 播放器排版
                     description: 不要顯示播放器的裝飾

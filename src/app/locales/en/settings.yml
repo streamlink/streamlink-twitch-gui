@@ -194,7 +194,11 @@ player:
                 title:
                     title: Player window title
                     description: Show the channel name, game being played and stream title.
-                    checkbox: Set custom title
+                    checkbox: Set custom window title
+                media-title:
+                    title: Media title
+                    description: Show the channel name, game being played and stream title.
+                    checkbox: Set custom media title
                 minimal:
                     title: Layout
                     description: Don't show player window decorations.
