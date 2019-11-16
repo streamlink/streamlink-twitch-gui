@@ -1,12 +1,9 @@
-/**
- * @returns {Promise}
- */
-module.exports = function( grunt, options, cdp, isCoverage ) {
+module.exports = function( grunt, options, cdp ) {
 	const UUID = `qunit_${Date.now()}_${Math.random().toString( 36 ).substring( 2, 15 )}`;
-	const consoleMethod = "info";
+	const METHOD = "info";
 
 
-	function promiseQUnitBridge( resolve, reject ) {
+	return new Promise( ( resolve, reject ) => {
 		let started = false;
 		let done = false;
 
@@ -17,6 +14,7 @@ module.exports = function( grunt, options, cdp, isCoverage ) {
 		// wait X seconds for all tests to finish
 		let testTimeout;
 
+		const { hasOwnProperty } = {};
 		const failures = [];
 
 		function onBegin() {
@@ -50,8 +48,9 @@ module.exports = function( grunt, options, cdp, isCoverage ) {
 			}
 		}
 
-		function onDone({ failed, passed, total, runtime, coverage }) {
+		function onDone({ failed, passed, total, runtime }) {
 			done = true;
+			cdp.off( "Runtime.consoleAPICalled", onConsole );
 
 			if ( testTimeout ) {
 				clearTimeout( testTimeout );
@@ -68,7 +67,7 @@ module.exports = function( grunt, options, cdp, isCoverage ) {
 				} else if ( total > 0 ) {
 					grunt.log.ok( `${total} assertions passed (${runtime}ms)` );
 				}
-				resolve( coverage );
+				resolve();
 			} else {
 				grunt.log.warn( `${failed}/${total} assertions failed (${runtime}ms)` );
 				reject();
@@ -83,17 +82,18 @@ module.exports = function( grunt, options, cdp, isCoverage ) {
 		};
 
 		// listen for qunit messages
-		cdp.on( "Runtime.consoleAPICalled", obj => {
-			if ( done || !obj || !obj.type || obj.type !== consoleMethod ) { return; }
+		function onConsole( obj ) {
+			if ( done || !obj || !obj.type || obj.type !== METHOD ) { return; }
 			const params = obj.args;
 			if ( !params || params.length !== 3 || params[ 0 ].value !== UUID ) { return; }
 			const event = params[ 1 ].value;
 			const data = JSON.parse( params[ 2 ].value );
 
-			if ( eventCallbacks[ event ] ) {
+			if ( hasOwnProperty.call( eventCallbacks, event ) ) {
 				eventCallbacks[ event ]( data );
 			}
-		});
+		}
+		cdp.on( "Runtime.consoleAPICalled", onConsole );
 
 
 		/*
@@ -115,12 +115,7 @@ module.exports = function( grunt, options, cdp, isCoverage ) {
 				"begin",
 				"done"
 			].forEach( callback => {
-				QUnit[ callback ]( callback !== "done"
-					? data => logMessage( callback, data )
-					: data => logMessage( callback, Object.assign( data, {
-						coverage: window.__coverage__
-					} ) )
-				);
+				QUnit[ callback ]( data => logMessage( callback, data ) );
 			});
 
 			QUnit.start();
@@ -130,7 +125,7 @@ module.exports = function( grunt, options, cdp, isCoverage ) {
 			"(function() {",
 			setupQUnit
 				.toString()
-				.replace( "%METHOD%", consoleMethod )
+				.replace( "%METHOD%", METHOD )
 				.replace( "%UUID%", UUID ),
 			"if ( global._setupQUnitBridge ) {",
 			"setupQUnit( global._setupQUnitBridge );",
@@ -141,51 +136,9 @@ module.exports = function( grunt, options, cdp, isCoverage ) {
 		].join( "\n" );
 
 		// setup & start QUnit
-		cdp.send( "Runtime.evaluate", { expression: expression } )
+		cdp.send( "Runtime.evaluate", { expression } )
 			.then( () => {
 				grunt.log.debug( "QUnit test reporter injected and QUnit started" );
 			});
-	}
-
-
-	function processCoverage( report ) {
-		if ( !isCoverage ) {
-			return;
-		}
-
-		if ( typeof report !== "object" ) {
-			throw new Error( "Could not read coverage report" );
-		}
-
-		grunt.log.writeln( "" );
-		grunt.log.ok( "Processing coverage data..." );
-
-		const dir = grunt.config( "dir.tmp_coverage" );
-		const watermarks = grunt.config( "coverage.watermarks" );
-		const reporters = grunt.config( "coverage.reporters" );
-
-		const libCoverage = require( "istanbul-lib-coverage" );
-		const libReport = require( "istanbul-lib-report" );
-		const libSourceMaps = require( "istanbul-lib-source-maps" );
-		const reports = require( "istanbul-reports" );
-
-		const map = libCoverage.createCoverageMap( report );
-		const sourceMapCache = libSourceMaps.createSourceMapStore();
-		map.data = sourceMapCache.transformCoverage(
-			libCoverage.createCoverageMap( map.data )
-		).map.data;
-		const tree = libReport.summarizers.pkg( map );
-		const context = libReport.createContext({ dir, watermarks });
-
-		reporters.forEach( ({ name, options }) => {
-			const report = reports.create( name, options );
-			tree.visit( report, context );
-			grunt.log.ok( `Coverage reporter run: ${name}` );
-		});
-	}
-
-
-	return cdp.send( "Runtime.enable" )
-		.then( () => new Promise( promiseQUnitBridge ) )
-		.then( processCoverage );
+	});
 };

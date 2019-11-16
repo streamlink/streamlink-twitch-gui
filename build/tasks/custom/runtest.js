@@ -1,6 +1,7 @@
 const NwBuilder = require( "nw-builder" );
-const cdpConnection = require( "../common/cdp/cdpConnection" );
-const cdpTestReporterQUnit = require( "../common/cdp/cdpTestReporterQUnit" );
+const cdpConnect = require( "../common/cdp/connect" );
+const cdpQUnit = require( "../common/cdp/qunit" );
+const cdpCoverage = require( "../common/cdp/coverage" );
 
 const nwjsTaskOptions = require( "../configs/nwjs" ).options;
 const currentPlatform = require( "../common/platforms" ).getPlatforms( [] );
@@ -13,10 +14,15 @@ module.exports = function( grunt ) {
 	grunt.registerTask( task, descr, function() {
 		const done = this.async();
 		const options = this.options({
+			host: "localhost",
+			port: 8000,
+			connectAttempts: 3,
+			connectDelay: 1000,
 			startTimeout: 10000,
 			testTimeout: 300000,
-			host: "localhost",
-			port: 8000
+			coverageAttempts: 3,
+			coverageDelay: 1000,
+			coverageTimeout: 5000
 		});
 		const isCoverage = !!this.flags.coverage;
 
@@ -72,12 +78,15 @@ module.exports = function( grunt ) {
 				});
 
 				// connect to NW.js
-				cdpConnection( options )
-					.then( cdp => {
+				cdpConnect( options )
+					.then( async cdp => {
 						grunt.log.debug( `Connected to ${options.host}:${options.port}` );
 
 						// set up and start QUnit
-						return cdpTestReporterQUnit( grunt, options, cdp, isCoverage );
+						await cdpQUnit( grunt, options, cdp );
+						if ( isCoverage ) {
+							await cdpCoverage( grunt, options, cdp );
+						}
 					})
 					// resolve on a successful test run
 					.then( resolve, reject );
