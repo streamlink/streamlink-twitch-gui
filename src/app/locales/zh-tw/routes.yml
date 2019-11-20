@@ -139,14 +139,6 @@ user:
         header: 追蹤中實況
         empty:
             text: 目前無追蹤中實況
-            hosted: 觀看追蹤頻道正在轉播中的實況
-            featured: 觀看目前的精選實況
-            streams: 觀看熱門實況
-    hostedStreams:
-        header: 轉播實況
-        empty:
-            text: 目前無轉播實況
-            followed: 觀看追蹤中實況
             featured: 觀看目前的精選實況
             streams: 觀看熱門實況
     followedChannels:

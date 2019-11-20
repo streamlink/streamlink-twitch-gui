@@ -18,7 +18,6 @@ const routeHotkeys = {
 	"games": "2",
 	"streams": "4",
 	"user.followedStreams": "6",
-	"user.hostedStreams": "7",
 	"user.followedChannels": "8",
 	"user.followedGames": "9"
 };

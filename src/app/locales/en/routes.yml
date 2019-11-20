@@ -139,14 +139,6 @@ user:
         header: Followed Streams
         empty:
             text: The returned list of followed streams is empty.
-            hosted: Watch streams being hosted by your followed channels
-            featured: Watch currently featured streams
-            streams: Watch top streams
-    hostedStreams:
-        header: Hosted Streams
-        empty:
-            text: The returned list of hosted streams is empty.
-            followed: Watch your followed streams
             featured: Watch currently featured streams
             streams: Watch top streams
     followedChannels:

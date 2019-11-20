@@ -13,9 +13,6 @@
 	title=(unless expanded (unless infoTitle (if channel.status channel.status "") (if channel.game channel.game "")) "")
 	action=(action "collapse")
 }}
-{{#if host}}
-<header><div><i class="fa fa-reply icon-host"></i>{{#link-to "channel" host.id title=(t "components.stream-item.hosted-by" name=host.display_name) bubbles=false}}{{host.display_name}}{{/link-to}}</div></header>
-{{/if}}
 <footer class="{{if (bool-or infoTitle showGame) 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
 <div class="bottom {{unless (bool-or infoTitle showGame) 'hidden'}}">
 <div class="info-game">{{#if channel.game}}<i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}{{/if}}</div>

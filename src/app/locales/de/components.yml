@@ -27,7 +27,6 @@ main-menu:
     my:
         header: Meine
         live-streams: Live Streams
-        hosted-streams: Hosts
         channels: Kanäle
         games: Spiele
     misc:
@@ -74,7 +73,6 @@ settings-submit:
 share-channel:
     title: URL des Kanals in die Zwischenablage kopieren
 stream-item:
-    hosted-by: "gehosted von {{name}}"
     fps: "{{fps}} fps"
     details:
         show: Streamdetails anzeigen

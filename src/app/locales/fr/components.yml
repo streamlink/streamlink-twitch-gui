@@ -27,7 +27,6 @@ main-menu:
     my:
         header: Mes
         live-streams: Streams live
-        hosted-streams: Streams Hébergés
         channels: Chaînes
         games: Jeux
     misc:
@@ -74,7 +73,6 @@ settings-submit:
 share-channel:
     title: Copier l'url de la chaîne dans le presse-papiers
 stream-item:
-    hosted-by: "hébérgé par {{name}}"
     fps: "{{fps}} fps"
     details:
         show: Voir les détails du stream

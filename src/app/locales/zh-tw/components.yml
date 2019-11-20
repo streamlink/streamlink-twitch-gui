@@ -27,7 +27,6 @@ main-menu:
     my:
         header: 我的
         live-streams: 實況
-        hosted-streams: 轉播
         channels: 頻道
         games: 遊戲
     misc:
@@ -74,7 +73,6 @@ settings-submit:
 share-channel:
     title: 複製頻道網址
 stream-item:
-    hosted-by: "{{name}} 轉播中"
     fps: "{{fps}} fps"
     details:
         show: 顯示頻道資訊

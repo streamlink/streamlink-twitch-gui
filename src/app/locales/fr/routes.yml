@@ -139,15 +139,7 @@ user:
         header: Stream suivis
         empty:
             text: La liste retournée des streams est vide
-            hosted: Regarder les streams hébergés par les chaînes que vous suivez
             featured: Regarder les flux actuellement mis en avant
-            streams: Regarder les top streams
-    hostedStreams:
-        header: Streams hébergés
-        empty:
-            text: La liste retournée des streams hébergés est vide.
-            followed: Regardez vos chaînes suivies
-            featured: Regarder les streams actuellement mis en avant
             streams: Regarder les top streams
     followedChannels:
         header: Chaînes suivies
