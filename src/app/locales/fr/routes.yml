@@ -135,11 +135,6 @@ user:
                 first: Connectez-vous à votre compte Twitch.tv en utilisant un token d'accès.
                 second: "Assurez-vous qu'il correspond aux permissions suivantes :"
         fail: L'authentification a échoué. Veuillez réessayer.
-    subscriptions:
-        header: Abonnements
-        empty:
-            first: Vous n'avez aucun abonnement.
-            second: Soutenez directement les streameurs en vous abonnant à leur chaîne.
     followedStreams:
         header: Stream suivis
         empty:

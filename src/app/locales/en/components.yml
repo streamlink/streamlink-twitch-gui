@@ -26,7 +26,6 @@ main-menu:
         streams: Streams
     my:
         header: My
-        subscriptions: Subscriptions
         live-streams: Live Streams
         hosted-streams: Hosted Streams
         channels: Channels
@@ -85,25 +84,6 @@ stream-item:
 subscribe-channel:
     title-new: "Subscribe to {{name}} now"
     title-renew: "Renew subscription to {{name}}"
-subscription-item:
-    cancel: Cancel subscription
-    edit: Edit subscription
-    access:
-        # new Moment(subscription.access_end).format(...)
-        title: "LLLL"
-        ended: "Has ended"
-        # time = new Moment().to(subscription.access_end)
-        renews: "Will be renewed {{time}}"
-        # time = new Moment().to(subscription.access_end)
-        ends: "Will end {{time}}"
-    subscribed: You are subscribed
-    support: Directly supports the channel
-    # new Moment(subscription.created_at).format(...)
-    since: "[Since] LLLL"
-    duration:
-        one: Subscribed for one month
-        other: Subscribed for {{count}} months
-    no-emoticons: This channel doesn't have any emoticons (yet)
 team-item:
     created-at:
         title: "Date created"

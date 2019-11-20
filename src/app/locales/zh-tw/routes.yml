@@ -135,11 +135,6 @@ user:
                 first: 使用存取金鑰登入 Twitch.tv 帳號
                 second: "請確認金鑰擁有下列權限:"
         fail: 認證失敗，請重試
-    subscriptions:
-        header: 訂閱
-        empty:
-            first: 您目前無任何訂閱頻道
-            second: 訂閱頻道以直接支持實況主
     followedStreams:
         header: 追蹤中實況
         empty:

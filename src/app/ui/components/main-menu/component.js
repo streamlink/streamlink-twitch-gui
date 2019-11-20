@@ -17,7 +17,6 @@ const routeHotkeys = {
 	"featured": "1",
 	"games": "2",
 	"streams": "4",
-	"user.subscriptions": "5",
 	"user.followedStreams": "6",
 	"user.hostedStreams": "7",
 	"user.followedChannels": "8",

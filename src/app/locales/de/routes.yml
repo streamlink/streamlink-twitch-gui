@@ -135,11 +135,6 @@ user:
                 first: Logge dich auf deinem Twitch.tv Account mit einem Zugangscode ein.
                 second: "Stell sicher, dass er mit folgenen Berechtigungen übereinstimmt:"
         fail: Authentifizierung fehlgeschlagen. Bitte noch einmal versuchen.
-    subscriptions:
-        header: Abonnements
-        empty:
-            first: Du hast zur Zeit keine Abonnements.
-            second: Unterstütze Broadcaster durch das Abonnieren ihrer Kanäle.
     followedStreams:
         header: Gefolgte Streams
         empty:

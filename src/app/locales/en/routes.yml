@@ -135,11 +135,6 @@ user:
                 first: Log in to your Twitch.tv account by using an access token.
                 second: "Make sure that it matches the following permissions:"
         fail: Authentication failed. Please try again.
-    subscriptions:
-        header: Subscriptions
-        empty:
-            first: You don't have any channel subscriptions.
-            second: Directly support broadcasters by subscribing to their channel.
     followedStreams:
         header: Followed Streams
         empty:
