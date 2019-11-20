@@ -17,9 +17,6 @@ export default EmberRouter.extend().map(function() {
 		this.route( "auth" );
 		this.route( "followedStreams" );
 		this.route( "followedChannels" );
-		this.route( "followedGames", function() {
-			this.route( "all" );
-		});
 	});
 	this.route( "team", { path: "/team/:team" }, function() {
 		this.route( "members" );

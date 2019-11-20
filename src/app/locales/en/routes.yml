@@ -150,19 +150,6 @@ user:
             sort-desc: Sort in descending order
             sort-asc: Sort in ascending order
         empty: The returned list of followed channels is empty.
-    followedGames:
-        header: Followed Games
-        menu:
-            live: Live Games
-            all: All Games
-        live:
-            empty:
-                text: The returned list of followed live games is empty.
-                games: Watch top games
-        all:
-            empty:
-                text: The returned list of followed games is empty.
-                games: Watch top games
 search:
     header:
         all: All search results

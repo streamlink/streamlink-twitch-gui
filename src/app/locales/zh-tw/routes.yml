@@ -150,19 +150,6 @@ user:
             sort-desc: 降冪排序
             sort-asc: 升冪排序
         empty: 目前無追隨頻道
-    followedGames:
-        header: 追隨的遊戲
-        menu:
-            live: 實況中遊戲
-            all: 所有遊戲
-        live:
-            empty:
-                text: 目前無追隨的實況中遊戲
-                games: 觀看熱門實況
-        all:
-            empty:
-                text: 目前無追隨的遊戲
-                games: 觀看熱門實況
 search:
     header:
         all: "搜尋結果: "

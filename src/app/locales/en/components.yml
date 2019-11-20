@@ -28,7 +28,6 @@ main-menu:
         header: My
         live-streams: Live Streams
         channels: Channels
-        games: Games
     misc:
         header: Misc
         settings: Settings

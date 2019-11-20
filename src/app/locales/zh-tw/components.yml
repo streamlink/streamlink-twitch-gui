@@ -28,7 +28,6 @@ main-menu:
         header: 我的
         live-streams: 實況
         channels: 頻道
-        games: 遊戲
     misc:
         header: 其他
         settings: 設定

@@ -150,19 +150,6 @@ user:
             sort-desc: In absteigender Reihe sortieren
             sort-asc: In aufsteigender Reihe sortieren
         empty: Die Liste der gefolgten Kanäle ist leer.
-    followedGames:
-        header: Gefolgte Spiele
-        menu:
-            live: Live Spiele
-            all: Alle Spiele
-        live:
-            empty:
-                text: Die Liste der gefolgten live Spiele ist leer.
-                games: Top-Spiele anschauen
-        all:
-            empty:
-                text: Die Liste aller gefolgten Spiele ist leer.
-                games: Top-Spiele anschauen
 search:
     header:
         all: Alle Suchergebnisse

@@ -18,8 +18,7 @@ const routeHotkeys = {
 	"games": "2",
 	"streams": "4",
 	"user.followedStreams": "6",
-	"user.followedChannels": "8",
-	"user.followedGames": "9"
+	"user.followedChannels": "8"
 };
 
 /** @this {MainMenuComponent} */

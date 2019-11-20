@@ -150,19 +150,6 @@ user:
             sort-desc: Trier par ordre décroissant
             sort-asc: Trier par ordre croissant
         empty: La liste retournée des chînes suivie est vide.
-    followedGames:
-        header: Jeux suivis
-        menu:
-            live: Jeux en live
-            all: Tous les jeux
-        live:
-            empty:
-                text: La liste retournée de tous les jeux en live est vide.
-                games: Regarder les top jeux
-        all:
-            empty:
-                text: La liste retournée des jeux suivis est vide.
-                games: Regarder les top jeux
 search:
     header:
         all: Tous les résultat de la recherche
