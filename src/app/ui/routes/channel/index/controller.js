@@ -12,7 +12,6 @@ export default Controller.extend({
 
 	stream: alias( "model.stream" ),
 	channel: alias( "model.channel" ),
-	panels: alias( "model.panels" ),
 
 	age: computed( "channel.created_at", function() {
 		const createdAt = get( this, "channel.created_at" );
