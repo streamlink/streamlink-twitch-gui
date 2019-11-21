@@ -6,9 +6,6 @@ import layout from "./template.hbs";
 import "./styles.less";
 
 
-const { isArray } = Array;
-
-
 const routeHotkeys = {
 	"about": "F1",
 	"watching": "F10",
@@ -16,9 +13,9 @@ const routeHotkeys = {
 	"settings": "F12",
 	"featured": "1",
 	"games": "2",
-	"streams": "4",
-	"user.followedStreams": "6",
-	"user.followedChannels": "8"
+	"streams": "3",
+	"user.followedStreams": "4",
+	"user.followedChannels": "5"
 };
 
 /** @this {MainMenuComponent} */
@@ -77,7 +74,7 @@ export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
 		},
 		...Object.keys( routeHotkeys ).map( route => ({
 			key: routeHotkeys[ route ],
-			force: !isArray( routeHotkeys[ route ] ),
+			force: true,
 			/** @this {MainMenuComponent} */
 			action() {
 				this.router.transitionTo( route );
