@@ -124,18 +124,6 @@
 {{/settings-row}}
 
 {{#settings-row
-	(t "settings.streaming.oauth.title")
-	(t "settings.streaming.oauth.description" provider=providerName)
-	icon="fa-sign-in"
-	documentation="--twitch-oauth-token"
-}}
-	{{check-box
-		(t "settings.streaming.oauth.checkbox")
-		checked=model.streaming.oauth
-	}}
-{{/settings-row}}
-
-{{#settings-row
 	(t "settings.streaming.disable-ads.title")
 	(t "settings.streaming.disable-ads.description")
 	icon="fa-money"

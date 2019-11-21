@@ -29,7 +29,6 @@ export default Fragment.extend({
 	player: attr( "string", { defaultValue: "default" } ),
 	players: fragment( "settingsStreamingPlayers", { defaultValue: {} } ),
 
-	oauth: attr( "boolean", { defaultValue: true } ),
 	disable_ads: attr( "boolean", { defaultValue: false } ),
 	player_input: attr( "string", { defaultValue: ATTR_STREAMING_PLAYER_INPUT_STDIN } ),
 	player_no_close: attr( "boolean", { defaultValue: false } ),

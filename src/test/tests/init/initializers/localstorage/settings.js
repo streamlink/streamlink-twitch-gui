@@ -56,7 +56,10 @@ test( "Removes old attributes", function( assert ) {
 			low: "qux",
 			audio: "quux"
 		},
-		chat_command: "foobar"
+		chat_command: "foobar",
+		streaming: {
+			oauth: true
+		}
 	};
 	updateSettings( a );
 	assert.propEqual(

@@ -63,14 +63,6 @@ export const parameters = [
 		"stream.settings.streaming.player_no_close"
 	),
 	new Parameter(
-		"--twitch-oauth-token",
-		[
-			"stream.session.isLoggedIn",
-			"stream.settings.streaming.oauth"
-		],
-		"stream.session.access_token"
-	),
-	new Parameter(
 		"--twitch-disable-ads",
 		"stream.settings.streaming.disable_ads"
 	),

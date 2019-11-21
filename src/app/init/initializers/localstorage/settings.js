@@ -29,6 +29,8 @@ function removeOldData( settings ) {
 		if ( typeof streaming.qualitiesOld === "object" ) {
 			delete streaming.qualitiesOld;
 		}
+		// remove old attributes
+		delete streaming[ "oauth" ];
 	}
 
 	// remove old livestreamer data

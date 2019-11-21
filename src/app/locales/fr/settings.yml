@@ -117,10 +117,6 @@ streaming:
         description: Après la fin du stream.
         notes: Le lecteur lui-même peut empêcher {{provider}}} de le fermer. Veuillez également consulter les paramètres du lecteur.
         checkbox: Ne pas fermer la fenêtre du lecteur
-    oauth:
-        title: Login Twitch.tv
-        description: Autoriser {{{provider}}} à utiliser le token oauth Twitch.tv  lorsque vous êtes connecté.
-        checkbox: S'authentifier lors du lancement d'un stream
     disable-ads:
         title: Publicité
         description: Ceci laissera le stream se figer pendant que la chaîne affiche des publicités. Voir le wiki pour plus d'informations.
