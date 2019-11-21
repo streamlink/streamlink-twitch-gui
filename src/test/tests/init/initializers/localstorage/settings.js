@@ -333,8 +333,7 @@ test( "Fixes attributes", function( assert ) {
 	const a = {
 		gui: {
 			minimize: false,
-			minimizetotray: 1,
-			homepage: "/user/following"
+			minimizetotray: 1
 		},
 		streaming: {
 			quality: 1
@@ -362,8 +361,7 @@ test( "Fixes attributes", function( assert ) {
 		{
 			gui: {
 				minimize: 0,
-				minimizetotray: true,
-				homepage: "/user/followedStreams"
+				minimizetotray: true
 			},
 			streaming: {
 				quality: "high",
@@ -434,45 +432,36 @@ test( "Fixes attributes", function( assert ) {
 		"Fixes old player preset structure"
 	);
 
-	const c = {
-		gui: {
-			homepage: "/communities"
-		}
-	};
-	updateSettings( c );
-	assert.propEqual(
-		c,
-		{
+	const guiHomepages = [
+		[ "/communities", "/" ],
+		[ "/communities/all", "/" ],
+		[ "/user/following", "/user/followedStreams" ],
+		[ "/user/subscriptions", "/user/followedStreams" ],
+		[ "/user/hostedStreams", "/user/followedStreams" ],
+		[ "/user/followedGames", "/user/followedStreams" ],
+		[ "/user/followedGames/all", "/user/followedStreams" ]
+	];
+	for ( const [ hpOld, hpNew ] of guiHomepages ) {
+		const data = {
 			gui: {
-				homepage: "/"
+				homepage: hpOld
+			}
+		};
+		updateSettings( data );
+		assert.propEqual(
+			data,
+			{
+				gui: {
+					homepage: hpNew
+				},
+				streaming: {},
+				streams: {},
+				chat: {},
+				notification: {}
 			},
-			streaming: {},
-			streams: {},
-			chat: {},
-			notification: {}
-		},
-		"Fixes homepage of removed communities route"
-	);
-
-	const d = {
-		gui: {
-			homepage: "/communities/all"
-		}
-	};
-	updateSettings( d );
-	assert.propEqual(
-		d,
-		{
-			gui: {
-				homepage: "/"
-			},
-			streaming: {},
-			streams: {},
-			chat: {},
-			notification: {}
-		},
-		"Fixes homepage of removed communities route"
-	);
+			`Fixes homepage of old route ${hpOld}`
+		);
+	}
 
 	const guiDefaultTheme = {
 		gui: {
