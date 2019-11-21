@@ -9,6 +9,8 @@ For Streamlink Twitch GUI, this means that a couple of features had to be remove
 
 Support for Livestreamer has also finally been removed. If you were still using Livestreamer, you will have to [install and use Streamlink now](https://github.com/streamlink/streamlink-twitch-gui/wiki/Installation).
 
+- :warning: Set Streamlink's version requirement to `1.3.0`.  
+  Upgrade to the latest Streamlink version [here](https://streamlink.github.io/install.html) or see the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
 - Removed everything that was using Twitch's old private API. #684
   - Removed channel panels.
   - Removed subscriptions list.
