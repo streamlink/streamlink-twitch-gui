@@ -1,9 +1,0 @@
-{{#if panel.title}}
-{{#selectable-text tagName="h3" class="title"}}{{#if (bool-and panel.link (bool-not panel.image))}}{{#external-link url=panel.link}}{{panel.title}}{{/external-link}}{{else}}{{panel.title}}{{/if}}{{/selectable-text}}
-{{/if}}
-{{#if panel.image}}
-<img class="{{if panel.link 'withLink'}}" src="{{panel.image}}" title="{{if panel.link panel.link}}" {{action "openBrowser" panel.link}}>
-{{/if}}
-{{#if panel.html_description}}
-{{#selectable-text class="description"}}{{{panel.html_description}}}{{/selectable-text}}
-{{/if}}

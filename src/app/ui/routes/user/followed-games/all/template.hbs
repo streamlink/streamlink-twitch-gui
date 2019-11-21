@@ -1,8 +1,0 @@
-{{#content-list model as |item isNewItem isDuplicateItem|}}
-{{game-item content=item gamePath="game" isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
-{{else}}
-<p>{{t "routes.user.followedGames.all.empty.text"}}</p>
-<ul class="fa-ul list-empty">
-<li>{{#link-to "games"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.user.followedGames.all.empty.games"}}{{/link-to}}</li>
-</ul>
-{{/content-list}}

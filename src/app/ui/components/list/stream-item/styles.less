@@ -164,10 +164,6 @@
 				margin-left: @icon-offset;
 				text-align: center;
 				text-indent: -.05em;
-
-				&.icon-host {
-					line-height: 1.5;
-				}
 			}
 
 			a,
@@ -305,14 +301,9 @@
 	// fix play icon position
 	&.show-game,
 	&.info-title {
-		&:not(.show-host) > .preview::after {
+		> .preview::after {
 			top: calc( 50% - .75rem );
 		}
-	}
-
-	// fix play icon size
-	&.show-host > .preview::after {
-		font-size: 5rem;
 	}
 
 	// show the right info in the bottom bar

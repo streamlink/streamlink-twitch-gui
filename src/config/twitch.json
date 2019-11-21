@@ -7,9 +7,7 @@
 	},
 	"emotes-url": "https://twitchemotes.com/channel/{channel}",
 	"subscription": {
-		"create-url": "https://www.twitch.tv/{channel}/subscribe",
-		"edit-url": "https://www.twitch.tv/products/{channel}/ticket/edit",
-		"cancel-url": "https://www.twitch.tv/products/{channel}/ticket/edit?cancel_and_refund=true"
+		"create-url": "https://www.twitch.tv/{channel}/subscribe"
 	},
 	"oauth": {
 		"server-port": 65432,

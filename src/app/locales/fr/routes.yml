@@ -135,24 +135,11 @@ user:
                 first: Connectez-vous à votre compte Twitch.tv en utilisant un token d'accès.
                 second: "Assurez-vous qu'il correspond aux permissions suivantes :"
         fail: L'authentification a échoué. Veuillez réessayer.
-    subscriptions:
-        header: Abonnements
-        empty:
-            first: Vous n'avez aucun abonnement.
-            second: Soutenez directement les streameurs en vous abonnant à leur chaîne.
     followedStreams:
         header: Stream suivis
         empty:
             text: La liste retournée des streams est vide
-            hosted: Regarder les streams hébergés par les chaînes que vous suivez
             featured: Regarder les flux actuellement mis en avant
-            streams: Regarder les top streams
-    hostedStreams:
-        header: Streams hébergés
-        empty:
-            text: La liste retournée des streams hébergés est vide.
-            followed: Regardez vos chaînes suivies
-            featured: Regarder les streams actuellement mis en avant
             streams: Regarder les top streams
     followedChannels:
         header: Chaînes suivies
@@ -163,19 +150,6 @@ user:
             sort-desc: Trier par ordre décroissant
             sort-asc: Trier par ordre croissant
         empty: La liste retournée des chînes suivie est vide.
-    followedGames:
-        header: Jeux suivis
-        menu:
-            live: Jeux en live
-            all: Tous les jeux
-        live:
-            empty:
-                text: La liste retournée de tous les jeux en live est vide.
-                games: Regarder les top jeux
-        all:
-            empty:
-                text: La liste retournée des jeux suivis est vide.
-                games: Regarder les top jeux
 search:
     header:
         all: Tous les résultat de la recherche

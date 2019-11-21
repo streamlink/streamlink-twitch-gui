@@ -135,23 +135,10 @@ user:
                 first: 使用存取金鑰登入 Twitch.tv 帳號
                 second: "請確認金鑰擁有下列權限:"
         fail: 認證失敗，請重試
-    subscriptions:
-        header: 訂閱
-        empty:
-            first: 您目前無任何訂閱頻道
-            second: 訂閱頻道以直接支持實況主
     followedStreams:
         header: 追蹤中實況
         empty:
             text: 目前無追蹤中實況
-            hosted: 觀看追蹤頻道正在轉播中的實況
-            featured: 觀看目前的精選實況
-            streams: 觀看熱門實況
-    hostedStreams:
-        header: 轉播實況
-        empty:
-            text: 目前無轉播實況
-            followed: 觀看追蹤中實況
             featured: 觀看目前的精選實況
             streams: 觀看熱門實況
     followedChannels:
@@ -163,19 +150,6 @@ user:
             sort-desc: 降冪排序
             sort-asc: 升冪排序
         empty: 目前無追隨頻道
-    followedGames:
-        header: 追隨的遊戲
-        menu:
-            live: 實況中遊戲
-            all: 所有遊戲
-        live:
-            empty:
-                text: 目前無追隨的實況中遊戲
-                games: 觀看熱門實況
-        all:
-            empty:
-                text: 目前無追隨的遊戲
-                games: 觀看熱門實況
 search:
     header:
         all: "搜尋結果: "

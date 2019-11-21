@@ -24,13 +24,10 @@ main-menu:
         featured: En avant
         games: Jeux
         streams: Streams
-    my:
-        header: Mes
-        subscriptions: Abonnements
-        live-streams: Streams live
-        hosted-streams: Streams Hébergés
+    followed:
+        header: Suivis
+        streams: Streams
         channels: Chaînes
-        games: Jeux
     misc:
         header: Divers
         settings: Paramètres
@@ -75,7 +72,6 @@ settings-submit:
 share-channel:
     title: Copier l'url de la chaîne dans le presse-papiers
 stream-item:
-    hosted-by: "hébérgé par {{name}}"
     fps: "{{fps}} fps"
     details:
         show: Voir les détails du stream
@@ -85,25 +81,6 @@ stream-item:
 subscribe-channel:
     title-new: "S'abonner à {{name}} maintenant"
     title-renew: "Renouveler l'abonnement à {{name}}"
-subscription-item:
-    cancel: Annuler l'abonnement
-    edit: Modifier l'abonnement
-    access:
-        # new Moment(subscription.access_end).format(...)
-        title: "LLLL"
-        ended: "Est terminé"
-        # time = new Moment().to(subscription.access_end)
-        renews: "Sera renouvelé {{time}}"
-        # time = new Moment().to(subscription.access_end)
-        ends: "Se terminera {{time}}"
-    subscribed: Vou êtes abonné
-    support: Soutient directement le créateur
-    # new Moment(subscription.created_at).format(...)
-    since: "[Depuis] LLLL"
-    duration:
-        one: Abonné pour un mois
-        other: Abonné pour {{count}} mois
-    no-emoticons: Cette chaîne n'a pas (encore) d'émoticons
 team-item:
     created-at:
         title: "Date de création"

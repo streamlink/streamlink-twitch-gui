@@ -129,7 +129,12 @@ function fixAttributes( settings ) {
 		gui.minimizetotray = !!gui.minimizetotray;
 	}
 	if ( hasOwnProperty.call( gui, "homepage" ) ) {
-		if ( gui.homepage === "/user/following" ) {
+		if (
+			   gui.homepage === "/user/following"
+			|| gui.homepage === "/user/subscriptions"
+			|| gui.homepage === "/user/hostedStreams"
+			|| /^\/user\/followedGames($|\/.*)/.test( gui.homepage )
+		) {
 			gui.homepage = "/user/followedStreams";
 		} else if ( /^\/communities($|\/.*)/.test( gui.homepage ) ) {
 			gui.homepage = "/";

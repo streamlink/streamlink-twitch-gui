@@ -135,23 +135,10 @@ user:
                 first: Log in to your Twitch.tv account by using an access token.
                 second: "Make sure that it matches the following permissions:"
         fail: Authentication failed. Please try again.
-    subscriptions:
-        header: Subscriptions
-        empty:
-            first: You don't have any channel subscriptions.
-            second: Directly support broadcasters by subscribing to their channel.
     followedStreams:
         header: Followed Streams
         empty:
             text: The returned list of followed streams is empty.
-            hosted: Watch streams being hosted by your followed channels
-            featured: Watch currently featured streams
-            streams: Watch top streams
-    hostedStreams:
-        header: Hosted Streams
-        empty:
-            text: The returned list of hosted streams is empty.
-            followed: Watch your followed streams
             featured: Watch currently featured streams
             streams: Watch top streams
     followedChannels:
@@ -163,19 +150,6 @@ user:
             sort-desc: Sort in descending order
             sort-asc: Sort in ascending order
         empty: The returned list of followed channels is empty.
-    followedGames:
-        header: Followed Games
-        menu:
-            live: Live Games
-            all: All Games
-        live:
-            empty:
-                text: The returned list of followed live games is empty.
-                games: Watch top games
-        all:
-            empty:
-                text: The returned list of followed games is empty.
-                games: Watch top games
 search:
     header:
         all: All search results

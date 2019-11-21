@@ -17,7 +17,6 @@ export default ListItemComponent.extend({
 	classNameBindings: [
 		":stream-item-component",
 		"showGame:show-game",
-		"host:show-host",
 		"settings.streams.show_flag:show-flag",
 		"settings.streams.show_info:show-info",
 		"infoGame:info-game",
