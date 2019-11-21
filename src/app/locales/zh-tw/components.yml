@@ -24,9 +24,9 @@ main-menu:
         featured: 精選
         games: 遊戲
         streams: 實況中
-    my:
-        header: 我的
-        live-streams: 實況
+    followed:
+        header: 追隨中
+        streams: 實況中
         channels: 頻道
     misc:
         header: 其他

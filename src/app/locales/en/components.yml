@@ -24,9 +24,9 @@ main-menu:
         featured: Featured
         games: Games
         streams: Streams
-    my:
-        header: My
-        live-streams: Live Streams
+    followed:
+        header: Followed
+        streams: Streams
         channels: Channels
     misc:
         header: Misc
