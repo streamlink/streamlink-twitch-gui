@@ -50,7 +50,7 @@ module.exports = function( grunt, options, cdp ) {
 
 		function onDone({ failed, passed, total, runtime }) {
 			done = true;
-			cdp.off( "Runtime.consoleAPICalled", onConsole );
+			cdp.removeListener( "Runtime.consoleAPICalled", onConsole );
 
 			if ( testTimeout ) {
 				clearTimeout( testTimeout );
