@@ -1,6 +1,31 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+This release mainly focuses on fixing the recent issues related to the [breaking changes of Twitch's API](https://github.com/streamlink/streamlink/issues/2680). Since the situation wasn't 100% clear for the first couple of days, we had to wait until we were able to make a proper decision.
+
+For Streamlink Twitch GUI, this means that a couple of features had to be removed, unfortunately. If Twitch decides to make the API endpoints available to third party app developers which were required by the removed features, I will be more than happy to re-implement them.
+
+Support for Livestreamer has also finally been removed. If you were still using Livestreamer, you will have to [install and use Streamlink now](https://github.com/streamlink/streamlink-twitch-gui/wiki/Installation).
+
+- Removed everything that was using Twitch's old private API. #684
+  - Removed channel panels.
+  - Removed subscriptions list.
+  - Removed hosted streams list.
+  - Removed followed games list and (un)follow game button.
+- Removed deprecated Livestreamer support. #667
+- Removed login sharing with Streamlink. #682
+- Added back automatic theme selection. #666
+- Added more fallback paths for VLC and MPV on macOS. #664
+- Added media title parameter to MPV player preset. #683
+- Upgraded NW.js to 0.42.3 (Chromium 78.0.3904.97 / NodeJS 13.1.0).
+- Updated donation links and texts.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.8.1...master)
+
+
 ## [v1.8.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.8.1) (2019-08-09)
 
 This is a critical bugfix release for the crashing Windows builds since v1.8.0 which downgrades the used NW.js version. See #656 for more information.
