@@ -8,12 +8,7 @@ import { twitch as twitchConfig } from "config";
 import qualities from "./-qualities";
 
 
-const {
-	"stream-url": twitchStreamUrl,
-	oauth: {
-		"client-id": clientId
-	}
-} = twitchConfig;
+const { "stream-url": twitchStreamUrl } = twitchConfig;
 
 
 const STATUS_PREPARING = 0;
@@ -79,9 +74,6 @@ export default Model.extend({
 	chat_open: attr( "boolean" ),
 	started: attr( "date" ),
 
-
-	// let Streamlink use the GUI's client-id
-	clientID: `Client-ID=${clientId}`,
 
 	// passthrough type (twitch streams are HLS)
 	playerInputPassthrough: "hls",

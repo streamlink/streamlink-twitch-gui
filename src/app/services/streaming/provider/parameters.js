@@ -23,11 +23,6 @@ export const parameters = [
 		"stream.customParameters"
 	),
 	new Parameter(
-		"--http-header",
-		null,
-		"stream.clientID"
-	),
-	new Parameter(
 		"--no-version-check"
 	),
 	new Parameter(
