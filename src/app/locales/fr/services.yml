@@ -1,7 +1,7 @@
 notification:
     dispatch:
         single: "{{name}} a commencé un stream"
-        group: Certain des chaînes que vous suivez ont commencé à stremer
+        group: Certaines des chaînes que vous suivez ont commencé à streamer
     status:
         disabled: Les notifications sur le Bureau sont désactivées
         enabled: Les notifications sur le Bureau sont activées
