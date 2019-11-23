@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.9.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.9.0) (2019-11-23)
 
 This release mainly focuses on fixing the recent issues related to the [breaking changes of Twitch's API](https://github.com/streamlink/streamlink/issues/2680). Since the situation wasn't 100% clear for the first couple of days, we had to wait until we were able to make a proper decision.
 
@@ -25,7 +25,7 @@ Support for Livestreamer has also finally been removed. If you were still using 
 - Updated donation links and texts.
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.8.1...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.8.1...v1.9.0)
 
 
 ## [v1.8.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.8.1) (2019-08-09)
