@@ -14,6 +14,7 @@ main:
     language:
         title: Language
         description: Select the GUI language.
+        notes: Do you speak another language? Help translating! See the wiki for more information.
         labels:
             auto: "System ({{label}})"
     advanced:
