@@ -14,6 +14,7 @@ main:
     language:
         title: 語系
         description: 設定介面語系
+        notes: 你會其他種語言嗎？請協助翻譯吧！詳情請參考 wiki 上的資訊
         labels:
             auto: "系統預設 ({{label}})"
     advanced:
