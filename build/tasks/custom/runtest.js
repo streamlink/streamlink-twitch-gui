@@ -20,8 +20,6 @@ module.exports = function( grunt ) {
 			connectDelay: 1000,
 			startTimeout: 10000,
 			testTimeout: 300000,
-			coverageAttempts: 3,
-			coverageDelay: 1000,
 			coverageTimeout: 5000
 		});
 		const isCoverage = !!this.flags.coverage;

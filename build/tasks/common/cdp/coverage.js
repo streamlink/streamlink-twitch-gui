@@ -1,6 +1,3 @@
-const retry = require( "./retry" );
-
-
 module.exports = async function( grunt, options, cdp ) {
 	const expression = "JSON.stringify(window.__coverage__)";
 
@@ -14,12 +11,16 @@ module.exports = async function( grunt, options, cdp ) {
 		let data;
 		try {
 			data = await cdp.send( "Runtime.evaluate", { expression } );
-			if ( !data || !data.result || data.result.type !== "string" || !data.result.value ) {
-				throw new Error();
+			if ( !data ) {
+				throw "No data returned";
+			} else if ( data.error ) {
+				throw data.error;
+			} else if ( !data.result || data.result.type !== "string" || !data.result.value ) {
+				throw "Missing result data";
 			}
 			data = JSON.parse( data.result.value );
-		} catch ( e ) {
-			throw new Error( "Could not read coverage report" );
+		} catch ( err ) {
+			throw new Error( `Could not read coverage report: ${err}` );
 		} finally {
 			clearTimeout( timeout );
 		}
@@ -56,7 +57,6 @@ module.exports = async function( grunt, options, cdp ) {
 
 
 	grunt.log.writeln( "" );
-	const data = await retry( options.coverageAttempts, options.coverageDelay, getCoverage );
-
+	const data = await getCoverage();
 	processCoverage( data );
 };
