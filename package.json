@@ -47,7 +47,7 @@
 		"babel6-plugin-strip-heimdall": "6.0.1",
 		"chrome-remote-interface": "0.25.5",
 		"codecov": "3.0.1",
-		"copy-webpack-plugin": "4.5.1",
+		"copy-webpack-plugin": "5.1.1",
 		"css-loader": "2.1.1",
 		"ember-compatibility-helpers": "1.0.2",
 		"ember-decorators": "2.5.1",
