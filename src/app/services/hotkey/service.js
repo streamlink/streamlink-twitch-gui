@@ -15,6 +15,7 @@ const ignoreElements = [
  * @property {(String|String[])} key
  * @property {Boolean?} altKey
  * @property {Boolean?} ctrlKey
+ * @property {Boolean?} metaKey
  * @property {Boolean?} shiftKey
  * @property {Boolean?} force
  * @property {(Function|String)} action
@@ -28,6 +29,15 @@ class HotkeyRegistry {
 	constructor( context, hotkeys ) {
 		this.context = context;
 		this.hotkeys = hotkeys;
+		// keep the passed hotkeys array and its entries intact
+		for ( const [ key, hotkey ] of hotkeys.entries() ) {
+			hotkeys[ key ] = Object.assign( hotkey, {
+				altKey: !!hotkey.altKey,
+				ctrlKey: !!hotkey.ctrlKey,
+				metaKey: !!hotkey.metaKey,
+				shiftKey: !!hotkey.shiftKey
+			});
+		}
 	}
 }
 
@@ -84,9 +94,10 @@ export default Service.extend({
 			let registry = registries[ start ];
 			hotkey = registry.hotkeys.find( h =>
 				   ( isArray( h.key ) ? h.key.includes( event.key ) : h.key === event.key )
-				&& ( h.altKey === undefined || h.altKey === event.altKey )
-				&& ( h.ctrlKey === undefined || h.ctrlKey === event.ctrlKey )
-				&& ( h.shiftKey === undefined || h.shiftKey === event.shiftKey )
+				&& h.altKey === event.altKey
+				&& h.ctrlKey === event.ctrlKey
+				&& h.metaKey === event.metaKey
+				&& h.shiftKey === event.shiftKey
 			);
 
 			if ( hotkey ) {

@@ -10,6 +10,7 @@ import {
 } from "event-utils";
 import { render, clearRender, focus } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
+import cartesian from "cartesian-product";
 import sinon from "sinon";
 
 import Component from "@ember/component";
@@ -102,23 +103,37 @@ module( "services/hotkey", function( hooks ) {
 				key: "Escape",
 				altKey: true,
 				ctrlKey: true,
+				metaKey: true,
 				shiftKey: true,
 				action
 			}]
 		}) );
 
+		// create an array of all possible modifier combinations
+		const modifiers = cartesian(
+			[ true, false, undefined ],
+			[ true, false, undefined ],
+			[ true, false, undefined ],
+			[ true, false, undefined ]
+		)
+			// filter out the matching modifier combination
+			.filter( ([ a, b, c, d ]) => !( a && b && c && d ) )
+			// assign the modifier property names
+			.map( ([ altKey, ctrlKey, metaKey, shiftKey ]) => ({
+				altKey, ctrlKey, metaKey, shiftKey
+			}) );
+
 		await render( hbs`{{component-a}}` );
 
-		await triggerKeyDownEvent( this.element, "Escape", {
-			altKey: false,
-			ctrlKey: false,
-			shiftKey: false
-		});
+		await Promise.all( modifiers.map( modifier =>
+			triggerKeyDownEvent( this.element, "Escape", modifier )
+		) );
 		assert.notOk( action.called, "Doesn't trigger action on non-matching modifiers" );
 
 		await triggerKeyDownEvent( this.element, "Escape", {
 			altKey: true,
 			ctrlKey: true,
+			metaKey: true,
 			shiftKey: true
 		});
 		assert.ok( action.called, "Triggers action on matching modifiers" );
