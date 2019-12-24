@@ -95,6 +95,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		{
 			name: "shutdown",
 			key: [ "q", "x" ],
+			ctrlKey: true,
 			action() {
 				if ( get( this, "active" ) ) {
 					this.send( "shutdown" );
@@ -106,6 +107,7 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 		{
 			name: "log",
 			key: "l",
+			ctrlKey: true,
 			action: "toggleLog"
 		}
 	],

@@ -67,6 +67,7 @@ export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
 		},
 		{
 			key: "0",
+			ctrlKey: true,
 			/** @this {MainMenuComponent} */
 			action() {
 				this.router.homepage();
@@ -74,6 +75,7 @@ export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
 		},
 		...Object.keys( routeHotkeys ).map( route => ({
 			key: routeHotkeys[ route ],
+			ctrlKey: !/^F\d+$/.test( routeHotkeys[ route ] ),
 			force: true,
 			/** @this {MainMenuComponent} */
 			action() {

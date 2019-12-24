@@ -4,13 +4,12 @@ import { inject as service } from "@ember/service";
 import { twitch } from "config";
 import FormButtonComponent from "../form-button/component";
 import TwitchInteractButtonMixin from "ui/components/-mixins/twitch-interact-button";
-import HotkeyMixin from "ui/components/-mixins/hotkey";
 
 
 const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
 
 
-export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixin, {
+export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 	nwjs: service(),
 
 	modelName: "twitchSubscription",
@@ -46,15 +45,6 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, HotkeyMixi
 
 		return i18n.t( key, { name } ).toString();
 	}),
-
-	hotkeys: [
-		{
-			key: "s",
-			action() {
-				this.click();
-			}
-		}
-	],
 
 	async action( success, failure ) {
 		try {

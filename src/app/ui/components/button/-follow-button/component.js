@@ -30,6 +30,7 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 		{
 			name: "main",
 			key: "f",
+			ctrlKey: true,
 			action() {
 				this.mainbutton.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
 			}
@@ -38,6 +39,7 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 			name: "confirm",
 			key: "f",
 			ctrlKey: true,
+			shiftKey: true,
 			action() {
 				this.confirmbutton.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
 			}

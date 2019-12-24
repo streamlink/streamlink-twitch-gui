@@ -16,6 +16,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	hotkeys: [
 		{
 			key: "c",
+			ctrlKey: true,
 			action() {
 				this.click();
 			}

@@ -178,7 +178,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 
 		assert.strictEqual(
 			mainButton.title,
-			"[F] components.follow-button.follow{\"name\":\"foo\"}",
+			"[hotkeys.modifiers.ctrl+F] components.follow-button.follow{\"name\":\"foo\"}",
 			"The main button has the correct title when not following"
 		);
 
@@ -209,7 +209,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 
 		assert.strictEqual(
 			mainButton.title,
-			"[F] components.follow-button.unfollow{\"name\":\"foo\"}",
+			"[hotkeys.modifiers.ctrl+F] components.follow-button.unfollow{\"name\":\"foo\"}",
 			"The main button has the correct title when following"
 		);
 
@@ -246,13 +246,14 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 
 		assert.strictEqual(
 			mainButton.title,
-			"[F] components.follow-button.keep{\"name\":\"foo\"}",
+			"[hotkeys.modifiers.ctrl+F] components.follow-button.keep{\"name\":\"foo\"}",
 			"The main button has the correct title when being expanded"
 		);
 
 		assert.strictEqual(
 			confirmButton.title,
-			"[hotkeys.modifiers.ctrl+F] components.follow-button.confirm{\"name\":\"foo\"}",
+			"[hotkeys.modifiers.ctrl+hotkeys.modifiers.shift+F] "
+				+ "components.follow-button.confirm{\"name\":\"foo\"}",
 			"The confirm button has the correct title when being expanded"
 		);
 
