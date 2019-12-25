@@ -37,7 +37,7 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 		},
 		{
 			name: "confirm",
-			key: "f",
+			key: "F",
 			ctrlKey: true,
 			shiftKey: true,
 			action() {
