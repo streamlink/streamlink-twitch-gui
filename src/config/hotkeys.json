@@ -1,0 +1,190 @@
+{
+	"navigation": {
+		"icon": "fa-map-marker",
+		"actions": {
+			"refresh": [{
+				"code": "F5",
+				"force": true
+			}, {
+				"code": "KeyR",
+				"ctrlKey": true,
+				"force": true
+			}],
+			"historyBack": [{
+				"code": "ArrowLeft",
+				"altKey": true,
+				"force": true
+			}],
+			"historyForward": [{
+				"code": "ArrowRight",
+				"altKey": true,
+				"force": true
+			}],
+			"routeAbout": [{
+				"code": "F1",
+				"force": true
+			}],
+			"routeWatching": [{
+				"code": "F10",
+				"force": true
+			}],
+			"routeUserAuth": [{
+				"code": "F11",
+				"force": true
+			}],
+			"routeSettings": [{
+				"code": "F12",
+				"force": true
+			}],
+			"homepage": [{
+				"code": "Digit0",
+				"ctrlKey": true,
+				"force": true
+			}, {
+				"code": "Numpad0",
+				"ctrlKey": true,
+				"force": true
+			}],
+			"routeFeatured": [{
+				"code": "Digit1",
+				"ctrlKey": true,
+				"force": true
+			}, {
+				"code": "Numpad1",
+				"ctrlKey": true,
+				"force": true
+			}],
+			"routeGames": [{
+				"code": "Digit2",
+				"ctrlKey": true,
+				"force": true
+			}, {
+				"code": "Numpad2",
+				"ctrlKey": true,
+				"force": true
+			}],
+			"routeStreams": [{
+				"code": "Digit3",
+				"ctrlKey": true,
+				"force": true
+			}, {
+				"code": "Numpad3",
+				"ctrlKey": true,
+				"force": true
+			}],
+			"routeUserFollowedStreams": [{
+				"code": "Digit4",
+				"ctrlKey": true,
+				"force": true
+			}, {
+				"code": "Numpad4",
+				"ctrlKey": true,
+				"force": true
+			}],
+			"routeUserFollowedChannels": [{
+				"code": "Digit5",
+				"ctrlKey": true,
+				"force": true
+			}, {
+				"code": "Numpad5",
+				"ctrlKey": true,
+				"force": true
+			}]
+		}
+	},
+	"searchbar": {
+		"icon": "fa-search",
+		"actions": {
+			"focus": [{
+				"code": "F6"
+			}, {
+				"code": "Slash"
+			}]
+		}
+	},
+	"followbutton": {
+		"icon": "fa-heart",
+		"actions": {
+			"default": [{
+				"code": "KeyF",
+				"ctrlKey": true
+			}],
+			"confirm": [{
+				"code": "KeyF",
+				"ctrlKey": true,
+				"shiftKey": true
+			}]
+		}
+	},
+	"openchatbutton": {
+		"icon": "fa-comments",
+		"actions": {
+			"default": [{
+				"code": "KeyC",
+				"ctrlKey": true
+			}]
+		}
+	},
+	"sharechannelbutton": {
+		"icon": "fa-share-alt",
+		"actions": {
+			"default": [{
+				"code": "KeyS",
+				"ctrlKey": true
+			}]
+		}
+	},
+	"twitchemotesbutton": {
+		"icon": "fa-smile-o",
+		"actions": {
+			"default": [{
+				"code": "KeyE",
+				"ctrlKey": true
+			}]
+		}
+	},
+	"modaldialog": {
+		"icon": "fa-square-o",
+		"actions": {
+			"close": [{
+				"code": "Escape"
+			}, {
+				"code": "Backspace"
+			}]
+		}
+	},
+	"modalconfirm": {
+		"icon": "fa-check",
+		"actions": {
+			"confirm": [{
+				"code": "Enter"
+			}, {
+				"code": "NumpadEnter"
+			}]
+		}
+	},
+	"modalquit": {
+		"icon": "fa-times",
+		"actions": {
+			"shutdown": "modalstreaming.shutdown"
+		}
+	},
+	"modalstreaming": {
+		"icon": "fa-tv",
+		"actions": {
+			"close": "modaldialog.close",
+			"confirm": "modalconfirm.confirm",
+			"shutdown": [{
+				"code": "KeyQ",
+				"ctrlKey": true
+			}, {
+				"code": "KeyX",
+				"ctrlKey": true
+			}],
+			"log": [{
+				"code": "KeyL",
+				"ctrlKey": true
+			}]
+		}
+	}
+}

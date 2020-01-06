@@ -31,6 +31,7 @@ export default EmberRouter.extend().map(function() {
 		this.route( "gui" );
 		this.route( "lists" );
 		this.route( "languages" );
+		this.route( "hotkeys" );
 		this.route( "notifications" );
 		this.route( "channels" );
 	});

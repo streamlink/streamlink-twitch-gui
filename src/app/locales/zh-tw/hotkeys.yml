@@ -1,8 +1,9 @@
+# See the "Hotkeys" section of the "Translating" wiki page on how to properly translate hotkeys:
+# https://github.com/streamlink/streamlink-twitch-gui/wiki/Translating#28-hotkeys
 modifiers:
-    ctrl: Ctrl
-    shift: Shift
-    alt: Alt
-keys:
-    Enter: Enter
-    Escape: Esc
-    Slash: "/"
+    altKey: Alt
+    ctrlKey: Ctrl
+    metaKey: Meta
+    shiftKey: Shift
+codes:
+#    code: translation

@@ -6,24 +6,17 @@ import layout from "./template.hbs";
 import "./styles.less";
 
 
-const routeHotkeys = {
-	"about": "F1",
-	"watching": "F10",
-	"user.auth": "F11",
-	"settings": "F12",
-	"featured": "1",
-	"games": "2",
-	"streams": "3",
-	"user.followedStreams": "4",
-	"user.followedChannels": "5"
+const hotkeyActionRouteMap = {
+	"routeAbout": "about",
+	"routeWatching": "watching",
+	"routeUserAuth": "user.auth",
+	"routeSettings": "settings",
+	"routeFeatured": "featured",
+	"routeGames": "games",
+	"routeStreams": "streams",
+	"routeUserFollowedStreams": "user.followedStreams",
+	"routeUserFollowedChannels": "user.followedChannels"
 };
-
-/** @this {MainMenuComponent} */
-function refresh() {
-	// macOS has a menu bar with its own refresh hotkey
-	if ( isDarwin ) { return; }
-	this.router.refresh();
-}
 
 
 export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
@@ -35,52 +28,32 @@ export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
 	classNames: [ "main-menu-component" ],
 	tagName: "aside",
 
-	hotkeys: [
-		{
-			key: "F5",
-			force: true,
-			action: refresh
+	hotkeysNamespace: "navigation",
+	hotkeys: {
+		/** @this {MainMenuComponent} */
+		refresh() {
+			// macOS has a menu bar with its own refresh hotkey
+			if ( isDarwin ) { return; }
+			this.router.refresh();
 		},
-		{
-			key: "r",
-			ctrlKey: true,
-			force: true,
-			action: refresh
+		/** @this {MainMenuComponent} */
+		historyBack() {
+			this.router.history( -1 );
 		},
-		{
-			key: "ArrowLeft",
-			altKey: true,
-			force: true,
-			/** @this {MainMenuComponent} */
-			action() {
-				this.router.history( -1 );
-			}
+		/** @this {MainMenuComponent} */
+		historyForward() {
+			this.router.history( +1 );
 		},
-		{
-			key: "ArrowRight",
-			altKey: true,
-			force: true,
-			/** @this {MainMenuComponent} */
-			action() {
-				this.router.history( +1 );
-			}
+		/** @this {MainMenuComponent} */
+		homepage() {
+			this.router.homepage();
 		},
-		{
-			key: "0",
-			ctrlKey: true,
-			/** @this {MainMenuComponent} */
-			action() {
-				this.router.homepage();
-			}
-		},
-		...Object.keys( routeHotkeys ).map( route => ({
-			key: routeHotkeys[ route ],
-			ctrlKey: !/^F\d+$/.test( routeHotkeys[ route ] ),
-			force: true,
-			/** @this {MainMenuComponent} */
-			action() {
-				this.router.transitionTo( route );
-			}
-		}) )
-	]
+		...Object.entries( hotkeyActionRouteMap )
+			.reduce( ( obj, [ action, route ]) => Object.assign( obj, {
+				/** @this {MainMenuComponent} */
+				[ action ]() {
+					this.router.transitionTo( route );
+				}
+			}), {} )
+	}
 });

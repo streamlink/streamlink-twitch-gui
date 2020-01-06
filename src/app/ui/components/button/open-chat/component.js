@@ -13,15 +13,12 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	_title: t( "components.open-chat.title" ),
 	iconanim: true,
 
-	hotkeys: [
-		{
-			key: "c",
-			ctrlKey: true,
-			action() {
-				this.click();
-			}
+	hotkeysNamespace: "openchatbutton",
+	hotkeys: {
+		default() {
+			this.click();
 		}
-	],
+	},
 
 	action() {
 		const channel = get( this, "channel" );

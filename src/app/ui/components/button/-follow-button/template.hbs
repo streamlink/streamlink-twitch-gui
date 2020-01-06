@@ -5,9 +5,9 @@
 	title=(if isLoading
 		""
 		(hotkey-title
-			"components.follow-button.confirm"
-			(find-by hotkeys "name" "confirm")
-			name=name
+			namespace="followbutton"
+			action="confirm"
+			title=(t "components.follow-button.confirm" name=name)
 		)
 	)
 	action=(unless isLocked
@@ -32,15 +32,15 @@
 	title=(if isLoading
 		""
 		(hotkey-title
-			(if isPromptVisible
-				"components.follow-button.keep"
+			namespace="followbutton"
+			action="default"
+			title=(if isPromptVisible
+				(t "components.follow-button.keep" name=name)
 				(if isSuccessful
-					"components.follow-button.unfollow"
-					"components.follow-button.follow"
+					(t "components.follow-button.unfollow" name=name)
+					(t "components.follow-button.follow" name=name)
 				)
 			)
-			(find-by hotkeys "name" "main")
-			name=name
 		)
 	)
 	action=(unless isLocked

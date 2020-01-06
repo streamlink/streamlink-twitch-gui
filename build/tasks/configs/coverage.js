@@ -22,7 +22,7 @@ module.exports = {
 	},
 	"i18n": {
 		"exclude": [
-			"hotkeys.keys.*"
+			"hotkeys.codes.*"
 		]
 	}
 };

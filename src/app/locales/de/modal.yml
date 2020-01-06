@@ -1,5 +1,6 @@
-action:
-    close: Schließen
+dialog:
+    action:
+        close: Schließen
 changelog:
     header: "Du hast zu v{{version}} geupgradet"
     body: Möchtest du sehen was neu ist und den Changelog durchlesen?

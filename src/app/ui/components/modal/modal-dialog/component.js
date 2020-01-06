@@ -16,12 +16,10 @@ export default Component.extend( HotkeyMixin, {
 
 	"class": "",
 
-	hotkeys: [
-		{
-			key: [ "Escape", "Backspace" ],
-			action: "close"
-		}
-	],
+	hotkeysNamespace: "modaldialog",
+	hotkeys: {
+		close: "close"
+	},
 
 	/*
 	 * This will be called synchronously, so we need to copy the element and animate it instead

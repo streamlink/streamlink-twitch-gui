@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeI18nService, FakeTHelper } from "i18n-utils";
 import { triggerEvent } from "event-utils";
 import { render, click } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
@@ -10,6 +10,7 @@ import sinon from "sinon";
 import Component from "@ember/component";
 import { set } from "@ember/object";
 import { alias } from "@ember/object/computed";
+import Evented from "@ember/object/evented";
 import Service from "@ember/service";
 
 // eslint-disable-next-line max-len
@@ -18,6 +19,7 @@ import FormButtonComponent from "ui/components/button/form-button/component";
 import { helper as HotkeyTitleHelper } from "ui/components/helper/hotkey-title";
 import { helper as FindByHelper } from "ui/components/helper/find-by";
 import { helper as BoolNotHelper } from "ui/components/helper/bool-not";
+import HotkeyService from "services/hotkey";
 
 
 // TODO: properly rewrite tests (and component) and use sinon's useFakeTimer
@@ -29,11 +31,10 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 				classNames: [ "loading-spinner-component" ]
 			}),
 			I18nService: FakeI18nService,
-			HotkeyService: Service.extend({
-				register() {},
-				unregister() {}
-			}),
+			THelper: FakeTHelper,
+			HotkeyService,
 			HotkeyTitleHelper,
+			SettingsService: Service.extend( Evented ),
 			FindByHelper,
 			BoolNotHelper
 		})
@@ -178,7 +179,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 
 		assert.strictEqual(
 			mainButton.title,
-			"[hotkeys.modifiers.ctrl+F] components.follow-button.follow{\"name\":\"foo\"}",
+			"[hotkeys.modifiers.ctrlKey+F] components.follow-button.follow{\"name\":\"foo\"}",
 			"The main button has the correct title when not following"
 		);
 
@@ -209,7 +210,7 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 
 		assert.strictEqual(
 			mainButton.title,
-			"[hotkeys.modifiers.ctrl+F] components.follow-button.unfollow{\"name\":\"foo\"}",
+			"[hotkeys.modifiers.ctrlKey+F] components.follow-button.unfollow{\"name\":\"foo\"}",
 			"The main button has the correct title when following"
 		);
 
@@ -246,13 +247,13 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 
 		assert.strictEqual(
 			mainButton.title,
-			"[hotkeys.modifiers.ctrl+F] components.follow-button.keep{\"name\":\"foo\"}",
+			"[hotkeys.modifiers.ctrlKey+F] components.follow-button.keep{\"name\":\"foo\"}",
 			"The main button has the correct title when being expanded"
 		);
 
 		assert.strictEqual(
 			confirmButton.title,
-			"[hotkeys.modifiers.ctrl+hotkeys.modifiers.shift+F] "
+			"[hotkeys.modifiers.ctrlKey+hotkeys.modifiers.shiftKey+F] "
 				+ "components.follow-button.confirm{\"name\":\"foo\"}",
 			"The confirm button has the correct title when being expanded"
 		);

@@ -41,12 +41,10 @@ export default Component.extend( HotkeyMixin, {
 	filter: "all",
 
 
-	hotkeys: [
-		{
-			key: "/",
-			action: "focus"
-		}
-	],
+	hotkeysNamespace: "searchbar",
+	hotkeys: {
+		focus: "focus"
+	},
 
 
 	init() {

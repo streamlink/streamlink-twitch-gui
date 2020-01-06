@@ -1,0 +1,22 @@
+<fieldset>
+{{#each-in defaultHotkeys as |namespace ns|}}
+	{{#settings-row
+		(t (concat "settings.hotkeys." namespace ".title"))
+		(t (concat "settings.hotkeys." namespace ".description"))
+		icon=ns.icon
+		notes=(if (is-equal namespace "navigation") (t "settings.hotkeys.navigation.notes"))
+	}}
+		{{#each-in ns.actions as |name hotkeys|}}
+			<header>{{t (concat "settings.hotkeys." namespace ".actions." name)}}</header>
+			<div class="settings-hotkeys">
+				{{#each (array "primary" "secondary") as |type|}}
+					{{settings-hotkey
+						model=(mut (get (get (get model.hotkeys namespace) name) type))
+						hotkey=(get hotkeys type)
+					}}
+				{{/each}}
+			</div>
+		{{/each-in}}
+	{{/settings-row}}
+{{/each-in}}
+</fieldset>

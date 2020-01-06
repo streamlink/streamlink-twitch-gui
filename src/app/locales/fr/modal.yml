@@ -1,5 +1,6 @@
-action:
-    close: Fermer
+dialog:
+    action:
+        close: Fermer
 changelog:
     header: "Vous avez mis à jour vers la version v{{version}}"
     body: Voulez-vous voir ce qu'il y a de nouveau et lire le changelog maintenant ?
