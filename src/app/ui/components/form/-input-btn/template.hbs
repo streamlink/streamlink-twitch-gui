@@ -1,1 +1,1 @@
-<i></i><span>{{#if hasBlock}}{{yield}}{{else}}{{label}}{{/if}}</span>
+<i></i>{{#if hasBlock}}{{_setHasBlock}}<span>{{yield}}</span>{{else if label}}<span>{{label}}</span>{{/if}}

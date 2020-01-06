@@ -35,6 +35,7 @@ module( "ui/components/form/check-box", function( hooks ) {
 
 		assert.ok( elem instanceof HTMLElement, "Component renders" );
 		assert.strictEqual( elem.innerText, "foo", "Has a label" );
+		assert.notOk( elem.classList.contains( "no-label" ), "Doesn't have the no-label class" );
 		assert.ok( elem.classList.contains( "checked" ), "Is checked initially" );
 
 		// set to false in context
@@ -66,9 +67,28 @@ module( "ui/components/form/check-box", function( hooks ) {
 		const elem = this.element.querySelector( ".check-box-component" );
 
 		assert.strictEqual( elem.innerText, "foo", "Has a label" );
+		assert.notOk( elem.classList.contains( "no-label" ), "Doesn't have the no-label class" );
 
 		this.set( "label", "bar" );
 		assert.strictEqual( elem.innerText, "bar", "Label gets updated" );
+	});
+
+
+	test( "CheckBoxComponent - without block and label", async function( assert ) {
+		await render( hbs`{{check-box}}` );
+		const elem = this.element.querySelector( ".check-box-component" );
+
+		assert.strictEqual( elem.innerText, "", "Doesn't have a label" );
+		assert.ok( elem.classList.contains( "no-label" ), "Has the no-label class" );
+	});
+
+
+	test( "CheckBoxComponent - attribute bindings", async function( assert ) {
+		await render( hbs`{{check-box title="foo"}}` );
+		const elem = this.element.querySelector( ".check-box-component" );
+
+		assert.strictEqual( elem.getAttribute( "tabindex" ), "0", "Has the tabindex of 0" );
+		assert.strictEqual( elem.getAttribute( "title" ), "foo", "Has a title" );
 	});
 
 
@@ -86,7 +106,6 @@ module( "ui/components/form/check-box", function( hooks ) {
 
 		assert.notStrictEqual( document.activeElement, elem, "Is not focused initially" );
 		assert.notOk( this.get( "checked" ), "Is not checked initially" );
-		assert.strictEqual( elem.getAttribute( "tabindex" ), "0", "Tabindex attribute is 0" );
 
 		e = await triggerKeyDownEvent( elem, " " );
 		assert.notOk( this.get( "checked" ), "Is still not checked on Space" );
