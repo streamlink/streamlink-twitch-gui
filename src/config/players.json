@@ -96,14 +96,14 @@
 				"icon": "fa-font",
 				"type": "boolean",
 				"default": true,
-				"args": "--title \"$>{name} - {game} - {status}\""
+				"args": "\"--title=$>{name} - {game} - {status}\""
 			},
 			{
 				"name": "media-title",
 				"icon": "fa-file-video-o",
 				"type": "boolean",
 				"default": true,
-				"args": "--force-media-title \"{name} - {game} - {status}\""
+				"args": "\"--force-media-title={name} - {game} - {status}\""
 			},
 			{
 				"name": "minimal",
@@ -117,7 +117,7 @@
 				"icon": "fa-image",
 				"type": "boolean",
 				"default": true,
-				"args": "--force-window"
+				"args": "--force-window=yes"
 			},
 			{
 				"name": "seeking",
@@ -131,7 +131,7 @@
 				"icon": "fa-hourglass-half",
 				"type": "boolean",
 				"default": false,
-				"args": "--no-cache"
+				"args": "--cache=no"
 			}
 		]
 	},
