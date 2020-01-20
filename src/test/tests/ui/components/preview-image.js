@@ -17,22 +17,8 @@ module( "ui/components/preview-image", function( hooks ) {
 		})
 	});
 
-	hooks.before(function() {
-		this.webRequestCallback = () => ({ cancel: true });
-		window.chrome.webRequest.onBeforeRequest.addListener(
-			this.webRequestCallback,
-			{ urls: [ "http://blocked/request" ] }
-		);
-	});
-
-	hooks.after(function() {
-		window.chrome.webRequest.onBeforeRequest.removeListener( this.webRequestCallback );
-	});
-
 
 	test( "Valid image source", async function( assert ) {
-		assert.expect( 4 );
-
 		await new Promise( async ( resolve, reject ) => {
 			this.setProperties({
 				src: transparentImage,
@@ -43,11 +29,6 @@ module( "ui/components/preview-image", function( hooks ) {
 			await render( hbs`
 				{{preview-image src=src title=title onLoad=onLoad onError=onError}}
 			` );
-
-			assert.ok(
-				this.element.querySelector( "img" ),
-				"Has an image element before loading"
-			);
 		});
 
 		assert.ok(
@@ -68,11 +49,10 @@ module( "ui/components/preview-image", function( hooks ) {
 
 
 	test( "Invalid image source", async function( assert ) {
-		assert.expect( 3 );
-
 		await new Promise( async ( resolve, reject ) => {
 			this.setProperties({
-				src: "http://blocked/request",
+				// using the page's URL as image src will cause the onerror event to be triggered
+				src: document.location.href,
 				title: "bar",
 				onLoad: reject,
 				onError: resolve
@@ -80,13 +60,12 @@ module( "ui/components/preview-image", function( hooks ) {
 			await render( hbs`
 				{{preview-image src=src title=title onLoad=onLoad onError=onError}}
 			` );
-
-			assert.ok(
-				this.element.querySelector( "img" ),
-				"Has an image element before loading"
-			);
 		});
 
+		assert.notOk(
+			this.element.querySelector( ".previewImage" ) instanceof HTMLImageElement,
+			"Doesn't have a preview image"
+		);
 		assert.ok(
 			this.element.querySelector( ".previewError" ),
 			"Is in error state"
