@@ -10,9 +10,9 @@ export default Component.extend({
 
 	error: false,
 
-	/* instanbul ignore next */
+	/* istanbul ignore next */
 	onLoad() {},
-	/* instanbul ignore next */
+	/* istanbul ignore next */
 	onError() {},
 
 	didInsertElement() {
