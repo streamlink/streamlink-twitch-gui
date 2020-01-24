@@ -166,6 +166,65 @@ export default Mixin.create({
 			|| total !== null && offset + length >= total;
 	},
 
+	async willFetchContent( force ) {
+		const controller = get( this, "controller" );
+		const isFetching = get( controller, "isFetching" );
+		const fetchedAll = get( controller, "hasFetchedAll" );
+
+		// we're already busy or finished fetching
+		if ( isFetching || fetchedAll ) { return; }
+
+		this.calcFetchSize();
+
+		const content = get( this, get( this, "contentPath" ) );
+		const offset = get( this, "offset" );
+		const limit = get( this, "limit" );
+		const max = get( this, "maxAutoFetches" );
+		const num = offset / limit;
+
+		// don't fetch infinitely
+		if ( !force && num > max ) { return; }
+
+		setProperties( controller, {
+			isFetching: true,
+			fetchError: false
+		});
+
+		try {
+			// fetch content
+			const data = await this.fetchContent();
+
+			// read limit again (in case it was modified by a filtered model)
+			const limit = get( this, "limit" );
+			const length = data
+				? get( data, "length" )
+				: 0;
+			const total = this._getTotal( data );
+
+			if ( this._calcHasFetchedAll( length, offset, limit, total ) ) {
+				set( controller, "hasFetchedAll", true );
+			}
+
+			// fix offset if content was missing from the response (banned channels, etc.)
+			if ( total !== null && length < limit && offset + length < total ) {
+				this.incrementProperty( "_filter", limit - length );
+			}
+
+			if ( length ) {
+				content.pushObjects( data );
+			}
+
+		} catch ( e ) {
+			setProperties( controller, {
+				fetchError: true,
+				hasFetchedAll: false
+			});
+
+		} finally {
+			set( controller, "isFetching", false );
+		}
+	},
+
 
 	actions: {
 		willTransition() {
@@ -179,63 +238,8 @@ export default Mixin.create({
 			return true;
 		},
 
-		async willFetchContent( force ) {
-			const controller = get( this, "controller" );
-			const isFetching = get( controller, "isFetching" );
-			const fetchedAll = get( controller, "hasFetchedAll" );
-
-			// we're already busy or finished fetching
-			if ( isFetching || fetchedAll ) { return; }
-
-			this.calcFetchSize();
-
-			const content = get( this, get( this, "contentPath" ) );
-			const offset = get( this, "offset" );
-			const limit = get( this, "limit" );
-			const max = get( this, "maxAutoFetches" );
-			const num = offset / limit;
-
-			// don't fetch infinitely
-			if ( !force && num > max ) { return; }
-
-			setProperties( controller, {
-				isFetching: true,
-				fetchError: false
-			});
-
-			try {
-				// fetch content
-				const data = await this.fetchContent();
-
-				// read limit again (in case it was modified by a filtered model)
-				const limit = get( this, "limit" );
-				const length = data
-					? get( data, "length" )
-					: 0;
-				const total = this._getTotal( data );
-
-				if ( this._calcHasFetchedAll( length, offset, limit, total ) ) {
-					set( controller, "hasFetchedAll", true );
-				}
-
-				// fix offset if content was missing from the response (banned channels, etc.)
-				if ( total !== null && length < limit && offset + length < total ) {
-					this.incrementProperty( "_filter", limit - length );
-				}
-
-				if ( length ) {
-					content.pushObjects( data );
-				}
-
-			} catch ( e ) {
-				setProperties( controller, {
-					fetchError: true,
-					hasFetchedAll: false
-				});
-
-			} finally {
-				set( controller, "isFetching", false );
-			}
+		willFetchContent() {
+			return this.willFetchContent( ...arguments );
 		}
 	}
 });
