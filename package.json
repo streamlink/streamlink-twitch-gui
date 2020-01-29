@@ -87,6 +87,7 @@
 		"yaml-loader": "0.5.0"
 	},
 	"resolutions": {
+		"istanbul-reports/handlebars": "4.3.0",
 		"sinon/nise/just-extend": "^4.0.0"
 	},
 	"scripts": {
