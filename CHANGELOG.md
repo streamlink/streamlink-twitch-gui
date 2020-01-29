@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.9.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.9.1) (2020-01-29)
 
 - :warning: Set Streamlink's version requirement to `1.3.1`.  
   Upgrade to the latest Streamlink version [here](https://streamlink.github.io/install.html) or see the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
@@ -15,7 +15,7 @@ Changelog - Streamlink Twitch GUI
 - Changed Twitch OAuth URL to correct new URL when signing in.
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.9.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.9.0...v1.9.1)
 
 
 ## [v1.9.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.9.0) (2019-11-23)
