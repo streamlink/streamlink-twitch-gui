@@ -1,6 +1,23 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- :warning: Set Streamlink's version requirement to `1.3.1`.  
+  Upgrade to the latest Streamlink version [here](https://streamlink.github.io/install.html) or see the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
+- Added workaround for followed streams not being sorted by viewer count. #699  
+  Apparently, the API changes have finally been fixed again by Twitch. The workaround will be kept though.
+- Added `ctrlKey` modifier to most hotkeys and changed share-channel hotkey. #696  
+  Customizable hotkeys will be added in one of the next releases.
+- Fixed hotkeys triggering when modifiers were not matching exactly. #696
+- Fixed MPV player preset related to recent breaking changes of MPV's parameter parsing.
+- Fixed some localization issues. #690, #691
+- Changed Twitch OAuth URL to correct new URL when signing in.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.9.0...master)
+
+
 ## [v1.9.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.9.0) (2019-11-23)
 
 This release mainly focuses on fixing the recent issues related to the [breaking changes of Twitch's API](https://github.com/streamlink/streamlink/issues/2680). Since the situation wasn't 100% clear for the first couple of days, we had to wait until we were able to make a proper decision.
