@@ -28,7 +28,7 @@ module.exports = async function( grunt, options, cdp ) {
 		return data;
 	}
 
-	function processCoverage( report ) {
+	async function processCoverage( report ) {
 		grunt.log.ok( "Processing coverage data..." );
 
 		const dir = grunt.config( "dir.tmp_coverage" );
@@ -40,17 +40,18 @@ module.exports = async function( grunt, options, cdp ) {
 		const libSourceMaps = require( "istanbul-lib-source-maps" );
 		const reports = require( "istanbul-reports" );
 
-		const map = libCoverage.createCoverageMap( report );
+		// https://github.com/istanbuljs/nyc/blob/v15.0.0/index.js#L410-L417
+		const coverageMap = libCoverage.createCoverageMap( report );
+		// https://github.com/istanbuljs/nyc/blob/v15.0.0/lib/source-maps.js#L49-L54
 		const sourceMapCache = libSourceMaps.createSourceMapStore();
-		map.data = sourceMapCache.transformCoverage(
-			libCoverage.createCoverageMap( map.data )
-		).map.data;
-		const tree = libReport.summarizers.pkg( map );
-		const context = libReport.createContext({ dir, watermarks });
-
+		const transformed = await sourceMapCache.transformCoverage(
+			libCoverage.createCoverageMap( coverageMap.data )
+		);
+		coverageMap.data = transformed.data;
+		// https://github.com/istanbuljs/nyc/blob/v15.0.0/index.js#L434-L447
+		const context = libReport.createContext({ dir, watermarks, coverageMap });
 		reporters.forEach( ({ name, options }) => {
-			const report = reports.create( name, options );
-			tree.visit( report, context );
+			reports.create( name, options ).execute( context );
 			grunt.log.ok( `Coverage reporter run: ${name}` );
 		});
 	}
@@ -58,5 +59,5 @@ module.exports = async function( grunt, options, cdp ) {
 
 	grunt.log.writeln( "" );
 	const data = await getCoverage();
-	processCoverage( data );
+	await processCoverage( data );
 };

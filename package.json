@@ -42,7 +42,7 @@
 		"babel-plugin-ember-modules-api-polyfill": "2.6.0",
 		"babel-plugin-feature-flags": "0.3.1",
 		"babel-plugin-filter-imports": "2.0.4",
-		"babel-plugin-istanbul": "5.1.0",
+		"babel-plugin-istanbul": "6.0.0",
 		"babel6-plugin-strip-class-callcheck": "6.0.0",
 		"babel6-plugin-strip-heimdall": "6.0.1",
 		"chrome-remote-interface": "0.25.5",
@@ -64,10 +64,10 @@
 		"grunt-webpack": "github:webpack-contrib/grunt-webpack#ff0475e",
 		"html-webpack-plugin": "3.2.0",
 		"inject-loader": "4.0.1",
-		"istanbul-lib-coverage": "1.2.0",
-		"istanbul-lib-report": "1.1.4",
-		"istanbul-lib-source-maps": "1.2.4",
-		"istanbul-reports": "1.4.0",
+		"istanbul-lib-coverage": "3.0.0",
+		"istanbul-lib-report": "3.0.0",
+		"istanbul-lib-source-maps": "4.0.0",
+		"istanbul-reports": "3.0.0",
 		"json-loader": "0.5.7",
 		"less": "3.0.2",
 		"less-loader": "4.1.0",
@@ -87,7 +87,6 @@
 		"yaml-loader": "0.5.0"
 	},
 	"resolutions": {
-		"istanbul-reports/handlebars": "4.3.0",
 		"sinon/nise/just-extend": "^4.0.0"
 	},
 	"scripts": {
