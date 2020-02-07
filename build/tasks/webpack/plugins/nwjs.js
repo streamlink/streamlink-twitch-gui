@@ -2,34 +2,40 @@ const platforms = require( "../../common/platforms" );
 
 
 class NwjsPlugin {
-	constructor( gruntconfig, options ) {
-		this.options = Object.assign( {}, gruntconfig.nwjs.options, options, {
+	constructor( nwOptions = {}, options = {} ) {
+		this.nwOptions = Object.assign( {}, nwOptions, {
 			flavor: "sdk",
 			platforms: platforms.getPlatforms( [] )
 		});
+		this.options = Object.assign({
+			rerunOnExit: true,
+			log: true,
+			logStdOut: true,
+			logStdErr: true
+		}, options );
 		this.launched = false;
 	}
 
 	apply( compiler ) {
 		compiler.hooks.done.tap( "NwjsPlugin", () => {
 			if ( !this.launched ) {
-				this.run();
+				this._run();
+				this.launched = true;
 			}
-			this.launched = true;
 		});
 	}
 
-	run() {
+	_run() {
 		const NwBuilder = require( "nw-builder" );
-		const options = this.options;
+		const { nwOptions, options } = this;
 
 		function log( msg ) {
 			/* eslint-disable no-console */
-			console.log( String( msg ) );
+			console.log( String( msg ).trim() );
 		}
 
 		function launch() {
-			const nw = new NwBuilder( options );
+			const nw = new NwBuilder( nwOptions );
 
 			if ( options.log ) {
 				nw.on( "log", log );
