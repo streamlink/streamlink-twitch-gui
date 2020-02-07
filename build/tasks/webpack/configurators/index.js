@@ -8,5 +8,6 @@ module.exports = [
 	require( "./styles" ),
 	require( "./dev" ),
 	require( "./tests" ),
+	require( "./i18n" ),
 	require( "./prod" )
 ];

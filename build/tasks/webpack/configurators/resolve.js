@@ -28,5 +28,9 @@ module.exports = {
 
 	coverage( config ) {
 		this._resolve( config, pTest );
+	},
+
+	i18n( config ) {
+		this._resolve( config, pApp );
 	}
 };

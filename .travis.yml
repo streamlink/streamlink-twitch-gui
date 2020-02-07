@@ -41,7 +41,7 @@ install:
 
 script:
   # test and build
-  - grunt build:prod:coverage
+  - grunt webpack:i18n build:prod:coverage
   - yarn run codecov
   # compile and package
   - if [ -n "${TRAVIS_TAG}" ]; then build/travis/package.sh; fi
