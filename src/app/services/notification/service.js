@@ -30,21 +30,23 @@ export default Service.extend(
 
 		init() {
 			this._super( ...arguments );
-			// read `running` on init and trigger the lazy computed property and its observers
+			// initialize lazy computed properties
+			get( this, "i18n" );
 			get( this, "running" );
 		},
 
-		statusText: computed( "enabled", "paused", "error", function() {
-			const i18n = get( this, "i18n" );
-			const status = !get( this, "enabled" )
-				? "disabled"
-				: get( this, "paused" )
-					? "paused"
-					: get( this, "error" )
-						? "error"
-						: "enabled";
+		statusText: computed( "enabled", "paused", "error", "i18n.locale", function() {
+			if ( !this.enabled ) {
+				return this.i18n.t( "services.notification.status.disabled" ).toString();
+			}
+			if ( this.paused ) {
+				return this.i18n.t( "services.notification.status.paused" ).toString();
+			}
+			if ( this.error ) {
+				return this.i18n.t( "services.notification.status.error" ).toString();
+			}
 
-			return i18n.t( `services.notification.status.${status}` ).toString();
+			return this.i18n.t( "services.notification.status.enabled" ).toString();
 		})
 	}
 );

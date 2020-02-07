@@ -2,6 +2,7 @@ import ChatProvider from "./-provider";
 import whichFallback from "utils/node/fs/whichFallback";
 import ParameterCustom from "utils/parameters/ParameterCustom";
 import Substitution from "utils/parameters/Substitution";
+import t from "translation-key";
 
 
 /**
@@ -10,13 +11,27 @@ import Substitution from "utils/parameters/Substitution";
  */
 export default class ChatProviderBasic extends ChatProvider {
 	static get userArgsSubstitutions() {
-		const base = "settings.chat.provider.providers.basic.substitutions";
-
 		return [
-			new Substitution( "url", "url", `${base}.url` ),
-			new Substitution( "channel", "channel", `${base}.channel` ),
-			new Substitution( "user", "user", `${base}.user` ),
-			new Substitution( "token", "token", `${base}.token` )
+			new Substitution(
+				"url",
+				"url",
+				t`settings.chat.provider.providers.basic.substitutions.url`
+			),
+			new Substitution(
+				"channel",
+				"channel",
+				t`settings.chat.provider.providers.basic.substitutions.channel`
+			),
+			new Substitution(
+				"user",
+				"user",
+				t`settings.chat.provider.providers.basic.substitutions.user`
+			),
+			new Substitution(
+				"token",
+				"token",
+				t`settings.chat.provider.providers.basic.substitutions.token`
+			)
 		];
 	}
 

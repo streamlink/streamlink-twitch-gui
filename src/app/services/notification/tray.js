@@ -1,6 +1,7 @@
 import { get, set, observer } from "@ember/object";
 import Mixin from "@ember/object/mixin";
 import { inject as service } from "@ember/service";
+import t from "translation-key";
 
 
 export default Mixin.create({
@@ -29,8 +30,8 @@ export default Mixin.create({
 			const paused = get( this, "paused" );
 			this._trayMenuItem = {
 				type   : "checkbox",
-				label  : [ "services.notification.tray.pause.label" ],
-				tooltip: [ "services.notification.tray.pause.tooltip" ],
+				label  : [ t`services.notification.tray.pause.label` ],
+				tooltip: [ t`services.notification.tray.pause.tooltip` ],
 				checked: paused,
 				click  : item => {
 					set( this, "paused", item.checked );

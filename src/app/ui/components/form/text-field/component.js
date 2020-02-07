@@ -1,5 +1,6 @@
 import TextField from "@ember/component/text-field";
 import { inject as service } from "@ember/service";
+import t from "translation-key";
 
 
 export default TextField.extend({
@@ -21,7 +22,7 @@ export default TextField.extend({
 		const clip = nwjs.clipboard.get();
 		nwjs.contextMenu( event, [
 			{
-				label: [ "contextmenu.copy" ],
+				label: [ t`contextmenu.copy` ],
 				enabled: start !== end,
 				click() {
 					const selected = element.value.substr( start, end - start );
@@ -29,7 +30,7 @@ export default TextField.extend({
 				}
 			},
 			{
-				label: [ "contextmenu.paste" ],
+				label: [ t`contextmenu.paste` ],
 				enabled: !element.readOnly && !element.disabled && clip && clip.length,
 				click() {
 					const value = element.value;

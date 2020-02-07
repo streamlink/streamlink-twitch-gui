@@ -96,14 +96,13 @@ export default Model.extend({
 
 
 	titleCreatedAt: computed( "i18n.locale", "created_at", function() {
-		const i18n = get( this, "i18n" );
-		const created_at = get( this, "created_at" );
-		const moment = new Moment( created_at );
+		const moment = new Moment( this.created_at );
 		const last24h = moment.diff( new Date(), "days" ) === 0;
-		const path = `models.twitch.stream.created-at.${last24h ? "less" : "more"}-than-24h`;
-		const format = i18n.t( path ).toString();
+		const format = last24h
+			? this.i18n.t( "models.twitch.stream.created-at.less-than-24h" )
+			: this.i18n.t( "models.twitch.stream.created-at.more-than-24h" );
 
-		return moment.format( format );
+		return moment.format( format.toString() );
 	}),
 
 	titleViewers: computed( "i18n.locale", "viewers", function() {

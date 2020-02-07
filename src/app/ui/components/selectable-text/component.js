@@ -1,5 +1,6 @@
 import Component from "@ember/component";
 import { inject as service } from "@ember/service";
+import t from "translation-key";
 
 
 export default Component.extend({
@@ -23,7 +24,7 @@ export default Component.extend({
 		if ( !selected.length && event.target.tagName === "A" ) { return; }
 
 		this.nwjs.contextMenu( event, [{
-			label: [ "contextmenu.copy-selection" ],
+			label: [ t`contextmenu.copy-selection` ],
 			enabled: selected.length,
 			click() {
 				this.nwjs.clipboard.set( selected );

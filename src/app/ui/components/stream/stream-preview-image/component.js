@@ -9,6 +9,7 @@ import {
 	ATTR_STREAMS_CLICK_SETTINGS
 } from "data/models/settings/streams/fragment";
 import { qualities } from "data/models/stream/model";
+import t from "translation-key";
 import layout from "./template.hbs";
 
 
@@ -105,18 +106,18 @@ export default Component.extend({
 			if ( get( this, "opened" ) ) {
 				items.push(
 					{
-						label: [ "contextmenu.close-stream" ],
+						label: [ t`contextmenu.close-stream` ],
 						click: () => this.closeStream()
 					},
 					{
-						label: [ "contextmenu.change-quality" ],
+						label: [ t`contextmenu.change-quality` ],
 						submenu: quals
 					}
 				);
 			} else {
 				items.push(
 					{
-						label: [ "contextmenu.launch-stream" ],
+						label: [ t`contextmenu.launch-stream` ],
 						submenu: quals
 					}
 				);
@@ -125,11 +126,11 @@ export default Component.extend({
 
 		items.push(
 			{
-				label: [ "contextmenu.open-chat" ],
+				label: [ t`contextmenu.open-chat` ],
 				click: () => this.openChat()
 			},
 			{
-				label: [ "contextmenu.copy-channel-url" ],
+				label: [ t`contextmenu.copy-channel-url` ],
 				click: () => this.copyChannelURL()
 			}
 		);
@@ -137,11 +138,11 @@ export default Component.extend({
 		if ( !this.attrs.contextmenuNoGotos ) {
 			items.push(
 				{
-					label: [ "contextmenu.channel-page" ],
+					label: [ t`contextmenu.channel-page` ],
 					click: () => this.gotoChannelPage()
 				},
 				{
-					label: [ "contextmenu.channel-settings" ],
+					label: [ t`contextmenu.channel-settings` ],
 					click: () => this.gotoChannelSettings()
 				}
 			);
