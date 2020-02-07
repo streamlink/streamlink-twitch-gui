@@ -19,7 +19,7 @@ firstrun:
         start: 直接開始
         settings: 設定
 newrelease:
-    header: "目前版本為 v{{version}}，版本已過時"
+    header: "目前版本為 {{version}}，版本已過時"
     body: "需要下載新版嗎? ({{version}})"
     action:
         download: 下載
