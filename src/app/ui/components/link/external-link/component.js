@@ -2,6 +2,7 @@ import Component from "@ember/component";
 import { get, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
 import getStreamFromUrl from "utils/getStreamFromUrl";
+import t from "translation-key";
 
 
 export default Component.extend({
@@ -58,11 +59,11 @@ export default Component.extend({
 		const url = this.url;
 		this.nwjs.contextMenu( event, [
 			{
-				label: [ "contextmenu.open-in-browser" ],
+				label: [ t`contextmenu.open-in-browser` ],
 				click: () => this.nwjs.openBrowser( url )
 			},
 			{
-				label: [ "contextmenu.copy-link-address" ],
+				label: [ t`contextmenu.copy-link-address` ],
 				click: () => this.nwjs.clipboard.set( url )
 			}
 		]);

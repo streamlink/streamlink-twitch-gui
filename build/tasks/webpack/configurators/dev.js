@@ -6,7 +6,7 @@ const NwjsPlugin = require( "../plugins/nwjs" );
  * Configurations for creating and running development builds
  */
 module.exports = {
-	_dev( config, path, gruntconfig ) {
+	_launch( config, grunt, path ) {
 		// watch and rebuild
 		Object.assign( config, {
 			watch: true,
@@ -16,18 +16,16 @@ module.exports = {
 
 		// launch NW.js after a successful build
 		config.plugins.push(
-			new NwjsPlugin( gruntconfig, {
-				files: `${gruntconfig.dir[ path ]}/**`,
-				argv: "--remote-debugging-port=8888",
-				rerunOnExit: true,
-				log: true,
-				logStdOut: true,
-				logStdErr: true
-			})
+			new NwjsPlugin( Object.assign( {}, grunt.config( "nwjs" ).options, {
+				files: `${grunt.config( "dir" )[ path ]}/**`,
+				argv: "--remote-debugging-port=8888"
+			}) )
 		);
 	},
 
-	_debug( config, DEBUG ) {
+	common( config, grunt, target ) {
+		const DEBUG = target === "dev";
+
 		// set DEBUG to true on each dev-target
 		config.plugins.push(
 			new webpack.DefinePlugin({
@@ -36,25 +34,11 @@ module.exports = {
 		);
 	},
 
-	dev( config, ...args ) {
-		this._dev( config, "tmp_dev", ...args );
-		this._debug( config, true );
+	dev( config, grunt ) {
+		this._launch( config, grunt, "tmp_dev" );
 	},
 
-	prod( config ) {
-		this._debug( config, false );
-	},
-
-	test( config ) {
-		this._debug( config, false );
-	},
-
-	testdev( config, ...args ) {
-		this._dev( config, "tmp_test", ...args );
-		this._debug( config, false );
-	},
-
-	coverage( config ) {
-		this._debug( config, false );
+	testdev( config, grunt ) {
+		this._launch( config, grunt, "tmp_test" );
 	}
 };

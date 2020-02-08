@@ -19,5 +19,10 @@
 		"functions": [ 80, 95 ],
 		"branches": [ 80, 95 ],
 		"statements": [ 80, 95 ]
+	},
+	"i18n": {
+		"exclude": [
+			"hotkeys.keys.*"
+		]
 	}
 }

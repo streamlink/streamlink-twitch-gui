@@ -5,13 +5,13 @@ const webpack = require( "webpack" );
  * Generic production build configurations
  */
 module.exports = {
-	prod( config, gruntconfig ) {
+	prod( config, grunt ) {
 		// add license banners
 		const banner = [
-			gruntconfig.main[ "display-name" ],
-			`@version v${gruntconfig.package.version}`,
+			grunt.config( "main.display-name" ),
+			`@version v${grunt.config( "package.version" )}`,
 			`@date ${new Date().toISOString()}`,
-			`@copyright ${gruntconfig.package.author}`
+			`@copyright ${grunt.config( "package.author" )}`
 		].join( "\n" );
 
 		config.plugins.push(

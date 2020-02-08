@@ -3,5 +3,6 @@ module.exports = {
 	prod: require( "./prod" ),
 	test: require( "./test" ),
 	testdev: require( "./testdev" ),
-	coverage: require( "./coverage" )
+	coverage: require( "./coverage" ),
+	i18n: require( "./i18n" )
 };

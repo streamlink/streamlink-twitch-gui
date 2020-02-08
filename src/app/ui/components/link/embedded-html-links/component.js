@@ -1,6 +1,7 @@
 import Component from "@ember/component";
 import { inject as service } from "@ember/service";
 import getStreamFromUrl from "utils/getStreamFromUrl";
+import t from "translation-key";
 
 
 const DISABLED_EVENTS = "mousedown mouseup keyup keydown keypress".split( " " );
@@ -51,11 +52,11 @@ export default Component.extend({
 
 					this.nwjs.contextMenu( event, [
 						{
-							label: [ "contextmenu.open-in-browser" ],
+							label: [ t`contextmenu.open-in-browser` ],
 							click: () => this.nwjs.openBrowser( url )
 						},
 						{
-							label: [ "contextmenu.copy-link-address" ],
+							label: [ t`contextmenu.copy-link-address` ],
 							click: () => this.nwjs.clipboard.set( url )
 						}
 					]);

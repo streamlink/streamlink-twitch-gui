@@ -36,6 +36,7 @@
 		"@babel/plugin-transform-typescript": "7.4.0",
 		"@ember/test-helpers": "0.7.27",
 		"@ember-decorators/argument": "0.8.21",
+		"@glimmer/syntax": "0.47.4",
 		"babel-eslint": "10.0.1",
 		"babel-loader": "8.0.5",
 		"babel-plugin-debug-macros": "0.2.0",

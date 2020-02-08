@@ -13,6 +13,7 @@ import {
 import { isDebug } from "nwjs/debug";
 import { isWin, platform } from "utils/node/platform";
 import resolvePath from "utils/node/resolvePath";
+import t from "translation-key";
 
 
 const { "display-name": displayName } = mainConfig;
@@ -72,14 +73,14 @@ export default EmberObject.extend( Evented, {
 	_createMenu() {
 		const items = [
 			{
-				label: [ "contextmenu.tray.toggle" ],
+				label: [ t`contextmenu.tray.toggle` ],
 				click: () => {
 					if ( !this.tray ) { return; }
 					this.trigger( "click" );
 				}
 			},
 			{
-				label: [ "contextmenu.tray.close" ],
+				label: [ t`contextmenu.tray.close` ],
 				click: () => nwWindow.close()
 			}
 		];

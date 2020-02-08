@@ -29,6 +29,10 @@ module.exports = {
 		buildEmberConfig( config, false );
 	},
 
+	i18n( config ) {
+		buildEmberConfig( config, false );
+	},
+
 	prod( config ) {
 		buildEmberConfig( config, true );
 	}

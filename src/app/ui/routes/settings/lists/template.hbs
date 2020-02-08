@@ -72,7 +72,7 @@
 	(t "settings.lists.click.description")
 	icon="fa-hand-pointer-o"
 }}
-	<p>{{t (unless isDarwin "settings.lists.click.ctrl" "settings.lists.click.cmd")}}</p>
+	<p>{{unless isDarwin (t "settings.lists.click.ctrl") (t "settings.lists.click.cmd")}}</p>
 	{{#drop-down
 		value=model.streams.click_modify
 		content=contentStreamsClick
