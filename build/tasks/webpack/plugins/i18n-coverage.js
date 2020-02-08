@@ -1,7 +1,8 @@
 module.exports = class WebpackI18nCoveragePlugin {
-	constructor( grunt, { appDir, localesDir, exclude = [] } = {} ) {
+	constructor( grunt, { appDir, defaultLocale, localesDir, exclude = [] } = {} ) {
 		this.grunt = grunt;
 		this.appDir = appDir;
+		this.defaultLocale = defaultLocale;
 		this.localesDir = localesDir;
 		this.exclude = exclude;
 
@@ -28,7 +29,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 		const diff = require( "lodash/difference" );
 		const diffWith = require( "lodash/differenceWith" );
 
-		const { grunt, localeData, translationKeys, exclude } = this;
+		const { grunt, localeData, translationKeys, defaultLocale, exclude } = this;
 
 		const output = ( header, callback ) => {
 			grunt.log.writeln();
@@ -41,26 +42,42 @@ module.exports = class WebpackI18nCoveragePlugin {
 			}
 		};
 
-		const keys = Array.from( translationKeys.values() )
-			.concat( exclude )
-			.sort()
+		// found translation keys (eg. "foo" or "foo.*.bar")
+		const keys = Array.from( translationKeys.values() ).sort();
+		// translation keys of default locale
+		const main = localeData.get( defaultLocale ).sort();
+		localeData.delete( defaultLocale );
+
+		// list of translation keys to be ignored
+		const reExclude = exclude.map( str => this._strToRegExp( str ) );
+		const fnExclude = ( a, b ) => b.test( a );
+
+		// remove ignored keys from both key lists
+		const mainFiltered = diffWith( main, reExclude, fnExclude );
+		const keysFiltered = diffWith( keys, reExclude, fnExclude )
+			// and turn found keys list into {RegExp[]}
 			.map( str => this._strToRegExp( str ) );
-		const en = localeData.get( "en" ).sort();
-		localeData.delete( "en" );
 
 		grunt.log.writeln();
 		output( "Checking for missing translation keys in locales", () => {
 			const missing = [];
 			for ( const [ locale, data ] of localeData ) {
-				missing.push( ...diff( en, data.sort() ).map( item => `${locale}: ${item}` ) );
+				// remove ignored keys from current locale's data
+				const dataFiltered = diffWith( data.sort(), reExclude, fnExclude );
+				// compare with default locale and add diff to missing list
+				missing.push(
+					...diff( mainFiltered, dataFiltered )
+						.map( item => `${locale}: ${item}` )
+				);
 			}
 			return missing;
 		});
 		output( "Checking for invalid translation keys in application code", () => {
-			return diffWith( keys, en, ( a, b ) => a.test( b ) );
+			return diffWith( keysFiltered, mainFiltered, ( a, b ) => fnExclude( b, a ) );
 		});
 		output( "Checking for unused translation keys in application code", () => {
-			return diffWith( en, keys, ( a, b ) => b.test( a ) );
+			// compare keys of default locale with found keys
+			return diffWith( mainFiltered, keysFiltered, fnExclude );
 		});
 	}
 
@@ -73,7 +90,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 		const content = module.originalSource().source();
 
 		if ( module.resource.startsWith( this.localesDir ) ) {
-			const match = /\/(\w+)\/(\w+)\.yml$/.exec( module.resource );
+			const match = /\/([\w-]+)\/([\w-]+)\.yml$/.exec( module.resource );
 			if ( !match ) { return; }
 			const [ , locale, section ] = match;
 			this._addLocaleData( locale, section, this._getContent( content ) );

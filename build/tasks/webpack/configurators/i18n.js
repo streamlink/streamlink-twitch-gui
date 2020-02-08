@@ -35,6 +35,7 @@ module.exports = {
 			new WebpackI18nCoveragePlugin( grunt, {
 				appDir: pApp,
 				localesDir: config.resolve.alias.locales,
+				defaultLocale: grunt.config( "locales.default" ),
 				exclude: grunt.config( "coverage.i18n.exclude" )
 			})
 		);
