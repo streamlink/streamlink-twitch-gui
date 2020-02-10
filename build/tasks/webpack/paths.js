@@ -1,5 +1,4 @@
 const { resolve: r } = require( "path" );
-const { tmpdir } = require( "os" );
 
 
 const pProjectRoot = r( __dirname, "..", "..", ".." );
@@ -10,7 +9,6 @@ const pTest = r( pRoot, "test" );
 const pTestFixtures = r( pTest, "fixtures" );
 const pImages = r( pRoot, "img" );
 const pDependencies = r( pProjectRoot, "node_modules" );
-const pCacheBabel = r( tmpdir(), "babel-cache" );
 
 
 module.exports = {
@@ -21,6 +19,5 @@ module.exports = {
 	pTest,
 	pTestFixtures,
 	pImages,
-	pDependencies,
-	pCacheBabel
+	pDependencies
 };
