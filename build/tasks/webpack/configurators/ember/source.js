@@ -8,7 +8,7 @@ const webpack = require( "webpack" );
 /**
  * EmberJS
  */
-module.exports = function( config, isProd ) {
+module.exports = function( config, grunt, isProd ) {
 	// custom "ember" module
 	Object.assign( config.resolve.alias, {
 		"ember$": r( pRoot, "web_modules", "ember" )
