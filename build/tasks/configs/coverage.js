@@ -1,4 +1,4 @@
-{
+module.exports = {
 	"reporters": [
 		{
 			"name": "html",
@@ -25,4 +25,4 @@
 			"hotkeys.keys.*"
 		]
 	}
-}
+};
