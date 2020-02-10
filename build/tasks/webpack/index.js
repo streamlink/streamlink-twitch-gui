@@ -12,7 +12,7 @@ module.exports = function( grunt ) {
 	const merge = require( "lodash/merge" );
 
 	const targets = require( "./targets" );
-	const defaultConfig = require( "./config" );
+	const defaultConfig = require( "./webpack.config" );
 	const configurators = require( "./configurators" );
 
 	const { hasOwnProperty } = {};
