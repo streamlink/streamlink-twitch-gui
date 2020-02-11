@@ -10,7 +10,7 @@ const HtmlWebpackPlugin = require( "html-webpack-plugin" );
  * Configurations for creating valid NW.js builds
  */
 module.exports = {
-	_nwjs( config, path ) {
+	_nwjs( config, path, isProd = false ) {
 		// NW.js package.json
 		config.plugins.push(
 			new CopyWebpackPlugin([
@@ -21,6 +21,9 @@ module.exports = {
 		// generate the index.html
 		config.plugins.push(
 			new HtmlWebpackPlugin({
+				minify: isProd && {
+					collapseWhitespace: true
+				},
 				inject: "body",
 				hash: false,
 				template: resolve( path, "index.html" )
@@ -40,7 +43,7 @@ module.exports = {
 	},
 
 	prod( config ) {
-		this._nwjs( config, pRoot );
+		this._nwjs( config, pRoot, true );
 	},
 
 	test( config ) {
