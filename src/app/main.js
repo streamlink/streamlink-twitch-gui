@@ -1,3 +1,6 @@
+// special NW.js package.json import (see webpack config)
+import "./package.json";
+
 
 global.process.removeAllListeners();
 

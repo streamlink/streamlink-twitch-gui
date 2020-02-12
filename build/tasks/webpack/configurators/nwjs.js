@@ -1,8 +1,7 @@
-const { resolve } = require( "path" );
-const { pRoot, pTest } = require( "../paths" );
+const { resolve: r } = require( "path" );
+const { pApp, pTest } = require( "../paths" );
 
 const webpack = require( "webpack" );
-const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 
 
@@ -12,11 +11,24 @@ const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 module.exports = {
 	_nwjs( config, path, isProd = false ) {
 		// NW.js package.json
-		config.plugins.push(
-			new CopyWebpackPlugin([
-				{ from: resolve( path, "package.json" ) }
-			])
-		);
+		config.module.rules.push({
+			type: "javascript/auto",
+			test: {
+				or: [
+					r( pApp, "package.json" ),
+					r( pTest, "package.json" )
+				]
+			},
+			use: [
+				{
+					loader: "file-loader",
+					options: {
+						name: "package.json"
+					}
+				},
+				"parse-json-loader"
+			]
+		});
 
 		// generate the index.html
 		config.plugins.push(
@@ -26,7 +38,7 @@ module.exports = {
 				},
 				inject: "body",
 				hash: false,
-				template: resolve( path, "index.html" )
+				template: r( path, "index.html" )
 			})
 		);
 	},
@@ -39,11 +51,11 @@ module.exports = {
 	},
 
 	dev( config ) {
-		this._nwjs( config, pRoot );
+		this._nwjs( config, pApp );
 	},
 
 	prod( config ) {
-		this._nwjs( config, pRoot, true );
+		this._nwjs( config, pApp, true );
 	},
 
 	test( config ) {
