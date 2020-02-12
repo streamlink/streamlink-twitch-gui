@@ -1,6 +1,5 @@
-const { pApp, pDependencies } = require( "../paths" );
+const { pApp } = require( "../paths" );
 
-const webpack = require( "webpack" );
 const WebpackI18nCoveragePlugin = require( "../plugins/i18n-coverage" );
 
 
@@ -19,18 +18,7 @@ module.exports = {
 			}
 		});
 
-		// don't bundle any dependencies
-		config.module.rules.push({
-			test: /./,
-			include: pDependencies,
-			loader: "null-loader"
-		});
-
 		config.plugins.push(
-			// ignore every asset
-			new webpack.IgnorePlugin({
-				resourceRegExp: /\.((c|le)ss|(pn|jpe?|)g|(tf|ot|wof)f|exe)$/
-			}),
 			// parse i18n translation keys
 			new WebpackI18nCoveragePlugin( grunt, {
 				appDir: pApp,
