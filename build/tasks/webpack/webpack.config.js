@@ -18,7 +18,7 @@ module.exports = {
 
 	mode: "development",
 
-	context: pRoot,
+	context: pApp,
 	entry: "main",
 
 	resolve: {
