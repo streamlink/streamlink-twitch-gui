@@ -1,5 +1,5 @@
 const { resolve: r } = require( "path" );
-const { pRoot, pApp, pConfig, pLocales, pTest, pImages, pDependencies } = require( "./paths" );
+const { pRoot, pApp, pAssets, pLocales, pConfig, pTest, pDependencies } = require( "./paths" );
 
 
 const resolveModuleDirectories = [
@@ -25,7 +25,7 @@ module.exports = {
 		alias: {
 			// directory aliases
 			"root": pRoot,
-			"img": pImages,
+			"assets": pAssets,
 
 			// app aliases
 			"config": r( pApp, "config" ),
