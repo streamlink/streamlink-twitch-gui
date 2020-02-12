@@ -1,4 +1,5 @@
-const { pRoot } = require( "../paths" );
+const { resolve: r, posix: { join: j } } = require( "path" );
+const { pRoot, pDependencies } = require( "../paths" );
 
 const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
 const OptimizeCssAssetsPlugin = require( "optimize-css-assets-webpack-plugin" );
@@ -54,10 +55,27 @@ module.exports = {
 
 		// assets
 		config.module.rules.push({
-			test: /\.(jpe?g|png|svg|woff2)$/,
+			test: /\.woff2$/,
 			loader: "file-loader",
 			options: {
-				name: "[path][name].[ext]"
+				name: j( "assets", "fonts", "[name].[ext]" )
+			}
+		});
+		config.module.rules.push({
+			test: /\.svg$/,
+			include: r( pDependencies, "flag-icon-css" ),
+			loader: "file-loader",
+			options: {
+				name: j( "assets", "flags", "[name].[ext]" )
+			}
+		});
+		config.module.rules.push({
+			test: /\.(jpe?|pn|sv)g$/,
+			exclude: r( pDependencies, "flag-icon-css" ),
+			loader: "file-loader",
+			options: {
+				name: "[path][name].[ext]",
+				outputPath: url => j( "assets", url.replace( /^assets[\/\\]/, "" ) )
 			}
 		});
 

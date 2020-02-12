@@ -5,7 +5,7 @@ module.exports = [
 	require( "./ember" ),
 	require( "./moment" ),
 	require( "./app" ),
-	require( "./styles" ),
+	require( "./stylesheets-and-assets" ),
 	require( "./dev" ),
 	require( "./tests" ),
 	require( "./i18n" ),
