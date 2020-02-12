@@ -1,6 +1,6 @@
 const CP = require( "child_process" );
 const FS = require( "fs" );
-const promisify = require( "util.promisify" );
+const { promisify } = require( "util" );
 const StreamOutputBuffer = require( "../app/utils/StreamOutputBuffer" );
 
 

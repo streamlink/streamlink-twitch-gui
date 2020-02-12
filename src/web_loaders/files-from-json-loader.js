@@ -1,6 +1,6 @@
 const { readFile: readFileFS } = require( "fs" );
 const loaderUtils = require( "loader-utils" );
-const promisify = require( "util.promisify" );
+const { promisify } = require( "util" );
 
 
 // dirty, but does its simple job
