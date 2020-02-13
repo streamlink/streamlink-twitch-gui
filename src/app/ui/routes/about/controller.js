@@ -1,25 +1,15 @@
 import Controller from "@ember/controller";
-import { main as config, locales as localesConfig } from "config";
+import { main as mainConfig, locales as localesConfig } from "config";
 import metadata from "metadata";
+import { manifest } from "nwjs/App";
 import { arch } from "utils/node/platform";
 import "./styles.less";
 
 
-const { urls: { release: releaseUrl } } = config;
-const { package: { version }, dependencies } = metadata;
-
-
 export default Controller.extend({
-	metadata,
-	config,
+	mainConfig,
 	localesConfig,
-
+	metadata,
 	arch,
-
-	releaseUrl: releaseUrl.replace( "{version}", version ),
-
-	dependencies: Object.keys( dependencies ).map( key => ({
-		title: key,
-		version: dependencies[ key ]
-	}) )
+	releaseUrl: mainConfig.urls.release.replace( "{version}", manifest.version )
 });

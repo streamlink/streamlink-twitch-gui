@@ -1,12 +1,12 @@
 const { resolve } = require( "path" );
-const { pRoot, pProjectRoot, pConfig } = require( "../paths" );
+const { pRoot, pConfig } = require( "../paths" );
 
 
 /**
  * Application content specific configurations
  */
 module.exports = {
-	common( config ) {
+	common( config, grunt ) {
 		// embed additional HTML files - used by the AuthService's HTTP server
 		config.module.rules.push({
 			test: /\.html$/,
@@ -16,13 +16,17 @@ module.exports = {
 		// metadata
 		config.module.rules.push({
 			test: /metadata\.js$/,
-			// see `src/web_loaders/metadata-loader.js`
-			loader: "metadata-loader",
-			options: {
-				dependencyProperties: [ "dependencies", "devDependencies" ],
-				packageJson: resolve( pProjectRoot, "package.json" ),
-				donationConfigFile: resolve( pConfig, "main.json" )
-			}
+			use: [
+				"optimized-json-loader",
+				{
+					// see `src/web_loaders/metadata-loader.js`
+					loader: "metadata-loader",
+					options: {
+						package: grunt.config( "package" ),
+						built: new Date().toISOString()
+					}
+				}
+			]
 		});
 
 		// themes

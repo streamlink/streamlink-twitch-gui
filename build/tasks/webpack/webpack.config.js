@@ -78,7 +78,12 @@ module.exports = {
 				},
 				config: {
 					name: "config",
-					test: pConfig
+					test({ resource }) {
+						return resource && (
+							   resource.startsWith( pConfig )
+							|| /metadata\.js$/.test( resource )
+						);
+					}
 				},
 				translation: {
 					name: "translation",
