@@ -36,10 +36,13 @@ before_install:
     yarn --version
 
 install:
+  - export SOURCE_DATE_EPOCH=$(git show -s --format=%ct ${TRAVIS_TAG:-${TRAVIS_COMMIT}})
+  - if [ "${TRAVIS_TAG}" ]; then yarn cache clean; fi
   - yarn global add --no-progress --non-interactive grunt-cli
   - yarn install --pure-lockfile --no-progress --non-interactive
 
 script:
+  - echo "SOURCE_DATE_EPOCH = ${SOURCE_DATE_EPOCH}"
   # test and build
   - grunt webpack:i18n build:prod:coverage
   - yarn run codecov

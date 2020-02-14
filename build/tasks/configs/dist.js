@@ -1,30 +1,30 @@
 module.exports = {
 	win32archive: {
 		platform: "win32",
-		tasks: [ "compress:win32" ],
-		checksum: "<%= compress.win32.options.archive %>"
+		tasks: [ "shell:win32archive" ],
+		checksum: "<%= compress.win32.output %>"
 	},
 	win64archive: {
 		platform: "win64",
-		tasks: [ "compress:win64" ],
-		checksum: "<%= compress.win64.options.archive %>"
+		tasks: [ "shell:win64archive" ],
+		checksum: "<%= compress.win64.output %>"
 	},
 
 	osx64archive: {
 		platform: "osx64",
-		tasks: [ "shell:compressMacOSarchive" ],
-		checksum: "<%= compress.osx64.options.archive %>"
+		tasks: [ "shell:osx64archive" ],
+		checksum: "<%= compress.osx64.output %>"
 	},
 
 	linux32archive: {
 		platform: "linux32",
-		tasks: [ "compress:linux32" ],
-		checksum: "<%= compress.linux32.options.archive %>"
+		tasks: [ "shell:linux32archive" ],
+		checksum: "<%= compress.linux32.output %>"
 	},
 	linux64archive: {
 		platform: "linux64",
-		tasks: [ "compress:linux64" ],
-		checksum: "<%= compress.linux64.options.archive %>"
+		tasks: [ "shell:linux64archive" ],
+		checksum: "<%= compress.linux64.output %>"
 	},
 
 	win32installer: {
@@ -36,7 +36,6 @@ module.exports = {
 		],
 		checksum: "<%= dir.dist %>/<%= template.win32installer.options.data.filename %>"
 	},
-
 	win64installer: {
 		platform: "win64",
 		tasks: [

@@ -1,3 +1,6 @@
+const createArchive = require( "../common/archive" );
+
+
 module.exports = {
 	permissions_osx64: {
 		command: "chmod -R g=u,o=u,g-w,o-w <%= dir.releases %>/<%= package.name %>/osx64"
@@ -15,7 +18,6 @@ module.exports = {
 			"makensis -v3 \"<%= dir.tmp_installer %>/win32installer/installer.nsi\""
 		].join( " && " )
 	},
-
 	win64installer: {
 		command: [
 			"mkdir -p \"<%= dir.tmp_installer %>\"",
@@ -23,16 +25,9 @@ module.exports = {
 		].join( " && " )
 	},
 
-	compressMacOSarchive: {
-		command: [
-			"cd '<%= compress.osx64.cwd %>'",
-			"tar -czf"
-				+ " '<%= compress.osx64.options.archive %>'"
-				// use --transform feature of GNU tar to set the custom prefix path
-				// set flags=r to ignore prefix when archiving symlinks
-				// https://stackoverflow.com/a/29661783
-				+ " --transform 'flags=r;s,^,<%= compress.osx64.dest %>,'"
-				+ " *"
-		].join( " && " )
-	}
+	win32archive: createArchive( "win32", "zip" ),
+	win64archive: createArchive( "win64", "zip" ),
+	osx64archive: createArchive( "osx64", "tgz" ),
+	linux32archive: createArchive( "linux32", "tgz" ),
+	linux64archive: createArchive( "linux64", "tgz" )
 };
