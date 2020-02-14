@@ -1,39 +1,18 @@
 const files = [
-	"build/tmp/prod/**"
+	"<%= dir.tmp_prod %>/**"
 ];
-
-const filesWin32 = [
-	...files,
-	"!build/tmp/prod/bin/win64/**"
-];
-const filesWin64 = [
-	...files,
-	"!build/tmp/prod/bin/win32/**"
-];
-const filesMacOS = [
-	...files,
-	"!build/tmp/prod/bin/win32/**",
-	"!build/tmp/prod/bin/win64/**"
-];
-const filesLinux32 = [
-	...files,
-	"!build/tmp/prod/bin/win32/**",
-	"!build/tmp/prod/bin/win64/**"
-];
-const filesLinux64 = [
-	...files,
-	"!build/tmp/prod/bin/win32/**",
-	"!build/tmp/prod/bin/win64/**"
-];
+const ignoreBinWin32 = "!<%= dir.tmp_prod %>/bin/win32/**";
+const ignoreBinWin64 = "!<%= dir.tmp_prod %>/bin/win64/**";
 
 
 module.exports = {
 	options: {
-		files   : "<%= dir.tmp_prod %>/**",
+		files,
 		buildDir: "<%= dir.releases %>",
 		cacheDir: "<%= dir.cache %>",
 		version : "<%= main['nwjs-version'] %>",
 		flavor  : "normal",
+		zip     : false,
 		winIco  : "<%= dir.resources %>/icons/icon-16-32-48-256.ico",
 		macIcns : "<%= dir.resources %>/icons/icon-1024.icns",
 		macPlist: {
@@ -48,33 +27,51 @@ module.exports = {
 
 	win32: {
 		options: {
-			files: filesWin32,
+			files: [
+				...files,
+				ignoreBinWin64
+			],
 			platforms: [ "win32" ]
 		}
 	},
 	win64: {
 		options: {
-			files: filesWin64,
+			files: [
+				...files,
+				ignoreBinWin32
+			],
 			platforms: [ "win64" ]
 		}
 	},
 
 	osx64: {
 		options: {
-			files: filesMacOS,
+			files: [
+				...files,
+				ignoreBinWin32,
+				ignoreBinWin64
+			],
 			platforms: [ "osx64" ]
 		}
 	},
 
 	linux32: {
 		options: {
-			files: filesLinux32,
+			files: [
+				...files,
+				ignoreBinWin32,
+				ignoreBinWin64
+			],
 			platforms: [ "linux32" ]
 		}
 	},
 	linux64: {
 		options: {
-			files: filesLinux64,
+			files: [
+				...files,
+				ignoreBinWin32,
+				ignoreBinWin64
+			],
 			platforms: [ "linux64" ]
 		}
 	}
