@@ -2,9 +2,9 @@ import { main as mainConfig, notification as notificationConfig } from "config";
 import Process from "nwjs/process";
 import promiseChildprocess from "utils/node/child_process/promise";
 import { is64bit, isWinGte8 } from "utils/node/platform";
-import resolvePath from "utils/node/resolvePath";
 import which from "utils/node/fs/which";
 import snoretoastBinaries from "snoretoast-binaries";
+import { resolve } from "path";
 
 
 const { "display-name": displayName } = mainConfig;
@@ -17,13 +17,16 @@ const {
 	}
 } = notificationConfig;
 
-//const EXIT_CODE_FAILED  = -1;
-const EXIT_CODE_SUCCESS   = 0;
-//const EXIT_CODE_HIDDEN  = 1;
-const EXIT_CODE_DISMISSED = 2;
-const EXIT_CODE_TIMEOUT   = 3;
 
-const MSG_CLICK = "The user clicked on the toast.";
+// noinspection JSUnusedGlobalSymbols
+export const EXIT_CODE_FAILED    = -1;
+export const EXIT_CODE_SUCCESS   = 0;
+// noinspection JSUnusedGlobalSymbols
+export const EXIT_CODE_HIDDEN    = 1;
+export const EXIT_CODE_DISMISSED = 2;
+export const EXIT_CODE_TIMEOUT   = 3;
+
+export const MSG_CLICK = "The user clicked on the toast.";
 
 
 /**
@@ -38,10 +41,7 @@ export default class NotificationProviderSnoreToast {
 	}
 
 	async setup() {
-		const path = resolvePath(
-			"%NWJSAPPPATH%",
-			...snoretoastBinaries[ is64bit ? "x64" : "x86" ]
-		);
+		const path = resolve( ...snoretoastBinaries[ is64bit ? "x64" : "x86" ] );
 		this.exec = await which( path );
 
 		await promiseChildprocess(

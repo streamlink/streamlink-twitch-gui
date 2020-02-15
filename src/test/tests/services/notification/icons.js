@@ -1,22 +1,24 @@
 import { module, test } from "qunit";
 import sinon from "sinon";
-import { posix as path } from "path";
+import { resolve, posix as pathPosix } from "path";
 
 import notificationIconsMixinInjector
 // eslint-disable-next-line max-len
-	from "inject-loader?config&utils/node/platform&utils/node/resolvePath&utils/node/fs/mkdirp&utils/node/fs/clearfolder&utils/node/fs/download&path!services/notification/icons";
+	from "inject-loader?config&utils/node/platform&utils/node/fs/mkdirp&utils/node/fs/clearfolder&utils/node/fs/download&path!services/notification/icons";
 
 
 
 module( "services/notification/icons", {
 	beforeEach() {
-		this.resolvePathStub = sinon.stub().callsFake( ( ...paths ) => paths.join( "/" ) );
 		this.mkdirpStub = sinon.stub();
 		this.clearfolderStub = sinon.stub();
 		this.downloadStub = sinon.stub();
 
-		this.subject = isWin => notificationIconsMixinInjector({
-			path,
+		this.subject = () => notificationIconsMixinInjector({
+			path: {
+				resolve,
+				join: pathPosix.join
+			},
 			config: {
 				files: {
 					icons: {
@@ -31,10 +33,8 @@ module( "services/notification/icons", {
 				}
 			},
 			"utils/node/platform": {
-				isWin,
 				cachedir: "/home/user/.cache/my-app"
 			},
-			"utils/node/resolvePath": this.resolvePathStub,
 			"utils/node/fs/mkdirp": this.mkdirpStub,
 			"utils/node/fs/clearfolder": this.clearfolderStub,
 			"utils/node/fs/download": this.downloadStub
@@ -54,7 +54,11 @@ test( "NotificationService icons", async function( assert ) {
 		iconDownload
 	} = this.subject( false );
 
-	assert.strictEqual( iconGroup, "bigIconPath", "Exports the correct iconGroup constant" );
+	assert.strictEqual(
+		iconGroup,
+		resolve( "bigIconPath" ),
+		"Exports the resolved absolute path of the iconGroup constant"
+	);
 
 	this.mkdirpStub.rejects( error );
 	await assert.rejects( iconDirCreate(), error, "Rejects on mkdirp failure" );
@@ -111,18 +115,5 @@ test( "NotificationService icons", async function( assert ) {
 	this.downloadStub.resetHistory();
 	await iconDownload( stream );
 	assert.notOk( this.downloadStub.called, "Doesn't try to download icons twice" );
-
-});
-
-
-test( "Windows icon path", async function( assert ) {
-
-	const { iconGroup } = this.subject( true );
-
-	assert.strictEqual(
-		iconGroup,
-		"%NWJSAPPPATH%/bigIconPath",
-		"Exports the correct iconGroup constant on Windows"
-	);
 
 });
