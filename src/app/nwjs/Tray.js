@@ -10,9 +10,7 @@ import {
 	toggleVisibility,
 	setShowInTaskbar
 } from "nwjs/Window";
-import { isDebug } from "nwjs/debug";
-import { isWin, platform } from "utils/node/platform";
-import resolvePath from "utils/node/resolvePath";
+import { platform } from "utils/node/platform";
 import t from "translation-key";
 
 
@@ -37,14 +35,8 @@ export default EmberObject.extend( Evented, {
 		// context menu
 		this._createMenu();
 
-		// tray icons on Windows require an absolute path
-		// TODO: rewrite this and also implement an icon resolver for Linux icon themes
+		// TODO: implement an icon resolver for Linux icon themes
 		this.icons = Object.assign( {}, trayIcons );
-		if ( isWin && !isDebug ) {
-			for ( const [ key, icon ] of Object.entries( this.icons ) ) {
-				this.icons[ key ] = resolvePath( "%NWJSAPPPATH%", icon );
-			}
-		}
 	},
 
 

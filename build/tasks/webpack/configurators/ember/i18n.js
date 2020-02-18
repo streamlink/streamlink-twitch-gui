@@ -13,7 +13,7 @@ module.exports = function( config ) {
 	config.module.rules.push({
 		test: /\.ya?ml$/,
 		use: [
-			"json-loader",
+			"optimized-json-loader",
 			"yaml-loader"
 		]
 	});

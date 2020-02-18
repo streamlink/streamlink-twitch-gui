@@ -1,11 +1,10 @@
 import { get, set } from "@ember/object";
 import { files as filesConfig, notification as notificationConfig } from "config";
-import { isWin, cachedir } from "utils/node/platform";
-import resolvePath from "utils/node/resolvePath";
+import { cachedir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
 import clearfolder from "utils/node/fs/clearfolder";
 import download from "utils/node/fs/download";
-import { join } from "path";
+import { resolve, join } from "path";
 
 
 const { icons: { big: bigIcon } } = filesConfig;
@@ -18,9 +17,8 @@ const {
 const iconCacheDir = join( cachedir, cacheName );
 
 
-export const iconGroup = isWin
-	? resolvePath( "%NWJSAPPPATH%", bigIcon )
-	: resolvePath( bigIcon );
+// TODO: implement an icon resolver for Linux icon themes
+export const iconGroup = resolve( bigIcon );
 
 /**
  * @returns {Promise}

@@ -5,7 +5,7 @@ const { buildBabelConfig } = require( "../../utils" );
 const webpack = require( "webpack" );
 
 
-module.exports = function( config, isProd ) {
+module.exports = function( config, grunt, isProd ) {
 	config.module.rules.push({
 		test: /\.js$/,
 		include: r( pDependencies, "@ember-decorators" ),

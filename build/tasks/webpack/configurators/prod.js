@@ -1,4 +1,9 @@
+const { resolve: r } = require( "path" );
+const { pProjectRoot } = require( "../paths" );
+const Date = require( "../../common/date" );
+
 const webpack = require( "webpack" );
+const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 
 
 /**
@@ -19,6 +24,13 @@ module.exports = {
 				banner,
 				entryOnly: true
 			})
+		);
+
+		config.plugins.push(
+			new CopyWebpackPlugin([{
+				from: r( pProjectRoot, "LICENSE" ),
+				transformPath: targetPath => `${targetPath}.txt`
+			}])
 		);
 	}
 };

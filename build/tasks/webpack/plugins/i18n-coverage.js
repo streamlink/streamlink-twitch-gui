@@ -106,7 +106,13 @@ module.exports = class WebpackI18nCoveragePlugin {
 	}
 
 	_getContent( content ) {
-		return JSON.parse( content.replace( /^module\.exports = /, "" ) );
+		content = content.replace( /^module\.exports\s*=\s*|;$/g, "" );
+		// get data of the optimized-json-loader
+		if ( content.startsWith( "JSON.parse(" ) ) {
+			content = JSON.parse( content.replace( /^JSON\.parse\(|\)$/g, "" ) );
+		}
+
+		return JSON.parse( content );
 	}
 
 	_addLocaleData( locale, section, content ) {

@@ -5,7 +5,7 @@ import { twitch } from "config";
 import { setFocused } from "nwjs/Window";
 import { all } from "utils/contains";
 import HttpServer from "utils/node/http/HttpServer";
-import OAuthResponseRedirect from "root/oauth-redirect.html";
+import OAuthResponseRedirect from "./oauth-redirect.html";
 
 
 const {

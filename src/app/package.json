@@ -14,7 +14,7 @@
 		"height": 540,
 		"min_width": 960,
 		"min_height": 540,
-		"icon": "img/icon-256.png",
+		"icon": "~assets/icons/icon-256.png",
 		"show_in_taskbar": false
 	},
 

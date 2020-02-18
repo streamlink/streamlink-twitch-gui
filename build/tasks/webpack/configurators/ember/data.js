@@ -9,7 +9,7 @@ const { buildBabelConfig } = require( "../../utils" );
  * https://github.com/emberjs/data/blob/v3.3.2/lib/stripped-build-plugins.js
  * https://github.com/babel/ember-cli-babel/blob/v6.17.1/index.js
  */
-module.exports = function( config, isProd ) {
+module.exports = function( config, grunt, isProd ) {
 	Object.assign( config.resolve.alias, {
 		"ember-data/version$": r( pRoot, "web_modules", "ember-data", "version" ),
 		"ember-data/app": r( pDependencies, "ember-data", "app" ),

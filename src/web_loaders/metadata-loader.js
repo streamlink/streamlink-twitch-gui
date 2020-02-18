@@ -1,28 +1,12 @@
 const CP = require( "child_process" );
-const FS = require( "fs" );
-const promisify = require( "util.promisify" );
-const StreamOutputBuffer = require( "../app/utils/StreamOutputBuffer" );
+const loaderUtils = require( "loader-utils" );
 
 
 module.exports = function() {
 	const callback = this.async();
-
-	const {
-		dependencyProperties,
-		packageJson,
-		donationConfigFile
-	} = this.query;
-
-	this.addDependency( packageJson );
-	this.addDependency( donationConfigFile );
 	this.cacheable( false );
 
-	/**
-	 * @type {Function}
-	 * @returns {Promise}
-	 */
-	const readFile = promisify( FS.readFile );
-	const readPackageJson = readFile( packageJson ).then( JSON.parse );
+	const { package: pkg, built } = loaderUtils.getOptions( this );
 
 
 	function promiseExec( exec, params ) {
@@ -40,68 +24,29 @@ module.exports = function() {
 				if ( code > 0 ) {
 					reject( new Error( status ) );
 				} else {
-					resolve( String( data ) );
+					resolve( data.join( "" ).split( /[\r\n]+/ ).slice( 0, -1 ) );
 				}
 			}
 
-			function onStdOut( line ) {
-				data.push( line );
+			function onStdOut( chunk ) {
+				data.push( chunk );
 			}
-
-			const streamoutputbuffer = new StreamOutputBuffer( {
-				maxBuffSize: 1024 * 64
-			}, onStdOut );
 
 			spawn.on( "error", onError );
 			spawn.on( "exit", onExit );
-			spawn.stdout.on( "data", streamoutputbuffer );
+			spawn.stdout.on( "data", onStdOut );
 		});
 	}
 
 
-	function promisePackageData() {
-		return Promise.all([
-			readPackageJson,
-			promiseExec( "git", [ "describe", "--tags" ] )
-		])
-			.then( ([ json, version ]) => ({
-				homepage: json.homepage,
-				author: json.author,
-				version: json.version,
-				versionstring: version.replace( /^v/, "" ),
-				built: new Date().toISOString()
+	promiseExec( "git", [ "describe", "--tags" ] )
+		.then( ([ versionstring ]) => {
+			callback( null, JSON.stringify({
+				versionstring,
+				built,
+				author: pkg.author,
+				dependencies: [ "dependencies", "devDependencies" ]
+					.reduce( ( obj, key ) => Object.assign( obj, pkg[ key ] ), {} )
 			}) );
-	}
-
-	function promiseDependencies() {
-		function merge( obj, nestedItem ) {
-			Object.keys( nestedItem )
-				.forEach( key => obj[ key ] = nestedItem[ key ] );
-			return obj;
-		}
-
-		return readPackageJson
-			// merge dependencies
-			.then( json => dependencyProperties
-				.map( property => json[ property ] || {} )
-				.reduce( merge, {} )
-			);
-	}
-
-	function getDonationData() {
-		return readFile( donationConfigFile )
-			.then( JSON.parse )
-			.then( data => data[ "donation" ] );
-	}
-
-
-	Promise.all([
-		promisePackageData(),
-		promiseDependencies(),
-		getDonationData()
-	])
-		.then( ([ packageData, dependencies, donation ]) => {
-			const data = JSON.stringify({ "package": packageData, dependencies, donation });
-			callback( null, `module.exports=${data}` );
 		}, callback );
 };

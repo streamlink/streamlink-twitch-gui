@@ -1,63 +1,33 @@
+// This was once the config file for grunt-contrib-compress, but since deterministic archives
+// can't be created with this lib and its dependencies and since it hasn't seen any activity in
+// recent years, the "compress" task was dropped in favor of the shell task with custom
+// compression targets that execute system utilities for creating and compressing archives.
+// The compress config file will be kept for holding input, prefix and output values
+// that get referenced by various other tasks and configs.
 module.exports = {
 	win32: {
-		options: {
-			mode   : "zip",
-			level  : 9,
-			archive: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-win32.zip"
-		},
-		expand : true,
-		cwd    : "<%= dir.releases %>/<%= package.name %>/win32",
-		src    : [ "**" ],
-		dest   : "<%= package.name %>"
+		input: "<%= dir.releases %>/<%= package.name %>/win32",
+		prefix: "<%= package.name %>",
+		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-win32.zip"
 	},
 	win64: {
-		options: {
-			mode   : "zip",
-			level  : 9,
-			archive: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-win64.zip"
-		},
-		expand : true,
-		cwd    : "<%= dir.releases %>/<%= package.name %>/win64",
-		src    : [ "**" ],
-		dest   : "<%= package.name %>"
+		input: "<%= dir.releases %>/<%= package.name %>/win64",
+		prefix: "<%= package.name %>",
+		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-win64.zip"
 	},
-
-	// broken due to symlinks inside the NW.js app folder
-	// symlinks are supported by archiver ^2.0.0, but grunt-contrib-compress still uses ^1.3.0
-	// see the shell:compressMacOSarchive task instead
-	// the other tasks still use the options.archive value defined here, so don't remove it
 	osx64: {
-		options: {
-			mode   : "tgz",
-			level  : 9,
-			archive: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-macOS.tar.gz"
-		},
-		expand : true,
-		cwd    : "<%= dir.releases %>/<%= package.name %>/osx64/<%= package.name %>.app/",
-		src    : [ "**" ],
-		dest   : "<%= main['display-name'] %>.app/"
+		input: "<%= dir.releases %>/<%= package.name %>/osx64/<%= package.name %>.app",
+		prefix: "<%= main['display-name'] %>.app",
+		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-macOS.tar.gz"
 	},
-
 	linux32: {
-		options: {
-			mode   : "tgz",
-			level  : 9,
-			archive: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-linux32.tar.gz"
-		},
-		expand : true,
-		cwd    : "<%= dir.releases %>/<%= package.name %>/linux32",
-		src    : [ "**" ],
-		dest   : "<%= package.name %>"
+		input: "<%= dir.releases %>/<%= package.name %>/linux32",
+		prefix: "<%= package.name %>",
+		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-linux32.tar.gz"
 	},
 	linux64: {
-		options: {
-			mode   : "tgz",
-			level  : 9,
-			archive: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-linux64.tar.gz"
-		},
-		expand : true,
-		cwd    : "<%= dir.releases %>/<%= package.name %>/linux64",
-		src    : [ "**" ],
-		dest   : "<%= package.name %>"
+		input: "<%= dir.releases %>/<%= package.name %>/linux64",
+		prefix: "<%= package.name %>",
+		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-linux64.tar.gz"
 	}
 };

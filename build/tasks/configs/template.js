@@ -40,12 +40,12 @@ module.exports = {
 		}
 	},
 
-	win32installer: {
+	installer_win32: {
 		options: {
 			data: {
 				dirroot    : "<%= dir.root %>",
 				dirinput   : "<%= dir.releases %>/<%= package.name %>/win32",
-				files      : "<%= grunt.config( 'template.win32installer.getFiles' )( grunt ) %>",
+				files      : "<%= grunt.config( 'template.installer_win32.getFiles' )( grunt ) %>",
 				diroutput  : "<%= dir.dist %>",
 				filename   : "<%= package.name %>-v<%= package.version %>-win32-installer.exe",
 				name       : "<%= package.name %>",
@@ -56,19 +56,18 @@ module.exports = {
 				arch       : "win32"
 			}
 		},
-		getFiles: getInstallerFiles( "win32installer" ),
+		getFiles: getInstallerFiles( "installer_win32" ),
 		files: {
 			"<%= dir.tmp_installer %>/win32installer/installer.nsi":
 				"<%= dir.resources %>/installer/installer.nsi"
 		}
 	},
-
-	win64installer: {
+	installer_win64: {
 		options: {
 			data: {
 				dirroot    : "<%= dir.root %>",
 				dirinput   : "<%= dir.releases %>/<%= package.name %>/win64",
-				files      : "<%= grunt.config( 'template.win64installer.getFiles' )( grunt ) %>",
+				files      : "<%= grunt.config( 'template.installer_win64.getFiles' )( grunt ) %>",
 				diroutput  : "<%= dir.dist %>",
 				filename   : "<%= package.name %>-v<%= package.version %>-win64-installer.exe",
 				name       : "<%= package.name %>",
@@ -79,7 +78,7 @@ module.exports = {
 				arch       : "win64"
 			}
 		},
-		getFiles: getInstallerFiles( "win64installer" ),
+		getFiles: getInstallerFiles( "installer_win64" ),
 		files: {
 			"<%= dir.tmp_installer %>/win64installer/installer.nsi":
 				"<%= dir.resources %>/installer/installer.nsi"

@@ -124,7 +124,7 @@
 			"linux": false
 		},
 		"data": {
-			"script": "%NWJSAPPPATH%\\msie-minimal.vbs"
+			"script": "msie-minimal.vbs"
 		},
 		"attributes": [
 			{

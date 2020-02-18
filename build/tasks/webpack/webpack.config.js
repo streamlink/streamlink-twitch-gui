@@ -1,5 +1,5 @@
 const { resolve: r } = require( "path" );
-const { pRoot, pApp, pImages, pTest, pDependencies } = require( "./paths" );
+const { pRoot, pApp, pAssets, pLocales, pConfig, pTest, pDependencies } = require( "./paths" );
 
 
 const resolveModuleDirectories = [
@@ -18,20 +18,20 @@ module.exports = {
 
 	mode: "development",
 
-	context: pRoot,
+	context: pApp,
 	entry: "main",
 
 	resolve: {
 		alias: {
 			// directory aliases
 			"root": pRoot,
-			"img": pImages,
+			"assets": pAssets,
 
 			// app aliases
 			"config": r( pApp, "config" ),
 			"data": r( pApp, "data" ),
 			"init": r( pApp, "init" ),
-			"locales": r( pApp, "locales" ),
+			"locales": pLocales,
 			"nwjs": r( pApp, "nwjs" ),
 			"services": r( pApp, "services" ),
 			"ui": r( pApp, "ui" ),
@@ -59,7 +59,7 @@ module.exports = {
 
 
 	output: {
-		// name each file by their entry module name
+		// name each file by its entry module name
 		filename: "[name].js",
 		// don't use the webpack:// protocol in sourcemaps
 		devtoolModuleFilenameTemplate: "/[resource-path]"
@@ -69,10 +69,29 @@ module.exports = {
 		runtimeChunk: true,
 		splitChunks: {
 			chunks: "all",
+			minSize: 0,
+			maxInitialRequests: Infinity,
 			cacheGroups: {
-				vendors: {
+				vendor: {
 					name: "vendor",
 					test: pDependencies
+				},
+				config: {
+					name: "config",
+					test({ resource }) {
+						return resource && (
+							   resource.startsWith( pConfig )
+							|| /metadata\.js$/.test( resource )
+						);
+					}
+				},
+				translation: {
+					name: "translation",
+					test({ resource }) {
+						return resource
+						    && resource.startsWith( pLocales )
+						    && resource.endsWith( ".yml" );
+					}
 				},
 				template: {
 					name: "template",
