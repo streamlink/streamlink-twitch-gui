@@ -6885,21 +6885,22 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"load-grunt-config@github:bastimeyer/load-grunt-config#update-lodash":
-  version "3.0.0-rc2"
-  resolved "https://codeload.github.com/bastimeyer/load-grunt-config/tar.gz/9bae5450ba67f6664755e9485d96740d384a8bb9"
+load-grunt-config@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/load-grunt-config/-/load-grunt-config-3.0.1.tgz#08e33098aa73c95ddfab577b7580d758060ae07a"
+  integrity sha512-kFzYN8roBa+owMyGlEKyui6JzWpM1tMH8xn0AejiLgXAT4Kh275cPwin7GjNrKZKul8viWK0Caa6OaUJLXXpkA==
   dependencies:
     cson "5.1.0"
     glob "7.1.4"
     jit-grunt "0.10.0"
     js-yaml "3.13.1"
-    load-grunt-tasks "5.0.0"
-    lodash "^4.17.13"
+    load-grunt-tasks "5.1.0"
+    lodash "4.17.15"
 
-load-grunt-tasks@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/load-grunt-tasks/-/load-grunt-tasks-5.0.0.tgz#6db9ea287865c841b66d6cb4312e903264e731ed"
-  integrity sha512-ga8vBA/+JVUB0Q/De9Id75maCIAzSgELWisBkBwxfDpU03fgYH5Ae1Do35hvfothsLWQCjPaTeG1Nya/CQr3gw==
+load-grunt-tasks@5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/load-grunt-tasks/-/load-grunt-tasks-5.1.0.tgz#14894c27a7e34ebbef9937c39cc35c573cd04c1c"
+  integrity sha512-oNj0Jlka1TsfDe+9He0kcA1cRln+TMoTsEByW7ij6kyktNLxBKJtslCFEvFrLC2Dj0S19IWJh3fOCIjLby2Xrg==
   dependencies:
     arrify "^2.0.1"
     multimatch "^4.0.0"
@@ -7061,10 +7062,10 @@ lodash@4.17.11:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
-lodash@^4.14.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.8.0, lodash@~4.17.10, lodash@~4.17.4, lodash@~4.17.5:
-  version "4.17.14"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
-  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+lodash@4.17.15, lodash@^4.14.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.8.0, lodash@~4.17.10, lodash@~4.17.4, lodash@~4.17.5:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
 lolex@^2.2.0, lolex@^2.3.2:
   version "2.3.2"
