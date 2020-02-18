@@ -19,7 +19,7 @@ module.exports = function( grunt ) {
 		/** @type {String[]} target */
 		const targets = ( !this.args.length
 			// default target is an archive for the current platform
-			? [ `${platforms.getPlatforms()}archive` ]
+			? [ `archive_${platforms.getPlatforms()}` ]
 			: this.args
 		)
 			.reduce( ( list, target ) => {
