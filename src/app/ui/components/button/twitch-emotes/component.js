@@ -35,9 +35,8 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 
 	async action( success, failure ) {
 		try {
-			this.nwjs.openBrowser( twitchEmotesUrl, {
-				channel: this.channel.name
-			});
+			const { id } = this.channel;
+			this.nwjs.openBrowser( twitchEmotesUrl, { id } );
 			await success();
 		} catch ( err ) {
 			await failure( err );

@@ -5,7 +5,7 @@
 		"popout": "https://www.twitch.tv/popout/{channel}/chat",
 		"embed": "https://www.twitch.tv/embed/{channel}/chat"
 	},
-	"emotes-url": "https://twitchemotes.com/channel/{channel}",
+	"emotes-url": "https://twitchemotes.com/channels/{id}",
 	"subscription": {
 		"create-url": "https://www.twitch.tv/{channel}/subscribe"
 	},
