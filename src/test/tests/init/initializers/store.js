@@ -8,7 +8,7 @@ import StoreInitializer from "init/initializers/store";
 import { buildResolver } from "test-utils";
 
 
-module( "init/initializer/store", function( hooks ) {
+module( "init/initializers/store", function( hooks ) {
 	setupTest( hooks, {
 		resolver: buildResolver({})
 	});
