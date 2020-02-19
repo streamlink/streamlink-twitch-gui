@@ -14,6 +14,7 @@ main:
     language:
         title: Langue
         description: Sélectionnez la langue de l'interface.
+        notes: Parlez-vous une autre langue ? Aidez à traduire ! Lisez le Wiki pour plus d'informations.
         labels:
             auto: "Système ({{label}})"
     advanced:
