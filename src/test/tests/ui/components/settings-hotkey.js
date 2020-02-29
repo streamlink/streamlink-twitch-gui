@@ -20,6 +20,7 @@ import SettingsHotkeyComponent from "ui/components/settings-hotkey/component";
 import FormButtonComponent from "ui/components/button/form-button/component";
 import CheckBoxComponent from "ui/components/form/check-box/component";
 import hotkeyServiceInjector from "inject-loader?config!services/hotkey";
+import { helper as BoolOrHelper } from "ui/components/helper/bool-or";
 import { helper as HotkeyTitleHelper } from "ui/components/helper/hotkey-title";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
@@ -32,6 +33,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 			CheckBoxComponent,
 			I18nService: FakeI18nService,
 			THelper: FakeTHelper,
+			BoolOrHelper,
 			HotkeyTitleHelper,
 			SettingsService: Service.extend( Evented )
 		})
@@ -67,6 +69,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 			"Shows empty translation string if no hotkey exists yet"
 		);
 		assert.ok( input.disabled, "Input field is disabled" );
+		assert.ok( input.classList.contains( "is-empty" ), "Input field is empty" );
 		assert.ok( btnDelete.disabled, "Delete button is disabled" );
 		assert.notOk( btnDelete.title, "Delete button doesn't have a title if disabled" );
 		assert.ok( btnDelete.querySelector( "i.fa-trash-o" ), "Delete button has the right icon" );
@@ -90,6 +93,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 			"hotkeys.modifiers.ctrlKey+Enter",
 			"Shows hotkey string if default hotkey exists"
 		);
+		assert.notOk( input.classList.contains( "is-empty" ), "Input field is not empty anymore" );
 
 		// create custom hotkey
 		run( () => model.set( "code", "Escape" ) );
@@ -99,6 +103,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 			"Shows hotkey string of custom hotkey if it exists"
 		);
 		assert.ok( input.disabled, "Input field is always disabled in normal mode" );
+		assert.notOk( input.classList.contains( "is-empty" ), "Input field is still not empty" );
 		assert.notOk( btnDelete.disabled, "Delete button is not disabled if custom hotkey is set" );
 		assert.strictEqual(
 			btnDelete.title,
@@ -151,6 +156,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 			"hotkeys.modifiers.shiftKey+Space",
 			"Shows hotkey string of custom hotkey if it exists"
 		);
+		assert.notOk( input.classList.contains( "is-empty" ), "Input field is not empty" );
 		assert.notOk( btnEnabled.classList.contains( "checked" ), "Checkbox is not checked again" );
 		assert.ok( model.get( "disabled" ), "Hotkey is disabled again" );
 
@@ -169,7 +175,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 		const hotkey = { code: "Enter" };
 		const content = { disabled: false, code: null };
 		const model = ObjectBuffer.create({ content });
-		this.setProperties({ hotkey, model });
+		this.setProperties({ hotkey: null, model });
 
 		await render( hbs`{{settings-hotkey model=model hotkey=hotkey}}` );
 		const elem = this.element.querySelector( ".settings-hotkey-component" );
@@ -178,6 +184,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 		let e;
 
 		assert.ok( input.disabled, "Input field is disabled in normal mode" );
+		assert.ok( input.classList.contains( "is-empty" ), "Input field is empty" );
 		assert.notEqual( document.activeElement, input, "Input is not focused" );
 
 		// disable hotkey
@@ -187,8 +194,13 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 
 		// edit
 		await click( elem.querySelector( ".js-btn-edit" ) );
-		assert.strictEqual( input.value.trim(), "Enter", "Shows the default hotkey" );
+		assert.strictEqual(
+			input.value.trim(),
+			"components.settings-hotkey.empty",
+			"Shows empty translation string if no hotkey exists yet"
+		);
 		assert.notOk( input.disabled, "Input field is not disabled in edit mode" );
+		assert.ok( input.classList.contains( "is-empty" ), "Input field is still empty" );
 		assert.strictEqual( document.activeElement, input, "Input gets focused when editing" );
 		assert.notOk(
 			elem.querySelector( ".js-btn-delete" ),
@@ -202,6 +214,10 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 			elem.querySelector( ".js-btn-enabled" ),
 			"Check box is always visible"
 		);
+
+		this.setProperties({ hotkey });
+		assert.strictEqual( input.value.trim(), "Enter", "Shows the default hotkey" );
+		assert.notOk( input.classList.contains( "is-empty" ), "Input field is not empty anymore" );
 
 		const btnDiscard = elem.querySelector( ".js-btn-discard" );
 		const btnConfirm = elem.querySelector( ".js-btn-confirm" );

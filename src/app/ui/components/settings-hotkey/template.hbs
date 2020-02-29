@@ -1,5 +1,6 @@
 {{input
 	classNames="form-control"
+	class=(unless (bool-or hotkey model.code _inputEvent) "is-empty")
 	type="text"
 	value=_inputValue
 	disabled=(unless editing true)
