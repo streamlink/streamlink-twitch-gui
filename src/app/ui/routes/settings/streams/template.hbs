@@ -46,22 +46,6 @@
 {{/if}}
 </fieldset>
 
-<fieldset class="{{unless model.advanced 'hidden'}}">
-{{#settings-row
-	(t "settings.streams.vodcast-regexp.title")
-	(t "settings.streams.vodcast-regexp.description")
-	icon="fa-search"
-	notes=(t "settings.streams.vodcast-regexp.notes")
-}}
-	{{input
-		type="text"
-		value=model.streams.vodcast_regexp
-		placeholder=DEFAULT_VODCAST_REGEXP
-		class="col-xs-12"
-	}}
-{{/settings-row}}
-</fieldset>
-
 <fieldset>
 {{#settings-row
 	(t "settings.streams.modal-close-launch.title")
@@ -116,7 +100,9 @@
 		checked=model.streams.show_flag
 	}}
 {{/settings-row}}
+</fieldset>
 
+<fieldset>
 {{#settings-row
 	(t "settings.streams.filter-vodcast.title")
 	(t "settings.streams.filter-vodcast.description")
@@ -128,6 +114,24 @@
 	}}
 {{/settings-row}}
 
+{{#if model.advanced}}
+	{{#settings-row
+		(t "settings.streams.vodcast-regexp.title")
+		(t "settings.streams.vodcast-regexp.description")
+		icon="fa-search"
+		notes=(t "settings.streams.vodcast-regexp.notes")
+	}}
+		{{input
+			type="text"
+			value=model.streams.vodcast_regexp
+			placeholder=DEFAULT_VODCAST_REGEXP
+			class="col-xs-12"
+		}}
+	{{/settings-row}}
+{{/if}}
+</fieldset>
+
+<fieldset>
 {{#settings-row
 	(t "settings.streams.show-info.title")
 	(t "settings.streams.show-info.description")
@@ -154,7 +158,9 @@
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
+</fieldset>
 
+<fieldset>
 {{#settings-row
 	(t "settings.streams.click.title")
 	(t "settings.streams.click.description")

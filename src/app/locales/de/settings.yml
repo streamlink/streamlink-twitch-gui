@@ -233,10 +233,6 @@ streams:
         description: Definiere eine präzise Auswahl der Qualität in einem bestimmten Bereich oder durch Aufzählung von expliziten Namen.
         notes: Die zweite Spalte zeigt die eigentliche Qualitätsauswahl. Werte aus der ersten Spalte werden von den "best" oder "worst" Selektoren herausgefiltert. Bitte lies das Wiki und Streamlinks Dokumentation bevor du Änderungen vornimmst.
         dont-exclude: Keine Streamqualitäten filtern
-    vodcast-regexp:
-        title: Benutzerdefinierte Vodcast Filter
-        description: Nicht markierte Vodcasts/Aufzeichnungen finden.
-        notes: Ein JavaScript konformer regulärer Ausdruck, angewendet auf den Streamtitel. Um das Filtern auszuschalten, gebe einen leeren Text oder ungültigen Ausdruck ein.
     modal-close-launch:
         title: Stream Pop-up verstecken
         description: Nachdem der Stream gestartet wurde.
@@ -260,6 +256,10 @@ streams:
         title: Vodcasts ausblenden
         description: Vodcasts als zusätzlichen Indikator weniger sichtbar machen.
         checkbox: Vodcasts ausblenden
+    vodcast-regexp:
+        title: Benutzerdefinierte Vodcast Filter
+        description: Nicht markierte Vodcasts/Aufzeichnungen finden.
+        notes: Ein JavaScript konformer regulärer Ausdruck, angewendet auf den Streamtitel. Um das Filtern auszuschalten, gebe einen leeren Text oder ungültigen Ausdruck ein.
     show-info:
         title: Infoleiste
         description: Untere Leiste innerhalb der Streamvorschau.

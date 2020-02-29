@@ -233,10 +233,6 @@ streams:
         description: Définir des sélections de qualité précises par plage ou en utilisant des noms de qualité explicites.
         notes : La deuxième colonne affiche la sélection de la qualité réelle. Les qualités ou les gammes de qualité de la première colonne seront exclues des alias de sélection "best" ou "worst". Veuillez consulter le wiki et la documentation de Streamlink avant d'apporter des modifications.
         dont-exclude: Ne pas exclure les qualités de streaming
-    vodcast-regexp:
-        title: Filtrage Vodcast personnalisé
-        description: Trouver des Vodcast/Rebroadcasts non-taggés.
-        notes: Une expression régulière conforme à JavaScript (insensible à la casse), appliquée au titre du flux. Pour désactiver le filtrage, entrez une chaîne vide ou une expression régulière invalide.
     modal-close-launch:
         title: Masquer la popup de stream
         description: Quand un stream commence.
@@ -260,6 +256,10 @@ streams:
         title: Fondu enchainé Vodcasts
         description: Rend les vodcasts moins visibles, comme indicateur supplémentaire.
         checkbox: Fondu enchainé Vodcasts
+    vodcast-regexp:
+        title: Filtrage Vodcast personnalisé
+        description: Trouver des Vodcast/Rebroadcasts non-taggés.
+        notes: Une expression régulière conforme à JavaScript (insensible à la casse), appliquée au titre du flux. Pour désactiver le filtrage, entrez une chaîne vide ou une expression régulière invalide.
     show-info:
         title: Barre d'infos
         description: Barre du bas à l'intérieur de l'aperçu du stream.
