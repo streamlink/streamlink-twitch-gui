@@ -85,3 +85,108 @@
 	}}
 {{/settings-row}}
 </fieldset>
+
+<fieldset>
+{{#settings-row
+	(t "settings.streams.channelname.title")
+	(t "settings.streams.channelname.description")
+	icon="fa-language"
+}}
+	{{#drop-down
+		value=model.streams.name
+		content=contentStreamsName
+		as |dropdown|
+	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.streams.channelname.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.streams.channelname.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.streams.show-flag.title")
+	(t "settings.streams.show-flag.description")
+	icon="fa-flag"
+}}
+	{{check-box
+		(t "settings.streams.show-flag.checkbox")
+		checked=model.streams.show_flag
+	}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.streams.filter-vodcast.title")
+	(t "settings.streams.filter-vodcast.description")
+	icon="fa-recycle"
+}}
+	{{check-box
+		(t "settings.streams.filter-vodcast.checkbox")
+		checked=model.streams.filter_vodcast
+	}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.streams.show-info.title")
+	(t "settings.streams.show-info.description")
+	icon="fa-info"
+}}
+	{{check-box
+		(t "settings.streams.show-info.checkbox")
+		checked=model.streams.show_info
+	}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.streams.info.title")
+	(t "settings.streams.info.description")
+	icon="fa-info"
+}}
+	{{#radio-buttons
+		value=model.streams.info
+		content=contentStreamsInfo
+		as |item|
+	}}
+		<div>
+			{{item.button label=(t (concat "settings.streams.info.values." item.label))}}
+		</div>
+	{{/radio-buttons}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.streams.click.title")
+	(t "settings.streams.click.description")
+	icon="fa-hand-pointer-o"
+}}
+	<p>{{unless isDarwin (t "settings.streams.click.ctrl") (t "settings.streams.click.cmd")}}</p>
+	{{#drop-down
+		value=model.streams.click_modify
+		content=contentStreamsClick
+		class="stream-click"
+		as |dropdown|
+	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.streams.click.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.streams.click.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
+	<p>{{t "settings.streams.click.middle"}}</p>
+	{{#drop-down
+		value=model.streams.click_middle
+		content=contentStreamsClick
+		class="stream-click"
+		as |dropdown|
+	}}
+		{{#dropdown.selection as |selection|}}
+			{{t (concat "settings.streams.click.values." selection.label)}}
+		{{/dropdown.selection}}
+		{{#dropdown.list as |item|}}
+			{{t (concat "settings.streams.click.values." item.label)}}
+		{{/dropdown.list}}
+	{{/drop-down}}
+{{/settings-row}}
+</fieldset>

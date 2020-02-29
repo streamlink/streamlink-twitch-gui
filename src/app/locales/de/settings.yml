@@ -6,7 +6,6 @@ menu:
     player: Player
     streams: Streams
     chat: Chat
-    lists: Listen
     languages: Sprachen
     notifications: Benachrichtigungen
     channels: Kanäle
@@ -246,6 +245,43 @@ streams:
         title: Stream Pop-up schließen
         description: Nachdem der Stream geschlossen wurde.
         checkbox: Pop-up des aktiven Streams bei Beendigung schließen
+    channelname:
+        title: Benutzerdefinierte Kanalnamen
+        description: Kanalnamen-Lokalisierungen.
+        values:
+            custom: Zeige benutzerdefinierte Namen
+            original: Zeige originale Namen
+            both: Zeige beide
+    show-flag:
+        title: Flaggen
+        description: Geben die Broadcaster-Sprache an.
+        checkbox: Flaggen sind immer sichtbar
+    filter-vodcast:
+        title: Vodcasts ausblenden
+        description: Vodcasts als zusätzlichen Indikator weniger sichtbar machen.
+        checkbox: Vodcasts ausblenden
+    show-info:
+        title: Infoleiste
+        description: Untere Leiste innerhalb der Streamvorschau.
+        checkbox: Infoleiste ist immer sichtbar
+    info:
+        title: Inhalt der Infoleiste
+        description: Was soll gezeigt werden?
+        values:
+            game: Zeige das gespielte Spiel
+            title: Zeige den Streamtitel
+    click:
+        title: Klickverhalten
+        description: Zusätzliche Streambild Klick-Aktionen.
+        ctrl: STRG + Primäre Maustaste
+        cmd: CMD + Primäre Maustaste
+        middle: Mittlere Maustaste
+        values:
+            noop: Nichts unternehmen
+            launch: Stream starten
+            chat: Chat öffnen
+            channel: Kanalseite öffnen
+            settings: Kanaleinstellungen öffnen
 chat:
     provider:
         title: Chat Anwendung
@@ -364,44 +400,6 @@ chat:
         title: Twitch Emoticons
         description: Button zum Öffnen von twitchemotes.com.
         checkbox: Zeige Emoticon-Button in Stream Pop-ups
-lists:
-    channelname:
-        title: Benutzerdefinierte Kanalnamen
-        description: Kanalnamen-Lokalisierungen.
-        values:
-            custom: Zeige benutzerdefinierte Namen
-            original: Zeige originale Namen
-            both: Zeige beide
-    show-flag:
-        title: Flaggen
-        description: Geben die Broadcaster-Sprache an.
-        checkbox: Flaggen sind immer sichtbar
-    filter-vodcast:
-        title: Vodcasts ausblenden
-        description: Vodcasts als zusätzlichen Indikator weniger sichtbar machen.
-        checkbox: Vodcasts ausblenden
-    show-info:
-        title: Infoleiste
-        description: Untere Leiste innerhalb der Streamvorschau.
-        checkbox: Infoleiste ist immer sichtbar
-    info:
-        title: Inhalt der Infoleiste
-        description: Was soll gezeigt werden?
-        values:
-            game: Zeige das gespielte Spiel
-            title: Zeige den Streamtitel
-    click:
-        title: Klickverhalten
-        description: Zusätzliche Streambild Klick-Aktionen.
-        ctrl: STRG + Primäre Maustaste
-        cmd: CMD + Primäre Maustaste
-        middle: Mittlere Maustaste
-        values:
-            noop: Nichts unternehmen
-            launch: Stream starten
-            chat: Chat öffnen
-            channel: Kanalseite öffnen
-            settings: Kanaleinstellungen öffnen
 languages:
     filter:
         title: Streams filtern

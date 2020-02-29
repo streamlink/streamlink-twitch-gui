@@ -6,7 +6,6 @@ menu:
     player: Joueur
     streams: Streams
     chat: Chat
-    lists: Listes
     languages: Langages
     notifications: Notifications
     channels: Chaînes
@@ -246,6 +245,43 @@ streams:
         title: Fermer la popup de stream
         description: Quand un stream est terminé.
         checkbox: Fermer la popup d'un stream actif lorsqu'il se termine
+    channelname:
+        title: Nom de chaînes personnalisés
+        description: Emplacements des noms de chaînes.
+        values:
+            custom: Afficher les noms personnalisés
+            original: Afficher les noms originaux
+            both: Afficher les deux
+    show-flag:
+        title: Drapeaux
+        description: Indiquer la langue du streamer
+        checkbox: Drapeaux toujours visibles
+    filter-vodcast:
+        title: Fondu enchainé Vodcasts
+        description: Rend les vodcasts moins visibles, comme indicateur supplémentaire.
+        checkbox: Fondu enchainé Vodcasts
+    show-info:
+        title: Barre d'infos
+        description: Barre du bas à l'intérieur de l'aperçu du stream.
+        checkbox: Barre d'infos toujours visible
+    info:
+        title: Contenu de la barre d'infos
+        description: Quoi afficher ?
+        values:
+            game: Le jeu joué
+            title: Le titre du stream
+    click:
+        title: Comportement du clic
+        description: Actions supplémentaires lors du clic sur l'image de stream.
+        ctrl: CTRL + clic gauche
+        cmd: CMD + clic gauche
+        middle: Clic molette de la souris
+        values:
+            noop: Ne rien faire
+            launch: Lancer le stream
+            chat: Ouvrir le chat
+            channel: Aller sur la page de la chaîne
+            settings: Aller dans les paramètres de la chaîne
 chat:
     provider:
         title: Application de chat
@@ -364,44 +400,6 @@ chat:
         title: Emotes Twitch
         description: Le bouton qui ouvre twitchemotes.com.
         checkbox: Afficher les boutons d'emotes dans la popup du stream
-lists:
-    channelname:
-        title: Nom de chaînes personnalisés
-        description: Emplacements des noms de chaînes.
-        values:
-            custom: Afficher les noms personnalisés
-            original: Afficher les noms originaux
-            both: Afficher les deux
-    show-flag:
-        title: Drapeaux
-        description: Indiquer la langue du streamer
-        checkbox: Drapeaux toujours visibles
-    filter-vodcast:
-        title: Fondu enchainé Vodcasts
-        description: Rend les vodcasts moins visibles, comme indicateur supplémentaire.
-        checkbox: Fondu enchainé Vodcasts
-    show-info:
-        title: Barre d'infos
-        description: Barre du bas à l'intérieur de l'aperçu du stream.
-        checkbox: Barre d'infos toujours visible
-    info:
-        title: Contenu de la barre d'infos
-        description: Quoi afficher ?
-        values:
-            game: Le jeu joué
-            title: Le titre du stream
-    click:
-        title: Comportement du clic
-        description: Actions supplémentaires lors du clic sur l'image de stream.
-        ctrl: CTRL + clic gauche
-        cmd: CMD + clic gauche
-        middle: Clic molette de la souris
-        values:
-            noop: Ne rien faire
-            launch: Lancer le stream
-            chat: Ouvrir le chat
-            channel: Aller sur la page de la chaîne
-            settings: Aller dans les paramètres de la chaîne
 languages:
     filter:
         title: Filtrer les streams
