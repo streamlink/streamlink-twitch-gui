@@ -170,7 +170,6 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 		assert.ok( btnEnabled.classList.contains( "checked" ), "Is checked after reset" );
 	});
 
-
 	test( "Editing mode", async function( assert ) {
 		const hotkey = { code: "Enter" };
 		const content = { disabled: false, code: null };
@@ -335,5 +334,32 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 			},
 			"Sets new hotkey on confirm, but doesn't change the disabled property"
 		);
+	});
+
+	test( "One-way input value binding", async function( assert ) {
+		const content = { disabled: false, code: null };
+		const model = ObjectBuffer.create({ content });
+		this.setProperties({ hotkey: null, model });
+
+		await render( hbs`{{settings-hotkey model=model hotkey=hotkey}}` );
+		const elem = this.element.querySelector( ".settings-hotkey-component" );
+		const input = elem.querySelector( "input" );
+
+		await click( elem.querySelector( ".js-btn-edit" ) );
+
+		assert.strictEqual(
+			input.value.trim(),
+			"components.settings-hotkey.empty",
+			"Shows empty translation string if no hotkey exists yet"
+		);
+		assert.notOk( input.disabled, "Input field is not disabled in edit mode" );
+		assert.ok( input.classList.contains( "is-empty" ), "Input field is empty" );
+
+		input.value = "invalid";
+		await triggerEvent( input, "change" );
+
+		await triggerEvent( input, "keyup", { code: "Space" } );
+		assert.strictEqual( input.value.trim(), "Space", "Shows the new hotkey text" );
+		assert.notOk( input.classList.contains( "is-empty" ), "Input field is not empty anymore" );
 	});
 });
