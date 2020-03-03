@@ -6,4 +6,14 @@ modifiers:
     metaKey: Meta
     shiftKey: Shift
 codes:
-#    code: translation
+    ArrowLeft: Links
+    ArrowRight: Rechts
+    ArrowUp: Hoch
+    ArrowDown: Runter
+    Insert: Einfügen
+    Delete: Entfernen
+    Home: Pos1
+    End: Ende
+    PageUp: BildAuf
+    PageDown: BildAb
+    Space: Leertaste

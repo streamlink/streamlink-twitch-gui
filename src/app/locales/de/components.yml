@@ -53,6 +53,13 @@ settings-channel-item:
     confirmation: Einstellungen löschen?
     confirm: Ja
     decline: Nein
+settings-hotkey:
+    empty: Kein Hotkey gesetzt
+    edit: Diesen Hotkey anpassen
+    delete: Eigenen Hotkey entfernen
+    discard: Verwerfen
+    confirm: Eigenen Hotkey setzen
+    toggle: Hotkey aktivieren oder deaktivieren
 settings-row:
     notes: Bemerkungen
     default: Standardwert

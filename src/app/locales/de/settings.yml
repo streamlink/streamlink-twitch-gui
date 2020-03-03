@@ -7,6 +7,7 @@ menu:
     streams: Streams
     chat: Chat
     languages: Sprachen
+    hotkeys: Hotkeys
     notifications: Benachrichtigungen
     channels: Kanäle
 main:
@@ -418,6 +419,69 @@ languages:
         notes: Wähle alle oder keine Sprachen aus, um das Filtern zu deaktivieren.
         check-all: Alle Sprachen markieren
         uncheck-all: Markierungen entfernen
+hotkeys:
+    navigation:
+        title: Navigation
+        description: Globale Navigationshotkeys.
+        notes: |
+            Hotkeys sind nach den Aktionen ihrer jeweiligen Komponente kategorisiert. Jede Aktion verfügt über einen primären und einen sekundären Hotkey, welcher individuell ein- und ausgeschaltet werden und zusätzlich mit einer eigenen Tastenkombination belegt werden kann. Das Anwendungsfenster muss fokussiert sein, damit die Hotkeys ausgelöst werden können.<br><br>
+            Weiterhin ist zu beachten, dass die Hotkeys derzeit das Tastaturlayout des Systems (aus technischen Gründen) nicht berücksichtigen. Das bedeutet, dass alle Hotkeys vorerst auf dem US-amerikanischen Standard-Tastaturlayout (QWERTY) basieren und einzelne Tasten auf Systemen mit einem anderen Layout möglicherweise falsch angezeigt werden.
+        actions:
+            refresh: Das aktuelle Menü neu laden
+            historyBack: Zurück gehen
+            historyForward: Vorwärts gehen
+            homepage: Zur Startseite gehen
+            routeFeatured: Zum Vorgestellte-Kanäle-Menü gehen
+            routeGames: Zum Spiele-Menü gehen
+            routeStreams: Zum Streams-Menü gehen
+            routeUserFollowedStreams: Zum Gefolgte-Streams-Menü gehen
+            routeUserFollowedChannels: Zum Gefolgte-Kanäle-Menü gehen
+            routeUserAuth: Zum Benutzer-Menü gehen
+            routeWatching: Zum Du-Schaust-Menü gehen
+            routeSettings: Zu den Einstellungen gehen
+            routeAbout: Zum Über-Menü gehen
+    searchbar:
+        title: Suchleiste
+        description: Die Suchleiste oben.
+        actions:
+            focus: Fokusieren
+    followbutton:
+        title: Folgen Button
+        description: Der Folgen-Knopf auf einer Kanalseite oder im Stream Pop-up.
+        actions:
+            default: Folgen oder nicht mehr folgen
+            confirm: Bestätigen
+    openchatbutton:
+        title: Chat öffnen Button
+        description: Der Chat-Knopf auf einer Kanalseite oder im Stream Pop-up.
+        actions:
+            default: Chat öffnen
+    sharechannelbutton:
+        title: Kanal teilen Button
+        description: Der Teilen-Knopf auf einer Kanalseite oder im Stream Pop-up.
+        actions:
+            default: Copy channel URL to clipboard
+    twitchemotesbutton:
+        title: Twitch emotes Button
+        description: Emotes-Knopf auf einer Kanalseite oder im Stream Pop-up.
+        actions:
+            default: Twitchemotes.com öffnen
+    modaldialog:
+        title: Pop-ups
+        description: Standard Pop-up Dialog.
+        actions:
+            close: Schließen
+    modalconfirm:
+        title: Bestätigungs-Pop-up
+        description: Wenn eine bestimmte Aktion bestätigt werden muss.
+        actions:
+            confirm: Bestätigen
+    modalstreaming:
+        title: Stream Pop-up
+        description: Beim Schauen eines Streams.
+        actions:
+            shutdown: Aktuellen Stream stoppen
+            log: Logansicht ein-/ausblenden
 notifications:
     enabled:
         title: Desktop-Benachrichtigungen
