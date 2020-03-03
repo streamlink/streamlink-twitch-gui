@@ -2,6 +2,7 @@ import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
 import { FakeI18nService } from "i18n-utils";
+import { setupKeyboardLayoutMap } from "keyboard-layout-map";
 import {
 	stubDOMEvents,
 	isDefaultPrevented,
@@ -32,6 +33,7 @@ module( "services/hotkey", function( hooks ) {
 	const HotkeyComponent = Component.extend( HotkeyMixin );
 
 	stubDOMEvents( hooks );
+	setupKeyboardLayoutMap( hooks );
 
 	hooks.beforeEach(function () {
 		this.subject = hotkeys => {

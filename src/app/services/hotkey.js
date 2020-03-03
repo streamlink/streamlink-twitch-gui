@@ -1,3 +1,4 @@
+import { getOwner } from "@ember/application";
 import { getProperties } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
 import { hotkeys as hotkeysConfig } from "config";
@@ -10,10 +11,6 @@ const ignoreElements = [
 	HTMLInputElement,
 	HTMLSelectElement,
 	HTMLTextAreaElement
-];
-
-const codeTitleMappings = [
-	[ /^(?:Key|Digit)(.)$/, "$1" ]
 ];
 
 
@@ -248,6 +245,25 @@ export default Service.extend({
 		};
 		this.settings.one( "initialized", hotkeysMapUpdate );
 		this.settings.on( "didUpdate", hotkeysMapUpdate );
+
+		// Even though the KeyboardMap API is currently only a proposed API by the WICG and has
+		// not been standardized yet by the W3C, it is already partially implemented in Chromium.
+		// Only the reference US keyboard layout is currently used and the `layoutchange` event
+		// is still missing.
+		// Once Chromium adds support for other layouts, the KeyboardEvent.code mapping to localized
+		// key names, which this API provides, should work seamlessly.
+		// https://wicg.github.io/keyboard-map/
+		// https://chromestatus.com/feature/6730004075380736
+
+		// see keyboard-layout-map application initializer
+		// (promise needs to be resolved before application boot)
+		const owner = getOwner( this );
+		this.layoutMap = owner.lookup( "keyboardlayoutmap:main" );
+		owner.unregister( "keyboardlayoutmap:main" );
+
+		const resetLayoutMap = async () => this.layoutMap = await navigator.keyboard.getLayoutMap();
+		//navigator.keyboard.addEventListener( "layoutchange", resetLayoutMap );
+		this.settings.on( "didUpdate", resetLayoutMap );
 	},
 
 	/** @type {HotkeysMap} */
@@ -255,6 +271,9 @@ export default Service.extend({
 
 	/** @type {HotkeyRegistry[]} */
 	registries: null,
+
+	/** @type {KeyboardLayoutMap} */
+	layoutMap: null,
 
 	/**
 	 * Register hotkeys of a component
@@ -361,7 +380,7 @@ export default Service.extend({
 	 * @returns {string}
 	 */
 	formatTitle( hotkey, title ) {
-		const i18n = this.i18n;
+		const { i18n, layoutMap } = this;
 		const combination = [];
 
 		// use Ember.get here, because hotkey can be an ObjectProxy wrapping a hotkey record
@@ -376,7 +395,9 @@ export default Service.extend({
 		// look for translations of special hotkeys, eg. "Space"
 		combination.push( i18n.exists( `hotkeys.codes.${code}` )
 			? i18n.t( `hotkeys.codes.${code}` ).toString()
-			: codeTitleMappings.reduce( ( str, [ re, fn ] ) => str.replace( re, fn ), code )
+			: layoutMap.has( code )
+				? layoutMap.get( code ).toUpperCase()
+				: code
 		);
 
 		const str = combination.join( "+" );

@@ -2,6 +2,7 @@ import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
 import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { setupKeyboardLayoutMap } from "keyboard-layout-map";
 import {
 	stubDOMEvents,
 	isDefaultPrevented,
@@ -40,6 +41,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 	});
 
 	stubDOMEvents( hooks );
+	setupKeyboardLayoutMap( hooks );
 
 	hooks.beforeEach(function() {
 		const { default: HotkeyService } = hotkeyServiceInjector({
