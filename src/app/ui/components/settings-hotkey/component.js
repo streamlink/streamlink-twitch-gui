@@ -7,11 +7,15 @@ import layout from "./template.hbs";
 import "./styles.less";
 
 
-const IGNORED_EVENT_CODES = [
+// https://www.w3.org/TR/uievents-code/#code-value-tables
+const IGNORED_EVENT_CODES = new Set([
 	undefined,
 	null,
+	// https://www.w3.org/TR/uievents-code/#key-alphanumeric-functional
 	"AltLeft",
 	"AltRight",
+	"CapsLock",
+	"ContextMenu",
 	"ControlLeft",
 	"ControlRight",
 	"MetaLeft",
@@ -20,13 +24,23 @@ const IGNORED_EVENT_CODES = [
 	"OSRight",
 	"ShiftLeft",
 	"ShiftRight",
-	"CapsLock",
+	"Convert",
+	"KanaMode",
+	"Lang1",
+	"Lang2",
+	"Lang3",
+	"Lang4",
+	"Lang5",
+	"NonConvert",
+	// https://www.w3.org/TR/uievents-code/#key-numpad-section
 	"NumLock",
-	"ScrollLock",
+	// https://www.w3.org/TR/uievents-code/#key-function-section
+	"Fn",
+	"FnLock",
 	"PrintScreen",
-	"Pause",
-	"ContextMenu"
-];
+	"ScrollLock",
+	"Pause"
+]);
 
 
 export default Component.extend( /** @class SettingsHotkeyComponent */ {
@@ -129,7 +143,7 @@ export default Component.extend( /** @class SettingsHotkeyComponent */ {
 		change( event ) {
 			if ( !isFocused( this._input ) ) { return; }
 			this._stopEvent( event );
-			if ( IGNORED_EVENT_CODES.includes( event.code ) ) { return; }
+			if ( IGNORED_EVENT_CODES.has( event.code ) ) { return; }
 			set( this, "_inputEvent", event );
 		}
 	}
