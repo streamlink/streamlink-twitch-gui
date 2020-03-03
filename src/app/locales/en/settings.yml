@@ -423,7 +423,9 @@ hotkeys:
     navigation:
         title: Navigation
         description: Global navigation hotkeys.
-        notes: Hotkeys are categorized by the actions of their respective component. Each action does have a primary and a secondary hotkey, which can be toggled on and off individually, and can also be altered with a custom keybinding. The application window needs to be focused in order for hotkeys to trigger.
+        notes: |
+            Hotkeys are categorized by the actions of their respective component. Each action does have a primary and a secondary hotkey, which can be toggled on and off individually, and can also be modified with a custom keybinding. The application window needs to be focused in order for hotkeys to trigger.<br><br>
+            Also please note that the hotkeys are currently not aware of the system's keyboard layout (due to technical reasons). This means that all hotkeys are for now based on the default US keyboard layout (QWERTY) and individual keys may be displayed incorrectly on systems using a different layout.
         actions:
             refresh: Refresh current menu
             historyBack: Go back
