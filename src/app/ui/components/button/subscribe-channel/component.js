@@ -10,6 +10,9 @@ const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
 
 
 export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
+	/** @type {I18nService} */
+	i18n: service(),
+	/** @type {NwjsService} */
 	nwjs: service(),
 
 	modelName: "twitchSubscription",
@@ -32,7 +35,7 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 	iconSuccess : "fa-credit-card",
 	iconFailure : "fa-credit-card",
 
-	_title: computed( "i18n.locale", "isLoading", "isSuccessful", "name", function() {
+	title: computed( "i18n.locale", "isLoading", "isSuccessful", "name", function() {
 		if ( this.isLoading ) {
 			return "";
 		}

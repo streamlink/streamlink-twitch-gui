@@ -1,5 +1,6 @@
-action:
-    close: Close
+dialog:
+    action:
+        close: Close
 changelog:
     header: "You just upgraded to v{{version}}"
     body: Do you want to see what's new and read the changelog now?

@@ -3,7 +3,6 @@ import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import { streaming as streamingConfig } from "config";
 import ModalDialogComponent from "../modal-dialog/component";
-import HotkeyMixin from "ui/components/-mixins/hotkey";
 import { qualities } from "data/models/stream/model";
 import {
 	LogError,
@@ -34,7 +33,7 @@ function computedError( classObj ) {
 }
 
 
-export default ModalDialogComponent.extend( HotkeyMixin, {
+export default ModalDialogComponent.extend({
 	/** @type {NwjsService} */
 	nwjs: service(),
 	streaming: service(),
@@ -69,48 +68,31 @@ export default ModalDialogComponent.extend( HotkeyMixin, {
 	providerName: readOnly( "settings.streaming.providerName" ),
 
 
-	hotkeys: [
-		{
-			name: "close",
-			key: [ "Escape", "Backspace" ],
-			action() {
-				if ( get( this, "active" ) ) {
-					this.send( "close" );
-				} else {
-					this.send( "abort" );
-				}
+	hotkeysNamespace: "modalstreaming",
+	hotkeys: {
+		close() {
+			if ( get( this, "active" ) ) {
+				this.send( "close" );
+			} else {
+				this.send( "abort" );
 			}
 		},
-		{
-			name: "confirm",
-			key: "Enter",
-			action() {
-				if ( get( this, "active.isHostedError" ) ) {
-					this.send( "startHosted" );
-				} else if ( get( this, "active.hasEnded") ) {
-					this.send( "restart" );
-				}
+		confirm() {
+			if ( get( this, "active.isHostedError" ) ) {
+				this.send( "startHosted" );
+			} else if ( get( this, "active.hasEnded") ) {
+				this.send( "restart" );
 			}
 		},
-		{
-			name: "shutdown",
-			key: [ "q", "x" ],
-			ctrlKey: true,
-			action() {
-				if ( get( this, "active" ) ) {
-					this.send( "shutdown" );
-				} else {
-					this.send( "abort" );
-				}
+		shutdown() {
+			if ( get( this, "active" ) ) {
+				this.send( "shutdown" );
+			} else {
+				this.send( "abort" );
 			}
 		},
-		{
-			name: "log",
-			key: "l",
-			ctrlKey: true,
-			action: "toggleLog"
-		}
-	],
+		log: "toggleLog"
+	},
 
 
 	actions: {

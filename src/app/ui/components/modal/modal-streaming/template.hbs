@@ -57,8 +57,9 @@
 						classNames="btn-primary"
 						icon="fa-arrow-left"
 						title=(hotkey-title
-							"modal.streaming.action.continue"
-							(find-by hotkeys "name" "close")
+							context=this
+							action="close"
+							title=(t "modal.streaming.action.continue")
 						)
 					}}
 					{{form-button
@@ -66,8 +67,9 @@
 						classNames="btn-danger"
 						icon="fa-times"
 						title=(hotkey-title
-							"modal.streaming.action.shutdown"
-							(find-by hotkeys "name" "shutdown")
+							context=this
+							action="shutdown"
+							title=(t "modal.streaming.action.shutdown")
 						)
 					}}
 					{{form-button
@@ -75,9 +77,9 @@
 						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.isWatching::invisible"
 						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
 						title=(hotkey-title
-							"modal.streaming.action.log"
-							(find-by hotkeys "name" "log")
-							provider=providerName
+							context=this
+							action="log"
+							title=(t "modal.streaming.action.log" provider=providerName)
 						)
 					}}
 				</div>
@@ -191,11 +193,12 @@
 					classNames="btn-danger"
 					icon="fa-times"
 					title=(hotkey-title
-						"modal.action.close"
-						(find-by hotkeys "name" "close")
+						context=this
+						action="close"
+						title=(t "modal.dialog.action.close")
 					)
 				}}
-					{{t "modal.action.close"}}
+					{{t "modal.dialog.action.close"}}
 				{{/form-button}}
 				{{#if (bool-or isNotFoundError isVersionError)}}
 					{{#form-button
@@ -213,8 +216,9 @@
 						icon="fa-step-forward"
 						iconanim=true
 						title=(hotkey-title
-							"modal.streaming.action.start-hosted"
-							(find-by hotkeys "name" "confirm")
+							context=this
+							action="confirm"
+							title=(t "modal.streaming.action.start-hosted")
 						)
 					}}
 						{{t "modal.streaming.action.start-hosted"}}
@@ -226,8 +230,9 @@
 						icon="fa-play"
 						iconanim=true
 						title=(hotkey-title
-							"modal.streaming.action.restart"
-							(find-by hotkeys "name" "confirm")
+							context=this
+							action="confirm"
+							title=(t "modal.streaming.action.restart")
 						)
 					}}
 						{{t "modal.streaming.action.restart"}}

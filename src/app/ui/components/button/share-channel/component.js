@@ -13,15 +13,12 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	_title: t( "components.share-channel.title" ),
 	iconanim: true,
 
-	hotkeys: [
-		{
-			key: "s",
-			ctrlKey: true,
-			action() {
-				this.click();
-			}
+	hotkeysNamespace: "sharechannelbutton",
+	hotkeys: {
+		default() {
+			this.click();
 		}
-	],
+	},
 
 	async action( success, failure ) {
 		try {

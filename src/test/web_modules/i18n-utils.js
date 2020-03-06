@@ -3,20 +3,35 @@ import { get, observer } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
 
 
+const { hasOwnProperty } = {};
+
+
 /**
  * Fake I18nService for testing translations
  */
-export const FakeI18nService = Service.extend({
-	locale: "en",
+export class FakeI18nService extends Service {
+	locale = "en";
+	translations = {};
 
 	t( key, data ) {
+		const translation = hasOwnProperty.call( this.translations, key )
+			? this.translations[ key ]
+			: key;
 		const serializedData = data && Object.keys( data ).length
 			? JSON.stringify( data )
 			: "";
 
-		return `${key}${serializedData}`;
+		return `${translation}${serializedData}`;
 	}
-});
+
+	exists( key ) {
+		return hasOwnProperty.call( this.translations, key );
+	}
+
+	addTranslations( locale, translations ) {
+		Object.assign( this.translations, translations );
+	}
+}
 
 
 /**

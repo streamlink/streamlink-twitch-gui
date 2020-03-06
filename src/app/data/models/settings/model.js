@@ -15,6 +15,7 @@ export default Model.extend({
 	streams: fragment( "settingsStreams", { defaultValue: {} } ),
 	chat: fragment( "settingsChat", { defaultValue: {} } ),
 	notification: fragment( "settingsNotification", { defaultValue: {} } ),
+	hotkeys: fragment( "settingsHotkeys", { defaultValue: {} } ),
 
 
 	init() {

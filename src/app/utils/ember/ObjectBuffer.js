@@ -1,155 +1,182 @@
-/*
- * Based on https://github.com/movableink/buffered-proxy
- * Written by Kris Selden for Yapp Labs, published by Luke Melia
- */
 import { get, set, setProperties } from "@ember/object";
 import ObjectProxy from "@ember/object/proxy";
 
 
-function isEmpty( obj ) {
-	return !Object.keys( obj ).some( () => true );
+const { hasOwnProperty } = {};
+
+const bufferMap = new WeakMap();
+const parentMap = new WeakMap();
+const childrenMap = new WeakMap();
+const originalMap = new WeakMap();
+const hasChangesMap = new WeakMap();
+
+
+function setIsDirty( obj ) {
+	// an objectbuffer is dirty if it has changes or if one of its children is dirty
+	const dirty = hasChangesMap.get( obj )
+		|| Object.values( childrenMap.get( obj ) ).some( child => child.isDirty );
+
+	// if objectbuffer is dirty, so are all its parents
+	if ( dirty ) {
+		let current = obj;
+		do {
+			set( current, "isDirty", true );
+		} while ( ( current = parentMap.get( current ) ) );
+
+	// if it's not dirty, its parent needs to be re-checked
+	} else {
+		set( obj, "isDirty", false );
+		const parent = parentMap.get( obj );
+		if ( parent ) {
+			setIsDirty( parent );
+		}
+	}
 }
 
-function checkDirty() {
-	const children = this._children;
-	const dirty = get( this, "_hasChanges" )
-		|| Object.keys( children ).some( key => get( children[ key ], "isDirty" ) );
-	set( this, "isDirty", dirty );
+function setHasChanges( obj, hasChanges ) {
+	hasChangesMap.set( obj, hasChanges );
+	setIsDirty( obj );
 }
 
-const ObjectBuffer = ObjectProxy.extend({
+
+class ObjectBuffer extends ObjectProxy {
+	isDirty = false;
+
 	init() {
-		this._buffer     = {};
-		this._children   = {};
-		this._hasChanges = false;
-		this.isDirty     = false;
+		const constructor = this.constructor;
 
-		this.addObserver( "_hasChanges", this, checkDirty );
+		const children = {};
+		bufferMap.set( this, {} );
+		childrenMap.set( this, children );
+
+		setHasChanges( this, false );
 
 		// the original object
-		let original = this._original = this.content;
+		const original = this.content;
+		originalMap.set( this, original );
 		// the content object with bindings, etc...
-		let content = this.content = {};
+		const content = this.content = {};
 
-		// populate content object
-		Object.keys( original ).forEach( key => {
-			let val = get( original, key );
+		// populate content object and create child buffers
+		for ( const key of Object.keys( original ) ) {
+			const val = get( original, key );
 
 			// set primitives
 			if ( !( val instanceof Object ) ) {
 				content[ key ] = val;
-				return;
+				continue;
 			}
 			// don't create buffers of buffers
-			if ( val instanceof ObjectBuffer ) { return; }
+			if ( val instanceof constructor ) { continue; }
 
 			// create a child buffer for nested objects
-			let childBuffer = ObjectBuffer.create({ content: val });
-			set( this._children, key, childBuffer );
+			const childBuffer = constructor.create({ content: val });
+			parentMap.set( childBuffer, this );
+			set( children, key, childBuffer );
+		}
 
-			this.addObserver( `_children.${key}.isDirty`, this, checkDirty );
-		});
-
-		this._super( ...arguments );
-	},
+		super.init( ...arguments );
+	}
 
 	unknownProperty( key ) {
-		let buffer = this._buffer;
-		let children = this._children;
-
 		// look for properties in the buffer first
-		return buffer && buffer.hasOwnProperty( key )
-			? buffer[ key ]
-			// then try child buffers
-			: children && children.hasOwnProperty( key )
-				? children[ key ]
-				// finally look up the content property
-				: get( this, `content.${key}` );
-	},
+		const buffer = bufferMap.get( this );
+		if ( hasOwnProperty.call( buffer, key ) ) {
+			return buffer[ key ];
+		}
+
+		// then try child buffers
+		const children = childrenMap.get( this );
+		if ( hasOwnProperty.call( children, key ) ) {
+			return children[ key ];
+		}
+
+		// finally look up the content property
+		return get( this.content, key );
+	}
 
 	setUnknownProperty( key, value ) {
-		const buffer = this._buffer;
-		const content = this.content;
-		const current = content
-			? get( content, key )
-			: undefined;
-		const previous = buffer.hasOwnProperty( key )
+		const buffer = bufferMap.get( this );
+		const current = get( this.content, key );
+		const previous = hasOwnProperty.call( buffer, key )
 			? buffer[ key ]
 			: current;
 
-		if ( previous === value ) { return value; }
+		if ( previous === value ) {
+			return value;
+		}
 
 		if ( current === value ) {
 			delete buffer[ key ];
-			if ( isEmpty( buffer ) ) {
-				set( this, "_hasChanges", false );
+			if ( !Object.keys( buffer ).length ) {
+				setHasChanges( this, false );
 			}
 		} else {
 			buffer[ key ] = value;
-			set( this, "_hasChanges", true );
+			setHasChanges( this, true );
 		}
 
 		this.notifyPropertyChange( key );
 		return value;
-	},
+	}
 
 	applyChanges( target, _isChild ) {
-		const buffer = this._buffer;
-		const children = this._children;
-		const original = this._original;
+		const buffer = bufferMap.get( this );
+		const children = childrenMap.get( this );
+		const original = originalMap.get( this );
 		const content = this.content;
 
 		if ( !( target instanceof Object ) || !target.notifyPropertyChange ) {
 			target = false;
 		}
 
-		Object.keys( children ).forEach( key => {
+		for ( const [ key, child ] of Object.entries( children ) ) {
 			// notify target EmberObject if nested objects have changed
-			if ( target && get( children[ key ], "_hasChanges" ) ) {
+			if ( target && hasChangesMap.get( child ) ) {
 				target.notifyPropertyChange( key );
 			}
-			children[ key ].applyChanges( target && get( target, key ), true );
-		});
+			child.applyChanges( target && get( target, key ), true );
+		}
 
 		// update both content and original objects
-		Object.keys( buffer ).forEach( key => {
-			set( content, key, buffer[ key ] );
-			set( original, key, buffer[ key ] );
-		});
+		for ( const [ key, value ] of Object.entries( buffer ) ) {
+			set( content, key, value );
+			set( original, key, value );
+		}
 
-		this._buffer = {};
-		set( this, "_hasChanges", false );
+		bufferMap.set( this, {} );
+		setHasChanges( this, false );
 
 		if ( target && !_isChild ) {
-			setProperties( target, this._original );
+			setProperties( target, originalMap.get( this ) );
 		}
 
 		return this;
-	},
+	}
 
 	discardChanges() {
-		const buffer = this._buffer;
-		const children = this._children;
+		const buffer = bufferMap.get( this );
+		const children = childrenMap.get( this );
 
-		Object.keys( children ).forEach( key => {
-			children[ key ].discardChanges();
-		});
+		for ( const child of Object.values( children ) ) {
+			child.discardChanges();
+		}
 
-		Object.keys( buffer ).forEach( key => {
+		for ( const key of Object.keys( buffer ) ) {
 			delete buffer[ key ];
 			this.notifyPropertyChange( key );
-		});
+		}
 
-		set( this, "_hasChanges", false );
+		setHasChanges( this, false );
 
 		return this;
-	},
+	}
 
 	getContent() {
 		// return the original object
-		return this._original;
+		return originalMap.get( this );
 	}
-});
+}
 
 
 export default ObjectBuffer;

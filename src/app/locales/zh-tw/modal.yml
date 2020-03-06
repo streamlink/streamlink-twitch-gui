@@ -1,5 +1,6 @@
-action:
-    close: 關閉
+dialog:
+    action:
+        close: 關閉
 changelog:
     header: "已更新為 v{{version}}"
     body: 察看最新消息及更新日誌?

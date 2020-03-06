@@ -23,15 +23,12 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	iconanim: true,
 	_title: t( "components.twitch-emotes.title" ),
 
-	hotkeys: [
-		{
-			key: "e",
-			ctrlKey: true,
-			action() {
-				this.click();
-			}
+	hotkeysNamespace: "twitchemotesbutton",
+	hotkeys: {
+		default() {
+			this.click();
 		}
-	],
+	},
 
 	async action( success, failure ) {
 		try {

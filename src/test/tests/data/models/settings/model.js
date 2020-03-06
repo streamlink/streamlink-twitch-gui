@@ -20,6 +20,7 @@ module( "data/models/settings", {
 
 		owner.register( "model:settings", Settings );
 		owner.register( "model:settings-gui", Fragment.extend() );
+		owner.register( "model:settings-hotkeys", Fragment.extend() );
 		owner.register( "model:settings-streaming", Fragment.extend() );
 		owner.register( "model:settings-streams", Fragment.extend({
 			languages: fragment( "settings-streams-languages", { defaultValue: {} } )
@@ -52,6 +53,7 @@ test( "Serializer", function( assert ) {
 		{
 			advanced: false,
 			gui: {},
+			hotkeys: {},
 			streaming: {},
 			streams: {
 				languages: {

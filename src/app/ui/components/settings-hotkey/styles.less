@@ -1,0 +1,20 @@
+.settings-hotkey-component {
+	display: flex;
+
+	> * {
+		@height: 2.25rem;
+
+		flex: 0 0 @height;
+		height: @height !important;
+	}
+	> input {
+		flex-grow: 1;
+
+		&.is-empty {
+			font-style: italic;
+		}
+	}
+	> .check-box-component > i {
+		margin: 0;
+	}
+}

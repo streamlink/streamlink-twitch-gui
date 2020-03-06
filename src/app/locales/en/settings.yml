@@ -6,8 +6,8 @@ menu:
     player: Player
     streams: Streams
     chat: Chat
-    lists: Lists
     languages: Languages
+    hotkeys: Hotkeys
     notifications: Notifications
     channels: Channels
 main:
@@ -234,10 +234,6 @@ streams:
         description: Define precise quality selections by range or by using explicit quality names.
         notes: The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the "best" or "worst" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes.
         dont-exclude: Don't exclude stream qualities
-    vodcast-regexp:
-        title: Custom Vodcast filtering
-        description: Find untagged Vodcasts/Rebroadcasts.
-        notes: A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression.
     modal-close-launch:
         title: Hide stream popup
         description: When a stream has started.
@@ -246,6 +242,47 @@ streams:
         title: Close stream popup
         description: When a stream has ended.
         checkbox: Close the popup of an active stream when it ends
+    channelname:
+        title: Custom channel names
+        description: Channel name localizations.
+        values:
+            custom: Show custom names
+            original: Show original names
+            both: Show both
+    show-flag:
+        title: Flags
+        description: Indicating the broadcaster language.
+        checkbox: Flags are always visible
+    filter-vodcast:
+        title: Fade out Vodcasts
+        description: Makes vodcasts less visible, as an additional indicator.
+        checkbox: Fade out Vodcasts
+    vodcast-regexp:
+        title: Custom Vodcast filtering
+        description: Find untagged Vodcasts/Rebroadcasts.
+        notes: A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression.
+    show-info:
+        title: Info bar
+        description: Bottom bar inside the stream preview.
+        checkbox: Info bar is always visible
+    info:
+        title: Info bar content
+        description: What should be displayed?
+        values:
+            game: Game being played
+            title: Stream title
+    click:
+        title: Click behavior
+        description: Additional stream image click actions.
+        ctrl: CTRL + Primary mouse button
+        cmd: CMD + Primary mouse button
+        middle: Middle mouse button
+        values:
+            noop: Do nothing
+            launch: Launch stream
+            chat: Open chat
+            channel: Go to channel page
+            settings: Go to channel settings
 chat:
     provider:
         title: Chat application
@@ -364,44 +401,6 @@ chat:
         title: Twitch emotes
         description: Button that opens up twitchemotes.com.
         checkbox: Show emotes button in stream popups
-lists:
-    channelname:
-        title: Custom channel names
-        description: Channel name localizations.
-        values:
-            custom: Show custom names
-            original: Show original names
-            both: Show both
-    show-flag:
-        title: Flags
-        description: Indicating the broadcaster language.
-        checkbox: Flags are always visible
-    filter-vodcast:
-        title: Fade out Vodcasts
-        description: Makes vodcasts less visible, as an additional indicator.
-        checkbox: Fade out Vodcasts
-    show-info:
-        title: Info bar
-        description: Bottom bar inside the stream preview.
-        checkbox: Info bar is always visible
-    info:
-        title: Info bar content
-        description: What should be displayed?
-        values:
-            game: Game being played
-            title: Stream title
-    click:
-        title: Click behavior
-        description: Additional stream image click actions.
-        ctrl: CTRL + Primary mouse button
-        cmd: CMD + Primary mouse button
-        middle: Middle mouse button
-        values:
-            noop: Do nothing
-            launch: Launch stream
-            chat: Open chat
-            channel: Go to channel page
-            settings: Go to channel settings
 languages:
     filter:
         title: Filter streams
@@ -420,6 +419,69 @@ languages:
         notes: Select all languages to disable filtering.
         check-all: Check all
         uncheck-all: Uncheck all
+hotkeys:
+    navigation:
+        title: Navigation
+        description: Global navigation hotkeys.
+        notes: |
+            Hotkeys are categorized by the actions of their respective component. Each action does have a primary and a secondary hotkey, which can be toggled on and off individually, and can also be modified with a custom keybinding. The application window needs to be focused in order for hotkeys to trigger.<br><br>
+            Also please note that the hotkeys are currently not aware of the system's keyboard layout (due to technical reasons). This means that all hotkeys are for now based on the default US keyboard layout (QWERTY) and individual keys may be displayed incorrectly on systems using a different layout.
+        actions:
+            refresh: Refresh current menu
+            historyBack: Go back
+            historyForward: Go forward
+            homepage: Go to homepage
+            routeFeatured: Go to the Featured Channels menu
+            routeGames: Go to the Games menu
+            routeStreams: Go to the Streams menu
+            routeUserFollowedStreams: Go to the Followed Streams menu
+            routeUserFollowedChannels: Go to the Followed Channels menu
+            routeUserAuth: Go to the User menu
+            routeWatching: Go to the Watching menu
+            routeSettings: Go to the Settings menu
+            routeAbout: Go to the About menu
+    searchbar:
+        title: Search bar
+        description: Search bar at the top.
+        actions:
+            focus: Focus
+    followbutton:
+        title: Follow button
+        description: The follow button on a channel's page or on the streaming dialog.
+        actions:
+            default: Follow or unfollow
+            confirm: Confirm
+    openchatbutton:
+        title: Open chat button
+        description: The chat button on a channel's page or on the streaming dialog.
+        actions:
+            default: Open chat
+    sharechannelbutton:
+        title: Share channel button
+        description: The share button on a channel's page or on the streaming dialog.
+        actions:
+            default: Copy channel URL to clipboard
+    twitchemotesbutton:
+        title: Twitch emotes button
+        description: Emotes button on a channel's page or on the streaming dialog.
+        actions:
+            default: Open Twitchemotes.com
+    modaldialog:
+        title: Modal dialog
+        description: Generic popup dialogs.
+        actions:
+            close: Close
+    modalconfirm:
+        title: Confirm dialog
+        description: When a certain action needs to be confirmed.
+        actions:
+            confirm: Confirm
+    modalstreaming:
+        title: Streaming dialog
+        description: When watching a stream.
+        actions:
+            shutdown: Stop current stream
+            log: Toggle log output
 notifications:
     enabled:
         title: Notifications

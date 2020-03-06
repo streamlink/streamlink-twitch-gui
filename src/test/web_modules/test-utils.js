@@ -124,16 +124,24 @@ export function buildResolver( namespace = {} ) {
 	});
 }
 
-export function buildFakeApplication( hooks, namespace = {} ) {
+export function buildFakeApplication( hooks, options, namespace ) {
+	if ( !namespace ) {
+		namespace = options;
+		options = {};
+	}
+
+	const methodBefore = options.each ? "beforeEach" : "before";
+	const methodAfter = options.each ? "afterEach" : "after";
+
 	let oldApplication;
 	let oldResolver;
 
-	hooks.before(function() {
+	hooks[ methodBefore ](function() {
 		oldApplication = getApplication();
 		oldResolver = getResolver();
 
 		const resolver = buildResolver( namespace );
-		const application = Application.create({
+		const application = Application.extend().create({
 			autoboot: false,
 			rootElement: "#ember-testing",
 			Resolver: {
@@ -145,7 +153,7 @@ export function buildFakeApplication( hooks, namespace = {} ) {
 		setApplication( application );
 	});
 
-	hooks.after(function() {
+	hooks[ methodAfter ](function() {
 		setApplication( oldApplication );
 		setResolver( oldResolver );
 	});

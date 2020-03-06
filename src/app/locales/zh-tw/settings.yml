@@ -6,7 +6,6 @@ menu:
     player: 播放器
     streams: 實況
     chat: 聊天室
-    lists: 列表
     languages: 語言
     notifications: 通知
     channels: 頻道設定
@@ -234,10 +233,6 @@ streams:
         description: 使用畫質範圍設定或是特定的畫質設定
         notes: 第2欄顯示實際選擇的畫質，從"最佳畫質"到"最差畫質"中排除第1欄中指定的畫質或畫質範圍，修改前請先查詢 wiki 及 Streamlink 的文件
         dont-exclude: 不排除實況畫質
-    vodcast-regexp:
-        title: 自訂 Vodcast 過濾
-        description: 尋找未標籤的 VOD/重播
-        notes: 使用 JavaScript 的正規表達式(區分大小寫) 來過濾實況標題，使用空字串來停用過濾
     modal-close-launch:
         title: 隱藏實況對話框
         description: 當打開實況時會彈出對話框
@@ -246,6 +241,47 @@ streams:
         title: 關閉實況對話框
         description: 當實況結束時關閉對話框
         checkbox: 當實況結束時自動關閉對話框
+    channelname:
+        title: 自訂頻道名稱
+        description: 頻道名稱在地化
+        values:
+            custom: 顯示自訂名稱
+            original: 顯示原始頻道名稱
+            both: 全部顯示
+    show-flag:
+        title: 旗幟
+        description: 標示實況主的語言
+        checkbox: 總是顯示旗幟
+    filter-vodcast:
+        title: 淡出重播頻道 (Vodcasts)
+        description: 使重播頻道較不明顯
+        checkbox: 淡出重播頻道
+    vodcast-regexp:
+        title: 自訂 Vodcast 過濾
+        description: 尋找未標籤的 VOD/重播
+        notes: 使用 JavaScript 的正規表達式(區分大小寫) 來過濾實況標題，使用空字串來停用過濾
+    show-info:
+        title: 資訊列
+        description: 實況預覽圖下方的資訊列
+        checkbox: 永遠顯示資訊列
+    info:
+        title: 資訊列內容
+        description: 資訊列要顯示什麼？
+        values:
+            game: 正在玩的遊戲
+            title: 實況標題
+    click:
+        title: 點擊行為
+        description: 實況預覽圖的額外點擊動作
+        ctrl: Ctrl + 滑鼠主要按鈕
+        cmd: CMD + 滑鼠主要按鈕
+        middle: 滑鼠中鍵
+        values:
+            noop: 不動作
+            launch: 開啟實況
+            chat: 開啟聊天室
+            channel: 移至頻道資訊頁
+            settings: 移至頻道設定頁
 chat:
     provider:
         title: 聊天室軟體
@@ -364,44 +400,6 @@ chat:
         title: Twitch 表情
         description: 打開 twitchemotes.com 的按鈕
         checkbox: 在實況對話框顯示表情按鈕
-lists:
-    channelname:
-        title: 自訂頻道名稱
-        description: 頻道名稱在地化
-        values:
-            custom: 顯示自訂名稱
-            original: 顯示原始頻道名稱
-            both: 全部顯示
-    show-flag:
-        title: 旗幟
-        description: 標示實況主的語言
-        checkbox: 總是顯示旗幟
-    filter-vodcast:
-        title: 淡出重播頻道 (Vodcasts)
-        description: 使重播頻道較不明顯
-        checkbox: 淡出重播頻道
-    show-info:
-        title: 資訊列
-        description: 實況預覽圖下方的資訊列
-        checkbox: 永遠顯示資訊列
-    info:
-        title: 資訊列內容
-        description: 資訊列要顯示什麼？
-        values:
-            game: 正在玩的遊戲
-            title: 實況標題
-    click:
-        title: 點擊行為
-        description: 實況預覽圖的額外點擊動作
-        ctrl: Ctrl + 滑鼠主要按鈕
-        cmd: CMD + 滑鼠主要按鈕
-        middle: 滑鼠中鍵
-        values:
-            noop: 不動作
-            launch: 開啟實況
-            chat: 開啟聊天室
-            channel: 移至頻道資訊頁
-            settings: 移至頻道設定頁
 languages:
     filter:
         title: 過濾實況

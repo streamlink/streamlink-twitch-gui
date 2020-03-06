@@ -1,0 +1,41 @@
+<input
+	type="text"
+	class="form-control {{unless (bool-or hotkey model.code _inputEvent) "is-empty"}}"
+	value="{{_inputValue}}"
+	disabled={{unless editing true}}
+	onkeydown={{if editing _stopEvent}}
+	onkeyup={{if editing (action "change")}}
+>
+{{#unless editing}}
+	{{form-button
+		classNames="js-btn-delete"
+		action=(if model.code (action "delete"))
+		icon="fa-trash-o"
+		disabled=(unless model.code true)
+		title=(if model.code (t "components.settings-hotkey.delete"))
+	}}
+	{{form-button
+		classNames="js-btn-edit"
+		action=(action "edit")
+		icon="fa-pencil"
+		title=(t "components.settings-hotkey.edit")
+	}}
+{{else}}
+	{{form-button
+		classNames="js-btn-discard btn-danger"
+		action=(action "discard")
+		icon="fa-times"
+		title=(t "components.settings-hotkey.discard")
+	}}
+	{{form-button
+		classNames="js-btn-confirm btn-success"
+		action=(action "confirm")
+		icon="fa-check"
+		title=(t "components.settings-hotkey.confirm")
+	}}
+{{/unless}}
+{{check-box
+	classNames="js-btn-enabled btn"
+	checked=(mut enabled)
+	title=(t "components.settings-hotkey.toggle")
+}}

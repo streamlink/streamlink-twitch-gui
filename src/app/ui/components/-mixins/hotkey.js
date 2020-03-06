@@ -1,53 +1,48 @@
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import { on } from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
 import { inject as service } from "@ember/service";
-import formatTitle from "services/hotkey/title";
-
-
-const { isArray } = Array;
 
 
 export default Mixin.create({
+	/** @type {I18nService} */
 	i18n: service(),
+	/** @type {HotkeyService} */
 	hotkey: service(),
 
-	concatenatedProperties: "hotkeys",
-	disableHotkeys: false,
+	concatenatedProperties: "hotkeysNamespace",
+	mergedProperties: "hotkeys",
 
-	title: computed( "_title", function() {
-		const title = get( this, "_title" );
+	hotkeysDisabled: false,
+	hotkeysTitleAction: null,
 
-		if (
-			   !title
-			|| !isArray( this.hotkeys )
-			|| !this.hotkeys.length
-			|| get( this, "disableHotkeys" )
-		) {
+	init() {
+		this._super( ...arguments );
+		// initialize computed property of injected service to make the observer work
+		this.get( "i18n" );
+	},
+
+	title: computed( "_title", "hotkeysDisabled", "hotkeysTitleAction", "i18n.locale", function() {
+		const _title = this._title;
+		const title = _title ? String( _title ) : "";
+
+		if ( !title || this.hotkeysDisabled || !this.hotkeysNamespace || !this.hotkeys ) {
 			return title;
 		}
 
-		const i18n = get( this, "i18n" );
-		const hotkey = this.hotkeys[ 0 ];
+		const action = this.hotkeysTitleAction || Object.keys( this.hotkeys )[ 0 ];
+		const hotkey = this.hotkey.getHotkeyDataByContext( this, action );
 
-		return formatTitle( i18n, title, hotkey );
+		return hotkey
+			? this.hotkey.formatTitle( hotkey, title )
+			: title;
 	}),
 
-	_registerHotkeys: on( "didInsertElement", function() {
-		if ( get( this, "disableHotkeys" ) ) { return; }
-
-		const HotkeyService = get( this, "hotkey" );
-		const hotkeys = get( this, "hotkeys" ) || [];
-
-		if ( !hotkeys.length ) { return; }
-
-		// reverse the array (concatenatedProperties appends similar hotkeys defined by subclasses)
-		HotkeyService.register( this, hotkeys.slice().reverse() );
+	_hotkeysRegister: on( "didInsertElement", function() {
+		this.hotkey.register( this );
 	}),
 
-	_unregisterHotkeys: on( "willDestroyElement", function() {
-		const HotkeyService = get( this, "hotkey" );
-
-		HotkeyService.unregister( this );
+	_hotkeysUnregister: on( "willDestroyElement", function() {
+		this.hotkey.unregister( this );
 	})
 });

@@ -6,8 +6,8 @@ menu:
     player: Player
     streams: Streams
     chat: Chat
-    lists: Listen
     languages: Sprachen
+    hotkeys: Hotkeys
     notifications: Benachrichtigungen
     channels: Kanäle
 main:
@@ -234,10 +234,6 @@ streams:
         description: Definiere eine präzise Auswahl der Qualität in einem bestimmten Bereich oder durch Aufzählung von expliziten Namen.
         notes: Die zweite Spalte zeigt die eigentliche Qualitätsauswahl. Werte aus der ersten Spalte werden von den "best" oder "worst" Selektoren herausgefiltert. Bitte lies das Wiki und Streamlinks Dokumentation bevor du Änderungen vornimmst.
         dont-exclude: Keine Streamqualitäten filtern
-    vodcast-regexp:
-        title: Benutzerdefinierte Vodcast Filter
-        description: Nicht markierte Vodcasts/Aufzeichnungen finden.
-        notes: Ein JavaScript konformer regulärer Ausdruck, angewendet auf den Streamtitel. Um das Filtern auszuschalten, gebe einen leeren Text oder ungültigen Ausdruck ein.
     modal-close-launch:
         title: Stream Pop-up verstecken
         description: Nachdem der Stream gestartet wurde.
@@ -246,6 +242,47 @@ streams:
         title: Stream Pop-up schließen
         description: Nachdem der Stream geschlossen wurde.
         checkbox: Pop-up des aktiven Streams bei Beendigung schließen
+    channelname:
+        title: Benutzerdefinierte Kanalnamen
+        description: Kanalnamen-Lokalisierungen.
+        values:
+            custom: Zeige benutzerdefinierte Namen
+            original: Zeige originale Namen
+            both: Zeige beide
+    show-flag:
+        title: Flaggen
+        description: Geben die Broadcaster-Sprache an.
+        checkbox: Flaggen sind immer sichtbar
+    filter-vodcast:
+        title: Vodcasts ausblenden
+        description: Vodcasts als zusätzlichen Indikator weniger sichtbar machen.
+        checkbox: Vodcasts ausblenden
+    vodcast-regexp:
+        title: Benutzerdefinierte Vodcast Filter
+        description: Nicht markierte Vodcasts/Aufzeichnungen finden.
+        notes: Ein JavaScript konformer regulärer Ausdruck, angewendet auf den Streamtitel. Um das Filtern auszuschalten, gebe einen leeren Text oder ungültigen Ausdruck ein.
+    show-info:
+        title: Infoleiste
+        description: Untere Leiste innerhalb der Streamvorschau.
+        checkbox: Infoleiste ist immer sichtbar
+    info:
+        title: Inhalt der Infoleiste
+        description: Was soll gezeigt werden?
+        values:
+            game: Zeige das gespielte Spiel
+            title: Zeige den Streamtitel
+    click:
+        title: Klickverhalten
+        description: Zusätzliche Streambild Klick-Aktionen.
+        ctrl: STRG + Primäre Maustaste
+        cmd: CMD + Primäre Maustaste
+        middle: Mittlere Maustaste
+        values:
+            noop: Nichts unternehmen
+            launch: Stream starten
+            chat: Chat öffnen
+            channel: Kanalseite öffnen
+            settings: Kanaleinstellungen öffnen
 chat:
     provider:
         title: Chat Anwendung
@@ -364,44 +401,6 @@ chat:
         title: Twitch Emoticons
         description: Button zum Öffnen von twitchemotes.com.
         checkbox: Zeige Emoticon-Button in Stream Pop-ups
-lists:
-    channelname:
-        title: Benutzerdefinierte Kanalnamen
-        description: Kanalnamen-Lokalisierungen.
-        values:
-            custom: Zeige benutzerdefinierte Namen
-            original: Zeige originale Namen
-            both: Zeige beide
-    show-flag:
-        title: Flaggen
-        description: Geben die Broadcaster-Sprache an.
-        checkbox: Flaggen sind immer sichtbar
-    filter-vodcast:
-        title: Vodcasts ausblenden
-        description: Vodcasts als zusätzlichen Indikator weniger sichtbar machen.
-        checkbox: Vodcasts ausblenden
-    show-info:
-        title: Infoleiste
-        description: Untere Leiste innerhalb der Streamvorschau.
-        checkbox: Infoleiste ist immer sichtbar
-    info:
-        title: Inhalt der Infoleiste
-        description: Was soll gezeigt werden?
-        values:
-            game: Zeige das gespielte Spiel
-            title: Zeige den Streamtitel
-    click:
-        title: Klickverhalten
-        description: Zusätzliche Streambild Klick-Aktionen.
-        ctrl: STRG + Primäre Maustaste
-        cmd: CMD + Primäre Maustaste
-        middle: Mittlere Maustaste
-        values:
-            noop: Nichts unternehmen
-            launch: Stream starten
-            chat: Chat öffnen
-            channel: Kanalseite öffnen
-            settings: Kanaleinstellungen öffnen
 languages:
     filter:
         title: Streams filtern
@@ -420,6 +419,69 @@ languages:
         notes: Wähle alle oder keine Sprachen aus, um das Filtern zu deaktivieren.
         check-all: Alle Sprachen markieren
         uncheck-all: Markierungen entfernen
+hotkeys:
+    navigation:
+        title: Navigation
+        description: Globale Navigationshotkeys.
+        notes: |
+            Hotkeys sind nach den Aktionen ihrer jeweiligen Komponente kategorisiert. Jede Aktion verfügt über einen primären und einen sekundären Hotkey, welcher individuell ein- und ausgeschaltet werden und zusätzlich mit einer eigenen Tastenkombination belegt werden kann. Das Anwendungsfenster muss fokussiert sein, damit die Hotkeys ausgelöst werden können.<br><br>
+            Weiterhin ist zu beachten, dass die Hotkeys derzeit das Tastaturlayout des Systems (aus technischen Gründen) nicht berücksichtigen. Das bedeutet, dass alle Hotkeys vorerst auf dem US-amerikanischen Standard-Tastaturlayout (QWERTY) basieren und einzelne Tasten auf Systemen mit einem anderen Layout möglicherweise falsch angezeigt werden.
+        actions:
+            refresh: Das aktuelle Menü neu laden
+            historyBack: Zurück gehen
+            historyForward: Vorwärts gehen
+            homepage: Zur Startseite gehen
+            routeFeatured: Zum Vorgestellte-Kanäle-Menü gehen
+            routeGames: Zum Spiele-Menü gehen
+            routeStreams: Zum Streams-Menü gehen
+            routeUserFollowedStreams: Zum Gefolgte-Streams-Menü gehen
+            routeUserFollowedChannels: Zum Gefolgte-Kanäle-Menü gehen
+            routeUserAuth: Zum Benutzer-Menü gehen
+            routeWatching: Zum Du-Schaust-Menü gehen
+            routeSettings: Zu den Einstellungen gehen
+            routeAbout: Zum Über-Menü gehen
+    searchbar:
+        title: Suchleiste
+        description: Die Suchleiste oben.
+        actions:
+            focus: Fokusieren
+    followbutton:
+        title: Folgen Button
+        description: Der Folgen-Knopf auf einer Kanalseite oder im Stream Pop-up.
+        actions:
+            default: Folgen oder nicht mehr folgen
+            confirm: Bestätigen
+    openchatbutton:
+        title: Chat öffnen Button
+        description: Der Chat-Knopf auf einer Kanalseite oder im Stream Pop-up.
+        actions:
+            default: Chat öffnen
+    sharechannelbutton:
+        title: Kanal teilen Button
+        description: Der Teilen-Knopf auf einer Kanalseite oder im Stream Pop-up.
+        actions:
+            default: Copy channel URL to clipboard
+    twitchemotesbutton:
+        title: Twitch emotes Button
+        description: Emotes-Knopf auf einer Kanalseite oder im Stream Pop-up.
+        actions:
+            default: Twitchemotes.com öffnen
+    modaldialog:
+        title: Pop-ups
+        description: Standard Pop-up Dialog.
+        actions:
+            close: Schließen
+    modalconfirm:
+        title: Bestätigungs-Pop-up
+        description: Wenn eine bestimmte Aktion bestätigt werden muss.
+        actions:
+            confirm: Bestätigen
+    modalstreaming:
+        title: Stream Pop-up
+        description: Beim Schauen eines Streams.
+        actions:
+            shutdown: Aktuellen Stream stoppen
+            log: Logansicht ein-/ausblenden
 notifications:
     enabled:
         title: Desktop-Benachrichtigungen

@@ -26,25 +26,15 @@ export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
 	mouseLeaveTime: 1000,
 	_timeout: null,
 
-	hotkeys: [
-		{
-			name: "main",
-			key: "f",
-			ctrlKey: true,
-			action() {
-				this.mainbutton.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
-			}
+	hotkeysNamespace: "followbutton",
+	hotkeys: {
+		default() {
+			this.mainbutton.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
 		},
-		{
-			name: "confirm",
-			key: "F",
-			ctrlKey: true,
-			shiftKey: true,
-			action() {
-				this.confirmbutton.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
-			}
+		confirm() {
+			this.confirmbutton.dispatchEvent( new MouseEvent( "click", { bubbles: true } ) );
 		}
-	],
+	},
 
 	didInsertElement() {
 		this._super( ...arguments );
