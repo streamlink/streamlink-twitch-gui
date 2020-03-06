@@ -61,7 +61,8 @@ module.exports = class WebpackI18nCoveragePlugin {
 		grunt.log.writeln();
 		output( "Checking for missing translation keys in locales", () => {
 			const missing = [];
-			for ( const [ locale, data ] of localeData ) {
+			for ( const locale of Array.from( localeData.keys() ).sort() ) {
+				const data = localeData.get( locale );
 				// remove ignored keys from current locale's data
 				const dataFiltered = diffWith( data.sort(), reExclude, fnExclude );
 				// compare with default locale and add diff to missing list
