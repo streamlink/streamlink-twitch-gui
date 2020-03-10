@@ -91,9 +91,9 @@ module( "services/theme", function( hooks ) {
 	});
 
 	test( "System theme", async function( assert ) {
-		this.owner.register( "service:theme", ThemeService.extend({
-			_applyTheme: null
-		}) );
+		this.owner.register( "service:theme", class extends ThemeService {
+			_applyTheme = new Function();
+		});
 
 		{
 			this.matchMediaStub.callsFake( () => ({ matches: false }) );

@@ -1,21 +1,24 @@
-import { set, observer } from "@ember/object";
+import { set } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
+import { observes } from "@ember-decorators/object";
 import { themes as themesConfig } from "config";
 
 
 const { themes, system: systemThemes, prefix } = themesConfig;
 
 
-export default Service.extend({
-	document: service( "-document" ),
-	settings: service(),
+export default class ThemeService extends Service {
+	/** @type {Document} */
+	@service( "-document" ) document;
+	/** @type {SettingsService} */
+	@service settings;
 
-	systemTheme: null,
+	systemTheme = null;
 
 	initialize() {
 		// calling this in `init` won't trigger the observer of systemTheme when it gets set
 		this._checkSystemColorScheme();
-	},
+	}
 
 	/**
 	 * Query registered color schemes until one matches and update the systemTheme property.
@@ -38,12 +41,13 @@ export default Service.extend({
 		}
 		// use the default theme if none actually matches (probably unnecessary)
 		set( this, "systemTheme", systemThemes[ "no-preference" ] );
-	},
+	}
 
 	/**
 	 * Apply theme class name to the documentElement
 	 */
-	_applyTheme: observer( "settings.content.gui.theme", "systemTheme", function() {
+	@observes( "settings.content.gui.theme", "systemTheme" )
+	_applyTheme() {
 		let theme = this.settings.content.gui.theme;
 
 		if ( !theme || !themes.includes( theme ) ) {
@@ -60,5 +64,5 @@ export default Service.extend({
 			}
 		});
 		classList.add( `${prefix}${theme}` );
-	})
-});
+	}
+}
