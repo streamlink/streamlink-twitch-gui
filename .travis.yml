@@ -56,15 +56,8 @@ script:
     fi
 
 deploy:
-  - provider: releases
-    api_key: "${RELEASES_API_KEY}"
-    file: dist/*{.tar.gz,.zip,.exe,-checksums.txt}
-    file_glob: true
-    skip_cleanup: true
-    on:
-      tags: true
   - provider: script
-    script: node build/travis/update_release.js
+    script: yarn run grunt deploy:github
     skip_cleanup: true
     on:
       tags: true
