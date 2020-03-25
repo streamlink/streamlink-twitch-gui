@@ -5,8 +5,10 @@ module.exports = {
 	github: {
 		options: {
 			apikey: process.env[ "RELEASES_API_KEY" ],
-			repo: process.env[ "TRAVIS_REPO_SLUG" ],
-			tag_name: process.env[ "TRAVIS_TAG" ],
+			repo: process.env[ "GITHUB_REPOSITORY" ],
+			tag_name: ( process.env[ "GITHUB_REF" ] || "" )
+				.replace( /^(?!refs\/tags\/).+$/, "" )
+				.replace( /^refs\/tags\//, "" ),
 			body: "<%= dir.root %>/.github/release_template.md",
 			template: {
 				display_name: "<%= main['display-name'] %>",

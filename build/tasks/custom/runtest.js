@@ -12,17 +12,19 @@ module.exports = function( grunt ) {
 	const descr = "Run the tests in NW.js";
 
 	grunt.registerTask( task, descr, function() {
+		const isCI = process.env[ "CI" ] === "true";
+		const isCoverage = !!this.flags.coverage;
+
 		const done = this.async();
 		const options = this.options({
 			host: "localhost",
-			port: 8000,
+			port: isCI ? 4444 : 8000,
 			connectAttempts: 3,
-			connectDelay: 1000,
+			connectDelay: 3000,
 			startTimeout: 10000,
 			testTimeout: 300000,
 			coverageTimeout: 5000
 		});
-		const isCoverage = !!this.flags.coverage;
 
 
 		const nwjsOptions = Object.assign( {}, grunt.config.process( nwjsTaskOptions ), {
