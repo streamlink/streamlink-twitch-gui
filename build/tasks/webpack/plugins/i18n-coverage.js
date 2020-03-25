@@ -31,6 +31,10 @@ module.exports = class WebpackI18nCoveragePlugin {
 
 		const { grunt, localeData, translationKeys, defaultLocale, exclude } = this;
 
+		if ( !localeData.has( defaultLocale ) ) {
+			throw new Error( "Missing default locale data" );
+		}
+
 		const output = ( header, callback ) => {
 			grunt.log.writeln();
 			grunt.log.ok( header );
@@ -91,7 +95,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 		const content = module.originalSource().source();
 
 		if ( module.resource.startsWith( this.localesDir ) ) {
-			const match = /\/([\w-]+)\/([\w-]+)\.yml$/.exec( module.resource );
+			const match = /[\/\\]([\w-]+)[\/\\]([\w-]+)\.yml$/.exec( module.resource );
 			if ( !match ) { return; }
 			const [ , locale, section ] = match;
 			this._addLocaleData( locale, section, this._getContent( content ) );
