@@ -30,10 +30,12 @@ Please see the detailed translation guidelines on the project's [wiki][wiki].
 
 ## Developing and building
 
-Streamlink Twitch GUI is based on [NW.js][NW.js].  
+Streamlink Twitch GUI is built on top of [NW.js][NW.js] (formerly known as node-webkit).  
 Please visit the [NW.js website][NW.js-website] if you want to know more about NW.js apps.
 
-Building the application is simple. Please make sure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Yarn][yarn] (or [Npm][npm]) are installed on your system, so all dependencies can be installed and the application can be built and compiled.
+Building the application is simple. Please make sure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Yarn][Yarn] are properly set up on your system, so all dependencies can be installed and the application be tested, built, compiled and optionally packaged.
+
+Unlike other [Ember.js][Ember] based projects which are built with ember-cli, Streamlink Twitch GUI uses [Grunt][Gruntjs] and [Webpack][Webpack] as build tools.
 
 ### Setup
 
@@ -42,17 +44,23 @@ Building the application is simple. Please make sure that the latest stable vers
 git clone https://github.com/streamlink/streamlink-twitch-gui.git
 cd streamlink-twitch-gui
 
-# install dependencies via yarn (preferred way)
-yarn global add grunt-cli # may require administrator privileges
+# install the project's dependencies
 yarn install
-# or use npm instead (discouraged)
-npm install --global grunt-cli # may require administrator privileges
-npm install
 ```
 
-Streamlink Twitch GUI uses [Gruntjs][Gruntjs] and [Webpack][Webpack] as build tools. This is different from Ember.js based projects that are using ember-cli.  
+### Grunt
+
+In order to be able to run `grunt` from the command line shell, `grunt-cli` has to be installed.
+
+If your system does not have a `grunt-cli` / `node-grunt-cli` / etc package available in its native package management system, or if you don't want to [install `grunt-cli` globally via yarn][Yarn-global] (`yarn global add grunt-cli`), then you'll have to use the version which comes bundled with Streamlink Twitch GUI's build-dependencies. This bundled version requires you to either wrap its executable with the yarn run command (`yarn run grunt`) or to execute it directly from `./node_modules/.bin/grunt`. If you're choosing the second option, `./node_modules/.bin/` can also be added to the `PATH` environment variable for quicker access, so you can just run `grunt` instead.
+
 To get a list of all available grunt tasks, run `grunt --help`.  
-All task configs can be found in `build/tasks/{configs,custom}`.
+Task configs and custom task modules can be found in `build/tasks/{configs,custom}`.
+
+#### Task aliases
+
+Executing `grunt` without parameters is an alias for `grunt build`, which itself is an alias for `grunt build:dev`, which is again an alias for the task list for building and launching a development build.  
+See `build/tasks/configs/aliases.yml` for all available aliases.
 
 ### Developing
 
@@ -60,9 +68,10 @@ All task configs can be found in `build/tasks/{configs,custom}`.
 grunt build
 ```
 
-This will create a development build and will run it afterwards. If NW.js has not been downloaded yet, it will do this automatically.  
-Since NW.js is based on Chromium, you will find all the usual debugging tools. These can be accessed by clicking the button in the titlebar of the application or by opening `http://localhost:8888/` in your web browser. IDEs with internal NW.js debugging support can be used as well.  
-Once NW.js has been launched, file watchers will look for any changes being made to the source files and will then rebuild those parts of the application.
+This will create a development build and will run NW.js afterwards. If NW.js has not been downloaded yet, it will do this automatically.  
+Since NW.js is based on Chromium, you will find all the usual debugging tools. These can be accessed by clicking the button in the titlebar of the application or by opening `http://localhost:8888/` in your web browser. IDEs with internal Node/Chromium/NW.js debugging support can be used as well.  
+Once NW.js has been launched, file watchers will look for any changes being made to the source files and will then rebuild those parts of the application.  
+Closing NW.js while grunt is still running will automatically re-open it. To stop this, terminate/interrupt the grunt process with CTRL+C.
 
 ### Testing
 
@@ -70,8 +79,18 @@ Once NW.js has been launched, file watchers will look for any changes being made
 # run tests
 grunt test
 
-# keep running NW.js, show its window and rebuild tests on change
+# show the NW.js window while running tests and keep rebuilding tests on change
 grunt test:dev
+
+# test and build a code coverage report (see build/tmp/coverage)
+grunt test:coverage
+```
+
+### I18n coverage
+
+```bash
+# show missing, invalid or unused translation strings
+grunt webpack:i18n
 ```
 
 ### Building and compiling
@@ -85,7 +104,20 @@ grunt build:prod compile
 
 The final build can be found in the `build/releases` directory.
 
-Both `release` and `compile` tasks support multiple *targets* for different platforms. Targets can be set by appending `:target` to the task name (eg. `grunt release:linux64:osx64`). See `build/tasks/common/platforms.js` for all available targets. By default, the currently used platform will be used.
+Both the `release` and `compile` tasks support multiple *targets* for different platforms. Targets can be set by appending `:target` to the task name (eg. `grunt release:linux64:osx64`). See `build/tasks/common/platforms.js` for all available targets. By default, the currently used platform will be selected. Compiling a `win32` or `win64` build on Linux or macOS requires `wine` to be installed on the system.
+
+#### Archives, installers and packages
+
+Distribution files can optionally be built after successfully compiling a production build. For building archives, a *nix environment is required, for building tarballs, GNU tar has to be installed, and for building the Windows installers, NSIS has to be set up on the system.
+
+```bash
+# see the dist grunt task config for the available distribution targets
+grunt dist:all
+```
+
+#### Reproducible builds
+
+Reproducible builds are supported (excluding the NSIS installers). If you want to compare an official build with a local build, check out the tagged git commit first and then set the `SOURCE_DATE_EPOCH` environment variable to the value of `git show -s --format=%ct` before building, compiling and packaging.
 
 
 ## Pull requests
@@ -151,11 +183,12 @@ This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5
   [howto-format-commits]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
   [howto-open-pull-requests]: https://help.github.com/articles/using-pull-requests
   [NW.js]: https://github.com/nwjs/nw.js
-  [NW.js-website]: http://nwjs.io
+  [NW.js-website]: https://nwjs.io
   [Git]: https://git-scm.com
   [Node.js]: https://nodejs.org
-  [yarn]: https://yarnpkg.com
-  [npm]: https://npmjs.org
+  [Yarn]: https://classic.yarnpkg.com/lang/en/
+  [Yarn-global]: https://classic.yarnpkg.com/en/docs/cli/global
+  [Ember]: https://emberjs.com/
   [Gruntjs]: http://gruntjs.com
   [Webpack]: https://webpack.github.io
   [ref-h5bp]: https://github.com/h5bp/html5-boilerplate/blob/master/CONTRIBUTING.md

@@ -62,17 +62,18 @@ Please don't forget to report any bugs you may encounter. Thank you very much fo
 
 ## Build
 
-Building the application on your own is simple. Just make sure that the latest stable versions of [Node.js][Node.js] and [Yarn][yarn] (or [Npm][npm]) are installed on your system.  
-Then run the following lines from the path of your cloned repository to install all dependencies and to start the build process. You will then find the built executable inside the `build/releases` folder. See [here][Contributing] for more detailed instructions.
+Building the application on your own is simple. Just make sure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Yarn][yarn] are installed on your system.  
+Then run the following lines to clone the repository, to install all dependencies and to start the build process. You will then find the built executable inside the `build/releases` folder. See [CONTRIBUTING.md][Contributing] for more detailed instructions.
 
 ```bash
-yarn global add grunt-cli
+git clone https://github.com/streamlink/streamlink-twitch-gui.git
+cd streamlink-twitch-gui
 yarn install
-grunt release
+yarn run grunt release
 ```
 
 
-## Contributing
+## Contribute
 
 Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first.
 
@@ -99,8 +100,9 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Chromium]: https://www.chromium.org/ "Chromium"
   [Microsoft Visual C++ 2008 Redistributable Package]: http://www.microsoft.com/en-us/download/details.aspx?id=29 "Microsoft Visual C++ 2008 Redistributable Package"
   [Installation package]: https://streamlink.github.io/install.html#windows-binaries "Streamlink installation package"
+  [Git]: https://git-scm.com "Git"
   [Node.js]: https://nodejs.org "Node.js"
-  [yarn]: https://yarnpkg.com "Fast, reliable, and secure dependency management."
+  [yarn]: https://classic.yarnpkg.com/lang/en/ "Fast, reliable, and secure dependency management."
   [npm]: https://npmjs.org "Node Packaged Modules"
   [badge-platforms]: https://img.shields.io/badge/platform-win%20%7C%20mac%20%7C%20linux-green.svg?style=flat-square "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/streamlink/streamlink-twitch-gui.svg?style=flat-square "Latest release"
