@@ -3,7 +3,6 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules
-  - bower_components
   - build
   - dist
 permalink: /:title
@@ -25,7 +24,7 @@ compress_html:
 
 title: Streamlink Twitch GUI
 description: A multi platform Twitch.tv browser for Streamlink
-keywords: Streamlink, Twitch, GUI, Streaming, Livestreamer, desktop app, web app, nw.js
+keywords: Streamlink, Twitch, GUI, Streaming, desktop app, web app, nw.js
 baseurl: /streamlink-twitch-gui
 source_link: https://github.com/streamlink/streamlink-twitch-gui
 repository: streamlink/streamlink-twitch-gui
