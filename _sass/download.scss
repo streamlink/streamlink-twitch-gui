@@ -15,7 +15,7 @@
 
 			&::before {
 				display: block;
-				font-family: FontAwesome;
+				font-family: "Font Awesome 5 Brands";
 				transition: font-size .333s ease-out;
 			}
 
@@ -73,7 +73,7 @@
 				width: 2rem;
 				height: 2rem;
 				font-size: 2rem;
-				font-family: FontAwesome;
+				font-family: "Font Awesome 5 Free";
 			}
 
 			&::after {
@@ -85,6 +85,9 @@
 				right: 0;
 				margin: 0 -10rem;
 				font-size: 1.5rem;
+				font-style: normal;
+				font-weight: 400;
+				font-family: inherit;
 				white-space: nowrap;
 				text-align: center;
 				opacity: 0;
