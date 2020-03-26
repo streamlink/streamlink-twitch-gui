@@ -24,24 +24,26 @@ Streamlink Twitch GUI is a [NW.js][NW.js] application, which means that it is a 
 ## Features
 
 * Available on Windows, macOS and Linux
-* Supports both Streamlink and Livestreamer
-* Browse streams by popularity, game, community or team
-* Watch streams in the video player of your choice
+* Watch streams in the video player of your choice via Streamlink
 * Watch multiple streams at once
-* Access your subscriptions and followed channels or games
+* Browse streams by popularity, game, channel or team
+* Access your followed streams and channels
 * Filter streams by channel- or broadcasting language
 * Receive desktop notifications when new streams start
 * Join the Twitch chat by using customizable chat applications
 * Rich settings menu with lots of customizations and presets
 * Individual channel settings
-* Integrated default and dark themes
+* Available in multiple languages
+* Automatic or custom selection of light and dark themes
+* Customizable hotkeys
+* Command line parameters for automation purposes
 
 
 ## Why
 
-One of the reasons for having bad viewing experiences on [Twitch.tv][Twitch] is the usage of their HTML5 or Flash video player. Especially on mobile desktop devices, high CPU and memory usage and lack of GPU acceleration of the web browser can cause major issues like buffering, stuttering or low video playback frame rates.
+One of the reasons for having bad viewing experiences on [Twitch.tv][Twitch] is the implementation of their resource-heavy website and HTML5 video player. Especially on mobile desktop devices, high CPU and memory usage and lack of GPU acceleration of the web browser can cause major issues like buffering, stuttering or low video playback frame rates, all while draining the device's battery and spinning up its fans. Even on desktop computers, watching streams on Twitch.tv while multi-tasking can be an issue.
 
-With Streamlink Twitch GUI you're not dependent on your web browser and streams can be watched in the video player of your choice, enabling a smooth video playback. In addition to that, variable stream buffers will help you countering bad network conditions.
+With Streamlink Twitch GUI, you're not dependent on your web browser and streams can be watched in the video player of your choice, enabling a smooth video playback. Depending on your choice of player, additional features become available, like for example timeshift support or resolution/framerate upscaling. In addition to that, Streamlink's variable stream buffers will help you countering bad network conditions or reducing the stream's latency even further.
 
 Please bear in mind that you're bypassing any ads run by Twitch by using this software. If you want to support [Twitch][Twitch] or a single broadcaster, please consider buying [Twitch Prime][TwitchPrime] or subscribing to the broadcaster's channel. Thank you!
 
@@ -52,18 +54,18 @@ Please bear in mind that you're bypassing any ads run by Twitch by using this so
 
 [**Visit the project's wiki**][Wiki] for detailed installation and configuration guides, or just see the [GitHub releases][Releases] page if you don't need help. The wiki also includes a list of supported packages for your platform.
 
-Please remember that **Streamlink Twitch GUI**, as the name already suggests, is only a graphical user interface (GUI) built on top of **Streamlink**. This means that [Streamlink][Streamlink] has to be installed on your system in order to be able to launch streams. Once again, see the [wiki][Wiki] if you need help, as it also covers installing Streamlink.
+Please remember that **Streamlink Twitch GUI**, as the name already suggests, is only a graphical user interface (GUI) built on top of the **Streamlink** command line interface (CLI). This means that [Streamlink][Streamlink] has to be installed on your system in order to be able to launch streams. Once again, see the [wiki][Wiki] if you need help, as it also covers installing Streamlink.
 
 ### Development version
 
-If you want to test the latest unreleased version, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or [here][Contributing].  
+If you want to test the latest unreleased version, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or in [CONTRIBUTING.md][Contributing].  
 Please don't forget to report any bugs you may encounter. Thank you very much for helping!
 
 
 ## Build
 
 Building the application on your own is simple. Just make sure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Yarn][yarn] are installed on your system.  
-Then run the following lines to clone the repository, to install all dependencies and to start the build process. You will then find the built executable inside the `build/releases` folder. See [CONTRIBUTING.md][Contributing] for more detailed instructions.
+Then run the following lines to clone the repository, to install all dependencies and to start the build process. You will then find the built application inside the `build/releases` folder. See [CONTRIBUTING.md][Contributing] for more detailed instructions.
 
 ```bash
 git clone https://github.com/streamlink/streamlink-twitch-gui.git
@@ -77,6 +79,17 @@ yarn run grunt release
 
 Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first.
 
+Do you speak another language? Translating or improving translations is a good and simple way of helping and contributing to the project.  
+Please see the [Translating][Translating] section on the wiki for all the necessary informations and the beginner's translating guide.
+
+
+## Support
+
+If you think that this application is helpful, please consider supporting its creator by donating.
+
+The available options can be found [on the releases page][Releases] or in the application's "About" menu.
+
+Thank you very much for your support!
 
 
   [Preview]: https://user-images.githubusercontent.com/467294/32060296-a08d7b44-ba6e-11e7-9793-8ef60fc3e1f0.jpg "Preview image"
@@ -89,6 +102,7 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Codecov]: https://codecov.io/gh/streamlink/streamlink-twitch-gui "Codecov"
   [Gitter]: https://gitter.im/streamlink/streamlink-twitch-gui "Gitter IRC"
   [Contributing]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CONTRIBUTING.md
+  [Translating]: https://github.com/streamlink/streamlink-twitch-gui/wiki/Translating "Translating Wiki page"
   [Changelog]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CHANGELOG.md
   [Streamlink]: https://streamlink.github.io/ "Streamlink"
   [Twitch]: https://twitch.tv "Twitch.tv"
@@ -103,7 +117,6 @@ Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first
   [Git]: https://git-scm.com "Git"
   [Node.js]: https://nodejs.org "Node.js"
   [yarn]: https://classic.yarnpkg.com/lang/en/ "Fast, reliable, and secure dependency management."
-  [npm]: https://npmjs.org "Node Packaged Modules"
   [badge-platforms]: https://img.shields.io/badge/platform-win%20%7C%20mac%20%7C%20linux-green.svg?style=flat-square "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/streamlink/streamlink-twitch-gui.svg?style=flat-square "Latest release"
   [badge-issues]: https://img.shields.io/github/issues/streamlink/streamlink-twitch-gui.svg?style=flat-square "Open issues"
