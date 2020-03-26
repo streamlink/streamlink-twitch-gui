@@ -27,11 +27,15 @@ module.exports = function( grunt ) {
 		});
 
 
+		const argv = [ `--remote-debugging-port=${options.port}` ];
+		if ( isCI ) {
+			argv.unshift( "--disable-gpu", "--no-sandbox" );
+		}
 		const nwjsOptions = Object.assign( {}, grunt.config.process( nwjsTaskOptions ), {
 			platforms: currentPlatform,
-			argv: [ `--remote-debugging-port=${options.port}` ],
+			flavor: "sdk",
 			files: options.path,
-			flavor: "sdk"
+			argv
 		});
 		const nwjs = new NwBuilder( nwjsOptions );
 
