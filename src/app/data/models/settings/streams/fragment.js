@@ -39,6 +39,7 @@ export default Fragment.extend({
 	show_flag: attr( "boolean", { defaultValue: false } ),
 	show_info: attr( "boolean", { defaultValue: false } ),
 	info: attr( "number", { defaultValue: ATTR_STREAMS_INFO_TITLE } ),
+	uptime_hours_only: attr( "boolean", { defaultValue: false } ),
 
 	click_middle: attr( "number", { defaultValue: ATTR_STREAMS_CLICK_CHAT } ),
 	click_modify: attr( "number", { defaultValue: ATTR_STREAMS_CLICK_SETTINGS } )

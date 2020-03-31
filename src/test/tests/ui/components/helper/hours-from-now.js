@@ -6,6 +6,8 @@ import { render, clearRender } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
 
+import Service from "@ember/service";
+
 import { helper as HoursFromNowHelper } from "ui/components/helper/hours-from-now";
 
 
@@ -18,10 +20,22 @@ module( "ui/components/helper/hours-from-now", function( hooks ) {
 	});
 
 	hooks.beforeEach(function() {
+		const context = this;
+
+		this.uptime_hours_only = false;
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "Date", "setTimeout", "clearTimeout" ],
 			target: window
 		});
+		this.owner.register( "service:settings", Service.extend({
+			content: {
+				streams: {
+					get uptime_hours_only() {
+						return context.uptime_hours_only;
+					}
+				}
+			}
+		}) );
 	});
 	hooks.afterEach(function() {
 		this.fakeTimer.restore();
@@ -81,6 +95,14 @@ module( "ui/components/helper/hours-from-now", function( hooks ) {
 			"Almost an hour"
 		);
 
+		this.uptime_hours_only = true;
+		assert.strictEqual(
+			compute(),
+			"helpers.hours-from-now.minutes{\"minutes\":\"59\"}",
+			"Almost an hour in minutes with hours only option"
+		);
+		this.uptime_hours_only = false;
+
 		this.fakeTimer.tick( 1 );
 		assert.strictEqual(
 			compute(),
@@ -116,6 +138,14 @@ module( "ui/components/helper/hours-from-now", function( hooks ) {
 			"One day"
 		);
 
+		this.uptime_hours_only = true;
+		assert.strictEqual(
+			compute(),
+			"helpers.hours-from-now.hours.simple{\"hours\":\"24\"}",
+			"One day in hours"
+		);
+		this.uptime_hours_only = false;
+
 		this.fakeTimer.setSystemTime( 10 * day - 1 );
 		assert.strictEqual(
 			compute(),
@@ -123,11 +153,26 @@ module( "ui/components/helper/hours-from-now", function( hooks ) {
 			"Almost ten days"
 		);
 
+		this.uptime_hours_only = true;
+		assert.strictEqual(
+			compute(),
+			"helpers.hours-from-now.hours.extended{\"hours\":\"239\",\"minutes\":\"59\"}",
+			"Almost ten days in hours"
+		);
+		this.uptime_hours_only = false;
+
 		this.fakeTimer.tick( 1 );
 		assert.strictEqual(
 			compute(),
 			"helpers.hours-from-now.days.simple{\"days\":\"10\"}",
 			"Ten days"
+		);
+
+		this.uptime_hours_only = true;
+		assert.strictEqual(
+			compute(),
+			"helpers.hours-from-now.hours.simple{\"hours\":\"240\"}",
+			"Ten days in hours"
 		);
 	});
 

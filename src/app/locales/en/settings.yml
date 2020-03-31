@@ -271,6 +271,10 @@ streams:
         values:
             game: Game being played
             title: Stream title
+    uptime-hours-only:
+        title: Stream uptime format
+        description: Display stream uptime in hours or days
+        checkbox: Ignore days and sum up hours
     click:
         title: Click behavior
         description: Additional stream image click actions.

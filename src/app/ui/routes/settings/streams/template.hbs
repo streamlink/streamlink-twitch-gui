@@ -158,6 +158,17 @@
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}
+
+{{#settings-row
+	(t "settings.streams.uptime-hours-only.title")
+	(t "settings.streams.uptime-hours-only.description")
+	icon="fa-clock-o"
+}}
+	{{check-box
+		(t "settings.streams.uptime-hours-only.checkbox")
+		checked=model.streams.uptime_hours_only
+	}}
+{{/settings-row}}
 </fieldset>
 
 <fieldset>
