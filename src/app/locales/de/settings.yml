@@ -271,6 +271,10 @@ streams:
         values:
             game: Zeige das gespielte Spiel
             title: Zeige den Streamtitel
+    uptime-hours-only:
+        title: Streamzeitformat
+        description: Zeige Streamzeit in Stunden oder Tagen an
+        checkbox: Tage ignorieren und Stunden zusammenzählen
     click:
         title: Klickverhalten
         description: Zusätzliche Streambild Klick-Aktionen.
