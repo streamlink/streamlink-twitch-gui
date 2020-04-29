@@ -12,6 +12,21 @@ module.exports = {
 		command: "chmod -R g=u,o=u,g-w,o-w <%= dir.releases %>/<%= package.name %>/linux64"
 	},
 
+	// delete "product_string" field from package.json on macOS
+	// https://github.com/nwjs/nw.js/issues/7253
+	packagejson_osx64: {
+		cwd: [
+			"<%= dir.releases %>",
+			"<%= package.name %>",
+			"osx64",
+			"<%= package.name %>.app",
+			"Contents",
+			"Resources",
+			"app.nw"
+		].join( "/" ),
+		command: "str=\"$(jq 'del(.product_string)' package.json)\" && echo \"$str\" > package.json"
+	},
+
 	archive_win32: createArchive( "win32", "zip" ),
 	archive_win64: createArchive( "win64", "zip" ),
 	archive_osx64: createArchive( "osx64", "tgz" ),

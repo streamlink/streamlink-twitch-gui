@@ -9,7 +9,10 @@ module.exports = {
 	},
 	osx64: {
 		before: [ "clean:release_osx64" ],
-		after: [ "shell:permissions_osx64" ]
+		after: [
+			"shell:packagejson_osx64",
+			"shell:permissions_osx64"
+		]
 	},
 	linux32: {
 		before: [ "clean:release_linux32" ],
