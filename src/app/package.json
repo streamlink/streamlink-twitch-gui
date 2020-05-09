@@ -1,6 +1,7 @@
 {
 	"name": "streamlink-twitch-gui",
 	"version": "1.9.1",
+	"product_string": "Streamlink Twitch GUI",
 
 	"main": "index.html",
 
