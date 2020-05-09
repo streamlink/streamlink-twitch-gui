@@ -22,8 +22,14 @@ module.exports = {
 			})
 		});
 
-		// ignore Windows binary dependencies in tests
-		config.plugins.push( new webpack.IgnorePlugin( /\.exe$/ ) );
+		config.plugins.push(
+			// ignore file-loader dependencies in tests
+			new webpack.IgnorePlugin({
+				checkResource( module ) {
+					return module && module.startsWith( "file-loader?" );
+				}
+			})
+		);
 	},
 
 	_aliases( config ) {
