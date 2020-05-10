@@ -14,7 +14,7 @@
 <ul class="channels">
 {{#each featured as |elem index|}}
 <li class="{{if (is-equal _index index) 'active'}}" {{action "switchFeatured" index}}>
-{{preview-image src=elem.image title=elem.stream.channel.display_name}}
+{{preview-image src=elem.stream.preview.largeLatest title=elem.stream.channel.display_name}}
 </li>
 {{/each}}
 <i class="cursor fa fa-caret-down"></i>
