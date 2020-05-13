@@ -81,6 +81,19 @@
 
 <fieldset>
 {{#settings-row
+	(t "settings.streaming.low-latency.title")
+	(t "settings.streaming.low-latency.description")
+	icon="fa-compress"
+	notes=(t "settings.streaming.low-latency.notes")
+	documentation="--twitch-low-latency"
+}}
+	{{check-box
+		(t "settings.streaming.low-latency.checkbox")
+		checked=model.streaming.low_latency
+	}}
+{{/settings-row}}
+
+{{#settings-row
 	(t "settings.streaming.hls-live-edge.title")
 	(t "settings.streaming.hls-live-edge.description")
 	icon="fa-bolt"

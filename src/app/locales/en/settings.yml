@@ -107,6 +107,11 @@ streaming:
             passthrough:
                 label: HLS (passthrough)
                 description: Lets the player download and buffer the stream by itself.
+    low-latency:
+        title: Low latency streaming
+        description: Reduces the streaming delay for channels which are streaming in low latency mode.
+        notes: Be aware that enabling this option will also set the live-edge value to 2 if it is higher, which may cause buffering for regular streams. To achieve the lowest latency possible, further tweaking of the player's own caching/buffering settings needs to be done.
+        checkbox: Enable low latency streaming
     hls-live-edge:
         title: HLS live edge
         description: Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering.
