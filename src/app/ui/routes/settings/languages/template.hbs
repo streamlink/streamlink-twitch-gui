@@ -2,7 +2,6 @@
 {{#settings-row
 	(t "settings.languages.filter.title")
 	(t "settings.languages.filter.description")
-	notes=(t "settings.languages.filter.notes")
 	icon="fa-filter"
 }}
 	{{#radio-buttons
@@ -21,17 +20,18 @@
 	(t "settings.languages.languages.title")
 	(t "settings.languages.languages.description")
 	icon="fa-language"
-	notes=(t "settings.languages.languages.notes")
 }}
-	<ul class="list-unstyled filter-lang">
-		{{#each languages as |id|}}
-			<li>
-				{{#check-box checked=(mut (get model.streams.languages id))}}
-					{{flag-icon lang=id withTitle=false withCursor=false}} {{t (concat "languages." id)}}<span class="lang-code">({{id}})</span>
-				{{/check-box}}
-			</li>
-		{{/each}}
-	</ul>
-	<div><a href="#" {{action "checkLanguages" true}}>{{t "settings.languages.languages.check-all"}}</a> / <a href="#" {{action "checkLanguages" false}}>{{t "settings.languages.languages.uncheck-all"}}</a></div>
+	{{#radio-buttons
+		value=model.streams.language
+		content=languages
+		classNames="filter-lang"
+		as |item|
+	}}
+		{{#item.button
+			disabled=(is-equal model.streams.filter_languages null)
+		}}
+			{{flag-icon lang=item.value withTitle=false withCursor=false}} {{t (concat "languages." item.value)}}<span class="lang-code">({{item.value}})</span>
+		{{/item.button}}
+	{{/radio-buttons}}
 {{/settings-row}}
 </fieldset>

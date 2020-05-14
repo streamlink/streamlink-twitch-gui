@@ -1,6 +1,5 @@
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
-import { fragment } from "ember-data-model-fragments/attributes";
 
 
 export const ATTR_STREAMS_NAME_CUSTOM = 1;
@@ -33,8 +32,8 @@ export default Fragment.extend({
 	filter_vodcast: attr( "boolean", { defaultValue: true } ),
 	vodcast_regexp: attr( "string", { defaultValue: "" } ),
 
-	filter_languages: attr( "boolean", { defaultValue: false } ),
-	languages: fragment( "settingsStreamsLanguages", { defaultValue: {} } ),
+	filter_languages: attr( "boolean", { defaultValue: null } ),
+	language: attr( "string", { defaultValue: "en" } ),
 
 	show_flag: attr( "boolean", { defaultValue: false } ),
 	show_info: attr( "boolean", { defaultValue: false } ),
@@ -53,6 +52,7 @@ export default Fragment.extend({
 	],
 
 	filterLanguages: [
+		{ id: null, label: "noop" },
 		{ id: false, label: "fade" },
 		{ id: true, label: "filter" }
 	],

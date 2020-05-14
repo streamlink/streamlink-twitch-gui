@@ -260,10 +260,6 @@ test( "Updates attributes", function( assert ) {
 				twitchemotes: false,
 				filter_vodcast: true,
 				filter_languages: true,
-				languages: {
-					de: true,
-					en: true
-				},
 				show_flag: false,
 				show_info: false,
 				info: 1,
@@ -344,9 +340,7 @@ test( "Fixes attributes", function( assert ) {
 		streams: {
 			languages: {
 				de: true,
-				en: false,
-				fr: true,
-				nl: true
+				en: false
 			}
 		},
 		chat: {
@@ -377,10 +371,7 @@ test( "Fixes attributes", function( assert ) {
 				}
 			},
 			streams: {
-				languages: {
-					de: true,
-					en: false
-				}
+				language: "de"
 			},
 			chat: {
 				provider: "browser"

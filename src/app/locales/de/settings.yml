@@ -414,8 +414,10 @@ languages:
     filter:
         title: Streams filtern
         description: Wende einen Sprachfilter auf alle Stream-Listen an (außer auf gefolgte Streams).
-        notes: Beeinflusst nicht das 'Meine Live Streams' Menü.
         values:
+            noop:
+                text: Streams nicht ausblenden oder ausfiltern
+                description: Zeige alle Streams.
             fade:
                 text: Streams ausblenden
                 description: Zeige alle Streams, blende nicht passende aus.
@@ -425,9 +427,6 @@ languages:
     languages:
         title: Sprachen
         description: Broadcaster-Sprache oder, falls nicht verfügbar, die Kanalsprache.
-        notes: Wähle alle oder keine Sprachen aus, um das Filtern zu deaktivieren.
-        check-all: Alle Sprachen markieren
-        uncheck-all: Markierungen entfernen
 hotkeys:
     navigation:
         title: Navigation

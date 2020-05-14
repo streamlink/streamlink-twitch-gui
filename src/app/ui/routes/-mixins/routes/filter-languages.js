@@ -1,31 +1,27 @@
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import Mixin from "@ember/object/mixin";
 import { inject as service } from "@ember/service";
 
 
 export default Mixin.create({
+	/** @type {SettingsService} */
 	settings: service(),
 
-	broadcaster_language: computed(
-		"settings.streams.filter_languages",
-		"settings.streams.languages",
+	language: computed(
+		"settings.content.streams.filter_languages",
+		"settings.content.streams.language",
 		function() {
-			if ( !get( this, "settings.streams.filter_languages" ) ) { return; }
+			const { filter_languages, language } = this.settings.content.streams;
 
-			const filters = get( this, "settings.streams.languages" ).toJSON();
-			const keys = Object.keys( filters );
-			const filtered = keys.filter( lang => filters[ lang ] );
-
-			// ignore if all languages are (un)checked
-			return filtered.length > 0 && filtered.length !== keys.length
-				? filtered.join( "," )
+			return filter_languages
+				? language
 				: undefined;
 		}
 	),
 
 	model( params ) {
-		const broadcaster_language = get( this, "broadcaster_language" );
+		const { language } = this;
 
-		return this._super( Object.assign( params || {}, { broadcaster_language } ) );
+		return this._super( Object.assign( params || {}, { language } ) );
 	}
 });

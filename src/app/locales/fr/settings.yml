@@ -404,7 +404,6 @@ languages:
     filter:
         title: Filtrer les streams
         description: Filter toutes les listes de streams selon la langue (sauf pour les streams suivis).
-        notes: N'affecte pas le menu 'Streams live' de la section 'Mes'
         values:
             fade:
                 text: Faire disparaitre les streams
@@ -415,9 +414,6 @@ languages:
     languages:
         title: Langages
         description: Langue du streamer, ou si non-défini, la langue de la chaîne.
-        notes: Selectionnez tous les langages pour désasctiver le filtrage.
-        check-all: Tout cocher
-        uncheck-all: Tout décocher
 notifications:
     enabled:
         title: Notifications

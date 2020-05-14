@@ -17,14 +17,15 @@ export default ListItemComponent.extend({
 	classNameBindings: [
 		":stream-item-component",
 		"showGame:show-game",
-		"settings.streams.show_flag:show-flag",
-		"settings.streams.show_info:show-info",
+		"settings.content.streams.show_flag:show-flag",
+		"settings.content.streams.show_info:show-info",
 		"infoGame:info-game",
 		"infoTitle:info-title",
 		"isFaded:faded",
 		"expanded:expanded"
 	],
 
+	/** @type {TwitchChannel} */
 	channel: alias( "content.channel" ),
 
 	expanded: false,
@@ -33,48 +34,37 @@ export default ListItemComponent.extend({
 
 	showGame: notEmpty( "channel.game" ),
 
-	infoGame: equal( "settings.streams.info", ATTR_STREAMS_INFO_GAME ),
-	infoTitle: equal( "settings.streams.info", ATTR_STREAMS_INFO_TITLE ),
+	infoGame: equal( "settings.content.streams.info", ATTR_STREAMS_INFO_GAME ),
+	infoTitle: equal( "settings.content.streams.info", ATTR_STREAMS_INFO_TITLE ),
 
 
 	isFaded: or( "faded", "fadedVodcast" ),
 
-	fadedVodcast: and( "content.isVodcast", "settings.streams.filter_vodcast" ),
+	fadedVodcast: and( "content.isVodcast", "settings.content.streams.filter_vodcast" ),
 
 	faded: computed(
-		"settings.streams.filter_languages",
-		"settings.streams.languages",
-		"settings.hasStreamsLanguagesSelection",
+		"settings.content.streams.filter_languages",
+		"settings.content.streams.language",
 		"channel.language",
 		"channel.broadcaster_language",
 		function() {
-			if ( get( this, "settings.streams.filter_languages" ) ) {
+			const { filter_languages, language } = this.settings.content.streams;
+
+			if ( filter_languages !== false ) {
 				return false;
 			}
 
-			// don't fade if the user has selected none or all languages
-			const hasLangSelection = get( this, "settings.hasStreamsLanguagesSelection" );
-			if ( !hasLangSelection ) {
-				return false;
-			}
-
-			const languages = get( this, "settings.streams.languages" ).toJSON();
-			const clang = get( this, "channel.language" );
-			const blang = get( this, "channel.broadcaster_language" );
+			const { language: clang, broadcaster_language: blang } = this.channel;
 
 			// a channel language needs to be set
 			if ( clang ) {
 				// fade out if
 				// no broadcaster language is set and channel language is filtered out
-				if ( !blang && languages[ clang ] === false ) {
+				if ( !blang && clang !== language ) {
 					return true;
 				}
 				// OR broadcaster language is set and filtered out (ignore channel language)
-				if ( blang && languages[ blang ] === false ) {
-					return true;
-				}
-				// OR broadcaster language is set to "other"
-				if ( blang === "other" ) {
+				if ( blang && blang !== language ) {
 					return true;
 				}
 			}

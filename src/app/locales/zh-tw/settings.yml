@@ -404,7 +404,6 @@ languages:
     filter:
         title: 過濾實況
         description: 使用語言來過濾所有實況列表 (已追蹤的除外)
-        notes: 我的實況不受影響
         values:
             fade:
                 text: 淡出實況頻道
@@ -415,9 +414,6 @@ languages:
     languages:
         title: 語言
         description: 實況主語言，若未設定，則為頻道語言
-        notes: 選擇所有語言來關閉過濾功能
-        check-all: 全部勾選
-        uncheck-all: 全部取消
 notifications:
     enabled:
         title: 桌面通知

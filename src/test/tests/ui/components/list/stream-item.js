@@ -23,16 +23,11 @@ module( "ui/components/list/stream-item", function( hooks ) {
 
 	hooks.beforeEach(function() {
 		this.owner.register( "service:settings", Service.extend({
-			hasStreamsLanguagesSelection: true,
-			streams: {
-				filter_languages: false,
-				filter_vodcast: false,
-				languages: {
-					toJSON: () => ({
-						de: true,
-						en: true,
-						fr: false
-					})
+			content: {
+				streams: {
+					filter_languages: false,
+					filter_vodcast: false,
+					language: "en"
 				}
 			}
 		}) );
@@ -53,27 +48,22 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		assert.notOk( subject.faded, "Not faded if channel language is missing" );
 
 		set( subject, "content.channel.language", "en" );
-		assert.notOk( subject.faded, "Not faded if language has been enabled" );
+		assert.notOk( subject.faded, "Not faded if broadcaster language is missing" );
 
-		set( subject, "content.channel.language", "fr" );
-		assert.ok( subject.faded, "Faded if language has been disabled" );
+		set( subject, "content.channel.broadcaster_language", "en" );
+		assert.notOk( subject.faded, "Not faded if broadcaster language is equal" );
 
-		set( subject, "content.channel.broadcaster_language", "de" );
-		assert.notOk( subject.faded, "Not faded if broadcaster language has been enabled" );
+		set( subject, "content.channel.language", "other" );
+		assert.notOk( subject.faded, "Not faded if language differs" );
 
-		set( subject, "content.channel.broadcaster_language", "fr" );
-		assert.ok( subject.faded, "Faded if broadcaster language has been disabled" );
-
-		set( subject, "content.channel.language", "en" );
 		set( subject, "content.channel.broadcaster_language", "other" );
-		assert.ok( subject.faded, "Faded if broadcaster language is 'other'" );
+		assert.ok( subject.faded, "Faded if broadcaster language differs" );
 
-		set( subject, "settings.hasStreamsLanguagesSelection", false );
-		assert.notOk( subject.faded, "Not faded if no custom stream language selection" );
-
-		set( subject, "settings.hasStreamsLanguagesSelection", true );
-		set( subject, "settings.streams.filter_languages", true );
+		set( subject, "settings.content.streams.filter_languages", true );
 		assert.notOk( subject.faded, "Not faded if filtering is enabled" );
+
+		set( subject, "settings.content.streams.filter_languages", null );
+		assert.notOk( subject.faded, "Not faded if fading is disabled" );
 	});
 
 
@@ -90,7 +80,7 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		set( subject, "content.isVodcast", true );
 		assert.notOk( subject.fadedVodcast, "Not faded if vodcast filtering is disabled" );
 
-		set( subject, "settings.streams.filter_vodcast", true );
+		set( subject, "settings.content.streams.filter_vodcast", true );
 		assert.ok( subject.fadedVodcast, "Faded if vodcast filtering is enabled" );
 
 		set( subject, "content.isVodcast", false );

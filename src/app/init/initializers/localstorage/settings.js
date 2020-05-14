@@ -162,14 +162,15 @@ function fixAttributes( settings ) {
 		chat.provider = "browser";
 	}
 
-	// remove unused or disabled streams language filters
-	if ( typeof streams.languages === "object" ) {
-		for ( const [ code ] of Object.entries( streams.languages ) ) {
-			const lang = langsConfig[ code ];
-			if ( !lang || lang.disabled ) {
-				delete streams.languages[ code ];
-			}
+	// find single language selection in the old languages object
+	if ( !hasOwnProperty.call( streams, "language" ) && typeof streams.languages === "object" ) {
+		const langs = Object.keys( streams.languages )
+			.filter( code => langsConfig[ code ] && !langsConfig[ code ].disabled )
+			.filter( code => streams.languages[ code ] );
+		if ( langs.length === 1 ) {
+			streams.language = langs[0];
 		}
+		delete streams.languages;
 	}
 
 	// rename old notification provider names
