@@ -107,6 +107,11 @@ streaming:
             passthrough:
                 label: HLS (passthrough)
                 description: Lässt den Player den Stream selber downloaden und buffern.
+    low-latency:
+        title: Streaming mit geringer Latenz
+        description: Reduziert die Streamverzögerung für Kanäle, welche im Niedriglatenzmodus streamen.
+        notes: Bitte beachte, dass durch die Aktivierung dieser Option auch der live-edge Wert auf 2 gesetzt wird falls er höher ist, was zu Buffering für Streams mit regulärer Latenz führen kann. Um die geringstmögliche Latenz zu erreichen, müssen die Cache-/Buffereinstellungen des Players selbst weiter optimiert werden.
+        checkbox: Streaming mit geringer Latenz aktivieren
     hls-live-edge:
         title: HLS live edge
         description: Das Senken des Wertes reduziert die Streamverzögerung, kann allerdings Buffering verursachen. Je nach Playerkonfiguration existieren weitere Bufferebenen.
