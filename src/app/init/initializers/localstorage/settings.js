@@ -1,12 +1,14 @@
 import { langs as langsConfig } from "config";
 import { moveAttributes, moveAttributesIntoFragment, qualityIdToName } from "./utils";
-import { defaultProvider } from "data/models/settings/streaming/fragment";
 import { typeKey as streamingPlayerTypeKey } from "data/models/settings/streaming/player/fragment";
 import { qualities } from "data/models/stream/model";
 import { isWin7 } from "utils/node/platform";
+import { streaming as streamingConfig } from "config";
 
 
 const { hasOwnProperty } = {};
+
+const { "default-provider": defaultProvider } = streamingConfig;
 
 
 function removeOldData( settings ) {
@@ -153,6 +155,19 @@ function fixAttributes( settings ) {
 
 	// translate old quality ID setting
 	qualityIdToName( streaming, qualities );
+
+	// translate old streaming providers data
+	if ( typeof streaming[ "providers" ] === "object" ) {
+		const { provider, providers } = streaming;
+		if ( hasOwnProperty.call( providers, "streamlinkw" ) ) {
+			providers[ "streamlink-python" ] = providers[ "streamlink" ];
+			providers[ "streamlink" ] = providers[ "streamlinkw" ];
+			delete providers[ "streamlinkw" ];
+		}
+		if ( provider === "streamlinkw" ) {
+			streaming.provider = "streamlink";
+		}
+	}
 
 	// translate old players data
 	fixStreamingPlayers( streaming, settings );

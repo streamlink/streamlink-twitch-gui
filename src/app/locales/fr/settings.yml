@@ -82,10 +82,10 @@ streaming:
         description: Choisissez un fournisseur de streaming et définissez des emplacements exécutables personnalisés.
         notes: Un chemin explicite doit être défini si le fichier ne peut pas être trouvé dans la variable d'environnement $PATH du système ou dans la liste des chemins de repli de l'interface.
         executable:
-            python: Éxcutable Python
-            streamlinkw: Éxcutable Streamlink
+            streamlink: Éxcutable Streamlink
+            streamlink-python: Éxcutable Python
         python-script:
-            streamlink: Script python Streamlink
+            streamlink-python: Script python Streamlink
         parameters:
             title: Paramètres personnalisés
             placeholder: Ajouter des paramètres personnalisés

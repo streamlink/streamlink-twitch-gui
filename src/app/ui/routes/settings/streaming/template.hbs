@@ -17,11 +17,7 @@
 	{{#each-in providers as |key provider|}}
 		<dl class="streaming-providers-list {{unless (is-equal key model.streaming.provider) 'hidden'}}">
 			<dt>
-				{{#if provider.python}}
-					{{t "settings.streaming.provider.executable.python"}}
-				{{else}}
-					{{t (concat "settings.streaming.provider.executable." key)}}
-				{{/if}}
+				{{t (concat "settings.streaming.provider.executable." key)}}
 			</dt>
 			<dd>
 				{{file-select

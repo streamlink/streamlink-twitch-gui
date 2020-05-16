@@ -9,15 +9,15 @@ module( "init/initializers/localstorage/settings", {
 
 		const { default: updateSettings } = updateSettingsInjector({
 			config: {
+				streaming: {
+					"default-provider": "streamlink"
+				},
 				players: {},
 				langs: {
 					de: {},
 					en: {},
 					fr: { disabled: true }
 				}
-			},
-			"data/models/settings/streaming/fragment": {
-				defaultProvider: "streamlink"
 			},
 			"data/models/settings/streaming/player/fragment": {
 				typeKey: "type"
@@ -85,9 +85,6 @@ test( "Removes old attributes", function( assert ) {
 				},
 				"streamlink": {
 					exec: "baz"
-				},
-				"streamlinkw": {
-					exec: "qux"
 				}
 			},
 			qualitiesOld: {
@@ -108,9 +105,6 @@ test( "Removes old attributes", function( assert ) {
 				providers: {
 					streamlink: {
 						exec: "baz"
-					},
-					streamlinkw: {
-						exec: "qux"
 					}
 				}
 			},
@@ -495,6 +489,50 @@ test( "Fixes attributes", function( assert ) {
 			notification: {}
 		},
 		"Changes streaming provider from livestreamer to default value (streamlink)"
+	);
+
+	const streamingProviderStreamlinkw = {
+		streaming: {
+			provider: "streamlinkw",
+			providers: {
+				"streamlink": {
+					exec: "foo",
+					params: "bar",
+					pythonscript: "baz"
+				},
+				"streamlinkw": {
+					exec: "qux",
+					params: "quux",
+					pythonscript: null
+				}
+			}
+		}
+	};
+	updateSettings( streamingProviderStreamlinkw );
+	assert.propEqual(
+		streamingProviderStreamlinkw,
+		{
+			gui: {},
+			streaming: {
+				provider: "streamlink",
+				providers: {
+					"streamlink": {
+						exec: "qux",
+						params: "quux",
+						pythonscript: null
+					},
+					"streamlink-python": {
+						exec: "foo",
+						params: "bar",
+						pythonscript: "baz"
+					}
+				}
+			},
+			streams: {},
+			chat: {},
+			notification: {}
+		},
+		"Fixes streamlinkw streaming provider data"
 	);
 
 	const notificationProviderRich = {

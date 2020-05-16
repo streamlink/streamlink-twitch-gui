@@ -82,10 +82,10 @@ streaming:
         description: 選擇一個串流提供元件並設定執行檔路徑
         notes: 若系統路徑 $PATH 或程式介面搜尋路徑找不到，則需手動指定執行檔路徑
         executable:
-            python: Python 執行檔
-            streamlinkw: Streamlink 執行檔
+            streamlink: Streamlink 執行檔
+            streamlink-python: Python 執行檔
         python-script:
-            streamlink: Streamlink python 腳本
+            streamlink-python: Streamlink python 腳本
         parameters:
             title: 自訂參數
             placeholder: 加入自訂參數
