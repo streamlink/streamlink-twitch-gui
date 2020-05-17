@@ -8,6 +8,11 @@ import { set } from "@ember/object";
 import Service from "@ember/service";
 
 import StreamItemComponent from "ui/components/list/stream-item/component";
+import {
+	ATTR_FILTER_LANGUAGES_NOOP,
+	ATTR_FILTER_LANGUAGES_FADE,
+	ATTR_FILTER_LANGUAGES_FILTER
+} from "data/models/settings/streams/fragment";
 
 
 // TODO: finish stream-item-component tests
@@ -25,7 +30,7 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		this.owner.register( "service:settings", Service.extend({
 			content: {
 				streams: {
-					filter_languages: false,
+					filter_languages: ATTR_FILTER_LANGUAGES_FADE,
 					filter_vodcast: false,
 					language: "en"
 				}
@@ -59,10 +64,10 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		set( subject, "content.channel.broadcaster_language", "other" );
 		assert.ok( subject.faded, "Faded if broadcaster language differs" );
 
-		set( subject, "settings.content.streams.filter_languages", true );
+		set( subject, "settings.content.streams.filter_languages", ATTR_FILTER_LANGUAGES_FILTER );
 		assert.notOk( subject.faded, "Not faded if filtering is enabled" );
 
-		set( subject, "settings.content.streams.filter_languages", null );
+		set( subject, "settings.content.streams.filter_languages", ATTR_FILTER_LANGUAGES_NOOP );
 		assert.notOk( subject.faded, "Not faded if fading is disabled" );
 	});
 

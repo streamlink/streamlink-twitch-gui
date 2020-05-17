@@ -4,6 +4,7 @@ import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
 import ListItemComponent from "../-list-item/component";
 import {
+	ATTR_FILTER_LANGUAGES_FADE,
 	ATTR_STREAMS_INFO_GAME,
 	ATTR_STREAMS_INFO_TITLE
 } from "data/models/settings/streams/fragment";
@@ -50,7 +51,7 @@ export default ListItemComponent.extend({
 		function() {
 			const { filter_languages, language } = this.settings.content.streams;
 
-			if ( filter_languages !== false ) {
+			if ( filter_languages !== ATTR_FILTER_LANGUAGES_FADE ) {
 				return false;
 			}
 

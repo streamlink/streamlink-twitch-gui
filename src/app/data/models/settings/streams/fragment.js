@@ -15,6 +15,10 @@ export const ATTR_STREAMS_CLICK_CHAT = 2;
 export const ATTR_STREAMS_CLICK_CHANNEL = 3;
 export const ATTR_STREAMS_CLICK_SETTINGS = 4;
 
+export const ATTR_FILTER_LANGUAGES_NOOP = 0;
+export const ATTR_FILTER_LANGUAGES_FADE = 1;
+export const ATTR_FILTER_LANGUAGES_FILTER = 2;
+
 // eslint-disable-next-line max-len
 export const DEFAULT_VODCAST_REGEXP = "\\b(not live|re-?(run|streaming)|(vod-?|re-?broad)cast(ing)?)\\b";
 
@@ -32,7 +36,7 @@ export default Fragment.extend({
 	filter_vodcast: attr( "boolean", { defaultValue: true } ),
 	vodcast_regexp: attr( "string", { defaultValue: "" } ),
 
-	filter_languages: attr( "boolean", { defaultValue: null } ),
+	filter_languages: attr( "number", { defaultValue: ATTR_FILTER_LANGUAGES_NOOP } ),
 	language: attr( "string", { defaultValue: "en" } ),
 
 	show_flag: attr( "boolean", { defaultValue: false } ),
@@ -52,9 +56,9 @@ export default Fragment.extend({
 	],
 
 	filterLanguages: [
-		{ id: null, label: "noop" },
-		{ id: false, label: "fade" },
-		{ id: true, label: "filter" }
+		{ id: ATTR_FILTER_LANGUAGES_NOOP, label: "noop" },
+		{ id: ATTR_FILTER_LANGUAGES_FADE, label: "fade" },
+		{ id: ATTR_FILTER_LANGUAGES_FILTER, label: "filter" }
 	],
 
 	info: [

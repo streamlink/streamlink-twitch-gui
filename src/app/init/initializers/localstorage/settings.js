@@ -1,6 +1,11 @@
 import { langs as langsConfig } from "config";
 import { moveAttributes, moveAttributesIntoFragment, qualityIdToName } from "./utils";
 import { typeKey as streamingPlayerTypeKey } from "data/models/settings/streaming/player/fragment";
+import {
+	ATTR_FILTER_LANGUAGES_NOOP,
+	ATTR_FILTER_LANGUAGES_FADE,
+	ATTR_FILTER_LANGUAGES_FILTER
+} from "data/models/settings/streams/fragment";
 import { qualities } from "data/models/stream/model";
 import { isWin7 } from "utils/node/platform";
 import { streaming as streamingConfig } from "config";
@@ -179,11 +184,19 @@ function fixAttributes( settings ) {
 
 	// find single language selection in the old languages object
 	if ( !hasOwnProperty.call( streams, "language" ) && typeof streams.languages === "object" ) {
-		const langs = Object.keys( streams.languages )
-			.filter( code => langsConfig[ code ] && !langsConfig[ code ].disabled )
+		const allLangs = Object.keys( streams.languages )
+			.filter( code => langsConfig[ code ] && !langsConfig[ code ].disabled );
+		const langs = allLangs
 			.filter( code => streams.languages[ code ] );
 		if ( langs.length === 1 ) {
 			streams.language = langs[0];
+		}
+		if ( langs.length === 0 || langs.length === allLangs.length ) {
+			streams.filter_languages = ATTR_FILTER_LANGUAGES_NOOP;
+		} else {
+			streams.filter_languages = streams.filter_languages
+				? ATTR_FILTER_LANGUAGES_FILTER
+				: ATTR_FILTER_LANGUAGES_FADE;
 		}
 		delete streams.languages;
 	}

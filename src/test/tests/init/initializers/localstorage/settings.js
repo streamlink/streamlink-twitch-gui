@@ -1,6 +1,11 @@
 import { module, test } from "qunit";
 
 import updateSettingsInjector from "inject-loader?-./utils!init/initializers/localstorage/settings";
+import {
+	ATTR_FILTER_LANGUAGES_NOOP,
+	ATTR_FILTER_LANGUAGES_FADE,
+	ATTR_FILTER_LANGUAGES_FILTER
+} from "data/models/settings/streams/fragment";
 
 
 module( "init/initializers/localstorage/settings", {
@@ -253,7 +258,7 @@ test( "Updates attributes", function( assert ) {
 				chat_open_context: false,
 				twitchemotes: false,
 				filter_vodcast: true,
-				filter_languages: true,
+				filter_languages: ATTR_FILTER_LANGUAGES_NOOP,
 				show_flag: false,
 				show_info: false,
 				info: 1,
@@ -331,12 +336,7 @@ test( "Fixes attributes", function( assert ) {
 		streaming: {
 			quality: 1
 		},
-		streams: {
-			languages: {
-				de: true,
-				en: false
-			}
-		},
+		streams: {},
 		chat: {
 			provider: "default"
 		},
@@ -364,9 +364,7 @@ test( "Fixes attributes", function( assert ) {
 					}
 				}
 			},
-			streams: {
-				language: "de"
-			},
+			streams: {},
 			chat: {
 				provider: "browser"
 			},
@@ -533,6 +531,56 @@ test( "Fixes attributes", function( assert ) {
 			notification: {}
 		},
 		"Fixes streamlinkw streaming provider data"
+	);
+
+	const streamsFilterLanguageFade = {
+		streams: {
+			filter_languages: false,
+			languages: {
+				de: false,
+				en: true
+			}
+		}
+	};
+	updateSettings( streamsFilterLanguageFade );
+	assert.propEqual(
+		streamsFilterLanguageFade,
+		{
+			gui: {},
+			streaming: {},
+			streams: {
+				filter_languages: ATTR_FILTER_LANGUAGES_FADE,
+				language: "en"
+			},
+			chat: {},
+			notification: {}
+		},
+		"Translates boolean language filter when disabled"
+	);
+
+	const streamsFilterLanguageFilter = {
+		streams: {
+			filter_languages: true,
+			languages: {
+				de: true,
+				en: false
+			}
+		}
+	};
+	updateSettings( streamsFilterLanguageFilter );
+	assert.propEqual(
+		streamsFilterLanguageFilter,
+		{
+			gui: {},
+			streaming: {},
+			streams: {
+				filter_languages: ATTR_FILTER_LANGUAGES_FILTER,
+				language: "de"
+			},
+			chat: {},
+			notification: {}
+		},
+		"Translates boolean language filter when enabled"
 	);
 
 	const notificationProviderRich = {
