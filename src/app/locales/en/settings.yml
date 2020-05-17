@@ -83,10 +83,10 @@ streaming:
         description: Choose a streaming provider and set custom executable locations.
         notes: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
         executable:
-            python: Python executable
-            streamlinkw: Streamlink executable
+            streamlink: Streamlink executable
+            streamlink-python: Python executable
         python-script:
-            streamlink: Streamlink python script
+            streamlink-python: Streamlink python script
         parameters:
             title: Custom parameters
             placeholder: Add custom parameters

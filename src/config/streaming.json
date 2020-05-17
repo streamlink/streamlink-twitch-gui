@@ -11,17 +11,41 @@
 		"providers": {
 			"streamlink": {
 				"version": "1.4.0",
-				"regexp": "^(?:python\\d*-)?streamlink(?:\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|[\\s+-].*)"
+				"regexp": "^(?:python\\d*-)?streamlink(?:w?\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|[\\s+-].*)"
 			}
 		}
 	},
 	"providers": {
 		"streamlink": {
 			"type": "streamlink",
-			"flavor": "default",
 			"name": "Streamlink",
 			"label": "Streamlink",
-			"python": ">=2.6 <3 || >=3.3",
+			"exec": {
+				"win32": "streamlinkw.exe",
+				"darwin": "streamlink",
+				"linux": "streamlink"
+			},
+			"fallback": {
+				"win32": [
+					"%PROGRAMFILES%\\Streamlink\\bin",
+					"%PROGRAMFILES(X86)%\\Streamlink\\bin"
+				],
+				"darwin": [
+					"/usr/local/bin",
+					"/usr/bin",
+					"/Library/Frameworks/Python.framework/Versions/Current/bin"
+				],
+				"linux": [
+					"/usr/local/bin",
+					"/usr/bin"
+				]
+			}
+		},
+		"streamlink-python": {
+			"type": "streamlink",
+			"name": "Streamlink",
+			"label": "Streamlink (Python)",
+			"python": ">=2.7 <3 || >=3.5",
 			"exec": {
 				"win32": "pythonw.exe",
 				"darwin": "python",
@@ -33,13 +57,13 @@
 					"%PROGRAMFILES(X86)%\\Streamlink\\Python"
 				],
 				"darwin": [
-					"/usr/bin",
 					"/usr/local/bin",
+					"/usr/bin",
 					"/Library/Frameworks/Python.framework/Versions/Current/bin"
 				],
 				"linux": [
-					"/usr/bin",
-					"/usr/local/bin"
+					"/usr/local/bin",
+					"/usr/bin"
 				]
 			},
 			"pythonscript": {
@@ -53,30 +77,13 @@
 					"%PROGRAMFILES(X86)%\\Streamlink\\bin"
 				],
 				"darwin": [
-					"/usr/bin",
 					"/usr/local/bin",
+					"/usr/bin",
 					"/Library/Frameworks/Python.framework/Versions/Current/bin"
 				],
 				"linux": [
-					"/usr/bin",
-					"/usr/local/bin"
-				]
-			}
-		},
-		"streamlinkw": {
-			"type": "streamlink",
-			"flavor": "windows",
-			"name": "Streamlink",
-			"label": "Streamlink (Windows)",
-			"exec": {
-				"win32": "streamlinkw.exe",
-				"darwin": false,
-				"linux": false
-			},
-			"fallback": {
-				"win32": [
-					"%PROGRAMFILES%\\Streamlink\\bin",
-					"%PROGRAMFILES(X86)%\\Streamlink\\bin"
+					"/usr/local/bin",
+					"/usr/bin"
 				]
 			}
 		}
