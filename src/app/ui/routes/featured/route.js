@@ -16,7 +16,6 @@ export default Route.extend( RefreshRouteMixin, {
 			})
 		]);
 		await preload( featured, [
-			"image",
 			"stream.preview.largeLatest"
 		]);
 
