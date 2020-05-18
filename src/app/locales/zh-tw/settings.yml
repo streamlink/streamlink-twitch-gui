@@ -270,6 +270,10 @@ streams:
         values:
             game: 正在玩的遊戲
             title: 實況標題
+    uptime-hours-only:
+        title: 串流上線時間格式
+        description: 以小時或天數顯示串流上線時間
+        checkbox: 忽略天數，以時數加總顯示
     click:
         title: 點擊行為
         description: 實況預覽圖的額外點擊動作
