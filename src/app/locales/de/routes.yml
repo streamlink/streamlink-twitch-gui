@@ -84,6 +84,14 @@ channel:
             quality:
                 title: Qualität
                 description: Setze eine spezifische Streaming-Qualität.
+            low-latency:
+                title: Streaming mit geringer Latenz
+                description: Überschreibe die globalen Einstellungen für niedrige Latenzzeiten.
+                checkbox: Streaming mit geringer Latenz aktivieren
+            disable-ads:
+                title: Werbung
+                description: Überschreibe die globalen Einstellungen zur Werbung.
+                checkbox: Eingebettete Streamwerbung überspringen
             chat:
                 title: Chat
                 description: Den Chat automatisch öffnen.
