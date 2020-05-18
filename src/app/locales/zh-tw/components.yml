@@ -53,6 +53,13 @@ settings-channel-item:
     confirmation: 清除自定設定?
     confirm: 是
     decline: 否
+settings-hotkey:
+    empty: 沒有快捷鍵
+    edit: 編輯快捷鍵
+    delete: 取消快捷鍵
+    discard: 清除
+    confirm: 設定快捷鍵
+    toggle: 啟用或停用快捷鍵
 settings-row:
     notes: Notes
     default: 備註

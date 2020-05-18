@@ -6,4 +6,23 @@ modifiers:
     metaKey: Meta
     shiftKey: Shift
 codes:
-#    code: translation
+    ArrowLeft: 左
+    ArrowRight: 右
+    ArrowUp: 上
+    ArrowDown: 下
+    Numpad0: 數字鍵盤0
+    Numpad1: 數字鍵盤1
+    Numpad2: 數字鍵盤2
+    Numpad3: 數字鍵盤3
+    Numpad4: 數字鍵盤4
+    Numpad5: 數字鍵盤5
+    Numpad6: 數字鍵盤6
+    Numpad7: 數字鍵盤7
+    Numpad8: 數字鍵盤8
+    Numpad9: 數字鍵盤9
+    NumpadDecimal: 數字鍵盤.
+    NumpadAdd: 數字鍵盤+
+    NumpadSubtract: 數字鍵盤-
+    NumpadMultiply: 數字鍵盤*
+    NumpadEnter: 數字鍵盤Enter
+    NumpadDivide: 數字鍵盤/

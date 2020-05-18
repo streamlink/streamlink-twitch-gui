@@ -7,6 +7,7 @@ menu:
     streams: 實況
     chat: 聊天室
     languages: 語言
+    hotkeys: 快捷鍵
     notifications: 通知
     channels: 頻道設定
 main:
@@ -426,6 +427,69 @@ languages:
     languages:
         title: 語言
         description: 實況主語言，若未設定，則為頻道語言
+hotkeys:
+    navigation:
+        title: 導航
+        description: 全域導航快捷鍵
+        notes: |
+            快捷鍵會根據元件做分類，每個動作都有可獨立啟停用或自訂鍵位的主快捷鍵及副快捷鍵，需取得視窗焦點才能使用快捷鍵<br><br>
+            另外請注意，目前快捷鍵還沒辦法知道系統的鍵盤佈局 (因技術問題)，所以目前所有的快捷鍵都是依照美式鍵盤佈局(QWERTY)，且若系統使用不同鍵盤佈局，有些獨立按鍵可能會顯示不正確
+        actions:
+            refresh: 重新整理
+            historyBack: 上一頁
+            historyForward: 下一頁
+            homepage: 回首頁
+            routeFeatured: 跳到精選實況
+            routeGames: 跳到遊戲實況
+            routeStreams: 跳到實況列表
+            routeUserFollowedStreams: 跳到追隨中實況
+            routeUserFollowedChannels: 跳到追隨中頻道
+            routeUserAuth: 跳到使用者
+            routeWatching: 跳到正在收看
+            routeSettings: 跳到設定
+            routeAbout: 跳到關於
+    searchbar:
+        title: 搜尋列
+        description: 上方的搜尋列
+        actions:
+            focus: 焦點
+    followbutton:
+        title: 追隨按鈕
+        description: 在頻道頁或實況對話框上面的追隨按鈕
+        actions:
+            default: 追隨或停止追隨
+            confirm: 確認
+    openchatbutton:
+        title: 聊天室按鈕
+        description: 在頻道頁或實況對話框上面的聊天室按鈕
+        actions:
+            default: 開啟聊天室
+    sharechannelbutton:
+        title: 分享頻道按鈕
+        description: 在頻道頁或實況對話框上面的分享頻道按鈕
+        actions:
+            default: 複製頻道網址
+    twitchemotesbutton:
+        title: Twitch 表情按鈕
+        description: 在頻道頁或實況對話框上面的表情按鈕
+        actions:
+            default: 開啟 Twitchemotes.com
+    modaldialog:
+        title: 對話框
+        description: 彈出對話框
+        actions:
+            close: 關閉
+    modalconfirm:
+        title: 確認對話框
+        description: 訊息需要確認時
+        actions:
+            confirm: 確認
+    modalstreaming:
+        title: 實況對話框
+        description: 收看實況時
+        actions:
+            shutdown: 中斷目前實況
+            log: 切換顯示記錄
 notifications:
     enabled:
         title: 桌面通知
