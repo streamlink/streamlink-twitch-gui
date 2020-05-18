@@ -71,6 +71,8 @@ export default Model.extend({
 	/** @property {TwitchChannel} channel */
 	channel: belongsTo( "twitchChannel", { async: false } ),
 	quality: attr( "string" ),
+	low_latency: attr( "boolean" ),
+	disable_ads: attr( "boolean" ),
 	chat_open: attr( "boolean" ),
 	started: attr( "date" ),
 

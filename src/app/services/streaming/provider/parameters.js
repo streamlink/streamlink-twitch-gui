@@ -30,11 +30,11 @@ export const parameters = [
 	),
 	new Parameter(
 		"--twitch-disable-ads",
-		"stream.settings.streaming.disable_ads"
+		"stream.disable_ads"
 	),
 	new Parameter(
 		"--twitch-low-latency",
-		"stream.settings.streaming.low_latency"
+		"stream.low_latency"
 	),
 	new Parameter(
 		"--player",

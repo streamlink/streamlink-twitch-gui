@@ -97,8 +97,10 @@ export default Service.extend({
 			id,
 			channel,
 			stream: twitchStream,
-			quality: get( this, "settings.streaming.quality" ),
-			chat_open: get( this, "settings.streams.chat_open" ),
+			quality: this.settings.content.streaming.quality,
+			low_latency: this.settings.content.streaming.low_latency,
+			disable_ads: this.settings.content.streaming.disable_ads,
+			chat_open: this.settings.content.streams.chat_open,
 			started: new Date()
 		});
 
@@ -261,6 +263,8 @@ export default Service.extend({
 			set( stream, "quality", quality );
 			set( stream, "strictQuality", true );
 		}
+		setIfNotNull( stream, "low_latency", channelSettings, "streaming_low_latency" );
+		setIfNotNull( stream, "disable_ads", channelSettings, "streaming_disable_ads" );
 		setIfNotNull( stream, "chat_open", channelSettings, "streams_chat_open" );
 	},
 
