@@ -105,7 +105,7 @@ streaming:
                 description: 開啟一個本地 HTTP 伺服器讓播放器讀取
             passthrough:
                 label: HLS (passthrough)
-                description: 讓播放器自下載及緩衝串流
+                description: 讓播放器自己下載及緩衝串流
     low-latency:
         title: 低延遲串流
         description: 頻道如果有開啟低延遲模式，會降低串流的延遲
