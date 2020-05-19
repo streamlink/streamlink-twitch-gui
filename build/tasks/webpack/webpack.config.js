@@ -61,6 +61,8 @@ module.exports = {
 	output: {
 		// name each file by its entry module name
 		filename: "[name].js",
+		// set crossorigin attribute on resources with integrity data
+		crossOriginLoading: "anonymous",
 		// don't use the webpack:// protocol in sourcemaps
 		devtoolModuleFilenameTemplate: "/[resource-path]"
 	},

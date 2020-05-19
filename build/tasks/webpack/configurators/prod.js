@@ -4,6 +4,7 @@ const Date = require( "../../common/date" );
 
 const webpack = require( "webpack" );
 const CopyWebpackPlugin = require( "copy-webpack-plugin" );
+const WebpackSubresourceIntegrity = require( "webpack-subresource-integrity" );
 
 
 /**
@@ -16,10 +17,16 @@ module.exports = {
 			grunt.config( "main.display-name" ),
 			`@version v${grunt.config( "package.version" )}`,
 			`@date ${new Date().toISOString()}`,
-			`@copyright ${grunt.config( "package.author" )}`
+			`@copyright ${grunt.config( "package.author" )}`,
+			`@license ${grunt.config( "package.license" )}`,
+			"",
+			"DO NOT MODIFY THIS FILE, OR THE APPLICATION WILL BREAK"
 		].join( "\n" );
 
 		config.plugins.push(
+			new WebpackSubresourceIntegrity({
+				hashFuncNames: [ "sha256" ]
+			}),
 			new webpack.BannerPlugin({
 				banner,
 				entryOnly: true
