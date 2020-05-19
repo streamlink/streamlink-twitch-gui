@@ -53,6 +53,13 @@ settings-channel-item:
     confirmation: 清除自定設定?
     confirm: 是
     decline: 否
+settings-hotkey:
+    empty: 沒有快捷鍵
+    edit: 編輯快捷鍵
+    delete: 取消快捷鍵
+    discard: 清除
+    confirm: 設定快捷鍵
+    toggle: 啟用或停用快捷鍵
 settings-row:
     notes: Notes
     default: 備註
@@ -64,7 +71,7 @@ settings-row:
         help: |
             變數內容將會被逸出，如果沒有使用引號括住字串，每個字元都會被逸出。部分程式能處理參數中不必要的逸出字元，但有些不行，請確保變數皆放在單引號或雙引號中。
 
-            Correct usage:
+            正確用法:
             -a "{a}" -b "{b1}{b2}" "-c={c}"
 settings-submit:
     apply: 套用
