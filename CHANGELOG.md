@@ -1,6 +1,29 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- :warning: Set Streamlink's version requirement to `1.4.0`.  
+  Upgrade to the latest Streamlink version [here](https://streamlink.github.io/install.html) or see the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
+- :warning: Simplified streaming provider configuration.  
+  In some cases, you may need to re-apply your Streamlink settings if you've previously set custom file paths. #718
+- Added option for low latency streaming to the streaming settings menu. As mentioned in the Streamlink docs, you may also need to customize your player's own caching/buffering settings.
+- Added option for low latency streaming and disabling ads to the channel settings menu. #723
+- Added customizable hotkeys. #502
+- Added toggle for showing stream uptime hours instead of days. #713
+- Fixed language selection not returning any streams. Due to a new Twitch API limitation, only one language can be selected now. #706
+- Fixed preview images missing in the featured streams menu. #720
+- Fixed twitchemotes.com URL when clicking the emotes button. #705
+- Fixed desktop notifications showing incorrect app name on Linux. #715
+- Fixed various translations.
+- Changed build method on Windows and Linux. App files are now stored uncompressed in the install directory. f84a5fc
+- Improved build config and made builds reproducible. 10f908b, f063b9c
+- Upgraded NW.js to to 0.45.5 (Chromium 81.0.4044.129 / NodeJS 14.0.0).
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.9.1...master)
+
+
 ## [v1.9.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.9.1) (2020-01-29)
 
 - :warning: Set Streamlink's version requirement to `1.3.1`.  
