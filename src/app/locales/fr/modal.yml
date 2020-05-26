@@ -36,7 +36,7 @@ quit:
         quit: Quitter
 streaming:
     header:
-        preparing: "Prépartion, veuillez patientez"
+        preparing: "Préparation, veuillez patientez"
         launching: "Lancement: "
         watching: "En visionnage: "
         ended: "Le stream est terminé: "
