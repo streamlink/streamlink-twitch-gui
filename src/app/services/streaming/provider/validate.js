@@ -21,12 +21,11 @@ const params = [ "--version", "--no-version-check" ];
  * Runs the executable with the `--version` parameter and reads answer from stderr
  * @param {ExecObj} execObj
  * @param {Object} providerConfData
- * @param {String} providerConfData.type
- * @param {String} providerConfData.flavor
+ * @param {string} providerConfData.type
  * @returns {Promise}
  */
 export default async function( execObj, providerConfData ) {
-	const { type, flavor } = providerConfData;
+	const { type } = providerConfData;
 	if ( !hasOP.call( validationProviders, type ) ) {
 		throw new Error( "Missing provider validation data" );
 	}
@@ -34,12 +33,7 @@ export default async function( execObj, providerConfData ) {
 	if ( !hasOP.call( validation, "version" ) || !hasOP.call( validation, "regexp" ) ) {
 		throw new Error( "Invalid provider validation data" );
 	}
-	const regexp = new RegExp(
-		typeof validation.regexp === "string"
-			? validation.regexp
-			: validation.regexp[ flavor ] || validation.regexp[ "default" ],
-		"i"
-	);
+	const regexp = new RegExp( validation.regexp, "i" );
 
 
 	let child;
