@@ -16,8 +16,8 @@ Changelog - Streamlink Twitch GUI
 - Fixed twitchemotes.com URL when clicking the emotes button. #705
 - Fixed desktop notifications showing incorrect app name on Linux. #715
 - Fixed various translations.
-- Changed build method on Windows and Linux. App files are now stored uncompressed in the install directory. f84a5fc
-- Improved build config and made builds reproducible. 10f908b, f063b9c
+- Changed build method on Windows and Linux. Uncompressed app files are now directly included in the install directory.
+- Improved build config and made builds reproducible.
 - Upgraded NW.js to to 0.45.5 (Chromium 81.0.4044.129 / NodeJS 14.0.0).
 
 
