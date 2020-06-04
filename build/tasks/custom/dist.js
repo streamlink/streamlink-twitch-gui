@@ -1,3 +1,4 @@
+const { mkdirSync } = require( "fs" );
 const platforms = require( "../common/platforms" );
 const config = require( "../configs/dist" );
 const configKeys = Object.keys( config )
@@ -83,6 +84,10 @@ module.exports = function( grunt ) {
 		if ( checksumTargets.length ) {
 			tasks.push( `checksum:${checksumTargets.join( ":" )}` );
 		}
+
+		// make sure the dist directory exists
+		const distDir = grunt.config.get( "dir.dist" );
+		mkdirSync( distDir, { recursive: true, mode: 0o755 } );
 
 		// run all tasks
 		grunt.task.run( tasks );
