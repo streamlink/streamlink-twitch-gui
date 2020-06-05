@@ -19,8 +19,8 @@ module.exports = function( grunt ) {
 		const options = this.options({
 			host: "localhost",
 			port: isCI ? 4444 : 8000,
-			connectAttempts: 3,
-			connectDelay: 3000,
+			connectAttempts: 5,
+			connectDelay: 1000,
 			startTimeout: 10000,
 			testTimeout: 300000,
 			coverageTimeout: 5000
