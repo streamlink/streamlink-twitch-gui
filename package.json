@@ -51,7 +51,6 @@
 		"babel6-plugin-strip-class-callcheck": "6.0.0",
 		"babel6-plugin-strip-heimdall": "6.0.1",
 		"chrome-remote-interface": "0.25.5",
-		"codecov": "3.6.5",
 		"copy-webpack-plugin": "5.1.1",
 		"css-loader": "2.1.1",
 		"ember-compatibility-helpers": "1.0.2",
@@ -98,7 +97,6 @@
 	"scripts": {
 		"build": "yarn run grunt release",
 		"test": "yarn run grunt test",
-		"coverage": "yarn run grunt test:coverage && xdg-open build/tmp/coverage/html-report/index.html",
-		"codecov": "codecov -f build/tmp/coverage/coverage.json"
+		"coverage": "yarn run grunt test:coverage && xdg-open build/tmp/coverage/html-report/index.html"
 	}
 }

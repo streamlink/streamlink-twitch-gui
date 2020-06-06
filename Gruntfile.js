@@ -25,7 +25,6 @@ module.exports = function( grunt ) {
 				tmp_test: r( "build", "tmp", "test" ),
 				tmp_coverage: r( "build", "tmp", "coverage" ),
 				tmp_installer: r( "build", "tmp", "installer" ),
-				travis: r( "build", "travis" ),
 				dist: r( "dist" )
 			}
 		},

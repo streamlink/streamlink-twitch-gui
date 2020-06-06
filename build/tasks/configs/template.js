@@ -26,20 +26,6 @@ function getInstallerFiles( config ) {
 
 
 module.exports = {
-	releases: {
-		options: {
-			data: {
-				display_name: "<%= main['display-name'] %>",
-				version: "<%= package.version %>",
-				homepage: "<%= package.homepage %>",
-				donation: "<%= JSON.stringify( main['donation'] ) %>"
-			}
-		},
-		files: {
-			"<%= dir.travis %>/data/releases.md": "<%= dir.travis %>/templates/releases.md"
-		}
-	},
-
 	installer_win32: {
 		options: {
 			data: {

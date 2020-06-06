@@ -12,24 +12,30 @@ module.exports = function( grunt ) {
 	const descr = "Run the tests in NW.js";
 
 	grunt.registerTask( task, descr, function() {
+		const isCI = process.env[ "CI" ] === "true";
+		const isCoverage = !!this.flags.coverage;
+
 		const done = this.async();
 		const options = this.options({
 			host: "localhost",
-			port: 8000,
-			connectAttempts: 3,
+			port: isCI ? 4444 : 8000,
+			connectAttempts: 5,
 			connectDelay: 1000,
 			startTimeout: 10000,
 			testTimeout: 300000,
 			coverageTimeout: 5000
 		});
-		const isCoverage = !!this.flags.coverage;
 
 
+		const argv = [ `--remote-debugging-port=${options.port}` ];
+		if ( isCI ) {
+			argv.unshift( "--disable-gpu", "--no-sandbox" );
+		}
 		const nwjsOptions = Object.assign( {}, grunt.config.process( nwjsTaskOptions ), {
 			platforms: currentPlatform,
-			argv: [ `--remote-debugging-port=${options.port}` ],
+			flavor: "sdk",
 			files: options.path,
-			flavor: "sdk"
+			argv
 		});
 		const nwjs = new NwBuilder( nwjsOptions );
 

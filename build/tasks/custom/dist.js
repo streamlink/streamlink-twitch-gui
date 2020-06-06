@@ -1,6 +1,5 @@
+const { mkdirSync } = require( "fs" );
 const platforms = require( "../common/platforms" );
-const getReleaseChangelog = require( "../common/release-changelog" );
-const changelogFile = require( "path" ).resolve( "CHANGELOG.md" );
 const config = require( "../configs/dist" );
 const configKeys = Object.keys( config )
 	.filter( item => item !== "options" );
@@ -14,8 +13,6 @@ module.exports = function( grunt ) {
 	].join( " " );
 
 	grunt.task.registerTask( task, descr, function() {
-		const done = this.async();
-
 		/** @type {String[]} target */
 		const targets = ( !this.args.length
 			// default target is an archive for the current platform
@@ -44,7 +41,7 @@ module.exports = function( grunt ) {
 
 		const tasks = [];
 		// compile the application once for every given platform
-		tasks.push.apply( tasks, targets
+		tasks.push( ...targets
 			// unique
 			.reduce( ( list, target ) => {
 				const platform = config[ target ].platform;
@@ -57,7 +54,7 @@ module.exports = function( grunt ) {
 		);
 
 		// run all "main" tasks
-		tasks.push.apply( tasks, targets
+		tasks.push( ...targets
 			// flatten
 			.reduce( ( list, target ) => {
 				const tasks = config[ target ].tasks || [];
@@ -67,7 +64,7 @@ module.exports = function( grunt ) {
 		);
 
 		// run all "after" tasks
-		tasks.push.apply( tasks, targets
+		tasks.push( ...targets
 			// unique & flatten
 			.reduce( ( list, target ) => {
 				const after = config[ target ].after || [];
@@ -88,16 +85,11 @@ module.exports = function( grunt ) {
 			tasks.push( `checksum:${checksumTargets.join( ":" )}` );
 		}
 
-		// read changelog
-		getReleaseChangelog( { changelogFile: changelogFile }, grunt.config.get( "package" ) )
-			.then( data => {
-				grunt.config.set( "template.releases.options.data.changelog", data );
-				tasks.push( "template:releases" );
-			})
-			.then( () => {
-				// run all tasks
-				grunt.task.run( tasks );
-				done();
-			});
+		// make sure the dist directory exists
+		const distDir = grunt.config.get( "dir.dist" );
+		mkdirSync( distDir, { recursive: true, mode: 0o755 } );
+
+		// run all tasks
+		grunt.task.run( tasks );
 	});
 };
