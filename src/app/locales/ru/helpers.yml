@@ -1,0 +1,9 @@
+hours-from-now:
+    now: "прямо сейчас"
+    minutes: "{{minutes}}минут"
+    hours:
+        simple: "{{hours}}часов"
+        extended: "{{hours}}часов{{minutes}}минут"
+    days:
+        simple: "{{days}}дней"
+        extended: "{{days}}дней{{hours}}часов"

@@ -1,0 +1,18 @@
+tray:
+    toggle: Окно переключения
+    close: Закрыть приложение
+macOS:
+    preferences: предпочтения
+    refresh: обновление
+channel-page: Страница канала
+channel-settings: Настройки канала
+change-quality: Изменить качество
+close-stream: Закрыть поток
+copy: скопировать
+copy-channel-url: Скопировать URL канала
+copy-link-address: Скопировать адрес ссылки
+copy-selection: Копировать выбор
+launch-stream: Запустить поток
+open-chat: Открыть чат
+open-in-browser: Открыть в браузере
+paste: вставить

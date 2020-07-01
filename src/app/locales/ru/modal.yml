@@ -1,0 +1,72 @@
+dialog:
+    action:
+        close: закрыть
+changelog:
+    header: "You just upgraded to v{{version}}"
+    body: Хотите увидеть что нового и прочитать список изменений сейчас?
+    action:
+        show: Изменения
+confirm:
+    header: Пожалуйста подтвердите
+    body: Хотите применить свои изменения?
+    action:
+        apply: сохранить
+        discard: сбросить
+        cancel: отменить
+firstrun:
+    header: "Спасибо за использование {{name}}!"
+    body: Вы хотите настроить приложение, прежде чем начать?
+    action:
+        start: Начинай сейчас
+        settings: настройки
+newrelease:
+    header: "Вы используете устаревшую версию: {{version}}"
+    body: "Хотите скачать последнюю версию сейчас? ({{version}})"
+    action:
+        download: Скачать
+        ignore: игнорировать
+quit:
+    header: Вы уверены, что хотите выйти?
+    body:
+        streams: При выборе shutdown все потоки также будут закрыты.
+        no-streams: Все потоки были закрыты. Вы хотите выйти сейчас?
+    action:
+        close: возвратить
+        shutdown: Shutdown
+        quit: выйти
+streaming:
+    header:
+        preparing: "Готовимся, пожалуйста, подождите"
+        launching: "Запуск: "
+        watching: "Наблюдение: "
+        ended: "Поток закончился: "
+        error:
+            log: "Ошибка: не удалось запустить поток"
+            provider: "Ошибка: {{provider}} расконфигурация"
+            player: "Ошибка: неверная конфигурация плеера"
+            version: "Ошибка: неверная {{provider}} версия"
+            unable-to-open: "Ошибка: невозможно открыть поток"
+            no-streams-found: "Ошибка: потоки не найдены"
+            timeout: "Ошибка: время ожидания"
+            hosting: "{{name}} хостинг другого канала"
+            internal: "ошибка"
+    body:
+        launching: "Ожидайте {{provider}} что-бы запустить поток ..."
+        ended: "Вы хотите перезапустить поток сейчас?"
+        error:
+            provider: "Пожалуйста, проверьте ваши настройки и/или (пере)установить {{provider}}."
+            player: "Пожалуйста, проверьте настройки вашего плеера."
+            version: "Версия v{{version}} не соответствует мин.требования (v{{required}})."
+            unable-to-open: "{{provider}} не удалось открыть поток."
+            no-streams-found: "{{provider}} не удалось найти поток."
+            timeout: "Либо {{name}} перешел в автономный режим или ваше соединение с Twitch было прервано."
+            hosting: "Вы хотите переключиться на {{name}}?"
+            internal: "Внутренняя ошибка"
+    action:
+        abort: Прервать
+        continue: Продолжить
+        download: Скачать
+        log: кнопка {{provider}} журнала
+        restart: рестарт
+        shutdown: Закрыть поток
+        start-hosted: переключиться
