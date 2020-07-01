@@ -1,107 +1,106 @@
 channel-item:
-    game-missing: no game set yet
+    game-missing: игра еще не установлена
 documentation-link:
-    title: Read the documentation online
+    title: Читать документацию онлайн
 drop-down-selection:
-    placeholder: Please choose
+    placeholder: Пожалуйста, выбери
 file-select:
-    placeholder: Leave blank for default path
+    placeholder: Оставьте пустым путь по умолчанию
 flag-icon:
-    channel: "The channel's language is {{lang}}"
-    broadcaster: "The broadcaster's language is {{lang}}"
+    channel: "Язык канала {{lang}}"
+    broadcaster: "Язык вещателя: {{lang}}"
 follow-button:
-    follow: "Follow {{name}}"
-    unfollow: "Unfollow {{name}}"
-    confirm: "Unfollow {{name}}"
-    keep: "Keep following {{name}}"
+    follow: "следить {{name}}"
+    unfollow: "Отписаться {{name}}"
+    confirm: "Отписаться {{name}}"
+    keep: "Продолжать следовать {{name}}"
 infinite-scroll:
-    error: Error
-    loading: Loading
-    fetch: Fetch more
+    error: ошибка
+    loading: загрузка
+    fetch: получить больше информации
 main-menu:
     browse:
-        header: Browse
-        featured: Featured
-        games: Games
-        streams: Streams
+        header: Просматривать
+        featured: Рекомендуемые
+        games: Игры
+        streams: стримы
     followed:
-        header: Followed
-        streams: Streams
-        channels: Channels
+        header: зафоловленные
+        streams: стримы
+        channels: каналы
     misc:
-        header: Misc
-        settings: Settings
-        about: About
+        header: Разное
+        settings: настройки
+        about: о нас
 open-chat:
-    title: Open chat
+    title: Открыть чат
 quick-bar-homepage:
-    title: Set as homepage
+    title: Сохранить как стартовую страницу
 quick-bar-random-stream:
-    title: Launch random stream
+    title: Запустить случайный поток
 search-bar:
-    placeholder: Search
-    filter: Filter results
+    placeholder: Поиск
+    filter: Фильтровать результаты
     filters:
-        all: All
-        games: Games
-        channels: Channels
-        streams: Streams
-    recent: Recent queries
+        all: Все
+        games: Игры
+        channels: каналы
+        streams: стримы
+    recent: Последние запросы
 settings-channel-item:
-    settings: Settings
-    erase: Unset
-    confirmation: Unset custom settings?
-    confirm: Yes
-    decline: No
+    settings: настройки
+    erase: Сброс
+    confirmation: Сбросить пользовательские настройки?
+    confirm: да
+    decline: нет
 settings-hotkey:
-    empty: No hotkey set
-    edit: Customize this hotkey
-    delete: Unset custom hotkey
-    discard: Discard
-    confirm: Set custom hotkey
-    toggle: Enable or disable this hotkey
+    empty: Нет горячих клавиш
+    edit: Настройте эту горячую клавишу
+    delete: Отключить пользовательскую горячую клавишу
+    discard: отменить
+    confirm: Установить пользовательскую горячую клавишу
+    toggle: Включить или отключить эту горячую клавишу
 settings-row:
     notes: Notes
-    default: Default
-    requires: Requires
-    example: Example
+    default: По умолчанию
+    requires: требует
+    example: пример
     variables:
-        title: Available variables
+        title: Доступные переменные
         # tooltip (whitespace sensitive)
         help: |
-            The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped. Some applications are able to read unnecessarily escaped characters in their parameters list and will work as expected, but others will not. Make sure to set all variables inside single or double quoted strings.
-
-            Correct usage:
+            Содержимое каждой переменной будет экранировано. Если используется вне строк в кавычках, каждый символ будет экранирован. Некоторые приложения могут читать излишне экранированные символы в своем списке параметров и будут работать как положено, но другие не будут. Убедитесь, что все переменные установлены внутри одинарных или двойных кавычек.
+            Правильное использование:
             -a "{a}" -b "{b1}{b2}" "-c={c}"
 settings-submit:
-    apply: Apply
-    discard: Discard
+    apply: применить
+    discard: отменить
 share-channel:
-    title: Copy channel url to clipboard
+    title: Скопировать URL канала в буфер обмена
 stream-item:
-    fps: "{{fps}} fps"
+    fps: "{{fps}} кадров в секунду"
     details:
-        show: Show stream details
-        lock: Lock details view
-        unlock: Unlock details view
+        show: Показать детали потока
+        lock: Блокировка просмотра информации
+        unlock: Разблокировать просмотр сведений
     vodcast: Vodcast
 subscribe-channel:
-    title-new: "Subscribe to {{name}} now"
-    title-renew: "Renew subscription to {{name}}"
+    title-new: "Подписываться на {{name}} сейчас"
+    title-renew: "Продлить подписку на {{name}}"
 team-item:
     created-at:
-        title: "Date created"
+        title: "Дата создания"
         # new Moment(team.created_at).format(...)
         format: "llll"
     updated-at:
-        title: "Modified last"
+        title: "последние изменение"
         # new Moment(team.updated_at).format(...)
         format: "llll"
 title-bar:
-    loggedout: Not logged in
+    loggedout: Не вошел
     # tooltip (whitespace sensitive)
     loggedin: |
-        Logged in as {{name}}
+        Вы вошли как {{name}}
         {{status}}
 twitch-emotes:
-    title: Show available channel emotes
+    title: Показать доступные эмоции канала
