@@ -2,7 +2,7 @@ dialog:
     action:
         close: закрыть
 changelog:
-    header: "You just upgraded to v{{version}}"
+    header: "Вы только что обновились до v{{version}}"
     body: Хотите увидеть что нового и прочитать список изменений сейчас?
     action:
         show: Изменения
@@ -28,11 +28,11 @@ newrelease:
 quit:
     header: Вы уверены, что хотите выйти?
     body:
-        streams: При выборе shutdown все потоки также будут закрыты.
+        streams: При выборе закрыть все потоки также будут закрыты.
         no-streams: Все потоки были закрыты. Вы хотите выйти сейчас?
     action:
         close: возвратить
-        shutdown: Shutdown
+        shutdown: закрыть
         quit: выйти
 streaming:
     header:
@@ -54,7 +54,7 @@ streaming:
         launching: "Ожидайте {{provider}} что-бы запустить поток ..."
         ended: "Вы хотите перезапустить поток сейчас?"
         error:
-            provider: "Пожалуйста, проверьте ваши настройки и/или (пере)установить {{provider}}."
+            provider: "Пожалуйста, проверьте ваши настройки и/или (пере)установите {{provider}}."
             player: "Пожалуйста, проверьте настройки вашего плеера."
             version: "Версия v{{version}} не соответствует мин.требования (v{{required}})."
             unable-to-open: "{{provider}} не удалось открыть поток."
@@ -66,7 +66,7 @@ streaming:
         abort: Прервать
         continue: Продолжить
         download: Скачать
-        log: кнопка {{provider}} журнала
+        log: лог {{provider}}
         restart: рестарт
         shutdown: Закрыть поток
         start-hosted: переключиться
