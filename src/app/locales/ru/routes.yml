@@ -1,181 +1,181 @@
 error:
-    header: Error
-    text: There was an error while trying to display this page.
+    header: Ошибка
+    text: при попытке отобразить эту страницу произошла ошибка.
 about:
     about:
-        header: About
-        homepage: Homepage
-        author: Author
-        version: Version
+        header: о нас
+        homepage: домашняя страница
+        author: автор
+        version: Версия
         nwjs: NW.js
-        arch: Architecture
-        built: Built
-        help: Help
+        arch: Архитектура
+        built: построен
+        help: Помошь
         wiki: Wiki
-        bugs: Bugs
-        issue-tracker: Issue tracker
-        support: Support
+        bugs: ошибки
+        issue-tracker: Система отслеживания ошибок
+        support: Служба поддержки
         gitter: Gitter
-        changelog: Changelog
-        contributors: Contributors
+        changelog: Изменения
+        contributors: Авторы
     donation:
-        header: Support & donate
-        text: If you think that this application is helpful, please consider supporting its creator by donating.<br>Thank you very much!
+        header: Поддержка и пожертвование
+        text: Если вы считаете, что это приложение полезно, попробуйте поддержать его создателя, сделав пожертвование.<br>Большое спасибо!
     translations:
-        header: Translations
+        header: Переводы
     dependencies:
-        header: Third party applications
+        header: Сторонние приложения
 featured:
-    header: Featured Channels
-    empty: The featured channels list could not be loaded!
-    summary: There are {{viewers}} people watching {{channels}} live streams right now!
+    header: Избранные каналы
+    empty: Список рекомендуемых каналов не может быть загружен!
+    summary:  {{viewers}} зрителей смотрят трансляцию {{channels}} прямо сейчас !
 games:
-    header: Top Games
-    empty: The returned list of top games is empty.
+    header: Лучшие игры
+    empty: список лучших игр пуст.
 game:
-    empty: The returned list of streams of this game is empty.
+    empty: список потоков этой игры пуст.
 streams:
-    header: Top Streams
-    empty: The returned list of top streams is empty.
+    header: Лучшие потоки
+    empty: список главных потоков пуст.
 channel:
     menu:
-        details: Details
-        teams: Teams
-        settings: Settings
-    offline: is offline right now
+        details: подробности
+        teams: Команды
+        settings: настройки
+    offline: сейчас не в сети
     details:
-        header: Channel statistics
+        header: Статистика канала
         name:
-            title: Name
+            title: название
         created-at:
-            title: Created
+            title: создан
             # new Moment(channel.created_at).format(...)
             format: "LL"
         language:
-            title: Language
+            title: язык
         followers:
-            title: Followers
-            data: "{{followers}} ({{day}} per day)"
+            title: фоловеров
+            data: "{{followers}} ({{day}} в день)"
         views:
-            title: Views
-            data: "{{views}} ({{day}} per day)"
+            title: просмотров
+            data: "{{views}} ({{day}} в день)"
         content:
-            title: Content
-            mature: Inappropriate for children
-            ffa: No age restrictions
+            title: содержание
+            mature: Не подходит для детей
+            ffa: Нет возрастных ограничений
         format:
-            title: Format
+            title: Формат
             data: "{{resolution}} @ {{fps}}fps"
         delay:
-            title: Delay
+            title: задержка
             # static "zero" property
             data:
-                zero: No additional delay
-                one: One second
-                other: "{{count}} seconds"
+                zero: Без дополнительной задержки
+                one: Секунда
+                other: "{{count}} секунд"
         vodcast:
             title: Vodcast
-            data: Stream is a Vodcast
+            data: Stream это Vodcast
     teams:
-        empty: The returned list of teams is empty.
+        empty: список команд пуст.
     settings:
         stream:
-            header: Stream
+            header: Поток
             quality:
-                title: Quality
-                description: Set a channel specific streaming quality.
+                title: Качество
+                description: Установите конкретное качество потоковой передачи канала.
             low-latency:
-                title: Low latency streaming
-                description: Override the global low latency streaming settings.
-                checkbox: Enable low latency streaming
+                title: Потоковая передача с низкой задержкой
+                description: Переопределите глобальные настройки потоковой передачи с низкой задержкой.
+                checkbox: Включить потоковую передачу с низкой задержкой
             disable-ads:
-                title: Advertisements
-                description: Override the global advertisements settings.
-                checkbox: Skip advertisements embedded into streams
+                title: Объявления
+                description: Переопределите глобальные настройки рекламы.
+                checkbox: Пропустить рекламу, встроенную в потоки
             chat:
-                title: Chat
-                description: Automatically open chat.
-                checkbox: Open chat when the stream starts
+                title: Чат
+                description: Автоматически открывать чат.
+                checkbox: Открыть чат при запуске потока
         notifications:
-            header: Desktop notifications
+            header: Настольные уведомления
             enabled:
-                title: Notifications
-                description: When the channel starts streaming.
-                notes: Channel needs to be followed.
-                checkbox: Enable desktop notifications
+                title: Уведомления
+                description: Когда канал начинает потоковую передачу.
+                notes: Канал должен быть зафоловлен.
+                checkbox: Включить уведомления на рабочем столе
 team:
     header:
-        members: "Team members: {{num}}"
+        members: "Члены команды: {{num}}"
         # new Moment(team.created_at).format(...)
         created-at: "[Date created:] llll"
         # new Moment(team.updated_at).format(...)
         updated-at: "[Modified last:] llll"
     menu:
-        live: Live Members
-        all: All Members
-        info: Team Infos
+        live: Живые участники
+        all: Все участники
+        info: Командная информация
     live:
-        empty: The returned list of broadcasting team members is empty.
+        empty: список членов команды вещания пуст.
     all:
-        empty: The returned list of all team members is empty.
+        empty: список всех членов команды пуст.
     info:
-        header: Infos
+        header: Информация
 user:
     index:
-        logged-in: "Logged in as {{name}}"
+        logged-in: "Вы вошли как {{name}}"
         # new Moment(auth.session.date).format(...)
         since: "[since] LLLL"
-        sign-out: Sign out
+        sign-out: выход
         token:
-            title: Your access token
-            show: Show access token
-            copy: Copy to clipboard
+            title: Ваш токен доступа
+            show: Показать токен доступа
+            copy: Скопировать в буфер обмена
             hint:
-                first: "This key grants access to your Twitch.tv account with these permissions:"
-                second: Log in again with your password to invalidate it.
+                first: "Этот ключ предоставляет доступ к вашей учетной записи Twitch.tv со следующими разрешениями:"
+                second: Войдите снова с паролем, чтобы сделать его недействительным.
     auth:
-        abort: Abort
-        sign-in: Sign in
+        abort: завершить
+        sign-in: войти в систему
         token:
-            show-form: Use access token
-            placeholder: Insert access token
+            show-form: Использовать токен доступа
+            placeholder: Вставьте токен доступа
             hint:
-                first: Log in to your Twitch.tv account by using an access token.
-                second: "Make sure that it matches the following permissions:"
-        fail: Authentication failed. Please try again.
+                first: Войдите в свою учетную запись Twitch.tv с помощью токена доступа.
+                second: "Убедитесь, что оно соответствует следующим разрешениям:"
+        fail: Ошибка аутентификации. Пожалуйста, попробуйте еще раз.
     followedStreams:
-        header: Followed Streams
+        header: зафоловленные стримы
         empty:
-            text: The returned list of followed streams is empty.
-            featured: Watch currently featured streams
-            streams: Watch top streams
+            text: список отслеживаемых потоков пуст.
+            featured: Смотреть текущие избранные потоки
+            streams: Смотреть лучшие потоки
     followedChannels:
-        header: Followed Channels
+        header: зафоловленные каналы
         buttons:
-            sort-by-followed: Sort by date followed
-            sort-by-broadcast: Sort by last broadcast
-            sort-by-login: Sort by last login
-            sort-desc: Sort in descending order
-            sort-asc: Sort in ascending order
-        empty: The returned list of followed channels is empty.
+            sort-by-followed: Сортировать по дате следования
+            sort-by-broadcast: Сортировать по последней трансляции
+            sort-by-login: Сортировать по последнему логину
+            sort-desc: Сортировать по убыванию
+            sort-asc: Сортировать по возрастанию
+        empty: список следующих каналов пуст.
 search:
     header:
-        all: All search results
-        games: "Game search results: "
-        channels: "Stream search results: "
-        streams: "Stream search results: "
+        all: Все результаты поиска
+        games: "Результаты поиска игр: "
+        channels: "Поток результатов поиска: "
+        streams: "Поток результатов поиска: "
     subheader:
-        games: Games
-        channels: Channels
-        streams: Streams
-    empty: Your query didn't match anything...
+        games: Игры
+        channels: каналы
+        streams: стримы
+    empty: Ваш запрос ничего не соответствует ...
 watching:
-    header: You're watching
+    header: Ты смотришь
     buttons:
-        open: Open dialog
-        close: Close stream
+        open: Открыть диалог
+        close: Закрыть поток
     empty:
-        header: All streams have been closed
-        next: What to do next?
-        featured: Watch currently featured streams
-        followed: Watch your followed streams
+        header: Все потоки были закрыты
+        next: Что делать дальше?
+        featured: Смотреть текущие избранные потоки
+        followed: Следите за вашими потоками
