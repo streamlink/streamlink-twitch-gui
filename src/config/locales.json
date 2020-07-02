@@ -5,6 +5,7 @@
 		"en": "English",
 		"fr": "Français",
 		"zh-tw": "中文 繁體"
+		"ru": "Русский"
 	},
 	"contributors": {
 		"de": [
@@ -29,6 +30,12 @@
 			{
 				"name": "Dxball",
 				"github": "dxball"
+			}
+		],
+		"ru": [
+			{
+				"name": "Denis Kartashov",
+				"github": "dEN5-tech"
 			}
 		]
 	}
