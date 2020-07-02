@@ -1,6 +1,6 @@
 [Streamlink Twitch GUI][Website]
 ===
-[![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] [![Gitter IRC][badge-gitter]][Gitter] [![Build status (Travis CI)][badge-travis]][Travis-CI] [![Build status (Appveyor CI)][badge-appveyor]][Appveyor-CI] [![Code coverage][badge-codecov]][Codecov]
+[![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] [![Gitter IRC][badge-gitter]][Gitter] [![Build status][badge-actions]][Github-actions] [![Code coverage][badge-codecov]][Codecov]
 
 **A multi platform [Twitch.tv][Twitch] browser for [Streamlink][Streamlink]**
 
@@ -97,8 +97,7 @@ Thank you very much for your support!
   [Releases]: https://github.com/streamlink/streamlink-twitch-gui/releases "Streamlink Twitch GUI Releases"
   [Issues]: https://github.com/streamlink/streamlink-twitch-gui/issues "Streamlink Twitch GUI Issues"
   [Wiki]: https://github.com/streamlink/streamlink-twitch-gui/wiki "Streamlink Twitch GUI Wiki"
-  [Travis-CI]: https://travis-ci.org/streamlink/streamlink-twitch-gui "Travis CI"
-  [Appveyor-CI]: https://ci.appveyor.com/project/bastimeyer/streamlink-twitch-gui "Appveyor CI"
+  [Github-actions]: https://github.com/streamlink/streamlink-twitch-gui/actions?query=event%3Apush "Github actions"
   [Codecov]: https://codecov.io/gh/streamlink/streamlink-twitch-gui "Codecov"
   [Gitter]: https://gitter.im/streamlink/streamlink-twitch-gui "Gitter IRC"
   [Contributing]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/CONTRIBUTING.md
@@ -120,8 +119,7 @@ Thank you very much for your support!
   [badge-platforms]: https://img.shields.io/badge/platform-win%20%7C%20mac%20%7C%20linux-green.svg?style=flat-square "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/streamlink/streamlink-twitch-gui.svg?style=flat-square "Latest release"
   [badge-issues]: https://img.shields.io/github/issues/streamlink/streamlink-twitch-gui.svg?style=flat-square "Open issues"
-  [badge-travis]: https://img.shields.io/travis/streamlink/streamlink-twitch-gui.svg?style=flat-square
-  [badge-appveyor]: https://img.shields.io/appveyor/ci/bastimeyer/streamlink-twitch-gui.svg?style=flat-square
+  [badge-actions]: https://img.shields.io/github/workflow/status/streamlink/streamlink-twitch-gui/Test,%20build%20and%20deploy/master?style=flat-square
   [badge-codecov]: https://img.shields.io/codecov/c/github/streamlink/streamlink-twitch-gui.svg?style=flat-square
   [badge-gitter]: https://img.shields.io/gitter/room/streamlink/streamlink-twitch-gui.svg?style=flat-square "Gitter IRC"
   [Application-rename]: https://github.com/streamlink/streamlink-twitch-gui/issues/331 "The future of Livestreamer Twitch GUI"
