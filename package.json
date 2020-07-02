@@ -88,7 +88,7 @@
 		"svgo-loader": "2.1.0",
 		"webpack": "4.39.3",
 		"webpack-subresource-integrity": "1.4.1",
-		"yaml-loader": "0.5.0"
+		"yaml-loader": "0.6.0"
 	},
 	"resolutions": {
 		"**/optimist/minimist": "0.2.1",
