@@ -1,7 +1,7 @@
 const platforms = require( "../common/platforms" );
+const hash = require( "../common/hash" );
 const config = require( "../configs/dist" );
-const { createHash } = require( "crypto" );
-const { createReadStream, writeFile } = require( "fs" );
+const { writeFile } = require( "fs" );
 const { resolve: r, basename, relative } = require( "path" );
 
 
@@ -30,21 +30,12 @@ module.exports = function( grunt ) {
 		const promises = targets
 			.map( target => grunt.config.process( config[ target ].checksum ) )
 			.sort()
-			.map( file => new Promise( ( resolve, reject ) => {
-				const hash = createHash( options.algorithm );
-				hash.setEncoding( options.encoding );
-
-				const stream = createReadStream( file );
-				stream.on( "error", reject );
-				stream.on( "end", () => {
-					hash.end();
-					resolve({
-						file: basename( file ),
-						hash: hash.read()
-					});
-				});
-				stream.pipe( hash );
-			}) );
+			.map( file => hash( file, options.algorithm, options.encoding )
+				.then( hash => ({
+					file: basename( file ),
+					hash
+				}) )
+			);
 
 		Promise.all( promises )
 			.then( list => list
