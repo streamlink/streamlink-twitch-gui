@@ -69,5 +69,44 @@ module.exports = {
 			"<%= dir.tmp_installer %>/win64installer/installer.nsi":
 				"<%= dir.resources %>/installer/installer.nsi"
 		}
+	},
+
+	appimage_linux32: {
+		options: {
+			data: {
+				dirinput: "<%= dir.releases %>/<%= package.name %>/linux32",
+				diroutput: "<%= dir.dist %>",
+				filename: "<%= package.name %>-v<%= package.version %>-i686.AppImage",
+				name: "<%= package.name %>",
+				version: "<%= package.version %>",
+				appimagekit: "<%= appimagekit.options.path %>",
+				apprun: "<%= appimagekit.options.apprun.linux32 %>",
+				appimagetool: "<%= appimagekit.options.appimagetool.linux32 %>",
+				arch: "i686"
+			}
+		},
+		files: {
+			"<%= dir.tmp_appimage %>/build-linux32.sh":
+				"<%= dir.resources %>/appimage/build.sh.tpl"
+		}
+	},
+	appimage_linux64: {
+		options: {
+			data: {
+				dirinput: "<%= dir.releases %>/<%= package.name %>/linux64",
+				diroutput: "<%= dir.dist %>",
+				filename: "<%= package.name %>-v<%= package.version %>-x86_64.AppImage",
+				name: "<%= package.name %>",
+				version: "<%= package.version %>",
+				appimagekit: "<%= appimagekit.options.path %>",
+				apprun: "<%= appimagekit.options.apprun.linux64 %>",
+				appimagetool: "<%= appimagekit.options.appimagetool.linux64 %>",
+				arch: "x86_64"
+			}
+		},
+		files: {
+			"<%= dir.tmp_appimage %>/build-linux64.sh":
+				"<%= dir.resources %>/appimage/build.sh.tpl"
+		}
 	}
 };
