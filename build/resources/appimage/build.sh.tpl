@@ -12,11 +12,41 @@ appimagetool="<%= appimagekit %>/<%= appimagetool %>"
 
 # ----
 
+declare -A DEPS=(
+  [mksquashfs]=mksquashfs
+)
+for dep in "${!DEPS[@]}"; do
+  ! declare "${dep}"="$(which "${DEPS["${dep}"]}" 2>/dev/null)" \
+  && {
+    echo &>2 "'${dep}' not found. Cannot build AppImage."
+    exit 1
+  }
+done
+
+# show versions of custom dependencies
+echo "${mksquashfs}: $("${mksquashfs}" -version | head -n1)"
+
+# ----
+
 tempdir=$(mktemp -d) && trap "rm -rf ${tempdir}" EXIT || exit 255
 cd "${tempdir}"
 
 appdir="${tempdir}/${name}.AppDir"
 installdir="${appdir}/opt/${name}/"
+
+# ----
+
+# extract appimagetool
+install -m777 "${appimagetool}" "${tempdir}/appimagetool"
+"${tempdir}/appimagetool" --appimage-extract >/dev/null
+appimagetool="${tempdir}/squashfs-root/AppRun"
+
+# replace its internal mksquashfs tool with the system's one
+cat > "${tempdir}/squashfs-root/usr/lib/appimagekit/mksquashfs" <<EOF
+#!/bin/sh
+args=\$(echo "\$@" | sed -e 's/-mkfs-fixed-time 0//')
+"${mksquashfs}" \${args}
+EOF
 
 # ----
 
