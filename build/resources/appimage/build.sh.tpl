@@ -14,6 +14,8 @@ appimagetool="<%= appimagekit %>/<%= appimagetool %>"
 
 declare -A DEPS=(
   [mksquashfs]=mksquashfs
+  [appstreamcli]=appstreamcli
+  [appstreamutil]=appstream-util
 )
 for dep in "${!DEPS[@]}"; do
   ! declare "${dep}"="$(which "${DEPS["${dep}"]}" 2>/dev/null)" \
@@ -25,6 +27,8 @@ done
 
 # show versions of custom dependencies
 echo "${mksquashfs}: $("${mksquashfs}" -version | head -n1)"
+echo "${appstreamcli}: $("${appstreamcli}" --version)"
+echo "${appstreamutil}: $("${appstreamutil}" --version)"
 
 # ----
 
@@ -78,6 +82,11 @@ install -Dm644 \
   "${installdir}/LICENSE.txt" \
   "${installdir}/credits.html"
 
+# copy appstream metainfo
+install -Dm644 \
+  -t "${appdir}/usr/share/metainfo/" \
+  "${installdir}/${name}.appdata.xml"
+
 # copy icons
 for res in 16 32 48 64 128 256; do
   install -Dm644 \
@@ -108,9 +117,16 @@ EOF
 ln -sr "${appdir}/usr/share/applications/${name}.desktop" "${appdir}/${name}.desktop"
 
 # remove unneeded stuff
-rm -r "${installdir}/"{{add,remove}-menuitem.sh,LICENSE.txt,credits.html,icons/}
+rm -r "${installdir}/"{{add,remove}-menuitem.sh,LICENSE.txt,credits.html,"${name}.appdata.xml",icons/}
 
 # ----
+
+# verify metainfo xml with system appstream binaries
+(
+  set -x
+  "${appstreamcli}" validate-tree "${appdir}/usr/share/metainfo/${name}.appdata.xml"
+  "${appstreamutil}" validate-relax "${appdir}/usr/share/metainfo/${name}.appdata.xml"
+)
 
 # build AppImage
 (

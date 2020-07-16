@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <name>Streamlink Twitch GUI</name>
+  <id>io.github.streamlink.gui.twitch</id>
+  <summary>Browse Twitch.tv and watch streams in your videoplayer of choice</summary>
+  <description>
+    <p>
+      A graphical user interface on top of the Streamlink command line interface.
+    </p>
+    <p>
+      Streamlink Twitch GUI is a NW.js application, which means that it is a web application
+      written in JavaScript (EmberJS), HTML (Handlebars) and CSS (LessCSS) and is being run
+      by a Node.js powered version of Chromium.
+    </p>
+  </description>
+  <developer_name>Sebastian Meyer</developer_name>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <url type="homepage">https://streamlink.github.io/streamlink-twitch-gui/</url>
+  <url type="bugtracker">https://github.com/streamlink/streamlink-twitch-gui/issues</url>
+  <url type="help">https://github.com/streamlink/streamlink-twitch-gui/wiki</url>
+  <url type="translate">https://github.com/streamlink/streamlink-twitch-gui/wiki/Translating</url>
+  <provides>
+    <binary>streamlink-twitch-gui</binary>
+  </provides>
+  <launchable type="desktop-id">streamlink-twitch-gui.desktop</launchable>
+  <categories>
+    <category>AudioVideo</category>
+    <category>Network</category>
+  </categories>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source" width="1920" height="1080">https://user-images.githubusercontent.com/467294/32060296-a08d7b44-ba6e-11e7-9793-8ef60fc3e1f0.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="960" height="540">https://user-images.githubusercontent.com/467294/28097571-3415adda-66b1-11e7-86dd-6aac8f41f91f.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="960" height="540">https://user-images.githubusercontent.com/467294/28097572-3415f4a2-66b1-11e7-9eeb-20b21b2ac6a7.jpg</image>
+    </screenshot>
+  </screenshots>
+</component>
