@@ -77,7 +77,7 @@
 		"less-loader": "4.1.0",
 		"load-grunt-config": "3.0.1",
 		"loader-utils": "1.1.0",
-		"lodash": "4.17.11",
+		"lodash": "4.17.19",
 		"mini-css-extract-plugin": "0.4.0",
 		"nw-builder": "3.5.7",
 		"optimize-css-assets-webpack-plugin": "5.0.3",
@@ -92,6 +92,7 @@
 	},
 	"resolutions": {
 		"**/optimist/minimist": "0.2.1",
+		"load-grunt-config/lodash": "^4.17.19",
 		"sinon/nise/just-extend": "^4.0.0"
 	},
 	"scripts": {
