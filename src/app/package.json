@@ -1,12 +1,12 @@
 {
-	"name": "streamlink-twitch-gui",
-	"version": "1.10.0",
-	"product_string": "Streamlink Twitch GUI",
+	"name": "<%= package.name %>",
+	"version": "<%= package.version %>",
+	"product_string": "<%= main['display-name'] %>",
 
 	"main": "index.html",
 
 	"window": {
-		"title": "Streamlink Twitch GUI",
+		"title": "<%= main['display-name'] %>",
 		"frame": false,
 		"resizable": true,
 		"show": false,

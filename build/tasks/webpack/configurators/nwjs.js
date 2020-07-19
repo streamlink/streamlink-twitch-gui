@@ -9,7 +9,7 @@ const HtmlWebpackPlugin = require( "html-webpack-plugin" );
  * Configurations for creating valid NW.js builds
  */
 module.exports = {
-	_nwjs( config, path, isProd = false ) {
+	_nwjs( config, grunt, path, isProd = false ) {
 		// NW.js package.json
 		config.module.rules.push({
 			type: "javascript/auto",
@@ -26,7 +26,12 @@ module.exports = {
 						name: "package.json"
 					}
 				},
-				"parse-json-loader"
+				{
+					loader: "parse-json-loader",
+					options: {
+						grunt
+					}
+				}
 			]
 		});
 
@@ -50,23 +55,23 @@ module.exports = {
 		);
 	},
 
-	dev( config ) {
-		this._nwjs( config, pApp );
+	dev( ...args ) {
+		this._nwjs( ...args, pApp );
 	},
 
-	prod( config ) {
-		this._nwjs( config, pApp, true );
+	prod( ...args ) {
+		this._nwjs( ...args, pApp, true );
 	},
 
-	test( config ) {
-		this._nwjs( config, pTest );
+	test( ...args ) {
+		this._nwjs( ...args, pTest );
 	},
 
-	testdev( config ) {
-		this._nwjs( config, pTest );
+	testdev( ...args ) {
+		this._nwjs( ...args, pTest );
 	},
 
-	coverage( config ) {
-		this._nwjs( config, pTest );
+	coverage( ...args ) {
+		this._nwjs( ...args, pTest );
 	}
 };

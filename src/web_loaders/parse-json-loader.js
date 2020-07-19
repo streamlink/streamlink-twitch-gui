@@ -3,16 +3,26 @@ const { relative } = require( "path" );
 
 module.exports = function( content ) {
 	const callback = this.async();
-	this.cacheable();
+	this.cacheable( false );
+
+	const { grunt } = this.query;
 
 	const promises = [];
 	const parse = obj => {
-		for ( const [ key, value ] of Object.entries( obj ) ) {
+		for ( let [ key, value ] of Object.entries( obj ) ) {
 			const type = typeof value;
 			if ( type === "object" && value ) {
 				parse( value );
+				continue;
+			}
 
-			} else if ( type === "string" && value.startsWith( "~" ) ) {
+			const isString = type === "string";
+
+			if ( isString && value.includes( "<%=" ) ) {
+				obj[ key ] = value = grunt.config.process( value );
+			}
+
+			if ( isString && value.startsWith( "~" ) ) {
 				const promise = new Promise( ( resolve, reject ) => {
 					this.loadModule( value.substr( 1 ), ( err, source, sourceMap, module ) => {
 						if ( err ) {

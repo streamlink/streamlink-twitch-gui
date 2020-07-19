@@ -1,11 +1,11 @@
 {
-	"name": "streamlink-twitch-gui-test",
-	"version": "0.0.1",
+	"name": "<%= package.name %>-test",
+	"version": "<%= package.version %>",
 
 	"main": "index.html",
 
 	"window": {
-		"title": "Streamlink Twitch GUI Test",
+		"title": "<%= main['display-name'] %> Test",
 		"frame": true,
 		"resizable": true,
 		"show": false,
