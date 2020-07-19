@@ -23,6 +23,7 @@ module.exports = {
 					// see `src/web_loaders/metadata-loader.js`
 					loader: "metadata-loader",
 					options: {
+						version: grunt.config( "version" ),
 						package: grunt.config( "package" ),
 						built: new Date().toISOString()
 					}

@@ -3,7 +3,7 @@
 !define Author "<%= author %>"
 !define Homepage "<%= homepage %>"
 !define ReleaseVersion "<%= version %>"
-!define ReleaseNotes "${Homepage}/releases/v${ReleaseVersion}"
+!define ReleaseNotes "<%= releaseurl %>"
 !define Arch "<%= arch %>"
 
 !define AppDir "${DisplayName}"
@@ -26,8 +26,8 @@
 
 # Installer/Uninstaller params
 Name "${DisplayName}"
-Caption "${DisplayName} - v${ReleaseVersion}"
-BrandingText "${DisplayName} - v${ReleaseVersion}"
+Caption "${DisplayName} - ${ReleaseVersion}"
+BrandingText "${DisplayName} - ${ReleaseVersion}"
 ShowInstDetails show
 ShowUninstDetails show
 InstallDir ""
@@ -54,7 +54,7 @@ VIAddVersionKey "LegalCopyright" "${Author}"
 
 # GUI
 !define MUI_ICON "<%= dirroot %>/build/resources/icons/icon-16-32-48-256.ico"
-!define MUI_WELCOMEPAGE_TITLE "${DisplayName} - v${ReleaseVersion}"
+!define MUI_WELCOMEPAGE_TITLE "${DisplayName} - ${ReleaseVersion}"
 !define MUI_WELCOMEPAGE_TITLE_3LINES
 !define MUI_ABORTWARNING
 !define MUI_ABORTWARNING_CANCEL_DEFAULT

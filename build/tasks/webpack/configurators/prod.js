@@ -15,7 +15,7 @@ module.exports = {
 		// add license banners
 		const banner = [
 			grunt.config( "main.display-name" ),
-			`@version v${grunt.config( "package.version" )}`,
+			`@version ${grunt.config( "version" )}`,
 			`@date ${new Date().toISOString()}`,
 			`@copyright ${grunt.config( "package.author" )}`,
 			`@license ${grunt.config( "package.license" )}`,

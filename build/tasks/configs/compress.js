@@ -8,26 +8,26 @@ module.exports = {
 	win32: {
 		input: "<%= dir.releases %>/<%= package.name %>/win32",
 		prefix: "<%= package.name %>",
-		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-win32.zip"
+		output: "<%= dir.dist %>/<%= package.name %>-<%= version %>-win32.zip"
 	},
 	win64: {
 		input: "<%= dir.releases %>/<%= package.name %>/win64",
 		prefix: "<%= package.name %>",
-		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-win64.zip"
+		output: "<%= dir.dist %>/<%= package.name %>-<%= version %>-win64.zip"
 	},
 	osx64: {
 		input: "<%= dir.releases %>/<%= package.name %>/osx64/<%= package.name %>.app",
 		prefix: "<%= main['display-name'] %>.app",
-		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-macOS.tar.gz"
+		output: "<%= dir.dist %>/<%= package.name %>-<%= version %>-macOS.tar.gz"
 	},
 	linux32: {
 		input: "<%= dir.releases %>/<%= package.name %>/linux32",
 		prefix: "<%= package.name %>",
-		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-linux32.tar.gz"
+		output: "<%= dir.dist %>/<%= package.name %>-<%= version %>-linux32.tar.gz"
 	},
 	linux64: {
 		input: "<%= dir.releases %>/<%= package.name %>/linux64",
 		prefix: "<%= package.name %>",
-		output: "<%= dir.dist %>/<%= package.name %>-v<%= package.version %>-linux64.tar.gz"
+		output: "<%= dir.dist %>/<%= package.name %>-<%= version %>-linux64.tar.gz"
 	}
 };
