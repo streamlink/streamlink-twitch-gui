@@ -44,5 +44,12 @@ module.exports = {
 			"mkdir -p \"<%= dir.tmp_installer %>\"",
 			"makensis -v3 \"<%= dir.tmp_installer %>/win64installer/installer.nsi\""
 		].join( " && " )
+	},
+
+	appimage_linux32: {
+		command: "bash '<%= dir.tmp_appimage %>/build-linux32.sh'"
+	},
+	appimage_linux64: {
+		command: "bash '<%= dir.tmp_appimage %>/build-linux64.sh'"
 	}
 };

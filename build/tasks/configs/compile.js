@@ -19,6 +19,7 @@ module.exports = {
 		after : [
 			"copy:scripts_linux32",
 			"copy:icons_linux32",
+			"copy:assets_linux32",
 			"shell:permissions_linux32"
 		]
 	},
@@ -27,6 +28,7 @@ module.exports = {
 		after : [
 			"copy:scripts_linux64",
 			"copy:icons_linux64",
+			"copy:assets_linux64",
 			"shell:permissions_linux64"
 		]
 	}

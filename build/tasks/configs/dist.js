@@ -42,5 +42,24 @@ module.exports = {
 			"shell:installer_win64"
 		],
 		checksum: "<%= dir.dist %>/<%= template.installer_win64.options.data.filename %>"
+	},
+
+	appimage_linux32: {
+		platform: "linux32",
+		tasks: [
+			"appimagekit",
+			"template:appimage_linux32",
+			"shell:appimage_linux32"
+		],
+		checksum: "<%= dir.dist %>/<%= template.appimage_linux32.options.data.filename %>"
+	},
+	appimage_linux64: {
+		platform: "linux64",
+		tasks: [
+			"appimagekit",
+			"template:appimage_linux64",
+			"shell:appimage_linux64"
+		],
+		checksum: "<%= dir.dist %>/<%= template.appimage_linux64.options.data.filename %>"
 	}
 };

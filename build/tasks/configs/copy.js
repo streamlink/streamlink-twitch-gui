@@ -37,5 +37,18 @@ module.exports = {
 		flatten: true,
 		src    : "<%= dir.resources %>/icons/*.png",
 		dest   : "<%= dir.releases %>/<%= package.name %>/linux64/icons/"
+	},
+
+	assets_linux32: {
+		expand : true,
+		flatten: true,
+		src    : "<%= dir.resources %>/linux/*.!(sh)",
+		dest   : "<%= dir.releases %>/<%= package.name %>/linux32/"
+	},
+	assets_linux64: {
+		expand : true,
+		flatten: true,
+		src    : "<%= dir.resources %>/linux/*.!(sh)",
+		dest   : "<%= dir.releases %>/<%= package.name %>/linux64/"
 	}
 };

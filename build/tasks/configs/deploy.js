@@ -17,6 +17,6 @@ module.exports = {
 				donation: "<%= JSON.stringify( main['donation'] ) %>"
 			}
 		},
-		src: "<%= dir.dist %>/*{.tar.gz,.zip,.exe,-checksums.txt}"
+		src: "<%= dir.dist %>/*{.tar.gz,.zip,.exe,.AppImage,-checksums.txt}"
 	}
 };
