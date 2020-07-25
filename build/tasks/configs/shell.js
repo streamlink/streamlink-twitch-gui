@@ -1,6 +1,3 @@
-const createArchive = require( "../common/archive" );
-
-
 module.exports = {
 	permissions_osx64: {
 		command: "chmod -R g=u,o=u,g-w,o-w <%= dir.releases %>/<%= package.name %>/osx64"
@@ -27,11 +24,46 @@ module.exports = {
 		command: "str=\"$(jq 'del(.product_string)' package.json)\" && echo \"$str\" > package.json"
 	},
 
-	archive_win32: createArchive( "win32", "zip" ),
-	archive_win64: createArchive( "win64", "zip" ),
-	archive_osx64: createArchive( "osx64", "tgz" ),
-	archive_linux32: createArchive( "linux32", "tgz" ),
-	archive_linux64: createArchive( "linux64", "tgz" ),
+	archive_win32: {
+		command: [
+			"bash '<%= dir.resources %>/archive/zip.sh'",
+			"'<%= compress.win32.input %>'",
+			"'<%= compress.win32.output %>'",
+			"'<%= compress.win32.prefix %>'"
+		].join( " " )
+	},
+	archive_win64: {
+		command: [
+			"bash '<%= dir.resources %>/archive/zip.sh'",
+			"'<%= compress.win64.input %>'",
+			"'<%= compress.win64.output %>'",
+			"'<%= compress.win64.prefix %>'"
+		].join( " " )
+	},
+	archive_osx64: {
+		command: [
+			"bash '<%= dir.resources %>/archive/tar-gzip.sh'",
+			"'<%= compress.osx64.input %>'",
+			"'<%= compress.osx64.output %>'",
+			"'<%= compress.osx64.prefix %>'"
+		].join( " " )
+	},
+	archive_linux32: {
+		command: [
+			"bash '<%= dir.resources %>/archive/tar-gzip.sh'",
+			"'<%= compress.linux32.input %>'",
+			"'<%= compress.linux32.output %>'",
+			"'<%= compress.linux32.prefix %>'"
+		].join( " " )
+	},
+	archive_linux64: {
+		command: [
+			"bash '<%= dir.resources %>/archive/tar-gzip.sh'",
+			"'<%= compress.linux64.input %>'",
+			"'<%= compress.linux64.output %>'",
+			"'<%= compress.linux64.prefix %>'"
+		].join( " " )
+	},
 
 	installer_win32: {
 		command: [
