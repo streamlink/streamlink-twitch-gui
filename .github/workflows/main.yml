@@ -85,7 +85,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --pure-lockfile --no-progress --non-interactive
-          sudo apt install nsis appstream{,-util}
+          sudo apt install pigz nsis appstream{,-util}
           ./.github/workflows/install-wine.sh
           ./.github/workflows/build-squashfs-tools.sh
       - name: Build

@@ -50,8 +50,11 @@ find . -type f -print0 \
     `# PAX headers` \
     --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
     --create \
-  `# compress tarball` \
-  | gzip \
+  `# compress tarball with pigz instead of gzip, so all CPU cores get utilized` \
+  `# due to its parallelism, files created with pigz have a different checksum compared to gzip` \
+  `# since we're declaring pigz as a build dependency now, this difference doesn't matter` \
+  `# pigz is a simple drop-in replacement and everything is still deterministic` \
+  | pigz \
     `# https://wiki.debian.org/ReproducibleBuilds/TimestampsInGzipHeaders` \
     --no-name \
     --best \
