@@ -3,19 +3,7 @@
 
 
 .modal-dialog-component {
-	display: flex;
-	align-content: center;
-	justify-content: center;
-	align-items: center;
 	position: fixed;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	z-index: 10000;
-	background: fade( #000, 50% );
-	opacity: 1;
-	animation: animFadeIn .333s ease-out 0s 1 normal;
 
 	> div {
 		display: flex;
@@ -32,7 +20,6 @@
 	}
 
 	&.fadeOut {
-		&,
 		> div {
 			animation-direction: reverse;
 		}

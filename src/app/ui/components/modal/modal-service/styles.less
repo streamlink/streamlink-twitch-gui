@@ -1,0 +1,27 @@
+.modal-service-component {
+	@duration: .333s;
+
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 10000;
+	background: fade( #000, 50% );
+
+	opacity: 0;
+	visibility: hidden;
+	// active -> inactive: toggle visibility after the opacity transition has finished
+	transition: opacity @duration ease-out 0s, visibility 0s linear @duration;
+
+	&.active {
+		opacity: 1;
+		visibility: visible;
+		// inactive -> active: toggle visibility immediately
+		transition: opacity @duration ease-out 0s;
+	}
+}
