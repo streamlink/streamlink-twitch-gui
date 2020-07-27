@@ -1,5 +1,4 @@
-import { get, set, computed } from "@ember/object";
-import { scheduleOnce } from "@ember/runloop";
+import { set, computed } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
 import { vars as varsConfig } from "config";
 import { logDebug, logError } from "./logger";
@@ -18,27 +17,28 @@ import {
 const { "stream-reload-interval": streamReloadInterval } = varsConfig;
 
 
-const modelName = "stream";
-
-
 function setIfNotNull( objA, keyA, objB, keyB ) {
-	const val = get( objB, keyB );
+	const val = objB[ keyB ];
 	if ( val !== null ) {
 		set( objA, keyA, val );
 	}
 }
 
 
-export default Service.extend({
+export default Service.extend( /** @class StreamingService */ {
+	/** @type {ChatService} */
 	chat: service(),
+	/** @type {ModalService} */
 	modal: service(),
+	/** @type {SettingsService} */
 	settings: service(),
+	/** @type {DS.Store} */
 	store: service(),
 
-	active: null,
+
+	/** @type {DS.RecordArray<Stream>} */
 	model: computed(function() {
-		const store = get( this, "store" );
-		return store.peekAll( modelName );
+		return this.store.peekAll( "stream" );
 	}),
 
 
@@ -47,18 +47,22 @@ export default Service.extend({
 
 		// invalidate cache: listen for all settings changes
 		// changed properties of model relationships and nested attributes don't trigger isDirty
-		get( this, "settings" ).on( "didUpdate", clearCache );
+		this.settings.on( "didUpdate", clearCache );
 	},
 
 
+	/**
+	 * @param {TwitchStream} twitchStream
+	 * @return {boolean}
+	 */
 	closeStream( twitchStream ) {
-		const model = get( this, "model" );
-		const stream = model.findBy( "stream", twitchStream );
+		/** @type {Stream} */
+		const stream = this.model.find( ({ stream }) => stream === twitchStream );
 		if ( !stream ) { return false; }
 
 		// remove from list if the stream has already ended (eg. with an error)
 		// TODO: refactor this
-		if ( get( stream, "hasEnded" ) && !get( stream, "isDeleted" ) ) {
+		if ( !stream.isDeleted && stream.hasEnded ) {
 			stream.destroyRecord();
 		} else {
 			stream.kill();
@@ -67,33 +71,33 @@ export default Service.extend({
 		return true;
 	},
 
+	/**
+	 * @param {TwitchStream} twitchStream
+	 * @param {string?} quality
+	 * @return {Promise}
+	 */
 	async startStream( twitchStream, quality ) {
-		get( this, "modal" ).openModal( "streaming", this, {
-			error: null,
-			active: null
-		});
-
-		const store = get( this, "store" );
-		const channel = get( twitchStream, "channel" );
-		const id = get( channel, "name" );
+		const { /** @type {DS.Store} */ store } = this;
+		const { /** @type {TwitchChannel} */ channel } = twitchStream;
+		const { name: id } = channel;
+		/** @type {Stream} */
 		let stream;
 
 		// is the stream already running?
-		if ( store.hasRecordForId( modelName, id ) ) {
-			stream = store.peekRecord( modelName, id );
+		if ( store.hasRecordForId( "stream", id ) ) {
+			stream = store.peekRecord( "stream", id );
 
-			if ( quality !== undefined && get( stream, "quality" ) !== quality ) {
+			if ( quality !== undefined && stream.quality !== quality ) {
 				set( stream, "quality", quality );
 			}
 
-			set( this, "active", stream );
-			this.onModalOpened( stream );
-
+			// re-open modal streaming dialog of current stream
+			this.modal.openModal( "streaming", stream );
 			return;
 		}
 
 		// create a new Stream record
-		stream = store.createRecord( modelName, {
+		stream = store.createRecord( "stream", {
 			id,
 			channel,
 			stream: twitchStream,
@@ -104,7 +108,14 @@ export default Service.extend({
 			started: new Date()
 		});
 
-		this.onModalOpened( stream );
+		// open modal streaming dialog with the newly created stream record as context
+		this.modal.promiseModal( "streaming", stream )
+			.then( () => {
+				// clean up if the modal gets closed and the stream has ended
+				if ( !stream.isDeleted && stream.hasEnded ) {
+					stream.destroyRecord();
+				}
+			});
 
 		// override record with channel specific settings
 		await this.getChannelSettings( stream, quality );
@@ -112,17 +123,20 @@ export default Service.extend({
 		await this.launchStream( stream, true );
 	},
 
+	/**
+	 * @param {Stream} stream
+	 * @param {boolean} launchChat
+	 * @return {Promise}
+	 */
 	async launchStream( stream, launchChat ) {
 		// begin the stream launch procedure
 		try {
-			set( this, "active", stream );
-
 			await logDebug(
 				"Preparing to launch stream",
 				() => stream.toJSON({ includeId: true })
 			);
 
-			const settingsStreaming = get( this, "settings.streaming" ).toJSON();
+			const settingsStreaming = this.settings.content.streaming.toJSON();
 
 			// resolve streaming provider
 			const providerObj = await resolveProvider(
@@ -155,18 +169,20 @@ export default Service.extend({
 	},
 
 
+	/**
+	 * @param {Stream} stream
+	 * @param {boolean} launchChat
+	 */
 	onStreamSuccess( stream, launchChat ) {
-		if ( get( stream, "isWatching" ) ) {
-			return;
-		}
+		if ( stream.isWatching ) { return; }
 		set( stream, "isWatching", true );
 
 		// setup stream refresh interval
 		this.refreshStream( stream );
 
 		// automatically close modal on success
-		if ( get( this, "settings.streams.modal_close_launch" ) ) {
-			this.closeStreamModal( stream );
+		if ( this.settings.content.streams.modal_close_launch ) {
+			this.modal.closeModal( stream );
 		}
 
 		// automatically open chat
@@ -174,17 +190,15 @@ export default Service.extend({
 			// do not open chat on stream restarts
 			   launchChat
 			// require open chat setting
-			&& get( stream, "chat_open" )
+			&& stream.chat_open
 			&& (
 				// context menu not used
-				   !get( stream, "strictQuality" )
+				   !stream.strictQuality
 				// or context menu setting disabled
-				|| !get( this, "settings.streams.chat_open_context" )
+				|| !this.settings.content.streams.chat_open_context
 			)
 		) {
-			const channel = get( stream, "channel" );
-			const chat = get( this, "chat" );
-			chat.openChat( channel )
+			this.chat.openChat( stream.channel )
 				.catch( () => {} );
 		}
 
@@ -192,10 +206,12 @@ export default Service.extend({
 		this.minimize( false );
 	},
 
+	/**
+	 * @param {Stream} stream
+	 * @param {Error} error
+	 */
 	onStreamFailure( stream, error ) {
-		if ( error instanceof Aborted ) {
-			return;
-		}
+		if ( error instanceof Aborted ) { return; }
 
 		logError( error, () => stream.toJSON({ includeId: true }) );
 
@@ -208,15 +224,19 @@ export default Service.extend({
 		set( stream, "error", error );
 	},
 
+	/**
+	 * @param {Stream} stream
+	 */
 	onStreamEnd( stream ) {
-		if ( get( this, "active" ) === stream ) {
-			const error = get( stream, "error" );
-			// close modal of the active stream if it has been enabled in the settings
-			if ( !error && get( this, "settings.streams.modal_close_end" ) ) {
-				this.closeStreamModal( stream );
-			}
-		} else if ( !get( stream, "isDeleted" ) ) {
-			const error = get( stream, "error" );
+		const { error } = stream;
+
+		// close modal of the stream if it has been enabled in the settings
+		if ( !error && this.settings.content.streams.modal_close_end ) {
+			this.modal.closeModal( stream );
+		}
+
+		// clean up if streams ends, but modal is not opened
+		if ( !this.modal.hasModal( "streaming", stream ) && !stream.isDeleted ) {
 			// remove stream from store if modal is not opened
 			if ( !error || error instanceof ExitSignalError ) {
 				stream.destroyRecord();
@@ -228,31 +248,13 @@ export default Service.extend({
 	},
 
 
-	onModalOpened( stream ) {
-		get( this, "modal" ).one( "close", () => {
-			// unset the active property on the next tick (ModalDialogComponent.willDestroyElement)
-			scheduleOnce( "destroy", () => {
-				set( this, "active", null );
-
-				// remove the record from the store
-				if ( get( stream, "hasEnded" ) && !get( stream, "isDeleted" ) ) {
-					stream.destroyRecord();
-				}
-			});
-		});
-	},
-
-	closeStreamModal( stream ) {
-		if ( get( this, "active" ) !== stream ) {
-			return;
-		}
-
-		get( this, "modal" ).closeModal( this );
-	},
-
-
+	/**
+	 * @param {Stream} stream
+	 * @param {string?} quality
+	 * @return {Promise}
+	 */
 	async getChannelSettings( stream, quality ) {
-		const channel = get( stream, "channel" );
+		const { channel } = stream;
 		const channelSettings = await channel.getChannelSettings();
 
 		// override channel specific settings
@@ -270,13 +272,11 @@ export default Service.extend({
 
 
 	killAll() {
-		/** @type {Stream[]} */
-		const model = get( this, "model" );
-		model.slice().forEach( stream => stream.kill() );
+		this.model.slice().forEach( stream => stream.kill() );
 	},
 
 	minimize( restore ) {
-		switch ( get( this, "settings.gui.minimize" ) ) {
+		switch ( this.settings.content.gui.minimize ) {
 			// minimize
 			case ATTR_GUI_MINIMIZE_MINIMIZE:
 				setMinimized( !restore );
@@ -284,19 +284,21 @@ export default Service.extend({
 			// move to tray: toggle window and taskbar visibility
 			case ATTR_GUI_MINIMIZE_TRAY:
 				setVisibility( restore );
-				if ( get( this, "settings.gui.isVisibleInTaskbar" ) ) {
+				if ( this.settings.content.gui.isVisibleInTaskbar ) {
 					setShowInTaskbar( restore );
 				}
 				break;
 		}
 	},
 
+	/**
+	 * @param {Stream} stream
+	 * TODO: refactor this
+	 */
 	refreshStream( stream ) {
-		if ( stream.isDestroyed || stream.isDeleted ) {
-			return;
-		}
+		if ( stream.isDestroyed || stream.isDeleted ) { return; }
 
-		const twitchStream = get( stream, "stream" );
+		const { stream: twitchStream } = stream;
 		const reload = () => twitchStream.reload();
 		let promise = Promise.reject();
 

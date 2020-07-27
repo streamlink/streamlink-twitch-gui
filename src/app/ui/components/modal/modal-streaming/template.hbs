@@ -1,6 +1,6 @@
 <div>
 	{{#unless error}}
-		{{#if active.isPreparing}}
+		{{#if modalContext.isPreparing}}
 			{{#modal-header}}
 				{{t "modal.streaming.header.preparing"}}
 			{{/modal-header}}
@@ -16,37 +16,37 @@
 					{{t "modal.streaming.action.abort"}}
 				{{/form-button}}
 			{{/modal-footer}}
-		{{else if active.hasEnded}}
+		{{else if modalContext.hasEnded}}
 			{{#modal-header}}
-				{{t "modal.streaming.header.ended"}}{{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
+				{{t "modal.streaming.header.ended"}}{{#link-to "channel" modalContext.channel.id}}{{modalContext.channel.detailedName}}{{/link-to}}
 			{{/modal-header}}
 			{{#modal-body}}
 				{{t "modal.streaming.body.ended"}}
 			{{/modal-body}}
 		{{else}}
-			{{#if active.isLaunching}}
+			{{#if modalContext.isLaunching}}
 				{{#modal-header}}
-					{{t "modal.streaming.header.launching"}}{{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
+					{{t "modal.streaming.header.launching"}}{{#link-to "channel" modalContext.channel.id}}{{modalContext.channel.detailedName}}{{/link-to}}
 				{{/modal-header}}
 				{{#modal-body class="launching"}}
 					{{t "modal.streaming.body.launching" provider=providerName}}
 				{{/modal-body}}
-				{{modal-log class="launching" log=active.log}}
-			{{else if active.isWatching}}
+				{{modal-log class="launching" log=modalContext.log}}
+			{{else if modalContext.isWatching}}
 				{{#modal-header}}
-					{{t "modal.streaming.header.watching"}}{{#link-to "channel" active.channel.id}}{{active.channel.detailedName}}{{/link-to}}
+					{{t "modal.streaming.header.watching"}}{{#link-to "channel" modalContext.channel.id}}{{modalContext.channel.detailedName}}{{/link-to}}
 				{{/modal-header}}
 				{{#modal-body}}
-					{{#if active.stream.game}}
+					{{#if modalContext.stream.game}}
 						<div class="game">
-							<i class="fa fa-gamepad"></i> {{#link-to "games.game" active.stream.game}}{{active.stream.game}}{{/link-to}}
+							<i class="fa fa-gamepad"></i> {{#link-to "games.game" modalContext.stream.game}}{{modalContext.stream.game}}{{/link-to}}
 						</div>
 					{{/if}}
-					{{stats-row stream=active.stream withFlag=false}}
-					{{#unless active.showLog}}
-						{{embedded-links tagName="section" class="content" text=active.channel.status}}
+					{{stats-row stream=modalContext.stream withFlag=false}}
+					{{#unless modalContext.showLog}}
+						{{embedded-links tagName="section" class="content" text=modalContext.channel.status}}
 					{{else}}
-						{{modal-log log=active.log}}
+						{{modal-log log=modalContext.log}}
 					{{/unless}}
 				{{/modal-body}}
 			{{/if}}
@@ -74,8 +74,8 @@
 					}}
 					{{form-button
 						action=(action "toggleLog")
-						classNameBindings=":btn-log active.warning:btn-danger:btn-info active.isWatching::invisible"
-						icon=(if active.warning "fa-exclamation" "fa-ellipsis-v")
+						classNameBindings=":btn-log modalContext.warning:btn-danger:btn-info modalContext.isWatching::invisible"
+						icon=(if modalContext.warning "fa-exclamation" "fa-ellipsis-v")
 						title=(hotkey-title
 							context=this
 							action="log"
@@ -84,14 +84,14 @@
 					}}
 				</div>
 				<div class="button-list-horizontal-wide">
-					{{open-chat channel=active.channel}}
-					{{twitch-emotes channel=active.channel}}
-					{{share-channel channel=active.channel}}
-					{{subscribe-channel channel=active.channel}}
-					{{follow-channel channel=active.channel}}
+					{{open-chat channel=modalContext.channel}}
+					{{twitch-emotes channel=modalContext.channel}}
+					{{share-channel channel=modalContext.channel}}
+					{{subscribe-channel channel=modalContext.channel}}
+					{{follow-channel channel=modalContext.channel}}
 				</div>
 				{{#drop-down
-					value=active.quality
+					value=modalContext.quality
 					content=qualities
 					class="stream-quality-dropdown"
 					as |dropdown|
@@ -160,11 +160,11 @@
 				{{t "modal.streaming.header.error.timeout"}}
 			{{/modal-header}}
 			{{#modal-body class="error"}}
-				{{t "modal.streaming.body.error.timeout" name=active.channel.detailedName}}
+				{{t "modal.streaming.body.error.timeout" name=modalContext.channel.detailedName}}
 			{{/modal-body}}
 		{{else if isHostingError}}
 			{{#modal-header}}
-				{{t "modal.streaming.header.error.hosting" name=active.channel.detailedName}}
+				{{t "modal.streaming.header.error.hosting" name=modalContext.channel.detailedName}}
 			{{/modal-header}}
 			{{#modal-body class="error"}}
 				{{t "modal.streaming.body.error.hosting" name=error.channel}}
@@ -181,11 +181,11 @@
 				{{/if}}
 			{{/modal-body}}
 		{{/if}}
-		{{#if active.log.length}}
-			{{modal-log class="error" log=active.log}}
+		{{#if modalContext.log.length}}
+			{{modal-log class="error" log=modalContext.log}}
 		{{/if}}
 	{{/unless}}
-	{{#if active.hasEnded}}
+	{{#if modalContext.hasEnded}}
 		{{#modal-footer}}
 			<div class="button-list-horizontal-wide">
 				{{#form-button
@@ -223,7 +223,7 @@
 					}}
 						{{t "modal.streaming.action.start-hosted"}}
 					{{/form-button}}
-				{{else if active.hasEnded}}
+				{{else if modalContext.hasEnded}}
 					{{#form-button
 						action=(action "restart")
 						classNames="btn-success"
