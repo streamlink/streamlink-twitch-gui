@@ -1,35 +1,34 @@
-import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import ModalDialogComponent from "../modal-dialog/component";
 import layout from "./template.hbs";
 
 
-export default ModalDialogComponent.extend({
+export default ModalDialogComponent.extend( /** @class ModalNewreleaseComponent */ {
 	/** @type {NwjsService} */
 	nwjs: service(),
-	versioncheck: service(),
+
+	/** @type {VersioncheckService} */
+	modalContext: null,
 
 	layout,
-
-	"class": "modal-newrelease",
-
-	outdated: readOnly( "versioncheck.versionOutdated" ),
-	latest  : readOnly( "versioncheck.versionLatest" ),
+	classNames: [ "modal-newrelease-component" ],
 
 
 	actions: {
+		/** @this {ModalNewreleaseComponent} */
 		async download( success, failure ) {
 			try {
-				this.nwjs.openBrowser( this.versioncheck.downloadURL );
+				this.nwjs.openBrowser( this.modalContext.release.html_url );
 				await success();
 				this.send( "ignore" );
-			} catch ( err ) {
+			} catch ( err ) /* istanbul ignore next */ {
 				await failure( err );
 			}
 		},
 
+		/** @this {ModalNewreleaseComponent} */
 		ignore() {
-			this.versioncheck.ignoreRelease();
+			this.modalContext.ignoreRelease();
 			this.send( "close" );
 		}
 	}

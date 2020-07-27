@@ -1,9 +1,9 @@
 <div>
 	{{#modal-header}}
-		{{t "modal.newrelease.header" version=outdated}}
+		{{t "modal.newrelease.header" version=modalContext.version}}
 	{{/modal-header}}
 	{{#modal-body}}
-		{{t "modal.newrelease.body" version=latest}}
+		{{t "modal.newrelease.body" version=modalContext.release.version}}
 	{{/modal-body}}
 	{{#modal-footer classNames="button-list-horizontal"}}
 		{{#form-button
