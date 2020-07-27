@@ -3,5 +3,5 @@ import Component from "@ember/component";
 
 export default Component.extend({
 	tagName: "footer",
-	classNameBindings: [ "class" ]
+	classNames: [ "modal-footer-component" ]
 });
