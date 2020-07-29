@@ -3,11 +3,7 @@ import attr from "ember-data/attr";
 import Model from "ember-data/model";
 
 
-/**
- * @class Auth
- * @extends Model
- */
-export default Model.extend({
+export default Model.extend( /** @class Auth */ {
 	access_token: attr( "string" ),
 	scope       : attr( "string" ),
 	date        : attr( "date" ),

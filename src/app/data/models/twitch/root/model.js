@@ -1,5 +1,6 @@
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
+import { array } from "ember-data-model-fragments/attributes";
 
 
 /**
@@ -8,7 +9,7 @@ import Model from "ember-data/model";
  */
 export default Model.extend({
 	created_at: attr( "date" ),
-	scopes: attr( "" ),
+	scopes: array( "string" ),
 	updated_at: attr( "date" ),
 	user_id: attr( "number" ),
 	user_name: attr( "string" ),

@@ -52,29 +52,35 @@ export default class HttpServer {
 		});
 	}
 
-	handleRequest( request, response ) {
+	async handleRequest( request, response ) {
 		let matched = false;
 
 		// parse url
 		request.url = parse( request.url, true );
 
-		this.routes.some( route => {
+		for ( const route of this.routes ) {
 			// next route
-			if ( !route.matches( request ) ) { return false; }
+			if ( !route.matches( request ) ) {
+				continue;
+			}
 			matched = true;
 
 			// last route
-			const result = route.callback( request, response );
+			const result = await route.callback( request, response );
 			if ( result === true ) {
-				return true;
+				break;
 			}
-		});
+		}
 
 		// no route matched
 		if ( !matched ) {
 			response.statusCode = 404;
 			response.end( "404" );
+		} else if ( response.writable ) {
+			response.end();
 		}
+
+		return response;
 	}
 
 	/**

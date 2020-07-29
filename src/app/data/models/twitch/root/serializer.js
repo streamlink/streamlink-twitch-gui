@@ -10,7 +10,8 @@ export default TwitchSerializer.extend({
 		// add an ID to the record
 		resourceHash[ this.primaryKey ] = 1;
 
-		const { scopes, created_at, updated_at } = resourceHash.authorization || {};
+		const authorization = resourceHash.authorization /* istanbul ignore next */ || {};
+		const { scopes, created_at, updated_at } = authorization;
 		resourceHash.scopes = scopes;
 		resourceHash.created_at = created_at;
 		resourceHash.updated_at = updated_at;

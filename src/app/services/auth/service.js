@@ -1,9 +1,7 @@
-import { get, set, getProperties, setProperties, computed } from "@ember/object";
+import { set, setProperties, computed } from "@ember/object";
 import Evented from "@ember/object/evented";
 import { default as Service, inject as service } from "@ember/service";
-import { twitch } from "config";
-import { setFocused } from "nwjs/Window";
-import { all } from "utils/contains";
+import { twitch as twitchConfig } from "config";
 import HttpServer from "utils/node/http/HttpServer";
 import OAuthResponseRedirect from "./oauth-redirect.html";
 
@@ -19,69 +17,81 @@ const {
 		/** @type {String} */
 		"redirect-uri": redirecturi,
 		/** @type {String[]} */
-		"scope": scope
+		"scope": expectedScopes
 	}
-} = twitch;
+} = twitchConfig;
 
 const reToken = /^[a-z\d]{30}$/i;
 
 
-export default Service.extend( Evented, {
+export default Service.extend( Evented, /** @class AuthService */ {
 	/** @type {NwjsService} */
 	nwjs: service(),
+	/** @type {DS.Store} */
 	store: service(),
 
+	/** @type {Auth} */
 	session: null,
+	/** @type {HttpServer} */
 	server: null,
 
+
 	url: computed(function() {
-		let redirect = redirecturi.replace( "{server-port}", String( serverport ) );
+		const redirect = redirecturi.replace( "{server-port}", String( serverport ) );
 
 		return baseuri
 			.replace( "{client-id}", clientid )
 			.replace( "{redirect-uri}", encodeURIComponent( redirect ) )
-			.replace( "{scope}", scope.join( "+" ) );
+			.replace( "{scope}", expectedScopes.join( "+" ) );
 	}),
 
 
-	init() {
-		const store = get( this, "store" );
-		store.findOrCreateRecord( "auth" )
-			.then( session => {
-				set( this, "session", session );
+	async autoLogin() {
+		await this._loadSession();
+		const { access_token } = this.session;
 
-				// startup auto login
-				let token = get( session, "access_token" );
-				this.login( token, true )
-					.catch( () => {} );
+		// not a returning user? just trigger the "initialized" event
+		if ( !reToken.test( access_token ) ) {
+			this.trigger( "initialized" );
+			return;
+		}
 
-				// trigger event after calling login, so `isPending` can be set first
-				this.trigger( "initialized" );
-			});
+		// set session.isPending before triggering "initialized"
+		set( this.session, "isPending", true );
+		this.trigger( "initialized" );
+
+		// then perform auto-login afterwards
+		await this.login( access_token, true )
+			.catch( /* istanbul ignore next */ () => {} );
 	},
 
+	async _loadSession() {
+		/** @type {Auth} */
+		const session = await this.store.findOrCreateRecord( "auth" );
+		set( this, "session", session );
+	},
 
 
 	/**
 	 * Signout and reset session
 	 * @returns {Promise}
 	 */
-	signout() {
-		this.updateAdapter( null );
-		return this.sessionReset();
+	async signout() {
+		this._updateAdapter( null );
+		await this._sessionReset();
 	},
 
 	/**
 	 * Open OAuth url in browser
 	 * @returns {Promise}
 	 */
-	signin() {
-		if ( get( this, "server" ) ) {
-			return Promise.reject();
+	async signin() {
+		if ( this.server ) {
+			throw new Error( "An OAuth response server is already running" );
 		}
 
 		return new Promise( ( resolve, reject ) => {
-			let server = new HttpServer( serverport, 1000 );
+			const server = new HttpServer( serverport, 1000 );
 			set( this, "server", server );
 
 			server.onRequest( "GET", "/redirect", ( req, res ) => {
@@ -89,19 +99,18 @@ export default Service.extend( Evented, {
 				return true;
 			});
 
-			server.onRequest( "GET", "/token", ( req, res ) => {
-				let { access_token: token, scope } = req.url.query;
+			server.onRequest( "GET", "/token", async ( req, res ) => {
+				const { access_token, scope } = req.url.query;
 
 				// validate token and scope and keep the request open
-				this.validateOAuthResponse( token, scope )
-					.finally( () => res.end() )
-					.then( data => {
-						// send 200
-						resolve( data );
+				await this._validateOAuthResponse( access_token, scope )
+					.then( () => {
+						res.end( "OK" );
+						process.nextTick( resolve );
 					}, err => {
-						// send 500
 						res.statusCode = 500;
-						reject( err );
+						res.end( String( err ) );
+						process.nextTick( () => reject( err ) );
 					});
 
 				return true;
@@ -117,12 +126,12 @@ export default Service.extend( Evented, {
 			// shut down server and focus the application window when done
 			.finally( () => {
 				this.abortSignin();
-				setFocused( true );
+				this.nwjs.focus( true );
 			});
 	},
 
 	abortSignin() {
-		let server = get( this, "server" );
+		const { server } = this;
 		if ( !server ) { return; }
 		server.close();
 		set( this, "server", null );
@@ -130,133 +139,107 @@ export default Service.extend( Evented, {
 
 	/**
 	 * Validate the OAuth response after a login attempt
-	 * @param {String} token
-	 * @param {String} scope
+	 * @param {string} token
+	 * @param {string} scope
 	 * @returns {Promise}
 	 */
-	validateOAuthResponse( token, scope ) {
+	async _validateOAuthResponse( token, scope ) {
 		// check the returned token and validate scopes
-		return token
-		    && token.length > 0
-		    && scope
-		    && scope.length > 0
-		    && this.validateScope( scope.split( " " ) )
-			? this.login( token, false )
-			: Promise.reject();
+		if ( !reToken.test( token ) || !this._validateScope( String( scope ).split( " " ) ) ) {
+			throw new Error( "OAuth token validation error" );
+		}
+
+		return await this.login( token, false );
 	},
 
 	/**
 	 * Update the adapter and try to authenticate with the given access token
-	 * @param {String} token
-	 * @param {Boolean} isAutoLogin
+	 * @param {string} token
+	 * @param {boolean} isAutoLogin
 	 * @returns {Promise}
 	 */
-	login( token, isAutoLogin ) {
-		// no token set
-		if ( !token || !reToken.test( token ) ) {
-			return Promise.reject();
-		}
+	async login( token, isAutoLogin ) {
+		const { session } = this;
+		let success = false;
+		set( session, "isPending", true );
 
-		set( this, "session.isPending", true );
+		try {
+			// tell the twitch adapter to use the token from now on
+			this._updateAdapter( token );
 
-		// tell the twitch adapter to use the token from now on
-		this.updateAdapter( token );
+			// validate session
+			const record = await this._validateSession();
 
-		// validate session
-		return this.validateSession()
-			// logged in...
-			.then( record => {
-				let promise = isAutoLogin
-					? Promise.resolve()
-					// save auth record if this was no auto login
-					: this.sessionSave( token, record );
+			if ( !isAutoLogin ) {
+				// save auth record if this was no auto login
+				await this._sessionSave( token, record );
+			}
 
-				// also don't forget to set the user_name on the auth record (volatile)
-				return promise.then( () => {
-					let { user_id, user_name } = getProperties( record, "user_id", "user_name" );
-					let session = get( this, "session" );
-					setProperties( session, { user_id, user_name } );
-				});
-			})
-			// SUCCESS
-			.then( () => {
-				set( this, "session.isPending", false );
-				this.trigger( "login", true );
-			})
+			// also don't forget to set the user_name on the auth record (regular properties)
+			const { user_id, user_name } = record;
+			setProperties( session, { user_id, user_name } );
+			success = true;
+
+		} catch ( err ) {
 			// FAILURE: reset the adapter
-			.catch( err => {
-				this.updateAdapter( null );
-				set( this, "session.isPending", false );
-				this.trigger( "login", false );
+			this._updateAdapter( null );
 
-				return Promise.reject( err );
-			});
+			throw err;
+
+		} finally {
+			set( session, "isPending", false );
+			this.trigger( "login", success );
+		}
 	},
 
 	/**
 	 * Adapter was updated. Now check if the access token is valid.
-	 * @returns {Promise}
+	 * @returns {Promise<TwitchRoot>}
 	 */
-	validateSession() {
-		// validate token
-		const store = get( this, "store" );
+	async _validateSession() {
+		/** @type {TwitchRoot} */
+		const twitchRoot = await this.store.queryRecord( "twitch-root", {} );
+		const { valid, user_name, scopes } = twitchRoot.toJSON();
 
-		return store.queryRecord( "twitchRoot", {} )
-			.then( record => this.validateToken( record ) );
-	},
+		if ( valid !== true || !user_name || !this._validateScope( scopes ) ) {
+			throw new Error( "Invalid session" );
+		}
 
-	/**
-	 * Validate access token response
-	 * @param {TwitchRoot} record
-	 * @returns {Promise}
-	 */
-	validateToken( record ) {
-		let valid = get( record, "valid" );
-		let name = get( record, "user_name" );
-		let scopes = get( record, "scopes" );
-
-		return valid === true
-		    && name
-		    && name.length > 0
-		    && this.validateScope( scopes )
-			? Promise.resolve( record )
-			: Promise.reject( new Error( "Invalid access token" ) );
+		return twitchRoot;
 	},
 
 	/**
 	 * Received and expected scopes need to be identical
-	 * @param {String[]} returnedScope
+	 * @param {string[]} returnedScopes
 	 * @returns {boolean}
 	 */
-	validateScope( returnedScope ) {
-		return returnedScope instanceof Array
-		    && all.apply( returnedScope, scope );
+	_validateScope( returnedScopes ) {
+		return Array.isArray( returnedScopes )
+		    && expectedScopes.every( item => returnedScopes.includes( item ) );
 	},
 
 
 	/**
 	 * Update the auth record and save it
-	 * @param {String} token
-	 * @param {TwitchRoot} record
+	 * @param {string} access_token
+	 * @param {TwitchRoot} twitchRoot
 	 * @returns {Promise}
 	 */
-	sessionSave( token, record ) {
-		let session = get( this, "session" );
-		setProperties( session, {
-			access_token: token,
-			scope: get( record, "scopes" ).join( "+" ),
-			date: new Date()
-		});
+	async _sessionSave( access_token, twitchRoot ) {
+		const { session } = this;
+		const scope = twitchRoot.scopes.content.join( "+" );
+		const date = new Date();
+		setProperties( session, { access_token, scope, date } );
 
-		return session.save();
+		await session.save();
 	},
 
 	/**
 	 * Clear auth record and save it
 	 * @returns {Promise}
 	 */
-	sessionReset() {
-		let session = get( this, "session" );
+	async _sessionReset() {
+		const { session } = this;
 		setProperties( session, {
 			access_token: null,
 			scope: null,
@@ -265,16 +248,14 @@ export default Service.extend( Evented, {
 			user_name: null
 		});
 
-		return session.save();
+		await session.save();
 	},
 
-
-	updateAdapter( token ) {
-		let adapter = get( this, "store" ).adapterFor( "twitch" );
-		if ( !adapter ) {
-			throw new Error( "Adapter not found" );
-		}
-
+	/**
+	 * @param {string} token
+	 */
+	_updateAdapter( token ) {
+		const adapter = this.store.adapterFor( "twitch" );
 		set( adapter, "access_token", token );
 	}
 });

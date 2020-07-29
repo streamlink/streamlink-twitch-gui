@@ -28,6 +28,7 @@ module( "services/nwjs", function( hooks ) {
 		this.toggleMinimizedSpy = sinon.spy();
 		this.toggleMaximizedSpy = sinon.spy();
 		this.toggleShowInTaskbarSpy = sinon.spy();
+		this.setFocusedSpy = sinon.spy();
 
 		let clipboard;
 		this.clipboardGetStub = sinon.stub().callsFake( () => clipboard );
@@ -71,7 +72,8 @@ module( "services/nwjs", function( hooks ) {
 				toggleVisibility: this.toggleVisibilitySpy,
 				toggleMinimized: this.toggleMinimizedSpy,
 				toggleMaximized: this.toggleMaximizedSpy,
-				toggleShowInTaskbar: this.toggleShowInTaskbarSpy
+				toggleShowInTaskbar: this.toggleShowInTaskbarSpy,
+				setFocused: this.setFocusedSpy
 			}
 		}).default );
 	});
@@ -126,6 +128,18 @@ module( "services/nwjs", function( hooks ) {
 
 		NwjsService.maximize();
 		assert.ok( this.toggleMaximizedSpy.calledOnce, "Calls toggleMaxmized" );
+	});
+
+
+	test( "Focus", function( assert ) {
+		/** @type {NwjsService} */
+		const NwjsService = this.owner.lookup( "service:nwjs" );
+
+		NwjsService.focus();
+		assert.ok( this.setFocusedSpy.calledOnceWithExactly( true ), "Focuses window" );
+		this.setFocusedSpy.resetHistory();
+		NwjsService.focus( false );
+		assert.ok( this.setFocusedSpy.calledOnceWithExactly( false ), "Unfocuses window" );
 	});
 
 

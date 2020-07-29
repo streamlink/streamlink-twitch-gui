@@ -8,7 +8,8 @@ import {
 	toggleVisibility,
 	toggleMaximized,
 	toggleMinimized,
-	toggleShowInTaskbar
+	toggleShowInTaskbar,
+	setFocused
 } from "nwjs/Window";
 import { ATTR_GUI_INTEGRATION_TRAY } from "data/models/settings/gui/fragment";
 
@@ -81,6 +82,10 @@ export default Service.extend( /** @class NwjsService */ {
 
 	maximize() {
 		toggleMaximized();
+	},
+
+	focus( focus = true ) {
+		setFocused( focus );
 	},
 
 	close() {

@@ -1,25 +1,34 @@
 import Controller from "@ember/controller";
-import { get, set, computed } from "@ember/object";
+import { set, computed } from "@ember/object";
 import { inject as service } from "@ember/service";
 
 
 export default Controller.extend({
+	/** @type {AuthService} */
 	auth: service(),
+	/** @type {NotificationService} */
 	notification: service(),
 	/** @type {NwjsService} */
 	nwjs: service(),
+	/** @type {RouterService} */
+	router: service(),
+	/** @type {SettingsService} */
 	settings: service(),
 
 	scope: computed( "auth.session.scope", function() {
-		return get( this, "auth.session.scope" ).split( "+" ).join( ", " );
+		const { session } = this.auth;
+
+		return session && session.scope
+			? session.scope.split( "+" ).join( ", " )
+			: "";
 	}),
 
 	showTokenForm: false,
 
 	actions: {
-		signout() {
-			get( this, "auth" ).signout()
-				.then( () => this.transitionToRoute( "user.auth" ) );
+		async signout() {
+			await this.auth.signout();
+			this.router.transitionTo( "user.auth" );
 		},
 
 		async copyToken( success, failure ) {
