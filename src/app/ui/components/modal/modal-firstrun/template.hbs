@@ -1,13 +1,13 @@
 <div>
 	{{#modal-header}}
-		{{t "modal.firstrun.header" name=config.display-name}}
+		{{t "modal.firstrun.header" name=name}}
 	{{/modal-header}}
 	{{#modal-body}}
 		{{t "modal.firstrun.body"}}
 	{{/modal-body}}
 	{{#modal-footer classNames="button-list-horizontal"}}
 		{{#form-button
-			action=(action "start")
+			action=(action "close")
 			classNames="btn-primary"
 			icon="fa-arrow-left"
 		}}

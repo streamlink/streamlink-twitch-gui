@@ -2,7 +2,7 @@ dialog:
     action:
         close: Close
 changelog:
-    header: "You just upgraded to v{{version}}"
+    header: "You just upgraded to {{version}}"
     body: Do you want to see what's new and read the changelog now?
     action:
         show: Changelog

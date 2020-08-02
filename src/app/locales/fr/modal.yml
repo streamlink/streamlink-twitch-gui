@@ -2,7 +2,7 @@ dialog:
     action:
         close: Fermer
 changelog:
-    header: "Vous avez mis à jour vers la version v{{version}}"
+    header: "Vous avez mis à jour vers la version {{version}}"
     body: Voulez-vous voir ce qu'il y a de nouveau et lire le changelog maintenant ?
     action:
         show: Changelog

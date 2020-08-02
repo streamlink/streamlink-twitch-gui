@@ -16,3 +16,11 @@ body {
 	width: 1000px;
 	height: 1000px;
 }
+
+/* specific component fixes for testing */
+.modal-service-component {
+	top: unset !important;
+	right: unset !important;
+	bottom: unset !important;
+	left: unset !important;
+}

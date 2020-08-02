@@ -1,31 +1,24 @@
-import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { main as config } from "config";
+import { main as mainConfig } from "config";
 import ModalDialogComponent from "../modal-dialog/component";
 import layout from "./template.hbs";
 
 
-export default ModalDialogComponent.extend({
+export default ModalDialogComponent.extend( /** @class ModalFirstrunComponent */ {
 	/** @type {RouterService} */
 	router: service(),
-	versioncheck: service(),
 
 	layout,
+	classNames: [ "modal-firstrun-component" ],
 
-	"class": "modal-firstrun",
-
-	config,
+	name: mainConfig[ "display-name" ],
 
 
 	actions: {
+		/** @this {ModalFirstrunComponent} */
 		settings() {
 			this.router.transitionTo( "settings" );
-			this.send( "start" );
-		},
-
-		start() {
 			this.send( "close" );
-			get( this, "versioncheck" ).checkForNewRelease();
 		}
 	}
 });

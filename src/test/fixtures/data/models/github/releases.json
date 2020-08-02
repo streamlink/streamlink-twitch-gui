@@ -1,0 +1,26 @@
+{
+	"latest-older": {
+		"request": {
+			"url": "https://api.github.com/repos/streamlink/streamlink-twitch-gui/releases/latest",
+			"method": "GET",
+			"query": {}
+		},
+		"response": {
+			"id": "123456789",
+			"tag_name": "v1.0.0",
+			"html_url": "https://github.com/streamlink/streamlink-twitch-gui/releases/v1.0.0"
+		}
+	},
+	"latest-newer": {
+		"request": {
+			"url": "https://api.github.com/repos/streamlink/streamlink-twitch-gui/releases/latest",
+			"method": "GET",
+			"query": {}
+		},
+		"response": {
+			"id": "987654321",
+			"tag_name": "v1337.0.0",
+			"html_url": "https://github.com/streamlink/streamlink-twitch-gui/releases/v1337.0.0"
+		}
+	}
+}

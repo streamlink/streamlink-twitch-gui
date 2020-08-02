@@ -10,12 +10,12 @@
 	}
 
 	header,
-	.modal-body.launching,
-	.modal-body.error {
+	.modal-body-component.launching,
+	.modal-body-component.error {
 		margin-bottom: .5rem;
 	}
 
-	.modal-body.loading {
+	.modal-body-component.loading {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -36,7 +36,7 @@
 		margin-bottom: .5em;
 	}
 
-	header,
+	.modal-header-component,
 	.game {
 		> a {
 			text-decoration: none !important;
@@ -58,7 +58,7 @@
 		overflow: auto;
 	}
 
-	.modal-log {
+	.modal-log-component {
 		height: @content-height;
 		overflow: auto;
 		font-size: .8em;
@@ -77,7 +77,7 @@
 		}
 	}
 
-	footer {
+	.modal-footer-component {
 		justify-content: space-between;
 	}
 

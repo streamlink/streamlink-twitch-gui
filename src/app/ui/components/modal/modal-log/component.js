@@ -9,7 +9,7 @@ export default Component.extend({
 	layout,
 
 	tagName: "section",
-	classNames: [ "modal-log" ],
+	classNames: [ "modal-log-component" ],
 
 	log: computed(function() {
 		return [];

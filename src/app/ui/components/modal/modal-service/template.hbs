@@ -1,1 +1,9 @@
-{{#if modal.isModalOpened}}{{component modal.modal}}{{/if}}
+{{#if modal.isModalOpened}}
+	{{#with modal.modals.lastObject as |modal|}}
+		{{component
+			(concat "modal-" modal.name)
+			modalName=modal.name
+			modalContext=modal.context
+		}}
+	{{/with}}
+{{/if}}
