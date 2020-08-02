@@ -24,7 +24,7 @@ function isWindowFullyVisible() {
 	return screens.some( screen => {
 		const { bounds: { x: sX, y: sY, width: sWidth, height: sHeight } } = screen;
 
-		// substract screen offset from window position
+		// subtract screen offset from window position
 		const posX = wX - sX;
 		const posY = wY - sY;
 
@@ -71,7 +71,7 @@ function onMove( windowRecord, x, y ) {
 	// double check on Windows: NW.js moves the window to
 	// [    -8,    -8] when maximizing...
 	// [-32000,-32000] when minimizing...
-	if ( isWin && ( x === -8 && y === -8 || x === -32000 && x === -32000 ) ) { return; }
+	if ( isWin && ( x === -8 && y === -8 || x === -32000 && y === -32000 ) ) { return; }
 	// validate window position
 	if ( !isWindowFullyVisible() ) { return; }
 
@@ -133,8 +133,8 @@ export default async function( application ) {
 	nwWindow.on(   "move", debounceEvent( windowRecord, onMove ) );
 
 	// listen for screen changes
-	nwScreen.on( "displayBoundsChanged", () => resetWindowIfOutOfBounds( windowRecord ) );
+	nwScreen.on( "displayBoundsChanged", () => resetWindowIfOutOfBounds() );
 
 	// validate restored window position and reset if it's invalid
-	await resetWindowIfOutOfBounds( windowRecord );
+	await resetWindowIfOutOfBounds();
 }
