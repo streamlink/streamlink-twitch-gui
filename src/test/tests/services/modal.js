@@ -1,19 +1,24 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
+import { triggerEvent } from "event-utils";
 import { render } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
 
-import Component from "@ember/component";
 import { run } from "@ember/runloop";
-import { inject as service } from "@ember/service";
 
 import ModalService from "services/modal";
 import ModalServiceComponent from "ui/components/modal/modal-service/component";
+import modalDialogComponentInjector
+	from "inject-loader?ui/components/-mixins/hotkey!ui/components/modal/modal-dialog/component";
 
 
 module( "services/modal", function( hooks ) {
+	const { default: ModalDialogComponent } = modalDialogComponentInjector({
+		"ui/components/-mixins/hotkey": {}
+	});
+
 	setupRenderingTest( hooks, {
 		resolver: buildResolver({
 			ModalServiceComponent,
@@ -22,13 +27,14 @@ module( "services/modal", function( hooks ) {
 	});
 
 	hooks.beforeEach(function() {
-		this.owner.register( "component:modal-foo", Component.extend({
-			modal: service(),
+		const FakeModalDialogComponent = ModalDialogComponent.extend({
 			layout: hbs`[{{this.modalName}}:{{this.modalContext.value}}]`
+		});
+		this.owner.register( "component:modal-foo", FakeModalDialogComponent.extend({
+			classNames: [ "modal-foo-component" ]
 		}) );
-		this.owner.register( "component:modal-bar", Component.extend({
-			modal: service(),
-			layout: hbs`[{{this.modalName}}:{{this.modalContext.value}}]`
+		this.owner.register( "component:modal-bar", FakeModalDialogComponent.extend({
+			classNames: [ "modal-bar-component" ]
 		}) );
 
 		/** @type {ModalService} */
@@ -354,33 +360,71 @@ module( "services/modal", function( hooks ) {
 	test( "Rendering test", async function( assert ) {
 		const { /** @type {ModalService} */ modalService } = this;
 
-		const contextFoo = { value: 1 };
-		const contextBar = { value: 2 };
+		const contextFooOne = { value: 1 };
+		const contextFooTwo = { value: 2 };
+		const contextBar = { value: 3 };
 
-		const getContent = () => this.element.innerText.replace( /\s+/g, "" );
+		const getContent = () =>
+			Array.from( this.element.querySelectorAll( ".modal-dialog-component:not(.fadeOut)" ) )
+				.map( elem => elem.innerText.replace( /\s+/g, "" ) )
+				.join( "" );
 
 		await render( hbs`{{modal-service}}` );
 		const wrapper = this.element.querySelector( ".modal-service-component" );
+		const replaceChildSpy = sinon.spy( wrapper, "replaceChild" );
 
+		// wrapper
 		assert.ok( wrapper instanceof HTMLElement, "Renders wrapper" );
 		assert.notOk( wrapper.classList.contains( "active" ), "Is inactive" );
 		assert.strictEqual( getContent(), "", "Doesn't show a modal dialog initially" );
 
-		run( () => modalService.openModal( "foo", contextFoo ) );
-		assert.ok( modalService.isModalOpened, "The foo modal is opened" );
+		// new foo 1 modal
+		run( () => modalService.openModal( "foo", contextFooOne ) );
+		assert.ok( modalService.isModalOpened, "A modal is opened now" );
 		assert.ok( wrapper.classList.contains( "active" ), "Is active now" );
-		assert.strictEqual( getContent(), "[foo:1]", "Shows the foo modal" );
 
+		// foo 1 rendering
+		const modalFooOne = wrapper.querySelector( ".modal-dialog-component" );
+		assert.ok( modalFooOne instanceof HTMLElement, "Renders modal dialog" );
+		assert.ok( modalFooOne.classList.contains( "modal-foo-component" ), "Has the right class" );
+		assert.strictEqual( getContent(), "[foo:1]", "Shows the foo modal one" );
+
+		// new foo 2 modal
+		run( () => modalService.openModal( "foo", contextFooTwo ) );
+		assert.ok( modalService.isModalOpened, "A modal is still opened" );
+		assert.ok( wrapper.classList.contains( "active" ), "Is still active" );
+
+		// foo 2 rendering and re-inserting into DOM
+		const modalFooTwo = wrapper.querySelector( ".modal-dialog-component" );
+		assert.ok( modalFooTwo instanceof HTMLElement, "Renders modal dialog" );
+		assert.ok( modalFooTwo.classList.contains( "modal-foo-component" ), "Has the right class" );
+		assert.strictEqual( getContent(), "[foo:2]", "Shows the foo modal two" );
+		assert.strictEqual( modalFooOne, modalFooTwo, "Modals with same name share same element" );
+		assert.notOk( wrapper.querySelector( ".fadeOut" ), "Doesn't create a fadeOut clone" );
+		assert.ok( replaceChildSpy.calledOnce, "Re-inserts element on context change" );
+		replaceChildSpy.resetHistory();
+
+		// new bar modal
 		run( () => modalService.openModal( "bar", contextBar ) );
+		const modalBar = wrapper.querySelector( ".modal-dialog-component:not(.fadeOut)" );
+		assert.ok( modalBar instanceof HTMLElement, "Renders modal dialog" );
+		assert.ok( modalBar.classList.contains( "modal-bar-component" ), "Has the right class" );
+		assert.strictEqual( getContent(), "[bar:3]", "Shows bar modal now" );
+		assert.notOk( replaceChildSpy.called, "Doesn't re-insert element on name change" );
+
+		// foo 2 clone
+		const modalFooOneClone = wrapper.querySelector( ".modal-dialog-component.fadeOut" );
+		assert.ok( modalFooOneClone instanceof HTMLElement, "Foo two has a fadeOut clone" );
+		await triggerEvent( modalFooOneClone, "webkitAnimationEnd" );
+		assert.notOk( modalFooOneClone.isConnected, "Clone gets removed from DOM after animation" );
+
+		// close foo modals
+		run( () => modalService.closeModal( null, "foo" ) );
 		assert.ok( modalService.isModalOpened, "A modal is still opened" );
 		assert.ok( wrapper.classList.contains( "active" ), "Is still active" );
-		assert.strictEqual( getContent(), "[foo:1][bar:2]", "Shows both the foo and bar modals" );
+		assert.strictEqual( getContent(), "[bar:3]", "Only shows the bar modal" );
 
-		run( () => modalService.closeModal( contextFoo ) );
-		assert.ok( modalService.isModalOpened, "A modal is still opened" );
-		assert.ok( wrapper.classList.contains( "active" ), "Is still active" );
-		assert.strictEqual( getContent(), "[bar:2]", "Only shows the bar modal" );
-
+		// close bar modal
 		run( () => modalService.closeModal( contextBar ) );
 		assert.notOk( modalService.isModalOpened, "No modal is opened anymore" );
 		assert.notOk( wrapper.classList.contains( "active" ), "Is inactive now" );

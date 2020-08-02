@@ -26,10 +26,23 @@ export default Component.extend( HotkeyMixin, {
 	modalContext: null,
 
 	/*
+	 * Since Ember will try to re-use the same DOM element when only the modalContext changes and
+	 * the modalName stays the same (see modal-server-component), the open/close animation
+	 * won't play here. Simply re-insert the DOM node on modalContext change to fix this.
+	 */
+	didInsertElement() {
+		this._super( ...arguments );
+		this.addObserver( "modalContext", this, () => {
+			const { element } = this;
+			element.parentNode.replaceChild( element, element );
+		});
+	},
+
+	/*
 	 * This will be called synchronously, so we need to copy the element and animate it instead
 	 */
 	willDestroyElement() {
-		const element = this.element;
+		const { element } = this;
 		let clone = element.cloneNode( true );
 		clone.classList.add( "fadeOut" );
 		element.parentNode.appendChild( clone );

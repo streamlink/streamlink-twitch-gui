@@ -1,9 +1,9 @@
 {{#if modal.isModalOpened}}
-	{{#each modal.modals as |modal|}}
+	{{#with modal.modals.lastObject as |modal|}}
 		{{component
 			(concat "modal-" modal.name)
 			modalName=modal.name
 			modalContext=modal.context
 		}}
-	{{/each}}
+	{{/with}}
 {{/if}}
