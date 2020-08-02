@@ -42,7 +42,7 @@ module.exports = async function( grunt, files, options, dryRun ) {
 		for ( const file of files.sort() ) {
 			const basename = PATH.basename( file );
 			const stats = await FS.promises.stat( file );
-			if ( !stats.isFile() || stats.mode & 0o444 === 0 ) { continue; }
+			if ( !stats.isFile() || ( stats.mode & 0o444 ) === 0 ) { continue; }
 			streams.set( basename, {
 				file,
 				size: stats.size,
