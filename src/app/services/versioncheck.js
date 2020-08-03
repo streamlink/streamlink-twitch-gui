@@ -1,12 +1,15 @@
 import { set } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
 import semver from "semver";
-import { update as updateConfig } from "config";
+import { main as mainConfig, update as updateConfig } from "config";
+import { version as buildVersion } from "metadata";
 import { manifest } from "nwjs/App";
 import { argv, ARG_VERSIONCHECK } from "nwjs/argv";
+import { isDebug, isDevelopment } from "nwjs/debug";
 
 
-const { "check-again": checkAgain } = updateConfig;
+const { "display-name": displayName } = mainConfig;
+const { "check-again": checkAgain, "show-debug-message": showDebugMessage } = updateConfig;
 const { version } = manifest;
 
 
@@ -26,6 +29,7 @@ export default Service.extend( /** @class VersioncheckService */ {
 
 	async check() {
 		const existinguser = await this._getRecord();
+		await this._showDebugMessage();
 		await this._check( existinguser );
 	},
 
@@ -64,6 +68,17 @@ export default Service.extend( /** @class VersioncheckService */ {
 		set( this, "model", record );
 
 		return existinguser;
+	},
+
+	async _showDebugMessage() {
+		if ( !isDebug || isDevelopment ) { return; }
+
+		const { model } = this;
+		if ( Date.now() < model.showdebugmessage ) { return; }
+
+		await this.modal.promiseModal( "debug", { buildVersion, displayName }, null, 1000 );
+		set( model, "showdebugmessage", Date.now() + showDebugMessage );
+		await model.save();
 	},
 
 	/**

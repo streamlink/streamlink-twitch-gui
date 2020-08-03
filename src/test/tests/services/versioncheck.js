@@ -13,7 +13,7 @@ import Service from "@ember/service";
 import Adapter from "ember-data/adapter";
 
 import versioncheckServiceInjector
-	from "inject-loader?nwjs/App&nwjs/argv!services/versioncheck";
+	from "inject-loader?metadata&nwjs/App&nwjs/argv&nwjs/debug!services/versioncheck";
 import Versioncheck from "data/models/versioncheck/model";
 import GithubReleases from "data/models/github/releases/model";
 import GithubReleasesAdapter from "data/models/github/releases/adapter";
@@ -23,6 +23,7 @@ import ModalServiceComponent from "ui/components/modal/modal-service/component";
 import ModalHeaderComponent from "ui/components/modal/modal-header/component";
 import ModalBodyComponent from "ui/components/modal/modal-body/component";
 import ModalFooterComponent from "ui/components/modal/modal-footer/component";
+import ModalDebugComponent from "ui/components/modal/modal-debug/component";
 import ModalFirstrunComponent from "ui/components/modal/modal-firstrun/component";
 import ModalChangelogComponent from "ui/components/modal/modal-changelog/component";
 import ModalNewreleaseComponent from "ui/components/modal/modal-newrelease/component";
@@ -42,6 +43,7 @@ module( "services/versioncheck", function( hooks ) {
 			ModalHeaderComponent,
 			ModalBodyComponent,
 			ModalFooterComponent,
+			ModalDebugComponent,
 			ModalFirstrunComponent,
 			ModalChangelogComponent,
 			ModalNewreleaseComponent,
@@ -66,6 +68,8 @@ module( "services/versioncheck", function( hooks ) {
 
 		setupStore( this.owner );
 
+		this.isDebug = this.isDevelopment = false;
+
 		this.argVersioncheck = true;
 		this.openBrowserSpy = sinon.spy();
 		this.transitionToSpy = sinon.spy();
@@ -89,6 +93,9 @@ module( "services/versioncheck", function( hooks ) {
 		};
 
 		const { default: VersioncheckService } = versioncheckServiceInjector({
+			"metadata": {
+				version: "v13.3.7.g01234567.dirty"
+			},
 			"nwjs/App": {
 				manifest: {
 					version: "1.0.0"
@@ -100,6 +107,14 @@ module( "services/versioncheck", function( hooks ) {
 					get [ ARG_VERSIONCHECK ]() {
 						return context.argVersioncheck;
 					}
+				}
+			},
+			"nwjs/debug": {
+				get isDebug() {
+					return context.isDebug;
+				},
+				get isDevelopment() {
+					return context.isDevelopment;
 				}
 			}
 		});
@@ -151,7 +166,8 @@ module( "services/versioncheck", function( hooks ) {
 			{
 				id: "1",
 				version: "1.0.0",
-				checkagain: 0
+				checkagain: 0,
+				showdebugmessage: 0
 			}
 		);
 		assert.ok( modal, "Shows firstrun modal" );
@@ -429,5 +445,128 @@ module( "services/versioncheck", function( hooks ) {
 			"Updates the checkagain versioncheck attribute"
 		);
 		assert.ok( this.versioncheckUpdateRecordStub.calledOnce, "Updates versioncheck record" );
+	});
+
+	test( "Debug modal dialog - production build", async function( assert ) {
+		/** @type {VersioncheckService} */
+		const VersioncheckService = this.owner.lookup( "service:versioncheck" );
+		const continueStub = sinon.stub( VersioncheckService, "_check" ).resolves();
+		await render( hbs`{{modal-service}}` );
+
+		this.versioncheckFindRecordStub.resolves( this.createFakeRecord( "versioncheck", {
+			id: "1",
+			showdebugmessage: 0
+		}) );
+
+		const promise = run( () => VersioncheckService.check() );
+		assert.notOk(
+			this.element.querySelector( ".modal-debug-component" ),
+			"No debug modal in development mode"
+		);
+		await promise;
+		assert.notOk( this.versioncheckUpdateRecordStub.called, "Doesn't update model" );
+		assert.ok( continueStub.calledOnce, "Continues normally if no debug modal is shown" );
+	});
+
+	test( "Debug modal dialog - development build", async function( assert ) {
+		/** @type {VersioncheckService} */
+		const VersioncheckService = this.owner.lookup( "service:versioncheck" );
+		const continueStub = sinon.stub( VersioncheckService, "_check" ).resolves();
+		await render( hbs`{{modal-service}}` );
+
+		this.isDebug = this.isDevelopment = true;
+		this.versioncheckFindRecordStub.resolves( this.createFakeRecord( "versioncheck", {
+			id: "1",
+			showdebugmessage: 0
+		}) );
+
+		const promise = run( () => VersioncheckService.check() );
+		assert.notOk(
+			this.element.querySelector( ".modal-debug-component" ),
+			"No debug modal in development mode"
+		);
+		await promise;
+		assert.notOk( this.versioncheckUpdateRecordStub.called, "Doesn't update model" );
+		assert.ok( continueStub.calledOnce, "Continues normally if no debug modal is shown" );
+	});
+
+	test( "Debug modal dialog - debug build - threshold not reached", async function( assert ) {
+		/** @type {VersioncheckService} */
+		const VersioncheckService = this.owner.lookup( "service:versioncheck" );
+		const continueStub = sinon.stub( VersioncheckService, "_check" ).resolves();
+		await render( hbs`{{modal-service}}` );
+
+		this.isDebug = true;
+		this.isDevelopment = false;
+		this.versioncheckFindRecordStub.resolves( this.createFakeRecord( "versioncheck", {
+			id: "1",
+			showdebugmessage: Date.now() + 1
+		}) );
+
+		const promise = run( () => VersioncheckService.check() );
+		assert.notOk(
+			this.element.querySelector( ".modal-debug-component" ),
+			"No debug modal in development mode"
+		);
+		await promise;
+		assert.notOk( this.versioncheckUpdateRecordStub.called, "Doesn't update model" );
+		assert.ok( continueStub.calledOnce, "Continues normally if no debug modal is shown" );
+	});
+
+	test( "Debug modal dialog - debug build - show modal", async function( assert ) {
+		/** @type {VersioncheckService} */
+		const VersioncheckService = this.owner.lookup( "service:versioncheck" );
+		const continueStub = sinon.stub( VersioncheckService, "_check" ).resolves();
+		await render( hbs`{{modal-service}}` );
+
+		this.isDebug = true;
+		this.isDevelopment = false;
+		this.versioncheckFindRecordStub.resolves( this.createFakeRecord( "versioncheck", {
+			id: "1",
+			showdebugmessage: 0
+		}) );
+
+		const promise = run( () => VersioncheckService.check() );
+		const obj = {};
+
+		assert.strictEqual(
+			await Promise.race([
+				promise,
+				new Promise( resolve => process.nextTick( resolve ) ).then( () => obj )
+			]),
+			obj,
+			"Check is still pending"
+		);
+
+		const modal = this.element.querySelector( ".modal-debug-component" );
+		assert.ok( modal instanceof HTMLElement, "Shows debug modal" );
+		assert.strictEqual(
+			modal.querySelector( ".modal-header-component" ).textContent.trim(),
+			"modal.debug.header{\"version\":\"v13.3.7.g01234567.dirty\"}",
+			"Modal has the correct header text"
+		);
+		assert.strictEqual(
+			modal.querySelector( ".modal-body-component" ).textContent.trim(),
+			"modal.debug.body{\"name\":\"Streamlink Twitch GUI\"}",
+			"Modal has the correct body text"
+		);
+		const btn = modal.querySelector( ".form-button-component.btn-primary" );
+		assert.strictEqual(
+			btn.textContent.trim(),
+			"modal.debug.action.close",
+			"Close button has the correct text"
+		);
+		assert.notOk( this.versioncheckUpdateRecordStub.called, "Hasn't saved model yet" );
+		assert.notOk( continueStub.called, "Doesn't continue with version check yet" );
+
+		await click( btn );
+		await triggerEvent( btn, "webkitAnimationEnd" );
+		assert.strictEqual(
+			VersioncheckService.model.showdebugmessage,
+			Date.now() + 86400000,
+			"Updates the showdebugmessage versioncheck attribute"
+		);
+		assert.ok( this.versioncheckUpdateRecordStub.calledOnce, "Has saved model" );
+		assert.ok( continueStub.calledOnce, "Continues normally when modal gets closed" );
 	});
 });
