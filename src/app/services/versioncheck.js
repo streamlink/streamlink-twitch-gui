@@ -25,17 +25,8 @@ export default Service.extend( /** @class VersioncheckService */ {
 
 
 	async check() {
-		try {
-			/** @type {Versioncheck} */
-			const record = await this.store.findRecord( "versioncheck", 1 );
-			// versioncheck record found: existing user
-			set( this, "model", record );
-			await this._notFirstRun();
-
-		} catch ( e ) {
-			// versioncheck record not found: new user
-			await this._firstRun();
-		}
+		const existinguser = await this._getRecord();
+		await this._check( existinguser );
 	},
 
 	async ignoreRelease() {
@@ -46,7 +37,46 @@ export default Service.extend( /** @class VersioncheckService */ {
 	},
 
 
-	async _notFirstRun() {
+	async _getRecord() {
+		const { store, version } = this;
+
+		/** @type {Versioncheck} */
+		let record = null;
+		let existinguser = false;
+
+		try {
+			record = await store.findRecord( "versioncheck", 1 );
+			// versioncheck record found: existing user
+			existinguser = true;
+
+		} catch ( e ) {
+			// unload automatically created record and create a new one instead
+			record = store.peekRecord( "versioncheck", 1 );
+			/* istanbul ignore next */
+			if ( record ) {
+				store.unloadRecord( record );
+			}
+
+			record = store.createRecord( "versioncheck", { id: 1, version } );
+			await record.save();
+		}
+
+		set( this, "model", record );
+
+		return existinguser;
+	},
+
+	/**
+	 * @param {boolean} existinguser
+	 * @return {Promise}
+	 */
+	async _check( existinguser ) {
+		if ( !existinguser ) {
+			// show first run modal dialog
+			this._openModalAndCheckForNewRelease( "firstrun" );
+			return;
+		}
+
 		const { model, version } = this;
 		// is previous version string empty or lower than current version?
 		if ( !model.version || semver.lt( model.version, version ) ) {
@@ -64,28 +94,6 @@ export default Service.extend( /** @class VersioncheckService */ {
 
 		// go on with new version check if no modal was opened
 		await this._checkForNewRelease();
-	},
-
-	async _firstRun() {
-		const { store, version } = this;
-
-		// unload automatically created record and create a new one instead
-		/** @type {Versioncheck} */
-		let record = store.peekRecord( "versioncheck", 1 );
-		/* istanbul ignore next */
-		if ( record ) {
-			store.unloadRecord( record );
-		}
-
-		record = store.createRecord( "versioncheck", {
-			id: 1,
-			version
-		});
-		await record.save();
-		set( this, "model", record );
-
-		// show first run modal dialog
-		this._openModalAndCheckForNewRelease( "firstrun" );
 	},
 
 	_openModalAndCheckForNewRelease( name ) {
