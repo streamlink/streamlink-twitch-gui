@@ -6,8 +6,8 @@ import process from "nwjs/process";
 import { logdir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
 import clearfolder from "utils/node/fs/clearfolder";
+import { appendFile } from "fs/promises";
 import { join } from "path";
-import { appendFile as fsAppendFile } from "fs";
 import { promisify } from "util";
 
 
@@ -39,12 +39,6 @@ const idxLevel = LOG_LEVELS.indexOf( level );
 export const LISTEN_TO_ERROR = idxLevel >= LOG_LEVELS.indexOf( LOG_LEVEL_ERROR );
 export const LISTEN_TO_DEBUG = idxLevel >= LOG_LEVELS.indexOf( LOG_LEVEL_DEBUG );
 
-
-/**
- * @type {Function}
- * @returns {Promise}
- */
-const appendFile = promisify( fsAppendFile );
 
 /**
  * @type {Function}
