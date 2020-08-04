@@ -6,12 +6,13 @@ import process from "nwjs/process";
 import { logdir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
 import clearfolder from "utils/node/fs/clearfolder";
-import { appendFile } from "fs/promises";
+import { promises as fsPromises } from "fs";
 import { join } from "path";
 import { promisify } from "util";
 
 
 const { filename, maxAgeDays } = logConfig;
+const { appendFile } = fsPromises;
 
 
 export const LOG_LEVEL_NONE = "none";

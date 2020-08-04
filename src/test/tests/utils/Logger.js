@@ -70,7 +70,11 @@ module( "utils/Logger", function( hooks ) {
 				"utils/node/platform": { logdir: "/logs" },
 				"utils/node/fs/mkdirp": this.mkdirpStub,
 				"utils/node/fs/clearfolder": this.clearfolderStub,
-				"fs/promises": { appendFile: this.appendFileStub },
+				"fs": {
+					promises: {
+						appendFile: this.appendFileStub
+					}
+				},
 				"path": path
 			});
 
