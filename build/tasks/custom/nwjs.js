@@ -1,11 +1,7 @@
-const NwBuilder = require( "nw-builder" );
-
-
 module.exports = function( grunt ) {
-	const task = "nwjs";
-	const descr = "Build the NW.js application";
+	const NwBuilder = require( "nw-builder" );
 
-	grunt.registerMultiTask( task, descr, function() {
+	function taskNwjs() {
 		const done = this.async();
 		const options = this.options();
 
@@ -20,6 +16,11 @@ module.exports = function( grunt ) {
 				grunt.log.ok( "NW.js application created." );
 				done();
 			}, grunt.fail.fatal );
-	});
+	}
 
+	grunt.registerMultiTask(
+		"nwjs",
+		"Create an NW.js build of the application",
+		taskNwjs
+	);
 };

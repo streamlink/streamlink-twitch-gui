@@ -1,23 +1,29 @@
-const platforms = require( "../common/platforms" );
-const tasks = require( "../configs/compile" );
-
-
 module.exports = function( grunt ) {
-	const task = "compile";
-	const descr = `Compile the built application. ${platforms.getList()}`;
+	const platforms = require( "../common/platforms" );
 
-	grunt.task.registerTask( task, descr, function() {
-		platforms.getPlatforms( arguments )
-			.forEach( platform => {
-				grunt.task.run([
-					// run these tasks before the compilation
-					...( tasks[ platform ].before || [] ),
-					// the actual compile tasks
-					`nwjs:${platform}`,
-					// run these tasks after the compilation
-					...( tasks[ platform ].after || [] )
-				]);
-			});
-	});
+	function taskCompile() {
+		const options = this.options();
+		const { hasOwnProperty } = {};
 
+		for ( const platform of platforms.getPlatforms( ...this.args ) ) {
+			if ( !hasOwnProperty.call( options, platform ) ) {
+				throw new Error( `Missing compile option for platform: ${platform}` );
+			}
+
+			grunt.task.run([
+				// run these tasks before the compilation
+				...( options[ platform ].before || [] ),
+				// the actual compile tasks
+				`nwjs:${platform}`,
+				// run these tasks after the compilation
+				...( options[ platform ].after || [] )
+			]);
+		}
+	}
+
+	grunt.task.registerTask(
+		"compile",
+		`Compile the built application. ${platforms.getList()}`,
+		taskCompile
+	);
 };

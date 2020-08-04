@@ -1,36 +1,32 @@
-const platforms = require( "../common/platforms" );
-const hash = require( "../common/hash" );
-const config = require( "../configs/dist" );
-const { writeFile } = require( "fs" );
-const { resolve: r, basename, relative } = require( "path" );
-
-
-function checkTarget( target ) {
-	return config.hasOwnProperty( target )
-	    && config[ target ].hasOwnProperty( "checksum" );
-}
-
-
 module.exports = function( grunt ) {
-	const name = "checksum";
-	const descr = `Create a list of checksums. ${platforms.getList()}`;
+	const hash = require( "../common/hash" );
+	const { options: distOptions } = require( "../configs/dist" );
+	const { writeFile: fsWriteFile } = require( "fs" );
+	const { resolve: r, basename } = require( "path" );
+	const { promisify } = require( "util" );
 
-	grunt.registerTask( name, descr, function() {
+	const writeFile = promisify( fsWriteFile );
+	const { hasOwnProperty } = {};
+
+	function taskChecksum() {
 		const done = this.async();
-		const options = this.options();
-
-		/** @type {string[]} target */
+		const { algorithm, encoding, dest } = this.options();
 		const targets = this.args;
-
-		// targets need to be set explicitly
-		if ( !targets.every( checkTarget ) ) {
-			grunt.fail.fatal( "Invalid dist task parameters" );
-		}
+		const checksumFile = r( dest );
 
 		const promises = targets
-			.map( target => grunt.config.process( config[ target ].checksum ) )
+			.map( target => {
+				if (
+					   !hasOwnProperty.call( distOptions, target )
+					|| !hasOwnProperty.call( distOptions[ target ], "checksum" )
+				) {
+					grunt.fail.fatal( `Invalid dist task parameter: ${target}` );
+				}
+
+				return grunt.config.process( distOptions[ target ].checksum );
+			})
 			.sort()
-			.map( file => hash( file, options.algorithm, options.encoding )
+			.map( file => hash( file, algorithm, encoding )
 				.then( hash => ({
 					file: basename( file ),
 					hash
@@ -42,19 +38,17 @@ module.exports = function( grunt ) {
 				.map( item => `${item.hash}  ${item.file}` )
 				.join( "\n" )
 			)
-			.then( checksums => new Promise(function( resolve, reject ) {
-				const path = r( options.dest );
-				writeFile( path, `${checksums}\n`, err => {
-					if ( err ) {
-						reject( err );
-					} else {
-						const dest = relative( ".", path );
-						grunt.log.ok( `Checksums written to ${dest}` );
-						grunt.log.writeln( checksums );
-						resolve();
-					}
-				});
-			}) )
+			.then( async checksums => {
+				await writeFile( checksumFile, `${checksums}\n` );
+				grunt.log.ok( `Checksums written to ${checksumFile}` );
+				grunt.log.writeln( checksums );
+			})
 			.then( done, grunt.fail.fatal );
-	});
+	}
+
+	grunt.registerTask(
+		"checksum",
+		"Create a list of checksums.",
+		taskChecksum
+	);
 };

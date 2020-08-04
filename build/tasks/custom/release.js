@@ -1,16 +1,19 @@
-const platforms = require( "../common/platforms" );
-
-
 module.exports = function( grunt ) {
-	const task = "release";
-	const descr = `Build and compile the application. ${platforms.getList()}`;
+	const platforms = require( "../common/platforms" );
 
-	grunt.task.registerTask( task, descr, function() {
+	function taskRelease() {
 		grunt.task.run([
 			// build
 			"build:prod",
 			// compile
-			...platforms.getTasks( "compile", arguments )
+			...platforms.getPlatforms( ...this.args )
+				.map( platform => `compile:${platform}` )
 		]);
-	});
+	}
+
+	grunt.task.registerTask(
+		"release",
+		`Build and compile the application. ${platforms.getList()}`,
+		taskRelease
+	);
 };

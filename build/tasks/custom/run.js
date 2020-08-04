@@ -1,16 +1,12 @@
-const NwBuilder = require( "nw-builder" );
-const platforms = require( "../common/platforms" );
-const { resolve: r } = require( "path" );
-
-
 module.exports = function( grunt ) {
-	const task = "run";
-	const descr = "Run NW.js";
+	const NwBuilder = require( "nw-builder" );
+	const platforms = require( "../common/platforms" );
+	const { resolve: r } = require( "path" );
 
-	grunt.task.registerMultiTask( task, descr, function() {
+	function taskRun() {
 		const done = this.async();
 		const options = this.options({
-			platforms: platforms.getPlatforms( [] )
+			platforms: [ platforms.getPlatform() ]
 		});
 
 		options.files = r( process.cwd(), this.data.src );
@@ -22,5 +18,11 @@ module.exports = function( grunt ) {
 		nw.on( "stderr", grunt.log.writeln.bind( grunt.log ) );
 
 		nw.run().then( done, grunt.fail.fatal );
-	});
+	}
+
+	grunt.task.registerMultiTask(
+		"run",
+		"Run the previously built NW.js application",
+		taskRun
+	);
 };

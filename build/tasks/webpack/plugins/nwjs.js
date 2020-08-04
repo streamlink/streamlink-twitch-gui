@@ -5,7 +5,7 @@ class NwjsPlugin {
 	constructor( nwOptions = {}, options = {} ) {
 		this.nwOptions = Object.assign( {}, nwOptions, {
 			flavor: "sdk",
-			platforms: platforms.getPlatforms( [] )
+			platforms: [ platforms.getPlatform() ]
 		});
 		this.options = Object.assign({
 			rerunOnExit: true,

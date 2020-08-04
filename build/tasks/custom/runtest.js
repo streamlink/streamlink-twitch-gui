@@ -4,14 +4,11 @@ const cdpQUnit = require( "../common/cdp/qunit" );
 const cdpCoverage = require( "../common/cdp/coverage" );
 
 const nwjsTaskOptions = require( "../configs/nwjs" ).options;
-const currentPlatform = require( "../common/platforms" ).getPlatforms( [] );
+const platforms = require( "../common/platforms" );
 
 
 module.exports = function( grunt ) {
-	const task = "runtest";
-	const descr = "Run the tests in NW.js";
-
-	grunt.registerTask( task, descr, function() {
+	grunt.registerTask( "runtest", "Run the tests in NW.js", function() {
 		const isCI = process.env[ "CI" ] === "true";
 		const isCoverage = !!this.flags.coverage;
 
@@ -32,7 +29,7 @@ module.exports = function( grunt ) {
 			argv.unshift( "--disable-gpu", "--no-sandbox" );
 		}
 		const nwjsOptions = Object.assign( {}, grunt.config.process( nwjsTaskOptions ), {
-			platforms: currentPlatform,
+			platforms: [ platforms.getPlatform() ],
 			flavor: "sdk",
 			files: options.path,
 			argv
