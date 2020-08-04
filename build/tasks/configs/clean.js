@@ -17,6 +17,10 @@ module.exports = {
 		"<%= dir.tmp_dev %>/**",
 		"!<%= dir.tmp_dev %>"
 	],
+	tmp_debug: [
+		"<%= dir.tmp_prod %>/**",
+		"!<%= dir.tmp_prod %>"
+	],
 	tmp_prod: [
 		"<%= dir.tmp_prod %>/**",
 		"!<%= dir.tmp_prod %>"

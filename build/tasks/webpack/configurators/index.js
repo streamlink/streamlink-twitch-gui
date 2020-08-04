@@ -9,5 +9,5 @@ module.exports = [
 	require( "./dev" ),
 	require( "./tests" ),
 	require( "./i18n" ),
-	require( "./prod" )
+	require( "./release" )
 ];
