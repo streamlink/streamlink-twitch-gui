@@ -1,5 +1,6 @@
 module.exports = {
 	dev: require( "./dev" ),
+	debug: require( "./debug" ),
 	prod: require( "./prod" ),
 	test: require( "./test" ),
 	testdev: require( "./testdev" ),

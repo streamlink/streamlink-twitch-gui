@@ -1,0 +1,17 @@
+<div>
+	{{#modal-header}}
+		{{t "modal.debug.header" version=modalContext.buildVersion}}
+	{{/modal-header}}
+	{{#modal-body}}
+		{{t "modal.debug.body" name=modalContext.displayName}}
+	{{/modal-body}}
+	{{#modal-footer classNames="button-list-horizontal"}}
+		{{#form-button
+			action=(action "close")
+			classNames="btn-primary"
+			icon="fa-arrow-left"
+		}}
+			{{t "modal.debug.action.close"}}
+		{{/form-button}}
+	{{/modal-footer}}
+</div>

@@ -13,6 +13,14 @@ confirm:
         apply: Apply
         discard: Discard
         cancel: Cancel
+debug:
+    header: "Debug build: {{version}}"
+    body: |
+        You are running a debug build of {{name}}.<br>
+        Please be careful with what you're doing and report any issues you may find.<br>
+        Thank you!
+    action:
+        close: Okay
 firstrun:
     header: "Thanks for using {{name}}!"
     body: Do you want to configure the application first before you start?

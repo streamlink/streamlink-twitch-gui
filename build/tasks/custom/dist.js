@@ -31,12 +31,14 @@ module.exports = function( grunt ) {
 	function taskDist() {
 		const done = this.async();
 		const options = this.options();
-		const targets = getTargets( options, this.args );
+
+		const [ debug, args ] = platforms.getDebugTargets( this.args );
+		const targets = getTargets( options, args );
 
 		const tasks = unique([
 			// compile the application once for every given platform
 			...unique( targets.map( target => options[ target ].platform ) )
-				.map( platform => `compile:${platform}` ),
+				.map( platform => `compile:${platform}${debug ? ":debug" : ""}` ),
 			// run all dist tasks
 			...targets.map( target => options[ target ].tasks ).flat(),
 			// checksum

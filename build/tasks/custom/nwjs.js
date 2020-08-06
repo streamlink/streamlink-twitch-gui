@@ -5,6 +5,10 @@ module.exports = function( grunt ) {
 		const done = this.async();
 		const options = this.options();
 
+		if ( this.flags.debug ) {
+			options.flavor = "sdk";
+		}
+
 		const nw = new NwBuilder( options );
 
 		nw.on( "log", grunt.log.debug );

@@ -1,36 +1,17 @@
 const { pApp, pTest } = require( "../paths" );
+const { isTestTarget } = require( "../utils" );
 
 
 /**
  * Resolver configurations for each build target
  */
 module.exports = {
-	_resolve( config, path ) {
+	common( config, grunt, target ) {
 		// set the first module resolve path
-		config.resolve.modules.unshift( path );
-	},
-
-	dev( config ) {
-		this._resolve( config, pApp );
-	},
-
-	prod( config ) {
-		this._resolve( config, pApp );
-	},
-
-	test( config ) {
-		this._resolve( config, pTest );
-	},
-
-	testdev( config ) {
-		this._resolve( config, pTest );
-	},
-
-	coverage( config ) {
-		this._resolve( config, pTest );
-	},
-
-	i18n( config ) {
-		this._resolve( config, pApp );
+		config.resolve.modules.unshift(
+			isTestTarget( target )
+				? pTest
+				: pApp
+		);
 	}
 };

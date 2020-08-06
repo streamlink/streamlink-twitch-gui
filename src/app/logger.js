@@ -1,4 +1,4 @@
-/* global DEBUG */
+/* global DEBUG, DEVELOPMENT */
 /* eslint-disable no-console */
 import Ember from "ember";
 import { argv } from "nwjs/argv";
@@ -9,7 +9,7 @@ const { logDebug, logError } = new Logger( "Application" );
 
 
 const onError = async ( type, err, debug ) => {
-	if ( DEBUG ) {
+	if ( DEVELOPMENT || DEBUG ) {
 		console.error( type, err, debug );
 	}
 	try {
@@ -23,9 +23,10 @@ window.addEventListener( "unhandledrejection", e => onError( e.type, e.reason, e
 window.addEventListener( "error", e => onError( "error", e.error ) );
 Ember.onerror = e => e && e.name !== "Adapter Error" ? onError( "Ember error", e ) : null;
 
-// don't log parameters when running a dev build via grunt
-if ( DEBUG ) {
+if ( DEVELOPMENT || DEBUG ) {
 	console.debug( argv );
-} else {
+}
+// don't log parameters when running a dev build via grunt
+if ( !DEVELOPMENT ) {
 	logDebug( "Parameters", argv );
 }

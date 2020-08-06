@@ -5,6 +5,10 @@ build:
 build:dev:
     - "clean:tmp_dev"
     - "webpack:dev"
+build:debug:
+    - "test"
+    - "clean:tmp_debug"
+    - "webpack:debug"
 build:prod:
     - "test"
     - "clean:tmp_prod"

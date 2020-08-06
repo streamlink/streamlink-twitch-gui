@@ -60,5 +60,11 @@ module.exports = {
 		}
 
 		return Array.from( new Set( arr ) );
+	},
+
+	getDebugTargets( targets ) {
+		return targets.length && targets[ targets.length - 1 ] === "debug"
+			? [ true, targets.slice( 0, -1 ) ]
+			: [ false, targets.slice() ];
 	}
 };

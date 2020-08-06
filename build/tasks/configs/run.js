@@ -10,5 +10,9 @@ module.exports = {
 
 	prod: {
 		src: "<%= dir.tmp_prod %>/**"
+	},
+
+	debug: {
+		src: "<%= dir.tmp_prod %>/**"
 	}
 };

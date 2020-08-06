@@ -24,12 +24,13 @@ module.exports = {
 	},
 
 	common( config, grunt, target ) {
-		const DEBUG = target === "dev";
-
-		// set DEBUG to true on each dev-target
 		config.plugins.push(
 			new webpack.DefinePlugin({
-				DEBUG
+				// debug build on top of NW.js SDK flavor
+				// with dev-tools, debug logging and initial warning message
+				DEBUG: target === "debug",
+				// same as debug build, but without initial warning message
+				DEVELOPMENT: target === "dev"
 			})
 		);
 	},
