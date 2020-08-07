@@ -13,6 +13,14 @@ confirm:
         apply: 套用
         discard: 復原
         cancel: 取消
+debug:
+    header: "偵錯用版本: {{version}}"
+    body: |
+        你正在執行偵錯用的 {{name}}.<br>
+        請小心你目前所做的動作，並盡可能的回報你所發現的問題<br>
+        非常感謝你！
+    action:
+        close: Okay
 firstrun:
     header: "感謝使用 {{name}}!"
     body: 開始使用前需要先進行設定嗎?
