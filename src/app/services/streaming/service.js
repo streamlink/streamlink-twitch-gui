@@ -25,30 +25,33 @@ function setIfNotNull( objA, keyA, objB, keyB ) {
 }
 
 
-export default Service.extend( /** @class StreamingService */ {
+export default class StreamingService extends Service {
 	/** @type {ChatService} */
-	chat: service(),
+	@service chat;
 	/** @type {ModalService} */
-	modal: service(),
+	@service modal;
 	/** @type {SettingsService} */
-	settings: service(),
+	@service settings;
 	/** @type {DS.Store} */
-	store: service(),
+	@service store;
 
+	/**@type {(Stream|null)} */
+	active = null;
 
-	/** @type {DS.RecordArray<Stream>} */
-	model: computed(function() {
+	/** @returns {DS.RecordArray<Stream>} */
+	@computed()
+	get model() {
 		return this.store.peekAll( "stream" );
-	}),
+	}
 
 
 	init() {
-		this._super( ...arguments );
+		super.init( ...arguments );
 
 		// invalidate cache: listen for all settings changes
 		// changed properties of model relationships and nested attributes don't trigger isDirty
 		this.settings.on( "didUpdate", clearCache );
-	},
+	}
 
 
 	/**
@@ -69,7 +72,7 @@ export default Service.extend( /** @class StreamingService */ {
 		}
 
 		return true;
-	},
+	}
 
 	/**
 	 * @param {TwitchStream} twitchStream
@@ -77,8 +80,8 @@ export default Service.extend( /** @class StreamingService */ {
 	 * @return {Promise}
 	 */
 	async startStream( twitchStream, quality ) {
-		const { /** @type {DS.Store} */ store } = this;
-		const { /** @type {TwitchChannel} */ channel } = twitchStream;
+		const { store } = this;
+		const { channel } = twitchStream;
 		const { name: id } = channel;
 		/** @type {Stream} */
 		let stream;
@@ -121,7 +124,7 @@ export default Service.extend( /** @class StreamingService */ {
 		await this.getChannelSettings( stream, quality );
 
 		await this.launchStream( stream, true );
-	},
+	}
 
 	/**
 	 * @param {Stream} stream
@@ -166,7 +169,7 @@ export default Service.extend( /** @class StreamingService */ {
 		} finally {
 			await this.onStreamEnd( stream );
 		}
-	},
+	}
 
 
 	/**
@@ -204,7 +207,7 @@ export default Service.extend( /** @class StreamingService */ {
 
 		// hide the GUI
 		this.minimize( false );
-	},
+	}
 
 	/**
 	 * @param {Stream} stream
@@ -222,7 +225,7 @@ export default Service.extend( /** @class StreamingService */ {
 
 		// show error in modal
 		set( stream, "error", error );
-	},
+	}
 
 	/**
 	 * @param {Stream} stream
@@ -245,7 +248,7 @@ export default Service.extend( /** @class StreamingService */ {
 
 		// restore the GUI
 		this.minimize( true );
-	},
+	}
 
 
 	/**
@@ -268,12 +271,12 @@ export default Service.extend( /** @class StreamingService */ {
 		setIfNotNull( stream, "low_latency", channelSettings, "streaming_low_latency" );
 		setIfNotNull( stream, "disable_ads", channelSettings, "streaming_disable_ads" );
 		setIfNotNull( stream, "chat_open", channelSettings, "streams_chat_open" );
-	},
+	}
 
 
 	killAll() {
 		this.model.slice().forEach( stream => stream.kill() );
-	},
+	}
 
 	minimize( restore ) {
 		switch ( this.settings.content.gui.minimize ) {
@@ -289,7 +292,7 @@ export default Service.extend( /** @class StreamingService */ {
 				}
 				break;
 		}
-	},
+	}
 
 	/**
 	 * @param {Stream} stream
@@ -312,4 +315,4 @@ export default Service.extend( /** @class StreamingService */ {
 			setTimeout( () => this.refreshStream( stream ), streamReloadInterval );
 		});
 	}
-});
+}

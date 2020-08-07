@@ -28,28 +28,36 @@ export class ProviderError extends Error {
 	}
 }
 
-export class PlayerError extends Error {}
-PlayerError.regex = [
-	/^error: Failed to start player: /,
-	/^error: The default player \(.+\) does not seem to be installed\./
-];
+export class PlayerError extends Error {
+	static regex = [
+		/^error: Failed to start player: /,
+		/^error: The default player \(.+\) does not seem to be installed\./
+	];
+}
 
-export class UnableToOpenError extends Error {}
-UnableToOpenError.regex = [
-	/^error: Unable to open URL: /
-];
+export class UnableToOpenError extends Error {
+	static regex = [
+		/^error: Unable to open URL: /
+	];
+}
 
-export class NoStreamsFoundError extends Error {}
-NoStreamsFoundError.regex = [
-	/^error: No streams found on this URL: /
-];
+export class NoStreamsFoundError extends Error {
+	static regex = [
+		/^error: No streams found on this URL: /
+	];
+}
 
-export class TimeoutError extends Error {}
-TimeoutError.regex = [
-	/^error: Error when reading from stream: Read timeout, exiting$/
-];
+export class TimeoutError extends Error {
+	static regex = [
+		/^error: Error when reading from stream: Read timeout, exiting$/
+	];
+}
 
 export class HostingError extends Error {
+	static regex = [
+		/^\S+ is hosting (\S+)$/
+	];
+
 	constructor( message, channel ) {
 		super( message );
 		if ( channel ) {
@@ -57,11 +65,9 @@ export class HostingError extends Error {
 		}
 	}
 }
-HostingError.regex = [
-	/^\S+ is hosting (\S+)$/
-];
 
-export class Warning extends Error {}
-Warning.regex = [
-	/InsecurePlatformWarning: A true SSLContext object is not available\./
-];
+export class Warning extends Error {
+	static regex = [
+		/InsecurePlatformWarning: A true SSLContext object is not available\./
+	];
+}

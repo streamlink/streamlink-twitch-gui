@@ -1,6 +1,7 @@
-import { get, set, computed } from "@ember/object";
+import { action, get, set, computed } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
+import { classNames, layout } from "@ember-decorators/component";
 import { streaming as streamingConfig } from "config";
 import ModalDialogComponent from "../modal-dialog/component";
 import { qualities } from "data/models/stream/model";
@@ -14,7 +15,7 @@ import {
 	TimeoutError,
 	HostingError
 } from "services/streaming/errors";
-import layout from "./template.hbs";
+import template from "./template.hbs";
 import "./styles.less";
 
 
@@ -33,46 +34,57 @@ function computedError( Class ) {
 }
 
 
-export default ModalDialogComponent.extend( /** @class ModalStreamingComponent */ {
+@layout( template )
+@classNames( "modal-streaming-component" )
+export default class ModalStreamingComponent extends ModalDialogComponent {
 	/** @type {NwjsService} */
-	nwjs: service(),
+	@service nwjs;
 	/** @type {StreamingService} */
-	streaming: service(),
+	@service streaming;
 	/** @type {SettingsService} */
-	settings: service(),
+	@service settings;
 	/** @type {DS.Store} */
-	store: service(),
+	@service store;
 
-	layout,
-
-	classNames: [ "modal-streaming-component" ],
 
 	/** @type {Stream} */
-	modalContext: null,
+	modalContext;
 
-	error: readOnly( "modalContext.error" ),
+	/** @alias modalContext.error */
+	@readOnly( "modalContext.error" )
+	error;
 
-	isLogError: computedError( LogError ),
-	isProviderError: computedError( ProviderError ),
-	isPlayerError: computedError( PlayerError ),
-	isVersionError: computedError( VersionError ),
-	isUnableToOpenError: computedError( UnableToOpenError ),
-	isNoStreamsFoundError: computedError( NoStreamsFoundError ),
-	isTimeoutError: computedError( TimeoutError ),
-	isHostingError: computedError( HostingError ),
+	@computedError( LogError )
+	isLogError;
+	@computedError( ProviderError )
+	isProviderError;
+	@computedError( PlayerError )
+	isPlayerError;
+	@computedError( VersionError )
+	isVersionError;
+	@computedError( UnableToOpenError )
+	isUnableToOpenError;
+	@computedError( NoStreamsFoundError )
+	isNoStreamsFoundError;
+	@computedError( TimeoutError )
+	isTimeoutError;
+	@computedError( HostingError )
+	isHostingError;
 
-	qualities,
-	versionMin: computed( "settings.content.streaming.providerType", function() {
+	qualities = qualities;
+	@computed( "settings.content.streaming.providerType" )
+	get versionMin() {
 		const type = this.settings.content.streaming.providerType;
 
 		return validationProviders[ type ][ "version" ];
-	}),
+	}
 
-	providerName: readOnly( "settings.streaming.providerName" ),
+	@readOnly( "settings.content.streaming.providerName" )
+	providerName;
 
 
-	hotkeysNamespace: "modalstreaming",
-	hotkeys: {
+	hotkeysNamespace = "modalstreaming";
+	hotkeys = {
 		/** @this {ModalStreamingComponent} */
 		close() {
 			if ( this.modalContext.isPreparing ) {
@@ -98,78 +110,76 @@ export default ModalDialogComponent.extend( /** @class ModalStreamingComponent *
 			}
 		},
 		log: "toggleLog"
-	},
+	};
 
 
-	actions: {
-		/** @this {ModalStreamingComponent} */
-		async download( success, failure ) {
-			try {
-				const providerType = this.settings.content.streaming.providerType;
-				this.nwjs.openBrowser( downloadUrl[ providerType ] );
+	@action
+	async download( success, failure ) {
+		try {
+			const { providerType } = this.settings.content.streaming;
+			this.nwjs.openBrowser( downloadUrl[ providerType ] );
+			await success();
+			this.send( "close" );
+		} catch ( err ) {
+			await failure( err );
+		}
+	}
+
+	@action
+	abort() {
+		const { modalContext } = this;
+		if ( !modalContext.isDestroyed ) {
+			set( modalContext, "isAborted", true );
+			modalContext.destroyRecord();
+		}
+		this.send( "close" );
+	}
+
+	@action
+	async shutdown() {
+		this.modalContext.kill();
+		this.send( "close" );
+	}
+
+	@action
+	async restart( success ) {
+		const { modalContext } = this;
+		if ( !modalContext.isDestroyed ) {
+			if ( success ) {
 				await success();
-				this.send( "close" );
-			} catch ( err ) {
-				await failure( err );
 			}
-		},
+			this.streaming.launchStream( modalContext )
+				.catch( () => {} );
+		}
+	}
 
-		/** @this {ModalStreamingComponent} */
-		abort() {
-			const { modalContext } = this;
-			if ( !modalContext.isDestroyed ) {
-				set( modalContext, "isAborted", true );
-				modalContext.destroyRecord();
+	@action
+	async startHosted( success, failure ) {
+		const { modalContext } = this;
+		if ( modalContext.isDestroyed ) { return; }
+		const channel = get( modalContext, "error.channel" );
+		if ( !channel ) { return; }
+		try {
+			const user = await this.store.queryRecord( "twitchUser", channel );
+			const stream = await get( user, "stream" );
+			if ( success ) {
+				await success();
 			}
 			this.send( "close" );
-		},
-
-		/** @this {ModalStreamingComponent} */
-		async shutdown() {
-			this.modalContext.kill();
-			this.send( "close" );
-		},
-
-		/** @this {ModalStreamingComponent} */
-		async restart( success ) {
-			const { modalContext } = this;
-			if ( !modalContext.isDestroyed ) {
-				if ( success ) {
-					await success();
-				}
-				this.streaming.launchStream( modalContext )
-					.catch( () => {} );
-			}
-		},
-
-		/** @this {ModalStreamingComponent} */
-		async startHosted( success, failure ) {
-			const { modalContext } = this;
-			if ( modalContext.isDestroyed ) { return; }
-			const channel = get( modalContext, "error.channel" );
-			if ( !channel ) { return; }
-			try {
-				const user = await this.store.queryRecord( "twitchUser", channel );
-				const stream = await get( user, "stream" );
-				if ( success ) {
-					await success();
-				}
-				this.send( "close" );
-				this.streaming.startStream( stream )
-					.catch( () => {} );
-			} catch ( e ) {
-				if ( failure ) {
-					await failure();
-				}
-			}
-		},
-
-		/** @this {ModalStreamingComponent} */
-		toggleLog() {
-			const { modalContext } = this;
-			if ( !modalContext.isDestroyed ) {
-				modalContext.toggleProperty( "showLog" );
+			this.streaming.startStream( stream )
+				.catch( () => {} );
+		} catch ( e ) {
+			if ( failure ) {
+				await failure();
 			}
 		}
 	}
-});
+
+	@action
+	toggleLog() {
+		const { modalContext } = this;
+		if ( !modalContext.isDestroyed ) {
+			modalContext.toggleProperty( "showLog" );
+		}
+	}
+}
