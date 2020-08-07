@@ -4,6 +4,7 @@ import { inject as service } from "@ember/service";
 import { className, classNames, layout, tagName } from "@ember-decorators/component";
 import { on } from "@ember-decorators/object";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
+import { hotkey, hotkeysNamespace } from "utils/decorators";
 import template from "./template.hbs";
 import "./styles.less";
 
@@ -11,17 +12,13 @@ import "./styles.less";
 @layout( template )
 @tagName( "section" )
 @classNames( "modal-dialog-component" )
+@hotkeysNamespace( "modaldialog" )
 export default class ModalDialogComponent extends Component.extend( HotkeyMixin ) {
 	/** @type {ModalService} */
 	@service modal;
 
 	@className
 	class = "";
-
-	hotkeysNamespace = "modaldialog";
-	hotkeys = {
-		close: "close"
-	};
 
 	/** @type {string} Set by the modal-service-component on component init */
 	modalName = "";
@@ -54,6 +51,12 @@ export default class ModalDialogComponent extends Component.extend( HotkeyMixin 
 			clone.parentNode.removeChild( clone );
 			clone = null;
 		}, { once: true } );
+	}
+
+
+	@hotkey( "close" )
+	hotkeyClose() {
+		this.send( "close" );
 	}
 
 

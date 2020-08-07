@@ -15,6 +15,7 @@ import {
 	TimeoutError,
 	HostingError
 } from "services/streaming/errors";
+import { hotkey, hotkeysNamespace } from "utils/decorators";
 import template from "./template.hbs";
 import "./styles.less";
 
@@ -36,6 +37,7 @@ function computedError( Class ) {
 
 @layout( template )
 @classNames( "modal-streaming-component" )
+@hotkeysNamespace( "modalstreaming" )
 export default class ModalStreamingComponent extends ModalDialogComponent {
 	/** @type {NwjsService} */
 	@service nwjs;
@@ -83,34 +85,37 @@ export default class ModalStreamingComponent extends ModalDialogComponent {
 	providerName;
 
 
-	hotkeysNamespace = "modalstreaming";
-	hotkeys = {
-		/** @this {ModalStreamingComponent} */
-		close() {
-			if ( this.modalContext.isPreparing ) {
-				this.send( "abort" );
-			} else {
-				this.send( "close" );
-			}
-		},
-		/** @this {ModalStreamingComponent} */
-		confirm() {
-			if ( this.isHostingError ) {
-				this.send( "startHosted" );
-			} else if ( this.modalContext.hasEnded ) {
-				this.send( "restart" );
-			}
-		},
-		/** @this {ModalStreamingComponent} */
-		shutdown() {
-			if ( this.modalContext.isPreparing ) {
-				this.send( "abort" );
-			} else {
-				this.send( "shutdown" );
-			}
-		},
-		log: "toggleLog"
-	};
+	@hotkey( "close" )
+	hotkeyClose() {
+		if ( this.modalContext.isPreparing ) {
+			this.send( "abort" );
+		} else {
+			this.send( "close" );
+		}
+	}
+
+	@hotkey( "confirm" )
+	hotkeyConfirm() {
+		if ( this.isHostingError ) {
+			this.send( "startHosted" );
+		} else if ( this.modalContext.hasEnded ) {
+			this.send( "restart" );
+		}
+	}
+
+	@hotkey( "shutdown" )
+	hotkeyShutdown() {
+		if ( this.modalContext.isPreparing ) {
+			this.send( "abort" );
+		} else {
+			this.send( "shutdown" );
+		}
+	}
+
+	@hotkey( "log" )
+	hotkeyLog() {
+		this.send( "toggleLog" );
+	}
 
 
 	@action

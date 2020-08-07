@@ -8,6 +8,7 @@ import { on } from "@ember-decorators/object";
 import { vars as varsConfig } from "config";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 import Search from "data/models/search/model";
+import { hotkey, hotkeysNamespace } from "utils/decorators";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import template from "./template.hbs";
 import "./styles.less";
@@ -21,6 +22,7 @@ const { filters } = Search;
 @layout( template )
 @tagName( "nav" )
 @classNames( "search-bar-component" )
+@hotkeysNamespace( "searchbar" )
 export default class SearchBarComponent extends Component.extend( HotkeyMixin ) {
 	/** @type {RouterService} */
 	@service router;
@@ -41,12 +43,6 @@ export default class SearchBarComponent extends Component.extend( HotkeyMixin ) 
 
 	filters = filters;
 	filter = "all";
-
-
-	hotkeysNamespace = "searchbar";
-	hotkeys = {
-		focus: "focus"
-	};
 
 
 	@on( "init" )
@@ -123,6 +119,12 @@ export default class SearchBarComponent extends Component.extend( HotkeyMixin ) 
 				set( this, "showDropdown", false );
 			}
 		});
+	}
+
+
+	@hotkey( "focus" )
+	hotkeyFocus() {
+		this.send( "focus" );
 	}
 
 
