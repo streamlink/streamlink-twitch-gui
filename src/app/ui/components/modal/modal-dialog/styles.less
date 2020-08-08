@@ -3,6 +3,9 @@
 
 
 .modal-dialog-component {
+	position: fixed;
+	z-index: 10000;
+
 	> div {
 		display: flex;
 		flex-flow: column nowrap;
@@ -18,6 +21,8 @@
 	}
 
 	&.fadeOut {
+		z-index: 9999;
+
 		> div {
 			animation-direction: reverse;
 		}
@@ -28,6 +33,7 @@
 	}
 
 	.modal-body-component {
+		position: static;
 		flex: 1 0;
 		padding: 0;
 
