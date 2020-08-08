@@ -1,4 +1,3 @@
-import { get } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import ModalDialogComponent from "../modal-dialog/component";
@@ -11,9 +10,9 @@ export default ModalDialogComponent.extend({
 
 	layout,
 
-	"class": "modal-quit",
+	classNames: [ "modal-quit-component" ],
 
-	hasStreams: readOnly( "streaming.model.length" ),
+	hasStreams: readOnly( "streaming.hasStreams" ),
 
 	hotkeysNamespace: "modalquit",
 	hotkeys: {
@@ -22,12 +21,12 @@ export default ModalDialogComponent.extend({
 
 	actions: {
 		shutdown() {
-			get( this, "streaming" ).killAll();
+			this.streaming.killAll();
 			this.send( "quit" );
 		},
 
 		quit() {
-			get( this, "nwjs" ).quit();
+			this.nwjs.quit();
 		}
 	}
 });

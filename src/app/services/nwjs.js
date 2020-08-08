@@ -89,9 +89,8 @@ export default Service.extend( /** @class NwjsService */ {
 	},
 
 	close() {
-		const streams = get( this, "streaming.model" ).toArray();
-		if ( streams.length && streams.some( stream => !get( stream, "hasEnded" ) ) ) {
-			get( this, "modal" ).openModal( "quit", this );
+		if ( this.streaming.hasStreams ) {
+			this.modal.openModal( "quit" );
 		} else {
 			this.quit();
 		}

@@ -41,6 +41,10 @@ export default Service.extend( /** @class StreamingService */ {
 		return this.store.peekAll( "stream" );
 	}),
 
+	hasStreams: computed( "model.@each.hasEnded", function() {
+		return this.model.toArray().some( stream => !stream.hasEnded );
+	}),
+
 
 	init() {
 		this._super( ...arguments );
@@ -235,13 +239,10 @@ export default Service.extend( /** @class StreamingService */ {
 			this.modal.closeModal( stream );
 		}
 
-		if ( !error || error instanceof ExitSignalError ) {
-			// if quit modal is opened, close stream's modal and remove it from the store with that
-			if ( this.modal.hasModal( "quit" ) ) {
-				this.modal.closeModal( stream );
-
+		// clean up if streams ends, but modal is not opened
+		if ( !this.modal.hasModal( "streaming", stream ) && !stream.isDeleted ) {
 			// remove stream from store if modal is not opened
-			} else if ( !this.modal.hasModal( "streaming", stream ) && !stream.isDeleted ) {
+			if ( !error || error instanceof ExitSignalError ) {
 				stream.destroyRecord();
 			}
 		}
