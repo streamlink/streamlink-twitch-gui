@@ -235,10 +235,13 @@ export default Service.extend( /** @class StreamingService */ {
 			this.modal.closeModal( stream );
 		}
 
-		// clean up if streams ends, but modal is not opened
-		if ( !this.modal.hasModal( "streaming", stream ) && !stream.isDeleted ) {
+		if ( !error || error instanceof ExitSignalError ) {
+			// if quit modal is opened, close stream's modal and remove it from the store with that
+			if ( this.modal.hasModal( "quit" ) ) {
+				this.modal.closeModal( stream );
+
 			// remove stream from store if modal is not opened
-			if ( !error || error instanceof ExitSignalError ) {
+			} else if ( !this.modal.hasModal( "streaming", stream ) && !stream.isDeleted ) {
 				stream.destroyRecord();
 			}
 		}
