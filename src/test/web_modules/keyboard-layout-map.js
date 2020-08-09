@@ -26,17 +26,13 @@ const defaultLayoutMap = new Map([
  * @param {KeyboardLayoutMap} layoutMap
  */
 export function setupKeyboardLayoutMap( hooks, layoutMap = defaultLayoutMap ) {
-	let getLayoutMapStub;
-
-	hooks.before(function() {
-		getLayoutMapStub = sinon.stub( navigator.keyboard, "getLayoutMap" ).resolves( layoutMap );
-	});
-
 	hooks.beforeEach(function() {
+		this._getLayoutMapStub = sinon.stub( navigator.keyboard, "getLayoutMap" )
+			.resolves( layoutMap );
 		this.owner.register( "keyboardlayoutmap:main", layoutMap, { instantiate: false } );
 	});
 
-	hooks.after(function() {
-		getLayoutMapStub.restore();
+	hooks.afterEach(function() {
+		this._getLayoutMapStub.restore();
 	});
 }
