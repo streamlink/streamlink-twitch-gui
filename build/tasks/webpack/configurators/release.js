@@ -41,10 +41,12 @@ module.exports = {
 		);
 
 		config.plugins.push(
-			new CopyWebpackPlugin([{
-				from: r( pProjectRoot, "LICENSE" ),
-				transformPath: targetPath => `${targetPath}.txt`
-			}])
+			new CopyWebpackPlugin({
+				patterns: [{
+					from: r( pProjectRoot, "LICENSE" ),
+					transformPath: targetPath => `${targetPath}.txt`
+				}]
+			})
 		);
 	},
 
