@@ -1,0 +1,181 @@
+error:
+    header: "Ошибка" #Error
+    text: "При отображении этой страницы произошла ошибка." #There was an error while trying to display this page.
+about:
+    about:
+        header: "О проекте" #About
+        homepage: "Сайт" #Homepage
+        author: "Автор" #Author
+        version: "Версия" #Version
+        nwjs: "NW.js" #NW.js
+        arch: "Архитектура" #Architecture
+        built: "Сборка" #Built
+        help: "Справка" #Help
+        wiki: "Вики" #Wiki
+        bugs: "Ошибки (баги)" #Bugs
+        issue-tracker: "Трекер проблем" #Issue tracker
+        support: "Поддержка" #Support
+        gitter: "Gitter" #Gitter
+        changelog: "Журнал изменений" #Changelog
+        contributors: "Авторы/помощники" #Contributors
+    donation:
+        header: "Поддержка и пожертвования" #Support & donate
+        text: "Если вы считаете, что это приложение полезно, подумайте о поддержке его создателя, сделав пожертвование. <br> Большое спасибо!" #If you think that this application is helpful, please consider supporting its creator by donating.<br>Thank you very much!
+    translations:
+        header: "Переводы" #Translations
+    dependencies:
+        header: "Сторонние приложения/библиотеки" #Third party applications
+featured:
+    header: "Рекомендованные каналы" #Featured Channels
+    empty: "Не удалось загрузить список рекомендованных каналов!" #The featured channels list could not be loaded!
+    summary: "Прямо сейчас {{viewers}} зрителей смотрят {{channels}} стримов!" #There are {{viewers}} people watching {{channels}} live streams right now!
+games:
+    header: "Популярные игры" #Top Games
+    empty: "Получен пустой список игр." #The returned list of top games is empty.
+game:
+    empty: "Нет стримов по этой игре." #The returned list of streams of this game is empty.
+streams:
+    header: "Популярные стримы" #Top Streams
+    empty: "Получен пустой список стримов" #The returned list of top streams is empty.
+channel:
+    menu:
+        details: "Подробности" #Details
+        teams: "Команды" #Teams
+        settings: "Настройки" #Settings
+    offline: "сейчас офлайн" #is offline right now
+    details:
+        header: "Статистика канала" #Channel statistics
+        name:
+            title: "Название" #Name
+        created-at:
+            title: "Создан" #Created
+            # new Moment(channel.created_at).format(...)
+            format: "LL" #"LL"
+        language:
+            title: "Язык" #Language
+        followers:
+            title: "Подписчики" #Followers
+            data: "{{followers}} ({{day}} в день)" #"{{followers}} ({{day}} per day)"
+        views:
+            title: "Просмотры" #Views
+            data: "{{views}} ({{day}} в день)" #"{{views}} ({{day}} per day)"
+        content:
+            title: "Содержимое" #Content
+            mature: "Не подходит для детей" #Inappropriate for children
+            ffa: "Нет ограничений по возрасту" #No age restrictions
+        format:
+            title: "Формат" #Format
+            data: "{{resolution}} @ {{fps}}fps" #"{{resolution}} @ {{fps}}fps"
+        delay:
+            title: "Задержка" #Delay
+            # static "zero" property
+            data:
+                zero: "Нет дополнительной задержки" #No additional delay
+                one: "Одна секунда" #One second
+                other: "{{count}} сек." #"{{count}} seconds"
+        vodcast:
+            title: "Повтор (VOD)" #Vodcast
+            data: "Идет повтор стрима" #Stream is a Vodcast
+    teams:
+        empty: "Нет команд (teams)" #The returned list of teams is empty.
+    settings:
+        stream:
+            header: "Стрим" #Stream
+            quality:
+                title: "Качество" #Quality
+                description: "Установите качество для этого канала" #Set a channel specific streaming quality.
+            low-latency:
+                title: "Стрим с низкой задержкой" #Low latency streaming
+                description: "Переопределяет общие настройки низкой задержки для стримов" #Override the global low latency streaming settings.
+                checkbox: "Включить низкую задержку для просмотра стрима" #Enable low latency streaming
+            disable-ads:
+                title: "Реклама" #Advertisements
+                description: "Переопределяет для этого канала общие настройки просмотра рекламы" #Override the global advertisements settings.
+                checkbox: "Не показывать рекламу на стриме" #Skip advertisements embedded into streams
+            chat:
+                title: "Чат" #Chat
+                description: "Автоматический запуск чата" #Automatically open chat.
+                checkbox: "Автоматически открывать чат вместе с запуском стрима" #Open chat when the stream starts
+        notifications:
+            header: "Оповещения на рабочем столе" #Desktop notifications
+            enabled:
+                title: "Оповещения" #Notifications
+                description: "Когда начинается стрим на канале." #When the channel starts streaming.
+                notes: "Надо быть подписчиком канала." #Channel needs to be followed.
+                checkbox: "Включить оповещения на рабочем столе" #Enable desktop notifications
+team:
+    header:
+        members: "Участников команды: {{num}}" #"Team members: {{num}}"
+        # new Moment(team.created_at).format(...)
+        created-at: "[Дата создания:] llll" #"[Date created:] llll"
+        # new Moment(team.updated_at).format(...)
+        updated-at: "[Дата изменения:] llll" #"[Modified last:] llll"
+    menu:
+        live: "Онлайн" #Live Members
+        all: "Все" #All Members
+        info: "Информация" #Team Infos
+    live:
+        empty: "Никто не стримит" #The returned list of broadcasting team members is empty.
+    all:
+        empty: "В команде нет участников" #The returned list of all team members is empty.
+    info:
+        header: "Информация о команде" #Infos
+user:
+    index:
+        logged-in: "Вход под именем: {{name}}" #"Logged in as {{name}}"
+        # new Moment(auth.session.date).format(...)
+        since: "[подключен с] LLLL" #"[since] LLLL"
+        sign-out: "Выход" #Sign out
+        token:
+            title: "Ваш токен доступа" #Your access token
+            show: "Показать токен доступа" #Show access token
+            copy: "Копировать в буфер обмена" #Copy to clipboard
+            hint:
+                first: "Этот ключ разрешает доступ к вашему Твич-аккаунту с такими разрешениями:" #"This key grants access to your Twitch.tv account with these permissions:"
+                second: "Переподключитесь, используя пароль, чтобы сделать его недействительным." #Log in again with your password to invalidate it.
+    auth:
+        abort: "Прервать" #Abort
+        sign-in: "Подключиться" #Sign in
+        token:
+            show-form: "Использовать токен доступа" #Use access token
+            placeholder: "Вставьте токен доступа" #Insert access token
+            hint:
+                first: "Войдите в свою учетную запись Twitch.tv с помощью токена доступа." #Log in to your Twitch.tv account by using an access token.
+                second: "Убедитесь, что он соответствует следующим разрешениям:" #"Make sure that it matches the following permissions:"
+        fail: "Ошибка аутентификации. Пожалуйста, попробуйте еще раз." #Authentication failed. Please try again.
+    followedStreams:
+        header: "Отслеживаемые стримы" #Followed Streams
+        empty:
+            text: "Нет стримов" #The returned list of followed streams is empty.
+            featured: "Смотреть рекомендуемые в настоящее время стримы" #Watch currently featured streams
+            streams: "Смотрите лучшие стримы" #Watch top streams
+    followedChannels:
+        header: "Отслеживаемые каналы" #Followed Channels
+        buttons:
+            sort-by-followed: "Сортировать по дате подписки" #Sort by date followed
+            sort-by-broadcast: "Сортировать по последней трансляции" #Sort by last broadcast
+            sort-by-login: "Сортировать по последнему входу" #Sort by last login
+            sort-desc: "Сортировать по убыванию" #Sort in descending order
+            sort-asc: "Сортировать по возрастанию" #Sort in ascending order
+        empty: "Нет отслеживаемых каналов" #The returned list of followed channels is empty.
+search:
+    header:
+        all: "Все результаты поиска:" #All search results
+        games: "Результат поиска игр:" #"Game search results: "
+        channels: "Результат поиска каналов:" #"Stream search results: "
+        streams: "Результат поиска стримов:" #"Stream search results: "
+    subheader:
+        games: "Игры" #Games
+        channels: "Каналы" #Channels
+        streams: "Стримы" #Streams
+    empty: "Нет результатов по Вашему запросу..." #Your query didn't match anything...
+watching:
+    header: "Вы смотрите" #You're watching
+    buttons:
+        open: "Открыть диалог" #Open dialog
+        close: "Закрыть стрим" #Close stream
+    empty:
+        header: "Все стримы закрыты" #All streams have been closed
+        next: "Что делать дальше?" #What to do next?
+        featured: "Смотреть рекомендуемые в настоящее время стримы" #Watch currently featured streams
+        followed: "Смотреть отслеживаемые стримы" #Watch your followed streams

@@ -4,6 +4,7 @@
 		"de": "Deutsch",
 		"en": "English",
 		"fr": "Français",
+		"ru": "Русский",
 		"zh-tw": "中文 繁體"
 	},
 	"contributors": {
@@ -23,6 +24,12 @@
 			{
 				"name": "Simon P.",
 				"github": "selbiselbi"
+			}
+		],
+		"ru": [
+			{
+				"name": "tesla1856",
+				"github": "tesla1856"
 			}
 		],
 		"zh-tw":[

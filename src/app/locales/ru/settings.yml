@@ -1,0 +1,565 @@
+menu:
+    header: "Настройки" #Settings
+    main: "Главная" #Main
+    gui: "Интерфейс" #GUI
+    streaming: "Поток данных" #Streaming
+    player: "Плеер" #Player
+    streams: "Стримы" #Streams
+    chat: "Чат" #Chat
+    languages: "Язык" #Languages
+    hotkeys: "Горячие клавиши" #Hotkeys
+    notifications: "Уведомления" #Notifications
+    channels: "Каналы" #Channels
+main:
+    language:
+        title: "Язык" #Language
+        description: "Выберите язык интерфейса" #Select the GUI language.
+        notes: "Вы говорите на другом языке? Помогите с переводом! Посмотрите Вики для получения доп. информации." #Do you speak another language? Help translating! See the wiki for more information.
+        labels:
+            auto: "Системный ({{label}})" #"System ({{label}})"
+    advanced:
+        title: "Настройки и функции" #Settings and features
+        description: "Включите скрытые настройки и функции. <br> Относится не только к меню настроек." #Enable hidden settings and features.<br>Does not only apply to the settings menu.
+        checkbox: "Включить расширенные настройки и функции" #Enable advanced settings and features
+    homepage:
+        title: "Стартовая страница" #Home page
+        description: "Страница для загрузки первой или при нажатии на логотип." #Menu to load first or when clicking the logo.
+        text:
+            first: "Смотрите значек меню в правом верхнем углу каждой страницы." #See the menu bar in the top right corner of each page.
+            second: "Нажмите кнопку «Дом», чтобы сделать ее новой стартовой страницей." #Click the home button to make it the new home page.
+    theme:
+        title: "Тема" #Theme
+        description: "Выберите тему оформления" #Select a GUI color theme.
+        notes-system: "Это должно поддерживаться операционной системой или средой рабочего стола." #This has to be supported by the operating system or desktop environment.
+    scrolling:
+        title: "Прокрутка" #Scrolling
+        description: "Включите или выключите плавную прокрутку" #Enable or disable smooth scrolling.
+        checkbox: "Включить плавную прокрутку" #Enable smooth scrolling
+    externalcommands:
+        title: "Действия командной строки" #Command line actions
+        description: "Слушать сигналы, отправленные вторыми экземплярами приложения." #Listen to signals sent by second application instances.
+        notes: "Смотрите в Вики список доступных действий и параметров." #See the wiki for a list of available actions and parameters.
+        checkbox: "Разрешить внешние команды" #Allow external commands
+gui:
+    integration:
+        title: "Интеграция в операционную систему" #OS integration
+        description: "Где показывать приложение." #Where to access the GUI from.
+        values:
+            both: "Панель задач и область уведомлений (трей)" #Both
+            taskbar: "Панель задач" #Taskbar
+            tray: "Область уведомлений (трей)" #Tray
+    minimize:
+        title: "Сворачивать интерфейс" #Minimize GUI
+        description: "После запуска плеера" #When the video player opens.
+        values:
+            noop: "Не сворачивать" #Do nothing
+            minimize: "Сворачивать" #Minimize
+            tray: "Свернуть в область уведомлений (трей)" #Move to tray
+    hidebuttons:
+        title: "Стрятать кнопки окна" #Hide window buttons
+        description: "Скрыть кнопки сворачивания, разворачивания и закрытия." #Hide minimize, maximize and close buttons.
+        checkbox: "Спрятать" #Hide buttons
+    minimizetotray:
+        title: "Кнопка \"Свернуть\"" #Minimize button
+        description: "Действие при нажатии" #Click behavior.
+        checkbox: "Свернуть в область уведомлений (трей)" #Minimize to tray
+    badgelabel:
+        title: "Значок приложения" #Application badge
+        description: "На иконке с панели задач" #On the taskbar/dock icon.
+        notes: "Это должно поддерживаться операционной системой или настройками рабочего стола." #This has to be supported by the operating system or desktop environment.
+        requires: "Должна быть включена интеграция с панелью задач и уведомлениями рабочего строла" #Taskbar OS integration and desktop notifications have to be enabled.
+        checkbox: "Показывать число отслеживаемых стримов" #Show number of streaming favorites
+    focusrefresh:
+        title: "Обновление содержимого" #Refresh content
+        description: "Автоматически обновлять, когда окно приложения получает фокус." #Automatically refresh when the application window regains focus.
+        values:
+            none: "Не обновлять" #Don't refresh
+            one: "Через минуту" #After one minute
+            two: "Через 2 минуты" #After two minutes
+            five: "Через 5 минут" #After five minutes
+streaming:
+    provider:
+        title: "Провайдер стримов (streaming provider)" #Streaming provider
+        description: "Выберите провайдера и укажите путь к исполняемым файлам." #Choose a streaming provider and set custom executable locations.
+        notes: "Необходимо указать точный путь, если путь к файлу не указан в переменной окружения $PATH или в списке запасных путей." #An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
+        executable:
+            streamlink: "Исполняемый файл Streamlink" #Streamlink executable
+            streamlink-python: "Исполняемый файл Python" #Python executable
+        python-script:
+            streamlink-python: "Python-скрипт Streamlink" #Streamlink python script
+        parameters:
+            title: "Пользовательские параметры" #Custom parameters
+            placeholder: "Добавить пользовательские параметры" #Add custom parameters
+    playerinput:
+        title: "Передача данных в плеер" #Player input
+        description: "Определяет метод передачи потока данных в плеер." #Defines the method of how the stream data is being fed into the player.
+        notes: "Пожалуйста, смотрите Вики для получения подробной информации об этой опции. В зависимости от выбора будут установлены разные параметры. Плеер должен поддерживать выбранный метод." #Please see the wiki for detailed informations about this option. Different parameters will be set, depending on the selection. The player needs to support the selected method.
+        values:
+            stdin:
+                label: "Стандартный ввод (standard input)" #Standard input
+                description: "Запись данных в стандартный входной канал плеера." #Writes the stream to the player's standard input channel.
+            fifo:
+                label: "Именованный канал (named pipe)" #Named pipe
+                description: "Запись данных в именованный канал, из которого плеер читает." #Writes the stream to a named pipe, where the player reads from.
+            http:
+                label: "HTTP" #HTTP
+                description: "Запуск локального HTTP-сервера, с которого плеер читает." #Launches a local HTTP server where the player reads from.
+            passthrough:
+                label: "HLS (passthrough)" #HLS (passthrough)
+                description: "Плеер загружает и буферизирует поток данных самостоятельно." #Lets the player download and buffer the stream by itself.
+    low-latency:
+        title: "Стрим с низкой задержкой" #Low latency streaming
+        description: "Уменьшает задержку для каналов, которые транслируют в режиме низкой задержки." #Reduces the streaming delay for channels which are streaming in low latency mode.
+        notes: "Имейте в виду, что включение этой опции установит значение \"live-edge\" равным 2, если оно было выше. Это может вызвать буферизацию для обычных стримов. Чтобы достичь минимально возможной задержки, необходимо выполнить дополнительную настройку собственных настроек кеширования/буферизации плеера." #Be aware that enabling this option will also set the live-edge value to 2 if it is higher, which may cause buffering for regular streams. To achieve the lowest latency possible, further tweaking of the player's own caching/buffering settings needs to be done.
+        checkbox: "Включить просмотр с низкой задержкой" #Enable low latency streaming
+    hls-live-edge:
+        title: "HLS live edge" #HLS live edge
+        description: "Уменьшение значения уменьшит задержку на стриме, но также может вызвать буферизацию. В зависимости от настроеек плеера может быть еще один уровень буферизации." #Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering.
+    hls-segment-threads:
+        title: "HLS segment threads" #HLS segment threads
+        description: "Количество потоков, используемых для загрузки и обработки сегментов." #Number of threads used for downloading and processing stream segments.
+    player-no-close:
+        title: "Не закрывать окно плеера" #Keep player window
+        description: "После завершения стрима" #After the stream has ended.
+        notes: "Сам плеер может помешать {{provider}} закрыть его. Проверьте настройки плеера." #The player itself may prevent {{provider}} to close it. Please see the player settings as well.
+        checkbox: "Не закрывать плеер" #Do not close the player
+    disable-ads:
+        title: "Реклама" #Advertisements
+        description: "Это позволит остановить стрим, пока идет реклама. Смотрите Вики для дополнительной информации." #This will let the stream freeze while the channel is showing advertisements. See the wiki for more information.
+        checkbox: "Пропускать рекламу, встроенную в стрим" #Skip advertisements embedded into streams
+    retry-open:
+        title: "Попытки запуска" #Launch attempts
+        description: "Число попыток запука стрима" #Number of stream launch attempts.
+    retry-streams:
+        title: "Пауза между попытками" #Retry delay
+        description: "Время в секундах между попытками подключения к стриму" #Time in seconds between each attempt.
+player:
+    preset:
+        title: "Предустановки плеера" #Player preset
+        description: "Использовать предопределенную конфигурацию плеера." #Use a predefined player configuration.
+    executable:
+        default:
+            title: "Плеер" #Video player
+            description: "Если оставить поле пустым, будет использован плеер, указанный в файле конфигурации." #If left empty, the player defined in the config file will be used.
+            default-value: "VLC (ненастроенный)" #VLC (unconfigured)
+            notes: "Здесь можно добавить параметры, но вместо этого их следует установить в поле параметров. Смотрите ниже список доступных переменных." #Parameters can be added here, but should be set in the parameters field instead. See below for a list of available variables.
+            placeholder: "Оставьте поле пустым для плеера по умолчанию" #Leave blank for default player
+        preset:
+            title: "Исполняемый файл плеера" #Player executable
+            description: "Необходимо указать точный путь, если путь к файлу не указан в переменной окружения $PATH или в списке запасных путей." #An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
+            placeholder: "Оставьте поле пустым для пути по умолчанию" #Leave blank for default location
+    args:
+        default:
+            title: "Параметры" #Parameters
+            description: "Добавить параметры специфичные для плеера" #Add player specific parameters.
+        preset:
+            title: "Пользовательские параметры" #Custom parameters
+            description: "Укажите дополнительные пользовательские параметры для плеера" #Set additional custom player parameters.
+        placeholder: "Добавить пользовательские параметры для плеера" #Add custom player parameters
+        substitutions:
+            channel: "Имя канала" #Channel name
+            status: "Название стрима" #Channel status text
+            game: "Название игры" #Name of the game being played
+            delay: "Дополнительная задержка на стриме" #Additional stream delay in seconds
+            created: "Когда запущен" #Online since
+            viewers: "Текущее число зрителей" #Number of current viewers
+            views: "Общее число просмотров" #Total number of views
+    players:
+        default:
+            label: "Нет предустановки" #No preset
+        vlc:
+            label: "VLC media player" #VLC media player
+            attributes:
+                instance:
+                    title: "Режим одного окна" #Single instance mode
+                    description: "Просматривайте несколько стримов в разных окнах плеера." #View multiple streams in different player windows.
+                    checkbox: "Запретить режим одного окна" #Prevent single instance mode
+                close:
+                    title: "Закрытие плеера" #Close player
+                    description: "Предотвращает накопление пустых окон плеера." #Prevents stacking up empty player windows.
+                    checkbox: "Разрешать плееру закрываться" #Allow the player to get closed
+                title:
+                    title: "Заголовок окна плеера" #Player window title
+                    description: "Показать название канала, игру и название стрима." #Show the channel name, game being played and stream title.
+                    checkbox: "Установить заголовок" #Set custom title
+                minimal:
+                    title: "Вид (layout)" #Layout
+                    description: "Скрыть элементы управления плеером. Можно переключать, нажав CTRL+H." #Hide player controls. Can also be toggled by pressing CTRL+H.
+                    checkbox: "Минималистичный вид плеера" #Minimal player layout
+        mpv:
+            label: "MPV" #MPV
+            attributes:
+                close:
+                    title: "Закрытие плеера" #Close player
+                    description: "Предотвращает накопление пустых окон плеера." #Prevents stacking up empty player windows.
+                    checkbox: "Разрешать плееру закрываться" #Allow the player to get closed
+                title:
+                    title: "Заголовок окна плеера" #Player window title
+                    description: "Показать название канала, игру и название стрима." #Show the channel name, game being played and stream title.
+                    checkbox: "Установить заголовок" #Set custom title
+                media-title:
+                    title: "Название медиа" #Media title
+                    description: "Показать название канала, игру и название стрима." #Show the channel name, game being played and stream title.
+                    checkbox: "Установить название медиа" #Set custom media title
+                minimal:
+                    title: "Вид (layout)" #Layout
+                    description: "Не показывать украшение окна плеера." #Don't show player window decorations.
+                    checkbox: "Минималистичный вид плеера" #Minimal player layout
+                window:
+                    title: "Обязательное окно плеера" #Force window
+                    description: "Устраняет потенциальные проблемы с стримами в качестве \"только звук\"." #Fixes potential issues with audio-only streams.
+                    checkbox: "Всегда показывать окно плеера" #Always show player window
+                seeking:
+                    title: "Позиционирование (seeking)" #Seeking
+                    description: "Позволяет переходить вперед/назад в рамках кэша стрима." #Enables jumping forwards/backwards in the stream cache.
+                    checkbox: "Включить позиционирование" #Enable seeking
+                no-cache:
+                    title: "Без кэша" #No player cache
+                    description: "Ускоряет время подключения к стриму" #Speed up stream launch time.
+                    checkbox: "Не использовать дополнительный кеш плеера" #Don't use the additional player cache
+        mpc:
+            label: "Media Player Classic - Home Cinema" #Media Player Classic - Home Cinema
+            attributes:
+                instance:
+                    title: "Режим одного окна" #Single instance mode
+                    description: "Просматривайте несколько стримов в разных окнах плеера." #View multiple streams in different player windows.
+                    checkbox: "Запретить режим одного окна" #Prevent single instance mode
+                close:
+                    title: "Закрытие плеера" #Close player
+                    description: "Предотвращает накопление пустых окон плеера." #Prevents stacking up empty player windows.
+                    checkbox: "Разрешать плееру закрываться" #Allow the player to get closed
+        potplayer:
+            label: "Daum PotPlayer" #Daum PotPlayer
+streams:
+    quality:
+        title: "Предпочтительное качество" #Preferred quality
+        description: "Выберите качество стримов по умолчанию" #Choose the default stream quality.
+    qualitypresets:
+        title: "Предустановки качества" #Quality presets
+        description: "Определите точный выбор качества по диапазону или с помощью псевдониомв (названий качества)." #Define precise quality selections by range or by using explicit quality names.
+        notes: "Во втором столбце отображается фактический выбор качества. Псевдонимы или диапазоны первого столбца будут исключены (will be excluded) из псевдонимов «лучший» (best) или «худший» (worst). Прежде чем вносить какие-либо изменения, просмотрите вики и документацию Streamlink." #The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the "best" or "worst" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes.
+        dont-exclude: "Не исключать качества (stream qualities)" #Don't exclude stream qualities
+    modal-close-launch:
+        title: "Скрыть всплывающее окно стрима" #Hide stream popup
+        description: "Когда стрим запущен" #When a stream has started.
+        checkbox: "Скрыть всплывающее окно после успешного запуска стрима" #Hide the popup after successfully launching a stream
+    modal-close-end:
+        title: "Закрыть всплывающее окно стрима" #Close stream popup
+        description: "Когда стрим завершен" #When a stream has ended.
+        checkbox: "Закрыть всплывающее окно активного стрима, когда он закончится" #Close the popup of an active stream when it ends
+    channelname:
+        title: "Пользовательские названия канала" #Custom channel names
+        description: "Локализация названия канала." #Channel name localizations.
+        values:
+            custom: "Пользовательские названия" #Show custom names
+            original: "Оригинальные названия" #Show original names
+            both: "Показывать оба варианта" #Show both
+    show-flag:
+        title: "Флаги" #Flags
+        description: "Показывать язык стримера" #Indicating the broadcaster language.
+        checkbox: "Показывать флаги всегда" #Flags are always visible
+    filter-vodcast:
+        title: "Затемнять повторы (VOD)" #Fade out Vodcasts
+        description: "Делает повторы менее заметными в качестве дополнительного индикатора." #Makes vodcasts less visible, as an additional indicator.
+        checkbox: "Затемнять повторы" #Fade out Vodcasts
+    vodcast-regexp:
+        title: "Пользовательская фильтрация повторов (VOD)" #Custom Vodcast filtering
+        description: "Найдите непомеченные повторы (VOD)." #Find untagged Vodcasts/Rebroadcasts.
+        notes: "Регулярное выражение, совместимое с JavaScript (без учета регистра), применяемое к названию стрима. Чтобы отключить фильтрацию, введите пустую строку или недопустимое регулярное выражение." #A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression.
+    show-info:
+        title: "Информационный блок" #Info bar
+        description: "Нижняя панель внутри предварительного просмотра стрима." #Bottom bar inside the stream preview.
+        checkbox: "Информация показывается" #Info bar is always visible
+    info:
+        title: "Содержимого информационного блока" #Info bar content
+        description: "Что должно быть показано" #What should be displayed?
+        values:
+            game: "Название игры" #Game being played
+            title: "Название стрима" #Stream title
+    uptime-hours-only:
+        title: "Формат времени продолжительности стрима" #Stream uptime format
+        description: "Показывать время в эфире в часах или днях" #Display stream uptime in hours or days
+        checkbox: "Игнорировать дни и суммировать часы" #Ignore days and sum up hours
+    click:
+        title: "Дейстивие при нажатии" #Click behavior
+        description: "Дополнительные действия при нажатии на картинку стрима." #Additional stream image click actions.
+        ctrl: "CTRL + левая кнопка мыши" #CTRL + Primary mouse button
+        cmd: "CMD + левая кнопка мыши" #CMD + Primary mouse button
+        middle: "Средняя кнопка мыши" #Middle mouse button
+        values:
+            noop: "Ничего не делать" #Do nothing
+            launch: "Запустить" #Launch stream
+            chat: "Открыть чат" #Open chat
+            channel: "Перейти на страницу канала" #Go to channel page
+            settings: "Перейти на настройки канала" #Go to channel settings
+chat:
+    provider:
+        title: "Приложение для чата" #Chat application
+        description: "Выберите приложение" #Choose the chat application.
+        notes-browser: "Выбор браузера по умолчанию может привести к нежелательным (большим) размерам окон." #Choosing the default browser may result in unwanted, non-minimal window sizes.
+        file-placeholder: "Укажите путь к исполняемому файлу" #Setting an executable path is required
+        params-placeholder: "Укажите дополнительные параметры" #Set additional parameters
+        url:
+            default:
+                label: "Ссылка чата по умолчанию" #Default chat URL
+                description: "Ссылка чата по умолчанию для приложения (всплывающее окно)." #The application's default chat URL (popout).
+            popout:
+                label: "Ссылка всплывающего чата" #Popout chat URL
+                description: "Используется на сайте Twitch для всплывающего окна чата." #Used by the popout mode on Twitch's website.
+            embed:
+                label: "Ссылка встроенного чата" #Embedded chat URL
+                description: "Предназначена для встраивания чата на другие сайты." #Meant for embedding the chat into other websites.
+        providers:
+            browser:
+                label: "Браузер по умолчанию" #Default browser
+                attributes:
+                    url:
+                        title: "Ссылка чата" #Chat URL
+                        description: "Какую ссылку на чат Twitch использовать." #Which Twitch chat URL to use.
+            basic:
+                substitutions:
+                    url: "Ссылка на чат канала на Twitch.tv" #The channel's chat URL on Twitch.tv
+                    channel: "Название канала" #The channel name
+                    user: "Ваше имя пользователя (если подключен)" #Your user name (if logged in)
+                    token: "Ваш токен доступа (если подключен)" #Your access token (if logged in)
+            chromium:
+                label: "Chromium" #Chromium
+                attributes:
+                    exec:
+                        title: "Исполняемый файл Chromium" #Chromium executable
+                        description: "Пользовательский путь к Chromium" #Set a custom Chromium executable path.
+                    args:
+                        title: "Параметры Chromium" #Chromium parameters
+                        description: "Укажите дополнительные параметры" #Set additional parameters.
+                    url:
+                        title: "Ссылка на чат" #Chat URL
+                        description: "Какую ссылку на чат Twitch использовать." #Which Twitch chat URL to use.
+            chrome:
+                label: "Google Chrome" #Google Chrome
+                attributes:
+                    exec:
+                        title: "Исполняемый файл Google Chrome" #Google Chrome executable
+                        description: "Пользовательский путь к Google Chrome" #Set a custom Google Chrome executable path.
+                    args:
+                        title: "Параметры Google Chrome" #Google Chrome parameters
+                        description: "Укажите дополнительные параметры" #Set additional parameters.
+                    url:
+                        title: "Ссылка на чат" #Chat URL
+                        description: "Какую ссылку на чат Twitch использовать." #Which Twitch chat URL to use.
+            msie:
+                label: "Internet Explorer" #Internet Explorer
+                attributes:
+                    url:
+                        title: "Ссылка на чат" #Chat URL
+                        description: "Какую ссылку на чат Twitch использовать." #Which Twitch chat URL to use.
+            chatty:
+                label: "Chatty" #Chatty
+                attributes:
+                    exec:
+                        title: "Исполняемый файл Java" #Java executable
+                        description: "Пользовательский путь к Java" #Set a custom java executable path.
+                    jar:
+                        title: ".jar файл Chatty" #Chatty .jar file
+                        description: "Пользовательский путь к chatty.jar" #Set a custom chatty.jar path.
+                    instance:
+                        title: "Режим одного окна" #Single instance mode
+                        description: "Требуется версия не ниже 0.8.2b2." #Requires at least version 0.8.2b2.
+                        checkbox: "Включить режим одного окна" #Enable single instance mode
+                    auth:
+                        title: "Аутентификация" #Authenticate
+                        description: "Разрешить Chatty повторно использовать данные аутентификации." #Let Chatty re-use the auth data.
+                        checkbox: "Заходить автоматически" #Sign in automatically
+                    args:
+                        title: "Пользовательские параметры Chatty" #Custom Chatty parameters
+                        description: "Укажите дополнительные параметры" #Set additional parameters.
+            chatty-standalone:
+                label: "Chatty (Standalone)" #Chatty (Standalone)
+                attributes:
+                    exec:
+                        title: "Исполняемый файл Chatty" #Chatty executable
+                        description: "Пользовательский путь к Chatty" #Set the path to the Chatty executable.
+                    instance:
+                        title: "Режим одного окна" #Single instance mode
+                        description: "Требуется версия не ниже 0.8.2b2." #Requires at least version 0.8.2b2.
+                        checkbox: "Включить режим одного окна" #Enable single instance mode
+                    auth:
+                        title: "Аутентификация" #Authenticate
+                        description: "Разрешить Chatty повторно использовать данные аутентификации." #Let Chatty re-use the auth data.
+                        checkbox: "Заходить автоматически" #Sign in automatically
+                    args:
+                        title: "Пользовательские параметры Chatty" #Custom Chatty parameters
+                        description: "Укажите дополнительные параметры" #Set additional parameters.
+            custom:
+                label: "Другое приложение" #Custom application
+                attributes:
+                    exec:
+                        title: "Исполняемый файл приложения" #Application executable
+                        description: "Пользовательский путь к приложению" #Set the path to the executable.
+                    args:
+                        title: "Пользовательские параметры приложения" #Application parameters
+                        description: "Укажите дополнительные параметры" #Set application parameters.
+                    url:
+                        title: "Ссылка на чат" #Chat URL
+                        description: "Какую ссылку на чат Twitch использовать." #Which Twitch chat URL to use.
+    chat-open:
+        title: "Открыть чат" #Open chat
+        description: "Когда запускается стрим" #While launching streams.
+        checkbox: "Автоматически открывать чат" #Automatically open chat
+        checkbox-context: "Не открывать чат при запуске стрима через контекстное меню" #Don't open chat while launching streams via the context menu
+    twitchemotes:
+        title: "Смайлики Twitch" #Twitch emotes
+        description: "Кнопка, открывающая сайт twitchemotes.com" #Button that opens up twitchemotes.com.
+        checkbox: "Показывать кнопку смайликов во всплывающих окнах стримов" #Show emotes button in stream popups
+languages:
+    filter:
+        title: "Фильтрация стримов" #Filter streams
+        description: "Примените языковой фильтр ко всем спискам стримов (кроме отслеживаемых)." #Apply a language filter to all stream lists (except followed streams).
+        values:
+            noop:
+                text: "Не затемнять и не отфильтровывать стримы" #Don't fade out or filter out streams
+                description: "Показывать все стримы" #Show all streams.
+            fade:
+                text: "Затемнять стримы" #Fade out streams
+                description: "Показать все стримы, затемнять те, которые не соответствуют выбранному языку." #Show all streams, fade out ones not matching the language selection.
+            filter:
+                text: "Отфильтровывать стримы" #Filter out streams
+                description: "Показывать только стримы, соответствующие выбранному языку." #Only show streams matching the language selection.
+    languages:
+        title: "Языки" #Languages
+        description: "Язык стримера. Если не установлен, то язык канала." #Broadcaster language, or if not set, the channel language.
+hotkeys:
+    navigation:
+        title: "Навигация" #Navigation
+        description: "Горячие клавиши глобальной навигации." #Global navigation hotkeys.
+        notes: |
+            Горячие клавиши классифицируются по действиям соответствующих компонентов. У каждого действия есть основная и дополнительная горячие клавиши, которые можно включать и выключать индивидуально, а также можно изменять с помощью настраиваемой привязки клавиш. Окно приложения должно быть в фокусе, чтобы горячие клавиши срабатывали. <br> <br>
+            Также обратите внимание, что горячие клавиши в настоящее время не учитывают раскладку клавиатуры (по техническим причинам). Это означает, что все горячие клавиши на данный момент основаны на раскладке клавиатуры США по умолчанию (QWERTY), и отдельные клавиши могут отображаться неправильно в системах, использующих другую раскладку.
+        #    |
+        #    Hotkeys are categorized by the actions of their respective component. Each action does have a primary and a secondary hotkey, which can be toggled on and off individually, and can also be modified with a custom keybinding. The application window needs to be focused in order for hotkeys to trigger.<br><br>
+        #    Also please note that the hotkeys are currently not aware of the system's keyboard layout (due to technical reasons). This means that all hotkeys are for now based on the default US keyboard layout (QWERTY) and individual keys may be displayed incorrectly on systems using a different layout.
+        actions:
+            refresh: "Обновить текущую страницу" #Refresh current menu
+            historyBack: "Назад" #Go back
+            historyForward: "Вперед" #Go forward
+            homepage: "На стартовую страницу" #Go to homepage
+            routeFeatured: "Перейти на страницу рекомендуемых каналов" #Go to the Featured Channels menu
+            routeGames: "Перейти на страницу игр" #Go to the Games menu
+            routeStreams: "Перейти на страницу стримов" #Go to the Streams menu
+            routeUserFollowedStreams: "Перейти на страницу отслеживаемых стримов" #Go to the Followed Streams menu
+            routeUserFollowedChannels: "Перейти на страницу отслеживаемых каналов" #Go to the Followed Channels menu
+            routeUserAuth: "Перейти на страницу пользователя" #Go to the User menu
+            routeWatching: "Перейти на страницу просмотра" #Go to the Watching menu
+            routeSettings: "Перейти в настройки" #Go to the Settings menu
+            routeAbout: "Перейти на страницу проекта" #Go to the About menu
+    searchbar:
+        title: "Строка поиска" #Search bar
+        description: "Строка поиска сверху" #Search bar at the top.
+        actions:
+            focus: "Перевести фокус ввода" #Focus
+    followbutton:
+        title: "Кнопка \"Отслеживать\"" #Follow button
+        description: "Кнопка отслеживания на странице канала или в диалоговом окне стрима." #The follow button on a channel's page or on the streaming dialog.
+        actions:
+            default: "Отслеживать или отписаться" #Follow or unfollow
+            confirm: "Подверждение" #Confirm
+    openchatbutton:
+        title: "Кнопка открытия чата" #Open chat button
+        description: "Кнопка открытия чата на странице канала или в диалоговом окне стрима." #The chat button on a channel's page or on the streaming dialog.
+        actions:
+            default: "Открыть чат" #Open chat
+    sharechannelbutton:
+        title: "Кнопка ссылки на канал" #Share channel button
+        description: "Кнопка ссылки на странице канала или в диалоговом окне стрима." #The share button on a channel's page or on the streaming dialog.
+        actions:
+            default: "Копировать ссылку на канал в буфер обмена" #Copy channel URL to clipboard
+    twitchemotesbutton:
+        title: "Кнопка смайликов" #Twitch emotes button
+        description: "Кнопка смайликов на странице канала или в диалоговом окне стрима." #Emotes button on a channel's page or on the streaming dialog.
+        actions:
+            default: "Открыть Twitchemotes.com" #Open Twitchemotes.com
+    modaldialog:
+        title: "Модальный диалог (всплывающее окно)" #Modal dialog
+        description: "Общие настройки всплывающих диалоговых окон." #Generic popup dialogs.
+        actions:
+            close: "Закрыть" #Close
+    modalconfirm:
+        title: "Диалог подтверждения" #Confirm dialog
+        description: "Когда необходимо подтвердить какое-то действие." #When a certain action needs to be confirmed.
+        actions:
+            confirm: "Подтвердить" #Confirm
+    modalstreaming:
+        title: "Диалог стрима" #Streaming dialog
+        description: "При просмотре стрима." #When watching a stream.
+        actions:
+            shutdown: "Остановить текущий стрим" #Stop current stream
+            log: "Показать/скрыть журнал" #Toggle log output
+notifications:
+    enabled:
+        title: "Уведомления" #Notifications
+        description: "Когда отслеживаемый канал начинает стрим" #When favorites start streaming.
+        checkbox: "Включить уведомления на рабочем столе" #Enable desktop notifications
+    provider:
+        title: "Тип уведомления" #Notification type
+        description: "Выберите вид уведомления" #Choose the kind of notification
+        test:
+            button: "Тестовая нотификация" #Test notification
+            message: "Это тестовая нотификация" #This is a test notification
+        providers:
+            auto:
+                name: "Автоматический выбор" #Automatic selection
+                description: "Попытаться найти лучший вид уведомления" #Tries to find the best notification provider
+                notes: "Проверяются все виды уведомлений в убывающем порядке" #Tests all available notification providers in descending order
+            native:
+                name: "Встроенная система уведовлений" #Native notifications
+                description: "Использует встроенную систему уведомлений системы" #Uses the system's native notification system
+                notes: "Уведомления можно настроить в системных настройках" #Notifications can be configured in the system preferences
+            snoretoast:
+                name: "Всплывающие уведомления Windows" #Windows toast notifications
+                description: "Встроенные уведомления в Windows 8+" #Native notifications on Windows 8+
+                notes: "\"Баннерные уведомления\" должны быть включены в системных настройках." #\"Banner notifications\" need to be enabled in the system preferences
+            growl:
+                name: "Уведомления Growl" #Growl notifications
+                description: "Сторонняя служба уведомлений для Windows, macOS и Linux" #Third-party notification service for Windows, macOS and Linux
+                notes: "Growl должен быть установлен и запущен" #Requires Growl to be installed and running on the system
+            rich:
+                name: "Улучшенные (rish) уведомления" #Rich notifications
+                description: "Улучшенные уведомления Chromium" #Chromium rich notifications
+                notes: "Оформляется самим приложением" #Rendered by the application itself
+    filter:
+        title: "Фильтр каналов" #Channel filter
+        description: "Уведомления можно включить/выключить индивидуально в меню настроек канала." #Notifications can be turned on/off individually in a channel's settings menu.
+        values:
+            blacklist: "Показать все, кроме отключенных" #Show all except disabled ones
+            whitelist: "Игнорировать все, кроме включенных" #Ignore all except enabled ones
+    filter-vodcasts:
+        title: "Фильтр повторов (VOD)" #Filter Vodcasts
+        description: "Только прямой эфир" #Only include live streams.
+        checkbox: "Игнорировать повторы" #Ignore Vodcasts
+    grouping:
+        title: "Группировка" #Grouping
+        description: "Объединить несколько уведомлений." #Merge multiple notifications.
+        checkbox: "Показывать только одно уведомление за раз" #Only show one notification at a time
+    click:
+        title: "Нажатие на уведомление" #Notification click
+        description: "Предпочтительное действие при нажатии." #Preferred click action.
+        values:
+            noop: "Ничего не делать" #Do nothing
+            followed: "Перейти в подписки" #Go to favorites
+            stream: "Открыть стрим" #Open stream
+            stream-and-chat: "Открыть стрим + чат" #Open stream+chat
+    click-group:
+        title: "Нажание на групповое уведомление" #Group click
+        description: "Предпочтительное действие при нажатии." #Preferred group click action.
+        values:
+            noop: "Ничего не делать" #Do nothing
+            followed: "Перейти в подписки" #Go to favorites
+            stream: "Открыть все стримы" #Open all streams
+            stream-and-chat: "Открыть все стримы + чаты" #Open all streams+chats
+    click-restore:
+        title: "Развернуть приложение" #Restore GUI
+        description: "Восстановить из трея или свернутого состояния при нажатии на уведомления." #Restore from tray or minimized state when performing a notification click action.
+        checkbox: "Восстановить при нажатии на уведомление" #Restore when clicking a notification
+channels:
+    find: "Найти канал" #Find channel
+    none: "Каналов не найдено." #No channels found.
+    empty: "Пользовательские настройки каналов не заданы." #No custom channel settings set.

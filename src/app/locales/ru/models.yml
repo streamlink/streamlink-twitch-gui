@@ -1,0 +1,17 @@
+twitch:
+    channel:
+        followers: "Подписчиков: {{count}}"
+            #one: "Один человек подписан" #"One person is following"
+            #other: "Подписчиков: {{count}}" #"{{count}} people are following"
+        views: "Просмотров: {{count}}"
+            #one: "Один просмотр" #"One channel view"
+            #other: "Просмотров: {{count}}" #"{{count}} channel views"
+    stream:
+        created-at:
+            # new Moment(stream.created_at).format(...)
+            less-than-24h: "[Запущен в] LTS" #"[Online since] LTS"
+            # new Moment(stream.created_at).format(...)
+            more-than-24h: "[Запущен в] llll" #"[Online since] llll"
+        viewers:  "Зрителей: {{count}}"
+            #one: "Один зритель" #"One person is watching"
+            #other: "Зрителей: {{count}}" #"{{count}} people are watching"
