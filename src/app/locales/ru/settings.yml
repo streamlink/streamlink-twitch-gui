@@ -2,12 +2,12 @@ menu:
     header: "Настройки" #Settings
     main: "Главная" #Main
     gui: "Интерфейс" #GUI
-    streaming: "Поток данных" #Streaming
+    streaming: "Данные" #Streaming
     player: "Плеер" #Player
     streams: "Стримы" #Streams
     chat: "Чат" #Chat
     languages: "Язык" #Languages
-    hotkeys: "Горячие клавиши" #Hotkeys
+    hotkeys: "Клавиатура" #Hotkeys
     notifications: "Уведомления" #Notifications
     channels: "Каналы" #Channels
 main:

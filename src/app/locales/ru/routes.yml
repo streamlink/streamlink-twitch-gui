@@ -71,7 +71,9 @@ channel:
             # static "zero" property
             data:
                 zero: "Нет дополнительной задержки" #No additional delay
-                one: "Одна секунда" #One second
+                one: "{{count}} секунда" #One second
+                few: "{{count}} секунды"
+                many: "{{count}} секунд"
                 other: "{{count}} сек." #"{{count}} seconds"
         vodcast:
             title: "Повтор (VOD)" #Vodcast
