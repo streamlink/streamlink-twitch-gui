@@ -16,10 +16,22 @@
 		margin-right: 1.5rem;
 
 		> * {
+			@icon-width: 1.25rem;
+			@icon-full-width: 1.5rem;
+
 			margin: 0;
 
+			&:first-child {
+				margin-left: @icon-full-width;
+
+				> i.fa {
+					width: @icon-width;
+					margin: 0 (@icon-full-width - @icon-width) 0 -@icon-full-width !important;
+				}
+			}
+
 			&:not(:first-child) {
-				margin-left: 1.5rem;
+				margin-left: @icon-full-width;
 				margin-bottom: .25rem;
 				font-size: .75em;
 
