@@ -1,7 +1,22 @@
+@import (reference) "~ui/styles/config";
+
+
 .input-btn-component.check-box-component {
 	&.no-label {
 		> i {
 			margin: 0;
+		}
+	}
+
+	&:not(.no-label) {
+		display: inline-flex;
+
+		> i {
+			@line: ( @input-btn-size * @line-height-base );
+			@size: ( @input-btn-size + 2 * @input-btn-outline-size );
+
+			flex: 0 0 @input-btn-size;
+			margin: ( ( @line - @size ) / 2 ) 0 0;
 		}
 	}
 }
