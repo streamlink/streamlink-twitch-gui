@@ -13,6 +13,14 @@ confirm:
         apply: Anwenden
         discard: Verwerfen
         cancel: Abbrechen
+debug:
+    header: "Debug-Build: {{version}}"
+    body: |
+        Du verwendest einen Debug-Build von {{name}}.<br>
+        Bitte sei vorsichtig bei dem, was du tust, und melde alle Probleme, die du findest.<br>
+        Vielen Dank!
+    action:
+        close: Okay
 firstrun:
     header: "Danke für das Verwenden von {{name}}!"
     body: Möchtest du die Anwendung zuerst konfigurieren, bevor du startest?
