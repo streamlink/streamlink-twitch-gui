@@ -119,7 +119,7 @@ Thank you very much for your support!
   [badge-platforms]: https://img.shields.io/badge/platform-win%20%7C%20mac%20%7C%20linux-green.svg?style=flat-square "Supported platforms"
   [badge-release]: https://img.shields.io/github/release/streamlink/streamlink-twitch-gui.svg?style=flat-square "Latest release"
   [badge-issues]: https://img.shields.io/github/issues/streamlink/streamlink-twitch-gui.svg?style=flat-square "Open issues"
-  [badge-actions]: https://img.shields.io/github/workflow/status/streamlink/streamlink-twitch-gui/Test,%20build%20and%20deploy/master?style=flat-square
+  [badge-actions]: https://img.shields.io/github/workflow/status/streamlink/streamlink-twitch-gui/Test,%20build%20and%20deploy/master?event=push&style=flat-square
   [badge-codecov]: https://img.shields.io/codecov/c/github/streamlink/streamlink-twitch-gui.svg?style=flat-square
   [badge-gitter]: https://img.shields.io/gitter/room/streamlink/streamlink-twitch-gui.svg?style=flat-square "Gitter IRC"
   [Application-rename]: https://github.com/streamlink/streamlink-twitch-gui/issues/331 "The future of Livestreamer Twitch GUI"
