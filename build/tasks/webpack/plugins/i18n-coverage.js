@@ -144,7 +144,10 @@ module.exports = class WebpackI18nCoveragePlugin {
 	}
 
 	_strToRegExp( str ) {
-		const regexp = new RegExp( `^${str.replace( /\./g, "\\." ).replace( /\*/g, "[\\w-]+" )}$` );
+		const reStr = str
+			.replace( /[\\.]/g, "\\$&" )
+			.replace( /\*/g, "[\\w-]+" );
+		const regexp = new RegExp( `^${reStr}$` );
 		regexp.toString = () => str;
 
 		return regexp;
