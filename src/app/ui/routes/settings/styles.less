@@ -123,23 +123,8 @@
 		margin-bottom: 1em;
 	}
 
-	.input-btn-with-description {
-		> label {
-			margin-bottom: 0;
-		}
-
-		> .description {
-			margin: 0 0 .5rem calc(@input-btn-size + 2 * @input-btn-outline-size + .5rem) !important;
-			font-size: small;
-
-			.theme({
-				.theme-mix-color( @theme-text-color-hint, @theme-background );
-			});
-
-			> .fa {
-				cursor: help;
-			}
-		}
+	.input-btn-component .label-description > .fa {
+		cursor: help;
 	}
 
 	.settings-hotkeys {

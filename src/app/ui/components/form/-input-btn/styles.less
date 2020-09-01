@@ -4,15 +4,29 @@
 
 
 .input-btn-component {
-	> i {
-		@line: ( @input-btn-size * @line-height-base );
-		@size: ( @input-btn-size + 2 * @input-btn-outline-size );
+	@line: ( @input-btn-size * @line-height-base );
+	@size: ( @input-btn-size + 2 * @input-btn-outline-size );
 
+	&.no-label {
+		> i {
+			margin: 0;
+		}
+	}
+
+	&:not(.no-label) {
+		display: inline-flex;
+
+		> i {
+			flex: 0 0 @input-btn-size;
+			margin: ( ( @line - @size ) / 2 ) .5em 0 0;
+		}
+	}
+
+	> i {
 		display: inline-block;
 		position: relative;
 		width: @input-btn-size;
 		height: @input-btn-size;
-		margin: 0 @input-btn-outline-size ( ( @line - @size ) / 2 );
 		visibility: hidden;
 		vertical-align: middle;
 		cursor: inherit;
@@ -51,10 +65,18 @@
 	}
 
 	// label text
-	> span {
+	> div {
 		display: inline-block;
-		margin: 0 0 0 .5em;
 		font-weight: normal;
+
+		// label description
+		> div:nth-of-type(2) {
+			font-size: small;
+
+			.theme({
+				.theme-mix-color( @theme-text-color-hint, @theme-background );
+			});
+		}
 	}
 
 	& {

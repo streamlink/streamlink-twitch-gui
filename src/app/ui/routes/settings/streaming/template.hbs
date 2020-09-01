@@ -67,9 +67,11 @@
 		content=contentStreamingPlayerInput
 		as |item|
 	}}
-		<div class="input-btn-with-description">
-			{{item.button label=(t (concat "settings.streaming.playerinput.values." item.value ".label"))}}
-			<p class="description">{{t (concat "settings.streaming.playerinput.values." item.value ".description")}}</p>
+		<div>
+			{{item.button
+				label=(t (concat "settings.streaming.playerinput.values." item.value ".label"))
+				description=(t (concat "settings.streaming.playerinput.values." item.value ".description"))
+			}}
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}

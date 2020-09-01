@@ -1,6 +1,5 @@
 import { get } from "@ember/object";
 import InputBtnComponent from "../-input-btn/component";
-import "./styles.less";
 
 
 export default InputBtnComponent.extend({

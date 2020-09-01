@@ -29,15 +29,13 @@
 		content=contentNotificationProviders
 		as |item|
 	}}
-		<div class="input-btn-with-description">
-			{{item.button
-				label=(t (concat "settings.notifications.provider.providers." item.value ".name"))
-				disabled=(bool-not model.notification.enabled)
-			}}
-			<p class="description">
+		<div>
+			{{#item.button disabled=(bool-not model.notification.enabled)}}
+				{{t (concat "settings.notifications.provider.providers." item.value ".name")}}
+			{{else}}
 				<i class="fa fa-question-circle" title={{t (concat "settings.notifications.provider.providers." item.value ".notes")}}></i>
 				{{t (concat "settings.notifications.provider.providers." item.value ".description")}}
-			</p>
+			{{/item.button}}
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}

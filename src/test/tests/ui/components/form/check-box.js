@@ -61,29 +61,58 @@ module( "ui/components/form/check-box", function( hooks ) {
 	});
 
 
-	test( "CheckBoxComponent - without block", async function( assert ) {
+	test( "Positional parameters", async function( assert ) {
 		this.set( "label", "foo" );
-		await render( hbs`{{check-box label}}` );
+		this.set( "description", "" );
+		await render( hbs`{{check-box label description}}` );
 		const elem = this.element.querySelector( ".check-box-component" );
 
-		assert.strictEqual( elem.innerText, "foo", "Has a label" );
 		assert.notOk( elem.classList.contains( "no-label" ), "Doesn't have the no-label class" );
+		assert.propEqual(
+			Array.from( elem.querySelector( ":scope > div" ).children ).map( e => e.innerText ),
+			[ "foo" ],
+			"Has a label, but no description"
+		);
 
 		this.set( "label", "bar" );
-		assert.strictEqual( elem.innerText, "bar", "Label gets updated" );
+		assert.propEqual(
+			Array.from( elem.querySelector( ":scope > div" ).children ).map( e => e.innerText ),
+			[ "bar" ],
+			"Label gets updated"
+		);
+
+		this.set( "description", "baz" );
+		assert.propEqual(
+			Array.from( elem.querySelector( ":scope > div" ).children ).map( e => e.innerText ),
+			[ "bar", "baz" ],
+			"Has a label and a description"
+		);
 	});
 
 
-	test( "CheckBoxComponent - without block and label", async function( assert ) {
+	test( "Inverse block", async function( assert ) {
+		await render( hbs`{{#check-box}}foo{{else}}bar{{/check-box}}` );
+		const elem = this.element.querySelector( ".check-box-component" );
+
+		assert.propEqual(
+			Array.from( elem.querySelector( ":scope > div" ).children ).map( e => e.innerText ),
+			[ "foo", "bar" ],
+			"Has a label and a description"
+		);
+	});
+
+
+	test( "No block and label", async function( assert ) {
 		await render( hbs`{{check-box}}` );
 		const elem = this.element.querySelector( ".check-box-component" );
 
 		assert.strictEqual( elem.innerText, "", "Doesn't have a label" );
 		assert.ok( elem.classList.contains( "no-label" ), "Has the no-label class" );
+		assert.notOk( elem.querySelector( ":scope > div" ), "Doesn't have a label element" );
 	});
 
 
-	test( "CheckBoxComponent - attribute bindings", async function( assert ) {
+	test( "Attribute bindings", async function( assert ) {
 		await render( hbs`{{check-box title="foo"}}` );
 		const elem = this.element.querySelector( ".check-box-component" );
 

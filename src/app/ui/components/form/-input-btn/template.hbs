@@ -1,1 +1,17 @@
-<i></i>{{#if hasBlock}}{{_setHasBlock}}<span>{{yield}}</span>{{else if label}}<span>{{label}}</span>{{/if}}
+<i></i>
+{{#if hasBlock}}
+	{{_setHasBlock}}
+	<div>
+		<div>{{yield}}</div>
+		{{#if (hasBlock "inverse")}}
+			<div>{{yield to="inverse"}}</div>
+		{{/if}}
+	</div>
+{{else if label}}
+	<div>
+		<div>{{label}}</div>
+		{{#if description}}
+			<div>{{description}}</div>
+		{{/if}}
+	</div>
+{{/if}}

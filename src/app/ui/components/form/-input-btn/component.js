@@ -53,5 +53,5 @@ export default Component.extend({
 	}
 
 }).reopenClass({
-	positionalParams: [ "label" ]
+	positionalParams: [ "label", "description" ]
 });
