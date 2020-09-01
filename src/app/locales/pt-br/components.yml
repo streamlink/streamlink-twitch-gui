@@ -1,0 +1,107 @@
+channel-item:
+    game-missing: nenhum jogo definido
+documentation-link:
+    title: Ler a documentação online
+drop-down-selection:
+    placeholder: Por favor escolha
+file-select:
+    placeholder: Deixe em branco para o caminho padrão
+flag-icon:
+    channel: "O idioma do canal é {{lang}}"
+    broadcaster: "O idioma de transmissão é {{lang}}"
+follow-button:
+    follow: "Seguir {{name}}"
+    unfollow: "Não seguir {{name}}"
+    confirm: "Não seguir {{name}}"
+    keep: "Continuar seguindo {{name}}"
+infinite-scroll:
+    error: Erro
+    loading: Carregando
+    fetch: Carregar mais
+main-menu:
+    browse:
+        header: Navegar
+        featured: Em destaque
+        games: Jogos
+        streams: Streams
+    followed:
+        header: Seguidos
+        streams: Streams
+        channels: Canais
+    misc:
+        header: Misc
+        settings: Preferências
+        about: Sobre
+open-chat:
+    title: Abrir chat
+quick-bar-homepage:
+    title: Definir como página principal
+quick-bar-random-stream:
+    title: Abrir um stream aleatório
+search-bar:
+    placeholder: Procurar
+    filter: Filtrar resultados
+    filters:
+        all: Todos
+        games: Jogos
+        channels: Canais
+        streams: Streams
+    recent: Requisições recentes
+settings-channel-item:
+    settings: Preferências
+    erase: Desfazer
+    confirmation: Desfazer preferências?
+    confirm: Sim
+    decline: Não
+settings-hotkey:
+    empty: Nenhum atalho definida
+    edit: Definir este atalho
+    delete: Desfazer atalho
+    discard: Descartar
+    confirm: Definir atalho
+    toggle: Ativar or desativar atalho
+settings-row:
+    notes: Notas
+    default: Padrãp
+    requires: Necessita
+    example: Exemplo
+    variables:
+        title: Variáveis disponíveis
+        # tooltip (whitespace sensitive)
+        help: |
+            O conteúdo de cada variável será escapado. Se usado fora das aspas, cada caracter será escapado. algumas aplicações permitem a leitura desnecessária de caracteres escapados dentro da lista de parâmetros e irá funcionar como o esperado, mas outros não. Certifique de definir todas as variáveis dentro de aspas simples ou duplas.
+
+            Uso correto:
+            -a "{a}" -b "{b1}{b2}" "-c={c}"
+settings-submit:
+    apply: Aplicar
+    discard: Discartar
+share-channel:
+    title: Copiar URL do canal para a área de cópia
+stream-item:
+    fps: "{{fps}} fps"
+    details:
+        show: Mostrar detalhes da stream
+        lock: Travar a visualização de detalhes
+        unlock: Destravar a visualização de detalhes
+    vodcast: Vodcast
+subscribe-channel:
+    title-new: "Inscrever para {{name}} agora"
+    title-renew: "Renovar inscrição para {{name}}"
+team-item:
+    created-at:
+        title: "Data de criação"
+        # new Moment(team.created_at).format(...)
+        format: "llll"
+    updated-at:
+        title: "Última modificação"
+        # new Moment(team.updated_at).format(...)
+        format: "llll"
+title-bar:
+    loggedout: Não está logado
+    # tooltip (whitespace sensitive)
+    loggedin: |
+        Logado como {{name}}
+        {{status}}
+twitch-emotes:
+    title: Mostrar emotes de canais disponíveis

@@ -1,0 +1,13 @@
+notification:
+    dispatch:
+        single: "{{name}} iniciou a transmissão"
+        group: Alguns canais seguidos iniciaram as transmissões
+    status:
+        disabled: Notificação desativada
+        enabled: Notificação ativada
+        error: Notificação desligada (offline)
+        paused: Notificação pausada
+    tray:
+        pause:
+            label: Pausar notificações
+            tooltip: Ativar ou Desativar as notificações

@@ -1,0 +1,181 @@
+error:
+    header: Erro
+    text: Houve um erro enquanto tentava mostrar esta página.
+about:
+    about:
+        header: Sobre
+        homepage: Página principal
+        author: Autor
+        version: Versão
+        nwjs: NW.js
+        arch: Arquitetura
+        built: Built
+        help: Ajuda
+        wiki: Wiki
+        bugs: Bugs
+        issue-tracker: Issue tracker
+        support: Suporte
+        gitter: Gitter
+        changelog: Log de mudanças
+        contributors: Contribuidores
+    donation:
+        header: Suporte & doação
+        text: Se você acha que este aplicativo o está ajudando, por favor considere suportar o seu criador através de doações.<br>Muito obrigado!
+    translations:
+        header: Traduções
+    dependencies:
+        header: Aplicativos de terceiros
+featured:
+    header: Canais em destaque
+    empty: A lista de canais em destaque não pôde ser carregado!
+    summary: Há {{viewers}} pessoas assistindo {{channels}} streams agora!
+games:
+    header: Jogos mais vistos
+    empty: A lista de jogos mais vistos está vazia.
+game:
+    empty: A lista de streams deste jogo está vazia.
+streams:
+    header: Streams mais vistos
+    empty: A lista de streams mais vistos está vazia.
+channel:
+    menu:
+        details: Detalhes
+        teams: Times
+        settings: Preferências
+    offline: está offline agora
+    details:
+        header: Estatísticas do canal
+        name:
+            title: Nome
+        created-at:
+            title: Criado
+            # new Moment(channel.created_at).format(...)
+            format: "LL"
+        language:
+            title: Idioma
+        followers:
+            title: Seguidores
+            data: "{{followers}} ({{day}} por dia)"
+        views:
+            title: visualizações
+            data: "{{views}} ({{day}} por dia)"
+        content:
+            title: Conteúdo
+            mature: Inapropriado para crianças
+            ffa: Sem restrição de idade
+        format:
+            title: Formato
+            data: "{{resolution}} @ {{fps}}fps"
+        delay:
+            title: Atraso
+            # static "zero" property
+            data:
+                zero: Sem atrasos adicionais
+                one: Um segundo
+                other: "{{count}} segundos"
+        vodcast:
+            title: Vodcast
+            data: O Stream é um Vodcast
+    teams:
+        empty: A lista de times está vazia.
+    settings:
+        stream:
+            header: Stream
+            quality:
+                title: Qualidade
+                description: Definir a qualidade da transmissão.
+            low-latency:
+                title: Transmissão de baixa latência
+                description: Sobrescrever a configuração global de baixa latência.
+                checkbox: Ativar transmissão de baixa latência
+            disable-ads:
+                title: Propagandas
+                description: Sobrescrever a configuração global de propaganadas.
+                checkbox: Pular propaganda nas transmissões
+            chat:
+                title: Chat
+                description: Abrir chat automaticamente.
+                checkbox: Abrir chat quando a transmissão iniciar
+        notifications:
+            header: Notificações na área de trabalho
+            enabled:
+                title: Notificações
+                description: Quando o canal inicia transmissão.
+                notes: O canal precisa ser seguido.
+                checkbox: Ativar notificações na área de trabalho
+team:
+    header:
+        members: "Membros do time: {{num}}"
+        # new Moment(team.created_at).format(...)
+        created-at: "[Data de criação:] llll"
+        # new Moment(team.updated_at).format(...)
+        updated-at: "[Última modificação:] llll"
+    menu:
+        live: Membros ao vivo
+        all: Todos os membros
+        info: Informação do time
+    live:
+        empty: A lista de transmissão dos membros do time está vaiza.
+    all:
+        empty: A lista de todos os membros do time está vazia.
+    info:
+        header: Informações
+user:
+    index:
+        logged-in: "Logado como {{name}}"
+        # new Moment(auth.session.date).format(...)
+        since: "[desde] LLLL"
+        sign-out: Sair
+        token:
+            title: Seu token de acesso
+            show: Mostrar token de acesso
+            copy: Copiar para área de cópia
+            hint:
+                first: "Esta chave permite acesso a sua conta Twitch.tv com estas permissões:"
+                second: Faça login novamente com o seu password para invalidar esta ação.
+    auth:
+        abort: Abortar
+        sign-in: Acessar
+        token:
+            show-form: Usar token de acesso
+            placeholder: Inserir o token de acesso
+            hint:
+                first: Faça login na sua conta Twitch.tv usando o token de acesso.
+                second: "Certifique que as seguintes permissões estão liberadas:"
+        fail: Falha de autenticação. Tente novamente por favor.
+    followedStreams:
+        header: Streams seguidos
+        empty:
+            text: A lista de streams seguidos está vazia.
+            featured: Watch currently featured streams
+            streams: Watch top streams
+    followedChannels:
+        header: Canais seguidos
+        buttons:
+            sort-by-followed: Ordenar pela data (seguido)
+            sort-by-broadcast: Ordenar pela última transmissão
+            sort-by-login: Ordenar pelo último login
+            sort-desc: Ordenar por ordem descendente
+            sort-asc: Ordenar por ordem ascendente
+        empty: A lista de canais seguidos está vazia.
+search:
+    header:
+        all: Todas os resultados buscados
+        games: "Resultado de jogos buscados: "
+        channels: "Resultado de canais buscados: "
+        streams: "Resultado de stream buscados: "
+    subheader:
+        games: Jogos
+        channels: Canais
+        streams: Streams
+    empty: Sua requisição não encontrou nada...
+watching:
+    header: Você está assistindo
+    buttons:
+        open: Abrir caixa de diálogo
+        close: Fechar Stream
+    empty:
+        header: Todas as streams foram fechadas
+        next: O que fazer a seguir?
+        featured: Assistir as streams em destaque
+        followed: Assistir as streams que você segue

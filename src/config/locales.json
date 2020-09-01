@@ -4,6 +4,7 @@
 		"de": "Deutsch",
 		"en": "English",
 		"fr": "Français",
+		"pt-br": "Português (Brasil)",
 		"ru": "Русский",
 		"zh-tw": "中文 繁體"
 	},
@@ -24,6 +25,12 @@
 			{
 				"name": "Simon P.",
 				"github": "selbiselbi"
+			}
+		],
+		"pt-br": [
+			{
+				"name": "Rubens Suguimoto",
+				"github": "rumassa86"
 			}
 		],
 		"ru": [
