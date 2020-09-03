@@ -80,7 +80,7 @@
 		"lodash": "4.17.19",
 		"mini-css-extract-plugin": "0.4.0",
 		"node-fetch": "3.0.0-beta.7",
-		"nw-builder": "github:bastimeyer/nw-builder#4e9b2e7",
+		"nw-builder": "github:bastimeyer/nw-builder#48b4ae8",
 		"optimize-css-assets-webpack-plugin": "5.0.3",
 		"qunit": "2.6.2",
 		"raw-loader": "0.5.1",
