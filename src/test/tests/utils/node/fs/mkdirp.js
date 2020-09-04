@@ -12,8 +12,10 @@ module( "utils/node/fs/mkdirp", function( hooks ) {
 
 		/** @type {Function} subject */
 		this.subject = mkdirpInjector({
-			"fs/promises": {
-				mkdir: this.mkdirStub
+			fs: {
+				promises: {
+					mkdir: this.mkdirStub
+				}
 			}
 		})[ "default" ];
 	});

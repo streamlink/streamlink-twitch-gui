@@ -1,4 +1,7 @@
-import { mkdir } from "fs/promises";
+import { promises as fsPromises } from "fs";
+
+
+const { mkdir } = fsPromises;
 
 
 /**
