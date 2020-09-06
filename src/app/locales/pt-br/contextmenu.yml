@@ -1,0 +1,18 @@
+tray:
+    toggle: Alternar janela
+    close: Fechar aplicação
+macOS:
+    preferences: Preferências
+    refresh: Atualizar
+channel-page: Página do canal
+channel-settings: Preferências do canal
+change-quality: Mudar qualidade
+close-stream: Fechar transmissão
+copy: Copiar
+copy-channel-url: Copiar URL do canal
+copy-link-address: Copiar endereço
+copy-selection: Copiar seleção
+launch-stream: Abrir transmissão
+open-chat: Abrir chat
+open-in-browser: Abrir no navegador
+paste: Colar

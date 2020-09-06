@@ -1,0 +1,80 @@
+dialog:
+    action:
+        close: Fechar
+changelog:
+    header: "Você atualizou para {{version}}"
+    body: Você gostaria de ver as novidades e ler as alterações agora?
+    action:
+        show: Changelog
+confirm:
+    header: Por favor confirme
+    body: Você quer aplicar as mudanças?
+    action:
+        apply: Aplicar
+        discard: Discartar
+        cancel: Cancelar
+debug:
+    header: "Debug build: {{version}}"
+    body: |
+        Você está rodando uma versão de debug {{name}}.<br>
+        Tenha cuidado com o que está fazendo e reporte quaisquer problemas que encontrar.<br>
+        Obrigado!
+    action:
+        close: Okay
+firstrun:
+    header: "Obrigado por usar {{name}}!"
+    body: Você gostaria de configurar a aplicação antes de iniciar?
+    action:
+        start: Iniciar agora
+        settings: Preferências
+newrelease:
+    header: "Você está usando uma versão desatualizada: {{version}}"
+    body: "Você gostaria de baixar a última versão agora? ({{version}})"
+    action:
+        download: Baixar
+        ignore: Ignorar
+quit:
+    header: Você tem certeza que quer sair?
+    body:
+        streams: Escolhendo desligar, todos as transmissões serão fechados.
+        no-streams: Todos as transmissões foram fechados. Você quer sair agora?
+    action:
+        close: Voltar
+        shutdown: Desligar
+        quit: Sair
+streaming:
+    header:
+        preparing: "Preparando, espere por favor"
+        launching: "Abrindo: "
+        watching: "Assistindo: "
+        ended: "Stream finalizado: "
+        error:
+            log: "Erro: não foi possível abrir a transmissão"
+            provider: "Erro: {{provider}} não configurado"
+            player: "Erro: tocador de vídeo não configurado"
+            version: "Erro: versão {{provider}} inválido"
+            unable-to-open: "Erro: não foi possível abrir a transmissão"
+            no-streams-found: "Erro: nenhum stream encontrado"
+            timeout: "Erro: tempo excedido"
+            hosting: "{{name}} está hospedando outro canal"
+            internal: "Erro"
+    body:
+        launching: "Esperando por {{provider}} para abrir o stream..."
+        ended: "Você quer reiniciar o stream agora?"
+        error:
+            provider: "Por favor verifique suas preferências e/ou (re)instale {{provider}}."
+            player: "Por favor verifique as preferências do tocador de vídeo."
+            version: "A versão v{{version}} não corresponde com os requisitos (v{{required}})."
+            unable-to-open: "{{provider}} não foi possível abrir o stream."
+            no-streams-found: "{{provider}} não foi possível encontrar o stream."
+            timeout: "{{name}} desligou o stream, ou a sua conexão com o Twitch foi interrompida."
+            hosting: "Você quer mudar para {{name}}?"
+            internal: "Erro interno"
+    action:
+        abort: Abortar
+        continue: Continuar
+        download: Baixar
+        log: Mostra/Ocultar log do {{provider}}
+        restart: Reiniciar
+        shutdown: Fechar stream
+        start-hosted: Mudar

@@ -1,0 +1,571 @@
+# Translation notes:
+# I list some translation made here of some words not so used in portuguese
+# to make it clear and avoid confusion about it.
+#
+# tray (system tray): área de notificação
+# streaming: transmissão
+# buffering: bufferização
+# to launch (stream): abrir (transmissão)
+
+menu:
+    header: Preferências
+    main: Principal
+    gui: GUI
+    streaming: Transmitindo
+    player: Tocador de vídeo
+    streams: Streams
+    chat: Chat
+    languages: Idiomas
+    hotkeys: Atalhos
+    notifications: Notificações
+    channels: Canais
+main:
+    language:
+        title: Idioma
+        description: Selecione o idioma para a interface (GUI).
+        notes: Você fala outro idioma? Ajude traduzindo! Veja o Wiki para mais informações.
+        labels:
+            auto: "Sistema ({{label}})"
+    advanced:
+        title: Preferências e capacidades
+        description: Esconder Preferências e capacidades.<br>Não é somente aplicado ao menu das preferências.
+        checkbox: Ativar Preferências e capacidades avançadas
+    homepage:
+        title: Página principal
+        description: Carregar menu primeiro ou quando clicar no logo.
+        text:
+            first: Ver a barra de menu no canto superior direito de cada página.
+            second: Clicar no botão 'Página principal' para ir a página principal.
+    theme:
+        title: Tema
+        description: Selecionar uma cor tema para a interface (GUI).
+        notes-system: Isso precisa ter o suporte do sistema operacional ou do ambiente da área de trabalho.
+    scrolling:
+        title: Navegação
+        description: Permitir a navegação (scrolling) suave.
+        checkbox: Permitir naveção suave
+    externalcommands:
+        title: Ações por linha de comando
+        description: Escutar os sinais enviados por outras aplicações.
+        notes: Veja o Wiki para mais informações sobre ações e parâmetros.
+        checkbox: Permitir comandos externos
+gui:
+    integration:
+        title: Interação com Sistema Operacional
+        description: Por onde acessar a interface (GUI).
+        values:
+            both: Ambos
+            taskbar: Barra de tarefas
+            tray: Área de notificação
+    minimize:
+        title: Minimizar a interface (GUI)
+        description: Quando o tocador de vídeo abrir.
+        values:
+            noop: Não fazer nada
+            minimize: Minimizar
+            tray: Mover para a área de notificação
+    hidebuttons:
+        title: Esconder os botões da janela
+        description: Esconder os botões minimizar, maximizar e fechar.
+        checkbox: Esconder botões
+    minimizetotray:
+        title: Botão minimizar
+        description: Comportamento do clicque.
+        checkbox: Minimizar para área de notificação
+    badgelabel:
+        title: Distintivo da aplicação
+        description: Ícone na barra de tarefas ou notificação.
+        notes: Isso precisa ter o suporte do sistema operacional ou do ambiente da área de trabalho.
+        requires: Integração com a barra de tarefas e área de notificações precisam estar ativas.
+        checkbox: Mostrar o número de transmissões favoritas
+    focusrefresh:
+        title: Atualizar conteúdo
+        description: Atualizar automaticamente quando a janela ganhar foco.
+        values:
+            none: Não atualizar
+            one: Após um minuto
+            two: Após dois minutos
+            five: Após cinco minutos
+streaming:
+    provider:
+        title: Provedor de transmissão
+        description: Escolher um provedor de transmissão e definir os locais de executáveis da sua preferência.
+        notes: É preciso definir um caminho explícito se o arquivo não for encontrador pelo sistema através da variável de ambiente $PATH ou na lista pré-definida pela GUI.
+        executable:
+            streamlink: executável Streamlink
+            streamlink-python: executável Python
+        python-script:
+            streamlink-python: Python script do Streamlink
+        parameters:
+            title: Parâmetros personalizados
+            placeholder: Adicionar parâmetros personalizados
+    playerinput:
+        title: Entrada de dados do tocador de vídeo
+        description: Define o método de entrada de dados da transmissão no tocador de vídeo.
+        notes: Por favor veja o Wiki para informações detalhadas sobre esta opção. Diferentes parâmetros serão definidos, dependendo do método selecionado. O tocador precisa ter suporte ao método selecionado.
+        values:
+            stdin:
+                label: Entrada padrão
+                description: Escreve os dados de transmissão na entrada padrão do tocador.
+            fifo:
+                label: Pipe
+                description: Escreve os dados de transmissão em um pipe (arquivo) por onde o tocador faz a leitura.
+            http:
+                label: HTTP
+                description: Abre um servidor HTTP local e então o tocador se conecta a este servidor para obter os dados de transmissão.
+            passthrough:
+                label: HLS (atravessado)
+                description: Deixa o próprio tocador de vídeo baixar e carregar a transmissão.
+    low-latency:
+        title: Tranmissão de baixa latência
+        description: Reduz o atraso da transmissão para os canais que transmitem em modo de baixa latência.
+        notes: Atenção ao ativar esta opção pois irá configurar o valor do live-edge para 2 (se for alto), o que pode causar uma bufferização para transmissões regulares. Para alcançar a menor latência possível, serão necessários ajustes nas configurações de cache ou buffer dos tocadores de vídeo.
+        checkbox: Ativar transmissão de baixa latência
+    hls-live-edge:
+        title: HLS live edge
+        description: Diminuir o valor irá diminuir a latência da transmissão, mas podem causar bufferização. Dependendo da configuração do tocador, podem haver outros níveis de bufferização.
+    hls-segment-threads:
+        title: HLS segmentos de threads
+        description: Número de threads usados para baixar e processar os segmentos de transmissão.
+    player-no-close:
+        title: Manter a janela do tocador de vídeo
+        description: Após a transmissão ter terminado.
+        notes: O próprio tocador deve previnir que o {{provider}} feche. Por favor veja também as configurações do tocador de vídeo.
+        checkbox: Não fechar o tocador de vídeo
+    disable-ads:
+        title: Propagandas
+        description: Isto permite que a transmissão congele enquanto o canal está mostrando propagandas. Veja o Wiki para mais detalhes.
+        checkbox: Pular propagandas embutidas nas transmissões
+    retry-open:
+        title: Tentativas ao abrir transmissão
+        description: Número de tentativas ao abrir um transmissão.
+    retry-streams:
+        title: Atraso ao tentar novamente
+        description: Tempo em segundos entre cada tentativa.
+player:
+    preset:
+        title: Pré-configuração do tocador de vídeo
+        description: Use um pré definição de configuração do tocador de vídeo.
+    executable:
+        default:
+            title: Tocador de vídeo
+            description: Se deixado vazio, a configuração padrão será usada.
+            default-value: VLC (não configurado)
+            notes: Os parâmetros podem ser adicionados aqui, mas devem ser definidos nos campos específicos. Veja a seguir a lista de variáveis disponíveis.
+            placeholder: Deixe vazio para usar a configuração padrão do tocador
+        preset:
+            title: Executável do tocador de vídeo
+            description: É preciso definir um caminho explícito se o arquivo não for encontrador pelo sistema através da variável de ambiente $PATH ou na lista pré-definida pela GUI.
+            placeholder: Deixe em branco para usar a localização padrão
+    args:
+        default:
+            title: Parâmetros
+            description: Adicionar parâmetros específicos do tocador.
+        preset:
+            title: Parâmetros personalizados
+            description: Adicionar parâmetros personalizados para o tocador de vídeo.
+        placeholder: Adicionar parâmetros personalizados
+        substitutions:
+            channel: Nome do canal
+            status: Texto de status do canal
+            game: Nome do jogo que está sendo jogado
+            delay: Atraso adicional para a transmissão (em segundos)
+            created: Online desde
+            viewers: Número de espectadores
+            views: Número total de visualizações
+    players:
+        default:
+            label: Sem pré definição
+        vlc:
+            label: VLC media player
+            attributes:
+                instance:
+                    title: Modo de instância única
+                    description: Ver múltiplas transmissões em diferentes janelas.
+                    checkbox: Previne o modo de instância única
+                close:
+                    title: Fechar o tocador
+                    description: Previne abrir uma transmissão sobre outra em uma janela vazia.
+                    checkbox: Permite que o tocador seja fechado
+                title:
+                    title: Título da janela no tocador de vídeo
+                    description: Mostrar o nome do canal, título do jogo e a transmissão no título
+                    checkbox: Definir um título personalizado
+                minimal:
+                    title: Layout
+                    description: Esconder os controles do tocador. Pode ser mostrado apertando CTRL+H.
+                    checkbox: Layout minimalista do tocador de vídeo
+        mpv:
+            label: MPV
+            attributes:
+                close:
+                    title: Fechar o tocador
+                    description: Previne abrir uma transmissão sobre outra em uma janela vazia.
+                    checkbox: Permite que o tocador seja fechado
+                title:
+                    title: Título da janela no tocador de vídeo
+                    description: Mostrar o nome do canal, título do jogo e a transmissão no título
+                    checkbox: Definir um título personalizado
+                media-title:
+                    title: Título da mídia no tocador de vídeo
+                    description: Mostrar o nome do canal, título do jogo e a transmissão no título
+                    checkbox: Definir um título da mídia personalizado
+                minimal:
+                    title: Layout
+                    description: Esconder os controles do tocador. Pode ser mostrado apertando CTRL+H.
+                    checkbox: Layout minimalista do tocador de vídeo
+                window:
+                    title: Forçar janela
+                    description: Corrige possíveis problemas com tranmissões com somente áudio.
+                    checkbox: Sempre mostrar a janela do tocador de vídeo
+                seeking:
+                    title: Seeking
+                    description: Permite pular para frente ou para trás no cache da transmissão
+                    checkbox: Permitir seeking
+                no-cache:
+                    title: Sem cache no tocador de vídeo
+                    description: Abre com mais rapidez o tocador de vídeo.
+                    checkbox: Não usar cache adicional do tocador de vídeo
+        mpc:
+            label: Media Player Classic - Home Cinema
+            attributes:
+                instance:
+                    title: Modo de instância única
+                    description: Ver múltiplas transmissões em diferentes janelas.
+                    checkbox: Previne o modo de instância única
+                close:
+                    title: Fechar o tocador
+                    description: Previne abrir uma transmissão sobre outra em uma janela vazia.
+                    checkbox: Permite que o tocador seja fechado
+        potplayer:
+            label: Daum PotPlayer
+streams:
+    quality:
+        title: Qualidade
+        description: Escolha a qualidade padrão da tranmissão.
+    qualitypresets:
+        title: Pré definição de qualidade
+        description: Define a qualidade por seleção ou por uso explícito de rótulos de qualidade.
+        notes: A segunda coluna mostra a qualidade selecionada. As qualidades ou intervalos da primeira coluna são rótulos que vão deste "best" até "worst". Veja o Wiki de documentação do Streamlink antes de fazer quaisquer alterações.
+        dont-exclude: Não excluir qualidades de transmissão
+    modal-close-launch:
+        title: Esconder popup de transmissão
+        description: Quando uma transmissão inicia.
+        checkbox: Esconder o popup após iniciar um transmissão com sucesso
+    modal-close-end:
+        title: Fechar o popup de transmissão
+        description: Quando a transmissão terminar.
+        checkbox: Fechar o popup quando transmissão ativa terminar
+    channelname:
+        title: Nomes personalizado de canais
+        description: Localizações dos nomes de canais.
+        values:
+            custom: Mostrar nomes personalizados
+            original: Mostrar nomes originais
+            both: Mostrar ambos
+    show-flag:
+        title: Bandeira
+        description: Indica o idioma da transmissão.
+        checkbox: As bandeiras estão sempre visíveis
+    filter-vodcast:
+        title: Esvanecer Vodcasts
+        description: Fazer os vodcasts menos visíveis, como um indicador adicional.
+        checkbox: Esvanecer Vodcasts
+    vodcast-regexp:
+        title: Filtragem personalizada do Vodcast
+        description: Encontrar Vodcasts/Rebroadcasts sem tag.
+        notes: Um expressão regular em JavaScript (case-insensitive), aplicado no título da transmissão. Para destaivar a filtragem, deixe o campo vazio ou insira um expressão inválida.
+    show-info:
+        title: Barra de informação
+        description: Barra de baixo dentro da transmissão.
+        checkbox: A barra de informação sempre visível
+    info:
+        title: Conteúdo da barra de informação
+        description: O que deve ser mostrado?
+        values:
+            game: Jogo que está sendo jogado
+            title: Título da transmissão
+    uptime-hours-only:
+        title: Formato do tempo de duração da transmissão
+        description: Mostra o tempo de duração da transmissão em horas ou dias
+        checkbox: Ignora os dias e mostra as horas
+    click:
+        title: Comportamento do clique
+        description: Ações adicionais ao clicar na imagem
+        ctrl: CTRL + Botão primário do mouse
+        cmd: CMD + Botão primário do mouse
+        middle: Botão do meio do mouse
+        values:
+            noop: Não faz nada
+            launch: Abre a transmissão
+            chat: Abre o chat
+            channel: Ir para a página do canal
+            settings: Ir para as preferências do canal
+chat:
+    provider:
+        title: Aplicação do chat
+        description: Escolher a aplicação do chat.
+        notes-browser: Escolher o navegador padrão pode resultar em tamanhos de janela indesejados.
+        file-placeholder: É necessário definir o caminho do executável
+        params-placeholder: Definir parâmetros adicionais
+        url:
+            default:
+                label: URL padrão do chat
+                description: URL padrão do navegador para o chat (popup).
+            popout:
+                label: URL do popout do chat
+                description: Usado pelo modo popout no site da Twitch.
+            embed:
+                label: URL do chat embutido
+                description: Embutir o chat em outros sites.
+        providers:
+            browser:
+                label: Navegador padrão
+                attributes:
+                    url:
+                        title: URL do chat
+                        description: Qual URL do chat Twitch usar.
+            basic:
+                substitutions:
+                    url: URL do chat usado pelo canal no Twitch.tv
+                    channel: O nome do canal
+                    user: Seu nome de usuário (se estiver logado)
+                    token: Seu token de acesso (se estiver logado)
+            chromium:
+                label: Chromium
+                attributes:
+                    exec:
+                        title: Executável do Chromium
+                        description: Define um caminho diferente para o executável do Chromium.
+                    args:
+                        title: Parâmetros do Chromium
+                        description: Define parâmetros adicionais.
+                    url:
+                        title: URL do chat
+                        description: Qual URL utilizar para o chat na Twitch.
+            chrome:
+                label: Google Chrome
+                attributes:
+                    exec:
+                        title: Executável do Google Chrome
+                        description: Deine um caminho diferente para o executável do Google Chrome.
+                    args:
+                        title: Parâmetros do Google Chrome
+                        description: Define parâmetros adicionais.
+                    url:
+                        title: URL do chat
+                        description: Qual URL utilizar para o chat na Twitch.
+            msie:
+                label: Internet Explorer
+                attributes:
+                    url:
+                        title: URL do chat
+                        description: Qual URL utilizar para o chat na Twitch.
+            chatty:
+                label: Chatty
+                attributes:
+                    exec:
+                        title: Executável do Java
+                        description: Define um caminho diferente para o executável do Java.
+                    jar:
+                        title: Arquivo Chatty .jar
+                        description: Define um caminho diferente para o arquivo chatty.jar.
+                    instance:
+                        title: Modo de instância única
+                        description: Precisa de no mínimo a versão 0.8.2b2.
+                        checkbox: Ativar modo de instância única
+                    auth:
+                        title: Autenticação
+                        description: Permite Chatty reutilizar os dados de autenticação.
+                        checkbox: Logar automaticamente
+                    args:
+                        title: Parâmetros personalizados para Chatty
+                        description: Definir parâmetros adicionais
+            chatty-standalone:
+                label: Chatty (Standalone)
+                attributes:
+                    exec:
+                        title: Executável do Java
+                        description: Define um caminho diferente para o executável do Java.
+                    instance:
+                        title: Modo de instância única
+                        description: Precisa de no mínimo a versão 0.8.2b2.
+                        checkbox: Ativar modo de instância única
+                    auth:
+                        title: Autenticação
+                        description: Permite Chatty reutilizar os dados de autenticação.
+                        checkbox: Logar automaticamente
+                    args:
+                        title: Parâmetros personalizados para Chatty
+                        description: Definir parâmetros adicionais
+            custom:
+                label: Outra aplicação
+                attributes:
+                    exec:
+                        title: Caminho da aplicação
+                        description: Define o caminho para o executável.
+                    args:
+                        title: Parâmetros da aplicaçãoApplication parameters
+                        description: Set application parameters.
+                    url:
+                        title: URL do chat
+                        description: Qual URL utilizar para o chat na Twitch.
+    chat-open:
+        title: Abrir chat
+        description: Enquanto abrir a transmissão.
+        checkbox: Abrir o chat automaticamente
+        checkbox-context: Não abrir o chat quando abrir a transmissão via menu de contexto
+    twitchemotes:
+        title: Twitch emotes
+        description: Botão que abre o twitchemotes.com.
+        checkbox: Mostrar os botões de emotes nos popups das transmissões
+languages:
+    filter:
+        title: Filtro de transmissões
+        description: Aplica um filtro de idiomas para lista com todas as transmissões (exceto as seguintes transmissões).
+        values:
+            noop:
+                text: Não esconder ou filtrar transmissões
+                description: Mostrar todas as transmissões.
+            fade:
+                text: Esconder transmissões
+                description: Mostrar todas as transmissões e esconder aquelas que não condizem com o idioma selecionado.
+            filter:
+                text: Mostrar transmissões
+                description: Mostrar somente as transmissões que condizem com o idioma selecionado.
+    languages:
+        title: Idiomas
+        description: Idioma de transmissão, ou se não estiver definido, o idioma do canal.
+hotkeys:
+    navigation:
+        title: Navegação
+        description: Atalhos globais para navegação.
+        notes: |
+            Os atalhos são categorizados pelas ações os respectivos componentes. Cada ação tem um atalho primário e um secundário que podem definidos individualmente. A janela da aplicação precisa estar com foco para que os atalhos tenham efeito. <br><br>
+            Note que os atalhos não estão associados ao layout do teclado definido no sistema (por motivos técnicos). Isso significa que todos os atalhos são baseados no layout de teclado US (QWERTY) e podem aparentar incorretos em sistemas com diferentes layouts.
+        actions:
+            refresh: Atualizar o menu atual
+            historyBack: Voltar
+            historyForward: Ir
+            homepage: Ir para Página Principal
+            routeFeatured: Ir para página dos Canais em Destaque
+            routeGames: Ir para o menu de Jogos
+            routeStreams: Ir para o menu de Streams
+            routeUserFollowedStreams: Ir para o menu de Streams seguidos
+            routeUserFollowedChannels: Ir para o menu de Canais seguidos
+            routeUserAuth: Ir para o menu do Usuário
+            routeWatching: Ir para o menu de Assistindo
+            routeSettings: Ir para o menu de Preferências
+            routeAbout: Ir para o menu Sobre
+    searchbar:
+        title: Barra de procura
+        description: Barra de procura no topo.
+        actions:
+            focus: Foco
+    followbutton:
+        title: Botão de seguir
+        description: O botão de seguir na página de um canal ou na caixa de diálogo da transmissão.
+        actions:
+            default: Seguir ou não seguir
+            confirm: Confirmar
+    openchatbutton:
+        title: Botão de abrir chat
+        description: O botão de chat na página de um canal ou na caixa de diálogo da transmissão.
+        actions:
+            default: Abrir chat
+    sharechannelbutton:
+        title: Botão de compartilhar canal
+        description: O botão de compartilhar na página de um canal ou na caixa de diálogo da transmissão.
+        actions:
+            default: Copiar URL do canal na área de cópia
+    twitchemotesbutton:
+        title: Botão de emotes do Twitch
+        description: Botão de emotes na página de um canal ou na caixa de diálogo da transmissão.
+        actions:
+            default: Abrir Twitchemotes.com
+    modaldialog:
+        title: Caixa de diálogo modal
+        description: Caixas de diálogo genérico.
+        actions:
+            close: Fechar
+    modalconfirm:
+        title: Caixa de diálogo de confirmar
+        description: Quando uma determinada ação precisa de confirmação.
+        actions:
+            confirm: Confirmar
+    modalstreaming:
+        title: Caixa de diálogo de transmissão
+        description: Quando assiste uma transmissão
+        actions:
+            shutdown: Para a transmissão atual
+            log: Trocar log de saída
+notifications:
+    enabled:
+        title: Notificações
+        description: Quando as transmissões favoritas iniciam
+        checkbox: Ativar notificações na área de trabalho
+    provider:
+        title: Tipo de notificações
+        description: Escolher o tipo de notificação
+        test:
+            button: Notificação de teste
+            message: Este é uma notificação de teste
+        providers:
+            auto:
+                name: Seleção automática
+                description: Tenta encontra ro melhor provedor de notificação
+                notes: Testa todos os provedores disponíveis em order descendente
+            native:
+                name: Notificações nativas
+                description: Usa o sistema nativo de notificações
+                notes: As notificações podem ser configuradas nas preferências do sistemas
+            snoretoast:
+                name: Notificações no Windows
+                description: Usa o sistema de notificações nativa do Windows 8+
+                notes: \"Banner notifications\" precisa estar ativo nas preferências do sistema
+            growl:
+                name: Notificações no Growl
+                description: Serviço de notificação de terceiro para Windows, macOS e Linux
+                notes: Necessita do Growl estar instalado e rodando no sistema
+            rich:
+                name: Notificações no Rich
+                description: Notificações usando Chromium Rich
+                notes: Renderizado pela própria aplicação
+    filter:
+        title: Filtro de canal
+        description: Notificações podem ser ligadas e desligadas individualmente no menu de preferências do canal.
+        values:
+            blacklist: Mostrar todos exceto os desativados
+            whitelist: Ignorar todos exceto os ativados
+    filter-vodcasts:
+        title: Filtrar Vodcasts
+        description: Apenas incluir as transmissões ao vivo.
+        checkbox: Ignorar Vodcasts
+    grouping:
+        title: Agrupamento
+        description: Ajuntar múltiplas notificações.
+        checkbox: Apenas mostra um notificação por vez
+    click:
+        title: Notificação de clique
+        description: Ação de clique preferida.
+        values:
+            noop: Não fazer nada
+            followed: Ir para favoritos
+            stream: Abrir transmissão
+            stream-and-chat: Abrir transmissão e chat
+    click-group:
+        title: Clique em grupo
+        description: Ação de clique em grupo preferida.
+        values:
+            noop: Não fazer nada
+            followed: Ir para favoritos
+            stream: Abrir transmissão
+            stream-and-chat: Abrir transmissão e chat
+    click-restore:
+        title: Restaurar interface (GUI)
+        description: Restaurar a partir da área de notificação ou da janela minimizada quando houver a ação do clique de notificação.
+        checkbox: Restaurar quando clicar na notificação
+channels:
+    find: Encontrar canal
+    none: Nenhum canal encontrado.
+    empty: Nenhum preferência de canal definida.
