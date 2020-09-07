@@ -1,6 +1,23 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Added AppImage builds for Linux. [#735](https://github.com/streamlink/streamlink-twitch-gui/issues/735)
+- Added daily debug builds for Windows, macOS and Linux. [#736](https://github.com/streamlink/streamlink-twitch-gui/issues/736)
+- Implemented Russian translations (ru). [#740](https://github.com/streamlink/streamlink-twitch-gui/issues/740)
+- Implemented Brazilian Portuguese translations (pt-br). [#741](https://github.com/streamlink/streamlink-twitch-gui/issues/741)
+- Re-implemented modal service and made dialogs stackable.
+- Fixed adapter issue when loading multiple Twitch users at once.
+- Various small translation fixes/additions. [#742](https://github.com/streamlink/streamlink-twitch-gui/issues/742)
+- Refactored auth and versioncheck service.
+- \[dev\] Refactored lots of build scripts and configs.
+- \[dev\] Switched CI provider from TravisCi+AppVeyor to Github Actions.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.10.0...master)
+
+
 ## [v1.10.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.10.0) (2020-05-31)
 
 - :warning: Set Streamlink's version requirement to `1.4.0`.  
