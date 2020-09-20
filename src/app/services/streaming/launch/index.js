@@ -10,7 +10,7 @@ import Parameter from "utils/parameters/Parameter";
 
 const { getParameters } = Parameter;
 
-const reReplace = /^\[(?:cli|console|plugin\.\w+)]\[\S+]\s+/;
+const reReplace = /^\[\S+]\[\S+]\s+/;
 const rePlayerStarted = /^Starting player: \S+/;
 
 
