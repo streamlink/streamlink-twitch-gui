@@ -44,7 +44,7 @@ gui:
         title: Intégration avec l'OS
         description: À partir d'où accèder à l'interface.
         values:
-            both: Both
+            both: Les deux barres
             taskbar: Barre des programmes
             tray: Barre des tâchs
     minimize:
