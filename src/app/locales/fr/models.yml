@@ -13,5 +13,5 @@ twitch:
             # new Moment(stream.created_at).format(...)
             more-than-24h: "[Online since] llll"
         viewers:
-            one: "Une perosonne est en train de regarder"
+            one: "Une personne est en train de regarder"
             other: "{{count}} personnes sont en train de regarder"
