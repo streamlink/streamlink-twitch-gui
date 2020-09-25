@@ -7,7 +7,7 @@ changelog:
     action:
         show: Changelog
 confirm:
-    header: Confirmez
+    header: Confirmer
     body: Voulez-vous appliquer vos changements?
     action:
         apply: Appliquer
@@ -36,7 +36,7 @@ quit:
         quit: Quitter
 streaming:
     header:
-        preparing: "Préparation, veuillez patientez"
+        preparing: "Préparation, veuillez patienter"
         launching: "Lancement: "
         watching: "En visionnage: "
         ended: "Le stream est terminé: "
@@ -54,7 +54,7 @@ streaming:
         launching: "En attente de {{provider}} de lancer le stream..."
         ended: "Voulez-vous relancer le stream maintenant ?"
         error:
-            provider: "Veuillez vérifier vos paramètre et/ou (ré)installer {{provider}}."
+            provider: "Veuillez vérifier vos paramètres et/ou (ré)installer {{provider}}."
             player: "Veuillez vérifier les paramètres du lecteur."
             version: "La version v{{version}} ne remplit pas les exigences minimales. (v{{required}})."
             unable-to-open: "{{provider}} n'a pas réussi à ouvrir le stream."
@@ -64,7 +64,7 @@ streaming:
             internal: "Erreur interne"
     action:
         abort: Abandonner
-        continue: Continue
+        continue: Continuer
         download: Télécharger
         log: Activer/désactiver les logs {{provider}}
         restart: Redémarrer
