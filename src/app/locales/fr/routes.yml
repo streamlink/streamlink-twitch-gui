@@ -1,6 +1,6 @@
 error:
     header: Erreur
-    text: Une erreur est survenue en tente d'afficher cette page.
+    text: Une erreur est survenue en tentant d'afficher cette page.
 about:
     about:
         header: À propos
@@ -92,7 +92,7 @@ channel:
             header: Notifications sur le Bureau
             enabled:
                 title: Notifications
-                description: Quand le strea commence.
+                description: Quand le stream commence.
                 notes: Il faut suivre la chaîne.
                 checkbox: Activer les notifications sur le Bureau
 team:
@@ -149,7 +149,7 @@ user:
             sort-by-login: Trier par la date de dernière connexion
             sort-desc: Trier par ordre décroissant
             sort-asc: Trier par ordre croissant
-        empty: La liste retournée des chînes suivie est vide.
+        empty: La liste retournée des chaînes suivie est vide.
 search:
     header:
         all: Tous les résultat de la recherche
@@ -167,7 +167,7 @@ watching:
         open: Ouvrir la boite de dialogue
         close: Fermer le stream
     empty:
-        header: Tous les stream ont été fermés
+        header: Tous les streams ont été fermés
         next: Que faire ensuite ?
-        featured: Regarder les stream actuellement mis en avant
-        followed: Regardez vos stream suivis
+        featured: Regarder les streams actuellement mis en avant
+        followed: Regardez vos streams suivis
