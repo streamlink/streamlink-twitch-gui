@@ -3,10 +3,11 @@ menu:
     main: Principal
     gui: Interface
     streaming: Streaming
-    player: Joueur
+    player: Lecteur
     streams: Streams
     chat: Chat
     languages: Langages
+    hotkeys: Raccourcis claviers
     notifications: Notifications
     channels: Chaînes
 main:
@@ -106,6 +107,11 @@ streaming:
             passthrough:
                 label: HLS (passthrough)
                 description: Laisse le lecteur lui-même télécharger et mettre en tampon le stream
+    low-latency:
+        title: Streaming en latence basse
+        description: Reduit le délai du stream pour les chaînes qui streament avec le mode latence basse.
+        notes: Soyez conscient que l'activation de cette option définira également la valeur de live-edge sur 2 si elle est supérieure, ce qui peut entraîner une mise en mémoire tampon pour les streams réguliers. Pour atteindre la latence la plus faible possible, il faut encore peaufiner les paramètres de mise en cache / mise en mémoire tampon du lecteur.
+        checkbox: Enable low latency streaming
     hls-live-edge:
         title: HLS live edge
         description: Diminuer la valeur réduira la latence du flux, mais peut également provoquer une mise en mémoire tampon. Selon la configuration du lecteur, il peut y avoir une autre couche de mémoire tampon.
@@ -270,6 +276,10 @@ streams:
         values:
             game: Le jeu joué
             title: Le titre du stream
+    uptime-hours-only:
+        title: Format de durée de stream
+        description: Afficher la durée du stream en heures ou jours.
+        checkbox: Ignorer les jours et additionner les heures
     click:
         title: Comportement du clic
         description: Actions supplémentaires lors du clic sur l'image de stream.
@@ -405,15 +415,81 @@ languages:
         title: Filtrer les streams
         description: Filter toutes les listes de streams selon la langue (sauf pour les streams suivis).
         values:
+            noop:
+                text: Ne pas faire disparaitre ou filtrer les streams 
+                description: Afficher tous les streams.
             fade:
                 text: Faire disparaitre les streams
                 description: Afficher tous les streams, faire disparaitre ceux qui ne correpondent pas au filtre de langage.
             filter:
-                text: Filtrer les stream
-                description: N'afficher que les stream qui correspondent au filtre de langage.
+                text: Filtrer les streams
+                description: N'afficher que les streams qui correspondent au filtre de langage.
     languages:
         title: Langages
         description: Langue du streamer, ou si non-défini, la langue de la chaîne.
+hotkeys:
+    navigation:
+        title: Navigation
+        description: Raccourcis clavier globaux de navigation.
+        notes: |
+            Les raccourcis clavier sont classés en fonction des actions de leur composant respectif. Chaque action a un raccourci clavier principal et secondaire, qui peuvent être activés et désactivés individuellement, et peuvent également être modifiés via un raccourci clavier personnalisé. La fenêtre de l'application doit être focalisée pour que les raccourcis clavier se déclenchent. <br> <br>
+            Veuillez également noter que les raccourcis clavier ignorent actuellement la disposition du clavier du système (pour des raisons techniques). Cela signifie que tous les raccourcis clavier sont pour l'instant basés sur la disposition du clavier américain par défaut (QWERTY) et que les touches individuelles peuvent être affichées de manière incorrecte sur les systèmes utilisant une disposition différente.
+        actions:
+            refresh: Actualiser la page actuelle
+            historyBack: Reculer d'une page
+            historyForward: Avancer d'une page
+            homepage: Accéder à la page d'accueil
+            routeFeatured: Accéder à la page des Chaînes mises en avant
+            routeGames: Accéder à la page des Jeux
+            routeStreams: Accéder à la page des Streams
+            routeUserFollowedStreams: Accéder à la page des Streams suivis 
+            routeUserFollowedChannels: Accéder à la page des Chaînes suivies
+            routeUserAuth: Accéder à la page Utilisateur
+            routeWatching: Accéder à la page des Streams en cours de visualisation
+            routeSettings: Accéder à la page des Paramètres
+            routeAbout: Accéder à la page À propos
+    searchbar:
+        title: Barre de recherche
+        description: Barre de recherche en haut.
+        actions:
+            focus: Focaliser
+    followbutton:
+        title: Bouton Suivre
+        description: Le bouton de suivi sur la page d'une chaîne ou dans la boîte de dialogue de streaming.
+        actions:
+            default: Suivre ou Ne plus suivre
+            confirm: Confirmer
+    openchatbutton:
+        title: Bouton Ouvrir le chat
+        description: Le bouton ouvrir le chat sur la page d'une chaîne ou dans la boîte de dialogue de streaming.
+        actions:
+            default: Ouvrir le chat
+    sharechannelbutton:
+        title: Bouton Partager la chaîne
+        description: Le bouton partager sur la page d'une chaîne ou dans la boîte de dialogue de streaming.
+        actions:
+            default: Copier l'URL de la chaîne dans le presse-papier
+    twitchemotesbutton:
+        title: Bouton Twitch emotes 
+        description: Le bouton emotes sur la page d'une chaîne ou dans la boîte de dialogue de streaming.
+        actions:
+            default: Ouvrir Twitchemotes.com
+    modaldialog:
+        title: Boîte de dialogue modale
+        description: Boîtes de dialogue contextuelles génériques.
+        actions:
+            close: Fermer
+    modalconfirm:
+        title: Confirmer la boîte de dialogue
+        description: Quand une certaine action a besoin d'être confirmée.
+        actions:
+            confirm: Confirmer
+    modalstreaming:
+        title: Boîte de dialogue Streaming 
+        description: Quand un stream est en cours de visualisation.
+        actions:
+            shutdown: Fermer le stream actuel
+            log: Activer/Désactiver les logs Streamlink
 notifications:
     enabled:
         title: Notifications
