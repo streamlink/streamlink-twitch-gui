@@ -13,6 +13,14 @@ confirm:
         apply: Appliquer
         discard: Abandonner
         cancel: Annuler
+debug:
+    header: "Version de débogage: {{version}}"
+    body: |
+        Vous exécutez une version de débogage de {{name}}.<br>
+        Soyez prudent avec ce que vous faites et signalez tout problème que vous pourriez trouver.<br>
+        Merci!
+    action:
+        close: Okay
 firstrun:
     header: "Merci d'utiliser {{name}}!"
     body: Voulez-vous d'abord configurer l'application avant de commencer ?
