@@ -84,6 +84,14 @@ channel:
             quality:
                 title: Qualité
                 description: Configurer la qualité d'un stream spécifique.
+            low-latency:
+                title: Streaming latence basse
+                description: Remplacer les paramètres globaux de streaming en latence basse.
+                checkbox: Activer le streaming en latence basse
+            disable-ads:
+                title: Publicités
+                description: Remplacer les paramètres globaux de publicités.
+                checkbox: Ignorer les publicités intégrées dans les flux
             chat:
                 title: Chat
                 description: Ouvrir automatiquement le chat.
