@@ -53,6 +53,13 @@ settings-channel-item:
     confirmation: Désactiver les paramètres personnalisés?
     confirm: Oui
     decline: Non
+settings-hotkey:
+    empty: Aucun raccourci clavier défini
+    edit: Modifier ce raccourci clavier
+    delete: Supprimer ce raccourci clavier personnalisé
+    discard: Annuler
+    confirm: Définir comme raccourci clavier
+    toggle: Activer ou désactiver ce raccourci clavier
 settings-row:
     notes: Notes
     default: Défaut
