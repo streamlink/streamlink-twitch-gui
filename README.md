@@ -58,7 +58,10 @@ Please remember that **Streamlink Twitch GUI**, as the name already suggests, is
 
 ### Development version
 
-If you want to test the latest unreleased version, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or in [CONTRIBUTING.md][Contributing].  
+Pre-built debug builds for all supported operating systems are [available to download from the nightly Github actions runs as build artifacts][Nightly builds].
+
+If you want to test the latest version on your own, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or in [CONTRIBUTING.md][Contributing].
+
 Please don't forget to report any bugs you may encounter. Thank you very much for helping!
 
 
@@ -113,6 +116,7 @@ Thank you very much for your support!
   [Chromium]: https://www.chromium.org/ "Chromium"
   [Microsoft Visual C++ 2008 Redistributable Package]: http://www.microsoft.com/en-us/download/details.aspx?id=29 "Microsoft Visual C++ 2008 Redistributable Package"
   [Installation package]: https://streamlink.github.io/install.html#windows-binaries "Streamlink installation package"
+  [Nightly builds]: https://github.com/streamlink/streamlink-twitch-gui/actions?query=is%3Asuccess+event%3Aschedule+workflow%3A%22Test%2C+build+and+deploy%22
   [Git]: https://git-scm.com "Git"
   [Node.js]: https://nodejs.org "Node.js"
   [yarn]: https://classic.yarnpkg.com/lang/en/ "Fast, reliable, and secure dependency management."
