@@ -34,7 +34,7 @@ jobs:
       - name: Prepare env vars
         shell: bash
         run: |
-          echo ::set-env name=YARN_CACHE_FOLDER::$(yarn cache dir)
+          echo "YARN_CACHE_FOLDER=$(yarn cache dir)" >> $GITHUB_ENV
       - name: Yarn cache
         if: startsWith(github.ref, 'refs/tags/') != true
         uses: actions/cache@v2
@@ -87,7 +87,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Prepare env vars
         run: |
-          echo ::set-env name=SOURCE_DATE_EPOCH::$(git show -s --format=%ct "${GITHUB_REF}")
+          echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct "${GITHUB_REF}")" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           yarn install --pure-lockfile --no-progress --non-interactive
@@ -137,7 +137,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Prepare env vars
         run: |
-          echo ::set-env name=SOURCE_DATE_EPOCH::$(git show -s --format=%ct "${GITHUB_REF}")
+          echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct "${GITHUB_REF}")" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           yarn install --pure-lockfile --no-progress --non-interactive
