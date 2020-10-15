@@ -13,6 +13,8 @@ module( "utils/ember/ObjectBuffer", function() {
 			bar: "bar"
 		};
 		const buffer = ObjectBuffer.create({ content });
+		const onChange = sinon.spy();
+		buffer.on( "change", onChange );
 
 		// initial
 		assert.propEqual(
@@ -27,6 +29,14 @@ module( "utils/ember/ObjectBuffer", function() {
 			"initial: return initial values"
 		);
 		assert.propEqual(
+			buffer.getOriginal(),
+			{
+				foo: "foo",
+				bar: "bar"
+			},
+			"initial: getOriginal() returns initial values"
+		);
+		assert.propEqual(
 			buffer.getContent(),
 			{
 				foo: "foo",
@@ -35,6 +45,7 @@ module( "utils/ember/ObjectBuffer", function() {
 			"initial: getContent() returns initial values"
 		);
 		assert.notOk( buffer.isDirty, "initial: buffer is not dirty" );
+		assert.strictEqual( onChange.callCount, 0, "Hasn't triggered onChange yet" );
 
 		// set
 		assert.strictEqual(
@@ -42,24 +53,35 @@ module( "utils/ember/ObjectBuffer", function() {
 			"foo",
 			"Setting the same value returns the same value"
 		);
+		assert.strictEqual( onChange.callCount, 0, "Doesn't trigger onChange on same value" );
 		assert.strictEqual(
 			set( buffer, "foo", "bar" ),
 			"bar",
 			"Setting a new value returns the new value"
 		);
+		assert.strictEqual( onChange.callCount, 1, "Has triggered onChange once" );
 		set( buffer, "bar", "foo" );
+		assert.strictEqual( onChange.callCount, 2, "Has triggered onChange twice" );
 		assert.strictEqual(
 			get( buffer, "foo" ),
 			"bar",
 			"modified: return modified values"
 		);
 		assert.propEqual(
-			buffer.getContent(),
+			buffer.getOriginal(),
 			{
 				foo: "foo",
 				bar: "bar"
 			},
-			"modified: getContent() returns initial values"
+			"modified: getOriginal() returns initial values"
+		);
+		assert.propEqual(
+			buffer.getContent(),
+			{
+				foo: "bar",
+				bar: "foo"
+			},
+			"modified: getContent() returns modified values"
 		);
 		assert.ok(
 			buffer.isDirty,
@@ -71,10 +93,14 @@ module( "utils/ember/ObjectBuffer", function() {
 		assert.ok( buffer.isDirty, "reset: buffer is still dirty" );
 		set( buffer, "bar", "bar" );
 		assert.notOk( buffer.isDirty, "reset: buffer is not dirty" );
+		assert.strictEqual( onChange.callCount, 4, "Has triggered onChange four times now" );
+		onChange.resetHistory();
 
 		// discard
 		set( buffer, "foo", "bar" );
+		assert.strictEqual( onChange.callCount, 1, "Has triggered onChange once" );
 		buffer.discardChanges();
+		assert.strictEqual( onChange.callCount, 2, "Triggers onChange on discard" );
 		assert.strictEqual(
 			get( buffer, "foo" ),
 			"foo",
@@ -89,14 +115,25 @@ module( "utils/ember/ObjectBuffer", function() {
 			"discarded: getContent() returns initial values"
 		);
 		assert.notOk( buffer.isDirty, "discarded: buffer is not dirty" );
+		onChange.resetHistory();
 
 		// apply
 		set( buffer, "foo", "bar" );
+		assert.strictEqual( onChange.callCount, 1, "Has triggered onChange once" );
 		buffer.applyChanges();
+		assert.strictEqual( onChange.callCount, 2, "Triggers onChange on apply" );
 		assert.strictEqual(
 			get( buffer, "foo" ),
 			"bar",
 			"applied: return applied values"
+		);
+		assert.deepEqual(
+			buffer.getOriginal(),
+			{
+				foo: "bar",
+				bar: "bar"
+			},
+			"applied: getOriginal() returns applied values"
 		);
 		assert.deepEqual(
 			buffer.getContent(),
@@ -151,6 +188,8 @@ module( "utils/ember/ObjectBuffer", function() {
 			}
 		};
 		const buffer = ObjectBuffer.create({ content });
+		const onChange = sinon.spy();
+		buffer.on( "change", onChange );
 
 		// initial
 		assert.propEqual(
@@ -165,6 +204,19 @@ module( "utils/ember/ObjectBuffer", function() {
 				"quux"
 			],
 			"initial: return initial values"
+		);
+		assert.propEqual(
+			buffer.getOriginal(),
+			{
+				foo: "foo",
+				bar: {
+					baz: "baz",
+					qux: {
+						quux: "quux"
+					}
+				}
+			},
+			"initial: getOriginal() returns initial values"
 		);
 		assert.propEqual(
 			buffer.getContent(),
@@ -192,6 +244,7 @@ module( "utils/ember/ObjectBuffer", function() {
 			],
 			"initial: all buffers are not dirty"
 		);
+		assert.strictEqual( onChange.callCount, 0, "Hasn't triggered onChange yet" );
 
 		// modify root
 		set( buffer, "foo", "bar" );
@@ -208,16 +261,18 @@ module( "utils/ember/ObjectBuffer", function() {
 			],
 			"modified root: only the root buffer is dirty"
 		);
+		assert.strictEqual( onChange.callCount, 1, "Has triggered onChange once" );
 
 		// modify descendant
 		set( buffer, "bar.qux.quux", "foo" );
+		assert.strictEqual( onChange.callCount, 2, "Has triggered onChange twice" );
 		assert.strictEqual(
 			get( buffer, "bar.qux.quux" ),
 			"foo",
 			"modified descendant: return modified value"
 		);
 		assert.propEqual(
-			buffer.getContent(),
+			buffer.getOriginal(),
 			{
 				foo: "foo",
 				bar: {
@@ -227,7 +282,20 @@ module( "utils/ember/ObjectBuffer", function() {
 					}
 				}
 			},
-			"modified root and descendant: getContent() returns initial values"
+			"modified root and descendant: getOriginal() returns initial values"
+		);
+		assert.propEqual(
+			buffer.getContent(),
+			{
+				foo: "bar",
+				bar: {
+					baz: "baz",
+					qux: {
+						quux: "foo"
+					}
+				}
+			},
+			"modified root and descendant: getContent() returns modified values"
 		);
 		assert.propEqual(
 			[
@@ -245,6 +313,7 @@ module( "utils/ember/ObjectBuffer", function() {
 
 		// reset root
 		set( buffer, "foo", "foo" );
+		assert.strictEqual( onChange.callCount, 3, "Has triggered onChange thrice" );
 		assert.propEqual(
 			[
 				get( buffer, "isDirty" ),
@@ -258,9 +327,11 @@ module( "utils/ember/ObjectBuffer", function() {
 			],
 			"modified descendant: all buffers are still dirty"
 		);
+		onChange.resetHistory();
 
 		// discard root
 		buffer.discardChanges();
+		assert.strictEqual( onChange.callCount, 1, "Triggers onChange once on discard" );
 		assert.strictEqual(
 			get( buffer, "bar.qux.quux" ),
 			"quux",
@@ -279,14 +350,30 @@ module( "utils/ember/ObjectBuffer", function() {
 			],
 			"discarding a root buffer also discards all descendants"
 		);
+		onChange.resetHistory();
 
 		// apply
 		set( buffer, "bar.qux.quux", "foo" );
+		assert.strictEqual( onChange.callCount, 1, "Has triggered onChange once" );
 		buffer.applyChanges();
+		assert.strictEqual( onChange.callCount, 2, "Triggers onChange once on apply" );
 		assert.strictEqual(
 			get( buffer, "bar.qux.quux" ),
 			"foo",
 			"applied root: return applied descendant value"
+		);
+		assert.propEqual(
+			buffer.getOriginal(),
+			{
+				foo: "foo",
+				bar: {
+					baz: "baz",
+					qux: {
+						quux: "foo"
+					}
+				}
+			},
+			"applied root: getOriginal() returns applied values"
 		);
 		assert.propEqual(
 			buffer.getContent(),
@@ -339,12 +426,17 @@ module( "utils/ember/ObjectBuffer", function() {
 			"Nested object references are not changed"
 		);
 		assert.strictEqual(
+			buffer.getOriginal(),
+			contentOuter,
+			"getOriginal() returns the original object"
+		);
+		assert.notStrictEqual(
 			buffer.getContent(),
 			contentOuter,
-			"getOutput() returns the original object"
+			"getContent() does not return the original object"
 		);
 		assert.strictEqual(
-			buffer.getContent()[ "foo" ][ "bar" ][ "baz" ],
+			buffer.getOriginal()[ "foo" ][ "bar" ][ "baz" ],
 			"foo",
 			"Nested objects of the original object have been updated"
 		);
