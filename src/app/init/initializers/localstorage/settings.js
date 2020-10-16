@@ -1,11 +1,6 @@
 import { langs as langsConfig } from "config";
 import { moveAttributes, moveAttributesIntoFragment, qualityIdToName } from "./utils";
 import { typeKey as streamingPlayerTypeKey } from "data/models/settings/streaming/player/fragment";
-import {
-	ATTR_FILTER_LANGUAGES_NOOP,
-	ATTR_FILTER_LANGUAGES_FADE,
-	ATTR_FILTER_LANGUAGES_FILTER
-} from "data/models/settings/streams/fragment";
 import { qualities } from "data/models/stream/model";
 import { isWin7 } from "utils/node/platform";
 import { streaming as streamingConfig } from "config";
@@ -182,23 +177,25 @@ function fixAttributes( settings ) {
 		chat.provider = "browser";
 	}
 
-	// find single language selection in the old languages object
-	if ( !hasOwnProperty.call( streams, "language" ) && typeof streams.languages === "object" ) {
-		const allLangs = Object.keys( streams.languages )
-			.filter( code => langsConfig[ code ] && !langsConfig[ code ].disabled );
-		const langs = allLangs
-			.filter( code => streams.languages[ code ] );
-		if ( langs.length === 1 ) {
-			streams.language = langs[0];
-		}
-		if ( langs.length === 0 || langs.length === allLangs.length ) {
-			streams.filter_languages = ATTR_FILTER_LANGUAGES_NOOP;
-		} else {
-			streams.filter_languages = streams.filter_languages
-				? ATTR_FILTER_LANGUAGES_FILTER
-				: ATTR_FILTER_LANGUAGES_FADE;
-		}
-		delete streams.languages;
+	// update old language filter
+	if ( hasOwnProperty.call( streams, "filter_languages" ) ) {
+		const value = streams.filter_languages;
+		// can't translate null or false value here due to lack of schema version
+		streams.languages_fade = value === 1;
+		streams.languages_filter = value === 2 || value === true;
+		delete streams.filter_languages;
+	}
+	// find single language selection and update the new old languages object
+	if ( hasOwnProperty.call( streams, "language" ) ) {
+		const language = streams.language;
+		streams.languages = Object.entries( langsConfig )
+			.reduce( ( obj, [ key, { disabled } ] ) => {
+				if ( !disabled ) {
+					obj[ key ] = key === language;
+				}
+				return obj;
+			}, {} );
+		delete streams.language;
 	}
 
 	// rename old notification provider names

@@ -8,6 +8,7 @@ Changelog - Streamlink Twitch GUI
 - Implemented Russian translations (ru). [#740](https://github.com/streamlink/streamlink-twitch-gui/issues/740)
 - Implemented Brazilian Portuguese translations (pt-br). [#741](https://github.com/streamlink/streamlink-twitch-gui/issues/741)
 - Re-implemented modal service and made dialogs stackable.
+- Re-implemented stream language filtering. [#753](https://github.com/streamlink/streamlink-twitch-gui/issues/753)
 - Fixed adapter issue when loading multiple Twitch users at once.
 - Various small translation fixes/additions. [#742](https://github.com/streamlink/streamlink-twitch-gui/issues/742)
 - Refactored auth and versioncheck service.

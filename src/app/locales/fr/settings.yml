@@ -415,18 +415,22 @@ languages:
         title: Filtrer les streams
         description: Filter toutes les listes de streams selon la langue (sauf pour les streams suivis).
         values:
-            noop:
-                text: Ne pas faire disparaitre ou filtrer les streams 
-                description: Afficher tous les streams.
             fade:
                 text: Faire disparaitre les streams
-                description: Afficher tous les streams, faire disparaitre ceux qui ne correpondent pas au filtre de langage.
+                # FIXME
+                description: |
+                    Afficher tous les streams, faire disparaitre ceux qui ne correpondent pas au filtre de langage.<br>
+                    Requires at least one selection and filtering needs to be disabled.
             filter:
                 text: Filtrer les streams
-                description: N'afficher que les streams qui correspondent au filtre de langage.
+                # FIXME
+                description: |
+                    N'afficher que les streams qui correspondent au filtre de langage.<br>
+                    Requires exactly one selection and takes precedence over fading.
     languages:
         title: Langages
         description: Langue du streamer, ou si non-défini, la langue de la chaîne.
+        uncheck-all: Tout décocher
 hotkeys:
     navigation:
         title: Navigation
@@ -442,7 +446,7 @@ hotkeys:
             routeFeatured: Accéder à la page des Chaînes mises en avant
             routeGames: Accéder à la page des Jeux
             routeStreams: Accéder à la page des Streams
-            routeUserFollowedStreams: Accéder à la page des Streams suivis 
+            routeUserFollowedStreams: Accéder à la page des Streams suivis
             routeUserFollowedChannels: Accéder à la page des Chaînes suivies
             routeUserAuth: Accéder à la page Utilisateur
             routeWatching: Accéder à la page des Streams en cours de visualisation
@@ -470,7 +474,7 @@ hotkeys:
         actions:
             default: Copier l'URL de la chaîne dans le presse-papier
     twitchemotesbutton:
-        title: Bouton Twitch emotes 
+        title: Bouton Twitch emotes
         description: Le bouton emotes sur la page d'une chaîne ou dans la boîte de dialogue de streaming.
         actions:
             default: Ouvrir Twitchemotes.com
@@ -485,7 +489,7 @@ hotkeys:
         actions:
             confirm: Confirmer
     modalstreaming:
-        title: Boîte de dialogue Streaming 
+        title: Boîte de dialogue Streaming
         description: Quand un stream est en cours de visualisation.
         actions:
             shutdown: Fermer le stream actuel

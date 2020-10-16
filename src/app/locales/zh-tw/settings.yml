@@ -415,18 +415,22 @@ languages:
         title: 過濾實況
         description: 使用語言來過濾所有實況列表 (已追蹤的除外)
         values:
-            noop:
-                text: 不要過濾或隱藏實況
-                description: 顯示所有實況
             fade:
                 text: 淡出實況
-                description: 顯示所有實況，不符合設定語系的實況淡出顯示
+                # FIXME
+                description: |
+                    顯示所有實況，不符合設定語系的實況淡出顯示<br>
+                    Requires at least one selection and filtering needs to be disabled.
             filter:
                 text: 過濾顯示實況頻道
-                description: 只顯示所選語言的頻道
+                # FIXME
+                description: |
+                    只顯示所選語言的頻道<br>
+                    Requires exactly one selection and takes precedence over fading.
     languages:
         title: 語言
         description: 實況主語言，若未設定，則為頻道語言
+        uncheck-all: 全部取消
 hotkeys:
     navigation:
         title: 導航

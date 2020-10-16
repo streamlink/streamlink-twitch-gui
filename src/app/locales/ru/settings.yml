@@ -415,18 +415,22 @@ languages:
         title: "Фильтрация стримов" #Filter streams
         description: "Примените языковой фильтр ко всем спискам стримов (кроме отслеживаемых)." #Apply a language filter to all stream lists (except followed streams).
         values:
-            noop:
-                text: "Не затемнять и не отфильтровывать стримы" #Don't fade out or filter out streams
-                description: "Показывать все стримы" #Show all streams.
             fade:
                 text: "Затемнять стримы" #Fade out streams
-                description: "Показать все стримы, затемнять те, которые не соответствуют выбранному языку." #Show all streams, fade out ones not matching the language selection.
+                # FIXME
+                description: |
+                    Показать все стримы, затемнять те, которые не соответствуют выбранному языку.<br>
+                    Requires at least one selection and filtering needs to be disabled.
             filter:
                 text: "Отфильтровывать стримы" #Filter out streams
-                description: "Показывать только стримы, соответствующие выбранному языку." #Only show streams matching the language selection.
+                # FIXME
+                description: |
+                    Показывать только стримы, соответствующие выбранному языку.<br>
+                    Requires exactly one selection and takes precedence over fading.
     languages:
         title: "Языки" #Languages
         description: "Язык стримера. Если не установлен, то язык канала." #Broadcaster language, or if not set, the channel language.
+        uncheck-all: "Снять все"
 hotkeys:
     navigation:
         title: "Навигация" #Navigation

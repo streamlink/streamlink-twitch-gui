@@ -415,18 +415,20 @@ languages:
         title: Filter streams
         description: Apply a language filter to all stream lists (except followed streams).
         values:
-            noop:
-                text: Don't fade out or filter out streams
-                description: Show all streams.
             fade:
                 text: Fade out streams
-                description: Show all streams, fade out ones not matching the language selection.
+                description: |
+                    Show all streams, fade out ones not matching the language selection.<br>
+                    Requires at least one selection and filtering needs to be disabled.
             filter:
                 text: Filter out streams
-                description: Only show streams matching the language selection.
+                description: |
+                    Only show streams matching the language selection.<br>
+                    Requires exactly one selection and takes precedence over fading.
     languages:
         title: Languages
         description: Broadcaster language, or if not set, the channel language.
+        uncheck-all: Uncheck all
 hotkeys:
     navigation:
         title: Navigation

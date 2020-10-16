@@ -1,4 +1,5 @@
 import { get, set, setProperties } from "@ember/object";
+import Evented from "@ember/object/evented";
 import ObjectProxy from "@ember/object/proxy";
 
 
@@ -38,8 +39,15 @@ function setHasChanges( obj, hasChanges ) {
 	setIsDirty( obj );
 }
 
+function triggerChange( buffer ) {
+	do {
+		buffer.trigger( "change" );
+		buffer = parentMap.get( buffer );
+	} while ( buffer );
+}
 
-class ObjectBuffer extends ObjectProxy {
+
+class ObjectBuffer extends ObjectProxy.extend( Evented ) {
 	isDirty = false;
 
 	init() {
@@ -117,10 +125,12 @@ class ObjectBuffer extends ObjectProxy {
 		}
 
 		this.notifyPropertyChange( key );
+		triggerChange( this );
+
 		return value;
 	}
 
-	applyChanges( target, _isChild ) {
+	applyChanges( target, _isChild = false, _trigger = true ) {
 		const buffer = bufferMap.get( this );
 		const children = childrenMap.get( this );
 		const original = originalMap.get( this );
@@ -135,7 +145,7 @@ class ObjectBuffer extends ObjectProxy {
 			if ( target && hasChangesMap.get( child ) ) {
 				target.notifyPropertyChange( key );
 			}
-			child.applyChanges( target && get( target, key ), true );
+			child.applyChanges( target && get( target, key ), true, false );
 		}
 
 		// update both content and original objects
@@ -150,16 +160,19 @@ class ObjectBuffer extends ObjectProxy {
 		if ( target && !_isChild ) {
 			setProperties( target, originalMap.get( this ) );
 		}
+		if ( _trigger ) {
+			triggerChange( this );
+		}
 
 		return this;
 	}
 
-	discardChanges() {
+	discardChanges( _trigger = true ) {
 		const buffer = bufferMap.get( this );
 		const children = childrenMap.get( this );
 
 		for ( const child of Object.values( children ) ) {
-			child.discardChanges();
+			child.discardChanges( false );
 		}
 
 		for ( const key of Object.keys( buffer ) ) {
@@ -168,13 +181,29 @@ class ObjectBuffer extends ObjectProxy {
 		}
 
 		setHasChanges( this, false );
+		if ( _trigger ) {
+			triggerChange( this );
+		}
 
 		return this;
 	}
 
-	getContent() {
+	getOriginal() {
 		// return the original object
 		return originalMap.get( this );
+	}
+
+	getContent() {
+		// return a new object with all modified properties and children
+		return Object.assign(
+			{},
+			originalMap.get( this ),
+			bufferMap.get( this ),
+			Object.entries( childrenMap.get( this ) ).reduce( ( children, [ key, child ] ) => {
+				children[ key ] = child.getContent();
+				return children;
+			}, {} )
+		);
 	}
 }
 
