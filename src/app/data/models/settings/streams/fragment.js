@@ -1,5 +1,6 @@
 import attr from "ember-data/attr";
 import Fragment from "ember-data-model-fragments/fragment";
+import { fragment } from "ember-data-model-fragments/attributes";
 
 
 export const ATTR_STREAMS_NAME_CUSTOM = 1;
@@ -14,10 +15,6 @@ export const ATTR_STREAMS_CLICK_LAUNCH = 1;
 export const ATTR_STREAMS_CLICK_CHAT = 2;
 export const ATTR_STREAMS_CLICK_CHANNEL = 3;
 export const ATTR_STREAMS_CLICK_SETTINGS = 4;
-
-export const ATTR_FILTER_LANGUAGES_NOOP = 0;
-export const ATTR_FILTER_LANGUAGES_FADE = 1;
-export const ATTR_FILTER_LANGUAGES_FILTER = 2;
 
 // eslint-disable-next-line max-len
 export const DEFAULT_VODCAST_REGEXP = "\\b(not live|re-?(run|streaming)|(vod-?|re-?broad)cast(ing)?)\\b";
@@ -36,8 +33,9 @@ export default Fragment.extend({
 	filter_vodcast: attr( "boolean", { defaultValue: true } ),
 	vodcast_regexp: attr( "string", { defaultValue: "" } ),
 
-	filter_languages: attr( "number", { defaultValue: ATTR_FILTER_LANGUAGES_NOOP } ),
-	language: attr( "string", { defaultValue: "en" } ),
+	languages_fade: attr( "boolean", { defaultValue: false } ),
+	languages_filter: attr( "boolean", { defaultValue: false } ),
+	languages: fragment( "settingsStreamsLanguages", { defaultValue: {} } ),
 
 	show_flag: attr( "boolean", { defaultValue: false } ),
 	show_info: attr( "boolean", { defaultValue: false } ),
@@ -53,12 +51,6 @@ export default Fragment.extend({
 		{ id: ATTR_STREAMS_NAME_BOTH, label: "both" },
 		{ id: ATTR_STREAMS_NAME_CUSTOM, label: "custom" },
 		{ id: ATTR_STREAMS_NAME_ORIGINAL, label: "original" }
-	],
-
-	filterLanguages: [
-		{ id: ATTR_FILTER_LANGUAGES_NOOP, label: "noop" },
-		{ id: ATTR_FILTER_LANGUAGES_FADE, label: "fade" },
-		{ id: ATTR_FILTER_LANGUAGES_FILTER, label: "filter" }
 	],
 
 	info: [

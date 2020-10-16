@@ -415,18 +415,20 @@ languages:
         title: Streams filtern
         description: Wende einen Sprachfilter auf alle Stream-Listen an (außer auf gefolgte Streams).
         values:
-            noop:
-                text: Streams nicht ausblenden oder ausfiltern
-                description: Zeige alle Streams.
             fade:
                 text: Streams ausblenden
-                description: Zeige alle Streams, blende nicht passende aus.
+                description: |
+                    Zeige alle Streams, blende nicht passende aus.<br>
+                    Benötigt mindestens eine Auswahl und Ausfiltern muss deaktiviert sein.
             filter:
                 text: Streams ausfiltern
-                description: Nur Streams anzeigen, die der Sprachauswahl entsprechen.
+                description: |
+                    Nur Streams anzeigen, die der Sprachauswahl entsprechen.<br>
+                    Benötigt exakt eine Auswahl und hat Vorrang vor dem Ausblenden.
     languages:
         title: Sprachen
         description: Broadcaster-Sprache oder, falls nicht verfügbar, die Kanalsprache.
+        uncheck-all: Auswahl entfernen
 hotkeys:
     navigation:
         title: Navigation

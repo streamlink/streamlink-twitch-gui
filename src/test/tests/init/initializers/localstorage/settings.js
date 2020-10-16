@@ -1,11 +1,6 @@
 import { module, test } from "qunit";
 
 import updateSettingsInjector from "inject-loader?-./utils!init/initializers/localstorage/settings";
-import {
-	ATTR_FILTER_LANGUAGES_NOOP,
-	ATTR_FILTER_LANGUAGES_FADE,
-	ATTR_FILTER_LANGUAGES_FILTER
-} from "data/models/settings/streams/fragment";
 
 
 module( "init/initializers/localstorage/settings", {
@@ -258,7 +253,12 @@ test( "Updates attributes", function( assert ) {
 				chat_open_context: false,
 				twitchemotes: false,
 				filter_vodcast: true,
-				filter_languages: ATTR_FILTER_LANGUAGES_NOOP,
+				languages_fade: false,
+				languages_filter: true,
+				languages: {
+					de: true,
+					en: true
+				},
 				show_flag: false,
 				show_info: false,
 				info: 1,
@@ -535,11 +535,8 @@ test( "Fixes attributes", function( assert ) {
 
 	const streamsFilterLanguageFade = {
 		streams: {
-			filter_languages: false,
-			languages: {
-				de: false,
-				en: true
-			}
+			filter_languages: 1,
+			language: "en"
 		}
 	};
 	updateSettings( streamsFilterLanguageFade );
@@ -549,22 +546,23 @@ test( "Fixes attributes", function( assert ) {
 			gui: {},
 			streaming: {},
 			streams: {
-				filter_languages: ATTR_FILTER_LANGUAGES_FADE,
-				language: "en"
+				languages_fade: true,
+				languages_filter: false,
+				languages: {
+					de: false,
+					en: true
+				}
 			},
 			chat: {},
 			notification: {}
 		},
-		"Translates boolean language filter when disabled"
+		"Translates old language filter with attribute number 1"
 	);
 
 	const streamsFilterLanguageFilter = {
 		streams: {
-			filter_languages: true,
-			languages: {
-				de: true,
-				en: false
-			}
+			filter_languages: 2,
+			language: "de"
 		}
 	};
 	updateSettings( streamsFilterLanguageFilter );
@@ -574,13 +572,43 @@ test( "Fixes attributes", function( assert ) {
 			gui: {},
 			streaming: {},
 			streams: {
-				filter_languages: ATTR_FILTER_LANGUAGES_FILTER,
-				language: "de"
+				languages_fade: false,
+				languages_filter: true,
+				languages: {
+					de: true,
+					en: false
+				}
 			},
 			chat: {},
 			notification: {}
 		},
-		"Translates boolean language filter when enabled"
+		"Translates old language filter with attribute number 2"
+	);
+
+	const streamsFilterLanguageFilterBoolean = {
+		streams: {
+			filter_languages: true,
+			language: "de"
+		}
+	};
+	updateSettings( streamsFilterLanguageFilterBoolean );
+	assert.propEqual(
+		streamsFilterLanguageFilterBoolean,
+		{
+			gui: {},
+			streaming: {},
+			streams: {
+				languages_fade: false,
+				languages_filter: true,
+				languages: {
+					de: true,
+					en: false
+				}
+			},
+			chat: {},
+			notification: {}
+		},
+		"Translates old language filter with boolean value"
 	);
 
 	const notificationProviderRich = {

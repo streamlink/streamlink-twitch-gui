@@ -4,7 +4,6 @@ import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
 import ListItemComponent from "../-list-item/component";
 import {
-	ATTR_FILTER_LANGUAGES_FADE,
 	ATTR_STREAMS_INFO_GAME,
 	ATTR_STREAMS_INFO_TITLE
 } from "data/models/settings/streams/fragment";
@@ -43,29 +42,43 @@ export default ListItemComponent.extend({
 
 	fadedVodcast: and( "content.isVodcast", "settings.content.streams.filter_vodcast" ),
 
+	fading_enabled: computed(
+		"settings.content.streams.languages_fade",
+		"settings.content.streams.languages_filter",
+		"settings.content.hasAnyStreamsLanguagesSelection",
+		"settings.content.hasSingleStreamsLanguagesSelection",
+		function() {
+			const settings = this.settings.content;
+			const { languages_fade, languages_filter } = settings.streams;
+
+			return languages_fade && settings.hasAnyStreamsLanguagesSelection
+				&& !( languages_filter && settings.hasSingleStreamsLanguagesSelection );
+		}
+	),
+
 	faded: computed(
-		"settings.content.streams.filter_languages",
-		"settings.content.streams.language",
+		"fading_enabled",
+		"settings.content.streams.languages",
 		"channel.language",
 		"channel.broadcaster_language",
 		function() {
-			const { filter_languages, language } = this.settings.content.streams;
-
-			if ( filter_languages !== ATTR_FILTER_LANGUAGES_FADE ) {
+			if ( !this.fading_enabled ) {
 				return false;
 			}
 
+			const { languages } = this.settings.content.streams;
+			const langs = languages.toJSON();
 			const { language: clang, broadcaster_language: blang } = this.channel;
 
 			// a channel language needs to be set
 			if ( clang ) {
 				// fade out if
 				// no broadcaster language is set and channel language is filtered out
-				if ( !blang && clang !== language ) {
+				if ( !blang && !langs[ clang ] ) {
 					return true;
 				}
 				// OR broadcaster language is set and filtered out (ignore channel language)
-				if ( blang && blang !== language ) {
+				if ( blang && !langs[ blang ] ) {
 					return true;
 				}
 			}

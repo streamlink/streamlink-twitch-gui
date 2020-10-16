@@ -8,11 +8,6 @@ import { set } from "@ember/object";
 import Service from "@ember/service";
 
 import StreamItemComponent from "ui/components/list/stream-item/component";
-import {
-	ATTR_FILTER_LANGUAGES_NOOP,
-	ATTR_FILTER_LANGUAGES_FADE,
-	ATTR_FILTER_LANGUAGES_FILTER
-} from "data/models/settings/streams/fragment";
 
 
 // TODO: finish stream-item-component tests
@@ -29,19 +24,49 @@ module( "ui/components/list/stream-item", function( hooks ) {
 	hooks.beforeEach(function() {
 		this.owner.register( "service:settings", Service.extend({
 			content: {
+				hasAnyStreamsLanguagesSelection: true,
+				hasSingleStreamsLanguagesSelection: true,
 				streams: {
-					filter_languages: ATTR_FILTER_LANGUAGES_FADE,
+					languages_fade: true,
+					languages_filter: false,
 					filter_vodcast: false,
-					language: "en"
+					languages: {
+						toJSON: () => ({
+							de: false,
+							en: true,
+							fr: false
+						})
+					}
 				}
 			}
 		}) );
 	});
 
 
+	test( "fading_enabled", function( assert ) {
+		const { content: settings } = this.owner.lookup( "service:settings" );
+		const subject = this.owner.lookup( "component:stream-item" );
+
+		assert.ok( subject.fading_enabled, "Enabled initially" );
+
+		set( settings, "hasAnyStreamsLanguagesSelection", false );
+		set( settings, "hasSingleStreamsLanguagesSelection", false );
+		assert.notOk( subject.fading_enabled, "Disabled if no language selected" );
+
+		set( settings, "hasAnyStreamsLanguagesSelection", true );
+		set( settings, "hasSingleStreamsLanguagesSelection", true );
+		set( settings, "streams.languages_filter", true );
+		assert.notOk( subject.fading_enabled, "Disabled if filtering is active" );
+
+		set( settings, "hasSingleStreamsLanguagesSelection", false );
+		assert.ok( subject.fading_enabled, "Enabled if filtering active but invalid" );
+	});
+
+
 	test( "faded", function( assert ) {
 		const Subject = this.owner.factoryFor( "component:stream-item" );
 		const subject = Subject.create({
+			fading_enabled: true,
 			content: {
 				channel: {
 					language: undefined,
@@ -51,6 +76,9 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		});
 
 		assert.notOk( subject.faded, "Not faded if channel language is missing" );
+
+		set( subject, "content.channel.language", "de" );
+		assert.ok( subject.faded, "Faded if channel language differs" );
 
 		set( subject, "content.channel.language", "en" );
 		assert.notOk( subject.faded, "Not faded if broadcaster language is missing" );
@@ -64,11 +92,8 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		set( subject, "content.channel.broadcaster_language", "other" );
 		assert.ok( subject.faded, "Faded if broadcaster language differs" );
 
-		set( subject, "settings.content.streams.filter_languages", ATTR_FILTER_LANGUAGES_FILTER );
-		assert.notOk( subject.faded, "Not faded if filtering is enabled" );
-
-		set( subject, "settings.content.streams.filter_languages", ATTR_FILTER_LANGUAGES_NOOP );
-		assert.notOk( subject.faded, "Not faded if fading is disabled" );
+		set( subject, "fading_enabled", false );
+		assert.notOk( subject.faded, "Not faded if fading disabled" );
 	});
 
 

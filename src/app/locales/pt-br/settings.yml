@@ -424,18 +424,22 @@ languages:
         title: Filtro de transmissões
         description: Aplica um filtro de idiomas para lista com todas as transmissões (exceto as seguintes transmissões).
         values:
-            noop:
-                text: Não esconder ou filtrar transmissões
-                description: Mostrar todas as transmissões.
             fade:
                 text: Esconder transmissões
-                description: Mostrar todas as transmissões e esconder aquelas que não condizem com o idioma selecionado.
+                # FIXME
+                description: |
+                    Mostrar todas as transmissões e esconder aquelas que não condizem com o idioma selecionado.<br>
+                    Requires at least one selection and filtering needs to be disabled.
             filter:
                 text: Mostrar transmissões
-                description: Mostrar somente as transmissões que condizem com o idioma selecionado.
+                # FIXME
+                description: |
+                    Mostrar somente as transmissões que condizem com o idioma selecionado.<br>
+                    Requires exactly one selection and takes precedence over fading.
     languages:
         title: Idiomas
         description: Idioma de transmissão, ou se não estiver definido, o idioma do canal.
+        uncheck-all: Desmarcar todos
 hotkeys:
     navigation:
         title: Navegação
