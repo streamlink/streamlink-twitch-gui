@@ -417,16 +417,14 @@ languages:
         values:
             fade:
                 text: 淡出實況
-                # FIXME
                 description: |
                     顯示所有實況，不符合設定語系的實況淡出顯示<br>
-                    Requires at least one selection and filtering needs to be disabled.
+                    至少要選擇一項且需停用過濾器
             filter:
                 text: 過濾顯示實況頻道
-                # FIXME
                 description: |
                     只顯示所選語言的頻道<br>
-                    Requires exactly one selection and takes precedence over fading.
+                    只選一個選項，並優先於淡出設定
     languages:
         title: 語言
         description: 實況主語言，若未設定，則為頻道語言
