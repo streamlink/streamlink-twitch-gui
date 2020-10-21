@@ -121,6 +121,8 @@ module.exports = {
 		chunkModules: false,
 		children: false,
 		timings: true,
-		warnings: true
+		warnings: true,
+		// FIXME: stats.warningsFilter has been deprecated in webpack 5
+		warningsFilter: []
 	}
 };

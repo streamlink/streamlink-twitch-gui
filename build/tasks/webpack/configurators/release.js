@@ -31,6 +31,13 @@ module.exports = {
 					hashFuncNames: [ "sha256" ]
 				})
 			);
+			// FIXME: stats.warningsFilter has been deprecated in webpack 5
+			config.stats.warningsFilter.push(
+				// integrity checksums are only added for **very simple** anti-tampering reasons
+				// there is no security aspect or full manipulation protection, which would normally
+				// be considered "useful"
+				"webpack-subresource-integrity: This plugin is not useful for non-web targets."
+			);
 		}
 
 		config.plugins.push(
