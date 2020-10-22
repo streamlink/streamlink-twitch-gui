@@ -23,9 +23,6 @@ export const parameters = [
 		"stream.customParameters"
 	),
 	new Parameter(
-		"--no-version-check"
-	),
-	new Parameter(
 		"--twitch-disable-hosting"
 	),
 	new Parameter(

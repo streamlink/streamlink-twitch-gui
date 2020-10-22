@@ -13,7 +13,7 @@ const {
 	}
 } = streamingConfig;
 
-const params = [ "--version", "--no-version-check" ];
+const params = [ "--version" ];
 
 
 /**

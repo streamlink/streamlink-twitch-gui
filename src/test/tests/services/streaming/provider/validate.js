@@ -134,7 +134,7 @@ test( "Spawn parameters", async function( assert ) {
 		this.spawnStub.args,
 		[[
 			{ exec: "foo" },
-			[ "--version", "--no-version-check" ]
+			[ "--version" ]
 		]],
 		"Calls spawn with correct arguments"
 	);
