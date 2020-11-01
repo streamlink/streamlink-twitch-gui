@@ -58,7 +58,7 @@ Please remember that **Streamlink Twitch GUI**, as the name already suggests, is
 
 ### Development version
 
-Pre-built debug builds for all supported operating systems are [available to download from the nightly Github actions runs as build artifacts][Nightly builds].
+Pre-built debug builds for all supported operating systems are [available to download from the nightly Github actions runs][Nightly builds]. Downloading build artifacts requires a Github account.
 
 If you want to test the latest version on your own, you can do this by cloning the repository and building the application off the master branch. Further instructions can be found down below or in [CONTRIBUTING.md][Contributing].
 
