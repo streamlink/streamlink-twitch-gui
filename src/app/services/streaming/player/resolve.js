@@ -62,11 +62,7 @@ export default async function( stream, player, playersUserData ) {
 	}
 
 	try {
-		execObj.params = getPlayerParams(
-			player !== defaultProfileName || !!playerExec,
-			playerConfData,
-			playerUserData
-		);
+		execObj.params = getPlayerParams( playerConfData, playerUserData );
 	} catch ( e ) {
 		throw new PlayerError( "Error while generating player parameters" );
 	}
@@ -80,24 +76,21 @@ export default async function( stream, player, playersUserData ) {
 
 
 /**
- * Build the player parameter string out of the preset and custom params
+ * Build the player parameter string from the preset and provided custom params
  * This is a single string being used as the provider's --player-args parameter value
- * @param {boolean} hasPlayerExecPath
  * @param {Object} playerConfData
  * @param {Object[]} playerConfData.params
  * @param {Object} playerUserData
  * @param {string?} playerUserData.args
  * @returns {string}
  */
-function getPlayerParams( hasPlayerExecPath, playerConfData, playerUserData ) {
+function getPlayerParams( playerConfData, playerUserData ) {
 	const parameters = [];
 
-	// add custom user parameters at the beginning if the player exec path is known
-	if ( hasPlayerExecPath ) {
-		const { args } = playerUserData;
-		if ( args ) {
-			parameters.push( args );
-		}
+	// add custom user parameters at the beginning
+	const { args } = playerUserData;
+	if ( args ) {
+		parameters.push( args );
 	}
 
 	// add player specific parameters
@@ -124,11 +117,6 @@ function getPlayerParams( hasPlayerExecPath, playerConfData, playerUserData ) {
 		.filter( param => param !== null )
 		.forEach( param => parameters.push( param ) );
 
-	// append "{filename}" if it's missing
-	if ( !parameters.includes( "{filename}" ) ) {
-		parameters.push( "{filename}" );
-	}
-
 	return parameters.join( " " );
 }
 
@@ -144,11 +132,6 @@ function getDefaultPlayerProfile( playersUserData ) {
 
 	execObj.exec = playersUserDataDefault[ "exec" ] || null;
 	execObj.params = execObj.exec && playersUserDataDefault[ "args" ] || null;
-
-	// append "{filename}" if it's missing
-	if ( execObj.params && execObj.params.indexOf( "{filename}" ) === -1 ) {
-		execObj.params = `${execObj.params} {filename}`;
-	}
 
 	playerCache.set( execObj );
 
