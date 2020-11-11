@@ -44,7 +44,7 @@ OutFile "<%= diroutput %>/${InstallerFile}"
 
 
 # Metadata params
-VIProductVersion "${ReleaseVersion}.0"
+VIProductVersion "<%= pkgversion %>.0"
 VIAddVersionKey "ProductName" "${DisplayName}"
 VIAddVersionKey "ProductVersion" "${ReleaseVersion}"
 VIAddVersionKey "FileDescription" "${DisplayName}"
