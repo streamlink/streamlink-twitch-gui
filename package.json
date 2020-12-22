@@ -1,6 +1,6 @@
 {
 	"name": "streamlink-twitch-gui",
-	"version": "1.10.0",
+	"version": "1.11.0",
 	"license": "MIT",
 	"author": "Sebastian Meyer",
 	"homepage": "https://github.com/streamlink/streamlink-twitch-gui",
