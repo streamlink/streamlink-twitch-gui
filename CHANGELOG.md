@@ -3,6 +3,8 @@ Changelog - Streamlink Twitch GUI
 
 ## Master
 
+- :warning: Set Streamlink's version requirement to `2.0.0`.  
+  Upgrade to the latest Streamlink version [here](https://streamlink.github.io/install.html) or see the [wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki).
 - Added AppImage builds for Linux. [#735](https://github.com/streamlink/streamlink-twitch-gui/issues/735)
 - Added daily debug builds for Windows, macOS and Linux. [#736](https://github.com/streamlink/streamlink-twitch-gui/issues/736)
 - Implemented Russian translations (ru). [#740](https://github.com/streamlink/streamlink-twitch-gui/issues/740)
