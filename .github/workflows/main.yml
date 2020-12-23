@@ -20,11 +20,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     steps:
-      - name: Git config on Windows
-        if: startsWith(matrix.os, 'windows')
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
