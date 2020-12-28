@@ -8,6 +8,7 @@ about:
         author: Autor
         version: Versão
         nwjs: NW.js
+        platform: Plataforma
         arch: Arquitetura
         built: Built
         help: Ajuda
