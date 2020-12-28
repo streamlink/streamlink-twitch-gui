@@ -8,6 +8,7 @@ about:
         author: "Автор" #Author
         version: "Версия" #Version
         nwjs: "NW.js" #NW.js
+        platform: "Платформа" #Platform
         arch: "Архитектура" #Architecture
         built: "Сборка" #Built
         help: "Справка" #Help
