@@ -45,7 +45,7 @@
 			"type": "streamlink",
 			"name": "Streamlink",
 			"label": "Streamlink (Python)",
-			"python": ">=2.7 <3 || >=3.5",
+			"python": ">=3.6",
 			"exec": {
 				"win32": "pythonw.exe",
 				"darwin": "python",
