@@ -48,6 +48,31 @@ module( "ui/components/link/external-link", function( hooks ) {
 	});
 
 
+	test( "Empty URL", async function( assert ) {
+		let e;
+
+		await render( hbs`{{#external-link url=null}}foo{{/external-link}}` );
+		const component = this.element.querySelector( ".external-link-component" );
+
+		assert.ok( component instanceof HTMLAnchorElement, "Component renders" );
+		assert.strictEqual( component.innerText, "foo", "Component has the correct content" );
+		assert.notOk( component.classList.contains( "external-link" ), "Empty URL" );
+		assert.notOk( component.title, "Empty URLs don't have a title" );
+
+		// trigger click event
+		e = await triggerEvent( component, "click" );
+		assert.ok( isDefaultPrevented( e ), "Default event action is prevented" );
+		assert.ok( isImmediatePropagationStopped( e ), "Event doesn't propagate" );
+		assert.notOk( this.openBrowserSpy.called, "Doesn't open browser" );
+		assert.notOk( this.transitionToStub.called, "Doesn't transition to different route" );
+
+		// doesn't have a context menu
+		e = await triggerEvent( component, "contextmenu" );
+		assert.notOk( isDefaultPrevented( e ), "Default event action is not prevented" );
+		assert.notOk( isImmediatePropagationStopped( e ), "Event propagates" );
+		assert.notOk( this.contextMenuStub.called, "Doesn't open context menu" );
+	});
+
 	test( "Internal URL", async function( assert ) {
 		let e;
 

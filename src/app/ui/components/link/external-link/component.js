@@ -1,5 +1,5 @@
 import Component from "@ember/component";
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
 import getStreamFromUrl from "utils/getStreamFromUrl";
 import t from "translation-key";
@@ -14,7 +14,7 @@ export default Component.extend({
 	tagName: "a",
 	classNameBindings: [
 		":external-link-component",
-		"channel::external-link"
+		"isInternal::external-link"
 	],
 	attributeBindings: [
 		"href",
@@ -25,38 +25,38 @@ export default Component.extend({
 	href: "#",
 	tabindex: -1,
 
+	isInternal: computed( "url", "channel", function() {
+		return !this.url || this.channel;
+	}),
+
 	channel: computed( "url", function() {
-		const url = get( this, "url" );
-		return getStreamFromUrl( url );
+		return this.url && getStreamFromUrl( this.url );
 	}),
 
 	title: computed( "url", "channel", function() {
-		return get( this, "channel" )
+		return this.channel
 			? null
-			: get( this, "url" );
+			: this.url;
 	}),
 
 	click( event ) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		const channel = get( this, "channel" );
-		if ( channel ) {
-			this.router.transitionTo( "channel", channel );
-		} else {
+		if ( this.channel ) {
+			this.router.transitionTo( "channel", this.channel );
+		} else if ( this.url ) {
 			this.nwjs.openBrowser( this.url );
 		}
 	},
 
 	contextMenu( event ) {
-		if ( get( this, "channel" ) ) {
-			return;
-		}
+		const { url } = this;
+		if ( !url || this.channel ) { return; }
 
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		const url = this.url;
 		this.nwjs.contextMenu( event, [
 			{
 				label: [ t`contextmenu.open-in-browser` ],
