@@ -113,6 +113,13 @@
 				"args": "--no-border"
 			},
 			{
+				"name": "no-keepaspect-window",
+				"icon": "fa-expand",
+				"type": "boolean",
+				"default": true,
+				"args": "--no-keepaspect-window"
+			},
+			{
 				"name": "window",
 				"icon": "fa-image",
 				"type": "boolean",

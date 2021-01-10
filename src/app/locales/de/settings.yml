@@ -205,6 +205,10 @@ player:
                     title: Layout
                     description: Verstecke Fensterdekorationen des Players.
                     checkbox: Minimales Player-Layout
+                no-keepaspect-window:
+                    title: Seitenverhältnis
+                    description: Zeige einen schwarzen Hintergrund wenn der Inhalt nicht ins Playerfenster passt.
+                    checkbox: Uneingeschränktes Bildseitenverhältnis
                 window:
                     title: Playerfenster erzwingen
                     description: Behebt potenzielle Probleme mit reinen Audio-Streams.

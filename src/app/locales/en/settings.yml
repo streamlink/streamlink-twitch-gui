@@ -205,6 +205,10 @@ player:
                     title: Layout
                     description: Don't show player window decorations.
                     checkbox: Minimal player layout
+                no-keepaspect-window:
+                    title: Window aspect ratio
+                    description: Show a black background if the content doesn't fit into the player window.
+                    checkbox: Unrestricted window aspect ratio
                 window:
                     title: Force window
                     description: Fixes potential issues with audio-only streams.
