@@ -2,16 +2,15 @@ codecov:
     notify:
         require_ci_to_pass: yes
 comment:
-    behavior: default
-    layout: header, diff
-    require_changes: no
+  layout: "reach, diff, flags, files"
+  after_n_builds: 999999999
 coverage:
     range: "0..100"
     round: down
     precision: 2
     status:
         changes: no
-        patch: no
+        patch: yes
         project:
             default: no
             app:
@@ -20,7 +19,7 @@ coverage:
                 paths:
                     - "!src/test/"
             tests:
-                target: 98
+                target: 99
                 threshold: 0
                 paths:
                     - "src/test/"
