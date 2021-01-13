@@ -205,6 +205,10 @@ player:
                     title: 播放器排版
                     description: 不要顯示播放器的裝飾
                     checkbox: 最小化播放器排版
+                no-keepaspect-window:
+                    title: 視窗長寬比
+                    description: 內容沒有填滿播放器視窗時，用黑色背景取代
+                    checkbox: 不限制視窗長寬比
                 window:
                     title: 強制顯示視窗
                     description: 修正只有音訊的實況可能會造成的問題
