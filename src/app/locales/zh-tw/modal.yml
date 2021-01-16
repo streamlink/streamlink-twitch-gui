@@ -22,8 +22,9 @@ debug:
     action:
         close: Okay
 firstrun:
-    header: "感謝使用 {{name}}!"
-    body: 開始使用前需要先進行設定嗎?
+    body: |
+        感謝使用 {{name}}!<br>
+        開始使用前需要先進行設定嗎?
     action:
         start: 直接開始
         settings: 設定

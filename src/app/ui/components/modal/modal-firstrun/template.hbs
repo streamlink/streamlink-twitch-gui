@@ -1,9 +1,9 @@
 <div>
 	{{#modal-header}}
-		{{t "modal.firstrun.header" name=name}}
+		{{name}}
 	{{/modal-header}}
 	{{#modal-body}}
-		{{t "modal.firstrun.body"}}
+		{{t "modal.firstrun.body" name=name}}
 	{{/modal-body}}
 	{{#modal-footer classNames="button-list-horizontal"}}
 		{{#form-button

@@ -22,8 +22,9 @@ debug:
     action:
         close: Okay
 firstrun:
-    header: "Thanks for using {{name}}!"
-    body: Do you want to configure the application first before you start?
+    body: |
+        Thanks for using {{name}}!<br>
+        Do you want to configure the application first before you start?
     action:
         start: Start now
         settings: Settings

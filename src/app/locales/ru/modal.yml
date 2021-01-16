@@ -26,8 +26,9 @@ debug:
     action:
         close: Хорошо #Okay
 firstrun:
-    header: Спасибо за выбор {{name}}! #"Thanks for using {{name}}!"
-    body: Вы хотите настроить приложение перед запуском? #Do you want to configure the application first before you start?
+    body: |
+        Спасибо за выбор {{name}}!<br>
+        Вы хотите настроить приложение перед запуском?
     action:
         start: Запуск #Start now
         settings: Настройки #Settings
