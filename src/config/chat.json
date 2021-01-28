@@ -136,6 +136,37 @@
 			}
 		]
 	},
+	"chatterino": {
+		"exec": {
+			"win32": "chatterino.exe",
+			"darwin": "chatterino",
+			"linux": [
+				"chatterino",
+				"Chatterino-x86_64.AppImage"
+			]
+		},
+		"fallback": {
+			"win32": [
+				"%LOCALAPPDATA%\\Programs\\Chatterino",
+				"%PROGRAMFILES%\\Chatterino"
+			],
+			"darwin": [
+				"/Applications/chatterino.app/Contents/MacOS"
+			],
+			"linux": [
+				"/usr/local/bin",
+				"/usr/bin"
+			]
+		},
+		"attributes": [
+			{
+				"name": "exec",
+				"icon": "fa-cog",
+				"type": "string",
+				"isFile": true
+			}
+		]
+	},
 	"chatty": {
 		"exec": {
 			"win32": "javaw.exe",

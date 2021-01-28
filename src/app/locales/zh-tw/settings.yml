@@ -356,6 +356,12 @@ chat:
                     url:
                         title: 聊天室網址
                         description: 要打開何種 Twitch 聊天室網址
+            chatterino:
+                label: Chatterino
+                attributes:
+                    exec:
+                        title: Chatterino 執行檔路徑
+                        description: 設定 Chatterino 執行檔路徑
             chatty:
                 label: Chatty
                 attributes:

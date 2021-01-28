@@ -356,6 +356,12 @@ chat:
                     url:
                         title: Chat URL
                         description: Welche Chat URL verwendet werden soll.
+            chatterino:
+                label: Chatterino
+                attributes:
+                    exec:
+                        title: Chatterino Programmdatei
+                        description: Setze einen benutzerdefinierten Chatterino Programmdateipfad.
             chatty:
                 label: Chatty
                 attributes:

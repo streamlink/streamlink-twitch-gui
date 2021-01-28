@@ -356,6 +356,12 @@ chat:
                     url:
                         title: Chat URL
                         description: Which Twitch chat URL to use.
+            chatterino:
+                label: Chatterino
+                attributes:
+                    exec:
+                        title: Chatterino executable
+                        description: Set a custom Chatterino executable path.
             chatty:
                 label: Chatty
                 attributes:

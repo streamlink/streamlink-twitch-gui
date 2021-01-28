@@ -352,6 +352,12 @@ chat:
                     url:
                         title: "Ссылка на чат" #Chat URL
                         description: "Какую ссылку на чат Twitch использовать." #Which Twitch chat URL to use.
+            chatterino:
+                label: "Chatterino" #Chatterino
+                attributes:
+                    exec:
+                        title: "Исполняемый файл Chatterino" #Chatterino executable
+                        description: "Пользовательский путь к Chatterino" #Set a custom Chatterino executable path.
             chatty:
                 label: "Chatty" #Chatty
                 attributes:
