@@ -16,6 +16,7 @@ import { ATTR_GUI_INTEGRATION_TRAY } from "data/models/settings/gui/fragment";
 
 const { hasOwnProperty } = {};
 const reVariable = /{(\w+)}/g;
+const modalCloseContext = {};
 
 
 export default Service.extend( /** @class NwjsService */ {
@@ -90,7 +91,7 @@ export default Service.extend( /** @class NwjsService */ {
 
 	close() {
 		if ( this.streaming.hasStreams ) {
-			this.modal.openModal( "quit" );
+			this.modal.openModal( "quit", modalCloseContext );
 		} else {
 			this.quit();
 		}

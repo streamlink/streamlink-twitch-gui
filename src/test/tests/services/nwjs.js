@@ -15,13 +15,13 @@ import {
 
 module( "services/nwjs", function( hooks ) {
 	setupTest( hooks, {
-		resolver: buildResolver({
-			ModalService: Service.extend(),
-			StreamingService: Service.extend()
-		})
+		resolver: buildResolver()
 	});
 
-	hooks.beforeEach(function() {
+	/** @typedef {TestContext} TestContextServicesNwjs */
+	hooks.beforeEach( /** @this {TestContextServicesNwjs} */ function() {
+		const self = this;
+
 		this.quitSpy = sinon.spy();
 		this.openExternalSpy = sinon.spy();
 		this.toggleVisibilitySpy = sinon.spy();
@@ -38,22 +38,32 @@ module( "services/nwjs", function( hooks ) {
 			set: this.clipboardSetStub
 		});
 
-		const guiSettings = this.guiSettings = {
+		this.openModalSpy = sinon.spy();
+
+		this.guiSettings = {
 			integration: ATTR_GUI_INTEGRATION_BOTH,
 			minimizetotray: false
 		};
+
+		this.owner.register( "service:modal", Service.extend({
+			openModal: this.openModalSpy
+		}) );
 
 		this.owner.register( "service:settings", Service.extend({
 			content: {
 				gui: {
 					get integration() {
-						return guiSettings.integration;
+						return self.guiSettings.integration;
 					},
 					get minimizetotray() {
-						return guiSettings.minimizetotray;
+						return self.guiSettings.minimizetotray;
 					}
 				}
 			}
+		}) );
+
+		this.owner.register( "service:streaming", Service.extend({
+			hasStreams: false
 		}) );
 
 		this.owner.register( "service:nwjs", nwjsServiceInjector({
@@ -80,6 +90,7 @@ module( "services/nwjs", function( hooks ) {
 
 
 	test( "Minimize", function( assert ) {
+		/** @this {TestContextServicesNwjs} */
 		/** @type {NwjsService} */
 		const NwjsService = this.owner.lookup( "service:nwjs" );
 
@@ -123,6 +134,7 @@ module( "services/nwjs", function( hooks ) {
 
 
 	test( "Maximize", function( assert ) {
+		/** @this {TestContextServicesNwjs} */
 		/** @type {NwjsService} */
 		const NwjsService = this.owner.lookup( "service:nwjs" );
 
@@ -132,6 +144,7 @@ module( "services/nwjs", function( hooks ) {
 
 
 	test( "Focus", function( assert ) {
+		/** @this {TestContextServicesNwjs} */
 		/** @type {NwjsService} */
 		const NwjsService = this.owner.lookup( "service:nwjs" );
 
@@ -143,16 +156,34 @@ module( "services/nwjs", function( hooks ) {
 	});
 
 
-	test( "Quit", function( assert ) {
+	test( "Close", function( assert ) {
+		/** @this {TestContextServicesNwjs} */
 		/** @type {NwjsService} */
 		const NwjsService = this.owner.lookup( "service:nwjs" );
 
-		NwjsService.quit();
+		NwjsService.close();
+		assert.notOk( this.openModalSpy.called, "Doesn't open quit modal" );
 		assert.ok( this.quitSpy.calledOnce, "Calls quit" );
+		this.quitSpy.resetHistory();
+
+		NwjsService.streaming.hasStreams = true;
+		NwjsService.close();
+		assert.ok( this.openModalSpy.calledOnceWith( "quit", {} ), "Opens quit modal" );
+		assert.notOk( this.quitSpy.called, "Doesn't call quit" );
+
+		NwjsService.close();
+		assert.ok( this.openModalSpy.calledTwice );
+		assert.strictEqual(
+			this.openModalSpy.getCall( 0 ).lastArg,
+			this.openModalSpy.getCall( 1 ).lastArg,
+			"Shares the same modal quit context"
+		);
+		assert.notOk( this.quitSpy.called, "Doesn't call quit" );
 	});
 
 
 	test( "OpenBrowser", function( assert ) {
+		/** @this {TestContextServicesNwjs} */
 		/** @type {NwjsService} */
 		const NwjsService = this.owner.lookup( "service:nwjs" );
 
@@ -193,6 +224,7 @@ module( "services/nwjs", function( hooks ) {
 
 
 	test( "Clipboard", function( assert ) {
+		/** @this {TestContextServicesNwjs} */
 		/** @type {NwjsService} */
 		const NwjsService = this.owner.lookup( "service:nwjs" );
 
