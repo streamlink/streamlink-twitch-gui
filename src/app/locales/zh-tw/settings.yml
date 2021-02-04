@@ -350,12 +350,6 @@ chat:
                     url:
                         title: 聊天室網址
                         description: 要打開何種 Twitch 聊天室網址
-            msie:
-                label: Internet Explorer
-                attributes:
-                    url:
-                        title: 聊天室網址
-                        description: 要打開何種 Twitch 聊天室網址
             chatterino:
                 label: Chatterino
                 attributes:

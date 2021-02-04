@@ -611,6 +611,26 @@ test( "Fixes attributes", function( assert ) {
 		"Translates old language filter with boolean value"
 	);
 
+	const chatProviderMsie = {
+		chat: {
+			provider: "msie"
+		}
+	};
+	updateSettings( chatProviderMsie );
+	assert.propEqual(
+		chatProviderMsie,
+		{
+			gui: {},
+			streaming: {},
+			streams: {},
+			chat: {
+				provider: "browser"
+			},
+			notification: {}
+		},
+		"Updates removed chat providers to \"browser\""
+	);
+
 	const notificationProviderRich = {
 		notification: {
 			provider: "rich"

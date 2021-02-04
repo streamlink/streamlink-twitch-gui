@@ -350,12 +350,6 @@ chat:
                     url:
                         title: Chat URL
                         description: Welche Chat URL verwendet werden soll.
-            msie:
-                label: Internet Explorer
-                attributes:
-                    url:
-                        title: Chat URL
-                        description: Welche Chat URL verwendet werden soll.
             chatterino:
                 label: Chatterino
                 attributes:

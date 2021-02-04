@@ -346,12 +346,6 @@ chat:
                     url:
                         title: "Ссылка на чат" #Chat URL
                         description: "Какую ссылку на чат Twitch использовать." #Which Twitch chat URL to use.
-            msie:
-                label: "Internet Explorer" #Internet Explorer
-                attributes:
-                    url:
-                        title: "Ссылка на чат" #Chat URL
-                        description: "Какую ссылку на чат Twitch использовать." #Which Twitch chat URL to use.
             chatterino:
                 label: "Chatterino" #Chatterino
                 attributes:

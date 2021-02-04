@@ -173,7 +173,10 @@ function fixAttributes( settings ) {
 	fixStreamingPlayers( streaming, settings );
 
 	// fix old chat data
-	if ( hasOwnProperty.call( chat, "provider" ) && chat.provider === "default" ) {
+	if (
+		   hasOwnProperty.call( chat, "provider" )
+		&& [ "default", "msie" ].includes( chat.provider )
+	) {
 		chat.provider = "browser";
 	}
 

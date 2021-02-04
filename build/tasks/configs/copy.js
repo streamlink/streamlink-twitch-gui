@@ -1,16 +1,4 @@
 module.exports = {
-	scripts_win32: {
-		expand : true,
-		flatten: true,
-		src    : "<%= dir.resources %>/windows/*",
-		dest   : "<%= dir.releases %>/<%= package.name %>/win32/"
-	},
-	scripts_win64: {
-		expand : true,
-		flatten: true,
-		src    : "<%= dir.resources %>/windows/*",
-		dest   : "<%= dir.releases %>/<%= package.name %>/win64/"
-	},
 	scripts_linux32: {
 		options: { mode: 0o755 },
 		expand : true,

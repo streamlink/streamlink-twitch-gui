@@ -355,12 +355,6 @@ chat:
                     url:
                         title: URL do chat
                         description: Qual URL utilizar para o chat na Twitch.
-            msie:
-                label: Internet Explorer
-                attributes:
-                    url:
-                        title: URL do chat
-                        description: Qual URL utilizar para o chat na Twitch.
             chatterino:
                 label: Chatterino
                 attributes:

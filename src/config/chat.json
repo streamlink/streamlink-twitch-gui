@@ -109,33 +109,6 @@
 			}
 		]
 	},
-	"msie": {
-		"exec": {
-			"win32": "cscript.exe",
-			"darwin": false,
-			"linux": false
-		},
-		"fallback": {
-			"win32": [
-				"%WINDIR%\\SysWOW64",
-				"%WINDIR%\\system32"
-			],
-			"darwin": false,
-			"linux": false
-		},
-		"data": {
-			"script": "msie-minimal.vbs"
-		},
-		"attributes": [
-			{
-				"name": "url",
-				"icon": "fa-link",
-				"type": "string",
-				"isUrl": true,
-				"defaultValue": "default"
-			}
-		]
-	},
 	"chatterino": {
 		"exec": {
 			"win32": "chatterino.exe",

@@ -350,12 +350,6 @@ chat:
                     url:
                         title: Chat URL
                         description: Which Twitch chat URL to use.
-            msie:
-                label: Internet Explorer
-                attributes:
-                    url:
-                        title: Chat URL
-                        description: Which Twitch chat URL to use.
             chatterino:
                 label: Chatterino
                 attributes:

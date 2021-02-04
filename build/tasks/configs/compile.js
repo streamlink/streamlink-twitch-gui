@@ -4,17 +4,13 @@ module.exports = {
 			before: [
 				"clean:release_win32"
 			],
-			after: [
-				"copy:scripts_win32"
-			]
+			after: []
 		},
 		win64: {
 			before: [
 				"clean:release_win64"
 			],
-			after: [
-				"copy:scripts_win64"
-			]
+			after: []
 		},
 
 		osx64: {
