@@ -9569,9 +9569,9 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-"snoretoast@github:bastimeyer/snoretoast#binaries":
-  version "0.5.2"
-  resolved "https://codeload.github.com/bastimeyer/snoretoast/tar.gz/7116b588898fd1283aa156624d7b7e78541691c3"
+"snoretoast@github:bastimeyer/snoretoast#v0.7.0-binaries":
+  version "0.7.0"
+  resolved "https://codeload.github.com/bastimeyer/snoretoast/tar.gz/1a37c8f17f0a3d571b61ad31d4e60c9bed97e74e"
 
 source-list-map@^2.0.0:
   version "2.0.0"
