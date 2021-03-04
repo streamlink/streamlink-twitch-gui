@@ -108,7 +108,7 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 					"C:\\app\\bin\\win64\\snoretoast.exe",
 					[
 						"-install",
-						"application name.lnk",
+						"application name",
 						"C:\\app\\executable",
 						"application name"
 					]
@@ -163,7 +163,6 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 						"-appID",
 						"application name",
 						"-silent",
-						"-w",
 						"-t",
 						"title",
 						"-m",
@@ -205,7 +204,6 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 						"-appID",
 						"application name",
 						"-silent",
-						"-w",
 						"-t",
 						"title",
 						"-m",

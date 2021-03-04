@@ -49,7 +49,7 @@ export default class NotificationProviderSnoreToast {
 				this.exec,
 				[
 					"-install",
-					`${displayName}.lnk`,
+					displayName,
 					Process.execPath,
 					displayName
 				]
@@ -75,7 +75,6 @@ export default class NotificationProviderSnoreToast {
 					"-appID",
 					displayName,
 					"-silent",
-					"-w",
 					"-t",
 					data.title,
 					"-m",
