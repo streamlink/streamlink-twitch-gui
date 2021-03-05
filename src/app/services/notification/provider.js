@@ -54,8 +54,15 @@ export async function showNotification( provider, data, newInst ) {
 
 		try {
 			let instance;
+			// clean up existing provider instance if newInst is true
+			if ( newInst && instanceMap.has( current ) ) {
+				try {
+					await instanceMap.get( current ).cleanup();
+				} catch ( e ) {}
+				instanceMap.delete( current );
+			}
 			// create a provider instance if it doesn't exist yet
-			if ( newInst || !instanceMap.has( current ) ) {
+			if ( !instanceMap.has( current ) ) {
 				/** @type {NotificationProvider} */
 				instance = new Provider();
 				instanceMap.set( current, instance );

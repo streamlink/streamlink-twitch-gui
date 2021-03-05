@@ -58,6 +58,9 @@ export default class NotificationProviderChromeNotifications {
 		});
 	}
 
+	/* istanbul ignore next */
+	async cleanup() {}
+
 	async notify( data ) {
 		const notification = {
 			title: data.title,

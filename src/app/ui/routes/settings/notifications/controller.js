@@ -6,6 +6,10 @@ import SettingsNotification from "data/models/settings/notification/fragment";
 import NotificationData from "services/notification/data";
 import { iconGroup as icon } from "services/notification/icons";
 import { isSupported, showNotification } from "services/notification/provider";
+import Logger from "utils/Logger";
+
+
+const { logError } = new Logger( "NotificationSettings" );
 
 
 const { "display-name": displayName } = mainConfig;
@@ -43,7 +47,7 @@ export default Controller.extend({
 
 			showNotification( provider, data, true )
 				.then( success, failure )
-				.catch( () => {} );
+				.catch( err => logError( err ) );
 		}
 	}
 });

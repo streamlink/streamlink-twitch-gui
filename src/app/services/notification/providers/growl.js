@@ -42,6 +42,9 @@ export default class NotificationProviderGrowl {
 		throw new Error( "Could not find growl server" );
 	}
 
+	/* istanbul ignore next */
+	async cleanup() {}
+
 	/**
 	 * @param {number} port
 	 * @returns {Promise}

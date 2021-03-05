@@ -20,6 +20,11 @@ import NotificationProviderRich from "./rich";
  */
 /**
  * @function
+ * @name NotificationProvider#cleanup
+ * @returns {Promise}
+ */
+/**
+ * @function
  * @name NotificationProvider#notify
  * @params {NotificationData} data
  * @returns {Promise}
