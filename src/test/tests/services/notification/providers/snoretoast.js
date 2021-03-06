@@ -1,27 +1,38 @@
 import { module, test } from "qunit";
 import sinon from "sinon";
 
+import { Buffer } from "buffer";
+import { EventEmitter } from "events";
 import { win32 as win32Path } from "path";
 
 import notificationProviderSnoreToastInjector
-	from "inject-loader!services/notification/providers/snoretoast";
+	from "inject-loader?-events!services/notification/providers/snoretoast";
 import NotificationData from "services/notification/data";
 
 
 module( "services/notification/providers/snoretoast", function( hooks ) {
-	hooks.beforeEach(function() {
+	/** @typedef {Object} TestContextServicesNotificationProviderSnoretoast */
+	hooks.beforeEach( /** @this {TestContextServicesNotificationProviderSnoretoast} */ function() {
 		const context = this;
 
 		this.resolveStub = sinon.stub().callsFake( ( ...p ) => win32Path.join( "C:\\app", ...p ) );
 		this.whichStub = sinon.stub().callsFake( async path => path );
 		this.promiseChildProcessStub = sinon.stub();
+		this.onShutdownSpy = sinon.spy();
+
+		this.server = new EventEmitter();
+		this.server.listen = sinon.stub().callsArg( 1 );
+		this.server.close = sinon.spy();
+		this.createServerStub = sinon.stub().returns( this.server );
+
 		this.is64bit = true;
 		this.isWinGte8 = true;
 
 		this.subject = () => notificationProviderSnoreToastInjector({
 			config: {
 				main: {
-					"display-name": "application name"
+					"display-name": "application name",
+					"app-identifier": "application-name"
 				},
 				notification: {
 					provider: {
@@ -31,6 +42,9 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 						}
 					}
 				}
+			},
+			"net": {
+				createServer: this.createServerStub
 			},
 			"path": {
 				resolve: this.resolveStub
@@ -44,6 +58,7 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 			},
 			"utils/node/fs/which": this.whichStub,
 			"utils/node/child_process/promise": this.promiseChildProcessStub,
+			"utils/node/onShutdown": this.onShutdownSpy,
 			"utils/node/platform": {
 				get is64bit() {
 					return context.is64bit;
@@ -57,6 +72,7 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 
 
 	test( "isSupported", function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
 		const { default: NotificationProviderSnoreToast } = this.subject();
 		assert.ok( NotificationProviderSnoreToast.isSupported(), "Supported on Windows 8+" );
 
@@ -65,6 +81,7 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 	});
 
 	test( "Invalid executable path", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
 		const { default: NotificationProviderSnoreToast } = this.subject();
 		const inst = new NotificationProviderSnoreToast();
 
@@ -93,12 +110,12 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 		assert.notOk( this.promiseChildProcessStub.called, "Doesn't execute invalid path" );
 	});
 
-	test( "Snoretoast setup", async function( assert ) {
+	test( "Snoretoast setup - failure", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
 		const { default: NotificationProviderSnoreToast } = this.subject();
-		const inst = new NotificationProviderSnoreToast();
-
 		this.promiseChildProcessStub.rejects( new Error( "fail" ) );
 
+		const inst = new NotificationProviderSnoreToast();
 		await assert.rejects( inst.setup(), new Error( "fail" ), "Fails to execute" );
 		assert.ok( this.promiseChildProcessStub.calledOnce, "Tries to execute once" );
 		assert.propEqual(
@@ -108,7 +125,7 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 					"C:\\app\\bin\\win64\\snoretoast.exe",
 					[
 						"-install",
-						"application name.lnk",
+						"application name",
 						"C:\\app\\executable",
 						"application name"
 					]
@@ -120,24 +137,91 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 			],
 			"Tries to execute snoretoast with correct setup parameters"
 		);
+	});
 
-		let code = 1;
-		this.promiseChildProcessStub.reset();
+	test( "Snoretoast setup - exit code 1", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
+		const { default: NotificationProviderSnoreToast } = this.subject();
 		this.promiseChildProcessStub.callsFake( async ( params, onExit ) => {
-			await new Promise( ( resolve, reject ) => onExit( code, resolve, reject ) );
+			await new Promise( ( resolve, reject ) => onExit( 1, resolve, reject ) );
 		});
 
+		const inst = new NotificationProviderSnoreToast();
 		await assert.rejects(
 			inst.setup(),
 			new Error( "Could not install application shortcut" ),
 			"Fails to setup"
 		);
+	});
 
-		code = 0;
+	test( "Snoretoast setup - server error", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
+		const { default: NotificationProviderSnoreToast } = this.subject();
+		this.promiseChildProcessStub.callsFake( async ( params, onExit ) => {
+			await new Promise( ( resolve, reject ) => onExit( 0, resolve, reject ) );
+		});
+		this.server.listen.reset();
+		this.server.listen.callsFake( () => this.server.emit( "error", new Error( "fail" ) ) );
+
+		const inst = new NotificationProviderSnoreToast();
+		await assert.rejects( inst.setup(), new Error( "fail" ), "Fails to start server" );
+		assert.ok( this.server.close.calledOnce, "Closes server on error" );
+		assert.notOk( this.onShutdownSpy.called, "Doesn't set up onShutdown callback on error" );
+
+		await inst.cleanup();
+		assert.ok( this.server.close.calledOnce, "Doesn't close server twice on cleanup" );
+	});
+
+	test( "Snoretoast setup - success", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
+		const { default: NotificationProviderSnoreToast } = this.subject();
+		this.promiseChildProcessStub.callsFake( async ( params, onExit ) => {
+			await new Promise( ( resolve, reject ) => onExit( 0, resolve, reject ) );
+		});
+
+		const inst = new NotificationProviderSnoreToast();
 		await inst.setup();
+		assert.propEqual(
+			this.server.listen.getCall( 0 ).args,
+			[ "\\\\.\\pipe\\application-name", new Function() ],
+			"Calls server.listen() with correct pipe name"
+		);
+		assert.notOk( this.server.close.called, "Does not close server" );
+		assert.ok( this.onShutdownSpy.calledOnce, "Sets up onShutdown callback" );
+
+		this.onShutdownSpy.getCall( 0 ).args[ 0 ]();
+		assert.ok( this.server.close.calledOnce, "Closes server on shutdown" );
+	});
+
+	test( "Named pipe messages", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
+		const { default: NotificationProviderSnoreToast } = this.subject();
+		this.promiseChildProcessStub.callsFake( async ( params, onExit ) => {
+			await new Promise( ( resolve, reject ) => onExit( 0, resolve, reject ) );
+		});
+
+		const onMessageSpy = sinon.spy();
+		const conn = new EventEmitter();
+		const inst = new NotificationProviderSnoreToast();
+		inst.messages.on( "message", onMessageSpy );
+		await inst.setup();
+		this.server.emit( "connection", conn );
+
+		let message = "foo=bar;baz=qux=quux;asdf=;;";
+		conn.emit( "data", Buffer.from( message, "utf16le" ) );
+		assert.propEqual(
+			onMessageSpy.getCall( 0 ).args,
+			[{
+				"foo": "bar",
+				"baz": "qux=quux",
+				"asdf": ""
+			}],
+			"Parses message"
+		);
 	});
 
 	test( "Notify fail and message format", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
 		const { default: NotificationProviderSnoreToast } = this.subject();
 		const inst = new NotificationProviderSnoreToast();
 		inst.exec = "C:\\app\\bin\\win64\\snoretoast.exe";
@@ -163,20 +247,25 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 						"-appID",
 						"application name",
 						"-silent",
-						"-w",
 						"-t",
 						"title",
 						"-m",
 						"message",
 						"-p",
-						"icon-path"
+						"icon-path",
+						"-id",
+						"1",
+						"-pipeName",
+						"\\\\.\\pipe\\application-name",
+						"-application",
+						"C:\\app\\executable"
 					],
 					{
 						stdio: [ 1 ]
 					}
 				],
 				new Function(),
-				new Function(),
+				null,
 				null,
 				2
 			],
@@ -205,20 +294,25 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 						"-appID",
 						"application name",
 						"-silent",
-						"-w",
 						"-t",
 						"title",
 						"-m",
 						"foo, bar",
 						"-p",
-						"icon-path"
+						"icon-path",
+						"-id",
+						"2",
+						"-pipeName",
+						"\\\\.\\pipe\\application-name",
+						"-application",
+						"C:\\app\\executable"
 					],
 					{
 						stdio: [ 1 ]
 					}
 				],
 				new Function(),
-				new Function(),
+				null,
 				null,
 				2
 			],
@@ -227,14 +321,14 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 	});
 
 	test( "Snoretoast return codes and click callback", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
 		const {
 			default: NotificationProviderSnoreToast,
 			EXIT_CODE_FAILED,
 			EXIT_CODE_SUCCESS,
 			EXIT_CODE_HIDDEN,
 			EXIT_CODE_DISMISSED,
-			EXIT_CODE_TIMEOUT,
-			MSG_CLICK
+			EXIT_CODE_TIMEOUT
 		} = this.subject();
 		const inst = new NotificationProviderSnoreToast();
 		inst.exec = "C:\\app\\bin\\win64\\snoretoast.exe";
@@ -247,11 +341,8 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 			click: onClickSpy
 		});
 
-		let code, stdOut;
-		this.promiseChildProcessStub.callsFake( async ( params, onExit, onStdOut ) => {
-			if ( stdOut ) {
-				onStdOut( stdOut );
-			}
+		let code;
+		this.promiseChildProcessStub.callsFake( async ( params, onExit ) => {
 			await new Promise( ( resolve, reject ) => onExit( code, resolve, reject ) );
 		});
 
@@ -267,18 +358,6 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 		await assert.rejects( inst.notify( data ), undefined, "Rejects on EXIT_CODE_HIDDEN" );
 		assert.notOk( onClickSpy.called, "Doesn't call onClick" );
 
-		code = EXIT_CODE_SUCCESS;
-		await inst.notify( data );
-		assert.notOk( onClickSpy.calledOnce, "Doesn't call onClick on missing stdOut" );
-
-		stdOut = "invalid";
-
-		code = EXIT_CODE_SUCCESS;
-		await inst.notify( data );
-		assert.notOk( onClickSpy.calledOnce, "Doesn't call onClick on invalid stdOut" );
-
-		stdOut = MSG_CLICK;
-
 		code = EXIT_CODE_DISMISSED;
 		await inst.notify( data );
 		assert.notOk( onClickSpy.called, "Doesn't call onClick on EXIT_CODE_DISMISSED" );
@@ -289,6 +368,33 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 
 		code = EXIT_CODE_SUCCESS;
 		await inst.notify( data );
+		assert.notOk( onClickSpy.called, "Doesn't call onClick without clicked event" );
+
+		code = EXIT_CODE_SUCCESS;
+		let promise;
+		let message;
+
+		this.promiseChildProcessStub.reset();
+		this.promiseChildProcessStub.callsFake( async ( params, onExit ) => {
+			inst.messages.emit( "message", message );
+			await new Promise( ( resolve, reject ) => onExit( code, resolve, reject ) );
+		});
+
+		message = { action: "invalid" };
+		await inst.notify( data );
+		assert.notOk( onClickSpy.called, "Doesn't call onClick with invalid event message" );
+
+		message = {
+			action: "clicked",
+			notificationId: "8",
+			pipe: "\\\\.\\pipe\\application-name",
+			application: "C:\\app\\executable"
+		};
+		assert.strictEqual( inst.messages.listenerCount( "message" ), 0, "Has no listeners" );
+		promise = inst.notify( data );
+		assert.strictEqual( inst.messages.listenerCount( "message" ), 1, "Has message listener" );
+		await promise;
 		assert.ok( onClickSpy.calledOnce, "Calls onClick on EXIT_CODE_SUCCESS" );
+		assert.strictEqual( inst.messages.listenerCount( "message" ), 0, "Has no listeners" );
 	});
 });

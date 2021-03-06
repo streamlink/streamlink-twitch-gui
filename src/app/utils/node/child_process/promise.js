@@ -24,7 +24,7 @@ async function promiseChildprocess( args, onExit, onStdOut, onStdErr, time ) {
 		if ( timeout ) {
 			clearTimeout( timeout );
 		}
-		if ( child ) {
+		if ( child && child.exitCode === null && !child.killed ) {
 			child.kill();
 		}
 		if ( unregisterOnShutdown ) {
