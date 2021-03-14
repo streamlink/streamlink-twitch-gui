@@ -94,6 +94,7 @@
 	"resolutions": {
 		"**/optimist/minimist": "0.2.1",
 		"load-grunt-config/lodash": "^4.17.19",
+		"**/plist/xmldom": "^0.5.0",
 		"sinon/nise/just-extend": "^4.0.0"
 	},
 	"scripts": {
