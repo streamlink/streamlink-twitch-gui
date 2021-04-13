@@ -1,21 +1,13 @@
 /**
  * Factory function for creating a function to be called by the Windows installer template config
- * @param {String} config
+ * @param {string} config
  * @returns {Function}
  */
 function getInstallerFiles( config ) {
 	return function( grunt ) {
-		const dir = grunt.config( `template.${config}.options.data.dirinput` );
-
-		function getFiles( filter ) {
-			return grunt.file.expand({
-				cwd: dir,
-				filter: filter
-			}, "**" )
-				.map(function( file ) {
-					return file.replace( "/", "\\" );
-				});
-		}
+		const cwd = grunt.config( `template.${config}.options.data.dirinput` );
+		const getFiles = filter => grunt.file.expand( { cwd, filter }, "**" )
+			.map( path => path.replace( /\//g, "\\" ) );
 
 		return JSON.stringify({
 			files: getFiles( "isFile" ),
