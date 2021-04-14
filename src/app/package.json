@@ -19,5 +19,5 @@
 		"show_in_taskbar": false
 	},
 
-	"chromium-args": "--disable-devtools --enable-features=NativeNotifications --disable-smooth-scrolling --disable-features=nw2"
+	"chromium-args": "--disable-devtools --enable-features=NativeNotifications --disable-smooth-scrolling"
 }
