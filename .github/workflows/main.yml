@@ -138,7 +138,6 @@ jobs:
           yarn install --pure-lockfile --no-progress --non-interactive
           sudo apt install pigz nsis appstream{,-util}
           ./.github/workflows/install-wine.sh
-          ./.github/workflows/build-squashfs-tools.sh
       - name: Build
         run: yarn run grunt clean:tmp_prod webpack:prod
       - name: Compile & package

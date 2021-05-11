@@ -33,10 +33,6 @@ module.exports = {
 		"<%= dir.tmp_coverage %>/**",
 		"!<%= dir.tmp_coverage %>"
 	],
-	tmp_appimage: [
-		"<%= dir.tmp_appimage %>/**",
-		"!<%= dir.tmp_appimage %>"
-	],
 
 	cache: [
 		"<%= dir.cache %>/**",

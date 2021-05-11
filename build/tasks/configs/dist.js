@@ -47,21 +47,13 @@ module.exports = {
 
 		appimage_linux32: {
 			platform: "linux32",
-			tasks: [
-				"appimagekit",
-				"template:appimage_linux32",
-				"shell:appimage_linux32"
-			],
-			checksum: "<%= dir.dist %>/<%= template.appimage_linux32.options.data.filename %>"
+			tasks: [ "shell:appimage_linux32" ],
+			checksum: "<%= appimage.linux32.output %>"
 		},
 		appimage_linux64: {
 			platform: "linux64",
-			tasks: [
-				"appimagekit",
-				"template:appimage_linux64",
-				"shell:appimage_linux64"
-			],
-			checksum: "<%= dir.dist %>/<%= template.appimage_linux64.options.data.filename %>"
+			tasks: [ "shell:appimage_linux64" ],
+			checksum: "<%= appimage.linux64.output %>"
 		}
 	}
 };
