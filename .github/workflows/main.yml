@@ -69,6 +69,8 @@ jobs:
     needs:
       - test
     runs-on: ubuntu-18.04
+    permissions:
+      actions: write
     steps:
       - uses: actions/checkout@v2
         with:
