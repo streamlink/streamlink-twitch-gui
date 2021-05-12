@@ -83,11 +83,11 @@ module.exports = {
 			"bash '<%= dir.resources %>/appimage/build.sh'",
 			"'<%= package.name %>'",
 			"'<%= version %>'",
-			"'<%= appimage.linux32.arch %>'",
 			"'<%= appimage.linux32.image %>'",
 			"'<%= appimage.linux32.digest %>'",
 			"'<%= appimage.linux32.input %>'",
-			"'<%= appimage.linux32.output %>'"
+			"'<%= appimage.linux32.output %>'",
+			"<%= appimage.linux32.dependencies.map(d=>`'${d}'`).join(' ') %>"
 		].join( " " )
 	},
 	appimage_linux64: {
@@ -95,11 +95,28 @@ module.exports = {
 			"bash '<%= dir.resources %>/appimage/build.sh'",
 			"'<%= package.name %>'",
 			"'<%= version %>'",
-			"'<%= appimage.linux64.arch %>'",
 			"'<%= appimage.linux64.image %>'",
 			"'<%= appimage.linux64.digest %>'",
 			"'<%= appimage.linux64.input %>'",
-			"'<%= appimage.linux64.output %>'"
+			"'<%= appimage.linux64.output %>'",
+			"<%= appimage.linux64.dependencies.map(d=>`'${d}'`).join(' ') %>"
+		].join( " " )
+	},
+
+	appimage_dependencies_linux32: {
+		command: [
+			"bash '<%= dir.resources %>/appimage/get-dependencies.sh'",
+			"'<%= appimage.linux32.image %>'",
+			"'<%= appimage.linux32.digest %>'",
+			"'<%= appimage.linux32.input %>'"
+		].join( " " )
+	},
+	appimage_dependencies_linux64: {
+		command: [
+			"bash '<%= dir.resources %>/appimage/get-dependencies.sh'",
+			"'<%= appimage.linux64.image %>'",
+			"'<%= appimage.linux64.digest %>'",
+			"'<%= appimage.linux64.input %>'"
 		].join( " " )
 	}
 };

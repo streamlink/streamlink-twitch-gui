@@ -6,11 +6,10 @@ set -e
 
 NAME="${1}"
 VERSION="${2}"
-ARCH="${3}"
-DOCKER_IMAGE="${4}"
-DOCKER_DIGEST="${5}"
-INPUT="${6}"
-OUTPUT="${7}"
+DOCKER_IMAGE="${3}"
+DOCKER_DIGEST="${4}"
+INPUT="${5}"
+OUTPUT="${6}"
 
 declare -A DEPS=(
   [docker]=docker
@@ -33,11 +32,14 @@ err() {
   exit 1
 }
 
-[[ $# == 7 ]] || err "Invalid arguments"
+[[ $# -lt 6 ]] && err "Invalid arguments"
+shift 6
 
 for dep in "${!DEPS[@]}"; do
   command -v "${dep}" 2>&1 >/dev/null || err "Missing dependency: ${DEPS["${dep}"]}"
 done
+
+APPIMAGEDEPS=("${@}")
 
 
 # ----
@@ -156,7 +158,7 @@ trap "chown -R $(id -u):$(id -g) '${target}'" EXIT
   "${appdir}" \
   "${installdir}" \
   "${VERSION}" \
-  "${ARCH}"
+  "${APPIMAGEDEPS[@]}"
 EOF
   install -Dm755 "${tempdir}/output" "${OUTPUT}"
 }
