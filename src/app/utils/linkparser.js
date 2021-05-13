@@ -1,29 +1,34 @@
-// most common gTLDs... a little overkill, but
-// we don't want to match something like cat.jpg
-const gTLD   = [
-	"com", "org", "net", "int", "biz", "pro", "edu", "gov", "mil",
-	"info", "name", "mobi", "jobs", "pics", "link", "wiki", "asia"
-].join( "|" );
-const reTLD  = `(?:[a-z]{2}|${gTLD})`;
-const reHost = "(?:[a-z0-9\u00C0-\uFFFF-]+\\.)";
+import { TLDs as arrTLDs } from "global-tld-list";
+import { toUnicode as punycodeToUnicode } from "punycode";
 
+
+const TLDs = new Set( arrTLDs );
+const reHostname = "[a-z0-9\u00C0-\uFFFF-]";
+const reHost = `${reHostname}+(?:\\.${reHostname}+)*`;
 
 const reURL = new RegExp([
 	// boundary (no look-behind)
 	"(^|(?:^|\\s)[^a-z]?)",
 	// scheme
 	"(https?:\\/\\/)?",
-	// sub.host.tld:port
-	`(${reHost}+${reTLD}(?::\\d{2,5})?)`,
+	// netloc
+	`(${reHost}\\.(${reHostname}{2,})\\.?(?::\\d{2,5})?)`,
 	// path
 	"(\\/\\S*)?",
 	// boundary
 	"(\\W|\\s|$)"
 ].join( "" ), "igm" );
 
-function fnURL( _, __, scheme, host, path ) {
+function fnURL( _, __, scheme, netloc, tld, path ) {
+	if ( tld.length > 4 && tld.startsWith( "xn--" ) ) {
+		// noinspection JSDeprecatedSymbols
+		tld = punycodeToUnicode( tld );
+	} else {
+		tld = tld.toLowerCase();
+	}
+	if ( !TLDs.has( tld ) ) { return; }
+
 	scheme = scheme || "";
-	host = host || "";
 	path = path || "";
 
 	// assume implicit http protocol
@@ -31,9 +36,12 @@ function fnURL( _, __, scheme, host, path ) {
 	// hide implicit http prototcol in link text
 	let textScheme = scheme === "http://" ? "" : scheme;
 
+	// noinspection JSDeprecatedSymbols
+	let textNetloc = punycodeToUnicode( netloc );
+
 	return {
-		url : `${urlScheme}${host}${path}`,
-		text: `${textScheme}${host}${path}`
+		url : `${urlScheme}${netloc}${path}`,
+		text: `${textScheme}${textNetloc}${path}`
 	};
 }
 
@@ -59,7 +67,7 @@ const reSubreddit = new RegExp([
 	// boundary (no look-behind)
 	"(^|\\W)",
 	// optional reddit URL
-	`(?:https?://${reHost}*reddit\\.com)?`,
+	`(?:https?://(?:${reHostname}+\\.)*reddit\\.com)?`,
 	// subreddit
 	"/r/([\\w-]+)/?",
 	// boundary
@@ -78,7 +86,7 @@ const reRedditUser = new RegExp([
 	// boundary (no look-behind)
 	"(^|\\W)",
 	// optional reddit URL
-	`(?:https?://${reHost}*reddit\\.com)?`,
+	`(?:https?://(?:${reHostname}+\\.)*reddit\\.com)?`,
 	// user
 	"/u(?:ser)?/([\\w-]+)/?",
 	// boundary
@@ -145,8 +153,12 @@ export function parseString( string ) {
 				continue;
 			}
 
-			// create the linkObj out of the parser function
+			// create the linkObj from the parser function
 			linkObj = fn( ...match );
+			// was parsing successful?
+			if ( !linkObj ) {
+				continue;
+			}
 
 			// update the current text item:
 			// everything from the beginning to the match index (including the "lookbehind")
