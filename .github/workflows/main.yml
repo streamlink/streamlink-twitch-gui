@@ -16,7 +16,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04, windows-latest]
+        os:
+          - ubuntu-latest
+          - windows-latest
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     steps:
@@ -68,7 +70,7 @@ jobs:
     if: github.repository == 'streamlink/streamlink-twitch-gui' && github.event_name == 'schedule'
     needs:
       - test
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     permissions:
       actions: write
     steps:
@@ -88,7 +90,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --pure-lockfile --no-progress --non-interactive
-          sudo apt install pigz
+          sudo apt-get install pigz
           ./.github/workflows/install-wine.sh
       - name: Build
         run: yarn run grunt clean:tmp_debug webpack:debug
@@ -124,7 +126,7 @@ jobs:
     if: github.repository == 'streamlink/streamlink-twitch-gui' && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     needs:
       - test
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
         with:
@@ -138,7 +140,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --pure-lockfile --no-progress --non-interactive
-          sudo apt install pigz nsis appstream{,-util}
+          sudo apt-get install pigz nsis appstream{,-util}
           ./.github/workflows/install-wine.sh
       - name: Build
         run: yarn run grunt clean:tmp_prod webpack:prod
