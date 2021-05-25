@@ -32,7 +32,7 @@ export const is64bit = arch === "x64";
 
 export const cachedir = ( () => {
 	if ( isLinux ) {
-		return resolve( env.XDG_CACHE_HOME || join( home, ".cache" ), appIdentifier );
+		return resolve( env[ "XDG_CACHE_HOME" ] || join( home, ".cache" ), appIdentifier );
 	} else if ( isDarwin ) {
 		return resolve( home, "Library", "Caches", appIdentifier );
 	} else {
@@ -44,7 +44,7 @@ export const cachedir = ( () => {
 export const datadir = ( () => {
 	if ( isLinux ) {
 		return resolve(
-			env.XDG_DATA_HOME || join( home, ".local", "share" ),
+			env[ "XDG_DATA_HOME" ] || join( home, ".local", "share" ),
 			appIdentifier,
 			"data"
 		);
@@ -59,7 +59,7 @@ export const datadir = ( () => {
 export const logdir = ( () => {
 	if ( isLinux ) {
 		return resolve(
-			env.XDG_DATA_HOME || join( home, ".local", "share" ),
+			env[ "XDG_STATE_HOME" ] || join( home, ".local", "state" ),
 			appIdentifier,
 			"logs"
 		);

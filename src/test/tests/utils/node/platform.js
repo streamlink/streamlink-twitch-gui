@@ -203,7 +203,7 @@ test( "Linux", function( assert ) {
 	);
 	assert.strictEqual(
 		logdir,
-		"/home/user/.local/share/my-app/logs",
+		"/home/user/.local/state/my-app/logs",
 		"Log dir"
 	);
 
@@ -214,6 +214,7 @@ test( "Linux with XDG env vars", function( assert ) {
 
 	process.env.XDG_CACHE_HOME = "/foo";
 	process.env.XDG_DATA_HOME = "/bar";
+	process.env.XDG_STATE_HOME = "/baz";
 
 	const {
 		cachedir,
@@ -247,7 +248,7 @@ test( "Linux with XDG env vars", function( assert ) {
 	);
 	assert.strictEqual(
 		logdir,
-		"/bar/my-app/logs",
+		"/baz/my-app/logs",
 		"Log dir"
 	);
 
