@@ -49,7 +49,7 @@ export const datadir = ( () => {
 			"data"
 		);
 	} else if ( isDarwin ) {
-		return resolve( home, "Library", appIdentifier );
+		return resolve( home, "Library", "Application Support", appIdentifier );
 	} else {
 		return resolve( osTmpdir(), appIdentifier, "data" );
 	}

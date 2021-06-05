@@ -132,7 +132,7 @@ module( "utils/node/platform", function( hooks ) {
 		);
 		assert.strictEqual(
 			datadir,
-			"/Users/user/Library/my-app",
+			"/Users/user/Library/Application Support/my-app",
 			"Data dir"
 		);
 		assert.strictEqual(
