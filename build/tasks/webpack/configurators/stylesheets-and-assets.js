@@ -43,11 +43,13 @@ module.exports = {
 				{
 					loader: "less-loader",
 					options: {
-						sourceMap: true,
-						strictMath: true,
-						strictUnits: true,
-						relativeUrls: true,
-						noIeCompat: true
+						lessOptions: {
+							sourceMap: true,
+							strictMath: true,
+							strictUnits: true,
+							relativeUrls: true,
+							noIeCompat: true
+						}
 					}
 				}
 			]
