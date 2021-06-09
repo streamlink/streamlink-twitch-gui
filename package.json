@@ -34,12 +34,12 @@
 		"snoretoast": "github:bastimeyer/snoretoast#v0.7.0-binaries"
 	},
 	"devDependencies": {
-		"@babel/core": "7.2.2",
-		"@babel/plugin-proposal-class-properties": "7.3.0",
-		"@babel/plugin-proposal-decorators": "7.3.0",
-		"@babel/plugin-transform-block-scoping": "7.2.0",
-		"@babel/plugin-transform-modules-commonjs": "7.2.0",
-		"@babel/plugin-transform-typescript": "7.4.0",
+		"@babel/core": "7.14.3",
+		"@babel/plugin-proposal-class-properties": "7.13.0",
+		"@babel/plugin-proposal-decorators": "7.14.2",
+		"@babel/plugin-transform-block-scoping": "7.14.4",
+		"@babel/plugin-transform-modules-commonjs": "7.14.0",
+		"@babel/plugin-transform-typescript": "7.14.4",
 		"@ember/test-helpers": "0.7.27",
 		"@ember-decorators/argument": "0.8.21",
 		"@glimmer/syntax": "0.47.4",
