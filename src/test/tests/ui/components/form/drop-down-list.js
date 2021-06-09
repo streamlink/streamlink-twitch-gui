@@ -41,7 +41,6 @@ module( "ui/components/form/drop-down-list", function( hooks ) {
 			},
 			set( value ) {
 				testContext.clickListener = value;
-				return value;
 			}
 		});
 		this.owner.register( "component:drop-down-list", Subject );

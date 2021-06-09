@@ -5,6 +5,7 @@ import { stat, isExecutable } from "utils/node/fs/stat";
 import { join } from "path";
 
 
+const { hasOwnProperty } = {};
 const { isArray } = Array;
 
 
@@ -30,7 +31,7 @@ async function whichFallback( exec, fallback, check, fallbackOnly ) {
 	}
 
 	// get executables for current platform
-	if ( exec.hasOwnProperty( platform ) ) {
+	if ( hasOwnProperty.call( exec, platform ) ) {
 		exec = exec[ platform ];
 	}
 
@@ -63,7 +64,7 @@ async function whichFallback( exec, fallback, check, fallbackOnly ) {
 	}
 
 	// get fallbacks for current platform
-	if ( fallback.hasOwnProperty( platform ) ) {
+	if ( hasOwnProperty.call( fallback, platform ) ) {
 		fallback = fallback[ platform ];
 	}
 

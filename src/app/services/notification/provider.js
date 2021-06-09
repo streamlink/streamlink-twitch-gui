@@ -2,6 +2,8 @@ import { logDebug } from "./logger";
 import providers from "./providers";
 
 
+const { hasOwnProperty } = {};
+
 /** @type {Map<string,NotificationProvider>} */
 const instanceMap = new Map();
 /** @type {Map<string,Promise>} */
@@ -14,7 +16,7 @@ const setupMap = new Map();
  * @returns {boolean}
  */
 export function isSupported( provider ) {
-	return providers.hasOwnProperty( provider )
+	return hasOwnProperty.call( providers, provider )
 		? providers[ provider ].isSupported()
 		: false;
 }
@@ -29,7 +31,7 @@ export function isSupported( provider ) {
  * @returns {Promise}
  */
 export async function showNotification( provider, data, newInst ) {
-	if ( !providers.hasOwnProperty( provider ) ) {
+	if ( !hasOwnProperty.call( providers, provider ) ) {
 		throw new Error( "Invalid notification provider" );
 	}
 

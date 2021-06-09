@@ -1,3 +1,4 @@
+/* global DEBUG */
 import { get, set, getProperties } from "@ember/object";
 import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";

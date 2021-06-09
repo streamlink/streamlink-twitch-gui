@@ -9,6 +9,8 @@ import fetch from "fetch";
 const reURL = /^[a-z]+:\/\/([\w.]+)\/(.+)$/i;
 const reURLFragment = /^:(\w+)$/;
 
+const { hasOwnProperty } = {};
+
 
 /**
  * Adapter mixin for using static model names
@@ -152,7 +154,7 @@ export default Mixin.create( Evented, {
 					idFound = true;
 				}
 
-				if ( urlFragments.hasOwnProperty( key ) ) {
+				if ( hasOwnProperty.call( urlFragments, key ) ) {
 					return urlFragments[ key ].call( this, type, id, data );
 				}
 

@@ -3,8 +3,9 @@
 
 	"extends": "eslint:recommended",
 
-	"parser": "babel-eslint",
+	"parser": "@babel/eslint-parser",
 	"parserOptions": {
+		"requireConfigFile": false,
 		"ecmaVersion": 2017,
 		"ecmaFeatures": {
 			"legacyDecorators": true
@@ -19,9 +20,7 @@
 		"browser": true
 	},
 
-	"globals": {
-		"DEBUG": true
-	},
+	"globals": {},
 
 	"rules": {
 		"no-empty": "off",
@@ -54,6 +53,7 @@
 		"semi": "error",
 		"no-sequences": "error",
 		"no-var": "error",
+		"no-redeclare": [ "error", { "builtinGlobals": true } ],
 		"no-useless-escape": "off",
 		"quotes": [ "error", "double" ],
 		"prefer-template": "error",
@@ -70,6 +70,8 @@
 			"capIsNew": false,
 			"properties": false
 		}],
-		"new-parens": "error"
+		"new-parens": "error",
+
+		"no-console": "error"
 	}
 }

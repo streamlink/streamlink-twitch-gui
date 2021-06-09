@@ -90,7 +90,6 @@ module( "ui/components/button/-follow-button", function( hooks ) {
 			},
 			set( value ) {
 				testContext.timeout = value;
-				return value;
 			}
 		});
 		this.owner.register( "component:follow-button", Subject );

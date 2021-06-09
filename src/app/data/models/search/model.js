@@ -3,6 +3,9 @@ import attr from "ember-data/attr";
 import Model from "ember-data/model";
 
 
+const { hasOwnProperty } = {};
+
+
 export default Model.extend({
 	query : attr( "string" ),
 	filter: attr( "string" ),
@@ -32,7 +35,7 @@ export default Model.extend({
 
 	getLabel( filter ) {
 		const map = get( this, "filtersmap" );
-		return map.hasOwnProperty( filter )
+		return hasOwnProperty.call( map, filter )
 			? map[ filter ].label
 			: "All";
 	}

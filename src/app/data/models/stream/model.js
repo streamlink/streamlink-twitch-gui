@@ -10,6 +10,8 @@ import qualities from "./-qualities";
 
 const { "stream-url": twitchStreamUrl } = twitchConfig;
 
+const { hasOwnProperty } = {};
+
 
 const STATUS_PREPARING = 0;
 const STATUS_ABORTED = 1;
@@ -44,7 +46,7 @@ function cpQualityFromPresetOrCustomValue( key ) {
 		const { id, [ key ]: defaultValue } = this.streamQualityPreset;
 		const custom = this.settings.content.streaming.qualities.toJSON();
 
-		if ( custom.hasOwnProperty( id ) ) {
+		if ( hasOwnProperty.call( custom, id ) ) {
 			const customValue = String( custom[ id ][ key ] || "" ).trim();
 			if ( customValue.length ) {
 				return customValue;

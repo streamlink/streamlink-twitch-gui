@@ -19,16 +19,15 @@ module( "ui/components/preview-image", function( hooks ) {
 
 
 	test( "Valid image source", async function( assert ) {
-		await new Promise( async ( resolve, reject ) => {
+		await new Promise( ( resolve, reject ) => {
 			this.setProperties({
 				src: transparentImage,
 				title: "bar",
 				onLoad: resolve,
 				onError: reject
 			});
-			await render( hbs`
-				{{preview-image src=src title=title onLoad=onLoad onError=onError}}
-			` );
+			render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` )
+				.catch( reject );
 		});
 
 		assert.ok(
@@ -49,7 +48,7 @@ module( "ui/components/preview-image", function( hooks ) {
 
 
 	test( "Invalid image source", async function( assert ) {
-		await new Promise( async ( resolve, reject ) => {
+		await new Promise( ( resolve, reject ) => {
 			this.setProperties({
 				// using the page's URL as image src will cause the onerror event to be triggered
 				src: document.location.href,
@@ -57,9 +56,8 @@ module( "ui/components/preview-image", function( hooks ) {
 				onLoad: reject,
 				onError: resolve
 			});
-			await render( hbs`
-				{{preview-image src=src title=title onLoad=onLoad onError=onError}}
-			` );
+			render( hbs`{{preview-image src=src title=title onLoad=onLoad onError=onError}}` )
+				.catch( reject );
 		});
 
 		assert.notOk(
