@@ -1,15 +1,14 @@
 const { resolve: r } = require( "path" );
-const { pRoot, pApp, pAssets, pLocales, pConfig, pTest, pDependencies } = require( "./paths" );
-
-
-const resolveModuleDirectories = [
-	"web_modules",
-	"node_modules"
-];
-const resolveLoaderModuleDirectories = [
-	"web_loaders",
-	...resolveModuleDirectories
-];
+const {
+	pRoot,
+	pLoaders,
+	pApp,
+	pAssets,
+	pLocales,
+	pConfig,
+	pTest,
+	pDependencies
+} = require( "./paths" );
 
 
 // default target config which each target is based on
@@ -25,6 +24,7 @@ module.exports = {
 		alias: {
 			// directory aliases
 			"root": pRoot,
+			"loaders": pLoaders,
 			"assets": pAssets,
 
 			// app aliases
@@ -39,14 +39,15 @@ module.exports = {
 		},
 		extensions: [ ".wasm", ".mjs", ".js", ".json", ".ts" ],
 		modules: [
-			...resolveModuleDirectories
+			"web_modules",
+			"node_modules"
 		]
 	},
 
 	resolveLoader: {
 		modules: [
-			pRoot,
-			...resolveLoaderModuleDirectories
+			pLoaders,
+			"node_modules"
 		]
 	},
 
