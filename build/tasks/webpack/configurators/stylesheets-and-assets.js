@@ -95,9 +95,15 @@ module.exports = {
 			test: /\.svg$/,
 			loader: "svgo-loader",
 			options: {
-				plugins: [
-					{ removeTitle: true },
-					{ removeUselessStrokeAndFill: false }
+				extendDefaultPlugins: [
+					{
+						name: "removeTitle",
+						active: true
+					},
+					{
+						name: "removeUselessStrokeAndFill",
+						active: false
+					}
 				]
 			}
 		});
