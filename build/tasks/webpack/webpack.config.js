@@ -73,7 +73,8 @@ module.exports = {
 		crossOriginLoading: "anonymous",
 
 		// don't use the webpack:// protocol in sourcemaps
-		devtoolModuleFilenameTemplate: "/[resource-path]"
+		devtoolNamespace: "/",
+		devtoolModuleFilenameTemplate: "[resource-path]"
 	},
 
 	optimization: {
