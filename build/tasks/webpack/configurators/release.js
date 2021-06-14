@@ -4,7 +4,7 @@ const Date = require( "../../common/date" );
 
 const webpack = require( "webpack" );
 const CopyWebpackPlugin = require( "copy-webpack-plugin" );
-const WebpackSubresourceIntegrity = require( "webpack-subresource-integrity" );
+const { SubresourceIntegrityPlugin } = require( "webpack-subresource-integrity" );
 
 
 /**
@@ -27,16 +27,9 @@ module.exports = {
 				"DO NOT MODIFY THIS FILE, OR THE APPLICATION WILL BREAK"
 			);
 			config.plugins.push(
-				new WebpackSubresourceIntegrity({
+				new SubresourceIntegrityPlugin({
 					hashFuncNames: [ "sha256" ]
 				})
-			);
-			// FIXME: stats.warningsFilter has been deprecated in webpack 5
-			config.stats.warningsFilter.push(
-				// integrity checksums are only added for **very simple** anti-tampering reasons
-				// there is no security aspect or full manipulation protection, which would normally
-				// be considered "useful"
-				"webpack-subresource-integrity: This plugin is not useful for non-web targets."
 			);
 		}
 

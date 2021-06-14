@@ -21,14 +21,16 @@ module.exports = function( config, grunt, isProd ) {
 			pRoot,
 			// all ember dependencies except ember itself and ones which have their own configs
 			{
-				test: /ember/,
-				include: pDependencies,
-				exclude: [
-					r( pDependencies, "ember-source" ),
-					r( pDependencies, "ember-data" ),
-					r( pDependencies, "ember-qunit" )
+				and: [
+					/ember/,
+					pDependencies
 				]
 			}
+		],
+		exclude: [
+			r( pDependencies, "ember-source" ),
+			r( pDependencies, "ember-data" ),
+			r( pDependencies, "ember-qunit" )
 		],
 		loader: "babel-loader",
 		options: buildBabelConfig({
@@ -53,7 +55,9 @@ module.exports = function( config, grunt, isProd ) {
 		// `@ember-foo` (other (related) namespaces should not be matched)
 		// `@ember/ordered-set` (is a real module in the same namespace)
 		// `@ember/test-helpers` (is a real module in the same namespace)
-		new webpack.IgnorePlugin( /@ember(?!-|\/(ordered-set|test-helpers))/ )
+		new webpack.IgnorePlugin({
+			resourceRegExp: /@ember(?!-|\/(ordered-set|test-helpers))/
+		})
 	);
 
 	// never parse the ember-source module
