@@ -52,7 +52,7 @@
 		"babel-plugin-istanbul": "6.0.0",
 		"babel6-plugin-strip-class-callcheck": "6.0.0",
 		"babel6-plugin-strip-heimdall": "6.0.1",
-		"chrome-remote-interface": "0.25.5",
+		"chrome-remote-interface": "0.30.0",
 		"copy-webpack-plugin": "6.0.3",
 		"css-loader": "2.1.1",
 		"ember-compatibility-helpers": "1.0.2",
