@@ -56,5 +56,21 @@ module.exports = {
 				ignore: [ "en" ]
 			}
 		});
+	},
+
+	prod( config ) {
+		const TerserWebpackPlugin = require( "terser-webpack-plugin" );
+
+		config.optimization.minimizer.unshift(
+			new TerserWebpackPlugin({
+				extractComments: false,
+				parallel: true,
+				terserOptions: {
+					compress: {
+						passes: 3
+					}
+				}
+			})
+		);
 	}
 };
