@@ -1,20 +1,19 @@
 const { resolve: r } = require( "path" );
-const { pRoot, pApp, pAssets, pLocales, pConfig, pTest, pDependencies } = require( "./paths" );
-
-
-const resolveModuleDirectories = [
-	"web_modules",
-	"node_modules"
-];
-const resolveLoaderModuleDirectories = [
-	"web_loaders",
-	...resolveModuleDirectories
-];
+const {
+	pRoot,
+	pLoaders,
+	pApp,
+	pAssets,
+	pLocales,
+	pConfig,
+	pTest,
+	pDependencies
+} = require( "./paths" );
 
 
 // default target config which each target is based on
 module.exports = {
-	target: "node-webkit",
+	target: "nwjs53",
 
 	mode: "development",
 
@@ -25,6 +24,7 @@ module.exports = {
 		alias: {
 			// directory aliases
 			"root": pRoot,
+			"loaders": pLoaders,
 			"assets": pAssets,
 
 			// app aliases
@@ -39,14 +39,15 @@ module.exports = {
 		},
 		extensions: [ ".wasm", ".mjs", ".js", ".json", ".ts" ],
 		modules: [
-			...resolveModuleDirectories
+			"web_modules",
+			"node_modules"
 		]
 	},
 
 	resolveLoader: {
 		modules: [
-			pRoot,
-			...resolveLoaderModuleDirectories
+			pLoaders,
+			"node_modules"
 		]
 	},
 
@@ -61,13 +62,25 @@ module.exports = {
 	output: {
 		// name each file by its entry module name
 		filename: "[name].js",
+
+		// fix "nwjs" target output options:
+		// chunks can't be commonjs and `global` can't be used as globalObject
+		chunkFormat: "array-push",
+		chunkLoading: "jsonp",
+		globalObject: "window",
+
 		// set crossorigin attribute on resources with integrity data
 		crossOriginLoading: "anonymous",
+
 		// don't use the webpack:// protocol in sourcemaps
-		devtoolModuleFilenameTemplate: "/[resource-path]"
+		devtoolNamespace: "/",
+		devtoolModuleFilenameTemplate: "[resource-path]"
 	},
 
 	optimization: {
+		// set custom optimization.minimizer array and avoid defaults
+		minimizer: [],
+
 		runtimeChunk: true,
 		splitChunks: {
 			chunks: "all",
@@ -117,12 +130,11 @@ module.exports = {
 
 	stats: {
 		modules: false,
+		moduleAssets: true,
 		chunks: false,
 		chunkModules: false,
 		children: false,
 		timings: true,
-		warnings: true,
-		// FIXME: stats.warningsFilter has been deprecated in webpack 5
-		warningsFilter: []
+		warnings: true
 	}
 };

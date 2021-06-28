@@ -1,8 +1,8 @@
 import { module, test } from "qunit";
 
-import parse from "root/web_loaders/ember-app-loader/parse";
-import checkDuplicates from "root/web_loaders/ember-app-loader/check-duplicates";
-import build from "root/web_loaders/ember-app-loader/build";
+import parse from "loaders/ember-app-loader/parse";
+import checkDuplicates from "loaders/ember-app-loader/check-duplicates";
+import build from "loaders/ember-app-loader/build";
 
 
 module( "loaders/ember-app-loader", {

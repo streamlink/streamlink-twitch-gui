@@ -24,12 +24,10 @@ module.exports = {
 		// NW.js package.json
 		config.module.rules.push({
 			type: "javascript/auto",
-			test: {
-				or: [
-					r( pApp, "package.json" ),
-					r( pTest, "package.json" )
-				]
-			},
+			include: [
+				r( pApp, "package.json" ),
+				r( pTest, "package.json" )
+			],
 			use: [
 				{
 					loader: "file-loader",

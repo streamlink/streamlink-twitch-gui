@@ -2,7 +2,7 @@ const { resolve: r, posix: { join: j } } = require( "path" );
 const { pRoot, pDependencies } = require( "../paths" );
 
 const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
-const OptimizeCssAssetsPlugin = require( "optimize-css-assets-webpack-plugin" );
+const CssMinimizerWebpackPlugin = require( "css-minimizer-webpack-plugin" );
 
 
 /**
@@ -95,23 +95,22 @@ module.exports = {
 			test: /\.svg$/,
 			loader: "svgo-loader",
 			options: {
-				plugins: [
-					{ removeTitle: true },
-					{ removeUselessStrokeAndFill: false }
+				extendDefaultPlugins: [
+					{
+						name: "removeTitle",
+						active: true
+					},
+					{
+						name: "removeUselessStrokeAndFill",
+						active: false
+					}
 				]
 			}
 		});
 
 		// minifiy and optimize production stylesheets
-		config.plugins.push(
-			new OptimizeCssAssetsPlugin({
-				cssProcessorOptions: {
-					autoprefixer: false,
-					preset: [ "default", {
-						svgo: false
-					}]
-				}
-			})
+		config.optimization.minimizer.push(
+			new CssMinimizerWebpackPlugin()
 		);
 	}
 };
