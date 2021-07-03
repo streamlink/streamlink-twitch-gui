@@ -1,81 +1,81 @@
 dialog:
     action:
-        close: Закрыть #Close
+        close: Закрыть
 changelog:
-    header: "Вы обновились до {version}" #"You just upgraded to {version}"
-    body: Вы хотите посмотреть что нового и почитать список изменений? #Do you want to see what's new and read the changelog now?
+    header: "Вы обновились до {version}"
+    body: Вы хотите посмотреть что нового и почитать список изменений?
     action:
-        show: Список изменений #Changelog
+        show: Список изменений
 confirm:
-    header: Подтверждение #Please confirm
-    body: Вы хотите применить изменения? #Do you want to apply your changes?
+    header: Подтверждение
+    body: Вы хотите применить изменения?
     action:
-        apply: Применить #Apply
-        discard: Сброс #Discard
-        cancel: Отмена #Cancel
+        apply: Применить
+        discard: Сброс
+        cancel: Отмена
 debug:
-    header: "Debug сборка: {version}" #"Debug build: {version}"
+    header: "Debug сборка: {version}"
     body: |
         Вы запустили отладочную сборку {name}.<br>
         Будьте осторожны, сообщайте обо всех обнаруженных проблемах.<br>
         Спасибо!
     action:
-        close: Хорошо #Okay
+        close: Хорошо
 firstrun:
     body: |
         Спасибо за выбор {name}!<br>
         Вы хотите настроить приложение перед запуском?
     action:
-        start: Запуск #Start now
-        settings: Настройки #Settings
+        start: Запуск
+        settings: Настройки
 newrelease:
-    header: "Вы используете устаревшую версию: {version}" #"You're using an outdated version: {version}"
-    body: "Хотите скачать последнюю версию ({version})?" #"Do you want to download the latest release now? ({version})"
+    header: "Вы используете устаревшую версию: {version}"
+    body: "Хотите скачать последнюю версию ({version})?"
     action:
-        download: Скачать #Download
-        ignore: Пропустить #Ignore
+        download: Скачать
+        ignore: Пропустить
 quit:
-    header: Вы уверены, что хотите выйти? #Are you sure you want to quit?
+    header: Вы уверены, что хотите выйти?
     body:
-        streams: Если выберите "Выключение", то все стримы также будут закрыты. #By choosing shutdown, all streams will be closed, too.
-        no-streams: Все стримы уже закрыты. Вы хотите выйти? #All streams have been closed. Do you want to quit now?
+        streams: Если выберите "Выключение", то все стримы также будут закрыты.
+        no-streams: Все стримы уже закрыты. Вы хотите выйти?
     action:
-        close: Назад #Return
-        shutdown: Выключение #Shutdown
-        quit: Выход #Quit
+        close: Назад
+        shutdown: Выключение
+        quit: Выход
 streaming:
     header:
-        preparing: "Идет подготовка, пожалуйста, ожидайте" #"Preparing, please wait"
-        launching: "Подключение: " #"Launching: "
-        watching: "Просмотр: " #"Watching: "
-        ended: "Стрим прерван/закончен: " #"Stream ended: "
+        preparing: "Идет подготовка, пожалуйста, ожидайте"
+        launching: "Подключение: "
+        watching: "Просмотр: "
+        ended: "Стрим прерван/закончен: "
         error:
-            log: "Ошибка: не удалось запустить" #"Error: Couldn't launch the stream"
-            provider: "Ошибка: неправильная конфигурация для {provider}" #"Error: {provider} misconfiguration"
-            player: "Ошибка: неверная конфигурация плеера" #"Error: Player misconfiguration"
-            version: "Ошибка: недопустимая версия {provider}" #"Error: Invalid {provider} version"
-            unable-to-open: "Ошибка: невозможно открыть стрим (поток)" #"Error: Unable to open stream"
-            no-streams-found: "Ошибка: стримы не найдены" #"Error: No streams found"
-            timeout: "Ошибка: время ожидания вышло" #"Error: Timeout"
-            hosting: "{name} хостит другой канал" #"{name} is hosting another channel"
-            internal: "Ошибка" #"Error"
+            log: "Ошибка: не удалось запустить"
+            provider: "Ошибка: неправильная конфигурация для {provider}"
+            player: "Ошибка: неверная конфигурация плеера"
+            version: "Ошибка: недопустимая версия {provider}"
+            unable-to-open: "Ошибка: невозможно открыть стрим (поток)"
+            no-streams-found: "Ошибка: стримы не найдены"
+            timeout: "Ошибка: время ожидания вышло"
+            hosting: "{name} хостит другой канал"
+            internal: "Ошибка"
     body:
-        launching: "Ждем, пока {provider} подключится к стриму ..." #"Waiting for {provider} to launch the stream..."
-        ended: "Вы хотите переподключиться к стриму?" #"Do you want to restart the stream now?"
+        launching: "Ждем, пока {provider} подключится к стриму ..."
+        ended: "Вы хотите переподключиться к стриму?"
         error:
-            provider: "Проверьте настройки и/или (пере)установите {provider}." #"Please check your settings and/or (re)install {provider}."
-            player: "Пожалуйста, проверьте настройки плеера" #"Please check your player settings."
-            version: "Версия v{version} не соответствует минимальным требованиям (v{required})" #"The version v{version} doesn't match the min. requirements (v{required})."
-            unable-to-open: "{provider} не смог подключиться к стриму (unable to open the stream)" #"{provider} was unable to open the stream."
-            no-streams-found: "{provider} не смог найти стрим" #"{provider} was unable to find the stream."
-            timeout: "Либо {name} отключился, либо соединение с Twitch было разорвано" #"Either {name} has gone offline, or your connection to Twitch has been interrupted."
-            hosting: "Хотите переключиться на {name}?" #"Do you want to switch to {name}?"
-            internal: "Внутренняя ошибка" #"Internal error"
+            provider: "Проверьте настройки и/или (пере)установите {provider}."
+            player: "Пожалуйста, проверьте настройки плеера"
+            version: "Версия v{version} не соответствует минимальным требованиям (v{required})"
+            unable-to-open: "{provider} не смог подключиться к стриму (unable to open the stream)"
+            no-streams-found: "{provider} не смог найти стрим"
+            timeout: "Либо {name} отключился, либо соединение с Twitch было разорвано"
+            hosting: "Хотите переключиться на {name}?"
+            internal: "Внутренняя ошибка"
     action:
-        abort: Прервать #Abort
-        continue: Продолжить #Continue
-        download: Скачать #Download
-        log: Показать/скрыть журнал {provider} #Toggle {provider} log
-        restart: Перезапуск #Restart
-        shutdown: Выключить #Close stream
-        start-hosted: Переключиться #Switch
+        abort: Прервать
+        continue: Продолжить
+        download: Скачать
+        log: Показать/скрыть журнал {provider}
+        restart: Перезапуск
+        shutdown: Выключить
+        start-hosted: Переключиться

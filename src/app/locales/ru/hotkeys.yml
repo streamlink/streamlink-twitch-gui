@@ -6,7 +6,7 @@ modifiers:
     metaKey: Meta
     shiftKey: Shift
 codes:
-    ArrowLeft: Влево #Left
-    ArrowRight: Вправо #Right
-    ArrowUp: Вверх #Up
-    ArrowDown: Вниз #Down
+    ArrowLeft: Влево
+    ArrowRight: Вправо
+    ArrowUp: Вверх
+    ArrowDown: Вниз
