@@ -75,7 +75,7 @@ module.exports = function( config, grunt, isProd ) {
 					}
 				} ],
 				[ "babel-plugin-ember-modules-api-polyfill", {
-					blacklist: {
+					ignore: {
 						"@ember/debug": [ "assert", "deprecate", "warn" ]
 					}
 				} ],
