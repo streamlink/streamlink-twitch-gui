@@ -29,7 +29,7 @@ about:
 featured:
     header: Canais em destaque
     empty: A lista de canais em destaque não pôde ser carregado!
-    summary: Há {{viewers}} pessoas assistindo {{channels}} streams agora!
+    summary: Há {viewers} pessoas assistindo {channels} streams agora!
 games:
     header: Jogos mais vistos
     empty: A lista de jogos mais vistos está vazia.
@@ -56,24 +56,25 @@ channel:
             title: Idioma
         followers:
             title: Seguidores
-            data: "{{followers}} ({{day}} por dia)"
+            data: "{followers} ({day} por dia)"
         views:
             title: visualizações
-            data: "{{views}} ({{day}} por dia)"
+            data: "{views} ({day} por dia)"
         content:
             title: Conteúdo
             mature: Inapropriado para crianças
             ffa: Sem restrição de idade
         format:
             title: Formato
-            data: "{{resolution}} @ {{fps}}fps"
+            data: "{resolution} @ {fps}fps"
         delay:
             title: Atraso
-            # static "zero" property
-            data:
-                zero: Sem atrasos adicionais
-                one: Um segundo
-                other: "{{count}} segundos"
+            data: |
+                {count, plural,
+                    =0 {Sem atrasos adicionais}
+                    one {Um segundo}
+                    other {# segundos}
+                }
         vodcast:
             title: Vodcast
             data: O Stream é um Vodcast
@@ -106,7 +107,7 @@ channel:
                 checkbox: Ativar notificações na área de trabalho
 team:
     header:
-        members: "Membros do time: {{num}}"
+        members: "Membros do time: {num}"
         # new Moment(team.created_at).format(...)
         created-at: "[Data de criação:] llll"
         # new Moment(team.updated_at).format(...)
@@ -123,7 +124,7 @@ team:
         header: Informações
 user:
     index:
-        logged-in: "Logado como {{name}}"
+        logged-in: "Logado como {name}"
         # new Moment(auth.session.date).format(...)
         since: "[desde] LLLL"
         sign-out: Sair

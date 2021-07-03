@@ -1,6 +1,6 @@
 notification:
     dispatch:
-        single: "{{name}} запустил стрим" #"{{name}} has started streaming"
+        single: "{name} запустил стрим" #"{name} has started streaming"
         group: "Некоторые отслеживаемые каналы начали трансляцию" #Some followed channels have started streaming
     status:
         disabled: "Уведомления на рабочем столе отключены" #Desktop notifications are disabled

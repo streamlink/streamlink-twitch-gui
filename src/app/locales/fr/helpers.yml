@@ -1,9 +1,9 @@
 hours-from-now:
     now: "à l'instant"
-    minutes: "{{minutes}}m"
+    minutes: "{minutes}m"
     hours:
-        simple: "{{hours}}h"
-        extended: "{{hours}}h{{minutes}}m"
+        simple: "{hours}h"
+        extended: "{hours}h{minutes}m"
     days:
-        simple: "{{days}}d"
-        extended: "{{days}}d{{hours}}h"
+        simple: "{days}d"
+        extended: "{days}d{hours}h"

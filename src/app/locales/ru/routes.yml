@@ -29,7 +29,7 @@ about:
 featured:
     header: "Рекомендованные каналы" #Featured Channels
     empty: "Не удалось загрузить список рекомендованных каналов!" #The featured channels list could not be loaded!
-    summary: "Прямо сейчас {{viewers}} зрителей смотрят {{channels}} стримов!" #There are {{viewers}} people watching {{channels}} live streams right now!
+    summary: "Прямо сейчас {viewers} зрителей смотрят {channels} стримов!" #There are {viewers} people watching {channels} live streams right now!
 games:
     header: "Популярные игры" #Top Games
     empty: "Получен пустой список игр." #The returned list of top games is empty.
@@ -56,26 +56,27 @@ channel:
             title: "Язык" #Language
         followers:
             title: "Подписчики" #Followers
-            data: "{{followers}} ({{day}} в день)" #"{{followers}} ({{day}} per day)"
+            data: "{followers} ({day} в день)" #"{followers} ({day} per day)"
         views:
             title: "Просмотры" #Views
-            data: "{{views}} ({{day}} в день)" #"{{views}} ({{day}} per day)"
+            data: "{views} ({day} в день)" #"{views} ({day} per day)"
         content:
             title: "Содержимое" #Content
             mature: "Не подходит для детей" #Inappropriate for children
             ffa: "Нет ограничений по возрасту" #No age restrictions
         format:
             title: "Формат" #Format
-            data: "{{resolution}} @ {{fps}}fps" #"{{resolution}} @ {{fps}}fps"
+            data: "{resolution} @ {fps}fps" #"{resolution} @ {fps}fps"
         delay:
             title: "Задержка" #Delay
-            # static "zero" property
-            data:
-                zero: "Нет дополнительной задержки" #No additional delay
-                one: "{{count}} секунда" #One second
-                few: "{{count}} секунды"
-                many: "{{count}} секунд"
-                other: "{{count}} сек." #"{{count}} seconds"
+            data: |
+                {count, plural,
+                    zero {Нет дополнительной задержки}
+                    one {# секунда}
+                    few {# секунды}
+                    many {# секунд}
+                    other {# сек.}
+                }
         vodcast:
             title: "Повтор (VOD)" #Vodcast
             data: "Идет повтор стрима" #Stream is a Vodcast
@@ -108,7 +109,7 @@ channel:
                 checkbox: "Включить оповещения на рабочем столе" #Enable desktop notifications
 team:
     header:
-        members: "Участников команды: {{num}}" #"Team members: {{num}}"
+        members: "Участников команды: {num}" #"Team members: {num}"
         # new Moment(team.created_at).format(...)
         created-at: "[Дата создания:] llll" #"[Date created:] llll"
         # new Moment(team.updated_at).format(...)
@@ -125,7 +126,7 @@ team:
         header: "Информация о команде" #Infos
 user:
     index:
-        logged-in: "Вход под именем: {{name}}" #"Logged in as {{name}}"
+        logged-in: "Вход под именем: {name}" #"Logged in as {name}"
         # new Moment(auth.session.date).format(...)
         since: "[подключен с] LLLL" #"[since] LLLL"
         sign-out: "Выход" #Sign out

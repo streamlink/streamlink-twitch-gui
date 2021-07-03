@@ -7,13 +7,13 @@ drop-down-selection:
 file-select:
     placeholder: Leave blank for default path
 flag-icon:
-    channel: "The channel's language is {{lang}}"
-    broadcaster: "The broadcaster's language is {{lang}}"
+    channel: "The channel's language is {lang}"
+    broadcaster: "The broadcaster's language is {lang}"
 follow-button:
-    follow: "Follow {{name}}"
-    unfollow: "Unfollow {{name}}"
-    confirm: "Unfollow {{name}}"
-    keep: "Keep following {{name}}"
+    follow: "Follow {name}"
+    unfollow: "Unfollow {name}"
+    confirm: "Unfollow {name}"
+    keep: "Keep following {name}"
 infinite-scroll:
     error: Error
     loading: Loading
@@ -72,22 +72,22 @@ settings-row:
             The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped. Some applications are able to read unnecessarily escaped characters in their parameters list and will work as expected, but others will not. Make sure to set all variables inside single or double quoted strings.
 
             Correct usage:
-            -a "{a}" -b "{b1}{b2}" "-c={c}"
+            -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
 settings-submit:
     apply: Apply
     discard: Discard
 share-channel:
     title: Copy channel url to clipboard
 stream-item:
-    fps: "{{fps}} fps"
+    fps: "{fps} fps"
     details:
         show: Show stream details
         lock: Lock details view
         unlock: Unlock details view
     vodcast: Vodcast
 subscribe-channel:
-    title-new: "Subscribe to {{name}} now"
-    title-renew: "Renew subscription to {{name}}"
+    title-new: "Subscribe to {name} now"
+    title-renew: "Renew subscription to {name}"
 team-item:
     created-at:
         title: "Date created"
@@ -101,7 +101,7 @@ title-bar:
     loggedout: Not logged in
     # tooltip (whitespace sensitive)
     loggedin: |
-        Logged in as {{name}}
-        {{status}}
+        Logged in as {name}
+        {status}
 twitch-emotes:
     title: Show available channel emotes

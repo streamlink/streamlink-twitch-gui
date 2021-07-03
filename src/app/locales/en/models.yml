@@ -1,17 +1,23 @@
 twitch:
     channel:
-        followers:
-            one: "One person is following"
-            other: "{{count}} people are following"
-        views:
-            one: "One channel view"
-            other: "{{count}} channel views"
+        followers: |
+            {count, plural,
+                one {One person is following}
+                other {# people are following}
+            }
+        views: |
+            {count, plural,
+                one {One channel view}
+                other {# channel views}
+            }
     stream:
         created-at:
             # new Moment(stream.created_at).format(...)
             less-than-24h: "[Online since] LTS"
             # new Moment(stream.created_at).format(...)
             more-than-24h: "[Online since] llll"
-        viewers:
-            one: "One person is watching"
-            other: "{{count}} people are watching"
+        viewers: |
+            {count, plural,
+                one {One person is watching}
+                other {# people are watching}
+            }

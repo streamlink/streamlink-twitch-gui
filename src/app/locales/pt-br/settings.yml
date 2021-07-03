@@ -25,7 +25,7 @@ main:
         description: Selecione o idioma para a interface (GUI).
         notes: Você fala outro idioma? Ajude traduzindo! Veja o Wiki para mais informações.
         labels:
-            auto: "Sistema ({{label}})"
+            auto: "Sistema ({label})"
     advanced:
         title: Preferências e capacidades
         description: Esconder Preferências e capacidades.<br>Não é somente aplicado ao menu das preferências.
@@ -130,7 +130,7 @@ streaming:
     player-no-close:
         title: Manter a janela do tocador de vídeo
         description: Após a transmissão ter terminado.
-        notes: O próprio tocador deve previnir que o {{provider}} feche. Por favor veja também as configurações do tocador de vídeo.
+        notes: O próprio tocador deve previnir que o {provider} feche. Por favor veja também as configurações do tocador de vídeo.
         checkbox: Não fechar o tocador de vídeo
     disable-ads:
         title: Propagandas

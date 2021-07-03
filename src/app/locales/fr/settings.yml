@@ -16,7 +16,7 @@ main:
         description: Sélectionnez la langue de l'interface.
         notes: Parlez-vous une autre langue ? Aidez à traduire ! Lisez le Wiki pour plus d'informations.
         labels:
-            auto: "Système ({{label}})"
+            auto: "Système ({label})"
     advanced:
         title: Réglages et fonctionnalités
         description: Activer les paramètres et fonctions cachés.<br>Ne s'applique pas seulement au menu Paramètres.
@@ -121,7 +121,7 @@ streaming:
     player-no-close:
         title: Garder la fenêtre du lecteur
         description: Après la fin du stream.
-        notes: Le lecteur lui-même peut empêcher {{provider}}} de le fermer. Veuillez également consulter les paramètres du lecteur.
+        notes: Le lecteur lui-même peut empêcher {provider}} de le fermer. Veuillez également consulter les paramètres du lecteur.
         checkbox: Ne pas fermer la fenêtre du lecteur
     disable-ads:
         title: Publicité

@@ -29,7 +29,7 @@ about:
 featured:
     header: Featured Channels
     empty: The featured channels list could not be loaded!
-    summary: There are {{viewers}} people watching {{channels}} live streams right now!
+    summary: There are {viewers} people watching {channels} live streams right now!
 games:
     header: Top Games
     empty: The returned list of top games is empty.
@@ -56,24 +56,25 @@ channel:
             title: Language
         followers:
             title: Followers
-            data: "{{followers}} ({{day}} per day)"
+            data: "{followers} ({day} per day)"
         views:
             title: Views
-            data: "{{views}} ({{day}} per day)"
+            data: "{views} ({day} per day)"
         content:
             title: Content
             mature: Inappropriate for children
             ffa: No age restrictions
         format:
             title: Format
-            data: "{{resolution}} @ {{fps}}fps"
+            data: "{resolution} @ {fps}fps"
         delay:
             title: Delay
-            # static "zero" property
-            data:
-                zero: No additional delay
-                one: One second
-                other: "{{count}} seconds"
+            data: |
+                {count, plural,
+                    =0 {No additional delay}
+                    one {One second}
+                    other {# seconds}
+                }
         vodcast:
             title: Vodcast
             data: Stream is a Vodcast
@@ -106,7 +107,7 @@ channel:
                 checkbox: Enable desktop notifications
 team:
     header:
-        members: "Team members: {{num}}"
+        members: "Team members: {num}"
         # new Moment(team.created_at).format(...)
         created-at: "[Date created:] llll"
         # new Moment(team.updated_at).format(...)
@@ -123,7 +124,7 @@ team:
         header: Infos
 user:
     index:
-        logged-in: "Logged in as {{name}}"
+        logged-in: "Logged in as {name}"
         # new Moment(auth.session.date).format(...)
         since: "[since] LLLL"
         sign-out: Sign out

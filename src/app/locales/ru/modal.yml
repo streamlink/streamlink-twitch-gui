@@ -2,7 +2,7 @@ dialog:
     action:
         close: Закрыть #Close
 changelog:
-    header: "Вы обновились до {{version}}" #"You just upgraded to {{version}}"
+    header: "Вы обновились до {version}" #"You just upgraded to {version}"
     body: Вы хотите посмотреть что нового и почитать список изменений? #Do you want to see what's new and read the changelog now?
     action:
         show: Список изменений #Changelog
@@ -14,27 +14,23 @@ confirm:
         discard: Сброс #Discard
         cancel: Отмена #Cancel
 debug:
-    header: "Debug сборка: {{version}}" #"Debug build: {{version}}"
+    header: "Debug сборка: {version}" #"Debug build: {version}"
     body: |
-        Вы запустили отладочную сборку {{name}}.<br>
+        Вы запустили отладочную сборку {name}.<br>
         Будьте осторожны, сообщайте обо всех обнаруженных проблемах.<br>
         Спасибо!
-    #|
-    #    You are running a debug build of {{name}}.<br>
-    #    Please be careful with what you're doing and report any issues you may find.<br>
-    #    Thank you!
     action:
         close: Хорошо #Okay
 firstrun:
     body: |
-        Спасибо за выбор {{name}}!<br>
+        Спасибо за выбор {name}!<br>
         Вы хотите настроить приложение перед запуском?
     action:
         start: Запуск #Start now
         settings: Настройки #Settings
 newrelease:
-    header: "Вы используете устаревшую версию: {{version}}" #"You're using an outdated version: {{version}}"
-    body: "Хотите скачать последнюю версию ({{version}})?" #"Do you want to download the latest release now? ({{version}})"
+    header: "Вы используете устаревшую версию: {version}" #"You're using an outdated version: {version}"
+    body: "Хотите скачать последнюю версию ({version})?" #"Do you want to download the latest release now? ({version})"
     action:
         download: Скачать #Download
         ignore: Пропустить #Ignore
@@ -55,31 +51,31 @@ streaming:
         ended: "Стрим прерван/закончен: " #"Stream ended: "
         error:
             log: "Ошибка: не удалось запустить" #"Error: Couldn't launch the stream"
-            provider: "Ошибка: неправильная конфигурация для {{provider}}" #"Error: {{provider}} misconfiguration"
+            provider: "Ошибка: неправильная конфигурация для {provider}" #"Error: {provider} misconfiguration"
             player: "Ошибка: неверная конфигурация плеера" #"Error: Player misconfiguration"
-            version: "Ошибка: недопустимая версия {{provider}}" #"Error: Invalid {{provider}} version"
+            version: "Ошибка: недопустимая версия {provider}" #"Error: Invalid {provider} version"
             unable-to-open: "Ошибка: невозможно открыть стрим (поток)" #"Error: Unable to open stream"
             no-streams-found: "Ошибка: стримы не найдены" #"Error: No streams found"
             timeout: "Ошибка: время ожидания вышло" #"Error: Timeout"
-            hosting: "{{name}} хостит другой канал" #"{{name}} is hosting another channel"
+            hosting: "{name} хостит другой канал" #"{name} is hosting another channel"
             internal: "Ошибка" #"Error"
     body:
-        launching: "Ждем, пока {{provider}} подключится к стриму ..." #"Waiting for {{provider}} to launch the stream..."
+        launching: "Ждем, пока {provider} подключится к стриму ..." #"Waiting for {provider} to launch the stream..."
         ended: "Вы хотите переподключиться к стриму?" #"Do you want to restart the stream now?"
         error:
-            provider: "Проверьте настройки и/или (пере)установите {{provider}}." #"Please check your settings and/or (re)install {{provider}}."
+            provider: "Проверьте настройки и/или (пере)установите {provider}." #"Please check your settings and/or (re)install {provider}."
             player: "Пожалуйста, проверьте настройки плеера" #"Please check your player settings."
-            version: "Версия v{{version}} не соответствует минимальным требованиям (v{{required}})" #"The version v{{version}} doesn't match the min. requirements (v{{required}})."
-            unable-to-open: "{{provider}} не смог подключиться к стриму (unable to open the stream)" #"{{provider}} was unable to open the stream."
-            no-streams-found: "{{provider}} не смог найти стрим" #"{{provider}} was unable to find the stream."
-            timeout: "Либо {{name}} отключился, либо соединение с Twitch было разорвано" #"Either {{name}} has gone offline, or your connection to Twitch has been interrupted."
-            hosting: "Хотите переключиться на {{name}}?" #"Do you want to switch to {{name}}?"
+            version: "Версия v{version} не соответствует минимальным требованиям (v{required})" #"The version v{version} doesn't match the min. requirements (v{required})."
+            unable-to-open: "{provider} не смог подключиться к стриму (unable to open the stream)" #"{provider} was unable to open the stream."
+            no-streams-found: "{provider} не смог найти стрим" #"{provider} was unable to find the stream."
+            timeout: "Либо {name} отключился, либо соединение с Twitch было разорвано" #"Either {name} has gone offline, or your connection to Twitch has been interrupted."
+            hosting: "Хотите переключиться на {name}?" #"Do you want to switch to {name}?"
             internal: "Внутренняя ошибка" #"Internal error"
     action:
         abort: Прервать #Abort
         continue: Продолжить #Continue
         download: Скачать #Download
-        log: Показать/скрыть журнал {{provider}} #Toggle {{provider}} log
+        log: Показать/скрыть журнал {provider} #Toggle {provider} log
         restart: Перезапуск #Restart
         shutdown: Выключить #Close stream
         start-hosted: Переключиться #Switch

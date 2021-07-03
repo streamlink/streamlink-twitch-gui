@@ -16,7 +16,7 @@ main:
         description: "Выберите язык интерфейса" #Select the GUI language.
         notes: "Вы говорите на другом языке? Помогите с переводом! Посмотрите Вики для получения доп. информации." #Do you speak another language? Help translating! See the wiki for more information.
         labels:
-            auto: "Системный ({{label}})" #"System ({{label}})"
+            auto: "Системный ({label})" #"System ({label})"
     advanced:
         title: "Настройки и функции" #Settings and features
         description: "Включите скрытые настройки и функции. <br> Относится не только к меню настроек." #Enable hidden settings and features.<br>Does not only apply to the settings menu.
@@ -121,7 +121,7 @@ streaming:
     player-no-close:
         title: "Не закрывать окно плеера" #Keep player window
         description: "После завершения стрима" #After the stream has ended.
-        notes: "Сам плеер может помешать {{provider}} закрыть его. Проверьте настройки плеера." #The player itself may prevent {{provider}} to close it. Please see the player settings as well.
+        notes: "Сам плеер может помешать {provider} закрыть его. Проверьте настройки плеера." #The player itself may prevent {provider} to close it. Please see the player settings as well.
         checkbox: "Не закрывать плеер" #Do not close the player
     disable-ads:
         title: "Реклама" #Advertisements

@@ -7,13 +7,13 @@ drop-down-selection:
 file-select:
     placeholder: Laisse vide pour le chemin par défaut
 flag-icon:
-    channel: "La langue de la chaîne est {{lang}}"
-    broadcaster: "La langue du diffuseur est {{lang}}"
+    channel: "La langue de la chaîne est {lang}"
+    broadcaster: "La langue du diffuseur est {lang}"
 follow-button:
-    follow: "Suivre {{name}}"
-    unfollow: "Ne plus suivre {{name}}"
-    confirm: "Ne plus suivre {{name}}"
-    keep: "Continuer à suivre {{name}}"
+    follow: "Suivre {name}"
+    unfollow: "Ne plus suivre {name}"
+    confirm: "Ne plus suivre {name}"
+    keep: "Continuer à suivre {name}"
 infinite-scroll:
     error: Erreur
     loading: Chargement
@@ -72,22 +72,22 @@ settings-row:
             Le contenu de chaque variable sera échappé. S'il est utilisé en dehors des chaînes de caractères citées, chaque caractère sera échappé. Certaines applications sont capables de lire les caractères inutilement échappés dans leur liste de paramètres et fonctionneront comme prévu, mais d'autres ne le feront pas. Assurez-vous de définir toutes les variables à l'intérieur de chaînes de caractères simples ou doubles.
 
             Correct usage:
-            -a "{a}" -b "{b1}{b2}" "-c={c}"
+            -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
 settings-submit:
     apply: Appliquer
     discard: Annuler
 share-channel:
     title: Copier l'url de la chaîne dans le presse-papiers
 stream-item:
-    fps: "{{fps}} fps"
+    fps: "{fps} fps"
     details:
         show: Voir les détails du stream
         lock: Verrouiller la vue de détails
         unlock: Déverrouiller la vue de détails
     vodcast: Vodcast
 subscribe-channel:
-    title-new: "S'abonner à {{name}} maintenant"
-    title-renew: "Renouveler l'abonnement à {{name}}"
+    title-new: "S'abonner à {name} maintenant"
+    title-renew: "Renouveler l'abonnement à {name}"
 team-item:
     created-at:
         title: "Date de création"
@@ -101,7 +101,7 @@ title-bar:
     loggedout: Non connecté(e)
     # infobulle (senseible aux whitespaces)
     loggedin: |
-        Connecté(e) en tant que {{name}}
-        {{status}}
+        Connecté(e) en tant que {name}
+        {status}
 twitch-emotes:
     title: Voir les émotes de la chaîne disponibles
