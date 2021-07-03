@@ -1,7 +1,7 @@
 import Controller from "@ember/controller";
 import { computed } from "@ember/object";
 import { locales as localesConfig, themes as themesConfig } from "config";
-import systemLocale from "services/i18n/system-locale";
+import systemLocale from "utils/system-locale";
 
 
 const { locales } = localesConfig;

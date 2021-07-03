@@ -1,4 +1,3 @@
-import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
 import Moment from "moment";
 
@@ -14,17 +13,17 @@ localesContext.keys().forEach( key => localesContext( key ) );
 
 export default {
 	name: "moment",
-	after: "i18n",
+	after: "intl",
 
 	initialize( application ) {
-		const i18n = application.lookup( "service:i18n" );
+		const intl = application.lookup( "service:intl" );
 
 		const updateMomentLocale = () => {
-			const locale = get( i18n, "locale" ).toLowerCase();
+			const locale = intl.locale[0].toLowerCase();
 			Moment.locale( locale );
 		};
 
 		updateMomentLocale();
-		addObserver( i18n, "locale", updateMomentLocale );
+		addObserver( intl, "locale", updateMomentLocale );
 	}
 };

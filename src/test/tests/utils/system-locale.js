@@ -1,9 +1,9 @@
 import { module, test } from "qunit";
 
-import systemLocaleInjector from "inject-loader!services/i18n/system-locale";
+import systemLocaleInjector from "inject-loader!utils/system-locale";
 
 
-module( "services/i18n/system-locale" );
+module( "utils/system-locale" );
 
 
 test( "Supported locales", function( assert ) {

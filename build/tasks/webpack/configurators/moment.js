@@ -12,7 +12,7 @@ module.exports = {
 		);
 
 		const locales = grunt.config( "locales.locales" );
-		// regexp for filtering locale config file imports (momentjs, ember-i18n, etc.)
+		// regexp for filtering locale config file imports (momentjs, ember-intl, etc.)
 		const reContext = new RegExp( `(${Object.keys( locales ).join( "|" )})\\.js$`, "i" );
 
 		// only import locale configs of available locales

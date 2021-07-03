@@ -39,7 +39,8 @@ const reRerun = /rerun|watch_party/;
 
 
 export default Model.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	settings: service(),
 
 
@@ -95,21 +96,18 @@ export default Model.extend({
 	hasFormatInfo: and( "video_height", "average_fps" ),
 
 
-	titleCreatedAt: computed( "i18n.locale", "created_at", function() {
+	titleCreatedAt: computed( "intl.locale", "created_at", function() {
 		const moment = new Moment( this.created_at );
 		const last24h = moment.diff( new Date(), "days" ) === 0;
 		const format = last24h
-			? this.i18n.t( "models.twitch.stream.created-at.less-than-24h" )
-			: this.i18n.t( "models.twitch.stream.created-at.more-than-24h" );
+			? this.intl.t( "models.twitch.stream.created-at.less-than-24h" )
+			: this.intl.t( "models.twitch.stream.created-at.more-than-24h" );
 
 		return moment.format( format.toString() );
 	}),
 
-	titleViewers: computed( "i18n.locale", "viewers", function() {
-		const i18n = get( this, "i18n" );
-		const count = get( this, "viewers" );
-
-		return i18n.t( "models.twitch.stream.viewers", { count } );
+	titleViewers: computed( "intl.locale", "viewers", function() {
+		return this.intl.t( "models.twitch.stream.viewers", { count: this.viewers } );
 	}),
 
 	resolution: computed( "video_height", function() {

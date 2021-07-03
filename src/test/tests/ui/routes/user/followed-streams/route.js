@@ -33,7 +33,7 @@ module( "ui/routes/user/followed-streams", function( hooks ) {
 			});
 		}),
 
-		I18nService: Service.extend(),
+		IntlService: Service.extend(),
 		SettingsService: Service.extend(),
 
 		TwitchStreamFollowed,

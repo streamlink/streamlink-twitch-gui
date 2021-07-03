@@ -223,8 +223,8 @@ class HotkeyRegistry {
  * @class HotkeyService
  */
 export default Service.extend({
-	/** @type {I18nService} */
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	/** @type {SettingsService} */
 	settings: service(),
 
@@ -380,21 +380,21 @@ export default Service.extend({
 	 * @returns {string}
 	 */
 	formatTitle( hotkey, title ) {
-		const { i18n, layoutMap } = this;
+		const { intl, layoutMap } = this;
 		const combination = [];
 
 		// use Ember.get here, because hotkey can be an ObjectProxy wrapping a hotkey record
 		const { code, altKey, ctrlKey, metaKey, shiftKey }
 			= getProperties( hotkey, "code", "altKey", "ctrlKey", "metaKey", "shiftKey" );
 
-		ctrlKey && combination.push( i18n.t( "hotkeys.modifiers.ctrlKey" ).toString() );
-		shiftKey && combination.push( i18n.t( "hotkeys.modifiers.shiftKey" ).toString() );
-		metaKey && combination.push( i18n.t( "hotkeys.modifiers.metaKey" ).toString() );
-		altKey && combination.push( i18n.t( "hotkeys.modifiers.altKey" ).toString() );
+		ctrlKey && combination.push( intl.t( "hotkeys.modifiers.ctrlKey" ).toString() );
+		shiftKey && combination.push( intl.t( "hotkeys.modifiers.shiftKey" ).toString() );
+		metaKey && combination.push( intl.t( "hotkeys.modifiers.metaKey" ).toString() );
+		altKey && combination.push( intl.t( "hotkeys.modifiers.altKey" ).toString() );
 
 		// look for translations of special hotkeys, eg. "Space"
-		combination.push( i18n.exists( `hotkeys.codes.${code}` )
-			? i18n.t( `hotkeys.codes.${code}` ).toString()
+		combination.push( intl.exists( `hotkeys.codes.${code}` )
+			? intl.t( `hotkeys.codes.${code}` ).toString()
 			: layoutMap.has( code )
 				? layoutMap.get( code ).toUpperCase()
 				: code

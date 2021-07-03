@@ -6,7 +6,8 @@ import { Menu, MenuItem } from "nwjs/nwGui";
 
 
 export default EmberObject.extend( Evented, {
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	init() {
 		this.menu = new Menu({
@@ -35,17 +36,22 @@ export default EmberObject.extend( Evented, {
 	},
 
 	_itemsDidChange( observedObj, start, removeCount, addCount ) {
-		const i18n = get( this, "i18n" );
 		const menu = this.menu;
 		for ( const end = start + addCount; start < end; start++ ) {
-			const item = this._createMenuItem( i18n, observedObj[ start ] );
+			const item = this._createMenuItem( this.intl, observedObj[ start ] );
 			menu.insert( item, start );
 		}
 
 		this.trigger( "update" );
 	},
 
-	_createMenuItem( i18n, obj ) {
+	/**
+	 * @param {IntlService} intl
+	 * @param {Object} obj
+	 * @return {module:"nw.gui".MenuItem}
+	 * @private
+	 */
+	_createMenuItem( intl, obj ) {
 		const data = Object.assign( {}, obj );
 
 		if ( !data.type ) {
@@ -55,16 +61,16 @@ export default EmberObject.extend( Evented, {
 			data.enabled = true;
 		}
 		if ( data.label ) {
-			data.label = i18n.t( ...data.label );
+			data.label = intl.t( ...data.label );
 		}
 		if ( data.tooltip ) {
-			data.tooltip = i18n.t( ...data.tooltip );
+			data.tooltip = intl.t( ...data.tooltip );
 		}
 
 		if ( data.submenu ) {
 			const submenu = new Menu();
 			data.submenu.forEach( submenuObj => {
-				const submenuItem = this._createMenuItem( i18n, submenuObj );
+				const submenuItem = this._createMenuItem( intl, submenuObj );
 				submenu.append( submenuItem );
 			});
 			data.submenu = submenu;

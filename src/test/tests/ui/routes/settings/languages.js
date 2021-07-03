@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupApplicationTest } from "ember-qunit";
 import { buildFakeApplication } from "test-utils";
-import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { FakeIntlService, FakeTHelper } from "intl-utils";
 import { visit, currentRouteName, click } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
@@ -33,7 +33,7 @@ module( "ui/routes/settings/languages", function( hooks ) {
 			});
 		}),
 
-		I18nService: FakeI18nService,
+		IntlService: FakeIntlService,
 		ModalService: Service.extend({
 			openModal: new Function()
 		}),

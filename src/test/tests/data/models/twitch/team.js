@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 import { get, set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
@@ -22,7 +22,7 @@ module( "data/models/twitch/team", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
-		owner.register( "service:i18n", FakeI18nService );
+		owner.register( "service:intl", FakeIntlService );
 		owner.register( "service:settings", Service.extend() );
 		owner.register( "model:twitch-team", Team );
 		owner.register( "adapter:twitch-team", TeamAdapter );

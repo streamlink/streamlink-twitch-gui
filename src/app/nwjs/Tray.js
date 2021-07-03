@@ -19,7 +19,8 @@ const { icons: { tray: { [ platform ]: trayIcons } } } = filesConfig;
 
 
 export default EmberObject.extend( Evented, {
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	settings: service(),
 
 	tray: null,
@@ -30,7 +31,7 @@ export default EmberObject.extend( Evented, {
 		nwWindow.window.addEventListener( "beforeunload", () => this._removeTray(), false );
 
 		// locale observer doesn't work without initializing the service injection
-		get( this, "i18n" );
+		get( this, "intl" );
 
 		// context menu
 		this._createMenu();
@@ -43,7 +44,7 @@ export default EmberObject.extend( Evented, {
 	/**
 	 * Rebuild the context menu on locale change
 	 */
-	_localeObserver: observer( "i18n.locale", function() {
+	_localeObserver: observer( "intl.locale", function() {
 		if ( !this.tray ) { return; }
 		this.menu.rebuild();
 	}),

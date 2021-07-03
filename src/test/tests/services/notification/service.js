@@ -1,6 +1,6 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 import { get, set } from "@ember/object";
 import { run } from "@ember/runloop";
 import Service from "@ember/service";
@@ -29,7 +29,7 @@ test( "NotificationService", assert => {
 			isLoggedIn: false
 		}
 	}) );
-	owner.register( "service:i18n", FakeI18nService );
+	owner.register( "service:intl", FakeIntlService );
 	owner.register( "service:settings", Service.extend({
 		notification: {
 			enabled: false

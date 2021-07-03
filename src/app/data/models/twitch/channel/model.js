@@ -13,7 +13,8 @@ const reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
 
 export default Model.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	settings: service(),
 
 
@@ -60,18 +61,12 @@ export default Model.extend({
 	),
 
 
-	titleFollowers: computed( "i18n.locale", "followers", function() {
-		const i18n = get( this, "i18n" );
-		const count = get( this, "followers" );
-
-		return i18n.t( "models.twitch.channel.followers", { count } );
+	titleFollowers: computed( "intl.locale", "followers", function() {
+		return this.intl.t( "models.twitch.channel.followers", { count: this.followers } );
 	}),
 
-	titleViews: computed( "i18n.locale", "views", function() {
-		const i18n = get( this, "i18n" );
-		const count = get( this, "views" );
-
-		return i18n.t( "models.twitch.channel.views", { count } );
+	titleViews: computed( "intl.locale", "views", function() {
+		return this.intl.t( "models.twitch.channel.views", { count: this.views } );
 	}),
 
 

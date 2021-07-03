@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { FakeIntlService, FakeTHelper } from "intl-utils";
 import { stubDOMEvents, hasListener } from "event-utils";
 import { render, clearRender, click, triggerEvent } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
@@ -18,7 +18,7 @@ module( "ui/components/list/infinite-scroll", function( hooks ) {
 		resolver: buildResolver({
 			InfiniteScrollComponent,
 			LoadingSpinnerComponent: Component.extend(),
-			I18nService: FakeI18nService,
+			IntlService: FakeIntlService,
 			THelper: FakeTHelper
 		})
 	});

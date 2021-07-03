@@ -10,8 +10,8 @@ const { subscription: { "create-url": subscriptionCreateUrl } } = twitch;
 
 
 export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
-	/** @type {I18nService} */
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	/** @type {NwjsService} */
 	nwjs: service(),
 
@@ -35,7 +35,7 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 	iconSuccess : "fa-credit-card",
 	iconFailure : "fa-credit-card",
 
-	title: computed( "i18n.locale", "isLoading", "isSuccessful", "name", function() {
+	title: computed( "intl.locale", "isLoading", "isSuccessful", "name", function() {
 		if ( this.isLoading ) {
 			return "";
 		}
@@ -43,8 +43,8 @@ export default FormButtonComponent.extend( TwitchInteractButtonMixin, {
 		const { name } = this;
 
 		return this.isSuccessful
-			? this.i18n.t( "components.subscribe-channel.title-renew", { name } ).toString()
-			: this.i18n.t( "components.subscribe-channel.title-new", { name } ).toString();
+			? this.intl.t( "components.subscribe-channel.title-renew", { name } ).toString()
+			: this.intl.t( "components.subscribe-channel.title-new", { name } ).toString();
 	}),
 
 	async action( success, failure ) {

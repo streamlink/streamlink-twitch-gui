@@ -25,7 +25,8 @@ export default Controller.extend({
 	contentNotificationClick,
 	contentNotificationClickGroup,
 
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	// filter available notification providers
 	contentNotificationProviders: computed(function() {
@@ -35,14 +36,13 @@ export default Controller.extend({
 
 	actions: {
 		testNotification( success, failure ) {
-			const i18n = get( this, "i18n" );
 			const provider = get( this, "model.notification.provider" );
-			const message = i18n.t( "settings.notifications.provider.test.message" ).toString();
+			const msg = this.intl.t( "settings.notifications.provider.test.message" ).toString();
 
 			const data = new NotificationData({
 				title: displayName,
-				icon,
-				message
+				message: msg,
+				icon
 			});
 
 			showNotification( provider, data, true )

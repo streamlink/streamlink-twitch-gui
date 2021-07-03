@@ -33,7 +33,7 @@
 {{/if}}
 {{#if stream}}
 <dt><i class="fa fa-history"></i>{{t "routes.channel.details.delay.title"}}</dt>
-<dd>{{#if (is-equal stream.delay 0)}}{{t "routes.channel.details.delay.data.zero"}}{{else}}{{t "routes.channel.details.delay.data" count=stream.delay}}{{/if}}</dd>
+<dd>{{t "routes.channel.details.delay.data" count=stream.delay}}</dd>
 {{/if}}
 {{#if stream.isVodcast}}
 <dt><i class="fa fa-recycle"></i>{{t "routes.channel.details.vodcast.title"}}</dt>

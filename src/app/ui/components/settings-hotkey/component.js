@@ -46,8 +46,8 @@ const IGNORED_EVENT_CODES = new Set([
 export default Component.extend( /** @class SettingsHotkeyComponent */ {
 	/** @type {HotkeyService} */
 	hotkeyService: service( "hotkey" ),
-	/** @type {I18nService} */
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	layout,
 	classNames: [ "settings-hotkey-component" ],
@@ -57,7 +57,7 @@ export default Component.extend( /** @class SettingsHotkeyComponent */ {
 	init() {
 		this._super( ...arguments );
 		// initialize computed property of injected service to make the observer work
-		this.get( "i18n" );
+		this.get( "intl" );
 	},
 
 	// needed for proper two-way binding
@@ -71,12 +71,12 @@ export default Component.extend( /** @class SettingsHotkeyComponent */ {
 		}
 	}),
 
-	_hotkeyString: computed( "model.code", "hotkey", "i18n.locale", function() {
+	_hotkeyString: computed( "model.code", "hotkey", "intl.locale", function() {
 		return get( this, "model.code" )
 			? this.hotkeyService.formatTitle( this.model )
 			: this.hotkey
 				? this.hotkeyService.formatTitle( this.hotkey )
-				: this.i18n.t( "components.settings-hotkey.empty" );
+				: this.intl.t( "components.settings-hotkey.empty" );
 	}),
 
 	_inputValue: computed( "editing", "_inputEvent", "_hotkeyString", function() {

@@ -9,21 +9,22 @@ const { "display-name": displayName } = mainConfig;
 
 
 export default EmberObject.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	/** @type {RouterService} */
 	router: service(),
 
 	init() {
 		this._buildMenubar();
+		// locale observer doesn't work without initializing the service injection
+		get( this, "intl" );
 	},
 
-	_localeObserver: observer( "i18n.locale", function() {
+	_localeObserver: observer( "intl.locale", function() {
 		this._buildMenubar();
 	}),
 
 	_buildMenubar() {
-		const i18n = get( this, "i18n" );
-
 		const menubar = new Menu({ type: "menubar" });
 		menubar.createMacBuiltin( displayName, {
 			hideEdit  : false,
@@ -35,7 +36,7 @@ export default EmberObject.extend({
 		mainMenu.insert( new MenuItem({ type: "separator" }), 1 );
 		const preferences = new MenuItem({
 			type: "normal",
-			label: i18n.t( "contextmenu.macOS.preferences" ).toString(),
+			label: this.intl.t( "contextmenu.macOS.preferences" ).toString(),
 			key: ",",
 			modifiers: "cmd"
 		});
@@ -46,7 +47,7 @@ export default EmberObject.extend({
 		const viewMenu = menubar.items[ 2 ].submenu;
 		const refresh = new MenuItem({
 			type: "normal",
-			label: i18n.t( "contextmenu.macOS.refresh" ).toString(),
+			label: this.intl.t( "contextmenu.macOS.refresh" ).toString(),
 			key: "r",
 			modifiers: "cmd"
 		});

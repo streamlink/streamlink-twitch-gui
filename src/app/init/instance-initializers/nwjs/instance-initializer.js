@@ -16,7 +16,7 @@ const { logDebug, logError } = new Logger( "NWjs EmberJS initializer" );
 
 export default {
 	name: "nwjs",
-	after: "i18n",
+	after: "intl",
 
 	initialize( application ) {
 		/** @type {NwjsService} */

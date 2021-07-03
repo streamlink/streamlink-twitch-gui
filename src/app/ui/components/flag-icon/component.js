@@ -6,7 +6,8 @@ import "./styles.less";
 
 
 export default Component.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	tagName: "i",
 	classNames: [ "flag-icon-component" ],
@@ -31,16 +32,16 @@ export default Component.extend({
 			return "";
 		}
 
-		const { i18n, type, lang: langId } = this;
+		const { intl, type, lang: langId } = this;
 		const path = `languages.${langId}`;
-		if ( type !== "channel" && type !== "broadcaster" || !i18n.exists( path ) ) {
+		if ( type !== "channel" && type !== "broadcaster" || !intl.exists( path ) ) {
 			return "";
 		}
 
-		const lang = i18n.t( path ).toString();
+		const lang = intl.t( path ).toString();
 
 		return type === "channel"
-			? i18n.t( "components.flag-icon.channel", { lang } ).toString()
-			: i18n.t( "components.flag-icon.broadcaster", { lang } ).toString();
+			? intl.t( "components.flag-icon.channel", { lang } ).toString()
+			: intl.t( "components.flag-icon.broadcaster", { lang } ).toString();
 	})
 });

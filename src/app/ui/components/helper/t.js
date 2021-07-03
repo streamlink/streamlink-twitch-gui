@@ -1,1 +1,1 @@
-export { default as helper } from "ember-i18n/addon/helper";
+export { default as helper } from "ember-intl/helpers/t";

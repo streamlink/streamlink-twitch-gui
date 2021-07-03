@@ -1,21 +1,23 @@
 import { module, test } from "qunit";
-import { buildOwner, runDestroy } from "test-utils";
+import { setupTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import { FakeIntlService } from "intl-utils";
 import sinon from "sinon";
 import { set } from "@ember/object";
-import Service from "@ember/service";
 
 import momentInstanceInitializerInjector
 	from "inject-loader?moment!init/instance-initializers/moment";
 
 
-module( "init/instance-initializers/moment", {
-	beforeEach() {
-		this.momentLocaleSpy = sinon.spy();
+module( "init/instance-initializers/moment", function( hooks ) {
+	setupTest( hooks, {
+		resolver: buildResolver({
+			IntlService: FakeIntlService
+		})
+	});
 
-		this.owner = buildOwner();
-		this.owner.register( "service:i18n", Service.extend({
-			locale: "en"
-		}) );
+	hooks.beforeEach(function() {
+		this.momentLocaleSpy = sinon.spy();
 
 		this.subject = () => {
 			const { default: instanceInitializer } = momentInstanceInitializerInjector({
@@ -26,22 +28,21 @@ module( "init/instance-initializers/moment", {
 
 			return instanceInitializer.initialize( this.owner );
 		};
-	},
-
-	afterEach() {
-		runDestroy( this.owner );
-		this.owner = null;
-	}
-});
+	});
 
 
-test( "Set and update the Moment locale", function( assert ) {
+	test( "Set and update the Moment locale", function( assert ) {
+		this.subject();
+		assert.ok(
+			this.momentLocaleSpy.calledWithExactly( "en" ),
+			"Sets Moment's locale on init"
+		);
 
-	this.subject();
-	assert.ok( this.momentLocaleSpy.calledWithExactly( "en" ), "Sets Moment's locale on init" );
-
-	const i18nService = this.owner.lookup( "service:i18n" );
-	set( i18nService, "locale", "de" );
-	assert.ok( this.momentLocaleSpy.calledWithExactly( "de" ), "Sets Moment's locale on change" );
-
+		const intlService = this.owner.lookup( "service:intl" );
+		set( intlService, "locale", [ "de" ] );
+		assert.ok(
+			this.momentLocaleSpy.calledWithExactly( "de" ),
+			"Sets Moment's locale on change"
+		);
+	});
 });

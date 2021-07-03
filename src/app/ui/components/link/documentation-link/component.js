@@ -10,8 +10,8 @@ const { "docs-url": docsUrl } = streamingConfig;
 
 
 export default ExternalLinkComponent.extend({
-	/** @type {I18nService} */
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	/** @type {SettingsService} */
 	settings: service(),
 
@@ -33,9 +33,9 @@ export default ExternalLinkComponent.extend({
 	],
 
 	class: "",
-	title: computed( "i18n.locale", "baseUrl", function() {
+	title: computed( "intl.locale", "baseUrl", function() {
 		return this.baseUrl
-			? this.i18n.t( "components.documentation-link.title" )
+			? this.intl.t( "components.documentation-link.title" )
 			: "";
 	}),
 

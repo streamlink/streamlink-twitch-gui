@@ -1,28 +1,56 @@
 const { resolve: r } = require( "path" );
-const { pRoot } = require( "../../paths" );
 
-const webpack = require( "webpack" );
+const { pDependencies, pLocales } = require( "../../paths" );
+const { buildBabelConfig } = require( "../../utils" );
 
 
 module.exports = function( config ) {
-	Object.assign( config.resolve.alias, {
-		"ember-i18n$": r( pRoot, "web_modules", "ember-i18n" )
-	});
-
-	// YAML loader (used by EmberI18n)
+	// translations
 	config.module.rules.push({
 		test: /\.ya?ml$/,
+		include: pLocales,
 		use: [
 			"optimized-json-loader",
 			"yaml-loader"
 		]
 	});
 
-	config.plugins.push(
-		// replace ember-i18n's get-locales utility function with a custom module
-		new webpack.NormalModuleReplacementPlugin(
-			/ember-i18n[\/\\]addon[\/\\]utils[\/\\]get-locales\.js$/,
-			r( pRoot, "web_modules", "ember-i18n", "get-locales.js" )
-		)
-	);
+	Object.assign( config.resolve.alias, {
+		"ember-intl": r( pDependencies, "ember-intl", "addon" )
+	});
+
+	config.module.rules.push({
+		test: /\.ts$/,
+		include: r( pDependencies, "ember-intl" ),
+		loader: "babel-loader",
+		options: buildBabelConfig({
+			plugins: [
+				[ "babel-plugin-debug-macros", {
+					flags: [
+						{
+							source: "@glimmer/env",
+							flags: {
+								DEBUG: false,
+								CI: false
+							}
+						}
+					],
+					externalizeHelpers: {
+						global: "Ember"
+					},
+					debugTools: {
+						isDebug: false,
+						source: "@ember/debug",
+						assertPredicateIndex: 1
+					}
+				} ],
+				[ "babel-plugin-ember-modules-api-polyfill", {
+					ignore: {
+						"@ember/debug": [ "assert", "deprecate", "warn" ]
+					}
+				} ],
+				"@babel/plugin-transform-typescript"
+			]
+		})
+	});
 };

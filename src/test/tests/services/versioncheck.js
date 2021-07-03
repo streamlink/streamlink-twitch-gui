@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { FakeIntlService, FakeTHelper } from "intl-utils";
 import { setupStore } from "store-utils";
 import { render, click, triggerEvent } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
@@ -52,7 +52,7 @@ module( "services/versioncheck", function( hooks ) {
 				register: new Function(),
 				unregister: new Function()
 			}),
-			I18nService: FakeI18nService,
+			IntlService: FakeIntlService,
 			THelper: FakeTHelper
 		})
 	});
