@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { FakeIntlService, FakeTHelper } from "intl-utils";
 import { setupKeyboardLayoutMap } from "keyboard-layout-map";
 import { triggerEvent } from "event-utils";
 import { render, click } from "@ember/test-helpers";
@@ -30,7 +30,7 @@ module( "ui/components/modals/modal-quit", function( hooks ) {
 		resolver: buildResolver({
 			HotkeyService,
 			SettingsService: Service.extend( Evented ),
-			I18nService: FakeI18nService,
+			IntlService: FakeIntlService,
 			THelper: FakeTHelper,
 			ModalService,
 			ModalServiceComponent,

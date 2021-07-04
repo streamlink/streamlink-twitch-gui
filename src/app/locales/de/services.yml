@@ -1,6 +1,6 @@
 notification:
     dispatch:
-        single: "{{name}} hat begonnen, zu streamen"
+        single: "{name} hat begonnen, zu streamen"
         group: Einige deiner gefolgten Kanäle haben begonnen, zu streamen
     status:
         disabled: Desktop-Benachrichtigungen sind deaktiviert

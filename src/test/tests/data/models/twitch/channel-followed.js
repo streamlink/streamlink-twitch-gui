@@ -2,7 +2,7 @@ import { module, test } from "qunit";
 import { setupTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 
 import Service from "@ember/service";
 
@@ -21,7 +21,7 @@ module( "data/models/twitch/channel-followed", function( hooks ) {
 			TwitchChannelSerializer,
 			TwitchChannelFollowed,
 			TwitchChannelFollowedSerializer,
-			I18nService: FakeI18nService,
+			IntlService: FakeIntlService,
 			SettingsService: Service.extend()
 		})
 	});

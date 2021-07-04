@@ -2,7 +2,7 @@ dialog:
     action:
         close: Fermer
 changelog:
-    header: "Vous avez mis à jour vers la version {{version}}"
+    header: "Vous avez mis à jour vers la version {version}"
     body: Voulez-vous voir ce qu'il y a de nouveau et lire le changelog maintenant ?
     action:
         show: Changelog
@@ -14,23 +14,23 @@ confirm:
         discard: Abandonner
         cancel: Annuler
 debug:
-    header: "Version de débogage: {{version}}"
+    header: "Version de débogage: {version}"
     body: |
-        Vous exécutez une version de débogage de {{name}}.<br>
+        Vous exécutez une version de débogage de {name}.<br>
         Soyez prudent avec ce que vous faites et signalez tout problème que vous pourriez trouver.<br>
         Merci!
     action:
         close: Okay
 firstrun:
     body: |
-        Merci d'utiliser {{name}}!<br>
+        Merci d'utiliser {name}!<br>
         Voulez-vous d'abord configurer l'application avant de commencer ?
     action:
         start: Commencer maintenant
         settings: Paramètres
 newrelease:
-    header: "Vous utilisez une version obsolète: {{version}}"
-    body: "Voulez-vous télécharger la dernière version maintenant ? ({{version}})"
+    header: "Vous utilisez une version obsolète: {version}"
+    body: "Voulez-vous télécharger la dernière version maintenant ? ({version})"
     action:
         download: Télécharger
         ignore: Ignorer
@@ -51,31 +51,31 @@ streaming:
         ended: "Le stream est terminé: "
         error:
             log: "Erreur: impossible de lancer le stream"
-            provider: "Erreur: {{provider}} configuration incorrecte"
+            provider: "Erreur: {provider} configuration incorrecte"
             player: "Erreur: Configuration incorrecte du lecteur"
-            version: "Erreur: Version {{provider}} incorrecte"
+            version: "Erreur: Version {provider} incorrecte"
             unable-to-open: "Erreur: Impossible d'ouvrir le stream"
             no-streams-found: "Erreur: Aucun sream trouvé"
             timeout: "Erreur: Timeout"
-            hosting: "{{name}} héberge une autre chaîne"
+            hosting: "{name} héberge une autre chaîne"
             internal: "Erreur"
     body:
-        launching: "En attente de {{provider}} de lancer le stream..."
+        launching: "En attente de {provider} de lancer le stream..."
         ended: "Voulez-vous relancer le stream maintenant ?"
         error:
-            provider: "Veuillez vérifier vos paramètres et/ou (ré)installer {{provider}}."
+            provider: "Veuillez vérifier vos paramètres et/ou (ré)installer {provider}."
             player: "Veuillez vérifier les paramètres du lecteur."
-            version: "La version v{{version}} ne remplit pas les exigences minimales. (v{{required}})."
-            unable-to-open: "{{provider}} n'a pas réussi à ouvrir le stream."
-            no-streams-found: "{{provider}} n'a pas réussi à trouver le stream."
-            timeout: "Soit {{name}} est hors ligne, soit votre connexion à Twitch a été interrompue."
-            hosting: "Voulez-vous changer pour {{name}}?"
+            version: "La version v{version} ne remplit pas les exigences minimales. (v{required})."
+            unable-to-open: "{provider} n'a pas réussi à ouvrir le stream."
+            no-streams-found: "{provider} n'a pas réussi à trouver le stream."
+            timeout: "Soit {name} est hors ligne, soit votre connexion à Twitch a été interrompue."
+            hosting: "Voulez-vous changer pour {name}?"
             internal: "Erreur interne"
     action:
         abort: Abandonner
         continue: Continuer
         download: Télécharger
-        log: Activer/désactiver les logs {{provider}}
+        log: Activer/désactiver les logs {provider}
         restart: Redémarrer
         shutdown: Fermer le stream
         start-hosted: Basculer

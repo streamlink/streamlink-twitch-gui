@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { FakeIntlService, FakeTHelper } from "intl-utils";
 import { setupKeyboardLayoutMap } from "keyboard-layout-map";
 import {
 	stubDOMEvents,
@@ -32,7 +32,7 @@ module( "ui/components/settings-hotkey", function( hooks ) {
 			SettingsHotkeyComponent,
 			FormButtonComponent,
 			CheckBoxComponent,
-			I18nService: FakeI18nService,
+			IntlService: FakeIntlService,
 			THelper: FakeTHelper,
 			BoolOrHelper,
 			HotkeyTitleHelper,

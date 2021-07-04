@@ -7,13 +7,13 @@ drop-down-selection:
 file-select:
     placeholder: Leer lassen für Standardpfad
 flag-icon:
-    channel: "Die Sprache des Kanals ist {{lang}}"
-    broadcaster: "Die Sprache des Broadcasters ist {{lang}}"
+    channel: "Die Sprache des Kanals ist {lang}"
+    broadcaster: "Die Sprache des Broadcasters ist {lang}"
 follow-button:
-    follow: "{{name}} folgen"
-    unfollow: "{{name}} nicht mehr folgen"
-    confirm: "{{name}} nicht mehr folgen"
-    keep: "{{name}} weiterhin folgen"
+    follow: "{name} folgen"
+    unfollow: "{name} nicht mehr folgen"
+    confirm: "{name} nicht mehr folgen"
+    keep: "{name} weiterhin folgen"
 infinite-scroll:
     error: Fehler
     loading: Lade
@@ -72,36 +72,34 @@ settings-row:
             Der Inhalt jeder Variable wird escaped. Bei Verwendung außerhalb von Anführungszeichen wird jedes Zeichen escaped. Einige Anwendungen sind in der Lage, unnötig escapte Zeichen in ihrer Parameterliste zu lesen und funktionieren wie erwartet, andere jedoch nicht. Stelle sicher, dass alle Variablen in einfachen oder doppelten Anführungszeichen gesetzt sind.
 
             Korrekte Verwendung:
-            -a "{a}" -b "{b1}{b2}" "-c={c}"
+            -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
 settings-submit:
     apply: Anwenden
     discard: Verwerfen
 share-channel:
     title: URL des Kanals in die Zwischenablage kopieren
 stream-item:
-    fps: "{{fps}} fps"
+    fps: "{fps} fps"
     details:
         show: Streamdetails anzeigen
         lock: Detailansicht sperren
         unlock: Detailansicht entsperren
     vodcast: Vodcast
 subscribe-channel:
-    title-new: "{{name}} jetzt abonnieren"
-    title-renew: "Abonnement von {{name}} erneuern"
+    title-new: "{name} jetzt abonnieren"
+    title-renew: "Abonnement von {name} erneuern"
 team-item:
     created-at:
         title: "Erstellt am"
-        # new Moment(team.created_at).format(...)
-        format: "llll"
+        format: "{created_at, date, full}"
     updated-at:
         title: "Zuletzt modifiziert"
-        # new Moment(team.updated_at).format(...)
-        format: "llll"
+        format: "{updated_at, date, full}"
 title-bar:
     loggedout: Nicht eingeloggt
     # tooltip (whitespace sensitive)
     loggedin: |
-        Eingeloggt als {{name}}
-        {{status}}
+        Eingeloggt als {name}
+        {status}
 twitch-emotes:
     title: Zeige verfügbare Emoticons des Kanals

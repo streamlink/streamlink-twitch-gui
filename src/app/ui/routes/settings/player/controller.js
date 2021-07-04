@@ -13,7 +13,8 @@ const { isArray } = Array;
 
 
 export default Controller.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	store: service(),
 
 	substitutionsPlayer,
@@ -39,11 +40,9 @@ export default Controller.extend({
 	}),
 
 	contentStreamingPlayer: computed(function() {
-		const i18n = get( this, "i18n" );
-
 		const presets = [{
 			id: "default",
-			label: i18n.t( "settings.player.players.default.label" ).toString()
+			label: this.intl.t( "settings.player.players.default.label" ).toString()
 		}];
 		for ( const [ id, { exec, disabled } ] of Object.entries( playersConfig ) ) {
 			if ( disabled || !exec[ platform ] ) { continue; }
@@ -54,17 +53,15 @@ export default Controller.extend({
 		return presets;
 	}),
 
-	playerPlaceholder: computed( "i18n.locale", "model.streaming.player", function() {
-		const i18n = get( this, "i18n" );
-
+	playerPlaceholder: computed( "intl.locale", "model.streaming.player", function() {
 		const player = get( this, "model.streaming.player" );
 		if ( player === "default" || !playersConfig[ player ] ) {
-			return i18n.t( "settings.player.executable.default.placeholder" ).toString();
+			return this.intl.t( "settings.player.executable.default.placeholder" ).toString();
 		}
 
 		const exec = playersConfig[ player ][ "exec" ][ platform ];
 		if ( !exec ) {
-			return i18n.t( "settings.player.executable.preset.placeholder" ).toString();
+			return this.intl.t( "settings.player.executable.preset.placeholder" ).toString();
 		}
 
 		return isArray( exec )

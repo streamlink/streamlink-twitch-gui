@@ -8,7 +8,8 @@ const day = 24 * 3600 * 1000;
 
 
 export default Controller.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	stream: alias( "model.stream" ),
 	channel: alias( "model.channel" ),
@@ -19,12 +20,11 @@ export default Controller.extend({
 		return ( new Date() - createdAt ) / day;
 	}),
 
-	language: computed( "i18n.locale", "channel.broadcaster_language", function() {
-		const i18n = get( this, "i18n" );
+	language: computed( "intl.locale", "channel.broadcaster_language", function() {
 		const blang = get( this, "channel.broadcaster_language" );
 
-		return blang && i18n.exists( `languages.${blang}` )
-			? i18n.t( `languages.${blang}` ).toString()
+		return blang && this.intl.exists( `languages.${blang}` )
+			? this.intl.t( `languages.${blang}` ).toString()
 			: "";
 	})
 });

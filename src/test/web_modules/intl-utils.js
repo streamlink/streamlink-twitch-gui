@@ -1,5 +1,5 @@
 import Helper from "@ember/component/helper";
-import { get, observer } from "@ember/object";
+import { observer } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
 
 
@@ -7,10 +7,10 @@ const { hasOwnProperty } = {};
 
 
 /**
- * Fake I18nService for testing translations
+ * Fake IntlService for testing translations
  */
-export class FakeI18nService extends Service {
-	locale = "en";
+export class FakeIntlService extends Service {
+	locale = [ "en" ];
 	translations = {};
 
 	t( key, data ) {
@@ -38,13 +38,13 @@ export class FakeI18nService extends Service {
  * Fake Translation helper which doesn't use a data EmberObject with an unknownProperty function
  */
 export const FakeTHelper = Helper.extend({
-	i18n: service(),
+	intl: service(),
 
 	compute( [ key ], data ) {
-		return get( this, "i18n" ).t( key, data );
+		return this.intl.t( key, data );
 	},
 
-	_localeObserver: observer( "i18n.locale", function() {
+	_localeObserver: observer( "intl.locale", function() {
 		this.recompute();
 	})
 });

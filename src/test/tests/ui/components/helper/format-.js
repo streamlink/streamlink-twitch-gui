@@ -5,14 +5,12 @@ import { render } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 
 import { helper as FormatViewersHelper } from "ui/components/helper/format-viewers";
-import { helper as FormatTimeHelper } from "ui/components/helper/format-time";
 
 
 module( "ui/components/helper/format-", function( hooks ) {
 	setupRenderingTest( hooks, {
 		resolver: buildResolver({
-			FormatViewersHelper,
-			FormatTimeHelper
+			FormatViewersHelper
 		})
 	});
 
@@ -54,19 +52,4 @@ module( "ui/components/helper/format-", function( hooks ) {
 		this.set( "viewers", 1010000 );
 		assert.strictEqual( this.element.innerText, "1.01m", "Millions" );
 	});
-
-
-	test( "Format time", async function( assert ) {
-		const time = new Date();
-
-		this.set( "time", time );
-		await render( hbs`{{format-time time "D"}}` );
-
-		assert.strictEqual(
-			this.element.innerText,
-			time.getDate().toString(),
-			"Format time using a custom format"
-		);
-	});
-
 });

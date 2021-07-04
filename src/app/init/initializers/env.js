@@ -9,7 +9,7 @@ export default {
 
 	initialize( application ) {
 		const ENV = {
-			i18n: {
+			intl: {
 				defaultLocale,
 				defaultFallback: defaultLocale
 			}

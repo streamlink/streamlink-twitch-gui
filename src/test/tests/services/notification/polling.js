@@ -2,7 +2,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore } from "store-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 import sinon from "sinon";
 
 import { get, set } from "@ember/object";
@@ -50,7 +50,7 @@ module( "services/notification/polling", {
 
 		env = setupStore( owner, { adapter: RESTAdapter } );
 
-		owner.register( "service:i18n", FakeI18nService );
+		owner.register( "service:intl", FakeIntlService );
 		owner.register( "service:settings", Service.extend({
 			notification: {}
 		}) );

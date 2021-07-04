@@ -1,6 +1,6 @@
 notification:
     dispatch:
-        single: "{{name}} iniciou a transmissão"
+        single: "{name} iniciou a transmissão"
         group: Alguns canais seguidos iniciaram as transmissões
     status:
         disabled: Notificação desativada

@@ -5,14 +5,14 @@ import { inject as service } from "@ember/service";
 export const helper = Helper.extend({
 	/** @type {HotkeyService} */
 	hotkey: service(),
-	/** @type {I18nService} */
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	init() {
 		this._super( ...arguments );
 		// initialize computed property of injected service to make the observer work
-		this.get( "i18n" );
-		this.addObserver( "i18n.locale", this, "recompute" );
+		this.get( "intl" );
+		this.addObserver( "intl.locale", this, "recompute" );
 	},
 
 	compute( positional, { hotkey, context, namespace, action, title } ) {

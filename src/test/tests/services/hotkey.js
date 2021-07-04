@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 import { setupKeyboardLayoutMap } from "keyboard-layout-map";
 import {
 	stubDOMEvents,
@@ -26,7 +26,7 @@ import hotkeyServiceInjector from "inject-loader?config!services/hotkey";
 module( "services/hotkey", function( hooks ) {
 	setupRenderingTest( hooks, {
 		resolver: buildResolver({
-			I18nService: FakeI18nService
+			IntlService: FakeIntlService
 		})
 	});
 
@@ -857,8 +857,8 @@ module( "services/hotkey", function( hooks ) {
 		const noop = new Function();
 		const getTitle = () => this.element.firstElementChild.title;
 
-		const i18n = this.owner.lookup( "service:i18n" );
-		i18n.addTranslations( "en", {
+		const intl = this.owner.lookup( "service:intl" );
+		intl.addTranslations( "en", {
 			"hotkeys.codes.Escape": "Esc",
 			"hotkeys.codes.ArrowDown": "Down"
 		});
@@ -927,12 +927,12 @@ module( "services/hotkey", function( hooks ) {
 
 		this.setProperties({
 			action: "actionA",
-			title: i18n.t( "some.translation", { a: "1" } )
+			title: intl.t( "some.translation", { a: "1" } )
 		});
 		assert.strictEqual(
 			getTitle(),
 			"[Enter] some.translation{\"a\":\"1\"}",
-			"Properly supports i18n SafeStrings"
+			"Properly supports intl SafeStrings"
 		);
 
 		this.setProperties({
@@ -964,8 +964,8 @@ module( "services/hotkey", function( hooks ) {
 			"Finds the first existing and enabled hotkey in namespace stack"
 		);
 
-		i18n.addTranslations( "en", { "hotkeys.codes.Space": "Spacebar" } );
-		run( () => i18n.notifyPropertyChange( "locale" ) );
+		intl.addTranslations( "en", { "hotkeys.codes.Space": "Spacebar" } );
+		run( () => intl.notifyPropertyChange( "locale" ) );
 		assert.strictEqual( getTitle(), "[Spacebar] bar", "Reacts to locale changes" );
 	});
 

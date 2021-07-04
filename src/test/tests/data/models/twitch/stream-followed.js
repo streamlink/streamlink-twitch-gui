@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 import { get } from "@ember/object";
 import Service from "@ember/service";
 
@@ -32,7 +32,7 @@ module( "data/models/twitch/stream-followed", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
-		owner.register( "service:i18n", FakeI18nService );
+		owner.register( "service:intl", FakeIntlService );
 		owner.register( "model:twitch-stream-followed", StreamFollowed );
 		owner.register( "serializer:twitch-stream-followed", StreamFollowedSerializer );
 		owner.register( "model:twitch-stream", Stream );

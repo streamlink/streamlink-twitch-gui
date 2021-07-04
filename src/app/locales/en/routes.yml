@@ -29,7 +29,7 @@ about:
 featured:
     header: Featured Channels
     empty: The featured channels list could not be loaded!
-    summary: There are {{viewers}} people watching {{channels}} live streams right now!
+    summary: There are {viewers} people watching {channels} live streams right now!
 games:
     header: Top Games
     empty: The returned list of top games is empty.
@@ -50,30 +50,30 @@ channel:
             title: Name
         created-at:
             title: Created
-            # new Moment(channel.created_at).format(...)
-            format: "LL"
+            format: "{created_at, date, long}"
         language:
             title: Language
         followers:
             title: Followers
-            data: "{{followers}} ({{day}} per day)"
+            data: "{followers} ({day} per day)"
         views:
             title: Views
-            data: "{{views}} ({{day}} per day)"
+            data: "{views} ({day} per day)"
         content:
             title: Content
             mature: Inappropriate for children
             ffa: No age restrictions
         format:
             title: Format
-            data: "{{resolution}} @ {{fps}}fps"
+            data: "{resolution} @ {fps}fps"
         delay:
             title: Delay
-            # static "zero" property
-            data:
-                zero: No additional delay
-                one: One second
-                other: "{{count}} seconds"
+            data: |
+                {count, plural,
+                    =0 {No additional delay}
+                    one {One second}
+                    other {# seconds}
+                }
         vodcast:
             title: Vodcast
             data: Stream is a Vodcast
@@ -106,11 +106,9 @@ channel:
                 checkbox: Enable desktop notifications
 team:
     header:
-        members: "Team members: {{num}}"
-        # new Moment(team.created_at).format(...)
-        created-at: "[Date created:] llll"
-        # new Moment(team.updated_at).format(...)
-        updated-at: "[Modified last:] llll"
+        members: "Team members: {num}"
+        created-at: "Date created: {created_at, date, full}"
+        updated-at: "Modified last: {updated_at, date, full}"
     menu:
         live: Live Members
         all: All Members
@@ -123,9 +121,8 @@ team:
         header: Infos
 user:
     index:
-        logged-in: "Logged in as {{name}}"
-        # new Moment(auth.session.date).format(...)
-        since: "[since] LLLL"
+        logged-in: "Logged in as {name}"
+        since: "since {since, date, full}"
         sign-out: Sign out
         token:
             title: Your access token

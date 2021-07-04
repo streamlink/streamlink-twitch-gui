@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { FakeIntlService, FakeTHelper } from "intl-utils";
 import { setupKeyboardLayoutMap } from "keyboard-layout-map";
 import { render } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
@@ -20,7 +20,7 @@ module( "ui/components/helper/hotkey-title", function( hooks ) {
 	setupRenderingTest( hooks, {
 		resolver: buildResolver({
 			HotkeyTitleHelper,
-			I18nService: FakeI18nService,
+			IntlService: FakeIntlService,
 			THelper: FakeTHelper,
 			SettingsService: Service.extend( Evented )
 		})
@@ -51,8 +51,10 @@ module( "ui/components/helper/hotkey-title", function( hooks ) {
 				}
 			}
 		});
-		const i18n = this.owner.lookup( "service:i18n" );
-		i18n.addTranslations( "en", { "hotkeys.codes.Escape": "Esc" } );
+
+		/** @type {IntlService} */
+		const intlService = this.owner.lookup( "service:intl" );
+		intlService.addTranslations( "en", { "hotkeys.codes.Escape": "Esc" } );
 
 		await render( hbs`{{hotkey-title namespace="invalid" action="invalid"}}` );
 		assert.strictEqual(
@@ -97,7 +99,7 @@ module( "ui/components/helper/hotkey-title", function( hooks ) {
 		assert.strictEqual(
 			this.element.innerText,
 			"[hotkeys.modifiers.ctrlKey+Esc] some.translation{\"a\":\"1\"}",
-			"Returns correct hotkey string with an i18n title"
+			"Returns correct hotkey string with an intl title"
 		);
 	});
 
@@ -112,8 +114,10 @@ module( "ui/components/helper/hotkey-title", function( hooks ) {
 				}
 			}
 		});
-		const i18n = this.owner.lookup( "service:i18n" );
-		i18n.addTranslations( "en", { "hotkeys.codes.Escape": "Esc" } );
+
+		/** @type {IntlService} */
+		const intlService = this.owner.lookup( "service:intl" );
+		intlService.addTranslations( "en", { "hotkeys.codes.Escape": "Esc" } );
 
 		this.owner.register( "component:component-a", Component.extend( HotkeyMixin, {
 			layout: hbs`{{hotkey-title context=this action=action title=title}}`,
@@ -139,7 +143,7 @@ module( "ui/components/helper/hotkey-title", function( hooks ) {
 		assert.strictEqual(
 			this.element.innerText,
 			"[hotkeys.modifiers.ctrlKey+Esc] some.translation{\"a\":\"1\"}",
-			"Returns correct hotkey string from context with an i18n title"
+			"Returns correct hotkey string from context with an intl title"
 		);
 
 		await render( hbs`{{component-a action=""}}` );
@@ -186,8 +190,10 @@ module( "ui/components/helper/hotkey-title", function( hooks ) {
 				}
 			}
 		});
-		const i18n = this.owner.lookup( "service:i18n" );
-		i18n.addTranslations( "en", { "hotkeys.codes.Escape": "Esc" } );
+
+		/** @type {IntlService} */
+		const intlService = this.owner.lookup( "service:intl" );
+		intlService.addTranslations( "en", { "hotkeys.codes.Escape": "Esc" } );
 
 		await render( hbs`{{hotkey-title namespace="namespaceA" action="actionA"}}` );
 		assert.strictEqual(
@@ -196,8 +202,8 @@ module( "ui/components/helper/hotkey-title", function( hooks ) {
 			"Returns correct hotkey string"
 		);
 
-		i18n.addTranslations( "en", { "hotkeys.codes.Escape": "Escape" } );
-		run( () => i18n.notifyPropertyChange( "locale" ) );
+		intlService.addTranslations( "en", { "hotkeys.codes.Escape": "Escape" } );
+		run( () => intlService.notifyPropertyChange( "locale" ) );
 		assert.strictEqual(
 			this.element.innerText,
 			"hotkeys.modifiers.ctrlKey+Escape",

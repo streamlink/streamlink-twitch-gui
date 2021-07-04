@@ -2,7 +2,7 @@ dialog:
     action:
         close: Schließen
 changelog:
-    header: "Du hast zu {{version}} geupgradet"
+    header: "Du hast zu {version} geupgradet"
     body: Möchtest du sehen was neu ist und den Changelog durchlesen?
     action:
         show: Changelog
@@ -14,23 +14,23 @@ confirm:
         discard: Verwerfen
         cancel: Abbrechen
 debug:
-    header: "Debug-Build: {{version}}"
+    header: "Debug-Build: {version}"
     body: |
-        Du verwendest einen Debug-Build von {{name}}.<br>
+        Du verwendest einen Debug-Build von {name}.<br>
         Bitte sei vorsichtig bei dem, was du tust, und melde alle Probleme, die du findest.<br>
         Vielen Dank!
     action:
         close: Okay
 firstrun:
     body: |
-        Danke für das Verwenden von {{name}}!<br>
+        Danke für das Verwenden von {name}!<br>
         Möchtest du die Anwendung zuerst konfigurieren, bevor du startest?
     action:
         start: Jetzt starten
         settings: Einstellungen
 newrelease:
-    header: "Du verwendest eine alte Version: {{version}}"
-    body: "Möchtest du die neueste Version jetzt herunterladen? ({{version}})"
+    header: "Du verwendest eine alte Version: {version}"
+    body: "Möchtest du die neueste Version jetzt herunterladen? ({version})"
     action:
         download: Herunterladen
         ignore: Ignorieren
@@ -51,31 +51,31 @@ streaming:
         ended: "Stream beendet: "
         error:
             log: "Fehler: Konnte Stream nicht starten"
-            provider: "Fehler: {{provider}} Fehlkonfiguration"
+            provider: "Fehler: {provider} Fehlkonfiguration"
             player: "Fehler: Fehlkonfiguration des Players"
-            version: "Fehler: Ungültige {{provider}} Version"
+            version: "Fehler: Ungültige {provider} Version"
             unable-to-open: "Fehler: Konnte Stream nicht öffnen"
             no-streams-found: "Fehler: Keine Streams gefunden"
             timeout: "Fehler: Timeout"
-            hosting: "{{name}} hostet einen anderen Kanal"
+            hosting: "{name} hostet einen anderen Kanal"
             internal: "Fehler"
     body:
-        launching: "Warte darauf, dass {{provider}} den Stream startet..."
+        launching: "Warte darauf, dass {provider} den Stream startet..."
         ended: "Möchtest du den Stream jetzt neu starten?"
         error:
-            provider: "Bitte Einstellungen überprüfen und/oder {{provider}} (neu) installieren."
+            provider: "Bitte Einstellungen überprüfen und/oder {provider} (neu) installieren."
             player: "Bitte prüfe deine Playereinstellungen."
-            version: "Die Version v{{version}} entspricht nicht den Mindestvorraussetzungen (v{{required}})."
-            unable-to-open: "{{provider}} konnte den Stream nicht öffnen."
-            no-streams-found: "{{provider}} konnte den Stream nicht finden."
-            timeout: "Entweder ist {{name}} nun offline, oder deine Verbindung zu Twitch wurde unterbrochen."
-            hosting: "Möchtest du zu {{name}} wechseln?"
+            version: "Die Version v{version} entspricht nicht den Mindestvorraussetzungen (v{required})."
+            unable-to-open: "{provider} konnte den Stream nicht öffnen."
+            no-streams-found: "{provider} konnte den Stream nicht finden."
+            timeout: "Entweder ist {name} nun offline, oder deine Verbindung zu Twitch wurde unterbrochen."
+            hosting: "Möchtest du zu {name} wechseln?"
             internal: "Interner Fehler"
     action:
         abort: Abbrechen
         continue: Weiter
         download: Herunterladen
-        log: "{{provider}} Logansicht ein-/ausschalten"
+        log: "{provider} Logansicht ein-/ausschalten"
         restart: Neu starten
         shutdown: Stream schließen
         start-hosted: Wechseln

@@ -1,13 +1,13 @@
 notification:
     dispatch:
-        single: "{{name}} запустил стрим" #"{{name}} has started streaming"
-        group: "Некоторые отслеживаемые каналы начали трансляцию" #Some followed channels have started streaming
+        single: "{name} запустил стрим"
+        group: "Некоторые отслеживаемые каналы начали трансляцию"
     status:
-        disabled: "Уведомления на рабочем столе отключены" #Desktop notifications are disabled
-        enabled: "Уведомления на рабочем столе включены" #Desktop notifications are enabled
-        error: "Уведомления на рабочем столе отключены (offline)" #Desktop notifications are offline
-        paused: "Уведомления на рабочем столе приостановлены" #Desktop notifications are paused
+        disabled: "Уведомления на рабочем столе отключены"
+        enabled: "Уведомления на рабочем столе включены"
+        error: "Уведомления на рабочем столе отключены (offline)"
+        paused: "Уведомления на рабочем столе приостановлены"
     tray:
         pause:
-            label: "Приостановить нотификации" #Pause notifications
-            tooltip: "Быстрое переключение уведомлений на рабочем столе" #Quickly toggle desktop notifications
+            label: "Приостановить нотификации"
+            tooltip: "Быстрое переключение уведомлений на рабочем столе"

@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { buildOwner, runDestroy } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 import Service from "@ember/service";
 
 import SearchChannel from "data/models/twitch/search-channel/model";
@@ -20,7 +20,7 @@ module( "data/models/twitch/search-channel", {
 		owner = buildOwner();
 
 		owner.register( "service:auth", Service.extend() );
-		owner.register( "service:i18n", FakeI18nService );
+		owner.register( "service:intl", FakeIntlService );
 		owner.register( "model:twitch-search-channel", SearchChannel );
 		owner.register( "serializer:twitch-search-channel", SearchChannelSerializer );
 		owner.register( "model:twitch-channel", Channel );

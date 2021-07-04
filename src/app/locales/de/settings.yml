@@ -16,7 +16,7 @@ main:
         description: Wähle die Sprache des GUIs.
         notes: Sprichst du eine weitere Sprache? Hilf beim Übersetzen! Lies das Wiki für weitere Informationen.
         labels:
-            auto: "System ({{label}})"
+            auto: "System ({label})"
     advanced:
         title: Einstellungen und Funktionen
         description: Aktiviere erweitere Einstellungen und Funktionen. Bezieht sich nicht nur auf das Einstellungsmenü.
@@ -121,7 +121,7 @@ streaming:
     player-no-close:
         title: Playerfenster beibehalten
         description: Nachdem der Stream geschlossen wurde.
-        notes: Der Player selbst kann {{provider}} daran hindern, ihn zu beenden. Bitte beachte die Einstellungen des Players.
+        notes: Der Player selbst kann {provider} daran hindern, ihn zu beenden. Bitte beachte die Einstellungen des Players.
         checkbox: Den Player nicht schließen
     disable-ads:
         title: Werbung

@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 import {
 	stubDOMEvents,
 	isDefaultPrevented,
@@ -26,7 +26,7 @@ module( "ui/components/form/drop-down", function( hooks ) {
 			DropDownSelectionComponent,
 			DropDownListComponent,
 			IsEqualHelper,
-			I18nService: FakeI18nService
+			IntlService: FakeIntlService
 		})
 	});
 

@@ -9,7 +9,8 @@ import "./styles.less";
 
 
 export default Component.extend( TwitchInteractButtonMixin, HotkeyMixin, {
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	layout,
 

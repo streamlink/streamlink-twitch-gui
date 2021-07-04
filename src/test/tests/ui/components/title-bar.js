@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { setupRenderingTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { FakeI18nService, FakeTHelper } from "i18n-utils";
+import { FakeIntlService, FakeTHelper } from "intl-utils";
 import { render, click } from "@ember/test-helpers";
 import hbs from "htmlbars-inline-precompile";
 import sinon from "sinon";
@@ -31,7 +31,7 @@ module( "ui/components/title-bar", function( hooks ) {
 			SearchBarComponent: Component.extend({
 				classNames: "search-bar-component"
 			}),
-			I18nService: FakeI18nService,
+			IntlService: FakeIntlService,
 			THelper: FakeTHelper
 		})
 	});

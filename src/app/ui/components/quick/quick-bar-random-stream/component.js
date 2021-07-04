@@ -1,6 +1,6 @@
 import { get, set } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { translationMacro as t } from "ember-i18n/addon";
+import { t } from "ember-intl";
 import { vars } from "config";
 import FormButtonComponent from "ui/components/button/form-button/component";
 import FilterLanguagesMixin from "ui/routes/-mixins/routes/filter-languages";
@@ -10,7 +10,8 @@ const { "random-max": randomMax } = vars;
 
 
 export default FormButtonComponent.extend( FilterLanguagesMixin, {
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	store: service(),
 	streaming: service(),
 

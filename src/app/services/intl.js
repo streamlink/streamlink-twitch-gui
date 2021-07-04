@@ -1,15 +1,19 @@
 import { get, set, observer } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { Service } from "ember-i18n/addon";
+import { Service } from "ember-intl";
 import { locales as localesConfig } from "config";
-import systemLocale from "./system-locale";
+import systemLocale from "utils/system-locale";
 
 
 const { locales } = localesConfig;
 const { hasOwnProperty } = {};
 
 
-export default Service.extend({
+/**
+ * @class IntlService
+ * @extends {Service}
+ */
+const IntlService = {
 	settings: service(),
 
 	_settingsObserver: observer( "settings.content.gui.language", function() {
@@ -18,7 +22,7 @@ export default Service.extend({
 			locale = systemLocale /* istanbul ignore next */ || "en";
 		}
 
-		set( this, "locale", locale );
+		set( this, "locale", [ locale ] );
 	}),
 
 	init() {
@@ -27,4 +31,7 @@ export default Service.extend({
 		// the observer doesn't trigger without reading the settings property first
 		get( this, "settings" );
 	}
-});
+};
+
+
+export default Service.extend( IntlService );

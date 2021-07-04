@@ -6,7 +6,7 @@ import sinon from "sinon";
 
 import { posix as path } from "path";
 
-import loggerInjector from "inject-loader?-moment&-util!utils/Logger";
+import loggerInjector from "inject-loader?-util!utils/Logger";
 
 
 module( "utils/Logger", function( hooks ) {
@@ -49,7 +49,6 @@ module( "utils/Logger", function( hooks ) {
 			loggerInjector({
 				"config": {
 					log: {
-						filename: "[file.log]",
 						maxAgeDays: 1
 					}
 				},
@@ -229,6 +228,8 @@ module( "utils/Logger", function( hooks ) {
 	test( "Logging to file", /** @this {TestContextUtilsLogger} */ async function( assert ) {
 		let Logger;
 
+		this.fakeTimer.setSystemTime( Date.parse( "2000-01-02T03:04:05.123Z" ) );
+
 		// mkdirp fails
 		this.mkdirpStub.rejects();
 		Logger = this.subject( "debug", true );
@@ -278,8 +279,14 @@ module( "utils/Logger", function( hooks ) {
 		assert.propEqual(
 			this.appendFileStub.args,
 			[
-				[ "/logs/file.log", "[1970-01-01T00:00:00.000Z][debug][foo]\nbar\n\n" ],
-				[ "/logs/file.log", "[1970-01-01T00:00:01.337Z][debug][foo]\nbaz\n\n" ]
+				[
+					"/logs/2000-01-02_03-04-05.log",
+					"[2000-01-02T03:04:05.123Z][debug][foo]\nbar\n\n"
+				],
+				[
+					"/logs/2000-01-02_03-04-05.log",
+					"[2000-01-02T03:04:06.460Z][debug][foo]\nbaz\n\n"
+				]
 			],
 			"Appends the log outputs to the log file"
 		);

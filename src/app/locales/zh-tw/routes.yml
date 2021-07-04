@@ -29,7 +29,7 @@ about:
 featured:
     header: 精選頻道
     empty: 精選頻道無法載入！
-    summary: 有 {{viewers}} 位觀眾正在收看 {{channels}} 個頻道實況！
+    summary: 有 {viewers} 位觀眾正在收看 {channels} 個頻道實況！
 games:
     header: 熱門遊戲
     empty: 無熱門遊戲
@@ -50,30 +50,30 @@ channel:
             title: 名稱
         created-at:
             title: 建立時間
-            # new Moment(channel.created_at).format(...)
-            format: "LL"
+            format: "{created_at, date, long}"
         language:
             title: 語言
         followers:
             title: 追蹤者
-            data: "{{followers}} ({{day}}人/日)"
+            data: "{followers} ({day}人/日)"
         views:
             title: 觀看次數
-            data: "{{views}} ({{day}}/日)"
+            data: "{views} ({day}/日)"
         content:
             title: 內容
             mature: 頻道僅適合成人觀看
             ffa: 無年齡限制
         format:
             title: 格式
-            data: "{{resolution}} @ {{fps}}fps"
+            data: "{resolution} @ {fps}fps"
         delay:
             title: 延遲
-            # static "zero" property
-            data:
-                zero: 無設定延遲
-                one: 1 秒
-                other: "{{count}} 秒"
+            data: |
+                {count, plural,
+                    =0 {無設定延遲}
+                    one {1 秒}
+                    other {# 秒}
+                }
         vodcast:
             title: 重播
             data: 實況重播
@@ -106,11 +106,9 @@ channel:
                 checkbox: 啟用桌面通知
 team:
     header:
-        members: "團隊成員: {{num}}"
-        # new Moment(team.created_at).format(...)
-        created-at: "[建立日期:] llll"
-        # new Moment(team.updated_at).format(...)
-        updated-at: "[最後更新:] llll"
+        members: "團隊成員: {num}"
+        created-at: "建立日期: {created_at, date, full}"
+        updated-at: "最後更新: {updated_at, date, full}"
     menu:
         live: 實況中成員
         all: 所有成員
@@ -123,9 +121,8 @@ team:
         header: 資訊
 user:
     index:
-        logged-in: "{{name}} 已登入"
-        # new Moment(auth.session.date).format(...)
-        since: "[從] LLLL"
+        logged-in: "{name} 已登入"
+        since: "從 {since, date, full}"
         sign-out: 登出
         token:
             title: 存取金鑰

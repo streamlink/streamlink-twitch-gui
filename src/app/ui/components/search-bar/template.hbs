@@ -30,7 +30,7 @@
 <li {{action "searchHistory" history}}>
 <div class="filter">{{t (concat "components.search-bar.filters." history.filter)}}</div>
 <div class="query">{{history.query}}</div>
-<div class="date">{{time-from-now history.date false interval=60000}}</div>
+<div class="date">{{time-from-now history.date interval=60000}}</div>
 </li>
 {{/each}}
 </ul>

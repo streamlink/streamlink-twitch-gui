@@ -2,7 +2,7 @@ dialog:
     action:
         close: Close
 changelog:
-    header: "You just upgraded to {{version}}"
+    header: "You just upgraded to {version}"
     body: Do you want to see what's new and read the changelog now?
     action:
         show: Changelog
@@ -14,23 +14,23 @@ confirm:
         discard: Discard
         cancel: Cancel
 debug:
-    header: "Debug build: {{version}}"
+    header: "Debug build: {version}"
     body: |
-        You are running a debug build of {{name}}.<br>
+        You are running a debug build of {name}.<br>
         Please be careful with what you're doing and report any issues you may find.<br>
         Thank you!
     action:
         close: Okay
 firstrun:
     body: |
-        Thanks for using {{name}}!<br>
+        Thanks for using {name}!<br>
         Do you want to configure the application first before you start?
     action:
         start: Start now
         settings: Settings
 newrelease:
-    header: "You're using an outdated version: {{version}}"
-    body: "Do you want to download the latest release now? ({{version}})"
+    header: "You're using an outdated version: {version}"
+    body: "Do you want to download the latest release now? ({version})"
     action:
         download: Download
         ignore: Ignore
@@ -51,31 +51,31 @@ streaming:
         ended: "Stream ended: "
         error:
             log: "Error: Couldn't launch the stream"
-            provider: "Error: {{provider}} misconfiguration"
+            provider: "Error: {provider} misconfiguration"
             player: "Error: Player misconfiguration"
-            version: "Error: Invalid {{provider}} version"
+            version: "Error: Invalid {provider} version"
             unable-to-open: "Error: Unable to open stream"
             no-streams-found: "Error: No streams found"
             timeout: "Error: Timeout"
-            hosting: "{{name}} is hosting another channel"
+            hosting: "{name} is hosting another channel"
             internal: "Error"
     body:
-        launching: "Waiting for {{provider}} to launch the stream..."
+        launching: "Waiting for {provider} to launch the stream..."
         ended: "Do you want to restart the stream now?"
         error:
-            provider: "Please check your settings and/or (re)install {{provider}}."
+            provider: "Please check your settings and/or (re)install {provider}."
             player: "Please check your player settings."
-            version: "The version v{{version}} doesn't match the min. requirements (v{{required}})."
-            unable-to-open: "{{provider}} was unable to open the stream."
-            no-streams-found: "{{provider}} was unable to find the stream."
-            timeout: "Either {{name}} has gone offline, or your connection to Twitch has been interrupted."
-            hosting: "Do you want to switch to {{name}}?"
+            version: "The version v{version} doesn't match the min. requirements (v{required})."
+            unable-to-open: "{provider} was unable to open the stream."
+            no-streams-found: "{provider} was unable to find the stream."
+            timeout: "Either {name} has gone offline, or your connection to Twitch has been interrupted."
+            hosting: "Do you want to switch to {name}?"
             internal: "Internal error"
     action:
         abort: Abort
         continue: Continue
         download: Download
-        log: Toggle {{provider}} log
+        log: Toggle {provider} log
         restart: Restart
         shutdown: Close stream
         start-hosted: Switch

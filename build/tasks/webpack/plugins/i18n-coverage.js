@@ -186,15 +186,15 @@ module.exports = class WebpackI18nCoveragePlugin {
 			&& callee.property.type === "Identifier"
 			&& callee.property.name === "t"
 			&& (
-				// i18n.t( "key" )
+				// intl.t( "key" )
 				   callee.object.type === "Identifier"
-				&& callee.object.name === "i18n"
-				// this.i18n.t( "key" )
+				&& callee.object.name === "intl"
+				// this.intl.t( "key" )
 				|| callee.object.type === "MemberExpression"
 				&& callee.object.object.type === "ThisExpression"
 				&& callee.object.property.type === "Identifier"
-				&& callee.object.property.name === "i18n"
-				// Ember.get( this, "i18n" ).t( "key" )
+				&& callee.object.property.name === "intl"
+				// Ember.get( this, "intl" ).t( "key" )
 				|| callee.object.type === "CallExpression"
 				&& callee.object.callee.type === "MemberExpression"
 				&& callee.object.callee.object.type === "Identifier"
@@ -204,28 +204,10 @@ module.exports = class WebpackI18nCoveragePlugin {
 				&& callee.object.arguments.length === 2
 				&& callee.object.arguments[0].type === "ThisExpression"
 				&& callee.object.arguments[1].type === "StringLiteral"
-				&& callee.object.arguments[1].value === "i18n"
+				&& callee.object.arguments[1].value === "intl"
 			)
 		) {
 			translationKey = args[0].value;
-		}
-
-		// pluralization via magic "count" parameter
-		// t( "key", { count } )
-		// t( "key", { count: value } )
-		if (
-			   translationKey
-			&& args.length === 2
-			&& args[1].type === "ObjectExpression"
-			&& args[1].properties.some( ({ type, key, computed, method }) =>
-				   type === "ObjectProperty"
-				&& !computed
-				&& !method
-				&& key.type === "Identifier"
-				&& key.name === "count"
-			)
-		) {
-			translationKey = `${translationKey}.*`;
 		}
 
 		if ( translationKey ) {
@@ -282,17 +264,6 @@ module.exports = class WebpackI18nCoveragePlugin {
 			translationKey = firstParam.params
 				.map( param => param.type === "StringLiteral" ? param.original : "*" )
 				.join( "" );
-		}
-
-		// pluralization via magic "count" parameter
-		// {{t "foo" count=value}}
-		if (
-			   translationKey
-			&& hash
-			&& hash.type === "Hash"
-			&& hash.pairs.some( ({ type, key }) => type === "HashPair" && key === "count" )
-		) {
-			translationKey = `${translationKey}.*`;
 		}
 
 		if ( translationKey ) {

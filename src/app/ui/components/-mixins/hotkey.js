@@ -5,8 +5,8 @@ import { inject as service } from "@ember/service";
 
 
 export default Mixin.create({
-	/** @type {I18nService} */
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	/** @type {HotkeyService} */
 	hotkey: service(),
 
@@ -19,10 +19,10 @@ export default Mixin.create({
 	init() {
 		this._super( ...arguments );
 		// initialize computed property of injected service to make the observer work
-		this.get( "i18n" );
+		this.get( "intl" );
 	},
 
-	title: computed( "_title", "hotkeysDisabled", "hotkeysTitleAction", "i18n.locale", function() {
+	title: computed( "_title", "hotkeysDisabled", "hotkeysTitleAction", "intl.locale", function() {
 		const _title = this._title;
 		const title = _title ? String( _title ) : "";
 

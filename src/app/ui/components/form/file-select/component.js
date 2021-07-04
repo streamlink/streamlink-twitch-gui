@@ -11,7 +11,8 @@ const { isArray } = Array;
 
 
 export default Component.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	layout,
 
@@ -28,7 +29,7 @@ export default Component.extend({
 			}
 
 			if ( typeof value !== "object" || !hasOwnProperty.call( value, platform ) ) {
-				return get( this, "i18n" ).t( "components.file-select.placeholder" ).toString();
+				return this.intl.t( "components.file-select.placeholder" ).toString();
 			}
 
 			value = value[ platform ];

@@ -2,7 +2,7 @@ import { module, test } from "qunit";
 import { setupTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
 import { setupStore, adapterRequest } from "store-utils";
-import { FakeI18nService } from "i18n-utils";
+import { FakeIntlService } from "intl-utils";
 
 import { get } from "@ember/object";
 import Service from "@ember/service";
@@ -32,7 +32,7 @@ module( "data/models/twitch/user", function( hooks ) {
 	setupTest( hooks, {
 		resolver: buildResolver({
 			AuthService: Service.extend(),
-			I18nService: FakeI18nService,
+			IntlService: FakeIntlService,
 			SettingsService: Service.extend(),
 			TwitchUser,
 			TwitchUserAdapter,

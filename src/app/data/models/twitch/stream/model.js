@@ -4,7 +4,6 @@ import { inject as service } from "@ember/service";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
-import Moment from "moment";
 import { DEFAULT_VODCAST_REGEXP } from "data/models/settings/streams/fragment";
 
 
@@ -39,7 +38,8 @@ const reRerun = /rerun|watch_party/;
 
 
 export default Model.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 	settings: service(),
 
 
@@ -56,8 +56,8 @@ export default Model.extend({
 	viewers: attr( "number" ),
 
 
-	reVodcast: computed( "settings.streams.vodcast_regexp", function() {
-		const vodcast_regexp = get( this, "settings.streams.vodcast_regexp" );
+	reVodcast: computed( "settings.content.streams.vodcast_regexp", function() {
+		const vodcast_regexp = get( this, "settings.content.streams.vodcast_regexp" );
 		if ( vodcast_regexp.length && !vodcast_regexp.trim().length ) {
 			return null;
 		}
@@ -95,21 +95,16 @@ export default Model.extend({
 	hasFormatInfo: and( "video_height", "average_fps" ),
 
 
-	titleCreatedAt: computed( "i18n.locale", "created_at", function() {
-		const moment = new Moment( this.created_at );
-		const last24h = moment.diff( new Date(), "days" ) === 0;
-		const format = last24h
-			? this.i18n.t( "models.twitch.stream.created-at.less-than-24h" )
-			: this.i18n.t( "models.twitch.stream.created-at.more-than-24h" );
-
-		return moment.format( format.toString() );
+	titleCreatedAt: computed( "intl.locale", "created_at", function() {
+		const { created_at } = this;
+		const last24h = new Date() - created_at < 24 * 3600 * 1000;
+		return last24h
+			? this.intl.t( "models.twitch.stream.created-at.less-than-24h", { created_at } )
+			: this.intl.t( "models.twitch.stream.created-at.more-than-24h", { created_at } );
 	}),
 
-	titleViewers: computed( "i18n.locale", "viewers", function() {
-		const i18n = get( this, "i18n" );
-		const count = get( this, "viewers" );
-
-		return i18n.t( "models.twitch.stream.viewers", { count } );
+	titleViewers: computed( "intl.locale", "viewers", function() {
+		return this.intl.t( "models.twitch.stream.viewers", { count: this.viewers } );
 	}),
 
 	resolution: computed( "video_height", function() {

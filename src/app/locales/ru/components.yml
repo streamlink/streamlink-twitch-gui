@@ -1,117 +1,105 @@
 channel-item:
-    game-missing: Игра не указана #no game set yet
+    game-missing: Игра не указана
 documentation-link:
-    title: Читать документацию на сайте #Read the documentation online
+    title: Читать документацию на сайте
 drop-down-selection:
-    placeholder: Выберите #Please choose
+    placeholder: Выберите
 file-select:
-    placeholder: Если не указать, то будет использоваться путь по умолчанию #Leave blank for default path
+    placeholder: Если не указать, то будет использоваться путь по умолчанию
 flag-icon:
-    channel: "Язык канала: {{lang}}" #"The channel's language is {{lang}}"
-    broadcaster: "Язык стримера: {{lang}}" #"The broadcaster's language is {{lang}}"
+    channel: "Язык канала: {lang}"
+    broadcaster: "Язык стримера: {lang}"
 follow-button:
-    follow: "Отслеживать {{name}}" #"Follow {{name}}"
-    unfollow: "Отписаться от {{name}}" #"Unfollow {{name}}"
-    confirm: "Отписаться от {{name}}" #"Unfollow {{name}}"
-    keep: "Продолжать отслеживать {{name}}" #"Keep following {{name}}"
+    follow: "Отслеживать {name}"
+    unfollow: "Отписаться от {name}"
+    confirm: "Отписаться от {name}"
+    keep: "Продолжать отслеживать {name}"
 infinite-scroll:
-    error: Ошибка #Error
-    loading: Загрузка #Loading
-    fetch: Ещё #Fetch more
+    error: Ошибка
+    loading: Загрузка
+    fetch: Ещё
 main-menu:
     browse:
-        header: Обзор #Browse
-        featured: Рекомендации #Featured
-        games: Игры #Games
-        streams: Стримы #Streams
+        header: Обзор
+        featured: Рекомендации
+        games: Игры
+        streams: Стримы
     followed:
-        header: Подписки #Followed
-        streams: Стримы #Streams
-        channels: Каналы #Channels
+        header: Подписки
+        streams: Стримы
+        channels: Каналы
     misc:
-        header: Прочее #Misc
-        settings: Настройки #Settings
-        about: О проекте #About
+        header: Прочее
+        settings: Настройки
+        about: О проекте
 open-chat:
-    title: Открыть чат #Open chat
+    title: Открыть чат
 quick-bar-homepage:
-    title: Сделать текущий раздел стартовым #Set as homepage
+    title: Сделать текущий раздел стартовым
 quick-bar-random-stream:
-    title: Запустить случайный стрим #Launch random stream
+    title: Запустить случайный стрим
 search-bar:
-    placeholder: Поиск #Search
-    filter: "Фильтр результатов:" #Filter results
+    placeholder: Поиск
+    filter: "Фильтр результатов:"
     filters:
-        all: Всё #All
-        games: Игры #Games
-        channels: Каналы #Channels
-        streams: Стримы #Streams
-    recent: Последние запросы #Recent queries
+        all: Всё
+        games: Игры
+        channels: Каналы
+        streams: Стримы
+    recent: Последние запросы
 settings-channel-item:
-    settings: Настройки #Settings
-    erase: Сброс #Unset
-    confirmation: Сбросить настройки? #Unset custom settings?
-    confirm: Да #Yes
-    decline: Нет #No
+    settings: Настройки
+    erase: Сброс
+    confirmation: Сбросить настройки?
+    confirm: Да
+    decline: Нет
 settings-hotkey:
-    empty: Горячая клавиша не установлена #No hotkey set
-    edit: Изменить горячую клавишу #Customize this hotkey
-    delete: Сбросить горячую клавишу #Unset custom hotkey
-    discard: Отмена #Discard
-    confirm: Установить горячую клавишу #Set custom hotkey
-    toggle: Включить или выключить горячую клавишу #Enable or disable this hotkey
+    empty: Горячая клавиша не установлена
+    edit: Изменить горячую клавишу
+    delete: Сбросить горячую клавишу
+    discard: Отмена
+    confirm: Установить горячую клавишу
+    toggle: Включить или выключить горячую клавишу
 settings-row:
-    notes: Примечание #Notes
-    default: По умолчанию #Default
-    requires: Требования #Requires
-    example: Пример #Example
+    notes: Примечание
+    default: По умолчанию
+    requires: Требования
+    example: Пример
     variables:
-        title: Доступные переменные #Available variables
+        title: Доступные переменные
         # tooltip (whitespace sensitive)
         help: |
             Содержимое каждой переменной будет экранировано. При использовании без кавычек каждый символ будет экранирован. Некоторые приложения могут читать излишне экранированные символы в параметрах и будут работать, как ожидалось, а другие - нет. Поэтому все переменные обычно должны быть внутри одинарных или двойных кавычек.
-        
+
             Пример правильного использования:
-                -a "{a}" -b "{b1} {b2}" "-c = {c}"
-        #|
-        #   The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped. 
-        #   Some applications are able to read unnecessarily escaped characters in their parameters list and will work as expected, but others will not. 
-        #   Make sure to set all variables inside single or double quoted strings.
-        #
-        #    Correct usage:
-        #    -a "{a}" -b "{b1}{b2}" "-c={c}"
+                -a "'{a}'" -b "'{b1} {b2}'" "-c='{c}'"
 settings-submit:
-    apply: Применить #Apply
-    discard: Отмена #Discard
+    apply: Применить
+    discard: Отмена
 share-channel:
-    title: Копировать в буфер обмена ссылку на канал #Copy channel url to clipboard
+    title: Копировать в буфер обмена ссылку на канал
 stream-item:
-    fps: "{{fps}} fps"
+    fps: "{fps} fps"
     details:
-        show: Показать подробности #Show stream details
-        lock: Закрепить подробности #Lock details view
-        unlock: Открепить подробности #Unlock details view
-    vodcast: Повтор (VOD) #Vodcast
+        show: Показать подробности
+        lock: Закрепить подробности
+        unlock: Открепить подробности
+    vodcast: Повтор (VOD)
 subscribe-channel:
-    title-new: Подписаться (платно) на {{name}} #"Subscribe to {{name}} now"
-    title-renew: Обновить подписку (платную) на {{name}} #"Renew subscription to {{name}}"
+    title-new: Подписаться (платно) на {name}
+    title-renew: Обновить подписку (платную) на {name}
 team-item:
     created-at:
-        title: "Дата создания" #"Date created"
-        # new Moment(team.created_at).format(...)
-        format: "llll"
+        title: "Дата создания"
+        format: "{created_at, date, full}"
     updated-at:
-        title: "Дата изменения" #"Modified last"
-        # new Moment(team.updated_at).format(...)
-        format: "llll"
+        title: "Дата изменения"
+        format: "{updated_at, date, full}"
 title-bar:
-    loggedout: Вход не выполнен #Not logged in
+    loggedout: Вход не выполнен
     # tooltip (whitespace sensitive)
     loggedin: |
-        Выполнен вход как: {{name}}
-        {{status}}
-    #|
-    #   Logged in as {{name}}
-    #   {{status}}
+        Выполнен вход как: {name}
+        {status}
 twitch-emotes:
-    title: Показать смайлики канала #Show available channel emotes
+    title: Показать смайлики канала

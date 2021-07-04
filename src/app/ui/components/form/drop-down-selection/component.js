@@ -1,12 +1,13 @@
 import Component from "@ember/component";
 import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { translationMacro as t } from "ember-i18n/addon";
+import { t } from "ember-intl";
 import layout from "./template.hbs";
 
 
 export default Component.extend({
-	i18n: service(),
+	/** @type {IntlService} */
+	intl: service(),
 
 	layout,
 

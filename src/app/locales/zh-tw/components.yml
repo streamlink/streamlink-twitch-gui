@@ -7,13 +7,13 @@ drop-down-selection:
 file-select:
     placeholder: 留空為預設路徑
 flag-icon:
-    channel: "頻道語言: {{lang}}"
-    broadcaster: "實況主語言: {{lang}}"
+    channel: "頻道語言: {lang}"
+    broadcaster: "實況主語言: {lang}"
 follow-button:
-    follow: "追隨 {{name}}"
-    unfollow: "停止追隨 {{name}}"
-    confirm: "確認停止追隨 {{name}}"
-    keep: "繼續追隨 {{name}}"
+    follow: "追隨 {name}"
+    unfollow: "停止追隨 {name}"
+    confirm: "確認停止追隨 {name}"
+    keep: "繼續追隨 {name}"
 infinite-scroll:
     error: 錯誤
     loading: 載入中
@@ -72,36 +72,34 @@ settings-row:
             變數內容將會被逸出，如果沒有使用引號括住字串，每個字元都會被逸出。部分程式能處理參數中不必要的逸出字元，但有些不行，請確保變數皆放在單引號或雙引號中。
 
             正確用法:
-            -a "{a}" -b "{b1}{b2}" "-c={c}"
+            -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
 settings-submit:
     apply: 套用
     discard: 復原
 share-channel:
     title: 複製頻道網址
 stream-item:
-    fps: "{{fps}} fps"
+    fps: "{fps} fps"
     details:
         show: 顯示頻道資訊
         lock: 鎖定詳細資訊
         unlock: 解鎖詳細資訊
     vodcast: VOD
 subscribe-channel:
-    title-new: "立即訂閱 {{name}}"
-    title-renew: "更新訂閱 {{name}}"
+    title-new: "立即訂閱 {name}"
+    title-renew: "更新訂閱 {name}"
 team-item:
     created-at:
         title: "建立日期"
-        # new Moment(team.created_at).format(...)
-        format: "llll"
+        format: "{created_at, date, full}"
     updated-at:
         title: "最後更新日期"
-        # new Moment(team.updated_at).format(...)
-        format: "llll"
+        format: "{updated_at, date, full}"
 title-bar:
     loggedout: 尚未登入
     # tooltip (whitespace sensitive)
     loggedin: |
-        {{name}} 已登入
-        {{status}}
+        {name} 已登入
+        {status}
 twitch-emotes:
     title: 顯示頻道可用的表情符號

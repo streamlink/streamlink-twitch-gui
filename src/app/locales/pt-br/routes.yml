@@ -29,7 +29,7 @@ about:
 featured:
     header: Canais em destaque
     empty: A lista de canais em destaque não pôde ser carregado!
-    summary: Há {{viewers}} pessoas assistindo {{channels}} streams agora!
+    summary: Há {viewers} pessoas assistindo {channels} streams agora!
 games:
     header: Jogos mais vistos
     empty: A lista de jogos mais vistos está vazia.
@@ -50,30 +50,30 @@ channel:
             title: Nome
         created-at:
             title: Criado
-            # new Moment(channel.created_at).format(...)
-            format: "LL"
+            format: "{created_at, date, long}"
         language:
             title: Idioma
         followers:
             title: Seguidores
-            data: "{{followers}} ({{day}} por dia)"
+            data: "{followers} ({day} por dia)"
         views:
             title: visualizações
-            data: "{{views}} ({{day}} por dia)"
+            data: "{views} ({day} por dia)"
         content:
             title: Conteúdo
             mature: Inapropriado para crianças
             ffa: Sem restrição de idade
         format:
             title: Formato
-            data: "{{resolution}} @ {{fps}}fps"
+            data: "{resolution} @ {fps}fps"
         delay:
             title: Atraso
-            # static "zero" property
-            data:
-                zero: Sem atrasos adicionais
-                one: Um segundo
-                other: "{{count}} segundos"
+            data: |
+                {count, plural,
+                    =0 {Sem atrasos adicionais}
+                    one {Um segundo}
+                    other {# segundos}
+                }
         vodcast:
             title: Vodcast
             data: O Stream é um Vodcast
@@ -106,11 +106,9 @@ channel:
                 checkbox: Ativar notificações na área de trabalho
 team:
     header:
-        members: "Membros do time: {{num}}"
-        # new Moment(team.created_at).format(...)
-        created-at: "[Data de criação:] llll"
-        # new Moment(team.updated_at).format(...)
-        updated-at: "[Última modificação:] llll"
+        members: "Membros do time: {num}"
+        created-at: "Data de criação:: {created_at, date, full}"
+        updated-at: "Última modificação: {updated_at, date, full}"
     menu:
         live: Membros ao vivo
         all: Todos os membros
@@ -123,9 +121,8 @@ team:
         header: Informações
 user:
     index:
-        logged-in: "Logado como {{name}}"
-        # new Moment(auth.session.date).format(...)
-        since: "[desde] LLLL"
+        logged-in: "Logado como {name}"
+        since: "desde {since, date, full}"
         sign-out: Sair
         token:
             title: Seu token de acesso

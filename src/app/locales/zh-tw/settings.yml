@@ -16,7 +16,7 @@ main:
         description: 設定介面語系
         notes: 你會其他種語言嗎？請協助翻譯吧！詳情請參考 wiki 上的資訊
         labels:
-            auto: "系統預設 ({{label}})"
+            auto: "系統預設 ({label})"
     advanced:
         title: 設定及功能
         description: 啟用隱藏設定及功能
@@ -121,7 +121,7 @@ streaming:
     player-no-close:
         title: 保留播放器視窗
         description: 當串流結束後保留播放器
-        notes: 播放器可能會阻擋 {{provider}} 關閉它，請參考播放器設定
+        notes: 播放器可能會阻擋 {provider} 關閉它，請參考播放器設定
         checkbox: 不要關閉播放器
     disable-ads:
         title: 廣告

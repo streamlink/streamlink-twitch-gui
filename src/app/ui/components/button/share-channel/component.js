@@ -1,10 +1,12 @@
 import { inject as service } from "@ember/service";
-import { translationMacro as t } from "ember-i18n/addon";
+import { t } from "ember-intl";
 import FormButtonComponent from "../form-button/component";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
 
 
 export default FormButtonComponent.extend( HotkeyMixin, {
+	/** @type {IntlService} */
+	intl: service(),
 	/** @type {NwjsService} */
 	nwjs: service(),
 
