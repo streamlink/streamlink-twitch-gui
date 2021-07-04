@@ -12,10 +12,8 @@ twitch:
             }
     stream:
         created-at:
-            # new Moment(stream.created_at).format(...)
-            less-than-24h: "[從] LTS 開始"
-            # new Moment(stream.created_at).format(...)
-            more-than-24h: "[從] llll 開始"
+            less-than-24h: "從 {created_at, time, medium} 開始"
+            more-than-24h: "從 {created_at, time, long} 開始"
         viewers: |
             {count, plural,
                 one {目前有 1 位觀眾}

@@ -50,8 +50,7 @@ channel:
             title: Nome
         created-at:
             title: Criado
-            # new Moment(channel.created_at).format(...)
-            format: "LL"
+            format: "{created_at, date, long}"
         language:
             title: Idioma
         followers:
@@ -108,10 +107,8 @@ channel:
 team:
     header:
         members: "Membros do time: {num}"
-        # new Moment(team.created_at).format(...)
-        created-at: "[Data de criação:] llll"
-        # new Moment(team.updated_at).format(...)
-        updated-at: "[Última modificação:] llll"
+        created-at: "Data de criação:: {created_at, date, full}"
+        updated-at: "Última modificação: {updated_at, date, full}"
     menu:
         live: Membros ao vivo
         all: Todos os membros
@@ -125,8 +122,7 @@ team:
 user:
     index:
         logged-in: "Logado como {name}"
-        # new Moment(auth.session.date).format(...)
-        since: "[desde] LLLL"
+        since: "desde {since, date, full}"
         sign-out: Sair
         token:
             title: Seu token de acesso

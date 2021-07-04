@@ -16,7 +16,7 @@
 <dd>{{channel.name}}</dd>
 {{/if}}
 <dt><i class="fa fa-calendar"></i>{{t "routes.channel.details.created-at.title"}}</dt>
-<dd>{{format-time channel.created_at (t "routes.channel.details.created-at.format")}}</dd>
+<dd>{{t "routes.channel.details.created-at.format" created_at=channel.created_at}}</dd>
 {{#if channel.hasBroadcasterLanguage}}
 <dt><i class="fa fa-language"></i>{{t "routes.channel.details.language.title"}}</dt>
 <dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>

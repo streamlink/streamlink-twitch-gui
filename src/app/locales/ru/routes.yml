@@ -50,8 +50,7 @@ channel:
             title: "Название"
         created-at:
             title: "Создан"
-            # new Moment(channel.created_at).format(...)
-            format: "LL"
+            format: "{created_at, date, long}"
         language:
             title: "Язык"
         followers:
@@ -110,10 +109,8 @@ channel:
 team:
     header:
         members: "Участников команды: {num}"
-        # new Moment(team.created_at).format(...)
-        created-at: "[Дата создания:] llll"
-        # new Moment(team.updated_at).format(...)
-        updated-at: "[Дата изменения:] llll"
+        created-at: "Дата создания: {created_at, date, full}"
+        updated-at: "Дата изменения: {updated_at, date, full}"
     menu:
         live: "Онлайн"
         all: "Все"
@@ -127,8 +124,7 @@ team:
 user:
     index:
         logged-in: "Вход под именем: {name}"
-        # new Moment(auth.session.date).format(...)
-        since: "[подключен с] LLLL"
+        since: "подключен с {since, date, full}"
         sign-out: "Выход"
         token:
             title: "Ваш токен доступа"

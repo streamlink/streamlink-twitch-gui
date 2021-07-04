@@ -50,8 +50,7 @@ channel:
             title: 名稱
         created-at:
             title: 建立時間
-            # new Moment(channel.created_at).format(...)
-            format: "LL"
+            format: "{created_at, date, long}"
         language:
             title: 語言
         followers:
@@ -108,10 +107,8 @@ channel:
 team:
     header:
         members: "團隊成員: {num}"
-        # new Moment(team.created_at).format(...)
-        created-at: "[建立日期:] llll"
-        # new Moment(team.updated_at).format(...)
-        updated-at: "[最後更新:] llll"
+        created-at: "建立日期: {created_at, date, full}"
+        updated-at: "最後更新: {updated_at, date, full}"
     menu:
         live: 實況中成員
         all: 所有成員
@@ -125,8 +122,7 @@ team:
 user:
     index:
         logged-in: "{name} 已登入"
-        # new Moment(auth.session.date).format(...)
-        since: "[從] LLLL"
+        since: "從 {since, date, full}"
         sign-out: 登出
         token:
             title: 存取金鑰

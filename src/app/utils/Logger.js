@@ -1,4 +1,3 @@
-import Moment from "moment";
 import { log as logConfig } from "config";
 import { argv, ARG_LOGFILE, ARG_LOGLEVEL } from "nwjs/argv";
 import { isDebug } from "nwjs/debug";
@@ -11,7 +10,7 @@ import { join } from "path";
 import { promisify } from "util";
 
 
-const { filename, maxAgeDays } = logConfig;
+const { maxAgeDays } = logConfig;
 const { appendFile } = fsPromises;
 
 
@@ -54,7 +53,11 @@ const writeStdOut = promisify( process.stdout.write.bind( process.stdout ) );
 const writeStdErr = promisify( process.stderr.write.bind( process.stderr ) );
 
 
-const logFileName = new Moment().format( filename );
+const logFileName = new Date().toISOString().replace(
+	/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*/,
+	( _, year, month, day, hours, minutes, seconds ) =>
+		`${year}-${month}-${day}_${hours}-${minutes}-${seconds}.log`
+);
 let logFilePath;
 
 

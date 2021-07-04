@@ -91,12 +91,10 @@ subscribe-channel:
 team-item:
     created-at:
         title: "Date de création"
-        # new Moment(team.created_at).format(...)
-        format: "llll"
+        format: "{created_at, date, full}"
     updated-at:
         title: "Dernière modification"
-        # new Moment(team.updated_at).format(...)
-        format: "llll"
+        format: "{updated_at, date, full}"
 title-bar:
     loggedout: Non connecté(e)
     # infobulle (senseible aux whitespaces)

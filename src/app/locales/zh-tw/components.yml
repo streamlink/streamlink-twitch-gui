@@ -91,12 +91,10 @@ subscribe-channel:
 team-item:
     created-at:
         title: "建立日期"
-        # new Moment(team.created_at).format(...)
-        format: "llll"
+        format: "{created_at, date, full}"
     updated-at:
         title: "最後更新日期"
-        # new Moment(team.updated_at).format(...)
-        format: "llll"
+        format: "{updated_at, date, full}"
 title-bar:
     loggedout: 尚未登入
     # tooltip (whitespace sensitive)

@@ -4,8 +4,8 @@
 <div class="info">
 <h3 class="title">{{model.title}}</h3>
 <div class="stats"><i class="fa fa-fw fa-users"></i> {{t "routes.team.header.members" num=model.users.length}}</div>
-<div class="stats"><i class="fa fa-fw fa-calendar"></i> {{format-time model.created_at (t "routes.team.header.created-at")}}</div>
-<div class="stats"><i class="fa fa-fw fa-pencil"></i> {{format-time model.updated_at (t "routes.team.header.updated-at")}}</div>
+<div class="stats"><i class="fa fa-fw fa-calendar"></i> {{t "routes.team.header.created-at" created_at=model.created_at}}</div>
+<div class="stats"><i class="fa fa-fw fa-pencil"></i> {{t "routes.team.header.updated-at" updated_at=model.updated_at}}</div>
 </div>
 </header>
 {{#sub-menu "team" (hash

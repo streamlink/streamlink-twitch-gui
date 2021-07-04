@@ -12,10 +12,8 @@ twitch:
             }
     stream:
         created-at:
-            # new Moment(stream.created_at).format(...)
-            less-than-24h: "[Online desde] LTS"
-            # new Moment(stream.created_at).format(...)
-            more-than-24h: "[Online desde] llll"
+            less-than-24h: "Online desde {created_at, time, medium}"
+            more-than-24h: "Online desde {created_at, time, long}"
         viewers: |
             {count, plural,
                 one {Uma pessoa está assistindo}

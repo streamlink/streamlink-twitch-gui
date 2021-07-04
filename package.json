@@ -27,7 +27,6 @@
 		"global-tld-list": "0.0.372",
 		"growly": "1.3.0",
 		"minimist": "1.2.5",
-		"moment": "2.21.0",
 		"punycode": "2.1.1",
 		"roboto-fontface": "0.8.0",
 		"semver": "5.5.0",

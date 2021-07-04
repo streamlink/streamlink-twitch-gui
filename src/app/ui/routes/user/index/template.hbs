@@ -1,7 +1,7 @@
 <main class="content content-user content-user-index">
 <div class="bigicon"><i class="fa fa-user"></i></div>
 <p>{{t "routes.user.index.logged-in" name=auth.session.user_name}}</p>
-<p>{{format-time auth.session.date (t "routes.user.index.since")}}</p>
+<p>{{t "routes.user.index.since" since=auth.session.date}}</p>
 <p>{{notification.statusText}}</p>
 {{#form-button classNames="btn-signout" icon="fa-sign-out" action=(action "signout")}}
 	{{t "routes.user.index.sign-out"}}

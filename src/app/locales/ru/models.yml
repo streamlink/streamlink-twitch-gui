@@ -16,10 +16,8 @@ twitch:
             }
     stream:
         created-at:
-            # new Moment(stream.created_at).format(...)
-            less-than-24h: "[Запущен в] LTS"
-            # new Moment(stream.created_at).format(...)
-            more-than-24h: "[Запущен в] llll"
+            less-than-24h: "Запущен в {created_at, time, medium}"
+            more-than-24h: "Запущен в {created_at, time, long}"
         viewers: |
             {count, plural,
                 one {# зритель}
