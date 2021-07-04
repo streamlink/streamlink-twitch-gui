@@ -10,7 +10,9 @@ coverage:
     precision: 2
     status:
         changes: no
-        patch: yes
+        patch:
+            default:
+                target: 0
         project:
             default: no
             app:
