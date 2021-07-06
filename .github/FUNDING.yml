@@ -1,3 +1,5 @@
 github: [ bastimeyer ]
-open_collective: streamlink
-custom: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YUCGRLVALHS8C&item_name=Streamlink%20Twitch%20GUI
+custom:
+  - "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YUCGRLVALHS8C&item_name=Streamlink%20Twitch%20GUI"
+  - "https://paypal.me/bastimeyer123"
+  - "https://www.blockchain.com/btc/address/1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8"

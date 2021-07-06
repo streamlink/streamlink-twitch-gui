@@ -88,9 +88,12 @@ Please see the [Translating][Translating] section on the wiki for all the necess
 
 ## Support
 
-If you think that this application is helpful, please consider supporting its creator by donating.
+If you think that this application is helpful, please consider supporting its creator by sending a small, optionally recurring, tip.
 
-The available options can be found [on the releases page][Releases] or in the application's "About" menu.
+* [GitHub Sponsors](https://github.com/users/bastimeyer/sponsorship)
+* [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YUCGRLVALHS8C&item_name=Streamlink%20Twitch%20GUI)
+* [Paypal.me](https://paypal.me/bastimeyer123)
+* [Bitcoin](https://blockchain.info/qr?data=1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8) (`1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8`)
 
 Thank you very much for your support!
 
