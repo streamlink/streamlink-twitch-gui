@@ -15,7 +15,7 @@ Please read the following guidelines before you [report an issue][issues]:
 
 3. **Isolate the demonstrable problem** — make sure that the code in the project's repository is *definitely* responsible for the issue.
 
-Please try to be as detailed as possible in your report too. What is your environment? What steps will reproduce the issue? What would you expect to be the outcome? All these details will help people to assess and fix any potential bugs. You can also consider using the [issue template][issue-template] when reporting an issue.
+Please try to be as detailed as possible in your report too. What is your environment? What steps will reproduce the issue? What would you expect to be the outcome? All these details will help people to assess and fix any potential bugs.
 
 
 ## Feature requests
@@ -176,7 +176,6 @@ This contributing guide has been adapted from [HTML5 boilerplate's guide][ref-h5
 
   [license]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/LICENSE
   [issues]: https://github.com/streamlink/streamlink-twitch-gui/issues
-  [issue-template]: https://github.com/streamlink/streamlink-twitch-gui/blob/master/ISSUE_TEMPLATE.md
   [wiki]: https://github.com/streamlink/streamlink-twitch-gui/wiki
   [howto-fork]: https://help.github.com/articles/fork-a-repo
   [howto-rebase]: https://help.github.com/articles/interactive-rebase

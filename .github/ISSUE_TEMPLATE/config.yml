@@ -1,4 +1,4 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
   - name: "Streamlink"
     about: "This is the Streamlink Twitch GUI repository. Anything Streamlink related belongs on the Streamlink repository."
@@ -12,3 +12,6 @@ contact_links:
   - name: "Gitter channel"
     about: "Get in touch with other Streamlink Twitch GUI users."
     url: https://gitter.im/streamlink/streamlink-twitch-gui
+  - name: "Matrix channel (Gitter bridge)"
+    about: "Get in touch with other Streamlink Twitch GUI users."
+    url: https://matrix.to/#/#streamlink_streamlink-twitch-gui:gitter.im

@@ -1,0 +1,85 @@
+name: Bug report
+description: Something is broken or not working as intended
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for reporting a bug!
+
+        Bugs are the result of broken functionality within the code base of Streamlink Twitch GUI.
+        Remember that Streamlink Twitch GUI is just a launcher for Streamlink, so any issues related to streaming via Streamlink itself or the stream output in the chosen video player do not belong on this issue tracker.
+
+        **DON'T IGNORE this template and fill in all the required details.**
+        **Issues that don't adhere to our request will be closed and ignored.**
+        This is because analyzing bugs, issues or requests without proper details and log output is harder than necessary.
+        Low quality and low effort issues are noise and steal the time of the maintainers and contributors.
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: I understand that **Streamlink Twitch GUI** is just a launcher for **Streamlink**
+          required: true
+        - label: "[I have read the contribution guidelines](https://github.com/streamlink/streamlink-twitch-gui/blob/master/CONTRIBUTING.md)"
+          required: true
+        - label: "[I have checked the list of open and recently closed issues](https://github.com/streamlink/streamlink-twitch-gui/issues?q=is%3Aissue+sort%3Aupdated-desc)"
+          required: true
+        - label: "[I have checked the commit log of the master branch](https://github.com/streamlink/streamlink-twitch-gui/commits/master)"
+          required: true
+  - type: input
+    attributes:
+      label: Streamlink Twitch GUI version
+      description: |
+        [Only the **latest stable release** or **latest build from the master branch** will be accepted.](https://github.com/streamlink/streamlink-twitch-gui#download)
+        The exact version string can be found in the application's "About" menu.
+      placeholder: "eg. v1.11.0 or v1.11.0+62.g414cdfc1"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Streamlink version
+      description: |
+        Bugs related to launching streams require the Streamlink version in use.
+        Run `streamlink --version` from the command line shell to see the exact version string.
+        If you have set a custom Streamlink path in the streaming settings menu, then you will need to adjust the Streamlink path in the shell as well.
+      placeholder: "eg. 2.2.0 or 2.2.0+32.g1b517c7"
+  - type: textarea
+    attributes:
+      label: Operating system, environment and configuration details
+      description: |
+        Anything useful for the developers to understand your system's environment and the application's configuration.
+      placeholder: |
+        eg. Windows 10 21H1, macOS 10.15 Catalina, Ubuntu 20.04 LTS, Arch Linux, etc.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        Explain the bug as thoroughly as you can.
+        Don't leave out information which is necessary for the developers to fully understand the problem and don't forget to list reproduction steps.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Debug log
+      description: |
+        Depending on the bug, debug text log output may be useful.
+        Use Streamlink Twitch GUI's [`--loglevel debug`](https://github.com/streamlink/streamlink-twitch-gui/wiki/Parameters) parameter.
+        Make sure to **remove usernames, passwords and tokens**
+      placeholder: |
+        Don't post screenshots of the log output and instead copy the text from your terminal application.
+
+        The content will be rendered as code block.
+      render: text
+  - type: markdown
+    attributes:
+      value: |
+        ### Before submitting
+
+        Make sure that you have
+        - properly filled in the title of this bug report
+        - checked the rendered text previews to avoid unnecessary formatting errors
+
+        ----
+
+        [Love Streamlink Twitch GUI? Please consider supporting its developer. Thanks!](https://github.com/streamlink/streamlink-twitch-gui#support)

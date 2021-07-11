@@ -1,0 +1,50 @@
+name: Feature request
+description: Suggest a new feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for filing a feature request!
+
+        **DON'T IGNORE this template and fill in all the required details.**
+        **Issues that don't adhere to our request will be closed and ignored.**
+        This is because analyzing bugs, issues or requests without proper details and log output is harder than necessary.
+        Low quality and low effort issues are noise and steal the time of the maintainers and contributors.
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: I understand that **Streamlink Twitch GUI** is just a launcher for **Streamlink**
+          required: true
+        - label: "[I have read the contribution guidelines](https://github.com/streamlink/streamlink-twitch-gui/blob/master/CONTRIBUTING.md)"
+          required: true
+        - label: "[I have checked the list of open and recently closed issues](https://github.com/streamlink/streamlink-twitch-gui/issues?q=is%3Aissue+sort%3Aupdated-desc)"
+          required: true
+        - label: "[I have checked the commit log of the master branch](https://github.com/streamlink/streamlink-twitch-gui/commits/master)"
+          required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        Explain the feature as clearly as you can.
+
+        What is it?
+        How would you expect it to work?
+        What value does it bring to Streamlink Twitch GUI?
+        Is it supported by the [Twitch API](https://dev.twitch.tv/docs/)?
+        Does it fit into the scope and aims of the project?
+        etc.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ### Before submitting
+
+        Make sure that you have
+        - properly filled in the title of this feature request
+        - checked the rendered text previews to avoid unnecessary formatting errors
+
+        ----
+
+        [Love Streamlink Twitch GUI? Please consider supporting its developer. Thanks!](https://github.com/streamlink/streamlink-twitch-gui#support)
