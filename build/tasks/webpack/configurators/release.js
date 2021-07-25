@@ -44,7 +44,7 @@ module.exports = {
 			new CopyWebpackPlugin({
 				patterns: [{
 					from: r( pProjectRoot, "LICENSE" ),
-					transformPath: targetPath => `${targetPath}.txt`
+					to: "[name].txt"
 				}]
 			})
 		);
