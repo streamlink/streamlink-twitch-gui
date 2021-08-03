@@ -1,3 +1,5 @@
+channel-button:
+    title: "Suivre {name}"
 channel-item:
     game-missing: pas de jeu configuré
 documentation-link:
@@ -9,11 +11,6 @@ file-select:
 flag-icon:
     channel: "La langue de la chaîne est {lang}"
     broadcaster: "La langue du diffuseur est {lang}"
-follow-button:
-    follow: "Suivre {name}"
-    unfollow: "Ne plus suivre {name}"
-    confirm: "Ne plus suivre {name}"
-    keep: "Continuer à suivre {name}"
 infinite-scroll:
     error: Erreur
     loading: Chargement
@@ -85,9 +82,6 @@ stream-item:
         lock: Verrouiller la vue de détails
         unlock: Déverrouiller la vue de détails
     vodcast: Vodcast
-subscribe-channel:
-    title-new: "S'abonner à {name} maintenant"
-    title-renew: "Renouveler l'abonnement à {name}"
 team-item:
     created-at:
         title: "Date de création"
