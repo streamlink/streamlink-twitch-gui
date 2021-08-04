@@ -101,37 +101,4 @@ module( "data/models/twitch/channel-followed", function( hooks ) {
 		);
 	});
 
-	test( "Create and delete records", async function( assert ) {
-		const { create: fixturesCreate, delete: fixturesDelete } = TwitchChannelFollowedFixtures;
-
-		this.env.adapter.ajax = ( ...args ) => adapterRequest( assert, fixturesCreate, ...args );
-		const record = this.env.store.createRecord( "twitch-channel-followed", { id: 1 } );
-		await record.save();
-
-		assert.propEqual(
-			record.toJSON({ includeId: true }),
-			{
-				id: "1",
-				channel: null,
-				created_at: "2000-01-01T00:00:00.000Z",
-				notifications: false
-			},
-			"Record has the correct id and attributes"
-		);
-		assert.propEqual(
-			this.env.store.peekAll( "twitch-channel-followed" ).mapBy( "id" ),
-			[ "1" ],
-			"Has the new record registered in the data store"
-		);
-
-		this.env.adapter.ajax = ( ...args ) => adapterRequest( assert, fixturesDelete, ...args );
-		await record.destroyRecord();
-
-		assert.propEqual(
-			this.env.store.peekAll( "twitch-channel-followed" ).mapBy( "id" ),
-			[],
-			"Does not have the new record registered in the data store anymore"
-		);
-	});
-
 });

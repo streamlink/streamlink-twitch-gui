@@ -103,16 +103,11 @@
 		}
 	},
 	"followbutton": {
-		"icon": "fa-heart",
+		"icon": "fa-twitch",
 		"actions": {
 			"default": [{
 				"code": "KeyF",
 				"ctrlKey": true
-			}],
-			"confirm": [{
-				"code": "KeyF",
-				"ctrlKey": true,
-				"shiftKey": true
 			}]
 		}
 	},
