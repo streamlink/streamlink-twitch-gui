@@ -118,7 +118,7 @@
 		"**/ember-cli-version-checker": "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz",
 		"**/exec-sh": "^0.4.0",
 		"**/optimist/minimist": "0.2.1",
-		"**/plist/xmldom": "^0.5.0",
+		"**/plist/xmldom": "github:xmldom/xmldom#0.7.0",
 		"**/postcss-svgo/svgo": "2.2.2",
 		"**/svgo/css-select": "^4.1.3",
 		"load-grunt-config/lodash": "^4.17.21",
