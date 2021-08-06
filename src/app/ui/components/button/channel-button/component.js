@@ -2,6 +2,7 @@ import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
 import FormButtonComponent from "../form-button/component";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
+import "./styles.less";
 
 
 export default FormButtonComponent.extend( HotkeyMixin, {
@@ -10,7 +11,7 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	/** @type {NwjsService} */
 	nwjs: service(),
 
-	classNames: [ "btn-primary" ],
+	classNames: [ "channel-button-component", "btn-primary" ],
 	icon: "fa-twitch",
 	iconanim: true,
 
