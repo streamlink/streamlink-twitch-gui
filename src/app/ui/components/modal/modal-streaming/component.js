@@ -68,7 +68,7 @@ export default ModalDialogComponent.extend( /** @class ModalStreamingComponent *
 		return validationProviders[ type ][ "version" ];
 	}),
 
-	providerName: readOnly( "settings.streaming.providerName" ),
+	providerName: readOnly( "settings.content.streaming.providerName" ),
 
 
 	hotkeysNamespace: "modalstreaming",
