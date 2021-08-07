@@ -1,6 +1,31 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Replaced buttons for following and subscribing channels ([#813](https://github.com/streamlink/streamlink-twitch-gui/issues/813))  
+  Twitch has decided to shut down the follow-channel API endpoints, which means that 3rd party applications using their public APIs won't be able to follow or unfollow channels anymore. As a workaround, the buttons have been replaced with one that opens the channel page on Twitch.tv in the system's web browser.  
+  Please see the [comment on issue #813](https://github.com/streamlink/streamlink-twitch-gui/issues/813#issuecomment-890420938) and the [commit message of `402cab1`](https://github.com/streamlink/streamlink-twitch-gui/commit/402cab14f30fb43692420288ae43487fe0d7f24d) for all the details and how you can help make Twitch restore this feature again via their feedback tracker. Thank you!
+- Added chat profile for Chatterino ([#607](https://github.com/streamlink/streamlink-twitch-gui/issues/607))
+- Added `--no-keepaspect-window` to MPV player profile
+- Added support for more TLDs to the linkparser
+- Added platform details to about page ([#770](https://github.com/streamlink/streamlink-twitch-gui/pull/770))
+- Changed log dir on Linux according to new XDG-base-dir spec version 0.8
+- Fixed header text length in modal dialogs
+- Fixed being able to stack multiple quit dialogs
+- Fixed context menu on documentation links
+- Fixed Windows uninstaller not removing some files
+- Removed MSIE chat profile
+- Upgraded snoretoast (Windows notification provider) to 0.7.0
+- Upgraded NW.js to 0.52.2 (Chromium 89.0.4389.114 / NodeJS 15.12.0)
+- Upgraded Linux AppImage ([#798](https://github.com/streamlink/streamlink-twitch-gui/issues/798))
+- \[dev\] Upgraded from webpack 4 to webpack 5 ([#803](https://github.com/streamlink/streamlink-twitch-gui/pull/803), [#812](https://github.com/streamlink/streamlink-twitch-gui/pull/812))
+- \[dev\] Upgraded from ember-i18n to ember-intl (new translation formats) ([#806](https://github.com/streamlink/streamlink-twitch-gui/pull/806))
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.11.0...master)
+
+
 ## [v1.11.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.11.0) (2020-12-22)
 
 - :warning: Set Streamlink's version requirement to `2.0.0`.  
