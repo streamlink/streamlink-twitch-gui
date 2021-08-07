@@ -1,3 +1,9 @@
+// Simply ignore translation strings which include any escaped curly braces.
+// This is a cheap workaround since we can't parse the translation format here.
+const reTranslationParamsIgnore = /'{/;
+const reTranslationParamNames = /{(\w+)(?:}|, )/g;
+
+
 module.exports = class WebpackI18nCoveragePlugin {
 	constructor( grunt, { appDir, defaultLocale, localesDir, exclude = [] } = {} ) {
 		this.grunt = grunt;
@@ -10,8 +16,10 @@ module.exports = class WebpackI18nCoveragePlugin {
 		this._BabelTraverse = require( "@babel/traverse" ).default;
 		this._Glimmer = require( "@glimmer/syntax" );
 
+		/** @type {Map<string, Map<string, Set<string>>>} */
 		this.localeData = new Map();
-		this.translationKeys = new Set();
+		/** @type {Map<string, string[][]>} */
+		this.translationKeys = new Map();
 	}
 
 	apply( compiler ) {
@@ -35,7 +43,8 @@ module.exports = class WebpackI18nCoveragePlugin {
 			throw new Error( "Missing default locale data" );
 		}
 
-		const output = ( header, callback ) => {
+		let success = true;
+		const output = ( header, fail, callback ) => {
 			grunt.log.writeln();
 			grunt.log.ok( header );
 			const list = callback();
@@ -43,14 +52,16 @@ module.exports = class WebpackI18nCoveragePlugin {
 				grunt.log.ok( "Success" );
 			} else {
 				list.forEach( item => grunt.log.error( item.toString() ) );
+				if ( fail ) {
+					success = false;
+				}
 			}
 		};
 
 		// found translation keys (eg. "foo" or "foo.*.bar")
-		const keys = Array.from( translationKeys.values() ).sort();
+		const keys = Array.from( translationKeys.keys() ).sort();
 		// translation keys of default locale
-		const main = localeData.get( defaultLocale ).sort();
-		localeData.delete( defaultLocale );
+		const main = Array.from( localeData.get( defaultLocale ).keys() ).sort();
 
 		// list of translation keys to be ignored
 		const reExclude = exclude.map( str => this._strToRegExp( str ) );
@@ -63,10 +74,11 @@ module.exports = class WebpackI18nCoveragePlugin {
 			.map( str => this._strToRegExp( str ) );
 
 		grunt.log.writeln();
-		output( "Checking for missing translation keys in locales", () => {
+		output( "Checking for missing translation keys in locales", false, () => {
 			const missing = [];
 			for ( const locale of Array.from( localeData.keys() ).sort() ) {
-				const data = localeData.get( locale );
+				if ( locale === defaultLocale ) { continue; }
+				const data = Array.from( localeData.get( locale ).keys() );
 				// remove ignored keys from current locale's data
 				const dataFiltered = diffWith( data.sort(), reExclude, fnExclude );
 				// compare with default locale and add diff to missing list
@@ -77,13 +89,62 @@ module.exports = class WebpackI18nCoveragePlugin {
 			}
 			return missing;
 		});
-		output( "Checking for invalid translation keys in application code", () => {
+		output( "Checking for missing/invalid translation parameters in locales", true, () => {
+			const errors = [];
+			const defaultLocaleKeys = localeData.get( defaultLocale );
+			for ( const [ locale, data ] of localeData.entries() ) {
+				if ( locale === defaultLocale ) { continue; }
+				for ( const [ key, params ] of data.entries() ) {
+					if ( !defaultLocaleKeys.has( key ) ) { continue; }
+					const defaultKeyParams = defaultLocaleKeys.get( key );
+					for ( const param of defaultKeyParams ) {
+						if ( !params.has( param ) ) {
+							errors.push( `Missing param in ${locale}.${key}: ${param}` );
+						}
+					}
+					for ( const param of params ) {
+						if ( !defaultKeyParams.has( param ) ) {
+							errors.push( `Invalid param in ${locale}.${key}: ${param}` );
+						}
+					}
+				}
+			}
+			return errors;
+		});
+		output( "Checking for invalid translation keys in application code", false, () => {
 			return diffWith( keysFiltered, mainFiltered, ( a, b ) => fnExclude( b, a ) );
 		});
-		output( "Checking for unused translation keys in application code", () => {
+		output( "Checking for unused translation keys in application code", false, () => {
 			// compare keys of default locale with found keys
 			return diffWith( mainFiltered, keysFiltered, fnExclude );
 		});
+		output( "Checking for missing/invalid parameters in application code", true, () => {
+			const errors = [];
+			const defaultLocaleKeys = localeData.get( defaultLocale );
+			for ( const key of keys ) {
+				if ( key.includes( "*" ) || !defaultLocaleKeys.has( key ) ) { continue; }
+				const params = defaultLocaleKeys.get( key );
+				for ( const calls of translationKeys.get( key ) ) {
+					for ( const param of params ) {
+						// eslint-disable-next-line max-depth
+						if ( !calls.length || !calls.includes( param ) ) {
+							errors.push( `Missing param in ${key}: ${param}` );
+						}
+					}
+					for ( const param of calls ) {
+						// eslint-disable-next-line max-depth
+						if ( !params.has( param ) ) {
+							errors.push( `Unknown param in ${key}: ${param}` );
+						}
+					}
+				}
+			}
+			return errors;
+		});
+
+		if ( !success ) {
+			grunt.fail.fatal();
+		}
 	}
 
 	_onModule( module ) {
@@ -121,26 +182,33 @@ module.exports = class WebpackI18nCoveragePlugin {
 	}
 
 	_addLocaleData( locale, section, content ) {
-		let keys;
+		let translations;
 		if ( !this.localeData.has( locale ) ) {
-			keys = [];
-			this.localeData.set( locale, keys );
+			translations = new Map();
+			this.localeData.set( locale, translations );
 		} else {
-			keys = this.localeData.get( locale );
+			translations = this.localeData.get( locale );
 		}
 
-		const flatten = ( keys, nestedObj, prefix ) => {
+		const flatten = ( translations, nestedObj, prefix ) => {
 			for ( const [ key, value ] of Object.entries( nestedObj ) ) {
 				const translationKey = `${prefix}.${key}`;
 				const type = typeof value;
 				if ( type === "string" ) {
-					keys.push( translationKey );
+					const params = new Set();
+					if ( !reTranslationParamsIgnore.test( value ) ) {
+						for ( const [, name ] of value.matchAll( reTranslationParamNames ) ) {
+							params.add( name );
+						}
+					}
+					translations.set( translationKey, params );
+
 				} else if ( type === "object" && value ) {
-					flatten( keys, value, translationKey );
+					flatten( translations, value, translationKey );
 				}
 			}
 		};
-		flatten( keys, content, section );
+		flatten( translations, content, section );
 	}
 
 	_strToRegExp( str ) {
@@ -176,9 +244,10 @@ module.exports = class WebpackI18nCoveragePlugin {
 		if ( args.length === 0 || args[0].type !== "StringLiteral" ) { return; }
 
 		let translationKey;
+		let translationParams;
 
 		if (
-			// t( "key" )
+			// t( "key", params )
 			   callee.type === "Identifier"
 			&& callee.name === "t"
 
@@ -186,15 +255,15 @@ module.exports = class WebpackI18nCoveragePlugin {
 			&& callee.property.type === "Identifier"
 			&& callee.property.name === "t"
 			&& (
-				// intl.t( "key" )
+				// intl.t( "key", params )
 				   callee.object.type === "Identifier"
 				&& callee.object.name === "intl"
-				// this.intl.t( "key" )
+				// this.intl.t( "key", params )
 				|| callee.object.type === "MemberExpression"
 				&& callee.object.object.type === "ThisExpression"
 				&& callee.object.property.type === "Identifier"
 				&& callee.object.property.name === "intl"
-				// Ember.get( this, "intl" ).t( "key" )
+				// Ember.get( this, "intl" ).t( "key", params )
 				|| callee.object.type === "CallExpression"
 				&& callee.object.callee.type === "MemberExpression"
 				&& callee.object.callee.object.type === "Identifier"
@@ -208,10 +277,19 @@ module.exports = class WebpackI18nCoveragePlugin {
 			)
 		) {
 			translationKey = args[0].value;
+
+			if ( args.length === 2 && args[1].type === "ObjectExpression" ) {
+				translationParams = [];
+				for ( const prop of args[1].properties ) {
+					if ( prop.type === "ObjectProperty" ) {
+						translationParams.push( prop.key.name );
+					}
+				}
+			}
 		}
 
 		if ( translationKey ) {
-			this.translationKeys.add( translationKey );
+			this._addTranslationCall( translationKey, translationParams );
 		}
 	}
 
@@ -231,7 +309,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 					return arr;
 				}, [ quasis[0].value.cooked ] )
 				.join( "" );
-			this.translationKeys.add( keyString );
+			this._addTranslationCall( keyString );
 		}
 	}
 
@@ -246,6 +324,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 
 		const [ firstParam ] = params;
 		let translationKey;
+		let translationParams;
 
 		if (
 			// {{t "key"}}
@@ -267,7 +346,23 @@ module.exports = class WebpackI18nCoveragePlugin {
 		}
 
 		if ( translationKey ) {
-			this.translationKeys.add( translationKey );
+			translationParams = [];
+			for ( const pair of hash.pairs ) {
+				if ( pair.type === "HashPair" ) {
+					translationParams.push( pair.key );
+				}
+			}
+
+			this._addTranslationCall( translationKey, translationParams );
 		}
+	}
+
+	_addTranslationCall( key, params ) {
+		let arr = this.translationKeys.get( key );
+		if ( !arr ) {
+			arr = [];
+			this.translationKeys.set( key, arr );
+		}
+		arr.push( params || [] );
 	}
 };
