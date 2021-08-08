@@ -3,7 +3,7 @@
 		{{t "modal.debug.header" version=modalContext.buildVersion}}
 	{{/modal-header}}
 	{{#modal-body}}
-		{{t "modal.debug.body" name=modalContext.displayName}}
+		{{t "modal.debug.body" name=modalContext.displayName htmlSafe=true}}
 	{{/modal-body}}
 	{{#modal-footer classNames="button-list-horizontal"}}
 		{{#form-button

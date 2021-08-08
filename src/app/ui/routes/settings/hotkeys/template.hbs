@@ -4,7 +4,7 @@
 		(t (concat "settings.hotkeys." namespace ".title"))
 		(t (concat "settings.hotkeys." namespace ".description"))
 		icon=ns.icon
-		notes=(if (is-equal namespace "navigation") (t "settings.hotkeys.navigation.notes"))
+		notes=(if (is-equal namespace "navigation") (t "settings.hotkeys.navigation.notes" htmlSafe=true))
 	}}
 		{{#each-in ns.actions as |name hotkeys|}}
 			<header>{{t (concat "settings.hotkeys." namespace ".actions." name)}}</header>

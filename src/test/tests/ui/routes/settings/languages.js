@@ -121,11 +121,11 @@ module( "ui/routes/settings/languages", function( hooks ) {
 			[
 				[
 					"settings.languages.filter.values.fade.text",
-					"settings.languages.filter.values.fade.description"
+					"settings.languages.filter.values.fade.description{\"htmlSafe\":true}"
 				],
 				[
 					"settings.languages.filter.values.filter.text",
-					"settings.languages.filter.values.filter.description"
+					"settings.languages.filter.values.filter.description{\"htmlSafe\":true}"
 				]
 			],
 			"Shows both checkboxes with correct label and description"

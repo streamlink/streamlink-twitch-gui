@@ -36,7 +36,7 @@
 {{#if mainConfig.donation.length}}
 <article>
 <h3><i class="fa fa-heart"></i>{{t "routes.about.donation.header"}}</h3>
-<p class="text-donation">{{t "routes.about.donation.text"}}</p>
+<p class="text-donation">{{t "routes.about.donation.text" htmlSafe=true}}</p>
 <dl class="dl-horizontal">
 {{#each mainConfig.donation as |item|}}
 <dt><i class="fa fa-angle-right"></i></dt>

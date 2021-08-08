@@ -1,7 +1,10 @@
 // Simply ignore translation strings which include any escaped curly braces.
 // This is a cheap workaround since we can't parse the translation format here.
-const reTranslationParamsIgnore = /'{/;
-const reTranslationParamNames = /{(\w+)(?:}|, )/g;
+const reTranslationVarsIgnore = /'{/;
+const reTranslationVarNames = /{(\w+)(?:}|, )/g;
+const reTranslationHTMLTag = /<[a-z-]+[\s>]/;
+
+const paramHTMLSafe = "htmlSafe";
 
 
 module.exports = class WebpackI18nCoveragePlugin {
@@ -16,9 +19,9 @@ module.exports = class WebpackI18nCoveragePlugin {
 		this._BabelTraverse = require( "@babel/traverse" ).default;
 		this._Glimmer = require( "@glimmer/syntax" );
 
-		/** @type {Map<string, Map<string, Set<string>>>} */
+		/** @type {Map<string, Map<string, {vars: Set<string>, hasHTMLTags: boolean}>>} */
 		this.localeData = new Map();
-		/** @type {Map<string, string[][]>} */
+		/** @type {Map<string, Array<{params: string[], htmlSafe: boolean}>>>} */
 		this.translationKeys = new Map();
 	}
 
@@ -89,28 +92,6 @@ module.exports = class WebpackI18nCoveragePlugin {
 			}
 			return missing;
 		});
-		output( "Checking for missing/invalid translation parameters in locales", true, () => {
-			const errors = [];
-			const defaultLocaleKeys = localeData.get( defaultLocale );
-			for ( const [ locale, data ] of localeData.entries() ) {
-				if ( locale === defaultLocale ) { continue; }
-				for ( const [ key, params ] of data.entries() ) {
-					if ( !defaultLocaleKeys.has( key ) ) { continue; }
-					const defaultKeyParams = defaultLocaleKeys.get( key );
-					for ( const param of defaultKeyParams ) {
-						if ( !params.has( param ) ) {
-							errors.push( `Missing param in ${locale}.${key}: ${param}` );
-						}
-					}
-					for ( const param of params ) {
-						if ( !defaultKeyParams.has( param ) ) {
-							errors.push( `Invalid param in ${locale}.${key}: ${param}` );
-						}
-					}
-				}
-			}
-			return errors;
-		});
 		output( "Checking for invalid translation keys in application code", false, () => {
 			return diffWith( keysFiltered, mainFiltered, ( a, b ) => fnExclude( b, a ) );
 		});
@@ -118,23 +99,48 @@ module.exports = class WebpackI18nCoveragePlugin {
 			// compare keys of default locale with found keys
 			return diffWith( mainFiltered, keysFiltered, fnExclude );
 		});
-		output( "Checking for missing/invalid parameters in application code", true, () => {
+		output( "Checking for missing/invalid translation variables", true, () => {
 			const errors = [];
-			const defaultLocaleKeys = localeData.get( defaultLocale );
-			for ( const key of keys ) {
-				if ( key.includes( "*" ) || !defaultLocaleKeys.has( key ) ) { continue; }
-				const params = defaultLocaleKeys.get( key );
-				for ( const calls of translationKeys.get( key ) ) {
-					for ( const param of params ) {
-						// eslint-disable-next-line max-depth
-						if ( !calls.length || !calls.includes( param ) ) {
-							errors.push( `Missing param in ${key}: ${param}` );
+			const defaultLocaleData = localeData.get( defaultLocale );
+			for ( const [ locale, data ] of localeData.entries() ) {
+				if ( locale === defaultLocale ) { continue; }
+				for ( const [ key, { vars } ] of data.entries() ) {
+					if ( !defaultLocaleData.has( key ) ) { continue; }
+					const { vars: defaultLocaleKeyVars } = defaultLocaleData.get( key );
+					for ( const variable of defaultLocaleKeyVars ) {
+						if ( !vars.has( variable ) ) {
+							errors.push( `Missing variable in ${locale}.${key}: ${variable}` );
 						}
 					}
-					for ( const param of calls ) {
+					for ( const variable of vars ) {
+						if ( !defaultLocaleKeyVars.has( variable ) ) {
+							errors.push( `Invalid variable in ${locale}.${key}: ${variable}` );
+						}
+					}
+				}
+			}
+			return errors;
+		});
+		output( "Checking for missing/invalid translation parameters", true, () => {
+			const errors = [];
+			const defaultLocaleData = localeData.get( defaultLocale );
+			for ( const key of keys ) {
+				if ( key.includes( "*" ) || !defaultLocaleData.has( key ) ) { continue; }
+				const { vars, hasHTMLTags } = defaultLocaleData.get( key );
+				for ( const { params, htmlSafe } of translationKeys.get( key ) ) {
+					if ( hasHTMLTags && !htmlSafe ) {
+						errors.push( `Missing ${paramHTMLSafe} parameter in ${key}` );
+					}
+					for ( const variable of vars ) {
 						// eslint-disable-next-line max-depth
-						if ( !params.has( param ) ) {
-							errors.push( `Unknown param in ${key}: ${param}` );
+						if ( !params.length || !params.includes( variable ) ) {
+							errors.push( `Missing parameter in ${key}: ${variable}` );
+						}
+					}
+					for ( const param of params ) {
+						// eslint-disable-next-line max-depth
+						if ( !vars.has( param ) ) {
+							errors.push( `Invalid parameter in ${key}: ${param}` );
 						}
 					}
 				}
@@ -195,13 +201,14 @@ module.exports = class WebpackI18nCoveragePlugin {
 				const translationKey = `${prefix}.${key}`;
 				const type = typeof value;
 				if ( type === "string" ) {
-					const params = new Set();
-					if ( !reTranslationParamsIgnore.test( value ) ) {
-						for ( const [, name ] of value.matchAll( reTranslationParamNames ) ) {
-							params.add( name );
+					const hasHTMLTags = reTranslationHTMLTag.test( value );
+					const vars = new Set();
+					if ( !reTranslationVarsIgnore.test( value ) ) {
+						for ( const [, name ] of value.matchAll( reTranslationVarNames ) ) {
+							vars.add( name );
 						}
 					}
-					translations.set( translationKey, params );
+					translations.set( translationKey, { vars, hasHTMLTags } );
 
 				} else if ( type === "object" && value ) {
 					flatten( translations, value, translationKey );
@@ -324,7 +331,6 @@ module.exports = class WebpackI18nCoveragePlugin {
 
 		const [ firstParam ] = params;
 		let translationKey;
-		let translationParams;
 
 		if (
 			// {{t "key"}}
@@ -346,23 +352,30 @@ module.exports = class WebpackI18nCoveragePlugin {
 		}
 
 		if ( translationKey ) {
-			translationParams = [];
+			let translationParams = [];
+			let htmlSafe = false;
 			for ( const pair of hash.pairs ) {
 				if ( pair.type === "HashPair" ) {
-					translationParams.push( pair.key );
+					if ( pair.key === paramHTMLSafe ) {
+						let { value } = pair;
+						htmlSafe = value && value.type === "BooleanLiteral" && !!value.value;
+					} else {
+						translationParams.push( pair.key );
+					}
 				}
 			}
 
-			this._addTranslationCall( translationKey, translationParams );
+			this._addTranslationCall( translationKey, translationParams, htmlSafe );
 		}
 	}
 
-	_addTranslationCall( key, params ) {
+	_addTranslationCall( key, params, htmlSafe = false ) {
 		let arr = this.translationKeys.get( key );
 		if ( !arr ) {
 			arr = [];
 			this.translationKeys.set( key, arr );
 		}
-		arr.push( params || [] );
+		params = params || [];
+		arr.push({ params, htmlSafe });
 	}
 };

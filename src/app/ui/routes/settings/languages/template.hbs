@@ -6,8 +6,8 @@
 }}
 	{{check-box
 		checked=model.streams.languages_fade
-		label=(t (concat "settings.languages.filter.values.fade.text"))
-		description=(t (concat "settings.languages.filter.values.fade.description"))
+		label=(t "settings.languages.filter.values.fade.text")
+		description=(t "settings.languages.filter.values.fade.description" htmlSafe=true)
 		disabled=(bool-or
 			(bool-not hasAnySelection)
 			(bool-and model.streams.languages_filter hasSingleSelection)
@@ -15,8 +15,8 @@
 	}}
 	{{check-box
 		checked=model.streams.languages_filter
-		label=(t (concat "settings.languages.filter.values.filter.text"))
-		description=(t (concat "settings.languages.filter.values.filter.description"))
+		label=(t "settings.languages.filter.values.filter.text")
+		description=(t "settings.languages.filter.values.filter.description" htmlSafe=true)
 		disabled=(bool-not hasSingleSelection)
 	}}
 {{/settings-row}}
