@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.12.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.12.0) (2021-08-08)
 
 - Replaced buttons for following and subscribing channels ([#813](https://github.com/streamlink/streamlink-twitch-gui/issues/813))  
   Twitch has decided to shut down the follow-channel API endpoints, which means that 3rd party applications using their public APIs won't be able to follow or unfollow channels anymore. As a workaround, the buttons have been replaced with one that opens the channel page on Twitch.tv in the system's web browser.  
@@ -23,7 +23,7 @@ Changelog - Streamlink Twitch GUI
 - \[dev\] Upgraded from ember-i18n to ember-intl (new translation formats) ([#806](https://github.com/streamlink/streamlink-twitch-gui/pull/806))
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.11.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.11.0...v1.12.0)
 
 
 ## [v1.11.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.11.0) (2020-12-22)
