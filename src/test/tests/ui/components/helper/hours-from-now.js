@@ -25,7 +25,7 @@ module( "ui/components/helper/hours-from-now", function( hooks ) {
 		this.uptime_hours_only = false;
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "Date", "setTimeout", "clearTimeout" ],
-			target: window
+			global: window
 		});
 		this.owner.register( "service:settings", Service.extend({
 			content: {

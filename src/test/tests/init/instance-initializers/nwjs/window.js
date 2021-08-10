@@ -20,7 +20,7 @@ module( "init/instance-initializers/nwjs/window", {
 
 		this.fakeTimer = sinon.useFakeTimers({
 			//toFake: [ "Date", "setTimeout", "clearTimeout" ],
-			target: window
+			global: window
 		});
 
 		const manifest = {

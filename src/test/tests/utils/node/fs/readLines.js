@@ -9,7 +9,7 @@ module( "utils/node/fs/readLines", {
 	beforeEach() {
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "setTimeout", "clearTimeout" ],
-			target: window
+			global: window
 		});
 	},
 	afterEach() {

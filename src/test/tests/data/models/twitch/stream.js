@@ -50,7 +50,7 @@ module( "data/models/twitch/stream", function( hooks ) {
 	hooks.beforeEach(function() {
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "Date" ],
-			target: window
+			global: window
 		});
 
 		setupStore( this.owner );

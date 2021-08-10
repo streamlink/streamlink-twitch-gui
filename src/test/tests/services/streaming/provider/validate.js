@@ -14,7 +14,7 @@ const { validation: { providers: validationProviders } } = streamingConfig;
 module( "services/streaming/provider/validate", {
 	beforeEach() {
 		this.clock = sinon.useFakeTimers({
-			target: window
+			global: window
 		});
 
 		class ChildProcess extends EventEmitter {

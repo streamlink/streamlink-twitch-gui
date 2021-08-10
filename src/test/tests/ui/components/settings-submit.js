@@ -24,7 +24,7 @@ module( "ui/components/settings-submit", function( hooks ) {
 	hooks.beforeEach(function() {
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "Date", "setTimeout", "clearTimeout" ],
-			target: window
+			global: window
 		});
 	});
 	hooks.afterEach(function() {

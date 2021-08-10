@@ -84,7 +84,7 @@
 		"nw-builder": "github:bastimeyer/nw-builder#48b4ae8",
 		"qunit": "2.6.2",
 		"raw-loader": "0.5.1",
-		"sinon": "5.0.3",
+		"sinon": "11.1.2",
 		"svgo": "2.2.2",
 		"webpack": "5.38.1",
 		"webpack-subresource-integrity": "5.0.0-alpha.5",

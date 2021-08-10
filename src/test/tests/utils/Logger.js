@@ -19,7 +19,7 @@ module( "utils/Logger", function( hooks ) {
 	hooks.beforeEach( /** @this {TestContextUtilsLogger} */ function( assert ) {
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "Date" ],
-			target: window
+			global: window
 		});
 
 		const fakeWrite = ( message, callback ) => callback();
