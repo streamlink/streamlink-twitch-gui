@@ -1,0 +1,179 @@
+error:
+    header: Error
+    text: There was an error while trying to display this page.
+about:
+    about:
+        header: About
+        homepage: Homepage
+        author: Autor
+        version: Versión
+        nwjs: NW.js
+        platform: Plataforma
+        arch: Arquitectura
+        built: Built
+        help: Ayuda
+        wiki: Wiki
+        bugs: Bugs
+        issue-tracker: Issue tracker
+        support: Soporte
+        gitter: Gitter
+        changelog: Changelog
+        contributors: Colaboradores
+    donation:
+        header: Apoya & dona
+        text: If you think that this application is helpful, please consider supporting its creator by donating.<br>Thank you very much!
+    translations:
+        header: Traducciones
+    dependencies:
+        header: Third party applications
+featured:
+    header: Featured Channels
+    empty: The featured channels list could not be loaded!
+    summary: There are {viewers} people watching {channels} live streams right now!
+games:
+    header: Top Juegos
+    empty: The returned list of top games is empty.
+game:
+    empty: The returned list of streams of this game is empty.
+streams:
+    header: Top Streams
+    empty: The returned list of top streams is empty.
+channel:
+    menu:
+        details: Detalles
+        teams: Teams
+        settings: Ajustes
+    offline: está offline ahora mismo
+    details:
+        header: Estadísticas del canal
+        name:
+            title: Nombre
+        created-at:
+            title: Creado
+            format: "{created_at, date, long}"
+        language:
+            title: Idioma
+        followers:
+            title: Seguidores
+            data: "{followers} ({day} per day)"
+        views:
+            title: Views
+            data: "{views} ({day} per day)"
+        content:
+            title: Contenido
+            mature: Inappropriate for children
+            ffa: No age restrictions
+        format:
+            title: Formato
+            data: "{resolution} @ {fps}fps"
+        delay:
+            title: Delay
+            data: |
+                {count, plural,
+                    =0 {No additional delay}
+                    one {One second}
+                    other {# seconds}
+                }
+        vodcast:
+            title: Vodcast
+            data: Stream is a Vodcast
+    teams:
+        empty: The returned list of teams is empty.
+    settings:
+        stream:
+            header: Stream
+            quality:
+                title: Calidad
+                description: Set a channel specific streaming quality.
+            low-latency:
+                title: Low latency streaming
+                description: Override the global low latency streaming settings.
+                checkbox: Enable low latency streaming
+            disable-ads:
+                title: Advertisements
+                description: Override the global advertisements settings.
+                checkbox: Skip advertisements embedded into streams
+            chat:
+                title: Chat
+                description: Abrir el chat automáticamente.
+                checkbox: Open chat when the stream starts
+        notifications:
+            header: Notificaciones de escritorio
+            enabled:
+                title: Notificaciones
+                description: When the channel starts streaming.
+                notes: Channel needs to be followed.
+                checkbox: Habilitar notificaciones de escritorio
+team:
+    header:
+        members: "Team members: {num}"
+        created-at: "Fecha creada: {created_at, date, full}"
+        updated-at: "Ultima modificación: {updated_at, date, full}"
+    menu:
+        live: Live Members
+        all: All Members
+        info: Team Infos
+    live:
+        empty: The returned list of broadcasting team members is empty.
+    all:
+        empty: The returned list of all team members is empty.
+    info:
+        header: Infos
+user:
+    index:
+        logged-in: "Logged in as {name}"
+        since: "desde {since, date, full}"
+        sign-out: Cerrar sesión
+        token:
+            title: Tu access token
+            show: Mostrar access token
+            copy: Copiar al portapapeles
+            hint:
+                first: "This key grants access to your Twitch.tv account with these permissions:"
+                second: Log in again with your password to invalidate it.
+    auth:
+        abort: Abortar
+        sign-in: Sign in
+        token:
+            show-form: Utilizar access token
+            placeholder: Insertar access token
+            hint:
+                first: Log in to your Twitch.tv account by using an access token.
+                second: "Make sure that it matches the following permissions:"
+        fail: Authentication failed. Please try again.
+    followedStreams:
+        header: Followed Streams
+        empty:
+            text: The returned list of followed streams is empty.
+            featured: Watch currently featured streams
+            streams: Watch top streams
+    followedChannels:
+        header: Followed Channels
+        buttons:
+            sort-by-followed: Sort by date followed
+            sort-by-broadcast: Sort by last broadcast
+            sort-by-login: Sort by last login
+            sort-desc: Sort in descending order
+            sort-asc: Sort in ascending order
+        empty: The returned list of followed channels is empty.
+search:
+    header:
+        all: All search results
+        games: "Game search results: "
+        channels: "Stream search results: "
+        streams: "Stream search results: "
+    subheader:
+        games: Juegos
+        channels: Canales
+        streams: Streams
+    empty: Your query didn't match anything...
+watching:
+    header: Estás viendo
+    buttons:
+        open: Abrir diálogo 
+        close: Cerrar stream
+    empty:
+        header: Todos los streams han sido cerrados
+        next: What to do next?
+        featured: Watch currently featured streams
+        followed: Watch your followed streams
