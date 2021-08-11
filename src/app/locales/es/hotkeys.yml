@@ -6,7 +6,7 @@ modifiers:
     metaKey: Meta
     shiftKey: Shift
 codes:
-    ArrowLeft: Left
-    ArrowRight: Right
-    ArrowUp: Up
-    ArrowDown: Down
+    ArrowLeft: Izquierda
+    ArrowRight: Derecha
+    ArrowUp: Arriba
+    ArrowDown: Abajo

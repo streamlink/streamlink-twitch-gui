@@ -9,8 +9,8 @@ drop-down-selection:
 file-select:
     placeholder: Dejar en blanco para path predeterminado
 flag-icon:
-    channel: "El lenguaje del canal es {lang}"
-    broadcaster: "El lenguaje del emisor es {lang}"
+    channel: "El idioma del canal es {lang}"
+    broadcaster: "El idioma del emisor es {lang}"
 infinite-scroll:
     error: Error
     loading: Cargando
@@ -18,7 +18,7 @@ infinite-scroll:
 main-menu:
     browse:
         header: Navegar
-        featured: Featured
+        featured: Destacados
         games: Juegos
         streams: Streams
     followed:
@@ -27,14 +27,14 @@ main-menu:
         channels: Channels
     misc:
         header: Misc
-        settings: Ajustes
+        settings: Configuración
         about: About
 open-chat:
     title: Abrir chat
 quick-bar-homepage:
-    title: Set as homepage
+    title: Establecer página de inicio
 quick-bar-random-stream:
-    title: Launch random stream
+    title: Iniciar stream aleatorio
 search-bar:
     placeholder: Buscar
     filter: Filter results
@@ -45,7 +45,7 @@ search-bar:
         streams: Streams
     recent: Recent queries
 settings-channel-item:
-    settings: Ajustes
+    settings: Configuración
     erase: Unset
     confirmation: Unset custom settings?
     confirm: Sí
@@ -58,9 +58,9 @@ settings-hotkey:
     confirm: Set custom hotkey
     toggle: Enable or disable this hotkey
 settings-row:
-    notes: Notes
+    notes: Notas
     default: Por defecto
-    requires: Requires
+    requires: Requiere
     example: Ejemplo
     variables:
         title: Variables disponibles
@@ -78,7 +78,7 @@ share-channel:
 stream-item:
     fps: "{fps} fps"
     details:
-        show: Show stream details
+        show: Mostrar detalles del stream
         lock: Lock details view
         unlock: Unlock details view
     vodcast: Vodcast

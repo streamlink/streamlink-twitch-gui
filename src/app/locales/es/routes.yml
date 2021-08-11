@@ -42,7 +42,7 @@ channel:
     menu:
         details: Detalles
         teams: Teams
-        settings: Ajustes
+        settings: Configuración
     offline: está offline ahora mismo
     details:
         header: Estadísticas del canal

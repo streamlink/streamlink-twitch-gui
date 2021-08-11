@@ -27,7 +27,7 @@ firstrun:
         Do you want to configure the application first before you start?
     action:
         start: Empezar ahora
-        settings: Ajustes
+        settings: Configuración
 newrelease:
     header: "Estás utilizando una versión desactualizada: {version}"
     body: "Do you want to download the latest release now? ({version})"

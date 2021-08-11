@@ -1,36 +1,36 @@
 menu:
-    header: Settings
+    header: Configuración
     main: Main
-    gui: GUI
+    gui: Interfaz
     streaming: Streaming
-    player: Player
+    player: Reproductor
     streams: Streams
     chat: Chat
-    languages: Languages
-    hotkeys: Hotkeys
-    notifications: Notifications
-    channels: Channels
+    languages: Idiomas
+    hotkeys: Acceso rápido
+    notifications: Notificaciones
+    channels: Canales
 main:
     language:
-        title: Language
-        description: Select the GUI language.
-        notes: Do you speak another language? Help translating! See the wiki for more information.
+        title: Idioma
+        description: Seleccione el idioma de la interfaz.
+        notes: ¿Hablas otro idioma? ¡Ayuda a traducir! Vea la wiki para más información.
         labels:
-            auto: "System ({label})"
+            auto: "Sistema ({label})"
     advanced:
-        title: Settings and features
-        description: Enable hidden settings and features.<br>Does not only apply to the settings menu.
-        checkbox: Enable advanced settings and features
+        title: Configuración y características
+        description: Habilitar configuración y características ocultas.<br>No solo se aplica al menú de configuración.
+        checkbox: Habilitar configuración y características avanzadas
     homepage:
-        title: Home page
-        description: Menu to load first or when clicking the logo.
+        title: Página de inicio
+        description: Menú para cargar al inicio o al hacer click en el logo.
         text:
-            first: See the menu bar in the top right corner of each page.
-            second: Click the home button to make it the new home page.
+            first: Vea la barra de menú en la esquina superior derecha de cada página.
+            second: Haga click en el botón de inicio para convertirlo en la nueva página de inicio.
     theme:
-        title: Theme
-        description: Select a GUI color theme.
-        notes-system: This has to be supported by the operating system or desktop environment.
+        title: Tema
+        description: Seleccione un tema para la interfaz.
+        notes-system: Esto debe ser compatible con el sistema operativo o el entorno de escritorio.
     scrolling:
         title: Scrolling
         description: Enable or disable smooth scrolling.
@@ -43,24 +43,24 @@ main:
 gui:
     integration:
         title: OS integration
-        description: Where to access the GUI from.
+        description: Desde donde acceder a la interfaz.
         values:
-            both: Both
-            taskbar: Taskbar
+            both: Ambas
+            taskbar: Barra de tareas
             tray: Tray
     minimize:
-        title: Minimize GUI
-        description: When the video player opens.
+        title: Minimizar interfaz
+        description: Cuando el reproductor de vídeo se abra.
         values:
-            noop: Do nothing
-            minimize: Minimize
+            noop: No hacer nada
+            minimize: Minimizar
             tray: Move to tray
     hidebuttons:
-        title: Hide window buttons
-        description: Hide minimize, maximize and close buttons.
-        checkbox: Hide buttons
+        title: Ocultar botones de ventana
+        description: Ocultar botones de minimizar, maximizar y cerrar.
+        checkbox: Ocultar botones
     minimizetotray:
-        title: Minimize button
+        title: Botón minimizar
         description: Click behavior.
         checkbox: Minimize to tray
     badgelabel:
@@ -73,10 +73,10 @@ gui:
         title: Refresh content
         description: Automatically refresh when the application window regains focus.
         values:
-            none: Don't refresh
-            one: After one minute
-            two: After two minutes
-            five: After five minutes
+            none: No refrescar
+            one: Después de un minuto
+            two: Después de dos minutos
+            five: Después de cinco minutos
 streaming:
     provider:
         title: Streaming provider
