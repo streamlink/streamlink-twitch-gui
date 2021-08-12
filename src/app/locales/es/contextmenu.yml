@@ -4,13 +4,13 @@ tray:
 macOS:
     preferences: Preferencias
     refresh: Refrescar
-channel-page: Channel page
+channel-page: Página del canal
 channel-settings: Configuración del canal
 change-quality: Cambiar calidad
 close-stream: Cerrar stream
 copy: Copiar
 copy-channel-url: Copiar URL del canal
-copy-link-address: Copy link address
+copy-link-address: Copiar dirección de enlace
 copy-selection: Copiar selección
 launch-stream: Iniciar stream
 open-chat: Abrir chat

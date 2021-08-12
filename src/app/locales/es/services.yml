@@ -1,7 +1,7 @@
 notification:
     dispatch:
         single: "{name} ha empezado streaming"
-        group: Some followed channels have started streaming
+        group: Algunos canales de los que sigues han comenzado a transmitir
     status:
         disabled: Las notificaciones de escritorio están deshabilitadas
         enabled: Las notificaciones de escritorio están habilitadas
@@ -10,4 +10,4 @@ notification:
     tray:
         pause:
             label: Pausar notificaciones
-            tooltip: Quickly toggle desktop notifications
+            tooltip: Alternar rápidamente las notificaciones de escritorio
