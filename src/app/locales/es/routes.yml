@@ -17,7 +17,7 @@ about:
         issue-tracker: Issue tracker
         support: Soporte
         gitter: Gitter
-        changelog: Changelog
+        changelog: Cambios
         contributors: Colaboradores
     donation:
         header: Apoya & dona
@@ -122,7 +122,7 @@ team:
 user:
     index:
         logged-in: "Logged in as {name}"
-        since: "desde {since, date, full}"
+        since: "desde el {since, date, full}"
         sign-out: Cerrar sesión
         token:
             title: Tu access token

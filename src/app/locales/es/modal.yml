@@ -3,42 +3,42 @@ dialog:
         close: Cerrar
 changelog:
     header: "Acabas de actualizar a {version}"
-    body: Do you want to see what's new and read the changelog now?
+    body: ¿Quieres ver las novedades y leer los cambios ahora?
     action:
-        show: Changelog
+        show: Cambios
 confirm:
     header: Por favor confirme
-    body: Do you want to apply your changes?
+    body: ¿Quieres aplicar tus cambios?
     action:
         apply: Aplicar
-        discard: Discard
+        discard: Descartar
         cancel: Cancelar
 debug:
-    header: "Debug build: {version}"
+    header: "Compilación de depuración: {version}"
     body: |
-        You are running a debug build of {name}.<br>
-        Please be careful with what you're doing and report any issues you may find.<br>
-        Thank you!
+        Estás ejecutando una compilación de depuración de {name}.<br>
+        Tenga cuidado con lo que está haciendo e informe cualquier problema que pueda encontrar.<br>
+        Gracias!
     action:
         close: Okay
 firstrun:
     body: |
-        Thanks for using {name}!<br>
-        Do you want to configure the application first before you start?
+        Gracias por utilizar {name}!<br>
+        ¿Quieres configurar la aplicación antes de empezar?
     action:
         start: Empezar ahora
         settings: Configuración
 newrelease:
     header: "Estás utilizando una versión desactualizada: {version}"
-    body: "Do you want to download the latest release now? ({version})"
+    body: " ¿Quieres descargar la última versión ahora? ({version})"
     action:
         download: Descargar
         ignore: Ignorar
 quit:
-    header: Are you sure you want to quit?
+    header: ¿Estás seguro de que quieres salir?
     body:
-        streams: By choosing shutdown, all streams will be closed, too.
-        no-streams: All streams have been closed. Do you want to quit now?
+        streams: Al elegir apagar, también se cerrarán todos los streams.
+        no-streams: Se han cerrado todos los streams. ¿Quieres salir ahora?
     action:
         close: Volver
         shutdown: Apagar

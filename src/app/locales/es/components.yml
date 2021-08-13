@@ -1,7 +1,7 @@
 channel-button:
     title: "Seguir a {name}"
 channel-item:
-    game-missing: no game set yet
+    game-missing: no hay juego establecido
 documentation-link:
     title: Leer la documentación online
 drop-down-selection:
@@ -14,7 +14,7 @@ flag-icon:
 infinite-scroll:
     error: Error
     loading: Cargando
-    fetch: Fetch more
+    fetch: Obtener más
 main-menu:
     browse:
         header: Navegar
@@ -22,9 +22,9 @@ main-menu:
         games: Juegos
         streams: Streams
     followed:
-        header: Followed
+        header: Seguidos
         streams: Streams
-        channels: Channels
+        channels: Canales
     misc:
         header: Misc
         settings: Configuración
@@ -37,13 +37,13 @@ quick-bar-random-stream:
     title: Iniciar stream aleatorio
 search-bar:
     placeholder: Buscar
-    filter: Filter results
+    filter: Filtrar resultados
     filters:
         all: Todas
         games: Juegos
-        channels: Channels
+        channels: Canales
         streams: Streams
-    recent: Recent queries
+    recent: Búsquedas recientes
 settings-channel-item:
     settings: Configuración
     erase: Unset
@@ -54,7 +54,7 @@ settings-hotkey:
     empty: No hotkey set
     edit: Customize this hotkey
     delete: Unset custom hotkey
-    discard: Discard
+    discard: Descartar
     confirm: Set custom hotkey
     toggle: Enable or disable this hotkey
 settings-row:
@@ -68,19 +68,19 @@ settings-row:
         help: |
             The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped. Some applications are able to read unnecessarily escaped characters in their parameters list and will work as expected, but others will not. Make sure to set all variables inside single or double quoted strings.
 
-            Correct usage:
+            Uso correcto:
             -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
 settings-submit:
     apply: Aplicar
-    discard: Discard
+    discard: Descartar
 share-channel:
     title: Copiar url del canal al portapapeles
 stream-item:
     fps: "{fps} fps"
     details:
         show: Mostrar detalles del stream
-        lock: Lock details view
-        unlock: Unlock details view
+        lock: Bloquear vista de detalles
+        unlock: Desbloquear vista de detalles
     vodcast: Vodcast
 team-item:
     created-at:
@@ -96,4 +96,4 @@ title-bar:
         Logueado como {name}
         {status}
 twitch-emotes:
-    title: Show available channel emotes
+    title: Mostrar emoticonos del canal disponibles

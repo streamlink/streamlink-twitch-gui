@@ -36,10 +36,10 @@ main:
         description: Enable or disable smooth scrolling.
         checkbox: Enable smooth scrolling
     externalcommands:
-        title: Command line actions
+        title: Acciones de línea de comandos
         description: Listen to signals sent by second application instances.
-        notes: See the wiki for a list of available actions and parameters.
-        checkbox: Allow external commands
+        notes: Consulte la wiki para obtener una lista de acciones y parámetros disponibles.
+        checkbox: Permitir comandos externos
 gui:
     integration:
         title: OS integration
@@ -66,14 +66,14 @@ gui:
     badgelabel:
         title: Application badge
         description: On the taskbar/dock icon.
-        notes: This has to be supported by the operating system or desktop environment.
+        notes: Esto debe ser compatible con el sistema operativo o el entorno de escritorio.
         requires: Taskbar OS integration and desktop notifications have to be enabled.
         checkbox: Show number of streaming favorites
     focusrefresh:
-        title: Refresh content
-        description: Automatically refresh when the application window regains focus.
+        title: Actualizar contenido
+        description: Actualizar automáticamente cuando la ventana de la aplicación recupere el foco.
         values:
-            none: No refrescar
+            none: No actualizar
             one: Después de un minuto
             two: Después de dos minutos
             five: Después de cinco minutos
@@ -83,13 +83,13 @@ streaming:
         description: Choose a streaming provider and set custom executable locations.
         notes: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
         executable:
-            streamlink: Streamlink executable
-            streamlink-python: Python executable
+            streamlink: Ejecutable de Streamlink
+            streamlink-python: Ejecutable de Python
         python-script:
             streamlink-python: Streamlink python script
         parameters:
-            title: Custom parameters
-            placeholder: Add custom parameters
+            title: Parámetros personalizados
+            placeholder: Agregar parámetros personalizados
     playerinput:
         title: Player input
         description: Defines the method of how the stream data is being fed into the player.
@@ -108,10 +108,10 @@ streaming:
                 label: HLS (passthrough)
                 description: Lets the player download and buffer the stream by itself.
     low-latency:
-        title: Low latency streaming
-        description: Reduces the streaming delay for channels which are streaming in low latency mode.
+        title: Streaming de baja latencia
+        description: Reduce la carga del stream para los canales que se transmiten en modo de baja latencia.
         notes: Be aware that enabling this option will also set the live-edge value to 2 if it is higher, which may cause buffering for regular streams. To achieve the lowest latency possible, further tweaking of the player's own caching/buffering settings needs to be done.
-        checkbox: Enable low latency streaming
+        checkbox: Habilitar la transmisión de baja latencia
     hls-live-edge:
         title: HLS live edge
         description: Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering.
@@ -124,9 +124,9 @@ streaming:
         notes: The player itself may prevent {provider} to close it. Please see the player settings as well.
         checkbox: Do not close the player
     disable-ads:
-        title: Advertisements
-        description: This will let the stream freeze while the channel is showing advertisements. See the wiki for more information.
-        checkbox: Skip advertisements embedded into streams
+        title: Anuncios
+        description: Esto permitirá que el stream se congele mientras el canal muestra anuncios. Consulte la wiki para obtener más información.
+        checkbox: Omitir anuncios incrustados en los streams
     retry-open:
         title: Launch attempts
         description: Number of stream launch attempts.
@@ -236,8 +236,8 @@ player:
             label: Daum PotPlayer
 streams:
     quality:
-        title: Preferred quality
-        description: Choose the default stream quality.
+        title: Calidad preferida
+        description: Elija la calidad del stream predeterminada.
     qualitypresets:
         title: Quality presets
         description: Define precise quality selections by range or by using explicit quality names.
@@ -298,11 +298,11 @@ streams:
             settings: Go to channel settings
 chat:
     provider:
-        title: Chat application
-        description: Choose the chat application.
+        title: Aplicación de chat
+        description: Elija la aplicación de chat.
         notes-browser: Choosing the default browser may result in unwanted, non-minimal window sizes.
-        file-placeholder: Setting an executable path is required
-        params-placeholder: Set additional parameters
+        file-placeholder: Es necesario configurar una ruta ejecutable
+        params-placeholder: Establecer parámetros adicionales
         url:
             default:
                 label: Default chat URL
@@ -315,7 +315,7 @@ chat:
                 description: Meant for embedding the chat into other websites.
         providers:
             browser:
-                label: Default browser
+                label: Navegador por defecto
                 attributes:
                     url:
                         title: Chat URL
@@ -323,18 +323,18 @@ chat:
             basic:
                 substitutions:
                     url: The channel's chat URL on Twitch.tv
-                    channel: The channel name
-                    user: Your user name (if logged in)
-                    token: Your access token (if logged in)
+                    channel: El nombre del canal
+                    user: Tu nombre de usuario (si está logueado)
+                    token: Tu access token (si está logueado)
             chromium:
                 label: Chromium
                 attributes:
                     exec:
-                        title: Chromium executable
-                        description: Set a custom Chromium executable path.
+                        title: Ejecutable de Chromium
+                        description: Establece una ruta ejecutable personalizada de Chromium.
                     args:
-                        title: Chromium parameters
-                        description: Set additional parameters.
+                        title: Parámetros de Chromium
+                        description: Establecer parámetros adicionales.
                     url:
                         title: Chat URL
                         description: Which Twitch chat URL to use.
@@ -342,11 +342,11 @@ chat:
                 label: Google Chrome
                 attributes:
                     exec:
-                        title: Google Chrome executable
-                        description: Set a custom Google Chrome executable path.
+                        title: Ejecutable de Google Chrome
+                        description: Establece una ruta ejecutable personalizada de Google Chrome.
                     args:
-                        title: Google Chrome parameters
-                        description: Set additional parameters.
+                        title: Parámetros de Google Chrome
+                        description: Establecer parámetros adicionales.
                     url:
                         title: Chat URL
                         description: Which Twitch chat URL to use.
@@ -354,17 +354,17 @@ chat:
                 label: Chatterino
                 attributes:
                     exec:
-                        title: Chatterino executable
-                        description: Set a custom Chatterino executable path.
+                        title: Ejecutable de Chatterino
+                        description: Establece una ruta ejecutable personalizada de Chatterino.
             chatty:
                 label: Chatty
                 attributes:
                     exec:
-                        title: Java executable
-                        description: Set a custom java executable path.
+                        title: Ejecutable de Java
+                        description: Establece una ruta ejecutable personalizada de Java.
                     jar:
-                        title: Chatty .jar file
-                        description: Set a custom chatty.jar path.
+                        title: Archivo .jar de Chatty
+                        description: Establece una ruta ejecutable personalizada de Chatty.
                     instance:
                         title: Single instance mode
                         description: Requires at least version 0.8.2b2.
@@ -406,18 +406,18 @@ chat:
                         title: Chat URL
                         description: Which Twitch chat URL to use.
     chat-open:
-        title: Open chat
-        description: While launching streams.
-        checkbox: Automatically open chat
+        title: Abrir chat
+        description: Al cargar streams.
+        checkbox: Abrir chat automáticamente
         checkbox-context: Don't open chat while launching streams via the context menu
     twitchemotes:
-        title: Twitch emotes
-        description: Button that opens up twitchemotes.com.
+        title: Emoticonos de Twitch
+        description: Botón que abre twitchemotes.com.
         checkbox: Show emotes button in stream popups
 languages:
     filter:
-        title: Filter streams
-        description: Apply a language filter to all stream lists (except followed streams).
+        title: Filtrar streams
+        description: Aplicar filtro de idioma a los streams (excepto los streams que sigues).
         values:
             fade:
                 text: Fade out streams
@@ -430,66 +430,66 @@ languages:
                     Only show streams matching the language selection.<br>
                     Requires exactly one selection and takes precedence over fading.
     languages:
-        title: Languages
-        description: Broadcaster language, or if not set, the channel language.
-        uncheck-all: Uncheck all
+        title: Idiomas
+        description: Idioma de del emisor,o si no está configurado, el idioma del canal.
+        uncheck-all: Desmarcar todas
 hotkeys:
     navigation:
-        title: Navigation
+        title: Navegación
         description: Global navigation hotkeys.
         notes: |
             Hotkeys are categorized by the actions of their respective component. Each action does have a primary and a secondary hotkey, which can be toggled on and off individually, and can also be modified with a custom keybinding. The application window needs to be focused in order for hotkeys to trigger.<br><br>
             Also please note that the hotkeys are currently not aware of the system's keyboard layout (due to technical reasons). This means that all hotkeys are for now based on the default US keyboard layout (QWERTY) and individual keys may be displayed incorrectly on systems using a different layout.
         actions:
-            refresh: Refresh current menu
-            historyBack: Go back
-            historyForward: Go forward
-            homepage: Go to homepage
-            routeFeatured: Go to the Featured Channels menu
-            routeGames: Go to the Games menu
-            routeStreams: Go to the Streams menu
-            routeUserFollowedStreams: Go to the Followed Streams menu
-            routeUserFollowedChannels: Go to the Followed Channels menu
-            routeUserAuth: Go to the User menu
+            refresh: Actualizar menú actual
+            historyBack: Regresar
+            historyForward: Avanzar
+            homepage: Ir a la página de inicio
+            routeFeatured: Ir al menú de Canales Destacados
+            routeGames: Ir al menú de Juegos
+            routeStreams: Ir al menú de Streams
+            routeUserFollowedStreams: Ir al menú de Streams seguidos
+            routeUserFollowedChannels: Ir al menú de Canales seguidos
+            routeUserAuth: Ir al menú de usuario
             routeWatching: Go to the Watching menu
-            routeSettings: Go to the Settings menu
+            routeSettings: Ir al menú de configuración
             routeAbout: Go to the About menu
     searchbar:
-        title: Search bar
-        description: Search bar at the top.
+        title: Barra de búsqueda
+        description: Barra de búsqueda en la parte superior.
         actions:
             focus: Focus
     followbutton:
-        title: Follow button
+        title: Botón de seguir
         description: The follow button on a channel's page or on the streaming dialog.
         actions:
-            default: Follow or unfollow
-            confirm: Confirm
+            default: Seguir o dejar de seguir
+            confirm: Confirmar
     openchatbutton:
-        title: Open chat button
+        title: Botón de abrir chat
         description: The chat button on a channel's page or on the streaming dialog.
         actions:
-            default: Open chat
+            default: Abrir chat
     sharechannelbutton:
-        title: Share channel button
+        title: Botón de compartir canal
         description: The share button on a channel's page or on the streaming dialog.
         actions:
-            default: Copy channel URL to clipboard
+            default: Copiar URL del canal al portapapeles
     twitchemotesbutton:
-        title: Twitch emotes button
+        title: Botón de emoticonos de Twitch
         description: Emotes button on a channel's page or on the streaming dialog.
         actions:
-            default: Open Twitchemotes.com
+            default: Abrir Twitchemotes.com
     modaldialog:
         title: Modal dialog
         description: Generic popup dialogs.
         actions:
-            close: Close
+            close: Cerrar
     modalconfirm:
-        title: Confirm dialog
+        title: Confirmar diálogo
         description: When a certain action needs to be confirmed.
         actions:
-            confirm: Confirm
+            confirm: Confirmar
     modalstreaming:
         title: Streaming dialog
         description: When watching a stream.
@@ -498,28 +498,28 @@ hotkeys:
             log: Toggle log output
 notifications:
     enabled:
-        title: Notifications
+        title: Notificaciones
         description: When favorites start streaming.
-        checkbox: Enable desktop notifications
+        checkbox: Habilitar notificaciones de escritorio
     provider:
-        title: Notification type
-        description: Choose the kind of notification
+        title: Tipo de notificación
+        description: Elige el tipo de notificación
         test:
-            button: Test notification
-            message: This is a test notification
+            button: Notificación de prueba
+            message: Esta es una notificación de prueba
         providers:
             auto:
-                name: Automatic selection
-                description: Tries to find the best notification provider
-                notes: Tests all available notification providers in descending order
+                name: Selección automática
+                description: Intenta encontrar el mejor proveedor de notificaciones
+                notes: Prueba todos los proveedores de notificaciones disponibles en orden descendente
             native:
-                name: Native notifications
-                description: Uses the system's native notification system
-                notes: Notifications can be configured in the system preferences
+                name: Notificaciones nativas
+                description: Utiliza el sistema de notificaciones nativo del sistema.
+                notes: Las notificaciones se pueden configurar en las preferencias del sistema
             snoretoast:
                 name: Windows toast notifications
-                description: Native notifications on Windows 8+
-                notes: \"Banner notifications\" need to be enabled in the system preferences
+                description: Notificaciones nativas en Windows 8+
+                notes: \"Las notificaciones de banner\" necesita estar habilitado en las preferencias del sistema
             growl:
                 name: Growl notifications
                 description: Third-party notification service for Windows, macOS and Linux
@@ -529,11 +529,11 @@ notifications:
                 description: Chromium rich notifications
                 notes: Rendered by the application itself
     filter:
-        title: Channel filter
-        description: Notifications can be turned on/off individually in a channel's settings menu.
+        title: Filtro del canal
+        description: Las notificaciones se pueden activar/desactivar individualmente en el menú de configuración del canal.
         values:
-            blacklist: Show all except disabled ones
-            whitelist: Ignore all except enabled ones
+            blacklist: Mostrar todos excepto los deshabilitados
+            whitelist: Ignorar todos excepto los habilitados
     filter-vodcasts:
         title: Filter Vodcasts
         description: Only include live streams.
@@ -546,23 +546,23 @@ notifications:
         title: Notification click
         description: Preferred click action.
         values:
-            noop: Do nothing
-            followed: Go to favorites
-            stream: Open stream
-            stream-and-chat: Open stream+chat
+            noop: No hacer nada
+            followed: Ir a favoritos
+            stream: Abrir stream
+            stream-and-chat: Abrir stream+chat
     click-group:
         title: Group click
         description: Preferred group click action.
         values:
-            noop: Do nothing
-            followed: Go to favorites
-            stream: Open all streams
-            stream-and-chat: Open all streams+chats
+            noop: No hacer nada
+            followed: Ir a favoritos
+            stream: Abrir todos los streams
+            stream-and-chat: Abrir todos los streams+chats
     click-restore:
-        title: Restore GUI
+        title: Restablecer interfaz
         description: Restore from tray or minimized state when performing a notification click action.
-        checkbox: Restore when clicking a notification
+        checkbox: Restaurar al hacer click en una notificación
 channels:
-    find: Find channel
-    none: No channels found.
-    empty: No custom channel settings set.
+    find: Encontrar canal
+    none: No se encontraron canales.
+    empty: No se ha establecido ninguna configuración de canal personalizada.
