@@ -3,6 +3,8 @@ import { setupTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
 import sinon from "sinon";
 
+import { A } from "@ember/array";
+import EmberObject from "@ember/object";
 import Service from "@ember/service";
 
 import nwjsServiceInjector from "inject-loader?nwjs/App&nwjs/Shell&nwjs/Window!services/nwjs";
@@ -239,5 +241,42 @@ module( "services/nwjs", function( hooks ) {
 
 		assert.strictEqual( NwjsService.clipboard.get(), "foo", "Gets correct clipboard value" );
 		assert.ok( this.clipboardGetStub.called, "clipboard.get was called" );
+	});
+
+	test( "Context menu", function( assert ) {
+		/** @this {TestContextServicesNwjs} */
+
+		const menuPopupSpy = sinon.spy();
+		this.owner.register( "nwjs:menu", EmberObject.extend({
+			items: A(),
+			menu: {
+				popup: menuPopupSpy
+			}
+		}) );
+
+		/** @type {NwjsService} */
+		const NwjsService = this.owner.lookup( "service:nwjs" );
+		const menu = this.owner.lookup( "nwjs:menu" );
+
+		// don't use a real MouseEvent here, because
+		// it'll round the coords automatically in the constructor
+		const event = {
+			preventDefault: sinon.spy(),
+			stopImmediatePropagation: sinon.spy(),
+			clientX: 123.123,
+			clientY: 987.987
+		};
+		const items = [
+			{ label: "foo" },
+			{ label: "bar" }
+		];
+
+		assert.notOk( menuPopupSpy.called, "Hasn't called menu.popup yet" );
+
+		NwjsService.contextMenu( event, items );
+		assert.ok( event.preventDefault.calledOnce, "Prevents default" );
+		assert.ok( event.stopImmediatePropagation.calledOnce, "Stops immediate propagation" );
+		assert.propEqual( menuPopupSpy.args, [ [ 123, 988 ] ], "It rounds click coordinates" );
+		assert.propEqual( menu.items, items, "Sets the correct items" );
 	});
 });
