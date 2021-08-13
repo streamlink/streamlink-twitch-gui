@@ -113,13 +113,17 @@ export default Service.extend( /** @class NwjsService */ {
 		}
 	},
 
+	/**
+	 * @param {MouseEvent} event
+	 * @param {nw.MenuItem[]} items
+	 */
 	contextMenu( event, items ) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
 		const menu = getOwner( this ).lookup( "nwjs:menu" );
 		menu.items.pushObjects( items );
-		menu.menu.popup( event.x, event.y );
+		menu.menu.popup( Math.round( event.clientX ), Math.round( event.clientY ) );
 	},
 
 	addTrayMenuItem( item, position ) {
