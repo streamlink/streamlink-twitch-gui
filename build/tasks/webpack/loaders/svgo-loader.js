@@ -1,5 +1,5 @@
 const { getOptions } = require( "loader-utils" );
-const { extendDefaultPlugins, optimize } = require( "svgo" );
+const { optimize } = require( "svgo" );
 
 
 /**
@@ -9,15 +9,14 @@ const { extendDefaultPlugins, optimize } = require( "svgo" );
  */
 module.exports = function svgoLoader( source ) {
 	const {
-		extendDefaultPlugins: defaultPlugins = [],
-		plugins = [],
+		plugins = [{ name: "preset-default" }],
 		...options
 	} = getOptions( this );
 
 	const result = optimize( source, {
 		...options,
 		path: this.resourcePath,
-		plugins: extendDefaultPlugins( defaultPlugins ).concat( plugins )
+		plugins
 	});
 
 	if ( result.error ) {

@@ -95,14 +95,15 @@ module.exports = {
 			test: /\.svg$/,
 			loader: "svgo-loader",
 			options: {
-				extendDefaultPlugins: [
+				plugins: [
 					{
-						name: "removeTitle",
-						active: true
-					},
-					{
-						name: "removeUselessStrokeAndFill",
-						active: false
+						name: "preset-default",
+						overrides: {
+							convertPathData: {
+								applyTransforms: false
+							},
+							removeUselessStrokeAndFill: false
+						}
 					}
 				]
 			}
