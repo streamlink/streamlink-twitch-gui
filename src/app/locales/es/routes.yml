@@ -1,47 +1,47 @@
 error:
     header: Error
-    text: There was an error while trying to display this page.
+    text: Hubo un error al intentar mostrar esta página.
 about:
     about:
-        header: About
-        homepage: Homepage
+        header: Acerca de
+        homepage: Página principal
         author: Autor
         version: Versión
         nwjs: NW.js
         platform: Plataforma
         arch: Arquitectura
-        built: Built
+        built: Construido
         help: Ayuda
         wiki: Wiki
         bugs: Bugs
-        issue-tracker: Issue tracker
+        issue-tracker: Seguimiento de problemas
         support: Soporte
         gitter: Gitter
         changelog: Cambios
         contributors: Colaboradores
     donation:
         header: Apoya & dona
-        text: If you think that this application is helpful, please consider supporting its creator by donating.<br>Thank you very much!
+        text: Si cree que esta aplicación es útil, considere apoyar a su creador con una donación.<br>¡Muchas gracias!
     translations:
         header: Traducciones
     dependencies:
-        header: Third party applications
+        header: Aplicaciones de terceros
 featured:
-    header: Featured Channels
-    empty: The featured channels list could not be loaded!
-    summary: There are {viewers} people watching {channels} live streams right now!
+    header: Canales destacados
+    empty: ¡No se pudo cargar la lista de canales destacados!
+    summary: Hay {viewers} personas viendo {channels} streams ahora mismo!
 games:
     header: Top Juegos
-    empty: The returned list of top games is empty.
+    empty: La lista devuelta de los tops juegos está vacía.
 game:
-    empty: The returned list of streams of this game is empty.
+    empty: La lista devuelta de streams de este juego está vacía.
 streams:
     header: Top Streams
-    empty: The returned list of top streams is empty.
+    empty: La lista devuelta de top streams está vacía.
 channel:
     menu:
         details: Detalles
-        teams: Teams
+        teams: Equipos
         settings: Configuración
     offline: está offline ahora mismo
     details:
@@ -55,14 +55,14 @@ channel:
             title: Idioma
         followers:
             title: Seguidores
-            data: "{followers} ({day} per day)"
+            data: "{followers} ({day} por día)"
         views:
-            title: Views
-            data: "{views} ({day} per day)"
+            title: Visitas
+            data: "{views} ({day} por día)"
         content:
             title: Contenido
-            mature: Inappropriate for children
-            ffa: No age restrictions
+            mature: Inapropiado para niños
+            ffa: Sin restricciones de edad
         format:
             title: Formato
             data: "{resolution} @ {fps}fps"
@@ -70,58 +70,58 @@ channel:
             title: Delay
             data: |
                 {count, plural,
-                    =0 {No additional delay}
-                    one {One second}
-                    other {# seconds}
+                    =0 {Sin delay adicional}
+                    one {Un segundo}
+                    other {# segundos}
                 }
         vodcast:
             title: Vodcast
-            data: Stream is a Vodcast
+            data: El stream es un Vodcast
     teams:
-        empty: The returned list of teams is empty.
+        empty: La lista devuelta de equipos está vacía.
     settings:
         stream:
             header: Stream
             quality:
                 title: Calidad
-                description: Set a channel specific streaming quality.
+                description: Establece una calidad de transmisión específica para el canal.
             low-latency:
-                title: Low latency streaming
-                description: Override the global low latency streaming settings.
-                checkbox: Enable low latency streaming
+                title: Streaming de baja latencia
+                description: Reemplaza la configuración global de streams de baja latencia.
+                checkbox: Habilitar streaming de baja latencia
             disable-ads:
-                title: Advertisements
-                description: Override the global advertisements settings.
-                checkbox: Skip advertisements embedded into streams
+                title: Anuncios
+                description: Reemplaza la configuración global de los anuncios.
+                checkbox: Omitir anuncios incrustados en streams
             chat:
                 title: Chat
-                description: Abrir el chat automáticamente.
-                checkbox: Open chat when the stream starts
+                description: Abre el chat automáticamente.
+                checkbox: Abrir el chat cuando comience el stream
         notifications:
             header: Notificaciones de escritorio
             enabled:
                 title: Notificaciones
-                description: When the channel starts streaming.
-                notes: Channel needs to be followed.
+                description: Cuando el canal comienza a hacer stream.
+                notes: Es necesario seguir el canal.
                 checkbox: Habilitar notificaciones de escritorio
 team:
     header:
-        members: "Team members: {num}"
+        members: "Miembros del equipo: {num}"
         created-at: "Fecha creada: {created_at, date, full}"
         updated-at: "Ultima modificación: {updated_at, date, full}"
     menu:
-        live: Live Members
-        all: All Members
-        info: Team Infos
+        live: Miembros en directo
+        all: Todos los miembros
+        info: Información del equipo
     live:
-        empty: The returned list of broadcasting team members is empty.
+        empty: La lista devuelta de miembros del equipo en stream está vacía.
     all:
-        empty: The returned list of all team members is empty.
+        empty: La lista devuelta de todos los miembros del equipo está vacía.
     info:
-        header: Infos
+        header: Información
 user:
     index:
-        logged-in: "Logged in as {name}"
+        logged-in: "Logueado como {name}"
         since: "desde el {since, date, full}"
         sign-out: Cerrar sesión
         token:
@@ -129,44 +129,44 @@ user:
             show: Mostrar access token
             copy: Copiar al portapapeles
             hint:
-                first: "This key grants access to your Twitch.tv account with these permissions:"
-                second: Log in again with your password to invalidate it.
+                first: "Esta clave otorga acceso a su cuenta de Twitch.tv con estos permisos:"
+                second: Inicie sesión nuevamente con su contraseña para invalidarla.
     auth:
         abort: Abortar
-        sign-in: Sign in
+        sign-in: Iniciar sesión
         token:
             show-form: Utilizar access token
             placeholder: Insertar access token
             hint:
-                first: Log in to your Twitch.tv account by using an access token.
-                second: "Make sure that it matches the following permissions:"
-        fail: Authentication failed. Please try again.
+                first: Inicie sesión en su cuenta de Twitch.tv utilizando un token de acceso.
+                second: "Asegúrese de que coincida con los siguientes permisos:"
+        fail: Autenticación fallida. Inténtalo de nuevo.
     followedStreams:
-        header: Followed Streams
+        header: Streams Seguidos
         empty:
-            text: The returned list of followed streams is empty.
-            featured: Watch currently featured streams
-            streams: Watch top streams
+            text: La lista devuelta de streams seguidos está vacía.
+            featured: Ver streams destacados actualmente
+            streams: Ver top streams
     followedChannels:
-        header: Followed Channels
+        header: Canales Seguidos
         buttons:
-            sort-by-followed: Sort by date followed
-            sort-by-broadcast: Sort by last broadcast
-            sort-by-login: Sort by last login
-            sort-desc: Sort in descending order
-            sort-asc: Sort in ascending order
-        empty: The returned list of followed channels is empty.
+            sort-by-followed: Ordenar por fecha seguida
+            sort-by-broadcast: Ordenar por última transmisión
+            sort-by-login: Ordenar por último inicio de sesión
+            sort-desc: Ordenar en orden descendente
+            sort-asc: Ordenar en orden ascendente
+        empty: La lista devuelta de canales seguidos está vacía.
 search:
     header:
-        all: All search results
-        games: "Game search results: "
-        channels: "Stream search results: "
-        streams: "Stream search results: "
+        all: Todos los resultados de la búsqueda
+        games: "Resultados de la búsqueda de juegos: "
+        channels: "Resultados de la búsqueda de canales: "
+        streams: "Resultados de la búsqueda de streams: "
     subheader:
         games: Juegos
         channels: Canales
         streams: Streams
-    empty: Your query didn't match anything...
+    empty: Tu consulta no coincidió con nada...
 watching:
     header: Estás viendo
     buttons:
@@ -174,6 +174,6 @@ watching:
         close: Cerrar stream
     empty:
         header: Todos los streams han sido cerrados
-        next: What to do next?
-        featured: Watch currently featured streams
-        followed: Watch your followed streams
+        next: ¿Qué hacer ahora?
+        featured: Ver streams destacados actualmente
+        followed: Ver tus streams seguidos
