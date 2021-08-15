@@ -9,7 +9,7 @@ module( "utils/node/fs/clearfolder", {
 	beforeEach() {
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "Date" ],
-			target: window
+			global: window
 		});
 
 		this.statStub = sinon.stub();

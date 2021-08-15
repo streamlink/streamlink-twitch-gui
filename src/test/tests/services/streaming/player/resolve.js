@@ -89,7 +89,7 @@ module( "services/streaming/player/resolve", function( hooks ) {
 		assert.propEqual( result, expected, "Returns the correct execObj" );
 		assert.ok( this.isAbortedSpy.calledOnceWithExactly( stream ), "Calls isAborted once" );
 		assert.ok( this.playerCacheGetStub.calledOnce, "Calls playerCache.get once" );
-		assert.ok( this.playerCacheSetStub.calledOnceWith( expected ), "Sets player cache" );
+		assert.propEqual( this.playerCacheSetStub.args, [ [ expected ] ], "Sets player cache" );
 	});
 
 	test( "Default player profile - custom exec", async function( assert ) {
@@ -108,7 +108,7 @@ module( "services/streaming/player/resolve", function( hooks ) {
 		assert.propEqual( result, expected, "Returns the correct execObj" );
 		assert.ok( this.isAbortedSpy.calledOnceWithExactly( stream ), "Calls isAborted once" );
 		assert.ok( this.playerCacheGetStub.calledOnce, "Calls playerCache.get once" );
-		assert.ok( this.playerCacheSetStub.calledOnceWith( expected ), "Sets player cache" );
+		assert.propEqual( this.playerCacheSetStub.args, [ [ expected ] ], "Sets player cache" );
 	});
 
 	test( "Default player profile - custom params", async function( assert ) {
@@ -128,7 +128,7 @@ module( "services/streaming/player/resolve", function( hooks ) {
 		assert.propEqual( result, expected, "Returns the correct execObj" );
 		assert.ok( this.isAbortedSpy.calledOnceWithExactly( stream ), "Calls isAborted once" );
 		assert.ok( this.playerCacheGetStub.calledOnce, "Calls playerCache.get once" );
-		assert.ok( this.playerCacheSetStub.calledOnceWith( expected ), "Sets player cache" );
+		assert.propEqual( this.playerCacheSetStub.args, [ [ expected ] ], "Sets player cache" );
 	});
 
 	test( "Default player profile - custom params and no exec", async function( assert ) {
@@ -148,7 +148,7 @@ module( "services/streaming/player/resolve", function( hooks ) {
 		assert.propEqual( result, expected, "Returns the correct execObj" );
 		assert.ok( this.isAbortedSpy.calledOnceWithExactly( stream ), "Calls isAborted once" );
 		assert.ok( this.playerCacheGetStub.calledOnce, "Calls playerCache.get once" );
-		assert.ok( this.playerCacheSetStub.calledOnceWith( expected ), "Sets player cache" );
+		assert.propEqual( this.playerCacheSetStub.args, [ [ expected ] ], "Sets player cache" );
 	});
 
 	test( "Invalid player data - missing data", async function( assert ) {

@@ -63,7 +63,7 @@ module( "services/versioncheck", function( hooks ) {
 
 		this.fakeTimer = sinon.useFakeTimers({
 			toFake: [ "Date" ],
-			target: window
+			global: window
 		});
 
 		setupStore( this.owner );

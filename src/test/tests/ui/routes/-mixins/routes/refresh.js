@@ -15,7 +15,7 @@ const { hasOwnProperty } = {};
 module( "ui/routes/-mixins/routes/refresh", {
 	beforeEach() {
 		this.clock = sinon.useFakeTimers({
-			target: window
+			global: window
 		});
 		this.events = new EventEmitter();
 
