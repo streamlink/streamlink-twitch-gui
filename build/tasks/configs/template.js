@@ -12,6 +12,9 @@ function getInstallerFiles( config ) {
 		return JSON.stringify({
 			files: getFiles( "isFile" ),
 			directories: getFiles( "isDirectory" )
+				// ensure that subdirectories will get removed first
+				.sort()
+				.reverse()
 		});
 	};
 }
