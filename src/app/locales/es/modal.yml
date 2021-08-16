@@ -2,7 +2,7 @@ dialog:
     action:
         close: Cerrar
 changelog:
-    header: "Acabas de actualizar a {version}"
+    header: "Acabas de actualizar a la versión {version}"
     body: ¿Quieres ver las novedades y leer los cambios ahora?
     action:
         show: Cambios
@@ -46,36 +46,36 @@ quit:
 streaming:
     header:
         preparing: "Preparando, por favor espere"
-        launching: "Launching: "
+        launching: "Lanzando: "
         watching: "Viendo: "
         ended: "Stream terminado: "
         error:
             log: "Error: No se pudo cargar el stream"
-            provider: "Error: {provider} misconfiguration"
-            player: "Error: Player misconfiguration"
-            version: "Error: Invalid {provider} version"
-            unable-to-open: "Error: Unable to open stream"
-            no-streams-found: "Error: No streams found"
-            timeout: "Error: Timeout"
-            hosting: "{name} is hosting another channel"
+            provider: "Error: Mala configuración de {provider}"
+            player: "Error: Mala configuración del reproductor"
+            version: "Error: Versión del {provider} inválida"
+            unable-to-open: "Error: No se puede abrir el stream"
+            no-streams-found: "Error: No se encontraron streams"
+            timeout: "Error: Desconexión por tiempo"
+            hosting: "{name} está hosteando otro canal"
             internal: "Error"
     body:
-        launching: "Waiting for {provider} to launch the stream..."
-        ended: "Do you want to restart the stream now?"
+        launching: "Esperando a {provider} para iniciar stream..."
+        ended: "¿Quieres reiniciar el stream ahora?"
         error:
-            provider: "Please check your settings and/or (re)install {provider}."
-            player: "Please check your player settings."
-            version: "The version v{version} doesn't match the min. requirements (v{required})."
-            unable-to-open: "{provider} was unable to open the stream."
-            no-streams-found: "{provider} was unable to find the stream."
-            timeout: "Either {name} has gone offline, or your connection to Twitch has been interrupted."
-            hosting: "Do you want to switch to {name}?"
+            provider: "Por favor compruebe su configuración y/o (re)instala {provider}."
+            player: "Por favor compruebe la configuración del reproductor."
+            version: "La versión v{version} no coincide con los requisitos mínimos (v{required})."
+            unable-to-open: "{provider} no pudo abrir el stream."
+            no-streams-found: "{provider} no pudo encontrar el stream."
+            timeout: "O {name} se ha desconectado, o tu conexión con Twitch ha sido interrumpida."
+            hosting: "¿Quieres cambiarte a {name}?"
             internal: "Error interno"
     action:
         abort: Abortar
         continue: Continuar
         download: Descargar
-        log: Toggle {provider} log
+        log: Alternar el log de {provider}
         restart: Reiniciar
         shutdown: Cerrar stream
         start-hosted: Cambiar
