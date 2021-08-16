@@ -28,7 +28,7 @@ main-menu:
     misc:
         header: Misc
         settings: Configuración
-        about: About
+        about: Acerca de
 open-chat:
     title: Abrir chat
 quick-bar-homepage:
@@ -46,17 +46,17 @@ search-bar:
     recent: Búsquedas recientes
 settings-channel-item:
     settings: Configuración
-    erase: Unset
-    confirmation: Unset custom settings?
+    erase: Borrar
+    confirmation: ¿Deseas anular la configuración personalizada?
     confirm: Sí
     decline: No
 settings-hotkey:
-    empty: No hotkey set
-    edit: Customize this hotkey
-    delete: Unset custom hotkey
+    empty: Acceso rápido no definido
+    edit: Personalizar este acceso rápido
+    delete: Borrar acceso rápido personalizado
     discard: Descartar
-    confirm: Set custom hotkey
-    toggle: Enable or disable this hotkey
+    confirm: Establecer acceso rápido personalizado
+    toggle: Habilitar o deshabilitar este acceso rápido
 settings-row:
     notes: Notas
     default: Por defecto
@@ -66,7 +66,7 @@ settings-row:
         title: Variables disponibles
         # tooltip (whitespace sensitive)
         help: |
-            The content of each variable will be escaped. If used outside of quoted strings, every character will be escaped. Some applications are able to read unnecessarily escaped characters in their parameters list and will work as expected, but others will not. Make sure to set all variables inside single or double quoted strings.
+            El contenido de cada variable se escapará. Si el contenido se utiliza fuera de las comillas, todos los caracteres se escaparán. Algunas aplicaciones pueden leer caracteres de escape innecesarios en su lista de parámetros y funcionarán como se espera, pero otras no. Asegúrese de establecer todas las variables dentro de cadenas entre comillas simples o dobles.
 
             Uso correcto:
             -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
