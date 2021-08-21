@@ -7,7 +7,7 @@ menu:
     streams: Streams
     chat: Chat
     languages: Idiomas
-    hotkeys: Acceso rápido
+    hotkeys: Accesos rápidos
     notifications: Notificaciones
     channels: Canales
 main:
@@ -32,43 +32,43 @@ main:
         description: Seleccione un tema para la interfaz.
         notes-system: Esto debe ser compatible con el sistema operativo o el entorno de escritorio.
     scrolling:
-        title: Scrolling
-        description: Enable or disable smooth scrolling.
-        checkbox: Enable smooth scrolling
+        title: Desplazamiento
+        description: Habilitar o deshabilitar el desplazamiento suave.
+        checkbox: Habilitar desplazamiento suave
     externalcommands:
         title: Acciones de línea de comandos
-        description: Listen to signals sent by second application instances.
+        description: Escuche las señales enviadas por las instancias de la segunda aplicación.
         notes: Consulte la wiki para obtener una lista de acciones y parámetros disponibles.
         checkbox: Permitir comandos externos
 gui:
     integration:
-        title: OS integration
+        title: Integración del SO
         description: Desde donde acceder a la interfaz.
         values:
             both: Ambas
             taskbar: Barra de tareas
-            tray: Tray
+            tray: Bandeja del sistema
     minimize:
         title: Minimizar interfaz
         description: Cuando el reproductor de vídeo se abra.
         values:
             noop: No hacer nada
             minimize: Minimizar
-            tray: Move to tray
+            tray: Mover a la bandeja del sistema
     hidebuttons:
         title: Ocultar botones de ventana
         description: Ocultar botones de minimizar, maximizar y cerrar.
         checkbox: Ocultar botones
     minimizetotray:
         title: Botón minimizar
-        description: Click behavior.
-        checkbox: Minimize to tray
+        description: Conducta del click.
+        checkbox: Minimizar a la bandeja del sistema
     badgelabel:
         title: Application badge
-        description: On the taskbar/dock icon.
+        description: El icono en la barra de tareas/dock.
         notes: Esto debe ser compatible con el sistema operativo o el entorno de escritorio.
-        requires: Taskbar OS integration and desktop notifications have to be enabled.
-        checkbox: Show number of streaming favorites
+        requires: La integración del SO de la barra de tareas y las notificaciones de escritorio deben estar habilitadas.
+        checkbox: Mostrar el número de streams favoritos
     focusrefresh:
         title: Actualizar contenido
         description: Actualizar automáticamente cuando la ventana de la aplicación recupere el foco.
@@ -79,9 +79,9 @@ gui:
             five: Después de cinco minutos
 streaming:
     provider:
-        title: Streaming provider
-        description: Choose a streaming provider and set custom executable locations.
-        notes: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
+        title: Proveedor del streaming
+        description: Elija un proveedor de streaming y establezca ubicaciones ejecutables personalizadas.
+        notes: Se debe establecer una ruta explícita si el archivo no se puede encontrar en las variables de entorno (PATH) del sistema o en la lista de rutas de respaldo de la GUI.
         executable:
             streamlink: Ejecutable de Streamlink
             streamlink-python: Ejecutable de Python
@@ -91,147 +91,147 @@ streaming:
             title: Parámetros personalizados
             placeholder: Agregar parámetros personalizados
     playerinput:
-        title: Player input
-        description: Defines the method of how the stream data is being fed into the player.
-        notes: Please see the wiki for detailed informations about this option. Different parameters will be set, depending on the selection. The player needs to support the selected method.
+        title: Entrada del reproductor
+        description: Define el método por el que se introducen los datos del stream en el reproductor.
+        notes: Consulte la wiki para obtener información detallada sobre esta opción. Se establecerán diferentes parámetros, dependiendo de la selección. El reproductor debe admitir el método seleccionado.
         values:
             stdin:
-                label: Standard input
-                description: Writes the stream to the player's standard input channel.
+                label: Entrada estándar
+                description: Escribe el stream en la entrada estándar del reproductor.
             fifo:
-                label: Named pipe
-                description: Writes the stream to a named pipe, where the player reads from.
+                label: Canalización con nombre # TODO: Improve this translation
+                description: Escribe la secuencia en una canalización con nombre, desde donde el reproductor lee. # TODO: Improve this translation
             http:
                 label: HTTP
-                description: Launches a local HTTP server where the player reads from.
+                description: Inicia un servidor HTTP local desde donde el reproductor lee.
             passthrough:
-                label: HLS (passthrough)
-                description: Lets the player download and buffer the stream by itself.
+                label: HLS (passthrough) # TODO: Translate this
+                description: Permite que el reproductor descargue y almacene el stream por sí mismo.
     low-latency:
         title: Streaming de baja latencia
         description: Reduce la carga del stream para los canales que se transmiten en modo de baja latencia.
-        notes: Be aware that enabling this option will also set the live-edge value to 2 if it is higher, which may cause buffering for regular streams. To achieve the lowest latency possible, further tweaking of the player's own caching/buffering settings needs to be done.
+        notes: Tenga en cuenta que habilitar esta opción también establecerá el valor de Live-Edge en 2 si es más alto, lo que puede causar el almacenamiento en búfer para transmisiones regulares. Para lograr la latencia más baja posible, es necesario realizar más ajustes en la configuración de almacenamiento en caché / búfer del reproductor.
         checkbox: Habilitar la transmisión de baja latencia
     hls-live-edge:
-        title: HLS live edge
-        description: Lowering the value will reduce stream latency, but may also cause buffering. Depending on the player configuration, there may be another layer of buffering.
+        title: HLS live edge # TODO: Translate this
+        description: Bajar el valor reducirá la latencia de la transmisión, pero también puede causar almacenamiento en búfer. Dependiendo de la configuración del reproductor, puede haber otra capa de almacenamiento en búfer.
     hls-segment-threads:
-        title: HLS segment threads
-        description: Number of threads used for downloading and processing stream segments.
+        title: HLS segment threads # TODO: Translate this
+        description: Número de subprocesos utilizados para descargar y procesar segmentos de flujo.
     player-no-close:
-        title: Keep player window
-        description: After the stream has ended.
-        notes: The player itself may prevent {provider} to close it. Please see the player settings as well.
-        checkbox: Do not close the player
+        title: Mantener la ventana del reproductor
+        description: Después de que el stream haya terminado.
+        notes: El propio reproductor puede evitar que {provider} lo cierre. Por favor consulte también la configuración del reproductor.
+        checkbox: No cerrar el reproductor
     disable-ads:
         title: Anuncios
         description: Esto permitirá que el stream se congele mientras el canal muestra anuncios. Consulte la wiki para obtener más información.
         checkbox: Omitir anuncios incrustados en los streams
     retry-open:
-        title: Launch attempts
-        description: Number of stream launch attempts.
+        title: Intentos de lanzamiento
+        description: Número de intentos de lanzamiento del stream.
     retry-streams:
-        title: Retry delay
-        description: Time in seconds between each attempt.
+        title: Retraso de reintento
+        description: Tiempo en segundos entre cada intento.
 player:
     preset:
-        title: Player preset
-        description: Use a predefined player configuration.
+        title: Ajustes preestablecidos del reproductor
+        description: Use una configuración de reproductor predefinida.
     executable:
         default:
-            title: Video player
-            description: If left empty, the player defined in the config file will be used.
-            default-value: VLC (unconfigured)
-            notes: Parameters can be added here, but should be set in the parameters field instead. See below for a list of available variables.
-            placeholder: Leave blank for default player
+            title: Reproductor de vídeo
+            description: Si se deja vacío, se utilizará el reproductor definido en el archivo de configuración.
+            default-value: VLC (desconfigurado)
+            notes: Los parámetros se pueden agregar aquí, pero deben establecerse en el campo de parámetros. Consulte a continuación para obtener una lista de variables disponibles.
+            placeholder: Dejar en blanco para el reproductor predeterminado
         preset:
-            title: Player executable
-            description: An explicit path needs to be set if the file can not be found in the system's $PATH env var or in the GUI's list of fallback paths.
-            placeholder: Leave blank for default location
+            title: Ejecutable del reproductor
+            description: Se debe establecer una ruta explícita si el archivo no se puede encontrar en las variables de entorno (PATH) del sistema o en la lista de rutas de respaldo de la GUI.
+            placeholder: Dejar en blanco para la ubicación predeterminada
     args:
         default:
-            title: Parameters
-            description: Add player specific parameters.
+            title: Parámetros
+            description: Agrega parámetros específicos del reproductor.
         preset:
-            title: Custom parameters
-            description: Set additional custom player parameters.
-        placeholder: Add custom player parameters
+            title: Parámetros personalizados
+            description: Establezca parámetros de reproductor personalizados adicionales.
+        placeholder: Agregar parámetros de reproductor personalizados
         substitutions:
-            channel: Channel name
-            status: Channel status text
-            game: Name of the game being played
-            delay: Additional stream delay in seconds
-            created: Online since
-            viewers: Number of current viewers
-            views: Total number of views
+            channel: Nombre del canal
+            status: Texto de estado del canal
+            game: Nombre del juego que se está jugando
+            delay: Retraso de stream adicional en segundos
+            created: Online desde
+            viewers: Número de espectadores actuales
+            views: Número total de visualizaciones
     players:
         default:
-            label: No preset
+            label: No preestablecido
         vlc:
             label: VLC media player
             attributes:
                 instance:
-                    title: Single instance mode
-                    description: View multiple streams in different player windows.
-                    checkbox: Prevent single instance mode
+                    title: Modo de instancia única
+                    description: Ver múltiples transmisiones en diferentes ventanas de reproductor.
+                    checkbox: Evitar el modo de instancia única
                 close:
-                    title: Close player
-                    description: Prevents stacking up empty player windows.
-                    checkbox: Allow the player to get closed
+                    title: Cerrar reproductor
+                    description: Evita que se acumulen ventanas de reproductor vacías.
+                    checkbox: Permitir que el reproductor se cierre
                 title:
-                    title: Player window title
-                    description: Show the channel name, game being played and stream title.
-                    checkbox: Set custom title
+                    title: Título de la ventana del reproductor
+                    description: Muestra el nombre del canal, el juego que se está jugando y el título del stream.
+                    checkbox: Establecer título personalizado
                 minimal:
-                    title: Layout
-                    description: Hide player controls. Can also be toggled by pressing CTRL+H.
-                    checkbox: Minimal player layout
+                    title: Diseño
+                    description: Ocultar los controles del reproductor. También se puede alternar presionando CTRL + H.
+                    checkbox: Diseño mínimo del reproductor
         mpv:
             label: MPV
             attributes:
                 close:
-                    title: Close player
-                    description: Prevents stacking up empty player windows.
-                    checkbox: Allow the player to get closed
+                    title: Cerrar reproductor
+                    description: Evita que se acumulen ventanas de reproductor vacías.
+                    checkbox: Permitir que el reproductor se cierre
                 title:
-                    title: Player window title
-                    description: Show the channel name, game being played and stream title.
-                    checkbox: Set custom window title
+                    title: Título de la ventana del reproductor
+                    description: Muestra el nombre del canal, el juego que se está jugando y el título del stream.
+                    checkbox: Establecer título personalizado
                 media-title:
-                    title: Media title
-                    description: Show the channel name, game being played and stream title.
-                    checkbox: Set custom media title
+                    title: Media title # TODO: Translate this
+                    description: Muestra el nombre del canal, el juego que se está jugando y el título del stream.
+                    checkbox: Set custom media title # TODO: Translate this
                 minimal:
-                    title: Layout
-                    description: Don't show player window decorations.
-                    checkbox: Minimal player layout
+                    title: Diseño
+                    description: No mostrar decoraciones del reproductor.
+                    checkbox: Diseño mínimo del reproductor
                 no-keepaspect-window:
-                    title: Window aspect ratio
-                    description: Show a black background if the content doesn't fit into the player window.
-                    checkbox: Unrestricted window aspect ratio
+                    title: Relación de aspecto de la ventana
+                    description: Muestra un fondo negro si el contenido no encaja en la ventana del reproductor.
+                    checkbox: Relación de aspecto de ventana sin restricciones
                 window:
-                    title: Force window
-                    description: Fixes potential issues with audio-only streams.
-                    checkbox: Always show player window
+                    title: Forzar ventana
+                    description: Soluciona problemas potenciales con streams de solo audio.
+                    checkbox: Mostrar siempre la ventana del reproductor
                 seeking:
-                    title: Seeking
-                    description: Enables jumping forwards/backwards in the stream cache.
-                    checkbox: Enable seeking
+                    title: Seeking # TODO: Translate this
+                    description: Permite saltar hacia adelante/atrás en la caché del stream.
+                    checkbox: Enable seeking # TODO: Translate this
                 no-cache:
-                    title: No player cache
-                    description: Speed up stream launch time.
-                    checkbox: Don't use the additional player cache
+                    title: No caché en el reproductor
+                    description: Acelera el tiempo de lanzamiento del stream.
+                    checkbox: No usar el caché adicional del reproductor
         mpc:
-            label: Media Player Classic - Home Cinema
+            label: Media Player Classic - Home Cinema # TODO: Translate this
             attributes:
                 instance:
-                    title: Single instance mode
-                    description: View multiple streams in different player windows.
-                    checkbox: Prevent single instance mode
+                    title: Modo de instancia única
+                    description: Ver múltiples streams en diferentes ventanas de reproductor.
+                    checkbox: Evitar el modo de instancia única
                 close:
-                    title: Close player
-                    description: Prevents stacking up empty player windows.
-                    checkbox: Allow the player to get closed
+                    title: Cerrar reproductor
+                    description: Evita que se acumulen ventanas de reproductor vacías.
+                    checkbox: Permitir que el reproductor se cierre
         potplayer:
             label: Daum PotPlayer
 streams:
@@ -239,7 +239,7 @@ streams:
         title: Calidad preferida
         description: Elija la calidad del stream predeterminada.
     qualitypresets:
-        title: Quality presets
+        title: Quality presets # NOTE: Continue from here
         description: Define precise quality selections by range or by using explicit quality names.
         notes: The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the "best" or "worst" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes.
         dont-exclude: Don't exclude stream qualities
