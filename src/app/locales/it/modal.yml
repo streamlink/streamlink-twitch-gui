@@ -1,0 +1,81 @@
+dialog:
+    action:
+        close: Chiudi
+changelog:
+    header: "Hai appena eseguito l'upgrade a {version}"
+    body: Vuoi vedere le novità e leggere subito il changelog?
+    action:
+        show: Novità
+confirm:
+    header: Si prega di confermare
+    body: Vuoi applicare le tue modifiche?
+    action:
+        apply: Applica
+        discard: Scarta
+        cancel: Cancella
+debug:
+    header: "Debug build: {version}"
+    body: |
+        Stai eseguendo una build di debug di {name}.<br>
+        Fai attenzione a ciò che stai facendo e segnala eventuali problemi che potresti riscontrare.<br>
+        Grazie!
+    action:
+        close: Okay
+firstrun:
+    body: |
+        Grazie per usare {name}!<br>
+        Vuoi configurare l'applicazione prima di iniziare?
+    action:
+        start: Avvia ora
+        settings: Impostazioni
+newrelease:
+    header: "Stai utilizzando una versione obsoleta: {version}"
+    body: "Vuoi scaricare l'ultima versione adesso? ({version})"
+    action:
+        download: Scarica
+        ignore: Ignora
+quit:
+    header: Sei sicuro di voler uscire?
+    body:
+        streams: Scegliendo lo spegnimento, verranno chiusi anche tutti i flussi.
+        no-streams: Tutti i flussi sono stati chiusi. Vuoi uscire adesso?
+    action:
+        close: Ritorna
+        shutdown: Spegni
+        quit: Esci
+streaming:
+    header:
+        preparing: "Preparazione, per favore aspetta"
+        launching: "Lanciando: "
+        watching: "Guardando: "
+        ended: "Stream concluso: "
+        error:
+            log: "Errore: impossibile avviare lo stream"
+            provider: "Errore: {provider} configurazione errata"
+            player: "Errore: configurazione errata lettore"
+            version: "Errore: Versione {provider} non valida"
+            unable-to-open: "Errore: Impossibile aprire lo streaming"
+            no-streams-found: "Errore: Nessun flusso trovato"
+            timeout: "Errore: Tempo scaduto"
+            hosting: "{name} sta ospitando un altro canale"
+            internal: "Errore"
+    body:
+        launching: "In attesa che {provider} avii lo stream..."
+        ended: "Vuoi riavviare lo streaming ora?"
+        error:
+            provider: "Si prega di controllare le impostazioni e/o (re)installare {provider}."
+            player: "Si prega di controllare le impostazioni del lettore."
+            version: "La versione v{version} non rispetta i requisiti minimi (v{required})."
+            unable-to-open: "Non è stato possibile aprire lo stream {provider}"
+            no-streams-found: "Non sono riuscito a trovare lo stream {provider}"
+            timeout: "O {name} è offline o la tua connessione a Twitch è stata interrotta."
+            hosting: "Vuoi passare a {name}?"
+            internal: "Errore interno"
+    action:
+        abort: Interrompi
+        continue: Continua
+        download: Scarica
+        log: attiva/disattiva registro {provider}
+        restart: Riavvia
+        shutdown: Chiudi stream
+        start-hosted: Passa

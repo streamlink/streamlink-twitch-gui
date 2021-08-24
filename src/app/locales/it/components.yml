@@ -1,0 +1,97 @@
+channel-button:
+    title: "Segui {name}"
+channel-item:
+    game-missing: Nessun gioco ancora impostato
+documentation-link:
+    title: Leggi la documentazione online
+drop-down-selection:
+    placeholder: Si prega di scegliere
+file-select:
+    placeholder: Lascia vuoto per il percorso predefinito
+flag-icon:
+    channel: "La lingua del canale è {lang}"
+    broadcaster: "La lingua dell'emittente è {lang}"
+infinite-scroll:
+    error: Errore
+    loading: Caricamento
+    fetch: Prendi di più
+main-menu:
+    browse:
+        header: Naviga
+        featured: In primo piano
+        games: Giochi
+        streams: Streams
+    followed:
+        header: Seguito
+        streams: Streams
+        channels: Canali
+    misc:
+        header: Varie
+        settings: Impostazioni
+        about: Informazioni
+open-chat:
+    title: Apri chat
+quick-bar-homepage:
+    title: Imposta come pagina iniziale
+quick-bar-random-stream:
+    title: Avvia stream casuale
+search-bar:
+    placeholder: Cerca
+    filter: Filtra risultati
+    filters:
+        all: Tutti
+        games: Giochi
+        channels: Canali
+        streams: Streams
+    recent: Richieste recenti
+settings-channel-item:
+    settings: Impostazioni
+    erase: Non settato
+    confirmation: Annullare le impostazioni personalizzate?
+    confirm: Sì
+    decline: No 
+settings-hotkey:
+    empty: Nessun tasto di scelta rapida impostato
+    edit: Personalizza questo tasto di scelta rapida
+    delete: Annulla tasto di scelta rapida personalizzato
+    discard: Scarta
+    confirm: Imposta il tasto di scelta rapida personalizzato
+    toggle: Abilita o disabilita questo tasto di scelta rapida
+settings-row:
+    notes: Note
+    default: Predefinito
+    requires: Richiede
+    example: Esempio
+    variables:
+        title: Variabili disponibili
+        # Variabili disponibili (whitespace sensitive)
+        help: |
+            Il contenuto di ogni variabile verrà sottoposto a escape. Se utilizzato al di fuori delle stringhe tra virgolette, ogni carattere verrà sottoposto a escape. Alcune applicazioni sono in grado di leggere caratteri sfuggiti inutilmente nell'elenco dei parametri e funzioneranno come previsto, ma altre no. Assicurati di impostare tutte le variabili all'interno di stringhe con virgolette singole o doppie:
+            -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
+settings-submit:
+    apply: Applica
+    discard: Scarta
+share-channel:
+    title: Copia l'URL del canale negli appunti
+stream-item:
+    fps: "{fps} fps"
+    details:
+        show: Mostra dettagli streaming
+        lock: Blocca la visualizzazione dei dettagli
+        unlock: Sblocca la visualizzazione dei dettagli
+    vodcast: Vodcast
+team-item:
+    created-at:
+        title: "Data creazione"
+        format: "{created_at, date, full}"
+    updated-at:
+        title: "Ultima modifica"
+        format: "{updated_at, date, full}"
+title-bar:
+    loggedout: Accesso non effettuato
+    # Variabili disponibili (whitespace sensitive)
+    loggedin: |
+        Collegato come {name}
+        {status}
+twitch-emotes:
+    title: Mostra le emoticon del canale disponibili
