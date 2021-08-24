@@ -1,0 +1,179 @@
+error:
+    header: Errore
+    text: Si è verificato un errore durante il tentativo di visualizzare questa pagina.
+about:
+    about:
+        header: Informazioni
+        homepage: Homepage
+        author: Autore
+        version: Versione
+        nwjs: NW.js
+        platform: Piattaforma
+        arch: Architettura
+        built: Costruito
+        help: Aiuto
+        wiki: Wiki
+        bugs: Bugs
+        issue-tracker: Rilevatore di problemi
+        support: Supporto
+        gitter: Gitter
+        changelog: Novità
+        contributors: Contributori
+    donation:
+        header: Dona e Supporta
+        text: Se ritieni che questa applicazione sia utile, considera di supportare il suo creatore con una donazione.<br>Grazie mille!
+    translations:
+        header: Traduzioni
+    dependencies:
+        header: Applicazioni di terze parti
+featured:
+    header: Canali in primo piano
+    empty: Impossibile caricare l'elenco dei canali in primo piano!
+    summary: Ci sono {viewers} persone che stanno guardando {channels} live streaming in questo momento!
+games:
+    header: Migliori giochi
+    empty: L'elenco restituito dei migliori giochi è vuoto.
+game:
+    empty: L'elenco restituito dei flussi di questo gioco è vuoto.
+streams:
+    header: Migliori streams
+    empty: L'elenco restituito dei migliori stream è vuoto.
+channel:
+    menu:
+        details: Dettagli
+        teams: Teams
+        settings: Impostazioni
+    offline: È offline in questo momento
+    details:
+        header: Statistiche canale
+        name:
+            title: Nome
+        created-at:
+            title: Creato
+            format: "{created_at, date, long}"
+        language:
+            title: Lingua
+        followers:
+            title: Followers
+            data: "{followers} ({day} per day)"
+        views:
+            title: Visualizzazioni
+            data: "{views} ({day} per day)"
+        content:
+            title: Contenuto
+            mature: Inappropriato per i bambini
+            ffa: Nessun limite di età
+        format:
+            title: Formato
+            data: "{resolution} @ {fps}fps"
+        delay:
+            title: Ritardo
+            data: |
+                {count, plural,
+                    =0 {Nessun ritardo aggiuntivo}
+                    one {Un secondo}
+                    other {# secondi}
+                }
+        vodcast:
+            title: Vodcast
+            data: Lo streaming è un Vodcast
+    teams:
+        empty: L'elenco dei teams restituito è vuoto.
+    settings:
+        stream:
+            header: Stream
+            quality:
+                title: Qualità
+                description: Imposta una qualità di streaming specifica per il canale.
+            low-latency:
+                title: Streaming a bassa latenza
+                description: Sostituisci le impostazioni globali di streaming a bassa latenza.
+                checkbox: Abilita streaming a bassa latenza
+            disable-ads:
+                title: Annunci
+                description: Sostituisci le impostazioni globali degli annunci.
+                checkbox: Salta gli annunci pubblicitari incorporati negli stream
+            chat:
+                title: Chat
+                description: Apri chat automaticamente.
+                checkbox: Apri chat quando lo streaming inizia
+        notifications:
+            header: Notifiche desktop
+            enabled:
+                title: Notifiche
+                description: Quando il canale inizia lo streaming
+                notes: Il canale deve essere seguito.
+                checkbox: Abilita le notifiche del desktop
+team:
+    header:
+        members: "Membri team: {num}"
+        created-at: "Data creazione: {created_at, date, full}"
+        updated-at: "Ultima modifica: {updated_at, date, full}"
+    menu:
+        live: Membri live
+        all: Tutti i membri
+        info: Informazioni Team
+    live:
+        empty: L'elenco restituito dei membri del team della trasmissione è vuoto.
+    all:
+        empty: L'elenco restituito di tutti i membri del team è vuoto.
+    info:
+        header: Informazioni
+user:
+    index:
+        logged-in: "Collegato come {name}"
+        since: "Da {since, date, full}"
+        sign-out: Disconnetti
+        token:
+            title: Il tuo token di accesso
+            show: Mostra il token d'accesso
+            copy: Copia negli appunti
+            hint:
+                first: "Questa chiave garantisce l'accesso al tuo account Twitch.tv con queste autorizzazioni:"
+                second: Accedi di nuovo con la tua password per invalidarla.
+    auth:
+        abort: Interrompi
+        sign-in: Accedi
+        token:
+            show-form: Usa token di accesso
+            placeholder: Inserisci token di accesso
+            hint:
+                first: Accedi al tuo account Twitch.tv utilizzando un token di accesso.
+                second: "Assicurati che corrisponda alle seguenti autorizzazioni:"
+        fail: Autenticazione fallita. Per favore riprova.
+    followedStreams:
+        header: Stream seguiti
+        empty:
+            text: L'elenco restituito degli stream seguiti è vuoto.
+            featured: Guarda gli stream attualmente in primo piano
+            streams: Guarda i migliori stream
+    followedChannels:
+        header: Canali seguiti
+        buttons:
+            sort-by-followed: Ordina per data seguita
+            sort-by-broadcast: Ordina per ultima trasmissione
+            sort-by-login: Ordina per ultimo accesso
+            sort-desc: Ordina in ordine decrescente
+            sort-asc: Ordina in ordine crescente
+        empty: L'elenco restituito dei canali seguiti è vuoto.
+search:
+    header:
+        all: Tutti i risultati della ricerca
+        games: "Risultati dei giochi cercati: "
+        channels: "Risultati dei canali cercati: "
+        streams: "Risultati dei flussi cercati: "
+    subheader:
+        games: Giochi
+        channels: Canali
+        streams: Flussi
+    empty: La tua richiesta non corrisponde a nulla...
+watching:
+    header: Stai guardando
+    buttons:
+        open: Apri finestra di dialogo
+        close: Chiudi flusso
+    empty:
+        header: Tutti i flussi sono stati chiusi
+        next: Cosa fare dopo?
+        featured: Guarda gli stream attualmente in primo piano
+        followed: Guarda i tuoi stream seguiti

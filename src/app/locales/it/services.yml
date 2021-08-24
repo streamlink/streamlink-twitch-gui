@@ -1,0 +1,13 @@
+notification:
+    dispatch:
+        single: "{name} ha iniziato lo streaming"
+        group: Alcuni canali seguiti hanno iniziato lo streaming
+    status:
+        disabled: Le notifiche desktop sono disabilitate
+        enabled: Le notifiche desktop sono abilitate
+        error: Le notifiche desktop sono offline
+        paused: Le notifiche desktop sono in pausa
+    tray:
+        pause:
+            label: Metti in pausa le notifiche
+            tooltip: Attiva/disattiva rapidamente le notifiche del desktop

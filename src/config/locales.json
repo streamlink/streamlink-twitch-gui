@@ -4,6 +4,7 @@
 		"de": "Deutsch",
 		"en": "English",
 		"fr": "Français",
+		"it": "Italian",
 		"pt-br": "Português (Brasil)",
 		"ru": "Русский",
 		"zh-tw": "中文 繁體"
@@ -25,6 +26,12 @@
 			{
 				"name": "Simon P.",
 				"github": "selbiselbi"
+			}
+		],
+		"it": [
+			{
+				"name": "Salvatore",
+				"github": "Salvaju29ro"
 			}
 		],
 		"pt-br": [
