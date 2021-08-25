@@ -19,6 +19,8 @@ module.exports = class WebpackI18nCoveragePlugin {
 		this._BabelTraverse = require( "@babel/traverse" ).default;
 		this._Glimmer = require( "@glimmer/syntax" );
 
+		/** @type {Array<webpack.NormalModule>} */
+		this.moduleErrors = [];
 		/** @type {Map<string, Map<string, {vars: Set<string>, hasHTMLTags: boolean}>>} */
 		this.localeData = new Map();
 		/** @type {Map<string, Array<{params: string[], htmlSafe: boolean}>>>} */
@@ -37,10 +39,20 @@ module.exports = class WebpackI18nCoveragePlugin {
 	}
 
 	_onDone() {
+		const { grunt, localeData, translationKeys, defaultLocale, exclude } = this;
+
+		if ( this.moduleErrors.length ) {
+			grunt.log.writeln();
+			for ( const { resource, error: { name: errName, message } } of this.moduleErrors ) {
+				grunt.log.error( `${errName}: ${resource}\n${message}` );
+				grunt.log.writeln();
+			}
+			grunt.fail.fatal();
+			return;
+		}
+
 		const diff = require( "lodash/difference" );
 		const diffWith = require( "lodash/differenceWith" );
-
-		const { grunt, localeData, translationKeys, defaultLocale, exclude } = this;
 
 		if ( !localeData.has( defaultLocale ) ) {
 			throw new Error( "Missing default locale data" );
@@ -155,6 +167,11 @@ module.exports = class WebpackI18nCoveragePlugin {
 
 	_onModule( module ) {
 		if ( !module.resource || !module.resource.startsWith( this.appDir ) ) {
+			return;
+		}
+
+		if ( module.error ) {
+			this.moduleErrors.push( module );
 			return;
 		}
 
