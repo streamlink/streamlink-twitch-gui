@@ -1,5 +1,5 @@
 import Controller from "@ember/controller";
-import { computed } from "@ember/object";
+import { get, set, computed } from "@ember/object";
 import { locales as localesConfig, themes as themesConfig } from "config";
 import systemLocale from "utils/system-locale";
 
@@ -7,11 +7,27 @@ import systemLocale from "utils/system-locale";
 const { locales } = localesConfig;
 const { themes } = themesConfig;
 
+const { hasOwnProperty } = {};
+
 
 export default Controller.extend({
 	systemThemeId: "system",
 
-	contentGuiLanguages: computed(function() {
+	// fix empty language selection when switching between builds while adding new translations
+	guiLanguage: computed({
+		get() {
+			const lang = get( this, "model.gui.language" );
+
+			return hasOwnProperty.call( locales, lang )
+				? lang
+				: "auto";
+		},
+		set( _, value ) {
+			return set( this, "model.gui.language", value );
+		}
+	}),
+
+	contentGuiLanguage: computed(function() {
 		const compare = new Intl.Collator( "en", { sensitivity: "base" } ).compare;
 		const languages = Object.keys( locales )
 			.map( key => ({

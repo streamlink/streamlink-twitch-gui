@@ -19,7 +19,7 @@ const IntlService = {
 	_settingsObserver: observer( "settings.content.gui.language", function() {
 		let locale = get( this, "settings.content.gui.language" );
 		if ( locale === "auto" || !locales || !hasOwnProperty.call( locales, locale ) ) {
-			locale = systemLocale /* istanbul ignore next */ || "en";
+			locale = systemLocale;
 		}
 
 		set( this, "locale", [ locale ] );
