@@ -47,8 +47,6 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: yarn install --pure-lockfile --no-progress --non-interactive
-      - name: I18n
-        run: yarn run grunt webpack:i18n
       - name: Test
         shell: bash
         run: |
@@ -57,6 +55,8 @@ jobs:
           else
             yarn run grunt test:coverage
           fi
+      - name: I18n
+        run: yarn run grunt webpack:i18n
       - name: Build
         run: yarn run grunt clean:tmp_prod webpack:prod
       - name: Upload coverage data
