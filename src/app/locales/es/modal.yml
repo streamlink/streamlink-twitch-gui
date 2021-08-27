@@ -30,7 +30,7 @@ firstrun:
         settings: Configuración
 newrelease:
     header: "Estás utilizando una versión desactualizada: {version}"
-    body: " ¿Quieres descargar la última versión ahora? ({version})"
+    body: "¿Quieres descargar la última versión ahora? ({version})"
     action:
         download: Descargar
         ignore: Ignorar
