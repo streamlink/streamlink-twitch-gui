@@ -1,7 +1,7 @@
 menu:
     header: Configuración
     main: Main
-    gui: Interfaz
+    gui: GUI
     streaming: Streaming
     player: Reproductor
     streams: Streams
