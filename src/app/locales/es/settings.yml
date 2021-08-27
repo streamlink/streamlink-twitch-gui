@@ -99,13 +99,13 @@ streaming:
                 label: Entrada estándar
                 description: Escribe el stream en la entrada estándar del reproductor.
             fifo:
-                label: Canalización con nombre # TODO: Improve this translation
-                description: Escribe la secuencia en una canalización con nombre, desde donde el reproductor lee. # TODO: Improve this translation
+                label: Tubería con nombre
+                description: Escribe la secuencia en una tubería con nombre, desde donde el reproductor lee.
             http:
                 label: HTTP
                 description: Inicia un servidor HTTP local desde donde el reproductor lee.
             passthrough:
-                label: HLS (passthrough) # TODO: Translate this
+                label: HLS (pasar por)
                 description: Permite que el reproductor descargue y almacene el stream por sí mismo.
     low-latency:
         title: Streaming de baja latencia
@@ -113,10 +113,10 @@ streaming:
         notes: Tenga en cuenta que habilitar esta opción también establecerá el valor de Live-Edge en 2 si es más alto, lo que puede causar el almacenamiento en búfer para transmisiones regulares. Para lograr la latencia más baja posible, es necesario realizar más ajustes en la configuración de almacenamiento en caché / búfer del reproductor.
         checkbox: Habilitar la transmisión de baja latencia
     hls-live-edge:
-        title: HLS live edge # TODO: Translate this
+        title: HLS live edge
         description: Bajar el valor reducirá la latencia de la transmisión, pero también puede causar almacenamiento en búfer. Dependiendo de la configuración del reproductor, puede haber otra capa de almacenamiento en búfer.
     hls-segment-threads:
-        title: HLS segment threads # TODO: Translate this
+        title: HLS segment threads
         description: Número de subprocesos utilizados para descargar y procesar segmentos de flujo.
     player-no-close:
         title: Mantener la ventana del reproductor
@@ -198,9 +198,9 @@ player:
                     description: Muestra el nombre del canal, el juego que se está jugando y el título del stream.
                     checkbox: Establecer título personalizado
                 media-title:
-                    title: Media title # TODO: Translate this
+                    title: Título del vídeo
                     description: Muestra el nombre del canal, el juego que se está jugando y el título del stream.
-                    checkbox: Set custom media title # TODO: Translate this
+                    checkbox: Activar título de vídeo personalizado
                 minimal:
                     title: Diseño
                     description: No mostrar decoraciones del reproductor.
@@ -214,15 +214,15 @@ player:
                     description: Soluciona problemas potenciales con streams de solo audio.
                     checkbox: Mostrar siempre la ventana del reproductor
                 seeking:
-                    title: Seeking # TODO: Translate this
+                    title: Seeking
                     description: Permite saltar hacia adelante/atrás en la caché del stream.
-                    checkbox: Enable seeking # TODO: Translate this
+                    checkbox: Activar seeking
                 no-cache:
                     title: No caché en el reproductor
                     description: Acelera el tiempo de lanzamiento del stream.
                     checkbox: No usar el caché adicional del reproductor
         mpc:
-            label: Media Player Classic - Home Cinema # TODO: Translate this
+            label: Media Player Classic - Home Cinema
             attributes:
                 instance:
                     title: Modo de instancia única
@@ -239,90 +239,90 @@ streams:
         title: Calidad preferida
         description: Elija la calidad del stream predeterminada.
     qualitypresets:
-        title: Quality presets # NOTE: Continue from here
-        description: Define precise quality selections by range or by using explicit quality names.
-        notes: The second column is showing the actual quality selection. Qualities or quality ranges of the first column will be excluded from the "best" or "worst" selector aliases. Please see the wiki and Streamlink's documentation first before making any changes.
-        dont-exclude: Don't exclude stream qualities
+        title: Ajustes preestablecidos de calidad
+        description: Defina selecciones de calidad precisas por rango o utilizando nombres de calidad explícitos.
+        notes: La segunda columna muestra la selección de calidad real. Las cualidades o los rangos de calidad de la primera columna se excluirán de los alias del selector "mejor" o "peor". Consulte la wiki y la documentación de Streamlink antes de realizar cualquier cambio.
+        dont-exclude: No excluya las calidades del stream
     modal-close-launch:
-        title: Hide stream popup
-        description: When a stream has started.
-        checkbox: Hide the popup after successfully launching a stream
+        title: Ocultar ventana emergente del stream
+        description: Cuando ha comenzado el stream.
+        checkbox: Ocultar la ventana emergente después de lanzar el stream con éxito
     modal-close-end:
-        title: Close stream popup
-        description: When a stream has ended.
-        checkbox: Close the popup of an active stream when it ends
+        title: Cerrar ventana emergente del stream
+        description: Cuando ha terminado el stream.
+        checkbox: Cerrar la ventana emergente de un stream activo cuando finalice
     channelname:
-        title: Custom channel names
-        description: Channel name localizations.
+        title: Nombres de canales personalizados
+        description: Localizaciones de nombres de canales.
         values:
-            custom: Show custom names
-            original: Show original names
-            both: Show both
+            custom: Mostrar nombres personalizados
+            original: Mostrar nombres originales
+            both: Mostrar ambas
     show-flag:
-        title: Flags
-        description: Indicating the broadcaster language.
-        checkbox: Flags are always visible
+        title: Banderas
+        description: Indicando el idioma del emisor.
+        checkbox: Las banderas siempre visibles
     filter-vodcast:
-        title: Fade out Vodcasts
-        description: Makes vodcasts less visible, as an additional indicator.
-        checkbox: Fade out Vodcasts
+        title: Difuminar Vodcasts
+        description: Hace que los vodcasts sean menos visibles, como indicador adicional.
+        checkbox: Difuminar Vodcasts
     vodcast-regexp:
-        title: Custom Vodcast filtering
-        description: Find untagged Vodcasts/Rebroadcasts.
-        notes: A JavaScript compliant regular expression (case-insensitive), applied to the stream title. To disable filtering, enter an empty string or an invalid regular expression.
+        title: Filtrado de Vodcast personalizado
+        description: Encuentra Vodcasts/Rebroadcasts sin etiquetar.
+        notes: Una expresión regular compatible con JavaScript (que no distingue entre mayúsculas y minúsculas), aplicada al título del stream. Para deshabilitar el filtrado, ingrese una cadena vacía o una expresión regular no válida.
     show-info:
-        title: Info bar
-        description: Bottom bar inside the stream preview.
-        checkbox: Info bar is always visible
+        title: Barra de información
+        description: Barra inferior dentro de la vista previa del stream.
+        checkbox: La barra de información siempre visible
     info:
-        title: Info bar content
-        description: What should be displayed?
+        title: Contenido de la barra de información
+        description: ¿Qué debería mostrarse?
         values:
-            game: Game being played
-            title: Stream title
+            game: Juego que se está jugando
+            title: Título del stream
     uptime-hours-only:
-        title: Stream uptime format
-        description: Display stream uptime in hours or days
-        checkbox: Ignore days and sum up hours
+        title: Formato de tiempo del stream
+        description: Mostrar formato de tiempo del stream en horas o días
+        checkbox: Ignorar días y sumar las horas
     click:
-        title: Click behavior
-        description: Additional stream image click actions.
-        ctrl: CTRL + Primary mouse button
-        cmd: CMD + Primary mouse button
-        middle: Middle mouse button
+        title: Comportamiento de click
+        description: Acciones adicionales de click en la imagen del stream.
+        ctrl: CTRL + Botón principal del ratón
+        cmd: CMD + Botón principal del ratón
+        middle: Botón central del ratón
         values:
-            noop: Do nothing
-            launch: Launch stream
-            chat: Open chat
-            channel: Go to channel page
-            settings: Go to channel settings
+            noop: No hacer nada
+            launch: Lanzar stream
+            chat: Abrir chat
+            channel: Ir a la página del canal
+            settings: Ir a la configuración del canal
 chat:
     provider:
         title: Aplicación de chat
         description: Elija la aplicación de chat.
-        notes-browser: Choosing the default browser may result in unwanted, non-minimal window sizes.
+        notes-browser: La elección del navegador predeterminado puede resultar en tamaños de ventana no deseados y no mínimos.
         file-placeholder: Es necesario configurar una ruta ejecutable
         params-placeholder: Establecer parámetros adicionales
         url:
             default:
-                label: Default chat URL
-                description: The application's default chat URL (popout).
+                label: URL de chat predeterminado
+                description: La URL del chat predeterminado de la aplicación (popout).
             popout:
-                label: Popout chat URL
-                description: Used by the popout mode on Twitch's website.
+                label: URL de chat emergente
+                description: Utilizado por el modo ventana emergente en el sitio web de Twitch.
             embed:
-                label: Embedded chat URL
-                description: Meant for embedding the chat into other websites.
+                label: URL del chat incrustado
+                description: Destinado a incrustar el chat en otros sitios web.
         providers:
             browser:
                 label: Navegador por defecto
                 attributes:
                     url:
                         title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        description: Qué URL de chat de Twitch utilizar.
             basic:
                 substitutions:
-                    url: The channel's chat URL on Twitch.tv
+                    url: La URL de chat del canal en Twitch.tv
                     channel: El nombre del canal
                     user: Tu nombre de usuario (si está logueado)
                     token: Tu access token (si está logueado)
@@ -337,7 +337,7 @@ chat:
                         description: Establecer parámetros adicionales.
                     url:
                         title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        description: Qué URL de chat de Twitch usar.
             chrome:
                 label: Google Chrome
                 attributes:
@@ -349,7 +349,7 @@ chat:
                         description: Establecer parámetros adicionales.
                     url:
                         title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        description: Qué URL de chat de Twitch usar.
             chatterino:
                 label: Chatterino
                 attributes:
@@ -366,69 +366,69 @@ chat:
                         title: Archivo .jar de Chatty
                         description: Establece una ruta ejecutable personalizada de Chatty.
                     instance:
-                        title: Single instance mode
-                        description: Requires at least version 0.8.2b2.
-                        checkbox: Enable single instance mode
+                        title: Modo de instancia única
+                        description: Requiere al menos la versión 0.8.2b2.
+                        checkbox: Habiliar modo de instancia única
                     auth:
-                        title: Authenticate
-                        description: Let Chatty re-use the auth data.
-                        checkbox: Sign in automatically
+                        title: Autenticar
+                        description: Deje que Chatty reutilice los datos de autenticación.
+                        checkbox: Iniciar sesión automáticamente
                     args:
-                        title: Custom Chatty parameters
-                        description: Set additional parameters.
+                        title: Parámetros personalizados de Chatty
+                        description: Establecer parámetros adicionales.
             chatty-standalone:
                 label: Chatty (Standalone)
                 attributes:
                     exec:
                         title: Chatty executable
-                        description: Set the path to the Chatty executable.
+                        description: Establezca la ruta al ejecutable de Chatty.
                     instance:
-                        title: Single instance mode
-                        description: Requires at least version 0.8.2b2.
-                        checkbox: Enable single instance mode
+                        title: Modo de instancia única
+                        description: Requiere al menos la versión 0.8.2b2.
+                        checkbox: Habiliar modo de instancia única
                     auth:
-                        title: Authenticate
-                        description: Let Chatty re-use the auth data.
-                        checkbox: Sign in automatically
+                        title: Autenticar
+                        description: Deje que Chatty reutilice los datos de autenticación.
+                        checkbox: Iniciar sesión automáticamente
                     args:
-                        title: Custom Chatty parameters
-                        description: Set additional parameters.
+                        title: Parámetros personalizados de Chatty
+                        description: Establecer parámetros adicionales.
             custom:
-                label: Custom application
+                label: Aplicación personalizada
                 attributes:
                     exec:
-                        title: Application executable
-                        description: Set the path to the executable.
+                        title: Ejecutable de la aplicación
+                        description: Establezca la ruta del ejecutable.
                     args:
-                        title: Application parameters
-                        description: Set application parameters.
+                        title: Parámetros de la aplicación
+                        description: Establecer los parámetros de la aplicación.
                     url:
                         title: Chat URL
-                        description: Which Twitch chat URL to use.
+                        description: Qué URL de chat de Twitch usar.
     chat-open:
         title: Abrir chat
         description: Al cargar streams.
         checkbox: Abrir chat automáticamente
-        checkbox-context: Don't open chat while launching streams via the context menu
+        checkbox-context: No abrir el chat mientras inicia streams a través del menú contextual
     twitchemotes:
         title: Emoticonos de Twitch
         description: Botón que abre twitchemotes.com.
-        checkbox: Show emotes button in stream popups
+        checkbox: Mostrar botón de emoticonos en las ventanas emergentes de stream
 languages:
     filter:
         title: Filtrar streams
         description: Aplicar filtro de idioma a los streams (excepto los streams que sigues).
         values:
             fade:
-                text: Fade out streams
+                text: Difuminar streams
                 description: |
-                    Show all streams, fade out ones not matching the language selection.<br>
-                    Requires at least one selection and filtering needs to be disabled.
+                    Muestra todos las streams, difumina las que no coinciden con la selección de idioma.<br>
+                    Requiere al menos una selección y el filtrado debe estar deshabilitado.
             filter:
-                text: Filter out streams
+                text: Filtrar streams
                 description: |
-                    Only show streams matching the language selection.<br>
-                    Requires exactly one selection and takes precedence over fading.
+                    Mostrar solo los streams que coincidan con la selección de idioma.<br>
+                    Requiere exactamente una selección y tiene prioridad sobre el difuminado.
     languages:
         title: Idiomas
         description: Idioma de del emisor,o si no está configurado, el idioma del canal.
@@ -436,10 +436,10 @@ languages:
 hotkeys:
     navigation:
         title: Navegación
-        description: Global navigation hotkeys.
+        description: Navegación global de accesos rápidos.
         notes: |
-            Hotkeys are categorized by the actions of their respective component. Each action does have a primary and a secondary hotkey, which can be toggled on and off individually, and can also be modified with a custom keybinding. The application window needs to be focused in order for hotkeys to trigger.<br><br>
-            Also please note that the hotkeys are currently not aware of the system's keyboard layout (due to technical reasons). This means that all hotkeys are for now based on the default US keyboard layout (QWERTY) and individual keys may be displayed incorrectly on systems using a different layout.
+            Las teclas de acceso rápido se clasifican según las acciones de sus respectivos componentes. Cada acción tiene una tecla de acceso rápido principal y una secundaria, que se pueden activar y desactivar individualmente, y también se pueden modificar con una combinación de teclas personalizada. La ventana de la aplicación debe estar enfocada para que se activen las teclas de acceso rápido.<br><br>
+            También tenga en cuenta que las teclas de acceso rápido actualmente no conocen la distribución del teclado del sistema (debido a razones técnicas). Esto significa que, por ahora, todas las teclas de acceso rápido se basan en la distribución predeterminada del teclado de EE. UU. (QWERTY) y es posible que las teclas individuales se muestren incorrectamente en los sistemas que utilizan una distribución diferente.
         actions:
             refresh: Actualizar menú actual
             historyBack: Regresar
@@ -451,55 +451,55 @@ hotkeys:
             routeUserFollowedStreams: Ir al menú de Streams seguidos
             routeUserFollowedChannels: Ir al menú de Canales seguidos
             routeUserAuth: Ir al menú de usuario
-            routeWatching: Go to the Watching menu
+            routeWatching: Ir al menú de Viendo
             routeSettings: Ir al menú de configuración
-            routeAbout: Go to the About menu
+            routeAbout: Ir al menú de Acerca de
     searchbar:
         title: Barra de búsqueda
         description: Barra de búsqueda en la parte superior.
         actions:
-            focus: Focus
+            focus: Enfocar
     followbutton:
         title: Botón de seguir
-        description: The follow button on a channel's page or on the streaming dialog.
+        description: El botón de seguir en la página de un canal o en el cuadro de diálogo del stream.
         actions:
             default: Seguir o dejar de seguir
             confirm: Confirmar
     openchatbutton:
         title: Botón de abrir chat
-        description: The chat button on a channel's page or on the streaming dialog.
+        description: El botón de chat en la página de un canal o en el cuadro de diálogo del stream.
         actions:
             default: Abrir chat
     sharechannelbutton:
         title: Botón de compartir canal
-        description: The share button on a channel's page or on the streaming dialog.
+        description: El botón de compartir en la página de un canal o en el cuadro de diálogo del stream.
         actions:
             default: Copiar URL del canal al portapapeles
     twitchemotesbutton:
         title: Botón de emoticonos de Twitch
-        description: Emotes button on a channel's page or on the streaming dialog.
+        description: Botón de emoticonos en la página de un canal o en el cuadro de diálogo del stream.
         actions:
             default: Abrir Twitchemotes.com
     modaldialog:
-        title: Modal dialog
-        description: Generic popup dialogs.
+        title: Diálogos de ventana modal
+        description: Diálogos emergentes genéricos.
         actions:
             close: Cerrar
     modalconfirm:
         title: Confirmar diálogo
-        description: When a certain action needs to be confirmed.
+        description: Cuando una determinada acción necesita ser confirmada.
         actions:
             confirm: Confirmar
     modalstreaming:
-        title: Streaming dialog
-        description: When watching a stream.
+        title: Diálogo del stream
+        description: Viendo el stream.
         actions:
-            shutdown: Stop current stream
-            log: Toggle log output
+            shutdown: Detener el stream actual
+            log: Alternar salida de registro
 notifications:
     enabled:
         title: Notificaciones
-        description: When favorites start streaming.
+        description: Cuando los favoritos comienzan a hacer stream.
         checkbox: Habilitar notificaciones de escritorio
     provider:
         title: Tipo de notificación
@@ -517,17 +517,17 @@ notifications:
                 description: Utiliza el sistema de notificaciones nativo del sistema.
                 notes: Las notificaciones se pueden configurar en las preferencias del sistema
             snoretoast:
-                name: Windows toast notifications
+                name: Notificaciones de Windows
                 description: Notificaciones nativas en Windows 8+
                 notes: \"Las notificaciones de banner\" necesita estar habilitado en las preferencias del sistema
             growl:
-                name: Growl notifications
-                description: Third-party notification service for Windows, macOS and Linux
-                notes: Requires Growl to be installed and running on the system
+                name: Notificaciones de Growl
+                description: Servicio de notificación de terceros para Windows, macOS y Linux
+                notes: Requiere que Growl esté instalado y ejecutándose en el sistema
             rich:
                 name: Rich notifications
                 description: Chromium rich notifications
-                notes: Rendered by the application itself
+                notes: Renderizado por la propia aplicación
     filter:
         title: Filtro del canal
         description: Las notificaciones se pueden activar/desactivar individualmente en el menú de configuración del canal.
@@ -535,24 +535,24 @@ notifications:
             blacklist: Mostrar todos excepto los deshabilitados
             whitelist: Ignorar todos excepto los habilitados
     filter-vodcasts:
-        title: Filter Vodcasts
-        description: Only include live streams.
-        checkbox: Ignore Vodcasts
+        title: Filtrar Vodcasts
+        description: Incluir solo transmisiones en vivo.
+        checkbox: Ignorar Vodcasts
     grouping:
-        title: Grouping
-        description: Merge multiple notifications.
-        checkbox: Only show one notification at a time
+        title: Agrupamiento
+        description: Fusionar varias notificaciones.
+        checkbox: Mostrar solo una notificación a la vez
     click:
         title: Notification click
-        description: Preferred click action.
+        description: Acción de click preferida.
         values:
             noop: No hacer nada
             followed: Ir a favoritos
             stream: Abrir stream
             stream-and-chat: Abrir stream+chat
     click-group:
-        title: Group click
-        description: Preferred group click action.
+        title: Click en grupo
+        description: Acción de click en grupo preferida.
         values:
             noop: No hacer nada
             followed: Ir a favoritos
@@ -560,7 +560,7 @@ notifications:
             stream-and-chat: Abrir todos los streams+chats
     click-restore:
         title: Restablecer interfaz
-        description: Restore from tray or minimized state when performing a notification click action.
+        description: Restaurar desde la bandeja o el estado minimizado al realizar una acción de click de notificación.
         checkbox: Restaurar al hacer click en una notificación
 channels:
     find: Encontrar canal
