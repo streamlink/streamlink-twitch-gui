@@ -1,0 +1,99 @@
+channel-button:
+    title: "Seguir a {name}"
+channel-item:
+    game-missing: no hay juego establecido
+documentation-link:
+    title: Leer la documentación online
+drop-down-selection:
+    placeholder: Por favor elija
+file-select:
+    placeholder: Dejar en blanco para path predeterminado
+flag-icon:
+    channel: "El idioma del canal es {lang}"
+    broadcaster: "El idioma del emisor es {lang}"
+infinite-scroll:
+    error: Error
+    loading: Cargando
+    fetch: Obtener más
+main-menu:
+    browse:
+        header: Navegar
+        featured: Destacados
+        games: Juegos
+        streams: Streams
+    followed:
+        header: Seguidos
+        streams: Streams
+        channels: Canales
+    misc:
+        header: Misc
+        settings: Configuración
+        about: Acerca de
+open-chat:
+    title: Abrir chat
+quick-bar-homepage:
+    title: Establecer página de inicio
+quick-bar-random-stream:
+    title: Iniciar stream aleatorio
+search-bar:
+    placeholder: Buscar
+    filter: Filtrar resultados
+    filters:
+        all: Todas
+        games: Juegos
+        channels: Canales
+        streams: Streams
+    recent: Búsquedas recientes
+settings-channel-item:
+    settings: Configuración
+    erase: Borrar
+    confirmation: ¿Deseas anular la configuración personalizada?
+    confirm: Sí
+    decline: No
+settings-hotkey:
+    empty: Acceso rápido no definido
+    edit: Personalizar este acceso rápido
+    delete: Borrar acceso rápido personalizado
+    discard: Descartar
+    confirm: Establecer acceso rápido personalizado
+    toggle: Habilitar o deshabilitar este acceso rápido
+settings-row:
+    notes: Notas
+    default: Por defecto
+    requires: Requiere
+    example: Ejemplo
+    variables:
+        title: Variables disponibles
+        # tooltip (whitespace sensitive)
+        help: |
+            El contenido de cada variable se escapará. Si el contenido se utiliza fuera de las comillas, todos los caracteres se escaparán. Algunas aplicaciones pueden leer caracteres de escape innecesarios en su lista de parámetros y funcionarán como se espera, pero otras no. Asegúrese de establecer todas las variables dentro de cadenas entre comillas simples o dobles.
+
+            Uso correcto:
+            -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
+settings-submit:
+    apply: Aplicar
+    discard: Descartar
+share-channel:
+    title: Copiar url del canal al portapapeles
+stream-item:
+    fps: "{fps} fps"
+    details:
+        show: Mostrar detalles del stream
+        lock: Bloquear vista de detalles
+        unlock: Desbloquear vista de detalles
+    vodcast: Vodcast
+team-item:
+    created-at:
+        title: "Fecha creada"
+        format: "{created_at, date, full}"
+    updated-at:
+        title: "Última modificación"
+        format: "{updated_at, date, full}"
+title-bar:
+    loggedout: No logueado
+    # tooltip (whitespace sensitive)
+    loggedin: |
+        Logueado como {name}
+        {status}
+twitch-emotes:
+    title: Mostrar emoticonos del canal disponibles

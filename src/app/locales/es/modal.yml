@@ -1,0 +1,81 @@
+dialog:
+    action:
+        close: Cerrar
+changelog:
+    header: "Acabas de actualizar a la versión {version}"
+    body: ¿Quieres ver las novedades y leer los cambios ahora?
+    action:
+        show: Cambios
+confirm:
+    header: Por favor confirme
+    body: ¿Quieres aplicar tus cambios?
+    action:
+        apply: Aplicar
+        discard: Descartar
+        cancel: Cancelar
+debug:
+    header: "Compilación de depuración: {version}"
+    body: |
+        Estás ejecutando una compilación de depuración de {name}.<br>
+        Tenga cuidado con lo que está haciendo e informe cualquier problema que pueda encontrar.<br>
+        Gracias!
+    action:
+        close: Okay
+firstrun:
+    body: |
+        Gracias por utilizar {name}!<br>
+        ¿Quieres configurar la aplicación antes de empezar?
+    action:
+        start: Empezar ahora
+        settings: Configuración
+newrelease:
+    header: "Estás utilizando una versión desactualizada: {version}"
+    body: "¿Quieres descargar la última versión ahora? ({version})"
+    action:
+        download: Descargar
+        ignore: Ignorar
+quit:
+    header: ¿Estás seguro de que quieres salir?
+    body:
+        streams: Al elegir apagar, también se cerrarán todos los streams.
+        no-streams: Se han cerrado todos los streams. ¿Quieres salir ahora?
+    action:
+        close: Volver
+        shutdown: Apagar
+        quit: Quitar
+streaming:
+    header:
+        preparing: "Preparando, por favor espere"
+        launching: "Lanzando: "
+        watching: "Viendo: "
+        ended: "Stream terminado: "
+        error:
+            log: "Error: No se pudo cargar el stream"
+            provider: "Error: Mala configuración de {provider}"
+            player: "Error: Mala configuración del reproductor"
+            version: "Error: Versión del {provider} inválida"
+            unable-to-open: "Error: No se puede abrir el stream"
+            no-streams-found: "Error: No se encontraron streams"
+            timeout: "Error: Desconexión por tiempo"
+            hosting: "{name} está hosteando otro canal"
+            internal: "Error"
+    body:
+        launching: "Esperando a {provider} para iniciar stream..."
+        ended: "¿Quieres reiniciar el stream ahora?"
+        error:
+            provider: "Por favor compruebe su configuración y/o (re)instala {provider}."
+            player: "Por favor compruebe la configuración del reproductor."
+            version: "La versión v{version} no coincide con los requisitos mínimos (v{required})."
+            unable-to-open: "{provider} no pudo abrir el stream."
+            no-streams-found: "{provider} no pudo encontrar el stream."
+            timeout: "O {name} se ha desconectado, o tu conexión con Twitch ha sido interrumpida."
+            hosting: "¿Quieres cambiarte a {name}?"
+            internal: "Error interno"
+    action:
+        abort: Abortar
+        continue: Continuar
+        download: Descargar
+        log: Alternar el log de {provider}
+        restart: Reiniciar
+        shutdown: Cerrar stream
+        start-hosted: Cambiar

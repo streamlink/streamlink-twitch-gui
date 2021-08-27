@@ -1,0 +1,21 @@
+twitch:
+    channel:
+        followers: |
+            {count, plural,
+                one {Una persona está siguiendo}
+                other {# personas están siguiendo}
+            }
+        views: |
+            {count, plural,
+                one {Una visita del canal}
+                other {# visitas del canal}
+            }
+    stream:
+        created-at:
+            less-than-24h: "Online desde las {created_at, time, medium}"
+            more-than-24h: "Online desde las {created_at, time, long}"
+        viewers: |
+            {count, plural,
+                one {Una persona está viendo}
+                other {# personas están viendo}
+            }

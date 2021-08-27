@@ -3,6 +3,7 @@
 	"locales": {
 		"de": "Deutsch",
 		"en": "English",
+		"es": "Español",
 		"fr": "Français",
 		"it": "Italian",
 		"pt-br": "Português (Brasil)",
@@ -20,6 +21,12 @@
 			{
 				"name": "Sebastian Meyer",
 				"github": "bastimeyer"
+			}
+		],
+		"es": [
+			{
+				"name": "Iker",
+				"github": "Relwi"
 			}
 		],
 		"fr": [

@@ -1,0 +1,13 @@
+notification:
+    dispatch:
+        single: "{name} ha empezado streaming"
+        group: Algunos canales de los que sigues han comenzado a transmitir
+    status:
+        disabled: Las notificaciones de escritorio están deshabilitadas
+        enabled: Las notificaciones de escritorio están habilitadas
+        error: Las notificaciones de escritorio están offline
+        paused: Las notificaciones de escritorio están pausadas
+    tray:
+        pause:
+            label: Pausar notificaciones
+            tooltip: Alternar rápidamente las notificaciones de escritorio
