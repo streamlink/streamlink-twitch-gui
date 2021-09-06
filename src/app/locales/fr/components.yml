@@ -7,7 +7,7 @@ documentation-link:
 drop-down-selection:
     placeholder: Choisissez
 file-select:
-    placeholder: Laisse vide pour le chemin par défaut
+    placeholder: Laissez vide pour le chemin par défaut
 flag-icon:
     channel: "La langue de la chaîne est {lang}"
     broadcaster: "La langue du diffuseur est {lang}"
@@ -47,7 +47,7 @@ search-bar:
 settings-channel-item:
     settings: Paramètres
     erase: Désactiver
-    confirmation: Désactiver les paramètres personnalisés?
+    confirmation: Désactiver les paramètres personnalisés ?
     confirm: Oui
     decline: Non
 settings-hotkey:

@@ -21,15 +21,15 @@ about:
         contributors: Contributeurs
     donation:
         header: Donner & Soutenir
-        text: Si vous pensez que cette application est utile, veuillez envisager de soutenir son créateur en faisant un don.<b>Merci beaucoup !
+        text: Si vous pensez que cette application est utile, veuillez envisager de soutenir son créateur en faisant un don.<br>Merci beaucoup !
     translations:
         header: Traductions
     dependencies:
         header: Application tierces
 featured:
     header: Chaînes mises en avant
-    empty: La liste des chaînes mises en avant n'a pas pu être chargée!
-    summary: Il y actuellement {viewers} personnes en train de regarder {channels} !
+    empty: La liste des chaînes mises en avant n'a pas pu être chargée !
+    summary: Il y actuellement {viewers} personnes en train de regarder {channels} streams !
 games:
     header: Top Jeux
     empty: La liste des top jeux retournée est vide.
@@ -37,7 +37,7 @@ game:
     empty: La liste des streams de ce jeu est vide.
 streams:
     header: Top Streams
-    empty: La liste des top Streams retournée est vide
+    empty: La liste des top Streams retournée est vide.
 channel:
     menu:
         details: Détails
@@ -122,7 +122,7 @@ team:
 user:
     index:
         logged-in: "Connecté(e) en tant que {name}"
-        since: "since {since, date, full}"
+        since: "Depuis le {since, date, full}"
         sign-out: Se déconnecter
         token:
             title: Votre token d'accès
@@ -155,13 +155,13 @@ user:
             sort-by-login: Trier par la date de dernière connexion
             sort-desc: Trier par ordre décroissant
             sort-asc: Trier par ordre croissant
-        empty: La liste retournée des chaînes suivie est vide.
+        empty: La liste retournée des chaînes suivies est vide.
 search:
     header:
-        all: Tous les résultat de la recherche
-        games: "Résultat de la recherche de jeux: "
-        channels: "Résultat de la recherche de chaînes: "
-        streams: "Résultat de la recherche de streams: "
+        all: Tous les résultats de la recherche
+        games: "Résultat de la recherche de jeux : "
+        channels: "Résultat de la recherche de chaînes : "
+        streams: "Résultat de la recherche de streams : "
     subheader:
         games: Jeux
         channels: Chaînes

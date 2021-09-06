@@ -47,7 +47,7 @@ gui:
         values:
             both: Les deux barres
             taskbar: Barre des programmes
-            tray: Barre des tâchs
+            tray: Barre des tâches
     minimize:
         title: Réduire l'interface
         description: Quand le lecteur s'ouvre.
@@ -100,7 +100,7 @@ streaming:
                 description: Écrit le flux sur le canal d'entrée standard du lecteur.
             fifo:
                 label: Tube nommé
-                description: Envoi le stream dans un pipe, depuis lequel le lecteur lit
+                description: Envoie le stream dans un pipe, depuis lequel le lecteur lit
             http:
                 label: HTTP
                 description: Lance un serveur HTTP en local, depuis lequel le lecteur lit
@@ -121,7 +121,7 @@ streaming:
     player-no-close:
         title: Garder la fenêtre du lecteur
         description: Après la fin du stream.
-        notes: Le lecteur lui-même peut empêcher {provider}} de le fermer. Veuillez également consulter les paramètres du lecteur.
+        notes: Le lecteur lui-même peut empêcher {provider} de le fermer. Veuillez également consulter les paramètres du lecteur.
         checkbox: Ne pas fermer la fenêtre du lecteur
     disable-ads:
         title: Publicité
@@ -184,7 +184,7 @@ player:
                     checkbox: Définir un titre personnalisé
                 minimal:
                     title: Disposition
-                    description: Masquer les controles du lecteur. Peut aussi être activé/désactivé en appuyant sur CTRL+H.
+                    description: Masquer les contrôles du lecteur. Peut aussi être activé/désactivé en appuyant sur CTRL+H.
                     checkbox: Affichage lecteur minimal
         mpv:
             label: MPV
@@ -203,11 +203,15 @@ player:
                     checkbox: Définir un titre de média personnalisé
                 minimal:
                     title: Disposition
-                    description: Ne montrez pas les décorations des fenêtres des joueurs..
+                    description: Ne montre pas les décorations des fenêtres des joueurs.
                     checkbox: Affichage lecteur minimal
+                no-keepaspect-window:
+                    title: Rapport hauteur/largeur de la fenêtre
+                    description: Rajoute des bandes noires si les dimensions du stream ne correspondent pas à celles de la fenêtre.
+                    checkbox: Rapport hauteur/largeur de la fenêtre non restreint
                 window:
                     title: Forcer la fenêtre
-                    description: Régles de potentiels problèmes avec les stream en audio uniquement.
+                    description: Régle de potentiels problèmes avec les stream en audio uniquement.
                     checkbox: Toujours afficher la fenêtre du lecteur
                 seeking:
                     title: Avancer/Reculer
@@ -215,7 +219,7 @@ player:
                     checkbox: Activer avancer/reculer
                 no-cache:
                     title: Pas de cache lecteur
-                    description: Accelerer la vitesse de lancement du stream.
+                    description: Accélère la vitesse de lancement du stream.
                     checkbox: Ne pas utiliser le cache additionnel du lecteur
         mpc:
             label: Media Player Classic - Home Cinema
@@ -236,8 +240,8 @@ streams:
         description: Choisissez la qualité par défaut
     qualitypresets:
         title: Qualité prédéfinie
-        description: Définir des sélections de qualité précises par plage ou en utilisant des noms de qualité explicites.
-        notes : La deuxième colonne affiche la sélection de la qualité réelle. Les qualités ou les gammes de qualité de la première colonne seront exclues des alias de sélection "best" ou "worst". Veuillez consulter le wiki et la documentation de Streamlink avant d'apporter des modifications.
+        description: Définissez des sélections de qualité précises par plage ou en utilisant des noms de qualité explicites.
+        notes : La deuxième colonne affiche la sélection de la qualité réelle. Les qualités ou les plages de qualité de la première colonne seront exclues des alias de sélection "best" ou "worst". Veuillez consulter le wiki et la documentation de Streamlink avant d'apporter des modifications.
         dont-exclude: Ne pas exclure les qualités de streaming
     modal-close-launch:
         title: Masquer la popup de stream
@@ -248,8 +252,8 @@ streams:
         description: Quand un stream est terminé.
         checkbox: Fermer la popup d'un stream actif lorsqu'il se termine
     channelname:
-        title: Nom de chaînes personnalisés
-        description: Emplacements des noms de chaînes.
+        title: Noms de chaînes personnalisés
+        description: Traduction des noms de chaînes.
         values:
             custom: Afficher les noms personnalisés
             original: Afficher les noms originaux
@@ -259,13 +263,13 @@ streams:
         description: Indiquer la langue du streamer
         checkbox: Drapeaux toujours visibles
     filter-vodcast:
-        title: Fondu enchainé Vodcasts
+        title: Griser les Vodcasts
         description: Rend les vodcasts moins visibles, comme indicateur supplémentaire.
-        checkbox: Fondu enchainé Vodcasts
+        checkbox: Griser les Vodcasts
     vodcast-regexp:
-        title: Filtrage Vodcast personnalisé
+        title: Filtrage personnalisé des Vodcasts 
         description: Trouver des Vodcast/Rebroadcasts non-taggés.
-        notes: Une expression régulière conforme à JavaScript (insensible à la casse), appliquée au titre du flux. Pour désactiver le filtrage, entrez une chaîne vide ou une expression régulière invalide.
+        notes: Une expression régulière conforme à JavaScript (insensible à la casse), appliquée au titre du stream. Pour désactiver le filtrage, entrez une chaîne vide ou une expression régulière invalide.
     show-info:
         title: Barre d'infos
         description: Barre du bas à l'intérieur de l'aperçu du stream.
@@ -277,12 +281,12 @@ streams:
             game: Le jeu joué
             title: Le titre du stream
     uptime-hours-only:
-        title: Format de durée de stream
+        title: Format de durée du stream
         description: Afficher la durée du stream en heures ou jours.
         checkbox: Ignorer les jours et additionner les heures
     click:
         title: Comportement du clic
-        description: Actions supplémentaires lors du clic sur l'image de stream.
+        description: Actions supplémentaires lors du clic sur l'image du stream.
         ctrl: CTRL + clic gauche
         cmd: CMD + clic gauche
         middle: Clic molette de la souris
@@ -296,7 +300,7 @@ chat:
     provider:
         title: Application de chat
         description: Choisissez l'application de chat.
-        notes-browser: Le choix du navigateur par défaut peut entraîner des tailles de fenêtre non désirées et non minimales..
+        notes-browser: Le choix du navigateur par défaut peut entraîner des tailles de fenêtre non désirées et non minimales.
         file-placeholder: La définition d'un chemin vers l'exécutable est nécessaire
         params-placeholder: Définir des paramètres additionnels
         url:
@@ -318,7 +322,7 @@ chat:
                         description: Quel URL du chat Twitch utiliser.
             basic:
                 substitutions:
-                    url: L'URL du chat de la chaîne sur Twitch.tv
+                    url: L'URL du chat de la chaîne sur twitch.tv
                     channel: Le nom de la chaîne
                     user: Votre login (si connecté)
                     token: Votre token d'accès (si connecté)
@@ -345,7 +349,7 @@ chat:
                         description: Définir des paramètres supplémentaires.
                     url:
                         title: URL du chat
-                        description: Quel URL du chat Twitch utiliser
+                        description: Quel URL du chat Twitch utiliser.
             chatterino:
                 label: Chatterino
                 attributes:
@@ -357,7 +361,7 @@ chat:
                 attributes:
                     exec:
                         title: Exécutable Java
-                        description: Définir un chemin personnalisé vers l'exécutable Java
+                        description: Définir un chemin personnalisé vers l'exécutable Java.
                     jar:
                         title: Fichier .jar de Chatty
                         description: Définir un chemin personnalisé vers le .jar de Chatty.
@@ -367,7 +371,7 @@ chat:
                         checkbox: Activer le mode single instance
                     auth:
                         title: S'authentifier
-                        description: Laisser Chatty re-utiliser les donnés d'authentification.
+                        description: Laisser Chatty ré-utiliser les données d'authentification.
                         checkbox: Se connecter automatiquement
                     args:
                         title: Paramètre Chatty personnalisés
@@ -396,16 +400,16 @@ chat:
                         title: Exécutable de l'application
                         description: Définir le chemin de l'exécutable
                     args:
-                        title: Paramètre de l'application
+                        title: Paramètres de l'application
                         description: Définir les paramètres de l'application.
                     url:
                         title: URL du chat
-                        description: Quel URL du chat Twitch utiliser
+                        description: Quelle URL du chat Twitch utiliser.
     chat-open:
         title: Ouvrir le chat
-        description: En lançant un stream
+        description: En lançant un stream.
         checkbox: Ouvrir automatiquement le chat
-        checkbox-context: Ne pas ouvrir le chat en lançant de stream via le menu contextuel
+        checkbox-context: Ne pas ouvrir le chat en lançant un stream via le menu contextuel
     twitchemotes:
         title: Emotes Twitch
         description: Le bouton qui ouvre twitchemotes.com.
@@ -413,20 +417,20 @@ chat:
 languages:
     filter:
         title: Filtrer les streams
-        description: Filter toutes les listes de streams selon la langue (sauf pour les streams suivis).
+        description: Filtrer toutes les listes de streams selon la langue (sauf pour les streams suivis).
         values:
             fade:
-                text: Faire disparaitre les streams
+                text: Griser les streams
                 # FIXME
                 description: |
-                    Afficher tous les streams, faire disparaitre ceux qui ne correpondent pas au filtre de langage.<br>
-                    Requires at least one selection and filtering needs to be disabled.
+                    Afficher tous les streams, griser ceux qui ne correspondent pas au filtre de langage.<br>
+                    Nécessite au moins une sélection et l'option "Cacher les streams" doit être désactivée.
             filter:
-                text: Filtrer les streams
+                text: Cacher les streams
                 # FIXME
                 description: |
                     N'afficher que les streams qui correspondent au filtre de langage.<br>
-                    Requires exactly one selection and takes precedence over fading.
+                    Nécessite au moins une sélection et a la priorité sur "Griser les streams".
     languages:
         title: Langages
         description: Langue du streamer, ou si non-défini, la langue de la chaîne.
@@ -436,7 +440,7 @@ hotkeys:
         title: Navigation
         description: Raccourcis clavier globaux de navigation.
         notes: |
-            Les raccourcis clavier sont classés en fonction des actions de leur composant respectif. Chaque action a un raccourci clavier principal et secondaire, qui peuvent être activés et désactivés individuellement, et peuvent également être modifiés via un raccourci clavier personnalisé. La fenêtre de l'application doit être focalisée pour que les raccourcis clavier se déclenchent. <br> <br>
+            Les raccourcis clavier sont classés en fonction des actions de leur composant respectif. Chaque action a un raccourci clavier principal et secondaire, qui peuvent être activés et désactivés individuellement, et peuvent également être modifiés via un raccourci clavier personnalisé. La fenêtre de l'application doit être focalisée pour que les raccourcis clavier se déclenchent.<br><br> 
             Veuillez également noter que les raccourcis clavier ignorent actuellement la disposition du clavier du système (pour des raisons techniques). Cela signifie que tous les raccourcis clavier sont pour l'instant basés sur la disposition du clavier américain par défaut (QWERTY) et que les touches individuelles peuvent être affichées de manière incorrecte sur les systèmes utilisant une disposition différente.
         actions:
             refresh: Actualiser la page actuelle
@@ -497,17 +501,17 @@ hotkeys:
 notifications:
     enabled:
         title: Notifications
-        description: Quand les favoris commencent à streamer
-        checkbox: Activer les notification sur le burea
+        description: Quand les favoris commencent à streamer.
+        checkbox: Activer les notification sur le bureau
     provider:
         title: Type de notification
-        description: Choisissez le type de notification
+        description: Choisissez le type de notification.
         test:
             button: Notification de test
             message: Ceci est une notification de test
         providers:
             auto:
-                name: Séléction automatique
+                name: Sélection automatique
                 description: Essaye de trouver le meilleur fournisseur de notifications
                 notes: Essaye tous les fournisseurs de notification dans l'ordre décroissant
             native:
@@ -517,7 +521,7 @@ notifications:
             snoretoast:
                 name: Notifications Windows toast
                 description: Notifications natives sur Windows 8+
-                notes: L'option \"Afficher les bannières de notification\" doit être activé dans les préférences système
+                notes: L'option \"Afficher les bannières de notification\" doit être activée dans les préférences système
             growl:
                 name: Notification Growl
                 description: Service tiers de notification pour Windows, macOS et Linux
@@ -528,21 +532,21 @@ notifications:
                 notes: Rendue par l'application elle-même
     filter:
         title: Filtre de chaîne
-        description: Les notification peuvent être activées/désactivées individuellement dans les paramètres de la chaîne
+        description: Les notifications peuvent être activées/désactivées individuellement dans les paramètres de la chaîne.
         values:
             blacklist: Tout afficher sauf celles désactivées
             whitelist: Tout ignorer sauf celles activées
     filter-vodcasts:
         title: Filtre des vodcast
-        description: Inclure seulement les stream live.
+        description: Inclure seulement les streams live.
         checkbox: Ignorer les vodcasts
     grouping:
         title: Regrouper
-        description: Regrouper les notifications multiples
+        description: Regrouper les notifications multiples.
         checkbox: Ne montrer qu'une seule notification à la fois
     click:
         title: Clic sur la notification
-        description: Action de clic préférée
+        description: Action de clic préférée.
         values:
             noop: Ne rien faire
             followed: Aller aux favoris
@@ -558,7 +562,7 @@ notifications:
             stream-and-chat: Ouvrir tous les stream et les chats
     click-restore:
         title: Restaurer l'interface
-        description: Restaure depuis la barre des tâches lors du clic sur une notification.
+        description: Restaurer depuis la barre des tâches lors du clic sur une notification.
         checkbox: Restaurer lors du clic sur une notification
 channels:
     find: Trouver des chaînes
