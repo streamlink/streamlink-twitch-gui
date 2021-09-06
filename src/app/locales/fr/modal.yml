@@ -46,9 +46,9 @@ quit:
 streaming:
     header:
         preparing: "Préparation, veuillez patienter"
-        launching: "Lancement: "
-        watching: "En visionnage: "
-        ended: "Le stream est terminé: "
+        launching: "Lancement : "
+        watching: "En visionnage : "
+        ended: "Le stream est terminé : "
         error:
             log: "Erreur: impossible de lancer le stream"
             provider: "Erreur: {provider} configuration incorrecte"
