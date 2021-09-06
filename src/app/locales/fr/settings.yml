@@ -423,13 +423,13 @@ languages:
                 text: Griser les streams
                 # FIXME
                 description: |
-                    Afficher tous les streams, griser ceux qui ne correspondent pas au filtre de langage.
+                    Afficher tous les streams, griser ceux qui ne correspondent pas au filtre de langage.<br>
                     Nécessite au moins une sélection et l'option "Cacher les streams" doit être désactivée.
             filter:
                 text: Cacher les streams
                 # FIXME
                 description: |
-                    N'afficher que les streams qui correspondent au filtre de langage.
+                    N'afficher que les streams qui correspondent au filtre de langage.<br>
                     Nécessite au moins une sélection et a la priorité sur "Griser les streams".
     languages:
         title: Langages
@@ -440,7 +440,7 @@ hotkeys:
         title: Navigation
         description: Raccourcis clavier globaux de navigation.
         notes: |
-            Les raccourcis clavier sont classés en fonction des actions de leur composant respectif. Chaque action a un raccourci clavier principal et secondaire, qui peuvent être activés et désactivés individuellement, et peuvent également être modifiés via un raccourci clavier personnalisé. La fenêtre de l'application doit être focalisée pour que les raccourcis clavier se déclenchent. 
+            Les raccourcis clavier sont classés en fonction des actions de leur composant respectif. Chaque action a un raccourci clavier principal et secondaire, qui peuvent être activés et désactivés individuellement, et peuvent également être modifiés via un raccourci clavier personnalisé. La fenêtre de l'application doit être focalisée pour que les raccourcis clavier se déclenchent.<br><br> 
             Veuillez également noter que les raccourcis clavier ignorent actuellement la disposition du clavier du système (pour des raisons techniques). Cela signifie que tous les raccourcis clavier sont pour l'instant basés sur la disposition du clavier américain par défaut (QWERTY) et que les touches individuelles peuvent être affichées de manière incorrecte sur les systèmes utilisant une disposition différente.
         actions:
             refresh: Actualiser la page actuelle

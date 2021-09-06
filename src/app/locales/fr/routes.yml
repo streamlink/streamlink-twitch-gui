@@ -21,9 +21,7 @@ about:
         contributors: Contributeurs
     donation:
         header: Donner & Soutenir
-        text: |
-            Si vous pensez que cette application est utile, veuillez envisager de soutenir son créateur en faisant un don.
-            Merci beaucoup !
+        text: Si vous pensez que cette application est utile, veuillez envisager de soutenir son créateur en faisant un don.<br>Merci beaucoup !
     translations:
         header: Traductions
     dependencies:
