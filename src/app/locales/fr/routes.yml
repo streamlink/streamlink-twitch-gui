@@ -37,7 +37,7 @@ game:
     empty: La liste des streams de ce jeu est vide.
 streams:
     header: Top Streams
-    empty: La liste des top Streams retournée est vide
+    empty: La liste des top Streams retournée est vide.
 channel:
     menu:
         details: Détails
@@ -159,8 +159,8 @@ user:
 search:
     header:
         all: Tous les résultats de la recherche
-        games: "Résultat de la recherche de jeux: "
-        channels: "Résultat de la recherche de chaînes: "
+        games: "Résultat de la recherche de jeux : "
+        channels: "Résultat de la recherche de chaînes : "
         streams: "Résultat de la recherche de streams : "
     subheader:
         games: Jeux
