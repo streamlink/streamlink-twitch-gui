@@ -1,6 +1,20 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## Master
+
+- Implemented Spanish translations (es) ([#818](https://github.com/streamlink/streamlink-twitch-gui/pull/818))
+- Implemented Italian translations (it) ([#823](https://github.com/streamlink/streamlink-twitch-gui/pull/823))
+- Fixed context menu position on displays with fractional scaling ([#817](https://github.com/streamlink/streamlink-twitch-gui/issues/817))
+- Fixed HTML tags being escaped in translations
+- Fixed Windows uninstaller not removing some directories
+- Fixed French translations ([#826](https://github.com/streamlink/streamlink-twitch-gui/pull/826))
+- Upgraded NW.js to 0.56.0 (Chromium 93.0.4577.63 / NodeJS 16.4.2)
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.12.0...master)
+
+
 ## [v1.12.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.12.0) (2021-08-08)
 
 - Replaced buttons for following and subscribing channels ([#813](https://github.com/streamlink/streamlink-twitch-gui/issues/813))  
