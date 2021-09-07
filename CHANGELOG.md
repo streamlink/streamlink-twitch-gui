@@ -9,7 +9,7 @@ Changelog - Streamlink Twitch GUI
 - Fixed HTML tags being escaped in translations
 - Fixed Windows uninstaller not removing some directories
 - Fixed French translations ([#826](https://github.com/streamlink/streamlink-twitch-gui/pull/826))
-- Upgraded NW.js to 0.56.0 (Chromium 93.0.4577.63 / NodeJS 16.4.2)
+- Upgraded NW.js to 0.55.0 (Chromium 92.0.4515.107 / NodeJS 16.4.2)
 
 
 [Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.12.0...master)
