@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## Master
+## [v1.13.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.13.0) (2021-09-09)
 
 - Implemented Spanish translations (es) ([#818](https://github.com/streamlink/streamlink-twitch-gui/pull/818))
 - Implemented Italian translations (it) ([#823](https://github.com/streamlink/streamlink-twitch-gui/pull/823))
@@ -12,7 +12,7 @@ Changelog - Streamlink Twitch GUI
 - Upgraded NW.js to 0.55.0 (Chromium 92.0.4515.107 / NodeJS 16.4.2)
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.12.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.12.0...v1.13.0)
 
 
 ## [v1.12.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.12.0) (2021-08-08)
