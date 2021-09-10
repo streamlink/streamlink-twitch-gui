@@ -55,9 +55,9 @@ export default Controller.extend({
 	hlsLiveEdgeMin: settingsAttrMeta( "hls_live_edge", "min" ),
 	hlsLiveEdgeMax: settingsAttrMeta( "hls_live_edge", "max" ),
 
-	hlsSegmentThreadsDefault: settingsAttrMeta( "hls_segment_threads", "defaultValue" ),
-	hlsSegmentThreadsMin: settingsAttrMeta( "hls_segment_threads", "min" ),
-	hlsSegmentThreadsMax: settingsAttrMeta( "hls_segment_threads", "max" ),
+	streamSegmentThreadsDefault: settingsAttrMeta( "stream_segment_threads", "defaultValue" ),
+	streamSegmentThreadsMin: settingsAttrMeta( "stream_segment_threads", "min" ),
+	streamSegmentThreadsMax: settingsAttrMeta( "stream_segment_threads", "max" ),
 
 	retryStreamsDefault: settingsAttrMeta( "retry_streams", "defaultValue" ),
 	retryStreamsMin: settingsAttrMeta( "retry_streams", "min" ),

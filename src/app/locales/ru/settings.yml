@@ -115,8 +115,8 @@ streaming:
     hls-live-edge:
         title: "HLS live edge"
         description: "Уменьшение значения уменьшит задержку на стриме, но также может вызвать буферизацию. В зависимости от настроеек плеера может быть еще один уровень буферизации."
-    hls-segment-threads:
-        title: "HLS segment threads"
+    stream-segment-threads:
+        title: "Stream segment threads"
         description: "Количество потоков, используемых для загрузки и обработки сегментов."
     player-no-close:
         title: "Не закрывать окно плеера"

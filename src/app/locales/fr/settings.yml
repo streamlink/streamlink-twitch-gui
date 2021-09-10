@@ -115,8 +115,8 @@ streaming:
     hls-live-edge:
         title: HLS live edge
         description: Diminuer la valeur réduira la latence du flux, mais peut également provoquer une mise en mémoire tampon. Selon la configuration du lecteur, il peut y avoir une autre couche de mémoire tampon.
-    hls-segment-threads:
-        title: HLS segment threads
+    stream-segment-threads:
+        title: Stream segment threads
         description: Nombre de threads utilisés pour le téléchargement et le traitement des segments de stream.
     player-no-close:
         title: Garder la fenêtre du lecteur
@@ -267,7 +267,7 @@ streams:
         description: Rend les vodcasts moins visibles, comme indicateur supplémentaire.
         checkbox: Griser les Vodcasts
     vodcast-regexp:
-        title: Filtrage personnalisé des Vodcasts 
+        title: Filtrage personnalisé des Vodcasts
         description: Trouver des Vodcast/Rebroadcasts non-taggés.
         notes: Une expression régulière conforme à JavaScript (insensible à la casse), appliquée au titre du stream. Pour désactiver le filtrage, entrez une chaîne vide ou une expression régulière invalide.
     show-info:
@@ -440,7 +440,7 @@ hotkeys:
         title: Navigation
         description: Raccourcis clavier globaux de navigation.
         notes: |
-            Les raccourcis clavier sont classés en fonction des actions de leur composant respectif. Chaque action a un raccourci clavier principal et secondaire, qui peuvent être activés et désactivés individuellement, et peuvent également être modifiés via un raccourci clavier personnalisé. La fenêtre de l'application doit être focalisée pour que les raccourcis clavier se déclenchent.<br><br> 
+            Les raccourcis clavier sont classés en fonction des actions de leur composant respectif. Chaque action a un raccourci clavier principal et secondaire, qui peuvent être activés et désactivés individuellement, et peuvent également être modifiés via un raccourci clavier personnalisé. La fenêtre de l'application doit être focalisée pour que les raccourcis clavier se déclenchent.<br><br>
             Veuillez également noter que les raccourcis clavier ignorent actuellement la disposition du clavier du système (pour des raisons techniques). Cela signifie que tous les raccourcis clavier sont pour l'instant basés sur la disposition du clavier américain par défaut (QWERTY) et que les touches individuelles peuvent être affichées de manière incorrecte sur les systèmes utilisant une disposition différente.
         actions:
             refresh: Actualiser la page actuelle

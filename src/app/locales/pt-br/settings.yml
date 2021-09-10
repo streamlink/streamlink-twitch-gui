@@ -124,8 +124,8 @@ streaming:
     hls-live-edge:
         title: HLS live edge
         description: Diminuir o valor irá diminuir a latência da transmissão, mas podem causar bufferização. Dependendo da configuração do tocador, podem haver outros níveis de bufferização.
-    hls-segment-threads:
-        title: HLS segmentos de threads
+    stream-segment-threads:
+        title: Stream segment threads
         description: Número de threads usados para baixar e processar os segmentos de transmissão.
     player-no-close:
         title: Manter a janela do tocador de vídeo

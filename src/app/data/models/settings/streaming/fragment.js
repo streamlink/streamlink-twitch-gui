@@ -31,7 +31,7 @@ export default Fragment.extend({
 	player_input: attr( "string", { defaultValue: ATTR_STREAMING_PLAYER_INPUT_STDIN } ),
 	player_no_close: attr( "boolean", { defaultValue: false } ),
 	hls_live_edge: attr( "number", { defaultValue: 3, min: 1, max: 10 } ),
-	hls_segment_threads: attr( "number", { defaultValue: 1, min: 1, max: 10 } ),
+	stream_segment_threads: attr( "number", { defaultValue: 1, min: 1, max: 10 } ),
 	retry_open: attr( "number", { defaultValue: 1, min: 1, max: MAX } ),
 	retry_streams: attr( "number", { defaultValue: 1, min: 0, max: MAX } ),
 

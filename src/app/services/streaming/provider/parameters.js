@@ -68,9 +68,9 @@ export const parameters = [
 		"stream.settings.streaming.hls_live_edge"
 	),
 	new Parameter(
-		"--hls-segment-threads",
+		"--stream-segment-threads",
 		"stream.settings.advanced",
-		"stream.settings.streaming.hls_segment_threads"
+		"stream.settings.streaming.stream_segment_threads"
 	),
 	new Parameter(
 		"--retry-open",
