@@ -82,7 +82,7 @@
 		"mini-css-extract-plugin": "1.6.0",
 		"node-fetch": "3.0.0-beta.9",
 		"nw-builder": "github:bastimeyer/nw-builder#48b4ae8",
-		"qunit": "2.6.2",
+		"qunit": "2.17.1",
 		"raw-loader": "0.5.1",
 		"sinon": "11.1.2",
 		"svgo": "2.4.0",
@@ -119,6 +119,7 @@
 		"**/exec-sh": "^0.4.0",
 		"**/optimist/minimist": "0.2.1",
 		"**/plist/xmldom": "github:xmldom/xmldom#0.7.0",
+		"ember-qunit/qunit": "2.17.1",
 		"load-grunt-config/lodash": "^4.17.21",
 		"sinon/nise/just-extend": "^4.0.0"
 	},

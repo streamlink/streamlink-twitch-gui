@@ -1,10 +1,13 @@
 // special NW.js package.json import (see webpack config)
 import "./package.json";
 
-import { default as QUnit, config } from "qunit";
+import QUnit from "qunit";
 import "qunit/assertion-helpers";
-// TODO: fix import paths
 import "./web_modules/ember-test";
+
+
+// TODO: fix QUnit's urlParams / broken checkbox states
+const { config } = QUnit;
 
 
 // don't start automatically
@@ -17,7 +20,9 @@ config.hidepassed = true;
 
 // load tests and then start
 require( [ "tests" ], /* istanbul ignore next */ function() {
-	if ( global._noQUnitBridge ) { return; }
+	if ( global._noQUnitBridge ) {
+		return QUnit.start();
+	}
 	if ( global._setupQUnitBridge ) {
 		// bridge injected, set it up and start QUnit
 		global._setupQUnitBridge( QUnit );

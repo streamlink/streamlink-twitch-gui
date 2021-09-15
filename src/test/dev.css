@@ -2,6 +2,14 @@ body {
 	overflow-y: scroll;
 }
 
+#qunit {
+	position: unset !important;
+}
+
+#qunit-tests {
+	overflow: auto !important;
+}
+
 /* fix line height in the test module dropdown */
 #qunit-modulefilter-dropdown-list .clickable {
 	display: inline-block;
