@@ -60,7 +60,7 @@ jobs:
       - name: Build
         run: yarn run grunt clean:tmp_prod webpack:prod
       - name: Upload coverage data
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           name: os:${{ matrix.os }}
           file: build/tmp/coverage/coverage.json
