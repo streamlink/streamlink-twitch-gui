@@ -104,6 +104,7 @@ GenericName=Twitch.tv browser for Streamlink
 Comment=Browse Twitch.tv and watch streams in your videoplayer of choice
 Keywords=streamlink;twitch;
 Categories=AudioVideo;Network;
+StartupWMClass=streamlink-twitch-gui
 Exec=${NAME}
 Icon=${NAME}
 EOF
