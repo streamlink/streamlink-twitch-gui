@@ -4,7 +4,6 @@ import { default as Service, inject as service } from "@ember/service";
 import NotificationServicePollingMixin from "./polling";
 import NotificationServiceDispatchMixin from "./dispatch";
 import NotificationServiceBadgeMixin from "./badge";
-import NotificationServiceFollowMixin from "./follow";
 import NotificationServiceTrayMixin from "./tray";
 
 
@@ -12,7 +11,6 @@ export default Service.extend(
 	NotificationServicePollingMixin,
 	NotificationServiceDispatchMixin,
 	NotificationServiceBadgeMixin,
-	NotificationServiceFollowMixin,
 	NotificationServiceTrayMixin,
 	{
 		auth: service(),

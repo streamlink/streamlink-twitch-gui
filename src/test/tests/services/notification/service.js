@@ -6,7 +6,7 @@ import { run } from "@ember/runloop";
 import Service from "@ember/service";
 
 import notificationServiceInjector
-	from "inject-loader?./polling&./dispatch&./badge&./tray&./follow!services/notification/service";
+	from "inject-loader?./polling&./dispatch&./badge&./tray!services/notification/service";
 
 
 module( "services/notification" );
@@ -20,8 +20,7 @@ test( "NotificationService", assert => {
 		"./polling": {},
 		"./dispatch": {},
 		"./badge": {},
-		"./tray": {},
-		"./follow": {}
+		"./tray": {}
 	});
 
 	owner.register( "service:auth", Service.extend({
