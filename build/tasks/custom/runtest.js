@@ -14,7 +14,7 @@ module.exports = function( grunt ) {
 
 		const done = this.async();
 		const options = this.options({
-			host: "localhost",
+			host: "127.0.0.1",
 			port: isCI ? 4444 : 8000,
 			connectAttempts: 5,
 			connectDelay: 1000,
