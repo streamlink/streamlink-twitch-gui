@@ -107,16 +107,16 @@
 {{/settings-row}}
 
 {{#settings-row
-	(t "settings.streaming.hls-segment-threads.title")
-	(t "settings.streaming.hls-segment-threads.description")
+	(t "settings.streaming.stream-segment-threads.title")
+	(t "settings.streaming.stream-segment-threads.description")
 	icon="fa-sort-amount-asc"
-	documentation="--hls-segment-threads"
+	documentation="--stream-segment-threads"
 }}
 	{{number-field
-		value=model.streaming.hls_segment_threads
-		defaultValue=hlsSegmentThreadsDefault
-		min=hlsSegmentThreadsMin
-		max=hlsSegmentThreadsMax
+		value=model.streaming.stream_segment_threads
+		defaultValue=streamSegmentThreadsDefault
+		min=streamSegmentThreadsMin
+		max=streamSegmentThreadsMax
 		disabled=playerInputPassthrough
 	}}
 {{/settings-row}}

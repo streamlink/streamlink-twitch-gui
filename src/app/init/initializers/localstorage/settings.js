@@ -169,6 +169,11 @@ function fixAttributes( settings ) {
 		}
 	}
 
+	if ( hasOwnProperty.call( streaming, "hls_segment_threads" ) ) {
+		streaming[ "stream_segment_threads" ] = streaming[ "hls_segment_threads" ];
+		delete streaming[ "hls_segment_threads" ];
+	}
+
 	// translate old players data
 	fixStreamingPlayers( streaming, settings );
 

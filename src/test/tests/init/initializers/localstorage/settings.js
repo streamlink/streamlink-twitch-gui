@@ -209,7 +209,7 @@ test( "Updates attributes", function( assert ) {
 				oauth: true,
 				player_no_close: false,
 				hls_live_edge: 3,
-				hls_segment_threads: 2,
+				stream_segment_threads: 2,
 				retry_open: 10,
 				retry_streams: 1
 			},
