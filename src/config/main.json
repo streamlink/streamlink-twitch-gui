@@ -1,7 +1,7 @@
 {
 	"display-name": "Streamlink Twitch GUI",
 	"app-identifier": "streamlink-twitch-gui",
-	"nwjs-version": "0.55.0",
+	"nwjs-version": "0.60.0",
 	"urls": {
 		"homepage": "https://github.com/streamlink/streamlink-twitch-gui",
 		"release": "https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v{version}",

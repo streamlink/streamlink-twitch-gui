@@ -1,12 +1,21 @@
 module.exports = {
 	permissions_osx64: {
-		command: "chmod -R g=u,o=u,g-w,o-w <%= dir.releases %>/<%= package.name %>/osx64"
+		command: [
+			"cd '<%= dir.releases %>/<%= package.name %>/osx64'",
+			"find . -type f -print0 | xargs -0 chmod -R g=u,o=u,g-w,o-w"
+		].join( " && " )
 	},
 	permissions_linux32: {
-		command: "chmod -R g=u,o=u,g-w,o-w <%= dir.releases %>/<%= package.name %>/linux32"
+		command: [
+			"cd '<%= dir.releases %>/<%= package.name %>/linux32'",
+			"find . -type f -print0 | xargs -0 chmod -R g=u,o=u,g-w,o-w"
+		].join( " && " )
 	},
 	permissions_linux64: {
-		command: "chmod -R g=u,o=u,g-w,o-w <%= dir.releases %>/<%= package.name %>/linux64"
+		command: [
+			"cd '<%= dir.releases %>/<%= package.name %>/linux64'",
+			"find . -type f -print0 | xargs -0 chmod -R g=u,o=u,g-w,o-w"
+		].join( " && " )
 	},
 
 	// delete "product_string" field from package.json on macOS
