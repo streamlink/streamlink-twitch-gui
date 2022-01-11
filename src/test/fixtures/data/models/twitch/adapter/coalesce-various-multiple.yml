@@ -1,0 +1,58 @@
+stream:
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                - name: "user_id"
+                  value: "1234567890"
+                - name: "user_id"
+                  value: "1234567891"
+        response:
+            data:
+                -   id: "1234567890"
+                    user_id: "1234567890"
+                    game_id: "1234567890"
+                -   id: "1234567891"
+                    user_id: "1234567891"
+                    game_id: "1234567891"
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                - name: "user_id"
+                  value: "1234567892"
+                - name: "user_id"
+                  value: "1234567893"
+        response:
+            data:
+                -   id: "1234567892"
+                    user_id: "1234567892"
+                    game_id: "1234567892"
+                -   id: "1234567893"
+                    user_id: "1234567893"
+                    game_id: "1234567893"
+user:
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/users"
+            query:
+                - name: "id"
+                  value: "1234567890"
+                - name: "id"
+                  value: "1234567891"
+        response:
+            data:
+                -   id: "1234567890"
+                -   id: "1234567891"
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/users"
+            query:
+                - name: "id"
+                  value: "1234567892"
+                - name: "id"
+                  value: "1234567893"
+        response:
+            data:
+                -   id: "1234567892"
+                -   id: "1234567893"

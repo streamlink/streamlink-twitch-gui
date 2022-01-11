@@ -90,13 +90,21 @@ export function adapterRequestFactory( assert, fixtures, mapper = null ) {
 		mapper = obj => obj;
 	}
 
+	const getCallback = data => ( ...args ) => adapterRequest(
+		assert,
+		mapper( data, responseStub ),
+		...args
+	);
 	const responseStub = sinon.stub();
 
-	return responseStub.callsFake( ( ...args ) => adapterRequest(
-		assert,
-		mapper( fixtures, responseStub ),
-		...args
-	) );
+	if ( Array.isArray( fixtures ) ) {
+		for ( const [ idx, item ] of fixtures.entries() ) {
+			responseStub.onCall( idx ).callsFake( getCallback( item ) );
+		}
+		return responseStub;
+	}
+
+	return responseStub.callsFake( getCallback( fixtures ) );
 }
 
 

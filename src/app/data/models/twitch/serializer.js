@@ -2,29 +2,83 @@ import EmbeddedRecordsMixin from "ember-data/serializers/embedded-records-mixin"
 import RESTSerializer from "ember-data/serializers/rest";
 
 
+const { hasOwnProperty } = {};
+
+
 export default RESTSerializer.extend( EmbeddedRecordsMixin, {
 	isNewSerializerAPI: true,
 
-	primaryKey: "_id",
+	primaryKey: "id",
 
 	/**
-	 * All underscored properties contain metadata (except the primaryKey)
+	 * Override "data" payload key with model name recognized by EmberData
+	 * @param {DS.Store} store
+	 * @param {DS.Model} primaryModelClass
+	 * @param {Object} payload
+	 * @param {string|null} id
+	 * @param {string} requestType
+	 * @return {Object}
+	 */
+	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
+		if ( !payload || !hasOwnProperty.call( payload, "data" ) ) {
+			throw new Error( "Unknown payload format of the API response" );
+		}
+
+		const key = this.modelNameFromPayloadKey();
+		payload[ key ] = payload[ "data" ] /* istanbul ignore next */ || [];
+		delete payload[ "data" ];
+
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	},
+
+	/**
+	 * Turn Twitch's array response into a single response
+	 * @param {DS.Store} store
+	 * @param {DS.Model} primaryModelClass
+	 * @param {Object} payload
+	 * @param {string|null} id
+	 * @param {string} requestType
+	 * @return {Object}
+	 */
+	normalizeSingleResponse( store, primaryModelClass, payload, id, requestType ) {
+		const key = this.modelNameFromPayloadKey();
+		payload[ key ] = payload[ key ][0] /* istanbul ignore next */ || null;
+
+		return this._super( store, primaryModelClass, payload, id, requestType );
+	},
+
+	/**
+	 * Extract metadata and remove metadata properties from payload
+	 * Everything except the model-name (overridden by normalizeResponse) is considered metadata
 	 * @param {DS.Store} store
 	 * @param {DS.Model} type
 	 * @param {Object} payload
 	 */
 	extractMeta( store, type, payload ) {
+		/* istanbul ignore next */
 		if ( !payload ) { return; }
 
-		const primaryKey = this.primaryKey;
 		const data = {};
-
-		Object.keys( payload ).forEach(function( key ) {
-			if ( key.charAt( 0 ) === "_" && key !== primaryKey ) {
-				data[ key.substr( 1 ) ] = payload[ key ];
-				delete payload[ key ];
+		const dataKey = this.modelNameFromPayloadKey();
+		for ( const [ key, value ] of Object.entries( payload ) ) {
+			if ( key === dataKey ) { continue; }
+			const type = typeof value;
+			switch ( key ) {
+				case "pagination":
+					if ( type === "object" && hasOwnProperty.call( value, "cursor" ) ) {
+						data[ "pagination" ] = {
+							cursor: String( value[ "cursor" ] )
+						};
+					}
+					break;
+				default:
+					// ignore non-primitive values
+					if ( type === "string" || type === "number" ) {
+						data[ key ] = value;
+					}
 			}
-		});
+			delete payload[ key ];
+		}
 
 		return data;
 	}

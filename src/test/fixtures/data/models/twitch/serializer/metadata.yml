@@ -1,0 +1,27 @@
+invalid:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/foo"
+        query: {}
+    response:
+        data:
+            - id: "1"
+        pagination: {}
+        nul: null
+        obj:
+            key: "val"
+        arr:
+            - "item1"
+            - "item2"
+valid:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/foo"
+        query: {}
+    response:
+        data:
+            - id: "1"
+        pagination:
+            cursor: "cursor-value"
+        str: "foo"
+        num: 123
