@@ -1,6 +1,6 @@
 twitch:
-    channel:
-        views: |
+    user:
+        view_count: |
             {count, plural,
                 one {Visualizzazione di un canale}
                 other {# visualizzazioni canale}

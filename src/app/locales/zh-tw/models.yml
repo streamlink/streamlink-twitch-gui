@@ -1,6 +1,6 @@
 twitch:
-    channel:
-        views: |
+    user:
+        view_count: |
             {count, plural,
                 one {總觀看次數: 1 }
                 other {總觀看次數: #}
