@@ -41,6 +41,17 @@ module.exports = {
 		});
 	},
 
+	common( config ) {
+		config.module.rules.push({
+			test: /\.ya?ml$/,
+			include: pTestFixtures,
+			type: "json",
+			use: [
+				"yaml-loader"
+			]
+		});
+	},
+
 	test( config ) {
 		this._tests( config );
 		this._aliases( config );
