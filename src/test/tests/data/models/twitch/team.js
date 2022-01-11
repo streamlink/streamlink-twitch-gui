@@ -1,218 +1,153 @@
 import { module, test } from "qunit";
-import { buildOwner, runDestroy } from "test-utils";
-import { setupStore, adapterRequest } from "store-utils";
+import { setupTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import { adapterRequestFactory, assertRelationships, setupStore } from "store-utils";
 import { FakeIntlService } from "intl-utils";
-import { get, set } from "@ember/object";
-import { run } from "@ember/runloop";
+
+import { set } from "@ember/object";
 import Service from "@ember/service";
 
-import Team from "data/models/twitch/team/model";
-import TeamAdapter from "data/models/twitch/team/adapter";
-import TeamSerializer from "data/models/twitch/team/serializer";
-import Channel from "data/models/twitch/channel/model";
-import ChannelSerializer from "data/models/twitch/channel/serializer";
-import TwitchTeamFixtures from "fixtures/data/models/twitch/team.json";
+import TwitchTeam from "data/models/twitch/team/model";
+import TwitchTeamAdapter from "data/models/twitch/team/adapter";
+import TwitchTeamSerializer from "data/models/twitch/team/serializer";
+import TwitchTeamFixtures from "fixtures/data/models/twitch/team.yml";
 
 
-let owner, env;
+module( "data/models/twitch/team", function( hooks ) {
+	setupTest( hooks, {
+		resolver: buildResolver({
+			IntlService: FakeIntlService,
+			SettingsService: Service.extend({}),
+			TwitchTeam,
+			TwitchTeamAdapter,
+			TwitchTeamSerializer
+		})
+	});
+
+	hooks.beforeEach(function() {
+		setupStore( this.owner );
+	});
 
 
-module( "data/models/twitch/team", {
-	beforeEach() {
-		owner = buildOwner();
+	test( "Model relationships", function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+		/** @type {TwitchTeam} */
+		const model = store.modelFor( "twitch-team" );
 
-		owner.register( "service:auth", Service.extend() );
-		owner.register( "service:intl", FakeIntlService );
-		owner.register( "service:settings", Service.extend() );
-		owner.register( "model:twitch-team", Team );
-		owner.register( "adapter:twitch-team", TeamAdapter );
-		owner.register( "serializer:twitch-team", TeamSerializer );
-		owner.register( "model:twitch-channel", Channel );
-		owner.register( "serializer:twitch-channel", ChannelSerializer );
+		assertRelationships( assert, model, [] );
+	});
 
-		env = setupStore( owner );
-	},
+	test( "Computed properties", function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
 
-	afterEach() {
-		runDestroy( owner );
-		owner = env = null;
-	}
-});
+		const record = store.createRecord( "twitch-team", { id: "1", team_name: "foo" } );
 
+		assert.strictEqual(
+			record.title,
+			"foo",
+			"Shows the team_name attribute when the team_display_name attribute is missing"
+		);
 
-test( "Adapter and Serializer (single)", assert => {
+		set( record, "team_display_name", "Foo" );
+		assert.strictEqual(
+			record.title,
+			"Foo",
+			"Shows the team_display_name attribute when it exists"
+		);
+	});
 
-	env.store.adapterFor( "twitchTeam" ).ajax = ( url, method, query ) =>
-		adapterRequest( assert, TwitchTeamFixtures[ "single" ], url, method, query );
+	test( "findRecord", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
 
-	return env.store.findRecord( "twitchTeam", "foo" )
-		.then( record => {
-			assert.deepEqual(
+		const responseStub
+			= store.adapterFor( "twitch-team" ).ajax
+			= adapterRequestFactory( assert, TwitchTeamFixtures, "findRecord" );
+
+		const record = await store.findRecord( "twitch-team", "1" );
+
+		assert.propEqual(
 			record.toJSON({ includeId: true }),
-				{
-					id: "foo",
-					users: [
-						"1",
-						"2"
-					],
-					background: "background",
-					banner: "banner",
-					created_at: "2000-01-01T00:00:00.000Z",
-					display_name: "Foo",
-					info: "info",
-					logo: "logo",
-					name: "foo",
-					updated_at: "2000-01-01T00:00:00.000Z"
-				},
-				"Record has the correct id and attributes"
-			);
-
-			assert.ok(
-				env.store.hasRecordForId( "twitchTeam", "foo" ),
-				"Has the Team record registered in the data store"
-			);
-
-			assert.deepEqual(
-				env.store.peekAll( "twitchChannel" ).map( channel => get( channel, "id" ) ),
-				[
+			{
+				id: "1",
+				users: [
 					"1",
 					"2"
 				],
-				"Has all Channel records registered in the data store"
-			);
-		});
+				background_image_url: "https://mock/twitch-team/1/background_image-1920x1080.png",
+				banner: "https://mock/twitch-team/1/banner.png",
+				created_at: "2000-01-01T00:00:00.000Z",
+				updated_at: "2000-01-01T00:00:01.000Z",
+				info: "team description",
+				thumbnail_url: "https://mock/twitch-team/1/thumbnail-600x600.png",
+				team_name: "team name",
+				team_display_name: "cool team"
+			},
+			"Record has the correct id and attributes"
+		);
+		assert.propEqual(
+			store.peekAll( "twitch-team" ).mapBy( "id" ),
+			[ "1" ],
+			"Has the TwitchTeam record registered in the data store"
+		);
+		assert.strictEqual(
+			responseStub.callCount,
+			1,
+			"Queries the API for teams only once"
+		);
+	});
 
-});
+	test( "query", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
 
+		const responseStub
+			= store.adapterFor( "twitch-team" ).ajax
+			= adapterRequestFactory( assert, TwitchTeamFixtures, "query" );
 
-test( "Adapter and Serializer (many)", assert => {
+		const records = await store.query( "twitch-team", { broadcaster_id: "1" } );
 
-	env.store.adapterFor( "twitchTeam" ).ajax = ( url, method, query ) =>
-		adapterRequest( assert, TwitchTeamFixtures[ "many" ], url, method, query );
-
-	return env.store.query( "twitchTeam", {} )
-		.then( records => {
-			assert.deepEqual(
-				records.map( record => record.toJSON({ includeId: true }) ),
-				[
-					{
-						id: "foo",
-						background: "background",
-						banner: "banner",
-						created_at: "2000-01-01T00:00:00.000Z",
-						display_name: "Foo",
-						info: "info",
-						logo: "logo",
-						name: "foo",
-						updated_at: "2000-01-01T00:00:00.000Z"
-					},
-					{
-						id: "qux",
-						background: "background",
-						banner: "banner",
-						created_at: "2000-01-01T00:00:00.000Z",
-						display_name: "Qux",
-						info: "info",
-						logo: "logo",
-						name: "qux",
-						updated_at: "2000-01-01T00:00:00.000Z"
-					}
-				],
-				"Records have the correct id and attributes"
-			);
-
-			assert.deepEqual(
-				env.store.peekAll( "twitchTeam" ).map( team => get( team, "id" ) ),
-				[
-					"foo",
-					"qux"
-				],
-				"Has all Team records registered in the data store"
-			);
-
-			assert.strictEqual(
-				get( env.store.peekAll( "twitchChannel" ), "length" ),
-				0,
-				"Does not have any Channel records registered in the data store"
-			);
-		});
-
-});
-
-
-test( "Adapter and Serializer (by channel)", assert => {
-
-	env.store.adapterFor( "twitchTeam" ).ajax = ( url, method, query ) =>
-		adapterRequest( assert, TwitchTeamFixtures[ "by-channel" ], url, method, query );
-
-	return env.store.query( "twitchTeam", { channel: "bar" } )
-		.then( records => {
-			assert.deepEqual(
-				records.map( record => record.toJSON({ includeId: true }) ),
-				[
-					{
-						id: "foo",
-						background: "background",
-						banner: "banner",
-						created_at: "2000-01-01T00:00:00.000Z",
-						display_name: "Foo",
-						info: "info",
-						logo: "logo",
-						name: "foo",
-						updated_at: "2000-01-01T00:00:00.000Z"
-					},
-					{
-						id: "qux",
-						background: "background",
-						banner: "banner",
-						created_at: "2000-01-01T00:00:00.000Z",
-						display_name: "Qux",
-						info: "info",
-						logo: "logo",
-						name: "qux",
-						updated_at: "2000-01-01T00:00:00.000Z"
-					}
-				],
-				"Records have the correct id and attributes"
-			);
-
-			assert.deepEqual(
-				env.store.peekAll( "twitchTeam" ).map( team => get( team, "id" ) ),
-				[
-					"foo",
-					"qux"
-				],
-				"Has all Team records registered in the data store"
-			);
-
-			assert.strictEqual(
-				get( env.store.peekAll( "twitchChannel" ), "length" ),
-				0,
-				"Does not have any Channel records registered in the data store"
-			);
-		});
-
-});
-
-
-test( "Computed properties", assert => {
-
-	const record = env.store.createRecord( "twitchTeam", { name: "foo" } );
-
-
-	// title
-
-	assert.strictEqual(
-		get( record, "title" ),
-		"foo",
-		"Shows the name attribute when the display_name attribute is missing"
-	);
-
-	run( () => set( record, "display_name", "Foo" ) );
-	assert.strictEqual(
-		get( record, "title" ),
-		"Foo",
-		"Shows the display_name attribute when it exists"
-	);
-
+		assert.propEqual(
+			records.map( record => record.toJSON({ includeId: true }) ),
+			[
+				{
+					id: "1",
+					users: [],
+					background_image_url: null,
+					banner: null,
+					created_at: null,
+					updated_at: null,
+					info: null,
+					thumbnail_url: null,
+					team_name: null,
+					team_display_name: null
+				},
+				{
+					id: "2",
+					users: [],
+					background_image_url: null,
+					banner: null,
+					created_at: null,
+					updated_at: null,
+					info: null,
+					thumbnail_url: null,
+					team_name: null,
+					team_display_name: null
+				}
+			],
+			"Records have the correct IDs and attributes"
+		);
+		assert.propEqual(
+			store.peekAll( "twitch-team" ).mapBy( "id" ),
+			[ "1", "2" ],
+			"Has the TwitchTeam records registered in the data store"
+		);
+		assert.strictEqual(
+			responseStub.callCount,
+			1,
+			"Queries API once"
+		);
+	});
 });
