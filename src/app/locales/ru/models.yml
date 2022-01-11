@@ -1,12 +1,5 @@
 twitch:
     channel:
-        followers: |
-            {count, plural,
-                one {# человек подписан}
-                few {# человека подписано}
-                many {# человек подписано}
-                other {Подписчиков: #}
-            }
         views: |
             {count, plural,
                 one {# просмотр}

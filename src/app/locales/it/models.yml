@@ -1,10 +1,5 @@
 twitch:
     channel:
-        followers: |
-            {count, plural,
-                one {Una persona sta seguendo}
-                other {# persone stanno seguendo}
-            }
         views: |
             {count, plural,
                 one {Visualizzazione di un canale}

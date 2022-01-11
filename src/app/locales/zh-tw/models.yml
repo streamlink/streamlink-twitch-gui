@@ -1,10 +1,5 @@
 twitch:
     channel:
-        followers: |
-            {count, plural,
-                one {有 1 位追蹤者}
-                other {有 # 位追蹤者}
-            }
         views: |
             {count, plural,
                 one {總觀看次數: 1 }
