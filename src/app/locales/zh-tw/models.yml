@@ -6,10 +6,10 @@ twitch:
                 other {總觀看次數: #}
             }
     stream:
-        created-at:
-            less-than-24h: "從 {created_at, time, medium} 開始"
-            more-than-24h: "從 {created_at, time, long} 開始"
-        viewers: |
+        started-at:
+            less-than-24h: "從 {started_at, time, medium} 開始"
+            more-than-24h: "從 {started_at, time, long} 開始"
+        viewer_count: |
             {count, plural,
                 one {目前有 1 位觀眾}
                 other {目前有 # 位觀眾}

@@ -6,10 +6,10 @@ twitch:
                 other {# vues de la chaîne}
             }
     stream:
-        created-at:
-            less-than-24h: "En ligne depuis le {created_at, time, medium}"
-            more-than-24h: "En ligne depuis le {created_at, time, long}"
-        viewers: |
+        started-at:
+            less-than-24h: "En ligne depuis le {started_at, time, medium}"
+            more-than-24h: "En ligne depuis le {started_at, time, long}"
+        viewer_count: |
             {count, plural,
                 one {Une personne est en train de regarder}
                 other {# personnes sont en train de regarder}

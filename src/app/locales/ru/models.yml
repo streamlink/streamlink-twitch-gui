@@ -8,10 +8,10 @@ twitch:
                 other {Просмотров: #}
             }
     stream:
-        created-at:
-            less-than-24h: "Запущен в {created_at, time, medium}"
-            more-than-24h: "Запущен в {created_at, time, long}"
-        viewers: |
+        started-at:
+            less-than-24h: "Запущен в {started_at, time, medium}"
+            more-than-24h: "Запущен в {started_at, time, long}"
+        viewer_count: |
             {count, plural,
                 one {# зритель}
                 few {# зрителя}

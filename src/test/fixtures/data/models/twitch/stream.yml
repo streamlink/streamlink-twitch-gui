@@ -1,0 +1,96 @@
+queryRecord:
+    stream:
+        request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                user_id: "123"
+        response:
+            data:
+                -   id: "1"
+                    user_id: "123"
+                    user_login: "foo"
+                    user_name: "FOO"
+                    game_id: "321"
+                    game_name: "some game"
+                    type: "live"
+                    title: "some stream title"
+                    viewer_count: 1337
+                    started_at: "2000-01-01T00:00:00Z"
+                    language: "en"
+                    thumbnail_url: "https://mock/twitch-stream/1/thumbnail-{width}x{height}.jpg"
+                    tag_ids: []
+                    is_mature: true
+    user:
+        request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/users"
+            query:
+                id: "123"
+        response:
+            data:
+                -   id: "123"
+    channel:
+        request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/channels"
+            query:
+                broadcaster_id: "123"
+        response:
+            data:
+                -   broadcaster_id: "123"
+    game:
+        request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/games"
+            query:
+                id: "321"
+        response:
+            data:
+                -   id: "321"
+query:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/streams"
+        query:
+            game: "123"
+            language: "en"
+    response:
+        data:
+            -   id: "1"
+                user_id: "1"
+                game_id: "123"
+            -   id: "2"
+                user_id: "2"
+                game_id: "123"
+reload:
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                user_id: "1"
+        response:
+            data:
+                -   id: "1"
+                    user_id: "1"
+                    title: "foo"
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                user_id: "1"
+        response:
+            data:
+                -   id: "1"
+                    user_id: "1"
+                    title: "bar"
+getChannelSettings:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/streams"
+        query:
+            user_id: "1"
+    response:
+        data:
+            -   id: "1"
+                user_id: "1"

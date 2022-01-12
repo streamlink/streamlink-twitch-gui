@@ -1,41 +1,34 @@
 import { module, test } from "qunit";
 import { setupTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { setupStore, adapterRequest } from "store-utils";
+import { adapterRequestFactory, assertRelationships, setupStore } from "store-utils";
 import { FakeIntlService } from "intl-utils";
 import sinon from "sinon";
 
-import { set, setProperties } from "@ember/object";
-import { run } from "@ember/runloop";
+import { set } from "@ember/object";
 import Service from "@ember/service";
+import Adapter from "ember-data/adapter";
+import attr from "ember-data/attr";
+import Model from "ember-data/model";
 
 import TwitchStream from "data/models/twitch/stream/model";
 import TwitchStreamAdapter from "data/models/twitch/stream/adapter";
 import TwitchStreamSerializer from "data/models/twitch/stream/serializer";
+import TwitchStreamFixtures from "fixtures/data/models/twitch/stream.yml";
+import TwitchUser from "data/models/twitch/user/model";
+import TwitchUserAdapter from "data/models/twitch/user/adapter";
+import TwitchUserSerializer from "data/models/twitch/user/serializer";
 import TwitchChannel from "data/models/twitch/channel/model";
+import TwitchChannelAdapter from "data/models/twitch/channel/adapter";
 import TwitchChannelSerializer from "data/models/twitch/channel/serializer";
-import twitchImageInjector from "inject-loader?config!data/models/twitch/image/model";
-import TwitchImageSerializer from "data/models/twitch/image/serializer";
-import TwitchStreamFixtures from "fixtures/data/models/twitch/stream.json";
+import TwitchGame from "data/models/twitch/game/model";
+import TwitchGameAdapter from "data/models/twitch/game/adapter";
+import TwitchGameSerializer from "data/models/twitch/game/serializer";
 
 
 module( "data/models/twitch/stream", function( hooks ) {
-	const { default: TwitchImage } = twitchImageInjector({
-		config: {
-			vars: {}
-		}
-	});
-
 	setupTest( hooks, {
 		resolver: buildResolver({
-			TwitchStream,
-			TwitchStreamAdapter,
-			TwitchStreamSerializer,
-			TwitchChannel,
-			TwitchChannelSerializer,
-			TwitchImage,
-			TwitchImageSerializer,
-			AuthService: Service.extend(),
 			IntlService: FakeIntlService,
 			SettingsService: Service.extend({
 				content: {
@@ -43,7 +36,19 @@ module( "data/models/twitch/stream", function( hooks ) {
 						vodcast_regexp: ""
 					}
 				}
-			})
+			}),
+			TwitchStream,
+			TwitchStreamAdapter,
+			TwitchStreamSerializer,
+			TwitchUser,
+			TwitchUserAdapter,
+			TwitchUserSerializer,
+			TwitchChannel,
+			TwitchChannelAdapter,
+			TwitchChannelSerializer,
+			TwitchGame,
+			TwitchGameAdapter,
+			TwitchGameSerializer
 		})
 	});
 
@@ -61,123 +66,40 @@ module( "data/models/twitch/stream", function( hooks ) {
 	});
 
 
-	test( "Adapter and Serializer (single)", async function( assert ) {
+	test( "Model relationships", function( assert ) {
 		/** @type {DS.Store} */
 		const store = this.owner.lookup( "service:store" );
-		store.adapterFor( "twitch-stream" ).ajax = ( url, method, query ) =>
-			adapterRequest( assert, TwitchStreamFixtures[ "single" ], url, method, query );
-
-		// stream query IDs are actually channel IDs
 		/** @type {TwitchStream} */
-		const record = await store.findRecord( "twitch-stream", 1 );
-		assert.propEqual(
-			record.toJSON({ includeId: true }),
+		const model = store.modelFor( "twitch-stream" );
+
+		assertRelationships( assert, model, [
 			{
-				id: "1",
-				average_fps: 60,
-				broadcast_platform: "live",
-				channel: "1",
-				created_at: "2000-01-01T00:00:00.000Z",
-				delay: 0,
-				game: "some game",
-				preview: "stream/preview/1",
-				stream_type: "live",
-				video_height: 1080,
-				viewers: 1000
+				key: "user",
+				kind: "belongsTo",
+				type: "twitch-user",
+				options: { async: true }
 			},
-			"Has the correct model id and attributes"
-		);
-		assert.propEqual(
-			record.channel.toJSON({ includeId: true }),
 			{
-				id: "1",
-				broadcaster_language: "en",
-				created_at: "2000-01-01T00:00:00.000Z",
-				display_name: "Foo",
-				followers: 1337,
-				game: "some game",
-				language: "en",
-				logo: "logo",
-				mature: false,
-				name: "foo",
-				partner: false,
-				profile_banner: null,
-				profile_banner_background_color: null,
-				status: "Playing some game",
-				updated_at: "2000-01-01T00:00:01.000Z",
-				url: "https://www.twitch.tv/foo",
-				video_banner: null,
-				views: 13337
+				key: "channel",
+				kind: "belongsTo",
+				type: "twitch-channel",
+				options: { async: true }
 			},
-			"The channel relation has the correct attributes"
-		);
-		assert.propEqual(
-			record.preview.toJSON({ includeId: true }),
 			{
-				id: "stream/preview/1",
-				image_large: "large.jpg",
-				image_medium: "medium.jpg",
-				image_small: "small.jpg"
-			},
-			"The preview relation has the correct attributes"
-		);
-		assert.ok(
-			store.hasRecordForId( "twitch-channel", 1 ),
-			"Store has a TwitchChannel record of the the embedded channel data"
-		);
-		assert.ok(
-			store.hasRecordForId( "twitch-image", "stream/preview/1" ),
-			"Store has a TwitchImage record of the the embedded preview image data"
-		);
+				key: "game",
+				kind: "belongsTo",
+				type: "twitch-game",
+				options: { async: true }
+			}
+		]);
 	});
 
-	test( "Adapter and Serializer (many)", async function( assert ) {
+	test( "Computed properties - vodcast", function( assert ) {
 		/** @type {DS.Store} */
 		const store = this.owner.lookup( "service:store" );
-		store.adapterFor( "twitch-stream" ).ajax = ( url, method, query ) =>
-			adapterRequest( assert, TwitchStreamFixtures[ "many" ], url, method, query );
 
-		/** @type {TwitchStream[]} */
-		const records = await store.query( "twitch-stream", {} );
-		assert.strictEqual(
-			records.length,
-			3,
-			"Returns all records"
-		);
-		assert.strictEqual(
-			records.meta.total,
-			3,
-			"Recordarray has metadata with total number of streams"
-		);
-		assert.ok(
-			   store.hasRecordForId( "twitch-stream", 2 )
-			&& store.hasRecordForId( "twitch-stream", 4 )
-			&& store.hasRecordForId( "twitch-stream", 6 ),
-			"Has all stream records registered in the data store"
-		);
-		assert.ok(
-			   store.hasRecordForId( "twitch-channel", 2 )
-			&& store.hasRecordForId( "twitch-channel", 4 )
-			&& store.hasRecordForId( "twitch-channel", 6 ),
-			"Has all channel records registered in the data store"
-		);
-		assert.ok(
-			   store.hasRecordForId( "twitch-image", "stream/preview/2" )
-			&& store.hasRecordForId( "twitch-image", "stream/preview/4" )
-			&& store.hasRecordForId( "twitch-image", "stream/preview/6" ),
-			"Has all image records registered in the data store"
-		);
-	});
-
-	test( "Computed properties", function( assert ) {
-		/** @type {DS.Store} */
-		const store = this.owner.lookup( "service:store" );
-		/** @type {TwitchChannel} */
-		const channel = store.createRecord( "twitch-channel", { status: "" } );
 		/** @type {TwitchStream} */
-		const record = store.createRecord( "twitch-stream", { channel } );
-
-		// vodcast
+		const record = store.createRecord( "twitch-stream", {} );
 
 		assert.ok( record.reVodcast instanceof RegExp, "Has a default vodcast RegExp" );
 
@@ -192,121 +114,317 @@ module( "data/models/twitch/stream", function( hooks ) {
 
 		assert.notOk( record.isVodcast, "Not a vodcast" );
 
-		setProperties( record, {
-			broadcast_platform: "watch_party",
-			stream_type: "live"
-		});
-		assert.ok( record.isVodcast, "Is a vodcast now" );
-
-		setProperties( record, {
-			broadcast_platform: "rerun",
-			stream_type: "live"
-		});
-		assert.ok( record.isVodcast, "Is still vodcast/rerun" );
-
-		setProperties( record, {
-			broadcast_platform: "live",
-			stream_type: "watch_party"
-		});
-		assert.ok( record.isVodcast, "Is still a vodcast" );
-
-		setProperties( record, {
-			broadcast_platform: "live",
-			stream_type: "rerun"
-		});
-		assert.ok( record.isVodcast, "Is still a vodcast/rerun" );
-
-		setProperties( record, {
-			broadcast_platform: "live",
-			stream_type: "live"
-		});
-		assert.notOk( record.isVodcast, "Not a vodcast anymore" );
-
-		set( record, "channel.status", "I'm a vodcast" );
+		set( record, "title", "I'm a vodcast" );
 		assert.ok( record.isVodcast, "Is a vodcast because of its title" );
+	});
 
-		// titleCreatedAt
+	test( "Computed properties - i18n", function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+
+		/** @type {TwitchStream} */
+		const record = store.createRecord( "twitch-stream", {} );
 
 		const day = 3600 * 24 * 1000;
 		this.fakeTimer.setSystemTime( 2 * day );
 
-		run( () => set( record, "created_at", new Date( Date.now() - 1 ) ) );
+		set( record, "started_at", new Date( Date.now() - 1 ) );
 		assert.strictEqual(
-			record.titleCreatedAt,
-			[
-				"models.twitch.stream.created-at.less-than-24h",
-				"{\"created_at\":\"1970-01-02T23:59:59.999Z\"}"
-			].join( "" ),
+			record.titleStartedAt,
+			"models.twitch.stream.started-at.less-than-24h"
+			+ "{\"started_at\":\"1970-01-02T23:59:59.999Z\"}",
 			"Shows a shorthand title for streams running for less than 24h"
 		);
 
-		run( () => set( record, "created_at", new Date( Date.now() - day ) ) );
+		set( record, "started_at", new Date( Date.now() - day ) );
 		assert.strictEqual(
-			record.titleCreatedAt,
-			[
-				"models.twitch.stream.created-at.more-than-24h",
-				"{\"created_at\":\"1970-01-02T00:00:00.000Z\"}"
-			].join( "" ),
+			record.titleStartedAt,
+			"models.twitch.stream.started-at.more-than-24h"
+			+ "{\"started_at\":\"1970-01-02T00:00:00.000Z\"}",
 			"Shows an extended title for streams running for more than 24h"
 		);
 
-		// titleViewers
-
-		run( () => set( record, "viewers", 1 ) );
+		set( record, "viewer_count", 1 );
 		assert.strictEqual(
 			record.titleViewers,
-			"models.twitch.stream.viewers{\"count\":1}",
+			"models.twitch.stream.viewer_count{\"count\":1}",
 			"Shows the correct title when one person is watching"
 		);
 
-		run( () => set( record, "viewers", 2 ) );
+		set( record, "viewer_count", 2 );
 		assert.strictEqual(
 			record.titleViewers,
-			"models.twitch.stream.viewers{\"count\":2}",
+			"models.twitch.stream.viewer_count{\"count\":2}",
 			"Shows the correct title when more than one person is watching"
 		);
+	});
 
-		// hasFormatInfo
+	test( "Computed properties - language", function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
 
+		/** @type {TwitchChannel} */
+		const channel = store.createRecord( "twitch-channel", { broadcaster_language: "en" } );
+		/** @type {TwitchStream} */
+		const stream = store.createRecord( "twitch-stream", { channel } );
+
+		assert.notOk(
+			stream.hasLanguage,
+			"Does not have a language when attribute is missing"
+		);
+
+		set( stream, "language", "other" );
+		assert.notOk(
+			stream.hasLanguage,
+			"Does not have a language when the value of the language attribute is 'other'"
+		);
+
+		set( stream, "language", "en" );
 		assert.ok(
-			!record.hasFormatInfo,
-			"Doesn't have format info when attrs are missing"
+			stream.hasLanguage,
+			"Does have a language when the value of the language attribute is not 'other'"
 		);
 
-		run( () => set( record, "average_fps", 60 ) );
+		assert.notOk(
+			stream.hasBroadcasterLanguage,
+			"Does not have a broadcaster language when attribute is missing"
+		);
+
+		set( channel, "broadcaster_language", "en" );
+		assert.notOk(
+			stream.hasBroadcasterLanguage,
+			"Does not have a broadcaster language when both attributes are equal"
+		);
+
+		set( channel, "broadcaster_language", "en-gb" );
+		assert.notOk(
+			stream.hasBroadcasterLanguage,
+			"Does not have a broadcaster language when both main languages are equal"
+		);
+
+		set( stream, "language", "en-us" );
+		assert.notOk(
+			stream.hasBroadcasterLanguage,
+			"Does not have a broadcaster language when both main languages are equal"
+		);
+
+		set( channel, "broadcaster_language", "de" );
 		assert.ok(
-			!record.hasFormatInfo,
-			"Doesn't have format info when only one attr is set"
+			stream.hasBroadcasterLanguage,
+			"Does have a broadcaster language when both languages differ"
 		);
+	});
 
-		run( () => set( record, "video_height", 1080 ) );
-		assert.ok(
-			record.hasFormatInfo,
-			"Does have format info when both attrs are set"
+	test( "queryRecord", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+
+		const streamResponseStub
+			= store.adapterFor( "twitch-stream" ).ajax
+			= adapterRequestFactory( assert, TwitchStreamFixtures, "queryRecord.stream" );
+		const userResponseStub
+			= store.adapterFor( "twitch-user" ).ajax
+			= adapterRequestFactory( assert, TwitchStreamFixtures, "queryRecord.user" );
+		const channelResponseStub
+			= store.adapterFor( "twitch-channel" ).ajax
+			= adapterRequestFactory( assert, TwitchStreamFixtures, "queryRecord.channel" );
+		const gameResponseStub
+			= store.adapterFor( "twitch-game" ).ajax
+			= adapterRequestFactory( assert, TwitchStreamFixtures, "queryRecord.game" );
+
+		const record = await store.queryRecord( "twitch-stream", { user_id: "123" } );
+
+		assert.propEqual(
+			record.toJSON({ includeId: true }),
+			{
+				id: "123",
+				user: "123",
+				user_login: "foo",
+				user_name: "FOO",
+				channel: "123",
+				game: "321",
+				game_id: "321",
+				game_name: "some game",
+				type: "live",
+				title: "some stream title",
+				viewer_count: 1337,
+				started_at: "2000-01-01T00:00:00.000Z",
+				language: "en",
+				thumbnail_url: "https://mock/twitch-stream/1/thumbnail-{width}x{height}.jpg",
+				is_mature: true
+			},
+			"Record has the correct ID and attributes"
 		);
-
-		run( () => set( record, "average_fps", null ) );
-		assert.ok(
-			!record.hasFormatInfo,
-			"Doesn't have format info when one attr is missing"
+		assert.propEqual(
+			store.peekAll( "twitch-stream" ).mapBy( "id" ),
+			[ "123" ],
+			"Has the TwitchStream record registered in the data store"
 		);
-
-		// resolution
-
-		assert.strictEqual(
-			record.resolution,
-			"1920x1080",
-			"Assumes the correct resolution"
+		assert.propEqual(
+			store.peekAll( "twitch-user" ).mapBy( "id" ),
+			[],
+			"Has no TwitchUser record registered in the data store"
 		);
+		assert.propEqual(
+			store.peekAll( "twitch-game" ).mapBy( "id" ),
+			[],
+			"Has no TwitchGame record registered in the data store"
+		);
+		assert.strictEqual( streamResponseStub.callCount, 1, "Queries API once for streams" );
+		assert.strictEqual( userResponseStub.callCount, 0, "Hasn't queried API for user" );
+		assert.strictEqual( channelResponseStub.callCount, 0, "Hasn't queried API for channel" );
+		assert.strictEqual( gameResponseStub.callCount, 0, "Hasn't queried API for game" );
 
-		// fps
+		await record.user.promise;
+		assert.propEqual(
+			store.peekAll( "twitch-user" ).mapBy( "id" ),
+			[ "123" ],
+			"Has the TwitchUser record registered in the data store"
+		);
+		assert.strictEqual( userResponseStub.callCount, 1, "Has queried API for user" );
 
-		assert.strictEqual( record.fps, null, "fps is unknown when average_fps is missing" );
+		await record.channel.promise;
+		assert.propEqual(
+			store.peekAll( "twitch-channel" ).mapBy( "id" ),
+			[ "123" ],
+			"Has the TwitchChannel record registered in the data store"
+		);
+		assert.strictEqual( channelResponseStub.callCount, 1, "Has queried API for channel" );
 
-		run( () => set( record, "average_fps", 19.99 ) );
-		assert.strictEqual( record.fps, 19, "Rounds down fps when no range could be found" );
+		await record.game.promise;
+		assert.propEqual(
+			store.peekAll( "twitch-game" ).mapBy( "id" ),
+			[ "321" ],
+			"Has the TwitchGame record registered in the data store"
+		);
+		assert.strictEqual( gameResponseStub.callCount, 1, "Has queried API for game" );
+	});
 
-		run( () => set( record, "average_fps", 62 ) );
-		assert.strictEqual( record.fps, 60, "Uses a common fps value for a matching range" );
+	test( "query", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+
+		store.adapterFor( "twitch-stream" ).ajax
+			= adapterRequestFactory( assert, TwitchStreamFixtures, "query" );
+
+		const records = await store.query( "twitch-stream", { game: "123", language: "en" } );
+
+		assert.propEqual(
+			records.map( record => record.toJSON({ includeId: true }) ),
+			[
+				{
+					id: "1",
+					user: "1",
+					user_login: null,
+					user_name: null,
+					channel: "1",
+					game: "123",
+					game_id: "123",
+					game_name: null,
+					type: null,
+					title: null,
+					viewer_count: null,
+					started_at: null,
+					language: null,
+					thumbnail_url: null,
+					is_mature: false
+				},
+				{
+					id: "2",
+					user: "2",
+					user_login: null,
+					user_name: null,
+					channel: "2",
+					game: "123",
+					game_id: "123",
+					game_name: null,
+					type: null,
+					title: null,
+					viewer_count: null,
+					started_at: null,
+					language: null,
+					thumbnail_url: null,
+					is_mature: false
+				}
+			],
+			"Records have the correct IDs and attributes"
+		);
+		assert.propEqual(
+			store.peekAll( "twitch-stream" ).mapBy( "id" ),
+			[ "1", "2" ],
+			"Has all TwitchStream records registered in the data store"
+		);
+	});
+
+	test( "reload", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+
+		const responseStub
+			= store.adapterFor( "twitch-stream" ).ajax
+			= adapterRequestFactory( assert, TwitchStreamFixtures[ "reload" ] );
+
+		/** @type {TwitchStream|DS.Model} */
+		const record = await store.findRecord( "twitch-stream", "1" );
+		assert.propEqual(
+			store.peekAll( "twitch-stream" ).mapBy( "id" ),
+			[ "1" ],
+			"Has the TwitchStream record registered in the data store"
+		);
+		assert.strictEqual( record.title, "foo", "Title is foo" );
+		assert.strictEqual( responseStub.callCount, 1, "Queries API once" );
+
+		await record.reload();
+		assert.strictEqual( record.title, "bar", "Title is bar" );
+		assert.strictEqual( responseStub.callCount, 2, "Queries API twice" );
+	});
+
+	test( "getChannelSettings", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+
+		const channelSettingsFindRecordStub = sinon.stub()
+			.callsFake( async ( store, type, id ) => ({ id, foo: "foo" }));
+		this.owner.register( "model:channel-settings", Model.extend({
+			foo: attr( "string" )
+		}) );
+		this.owner.register( "adapter:channel-settings", Adapter.extend({
+			findRecord: channelSettingsFindRecordStub
+		}) );
+
+		store.adapterFor( "twitch-stream" ).ajax
+			= adapterRequestFactory( assert, TwitchStreamFixtures, "getChannelSettings" );
+		const twitchUserAdapterAjaxStub
+			= sinon.stub( store.adapterFor( "twitch-user" ), "ajax" ) .rejects();
+
+		// noinspection JSValidateTypes
+		/** @type {TwitchStream} */
+		const stream = await store.queryRecord( "twitch-stream", { user_id: "1" } );
+
+		assert.propEqual(
+			await stream.getChannelSettings(),
+			{ foo: "foo" },
+			"Returns channel-settings data"
+		);
+		assert.propEqual(
+			store.peekAll( "channel-settings" ).mapBy( "id" ),
+			[],
+			"No channel-settings loaded"
+		);
+		assert.notOk( twitchUserAdapterAjaxStub.called, "Doesn't query API for user" );
+
+		channelSettingsFindRecordStub.rejects();
+
+		assert.propEqual(
+			await stream.getChannelSettings(),
+			{ foo: null },
+			"Returns empty channel-settings data"
+		);
+		assert.propEqual(
+			store.peekAll( "channel-settings" ).mapBy( "id" ),
+			[],
+			"No channel-settings loaded"
+		);
+		assert.notOk( twitchUserAdapterAjaxStub.called, "Doesn't query API for user" );
 	});
 });
