@@ -20,6 +20,7 @@ import TwitchUserSerializer from "data/models/twitch/user/serializer";
 import TwitchGame from "data/models/twitch/game/model";
 import TwitchGameAdapter from "data/models/twitch/game/adapter";
 import TwitchGameSerializer from "data/models/twitch/game/serializer";
+import TwitchImageTransform from "data/transforms/twitch/image";
 
 
 module( "data/models/twitch/search-channel", function( hooks ) {
@@ -41,7 +42,8 @@ module( "data/models/twitch/search-channel", function( hooks ) {
 			TwitchGame,
 			TwitchGameAdapter,
 			TwitchGameSerializer,
-			TwitchChannel: Model.extend()
+			TwitchChannel: Model.extend(),
+			TwitchImageTransform
 		})
 	});
 
@@ -152,6 +154,7 @@ module( "data/models/twitch/search-channel", function( hooks ) {
 			= store.adapterFor( "twitch-game" ).ajax
 			= adapterRequestFactory( assert, TwitchSearchChannelFixtures, "game" );
 
+		/** @type {DS.AdapterPopulatedRecordArray<TwitchSearchChannel>} */
 		const records = await store.query( "twitch-search-channel", {
 			query: "foo",
 			live_only: true
@@ -169,7 +172,7 @@ module( "data/models/twitch/search-channel", function( hooks ) {
 					game: "1",
 					game_name: "some game",
 					is_live: true,
-					thumbnail_url: "https://mock/twitch-search-channel/1/thumbnail-{width}x{height}.jpg",
+					thumbnail_url: "https://mock/twitch-search-channel/1/thumbnail-640x360.jpg",
 					title: "some title",
 					started_at: "2000-01-01T00:00:00.000Z"
 				},
@@ -182,7 +185,7 @@ module( "data/models/twitch/search-channel", function( hooks ) {
 					game: "2",
 					game_name: "another game",
 					is_live: true,
-					thumbnail_url: "https://mock/twitch-search-channel/2/thumbnail-{width}x{height}.jpg",
+					thumbnail_url: "https://mock/twitch-search-channel/2/thumbnail-640x360.jpg",
 					title: "another title",
 					started_at: "1999-12-31T23:59:59.000Z"
 				}
@@ -223,5 +226,33 @@ module( "data/models/twitch/search-channel", function( hooks ) {
 			"Has all TwitchGame records registered in the data store"
 		);
 		assert.ok( userResponseStub.calledOnce, "Has queried API for game" );
+
+		const { /** @type {TwitchSearchChannel} */ firstObject: record } = records;
+
+		this.fakeTimer.setSystemTime( 1234 );
+		assert.strictEqual(
+			`${record.thumbnail_url}`,
+			"https://mock/twitch-search-channel/1/thumbnail-640x360.jpg",
+			"Has the correct URL for the thumbnail image"
+		);
+		assert.strictEqual(
+			record.thumbnail_url.latest,
+			"https://mock/twitch-search-channel/1/thumbnail-640x360.jpg?_=61234",
+			"Sets an expiration date parameter"
+		);
+
+		this.fakeTimer.tick( 59999 );
+		assert.strictEqual(
+			record.thumbnail_url.latest,
+			"https://mock/twitch-search-channel/1/thumbnail-640x360.jpg?_=61234",
+			"Doesn't update the expiration date parameter yet"
+		);
+
+		this.fakeTimer.tick( 1 );
+		assert.strictEqual(
+			record.thumbnail_url.latest,
+			"https://mock/twitch-search-channel/1/thumbnail-640x360.jpg?_=121234",
+			"Updates the expiration date parameter"
+		);
 	});
 });

@@ -27,8 +27,8 @@ export default Model.extend( /** @class TwitchSearchChannel */ {
 	game_name: attr( "string" ),
 	/** @type {boolean} */
 	is_live: attr( "boolean" ),
-	/** @type {string} */
-	thumbnail_url: attr( "string" ),
+	/** @type {TwitchImage} */
+	thumbnail_url: attr( "twitch-image", { width: 640, height: 360 } ),
 	/** @type {string} */
 	title: attr( "string" ),
 	/** @type {Date} */

@@ -44,8 +44,8 @@ export default Model.extend( /** @class TwitchStream */ {
 	started_at: attr( "date" ),
 	/** @type {string} */
 	language: attr( "string" ),
-	/** @type {string} */
-	thumbnail_url: attr( "string" ),
+	/** @type {TwitchImage} */
+	thumbnail_url: attr( "twitch-image", { width: 640, height: 360 } ),
 	/** @type {boolean} */
 	is_mature: attr( "boolean" ),
 

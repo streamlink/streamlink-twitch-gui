@@ -24,6 +24,7 @@ import TwitchChannelSerializer from "data/models/twitch/channel/serializer";
 import TwitchGame from "data/models/twitch/game/model";
 import TwitchGameAdapter from "data/models/twitch/game/adapter";
 import TwitchGameSerializer from "data/models/twitch/game/serializer";
+import TwitchImageTransform from "data/transforms/twitch/image";
 
 
 module( "data/models/twitch/stream", function( hooks ) {
@@ -48,7 +49,8 @@ module( "data/models/twitch/stream", function( hooks ) {
 			TwitchChannelSerializer,
 			TwitchGame,
 			TwitchGameAdapter,
-			TwitchGameSerializer
+			TwitchGameSerializer,
+			TwitchImageTransform
 		})
 	});
 
@@ -232,6 +234,8 @@ module( "data/models/twitch/stream", function( hooks ) {
 			= store.adapterFor( "twitch-game" ).ajax
 			= adapterRequestFactory( assert, TwitchStreamFixtures, "queryRecord.game" );
 
+		// noinspection JSValidateTypes
+		/** @type {TwitchStream} */
 		const record = await store.queryRecord( "twitch-stream", { user_id: "123" } );
 
 		assert.propEqual(
@@ -250,7 +254,7 @@ module( "data/models/twitch/stream", function( hooks ) {
 				viewer_count: 1337,
 				started_at: "2000-01-01T00:00:00.000Z",
 				language: "en",
-				thumbnail_url: "https://mock/twitch-stream/1/thumbnail-{width}x{height}.jpg",
+				thumbnail_url: "https://mock/twitch-stream/1/thumbnail-640x360.jpg",
 				is_mature: true
 			},
 			"Record has the correct ID and attributes"
@@ -298,6 +302,32 @@ module( "data/models/twitch/stream", function( hooks ) {
 			"Has the TwitchGame record registered in the data store"
 		);
 		assert.strictEqual( gameResponseStub.callCount, 1, "Has queried API for game" );
+
+		this.fakeTimer.setSystemTime( 1234 );
+		assert.strictEqual(
+			`${record.thumbnail_url}`,
+			"https://mock/twitch-stream/1/thumbnail-640x360.jpg",
+			"Has the correct URL for the thumbnail image"
+		);
+		assert.strictEqual(
+			record.thumbnail_url.latest,
+			"https://mock/twitch-stream/1/thumbnail-640x360.jpg?_=61234",
+			"Sets an expiration date parameter"
+		);
+
+		this.fakeTimer.tick( 59999 );
+		assert.strictEqual(
+			record.thumbnail_url.latest,
+			"https://mock/twitch-stream/1/thumbnail-640x360.jpg?_=61234",
+			"Doesn't update the expiration date parameter yet"
+		);
+
+		this.fakeTimer.tick( 1 );
+		assert.strictEqual(
+			record.thumbnail_url.latest,
+			"https://mock/twitch-stream/1/thumbnail-640x360.jpg?_=121234",
+			"Updates the expiration date parameter"
+		);
 	});
 
 	test( "query", async function( assert ) {
