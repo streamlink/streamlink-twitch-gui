@@ -14,3 +14,8 @@ twitch:
                 one {One person is watching}
                 other {# people are watching}
             }
+    search-channel:
+        started-at:
+            offline: "Offline"
+            less-than-24h: "Online since {started_at, time, medium}"
+            more-than-24h: "Online since {started_at, time, long}"

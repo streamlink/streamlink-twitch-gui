@@ -1,0 +1,57 @@
+search-channel:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/search/channels"
+        query:
+            query: "foo"
+            live_only: true
+    response:
+        data:
+            -   id: "1"
+                broadcaster_language: "en"
+                broadcaster_login: "foo"
+                display_name: "FOO"
+                game_id: "1"
+                game_name: "some game"
+                is_live: true
+                tag_ids: []
+                thumbnail_url: "https://mock/twitch-search-channel/1/thumbnail-{width}x{height}.jpg"
+                title: "some title"
+                started_at: "2000-01-01T00:00:00Z"
+            -   id: "2"
+                broadcaster_language: "de"
+                broadcaster_login: "bar"
+                display_name: "BAR"
+                game_id: "2"
+                game_name: "another game"
+                is_live: true
+                tag_ids: []
+                thumbnail_url: "https://mock/twitch-search-channel/2/thumbnail-{width}x{height}.jpg"
+                title: "another title"
+                started_at: "1999-12-31T23:59:59Z"
+user:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/users"
+        query:
+            - name: "id"
+              value: "1"
+            - name: "id"
+              value: "2"
+    response:
+        data:
+            - id: "1"
+            - id: "2"
+game:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/games"
+        query:
+            - name: "id"
+              value: "1"
+            - name: "id"
+              value: "2"
+    response:
+        data:
+            - id: "1"
+            - id: "2"

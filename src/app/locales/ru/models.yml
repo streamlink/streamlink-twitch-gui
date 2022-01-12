@@ -18,3 +18,8 @@ twitch:
                 many {# зрителей}
                 other {Зрителей: #}
             }
+    search-channel:
+        started-at:
+            offline: "не в сети"
+            less-than-24h: "Запущен в {started_at, time, medium}"
+            more-than-24h: "Запущен в {started_at, time, long}"

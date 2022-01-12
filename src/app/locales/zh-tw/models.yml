@@ -14,3 +14,8 @@ twitch:
                 one {目前有 1 位觀眾}
                 other {目前有 # 位觀眾}
             }
+    search-channel:
+        started-at:
+            offline: "離線"
+            less-than-24h: "從 {started_at, time, medium} 開始"
+            more-than-24h: "從 {started_at, time, long} 開始"
