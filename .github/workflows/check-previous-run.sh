@@ -6,7 +6,7 @@ HEADERS=(
   -H "Accept: application/vnd.github.v3+json"
   -H "User-Agent: ${GITHUB_REPOSITORY}"
 )
-URL="${HOST}/repos/${GITHUB_REPOSITORY}/actions/runs?branch=${GITHUB_REF#refs/heads/}&event=${GITHUB_EVENT_NAME}&status=success&per_page=1"
+URL="${HOST}/repos/${GITHUB_REPOSITORY}/actions/workflows/main.yml/runs?branch=${GITHUB_REF#refs/heads/}&event=${GITHUB_EVENT_NAME}&status=success&per_page=1"
 SELECT=".workflow_runs[].head_sha | select(. == \"${GITHUB_SHA}\")"
 
 success() {
