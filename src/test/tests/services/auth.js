@@ -1,25 +1,29 @@
 import { module, test } from "qunit";
 import { setupTest } from "ember-qunit";
 import { buildResolver } from "test-utils";
-import { setupStore, adapterRequest } from "store-utils";
+import { adapterRequestFactory, setupStore } from "store-utils";
+import { FakeIntlService } from "intl-utils";
 import sinon from "sinon";
 
 import { observer } from "@ember/object";
 import { on } from "@ember/object/evented";
 import Service from "@ember/service";
 import Adapter from "ember-data/adapter";
+import Model from "ember-data/model";
 import { EventEmitter } from "events";
 import { Stream, Writable } from "stream";
 
-import authServiceInjector from "inject-loader?utils/node/http/HttpServer!services/auth/service";
+import authServiceInjector
+	from "inject-loader?crypto&utils/node/http/HttpServer!services/auth/service";
 import httpServerInjector from "inject-loader?http!utils/node/http/HttpServer";
-import ModelFragmentsInitializer from "init/initializers/model-fragments";
 import Auth from "data/models/auth/model";
 import TwitchAdapter from "data/models/twitch/adapter";
-import TwitchRoot from "data/models/twitch/root/model";
-import TwitchRootSerializer from "data/models/twitch/root/serializer";
-import TwitchRootFixtures from "fixtures/data/models/twitch/root.json";
+import TwitchUser from "data/models/twitch/user/model";
+import TwitchUserAdapter from "data/models/twitch/user/adapter";
+import TwitchUserSerializer from "data/models/twitch/user/serializer";
 import { twitch as twitchConfig } from "config";
+
+import fixturesTwitchUser from "fixtures/services/auth/validate-session.yml";
 
 
 module( "services/auth", function( hooks ) {
@@ -64,17 +68,21 @@ module( "services/auth", function( hooks ) {
 
 	setupTest( hooks, {
 		resolver: buildResolver({
+			IntlService: FakeIntlService,
+			SettingsService: Service.extend(),
 			Auth,
-			TwitchRoot,
-			TwitchRootSerializer
+			TwitchUser,
+			TwitchUserSerializer,
+			TwitchChannel: Model.extend()
 		})
 	});
 
+	/** @typedef {Object} TestContextServiceAuth */
+	/** @this {TestContextServiceAuth} */
 	hooks.beforeEach(function( assert ) {
 		const context = this;
 
 		setupStore( this.owner );
-		ModelFragmentsInitializer.initialize( this.owner );
 
 		// NwjsService
 		this.openBrowserStub = sinon.stub();
@@ -85,11 +93,11 @@ module( "services/auth", function( hooks ) {
 		});
 
 		// Models, Adapters, etc
-		this.kTwitchRootFixtures = "valid";
 		this.setAccessTokenSpy = sinon.spy();
 		this.sessionFindAllStub = sinon.stub().resolves( [] );
 		this.sessionCreateStub = sinon.stub().resolves();
 		this.sessionSaveStub = sinon.stub().resolves();
+		this.twitchUserResponseStub = adapterRequestFactory( assert, fixturesTwitchUser );
 		this.owner.register( "adapter:auth", Adapter.extend({
 			findAll: context.sessionFindAllStub,
 			createRecord: context.sessionCreateStub,
@@ -100,14 +108,8 @@ module( "services/auth", function( hooks ) {
 				context.setAccessTokenSpy.call( this, this.access_token );
 			})
 		}) );
-		this.owner.register( "adapter:twitch-root", TwitchAdapter.extend({
-			async ajax( ...args ) {
-				return adapterRequest(
-					assert,
-					TwitchRootFixtures[ context.kTwitchRootFixtures ],
-					...args
-				);
-			}
+		this.owner.register( "adapter:twitch-user", TwitchUserAdapter.extend({
+			ajax: context.twitchUserResponseStub
 		}) );
 
 		// HttpServer
@@ -133,9 +135,13 @@ module( "services/auth", function( hooks ) {
 		};
 
 		// AuthService
+		this.randomBytesStub = sinon.stub().returns({ toString: () => "deadbeef" });
 		this.onLoginSpy = sinon.spy();
 		this.onInitializedSpy = sinon.spy();
 		const { default: AuthService } = authServiceInjector({
+			"crypto": {
+				randomBytes: context.randomBytesStub
+			},
 			"utils/node/http/HttpServer": context.httpServerStub
 		});
 		this.owner.register( "service:auth", AuthService.extend({
@@ -149,8 +155,9 @@ module( "services/auth", function( hooks ) {
 	});
 
 
+	/** @this {TestContextServiceAuth} */
 	test( "Log in - invalid", async function( assert ) {
-		this.kTwitchRootFixtures = "invalid";
+		this.twitchUserResponseStub.rejects();
 
 		/** @type {AuthService} */
 		const AuthService = this.owner.lookup( "service:auth" );
@@ -171,40 +178,14 @@ module( "services/auth", function( hooks ) {
 			"Rejects on invalid session"
 		);
 
+		assert.notOk( this.sessionSaveStub.called, "Does not save invalid session" );
 		assert.ok( this.setAccessTokenSpy.calledOnceWithExactly( null ), "Resets adapter" );
 		assert.ok( this.onLoginSpy.calledOnceWithExactly( false ), "Triggers failed login event" );
 		assert.notOk( AuthService.session.isPending, "Login is not pending anymore" );
 		assert.notOk( AuthService.session.isLoggedIn, "User is not logged in" );
 	});
 
-	test( "Log in - missing scopes", async function( assert ) {
-		this.kTwitchRootFixtures = "missing-scopes";
-
-		/** @type {AuthService} */
-		const AuthService = this.owner.lookup( "service:auth" );
-		await AuthService._loadSession();
-
-		assert.notOk( AuthService.session.isPending, "Session is not pending initially" );
-		assert.notOk( this.onLoginSpy.called, "Login event hasn't triggered yet" );
-
-		const promise = AuthService.login( fakeToken );
-
-		assert.ok( AuthService.session.isPending, "Login is pending" );
-		assert.ok( this.setAccessTokenSpy.calledOnceWithExactly( fakeToken ), "Updates adapter" );
-		this.setAccessTokenSpy.resetHistory();
-
-		await assert.rejects(
-			promise,
-			new Error( "Invalid session" ),
-			"Rejects on invalid session"
-		);
-
-		assert.ok( this.setAccessTokenSpy.calledOnceWithExactly( null ), "Resets adapter" );
-		assert.ok( this.onLoginSpy.calledOnceWithExactly( false ), "Triggers failed login event" );
-		assert.notOk( AuthService.session.isPending, "Login is not pending anymore" );
-		assert.notOk( AuthService.session.isLoggedIn, "User is not logged in" );
-	});
-
+	/** @this {TestContextServiceAuth} */
 	test( "Log in - success", async function( assert ) {
 		/** @type {AuthService} */
 		const AuthService = this.owner.lookup( "service:auth" );
@@ -221,7 +202,8 @@ module( "services/auth", function( hooks ) {
 		await promise;
 
 		assert.strictEqual( AuthService.session.access_token, fakeToken, "Updates session token" );
-		assert.strictEqual( AuthService.session.user_id, 1337, "Updates user id" );
+		assert.strictEqual( AuthService.session.scope, expectedScopes.join( "+" ), "Saves scope" );
+		assert.strictEqual( AuthService.session.user_id, "1337", "Updates user id" );
 		assert.strictEqual( AuthService.session.user_name, "user", "Updates user name" );
 		assert.ok( this.sessionSaveStub.calledOnce, "Saves session on success" );
 		assert.ok( this.setAccessTokenSpy.calledOnce, "Doesn't reset adapter" );
@@ -230,24 +212,47 @@ module( "services/auth", function( hooks ) {
 		assert.ok( AuthService.session.isLoggedIn, "User is now logged in" );
 	});
 
+	/** @this {TestContextServiceAuth} */
 	test( "Log in - auto - non-existing user", async function( assert ) {
 		/** @type {AuthService} */
 		const AuthService = this.owner.lookup( "service:auth" );
 
 		await AuthService.autoLogin();
 
-		assert.ok( this.onInitializedSpy.called, "Initialized event has been triggered" );
+		assert.ok( this.onInitializedSpy.calledOnce, "Initialized event has been triggered" );
 		assert.notOk( this.onLoginSpy.called, "Login event hasn't been triggered" );
 		assert.notOk( AuthService.session.isPending, "Login is not pending" );
 	});
 
+	/** @this {TestContextServiceAuth} */
+	test( "Log in - auto - invalid scopes", async function( assert ) {
+		this.sessionFindAllStub.resolves([
+			{
+				id: "1",
+				access_token: fakeToken,
+				scope: "foo+bar+baz+qux",
+				date: "2000-01-01T00:00:00Z"
+			}
+		]);
+
+		/** @type {AuthService} */
+		const AuthService = this.owner.lookup( "service:auth" );
+
+		await AuthService.autoLogin();
+
+		assert.ok( this.onInitializedSpy.calledOnce, "Initialized event has been triggered" );
+		assert.notOk( this.setAccessTokenSpy.called, "Doesn't set access token" );
+		assert.ok( this.onLoginSpy.calledWithExactly( false ), "Fires login event with false" );
+		assert.notOk( AuthService.session.isPending, "Login is not pending" );
+	});
+
+	/** @this {TestContextServiceAuth} */
 	test( "Log in - auto - existing user", async function( assert ) {
 		this.sessionFindAllStub.resolves([
 			{
 				id: "1",
 				access_token: fakeToken,
-				scope: "user_read+user_blocks_read+user_blocks_edit+user_follows_edit"
-					+ "+user_subscriptions+chat_login",
+				scope: expectedScopes.join( "+" ),
 				date: "2000-01-01T00:00:00Z"
 			}
 		]);
@@ -264,15 +269,14 @@ module( "services/auth", function( hooks ) {
 		// wait for _loadSession to resolve
 		await _loadSessionSpy.returnValues[0];
 
-		assert.ok( this.onInitializedSpy.called, "Initialized event has been triggered" );
+		assert.ok( this.onInitializedSpy.calledOnce, "Initialized event has been triggered" );
 		assert.notOk( this.onLoginSpy.called, "Login event hasn't been triggered yet" );
 		assert.ok( AuthService.session.isPending, "Login is pending" );
 		assert.ok( this.setAccessTokenSpy.calledOnceWithExactly( fakeToken ), "Updates adapter" );
 
 		await promise;
 
-		assert.strictEqual( AuthService.session.access_token, fakeToken, "Updates session token" );
-		assert.strictEqual( AuthService.session.user_id, 1337, "Updates user id" );
+		assert.strictEqual( AuthService.session.user_id, "1337", "Updates user id" );
 		assert.strictEqual( AuthService.session.user_name, "user", "Updates user name" );
 		assert.notOk( this.sessionSaveStub.called, "Doesn't save session on auto login success" );
 		assert.ok( this.setAccessTokenSpy.calledOnce, "Doesn't reset adapter" );
@@ -281,6 +285,7 @@ module( "services/auth", function( hooks ) {
 		assert.ok( AuthService.session.isLoggedIn, "User is now logged in" );
 	});
 
+	/** @this {TestContextServiceAuth} */
 	test( "Sign in - already running", async function( assert ) {
 		/** @type {AuthService} */
 		const AuthService = this.owner.lookup( "service:auth" );
@@ -295,6 +300,7 @@ module( "services/auth", function( hooks ) {
 		assert.ok( AuthService.server, "HttpServer is still referenced" );
 	});
 
+	/** @this {TestContextServiceAuth} */
 	test( "Sign in - openBrowser fail", async function( assert ) {
 		this.openBrowserStub.throws( new Error( "fail" ) );
 
@@ -319,6 +325,7 @@ module( "services/auth", function( hooks ) {
 		assert.ok( this.focusSpy.calledOnceWithExactly( true ), "Focuses app window when done" );
 	});
 
+	/** @this {TestContextServiceAuth} */
 	test( "Sign in - invalid query params", async function( assert ) {
 		/** @type {AuthService} */
 		const AuthService = this.owner.lookup( "service:auth" );
@@ -357,6 +364,7 @@ module( "services/auth", function( hooks ) {
 		assert.ok( this.focusSpy.calledOnceWithExactly( true ), "Focuses app window when done" );
 	});
 
+	/** @this {TestContextServiceAuth} */
 	test( "Sign in - success", async function( assert ) {
 		/** @type {AuthService} */
 		const AuthService = this.owner.lookup( "service:auth" );
@@ -376,15 +384,17 @@ module( "services/auth", function( hooks ) {
 			"Sets server port and timeout"
 		);
 		assert.ok( AuthService.server, "Has an HttpServer reference" );
-		assert.ok(
-			this.openBrowserStub.calledOnceWithExactly([
-				"https://id.twitch.tv/oauth2/authorize",
-				"?response_type=token",
-				`&client_id=${expectedClientId}`,
-				"&redirect_uri=http%3A%2F%2Flocalhost%3A65432%2Fredirect",
-				`&scope=${expectedScopes.join( "+" )}`,
-				"&force_verify=true"
-			].join( "" ) ),
+		assert.propEqual(
+			this.openBrowserStub.args,
+			[[
+				"https://id.twitch.tv/oauth2/authorize"
+				+ "?response_type=token"
+				+ `&client_id=${expectedClientId}`
+				+ "&redirect_uri=http%3A%2F%2Flocalhost%3A65432%2Fredirect"
+				+ `&scope=${expectedScopes.join( " " )}`
+				+ "&force_verify=true"
+				+ "&state=deadbeef"
+			]],
 			"Opens browser with correct OAuth URL when signing in"
 		);
 
@@ -398,10 +408,14 @@ module( "services/auth", function( hooks ) {
 		);
 		assert.notOk( resRedirect.writable, "Writable stream has finished" );
 
-		const scope = expectedScopes.join( "+" );
+		const scope = expectedScopes.join( " " );
 		const resToken = await this.httpServerEmitRequest(
 			"GET",
-			`http://localhost:65432/token?access_token=${fakeToken}&scope=${scope}`
+			"http://localhost:65432/token"
+			+ "?token_type=bearer"
+			+ `&access_token=${fakeToken}`
+			+ `&scope=${scope}`
+			+ "&state=deadbeef"
 		);
 		assert.ok( resToken.content.includes( "OK" ), "Writes success message" );
 		assert.notOk( resToken.writable, "Writable stream has finished" );
@@ -411,8 +425,19 @@ module( "services/auth", function( hooks ) {
 		assert.ok( this.httpServerCloseSpy.called, "Shuts down HttpServer when done" );
 		assert.notOk( AuthService.server, "Doesn't have an HttpServer reference anymore" );
 		assert.ok( this.focusSpy.calledOnceWithExactly( true ), "Focuses app window when done" );
+
+		assert.strictEqual( AuthService.session.access_token, fakeToken, "Updates session token" );
+		assert.strictEqual( AuthService.session.scope, expectedScopes.join( "+" ), "Saves scope" );
+		assert.strictEqual( AuthService.session.user_id, "1337", "Updates user id" );
+		assert.strictEqual( AuthService.session.user_name, "user", "Updates user name" );
+		assert.ok( this.sessionSaveStub.calledOnce, "Saves session on success" );
+		assert.ok( this.setAccessTokenSpy.calledOnce, "Updates adapter" );
+		assert.ok( this.onLoginSpy.calledOnceWithExactly( true ), "Triggers login event" );
+		assert.notOk( AuthService.session.isPending, "Login is not pending anymore" );
+		assert.ok( AuthService.session.isLoggedIn, "User is now logged in" );
 	});
 
+	/** @this {TestContextServiceAuth} */
 	test( "Sign in - abort without server", async function( assert ) {
 		/** @type {AuthService} */
 		const AuthService = this.owner.lookup( "service:auth" );
@@ -422,13 +447,13 @@ module( "services/auth", function( hooks ) {
 		assert.notOk( this.httpServerCloseSpy.called, "Doesn't try to close non-existing server" );
 	});
 
+	/** @this {TestContextServiceAuth} */
 	test( "Sign out", async function( assert ) {
 		this.sessionFindAllStub.resolves([
 			{
 				id: "1",
 				access_token: fakeToken,
-				scope: "user_read+user_blocks_read+user_blocks_edit+user_follows_edit"
-					+ "+user_subscriptions+chat_login",
+				scope: expectedScopes.join( "+" ),
 				date: "2000-01-01T00:00:00Z"
 			}
 		]);
@@ -441,7 +466,7 @@ module( "services/auth", function( hooks ) {
 		assert.strictEqual( AuthService.session.access_token, fakeToken, "Has session token" );
 		assert.ok( AuthService.session.scope, "Has session scope" );
 		assert.ok( AuthService.session.date, "Has session date" );
-		assert.strictEqual( AuthService.session.user_id, 1337, "Has user id" );
+		assert.strictEqual( AuthService.session.user_id, "1337", "Has user id" );
 		assert.strictEqual( AuthService.session.user_name, "user", "Has user name" );
 		assert.ok( AuthService.session.isLoggedIn, "Is logged in" );
 		assert.ok( this.setAccessTokenSpy.calledOnceWithExactly( fakeToken ), "Sets token" );

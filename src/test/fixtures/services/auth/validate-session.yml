@@ -1,0 +1,9 @@
+request:
+    method: "GET"
+    url: "https://api.twitch.tv/helix/users"
+    query: {}
+response:
+    data:
+        -   id: "1337"
+            login: "user"
+            display_name: "User"

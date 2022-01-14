@@ -12,16 +12,18 @@
 	},
 	"oauth": {
 		"server-port": 65432,
-		"base-uri": "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id={client-id}&redirect_uri={redirect-uri}&scope={scope}&force_verify=true",
+		"base-uri": "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id={client-id}&redirect_uri={redirect-uri}&scope={scope}&force_verify=true&state={state}",
 		"client-id": "phiay4sq36lfv9zu7cbqwz2ndnesfd8",
 		"redirect-uri": "http://localhost:{server-port}/redirect",
 		"scope": [
-			"user_read",
-			"user_blocks_read",
-			"user_blocks_edit",
-			"user_follows_edit",
-			"user_subscriptions",
-			"chat_login"
+			"user:manage:blocked_users",
+			"user:read:blocked_users",
+			"user:read:follows",
+			"user:read:subscriptions",
+			"chat:edit",
+			"chat:read",
+			"whispers:edit",
+			"whispers:read"
 		]
 	}
 }

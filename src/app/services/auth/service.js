@@ -1,7 +1,8 @@
-import { set, setProperties, computed } from "@ember/object";
+import { set, setProperties } from "@ember/object";
 import Evented from "@ember/object/evented";
 import { default as Service, inject as service } from "@ember/service";
 import { twitch as twitchConfig } from "config";
+import { randomBytes } from "crypto";
 import HttpServer from "utils/node/http/HttpServer";
 import OAuthResponseRedirect from "./oauth-redirect.html";
 
@@ -23,6 +24,11 @@ const {
 
 const reToken = /^[a-z\d]{30}$/i;
 
+// Twitch splits up scope names like this
+const SEP_SCOPES_OAUTH = " ";
+// This separator is used for backwards compatibility
+const SEP_SCOPES_STORAGE = "+";
+
 
 export default Service.extend( Evented, /** @class AuthService */ {
 	/** @type {NwjsService} */
@@ -35,15 +41,15 @@ export default Service.extend( Evented, /** @class AuthService */ {
 	/** @type {HttpServer} */
 	server: null,
 
-
-	url: computed(function() {
+	buildOAuthUrl( state ) {
 		const redirect = redirecturi.replace( "{server-port}", String( serverport ) );
 
 		return baseuri
 			.replace( "{client-id}", clientid )
 			.replace( "{redirect-uri}", encodeURIComponent( redirect ) )
-			.replace( "{scope}", expectedScopes.join( "+" ) );
-	}),
+			.replace( "{scope}", expectedScopes.join( SEP_SCOPES_OAUTH ) )
+			.replace( "{state}", state );
+	},
 
 
 	async autoLogin() {
@@ -62,7 +68,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 
 		// then perform auto-login afterwards
 		await this.login( access_token, true )
-			.catch( /* istanbul ignore next */ () => {} );
+			.catch( new Function() );
 	},
 
 	async _loadSession() {
@@ -89,6 +95,7 @@ export default Service.extend( Evented, /** @class AuthService */ {
 		if ( this.server ) {
 			throw new Error( "An OAuth response server is already running" );
 		}
+		const state = randomBytes( 16 ).toString( "hex" );
 
 		return new Promise( ( resolve, reject ) => {
 			const server = new HttpServer( serverport, 1000 );
@@ -100,10 +107,8 @@ export default Service.extend( Evented, /** @class AuthService */ {
 			});
 
 			server.onRequest( "GET", "/token", async ( req, res ) => {
-				const { access_token, scope } = req.url.query;
-
 				// validate token and scope and keep the request open
-				await this._validateOAuthResponse( access_token, scope )
+				await this._validateOAuthResponse( req.url.query, state )
 					.then( () => {
 						res.end( "OK" );
 						process.nextTick( resolve );
@@ -118,7 +123,8 @@ export default Service.extend( Evented, /** @class AuthService */ {
 
 			// open auth url in web browser
 			try {
-				this.nwjs.openBrowser( this.url );
+				const url = this.buildOAuthUrl( state );
+				this.nwjs.openBrowser( url );
 			} catch ( err ) {
 				reject( err );
 			}
@@ -139,17 +145,26 @@ export default Service.extend( Evented, /** @class AuthService */ {
 
 	/**
 	 * Validate the OAuth response after a login attempt
-	 * @param {string} token
-	 * @param {string} scope
+	 * @param {Object} query
+	 * @param {string} query.token_type
+	 * @param {string} query.access_token
+	 * @param {string} query.scope
+	 * @param {string} query.state
+	 * @param {string} expectedState
 	 * @returns {Promise}
 	 */
-	async _validateOAuthResponse( token, scope ) {
-		// check the returned token and validate scopes
-		if ( !reToken.test( token ) || !this._validateScope( String( scope ).split( " " ) ) ) {
+	async _validateOAuthResponse( query, expectedState ) {
+		const { token_type, access_token, scope, state } = query;
+		if (
+			   token_type !== "bearer"
+			|| !reToken.test( access_token )
+			|| !this._validateScope( String( scope ).split( SEP_SCOPES_OAUTH ) )
+			|| state !== expectedState
+		) {
 			throw new Error( "OAuth token validation error" );
 		}
 
-		return await this.login( token, false );
+		return await this.login( access_token, false );
 	},
 
 	/**
@@ -164,6 +179,10 @@ export default Service.extend( Evented, /** @class AuthService */ {
 		set( session, "isPending", true );
 
 		try {
+			if ( isAutoLogin ) {
+				this._validateSessionScope();
+			}
+
 			// tell the twitch adapter to use the token from now on
 			this._updateAdapter( token );
 
@@ -172,11 +191,11 @@ export default Service.extend( Evented, /** @class AuthService */ {
 
 			if ( !isAutoLogin ) {
 				// save auth record if this was no auto login
-				await this._sessionSave( token, record );
+				await this._sessionSave( token );
 			}
 
 			// also don't forget to set the user_name on the auth record (regular properties)
-			const { user_id, user_name } = record;
+			const { id: user_id, login: user_name } = record;
 			setProperties( session, { user_id, user_name } );
 			success = true;
 
@@ -194,40 +213,46 @@ export default Service.extend( Evented, /** @class AuthService */ {
 
 	/**
 	 * Adapter was updated. Now check if the access token is valid.
-	 * @returns {Promise<TwitchRoot>}
+	 * @returns {Promise<TwitchUser>}
 	 */
 	async _validateSession() {
-		/** @type {TwitchRoot} */
-		const twitchRoot = await this.store.queryRecord( "twitch-root", {} );
-		const { valid, user_name, scopes } = twitchRoot.toJSON();
-
-		if ( valid !== true || !user_name || !this._validateScope( scopes ) ) {
+		try {
+			// noinspection JSValidateTypes
+			return await this.store.queryRecord( "twitch-user", {} );
+		} catch ( e ) {
 			throw new Error( "Invalid session" );
 		}
+	},
 
-		return twitchRoot;
+	/**
+	 * Check the scopes on the stored Auth record before attempting a login.
+	 * Scopes can always be updated/extended in the future, requiring a new authentication.
+	 */
+	_validateSessionScope() {
+		const { scope } = this.session;
+		if ( !scope || !this._validateScope( scope.split( SEP_SCOPES_STORAGE ) ) ) {
+			throw new Error( "Invalid access token scopes" );
+		}
 	},
 
 	/**
 	 * Received and expected scopes need to be identical
-	 * @param {string[]} returnedScopes
+	 * @param {string[]} scopes
 	 * @returns {boolean}
 	 */
-	_validateScope( returnedScopes ) {
-		return Array.isArray( returnedScopes )
-		    && expectedScopes.every( item => returnedScopes.includes( item ) );
+	_validateScope( scopes ) {
+		return Array.isArray( scopes ) && expectedScopes.every( item => scopes.includes( item ) );
 	},
 
 
 	/**
 	 * Update the auth record and save it
 	 * @param {string} access_token
-	 * @param {TwitchRoot} twitchRoot
 	 * @returns {Promise}
 	 */
-	async _sessionSave( access_token, twitchRoot ) {
+	async _sessionSave( access_token ) {
 		const { session } = this;
-		const scope = twitchRoot.scopes.content.join( "+" );
+		const scope = expectedScopes.join( SEP_SCOPES_STORAGE );
 		const date = new Date();
 		setProperties( session, { access_token, scope, date } );
 
