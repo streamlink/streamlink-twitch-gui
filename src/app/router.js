@@ -4,7 +4,6 @@ import EmberRouter from "@ember/routing/router";
 export default EmberRouter.extend().map(function() {
 	this.route( "watching" );
 	this.route( "search" );
-	this.route( "featured" );
 	this.route( "games", function() {
 		this.route( "game", { path: "/:game" } );
 	});

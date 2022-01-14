@@ -18,7 +18,6 @@ infinite-scroll:
 main-menu:
     browse:
         header: Navegar
-        featured: Em destaque
         games: Jogos
         streams: Streams
     followed:

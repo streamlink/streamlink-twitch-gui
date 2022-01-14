@@ -26,10 +26,6 @@ about:
         header: Traduções
     dependencies:
         header: Aplicativos de terceiros
-featured:
-    header: Canais em destaque
-    empty: A lista de canais em destaque não pôde ser carregado!
-    summary: Há {viewers} pessoas assistindo {channels} streams agora!
 games:
     header: Jogos mais vistos
     empty: A lista de jogos mais vistos está vazia.
@@ -145,8 +141,7 @@ user:
         header: Streams seguidos
         empty:
             text: A lista de streams seguidos está vazia.
-            featured: Watch currently featured streams
-            streams: Watch top streams
+            streams: Assista às principais streams
     followedChannels:
         header: Canais seguidos
         buttons:
@@ -175,5 +170,5 @@ watching:
     empty:
         header: Todas as streams foram fechadas
         next: O que fazer a seguir?
-        featured: Assistir as streams em destaque
+        streams: Assista às principais streams
         followed: Assistir as streams que você segue

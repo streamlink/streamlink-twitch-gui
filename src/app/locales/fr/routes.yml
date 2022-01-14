@@ -26,10 +26,6 @@ about:
         header: Traductions
     dependencies:
         header: Application tierces
-featured:
-    header: Chaînes mises en avant
-    empty: La liste des chaînes mises en avant n'a pas pu être chargée !
-    summary: Il y actuellement {viewers} personnes en train de regarder {channels} streams !
 games:
     header: Top Jeux
     empty: La liste des top jeux retournée est vide.
@@ -145,7 +141,6 @@ user:
         header: Stream suivis
         empty:
             text: La liste retournée des streams est vide
-            featured: Regarder les flux actuellement mis en avant
             streams: Regarder les top streams
     followedChannels:
         header: Chaînes suivies
@@ -175,5 +170,5 @@ watching:
     empty:
         header: Tous les streams ont été fermés
         next: Que faire ensuite ?
-        featured: Regarder les streams actuellement mis en avant
+        streams: Regarder les top streams
         followed: Regardez vos streams suivis

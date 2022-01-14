@@ -41,7 +41,7 @@
 <h2>{{t "routes.watching.empty.header"}}</h2>
 <p>{{t "routes.watching.empty.next"}}</p>
 <ul class="fa-ul list-empty">
-<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.featured"}}{{/link-to}}</li>
+<li>{{#link-to "streams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.streams"}}{{/link-to}}</li>
 {{#if auth.session.isLoggedIn}}
 <li>{{#link-to "user.followedStreams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.followed"}}{{/link-to}}</li>
 {{/if}}

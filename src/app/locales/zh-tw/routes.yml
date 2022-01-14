@@ -26,10 +26,6 @@ about:
         header: 翻譯
     dependencies:
         header: 第三方元件
-featured:
-    header: 精選頻道
-    empty: 精選頻道無法載入！
-    summary: 有 {viewers} 位觀眾正在收看 {channels} 個頻道實況！
 games:
     header: 熱門遊戲
     empty: 無熱門遊戲
@@ -145,7 +141,6 @@ user:
         header: 追蹤中實況
         empty:
             text: 目前無追蹤中實況
-            featured: 觀看目前的精選實況
             streams: 觀看熱門實況
     followedChannels:
         header: 已追隨的頻道
@@ -175,5 +170,5 @@ watching:
     empty:
         header: 所有實況已關閉
         next: 下一步?
-        featured: 觀看目前精選實況
+        streams: 觀看熱門實況
         followed: 觀看已追隨實況

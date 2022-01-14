@@ -26,10 +26,6 @@ about:
         header: Übersetzungen
     dependencies:
         header: Drittanwendungen
-featured:
-    header: Vorgestellte Kanäle
-    empty: Die Liste der vorgestellten Kanäle konnte nicht geladen werden!
-    summary: Zur Zeit schauen {viewers} Leute {channels} Livestreams zu!
 games:
     header: Top-Spiele
     empty: Die Liste der Top-Spiele ist leer.
@@ -145,8 +141,7 @@ user:
         header: Gefolgte Streams
         empty:
             text: Die Liste der gefolgten Streams ist leer.
-            featured: Vorgestellte Streams anschauen
-            streams: Top-Streams anschauen
+            streams: Beliebte Streams anschauen
     followedChannels:
         header: Gefolgte Kanäle
         buttons:
@@ -175,5 +170,5 @@ watching:
     empty:
         header: Alle Streams wurden geschlossen
         next: Was tun als nächstes?
-        featured: Vorgestellte Streams anschauen
+        streams: Beliebte Streams anschauen
         followed: Gefolgte Streams anschauen

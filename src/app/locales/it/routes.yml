@@ -26,10 +26,6 @@ about:
         header: Traduzioni
     dependencies:
         header: Applicazioni di terze parti
-featured:
-    header: Canali in primo piano
-    empty: Impossibile caricare l'elenco dei canali in primo piano!
-    summary: Ci sono {viewers} persone che stanno guardando {channels} live streaming in questo momento!
 games:
     header: Migliori giochi
     empty: L'elenco restituito dei migliori giochi è vuoto.
@@ -145,7 +141,6 @@ user:
         header: Stream seguiti
         empty:
             text: L'elenco restituito degli stream seguiti è vuoto.
-            featured: Guarda gli stream attualmente in primo piano
             streams: Guarda i migliori stream
     followedChannels:
         header: Canali seguiti
@@ -175,5 +170,5 @@ watching:
     empty:
         header: Tutti i flussi sono stati chiusi
         next: Cosa fare dopo?
-        featured: Guarda gli stream attualmente in primo piano
+        streams: Guarda i migliori stream
         followed: Guarda i tuoi stream seguiti

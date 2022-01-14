@@ -45,7 +45,7 @@
 				"ctrlKey": true,
 				"force": true
 			}],
-			"routeFeatured": [{
+			"routeGames": [{
 				"code": "Digit1",
 				"ctrlKey": true,
 				"force": true
@@ -54,7 +54,7 @@
 				"ctrlKey": true,
 				"force": true
 			}],
-			"routeGames": [{
+			"routeStreams": [{
 				"code": "Digit2",
 				"ctrlKey": true,
 				"force": true
@@ -63,7 +63,7 @@
 				"ctrlKey": true,
 				"force": true
 			}],
-			"routeStreams": [{
+			"routeUserFollowedStreams": [{
 				"code": "Digit3",
 				"ctrlKey": true,
 				"force": true
@@ -72,21 +72,12 @@
 				"ctrlKey": true,
 				"force": true
 			}],
-			"routeUserFollowedStreams": [{
+			"routeUserFollowedChannels": [{
 				"code": "Digit4",
 				"ctrlKey": true,
 				"force": true
 			}, {
 				"code": "Numpad4",
-				"ctrlKey": true,
-				"force": true
-			}],
-			"routeUserFollowedChannels": [{
-				"code": "Digit5",
-				"ctrlKey": true,
-				"force": true
-			}, {
-				"code": "Numpad5",
 				"ctrlKey": true,
 				"force": true
 			}]

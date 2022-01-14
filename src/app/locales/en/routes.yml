@@ -26,10 +26,6 @@ about:
         header: Translations
     dependencies:
         header: Third party applications
-featured:
-    header: Featured Channels
-    empty: The featured channels list could not be loaded!
-    summary: There are {viewers} people watching {channels} live streams right now!
 games:
     header: Top Games
     empty: The returned list of top games is empty.
@@ -145,8 +141,7 @@ user:
         header: Followed Streams
         empty:
             text: The returned list of followed streams is empty.
-            featured: Watch currently featured streams
-            streams: Watch top streams
+            streams: Watch popular streams
     followedChannels:
         header: Followed Channels
         buttons:
@@ -175,5 +170,5 @@ watching:
     empty:
         header: All streams have been closed
         next: What to do next?
-        featured: Watch currently featured streams
+        streams: Watch popular streams
         followed: Watch your followed streams

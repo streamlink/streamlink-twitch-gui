@@ -21,7 +21,7 @@ export default Fragment.extend({
 	externalcommands: attr( "boolean", { defaultValue: false } ),
 	focusrefresh: attr( "number", { defaultValue: ATTR_GUI_FOCUSREFRESH_NONE } ),
 	hidebuttons: attr( "boolean", { defaultValue: false } ),
-	homepage: attr( "string", { defaultValue: "/featured" } ),
+	homepage: attr( "string", { defaultValue: "/streams" } ),
 	integration: attr( "number", { defaultValue: ATTR_GUI_INTEGRATION_BOTH } ),
 	language: attr( "string",  { defaultValue: "auto" } ),
 	minimize: attr( "number", { defaultValue: ATTR_GUI_MINIMIZE_NOOP } ),
