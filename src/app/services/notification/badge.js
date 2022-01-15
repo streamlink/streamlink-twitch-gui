@@ -1,34 +1,30 @@
-import { get, observer } from "@ember/object";
+import { observer } from "@ember/object";
 import { and } from "@ember/object/computed";
 import { default as Evented, on } from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
 import { inject as service } from "@ember/service";
-import nwWindow from "nwjs/Window";
 
 
 export default Mixin.create( Evented, {
+	/** @type {NwjsService} */
+	nwjs: service(),
+	/** @type {SettingsService} */
 	settings: service(),
 
 	// will be overridden by NotificationService
 	running: false,
 
-	_badgeEnabled: and( "running", "settings.notification.badgelabel" ),
+	_badgeEnabled: and( "running", "settings.content.notification.badgelabel" ),
 
 	_badgeEnabledObserver: observer( "_badgeEnabled", function() {
-		if ( !get( this, "_badgeEnabled" ) ) {
-			this.badgeSetLabel( "" );
+		if ( !this._badgeEnabled ) {
+			this.nwjs.setBadgeLabel( "" );
 		}
 	}),
 
 	_badgeStreamsAllListener: on( "streams-all", function( streams ) {
-		if ( streams && get( this, "_badgeEnabled" ) ) {
-			const length = get( streams, "length" );
-			this.badgeSetLabel( String( length ) );
+		if ( streams && this._badgeEnabled ) {
+			this.nwjs.setBadgeLabel( `${streams.length}` );
 		}
-	}),
-
-	badgeSetLabel( label ) {
-		// update badge label or remove it
-		nwWindow.setBadgeLabel( label );
-	}
+	})
 });

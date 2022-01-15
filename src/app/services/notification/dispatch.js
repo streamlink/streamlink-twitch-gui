@@ -21,7 +21,9 @@ export default Mixin.create( Evented, {
 	intl: service(),
 	/** @type {RouterService} */
 	router: service(),
+	/** @type {SettingsService} */
 	settings: service(),
+	/** @type {StreamingService} */
 	streaming: service(),
 
 
@@ -33,9 +35,13 @@ export default Mixin.create( Evented, {
 		 */
 		async function( streams ) {
 			if ( !streams ) { return; }
-			const length = get( streams, "length" );
+			const { length } = streams;
 
-			if ( length > 1 && get( this, "settings.notification.grouping" ) ) {
+			// load TwitchUser relationships first and work around the missing user_name attribute
+			// https://github.com/twitchdev/issues/issues/500
+			await Promise.all( streams.map( stream => stream.user.promise ) );
+
+			if ( length > 1 && this.settings.content.notification.grouping ) {
 				// merge multiple notifications and show a single one
 				const data = this._getNotificationDataGroup( streams );
 				await this._showNotification( data );
@@ -43,9 +49,9 @@ export default Mixin.create( Evented, {
 			} else if ( length > 0 ) {
 				await Promise.all( streams.map( async stream => {
 					// download channel icon first and save it into a local temp dir...
-					await iconDownload( stream );
+					const icon = await iconDownload( stream.user.content );
 					// show notification
-					const data = this._getNotificationDataSingle( stream );
+					const data = this._getNotificationDataSingle( stream, icon );
 					await this._showNotification( data );
 				}) );
 			}
@@ -58,13 +64,13 @@ export default Mixin.create( Evented, {
 	 * @returns {NotificationData}
 	 */
 	_getNotificationDataGroup( streams ) {
-		const settings = get( this, "settings.notification.click_group" );
+		const settings = this.settings.content.notification.click_group;
 
 		return new NotificationData({
 			title: this.intl.t( "services.notification.dispatch.group" ).toString(),
 			message: streams.map( stream => ({
-				title: get( stream, "channel.display_name" ),
-				message: get( stream, "channel.status" ) || ""
+				title: get( stream, "user.display_name" ),
+				message: stream.title || ""
 			}) ),
 			icon: iconGroup,
 			click: () => this._notificationClick( streams, settings ),
@@ -75,16 +81,17 @@ export default Mixin.create( Evented, {
 	/**
 	 * Show a notification for each stream
 	 * @param {TwitchStream} stream
+	 * @param {string} icon
 	 * @returns {NotificationData}
 	 */
-	_getNotificationDataSingle( stream ) {
-		const settings = get( this, "settings.notification.click" );
-		const name = get( stream, "channel.display_name" );
+	_getNotificationDataSingle( stream, icon ) {
+		const settings = this.settings.content.notification.click;
+		const name = get( stream, "user.display_name" );
 
 		return new NotificationData({
 			title: this.intl.t( "services.notification.dispatch.single", { name } ).toString(),
-			message: get( stream, "channel.status" ) || "",
-			icon: get( stream, "logo" ) || iconGroup,
+			message: stream.title || "",
+			icon: icon || iconGroup,
 			click: () => this._notificationClick( [ stream ], settings ),
 			settings
 		});
@@ -101,13 +108,13 @@ export default Mixin.create( Evented, {
 			return;
 		}
 
-		logDebug( "Notification click", () => ({
+		await logDebug( "Notification click", () => ({
 			action,
 			streams: streams.mapBy( "id" )
 		}) );
 
 		// restore the window
-		if ( get( this, "settings.notification.click_restore" ) ) {
+		if ( this.settings.content.notification.click_restore ) {
 			setMinimized( false );
 			setVisibility( true );
 			setFocused( true );
@@ -117,7 +124,7 @@ export default Mixin.create( Evented, {
 			this.router.transitionTo( "user.followedStreams" );
 
 		} else if ( action === ATTR_NOTIFY_CLICK_STREAM ) {
-			const streaming = get( this, "streaming" );
+			const { streaming } = this;
 			await Promise.all( streams.map( async stream => {
 				// don't await startStream promise and ignore errors
 				streaming.startStream( stream )
@@ -125,13 +132,11 @@ export default Mixin.create( Evented, {
 			}) );
 
 		} else if ( action === ATTR_NOTIFY_CLICK_STREAMANDCHAT ) {
-			const streaming = get( this, "streaming" );
-			const openGlobal = get( this, "settings.streams.chat_open" );
-			const chat = get( this, "chat" );
+			const { streaming, chat } = this;
+			const openGlobal = this.settings.content.streams.chat_open;
 
 			await Promise.all( streams.map( async stream => {
-				const channel = get( stream, "channel" );
-				const { streams_chat_open: openChannel } = await channel.getChannelSettings();
+				const { streams_chat_open: openChannel } = await stream.getChannelSettings();
 
 				// don't await startStream promise and ignore errors
 				streaming.startStream( stream )
@@ -150,7 +155,7 @@ export default Mixin.create( Evented, {
 					return;
 				}
 				// don't await openChat promise and ignore errors
-				chat.openChat( channel )
+				chat.openChat( get( stream, "user.login" ) )
 					.catch( () => {} );
 			}) );
 		}
@@ -161,7 +166,7 @@ export default Mixin.create( Evented, {
 	 * @returns {Promise}
 	 */
 	async _showNotification( data ) {
-		const provider = get( this, "settings.notification.provider" );
+		const provider = this.settings.content.notification.provider;
 
 		// don't await the notification promise here
 		showNotification( provider, data, false )

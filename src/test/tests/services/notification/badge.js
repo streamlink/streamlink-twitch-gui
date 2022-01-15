@@ -1,71 +1,81 @@
 import { module, test } from "qunit";
-import { buildOwner, runDestroy } from "test-utils";
+import { setupTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import sinon from "sinon";
+
 import { set } from "@ember/object";
-import { run } from "@ember/runloop";
 import Service from "@ember/service";
 
-import notificationServiceBadgeMixinInjector
-	from "inject-loader?nwjs/Window!services/notification/badge";
+import NotificationServiceBadgeMixin from "services/notification/badge";
 
 
-module( "services/notification/badge" );
-
-
-test( "Badge", assert => {
-
-	assert.expect( 5 );
-
-	let expected = "";
-
-	const { default: NotificationServiceBadgeMixin } = notificationServiceBadgeMixinInjector({
-		"nwjs/Window": {
-			setBadgeLabel( label ) {
-				assert.strictEqual( label, expected, "Sets the badge label" );
-			}
-		}
+module( "services/notification/badge", function( hooks ) {
+	setupTest( hooks, {
+		resolver: buildResolver({
+			NotificationService: Service.extend( NotificationServiceBadgeMixin )
+		})
 	});
 
-	const owner = buildOwner();
+	/** @typedef {Object} TestContextNotificationServiceBadgeMixin */
+	/** @this {TestContextNotificationServiceBadgeMixin} */
+	hooks.beforeEach(function() {
+		this.setBadgeLabelSpy = sinon.spy();
 
-	owner.register( "service:settings", Service.extend({
-		notification: {
-			badgelabel: false
-		}
-	}) );
-	owner.register( "service:notification", Service.extend( NotificationServiceBadgeMixin ) );
+		this.owner.register( "service:nwjs", Service.extend({
+			setBadgeLabel: this.setBadgeLabelSpy
+		}) );
+		this.owner.register( "service:settings", Service.extend({
+			content: {
+				notification: {
+					badgelabel: false
+				}
+			}
+		}) );
+	});
 
-	const settings = owner.lookup( "service:settings" );
-	const service = owner.lookup( "service:notification" );
+	/** @this {TestContextNotificationServiceBadgeMixin} */
+	test( "Badge", function( assert ) {
+		const settings = this.owner.lookup( "service:settings" );
+		const service = this.owner.lookup( "service:notification" );
 
-	// doesn't update the label when not running or disabled in settings
-	service.trigger( "streams-all", [ {}, {} ] );
+		service.trigger( "streams-all", [ {}, {} ] );
+		assert.notOk(
+			this.setBadgeLabelSpy.called,
+			"Doesn't update the label when not running or disabled in settings"
+		);
 
-	run( () => set( settings, "notification.badgelabel", true ) );
+		set( settings, "content.notification.badgelabel", true );
+		service.trigger( "streams-all", [ {}, {} ] );
+		assert.notOk(
+			this.setBadgeLabelSpy.called,
+			"Doesn't update the label when enabled, but not running"
+		);
 
-	// doesn't update the label when enabled, but not running
-	service.trigger( "streams-all", [ {}, {} ] );
+		set( service, "running", true );
 
-	run( () => set( service, "running", true ) );
+		service.trigger( "streams-all", [ {}, {} ] );
+		assert.propEqual( this.setBadgeLabelSpy.args, [[ "2" ]], "Sets label to 2" );
+		this.setBadgeLabelSpy.resetHistory();
 
-	// updates the label when running and enabled
-	expected = "2";
-	service.trigger( "streams-all", [ {}, {} ] );
-	expected = "3";
-	service.trigger( "streams-all", [ {}, {}, {} ] );
+		service.trigger( "streams-all", [ {}, {}, {} ] );
+		assert.propEqual( this.setBadgeLabelSpy.args, [[ "3" ]], "Sets label to 3" );
+		this.setBadgeLabelSpy.resetHistory();
 
-	// clears label when it gets disabled
-	expected = "";
-	run( () => set( settings, "notification.badgelabel", false ) );
+		set( settings, "content.notification.badgelabel", false );
+		assert.propEqual( this.setBadgeLabelSpy.args, [[ "" ]], "Clears label when disabled" );
+		this.setBadgeLabelSpy.resetHistory();
 
-	// doesn't reset label, requires a new streams-all event
-	run( () => set( settings, "notification.badgelabel", true ) );
-	expected = "1";
-	service.trigger( "streams-all", [ {} ] );
+		set( settings, "content.notification.badgelabel", true );
+		assert.notOk(
+			this.setBadgeLabelSpy.called,
+			"Doesn't reset label, requires a new streams-all event"
+		);
 
-	// clears label when service stops
-	expected = "";
-	run( () => set( service, "running", false ) );
+		service.trigger( "streams-all", [ {} ] );
+		assert.propEqual( this.setBadgeLabelSpy.args, [[ "1" ]], "Sets label to 1" );
+		this.setBadgeLabelSpy.resetHistory();
 
-	runDestroy( owner );
-
+		set( service, "running", false );
+		assert.propEqual( this.setBadgeLabelSpy.args, [[ "" ]], "Clears label when service stops" );
+	});
 });

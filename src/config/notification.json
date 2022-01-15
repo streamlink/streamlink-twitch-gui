@@ -13,7 +13,8 @@
 		"error": 120000
 	},
 	"query": {
-		"limit": 100
+		"first": 100,
+		"maxQueries": 5
 	},
 	"provider": {
 		"snoretoast": {

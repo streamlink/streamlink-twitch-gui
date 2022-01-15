@@ -1,13 +1,13 @@
 import { A } from "@ember/array";
-import { get, set, setProperties, observer } from "@ember/object";
+import { set, setProperties, observer } from "@ember/object";
 import Evented from "@ember/object/evented";
 import Mixin from "@ember/object/mixin";
-import { cancel, later } from "@ember/runloop";
 import { inject as service } from "@ember/service";
 import { notification as notificationConfig } from "config";
 import { cacheClear, cacheFill } from "./cache";
 import { iconDirCreate, iconDirClear } from "./icons";
 import { logError } from "./logger";
+import { setTimeout, clearTimeout } from "timers";
 
 
 const {
@@ -20,13 +20,19 @@ const {
 		error: intervalError
 	},
 	query: {
-		limit
+		first,
+		maxQueries
 	}
 } = notificationConfig;
 
 
-export default Mixin.create( Evented, {
+// TODO: rewrite this as a generic PollingService with a better design and better tests
+export default Mixin.create( Evented, /** @class NotificatonServicePollingMixin */ {
+	/** @type {AuthService} */
+	auth: service(),
+	/** @type {SettingsService} */
 	settings: service(),
+	/** @type {DS.Store} */
 	store: service(),
 
 	// NotificationService properties
@@ -36,12 +42,12 @@ export default Mixin.create( Evented, {
 	// state
 	_pollNext: null,
 	_pollTries: 0,
-	_pollInitializedPromise: null,
+	_pollInitialized: false,
 	_pollPromise: null,
 
 
 	_pollObserver: observer( "running", function() {
-		if ( get( this, "running" ) ) {
+		if ( this.running ) {
 			this._pollPromise = this.start();
 		} else {
 			this.reset();
@@ -52,7 +58,7 @@ export default Mixin.create( Evented, {
 	reset() {
 		// unqueue
 		if ( this._pollNext ) {
-			cancel( this._pollNext );
+			clearTimeout( this._pollNext );
 		}
 
 		// reset state
@@ -70,18 +76,17 @@ export default Mixin.create( Evented, {
 			this.reset();
 
 			// wait for initialization to complete
-			if ( !this._pollInitializedPromise ) {
-				this._pollInitializedPromise = Promise.resolve()
-					.then( iconDirCreate )
-					.then( iconDirClear );
+			if ( !this._pollInitialized ) {
+				await iconDirCreate();
+				await iconDirClear();
+				this._pollInitialized = true;
 			}
-			await this._pollInitializedPromise;
 
 			// start polling
 			await this._poll( true );
 
 		} catch ( e ) {
-			logError( e );
+			await logError( e );
 		}
 	},
 
@@ -90,7 +95,7 @@ export default Mixin.create( Evented, {
 	 * @returns {Promise}
 	 */
 	async _poll( firstRun ) {
-		if ( !get( this, "running" ) ) { return; }
+		if ( !this.running ) { return; }
 
 		let streams;
 		try {
@@ -101,7 +106,7 @@ export default Mixin.create( Evented, {
 			return this._pollFailure();
 		}
 
-		if ( !get( this, "running" ) ) { return; }
+		if ( !this.running ) { return; }
 		await this._pollResult( streams, firstRun );
 
 		// requeue
@@ -117,7 +122,7 @@ export default Mixin.create( Evented, {
 	},
 
 	_pollFailure() {
-		let tries = get( this, "_pollTries" );
+		let tries = this._pollTries;
 
 		// did we reach the retry limit yet?
 		if ( ++tries > failsRequests ) {
@@ -136,37 +141,41 @@ export default Mixin.create( Evented, {
 	},
 
 	_pollRequeue( time ) {
-		if ( !get( this, "running" ) ) { return; }
+		if ( !this.running ) { return; }
 
 		this._pollPromise = new Promise( resolve =>
-			set( this, "_pollNext", later( resolve, time ) )
+			set( this, "_pollNext", setTimeout( resolve, time ) )
 		)
 			.then( () => this._poll( false ) )
 			.catch( logError );
 	},
 
 	/**
-	 * @returns {Promise.<TwitchStream[]>}
+	 * @returns {Promise<TwitchStream[]>}
 	 */
 	async _pollQuery() {
-		const store = get( this, "store" );
+		const { store } = this;
 		const allStreams = A();
+		const params = {
+			user_id: this.auth.session.user_id,
+			first
+		};
+		let num = 0;
 
 		// eslint-disable-next-line no-constant-condition
-		while ( true ) {
-			const streams = await store.query( "twitchStreamFollowed", {
-				offset: get( allStreams, "length" ),
-				limit
-			});
+		while ( ++num <= maxQueries ) {
+			const streams = await store.query( "twitch-stream-followed", params );
 
 			// add new streams to the overall streams list
 			allStreams.push( ...streams.mapBy( "stream" ) );
 
 			// stop querying as soon as a request doesn't have enough items
 			// otherwise query again with an increased offset
-			if ( get( streams, "length" ) < limit ) {
+			if ( streams.length < first || !streams.meta.pagination ) {
 				break;
 			}
+
+			params.after = streams.meta.pagination.cursor;
 		}
 
 		// remove any potential duplicates that may have occured between multiple requests
@@ -191,25 +200,25 @@ export default Mixin.create( Evented, {
 			this.trigger( "streams-filtered", filteredStreams );
 
 		} catch ( e ) {
-			logError( e );
+			await logError( e );
 		}
 	},
 
 	/**
 	 * @param {TwitchStream[]} streams
-	 * @returns {Promise.<TwitchStream[]>}
+	 * @returns {Promise<TwitchStream[]>}
 	 */
 	async _filterStreams( streams ) {
-		const filter = get( this, "settings.notification.filter" );
-		const filter_vodcasts = get( this, "settings.notification.filter_vodcasts" );
+		const filter = this.settings.content.notification.filter;
 
 		// filter vodcasts before loading channel settings
-		streams = streams.filter( stream => filter_vodcasts ? !get( stream, "isVodcast" ) : true );
+		if ( this.settings.content.notification.filter_vodcasts ) {
+			streams = streams.filter( stream => !stream.isVodcast );
+		}
 
 		// get a list of all streams and their channel's individual settings
 		const streamSettingsObjects = await Promise.all( streams.map( async stream => {
-			const channel = get( stream, "channel" );
-			const { notification_enabled } = await channel.getChannelSettings();
+			const { notification_enabled } = await stream.getChannelSettings();
 
 			return { stream, notification_enabled };
 		}) );

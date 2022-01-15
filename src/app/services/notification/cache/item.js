@@ -1,13 +1,10 @@
-import { get } from "@ember/object";
-
-
 export default class NotificationStreamCacheItem {
 	/**
 	 * @param {TwitchStream} stream
 	 */
 	constructor( stream ) {
-		this.id = get( stream, "id" );
-		this.since = get( stream, "created_at" );
+		this.id = stream.id;
+		this.since = stream.started_at;
 		this.fails = 0;
 	}
 
@@ -16,8 +13,8 @@ export default class NotificationStreamCacheItem {
 	 * @returns {Number}
 	 */
 	findStreamIndex( streams ) {
-		for ( let id = this.id, i = 0, l = get( streams, "length" ); i < l; i++ ) {
-			if ( get( streams[ i ], "id" ) === id ) {
+		for ( let id = this.id, i = 0, l = streams.length; i < l; i++ ) {
+			if ( streams[ i ].id === id ) {
 				return i;
 			}
 		}
@@ -29,6 +26,6 @@ export default class NotificationStreamCacheItem {
 	 * @returns {Boolean}
 	 */
 	isNotNewer( stream ) {
-		return this.since >= get( stream, "created_at" );
+		return this.since >= stream.started_at;
 	}
 }

@@ -1,70 +1,72 @@
 import { module, test } from "qunit";
-import { buildOwner, runDestroy } from "test-utils";
+import { setupTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
 import { FakeIntlService } from "intl-utils";
-import { get, set } from "@ember/object";
-import { run } from "@ember/runloop";
+
+import { set } from "@ember/object";
 import Service from "@ember/service";
 
 import notificationServiceInjector
 	from "inject-loader?./polling&./dispatch&./badge&./tray!services/notification/service";
 
 
-module( "services/notification" );
-
-
-test( "NotificationService", assert => {
-
-	const owner = buildOwner();
-
-	const { default: NotificationService } = notificationServiceInjector({
-		"./polling": {},
-		"./dispatch": {},
-		"./badge": {},
-		"./tray": {}
+module( "services/notification", function( hooks ) {
+	setupTest( hooks, {
+		resolver: buildResolver({
+			IntlService: FakeIntlService
+		})
 	});
 
-	owner.register( "service:auth", Service.extend({
-		session: {
-			isLoggedIn: false
-		}
-	}) );
-	owner.register( "service:intl", FakeIntlService );
-	owner.register( "service:settings", Service.extend({
-		notification: {
-			enabled: false
-		}
-	}) );
-	owner.register( "service:notification", NotificationService );
+	hooks.beforeEach(function() {
+		const { default: NotificationService } = notificationServiceInjector({
+			"./polling": {},
+			"./dispatch": {},
+			"./badge": {},
+			"./tray": {}
+		});
 
-	const auth = owner.lookup( "service:auth" );
-	const settings = owner.lookup( "service:settings" );
-	const service = owner.lookup( "service:notification" );
+		this.owner.register( "service:notification", NotificationService );
+		this.owner.register( "service:auth", Service.extend({
+			session: {
+				isLoggedIn: false
+			}
+		}) );
+		this.owner.register( "service:settings", Service.extend({
+			content: {
+				notification: {
+					enabled: false
+				}
+			}
+		}) );
+	});
 
-	assert.notOk( get( service, "error" ), "Error flag is not set" );
-	assert.notOk( get( service, "enabled" ), "Is not enabled" );
-	assert.notOk( get( service, "paused" ), "Is not paused" );
-	assert.notOk( get( service, "running" ), "Is not running when being logged out or disabled" );
-	assert.strictEqual( get( service, "statusText" ), "services.notification.status.disabled" );
+	test( "NotificationService", function( assert ) {
+		/** @type {NotificationService} */
+		const service = this.owner.lookup( "service:notification" );
 
-	run( () => set( settings, "notification.enabled", true ) );
-	assert.notOk( get( service, "running" ), "Is not running when being logged out and enabled" );
+		assert.notOk( service.error, "Error flag is not set" );
+		assert.notOk( service.enabled, "Is not enabled" );
+		assert.notOk( service.paused, "Is not paused" );
+		assert.notOk( service.running, "Is not running when being logged out or disabled" );
+		assert.strictEqual( service.statusText, "services.notification.status.disabled" );
 
-	run( () => set( auth, "session.isLoggedIn", true ) );
-	assert.ok( get( service, "running" ), "Is running when being logged in and enabled" );
-	assert.strictEqual( get( service, "statusText" ), "services.notification.status.enabled" );
+		set( service, "settings.content.notification.enabled", true );
+		assert.notOk( service.running, "Is not running when being logged out and enabled" );
 
-	run( () => set( service, "error", true ) );
-	assert.strictEqual( get( service, "statusText" ), "services.notification.status.error" );
+		set( service, "auth.session.isLoggedIn", true );
+		assert.ok( service.running, "Is running when being logged in and enabled" );
+		assert.strictEqual( service.statusText, "services.notification.status.enabled" );
 
-	run( () => set( service, "paused", true ) );
-	assert.notOk( get( service, "running" ), "Is not running when paused" );
-	assert.strictEqual( get( service, "statusText" ), "services.notification.status.paused" );
+		set( service, "error", true );
+		assert.strictEqual( service.statusText, "services.notification.status.error" );
 
-	run( () => set( settings, "notification.enabled", false ) );
-	assert.notOk( get( service, "running" ), "Is not running when being logged in and disabled" );
-	run( () => set( service, "paused", false ) );
-	assert.notOk( get( service, "running" ), "Still not running when unpausing again" );
+		set( service, "paused", true );
+		assert.notOk( service.running, "Is not running when paused" );
+		assert.strictEqual( service.statusText, "services.notification.status.paused" );
 
-	runDestroy( owner );
-
+		set( service, "settings.content.notification.enabled", false );
+		assert.notOk( service.running, "Is not running when being logged in and disabled" );
+		set( service, "paused", false );
+		assert.notOk( service.running, "Still not running when unpausing again" );
+	});
 });
