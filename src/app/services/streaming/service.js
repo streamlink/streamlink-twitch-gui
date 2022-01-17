@@ -82,8 +82,12 @@ export default Service.extend( /** @class StreamingService */ {
 	 */
 	async startStream( twitchStream, quality ) {
 		const { /** @type {DS.Store} */ store } = this;
-		const { /** @type {TwitchChannel} */ channel } = twitchStream;
-		const { name: id } = channel;
+
+		await twitchStream.user.promise;
+		/** @type {TwitchUser} */
+		const user = twitchStream.user.content;
+
+		const { id } = user;
 		/** @type {Stream} */
 		let stream;
 
@@ -103,7 +107,7 @@ export default Service.extend( /** @class StreamingService */ {
 		// create a new Stream record
 		stream = store.createRecord( "stream", {
 			id,
-			channel,
+			user,
 			stream: twitchStream,
 			quality: this.settings.content.streaming.quality,
 			low_latency: this.settings.content.streaming.low_latency,
@@ -202,7 +206,7 @@ export default Service.extend( /** @class StreamingService */ {
 				|| !this.settings.content.streams.chat_open_context
 			)
 		) {
-			this.chat.openChat( stream.channel )
+			this.chat.openChat( stream.stream.user_login )
 				.catch( () => {} );
 		}
 
@@ -258,8 +262,7 @@ export default Service.extend( /** @class StreamingService */ {
 	 * @return {Promise}
 	 */
 	async getChannelSettings( stream, quality ) {
-		const { channel } = stream;
-		const channelSettings = await channel.getChannelSettings();
+		const channelSettings = await stream.stream.getChannelSettings();
 
 		// override channel specific settings
 		if ( quality === undefined ) {
