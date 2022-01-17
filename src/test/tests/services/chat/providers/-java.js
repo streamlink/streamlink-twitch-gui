@@ -57,9 +57,7 @@ test( "Default attributes", async function( assert ) {
 		jar: "app.jar",
 		jarfallback: "/bar"
 	});
-	await provider.launch({
-		name: "baz"
-	});
+	await provider.launch( "baz" );
 
 	assert.propEqual(
 		this.whichFallbackJava.getCall(0).args,
@@ -103,9 +101,7 @@ test( "User attributes", async function( assert ) {
 		args: "\"--url={url}\" --channel \"{channel}\" --user \"{user}\" --token \"{token}\"",
 		jar: "/foo/app.jar"
 	});
-	await provider.launch({
-		name: "baz"
-	}, {
+	await provider.launch( "baz", {
 		user_name: "user",
 		access_token: "token",
 		isLoggedIn: true

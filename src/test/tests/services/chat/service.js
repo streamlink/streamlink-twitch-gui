@@ -246,14 +246,10 @@ test( "Opens chat", async function( assert ) {
 	this.owner.register( "service:chat", ChatService );
 	const chatService = this.owner.lookup( "service:chat" );
 
-	const twitchChannel = _buildFakeModel({
-		name: "bar"
-	});
-
 	let resolveFooLaunch;
 	chatProviderFooLaunch.resolves( new Promise( resolve => resolveFooLaunch = resolve ) );
 
-	const promiseOne = chatService.openChat( twitchChannel );
+	const promiseOne = chatService.openChat( "bar" );
 
 	assert.propEqual( logDebugStub.args, [[
 		"Preparing to launch chat",
@@ -268,9 +264,7 @@ test( "Opens chat", async function( assert ) {
 
 	assert.strictEqual( chatProviderFooLaunch.callCount, 1, "Calls foo.launch" );
 	assert.propEqual( chatProviderFooLaunch.getCall(0).args, [
-		{
-			name: "bar"
-		},
+		"bar",
 		{
 			access_token: "token",
 			user_name: "user",
@@ -297,7 +291,7 @@ test( "Opens chat", async function( assert ) {
 	// reject if provider.launch fails
 	const error = new Error( "Launch failed" );
 	chatProviderFooLaunch.rejects( error );
-	await assert.rejects( chatService.openChat( twitchChannel ), error );
+	await assert.rejects( chatService.openChat( "bar" ), error );
 	assert.ok( logDebugStub.calledWith( "Preparing to launch chat" ), "Logs preparing to launch" );
 	assert.ok( logErrorStub.calledWithExactly( error ), "Calls logError with error" );
 

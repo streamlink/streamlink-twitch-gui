@@ -16,7 +16,7 @@ export default class ChatProviderBrowser extends ChatProvider {
 	}
 
 	// noinspection JSCheckFunctionSignatures
-	async launch({ name: channel }) {
+	async launch( channel ) {
 		const url = this._getUrl( channel );
 		openExternal( url );
 	}

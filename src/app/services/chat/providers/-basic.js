@@ -49,7 +49,7 @@ export default class ChatProviderBasic extends ChatProvider {
 		];
 	}
 
-	_getRuntimeContext( { name: channel }, session ) {
+	_getRuntimeContext( channel, session ) {
 		const { user_name: user, access_token: token, isLoggedIn } = session;
 		const url = this._getUrl( channel );
 

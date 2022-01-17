@@ -41,7 +41,7 @@ test( "Default attributes", async function( assert ) {
 	/** @type ChatProviderBrowser */
 	const provider = new this.subject();
 	await provider.setup({});
-	await provider.launch({ name: "foo" });
+	await provider.launch( "foo" );
 
 	assert.propEqual(
 		this.openExternalSpy.args,
@@ -63,7 +63,7 @@ test( "User attributes: non-existent", async function( assert ) {
 	}, {
 		url: "non-existent"
 	});
-	await provider.launch({ name: "foo" });
+	await provider.launch( "foo" );
 
 	assert.propEqual(
 		this.openExternalSpy.args,
@@ -83,7 +83,7 @@ test( "User attributes: default", async function( assert ) {
 	}, {
 		url: "default"
 	});
-	await provider.launch({ name: "foo" });
+	await provider.launch( "foo" );
 
 	assert.propEqual(
 		this.openExternalSpy.args,
@@ -103,7 +103,7 @@ test( "User attributes: popout", async function( assert ) {
 	}, {
 		url: "popout"
 	});
-	await provider.launch({ name: "foo" });
+	await provider.launch( "foo" );
 
 	assert.propEqual(
 		this.openExternalSpy.args,
@@ -123,7 +123,7 @@ test( "User attributes: embed", async function( assert ) {
 	}, {
 		url: "embed"
 	});
-	await provider.launch({ name: "foo" });
+	await provider.launch( "foo" );
 
 	assert.propEqual(
 		this.openExternalSpy.args,

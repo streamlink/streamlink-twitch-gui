@@ -36,7 +36,7 @@ module( "services/chat/providers/chatterino", function( hooks ) {
 		sinon.stub( provider, "_getExec" ).resolves( "/path/to/chatterino" );
 
 		await provider.setup( {}, {} );
-		await provider.launch( { name: "foo" }, {} );
+		await provider.launch( "foo", {} );
 
 		assert.propEqual(
 			this.launch.args,

@@ -59,9 +59,7 @@ test( "Default attributes", async function( assert ) {
 		exec: "foo",
 		fallback: "/bar"
 	});
-	await provider.launch({
-		name: "baz"
-	});
+	await provider.launch( "baz" );
 
 	assert.propEqual(
 		this.whichFallback.getCall(0).args,
@@ -93,9 +91,7 @@ test( "User attributes", async function( assert ) {
 		args: "\"--url={url}\" --channel \"{channel}\" --user \"{user}\" --token \"{token}\"",
 		url: "embed"
 	});
-	await provider.launch({
-		name: "baz"
-	}, {
+	await provider.launch( "baz", {
 		user_name: "user",
 		access_token: "token",
 		isLoggedIn: true
@@ -142,7 +138,7 @@ test( "User attributes and no session data", async function( assert ) {
 		args: "\"--url={url}\" --channel \"{channel}\" --user \"{user}\" --token \"{token}\"",
 		url: "popout"
 	});
-	await provider.launch({ name: "baz" });
+	await provider.launch( "baz" );
 
 	assert.propEqual(
 		this.launch.getCall(0).args,
