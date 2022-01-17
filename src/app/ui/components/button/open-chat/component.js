@@ -1,4 +1,3 @@
-import { get } from "@ember/object";
 import { inject as service } from "@ember/service";
 import { t } from "ember-intl";
 import FormButtonComponent from "../form-button/component";
@@ -8,9 +7,13 @@ import HotkeyMixin from "ui/components/-mixins/hotkey";
 export default FormButtonComponent.extend( HotkeyMixin, {
 	/** @type {IntlService} */
 	intl: service(),
+	/** @type {ChatService} */
 	chat: service(),
 
-	classNames: [ "btn-hint" ],
+	/** @type {TwitchUser} */
+	user: null,
+
+	classNames: [ "open-chat-component", "btn-hint" ],
 	icon: "fa-comments",
 	_title: t( "components.open-chat.title" ),
 	iconanim: true,
@@ -23,9 +26,6 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	},
 
 	action() {
-		const channel = get( this, "channel" );
-		const chat = get( this, "chat" );
-
-		return chat.openChat( channel );
+		return this.chat.openChat( this.user.login );
 	}
 });

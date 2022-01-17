@@ -1,5 +1,6 @@
 {
 	"stream-url": "twitch.tv/{channel}",
+	"channel-url": "https://twitch.tv/{channel}",
 	"chat-url": {
 		"default": "https://www.twitch.tv/popout/{channel}/chat",
 		"popout": "https://www.twitch.tv/popout/{channel}/chat",

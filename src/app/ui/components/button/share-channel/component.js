@@ -2,6 +2,10 @@ import { inject as service } from "@ember/service";
 import { t } from "ember-intl";
 import FormButtonComponent from "../form-button/component";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
+import { twitch as twitchConfig } from "config";
+
+
+const { "channel-url": channelUrl } = twitchConfig;
 
 
 export default FormButtonComponent.extend( HotkeyMixin, {
@@ -10,7 +14,10 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 	/** @type {NwjsService} */
 	nwjs: service(),
 
-	classNames: [ "btn-info" ],
+	/** @type {TwitchUser} */
+	user: null,
+
+	classNames: [ "share-channel-component", "btn-info" ],
 	icon: "fa-share-alt",
 	_title: t( "components.share-channel.title" ),
 	iconanim: true,
@@ -24,7 +31,8 @@ export default FormButtonComponent.extend( HotkeyMixin, {
 
 	async action( success, failure ) {
 		try {
-			this.nwjs.clipboard.set( this.channel.url );
+			const url = channelUrl.replace( "{channel}", this.user.login );
+			this.nwjs.clipboard.set( url );
 			await success();
 		} catch ( err ) {
 			await failure( err );
