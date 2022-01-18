@@ -144,12 +144,6 @@ user:
             streams: Assista às principais streams
     followedChannels:
         header: Canais seguidos
-        buttons:
-            sort-by-followed: Ordenar pela data (seguido)
-            sort-by-broadcast: Ordenar pela última transmissão
-            sort-by-login: Ordenar pelo último login
-            sort-desc: Ordenar por ordem descendente
-            sort-asc: Ordenar por ordem ascendente
         empty: A lista de canais seguidos está vazia.
 search:
     header:

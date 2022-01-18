@@ -146,12 +146,6 @@ user:
             streams: "Смотрите лучшие стримы"
     followedChannels:
         header: "Отслеживаемые каналы"
-        buttons:
-            sort-by-followed: "Сортировать по дате подписки"
-            sort-by-broadcast: "Сортировать по последней трансляции"
-            sort-by-login: "Сортировать по последнему входу"
-            sort-desc: "Сортировать по убыванию"
-            sort-asc: "Сортировать по возрастанию"
         empty: "Нет отслеживаемых каналов"
 search:
     header:

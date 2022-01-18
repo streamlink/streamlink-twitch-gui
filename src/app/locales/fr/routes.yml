@@ -144,12 +144,6 @@ user:
             streams: Regarder les top streams
     followedChannels:
         header: Chaînes suivies
-        buttons:
-            sort-by-followed: Trier par date de suivi
-            sort-by-broadcast: Trier par la date de dernière diffusion
-            sort-by-login: Trier par la date de dernière connexion
-            sort-desc: Trier par ordre décroissant
-            sort-asc: Trier par ordre croissant
         empty: La liste retournée des chaînes suivies est vide.
 search:
     header:

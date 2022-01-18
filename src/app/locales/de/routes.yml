@@ -144,12 +144,6 @@ user:
             streams: Beliebte Streams anschauen
     followedChannels:
         header: Gefolgte Kanäle
-        buttons:
-            sort-by-followed: Nach Folge-Datum sortieren
-            sort-by-broadcast: Nach letztem Broadcast sortieren
-            sort-by-login: Nach letztem Login sortieren
-            sort-desc: In absteigender Reihe sortieren
-            sort-asc: In aufsteigender Reihe sortieren
         empty: Die Liste der gefolgten Kanäle ist leer.
 search:
     header:

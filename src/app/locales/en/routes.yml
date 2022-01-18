@@ -144,12 +144,6 @@ user:
             streams: Watch popular streams
     followedChannels:
         header: Followed Channels
-        buttons:
-            sort-by-followed: Sort by date followed
-            sort-by-broadcast: Sort by last broadcast
-            sort-by-login: Sort by last login
-            sort-desc: Sort in descending order
-            sort-asc: Sort in ascending order
         empty: The returned list of followed channels is empty.
 search:
     header:

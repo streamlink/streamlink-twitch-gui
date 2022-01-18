@@ -144,12 +144,6 @@ user:
             streams: 觀看熱門實況
     followedChannels:
         header: 已追隨的頻道
-        buttons:
-            sort-by-followed: 以追隨日期排序
-            sort-by-broadcast: 以最後開始實況排序
-            sort-by-login: 以最後登入排序
-            sort-desc: 降冪排序
-            sort-asc: 升冪排序
         empty: 目前無追隨頻道
 search:
     header:
