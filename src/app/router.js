@@ -5,7 +5,7 @@ export default EmberRouter.extend().map(function() {
 	this.route( "watching" );
 	this.route( "search" );
 	this.route( "games", function() {
-		this.route( "game", { path: "/:game" } );
+		this.route( "game", { path: "/:game_id" } );
 	});
 	this.route( "streams" );
 	this.route( "channel", { path: "/channel/:channel" }, function() {

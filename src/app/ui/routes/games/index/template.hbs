@@ -1,15 +1,18 @@
 <main class="content content-games">
-<header>
-<h2>{{t "routes.games.header"}}</h2>
-{{headline-totals model.meta.total}}
-{{#quick-bar}}
-{{quick-bar-random-stream}}
-{{quick-bar-homepage}}
-{{/quick-bar}}
-</header>
-{{#content-list model as |item isNewItem isDuplicateItem|}}
-{{game-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
-{{else}}
-<p>{{t "routes.games.empty"}}</p>
-{{/content-list}}
+	<header>
+		<h2>{{t "routes.games.header"}}</h2>
+		{{#quick-bar}}
+			{{quick-bar-random-stream}}
+			{{quick-bar-homepage}}
+		{{/quick-bar}}
+	</header>
+	{{#content-list model as |item isNewItem isDuplicateItem|}}
+		{{game-item
+			content=item
+			isNewItem=isNewItem
+			isDuplicateItem=isDuplicateItem
+		}}
+	{{else}}
+		<p>{{t "routes.games.empty"}}</p>
+	{{/content-list}}
 </main>

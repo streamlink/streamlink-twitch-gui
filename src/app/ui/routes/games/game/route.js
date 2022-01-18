@@ -1,24 +1,36 @@
-import { get, set } from "@ember/object";
-import Route from "@ember/routing/route";
+import { set } from "@ember/object";
+import UserIndexRoute from "ui/routes/user/index/route";
 import PaginationMixin from "ui/routes/-mixins/routes/infinite-scroll/pagination";
 import FilterLanguagesMixin from "ui/routes/-mixins/routes/filter-languages";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 
 
-export default Route.extend( PaginationMixin, FilterLanguagesMixin, RefreshRouteMixin, {
+export default UserIndexRoute.extend( PaginationMixin, FilterLanguagesMixin, RefreshRouteMixin, {
 	itemSelector: ".stream-item-component",
-	modelName: "twitchStream",
-	modelPreload: "preview.mediumLatest",
+	modelName: "twitch-stream",
+	modelPreload: "thumbnail_url.latest",
 
-	async model({ game }) {
-		const model = await this._super({ game });
+	/**
+	 * @param {TwitchStream} twitchStream
+	 * @return {Promise}
+	 */
+	async modelItemLoader( twitchStream ) {
+		await Promise.all([
+			twitchStream.user.promise,
+			twitchStream.channel.promise
+		]);
+	},
+
+	async model({ game_id }) {
+		const model = await this._super({ game_id });
+		const game = await this.store.findRecord( "twitch-game", game_id );
 
 		return { game, model };
 	},
 
 	async fetchContent() {
-		const game = get( this.controller, "game" );
-		const { model } = await this.model({ game });
+		const { id: game_id } = this.controller.game;
+		const { model } = await this.model({ game_id });
 
 		return model;
 	},

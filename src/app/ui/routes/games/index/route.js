@@ -1,10 +1,11 @@
-import Route from "@ember/routing/route";
+import UserIndexRoute from "ui/routes/user/index/route";
 import PaginationMixin from "ui/routes/-mixins/routes/infinite-scroll/pagination";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 
 
-export default Route.extend( PaginationMixin, RefreshRouteMixin, {
+export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
 	itemSelector: ".game-item-component",
-	modelName: "twitchGameTop",
-	modelPreload: "game.box.large"
+	modelName: "twitch-game-top",
+	modelMapBy: "game",
+	modelPreload: "box_art_url.latest"
 });

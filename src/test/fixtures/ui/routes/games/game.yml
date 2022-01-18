@@ -1,0 +1,83 @@
+stream:
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                game_id: "123"
+                first: 2
+        response:
+            data:
+                -   id: "1"
+                    user_id: "1"
+                    game_id: "123"
+                    thumbnail_url: "https://mock/twitch-stream/1/thumbnail_url-{width}x{height}.jpg"
+                -   id: "2"
+                    user_id: "2"
+                    game_id: "123"
+                    thumbnail_url: "https://mock/twitch-stream/2/thumbnail_url-{width}x{height}.jpg"
+            pagination:
+                cursor: "cursor1"
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                game_id: "123"
+                first: 2
+                after: "cursor1"
+        response:
+            data:
+                -   id: "3"
+                    user_id: "3"
+                    game_id: "123"
+                    thumbnail_url: "https://mock/twitch-stream/3/thumbnail_url-{width}x{height}.jpg"
+user:
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/users"
+            query:
+                -   name: "id"
+                    value: "1"
+                -   name: "id"
+                    value: "2"
+        response:
+            data:
+                -   id: "1"
+                -   id: "2"
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/users"
+            query:
+                id: "3"
+        response:
+            data:
+                -   id: "3"
+channel:
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/channels"
+            query:
+                -   name: "broadcaster_id"
+                    value: "1"
+                -   name: "broadcaster_id"
+                    value: "2"
+        response:
+            data:
+                -   broadcaster_id: "1"
+                -   broadcaster_id: "2"
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/channels"
+            query:
+                broadcaster_id: "3"
+        response:
+            data:
+                -   broadcaster_id: "3"
+game:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/games"
+        query:
+            id: "123"
+    response:
+        data:
+            -   id: "123"
