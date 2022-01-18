@@ -1,10 +1,10 @@
 import { getProperties } from "@ember/object";
 import UserIndexRoute from "../index/route";
-import InfiniteScrollOffsetMixin from "ui/routes/-mixins/routes/infinite-scroll/offset";
+import PaginationMixin from "ui/routes/-mixins/routes/infinite-scroll/pagination";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 
 
-export default UserIndexRoute.extend( InfiniteScrollOffsetMixin, RefreshRouteMixin, {
+export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
 	itemSelector: ".channel-item-component",
 	modelName: "twitchChannelFollowed",
 	modelMapBy: "channel",

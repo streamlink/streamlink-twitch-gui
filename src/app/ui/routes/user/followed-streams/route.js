@@ -1,12 +1,12 @@
 import { A } from "@ember/array";
 import UserIndexRoute from "../index/route";
-import InfiniteScrollMixin from "ui/routes/-mixins/routes/infinite-scroll";
+import PaginationMixin from "ui/routes/-mixins/routes/infinite-scroll/pagination";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 import { mapBy } from "utils/ember/recordArrayMethods";
 import { preload } from "utils/preload";
 
 
-export default UserIndexRoute.extend( InfiniteScrollMixin, RefreshRouteMixin, {
+export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
 	itemSelector: ".stream-item-component",
 
 	// Guard against infinite API queries in case Twitch's query offset implemention breaks.

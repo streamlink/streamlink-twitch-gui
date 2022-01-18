@@ -1,9 +1,9 @@
 import { get } from "@ember/object";
 import Route from "@ember/routing/route";
-import InfiniteScrollOffsetMixin from "ui/routes/-mixins/routes/infinite-scroll/offset";
+import PaginationMixin from "ui/routes/-mixins/routes/infinite-scroll/pagination";
 
 
-export default Route.extend( InfiniteScrollOffsetMixin, {
+export default Route.extend( PaginationMixin, {
 	itemSelector: ".team-item-component",
 	modelName: "twitchTeam",
 	modelPreload: "logo",
