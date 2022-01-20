@@ -1,43 +1,41 @@
 <header>
-{{#if channel.hasLanguage}}{{flag-icon type="channel" lang=channel.language}}{{/if}}
-<span class="{{unless channel.hasLanguage 'noL'}} {{unless channel.hasBroadcasterLanguage 'noBL'}}">{{#link-to "channel" channel.id}}{{channel.detailedName}}{{/link-to}}</span>
-{{#if channel.hasBroadcasterLanguage}}{{flag-icon type="broadcaster" lang=channel.broadcaster_language}}{{/if}}
+	{{#if content.hasLanguage}}{{flag-icon type="channel" lang=content.language}}{{/if}}
+	<span class="{{unless content.hasLanguage 'noL'}} {{unless content.hasBroadcasterLanguage 'noBL'}}">{{#link-to "channel" content.id}}{{content.user.detailedName}}{{/link-to}}</span>
+	{{#if content.hasBroadcasterLanguage}}{{flag-icon type="broadcaster" lang=content.channel.broadcaster_language}}{{/if}}
 </header>
 {{#stream-preview-image
-	src=content.preview.medium
+	src=content.thumbnail_url.latest
 	stream=content
 	channel=content.channel
 	clickable=(bool-not expanded)
 	tagName="section"
 	class=(if expanded "expanded")
-	title=(unless expanded (unless infoTitle (if channel.status channel.status "") (if channel.game channel.game "")) "")
+	title=(unless expanded
+		(unless infoTitle content.title content.game_name)
+		""
+	)
 	action=(action "collapse")
 }}
-<footer class="{{if (bool-or infoTitle showGame) 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
-<div class="bottom {{unless (bool-or infoTitle showGame) 'hidden'}}">
-<div class="info-game">{{#if channel.game}}<i class="fa fa-gamepad"></i>{{#link-to "games.game" channel.game title=channel.game}}{{channel.game}}{{/link-to}}{{/if}}</div>
-<div class="info-title"><i></i><span>{{channel.status}}</span></div>
-</div>
-<div class="details">
-<div>
-{{#if content.hasFormatInfo}}
-<div class="stats">
-<div class="resolution"><i class="fa fa-film"></i> {{content.resolution}}</div>
-<div class="fps">{{t "components.stream-item.fps" fps=content.fps}} <i class="fa fa-eye"></i></div>
-</div>
-{{/if}}
-<div class="status">
-{{embedded-links text=channel.status}}
-</div>
-</div>
-</div>
-</footer>
-<div class="btn-expand" title="{{t (concat 'components.stream-item.details.' (unless expanded 'show' (if locked 'unlock' 'lock')))}}" {{action "expand" bubbles=false}}>
-<i class="fa {{unless expanded 'fa-chevron-up' (if locked 'fa-lock' 'fa-unlock-alt')}}"></i>
-</div>
+	<footer class="{{if (bool-or infoTitle showGame) 'shaded'}} {{if expanded 'expanded'}} {{if locked 'locked'}}">
+		<div class="bottom {{unless (bool-or infoTitle showGame) 'hidden'}}">
+			<div class="info-game">{{#if content.game_id}}<i class="fa fa-gamepad"></i>{{#link-to "games.game" content.game_id title=content.game_name}}{{content.game_name}}{{/link-to}}{{/if}}</div>
+			<div class="info-title"><i></i><span>{{content.title}}</span></div>
+		</div>
+		<div class="details">
+			<div>
+				<div class="stats"></div>
+				<div class="status">
+					{{embedded-links text=content.title}}
+				</div>
+			</div>
+		</div>
+	</footer>
+	<div class="btn-expand" title="{{t (concat 'components.stream-item.details.' (unless expanded 'show' (if locked 'unlock' 'lock')))}}" {{action "expand" bubbles=false}}>
+		<i class="fa {{unless expanded 'fa-chevron-up' (if locked 'fa-lock' 'fa-unlock-alt')}}"></i>
+	</div>
 {{/stream-preview-image}}
 <footer>
-<span title="{{content.titleCreatedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.created_at interval=60000}}</span>
-{{#if content.isVodcast}}<span class="vodcast-indicator" title="{{t 'components.stream-item.vodcast'}}"><i class="fa fa-recycle"></i></span>{{/if}}
-<span title="{{content.titleViewers}}">{{format-viewers content.viewers}} <i class="fa fa-users"></i></span>
+	<span title="{{content.titleStartedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.started_at interval=60000}}</span>
+	{{#if content.isVodcast}}<span class="vodcast-indicator" title="{{t 'components.stream-item.vodcast'}}"><i class="fa fa-recycle"></i></span>{{/if}}
+	<span title="{{content.titleViewers}}">{{format-viewers content.viewer_count}} <i class="fa fa-users"></i></span>
 </footer>

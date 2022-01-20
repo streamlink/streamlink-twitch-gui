@@ -73,7 +73,6 @@ settings-submit:
 share-channel:
     title: 複製頻道網址
 stream-item:
-    fps: "{fps} fps"
     details:
         show: 顯示頻道資訊
         lock: 鎖定詳細資訊

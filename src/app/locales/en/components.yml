@@ -73,7 +73,6 @@ settings-submit:
 share-channel:
     title: Copy channel url to clipboard
 stream-item:
-    fps: "{fps} fps"
     details:
         show: Show stream details
         lock: Lock details view

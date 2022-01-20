@@ -73,7 +73,6 @@ settings-submit:
 share-channel:
     title: Копировать в буфер обмена ссылку на канал
 stream-item:
-    fps: "{fps} fps"
     details:
         show: Показать подробности
         lock: Закрепить подробности

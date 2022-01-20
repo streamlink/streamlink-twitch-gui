@@ -73,7 +73,6 @@ settings-submit:
 share-channel:
     title: Copier l'url de la chaîne dans le presse-papiers
 stream-item:
-    fps: "{fps} fps"
     details:
         show: Voir les détails du stream
         lock: Verrouiller la vue de détails

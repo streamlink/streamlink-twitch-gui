@@ -73,7 +73,6 @@ settings-submit:
 share-channel:
     title: Copiar url del canal al portapapeles
 stream-item:
-    fps: "{fps} fps"
     details:
         show: Mostrar detalles del stream
         lock: Bloquear vista de detalles
