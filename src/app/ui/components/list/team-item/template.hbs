@@ -1,8 +1,8 @@
 {{#link-to "team" content.id tagName="div" class="logo"}}
-{{preview-image src=content.logo title=content.title}}
+	{{preview-image src=content.thumbnail_url title=content.title}}
 {{/link-to}}
 <div class="info">
-<header><i class="fa fa-fw fa-users"></i> {{#link-to "team" content.id}}{{content.title}}{{/link-to}}</header>
-<div class="stats"><span title="{{t "components.team-item.created-at.title"}}"><i class="fa fa-fw fa-calendar"></i> {{t "components.team-item.created-at.format" created_at=content.created_at}}</span></div>
-<div class="stats"><span title="{{t "components.team-item.updated-at.title"}}"><i class="fa fa-fw fa-pencil"></i> {{t "components.team-item.updated-at.format" updated_at=content.updated_at}}</span></div>
+	<header><i class="fa fa-fw fa-users"></i> {{#link-to "team" content.id}}{{content.title}}{{/link-to}}</header>
+	<div class="stats"><span title="{{t "components.team-item.created-at.title"}}"><i class="fa fa-fw fa-calendar"></i> {{t "components.team-item.created-at.format" created_at=content.created_at}}</span></div>
+	<div class="stats"><span title="{{t "components.team-item.updated-at.title"}}"><i class="fa fa-fw fa-pencil"></i> {{t "components.team-item.updated-at.format" updated_at=content.updated_at}}</span></div>
 </div>
