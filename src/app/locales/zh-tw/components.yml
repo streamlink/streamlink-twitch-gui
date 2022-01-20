@@ -1,7 +1,5 @@
 channel-button:
     title: "追隨 {name}"
-channel-item:
-    game-missing: 尚未設定遊戲
 documentation-link:
     title: 檢視線上文件
 drop-down-selection:

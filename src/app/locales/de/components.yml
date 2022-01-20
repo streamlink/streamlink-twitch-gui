@@ -1,7 +1,5 @@
 channel-button:
     title: "{name} folgen"
-channel-item:
-    game-missing: kein Spiel ausgewählt
 documentation-link:
     title: Dokumentation online durchlesen
 drop-down-selection:

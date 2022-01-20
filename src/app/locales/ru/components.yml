@@ -1,7 +1,5 @@
 channel-button:
     title: "Отслеживать {name}"
-channel-item:
-    game-missing: Игра не указана
 documentation-link:
     title: Читать документацию на сайте
 drop-down-selection:

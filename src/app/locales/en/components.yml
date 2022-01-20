@@ -1,7 +1,5 @@
 channel-button:
     title: "Follow {name}"
-channel-item:
-    game-missing: no game set yet
 documentation-link:
     title: Read the documentation online
 drop-down-selection:

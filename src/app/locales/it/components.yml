@@ -1,7 +1,5 @@
 channel-button:
     title: "Segui {name}"
-channel-item:
-    game-missing: Nessun gioco ancora impostato
 documentation-link:
     title: Leggi la documentazione online
 drop-down-selection:
