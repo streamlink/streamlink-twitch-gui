@@ -1,43 +1,28 @@
-import { get } from "@ember/object";
-import Route from "@ember/routing/route";
+import UserIndexRoute from "ui/routes/user/index/route";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 import preload from "utils/preload";
 
 
-const reNum = /^\d+$/;
-
-
-export default Route.extend( RefreshRouteMixin, {
-	async model( params ) {
-		const store = get( this, "store" );
-		let { channel: id } = params;
-		let stream;
-		let channel;
-
-		if ( !reNum.test( id ) ) {
-			const user = await store.findRecord( "twitchUser", id );
-			try {
-				stream = await get( user, "stream" );
-			} catch ( e ) {}
-			channel = await get( user, "channel" );
-
-		} else {
-			try {
-				stream = await store.findRecord( "twitchStream", id, { reload: true } );
-				channel = get( stream, "channel" );
-			} catch ( e ) {
-				// if the channel is not online, just find and return the channel record
-				channel = await store.findRecord( "twitchChannel", id, { reload: true } );
-			}
-		}
-
-		const model = { stream, channel };
-		await preload( model, [
-			"stream.preview.largeLatest",
-			"channel.logo",
-			"channel.video_banner"
+export default UserIndexRoute.extend( RefreshRouteMixin, {
+	async model({ user_id }) {
+		const { /** @type {DS.Store} */ store } = this;
+		const [
+			/** @type {TwitchStream} */
+			stream,
+			/** @type {TwitchUser} */
+			user,
+			/** @type {TwitchChannel} */
+			channel
+		] = await Promise.all([
+			store.queryRecord( "twitch-stream", { user_id } ).catch(),
+			store.findRecord( "twitch-user", user_id, { reload: true } ),
+			store.findRecord( "twitch-channel", user_id, { reload: true } )
 		]);
 
-		return model;
+		return await preload( { stream, user, channel }, [
+			"stream.thumbnail_url.latest",
+			"user.profile_image_url",
+			"user.offline_image_url"
+		]);
 	}
 });

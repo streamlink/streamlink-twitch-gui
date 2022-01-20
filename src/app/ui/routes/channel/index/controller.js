@@ -1,27 +1,26 @@
 import Controller from "@ember/controller";
-import { get, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
-
-
-const day = 24 * 3600 * 1000;
 
 
 export default Controller.extend({
 	/** @type {IntlService} */
 	intl: service(),
 
+	/** @type {TwitchStream} */
 	stream: alias( "model.stream" ),
+	/** @type {TwitchUser} */
+	user: alias( "model.user" ),
+	/** @type {TwitchChannel} */
 	channel: alias( "model.channel" ),
 
-	age: computed( "channel.created_at", function() {
-		const createdAt = get( this, "channel.created_at" );
-
-		return ( new Date() - createdAt ) / day;
+	age: computed( "user.created_at", function() {
+		return ( new Date() - this.user.created_at ) / ( 24 * 3600 * 1000 );
 	}),
 
 	language: computed( "intl.locale", "channel.broadcaster_language", function() {
-		const blang = get( this, "channel.broadcaster_language" );
+		const { broadcaster_language: blang } = this.channel;
 
 		return blang && this.intl.exists( `languages.${blang}` )
 			? this.intl.t( `languages.${blang}` ).toString()

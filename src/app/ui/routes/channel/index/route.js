@@ -1,12 +1,10 @@
 import { getOwner } from "@ember/application";
-import Route from "@ember/routing/route";
+import UserIndexRoute from "ui/routes/user/index/route";
 
 
-export default Route.extend({
+export default UserIndexRoute.extend({
 	async model() {
-		const { stream, channel } = this.modelFor( "channel" );
-
-		return { stream, channel };
+		return this.modelFor( "channel" );
 	},
 
 	refresh() {

@@ -1,17 +1,15 @@
-import { get } from "@ember/object";
-import Route from "@ember/routing/route";
+import UserIndexRoute from "ui/routes/user/index/route";
 import PaginationMixin from "ui/routes/-mixins/routes/infinite-scroll/pagination";
 
 
-export default Route.extend( PaginationMixin, {
+export default UserIndexRoute.extend( PaginationMixin, {
 	itemSelector: ".team-item-component",
-	modelName: "twitchTeam",
-	modelPreload: "logo",
+	modelName: "twitch-team",
+	modelPreload: "thumbnail_url",
 
 	model() {
-		const { channel: parentModel } = this.modelFor( "channel" );
-		const channel = get( parentModel, "id" );
+		const { user: { id: broadcaster_id } } = this.modelFor( "channel" );
 
-		return this._super({ channel });
+		return this._super({ broadcaster_id });
 	}
 });

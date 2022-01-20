@@ -1,7 +1,11 @@
 <section class="channel-teams">
-{{#content-list model as |item isNewItem isDuplicateItem|}}
-{{team-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem}}
-{{else}}
-<p>{{t "routes.channel.teams.empty"}}</p>
-{{/content-list}}
+	{{#content-list model as |item isNewItem isDuplicateItem|}}
+		{{team-item
+			content=item
+			isNewItem=isNewItem
+			isDuplicateItem=isDuplicateItem
+		}}
+	{{else}}
+		<p>{{t "routes.channel.teams.empty"}}</p>
+	{{/content-list}}
 </section>

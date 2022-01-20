@@ -8,7 +8,7 @@ export default EmberRouter.extend().map(function() {
 		this.route( "game", { path: "/:game_id" } );
 	});
 	this.route( "streams" );
-	this.route( "channel", { path: "/channel/:channel" }, function() {
+	this.route( "channel", { path: "/channel/:user_id" }, function() {
 		this.route( "teams" );
 		this.route( "settings" );
 	});

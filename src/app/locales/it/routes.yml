@@ -49,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: Lingua
-        followers:
-            title: Followers
-            data: "{followers} ({day} per day)"
-        views:
+        view-count:
             title: Visualizzazioni
             data: "{views} ({day} per day)"
         content:
             title: Contenuto
             mature: Inappropriato per i bambini
             ffa: Nessun limite di età
-        format:
-            title: Formato
-            data: "{resolution} @ {fps}fps"
         delay:
             title: Ritardo
             data: |

@@ -49,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: "Язык"
-        followers:
-            title: "Подписчики"
-            data: "{followers} ({day} в день)"
-        views:
+        view-count:
             title: "Просмотры"
             data: "{views} ({day} в день)"
         content:
             title: "Содержимое"
             mature: "Не подходит для детей"
             ffa: "Нет ограничений по возрасту"
-        format:
-            title: "Формат"
-            data: "{resolution} @ {fps}fps"
         delay:
             title: "Задержка"
             data: |

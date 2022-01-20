@@ -49,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: 語言
-        followers:
-            title: 追蹤者
-            data: "{followers} ({day}人/日)"
-        views:
+        view-count:
             title: 觀看次數
             data: "{views} ({day}/日)"
         content:
             title: 內容
             mature: 頻道僅適合成人觀看
             ffa: 無年齡限制
-        format:
-            title: 格式
-            data: "{resolution} @ {fps}fps"
         delay:
             title: 延遲
             data: |
