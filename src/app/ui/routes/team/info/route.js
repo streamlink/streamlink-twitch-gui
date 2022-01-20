@@ -1,8 +1,8 @@
 import { getOwner } from "@ember/application";
-import Route from "@ember/routing/route";
+import UserIndexRoute from "ui/routes/user/index/route";
 
 
-export default Route.extend({
+export default UserIndexRoute.extend({
 	model() {
 		return this.modelFor( "team" );
 	},

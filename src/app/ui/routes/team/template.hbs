@@ -1,21 +1,21 @@
 <main class="content content-team">
-<header>
-{{preview-image src=model.logo title=model.display_name classNames="logo"}}
-<div class="info">
-<h3 class="title">{{model.title}}</h3>
-<div class="stats"><i class="fa fa-fw fa-users"></i> {{t "routes.team.header.members" num=model.users.length}}</div>
-<div class="stats"><i class="fa fa-fw fa-calendar"></i> {{t "routes.team.header.created-at" created_at=model.created_at}}</div>
-<div class="stats"><i class="fa fa-fw fa-pencil"></i> {{t "routes.team.header.updated-at" updated_at=model.updated_at}}</div>
-</div>
-</header>
-{{#sub-menu "team" (hash
-	index=(t "routes.team.menu.live")
-	members=(t "routes.team.menu.all")
-	info=(if model.info (t "routes.team.menu.info") false)
-) as |subroute name|}}
-	{{#if name}}
-		{{#link-to (concat "team." subroute) model tagName="li"}}{{name}}{{/link-to}}
-	{{/if}}
-{{/sub-menu}}
-{{outlet}}
+	<header>
+		{{preview-image src=model.thumbnail_url title=model.display_name classNames="logo"}}
+		<div class="info">
+			<h3 class="title">{{model.title}}</h3>
+			<div class="stats"><i class="fa fa-fw fa-users"></i> {{t "routes.team.header.members" num=model.users.length}}</div>
+			<div class="stats"><i class="fa fa-fw fa-calendar"></i> {{t "routes.team.header.created-at" created_at=model.created_at}}</div>
+			<div class="stats"><i class="fa fa-fw fa-pencil"></i> {{t "routes.team.header.updated-at" updated_at=model.updated_at}}</div>
+		</div>
+	</header>
+	{{#sub-menu "team" (hash
+		index=(t "routes.team.menu.live")
+		members=(t "routes.team.menu.all")
+		info=(if model.info (t "routes.team.menu.info") false)
+	) as |subroute name|}}
+		{{#if name}}
+			{{#link-to (concat "team." subroute) model tagName="li"}}{{name}}{{/link-to}}
+		{{/if}}
+	{{/sub-menu}}
+	{{outlet}}
 </main>
