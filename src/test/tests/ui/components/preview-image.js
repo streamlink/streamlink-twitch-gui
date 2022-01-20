@@ -46,7 +46,6 @@ module( "ui/components/preview-image", function( hooks ) {
 		);
 	});
 
-
 	test( "Invalid image source", async function( assert ) {
 		await new Promise( ( resolve, reject ) => {
 			this.setProperties({
@@ -75,7 +74,6 @@ module( "ui/components/preview-image", function( hooks ) {
 		);
 	});
 
-
 	test( "Missing image source", async function( assert ) {
 		await render( hbs`{{preview-image}}` );
 
@@ -92,4 +90,16 @@ module( "ui/components/preview-image", function( hooks ) {
 		);
 	});
 
+	test( "Updating image source", async function( assert ) {
+		this.set( "src", transparentImage );
+		await render( hbs`{{preview-image src=src}}` );
+
+		const img = this.element.querySelector( "img" );
+		assert.ok( img, "Does have an image element" );
+		assert.strictEqual( img.src, transparentImage, "Image has the correct source" );
+
+		this.set( "src", "" );
+		await new Promise( resolve => scheduleOnce( "afterRender", resolve ) );
+		assert.strictEqual( img.src, transparentImage, "Image source is unbound" );
+	});
 });
