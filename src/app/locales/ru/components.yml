@@ -30,8 +30,6 @@ open-chat:
     title: Открыть чат
 quick-bar-homepage:
     title: Сделать текущий раздел стартовым
-quick-bar-random-stream:
-    title: Запустить случайный стрим
 search-bar:
     placeholder: Поиск
     filter: "Фильтр результатов:"

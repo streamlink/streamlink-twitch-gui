@@ -30,8 +30,6 @@ open-chat:
     title: Abrir chat
 quick-bar-homepage:
     title: Definir como página principal
-quick-bar-random-stream:
-    title: Abrir um stream aleatório
 search-bar:
     placeholder: Procurar
     filter: Filtrar resultados

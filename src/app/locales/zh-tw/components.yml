@@ -30,8 +30,6 @@ open-chat:
     title: 開啟聊天室
 quick-bar-homepage:
     title: 設為首頁
-quick-bar-random-stream:
-    title: 開啟隨機實況
 search-bar:
     placeholder: 搜尋
     filter: 過濾器
