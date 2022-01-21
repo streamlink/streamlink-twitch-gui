@@ -1,42 +1,22 @@
-import { get, computed } from "@ember/object";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 
 
-const { hasOwnProperty } = {};
-
-
-export default Model.extend({
-	query : attr( "string" ),
+// noinspection JSValidateTypes
+export default Model.extend( /** @class Search */ {
+	/** @type {string} */
+	query: attr( "string" ),
+	/** @type {string} */
 	filter: attr( "string" ),
-	date  : attr( "date" ),
-
-	label: computed( "filter", function() {
-		const filter = get( this, "filter" );
-		return this.constructor.getLabel( filter );
-	})
+	/** @type {Date} */
+	date: attr( "date" )
 
 }).reopenClass({
 	toString() { return "Search"; },
 
 	filters: [
-		{ label: "All", id: "all" },
-		{ label: "Game", id: "games" },
-		{ label: "Channel", id: "channels" },
-		{ label: "Stream", id: "streams" }
-	],
-
-	filtersmap: computed(function() {
-		return this.filters.reduce( ( map, filter ) => {
-			map[ filter.id ] = filter;
-			return map;
-		}, {} );
-	}),
-
-	getLabel( filter ) {
-		const map = get( this, "filtersmap" );
-		return hasOwnProperty.call( map, filter )
-			? map[ filter ].label
-			: "All";
-	}
+		{ id: "all" },
+		{ id: "games" },
+		{ id: "channels" }
+	]
 });
