@@ -1,27 +1,30 @@
 {{#unless content.isFulfilled}}
-{{loading-spinner}}
+	{{loading-spinner}}
 {{else}}
-{{#link-to "channel" content.id tagName="div" class="logo"}}
-{{preview-image src=content.logo title=content.display_name}}
-{{/link-to}}
-<div class="text">
-<header>
-{{#if content.hasLanguage}}{{flag-icon type="channel" lang=content.language}}{{/if}}
-<span>{{#link-to "channel" content.id}}{{content.display_name}}{{/link-to}}</span>
-</header>
-{{#unless dialog}}
-<div>
-<p><i class="fa fa-fw fa-cog"></i> {{#link-to "channel.settings" content.id}}{{t "components.settings-channel-item.settings"}}{{/link-to}}</p>
-<p><i class="fa fa-fw fa-eraser"></i> <a href="#" {{action "eraseDialog"}}>{{t "components.settings-channel-item.erase"}}</a></p>
-</div>
-{{else}}
-<div class="erase">
-<p>{{t "components.settings-channel-item.confirmation"}}</p>
-<div class="button-list-horizontal">
-{{#form-button action=(action "confirm") classNames="btn-success"}}{{t "components.settings-channel-item.confirm"}}{{/form-button}}
-{{#form-button action=(action "decline") classNames="btn-danger"}}{{t "components.settings-channel-item.decline"}}{{/form-button}}
-</div>
-</div>
-{{/unless}}
-</div>
+	{{#link-to "channel" content.id tagName="div" class="logo"}}
+		{{preview-image
+			src=content.profile_image_url
+			title=content.display_name
+		}}
+	{{/link-to}}
+	<div class="text">
+		<header>
+			{{#if content.channel.broadcaster_language}}{{flag-icon type="broadcaster" lang=content.channel.broadcaster_language}}{{/if}}
+			<span>{{#link-to "channel" content.id}}{{content.display_name}}{{/link-to}}</span>
+		</header>
+		{{#unless dialog}}
+			<div>
+				<p><i class="fa fa-fw fa-cog"></i> {{#link-to "channel.settings" content.id}}{{t "components.settings-channel-item.settings"}}{{/link-to}}</p>
+				<p><i class="fa fa-fw fa-eraser"></i> <a href="#" {{action "eraseDialog"}}>{{t "components.settings-channel-item.erase"}}</a></p>
+			</div>
+		{{else}}
+			<div class="erase">
+				<p>{{t "components.settings-channel-item.confirmation"}}</p>
+				<div class="button-list-horizontal">
+					{{#form-button action=(action "confirm") classNames="btn-success"}}{{t "components.settings-channel-item.confirm"}}{{/form-button}}
+					{{#form-button action=(action "decline") classNames="btn-danger"}}{{t "components.settings-channel-item.decline"}}{{/form-button}}
+				</div>
+			</div>
+		{{/unless}}
+	</div>
 {{/unless}}
