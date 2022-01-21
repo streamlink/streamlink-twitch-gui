@@ -144,11 +144,9 @@ search:
         all: Tutti i risultati della ricerca
         games: "Risultati dei giochi cercati: "
         channels: "Risultati dei canali cercati: "
-        streams: "Risultati dei flussi cercati: "
     subheader:
         games: Giochi
         channels: Canali
-        streams: Flussi
     empty: La tua richiesta non corrisponde a nulla...
 watching:
     header: Stai guardando

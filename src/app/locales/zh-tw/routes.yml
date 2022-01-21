@@ -144,11 +144,9 @@ search:
         all: "搜尋結果: "
         games: "遊戲搜尋結果: "
         channels: "頻道搜尋結果: "
-        streams: "實況搜尋結果: "
     subheader:
         games: 遊戲
         channels: 頻道
-        streams: 實況
     empty: 查無資訊
 watching:
     header: 正在收看

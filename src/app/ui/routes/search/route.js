@@ -1,8 +1,8 @@
 import { get, setProperties } from "@ember/object";
-import Route from "@ember/routing/route";
+import UserIndexRoute from "ui/routes/user/index/route";
 import PaginationMixin from "ui/routes/-mixins/routes/infinite-scroll/pagination";
+import { map, toArray } from "ui/routes/-mixins/routes/infinite-scroll/record-array";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
-import { toArray, mapBy } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
@@ -11,28 +11,25 @@ function filterMatches( filter, value ) {
 }
 
 const contentPaths = {
-	all: "controller.model.streams",
+	all: "controller.model.channels",
 	games: "controller.model.games",
-	channels: "controller.model.channels",
-	streams: "controller.model.streams"
+	channels: "controller.model.channels"
 };
 
 const itemSelectors = {
-	all: ".stream-item-component",
+	all: ".channel-item-component",
 	games: ".game-item-component",
-	channels: ".channel-item-component",
-	streams: ".stream-item-component"
+	channels: ".channel-item-component"
 };
 
 const fetchMethods = {
-	all: "fetchStreams",
+	all: "fetchChannels",
 	games: "fetchGames",
-	channels: "fetchChannels",
-	streams: "fetchStreams"
+	channels: "fetchChannels"
 };
 
 
-export default Route.extend( PaginationMixin, RefreshRouteMixin, {
+export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
 	queryParams: {
 		filter: {
 			refreshModel: true,
@@ -59,66 +56,75 @@ export default Route.extend( PaginationMixin, RefreshRouteMixin, {
 	},
 
 	async model( params ) {
-		const [ games, channels, streams ] = await Promise.all([
+		const [ games, channels ] = await Promise.all([
 			this.fetchGames( params ),
-			this.fetchChannels( params ),
-			this.fetchStreams( params )
+			this.fetchChannels( params )
 		]);
 
-		return { games, channels, streams };
+		return { games, channels };
 	},
 
 	fetchContent() {
-		const fetchMethod = get( this, "fetchMethod" );
-		const filter = get( this, "controller.filter" );
-		const query = get( this, "controller.query" );
+		const { fetchMethod, controller: { filter, query } } = this;
 
 		return this[ fetchMethod ]({ filter, query });
 	},
 
 
+	/**
+	 * @return {Promise<TwitchSearchGame[]>}
+	 */
 	async fetchGames({ filter, query }) {
 		if ( !filterMatches( filter, "games" ) ) {
 			return [];
 		}
 
-		const store = get( this, "store" );
-		const records = await store.query( "twitchSearchGame", {
-			type: "suggest",
-			live: true,
-			query
-		});
+		const first = this.calcFetchSize( itemSelectors[ "games" ], 2 );
+		const queryData = { query, first };
+		if ( filter === "games" ) {
+			queryData[ "first" ] = this.limit;
+			if ( this.paginationMethod && this.paginationCursor ) {
+				queryData[ this.paginationMethod ] = this.paginationCursor;
+			}
+		}
 
-		return await preload( toArray( records ), "game.box.largeLatest" );
+		/** @type {TwitchSearchGame[]} */
+		const records = await this.store.query( "twitch-search-game", queryData );
+
+		if ( filter === "games" ) {
+			this.paginationCursor = get( records, "meta.pagination.cursor" );
+		}
+
+		return await preload( await toArray( records ), "game.box_art_url.latest" );
 	},
 
+	/**
+	 * @return {Promise<TwitchSearchChannel[]>}
+	 */
 	async fetchChannels({ filter, query }) {
 		if ( !filterMatches( filter, "channels" ) ) {
 			return [];
 		}
 
-		const store = get( this, "store" );
-		const records = await store.query( "twitchSearchChannel", {
-			offset: get( this, "offset" ),
-			limit: get( this, "limit" ),
-			query
-		});
-
-		return await preload( mapBy( records, "channel" ), "logo" );
-	},
-
-	async fetchStreams({ filter, query }) {
-		if ( !filterMatches( filter, "streams" ) ) {
-			return [];
+		const queryData = { query, first: this.limit };
+		if ( this.paginationMethod && this.paginationCursor ) {
+			queryData[ this.paginationMethod ] = this.paginationCursor;
 		}
 
-		const store = get( this, "store" );
-		const records = await store.query( "twitchSearchStream", {
-			offset: get( this, "offset" ),
-			limit: get( this, "limit" ),
-			query
+		/** @type {TwitchSearchChannel[]} */
+		let records = await this.store.query( "twitch-search-channel", queryData );
+		this.paginationCursor = get( records, "meta.pagination.cursor" );
+
+		/** @type {TwitchUser[]} */
+		records = await map( records, async record => {
+			try {
+				await record.user.promise;
+				return record.user.content;
+			} catch ( e ) {
+				return false;
+			}
 		});
 
-		return await preload( mapBy( records, "stream" ), "preview.mediumLatest" );
+		return await preload( records, "profile_image_url" );
 	}
 });
