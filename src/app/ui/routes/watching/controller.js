@@ -1,5 +1,4 @@
 import Controller from "@ember/controller";
-import { get } from "@ember/object";
 import { sort } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import { qualities } from "data/models/stream/model";
@@ -7,7 +6,9 @@ import "./styles.less";
 
 
 export default Controller.extend({
+	/** @type {AuthService} */
 	auth: service(),
+	/** @type {StreamingService} */
 	streaming: service(),
 
 	sortedModel: sort( "model", "sortBy" ),
@@ -17,11 +18,11 @@ export default Controller.extend({
 
 	actions: {
 		openDialog( stream ) {
-			get( this, "streaming" ).startStream( stream );
+			this.streaming.startStream( stream );
 		},
 
 		closeStream( stream ) {
-			get( this, "streaming" ).closeStream( stream );
+			this.streaming.closeStream( stream );
 		}
 	}
 });
