@@ -17,8 +17,8 @@ const {
 } = Math;
 
 
-// lessCSS sorts media queries alphabetically, so we need to reverse the order here
-const reMinWidth = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)$/;
+// eslint-disable-next-line max-len
+const reMinWidth = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)(?:\s*and\s*\(max-width:\s*\d+px\))?$/;
 const cachedMinWidths = {};
 
 
