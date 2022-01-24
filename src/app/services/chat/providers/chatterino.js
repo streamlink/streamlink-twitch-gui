@@ -15,7 +15,7 @@ export default class ChatProviderChatterino extends ChatProviderBasic {
 	}
 
 	// noinspection JSCheckFunctionSignatures
-	_getRuntimeContext({ name: channel }) {
+	_getRuntimeContext( channel ) {
 		return Object.assign( {}, this.context, {
 			channel: `t:${channel}`
 		});

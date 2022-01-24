@@ -1,20 +1,20 @@
 <div class="image">
-{{stream-preview-image
-	stream=stream
-	channel=stream.channel
-	clickable=clickablePreview
-	src=stream.preview.large
-	noContextmenu=(bool-not clickablePreview)
-}}
+	{{stream-preview-image
+		stream=stream
+		user=stream.user
+		clickable=clickablePreview
+		src=stream.thumbnail_url.latest
+		noContextmenu=(bool-not clickablePreview)
+	}}
 </div>
 <div class="info">
-<h3 class="title">{{#if stream.channel.hasLanguage}}{{flag-icon type="channel" lang=stream.channel.language}}{{/if}}{{#link-to "channel" stream.channel.id}}{{stream.channel.detailedName}}{{/link-to}}</h3>
-{{#if stream.game}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.game}}{{stream.game}}{{/link-to}}</div>{{/if}}
-{{stats-row stream=stream}}
-{{embedded-links class="status" text=stream.channel.status}}
-{{#if hasBlock}}
-<footer class="buttons">
-{{yield}}
-</footer>
-{{/if}}
+	<h3 class="title">{{#if stream.hasLanguage}}{{flag-icon type="channel" lang=stream.language}}{{/if}}{{#link-to "channel" stream.id}}{{stream.user.detailedName}}{{/link-to}}</h3>
+	{{#if stream.game_id}}<div class="game"><i class="fa fa-gamepad"></i>{{#link-to "games.game" stream.game_id}}{{stream.game_name}}{{/link-to}}</div>{{/if}}
+	{{stats-row stream=stream}}
+	{{embedded-links class="status" text=stream.title}}
+	{{#if hasBlock}}
+		<footer class="buttons">
+			{{yield}}
+		</footer>
+	{{/if}}
 </div>

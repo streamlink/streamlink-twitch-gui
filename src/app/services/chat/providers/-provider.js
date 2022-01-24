@@ -32,16 +32,15 @@ export default class ChatProvider {
 
 	/**
 	 * Launch the provider process
-	 * @param {Object} channel
-	 * @param {string} channel.name
+	 * @param {string} login
 	 * @param {Object} [session]
 	 * @param {string} [session.access_token]
 	 * @param {string} [session.user_name]
 	 * @param {boolean} [session.isLoggedIn]
 	 * @returns {Promise}
 	 */
-	async launch( channel, session = {} ) {
-		const context = this._getRuntimeContext( channel, session );
+	async launch( login, session = {} ) {
+		const context = this._getRuntimeContext( login, session );
 		const params = getParameters( context, this.parameters );
 
 		await launch( this.exec, params );
@@ -97,8 +96,7 @@ export default class ChatProvider {
 	/* istanbul ignore next */
 	/**
 	 * Get the runtime context object
-	 * @param {Object} channel
-	 * @param {string} channel.name
+	 * @param {string} login
 	 * @param {Object} session
 	 * @param {string} [session.access_token]
 	 * @param {string} [session.user_name]
@@ -106,7 +104,7 @@ export default class ChatProvider {
 	 * @returns {Object}
 	 */
 	// eslint-disable-next-line no-unused-vars
-	_getRuntimeContext( channel, session ) {
+	_getRuntimeContext( login, session ) {
 		return this.context;
 	}
 

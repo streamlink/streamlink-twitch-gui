@@ -20,7 +20,7 @@ module( "init/instance-initializers/routing", function( hooks ) {
 			this.route( "foo" );
 			this.route( "bar" );
 			this.route( "baz", { path: "/baz/:a/:b/:c" } );
-			this.route( "featured" );
+			this.route( "streams" );
 			this.route( "channel", { path: "/channel/:id" } );
 			this.route( "fail" );
 		}),
@@ -38,7 +38,7 @@ module( "init/instance-initializers/routing", function( hooks ) {
 				{ foo: { type: "string" } }
 			]
 		}),
-		FeaturedRoute: class extends Route {},
+		StreamsRoute: class extends Route {},
 		ChannelRoute: class extends Route {},
 		ChannelController: class extends Controller {},
 		FailRoute: class extends Route {},
@@ -191,7 +191,7 @@ module( "init/instance-initializers/routing", function( hooks ) {
 
 		this.owner.lookup( "service:settings" ).content.gui.homepage = "";
 		await RouterService.homepage();
-		assert.strictEqual( currentRouteName(), "featured", "Transitioned to fallback homepage" );
+		assert.strictEqual( currentRouteName(), "streams", "Transitioned to fallback homepage" );
 	});
 
 	test( "RouterService#openBrowserOrTransitionToChannel", async function( assert ) {

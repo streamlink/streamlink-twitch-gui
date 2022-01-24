@@ -4,12 +4,11 @@ import EmberRouter from "@ember/routing/router";
 export default EmberRouter.extend().map(function() {
 	this.route( "watching" );
 	this.route( "search" );
-	this.route( "featured" );
 	this.route( "games", function() {
-		this.route( "game", { path: "/:game" } );
+		this.route( "game", { path: "/:game_id" } );
 	});
 	this.route( "streams" );
-	this.route( "channel", { path: "/channel/:channel" }, function() {
+	this.route( "channel", { path: "/channel/:user_id" }, function() {
 		this.route( "teams" );
 		this.route( "settings" );
 	});
@@ -18,7 +17,7 @@ export default EmberRouter.extend().map(function() {
 		this.route( "followedStreams" );
 		this.route( "followedChannels" );
 	});
-	this.route( "team", { path: "/team/:team" }, function() {
+	this.route( "team", { path: "/team/:team_id" }, function() {
 		this.route( "members" );
 		this.route( "info" );
 	});

@@ -6,34 +6,34 @@
 <button type="button" class="btn-small btn-context-valid fa fa-search" {{action "submit"}}></button>
 <button type="button" class="btn-small btn-dropdown fa fa-chevron-down" {{action "toggleDropdown"}}></button>
 <div class="searchbar-dropdown {{unless showDropdown 'hidden'}}">
-<section class="filters">
-<div>{{t "components.search-bar.filter"}}</div>
-{{#radio-buttons
-	name="searchfilters"
-	value=filter
-	content=filters
-	as |item|
-}}
-	{{#item.button classNames="default btn radio-buttons-item-searchbar-filter"}}
-		{{t (concat "components.search-bar.filters." item.value)}}
-	{{/item.button}}
-{{/radio-buttons}}
-</section>
-{{#if model.length}}
-<section class="recent">
-<header>
-<div>{{t "components.search-bar.recent"}}</div>
-<div class="clear" {{action "clearHistory"}}><i class="fa fa-trash-o"></i></div>
-</header>
-<ul class="list-unstyled">
-{{#each content as |history|}}
-<li {{action "searchHistory" history}}>
-<div class="filter">{{t (concat "components.search-bar.filters." history.filter)}}</div>
-<div class="query">{{history.query}}</div>
-<div class="date">{{time-from-now history.date interval=60000}}</div>
-</li>
-{{/each}}
-</ul>
-</section>
-{{/if}}
+	<section class="filters">
+		<div>{{t "components.search-bar.filter"}}</div>
+		{{#radio-buttons
+			name="searchfilters"
+			value=filter
+			content=filters
+			as |item|
+		}}
+			{{#item.button classNames="default btn radio-buttons-item-searchbar-filter"}}
+				{{t (concat "components.search-bar.filters." item.value)}}
+			{{/item.button}}
+		{{/radio-buttons}}
+	</section>
+	{{#if model.length}}
+		<section class="recent">
+			<header>
+				<div>{{t "components.search-bar.recent"}}</div>
+				<div class="clear" {{action "clearHistory"}}><i class="fa fa-trash-o"></i></div>
+			</header>
+			<ul class="list-unstyled">
+				{{#each content as |history|}}
+					<li {{action "searchHistory" history}}>
+						<div class="filter">{{t (concat "components.search-bar.filters." history.filter)}}</div>
+						<div class="query">{{history.query}}</div>
+						<div class="date">{{time-from-now history.date interval=60000}}</div>
+					</li>
+				{{/each}}
+			</ul>
+		</section>
+	{{/if}}
 </div>

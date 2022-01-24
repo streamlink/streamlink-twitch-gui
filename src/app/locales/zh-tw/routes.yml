@@ -26,10 +26,6 @@ about:
         header: 翻譯
     dependencies:
         header: 第三方元件
-featured:
-    header: 精選頻道
-    empty: 精選頻道無法載入！
-    summary: 有 {viewers} 位觀眾正在收看 {channels} 個頻道實況！
 games:
     header: 熱門遊戲
     empty: 無熱門遊戲
@@ -53,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: 語言
-        followers:
-            title: 追蹤者
-            data: "{followers} ({day}人/日)"
-        views:
+        view-count:
             title: 觀看次數
             data: "{views} ({day}/日)"
         content:
             title: 內容
             mature: 頻道僅適合成人觀看
             ffa: 無年齡限制
-        format:
-            title: 格式
-            data: "{resolution} @ {fps}fps"
         delay:
             title: 延遲
             data: |
@@ -145,27 +135,18 @@ user:
         header: 追蹤中實況
         empty:
             text: 目前無追蹤中實況
-            featured: 觀看目前的精選實況
             streams: 觀看熱門實況
     followedChannels:
         header: 已追隨的頻道
-        buttons:
-            sort-by-followed: 以追隨日期排序
-            sort-by-broadcast: 以最後開始實況排序
-            sort-by-login: 以最後登入排序
-            sort-desc: 降冪排序
-            sort-asc: 升冪排序
         empty: 目前無追隨頻道
 search:
     header:
         all: "搜尋結果: "
         games: "遊戲搜尋結果: "
         channels: "頻道搜尋結果: "
-        streams: "實況搜尋結果: "
     subheader:
         games: 遊戲
         channels: 頻道
-        streams: 實況
     empty: 查無資訊
 watching:
     header: 正在收看
@@ -175,5 +156,5 @@ watching:
     empty:
         header: 所有實況已關閉
         next: 下一步?
-        featured: 觀看目前精選實況
+        streams: 觀看熱門實況
         followed: 觀看已追隨實況

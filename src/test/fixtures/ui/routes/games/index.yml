@@ -1,0 +1,26 @@
+-   request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/games/top"
+        query:
+            first: 2
+    response:
+        data:
+            -   id: "1"
+                name: "first game"
+                box_art_url: "https://mock/twitch-game-top/1/box_art-{width}x{height}.png"
+            -   id: "2"
+                name: "second game"
+                box_art_url: "https://mock/twitch-game-top/2/box_art-{width}x{height}.png"
+        pagination:
+            cursor: "cursor1"
+-   request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/games/top"
+        query:
+            first: 2
+            after: "cursor1"
+    response:
+        data:
+            -   id: "3"
+                name: "third game"
+                box_art_url: "https://mock/twitch-game-top/3/box_art-{width}x{height}.png"

@@ -1,11 +1,9 @@
-import { get } from "@ember/object";
-import Route from "@ember/routing/route";
+import UserIndexRoute from "ui/routes/user/index/route";
 import InfiniteScrollMixin from "ui/routes/-mixins/routes/infinite-scroll";
-import { toArray } from "utils/ember/recordArrayMethods";
 import preload from "utils/preload";
 
 
-export default Route.extend( InfiniteScrollMixin, {
+export default UserIndexRoute.extend( InfiniteScrollMixin, {
 	itemSelector: ".stream-item-component",
 
 	beforeModel() {
@@ -15,11 +13,9 @@ export default Route.extend( InfiniteScrollMixin, {
 	},
 
 	async model() {
-		const store = get( this, "store" );
-		const limit = get( this, "limit" );
-		const model = this.modelFor( "team" );
-		const users = get( model, "users" );
-		const length = get( users, "length" );
+		const { /** @type {DS.Store} */ store, /** @type {number} */ limit } = this;
+		const { /** @type {string[]} */ users } = this.modelFor( "team" );
+		const { length } = users;
 
 		let offsetCalculated = false;
 		const options = { reload: true };
@@ -28,13 +24,22 @@ export default Route.extend( InfiniteScrollMixin, {
 			const end = start + limit;
 			const records = await Promise.all( users
 				.slice( start, end )
-				.map( channel => store.findRecord( "twitchStream", get( channel, "id" ), options )
-					.catch( () => false )
-				)
+				.map( async user_id => {
+					try {
+						const [ stream ] = await Promise.all([
+							store.findRecord( "twitch-stream", user_id, options ),
+							store.findRecord( "twitch-user", user_id, options ),
+							store.findRecord( "twitch-channel", user_id, options )
+						]);
+						return stream;
+					} catch ( e ) {
+						return false;
+					}
+				} )
 			);
 
 			// filter offline streams and append to overall list
-			streams.push( ...toArray( records ).filter( Boolean ) );
+			streams.push( ...records.filter( Boolean ) );
 
 			// fetch more if necessary
 			if ( streams.length < limit && end < length ) {
@@ -53,6 +58,6 @@ export default Route.extend( InfiniteScrollMixin, {
 
 		const records = await fill( [], this.customOffset );
 
-		return await preload( records, "preview.mediumLatest" );
+		return await preload( records, "thumbnail_url.latest" );
 	}
 });

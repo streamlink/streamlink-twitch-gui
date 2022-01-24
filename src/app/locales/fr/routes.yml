@@ -26,10 +26,6 @@ about:
         header: Traductions
     dependencies:
         header: Application tierces
-featured:
-    header: Chaînes mises en avant
-    empty: La liste des chaînes mises en avant n'a pas pu être chargée !
-    summary: Il y actuellement {viewers} personnes en train de regarder {channels} streams !
 games:
     header: Top Jeux
     empty: La liste des top jeux retournée est vide.
@@ -53,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: Langue
-        followers:
-            title: Followers
-            data: "{followers} ({day} par jour)"
-        views:
+        view-count:
             title: Vues
             data: "{views} ({day} par jour)"
         content:
             title: Contenu
             mature: Inadapté aux enfants
             ffa: Pas de restriction d'âge
-        format:
-            title: Format
-            data: "{resolution} @ {fps}fps"
         delay:
             title: Délai
             data: |
@@ -145,27 +135,18 @@ user:
         header: Stream suivis
         empty:
             text: La liste retournée des streams est vide
-            featured: Regarder les flux actuellement mis en avant
             streams: Regarder les top streams
     followedChannels:
         header: Chaînes suivies
-        buttons:
-            sort-by-followed: Trier par date de suivi
-            sort-by-broadcast: Trier par la date de dernière diffusion
-            sort-by-login: Trier par la date de dernière connexion
-            sort-desc: Trier par ordre décroissant
-            sort-asc: Trier par ordre croissant
         empty: La liste retournée des chaînes suivies est vide.
 search:
     header:
         all: Tous les résultats de la recherche
         games: "Résultat de la recherche de jeux : "
         channels: "Résultat de la recherche de chaînes : "
-        streams: "Résultat de la recherche de streams : "
     subheader:
         games: Jeux
         channels: Chaînes
-        streams: Streams
     empty: Votre requête n'a renvoyé aucun résultat...
 watching:
     header: Vous regardez
@@ -175,5 +156,5 @@ watching:
     empty:
         header: Tous les streams ont été fermés
         next: Que faire ensuite ?
-        featured: Regarder les streams actuellement mis en avant
+        streams: Regarder les top streams
         followed: Regardez vos streams suivis

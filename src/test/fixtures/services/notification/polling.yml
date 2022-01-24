@@ -1,0 +1,36 @@
+-   request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/streams/followed"
+        query:
+            user_id: "123"
+            first: 2
+    response:
+        data:
+            -   user_id: "1"
+            -   user_id: "2"
+        pagination:
+            cursor: "cursor1"
+-   request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/streams/followed"
+        query:
+            user_id: "123"
+            first: 2
+            after: "cursor1"
+    response:
+        data:
+            -   user_id: "3"
+            -   user_id: "4"
+        pagination:
+            cursor: "cursor2"
+-   request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/streams/followed"
+        query:
+            user_id: "123"
+            first: 2
+            after: "cursor2"
+    response:
+        data:
+            -   user_id: "4"
+            -   user_id: "5"

@@ -1,13 +1,6 @@
 twitch:
-    channel:
-        followers: |
-            {count, plural,
-                one {# человек подписан}
-                few {# человека подписано}
-                many {# человек подписано}
-                other {Подписчиков: #}
-            }
-        views: |
+    user:
+        view_count: |
             {count, plural,
                 one {# просмотр}
                 few {# просмотра}
@@ -15,13 +8,18 @@ twitch:
                 other {Просмотров: #}
             }
     stream:
-        created-at:
-            less-than-24h: "Запущен в {created_at, time, medium}"
-            more-than-24h: "Запущен в {created_at, time, long}"
-        viewers: |
+        started-at:
+            less-than-24h: "Запущен в {started_at, time, medium}"
+            more-than-24h: "Запущен в {started_at, time, long}"
+        viewer_count: |
             {count, plural,
                 one {# зритель}
                 few {# зрителя}
                 many {# зрителей}
                 other {Зрителей: #}
             }
+    search-channel:
+        started-at:
+            offline: "не в сети"
+            less-than-24h: "Запущен в {started_at, time, medium}"
+            more-than-24h: "Запущен в {started_at, time, long}"

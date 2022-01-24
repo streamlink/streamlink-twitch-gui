@@ -1,510 +1,437 @@
-// TODO: properly rewrite tests using ember-qunit and sinon
 import { module, test } from "qunit";
-import { buildOwner, runDestroy } from "test-utils";
-import { setupStore } from "store-utils";
+import { setupTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import { adapterRequestFactory, setupStore } from "store-utils";
 import { FakeIntlService } from "intl-utils";
 import sinon from "sinon";
+import { setTimeout } from "timers";
 
-import { get, set } from "@ember/object";
+import { set } from "@ember/object";
 import { on } from "@ember/object/evented";
-import { run } from "@ember/runloop";
 import Service from "@ember/service";
-import RESTAdapter from "ember-data/adapters/rest";
+import Model from "ember-data/model";
 
 import notificationPollingMixinInjector
 	from "inject-loader?config&./cache&./icons&./logger!services/notification/polling";
-import StreamFollowed from "data/models/twitch/stream-followed/model";
-import StreamFollowedSerializer from "data/models/twitch/stream-followed/serializer";
-import Stream from "data/models/twitch/stream/model";
-import StreamSerializer from "data/models/twitch/stream/serializer";
-import Channel from "data/models/twitch/channel/model";
-import ChannelSerializer from "data/models/twitch/channel/serializer";
-import imageInjector from "inject-loader?config!data/models/twitch/image/model";
-import ImageSerializer from "data/models/twitch/image/serializer";
+import TwitchAdapter from "data/models/twitch/adapter";
+import TwitchStreamFollowed from "data/models/twitch/stream-followed/model";
+import TwitchStreamFollowedSerializer from "data/models/twitch/stream-followed/serializer";
+import TwitchStream from "data/models/twitch/stream/model";
+import TwitchStreamSerializer from "data/models/twitch/stream/serializer";
+import TwitchUser from "data/models/twitch/user/model";
+import TwitchUserAdapter from "data/models/twitch/user/adapter";
+import TwitchUserSerializer from "data/models/twitch/user/serializer";
+
+import fixturesTwitchStreamFollowed from "fixtures/services/notification/polling.yml";
 
 
-const { later } = run;
-
-let owner, env;
-
-const config = {
-	notification: {
-		fails: {
-			requests: 2
-		},
-		interval: {
-			request: 1,
-			retry: 1,
-			error: 1
-		},
-		query: {
-			limit: 2
-		}
-	}
-};
-
-
-module( "services/notification/polling", {
-	beforeEach() {
-		owner = buildOwner();
-
-		env = setupStore( owner, { adapter: RESTAdapter } );
-
-		owner.register( "service:intl", FakeIntlService );
-		owner.register( "service:settings", Service.extend({
-			notification: {}
-		}) );
-	},
-
-	afterEach() {
-		runDestroy( owner );
-		owner = env = null;
-	}
-});
-
-
-test( "Start / reset", async assert => {
-
-	assert.expect( 33 );
-
-	const { default: NotificationPollingMixin } = notificationPollingMixinInjector({
-		config,
-		"./logger": {
-			logError( e ) {
-				assert.strictEqual( e.message, "foo", "Calls logError" );
-			}
-		},
-		"./cache": {
-			cacheClear() {
-				assert.step( "cacheClear" );
-			}
-		},
-		"./icons": {
-			iconDirCreate() {
-				assert.step( "iconDirCreate" );
+module( "services/notification/polling", function( hooks ) {
+	const config = {
+		notification: {
+			fails: {
+				requests: 2
 			},
-			iconDirClear() {
-				assert.step( "iconDirClear" );
+			interval: {
+				request: 1,
+				retry: 1,
+				error: 1
+			},
+			query: {
+				first: 2,
+				maxQueries: 5
 			}
 		}
-	});
-
-	owner.register( "service:notification", Service.extend( NotificationPollingMixin, {
-		start() {
-			assert.step( "start" );
-			return this._super( ...arguments );
-		},
-		reset() {
-			assert.step( "reset" );
-			return this._super( ...arguments );
-		},
-		_poll( firstRun ) {
-			assert.step( "poll" );
-			assert.ok( firstRun, "Sets the firstRun parameter" );
-		}
-	}) );
-	const service = owner.lookup( "service:notification" );
-
-	// initialization
-	assert.notOk( get( service, "running" ), "Does not poll initially" );
-
-	// turn polling on
-	run( () => set( service, "running", true ) );
-	await service._pollPromise;
-	assert.checkSteps(
-		[ "start", "reset", "cacheClear", "iconDirCreate", "iconDirClear", "poll" ],
-		"Resets before each new start"
-	);
-
-	// turn polling off
-	run( () => {
-		// fake a queued function call
-		set( service, "_pollNext", later( () => {
-			throw new Error();
-		}, 5 ) );
-		set( service, "running", false );
-	});
-	assert.checkSteps( [ "reset", "cacheClear" ], "Resets" );
-	assert.strictEqual( get( service, "_pollNext" ), null, "Clears queued polling function" );
-
-	// don't execute initialization twice
-	run( () => set( service, "running", true ) );
-	await service._pollPromise;
-	assert.checkSteps(
-		[ "start", "reset", "cacheClear", "poll" ],
-		"Doesn't execute initialization twice"
-	);
-	run( () => set( service, "running", false ) );
-	assert.clearSteps();
-
-	// turn on and off without waiting for _poll() to resolve
-	run( () => set( service, "running", true ) );
-	await service._pollInitializedPromise;
-	run( () => set( service, "running", false ) );
-	assert.checkSteps(
-		[ "start", "reset", "cacheClear", "poll", "reset", "cacheClear" ],
-		"Executes all async functions in correct order"
-	);
-
-	// exceptions
-	service.reopen({
-		_poll() {
-			throw new Error( "foo" );
-		}
-	});
-	run( () => set( service, "running", true ) );
-	await service._pollPromise;
-
-	assert.clearSteps();
-
-});
-
-
-test( "Polling", async assert => {
-
-	assert.expect( 46 );
-
-	let streams;
-	let expectFirstRun = true;
-	let requeue = false;
-	let failQuery = false;
-
-	const { default: NotificationPollingMixin } = notificationPollingMixinInjector({
-		config,
-		"./logger": {
-			logError( e ) {
-				assert.strictEqual( e.message, "foo", "Calls logError" );
-			}
-		}
-	});
-
-	owner.register( "service:notification", Service.extend( NotificationPollingMixin, {
-		// manually start/stop polling
-		_pollObserver: null,
-		reset() {
-			assert.step( "reset" );
-			return this._super( ...arguments );
-		},
-		async _pollQuery() {
-			assert.step( "query" );
-			if ( failQuery ) {
-				throw new Error();
-			}
-			streams = [ { id: 1 } ];
-			return streams;
-		},
-		async _pollResult( allStreams, firstRun ) {
-			assert.step( "result" );
-			assert.strictEqual( allStreams, streams, "passes streams to queryResult" );
-			assert.strictEqual( firstRun, expectFirstRun, "passes firstRun to queryResult" );
-		},
-		_pollSuccess() {
-			assert.step( "success" );
-			return this._super( ...arguments );
-		},
-		_pollFailure() {
-			assert.step( "failure" );
-			return this._super( ...arguments );
-		},
-		_pollRequeue() {
-			if ( requeue ) {
-				assert.step( "requeue" );
-				return this._super( ...arguments );
-			}
-		}
-	}) );
-
-	const service = owner.lookup( "service:notification" );
-
-	// not running
-	await service._poll();
-	assert.checkSteps( [], "Doesn't do anything if not running" );
-
-	// running now... (observer disabled in this test)
-	run( () => set( service, "running", true ) );
-
-	// successful poll without queue
-	await service._poll( true );
-	assert.checkSteps(
-		[ "query", "result", "success" ],
-		"Executes all methods in correct order"
-	);
-
-	// disable polling while querying
-	let promise = service._poll( true );
-	run( () => set( service, "running", false ) );
-	await promise;
-	assert.checkSteps( [ "query" ], "Only gets streams and doesn't dispatch notifications" );
-	run( () => set( service, "running", true ) );
-
-	// requeue on success
-	requeue = true;
-	await service._poll( true );
-	expectFirstRun = false;
-	await service._pollPromise;
-	requeue = false;
-	await service._pollPromise;
-	expectFirstRun = true;
-	assert.checkSteps(
-		[
-			"query", "result", "success", "requeue",
-			"query", "result", "success", "requeue",
-			"query", "result", "success"
-		],
-		"Executes all methods in correct order when queuing"
-	);
-
-	// requeue on failure
-	requeue = true;
-	failQuery = true;
-	await service._poll( true );
-	assert.strictEqual( get( service, "_pollTries" ), 1, "Increases the tries count on failure" );
-	assert.strictEqual( get( service, "error" ), false, "Doesn't report an error yet" );
-	expectFirstRun = false;
-	await service._pollPromise;
-	assert.strictEqual( get( service, "_pollTries" ), 2, "Increases the tries count on failure" );
-	assert.strictEqual( get( service, "error" ), false, "Doesn't report an error yet" );
-	await service._pollPromise;
-	assert.strictEqual( get( service, "_pollTries" ), 0, "Resets tries count on final failure" );
-	assert.strictEqual( get( service, "error" ), true, "Reports an error now" );
-	assert.checkSteps(
-		[
-			"query", "failure", "requeue",
-			"query", "failure", "requeue",
-			"query", "failure", "reset", "requeue"
-		],
-		"Executes all methods in correct order when queuing and failing"
-	);
-	assert.ok( get( service, "_pollNext" ), "Keeps polling" );
-	service.reset();
-	assert.clearSteps();
-	requeue = false;
-	failQuery = false;
-	expectFirstRun = true;
-
-});
-
-
-test( "Polling results", async assert => {
-
-	const allStreams = [ { id: 1 }, { id: 2 } ];
-	const newStreams = [ ...allStreams ];
-	const filteredStreams = [ ...newStreams ];
-	let error;
-
-	const logErrorSpy = sinon.spy();
-	const cacheFillStub = sinon.stub().callsFake( () => newStreams );
-	const filterStreamsStub = sinon.stub().callsFake( async () => filteredStreams );
-	const onStreamsAllSpy = sinon.spy();
-	const onStreamsNewSpy = sinon.spy();
-	const onStreamsFilteredSpy = sinon.spy();
-
-	const { default: NotificationPollingMixin } = notificationPollingMixinInjector({
-		config,
-		"./logger": {
-			logError: logErrorSpy
-		},
-		"./cache": {
-			cacheFill: cacheFillStub
-		}
-	});
-
-	owner.register( "service:notification", Service.extend( NotificationPollingMixin, {
-		_filterStreams: filterStreamsStub,
-		_onAllStreams: on( "streams-all", onStreamsAllSpy ),
-		_onNewStreams: on( "streams-new", onStreamsNewSpy ),
-		_onFilteredStreams: on( "streams-filtered", onStreamsFilteredSpy )
-	}) );
-
-	const service = owner.lookup( "service:notification" );
-
-	// success
-
-	await service._pollResult( allStreams, true );
-	assert.ok( onStreamsAllSpy.calledOnceWithExactly( allStreams ), "Triggers streams-all" );
-	assert.ok( cacheFillStub.calledOnceWithExactly( allStreams, true ), "Calls cacheFill" );
-	assert.ok( onStreamsNewSpy.calledOnceWithExactly( newStreams ), "Triggers streams-new" );
-	assert.ok(
-		filterStreamsStub.calledOnceWithExactly( newStreams ),
-		"Passes new streams to filterStreams"
-	);
-	assert.ok(
-		onStreamsFilteredSpy.calledOnceWithExactly( filteredStreams ),
-		"Triggers streams-filtered"
-	);
-	sinon.assert.callOrder(
-		onStreamsAllSpy,
-		cacheFillStub,
-		onStreamsNewSpy,
-		filterStreamsStub,
-		onStreamsFilteredSpy
-	);
-
-	// catch all exceptions thrown by event listeners
-
-	error = new Error( "streams-filtered" );
-	service.reopen({
-		_onFilteredStreamsFailure: on( "streams-filtered", () => { throw error; } )
-	});
-	await service._pollResult( allStreams, true );
-	assert.ok( logErrorSpy.calledOnceWith( error ), "Logs the streams-filtered error" );
-	logErrorSpy.resetHistory();
-
-	error = new Error( "streams-new" );
-	service.reopen({
-		_onNewStreamsFailure: on( "streams-new", () => { throw error; } )
-	});
-	await service._pollResult( allStreams, true );
-	assert.ok( logErrorSpy.calledOnceWith( error ), "Logs the streams-new error" );
-	logErrorSpy.resetHistory();
-
-	error = new Error( "streams-all" );
-	service.reopen({
-		_onAllStreamsFailure: on( "streams-all", () => { throw error; } )
-	});
-	await service._pollResult( allStreams, true );
-	assert.ok( logErrorSpy.calledOnceWith( error ), "Logs the streams-all error" );
-
-});
-
-
-test( "Query streams", async assert => {
-
-	assert.expect( 4 );
-
-	const { default: NotificationPollingMixin } = notificationPollingMixinInjector({
-		config,
-		"./logger": {
-			logError() {}
-		}
-	});
-
-	const { default: TwitchImage } = imageInjector({
-		config: {
-			vars: {}
-		}
-	});
-
-	owner.register( "model:twitch-stream-followed", StreamFollowed );
-	owner.register( "serializer:twitch-stream-followed", StreamFollowedSerializer );
-	owner.register( "model:twitch-stream", Stream );
-	owner.register( "serializer:twitch-stream", StreamSerializer );
-	owner.register( "model:twitch-channel", Channel );
-	owner.register( "serializer:twitch-channel", ChannelSerializer );
-	owner.register( "model:twitch-image", TwitchImage );
-	owner.register( "serializer:twitch-image", ImageSerializer );
-
-	owner.register( "service:notification", Service.extend( NotificationPollingMixin ) );
-
-	let calls = 0;
-	env.adapter.ajax = async ( url, method, query ) => {
-		switch ( ++calls ) {
-			case 1:
-				assert.propEqual( query, { data: { offset: 0, limit: 2 } }, "First query" );
-				return {
-					streams: [
-						{ _id: 1, channel: { _id: 1 } },
-						{ _id: 2, channel: { _id: 2 } }
-					]
-				};
-			case 2:
-				assert.propEqual( query, { data: { offset: 2, limit: 2 } }, "Second query" );
-				return {
-					streams: [
-						{ _id: 3, channel: { _id: 3 } },
-						{ _id: 4, channel: { _id: 4 } }
-					]
-				};
-			case 3:
-				assert.propEqual( query, { data: { offset: 4, limit: 2 } }, "Third query" );
-				return {
-					streams: [
-						{ _id: 4, channel: { _id: 4 } }
-					]
-				};
-		}
-		throw new Error();
 	};
 
-	const service = owner.lookup( "service:notification" );
-
-	let streams = await service._pollQuery();
-	assert.strictEqual( get( streams, "length" ), 4, "Returns all streams and removes duplicates" );
-
-});
-
-
-test( "Filter streams", async assert => {
-
-	let streams;
-
-	const { default: NotificationPollingMixin } = notificationPollingMixinInjector({
-		config,
-		"./logger": {
-			logError() {}
-		}
+	setupTest( hooks, {
+		resolver: buildResolver({
+			IntlService: FakeIntlService,
+			TwitchStreamFollowed,
+			TwitchStreamFollowedSerializer,
+			TwitchStream,
+			TwitchStreamSerializer,
+			TwitchUser,
+			TwitchUserAdapter,
+			TwitchUserSerializer,
+			TwitchGame: Model.extend(),
+			TwitchChannel: Model.extend()
+		})
 	});
 
-	owner.register( "service:notification", Service.extend( NotificationPollingMixin ) );
+	/** @typedef {TestContext} TestContextNotificationServicePollingMixin */
+	/** @this {TestContextNotificationServicePollingMixin} */
+	hooks.beforeEach(function() {
+		setupStore( this.owner, { adapter: TwitchAdapter } );
 
-	class TwitchStream {
-		constructor( id, isVodcast, settings ) {
-			this.id = id;
-			this.isVodcast = isVodcast;
-			this.channel = {
-				async getChannelSettings() {
-					return settings;
-				}
-			};
+		this.owner.register( "service:auth", Service.extend({
+			session: {
+				user_id: "123"
+			}
+		}) );
+		this.owner.register( "service:settings", Service.extend({
+			content: {
+				notification: {}
+			}
+		}) );
+
+		this.logErrorSpy = sinon.spy();
+		this.cacheClearStub = sinon.stub();
+		this.cacheFillStub = sinon.stub();
+		this.iconDirCreateSpy = sinon.spy();
+		this.iconDirClearSpy = sinon.spy();
+		const { default: NotificationPollingMixin } = notificationPollingMixinInjector({
+			config,
+			"./logger": {
+				logError: this.logErrorSpy
+			},
+			"./cache": {
+				cacheClear: this.cacheClearStub,
+				cacheFill: this.cacheFillStub
+			},
+			"./icons": {
+				iconDirCreate: this.iconDirCreateSpy,
+				iconDirClear: this.iconDirClearSpy
+			}
+		});
+		this.owner.register( "service:notification", Service.extend( NotificationPollingMixin ) );
+	});
+
+
+	/** @this {TestContextNotificationServicePollingMixin} */
+	test( "Start / reset", async function( assert ) {
+		/** @type {NotificatonServicePollingMixin} */
+		const service = this.owner.lookup( "service:notification" );
+		const startSpy = sinon.spy( service, "start" );
+		const resetSpy = sinon.spy( service, "reset" );
+		const pollStub = sinon.stub( service, "_poll" );
+
+		// initialization
+		assert.notOk( service.running, "Does not poll initially" );
+
+		// turn polling on
+		set( service, "running", true );
+		await service._pollPromise;
+		// Resets before each new start
+		sinon.assert.callOrder(
+			startSpy,
+			resetSpy,
+			this.cacheClearStub,
+			this.iconDirCreateSpy,
+			this.iconDirClearSpy,
+			pollStub
+		);
+		assert.propEqual( pollStub.args, [[ true ]], "Calls _poll() with firstRun" );
+		sinon.resetHistory();
+
+		// turn polling off
+		// fake a queued function call
+		const errorOnNext = sinon.spy();
+		set( service, "_pollNext", setTimeout( errorOnNext, 5 ) );
+		set( service, "running", false );
+		await new Promise( resolve => setTimeout( resolve, 10 ) );
+		sinon.assert.callOrder( resetSpy, this.cacheClearStub );
+		assert.notOk( errorOnNext.called, "Clears queued polling function" );
+		assert.strictEqual( service._pollNext, null, "Unsets queued polling function" );
+
+		// don't execute initialization twice
+		set( service, "running", true );
+		await service._pollPromise;
+		assert.strictEqual( this.iconDirCreateSpy.callCount, 0, "Only initializes once" );
+		assert.strictEqual( this.iconDirClearSpy.callCount, 0, "Only initializes once" );
+		set( service, "running", false );
+		sinon.resetHistory();
+
+		// turn on and off without waiting for _poll() to resolve
+		const pollPromise = new Promise( resolve => setTimeout( resolve, 10 ) );
+		pollStub.callsFake( pollPromise );
+		set( service, "running", true );
+		set( service, "running", false );
+		await pollPromise;
+		// Executes all async functions in correct order
+		sinon.assert.callOrder(
+			startSpy,
+			resetSpy,
+			this.cacheClearStub,
+			pollStub,
+			resetSpy,
+			this.cacheClearStub
+		);
+
+		// exceptions
+		const error = new Error( "foo" );
+		pollStub.rejects( error );
+		set( service, "running", true );
+		await service._pollPromise;
+		assert.ok( this.logErrorSpy.calledWithExactly( error ) );
+	});
+
+	/** @this {TestContextNotificationServicePollingMixin} */
+	test( "Polling", async function( assert ) {
+		const streams = [ { id: 1 } ];
+
+		const service = this.owner.lookup( "service:notification" );
+		const resetSpy = sinon.spy( service, "reset" );
+		const pollSpy = sinon.spy( service, "_poll" );
+		const pollQueryStub = sinon.stub( service, "_pollQuery" ).resolves( streams );
+		const pollResultStub = sinon.stub( service, "_pollResult" );
+		const pollSuccessSpy = sinon.spy( service, "_pollSuccess" );
+		const pollFailureSpy = sinon.spy( service, "_pollFailure" );
+		const pollRequeueStub = sinon.stub( service, "_pollRequeue" );
+
+		service.reopen({
+			// manually start/stop polling
+			_pollObserver: null
+		});
+
+		// not running
+		await service._poll();
+		assert.notOk( pollQueryStub.called, "Doesn't do anything if not running" );
+
+		// running now... (observer disabled in this test)
+		set( service, "running", true );
+
+		// successful poll without queue
+		await service._poll( true );
+		// Executes all methods in correct order
+		sinon.assert.callOrder(
+			pollQueryStub,
+			pollResultStub,
+			pollSuccessSpy
+		);
+		sinon.resetHistory();
+
+		// disable polling while querying
+		let promise = service._poll( true );
+		set( service, "running", false );
+		await promise;
+		assert.ok( pollQueryStub.calledOnce, "Queries streams" );
+		assert.notOk( pollResultStub.called, "Doesn't dispatch notifications" );
+		assert.notOk( pollSuccessSpy.called, "Doesn't requeue polling" );
+		set( service, "running", true );
+		sinon.resetHistory();
+
+		// requeue on success
+		pollRequeueStub.callThrough();
+		await service._poll( true );
+		assert.ok(
+			pollResultStub.calledOnceWithExactly( streams, true ),
+			"Passes streams to _pollResult with firstRun being true"
+		);
+		sinon.assert.callOrder(
+			pollQueryStub, pollResultStub, pollSuccessSpy, pollRequeueStub
+		);
+		sinon.resetHistory();
+
+		await service._pollPromise;
+		assert.ok(
+			pollResultStub.calledOnceWithExactly( streams, false ),
+			"Passes new streams to _pollResult with firstRun being false"
+		);
+		sinon.assert.callOrder(
+			pollQueryStub, pollResultStub, pollSuccessSpy, pollRequeueStub
+		);
+		sinon.resetHistory();
+
+		pollRequeueStub.reset();
+		await service._pollPromise;
+		// Executes all methods in correct order when queuing
+		sinon.assert.callOrder(
+			pollQueryStub, pollResultStub, pollSuccessSpy
+		);
+		sinon.resetHistory();
+
+		// requeue on failure
+		pollQueryStub.rejects( new Error() );
+		pollRequeueStub.callThrough();
+		await service._poll( true );
+		assert.propEqual( pollSpy.args, [[ true ]], "First poll attempt" );
+		assert.notOk( resetSpy.called, "Doesn't call reset yet" );
+		assert.strictEqual( service._pollTries, 1, "Increases tries count on failure" );
+		assert.strictEqual( service.error, false, "Doesn't report an error yet" );
+		sinon.assert.callOrder(
+			pollQueryStub, pollFailureSpy, pollRequeueStub
+		);
+		sinon.resetHistory();
+
+		await service._pollPromise;
+		assert.propEqual( pollSpy.args, [[ false ]], "Second poll attempt" );
+		assert.notOk( resetSpy.called, "Doesn't call reset yet" );
+		assert.strictEqual( service._pollTries, 2, "Increases tries count on failure" );
+		assert.strictEqual( service.error, false, "Doesn't report an error yet" );
+		sinon.assert.callOrder(
+			pollQueryStub, pollFailureSpy, pollRequeueStub
+		);
+		sinon.resetHistory();
+
+		await service._pollPromise;
+		assert.propEqual( pollSpy.args, [[ false ]], "Third poll attempt" );
+		assert.strictEqual( service._pollTries, 0, "Resets tries count on last failure" );
+		assert.strictEqual( service.error, true, "Reports an error now" );
+		sinon.assert.callOrder(
+			pollQueryStub, pollFailureSpy, resetSpy, pollRequeueStub
+		);
+		sinon.resetHistory();
+		assert.ok( service._pollNext, "Keeps polling" );
+
+		service.reset();
+		assert.notOk( service._pollNext, "Clears poll queue" );
+	});
+
+	/** @this {TestContextNotificationServicePollingMixin} */
+	test( "Polling results", async function( assert ) {
+		const allStreams = [ { id: 1 }, { id: 2 } ];
+		const newStreams = [ ...allStreams ];
+		const filteredStreams = [ ...newStreams ];
+		let error;
+
+		this.cacheFillStub.callsFake( () => newStreams );
+
+		const filterStreamsStub = sinon.stub().callsFake( async () => filteredStreams );
+		const onStreamsAllSpy = sinon.spy();
+		const onStreamsNewSpy = sinon.spy();
+		const onStreamsFilteredSpy = sinon.spy();
+
+		const service = this.owner.lookup( "service:notification" );
+		service.reopen({
+			_filterStreams: filterStreamsStub,
+			_onAllStreams: on( "streams-all", onStreamsAllSpy ),
+			_onNewStreams: on( "streams-new", onStreamsNewSpy ),
+			_onFilteredStreams: on( "streams-filtered", onStreamsFilteredSpy )
+		});
+
+		// success
+
+		await service._pollResult( allStreams, true );
+		assert.ok(
+			onStreamsAllSpy.calledOnceWithExactly( allStreams ),
+			"Triggers streams-all"
+		);
+		assert.ok(
+			this.cacheFillStub.calledOnceWithExactly( allStreams, true ),
+			"Calls cacheFill"
+		);
+		assert.ok(
+			onStreamsNewSpy.calledOnceWithExactly( newStreams ),
+			"Triggers streams-new"
+		);
+		assert.ok(
+			filterStreamsStub.calledOnceWithExactly( newStreams ),
+			"Passes new streams to filterStreams"
+		);
+		assert.ok(
+			onStreamsFilteredSpy.calledOnceWithExactly( filteredStreams ),
+			"Triggers streams-filtered"
+		);
+		sinon.assert.callOrder(
+			onStreamsAllSpy,
+			this.cacheFillStub,
+			onStreamsNewSpy,
+			filterStreamsStub,
+			onStreamsFilteredSpy
+		);
+
+		// catch all exceptions thrown by event listeners
+
+		error = new Error( "streams-filtered" );
+		service.reopen({
+			_onFilteredStreamsFailure: on( "streams-filtered", sinon.stub().throws( error ) )
+		});
+		await service._pollResult( allStreams, true );
+		assert.ok( this.logErrorSpy.calledOnceWith( error ), "Logs the streams-filtered error" );
+		this.logErrorSpy.resetHistory();
+
+		error = new Error( "streams-new" );
+		service.reopen({
+			_onNewStreamsFailure: on( "streams-new", sinon.stub().throws( error ) )
+		});
+		await service._pollResult( allStreams, true );
+		assert.ok( this.logErrorSpy.calledOnceWith( error ), "Logs the streams-new error" );
+		this.logErrorSpy.resetHistory();
+
+		error = new Error( "streams-all" );
+		service.reopen({
+			_onAllStreamsFailure: on( "streams-all", sinon.stub().throws( error ) )
+		});
+		await service._pollResult( allStreams, true );
+		assert.ok( this.logErrorSpy.calledOnceWith( error ), "Logs the streams-all error" );
+	});
+
+	/** @this {TestContextNotificationServicePollingMixin} */
+	test( "Query streams", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+
+		const responseStub
+			= store.adapterFor( "twitch-stream-followed" ).ajax
+			= adapterRequestFactory( assert, fixturesTwitchStreamFollowed );
+
+		const service = this.owner.lookup( "service:notification" );
+		const streams = await service._pollQuery();
+		assert.propEqual(
+			streams.mapBy( "id" ),
+			[ "1", "2", "3", "4", "5" ],
+			"Returns all streams without duplicates"
+		);
+		assert.strictEqual( responseStub.callCount, 3, "Queries API 3 times" );
+	});
+
+	/** @this {TestContextNotificationServicePollingMixin} */
+	test( "Filter streams", async function( assert ) {
+		let streams;
+
+		class FakeTwitchStream {
+			constructor( id, isVodcast, settings ) {
+				this.id = id;
+				this.isVodcast = isVodcast;
+				this.getChannelSettings = async () => settings;
+			}
 		}
-	}
 
-	const twitchStreams = [
-		new TwitchStream( 1, false, { notification_enabled: null } ),
-		new TwitchStream( 2, false, { notification_enabled: true } ),
-		new TwitchStream( 3, false, { notification_enabled: false } ),
-		new TwitchStream( 4, true, { notification_enabled: null } ),
-		new TwitchStream( 5, true, { notification_enabled: true } ),
-		new TwitchStream( 6, true, { notification_enabled: false } )
-	];
+		const twitchStreams = [
+			new FakeTwitchStream( 1, false, { notification_enabled: null } ),
+			new FakeTwitchStream( 2, false, { notification_enabled: true } ),
+			new FakeTwitchStream( 3, false, { notification_enabled: false } ),
+			new FakeTwitchStream( 4, true, { notification_enabled: null } ),
+			new FakeTwitchStream( 5, true, { notification_enabled: true } ),
+			new FakeTwitchStream( 6, true, { notification_enabled: false } )
+		];
 
-	const service = owner.lookup( "service:notification" );
-	const settings = owner.lookup( "service:settings" );
+		const service = this.owner.lookup( "service:notification" );
 
-	set( settings, "notification.filter_vodcasts", false );
+		set( service, "settings.content.notification.filter_vodcasts", false );
 
-	set( settings, "notification.filter", true );
-	streams = await service._filterStreams( twitchStreams );
-	assert.propEqual(
-		streams.map( stream => stream.id ),
-		[ 1, 2, 4, 5 ],
-		"Return unknown and enabled streams and ignore vodcast settings"
-	);
+		set( service, "settings.content.notification.filter", true );
+		streams = await service._filterStreams( twitchStreams );
+		assert.propEqual(
+			streams.map( stream => stream.id ),
+			[ 1, 2, 4, 5 ],
+			"Return unknown and enabled streams and ignore vodcast settings"
+		);
 
-	set( settings, "notification.filter", false );
-	streams = await service._filterStreams( twitchStreams );
-	assert.propEqual(
-		streams.map( stream => stream.id ),
-		[ 2, 5 ],
-		"Return enabled streams and ignore vodcast settings"
-	);
+		set( service, "settings.content.notification.filter", false );
+		streams = await service._filterStreams( twitchStreams );
+		assert.propEqual(
+			streams.map( stream => stream.id ),
+			[ 2, 5 ],
+			"Return enabled streams and ignore vodcast settings"
+		);
 
-	set( settings, "notification.filter_vodcasts", true );
+		set( service, "settings.content.notification.filter_vodcasts", true );
 
-	set( settings, "notification.filter", true );
-	streams = await service._filterStreams( twitchStreams );
-	assert.propEqual(
-		streams.map( stream => stream.id ),
-		[ 1, 2 ],
-		"Return unknown, enabled and live streams"
-	);
+		set( service, "settings.content.notification.filter", true );
+		streams = await service._filterStreams( twitchStreams );
+		assert.propEqual(
+			streams.map( stream => stream.id ),
+			[ 1, 2 ],
+			"Return unknown, enabled and live streams"
+		);
 
-	set( settings, "notification.filter", false );
-	streams = await service._filterStreams( twitchStreams );
-	assert.propEqual(
-		streams.map( stream => stream.id ),
-		[ 2 ],
-		"Return enabled and live streams"
-	);
-
+		set( service, "settings.content.notification.filter", false );
+		streams = await service._filterStreams( twitchStreams );
+		assert.propEqual(
+			streams.map( stream => stream.id ),
+			[ 2 ],
+			"Return enabled and live streams"
+		);
+	});
 });

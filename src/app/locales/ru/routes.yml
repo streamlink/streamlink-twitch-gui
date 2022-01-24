@@ -26,10 +26,6 @@ about:
         header: "Переводы"
     dependencies:
         header: "Сторонние приложения/библиотеки"
-featured:
-    header: "Рекомендованные каналы"
-    empty: "Не удалось загрузить список рекомендованных каналов!"
-    summary: "Прямо сейчас {viewers} зрителей смотрят {channels} стримов!"
 games:
     header: "Популярные игры"
     empty: "Получен пустой список игр."
@@ -53,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: "Язык"
-        followers:
-            title: "Подписчики"
-            data: "{followers} ({day} в день)"
-        views:
+        view-count:
             title: "Просмотры"
             data: "{views} ({day} в день)"
         content:
             title: "Содержимое"
             mature: "Не подходит для детей"
             ffa: "Нет ограничений по возрасту"
-        format:
-            title: "Формат"
-            data: "{resolution} @ {fps}fps"
         delay:
             title: "Задержка"
             data: |
@@ -147,27 +137,18 @@ user:
         header: "Отслеживаемые стримы"
         empty:
             text: "Нет стримов"
-            featured: "Смотреть рекомендуемые в настоящее время стримы"
             streams: "Смотрите лучшие стримы"
     followedChannels:
         header: "Отслеживаемые каналы"
-        buttons:
-            sort-by-followed: "Сортировать по дате подписки"
-            sort-by-broadcast: "Сортировать по последней трансляции"
-            sort-by-login: "Сортировать по последнему входу"
-            sort-desc: "Сортировать по убыванию"
-            sort-asc: "Сортировать по возрастанию"
         empty: "Нет отслеживаемых каналов"
 search:
     header:
         all: "Все результаты поиска:"
         games: "Результат поиска игр:"
         channels: "Результат поиска каналов:"
-        streams: "Результат поиска стримов:"
     subheader:
         games: "Игры"
         channels: "Каналы"
-        streams: "Стримы"
     empty: "Нет результатов по Вашему запросу..."
 watching:
     header: "Вы смотрите"
@@ -177,5 +158,5 @@ watching:
     empty:
         header: "Все стримы закрыты"
         next: "Что делать дальше?"
-        featured: "Смотреть рекомендуемые в настоящее время стримы"
+        streams: "Смотрите лучшие стримы"
         followed: "Смотреть отслеживаемые стримы"

@@ -68,8 +68,8 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		const subject = Subject.create({
 			fading_enabled: true,
 			content: {
+				language: undefined,
 				channel: {
-					language: undefined,
 					broadcaster_language: undefined
 				}
 			}
@@ -77,16 +77,16 @@ module( "ui/components/list/stream-item", function( hooks ) {
 
 		assert.notOk( subject.faded, "Not faded if channel language is missing" );
 
-		set( subject, "content.channel.language", "de" );
+		set( subject, "content.language", "de" );
 		assert.ok( subject.faded, "Faded if channel language differs" );
 
-		set( subject, "content.channel.language", "en" );
+		set( subject, "content.language", "en" );
 		assert.notOk( subject.faded, "Not faded if broadcaster language is missing" );
 
 		set( subject, "content.channel.broadcaster_language", "en" );
 		assert.notOk( subject.faded, "Not faded if broadcaster language is equal" );
 
-		set( subject, "content.channel.language", "other" );
+		set( subject, "content.language", "other" );
 		assert.notOk( subject.faded, "Not faded if language differs" );
 
 		set( subject, "content.channel.broadcaster_language", "other" );

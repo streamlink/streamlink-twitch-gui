@@ -114,6 +114,13 @@ export default Service.extend( /** @class NwjsService */ {
 	},
 
 	/**
+	 * @param {string?} label
+	 */
+	setBadgeLabel( label = "" ) {
+		nwWindow.setBadgeLabel( `${label}` );
+	},
+
+	/**
 	 * @param {MouseEvent} event
 	 * @param {nw.MenuItem[]} items
 	 */

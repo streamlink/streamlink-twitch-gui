@@ -1,32 +1,26 @@
-import { getProperties } from "@ember/object";
 import UserIndexRoute from "../index/route";
-import InfiniteScrollOffsetMixin from "ui/routes/-mixins/routes/infinite-scroll/offset";
+import PaginationMixin from "ui/routes/-mixins/routes/infinite-scroll/pagination";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 
 
-export default UserIndexRoute.extend( InfiniteScrollOffsetMixin, RefreshRouteMixin, {
+export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
+	modelName: "twitch-user-followed",
+	modelMapBy: "to",
+	modelPreload: "profile_image_url",
 	itemSelector: ".channel-item-component",
-	modelName: "twitchChannelFollowed",
-	modelMapBy: "channel",
-	modelPreload: "logo",
 
-	queryParams: {
-		sortby: {
-			refreshModel: true
-		},
-		direction: {
-			refreshModel: true
-		}
+	/**
+	 * @param {TwitchUser} twitchUser
+	 * @return {Promise}
+	 */
+	async modelItemLoader( twitchUser ) {
+		await twitchUser.channel.promise;
 	},
 
+	query() {
+		const query = this._super();
+		const { user_id } = this.auth.session;
 
-	model({ sortby = "created_at", direction = "desc" }) {
-		return this._super({ sortby, direction });
-	},
-
-	fetchContent() {
-		const params = getProperties( this.controller, "sortby", "direction" );
-
-		return this.model( params );
+		return Object.assign( query, { from_id: user_id } );
 	}
 });

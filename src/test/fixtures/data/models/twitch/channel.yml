@@ -1,0 +1,24 @@
+request:
+    method: "GET"
+    url: "https://api.twitch.tv/helix/channels"
+    query:
+        - name: "broadcaster_id"
+          value: "11"
+        - name: "broadcaster_id"
+          value: "21"
+response:
+    data:
+        -   broadcaster_id: "11"
+            broadcaster_name: "foo"
+            game_id: "12"
+            game_name: "some game"
+            broadcaster_language: "en"
+            title: "some title"
+            delay: 90
+        -   broadcaster_id: "21"
+            broadcaster_name: "bar"
+            game_id: "22"
+            game_name: "another game"
+            broadcaster_language: "de"
+            title: "another title"
+            delay: 0

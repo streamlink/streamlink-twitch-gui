@@ -1,0 +1,9 @@
+request:
+    method: "GET"
+    url: "https://api.twitch.tv/helix/search/categories"
+    query:
+        query: "foo"
+response:
+    data:
+        -   id: "1"
+        -   id: "2"

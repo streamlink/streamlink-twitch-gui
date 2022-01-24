@@ -1,14 +1,13 @@
-import { get } from "@ember/object";
-import Route from "@ember/routing/route";
+import UserIndexRoute from "ui/routes/user/index/route";
 import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 import preload from "utils/preload";
 
 
-export default Route.extend( RefreshRouteMixin, {
-	async model({ team }) {
-		const store = get( this, "store" );
-		const record = await store.findRecord( "twitchTeam", team, { reload: true } );
+export default UserIndexRoute.extend( RefreshRouteMixin, {
+	async model({ team_id }) {
+		/** @type {TwitchTeam} */
+		const record = await this.store.findRecord( "twitch-team", team_id, { reload: true } );
 
-		return await preload( record, "logo" );
+		return await preload( record, "thumbnail_url" );
 	}
 });

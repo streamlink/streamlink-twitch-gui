@@ -1,0 +1,9 @@
+request:
+    method: "GET"
+    url: "https://api.twitch.tv/helix/streams/followed"
+    query:
+        user_id: "1"
+response:
+    data:
+        -   user_id: "1"
+        -   user_id: "2"

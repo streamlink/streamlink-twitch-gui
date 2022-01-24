@@ -1,12 +1,15 @@
 <fieldset>
-{{#if model.length}}
-<div class="channel-search">{{input type="search" value=filter placeholder=(t "settings.channels.find")}}</div>
-{{/if}}
-{{#content-list modelFiltered as |item|}}
-{{settings-channel-item content=item.channel erase=(action "erase" item)}}
-{{else if filter}}
-<p>{{t "settings.channels.none"}}</p>
-{{else}}
-<p>{{t "settings.channels.empty"}}</p>
-{{/content-list}}
+	{{#if model.length}}
+		<div class="channel-search">{{input type="search" value=filter placeholder=(t "settings.channels.find")}}</div>
+	{{/if}}
+	{{#content-list modelFiltered as |item|}}
+		{{settings-channel-item
+			content=item.user
+			erase=(action "erase" item)
+		}}
+	{{else if filter}}
+		<p>{{t "settings.channels.none"}}</p>
+	{{else}}
+		<p>{{t "settings.channels.empty"}}</p>
+	{{/content-list}}
 </fieldset>

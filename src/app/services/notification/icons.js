@@ -1,4 +1,3 @@
-import { get, set } from "@ember/object";
 import { files as filesConfig, notification as notificationConfig } from "config";
 import { cachedir } from "utils/node/platform";
 import mkdirp from "utils/node/fs/mkdirp";
@@ -15,6 +14,9 @@ const {
 	}
 } = notificationConfig;
 const iconCacheDir = join( cachedir, cacheName );
+
+/** @type {Map<string, string>} */
+const userIconCache = new Map();
 
 
 // TODO: implement an icon resolver for Linux icon themes
@@ -37,18 +39,18 @@ export async function iconDirClear() {
 }
 
 /**
- * @param {TwitchStream} stream
- * @returns {Promise}
+ * @param {TwitchUser} user
+ * @returns {Promise<string>}
  */
-export async function iconDownload( stream ) {
+export async function iconDownload( user ) {
 	// don't download logo again if it has already been downloaded
-	if ( get( stream, "logo" ) ) {
-		return;
+	const { id, profile_image_url } = user;
+
+	let file = userIconCache.get( id );
+	if ( !file ) {
+		file = await download( profile_image_url, iconCacheDir );
+		userIconCache.set( id, file );
 	}
 
-	const logo = get( stream, "channel.logo" );
-	const file = await download( logo, iconCacheDir );
-
-	// set the local channel logo on the twitchStream record
-	set( stream, "logo", file );
+	return file;
 }

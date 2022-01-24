@@ -133,7 +133,9 @@ function fixAttributes( settings ) {
 		gui.minimizetotray = !!gui.minimizetotray;
 	}
 	if ( hasOwnProperty.call( gui, "homepage" ) ) {
-		if (
+		if ( gui.homepage === "/featured" ) {
+			gui.homepage = "/streams";
+		} else if (
 			   gui.homepage === "/user/following"
 			|| gui.homepage === "/user/subscriptions"
 			|| gui.homepage === "/user/hostedStreams"

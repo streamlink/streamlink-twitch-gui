@@ -29,6 +29,8 @@ export function cacheAdd( stream ) {
  * @returns {TwitchStream[]}
  */
 export function cacheFill( streams, firstRun ) {
+	streams = streams.slice();
+
 	// figure out which streams are new
 	for ( let item, idx, i = 0, l = cache.length; i < l; i++ ) {
 		item = cache[ i ];

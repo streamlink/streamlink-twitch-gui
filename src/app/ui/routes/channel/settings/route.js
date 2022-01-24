@@ -1,17 +1,16 @@
 import { getOwner } from "@ember/application";
 import { get } from "@ember/object";
-import Route from "@ember/routing/route";
 import { inject as service } from "@ember/service";
+import UserIndexRoute from "ui/routes/user/index/route";
 import ObjectBuffer from "utils/ember/ObjectBuffer";
 
 
-export default Route.extend({
+export default UserIndexRoute.extend({
 	modal: service(),
 
 	async model() {
-		const store = get( this, "store" );
-		const parentModel = this.modelFor( "channel" );
-		const id = get( parentModel, "channel.name" );
+		const { /** @type {DS.Store} */ store } = this;
+		const { user: { id } } = this.modelFor( "channel" );
 
 		const model = await store.findRecord( "channelSettings", id )
 			.catch( () => {

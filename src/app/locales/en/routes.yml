@@ -26,10 +26,6 @@ about:
         header: Translations
     dependencies:
         header: Third party applications
-featured:
-    header: Featured Channels
-    empty: The featured channels list could not be loaded!
-    summary: There are {viewers} people watching {channels} live streams right now!
 games:
     header: Top Games
     empty: The returned list of top games is empty.
@@ -53,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: Language
-        followers:
-            title: Followers
-            data: "{followers} ({day} per day)"
-        views:
+        view-count:
             title: Views
             data: "{views} ({day} per day)"
         content:
             title: Content
             mature: Inappropriate for children
             ffa: No age restrictions
-        format:
-            title: Format
-            data: "{resolution} @ {fps}fps"
         delay:
             title: Delay
             data: |
@@ -145,27 +135,18 @@ user:
         header: Followed Streams
         empty:
             text: The returned list of followed streams is empty.
-            featured: Watch currently featured streams
-            streams: Watch top streams
+            streams: Watch popular streams
     followedChannels:
         header: Followed Channels
-        buttons:
-            sort-by-followed: Sort by date followed
-            sort-by-broadcast: Sort by last broadcast
-            sort-by-login: Sort by last login
-            sort-desc: Sort in descending order
-            sort-asc: Sort in ascending order
         empty: The returned list of followed channels is empty.
 search:
     header:
         all: All search results
         games: "Game search results: "
         channels: "Stream search results: "
-        streams: "Stream search results: "
     subheader:
         games: Games
         channels: Channels
-        streams: Streams
     empty: Your query didn't match anything...
 watching:
     header: You're watching
@@ -175,5 +156,5 @@ watching:
     empty:
         header: All streams have been closed
         next: What to do next?
-        featured: Watch currently featured streams
+        streams: Watch popular streams
         followed: Watch your followed streams

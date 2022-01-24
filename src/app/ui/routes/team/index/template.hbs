@@ -1,5 +1,8 @@
 {{#content-list model as |item isNewItem|}}
-{{stream-item content=item isNewItem=isNewItem}}
+	{{stream-item
+		content=item
+		isNewItem=isNewItem
+	}}
 {{else}}
-<p>{{t "routes.team.live.empty"}}</p>
+	<p>{{t "routes.team.live.empty"}}</p>
 {{/content-list}}

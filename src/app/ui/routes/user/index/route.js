@@ -5,6 +5,7 @@ import { inject as service } from "@ember/service";
 
 
 export default Route.extend({
+	/** @type {AuthService} */
 	auth: service(),
 	/** @type {RouterService} */
 	router: service(),

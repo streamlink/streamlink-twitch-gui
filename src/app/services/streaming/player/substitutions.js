@@ -6,37 +6,37 @@ import t from "translation-key";
 export default [
 	new Substitution(
 		[ "name", "channel", "channelname" ],
-		"stream.channel.display_name",
+		"stream.stream.user_name",
 		t`settings.player.args.substitutions.channel`
 	),
 	new Substitution(
 		[ "status", "title" ],
-		"stream.channel.status",
+		"stream.stream.title",
 		t`settings.player.args.substitutions.status`
 	),
 	new Substitution(
 		[ "game", "gamename" ],
-		"stream.stream.game",
+		"stream.stream.game_name",
 		t`settings.player.args.substitutions.game`
 	),
 	new Substitution(
 		"delay",
-		"stream.stream.delay",
+		"stream.stream.channel.delay",
 		t`settings.player.args.substitutions.delay`
 	),
 	new Substitution(
 		[ "online", "since", "created" ],
-		"stream.stream.created_at",
+		"stream.stream.started_at",
 		t`settings.player.args.substitutions.created`
 	),
 	new Substitution(
 		[ "viewers", "current" ],
-		"stream.stream.viewers",
+		"stream.stream.viewer_count",
 		t`settings.player.args.substitutions.viewers`
 	),
 	new Substitution(
 		[ "views", "overall" ],
-		"stream.channel.views",
+		"stream.user.view_count",
 		t`settings.player.args.substitutions.views`
 	)
 ];

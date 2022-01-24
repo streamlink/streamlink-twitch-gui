@@ -1,0 +1,53 @@
+from:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/users/follows"
+        query:
+            from_id: "1"
+    response:
+        data:
+            -   from_id: "1"
+                to_id: "2"
+                followed_at: "2000-01-01T00:00:00Z"
+            -   from_id: "1"
+                to_id: "3"
+                followed_at: "1999-12-31T23:59:59Z"
+        total: 2
+to:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/users/follows"
+        query:
+            to_id: "1"
+    response:
+        data:
+            -   to_id: "1"
+                from_id: "2"
+                followed_at: "2000-01-01T00:00:00Z"
+            -   to_id: "1"
+                from_id: "3"
+                followed_at: "1999-12-31T23:59:59Z"
+        total: 2
+bidirectional:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/users/follows"
+        query:
+            from_id: "1"
+            to_id: "2"
+    response:
+        data:
+            -   from_id: "1"
+                to_id: "2"
+                followed_at: "2000-01-01T00:00:00Z"
+        total: 1
+mismatch:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/users/follows"
+        query:
+            from_id: "1"
+            to_id: "4"
+    response:
+        data: []
+        total: 0

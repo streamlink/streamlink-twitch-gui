@@ -48,9 +48,7 @@ test( "Default attributes", async function( assert ) {
 		exec: "Chatty.exe",
 		fallback: []
 	});
-	await provider.launch({
-		name: "baz"
-	});
+	await provider.launch( "baz" );
 
 	assert.propEqual(
 		this.whichFallback.getCall(0).args,
@@ -95,9 +93,7 @@ test( "User attributes", async function( assert ) {
 		instance: true,
 		auth: true
 	});
-	await provider.launch({
-		name: "baz"
-	}, {
+	await provider.launch( "baz", {
 		user_name: "user",
 		access_token: "token",
 		isLoggedIn: true
@@ -153,9 +149,7 @@ test( "User attributes and no session data", async function( assert ) {
 		instance: false,
 		auth: true
 	});
-	await provider.launch({
-		name: "baz"
-	}, {
+	await provider.launch( "baz", {
 		isLoggedIn: false
 	});
 

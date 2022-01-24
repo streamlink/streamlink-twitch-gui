@@ -26,10 +26,6 @@ about:
         header: Traduzioni
     dependencies:
         header: Applicazioni di terze parti
-featured:
-    header: Canali in primo piano
-    empty: Impossibile caricare l'elenco dei canali in primo piano!
-    summary: Ci sono {viewers} persone che stanno guardando {channels} live streaming in questo momento!
 games:
     header: Migliori giochi
     empty: L'elenco restituito dei migliori giochi è vuoto.
@@ -53,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: Lingua
-        followers:
-            title: Followers
-            data: "{followers} ({day} per day)"
-        views:
+        view-count:
             title: Visualizzazioni
             data: "{views} ({day} per day)"
         content:
             title: Contenuto
             mature: Inappropriato per i bambini
             ffa: Nessun limite di età
-        format:
-            title: Formato
-            data: "{resolution} @ {fps}fps"
         delay:
             title: Ritardo
             data: |
@@ -145,27 +135,18 @@ user:
         header: Stream seguiti
         empty:
             text: L'elenco restituito degli stream seguiti è vuoto.
-            featured: Guarda gli stream attualmente in primo piano
             streams: Guarda i migliori stream
     followedChannels:
         header: Canali seguiti
-        buttons:
-            sort-by-followed: Ordina per data seguita
-            sort-by-broadcast: Ordina per ultima trasmissione
-            sort-by-login: Ordina per ultimo accesso
-            sort-desc: Ordina in ordine decrescente
-            sort-asc: Ordina in ordine crescente
         empty: L'elenco restituito dei canali seguiti è vuoto.
 search:
     header:
         all: Tutti i risultati della ricerca
         games: "Risultati dei giochi cercati: "
         channels: "Risultati dei canali cercati: "
-        streams: "Risultati dei flussi cercati: "
     subheader:
         games: Giochi
         channels: Canali
-        streams: Flussi
     empty: La tua richiesta non corrisponde a nulla...
 watching:
     header: Stai guardando
@@ -175,5 +156,5 @@ watching:
     empty:
         header: Tutti i flussi sono stati chiusi
         next: Cosa fare dopo?
-        featured: Guarda gli stream attualmente in primo piano
+        streams: Guarda i migliori stream
         followed: Guarda i tuoi stream seguiti

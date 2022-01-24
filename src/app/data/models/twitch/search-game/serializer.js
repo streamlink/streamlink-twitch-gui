@@ -1,27 +1,32 @@
 import TwitchSerializer from "data/models/twitch/serializer";
 
 
+const reStaticBoxArtRes = /\d+x\d+\.(\w+)$/;
+
+
 export default TwitchSerializer.extend({
 	modelNameFromPayloadKey() {
-		return "twitchSearchGame";
+		return "twitch-search-game";
 	},
 
 	attrs: {
 		game: { deserialize: "records" }
 	},
 
-	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
-		// fix payload format
-		payload.games = ( payload.games || [] ).map( game => ({ game }) );
-
-		return this._super( store, primaryModelClass, payload, id, requestType );
-	},
-
 	normalize( modelClass, resourceHash, prop ) {
-		const foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
+		const { primaryKey } = this;
 
-		// get the id of the embedded TwitchGame record and apply it here
-		resourceHash[ this.primaryKey ] = resourceHash.game[ foreignKey ];
+		// workaround for: https://github.com/twitchdev/issues/issues/329
+		/* istanbul ignore next */
+		if ( resourceHash[ "box_art_url" ] ) {
+			resourceHash[ "box_art_url" ] = `${resourceHash[ "box_art_url" ]}`
+				.replace( reStaticBoxArtRes, "{width}x{height}.$1" );
+		}
+
+		resourceHash = {
+			[ primaryKey ]: resourceHash[ primaryKey ],
+			game: resourceHash
+		};
 
 		return this._super( modelClass, resourceHash, prop );
 	}

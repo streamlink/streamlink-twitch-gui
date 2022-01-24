@@ -1,4 +1,4 @@
-import { get, set, computed } from "@ember/object";
+import { set, computed } from "@ember/object";
 import { readOnly } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import { streaming as streamingConfig } from "config";
@@ -146,11 +146,10 @@ export default ModalDialogComponent.extend( /** @class ModalStreamingComponent *
 		async startHosted( success, failure ) {
 			const { modalContext } = this;
 			if ( modalContext.isDestroyed ) { return; }
-			const channel = get( modalContext, "error.channel" );
-			if ( !channel ) { return; }
+			const { channel: user_login } = modalContext.error;
+			if ( !user_login ) { return; }
 			try {
-				const user = await this.store.queryRecord( "twitchUser", channel );
-				const stream = await get( user, "stream" );
+				const stream = await this.store.queryRecord( "twitch-stream", { user_login } );
 				if ( success ) {
 					await success();
 				}

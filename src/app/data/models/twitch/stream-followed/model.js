@@ -2,9 +2,10 @@ import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
 
 
-export default Model.extend({
-	stream: belongsTo( "twitchStream", { async: false } )
+export default Model.extend( /** @class TwitchStreamFollowed */ {
+	/** @type {TwitchStream} */
+	stream: belongsTo( "twitch-stream", { async: false } )
 
 }).reopenClass({
-	toString() { return "kraken/streams/followed"; }
+	toString() { return "helix/streams/followed"; }
 });

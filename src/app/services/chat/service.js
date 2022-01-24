@@ -27,22 +27,24 @@ export default Service.extend({
 		});
 	}),
 
-	async openChat( twitchChannel ) {
-		/** @type {{name: string}} */
-		const channelData = twitchChannel.toJSON();
+	/**
+	 * @param {string} login
+	 * @return {Promise}
+	 */
+	async openChat( login ) {
 		const session = get( this, "auth.session" );
 		/** @type {Object} */
 		const sessionData = getProperties( session, "access_token", "user_name", "isLoggedIn" );
 
 		await logDebug( "Preparing to launch chat", {
-			channel: channelData.name,
+			channel: login,
 			user: sessionData.user_name
 		});
 
 		try {
 			/** @type {ChatProvider} */
 			const provider = await this._getChatProvider();
-			await provider.launch( channelData, sessionData );
+			await provider.launch( login, sessionData );
 
 		} catch ( error ) {
 			await logError( error );

@@ -1,4 +1,4 @@
-import { default as EmberObject, get, set, computed } from "@ember/object";
+import { default as EmberObject, set, computed } from "@ember/object";
 import PromiseProxyMixin from "@ember/object/promise-proxy-mixin";
 import ObjectProxy from "@ember/object/proxy";
 import SettingsSubmenuRoute from "../-submenu/route";
@@ -19,8 +19,8 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 
 
 	async model() {
-		const store = get( this, "store" );
-		const channelSettings = await store.findAll( "channelSettings" );
+		const { /** @type {DS.Store} */ store } = this;
+		const channelSettings = await store.findAll( "channel-settings" );
 
 		// we need all channelSettings records, so we can search for specific ones
 		// that have not been added to the controller's model yet
@@ -28,13 +28,22 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 			// return both channelSettings and twitchChannel records
 			EmberObject.extend({
 				settings: record,
-				// load the twitchChannel record on demand (PromiseObject)
-				// will be triggered by the first property read-access
-				channel: computed(function() {
-					const id = get( record, "id" );
-					const promise = store.findRecord( "twitchUser", id )
-						.then( user => get( user, "channel" ) )
-						.then( record => preload( record, "logo" ) );
+				// Load the TwitchUser (and TwitchChannel) records on demand (PromiseObject).
+				// Will be triggered by the first property read-access.
+				// Load TwitchChannel simultaneously, so it's ready immediately when accessing
+				// the user.channel relationship.
+				user: computed(function() {
+					const { id } = record;
+					const loader = async () => {
+						const [ user ] = await Promise.all([
+							store.findRecord( "twitch-user", id ),
+							store.findRecord( "twitch-channel", id )
+						]);
+						await preload( user, "profile_image_url" );
+
+						return user;
+					};
+					const promise = loader();
 
 					return PromiseObject.create({ promise });
 				})
@@ -45,8 +54,7 @@ export default SettingsSubmenuRoute.extend( InfiniteScrollMixin, {
 	},
 
 	async fetchContent() {
-		const limit = get( this, "limit" );
-		const offset = get( this, "offset" );
+		const { limit, offset } = this;
 
 		return this.all.slice( offset, offset + limit );
 	},

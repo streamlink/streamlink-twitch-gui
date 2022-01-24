@@ -1,5 +1,4 @@
 import { get, observer } from "@ember/object";
-import { inject as service } from "@ember/service";
 import RESTAdapter from "ember-data/adapters/rest";
 import { twitch } from "config";
 import AdapterMixin from "data/models/-mixins/adapter";
@@ -9,42 +8,18 @@ const { oauth: { "client-id": clientId } } = twitch;
 
 
 export default RESTAdapter.extend( AdapterMixin, {
-	auth: service(),
-
 	host: "https://api.twitch.tv",
 	namespace: "",
 	headers: {
-		"Accept": "application/vnd.twitchtv.v5+json",
 		"Client-ID": clientId
 	},
 
 	defaultSerializer: "twitch",
 
-
-	urlFragments: {
-		user_id() {
-			let user_id = get( this, "auth.session.user_id" );
-			if ( !user_id ) {
-				throw new Error( "Unknown user_id" );
-			}
-
-			return user_id;
-		},
-		user_name() {
-			let user_name = get( this, "auth.session.user_name" );
-			if ( !user_name ) {
-				throw new Error( "Unknown user_name" );
-			}
-
-			return user_name;
-		}
-	},
-
-
 	coalesceFindRequests: false,
-
-	findManyIdString: null,
-	findManyIdSeparator: ",",
+	findIdParam: null,
+	findIdSeparator: null,
+	findIdMax: 100,
 
 
 	access_token: null,
@@ -53,7 +28,7 @@ export default RESTAdapter.extend( AdapterMixin, {
 		if ( token === null ) {
 			delete this.headers[ "Authorization" ];
 		} else {
-			this.headers[ "Authorization" ] = `OAuth ${token}`;
+			this.headers[ "Authorization" ] = `Bearer ${token}`;
 		}
 	}),
 
@@ -69,61 +44,100 @@ export default RESTAdapter.extend( AdapterMixin, {
 		return {};
 	},
 
-	findMany( store, type, ids, snapshots ) {
-		const url = this.buildURL( type, null, snapshots, "findMany" );
+	/**
+	 * @param {DS.Store} store
+	 * @param {DS.Model} type
+	 * @param {string} id
+	 * @param {DS.Snapshot} snapshot
+	 * @return {Promise}
+	 */
+	findRecord( store, type, id, snapshot ) {
+		const url = this.buildURL( type, null, snapshot, "findRecord" );
+		const paramName = this.findIdParam || store.serializerFor( type.modelName ).primaryKey;
 		const data = {
-			[ this.findManyIdString ]: ids.join( this.findManyIdSeparator )
+			[ paramName ]: id
 		};
 
 		return this.ajax( url, "GET", { data } );
 	},
 
+	/**
+	 * @param {DS.Store} store
+	 * @param {DS.Model} type
+	 * @param {string[]} ids
+	 * @param {DS.Snapshot[]} snapshots
+	 * @return {Promise}
+	 */
+	findMany( store, type, ids, snapshots ) {
+		const url = this.buildURL( type, null, snapshots, "findMany" );
+		const paramName = this.findIdParam || store.serializerFor( type.modelName ).primaryKey;
+		const data = this.findIdSeparator
+			? { [ paramName ]: ids.join( this.findIdSeparator ) }
+			: ids.map( id => ({ name: paramName, value: id }) );
 
+		return this.ajax( url, "GET", { data } );
+	},
+
+
+	/**
+	 * @param {DS.Store} store
+	 * @param {DS.Snapshot[]} snapshots
+	 * @return {Array<Array<DS.Snapshot>>}
+	 */
 	groupRecordsForFindMany( store, snapshots ) {
 		const snapshotsByType = new Map();
 
 		// group snapshots by type
-		snapshots.forEach( snapshot => {
-			const type = snapshot.type;
-			const typeArray = snapshotsByType.get( type ) || [];
-			typeArray.push( snapshot );
-			snapshotsByType.set( type, typeArray );
-		});
+		for ( const snapshot of snapshots ) {
+			const { type } = snapshot;
+			let snapshotGroup = snapshotsByType.get( type );
+			if ( !snapshotGroup ) {
+				snapshotGroup = [];
+				snapshotsByType.set( type, snapshotGroup );
+			}
+			snapshotGroup.push( snapshot );
+		}
 
 		// build request groups
 		const groups = [];
-		snapshotsByType.forEach( ( snapshotGroup, type ) => {
+		for ( const [ type, snapshotGroup ] of snapshotsByType ) {
 			const adapter = store.adapterFor( type.modelName );
+			const {
+				maxURLLength,
+				findIdParam,
+				findIdMax,
+				findIdSeparator
+			} = adapter;
 
-			const baseLength = adapter._buildURL( type ).length
-				// "?[findManyIdString]="
-				+ 2 + adapter.findManyIdString.length;
-			const findManyIdSeparatorLength = adapter.findManyIdSeparator.length;
-			const maxLength = adapter.maxURLLength;
+			const baseLength = adapter._buildURL( type ).length;
+			const paramName = findIdParam || store.serializerFor( type.modelName ).primaryKey;
+			const paramNameLength = paramName.length;
+			const findIdSeparatorLength = findIdSeparator?.length || 0;
 
 			let group = [];
 			let length = baseLength;
 
-			snapshotGroup.forEach( snapshot => {
-				const id = get( snapshot, "record.id" );
-				const idLength = String( id ).length;
-				const separatorLength = group.length === 0 ? 0 : findManyIdSeparatorLength;
-				const newLength = length + separatorLength + idLength;
+			for ( const snapshot of snapshotGroup ) {
+				length += group.length === 0 || findIdSeparatorLength === 0
+					// ${url}?${paramName}=${id1} ... &${paramName}=${id2}
+					? 2 + paramNameLength
+					// ${url}?${paramName}=${id1} ... ${findIdSeparator}${id2}
+					: findIdSeparatorLength;
+				length += String( snapshot.record.id ).length;
 
-				if ( newLength <= maxLength ) {
+				if ( length <= maxURLLength && group.length < findIdMax ) {
 					group.push( snapshot );
-					length = newLength;
 				} else {
 					groups.push( group );
 					group = [ snapshot ];
 					length = baseLength;
 				}
-			});
+			}
 
 			if ( group.length ) {
 				groups.push( group );
 			}
-		});
+		}
 
 		return groups;
 	}

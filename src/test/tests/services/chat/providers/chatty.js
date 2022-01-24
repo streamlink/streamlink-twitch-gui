@@ -63,9 +63,7 @@ test( "Default attributes", async function( assert ) {
 		jar: "chatty.jar",
 		jarfallback: "/bar"
 	});
-	await provider.launch({
-		name: "baz"
-	});
+	await provider.launch( "baz" );
 
 	assert.propEqual(
 		this.whichFallbackJava.getCall(0).args,
@@ -122,9 +120,7 @@ test( "User attributes", async function( assert ) {
 		instance: true,
 		auth: true
 	});
-	await provider.launch({
-		name: "baz"
-	}, {
+	await provider.launch( "baz", {
 		user_name: "user",
 		access_token: "token",
 		isLoggedIn: true
@@ -191,9 +187,7 @@ test( "User attributes and no session data", async function( assert ) {
 		instance: false,
 		auth: true
 	});
-	await provider.launch({
-		name: "baz"
-	}, {
+	await provider.launch( "baz", {
 		isLoggedIn: false
 	});
 

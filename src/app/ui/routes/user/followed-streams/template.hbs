@@ -1,19 +1,21 @@
 <main class="content content-user content-user-followed-streams">
-<header>
-<h2>{{t "routes.user.followedStreams.header"}}</h2>
-{{headline-totals model.meta.total}}
-{{#quick-bar}}
-{{quick-bar-random-stream model="twitchStreamFollowed"}}
-{{quick-bar-homepage}}
-{{/quick-bar}}
-</header>
-{{#content-list model as |item isNewItem isDuplicateItem|}}
-{{stream-item content=item isNewItem=isNewItem isDuplicateItem=isDuplicateItem faded=false}}
-{{else}}
-<p>{{t "routes.user.followedStreams.empty.text"}}</p>
-<ul class="fa-ul list-empty">
-<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.user.followedStreams.empty.featured"}}{{/link-to}}</li>
-<li>{{#link-to "streams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.user.followedStreams.empty.streams"}}{{/link-to}}</li>
-</ul>
-{{/content-list}}
+	<header>
+		<h2>{{t "routes.user.followedStreams.header"}}</h2>
+		{{#quick-bar}}
+			{{quick-bar-homepage}}
+		{{/quick-bar}}
+	</header>
+	{{#content-list model as |item isNewItem isDuplicateItem|}}
+		{{stream-item
+			content=item
+			isNewItem=isNewItem
+			isDuplicateItem=isDuplicateItem
+			faded=false
+		}}
+	{{else}}
+		<p>{{t "routes.user.followedStreams.empty.text"}}</p>
+		<ul class="fa-ul list-empty">
+			<li>{{#link-to "streams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.user.followedStreams.empty.streams"}}{{/link-to}}</li>
+		</ul>
+	{{/content-list}}
 </main>

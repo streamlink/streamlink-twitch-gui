@@ -10,16 +10,23 @@ import {
 } from "data/models/settings/streams/fragment";
 import { qualities } from "data/models/stream/model";
 import t from "translation-key";
+import { twitch as twitchConfig } from "config";
 import layout from "./template.hbs";
 
 
+const { "channel-url": channelUrl } = twitchConfig;
+
+
 export default Component.extend({
+	/** @type {ChatService} */
 	chat: service(),
 	/** @type {NwjsService} */
 	nwjs: service(),
 	/** @type {RouterService} */
 	router: service(),
+	/** @type {SettingsService} */
 	settings: service(),
+	/** @type {StreamingService} */
 	streaming: service(),
 
 	layout,
@@ -36,19 +43,21 @@ export default Component.extend({
 	],
 	"class": "",
 
-	noMiddleclickScroll: computed( "settings.streams.click_middle", function() {
-		// true or null
-		return get( this, "settings.streams.click_middle" ) !== ATTR_STREAMS_CLICK_NOOP || null;
+	/** @type {TwitchStream} */
+	stream: null,
+	/** @type {TwitchUser} */
+	user: null,
+
+	/** @type {(true|null)} */
+	noMiddleclickScroll: computed( "settings.content.streams.click_middle", function() {
+		return this.settings.content.streams.click_middle !== ATTR_STREAMS_CLICK_NOOP || null;
 	}),
 
 	clickable: true,
 
 
-	opened: computed( "channel.id", "streaming.model.length", function() {
-		const model = get( this, "streaming.model" );
-		const id    = get( this, "channel.id" );
-
-		return model.mapBy( "channel.id" ).indexOf( id ) !== -1;
+	opened: computed( "stream.id", "streaming.model.@each.id", function() {
+		return this.stream && this.streaming.model.mapBy( "id" ).indexOf( this.stream.id ) !== -1;
 	}),
 
 
@@ -59,18 +68,18 @@ export default Component.extend({
 	},
 
 	click( event ) {
-		if ( get( this, "clickable" ) ) {
+		if ( this.clickable ) {
 			const action = event.button === 0
 				// left mouse button
 				? ( event.ctrlKey || event.metaKey
 					// with modifier key
-					? get( this, "settings.streams.click_modify" )
+					? this.settings.content.streams.click_modify
 					// without modifier keys (default action)
 					: ATTR_STREAMS_CLICK_LAUNCH
 				)
 				: ( event.button === 1
 					// middle mouse button
-					? get( this, "settings.streams.click_middle" )
+					? this.settings.content.streams.click_middle
 					// everything else (no action)
 					: ATTR_STREAMS_CLICK_NOOP
 				);
@@ -97,13 +106,12 @@ export default Component.extend({
 
 		const items = [];
 
-		const quals = qualities.map( quality => ({
-			label: [ `qualities.${quality.id}` ],
-			click: () => this.startStream( quality.id )
-		}) );
-
-		if ( get( this, "stream" ) ) {
-			if ( get( this, "opened" ) ) {
+		if ( this.stream ) {
+			const quals = qualities.map( quality => ({
+				label: [ t`qualities.${quality.id}` ],
+				click: () => this.startStream( quality.id )
+			}) );
+			if ( this.opened ) {
 				items.push(
 					{
 						label: [ t`contextmenu.close-stream` ],
@@ -153,34 +161,30 @@ export default Component.extend({
 
 
 	startStream( quality ) {
-		const streaming = get( this, "streaming" );
-		const stream = get( this, "stream" );
-		streaming.startStream( stream, quality );
+		this.streaming.startStream( this.stream, quality );
 	},
 
 	closeStream() {
-		const streaming = get( this, "streaming" );
-		const stream = get( this, "stream" );
-		streaming.closeStream( stream );
+		this.streaming.closeStream( this.stream );
 	},
 
 	openChat() {
-		const chat = get( this, "chat" );
-		const channel = get( this, "channel" );
-		chat.openChat( channel );
+		const login = get( this, "stream.user_login" ) || get( this, "user.login" );
+		this.chat.openChat( login );
 	},
 
 	copyChannelURL() {
-		this.nwjs.clipboard.set( this.channel.url );
+		const login = get( this, "stream.user_login" ) || get( this, "user.login" );
+		this.nwjs.clipboard.set( channelUrl.replace( "{channel}", login ) );
 	},
 
 	gotoChannelPage() {
-		const id = get( this, "channel.id" );
+		const id = get( this, "stream.id" ) || get( this, "user.id" );
 		this.router.transitionTo( "channel", id );
 	},
 
 	gotoChannelSettings() {
-		const id = get( this, "channel.id" );
+		const id = get( this, "stream.id" ) || get( this, "user.id" );
 		this.router.transitionTo( "channel.settings", id );
 	}
 });

@@ -25,6 +25,8 @@ export default ListItemComponent.extend({
 		"expanded:expanded"
 	],
 
+	/** @type {TwitchUser} */
+	user: alias( "content.user" ),
 	/** @type {TwitchChannel} */
 	channel: alias( "content.channel" ),
 
@@ -32,7 +34,7 @@ export default ListItemComponent.extend({
 	locked  : false,
 	timer   : null,
 
-	showGame: notEmpty( "channel.game" ),
+	showGame: notEmpty( "content.game_id" ),
 
 	infoGame: equal( "settings.content.streams.info", ATTR_STREAMS_INFO_GAME ),
 	infoTitle: equal( "settings.content.streams.info", ATTR_STREAMS_INFO_TITLE ),
@@ -59,19 +61,21 @@ export default ListItemComponent.extend({
 	faded: computed(
 		"fading_enabled",
 		"settings.content.streams.languages",
-		"channel.language",
-		"channel.broadcaster_language",
+		"content.language",
+		"content.channel.broadcaster_language",
 		function() {
 			if ( !this.fading_enabled ) {
 				return false;
 			}
 
-			const { languages } = this.settings.content.streams;
-			const langs = languages.toJSON();
-			const { language: clang, broadcaster_language: blang } = this.channel;
+			const { language: clang } = this.content;
 
 			// a channel language needs to be set
 			if ( clang ) {
+				const { languages } = this.settings.content.streams;
+				const langs = languages.toJSON();
+				const blang = get( this, "content.channel.broadcaster_language" );
+
 				// fade out if
 				// no broadcaster language is set and channel language is filtered out
 				if ( !blang && !langs[ clang ] ) {

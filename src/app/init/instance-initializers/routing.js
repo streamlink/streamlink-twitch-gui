@@ -113,7 +113,7 @@ function initialize( application ) {
 		 */
 		homepage( shouldReplace ) {
 			return this[ shouldReplace ? "replaceWith" : "transitionTo" ](
-				this.settings.content.gui.homepage || "/featured"
+				this.settings.content.gui.homepage || "/streams"
 			);
 		},
 

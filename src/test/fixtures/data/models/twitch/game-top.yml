@@ -1,0 +1,9 @@
+request:
+    method: "GET"
+    url: "https://api.twitch.tv/helix/games/top"
+    query: {}
+response:
+    data:
+        -   id: "1"
+        -   id: "2"
+    pagination: {}

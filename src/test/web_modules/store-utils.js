@@ -1,4 +1,7 @@
+import { get } from "@ember/object";
 import DS from "ember-data";
+import cloneDeep from "lodash/cloneDeep";
+import sinon from "sinon";
 import "init/initializers/store";
 
 
@@ -47,18 +50,78 @@ export function setupStore( owner, options ) {
 }
 
 
-export function adapterRequest( assert, obj, url, method, query ) {
+function adapterRequest( assert, obj, url, method, query ) {
+	/* istanbul ignore next */
 	if ( !obj ) {
 		throw new Error( "Missing request object" );
 	}
 
+	// filter out undefined values from queries, as those can't be set in YAML
+	let queryData;
+	/* istanbul ignore if */
+	if ( !query || !query.data ) {
+		queryData = query;
+	} else if ( Array.isArray( query.data ) ) {
+		queryData = query.data.filter( ({ value }) => value !== undefined );
+	} else {
+		queryData = Object.fromEntries( Object.entries( query.data )
+			.filter( ( [ , value ] ) => value !== undefined )
+		);
+	}
+
 	assert.strictEqual( url, obj.request.url, "Correct request url" );
 	assert.strictEqual( method, obj.request.method, "Correct request method" );
-	assert.deepEqual(
-		query && query.data || query,
-		obj.request.query || undefined,
-		"Correct request query"
+	assert.propEqual(
+		queryData,
+		obj.request.query || /* istanbul ignore next */ undefined,
+		`Correct request query for URL: ${url}`
 	);
 
-	return Promise.resolve( obj.response );
+	return Promise.resolve( cloneDeep( obj.response ) );
+}
+
+
+export function adapterRequestFactory( assert, fixtures, mapper = null ) {
+	const mapperType = typeof mapper;
+	if ( mapperType === "string" ) {
+		const key = mapper;
+		mapper = obj => get( obj, key );
+	} else /* istanbul ignore else */ if ( mapperType !== "function" ) {
+		mapper = obj => obj;
+	}
+
+	const getCallback = data => ( ...args ) => adapterRequest(
+		assert,
+		mapper( data, responseStub ),
+		...args
+	);
+	const responseStub = sinon.stub();
+
+	if ( Array.isArray( fixtures ) ) {
+		for ( const [ idx, item ] of fixtures.entries() ) {
+			responseStub.onCall( idx ).callsFake( getCallback( item ) );
+		}
+		return responseStub;
+	}
+
+	return responseStub.callsFake( getCallback( fixtures ) );
+}
+
+
+/**
+ * @param {QUnit.assert} assert
+ * @param {DS.Model} model
+ * @param {Object} expected
+ * @param {string} expected.key
+ * @param {"belongsTo"|"hasMany"} expected.kind
+ * @param {string} expected.type
+ * @param {Object?} expected.options
+ */
+export function assertRelationships( assert, model, expected ) {
+	assert.propEqual(
+		Object.values( model.relationshipsObject )
+			.map( ({ meta: { key, kind, type, options } }) => ({ key, kind, type, options }) ),
+		expected,
+		"Has the correct model relationships"
+	);
 }

@@ -2,33 +2,14 @@ import TwitchSerializer from "data/models/twitch/serializer";
 
 
 export default TwitchSerializer.extend({
-	primaryKey: "id",
-
 	modelNameFromPayloadKey() {
-		return "twitchUser";
+		return "twitch-user";
 	},
 
-	normalizeResponse( store, primaryModelClass, payload, id, requestType ) {
-		payload = {
-			[ this.modelNameFromPayloadKey() ]: ( payload.users /* istanbul ignore next */ || [] )
-				.map( user => ({
-					[ this.primaryKey ]: user.name,
-					channel: user._id,
-					stream: user._id
-				}) )
-		};
+	normalize( modelClass, resourceHash, prop ) {
+		// add key for custom channel relationship
+		resourceHash.channel = resourceHash[ this.primaryKey ];
 
-		return this._super( store, primaryModelClass, payload, id, requestType );
-	},
-
-	normalizeFindRecordResponse( store, primaryModelClass, payload, id, requestType ) {
-		const key = this.modelNameFromPayloadKey();
-		payload[ key ] = payload[ key ][0] /* istanbul ignore next */ || null;
-
-		return this._super( store, primaryModelClass, payload, id, requestType );
-	},
-
-	normalizeQueryRecordResponse( ...args ) {
-		return this.normalizeFindRecordResponse( ...args );
+		return this._super( modelClass, resourceHash, prop );
 	}
 });

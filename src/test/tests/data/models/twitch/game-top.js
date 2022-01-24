@@ -1,108 +1,78 @@
 import { module, test } from "qunit";
-import { buildOwner, runDestroy } from "test-utils";
-import { setupStore, adapterRequest } from "store-utils";
-import { get } from "@ember/object";
-import Service from "@ember/service";
+import { setupTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
+import { adapterRequestFactory, assertRelationships, setupStore } from "store-utils";
 
-import GameTop from "data/models/twitch/game-top/model";
-import GameTopSerializer from "data/models/twitch/game-top/serializer";
-import Game from "data/models/twitch/game/model";
-import GameSerializer from "data/models/twitch/game/serializer";
-import imageInjector from "inject-loader?config!data/models/twitch/image/model";
-import ImageSerializer from "data/models/twitch/image/serializer";
+import Model from "ember-data/model";
+
 import TwitchAdapter from "data/models/twitch/adapter";
-import TwitchGameTopFixtures from "fixtures/data/models/twitch/game-top.json";
+import TwitchGameTop from "data/models/twitch/game-top/model";
+import TwitchGameTopSerializer from "data/models/twitch/game-top/serializer";
+import TwitchGameTopFixtures from "fixtures/data/models/twitch/game-top.yml";
 
 
-const TwitchImage = imageInjector({
-	config: {
-		vars: {}
-	}
-})[ "default" ];
+module( "data/models/twitch/game-top", function( hooks ) {
+	setupTest( hooks, {
+		resolver: buildResolver({
+			TwitchGameTop,
+			TwitchGameTopSerializer,
+			TwitchGame: Model.extend()
+		})
+	});
+
+	hooks.beforeEach(function() {
+		setupStore( this.owner, { adapter: TwitchAdapter } );
+	});
 
 
-let owner, env;
+	test( "Model relationships", function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+		/** @type {TwitchGameTop} */
+		const model = store.modelFor( "twitch-game-top" );
 
+		assertRelationships( assert, model, [
+			{
+				key: "game",
+				kind: "belongsTo",
+				type: "twitch-game",
+				options: { async: false }
+			}
+		]);
+	});
 
-module( "data/models/twitch/game-top", {
-	beforeEach() {
-		owner = buildOwner();
+	test( "query", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
 
-		owner.register( "service:auth", Service.extend() );
-		owner.register( "model:twitch-game-top", GameTop );
-		owner.register( "serializer:twitch-game-top", GameTopSerializer );
-		owner.register( "model:twitch-game", Game );
-		owner.register( "serializer:twitch-game", GameSerializer );
-		owner.register( "model:twitch-image", TwitchImage );
-		owner.register( "serializer:twitch-image", ImageSerializer );
+		store.adapterFor( "twitch-game-top" ).ajax
+			= adapterRequestFactory( assert, TwitchGameTopFixtures );
 
-		env = setupStore( owner, { adapter: TwitchAdapter } );
-	},
+		const records = await store.query( "twitch-game-top", {} );
 
-	afterEach() {
-		runDestroy( owner );
-		owner = env = null;
-	}
-});
-
-
-test( "Adapter and Serializer", assert => {
-
-	env.adapter.ajax = ( url, method, query ) =>
-		adapterRequest( assert, TwitchGameTopFixtures, url, method, query );
-
-	return env.store.query( "twitchGameTop", {} )
-		.then( records => {
-			assert.strictEqual(
-				get( records, "length" ),
-				2,
-				"Returns all records"
-			);
-
-			assert.strictEqual(
-				get( records, "meta.total" ),
-				1000,
-				"Recordarray has metadata with total number of games"
-			);
-
-			assert.deepEqual(
-				records.map( record => record.toJSON({ includeId: true }) ),
-				[
-					{
-						id: "Game A",
-						game: "Game A",
-						channels: 1000,
-						viewers: 100000
-					},
-					{
-						id: "Game B",
-						game: "Game B",
-						channels: 100,
-						viewers: 10000
-					}
-				],
-				"Models have the correct id and attributes"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchGameTop", "Game A" )
-				&& env.store.hasRecordForId( "twitchGameTop", "Game B" ),
-				"Has all GameTop records registered in the data store"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchGame", "Game A" )
-				&& env.store.hasRecordForId( "twitchGame", "Game B" ),
-				"Has all Game records registered in the data store"
-			);
-
-			assert.ok(
-				   env.store.hasRecordForId( "twitchImage", "game/box/Game A" )
-				&& env.store.hasRecordForId( "twitchImage", "game/logo/Game A" )
-				&& env.store.hasRecordForId( "twitchImage", "game/box/Game B" )
-				&& env.store.hasRecordForId( "twitchImage", "game/logo/Game B" ),
-				"Has all image records registered in the data store"
-			);
-		});
-
+		assert.propEqual(
+			records.map( record => record.toJSON({ includeId: true }) ),
+			[
+				{
+					id: "1",
+					game: "1"
+				},
+				{
+					id: "2",
+					game: "2"
+				}
+			],
+			"Records have the correct IDs and relationship IDs"
+		);
+		assert.propEqual(
+			store.peekAll( "twitch-game-top" ).mapBy( "id" ),
+			[ "1", "2" ],
+			"Has all TwitchGameTop records registered in the data store"
+		);
+		assert.propEqual(
+			store.peekAll( "twitch-game" ).mapBy( "id" ),
+			[ "1", "2" ],
+			"Has all TwitchGame records registered in the data store"
+		);
+	});
 });

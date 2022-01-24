@@ -12,16 +12,19 @@ export default Service.extend(
 	NotificationServiceDispatchMixin,
 	NotificationServiceBadgeMixin,
 	NotificationServiceTrayMixin,
+	/** @class NotificationService */
 	{
+		/** @type {AuthService} */
 		auth: service(),
 		/** @type {IntlService} */
 		intl: service(),
+		/** @type {SettingsService} */
 		settings: service(),
 
 		error: false,
 		paused: false,
 
-		enabled: and( "auth.session.isLoggedIn", "settings.notification.enabled" ),
+		enabled: and( "auth.session.isLoggedIn", "settings.content.notification.enabled" ),
 
 		running: computed( "enabled", "paused", function() {
 			return get( this, "enabled" ) && !get( this, "paused" );

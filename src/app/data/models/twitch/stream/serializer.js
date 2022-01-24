@@ -2,28 +2,23 @@ import TwitchSerializer from "data/models/twitch/serializer";
 
 
 export default TwitchSerializer.extend({
-	modelNameFromPayloadKey() {
-		return "twitchStream";
-	},
+	// streams can only be uniquely queried by "user_id"
+	// simply set the primaryKey to it and ignore the regular stream "id"
+	// this allows us to reload the TwitchStream model
+	// but store.findRecord will require the user_id to be set
+	primaryKey: "user_id",
 
-	attrs: {
-		channel: { deserialize: "records" },
-		preview: { deserialize: "records" }
+	modelNameFromPayloadKey() {
+		return "twitch-stream";
 	},
 
 	normalize( modelClass, resourceHash, prop ) {
-		const foreignKeyChannel = this.store.serializerFor( "twitchChannel" ).primaryKey;
-		const foreignKeyImage = this.store.serializerFor( "twitchImage" ).primaryKey;
-
-		// get the id of the embedded TwitchChannel record and apply it here
-		// this is required for refreshing the record so that the correct id is being used
-		const id = resourceHash.channel[ foreignKeyChannel ];
-		resourceHash[ this.primaryKey ] = id;
-
-		// apply the id of this record on the embedded TwitchImage record (preview)
-		if ( resourceHash.preview ) {
-			resourceHash.preview[ foreignKeyImage ] = `stream/preview/${id}`;
-		}
+		const { primaryKey } = this;
+		resourceHash[ "user" ] = resourceHash[ primaryKey ];
+		resourceHash[ "channel" ] = resourceHash[ primaryKey ];
+		// game IDs can be empty strings
+		resourceHash[ "game_id" ] = resourceHash[ "game" ]
+			= resourceHash[ "game_id" ] /* istanbul ignore next */ || null;
 
 		return this._super( modelClass, resourceHash, prop );
 	}

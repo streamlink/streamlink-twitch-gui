@@ -26,10 +26,6 @@ about:
         header: Übersetzungen
     dependencies:
         header: Drittanwendungen
-featured:
-    header: Vorgestellte Kanäle
-    empty: Die Liste der vorgestellten Kanäle konnte nicht geladen werden!
-    summary: Zur Zeit schauen {viewers} Leute {channels} Livestreams zu!
 games:
     header: Top-Spiele
     empty: Die Liste der Top-Spiele ist leer.
@@ -53,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: Sprache
-        followers:
-            title: Follower
-            data: "{followers} ({day} pro Tag)"
-        views:
+        view-count:
             title: Aufrufe
             data: "{views} ({day} pro Tag)"
         content:
             title: Inhalt
             mature: Nicht geeignet für Kinder
             ffa: Keine Altersbeschränkung
-        format:
-            title: Format
-            data: "{resolution} @ {fps}fps"
         delay:
             title: Verzögerung
             data: |
@@ -145,27 +135,18 @@ user:
         header: Gefolgte Streams
         empty:
             text: Die Liste der gefolgten Streams ist leer.
-            featured: Vorgestellte Streams anschauen
-            streams: Top-Streams anschauen
+            streams: Beliebte Streams anschauen
     followedChannels:
         header: Gefolgte Kanäle
-        buttons:
-            sort-by-followed: Nach Folge-Datum sortieren
-            sort-by-broadcast: Nach letztem Broadcast sortieren
-            sort-by-login: Nach letztem Login sortieren
-            sort-desc: In absteigender Reihe sortieren
-            sort-asc: In aufsteigender Reihe sortieren
         empty: Die Liste der gefolgten Kanäle ist leer.
 search:
     header:
         all: Alle Suchergebnisse
         games: "Spiel-Suchergebnisse: "
         channels: "Kanal-Suchergebnisse: "
-        streams: "Stream-Suchergebnisse: "
     subheader:
         games: Spiele
         channels: Kanäle
-        streams: Streams
     empty: Deine Suchanfrage lieferte keine Ergebnisse...
 watching:
     header: Du schaust
@@ -175,5 +156,5 @@ watching:
     empty:
         header: Alle Streams wurden geschlossen
         next: Was tun als nächstes?
-        featured: Vorgestellte Streams anschauen
+        streams: Beliebte Streams anschauen
         followed: Gefolgte Streams anschauen

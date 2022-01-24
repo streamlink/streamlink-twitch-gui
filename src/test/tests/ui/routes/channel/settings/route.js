@@ -26,12 +26,17 @@ module( "ui/routes/channel/settings/route", function( hooks ) {
 			});
 		}),
 
+		AuthService: Service.extend({
+			session: {
+				isLoggedIn: true
+			}
+		}),
 		ModalService: Service.extend(),
 
 		ChannelRoute: Route.extend({
 			model: async () => ({
-				channel: {
-					name: "foo"
+				user: {
+					id: "foo"
 				}
 			})
 		}),

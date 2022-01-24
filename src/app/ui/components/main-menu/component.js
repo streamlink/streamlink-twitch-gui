@@ -11,7 +11,6 @@ const hotkeyActionRouteMap = {
 	"routeWatching": "watching",
 	"routeUserAuth": "user.auth",
 	"routeSettings": "settings",
-	"routeFeatured": "featured",
 	"routeGames": "games",
 	"routeStreams": "streams",
 	"routeUserFollowedStreams": "user.followedStreams",

@@ -1,50 +1,45 @@
 <section class="content-channel-overview">
-<div class="big-image {{if stream 'online'}}">
-{{stream-preview-image
-	stream=stream
-	channel=channel
-	clickable=stream
-	src=(if stream stream.preview.large channel.video_banner)
-	contextmenuNoGotos=true
-}}
-</div>
-<div class="info">
-<h3>{{t "routes.channel.details.header"}}</h3>
-<dl class="dl-horizontal">
-{{#if channel.hasCustomDisplayName}}
-<dt><i class="fa fa-user"></i>{{t "routes.channel.details.name.title"}}</dt>
-<dd>{{channel.name}}</dd>
-{{/if}}
-<dt><i class="fa fa-calendar"></i>{{t "routes.channel.details.created-at.title"}}</dt>
-<dd>{{t "routes.channel.details.created-at.format" created_at=channel.created_at}}</dd>
-{{#if channel.hasBroadcasterLanguage}}
-<dt><i class="fa fa-language"></i>{{t "routes.channel.details.language.title"}}</dt>
-<dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>
-{{/if}}
-<dt><i class="fa fa-heart"></i>{{t "routes.channel.details.followers.title"}}</dt>
-<dd title="{{channel.titleFollowers}}">{{t "routes.channel.details.followers.data" followers=(format-viewers channel.followers) day=(format-viewers (math-div channel.followers age))}}</dd>
-<dt><i class="fa fa-line-chart"></i>{{t "routes.channel.details.views.title"}}</dt>
-<dd title="{{channel.titleViews}}">{{t "routes.channel.details.views.data" views=(format-viewers channel.views) day=(format-viewers (math-div channel.views age))}}</dd>
-<dt><i class="fa fa-male"></i>{{t "routes.channel.details.content.title"}}</dt>
-<dd>{{t (concat "routes.channel.details.content." (if channel.mature "mature" "ffa"))}}</dd>
-{{#if stream.hasFormatInfo}}
-<dt><i class="fa fa-film"></i>{{t "routes.channel.details.format.title"}}</dt>
-<dd>{{t "routes.channel.details.format.data" resolution=stream.resolution fps=stream.fps}}</dd>
-{{/if}}
-{{#if stream}}
-<dt><i class="fa fa-history"></i>{{t "routes.channel.details.delay.title"}}</dt>
-<dd>{{t "routes.channel.details.delay.data" count=stream.delay}}</dd>
-{{/if}}
-{{#if stream.isVodcast}}
-<dt><i class="fa fa-recycle"></i>{{t "routes.channel.details.vodcast.title"}}</dt>
-<dd>{{t "routes.channel.details.vodcast.data"}}</dd>
-{{/if}}
-</dl>
-<div class="button-list-horizontal">
-{{open-chat channel=channel}}
-{{twitch-emotes channel=channel showButton=true}}
-{{share-channel channel=channel}}
-{{channel-button channel=channel}}
-</div>
-</div>
+	<div class="big-image {{if stream 'online'}}">
+		{{stream-preview-image
+			stream=stream
+			user=user
+			clickable=stream
+			src=(if stream
+				stream.thumbnail_url.latest
+				user.offline_image_url
+			)
+			contextmenuNoGotos=true
+		}}
+	</div>
+	<div class="info">
+		<h3>{{t "routes.channel.details.header"}}</h3>
+		<dl class="dl-horizontal">
+			{{#if user.hasCustomDisplayName}}
+				<dt><i class="fa fa-user"></i>{{t "routes.channel.details.name.title"}}</dt>
+				<dd>{{user.login}}</dd>
+			{{/if}}
+			<dt><i class="fa fa-calendar"></i>{{t "routes.channel.details.created-at.title"}}</dt>
+			<dd>{{t "routes.channel.details.created-at.format" created_at=user.created_at}}</dd>
+			{{#if channel.broadcaster_language}}
+				<dt><i class="fa fa-language"></i>{{t "routes.channel.details.language.title"}}</dt>
+				<dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>
+			{{/if}}
+			<dt><i class="fa fa-line-chart"></i>{{t "routes.channel.details.view-count.title"}}</dt>
+			<dd title="{{user.titleViewCount}}">{{t "routes.channel.details.view-count.data" views=(format-viewers user.view_count) day=(format-viewers (math-div user.view_count age))}}</dd>
+			<dt><i class="fa fa-male"></i>{{t "routes.channel.details.content.title"}}</dt>
+			<dd>{{t (concat "routes.channel.details.content." (if user.is_mature "mature" "ffa"))}}</dd>
+			<dt><i class="fa fa-history"></i>{{t "routes.channel.details.delay.title"}}</dt>
+			<dd>{{t "routes.channel.details.delay.data" count=channel.delay}}</dd>
+			{{#if stream.isVodcast}}
+				<dt><i class="fa fa-recycle"></i>{{t "routes.channel.details.vodcast.title"}}</dt>
+				<dd>{{t "routes.channel.details.vodcast.data"}}</dd>
+			{{/if}}
+		</dl>
+		<div class="button-list-horizontal">
+			{{open-chat user=user}}
+			{{twitch-emotes user=user showButton=true}}
+			{{share-channel user=user}}
+			{{channel-button user=user}}
+		</div>
+	</div>
 </section>

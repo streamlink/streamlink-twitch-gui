@@ -419,6 +419,7 @@ test( "Fixes attributes", function( assert ) {
 	);
 
 	const guiHomepages = [
+		[ "/featured", "/streams" ],
 		[ "/communities", "/" ],
 		[ "/communities/all", "/" ],
 		[ "/user/following", "/user/followedStreams" ],

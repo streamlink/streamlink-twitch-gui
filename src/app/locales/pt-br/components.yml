@@ -1,7 +1,5 @@
 channel-button:
     title: "Seguir {name}"
-channel-item:
-    game-missing: nenhum jogo definido
 documentation-link:
     title: Ler a documentação online
 drop-down-selection:
@@ -18,7 +16,6 @@ infinite-scroll:
 main-menu:
     browse:
         header: Navegar
-        featured: Em destaque
         games: Jogos
         streams: Streams
     followed:
@@ -33,8 +30,6 @@ open-chat:
     title: Abrir chat
 quick-bar-homepage:
     title: Definir como página principal
-quick-bar-random-stream:
-    title: Abrir um stream aleatório
 search-bar:
     placeholder: Procurar
     filter: Filtrar resultados
@@ -76,7 +71,6 @@ settings-submit:
 share-channel:
     title: Copiar URL do canal para a área de cópia
 stream-item:
-    fps: "{fps} fps"
     details:
         show: Mostrar detalhes da stream
         lock: Travar a visualização de detalhes

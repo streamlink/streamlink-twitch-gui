@@ -48,9 +48,7 @@ test( "Default attributes", async function( assert ) {
 		exec: "chromium",
 		fallback: "/foo"
 	}, {} );
-	await provider.launch({
-		name: "baz"
-	}, {} );
+	await provider.launch( "baz", {} );
 
 	assert.propEqual(
 		this.whichFallback.getCall(0).args,
@@ -91,9 +89,7 @@ test( "User attributes", async function( assert ) {
 		args: "\"--user-data-dir=/qux/{channel}\"",
 		url: "popout"
 	});
-	await provider.launch({
-		name: "baz"
-	}, {} );
+	await provider.launch( "baz", {} );
 
 	assert.propEqual(
 		this.whichFallback.getCall(0).args,

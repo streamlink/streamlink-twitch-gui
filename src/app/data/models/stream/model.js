@@ -64,14 +64,18 @@ export {
 };
 
 
-/**
- * @class Stream
- */
-export default Model.extend({
-	/** @property {TwitchStream} stream */
-	stream: belongsTo( "twitchStream", { async: false } ),
-	/** @property {TwitchChannel} channel */
-	channel: belongsTo( "twitchChannel", { async: false } ),
+export default Model.extend( /** @class Stream */ {
+	/** @type {AuthService} */
+	auth: service(),
+	/** @type {SettingsService} */
+	settings: service(),
+	/** @type {StreamingService} */
+	streaming: service(),
+
+	/** @type {TwitchStream} */
+	stream: belongsTo( "twitch-stream", { async: false } ),
+	/** @type {TwitchUser} */
+	user: belongsTo( "twitch-user", { async: false } ),
 	quality: attr( "string" ),
 	low_latency: attr( "boolean" ),
 	disable_ads: attr( "boolean" ),
@@ -95,12 +99,6 @@ export default Model.extend({
 	/** @property {Object[]} log */
 	log: null,
 	showLog: false,
-
-
-	auth: service(),
-	settings: service(),
-	streaming: service(),
-
 
 	session: alias( "auth.session" ),
 
@@ -166,14 +164,14 @@ export default Model.extend({
 		cpQualityFromPresetOrCustomValue( "quality" )
 	),
 
-	streamUrl: computed( "channel.name", function() {
-		const channel = get( this, "channel.name" );
-
-		return twitchStreamUrl.replace( "{channel}", channel );
-	})
+	streamUrl: computed(
+		"stream.user_login",
+		/** @this {Stream} */
+		function() {
+			return twitchStreamUrl.replace( "{channel}", this.stream.user_login );
+		}
+	)
 
 }).reopenClass({
-
 	toString() { return "Stream"; }
-
 });

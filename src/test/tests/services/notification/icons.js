@@ -8,8 +8,10 @@ import notificationIconsMixinInjector
 
 
 
-module( "services/notification/icons", {
-	beforeEach() {
+module( "services/notification/icons", function( hooks ) {
+	/** @typedef {TestContext} TestContextNotificationServiceIcons */
+	/** @this {TestContextNotificationServiceIcons} */
+	hooks.beforeEach(function() {
 		this.mkdirpStub = sinon.stub();
 		this.clearfolderStub = sinon.stub();
 		this.downloadStub = sinon.stub();
@@ -39,81 +41,109 @@ module( "services/notification/icons", {
 			"utils/node/fs/clearfolder": this.clearfolderStub,
 			"utils/node/fs/download": this.downloadStub
 		});
-	}
-});
+	});
 
 
-test( "NotificationService icons", async function( assert ) {
+	/** @this {TestContextNotificationServiceIcons} */
+	test( "iconGroup", function( assert ) {
+		const { iconGroup } = this.subject();
 
-	const error = new Error( "fail" );
+		assert.strictEqual(
+			iconGroup,
+			resolve( "bigIconPath" ),
+			"Exports the resolved absolute path of the iconGroup constant"
+		);
+	});
 
-	const {
-		iconGroup,
-		iconDirCreate,
-		iconDirClear,
-		iconDownload
-	} = this.subject( false );
+	/** @this {TestContextNotificationServiceIcons} */
+	test( "iconDirCreate", async function( assert ) {
+		const { iconDirCreate } = this.subject();
+		const error = new Error();
 
-	assert.strictEqual(
-		iconGroup,
-		resolve( "bigIconPath" ),
-		"Exports the resolved absolute path of the iconGroup constant"
-	);
+		this.mkdirpStub.rejects( error );
+		await assert.rejects( iconDirCreate(), error, "Rejects on mkdirp failure" );
+		assert.ok(
+			this.mkdirpStub.calledOnceWithExactly( "/home/user/.cache/my-app/icons" ),
+			"Tries to create correct icon cache dir"
+		);
 
-	this.mkdirpStub.rejects( error );
-	await assert.rejects( iconDirCreate(), error, "Rejects on mkdirp failure" );
-	assert.ok(
-		this.mkdirpStub.calledWithExactly( "/home/user/.cache/my-app/icons" ),
-		"Tries to create correct icon cache dir"
-	);
+		this.mkdirpStub.reset();
+		this.mkdirpStub.resolves();
+		await iconDirCreate();
+		assert.ok(
+			this.mkdirpStub.calledOnceWithExactly( "/home/user/.cache/my-app/icons" ),
+			"Creates correct icon cache dir"
+		);
+	});
 
-	this.mkdirpStub.reset();
-	this.mkdirpStub.resolves();
-	await iconDirCreate();
-	assert.ok(
-		this.mkdirpStub.calledWithExactly( "/home/user/.cache/my-app/icons" ),
-		"Creates correct icon cache dir"
-	);
+	/** @this {TestContextNotificationServiceIcons} */
+	test( "iconDirClear", async function( assert ) {
+		const { iconDirClear } = this.subject();
+		const error = new Error( "fail" );
 
-	this.clearfolderStub.rejects( error );
-	await iconDirClear();
-	assert.ok(
-		this.clearfolderStub.calledWithExactly( "/home/user/.cache/my-app/icons", 1234 ),
-		"Always resolves iconDirClear"
-	);
+		this.clearfolderStub.rejects( error );
+		await iconDirClear();
+		assert.ok(
+			this.clearfolderStub.calledOnceWithExactly( "/home/user/.cache/my-app/icons", 1234 ),
+			"Always resolves iconDirClear"
+		);
 
-	this.clearfolderStub.reset();
-	this.clearfolderStub.resolves();
-	await iconDirClear();
-	assert.ok(
-		this.clearfolderStub.calledWithExactly( "/home/user/.cache/my-app/icons", 1234 ),
-		"Always resolves iconDirClear"
-	);
+		this.clearfolderStub.reset();
+		this.clearfolderStub.resolves();
+		await iconDirClear();
+		assert.ok(
+			this.clearfolderStub.calledOnceWithExactly( "/home/user/.cache/my-app/icons", 1234 ),
+			"Always resolves iconDirClear"
+		);
+	});
 
-	const stream = { channel: { logo: "logo-url" } };
-	this.downloadStub.rejects( error );
-	await assert.rejects(
-		iconDownload( stream ),
-		error,
-		"Rejects on download failure"
-	);
-	assert.ok(
-		this.downloadStub.calledWithExactly( "logo-url", "/home/user/.cache/my-app/icons" ),
-		"Downloads logo into cache directory"
-	);
-	assert.strictEqual( stream.logo, undefined, "Doesn't set logo property on failure" );
+	/** @this {TestContextNotificationServiceIcons} */
+	test( "iconDownload", async function( assert ) {
+		const { iconDownload } = this.subject();
+		const error = new Error();
 
-	this.downloadStub.reset();
-	this.downloadStub.resolves( "file-path" );
-	await iconDownload( stream );
-	assert.ok(
-		this.downloadStub.calledWithExactly( "logo-url", "/home/user/.cache/my-app/icons" ),
-		"Downloads logo into cache directory"
-	);
-	assert.strictEqual( stream.logo, "file-path", "Sets the logo property on the stream record" );
+		class FakeTwitchUser {
+			constructor( id, icon ) {
+				this.id = id;
+				this.profile_image_url = icon;
+			}
+		}
 
-	this.downloadStub.resetHistory();
-	await iconDownload( stream );
-	assert.notOk( this.downloadStub.called, "Doesn't try to download icons twice" );
+		this.downloadStub.rejects( error );
+		await assert.rejects(
+			iconDownload( new FakeTwitchUser( "1", "logo1" ) ),
+			error,
+			"Rejects on download failure"
+		);
+		assert.ok(
+			this.downloadStub.calledOnceWithExactly( "logo1", "/home/user/.cache/my-app/icons" ),
+			"Downloads logo into cache directory"
+		);
 
+		this.downloadStub.reset();
+		this.downloadStub.resolves( "file1" );
+		assert.strictEqual(
+			await iconDownload( new FakeTwitchUser( "1", "logo1" ) ),
+			"file1",
+			"Returns the file path of the downloaded icon"
+		);
+		assert.ok(
+			this.downloadStub.calledOnceWithExactly( "logo1", "/home/user/.cache/my-app/icons" ),
+			"Downloads logo into cache directory"
+		);
+
+		this.downloadStub.resetHistory();
+		assert.strictEqual(
+			await iconDownload( new FakeTwitchUser( "1", "logo1" ) ),
+			"file1",
+			"Returns the file path of the downloaded icon"
+		);
+		assert.notOk( this.downloadStub.called, "Doesn't try to download icons twice" );
+
+		await iconDownload( new FakeTwitchUser( "2", "logo2" ) );
+		assert.ok(
+			this.downloadStub.calledOnceWithExactly( "logo2", "/home/user/.cache/my-app/icons" ),
+			"Downloads second logo into cache directory"
+		);
+	});
 });

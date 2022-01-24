@@ -3,7 +3,7 @@ import TwitchSerializer from "data/models/twitch/serializer";
 
 export default TwitchSerializer.extend({
 	modelNameFromPayloadKey() {
-		return "twitchGameTop";
+		return "twitch-game-top";
 	},
 
 	attrs: {
@@ -11,10 +11,11 @@ export default TwitchSerializer.extend({
 	},
 
 	normalize( modelClass, resourceHash, prop ) {
-		const foreignKey = this.store.serializerFor( "twitchGame" ).primaryKey;
-
-		// get the id of the embedded TwitchGame record and apply it here
-		resourceHash[ this.primaryKey ] = resourceHash.game[ foreignKey ];
+		const foreignKey = this.store.serializerFor( "twitch-game" ).primaryKey;
+		resourceHash = {
+			[ this.primaryKey ]: resourceHash[ foreignKey ],
+			game: resourceHash
+		};
 
 		return this._super( modelClass, resourceHash, prop );
 	}

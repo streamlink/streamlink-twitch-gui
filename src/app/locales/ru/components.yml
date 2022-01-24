@@ -1,7 +1,5 @@
 channel-button:
     title: "Отслеживать {name}"
-channel-item:
-    game-missing: Игра не указана
 documentation-link:
     title: Читать документацию на сайте
 drop-down-selection:
@@ -18,7 +16,6 @@ infinite-scroll:
 main-menu:
     browse:
         header: Обзор
-        featured: Рекомендации
         games: Игры
         streams: Стримы
     followed:
@@ -33,8 +30,6 @@ open-chat:
     title: Открыть чат
 quick-bar-homepage:
     title: Сделать текущий раздел стартовым
-quick-bar-random-stream:
-    title: Запустить случайный стрим
 search-bar:
     placeholder: Поиск
     filter: "Фильтр результатов:"
@@ -76,7 +71,6 @@ settings-submit:
 share-channel:
     title: Копировать в буфер обмена ссылку на канал
 stream-item:
-    fps: "{fps} fps"
     details:
         show: Показать подробности
         lock: Закрепить подробности

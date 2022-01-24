@@ -26,10 +26,6 @@ about:
         header: Traducciones
     dependencies:
         header: Aplicaciones de terceros
-featured:
-    header: Canales destacados
-    empty: ¡No se pudo cargar la lista de canales destacados!
-    summary: Hay {viewers} personas viendo {channels} streams ahora mismo!
 games:
     header: Top Juegos
     empty: La lista devuelta de los tops juegos está vacía.
@@ -53,19 +49,13 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: Idioma
-        followers:
-            title: Seguidores
-            data: "{followers} ({day} por día)"
-        views:
+        view-count:
             title: Visitas
             data: "{views} ({day} por día)"
         content:
             title: Contenido
             mature: Inapropiado para niños
             ffa: Sin restricciones de edad
-        format:
-            title: Formato
-            data: "{resolution} @ {fps}fps"
         delay:
             title: Delay
             data: |
@@ -145,35 +135,26 @@ user:
         header: Streams Seguidos
         empty:
             text: La lista devuelta de streams seguidos está vacía.
-            featured: Ver streams destacados actualmente
             streams: Ver top streams
     followedChannels:
         header: Canales Seguidos
-        buttons:
-            sort-by-followed: Ordenar por fecha seguida
-            sort-by-broadcast: Ordenar por última transmisión
-            sort-by-login: Ordenar por último inicio de sesión
-            sort-desc: Ordenar en orden descendente
-            sort-asc: Ordenar en orden ascendente
         empty: La lista devuelta de canales seguidos está vacía.
 search:
     header:
         all: Todos los resultados de la búsqueda
         games: "Resultados de la búsqueda de juegos: "
         channels: "Resultados de la búsqueda de canales: "
-        streams: "Resultados de la búsqueda de streams: "
     subheader:
         games: Juegos
         channels: Canales
-        streams: Streams
     empty: Tu consulta no coincidió con nada...
 watching:
     header: Estás viendo
     buttons:
-        open: Abrir diálogo 
+        open: Abrir diálogo
         close: Cerrar stream
     empty:
         header: Todos los streams han sido cerrados
         next: ¿Qué hacer ahora?
-        featured: Ver streams destacados actualmente
+        streams: Ver top streams
         followed: Ver tus streams seguidos

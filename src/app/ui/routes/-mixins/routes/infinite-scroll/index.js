@@ -31,8 +31,7 @@ export default Mixin.create({
 	 * Offset will be turned into a computed property on controller initialization.
 	 */
 	offset: 0,
-	_limit: 0,
-	_filter: 0,
+	limit: 0,
 
 	/**
 	 * Don't fetch infinitely.
@@ -45,30 +44,22 @@ export default Mixin.create({
 	maxLimit: 100,
 
 
-	limit: computed( "_limit", "_filter", function() {
-		return get( this, "_limit" ) + get( this, "_filter" );
-	}),
-
-
 	/**
 	 * Calculate how many items are needed to completely fill the container
+	 * @param {string} itemSel
+	 * @param {number?} maxRows
 	 */
-	calcFetchSize() {
-		const itemSel = get( this, "itemSelector" );
-		const offset = get( this, "offset" );
-		const max = get( this, "maxLimit" );
+	calcFetchSize( itemSel, maxRows = Number.POSITIVE_INFINITY ) {
 		const columns = getNeededColumns( itemSel );
-		const rows = getNeededRows( itemSel );
-		const rest = offset % columns;
+		const rows = min( getNeededRows( itemSel ), maxRows );
+		const remaining = this.offset % columns;
 
-		const limit = min(
-			// fetch size + number of items to fill the last row after a window resize
-			( columns * rows ) + ( rest > 0 ? columns - rest : 0 ),
-			// respect the max number of items
-			max
-		);
+		return ( columns * rows ) + ( remaining > 0 ? columns - remaining : 0 );
+	},
 
-		set( this, "_limit", limit );
+	setFetchSize() {
+		const limit = this.calcFetchSize( this.itemSelector );
+		set( this, "limit", min( limit, this.maxLimit ) );
 	},
 
 
@@ -80,7 +71,7 @@ export default Mixin.create({
 			offset: 0,
 			_filter: 0
 		});
-		this.calcFetchSize();
+		this.setFetchSize();
 	},
 
 	setupController( controller ) {
@@ -88,51 +79,21 @@ export default Mixin.create({
 
 		// offset (current model length)
 		// setup oneWay computed property to the value of `contentPath`
-		const contentPath = get( this, "contentPath" );
+		const { contentPath } = this;
 		const path = `${contentPath}.length`;
-		const computedOffset = computed( path, "_filter", () => {
-			// increase model length by number of filtered records
-			return get( this, path ) + get( this, "_filter" );
+		const computedOffset = computed( path, function() {
+			return get( this, path );
 		});
 		defineProperty( this, "offset", computedOffset );
 
-		// length=offset on the first fetch
-		const length = get( this, "offset" );
-		const limit = get( this, "limit" );
 		const data = get( this, contentPath );
-		const total = this._getTotal( data );
-		const hasFetchedAll = this._calcHasFetchedAll( length, 0, limit, total );
+		this.calcHasFetchedAll( data, 0 );
 
-		setProperties( controller, {
-			hasFetchedAll,
-			isFetching: false
-		});
+		set( controller, "isFetching", false );
 	},
 
 	fetchContent() {
 		return this.model();
-	},
-
-	/**
-	 * @param {Model[]} records
-	 * @param {(String|Function)} key
-	 * @param {*} [value]
-	 * @returns {Model[]}
-	 */
-	filterFetchedContent( records, key, value ) {
-		const filtered = key instanceof Function
-			? records.filter( key )
-			: records.filterBy( key, value );
-
-		const recordsLength = get( records, "length" );
-		const filteredLength = get( filtered, "length" );
-		const diff = recordsLength - filteredLength;
-
-		// add to filteredOffset, so that next requests don't include the filtered records
-		// reduce limit, so that the hasFetchedAll calculation keeps working
-		this.incrementProperty( "_filter", diff );
-
-		return filtered;
 	},
 
 
@@ -142,14 +103,11 @@ export default Mixin.create({
 	 */
 	_getTotal( data ) {
 		// try to get the "total" metadata value
-		const metadataPath = get( this, "fetchMetadataPath" );
-		if ( !data || !metadataPath ) {
+		const { fetchMetadataPath } = this;
+		if ( !data || !fetchMetadataPath ) {
 			return null;
 		}
-		const total = get( data, metadataPath );
-		if ( total === null ) {
-			return null;
-		}
+		const total = get( data, fetchMetadataPath );
 		const parsed = Number( total );
 		if ( isNaN( parsed ) || parsed < 1 ) {
 			return null;
@@ -157,33 +115,34 @@ export default Mixin.create({
 		return parsed;
 	},
 
-	_calcHasFetchedAll( length, offset, limit, total ) {
-		// invalid or empty data
-		return !length
+	calcHasFetchedAll( data, offset ) {
+		const { controller, limit } = this;
+		const length = data && data.length || 0;
+		const total = this._getTotal( data );
+
+		const hasFetchedAll
+			// invalid or empty data
+			= !length
 			// has no metadata and not enough data to fill the whole request
 			|| total === null && length < limit
 			// has metadata and has fetched everything
 			|| total !== null && offset + length >= total;
+		set( controller, "hasFetchedAll", hasFetchedAll );
 	},
 
 	async willFetchContent( force ) {
-		const controller = get( this, "controller" );
-		const isFetching = get( controller, "isFetching" );
-		const fetchedAll = get( controller, "hasFetchedAll" );
+		const { controller } = this;
 
 		// we're already busy or finished fetching
-		if ( isFetching || fetchedAll ) { return; }
+		if ( controller.isFetching || controller.hasFetchedAll ) { return; }
 
-		this.calcFetchSize();
+		this.setFetchSize();
 
-		const content = get( this, get( this, "contentPath" ) );
-		const offset = get( this, "offset" );
-		const limit = get( this, "limit" );
-		const max = get( this, "maxAutoFetches" );
-		const num = offset / limit;
+		const content = get( this, this.contentPath );
+		const { offset, limit } = this;
 
 		// don't fetch infinitely
-		if ( !force && num > max ) { return; }
+		if ( !force && ( offset / limit ) > this.maxAutoFetches ) { return; }
 
 		setProperties( controller, {
 			isFetching: true,
@@ -194,23 +153,9 @@ export default Mixin.create({
 			// fetch content
 			const data = await this.fetchContent();
 
-			// read limit again (in case it was modified by a filtered model)
-			const limit = get( this, "limit" );
-			const length = data
-				? get( data, "length" )
-				: 0;
-			const total = this._getTotal( data );
+			this.calcHasFetchedAll( data, offset );
 
-			if ( this._calcHasFetchedAll( length, offset, limit, total ) ) {
-				set( controller, "hasFetchedAll", true );
-			}
-
-			// fix offset if content was missing from the response (banned channels, etc.)
-			if ( total !== null && length < limit && offset + length < total ) {
-				this.incrementProperty( "_filter", limit - length );
-			}
-
-			if ( length ) {
+			if ( data && data.length ) {
 				content.pushObjects( data );
 			}
 

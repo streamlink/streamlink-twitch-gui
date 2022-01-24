@@ -1,50 +1,55 @@
 <main class="content content-watching">
-{{#if model.length}}
-<h2>{{t "routes.watching.header"}}</h2>
-<ul class="list-unstyled">
-{{#each sortedModel as |watching|}}
-{{#stream-presentation stream=watching.stream tagName="li" class="watching" clickablePreview=false}}
-<div class="button-list-horizontal">
-{{form-button
-	action=(action "openDialog" watching.stream)
-	icon="fa-arrow-up"
-	title=(t "routes.watching.buttons.open")
-}}
-{{form-button
-	action=(action "closeStream" watching.stream)
-	classNames="btn-danger"
-	icon="fa-times"
-	title=(t "routes.watching.buttons.close")
-}}
-</div>
-<div class="button-list-horizontal">
-{{open-chat channel=watching.stream.channel hotkeysDisabled=true}}
-{{share-channel channel=watching.stream.channel hotkeysDisabled=true}}
-</div>
-{{#drop-down
-	value=watching.quality
-	content=qualities
-	class="stream-quality-dropdown"
-	as |dropdown|
-}}
-	{{#dropdown.selection as |selection|}}
-		{{t (concat "qualities." selection.value)}}
-	{{/dropdown.selection}}
-	{{#dropdown.list as |item|}}
-		{{t (concat "qualities." item.value)}}
-	{{/dropdown.list}}
-{{/drop-down}}
-{{/stream-presentation}}
-{{/each}}
-</ul>
-{{else}}
-<h2>{{t "routes.watching.empty.header"}}</h2>
-<p>{{t "routes.watching.empty.next"}}</p>
-<ul class="fa-ul list-empty">
-<li>{{#link-to "featured"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.featured"}}{{/link-to}}</li>
-{{#if auth.session.isLoggedIn}}
-<li>{{#link-to "user.followedStreams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.followed"}}{{/link-to}}</li>
-{{/if}}
-</ul>
-{{/if}}
+	{{#if model.length}}
+		<h2>{{t "routes.watching.header"}}</h2>
+		<ul class="list-unstyled">
+			{{#each sortedModel as |watching|}}
+				{{#stream-presentation
+					stream=watching.stream
+					tagName="li"
+					class="watching"
+					clickablePreview=false
+				}}
+					<div class="button-list-horizontal">
+						{{form-button
+							action=(action "openDialog" watching.stream)
+							icon="fa-arrow-up"
+							title=(t "routes.watching.buttons.open")
+						}}
+						{{form-button
+							action=(action "closeStream" watching.stream)
+							classNames="btn-danger"
+							icon="fa-times"
+							title=(t "routes.watching.buttons.close")
+						}}
+					</div>
+					<div class="button-list-horizontal">
+						{{open-chat user=watching.user hotkeysDisabled=true}}
+						{{share-channel user=watching.user hotkeysDisabled=true}}
+					</div>
+					{{#drop-down
+						value=watching.quality
+						content=qualities
+						class="stream-quality-dropdown"
+						as |dropdown|
+					}}
+						{{#dropdown.selection as |selection|}}
+							{{t (concat "qualities." selection.value)}}
+						{{/dropdown.selection}}
+						{{#dropdown.list as |item|}}
+							{{t (concat "qualities." item.value)}}
+						{{/dropdown.list}}
+					{{/drop-down}}
+				{{/stream-presentation}}
+			{{/each}}
+		</ul>
+	{{else}}
+		<h2>{{t "routes.watching.empty.header"}}</h2>
+		<p>{{t "routes.watching.empty.next"}}</p>
+		<ul class="fa-ul list-empty">
+			<li>{{#link-to "streams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.streams"}}{{/link-to}}</li>
+			{{#if auth.session.isLoggedIn}}
+				<li>{{#link-to "user.followedStreams"}}<i class="fa fa-li fa-caret-right"></i>{{t "routes.watching.empty.followed"}}{{/link-to}}</li>
+			{{/if}}
+		</ul>
+	{{/if}}
 </main>

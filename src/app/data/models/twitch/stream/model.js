@@ -1,136 +1,151 @@
 import { get, computed } from "@ember/object";
-import { and } from "@ember/object/computed";
 import { inject as service } from "@ember/service";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
 import { DEFAULT_VODCAST_REGEXP } from "data/models/settings/streams/fragment";
+import { getChannelSettings } from "data/models/twitch/user/model";
 
 
-/**
- * @typedef {Object} FPSRange
- * @property {Number} target
- * @property {Number} min
- * @property {Number} max
- */
-
-/**
- * Try to fix the weird fps numbers received from twitch...
- * Define a list of common stream frame rates and give each one a min and max value range.
- * @type {FPSRange[]}
- */
-const fpsRanges = [
-	{ target: 24, min: 22, max: 24.5 },
-	{ target: 25, min: 24.5, max: 27 },
-	{ target: 30, min: 28, max: 32 },
-	{ target: 45, min: 43, max: 46.5 },
-	{ target: 48, min: 46.5, max: 49.5 },
-	{ target: 50, min: 49.5, max: 52 },
-	{ target: 60, min: 58, max: 62.5 },
-	{ target: 72, min: 70, max: 74 },
-	{ target: 90, min: 88, max: 92 },
-	{ target: 100, min: 98, max: 102 },
-	{ target: 120, min: 118, max: 122 },
-	{ target: 144, min: 142, max: 146 }
-];
-
-const reRerun = /rerun|watch_party/;
+const reLang = /^([a-z]{2})(:?-([a-z]{2}))?$/;
 
 
-export default Model.extend({
+// noinspection JSValidateTypes
+export default Model.extend( /** @class TwitchStream */ {
 	/** @type {IntlService} */
 	intl: service(),
+	/** @type {SettingsService} */
 	settings: service(),
 
+	/** @type {TwitchUser} */
+	user: belongsTo( "twitch-user", { async: true } ),
+	/** @type {TwitchChannel} */
+	channel: belongsTo( "twitch-channel", { async: true } ),
+	/** @type {TwitchGame} */
+	game: belongsTo( "twitch-game", { async: true } ),
 
-	average_fps: attr( "number" ),
-	broadcast_platform: attr( "string" ),
-	channel: belongsTo( "twitchChannel", { async: false } ),
-	created_at: attr( "date" ),
-	delay: attr( "number" ),
-	game: attr( "string" ),
-	//is_playlist: attr( "boolean" ),
-	preview: belongsTo( "twitchImage", { async: false } ),
-	stream_type: attr( "string" ),
-	video_height: attr( "number" ),
-	viewers: attr( "number" ),
+	// "user_id" is already defined as the primaryKey of TwitchStream
+	// accessing the record's "user_id" can be done via "record.id"
+	/** @type {string} */
+	user_login: attr( "string" ),
+	/** @type {string} */
+	user_name: attr( "string" ),
+	/** @type {string} */
+	game_id: attr( "string" ),
+	/** @type {string} */
+	game_name: attr( "string" ),
+	/** @type {string} */
+	type: attr( "string" ),
+	/** @type {string} */
+	title: attr( "string" ),
+	/** @type {number} */
+	viewer_count: attr( "number" ),
+	/** @type {Date} */
+	started_at: attr( "date" ),
+	/** @type {string} */
+	language: attr( "string" ),
+	/** @type {TwitchImage} */
+	thumbnail_url: attr( "twitch-image", { width: 640, height: 360 } ),
+	/** @type {boolean} */
+	is_mature: attr( "boolean" ),
 
 
-	reVodcast: computed( "settings.content.streams.vodcast_regexp", function() {
-		const vodcast_regexp = get( this, "settings.content.streams.vodcast_regexp" );
-		if ( vodcast_regexp.length && !vodcast_regexp.trim().length ) {
-			return null;
-		}
-		try {
-			return new RegExp( vodcast_regexp || DEFAULT_VODCAST_REGEXP, "i" );
-		} catch ( e ) {
-			return null;
-		}
-	}),
-
-	// both properties are not documented in the v5 API
-	isVodcast: computed(
-		"broadcast_platform",
-		"stream_type",
-		"reVodcast",
-		"channel.status",
+	/** @type {(null|RegExp)} */
+	reVodcast: computed(
+		"settings.content.streams.vodcast_regexp",
+		/** @this {TwitchStream} */
 		function() {
-			if (
-				   reRerun.test( get( this, "broadcast_platform" ) )
-				|| reRerun.test( get( this, "stream_type" ) )
-			) {
-				return true;
+			const vodcast_regexp = this.settings.content.streams.vodcast_regexp;
+
+			if ( vodcast_regexp.length && !vodcast_regexp.trim().length ) {
+				return null;
 			}
-
-			const reVodcast = get( this, "reVodcast" );
-			const status = get( this, "channel.status" );
-
-			return reVodcast && status
-				? reVodcast.test( status )
-				: false;
+			try {
+				return new RegExp( vodcast_regexp || DEFAULT_VODCAST_REGEXP, "i" );
+			} catch ( e ) {
+				return null;
+			}
 		}
 	),
 
+	/** @type {boolean} */
+	isVodcast: computed(
+		"reVodcast",
+		"title",
+		/** @this {TwitchStream} */
+		function() {
+			const { reVodcast, title } = this;
 
-	hasFormatInfo: and( "video_height", "average_fps" ),
+			return reVodcast && title && reVodcast.test( title );
+		}
+	),
 
+	/** @type {string} */
+	titleStartedAt: computed(
+		"intl.locale",
+		"started_at",
+		/** @this {TwitchStream} */
+		function() {
+			const { started_at } = this;
 
-	titleCreatedAt: computed( "intl.locale", "created_at", function() {
-		const { created_at } = this;
-		const last24h = new Date() - created_at < 24 * 3600 * 1000;
-		return last24h
-			? this.intl.t( "models.twitch.stream.created-at.less-than-24h", { created_at } )
-			: this.intl.t( "models.twitch.stream.created-at.more-than-24h", { created_at } );
-	}),
+			return new Date() - started_at < 24 * 3600 * 1000
+				? this.intl.t( "models.twitch.stream.started-at.less-than-24h", { started_at } )
+				: this.intl.t( "models.twitch.stream.started-at.more-than-24h", { started_at } );
+		}
+	),
 
-	titleViewers: computed( "intl.locale", "viewers", function() {
-		return this.intl.t( "models.twitch.stream.viewers", { count: this.viewers } );
-	}),
+	/** @type {string} */
+	titleViewers: computed(
+		"intl.locale",
+		"viewer_count",
+		/** @this {TwitchStream} */
+		function() {
+			return this.intl.t( "models.twitch.stream.viewer_count", { count: this.viewer_count } );
+		}
+	),
 
-	resolution: computed( "video_height", function() {
-		// assume 16:9
-		const video_height = get( this, "video_height" );
-		const width = Math.round( ( 16 / 9 ) * video_height );
-		const height = Math.round( video_height );
+	/** @type {boolean} */
+	hasLanguage: computed(
+		"language",
+		/** @this {TwitchStream} */
+		function() {
+			const { language } = this;
 
-		return `${width}x${height}`;
-	}),
+			return !!language && language !== "other";
+		}
+	),
 
-	fps: computed( "average_fps", function() {
-		const average_fps = get( this, "average_fps" );
+	/** @type {boolean} */
+	hasBroadcasterLanguage: computed(
+		"language",
+		"channel.broadcaster_language",
+		/** @this {TwitchStream} */
+		function() {
+			const { language } = this;
+			// Ember.get() required here for ObjectProxy access
+			const broadcaster_language = get( this, "channel.broadcaster_language" );
 
-		if ( !average_fps ) { return null; }
+			const mLanguage = reLang.exec( language );
+			const mBroadcaster = reLang.exec( broadcaster_language );
 
-		const fpsRange = fpsRanges.find( fpsRange =>
-			   average_fps > fpsRange.min
-			&& average_fps <= fpsRange.max
-		);
+			// show the broadcaster_language only if it is set and
+			// 1. the language is not set or
+			// 2. the language differs from the broadcaster_language
+			//    WITHOUT comparing both lang variants
+			return !!mBroadcaster && ( !mLanguage || mLanguage[ 1 ] !== mBroadcaster[ 1 ] );
+		}
+	),
 
-		return fpsRange
-			? fpsRange.target
-			: Math.floor( average_fps );
-	})
+	/**
+	 * Load channel specific settings (without loading the TwitchUser belongsTo relationship)
+	 * @returns {Promise<Object>}
+	 */
+	async getChannelSettings() {
+		const { store, id } = this;
+
+		return await getChannelSettings( store, id );
+	}
 
 }).reopenClass({
-	toString() { return "kraken/streams"; }
+	toString() { return "helix/streams"; }
 });

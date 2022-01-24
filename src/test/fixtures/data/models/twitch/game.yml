@@ -1,0 +1,16 @@
+request:
+    method: "GET"
+    url: "https://api.twitch.tv/helix/games"
+    query:
+        - name: "id"
+          value: "1"
+        - name: "id"
+          value: "2"
+response:
+    data:
+        -   id: "1"
+            name: "some game"
+            box_art_url: "https://mock/twitch-game/1/box_art-{width}x{height}.png"
+        -   id: "2"
+            name: "another game"
+            box_art_url: "https://mock/twitch-game/2/box_art-{width}x{height}.png"
