@@ -1,6 +1,53 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## master
+
+### Twitch Helix API
+
+The application has been rewritten based on the Twitch Helix API.  
+Twitch's old Kraken API will be shut down at the end of February 2022.  
+**⚠️ Old versions of Streamlink Twitch GUI will stop working after that! ⚠️**
+
+The switch from Kraken to Helix introduces several breaking changes and unfortunately also removes a couple of features due to the difference of both APIs and the availability of certain data. New Helix API features have not been implemented yet, as the focus of this release is to re-implement the application's entire data structure, which affects almost all of its components.
+
+Please see [issue #849](https://github.com/streamlink/streamlink-twitch-gui/issues/849) and [pull request #852](https://github.com/streamlink/streamlink-twitch-gui/pull/852) for more details.
+
+### Breaking changes and feature removals
+
+- Authentication is now mandatory for all users.  
+  Data can not be retrieved anymore without user authentication on Twitch's Helix API. Due to different authentication permissions, a new login will be needed after upgrading.
+- The Featured Streams menu has been removed.
+- Games are now referenced by ID instead by name.  
+  Users who have set the application's homepage to a specific game will have to reset their homepage.
+- Channel follower numbers are not available anymore.  
+  [In addition to Twitch's removal of the API endpoints on Kraken and Helix for following and unfollowing channels in August 2021.](https://github.com/streamlink/streamlink-twitch-gui/issues/813#issuecomment-890420938)
+- Game viewers/streamers numbers are not available anymore.
+- Stream resolution+fps data is not available anymore.
+- The list of followed channels can't be sorted anymore.
+- The list of followed channels does not include the current/last stream title and game being played anymore.
+- The launch-random-stream button has been removed.
+- Searching for live streams has been removed.  
+  This is due to Twitch merging "live stream" and "user/channel" data in the search results. The data representation currently only shows channels instead of available live streams. This might be changed in the future.
+
+### Regular application changes and fixes
+
+- Changed the minimum version requirement of Streamlink to `2.4.0`.  
+  Please [upgrade Streamlink to the latest version](https://streamlink.github.io/install.html).
+- Changed game/stream thumbnails and user profile pictures to a higher resolution.
+- Fixed the data fetch size of the infinite scroll mechanism.  
+  It once again depends on the application's window size.
+- Fixed additional streams sometimes not being fetched, even if more data was available.  
+  This was caused by an unfixed bug in Twitch's Kraken API and how the infinite scroll mechanism was implemented.
+- Fixed followed channels menu not loading additional channels correctly.  
+  This was caused by an unfixed bug in Twitch's Kraken API.
+- Fixed StartupWMClass attribute in the Linux AppImage's launcher file. ([#839](https://github.com/streamlink/streamlink-twitch-gui/pull/839))
+- Upgraded NW.js to 0.60.0 (Chromium 97.0.4692.71 / NodeJS 17.3.0)
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.13.0...master)
+
+
 ## [v1.13.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.13.0) (2021-09-09)
 
 - Implemented Spanish translations (es) ([#818](https://github.com/streamlink/streamlink-twitch-gui/pull/818))
