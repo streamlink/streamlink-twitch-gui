@@ -1,15 +1,19 @@
 [<%= display_name %>](<%= homepage %>)
 ===
 
-### Release highlights (v<%= version %>)
+## 🎉 Release highlights (v<%= version %>)
 
-<%= changelog %> / [Wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki) / [Installation instructions](https://github.com/streamlink/streamlink-twitch-gui/wiki/Installation) / [Open issues](https://github.com/streamlink/streamlink-twitch-gui/issues) / [Project activity](https://github.com/streamlink/streamlink-twitch-gui/pulse/monthly) / [Chat](https://gitter.im/streamlink/streamlink-twitch-gui)
+<%= changelog %>
+
+## ⚙️ Installation and Configuration
+
+See [the project's wiki](https://github.com/streamlink/streamlink-twitch-gui/wiki) for detailed installation and configuration guides.
 
 <% if ( donation && donation.length ) { %>
-### Donate
+## ❤️ Support
 
-If you think that this application is helpful, please consider supporting its creator by donating.
-Thank you very much!
+If you think that Streamlink Twitch GUI is useful and if you want to keep the project alive, then please consider supporting its creator/maintainer by sending a small and optionally recurring tip via the available options listed below.  
+Your support is very much appreciated, thank you!
 
 <% JSON.parse( donation ).forEach(function( item ) { %>* [<%= item.text %>](<%= item.url %>)<% if ( item.coinaddress ) { %> (`<%= item.coinaddress %>`)<% } %>
 <% }) %>
