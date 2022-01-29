@@ -2,26 +2,21 @@
 ===
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] [![Gitter IRC][badge-gitter]][Gitter] [![Build status][badge-actions]][Github-actions] [![Code coverage][badge-codecov]][Codecov]
 
-**A multi platform [Twitch.tv][Twitch] browser for [Streamlink][Streamlink]**
+**A multi-platform [Twitch.tv][Twitch] browser for [Streamlink][Streamlink]**
 
 [![Streamlink Twitch GUI][Preview]][Releases]
 
 
-## Livestreamer Twitch GUI has been renamed
+## ℹ️ Description
 
-*Streamlink Twitch GUI*, previously known as *Livestreamer Twitch GUI*, has been renamed in early december 2016. A comment regarding this change can be found in the thread ["The future of Livestreamer Twitch GUI"][Application-rename].
+A graphical user interface on top of the [Streamlink][Streamlink] command line interface.
 
-
-## Description
-
-A graphical user interface on top of the [Streamlink][Streamlink] command line interface.  
-
-Streamlink Twitch GUI is a [NW.js][NW.js] application, which means that it is a web application written in JavaScript ([EmberJS][EmberJS]), HTML ([Handlebars][Handlebars]) and CSS ([LessCSS][LessCSS]) and is being run by a [Node.js][Node.js] powered version of [Chromium][Chromium].
+Streamlink Twitch GUI is an [NW.js][NW.js] application, which means that it is a web application written in JavaScript ([EmberJS][EmberJS]), HTML ([Handlebars][Handlebars]) and CSS ([LessCSS][LessCSS]) and is being run by a [Node.js][Node.js] powered version of [Chromium][Chromium].
 
 [Recent releases][Releases] / [Changelog][Changelog] / [Wiki][Wiki] / [Chat][Gitter]
 
 
-## Features
+## 👍 Features
 
 * Available on Windows, macOS and Linux
 * Watch streams in the video player of your choice via Streamlink
@@ -39,7 +34,7 @@ Streamlink Twitch GUI is a [NW.js][NW.js] application, which means that it is a 
 * Command line parameters for automation purposes
 
 
-## Why
+## 💡 Why
 
 One of the reasons for having bad viewing experiences on [Twitch.tv][Twitch] is the implementation of their resource-heavy website and HTML5 video player. Especially on mobile desktop devices, high CPU and memory usage and lack of GPU acceleration of the web browser can cause major issues like buffering, stuttering or low video playback frame rates, all while draining the device's battery and spinning up its fans. Even on desktop computers, watching streams on Twitch.tv while multi-tasking can be an issue.
 
@@ -48,7 +43,7 @@ With Streamlink Twitch GUI, you're not dependent on your web browser and streams
 Please bear in mind that you're bypassing any ads run by Twitch by using this software. If you want to support [Twitch][Twitch] or a single broadcaster, please consider buying [Twitch Prime][TwitchPrime] or subscribing to the broadcaster's channel. Thank you!
 
 
-## Download
+## 📦 Download
 
 ### Stable release
 
@@ -65,7 +60,7 @@ If you want to test the latest version on your own, you can do this by cloning t
 Please don't forget to report any bugs you may encounter. Thank you very much for helping!
 
 
-## Build
+## 🔨 Build
 
 Building the application on your own is simple. Just make sure that the latest stable versions of [Git][Git], [Node.js][Node.js] and [Yarn][yarn] are installed on your system.  
 Then run the following lines to clone the repository, to install all dependencies and to start the build process. You will then find the built application inside the `build/releases` folder. See [CONTRIBUTING.md][Contributing] for more detailed instructions.
@@ -78,7 +73,7 @@ yarn run grunt release
 ```
 
 
-## Contribute
+## 🤝 Contribute
 
 Every contribution is welcome! Please read [CONTRIBUTING.md][Contributing] first.
 
@@ -86,19 +81,18 @@ Do you speak another language? Translating or improving translations is a good a
 Please see the [Translating][Translating] section on the wiki for all the necessary informations and the beginner's translating guide.
 
 
-## Support
+## ❤️ Support
 
-If you think that this application is helpful, please consider supporting its creator by sending a small, optionally recurring, tip.
+If you think that Streamlink Twitch GUI is useful and if you want to keep the project alive, then please consider supporting its creator/maintainer by sending a small and optionally recurring tip via the available options listed below.  
+Your support is very much appreciated, thank you!
 
 * [GitHub Sponsors](https://github.com/users/bastimeyer/sponsorship)
 * [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YUCGRLVALHS8C&item_name=Streamlink%20Twitch%20GUI)
 * [Paypal.me](https://paypal.me/bastimeyer123)
 * [Bitcoin](https://blockchain.info/qr?data=1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8) (`1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8`)
 
-Thank you very much for your support!
 
-
-  [Preview]: https://user-images.githubusercontent.com/467294/32060296-a08d7b44-ba6e-11e7-9793-8ef60fc3e1f0.jpg "Preview image"
+  [Preview]: https://user-images.githubusercontent.com/467294/151660267-97a8c0a3-62b3-4aa5-b960-c307da1b4fb2.png "Preview image"
   [Website]: https://streamlink.github.io/streamlink-twitch-gui/ "Streamlink Twitch GUI website"
   [Releases]: https://github.com/streamlink/streamlink-twitch-gui/releases "Streamlink Twitch GUI Releases"
   [Issues]: https://github.com/streamlink/streamlink-twitch-gui/issues "Streamlink Twitch GUI Issues"
@@ -129,4 +123,3 @@ Thank you very much for your support!
   [badge-actions]: https://img.shields.io/github/workflow/status/streamlink/streamlink-twitch-gui/Test,%20build%20and%20deploy/master?event=push&style=flat-square
   [badge-codecov]: https://img.shields.io/codecov/c/github/streamlink/streamlink-twitch-gui.svg?style=flat-square
   [badge-gitter]: https://img.shields.io/gitter/room/streamlink/streamlink-twitch-gui.svg?style=flat-square "Gitter IRC"
-  [Application-rename]: https://github.com/streamlink/streamlink-twitch-gui/issues/331 "The future of Livestreamer Twitch GUI"
