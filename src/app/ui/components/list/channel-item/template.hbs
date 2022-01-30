@@ -6,5 +6,9 @@
 		{{#if content.channel.broadcaster_language}}{{flag-icon type="broadcaster" lang=content.channel.broadcaster_language}}{{/if}}
 		<span>{{#link-to "channel" content.id}}{{content.detailedName}}{{/link-to}}</span>
 	</header>
-	{{embedded-links tagName="div" class="status" text=content.description}}
+	{{#if content.description}}
+		{{embedded-links tagName="div" class="status" text=content.description}}
+	{{else}}
+		<div class="status status-missing">{{t "components.channel-item.no-status"}}</div>
+	{{/if}}
 </div>
