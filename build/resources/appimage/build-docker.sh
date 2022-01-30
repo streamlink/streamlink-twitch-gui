@@ -4,7 +4,7 @@ set -e
 APPDIR="${1}"
 INSTALLDIR="${2}"
 VERSION="${3}"
-LIBDIR="${APPDIR}/${INSTALLDIR}/lib"
+LIBDIR="${APPDIR}/usr/lib"
 
 
 # ----
@@ -38,6 +38,7 @@ install_dependencies() {
   yum install -y --setopt=tsflags= "${DEPS[@]}"
 
   log "Copying libraries and license files"
+  ( set -x; mkdir -p "${LIBDIR}" )
   for lib in "${!DEPS[@]}"; do
     ( set -x; install -m755 -t "${LIBDIR}" "${lib}" )
     for path in $(repoquery --list "${DEPS["${lib}"]}" \

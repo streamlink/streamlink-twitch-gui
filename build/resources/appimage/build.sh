@@ -50,6 +50,7 @@ cd "${tempdir}"
 
 appdir="${NAME}.AppDir"
 installdir="opt/${NAME}"
+libdir="usr/lib"
 
 
 # ----
@@ -120,7 +121,7 @@ EOF
   cat > "${appdir}/AppRun" <<EOF
 #!/usr/bin/env bash
 HERE=\$(dirname "\$(readlink -f "\${0}")")
-export LD_LIBRARY_PATH="\${HERE}/${installdir}/lib\${LD_LIBRARY_PATH:+":\${LD_LIBRARY_PATH}"}"
+export LD_LIBRARY_PATH="\${HERE}/${libdir}\${LD_LIBRARY_PATH:+":\${LD_LIBRARY_PATH}"}"
 "\${HERE}/usr/bin/${NAME}" "\${@}"
 EOF
   chmod +x "${appdir}/AppRun"
