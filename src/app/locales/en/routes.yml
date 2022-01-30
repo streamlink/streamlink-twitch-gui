@@ -40,6 +40,7 @@ channel:
         teams: Teams
         settings: Settings
     offline: is offline right now
+    no-status: No channel description
     details:
         header: Channel statistics
         name:

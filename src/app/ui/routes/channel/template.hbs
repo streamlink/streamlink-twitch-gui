@@ -17,7 +17,11 @@
 				{{embedded-links text=stream.title classNames="status"}}
 			{{else}}
 				<div class="stats offline"><i class="fa fa-bed"></i> {{t "routes.channel.offline"}}</div>
-				{{embedded-links text=user.description classNames="status"}}
+				{{#if user.description}}
+					{{embedded-links text=user.description classNames="status"}}
+				{{else}}
+					<div class="status status-missing">{{t "routes.channel.no-status"}}</div>
+				{{/if}}
 			{{/if}}
 		</div>
 	</header>
