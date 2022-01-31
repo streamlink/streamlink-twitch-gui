@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## master
+## [v2.0.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.0.0) (2022-01-31)
 
 ### Twitch Helix API
 
@@ -46,7 +46,7 @@ Please see [issue #849](https://github.com/streamlink/streamlink-twitch-gui/issu
 - \[dev\] Bumped min. NodeJS requirement to 14.
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.13.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.13.0...v2.0.0)
 
 
 ## [v1.13.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v1.13.0) (2021-09-09)
