@@ -41,8 +41,9 @@ Please see [issue #849](https://github.com/streamlink/streamlink-twitch-gui/issu
   This was caused by an unfixed bug in Twitch's Kraken API and how the infinite scroll mechanism was implemented.
 - Fixed followed channels menu not loading additional channels correctly.  
   This was caused by an unfixed bug in Twitch's Kraken API.
-- Fixed StartupWMClass attribute in the Linux AppImage's launcher file. ([#839](https://github.com/streamlink/streamlink-twitch-gui/pull/839))
+- Fixed StartupWMClass attribute in the Linux launcher files. ([#839](https://github.com/streamlink/streamlink-twitch-gui/pull/839))
 - Upgraded NW.js to 0.60.0 (Chromium 97.0.4692.71 / NodeJS 17.3.0)
+- \[dev\] Bumped min. NodeJS requirement to 14.
 
 
 [Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v1.13.0...master)
