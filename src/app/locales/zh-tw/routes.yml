@@ -40,6 +40,7 @@ channel:
         teams: 團隊
         settings: 設定
     offline: 目前離線中
+    no-status: 無頻道描述
     details:
         header: 頻道統計
         name:
