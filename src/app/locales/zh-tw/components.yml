@@ -1,5 +1,7 @@
 channel-button:
     title: "追隨 {name}"
+channel-item:
+    no-status: 無頻道描述
 documentation-link:
     title: 檢視線上文件
 drop-down-selection:
