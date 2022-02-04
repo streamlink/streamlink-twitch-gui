@@ -1,8 +1,11 @@
 import { module, test } from "qunit";
-import { buildOwner, runDestroy } from "test-utils";
+import { setupTest } from "ember-qunit";
+import { buildResolver } from "test-utils";
 import { setupStore } from "store-utils";
-import { setOwner } from "@ember/application";
+import sinon from "sinon";
+
 import { get, set } from "@ember/object";
+import { on } from "@ember/object/evented";
 import Adapter from "ember-data/adapter";
 import attr from "ember-data/attr";
 import Model from "ember-data/model";
@@ -10,128 +13,122 @@ import Model from "ember-data/model";
 import SettingsService from "services/settings";
 
 
-let owner, env;
+module( "services/settings", function( hooks ) {
+	setupTest( hooks, {
+		resolver: buildResolver({
+			Settings: Model.extend({
+				foo: attr( "string", { defaultValue: "bar" } )
+			})
+		})
+	});
 
+	/** @typedef {TestContext} TestContextSettingsService */
+	/** @this TestContextSettingsService */
+	hooks.beforeEach(function() {
+		setupStore( this.owner );
 
-module( "services/settings", {
-	beforeEach() {
-		owner = buildOwner();
-		owner.register( "model:settings", Model.extend({
-			foo: attr( "string", { defaultValue: "bar" } )
+		this.findAllStub = sinon.stub().resolves([]);
+		this.createRecordStub = sinon.stub().resolves();
+		this.updateRecordStub = sinon.stub().resolves();
+
+		this.onInitializedSpy = sinon.spy();
+		this.onDidUpdateSpy = sinon.spy();
+
+		this.owner.register( "adapter:settings", Adapter.extend({
+			findAll: this.findAllStub,
+			createRecord: this.createRecordStub,
+			updateRecord: this.updateRecordStub
 		}) );
 
-		env = setupStore( owner );
-	},
-
-	afterEach() {
-		runDestroy( owner );
-		owner = env = null;
-	}
-});
-
-
-test( "Non existing record", async assert => {
-
-	assert.expect( 9 );
-
-	owner.register( "adapter:settings", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls findAll()" );
-			return [];
-		},
-		async createRecord() {
-			assert.ok( true, "Calls createRecord()" );
-		},
-		async updateRecord() {
-			assert.ok( true, "Calls updateRecord()" );
-		}
-	}) );
-
-	assert.ok( SettingsService.isServiceFactory, "Is a service factory object" );
-
-	const settingsService = SettingsService.extend({
-		init() {
-			setOwner( this, owner );
-			this._super( ...arguments );
-		}
-	}).create();
-
-	assert.strictEqual(
-		get( settingsService, "content" ),
-		null,
-		"Doesn't have content initially"
-	);
-	assert.strictEqual(
-		get( settingsService, "foo" ),
-		undefined,
-		"Foo property does not exist yet"
-	);
-
-	await new Promise( resolve => {
-		settingsService.on( "initialized", resolve );
+		this.owner.register( "service:settings", SettingsService.extend({
+			_onInitialized: on( "initialized", this.onInitializedSpy ),
+			_onDidUpdate: on( "didUpdate", this.onDidUpdateSpy )
+		}) );
 	});
 
-	assert.ok( env.store.hasRecordForId( "settings", 1 ), "Settings record with ID 1 exists" );
 
-	assert.strictEqual(
-		get( settingsService, "foo" ),
-		"bar",
-		"Properties are proxied once initialized"
-	);
+	/** @this TestContextSettingsService */
+	test( "Is Service", function( assert ) {
+		assert.ok( SettingsService.isServiceFactory, "Is a service factory object" );
+	});
 
-	await new Promise( resolve => {
-		settingsService.on( "didUpdate", () => {
-			assert.ok( true, "Supports the didUpdate event" );
-			resolve();
+	/** @this TestContextSettingsService */
+	test( "Non existing record", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+		/** @type {SettingsService} */
+		const settingsService = this.owner.lookup( "service:settings" );
+
+		assert.notOk( this.onInitializedSpy.called, "Not yet initialized" );
+		assert.strictEqual(
+			get( settingsService, "content" ),
+			null,
+			"Doesn't have content initially"
+		);
+		assert.strictEqual(
+			get( settingsService, "foo" ),
+			undefined,
+			"Foo property does not exist yet"
+		);
+
+		await new Promise( resolve => {
+			settingsService.on( "initialized", resolve );
 		});
-		set( settingsService, "foo", "baz" );
-		get( settingsService, "content" ).save();
+
+		assert.ok( this.onInitializedSpy.calledOnce, "Is initialized now" );
+		assert.ok( this.createRecordStub.calledOnce, "Creates record if none exists" );
+		assert.notOk( this.updateRecordStub.called, "Doesn't call updateRecord" );
+		assert.notOk( this.onDidUpdateSpy.called, "Didn't update settings yet" );
+		assert.ok( store.hasRecordForId( "settings", 1 ), "Settings record with ID 1 exists" );
+		assert.strictEqual(
+			get( settingsService, "foo" ),
+			"bar",
+			"Properties are proxied once initialized"
+		);
+
+		await new Promise( resolve => {
+			settingsService.on( "didUpdate", resolve );
+			set( settingsService, "foo", "baz" );
+			get( settingsService, "content" ).save();
+		});
+		assert.ok( this.updateRecordStub.calledOnce, "Has updated the record" );
+		assert.ok( this.onDidUpdateSpy.calledOnce, "Triggers the didUpdate event" );
 	});
 
-});
+	/** @this TestContextSettingsService */
+	test( "Existing record", async function( assert ) {
+		this.findAllStub.resolves([ { id: 1 } ]);
 
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+		/** @type {SettingsService} */
+		const settingsService = this.owner.lookup( "service:settings" );
 
-test( "Existing record", async assert => {
+		assert.notOk( this.onInitializedSpy.called, "Not yet initialized" );
+		assert.strictEqual(
+			get( settingsService, "content" ),
+			null,
+			"Doesn't have content initially"
+		);
+		assert.strictEqual(
+			get( settingsService, "foo" ),
+			undefined,
+			"Foo property does not exist yet"
+		);
 
-	assert.expect( 5 );
+		await new Promise( resolve => {
+			settingsService.on( "initialized", resolve );
+		});
 
-	owner.register( "adapter:settings", Adapter.extend({
-		async findAll() {
-			assert.ok( true, "Calls findAll()" );
-			return [{
-				id: 1
-			}];
-		}
-	}) );
-
-	const settingsService = SettingsService.extend({
-		init() {
-			setOwner( this, owner );
-			this._super( ...arguments );
-		}
-	}).create();
-
-	assert.strictEqual(
-		get( settingsService, "content" ),
-		null,
-		"Doesn't have content initially"
-	);
-	assert.strictEqual(
-		get( settingsService, "foo" ),
-		undefined,
-		"Foo property does not exist yet"
-	);
-
-	await new Promise( resolve => {
-		settingsService.on( "initialized", resolve );
+		assert.ok( this.onInitializedSpy.calledOnce, "Is initialized now" );
+		assert.notOk( this.createRecordStub.called, "Doesn't create new record if one exists" );
+		assert.notOk( this.updateRecordStub.called, "Doesn't call updateRecord" );
+		assert.notOk( this.onDidUpdateSpy.called, "Didn't update settings yet" );
+		assert.ok( store.hasRecordForId( "settings", 1 ), "Settings record with ID 1 exists" );
+		assert.strictEqual(
+			get( settingsService, "foo" ),
+			"bar",
+			"Properties are proxied once initialized"
+		);
 	});
-
-	assert.ok( env.store.hasRecordForId( "settings", 1 ), "Settings record with ID 1 exists" );
-
-	assert.strictEqual(
-		get( settingsService, "foo" ),
-		"bar",
-		"Properties are proxied once initialized"
-	);
-
 });
