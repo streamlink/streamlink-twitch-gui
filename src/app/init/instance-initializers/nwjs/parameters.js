@@ -7,7 +7,13 @@ import {
 	ARG_LAUNCH,
 	ARG_GOTO
 } from "nwjs/argv";
-import { setMaximized, setMinimized, setVisibility, setShowInTaskbar } from "nwjs/Window";
+import {
+	setFocused,
+	setVisibility,
+	setShowInTaskbar,
+	toggleMaximized,
+	toggleMinimized
+} from "nwjs/Window";
 import resetWindow from "nwjs/Window/reset";
 import onChangeIntegrations from "./integrations";
 
@@ -18,9 +24,9 @@ export default async function( application, argv ) {
 		await resetWindow( true );
 	}
 
-	// maximize window
+	// (un)maximize window
 	if ( argv[ ARG_MAX ] ) {
-		setMaximized( true );
+		toggleMaximized();
 	}
 
 	if ( argv[ ARG_TRAY ] ) {
@@ -36,11 +42,13 @@ export default async function( application, argv ) {
 
 		// show application window
 		setVisibility( true );
+		// and focus window
+		setFocused( true );
 	}
 
-	// minimize window (after the visibility has changed)
+	// (un)minimize window (after the visibility has changed)
 	if ( argv[ ARG_MIN ] ) {
-		setMinimized( true );
+		toggleMinimized();
 	}
 
 	// go to a new route (or refresh current one)
