@@ -52,10 +52,13 @@ export default async function( application, argv ) {
 
 	// launch a stream by user name
 	if ( argv[ ARG_LAUNCH ] ) {
-		const store = application.lookup( "service:store" );
-		const streamingService = application.lookup( "service:streaming" );
-		const user = await store.findRecord( "twitchUser", argv[ ARG_LAUNCH ] );
-		const twitchStream = await get( user, "stream" );
-		streamingService.startStream( twitchStream );
+		try {
+			const store = application.lookup( "service:store" );
+			const streamingService = application.lookup( "service:streaming" );
+			const query = { user_login: argv[ ARG_LAUNCH ] };
+			const twitchStream = await store.queryRecord( "twitch-stream", query );
+			// don't await startStream promise
+			streamingService.startStream( twitchStream );
+		} catch ( e ) {}
 	}
 }
