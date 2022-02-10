@@ -13,92 +13,125 @@ module( "ui/routes/-mixins/routes/infinite-scroll/css", function( hooks ) {
 	/** @typedef {TestContext} TestContextInfiniteScrollMixinCss */
 	/** @this {TestContextInfiniteScrollMixinCss} */
 	hooks.beforeEach(function() {
-		this.querySelectorStub = sinon.stub();
+		const fakeDocument = {
+			styleSheets: [],
+			querySelector: new Function(),
+			body: { clientHeight: 1000 }
+		};
+		this.styleSheetsStub = sinon.stub( fakeDocument, "styleSheets" ).value( [] );
+		this.querySelectorStub = sinon.stub( fakeDocument, "querySelector" ).returns();
 
-		this.getModule = cssContent => {
+		this.setCss = cssContent => {
 			const styleNode = document.createElement( "style" );
 			styleNode.innerText = cssContent;
 			document.head.appendChild( styleNode );
-
-			const module = infiniteScrollMixinCssInjector({
-				"nwjs/Window": {
-					window: {
-						CSSMediaRule: window.CSSMediaRule,
-						CSSStyleRule: window.CSSStyleRule,
-						innerWidth: 1000,
-						document: {
-							styleSheets: [ styleNode.sheet ],
-							querySelector: this.querySelectorStub,
-							body: { clientHeight: 1000 }
-						}
-					}
-				}
-			});
-
+			this.styleSheetsStub.value([ styleNode.sheet ]);
 			document.head.removeChild( styleNode );
-
-			return module;
 		};
+
+		this.subject = infiniteScrollMixinCssInjector({
+			"nwjs/Window": {
+				window: {
+					CSSMediaRule: window.CSSMediaRule,
+					CSSStyleRule: window.CSSStyleRule,
+					innerWidth: 1000,
+					document: fakeDocument
+				}
+			}
+		});
 	});
 
 
 	/** @this {TestContextInfiniteScrollMixinCss} */
-	test( "Empty media rules", function( assert ) {
-		const { cssMinWidthRules, cachedMinHeights } = this.getModule( css`
+	test( "No matching CSS rules", function( assert ) {
+		const { getCachedMinWidths, getCachedMinHeights } = this.subject;
+		this.setCss( css`
 			.foo { color: red; }
 		` );
 
-		assert.propEqual( cssMinWidthRules, [], "Empty min width rules" );
-		assert.propEqual( cachedMinHeights, {}, "Empty cached min heights" );
+		assert.propEqual( Array.from( getCachedMinWidths() ), [], "Empty min widths" );
+		assert.propEqual( Array.from( getCachedMinHeights() ), [], "Empty min heights" );
 	});
 
 	/** @this {TestContextInfiniteScrollMixinCss} */
-	test( "cssMinWidthRules", function( assert ) {
-		const { cssMinWidthRules } = this.getModule( css`
+	test( "cachedMinWidths", function( assert ) {
+		const { getCachedMinWidths } = this.subject;
+		assert.propEqual( Array.from( getCachedMinWidths() ), [], "Cache is empty" );
+
+		this.setCss( css`
 			/* max only */
 			@media (max-width: 250px) { .foo { width: 100%; } }
+			@media (max-width: 250px) { .bar { width: 100%; } }
 			/* max first, min second */
 			@media (max-width: 500px) and (min-width: 250px) { .foo { width: 50%; } }
+			@media (max-width: 500px) and (min-width: 250px) { .bar { width: 33.333%; } }
 			/* min first, max second */
 			@media (min-width: 500px) and (max-width: 750px) { .foo { width: 33.333%; } }
+			@media (min-width: 500px) and (max-width: 750px) { .bar { width: 25%; } }
 			/* min only */
 			@media (min-width: 1000px) { .foo { width: 25%; } }
 			/* empty */
 			@media (min-width: 1000px) {}
 		` );
-
 		assert.propEqual(
-			cssMinWidthRules.map( elem => elem.cssText.replace( /\s/g, "" ) ),
+			Array.from( getCachedMinWidths() ),
 			[
-				"@media(max-width:500px)and(min-width:250px){.foo{width:50%;}}",
-				"@media(min-width:500px)and(max-width:750px){.foo{width:33.333%;}}",
-				"@media(min-width:1000px){.foo{width:25%;}}"
+				[ ".foo", [
+					{ minWidth: 250, numItems: 2 },
+					{ minWidth: 500, numItems: 3 },
+					{ minWidth: 1000, numItems: 4 }
+				] ],
+				[ ".bar", [
+					{ minWidth: 250, numItems: 3 },
+					{ minWidth: 500, numItems: 4 }
+				] ]
 			],
-			"Finds all media rules containing min-width and optional max-width constraints"
+			"Finds all min-width media rules and calculates number of items for each selector"
+		);
+
+		this.setCss( css`
+			@media ( min-width: 1500px ) { .baz { width: 100%; } }
+		` );
+		assert.propEqual(
+			Array.from( getCachedMinWidths().keys() ),
+			[ ".foo", ".bar" ],
+			"Doesn't rebuild cache on consecutive calls"
 		);
 	});
 
 	/** @this {TestContextInfiniteScrollMixinCss} */
 	test( "cachedMinHeights", function( assert ) {
-		const { cachedMinHeights } = this.getModule( css`
+		const { getCachedMinHeights } = this.subject;
+		assert.propEqual( Array.from( getCachedMinHeights() ), [], "Cache is empty initially" );
+
+		this.setCss( css`
 			.foo, .bar { min-height: 100px; }
 			.baz { min-height: 200px; }
 		` );
-
 		assert.propEqual(
-			cachedMinHeights,
-			{
-				".foo": 100,
-				".bar": 100,
-				".baz": 200
-			},
+			Array.from( getCachedMinHeights() ),
+			[
+				[ ".foo", 100 ],
+				[ ".bar", 100 ],
+				[ ".baz", 200 ]
+			],
 			"Finds multiple min-height declarations"
+		);
+
+		this.setCss( css`
+			.qux { min-height: 300px; }
+		` );
+		assert.propEqual(
+			Array.from( getCachedMinHeights().keys() ),
+			[ ".foo", ".bar", ".baz" ],
+			"Doesn't rebuild cache on consecutive calls"
 		);
 	});
 
 	/** @this {TestContextInfiniteScrollMixinCss} */
 	test( "getNeededColumns", function( assert ) {
-		const { getNeededColumns } = this.getModule( css`
+		const { getNeededColumns } = this.subject;
+		this.setCss( css`
 			@media (max-width: 500px) and (min-width: 250px) { .foo { width: 50%; } }
 			@media (max-width: 750px) and (min-width: 500px) { .foo { width: 33.333%; } }
 			@media (min-width: 1000px) { .foo { width: 25%; } }
@@ -117,7 +150,8 @@ module( "ui/routes/-mixins/routes/infinite-scroll/css", function( hooks ) {
 
 	/** @this {TestContextInfiniteScrollMixinCss} */
 	test( "getNeededRows", function( assert ) {
-		const { getNeededRows } = this.getModule( css`
+		const { getNeededRows } = this.subject;
+		this.setCss( css`
 			.foo, .bar { min-height: 100px; }
 			.baz { min-height: 200px; }
 		` );

@@ -1,91 +1,128 @@
 import { window } from "nwjs/Window";
 
 
+const { ceil, floor } = Math;
+const { document, CSSMediaRule, CSSStyleRule } = window;
+
 const defaultContainerSelector = "body > .wrapper";
-
-const {
-	document,
-	CSSMediaRule,
-	CSSStyleRule
-} = window;
-
-const { hasOwnProperty } = {};
-
-const {
-	ceil,
-	floor
-} = Math;
-
 
 // eslint-disable-next-line max-len
 const reMinWidth = /^(?:\(max-width:\s*\d+px\)\s*and\s*)?\(min-width:\s*(\d+)px\)(?:\s*and\s*\(max-width:\s*\d+px\))?$/;
-const cachedMinWidths = {};
 
 
-const cssRules = [ ...document.styleSheets ]
-	.reduce( ( rules, stylesheet ) => {
-		rules.push( ...stylesheet.rules );
-		return rules;
-	}, [] );
+/** @type {(CSSMediaRule|CSSStyleRule)[]} */
+const cssRules = [];
+
+/** @typedef {{minWidth: number, numItems: number}} MinWidthItem */
+/** @type {Map<string, MinWidthItem[]>} */
+const cachedMinWidths = new Map();
+/** @type {Map<string, number>} */
+const cachedMinHeights = new Map();
 
 
-export const cssMinWidthRules = cssRules
-	.filter( rule =>
-		   rule instanceof CSSMediaRule
-		&& rule.media.length === 1
-		&& reMinWidth.test( rule.media[ 0 ] )
-		&& rule.cssRules.length > 0
-	);
-
-export const cachedMinHeights = cssRules
-	.filter( rule =>
-		   rule instanceof CSSStyleRule
-		&& rule.style.minHeight !== ""
-	)
-	.reduce( ( cache, rule ) => {
-		const height = parseInt( rule.style.minHeight, 10 );
-		rule.selectorText.split( "," ).forEach( selector => {
-			cache[ selector.trim() ] = height;
-		});
-		return cache;
-	}, {} );
-
-
-export function getNeededColumns( selector, width = window.innerWidth ) {
-	let cache;
-
-	if ( hasOwnProperty.call( cachedMinWidths, selector ) ) {
-		cache = cachedMinWidths[ selector ];
-
-	} else {
-		/*
-		 * Get a list of all min-width media queries and their item widths for a specific selector.
-		 * These media queries have been defined by the lesscss function .dynamic-elems-per-row()
-		 */
-		const data = cssMinWidthRules
-			.filter( rule => rule.cssRules[ 0 ].selectorText === selector );
-
-		if ( !data.length ) {
-			throw new Error( "Invalid selector" );
+/**
+ * @return {CSSStyleRule[]}
+ */
+function findCssRules() {
+	if ( !cssRules.length ) {
+		for ( const stylesheet of document.styleSheets ) {
+			cssRules.push( ...Array.from( stylesheet.cssRules )
+				.filter( rule => rule instanceof CSSMediaRule || rule instanceof CSSStyleRule )
+			);
 		}
-
-		cache = cachedMinWidths[ selector ] = data.map( rule => ({
-			minWidth: floor( reMinWidth.exec( rule.media[ 0 ] )[ 1 ] ),
-			numItems: floor( 100 / parseInt( rule.cssRules[ 0 ].style.width, 10 ) )
-		}) );
 	}
 
-	return cache
+	return cssRules;
+}
+
+
+/**
+ * @return {Map<string, MinWidthItem[]>}
+ */
+export function getCachedMinWidths() {
+	if ( !cachedMinWidths.size ) {
+		for ( const cssMediaRule of findCssRules() ) {
+			if (
+				   !( cssMediaRule instanceof CSSMediaRule )
+				|| cssMediaRule.media.length !== 1
+				|| !reMinWidth.test( cssMediaRule.media[ 0 ] )
+				|| !cssMediaRule.cssRules.length
+			) {
+				continue;
+			}
+
+			const firstCssRule = cssMediaRule.cssRules.item( 0 );
+			const firstMediaQuery = cssMediaRule.media.item( 0 );
+
+			const selector = firstCssRule.selectorText;
+			let minWidthItems = cachedMinWidths.get( selector );
+			if ( !minWidthItems ) {
+				minWidthItems = [];
+				cachedMinWidths.set( selector, minWidthItems );
+			}
+
+			const minWidth = floor( reMinWidth.exec( firstMediaQuery )[ 1 ] );
+			const numItems = floor( 100 / parseInt( firstCssRule.style.width, 10 ) );
+
+			minWidthItems.push({ minWidth, numItems });
+		}
+	}
+
+	return cachedMinWidths;
+}
+
+/**
+ * @return {Map<string, number>}
+ */
+export function getCachedMinHeights() {
+	if ( !cachedMinHeights.size ) {
+		for ( const cssStyleRule of findCssRules() ) {
+			if (
+				   !( cssStyleRule instanceof CSSStyleRule )
+				|| cssStyleRule.style.minHeight === ""
+			) {
+				continue;
+			}
+
+			const height = parseInt( cssStyleRule.style.minHeight, 10 );
+			for ( const selector of cssStyleRule.selectorText.split( "," ) ) {
+				cachedMinHeights.set( selector.trim(), height );
+			}
+		}
+	}
+
+	return cachedMinHeights;
+}
+
+
+/**
+ * @param {string} selector
+ * @param {number?} width
+ * @return {number}
+ */
+export function getNeededColumns( selector, width = window.innerWidth ) {
+	const minWidths = getCachedMinWidths();
+	const minWidthItems = minWidths.get( selector );
+	if ( !minWidthItems ) {
+		throw new Error( `Can't calculate needed columns, invalid selector: ${selector}` );
+	}
+
+	return minWidthItems
 		.reduce( ( current, next ) => width < next.minWidth ? current : next )
 		.numItems;
 }
 
+/**
+ * @param {string} selector
+ * @param {string?} containerSelector
+ * @return {number}
+ */
 export function getNeededRows( selector, containerSelector = defaultContainerSelector ) {
-	if ( !hasOwnProperty.call( cachedMinHeights, selector ) ) {
-		throw new Error( "Invalid selector" );
+	const minHeights = getCachedMinHeights();
+	const minHeight = minHeights.get( selector );
+	if ( !minHeight ) {
+		throw new Error( `Can't calculate needed rows, invalid selector: ${selector}` );
 	}
-
-	const minHeight = cachedMinHeights[ selector ];
 
 	// the route's view hasn't been inserted yet: choose the parent element
 	const container = document.querySelector( containerSelector ) || document.body;
