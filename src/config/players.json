@@ -13,8 +13,10 @@
 			"darwin": [
 				"/Applications/VLC.app/Contents/MacOS",
 				"$HOME/Applications/VLC.app/Contents/MacOS",
+				"/opt/homebrew/bin",
+				"/opt/local/bin",
 				"/usr/local/bin",
-				"/opt/local/bin"
+				"/usr/bin"
 			],
 			"linux": [
 				"/usr/bin",
@@ -74,9 +76,10 @@
 			"darwin": [
 				"/Applications/mpv.app/Contents/MacOS",
 				"$HOME/Applications/mpv.app/Contents/MacOS",
-				"/usr/bin",
+				"/opt/homebrew/bin",
+				"/opt/local/bin",
 				"/usr/local/bin",
-				"/opt/local/bin"
+				"/usr/bin"
 			],
 			"linux": [
 				"/usr/bin",

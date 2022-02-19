@@ -31,6 +31,7 @@
 					"%PROGRAMFILES(X86)%\\Streamlink\\bin"
 				],
 				"darwin": [
+					"/opt/homebrew/bin",
 					"/usr/local/bin",
 					"/usr/bin",
 					"/Library/Frameworks/Python.framework/Versions/Current/bin"
