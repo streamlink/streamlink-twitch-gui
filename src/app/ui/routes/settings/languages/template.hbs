@@ -4,21 +4,17 @@
 	(t "settings.languages.filter.description")
 	icon="fa-filter"
 }}
-	{{check-box
-		checked=model.streams.languages_fade
-		label=(t "settings.languages.filter.values.fade.text")
-		description=(t "settings.languages.filter.values.fade.description" htmlSafe=true)
-		disabled=(bool-or
-			(bool-not hasAnySelection)
-			(bool-and model.streams.languages_filter hasSingleSelection)
-		)
+	{{#radio-buttons
+		value=model.streams.languages_filter
+		content=contentLanguagesFilter
+		as |item|
 	}}
-	{{check-box
-		checked=model.streams.languages_filter
-		label=(t "settings.languages.filter.values.filter.text")
-		description=(t "settings.languages.filter.values.filter.description" htmlSafe=true)
-		disabled=(bool-not hasSingleSelection)
-	}}
+		{{item.button
+			label=(t (concat "settings.languages.filter.values." item.label ".text"))
+			description=(t (concat "settings.languages.filter.values." item.label ".description"))
+			disabled=(bool-not hasAnySelection)
+		}}
+	{{/radio-buttons}}
 {{/settings-row}}
 
 {{#settings-row

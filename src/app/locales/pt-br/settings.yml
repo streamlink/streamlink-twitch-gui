@@ -427,15 +427,11 @@ languages:
             fade:
                 text: Esconder transmissões
                 # FIXME
-                description: |
-                    Mostrar todas as transmissões e esconder aquelas que não condizem com o idioma selecionado.<br>
-                    Requires at least one selection and filtering needs to be disabled.
+                description: Mostrar todas as transmissões e esconder aquelas que não condizem com o idioma selecionado.
             filter:
                 text: Mostrar transmissões
                 # FIXME
-                description: |
-                    Mostrar somente as transmissões que condizem com o idioma selecionado.<br>
-                    Requires exactly one selection and takes precedence over fading.
+                description: Mostrar somente as transmissões que condizem com o idioma selecionado.
     languages:
         title: Idiomas
         description: Idioma de transmissão, ou se não estiver definido, o idioma do canal.

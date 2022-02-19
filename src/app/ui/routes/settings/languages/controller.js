@@ -1,11 +1,18 @@
 import Controller from "@ember/controller";
 import { get, setProperties, computed } from "@ember/object";
 import { langs as langsConfig } from "config";
+import { default as SettingsStreams } from "data/models/settings/streams/fragment";
+
+
+const {
+	languagesFilter: contentLanguagesFilter
+} = SettingsStreams;
 
 
 export default Controller.extend({
+	contentLanguagesFilter,
+
 	hasAnySelection: false,
-	hasSingleSelection: false,
 
 	languages: computed(function() {
 		return Object.entries( langsConfig )

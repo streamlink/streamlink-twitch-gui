@@ -421,14 +421,10 @@ languages:
         values:
             fade:
                 text: Streams ausblenden
-                description: |
-                    Zeige alle Streams, blende nicht passende aus.<br>
-                    Benötigt mindestens eine Auswahl und Ausfiltern muss deaktiviert sein.
+                description: Zeige alle Streams, blende nicht passende aus.
             filter:
                 text: Streams ausfiltern
-                description: |
-                    Nur Streams anzeigen, die der Sprachauswahl entsprechen.<br>
-                    Benötigt exakt eine Auswahl und hat Vorrang vor dem Ausblenden.
+                description: Nur Streams anzeigen, die der Sprachauswahl entsprechen.
     languages:
         title: Sprachen
         description: Broadcaster-Sprache oder, falls nicht verfügbar, die Kanalsprache.

@@ -421,14 +421,10 @@ languages:
         values:
             fade:
                 text: Dissolvenza flussi
-                description: |
-                    Mostra tutti i flussi, sfuma quelli che non corrispondono alla selezione della lingua.<br>
-                    Richiede almeno una selezione e il filtro deve essere disabilitato.
+                description: Mostra tutti i flussi, sfuma quelli che non corrispondono alla selezione della lingua.
             filter:
                 text: Filtra gli stream
-                description: |
-                    Mostra solo gli stream corrispondenti alla lingua selezionata.<br>
-                    Richiede esattamente una selezione e ha la precedenza sulla dissolvenza.
+                description: Mostra solo gli stream corrispondenti alla lingua selezionata.
     languages:
         title: Lingue
         description: Lingua dell'emittente o, se non impostata, la lingua del canale.

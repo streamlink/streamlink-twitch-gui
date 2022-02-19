@@ -421,14 +421,10 @@ languages:
         values:
             fade:
                 text: Difuminar streams
-                description: |
-                    Muestra todos las streams, difumina las que no coinciden con la selección de idioma.<br>
-                    Requiere al menos una selección y el filtrado debe estar deshabilitado.
+                description: Muestra todos las streams, difumina las que no coinciden con la selección de idioma.
             filter:
                 text: Filtrar streams
-                description: |
-                    Mostrar solo los streams que coincidan con la selección de idioma.<br>
-                    Requiere exactamente una selección y tiene prioridad sobre el difuminado.
+                description: Mostrar solo los streams que coincidan con la selección de idioma.
     languages:
         title: Idiomas
         description: Idioma de del emisor,o si no está configurado, el idioma del canal.

@@ -32,17 +32,11 @@ export default Model.extend({
 			writable: true,
 			value: false
 		});
-		Object.defineProperty( this, "hasSingleStreamsLanguagesSelection", {
-			enumerable: false,
-			writable: true,
-			value: false
-		});
 
 		const update = () => {
 			const data = this.streams.languages.toJSON();
 			const num = Object.values( data ).filter( Boolean ).length;
 			set( this, "hasAnyStreamsLanguagesSelection", num > 0 );
-			set( this, "hasSingleStreamsLanguagesSelection", num === 1 );
 		};
 
 		addListener( this, "ready", update );

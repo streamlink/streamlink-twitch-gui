@@ -1,5 +1,9 @@
 import { langs as langsConfig } from "config";
 import { moveAttributes, moveAttributesIntoFragment, qualityIdToName } from "./utils";
+import {
+	ATTR_STREAMS_LANGUAGES_FADE,
+	ATTR_STREAMS_LANGUAGES_FILTER
+} from "data/models/settings/streams/fragment";
 import { typeKey as streamingPlayerTypeKey } from "data/models/settings/streaming/player/fragment";
 import { qualities } from "data/models/stream/model";
 import { isWin7 } from "utils/node/platform";
@@ -189,12 +193,20 @@ function fixAttributes( settings ) {
 
 	// update old language filter
 	if ( hasOwnProperty.call( streams, "filter_languages" ) ) {
-		const value = streams.filter_languages;
-		// can't translate null or false value here due to lack of schema version
-		streams.languages_fade = value === 1;
-		streams.languages_filter = value === 2 || value === true;
+		streams.languages_filter = (
+			   streams.filter_languages === 2
+			|| streams.filter_languages === true
+		)
+			? ATTR_STREAMS_LANGUAGES_FILTER
+			: ATTR_STREAMS_LANGUAGES_FADE;
 		delete streams.filter_languages;
+	} else if ( hasOwnProperty.call( streams, "languages_fade" ) ) {
+		streams.languages_filter = streams.languages_filter
+			? ATTR_STREAMS_LANGUAGES_FILTER
+			: ATTR_STREAMS_LANGUAGES_FADE;
+		delete streams.languages_fade;
 	}
+
 	// find single language selection and update the new old languages object
 	if ( hasOwnProperty.call( streams, "language" ) ) {
 		const language = streams.language;

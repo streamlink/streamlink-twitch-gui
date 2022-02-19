@@ -7,6 +7,9 @@ export const ATTR_STREAMS_NAME_CUSTOM = 1;
 export const ATTR_STREAMS_NAME_ORIGINAL = 2;
 export const ATTR_STREAMS_NAME_BOTH = ATTR_STREAMS_NAME_CUSTOM | ATTR_STREAMS_NAME_ORIGINAL;
 
+export const ATTR_STREAMS_LANGUAGES_FADE = 0;
+export const ATTR_STREAMS_LANGUAGES_FILTER = 1;
+
 export const ATTR_STREAMS_INFO_GAME = 0;
 export const ATTR_STREAMS_INFO_TITLE = 1;
 
@@ -33,8 +36,7 @@ export default Fragment.extend({
 	filter_vodcast: attr( "boolean", { defaultValue: true } ),
 	vodcast_regexp: attr( "string", { defaultValue: "" } ),
 
-	languages_fade: attr( "boolean", { defaultValue: false } ),
-	languages_filter: attr( "boolean", { defaultValue: false } ),
+	languages_filter: attr( "number", { defaultValue: ATTR_STREAMS_LANGUAGES_FADE } ),
 	languages: fragment( "settingsStreamsLanguages", { defaultValue: {} } ),
 
 	show_flag: attr( "boolean", { defaultValue: false } ),
@@ -51,6 +53,11 @@ export default Fragment.extend({
 		{ id: ATTR_STREAMS_NAME_BOTH, label: "both" },
 		{ id: ATTR_STREAMS_NAME_CUSTOM, label: "custom" },
 		{ id: ATTR_STREAMS_NAME_ORIGINAL, label: "original" }
+	],
+
+	languagesFilter: [
+		{ id: ATTR_STREAMS_LANGUAGES_FADE, label: "fade" },
+		{ id: ATTR_STREAMS_LANGUAGES_FILTER, label: "filter" }
 	],
 
 	info: [

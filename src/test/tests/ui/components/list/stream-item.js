@@ -8,6 +8,10 @@ import { set } from "@ember/object";
 import Service from "@ember/service";
 
 import StreamItemComponent from "ui/components/list/stream-item/component";
+import {
+	ATTR_STREAMS_LANGUAGES_FADE,
+	ATTR_STREAMS_LANGUAGES_FILTER
+} from "data/models/settings/streams/fragment";
 
 
 // TODO: finish stream-item-component tests
@@ -25,11 +29,9 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		this.owner.register( "service:settings", Service.extend({
 			content: {
 				hasAnyStreamsLanguagesSelection: true,
-				hasSingleStreamsLanguagesSelection: true,
 				streams: {
-					languages_fade: true,
-					languages_filter: false,
 					filter_vodcast: false,
+					languages_filter: ATTR_STREAMS_LANGUAGES_FADE,
 					languages: {
 						toJSON: () => ({
 							de: false,
@@ -47,19 +49,14 @@ module( "ui/components/list/stream-item", function( hooks ) {
 		const { content: settings } = this.owner.lookup( "service:settings" );
 		const subject = this.owner.lookup( "component:stream-item" );
 
-		assert.ok( subject.fading_enabled, "Enabled initially" );
+		assert.ok( subject.fading_enabled, "Enabled if not filtering and languages selected" );
 
 		set( settings, "hasAnyStreamsLanguagesSelection", false );
-		set( settings, "hasSingleStreamsLanguagesSelection", false );
 		assert.notOk( subject.fading_enabled, "Disabled if no language selected" );
 
 		set( settings, "hasAnyStreamsLanguagesSelection", true );
-		set( settings, "hasSingleStreamsLanguagesSelection", true );
-		set( settings, "streams.languages_filter", true );
-		assert.notOk( subject.fading_enabled, "Disabled if filtering is active" );
-
-		set( settings, "hasSingleStreamsLanguagesSelection", false );
-		assert.ok( subject.fading_enabled, "Enabled if filtering active but invalid" );
+		set( settings, "streams.languages_filter", ATTR_STREAMS_LANGUAGES_FILTER );
+		assert.notOk( subject.fading_enabled, "Disabled if filtering" );
 	});
 
 

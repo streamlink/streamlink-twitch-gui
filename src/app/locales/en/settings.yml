@@ -421,14 +421,10 @@ languages:
         values:
             fade:
                 text: Fade out streams
-                description: |
-                    Show all streams, fade out ones not matching the language selection.<br>
-                    Requires at least one selection and filtering needs to be disabled.
+                description: Show all streams, fade out ones not matching the language selection.
             filter:
                 text: Filter out streams
-                description: |
-                    Only show streams matching the language selection.<br>
-                    Requires exactly one selection and takes precedence over fading.
+                description: Only show streams matching the language selection.
     languages:
         title: Languages
         description: Broadcaster language, or if not set, the channel language.

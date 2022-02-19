@@ -16,8 +16,7 @@ export default SettingsSubmenuRoute.extend({
 			const data = buffer.getContent();
 			const num = Object.values( data ).filter( Boolean ).length;
 			setProperties( controller, {
-				hasAnySelection: num > 0,
-				hasSingleSelection: num === 1
+				hasAnySelection: num > 0
 			});
 		};
 

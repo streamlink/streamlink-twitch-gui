@@ -422,15 +422,11 @@ languages:
             fade:
                 text: Griser les streams
                 # FIXME
-                description: |
-                    Afficher tous les streams, griser ceux qui ne correspondent pas au filtre de langage.<br>
-                    Nécessite au moins une sélection et l'option "Cacher les streams" doit être désactivée.
+                description: Afficher tous les streams, griser ceux qui ne correspondent pas au filtre de langage.
             filter:
                 text: Cacher les streams
                 # FIXME
-                description: |
-                    N'afficher que les streams qui correspondent au filtre de langage.<br>
-                    Nécessite au moins une sélection et a la priorité sur "Griser les streams".
+                description: N'afficher que les streams qui correspondent au filtre de langage.
     languages:
         title: Langages
         description: Langue du streamer, ou si non-défini, la langue de la chaîne.

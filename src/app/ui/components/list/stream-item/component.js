@@ -4,6 +4,7 @@ import { on } from "@ember/object/evented";
 import { cancel, later } from "@ember/runloop";
 import ListItemComponent from "../-list-item/component";
 import {
+	ATTR_STREAMS_LANGUAGES_FADE,
 	ATTR_STREAMS_INFO_GAME,
 	ATTR_STREAMS_INFO_TITLE
 } from "data/models/settings/streams/fragment";
@@ -45,16 +46,13 @@ export default ListItemComponent.extend({
 	fadedVodcast: and( "content.isVodcast", "settings.content.streams.filter_vodcast" ),
 
 	fading_enabled: computed(
-		"settings.content.streams.languages_fade",
 		"settings.content.streams.languages_filter",
 		"settings.content.hasAnyStreamsLanguagesSelection",
-		"settings.content.hasSingleStreamsLanguagesSelection",
 		function() {
 			const settings = this.settings.content;
-			const { languages_fade, languages_filter } = settings.streams;
 
-			return languages_fade && settings.hasAnyStreamsLanguagesSelection
-				&& !( languages_filter && settings.hasSingleStreamsLanguagesSelection );
+			return settings.streams.languages_filter === ATTR_STREAMS_LANGUAGES_FADE
+			    && settings.hasAnyStreamsLanguagesSelection;
 		}
 	),
 

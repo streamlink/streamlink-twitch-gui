@@ -418,15 +418,11 @@ languages:
             fade:
                 text: "Затемнять стримы"
                 # FIXME
-                description: |
-                    Показать все стримы, затемнять те, которые не соответствуют выбранному языку.<br>
-                    Requires at least one selection and filtering needs to be disabled.
+                description: Показать все стримы, затемнять те, которые не соответствуют выбранному языку.
             filter:
                 text: "Отфильтровывать стримы"
                 # FIXME
-                description: |
-                    Показывать только стримы, соответствующие выбранному языку.<br>
-                    Requires exactly one selection and takes precedence over fading.
+                description: Показывать только стримы, соответствующие выбранному языку.
     languages:
         title: "Языки"
         description: "Язык стримера. Если не установлен, то язык канала."

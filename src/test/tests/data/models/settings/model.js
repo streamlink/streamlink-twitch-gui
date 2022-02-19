@@ -87,17 +87,13 @@ module( "data/models/settings", function( hooks ) {
 		});
 
 		assert.ok( settings.hasAnyStreamsLanguagesSelection, "Has a language selection" );
-		assert.ok( settings.hasSingleStreamsLanguagesSelection, "Has a single language selection" );
+
+		set( settings, "streams.languages.en", false );
+		settings.trigger( "didUpdate" );
+		assert.notOk( settings.hasAnyStreamsLanguagesSelection, "Has no language selections" );
 
 		set( settings, "streams.languages.de", true );
 		settings.trigger( "didUpdate" );
 		assert.ok( settings.hasAnyStreamsLanguagesSelection, "Has a language selection" );
-		assert.notOk( settings.hasSingleStreamsLanguagesSelection, "Has two language selections" );
-
-		set( settings, "streams.languages.de", false );
-		set( settings, "streams.languages.en", false );
-		settings.trigger( "didUpdate" );
-		assert.notOk( settings.hasAnyStreamsLanguagesSelection, "Has no language selections" );
-		assert.notOk( settings.hasSingleStreamsLanguagesSelection, "Has no language selections" );
 	});
 });

@@ -1,6 +1,10 @@
 import { module, test } from "qunit";
 
 import updateSettingsInjector from "inject-loader?-./utils!init/initializers/localstorage/settings";
+import {
+	ATTR_STREAMS_LANGUAGES_FADE,
+	ATTR_STREAMS_LANGUAGES_FILTER
+} from "data/models/settings/streams/fragment";
 
 
 module( "init/initializers/localstorage/settings", {
@@ -253,8 +257,7 @@ test( "Updates attributes", function( assert ) {
 				chat_open_context: false,
 				twitchemotes: false,
 				filter_vodcast: true,
-				languages_fade: false,
-				languages_filter: true,
+				languages_filter: ATTR_STREAMS_LANGUAGES_FILTER,
 				languages: {
 					de: true,
 					en: true
@@ -547,8 +550,7 @@ test( "Fixes attributes", function( assert ) {
 			gui: {},
 			streaming: {},
 			streams: {
-				languages_fade: true,
-				languages_filter: false,
+				languages_filter: ATTR_STREAMS_LANGUAGES_FADE,
 				languages: {
 					de: false,
 					en: true
@@ -573,8 +575,7 @@ test( "Fixes attributes", function( assert ) {
 			gui: {},
 			streaming: {},
 			streams: {
-				languages_fade: false,
-				languages_filter: true,
+				languages_filter: ATTR_STREAMS_LANGUAGES_FILTER,
 				languages: {
 					de: true,
 					en: false
@@ -599,8 +600,7 @@ test( "Fixes attributes", function( assert ) {
 			gui: {},
 			streaming: {},
 			streams: {
-				languages_fade: false,
-				languages_filter: true,
+				languages_filter: ATTR_STREAMS_LANGUAGES_FILTER,
 				languages: {
 					de: true,
 					en: false
@@ -610,6 +610,58 @@ test( "Fixes attributes", function( assert ) {
 			notification: {}
 		},
 		"Translates old language filter with boolean value"
+	);
+
+	const streamsFilterLanguageFadeAndNoFilter = {
+		streams: {
+			languages_fade: true,
+			languages_filter: false,
+			language: "de"
+		}
+	};
+	updateSettings( streamsFilterLanguageFadeAndNoFilter );
+	assert.propEqual(
+		streamsFilterLanguageFadeAndNoFilter,
+		{
+			gui: {},
+			streaming: {},
+			streams: {
+				languages_filter: ATTR_STREAMS_LANGUAGES_FADE,
+				languages: {
+					de: true,
+					en: false
+				}
+			},
+			chat: {},
+			notification: {}
+		},
+		"Translates old language fade+filter attributes"
+	);
+
+	const streamsFilterLanguageFadeAndFilter = {
+		streams: {
+			languages_fade: true,
+			languages_filter: true,
+			language: "de"
+		}
+	};
+	updateSettings( streamsFilterLanguageFadeAndFilter );
+	assert.propEqual(
+		streamsFilterLanguageFadeAndFilter,
+		{
+			gui: {},
+			streaming: {},
+			streams: {
+				languages_filter: ATTR_STREAMS_LANGUAGES_FILTER,
+				languages: {
+					de: true,
+					en: false
+				}
+			},
+			chat: {},
+			notification: {}
+		},
+		"Translates old language fade+filter attributes"
 	);
 
 	const chatProviderMsie = {

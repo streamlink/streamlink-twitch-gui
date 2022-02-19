@@ -1,6 +1,7 @@
 import { computed } from "@ember/object";
 import Mixin from "@ember/object/mixin";
 import { inject as service } from "@ember/service";
+import { ATTR_STREAMS_LANGUAGES_FILTER } from "data/models/settings/streams/fragment";
 
 
 export default Mixin.create({
@@ -8,30 +9,28 @@ export default Mixin.create({
 	settings: service(),
 
 	language: computed(
-		"settings.content.hasSingleStreamsLanguagesSelection",
 		"settings.content.streams.languages_filter",
 		"settings.content.streams.languages",
 		function() {
-			const settings = this.settings.content;
-			const { languages_filter, languages } = settings.streams;
+			const { languages_filter, languages } = this.settings.content.streams;
 
-			if ( languages_filter && settings.hasSingleStreamsLanguagesSelection ) {
-				for ( const [ key, value ] of Object.entries( languages.toJSON() ) ) {
-					if ( value ) {
-						return key;
-					}
-				}
-			}
-
-			return undefined;
+			return languages_filter !== ATTR_STREAMS_LANGUAGES_FILTER
+				? []
+				: Object.entries( languages.toJSON() )
+					.filter( ([ , value ]) => value )
+					.map( ([ key ]) => key );
 		}
 	),
 
-	model( params ) {
+	model( params, ...args ) {
 		const { language } = this;
+		if ( language.length ) {
+			params = Object.assign(
+				params || /* istanbul ignore next */ {},
+				{ language }
+			);
+		}
 
-		return this._super(
-			Object.assign( params || /* istanbul ignore next */ {}, { language } )
-		);
+		return this._super( params, ...args );
 	}
 });
