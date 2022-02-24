@@ -1,9 +1,10 @@
 import { module, test } from "qunit";
 import { setupTest } from "ember-qunit";
-import { buildResolver, runDestroy } from "test-utils";
+import { buildResolver } from "test-utils";
 
 import { A } from "@ember/array";
 import { set } from "@ember/object";
+import { run } from "@ember/runloop";
 
 import SelectableComponent from "ui/components/form/-selectable/component";
 
@@ -76,7 +77,7 @@ module( "ui/components/form/-selectable", function( hooks ) {
 		assert.strictEqual( subject.selection, dataFour, "No new selection on value change" );
 		assert.strictEqual( subject.value, 4444, "Value has been updated" );
 
-		runDestroy( subject );
+		run( () => subject.destroy() );
 		assert.notOk( subject._selection, "Removes selection cache on destruction" );
 		assert.notOk( subject._selectionValueObserver, "Removes selection value observer as well" );
 	});
