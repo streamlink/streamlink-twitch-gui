@@ -89,7 +89,7 @@ Your support is very much appreciated, thank you!
 * [GitHub Sponsors](https://github.com/users/bastimeyer/sponsorship)
 * [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YUCGRLVALHS8C&item_name=Streamlink%20Twitch%20GUI)
 * [Paypal.me](https://paypal.me/bastimeyer123)
-* [Bitcoin](https://blockchain.info/qr?data=1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8) (`1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8`)
+* [Bitcoin](https://www.blockchain.com/btc/address/1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8) (`1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8`)
 
 
   [Preview]: https://user-images.githubusercontent.com/467294/151660267-97a8c0a3-62b3-4aa5-b960-c307da1b4fb2.png "Preview image"
