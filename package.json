@@ -119,7 +119,6 @@
 		"**/ember-fetch/node-fetch": "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz",
 		"**/exec-sh": "^0.4.0",
 		"**/optimist/minimist": "0.2.1",
-		"**/plist/xmldom": "github:xmldom/xmldom#0.7.0",
 		"**/babel-code-frame/chalk": "^2.0.0",
 		"ember-data/chalk": "^4.0.0",
 		"ember-qunit/qunit": "2.17.2",
