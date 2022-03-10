@@ -25,7 +25,7 @@ export default RESTSerializer.extend( EmbeddedRecordsMixin, {
 		}
 
 		const key = this.modelNameFromPayloadKey();
-		payload[ key ] = payload[ "data" ] /* istanbul ignore next */ || [];
+		payload[ key ] = payload[ "data" ] || [];
 		delete payload[ "data" ];
 
 		return this._super( store, primaryModelClass, payload, id, requestType );
@@ -42,7 +42,10 @@ export default RESTSerializer.extend( EmbeddedRecordsMixin, {
 	 */
 	normalizeSingleResponse( store, primaryModelClass, payload, id, requestType ) {
 		const key = this.modelNameFromPayloadKey();
-		payload[ key ] = payload[ key ][0] /* istanbul ignore next */ || null;
+		const data = payload[ key ] = payload[ key ][0];
+		if ( !data ) {
+			throw new Error( "Missing data while normalizing single response" );
+		}
 
 		return this._super( store, primaryModelClass, payload, id, requestType );
 	},

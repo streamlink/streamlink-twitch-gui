@@ -93,12 +93,26 @@ module( "data/models/twitch/serializer", function( hooks ) {
 		);
 	});
 
-	test( "Single response normalization", async function( assert ) {
+	test( "Single response normalization - invalid", async function( assert ) {
 		/** @type {DS.Store} */
 		const store = this.owner.lookup( "service:store" );
 
 		store.adapterFor( "foo" ).ajax
-			= adapterRequestFactory( assert, fixturesSingleResponse );
+			= adapterRequestFactory( assert, fixturesSingleResponse, "invalid" );
+
+		await assert.rejects(
+			store.queryRecord( "foo", {} ),
+			new Error( "Missing data while normalizing single response" ),
+			"Rejects with an error on invalid payload"
+		);
+	});
+
+	test( "Single response normalization - valid", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+
+		store.adapterFor( "foo" ).ajax
+			= adapterRequestFactory( assert, fixturesSingleResponse, "valid" );
 
 		const record = await store.queryRecord( "foo", {} );
 
