@@ -2442,10 +2442,10 @@ fined@^1.2.0:
     object.pick "^1.2.0"
     parse-filepath "^1.0.1"
 
-flag-icon-css@2.8.0:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-2.8.0.tgz#ec10c20fe417ade787a095200630069ca436a569"
-  integrity sha1-7BDCD+QXreeHoJUgBjAGnKQ2pWk=
+flag-icons@6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/flag-icons/-/flag-icons-6.1.1.tgz#8d6cee1534b05da3cdc103f5f8bdeb3003164e05"
+  integrity sha512-7QJaPXelUF5yLKppUvfqx915oLm2q6DVM037vrBzww4DjwzyVPooq74SLfPPsYabbN3kMPbDQstYjHrx8kBUPg==
 
 flagged-respawn@^1.0.1:
   version "1.0.1"
