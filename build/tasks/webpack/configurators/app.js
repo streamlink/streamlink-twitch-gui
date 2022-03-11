@@ -8,6 +8,14 @@ const Date = require( "../../common/date" );
  */
 module.exports = {
 	common( config, grunt ) {
+		// YAML config files
+		config.module.rules.push({
+			test: /\.ya?ml$/,
+			include: pConfig,
+			type: "json",
+			loader: "yaml-loader"
+		});
+
 		// embed additional HTML files - used by the AuthService's HTTP server
 		config.module.rules.push({
 			test: /\.html$/,
@@ -20,7 +28,7 @@ module.exports = {
 			use: [
 				"optimized-json-loader",
 				{
-					// see `src/web_loaders/metadata-loader.js`
+					// see `build/tasks/webpack/loaders/metadata-loader.js`
 					loader: "metadata-loader",
 					options: {
 						version: grunt.config( "version" ),
@@ -36,7 +44,7 @@ module.exports = {
 			enforce: "pre",
 			test: /\.less$/,
 			include: pRoot,
-			// see `src/web_loaders/themes-loader.js`
+			// see `build/tasks/webpack/loaders/themes-loader.js`
 			loader: "themes-loader",
 			options: {
 				config: resolve( pConfig, "themes.json" ),
@@ -49,12 +57,16 @@ module.exports = {
 		config.module.rules.push({
 			enforce: "pre",
 			test: /[\/\\]flag-icon[\/\\]styles\.less$/,
-			// see `src/web_loaders/flag-icons-loader.js`
-			loader: "flag-icons-loader",
-			options: {
-				config: resolve( pConfig, "langs.json" ),
-				ignore: [ "en" ]
-			}
+			use: [
+				{
+					// see `build/tasks/webpack/loaders/flag-icons-loader.js`
+					loader: "flag-icons-loader",
+					options: {
+						config: resolve( pConfig, "langs.yml" ),
+						ignore: [ "en" ]
+					}
+				}
+			]
 		});
 	},
 

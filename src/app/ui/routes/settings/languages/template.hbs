@@ -23,10 +23,10 @@
 	icon="fa-language"
 }}
 	<ul class="list-unstyled filter-lang">
-		{{#each languages as |id|}}
+		{{#each languages as |lang|}}
 			<li>
-				{{#check-box checked=(mut (get model.streams.languages id))}}
-					{{flag-icon lang=id withTitle=false withCursor=false}} {{t (concat "languages." id)}}<span class="lang-code">({{id}})</span>
+				{{#check-box checked=(mut (get model.streams.languages lang.code))}}
+					{{flag-icon lang=lang.code withTitle=false withCursor=false}} {{t (concat "languages." lang.code)}}<span class="lang-code">({{lang.name}})</span>
 				{{/check-box}}
 			</li>
 		{{/each}}

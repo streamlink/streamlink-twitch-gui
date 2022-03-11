@@ -1,0 +1,166 @@
+# This is a mapping of language codes to country codes.
+# "ISO 639-1" / "IETF BCP 47" -> "ISO 3166-1 alpha-2"
+#
+# It is used for
+# - showing stream languages as flags
+# - selecting stream language filters in the settings menu
+# - listing translations in the settings menu
+#
+# The data is a mixture of languages supported by Twitch and by Streamlink Twitch GUI.
+#
+# Mapping languages to single countries is obviously not ideal,
+# but it helps with recognizing most languages.
+#
+# ----
+#
+# Languages in this list which are not disabled are those which can be selected by broadcasters in
+# their dashboard on Twitch, which means that these languages can be used for filtering streams.
+#
+# Disabled languages are either used for listing available translations, or as special language
+# codes that were previously returned by Twitch's kraken API. This is not the case anymore on the
+# Helix API though, but it's possible that this is a bug which may get fixed in the future.
+# https://dev.twitch.tv/docs/api/reference#get-streams
+#
+# The following language codes can be found in the dashboard's stream language settings dropdown:
+# https://dashboard.twitch.tv/u/USERNAME/stream-manager
+# [
+#   'ar', 'asl', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'fi', 'fr', 'hi', 'hu', 'id', 'it',
+#   'ja', 'ko', 'ms', 'nl', 'no', 'other', 'pl', 'pt', 'ro', 'ru', 'sk', 'sv', 'th', 'tl', 'tr',
+#   'uk', 'vi', 'zh', 'zh-hk'
+# ]
+
+
+# Arabic
+ar:
+    flag: sa
+# American sign language
+asl:
+    # special "unknown" flag
+    flag: xx
+    disabled: true
+# Bulgarian
+bg:
+    flag: bg
+# Catalan
+ca:
+    flag: es-ct
+# Czech
+cs:
+    flag: cz
+# Danish
+da:
+    flag: dk
+# German
+de:
+    flag: de
+# Greek
+el:
+    flag: gr
+# English
+en:
+    # special flag
+    flag: en
+# English (Great Britain)
+en-gb:
+    flag: gb
+    disabled: true
+# English (United States)
+en-us:
+    flag: us
+    disabled: true
+# Spanish
+es:
+    flag: es
+# Mexican
+es-mx:
+    flag: mx
+    disabled: true
+# Finnish
+fi:
+    flag: fi
+# French
+fr:
+    flag: fr
+# Hindi
+hi:
+    flag: in
+# Hungarian
+hu:
+    flag: hu
+# Indonesian (use uppercase language code, as "id" is reserved for model IDs in Ember-Data)
+ID:
+    flag: id
+# Italian
+it:
+    flag: it
+# Japanese
+ja:
+    flag: jp
+# Korean
+ko:
+    flag: kr
+# Malay
+ms:
+    flag: my
+# Dutch
+nl:
+    flag: nl
+# Norwegian
+no:
+    flag: no
+# Other / unknown / unrecognized
+other:
+    # special "unknown" flag
+    flag: xx
+    disabled: true
+# Polish
+pl:
+    flag: pl
+# Portuguese
+pt:
+    flag: pt
+# Brazilian
+pt-br:
+    flag: br
+    disabled: true
+# Romanian
+ro:
+    flag: ro
+# Russian
+ru:
+    flag: ru
+# Slovak
+sk:
+    flag: sk
+# Swedish
+sv:
+    flag: se
+# Thai
+th:
+    flag: th
+# Tagalog
+tl:
+    flag: ph
+# Turkish
+tr:
+    flag: tr
+# Ukrainian
+uk:
+    flag: ua
+# Vietnamese
+vi:
+    flag: vn
+# Chinese
+zh:
+    flag: cn
+# Chinese
+zh-cn:
+    flag: cn
+    disabled: true
+# Cantonese
+zh-hk:
+    flag: hk
+# Taiwanese
+zh-tw:
+    flag: tw
+    disabled: true

@@ -83,7 +83,9 @@ module( "ui/routes/settings/languages", function( hooks ) {
 				langs: {
 					de: { flag: "de" },
 					en: { flag: "en" },
-					fr: { flag: "fr", disabled: true }
+					fr: { flag: "fr", disabled: true },
+					// special uppercase language code
+					ID: { flag: "id" }
 				}
 			}
 		});
@@ -151,8 +153,12 @@ module( "ui/routes/settings/languages", function( hooks ) {
 					.find( name => /^flag-\w+$/.test( name ) ),
 				lang.classList.contains( "checked" )
 			]) ),
-			[ [ "languages.de(de)", "flag-de", false ], [ "languages.en(en)", "flag-en", false ] ],
-			"Shows the enabled language selection checkboxes with correct flags"
+			[
+				[ "languages.de(de)", "flag-de", false ],
+				[ "languages.en(en)", "flag-en", false ],
+				[ "languages.ID(id)", "flag-id", false ]
+			],
+			"Shows the language selection checkboxes with correct flags"
 		);
 
 		// start selecting languages
@@ -161,11 +167,11 @@ module( "ui/routes/settings/languages", function( hooks ) {
 		assert.propEqual(
 			radiobuttons.map( cb => cb.classList.contains( "disabled" ) ),
 			[ false, false ],
-			"Both radiobuttons are enabled if at least one language is selected"
+			"All radiobuttons are enabled if at least one language is selected"
 		);
 		assert.propEqual(
 			languages.map( lang => lang.classList.contains( "checked" ) ),
-			[ false, true ],
+			[ false, true, false ],
 			"Checkbox for language.en is checked"
 		);
 
@@ -177,7 +183,7 @@ module( "ui/routes/settings/languages", function( hooks ) {
 		);
 		assert.propEqual(
 			languages.map( lang => lang.classList.contains( "checked" ) ),
-			[ false, false ],
+			[ false, false, false ],
 			"Unchecks all language checkboxes"
 		);
 	});

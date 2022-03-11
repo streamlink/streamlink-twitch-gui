@@ -6,7 +6,7 @@ export { default as vars } from "../config/vars.json";
 export { default as update } from "../config/update.json";
 export { default as themes } from "../config/themes.json";
 export { default as hotkeys } from "../config/hotkeys.json";
-export { default as langs } from "../config/langs.json";
+export { default as langs } from "../config/langs.yml";
 export { default as streaming } from "../config/streaming.json";
 export { default as players } from "../config/players.json";
 export { default as twitch } from "../config/twitch.json";

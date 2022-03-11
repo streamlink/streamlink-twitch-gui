@@ -58,7 +58,7 @@ module( "data/models/twitch/channel", function( hooks ) {
 				},
 				{
 					id: "21",
-					broadcaster_language: "de",
+					broadcaster_language: "ID",
 					delay: 0
 				}
 			],

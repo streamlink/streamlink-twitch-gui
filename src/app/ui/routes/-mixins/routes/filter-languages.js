@@ -18,7 +18,7 @@ export default Mixin.create({
 				? []
 				: Object.entries( languages.toJSON() )
 					.filter( ([ , value ]) => value )
-					.map( ([ key ]) => key );
+					.map( ([ key ]) => key.toLowerCase() );
 		}
 	),
 

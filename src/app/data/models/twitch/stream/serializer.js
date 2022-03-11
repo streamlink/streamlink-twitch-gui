@@ -19,6 +19,9 @@ export default TwitchSerializer.extend({
 		// game IDs can be empty strings
 		resourceHash[ "game_id" ] = resourceHash[ "game" ]
 			= resourceHash[ "game_id" ] /* istanbul ignore next */ || null;
+		if ( resourceHash[ "language" ] === "id" ) {
+			resourceHash[ "language" ] = "ID";
+		}
 
 		return this._super( modelClass, resourceHash, prop );
 	}

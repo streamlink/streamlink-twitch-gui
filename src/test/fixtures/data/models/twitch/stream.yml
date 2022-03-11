@@ -94,3 +94,14 @@ getChannelSettings:
         data:
             -   id: "1"
                 user_id: "1"
+language:
+    request:
+        method: "GET"
+        url: "https://api.twitch.tv/helix/streams"
+        query:
+            user_id: "1"
+    response:
+        data:
+            -   id: "1"
+                user_id: "1"
+                language: "id"

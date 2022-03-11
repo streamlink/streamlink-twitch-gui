@@ -1,5 +1,7 @@
 ar: Arabisch
+asl: Amerikanische Gebärdensprache
 bg: Bulgarisch
+ca: Katalanisch
 cs: Tschechisch
 da: Dänisch
 de: Deutsch
@@ -11,21 +13,30 @@ es: Spanisch
 es-mx: Mexikanisch
 fi: Finnisch
 fr: Französisch
+hi: Hindi
 hu: Ungarisch
+# special uppercase language code
+ID: Indonesisch
 it: Italienisch
 ja: Japanisch
 ko: Koreanisch
+ms: Malayisch
 nl: Niederländisch
 no: Norwegisch
+other: "\"Andere\""
 pl: Polnisch
 pt: Portugiesisch
 pt-br: Brazilianisch
+ro: Rumänisch
 ru: Russisch
 sk: Slovakisch
 sv: Schwedisch
-tr: Türkisch
+tl: Tagalog
 th: Thailändisch
+tr: Türkisch
+uk: Ukrainisch
 vi: Vietnamesisch
 zh: Chinesisch
 zh-cn: Chinesisch
+zh-hk: Kantonesisch
 zh-tw: Chinesisch (traditionell)

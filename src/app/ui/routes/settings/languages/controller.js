@@ -17,7 +17,10 @@ export default Controller.extend({
 	languages: computed(function() {
 		return Object.entries( langsConfig )
 			.filter( ([ , { disabled } ]) => !disabled )
-			.map( ([ code ]) => code );
+			.map( ([ code ]) => ({
+				code,
+				name: code.toLowerCase()
+			}) );
 	}),
 
 	actions: {

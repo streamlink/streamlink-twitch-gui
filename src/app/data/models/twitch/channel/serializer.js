@@ -6,5 +6,13 @@ export default TwitchSerializer.extend({
 
 	modelNameFromPayloadKey() {
 		return "twitch-channel";
+	},
+
+	normalize( modelClass, resourceHash, prop ) {
+		if ( resourceHash[ "broadcaster_language" ] === "id" ) {
+			resourceHash[ "broadcaster_language" ] = "ID";
+		}
+
+		return this._super( modelClass, resourceHash, prop );
 	}
 });

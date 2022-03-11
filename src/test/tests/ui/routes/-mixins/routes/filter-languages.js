@@ -36,7 +36,9 @@ module( "ui/routes/-mixins/routes/filter-languages", function( hooks ) {
 	hooks.beforeEach(function() {
 		this.languagesStub = sinon.stub().returns({
 			de: false,
-			en: true
+			en: true,
+			// special uppercase language code
+			ID: false
 		});
 
 		this.owner.register( "service:settings", Service.extend({
@@ -88,5 +90,18 @@ module( "ui/routes/-mixins/routes/filter-languages", function( hooks ) {
 		await visit( "/bar/bar" );
 		const { model } = this.owner.lookup( "controller:bar" );
 		assert.propEqual( model, { bar: "bar", language: [ "de", "en" ] }, "Two languages" );
+	});
+
+	/** @this TestContextFilterLanguagesMixin */
+	test( "Special uppercase language code", async function( assert ) {
+		const settings = this.owner.lookup( "service:settings" );
+		set( settings, "content.streams.languages_filter", ATTR_STREAMS_LANGUAGES_FILTER );
+
+		this.languagesStub.returns({
+			ID: true
+		});
+		await visit( "/bar/bar" );
+		const { model } = this.owner.lookup( "controller:bar" );
+		assert.propEqual( model, { bar: "bar", language: [ "id" ] }, "Requests lowercase code" );
 	});
 });

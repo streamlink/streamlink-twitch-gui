@@ -457,4 +457,16 @@ module( "data/models/twitch/stream", function( hooks ) {
 		);
 		assert.notOk( twitchUserAdapterAjaxStub.called, "Doesn't query API for user" );
 	});
+
+	test( "Special language code", async function( assert ) {
+		/** @type {DS.Store} */
+		const store = this.owner.lookup( "service:store" );
+
+		store.adapterFor( "twitch-stream" ).ajax
+			= adapterRequestFactory( assert, TwitchStreamFixtures[ "language" ] );
+
+		/** @type {TwitchStream} */
+		const record = await store.findRecord( "twitch-stream", "1" );
+		assert.strictEqual( record.language, "ID", "Sets language to uppercase if value is 'id'" );
+	});
 });

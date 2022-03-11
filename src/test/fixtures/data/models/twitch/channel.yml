@@ -19,6 +19,6 @@ response:
             broadcaster_name: "bar"
             game_id: "22"
             game_name: "another game"
-            broadcaster_language: "de"
+            broadcaster_language: "id"
             title: "another title"
             delay: 0
