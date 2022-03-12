@@ -1,6 +1,20 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## master
+
+- Re-implemented selection for filtering multiple stream languages
+- Updated list of languages supported by Twitch for filtering streams
+- Updated `--min` / `--max` parameters and made them toggle the app window state
+- Added streamlink + player fallback paths for homebrew on macOS M1
+- Fixed race-condition when calculating API item fetch sizes from stylesheets and window size
+- Fixed broken `--launch channelname` launch parameter
+- Fixed ChannelRoute not accepting channel names as route parameters
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.0.0..master)
+
+
 ## [v2.0.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.0.0) (2022-01-31)
 
 ### Twitch Helix API
