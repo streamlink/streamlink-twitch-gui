@@ -103,8 +103,8 @@ function resolveHotkeyAlias( hotkeys ) {
 		aliases.push( hotkeys );
 
 		const sep = hotkeys.indexOf( "." );
-		const namespace = hotkeys.substr( 0, sep );
-		const action = hotkeys.substr( sep + 1 );
+		const namespace = hotkeys.substring( 0, sep );
+		const action = hotkeys.slice( sep + 1 );
 
 		if ( !hasOwnProperty.call( hotkeysConfig, namespace ) ) { return; }
 		const { actions } = hotkeysConfig[ namespace ];

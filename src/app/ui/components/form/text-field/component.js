@@ -25,7 +25,7 @@ export default TextField.extend({
 				label: [ t`contextmenu.copy` ],
 				enabled: start !== end,
 				click() {
-					const selected = element.value.substr( start, end - start );
+					const selected = element.value.slice( start, end);
 					nwjs.clipboard.set( selected );
 				}
 			},
@@ -34,8 +34,8 @@ export default TextField.extend({
 				enabled: !element.readOnly && !element.disabled && clip && clip.length,
 				click() {
 					const value = element.value;
-					const before = value.substr( 0, element.selectionStart );
-					const after = value.substr( element.selectionEnd );
+					const before = value.slice( 0, element.selectionStart );
+					const after = value.slice( element.selectionEnd );
 
 					element.value = `${before}${clip}${after}`;
 					element.selectionStart = element.selectionEnd = before.length + clip.length;
