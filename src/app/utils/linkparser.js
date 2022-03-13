@@ -163,12 +163,12 @@ export function parseString( string ) {
 			// update the current text item:
 			// everything from the beginning to the match index (including the "lookbehind")
 			length = match.index + match[ 1 ].length;
-			texts[ i ] = current.substr( 0, length );
+			texts[ i ] = current.slice( 0, length );
 
 			// create a new text item after the current position:
 			// everything from the match ending (including the "lookahead") to the string end
 			length = match[ match.length - 1 ].length;
-			texts.splice( i + 1, 0, current.substr( re.lastIndex - length ) );
+			texts.splice( i + 1, 0, current.slice( re.lastIndex - length ) );
 
 			// insert the linkObj after the current position
 			links.splice( i, 0, linkObj );

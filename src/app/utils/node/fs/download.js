@@ -77,7 +77,7 @@ async function download( url, dest, time ) {
 	// download file path
 	const name = dest.name
 		|| basename( url.pathname )
-		|| `${String( Math.random() ).substr( 2 )}.download`;
+		|| `${String( Math.random() ).slice( 2 )}.download`;
 	const path = pathResolve( dest.dir, name );
 
 	// try to create download directory

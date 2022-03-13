@@ -24,7 +24,7 @@ module.exports = function( content ) {
 
 			if ( isString && value.startsWith( "~" ) ) {
 				const promise = new Promise( ( resolve, reject ) => {
-					this.loadModule( value.substr( 1 ), ( err, source, sourceMap, module ) => {
+					this.loadModule( value.slice( 1 ), ( err, source, sourceMap, module ) => {
 						if ( err ) {
 							return reject( err );
 						}

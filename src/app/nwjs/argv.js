@@ -73,9 +73,9 @@ const argTests = [
 	}, [] )
 ].map( name => name.length === 1
 	// shorthand parameters
-	? ( arg => arg.length > 1 && arg.substr( 1 ) === name )
+	? ( arg => arg.length > 1 && arg.slice( 1 ) === name )
 	// named parameters
-	: ( arg => arg.length > 2 && arg[1] === "-" && arg.substr( 2 ) === name )
+	: ( arg => arg.length > 2 && arg[1] === "-" && arg.slice( 2 ) === name )
 );
 
 
@@ -108,7 +108,7 @@ export function parseCommand( command ) {
 		const pos = command.indexOf( chromiumArgs );
 		/* istanbul ignore else */
 		if ( pos !== -1 ) {
-			command = command.substr( 0, pos ) + command.substr( pos + chromiumArgs.length );
+			command = command.slice( 0, pos ) + command.slice( pos + chromiumArgs.length );
 		}
 	}
 	// Remove user data dir parameter from the command line.
