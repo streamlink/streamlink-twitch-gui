@@ -65,7 +65,7 @@ module.exports = {
 		});
 		config.module.rules.push({
 			test: /\.svg$/,
-			include: r( pDependencies, "flag-icon-css" ),
+			include: r( pDependencies, "flag-icons" ),
 			loader: "file-loader",
 			options: {
 				name: j( "assets", "flags", "[name].[ext]" )
@@ -73,7 +73,7 @@ module.exports = {
 		});
 		config.module.rules.push({
 			test: /\.(jpe?|pn|sv)g$/,
-			exclude: r( pDependencies, "flag-icon-css" ),
+			exclude: r( pDependencies, "flag-icons" ),
 			loader: "file-loader",
 			options: {
 				name: "[path][name].[ext]",
