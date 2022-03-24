@@ -1157,7 +1157,7 @@ braces@^3.0.1:
   dependencies:
     fill-range "^7.0.1"
 
-broccoli-caching-writer@^3.0.3, "broccoli-caching-writer@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-concat@^3.2.2, "broccoli-concat@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-debug@^0.6.5, "broccoli-debug@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-file-creator@^1.1.1, broccoli-file-creator@^2.1.1, "broccoli-file-creator@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-funnel@^2.0.1, broccoli-funnel@^3.0.3, "broccoli-funnel@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-merge-files@^0.8.0, "broccoli-merge-files@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-merge-trees@^2.0.0, broccoli-merge-trees@^3.0.0, broccoli-merge-trees@^3.0.2, broccoli-merge-trees@^4.2.0, "broccoli-merge-trees@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", "broccoli-plugin@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-rollup@^2.1.1, "broccoli-rollup@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-source@^3.0.0, "broccoli-source@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-stew@^2.0.0, broccoli-stew@^3.0.0, "broccoli-stew@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-templater@^2.0.1, "broccoli-templater@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-auto-import@^1.5.3, "ember-auto-import@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", "ember-cli-babel-plugin-helpers@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-babel@^6.0.0, ember-cli-babel@^6.12.0, ember-cli-babel@^6.16.0, ember-cli-babel@^6.17.0, ember-cli-babel@^6.3.0, ember-cli-babel@^6.6.0, ember-cli-babel@^6.8.0, ember-cli-babel@^6.8.2, ember-cli-babel@^6.9.0, ember-cli-babel@^7.1.3, ember-cli-babel@^7.23.0, ember-cli-babel@^7.5.0, ember-cli-babel@^7.7.3, "ember-cli-babel@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-get-component-path-option@^1.0.0, "ember-cli-get-component-path-option@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-htmlbars-inline-precompile@^1.0.0, "ember-cli-htmlbars-inline-precompile@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-is-package-missing@^1.0.0, "ember-cli-is-package-missing@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-normalize-entity-name@^1.0.0, "ember-cli-normalize-entity-name@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-path-utils@^1.0.0, "ember-cli-path-utils@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-string-utils@^1.1.0, "ember-cli-string-utils@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-test-info@^1.0.0, "ember-cli-test-info@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-test-loader@^2.2.0, "ember-cli-test-loader@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-typescript@^2.0.0, ember-cli-typescript@^4.0.0, "ember-cli-typescript@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-version-checker@^2.0.0, ember-cli-version-checker@^2.1.0, ember-cli-version-checker@^2.1.1, ember-cli-version-checker@^3.1.3, "ember-cli-version-checker@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", node-fetch@^2.3.0, "node-fetch@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz":
+broccoli-caching-writer@^3.0.3, "broccoli-caching-writer@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-concat@^3.2.2, "broccoli-concat@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-debug@^0.6.5, "broccoli-debug@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-file-creator@^1.1.1, broccoli-file-creator@^2.1.1, "broccoli-file-creator@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-funnel@^2.0.1, broccoli-funnel@^3.0.3, "broccoli-funnel@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-merge-files@^0.8.0, "broccoli-merge-files@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-merge-trees@^2.0.0, broccoli-merge-trees@^3.0.0, broccoli-merge-trees@^3.0.2, broccoli-merge-trees@^4.2.0, "broccoli-merge-trees@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", "broccoli-plugin@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-rollup@^2.1.1, "broccoli-rollup@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-source@^3.0.0, "broccoli-source@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-stew@^2.0.0, broccoli-stew@^3.0.0, "broccoli-stew@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", broccoli-templater@^2.0.1, "broccoli-templater@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-auto-import@^1.5.3, "ember-auto-import@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", "ember-cli-babel-plugin-helpers@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-babel@^6.0.0, ember-cli-babel@^6.12.0, ember-cli-babel@^6.16.0, ember-cli-babel@^6.17.0, ember-cli-babel@^6.3.0, ember-cli-babel@^6.6.0, ember-cli-babel@^6.8.0, ember-cli-babel@^6.8.2, ember-cli-babel@^6.9.0, ember-cli-babel@^7.1.3, ember-cli-babel@^7.23.0, ember-cli-babel@^7.5.0, ember-cli-babel@^7.7.3, "ember-cli-babel@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-get-component-path-option@^1.0.0, "ember-cli-get-component-path-option@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-htmlbars-inline-precompile@^1.0.0, "ember-cli-htmlbars-inline-precompile@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-is-package-missing@^1.0.0, "ember-cli-is-package-missing@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-normalize-entity-name@^1.0.0, "ember-cli-normalize-entity-name@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-path-utils@^1.0.0, "ember-cli-path-utils@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-string-utils@^1.1.0, "ember-cli-string-utils@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-test-info@^1.0.0, "ember-cli-test-info@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-test-loader@^2.2.0, "ember-cli-test-loader@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-typescript@^2.0.0, ember-cli-typescript@^4.0.0, "ember-cli-typescript@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", ember-cli-version-checker@^2.0.0, ember-cli-version-checker@^2.1.0, ember-cli-version-checker@^2.1.1, ember-cli-version-checker@^3.1.3, "ember-cli-version-checker@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", node-fetch@^2.3.0, "node-fetch@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz", optimist@^0.6.1, "optimist@https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz#7ff0adb2a0e32b1a0a48f432cf31c16b53f7f4ea"
 
@@ -3736,15 +3736,10 @@ mini-css-extract-plugin@1.6.0:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@0.2.1, minimist@~0.0.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.2.1.tgz#827ba4e7593464e7c221e8c5bed930904ee2c455"
-  integrity sha512-GY8fANSrTMfBVfInqJAY41QkOM+upUTytK1jZ0c8+3HdHrJxBJ3rF5i9moClXTE8uUSnUo8cAsCoxDXvSY4DHg==
-
-minimist@1.2.5, minimist@^1.2.0, minimist@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+minimist@1.2.6, minimist@^1.2.0, minimist@^1.2.5:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
+  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
 mkdirp-classic@^0.5.2:
   version "0.5.3"
@@ -3976,14 +3971,6 @@ once@^1.3.0, once@^1.3.1, once@^1.4.0:
   integrity sha1-WDsap3WWHUsROsF9nFC6753Xa9E=
   dependencies:
     wrappy "1"
-
-optimist@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/optimist/-/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
-  integrity sha1-2j6nRob6IaGaERwybpDrFaAZZoY=
-  dependencies:
-    minimist "~0.0.1"
-    wordwrap "~0.0.2"
 
 optionator@^0.9.1:
   version "0.9.1"
@@ -5431,11 +5418,6 @@ wordwrap@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=
-
-wordwrap@~0.0.2:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.3.tgz#a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
-  integrity sha1-o9XabNXAvAAI03I0u68b7WMFkQc=
 
 wrappy@1:
   version "1.0.2"
