@@ -9,8 +9,10 @@ set -x
 sudo dpkg --add-architecture i386
 
 # fix version conflicts of certain library dependencies on GitHub's Ubuntu focal CI runner
+# this uninstalls some packages which we don't care about
 # https://github.com/actions/virtual-environments/issues/4589
-sudo apt-add-repository ppa:ondrej/php -y
+sudo apt-get update
+sudo apt-get install -y --allow-downgrades libpcre2-8-0=10.34-7
 
 # install wine-stable from the regular Ubuntu package repositories
 sudo apt-get update
