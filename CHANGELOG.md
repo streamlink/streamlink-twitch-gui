@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## master
+## [v2.1.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.1.0) (2022-05-19)
 
 - Re-implemented selection for filtering multiple stream languages
 - Updated list of languages supported by Twitch for filtering streams
@@ -13,7 +13,7 @@ Changelog - Streamlink Twitch GUI
 - Upgraded NW.js to 0.64.1 (Chromium 101.0.4951.67 / NodeJS 18.0.0)
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.0.0..master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.0.0..v2.1.0)
 
 
 ## [v2.0.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.0.0) (2022-01-31)
