@@ -10,6 +10,7 @@ Changelog - Streamlink Twitch GUI
 - Fixed race-condition when calculating API item fetch sizes from stylesheets and window size
 - Fixed broken `--launch channelname` launch parameter
 - Fixed ChannelRoute not accepting channel names as route parameters
+- Upgraded NW.js to 0.64.1 (Chromium 101.0.4951.67 / NodeJS 18.0.0)
 
 
 [Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.0.0..master)
