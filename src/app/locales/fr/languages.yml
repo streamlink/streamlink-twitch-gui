@@ -1,5 +1,7 @@
 ar: Arabe
+asl: Langue des signes américaine
 bg: Bulgare
+ca: Catalan
 cs: Tchèque
 da: Danois
 de: Allemand
@@ -11,21 +13,30 @@ es: Espagnol
 es-mx: Méxicain
 fi: Finnois
 fr: Français
+hi: Hindi
 hu: Hongrois
+# special uppercase language code
+ID: Indonésien
 it: Italien
 ja: Japonais
 ko: Coréen
+ms: Malais
 nl: Néérlandais
 no: Norvégien
+other: "\"Autre\""
 pl: Polonais
 pt: Portugais
 pt-br: Brésilien
+ro: Roumain
 ru: Russe
 sk: Slovaque
 sv: Suédois
+tl: Tagalog
 th: Thaï
 tr: Turque
+uk: Ukrainien
 vi: Vietnamien
 zh: Chinois
 zh-cn: Chinois Simplifié
+zh-hk: Cantonais
 zh-tw: Chinois Traditionnel
