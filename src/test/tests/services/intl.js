@@ -27,6 +27,7 @@ module( "services/intl", function( hooks ) {
 			"ember-intl": { Service },
 			"config": {
 				locales: {
+					default: "en",
 					locales: {
 						en: true,
 						de: true
@@ -57,7 +58,7 @@ module( "services/intl", function( hooks ) {
 		assert.propEqual( IntlService.locale, [ "en" ], "Translates auto to system locale" );
 
 		set( SettingsService, "content.gui.language", "de" );
-		assert.propEqual( IntlService.locale, [ "de" ], "Sets available locale" );
+		assert.propEqual( IntlService.locale, [ "de", "en" ], "Sets available locale" );
 
 		set( SettingsService, "content.gui.language", "fr" );
 		assert.propEqual( IntlService.locale, [ "en" ], "Sets system locale for invalid ones" );

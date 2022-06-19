@@ -6,6 +6,7 @@ import systemLocale from "utils/system-locale";
 
 
 const { locales } = localesConfig;
+const { default: defaultLocale } = localesConfig;
 const { hasOwnProperty } = {};
 
 
@@ -22,7 +23,10 @@ const IntlService = {
 			locale = systemLocale;
 		}
 
-		set( this, "locale", [ locale ] );
+		set( this, "locale", [
+			locale,
+			...( locale !== defaultLocale ? [ defaultLocale ] : [] )
+		]);
 	}),
 
 	init() {
