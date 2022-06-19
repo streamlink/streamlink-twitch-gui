@@ -40,6 +40,7 @@ channel:
         teams: Équipes
         settings: Paramètres
     offline: est hors ligne actuellement
+    no-status: Pas de description de chaîne
     details:
         header: Statistiques de la chaîne
         name:

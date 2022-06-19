@@ -1,5 +1,7 @@
 channel-button:
     title: "Suivre {name}"
+channel-item:
+    no-status: Pas de description de chaîne
 documentation-link:
     title: Lire la documentation en ligne
 drop-down-selection:
