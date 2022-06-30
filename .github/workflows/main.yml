@@ -136,6 +136,8 @@ jobs:
     needs:
       - test
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v2
         with:
@@ -157,5 +159,5 @@ jobs:
         run: yarn run grunt clean:dist dist:all
       - name: Deploy
         env:
-          RELEASES_API_KEY: ${{ secrets.RELEASES_API_KEY }}
+          RELEASES_API_KEY: ${{ secrets.GITHUB_TOKEN }}
         run: yarn run grunt deploy:github
