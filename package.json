@@ -58,7 +58,7 @@
 		"ember-compatibility-helpers": "1.0.2",
 		"ember-decorators": "2.5.1",
 		"ember-qunit": "3.5.1",
-		"eslint": "7.28.0",
+		"eslint": "8.20.0",
 		"eslint-webpack-plugin": "2.5.4",
 		"file-loader": "6.2.0",
 		"grunt": "1.5.3",
