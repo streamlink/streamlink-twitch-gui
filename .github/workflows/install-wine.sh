@@ -17,7 +17,7 @@ dpkg -l | awk '$1 == "ii" && index($3, "deb.sury.org") > 0 && $2 ~ /^php/ { prin
 dpkg -l | awk -v "CODENAME=${UBUNTU_CODENAME}" '$1 == "ii" && index($3, "deb.sury.org") > 0 { print $2 "/" CODENAME }' \
   | xargs -rt sudo apt-get install --no-install-recommends --allow-downgrades -V
 # 3. Assert that no packages from ppa:ondrej/php are left installed
-! dpkg -l | grep '^ii' | fgrep 'deb.sury.org'
+! dpkg -l | grep '^ii' | grep -F 'deb.sury.org'
 
 # add i386 architecture
 sudo dpkg --add-architecture i386
