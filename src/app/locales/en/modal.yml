@@ -57,7 +57,6 @@ streaming:
             unable-to-open: "Error: Unable to open stream"
             no-streams-found: "Error: No streams found"
             timeout: "Error: Timeout"
-            hosting: "{name} is hosting another channel"
             internal: "Error"
     body:
         launching: "Waiting for {provider} to launch the stream..."
@@ -69,7 +68,6 @@ streaming:
             unable-to-open: "{provider} was unable to open the stream."
             no-streams-found: "{provider} was unable to find the stream."
             timeout: "Either {name} has gone offline, or your connection to Twitch has been interrupted."
-            hosting: "Do you want to switch to {name}?"
             internal: "Internal error"
     action:
         abort: Abort
@@ -78,4 +76,3 @@ streaming:
         log: Toggle {provider} log
         restart: Restart
         shutdown: Close stream
-        start-hosted: Switch

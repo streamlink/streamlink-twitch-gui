@@ -57,7 +57,6 @@ streaming:
             unable-to-open: "Errore: Impossibile aprire lo streaming"
             no-streams-found: "Errore: Nessun flusso trovato"
             timeout: "Errore: Tempo scaduto"
-            hosting: "{name} sta ospitando un altro canale"
             internal: "Errore"
     body:
         launching: "In attesa che {provider} avii lo stream..."
@@ -69,7 +68,6 @@ streaming:
             unable-to-open: "Non è stato possibile aprire lo stream {provider}"
             no-streams-found: "Non sono riuscito a trovare lo stream {provider}"
             timeout: "O {name} è offline o la tua connessione a Twitch è stata interrotta."
-            hosting: "Vuoi passare a {name}?"
             internal: "Errore interno"
     action:
         abort: Interrompi
@@ -78,4 +76,3 @@ streaming:
         log: attiva/disattiva registro {provider}
         restart: Riavvia
         shutdown: Chiudi stream
-        start-hosted: Passa

@@ -23,9 +23,6 @@ export const parameters = [
 		"stream.customParameters"
 	),
 	new Parameter(
-		"--twitch-disable-hosting"
-	),
-	new Parameter(
 		"--twitch-disable-ads",
 		"stream.disable_ads"
 	),

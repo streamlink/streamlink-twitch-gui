@@ -5,7 +5,6 @@ import {
 	UnableToOpenError,
 	NoStreamsFoundError,
 	TimeoutError,
-	HostingError,
 	Warning
 } from "services/streaming/errors";
 import parseError from "services/streaming/launch/parse-error";
@@ -46,17 +45,6 @@ test( "Errors", assert => {
 	assert.ok(
 		error instanceof TimeoutError,
 		"Finds the 'read timeout' error message"
-	);
-
-	error = parseError( "foo is hosting bar" );
-	assert.ok(
-		error instanceof HostingError,
-		"Finds the 'X is hosting Y' error message"
-	);
-	assert.strictEqual(
-		error.channel,
-		"bar",
-		"Sets the correct channel property on HostingError"
 	);
 
 	error = parseError( "InsecurePlatformWarning: A true SSLContext object is not available." );

@@ -57,7 +57,6 @@ streaming:
             unable-to-open: "Ошибка: невозможно открыть стрим (поток)"
             no-streams-found: "Ошибка: стримы не найдены"
             timeout: "Ошибка: время ожидания вышло"
-            hosting: "{name} хостит другой канал"
             internal: "Ошибка"
     body:
         launching: "Ждем, пока {provider} подключится к стриму ..."
@@ -69,7 +68,6 @@ streaming:
             unable-to-open: "{provider} не смог подключиться к стриму (unable to open the stream)"
             no-streams-found: "{provider} не смог найти стрим"
             timeout: "Либо {name} отключился, либо соединение с Twitch было разорвано"
-            hosting: "Хотите переключиться на {name}?"
             internal: "Внутренняя ошибка"
     action:
         abort: Прервать
@@ -78,4 +76,3 @@ streaming:
         log: Показать/скрыть журнал {provider}
         restart: Перезапуск
         shutdown: Выключить
-        start-hosted: Переключиться

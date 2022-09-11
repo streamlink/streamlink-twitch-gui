@@ -57,7 +57,6 @@ streaming:
             unable-to-open: "Fehler: Konnte Stream nicht öffnen"
             no-streams-found: "Fehler: Keine Streams gefunden"
             timeout: "Fehler: Timeout"
-            hosting: "{name} hostet einen anderen Kanal"
             internal: "Fehler"
     body:
         launching: "Warte darauf, dass {provider} den Stream startet..."
@@ -69,7 +68,6 @@ streaming:
             unable-to-open: "{provider} konnte den Stream nicht öffnen."
             no-streams-found: "{provider} konnte den Stream nicht finden."
             timeout: "Entweder ist {name} nun offline, oder deine Verbindung zu Twitch wurde unterbrochen."
-            hosting: "Möchtest du zu {name} wechseln?"
             internal: "Interner Fehler"
     action:
         abort: Abbrechen
@@ -78,4 +76,3 @@ streaming:
         log: "{provider} Logansicht ein-/ausschalten"
         restart: Neu starten
         shutdown: Stream schließen
-        start-hosted: Wechseln

@@ -57,7 +57,6 @@ streaming:
             unable-to-open: "Erreur: Impossible d'ouvrir le stream"
             no-streams-found: "Erreur: Aucun sream trouvé"
             timeout: "Erreur: Timeout"
-            hosting: "{name} héberge une autre chaîne"
             internal: "Erreur"
     body:
         launching: "En attente de {provider} de lancer le stream..."
@@ -69,7 +68,6 @@ streaming:
             unable-to-open: "{provider} n'a pas réussi à ouvrir le stream."
             no-streams-found: "{provider} n'a pas réussi à trouver le stream."
             timeout: "Soit {name} est hors ligne, soit votre connexion à Twitch a été interrompue."
-            hosting: "Voulez-vous changer pour {name}?"
             internal: "Erreur interne"
     action:
         abort: Abandonner
@@ -78,4 +76,3 @@ streaming:
         log: Activer/désactiver les logs {provider}
         restart: Redémarrer
         shutdown: Fermer le stream
-        start-hosted: Basculer

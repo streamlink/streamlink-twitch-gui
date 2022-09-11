@@ -2,7 +2,7 @@ import { set, computed } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
 import { vars as varsConfig } from "config";
 import { logDebug, logError } from "./logger";
-import { Aborted, ExitSignalError, HostingError } from "./errors";
+import { Aborted, ExitSignalError } from "./errors";
 import { clearCache } from "./cache";
 import resolvePlayer from "./player/resolve";
 import resolveProvider from "./provider/resolve";
@@ -224,9 +224,7 @@ export default Service.extend( /** @class StreamingService */ {
 		logError( error, () => stream.toJSON({ includeId: true }) );
 
 		// clear cache on error
-		if ( !( error instanceof HostingError ) ) {
-			clearCache();
-		}
+		clearCache();
 
 		// show error in modal
 		set( stream, "error", error );

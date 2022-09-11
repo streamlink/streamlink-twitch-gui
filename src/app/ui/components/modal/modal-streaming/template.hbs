@@ -161,13 +161,6 @@
 			{{#modal-body class="error"}}
 				{{t "modal.streaming.body.error.timeout" name=modalContext.user.detailedName}}
 			{{/modal-body}}
-		{{else if isHostingError}}
-			{{#modal-header}}
-				{{t "modal.streaming.header.error.hosting" name=modalContext.user.detailedName}}
-			{{/modal-header}}
-			{{#modal-body class="error"}}
-				{{t "modal.streaming.body.error.hosting" name=error.channel}}
-			{{/modal-body}}
 		{{else}}
 			{{#modal-header}}
 				{{t "modal.streaming.header.error.internal"}}
@@ -207,20 +200,6 @@
 						iconanim=true
 					}}
 						{{t "modal.streaming.action.download"}}
-					{{/form-button}}
-				{{else if isHostingError}}
-					{{#form-button
-						action=(action "startHosted")
-						classNames="btn-success"
-						icon="fa-step-forward"
-						iconanim=true
-						title=(hotkey-title
-							context=this
-							action="confirm"
-							title=(t "modal.streaming.action.start-hosted")
-						)
-					}}
-						{{t "modal.streaming.action.start-hosted"}}
 					{{/form-button}}
 				{{else if modalContext.hasEnded}}
 					{{#form-button

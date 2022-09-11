@@ -57,7 +57,6 @@ streaming:
             unable-to-open: "Error: No se puede abrir el stream"
             no-streams-found: "Error: No se encontraron streams"
             timeout: "Error: Desconexión por tiempo"
-            hosting: "{name} está hosteando otro canal"
             internal: "Error"
     body:
         launching: "Esperando a {provider} para iniciar stream..."
@@ -69,7 +68,6 @@ streaming:
             unable-to-open: "{provider} no pudo abrir el stream."
             no-streams-found: "{provider} no pudo encontrar el stream."
             timeout: "O {name} se ha desconectado, o tu conexión con Twitch ha sido interrumpida."
-            hosting: "¿Quieres cambiarte a {name}?"
             internal: "Error interno"
     action:
         abort: Abortar
@@ -78,4 +76,3 @@ streaming:
         log: Alternar el log de {provider}
         restart: Reiniciar
         shutdown: Cerrar stream
-        start-hosted: Cambiar

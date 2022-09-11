@@ -11,8 +11,7 @@ import {
 	VersionError,
 	UnableToOpenError,
 	NoStreamsFoundError,
-	TimeoutError,
-	HostingError
+	TimeoutError
 } from "services/streaming/errors";
 import layout from "./template.hbs";
 import "./styles.less";
@@ -59,7 +58,6 @@ export default ModalDialogComponent.extend( /** @class ModalStreamingComponent *
 	isUnableToOpenError: computedError( UnableToOpenError ),
 	isNoStreamsFoundError: computedError( NoStreamsFoundError ),
 	isTimeoutError: computedError( TimeoutError ),
-	isHostingError: computedError( HostingError ),
 
 	qualities,
 	versionMin: computed( "settings.content.streaming.providerType", function() {
@@ -83,9 +81,7 @@ export default ModalDialogComponent.extend( /** @class ModalStreamingComponent *
 		},
 		/** @this {ModalStreamingComponent} */
 		confirm() {
-			if ( this.isHostingError ) {
-				this.send( "startHosted" );
-			} else if ( this.modalContext.hasEnded ) {
+			if ( this.modalContext.hasEnded ) {
 				this.send( "restart" );
 			}
 		},
@@ -139,27 +135,6 @@ export default ModalDialogComponent.extend( /** @class ModalStreamingComponent *
 				}
 				this.streaming.launchStream( modalContext )
 					.catch( () => {} );
-			}
-		},
-
-		/** @this {ModalStreamingComponent} */
-		async startHosted( success, failure ) {
-			const { modalContext } = this;
-			if ( modalContext.isDestroyed ) { return; }
-			const { channel: user_login } = modalContext.error;
-			if ( !user_login ) { return; }
-			try {
-				const stream = await this.store.queryRecord( "twitch-stream", { user_login } );
-				if ( success ) {
-					await success();
-				}
-				this.send( "close" );
-				this.streaming.startStream( stream )
-					.catch( () => {} );
-			} catch ( e ) {
-				if ( failure ) {
-					await failure();
-				}
 			}
 		},
 
