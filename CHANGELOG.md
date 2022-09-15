@@ -1,6 +1,23 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## master
+
+- Removed hardcoded `--twitch-disable-hosting` Streamlink launch parameter.  
+  [Twitch will remove the channel hosting feature on 2022-10-03.](https://help.twitch.tv/s/article/how-to-use-host-mode?language=en_US#faq)  
+  **⚠️ WARNING ⚠️**  
+  Users of Streamlink Twitch GUI will have to upgrade, or launching streams may fail.  
+  The parameter has been suppressed in [Streamlink 5.0.0](https://github.com/streamlink/streamlink/releases/tag/5.0.0), so upgrading to the latest Streamlink version will work as well.  
+  [See the Streamlink install docs.](https://streamlink.github.io/install.html)
+- Fixed missing tray icon menu if desktop notifications were disabled
+- Fixed missing translation stings not falling back to English and showing an error instead
+- Fixed missing French tanslations ([#895](https://github.com/streamlink/streamlink-twitch-gui/pull/895))
+- Upgraded NW.js to 0.68.1 (Chromium 105.0.5195.102 / NodeJS 18.9.0)
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.1.0...master)
+
+
 ## [v2.1.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.1.0) (2022-05-19)
 
 - Re-implemented selection for filtering multiple stream languages
