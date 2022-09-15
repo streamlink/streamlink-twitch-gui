@@ -12,6 +12,7 @@ import {
 } from "nwjs/Window";
 import { platform } from "utils/node/platform";
 import t from "translation-key";
+import { nextTick } from "process";
 
 
 const { "display-name": displayName } = mainConfig;
@@ -97,7 +98,7 @@ export default EmberObject.extend( Evented, {
 			tooltip: displayName
 		});
 		this.tray.on( "click", ( ...args ) => this.trigger( "click", ...args ) );
-		this.tray.menu = this.menu.menu;
+		nextTick( () => this.menu.trigger( "update" ) );
 	},
 
 	_removeTray() {
