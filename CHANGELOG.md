@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## master
+## [v2.2.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.2.0) (2022-09-16)
 
 - Removed hardcoded `--twitch-disable-hosting` Streamlink launch parameter.  
   [Twitch will remove the channel hosting feature on 2022-10-03.](https://help.twitch.tv/s/article/how-to-use-host-mode?language=en_US#faq)  
@@ -15,7 +15,7 @@ Changelog - Streamlink Twitch GUI
 - Upgraded NW.js to 0.68.1 (Chromium 105.0.5195.102 / NodeJS 18.9.0)
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.1.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.1.0...v2.2.0)
 
 
 ## [v2.1.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.1.0) (2022-05-19)
