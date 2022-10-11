@@ -9,7 +9,7 @@
 		"title": "<%= main['display-name'] %>",
 		"frame": false,
 		"resizable": true,
-		"show": false,
+		"show": true,
 		"position": "center",
 		"width": 960,
 		"height": 540,
