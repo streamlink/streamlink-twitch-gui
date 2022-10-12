@@ -29,6 +29,14 @@ global.process.on( "uncaughtException", function( err ) {
 });
 
 
+/* istanbul ignore next */
+if ( DEVELOPMENT ) {
+	try {
+		require( "nw.gui" ).Window.get().showDevTools();
+	} catch ( e ) {}
+}
+
+
 // "pre-load" certain native node modules
 // prevents a bug on Windows which causes all methods of stream.Writable.prototype to be missing
 // on stream.Duplex.prototype, more specifically stream.Duplex.prototype.cork. Also related to
