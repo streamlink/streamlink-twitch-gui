@@ -108,12 +108,12 @@ jobs:
       - name: Get file names for artifact upload
         id: names
         run: |
-          echo ::set-output name=archive_win64::$(basename dist/streamlink-twitch-gui-*-win64.zip)
-          echo ::set-output name=upload_win64::$(basename dist/streamlink-twitch-gui-*-win64.zip | sed 's/\.zip$//')
-          echo ::set-output name=archive_osx64::$(basename dist/streamlink-twitch-gui-*-macOS.tar.gz)
-          echo ::set-output name=upload_osx64::$(basename dist/streamlink-twitch-gui-*-macOS.tar.gz | sed 's/\.tar\.gz$//')
-          echo ::set-output name=archive_linux64::$(basename dist/streamlink-twitch-gui-*-linux64.tar.gz)
-          echo ::set-output name=upload_linux64::$(basename dist/streamlink-twitch-gui-*-linux64.tar.gz | sed 's/\.tar\.gz$//')
+          echo "archive_win64=$(basename dist/streamlink-twitch-gui-*-win64.zip)" >> $GITHUB_OUTPUT
+          echo "upload_win64=$(basename dist/streamlink-twitch-gui-*-win64.zip | sed 's/\.zip$//')" >> $GITHUB_OUTPUT
+          echo "archive_osx64=$(basename dist/streamlink-twitch-gui-*-macOS.tar.gz)" >> $GITHUB_OUTPUT
+          echo "upload_osx64=$(basename dist/streamlink-twitch-gui-*-macOS.tar.gz | sed 's/\.tar\.gz$//')" >> $GITHUB_OUTPUT
+          echo "archive_linux64=$(basename dist/streamlink-twitch-gui-*-linux64.tar.gz)" >> $GITHUB_OUTPUT
+          echo "upload_linux64=$(basename dist/streamlink-twitch-gui-*-linux64.tar.gz | sed 's/\.tar\.gz$//')" >> $GITHUB_OUTPUT
       - name: Upload artifact (win64)
         uses: actions/upload-artifact@v3
         with:
