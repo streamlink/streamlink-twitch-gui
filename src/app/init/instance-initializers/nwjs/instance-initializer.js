@@ -1,6 +1,6 @@
 import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
-import { scheduleOnce } from "@ember/runloop";
+import { later, scheduleOnce } from "@ember/runloop";
 import { default as nwApp, quit } from "nwjs/App";
 import { default as nwWindow, setVisibility, setFocused } from "nwjs/Window";
 import { argv, parseCommand } from "nwjs/argv";
@@ -52,12 +52,11 @@ export default {
 			// restore window position first (while being hidden)
 			await windowInitializer( application );
 
-			// wait until Ember has rendered the app for the first time (window is still hidden)
-			await new Promise( resolve => scheduleOnce( "afterRender", resolve ) );
-			// assume that NW.js doesn't render a white page anymore after the next two frames
-			for ( let i = 0; i < 2; i++ ) {
-				await new Promise( resolve => requestAnimationFrame( resolve ) );
-			}
+			// Wait until Ember has rendered the app for the first time (window is still hidden).
+			// Wrap scheduled "afterRender" run-loop queue callback in a new run-loop to ensure
+			// that the DOM is fully rendered and no white screen will appear for a few frames.
+			// We can't use requestAnimationFrame here due to issue #911.
+			await new Promise( resolve => later( () => scheduleOnce( "afterRender", resolve ) ) );
 
 			// wait until the target route is loaded
 			const routeName = await routingPromise;
