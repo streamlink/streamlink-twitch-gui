@@ -31,7 +31,8 @@ module.exports = {
 				appDir: pApp,
 				localesDir: config.resolve.alias.locales,
 				defaultLocale: grunt.config( "locales.default" ),
-				exclude: grunt.config( "coverage.i18n.exclude" )
+				exclude: grunt.config( "coverage.i18n.exclude" ),
+				ciSummary: process.env[ "GITHUB_STEP_SUMMARY" ]
 			})
 		);
 	}

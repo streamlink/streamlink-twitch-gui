@@ -8,12 +8,13 @@ const paramHTMLSafe = "htmlSafe";
 
 
 module.exports = class WebpackI18nCoveragePlugin {
-	constructor( grunt, { appDir, defaultLocale, localesDir, exclude = [] } = {} ) {
+	constructor( grunt, { appDir, defaultLocale, localesDir, exclude = [], ciSummary } = {} ) {
 		this.grunt = grunt;
 		this.appDir = appDir;
 		this.defaultLocale = defaultLocale;
 		this.localesDir = localesDir;
 		this.exclude = exclude;
+		this.ciSummary = ciSummary;
 
 		this._BabelParser = require( "@babel/parser" );
 		this._BabelTraverse = require( "@babel/traverse" ).default;
@@ -51,6 +52,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 			return;
 		}
 
+		const writeFileSync = require( "fs" ).writeFileSync;
 		const diff = require( "lodash/difference" );
 		const diffWith = require( "lodash/differenceWith" );
 
@@ -60,17 +62,32 @@ module.exports = class WebpackI18nCoveragePlugin {
 
 		let success = true;
 		const output = ( header, fail, callback ) => {
+			const list = callback();
+			outputGrunt( header, list );
+			outputCiSummary( header, list );
+			if ( list.length && fail ) {
+				success = false;
+			}
+		};
+		const outputGrunt = ( header, list ) => {
 			grunt.log.writeln();
 			grunt.log.ok( header );
-			const list = callback();
 			if ( !list.length ) {
 				grunt.log.ok( "Success" );
 			} else {
 				list.forEach( item => grunt.log.error( item.toString() ) );
-				if ( fail ) {
-					success = false;
-				}
 			}
+		};
+		const outputCiSummary = ( header, list ) => {
+			if ( !this.ciSummary ) { return; }
+			const out = [
+				`## ${list.length ? "❌" : "✔️"} ${header}`,
+				...( list.length ? [ "" ] : [] ),
+				...list.map( item => `- \`${item.toString()}\`` ),
+				"",
+				""
+			];
+			writeFileSync( this.ciSummary, out.join( "\n" ), { flag: "a" } );
 		};
 
 		// found translation keys (eg. "foo" or "foo.*.bar")
@@ -87,6 +104,10 @@ module.exports = class WebpackI18nCoveragePlugin {
 		const keysFiltered = diffWith( keys, reExclude, fnExclude )
 			// and turn found keys list into {RegExp[]}
 			.map( str => this._strToRegExp( str ) );
+
+		if ( this.ciSummary ) {
+			writeFileSync( this.ciSummary, "# i18n summary\n\n", { flag: "w" } );
+		}
 
 		grunt.log.writeln();
 		output( "Checking for missing translation keys in locales", false, () => {
