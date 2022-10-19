@@ -31,13 +31,13 @@ function fnURL( _, __, scheme, netloc, tld, path ) {
 	scheme = scheme || "";
 	path = path || "";
 
-	// assume implicit http protocol
-	let urlScheme = scheme ? scheme : "http://";
-	// hide implicit http prototcol in link text
-	let textScheme = scheme === "http://" ? "" : scheme;
+	// assume implicit https protocol
+	const urlScheme = scheme ? scheme : "https://";
+	// hide https protocol in link text
+	const textScheme = scheme === "https://" ? "" : scheme;
 
 	// noinspection JSDeprecatedSymbols
-	let textNetloc = punycodeToUnicode( netloc );
+	const textNetloc = punycodeToUnicode( netloc );
 
 	return {
 		url : `${urlScheme}${netloc}${path}`,

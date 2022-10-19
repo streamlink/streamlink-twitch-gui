@@ -25,27 +25,28 @@ module( "ui/components/link/embedded-links", function( hooks ) {
 
 
 	test( "EmbeddedLinksComponent", async function( assert ) {
-		this.set( "text", "foo https://twitch.tv/foo bar https://bar.com baz @baz qux" );
+		this.set( "text", "foo twitch.tv/foo bar bar.com baz @baz qux" );
 		await render( hbs`{{embedded-links text=text}}` );
 
 		const component = this.element.querySelector( ".embedded-links-component" );
 		const anchors = Array.from( component.querySelectorAll( ".external-link-component" ) );
-		assert.strictEqual( anchors.length, 3, "Renders all ExternalLinkComponents" );
-		assert.notOk(
-			anchors[ 0 ].classList.contains( "external-link" ),
-			"First link is internal"
+		assert.propEqual(
+			anchors.map( e => ([ e.classList.contains( "external-link" ), e.title ]) ),
+			[
+				[ false, "" ],
+				[ true, "https://bar.com" ],
+				[ true, "https://twitter.com/baz" ]
+			],
+			"First link is internal, other links are external"
 		);
-		assert.ok(
-			anchors.slice( 1 ).every( e => e.classList.contains( "external-link" ) ),
-			"Other links are external"
-		);
-		assert.ok(
-			anchors.every( e => e.tabIndex === -1 ),
+		assert.propEqual(
+			anchors.map( e => e.tabIndex ),
+			[ -1, -1, -1 ],
 			"All anchors have their tabIndex set to -1"
 		);
 		assert.strictEqual(
 			component.innerText,
-			"foo https://twitch.tv/foo bar https://bar.com baz @baz qux",
+			"foo twitch.tv/foo bar bar.com baz @baz qux",
 			"Component has the correct text child nodes"
 		);
 	});

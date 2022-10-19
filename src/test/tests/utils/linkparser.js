@@ -31,34 +31,34 @@ module( "utils/linkparser", function() {
 		);
 
 		assert.propEqual(
-			parseString( "https://google.com" ),
+			parseString( "http://google.com" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "https://google.com", text: "https://google.com" } ]
+				links: [ { url: "http://google.com", text: "http://google.com" } ]
 			},
 			"just the url"
 		);
 		assert.propEqual(
-			parseString( "!https://google.com" ),
+			parseString( "!http://google.com" ),
 			{
 				texts: [ "!", "" ],
-				links: [ { url: "https://google.com", text: "https://google.com" } ]
+				links: [ { url: "http://google.com", text: "http://google.com" } ]
 			},
 			"valid starting boundary"
 		);
 		assert.propEqual(
-			parseString( "<https://google.com>" ),
+			parseString( "<http://google.com>" ),
 			{
 				texts: [ "<", ">" ],
-				links: [ { url: "https://google.com", text: "https://google.com" } ]
+				links: [ { url: "http://google.com", text: "http://google.com" } ]
 			},
 			"valid ending boundary (no path)"
 		);
 		assert.propEqual(
-			parseString( "foo https://google.com bar" ),
+			parseString( "foo http://google.com bar" ),
 			{
 				texts: [ "foo ", " bar" ],
-				links: [ { url: "https://google.com", text: "https://google.com" } ]
+				links: [ { url: "http://google.com", text: "http://google.com" } ]
 			},
 			"between text"
 		);
@@ -66,20 +66,20 @@ module( "utils/linkparser", function() {
 
 	test( "URL schemes", function( assert ) {
 		assert.propEqual(
-			parseString( "http://google.com" ),
+			parseString( "https://google.com" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://google.com", text: "google.com" } ]
+				links: [ { url: "https://google.com", text: "google.com" } ]
 			},
-			"Remove http protocol from link text"
+			"Remove https protocol from link text"
 		);
 		assert.propEqual(
 			parseString( "google.com" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://google.com", text: "google.com" } ]
+				links: [ { url: "https://google.com", text: "google.com" } ]
 			},
-			"Implicit http protocol"
+			"Implicit https protocol"
 		);
 	});
 
@@ -97,7 +97,7 @@ module( "utils/linkparser", function() {
 			parseString( "google.de" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://google.de", text: "google.de" } ]
+				links: [ { url: "https://google.de", text: "google.de" } ]
 			},
 			"country code domains"
 		);
@@ -105,7 +105,7 @@ module( "utils/linkparser", function() {
 			parseString( "google.co.uk" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://google.co.uk", text: "google.co.uk" } ]
+				links: [ { url: "https://google.co.uk", text: "google.co.uk" } ]
 			},
 			"second level domains"
 		);
@@ -113,7 +113,7 @@ module( "utils/linkparser", function() {
 			parseString( "foo.我爱你" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://foo.我爱你", text: "foo.我爱你" } ]
+				links: [ { url: "https://foo.我爱你", text: "foo.我爱你" } ]
 			},
 			"internationalized TLDs"
 		);
@@ -121,24 +121,24 @@ module( "utils/linkparser", function() {
 			parseString( "foo.xn--7ba0bs.xn--6QQ986B3XL" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://foo.xn--7ba0bs.xn--6QQ986B3XL", text: "foo.ÄÖÜ.我爱你" } ]
+				links: [ { url: "https://foo.xn--7ba0bs.xn--6QQ986B3XL", text: "foo.ÄÖÜ.我爱你" } ]
 			},
 			"internationalized domains"
 		);
 
 		assert.propEqual(
-			parseString( "https://www.google.com" ),
+			parseString( "www.google.com" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "https://www.google.com", text: "https://www.google.com" } ]
+				links: [ { url: "https://www.google.com", text: "www.google.com" } ]
 			},
 			"subdomains"
 		);
 		assert.propEqual(
-			parseString( "https://foo.bar.baz.com" ),
+			parseString( "foo.bar.baz.com" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "https://foo.bar.baz.com", text: "https://foo.bar.baz.com" } ]
+				links: [ { url: "https://foo.bar.baz.com", text: "foo.bar.baz.com" } ]
 			},
 			"multiple subdomains"
 		);
@@ -147,7 +147,7 @@ module( "utils/linkparser", function() {
 			parseString( "foo.com:8080" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://foo.com:8080", text: "foo.com:8080" } ]
+				links: [ { url: "https://foo.com:8080", text: "foo.com:8080" } ]
 			},
 			"port number"
 		);
@@ -158,15 +158,15 @@ module( "utils/linkparser", function() {
 			parseString( "foo.com/" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://foo.com/", text: "foo.com/" } ]
+				links: [ { url: "https://foo.com/", text: "foo.com/" } ]
 			},
 			"empty path"
 		);
 		assert.propEqual(
-			parseString( "https://foo.com/bar" ),
+			parseString( "foo.com/bar" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url : "https://foo.com/bar", text: "https://foo.com/bar" } ]
+				links: [ { url : "https://foo.com/bar", text: "foo.com/bar" } ]
 			},
 			"non-empty path"
 		);
@@ -175,7 +175,7 @@ module( "utils/linkparser", function() {
 			parseString( "<https://foo.com/>" ),
 			{
 				texts: [ "<", "" ],
-				links: [ { url: "https://foo.com/>", text: "https://foo.com/>" } ]
+				links: [ { url: "https://foo.com/>", text: "foo.com/>" } ]
 			},
 			"empty path with URL wrappers"
 		);
@@ -183,7 +183,7 @@ module( "utils/linkparser", function() {
 			parseString( "<https://foo.com/bar>" ),
 			{
 				texts: [ "<", "" ],
-				links: [ { url: "https://foo.com/bar>", text: "https://foo.com/bar>" } ]
+				links: [ { url: "https://foo.com/bar>", text: "foo.com/bar>" } ]
 			},
 			"non-empty path with URL wrappers"
 		);
@@ -192,7 +192,7 @@ module( "utils/linkparser", function() {
 			parseString( "foo.com:8080/bar" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "http://foo.com:8080/bar", text: "foo.com:8080/bar" } ]
+				links: [ { url: "https://foo.com:8080/bar", text: "foo.com:8080/bar" } ]
 			},
 			"port number"
 		);
@@ -203,16 +203,16 @@ module( "utils/linkparser", function() {
 			parseString( "GOOGLE.COM" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url : "http://GOOGLE.COM", text: "GOOGLE.COM" } ]
+				links: [ { url : "https://GOOGLE.COM", text: "GOOGLE.COM" } ]
 			},
 			"Ignore case"
 		);
 		assert.propEqual(
-			parseString( "http://sub.host.com/path/subpath?a=b&c#d" ),
+			parseString( "sub.host.com/path/subpath?a=b&c#d" ),
 			{
 				texts: [ "", "" ],
 				links: [{
-					url : "http://sub.host.com/path/subpath?a=b&c#d",
+					url : "https://sub.host.com/path/subpath?a=b&c#d",
 					text: "sub.host.com/path/subpath?a=b&c#d"
 				}]
 			},
@@ -223,9 +223,9 @@ module( "utils/linkparser", function() {
 			{
 				texts: [ "foo ", " ", " ", " quux" ],
 				links: [
-					{ url: "http://bar.com", text: "bar.com" },
-					{ url: "http://baz.com", text: "baz.com" },
-					{ url: "http://qux.com", text: "qux.com" }
+					{ url: "https://bar.com", text: "bar.com" },
+					{ url: "https://baz.com", text: "baz.com" },
+					{ url: "https://qux.com", text: "qux.com" }
 				]
 			},
 			"Multiple matches"
@@ -315,11 +315,11 @@ module( "utils/linkparser", function() {
 				links: [
 					{
 						url: "https://www.reddit.com",
-						text: "https://www.reddit.com"
+						text: "www.reddit.com"
 					},
 					{
 						url: "https://www.reddit.com/r/subreddit/comments/abcdef",
-						text: "https://www.reddit.com/r/subreddit/comments/abcdef"
+						text: "www.reddit.com/r/subreddit/comments/abcdef"
 					}
 				]
 			},
@@ -372,7 +372,7 @@ module( "utils/linkparser", function() {
 				texts: [ "Follow ", " and visit ", " or follow ", " and visit ", "" ],
 				links: [
 					{ url: "https://twitter.com/foo", text: "@foo" },
-					{ url: "http://bar.com", text: "bar.com" },
+					{ url: "https://bar.com", text: "bar.com" },
 					{ url: "https://www.reddit.com/u/baz", text: "/u/baz" },
 					{ url: "https://www.reddit.com/r/qux", text: "/r/qux" }
 				]
