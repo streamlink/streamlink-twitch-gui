@@ -65,6 +65,7 @@ jobs:
             yarn run grunt test:coverage
           fi
       - name: I18n
+        if: startsWith(matrix.os, 'ubuntu')
         run: yarn run grunt webpack:i18n
       - name: Build
         run: yarn run grunt clean:tmp_prod webpack:prod

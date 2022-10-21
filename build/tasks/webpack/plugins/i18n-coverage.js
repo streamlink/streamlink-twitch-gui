@@ -52,7 +52,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 			return;
 		}
 
-		const writeFileSync = require( "fs" ).writeFileSync;
+		const { writeFileSync } = require( "fs" );
 		const diff = require( "lodash/difference" );
 		const diffWith = require( "lodash/differenceWith" );
 
@@ -61,6 +61,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 		}
 
 		let success = true;
+		const ciSummary = [];
 		const output = ( header, fail, callback ) => {
 			const list = callback();
 			outputGrunt( header, list );
@@ -80,14 +81,12 @@ module.exports = class WebpackI18nCoveragePlugin {
 		};
 		const outputCiSummary = ( header, list ) => {
 			if ( !this.ciSummary ) { return; }
-			const out = [
+			ciSummary.push(
 				`## ${list.length ? "❌" : "✔️"} ${header}`,
 				...( list.length ? [ "" ] : [] ),
 				...list.map( item => `- \`${item.toString()}\`` ),
-				"",
 				""
-			];
-			writeFileSync( this.ciSummary, out.join( "\n" ), { flag: "a" } );
+			);
 		};
 
 		// found translation keys (eg. "foo" or "foo.*.bar")
@@ -106,7 +105,7 @@ module.exports = class WebpackI18nCoveragePlugin {
 			.map( str => this._strToRegExp( str ) );
 
 		if ( this.ciSummary ) {
-			writeFileSync( this.ciSummary, "# i18n summary\n\n", { flag: "w" } );
+			ciSummary.push( "# i18n summary\n" );
 		}
 
 		grunt.log.writeln();
@@ -180,6 +179,10 @@ module.exports = class WebpackI18nCoveragePlugin {
 			}
 			return errors;
 		});
+
+		if ( this.ciSummary ) {
+			writeFileSync( this.ciSummary, `${ciSummary.join( "\n" )}\n\n`, { flag: "a" } );
+		}
 
 		if ( !success ) {
 			grunt.fail.fatal();
