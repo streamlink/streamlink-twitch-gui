@@ -92,7 +92,7 @@ Your support is very much appreciated, thank you!
 * [Bitcoin](https://www.blockchain.com/btc/address/1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8) (`1EZg8eBz4RdPb8pEzYD9JEzr9Fyitzj8j8`)
 
 
-  [Preview]: https://user-images.githubusercontent.com/467294/151660267-97a8c0a3-62b3-4aa5-b960-c307da1b4fb2.png "Preview image"
+  [Preview]: https://user-images.githubusercontent.com/467294/199009198-011d23f2-a884-4bf8-94d0-bb304ceecc08.jpg "Preview image"
   [Website]: https://streamlink.github.io/streamlink-twitch-gui/ "Streamlink Twitch GUI website"
   [Releases]: https://github.com/streamlink/streamlink-twitch-gui/releases "Streamlink Twitch GUI Releases"
   [Issues]: https://github.com/streamlink/streamlink-twitch-gui/issues "Streamlink Twitch GUI Issues"
