@@ -6,15 +6,26 @@ import { themes as themesConfig } from "config";
 const { themes, system: systemThemes, prefix } = themesConfig;
 
 
-export default Service.extend({
+export default Service.extend( /** @class ThemeService */ {
 	document: service( "-document" ),
 	settings: service(),
 
 	systemTheme: null,
+	customTheme: null,
 
 	initialize() {
 		// calling this in `init` won't trigger the observer of systemTheme when it gets set
 		this._checkSystemColorScheme();
+	},
+
+	/**
+	 * @param {string|null} theme
+	 */
+	setTheme( theme ) {
+		const customTheme = themes.includes( theme )
+			? theme
+			: null;
+		set( this, "customTheme", customTheme );
 	},
 
 	/**
@@ -43,9 +54,12 @@ export default Service.extend({
 	/**
 	 * Apply theme class name to the documentElement
 	 */
-	_applyTheme: observer( "settings.content.gui.theme", "systemTheme", function() {
-		let theme = this.settings.content.gui.theme;
+	_applyTheme: observer( "settings.content.gui.theme", "systemTheme", "customTheme", function() {
+		let { theme } = this.settings.content.gui;
 
+		if ( this.customTheme ) {
+			theme = this.customTheme;
+		}
 		if ( !theme || !themes.includes( theme ) ) {
 			theme = "system";
 		}

@@ -4,6 +4,7 @@ import {
 	ARG_MIN,
 	ARG_MAX,
 	ARG_RESET_WINDOW,
+	ARG_THEME,
 	ARG_LAUNCH,
 	ARG_GOTO
 } from "nwjs/argv";
@@ -27,6 +28,13 @@ export default async function( application, argv ) {
 	// (un)maximize window
 	if ( argv[ ARG_MAX ] ) {
 		toggleMaximized();
+	}
+
+	// apply custom theme
+	if ( argv[ ARG_THEME ] ) {
+		/** @type {ThemeService} */
+		const themeService = application.lookup( "service:theme" );
+		themeService.setTheme( argv[ ARG_THEME ] );
 	}
 
 	if ( argv[ ARG_TRAY ] ) {

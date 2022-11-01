@@ -36,6 +36,7 @@ test( "Default values", assert => {
 			"logfile": true,
 			"loglevel": "",
 			"l": "",
+			"theme": "",
 			"goto": "",
 			"launch": ""
 		},
@@ -54,6 +55,7 @@ test( "Default values", assert => {
 			"ARG_MAX",
 			"ARG_MIN",
 			"ARG_RESET_WINDOW",
+			"ARG_THEME",
 			"ARG_TRAY",
 			"ARG_VERSIONCHECK"
 		].sort(),
@@ -81,6 +83,8 @@ test( "Custom parameters", assert => {
 				// string
 				"--loglevel",
 				"debug",
+				"--theme",
+				"dark",
 				"--goto",
 				"foo",
 				"--launch",
@@ -109,6 +113,7 @@ test( "Custom parameters", assert => {
 			"logfile": false,
 			"loglevel": "debug",
 			"l": "debug",
+			"theme": "dark",
 			"goto": "foo",
 			"launch": "bar"
 		},
@@ -153,6 +158,7 @@ test( "Aliases", assert => {
 			"logfile": true,
 			"loglevel": "debug",
 			"l": "debug",
+			"theme": "",
 			"goto": "",
 			"launch": ""
 		},
@@ -208,6 +214,7 @@ test( "Parse command on Linux", assert => {
 			"logfile": true,
 			"loglevel": "",
 			"l": "",
+			"theme": "",
 			"goto": "foo",
 			"launch": ""
 		},
@@ -263,6 +270,7 @@ test( "Parse command on macOS", assert => {
 			"logfile": true,
 			"loglevel": "",
 			"l": "",
+			"theme": "",
 			"goto": "foo",
 			"launch": ""
 		},
@@ -319,6 +327,7 @@ test( "Parse command on Windows", assert => {
 			"logfile": true,
 			"loglevel": "",
 			"l": "",
+			"theme": "",
 			"goto": "foo",
 			"launch": ""
 		},

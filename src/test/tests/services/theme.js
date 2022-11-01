@@ -27,6 +27,8 @@ module( "services/theme", function( hooks ) {
 		}
 	}
 
+	/** @typedef {TestContext} TestContextThemeService */
+	/** @this {TestContextThemeService} */
 	hooks.beforeEach(function() {
 		this.matchMediaStub = sinon.stub();
 		this.stubMatchMedia = arr => arr.map( ( matches, i ) => {
@@ -58,6 +60,7 @@ module( "services/theme", function( hooks ) {
 	});
 
 
+	/** @this {TestContextThemeService} */
 	test( "Apply theme classes", async function( assert ) {
 		this.owner.register( "service:theme", ThemeService.extend({
 			_checkSystemColorScheme() {}
@@ -69,6 +72,7 @@ module( "services/theme", function( hooks ) {
 		this.theme = this.owner.lookup( "service:theme" );
 
 		assert.notOk( this.theme.systemTheme, "systemTheme is unset initially" );
+		assert.notOk( this.theme.customTheme, "customTheme is unset initially" );
 		assert.propEqual( this.getClassList(), [ "foo" ], "No theme classes set initially" );
 
 		this.set( "theme.systemTheme", "light" );
@@ -78,18 +82,32 @@ module( "services/theme", function( hooks ) {
 		assert.propEqual( this.getClassList(), [ "foo", "theme-dark" ], "Changes system theme" );
 
 		this.set( "settings.content.gui.theme", "light" );
-		assert.propEqual( this.getClassList(), [ "foo", "theme-light" ], "Changes custom theme" );
+		assert.propEqual( this.getClassList(), [ "foo", "theme-light" ], "Changes specific theme" );
 
 		this.set( "settings.content.gui.theme", "dark" );
-		assert.propEqual( this.getClassList(), [ "foo", "theme-dark" ], "Changes custom theme" );
+		assert.propEqual( this.getClassList(), [ "foo", "theme-dark" ], "Changes specific theme" );
 
 		this.set( "theme.systemTheme", "light" );
 		this.set( "settings.content.gui.theme", "" );
 		assert.propEqual( this.getClassList(), [ "foo", "theme-light" ], "Sys theme if unset" );
-		this.set( "settings.content.gui.theme", "unkown" );
+		this.set( "settings.content.gui.theme", "unknown" );
 		assert.propEqual( this.getClassList(), [ "foo", "theme-light" ], "Sys theme if unknown" );
+
+		this.set( "settings.content.gui.theme", "light" );
+		this.theme.setTheme( "dark" );
+		assert.propEqual( this.getClassList(), [ "foo", "theme-dark" ], "Changes custom theme" );
+
+		this.set( "settings.content.gui.theme", "" );
+		assert.propEqual( this.getClassList(), [ "foo", "theme-dark" ], "Keeps custom theme" );
+
+		this.theme.setTheme( "invalid" );
+		assert.propEqual( this.getClassList(), [ "foo", "theme-light" ], "Invalid custom theme" );
+
+		this.theme.setTheme( "" );
+		assert.propEqual( this.getClassList(), [ "foo", "theme-light" ], "No custom theme" );
 	});
 
+	/** @this {TestContextThemeService} */
 	test( "System theme", async function( assert ) {
 		this.owner.register( "service:theme", ThemeService.extend({
 			_applyTheme: null
@@ -166,6 +184,7 @@ module( "services/theme", function( hooks ) {
 		}
 	});
 
+	/** @this {TestContextThemeService} */
 	test( "Acceptance test", async function( assert ) {
 		this.owner.register( "service:theme", ThemeService );
 

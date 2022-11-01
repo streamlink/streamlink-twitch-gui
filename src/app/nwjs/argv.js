@@ -12,6 +12,7 @@ export const ARG_RESET_WINDOW = "reset-window";
 export const ARG_VERSIONCHECK = "versioncheck";
 export const ARG_LOGLEVEL = "loglevel";
 export const ARG_LOGFILE = "logfile";
+export const ARG_THEME = "theme";
 export const ARG_LAUNCH = "launch";
 export const ARG_GOTO = "goto";
 
@@ -27,6 +28,7 @@ const minimistOptions = {
 	],
 	string: [
 		ARG_LOGLEVEL,
+		ARG_THEME,
 		ARG_LAUNCH,
 		ARG_GOTO
 	],
@@ -41,6 +43,7 @@ const minimistOptions = {
 		[ ARG_VERSIONCHECK ]: true,
 		[ ARG_LOGLEVEL ]: "",
 		[ ARG_LOGFILE ]: true,
+		[ ARG_THEME ]: "",
 		[ ARG_LAUNCH ]: "",
 		[ ARG_GOTO ]: ""
 	}
