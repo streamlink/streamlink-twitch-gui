@@ -86,7 +86,7 @@
 		"raw-loader": "0.5.1",
 		"sinon": "11.1.2",
 		"svgo": "2.4.0",
-		"webpack": "5.38.1",
+		"webpack": "5.75.0",
 		"webpack-subresource-integrity": "5.0.0-alpha.5",
 		"yaml-loader": "0.6.0"
 	},
