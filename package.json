@@ -43,7 +43,7 @@
 		"@ember/test-helpers": "0.7.27",
 		"@ember-decorators/argument": "0.8.21",
 		"@glimmer/syntax": "0.47.4",
-		"babel-loader": "8.2.2",
+		"babel-loader": "9.1.0",
 		"babel-plugin-debug-macros": "0.2.0",
 		"babel-plugin-ember-modules-api-polyfill": "3.5.0",
 		"babel-plugin-feature-flags": "0.3.1",
