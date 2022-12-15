@@ -46,9 +46,9 @@ quit:
 streaming:
     header:
         preparing: "準備中，請稍候"
-        launching: "讀取中: "
-        watching: "收看中: "
-        ended: "實況已結束: "
+        launching: "讀取中: {channel}"
+        watching: "收看中: {channel}"
+        ended: "實況已結束: {channel}"
         error:
             log: "錯誤: 無法讀取實況"
             provider: "錯誤: {provider} 設定錯誤"

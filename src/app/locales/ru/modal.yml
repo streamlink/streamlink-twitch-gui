@@ -46,9 +46,9 @@ quit:
 streaming:
     header:
         preparing: "Идет подготовка, пожалуйста, ожидайте"
-        launching: "Подключение: "
-        watching: "Просмотр: "
-        ended: "Стрим прерван/закончен: "
+        launching: "Подключение: {channel}"
+        watching: "Просмотр: {channel}"
+        ended: "Стрим прерван/закончен: {channel}"
         error:
             log: "Ошибка: не удалось запустить"
             provider: "Ошибка: неправильная конфигурация для {provider}"

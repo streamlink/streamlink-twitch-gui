@@ -18,7 +18,9 @@
 			{{/modal-footer}}
 		{{else if modalContext.hasEnded}}
 			{{#modal-header}}
-				{{t "modal.streaming.header.ended"}}{{#link-to "channel" modalContext.user.id}}{{modalContext.user.detailedName}}{{/link-to}}
+				{{#link-to "channel" modalContext.user.id}}
+					{{t "modal.streaming.header.ended" channel=modalContext.user.detailedName}}
+				{{/link-to}}
 			{{/modal-header}}
 			{{#modal-body}}
 				{{t "modal.streaming.body.ended"}}
@@ -26,7 +28,9 @@
 		{{else}}
 			{{#if modalContext.isLaunching}}
 				{{#modal-header}}
-					{{t "modal.streaming.header.launching"}}{{#link-to "channel" modalContext.user.id}}{{modalContext.user.detailedName}}{{/link-to}}
+					{{#link-to "channel" modalContext.user.id}}
+						{{t "modal.streaming.header.launching" channel=modalContext.user.detailedName}}
+					{{/link-to}}
 				{{/modal-header}}
 				{{#modal-body class="launching"}}
 					{{t "modal.streaming.body.launching" provider=providerName}}
@@ -34,7 +38,9 @@
 				{{modal-log class="launching" log=modalContext.log}}
 			{{else if modalContext.isWatching}}
 				{{#modal-header}}
-					{{t "modal.streaming.header.watching"}}{{#link-to "channel" modalContext.user.id}}{{modalContext.user.detailedName}}{{/link-to}}
+					{{#link-to "channel" modalContext.user.id}}
+						{{t "modal.streaming.header.watching" channel=modalContext.user.detailedName}}
+					{{/link-to}}
 				{{/modal-header}}
 				{{#modal-body}}
 					{{#if modalContext.stream.game_name}}

@@ -46,9 +46,9 @@ quit:
 streaming:
     header:
         preparing: "Preparing, please wait"
-        launching: "Launching: "
-        watching: "Watching: "
-        ended: "Stream ended: "
+        launching: "Launching: {channel}"
+        watching: "Watching: {channel}"
+        ended: "Stream ended: {channel}"
         error:
             log: "Error: Couldn't launch the stream"
             provider: "Error: {provider} misconfiguration"
