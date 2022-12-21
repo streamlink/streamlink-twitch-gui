@@ -1,5 +1,7 @@
 channel-button:
     title: "Seguir a {name}"
+channel-item:
+    offline: está offline ahora mismo
 documentation-link:
     title: Leer la documentación online
 drop-down-selection:

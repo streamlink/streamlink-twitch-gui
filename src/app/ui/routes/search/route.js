@@ -112,11 +112,11 @@ export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
 		}
 
 		/** @type {TwitchSearchChannel[]} */
-		let records = await this.store.query( "twitch-search-channel", queryData );
-		this.paginationCursor = get( records, "meta.pagination.cursor" );
+		const twitchSearchChannels = await this.store.query( "twitch-search-channel", queryData );
+		this.paginationCursor = get( twitchSearchChannels, "meta.pagination.cursor" );
 
 		/** @type {TwitchUser[]} */
-		records = await map( records, async record => {
+		const twitchUsers = await map( twitchSearchChannels, async record => {
 			try {
 				await record.user.promise;
 				return record.user.content;
@@ -125,6 +125,13 @@ export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
 			}
 		});
 
-		return await preload( records, "profile_image_url" );
+		// load TwitchStream relationships after loading TwitchUser records (coalesced queries)
+		await Promise.all(
+			twitchUsers.map( twitchUser =>
+				twitchUser.stream.promise.catch( () => null )
+			)
+		);
+
+		return await preload( twitchUsers, "profile_image_url" );
 	}
 });

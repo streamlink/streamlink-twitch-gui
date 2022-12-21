@@ -1,6 +1,7 @@
 channel-button:
     title: "Suivre {name}"
 channel-item:
+    offline: est hors ligne actuellement
     no-status: Pas de description de chaîne
 documentation-link:
     title: Lire la documentation en ligne

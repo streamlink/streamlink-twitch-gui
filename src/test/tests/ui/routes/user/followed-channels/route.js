@@ -20,6 +20,9 @@ import TwitchUserSerializer from "data/models/twitch/user/serializer";
 import TwitchChannel from "data/models/twitch/channel/model";
 import TwitchChannelAdapter from "data/models/twitch/channel/adapter";
 import TwitchChannelSerializer from "data/models/twitch/channel/serializer";
+import TwitchStream from "data/models/twitch/stream/model";
+import TwitchStreamAdapter from "data/models/twitch/stream/adapter";
+import TwitchStreamSerializer from "data/models/twitch/stream/serializer";
 import TwitchImageTransform from "data/transforms/twitch/image";
 
 
@@ -42,6 +45,9 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 		TwitchChannel,
 		TwitchChannelAdapter,
 		TwitchChannelSerializer,
+		TwitchStream,
+		TwitchStreamAdapter,
+		TwitchStreamSerializer,
 		TwitchImageTransform,
 
 		AuthService: Service.extend({
@@ -76,6 +82,8 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 			= adapterRequestFactory( assert, UserFollowedChannelsRouteFixtures[ "user" ] );
 		store.adapterFor( "twitch-channel" ).ajax
 			= adapterRequestFactory( assert, UserFollowedChannelsRouteFixtures[ "channel" ] );
+		store.adapterFor( "twitch-stream" ).ajax
+			= adapterRequestFactory( assert, UserFollowedChannelsRouteFixtures[ "stream" ] );
 	});
 
 
@@ -94,6 +102,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 				{
 					id: "1",
 					channel: "1",
+					stream: "1",
 					broadcaster_type: null,
 					created_at: null,
 					description: null,
@@ -107,6 +116,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 				{
 					id: "2",
 					channel: "2",
+					stream: "2",
 					broadcaster_type: null,
 					created_at: null,
 					description: null,
@@ -137,6 +147,11 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 			"Store has TwitchChannel 1 and 2 loaded"
 		);
 		assert.propEqual(
+			store.peekAll( "twitch-stream" ).mapBy( "id" ),
+			[ "1", "2" ],
+			"Store has TwitchStream 1 and 2 loaded"
+		);
+		assert.propEqual(
 			this.preloadStub.args.map( args => args.slice( 1 ) ),
 			[[ "profile_image_url" ]],
 			"Preloads images of the first request"
@@ -149,6 +164,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 				{
 					id: "1",
 					channel: "1",
+					stream: "1",
 					broadcaster_type: null,
 					created_at: null,
 					description: null,
@@ -162,6 +178,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 				{
 					id: "2",
 					channel: "2",
+					stream: "2",
 					broadcaster_type: null,
 					created_at: null,
 					description: null,
@@ -175,6 +192,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 				{
 					id: "3",
 					channel: "3",
+					stream: "3",
 					broadcaster_type: null,
 					created_at: null,
 					description: null,
@@ -203,6 +221,11 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 			store.peekAll( "twitch-channel" ).mapBy( "id" ),
 			[ "1", "2", "3" ],
 			"Store has all TwitchChannel records loaded"
+		);
+		assert.propEqual(
+			store.peekAll( "twitch-stream" ).mapBy( "id" ),
+			[ "1", "2", "3" ],
+			"Store has all TwitchStream records loaded"
 		);
 		assert.propEqual(
 			this.preloadStub.args.map( args => args.slice( 1 ) ),

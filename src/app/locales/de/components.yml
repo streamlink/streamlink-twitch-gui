@@ -1,6 +1,7 @@
 channel-button:
     title: "{name} folgen"
 channel-item:
+    offline: ist gerade offline
     no-status: Keine Kanalbeschreibung
 documentation-link:
     title: Dokumentation online durchlesen

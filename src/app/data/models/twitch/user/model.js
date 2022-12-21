@@ -40,6 +40,8 @@ export default Model.extend( /** @class TwitchUser */ {
 
 	/** @type {TwitchChannel} */
 	channel: belongsTo( "twitch-channel", { async: true } ),
+	/** @type {TwitchStream} */
+	stream: belongsTo( "twitch-stream", { async: true, inverse: null } ),
 
 	/** @type {string} */
 	broadcaster_type: attr( "string" ),

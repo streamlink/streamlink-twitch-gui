@@ -18,6 +18,11 @@ import TwitchUserFixtures from "fixtures/data/models/twitch/user.yml";
 import TwitchChannel from "data/models/twitch/channel/model";
 import TwitchChannelAdapter from "data/models/twitch/channel/adapter";
 import TwitchChannelSerializer from "data/models/twitch/channel/serializer";
+import TwitchStream from "data/models/twitch/stream/model";
+import TwitchStreamAdapter from "data/models/twitch/stream/adapter";
+import TwitchStreamSerializer from "data/models/twitch/stream/serializer";
+import TwitchGame from "data/models/twitch/game/model";
+import TwitchImageTransform from "data/transforms/twitch/image";
 import {
 	ATTR_STREAMS_NAME_CUSTOM,
 	ATTR_STREAMS_NAME_ORIGINAL,
@@ -42,7 +47,12 @@ module( "data/models/twitch/user", function( hooks ) {
 			TwitchUserSerializer,
 			TwitchChannel,
 			TwitchChannelAdapter,
-			TwitchChannelSerializer
+			TwitchChannelSerializer,
+			TwitchStream,
+			TwitchStreamAdapter,
+			TwitchStreamSerializer,
+			TwitchGame,
+			TwitchImageTransform
 		})
 	});
 
@@ -63,6 +73,12 @@ module( "data/models/twitch/user", function( hooks ) {
 				kind: "belongsTo",
 				type: "twitch-channel",
 				options: { async: true }
+			},
+			{
+				key: "stream",
+				kind: "belongsTo",
+				type: "twitch-stream",
+				options: { async: true, inverse: null }
 			}
 		]);
 	});
@@ -137,6 +153,7 @@ module( "data/models/twitch/user", function( hooks ) {
 			{
 				id: "1",
 				channel: "1",
+				stream: "1",
 				broadcaster_type: "partner",
 				description: "channel description",
 				display_name: "Foo",
@@ -166,6 +183,9 @@ module( "data/models/twitch/user", function( hooks ) {
 		const channelResponseStub
 			= store.adapterFor( "twitch-channel" ).ajax
 			= adapterRequestFactory( assert, TwitchUserFixtures, "find-record-coalesced.channel" );
+		const streamResponseStub
+			= store.adapterFor( "twitch-stream" ).ajax
+			= adapterRequestFactory( assert, TwitchUserFixtures, "find-record-coalesced.stream" );
 
 		const records = await Promise.all([
 			store.findRecord( "twitch-user", "1" ),
@@ -178,6 +198,7 @@ module( "data/models/twitch/user", function( hooks ) {
 				{
 					id: "1",
 					channel: "1",
+					stream: "1",
 					broadcaster_type: null,
 					description: null,
 					display_name: null,
@@ -191,6 +212,7 @@ module( "data/models/twitch/user", function( hooks ) {
 				{
 					id: "2",
 					channel: "2",
+					stream: "2",
 					broadcaster_type: null,
 					description: null,
 					display_name: null,
@@ -249,6 +271,65 @@ module( "data/models/twitch/user", function( hooks ) {
 			1,
 			"Queries channel API endpoints once"
 		);
+
+		const streamData = await Promise.all(
+			records.map( async record => ({
+				id: record.id,
+				stream: ( await record.stream ).toJSON({ includeId: true })
+			}) )
+		);
+
+		assert.propEqual(
+			streamData,
+			[
+				{
+					id: "1",
+					stream: {
+						id: "1",
+						user: "1",
+						user_login: null,
+						user_name: null,
+						channel: "1",
+						game: null,
+						game_id: null,
+						game_name: null,
+						type: null,
+						title: null,
+						viewer_count: null,
+						started_at: null,
+						language: null,
+						thumbnail_url: null,
+						is_mature: false
+					}
+				},
+				{
+					id: "2",
+					stream: {
+						id: "2",
+						user: "2",
+						user_login: null,
+						user_name: null,
+						channel: "2",
+						game: null,
+						game_id: null,
+						game_name: null,
+						type: null,
+						title: null,
+						viewer_count: null,
+						started_at: null,
+						language: null,
+						thumbnail_url: null,
+						is_mature: false
+					}
+				}
+			],
+			"Correctly finds stream relationship data when accessing it"
+		);
+		assert.strictEqual(
+			streamResponseStub.callCount,
+			1,
+			"Queries stream API endpoints once"
+		);
 	});
 
 	test( "queryRecord", async function( assert ) {
@@ -265,6 +346,7 @@ module( "data/models/twitch/user", function( hooks ) {
 			{
 				id: "1",
 				channel: "1",
+				stream: "1",
 				broadcaster_type: null,
 				description: null,
 				display_name: null,

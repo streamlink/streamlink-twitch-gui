@@ -1,5 +1,7 @@
 channel-button:
     title: "Отслеживать {name}"
+channel-item:
+    offline: "сейчас офлайн"
 documentation-link:
     title: Читать документацию на сайте
 drop-down-selection:

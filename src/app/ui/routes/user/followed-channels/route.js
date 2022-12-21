@@ -14,7 +14,10 @@ export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
 	 * @return {Promise}
 	 */
 	async modelItemLoader( twitchUser ) {
-		await twitchUser.channel.promise;
+		await Promise.all([
+			twitchUser.channel.promise,
+			twitchUser.stream.promise.catch( () => null )
+		]);
 	},
 
 	query() {

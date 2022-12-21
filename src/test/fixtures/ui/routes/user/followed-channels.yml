@@ -71,3 +71,24 @@ channel:
         response:
             data:
                 -   broadcaster_id: "3"
+stream:
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                -   name: "user_id"
+                    value: "1"
+                -   name: "user_id"
+                    value: "2"
+        response:
+            data:
+                -   user_id: "1"
+                -   user_id: "2"
+    -   request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                user_id: "3"
+        response:
+            data:
+                -   user_id: "3"

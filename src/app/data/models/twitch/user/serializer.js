@@ -7,8 +7,8 @@ export default TwitchSerializer.extend({
 	},
 
 	normalize( modelClass, resourceHash, prop ) {
-		// add key for custom channel relationship
-		resourceHash.channel = resourceHash[ this.primaryKey ];
+		// add keys for custom channel and stream relationships
+		resourceHash.channel = resourceHash.stream = resourceHash[ this.primaryKey ];
 
 		return this._super( modelClass, resourceHash, prop );
 	}

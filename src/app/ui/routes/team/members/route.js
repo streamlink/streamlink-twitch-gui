@@ -13,7 +13,8 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 		const { users: user_ids } = model;
 
 		const options = { reload: true };
-		const records = await Promise.all( user_ids
+		/** @type {TwitchUser[]} */
+		const twitchUsers = await Promise.all( user_ids
 			.slice( offset, offset + limit )
 			.map( async user_id => {
 				try {
@@ -26,8 +27,16 @@ export default UserIndexRoute.extend( InfiniteScrollMixin, {
 					return false;
 				}
 			} )
+			.filter( Boolean )
 		);
 
-		return await preload( records.filter( Boolean ), "" );
+		// load TwitchStream relationships after loading TwitchUser records (coalesced queries)
+		await Promise.all(
+			twitchUsers.map( twitchUser =>
+				twitchUser.stream.promise.catch( () => null )
+			)
+		);
+
+		return await preload( twitchUsers, "" );
 	}
 });

@@ -39,6 +39,7 @@ module( "data/models/twitch/search-channel", function( hooks ) {
 			TwitchUser,
 			TwitchUserAdapter,
 			TwitchUserSerializer,
+			TwitchStream: Model.extend(),
 			TwitchGame,
 			TwitchGameAdapter,
 			TwitchGameSerializer,

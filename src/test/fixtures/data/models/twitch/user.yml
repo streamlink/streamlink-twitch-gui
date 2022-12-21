@@ -46,6 +46,22 @@ find-record-coalesced:
                 -   broadcaster_id: "1"
                 -   broadcaster_id: "2"
             pagination: {}
+    stream:
+        request:
+            method: "GET"
+            url: "https://api.twitch.tv/helix/streams"
+            query:
+                - name: "user_id"
+                  value: "1"
+                - name: "user_id"
+                  value: "2"
+        response:
+            data:
+                -   id: "1001"
+                    user_id: "1"
+                -   id: "1002"
+                    user_id: "2"
+            pagination: {}
 
 query-record:
     request:

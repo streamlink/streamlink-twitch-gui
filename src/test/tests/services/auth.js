@@ -73,7 +73,8 @@ module( "services/auth", function( hooks ) {
 			Auth,
 			TwitchUser,
 			TwitchUserSerializer,
-			TwitchChannel: Model.extend()
+			TwitchChannel: Model.extend(),
+			TwitchStream: Model.extend()
 		})
 	});
 
