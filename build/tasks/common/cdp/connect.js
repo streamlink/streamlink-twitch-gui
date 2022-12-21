@@ -2,7 +2,7 @@ const CDP = require( "chrome-remote-interface" );
 const retry = require( "./retry" );
 
 
-module.exports = async function( options ) {
+module.exports = async function( options, logger = null ) {
 	const { host, port } = options;
 
 	// select the testrunner page
@@ -16,7 +16,7 @@ module.exports = async function( options ) {
 	};
 
 	const connect = () => CDP({ host, port, target });
-	const cdp = await retry( options.connectAttempts, options.connectDelay, connect );
+	const cdp = await retry( options.connectAttempts, options.connectDelay, connect, logger );
 
 	await cdp.send( "Runtime.enable" );
 

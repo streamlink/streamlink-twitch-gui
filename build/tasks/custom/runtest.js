@@ -16,8 +16,8 @@ module.exports = function( grunt ) {
 		const options = this.options({
 			host: "127.0.0.1",
 			port: isCI ? 4444 : 8000,
-			connectAttempts: 5,
-			connectDelay: 1000,
+			connectAttempts: isCI ? 10 : 5,
+			connectDelay: isCI ? 2000 : 1000,
 			startTimeout: 10000,
 			testTimeout: 300000,
 			coverageTimeout: 5000
@@ -79,7 +79,7 @@ module.exports = function( grunt ) {
 				});
 
 				// connect to NW.js
-				cdpConnect( options )
+				cdpConnect( options, grunt.log.error )
 					.then( async cdp => {
 						grunt.log.debug( `Connected to ${options.host}:${options.port}` );
 
