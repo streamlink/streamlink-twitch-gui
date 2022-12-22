@@ -7,9 +7,15 @@ module.exports = async function( options, logger = null ) {
 
 	// select the testrunner page
 	const target = targets => {
+		if ( !targets || !targets.length ) {
+			throw new Error( "No targets" );
+		}
+
 		const index = targets.findIndex( ({ url }) => url.endsWith( "/index.html" ) );
 		if ( index < 0 ) {
-			throw `No matching target:\n${targets.map( t => `  ${t.url}` ).join( "\n" )}\n`;
+			throw new Error(
+				`No matching target:\n${targets.map( t => `  ${t.url}` ).join( "\n" )}\n`
+			);
 		}
 
 		return index;
