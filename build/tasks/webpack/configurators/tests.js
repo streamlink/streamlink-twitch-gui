@@ -47,7 +47,12 @@ module.exports = {
 			include: pTestFixtures,
 			type: "json",
 			use: [
-				"yaml-loader"
+				{
+					loader: "yaml-loader",
+					options: {
+						asJSON: true
+					}
+				}
 			]
 		});
 	},

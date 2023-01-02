@@ -11,7 +11,12 @@ module.exports = function( config ) {
 		include: pLocales,
 		use: [
 			"optimized-json-loader",
-			"yaml-loader"
+			{
+				loader: "yaml-loader",
+				options: {
+					asJSON: true
+				}
+			}
 		]
 	});
 

@@ -13,7 +13,14 @@ module.exports = {
 			test: /\.ya?ml$/,
 			include: pConfig,
 			type: "json",
-			loader: "yaml-loader"
+			use: [
+				{
+					loader: "yaml-loader",
+					options: {
+						asJSON: true
+					}
+				}
+			]
 		});
 
 		// embed additional HTML files - used by the AuthService's HTTP server
