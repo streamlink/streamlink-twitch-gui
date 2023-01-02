@@ -125,6 +125,7 @@
 		"grunt-contrib-copy/chalk": "^4.0.0",
 		"grunt-shell/chalk": "^4.0.0",
 		"grunt-shell/strip-ansi": "^6.0.0",
+		"inject-loader/babel-core/json5": "^2.0.0",
 		"load-grunt-config/lodash": "^4.17.21",
 		"nw-builder/optimist": "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz",
 		"sinon/nise/just-extend": "^4.0.0"
