@@ -9,9 +9,6 @@ contact_links:
   - name: "Wiki"
     about: "Please refer to Streamlink Twitch GUI's wiki first before opening new issues or asking questions."
     url: https://github.com/streamlink/streamlink-twitch-gui/wiki
-  - name: "Gitter channel"
-    about: "Get in touch with other Streamlink Twitch GUI users."
-    url: https://gitter.im/streamlink/streamlink-twitch-gui
-  - name: "Matrix channel (Gitter bridge)"
+  - name: "Gitter Matrix channel"
     about: "Get in touch with other Streamlink Twitch GUI users."
     url: https://matrix.to/#/#streamlink_streamlink-twitch-gui:gitter.im
