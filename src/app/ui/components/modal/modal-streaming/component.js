@@ -75,6 +75,8 @@ export default ModalDialogComponent.extend( /** @class ModalStreamingComponent *
 		close() {
 			if ( this.modalContext.isPreparing ) {
 				this.send( "abort" );
+			} else if ( this.modalContext.hasEnded ) {
+				this.send( "shutdown" );
 			} else {
 				this.send( "close" );
 			}
@@ -122,7 +124,7 @@ export default ModalDialogComponent.extend( /** @class ModalStreamingComponent *
 
 		/** @this {ModalStreamingComponent} */
 		async shutdown() {
-			this.modalContext.kill();
+			this.streaming.closeStream( this.modalContext.stream );
 			this.send( "close" );
 		},
 
