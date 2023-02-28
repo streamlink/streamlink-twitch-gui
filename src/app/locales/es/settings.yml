@@ -50,11 +50,20 @@ gui:
             tray: Bandeja del sistema
     minimize:
         title: Minimizar interfaz
-        description: Cuando el reproductor de vídeo se abra.
+# FIXME
+#        description: When a stream gets launched.
+#        description: Cuando el reproductor de vídeo se abra.
         values:
             noop: No hacer nada
             minimize: Minimizar
             tray: Mover a la bandeja del sistema
+#    restore:
+#        title: Restore GUI
+#        description: When a watched stream ends.
+#        values:
+#            noop: Do nothing
+#            any: After any stream has ended
+#            all: After all streams have ended
     hidebuttons:
         title: Ocultar botones de ventana
         description: Ocultar botones de minimizar, maximizar y cerrar.

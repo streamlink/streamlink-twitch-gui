@@ -50,11 +50,18 @@ gui:
             tray: Tray
     minimize:
         title: Minimize GUI
-        description: When the video player opens.
+        description: When a stream gets launched.
         values:
             noop: Do nothing
             minimize: Minimize
             tray: Move to tray
+    restore:
+        title: Restore GUI
+        description: When a watched stream ends.
+        values:
+            noop: Do nothing
+            any: After any stream has ended
+            all: After all streams have ended
     hidebuttons:
         title: Hide window buttons
         description: Hide minimize, maximize and close buttons.

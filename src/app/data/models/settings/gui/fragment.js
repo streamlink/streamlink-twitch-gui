@@ -11,6 +11,10 @@ export const ATTR_GUI_MINIMIZE_NOOP = 0;
 export const ATTR_GUI_MINIMIZE_MINIMIZE = 1;
 export const ATTR_GUI_MINIMIZE_TRAY = 2;
 
+export const ATTR_GUI_RESTORE_NOOP = 0;
+export const ATTR_GUI_RESTORE_ANY = 1;
+export const ATTR_GUI_RESTORE_ALL = 2;
+
 export const ATTR_GUI_FOCUSREFRESH_NONE = 0;
 export const ATTR_GUI_FOCUSREFRESH_ONE = 60000;
 export const ATTR_GUI_FOCUSREFRESH_TWO = 120000;
@@ -26,6 +30,7 @@ export default Fragment.extend({
 	language: attr( "string",  { defaultValue: "auto" } ),
 	minimize: attr( "number", { defaultValue: ATTR_GUI_MINIMIZE_NOOP } ),
 	minimizetotray: attr( "boolean", { defaultValue: false } ),
+	restore: attr( "number", { defaultValue: ATTR_GUI_RESTORE_NOOP } ),
 	smoothscroll: attr( "boolean", { defaultValue: true } ),
 	theme: attr( "string", { defaultValue: "system" } ),
 
@@ -50,6 +55,12 @@ export default Fragment.extend({
 		{ id: ATTR_GUI_MINIMIZE_NOOP, label: "noop", disabled: false },
 		{ id: ATTR_GUI_MINIMIZE_MINIMIZE, label: "minimize", disabled: false },
 		{ id: ATTR_GUI_MINIMIZE_TRAY, label: "tray", disabled: false }
+	],
+
+	restore: [
+		{ id: ATTR_GUI_RESTORE_NOOP, label: "noop" },
+		{ id: ATTR_GUI_RESTORE_ANY, label: "any" },
+		{ id: ATTR_GUI_RESTORE_ALL, label: "all" }
 	],
 
 	focusrefresh: [

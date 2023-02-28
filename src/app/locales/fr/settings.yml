@@ -50,11 +50,20 @@ gui:
             tray: Barre des tâches
     minimize:
         title: Réduire l'interface
-        description: Quand le lecteur s'ouvre.
+# FIXME
+#        description: When a stream gets launched.
+#        description: Quand le lecteur s'ouvre.
         values:
             noop: Ne rien faire
             minimize: Réduire
             tray: Dans la barre des tâches
+#    restore:
+#        title: Restore GUI
+#        description: When a watched stream ends.
+#        values:
+#            noop: Do nothing
+#            any: After any stream has ended
+#            all: After all streams have ended
     hidebuttons:
         title: Masquer les boutons de fenêtre
         description: Masquer les boutons de réduction, d'agrandissement et de fermeture.

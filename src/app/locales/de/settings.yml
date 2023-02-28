@@ -50,11 +50,18 @@ gui:
             tray: Infobereich
     minimize:
         title: GUI minimieren
-        description: Wenn der Videoplayer geöffnet wird.
+        description: Wenn ein Stream gestartet wird.
         values:
             noop: Nichts unternehmen
             minimize: Minimieren
             tray: In den Infobereich minimieren
+    restore:
+        title: GUI wiederherstellen
+        description: Wenn ein geschauter Stream endet.
+        values:
+            noop: Nichts unternehmen
+            any: Nach Beendigung eines Streams
+            all: Nach Beendigung aller Streams
     hidebuttons:
         title: Fenster-Schaltflächen
         description: Minimieren-, Maximieren- und Schließen-Buttons verstecken.

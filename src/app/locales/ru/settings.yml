@@ -50,11 +50,20 @@ gui:
             tray: "Область уведомлений (трей)"
     minimize:
         title: "Сворачивать интерфейс"
-        description: "После запуска плеера"
+# FIXME
+#        description: When a stream gets launched.
+#        description: "После запуска плеера"
         values:
             noop: "Не сворачивать"
             minimize: "Сворачивать"
             tray: "Свернуть в область уведомлений (трей)"
+#    restore:
+#        title: Restore GUI
+#        description: When a watched stream ends.
+#        values:
+#            noop: Do nothing
+#            any: After any stream has ended
+#            all: After all streams have ended
     hidebuttons:
         title: "Стрятать кнопки окна"
         description: "Скрыть кнопки сворачивания, разворачивания и закрытия."

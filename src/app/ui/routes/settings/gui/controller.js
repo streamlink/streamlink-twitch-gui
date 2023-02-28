@@ -14,6 +14,7 @@ import {
 const {
 	integration: contentGuiIntegration,
 	minimize: contentGuiMinimize,
+	restore: contentGuiRestore,
 	focusrefresh: contentGuiFocusrefresh
 } = SettingsGui;
 
@@ -21,6 +22,7 @@ const {
 export default Controller.extend({
 	contentGuiIntegration,
 	contentGuiMinimize,
+	contentGuiRestore,
 	contentGuiFocusrefresh,
 
 	hasTaskBarIntegration: equal( "model.gui.integration", ATTR_GUI_INTEGRATION_TASKBAR ),

@@ -50,11 +50,20 @@ gui:
             tray: Vassoio di sistema
     minimize:
         title: Riduci a icona l'interfaccia
-        description: Quando si apre il lettore video.
+# FIXME
+#        description: When a stream gets launched.
+#        description: Quando si apre il lettore video.
         values:
             noop: Non fare niente
             minimize: Riduci a icona
             tray: Sposta nel vassoio di sistema
+#    restore:
+#        title: Restore GUI
+#        description: When a watched stream ends.
+#        values:
+#            noop: Do nothing
+#            any: After any stream has ended
+#            all: After all streams have ended
     hidebuttons:
         title: Nascondi i pulsanti della finestra
         description: Nascondi i pulsanti di riduzione, ingrandimento e chiusura.

@@ -10,7 +10,9 @@ import launch from "./launch";
 import { setShowInTaskbar, setMinimized, setVisibility } from "nwjs/Window";
 import {
 	ATTR_GUI_MINIMIZE_MINIMIZE,
-	ATTR_GUI_MINIMIZE_TRAY
+	ATTR_GUI_MINIMIZE_TRAY,
+	ATTR_GUI_RESTORE_ANY,
+	ATTR_GUI_RESTORE_ALL
 } from "data/models/settings/gui/fragment";
 
 
@@ -211,7 +213,7 @@ export default Service.extend( /** @class StreamingService */ {
 		}
 
 		// hide the GUI
-		this.minimize( false );
+		this.guiHide();
 	},
 
 	/**
@@ -250,7 +252,7 @@ export default Service.extend( /** @class StreamingService */ {
 		}
 
 		// restore the GUI
-		this.minimize( true );
+		this.guiRestore();
 	},
 
 
@@ -280,19 +282,34 @@ export default Service.extend( /** @class StreamingService */ {
 		this.model.slice().forEach( stream => stream.kill() );
 	},
 
-	minimize( restore ) {
+	guiHide() {
 		switch ( this.settings.content.gui.minimize ) {
 			// minimize
 			case ATTR_GUI_MINIMIZE_MINIMIZE:
-				setMinimized( !restore );
+				setMinimized( true );
 				break;
-			// move to tray: toggle window and taskbar visibility
+			// move to tray: set window and taskbar visibility
 			case ATTR_GUI_MINIMIZE_TRAY:
-				setVisibility( restore );
+				setVisibility( false );
 				if ( this.settings.content.gui.isVisibleInTaskbar ) {
-					setShowInTaskbar( restore );
+					setShowInTaskbar( false );
 				}
 				break;
+		}
+	},
+
+	guiRestore() {
+		if (
+			   this.settings.content.gui.restore === ATTR_GUI_RESTORE_ANY
+			|| this.settings.content.gui.restore === ATTR_GUI_RESTORE_ALL
+			&& !this.model.any( stream => !stream.hasEnded )
+		) {
+			// always restore both states: minimized and visibility/tray
+			setMinimized( false );
+			setVisibility( true );
+			if ( this.settings.content.gui.isVisibleInTaskbar ) {
+				setShowInTaskbar( true );
+			}
 		}
 	},
 

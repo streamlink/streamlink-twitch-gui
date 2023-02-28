@@ -59,11 +59,20 @@ gui:
             tray: Área de notificação
     minimize:
         title: Minimizar a interface (GUI)
-        description: Quando o tocador de vídeo abrir.
+# FIXME
+#        description: When a stream gets launched.
+#        description: Quando o tocador de vídeo abrir.
         values:
             noop: Não fazer nada
             minimize: Minimizar
             tray: Mover para a área de notificação
+#    restore:
+#        title: Restore GUI
+#        description: When a watched stream ends.
+#        values:
+#            noop: Do nothing
+#            any: After any stream has ended
+#            all: After all streams have ended
     hidebuttons:
         title: Esconder os botões da janela
         description: Esconder os botões minimizar, maximizar e fechar.

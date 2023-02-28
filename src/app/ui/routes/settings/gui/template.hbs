@@ -18,7 +18,7 @@
 {{#settings-row
 	(t "settings.gui.minimize.title")
 	(t "settings.gui.minimize.description")
-	icon="fa-minus"
+	icon="fa-window-minimize"
 }}
 	{{#radio-buttons
 		name="settings-gui-minimize"
@@ -28,6 +28,23 @@
 	}}
 		<div>
 			{{item.button label=(t (concat "settings.gui.minimize.values." item.label))}}
+		</div>
+	{{/radio-buttons}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.gui.restore.title")
+	(t "settings.gui.restore.description")
+	icon="fa-window-restore"
+}}
+	{{#radio-buttons
+		name="settings-gui-restore"
+		value=model.gui.restore
+		content=contentGuiRestore
+		as |item|
+	}}
+		<div>
+			{{item.button label=(t (concat "settings.gui.restore.values." item.label))}}
 		</div>
 	{{/radio-buttons}}
 {{/settings-row}}

@@ -50,11 +50,20 @@ gui:
             tray: 通知區域圖示
     minimize:
         title: 最小化介面
-        description: 當播放器打開時最小化
+# FIXME
+#        description: When a stream gets launched.
+#        description: 當播放器打開時最小化
         values:
             noop: 不作任何動作
             minimize: 最小化
             tray: 至通知區域
+#    restore:
+#        title: Restore GUI
+#        description: When a watched stream ends.
+#        values:
+#            noop: Do nothing
+#            any: After any stream has ended
+#            all: After all streams have ended
     hidebuttons:
         title: 隱藏視窗按鈕
         description: 隱藏最小化、最大化及關閉按鈕
