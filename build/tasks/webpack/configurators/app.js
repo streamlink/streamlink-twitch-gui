@@ -1,5 +1,5 @@
 const { resolve } = require( "path" );
-const { pRoot, pConfig } = require( "../paths" );
+const { pRoot, pConfig, pApp, pTest } = require( "../paths" );
 const Date = require( "../../common/date" );
 
 
@@ -26,7 +26,11 @@ module.exports = {
 		// embed additional HTML files - used by the AuthService's HTTP server
 		config.module.rules.push({
 			test: /\.html$/,
-			loader: "raw-loader"
+			exclude: [
+				resolve( pApp, "index.html" ),
+				resolve( pTest, "index.html" )
+			],
+			type: "asset/source"
 		});
 
 		// metadata

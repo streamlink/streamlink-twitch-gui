@@ -199,8 +199,11 @@ module.exports = class WebpackI18nCoveragePlugin {
 			return;
 		}
 
-		// get built module content
-		const content = module.originalSource().source();
+		// get content of built module (string) or asset module (Buffer)
+		let content = module.originalSource().source();
+		if ( content instanceof Buffer ) {
+			content = content.toString();
+		}
 
 		if ( module.resource.startsWith( this.localesDir ) ) {
 			const match = /[\/\\]([\w-]+)[\/\\]([\w-]+)\.yml$/.exec( module.resource );
@@ -213,8 +216,8 @@ module.exports = class WebpackI18nCoveragePlugin {
 			this._parseJavaScript( content );
 
 		} else if ( module.resource.endsWith( ".hbs" ) ) {
-			// get content from the raw-loader's output and let Glimmer parse it
-			this._parseHTMLBars( this._getContent( content ) );
+			// let Glimmer parse the HTMLbars content
+			this._parseHTMLBars( content );
 		}
 	}
 

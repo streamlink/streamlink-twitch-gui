@@ -82,7 +82,6 @@
 		"node-fetch": "3.0.0-beta.9",
 		"nw-builder": "github:bastimeyer/nw-builder#48b4ae8",
 		"qunit": "2.17.2",
-		"raw-loader": "0.5.1",
 		"sinon": "11.1.2",
 		"svgo": "2.4.0",
 		"webpack": "5.76.1",

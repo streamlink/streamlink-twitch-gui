@@ -12,10 +12,11 @@ module.exports = {
 		config.stats = "errors-only";
 
 		// don't compile HTMLBars
-		// replace rule set by ember config (for current target only)
+		// update rule set by ember config (for current target only)
 		config.module.rules.forEach( rule => {
 			if ( rule.loader === "hbs-loader" ) {
-				rule.loader = "raw-loader";
+				rule.type = "asset/source";
+				delete rule.loader;
 			}
 		});
 

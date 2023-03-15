@@ -8,7 +8,7 @@ const { pApp } = require( "../../paths" );
 module.exports = function( config ) {
 	config.module.rules.push({
 		test: /ember-app\.js$/,
-		// see `src/web_loaders/ember-app-loader/index.js`
+		// see `build/tasks/webpack/loaders/ember-app-loader/index.js`
 		loader: "ember-app-loader",
 		options: {
 			context: pApp
@@ -17,7 +17,7 @@ module.exports = function( config ) {
 
 	config.module.rules.push({
 		test: /\.hbs$/,
-		// see `src/web_loaders/hbs-loader.js`
+		// see `build/tasks/webpack/loaders/hbs-loader.js`
 		loader: "hbs-loader"
 	});
 };
