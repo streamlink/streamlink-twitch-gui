@@ -1,10 +1,7 @@
-const loaderUtils = require( "loader-utils" );
-
-
 module.exports = function() {
 	this.cacheable( false );
 
-	const { version, package: pkg, built } = loaderUtils.getOptions( this );
+	const { version, package: pkg, built } = this.getOptions();
 
 	return JSON.stringify({
 		version,

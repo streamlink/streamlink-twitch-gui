@@ -1,17 +1,15 @@
-const { getOptions } = require( "loader-utils" );
-const { optimize } = require( "svgo" );
-
-
 /**
  * @param {string} source
  * @this {LoaderContext}
  * @return {string}
  */
 module.exports = function svgoLoader( source ) {
+	const { optimize } = require( "svgo" );
+
 	const {
 		plugins = [{ name: "preset-default" }],
 		...options
-	} = getOptions( this );
+	} = this.getOptions();
 
 	const result = optimize( source, {
 		...options,
