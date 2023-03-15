@@ -2,8 +2,6 @@ const { resolve: r } = require( "path" );
 const { pTest, pTestFixtures, pDependencies } = require( "../paths" );
 const { buildBabelConfig } = require( "../utils" );
 
-const webpack = require( "webpack" );
-
 
 /**
  * Configurations related to creating test and coverage builds
@@ -21,15 +19,6 @@ module.exports = {
 				]
 			})
 		});
-
-		config.plugins.push(
-			// ignore file-loader dependencies in tests
-			new webpack.IgnorePlugin({
-				checkResource( module ) {
-					return module && module.startsWith( "file-loader?" );
-				}
-			})
-		);
 	},
 
 	_aliases( config ) {

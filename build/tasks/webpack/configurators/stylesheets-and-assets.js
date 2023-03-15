@@ -1,15 +1,17 @@
+const { arch } = require( "process" );
 const { resolve: r, posix: { join: j } } = require( "path" );
 const { pRoot, pDependencies } = require( "../paths" );
 
 const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
 const CssMinimizerWebpackPlugin = require( "css-minimizer-webpack-plugin" );
+const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 
 
 /**
  * Stylesheets and assets
  */
 module.exports = {
-	common( config ) {
+	common( config, grunt, target ) {
 		// vendor stylesheets: don't parse anything
 		config.module.rules.push({
 			test: /\.css$/,
@@ -86,6 +88,32 @@ module.exports = {
 				filename: "[name].css"
 			})
 		);
+
+		// snoretoast
+		if ( target === "prod" || target === "dev" && arch === "win32" ) {
+			config.plugins.push(
+				new CopyWebpackPlugin({
+					patterns: [
+						{
+							from: r( pDependencies, "snoretoast", "bin", "32", "snoretoast.exe" ),
+							to: j( "bin", "win32", "snoretoast.exe" )
+						},
+						{
+							from: r( pDependencies, "snoretoast", "COPYING.LGPL-3" ),
+							to: j( "bin", "win32", "snoretoast-LICENSE.txt" )
+						},
+						{
+							from: r( pDependencies, "snoretoast", "bin", "64", "snoretoast.exe" ),
+							to: j( "bin", "win64", "snoretoast.exe" )
+						},
+						{
+							from: r( pDependencies, "snoretoast", "COPYING.LGPL-3" ),
+							to: j( "bin", "win64", "snoretoast-LICENSE.txt" )
+						}
+					]
+				})
+			);
+		}
 	},
 
 	prod( config ) {

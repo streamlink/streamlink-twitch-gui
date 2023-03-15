@@ -23,25 +23,20 @@ module.exports = {
 
 		// NW.js package.json
 		config.module.rules.push({
-			type: "javascript/auto",
 			include: [
 				r( pApp, "package.json" ),
 				r( pTest, "package.json" )
 			],
-			use: [
-				{
-					loader: "file-loader",
-					options: {
-						name: "package.json"
-					}
-				},
-				{
-					loader: "parse-json-loader",
-					options: {
-						grunt
-					}
+			type: "asset/resource",
+			generator: {
+				filename: "package.json"
+			},
+			use: {
+				loader: "parse-json-loader",
+				options: {
+					grunt
 				}
-			]
+			}
 		});
 
 		// generate the index.html
