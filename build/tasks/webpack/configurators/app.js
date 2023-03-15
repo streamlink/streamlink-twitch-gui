@@ -56,7 +56,7 @@ module.exports = {
 			options: {
 				config: resolve( pConfig, "themes.json" ),
 				themesVarName: "THEMES",
-				themesPath: "~ui/styles/themes/"
+				themesPath: "ui/styles/themes/"
 			}
 		});
 

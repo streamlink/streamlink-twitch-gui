@@ -18,7 +18,7 @@ module.exports = {
 				{
 					loader: "css-loader",
 					options: {
-						sourceMap: false,
+						sourceMap: true,
 						url: false,
 						import: false
 					}
@@ -58,26 +58,25 @@ module.exports = {
 		// assets
 		config.module.rules.push({
 			test: /\.woff2$/,
-			loader: "file-loader",
-			options: {
-				name: j( "assets", "fonts", "[name].[ext]" )
+			type: "asset/resource",
+			generator: {
+				filename: j( "assets", "fonts", "[name][ext]" )
 			}
 		});
 		config.module.rules.push({
 			test: /\.svg$/,
 			include: r( pDependencies, "flag-icons" ),
-			loader: "file-loader",
-			options: {
-				name: j( "assets", "flags", "[name].[ext]" )
+			type: "asset/resource",
+			generator: {
+				filename: j( "assets", "flags", "[name][ext]" )
 			}
 		});
 		config.module.rules.push({
 			test: /\.(jpe?|pn|sv)g$/,
 			exclude: r( pDependencies, "flag-icons" ),
-			loader: "file-loader",
-			options: {
-				name: "[path][name].[ext]",
-				outputPath: url => j( "assets", url.replace( /^assets[\/\\]/, "" ) )
+			type: "asset/resource",
+			generator: {
+				filename: "[path][name][ext]"
 			}
 		});
 
