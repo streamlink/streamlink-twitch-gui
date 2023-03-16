@@ -23,17 +23,19 @@ module.exports = function( content ) {
 			}
 
 			if ( isString && value.startsWith( "~" ) ) {
-				const promise = new Promise( ( resolve, reject ) => {
-					this.loadModule( value.slice( 1 ), ( err, source, sourceMap, module ) => {
-						if ( err ) {
-							return reject( err );
-						}
-						obj[ key ] = relative( this.rootContext, module.resource )
-							.replace( /\\/g, "/" );
-						resolve();
-					});
-				});
-				promises.push( promise );
+				promises.push( ( ( obj, key ) =>
+					new Promise( ( resolve, reject ) => {
+						this.loadModule( value.slice( 1 ), ( err, source, sourceMap, module ) => {
+							if ( err ) {
+								return reject( err );
+							}
+							obj[ key ] = relative( this.rootContext, module.resource )
+								.replace( /\\/g, "/" );
+							this.emitFile( obj[ key ], source, sourceMap );
+							resolve();
+						} );
+					} )
+				)( obj, key ) );
 			}
 		}
 	};
