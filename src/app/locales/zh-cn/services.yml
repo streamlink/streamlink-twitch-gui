@@ -1,0 +1,13 @@
+notification:
+    dispatch:
+        single: "{name} 已开始直播"
+        group: 关注的频道已开始直播
+    status:
+        disabled: 已关闭桌面通知
+        enabled: 已开启桌面通知
+        error: 桌面通知已离线
+        paused: 已暂停桌面通知
+    tray:
+        pause:
+            label: 暂停通知
+            tooltip: 开启/关闭桌面通知

@@ -1,0 +1,19 @@
+twitch:
+    user:
+        view_count: |
+            {count, plural,
+                other {观看次数: #}
+            }
+    stream:
+        started-at:
+            less-than-24h: "于 {started_at, time, medium} 开始"
+            more-than-24h: "于 {started_at, time, long} 开始"
+        viewer_count: |
+            {count, plural,
+                other { # 人正在观看}
+            }
+    search-channel:
+        started-at:
+            offline: "离线"
+            less-than-24h: "从 {started_at, time, medium} 开始"
+            more-than-24h: "从 {started_at, time, long} 开始"

@@ -1,0 +1,18 @@
+tray:
+    toggle: 显示/隐藏窗口
+    close: 关闭应用
+macOS:
+    preferences: 偏好设置
+    refresh: 刷新
+channel-page: 频道页面
+channel-settings: 频道设置
+change-quality: 更改画质
+close-stream: 关闭直播
+copy: 复制
+copy-channel-url: 复制频道地址
+copy-link-address: 复制链接地址
+copy-selection: 复制选中部分
+launch-stream: 打开直播
+open-chat: 打开聊天室
+open-in-browser: 在浏览器打开
+paste: 粘贴
