@@ -1,0 +1,78 @@
+dialog:
+    action:
+        close: 关闭
+changelog:
+    header: "已更新至{version}"
+    body: 阅读更新日志？
+    action:
+        show: 更新日志
+confirm:
+    header: 请确认
+    body: 确认应用更改？
+    action:
+        apply: 是
+        discard: 取消
+        cancel: 否
+debug:
+    header: "调试模式：{version}"
+    body: |
+        你正在运行用于调试的{name}。<br>
+        请小心你正在做的事情，并回报你可能发现的任何问题。<br>
+        谢谢！
+    action:
+        close: 好的
+firstrun:
+    body: |
+        感谢使用{name}！<br>
+        你想在使用前进行设置吗？
+    action:
+        start: 立即使用
+        settings: 设置
+newrelease:
+    header: "你正在使用过时的版本{version}"
+    body: "要下载最新版吗？({version})"
+    action:
+        download: 下载
+        ignore: 忽略
+quit:
+    header: 确认退出？
+    body:
+        streams: 退出后，所有的直播将中断。
+        no-streams: 已关闭所有直播，你想现在退出吗？
+    action:
+        close: 返回
+        shutdown: 中断并退出
+        quit: 退出
+streaming:
+    header:
+        preparing: "准备中，请稍候"
+        launching: "启动中：{channel}"
+        watching: "观看中：{channel}"
+        ended: "直播已结束：{channel}"
+        error:
+            log: "错误：无法启动直播"
+            provider: "错误：{provider}设置错误"
+            player: "错误：播放器设置错误"
+            version: "错误：{provider}版本不适用"
+            unable-to-open: "错误：无法打开直播"
+            no-streams-found: "错误：找不到直播"
+            timeout: "错误：已超时"
+            internal: "错误"
+    body:
+        launching: "等待{provider}启动直播中……"
+        ended: "现在重新启动直播？"
+        error:
+            provider: "请检查你的设置或重新安装{provider}。"
+            player: "请检查你的播放器设置。"
+            version: "当前版本v{version}不满足最低版本要求 (v{required})。"
+            unable-to-open: "{provider}无法打开直播。"
+            no-streams-found: "{provider}无法找到直播。"
+            timeout: "{name} 已离线，或你与Twitch的连接已中断。"
+            internal: "内部错误"
+    action:
+        abort: 中断
+        continue: 继续
+        download: 下载
+        log: 显示/隐藏{provider}日志
+        restart: 重启
+        shutdown: 中断直播

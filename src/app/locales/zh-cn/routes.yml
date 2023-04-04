@@ -1,0 +1,160 @@
+error:
+    header: 错误
+    text: 读取页面时发生错误
+about:
+    about:
+        header: 关于
+        homepage: 主页
+        author: 作者
+        version: 版本
+        nwjs: NW.js
+        platform: 平台
+        arch: 架构
+        built: 构建
+        help: 帮助
+        wiki: wiki
+        bugs: 漏洞
+        issue-tracker: 回报问题
+        support: 支持
+        gitter: Gitter
+        changelog: 更新日志
+        contributors: 贡献者
+    donation:
+        header: 支持 & 捐赠
+        text: 如果您觉得这个应用有帮助，请考虑通过捐赠支持作者。<br>谢谢您！
+    translations:
+        header: 翻译
+    dependencies:
+        header: 第三方应用
+games:
+    header: 热门游戏
+    empty: 目前无热门游戏。
+game:
+    empty: 目前无此游戏的直播。
+streams:
+    header: 热门直播
+    empty: 目前无热门直播。
+channel:
+    menu:
+        details: 资料
+        teams: 团队
+        settings: 设置
+    offline: 离线
+    no-status: 无频道描述
+    details:
+        header: 频道数据
+        name:
+            title: 名称
+        created-at:
+            title: 开设时间
+            format: "{created_at, date, long}"
+        language:
+            title: 语言
+        view-count:
+            title: 观看次数
+            data: "{views} ({day}/日)"
+        content:
+            title: 內容
+            mature: 不适合儿童观看
+            ffa: 无年龄限制
+        delay:
+            title: 延迟
+            data: |
+                {count, plural,
+                    =0 {无额外延迟}
+                    other {# 秒}
+                }
+        vodcast:
+            title: 重播
+            data: 直播为重播
+    teams:
+        empty: 团队列表为空。
+    settings:
+        stream:
+            header: 直播
+            quality:
+                title: 画质
+                description: 对频道设置特定画质。
+            low-latency:
+                title: 低延迟模式
+                description: 覆盖全局设置中的低延迟模式。
+                checkbox: 开启低延迟模式
+            disable-ads:
+                title: 广告
+                description: 覆盖全局设置中的广告设置。
+                checkbox: 跳过内嵌广告
+            chat:
+                title: 聊天室
+                description: 自动开启聊天室。
+                checkbox: 启动直播时开启聊天室
+        notifications:
+            header: 桌面通知
+            enabled:
+                title: 通知
+                description: 当频道开始直播时通知。
+                notes: 需要关注频道。
+                checkbox: 启用桌面通知
+team:
+    header:
+        members: "团队成员：{num}"
+        created-at: "开设日期：{created_at, date, full}"
+        updated-at: "最近更新：{updated_at, date, full}"
+    menu:
+        live: 直播中成员
+        all: 所有成员
+        info: 团队资料
+    live:
+        empty: 当前团队无直播成员。
+    all:
+        empty: 当前团队无成员。
+    info:
+        header: 资料
+user:
+    index:
+        logged-in: "{name} 已登录"
+        since: "从{since, date, full}"
+        sign-out: 退出
+        token:
+            title: 访问令牌
+            show: 显示访问令牌
+            copy: 复制到剪贴板
+            hint:
+                first: "此密钥拥有您的Twitch.tv帐户以下权限："
+                second: 使用密码再次登录以使其失效。
+    auth:
+        abort: 取消
+        sign-in: 登录
+        token:
+            show-form: 使用访问令牌
+            placeholder: 输入访问令牌
+            hint:
+                first: 使用访问令牌登录您的Twitch.tv账户。
+                second: "请确认访问令牌拥有以下权限："
+        fail: 认证失败。请重试。
+    followedStreams:
+        header: 关注的直播
+        empty:
+            text: 当前无关注的直播。
+            streams: 观看热门直播
+    followedChannels:
+        header: 关注的频道
+        empty: 当前无关注的频道。
+search:
+    header:
+        all: "搜索结果"
+        games: "游戏搜索结果："
+        channels: "频道搜索结果："
+    subheader:
+        games: 游戏
+        channels: 频道
+    empty: 找不到您查询的内容。
+watching:
+    header: 正在观看
+    buttons:
+        open: 打开对话框
+        close: 关闭直播
+    empty:
+        header: 所有直播已关闭
+        next: 下一步？
+        streams: 观看热门直播
+        followed: 观看已关注直播

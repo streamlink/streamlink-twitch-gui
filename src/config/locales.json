@@ -8,6 +8,7 @@
 		"it": "Italiano",
 		"pt-br": "Português (Brasil)",
 		"ru": "Русский",
+		"zh-cn": "简体中文",
 		"zh-tw": "中文 繁體"
 	},
 	"contributors": {
@@ -53,7 +54,13 @@
 				"github": "tesla1856"
 			}
 		],
-		"zh-tw":[
+		"zh-cn": [
+			{
+				"name": "木木",
+				"github": "dreammu"
+			}
+		],
+		"zh-tw": [
 			{
 				"name": "Dxball",
 				"github": "dxball"

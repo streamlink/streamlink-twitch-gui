@@ -1,0 +1,571 @@
+menu:
+    header: 设置
+    main: 主要
+    gui: 界面
+    streaming: 串流
+    player: 播放器
+    streams: 直播
+    chat: 聊天室
+    languages: 语言
+    hotkeys: 快捷键
+    notifications: 通知
+    channels: 频道设置
+main:
+    language:
+        title: 语言
+        description: 设置界面语言。
+        notes: 你会其他语言吗？来协助翻译！查阅wiki获得更多信息。
+        labels:
+            auto: "系统 ({label})"
+    advanced:
+        title: 设置与功能
+        description: 启用隐藏设置与功能。<br>不仅作用于设置菜单。
+        checkbox: 启用高级设置与功能
+    homepage:
+        title: 主页
+        description: 初次打开或点击logo时加载的页面。
+        text:
+            first: 在每个页面的右上角，
+            second: 点击主页按钮将其设为主页。
+    theme:
+        title: 主题
+        description: 选择一个界面主题。
+        notes-system: 此功能需要操作系统或桌面环境。
+    scrolling:
+        title: 滚动
+        description: 启用/禁用平滑滚动。
+        checkbox: 启用平滑滚动
+    externalcommands:
+        title: 命令行操作
+        description: 监听第二个应用实例发送的信号。
+        notes: 查阅wiki以获取可用操作和参数列表。
+        checkbox: 允许外部控制
+gui:
+    integration:
+        title: 操作系统集成
+        description: 从哪里访问应用程序。
+        values:
+            both: 两者
+            taskbar: 任务栏
+            tray: 托盘
+    minimize:
+        title: 最小化界面
+        description: 当直播启动时。
+        values:
+            noop: 什么都不做
+            minimize: 最小化
+            tray: 移动到托盘
+    restore:
+        title: 恢复界面
+        description: 当正在观看的直播结束时。
+        values:
+            noop: 什么都不做
+            any: 在任一直播结束后
+            all: 在所有直播结束后
+    hidebuttons:
+        title: 隐藏窗口按钮
+        description: 隐藏最小化、最大化和关闭按钮。
+        checkbox: 隐藏按钮
+    minimizetotray:
+        title: 最小化按钮
+        description: 点击最小化按钮的行为。
+        checkbox: 最小化到托盘
+    badgelabel:
+        title: 应用程序图标
+        description: 显示在任务栏/托盘上的图标。
+        notes: 此功能需要操作系统或桌面环境。
+        requires: 需启用任务栏操作系统集成和桌面通知。
+        checkbox: 显示正在直播的已关注频道数量
+    focusrefresh:
+        title: 刷新内容
+        description: 当应用窗口重新获得焦点时自动刷新。
+        values:
+            none: 不要刷新
+            one: 1 分钟后
+            two: 2 分钟后
+            five: 5 分钟后
+streaming:
+    provider:
+        title: 串流工具
+        description: 选择一个串流工具并设置可执行文件路径。
+        notes: 如果文件无法在系统的$PATH环境变量或GUI的回退路径列表中找到，则需要手动设置路径。
+        executable:
+            streamlink: Streamlink可执行文件
+            streamlink-python: Python可执行文件
+        python-script:
+            streamlink-python: Streamlink python脚本
+        parameters:
+            title: 自定义参数
+            placeholder: 添加自定义参数
+    playerinput:
+        title: 播放器输入
+        description: 设置播放器串流的方式。
+        notes: 请查阅wiki获得关于此选项的详细资料。根据所选项不同，将设置不同的参数。播放器需要支持所选的方法。
+        values:
+            stdin:
+                label: 标准输入
+                description: 将流写入播放器的标准输入。
+            fifo:
+                label: 命名管道
+                description: 将流写入命名管道中，由播放器从中读取。
+            http:
+                label: HTTP
+                description: 开启一个本地HTTP服务器，让播放器读取。
+            passthrough:
+                label: HLS透传
+                description: 让播放器自行下载与缓冲直播。
+    low-latency:
+        title: 低延迟模式
+        description: 降低开启低延迟模式的频道的串流延迟。
+        notes: 请注意，启用此选项也会将延迟时间设置为2，如果该值更高，则可能会导致常规直播缓冲。为了实现最低的延迟，需要进一步调整播放器自身的缓存/缓冲设置。
+        checkbox: 启用低延迟模式
+    hls-live-edge:
+        title: HLS延迟时间
+        description: 降低该值可以减少直播延迟，但也可能会导致缓冲。根据播放器设置，可能还会有另一层缓冲。
+    stream-segment-threads:
+        title: 直播片段线程
+        description: 下载和处理直播片段的线程数。
+    player-no-close:
+        title: 保留播放器窗口
+        description: 当直播结束时不关闭播放器窗口。
+        notes: 播放器可能会阻止{provider}关闭它，也请看看播放器设置。
+        checkbox: 不关闭播放器
+    disable-ads:
+        title: 广告
+        description: 当频道正在播放广告时，直播将会暂停。查阅wiki获得更多信息。
+        checkbox: 跳过内嵌广告
+    retry-open:
+        title: 启动尝试次数
+        description: 尝试启动直播的次数。
+    retry-streams:
+        title: 重试延迟
+        description: 每次重试之间的延迟秒数。
+player:
+    preset:
+        title: 播放器预设
+        description: 使用预定义的播放器配置。
+    executable:
+        default:
+            title: 播放器
+            description: 留空将使用配置文档内的播放器设置。
+            default-value: VLC (未配置)
+            notes: 此处可以添加参数，但应该在参数字段中设置。下面列出了可用的变量。留空使用默认播放器。
+            placeholder: 留空以使用默认播放器
+        preset:
+            title: 播放器可执行文件
+            description: 如果文件无法在系统的$PATH环境变量或GUI的回退路径列表中找到，则需要手动设置路径。
+            placeholder: 留空以使用默认路径
+    args:
+        default:
+            title: 参数
+            description: 添加播放器参数。
+        preset:
+            title: 自定义参数
+            description: 设置额外的自定义播放器参数。
+        placeholder: 添加自定义播放器参数
+        substitutions:
+            channel: 频道名称
+            status: 频道状态文字
+            game: 游玩中的游戏名称
+            delay: 额外的直播延迟秒数
+            created: 上线时间
+            viewers: 当前观众数量
+            views: 总观看次数
+    players:
+        default:
+            label: 无预设
+        vlc:
+            label: VLC媒体播放器
+            attributes:
+                instance:
+                    title: 单实例模式
+                    description: 在不同的播放器窗口中观看多个直播。
+                    checkbox: 禁止单实例模式
+                close:
+                    title: 关闭播放器
+                    description: 避免堆积空的播放器窗口。
+                    checkbox: 允许播放器被关闭
+                title:
+                    title: 播放器窗口标题
+                    description: 显示频道名称、正在进行的游戏和直播标题。
+                    checkbox: 设置自定义标题
+                minimal:
+                    title: 布局
+                    description: 隐藏播放器控制按钮。可以通过按CTRL+H切换。
+                    checkbox: 最小化播放器布局
+        mpv:
+            label: MPV
+            attributes:
+                close:
+                    title: 关闭播放器
+                    description: 避免堆积空的播放器窗口。
+                    checkbox: 允许播放器被关闭
+                title:
+                    title: 播放器窗口标题
+                    description: 显示频道名称、正在进行的游戏和直播标题。
+                    checkbox: 设置自定义标题
+                media-title:
+                    title: 媒体标题
+                    description: 显示频道名称、正在进行的游戏和直播标题。
+                    checkbox: 设置媒体标题
+                minimal:
+                    title: 布局
+                    description: 不显示播放器窗口的装饰。
+                    checkbox: 最小化播放器布局
+                no-keepaspect-window:
+                    title: 窗口长宽比
+                    description: 如果内容未填满播放器窗口则显示黑色背景。
+                    checkbox: 不限制窗口长宽比
+                window:
+                    title: 强制显示窗口
+                    description: 修复了纯音频流的潜在问题。
+                    checkbox: 始终显示播放器窗口
+                seeking:
+                    title: 跳转
+                    description: 启用流媒体缓存中的向前/向后跳转。
+                    checkbox: 启用跳转
+                no-cache:
+                    title: 禁用播放器缓存
+                    description: 加快直播启动时间。
+                    checkbox: 不使用额外的播放器缓存
+        mpc:
+            label: Media Player Classic - Home Cinema
+            attributes:
+                instance:
+                    title: 单实例模式
+                    description: 在不同的播放器窗口中观看多个直播。
+                    checkbox: 禁止单实例模式
+                close:
+                    title: 关闭播放器
+                    description: 避免堆积空的播放器窗口。
+                    checkbox: 允许播放器被关闭
+        potplayer:
+            label: Daum PotPlayer
+streams:
+    quality:
+        title: 偏好画质
+        description: 选择默认的直播画质。
+    qualitypresets:
+        title: 画质预设
+        description: 选择画质范围或使用特定的画质。
+        notes: 第二列会显示实际选择的画质，同时第一列的画质或画质范围将会从“最佳”或“最差”两个选择器别名排除。修改前清查阅wiki和Streamlink的文档。
+        dont-exclude: 不排除直播画质
+    modal-close-launch:
+        title: 隐藏直播对话框
+        description: 在直播已经打开后隐藏对话框。
+        checkbox: 在成功启动直播后隐藏对话框
+    modal-close-end:
+        title: 关闭直播对话框
+        description: 在直播已经结束时关闭对话框。
+        checkbox: 在直播结束时关闭对话框
+    channelname:
+        title: 自定义频道名称
+        description: 频道名称本地化。
+        values:
+            custom: 显示自定义名称
+            original: 显示原始名称
+            both: 都显示
+    show-flag:
+        title: 旗帜
+        description: 标明主播的语言。
+        checkbox: 总是显示旗帜
+    filter-vodcast:
+        title: 淡化点播
+        description: 使点播更不明显，作为一个额外的标志。
+        checkbox: 淡化点播
+    vodcast-regexp:
+        title: 自定义点播过滤
+        description: 寻找未被标签的点播/重播。
+        notes: 使用一个符合JavaScript的正则表达式 (不区分大小写) 来过滤点播标题。要停用过滤，请输入一个空字符串或一个无效的正则表达式。
+    show-info:
+        title: 信息栏
+        description: 直播预览下方的底栏。
+        checkbox: 永远显示信息栏
+    info:
+        title: 信息栏内容
+        description: 信息栏要显示什么？
+        values:
+            game: 正在游玩的游戏
+            title: 直播标题
+    uptime-hours-only:
+        title: 直播上线时间格式
+        description: 以小时或天数显示直播上线时间。
+        checkbox: 忽略天数并以小时数加总显示
+    click:
+        title: 点击行为
+        description: 直播预览图的额外点击动作。
+        ctrl: Ctrl+鼠标主要按钮
+        cmd: Cmd+鼠标主要按钮
+        middle: 鼠标中键
+        values:
+            noop: 什么都不做
+            launch: 启动直播
+            chat: 打开聊天室
+            channel: 前往频道页
+            settings: 前往频道设置
+chat:
+    provider:
+        title: 聊天室应用
+        description: 选择聊天室应用。
+        notes-browser: 选择默认浏览器可能会导致意外的、非最小化的窗口尺寸。
+        file-placeholder: 设置可执行文件路径是必要的
+        params-placeholder: 设置额外参数
+        url:
+            default:
+                label: 默认聊天室网址
+                description: 程序默认的聊天室网址 (弹出窗口)。
+            popout:
+                label: 弹出窗口聊天室网址
+                description: Twitch网站使用的弹出窗口模式。
+            embed:
+                label: 内嵌聊天室网址
+                description: 用于嵌入聊天室到其他网站的网址。
+        providers:
+            browser:
+                label: 默认浏览器
+                attributes:
+                    url:
+                        title: 聊天室网址
+                        description: 要使用哪种Twitch聊天室网址。
+            basic:
+                substitutions:
+                    url: Twitch.tv上的频道聊天室网址
+                    channel: 频道名称
+                    user: 用户名称 (如已登录)
+                    token: 访问令牌 (如已登录)
+            chromium:
+                label: Chromium
+                attributes:
+                    exec:
+                        title: Chromium可执行文件
+                        description: 设置Chromium可执行文件路径。
+                    args:
+                        title: Chromium参数
+                        description: 设置额外参数。
+                    url:
+                        title: 聊天室网址
+                        description: 使用哪个聊天室网址。
+            chrome:
+                label: Google Chrome
+                attributes:
+                    exec:
+                        title: Google Chrome可执行文件
+                        description: 设置Google Chrome可执行文件路径。
+                    args:
+                        title: Google Chrome参数
+                        description: 设置额外参数。
+                    url:
+                        title: 聊天室网址
+                        description: 使用哪个聊天室网址。
+            chatterino:
+                label: Chatterino
+                attributes:
+                    exec:
+                        title: Chatterino可执行文件
+                        description: 设置Chatterino可执行文件路径。
+            chatty:
+                label: Chatty
+                attributes:
+                    exec:
+                        title: Java可执行文件
+                        description: 设置Java可执行文件路径。
+                    jar:
+                        title: Chatty .jar文件
+                        description: 设置Chatty.jar路径
+                    instance:
+                        title: 单实例模式
+                        description: 最低需要v0.8.2b2版本。
+                        checkbox: 启用单实例模式
+                    auth:
+                        title: 认证
+                        description: 让Chatty复用认证数据。
+                        checkbox: 自动登录
+                    args:
+                        title: 自定义Chatty参数
+                        description: 设置额外参数。
+            chatty-standalone:
+                label: Chatty (独立程序)
+                attributes:
+                    exec:
+                        title: Chatty可执行文件
+                        description: 设置Chatty可执行文件路径。
+                    instance:
+                        title: 单实例模式
+                        description: 最低需要v0.8.2b2版本。
+                        checkbox: 启用单实例模式
+                    auth:
+                        title: 认证
+                        description: 让Chatty复用认证数据。
+                        checkbox: 自动登录
+                    args:
+                        title: 自定义Chatty参数
+                        description: 设置额外参数。
+            custom:
+                label: 自定义应用程序
+                attributes:
+                    exec:
+                        title: 应用程序可执行文件
+                        description: 设置应用程序可执行文件路径。
+                    args:
+                        title: 应用程序参数
+                        description: 设置应用程序参数。
+                    url:
+                        title: 聊天室网址
+                        description: 使用哪个聊天室网址。
+    chat-open:
+        title: 打开聊天室
+        description: 在启动直播时打开聊天室。
+        checkbox: 自动打开聊天室
+        checkbox-context: 通过右键菜单启动直播时不打开聊天室
+    twitchemotes:
+        title: Twitch表情
+        description: 打开twitchemotes.com的按钮
+        checkbox: 在直播的弹出对话框中显示表情按钮
+languages:
+    filter:
+        title: 过滤直播
+        description: 按语言过滤，应用于所有直播 (除了已关注的直播)。
+        values:
+            fade:
+                text: 淡化直播
+                description: 显示所有直播，淡化显示语言不匹配的直播。
+            filter:
+                text: 过滤直播
+                description: 仅显示与语言选择匹配的直播。
+    languages:
+        title: 语言
+        description: 主播的语言，如果未设置，则为频道语言。
+        uncheck-all: 取消所有选择
+hotkeys:
+    navigation:
+        title: 导航
+        description: 全局导航快捷键。
+        notes: |
+            快捷键是按其各自组件的操作来分类的。每个操作都有一个主要快捷键和一个次要快捷键，可以单独切换打开或关闭，也可以使用自定义键位进行修改。应用程序窗口需要在前台才能触发快捷键。<br><br>
+            此外请注意，由于技术原因，快捷键目前无法识别系统的键盘布局。这意味着所有快捷键都是基于默认的美国键盘布局 (QWERTY)，在使用不同布局的系统上，某些按键可能会显示不正确。
+        actions:
+            refresh: 刷新当前菜单
+            historyBack: 后退
+            historyForward: 前进
+            homepage: 回到主页
+            routeFeatured: 跳到精选频道菜单
+            routeGames: 跳到游戏菜单
+            routeStreams: 跳到直播菜单
+            routeUserFollowedStreams: 跳到关注中的直播菜单
+            routeUserFollowedChannels: 跳到关注中的频道菜单
+            routeUserAuth: 跳到用户菜单
+            routeWatching: 跳到观看菜单
+            routeSettings: 跳到设置菜单
+            routeAbout: 跳到关于菜单
+    searchbar:
+        title: 搜索栏
+        description: 顶部的搜索栏。
+        actions:
+            focus: 聚焦
+    followbutton:
+        title: 关注按钮
+        description: 频道页或直播对话框上的关注按钮。
+        actions:
+            default: 关注或取消关注
+            confirm: 确认
+    openchatbutton:
+        title: 打开聊天室按钮
+        description: 频道页或直播对话框上的聊天按钮。
+        actions:
+            default: 打开聊天室
+    sharechannelbutton:
+        title: 分享频道按钮
+        description: 频道页或直播对话框上的分享按钮。
+        actions:
+            default: 复制频道地址到剪贴板
+    twitchemotesbutton:
+        title: Twitch表情按鈕
+        description: 频道页或直播对话框上的表情按钮。
+        actions:
+            default: 打开twitchemotes.com
+    modaldialog:
+        title: 对话框
+        description: 通用的弹出式对话框。
+        actions:
+            close: 关闭
+    modalconfirm:
+        title: 确认对话框
+        description: 当某个行为需要确认时。
+        actions:
+            confirm: 确认
+    modalstreaming:
+        title: 直播对话框
+        description: 观看直播时显示的直播对话框
+        actions:
+            shutdown: 停止当前直播
+            log: 切换日志输出
+notifications:
+    enabled:
+        title: 通知
+        description: 当关注的频道开始直播时通知。
+        checkbox: 启用桌面通知
+    provider:
+        title: 通知类型
+        description: 选择通知类型
+        test:
+            button: 测试通知
+            message: 这是一条测试通知
+        providers:
+            auto:
+                name: 自动选择
+                description: 尝试使用最佳的通知提供程序
+                notes: 会按照降序测试所有可用的通知提供程序
+            native:
+                name: 原生通知
+                description: 使用系统原生通知系统
+                notes: 通知可以在系统设置中配置
+            snoretoast:
+                name: Windows应用通知
+                description: Windows 8+ 的原生通知
+                notes: “横幅通知” 需要在系统设置中启用
+            growl:
+                name: Growl通知
+                description: 适用于Windows、macOS和Linux的第三方通知服务
+                notes: 需要在系统中安装和运行 Growl
+            rich:
+                name: 富文本通知
+                description: Chromium富文本通知
+                notes: 由应用程序呈现
+    filter:
+        title: 频道过滤
+        description: 通知可以在频道的设置菜单中单独开关。
+        values:
+            blacklist: 显示全部并隐藏禁用的
+            whitelist: 忽略全部仅显示启用的
+    filter-vodcasts:
+        title: 过滤点播
+        description: 只显示直播。
+        checkbox: 忽略点播
+    grouping:
+        title: 群组通知
+        description: 合并多个通知
+        checkbox: 单次仅显示一条通知
+    click:
+        title: 点击通知
+        description: 点击通知时的行为。
+        values:
+            noop: 什么都不做
+            followed: 跳转到关注中直播页面
+            stream: 打开所有直播
+            stream-and-chat: 打开所有的直播和聊天室
+    click-group:
+        title: 点击群组通知
+        description: 点击群组通知时的行为。
+        values:
+            noop: 什么都不做
+            followed: 跳转到关注中直播页面
+            stream: 打开所有直播
+            stream-and-chat: 打开所有的直播和聊天室
+    click-restore:
+        title: 还原界面
+        description: 点击通知时从托盘或最小化还原。
+        checkbox: 点击通知时还原界面
+channels:
+    find: 寻找频道
+    none: 没有找到频道。
+    empty: 未设置自定义频道设置。

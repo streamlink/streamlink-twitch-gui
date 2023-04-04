@@ -1,0 +1,9 @@
+hours-from-now:
+    now: "刚刚"
+    minutes: "{minutes}分"
+    hours:
+        simple: "{hours}时"
+        extended: "{hours}时{minutes}分"
+    days:
+        simple: "{days}天"
+        extended: "{days}天{hours}时"

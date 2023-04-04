@@ -1,0 +1,96 @@
+channel-button:
+    title: "关注 {name}"
+channel-item:
+    offline: 离线
+    no-status: 无频道描述
+documentation-link:
+    title: 在线阅读文档
+drop-down-selection:
+    placeholder: 请选择
+file-select:
+    placeholder: 留空为默认路径
+flag-icon:
+    channel: "频道语言为{lang}"
+    broadcaster: "主播语言为{lang}"
+infinite-scroll:
+    error: 错误
+    loading: 加载中
+    fetch: 加载更多
+main-menu:
+    browse:
+        header: 浏览
+        games: 游戏
+        streams: 直播
+    followed:
+        header: 关注中
+        streams: 正在直播
+        channels: 频道
+    misc:
+        header: 其他
+        settings: 设置
+        about: 关于
+open-chat:
+    title: 打开聊天室
+quick-bar-homepage:
+    title: 设为主页
+search-bar:
+    placeholder: 搜索
+    filter: 过滤
+    filters:
+        all: 全部
+        games: 游戏
+        channels: 频道
+        streams: 直播
+    recent: 搜索历史
+settings-channel-item:
+    settings: 设置
+    erase: 清除
+    confirmation: 清除自定义设置？
+    confirm: 是
+    decline: 否
+settings-hotkey:
+    empty: 未设置热键
+    edit: 编辑热键
+    delete: 还原热键
+    discard: 取消
+    confirm: 确认
+    toggle: 启用或停用此热键
+settings-row:
+    notes: 注意
+    default: 默认
+    requires: 依赖
+    example: 范例
+    variables:
+        title: 可用参数
+        # tooltip (whitespace sensitive)
+        help: |
+            每个变量的内容都将被转义。如果在引号字符串之外使用，每个字符都将被转义。一些应用程序可以在其参数列表中读取不必要的转义字符并按预期工作，但其他应用程序则不会。请确保将所有变量设置在单引号或双引号字符串内。
+
+            正确用法：
+            -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
+settings-submit:
+    apply: 应用
+    discard: 丢弃
+share-channel:
+    title: 复制频道地址
+stream-item:
+    details:
+        show: 显示频道详情
+        lock: 锁定详情视图
+        unlock: 解锁详情视图
+    vodcast: 点播
+team-item:
+    created-at:
+        title: "创建日期"
+        format: "{created_at, date, full}"
+    updated-at:
+        title: "最后更新日期"
+        format: "{updated_at, date, full}"
+title-bar:
+    loggedout: 未登录
+    # tooltip (whitespace sensitive)
+    loggedin: |
+        {name} 已登录
+        {status}
+twitch-emotes:
+    title: 显示可用的频道表情
