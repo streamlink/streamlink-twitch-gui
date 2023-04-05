@@ -28,14 +28,12 @@ export default Controller.extend({
 	}),
 
 	contentGuiLanguage: computed(function() {
-		const compare = new Intl.Collator( "en", { sensitivity: "base" } ).compare;
 		const languages = Object.keys( locales )
+			.sort()
 			.map( key => ({
 				id: key,
 				label: locales[ key ]
-			}) )
-			// sort by localized language name in English order
-			.sort( ( a, b ) => compare( a.label, b.label ) );
+			}) );
 
 		// add auto selection to the top
 		languages.unshift({ id: "auto", label: locales[ systemLocale ] });
