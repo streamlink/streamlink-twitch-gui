@@ -54,7 +54,7 @@
 		"chrome-remote-interface": "0.30.0",
 		"copy-webpack-plugin": "11.0.0",
 		"css-loader": "6.7.3",
-		"css-minimizer-webpack-plugin": "4.2.2",
+		"css-minimizer-webpack-plugin": "5.0.0",
 		"ember-compatibility-helpers": "1.0.2",
 		"ember-decorators": "2.5.1",
 		"ember-qunit": "3.5.1",
