@@ -57,8 +57,6 @@ export default Model.extend( /** @class TwitchUser */ {
 	profile_image_url: attr( "string" ),
 	/** @type {string} */
 	type: attr( "string" ),
-	/** @type {number} */
-	view_count: attr( "number" ),
 	/** @type {Date} */
 	created_at: attr( "date" ),
 

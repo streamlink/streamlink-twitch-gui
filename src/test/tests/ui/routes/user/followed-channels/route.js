@@ -110,8 +110,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 					login: null,
 					offline_image_url: null,
 					profile_image_url: null,
-					type: null,
-					view_count: null
+					type: null
 				},
 				{
 					id: "2",
@@ -124,8 +123,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 					login: null,
 					offline_image_url: null,
 					profile_image_url: null,
-					type: null,
-					view_count: null
+					type: null
 				}
 			],
 			"Maps TwitchUserFollowed records to TwitchUser in the first request"
@@ -172,8 +170,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 					login: null,
 					offline_image_url: null,
 					profile_image_url: null,
-					type: null,
-					view_count: null
+					type: null
 				},
 				{
 					id: "2",
@@ -186,8 +183,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 					login: null,
 					offline_image_url: null,
 					profile_image_url: null,
-					type: null,
-					view_count: null
+					type: null
 				},
 				{
 					id: "3",
@@ -200,8 +196,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 					login: null,
 					offline_image_url: null,
 					profile_image_url: null,
-					type: null,
-					view_count: null
+					type: null
 				}
 			],
 			"Maps the last TwitchUserFollowed record to TwitchUser in the second request"

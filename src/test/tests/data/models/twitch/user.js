@@ -94,7 +94,6 @@ module( "data/models/twitch/user", function( hooks ) {
 			id: 1,
 			login: "foo",
 			display_name: "foo",
-			view_count: 1234,
 			broadcaster_type: ""
 		});
 
@@ -149,7 +148,6 @@ module( "data/models/twitch/user", function( hooks ) {
 				offline_image_url: "https://mock/twitch-user/1/offline_image-1920x1080.png",
 				profile_image_url: "https://mock/twitch-user/1/profile_image-300x300.png",
 				type: "",
-				view_count: 1234,
 				created_at: "2000-01-01T00:00:00.000Z"
 			},
 			"Records have the correct IDs and relationship IDs"
@@ -194,7 +192,6 @@ module( "data/models/twitch/user", function( hooks ) {
 					offline_image_url: null,
 					profile_image_url: null,
 					type: null,
-					view_count: null,
 					created_at: null
 				},
 				{
@@ -208,7 +205,6 @@ module( "data/models/twitch/user", function( hooks ) {
 					offline_image_url: null,
 					profile_image_url: null,
 					type: null,
-					view_count: null,
 					created_at: null
 				}
 			],
@@ -342,7 +338,6 @@ module( "data/models/twitch/user", function( hooks ) {
 				offline_image_url: null,
 				profile_image_url: null,
 				type: null,
-				view_count: null,
 				created_at: null
 			},
 			"Records have the correct IDs and relationship IDs"
