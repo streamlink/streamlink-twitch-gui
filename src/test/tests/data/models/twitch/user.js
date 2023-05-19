@@ -118,18 +118,6 @@ module( "data/models/twitch/user", function( hooks ) {
 		set( settingsService, "content.streams.name", ATTR_STREAMS_NAME_ORIGINAL );
 		assert.strictEqual( record.detailedName, "foo", "Only shows original name" );
 
-		assert.strictEqual(
-			record.titleViewCount,
-			"models.twitch.user.view_count{\"count\":1234}",
-			"titleViewCount has correct translation"
-		);
-		set( record, "view_count", 1337 );
-		assert.strictEqual(
-			record.titleViewCount,
-			"models.twitch.user.view_count{\"count\":1337}",
-			"Updates titleViewCount count parameter"
-		);
-
 		assert.notOk( record.isPartner, "Is not a partnered user" );
 		set( record, "broadcaster_type", "partner" );
 		assert.ok( record.isPartner, "Is a partnered user now" );

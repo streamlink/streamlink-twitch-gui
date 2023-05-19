@@ -1,12 +1,4 @@
 twitch:
-    user:
-        view_count: |
-            {count, plural,
-                one {# просмотр}
-                few {# просмотра}
-                many {# просмотров}
-                other {Просмотров: #}
-            }
     stream:
         started-at:
             less-than-24h: "Запущен в {started_at, time, medium}"

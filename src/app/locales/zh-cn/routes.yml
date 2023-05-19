@@ -50,9 +50,6 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: 语言
-        view-count:
-            title: 观看次数
-            data: "{views} ({day}/日)"
         content:
             title: 內容
             mature: 不适合儿童观看

@@ -49,9 +49,6 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: "Язык"
-        view-count:
-            title: "Просмотры"
-            data: "{views} ({day} в день)"
         content:
             title: "Содержимое"
             mature: "Не подходит для детей"

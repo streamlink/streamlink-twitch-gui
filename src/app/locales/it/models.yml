@@ -1,10 +1,4 @@
 twitch:
-    user:
-        view_count: |
-            {count, plural,
-                one {Visualizzazione di un canale}
-                other {# visualizzazioni canale}
-            }
     stream:
         started-at:
             less-than-24h: "Online da {started_at, time, medium}"

@@ -109,16 +109,6 @@ export default Model.extend( /** @class TwitchUser */ {
 		}
 	),
 
-	/** @type {string} */
-	titleViewCount: computed(
-		"intl.locale",
-		"view_count",
-		/** @this {TwitchUser} */
-		function() {
-			return this.intl.t( "models.twitch.user.view_count", { count: this.view_count } );
-		}
-	),
-
 	/**
 	 * Load channel specific settings
 	 * @returns {Promise<Object>}

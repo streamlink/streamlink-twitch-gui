@@ -24,8 +24,6 @@
 				<dt><i class="fa fa-language"></i>{{t "routes.channel.details.language.title"}}</dt>
 				<dd>{{flag-icon type="broadcaster" lang=channel.broadcaster_language}} {{language}}</dd>
 			{{/if}}
-			<dt><i class="fa fa-line-chart"></i>{{t "routes.channel.details.view-count.title"}}</dt>
-			<dd title="{{user.titleViewCount}}">{{t "routes.channel.details.view-count.data" views=(format-viewers user.view_count) day=(format-viewers (math-div user.view_count age))}}</dd>
 			<dt><i class="fa fa-male"></i>{{t "routes.channel.details.content.title"}}</dt>
 			<dd>{{t (concat "routes.channel.details.content." (if user.is_mature "mature" "ffa"))}}</dd>
 			<dt><i class="fa fa-history"></i>{{t "routes.channel.details.delay.title"}}</dt>

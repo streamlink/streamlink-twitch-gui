@@ -49,9 +49,6 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: Idioma
-        view-count:
-            title: visualizações
-            data: "{views} ({day} por dia)"
         content:
             title: Conteúdo
             mature: Inapropriado para crianças

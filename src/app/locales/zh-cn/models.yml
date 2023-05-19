@@ -1,9 +1,4 @@
 twitch:
-    user:
-        view_count: |
-            {count, plural,
-                other {观看次数: #}
-            }
     stream:
         started-at:
             less-than-24h: "于 {started_at, time, medium} 开始"

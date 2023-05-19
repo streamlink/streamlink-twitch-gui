@@ -50,9 +50,6 @@ channel:
             format: "{created_at, date, long}"
         language:
             title: Language
-        view-count:
-            title: Views
-            data: "{views} ({day} per day)"
         content:
             title: Content
             mature: Inappropriate for children
