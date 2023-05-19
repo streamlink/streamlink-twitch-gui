@@ -172,7 +172,6 @@ player:
             delay: Ritardo del flusso aggiuntivo in secondi
             created: Online da
             viewers: Numero di spettatori attuali
-            views: Numero totale di visualizzazioni
     players:
         default:
             label: Nessuna preimpostazione

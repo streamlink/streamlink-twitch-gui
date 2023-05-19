@@ -170,7 +170,6 @@ player:
             delay: Additional stream delay in seconds
             created: Online since
             viewers: Number of current viewers
-            views: Total number of views
     players:
         default:
             label: No preset

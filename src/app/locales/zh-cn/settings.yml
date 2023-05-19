@@ -170,7 +170,6 @@ player:
             delay: 额外的直播延迟秒数
             created: 上线时间
             viewers: 当前观众数量
-            views: 总观看次数
     players:
         default:
             label: 无预设

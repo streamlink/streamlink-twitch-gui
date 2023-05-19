@@ -33,10 +33,5 @@ export default [
 		[ "viewers", "current" ],
 		"stream.stream.viewer_count",
 		t`settings.player.args.substitutions.viewers`
-	),
-	new Substitution(
-		[ "views", "overall" ],
-		"stream.user.view_count",
-		t`settings.player.args.substitutions.views`
 	)
 ];

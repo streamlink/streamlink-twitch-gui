@@ -172,7 +172,6 @@ player:
             delay: Délai additionnel du stream en secondes
             created: En ligne depuis
             viewers: Nombre de viewers actuel
-            views: Nombre total de vues
     players:
         default:
             label: Par défaut

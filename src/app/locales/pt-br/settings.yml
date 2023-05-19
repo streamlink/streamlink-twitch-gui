@@ -181,7 +181,6 @@ player:
             delay: Atraso adicional para a transmissão (em segundos)
             created: Online desde
             viewers: Número de espectadores
-            views: Número total de visualizações
     players:
         default:
             label: Sem pré definição

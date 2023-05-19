@@ -170,7 +170,6 @@ player:
             delay: Zusätzliche Streamverzögerung in Sekunden
             created: Online seit
             viewers: Anzahl der aktuellen Zuschauer
-            views: Gesamtaufrufe
     players:
         default:
             label: Keine Voreinstellung

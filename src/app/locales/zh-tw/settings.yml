@@ -172,7 +172,6 @@ player:
             delay: 額外的串流延遲秒數
             created: 上線時間
             viewers: 觀眾人數
-            views: 總觀看次數
     players:
         default:
             label: 不使用預設定
