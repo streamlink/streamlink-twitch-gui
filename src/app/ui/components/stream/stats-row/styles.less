@@ -1,11 +1,16 @@
 
 .stats-row-component {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 
-	span {
+	span:not(.stats-row-item-flag) {
+		width: 6rem;
 		overflow: hidden;
 		white-space: nowrap;
+	}
+
+	span.stats-row-item-flag {
+		width: 2rem;
 	}
 
 	i {

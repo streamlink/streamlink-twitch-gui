@@ -1,8 +1,7 @@
 {{#if withFlag}}
 	{{#if stream.hasBroadcasterLanguage}}
-		<span>{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}</span>
+		<span class="stats-row-item-flag">{{flag-icon type="broadcaster" lang=stream.channel.broadcaster_language}}</span>
 	{{/if}}
 {{/if}}
 <span title="{{stream.titleStartedAt}}"><i class="fa fa-clock-o"></i>{{hours-from-now stream.started_at interval=60000}}</span>
 <span title="{{stream.titleViewers}}"><i class="fa fa-users"></i>{{format-viewers stream.viewer_count}}</span>
-<span title="{{stream.user.titleViewCount}}"><i class="fa fa-line-chart"></i>{{format-viewers stream.user.view_count}}</span>
