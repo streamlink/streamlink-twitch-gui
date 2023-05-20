@@ -1,0 +1,13 @@
+notification:
+    dispatch:
+        single: "{name} がライブを開始しました"
+        group: 一部のフォロー中のチャンネルがライブを開始しました
+    status:
+        disabled: デスクトップ通知をオフにしました
+        enabled: デスクトップ通知をオンにしました
+        error: デスクトップ通が停止しました
+        paused: デスクトップ通知は一時停止中です
+    tray:
+        pause:
+            label: 通知の一時停止
+            tooltip: デスクトップ通知のオン/オフ

@@ -1,0 +1,157 @@
+error:
+    header: エラー
+    text: ページの読み込み中にエラーが発生しました
+about:
+    about:
+        header: このアプリについて
+        homepage: ホームページ
+        author: 作者
+        version: バージョン
+        nwjs: NW.js
+        platform: プラットフォーム
+        arch: アーキテクチャ
+        built: ビルド
+        help: ヘルプ
+        wiki: Wiki
+        bugs: バグ
+        issue-tracker: 問題の報告
+        support: サポート
+        gitter: Gitter
+        changelog: 更新履歴
+        contributors: 貢献者
+    donation:
+        header: サポートと寄付
+        text: このアプリが気に入った場合は寄付をいただけると幸いです<br>ありがとうございます！
+    translations:
+        header: 翻訳
+    dependencies:
+        header: サードパーティアプリ
+games:
+    header: トップのカテゴリ
+    empty: 現在、トップのカテゴリはありません。
+game:
+    empty: 現在、このカテゴリのライブはありません。
+streams:
+    header: トップのライブ
+    empty: 現在、トップライブはありません。
+channel:
+    menu:
+        details: 詳細
+        teams: チーム
+        settings: 設定
+    offline: 現在オフラインです
+    no-status: チャンネルの説明がありません
+    details:
+        header: チャンネルデータ
+        name:
+            title: 名前
+        created-at:
+            title: 作成日
+            format: "{created_at, date, long}"
+        language:
+            title: 言語
+        content:
+            title: コンテンツ
+            mature: 未成年者に不適切なコンテンツ
+            ffa: 年齢制限なし
+        delay:
+            title: 遅延
+            data: |
+                {count, plural,
+                    =0 {遅延なし}
+                    other {# 秒}
+                }
+        vodcast:
+            title: ビデオ
+            data: この配信はビデオです
+    teams:
+        empty: チームリストが空です。
+    settings:
+        stream:
+            header: ライブ
+            quality:
+                title: 画質
+                description: チャンネルの画質を設定します。
+            low-latency:
+                title: 低遅延モード
+                description: 低遅延モードをグローバル設定に上書きします。
+                checkbox: 低遅延モードを有効にする
+            disable-ads:
+                title: 広告
+                description: 広告設定をグローバル設定に上書きします。
+                checkbox: ライブ内広告をスキップする
+            chat:
+                title: チャット
+                description: 自動でチャットを開きます。
+                checkbox: ライブ開始時にチャットを開く
+        notifications:
+            header: デスクトップ通知
+            enabled:
+                title: 通知
+                description: チャンネルのライブ開始時に通知します。
+                notes: チャンネルをフォローする必要があります。
+                checkbox: デスクトップ通知を有効にする
+team:
+    header:
+        members: "チームメンバー：{num}"
+        created-at: "作成日：{created_at, date, full}"
+        updated-at: "更新日：{updated_at, date, full}"
+    menu:
+        live: ライブ中のメンバー
+        all: すべてのメンバー
+        info: チームプロフィール
+    live:
+        empty: 現在、チームにはライブ中のメンバーがいません。
+    all:
+        empty: 現在、チームにはメンバーがいません。
+    info:
+        header: 詳細
+user:
+    index:
+        logged-in: "{name} はログイン中"
+        since: "{since, date, full} からオンライン"
+        sign-out: サインアウト
+        token:
+            title: あなたのアクセストークン
+            show: アクセストークンを表示
+            copy: クリップボードへコピー
+            hint:
+                first: "このキーは、次の権限を持つTwitch.tvアカウントへのアクセスを許可します："
+                second: 無効にするには、パスワードを使用して再度ログインしてください。
+    auth:
+        abort: 中止
+        sign-in: サインイン
+        token:
+            show-form: アクセストークンを使用
+            placeholder: アクセストークン入力してください
+            hint:
+                first: アクセストークンを使用してTwitch.tvアカウントにログインします。
+                second: "アクセストークンに次の権限があることを確認してください："
+        fail: 認証に失敗しました。もう一度試してください。
+    followedStreams:
+        header: フォロー中のライブ
+        empty:
+            text: フォロー中のライブがありません。
+            streams: 人気のライブを視聴する
+    followedChannels:
+        header: フォロー中のチャンネル
+        empty: フォロー中のチャンネルがありません。
+search:
+    header:
+        all: "すべての検索結果"
+        games: "カテゴリの検索結果："
+        channels: "ライブの検索結果："
+    subheader:
+        games: カテゴリ
+        channels: チャンネル
+    empty: 何も見つかりませんでした…
+watching:
+    header: 現在視聴中
+    buttons:
+        open: ダイアログを開く
+        close: ライブを閉じる
+    empty:
+        header: すべてのライブが終了しました
+        next: 次どうする？
+        streams: 人気のライブを視聴する
+        followed: フォロー中のライブを視聴する

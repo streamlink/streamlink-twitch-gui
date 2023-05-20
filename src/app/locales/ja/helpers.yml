@@ -1,0 +1,9 @@
+hours-from-now:
+    now: "たった今"
+    minutes: "{minutes}分"
+    hours:
+        simple: "{hours}時間"
+        extended: "{hours}時間{minutes}分"
+    days:
+        simple: "{days}日"
+        extended: "{days}日{hours}時間"
