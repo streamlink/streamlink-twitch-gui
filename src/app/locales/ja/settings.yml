@@ -1,0 +1,570 @@
+menu:
+    header: 設定
+    main: メイン
+    gui: GUI
+    streaming: ストリーミング
+    player: プレーヤー
+    streams: ライブ
+    chat: チャット
+    languages: 言語
+    hotkeys: ホットキー
+    notifications: 通知
+    channels: チャンネル
+main:
+    language:
+        title: 言語
+        description: 使用する言語を選択してください。
+        notes: 別の言語が話せますか？ 翻訳を手伝って！ 詳細についてはWikiをご覧ください。
+        labels:
+            auto: "システム ({label})"
+    advanced:
+        title: 設定と機能
+        description: 非表示の設定と機能を有効にします。<br>設定メニューのみに適用されるわけではありません。
+        checkbox: 拡張設定と機能を有効にする
+    homepage:
+        title: ホーム
+        description: 最初にロードしたときやロゴをクリックしたときに読み込まれるページです。
+        text:
+            first: 各ページ右上のメニューバーをご覧ください。
+            second: ホームボタンをクリックして新しいホームに設定します。
+    theme:
+        title: テーマ
+        description: カラーテーマを選択してください。
+        notes-system: OSまたはデスクトップ環境でサポートされている必要があります。
+    scrolling:
+        title: スクロール
+        description: スムーズスクロールのオン/オフ。
+        checkbox: スムーズスクロールを有効にする
+    externalcommands:
+        title: コマンドライン操作
+        description: シングルインスタンスアプリによって送信された信号を受信します。
+        notes: 使用可能なアクションとパラメータのリストについては、Wikiを参照してください。
+        checkbox: 外部コマンドを許可
+gui:
+    integration:
+        title: OSの統合
+        description: アプリへのアクセスをどこから行うか。
+        values:
+            both: 両方
+            taskbar: タスクバー
+            tray: トレイ
+    minimize:
+        title: GUIの最小化
+        description: ライブ開始を取得したときの動作。
+        values:
+            noop: 何もしない
+            minimize: 最小化
+            tray: トレイへ移動
+    restore:
+        title: インターフェースの復元
+        description: 視聴中のライブが終了したときに復元するかどうか。
+        values:
+            noop: 何もしない
+            any: いずれかのライブが終了後に復元
+            all: すべてのライブが終了後に復元
+    hidebuttons:
+        title: ウィンドウボタンの非表示
+        description: 最小化、最大化、閉じるボタンの非表示。
+        checkbox: ボタンの非表示
+    minimizetotray:
+        title: 最小化ボタン
+        description: 最小化ボタンをクリックしたときの動作。
+        checkbox: トレイへ最小化
+    badgelabel:
+        title: アプリアイコン
+        description: タスクバー/トレイに表示されるアイコン。
+        notes: OSまたはデスクトップ環境でサポートされている必要があります。
+        requires: タスクバーOS統合とデスクトップ通知を有効にする必要があります。
+        checkbox: ライブ中のフォローチャンネル数を表示
+    focusrefresh:
+        title: コンテンツの更新
+        description: アプリウィンドウにフォーカスが戻ったときに自動的に更新されます。
+        values:
+            none: 更新しない
+            one: 1分後に更新
+            two: 2分後に更新
+            five: 5分後に更新
+streaming:
+    provider:
+        title: ストリーミングツール
+        description: ストリーミングツールを選択し、実行ファイルのパスを指定します。
+        notes: システムの$PATH環境変数またはGUIのフォールバックパスのリストにファイルが見つからない場合は、パスを手動で設定する必要があります。
+        executable:
+            streamlink: Streamlink実行ファイル
+            streamlink-python: Python実行ファイル
+        python-script:
+            streamlink-python: StreamlinkのPythonスクリプト
+        parameters:
+            title: カスタムパラメータ
+            placeholder: カスタムパラメータの追加
+    playerinput:
+        title: プレーヤー入力
+        description: プレーヤーのストリーミング方法を設定します。
+        notes: このオプションの詳細についてはWikiを参照してください。選択したオプションに応じて異なるパラメータが設定されます。プレーヤーは選択されたメソッドをサポートする必要があります。
+        values:
+            stdin:
+                label: 標準入力
+                description: ストリームをプレーヤーの標準入力に書き込みます。
+            fifo:
+                label: 名前付きパイプ
+                description: プレーヤーが読み取る名前付きパイプにストリームを書き込みます。
+            http:
+                label: HTTP
+                description: ローカルHTTPサーバーを起動し、プレーヤーに読み取りを許可します。
+            passthrough:
+                label: HLS (パススルー)
+                description: プレーヤーがストリームをダウンロードしてバッファリングできるようにします。
+    low-latency:
+        title: 低遅延モード
+        description: 低遅延モードがオンになっているチャンネルのライブ遅延を低減します。
+        notes: オプションを有効にするとlive edge値が高い場合でも値が2に設定されるため、通常のストリームにバッファリングが発生する可能性があることに注意してください。可能な限り低遅延を実現するには、プレーヤー自身のキャッシュ/バッファリング設定をさらに微調整する必要があります。
+        checkbox: 低遅延モードを有効にする
+    hls-live-edge:
+        title: HLS live edge
+        description: 値を小さくするとストリームの遅延が減少しますが、バッファリングが発生する可能性があります。プレーヤーの構成によっては別レイヤのバッファリングが存在する場合があります。
+    stream-segment-threads:
+        title: ストリームセグメントのスレッド数
+        description: ストリームセグメントのダウンロードと処理に使用されるスレッドの数。
+    player-no-close:
+        title: プレーヤーウィンドウの維持
+        description: ライブが終了したあとのプレーヤーウィンドウの動作。
+        notes: プレーヤーが{provider}を閉じないようにすることもできます。プレーヤー設定も参照してください。
+        checkbox: プレーヤーを閉じない
+    disable-ads:
+        title: 広告
+        description: これによりチャンネルが広告を表示中はライブが停止します。詳細はwikiを参照してください。
+        checkbox: ライブ内広告をスキップ
+    retry-open:
+        title: 起動の試行回数
+        description: ライブ起動の試行回数。
+    retry-streams:
+        title: 再試行の遅延
+        description: 次の再試行までに間隔を開けます (単位：秒)。
+player:
+    preset:
+        title: プレーヤープリセット
+        description: 定義済みのプレーヤー設定を使用します。
+    executable:
+        default:
+            title: ビデオプレーヤー
+            description: 定義済みのプレーヤー設定を使用するには空白にしてください。
+            default-value: VLC (未構成)
+            notes: パラメータをここに追加できますが、一方でパラメータフィールドを設定する必要があります。使用可能な変数を以下に示します。
+            placeholder: デフォルトプレーヤーを使用する場合は空白
+        preset:
+            title: プレーヤーの実行ファイル
+            description: システムの$PATH環境変数またはGUIのフォールバックパスのリストにファイルが見つからない場合は、パスを手動で設定する必要があります。
+            placeholder: パスがデフォルトの場合は空白
+    args:
+        default:
+            title: パラメータ
+            description: プレーヤーパラメータを追加します。
+        preset:
+            title: カスタムパラメータ
+            description: 追加のカスタムプレーヤーパラメータを設定します。
+        placeholder: カスタムプレーヤーパラメータの追加
+        substitutions:
+            channel: チャンネル名
+            status: チャンネルの状態
+            game: 再生中のカテゴリ名
+            delay: ライブ遅延の追加秒数
+            created: オンライン時間
+            viewers: 現在の視聴回数
+    players:
+        default:
+            label: プリセットなし
+        vlc:
+            label: VLC media player
+            attributes:
+                instance:
+                    title: シングルインスタンスモード
+                    description: 異なるプレーヤーウィンドウで複数のライブを視聴する。
+                    checkbox: シングルインスタンスモードを無効
+                close:
+                    title: プレーヤーを閉じる
+                    description: 空のプレーヤーを重複起動しないようにします。
+                    checkbox: プレーヤーが閉じられるのを許可
+                title:
+                    title: プレーヤーウィンドウのタイトル
+                    description: チャンネル名やライブ中のカテゴリとタイトルを表示します。
+                    checkbox: カスタムタイトルを設定
+                minimal:
+                    title: レイアウト
+                    description: プレーヤーのコントロールボタンを非表示にします。Ctrl+Hを押すと切り替えられます。
+                    checkbox: プレーヤーレイアウトの最小化
+        mpv:
+            label: MPV
+            attributes:
+                close:
+                    title: プレーヤーを閉じる
+                    description: 空のプレーヤーを重複起動しないようにします。
+                    checkbox: プレーヤーが閉じられるのを許可
+                title:
+                    title: プレーヤーウィンドウのタイトル
+                    description: チャンネル名やライブ中のカテゴリとタイトルを表示します。
+                    checkbox: カスタムタイトルを設定
+                media-title:
+                    title: メディアタイトル
+                    description: チャンネル名やライブ中のカテゴリとタイトルを表示します。
+                    checkbox: カスタムタイトルを設定
+                minimal:
+                    title: レイアウト
+                    description: プレーヤーウィンドウの装飾を非表示。
+                    checkbox: プレーヤーレイアウトの最小化
+                no-keepaspect-window:
+                    title: ウィンドウのアスペクト比
+                    description: プレーヤーウィンドウのアスペクト比が一致していない場合は黒背景を表示します。
+                    checkbox: ウィンドウのアスペクト比を制限しない
+                window:
+                    title: ウィンドウの強制表示
+                    description: 音声のみのストリームに関する潜在的な問題を修正します。
+                    checkbox: プレーヤーウィンドウを常に表示
+                seeking:
+                    title: ジャンプ
+                    description: ストリームキャッシュで前後にジャンプできるようにします。
+                    checkbox: ジャンプを有効にする
+                no-cache:
+                    title: プレーヤーキャッシュを無効化
+                    description: ライブの起動時間を短縮します。
+                    checkbox: 追加のプレーヤーキャッシュを使用しない
+        mpc:
+            label: Media Player Classic - Home Cinema
+            attributes:
+                instance:
+                    title: シングルインスタンスモード
+                    description: 異なるプレーヤーウィンドウで複数のライブを視聴する。
+                    checkbox: シングルインスタンスモードを無効
+                close:
+                    title: プレーヤーを閉じる
+                    description: 空のプレーヤーを重複起動しないようにします。
+                    checkbox: プレーヤーが閉じるのを許可
+        potplayer:
+            label: Daum PotPlayer
+streams:
+    quality:
+        title: 優先画質
+        description: デフォルトのライブ画質を選択してください。
+    qualitypresets:
+        title: 画質プリセット
+        description: 画質の範囲を選択するか特定の画質を使用します。
+        notes: 2列目では実際の画質選択を表示しています。1列目の画質は選択エイリアスにある「最高」または「最低」から除外されます。変更前にWikiやStreamlinkのドキュメントをご確認ください。
+        dont-exclude: ライブ画質を除外しない
+    modal-close-launch:
+        title: ライブポップアップの非表示
+        description: ライブ起動後のポップアップ動作。
+        checkbox: ライブポップアップを非表示にする
+    modal-close-end:
+        title: ライブポップアップを閉じる
+        description: アクティブ中のライブ終了時にポップアップを終了します。
+        checkbox: ライブポップアップを閉じる
+    channelname:
+        title: カスタムチャンネル名
+        description: チャンネル名のローカライズ。
+        values:
+            custom: 表示名を表示
+            original: ユーザー名を表示
+            both: 両方を表示
+    show-flag:
+        title: 旗
+        description: 配信者の言語表示に使用される国旗の表示設定。
+        checkbox: 常に旗を表示
+    filter-vodcast:
+        title: ビデオのフェードアウト
+        description: 追加のインジケーターとしてビデオを目立たなくします。
+        checkbox: ビデオのフェードアウト
+    vodcast-regexp:
+        title: カスタムビデオフィルタ
+        description: タグ付けされていないビデオ/再配信の検索。
+        notes: JavaScript準拠の正規表現 (大文字と小文字を区別しない) を使用して、ビデオタイトルをフィルタします。フィルタを無効にするには空の文字列または無効な正規表現を入力してください。
+    show-info:
+        title: 情報バー
+        description: ライブプレビューにあるボトムバーの表示設定。
+        checkbox: 常に情報バーを表示
+    info:
+        title: 情報バーの内容
+        description: 情報バーに表示する内容を選択します。
+        values:
+            game: 現在再生中のカテゴリ
+            title: 配信タイトル
+    uptime-hours-only:
+        title: ライブの再生時間フォーマット
+        description: ライブの再生時間を日/時間で表示します。
+        checkbox: 時間数のみで表示
+    click:
+        title: クリック動作
+        description: ライブサムネイルをクリックしたときの追加アクション。
+        ctrl: Ctrl+マウスの左クリック
+        cmd: Cmd+マウスの左クリック
+        middle: マウスのミドルボタン
+        values:
+            noop: 何もしない
+            launch: ライブを起動
+            chat: チャットを開く
+            channel: チャンネルページへ移動
+            settings: チャンネル設定へ移動
+chat:
+    provider:
+        title: チャットアプリ
+        description: チャットアプリを選択してください。
+        notes-browser: 既定のブラウザを選択すると、ウィンドウのサイズが予期せずに最小化されないことがあります。
+        file-placeholder: 実行パスの設定が必要です
+        params-placeholder: 追加のパラメータを設定
+        url:
+            default:
+                label: デフォルトのチャットURL
+                description: アプリのデフォルトのチャットURL (ポップアップ)
+            popout:
+                label: ポップアップのチャットURL
+                description: Twitchのポップアップモードを使用
+            embed:
+                label: 埋め込みのチャットURL
+                description: チャットを他のウェブサイトに埋め込むためのURL
+        providers:
+            browser:
+                label: デフォルトブラウザ
+                attributes:
+                    url:
+                        title: チャットURL
+                        description: どのTwitchチャットURLを使用するか選択する。
+            basic:
+                substitutions:
+                    url: Twitch.tvのチャンネルチャットURL
+                    channel: チャンネル名
+                    user: (ログイン中の) あなたのアカウント名
+                    token: (ログイン中の) あなたのアクセストークン
+            chromium:
+                label: Chromium
+                attributes:
+                    exec:
+                        title: Chromium実行ファイル
+                        description: カスタムしたChromium実行ファイルパスを設定してください。
+                    args:
+                        title: Chromiumパラメータ
+                        description: 追加のパラメータを設定してください。
+                    url:
+                        title: チャットURL
+                        description: どのTwitchチャットURLを使用するか選択する。
+            chrome:
+                label: Google Chrome
+                attributes:
+                    exec:
+                        title: Google Chrome実行ファイル
+                        description: カスタムしたGoogle Chrome実行ファイルパスを設定してください。
+                    args:
+                        title: Google Chromeパラメータ
+                        description: 追加のパラメータを設定してください。
+                    url:
+                        title: チャットURL
+                        description: どのTwitchチャットURLを使用するか選択。
+            chatterino:
+                label: Chatterino
+                attributes:
+                    exec:
+                        title: Chatterino実行ファイル
+                        description: カスタムしたChatterino実行ファイルパスを設定してください。
+            chatty:
+                label: Chatty
+                attributes:
+                    exec:
+                        title: Java実行ファイル
+                        description: カスタムしたJava実行ファイルを設定してください。
+                    jar:
+                        title: Chatty .jarファイル
+                        description: カスタムしたChatty.jar実行ファイルを設定してください。
+                    instance:
+                        title: シングルインスタンスモード
+                        description: バージョンv0.8.2b2以上である必要があります。
+                        checkbox: シングルインスタンスモードを有効にする
+                    auth:
+                        title: 認証
+                        description: Chattyに認証データの再使用を許可します。
+                        checkbox: 自動でサインインを行う
+                    args:
+                        title: カスタムChattyパラメータ
+                        description: 追加のパラメータを設定する。
+            chatty-standalone:
+                label: Chatty (スタンドアローン)
+                attributes:
+                    exec:
+                        title: Chatty実行ファイル
+                        description: Chatty実行ファイルパスを設定してください。
+                    instance:
+                        title: シングルインスタンスモード
+                        description: バージョンv0.8.2b2以上である必要があります。
+                        checkbox: シングルインスタンスモードを有効にする
+                    auth:
+                        title: 認証
+                        description: Chattyに認証データの再使用を許可します。
+                        checkbox: 自動でサインインを行う
+                    args:
+                        title: Chattyのカスタムパラメータ
+                        description: 追加のパラメータを設定する。
+            custom:
+                label: カスタムアプリケーション
+                attributes:
+                    exec:
+                        title: アプリの実行ファイル
+                        description: アプリの実行ファイルのパスを設定します。
+                    args:
+                        title: アプリのパラメータ
+                        description: アプリのパラメータを設定します。
+                    url:
+                        title: チャットURL
+                        description: どのチャットURLを使用するか選択する。
+    chat-open:
+        title: チャットを開く
+        description: ライブ起動時にチャットを開く。
+        checkbox: 自動でチャットを開く
+        checkbox-context: 右クリックメニューからライブを起動するときにチャットを開かない
+    twitchemotes:
+        title: Twitchエモート
+        description: twitchemotes.comを開くボタン。
+        checkbox: ライブポップアップにエモートボタンを表示
+languages:
+    filter:
+        title: ライブフィルタ
+        description: 言語フィルタはすべてのライブに適用されます (フォロー中のライブを除く)。
+        values:
+            fade:
+                text: ライブのフェードアウト
+                description: すべてのライブを表示したあとで言語選択にマッチしないライブをフェードアウトします。
+            filter:
+                text: ライブフィルタ
+                description: 言語選択に一致するライブのみ表示します。
+    languages:
+        title: 言語
+        description: ストリーマーの言語。設定されていない場合はチャンネルの言語。
+        uncheck-all: チェックをすべて外す
+hotkeys:
+    navigation:
+        title: ナビゲーション
+        description: グローバルナビゲーションホットキー。
+        notes: |
+            ホットキーは、それぞれのコンポーネントのアクションによって分類されます。各アクションにはプライマリとセカンダリのホットキーがあり、個別にオンとオフを切り替えることができます。キーバインドをカスタムで変更することも可能です。ホットキーを作動するには、アプリケーションウィンドウをフォーカスする必要があります。<br><br>
+            また、ホットキーは現在 (技術的な理由により) システムのキーボードレイアウトを認識していないことに注意してください。現時点ではすべてのホットキーが米国の既定のキーボードレイアウト (QWERTY) に基づいており、異なるレイアウトを使用しているシステムでは個々のキーが誤って表示される可能性があります。
+        actions:
+            refresh: 現在のメニューを更新
+            historyBack: 戻る
+            historyForward: 進む
+            homepage: ホームへ移動
+            routeFeatured: お気に入りチャンネルへ移動
+            routeGames: カテゴリメニューへ移動
+            routeStreams: ライブメニューへ移動
+            routeUserFollowedStreams: フォロー中のライブメニューへ移動
+            routeUserFollowedChannels: フォロー中のチャンネルメニューへ移動
+            routeUserAuth: ユーザーメニューへ移動
+            routeWatching: 視聴中メニューへ移動
+            routeSettings: 設定メニューへ移動
+            routeAbout: このアプリについてのメニューへ移動
+    searchbar:
+        title: 検索バー
+        description: トップにある検索バー。
+        actions:
+            focus: フォーカスする
+    followbutton:
+        title: フォローボタン
+        description: ライブダイアログやチャンネルページにあるフォローボタン。
+        actions:
+            default: フォロー/フォロー解除
+            confirm: 確認
+    openchatbutton:
+        title: チャットを開くボタン
+        description: チャンネルページやライブダイアログにあるチャットボタン。
+        actions:
+            default: チャットを開く
+    sharechannelbutton:
+        title: チャンネルを共有するボタン
+        description: チャンネルページやライブダイアログにある共有ボタン。
+        actions:
+            default: チャンネルURLをクリップボードにコピー
+    twitchemotesbutton:
+        title: Twitchエモートのボタン
+        description: チャンネルページやライブダイアログにあるエモートボタン。
+        actions:
+            default: Twitchemotes.comを開く
+    modaldialog:
+        title: モーダルダイアログ
+        description: 汎用のポップアップダイアログ。
+        actions:
+            close: 閉じる
+    modalconfirm:
+        title: 確認ダイアログ
+        description: ある動作に確認が必要な場合。
+        actions:
+            confirm: 確認
+    modalstreaming:
+        title: ライブダイアログ
+        description: ライブを視聴中に表示されるライブダイアログ。
+        actions:
+            shutdown: 現在のライブを停止する
+            log: ログ出力の切り替え
+notifications:
+    enabled:
+        title: 通知
+        description: フォロー中のチャンネルがライブ配信を開始したときに通知する。
+        checkbox: デスクトップ通知を有効にする
+    provider:
+        title: 通知タイプ
+        description: 通知タイプの選択
+        test:
+            button: テスト通知
+            message: これはテスト通知です
+        providers:
+            auto:
+                name: 自動選択
+                description: 最適な通知ツールの検索を試みます
+                notes: 利用可能なすべての通知ツールを降順でテストします
+            native:
+                name: ネイティブ通知
+                description: システムのネイティブ通知システムを使用します
+                notes: 通知はシステム設定で構成できます
+            snoretoast:
+                name: Windowsのトースト通知
+                description: Windows 8+ネイティブのトースト通知
+                notes: “バナー通知” をシステム設定で有効にする必要があります
+            growl:
+                name: Growl通知
+                description: Windows、macOS、およびLinux向けのサードパーティ通知
+                notes: システムにGrowlをインストールして実行している必要があります
+            rich:
+                name: リッチ通知
+                description: Chromiumのリッチ通知
+                notes: アプリケーションでレンダリングを行います
+    filter:
+        title: チャンネルフィルタ
+        description: 通知はチャンネルの設定メニューから個別にオン/オフの切替が可能です。
+        values:
+            blacklist: リストで無効にしたチャンネル以外をすべて表示します
+            whitelist: リストで許可したチャンネル以外をすべて無視します
+    filter-vodcasts:
+        title: ビデオフィルタ
+        description: ライブのみを表示します。
+        checkbox: ビデオを無視
+    grouping:
+        title: グループ通知
+        description: 複数の通知を統合します。
+        checkbox: 1度に1つの通知のみを表示
+    click:
+        title: 通知をクリック
+        description: 通知をクリックしたときの動作。
+        values:
+            noop: 何もしない
+            followed: フォロー中のライブページへ移動
+            stream: ライブを開く
+            stream-and-chat: ライブとチャットを開く
+    click-group:
+        title: グループ通知をクリック
+        description: グループ通知をクリックしたときの動作。
+        values:
+            noop: 何もしない
+            followed: フォロー中のライブページへ移動
+            stream: すべてのライブを開く
+            stream-and-chat: すべてのライブとチャットを開く
+    click-restore:
+        title: インターフェース復元
+        description: 通知をクリックしたときにトレイまたは最小化から復元します。
+        checkbox: 通知クリック時に画面を復元
+channels:
+    find: チャンネルを探す
+    none: チャンネルが見つかりません。
+    empty: カスタムチャンネル設定が設定されていません。

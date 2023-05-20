@@ -1,0 +1,18 @@
+tray:
+    toggle: ウィンドウの切替
+    close: アプリを閉じる
+macOS:
+    preferences: 環境設定
+    refresh: 更新
+channel-page: チャンネルページ
+channel-settings: チャンネル設定
+change-quality: チャンネルの画質
+close-stream: ライブを閉じる
+copy: コピー
+copy-channel-url: チャンネルURLをコピー
+copy-link-address: リンクをコピー
+copy-selection: 選択部分をコピー
+launch-stream: ライブを起動
+open-chat: チャットを開く
+open-in-browser: ブラウザで開く
+paste: ペースト

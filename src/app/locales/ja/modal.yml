@@ -1,0 +1,78 @@
+dialog:
+    action:
+        close: "閉じる"
+changelog:
+    header: "{version} に更新しました"
+    body: "更新履歴を確認しますか？"
+    action:
+        show: "更新履歴"
+confirm:
+    header: "確認してください"
+    body: "変更を適用しますか？"
+    action:
+        apply: "適用"
+        discard: "破棄"
+        cancel: "キャンセル"
+debug:
+    header: "デバッグモード：{version}"
+    body: |
+        "{name}でデバッグを実行しています。<br>
+        作業には注意し、バグを見つけたら報告してください。<br>
+        ありがとうございます！"
+    action:
+        close: "OK"
+firstrun:
+    body: |
+        "{name}をお使いいただきありがとうございます！<br>
+        使用前にセットアップを行いますか？"
+    action:
+        start: "すぐに使用する"
+        settings: "設定"
+newrelease:
+    header: "古いバージョン: {version} を使用しています"
+    body: "最新バージョンをダウンロードしますか？ ({version})"
+    action:
+        download: "ダウンロード"
+        ignore: "無視"
+quit:
+    header: "本当に終了してもよろしいですか？"
+    body:
+        streams: "シャットダウンを選択するとすべてのライブは切断されます。"
+        no-streams: "すべてのライブが切断中になっています。いますぐ終了しますか？"
+    action:
+        close: "戻る"
+        shutdown: "シャットダウン"
+        quit: "終了"
+streaming:
+    header:
+        preparing: "準備中です、しばらくお待ち下さい"
+        launching: "起動中：{channel}"
+        watching: "視聴中：{channel}"
+        ended: "ライブ終了：{channel}"
+        error:
+            log: "エラー：ライブを起動出来ませんでした"
+            provider: "エラー：{provider}のセットアップが間違っています"
+            player: "エラー：プレイヤーの設定が間違っています"
+            version: "エラー：{provider}のバージョンが無効です"
+            unable-to-open: "エラー：ライブを開くことができません"
+            no-streams-found: "エラー：ライブが見つかりません"
+            timeout: "エラー：タイムアウト"
+            internal: "エラー"
+    body:
+        launching: "{provider}がライブを開始するのを待っています…"
+        ended: "ライブを再開しますか？"
+        error:
+            provider: "設定を確認するか、{provider}を再インストールしてください。"
+            player: "プレイヤーの設定を確認してください。"
+            version: "現在のバージョン v{version} は、最小バージョン要件 (v{required}) を満たしていません。"
+            unable-to-open: "{provider}はライブを開くことが出来ませんでした。"
+            no-streams-found: "{provider}はライブを見つけることが出来ませんでした。"
+            timeout: "{name}がオフラインになっているかTwitchへの接続が切断されています。"
+            internal: "内部エラー"
+    action:
+        abort: "中止"
+        continue: "続ける"
+        download: "ダウンロード"
+        log: "{provider}ログのオン/オフ"
+        restart: "再開"
+        shutdown: "ライブを閉じる"

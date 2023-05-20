@@ -1,0 +1,14 @@
+twitch:
+    stream:
+        started-at:
+            less-than-24h: "{started_at, time, medium} からオンライン"
+            more-than-24h: "{started_at, time, long} からオンライン"
+        viewer_count: |
+            {count, plural,
+                other { # 人が視聴中}
+            }
+    search-channel:
+        started-at:
+            offline: "オフライン"
+            less-than-24h: "{started_at, time, medium} からオンライン"
+            more-than-24h: "{started_at, time, long} からオンライン"

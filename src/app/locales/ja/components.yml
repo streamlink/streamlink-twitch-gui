@@ -1,0 +1,96 @@
+channel-button:
+    title: "{name}をフォロー"
+channel-item:
+    offline: オフライン
+    no-status: チャンネルの説明がありません
+documentation-link:
+    title: オンラインでドキュメントを読む
+drop-down-selection:
+    placeholder: 選択してください
+file-select:
+    placeholder: デフォルトのパスは空白です
+flag-icon:
+    channel: "チャンネルの言語は{lang}です"
+    broadcaster: "配信者の言語は{lang}です"
+infinite-scroll:
+    error: エラー
+    loading: ロード中
+    fetch: さらに読み込む
+main-menu:
+    browse:
+        header: ブラウズ
+        games: カテゴリ
+        streams: ライブ中
+    followed:
+        header: フォロー中
+        streams: ライブ中
+        channels: チャンネル
+    misc:
+        header: その他
+        settings: 設定
+        about: このアプリについて
+open-chat:
+    title: チャットを開く
+quick-bar-homepage:
+    title: ホームに設定する
+search-bar:
+    placeholder: 検索
+    filter: フィルタ結果
+    filters:
+        all: すべて
+        games: カテゴリ
+        channels: チャンネル
+        streams: ライブ中
+    recent: 最近の検索結果
+settings-channel-item:
+    settings: 設定
+    erase: 初期化
+    confirmation: カスタム設定を初期化しますか？
+    confirm: はい
+    decline: いいえ
+settings-hotkey:
+    empty: ホットキーは設定されていません
+    edit: このホットキーをカスタムする
+    delete: カスタムホットキーを初期化
+    discard: 破棄
+    confirm: カスタムホットキーを設定
+    toggle: このホットキーを有効または無効にする
+settings-row:
+    notes: 注意
+    default: デフォルト
+    requires: 要件
+    example: 例
+    variables:
+        title: 利用可能な変数
+        # tooltip (whitespace sensitive)
+        help: |
+            各変数の内容はエスケープされます。引用符で囲まれた文字列の外側で使用すると、すべての文字がエスケープされます。一部のアプリケーションでは、パラメータリスト内の不必要にエスケープされた文字を読み取ることができ、期待どおりに動作しますが、そうでないのもあります。すべての変数を単一引用符または二重引用符で囲まれた文字列内に設定するようにしてください。
+
+            正しい使い方：
+            -a "'{a}'" -b "'{b1}{b2}'" "-c='{c}'"
+settings-submit:
+    apply: 適用
+    discard: 破棄
+share-channel:
+    title: チャンネルURLをクリップボードへコピー
+stream-item:
+    details:
+        show: ライブの詳細を表示
+        lock: 詳細表示をロック
+        unlock: 詳細表示をアンロック
+    vodcast: ビデオ
+team-item:
+    created-at:
+        title: "作成日"
+        format: "{created_at, date, full}"
+    updated-at:
+        title: "更新日"
+        format: "{updated_at, date, full}"
+title-bar:
+    loggedout: オフライン
+    # tooltip (whitespace sensitive)
+    loggedin: |
+        {name} はログイン中
+        {status}
+twitch-emotes:
+    title: 利用可能なエモートを表示
