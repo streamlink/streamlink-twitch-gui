@@ -1,6 +1,21 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## master
+
+- Added option to unminimize the GUI when one or all watched streams have ended ([#955](https://github.com/streamlink/streamlink-twitch-gui/issues/955))
+- Added online status to followed-channels list ([#921](https://github.com/streamlink/streamlink-twitch-gui/issues/921))
+- Added simplified Chinese translations ([#958](https://github.com/streamlink/streamlink-twitch-gui/pull/958))
+- Added Japanese translations ([#963](https://github.com/streamlink/streamlink-twitch-gui/pull/963))
+- Changed default scheme of embedded URLs from HTTP to HTTPS
+- Fixed NW.js initialization issues ([#911](https://github.com/streamlink/streamlink-twitch-gui/issues/911))
+- Fixed not being able to remove an ended stream from the watching list ([#954](https://github.com/streamlink/streamlink-twitch-gui/issues/954))
+- Removed total channel view count (data removed by Twitch) ([#962](https://github.com/streamlink/streamlink-twitch-gui/issues/962))
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.2.0...master)
+
+
 ## [v2.2.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.2.0) (2022-09-16)
 
 - Removed hardcoded `--twitch-disable-hosting` Streamlink launch parameter.  
