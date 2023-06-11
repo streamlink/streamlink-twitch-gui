@@ -3,7 +3,7 @@
 module.exports = {
 	linux32: {
 		image: "ghcr.io/streamlink/appimage-buildenv-i686",
-		digest: "sha256:cebe6266fee12cf5e64dbf7324bdf358cd1b97ff647d16e818ea66342d8c9ea4",
+		digest: "sha256:6d9218d0a2b7d755d9b54a9f8f58e6fe144f60c2961553896d7af1d7c9f3bb47",
 		input: "<%= dir.releases %>/<%= package.name %>/linux32",
 		output: "<%= dir.dist %>/<%= package.name %>-<%= version %>-i686.AppImage",
 		dependencies: [
@@ -12,7 +12,7 @@ module.exports = {
 	},
 	linux64: {
 		image: "ghcr.io/streamlink/appimage-buildenv-x86_64",
-		digest: "sha256:bd6d8c4a945e108e4d9198a551e2c7aaeb44995ddb1780bc2aa3f25636e47606",
+		digest: "sha256:2f08ec73b4d593f365a14f3e0844beb16b334f1db42ca7c05e7a8095929d81db",
 		input: "<%= dir.releases %>/<%= package.name %>/linux64",
 		output: "<%= dir.dist %>/<%= package.name %>-<%= version %>-x86_64.AppImage",
 		dependencies: [
