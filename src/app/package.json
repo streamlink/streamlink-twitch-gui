@@ -18,6 +18,10 @@
 		"icon": "~assets/icons/icon-256.png",
 		"show_in_taskbar": false
 	},
+	"window.icon": "~assets/icons/icon-256.png",
+	"icons": {
+		"256": "~assets/icons/icon-256.png"
+	},
 
 	"chromium-args": "--disable-devtools --enable-features=NativeNotifications --disable-smooth-scrolling --disable-features=nw2"
 }
