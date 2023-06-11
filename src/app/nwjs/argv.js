@@ -60,7 +60,8 @@ const parameters = [ new ParameterCustom( null, "command" ) ];
 /** @type {RegExp[]} */
 const argFilters = [
 	...( filteredArgv || [] ),
-	/^--user-data-dir=/,
+	/^--enable-crashpad/,
+	/^--nwapp=/,
 	/^--no-sandbox/,
 	/^--no-zygote/,
 	/^--flag-switches-(begin|end)/
@@ -76,9 +77,16 @@ const argTests = [
 	}, [] )
 ].map( name => name.length === 1
 	// shorthand parameters
-	? ( arg => arg.length > 1 && arg.slice( 1 ) === name )
+	? ( arg => arg.length > 1
+		&& arg.slice( 0, 1 ) === "-"
+		&& arg.slice( 1 ) === name
+	)
 	// named parameters
-	: ( arg => arg.length > 2 && arg[1] === "-" && arg.slice( 2 ) === name )
+	: ( arg => arg.length > 2
+		&& arg.slice( 0, 2 ) === "--"
+		&& arg.slice( 2, 2 + name.length ) === name
+		&& ( arg.length === 2 + name.length || arg[ 2 + name.length ] === "=" )
+	)
 );
 
 
@@ -104,6 +112,11 @@ const argTests = [
  * @returns {Object}
  */
 export function parseCommand( command ) {
+	/* istanbul ignore next */
+	if ( Array.isArray( command ) && command.length === 1 ) {
+		command = command[0];
+	}
+
 	// remove chromium args from the command line
 	/* istanbul ignore else */
 	if ( manifest && hasOwnProperty.call( manifest, "chromium-args" ) ) {

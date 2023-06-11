@@ -189,6 +189,7 @@ test( "Parse command on Linux", assert => {
 			"--foo",
 			"--bar",
 			"--user-data-dir=/home/user/.config/appname",
+			"--enable-crashpad",
 			"--no-sandbox",
 			"--no-zygote",
 			"--flag-switches-begin",
@@ -196,6 +197,46 @@ test( "Parse command on Linux", assert => {
 			"--nwapp=/tmp/nwjs-tmp",
 			"--file-url-path-alias=/gen=/path/to/app/gen",
 			"foo"
+		].join( " " ) ),
+		{
+			"_": [],
+			"tray": false,
+			"hide": false,
+			"hidden": false,
+			"max": false,
+			"maximize": false,
+			"maximized": false,
+			"min": false,
+			"minimize": false,
+			"minimized": false,
+			"reset-window": false,
+			"versioncheck": true,
+			"version-check": true,
+			"logfile": true,
+			"loglevel": "",
+			"l": "",
+			"theme": "",
+			"goto": "foo",
+			"launch": ""
+		},
+		"Correctly parses parameters"
+	);
+
+	assert.propEqual(
+		parseCommand([
+			"/path/to/executable",
+			"--goto=foo",
+			"--unrecognized-parameter-name",
+			"--foo",
+			"--bar",
+			"--user-data-dir=/home/user/.config/appname",
+			"--enable-crashpad",
+			"--no-sandbox",
+			"--no-zygote",
+			"--flag-switches-begin",
+			"--flag-switches-end",
+			"--nwapp=/tmp/nwjs-tmp",
+			"--file-url-path-alias=/gen=/path/to/app/gen"
 		].join( " " ) ),
 		{
 			"_": [],
@@ -245,6 +286,7 @@ test( "Parse command on macOS", assert => {
 			"--foo",
 			"--bar",
 			"--user-data-dir=/Users/user/Library/Application Support/appname",
+			"--enable-crashpad",
 			"--no-sandbox",
 			"--no-zygote",
 			"--flag-switches-begin",
@@ -301,6 +343,7 @@ test( "Parse command on Windows", assert => {
 			"--foo",
 			"--bar",
 			"--user-data-dir=\"C:\\foo bar\\baz\"",
+			"--enable-crashpad",
 			"--no-sandbox",
 			"--no-zygote",
 			"--flag-switches-begin",
