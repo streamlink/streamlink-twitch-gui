@@ -1,4 +1,4 @@
-import semver from "semver";
+import semverLt from "semver/functions/lt";
 import { streaming as streamingConfig } from "config";
 import { LogError, VersionError } from "../errors";
 import spawn from "../spawn";
@@ -81,7 +81,7 @@ export default async function( execObj, providerConfData ) {
 			}
 		});
 
-	if ( semver.lt( version, validation.version ) ) {
+	if ( semverLt( version, validation.version ) ) {
 		throw new VersionError( version );
 	}
 

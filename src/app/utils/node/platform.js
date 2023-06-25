@@ -1,4 +1,4 @@
-import semver from "semver";
+import semverLt from "semver/functions/lt";
 import { main as mainConfig } from "config";
 import {
 	arch as osArch,
@@ -24,7 +24,7 @@ export const isWin    = platform === "win32";
 export const isDarwin = platform === "darwin";
 export const isLinux  = platform === "linux";
 
-export const isWin7    = isWin && semver.lt( release, "6.2.0" );
+export const isWin7    = isWin && semverLt( release, "6.2.0" );
 export const isWinGte8 = isWin && !isWin7;
 
 export const is64bit = arch === "x64";

@@ -1,7 +1,7 @@
 import { module, test } from "qunit";
 import { posix as pathPosix, win32 as pathWin32 } from "path";
 
-import platformInjector from "inject-loader?-semver!utils/node/platform";
+import platformInjector from "inject-loader?-semver/functions/lt!utils/node/platform";
 
 
 module( "utils/node/platform", function( hooks ) {

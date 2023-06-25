@@ -1,6 +1,6 @@
 import { set } from "@ember/object";
 import { default as Service, inject as service } from "@ember/service";
-import semver from "semver";
+import semverLt from "semver/functions/lt";
 import { main as mainConfig, update as updateConfig } from "config";
 import { version as buildVersion } from "metadata";
 import { manifest } from "nwjs/App";
@@ -94,7 +94,7 @@ export default Service.extend( /** @class VersioncheckService */ {
 
 		const { model, version } = this;
 		// is previous version string empty or lower than current version?
-		if ( !model.version || semver.lt( model.version, version ) ) {
+		if ( !model.version || semverLt( model.version, version ) ) {
 			// NEW version -> update record
 			set( model, "version", version );
 			await model.save();
@@ -124,7 +124,7 @@ export default Service.extend( /** @class VersioncheckService */ {
 		const release = await this.store.queryRecord( "github-releases", "latest" );
 		set( this, "release", release );
 
-		if ( semver.gte( this.version, release.version ) ) {
+		if ( !semverLt( this.version, release.version ) ) {
 			return this.ignoreRelease();
 		}
 
