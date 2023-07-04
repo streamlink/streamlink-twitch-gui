@@ -3,7 +3,7 @@ function importAll( r ) {
 }
 
 // import tests in a certain order instead of importing them alphabetically
-importAll( require.context( "../web_modules/", true, /test(\/.+)?\.js$/ ) );
+importAll( require.context( "../web_modules/", true, /test\.js$|test\/[^\/]+\.js$/ ) );
 importAll( require.context( "./loaders/", true, /\.js$/ ) );
 importAll( require.context( "./nwjs/", true, /\.js$/ ) );
 importAll( require.context( "./utils/", true, /\.js$/ ) );

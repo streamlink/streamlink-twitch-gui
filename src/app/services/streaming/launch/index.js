@@ -10,7 +10,7 @@ import Parameter from "utils/parameters/Parameter";
 
 const { getParameters } = Parameter;
 
-const reReplace = /^\[\S+]\[\S+]\s+/;
+const reReplace = /^\[[^\]]+]\[[^\]]+]\s+/;
 const rePlayerStarted = /^Starting player: \S+/;
 
 

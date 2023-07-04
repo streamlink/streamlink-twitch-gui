@@ -7,7 +7,7 @@ import { basename, dirname } from "path";
 
 const reShebangEnv = /^#!\/usr\/bin\/env\s+(['"]?)(\S+)\1$/;
 const reShebangExpl = /^#!(['"]?)(.+)\1$/;
-const reBashWrapperScript = /^(PYTHONPATH)="(.+)"\s+exec\s+"(.+)"\s+"\$@"\s*$/;
+const reBashWrapperScript = /^(PYTHONPATH)="([^"]+)"\s+exec\s+"([^"]+)"\s+"\$@"\s*$/;
 
 
 /**

@@ -1,7 +1,7 @@
 import TwitchSerializer from "data/models/twitch/serializer";
 
 
-const reStaticBoxArtRes = /\d+x\d+\.(\w+)$/;
+const reStaticBoxArtRes = /\d{1,10}x\d{1,10}\.(\w+)$/;
 
 
 export default TwitchSerializer.extend({
