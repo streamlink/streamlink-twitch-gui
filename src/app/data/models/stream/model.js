@@ -57,6 +57,12 @@ function cpQualityFromPresetOrCustomValue( key ) {
 	};
 }
 
+function settingsBool( attr ) {
+	return computed( attr, function() {
+		return get( this, attr ) ? "true" : "false";
+	});
+}
+
 
 // TODO: refactor this module / export
 export {
@@ -124,6 +130,8 @@ export default Model.extend( /** @class Stream */ {
 		return get( providers, `${provider}.params` ) || "";
 	}).volatile(),
 
+	webbrowser: settingsBool( "settings.streaming.webbrowser" ),
+	webbrowser_headless: settingsBool( "settings.streaming.webbrowser_headless" ),
 
 	kill() {
 		if ( this.spawn ) {

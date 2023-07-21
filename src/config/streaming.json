@@ -6,6 +6,7 @@
 	"docs-url": {
 		"streamlink": "https://streamlink.github.io/cli.html#cmdoption{item}"
 	},
+	"client-integrity-docs": "https://streamlink.github.io/cli/plugins/twitch.html#client-integrity-token",
 	"validation": {
 		"timeout": 10000,
 		"providers": {

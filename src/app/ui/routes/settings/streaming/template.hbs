@@ -54,7 +54,57 @@
 		</dl>
 	{{/each-in}}
 {{/settings-row}}
+</fieldset>
 
+<fieldset>
+{{#settings-row
+	(t "settings.streaming.webbrowser.title")
+	(t "settings.streaming.webbrowser.description")
+	icon="fa-chrome"
+	notes=(t "settings.streaming.webbrowser.notes")
+	documentation="--webbrowser"
+}}
+	{{check-box
+		(t "settings.streaming.webbrowser.checkbox")
+		checked=model.streaming.webbrowser
+	}}
+	<p class="small">
+		{{t "settings.streaming.webbrowser.details"}}
+	</p>
+	<p class="small">
+		{{#external-link url=contentClientIntegrityDocs}}{{t "settings.streaming.webbrowser.documentation"}}{{/external-link}}
+	</p>
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.streaming.webbrowser_executable.title")
+	(t "settings.streaming.webbrowser_executable.description")
+	icon="fa-rocket"
+	documentation="--webbrowser-executable"
+}}
+	{{file-select
+		value=(mut model.streaming.webbrowser_executable)
+		placeholder=(t "settings.streaming.webbrowser_executable.placeholder")
+		inputClass="form-control"
+		disabled=(bool-not model.streaming.webbrowser)
+	}}
+{{/settings-row}}
+
+{{#settings-row
+	(t "settings.streaming.webbrowser_headless.title")
+	(t "settings.streaming.webbrowser_headless.description")
+	icon="fa-eye-slash"
+	documentation="--webbrowser-headless"
+}}
+	{{check-box
+		(t "settings.streaming.webbrowser_headless.checkbox")
+		checked=model.streaming.webbrowser_headless
+		disabled=(bool-not model.streaming.webbrowser)
+	}}
+{{/settings-row}}
+</fieldset>
+
+<fieldset>
 {{#settings-row
 	(t "settings.streaming.playerinput.title")
 	(t "settings.streaming.playerinput.description")

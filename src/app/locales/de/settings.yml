@@ -97,6 +97,23 @@ streaming:
         parameters:
             title: Benutzerdefinierte Parameter
             placeholder: Setzte benutzerdefinierte Parameter
+    webbrowser:
+        title: Streamlink webbrowser API
+        description: Erforderlich zum Berechnen eines gültigen client-integrity tokens, welcher notwendig zum Erhalten eines streaming access tokens sein kann, abhängig von Twitchs aktuellen Einschränkungen.
+        notes: |
+            Die Berechnung eines client-integrity tokens zum Schauen von Streams funktioniert nur mithilfe eines Webbrowsers.
+            Der Webbrowser wird isoliert ausgeführt und hat keinen Zugriff auf Benutzerdaten.
+        checkbox: Erlaube Streamlink den Webbrowser vor dem Ansehen von Streams zu starten
+        details: Das Starten des Webbrowsers und das Berechnen des client-integrity tokens ist nur dann erforderlich, wenn dies von Twitch verlangt wird. In diesem Falle speichert Streamlink den Token im Cache bis dieser abläuft.
+        documentation: Siehe Streamlinks Twitch-Plugin Dokumentation für weitere Details.
+    webbrowser_executable:
+        title: Webbrowser Programmdatei
+        description: Streamlink unterstützt nur Chromium-basierte Webbrowser. Leer lassen, zur Auswahl des Standardprogramms.
+        placeholder: Pfad zur Programmdatei des Chromium-basierten Webbbrowsers
+    webbrowser_headless:
+        title: Headless mode
+        description: Führe den Webbrowser unsichtbar im headless-Modus aus.
+        checkbox: Headless-Modus aktivieren
     playerinput:
         title: Player Eingabemethode
         description: Definiert, wie die Streamdaten an den Player weitergeleitet werden.

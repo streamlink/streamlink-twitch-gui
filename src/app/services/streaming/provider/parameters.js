@@ -31,6 +31,21 @@ export const parameters = [
 		"stream.low_latency"
 	),
 	new Parameter(
+		"--webbrowser",
+		null,
+		"stream.webbrowser"
+	),
+	new Parameter(
+		"--webbrowser-executable",
+		"stream.settings.streaming.webbrowser",
+		"stream.settings.streaming.webbrowser_executable"
+	),
+	new Parameter(
+		"--webbrowser-headless",
+		"stream.settings.streaming.webbrowser",
+		"stream.webbrowser_headless"
+	),
+	new Parameter(
 		"--player",
 		null,
 		"player.exec"

@@ -9,7 +9,10 @@ import {
 import { platform } from "utils/node/platform";
 
 
-const { providers } = streamingConfig;
+const {
+	"client-integrity-docs": contentClientIntegrityDocs,
+	providers
+} = streamingConfig;
 const { playerInput: contentStreamingPlayerInput } = SettingsStreaming;
 
 
@@ -23,6 +26,7 @@ function settingsAttrMeta( attr, prop ) {
 export default Controller.extend({
 	platform,
 	providers,
+	contentClientIntegrityDocs,
 	contentStreamingPlayerInput,
 
 	contentStreamingProvider: computed(function() {
