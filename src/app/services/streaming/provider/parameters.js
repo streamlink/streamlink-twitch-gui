@@ -33,8 +33,7 @@ export const parameters = [
 	new Parameter(
 		"--player",
 		null,
-		"player.exec",
-		playerSubstitutions
+		"player.exec"
 	),
 	new Parameter(
 		"--player-args",
