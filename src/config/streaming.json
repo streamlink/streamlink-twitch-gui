@@ -10,7 +10,7 @@
 		"timeout": 10000,
 		"providers": {
 			"streamlink": {
-				"version": "2.4.0",
+				"version": "6.0.0",
 				"regexp": "^(?:python\\d*-)?streamlink(?:w?\\.exe|-script\\.pyw?)? (\\d+\\.\\d+\\.\\d+)(?:$|[\\s+-].*)"
 			}
 		}
