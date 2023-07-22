@@ -166,7 +166,6 @@ player:
             title: Videoplayer
             description: Wird der Pfad leer gelassen, wird der Player aus der Konfigurationsdatei verwendet.
             default-value: VLC (unkonfiguriert)
-            notes: Parameter können hier hinzugefügt werden, sollten aber stattdessen im Parameterfeld gesetzt werden. Siehe unten für eine Liste der verfügbaren Variablen.
             placeholder: Leer lassen für den Standardplayer
         preset:
             title: Player Programmdatei

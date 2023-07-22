@@ -151,7 +151,6 @@ player:
             title: 播放器
             description: 留空以使用設定檔內的播放器設定
             default-value: 預設為 VLC
-            notes: 此處可加入播放器參數，但建議設定在參數欄位，請參考下方可用變數
             placeholder: 留空以使用預設播放器
         preset:
             title: 播放器執行檔

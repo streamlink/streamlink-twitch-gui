@@ -166,7 +166,6 @@ player:
             title: Video player
             description: If left empty, the player defined in the config file will be used.
             default-value: VLC (unconfigured)
-            notes: Parameters can be added here, but should be set in the parameters field instead. See below for a list of available variables.
             placeholder: Leave blank for default player
         preset:
             title: Player executable

@@ -151,7 +151,6 @@ player:
             title: Reproductor de vídeo
             description: Si se deja vacío, se utilizará el reproductor definido en el archivo de configuración.
             default-value: VLC (desconfigurado)
-            notes: Los parámetros se pueden agregar aquí, pero deben establecerse en el campo de parámetros. Consulte a continuación para obtener una lista de variables disponibles.
             placeholder: Dejar en blanco para el reproductor predeterminado
         preset:
             title: Ejecutable del reproductor

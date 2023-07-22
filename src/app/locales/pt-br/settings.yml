@@ -160,7 +160,6 @@ player:
             title: Tocador de vídeo
             description: Se deixado vazio, a configuração padrão será usada.
             default-value: VLC (não configurado)
-            notes: Os parâmetros podem ser adicionados aqui, mas devem ser definidos nos campos específicos. Veja a seguir a lista de variáveis disponíveis.
             placeholder: Deixe vazio para usar a configuração padrão do tocador
         preset:
             title: Executável do tocador de vídeo

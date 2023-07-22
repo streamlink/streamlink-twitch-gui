@@ -149,7 +149,6 @@ player:
             title: 播放器
             description: 留空将使用配置文档内的播放器设置。
             default-value: VLC (未配置)
-            notes: 此处可以添加参数，但应该在参数字段中设置。下面列出了可用的变量。留空使用默认播放器。
             placeholder: 留空以使用默认播放器
         preset:
             title: 播放器可执行文件

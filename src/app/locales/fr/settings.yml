@@ -151,7 +151,6 @@ player:
             title: Lecteur vidéo
             description: Si laissé vide, le lecteur défini dans le fichier de configuration sera utilisé.
             default-value: VLC (non-configuré)
-            notes: Les paramètres peuvent être ajoutés ici, mais doivent être définis dans le champ paramètres à la place. Voir ci-dessous pour une liste des variables disponibles.
             placeholder: Laisser vide pour le lecteur par défaut
         preset:
             title: Exécutable du lecteur
