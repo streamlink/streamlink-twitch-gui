@@ -3,14 +3,21 @@ Changelog - Streamlink Twitch GUI
 
 ## master
 
+- ⚠️ Bumped Streamlink's version requirements to `>=6.0.0`  
+  [See the Streamlink docs on how to upgrade](https://streamlink.github.io/install.html)
+- Added options for Streamlink's webbrowser API which implements the acquirement of Twitch's [client-integrity token](https://streamlink.github.io/cli/plugins/twitch.html#client-integrity-token)
 - Added option to unminimize the GUI when one or all watched streams have ended ([#955](https://github.com/streamlink/streamlink-twitch-gui/issues/955))
 - Added online status to followed-channels list ([#921](https://github.com/streamlink/streamlink-twitch-gui/issues/921))
 - Added simplified Chinese translations ([#958](https://github.com/streamlink/streamlink-twitch-gui/pull/958))
 - Added Japanese translations ([#963](https://github.com/streamlink/streamlink-twitch-gui/pull/963))
+- Added the `--theme` launch/runtime argument for overriding the selected theme ([#918](https://github.com/streamlink/streamlink-twitch-gui/issues/918))
 - Changed default scheme of embedded URLs from HTTP to HTTPS
 - Fixed NW.js initialization issues ([#911](https://github.com/streamlink/streamlink-twitch-gui/issues/911))
 - Fixed not being able to remove an ended stream from the watching list ([#954](https://github.com/streamlink/streamlink-twitch-gui/issues/954))
 - Removed total channel view count (data removed by Twitch) ([#962](https://github.com/streamlink/streamlink-twitch-gui/issues/962))
+- Removed support for variables in the `--player` config field ([see Streamlink `6.0.0` changes](https://streamlink.github.io/changelog.html#streamlink-6-0-0-2023-07-20))
+- Removed support for building on EOL NodeJS versions
+- Upgraded NW.js to 0.77.0 (Chromium 114.0.5735.91 / NodeJS 20.1.0)
 
 
 [Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.2.0...master)
