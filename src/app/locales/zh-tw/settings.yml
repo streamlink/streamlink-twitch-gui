@@ -49,21 +49,19 @@ gui:
             taskbar: 工作列
             tray: 通知區域圖示
     minimize:
-        title: 最小化介面
-# FIXME
-#        description: When a stream gets launched.
-#        description: 當播放器打開時最小化
+        title: 最小化視窗
+        description: 當串流播放開始時
         values:
             noop: 不作任何動作
             minimize: 最小化
             tray: 至通知區域
-#    restore:
-#        title: Restore GUI
-#        description: When a watched stream ends.
-#        values:
-#            noop: Do nothing
-#            any: After any stream has ended
-#            all: After all streams have ended
+    restore:
+        title: 還原視窗
+        description: 當串流播放結束時
+        values:
+            noop: 不動作
+            any: 當任一串流播放結束時
+            all: 當所有串流播放結束時
     hidebuttons:
         title: 隱藏視窗按鈕
         description: 隱藏最小化、最大化及關閉按鈕
@@ -99,6 +97,23 @@ streaming:
         parameters:
             title: 自訂參數
             placeholder: 加入自訂參數
+    webbrowser:
+        title: Streamlink webbrowser API
+        description: 取得串流存取金鑰時可能需要額外計算有效的客戶端完整性存取金鑰，具體取決於 Twitch 當下的限制。
+        notes: |
+            只有使用網頁瀏覽器才能計算用於觀看串流的客戶端完整性存取金鑰。
+            網頁瀏覽器在隔離環境中執行，無法訪問任何用戶數據。
+        checkbox: 允許 Streamlink 在觀看串流前啟動網頁瀏覽器
+        details: 只有當 Twitch 需要時，才需要啟動網頁瀏覽器並計算客戶端完整性存取金鑰。在這種情況下，Streamlink 將快取該金鑰，直到過期。
+        documentation: 詳細請參閱 Streamlink 的 Twitch plugin 文件。
+    webbrowser_executable:
+        title: 網頁瀏覽器執行檔
+        description: Streamlink 僅支援基於 Chromium 的網頁瀏覽器。留空表示使用預設瀏覽器。
+        placeholder: Chromium-based 網頁瀏覽器執行檔的路徑
+    webbrowser_headless:
+        title: 無介面模式
+        description: 在無介面模式下執行網頁瀏覽器。
+        checkbox: 啟用無介面模式
     playerinput:
         title: 播放器輸入
         description: 設定播放器如何讀取串流資料
