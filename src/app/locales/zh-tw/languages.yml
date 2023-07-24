@@ -1,5 +1,7 @@
 ar: 阿拉伯語 # Arabic
+asl: 美國手語 # American sign language
 bg: 保加利亞語 # Bulgarian
+ca: 加泰羅尼亞語 # Catalan
 cs: 捷克語 # Czech
 da: 丹麥語 # Danish
 de: 德語 # German
@@ -11,21 +13,30 @@ es: 西班牙語 # Spanish
 es-mx: 墨西哥語 # Mexican
 fi: 芬蘭語 # Finnish
 fr: 法語 # French
+hi: 印地語 # Hindi
 hu: 匈牙利語 # Hungarian
+# special uppercase language code
+ID: 印尼語 # Indonesian
 it: 義大利語 # Italian
 ja: 日語 # Japanese
 ko: 韓語 # Korean
+ms: 馬來語 # Malay
 nl: 荷蘭語 # Dutch
 no: 挪威語 # Norwegian
+other: "\"其他\""
 pl: 波蘭語 # Polish
 pt: 葡萄牙語 # Portuguese
 pt-br: 巴西葡語 # Brazilian
+ro: 羅馬尼亞語 # Romanian
 ru: 俄語 # Russian
 sk: 斯洛伐克語 # Slovak
 sv: 瑞典語 # Swedish
+tl: 他加祿語 # Tagalog
 th: 泰語 # Thai
 tr: 土耳其語 # Turkish
+uk: 烏克蘭語 # Ukrainian
 vi: 越南語 # Vietnamese
 zh: 中文 # Chinese
 zh-cn: 簡體中文 # Simplified Chinese
-zh-tw: 繁體中文 # Traditional Chinese
+zh-hk: 繁體中文 (香港)
+zh-tw: 繁體中文 (台灣) # Traditional Chinese
