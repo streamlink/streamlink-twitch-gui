@@ -1,9 +1,9 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## master
+## [v2.3.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.3.0) (2023-08-03)
 
-- ⚠️ Bumped Streamlink's version requirements to `>=6.0.0`  
+- ⚠️ Bumped Streamlink's version requirement to `>=6.0.0`  
   [See the Streamlink docs on how to upgrade](https://streamlink.github.io/install.html)
 - Added options for Streamlink's webbrowser API which implements the acquirement of Twitch's [client-integrity token](https://streamlink.github.io/cli/plugins/twitch.html#client-integrity-token)
 - Added option to unminimize the GUI when one or all watched streams have ended ([#955](https://github.com/streamlink/streamlink-twitch-gui/issues/955))
@@ -20,7 +20,7 @@ Changelog - Streamlink Twitch GUI
 - Upgraded NW.js to 0.78.1 (Chromium 115.0.5790.114 / NodeJS 20.5.0)
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.2.0...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.2.0...v2.3.0)
 
 
 ## [v2.2.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.2.0) (2022-09-16)
