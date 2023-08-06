@@ -17,7 +17,8 @@ Changelog - Streamlink Twitch GUI
 - Removed total channel view count (data removed by Twitch) ([#962](https://github.com/streamlink/streamlink-twitch-gui/issues/962))
 - Removed support for variables in the `--player` config field ([see Streamlink `6.0.0` changes](https://streamlink.github.io/changelog.html#streamlink-6-0-0-2023-07-20))
 - Removed support for building on EOL NodeJS versions
-- Upgraded NW.js to 0.78.1 (Chromium 115.0.5790.114 / NodeJS 20.5.0)
+- Upgraded NW.js to 0.78.1 (Chromium 115.0.5790.114 / NodeJS 20.5.0)  
+  ⚠️ [The upgrade to Chromium 115 ends support for Windows 7, 8 and 8.1](https://support.google.com/chrome/thread/185534985/sunsetting-support-for-windows-7-8-8-1-and-windows-server-2012-and-2012-r2-in-early-2023?hl=en)
 
 
 [Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.2.0...v2.3.0)
