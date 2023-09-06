@@ -1,6 +1,14 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## master
+
+- Switched to new followed channels Twitch Helix API endpoint ([#979](https://github.com/streamlink/streamlink-twitch-gui/issues/979))
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.3.0...master)
+
+
 ## [v2.3.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.3.0) (2023-08-03)
 
 - ⚠️ Bumped Streamlink's version requirement to `>=6.0.0`  
