@@ -3,14 +3,14 @@ import Model from "ember-data/model";
 import { belongsTo } from "ember-data/relationships";
 
 
-export default Model.extend( /** @class TwitchUserFollowed */ {
+export default Model.extend( /** @class TwitchChannelsFollowed */ {
 	/** @type {TwitchUser} */
-	from: belongsTo( "twitch-user", { async: true } ),
+	user_id: belongsTo( "twitch-user", { async: true } ),
 	/** @type {TwitchUser} */
-	to: belongsTo( "twitch-user", { async: true } ),
+	broadcaster_id: belongsTo( "twitch-user", { async: true } ),
 	/** @type {Date} */
 	followed_at: attr( "date" )
 
 }).reopenClass({
-	toString() { return "helix/users/follows"; }
+	toString() { return "helix/channels/followed"; }
 });

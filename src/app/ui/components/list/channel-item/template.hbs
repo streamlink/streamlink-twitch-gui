@@ -1,26 +1,27 @@
-{{#link-to "channel" content.id tagName="div" class="logo"}}
-	{{preview-image src=content.profile_image_url title=content.display_name}}
+{{#link-to "channel" user.id tagName="div" class="logo"}}
+	{{preview-image src=user.profile_image_url title=user.display_name}}
 {{/link-to}}
 <div class="text">
 	<header>
-		{{#if content.channel.broadcaster_language}}{{flag-icon type="broadcaster" lang=content.channel.broadcaster_language}}{{/if}}
-		<span>{{#link-to "channel" content.id}}{{content.detailedName}}{{/link-to}}</span>
+		{{#if user.channel.broadcaster_language}}{{flag-icon type="broadcaster" lang=user.channel.broadcaster_language}}{{/if}}
+		<span>{{#link-to "channel" user.id}}{{user.detailedName}}{{/link-to}}</span>
 	</header>
-	{{#if content.stream.started_at}}
+	{{#if user.stream.started_at}}
 		<div class="stats online">
-			<span title="{{content.stream.titleStartedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now content.stream.started_at interval=60000}}</span>
-			<span title="{{content.stream.titleViewers}}"><i class="fa fa-users"></i> {{format-viewers content.stream.viewer_count}}</span>
+			<span title="{{user.stream.titleStartedAt}}"><i class="fa fa-clock-o"></i> {{hours-from-now user.stream.started_at interval=60000}}</span>
+			<span title="{{user.stream.titleViewers}}"><i class="fa fa-users"></i> {{format-viewers user.stream.viewer_count}}</span>
 		</div>
-		{{#if content.stream.game_id}}
-			<div class="stats game"><i class="fa fa-gamepad"></i> {{#link-to "games.game" content.stream.game_id}}{{content.stream.game_name}}{{/link-to}}</div>
+		{{#if user.stream.game_id}}
+			<div class="stats game"><i class="fa fa-gamepad"></i> {{#link-to "games.game" user.stream.game_id}}{{user.stream.game_name}}{{/link-to}}</div>
 		{{/if}}
 	{{else}}
 		<div class="stats offline">
 			<i class="fa fa-bed"></i> {{t "components.channel-item.offline"}}
 		</div>
 	{{/if}}
-	{{#if content.description}}
-		{{embedded-links tagName="div" class="status" text=content.description}}
+    <div class="followed-since" title="{{t "components.channel-item.followed-since.title"}}"><i class="fa fa-fw fa-calendar"></i> {{t "components.channel-item.followed-since.format" followed_since=content.followed_at}}</div>
+	{{#if user.description}}
+		{{embedded-links tagName="div" class="status" text=user.description}}
 	{{else}}
 		<div class="status status-missing">{{t "components.channel-item.no-status"}}</div>
 	{{/if}}

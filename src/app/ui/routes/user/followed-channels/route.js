@@ -4,16 +4,17 @@ import RefreshRouteMixin from "ui/routes/-mixins/routes/refresh";
 
 
 export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
-	modelName: "twitch-user-followed",
-	modelMapBy: "to",
+	modelName: "twitch-channels-followed",
 	modelPreload: "profile_image_url",
 	itemSelector: ".channel-item-component",
 
 	/**
-	 * @param {TwitchUser} twitchUser
+	 * @param {TwitchChannelsFollowed} twitchChannelsFollowed
 	 * @return {Promise}
 	 */
-	async modelItemLoader( twitchUser ) {
+	async modelItemLoader( twitchChannelsFollowed ) {
+		await twitchChannelsFollowed.broadcaster_id.promise;
+		const twitchUser = twitchChannelsFollowed.broadcaster_id.content;
 		await Promise.all([
 			twitchUser.channel.promise,
 			twitchUser.stream.promise.catch( () => null )
@@ -24,6 +25,6 @@ export default UserIndexRoute.extend( PaginationMixin, RefreshRouteMixin, {
 		const query = this._super();
 		const { user_id } = this.auth.session;
 
-		return Object.assign( query, { from_id: user_id } );
+		return Object.assign( query, { user_id } );
 	}
 });

@@ -1,32 +1,29 @@
 user-followed:
     -   request:
             method: "GET"
-            url: "https://api.twitch.tv/helix/users/follows"
+            url: "https://api.twitch.tv/helix/channels/followed"
             query:
-                from_id: "123"
+                user_id: "123"
                 first: 2
         response:
             data:
-                -   from_id: "123"
-                    to_id: "1"
+                -   broadcaster_id: "1"
                     followed_at: "2000-01-01T00:00:01Z"
-                -   from_id: "123"
-                    to_id: "2"
+                -   broadcaster_id: "2"
                     followed_at: "2000-01-01T00:00:02Z"
             pagination:
                 cursor: "cursor1"
             total: 3
     -   request:
             method: "GET"
-            url: "https://api.twitch.tv/helix/users/follows"
+            url: "https://api.twitch.tv/helix/channels/followed"
             query:
-                from_id: "123"
+                user_id: "123"
                 first: 2
                 after: "cursor1"
         response:
             data:
-                -   from_id: "123"
-                    to_id: "3"
+                -   broadcaster_id: "3"
                     followed_at: "2000-01-01T00:00:03Z"
             total: 3
 user:

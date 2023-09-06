@@ -2,6 +2,9 @@ channel-button:
     title: "{name} folgen"
 channel-item:
     offline: ist gerade offline
+    followed-since:
+        title: Gefolgt seit
+        format: "{followed_since, date, full}"
     no-status: Keine Kanalbeschreibung
 documentation-link:
     title: Dokumentation online durchlesen

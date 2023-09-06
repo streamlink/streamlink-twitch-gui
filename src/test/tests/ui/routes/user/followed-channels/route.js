@@ -12,8 +12,9 @@ import Service from "@ember/service";
 import UserFollowedChannelsRoute from "ui/routes/user/followed-channels/route";
 import UserFollowedChannelsRouteFixtures from "fixtures/ui/routes/user/followed-channels.yml";
 import TwitchAdapter from "data/models/twitch/adapter";
-import TwitchUserFollowed from "data/models/twitch/user-followed/model";
-import TwitchUserFollowedSerializer from "data/models/twitch/user-followed/serializer";
+import TwitchChannelsFollowed from "data/models/twitch/channels-followed/model";
+import TwitchChannelsFollowedAdapter from "data/models/twitch/channels-followed/adapter";
+import TwitchChannelsFollowedSerializer from "data/models/twitch/channels-followed/serializer";
 import TwitchUser from "data/models/twitch/user/model";
 import TwitchUserAdapter from "data/models/twitch/user/adapter";
 import TwitchUserSerializer from "data/models/twitch/user/serializer";
@@ -37,8 +38,9 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 		}),
 
 		UserFollowedChannelsRoute,
-		TwitchUserFollowed,
-		TwitchUserFollowedSerializer,
+		TwitchChannelsFollowed,
+		TwitchChannelsFollowedAdapter,
+		TwitchChannelsFollowedSerializer,
 		TwitchUser,
 		TwitchUserAdapter,
 		TwitchUserSerializer,
@@ -76,7 +78,7 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 		/** @type {DS.Store} */
 		const store = this.owner.lookup( "service:store" );
 
-		store.adapterFor( "twitch-user-followed" ).ajax
+		store.adapterFor( "twitch-channels-followed" ).ajax
 			= adapterRequestFactory( assert, UserFollowedChannelsRouteFixtures[ "user-followed" ] );
 		store.adapterFor( "twitch-user" ).ajax
 			= adapterRequestFactory( assert, UserFollowedChannelsRouteFixtures[ "user" ] );
@@ -100,39 +102,25 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 			controller.model.map( record => record.toJSON({ includeId: true }) ),
 			[
 				{
-					id: "1",
-					channel: "1",
-					stream: "1",
-					broadcaster_type: null,
-					created_at: null,
-					description: null,
-					display_name: null,
-					login: null,
-					offline_image_url: null,
-					profile_image_url: null,
-					type: null
+					id: "123-1",
+					user_id: "123",
+					broadcaster_id: "1",
+					followed_at: "2000-01-01T00:00:01.000Z"
 				},
 				{
-					id: "2",
-					channel: "2",
-					stream: "2",
-					broadcaster_type: null,
-					created_at: null,
-					description: null,
-					display_name: null,
-					login: null,
-					offline_image_url: null,
-					profile_image_url: null,
-					type: null
+					id: "123-2",
+					user_id: "123",
+					broadcaster_id: "2",
+					followed_at: "2000-01-01T00:00:02.000Z"
 				}
 			],
-			"Maps TwitchUserFollowed records to TwitchUser in the first request"
+			"Records have the correct IDs and relationship IDs in the first request"
 		);
 		assert.notOk( controller.hasFetchedAll, "Is not done fetching after the first request" );
 		assert.propEqual(
-			store.peekAll( "twitch-user-followed" ).mapBy( "id" ),
+			store.peekAll( "twitch-channels-followed" ).mapBy( "id" ),
 			[ "123-1", "123-2" ],
-			"Store has TwitchUserFollowed 123-1 and 123-2 loaded"
+			"Store has TwitchChannelsFollowed 123-1 and 123-2 loaded"
 		);
 		assert.propEqual(
 			store.peekAll( "twitch-user" ).mapBy( "id" ),
@@ -160,52 +148,31 @@ module( "ui/routes/user/followed-channels/route", function( hooks ) {
 			controller.model.map( record => record.toJSON({ includeId: true }) ),
 			[
 				{
-					id: "1",
-					channel: "1",
-					stream: "1",
-					broadcaster_type: null,
-					created_at: null,
-					description: null,
-					display_name: null,
-					login: null,
-					offline_image_url: null,
-					profile_image_url: null,
-					type: null
+					id: "123-1",
+					user_id: "123",
+					broadcaster_id: "1",
+					followed_at: "2000-01-01T00:00:01.000Z"
 				},
 				{
-					id: "2",
-					channel: "2",
-					stream: "2",
-					broadcaster_type: null,
-					created_at: null,
-					description: null,
-					display_name: null,
-					login: null,
-					offline_image_url: null,
-					profile_image_url: null,
-					type: null
+					id: "123-2",
+					user_id: "123",
+					broadcaster_id: "2",
+					followed_at: "2000-01-01T00:00:02.000Z"
 				},
 				{
-					id: "3",
-					channel: "3",
-					stream: "3",
-					broadcaster_type: null,
-					created_at: null,
-					description: null,
-					display_name: null,
-					login: null,
-					offline_image_url: null,
-					profile_image_url: null,
-					type: null
+					id: "123-3",
+					user_id: "123",
+					broadcaster_id: "3",
+					followed_at: "2000-01-01T00:00:03.000Z"
 				}
 			],
-			"Maps the last TwitchUserFollowed record to TwitchUser in the second request"
+			"Records have the correct IDs and relationship IDs after two requests"
 		);
 		assert.ok( controller.hasFetchedAll, "Has fetched all after two requests" );
 		assert.propEqual(
-			store.peekAll( "twitch-user-followed" ).mapBy( "id" ),
+			store.peekAll( "twitch-channels-followed" ).mapBy( "id" ),
 			[ "123-1", "123-2", "123-3" ],
-			"Store has all TwitchStream records loaded"
+			"Store has all TwitchChannelsFollowed records loaded"
 		);
 		assert.propEqual(
 			store.peekAll( "twitch-user" ).mapBy( "id" ),
