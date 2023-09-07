@@ -1,6 +1,14 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## master
+
+- Fixed layout issues on followed channels menu ([#980](https://github.com/streamlink/streamlink-twitch-gui/issues/980))
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.4.0...master)
+
+
 ## [v2.4.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.4.0) (2023-09-07)
 
 - Switched to new followed channels Twitch Helix API endpoint ([#979](https://github.com/streamlink/streamlink-twitch-gui/issues/979))
