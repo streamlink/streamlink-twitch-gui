@@ -37,16 +37,6 @@ jobs:
       - name: Lint (file permissions)
         if: startsWith(matrix.os, 'ubuntu')
         run: "! grep -Ev '^644' <(git ls-files src/ build/tasks/ | xargs stat '--format=%a %n')"
-      - name: Prepare env vars
-        shell: bash
-        run: |
-          echo "YARN_CACHE_FOLDER=$(yarn cache dir)" >> $GITHUB_ENV
-      - name: Yarn cache
-        if: startsWith(github.ref, 'refs/tags/') != true
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.YARN_CACHE_FOLDER }}
-          key: yarn-${{ matrix.os }}-${{ hashFiles('yarn.lock') }}
       - name: NW.js cache
         if: startsWith(github.ref, 'refs/tags/') != true
         uses: actions/cache@v3
