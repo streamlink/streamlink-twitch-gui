@@ -28,7 +28,9 @@
 			as |item isNewItem isDuplicate|
 		}}
 			{{channel-item
-				content=item
+				content=(hash
+					user=item
+				)
 				isNewItem=isNewItem
 				isDuplicate=isDuplicate
 			}}

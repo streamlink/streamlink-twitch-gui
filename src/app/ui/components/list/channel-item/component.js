@@ -9,5 +9,6 @@ export default ListItemComponent.extend({
 
 	classNames: [ "channel-item-component" ],
 
-	user: alias( "content.broadcaster_id" )
+	user: alias( "content.user" ),
+	followed_at: alias( "content.followed_at" )
 });

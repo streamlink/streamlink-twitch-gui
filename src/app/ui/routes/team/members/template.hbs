@@ -1,6 +1,8 @@
 {{#content-list model as |item isNewItem|}}
 	{{channel-item
-		content=item
+		content=(hash
+			user=item
+		)
 		isNewItem=isNewItem
 	}}
 {{else}}

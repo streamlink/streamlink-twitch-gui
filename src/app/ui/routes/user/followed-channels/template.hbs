@@ -8,7 +8,10 @@
 	</header>
 	{{#content-list model as |item isNewItem isDuplicateItem|}}
 		{{channel-item
-			content=item
+			content=(hash
+				user=item.broadcaster_id
+				followed_at=item.followed_at
+			)
 			isNewItem=isNewItem
 			isDuplicateItem=isDuplicateItem
 		}}

@@ -19,7 +19,9 @@
 			<i class="fa fa-bed"></i> {{t "components.channel-item.offline"}}
 		</div>
 	{{/if}}
-    <div class="followed-since" title="{{t "components.channel-item.followed-since.title"}}"><i class="fa fa-fw fa-calendar"></i> {{t "components.channel-item.followed-since.format" followed_since=content.followed_at}}</div>
+	{{#if followed_at}}
+		<div class="followed-since" title="{{t "components.channel-item.followed-since.title"}}"><i class="fa fa-fw fa-calendar"></i> {{t "components.channel-item.followed-since.format" followed_since=followed_at}}</div>
+	{{/if}}
 	{{#if user.description}}
 		{{embedded-links tagName="div" class="status" text=user.description}}
 	{{else}}
