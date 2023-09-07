@@ -97,6 +97,23 @@ streaming:
         parameters:
             title: カスタムパラメータ
             placeholder: カスタムパラメータの追加
+    webbrowser:
+        title: Streamlink webbrowser API
+        description: 有効なクライアント整合性トークンを計算するために必要であり、Twitchの現在の制限によっては、ストリーミングアクセストークンを取得するときに必要になる場合があります。
+        notes: |
+            配信を視聴できるようにするためのクライアント整合性トークンの計算は、Webブラウザを使用してのみ実行できます。
+            Webブラウザは独立に実行され、ユーザーデータにはアクセスできません。
+        checkbox: 配信を視聴する前にStreamlinkがWebブラウザを起動できるようにする
+        details: Twitchが必要とする場合にのみ、Webブラウザを起動してクライアント整合性トークンを計算する必要があります。この場合、Streamlinkは有効期限までトークンをキャッシュします。
+        documentation: 詳細についてはStreamlink Twitch GUIのプラグインドキュメントを確認してください。
+    webbrowser_executable:
+        title: Webブラウザ実行ファイル
+        description: StreamlinkはChromiumベースのWebブラウザのみサポートしています。デフォルトで実行するには空白にしてください。
+        placeholder: Webブラウザの実行パス (Chromiumベース)
+    webbrowser_headless:
+        title: ヘッドレスモード
+        description: 非表示のWebブラウザをヘッドレスモードで実行する。
+        checkbox: ヘッドレスモードを有効にする
     playerinput:
         title: プレーヤー入力
         description: プレーヤーのストリーミング方法を設定します。

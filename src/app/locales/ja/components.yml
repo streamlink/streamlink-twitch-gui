@@ -2,6 +2,9 @@ channel-button:
     title: "{name}をフォロー"
 channel-item:
     offline: オフライン
+    followed-since:
+        title: フォロー開始日
+        format: "{followed_since, date, full}"
     no-status: チャンネルの説明がありません
 documentation-link:
     title: オンラインでドキュメントを読む
