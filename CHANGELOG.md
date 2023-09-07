@@ -1,13 +1,15 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## master
+## [v2.4.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.4.1) (2023-09-07)
 
 - Fixed layout issues on followed channels menu ([#980](https://github.com/streamlink/streamlink-twitch-gui/issues/980))
 - Fixed broken channel search results and team members list ([#981](https://github.com/streamlink/streamlink-twitch-gui/issues/981))
 
+Please see the changelog of the [`v2.4.0`](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.4.0) release!
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.4.0...master)
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.4.0...v2.4.1)
 
 
 ## [v2.4.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.4.0) (2023-09-07)
