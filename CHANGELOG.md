@@ -4,6 +4,7 @@ Changelog - Streamlink Twitch GUI
 ## master
 
 - Fixed layout issues on followed channels menu ([#980](https://github.com/streamlink/streamlink-twitch-gui/issues/980))
+- Fixed broken channel search results and team members list ([#981](https://github.com/streamlink/streamlink-twitch-gui/issues/981))
 
 
 [Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.4.0...master)
