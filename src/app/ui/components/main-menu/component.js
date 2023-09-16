@@ -1,7 +1,6 @@
 import Component from "@ember/component";
 import { inject as service } from "@ember/service";
 import HotkeyMixin from "ui/components/-mixins/hotkey";
-import { isDarwin } from "utils/node/platform";
 import layout from "./template.hbs";
 import "./styles.less";
 
@@ -31,8 +30,6 @@ export default Component.extend( HotkeyMixin, /** @class MainMenuComponent */ {
 	hotkeys: {
 		/** @this {MainMenuComponent} */
 		refresh() {
-			// macOS has a menu bar with its own refresh hotkey
-			if ( isDarwin ) { return; }
 			this.router.refresh();
 		},
 		/** @this {MainMenuComponent} */
