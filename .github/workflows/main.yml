@@ -105,11 +105,11 @@ jobs:
           echo "upload_osx64=$(basename dist/streamlink-twitch-gui-*-macOS.tar.gz | sed 's/\.tar\.gz$//')" >> $GITHUB_OUTPUT
           echo "archive_linux64=$(basename dist/streamlink-twitch-gui-*-linux64.tar.gz)" >> $GITHUB_OUTPUT
           echo "upload_linux64=$(basename dist/streamlink-twitch-gui-*-linux64.tar.gz | sed 's/\.tar\.gz$//')" >> $GITHUB_OUTPUT
-      - name: Upload artifact (win64)
+      - name: Upload artifact (win32)
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.names.outputs.archive_win64 }}
-          path: dist/${{ steps.names.outputs.archive_win64 }}
+          name: ${{ steps.names.outputs.archive_win32 }}
+          path: dist/${{ steps.names.outputs.archive_win32 }}
       - name: Upload artifact (osx64)
         uses: actions/upload-artifact@v3
         with:
