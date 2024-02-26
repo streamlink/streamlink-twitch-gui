@@ -39,7 +39,7 @@ jobs:
         run: "! grep -Ev '^644' <(git ls-files src/ build/tasks/ | xargs stat '--format=%a %n')"
       - name: NW.js cache
         if: startsWith(github.ref, 'refs/tags/') != true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: build/cache/
           key: nwjs-${{ matrix.os }}-${{ hashFiles('src/config/main.json') }}
