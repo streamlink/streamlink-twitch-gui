@@ -35,7 +35,7 @@ module( "ui/components/link/embedded-links", function( hooks ) {
 			[
 				[ false, "" ],
 				[ true, "https://bar.com" ],
-				[ true, "https://twitter.com/baz" ]
+				[ true, "https://x.com/baz" ]
 			],
 			"First link is internal, other links are external"
 		);

@@ -232,12 +232,12 @@ module( "utils/linkparser", function() {
 		);
 	});
 
-	test( "Twitter", function( assert ) {
+	test( "X", function( assert ) {
 		assert.propEqual(
 			parseString( "@foo" ),
 			{
 				texts: [ "", "" ],
-				links: [ { url: "https://twitter.com/foo", text: "@foo" } ]
+				links: [ { url: "https://x.com/foo", text: "@foo" } ]
 			},
 			"Simple test"
 		);
@@ -255,15 +255,15 @@ module( "utils/linkparser", function() {
 			parseString( "!@foo..." ),
 			{
 				texts: [ "!", "..." ],
-				links: [ { url: "https://twitter.com/foo", text: "@foo" } ]
+				links: [ { url: "https://x.com/foo", text: "@foo" } ]
 			},
 			"Special char boundaries"
 		);
 
 		assert.propEqual(
-			parseString( "@myusernameiswaytoolongfortwitter" ),
+			parseString( "@myusernameiswaytoolongforxaliastwitter" ),
 			{
-				texts: [ "@myusernameiswaytoolongfortwitter" ],
+				texts: [ "@myusernameiswaytoolongforxaliastwitter" ],
 				links: []
 			},
 			"Username length"
@@ -274,9 +274,9 @@ module( "utils/linkparser", function() {
 			{
 				texts: [ "foo ", " ", " ", " quux" ],
 				links: [
-					{ url: "https://twitter.com/bar", text: "@bar" },
-					{ url: "https://twitter.com/baz", text: "@baz" },
-					{ url: "https://twitter.com/qux", text: "@qux" }
+					{ url: "https://x.com/bar", text: "@bar" },
+					{ url: "https://x.com/baz", text: "@baz" },
+					{ url: "https://x.com/qux", text: "@qux" }
 				]
 			},
 			"Multiple matches"
@@ -371,7 +371,7 @@ module( "utils/linkparser", function() {
 			{
 				texts: [ "Follow ", " and visit ", " or follow ", " and visit ", "" ],
 				links: [
-					{ url: "https://twitter.com/foo", text: "@foo" },
+					{ url: "https://x.com/foo", text: "@foo" },
 					{ url: "https://bar.com", text: "bar.com" },
 					{ url: "https://www.reddit.com/u/baz", text: "/u/baz" },
 					{ url: "https://www.reddit.com/r/qux", text: "/r/qux" }

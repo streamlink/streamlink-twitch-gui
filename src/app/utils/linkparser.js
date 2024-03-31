@@ -46,7 +46,7 @@ function fnURL( _, __, scheme, netloc, tld, path ) {
 }
 
 
-const reTwitter = new RegExp([
+const reX = new RegExp([
 	// boundary (no look-behind)
 	"(^|\\W)",
 	// username
@@ -55,9 +55,9 @@ const reTwitter = new RegExp([
 	"(\\W|$)"
 ].join( "" ), "igm" );
 
-function fnTwitter( _, __, user ) {
+function fnX( _, __, user ) {
 	return {
-		url : `https://twitter.com/${user}`,
+		url : `https://x.com/${user}`,
 		text: `@${user}`
 	};
 }
@@ -114,9 +114,9 @@ export const parsers = {
 		re: reURL,
 		fn: fnURL
 	},
-	twitter: {
-		re: reTwitter,
-		fn: fnTwitter
+	x: {
+		re: reX,
+		fn: fnX
 	}
 };
 
