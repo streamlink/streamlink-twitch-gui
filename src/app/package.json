@@ -23,5 +23,5 @@
 		"256": "~assets/icons/icon-256.png"
 	},
 
-	"chromium-args": "--disable-devtools --enable-features=NativeNotifications --disable-smooth-scrolling --disable-features=nw2"
+	"chromium-args": "--disable-devtools --enable-features=NativeNotifications --disable-smooth-scrolling"
 }
