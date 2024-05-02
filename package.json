@@ -22,7 +22,7 @@
 		"ember-inflector": "3.0.0",
 		"ember-localstorage-adapter": "github:bastimeyer/ember-localstorage-adapter#update-ember-latest",
 		"entities": "1.1.2",
-		"flag-icons": "6.1.1",
+		"flag-icons": "7.2.1",
 		"font-awesome": "4.7.0",
 		"global-tld-list": "0.0.488",
 		"growly": "1.3.0",

@@ -2710,10 +2710,10 @@ fined@^1.2.0:
     object.pick "^1.2.0"
     parse-filepath "^1.0.1"
 
-flag-icons@6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/flag-icons/-/flag-icons-6.1.1.tgz#8d6cee1534b05da3cdc103f5f8bdeb3003164e05"
-  integrity sha512-7QJaPXelUF5yLKppUvfqx915oLm2q6DVM037vrBzww4DjwzyVPooq74SLfPPsYabbN3kMPbDQstYjHrx8kBUPg==
+flag-icons@7.2.1:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/flag-icons/-/flag-icons-7.2.1.tgz#b60cbc4b19348874f58545816f30fd7ee837e8ba"
+  integrity sha512-EaU4XZmFt1BOilz9nMmJKjma5pOaNjzL7somOhadrrilollh4xj6aaXI2M1sd00VUfVWN0E25Q6xaW3SNt0k/Q==
 
 flagged-respawn@^1.0.1:
   version "1.0.1"
