@@ -129,6 +129,18 @@
 
 <fieldset>
 {{#settings-row
+	(t "settings.streaming.disable-ads.title")
+	(t "settings.streaming.disable-ads.description")
+	icon="fa-money"
+	documentation="--twitch-disable-ads"
+}}
+	{{check-box
+		(t "settings.streaming.disable-ads.checkbox")
+		checked=model.streaming.disable_ads
+	}}
+{{/settings-row}}
+
+{{#settings-row
 	(t "settings.streaming.low-latency.title")
 	(t "settings.streaming.low-latency.description")
 	icon="fa-compress"
@@ -181,18 +193,6 @@
 	{{check-box
 		(t "settings.streaming.player-no-close.checkbox")
 		checked=model.streaming.player_no_close
-	}}
-{{/settings-row}}
-
-{{#settings-row
-	(t "settings.streaming.disable-ads.title")
-	(t "settings.streaming.disable-ads.description")
-	icon="fa-money"
-	documentation="--twitch-disable-ads"
-}}
-	{{check-box
-		(t "settings.streaming.disable-ads.checkbox")
-		checked=model.streaming.disable_ads
 	}}
 {{/settings-row}}
 
