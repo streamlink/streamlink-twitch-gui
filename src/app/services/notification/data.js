@@ -1,4 +1,5 @@
-import { HTML as decodeHTML } from "entities/lib/decode";
+// explicitly set .js extension (see its package.json)
+import { decodeHTML } from "entities/lib/decode.js";
 
 
 const { isArray } = Array;
@@ -36,9 +37,9 @@ export default class NotificationData {
 		return isArray( message )
 			? message.map( ({ title, message }) => ({
 				title,
-				message: decodeHTML( message )
+				message: decodeHTML( message || "" )
 			}) )
-			: decodeHTML( message );
+			: decodeHTML( message || "" );
 	}
 
 	/**
