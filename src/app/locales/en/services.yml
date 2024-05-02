@@ -1,7 +1,7 @@
 notification:
     dispatch:
-        single: "{name} has started streaming"
-        group: Some followed channels have started streaming
+        single: "{name} is now live"
+        group: Now live
     status:
         disabled: Desktop notifications are disabled
         enabled: Desktop notifications are enabled
