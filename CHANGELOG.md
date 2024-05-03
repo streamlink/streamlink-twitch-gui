@@ -1,6 +1,23 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## [v2.5.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.5.0) (2024-05-03)
+
+- Fixed macOS refresh hotkey ([#986](https://github.com/streamlink/streamlink-twitch-gui/pull/986))
+- Fixed missing Japanese translations ([#982](https://github.com/streamlink/streamlink-twitch-gui/pull/982))
+- Changed notification messages to be a bit more brief
+- Changed twitter URLs to X
+- Removed support for building on EOL NodeJS versions
+- Upgraded and resolved various dependency issues
+- Upgraded NW.js to 0.87.0 (Chromium 124.0.6367.62 / NodeJS 21.1.0)
+  - Fixes graphical glitches due to shader compilation errors
+  - Fixes application `close` event, making confirmation dialog while streams are running work again
+  - Known issue: window `blur` event doesn't trigger when application loses focus for the first time, causing auto-refresh to not work when re-gaining focus
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.4.1...v2.5.0)
+
+
 ## [v2.4.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.4.1) (2023-09-07)
 
 - Fixed layout issues on followed channels menu ([#980](https://github.com/streamlink/streamlink-twitch-gui/issues/980))
