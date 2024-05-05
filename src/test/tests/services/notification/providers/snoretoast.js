@@ -220,6 +220,81 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 		);
 	});
 
+	test( "Messages", async function( assert ) {
+		/** @this {TestContextServicesNotificationProviderSnoretoast} */
+		const { default: NotificationProviderSnoreToast } = this.subject();
+		this.promiseChildProcessStub.returns( Promise.resolve() );
+
+		const inst = new NotificationProviderSnoreToast();
+		await inst.setup();
+		this.promiseChildProcessStub.resetHistory();
+
+		await inst.notify( new NotificationData({
+			title: "foo",
+			message: "bar",
+			icon: "icon-path",
+			click: new Function()
+		}) );
+		await inst.notify( new NotificationData({
+			title: "baz",
+			message: " ",
+			icon: "icon-path",
+			click: new Function()
+		}) );
+		assert.propEqual(
+			this.promiseChildProcessStub.args.map( args => args[0] ),
+			[
+				[
+					"C:\\app\\bin\\win64\\snoretoast.exe",
+					[
+						"-appID",
+						"application name",
+						"-silent",
+						"-t",
+						"foo",
+						"-m",
+						"bar",
+						"-p",
+						"icon-path",
+						"-id",
+						"1",
+						"-pipeName",
+						"\\\\.\\pipe\\application-name",
+						"-application",
+						"C:\\app\\executable"
+					],
+					{
+						"stdio": [ 1 ]
+					}
+				],
+				[
+					"C:\\app\\bin\\win64\\snoretoast.exe",
+					[
+						"-appID",
+						"application name",
+						"-silent",
+						"-t",
+						"baz",
+						"-m",
+						" ",
+						"-p",
+						"icon-path",
+						"-id",
+						"2",
+						"-pipeName",
+						"\\\\.\\pipe\\application-name",
+						"-application",
+						"C:\\app\\executable"
+					],
+					{
+						"stdio": [ 1 ]
+					}
+				]
+			],
+			"Ensures non-empty messages"
+		);
+	});
+
 	test( "Notify fail and message format", async function( assert ) {
 		/** @this {TestContextServicesNotificationProviderSnoretoast} */
 		const { default: NotificationProviderSnoreToast } = this.subject();

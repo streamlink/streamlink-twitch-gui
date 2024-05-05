@@ -124,7 +124,7 @@ export default class NotificationProviderSnoreToast {
 					"-t",
 					data.title,
 					"-m",
-					data.getMessageAsString(),
+					data.getMessageAsString() || " ",
 					"-p",
 					data.icon,
 					"-id",
