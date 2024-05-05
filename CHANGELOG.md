@@ -9,7 +9,7 @@ Changelog - Streamlink Twitch GUI
 - Changed twitter URLs to X
 - Removed support for building on EOL NodeJS versions
 - Upgraded and resolved various dependency issues
-- Upgraded NW.js to 0.87.0 (Chromium 124.0.6367.62 / NodeJS 21.1.0)
+- Upgraded NW.js to 0.87.0 (Chromium 124.0.6367.62 / NodeJS 21.1.0) ([#1004](https://github.com/streamlink/streamlink-twitch-gui/pull/1004))
   - Fixes graphical glitches due to shader compilation errors
   - Fixes application `close` event, making confirmation dialog while streams are running work again
   - Known issue: window `blur` event doesn't trigger when application loses focus for the first time, causing auto-refresh to not work when re-gaining focus
