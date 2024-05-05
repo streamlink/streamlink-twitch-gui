@@ -1,6 +1,16 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## master
+
+- Fixed notifications with empty messages not showing on Windows ([#1006](https://github.com/streamlink/streamlink-twitch-gui/pull/1006))
+- Downgraded NW.js to 0.82.0 (Chromium 119.0.6045.105 / NodeJS 20.7.0) ([#1005](https://github.com/streamlink/streamlink-twitch-gui/pull/1005))
+  - Fixes GPU process crashes on Linux
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.5.0...master)
+
+
 ## [v2.5.0](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.5.0) (2024-05-03)
 
 - Fixed macOS refresh hotkey ([#986](https://github.com/streamlink/streamlink-twitch-gui/pull/986))
