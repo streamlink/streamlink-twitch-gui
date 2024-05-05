@@ -237,7 +237,7 @@ module( "services/notification/providers/snoretoast", function( hooks ) {
 		}) );
 		await inst.notify( new NotificationData({
 			title: "baz",
-			message: " ",
+			message: "",
 			icon: "icon-path",
 			click: new Function()
 		}) );
