@@ -4,12 +4,14 @@ import metadata from "metadata";
 import { manifest } from "nwjs/App";
 import { platform, release, arch } from "utils/node/platform";
 import "./styles.less";
+import process from "process";
 
 
 export default Controller.extend({
 	mainConfig,
 	localesConfig,
 	metadata,
+	nwjsVersion: process.versions[ "nw" ],
 	platform,
 	release,
 	arch,

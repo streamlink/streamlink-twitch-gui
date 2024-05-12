@@ -16,10 +16,14 @@ module.exports = {
 
 		// launch NW.js after a successful build
 		config.plugins.push(
-			new NwjsPlugin( Object.assign( {}, grunt.config( "nwjs" ).options, {
-				files: `${grunt.config( "dir" )[ path ]}/**`,
-				argv: "--remote-debugging-port=8888"
-			}) )
+			new NwjsPlugin(
+				grunt.config( "nwjs" ),
+				{
+					files: `${grunt.config( "dir" )[ path ]}/**`,
+					flavor: "sdk",
+					argv: "--remote-debugging-port=8888"
+				}
+			)
 		);
 	},
 

@@ -1,14 +1,13 @@
-const NwBuilder = require( "nw-builder" );
-const cdpConnect = require( "../common/cdp/connect" );
-const cdpQUnit = require( "../common/cdp/qunit" );
-const cdpCoverage = require( "../common/cdp/coverage" );
-
-const nwjsTaskOptions = require( "../configs/nwjs" ).options;
-const platforms = require( "../common/platforms" );
-
-
 module.exports = function( grunt ) {
 	grunt.registerTask( "runtest", "Run the tests in NW.js", function() {
+		const NwBuilder = require( "nw-builder" );
+		const cdpConnect = require( "../common/cdp/connect" );
+		const cdpQUnit = require( "../common/cdp/qunit" );
+		const cdpCoverage = require( "../common/cdp/coverage" );
+
+		const platforms = require( "../common/platforms" );
+		const platform = platforms.getPlatform();
+
 		const isCI = process.env[ "CI" ] === "true";
 		const isCoverage = !!this.flags.coverage;
 
@@ -23,13 +22,14 @@ module.exports = function( grunt ) {
 			coverageTimeout: 5000
 		});
 
+		const nwConf = grunt.config( "nwjs" );
+		const { options: nwOptions, [ platform ]: { options: nwPlatformOptions } } = nwConf;
 
 		const argv = [ `--remote-debugging-port=${options.port}` ];
 		if ( isCI ) {
 			argv.unshift( "--disable-gpu", "--no-sandbox" );
 		}
-		const nwjsOptions = Object.assign( {}, grunt.config.process( nwjsTaskOptions ), {
-			platforms: [ platforms.getPlatform() ],
+		const nwjsOptions = Object.assign( {}, nwOptions, nwPlatformOptions, {
 			flavor: "sdk",
 			files: options.path,
 			argv

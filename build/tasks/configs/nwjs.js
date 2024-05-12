@@ -10,7 +10,6 @@ module.exports = {
 		files,
 		buildDir: "<%= dir.releases %>",
 		cacheDir: "<%= dir.cache %>",
-		version : "<%= main['nwjs-version'] %>",
 		flavor  : "normal",
 		zip     : false,
 		winIco  : "<%= dir.resources %>/icons/icon-16-32-48-256.ico",
@@ -27,52 +26,57 @@ module.exports = {
 
 	win32: {
 		options: {
+			platforms: [ "win32" ],
+			version: "0.82.0",
 			files: [
 				...files,
 				ignoreBinWin64
-			],
-			platforms: [ "win32" ]
+			]
 		}
 	},
 	win64: {
 		options: {
+			platforms: [ "win64" ],
+			version: "0.82.0",
 			files: [
 				...files,
 				ignoreBinWin32
-			],
-			platforms: [ "win64" ]
+			]
 		}
 	},
 
 	osx64: {
 		options: {
+			platforms: [ "osx64" ],
+			version: "0.82.0",
 			files: [
 				...files,
 				ignoreBinWin32,
 				ignoreBinWin64
-			],
-			platforms: [ "osx64" ]
+			]
 		}
 	},
 
 	linux32: {
 		options: {
+			platforms: [ "linux32" ],
+			version: "0.82.0",
 			files: [
 				...files,
 				ignoreBinWin32,
 				ignoreBinWin64
-			],
-			platforms: [ "linux32" ]
+			]
 		}
 	},
 	linux64: {
 		options: {
+			platforms: [ "linux64" ],
+			version: "0.82.0",
 			files: [
 				...files,
 				ignoreBinWin32,
 				ignoreBinWin64
-			],
-			platforms: [ "linux64" ]
+			]
 		}
 	}
 };

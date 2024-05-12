@@ -2,11 +2,11 @@ const platforms = require( "../../common/platforms" );
 
 
 class NwjsPlugin {
-	constructor( nwOptions = {}, options = {} ) {
-		this.nwOptions = Object.assign( {}, nwOptions, {
-			flavor: "sdk",
-			platforms: [ platforms.getPlatform() ]
-		});
+	constructor( nwConf = {}, nwOptionsOverride = {}, options = {} ) {
+		const platform = platforms.getPlatform();
+		const { options: nwOptions, [ platform ]: { options: nwPlatformOptions } } = nwConf;
+
+		this.nwOptions = Object.assign( {}, nwOptions, nwPlatformOptions, nwOptionsOverride );
 		this.options = Object.assign({
 			rerunOnExit: true,
 			log: true,

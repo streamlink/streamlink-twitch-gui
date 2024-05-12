@@ -42,7 +42,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build/cache/
-          key: nwjs-${{ matrix.os }}-${{ hashFiles('src/config/main.json') }}
+          key: nwjs-${{ matrix.os }}-${{ hashFiles('build/tasks/configs/nwjs.js') }}
       - name: Install dependencies
         shell: bash
         run: yarn install --pure-lockfile --no-progress --non-interactive
