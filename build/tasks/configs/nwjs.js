@@ -27,7 +27,7 @@ module.exports = {
 	win32: {
 		options: {
 			platforms: [ "win32" ],
-			version: "0.82.0",
+			version: "0.87.0",
 			files: [
 				...files,
 				ignoreBinWin64
@@ -37,7 +37,7 @@ module.exports = {
 	win64: {
 		options: {
 			platforms: [ "win64" ],
-			version: "0.82.0",
+			version: "0.87.0",
 			files: [
 				...files,
 				ignoreBinWin32
