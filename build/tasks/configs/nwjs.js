@@ -48,7 +48,7 @@ module.exports = {
 	osx64: {
 		options: {
 			platforms: [ "osx64" ],
-			version: "0.82.0",
+			version: "0.87.0",
 			files: [
 				...files,
 				ignoreBinWin32,
