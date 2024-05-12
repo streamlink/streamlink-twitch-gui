@@ -60,7 +60,7 @@ module.exports = {
 	linux32: {
 		options: {
 			platforms: [ "linux32" ],
-			version: "0.82.0",
+			version: "0.80.0",
 			files: [
 				...files,
 				ignoreBinWin32,
@@ -71,7 +71,7 @@ module.exports = {
 	linux64: {
 		options: {
 			platforms: [ "linux64" ],
-			version: "0.82.0",
+			version: "0.80.0",
 			files: [
 				...files,
 				ignoreBinWin32,
