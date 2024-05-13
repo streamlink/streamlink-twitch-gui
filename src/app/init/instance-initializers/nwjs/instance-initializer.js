@@ -2,7 +2,7 @@ import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
 import { later, scheduleOnce } from "@ember/runloop";
 import { default as nwApp, quit } from "nwjs/App";
-import { default as nwWindow } from "nwjs/Window";
+import { default as nwWindow, setFocused, setVisibility } from "nwjs/Window";
 import { argv, parseCommand } from "nwjs/argv";
 import onChangeIntegrations from "./integrations";
 import parameterActions from "./parameters";
@@ -86,6 +86,8 @@ export default {
 		// react to secondary application launch attempts
 		nwApp.on( "open", async command => {
 			if ( !get( settings, "advanced" ) || !get( settings, "gui.externalcommands" ) ) {
+				setVisibility( true );
+				setFocused( true );
 				return;
 			}
 			const argv = parseCommand( command );
