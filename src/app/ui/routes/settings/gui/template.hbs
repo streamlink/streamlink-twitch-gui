@@ -78,6 +78,19 @@
 {{/settings-row}}
 
 {{#settings-row
+	(t "settings.gui.closetotray.title")
+	(t "settings.gui.closetotray.description")
+	icon="fa-times"
+	requires=(t "settings.gui.closetotray.requires")
+}}
+	{{check-box
+		(t "settings.gui.closetotray.checkbox")
+		checked=model.gui.closetotray
+		disabled=(bool-not (bool-or hasTrayIntegration hasBothIntegrations))
+	}}
+{{/settings-row}}
+
+{{#settings-row
 	(t "settings.gui.badgelabel.title")
 	(t "settings.gui.badgelabel.description")
 	icon="fa-tag"

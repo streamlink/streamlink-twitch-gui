@@ -2,7 +2,7 @@ import { get } from "@ember/object";
 import { addObserver } from "@ember/object/observers";
 import { later, scheduleOnce } from "@ember/runloop";
 import { default as nwApp, quit } from "nwjs/App";
-import { default as nwWindow, setVisibility, setFocused } from "nwjs/Window";
+import { default as nwWindow } from "nwjs/Window";
 import { argv, parseCommand } from "nwjs/argv";
 import onChangeIntegrations from "./integrations";
 import parameterActions from "./parameters";
@@ -107,8 +107,6 @@ export default {
 			}
 
 			try {
-				setVisibility( true );
-				setFocused( true );
 				nwjs.close();
 			} catch ( e ) {
 				quit();

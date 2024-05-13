@@ -30,6 +30,7 @@ export default Fragment.extend({
 	language: attr( "string",  { defaultValue: "auto" } ),
 	minimize: attr( "number", { defaultValue: ATTR_GUI_MINIMIZE_NOOP } ),
 	minimizetotray: attr( "boolean", { defaultValue: false } ),
+	closetotray: attr( "boolean", { defaultValue: false } ),
 	restore: attr( "number", { defaultValue: ATTR_GUI_RESTORE_NOOP } ),
 	smoothscroll: attr( "boolean", { defaultValue: true } ),
 	theme: attr( "string", { defaultValue: "system" } ),

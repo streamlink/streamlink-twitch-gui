@@ -9,7 +9,9 @@ import {
 	toggleMaximized,
 	toggleMinimized,
 	toggleShowInTaskbar,
-	setFocused
+	setFocused,
+	setVisibility,
+	setShowInTaskbar
 } from "nwjs/Window";
 import { ATTR_GUI_INTEGRATION_TRAY } from "data/models/settings/gui/fragment";
 
@@ -89,8 +91,16 @@ export default Service.extend( /** @class NwjsService */ {
 		setFocused( focus );
 	},
 
-	close() {
-		if ( this.streaming.hasStreams ) {
+	close( fromTray = false ) {
+		const { integration, closetotray } = this.settings.content.gui;
+		const hasTray = ( integration & ATTR_GUI_INTEGRATION_TRAY ) > 0;
+
+		if ( !fromTray && hasTray && closetotray ) {
+			setShowInTaskbar( false );
+			setVisibility( false );
+		} else if ( this.streaming.hasStreams ) {
+			setVisibility( true );
+			setFocused( true );
 			this.modal.openModal( "quit", modalCloseContext );
 		} else {
 			this.quit();

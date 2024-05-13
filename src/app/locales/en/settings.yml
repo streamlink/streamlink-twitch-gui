@@ -70,6 +70,11 @@ gui:
         title: Minimize button
         description: Click behavior.
         checkbox: Minimize to tray
+    closetotray:
+        title: Window closing behavior
+        description: Keep application running and show in tray.
+        requires: Tray OS integration.
+        checkbox: Hide window, don't close
     badgelabel:
         title: Application badge
         description: On the taskbar/dock icon.

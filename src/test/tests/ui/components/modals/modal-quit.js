@@ -29,7 +29,6 @@ module( "ui/components/modals/modal-quit", function( hooks ) {
 	setupRenderingTest( hooks, {
 		resolver: buildResolver({
 			HotkeyService,
-			SettingsService: Service.extend( Evented ),
 			IntlService: FakeIntlService,
 			THelper: FakeTHelper,
 			ModalService,
@@ -48,10 +47,21 @@ module( "ui/components/modals/modal-quit", function( hooks ) {
 	hooks.beforeEach(function() {
 		this.quitSpy = sinon.spy();
 		this.killAllSpy = sinon.spy();
+		this.setFocusedSpy = sinon.spy();
+		this.setVisibilitySpy = sinon.spy();
+		this.setShowInTaskbarSpy = sinon.spy();
 
 		this.owner.register( "service:streaming", Service.extend({
 			hasStreams: false,
 			killAll: this.killAllSpy
+		}) );
+
+		this.owner.register( "service:settings", Service.extend( Evented, {
+			content: {
+				gui: {
+					closetotray: false
+				}
+			}
 		}) );
 
 		this.owner.register( "service:nwjs", nwjsServiceInjector({
@@ -59,7 +69,11 @@ module( "ui/components/modals/modal-quit", function( hooks ) {
 				quit: this.quitSpy
 			},
 			"nwjs/nwGui": {},
-			"nwjs/Window": {}
+			"nwjs/Window": {
+				setFocused: this.setFocusedSpy,
+				setVisibility: this.setVisibilitySpy,
+				setShowInTaskbar: this.setShowInTaskbarSpy
+			}
 		}).default );
 	});
 
@@ -80,6 +94,9 @@ module( "ui/components/modals/modal-quit", function( hooks ) {
 		run( () => nwjsService.close() );
 
 		assert.notOk( modalService.hasModal( "quit" ), "Doesn't show modal quit dialog" );
+		assert.notOk( this.setFocusedSpy.called, "Doesn't change focus" );
+		assert.notOk( this.setVisibilitySpy.called, "Doesn't change visibility" );
+		assert.notOk( this.setShowInTaskbarSpy.called, "Doesn't change taskbar state" );
 		assert.ok( this.quitSpy.calledOnce, "Calls quit" );
 		this.quitSpy.resetHistory();
 
@@ -88,6 +105,9 @@ module( "ui/components/modals/modal-quit", function( hooks ) {
 
 		const modal = this.element.querySelector( ".modal-quit-component" );
 		assert.ok( modalService.hasModal( "quit" ), "Shows quit dialog if streams are opened" );
+		assert.ok( this.setFocusedSpy.calledOnceWithExactly( true ), "Focuses window" );
+		assert.ok( this.setVisibilitySpy.calledOnceWithExactly( true ), "Shows window" );
+		assert.notOk( this.setShowInTaskbarSpy.called, "Doesn't change taskbar state" );
 		assert.ok( modal instanceof HTMLElement, "Renders modal" );
 		assert.strictEqual(
 			modal.querySelector( ".modal-header-component" ).textContent.trim(),

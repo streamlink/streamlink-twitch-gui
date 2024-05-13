@@ -70,6 +70,11 @@ gui:
         title: Minimieren-Schaltfläche
         description: Verhalten beim Anklicken.
         checkbox: In die Systemleiste minimieren
+    closetotray:
+        title: Fenster Schließverhalten
+        description: Anwendung laufen lassen und im Infobereich anzeigen.
+        requires: Systemeinbindung im Infobereich.
+        checkbox: Fenster verstecken, nicht schließen
     badgelabel:
         title: Anwendungskennzeichen
         description: Auf dem Icon der Taskleiste bzw. des Docks.

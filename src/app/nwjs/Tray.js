@@ -22,6 +22,9 @@ const { icons: { tray: { [ platform ]: trayIcons } } } = filesConfig;
 export default EmberObject.extend( Evented, {
 	/** @type {IntlService} */
 	intl: service(),
+	/** @type {NwjsService} */
+	nwjs: service(),
+	/** @type {SettingsService} */
 	settings: service(),
 
 	tray: null,
@@ -75,7 +78,7 @@ export default EmberObject.extend( Evented, {
 			},
 			{
 				label: [ t`contextmenu.tray.close` ],
-				click: () => nwWindow.close()
+				click: () => this.nwjs.close( true )
 			}
 		];
 		this.menu = getOwner( this ).lookup( "nwjs:menu" );

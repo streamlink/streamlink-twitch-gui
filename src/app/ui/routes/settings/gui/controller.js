@@ -26,6 +26,7 @@ export default Controller.extend({
 	contentGuiFocusrefresh,
 
 	hasTaskBarIntegration: equal( "model.gui.integration", ATTR_GUI_INTEGRATION_TASKBAR ),
+	hasTrayIntegration: equal( "model.gui.integration", ATTR_GUI_INTEGRATION_TRAY ),
 	hasBothIntegrations: equal( "model.gui.integration", ATTR_GUI_INTEGRATION_BOTH ),
 
 	_integrationObserver: observer( "model.gui.integration", function() {

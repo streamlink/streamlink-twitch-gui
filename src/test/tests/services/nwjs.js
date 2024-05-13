@@ -31,6 +31,8 @@ module( "services/nwjs", function( hooks ) {
 		this.toggleMaximizedSpy = sinon.spy();
 		this.toggleShowInTaskbarSpy = sinon.spy();
 		this.setFocusedSpy = sinon.spy();
+		this.setVisibilitySpy = sinon.spy();
+		this.setShowInTaskbarSpy = sinon.spy();
 
 		let clipboard;
 		this.clipboardGetStub = sinon.stub().callsFake( () => clipboard );
@@ -44,7 +46,8 @@ module( "services/nwjs", function( hooks ) {
 
 		this.guiSettings = {
 			integration: ATTR_GUI_INTEGRATION_BOTH,
-			minimizetotray: false
+			minimizetotray: false,
+			closetotray: false
 		};
 
 		this.owner.register( "service:modal", Service.extend({
@@ -59,6 +62,9 @@ module( "services/nwjs", function( hooks ) {
 					},
 					get minimizetotray() {
 						return self.guiSettings.minimizetotray;
+					},
+					get closetotray() {
+						return self.guiSettings.closetotray;
 					}
 				}
 			}
@@ -85,7 +91,9 @@ module( "services/nwjs", function( hooks ) {
 				toggleMinimized: this.toggleMinimizedSpy,
 				toggleMaximized: this.toggleMaximizedSpy,
 				toggleShowInTaskbar: this.toggleShowInTaskbarSpy,
-				setFocused: this.setFocusedSpy
+				setFocused: this.setFocusedSpy,
+				setVisibility: this.setVisibilitySpy,
+				setShowInTaskbar: this.setShowInTaskbarSpy
 			}
 		}).default );
 	});
@@ -165,11 +173,17 @@ module( "services/nwjs", function( hooks ) {
 
 		NwjsService.close();
 		assert.notOk( this.openModalSpy.called, "Doesn't open quit modal" );
+		assert.notOk( this.setFocusedSpy.called, "Doesn't change focus" );
+		assert.notOk( this.setVisibilitySpy.called, "Doesn't change visibility" );
+		assert.notOk( this.setShowInTaskbarSpy.called, "Doesn't change taskbar state" );
 		assert.ok( this.quitSpy.calledOnce, "Calls quit" );
 		this.quitSpy.resetHistory();
 
 		NwjsService.streaming.hasStreams = true;
 		NwjsService.close();
+		assert.ok( this.setFocusedSpy.calledOnceWithExactly( true ), "Focuses window" );
+		assert.ok( this.setVisibilitySpy.calledOnceWithExactly( true ), "Shows window" );
+		assert.notOk( this.setShowInTaskbarSpy.called, "Doesn't change taskbar state" );
 		assert.ok( this.openModalSpy.calledOnceWith( "quit", {} ), "Opens quit modal" );
 		assert.notOk( this.quitSpy.called, "Doesn't call quit" );
 
@@ -180,6 +194,62 @@ module( "services/nwjs", function( hooks ) {
 			this.openModalSpy.getCall( 1 ).lastArg,
 			"Shares the same modal quit context"
 		);
+		assert.notOk( this.quitSpy.called, "Doesn't call quit" );
+
+		this.setFocusedSpy.resetHistory();
+		this.setVisibilitySpy.resetHistory();
+	});
+
+
+	test( "Close to tray", function( assert ) {
+		/** @this {TestContextServicesNwjs} */
+		/** @type {NwjsService} */
+		const NwjsService = this.owner.lookup( "service:nwjs" );
+		this.guiSettings.closetotray = true;
+
+		NwjsService.close();
+		assert.notOk( this.openModalSpy.called, "Doesn't open quit modal" );
+		assert.notOk( this.setFocusedSpy.called, "Doesn't change focus" );
+		assert.ok( this.setVisibilitySpy.calledOnceWithExactly( false ), "Hides window" );
+		assert.ok( this.setShowInTaskbarSpy.calledOnceWithExactly( false ), "Hides taskbar item" );
+		assert.notOk( this.quitSpy.called, "Doesn't call quit" );
+		this.setVisibilitySpy.resetHistory();
+		this.setShowInTaskbarSpy.resetHistory();
+
+		this.guiSettings.integration = ATTR_GUI_INTEGRATION_TRAY;
+		NwjsService.close();
+		assert.notOk( this.openModalSpy.called, "Doesn't open quit modal" );
+		assert.notOk( this.setFocusedSpy.called, "Doesn't change focus" );
+		assert.ok( this.setVisibilitySpy.calledOnceWithExactly( false ), "Hides window" );
+		assert.ok( this.setShowInTaskbarSpy.calledOnceWithExactly( false ), "Hides taskbar item" );
+		assert.notOk( this.quitSpy.called, "Doesn't call quit" );
+		this.setVisibilitySpy.resetHistory();
+		this.setShowInTaskbarSpy.resetHistory();
+
+		this.guiSettings.integration = ATTR_GUI_INTEGRATION_TASKBAR;
+		NwjsService.close();
+		assert.notOk( this.openModalSpy.called, "Doesn't open quit modal" );
+		assert.notOk( this.setFocusedSpy.called, "Doesn't change focus" );
+		assert.notOk( this.setVisibilitySpy.called, "Doesn't change visibility" );
+		assert.notOk( this.setShowInTaskbarSpy.called, "Doesn't change taskbar state" );
+		assert.ok( this.quitSpy.calledOnce, "Calls quit" );
+		this.quitSpy.resetHistory();
+
+		this.guiSettings.integration = ATTR_GUI_INTEGRATION_BOTH;
+		NwjsService.close( true );
+		assert.notOk( this.openModalSpy.called, "Doesn't open quit modal" );
+		assert.notOk( this.setFocusedSpy.called, "Doesn't change focus" );
+		assert.notOk( this.setVisibilitySpy.called, "Doesn't change visibility" );
+		assert.notOk( this.setShowInTaskbarSpy.called, "Doesn't change taskbar state" );
+		assert.ok( this.quitSpy.calledOnce, "Calls quit" );
+		this.quitSpy.resetHistory();
+
+		NwjsService.streaming.hasStreams = true;
+		NwjsService.close( true );
+		assert.ok( this.setFocusedSpy.calledOnceWithExactly( true ), "Focuses window" );
+		assert.ok( this.setVisibilitySpy.calledOnceWithExactly( true ), "Shows window" );
+		assert.notOk( this.setShowInTaskbarSpy.called, "Doesn't change taskbar state" );
+		assert.ok( this.openModalSpy.calledOnceWith( "quit", {} ), "Opens quit modal" );
 		assert.notOk( this.quitSpy.called, "Doesn't call quit" );
 	});
 
