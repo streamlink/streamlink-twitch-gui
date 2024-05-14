@@ -12,7 +12,7 @@ import {
 } from "nwjs/Window";
 import { platform } from "utils/node/platform";
 import t from "translation-key";
-import { nextTick } from "process";
+import { setTimeout } from "timers";
 
 
 const { "display-name": displayName } = mainConfig;
@@ -101,7 +101,8 @@ export default EmberObject.extend( Evented, {
 			tooltip: displayName
 		});
 		this.tray.on( "click", ( ...args ) => this.trigger( "click", ...args ) );
-		nextTick( () => this.menu.trigger( "update" ) );
+		// (re-)attaching the menu to the new tray icon requires a certain delay
+		setTimeout( () => this.menu.trigger( "update" ), 10 );
 	},
 
 	_removeTray() {
