@@ -2,6 +2,9 @@ channel-button:
     title: "追隨 {name}"
 channel-item:
     offline: 目前離線中
+    followed-since:
+        title: 開始追隨日期
+        format: "{followed_since, date, full}"
     no-status: 無頻道描述
 documentation-link:
     title: 檢視線上文件
