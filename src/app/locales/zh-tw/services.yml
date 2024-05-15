@@ -1,7 +1,7 @@
 notification:
     dispatch:
         single: "{name} 已開始實況"
-        group: 追蹤的頻道已開始實況
+        group: 開始實況
     status:
         disabled: 已停用桌面通知
         enabled: 已啟用桌面通知
