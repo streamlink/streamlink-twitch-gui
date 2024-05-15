@@ -70,6 +70,11 @@ gui:
         title: 最小化按鈕
         description: 點擊最小化的動作
         checkbox: 最小化至通知區域
+    closetotray:
+        title: 關閉視窗動作
+        description: 保持應用程式執行並顯示於工作列
+        requires: 系統工作列整合
+        checkbox: 隱藏視窗，不要關閉程式
     badgelabel:
         title: 應用程式圖示標籤
         description: 顯示於工作列/Dock上的圖示
