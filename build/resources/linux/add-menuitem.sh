@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
+set -eu
 
-APP="streamlink-twitch-gui"
+APP=streamlink-twitch-gui
+HERE=$(dirname -- "$(readlink -f -- "${0}")")
 
-DIR=$(readlink -f "${0}")
-HERE=$(dirname "${DIR}")
+for dep in xdg-desktop-menu xdg-icon-resource; do
+  command -v "${dep}" >/dev/null 2>&1 || { echo >&2 "Missing dependency: ${dep}"; exit 1; }
+done
 
-TMP=$(mktemp --directory)
+# shellcheck disable=SC2064
+TMP=$(mktemp --directory) && trap "rm -rf ${TMP}" EXIT || exit 255
 DESKTOP="${TMP}/${APP}.desktop"
 
 cat << EOF > "${DESKTOP}"
@@ -23,8 +27,5 @@ EOF
 
 xdg-desktop-menu install "${DESKTOP}"
 for SIZE in 16 32 48 64 128 256; do
-	xdg-icon-resource install --size "${SIZE}" "${HERE}/icons/icon-${SIZE}.png" "${APP}"
+  xdg-icon-resource install --size "${SIZE}" "${HERE}/icons/icon-${SIZE}.png" "${APP}"
 done
-
-rm "${DESKTOP}"
-rmdir "${TMP}"
