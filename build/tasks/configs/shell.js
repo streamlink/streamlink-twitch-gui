@@ -18,6 +18,21 @@ module.exports = {
 		].join( " && " )
 	},
 
+	wrapper_linux32: {
+		command: [
+			"cd '<%= dir.releases %>/<%= package.name %>/linux32'",
+			"mv '<%= package.name %>' '_<%= package.name %>'",
+			"mv start.sh '<%= package.name %>'"
+		].join( " && " )
+	},
+	wrapper_linux64: {
+		command: [
+			"cd '<%= dir.releases %>/<%= package.name %>/linux64'",
+			"mv '<%= package.name %>' '_<%= package.name %>'",
+			"mv start.sh '<%= package.name %>'"
+		].join( " && " )
+	},
+
 	// delete "product_string" field from package.json on macOS
 	// https://github.com/nwjs/nw.js/issues/7253
 	packagejson_osx64: {
