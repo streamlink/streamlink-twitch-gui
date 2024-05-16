@@ -79,6 +79,10 @@ function onMove( windowRecord, x, y ) {
 }
 
 function onMaximize( windowRecord, maximized ) {
+	// HACK: the window `restore` event does not trigger on NW.js >=0.80,<0.84,
+	// causing the window state to become broken (see #1015):
+	// Don't store the maximized state for now
+	maximized = false;
 	return save( windowRecord, { maximized } );
 }
 
