@@ -448,7 +448,7 @@ module( "init/instance-initializers/nwjs/window", function( hooks ) {
 				y: 270,
 				width: 960,
 				height: 540,
-				maximized: false // FIXME: restore this
+				maximized: true
 			},
 			"Saves maximized state on maximize"
 		);
@@ -609,7 +609,7 @@ module( "init/instance-initializers/nwjs/window", function( hooks ) {
 				y: 0,
 				width: 1920,
 				height: 1080,
-				maximized: false // FIXME: restore this
+				maximized: true
 			},
 			"Updates the window record only after the event ignore time expires"
 		);
