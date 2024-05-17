@@ -3,7 +3,7 @@ Changelog - Streamlink Twitch GUI
 
 ## master
 
-- Implemented "close to tray" option in GUI settings menu
+- Implemented "close to tray" option in GUI settings menu (see known issue down below)
 - Fixed application window not showing when launching again while already running
 - Fixed missing traditional Chinese translations ([#1011](https://github.com/streamlink/streamlink-twitch-gui/pull/1011), [#1014](https://github.com/streamlink/streamlink-twitch-gui/pull/1014))
 - Changed build config to be able to set specific NW.js versions on individual platforms
@@ -12,6 +12,7 @@ Changelog - Streamlink Twitch GUI
   - Fixes broken window (un)maximize behavior and other window state issues ([#1009](https://github.com/streamlink/streamlink-twitch-gui/issues/1009))
   - Fixes forced window floating mode in tiling window managers on Linux ([#1012](https://github.com/streamlink/streamlink-twitch-gui/issues/1012))
   - Fixes window `blur` event, enabling auto-refresh configuration again
+  - Known issue: application `close` event doesn't work anymore (NW1 issue), breaking confirmation dialog and "close to tray" when not using the close button
 
 Please see [#1015](https://github.com/streamlink/streamlink-twitch-gui/pull/1015) for an overview of various known NW.js issues, as well as a summary about recent issues and thoughts about future development.
 
