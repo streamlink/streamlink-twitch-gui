@@ -11,8 +11,7 @@ Changelog - Streamlink Twitch GUI
   - Fixes unintended window decorations on Linux running on X11, or Gnome (and some other DEs/WMs) on Wayland ([#1008](https://github.com/streamlink/streamlink-twitch-gui/issues/1008))
   - Fixes broken window (un)maximize behavior and other window state issues ([#1009](https://github.com/streamlink/streamlink-twitch-gui/issues/1009))
   - Fixes forced window floating mode in tiling window managers on Linux ([#1012](https://github.com/streamlink/streamlink-twitch-gui/issues/1012))
-  - Fixes window `blur` event, enabling auto-refresh in all cases again (see v2.5.0)
-  - Known issue: application `close` event doesn't work anymore, breaking confirmation dialog (see v2.5.0 - NW1 issue)
+  - Fixes window `blur` event, enabling auto-refresh configuration again
 
 Please see [#1015](https://github.com/streamlink/streamlink-twitch-gui/pull/1015) for an overview of various known NW.js issues, as well as a summary about recent issues and thoughts about future development.
 
