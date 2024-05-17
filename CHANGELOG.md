@@ -1,7 +1,7 @@
 Changelog - Streamlink Twitch GUI
 ===
 
-## master
+## [v2.5.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.5.2) (2024-05-17)
 
 - Implemented "close to tray" option in GUI settings menu (see known issue down below)
 - Fixed application window not showing when launching again while already running
@@ -17,7 +17,7 @@ Changelog - Streamlink Twitch GUI
 Please see [#1015](https://github.com/streamlink/streamlink-twitch-gui/pull/1015) for an overview of various known NW.js issues, as well as a summary about recent issues and thoughts about future development.
 
 
-[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.5.1...master)
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.5.1...v2.5.2)
 
 
 ## [v2.5.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.5.1) (2024-05-06)
