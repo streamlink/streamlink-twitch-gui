@@ -1,6 +1,25 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## master
+
+- Implemented "close to tray" option in GUI settings menu
+- Fixed application window not showing when launching again while already running
+- Fixed missing traditional Chinese translations ([#1011](https://github.com/streamlink/streamlink-twitch-gui/pull/1011), [#1014](https://github.com/streamlink/streamlink-twitch-gui/pull/1014))
+- Changed build config to be able to set specific NW.js versions on individual platforms
+- Upgraded NW.js to 0.83.0 on all platforms and downgraded back to NW1 mode (Chromium 120.0.6099.129 / NodeJS 21.1.0) ([#1015](https://github.com/streamlink/streamlink-twitch-gui/pull/1015))
+  - Fixes unintended window decorations on Linux running on X11, or Gnome (and some other DEs/WMs) on Wayland ([#1008](https://github.com/streamlink/streamlink-twitch-gui/issues/1008))
+  - Fixes broken window (un)maximize behavior and other window state issues ([#1009](https://github.com/streamlink/streamlink-twitch-gui/issues/1009))
+  - Fixes forced window floating mode in tiling window managers on Linux ([#1012](https://github.com/streamlink/streamlink-twitch-gui/issues/1012))
+  - Fixes window `blur` event, enabling auto-refresh in all cases again (see v2.5.0)
+  - Known issue: application `close` event doesn't work anymore, breaking confirmation dialog (see v2.5.0 - NW1 issue)
+
+Please see [#1015](https://github.com/streamlink/streamlink-twitch-gui/pull/1015) for an overview of various known NW.js issues, as well as a summary about recent issues and thoughts about future development.
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.5.1...master)
+
+
 ## [v2.5.1](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.5.1) (2024-05-06)
 
 - Fixed notifications with empty messages not showing on Windows ([#1006](https://github.com/streamlink/streamlink-twitch-gui/pull/1006))
