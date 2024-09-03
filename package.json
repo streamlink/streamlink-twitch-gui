@@ -84,7 +84,7 @@
 		"qunit": "2.17.2",
 		"sinon": "11.1.2",
 		"svgo": "3.0.2",
-		"webpack": "5.76.1",
+		"webpack": "5.94.0",
 		"webpack-subresource-integrity": "5.0.0-alpha.5",
 		"yaml-loader": "0.8.0"
 	},
