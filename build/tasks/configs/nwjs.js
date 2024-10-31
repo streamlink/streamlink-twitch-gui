@@ -17,10 +17,7 @@ module.exports = {
 		macPlist: {
 			CFBundleIdentifier : "<%= main['app-identifier'] %>",
 			CFBundleName       : "<%= main['display-name'] %>",
-			CFBundleDisplayName: "<%= main['display-name'] %>",
-			LSEnvironment      : {
-				PATH: "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-			}
+			CFBundleDisplayName: "<%= main['display-name'] %>"
 		}
 	},
 
