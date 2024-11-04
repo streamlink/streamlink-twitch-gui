@@ -15,6 +15,7 @@ dpkg -l | awk '$1 == "ii" && index($3, "deb.sury.org") > 0 && $2 ~ /^php/ { prin
   | xargs -t sudo apt-get remove libpcre2-posix3 libzip4
 # 2. Revert remaining packages that ppa:ondrej/php and plain Ubuntu share back to the plain Ubuntu version
 dpkg -l | awk -v "CODENAME=${UBUNTU_CODENAME}" '$1 == "ii" && index($3, "deb.sury.org") > 0 { print $2 "/" CODENAME }' \
+  | grep -v -F debsuryorg-archive-keyring \
   | xargs -rt sudo apt-get install --no-install-recommends --allow-downgrades -V
 # 3. Assert that no packages from ppa:ondrej/php are left installed
 ! dpkg -l | grep '^ii' | grep -F 'deb.sury.org'
