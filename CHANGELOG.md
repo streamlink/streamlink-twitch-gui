@@ -1,6 +1,14 @@
 Changelog - Streamlink Twitch GUI
 ===
 
+## [v2.5.3](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.5.3) (2024-11-04)
+
+- Fixed launch issues on macOS 15 "Sequoia" ([#1027](https://github.com/streamlink/streamlink-twitch-gui/issues/1027))
+
+
+[Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.5.2...v2.5.3)
+
+
 ## [v2.5.2](https://github.com/streamlink/streamlink-twitch-gui/releases/tag/v2.5.2) (2024-05-17)
 
 - Implemented "close to tray" option in GUI settings menu (see known issue down below)
