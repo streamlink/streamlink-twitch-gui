@@ -5,7 +5,7 @@ Changelog - Streamlink Twitch GUI
 
 - Fixed NW.js launch issues on macOS 15 "Sequoia" ([#1027](https://github.com/streamlink/streamlink-twitch-gui/issues/1027))
 - Fixed build issue
-- Updated build dependencies
+- Updated build dependencies and AppImage build images
 
 
 [Changelog](https://github.com/streamlink/streamlink-twitch-gui/compare/v2.5.2...v2.5.3)
