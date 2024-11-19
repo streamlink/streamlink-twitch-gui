@@ -80,7 +80,7 @@
 		"lodash": "4.17.21",
 		"mini-css-extract-plugin": "2.7.3",
 		"node-fetch": "3.0.0-beta.9",
-		"nw-builder": "github:bastimeyer/nw-builder#48b4ae8",
+		"nw-builder": "4.11.6",
 		"qunit": "2.17.2",
 		"sinon": "18.0.1",
 		"svgo": "3.0.2",
@@ -126,7 +126,6 @@
 		"grunt-shell/strip-ansi": "^6.0.0",
 		"inject-loader/babel-core/json5": "^2.0.0",
 		"load-grunt-config/lodash": "^4.17.21",
-		"nw-builder/optimist": "https://registry.yarnpkg.com/@favware/skip-dependency/-/skip-dependency-1.1.0.tgz",
 		"sinon/nise/just-extend": "^4.0.0"
 	},
 	"scripts": {
