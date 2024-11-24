@@ -1891,16 +1891,7 @@ crc32-stream@^6.0.0:
     crc-32 "^1.2.0"
     readable-stream "^4.0.0"
 
-cross-spawn@^7.0.0:
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
-  integrity sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==
-  dependencies:
-    path-key "^3.1.0"
-    shebang-command "^2.0.0"
-    which "^2.0.1"
-
-cross-spawn@^7.0.2:
+cross-spawn@^7.0.0, cross-spawn@^7.0.2:
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
   integrity sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==
@@ -4565,10 +4556,10 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nw-builder@4.11.6:
-  version "4.11.6"
-  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-4.11.6.tgz#c59b62130ec9aa0339e3ef0bcd1fc85c193f822c"
-  integrity sha512-q6UGvjVxeLTSYR8fkQYeA+oo8omqT6oRmeUKBhI44MteVDk/efNIaYSd6tgMYPQZyXBWPWq3lU3riZqsjuZpRg==
+nw-builder@4.12.0:
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-4.12.0.tgz#d15f515130893abfdd3db0fa72a6c1ce71440721"
+  integrity sha512-rbSqbS0L1m4FvAIGnVEcwlKgKef3M6k/iPPzXa4UQjY4JrRxrr5d30Mmgnk5jaY77RlpDM+ts4hIrSyj6oTvyg==
   dependencies:
     archiver "^7.0.1"
     axios "^1.7.7"

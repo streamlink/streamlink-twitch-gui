@@ -35,22 +35,16 @@ module.exports = function( grunt ) {
 			argv,
 			mode: 'run'
 		});
-		const nwjs = nwbuild( nwjsOptions );
+		/**
+		 * @type {child_process.ChildProcess | null}
+		 */
+		const nwjs = await nwbuild( nwjsOptions );
 
 
 		function kill() {
-			if ( nwjs.isAppRunning() ) {
-				const appProcess = nwjs.getAppProcess();
-
-				// workaround for the close event log message
-				appProcess.removeAllListeners( "close" );
-				nwjs._nwProcess = undefined;
-
-				// now kill the child process
-				appProcess.kill();
-
+			if ( !nwjs.killed ) {
+				nwjs.kill();
 				grunt.log.debug( "NW.js stopped" );
-				process.removeListener( "exit", kill );
 			}
 		}
 
