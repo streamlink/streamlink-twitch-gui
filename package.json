@@ -119,7 +119,7 @@
 		"**/exec-sh": "^0.4.0",
 		"**/semver": "^7.5.3",
 		"ember-data/chalk": "^4.0.0",
-		"ember-qunit/qunit": "2.17.2",
+		"ember-qunit/qunit": "^2.17.2",
 		"ember-source/chalk": "^4.0.0",
 		"grunt-contrib-copy/chalk": "^4.0.0",
 		"grunt-shell/chalk": "^4.0.0",
