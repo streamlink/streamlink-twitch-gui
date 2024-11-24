@@ -1,6 +1,6 @@
 module.exports = function( grunt ) {
-	grunt.registerTask( "runtest", "Run the tests in NW.js", function() {
-		const NwBuilder = require( "nw-builder" );
+	grunt.registerTask( "runtest", "Run the tests in NW.js", async function() {
+		const nwbuild = (await import( "nw-builder" )).default;
 		const cdpConnect = require( "../common/cdp/connect" );
 		const cdpQUnit = require( "../common/cdp/qunit" );
 		const cdpCoverage = require( "../common/cdp/coverage" );
@@ -32,9 +32,10 @@ module.exports = function( grunt ) {
 		const nwjsOptions = Object.assign( {}, nwOptions, nwPlatformOptions, {
 			flavor: "sdk",
 			files: options.path,
-			argv
+			argv,
+			mode: 'run'
 		});
-		const nwjs = new NwBuilder( nwjsOptions );
+		const nwjs = nwbuild( nwjsOptions );
 
 
 		function kill() {

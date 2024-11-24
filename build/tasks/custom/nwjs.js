@@ -1,5 +1,5 @@
-module.exports = function( grunt ) {
-	const NwBuilder = require( "nw-builder" );
+module.exports = async function( grunt ) {
+	const nwbuild = (await import( "nw-builder" )).default;
 
 	function taskNwjs() {
 		const done = this.async();
@@ -9,13 +9,7 @@ module.exports = function( grunt ) {
 			options.flavor = "sdk";
 		}
 
-		const nw = new NwBuilder( options );
-
-		nw.on( "log", grunt.log.debug );
-		nw.on( "stdout", grunt.log.debug );
-		nw.on( "stderr", grunt.log.debug );
-
-		nw.build()
+		nwbuild(options)
 			.then( () => {
 				grunt.log.ok( "NW.js application created." );
 				done();
