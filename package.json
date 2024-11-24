@@ -80,7 +80,7 @@
 		"lodash": "4.17.21",
 		"mini-css-extract-plugin": "2.7.3",
 		"node-fetch": "3.0.0-beta.9",
-		"nw-builder": "4.12.0",
+		"nw-builder": "4.12.1",
 		"qunit": "2.17.2",
 		"sinon": "18.0.1",
 		"svgo": "3.0.2",

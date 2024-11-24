@@ -30,11 +30,13 @@ module.exports = function( grunt ) {
 			argv.unshift( "--disable-gpu", "--no-sandbox" );
 		}
 		const nwjsOptions = Object.assign( {}, nwOptions, nwPlatformOptions, {
+			mode: "run",
 			flavor: "sdk",
-			files: options.path,
-			argv,
-			mode: 'run'
+			srcDir: options.path,
+			glob: false,
+			argv: argv,
 		});
+
 		/**
 		 * @type {child_process.ChildProcess | null}
 		 */
