@@ -37,11 +37,7 @@ module.exports = function( grunt ) {
 			argv: argv,
 		});
 
-		/**
-		 * @type {child_process.ChildProcess | null}
-		 */
 		const nwjs = await nwbuild( nwjsOptions );
-
 
 		function kill() {
 			if ( !nwjs.killed ) {
