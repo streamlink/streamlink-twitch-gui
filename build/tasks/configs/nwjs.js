@@ -74,7 +74,7 @@ module.exports = {
 				ignoreBinWin32,
 				ignoreBinWin64
 			],
-			// cache: false,
+			cache: false,
 			shaSum: false,
 		}
 	}
