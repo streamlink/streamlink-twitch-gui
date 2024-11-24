@@ -23,7 +23,8 @@ module.exports = {
 
 	win32: {
 		options: {
-			platforms: [ "win32" ],
+			platform: "win",
+			arch: "ia32",
 			version: "0.83.0",
 			srcDir: [
 				...files,
@@ -33,7 +34,8 @@ module.exports = {
 	},
 	win64: {
 		options: {
-			platforms: [ "win64" ],
+			platform: "win",
+			arch: "x64",
 			version: "0.83.0",
 			srcDir: [
 				...files,
@@ -44,7 +46,8 @@ module.exports = {
 
 	osx64: {
 		options: {
-			platforms: [ "osx64" ],
+			platform: "osx",
+			arch: "x64",
 			version: "0.83.0",
 			srcDir: [
 				...files,
@@ -56,7 +59,8 @@ module.exports = {
 
 	linux32: {
 		options: {
-			platforms: [ "linux32" ],
+			platform: "linux",
+			arch: "ia32",
 			version: "0.83.0",
 			srcDir: [
 				...files,
@@ -67,14 +71,14 @@ module.exports = {
 	},
 	linux64: {
 		options: {
-			platforms: [ "linux64" ],
+			platform: "linux",
+			arch: "x64",
 			version: "0.83.0",
 			srcDir: [
 				...files,
 				ignoreBinWin32,
 				ignoreBinWin64
 			],
-			cache: false,
 			shaSum: false,
 		}
 	}
