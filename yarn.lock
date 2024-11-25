@@ -4561,10 +4561,10 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nw-builder@4.13.1:
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-4.13.1.tgz#070d5afa31b52e09271979386bf37d6e1a442063"
-  integrity sha512-Xi9oXmBxSTEw6OjFHnTqtXynlNMuJHrCk7F3R2HO6Y45a+KCHN1Mu5JsN9Xt4B2SI8JetCE8KIIUSO+IfcrWdg==
+nw-builder@4.13.2:
+  version "4.13.2"
+  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-4.13.2.tgz#0744d3e937de9e445b5da97e97a1131ae417cbc3"
+  integrity sha512-oYMFOle1oenOOMa6GVCUATsIZjAyPHC6mEMnJYxqzRzVmdKoBH21NrEW0qC2K1/+Tr7zi1NAGZZkCwDCbg9nlg==
   dependencies:
     archiver "^7.0.1"
     axios "^1.7.7"
