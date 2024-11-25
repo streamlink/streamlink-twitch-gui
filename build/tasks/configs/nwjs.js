@@ -8,9 +8,10 @@ const ignoreBinWin64 = "!<%= dir.tmp_prod %>/bin/win64/**";
 module.exports = {
 	options: {
 		files,
-		buildDir: "<%= dir.releases %>",
+		outDir: "<%= dir.releases %>",
 		cacheDir: "<%= dir.cache %>",
 		flavor  : "normal",
+		shaSum  : false,
 		zip     : false,
 		winIco  : "<%= dir.resources %>/icons/icon-16-32-48-256.ico",
 		macIcns : "<%= dir.resources %>/icons/icon-1024.icns",
@@ -79,7 +80,6 @@ module.exports = {
 				ignoreBinWin32,
 				ignoreBinWin64
 			],
-			shaSum: false,
 		}
 	}
 };
