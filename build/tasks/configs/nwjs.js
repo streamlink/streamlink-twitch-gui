@@ -8,7 +8,6 @@ const ignoreBinWin64 = "!<%= dir.tmp_prod %>/bin/win64/**";
 module.exports = {
 	options: {
 		files,
-		outDir  : "<%= dir.releases %>",
 		cacheDir: "<%= dir.cache %>",
 		flavor  : "normal",
 		shaSum  : false,
@@ -24,6 +23,7 @@ module.exports = {
 				...files,
 				ignoreBinWin64
 			],
+			outDir  : "<%= dir.releases %>/win32",
 			app: {
 				icon: "<%= dir.resources %>/icons/icon-16-32-48-256.ico",
 			}
@@ -37,7 +37,8 @@ module.exports = {
 			srcDir: [
 				...files,
 				ignoreBinWin32
-			]
+			],
+			outDir  : "<%= dir.releases %>/win64",
 		}
 	},
 
@@ -51,6 +52,7 @@ module.exports = {
 				ignoreBinWin32,
 				ignoreBinWin64
 			],
+			outDir  : "<%= dir.releases %>/osx64",
 			app: {
 				icon: "<%= dir.resources %>/icons/icon-1024.icns",
 				CFBundleIdentifier : "<%= main['app-identifier'] %>",
@@ -69,7 +71,8 @@ module.exports = {
 				...files,
 				ignoreBinWin32,
 				ignoreBinWin64
-			]
+			],
+			outDir  : "<%= dir.releases %>/linux32",
 		}
 	},
 	linux64: {
@@ -82,6 +85,7 @@ module.exports = {
 				ignoreBinWin32,
 				ignoreBinWin64
 			],
+			outDir  : "<%= dir.releases %>/linux64",
 		}
 	}
 };
