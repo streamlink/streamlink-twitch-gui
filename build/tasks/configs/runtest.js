@@ -1,5 +1,5 @@
 module.exports = {
 	options: {
-		path: "build/tmp/test/**"
+		path: "./build/tmp/test",
 	}
 };

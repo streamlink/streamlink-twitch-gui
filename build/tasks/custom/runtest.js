@@ -1,6 +1,6 @@
 module.exports = function( grunt ) {
-	grunt.registerTask( "runtest", "Run the tests in NW.js", function() {
-		const NwBuilder = require( "nw-builder" );
+	grunt.registerTask( "runtest", "Run the tests in NW.js", async function() {
+		const { default: nwbuild } = await import( "nw-builder" );
 		const cdpConnect = require( "../common/cdp/connect" );
 		const cdpQUnit = require( "../common/cdp/qunit" );
 		const cdpCoverage = require( "../common/cdp/coverage" );
@@ -30,26 +30,19 @@ module.exports = function( grunt ) {
 			argv.unshift( "--disable-gpu", "--no-sandbox" );
 		}
 		const nwjsOptions = Object.assign( {}, nwOptions, nwPlatformOptions, {
+			mode: "run",
 			flavor: "sdk",
-			files: options.path,
-			argv
+			srcDir: options.path,
+			glob: false,
+			argv: argv,
 		});
-		const nwjs = new NwBuilder( nwjsOptions );
 
+		const nwjs = await nwbuild( nwjsOptions );
 
 		function kill() {
-			if ( nwjs.isAppRunning() ) {
-				const appProcess = nwjs.getAppProcess();
-
-				// workaround for the close event log message
-				appProcess.removeAllListeners( "close" );
-				nwjs._nwProcess = undefined;
-
-				// now kill the child process
-				appProcess.kill();
-
+			if ( !nwjs.killed ) {
+				nwjs.kill();
 				grunt.log.debug( "NW.js stopped" );
-				process.removeListener( "exit", kill );
 			}
 		}
 

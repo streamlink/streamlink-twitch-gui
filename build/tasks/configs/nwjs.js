@@ -8,72 +8,84 @@ const ignoreBinWin64 = "!<%= dir.tmp_prod %>/bin/win64/**";
 module.exports = {
 	options: {
 		files,
-		buildDir: "<%= dir.releases %>",
 		cacheDir: "<%= dir.cache %>",
 		flavor  : "normal",
+		shaSum  : false,
 		zip     : false,
-		winIco  : "<%= dir.resources %>/icons/icon-16-32-48-256.ico",
-		macIcns : "<%= dir.resources %>/icons/icon-1024.icns",
-		macPlist: {
-			CFBundleIdentifier : "<%= main['app-identifier'] %>",
-			CFBundleName       : "<%= main['display-name'] %>",
-			CFBundleDisplayName: "<%= main['display-name'] %>"
-		}
 	},
 
 	win32: {
 		options: {
-			platforms: [ "win32" ],
+			platform: "win",
+			arch: "ia32",
 			version: "0.83.0",
-			files: [
+			srcDir: [
 				...files,
 				ignoreBinWin64
-			]
+			],
+			outDir  : "<%= dir.releases %>/win32",
+			app: {
+				icon: "<%= dir.resources %>/icons/icon-16-32-48-256.ico",
+			}
 		}
 	},
 	win64: {
 		options: {
-			platforms: [ "win64" ],
+			platform: "win",
+			arch: "x64",
 			version: "0.83.0",
-			files: [
+			srcDir: [
 				...files,
 				ignoreBinWin32
-			]
+			],
+			outDir  : "<%= dir.releases %>/win64",
 		}
 	},
 
 	osx64: {
 		options: {
-			platforms: [ "osx64" ],
+			platform: "osx",
+			arch: "x64",
 			version: "0.83.0",
-			files: [
+			srcDir: [
 				...files,
 				ignoreBinWin32,
 				ignoreBinWin64
-			]
+			],
+			outDir  : "<%= dir.releases %>/osx64",
+			app: {
+				icon: "<%= dir.resources %>/icons/icon-1024.icns",
+				CFBundleIdentifier : "<%= main['app-identifier'] %>",
+				CFBundleName       : "<%= main['display-name'] %>",
+				CFBundleDisplayName: "<%= main['display-name'] %>"
+			}
 		}
 	},
 
 	linux32: {
 		options: {
-			platforms: [ "linux32" ],
+			platform: "linux",
+			arch: "ia32",
 			version: "0.83.0",
-			files: [
+			srcDir: [
 				...files,
 				ignoreBinWin32,
 				ignoreBinWin64
-			]
+			],
+			outDir  : "<%= dir.releases %>/linux32",
 		}
 	},
 	linux64: {
 		options: {
-			platforms: [ "linux64" ],
+			platform: "linux",
+			arch: "x64",
 			version: "0.83.0",
-			files: [
+			srcDir: [
 				...files,
 				ignoreBinWin32,
 				ignoreBinWin64
-			]
+			],
+			outDir  : "<%= dir.releases %>/linux64",
 		}
 	}
 };
