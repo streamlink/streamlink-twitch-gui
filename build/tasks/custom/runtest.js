@@ -1,6 +1,6 @@
 module.exports = function( grunt ) {
 	grunt.registerTask( "runtest", "Run the tests in NW.js", async function() {
-		const nwbuild = (await import( "nw-builder" )).default;
+		const { default: nwbuild } = await import( "nw-builder" );
 		const cdpConnect = require( "../common/cdp/connect" );
 		const cdpQUnit = require( "../common/cdp/qunit" );
 		const cdpCoverage = require( "../common/cdp/coverage" );
