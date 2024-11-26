@@ -1,5 +1,5 @@
 module.exports = async function( grunt ) {
-	const nwbuild = (await import( "nw-builder" )).default;
+	const { default: nwbuild } = await import( "nw-builder" );
 
 	function taskNwjs() {
 		const done = this.async();
