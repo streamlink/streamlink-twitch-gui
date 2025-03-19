@@ -3,8 +3,6 @@ name: Test, build and deploy
 on:
   push: {}
   pull_request: {}
-  schedule:
-    - cron: '0 0 * * *'
 
 env:
   CI: true
@@ -66,62 +64,6 @@ jobs:
           file: build/tmp/coverage/coverage.json
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-  debug-build:
-    name: Debug build
-    if: github.repository == 'streamlink/streamlink-twitch-gui' && github.event_name == 'schedule'
-    needs:
-      - test
-    runs-on: ubuntu-20.04
-    permissions:
-      actions: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Check previous run
-        run: ./.github/workflows/check-previous-run.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: Prepare env vars
-        run: |
-          echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct "${GITHUB_REF}")" >> $GITHUB_ENV
-      - name: Install dependencies
-        run: |
-          yarn install --pure-lockfile --no-progress --non-interactive
-          sudo apt-get install pigz
-          ./.github/workflows/install-wine.sh
-      - name: Build
-        run: yarn run grunt clean:tmp_debug webpack:debug
-      - name: Compile & package
-        run: yarn run grunt clean:dist dist:archive_win64:archive_osx64:archive_linux64:debug
-      - name: Get file names for artifact upload
-        id: names
-        run: |
-          echo "archive_win64=$(basename dist/streamlink-twitch-gui-*-win64.zip)" >> $GITHUB_OUTPUT
-          echo "upload_win64=$(basename dist/streamlink-twitch-gui-*-win64.zip | sed 's/\.zip$//')" >> $GITHUB_OUTPUT
-          echo "archive_osx64=$(basename dist/streamlink-twitch-gui-*-macOS.tar.gz)" >> $GITHUB_OUTPUT
-          echo "upload_osx64=$(basename dist/streamlink-twitch-gui-*-macOS.tar.gz | sed 's/\.tar\.gz$//')" >> $GITHUB_OUTPUT
-          echo "archive_linux64=$(basename dist/streamlink-twitch-gui-*-linux64.tar.gz)" >> $GITHUB_OUTPUT
-          echo "upload_linux64=$(basename dist/streamlink-twitch-gui-*-linux64.tar.gz | sed 's/\.tar\.gz$//')" >> $GITHUB_OUTPUT
-      - name: Upload artifact (win64)
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.names.outputs.archive_win64 }}
-          path: dist/${{ steps.names.outputs.archive_win64 }}
-      - name: Upload artifact (osx64)
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.names.outputs.archive_osx64 }}
-          path: dist/${{ steps.names.outputs.archive_osx64 }}
-      - name: Upload artifact (linux64)
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.names.outputs.archive_linux64 }}
-          path: dist/${{ steps.names.outputs.archive_linux64 }}
 
   release:
     name: New release
