@@ -4113,9 +4113,9 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-"nw-builder@github:bastimeyer/nw-builder#48b4ae8":
+"nw-builder@github:bastimeyer/nw-builder#5286bf3":
   version "3.5.7"
-  resolved "https://codeload.github.com/bastimeyer/nw-builder/tar.gz/48b4ae81cd7d0bd2466bc8286882f519f15ba41e"
+  resolved "https://codeload.github.com/bastimeyer/nw-builder/tar.gz/5286bf3d148da21098e20ad7d58462a96d70cf74"
   dependencies:
     archiver "^5.0.0"
     deprecate "~1.0.0"
