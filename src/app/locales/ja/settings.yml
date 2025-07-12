@@ -147,10 +147,6 @@ streaming:
         description: ライブが終了したあとのプレーヤーウィンドウの動作。
         notes: プレーヤーが{provider}を閉じないようにすることもできます。プレーヤー設定も参照してください。
         checkbox: プレーヤーを閉じない
-    disable-ads:
-        title: 広告
-        description: これによりチャンネルが広告を表示中はライブが停止します。詳細はwikiを参照してください。
-        checkbox: ライブ内広告をスキップ
     retry-open:
         title: 起動の試行回数
         description: ライブ起動の試行回数。

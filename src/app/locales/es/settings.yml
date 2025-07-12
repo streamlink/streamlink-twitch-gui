@@ -132,10 +132,6 @@ streaming:
         description: Después de que el stream haya terminado.
         notes: El propio reproductor puede evitar que {provider} lo cierre. Por favor consulte también la configuración del reproductor.
         checkbox: No cerrar el reproductor
-    disable-ads:
-        title: Anuncios
-        description: Esto permitirá que el stream se congele mientras el canal muestra anuncios. Consulte la wiki para obtener más información.
-        checkbox: Omitir anuncios incrustados en los streams
     retry-open:
         title: Intentos de lanzamiento
         description: Número de intentos de lanzamiento del stream.

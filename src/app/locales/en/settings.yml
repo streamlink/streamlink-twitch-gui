@@ -152,10 +152,6 @@ streaming:
         description: After the stream has ended.
         notes: The player itself may prevent {provider} to close it. Please see the player settings as well.
         checkbox: Do not close the player
-    disable-ads:
-        title: Advertisements
-        description: This will let the stream freeze while the channel is showing advertisements. See the wiki for more information.
-        checkbox: Skip advertisements embedded into streams
     retry-open:
         title: Launch attempts
         description: Number of stream launch attempts.

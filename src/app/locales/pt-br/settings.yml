@@ -141,10 +141,6 @@ streaming:
         description: Após a transmissão ter terminado.
         notes: O próprio tocador deve previnir que o {provider} feche. Por favor veja também as configurações do tocador de vídeo.
         checkbox: Não fechar o tocador de vídeo
-    disable-ads:
-        title: Propagandas
-        description: Isto permite que a transmissão congele enquanto o canal está mostrando propagandas. Veja o Wiki para mais detalhes.
-        checkbox: Pular propagandas embutidas nas transmissões
     retry-open:
         title: Tentativas ao abrir transmissão
         description: Número de tentativas ao abrir um transmissão.

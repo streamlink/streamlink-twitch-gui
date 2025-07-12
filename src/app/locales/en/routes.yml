@@ -77,10 +77,6 @@ channel:
                 title: Low latency streaming
                 description: Override the global low latency streaming settings.
                 checkbox: Enable low latency streaming
-            disable-ads:
-                title: Advertisements
-                description: Override the global advertisements settings.
-                checkbox: Skip advertisements embedded into streams
             chat:
                 title: Chat
                 description: Automatically open chat.

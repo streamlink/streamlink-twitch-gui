@@ -31,7 +31,6 @@ export default Fragment.extend({
 	webbrowser_headless: attr( "boolean", { defaultValue: true } ),
 
 	low_latency: attr( "boolean", { defaultValue: false } ),
-	disable_ads: attr( "boolean", { defaultValue: false } ),
 	player_input: attr( "string", { defaultValue: ATTR_STREAMING_PLAYER_INPUT_STDIN } ),
 	player_no_close: attr( "boolean", { defaultValue: false } ),
 	hls_live_edge: attr( "number", { defaultValue: 3, min: 1, max: 10 } ),

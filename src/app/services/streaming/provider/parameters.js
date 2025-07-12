@@ -23,10 +23,6 @@ export const parameters = [
 		"stream.customParameters"
 	),
 	new Parameter(
-		"--twitch-disable-ads",
-		"stream.disable_ads"
-	),
-	new Parameter(
 		"--twitch-low-latency",
 		"stream.low_latency"
 	),

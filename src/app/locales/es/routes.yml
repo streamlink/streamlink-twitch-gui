@@ -76,10 +76,6 @@ channel:
                 title: Streaming de baja latencia
                 description: Reemplaza la configuración global de streams de baja latencia.
                 checkbox: Habilitar streaming de baja latencia
-            disable-ads:
-                title: Anuncios
-                description: Reemplaza la configuración global de los anuncios.
-                checkbox: Omitir anuncios incrustados en streams
             chat:
                 title: Chat
                 description: Abre el chat automáticamente.

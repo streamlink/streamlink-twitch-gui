@@ -76,10 +76,6 @@ channel:
                 title: Transmissão de baixa latência
                 description: Sobrescrever a configuração global de baixa latência.
                 checkbox: Ativar transmissão de baixa latência
-            disable-ads:
-                title: Propagandas
-                description: Sobrescrever a configuração global de propaganadas.
-                checkbox: Pular propaganda nas transmissões
             chat:
                 title: Chat
                 description: Abrir chat automaticamente.

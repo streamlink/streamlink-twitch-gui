@@ -76,10 +76,6 @@ channel:
                 title: 低延迟模式
                 description: 覆盖全局设置中的低延迟模式。
                 checkbox: 开启低延迟模式
-            disable-ads:
-                title: 广告
-                description: 覆盖全局设置中的广告设置。
-                checkbox: 跳过内嵌广告
             chat:
                 title: 聊天室
                 description: 自动开启聊天室。

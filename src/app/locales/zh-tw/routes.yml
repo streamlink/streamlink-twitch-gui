@@ -77,10 +77,6 @@ channel:
                 title: 低延遲串流
                 description: 覆蓋全域設定中低延遲串流設定
                 checkbox: 低延遲串流
-            disable-ads:
-                title: 廣告
-                description: 覆蓋全域設定中的廣告設定
-                checkbox: 跳過內嵌廣告
             chat:
                 title: 聊天室
                 description: 自動開啟聊天室

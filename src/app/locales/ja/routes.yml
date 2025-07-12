@@ -76,10 +76,6 @@ channel:
                 title: 低遅延モード
                 description: 低遅延モードをグローバル設定に上書きします。
                 checkbox: 低遅延モードを有効にする
-            disable-ads:
-                title: 広告
-                description: 広告設定をグローバル設定に上書きします。
-                checkbox: ライブ内広告をスキップする
             chat:
                 title: チャット
                 description: 自動でチャットを開きます。

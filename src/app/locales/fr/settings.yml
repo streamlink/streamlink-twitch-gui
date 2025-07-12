@@ -132,10 +132,6 @@ streaming:
         description: Après la fin du stream.
         notes: Le lecteur lui-même peut empêcher {provider} de le fermer. Veuillez également consulter les paramètres du lecteur.
         checkbox: Ne pas fermer la fenêtre du lecteur
-    disable-ads:
-        title: Publicité
-        description: Ceci laissera le stream se figer pendant que la chaîne affiche des publicités. Voir le wiki pour plus d'informations.
-        checkbox: Ignorer les publicités intégrées dans les flux
     retry-open:
         title: Tentatives de lancement
         description: Nombre de tentatives de lancement de stream.

@@ -84,7 +84,6 @@ export default Model.extend( /** @class Stream */ {
 	user: belongsTo( "twitch-user", { async: false } ),
 	quality: attr( "string" ),
 	low_latency: attr( "boolean" ),
-	disable_ads: attr( "boolean" ),
 	chat_open: attr( "boolean" ),
 	started: attr( "date" ),
 

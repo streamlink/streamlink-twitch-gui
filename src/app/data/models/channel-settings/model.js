@@ -11,7 +11,6 @@ import SettingsNotification from "data/models/settings/notification/fragment";
 const attributes = {
 	streaming_quality: [ SettingsStreaming, "quality", "streaming.quality" ],
 	streaming_low_latency: [ SettingsStreaming, "low_latency", "streaming.low_latency" ],
-	streaming_disable_ads: [ SettingsStreaming, "disable_ads", "streaming.disable_ads" ],
 	streams_chat_open: [ SettingsStreams, "chat_open", "streams.chat_open" ],
 	notification_enabled: [ SettingsNotification, "enabled", "notification.enabled" ]
 };

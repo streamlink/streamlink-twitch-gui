@@ -132,10 +132,6 @@ streaming:
         description: Al termine dello streaming.
         notes: Il lettore stesso può impedire al {provider} di chiuderlo. Si prega di vedere anche le impostazioni del lettore.
         checkbox: Non chiudere il lettore
-    disable-ads:
-        title: Annunci
-        description: Ciò consentirà al flusso di bloccarsi mentre il canale mostra annunci pubblicitari. Vedi il wiki per maggiori informazioni.
-        checkbox: Salta gli annunci pubblicitari incorporati negli stream
     retry-open:
         title: Tentativi di avvio
         description: Numero di tentativi di avvio del flusso.

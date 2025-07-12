@@ -39,21 +39,6 @@
 {{/settings-row}}
 
 {{#settings-row
-	(t "routes.channel.settings.stream.disable-ads.title")
-	(t "routes.channel.settings.stream.disable-ads.description")
-	icon="fa-money"
-	toggle=true
-	enabled=_streaming_disable_ads
-	documentation="--twitch-disable-ads"
-}}
-	{{check-box
-		(t "routes.channel.settings.stream.disable-ads.checkbox")
-		checked=streaming_disable_ads
-		disabled=(bool-not _streaming_disable_ads)
-	}}
-{{/settings-row}}
-
-{{#settings-row
 	(t "routes.channel.settings.stream.chat.title")
 	(t "routes.channel.settings.stream.chat.description")
 	icon="fa-comments"

@@ -130,10 +130,6 @@ streaming:
         description: 当直播结束时不关闭播放器窗口。
         notes: 播放器可能会阻止{provider}关闭它，也请看看播放器设置。
         checkbox: 不关闭播放器
-    disable-ads:
-        title: 广告
-        description: 当频道正在播放广告时，直播将会暂停。查阅wiki获得更多信息。
-        checkbox: 跳过内嵌广告
     retry-open:
         title: 启动尝试次数
         description: 尝试启动直播的次数。
