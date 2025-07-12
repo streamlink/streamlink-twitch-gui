@@ -269,7 +269,7 @@ test( "Version match", async function( assert ) {
 	};
 
 	const provider = { type: "streamlink", flavor: "default" };
-	const minVersion = "6.0.0";
+	const minVersion = "7.5.0";
 	const versionStrings = [
 		[
 			"streamlink {v}\n",
