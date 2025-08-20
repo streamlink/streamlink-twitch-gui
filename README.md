@@ -2,6 +2,9 @@
 ===
 [![Supported platforms][badge-platforms]][Releases] [![Latest release][badge-release]][Releases] [![Open issues][badge-issues]][Issues] [![Gitter IRC][badge-gitter]][Gitter] [![Build status][badge-actions]][Github-actions] [![Code coverage][badge-codecov]][Codecov]
 
+> [!IMPORTANT]
+> Please see [#1045](https://github.com/streamlink/streamlink-twitch-gui/issues/1045) regarding the development status of this project
+
 **A multi-platform [Twitch.tv][Twitch] browser for [Streamlink][Streamlink]**
 
 [![Streamlink Twitch GUI][Preview]][Releases]
