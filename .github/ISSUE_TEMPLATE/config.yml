@@ -3,8 +3,11 @@ contact_links:
   - name: "Streamlink"
     about: "This is the Streamlink Twitch GUI repository. Anything Streamlink related belongs on the Streamlink repository."
     url: https://github.com/streamlink/streamlink
+  - name: "Feature requests"
+    about: "Active development of Streamlink Twitch GUI has ceased. Feature requests will be ignored. Please read the linked issue."
+    url: https://github.com/streamlink/streamlink-twitch-gui/issues/1045
   - name: "Help"
-    about: "The issue tracker is only meant for bug reports and feature requests. Please ask your questions on the discussions forum and look for already existing answers."
+    about: "The issue tracker is only meant for bug reports. Please ask your questions on the discussions forum and look for already existing answers."
     url: https://github.com/streamlink/streamlink-twitch-gui/discussions
   - name: "Wiki"
     about: "Please refer to Streamlink Twitch GUI's wiki first before opening new issues or asking questions."
