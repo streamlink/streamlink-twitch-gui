@@ -4208,7 +4208,7 @@ number-is-nan@^1.0.0:
     graceful-fs-extra "^2.0.0"
     graceful-ncp "^3.0.0"
     inherits "~2.0.1"
-    lodash "~4.17.4"
+    lodash "^4.18.1"
     optimist "^0.6.1"
     plist "^3.0.1"
     progress "~2.0.0"
