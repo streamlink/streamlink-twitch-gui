@@ -43,11 +43,19 @@ module( "services/nwjs", function( hooks ) {
 		});
 
 		this.openModalSpy = sinon.spy();
+		this.windowOpenStub = sinon.stub();
+		this.windowGetAllStub = sinon.stub();
+		this.windowGetStub = sinon.stub();
+		this.settingsSaveStub = sinon.stub().resolves();
 
 		this.guiSettings = {
 			integration: ATTR_GUI_INTEGRATION_BOTH,
 			minimizetotray: false,
 			closetotray: false
+		};
+
+		this.streamingSettings = {
+			twitch_oauth_token: ""
 		};
 
 		this.owner.register( "service:modal", Service.extend({
@@ -66,7 +74,9 @@ module( "services/nwjs", function( hooks ) {
 					get closetotray() {
 						return self.guiSettings.closetotray;
 					}
-				}
+				},
+				streaming: self.streamingSettings,
+				save: self.settingsSaveStub
 			}
 		}) );
 
@@ -84,6 +94,11 @@ module( "services/nwjs", function( hooks ) {
 				},
 				Shell: {
 					openExternal: this.openExternalSpy
+				},
+				Window: {
+					open: this.windowOpenStub,
+					get: this.windowGetStub,
+					getAll: this.windowGetAllStub
 				}
 			},
 			"nwjs/Window": {
@@ -291,6 +306,97 @@ module( "services/nwjs", function( hooks ) {
 		assert.ok(
 			this.openExternalSpy.calledOnceWithExactly( "https://foo.bar/foo/bar" ),
 			"Opens browser with substituted URL"
+		);
+	});
+
+
+	test( "OpenTwitchLogin reads the token from localStorage", async function( assert ) {
+		/** @this {TestContextServicesNwjs} */
+		/** @type {NwjsService} */
+		const NwjsService = this.owner.lookup( "service:nwjs" );
+
+		window.localStorage.removeItem( "twitch-oauth-token" );
+
+		const handlers = {};
+		const fakeWin = {
+			id: "twitch-login",
+			on: ( event, fn ) => { handlers[ event ] = fn; },
+			close: sinon.spy()
+		};
+		this.windowOpenStub.callsFake( ( url, opts, cb ) => {
+			assert.strictEqual(
+				url,
+				"twitch-login.html",
+				"Opens the local Twitch login page"
+			);
+			assert.strictEqual( opts.id, "twitch-login", "Uses the Twitch login window id" );
+			assert.strictEqual( opts.frame, true, "Opens the login window with a native frame" );
+			// simulate the webview page having stored the token
+			window.localStorage.setItem( "twitch-oauth-token", "abcdef0123456789" );
+			cb( fakeWin );
+		});
+
+		const token = await NwjsService.openTwitchLogin();
+
+		assert.strictEqual( token, "abcdef0123456789", "Resolves with the token value" );
+		assert.strictEqual(
+			this.streamingSettings.twitch_oauth_token,
+			"abcdef0123456789",
+			"Stores the token in the streaming settings"
+		);
+		assert.ok( this.settingsSaveStub.calledOnce, "Saves the settings" );
+		assert.ok(
+			fakeWin.close.calledWithExactly( true ),
+			"Closes the login window after success"
+		);
+		assert.strictEqual(
+			window.localStorage.getItem( "twitch-oauth-token" ),
+			null,
+			"Clears the token from localStorage"
+		);
+		assert.ok(
+			this.setVisibilitySpy.calledWith( true ),
+			"Keeps the main window visible"
+		);
+	});
+
+
+	test( "OpenTwitchLogin rejects when the window is closed", async function( assert ) {
+		/** @this {TestContextServicesNwjs} */
+		/** @type {NwjsService} */
+		const NwjsService = this.owner.lookup( "service:nwjs" );
+
+		window.localStorage.removeItem( "twitch-oauth-token" );
+
+		const handlers = {};
+		const closeSpy = sinon.spy();
+		const fakeWin = {
+			id: "twitch-login",
+			on: ( event, fn ) => { handlers[ event ] = fn; },
+			close: closeSpy
+		};
+		this.windowOpenStub.callsFake( ( url, opts, cb ) => cb( fakeWin ) );
+
+		const promise = NwjsService.openTwitchLogin();
+		// user closes the login window before logging in
+		handlers[ "close" ].call( fakeWin );
+		handlers[ "closed" ]();
+
+		let caught;
+		try {
+			await promise;
+		} catch ( e ) {
+			caught = e;
+		}
+
+		assert.ok( caught instanceof Error, "Rejects when the login window is closed" );
+		assert.ok(
+			caught && /closed/i.test( caught.message ),
+			"Rejection has the expected message"
+		);
+		assert.ok(
+			closeSpy.calledWithExactly( true ),
+			"Force-closes the child window so the app stays open"
 		);
 	});
 

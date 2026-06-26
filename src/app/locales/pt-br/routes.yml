@@ -64,6 +64,10 @@ channel:
         vodcast:
             title: Vodcast
             data: O Stream é um Vodcast
+        subscription:
+            title: Assinatura
+            subscribed: "Você é assinante deste canal (Tier {tier})"
+            hint: Configure o token de sessão da Twitch nas configurações de streaming para remover anúncios ao assistir como assinante.
     teams:
         empty: A lista de times está vazia.
     settings:

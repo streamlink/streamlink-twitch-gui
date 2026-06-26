@@ -32,6 +32,13 @@
 				<dt><i class="fa fa-recycle"></i>{{t "routes.channel.details.vodcast.title"}}</dt>
 				<dd>{{t "routes.channel.details.vodcast.data"}}</dd>
 			{{/if}}
+			{{#if isSubscribed}}
+				<dt><i class="fa fa-heart"></i>{{t "routes.channel.details.subscription.title"}}</dt>
+				<dd>
+					{{t "routes.channel.details.subscription.subscribed" tier=subscriptionTier}}
+					<p class="small text-muted">{{t "routes.channel.details.subscription.hint"}}</p>
+				</dd>
+			{{/if}}
 		</dl>
 		<div class="button-list-horizontal">
 			{{open-chat user=user}}

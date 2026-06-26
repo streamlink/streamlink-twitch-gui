@@ -1,6 +1,7 @@
 import Controller from "@ember/controller";
-import { get, computed } from "@ember/object";
+import { get, computed, set } from "@ember/object";
 import { equal } from "@ember/object/computed";
+import { inject as service } from "@ember/service";
 import { streaming as streamingConfig } from "config";
 import {
 	default as SettingsStreaming,
@@ -24,6 +25,11 @@ function settingsAttrMeta( attr, prop ) {
 
 
 export default Controller.extend({
+	/** @type {IntlService} */
+	intl: service(),
+	/** @type {NwjsService} */
+	nwjs: service(),
+
 	platform,
 	providers,
 	contentClientIntegrityDocs,
@@ -69,5 +75,39 @@ export default Controller.extend({
 
 	retryOpenDefault: settingsAttrMeta( "retry_open", "defaultValue" ),
 	retryOpenMin: settingsAttrMeta( "retry_open", "min" ),
-	retryOpenMax: settingsAttrMeta( "retry_open", "max" )
+	retryOpenMax: settingsAttrMeta( "retry_open", "max" ),
+
+	twitchOAuthPending: false,
+	twitchOAuthMessage: null,
+	twitchOAuthMessageClass: null,
+
+	actions: {
+		async connectTwitchAccount( success, failure ) {
+			set( this, "twitchOAuthPending", true );
+			set( this, "twitchOAuthMessage", null );
+			set( this, "twitchOAuthMessageClass", null );
+
+			try {
+				const token = await this.nwjs.openTwitchLogin();
+				set( this, "model.streaming.twitch_oauth_token", token );
+				set(
+					this,
+					"twitchOAuthMessage",
+					this.intl.t( "settings.streaming.twitch-oauth.success" ).toString()
+				);
+				set( this, "twitchOAuthMessageClass", "text-success" );
+				success();
+			} catch ( e ) {
+				set(
+					this,
+					"twitchOAuthMessage",
+					this.intl.t( "settings.streaming.twitch-oauth.error" ).toString()
+				);
+				set( this, "twitchOAuthMessageClass", "text-danger" );
+				failure();
+			} finally {
+				set( this, "twitchOAuthPending", false );
+			}
+		}
+	}
 });

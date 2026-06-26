@@ -63,6 +63,10 @@ function settingsBool( attr ) {
 	});
 }
 
+function normalizeTwitchOAuthToken( token ) {
+	return String( token || "" ).trim().replace( /^oauth\s+/i, "" );
+}
+
 
 // TODO: refactor this module / export
 export {
@@ -176,6 +180,28 @@ export default Model.extend( /** @class Stream */ {
 		/** @this {Stream} */
 		function() {
 			return twitchStreamUrl.replace( "{channel}", this.stream.user_login );
+		}
+	),
+
+	hasTwitchToken: computed(
+		"settings.content.streaming.twitch_oauth_token",
+		/** @this {Stream} */
+		function() {
+			return !!normalizeTwitchOAuthToken(
+				this.settings.content.streaming.twitch_oauth_token
+			);
+		}
+	),
+
+	twitchApiHeaderValue: computed(
+		"settings.content.streaming.twitch_oauth_token",
+		/** @this {Stream} */
+		function() {
+			const token = normalizeTwitchOAuthToken(
+				this.settings.content.streaming.twitch_oauth_token
+			);
+
+			return token ? `Authorization=OAuth ${token}` : "";
 		}
 	)
 

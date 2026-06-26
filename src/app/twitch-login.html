@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<title>Twitch Login</title>
+<style>
+	html, body {
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		background: #0e0e10;
+	}
+	#status {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		padding: 6px 10px;
+		font: 12px sans-serif;
+		color: #efeff1;
+		background: #18181b;
+		z-index: 2;
+	}
+	webview {
+		position: absolute;
+		top: 28px;
+		left: 0;
+		width: 100%;
+		height: calc(100% - 28px);
+		border: 0;
+		display: block;
+	}
+</style>
+</head>
+<body>
+<div id="status">Carregando login da Twitch...</div>
+<webview
+	id="tw"
+	partition="persist:twitchlogin"
+></webview>
+<script>
+(function() {
+	var TOKEN_KEY = "twitch-oauth-token";
+	var TWITCH_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+		+ "AppleWebKit/537.36 (KHTML, like Gecko) "
+		+ "Chrome/120.0.0.0 Safari/537.36";
+	var gui = require( "nw.gui" );
+	var win = gui.Window.get();
+	var webview = document.getElementById( "tw" );
+	var status = document.getElementById( "status" );
+	var done = false;
+
+	// Use a clean desktop Chrome user-agent so Twitch doesn't reject the
+	// embedded browser and end up in a redirect loop.
+	try {
+		webview.setAttribute( "useragent", TWITCH_UA );
+	} catch ( e ) {}
+	try {
+		if ( webview.setUserAgentOverride ) {
+			webview.setUserAgentOverride( TWITCH_UA );
+		}
+	} catch ( e ) {}
+	webview.setAttribute( "src", "https://www.twitch.tv/login" );
+
+	// closing this child window must never quit the whole application
+	win.on( "close", function() {
+		this.close( true );
+	});
+
+	function setStatus( text ) {
+		if ( status ) { status.textContent = text; }
+	}
+
+	function finish( token ) {
+		if ( done ) { return; }
+		done = true;
+		try {
+			localStorage.setItem( TOKEN_KEY, token );
+		} catch ( e ) {}
+		setStatus( "Login detectado! Fechando..." );
+	}
+
+	function readToken() {
+		if ( done ) { return; }
+		if ( !window.chrome || !chrome.cookies ) { return; }
+
+		var storeId;
+		try {
+			storeId = webview.getCookieStoreId();
+		} catch ( e ) {
+			storeId = undefined;
+		}
+
+		var query = {
+			url: "https://www.twitch.tv/",
+			name: "auth-token"
+		};
+		if ( storeId !== undefined && storeId !== null ) {
+			query.storeId = String( storeId );
+		}
+
+		try {
+			chrome.cookies.get( query, function( cookie ) {
+				if ( chrome.runtime && chrome.runtime.lastError ) { return; }
+				if ( cookie && cookie.value ) {
+					finish( String( cookie.value ).trim() );
+				}
+			});
+		} catch ( e ) {}
+	}
+
+	webview.addEventListener( "loadcommit", function() {
+		setStatus( "Faça login na sua conta Twitch..." );
+		readToken();
+	});
+	webview.addEventListener( "contentload", readToken );
+	webview.addEventListener( "loadstop", readToken );
+
+	setInterval( readToken, 1000 );
+})();
+</script>
+</body>
+</html>

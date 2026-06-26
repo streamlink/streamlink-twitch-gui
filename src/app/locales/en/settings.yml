@@ -119,6 +119,16 @@ streaming:
         title: Headless mode
         description: Run the web browser invisibly in headless mode.
         checkbox: Enable headless mode
+    twitch-oauth:
+        title: Ad-free streaming (Turbo / subscriber)
+        description: Provide your Twitch website session token so Streamlink can request ad-free streams when your account has Turbo or a channel subscription.
+        notes: This uses a different token than the application's Twitch login. Ads are only removed if your account is eligible. Embedded ads may still appear.
+        placeholder: Paste OAuth token or use Connect account
+        manual-hint: You can paste the token manually from your browser's developer tools (Network tab, gql.twitch.tv request, Authorization header) or use the button below.
+        connect: Connect Twitch account
+        success: Twitch session token saved successfully.
+        error: Failed to retrieve Twitch session token. Please try again or paste the token manually.
+        warning: Using your website session token in third-party applications may violate Twitch's terms of service. Use at your own risk. The token expires periodically and must be renewed.
     playerinput:
         title: Player input
         description: Defines the method of how the stream data is being fed into the player.

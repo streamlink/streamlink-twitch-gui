@@ -65,6 +65,10 @@ channel:
         vodcast:
             title: Vodcast
             data: Stream is a Vodcast
+        subscription:
+            title: Subscription
+            subscribed: "You are subscribed to this channel (Tier {tier})"
+            hint: Configure a Twitch session token in the streaming settings to remove ads while watching as a subscriber.
     teams:
         empty: The returned list of teams is empty.
     settings:

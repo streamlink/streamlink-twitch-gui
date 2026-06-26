@@ -28,6 +28,7 @@ module.exports = {
 			test: /\.html$/,
 			exclude: [
 				resolve( pApp, "index.html" ),
+				resolve( pApp, "twitch-login.html" ),
 				resolve( pTest, "index.html" )
 			],
 			type: "asset/source"

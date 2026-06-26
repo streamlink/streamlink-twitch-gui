@@ -37,6 +37,7 @@ export default Fragment.extend({
 	stream_segment_threads: attr( "number", { defaultValue: 1, min: 1, max: 10 } ),
 	retry_open: attr( "number", { defaultValue: 1, min: 1, max: MAX } ),
 	retry_streams: attr( "number", { defaultValue: 1, min: 0, max: MAX } ),
+	twitch_oauth_token: attr( "string", { defaultValue: "" } ),
 
 	providerName: computed( "provider", function() {
 		const provider = get( this, "provider" );

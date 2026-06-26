@@ -23,5 +23,23 @@
 		"256": "~assets/icons/icon-256.png"
 	},
 
-	"chromium-args": "--disable-devtools --enable-features=NativeNotifications --disable-smooth-scrolling --disable-features=nw2"
+	"chromium-args": "--disable-devtools --enable-features=NativeNotifications --disable-smooth-scrolling --disable-features=nw2 --enable-webview-tag",
+
+	"webview": {
+		"partitions": [
+			{
+				"name": "persist:twitchlogin",
+				"accessible_resources": [ "*://*.twitch.tv/*" ]
+			}
+		]
+	},
+
+	"permissions": [
+		"cookies",
+		"webview",
+		"*://*.twitch.tv/*"
+	],
+	"host_permissions": [
+		"*://*.twitch.tv/*"
+	]
 }

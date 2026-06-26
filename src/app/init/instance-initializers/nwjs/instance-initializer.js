@@ -12,6 +12,7 @@ import { isDarwin } from "utils/node/platform";
 
 
 const { logDebug, logError } = new Logger( "NWjs EmberJS initializer" );
+const TWITCH_LOGIN_WINDOW_ID = "twitch-login";
 
 
 export default {
@@ -103,7 +104,13 @@ export default {
 
 		// listen for the close event and show the dialog instead of strictly shutting down
 		nwWindow.on( "close", function() {
-			if ( location.pathname !== "/index.html" ) {
+			if ( !location.pathname.endsWith( "index.html" ) ) {
+				nwWindow.close( true );
+				return;
+			}
+
+			// Auxiliary windows (e.g. Twitch login popup) must not quit the application.
+			if ( nwWindow.id === TWITCH_LOGIN_WINDOW_ID ) {
 				nwWindow.close( true );
 				return;
 			}

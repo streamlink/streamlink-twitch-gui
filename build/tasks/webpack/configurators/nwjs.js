@@ -3,6 +3,7 @@ const { pApp, pTest } = require( "../paths" );
 const { isTestTarget } = require( "../utils" );
 
 const webpack = require( "webpack" );
+const CopyWebpackPlugin = require( "copy-webpack-plugin" );
 const HtmlWebpackPlugin = require( "html-webpack-plugin" );
 
 
@@ -51,5 +52,16 @@ module.exports = {
 				template: r( path, "index.html" )
 			})
 		);
+
+		if ( !isTestTarget( target ) ) {
+			config.plugins.push(
+				new CopyWebpackPlugin({
+					patterns: [{
+						from: r( pApp, "twitch-login.html" ),
+						to: "twitch-login.html"
+					}]
+				})
+			);
+		}
 	}
 };

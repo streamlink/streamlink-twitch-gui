@@ -108,6 +108,16 @@ streaming:
         parameters:
             title: Parâmetros personalizados
             placeholder: Adicionar parâmetros personalizados
+    twitch-oauth:
+        title: Transmissão sem anúncios (Turbo / assinante)
+        description: Informe o token de sessão do site da Twitch para o Streamlink solicitar transmissões sem anúncios quando sua conta tiver Turbo ou assinatura no canal.
+        notes: Este token é diferente do login da aplicação. Os anúncios só são removidos se sua conta for elegível. Anúncios incorporados ainda podem aparecer.
+        placeholder: Cole o token OAuth ou use Conectar conta
+        manual-hint: Você pode colar o token manualmente nas ferramentas de desenvolvedor do navegador (aba Network, requisição gql.twitch.tv, cabeçalho Authorization) ou usar o botão abaixo.
+        connect: Conectar conta Twitch
+        success: Token de sessão da Twitch salvo com sucesso.
+        error: Falha ao obter o token de sessão da Twitch. Tente novamente ou cole o token manualmente.
+        warning: Usar o token de sessão do site em aplicativos de terceiros pode violar os termos de serviço da Twitch. Use por sua conta e risco. O token expira periodicamente e precisa ser renovado.
     playerinput:
         title: Entrada de dados do tocador de vídeo
         description: Define o método de entrada de dados da transmissão no tocador de vídeo.

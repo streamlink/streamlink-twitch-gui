@@ -27,6 +27,11 @@ export const parameters = [
 		"stream.low_latency"
 	),
 	new Parameter(
+		"--twitch-api-header",
+		"stream.hasTwitchToken",
+		"stream.twitchApiHeaderValue"
+	),
+	new Parameter(
 		"--webbrowser",
 		null,
 		"stream.webbrowser"
