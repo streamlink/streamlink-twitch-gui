@@ -51,9 +51,7 @@ export function qualityIdToName( obj, qualities, key = "quality", setDefault = t
 	}
 
 	// unexpected value: set to the default value (the first defined quality)
-	if ( !hasOwnProperty.call( qualities, quality ) ) {
-		quality = 0;
-	}
+	quality = 0;
 
 	obj[ key ] = qualities[ quality ].id;
 }
