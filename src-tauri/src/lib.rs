@@ -73,6 +73,7 @@ pub fn run() {
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_store::Builder::new().build())
         .manage(streaming)
         .invoke_handler(tauri::generate_handler![
             get_doctor_report,

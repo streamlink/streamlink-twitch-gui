@@ -27,7 +27,17 @@ pub enum AuthError {
     Store(#[from] store::TokenStoreError),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Twitch returns snake_case; we re-serialize to camelCase for the frontend.
+#[derive(Debug, Deserialize)]
+struct TwitchDeviceCodeBody {
+    device_code: String,
+    expires_in: u64,
+    interval: u64,
+    user_code: String,
+    verification_uri: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DeviceCodeResponse {
     pub device_code: String,
@@ -35,6 +45,18 @@ pub struct DeviceCodeResponse {
     pub interval: u64,
     pub user_code: String,
     pub verification_uri: String,
+}
+
+impl From<TwitchDeviceCodeBody> for DeviceCodeResponse {
+    fn from(value: TwitchDeviceCodeBody) -> Self {
+        Self {
+            device_code: value.device_code,
+            expires_in: value.expires_in,
+            interval: value.interval,
+            user_code: value.user_code,
+            verification_uri: value.verification_uri,
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -109,14 +131,20 @@ pub async fn start_device_flow() -> Result<DeviceCodeResponse, AuthError> {
         .form(&[("client_id", client_id.as_str()), ("scopes", scope.as_str())])
         .send()
         .await?;
-    if !res.status().is_success() {
-        let status = res.status();
-        let body = res.text().await.unwrap_or_default();
+    let status = res.status();
+    let body = res.text().await.unwrap_or_default();
+    if !status.is_success() {
         return Err(AuthError::Message(format!(
             "device code request failed ({status}): {body}"
         )));
     }
-    Ok(res.json().await?)
+    serde_json::from_str::<TwitchDeviceCodeBody>(&body)
+        .map(DeviceCodeResponse::from)
+        .map_err(|e| {
+            AuthError::Message(format!(
+                "device code response decode failed: {e}; body={body}"
+            ))
+        })
 }
 
 pub async fn poll_device_token(device_code: &str) -> Result<Option<AuthSession>, AuthError> {
@@ -291,3 +319,27 @@ pub async fn access_token() -> Result<String, AuthError> {
 pub fn public_client_id() -> Result<String, AuthError> {
     client_id()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn decodes_twitch_device_code_snake_case() {
+        let body = r#"{
+            "device_code":"abc",
+            "expires_in":1800,
+            "interval":5,
+            "user_code":"ABCD1234",
+            "verification_uri":"https://www.twitch.tv/activate?device-code=ABCD1234"
+        }"#;
+        let parsed: TwitchDeviceCodeBody = serde_json::from_str(body).unwrap();
+        let dto = DeviceCodeResponse::from(parsed);
+        assert_eq!(dto.user_code, "ABCD1234");
+        assert_eq!(dto.interval, 5);
+        let json = serde_json::to_string(&dto).unwrap();
+        assert!(json.contains("userCode"));
+        assert!(json.contains("verificationUri"));
+    }
+}
+

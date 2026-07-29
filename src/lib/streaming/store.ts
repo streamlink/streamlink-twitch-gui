@@ -44,7 +44,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
       const session = await invoke<StreamSession>("stream_start", {
         request: {
           channel: stream.user_login,
-          quality: settings.quality,
+          quality: settings.streaming.quality,
           title: stream.title,
           game: stream.game_name,
           streamlinkSource: settings.streamlink.source,
@@ -52,13 +52,22 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           playerId: settings.player.id,
           playerCustomPath: settings.player.customPath,
           playerCustomArgs: settings.player.customArgs,
-          lowLatency: true,
+          lowLatency: settings.streaming.lowLatency,
+          webbrowser: settings.streaming.webbrowser,
+          webbrowserHeadless: settings.streaming.webbrowserHeadless,
+          webbrowserExecutable: settings.streaming.webbrowserExecutable,
+          retryStreams: settings.streaming.retryStreams,
+          retryMax: settings.streaming.retryMax,
+          playerNoClose: settings.streaming.playerNoClose,
           openChat: true,
           chatProvider: settings.chat.provider,
         },
       });
       set((state) => ({
-        sessions: [...state.sessions.filter((s) => s.id !== session.id), session],
+        sessions: [
+          ...state.sessions.filter((s) => s.id !== session.id),
+          session,
+        ],
         activeChatChannel:
           settings.chat.provider === "embedded"
             ? stream.user_login

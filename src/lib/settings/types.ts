@@ -28,18 +28,37 @@ export interface AppSettings {
     customPath: string;
     customArgs: string;
   };
-  quality: string;
+  streaming: {
+    quality: string;
+    lowLatency: boolean;
+    webbrowser: boolean;
+    webbrowserHeadless: boolean;
+    webbrowserExecutable: string;
+    retryStreams: number;
+    retryMax: number;
+    playerNoClose: boolean;
+  };
+  gui: {
+    closeToTray: boolean;
+    minimizeOnWatch: boolean;
+  };
+  notifications: {
+    followedOnline: boolean;
+  };
   sentryEnabled: boolean;
-  closeToTray: boolean;
+  /** @deprecated use streaming.quality */
+  quality?: string;
+  /** @deprecated use gui.closeToTray */
+  closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 1;
+export const SETTINGS_SCHEMA_VERSION = 2;
 
 export const defaultSettings = (): AppSettings => ({
   schemaVersion: SETTINGS_SCHEMA_VERSION,
   theme: "system",
   streamlink: {
-    source: "bundled",
+    source: "system",
     customPath: "",
   },
   player: {
@@ -52,7 +71,22 @@ export const defaultSettings = (): AppSettings => ({
     customPath: "",
     customArgs: "",
   },
-  quality: "best",
+  streaming: {
+    quality: "best",
+    lowLatency: true,
+    webbrowser: true,
+    webbrowserHeadless: true,
+    webbrowserExecutable: "",
+    retryStreams: 1,
+    retryMax: 3,
+    playerNoClose: false,
+  },
+  gui: {
+    closeToTray: true,
+    minimizeOnWatch: false,
+  },
+  notifications: {
+    followedOnline: true,
+  },
   sentryEnabled: true,
-  closeToTray: true,
 });

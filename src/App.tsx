@@ -16,7 +16,7 @@ import {
   SearchPage,
   TeamPage,
 } from "./pages/BrowseExtraPages";
-import { SettingsPage } from "./pages/SettingsPage";
+import { SettingsPage, SettingsBootstrap } from "./pages/SettingsPage";
 import "./styles/global.css";
 
 const queryClient = new QueryClient({
@@ -33,25 +33,27 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <AuthBootstrap>
-          <BrowserRouter>
-            <AppShell>
-              <Routes>
-                <Route path="/" element={<FollowedPage />} />
-                <Route path="/streams" element={<StreamsPage />} />
-                <Route path="/games" element={<GamesPage />} />
-                <Route path="/games/:gameId" element={<GameStreamsPage />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/channel/:login" element={<ChannelPage />} />
-                <Route path="/team/:teamName" element={<TeamPage />} />
-                <Route path="/watching" element={<WatchingPage />} />
-                <Route path="/settings/*" element={<SettingsPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </AppShell>
-          </BrowserRouter>
-        </AuthBootstrap>
+        <SettingsBootstrap>
+          <AuthBootstrap>
+            <BrowserRouter>
+              <AppShell>
+                <Routes>
+                  <Route path="/" element={<FollowedPage />} />
+                  <Route path="/streams" element={<StreamsPage />} />
+                  <Route path="/games" element={<GamesPage />} />
+                  <Route path="/games/:gameId" element={<GameStreamsPage />} />
+                  <Route path="/search" element={<SearchPage />} />
+                  <Route path="/channel/:login" element={<ChannelPage />} />
+                  <Route path="/team/:teamName" element={<TeamPage />} />
+                  <Route path="/watching" element={<WatchingPage />} />
+                  <Route path="/settings/*" element={<SettingsPage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </AppShell>
+            </BrowserRouter>
+          </AuthBootstrap>
+        </SettingsBootstrap>
       </ThemeProvider>
     </QueryClientProvider>
   );

@@ -29,6 +29,12 @@ pub struct LaunchRequest {
     pub player_custom_path: Option<String>,
     pub player_custom_args: Option<String>,
     pub low_latency: Option<bool>,
+    pub webbrowser: Option<bool>,
+    pub webbrowser_headless: Option<bool>,
+    pub webbrowser_executable: Option<String>,
+    pub retry_streams: Option<u32>,
+    pub retry_max: Option<u32>,
+    pub player_no_close: Option<bool>,
     pub open_chat: Option<bool>,
     pub chat_provider: Option<String>,
 }
@@ -224,6 +230,36 @@ pub fn start_stream(
     let mut args: Vec<String> = Vec::new();
     if req.low_latency.unwrap_or(true) {
         args.push("--twitch-low-latency".into());
+    }
+    if req.webbrowser.unwrap_or(true) {
+        args.push("--webbrowser".into());
+        args.push("yes".into());
+        if req.webbrowser_headless.unwrap_or(true) {
+            args.push("--webbrowser-headless".into());
+            args.push("yes".into());
+        }
+        if let Some(exec) = req
+            .webbrowser_executable
+            .as_deref()
+            .filter(|s| !s.is_empty())
+        {
+            args.push("--webbrowser-executable".into());
+            args.push(exec.to_string());
+        }
+    } else {
+        args.push("--webbrowser".into());
+        args.push("no".into());
+    }
+    if let Some(delay) = req.retry_streams {
+        args.push("--retry-streams".into());
+        args.push(delay.to_string());
+    }
+    if let Some(max) = req.retry_max {
+        args.push("--retry-max".into());
+        args.push(max.to_string());
+    }
+    if req.player_no_close.unwrap_or(false) {
+        args.push("--player-no-close".into());
     }
     if let Some(player_path) = &player {
         args.push("--player".into());
