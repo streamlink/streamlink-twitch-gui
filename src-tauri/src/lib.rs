@@ -6,6 +6,7 @@ use auth::{AuthSession, DeviceCodeResponse};
 use doctor::DoctorReport;
 use streaming::{LaunchRequest, SharedStreaming, StreamSession, StreamingState};
 use std::sync::Arc;
+use tauri::{AppHandle, Manager};
 
 #[tauri::command]
 fn get_doctor_report() -> DoctorReport {
@@ -46,10 +47,11 @@ async fn auth_get_access_token() -> Result<String, String> {
 
 #[tauri::command]
 fn stream_start(
+    app: AppHandle,
     state: tauri::State<'_, SharedStreaming>,
     request: LaunchRequest,
 ) -> Result<StreamSession, String> {
-    streaming::start_stream(&state, request).map_err(|e| e.to_string())
+    streaming::start_stream(&app, &state, request).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -67,13 +69,43 @@ fn stream_stop_all(state: tauri::State<'_, SharedStreaming>) -> Result<(), Strin
     streaming::stop_all(&state).map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn app_quit(app: AppHandle) {
+    app.exit(0);
+}
+
+fn init_sentry() -> Option<sentry::ClientInitGuard> {
+    let dsn = std::env::var("SENTRY_DSN").ok().filter(|s| !s.is_empty())?;
+    let mut opts = sentry::apply_defaults(sentry::ClientOptions::default());
+    opts.dsn = Some(dsn.parse().ok()?);
+    opts.release = Some(std::borrow::Cow::Borrowed(env!("CARGO_PKG_VERSION")));
+    opts.send_default_pii = false;
+    Some(sentry::init(opts))
+}
+
+fn show_main_window(app: &AppHandle) {
+    if let Some(window) = app.get_webview_window("main") {
+        let _ = window.show();
+        let _ = window.unminimize();
+        let _ = window.set_focus();
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let _sentry_guard = init_sentry();
     let streaming = Arc::new(StreamingState::new());
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            show_main_window(app);
+        }))
+        .plugin(tauri_plugin_deep_link::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
+        .plugin(tauri_plugin_notification::init())
         .manage(streaming)
         .invoke_handler(tauri::generate_handler![
             get_doctor_report,
@@ -86,8 +118,10 @@ pub fn run() {
             stream_start,
             stream_list,
             stream_stop,
-            stream_stop_all
+            stream_stop_all,
+            app_quit
         ])
+        .setup(|_app| Ok(()))
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -18,4 +18,14 @@ jobs:
       - run: npm test
       - run: npm run build
 
-  # Full Tauri build (with bundled Streamlink) runs on tags / manual dispatch later.
+  rust:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - name: Cargo check
+        working-directory: src-tauri
+        run: cargo check

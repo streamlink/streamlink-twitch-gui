@@ -18,6 +18,11 @@ import {
 } from "./pages/BrowseExtraPages";
 import { SettingsPage, SettingsBootstrap } from "./pages/SettingsPage";
 import { TauriGuardBanner } from "./components/TauriGuardBanner";
+import { DesktopChrome } from "./components/DesktopChrome";
+import { HotkeyProvider } from "./components/HotkeyProvider";
+import { DeepLinkBootstrap } from "./components/DeepLinkAndUpdaterBootstrap";
+import { StreamingBootstrap } from "./components/StreamingBootstrap";
+import { SentryBootstrap } from "./lib/sentry";
 import "./styles/global.css";
 
 const queryClient = new QueryClient({
@@ -35,26 +40,41 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <SettingsBootstrap>
-          <AuthBootstrap>
-            <BrowserRouter>
-              <AppShell>
-                <TauriGuardBanner />
-                <Routes>
-                  <Route path="/" element={<FollowedPage />} />
-                  <Route path="/streams" element={<StreamsPage />} />
-                  <Route path="/games" element={<GamesPage />} />
-                  <Route path="/games/:gameId" element={<GameStreamsPage />} />
-                  <Route path="/search" element={<SearchPage />} />
-                  <Route path="/channel/:login" element={<ChannelPage />} />
-                  <Route path="/team/:teamName" element={<TeamPage />} />
-                  <Route path="/watching" element={<WatchingPage />} />
-                  <Route path="/settings/*" element={<SettingsPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </AppShell>
-            </BrowserRouter>
-          </AuthBootstrap>
+          <SentryBootstrap>
+            <AuthBootstrap>
+              <BrowserRouter>
+                <HotkeyProvider>
+                  <DeepLinkBootstrap>
+                    <StreamingBootstrap>
+                      <AppShell>
+                        <DesktopChrome />
+                        <TauriGuardBanner />
+                        <Routes>
+                          <Route path="/" element={<FollowedPage />} />
+                          <Route path="/streams" element={<StreamsPage />} />
+                          <Route path="/games" element={<GamesPage />} />
+                          <Route
+                            path="/games/:gameId"
+                            element={<GameStreamsPage />}
+                          />
+                          <Route path="/search" element={<SearchPage />} />
+                          <Route
+                            path="/channel/:login"
+                            element={<ChannelPage />}
+                          />
+                          <Route path="/team/:teamName" element={<TeamPage />} />
+                          <Route path="/watching" element={<WatchingPage />} />
+                          <Route path="/settings/*" element={<SettingsPage />} />
+                          <Route path="/about" element={<AboutPage />} />
+                          <Route path="*" element={<Navigate to="/" replace />} />
+                        </Routes>
+                      </AppShell>
+                    </StreamingBootstrap>
+                  </DeepLinkBootstrap>
+                </HotkeyProvider>
+              </BrowserRouter>
+            </AuthBootstrap>
+          </SentryBootstrap>
         </SettingsBootstrap>
       </ThemeProvider>
     </QueryClientProvider>

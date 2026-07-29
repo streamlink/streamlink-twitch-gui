@@ -8,33 +8,38 @@
 .authbar--compact {
   margin-bottom: 0;
   align-items: flex-end;
+  min-height: 1.7rem;
 }
 
 .authbar__user,
 .authbar__device {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .authbar__avatar {
   border-radius: 50%;
+  border: 1px solid var(--border);
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .authbar__name {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
 }
 
 .authbar__code {
   font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 0.2rem 0.4rem;
-  background: var(--bg-elevated);
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.45rem;
+  background: var(--bg-sunken);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  font-variant-numeric: tabular-nums;
 }
 
 .authbar__error {
@@ -43,19 +48,9 @@
   font-size: 0.8rem;
 }
 
-.button-secondary {
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-.button-secondary:hover {
-  background: var(--bg-hover);
-}
-
 .authbar--compact .button-secondary,
 .authbar--compact > button {
-  min-height: 1.75rem;
-  padding: 0.2rem 0.55rem;
-  font-size: 0.8rem;
+  min-height: 1.7rem;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.78rem;
 }

@@ -11,6 +11,25 @@ export type ChatProvider =
 
 export type PlayerId = "mpv" | "vlc" | "mpc" | "potplayer" | "custom";
 
+/** How Streamlink feeds the player. Passthrough is intentionally omitted. */
+export type PlayerInput = "default" | "fifo" | "http";
+
+export interface ChannelOverride {
+  quality?: string;
+  lowLatency?: boolean;
+  disableAds?: boolean;
+  playerId?: PlayerId;
+  playerCustomArgs?: string;
+}
+
+export interface HotkeySettings {
+  refresh: string;
+  focusSearch: string;
+  stopAll: string;
+  openSettings: string;
+  quit: string;
+}
+
 export interface AppSettings {
   schemaVersion: number;
   theme: ThemeMode;
@@ -22,6 +41,7 @@ export interface AppSettings {
     id: PlayerId;
     customPath: string;
     customArgs: string;
+    input: PlayerInput;
   };
   chat: {
     provider: ChatProvider;
@@ -31,6 +51,9 @@ export interface AppSettings {
   streaming: {
     quality: string;
     lowLatency: boolean;
+    disableAds: boolean;
+    /** Start the next Streamlink process before stopping the previous one. */
+    seamlessSwitch: boolean;
     webbrowser: boolean;
     webbrowserHeadless: boolean;
     webbrowserExecutable: string;
@@ -45,6 +68,9 @@ export interface AppSettings {
   notifications: {
     followedOnline: boolean;
   };
+  hotkeys: HotkeySettings;
+  /** Per-channel launch overrides, keyed by lowercase login. */
+  channels: Record<string, ChannelOverride>;
   sentryEnabled: boolean;
   /** @deprecated use streaming.quality */
   quality?: string;
@@ -52,19 +78,28 @@ export interface AppSettings {
   closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 2;
+export const SETTINGS_SCHEMA_VERSION = 5;
+
+export const defaultHotkeys = (): HotkeySettings => ({
+  refresh: "F5",
+  focusSearch: "Ctrl+K",
+  stopAll: "Ctrl+Shift+S",
+  openSettings: "Ctrl+,",
+  quit: "Ctrl+Q",
+});
 
 export const defaultSettings = (): AppSettings => ({
   schemaVersion: SETTINGS_SCHEMA_VERSION,
   theme: "system",
   streamlink: {
-    source: "system",
+    source: "bundled",
     customPath: "",
   },
   player: {
     id: "mpv",
     customPath: "",
     customArgs: "",
+    input: "default",
   },
   chat: {
     provider: "embedded",
@@ -74,6 +109,8 @@ export const defaultSettings = (): AppSettings => ({
   streaming: {
     quality: "best",
     lowLatency: true,
+    disableAds: true,
+    seamlessSwitch: true,
     webbrowser: true,
     webbrowserHeadless: true,
     webbrowserExecutable: "",
@@ -88,5 +125,28 @@ export const defaultSettings = (): AppSettings => ({
   notifications: {
     followedOnline: true,
   },
+  hotkeys: defaultHotkeys(),
+  channels: {},
   sentryEnabled: true,
 });
+
+export function resolveChannelLaunch(
+  settings: AppSettings,
+  login: string,
+): {
+  quality: string;
+  lowLatency: boolean;
+  disableAds: boolean;
+  playerId: PlayerId;
+  playerCustomArgs: string;
+} {
+  const override = settings.channels[login.toLowerCase()] ?? {};
+  return {
+    quality: override.quality || settings.streaming.quality,
+    lowLatency: override.lowLatency ?? settings.streaming.lowLatency,
+    disableAds: override.disableAds ?? settings.streaming.disableAds,
+    playerId: override.playerId ?? settings.player.id,
+    playerCustomArgs:
+      override.playerCustomArgs ?? settings.player.customArgs,
+  };
+}

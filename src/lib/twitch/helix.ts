@@ -242,3 +242,53 @@ export async function getChannelTeams(
     broadcaster_id: broadcasterId,
   });
 }
+
+export interface HelixTeamMember {
+  user_id: string;
+  user_name: string;
+  user_login: string;
+}
+
+export interface HelixTeamDetail extends HelixTeam {
+  users?: HelixTeamMember[];
+  info?: string;
+}
+
+export async function getTeamByName(
+  name: string,
+): Promise<HelixTeamDetail | null> {
+  const page = await helixFetch<HelixPage<HelixTeamDetail>>("teams", {
+    name,
+  });
+  return page.data[0] ?? null;
+}
+
+export async function getStreamsByUserIds(
+  userIds: string[],
+): Promise<HelixStream[]> {
+  if (!userIds.length) return [];
+  const [cid, token] = await Promise.all([clientId(), accessToken()]);
+  const streams: HelixStream[] = [];
+  for (let i = 0; i < userIds.length; i += 100) {
+    const batch = userIds.slice(i, i + 100);
+    const url = new URL("https://api.twitch.tv/helix/streams");
+    for (const id of batch) {
+      url.searchParams.append("user_id", id);
+    }
+    url.searchParams.set("first", String(Math.min(100, batch.length)));
+    const res = await fetch(url, {
+      headers: {
+        "Client-Id": cid,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.status === 401) {
+      clearHelixAuthCache();
+      throw new HelixError("unauthorized", 401);
+    }
+    if (!res.ok) throw new HelixError(await res.text(), res.status);
+    const page = (await res.json()) as HelixPage<HelixStream>;
+    streams.push(...page.data);
+  }
+  return streams;
+}

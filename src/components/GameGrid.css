@@ -1,36 +1,55 @@
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 0.9rem 0.7rem;
 }
 
 .game-card {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.35rem;
   color: inherit;
   text-decoration: none;
+  min-width: 0;
+}
+
+.game-card__frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #000;
+  aspect-ratio: 3 / 4;
+}
+
+.game-card__art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s ease-out;
+}
+
+.game-card:hover .game-card__art {
+  opacity: 0.82;
+}
+
+.game-card__name {
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .game-card:hover .game-card__name {
   color: var(--text);
 }
 
-.game-card__art {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  border-radius: var(--radius);
-  background: var(--bg);
-  border: 1px solid var(--border);
-}
-
-.game-card__name {
-  font-size: 0.72rem;
-  line-height: 1.2;
-  color: var(--text-muted);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.game-card:focus-visible .game-card__frame {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

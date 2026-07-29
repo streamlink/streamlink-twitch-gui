@@ -2,6 +2,7 @@ use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
 use keyring::Entry;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+use std::sync::OnceLock;
 use std::time::{SystemTime, UNIX_EPOCH};
 use thiserror::Error;
 
@@ -25,7 +26,27 @@ pub enum TokenStoreError {
     Serde(#[from] serde_json::Error),
 }
 
+/// keyring 4 / keyring-core require an explicit default store. The v1 helper
+/// can race under concurrent first access, so we install Windows Credential
+/// Manager once ourselves before any Entry::new calls.
+fn ensure_keyring() -> Result<(), TokenStoreError> {
+    static INIT: OnceLock<Result<(), String>> = OnceLock::new();
+    let result = INIT.get_or_init(|| {
+        #[cfg(windows)]
+        {
+            let store = windows_native_keyring_store::Store::new()
+                .map_err(|e| e.to_string())?;
+            keyring_core::set_default_store(store);
+        }
+        Ok(())
+    });
+    result
+        .clone()
+        .map_err(TokenStoreError::Keyring)
+}
+
 fn entry() -> Result<Entry, TokenStoreError> {
+    ensure_keyring()?;
     Entry::new(SERVICE, USER).map_err(|e| TokenStoreError::Keyring(e.to_string()))
 }
 

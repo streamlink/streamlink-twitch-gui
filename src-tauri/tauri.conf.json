@@ -12,6 +12,7 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "Streamlink Twitch GUI",
         "width": 1280,
         "height": 800,
@@ -20,12 +21,26 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; connect-src 'self' https://api.twitch.tv https://id.twitch.tv https://*.twitch.tv https://*.sentry.io; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; frame-src https://www.twitch.tv https://twitch.tv"
+      "csp": "default-src 'self'; connect-src 'self' https://api.twitch.tv https://id.twitch.tv https://*.twitch.tv https://*.sentry.io https://github.com https://*.github.com https://objects.githubusercontent.com; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; frame-src https://www.twitch.tv https://twitch.tv"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY3QjQ5QzIxNEFEMUE1NUQKUldSZHBkRktJWnkwOTN0WTNJZ3hyaUY2eFRDdUdlQU1FYTNURXpISzBxdUNaM1J4Ni96c0RBSloK",
+      "endpoints": [
+        "https://github.com/Wibias/streamlink-twitch-gui/releases/latest/download/latest.json"
+      ]
+    },
+    "deep-link": {
+      "desktop": {
+        "schemes": ["stg"]
+      }
     }
   },
   "bundle": {
     "active": true,
     "targets": ["nsis", "msi"],
+    "createUpdaterArtifacts": true,
     "resources": ["resources/**/*"],
     "icon": [
       "icons/32x32.png",

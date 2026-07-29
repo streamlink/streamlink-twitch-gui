@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   type AppSettings,
+  defaultHotkeys,
   defaultSettings,
   SETTINGS_SCHEMA_VERSION,
 } from "./types";
@@ -11,6 +12,10 @@ interface SettingsState {
   setSettings: (patch: Partial<AppSettings>) => void;
   replaceSettings: (next: AppSettings) => void;
   hydrate: (next: AppSettings) => void;
+  setChannelOverride: (
+    login: string,
+    patch: Partial<AppSettings["channels"][string]> | null,
+  ) => void;
 }
 
 /** Migrate older settings blobs toward the current schema. */
@@ -29,12 +34,19 @@ export function migrateSettings(raw: unknown): AppSettings {
     ...base,
     ...input,
     streamlink: { ...base.streamlink, ...input.streamlink },
-    player: { ...base.player, ...input.player },
+    player: {
+      ...base.player,
+      ...input.player,
+      input: input.player?.input ?? base.player.input,
+    },
     chat: { ...base.chat, ...input.chat },
     streaming: {
       ...base.streaming,
       ...input.streaming,
       quality: input.streaming?.quality ?? input.quality ?? base.streaming.quality,
+      disableAds: input.streaming?.disableAds ?? base.streaming.disableAds,
+      seamlessSwitch:
+        input.streaming?.seamlessSwitch ?? base.streaming.seamlessSwitch,
     },
     gui: {
       ...base.gui,
@@ -43,6 +55,8 @@ export function migrateSettings(raw: unknown): AppSettings {
         input.gui?.closeToTray ?? input.closeToTray ?? base.gui.closeToTray,
     },
     notifications: { ...base.notifications, ...input.notifications },
+    hotkeys: { ...defaultHotkeys(), ...input.hotkeys },
+    channels: { ...base.channels, ...input.channels },
     schemaVersion: SETTINGS_SCHEMA_VERSION,
   };
 
@@ -68,8 +82,26 @@ export const useSettingsStore = create<SettingsState>((set) => ({
           ...state.settings.notifications,
           ...patch.notifications,
         },
+        hotkeys: { ...state.settings.hotkeys, ...patch.hotkeys },
+        channels: patch.channels
+          ? { ...state.settings.channels, ...patch.channels }
+          : state.settings.channels,
       }),
     })),
   replaceSettings: (next) => set({ settings: migrateSettings(next) }),
   hydrate: (next) => set({ settings: migrateSettings(next), hydrated: true }),
+  setChannelOverride: (login, patch) =>
+    set((state) => {
+      const key = login.trim().toLowerCase();
+      if (!key) return state;
+      const channels = { ...state.settings.channels };
+      if (patch === null) {
+        delete channels[key];
+      } else {
+        channels[key] = { ...channels[key], ...patch };
+      }
+      return {
+        settings: migrateSettings({ ...state.settings, channels }),
+      };
+    }),
 }));

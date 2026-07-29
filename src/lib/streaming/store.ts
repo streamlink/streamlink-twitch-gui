@@ -1,7 +1,10 @@
 import { create } from "zustand";
-import { invoke } from "../tauri";
+import { listen } from "@tauri-apps/api/event";
+import { invoke, isTauri } from "../tauri";
 import type { HelixStream } from "../twitch/helix";
 import { useSettingsStore } from "../settings/store";
+import { resolveChannelLaunch } from "../settings/types";
+import { captureAppError } from "../sentry";
 
 export interface StreamSession {
   id: string;
@@ -10,6 +13,18 @@ export interface StreamSession {
   title?: string | null;
   game?: string | null;
   running: boolean;
+  status?: string;
+  phase?: string;
+  ready?: boolean;
+}
+
+export interface StreamStatusEvent {
+  id: string;
+  channel: string;
+  line: string;
+  status: string;
+  phase: string;
+  ready: boolean;
 }
 
 interface WatchingState {
@@ -21,6 +36,27 @@ interface WatchingState {
   stopSession: (id: string) => Promise<void>;
   stopAll: () => Promise<void>;
   setActiveChat: (channel: string | null) => void;
+  applyStatus: (payload: StreamStatusEvent) => void;
+}
+
+let listenersBound = false;
+
+export async function bindStreamingListeners(): Promise<() => void> {
+  if (!isTauri() || listenersBound) {
+    return () => undefined;
+  }
+  listenersBound = true;
+  const unStatus = await listen<StreamStatusEvent>("stream-status", (event) => {
+    useWatchingStore.getState().applyStatus(event.payload);
+  });
+  const unChanged = await listen("stream-sessions-changed", () => {
+    void useWatchingStore.getState().refresh();
+  });
+  return () => {
+    listenersBound = false;
+    unStatus();
+    unChanged();
+  };
 }
 
 export const useWatchingStore = create<WatchingState>((set, get) => ({
@@ -37,22 +73,42 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     }
   },
 
+  applyStatus: (payload) => {
+    set((state) => ({
+      sessions: state.sessions.map((session) =>
+        session.id === payload.id
+          ? {
+              ...session,
+              status: payload.status,
+              phase: payload.phase,
+              ready: payload.ready,
+            }
+          : session,
+      ),
+    }));
+  },
+
   watchStream: async (stream) => {
     set({ error: null });
     const settings = useSettingsStore.getState().settings;
+    const launch = resolveChannelLaunch(settings, stream.user_login);
+    const replaceExisting =
+      settings.streaming.seamlessSwitch && get().sessions.some((s) => s.running);
     try {
       const session = await invoke<StreamSession>("stream_start", {
         request: {
           channel: stream.user_login,
-          quality: settings.streaming.quality,
+          quality: launch.quality,
           title: stream.title,
           game: stream.game_name,
           streamlinkSource: settings.streamlink.source,
           streamlinkCustomPath: settings.streamlink.customPath,
-          playerId: settings.player.id,
+          playerId: launch.playerId,
           playerCustomPath: settings.player.customPath,
-          playerCustomArgs: settings.player.customArgs,
-          lowLatency: settings.streaming.lowLatency,
+          playerCustomArgs: launch.playerCustomArgs,
+          lowLatency: launch.lowLatency,
+          disableAds: launch.disableAds,
+          playerInput: settings.player.input,
           webbrowser: settings.streaming.webbrowser,
           webbrowserHeadless: settings.streaming.webbrowserHeadless,
           webbrowserExecutable: settings.streaming.webbrowserExecutable,
@@ -61,8 +117,14 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           playerNoClose: settings.streaming.playerNoClose,
           openChat: true,
           chatProvider: settings.chat.provider,
+          replaceExisting,
         },
       });
+      if (settings.gui.minimizeOnWatch && isTauri()) {
+        void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
+          void getCurrentWindow().minimize();
+        });
+      }
       set((state) => ({
         sessions: [
           ...state.sessions.filter((s) => s.id !== session.id),
@@ -73,7 +135,10 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
             ? stream.user_login
             : state.activeChatChannel,
       }));
+      // Keep list honest while dual-process handoff may still be running.
+      void get().refresh();
     } catch (err) {
+      captureAppError(err, "stream_start");
       set({
         error: err instanceof Error ? err.message : String(err),
       });

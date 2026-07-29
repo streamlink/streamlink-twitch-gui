@@ -24,39 +24,53 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="shell">
       <aside className="shell__nav" aria-label={tc("appName")}>
         <div className="shell__brand">
-          <span className="shell__brand-mark" aria-hidden />
+          <img
+            className="shell__brand-mark"
+            src="/app-icon.png"
+            width={28}
+            height={28}
+            alt=""
+          />
           <div>
             <div className="shell__brand-title">{tc("appNameShort")}</div>
             <div className="shell__brand-sub">{tc("appTagline")}</div>
           </div>
         </div>
-        <nav className="shell__links" aria-label={t("browse")}>
-          {primaryLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                isActive ? "shell__link shell__link--active" : "shell__link"
-              }
-              end={link.to === "/"}
-            >
-              {t(link.key)}
-            </NavLink>
-          ))}
-        </nav>
-        <nav className="shell__links shell__links--footer" aria-label={t("system")}>
-          {secondaryLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                isActive ? "shell__link shell__link--active" : "shell__link"
-              }
-            >
-              {t(link.key)}
-            </NavLink>
-          ))}
-        </nav>
+
+        <div className="shell__section">
+          <h2 className="shell__section-label">{t("browse")}</h2>
+          <nav className="shell__links" aria-label={t("browse")}>
+            {primaryLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  isActive ? "shell__link shell__link--active" : "shell__link"
+                }
+                end={link.to === "/"}
+              >
+                {t(link.key)}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+
+        <div className="shell__section shell__section--footer">
+          <h2 className="shell__section-label">{t("system")}</h2>
+          <nav className="shell__links" aria-label={t("system")}>
+            {secondaryLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  isActive ? "shell__link shell__link--active" : "shell__link"
+                }
+              >
+                {t(link.key)}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
       </aside>
       <div className="shell__content">
         <header className="shell__top">

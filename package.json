@@ -16,10 +16,15 @@
     "streamlink:fetch": "node scripts/fetch-streamlink.mjs"
   },
   "dependencies": {
+    "@sentry/react": "^10.69.0",
     "@tanstack/react-query": "^5.101.4",
     "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-deep-link": "^2.4.9",
+    "@tauri-apps/plugin-notification": "^2.3.3",
     "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-process": "^2.3.1",
     "@tauri-apps/plugin-store": "^2.4.4",
+    "@tauri-apps/plugin-updater": "^2.10.1",
     "i18next": "^26.3.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

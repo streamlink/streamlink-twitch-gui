@@ -1,0 +1,165 @@
+.settings {
+  max-width: 44rem;
+}
+
+.settings__group {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  padding: 0.55rem 0.85rem 0.7rem;
+  margin: 0 0 0.75rem;
+  min-width: 0;
+}
+
+.settings__group legend {
+  padding: 0 0.3rem;
+  font-weight: 650;
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
+}
+
+.settings__row {
+  display: grid;
+  grid-template-columns: minmax(11rem, 15.5rem) minmax(12rem, 18rem);
+  column-gap: 1rem;
+  align-items: start;
+  margin: 0;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.settings__row:last-child {
+  border-bottom: none;
+  padding-bottom: 0.15rem;
+}
+
+.settings__label {
+  min-width: 0;
+  padding-top: 0.4rem;
+  line-height: 1.3;
+}
+
+.settings__label span {
+  display: block;
+  font-weight: 500;
+}
+
+.settings__label small,
+.settings__check-text small {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  font-weight: 400;
+}
+
+.settings__control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  min-width: 0;
+  max-width: 18rem;
+}
+
+.settings__control .input,
+.settings__control select {
+  width: 100%;
+  max-width: none;
+}
+
+/* Quality always reserves two control rows — no mount/unmount jump */
+.settings__row--stack .settings__control {
+  min-height: calc(2rem + 0.4rem + 2rem);
+}
+
+/* Conditional path stays in layout; faded when unused */
+.settings__row--slot {
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.settings__row--slot .input:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.settings__control .input:disabled {
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+}
+
+.settings__row--check {
+  grid-template-columns: 1.15rem minmax(0, 1fr);
+  column-gap: 0.65rem;
+  align-items: start;
+  cursor: pointer;
+}
+
+.settings__row--check input[type="checkbox"] {
+  width: 0.95rem;
+  height: 0.95rem;
+  margin: 0.4rem 0 0;
+  min-height: 0;
+  max-width: none;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+}
+
+.settings__check-text {
+  padding-top: 0.28rem;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.settings__row--actions {
+  align-items: center;
+}
+
+.settings__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  max-width: 18rem;
+}
+
+.settings__actions .button-secondary {
+  min-height: 2rem;
+}
+
+.settings__hint {
+  margin: 0.15rem 0 0.45rem;
+  font-size: 0.78rem;
+}
+
+.settings__control--row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: none;
+}
+
+.settings__control--row .input {
+  flex: 1 1 8rem;
+  min-width: 7rem;
+}
+
+@media (max-width: 720px) {
+  .settings__row:not(.settings__row--check) {
+    grid-template-columns: 1fr;
+    row-gap: 0.35rem;
+  }
+
+  .settings__label {
+    padding-top: 0;
+  }
+
+  .settings__control,
+  .settings__actions {
+    max-width: none;
+  }
+
+  .settings__row--actions .settings__label {
+    display: none;
+  }
+}

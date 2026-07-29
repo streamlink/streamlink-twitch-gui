@@ -1,113 +1,205 @@
 .stream-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.15rem 1rem;
 }
 
-.stream-card {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
+.stream-item {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
-.stream-card__thumb-link {
-  display: block;
+.stream-item__channel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.55rem;
+  margin-bottom: 0.3rem;
+  padding: 0 0.25rem;
+  text-align: center;
+}
+
+.stream-item__channel a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.stream-item__channel a:hover {
+  color: var(--accent-light);
+}
+
+.stream-item__preview {
   position: relative;
-}
-
-.stream-card__thumb {
-  width: 100%;
+  overflow: hidden;
+  background: #000;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
-  background: var(--bg-hover);
-  display: block;
-}
-
-.stream-card__live {
-  position: absolute;
-  left: 0.3rem;
-  top: 0.3rem;
-}
-
-.stream-card__viewers {
-  position: absolute;
-  right: 0.3rem;
-  bottom: 0.3rem;
-  background: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  font-size: 0.7rem;
-  font-weight: 650;
-  padding: 0.1rem 0.3rem;
   border-radius: 2px;
 }
 
-.stream-card__body {
-  padding: 0.45rem 0.5rem 0.55rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  flex: 1;
+.stream-item__thumb-link {
+  display: block;
+  height: 100%;
 }
 
-.stream-card__title {
-  font-size: 0.82rem;
+.stream-item__thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s ease-out;
+}
+
+.stream-item:hover .stream-item__thumb {
+  opacity: 0.7;
+}
+
+.stream-item__live {
+  position: absolute;
+  left: 0.35rem;
+  top: 0.35rem;
+  z-index: 2;
+}
+
+.stream-item__viewers-chip {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  padding: 0.12rem 0.32rem;
+  border-radius: 2px;
+  transition: opacity 0.18s ease-out;
+}
+
+.stream-item:hover .stream-item__viewers-chip,
+.stream-item__preview:focus-within .stream-item__viewers-chip {
+  opacity: 0;
+}
+
+.stream-item__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  width: 2.75rem;
+  height: 2.75rem;
+  min-height: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease-out, background 0.15s ease-out,
+    border-color 0.15s ease-out;
+}
+
+.stream-item:hover .stream-item__play,
+.stream-item__preview:focus-within .stream-item__play {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.stream-item__play:hover {
+  background: var(--accent);
+  border-color: #fff;
+}
+
+.stream-item__play:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+}
+
+.stream-item__play-icon {
+  margin-left: 2px;
+}
+
+.stream-item__shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  padding: 0.4rem 0.45rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.stream-item:hover .stream-item__shade,
+.stream-item__preview:focus-within .stream-item__shade {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stream-item__title {
   margin: 0;
-  line-height: 1.25;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.stream-card__meta {
-  margin: 0;
+  font-weight: 600;
   font-size: 0.78rem;
-  font-weight: 650;
+  line-height: 1.3;
 }
 
-.stream-card__meta a {
-  color: inherit;
-  text-decoration: none;
+.stream-item__meta {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.35rem;
+  padding: 0 0.15rem;
+  min-height: 1.1rem;
 }
 
-.stream-card__meta a:hover {
-  text-decoration: underline;
-}
-
-.stream-card__game {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.72rem;
+.stream-item__game {
+  min-width: 0;
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.stream-card button {
-  margin-top: 0.35rem;
-  align-self: flex-start;
-  min-height: 1.65rem;
-  padding: 0.2rem 0.5rem;
+  color: var(--text-muted);
   font-size: 0.75rem;
+  text-align: center;
 }
 
 .channel-header {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.85rem;
   align-items: flex-start;
-  margin-bottom: 0.85rem;
-  padding: 0.65rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg-elevated);
+  margin-bottom: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .channel-header__avatar {
   border-radius: 50%;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
+}
+
+.channel-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
 }
 
 .team-list {
@@ -121,7 +213,7 @@
 
 .team-list a {
   display: inline-flex;
-  padding: 0.25rem 0.45rem;
+  padding: 0.25rem 0.5rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--bg-elevated);
@@ -132,4 +224,38 @@
 
 .team-list a:hover {
   background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+
+.team-member-list {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  max-width: 28rem;
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: var(--radius);
+}
+
+.team-member:hover {
+  background: var(--bg-hover);
+}
+
+.team-member a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.team-member a:hover {
+  color: var(--accent-light);
 }

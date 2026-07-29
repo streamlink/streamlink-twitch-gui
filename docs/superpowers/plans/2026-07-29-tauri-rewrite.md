@@ -37,20 +37,22 @@
 
 ## Phase 4 — Browse
 
-- [x] Top streams, games, search, channel, teams (team detail stub)
-- [ ] Virtualized infinite scroll (TanStack Virtual) for very long lists
+- [x] Top streams, games, search, channel, teams (team detail)
+- [x] Cursor pagination / infinite load-more for lists (virtualization optional later)
 
 ## Phase 5 — Settings parity
 
-- [ ] Full settings sections + persist + import/export
-- [ ] Tray, hotkeys, notifications, per-channel
+- [x] Core streaming settings (quality, low latency, disable-ads, player input, webbrowser, retries)
+- [x] Persist + import/export
+- [x] Tray + close-to-tray + minimize-on-watch + followed-live notifications
+- [x] Hotkeys + per-channel overrides
 
 ## Phase 6 — Ship
 
-- [ ] Multi-stream
-- [ ] Sentry (React + Rust), opt-out setting
-- [ ] Updater + deep links + single-instance
-- [ ] `fetch-streamlink` in release CI; NSIS/MSI
+- [x] Multi-stream sessions (Watching list; launch multiple)
+- [x] Sentry (React + Rust), opt-out setting wired to SDK
+- [x] Updater + deep links (`stg://`) + single-instance
+- [x] `fetch-streamlink` + Release CI for NSIS/MSI with bundled Streamlink
 
 ---
 
