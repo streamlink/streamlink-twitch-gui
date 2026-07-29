@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AuthBar } from "../components/AuthBar";
 import { DoctorPanel } from "../components/DoctorPanel";
 import { EmbeddedChat } from "../components/EmbeddedChat";
 import { LoadingGrid } from "../components/LoadingGrid";
@@ -25,17 +24,23 @@ export function FollowedPage() {
   });
 
   return (
-    <section>
-      <h1>{t("routes:followedTitle")}</h1>
-      <AuthBar />
+    <section className="page">
+      <header className="page__header">
+        <div>
+          <h1>{t("routes:followedTitle")}</h1>
+          <p className="page__lede">{t("routes:followedLede")}</p>
+        </div>
+      </header>
       {launchError ? <p className="authbar__error">{launchError}</p> : null}
       {!loggedIn ? <p className="muted">{t("routes:followedLoginRequired")}</p> : null}
-      {query.isLoading ? <p className="muted">{t("common:loading")}</p> : null}
+      {query.isLoading ? <LoadingGrid /> : null}
       {query.isError ? (
         <p className="muted">{(query.error as Error).message}</p>
       ) : null}
       {query.data?.data.length === 0 ? (
-        <p className="muted">{t("routes:followedEmpty")}</p>
+        <div className="empty-panel">
+          <strong>{t("routes:followedEmpty")}</strong>
+        </div>
       ) : null}
       {query.data?.data?.length ? (
         <StreamGrid
@@ -64,14 +69,18 @@ export function StreamsPage() {
   });
 
   return (
-    <section>
-      <h1>{t("routes:streamsTitle")}</h1>
-      <AuthBar />
+    <section className="page">
+      <header className="page__header">
+        <div>
+          <h1>{t("routes:streamsTitle")}</h1>
+          <p className="page__lede">{t("routes:streamsLede")}</p>
+        </div>
+      </header>
       {!loggedIn && !authLoading ? (
         <p className="muted">{t("routes:followedLoginRequired")}</p>
       ) : null}
-      {authLoading || query.isLoading || query.isFetching ? (
-        query.data?.data?.length ? null : <LoadingGrid />
+      {(authLoading || query.isLoading) && !query.data?.data?.length ? (
+        <LoadingGrid />
       ) : null}
       {query.isError ? (
         <p className="muted">{(query.error as Error).message}</p>

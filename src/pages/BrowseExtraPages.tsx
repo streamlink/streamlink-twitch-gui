@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { AuthBar } from "../components/AuthBar";
+import { ChannelResults } from "../components/ChannelResults";
 import { GameGrid } from "../components/GameGrid";
 import { LoadingGrid } from "../components/LoadingGrid";
 import { StreamGrid } from "../components/StreamGrid";
@@ -36,9 +36,13 @@ export function GamesPage() {
   });
 
   return (
-    <section>
-      <h1>{t("routes:gamesTitle")}</h1>
-      <AuthBar />
+    <section className="page">
+      <header className="page__header">
+        <div>
+          <h1>{t("routes:gamesTitle")}</h1>
+          <p className="page__lede">{t("routes:gamesLede")}</p>
+        </div>
+      </header>
       {!loggedIn && !authLoading ? (
         <p className="muted">{t("routes:followedLoginRequired")}</p>
       ) : null}
@@ -102,12 +106,19 @@ export function SearchPage() {
     queryFn: () => searchCategories(submitted),
   });
 
+  const busy = channels.isFetching || categories.isFetching;
+
   return (
-    <section>
-      <h1>{t("routes:searchTitle")}</h1>
-      <AuthBar />
+    <section className="page">
+      <header className="page__header">
+        <div>
+          <h1>{t("routes:searchTitle")}</h1>
+          <p className="page__lede">{t("routes:searchLede")}</p>
+        </div>
+      </header>
+
       <form
-        className="search-form"
+        className="search-hero"
         onSubmit={(e) => {
           e.preventDefault();
           setSubmitted(q.trim());
@@ -115,38 +126,59 @@ export function SearchPage() {
       >
         <input
           type="search"
-          className="input"
+          className="search-hero__input"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder={t("routes:searchPlaceholder")}
           aria-label={t("common:search")}
+          autoFocus
         />
-        <button type="submit">{t("common:search")}</button>
+        <button type="submit" disabled={!loggedIn || !q.trim()}>
+          {t("common:search")}
+        </button>
       </form>
 
-      {!loggedIn ? <p className="muted">{t("routes:followedLoginRequired")}</p> : null}
+      {!loggedIn ? (
+        <p className="muted">{t("routes:followedLoginRequired")}</p>
+      ) : null}
+
+      {!submitted && loggedIn ? (
+        <div className="empty-panel">
+          <strong>{t("routes:searchIdleTitle")}</strong>
+          <p className="muted">{t("routes:searchIdleBody")}</p>
+        </div>
+      ) : null}
 
       {submitted ? (
-        <>
-          <h2>{t("routes:searchChannels")}</h2>
-          <ul className="search-results">
-            {channels.data?.data.map((ch) => (
-              <li key={ch.id}>
-                <Link to={`/channel/${ch.broadcaster_login}`}>
-                  {ch.display_name}
-                  {ch.is_live ? " · LIVE" : ""}
-                </Link>
-                <span className="muted"> {ch.game_name}</span>
-              </li>
-            ))}
-          </ul>
-          <h2>{t("routes:searchCategories")}</h2>
-          {categories.data?.data?.length ? (
-            <GameGrid games={categories.data.data} />
-          ) : (
-            <p className="muted">{t("routes:searchEmpty")}</p>
-          )}
-        </>
+        <div className="search-layout">
+          <section className="search-panel">
+            <div className="search-panel__head">
+              <h2>{t("routes:searchChannels")}</h2>
+              {busy ? <span className="muted">{t("common:loading")}</span> : null}
+            </div>
+            {channels.isError ? (
+              <p className="muted">{(channels.error as Error).message}</p>
+            ) : null}
+            {channels.data ? (
+              <ChannelResults channels={channels.data.data} />
+            ) : busy ? (
+              <LoadingGrid count={4} />
+            ) : null}
+          </section>
+
+          <section className="search-panel">
+            <div className="search-panel__head">
+              <h2>{t("routes:searchCategories")}</h2>
+            </div>
+            {categories.data?.data?.length ? (
+              <GameGrid games={categories.data.data} />
+            ) : !busy ? (
+              <p className="muted">{t("routes:searchEmpty")}</p>
+            ) : (
+              <LoadingGrid count={6} />
+            )}
+          </section>
+        </div>
       ) : null}
     </section>
   );
@@ -184,17 +216,16 @@ export function ChannelPage() {
   );
 
   return (
-    <section>
+    <section className="page">
       <h1>{title}</h1>
-      <AuthBar />
       {!loggedIn ? <p className="muted">{t("routes:followedLoginRequired")}</p> : null}
       {user ? (
         <div className="channel-header">
           <img
             src={user.profile_image_url}
             alt=""
-            width={64}
-            height={64}
+            width={72}
+            height={72}
             className="channel-header__avatar"
           />
           <div>
@@ -219,7 +250,7 @@ export function ChannelPage() {
       {teamsQuery.data?.data?.length ? (
         <>
           <h2>{t("routes:channelTeams")}</h2>
-          <ul className="search-results">
+          <ul className="team-list">
             {teamsQuery.data.data.map((team) => (
               <li key={team.id}>
                 <Link to={`/team/${team.team_name}`}>{team.team_display_name}</Link>

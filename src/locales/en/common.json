@@ -1,5 +1,7 @@
 {
   "appName": "Streamlink Twitch GUI",
+  "appNameShort": "Streamlink",
+  "appTagline": "Twitch GUI",
   "loading": "Loading…",
   "error": "Something went wrong",
   "retry": "Retry",

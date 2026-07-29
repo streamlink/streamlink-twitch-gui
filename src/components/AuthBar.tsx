@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useAuthStore } from "../lib/auth/store";
 import "./AuthBar.css";
 
-export function AuthBar() {
+export function AuthBar({ compact = false }: { compact?: boolean }) {
   const { t } = useTranslation("common");
   const session = useAuthStore((s) => s.session);
   const device = useAuthStore((s) => s.device);
@@ -13,19 +13,25 @@ export function AuthBar() {
   const logout = useAuthStore((s) => s.logout);
 
   if (loading && !session) {
-    return <div className="authbar muted">{t("loading")}</div>;
+    return (
+      <div className={`authbar${compact ? " authbar--compact" : ""}`}>
+        <span className="muted">{t("loading")}</span>
+      </div>
+    );
   }
 
   return (
-    <div className="authbar">
+    <div className={`authbar${compact ? " authbar--compact" : ""}`}>
       {error ? <p className="authbar__error">{error}</p> : null}
       {device ? (
         <div className="authbar__device">
-          <p>
-            {t("authDevicePrompt", { code: device.userCode })}
-          </p>
+          <p>{t("authDevicePrompt", { code: device.userCode })}</p>
           <code className="authbar__code">{device.userCode}</code>
-          <button type="button" className="button-secondary" onClick={cancelLogin}>
+          <button
+            type="button"
+            className="button-secondary"
+            onClick={cancelLogin}
+          >
             {t("cancel")}
           </button>
         </div>
@@ -41,13 +47,23 @@ export function AuthBar() {
               height={28}
             />
           ) : null}
-          <span>{session.displayName ?? session.login}</span>
-          <button type="button" className="button-secondary" onClick={() => void logout()}>
+          <span className="authbar__name">
+            {session.displayName ?? session.login}
+          </span>
+          <button
+            type="button"
+            className="button-secondary"
+            onClick={() => void logout()}
+          >
             {t("logout")}
           </button>
         </div>
       ) : !device ? (
-        <button type="button" onClick={() => void startLogin()} disabled={loading}>
+        <button
+          type="button"
+          onClick={() => void startLogin()}
+          disabled={loading}
+        >
           {t("login")}
         </button>
       ) : null}
