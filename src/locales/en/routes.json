@@ -1,0 +1,21 @@
+{
+  "followedTitle": "Followed streams",
+  "followedEmpty": "No followed channels are live right now.",
+  "followedLoginRequired": "Log in to see streams from channels you follow.",
+  "streamsTitle": "Top streams",
+  "gamesTitle": "Top games",
+  "searchTitle": "Search",
+  "searchPlaceholder": "Search channels or categories…",
+  "watchingTitle": "Watching",
+  "watchingEmpty": "No active streams.",
+  "settingsTitle": "Settings",
+  "aboutTitle": "About",
+  "aboutBlurb": "A desktop Twitch browser for Streamlink — browse live channels and open them in your player.",
+  "doctorTitle": "Setup check",
+  "doctorStreamlinkOk": "Streamlink {{version}} found",
+  "doctorStreamlinkMissing": "Streamlink not found",
+  "doctorPlayerOk": "Player {{name}} found",
+  "doctorPlayerMissing": "No video player found (mpv recommended)",
+  "doctorChatOk": "Chatterino found",
+  "doctorChatMissing": "Chatterino not found (optional if using embedded chat)"
+}

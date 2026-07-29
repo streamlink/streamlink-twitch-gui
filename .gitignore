@@ -1,28 +1,35 @@
-# OS and editors
-.DS_Store
-._*
-Thumbs.db
-Desktop.ini
-*.bak
-.cache
-.project
-.settings
-.tmproj
-*.esproj
-nbproject
-*.sublime-project
-*.sublime-workspace
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Tauri / Rust
+src-tauri/target
+src-tauri/resources/streamlink/**
+!src-tauri/resources/README.md
+
+# Legacy yarn artifacts if reintroduced
+legacy/node_modules
+legacy/build/cache
+legacy/build/releases
+legacy/build/tmp
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
 .idea
-
-# gh-pages
-/_site/
-
-# dependencies
-/node_modules/
-
-# builds
-/build/cache/
-/build/releases/
-/build/tmp/
-/build/travis/data/
-/dist/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

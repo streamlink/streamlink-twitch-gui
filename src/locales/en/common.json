@@ -1,0 +1,17 @@
+{
+  "appName": "Streamlink Twitch GUI",
+  "loading": "Loading…",
+  "error": "Something went wrong",
+  "retry": "Retry",
+  "save": "Save",
+  "cancel": "Cancel",
+  "close": "Close",
+  "search": "Search",
+  "watch": "Watch",
+  "stop": "Stop",
+  "settings": "Settings",
+  "about": "About",
+  "login": "Log in with Twitch",
+  "logout": "Log out",
+  "notFound": "Page not found"
+}

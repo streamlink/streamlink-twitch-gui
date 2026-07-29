@@ -1,0 +1,12 @@
+{
+  "generic": "An unexpected error occurred.",
+  "network": "Network request failed.",
+  "unauthorized": "Session expired. Please log in again.",
+  "rateLimited": "Twitch rate limit hit. Retrying shortly…",
+  "streamlinkNotFound": "Streamlink executable not found.",
+  "streamlinkVersion": "Streamlink {{found}} is too old. Need {{minimum}}+.",
+  "playerNotFound": "Video player not found.",
+  "launchFailed": "Failed to start the stream.",
+  "streamOffline": "Channel is offline.",
+  "authFailed": "Twitch login failed."
+}

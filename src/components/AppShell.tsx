@@ -1,0 +1,41 @@
+import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import "./AppShell.css";
+
+const links = [
+  { to: "/", key: "followed" as const },
+  { to: "/streams", key: "streams" as const },
+  { to: "/games", key: "games" as const },
+  { to: "/search", key: "search" as const },
+  { to: "/watching", key: "watching" as const },
+  { to: "/settings", key: "settings" as const },
+  { to: "/about", key: "about" as const },
+];
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation("nav");
+  const { t: tc } = useTranslation("common");
+
+  return (
+    <div className="shell">
+      <aside className="shell__nav" aria-label={tc("appName")}>
+        <div className="shell__brand">{tc("appName")}</div>
+        <nav className="shell__links">
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) =>
+                isActive ? "shell__link shell__link--active" : "shell__link"
+              }
+              end={link.to === "/"}
+            >
+              {t(link.key)}
+            </NavLink>
+          ))}
+        </nav>
+      </aside>
+      <main className="shell__main">{children}</main>
+    </div>
+  );
+}
