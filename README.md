@@ -11,7 +11,8 @@ npm install
 npm run tauri:dev
 ```
 
-`npm run dev` is the same as `tauri:dev` (desktop shell). For the Vite UI only (no Streamlink/login APIs), use `npm run dev:web`.
+`npm run tauri:dev` starts the desktop app (Vite + Tauri).  
+`npm run dev` is Vite only (browser) — no Streamlink/login APIs.
 
 ## Requirements
 
