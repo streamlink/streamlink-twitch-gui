@@ -1,26 +1,16 @@
 .stream-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.05rem;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 0.65rem;
 }
 
 .stream-card {
-  background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition:
-    border-color 140ms ease,
-    transform 140ms ease,
-    box-shadow 140ms ease;
-}
-
-.stream-card:hover {
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
 }
 
 .stream-card__thumb-link {
@@ -38,34 +28,34 @@
 
 .stream-card__live {
   position: absolute;
-  left: 0.45rem;
-  top: 0.45rem;
+  left: 0.3rem;
+  top: 0.3rem;
 }
 
 .stream-card__viewers {
   position: absolute;
-  right: 0.45rem;
-  bottom: 0.45rem;
-  background: rgba(0, 0, 0, 0.72);
+  right: 0.3rem;
+  bottom: 0.3rem;
+  background: rgba(0, 0, 0, 0.75);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 650;
-  padding: 0.2rem 0.4rem;
-  border-radius: 6px;
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
 }
 
 .stream-card__body {
-  padding: 0.8rem 0.9rem 1rem;
+  padding: 0.45rem 0.5rem 0.55rem;
   display: flex;
   flex-direction: column;
-  gap: 0.28rem;
+  gap: 0.15rem;
   flex: 1;
 }
 
 .stream-card__title {
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.25;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -74,7 +64,7 @@
 
 .stream-card__meta {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 650;
 }
 
@@ -84,38 +74,40 @@
 }
 
 .stream-card__meta a:hover {
-  color: var(--accent);
+  text-decoration: underline;
 }
 
 .stream-card__game {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .stream-card button {
-  margin-top: auto;
+  margin-top: 0.35rem;
   align-self: flex-start;
-  margin-top: 0.55rem;
+  min-height: 1.65rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
 }
 
 .channel-header {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   align-items: flex-start;
-  margin-bottom: 1.25rem;
-  padding: 1rem;
+  margin-bottom: 0.85rem;
+  padding: 0.65rem;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius);
   background: var(--bg-elevated);
 }
 
 .channel-header__avatar {
   border-radius: 50%;
-  border: 2px solid color-mix(in srgb, var(--accent) 50%, var(--border));
+  border: 1px solid var(--border);
 }
 
 .team-list {
@@ -124,20 +116,20 @@
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .team-list a {
   display: inline-flex;
-  padding: 0.4rem 0.7rem;
-  border-radius: 999px;
+  padding: 0.25rem 0.45rem;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--bg-elevated);
   color: var(--text);
   text-decoration: none;
-  font-size: 0.88rem;
+  font-size: 0.8rem;
 }
 
 .team-list a:hover {
-  border-color: var(--accent);
+  background: var(--bg-hover);
 }

@@ -3,81 +3,63 @@
   grid-template-columns: var(--nav-width) 1fr;
   height: 100%;
   min-height: 100%;
-  background:
-    radial-gradient(
-      1200px 600px at -10% -20%,
-      color-mix(in srgb, var(--accent) 18%, transparent),
-      transparent 55%
-    ),
-    radial-gradient(
-      900px 500px at 110% 10%,
-      color-mix(in srgb, #00d4ff 8%, transparent),
-      transparent 50%
-    ),
-    var(--bg);
+  background: var(--bg);
 }
 
 .shell__nav {
-  background: color-mix(in srgb, var(--bg-elevated) 88%, transparent);
+  background: var(--bg-elevated);
   border-right: 1px solid var(--border);
-  padding: 1.1rem 0.85rem;
+  padding: 0.65rem 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  backdrop-filter: blur(10px);
+  gap: 0.75rem;
 }
 
 .shell__brand {
   display: flex;
-  gap: 0.7rem;
+  gap: 0.5rem;
   align-items: center;
-  padding: 0.35rem 0.45rem 0.6rem;
+  padding: 0.25rem 0.4rem;
 }
 
 .shell__brand-mark {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 9px;
-  background:
-    linear-gradient(145deg, var(--accent), #5b21b6 55%, #00d4ff);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 3px;
+  background: var(--accent);
   flex-shrink: 0;
 }
 
 .shell__brand-title {
-  font-weight: 750;
-  font-size: 0.95rem;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-size: 0.85rem;
   line-height: 1.15;
 }
 
 .shell__brand-sub {
   color: var(--text-muted);
-  font-size: 0.72rem;
-  margin-top: 0.12rem;
+  font-size: 0.7rem;
+  margin-top: 0.05rem;
 }
 
 .shell__links {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.1rem;
 }
 
 .shell__links--footer {
   margin-top: auto;
-  padding-top: 0.75rem;
+  padding-top: 0.5rem;
   border-top: 1px solid var(--border);
 }
 
 .shell__link {
   color: var(--text-muted);
   text-decoration: none;
-  padding: 0.55rem 0.7rem;
-  border-radius: 9px;
-  font-size: 0.92rem;
-  transition:
-    background 120ms ease,
-    color 120ms ease;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
 }
 
 .shell__link:hover {
@@ -86,10 +68,11 @@
 }
 
 .shell__link--active {
-  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  background: var(--bg-hover);
   color: var(--text);
   font-weight: 650;
-  box-shadow: inset 3px 0 0 var(--accent);
+  border-left: 2px solid var(--accent);
+  padding-left: calc(0.5rem - 2px);
 }
 
 .shell__content {
@@ -103,11 +86,12 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0.85rem 1.35rem 0;
+  padding: 0.5rem 0.85rem 0;
+  border-bottom: 1px solid transparent;
 }
 
 .shell__main {
-  padding: 0.85rem 1.5rem 1.75rem;
+  padding: 0.65rem 0.85rem 1rem;
   overflow: auto;
   flex: 1;
 }
@@ -135,6 +119,8 @@
   }
 
   .shell__link--active {
-    box-shadow: none;
+    border-left: 0;
+    border-bottom: 2px solid var(--accent);
+    padding-left: 0.5rem;
   }
 }
