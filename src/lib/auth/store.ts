@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { invoke } from "@tauri-apps/api/core";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import { clearHelixAuthCache } from "../twitch/helix";
+import { invoke, isTauri } from "../tauri";
 
 export interface AuthSession {
   loggedIn: boolean;
@@ -48,6 +49,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   refreshSession: async () => {
     set({ loading: true, error: null });
+    if (!isTauri()) {
+      set({
+        session: { loggedIn: false, scopes: [] },
+        loading: false,
+        error: null,
+      });
+      return;
+    }
     try {
       const session = await invoke<AuthSession>("auth_get_session");
       set({ session, loading: false });
@@ -63,6 +72,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   startLogin: async () => {
     clearPoll();
     set({ error: null, device: null, loading: true });
+    if (!isTauri()) {
+      set({
+        loading: false,
+        error:
+          "Run `npm run tauri:dev` to log in — browser Vite has no desktop APIs.",
+      });
+      return;
+    }
     try {
       const device = await invoke<DeviceCodeResponse>("auth_start_device_login");
       set({ device, loading: false });
@@ -112,7 +129,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   logout: async () => {
     clearPoll();
-    await invoke("auth_logout");
+    if (isTauri()) {
+      await invoke("auth_logout");
+    }
+    clearHelixAuthCache();
     set({ session: { loggedIn: false, scopes: [] }, device: null });
   },
 }));

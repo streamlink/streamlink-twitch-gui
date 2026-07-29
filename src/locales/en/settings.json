@@ -18,6 +18,7 @@
   "streamlinkCustom": "Custom path",
   "streamlinkCustomPath": "Streamlink executable",
   "quality": "Quality",
+  "qualityCustom": "Custom quality",
   "lowLatency": "Twitch low latency",
   "lowLatencyHint": "Passes --twitch-low-latency to Streamlink. Also tune your player buffer.",
   "webbrowser": "Enable Streamlink webbrowser API",

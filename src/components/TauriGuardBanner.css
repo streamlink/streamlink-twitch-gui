@@ -1,0 +1,19 @@
+.tauri-guard {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border));
+  background: color-mix(in srgb, var(--danger) 12%, var(--bg-elevated));
+  border-radius: var(--radius);
+}
+
+.tauri-guard p {
+  margin: 0.35rem 0 0.55rem;
+}
+
+.tauri-guard code {
+  display: inline-block;
+  padding: 0.25rem 0.45rem;
+  background: var(--bg);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}

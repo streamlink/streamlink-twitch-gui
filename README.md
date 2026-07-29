@@ -8,8 +8,10 @@ The previous NW.js + Ember application lives in `legacy/` for reference.
 
 ```bash
 npm install
-npm run tauri dev
+npm run tauri:dev
 ```
+
+`npm run dev` is the same as `tauri:dev` (desktop shell). For the Vite UI only (no Streamlink/login APIs), use `npm run dev:web`.
 
 ## Requirements
 

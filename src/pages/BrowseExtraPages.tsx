@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { AuthBar } from "../components/AuthBar";
 import { GameGrid } from "../components/GameGrid";
+import { LoadingGrid } from "../components/LoadingGrid";
 import { StreamGrid } from "../components/StreamGrid";
 import { useAuthStore } from "../lib/auth/store";
 import { useWatchingStore } from "../lib/streaming/store";
@@ -24,19 +25,29 @@ function useLoggedIn() {
 }
 
 export function GamesPage() {
-  const { t } = useTranslation("routes");
+  const { t } = useTranslation(["routes", "common"]);
   const loggedIn = useLoggedIn();
+  const authLoading = useAuthStore((s) => s.loading);
   const query = useQuery({
     queryKey: ["top-games"],
     enabled: loggedIn,
     queryFn: () => getTopGames(),
+    staleTime: 60_000,
   });
 
   return (
     <section>
-      <h1>{t("gamesTitle")}</h1>
+      <h1>{t("routes:gamesTitle")}</h1>
       <AuthBar />
-      {!loggedIn ? <p className="muted">{t("followedLoginRequired")}</p> : null}
+      {!loggedIn && !authLoading ? (
+        <p className="muted">{t("routes:followedLoginRequired")}</p>
+      ) : null}
+      {(authLoading || query.isLoading) && !query.data?.data?.length ? (
+        <LoadingGrid count={8} />
+      ) : null}
+      {query.isError ? (
+        <p className="muted">{(query.error as Error).message}</p>
+      ) : null}
       {query.data?.data?.length ? <GameGrid games={query.data.data} /> : null}
     </section>
   );

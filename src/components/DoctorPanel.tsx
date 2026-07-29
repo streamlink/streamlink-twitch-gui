@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
+import { invoke, isTauri } from "../lib/tauri";
 
 interface ToolStatus {
   found: boolean;
@@ -23,6 +23,10 @@ export function DoctorPanel() {
 
   useEffect(() => {
     let cancelled = false;
+    if (!isTauri()) {
+      setError("Desktop shell required (`npm run tauri:dev`).");
+      return;
+    }
     invoke<DoctorReport>("get_doctor_report")
       .then((data) => {
         if (!cancelled) {

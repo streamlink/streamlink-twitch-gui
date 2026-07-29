@@ -14,5 +14,7 @@
   "login": "Log in with Twitch",
   "logout": "Log out",
   "authDevicePrompt": "Open the browser page and enter this code: {{code}}",
-  "notFound": "Page not found"
+  "notFound": "Page not found",
+  "tauriRequiredTitle": "Desktop shell required",
+  "tauriRequiredBody": "You opened the Vite web UI in a browser. Streamlink Twitch GUI needs the Tauri window so login, settings storage, and Streamlink launch work."
 }

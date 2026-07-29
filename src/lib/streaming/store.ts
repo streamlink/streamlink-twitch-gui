@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { invoke } from "@tauri-apps/api/core";
+import { invoke } from "../tauri";
 import type { HelixStream } from "../twitch/helix";
 import { useSettingsStore } from "../settings/store";
 

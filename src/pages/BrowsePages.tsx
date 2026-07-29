@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AuthBar } from "../components/AuthBar";
 import { DoctorPanel } from "../components/DoctorPanel";
 import { EmbeddedChat } from "../components/EmbeddedChat";
+import { LoadingGrid } from "../components/LoadingGrid";
 import { StreamGrid } from "../components/StreamGrid";
 import { useAuthStore } from "../lib/auth/store";
 import { useWatchingStore } from "../lib/streaming/store";
-import { getFollowedStreams, getTopStreams } from "../lib/twitch/helix";
+import { getFollowedStreams, getTopGames, getTopStreams } from "../lib/twitch/helix";
 import { useSettingsStore } from "../lib/settings/store";
 
 export function FollowedPage() {
@@ -49,8 +50,9 @@ export function FollowedPage() {
 }
 
 export function StreamsPage() {
-  const { t } = useTranslation("routes");
+  const { t } = useTranslation(["routes", "common"]);
   const session = useAuthStore((s) => s.session);
+  const authLoading = useAuthStore((s) => s.loading);
   const watchStream = useWatchingStore((s) => s.watchStream);
   const loggedIn = Boolean(session?.loggedIn);
 
@@ -58,13 +60,22 @@ export function StreamsPage() {
     queryKey: ["top-streams"],
     enabled: loggedIn,
     queryFn: () => getTopStreams(),
+    staleTime: 20_000,
   });
 
   return (
     <section>
-      <h1>{t("streamsTitle")}</h1>
+      <h1>{t("routes:streamsTitle")}</h1>
       <AuthBar />
-      {!loggedIn ? <p className="muted">{t("followedLoginRequired")}</p> : null}
+      {!loggedIn && !authLoading ? (
+        <p className="muted">{t("routes:followedLoginRequired")}</p>
+      ) : null}
+      {authLoading || query.isLoading || query.isFetching ? (
+        query.data?.data?.length ? null : <LoadingGrid />
+      ) : null}
+      {query.isError ? (
+        <p className="muted">{(query.error as Error).message}</p>
+      ) : null}
       {query.data?.data?.length ? (
         <StreamGrid
           streams={query.data.data}
@@ -156,8 +167,35 @@ export function AboutPage() {
 
 export function AuthBootstrap({ children }: { children: React.ReactNode }) {
   const refreshSession = useAuthStore((s) => s.refreshSession);
+  const session = useAuthStore((s) => s.session);
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     void refreshSession();
   }, [refreshSession]);
+
+  useEffect(() => {
+    if (!session?.loggedIn) {
+      return;
+    }
+    void queryClient.prefetchQuery({
+      queryKey: ["top-streams"],
+      queryFn: () => getTopStreams(),
+      staleTime: 20_000,
+    });
+    void queryClient.prefetchQuery({
+      queryKey: ["top-games"],
+      queryFn: () => getTopGames(),
+      staleTime: 60_000,
+    });
+    if (session.userId) {
+      void queryClient.prefetchQuery({
+        queryKey: ["followed-streams", session.userId],
+        queryFn: () => getFollowedStreams(session.userId!),
+        staleTime: 20_000,
+      });
+    }
+  }, [session?.loggedIn, session?.userId, queryClient]);
+
   return children;
 }

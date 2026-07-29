@@ -17,6 +17,7 @@ import {
   TeamPage,
 } from "./pages/BrowseExtraPages";
 import { SettingsPage, SettingsBootstrap } from "./pages/SettingsPage";
+import { TauriGuardBanner } from "./components/TauriGuardBanner";
 import "./styles/global.css";
 
 const queryClient = new QueryClient({
@@ -37,6 +38,7 @@ export default function App() {
           <AuthBootstrap>
             <BrowserRouter>
               <AppShell>
+                <TauriGuardBanner />
                 <Routes>
                   <Route path="/" element={<FollowedPage />} />
                   <Route path="/streams" element={<StreamsPage />} />

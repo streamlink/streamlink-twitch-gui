@@ -68,12 +68,15 @@ button {
 
 .input,
 select {
-  background: var(--bg-elevated);
+  background: var(--bg);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 0.5rem 0.75rem;
-  min-width: 16rem;
+  padding: 0.45rem 0.7rem;
+  min-height: 2.35rem;
+  line-height: 1.2;
+  width: 100%;
+  max-width: 18rem;
 }
 
 button {
@@ -82,7 +85,9 @@ button {
   border: none;
   border-radius: var(--radius);
   padding: 0.5rem 0.9rem;
+  min-height: 2.35rem;
   cursor: pointer;
+  line-height: 1.2;
 }
 
 button:hover {
@@ -93,7 +98,7 @@ button:hover {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg-elevated);
-  padding: 1rem 1.1rem;
+  padding: 0.85rem 1rem 1rem;
   margin: 0 0 1rem;
 }
 
@@ -103,20 +108,81 @@ button:hover {
 }
 
 .settings__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0.5rem 0;
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) minmax(12rem, 18rem);
+  align-items: start;
+  column-gap: 1rem;
+  row-gap: 0.45rem;
+  margin: 0.65rem 0;
+}
+
+.settings__row > span {
+  padding-top: 0.5rem;
+  line-height: 1.35;
 }
 
 .settings__row--check {
-  justify-content: flex-start;
+  grid-template-columns: auto 1fr;
+  align-items: flex-start;
+}
+
+.settings__row--check > span {
+  padding-top: 0.1rem;
+}
+
+.settings__row--check input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  margin: 0.25rem 0 0;
+  min-height: 0;
+  max-width: none;
 }
 
 .settings__row small {
   display: block;
   margin-top: 0.25rem;
+}
+
+.settings__control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 100%;
+  max-width: 18rem;
+}
+
+.settings__control .input,
+.settings__control select {
+  max-width: none;
+}
+
+.stream-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.stream-skeleton__card {
+  height: 220px;
+  border-radius: var(--radius);
+  background: linear-gradient(
+    90deg,
+    var(--bg-elevated) 0%,
+    var(--bg-hover) 50%,
+    var(--bg-elevated) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.1s ease-in-out infinite;
+  border: 1px solid var(--border);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
 
 .watching-layout {

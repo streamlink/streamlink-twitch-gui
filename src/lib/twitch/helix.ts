@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/core";
+import { invoke } from "../tauri";
 
 export class HelixError extends Error {
   constructor(
@@ -10,16 +10,36 @@ export class HelixError extends Error {
   }
 }
 
+let cachedClientId: string | null = null;
+let cachedToken: { value: string; expiresAt: number } | null = null;
+
+export function clearHelixAuthCache(): void {
+  cachedClientId = null;
+  cachedToken = null;
+}
+
 async function clientId(): Promise<string> {
+  if (cachedClientId) {
+    return cachedClientId;
+  }
   const fromEnv = import.meta.env.VITE_TWITCH_CLIENT_ID as string | undefined;
   if (fromEnv) {
+    cachedClientId = fromEnv;
     return fromEnv;
   }
-  return invoke<string>("get_twitch_client_id");
+  cachedClientId = await invoke<string>("get_twitch_client_id");
+  return cachedClientId;
 }
 
 async function accessToken(): Promise<string> {
-  return invoke<string>("auth_get_access_token");
+  const now = Date.now();
+  if (cachedToken && cachedToken.expiresAt > now) {
+    return cachedToken.value;
+  }
+  const value = await invoke<string>("auth_get_access_token");
+  // Short client-side cache; Rust still refreshes when needed.
+  cachedToken = { value, expiresAt: now + 45_000 };
+  return value;
 }
 
 export async function helixFetch<T>(
@@ -44,6 +64,7 @@ export async function helixFetch<T>(
   });
 
   if (res.status === 401) {
+    clearHelixAuthCache();
     throw new HelixError("unauthorized", 401);
   }
   if (res.status === 429) {
@@ -85,7 +106,9 @@ export interface HelixUser {
 }
 
 export function streamThumbnail(url: string, width = 440, height = 248): string {
-  return url.replace("{width}", String(width)).replace("{height}", String(height));
+  return url
+    .replace("{width}", String(width))
+    .replace("{height}", String(height));
 }
 
 export async function getFollowedStreams(
@@ -134,7 +157,9 @@ export interface HelixTeam {
 }
 
 export function gameBoxArt(url: string, width = 144, height = 192): string {
-  return url.replace("{width}", String(width)).replace("{height}", String(height));
+  return url
+    .replace("{width}", String(width))
+    .replace("{height}", String(height));
 }
 
 export async function getTopGames(
@@ -202,7 +227,10 @@ export async function getUsersByLogin(
       Authorization: `Bearer ${token}`,
     },
   });
-  if (res.status === 401) throw new HelixError("unauthorized", 401);
+  if (res.status === 401) {
+    clearHelixAuthCache();
+    throw new HelixError("unauthorized", 401);
+  }
   if (!res.ok) throw new HelixError(await res.text(), res.status);
   return (await res.json()) as HelixPage<HelixUser>;
 }

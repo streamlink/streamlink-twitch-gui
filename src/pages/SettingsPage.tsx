@@ -112,16 +112,80 @@ export function SettingsPage() {
         ) : null}
         <label className="settings__row">
           <span>{t("settings:quality")}</span>
-          <input
-            className="input"
-            value={settings.streaming.quality}
-            onChange={(e) =>
-              setSettings({
-                streaming: { ...settings.streaming, quality: e.target.value },
-              })
-            }
-            placeholder="best"
-          />
+          <div className="settings__control">
+            <select
+              value={
+                [
+                  "best",
+                  "1080p60",
+                  "1080p",
+                  "720p60",
+                  "720p",
+                  "480p",
+                  "360p",
+                  "160p",
+                  "audio_only",
+                  "worst",
+                ].includes(settings.streaming.quality)
+                  ? settings.streaming.quality
+                  : "custom"
+              }
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "custom") {
+                  setSettings({
+                    streaming: {
+                      ...settings.streaming,
+                      quality: "",
+                    },
+                  });
+                  return;
+                }
+                setSettings({
+                  streaming: { ...settings.streaming, quality: value },
+                });
+              }}
+            >
+              <option value="best">best</option>
+              <option value="1080p60">1080p60</option>
+              <option value="1080p">1080p</option>
+              <option value="720p60">720p60</option>
+              <option value="720p">720p</option>
+              <option value="480p">480p</option>
+              <option value="360p">360p</option>
+              <option value="160p">160p</option>
+              <option value="audio_only">audio_only</option>
+              <option value="worst">worst</option>
+              <option value="custom">{t("settings:qualityCustom")}</option>
+            </select>
+            {![
+              "best",
+              "1080p60",
+              "1080p",
+              "720p60",
+              "720p",
+              "480p",
+              "360p",
+              "160p",
+              "audio_only",
+              "worst",
+            ].includes(settings.streaming.quality) ? (
+              <input
+                className="input"
+                value={settings.streaming.quality}
+                onChange={(e) =>
+                  setSettings({
+                    streaming: {
+                      ...settings.streaming,
+                      quality: e.target.value,
+                    },
+                  })
+                }
+                placeholder="720p,720p60"
+                aria-label={t("settings:qualityCustom")}
+              />
+            ) : null}
+          </div>
         </label>
         <label className="settings__row settings__row--check">
           <input
