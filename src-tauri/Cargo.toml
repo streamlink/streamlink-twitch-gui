@@ -29,7 +29,7 @@ sha2 = "0.11.0"
 base64 = "0.23.0"
 rand = "0.10.2"
 thiserror = "2.0.19"
-tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "sync", "time", "net"] }
+tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "sync", "time", "net", "process", "io-util"] }
 tiny_http = "0.12.0"
 reqwest = { version = "0.13.4", default-features = false, features = ["json", "rustls", "form"] }
 

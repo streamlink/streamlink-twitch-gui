@@ -29,11 +29,11 @@
 
 ## Phase 3 — Launch path
 
-- [ ] Resolve bundled vs system Streamlink
-- [ ] Spawn Streamlink + player args (mpv/VLC/…)
-- [ ] Watching session model + stop
-- [ ] Embedded chat webview/panel + Chatterino spawn
-- [ ] First-run doctor UX
+- [x] Resolve bundled vs system Streamlink
+- [x] Spawn Streamlink + player args (mpv/VLC/…)
+- [x] Watching session model + stop
+- [x] Embedded chat panel + Chatterino spawn option
+- [x] Doctor command (first-run UX still thin — About page)
 
 ## Phase 4 — Browse
 

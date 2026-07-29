@@ -1,0 +1,31 @@
+.embedded-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 320px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.embedded-chat--empty {
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.embedded-chat__header {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.embedded-chat__frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  min-height: 280px;
+  background: #0e0e10;
+}

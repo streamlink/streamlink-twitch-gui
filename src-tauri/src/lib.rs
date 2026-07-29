@@ -1,8 +1,11 @@
 mod auth;
 mod doctor;
+mod streaming;
 
 use auth::{AuthSession, DeviceCodeResponse};
 use doctor::DoctorReport;
+use streaming::{LaunchRequest, SharedStreaming, StreamSession, StreamingState};
+use std::sync::Arc;
 
 #[tauri::command]
 fn get_doctor_report() -> DoctorReport {
@@ -41,10 +44,36 @@ async fn auth_get_access_token() -> Result<String, String> {
     auth::access_token().await.map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn stream_start(
+    state: tauri::State<'_, SharedStreaming>,
+    request: LaunchRequest,
+) -> Result<StreamSession, String> {
+    streaming::start_stream(&state, request).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn stream_list(state: tauri::State<'_, SharedStreaming>) -> Result<Vec<StreamSession>, String> {
+    streaming::list_sessions(&state).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn stream_stop(state: tauri::State<'_, SharedStreaming>, id: String) -> Result<(), String> {
+    streaming::stop_stream(&state, &id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn stream_stop_all(state: tauri::State<'_, SharedStreaming>) -> Result<(), String> {
+    streaming::stop_all(&state).map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let streaming = Arc::new(StreamingState::new());
+
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .manage(streaming)
         .invoke_handler(tauri::generate_handler![
             get_doctor_report,
             get_twitch_client_id,
@@ -52,7 +81,11 @@ pub fn run() {
             auth_start_device_login,
             auth_poll_device_login,
             auth_logout,
-            auth_get_access_token
+            auth_get_access_token,
+            stream_start,
+            stream_list,
+            stream_stop,
+            stream_stop_all
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -17,5 +17,10 @@
   "doctorPlayerOk": "Player {{name}} found",
   "doctorPlayerMissing": "No video player found (mpv recommended)",
   "doctorChatOk": "Chatterino found",
-  "doctorChatMissing": "Chatterino not found (optional if using embedded chat)"
+  "doctorChatMissing": "Chatterino not found (optional if using embedded chat)",
+  "chatTitle": "Chat — {{channel}}",
+  "chatEmpty": "Watch a stream to open embedded chat.",
+  "watchingStop": "Stop",
+  "watchingStopAll": "Stop all",
+  "launchError": "Could not start stream"
 }
