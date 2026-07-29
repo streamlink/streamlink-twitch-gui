@@ -4,6 +4,7 @@ import { AppShell } from "./components/AppShell";
 import { ThemeProvider } from "./components/ThemeProvider";
 import {
   AboutPage,
+  AuthBootstrap,
   FollowedPage,
   GamesPage,
   SearchPage,
@@ -27,20 +28,22 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <BrowserRouter>
-          <AppShell>
-            <Routes>
-              <Route path="/" element={<FollowedPage />} />
-              <Route path="/streams" element={<StreamsPage />} />
-              <Route path="/games" element={<GamesPage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/watching" element={<WatchingPage />} />
-              <Route path="/settings/*" element={<SettingsPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </AppShell>
-        </BrowserRouter>
+        <AuthBootstrap>
+          <BrowserRouter>
+            <AppShell>
+              <Routes>
+                <Route path="/" element={<FollowedPage />} />
+                <Route path="/streams" element={<StreamsPage />} />
+                <Route path="/games" element={<GamesPage />} />
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/watching" element={<WatchingPage />} />
+                <Route path="/settings/*" element={<SettingsPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </AppShell>
+          </BrowserRouter>
+        </AuthBootstrap>
       </ThemeProvider>
     </QueryClientProvider>
   );

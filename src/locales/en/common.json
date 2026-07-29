@@ -13,5 +13,6 @@
   "about": "About",
   "login": "Log in with Twitch",
   "logout": "Log out",
+  "authDevicePrompt": "Open the browser page and enter this code: {{code}}",
   "notFound": "Page not found"
 }

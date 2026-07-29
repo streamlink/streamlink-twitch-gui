@@ -22,10 +22,10 @@
 
 ## Phase 2 — Auth + Helix
 
-- [ ] Twitch app client-id via env (`VITE_TWITCH_CLIENT_ID`)
-- [ ] Rust localhost OAuth PKCE + refresh
-- [ ] OS keyring for tokens
-- [ ] Typed Helix client + followed streams UI
+- [x] Twitch client-id via env (`TWITCH_CLIENT_ID` / `VITE_TWITCH_CLIENT_ID`) with upstream fallback for local tryouts
+- [x] Device Code Flow login (Twitch has no PKCE) + refresh + OS keyring
+- [x] Typed Helix client + followed / top streams UI
+- [ ] User registers own Public Twitch application for production use
 
 ## Phase 3 — Launch path
 
