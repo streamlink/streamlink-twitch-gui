@@ -37,7 +37,8 @@
 
 ## Phase 4 — Browse
 
-- [ ] Top streams, games, search, channel, teams (virtualized)
+- [x] Top streams, games, search, channel, teams (team detail stub)
+- [ ] Virtualized infinite scroll (TanStack Virtual) for very long lists
 
 ## Phase 5 — Settings parity
 

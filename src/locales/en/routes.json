@@ -22,5 +22,13 @@
   "chatEmpty": "Watch a stream to open embedded chat.",
   "watchingStop": "Stop",
   "watchingStopAll": "Stop all",
-  "launchError": "Could not start stream"
+  "launchError": "Could not start stream",
+  "gameStreamsTitle": "Streams in this category",
+  "searchChannels": "Channels",
+  "searchCategories": "Categories",
+  "searchEmpty": "No results.",
+  "channelOffline": "Channel is offline.",
+  "channelTeams": "Teams",
+  "teamTitle": "Team {{team}}",
+  "teamStub": "Team member list coming soon."
 }
