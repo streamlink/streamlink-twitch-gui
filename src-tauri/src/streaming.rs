@@ -459,15 +459,34 @@ pub fn layout_watching(
         // soon as they notice a newer generation instead of fighting over
         // window placement.
         let generation = LAYOUT_GENERATION.fetch_add(1, Ordering::SeqCst) + 1;
+        let expected = cleaned.len().clamp(1, 8);
         thread::spawn(move || {
             thread::sleep(Duration::from_millis(400));
-            for _ in 0..6 {
+            // Retry until every expected player window was tiled and the chat
+            // placed, capped at ~7 s. The mpv window can lag the "Starting
+            // player" log line by seconds (AV scans, cold start), so a short
+            // fixed retry window sometimes missed it and left the player at
+            // its approximate launch geometry.
+            let mut streak = 0;
+            for _ in 0..28 {
                 if LAYOUT_GENERATION.load(Ordering::SeqCst) != generation {
                     return;
                 }
-                let _ = retile_player_windows(&cleaned, reserve_chat, &layout);
+                let found = retile_player_windows(&cleaned, reserve_chat, &layout);
+                let mut chat_ok = true;
                 if reserve_chat && chat_pid != 0 {
-                    place_chatterino_window_right(chat_pid);
+                    chat_ok = find_main_window_for_pid(chat_pid).is_some();
+                    if chat_ok {
+                        place_chatterino_window_right(chat_pid);
+                    }
+                }
+                if found >= expected && chat_ok {
+                    streak += 1;
+                    if streak >= 2 {
+                        return;
+                    }
+                } else {
+                    streak = 0;
                 }
                 thread::sleep(Duration::from_millis(250));
             }

@@ -273,8 +273,6 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           replaceExisting,
         },
       });
-      // Layout is triggered by the session "ready" status event
-      // (scheduleLayoutAfterReady) — no extra timed call needed here.
       if (settings.gui.minimizeOnWatch && isTauri()) {
         void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
           void getCurrentWindow().minimize();
@@ -290,6 +288,10 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
             ? stream.user_login
             : state.activeChatChannel,
       }));
+      // Kick the debounced layout once the session is registered (orderedChannels
+      // reads the store). The "ready" status event re-triggers it later; the
+      // backend retries until every player window is actually tiled.
+      scheduleLayoutAfterReady();
       void get().refresh();
     } catch (err) {
       captureAppError(err, "stream_start");
