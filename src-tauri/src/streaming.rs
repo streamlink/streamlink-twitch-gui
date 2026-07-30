@@ -88,6 +88,12 @@ pub struct LaunchRequest {
     pub reserve_chat: Option<bool>,
     /// When true, keep existing sessions until this one is ready, then stop them.
     pub replace_existing: Option<bool>,
+    /// Planned tile of this stream in the dock grid (frontend slot order) —
+    /// lets the launch geometry open the window already snapped to its tile.
+    pub slot_index: Option<u32>,
+    pub slot_count: Option<u32>,
+    /// Multistream preset from settings (e.g. "2x2") for the launch geometry.
+    pub layout: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -819,44 +825,52 @@ fn tile_rect(video: WinRect, index: usize, layout: &str) -> WinRect {
     }
 }
 
-/// Percent geometry at launch (mpv handles this reliably). Win32 MoveWindow then snaps to pixels.
-/// Height follows the work area so controls are not created under the taskbar.
+/// Pixel-exact launch geometry for the planned tile, computed with the same
+/// math as the retile pass (measured: mpv honors pixel geometry exactly, so
+/// the window opens already snapped instead of resizing visibly afterwards).
+/// The retile pass still runs afterwards — the final tiling depends on how
+/// many streams are running once the player is ready, which can change
+/// between launch and ready.
 #[cfg(windows)]
-fn mpv_geometry_for_dock(reserve_chat: bool, _index: usize, _count: usize) -> Option<String> {
-    #[link(name = "user32")]
-    unsafe extern "system" {
-        fn GetSystemMetrics(index: i32) -> i32;
-        fn SetThreadDpiAwarenessContext(context: isize) -> isize;
-    }
-    const SM_CXSCREEN: i32 = 0;
-    const SM_CYSCREEN: i32 = 1;
-    unsafe {
-        let _prev = SetThreadDpiAwarenessContext(-4);
-    }
-    let screen_w = unsafe { GetSystemMetrics(SM_CXSCREEN) };
-    let screen_h = unsafe { GetSystemMetrics(SM_CYSCREEN) };
-    if screen_w <= 0 || screen_h <= 0 {
-        return None;
-    }
+fn mpv_geometry_for_dock(
+    reserve_chat: bool,
+    index: usize,
+    count: usize,
+    layout: Option<&str>,
+) -> Option<String> {
     let (video, _) = chat_video_split(reserve_chat)?;
-    let w = (video.right - video.left).max(1);
-    let h = (video.bottom - video.top).max(1);
-    let w_pct = ((w as f64 / screen_w as f64) * 100.0).round() as i32;
-    let h_pct = ((h as f64 / screen_h as f64) * 100.0).round() as i32;
+    let preset = normalize_layout(layout);
+    let n = count.clamp(1, 8);
+    let eff = effective_layout(n, &preset);
+    let tile = tile_rect(video, index.min(n - 1), eff);
+    let w = (tile.right - tile.left).max(1);
+    let h = (tile.bottom - tile.top).max(1);
     Some(format!(
-        "--geometry={w_pct}%x{h_pct}%+{x}+{y}",
-        x = video.left,
-        y = video.top
+        "--geometry={w}x{h}+{x}+{y}",
+        x = tile.left,
+        y = tile.top
     ))
 }
 
 #[cfg(not(windows))]
-fn mpv_geometry_for_dock(_reserve_chat: bool, _index: usize, _count: usize) -> Option<String> {
+fn mpv_geometry_for_dock(
+    _reserve_chat: bool,
+    _index: usize,
+    _count: usize,
+    _layout: Option<&str>,
+) -> Option<String> {
     None
 }
 
-fn build_mpv_dock_args(channel: &str, reserve_chat: bool, preset_args: &str) -> String {
-    let geo = mpv_geometry_for_dock(reserve_chat, 0, 1)
+fn build_mpv_dock_args(
+    channel: &str,
+    reserve_chat: bool,
+    preset_args: &str,
+    index: usize,
+    count: usize,
+    layout: Option<&str>,
+) -> String {
+    let geo = mpv_geometry_for_dock(reserve_chat, index, count, layout)
         .unwrap_or_else(|| "--geometry=82%x100%+0+0".into());
     let mut parts: Vec<String> = vec![
         // Geometry first; watch-later-options-clr stops mpv restoring an old window size.
@@ -1533,7 +1547,16 @@ pub fn start_stream(
             .unwrap_or_else(|| default_player_args(player_id, &channel, &title, &game));
         let reserve_chat = req.reserve_chat.unwrap_or(false);
         if player_id == "mpv" {
-            player_args = build_mpv_dock_args(&channel, reserve_chat, &player_args);
+            let slot_index = req.slot_index.unwrap_or(0) as usize;
+            let slot_count = req.slot_count.unwrap_or(1) as usize;
+            player_args = build_mpv_dock_args(
+                &channel,
+                reserve_chat,
+                &player_args,
+                slot_index,
+                slot_count,
+                req.layout.as_deref(),
+            );
         }
         if !player_args.is_empty() {
             args.push("--player-args".into());
@@ -1944,6 +1967,10 @@ mod tests {
             effective_layout(channels.len(), &layout)
         );
         for (i, channel) in channels.iter().enumerate() {
+            println!(
+                "EVID launch geometry idx {i}: {:?}",
+                mpv_geometry_for_dock(true, i, channels.len(), Some(&layout))
+            );
             let key = mpv_window_title(channel);
             match find_window_by_title(&key, true) {
                 Some(hwnd) => println!(
@@ -1987,6 +2014,9 @@ mod tests {
             "chan",
             false,
             "--loop-file=inf --cache=yes --volume=42 --title=\"chan - g - t\" --geometry=50%x50%+0+0 --window-maximized=yes",
+            0,
+            1,
+            Some("2x2"),
         );
         assert!(args.contains("--loop-file=inf"));
         assert!(args.contains("--cache=yes"));

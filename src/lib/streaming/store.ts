@@ -249,6 +249,12 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
         void syncChatterino(chatChannels);
       }
 
+      // Planned dock position for the launch geometry, so mpv opens already
+      // snapped to its tile instead of resizing visibly after "ready".
+      const plannedChannels = replaceExisting
+        ? [channel]
+        : [...new Set([...orderedChannels(), channel])];
+
       const session = await invoke<StreamSession>("stream_start", {
         request: {
           channel: stream.user_login,
@@ -271,6 +277,9 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           playerNoClose: settings.streaming.playerNoClose,
           reserveChat,
           replaceExisting,
+          slotIndex: Math.max(0, plannedChannels.indexOf(channel)),
+          slotCount: plannedChannels.length,
+          layout: currentLayout(),
         },
       });
       if (settings.gui.minimizeOnWatch && isTauri()) {
