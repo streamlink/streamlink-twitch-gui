@@ -8,3 +8,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <App />
   </React.StrictMode>,
 );
+// Drop the boot splash after the first commit; it covered the WebView while
+// the JS bundle loaded (noticeable in dev mode).
+requestAnimationFrame(() => {
+  document.getElementById("splash")?.remove();
+});
