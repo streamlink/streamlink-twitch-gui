@@ -752,6 +752,24 @@ fn chat_video_split(reserve_chat: bool) -> Option<(WinRect, Option<WinRect>)> {
     Some((video, Some(chat)))
 }
 
+/// Effective grid for `count` running channels under the chosen preset.
+/// A partially filled preset shrinks to the count-based grid, so a single
+/// stream never lands in a quarter tile of the default "2x2" preset.
+/// "3plus1" keeps its asymmetric split whenever 2+ channels run.
+#[cfg(windows)]
+fn effective_layout(count: usize, preset: &str) -> &str {
+    if preset == "3plus1" && count >= 2 {
+        return "3plus1";
+    }
+    match count {
+        0 | 1 => "1",
+        2 => "2",
+        3 | 4 => "2x2",
+        5 | 6 => "3x2",
+        _ => "4x2",
+    }
+}
+
 #[cfg(windows)]
 fn tile_rect(video: WinRect, index: usize, layout: &str) -> WinRect {
     let vw = video.right - video.left;
@@ -1209,9 +1227,10 @@ fn retile_player_windows(channels: &[String], reserve_chat: bool, layout: &str) 
         return 0;
     };
     let n = channels.len().clamp(1, 8);
+    let eff = effective_layout(n, layout);
     let mut found = 0usize;
     for (i, channel) in channels.iter().take(n).enumerate() {
-        let tile = tile_rect(video, i, layout);
+        let tile = tile_rect(video, i, eff);
         let key = mpv_window_title(channel);
         if let Some(hwnd) = find_window_by_title(&key, true) {
             // Borderless mpv: plain MoveWindow (DWM expand breaks no-border windows).
@@ -1889,6 +1908,75 @@ mod tests {
         // mpv_window_title strips anything outside [a-z0-9_-].
         assert_eq!(mpv_window_title("Some_Channel-1"), "stgui-some_channel-1");
         assert_eq!(mpv_window_title("äöü"), "stgui-stream");
+    }
+
+    #[test]
+    #[ignore = "diagnostic: needs a live mpv probe window (STGUI_PROBE_CHANNEL); moves windows"]
+    #[cfg(windows)]
+    fn probe_layout_evidence() {
+        #[link(name = "user32")]
+        unsafe extern "system" {
+            fn GetWindowRect(hwnd: *mut core::ffi::c_void, rect: *mut WinRect) -> i32;
+        }
+        fn rect_of(hwnd: *mut core::ffi::c_void) -> Option<WinRect> {
+            let mut r = WinRect {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+            };
+            (unsafe { GetWindowRect(hwnd, &mut r) } != 0).then_some(r)
+        }
+
+        let channels: Vec<String> = std::env::var("STGUI_PROBE_CHANNEL")
+            .unwrap_or_else(|_| "probe".into())
+            .split(',')
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+            .collect();
+        let layout = std::env::var("STGUI_PROBE_LAYOUT").unwrap_or_else(|_| "2x2".into());
+        let (video, chat) = chat_video_split(true).expect("chat_video_split");
+        println!("EVID video area: {video:?}");
+        println!("EVID chat area:  {chat:?}");
+        println!(
+            "EVID effective_layout(count={}, preset={layout}) = {}",
+            channels.len(),
+            effective_layout(channels.len(), &layout)
+        );
+        for (i, channel) in channels.iter().enumerate() {
+            let key = mpv_window_title(channel);
+            match find_window_by_title(&key, true) {
+                Some(hwnd) => println!(
+                    "EVID window '{key}' (idx {i}): found, rect before = {:?}",
+                    rect_of(hwnd)
+                ),
+                None => println!("EVID window '{key}' (idx {i}): NOT FOUND"),
+            }
+        }
+        let found = retile_player_windows(&channels, true, &layout);
+        println!("EVID retile(layout={layout}) found={found}");
+        for channel in &channels {
+            let key = mpv_window_title(channel);
+            if let Some(hwnd) = find_window_by_title(&key, true) {
+                println!("EVID window '{key}': rect after = {:?}", rect_of(hwnd));
+            }
+        }
+    }
+
+    #[test]
+    #[cfg(windows)]
+    fn partially_filled_presets_shrink_to_count_grid() {
+        // Regression: one stream under the default "2x2" preset was tiled into
+        // the top-left quarter instead of filling the video area.
+        assert_eq!(effective_layout(1, "2x2"), "1");
+        assert_eq!(effective_layout(2, "2x2"), "2");
+        assert_eq!(effective_layout(3, "2x2"), "2x2");
+        assert_eq!(effective_layout(4, "4x2"), "2x2");
+        assert_eq!(effective_layout(6, "4x2"), "3x2");
+        assert_eq!(effective_layout(8, "4x2"), "4x2");
+        // 3plus1 keeps its asymmetric main+stack split for 2+ channels.
+        assert_eq!(effective_layout(1, "3plus1"), "1");
+        assert_eq!(effective_layout(2, "3plus1"), "3plus1");
     }
 
     #[test]
