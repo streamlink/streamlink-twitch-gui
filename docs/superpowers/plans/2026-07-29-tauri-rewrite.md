@@ -17,15 +17,15 @@
 - [x] Settings store + schema migration test
 - [x] Doctor command (Streamlink/mpv/Chatterino detect)
 - [x] CI frontend job + Streamlink fetch script stub
-- [ ] `npm test` and `npm run build` green
-- [ ] `npm run tauri dev` launches
+- [x] `npm test` and `npm run build` green
+- [x] `npm run tauri dev` launches
 
 ## Phase 2 — Auth + Helix
 
 - [x] Twitch client-id via env (`TWITCH_CLIENT_ID` / `VITE_TWITCH_CLIENT_ID`) with upstream fallback for local tryouts
 - [x] Device Code Flow login (Twitch has no PKCE) + refresh + OS keyring
 - [x] Typed Helix client + followed / top streams UI
-- [ ] User registers own Public Twitch application for production use
+- [x] User registers own Public Twitch application for production use
 
 ## Phase 3 — Launch path
 
