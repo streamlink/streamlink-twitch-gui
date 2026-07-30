@@ -6,12 +6,13 @@ import nav from "../locales/en/nav.json";
 import routes from "../locales/en/routes.json";
 import settings from "../locales/en/settings.json";
 import errors from "../locales/en/errors.json";
+import onboarding from "../locales/en/onboarding.json";
 
 void i18n.use(initReactI18next).init({
   lng: "en",
   fallbackLng: "en",
   defaultNS: "common",
-  ns: ["common", "nav", "routes", "settings", "errors"],
+  ns: ["common", "nav", "routes", "settings", "errors", "onboarding"],
   resources: {
     en: {
       common,
@@ -19,6 +20,7 @@ void i18n.use(initReactI18next).init({
       routes,
       settings,
       errors,
+      onboarding,
     },
   },
   interpolation: {

@@ -272,11 +272,20 @@ button:disabled {
   }
 }
 
-.watching-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
-  gap: 0.85rem;
-  align-items: start;
+.launch-error-banner {
+  margin: 0 0 0.85rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--danger, #ff6b6b) 45%, var(--border));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg-elevated) 88%, var(--danger, #ff6b6b) 12%);
+}
+
+.launch-error-banner .authbar__error {
+  margin: 0 0 0.35rem;
+}
+
+.launch-error-banner .setup-help {
+  margin-top: 0.55rem;
 }
 
 .watching-layout__header {

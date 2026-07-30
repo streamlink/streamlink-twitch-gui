@@ -1,0 +1,57 @@
+.setup-help {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.45rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg-elevated) 92%, var(--accent, #9146ff) 8%);
+}
+
+.setup-help--ok {
+  background: var(--bg-elevated);
+}
+
+.setup-help__title {
+  margin: 0;
+  font-weight: 650;
+}
+
+.setup-help__body,
+.setup-help__status,
+.setup-help__path {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.setup-help__cmds {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.setup-help__cmds > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.82rem;
+}
+
+.setup-help__cmds code {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  border-radius: calc(var(--radius) - 2px);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 0.78rem;
+  overflow-x: auto;
+  user-select: all;
+}
+
+.setup-help__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}

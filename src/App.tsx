@@ -22,6 +22,8 @@ import { DesktopChrome } from "./components/DesktopChrome";
 import { HotkeyProvider } from "./components/HotkeyProvider";
 import { DeepLinkBootstrap } from "./components/DeepLinkAndUpdaterBootstrap";
 import { StreamingBootstrap } from "./components/StreamingBootstrap";
+import { OnboardingWizard } from "./components/OnboardingWizard";
+import { LaunchErrorBanner } from "./components/LaunchErrorBanner";
 import { SentryBootstrap } from "./lib/sentry";
 import "./styles/global.css";
 
@@ -46,9 +48,11 @@ export default function App() {
                 <HotkeyProvider>
                   <DeepLinkBootstrap>
                     <StreamingBootstrap>
+                      <OnboardingWizard />
                       <AppShell>
                         <DesktopChrome />
                         <TauriGuardBanner />
+                        <LaunchErrorBanner />
                         <Routes>
                           <Route path="/" element={<FollowedPage />} />
                           <Route path="/streams" element={<StreamsPage />} />

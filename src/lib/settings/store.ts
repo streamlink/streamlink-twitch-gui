@@ -53,6 +53,7 @@ export function migrateSettings(raw: unknown): AppSettings {
       ...input.gui,
       closeToTray:
         input.gui?.closeToTray ?? input.closeToTray ?? base.gui.closeToTray,
+      onboardingDone: input.gui?.onboardingDone ?? base.gui.onboardingDone,
     },
     notifications: { ...base.notifications, ...input.notifications },
     hotkeys: { ...defaultHotkeys(), ...input.hotkeys },

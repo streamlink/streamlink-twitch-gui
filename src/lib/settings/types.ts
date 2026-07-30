@@ -64,6 +64,8 @@ export interface AppSettings {
   gui: {
     closeToTray: boolean;
     minimizeOnWatch: boolean;
+    /** False until the first-run setup wizard is finished or skipped. */
+    onboardingDone: boolean;
   };
   notifications: {
     followedOnline: boolean;
@@ -78,7 +80,7 @@ export interface AppSettings {
   closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 5;
+export const SETTINGS_SCHEMA_VERSION = 6;
 
 export const defaultHotkeys = (): HotkeySettings => ({
   refresh: "F5",
@@ -121,6 +123,7 @@ export const defaultSettings = (): AppSettings => ({
   gui: {
     closeToTray: true,
     minimizeOnWatch: false,
+    onboardingDone: false,
   },
   notifications: {
     followedOnline: true,

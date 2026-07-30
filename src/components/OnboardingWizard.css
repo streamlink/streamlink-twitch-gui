@@ -1,0 +1,60 @@
+.onboarding {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: color-mix(in srgb, #000 55%, transparent);
+}
+
+.onboarding__panel {
+  width: min(520px, 100%);
+  max-height: min(90vh, 720px);
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 4px);
+  background: var(--bg-elevated);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+}
+
+.onboarding__header {
+  padding: 1.1rem 1.2rem 0.5rem;
+}
+
+.onboarding__header h2 {
+  margin: 0.15rem 0 0.35rem;
+}
+
+.onboarding__step {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.onboarding__body {
+  padding: 0.4rem 1.2rem 1rem;
+  flex: 1;
+}
+
+.onboarding__body h3 {
+  margin: 0 0 0.55rem;
+  font-size: 1rem;
+}
+
+.onboarding__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1.2rem 1.1rem;
+  border-top: 1px solid var(--border);
+}
+
+.onboarding__nav {
+  display: flex;
+  gap: 0.4rem;
+}

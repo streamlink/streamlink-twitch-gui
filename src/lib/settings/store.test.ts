@@ -6,6 +6,7 @@ import {
 } from "./types";
 import { migrateSettings } from "./store";
 import { matchesHotkey, normalizeHotkey } from "../hotkeys";
+import { isStreamlinkMissingError } from "../doctor";
 
 describe("migrateSettings", () => {
   it("returns defaults for empty input", () => {
@@ -15,6 +16,7 @@ describe("migrateSettings", () => {
     expect(result.streaming.lowLatency).toBe(true);
     expect(result.streaming.disableAds).toBe(true);
     expect(result.streaming.seamlessSwitch).toBe(true);
+    expect(result.gui.onboardingDone).toBe(false);
     expect(result.player.input).toBe("default");
     expect(result.hotkeys.refresh).toBe("F5");
     expect(result.channels).toEqual({});
@@ -30,6 +32,7 @@ describe("migrateSettings", () => {
     expect(result.theme).toBe("light");
     expect(result.streaming.quality).toBe("720p");
     expect(result.gui.closeToTray).toBe(false);
+    expect(result.gui.onboardingDone).toBe(false);
     expect(result.schemaVersion).toBe(SETTINGS_SCHEMA_VERSION);
     expect(result.player.id).toBe(defaultSettings().player.id);
   });
@@ -60,6 +63,14 @@ describe("migrateSettings", () => {
     expect(result.hotkeys.focusSearch).toBe("Ctrl+K");
     expect(result.schemaVersion).toBe(SETTINGS_SCHEMA_VERSION);
   });
+
+  it("preserves onboardingDone when already completed", () => {
+    const result = migrateSettings({
+      schemaVersion: 5,
+      gui: { closeToTray: true, minimizeOnWatch: false, onboardingDone: true },
+    });
+    expect(result.gui.onboardingDone).toBe(true);
+  });
 });
 
 describe("resolveChannelLaunch", () => {
@@ -88,5 +99,15 @@ describe("hotkeys", () => {
     } as KeyboardEvent;
     expect(matchesHotkey(event, "Ctrl+K")).toBe(true);
     expect(matchesHotkey(event, "F5")).toBe(false);
+  });
+});
+
+describe("isStreamlinkMissingError", () => {
+  it("detects Streamlink not-found messages", () => {
+    expect(isStreamlinkMissingError("Streamlink executable not found")).toBe(
+      true,
+    );
+    expect(isStreamlinkMissingError("player mpv not found")).toBe(false);
+    expect(isStreamlinkMissingError(null)).toBe(false);
   });
 });

@@ -1,0 +1,28 @@
+.doctor {
+  margin-top: 1.25rem;
+}
+
+.doctor__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.doctor__header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.doctor__list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.doctor__list > li {
+  line-height: 1.4;
+}

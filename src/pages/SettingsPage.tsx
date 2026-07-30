@@ -68,13 +68,6 @@ export function SettingsPage() {
       });
     };
 
-  useEffect(() => {
-    const handle = window.setTimeout(() => {
-      void persistSettings(settings);
-    }, 400);
-    return () => window.clearTimeout(handle);
-  }, [settings]);
-
   return (
     <section className="settings">
       <header className="page__header">
@@ -131,6 +124,26 @@ export function SettingsPage() {
             {t("settings:minimizeOnWatch")}
           </span>
         </label>
+
+        <div className="settings__row">
+          <div className="settings__label">
+            <span>{t("settings:showSetupAgain")}</span>
+            <small className="muted">{t("settings:showSetupAgainHint")}</small>
+          </div>
+          <div className="settings__control">
+            <button
+              type="button"
+              className="button-secondary"
+              onClick={() =>
+                setSettings({
+                  gui: { ...settings.gui, onboardingDone: false },
+                })
+              }
+            >
+              {t("settings:showSetupAgain")}
+            </button>
+          </div>
+        </div>
       </fieldset>
 
       <fieldset className="settings__group">
@@ -690,8 +703,20 @@ export function SettingsPage() {
 
 export function SettingsBootstrap({ children }: { children: React.ReactNode }) {
   const hydrate = useSettingsStore((s) => s.hydrate);
+  const hydrated = useSettingsStore((s) => s.hydrated);
+  const settings = useSettingsStore((s) => s.settings);
+
   useEffect(() => {
     void loadPersistedSettings().then(hydrate);
   }, [hydrate]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const handle = window.setTimeout(() => {
+      void persistSettings(settings);
+    }, 400);
+    return () => window.clearTimeout(handle);
+  }, [settings, hydrated]);
+
   return children;
 }

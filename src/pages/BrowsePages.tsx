@@ -19,7 +19,6 @@ export function FollowedPage() {
   const { t } = useTranslation(["routes", "common"]);
   const session = useAuthStore((s) => s.session);
   const watchStream = useWatchingStore((s) => s.watchStream);
-  const launchError = useWatchingStore((s) => s.error);
   const loggedIn = Boolean(session?.loggedIn && session.userId);
 
   const query = useInfiniteQuery({
@@ -41,7 +40,6 @@ export function FollowedPage() {
           <p className="page__lede">{t("routes:followedLede")}</p>
         </div>
       </header>
-      {launchError ? <p className="authbar__error">{launchError}</p> : null}
       {!loggedIn ? <p className="muted">{t("routes:followedLoginRequired")}</p> : null}
       {query.isLoading ? <LoadingGrid /> : null}
       {query.isError ? (

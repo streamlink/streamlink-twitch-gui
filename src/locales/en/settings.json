@@ -47,6 +47,8 @@
   "chatCustom": "Custom",
   "closeToTray": "Close to tray",
   "minimizeOnWatch": "Minimize when watching",
+  "showSetupAgain": "Show setup wizard again",
+  "showSetupAgainHint": "Reopens the first-run Streamlink / player / login checklist.",
   "followedOnline": "Notify when followed channels go live",
   "sentryEnabled": "Send crash reports",
   "sentryHint": "Anonymous error reports help fix bugs. Tokens are never included. Requires VITE_SENTRY_DSN at build time.",

@@ -1,51 +1,50 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { invoke, isTauri } from "../lib/tauri";
-
-interface ToolStatus {
-  found: boolean;
-  path?: string | null;
-  version?: string | null;
-  source?: string | null;
-}
-
-interface DoctorReport {
-  streamlink: ToolStatus;
-  mpv: ToolStatus;
-  chatterino: ToolStatus;
-  minStreamlinkVersion: string;
-}
+import type { DoctorReport } from "../lib/doctor";
+import { PlayerSetupHelp, StreamlinkSetupHelp } from "./SetupHelp";
+import "./DoctorPanel.css";
 
 export function DoctorPanel() {
   const { t } = useTranslation("routes");
   const [report, setReport] = useState<DoctorReport | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [checking, setChecking] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
+  const refresh = useCallback(() => {
     if (!isTauri()) {
       setError("Desktop shell required (`npm run tauri:dev`).");
       return;
     }
+    setChecking(true);
     invoke<DoctorReport>("get_doctor_report")
       .then((data) => {
-        if (!cancelled) {
-          setReport(data);
-        }
+        setReport(data);
+        setError(null);
       })
       .catch((err: unknown) => {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : String(err));
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
+        setError(err instanceof Error ? err.message : String(err));
+      })
+      .finally(() => setChecking(false));
   }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   return (
     <section className="doctor">
-      <h2>{t("doctorTitle")}</h2>
+      <div className="doctor__header">
+        <h2>{t("doctorTitle")}</h2>
+        <button
+          type="button"
+          className="button-secondary"
+          onClick={refresh}
+          disabled={checking}
+        >
+          {t("doctorRecheck")}
+        </button>
+      </div>
       {error ? <p className="muted">{error}</p> : null}
       {!report && !error ? <p className="muted">…</p> : null}
       {report ? (
@@ -56,11 +55,25 @@ export function DoctorPanel() {
                   version: report.streamlink.version ?? "?",
                 })
               : t("doctorStreamlinkMissing")}
+            {!report.streamlink.found ? (
+              <StreamlinkSetupHelp
+                status={report.streamlink}
+                onRecheck={refresh}
+                checking={checking}
+              />
+            ) : null}
           </li>
           <li>
             {report.mpv.found
               ? t("doctorPlayerOk", { name: "mpv" })
               : t("doctorPlayerMissing")}
+            {!report.mpv.found ? (
+              <PlayerSetupHelp
+                status={report.mpv}
+                onRecheck={refresh}
+                checking={checking}
+              />
+            ) : null}
           </li>
           <li>
             {report.chatterino.found
