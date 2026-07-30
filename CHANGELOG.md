@@ -7,15 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- `streamlink:fetch` works on Node 22 + Windows (pipeline hang, bsdtar path parsing)
-- Updater manifest uses GitHub's sanitized asset names (spaces → dots) so the download URL no longer 404s
-
 ### Planned
 
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI
 - Further parity and polish as we dogfood releases
+
+## [0.1.1] — 2026-07-30
+
+### Added
+
+- Startup update check: a banner appears when a new release is available, with download progress; the NSIS installer opens (`basicUi`) and the app relaunches into the new version
+
+### Fixed
+
+- `streamlink:fetch` works on Node 22 + Windows (pipeline hang, bsdtar path parsing)
+- Updater manifest uses GitHub's sanitized asset names (spaces → dots) so the download URL no longer 404s
 
 ## [0.1.0] — 2026-07-30
 
@@ -67,5 +73,6 @@ First public preview of the Windows rewrite (Tauri 2 + React + TypeScript). The 
 - Chatty is intentionally not supported
 - Unsigned installers may show a SmartScreen “Unknown publisher” warning until Authenticode is configured
 
-[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.1.1
 [0.1.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.1.0

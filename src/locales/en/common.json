@@ -20,5 +20,12 @@
   "authDevicePrompt": "Open the browser page and enter this code: {{code}}",
   "notFound": "Page not found",
   "tauriRequiredTitle": "Desktop shell required",
-  "tauriRequiredBody": "You opened the Vite web UI in a browser. Streamlink Twitch GUI needs the Tauri window so login, settings storage, and Streamlink launch work."
+  "tauriRequiredBody": "You opened the Vite web UI in a browser. Streamlink Twitch GUI needs the Tauri window so login, settings storage, and Streamlink launch work.",
+  "updateAvailableTitle": "Update available: v{{version}}",
+  "updateAvailableBody": "Download now and relaunch into the new version.",
+  "updateNow": "Download & install",
+  "updateLater": "Later",
+  "updateDownloading": "Downloading update… {{progress}}%",
+  "updateInstalling": "Installing — the installer opens and the app restarts.",
+  "updateFailed": "Update failed. You can retry from About."
 }

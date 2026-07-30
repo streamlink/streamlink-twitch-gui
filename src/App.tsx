@@ -27,6 +27,7 @@ import { DeepLinkBootstrap } from "./components/DeepLinkAndUpdaterBootstrap";
 import { StreamingBootstrap } from "./components/StreamingBootstrap";
 import { OnboardingWizard } from "./components/OnboardingWizard";
 import { LaunchErrorBanner } from "./components/LaunchErrorBanner";
+import { UpdateBanner } from "./components/UpdateBanner";
 import { SentryBootstrap } from "./lib/sentry";
 import "./styles/global.css";
 
@@ -86,6 +87,7 @@ export default function App() {
                         <DesktopChrome />
                         <TauriGuardBanner />
                         <LaunchErrorBanner />
+                        <UpdateBanner />
                         <AppRoutes />
                       </AppShell>
                     </StreamingBootstrap>
