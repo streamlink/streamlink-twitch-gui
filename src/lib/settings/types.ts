@@ -83,6 +83,8 @@ export interface AppSettings {
     minimizeOnWatch: boolean;
     /** False until the first-run setup wizard is finished or skipped. */
     onboardingDone: boolean;
+    /** Allow stg://watch/<login> deep links to start streams (off = navigate only). */
+    deepLinkAutoWatch: boolean;
   };
   notifications: {
     followedOnline: boolean;
@@ -143,13 +145,16 @@ export const defaultSettings = (): AppSettings => ({
     closeToTray: true,
     minimizeOnWatch: false,
     onboardingDone: false,
+    deepLinkAutoWatch: false,
   },
   notifications: {
     followedOnline: true,
   },
   hotkeys: defaultHotkeys(),
   channels: {},
-  sentryEnabled: true,
+  // Crash reports are opt-IN: the onboarding wizard and Settings offer the
+  // toggle, but nothing is sent until the user explicitly enables it.
+  sentryEnabled: false,
 });
 
 export function resolveChannelLaunch(

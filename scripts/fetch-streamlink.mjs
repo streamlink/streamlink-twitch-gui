@@ -2,17 +2,37 @@
  * Downloads a pinned Streamlink Windows portable build into
  * src-tauri/resources/streamlink for NSIS/MSI packaging.
  *
- * Usage: node scripts/fetch-streamlink.mjs [tag]
+ * The SHA-256 of the zip is pinned together with the tag: this binary is
+ * bundled into signed installers, so a replaced/ poisoned release asset must
+ * fail the build instead of shipping to users.
+ *
+ * Usage: node scripts/fetch-streamlink.mjs [tag] [sha256]
  * Default tag: 8.4.0-1
+ *
+ * When bumping the tag, update PINNED_SHA256 below:
+ *   curl -sL -o sl.zip <asset-url> && sha256sum sl.zip
  */
 import { mkdir, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import { createWriteStream } from "node:fs";
+import { createHash } from "node:crypto";
 import { pipeline } from "node:stream/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 
+const PINNED = {
+  "8.4.0-1":
+    "a8d3bd2b409e6d1b1f7a0e2a5c0cbfba619775e475da3f31285af08d680fb71c",
+};
+
 const version = process.argv[2] ?? "8.4.0-1";
+const expectedHash = process.argv[3] ?? PINNED[version];
+if (!expectedHash) {
+  console.error(
+    `No pinned SHA-256 for tag ${version}. Pass it as second argument and add it to PINNED in this script.`,
+  );
+  process.exit(1);
+}
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = path.join(root, "src-tauri", "resources", "streamlink");
 const assetUrl = `https://github.com/streamlink/windows-builds/releases/download/${version}/streamlink-${version}-py314-x86_64.zip`;
@@ -34,6 +54,28 @@ await mkdir(outDir, { recursive: true });
 
 const zipPath = path.join(outDir, "streamlink.zip");
 await pipeline(res.body, createWriteStream(zipPath));
+
+// Verify integrity BEFORE extracting anything.
+const hash = createHash("sha256");
+const { createReadStream } = await import("node:fs");
+await pipeline(createReadStream(zipPath), async function* (source) {
+  for await (const chunk of source) {
+    hash.update(chunk);
+    yield chunk;
+  }
+});
+const actualHash = hash.digest("hex");
+if (actualHash !== expectedHash) {
+  await rm(zipPath, { force: true });
+  console.error(`SHA-256 mismatch for Streamlink ${version}!`);
+  console.error(`  expected: ${expectedHash}`);
+  console.error(`  actual:   ${actualHash}`);
+  console.error(
+    "Refusing to bundle an unverified binary. If the release was re-published, verify it manually and update the pin.",
+  );
+  process.exit(1);
+}
+console.log(`SHA-256 verified: ${actualHash}`);
 
 try {
   execFileSync("tar", ["-xf", zipPath, "-C", outDir], { stdio: "inherit" });

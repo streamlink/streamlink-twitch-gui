@@ -3,6 +3,7 @@ mod store;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
+use crate::http::shared_client;
 use store::{clear_tokens, load_tokens, now_unix, save_tokens, StoredTokens};
 
 const AUTH_URL: &str = "https://id.twitch.tv/oauth2/device";
@@ -10,12 +11,9 @@ const TOKEN_URL: &str = "https://id.twitch.tv/oauth2/token";
 const VALIDATE_URL: &str = "https://id.twitch.tv/oauth2/validate";
 const REVOKE_URL: &str = "https://id.twitch.tv/oauth2/revoke";
 
-pub const DEFAULT_SCOPES: &[&str] = &[
-    "user:read:follows",
-    "user:read:subscriptions",
-    "user:read:blocked_users",
-    "user:manage:blocked_users",
-];
+/// Least privilege: only what the UI actually calls (followed streams).
+/// Blocked-user scopes were dropped — the app has no block/unblock feature.
+pub const DEFAULT_SCOPES: &[&str] = &["user:read:follows", "user:read:subscriptions"];
 
 #[derive(Debug, Error)]
 pub enum AuthError {
@@ -78,7 +76,8 @@ struct TokenErrorBody {
 #[serde(rename_all = "camelCase")]
 pub struct AuthSession {
     pub logged_in: bool,
-    pub access_token: Option<String>,
+    // The access token is intentionally NOT exposed to the frontend.
+    // Helix calls are proxied through the `helix_fetch` command in Rust.
     pub user_id: Option<String>,
     pub login: Option<String>,
     pub display_name: Option<String>,
@@ -108,8 +107,11 @@ struct HelixUser {
 }
 
 fn client_id() -> Result<String, AuthError> {
-    // Compile-time / runtime: prefer env, fall back to upstream public client-id for local dev.
-    // Forks should set TWITCH_CLIENT_ID (and VITE_TWITCH_CLIENT_ID) to their own app.
+    // Releases MUST set TWITCH_CLIENT_ID (and VITE_TWITCH_CLIENT_ID) to this
+    // project's own registered Twitch application — rate limits, revocation
+    // and ToS apply per application. The literal below is the upstream
+    // streamlink-twitch-gui public client ID and only exists so local dev
+    // builds work out of the box. Do not ship it in releases.
     if let Ok(id) = std::env::var("TWITCH_CLIENT_ID") {
         if !id.is_empty() {
             return Ok(id);
@@ -118,17 +120,20 @@ fn client_id() -> Result<String, AuthError> {
     Ok("phiay4sq36lfv9zu7cbqwz2ndnesfd8".to_string())
 }
 
-fn http() -> Result<reqwest::Client, AuthError> {
-    Ok(reqwest::Client::new())
+fn http() -> &'static reqwest::Client {
+    shared_client()
 }
 
 pub async fn start_device_flow() -> Result<DeviceCodeResponse, AuthError> {
     let client_id = client_id()?;
     let scope = DEFAULT_SCOPES.join(" ");
-    let http = http()?;
+    let http = http();
     let res = http
         .post(AUTH_URL)
-        .form(&[("client_id", client_id.as_str()), ("scopes", scope.as_str())])
+        .form(&[
+            ("client_id", client_id.as_str()),
+            ("scopes", scope.as_str()),
+        ])
         .send()
         .await?;
     let status = res.status();
@@ -147,17 +152,28 @@ pub async fn start_device_flow() -> Result<DeviceCodeResponse, AuthError> {
         })
 }
 
-pub async fn poll_device_token(device_code: &str) -> Result<Option<AuthSession>, AuthError> {
+/// Result of one device-flow poll. `SlowDown` is distinct from `Pending` so
+/// the frontend can increase its interval as RFC 8628 requires (Twitch
+/// enforces this and rate-limits clients that ignore it).
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase", tag = "state")]
+pub enum DevicePoll {
+    #[serde(rename = "pending")]
+    Pending,
+    #[serde(rename = "slowDown")]
+    SlowDown,
+    #[serde(rename = "done")]
+    Done { session: AuthSession },
+}
+
+pub async fn poll_device_token(device_code: &str) -> Result<DevicePoll, AuthError> {
     let client_id = client_id()?;
-    let http = http()?;
+    let http = http();
     let res = http
         .post(TOKEN_URL)
         .form(&[
             ("client_id", client_id.as_str()),
-            (
-                "grant_type",
-                "urn:ietf:params:oauth:grant-type:device_code",
-            ),
+            ("grant_type", "urn:ietf:params:oauth:grant-type:device_code"),
             ("device_code", device_code),
         ])
         .send()
@@ -172,7 +188,9 @@ pub async fn poll_device_token(device_code: &str) -> Result<Option<AuthSession>,
             scopes: token.scope.unwrap_or_default(),
         };
         save_tokens(&stored)?;
-        return Ok(Some(session_from_tokens(stored).await?));
+        return Ok(DevicePoll::Done {
+            session: session_from_tokens(stored).await?,
+        });
     }
 
     let status = res.status();
@@ -181,8 +199,11 @@ pub async fn poll_device_token(device_code: &str) -> Result<Option<AuthSession>,
         status: None,
     });
     let message = err.message.unwrap_or_default();
-    if message == "authorization_pending" || message == "slow_down" {
-        return Ok(None);
+    if message == "authorization_pending" {
+        return Ok(DevicePoll::Pending);
+    }
+    if message == "slow_down" {
+        return Ok(DevicePoll::SlowDown);
     }
     if message == "expired_token" || message == "access_denied" {
         return Err(AuthError::Message(message));
@@ -204,7 +225,7 @@ async fn refresh_if_needed(mut tokens: StoredTokens) -> Result<StoredTokens, Aut
         return Ok(tokens);
     };
     let client_id = client_id()?;
-    let http = http()?;
+    let http = http();
     let res = http
         .post(TOKEN_URL)
         .form(&[
@@ -215,10 +236,18 @@ async fn refresh_if_needed(mut tokens: StoredTokens) -> Result<StoredTokens, Aut
         .send()
         .await?;
     if !res.status().is_success() {
-        clear_tokens()?;
-        return Err(AuthError::Message(
-            "session expired; please log in again".into(),
-        ));
+        let status = res.status();
+        // Only wipe the stored session when Twitch definitively rejects the
+        // refresh token. A transient 5xx must not force a full re-login.
+        if status.as_u16() == 400 || status.as_u16() == 401 {
+            clear_tokens()?;
+            return Err(AuthError::Message(
+                "session expired; please log in again".into(),
+            ));
+        }
+        return Err(AuthError::Message(format!(
+            "token refresh failed ({status}); will retry later"
+        )));
     }
     let token: TokenResponse = res.json().await?;
     tokens = StoredTokens {
@@ -234,7 +263,7 @@ async fn refresh_if_needed(mut tokens: StoredTokens) -> Result<StoredTokens, Aut
 async fn session_from_tokens(tokens: StoredTokens) -> Result<AuthSession, AuthError> {
     let tokens = refresh_if_needed(tokens).await?;
     let client_id = client_id()?;
-    let http = http()?;
+    let http = http();
 
     let validate: ValidateResponse = http
         .get(VALIDATE_URL)
@@ -262,7 +291,6 @@ async fn session_from_tokens(tokens: StoredTokens) -> Result<AuthSession, AuthEr
     let user = users.data.into_iter().next();
     Ok(AuthSession {
         logged_in: true,
-        access_token: Some(tokens.access_token),
         user_id: user
             .as_ref()
             .map(|u| u.id.clone())
@@ -282,7 +310,6 @@ pub async fn get_session() -> Result<AuthSession, AuthError> {
         Some(tokens) => session_from_tokens(tokens).await,
         None => Ok(AuthSession {
             logged_in: false,
-            access_token: None,
             user_id: None,
             login: None,
             display_name: None,
@@ -295,7 +322,7 @@ pub async fn get_session() -> Result<AuthSession, AuthError> {
 pub async fn logout() -> Result<(), AuthError> {
     if let Some(tokens) = load_tokens()? {
         let client_id = client_id()?;
-        let http = http()?;
+        let http = http();
         let _ = http
             .post(REVOKE_URL)
             .form(&[
@@ -309,11 +336,13 @@ pub async fn logout() -> Result<(), AuthError> {
     Ok(())
 }
 
-pub async fn access_token() -> Result<String, AuthError> {
-    let session = get_session().await?;
-    session
-        .access_token
-        .ok_or_else(|| AuthError::Message("not logged in".into()))
+/// Lightweight token accessor for the Helix proxy: refreshes when needed but
+/// skips the validate + /helix/users round trips (those only matter for the
+/// account UI, not for attaching a Bearer header).
+pub async fn token_for_api() -> Result<String, AuthError> {
+    let tokens = load_tokens()?.ok_or_else(|| AuthError::Message("not logged in".into()))?;
+    let tokens = refresh_if_needed(tokens).await?;
+    Ok(tokens.access_token)
 }
 
 pub fn public_client_id() -> Result<String, AuthError> {
@@ -342,4 +371,3 @@ mod tests {
         assert!(json.contains("verificationUri"));
     }
 }
-

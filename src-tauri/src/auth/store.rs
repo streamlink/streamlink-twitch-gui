@@ -1,7 +1,5 @@
-use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
 use keyring::Entry;
 use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
 use std::sync::OnceLock;
 use std::time::{SystemTime, UNIX_EPOCH};
 use thiserror::Error;
@@ -34,15 +32,12 @@ fn ensure_keyring() -> Result<(), TokenStoreError> {
     let result = INIT.get_or_init(|| {
         #[cfg(windows)]
         {
-            let store = windows_native_keyring_store::Store::new()
-                .map_err(|e| e.to_string())?;
+            let store = windows_native_keyring_store::Store::new().map_err(|e| e.to_string())?;
             keyring_core::set_default_store(store);
         }
         Ok(())
     });
-    result
-        .clone()
-        .map_err(TokenStoreError::Keyring)
+    result.clone().map_err(TokenStoreError::Keyring)
 }
 
 fn entry() -> Result<Entry, TokenStoreError> {
@@ -81,12 +76,4 @@ pub fn now_unix() -> u64 {
         .duration_since(UNIX_EPOCH)
         .map(|d| d.as_secs())
         .unwrap_or(0)
-}
-
-/// Deterministic obfuscation is NOT used — tokens live in the OS keyring.
-/// Helper retained for optional future local-cache checksums.
-#[allow(dead_code)]
-pub fn checksum(input: &str) -> String {
-    let digest = Sha256::digest(input.as_bytes());
-    URL_SAFE_NO_PAD.encode(digest)
 }

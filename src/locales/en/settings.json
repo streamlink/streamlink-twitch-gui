@@ -74,6 +74,7 @@
   "chatCustom": "Custom",
   "closeToTray": "Close to tray",
   "minimizeOnWatch": "Minimize when watching",
+  "deepLinkAutoWatch": "Start streams from stg:// links (off = open channel page only)",
   "showSetupAgain": "Show setup wizard again",
   "showSetupAgainHint": "Reopens the first-run Streamlink / player / login checklist.",
   "followedOnline": "Notify when followed channels go live",

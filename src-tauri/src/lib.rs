@@ -3,17 +3,24 @@
 
 mod auth;
 mod doctor;
+mod helix;
+mod http;
 mod streaming;
 
 use auth::{AuthSession, DeviceCodeResponse};
 use doctor::DoctorReport;
-use streaming::{LaunchRequest, SharedStreaming, StreamSession, StreamingState};
 use std::sync::Arc;
+use streaming::{LaunchRequest, SharedStreaming, StreamSession, StreamingState};
 use tauri::{AppHandle, Manager};
 
 #[tauri::command]
-fn get_doctor_report() -> DoctorReport {
-    doctor::run_doctor()
+async fn get_doctor_report() -> Result<DoctorReport, String> {
+    // Probing `streamlink --version`, `mpv --version` and the registry can
+    // take seconds (AV scans, cold Python start) — never run it on the
+    // main thread (sync commands) or a runtime worker without offloading.
+    tauri::async_runtime::spawn_blocking(doctor::run_doctor)
+        .await
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -32,7 +39,7 @@ async fn auth_start_device_login() -> Result<DeviceCodeResponse, String> {
 }
 
 #[tauri::command]
-async fn auth_poll_device_login(device_code: String) -> Result<Option<AuthSession>, String> {
+async fn auth_poll_device_login(device_code: String) -> Result<auth::DevicePoll, String> {
     auth::poll_device_token(&device_code)
         .await
         .map_err(|e| e.to_string())
@@ -43,18 +50,30 @@ async fn auth_logout() -> Result<(), String> {
     auth::logout().await.map_err(|e| e.to_string())
 }
 
+/// Helix GET proxy: keeps the OAuth token inside Rust (never in the webview).
 #[tauri::command]
-async fn auth_get_access_token() -> Result<String, String> {
-    auth::access_token().await.map_err(|e| e.to_string())
+async fn helix_fetch(
+    path: String,
+    query: Option<Vec<(String, String)>>,
+) -> Result<serde_json::Value, String> {
+    helix::fetch(&path, &query.unwrap_or_default())
+        .await
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
-fn stream_start(
+async fn stream_start(
     app: AppHandle,
     state: tauri::State<'_, SharedStreaming>,
     request: LaunchRequest,
 ) -> Result<StreamSession, String> {
-    streaming::start_stream(&app, &state, request).map_err(|e| e.to_string())
+    // Path resolution + process spawn off the main thread.
+    let state = state.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        streaming::start_stream(&app, &state, request).map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 #[tauri::command]
@@ -63,24 +82,40 @@ fn stream_list(state: tauri::State<'_, SharedStreaming>) -> Result<Vec<StreamSes
 }
 
 #[tauri::command]
-fn stream_stop(state: tauri::State<'_, SharedStreaming>, id: String) -> Result<(), String> {
-    streaming::stop_stream(&state, &id).map_err(|e| e.to_string())
+async fn stream_stop(state: tauri::State<'_, SharedStreaming>, id: String) -> Result<(), String> {
+    // child.wait() blocks until Streamlink exits — offload it.
+    let state = state.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        streaming::stop_stream(&state, &id).map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 #[tauri::command]
-fn stream_stop_all(state: tauri::State<'_, SharedStreaming>) -> Result<(), String> {
-    streaming::stop_all(&state).map_err(|e| e.to_string())
+async fn stream_stop_all(state: tauri::State<'_, SharedStreaming>) -> Result<(), String> {
+    let state = state.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        streaming::stop_all(&state).map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 #[tauri::command]
-fn open_chatterino_chat(channels: Vec<String>) -> Result<String, String> {
-    streaming::launch_chatterino_for_channels(&channels).map_err(|e| e.to_string())
+async fn open_chatterino_chat(channels: Vec<String>) -> Result<String, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        streaming::launch_chatterino_for_channels(&channels).map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 #[tauri::command]
-fn close_owned_chatterino() -> Result<(), String> {
-    streaming::close_owned_chatterino();
-    Ok(())
+async fn close_owned_chatterino() -> Result<(), String> {
+    tauri::async_runtime::spawn_blocking(streaming::close_owned_chatterino)
+        .await
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -138,7 +173,7 @@ pub fn run() {
             auth_start_device_login,
             auth_poll_device_login,
             auth_logout,
-            auth_get_access_token,
+            helix_fetch,
             stream_start,
             stream_list,
             stream_stop,

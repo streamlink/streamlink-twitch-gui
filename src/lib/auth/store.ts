@@ -1,11 +1,10 @@
 import { create } from "zustand";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { clearHelixAuthCache } from "../twitch/helix";
 import { invoke, isTauri } from "../tauri";
 
 export interface AuthSession {
   loggedIn: boolean;
-  accessToken?: string | null;
+  // The access token stays in Rust; Helix calls go through the helix_fetch proxy.
   userId?: string | null;
   login?: string | null;
   displayName?: string | null;
@@ -20,6 +19,12 @@ export interface DeviceCodeResponse {
   userCode: string;
   verificationUri: string;
 }
+
+/** Tagged union returned by auth_poll_device_login. */
+export type DevicePoll =
+  | { state: "pending" }
+  | { state: "slowDown" }
+  | { state: "done"; session: AuthSession };
 
 interface AuthState {
   session: AuthSession | null;
@@ -85,24 +90,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ device, loading: false });
       await openUrl(device.verificationUri);
 
+      // RFC 8628: poll at `interval`, and add 5 s each time Twitch answers
+      // slow_down (capped) instead of hammering the token endpoint.
+      let pollIntervalMs = Math.max(device.interval, 1) * 1000;
       const poll = async () => {
         if (!get().device) {
           return;
         }
         try {
-          const session = await invoke<AuthSession | null>(
-            "auth_poll_device_login",
-            { deviceCode: device.deviceCode },
-          );
-          if (session?.loggedIn) {
+          const result = await invoke<DevicePoll>("auth_poll_device_login", {
+            deviceCode: device.deviceCode,
+          });
+          if (result.state === "done" && result.session?.loggedIn) {
             clearPoll();
-            set({ session, device: null, error: null });
+            set({ session: result.session, device: null, error: null });
             return;
           }
-          const waitMs = Math.max(device.interval, 1) * 1000;
+          if (result.state === "slowDown") {
+            pollIntervalMs = Math.min(pollIntervalMs + 5000, 30_000);
+          }
           pollTimer = setTimeout(() => {
             void poll();
-          }, waitMs);
+          }, pollIntervalMs);
         } catch (err) {
           clearPoll();
           set({
@@ -113,7 +122,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       };
       pollTimer = setTimeout(() => {
         void poll();
-      }, Math.max(device.interval, 1) * 1000);
+      }, pollIntervalMs);
     } catch (err) {
       set({
         loading: false,
@@ -132,7 +141,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (isTauri()) {
       await invoke("auth_logout");
     }
-    clearHelixAuthCache();
     set({ session: { loggedIn: false, scopes: [] }, device: null });
   },
 }));

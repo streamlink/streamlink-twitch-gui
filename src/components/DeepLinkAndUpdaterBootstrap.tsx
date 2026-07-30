@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isTauri } from "../lib/tauri";
 import { useWatchingStore } from "../lib/streaming/store";
+import { useSettingsStore } from "../lib/settings/store";
 import {
   getChannelStreams,
   type HelixStream,
 } from "../lib/twitch/helix";
+
+/** Twitch logins are 1–25 chars: lowercase letters, digits, underscore. */
+const TWITCH_LOGIN = /^[a-z0-9_]{1,25}$/;
 
 /** Handle `stg://watch/<login>` and `stg://channel/<login>` deep links. */
 export function DeepLinkBootstrap({ children }: { children: React.ReactNode }) {
@@ -34,9 +38,17 @@ export function DeepLinkBootstrap({ children }: { children: React.ReactNode }) {
             path;
 
           const channel = login.split(/[/?#]/)[0]?.toLowerCase();
-          if (!channel) return;
+          // Reject anything that is not a plausible Twitch login: deep links
+          // arrive from the OS and can be triggered by any website.
+          if (!channel || !TWITCH_LOGIN.test(channel)) return;
 
           navigate(`/channel/${channel}`);
+
+          // Auto-starting a stream spawns Streamlink/mpv/Chatterino — only do
+          // that when the user explicitly opted in (Settings → GUI).
+          if (!useSettingsStore.getState().settings.gui.deepLinkAutoWatch) {
+            return;
+          }
           try {
             const page = await getChannelStreams(channel);
             const live = page.data[0] as HelixStream | undefined;

@@ -1,80 +1,35 @@
 import { invoke } from "../tauri";
 
-export class HelixError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-  ) {
-    super(message);
-    this.name = "HelixError";
+/**
+ * All Helix calls are proxied through the Rust `helix_fetch` command so the
+ * OAuth access token never exists in webview JS. Errors come back as strings
+ * like "helix 401: …" / "not logged in".
+ */
+
+export type HelixQuery = Record<string, string | number | undefined>;
+
+type QueryPairs = Array<[string, string]>;
+
+function toPairs(query?: HelixQuery): QueryPairs {
+  if (!query) return [];
+  const pairs: QueryPairs = [];
+  for (const [key, value] of Object.entries(query)) {
+    if (value !== undefined && value !== "") {
+      pairs.push([key, String(value)]);
+    }
   }
+  return pairs;
 }
 
-let cachedClientId: string | null = null;
-let cachedToken: { value: string; expiresAt: number } | null = null;
-
-export function clearHelixAuthCache(): void {
-  cachedClientId = null;
-  cachedToken = null;
-}
-
-async function clientId(): Promise<string> {
-  if (cachedClientId) {
-    return cachedClientId;
-  }
-  const fromEnv = import.meta.env.VITE_TWITCH_CLIENT_ID as string | undefined;
-  if (fromEnv) {
-    cachedClientId = fromEnv;
-    return fromEnv;
-  }
-  cachedClientId = await invoke<string>("get_twitch_client_id");
-  return cachedClientId;
-}
-
-async function accessToken(): Promise<string> {
-  const now = Date.now();
-  if (cachedToken && cachedToken.expiresAt > now) {
-    return cachedToken.value;
-  }
-  const value = await invoke<string>("auth_get_access_token");
-  // Short client-side cache; Rust still refreshes when needed.
-  cachedToken = { value, expiresAt: now + 45_000 };
-  return value;
+async function helixFetchPairs<T>(path: string, pairs: QueryPairs): Promise<T> {
+  return invoke<T>("helix_fetch", { path, query: pairs });
 }
 
 export async function helixFetch<T>(
   path: string,
-  query?: Record<string, string | number | undefined>,
+  query?: HelixQuery,
 ): Promise<T> {
-  const [cid, token] = await Promise.all([clientId(), accessToken()]);
-  const url = new URL(`https://api.twitch.tv/helix/${path.replace(/^\//, "")}`);
-  if (query) {
-    for (const [key, value] of Object.entries(query)) {
-      if (value !== undefined && value !== "") {
-        url.searchParams.set(key, String(value));
-      }
-    }
-  }
-
-  const res = await fetch(url, {
-    headers: {
-      "Client-Id": cid,
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (res.status === 401) {
-    clearHelixAuthCache();
-    throw new HelixError("unauthorized", 401);
-  }
-  if (res.status === 429) {
-    throw new HelixError("rateLimited", 429);
-  }
-  if (!res.ok) {
-    const body = await res.text();
-    throw new HelixError(body || res.statusText, res.status);
-  }
-  return (await res.json()) as T;
+  return helixFetchPairs<T>(path, toPairs(query));
 }
 
 export interface HelixPage<T> {
@@ -216,23 +171,10 @@ export async function getChannelStreams(
 export async function getUsersByLogin(
   logins: string[],
 ): Promise<HelixPage<HelixUser>> {
-  const [cid, token] = await Promise.all([clientId(), accessToken()]);
-  const url = new URL("https://api.twitch.tv/helix/users");
-  for (const login of logins) {
-    url.searchParams.append("login", login);
-  }
-  const res = await fetch(url, {
-    headers: {
-      "Client-Id": cid,
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (res.status === 401) {
-    clearHelixAuthCache();
-    throw new HelixError("unauthorized", 401);
-  }
-  if (!res.ok) throw new HelixError(await res.text(), res.status);
-  return (await res.json()) as HelixPage<HelixUser>;
+  return helixFetchPairs<HelixPage<HelixUser>>(
+    "users",
+    logins.map((login) => ["login", login]),
+  );
 }
 
 export async function getChannelTeams(
@@ -267,27 +209,15 @@ export async function getStreamsByUserIds(
   userIds: string[],
 ): Promise<HelixStream[]> {
   if (!userIds.length) return [];
-  const [cid, token] = await Promise.all([clientId(), accessToken()]);
   const streams: HelixStream[] = [];
   for (let i = 0; i < userIds.length; i += 100) {
     const batch = userIds.slice(i, i + 100);
-    const url = new URL("https://api.twitch.tv/helix/streams");
-    for (const id of batch) {
-      url.searchParams.append("user_id", id);
-    }
-    url.searchParams.set("first", String(Math.min(100, batch.length)));
-    const res = await fetch(url, {
-      headers: {
-        "Client-Id": cid,
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (res.status === 401) {
-      clearHelixAuthCache();
-      throw new HelixError("unauthorized", 401);
-    }
-    if (!res.ok) throw new HelixError(await res.text(), res.status);
-    const page = (await res.json()) as HelixPage<HelixStream>;
+    const pairs: QueryPairs = batch.map((id) => ["user_id", id]);
+    pairs.push(["first", String(Math.min(100, batch.length))]);
+    const page = await helixFetchPairs<HelixPage<HelixStream>>(
+      "streams",
+      pairs,
+    );
     streams.push(...page.data);
   }
   return streams;

@@ -143,6 +143,21 @@ export function SettingsPage() {
           </span>
         </label>
 
+        <label className="settings__row settings__row--check">
+          <input
+            type="checkbox"
+            checked={settings.gui.deepLinkAutoWatch}
+            onChange={(e) =>
+              setSettings({
+                gui: { ...settings.gui, deepLinkAutoWatch: e.target.checked },
+              })
+            }
+          />
+          <span className="settings__check-text">
+            {t("settings:deepLinkAutoWatch")}
+          </span>
+        </label>
+
         <div className="settings__row">
           <div className="settings__label">
             <span>{t("settings:showSetupAgain")}</span>
