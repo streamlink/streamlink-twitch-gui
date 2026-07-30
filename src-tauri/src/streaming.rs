@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, OnceLock};
 use std::thread;
 use std::time::{Duration, Instant};
@@ -11,15 +11,20 @@ use tauri::{AppHandle, Emitter};
 use thiserror::Error;
 use uuid::Uuid;
 
-use crate::doctor::{find_chatterino_path, find_mpv_path, find_streamlink_path};
+use crate::doctor::{find_chatterino_path, find_mpv_path, find_streamlink_path, which_on_path};
 
 /// Cached tool paths so every `stream_start` does not re-walk PATH/fallbacks.
-static STREAMLINK_PATH_CACHE: OnceLock<Mutex<Option<(String, Option<String>, PathBuf)>>> =
-    OnceLock::new();
+type StreamlinkCacheEntry = (String, Option<String>, PathBuf);
+static STREAMLINK_PATH_CACHE: OnceLock<Mutex<Option<StreamlinkCacheEntry>>> = OnceLock::new();
 static MPV_PATH_CACHE: OnceLock<Mutex<Option<PathBuf>>> = OnceLock::new();
 static CHATTERINO_PATH_CACHE: OnceLock<Mutex<Option<PathBuf>>> = OnceLock::new();
 
-fn streamlink_cache() -> &'static Mutex<Option<(String, Option<String>, PathBuf)>> {
+/// How long the player window must be continuously missing (window-title
+/// heuristic) before a session is treated as closed and Streamlink is killed.
+/// The watchdog ticks every 1.5 s, so 40 s ≈ 26 consecutive misses.
+const MPV_MISSING_GRACE: Duration = Duration::from_secs(40);
+
+fn streamlink_cache() -> &'static Mutex<Option<StreamlinkCacheEntry>> {
     STREAMLINK_PATH_CACHE.get_or_init(|| Mutex::new(None))
 }
 fn mpv_cache() -> &'static Mutex<Option<PathBuf>> {
@@ -113,8 +118,15 @@ pub struct StreamStatusPayload {
 struct LiveSession {
     info: StreamSession,
     child: Child,
+    /// Windows Job containing the Streamlink child (and transitively the
+    /// player). Terminating it kills the whole tree.
+    job: JobSlot,
     /// When the player became ready — grace before treating missing mpv as closed.
     ready_at: Option<Instant>,
+    /// First moment the player window was observed missing (None = seen alive).
+    /// The window-title lookup is only a heuristic, so a session is treated as
+    /// closed solely on missing titles after a long, continuous absence.
+    mpv_missing_since: Option<Instant>,
 }
 
 pub struct StreamingState {
@@ -129,24 +141,13 @@ impl StreamingState {
     }
 }
 
-fn which_on_path(names: &[&str]) -> Option<PathBuf> {
-    let path = std::env::var_os("PATH")?;
-    for dir in std::env::split_paths(&path) {
-        for name in names {
-            let candidate = dir.join(name);
-            if candidate.is_file() {
-                return Some(candidate);
-            }
-        }
-    }
-    None
-}
-
 fn bundled_streamlink() -> Option<PathBuf> {
     let exe = std::env::current_exe().ok()?;
     let dir = exe.parent()?;
     let candidates = [
-        dir.join("resources").join("streamlink").join("streamlinkw.exe"),
+        dir.join("resources")
+            .join("streamlink")
+            .join("streamlinkw.exe"),
         dir.join("streamlink").join("streamlinkw.exe"),
         // Dev: relative to src-tauri/resources
         PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -157,7 +158,10 @@ fn bundled_streamlink() -> Option<PathBuf> {
     candidates.into_iter().find(|p| p.is_file())
 }
 
-fn resolve_streamlink(source: &str, custom: Option<&str>) -> Result<(PathBuf, String), StreamError> {
+fn resolve_streamlink(
+    source: &str,
+    custom: Option<&str>,
+) -> Result<(PathBuf, String), StreamError> {
     let custom_key = custom.map(str::to_string);
     if let Ok(guard) = streamlink_cache().lock() {
         if let Some((cached_source, cached_custom, path)) = guard.as_ref() {
@@ -187,9 +191,7 @@ fn resolve_streamlink(source: &str, custom: Option<&str>) -> Result<(PathBuf, St
             } else {
                 find_streamlink_path()
                     .map(|p| (p, "system".into()))
-                    .ok_or_else(|| {
-                        StreamError::Message("Streamlink executable not found".into())
-                    })?
+                    .ok_or_else(|| StreamError::Message("Streamlink executable not found".into()))?
             }
         }
         _ => find_streamlink_path()
@@ -264,30 +266,14 @@ fn default_player_args(player_id: &str, channel: &str, title: &str, game: &str) 
             )
         }
         "vlc" => {
-            let label = format!("{channel} - {game} - {title}").replace('"', "");
+            // Same stgui-<channel> marker mpv uses, so stop/prune can find
+            // and close the window (close_player_windows_for_channel matches
+            // the prefix). VLC shows it as "<title> - VLC media player".
+            let label = mpv_window_title(channel);
             format!("--play-and-exit --input-title-format \"{label}\"")
         }
         _ => String::new(),
     }
-}
-
-/// Leave the right ~22% of the screen free for Chatterino.
-#[allow(dead_code)]
-fn apply_side_chat_player_args(player_id: &str, args: &str) -> String {
-    if player_id != "mpv" {
-        return args.to_string();
-    }
-    let mut parts: Vec<&str> = args
-        .split_whitespace()
-        .filter(|p| !p.starts_with("--window-maximized") && !p.starts_with("--geometry="))
-        .collect();
-    parts.push("--geometry=70%x100%+0+0");
-    parts.join(" ")
-}
-
-#[allow(dead_code)]
-pub fn launch_chatterino_for_channel(channel: &str) -> Result<String, StreamError> {
-    launch_chatterino_for_channels(&[channel.to_string()])
 }
 
 pub fn launch_chatterino_for_channels(channels: &[String]) -> Result<String, StreamError> {
@@ -358,6 +344,93 @@ fn terminate_pid(pid: u32) {
     }
 }
 
+/// Windows Job Object wrapper: terminating the job kills the whole process
+/// tree rooted at the Streamlink child — including whatever player it spawned
+/// (mpv/VLC/…), regardless of window titles. Children spawned by a job member
+/// join the job automatically (Windows 8+), so even the orphaned player left
+/// behind by a dead Streamlink is cleaned up.
+#[cfg(windows)]
+mod process_job {
+    pub struct JobHandle(*mut core::ffi::c_void);
+    unsafe impl Send for JobHandle {}
+
+    #[link(name = "kernel32")]
+    unsafe extern "system" {
+        fn CreateJobObjectW(
+            attrs: *mut core::ffi::c_void,
+            name: *const u16,
+        ) -> *mut core::ffi::c_void;
+        fn OpenProcess(access: u32, inherit: i32, pid: u32) -> *mut core::ffi::c_void;
+        fn AssignProcessToJobObject(
+            job: *mut core::ffi::c_void,
+            process: *mut core::ffi::c_void,
+        ) -> i32;
+        fn TerminateJobObject(job: *mut core::ffi::c_void, exit_code: u32) -> i32;
+        fn CloseHandle(handle: *mut core::ffi::c_void) -> i32;
+    }
+    const PROCESS_SET_QUOTA: u32 = 0x0100;
+    const PROCESS_TERMINATE: u32 = 0x0001;
+
+    /// Create a job and assign the freshly spawned child (by PID) to it.
+    /// Returns None on any failure — callers fall back to title-based closing.
+    pub fn assign(pid: u32) -> Option<JobHandle> {
+        unsafe {
+            let job = CreateJobObjectW(std::ptr::null_mut(), std::ptr::null());
+            if job.is_null() {
+                return None;
+            }
+            let process = OpenProcess(PROCESS_SET_QUOTA | PROCESS_TERMINATE, 0, pid);
+            if process.is_null() {
+                let _ = CloseHandle(job);
+                return None;
+            }
+            let ok = AssignProcessToJobObject(job, process);
+            let _ = CloseHandle(process);
+            if ok == 0 {
+                let _ = CloseHandle(job);
+                return None;
+            }
+            Some(JobHandle(job))
+        }
+    }
+
+    /// Terminate every process in the job and close the handle.
+    pub fn terminate(job: JobHandle) {
+        unsafe {
+            let _ = TerminateJobObject(job.0, 1);
+            let _ = CloseHandle(job.0);
+        }
+    }
+}
+
+#[cfg(windows)]
+type JobSlot = Option<process_job::JobHandle>;
+#[cfg(not(windows))]
+type JobSlot = ();
+
+fn assign_job(child: &Child) -> JobSlot {
+    #[cfg(windows)]
+    {
+        process_job::assign(child.id())
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = child;
+    }
+}
+
+/// Kill the player's whole process tree (job). The title-based
+/// `close_player_windows_for_channel` remains as a fallback for sessions
+/// whose job assignment failed at spawn time.
+fn terminate_job(slot: &mut JobSlot) {
+    #[cfg(windows)]
+    if let Some(job) = slot.take() {
+        process_job::terminate(job);
+    }
+    #[cfg(not(windows))]
+    let _ = slot;
+}
+
 /// Re-tile mpv windows for active channels; optionally leave the right strip for chat.
 pub fn layout_watching(
     channels: &[String],
@@ -381,9 +454,17 @@ pub fn layout_watching(
             .ok()
             .and_then(|g| *g)
             .unwrap_or(0);
+        // Latest request wins: when several streams become ready at once, the
+        // frontend fires layout_watching repeatedly. Older threads exit as
+        // soon as they notice a newer generation instead of fighting over
+        // window placement.
+        let generation = LAYOUT_GENERATION.fetch_add(1, Ordering::SeqCst) + 1;
         thread::spawn(move || {
             thread::sleep(Duration::from_millis(400));
             for _ in 0..6 {
+                if LAYOUT_GENERATION.load(Ordering::SeqCst) != generation {
+                    return;
+                }
                 let _ = retile_player_windows(&cleaned, reserve_chat, &layout);
                 if reserve_chat && chat_pid != 0 {
                     place_chatterino_window_right(chat_pid);
@@ -398,6 +479,9 @@ pub fn layout_watching(
     }
     Ok(())
 }
+
+/// Monotonic counter serializing layout_watching retile threads (latest wins).
+static LAYOUT_GENERATION: AtomicU64 = AtomicU64::new(0);
 
 fn launch_chatterino_with_path(
     path: &Path,
@@ -552,10 +636,10 @@ fn primary_monitor_work() -> Option<WinRect> {
                 work = info.rc_work;
             }
         }
-        if work.right <= work.left || work.bottom <= work.top {
-            if SystemParametersInfoW(SPI_GETWORKAREA, 0, &mut work as *mut _ as *mut _, 0) == 0 {
-                return None;
-            }
+        if (work.right <= work.left || work.bottom <= work.top)
+            && SystemParametersInfoW(SPI_GETWORKAREA, 0, &mut work as *mut _ as *mut _, 0) == 0
+        {
+            return None;
         }
 
         // Extra clamp using the real taskbar rect (fixes cases where rcWork is wrong).
@@ -574,25 +658,17 @@ fn primary_monitor_work() -> Option<WinRect> {
         };
         if SHAppBarMessage(ABM_GETTASKBARPOS, &mut abd) != 0 {
             match abd.edge {
-                ABE_BOTTOM => {
-                    if abd.rc.top > work.top {
-                        work.bottom = work.bottom.min(abd.rc.top);
-                    }
+                ABE_BOTTOM if abd.rc.top > work.top => {
+                    work.bottom = work.bottom.min(abd.rc.top);
                 }
-                ABE_TOP => {
-                    if abd.rc.bottom < work.bottom {
-                        work.top = work.top.max(abd.rc.bottom);
-                    }
+                ABE_TOP if abd.rc.bottom < work.bottom => {
+                    work.top = work.top.max(abd.rc.bottom);
                 }
-                ABE_LEFT => {
-                    if abd.rc.right < work.right {
-                        work.left = work.left.max(abd.rc.right);
-                    }
+                ABE_LEFT if abd.rc.right < work.right => {
+                    work.left = work.left.max(abd.rc.right);
                 }
-                ABE_RIGHT => {
-                    if abd.rc.left > work.left {
-                        work.right = work.right.min(abd.rc.left);
-                    }
+                ABE_RIGHT if abd.rc.left > work.left => {
+                    work.right = work.right.min(abd.rc.left);
                 }
                 _ => {}
             }
@@ -756,14 +832,28 @@ fn build_mpv_dock_args(channel: &str, reserve_chat: bool, preset_args: &str) -> 
         "--demuxer-readahead-secs=0.5".into(),
         "--watch-later-options-clr".into(),
     ];
+    // Options the dock owns; matching preset flags are dropped. Everything
+    // else the user configured (loop-*, demuxer cache, custom extras, …) is
+    // kept — silently discarding it made dock mode diverge from the settings.
+    // mpv is last-one-wins for repeated options, so a preset --cache=yes
+    // still overrides our --cache=no default above.
+    const DOCK_OWNED: &[&str] = &[
+        "--geometry",
+        "--window-maximized",
+        "--title",
+        "--force-media-title",
+        "--force-window",
+        "--keep-open",
+        "--no-border",
+        "--watch-later-options-clr",
+    ];
     for p in rebuild_player_args_preserving_quotes(preset_args) {
-        if p == "--no-keepaspect-window"
-            || p.starts_with("--loop-playlist")
-            || p.starts_with("--loop-file")
-        {
-            if !parts.iter().any(|x| x == &p) {
-                parts.push(p);
-            }
+        let key = p.split('=').next().unwrap_or(p.as_str());
+        if DOCK_OWNED.contains(&key) {
+            continue;
+        }
+        if !parts.iter().any(|x| x == &p) {
+            parts.push(p);
         }
     }
     // Unique title so Win32 can find this mpv window (not a browser tab named after the channel).
@@ -1120,7 +1210,7 @@ fn strip_ansi(input: &str) -> String {
         if c == '\u{1b}' {
             if chars.peek() == Some(&'[') {
                 chars.next();
-                while let Some(n) = chars.next() {
+                for n in chars.by_ref() {
                     if n.is_ascii_alphabetic() {
                         break;
                     }
@@ -1157,12 +1247,13 @@ fn classify_line(line: &str) -> (&'static str, bool) {
         ("ads", false)
     } else if lower.contains("player:")
         || lower.contains("starting player")
-        || lower.contains("opening stream")
         || lower.contains("writing to player")
     {
+        // Ready = the player process actually started. "Opening stream" only
+        // means Streamlink began fetching — it must NOT mark the session
+        // ready (layout, handoff and the missing-window grace all key off it).
         ("ready", true)
-    } else if lower.contains("[error]") || lower.contains(" error:") || lower.contains("error: ")
-    {
+    } else if lower.contains("[error]") || lower.contains(" error:") || lower.contains("error: ") {
         ("error", false)
     } else if lower.contains("opening stream")
         || lower.contains("available streams")
@@ -1174,13 +1265,7 @@ fn classify_line(line: &str) -> (&'static str, bool) {
     }
 }
 
-fn update_session_status(
-    state: &StreamingState,
-    id: &str,
-    status: &str,
-    phase: &str,
-    ready: bool,
-) {
+fn update_session_status(state: &StreamingState, id: &str, status: &str, phase: &str, ready: bool) {
     if let Ok(mut map) = state.inner.lock() {
         if let Some(session) = map.get_mut(id) {
             session.info.status = status.to_string();
@@ -1223,6 +1308,7 @@ fn schedule_handoff(
     });
 }
 
+#[allow(clippy::too_many_arguments)]
 fn spawn_output_readers(
     app: AppHandle,
     state: SharedStreaming,
@@ -1311,11 +1397,34 @@ pub fn start_stream(
     if channel.is_empty() {
         return Err(StreamError::Message("channel is empty".into()));
     }
+    // Twitch logins: 1–25 chars of [a-z0-9_]. Reject everything else so the
+    // value is always safe to embed in URLs, window titles and player args.
+    if channel.len() > 25
+        || !channel
+            .chars()
+            .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_')
+    {
+        return Err(StreamError::Message(format!(
+            "invalid channel name: {channel}"
+        )));
+    }
 
     let quality = req
         .quality
         .filter(|q| !q.is_empty())
         .unwrap_or_else(|| "best".into());
+    // Quality is passed as a bare CLI argument to Streamlink; restrict it to
+    // selector characters (e.g. "best", "720p60", "1080p,720p,best") so a
+    // malformed settings value can never be interpreted as a flag.
+    if quality.len() > 64
+        || !quality
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || matches!(c, ',' | '_' | '+' | '-'))
+    {
+        return Err(StreamError::Message(format!(
+            "invalid quality selector: {quality}"
+        )));
+    }
     let source = req.streamlink_source.as_deref().unwrap_or("bundled");
     let player_id = req.player_id.as_deref().unwrap_or("mpv");
 
@@ -1386,15 +1495,6 @@ pub fn start_stream(
             .unwrap_or_else(|| default_player_args(player_id, &channel, &title, &game));
         let reserve_chat = req.reserve_chat.unwrap_or(false);
         if player_id == "mpv" {
-            let replace_existing = req.replace_existing.unwrap_or(false);
-            let existing = state
-                .inner
-                .lock()
-                .map(|m| m.len())
-                .unwrap_or(0);
-            let count = if replace_existing { 1 } else { existing + 1 };
-            let index = if replace_existing { 0 } else { existing };
-            let _ = (index, count);
             player_args = build_mpv_dock_args(&channel, reserve_chat, &player_args);
         }
         if !player_args.is_empty() {
@@ -1462,6 +1562,9 @@ pub fn start_stream(
 
     let handoff_done = Arc::new(AtomicBool::new(false));
     {
+        // Put the child in a kill-job BEFORE inserting: the player it spawns
+        // joins the job, so stop/prune can kill the whole tree.
+        let job = assign_job(&child);
         let mut map = state
             .inner
             .lock()
@@ -1471,7 +1574,9 @@ pub fn start_stream(
             LiveSession {
                 info: info.clone(),
                 child,
+                job,
                 ready_at: None,
+                mpv_missing_since: None,
             },
         );
     }
@@ -1525,13 +1630,23 @@ pub fn prune_dead_sessions(state: &StreamingState) -> Result<bool, StreamError> 
             Ok(None) => false,
             Err(_) => true,
         };
-        // Grace after ready: mpv window can lag "Starting player" by a few seconds.
-        let mpv_gone = session.info.ready
+        // The window-title lookup is a heuristic and can produce false
+        // negatives (renamed window, Unicode title, DWM timing). Never kill a
+        // stream on a single miss: require the player window to be missing
+        // continuously for MPV_MISSING_GRACE before treating it as closed.
+        let window_missing = session.info.ready
             && session
                 .ready_at
                 .map(|t| t.elapsed() > Duration::from_secs(8))
                 .unwrap_or(false)
             && !mpv_window_alive(&session.info.channel);
+        let mpv_gone = if window_missing {
+            let since = session.mpv_missing_since.get_or_insert_with(Instant::now);
+            since.elapsed() > MPV_MISSING_GRACE
+        } else {
+            session.mpv_missing_since = None;
+            false
+        };
         if child_dead || mpv_gone {
             session.info.running = false;
             session.info.phase = "ended".into();
@@ -1548,6 +1663,8 @@ pub fn prune_dead_sessions(state: &StreamingState) -> Result<bool, StreamError> 
         if let Some(mut session) = map.remove(id) {
             let _ = session.child.kill();
             let _ = session.child.wait();
+            // Kill the whole tree (orphaned player included) via the job.
+            terminate_job(&mut session.job);
         }
         close_player_windows_for_channel(channel);
     }
@@ -1593,8 +1710,10 @@ pub fn stop_stream(state: &StreamingState, id: &str) -> Result<(), StreamError> 
         let channel = session.info.channel.clone();
         let _ = session.child.kill();
         let _ = session.child.wait();
-        // Streamlink exit leaves mpv orphaned; with --loop-file=inf it keeps
-        // replaying the buffer instead of closing.
+        // Streamlink exit leaves the player orphaned; with --loop-file=inf it
+        // keeps replaying the buffer instead of closing. The job kills the
+        // whole tree; title-based closing is the fallback.
+        terminate_job(&mut session.job);
         close_player_windows_for_channel(&channel);
     }
     let empty = map.is_empty();
@@ -1614,6 +1733,7 @@ pub fn stop_all(state: &StreamingState) -> Result<(), StreamError> {
     for (_, mut session) in map.drain() {
         let _ = session.child.kill();
         let _ = session.child.wait();
+        terminate_job(&mut session.job);
     }
     drop(map);
     for channel in channels {
@@ -1678,8 +1798,11 @@ fn close_player_windows_for_channel_windows(channel: &str) {
         let title = String::from_utf16_lossy(&buf[..n as usize]);
         let lower = title.to_ascii_lowercase();
         let prefix = data.prefix.as_str();
-        // Our mpv titles look like: "{channel} - {game} - {title}"
-        if !(lower == prefix || lower.starts_with(&format!("{prefix} -")) || lower.starts_with(&format!("{prefix}:")))
+        // Player windows we spawn are titled stgui-<channel> (mpv --title /
+        // VLC --input-title-format); VLC appends " - VLC media player".
+        if !(lower == prefix
+            || lower.starts_with(&format!("{prefix} -"))
+            || lower.starts_with(&format!("{prefix}:")))
         {
             return 1;
         }
@@ -1719,9 +1842,53 @@ fn close_player_windows_for_channel_windows(channel: &str) {
     }
 }
 
-#[allow(dead_code)]
-pub fn streamlink_path_exists(path: &Path) -> bool {
-    path.is_file()
-}
-
 pub type SharedStreaming = Arc<StreamingState>;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn opening_stream_is_starting_not_ready() {
+        // Regression: "Opening stream" was treated as ready, which started
+        // the layout/handoff/missing-window timers before the player existed.
+        let (phase, ready) = classify_line("[cli][info] Opening stream: source (hls)");
+        assert_eq!(phase, "starting");
+        assert!(!ready);
+    }
+
+    #[test]
+    fn starting_player_marks_ready() {
+        let (phase, ready) =
+            classify_line("[cli][info] Starting player: C:\\Program Files\\mpv\\mpv.exe");
+        assert_eq!(phase, "ready");
+        assert!(ready);
+    }
+
+    #[test]
+    fn channel_and_quality_validation() {
+        // mpv_window_title strips anything outside [a-z0-9_-].
+        assert_eq!(mpv_window_title("Some_Channel-1"), "stgui-some_channel-1");
+        assert_eq!(mpv_window_title("äöü"), "stgui-stream");
+    }
+
+    #[test]
+    fn dock_args_keep_custom_extras_but_drop_owned_flags() {
+        // Regression: dock mode silently discarded all custom mpv args except
+        // --no-keepaspect-window and --loop-*.
+        let args = build_mpv_dock_args(
+            "chan",
+            false,
+            "--loop-file=inf --cache=yes --volume=42 --title=\"chan - g - t\" --geometry=50%x50%+0+0 --window-maximized=yes",
+        );
+        assert!(args.contains("--loop-file=inf"));
+        assert!(args.contains("--cache=yes"));
+        assert!(args.contains("--volume=42"));
+        // Dock owns geometry and window title.
+        assert!(!args.contains("--geometry=50%x50%"));
+        assert!(!args.contains("--window-maximized"));
+        assert!(!args.contains("chan - g - t"));
+        assert!(args.contains("--title=stgui-chan"));
+        assert!(args.contains("--force-media-title=stgui-chan"));
+    }
+}

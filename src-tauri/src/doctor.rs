@@ -22,7 +22,8 @@ pub struct DoctorReport {
     pub min_streamlink_version: String,
 }
 
-fn which_on_path(names: &[&str]) -> Option<PathBuf> {
+/// Find the first executable matching any of `names` on PATH.
+pub fn which_on_path(names: &[&str]) -> Option<PathBuf> {
     let path = std::env::var_os("PATH")?;
     for dir in std::env::split_paths(&path) {
         for name in names {
@@ -46,12 +47,10 @@ fn refresh_path_from_registry() {
     );
     let user = read_reg_path(r"HKEY_CURRENT_USER\Environment", "Path");
     let mut parts: Vec<OsString> = Vec::new();
-    for raw in [machine, user] {
-        if let Some(value) = raw {
-            for dir in std::env::split_paths(&value) {
-                if !dir.as_os_str().is_empty() {
-                    parts.push(dir.into_os_string());
-                }
+    for value in [machine, user].into_iter().flatten() {
+        for dir in std::env::split_paths(&value) {
+            if !dir.as_os_str().is_empty() {
+                parts.push(dir.into_os_string());
             }
         }
     }
@@ -145,12 +144,21 @@ fn streamlink_fallbacks() -> Vec<PathBuf> {
     if let Ok(exe) = std::env::current_exe() {
         if let Some(dir) = exe.parent() {
             paths.push(dir.join("streamlink").join("streamlinkw.exe"));
-            paths.push(dir.join("resources").join("streamlink").join("streamlinkw.exe"));
+            paths.push(
+                dir.join("resources")
+                    .join("streamlink")
+                    .join("streamlinkw.exe"),
+            );
         }
     }
     for env in ["ProgramFiles", "ProgramFiles(x86)"] {
         if let Ok(root) = std::env::var(env) {
-            paths.push(PathBuf::from(root).join("Streamlink").join("bin").join("streamlinkw.exe"));
+            paths.push(
+                PathBuf::from(root)
+                    .join("Streamlink")
+                    .join("bin")
+                    .join("streamlinkw.exe"),
+            );
         }
     }
     paths
@@ -169,14 +177,26 @@ fn mpv_fallbacks() -> Vec<PathBuf> {
     if let Ok(local) = std::env::var("LOCALAPPDATA") {
         let local = PathBuf::from(local);
         // winget shim / links directory
-        paths.push(local.join("Microsoft").join("WinGet").join("Links").join("mpv.exe"));
+        paths.push(
+            local
+                .join("Microsoft")
+                .join("WinGet")
+                .join("Links")
+                .join("mpv.exe"),
+        );
         // Common user install roots
         paths.push(local.join("Programs").join("mpv").join("mpv.exe"));
         paths.push(local.join("Programs").join("MPV Player").join("mpv.exe"));
     }
     if let Ok(user) = std::env::var("USERPROFILE") {
         let user = PathBuf::from(user);
-        paths.push(user.join("scoop").join("apps").join("mpv").join("current").join("mpv.exe"));
+        paths.push(
+            user.join("scoop")
+                .join("apps")
+                .join("mpv")
+                .join("current")
+                .join("mpv.exe"),
+        );
         paths.push(user.join("scoop").join("shims").join("mpv.exe"));
     }
     paths
@@ -187,12 +207,21 @@ fn chatterino_fallbacks() -> Vec<PathBuf> {
     // Prefer real installs first — WinGet Links shims often fail when spawned from a GUI host.
     for env in ["ProgramFiles", "ProgramFiles(x86)"] {
         if let Ok(root) = std::env::var(env) {
-            paths.push(PathBuf::from(root).join("Chatterino").join("chatterino.exe"));
+            paths.push(
+                PathBuf::from(root)
+                    .join("Chatterino")
+                    .join("chatterino.exe"),
+            );
         }
     }
     if let Ok(local) = std::env::var("LOCALAPPDATA") {
         let local = PathBuf::from(local);
-        paths.push(local.join("Programs").join("Chatterino").join("chatterino.exe"));
+        paths.push(
+            local
+                .join("Programs")
+                .join("Chatterino")
+                .join("chatterino.exe"),
+        );
         paths.push(local.join("Chatterino").join("chatterino.exe"));
     }
     if let Ok(user) = std::env::var("USERPROFILE") {
@@ -288,14 +317,10 @@ pub fn run_doctor() -> DoctorReport {
         streamlink_fallbacks(),
         &["--version"],
     );
-    if streamlink.found {
-        if let Some(path) = &streamlink.path {
-            if path.contains("resources") || path.contains(std::path::MAIN_SEPARATOR) {
-                // Prefer labeling bundled when under app resources
-                if path.contains("resources\\streamlink") || path.contains("resources/streamlink") {
-                    streamlink.source = Some("bundled".into());
-                }
-            }
+    // Prefer labeling bundled when under app resources.
+    if let Some(path) = streamlink.path.as_deref() {
+        if path.contains("resources\\streamlink") || path.contains("resources/streamlink") {
+            streamlink.source = Some("bundled".into());
         }
     }
 
@@ -340,6 +365,10 @@ mod tests {
     fn doctor_finds_installed_mpv_when_present() {
         let winget = PathBuf::from(r"C:\Program Files\MPV Player\mpv.exe");
         if !winget.is_file() {
+            return;
+        }
+        // Some CI shells don't export ProgramFiles; the fallbacks rely on it.
+        if std::env::var("ProgramFiles").is_err() {
             return;
         }
         let report = run_doctor();

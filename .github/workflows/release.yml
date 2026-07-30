@@ -74,6 +74,12 @@ jobs:
             npm run tauri -- build
           }
 
+      # `tauri build` creates .sig files but not the updater manifest; the
+      # endpoint in tauri.conf.json expects releases/latest/download/latest.json.
+      - name: Generate updater manifest (latest.json)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: node scripts/generate-updater-manifest.mjs "${{ github.ref_name }}"
+
       - name: Upload installers
         uses: actions/upload-artifact@v4
         with:
@@ -83,6 +89,7 @@ jobs:
             src-tauri/target/release/bundle/msi/*.msi
             src-tauri/target/release/bundle/nsis/*.sig
             src-tauri/target/release/bundle/msi/*.sig
+            src-tauri/target/release/bundle/latest.json
 
       - name: Publish GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -96,5 +103,6 @@ jobs:
             src-tauri/target/release/bundle/msi/*.sig
             src-tauri/target/release/bundle/nsis/*.json
             src-tauri/target/release/bundle/msi/*.json
+            src-tauri/target/release/bundle/latest.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
