@@ -170,10 +170,24 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
   refresh: async () => {
     const sessions = await invoke<StreamSession[]>("stream_list");
     syncSlotsFromSessions(sessions);
+    const hadSessions = get().sessions.length > 0;
     set({ sessions });
     const active = get().activeChatChannel;
     if (active && !sessions.some((s) => s.channel === active)) {
       set({ activeChatChannel: sessions[0]?.channel ?? null });
+    }
+    // minimizeOnWatch hid the app while watching — bring it back once the
+    // last stream ended (e.g. the user closed the player window).
+    if (
+      hadSessions &&
+      sessions.length === 0 &&
+      useSettingsStore.getState().settings.gui.minimizeOnWatch &&
+      isTauri()
+    ) {
+      void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
+        const win = getCurrentWindow();
+        void win.unminimize().then(() => win.setFocus());
+      });
     }
   },
 

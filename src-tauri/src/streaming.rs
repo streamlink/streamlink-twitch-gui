@@ -1953,6 +1953,15 @@ pub fn prune_dead_sessions(state: &StreamingState) -> Result<bool, StreamError> 
             Ok(None) => false,
             Err(_) => true,
         };
+        // Fast-start sessions own the pre-launched mpv, so its process state
+        // is authoritative: closing the player window exits mpv even in
+        // --idle mode. Detect that within one watchdog tick instead of
+        // waiting out the MPV_MISSING_GRACE window-title timeout.
+        let player_dead = session
+            .player
+            .as_mut()
+            .map(|p| !matches!(p.child.try_wait(), Ok(None)))
+            .unwrap_or(false);
         // The window-title lookup is a heuristic and can produce false
         // negatives (renamed window, Unicode title, DWM timing). Never kill a
         // stream on a single miss: require the player window to be missing
@@ -1970,7 +1979,7 @@ pub fn prune_dead_sessions(state: &StreamingState) -> Result<bool, StreamError> 
             session.mpv_missing_since = None;
             false
         };
-        if child_dead || mpv_gone {
+        if child_dead || player_dead || mpv_gone {
             session.info.running = false;
             session.info.phase = "ended".into();
             if session.info.status.is_empty() {
