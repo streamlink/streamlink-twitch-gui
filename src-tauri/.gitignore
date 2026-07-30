@@ -4,5 +4,6 @@
 /gen/schemas
 /gen/updater.key
 /gen/updater.key.pub
+/tauri.windows.conf.json
 /resources/streamlink/**
 !/resources/streamlink/README.md

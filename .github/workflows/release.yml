@@ -11,6 +11,10 @@ permissions:
 jobs:
   windows:
     runs-on: windows-latest
+    env:
+      WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+      WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+      WINDOWS_CERTIFICATE_THUMBPRINT: ${{ secrets.WINDOWS_CERTIFICATE_THUMBPRINT }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,6 +35,29 @@ jobs:
       - name: Fetch bundled Streamlink
         run: npm run streamlink:fetch
 
+      - name: Import Windows Authenticode certificate
+        if: ${{ env.WINDOWS_CERTIFICATE != '' && env.WINDOWS_CERTIFICATE_THUMBPRINT != '' }}
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $pfxPath = Join-Path $env:RUNNER_TEMP "windows-codesign.pfx"
+          $bytes = [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE.Trim())
+          [IO.File]::WriteAllBytes($pfxPath, $bytes)
+          $secure = ConvertTo-SecureString -String $env:WINDOWS_CERTIFICATE_PASSWORD -Force -AsPlainText
+          Import-PfxCertificate -FilePath $pfxPath -CertStoreLocation Cert:\CurrentUser\My -Password $secure | Out-Null
+          $thumb = ($env:WINDOWS_CERTIFICATE_THUMBPRINT -replace '\s', '').ToUpperInvariant()
+          $cfg = @{
+            bundle = @{
+              windows = @{
+                certificateThumbprint = $thumb
+                digestAlgorithm = "sha256"
+                timestampUrl = "http://timestamp.digicert.com"
+              }
+            }
+          } | ConvertTo-Json -Depth 6
+          Set-Content -Path "src-tauri/tauri.windows.conf.json" -Value $cfg -Encoding utf8
+          Write-Host "Authenticode enabled for thumbprint $thumb"
+
       - name: Build Tauri (NSIS + MSI)
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
@@ -39,7 +66,13 @@ jobs:
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
           VITE_TWITCH_CLIENT_ID: ${{ secrets.VITE_TWITCH_CLIENT_ID }}
-        run: npm run tauri:build
+        shell: pwsh
+        run: |
+          if (Test-Path "src-tauri/tauri.windows.conf.json") {
+            npm run tauri -- build --config src-tauri/tauri.windows.conf.json
+          } else {
+            npm run tauri -- build
+          }
 
       - name: Upload installers
         uses: actions/upload-artifact@v4
