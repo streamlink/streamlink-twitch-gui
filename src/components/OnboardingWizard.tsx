@@ -91,6 +91,18 @@ export function OnboardingWizard() {
               ) : (
                 <AuthBar />
               )}
+              <label className="settings__row settings__row--check">
+                <input
+                  type="checkbox"
+                  checked={settings.sentryEnabled}
+                  onChange={(e) =>
+                    setSettings({ sentryEnabled: e.target.checked })
+                  }
+                />
+                <span className="settings__check-text">
+                  {t("onboarding:sentryOptIn")}
+                </span>
+              </label>
             </section>
           ) : null}
         </div>

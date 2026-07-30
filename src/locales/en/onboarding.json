@@ -40,5 +40,6 @@
   "loginAction": "Log in with Twitch",
   "loginSkip": "Skip for now",
   "loginDone": "You are signed in as {{name}}.",
+  "sentryOptIn": "Send anonymous crash reports (off by default; tokens are never included)",
   "openDocs": "Open install page"
 }

@@ -21,7 +21,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; connect-src 'self' https://api.twitch.tv https://id.twitch.tv https://*.twitch.tv https://*.sentry.io https://github.com https://*.github.com https://objects.githubusercontent.com; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; frame-src https://www.twitch.tv https://twitch.tv"
+      "csp": "default-src 'self'; connect-src 'self' https://api.twitch.tv https://id.twitch.tv https://*.twitch.tv https://*.sentry.io https://github.com https://*.github.com https://objects.githubusercontent.com; img-src 'self' https: data:; style-src 'self'; frame-src https://www.twitch.tv https://twitch.tv"
     }
   },
   "plugins": {

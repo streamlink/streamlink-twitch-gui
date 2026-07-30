@@ -28,6 +28,8 @@ export function EmbeddedChat({ channel }: EmbeddedChatProps) {
         title={t("chatTitle", { channel })}
         src={src}
         allow="clipboard-write"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
+        referrerPolicy="no-referrer"
       />
     </aside>
   );
