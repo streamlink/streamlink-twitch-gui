@@ -57,6 +57,11 @@ if (!assetName || !signature) {
   process.exit(1);
 }
 
+// GitHub sanitizes uploaded asset names (spaces and other specials become
+// dots — observed: "Streamlink Twitch GUI_…exe" → "Streamlink.Twitch.GUI_…exe").
+// The download URL must use the sanitized name, otherwise it 404s.
+const sanitizedAsset = assetName.replace(/[^A-Za-z0-9._-]+/g, ".");
+
 const manifest = {
   version,
   notes: `See https://github.com/${repo}/releases/tag/${tag}`,
@@ -64,7 +69,7 @@ const manifest = {
   platforms: {
     "windows-x86_64": {
       signature,
-      url: `https://github.com/${repo}/releases/download/${tag}/${encodeURIComponent(assetName)}`,
+      url: `https://github.com/${repo}/releases/download/${tag}/${encodeURIComponent(sanitizedAsset)}`,
     },
   },
 };

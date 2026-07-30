@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `streamlink:fetch` works on Node 22 + Windows (pipeline hang, bsdtar path parsing)
+- Updater manifest uses GitHub's sanitized asset names (spaces → dots) so the download URL no longer 404s
+
 ### Planned
 
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI
