@@ -999,6 +999,18 @@ fn mpv_geometry_for_dock(
 
 /// Dock arg parts for mpv, shared by the classic --player-args string and the
 /// fast-start path, which spawns mpv directly with an argv vector.
+/// Branded loading screen shown by the pre-launched idle player instead of
+/// mpv's "Drop files or URLs" screen. Written to the temp dir once; the
+/// stream's loadfile replaces the image when playback attaches.
+fn loading_image_path() -> Option<PathBuf> {
+    static BYTES: &[u8] = include_bytes!("../assets/loading.png");
+    let path = std::env::temp_dir().join("stgui-loading.png");
+    match std::fs::metadata(&path) {
+        Ok(m) if m.len() as usize == BYTES.len() => Some(path),
+        _ => std::fs::write(&path, BYTES).ok().map(|_| path),
+    }
+}
+
 fn mpv_dock_arg_parts(
     channel: &str,
     reserve_chat: bool,
@@ -1768,6 +1780,12 @@ pub fn start_stream(
             let mut idle_argv = dock_argv.clone();
             idle_argv.push("--idle=yes".into());
             idle_argv.push(format!("--input-ipc-server={pipe}"));
+            // Branded loading screen instead of the "Drop files" idle screen.
+            // image-display-duration=inf keeps it up until loadfile replaces it.
+            idle_argv.push("--image-display-duration=inf".into());
+            if let Some(png) = loading_image_path() {
+                idle_argv.push(png.to_string_lossy().into_owned());
+            }
             if let Ok(mpv_child) = Command::new(player_path)
                 .args(&idle_argv)
                 .stdin(Stdio::null())
