@@ -27,9 +27,6 @@ keyring-core = "1"
 windows-native-keyring-store = "1"
 url = "2.5.8"
 uuid = { version = "1.24.0", features = ["v4"] }
-sha2 = "0.11.0"
-base64 = "0.23.0"
-rand = "0.10.2"
 thiserror = "2.0.19"
 tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "sync", "time", "net", "process", "io-util"] }
 tiny_http = "0.12.0"

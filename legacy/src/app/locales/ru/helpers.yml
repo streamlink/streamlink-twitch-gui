@@ -1,9 +1,0 @@
-hours-from-now:
-    now: Сейчас
-    minutes: "{minutes}м"
-    hours:
-        simple: "{hours}ч"
-        extended: "{hours}ч{minutes}м"
-    days:
-        simple: "{days}д"
-        extended: "{days}д{hours}ч"

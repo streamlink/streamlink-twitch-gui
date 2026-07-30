@@ -1,4 +1,4 @@
-import { load } from "@tauri-apps/plugin-store";
+import { load, type Store } from "@tauri-apps/plugin-store";
 import { isTauri } from "../tauri";
 import { migrateSettings } from "./store";
 import type { AppSettings } from "./types";
@@ -8,13 +8,22 @@ const STORE_PATH = "settings.json";
 const KEY = "settings";
 
 let memorySettings: AppSettings | null = null;
+// Cache the store handle: `load()` re-opens the file every call.
+let storePromise: Promise<Store> | null = null;
+
+function getStore(): Promise<Store> {
+  if (!storePromise) {
+    storePromise = load(STORE_PATH, { autoSave: false, defaults: {} });
+  }
+  return storePromise;
+}
 
 export async function loadPersistedSettings(): Promise<AppSettings> {
   if (!isTauri()) {
     return memorySettings ?? defaultSettings();
   }
   try {
-    const store = await load(STORE_PATH, { autoSave: false, defaults: {} });
+    const store = await getStore();
     const raw = await store.get<unknown>(KEY);
     return migrateSettings(raw ?? defaultSettings());
   } catch {
@@ -27,7 +36,7 @@ export async function persistSettings(settings: AppSettings): Promise<void> {
   if (!isTauri()) {
     return;
   }
-  const store = await load(STORE_PATH, { autoSave: true, defaults: {} });
+  const store = await getStore();
   await store.set(KEY, settings);
   await store.save();
 }

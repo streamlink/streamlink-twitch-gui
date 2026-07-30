@@ -273,16 +273,8 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           replaceExisting,
         },
       });
-      setTimeout(() => {
-        const channels = orderedChannels();
-        if (channels.length) {
-          void invoke("layout_watching", {
-            channels,
-            reserveChat,
-            layout: currentLayout(),
-          }).catch(() => undefined);
-        }
-      }, 500);
+      // Layout is triggered by the session "ready" status event
+      // (scheduleLayoutAfterReady) — no extra timed call needed here.
       if (settings.gui.minimizeOnWatch && isTauri()) {
         void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
           void getCurrentWindow().minimize();
