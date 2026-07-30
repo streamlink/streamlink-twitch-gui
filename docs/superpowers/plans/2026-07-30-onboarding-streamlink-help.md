@@ -56,4 +56,4 @@
 ### Task 5: Verify
 
 - [x] `npm test` + `npx tsc --noEmit`
-- [ ] Manual: first launch wizard; skip; show again; missing Streamlink copy
+- [x] Manual: first launch wizard; skip; show again; missing Streamlink copy
