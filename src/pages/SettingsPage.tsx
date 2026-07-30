@@ -338,34 +338,6 @@ export function SettingsPage() {
           </span>
         </label>
 
-        {!settings.streaming.seamlessSwitch ? (
-          <label className="settings__row">
-            <span>
-              {t("settings:multistreamLayout")}
-              <small className="muted">{t("settings:multistreamLayoutHint")}</small>
-            </span>
-            <select
-              value={settings.streaming.multistreamLayout}
-              onChange={(e) =>
-                setSettings({
-                  streaming: {
-                    ...settings.streaming,
-                    multistreamLayout: e.target
-                      .value as typeof settings.streaming.multistreamLayout,
-                  },
-                })
-              }
-            >
-              <option value="1">{t("settings:layout1")}</option>
-              <option value="2">{t("settings:layout2")}</option>
-              <option value="2x2">{t("settings:layout2x2")}</option>
-              <option value="3plus1">{t("settings:layout3plus1")}</option>
-              <option value="3x2">{t("settings:layout3x2")}</option>
-              <option value="4x2">{t("settings:layout4x2")}</option>
-            </select>
-          </label>
-        ) : null}
-
         <label className="settings__row settings__row--check">
           <input
             type="checkbox"

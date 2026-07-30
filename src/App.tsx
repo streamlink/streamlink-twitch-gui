@@ -19,6 +19,7 @@ import {
   TeamPage,
 } from "./pages/BrowseExtraPages";
 import { SettingsPage, SettingsBootstrap } from "./pages/SettingsPage";
+import { MultistreamPage } from "./pages/MultistreamPage";
 import { TauriGuardBanner } from "./components/TauriGuardBanner";
 import { DesktopChrome } from "./components/DesktopChrome";
 import { HotkeyProvider } from "./components/HotkeyProvider";
@@ -60,6 +61,7 @@ function AppRoutes() {
         <Route path="/channel/:login" element={<ChannelPage />} />
         <Route path="/team/:teamName" element={<TeamPage />} />
         <Route path="/watching" element={<WatchingPage />} />
+        <Route path="/multistream" element={<MultistreamPage />} />
         <Route path="/settings/*" element={<SettingsPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

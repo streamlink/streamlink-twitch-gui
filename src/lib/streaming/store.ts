@@ -44,6 +44,8 @@ interface WatchingState {
   stopSession: (id: string) => Promise<void>;
   stopAll: () => Promise<void>;
   moveSlot: (channel: string, direction: -1 | 1) => void;
+  /** Drag & drop reorder: replace the slot order outright (same channels). */
+  reorderSlots: (channels: string[]) => void;
   /** Retile + resync chat after layout preset changes. */
   applyLayout: () => void;
   setActiveChat: (channel: string | null) => void;
@@ -356,6 +358,17 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     slots[i] = slots[j]!;
     slots[j] = tmp;
     set({ slotChannels: slots });
+    scheduleLayoutAfterReady();
+    void syncChatterino(orderedChannels());
+  },
+
+  reorderSlots: (channels) => {
+    const current = new Set(get().slotChannels);
+    const next = channels
+      .map((c) => c.toLowerCase())
+      .filter((c) => current.has(c));
+    if (next.length !== current.size) return;
+    set({ slotChannels: next });
     scheduleLayoutAfterReady();
     void syncChatterino(orderedChannels());
   },

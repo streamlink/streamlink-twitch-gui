@@ -7,12 +7,13 @@ import routes from "../locales/en/routes.json";
 import settings from "../locales/en/settings.json";
 import errors from "../locales/en/errors.json";
 import onboarding from "../locales/en/onboarding.json";
+import multistream from "../locales/en/multistream.json";
 
 void i18n.use(initReactI18next).init({
   lng: "en",
   fallbackLng: "en",
   defaultNS: "common",
-  ns: ["common", "nav", "routes", "settings", "errors", "onboarding"],
+  ns: ["common", "nav", "routes", "settings", "errors", "onboarding", "multistream"],
   resources: {
     en: {
       common,
@@ -21,6 +22,7 @@ void i18n.use(initReactI18next).init({
       settings,
       errors,
       onboarding,
+      multistream,
     },
   },
   interpolation: {

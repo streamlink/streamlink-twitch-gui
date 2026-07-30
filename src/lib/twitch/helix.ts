@@ -77,6 +77,43 @@ export async function getFollowedStreams(
   });
 }
 
+export interface HelixFollowedChannel {
+  broadcaster_id: string;
+  broadcaster_login: string;
+  broadcaster_name: string;
+  followed_at: string;
+}
+
+export async function getFollowedChannels(
+  userId: string,
+  cursor?: string,
+): Promise<HelixPage<HelixFollowedChannel>> {
+  return helixFetch<HelixPage<HelixFollowedChannel>>("channels/followed", {
+    user_id: userId,
+    first: 100,
+    after: cursor,
+  });
+}
+
+/**
+ * Every channel login the user follows (paginated, capped at 1000) — used to
+ * rank followed channels above global search results in multistream.
+ */
+export async function getFollowedChannelLogins(userId: string): Promise<string[]> {
+  const logins: string[] = [];
+  let cursor: string | undefined;
+  for (let page = 0; page < 10; page += 1) {
+    const result: HelixPage<HelixFollowedChannel> = await getFollowedChannels(
+      userId,
+      cursor,
+    );
+    logins.push(...result.data.map((c) => c.broadcaster_login.toLowerCase()));
+    cursor = result.pagination?.cursor;
+    if (!cursor) break;
+  }
+  return logins;
+}
+
 export async function getTopStreams(
   cursor?: string,
 ): Promise<HelixPage<HelixStream>> {

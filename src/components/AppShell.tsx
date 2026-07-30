@@ -9,6 +9,7 @@ const primaryLinks = [
   { to: "/games", key: "games" as const },
   { to: "/search", key: "search" as const },
   { to: "/watching", key: "watching" as const },
+  { to: "/multistream", key: "multistream" as const },
 ];
 
 const secondaryLinks = [
