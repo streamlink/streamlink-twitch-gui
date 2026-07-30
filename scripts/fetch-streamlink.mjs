@@ -13,7 +13,7 @@
  *   curl -sL -o sl.zip <asset-url> && sha256sum sl.zip
  */
 import { mkdir, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
-import { createWriteStream } from "node:fs";
+import { createWriteStream, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { pipeline } from "node:stream/promises";
 import path from "node:path";
@@ -56,14 +56,13 @@ const zipPath = path.join(outDir, "streamlink.zip");
 await pipeline(res.body, createWriteStream(zipPath));
 
 // Verify integrity BEFORE extracting anything.
+// Plain for-await instead of stream.pipeline with a generator destination:
+// that pattern never settles on Node 22 ("unsettled top-level await").
 const hash = createHash("sha256");
 const { createReadStream } = await import("node:fs");
-await pipeline(createReadStream(zipPath), async function* (source) {
-  for await (const chunk of source) {
-    hash.update(chunk);
-    yield chunk;
-  }
-});
+for await (const chunk of createReadStream(zipPath)) {
+  hash.update(chunk);
+}
 const actualHash = hash.digest("hex");
 if (actualHash !== expectedHash) {
   await rm(zipPath, { force: true });
@@ -78,7 +77,16 @@ if (actualHash !== expectedHash) {
 console.log(`SHA-256 verified: ${actualHash}`);
 
 try {
-  execFileSync("tar", ["-xf", zipPath, "-C", outDir], { stdio: "inherit" });
+  // Prefer Windows' own bsdtar (auto-detects zip); a GNU tar found earlier
+  // on PATH (e.g. Git-Bash) cannot read zip archives. Relative paths + cwd:
+  // bsdtar misparses "C:\…" as host:file and lacks --force-local.
+  const systemTar = "C:\\Windows\\System32\\tar.exe";
+  const tarExe =
+    process.platform === "win32" && existsSync(systemTar) ? systemTar : "tar";
+  execFileSync(tarExe, ["-xf", "streamlink.zip", "-C", "."], {
+    cwd: outDir,
+    stdio: "inherit",
+  });
 } catch {
   console.error("Failed to extract with tar. Install tar or extract manually.");
   process.exit(1);
