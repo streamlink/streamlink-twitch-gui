@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { invoke, isTauri } from "../lib/tauri";
 import { useSettingsStore } from "../lib/settings/store";

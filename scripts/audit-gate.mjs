@@ -14,10 +14,10 @@
 import { execSync } from "node:child_process";
 
 const ALLOWLIST = new Map([
-  [
-    "GHSA-qwww-vcr4-c8h2",
-    "react-router RSC-mode CSRF: this app is a client-only BrowserRouter SPA inside Tauri — no RSC, no SSR, no loaders/actions, so the vulnerable code path is unreachable. Do NOT 'fix' by downgrading to 7.11.0 (reintroduces an open-redirect advisory). Proper fix: react-router >= 8.3.0 major upgrade. Review by 2026-10-30.",
-  ],
+  // No active exceptions. The react-router GHSA-qwww-vcr4-c8h2 entry was
+  // removed after the react-router 8.3.0 upgrade (2026-07-30). Add new
+  // entries only with a written justification + review date, e.g.:
+  // ["GHSA-xxxx-yyyy-zzzz", "why it is not exploitable here + review date"],
 ]);
 
 let raw;

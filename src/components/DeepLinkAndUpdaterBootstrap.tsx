@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { isTauri } from "../lib/tauri";
 import { useWatchingStore } from "../lib/streaming/store";
 import { useSettingsStore } from "../lib/settings/store";
