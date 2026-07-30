@@ -26,7 +26,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY3QjQ5QzIxNEFEMUE1NUQKUldSZHBkRktJWnkwOTN0WTNJZ3hyaUY2eFRDdUdlQU1FYTNURXpISzBxdUNaM1J4Ni96c0RBSloK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDkyMUE0RTgyOTQwODZFNjUKUldSbGJnaVVnazRha3VLUUNHSi9BM05IWHV6VktyS2g2dG1HYWR5YVJUekdtZFliVGtEcGk1TS8K",
       "endpoints": [
         "https://github.com/Wibias/streamlink-twitch-gui/releases/latest/download/latest.json"
       ]
