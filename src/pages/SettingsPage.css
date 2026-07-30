@@ -144,6 +144,27 @@
   min-width: 7rem;
 }
 
+.setup-help--settings {
+  margin-top: 0;
+}
+
+.settings__mpv-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: stretch;
+}
+
+.settings__mpv-presets .settings__row--check {
+  margin: 0;
+  padding: 0.2rem 0;
+}
+
+.settings__label .muted {
+  display: block;
+  margin-top: 0.25rem;
+}
+
 @media (max-width: 720px) {
   .settings__row:not(.settings__row--check) {
     grid-template-columns: 1fr;

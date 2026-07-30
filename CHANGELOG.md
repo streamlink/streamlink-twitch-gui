@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Low latency and ad filtering are **opt-in** (defaults off)
+- Default mpv args follow upstream wiki Recommendations (verified against current mpv manual): borderless, maximized, loop for Enter-reload, cache + `demuxer-max-back-bytes=1800M`
+- mpv install link uses `https://mpv.io/installation/`
+- Player settings: plain-language preset summary, **Reset to recommended**, and toggles for wiki mpv flags; clearer Windows install help (winget / Scoop / portable `.7z`)
+
 ### Planned
 
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI

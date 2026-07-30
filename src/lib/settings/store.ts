@@ -5,6 +5,10 @@ import {
   defaultSettings,
   SETTINGS_SCHEMA_VERSION,
 } from "./types";
+import {
+  DEFAULT_MULTISTREAM_LAYOUT,
+  isMultistreamLayout,
+} from "../streaming/layout";
 
 interface SettingsState {
   settings: AppSettings;
@@ -29,6 +33,7 @@ export function migrateSettings(raw: unknown): AppSettings {
     quality?: string;
     closeToTray?: boolean;
   };
+  const prevSchema = input.schemaVersion ?? 0;
 
   const merged: AppSettings = {
     ...base,
@@ -38,6 +43,7 @@ export function migrateSettings(raw: unknown): AppSettings {
       ...base.player,
       ...input.player,
       input: input.player?.input ?? base.player.input,
+      mpv: { ...base.player.mpv, ...input.player?.mpv },
     },
     chat: { ...base.chat, ...input.chat },
     streaming: {
@@ -47,6 +53,12 @@ export function migrateSettings(raw: unknown): AppSettings {
       disableAds: input.streaming?.disableAds ?? base.streaming.disableAds,
       seamlessSwitch:
         input.streaming?.seamlessSwitch ?? base.streaming.seamlessSwitch,
+      multistreamLayout: (() => {
+        const raw = input.streaming?.multistreamLayout;
+        return raw && isMultistreamLayout(raw)
+          ? raw
+          : DEFAULT_MULTISTREAM_LAYOUT;
+      })(),
     },
     gui: {
       ...base.gui,
@@ -60,6 +72,11 @@ export function migrateSettings(raw: unknown): AppSettings {
     channels: { ...base.channels, ...input.channels },
     schemaVersion: SETTINGS_SCHEMA_VERSION,
   };
+
+  // v8: webbrowser default flipped off — it made first stream starts very slow.
+  if (prevSchema < 8) {
+    merged.streaming.webbrowser = false;
+  }
 
   delete (merged as { quality?: string }).quality;
   delete (merged as { closeToTray?: boolean }).closeToTray;
@@ -75,7 +92,14 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         ...state.settings,
         ...patch,
         streamlink: { ...state.settings.streamlink, ...patch.streamlink },
-        player: { ...state.settings.player, ...patch.player },
+        player: {
+          ...state.settings.player,
+          ...patch.player,
+          mpv: {
+            ...state.settings.player.mpv,
+            ...patch.player?.mpv,
+          },
+        },
         chat: { ...state.settings.chat, ...patch.chat },
         streaming: { ...state.settings.streaming, ...patch.streaming },
         gui: { ...state.settings.gui, ...patch.gui },

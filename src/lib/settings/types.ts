@@ -1,3 +1,16 @@
+import {
+  composeMpvPlayerArgs,
+  defaultMpvPresets,
+  type MpvPresetSettings,
+} from "./mpv";
+import {
+  DEFAULT_MULTISTREAM_LAYOUT,
+  type MultistreamLayout,
+} from "../streaming/layout";
+
+export type { MpvPresetSettings } from "./mpv";
+export type { MultistreamLayout } from "../streaming/layout";
+
 export type ThemeMode = "system" | "dark" | "light";
 
 export type StreamlinkSource = "bundled" | "system" | "custom";
@@ -40,8 +53,10 @@ export interface AppSettings {
   player: {
     id: PlayerId;
     customPath: string;
+    /** Extra player args appended after mpv presets (or full args for non-mpv). */
     customArgs: string;
     input: PlayerInput;
+    mpv: MpvPresetSettings;
   };
   chat: {
     provider: ChatProvider;
@@ -54,6 +69,8 @@ export interface AppSettings {
     disableAds: boolean;
     /** Start the next Streamlink process before stopping the previous one. */
     seamlessSwitch: boolean;
+    /** Multistream grid when seamlessSwitch is off. */
+    multistreamLayout: MultistreamLayout;
     webbrowser: boolean;
     webbrowserHeadless: boolean;
     webbrowserExecutable: string;
@@ -80,7 +97,7 @@ export interface AppSettings {
   closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 6;
+export const SETTINGS_SCHEMA_VERSION = 9;
 
 export const defaultHotkeys = (): HotkeySettings => ({
   refresh: "F5",
@@ -102,6 +119,7 @@ export const defaultSettings = (): AppSettings => ({
     customPath: "",
     customArgs: "",
     input: "default",
+    mpv: defaultMpvPresets(),
   },
   chat: {
     provider: "embedded",
@@ -110,10 +128,11 @@ export const defaultSettings = (): AppSettings => ({
   },
   streaming: {
     quality: "best",
-    lowLatency: true,
-    disableAds: true,
+    lowLatency: false,
+    disableAds: false,
     seamlessSwitch: true,
-    webbrowser: true,
+    multistreamLayout: DEFAULT_MULTISTREAM_LAYOUT,
+    webbrowser: false,
     webbrowserHeadless: true,
     webbrowserExecutable: "",
     retryStreams: 1,
@@ -136,6 +155,8 @@ export const defaultSettings = (): AppSettings => ({
 export function resolveChannelLaunch(
   settings: AppSettings,
   login: string,
+  meta?: { title?: string; game?: string },
+  opts?: { geometry?: string; sideBySideChat?: boolean; deferLayout?: boolean },
 ): {
   quality: string;
   lowLatency: boolean;
@@ -144,12 +165,35 @@ export function resolveChannelLaunch(
   playerCustomArgs: string;
 } {
   const override = settings.channels[login.toLowerCase()] ?? {};
+  const playerId = override.playerId ?? settings.player.id;
+  const channel = login.toLowerCase();
+  const title = meta?.title || channel;
+  const game = meta?.game || "";
+  const sideBySideChat =
+    opts?.sideBySideChat ?? settings.chat.provider === "chatterino";
+  const playerCustomArgs =
+    override.playerCustomArgs ??
+    (playerId === "mpv"
+      ? composeMpvPlayerArgs(
+          settings.player.mpv,
+          settings.player.customArgs,
+          {
+            channel,
+            title,
+            game,
+          },
+          {
+            sideBySideChat,
+            geometry: opts?.geometry,
+            deferLayout: opts?.deferLayout,
+          },
+        )
+      : settings.player.customArgs);
   return {
     quality: override.quality || settings.streaming.quality,
     lowLatency: override.lowLatency ?? settings.streaming.lowLatency,
     disableAds: override.disableAds ?? settings.streaming.disableAds,
-    playerId: override.playerId ?? settings.player.id,
-    playerCustomArgs:
-      override.playerCustomArgs ?? settings.player.customArgs,
+    playerId,
+    playerCustomArgs,
   };
 }

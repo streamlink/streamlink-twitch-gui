@@ -26,3 +26,39 @@
 .doctor__list > li {
   line-height: 1.4;
 }
+
+.doctor__path {
+  margin: 0.2rem 0 0;
+  font-size: 0.82rem;
+  word-break: break-all;
+}
+
+.doctor__checking {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.88rem;
+}
+
+.button-with-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.spinner {
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 2px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: stg-spin 0.7s linear infinite;
+  flex: 0 0 auto;
+}
+
+@keyframes stg-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

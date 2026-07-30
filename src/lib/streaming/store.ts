@@ -5,6 +5,12 @@ import type { HelixStream } from "../twitch/helix";
 import { useSettingsStore } from "../settings/store";
 import { resolveChannelLaunch } from "../settings/types";
 import { captureAppError } from "../sentry";
+import {
+  DEFAULT_MULTISTREAM_LAYOUT,
+  isMultistreamLayout,
+  layoutCapacity,
+  type MultistreamLayout,
+} from "./layout";
 
 export interface StreamSession {
   id: string;
@@ -29,17 +35,111 @@ export interface StreamStatusEvent {
 
 interface WatchingState {
   sessions: StreamSession[];
+  /** Ordered multistream slots (lowercase logins). Ignored when seamless is on. */
+  slotChannels: string[];
   activeChatChannel: string | null;
   error: string | null;
   refresh: () => Promise<void>;
   watchStream: (stream: HelixStream) => Promise<void>;
   stopSession: (id: string) => Promise<void>;
   stopAll: () => Promise<void>;
+  moveSlot: (channel: string, direction: -1 | 1) => void;
+  /** Retile + resync chat after layout preset changes. */
+  applyLayout: () => void;
   setActiveChat: (channel: string | null) => void;
   applyStatus: (payload: StreamStatusEvent) => void;
 }
 
 let listenersBound = false;
+let lastChatSyncKey = "";
+let layoutTimer: ReturnType<typeof setTimeout> | null = null;
+
+function currentLayout(): MultistreamLayout {
+  const raw = useSettingsStore.getState().settings.streaming.multistreamLayout;
+  return isMultistreamLayout(raw) ? raw : DEFAULT_MULTISTREAM_LAYOUT;
+}
+
+function orderedChannels(): string[] {
+  const state = useWatchingStore.getState();
+  const settings = useSettingsStore.getState().settings;
+  if (settings.streaming.seamlessSwitch) {
+    return state.sessions
+      .filter((s) => s.running)
+      .map((s) => s.channel.toLowerCase())
+      .filter(Boolean);
+  }
+  const running = new Set(
+    state.sessions
+      .filter((s) => s.running)
+      .map((s) => s.channel.toLowerCase()),
+  );
+  return state.slotChannels.filter((c) => running.has(c));
+}
+
+function syncSlotsFromSessions(sessions: StreamSession[]) {
+  const settings = useSettingsStore.getState().settings;
+  if (settings.streaming.seamlessSwitch) {
+    useWatchingStore.setState({ slotChannels: [] });
+    return;
+  }
+  const running = sessions
+    .filter((s) => s.running)
+    .map((s) => s.channel.toLowerCase())
+    .filter(Boolean);
+  const prev = useWatchingStore.getState().slotChannels;
+  const kept = prev.filter((c) => running.includes(c));
+  const added = running.filter((c) => !kept.includes(c));
+  useWatchingStore.setState({ slotChannels: [...kept, ...added] });
+}
+
+async function syncChatterino(channels: string[]) {
+  if (!isTauri()) return;
+  const settings = useSettingsStore.getState().settings;
+  if (settings.chat.provider !== "chatterino") return;
+  if (!channels.length) {
+    lastChatSyncKey = "";
+    void invoke("close_owned_chatterino").catch(() => undefined);
+    return;
+  }
+  const key = channels.join(",");
+  if (key === lastChatSyncKey) return;
+  lastChatSyncKey = key;
+  void invoke<string>("open_chatterino_chat", { channels }).catch(
+    (err: unknown) => {
+      useWatchingStore.setState({
+        error:
+          err instanceof Error
+            ? err.message
+            : `Chatterino failed to open: ${String(err)}`,
+      });
+    },
+  );
+}
+
+function scheduleLayoutAfterReady() {
+  if (!isTauri()) return;
+  if (layoutTimer) clearTimeout(layoutTimer);
+  layoutTimer = setTimeout(() => {
+    layoutTimer = null;
+    const settings = useSettingsStore.getState().settings;
+    const reserveChat = settings.chat.provider === "chatterino";
+    const channels = orderedChannels();
+    if (!channels.length) return;
+    void invoke("layout_watching", {
+      channels,
+      reserveChat,
+      layout: currentLayout(),
+    }).catch(() => undefined);
+  }, 100);
+}
+
+function afterSessionsChanged() {
+  const channels = orderedChannels();
+  void syncChatterino(channels);
+  if (channels.length) {
+    scheduleLayoutAfterReady();
+  }
+}
 
 export async function bindStreamingListeners(): Promise<() => void> {
   if (!isTauri() || listenersBound) {
@@ -50,7 +150,9 @@ export async function bindStreamingListeners(): Promise<() => void> {
     useWatchingStore.getState().applyStatus(event.payload);
   });
   const unChanged = await listen("stream-sessions-changed", () => {
-    void useWatchingStore.getState().refresh();
+    void useWatchingStore.getState().refresh().then(() => {
+      afterSessionsChanged();
+    });
   });
   return () => {
     listenersBound = false;
@@ -61,11 +163,13 @@ export async function bindStreamingListeners(): Promise<() => void> {
 
 export const useWatchingStore = create<WatchingState>((set, get) => ({
   sessions: [],
+  slotChannels: [],
   activeChatChannel: null,
   error: null,
 
   refresh: async () => {
     const sessions = await invoke<StreamSession[]>("stream_list");
+    syncSlotsFromSessions(sessions);
     set({ sessions });
     const active = get().activeChatChannel;
     if (active && !sessions.some((s) => s.channel === active)) {
@@ -86,15 +190,65 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           : session,
       ),
     }));
+    if (payload.ready) {
+      scheduleLayoutAfterReady();
+    }
   },
 
   watchStream: async (stream) => {
     set({ error: null });
     const settings = useSettingsStore.getState().settings;
-    const launch = resolveChannelLaunch(settings, stream.user_login);
+    const multi = !settings.streaming.seamlessSwitch;
+    const channel = stream.user_login.toLowerCase();
+    const running = get().sessions.filter((s) => s.running);
+    const already = running.some((s) => s.channel.toLowerCase() === channel);
+
+    if (multi && !already) {
+      const cap = layoutCapacity(currentLayout());
+      const slots = get().slotChannels.filter((c) =>
+        running.some((s) => s.channel.toLowerCase() === c),
+      );
+      if (slots.length >= cap) {
+        const msg = `Layout holds ${cap} streams. Stop one or pick a larger layout.`;
+        set({ error: msg });
+        throw new Error(msg);
+      }
+    }
+
     const replaceExisting =
-      settings.streaming.seamlessSwitch && get().sessions.some((s) => s.running);
+      settings.streaming.seamlessSwitch && running.length > 0;
+    const reserveChat = settings.chat.provider === "chatterino";
+
+    const launch = resolveChannelLaunch(settings, stream.user_login, {
+      title: stream.title,
+      game: stream.game_name,
+    });
+
     try {
+      if (multi && !already) {
+        set((state) => ({
+          slotChannels: state.slotChannels.includes(channel)
+            ? state.slotChannels
+            : [...state.slotChannels, channel],
+        }));
+      } else if (!multi) {
+        set({ slotChannels: [channel] });
+      }
+
+      if (reserveChat) {
+        const chatChannels = multi
+          ? [
+              ...new Set(
+                [
+                  ...get().slotChannels,
+                  channel,
+                ].filter(Boolean),
+              ),
+            ]
+          : [channel];
+        void syncChatterino(chatChannels);
+      }
+
       const session = await invoke<StreamSession>("stream_start", {
         request: {
           channel: stream.user_login,
@@ -112,14 +266,23 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           webbrowser: settings.streaming.webbrowser,
           webbrowserHeadless: settings.streaming.webbrowserHeadless,
           webbrowserExecutable: settings.streaming.webbrowserExecutable,
-          retryStreams: settings.streaming.retryStreams,
-          retryMax: settings.streaming.retryMax,
+          retryStreams: 0,
+          retryMax: 0,
           playerNoClose: settings.streaming.playerNoClose,
-          openChat: true,
-          chatProvider: settings.chat.provider,
+          reserveChat,
           replaceExisting,
         },
       });
+      setTimeout(() => {
+        const channels = orderedChannels();
+        if (channels.length) {
+          void invoke("layout_watching", {
+            channels,
+            reserveChat,
+            layout: currentLayout(),
+          }).catch(() => undefined);
+        }
+      }, 500);
       if (settings.gui.minimizeOnWatch && isTauri()) {
         void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
           void getCurrentWindow().minimize();
@@ -135,7 +298,6 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
             ? stream.user_login
             : state.activeChatChannel,
       }));
-      // Keep list honest while dual-process handoff may still be running.
       void get().refresh();
     } catch (err) {
       captureAppError(err, "stream_start");
@@ -147,13 +309,43 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
   },
 
   stopSession: async (id) => {
+    const session = get().sessions.find((s) => s.id === id);
+    const channel = session?.channel.toLowerCase();
     await invoke("stream_stop", { id });
+    if (channel) {
+      set((state) => ({
+        slotChannels: state.slotChannels.filter((c) => c !== channel),
+      }));
+    }
     await get().refresh();
+    afterSessionsChanged();
   },
 
   stopAll: async () => {
     await invoke("stream_stop_all");
-    set({ sessions: [], activeChatChannel: null });
+    lastChatSyncKey = "";
+    void invoke("close_owned_chatterino").catch(() => undefined);
+    set({ sessions: [], slotChannels: [], activeChatChannel: null });
+  },
+
+  moveSlot: (channel, direction) => {
+    const login = channel.toLowerCase();
+    const slots = [...get().slotChannels];
+    const i = slots.indexOf(login);
+    if (i < 0) return;
+    const j = i + direction;
+    if (j < 0 || j >= slots.length) return;
+    const tmp = slots[i]!;
+    slots[i] = slots[j]!;
+    slots[j] = tmp;
+    set({ slotChannels: slots });
+    scheduleLayoutAfterReady();
+    void syncChatterino(orderedChannels());
+  },
+
+  applyLayout: () => {
+    scheduleLayoutAfterReady();
+    void syncChatterino(orderedChannels());
   },
 
   setActiveChat: (channel) => set({ activeChatChannel: channel }),

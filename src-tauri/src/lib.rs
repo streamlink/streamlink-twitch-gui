@@ -1,3 +1,6 @@
+// MSVC prints “.lib/.exp werden erstellt” to stdout while linking cdylibs; ignore that noise.
+#![allow(linker_messages)]
+
 mod auth;
 mod doctor;
 mod streaming;
@@ -70,6 +73,27 @@ fn stream_stop_all(state: tauri::State<'_, SharedStreaming>) -> Result<(), Strin
 }
 
 #[tauri::command]
+fn open_chatterino_chat(channels: Vec<String>) -> Result<String, String> {
+    streaming::launch_chatterino_for_channels(&channels).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn close_owned_chatterino() -> Result<(), String> {
+    streaming::close_owned_chatterino();
+    Ok(())
+}
+
+#[tauri::command]
+fn layout_watching(
+    channels: Vec<String>,
+    reserve_chat: bool,
+    layout: Option<String>,
+) -> Result<(), String> {
+    streaming::layout_watching(&channels, reserve_chat, layout.as_deref())
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 fn app_quit(app: AppHandle) {
     app.exit(0);
 }
@@ -119,9 +143,27 @@ pub fn run() {
             stream_list,
             stream_stop,
             stream_stop_all,
+            open_chatterino_chat,
+            close_owned_chatterino,
+            layout_watching,
             app_quit
         ])
-        .setup(|_app| Ok(()))
+        .setup(|app| {
+            let state = app.state::<SharedStreaming>().inner().clone();
+            streaming::start_session_watchdog(app.handle().clone(), state);
+            // Warm Streamlink so the first watch doesn't pay Python/plugin cold-start.
+            std::thread::spawn(|| {
+                if let Some(path) = doctor::find_streamlink_path() {
+                    let _ = std::process::Command::new(path)
+                        .arg("--version")
+                        .stdin(std::process::Stdio::null())
+                        .stdout(std::process::Stdio::null())
+                        .stderr(std::process::Stdio::null())
+                        .status();
+                }
+            });
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

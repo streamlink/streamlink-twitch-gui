@@ -5,6 +5,10 @@ import {
   SETTINGS_SCHEMA_VERSION,
 } from "./types";
 import { migrateSettings } from "./store";
+import {
+  composeMpvPlayerArgs,
+  defaultMpvPresets,
+} from "./mpv";
 import { matchesHotkey, normalizeHotkey } from "../hotkeys";
 import { isStreamlinkMissingError } from "../doctor";
 
@@ -13,11 +17,13 @@ describe("migrateSettings", () => {
     const result = migrateSettings(null);
     expect(result.schemaVersion).toBe(SETTINGS_SCHEMA_VERSION);
     expect(result.chat.provider).toBe("embedded");
-    expect(result.streaming.lowLatency).toBe(true);
-    expect(result.streaming.disableAds).toBe(true);
+    expect(result.streaming.multistreamLayout).toBe("2x2");
+    expect(result.streaming.lowLatency).toBe(false);
+    expect(result.streaming.disableAds).toBe(false);
     expect(result.streaming.seamlessSwitch).toBe(true);
     expect(result.gui.onboardingDone).toBe(false);
     expect(result.player.input).toBe("default");
+    expect(result.player.mpv).toEqual(defaultMpvPresets());
     expect(result.hotkeys.refresh).toBe("F5");
     expect(result.channels).toEqual({});
   });
@@ -35,6 +41,7 @@ describe("migrateSettings", () => {
     expect(result.gui.onboardingDone).toBe(false);
     expect(result.schemaVersion).toBe(SETTINGS_SCHEMA_VERSION);
     expect(result.player.id).toBe(defaultSettings().player.id);
+    expect(result.player.mpv.cacheRewind).toBe(true);
   });
 
   it("fills disableAds, player input, hotkeys when migrating from v2", () => {
@@ -57,9 +64,11 @@ describe("migrateSettings", () => {
         customArgs: "",
       },
     });
-    expect(result.streaming.disableAds).toBe(true);
+    expect(result.streaming.disableAds).toBe(false);
     expect(result.streaming.seamlessSwitch).toBe(true);
+    expect(result.streaming.webbrowser).toBe(false);
     expect(result.player.input).toBe("default");
+    expect(result.player.mpv.noBorder).toBe(true);
     expect(result.hotkeys.focusSearch).toBe("Ctrl+K");
     expect(result.schemaVersion).toBe(SETTINGS_SCHEMA_VERSION);
   });
@@ -71,15 +80,65 @@ describe("migrateSettings", () => {
     });
     expect(result.gui.onboardingDone).toBe(true);
   });
+
+  it("turns off webbrowser when migrating from schema < 8", () => {
+    const result = migrateSettings({
+      schemaVersion: 7,
+      streaming: {
+        ...defaultSettings().streaming,
+        webbrowser: true,
+      },
+    });
+    expect(result.streaming.webbrowser).toBe(false);
+  });
+});
+
+describe("composeMpvPlayerArgs", () => {
+  it("includes recommended flags and appends extras", () => {
+    const args = composeMpvPlayerArgs(defaultMpvPresets(), "--vo=gpu", {
+      channel: "forsen",
+      title: "hello",
+      game: "Minecraft",
+    });
+    expect(args).toContain("--no-border");
+    expect(args).toContain("--window-maximized=yes");
+    expect(args).toContain("--demuxer-max-back-bytes=250M");
+    expect(args).toContain("--vo=gpu");
+    expect(args).toContain('--title="forsen - Minecraft - hello"');
+  });
+
+  it("uses side geometry instead of maximized for Chatterino layout", () => {
+    const args = composeMpvPlayerArgs(
+      defaultMpvPresets(),
+      "",
+      { channel: "forsen", title: "Live", game: "Variety" },
+      { sideBySideChat: true },
+    );
+    expect(args).toContain("--geometry=82%x100%+0+0");
+    expect(args).not.toContain("--window-maximized=yes");
+  });
 });
 
 describe("resolveChannelLaunch", () => {
-  it("applies per-channel quality override", () => {
+  it("applies per-channel quality override and composes mpv args", () => {
     const settings = defaultSettings();
     settings.channels.forsen = { quality: "720p" };
-    const launch = resolveChannelLaunch(settings, "Forsen");
+    const launch = resolveChannelLaunch(settings, "Forsen", {
+      title: "Live",
+      game: "Variety",
+    });
     expect(launch.quality).toBe("720p");
     expect(launch.playerId).toBe("mpv");
+    expect(launch.playerCustomArgs).toContain("--no-border");
+    expect(launch.playerCustomArgs).toContain("forsen - Variety - Live");
+  });
+
+  it("composes side-by-side mpv geometry when chat is Chatterino", () => {
+    const settings = defaultSettings();
+    settings.chat.provider = "chatterino";
+    const launch = resolveChannelLaunch(settings, "forsen");
+    expect(launch.playerCustomArgs).toContain("--geometry=82%x100%+0+0");
+    expect(launch.playerCustomArgs).not.toContain("--window-maximized=yes");
   });
 });
 

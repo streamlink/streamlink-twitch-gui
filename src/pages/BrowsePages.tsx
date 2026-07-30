@@ -12,6 +12,10 @@ import { StreamGrid } from "../components/StreamGrid";
 import { useUpdaterCheck } from "../components/DeepLinkAndUpdaterBootstrap";
 import { useAuthStore } from "../lib/auth/store";
 import { useWatchingStore } from "../lib/streaming/store";
+import {
+  isMultistreamLayout,
+  layoutCapacity,
+} from "../lib/streaming/layout";
 import { getFollowedStreams, getTopGames, getTopStreams } from "../lib/twitch/helix";
 import { useSettingsStore } from "../lib/settings/store";
 
@@ -124,14 +128,21 @@ export function StreamsPage() {
 }
 
 export function WatchingPage() {
-  const { t } = useTranslation(["routes", "common"]);
+  const { t } = useTranslation(["routes", "common", "settings"]);
   const sessions = useWatchingStore((s) => s.sessions);
+  const slotChannels = useWatchingStore((s) => s.slotChannels);
   const refresh = useWatchingStore((s) => s.refresh);
   const stopSession = useWatchingStore((s) => s.stopSession);
   const stopAll = useWatchingStore((s) => s.stopAll);
+  const moveSlot = useWatchingStore((s) => s.moveSlot);
+  const applyLayout = useWatchingStore((s) => s.applyLayout);
   const activeChatChannel = useWatchingStore((s) => s.activeChatChannel);
   const setActiveChat = useWatchingStore((s) => s.setActiveChat);
-  const chatProvider = useSettingsStore((s) => s.settings.chat.provider);
+  const settings = useSettingsStore((s) => s.settings);
+  const setSettings = useSettingsStore((s) => s.setSettings);
+  const chatProvider = settings.chat.provider;
+  const multi = !settings.streaming.seamlessSwitch;
+  const launchError = useWatchingStore((s) => s.error);
 
   useEffect(() => {
     void refresh();
@@ -140,6 +151,14 @@ export function WatchingPage() {
     }, 4000);
     return () => window.clearInterval(id);
   }, [refresh]);
+
+  const orderedSessions = multi
+    ? slotChannels
+        .map((ch) =>
+          sessions.find((s) => s.channel.toLowerCase() === ch && s.running),
+        )
+        .filter((s): s is NonNullable<typeof s> => Boolean(s))
+    : sessions;
 
   return (
     <section className="watching-layout">
@@ -152,12 +171,48 @@ export function WatchingPage() {
             </button>
           ) : null}
         </div>
+        {multi ? (
+          <label className="settings__row" style={{ marginBottom: "0.75rem" }}>
+            <span>{t("settings:multistreamLayout")}</span>
+            <select
+              value={settings.streaming.multistreamLayout}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (!isMultistreamLayout(value)) return;
+                if (orderedSessions.length > layoutCapacity(value)) {
+                  useWatchingStore.setState({
+                    error: `Layout holds ${layoutCapacity(value)} streams. Stop extras first.`,
+                  });
+                  return;
+                }
+                setSettings({
+                  streaming: {
+                    ...settings.streaming,
+                    multistreamLayout: value,
+                  },
+                });
+                applyLayout();
+              }}
+            >
+              <option value="1">{t("settings:layout1")}</option>
+              <option value="2">{t("settings:layout2")}</option>
+              <option value="2x2">{t("settings:layout2x2")}</option>
+              <option value="3plus1">{t("settings:layout3plus1")}</option>
+              <option value="3x2">{t("settings:layout3x2")}</option>
+              <option value="4x2">{t("settings:layout4x2")}</option>
+            </select>
+          </label>
+        ) : null}
+        {launchError ? <p className="muted">{launchError}</p> : null}
         {!sessions.length ? <p className="muted">{t("routes:watchingEmpty")}</p> : null}
         <ul className="watching-list">
-          {sessions.map((session) => (
+          {orderedSessions.map((session, index) => (
             <li key={session.id} className="watching-list__item">
               <div className="watching-list__meta">
                 <div>
+                  {multi ? (
+                    <span className="muted">#{index + 1} </span>
+                  ) : null}
                   <strong>{session.channel}</strong>
                   <span className="muted">
                     {" "}
@@ -175,6 +230,28 @@ export function WatchingPage() {
                 ) : null}
               </div>
               <div className="watching-list__actions">
+                {multi ? (
+                  <>
+                    <button
+                      type="button"
+                      className="button-secondary"
+                      disabled={index === 0}
+                      onClick={() => moveSlot(session.channel, -1)}
+                      aria-label="Move up"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      className="button-secondary"
+                      disabled={index >= orderedSessions.length - 1}
+                      onClick={() => moveSlot(session.channel, 1)}
+                      aria-label="Move down"
+                    >
+                      ↓
+                    </button>
+                  </>
+                ) : null}
                 {chatProvider === "embedded" ? (
                   <button
                     type="button"

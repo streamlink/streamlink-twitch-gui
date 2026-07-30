@@ -28,7 +28,7 @@ See [CHANGELOG.md](CHANGELOG.md) for release notes.
 | [WebView2](https://developer.microsoft.com/microsoft-edge/webview2/) | Usually already installed |
 | [Node.js](https://nodejs.org/) 20+ | Develop / CI |
 | [Rust](https://rustup.rs/) stable | Tauri backend |
-| [mpv](https://mpv.io/) (recommended) | Or VLC / other player configured in Settings |
+| [mpv](https://mpv.io/installation/) (recommended) | **No official Windows installer.** Open PowerShell (Win → type `PowerShell` → Enter), then run `winget install -e --id shinchiro.mpv`. Or Scoop. Or portable: download `mpv-x86_64-….7z` from [shinchiro builds](https://github.com/shinchiro/mpv-winbuild-cmake/releases), extract, point Settings at `mpv.exe` (keep `ffmpeg.exe` / DLLs beside it). |
 | Streamlink | Bundled in **release** installers; for local unsigned builds use system install or `npm run streamlink:fetch` |
 | Chatterino | Optional if you use embedded chat |
 

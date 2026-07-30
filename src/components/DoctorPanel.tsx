@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { invoke, isTauri } from "../lib/tauri";
 import type { DoctorReport } from "../lib/doctor";
-import { PlayerSetupHelp, StreamlinkSetupHelp } from "./SetupHelp";
+import { PlayerSetupHelp, StreamlinkSetupHelp, ChatterinoSetupHelp } from "./SetupHelp";
 import "./DoctorPanel.css";
 
 export function DoctorPanel() {
@@ -38,15 +38,22 @@ export function DoctorPanel() {
         <h2>{t("doctorTitle")}</h2>
         <button
           type="button"
-          className="button-secondary"
+          className="button-secondary button-with-spinner"
           onClick={refresh}
           disabled={checking}
         >
-          {t("doctorRecheck")}
+          {checking ? <span className="spinner" aria-hidden /> : null}
+          {checking ? t("doctorChecking") : t("doctorRecheck")}
         </button>
       </div>
+      {checking ? (
+        <p className="doctor__checking muted">
+          <span className="spinner" aria-hidden />
+          {t("doctorChecking")}
+        </p>
+      ) : null}
       {error ? <p className="muted">{error}</p> : null}
-      {!report && !error ? <p className="muted">…</p> : null}
+      {!report && !error && !checking ? <p className="muted">…</p> : null}
       {report ? (
         <ul className="doctor__list">
           <li>
@@ -55,6 +62,11 @@ export function DoctorPanel() {
                   version: report.streamlink.version ?? "?",
                 })
               : t("doctorStreamlinkMissing")}
+            {report.streamlink.found && report.streamlink.path ? (
+              <p className="doctor__path muted">
+                {t("doctorToolPath", { path: report.streamlink.path })}
+              </p>
+            ) : null}
             {!report.streamlink.found ? (
               <StreamlinkSetupHelp
                 status={report.streamlink}
@@ -65,8 +77,15 @@ export function DoctorPanel() {
           </li>
           <li>
             {report.mpv.found
-              ? t("doctorPlayerOk", { name: "mpv" })
+              ? t("doctorPlayerOk", {
+                  version: report.mpv.version ?? "?",
+                })
               : t("doctorPlayerMissing")}
+            {report.mpv.found && report.mpv.path ? (
+              <p className="doctor__path muted">
+                {t("doctorToolPath", { path: report.mpv.path })}
+              </p>
+            ) : null}
             {!report.mpv.found ? (
               <PlayerSetupHelp
                 status={report.mpv}
@@ -79,6 +98,18 @@ export function DoctorPanel() {
             {report.chatterino.found
               ? t("doctorChatOk")
               : t("doctorChatMissing")}
+            {report.chatterino.found && report.chatterino.path ? (
+              <p className="doctor__path muted">
+                {t("doctorToolPath", { path: report.chatterino.path })}
+              </p>
+            ) : null}
+            {!report.chatterino.found ? (
+              <ChatterinoSetupHelp
+                status={report.chatterino}
+                onRecheck={refresh}
+                checking={checking}
+              />
+            ) : null}
           </li>
         </ul>
       ) : null}

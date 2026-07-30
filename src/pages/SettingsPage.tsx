@@ -15,8 +15,26 @@ import type {
   StreamlinkSource,
   ThemeMode,
 } from "../lib/settings/types";
+import { defaultMpvPresets, describeMpvPresets } from "../lib/settings/mpv";
+import {
+  MPV_PORTABLE_URL,
+  MPV_SCOOP,
+  MPV_WINGET,
+} from "../lib/settings/mpv";
+import { MPV_INSTALL_URL } from "../lib/doctor";
 import { eventToHotkey, normalizeHotkey } from "../lib/hotkeys";
+import { isTauri } from "../lib/tauri";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import "./SettingsPage.css";
+import "../components/SetupHelp.css";
+
+async function openExternal(url: string) {
+  if (isTauri()) {
+    await openUrl(url);
+    return;
+  }
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 
 const QUALITY_PRESETS = [
   "best",
@@ -169,6 +187,7 @@ export function SettingsPage() {
               <option value="system">{t("settings:streamlinkSystem")}</option>
               <option value="custom">{t("settings:streamlinkCustom")}</option>
             </select>
+            <p className="muted">{t("settings:streamlinkBundledHint")}</p>
           </div>
         </div>
 
@@ -304,6 +323,34 @@ export function SettingsPage() {
           </span>
         </label>
 
+        {!settings.streaming.seamlessSwitch ? (
+          <label className="settings__row">
+            <span>
+              {t("settings:multistreamLayout")}
+              <small className="muted">{t("settings:multistreamLayoutHint")}</small>
+            </span>
+            <select
+              value={settings.streaming.multistreamLayout}
+              onChange={(e) =>
+                setSettings({
+                  streaming: {
+                    ...settings.streaming,
+                    multistreamLayout: e.target
+                      .value as typeof settings.streaming.multistreamLayout,
+                  },
+                })
+              }
+            >
+              <option value="1">{t("settings:layout1")}</option>
+              <option value="2">{t("settings:layout2")}</option>
+              <option value="2x2">{t("settings:layout2x2")}</option>
+              <option value="3plus1">{t("settings:layout3plus1")}</option>
+              <option value="3x2">{t("settings:layout3x2")}</option>
+              <option value="4x2">{t("settings:layout4x2")}</option>
+            </select>
+          </label>
+        ) : null}
+
         <label className="settings__row settings__row--check">
           <input
             type="checkbox"
@@ -414,6 +461,50 @@ export function SettingsPage() {
           </div>
         </div>
 
+        {settings.player.id === "mpv" ? (
+          <div className="settings__row settings__row--stack">
+            <div className="settings__label">
+              <span>{t("settings:playerInstallTitle")}</span>
+            </div>
+            <div className="settings__control">
+              <div className="setup-help setup-help--settings">
+                <p className="setup-help__body muted">
+                  {t("settings:playerInstallOpenShell")}
+                </p>
+                <div className="setup-help__cmds">
+                  <div>
+                    <span className="muted">{t("settings:playerInstallWinget")}</span>
+                    <code>{MPV_WINGET}</code>
+                  </div>
+                  <div>
+                    <span className="muted">{t("settings:playerInstallScoop")}</span>
+                    <code>{MPV_SCOOP}</code>
+                  </div>
+                </div>
+                <p className="setup-help__body muted">
+                  {t("settings:playerInstallPortable")}
+                </p>
+                <div className="setup-help__actions">
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    onClick={() => void openExternal(MPV_PORTABLE_URL)}
+                  >
+                    {t("settings:playerInstallPortableLink")}
+                  </button>
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    onClick={() => void openExternal(MPV_INSTALL_URL)}
+                  >
+                    {t("settings:playerInstallSources")}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <div className="settings__row">
           <div className="settings__label">
             <span>{t("settings:playerCustomPath")}</span>
@@ -431,9 +522,73 @@ export function SettingsPage() {
           </div>
         </div>
 
+        {settings.player.id === "mpv" ? (
+          <div className="settings__row settings__row--stack">
+            <div className="settings__label">
+              <span>{t("settings:playerMpvPresets")}</span>
+              <small className="muted">{t("settings:playerMpvPresetsLede")}</small>
+              <small className="muted">
+                {describeMpvPresets(settings.player.mpv).length
+                  ? t("settings:playerMpvIncluded", {
+                      list: describeMpvPresets(settings.player.mpv).join(", "),
+                    })
+                  : t("settings:playerMpvIncludedNone")}
+              </small>
+            </div>
+            <div className="settings__control settings__mpv-presets">
+              {(
+                [
+                  ["noBorder", "playerMpvNoBorder"],
+                  ["noKeepaspectWindow", "playerMpvNoKeepaspect"],
+                  ["windowMaximized", "playerMpvMaximized"],
+                  ["loopReload", "playerMpvLoopReload"],
+                  ["cacheRewind", "playerMpvCacheRewind"],
+                ] as const
+              ).map(([key, labelKey]) => (
+                <label key={key} className="settings__row settings__row--check">
+                  <input
+                    type="checkbox"
+                    checked={settings.player.mpv[key]}
+                    onChange={(e) =>
+                      setSettings({
+                        player: {
+                          ...settings.player,
+                          mpv: {
+                            ...settings.player.mpv,
+                            [key]: e.target.checked,
+                          },
+                        },
+                      })
+                    }
+                  />
+                  <span className="settings__check-text">
+                    {t(`settings:${labelKey}`)}
+                  </span>
+                </label>
+              ))}
+              <button
+                type="button"
+                className="button-secondary"
+                onClick={() =>
+                  setSettings({
+                    player: {
+                      ...settings.player,
+                      mpv: defaultMpvPresets(),
+                      customArgs: "",
+                    },
+                  })
+                }
+              >
+                {t("settings:playerMpvReset")}
+              </button>
+            </div>
+          </div>
+        ) : null}
+
         <div className="settings__row">
           <div className="settings__label">
             <span>{t("settings:playerCustomArgs")}</span>
+            <small className="muted">{t("settings:playerCustomArgsHint")}</small>
           </div>
           <div className="settings__control">
             <input
@@ -515,6 +670,7 @@ export function SettingsPage() {
               <option value="chrome">{t("settings:chatChrome")}</option>
               <option value="custom">{t("settings:chatCustom")}</option>
             </select>
+            <p className="muted">{t("settings:chatProviderHint")}</p>
           </div>
         </div>
       </fieldset>

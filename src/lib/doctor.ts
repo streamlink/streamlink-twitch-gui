@@ -25,6 +25,15 @@ export function isStreamlinkMissingError(message: string | null | undefined): bo
 
 export const STREAMLINK_INSTALL_URL =
   "https://streamlink.github.io/install.html";
-export const MPV_INSTALL_URL = "https://mpv.io/installation.html";
+export const MPV_INSTALL_URL = "https://mpv.io/installation/";
+export {
+  MPV_WINGET,
+  MPV_SCOOP,
+  MPV_PORTABLE_URL,
+} from "./settings/mpv";
 export const STREAMLINK_WINGET = "winget install Streamlink.Streamlink";
 export const STREAMLINK_SCOOP = "scoop install streamlink";
+export const CHATTERINO_INSTALL_URL = "https://chatterino.com/";
+export const CHATTERINO_WINGET =
+  "winget install -e --id ChatterinoTeam.Chatterino";
+export const CHATTERINO_SCOOP = "scoop install chatterino";
