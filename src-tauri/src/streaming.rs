@@ -231,6 +231,8 @@ struct FastPlayerCtx {
     fallback_argv: Vec<String>,
     /// Guards one-time loadfile across the stdout/stderr watcher threads.
     fired: Arc<AtomicBool>,
+    /// Last loading-phase text shown on the idle player's OSD (dedupe).
+    osd: Mutex<String>,
     no_close: bool,
 }
 
@@ -455,6 +457,32 @@ fn terminate_pid(pid: u32) {
             let _ = CloseHandle(handle);
         }
     }
+}
+
+/// Prune the session the instant a fast session's pre-launched mpv exits —
+/// evidence: mpv exits 0.2–0.3 s after its window is closed, so blocking on
+/// the process handle closes the owned Chatterino in well under a second
+/// instead of waiting for the 1.5 s watchdog tick.
+#[cfg(windows)]
+fn watch_player_exit(pid: u32, state: SharedStreaming, app: AppHandle) {
+    #[link(name = "kernel32")]
+    unsafe extern "system" {
+        fn OpenProcess(access: u32, inherit: i32, pid: u32) -> *mut core::ffi::c_void;
+        fn WaitForSingleObject(handle: *mut core::ffi::c_void, ms: u32) -> u32;
+        fn CloseHandle(handle: *mut core::ffi::c_void) -> i32;
+    }
+    const SYNCHRONIZE: u32 = 0x0010_0000;
+    thread::spawn(move || unsafe {
+        let handle = OpenProcess(SYNCHRONIZE, 0, pid);
+        if handle.is_null() {
+            return;
+        }
+        WaitForSingleObject(handle, u32::MAX);
+        CloseHandle(handle);
+        if let Ok(true) = prune_dead_sessions(&state) {
+            let _ = app.emit("stream-sessions-changed", ());
+        }
+    });
 }
 
 /// Windows Job Object wrapper: terminating the job kills the whole process
@@ -1531,11 +1559,11 @@ fn spawn_output_readers(
                             )
                             .is_ok();
                             if attached {
-                                // Clear the "Starting …" OSD line from the
-                                // idle phase now that video is on screen.
+                                // Clear the loading-phase show-text now that
+                                // video frames are on screen.
                                 let _ = mpv_ipc_command(
                                     &fx.pipe,
-                                    &["set", "osd-msg1", ""],
+                                    &["show-text", "", "1"],
                                     Duration::from_secs(2),
                                 );
                             }
@@ -1568,6 +1596,27 @@ fn spawn_output_readers(
                 }
                 let status = display_status(trimmed);
                 let (phase, ready) = classify_line(trimmed);
+                // Mirror loading phases ("Waiting for pre-roll ads…",
+                // resolving, errors) onto the idle player's OSD — show-text
+                // repaints immediately and replaces the previous message.
+                if let Some(fx) = fast.as_ref() {
+                    if !fx.fired.load(Ordering::SeqCst) && phase != "info" {
+                        if let Ok(mut last) = fx.osd.lock() {
+                            if *last != status {
+                                *last = status.clone();
+                                let pipe = fx.pipe.clone();
+                                let msg = status.clone();
+                                thread::spawn(move || {
+                                    let _ = mpv_ipc_command(
+                                        &pipe,
+                                        &["show-text", msg.as_str(), "600000"],
+                                        Duration::from_secs(2),
+                                    );
+                                });
+                            }
+                        }
+                    }
+                }
                 update_session_status(&state, &id, &status, phase, ready);
                 emit_status(
                     &app,
@@ -1596,6 +1645,13 @@ fn spawn_output_readers(
                 if !fx.no_close {
                     close_session_player(&state, &id, true);
                 }
+            }
+            // Prune right away (closes the owned Chatterino) instead of
+            // waiting for the watchdog tick. Give the process handle a
+            // moment to signal exit after its pipes closed.
+            thread::sleep(Duration::from_millis(200));
+            if let Ok(true) = prune_dead_sessions(&state) {
+                let _ = app.emit("stream-sessions-changed", ());
             }
         });
     };
@@ -1694,6 +1750,7 @@ pub fn start_stream(
     let mut fast_player: Option<FastPlayer> = None;
     let mut fast_ctx: Option<Arc<FastPlayerCtx>> = None;
     let mut use_fast = false;
+    let mut fast_pid: Option<u32> = None;
     #[cfg(windows)]
     if player_id == "mpv" && req.player_input.as_deref().unwrap_or("default") == "default" {
         if let Some(player_path) = &player {
@@ -1719,15 +1776,17 @@ pub fn start_stream(
                 .spawn()
             {
                 let job = assign_job(&mpv_child);
+                fast_pid = Some(mpv_child.id());
                 // The idle window would be a black rectangle until the stream
-                // attaches (~3 s) — show a persistent OSD line instead and
-                // clear it again once playback starts.
+                // attaches (~3 s). osd-msg1 does NOT repaint the idle window
+                // (verified via PrintWindow screenshots) — show-text does.
+                // Long duration; each later phase update replaces it.
                 let osd_pipe = pipe.clone();
                 let osd_msg = format!("Starting {channel}…");
                 thread::spawn(move || {
                     let _ = mpv_ipc_command(
                         &osd_pipe,
-                        &["set", "osd-msg1", &osd_msg],
+                        &["show-text", osd_msg.as_str(), "600000"],
                         Duration::from_secs(3),
                     );
                 });
@@ -1738,6 +1797,7 @@ pub fn start_stream(
                     player_path: player_path.clone(),
                     fallback_argv: dock_argv,
                     fired: Arc::new(AtomicBool::new(false)),
+                    osd: Mutex::new(String::new()),
                     no_close,
                 }));
                 fast_player = Some(FastPlayer {
@@ -1922,6 +1982,13 @@ pub fn start_stream(
                 mpv_missing_since: None,
             },
         );
+    }
+
+    // Close the session (and with it the owned Chatterino) the instant the
+    // pre-launched player process exits, e.g. the user closed its window.
+    #[cfg(windows)]
+    if let Some(pid) = fast_pid {
+        watch_player_exit(pid, state.clone(), app.clone());
     }
 
     spawn_output_readers(
