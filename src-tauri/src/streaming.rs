@@ -1530,6 +1530,15 @@ fn spawn_output_readers(
                                 Duration::from_secs(5),
                             )
                             .is_ok();
+                            if attached {
+                                // Clear the "Starting …" OSD line from the
+                                // idle phase now that video is on screen.
+                                let _ = mpv_ipc_command(
+                                    &fx.pipe,
+                                    &["set", "osd-msg1", ""],
+                                    Duration::from_secs(2),
+                                );
+                            }
                             if !attached {
                                 // Fallback: spawn mpv with the URL directly
                                 // (no IPC). Title-based closing still finds it.
@@ -1710,6 +1719,18 @@ pub fn start_stream(
                 .spawn()
             {
                 let job = assign_job(&mpv_child);
+                // The idle window would be a black rectangle until the stream
+                // attaches (~3 s) — show a persistent OSD line instead and
+                // clear it again once playback starts.
+                let osd_pipe = pipe.clone();
+                let osd_msg = format!("Starting {channel}…");
+                thread::spawn(move || {
+                    let _ = mpv_ipc_command(
+                        &osd_pipe,
+                        &["set", "osd-msg1", &osd_msg],
+                        Duration::from_secs(3),
+                    );
+                });
                 use_fast = true;
                 fast_ctx = Some(Arc::new(FastPlayerCtx {
                     pipe: pipe.clone(),
