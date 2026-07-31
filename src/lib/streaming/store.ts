@@ -22,6 +22,7 @@ export interface StreamSession {
   status?: string;
   phase?: string;
   ready?: boolean;
+  muted?: boolean;
 }
 
 export interface StreamStatusEvent {
@@ -43,6 +44,7 @@ interface WatchingState {
   watchStream: (stream: HelixStream) => Promise<void>;
   stopSession: (id: string) => Promise<void>;
   stopAll: () => Promise<void>;
+  toggleMute: (id: string) => Promise<void>;
   moveSlot: (channel: string, direction: -1 | 1) => void;
   /** Drag & drop reorder: replace the slot order outright (same channels). */
   reorderSlots: (channels: string[]) => void;
@@ -112,7 +114,7 @@ async function syncChatterino(channels: string[]) {
         error:
           err instanceof Error
             ? err.message
-            : `Chatterino failed to open: ${String(err)}`,
+            : `Chatterino7 failed to open: ${String(err)}`,
       });
     },
   );
@@ -131,6 +133,9 @@ function scheduleLayoutAfterReady() {
       channels,
       reserveChat,
       layout: currentLayout(),
+      linkedDock: settings.streaming.linkedDock,
+      chatFraction: settings.streaming.chatWidthFraction,
+      mainSide: settings.streaming.unevenMainSide,
     }).catch(() => undefined);
   }, 100);
 }
@@ -140,6 +145,12 @@ function afterSessionsChanged() {
   void syncChatterino(channels);
   if (channels.length) {
     scheduleLayoutAfterReady();
+  } else if (isTauri()) {
+    // Tear down dock grips when the last stream ends (natural close or stop).
+    void invoke("layout_watching", {
+      channels: [],
+      reserveChat: false,
+    }).catch(() => undefined);
   }
 }
 
@@ -156,10 +167,24 @@ export async function bindStreamingListeners(): Promise<() => void> {
       afterSessionsChanged();
     });
   });
+  const unFraction = await listen<number>("dock-chat-fraction", (event) => {
+    const fraction = event.payload;
+    if (typeof fraction !== "number" || Number.isNaN(fraction)) return;
+    const settings = useSettingsStore.getState().settings;
+    const clamped = Math.min(0.45, Math.max(0.12, fraction));
+    if (Math.abs(settings.streaming.chatWidthFraction - clamped) < 0.001) return;
+    useSettingsStore.getState().setSettings({
+      streaming: {
+        ...settings.streaming,
+        chatWidthFraction: clamped,
+      },
+    });
+  });
   return () => {
     listenersBound = false;
     unStatus();
     unChanged();
+    unFraction();
   };
 }
 
@@ -345,6 +370,23 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     lastChatSyncKey = "";
     void invoke("close_owned_chatterino").catch(() => undefined);
     set({ sessions: [], slotChannels: [], activeChatChannel: null });
+  },
+
+  toggleMute: async (id) => {
+    if (!isTauri()) return;
+    try {
+      const muted = await invoke<boolean>("stream_toggle_mute", { id });
+      set((state) => ({
+        sessions: state.sessions.map((s) =>
+          s.id === id ? { ...s, muted } : s,
+        ),
+      }));
+    } catch (err) {
+      useWatchingStore.setState({
+        error:
+          err instanceof Error ? err.message : `Mute failed: ${String(err)}`,
+      });
+    }
   },
 
   moveSlot: (channel, direction) => {

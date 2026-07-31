@@ -14,8 +14,11 @@ import {
 } from "../lib/twitch/helix";
 import {
   isMultistreamLayout,
+  isUnevenLayout,
+  isUnevenMainSide,
   layoutCapacity,
   MULTISTREAM_LAYOUTS,
+  UNEVEN_MAIN_SIDES,
 } from "../lib/streaming/layout";
 import "./MultistreamPage.css";
 
@@ -51,6 +54,7 @@ export function MultistreamPage() {
   const watchStream = useWatchingStore((s) => s.watchStream);
   const stopSession = useWatchingStore((s) => s.stopSession);
   const stopAll = useWatchingStore((s) => s.stopAll);
+  const toggleMute = useWatchingStore((s) => s.toggleMute);
   const reorderSlots = useWatchingStore((s) => s.reorderSlots);
   const setActiveChat = useWatchingStore((s) => s.setActiveChat);
   const applyLayout = useWatchingStore((s) => s.applyLayout);
@@ -231,7 +235,31 @@ export function MultistreamPage() {
             ))}
           </select>
         </label>
-        <p className="muted">
+        {isUnevenLayout(settings.streaming.multistreamLayout) ? (
+          <label className="settings__row" style={{ maxWidth: "22rem" }}>
+            <span>{t("settings:unevenMainSide")}</span>
+            <select
+              value={settings.streaming.unevenMainSide}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (!isUnevenMainSide(value)) return;
+                setSettings({
+                  streaming: { ...settings.streaming, unevenMainSide: value },
+                });
+                applyLayout();
+              }}
+            >
+              {UNEVEN_MAIN_SIDES.map((side) => (
+                <option key={side} value={side}>
+                  {t(
+                    `settings:mainSide${side[0]!.toUpperCase()}${side.slice(1)}`,
+                  )}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+        <p className="muted ms-slots-meta">
           {t("multistream:slotsUsed", { used: runningCount, cap })}
           {layoutFull ? ` — ${t("multistream:layoutFull")}` : ""}
         </p>
@@ -324,12 +352,29 @@ export function MultistreamPage() {
                       </button>
                     ) : null}
                     {s ? (
-                      <button
-                        type="button"
-                        onClick={() => void stopSession(s.id)}
-                      >
-                        {t("multistream:stop")}
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          className={`button-secondary${s.muted ? " ms-muted" : ""}`}
+                          aria-pressed={Boolean(s.muted)}
+                          title={
+                            s.muted
+                              ? t("multistream:unmute")
+                              : t("multistream:mute")
+                          }
+                          onClick={() => void toggleMute(s.id)}
+                        >
+                          {s.muted
+                            ? t("multistream:unmute")
+                            : t("multistream:mute")}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => void stopSession(s.id)}
+                        >
+                          {t("multistream:stop")}
+                        </button>
+                      </>
                     ) : null}
                   </div>
                 </li>

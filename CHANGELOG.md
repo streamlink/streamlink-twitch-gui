@@ -12,6 +12,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI
 - Further parity and polish as we dogfood releases
 
+## [0.2.0] — 2026-07-31
+
+### Added
+
+- **Linked dock** (Windows): thin always-on-top grips to resize chat|video and multistream tiles live; center ◀ ▶ handle (or Ctrl+Shift+M) opens Windows-style monitor numbers to pick a display
+- Multistream layouts **2+1** and **8×1**, plus **large-pane position** (left / right / top / bottom) for 2+1 and 3+1
+- Per-stream **Mute / Unmute** via mpv IPC on the Watching list
+- When a stream goes offline: branded loading art and OSD **“The streamer {channel} went offline”**, then the player closes after 5 seconds (manual Stop still closes immediately)
+- **Refresh** button on Followed, Top streams, Top games, and Streams in this category
+
+### Changed
+
+- External chat target is **[Chatterino7](https://github.com/SevenTV/chatterino7)** (SevenTV fork): doctor/setup links, install commands, and docs recommend it for 7TV name paints, personal emotes, animated avatars, and 4× 7TV/FFZ images. Stock Chatterino 2 still works if installed
+- Seamless off turns linked dock on (and the reverse); chat width is configurable when the dock reserves space for Chatterino7
+- Docked mpv uses `--keep-open=yes` so the offline goodbye screen can show before quit
+
+### Fixed
+
+- Multistream tile grey bars move with the streams while resizing (no longer lag until mouse-up)
+- Monitor move no longer relies on buggy drag-to-cycle; click the handle and pick a numbered screen
+- Chatterino usercards are less likely to sit under the seam grips (temporary seam suppress while popups are focused)
+
 ## [0.1.1] — 2026-07-30
 
 ### Added
@@ -73,6 +95,7 @@ First public preview of the Windows rewrite (Tauri 2 + React + TypeScript). The 
 - Chatty is intentionally not supported
 - Unsigned installers may show a SmartScreen “Unknown publisher” warning until Authenticode is configured
 
-[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.2.0
 [0.1.1]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.1.1
 [0.1.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.1.0

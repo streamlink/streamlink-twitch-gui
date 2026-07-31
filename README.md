@@ -12,7 +12,7 @@ Upstream project: [streamlink/streamlink-twitch-gui](https://github.com/streamli
 - Followed / top streams, games, search, channel pages, teams
 - Streamlink launch (bundled in release builds, or system / custom path)
 - Watching list with live Streamlink status and seamless channel switching
-- Embedded chat (default) or Chatterino / browser
+- Embedded chat (default) or [Chatterino7](https://github.com/SevenTV/chatterino7) / browser
 - Settings: quality, low latency, ad filter, player, hotkeys, per-channel overrides, tray
 - First-run setup wizard (Streamlink → player → optional login)
 - Auto-updater (Tauri) + `stg://` deep links
@@ -30,7 +30,7 @@ See [CHANGELOG.md](CHANGELOG.md) for release notes.
 | [Rust](https://rustup.rs/) stable | Tauri backend |
 | [mpv](https://mpv.io/installation/) (recommended) | **No official Windows installer.** Open PowerShell (Win → type `PowerShell` → Enter), then run `winget install -e --id shinchiro.mpv`. Or Scoop. Or portable: download `mpv-x86_64-….7z` from [shinchiro builds](https://github.com/shinchiro/mpv-winbuild-cmake/releases), extract, point Settings at `mpv.exe` (keep `ffmpeg.exe` / DLLs beside it). |
 | Streamlink | Bundled in **release** installers; for local unsigned builds use system install or `npm run streamlink:fetch` |
-| Chatterino | Optional if you use embedded chat |
+| [Chatterino7](https://github.com/SevenTV/chatterino7) | Optional external chat (SevenTV fork). Stock Chatterino 2 still launches if found, but **Chatterino7 is recommended** for: **7TV name paints**, **7TV personal emotes**, **7TV animated profile avatars**, and **4× images (7TV and FFZ)**. Install: `winget install -e --id SevenTV.Chatterino7` or [releases](https://github.com/SevenTV/chatterino7/releases/latest). |
 
 ## Develop
 
@@ -57,11 +57,11 @@ Deep links: `stg://watch/<channel-login>`.
 
 ## Release (maintainers)
 
-Version is kept in sync in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json` (currently **0.1.0**).
+Version is kept in sync in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json` (currently **0.2.0**).
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
 That runs [`.github/workflows/release.yml`](.github/workflows/release.yml): fetch Streamlink → `tauri build` (NSIS + MSI + updater signatures) → GitHub Release with auto-generated notes. Keep the curated narrative in [CHANGELOG.md](CHANGELOG.md) in sync when you cut a version.

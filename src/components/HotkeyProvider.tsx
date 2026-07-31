@@ -44,6 +44,11 @@ export function HotkeyProvider({ children }: { children: React.ReactNode }) {
         void stopAll();
         return;
       }
+      if (matchesHotkey(e, hotkeys.cycleDockMonitor) && !typing && isTauri()) {
+        e.preventDefault();
+        void invoke("dock_cycle_monitor");
+        return;
+      }
       if (matchesHotkey(e, hotkeys.quit) && !typing && isTauri()) {
         e.preventDefault();
         void invoke("app_quit");

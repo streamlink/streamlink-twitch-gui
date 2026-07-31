@@ -11,6 +11,9 @@ use tauri::{AppHandle, Emitter};
 use thiserror::Error;
 use uuid::Uuid;
 
+#[cfg(windows)]
+use std::os::windows::ffi::OsStrExt;
+
 use crate::doctor::{find_chatterino_path, find_mpv_path, find_streamlink_path, which_on_path};
 
 /// Cached tool paths so every `stream_start` does not re-walk PATH/fallbacks.
@@ -108,6 +111,8 @@ pub struct StreamSession {
     pub status: String,
     pub phase: String,
     pub ready: bool,
+    /// Soft mute via mpv IPC (fast-start sessions).
+    pub muted: bool,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -135,6 +140,8 @@ struct LiveSession {
     /// The window-title lookup is only a heuristic, so a session is treated as
     /// closed solely on missing titles after a long, continuous absence.
     mpv_missing_since: Option<Instant>,
+    /// Natural stream end: keep mpv alive until this Instant for the offline OSD.
+    offline_until: Option<Instant>,
 }
 
 /// Pre-launched mpv owned by a session (fast start): the window appears
@@ -231,6 +238,8 @@ struct FastPlayerCtx {
     fallback_argv: Vec<String>,
     /// Guards one-time loadfile across the stdout/stderr watcher threads.
     fired: Arc<AtomicBool>,
+    /// Guards one-time offline goodbye across the stdout/stderr watchers.
+    goodbye: Arc<AtomicBool>,
     /// Last loading-phase text shown on the idle player's OSD (dedupe).
     osd: Mutex<String>,
     no_close: bool,
@@ -242,6 +251,88 @@ fn close_session_player(state: &StreamingState, id: &str, graceful: bool) {
             close_fast_player(&mut session.player, graceful);
         }
     }
+}
+
+const OFFLINE_GOODBYE_SECS: u64 = 5;
+
+/// After a natural stream end: swap to the loading art, show an offline OSD,
+/// wait a few seconds, then tear the session down.
+fn begin_offline_goodbye(
+    app: AppHandle,
+    state: SharedStreaming,
+    id: String,
+    channel: String,
+    pipe: String,
+) {
+    let status = format!("The streamer {channel} went offline");
+    if let Ok(mut map) = state.inner.lock() {
+        if let Some(session) = map.get_mut(&id) {
+            session.offline_until = Some(
+                Instant::now() + Duration::from_secs(OFFLINE_GOODBYE_SECS + 3),
+            );
+            session.info.running = false;
+            session.info.ready = false;
+            session.info.phase = "ended".into();
+            session.info.status = status.clone();
+        }
+    }
+    emit_status(
+        &app,
+        StreamStatusPayload {
+            id: id.clone(),
+            channel: channel.clone(),
+            line: status.clone(),
+            status: status.clone(),
+            phase: "ended".into(),
+            ready: false,
+        },
+    );
+    let _ = app.emit("stream-sessions-changed", ());
+
+    thread::spawn(move || {
+        // Replace the dead HTTP stream with the branded loading image so the
+        // window looks like the startup screen again.
+        if let Some(png) = loading_image_path() {
+            let path = png.to_string_lossy().into_owned();
+            let _ = mpv_ipc_command(&pipe, &["stop"], Duration::from_millis(800));
+            let _ = mpv_ipc_command(&pipe, &["loadfile", &path], Duration::from_secs(2));
+            let _ = mpv_ipc_command(
+                &pipe,
+                &["set_property", "image-display-duration", "inf"],
+                Duration::from_millis(800),
+            );
+        }
+        let _ = mpv_ipc_command(
+            &pipe,
+            &[
+                "show-text",
+                status.as_str(),
+                &format!("{}", OFFLINE_GOODBYE_SECS * 1000),
+            ],
+            Duration::from_secs(2),
+        );
+        thread::sleep(Duration::from_secs(OFFLINE_GOODBYE_SECS));
+
+        // Teardown: player first, then drop the session record.
+        close_session_player(&state, &id, true);
+        let empty = if let Ok(mut map) = state.inner.lock() {
+            if let Some(mut session) = map.remove(&id) {
+                let _ = session.child.kill();
+                let _ = session.child.wait();
+                terminate_job(&mut session.job);
+                close_fast_player(&mut session.player, false);
+                close_player_windows_for_channel(&channel);
+            }
+            map.is_empty()
+        } else {
+            false
+        };
+        if empty {
+            close_owned_chatterino();
+            crate::dock::clear_session();
+        }
+        let _ = app.emit("stream-sessions-changed", ());
+    });
 }
 
 pub struct StreamingState {
@@ -377,7 +468,7 @@ fn default_player_args(player_id: &str, channel: &str, title: &str, game: &str) 
         "mpv" => {
             let label = format!("{channel} - {game} - {title}").replace('"', "");
             format!(
-                "--force-window=yes --keep-open=no --no-border --no-keepaspect-window --loop-playlist=inf --loop-file=inf --title=\"{label}\" --force-media-title=\"{label}\""
+                "--force-window=yes --keep-open=yes --no-border --no-keepaspect-window --loop-playlist=inf --loop-file=inf --title=\"{label}\" --force-media-title=\"{label}\""
             )
         }
         "vlc" => {
@@ -417,7 +508,9 @@ pub fn launch_chatterino_for_channels(channels: &[String]) -> Result<String, Str
 
 fn normalize_layout(layout: Option<&str>) -> String {
     match layout.unwrap_or("2x2") {
-        s @ ("1" | "2" | "2x2" | "3plus1" | "3x2" | "4x2") => s.to_string(),
+        s @ ("1" | "2" | "2plus1" | "2x2" | "3plus1" | "3x2" | "4x2" | "8x1") => {
+            s.to_string()
+        }
         _ => "2x2".into(),
     }
 }
@@ -433,12 +526,47 @@ pub fn close_owned_chatterino() {
     };
     #[cfg(windows)]
     {
-        terminate_pid(pid);
+        // Prefer WM_CLOSE so Chatterino can flush settings (e.g. currentVersion
+        // for the changelog prompt). Fall back to TerminateProcess.
+        soft_close_pid(pid, Duration::from_millis(1500));
     }
     #[cfg(not(windows))]
     {
         let _ = pid;
     }
+}
+
+#[cfg(windows)]
+fn soft_close_pid(pid: u32, timeout: Duration) {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn PostMessageW(hwnd: *mut core::ffi::c_void, msg: u32, w: usize, l: isize) -> i32;
+    }
+    #[link(name = "kernel32")]
+    unsafe extern "system" {
+        fn OpenProcess(access: u32, inherit: i32, pid: u32) -> *mut core::ffi::c_void;
+        fn WaitForSingleObject(handle: *mut core::ffi::c_void, ms: u32) -> u32;
+        fn CloseHandle(handle: *mut core::ffi::c_void) -> i32;
+    }
+    const WM_CLOSE: u32 = 0x0010;
+    const SYNCHRONIZE: u32 = 0x0010_0000;
+    const WAIT_OBJECT_0: u32 = 0;
+    if let Some(hwnd) = find_main_window_for_pid(pid) {
+        unsafe {
+            let _ = PostMessageW(hwnd, WM_CLOSE, 0, 0);
+        }
+    }
+    let handle = unsafe { OpenProcess(SYNCHRONIZE, 0, pid) };
+    if !handle.is_null() {
+        let waited = unsafe { WaitForSingleObject(handle, timeout.as_millis() as u32) };
+        unsafe {
+            let _ = CloseHandle(handle);
+        }
+        if waited == WAIT_OBJECT_0 {
+            return;
+        }
+    }
+    terminate_pid(pid);
 }
 
 #[cfg(windows)]
@@ -577,6 +705,9 @@ pub fn layout_watching(
     channels: &[String],
     reserve_chat: bool,
     layout: Option<&str>,
+    linked_dock: Option<bool>,
+    chat_fraction: Option<f64>,
+    main_side: Option<&str>,
 ) -> Result<(), StreamError> {
     let cleaned: Vec<String> = channels
         .iter()
@@ -584,9 +715,18 @@ pub fn layout_watching(
         .filter(|c| !c.is_empty())
         .collect();
     if cleaned.is_empty() {
+        crate::dock::clear_session();
         return Ok(());
     }
     let layout = normalize_layout(layout);
+    if let Some(f) = chat_fraction {
+        crate::dock::set_chat_fraction(f);
+    }
+    if let Some(side) = main_side {
+        crate::dock::set_main_side(side);
+    }
+    let linked = linked_dock.unwrap_or_else(|| crate::dock::snapshot().linked);
+    crate::dock::sync_session(&cleaned, &layout, reserve_chat, linked);
     #[cfg(windows)]
     {
         let cleaned = cleaned.clone();
@@ -603,11 +743,6 @@ pub fn layout_watching(
         let expected = cleaned.len().clamp(1, 8);
         thread::spawn(move || {
             thread::sleep(Duration::from_millis(400));
-            // Retry until every expected player window was tiled and the chat
-            // placed, capped at ~7 s. The mpv window can lag the "Starting
-            // player" log line by seconds (AV scans, cold start), so a short
-            // fixed retry window sometimes missed it and left the player at
-            // its approximate launch geometry.
             let mut streak = 0;
             for _ in 0..28 {
                 if LAYOUT_GENERATION.load(Ordering::SeqCst) != generation {
@@ -640,6 +775,273 @@ pub fn layout_watching(
     Ok(())
 }
 
+/// When true, skip retile/place so we don't un-minimize the dock group.
+static DOCK_GROUP_MINIMIZED: AtomicBool = AtomicBool::new(false);
+
+/// Immediate retile from dock grip drags (no delayed retry loop).
+pub fn apply_dock_layout() {
+    #[cfg(windows)]
+    {
+        if DOCK_GROUP_MINIMIZED.load(Ordering::SeqCst) {
+            return;
+        }
+        let cfg = crate::dock::snapshot();
+        if cfg.channels.is_empty() {
+            return;
+        }
+        let _ = retile_player_windows(&cfg.channels, cfg.reserve_chat, &cfg.layout);
+        if cfg.reserve_chat {
+            place_chatterino_window_right(0);
+        }
+        if crate::dock::take_raise_after_apply() {
+            raise_dock_windows(&cfg.channels, cfg.reserve_chat);
+        }
+    }
+}
+
+fn apply_dock_layout_cb() {
+    apply_dock_layout();
+}
+
+static DOCK_APP: OnceLock<AppHandle> = OnceLock::new();
+
+fn emit_dock_fraction(f: f64) {
+    if let Some(app) = DOCK_APP.get() {
+        let _ = app.emit("dock-chat-fraction", f);
+    }
+}
+
+/// Register dock callbacks once the Tauri app handle exists.
+pub fn init_dock(app: AppHandle) {
+    let _ = DOCK_APP.set(app);
+    crate::dock::register_apply_layout(apply_dock_layout_cb);
+    crate::dock::register_fraction_emit(emit_dock_fraction);
+    // Starts Win32 grip thread + global Ctrl+Shift+M (works while mpv focused).
+    crate::dock::start_background();
+    start_dock_visibility_watchdog();
+}
+
+#[cfg(windows)]
+fn start_dock_visibility_watchdog() {
+    static STARTED: AtomicBool = AtomicBool::new(false);
+    if STARTED.swap(true, Ordering::SeqCst) {
+        return;
+    }
+    thread::spawn(|| {
+        // 0 = shown/normal, 1 = minimized as a group
+        let mut group_minimized = false;
+        let mut seam_suppressed = false;
+        loop {
+            thread::sleep(Duration::from_millis(200));
+            let cfg = crate::dock::snapshot();
+            if !cfg.linked || cfg.channels.is_empty() {
+                group_minimized = false;
+                DOCK_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
+                continue;
+            }
+            let hwnds = dock_member_hwnds(&cfg.channels, cfg.reserve_chat);
+            if hwnds.is_empty() {
+                continue;
+            }
+            let any_iconic = hwnds.iter().any(|&h| is_hwnd_iconic(h));
+            let any_zoomed = hwnds.iter().any(|&h| is_hwnd_zoomed(h));
+            let any_restored = hwnds
+                .iter()
+                .any(|&h| is_hwnd_visible(h) && !is_hwnd_iconic(h));
+
+            if !group_minimized && any_iconic {
+                DOCK_GROUP_MINIMIZED.store(true, Ordering::SeqCst);
+                minimize_dock_group(&hwnds);
+                crate::dock::hide_grips();
+                group_minimized = true;
+                continue;
+            }
+            if group_minimized && any_restored {
+                DOCK_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
+                restore_dock_group(&cfg.channels, cfg.reserve_chat, &cfg.layout);
+                crate::dock::show_grips();
+                group_minimized = false;
+                continue;
+            }
+            // Solo maximize breaks the dock — snap everyone back to tiles.
+            if !group_minimized && any_zoomed {
+                restore_dock_group(&cfg.channels, cfg.reserve_chat, &cfg.layout);
+                crate::dock::show_grips();
+            }
+
+            // Chatterino usercards/menus sit above the main chat window; our seam
+            // grips used to be TOPMOST and sliced through them. Hide seam grips
+            // while a secondary Chatterino window is visible.
+            if cfg.reserve_chat && !group_minimized {
+                let has_popup = chatterino_has_overlay_popup();
+                if has_popup && !seam_suppressed {
+                    crate::dock::suppress_seam_grips();
+                    seam_suppressed = true;
+                } else if !has_popup && seam_suppressed {
+                    crate::dock::restore_seam_grips();
+                    seam_suppressed = false;
+                }
+            } else if seam_suppressed {
+                seam_suppressed = false;
+            }
+        }
+    });
+}
+
+#[cfg(not(windows))]
+fn start_dock_visibility_watchdog() {}
+
+#[cfg(windows)]
+fn chatterino_has_overlay_popup() -> bool {
+    let pid = owned_chatterino_pid()
+        .lock()
+        .ok()
+        .and_then(|g| *g)
+        .unwrap_or(0);
+    if pid == 0 {
+        return false;
+    }
+    let Some(main) = find_main_window_for_pid(pid) else {
+        return false;
+    };
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn GetForegroundWindow() -> *mut core::ffi::c_void;
+        fn GetWindowThreadProcessId(hwnd: *mut core::ffi::c_void, pid: *mut u32) -> u32;
+        fn IsWindowVisible(hwnd: *mut core::ffi::c_void) -> i32;
+        fn GetWindow(hwnd: *mut core::ffi::c_void, cmd: u32) -> *mut core::ffi::c_void;
+        fn GetWindowRect(hwnd: *mut core::ffi::c_void, rect: *mut WinRect) -> i32;
+    }
+    const GW_OWNER: u32 = 4;
+    unsafe {
+        let fg = GetForegroundWindow();
+        if fg.is_null() || fg == main || IsWindowVisible(fg) == 0 {
+            return false;
+        }
+        let mut wpid = 0u32;
+        GetWindowThreadProcessId(fg, &mut wpid);
+        if wpid != pid {
+            return false;
+        }
+        // Usercards are owned dialogs (or other non-main top-level) with real size.
+        let owner = GetWindow(fg, GW_OWNER);
+        let mut rc = WinRect {
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+        };
+        if GetWindowRect(fg, &mut rc) == 0 {
+            return false;
+        }
+        let w = (rc.right - rc.left).max(0);
+        let h = (rc.bottom - rc.top).max(0);
+        if w < 120 || h < 120 {
+            return false;
+        }
+        // Owned by main chat, or any other focused Chatterino window that isn't main.
+        !owner.is_null() || fg != main
+    }
+}
+
+#[cfg(windows)]
+fn dock_member_hwnds(channels: &[String], reserve_chat: bool) -> Vec<*mut core::ffi::c_void> {
+    let mut out = Vec::new();
+    for channel in channels.iter().take(8) {
+        let key = mpv_window_title(channel);
+        if let Some(hwnd) = find_window_by_title(&key, true) {
+            out.push(hwnd);
+        }
+    }
+    if reserve_chat {
+        let pid = owned_chatterino_pid()
+            .lock()
+            .ok()
+            .and_then(|g| *g)
+            .unwrap_or(0);
+        if let Some(hwnd) = find_main_window_for_pid(pid) {
+            out.push(hwnd);
+        }
+    }
+    out
+}
+
+#[cfg(windows)]
+fn is_hwnd_iconic(hwnd: *mut core::ffi::c_void) -> bool {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn IsIconic(hwnd: *mut core::ffi::c_void) -> i32;
+    }
+    !hwnd.is_null() && unsafe { IsIconic(hwnd) != 0 }
+}
+
+#[cfg(windows)]
+fn is_hwnd_zoomed(hwnd: *mut core::ffi::c_void) -> bool {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn IsZoomed(hwnd: *mut core::ffi::c_void) -> i32;
+    }
+    !hwnd.is_null() && unsafe { IsZoomed(hwnd) != 0 }
+}
+
+#[cfg(windows)]
+fn is_hwnd_visible(hwnd: *mut core::ffi::c_void) -> bool {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn IsWindowVisible(hwnd: *mut core::ffi::c_void) -> i32;
+    }
+    !hwnd.is_null() && unsafe { IsWindowVisible(hwnd) != 0 }
+}
+
+#[cfg(windows)]
+fn minimize_dock_group(hwnds: &[*mut core::ffi::c_void]) {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn ShowWindow(hwnd: *mut core::ffi::c_void, cmd: i32) -> i32;
+    }
+    const SW_MINIMIZE: i32 = 6;
+    for &hwnd in hwnds {
+        if !hwnd.is_null() {
+            unsafe {
+                let _ = ShowWindow(hwnd, SW_MINIMIZE);
+            }
+        }
+    }
+}
+
+#[cfg(windows)]
+fn restore_dock_group(channels: &[String], reserve_chat: bool, layout: &str) {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn ShowWindow(hwnd: *mut core::ffi::c_void, cmd: i32) -> i32;
+    }
+    const SW_RESTORE: i32 = 9;
+    let hwnds = dock_member_hwnds(channels, reserve_chat);
+    for &hwnd in &hwnds {
+        unsafe {
+            let _ = ShowWindow(hwnd, SW_RESTORE);
+        }
+    }
+    let _ = retile_player_windows(channels, reserve_chat, layout);
+    if reserve_chat {
+        place_chatterino_window_right(0);
+    }
+    raise_dock_windows(channels, reserve_chat);
+}
+
+pub fn dock_set_linked(enabled: bool) {
+    crate::dock::set_linked(enabled);
+}
+
+pub fn dock_set_chat_fraction(f: f64) {
+    crate::dock::set_chat_fraction(f);
+    apply_dock_layout();
+}
+
+pub fn dock_cycle_monitor() {
+    crate::dock::cycle_monitor();
+}
+
 /// Monotonic counter serializing layout_watching retile threads (latest wins).
 static LAYOUT_GENERATION: AtomicU64 = AtomicU64::new(0);
 
@@ -648,6 +1050,11 @@ fn launch_chatterino_with_path(
     channels_arg: &str,
     place_beside: bool,
 ) -> Result<(), StreamError> {
+    // Chatterino shows "Show changelog?" when misc.currentVersion ≠ binary
+    // version. We often hard-restart it, so patch settings before spawn.
+    #[cfg(windows)]
+    suppress_chatterino_changelog_prompt(path);
+
     let mut cmd = Command::new(path);
     // Qt accepts -geometry before app args — open already sized (avoids big→small flash).
     #[cfg(windows)]
@@ -698,6 +1105,121 @@ fn launch_chatterino_with_path(
     Ok(())
 }
 
+/// Align `%APPDATA%\Chatterino2\Settings\settings.json` → `misc.currentVersion`
+/// with the executable's ProductVersion so the changelog QMessageBox is skipped.
+#[cfg(windows)]
+fn suppress_chatterino_changelog_prompt(exe: &Path) {
+    let Some(ver) = file_product_version(exe) else {
+        return;
+    };
+    let Ok(appdata) = std::env::var("APPDATA") else {
+        return;
+    };
+    let path = PathBuf::from(appdata)
+        .join("Chatterino2")
+        .join("Settings")
+        .join("settings.json");
+    if !path.is_file() {
+        return;
+    }
+    let Ok(raw) = std::fs::read_to_string(&path) else {
+        return;
+    };
+    let Ok(mut value) = serde_json::from_str::<serde_json::Value>(&raw) else {
+        return;
+    };
+    let Some(misc) = value.get_mut("misc") else {
+        // Create misc object if missing.
+        value
+            .as_object_mut()
+            .map(|o| o.insert("misc".into(), serde_json::json!({ "currentVersion": ver })));
+        let _ = std::fs::write(&path, serde_json::to_string_pretty(&value).unwrap_or(raw));
+        return;
+    };
+    let current = misc.get("currentVersion").and_then(|v| v.as_str()).unwrap_or("");
+    if current == ver {
+        return;
+    }
+    if let Some(obj) = misc.as_object_mut() {
+        obj.insert("currentVersion".into(), serde_json::Value::String(ver));
+    }
+    if let Ok(out) = serde_json::to_string_pretty(&value) {
+        let _ = std::fs::write(&path, out);
+    }
+}
+
+#[cfg(windows)]
+fn file_product_version(exe: &Path) -> Option<String> {
+    #[link(name = "version")]
+    unsafe extern "system" {
+        fn GetFileVersionInfoSizeW(path: *const u16, handle: *mut u32) -> u32;
+        fn GetFileVersionInfoW(
+            path: *const u16,
+            handle: u32,
+            len: u32,
+            data: *mut core::ffi::c_void,
+        ) -> i32;
+        fn VerQueryValueW(
+            block: *const core::ffi::c_void,
+            sub: *const u16,
+            buf: *mut *mut core::ffi::c_void,
+            len: *mut u32,
+        ) -> i32;
+    }
+    #[repr(C)]
+    struct VsFixedFileInfo {
+        signature: u32,
+        struc_version: u32,
+        file_version_ms: u32,
+        file_version_ls: u32,
+        product_version_ms: u32,
+        product_version_ls: u32,
+        file_flags_mask: u32,
+        file_flags: u32,
+        file_os: u32,
+        file_type: u32,
+        file_subtype: u32,
+        file_date_ms: u32,
+        file_date_ls: u32,
+    }
+    let wide: Vec<u16> = exe
+        .as_os_str()
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect();
+    unsafe {
+        let mut dummy = 0u32;
+        let size = GetFileVersionInfoSizeW(wide.as_ptr(), &mut dummy);
+        if size == 0 {
+            return None;
+        }
+        let mut buf = vec![0u8; size as usize];
+        if GetFileVersionInfoW(wide.as_ptr(), 0, size, buf.as_mut_ptr().cast()) == 0 {
+            return None;
+        }
+        let sub: Vec<u16> = "\\".encode_utf16().chain(std::iter::once(0)).collect();
+        let mut ptr: *mut core::ffi::c_void = std::ptr::null_mut();
+        let mut len = 0u32;
+        if VerQueryValueW(buf.as_ptr().cast(), sub.as_ptr(), &mut ptr, &mut len) == 0
+            || ptr.is_null()
+            || (len as usize) < std::mem::size_of::<VsFixedFileInfo>()
+        {
+            return None;
+        }
+        let info = &*(ptr as *const VsFixedFileInfo);
+        let major = (info.product_version_ms >> 16) & 0xffff;
+        let minor = info.product_version_ms & 0xffff;
+        let patch = (info.product_version_ls >> 16) & 0xffff;
+        // Chatterino prints "7.5.5" (3-part); omit build when zero.
+        let build = info.product_version_ls & 0xffff;
+        if build == 0 {
+            Some(format!("{major}.{minor}.{patch}"))
+        } else {
+            Some(format!("{major}.{minor}.{patch}.{build}"))
+        }
+    }
+}
+
 #[cfg(windows)]
 fn chatterino_qt_geometry() -> Option<(i32, i32, i32, i32)> {
     let (_, Some(chat)) = chat_video_split(true)? else {
@@ -719,188 +1241,39 @@ struct WinRect {
 }
 
 #[cfg(windows)]
-#[repr(C)]
-struct MonitorInfo {
-    cb_size: u32,
-    rc_monitor: WinRect,
-    rc_work: WinRect,
-    dw_flags: u32,
-}
-
-#[cfg(windows)]
-#[derive(Clone, Copy)]
-#[repr(C)]
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-#[cfg(windows)]
-#[repr(C)]
-struct AppBarData {
-    cb_size: u32,
-    hwnd: *mut core::ffi::c_void,
-    callback_message: u32,
-    edge: u32,
-    rc: WinRect,
-    lparam: isize,
-}
-
-/// Primary monitor work rect, clamped with the taskbar so chat input stays visible.
-#[cfg(windows)]
-fn primary_monitor_work() -> Option<WinRect> {
-    #[link(name = "user32")]
-    unsafe extern "system" {
-        fn MonitorFromPoint(pt: Point, flags: u32) -> *mut core::ffi::c_void;
-        fn GetMonitorInfoW(monitor: *mut core::ffi::c_void, info: *mut MonitorInfo) -> i32;
-        fn SystemParametersInfoW(
-            action: u32,
-            ui_param: u32,
-            pv_param: *mut core::ffi::c_void,
-            win_ini: u32,
-        ) -> i32;
-        fn SetThreadDpiAwarenessContext(context: isize) -> isize;
-    }
-    #[link(name = "shell32")]
-    unsafe extern "system" {
-        fn SHAppBarMessage(msg: u32, data: *mut AppBarData) -> usize;
-    }
-
-    // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = -4
-    const DPI_CTX: isize = -4;
-    const MONITOR_DEFAULTTOPRIMARY: u32 = 1;
-    const SPI_GETWORKAREA: u32 = 0x0030;
-    const ABM_GETTASKBARPOS: u32 = 5;
-    const ABE_LEFT: u32 = 0;
-    const ABE_TOP: u32 = 1;
-    const ABE_RIGHT: u32 = 2;
-    const ABE_BOTTOM: u32 = 3;
-
-    unsafe {
-        let _prev = SetThreadDpiAwarenessContext(DPI_CTX);
-        let monitor = MonitorFromPoint(Point { x: 0, y: 0 }, MONITOR_DEFAULTTOPRIMARY);
-        let mut work = WinRect {
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-        };
-        if !monitor.is_null() {
-            let mut info = MonitorInfo {
-                cb_size: std::mem::size_of::<MonitorInfo>() as u32,
-                rc_monitor: work,
-                rc_work: work,
-                dw_flags: 0,
-            };
-            if GetMonitorInfoW(monitor, &mut info) != 0 {
-                work = info.rc_work;
-            }
-        }
-        if (work.right <= work.left || work.bottom <= work.top)
-            && SystemParametersInfoW(SPI_GETWORKAREA, 0, &mut work as *mut _ as *mut _, 0) == 0
-        {
-            return None;
-        }
-
-        // Extra clamp using the real taskbar rect (fixes cases where rcWork is wrong).
-        let mut abd = AppBarData {
-            cb_size: std::mem::size_of::<AppBarData>() as u32,
-            hwnd: std::ptr::null_mut(),
-            callback_message: 0,
-            edge: 0,
-            rc: WinRect {
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0,
-            },
-            lparam: 0,
-        };
-        if SHAppBarMessage(ABM_GETTASKBARPOS, &mut abd) != 0 {
-            match abd.edge {
-                ABE_BOTTOM if abd.rc.top > work.top => {
-                    work.bottom = work.bottom.min(abd.rc.top);
-                }
-                ABE_TOP if abd.rc.bottom < work.bottom => {
-                    work.top = work.top.max(abd.rc.bottom);
-                }
-                ABE_LEFT if abd.rc.right < work.right => {
-                    work.left = work.left.max(abd.rc.right);
-                }
-                ABE_RIGHT if abd.rc.left > work.left => {
-                    work.right = work.right.min(abd.rc.left);
-                }
-                _ => {}
-            }
-        }
-
-        if work.right > work.left && work.bottom > work.top {
-            Some(work)
-        } else {
-            None
-        }
+fn rect_from_dock(r: crate::dock::Rect) -> WinRect {
+    WinRect {
+        left: r.left,
+        top: r.top,
+        right: r.right,
+        bottom: r.bottom,
     }
 }
 
-#[cfg(windows)]
-const CHAT_FRACTION: f64 = 0.18; // ~40% narrower than 0.30 — more room for video
-
-/// Video left / chat right. Vertical band uses the work area so mpv OSC and chat
-/// input stay above the taskbar (full screen height put controls under the bar).
+/// Video left / chat right. Uses linked-dock work monitor + chat fraction.
 #[cfg(windows)]
 fn chat_video_split(reserve_chat: bool) -> Option<(WinRect, Option<WinRect>)> {
-    #[link(name = "user32")]
-    unsafe extern "system" {
-        fn GetSystemMetrics(index: i32) -> i32;
-        fn SetThreadDpiAwarenessContext(context: isize) -> isize;
-    }
-    const SM_CXSCREEN: i32 = 0;
-    const SM_CYSCREEN: i32 = 1;
-    const DPI_CTX: isize = -4;
-
-    unsafe {
-        let _prev = SetThreadDpiAwarenessContext(DPI_CTX);
-    }
-    let screen_w = unsafe { GetSystemMetrics(SM_CXSCREEN) };
-    let screen_h = unsafe { GetSystemMetrics(SM_CYSCREEN) };
-    if screen_w <= 0 || screen_h <= 0 {
-        return None;
-    }
-    let work = primary_monitor_work().unwrap_or(WinRect {
-        left: 0,
-        top: 0,
-        right: screen_w,
-        bottom: screen_h,
-    });
-
-    if !reserve_chat {
-        return Some((work, None));
-    }
-
-    let chat_w = ((screen_w as f64) * CHAT_FRACTION).round() as i32;
-    let chat = WinRect {
-        left: screen_w - chat_w,
-        top: work.top,
-        right: screen_w,
-        bottom: work.bottom,
-    };
-    let video = WinRect {
-        left: work.left,
-        top: work.top,
-        right: chat.left,
-        bottom: work.bottom,
-    };
-    Some((video, Some(chat)))
+    let (video, chat) = crate::dock::chat_video_split(reserve_chat)?;
+    Some((
+        rect_from_dock(video),
+        chat.map(rect_from_dock),
+    ))
 }
 
 /// Effective grid for `count` running channels under the chosen preset.
 /// A partially filled preset shrinks to the count-based grid, so a single
 /// stream never lands in a quarter tile of the default "2x2" preset.
-/// "3plus1" keeps its asymmetric split whenever 2+ channels run.
+/// Asymmetric presets keep their split whenever 2+ channels run.
 #[cfg(windows)]
 fn effective_layout(count: usize, preset: &str) -> &str {
     if preset == "3plus1" && count >= 2 {
         return "3plus1";
+    }
+    if preset == "2plus1" && count >= 2 {
+        return "2plus1";
+    }
+    if preset == "8x1" && count >= 2 {
+        return "8x1";
     }
     match count {
         0 | 1 => "1",
@@ -913,51 +1286,17 @@ fn effective_layout(count: usize, preset: &str) -> &str {
 
 #[cfg(windows)]
 fn tile_rect(video: WinRect, index: usize, layout: &str) -> WinRect {
-    let vw = video.right - video.left;
-    let vh = video.bottom - video.top;
-    if layout == "3plus1" {
-        let main_w = (vw as f64 * 2.0 / 3.0).round() as i32;
-        if index == 0 {
-            return WinRect {
-                left: video.left,
-                top: video.top,
-                right: video.left + main_w,
-                bottom: video.bottom,
-            };
-        }
-        let slot = (index - 1).min(2) as i32;
-        let cell_h = vh / 3;
-        return WinRect {
-            left: video.left + main_w,
-            top: video.top + slot * cell_h,
+    let r = crate::dock::tile_rect(
+        crate::dock::Rect {
+            left: video.left,
+            top: video.top,
             right: video.right,
-            bottom: if slot == 2 {
-                video.bottom
-            } else {
-                video.top + (slot + 1) * cell_h
-            },
-        };
-    }
-    let (cols, rows) = match layout {
-        "1" => (1, 1),
-        "2" => (2, 1),
-        "2x2" => (2, 2),
-        "3x2" => (3, 2),
-        "4x2" => (4, 2),
-        _ => (2, 2),
-    };
-    let max_i = (cols * rows).max(1) - 1;
-    let i = index.min(max_i);
-    let cell_w = vw / cols as i32;
-    let cell_h = vh / rows as i32;
-    let col = (i % cols) as i32;
-    let row = (i / cols) as i32;
-    WinRect {
-        left: video.left + col * cell_w,
-        top: video.top + row * cell_h,
-        right: video.left + (col + 1) * cell_w,
-        bottom: video.top + (row + 1) * cell_h,
-    }
+            bottom: video.bottom,
+        },
+        index,
+        layout,
+    );
+    rect_from_dock(r)
 }
 
 /// Pixel-exact launch geometry for the planned tile, computed with the same
@@ -1025,7 +1364,8 @@ fn mpv_dock_arg_parts(
         // Geometry first; watch-later-options-clr stops mpv restoring an old window size.
         geo,
         "--force-window=yes".into(),
-        "--keep-open=no".into(),
+        // Stay open on EOF so we can show the offline screen; we quit via IPC.
+        "--keep-open=yes".into(),
         "--no-border".into(),
         // Live: don't fill a demuxer cache before showing the first frame.
         "--cache=no".into(),
@@ -1214,6 +1554,15 @@ fn move_hwnd_to(hwnd: *mut core::ffi::c_void, rect: WinRect, expand_dwm: bool) {
         fn ShowWindow(hwnd: *mut core::ffi::c_void, cmd: i32) -> i32;
         fn GetWindowLongPtrW(hwnd: *mut core::ffi::c_void, index: i32) -> isize;
         fn SetWindowLongPtrW(hwnd: *mut core::ffi::c_void, index: i32, value: isize) -> isize;
+        fn SetWindowPos(
+            hwnd: *mut core::ffi::c_void,
+            after: *mut core::ffi::c_void,
+            x: i32,
+            y: i32,
+            cx: i32,
+            cy: i32,
+            flags: u32,
+        ) -> i32;
         fn SetThreadDpiAwarenessContext(context: isize) -> isize;
     }
     #[link(name = "dwmapi")]
@@ -1229,6 +1578,12 @@ fn move_hwnd_to(hwnd: *mut core::ffi::c_void, rect: WinRect, expand_dwm: bool) {
     const SW_RESTORE: i32 = 9;
     const GWL_STYLE: i32 = -16;
     const WS_MAXIMIZE: isize = 0x0100_0000;
+    const WS_THICKFRAME: isize = 0x0004_0000;
+    const WS_MAXIMIZEBOX: isize = 0x0001_0000;
+    const SWP_NOMOVE: u32 = 0x0002;
+    const SWP_NOSIZE: u32 = 0x0001;
+    const SWP_NOZORDER: u32 = 0x0004;
+    const SWP_FRAMECHANGED: u32 = 0x0020;
     const DPI_CTX: isize = -4;
 
     let target_w = (rect.right - rect.left).max(1);
@@ -1236,9 +1591,24 @@ fn move_hwnd_to(hwnd: *mut core::ffi::c_void, rect: WinRect, expand_dwm: bool) {
 
     unsafe {
         let _prev = SetThreadDpiAwarenessContext(DPI_CTX);
-        let style = GetWindowLongPtrW(hwnd, GWL_STYLE);
+        let mut style = GetWindowLongPtrW(hwnd, GWL_STYLE);
         if style & WS_MAXIMIZE != 0 {
-            SetWindowLongPtrW(hwnd, GWL_STYLE, style & !WS_MAXIMIZE);
+            style &= !WS_MAXIMIZE;
+            SetWindowLongPtrW(hwnd, GWL_STYLE, style);
+        }
+        // Dock owns Chatterino geometry — strip its resize border so dragging
+        // the chat edge can't desync it from mpv.
+        if expand_dwm && style & (WS_THICKFRAME | WS_MAXIMIZEBOX) != 0 {
+            SetWindowLongPtrW(hwnd, GWL_STYLE, style & !(WS_THICKFRAME | WS_MAXIMIZEBOX));
+            SetWindowPos(
+                hwnd,
+                std::ptr::null_mut(),
+                0,
+                0,
+                0,
+                0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED,
+            );
         }
         ShowWindow(hwnd, SW_RESTORE);
 
@@ -1301,6 +1671,89 @@ fn move_hwnd_to(hwnd: *mut core::ffi::c_void, rect: WinRect, expand_dwm: bool) {
                     1,
                 );
             }
+        }
+    }
+}
+
+#[cfg(windows)]
+fn raise_hwnd(hwnd: *mut core::ffi::c_void, foreground: bool) {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn SetWindowPos(
+            hwnd: *mut core::ffi::c_void,
+            after: *mut core::ffi::c_void,
+            x: i32,
+            y: i32,
+            cx: i32,
+            cy: i32,
+            flags: u32,
+        ) -> i32;
+        fn BringWindowToTop(hwnd: *mut core::ffi::c_void) -> i32;
+        fn SetForegroundWindow(hwnd: *mut core::ffi::c_void) -> i32;
+        fn GetForegroundWindow() -> *mut core::ffi::c_void;
+        fn GetWindowThreadProcessId(hwnd: *mut core::ffi::c_void, pid: *mut u32) -> u32;
+        fn AttachThreadInput(attach: u32, attach_to: u32, attach_flag: i32) -> i32;
+        fn ShowWindow(hwnd: *mut core::ffi::c_void, cmd: i32) -> i32;
+    }
+    #[link(name = "kernel32")]
+    unsafe extern "system" {
+        fn GetCurrentThreadId() -> u32;
+    }
+    const HWND_TOP: isize = 0;
+    const SWP_NOMOVE: u32 = 0x0002;
+    const SWP_NOSIZE: u32 = 0x0001;
+    const SWP_SHOWWINDOW: u32 = 0x0040;
+    const SW_SHOW: i32 = 5;
+    if hwnd.is_null() {
+        return;
+    }
+    unsafe {
+        ShowWindow(hwnd, SW_SHOW);
+        SetWindowPos(
+            hwnd,
+            HWND_TOP as *mut core::ffi::c_void,
+            0,
+            0,
+            0,
+            0,
+            SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW,
+        );
+        BringWindowToTop(hwnd);
+        if foreground {
+            let fg = GetForegroundWindow();
+            let mut fg_pid = 0u32;
+            let fg_tid = GetWindowThreadProcessId(fg, &mut fg_pid);
+            let our_tid = GetCurrentThreadId();
+            if fg_tid != 0 && fg_tid != our_tid {
+                AttachThreadInput(our_tid, fg_tid, 1);
+                let _ = SetForegroundWindow(hwnd);
+                AttachThreadInput(our_tid, fg_tid, 0);
+            } else {
+                let _ = SetForegroundWindow(hwnd);
+            }
+        }
+    }
+}
+
+#[cfg(windows)]
+fn raise_dock_windows(channels: &[String], reserve_chat: bool) {
+    let mut first = true;
+    for channel in channels.iter().take(8) {
+        let key = mpv_window_title(channel);
+        if let Some(hwnd) = find_window_by_title(&key, true) {
+            raise_hwnd(hwnd, first);
+            first = false;
+        }
+    }
+    if reserve_chat {
+        let pid = owned_chatterino_pid()
+            .lock()
+            .ok()
+            .and_then(|g| *g)
+            .unwrap_or(0);
+        if let Some(hwnd) = find_main_window_for_pid(pid) {
+            // Chat after video so it ends up in the Z-order next to mpv; don't steal FG from video.
+            raise_hwnd(hwnd, false);
         }
     }
 }
@@ -1651,11 +2104,26 @@ fn spawn_output_readers(
                     );
                 }
             }
-            // Streamlink closed its pipes: the stream ended or it died. Close
-            // the pre-launched player unless the user asked to keep it.
+            // Streamlink closed its pipes: the stream ended or it died.
             if let Some(fx) = fast.as_ref() {
-                if !fx.no_close {
+                if fx.no_close {
+                    // Leave the pre-launched player; prune the Streamlink session.
+                } else if !fx.fired.load(Ordering::SeqCst) {
+                    // Never attached playback — nothing to show; close now.
                     close_session_player(&state, &id, true);
+                } else if !fx.goodbye.swap(true, Ordering::SeqCst) {
+                    // Show branded offline screen for a few seconds, then quit.
+                    begin_offline_goodbye(
+                        app.clone(),
+                        state.clone(),
+                        id.clone(),
+                        channel.clone(),
+                        fx.pipe.clone(),
+                    );
+                    return;
+                } else {
+                    // Sibling drain thread already started goodbye.
+                    return;
                 }
             }
             // Prune right away (closes the owned Chatterino) instead of
@@ -1815,6 +2283,7 @@ pub fn start_stream(
                     player_path: player_path.clone(),
                     fallback_argv: dock_argv,
                     fired: Arc::new(AtomicBool::new(false)),
+                    goodbye: Arc::new(AtomicBool::new(false)),
                     osd: Mutex::new(String::new()),
                     no_close,
                 }));
@@ -1978,6 +2447,7 @@ pub fn start_stream(
         status: initial_status.clone(),
         phase: "starting".into(),
         ready: false,
+        muted: false,
     };
 
     let handoff_done = Arc::new(AtomicBool::new(false));
@@ -1998,6 +2468,7 @@ pub fn start_stream(
                 player: fast_player,
                 ready_at: None,
                 mpv_missing_since: None,
+                offline_until: None,
             },
         );
     }
@@ -2045,6 +2516,35 @@ pub fn list_sessions(state: &StreamingState) -> Result<Vec<StreamSession>, Strea
     Ok(map.values().map(|s| s.info.clone()).collect())
 }
 
+/// Toggle mpv mute for a session (by id). Returns the new muted state.
+pub fn toggle_stream_mute(state: &StreamingState, id: &str) -> Result<bool, StreamError> {
+    let mut map = state
+        .inner
+        .lock()
+        .map_err(|_| StreamError::Message("streaming state poisoned".into()))?;
+    let session = map
+        .get_mut(id)
+        .ok_or_else(|| StreamError::Message(format!("unknown session {id}")))?;
+    let next = !session.info.muted;
+    let pipe = session
+        .player
+        .as_ref()
+        .map(|p| p.pipe.clone())
+        .ok_or_else(|| {
+            StreamError::Message(
+                "mute needs a fast-start mpv session (IPC). Restart the stream.".into(),
+            )
+        })?;
+    let flag = if next { "yes" } else { "no" };
+    mpv_ipc_command(
+        &pipe,
+        &["set_property", "mute", flag],
+        Duration::from_millis(800),
+    )?;
+    session.info.muted = next;
+    Ok(next)
+}
+
 /// Drop sessions whose Streamlink exited or (when ready) whose mpv window is gone.
 /// Returns true if any session was removed.
 pub fn prune_dead_sessions(state: &StreamingState) -> Result<bool, StreamError> {
@@ -2068,6 +2568,19 @@ pub fn prune_dead_sessions(state: &StreamingState) -> Result<bool, StreamError> 
             .as_mut()
             .map(|p| !matches!(p.child.try_wait(), Ok(None)))
             .unwrap_or(false);
+        // Natural offline goodbye: keep mpv up until offline_until (unless the
+        // user closed the player window themselves).
+        let in_offline_grace = session
+            .offline_until
+            .map(|t| Instant::now() < t)
+            .unwrap_or(false);
+        if in_offline_grace && !player_dead {
+            if child_dead {
+                session.info.running = false;
+                session.info.phase = "ended".into();
+            }
+            continue;
+        }
         // The window-title lookup is a heuristic and can produce false
         // negatives (renamed window, Unicode title, DWM timing). Never kill a
         // stream on a single miss: require the player window to be missing
@@ -2120,6 +2633,7 @@ pub fn prune_dead_sessions(state: &StreamingState) -> Result<bool, StreamError> 
     if map.is_empty() {
         drop(map);
         close_owned_chatterino();
+        crate::dock::clear_session();
     }
     Ok(true)
 }
@@ -2172,6 +2686,7 @@ pub fn stop_stream(state: &StreamingState, id: &str) -> Result<(), StreamError> 
     drop(map);
     if empty {
         close_owned_chatterino();
+        crate::dock::clear_session();
     }
     Ok(())
 }
@@ -2193,6 +2708,7 @@ pub fn stop_all(state: &StreamingState) -> Result<(), StreamError> {
         close_player_windows_for_channel(&channel);
     }
     close_owned_chatterino();
+    crate::dock::clear_session();
     Ok(())
 }
 

@@ -25,6 +25,7 @@ import { MPV_INSTALL_URL } from "../lib/doctor";
 import { eventToHotkey, normalizeHotkey } from "../lib/hotkeys";
 import { isTauri } from "../lib/tauri";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import { useWatchingStore } from "../lib/streaming/store";
 import "./SettingsPage.css";
 import "../components/SetupHelp.css";
 
@@ -59,6 +60,7 @@ export function SettingsPage() {
   const setSettings = useSettingsStore((s) => s.setSettings);
   const replaceSettings = useSettingsStore((s) => s.replaceSettings);
   const setChannelOverride = useSettingsStore((s) => s.setChannelOverride);
+  const applyLayout = useWatchingStore((s) => s.applyLayout);
   const fileRef = useRef<HTMLInputElement>(null);
   const [newChannelLogin, setNewChannelLogin] = useState("");
   const [newChannelQuality, setNewChannelQuality] = useState("");
@@ -323,20 +325,153 @@ export function SettingsPage() {
           <input
             type="checkbox"
             checked={settings.streaming.seamlessSwitch}
-            onChange={(e) =>
+            onChange={(e) => {
+              const seamless = e.target.checked;
+              // Seamless and linked dock are mutually exclusive: leaving seamless
+              // enables the dock grips so you don't need two toggles.
+              const linkedDock = seamless ? false : true;
               setSettings({
                 streaming: {
                   ...settings.streaming,
-                  seamlessSwitch: e.target.checked,
+                  seamlessSwitch: seamless,
+                  linkedDock,
                 },
-              })
-            }
+              });
+              void import("../lib/tauri").then(({ invoke, isTauri }) => {
+                if (isTauri()) {
+                  void invoke("dock_set_linked", { enabled: linkedDock }).catch(
+                    () => undefined,
+                  );
+                }
+              });
+            }}
           />
           <span className="settings__check-text">
             {t("settings:seamlessSwitch")}
             <small className="muted">{t("settings:seamlessSwitchHint")}</small>
           </span>
         </label>
+
+        {!settings.streaming.seamlessSwitch ? (
+          <label className="settings__row">
+            <span>
+              {t("settings:multistreamLayout")}
+              <small className="muted">{t("settings:multistreamLayoutHint")}</small>
+            </span>
+            <select
+              value={settings.streaming.multistreamLayout}
+              onChange={(e) =>
+                setSettings({
+                  streaming: {
+                    ...settings.streaming,
+                    multistreamLayout: e.target
+                      .value as typeof settings.streaming.multistreamLayout,
+                  },
+                })
+              }
+            >
+              <option value="1">{t("settings:layout1")}</option>
+              <option value="2">{t("settings:layout2")}</option>
+              <option value="2plus1">{t("settings:layout2plus1")}</option>
+              <option value="2x2">{t("settings:layout2x2")}</option>
+              <option value="3plus1">{t("settings:layout3plus1")}</option>
+              <option value="3x2">{t("settings:layout3x2")}</option>
+              <option value="4x2">{t("settings:layout4x2")}</option>
+              <option value="8x1">{t("settings:layout8x1")}</option>
+            </select>
+          </label>
+        ) : null}
+
+        {!settings.streaming.seamlessSwitch &&
+        (settings.streaming.multistreamLayout === "2plus1" ||
+          settings.streaming.multistreamLayout === "3plus1") ? (
+          <label className="settings__row">
+            <span>
+              {t("settings:unevenMainSide")}
+              <small className="muted">{t("settings:unevenMainSideHint")}</small>
+            </span>
+            <select
+              value={settings.streaming.unevenMainSide}
+              onChange={(e) => {
+                setSettings({
+                  streaming: {
+                    ...settings.streaming,
+                    unevenMainSide: e.target
+                      .value as typeof settings.streaming.unevenMainSide,
+                  },
+                });
+                applyLayout();
+              }}
+            >
+              <option value="left">{t("settings:mainSideLeft")}</option>
+              <option value="right">{t("settings:mainSideRight")}</option>
+              <option value="top">{t("settings:mainSideTop")}</option>
+              <option value="bottom">{t("settings:mainSideBottom")}</option>
+            </select>
+          </label>
+        ) : null}
+
+        <label className="settings__row settings__row--check">
+          <input
+            type="checkbox"
+            checked={settings.streaming.linkedDock}
+            onChange={(e) => {
+              const enabled = e.target.checked;
+              setSettings({
+                streaming: {
+                  ...settings.streaming,
+                  linkedDock: enabled,
+                  // Enabling dock forces multistream (seamless off).
+                  seamlessSwitch: enabled ? false : settings.streaming.seamlessSwitch,
+                },
+              });
+              void import("../lib/tauri").then(({ invoke, isTauri }) => {
+                if (isTauri()) {
+                  void invoke("dock_set_linked", { enabled }).catch(() => undefined);
+                }
+              });
+            }}
+          />
+          <span className="settings__check-text">
+            {t("settings:linkedDock")}
+            <small className="muted">{t("settings:linkedDockHint")}</small>
+          </span>
+        </label>
+
+        {settings.streaming.linkedDock ? (
+          <label className="settings__row">
+            <span>
+              {t("settings:chatWidthFraction")}
+              <small className="muted">{t("settings:chatWidthFractionHint")}</small>
+            </span>
+            <input
+              type="range"
+              min={12}
+              max={45}
+              step={1}
+              value={Math.round(settings.streaming.chatWidthFraction * 100)}
+              onChange={(e) => {
+                const fraction = Number(e.target.value) / 100;
+                setSettings({
+                  streaming: {
+                    ...settings.streaming,
+                    chatWidthFraction: fraction,
+                  },
+                });
+                void import("../lib/tauri").then(({ invoke, isTauri }) => {
+                  if (isTauri()) {
+                    void invoke("dock_set_chat_fraction", { fraction }).catch(
+                      () => undefined,
+                    );
+                  }
+                });
+              }}
+            />
+            <span className="muted">
+              {Math.round(settings.streaming.chatWidthFraction * 100)}%
+            </span>
+          </label>
+        ) : null}
 
         <label className="settings__row settings__row--check">
           <input
@@ -691,6 +826,7 @@ export function SettingsPage() {
             ["refresh", "hotkeyRefresh"],
             ["focusSearch", "hotkeyFocusSearch"],
             ["stopAll", "hotkeyStopAll"],
+            ["cycleDockMonitor", "hotkeyCycleDockMonitor"],
             ["openSettings", "hotkeyOpenSettings"],
             ["quit", "hotkeyQuit"],
           ] as const

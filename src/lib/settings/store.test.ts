@@ -18,6 +18,8 @@ describe("migrateSettings", () => {
     expect(result.schemaVersion).toBe(SETTINGS_SCHEMA_VERSION);
     expect(result.chat.provider).toBe("embedded");
     expect(result.streaming.multistreamLayout).toBe("2x2");
+    expect(result.streaming.linkedDock).toBe(false);
+    expect(result.streaming.chatWidthFraction).toBe(0.18);
     expect(result.streaming.lowLatency).toBe(false);
     expect(result.streaming.disableAds).toBe(false);
     expect(result.streaming.seamlessSwitch).toBe(true);

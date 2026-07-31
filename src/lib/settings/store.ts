@@ -7,7 +7,9 @@ import {
 } from "./types";
 import {
   DEFAULT_MULTISTREAM_LAYOUT,
+  DEFAULT_UNEVEN_MAIN_SIDE,
   isMultistreamLayout,
+  isUnevenMainSide,
 } from "../streaming/layout";
 
 interface SettingsState {
@@ -59,6 +61,18 @@ export function migrateSettings(raw: unknown): AppSettings {
           ? raw
           : DEFAULT_MULTISTREAM_LAYOUT;
       })(),
+      unevenMainSide: (() => {
+        const raw = input.streaming?.unevenMainSide;
+        return raw && isUnevenMainSide(raw) ? raw : DEFAULT_UNEVEN_MAIN_SIDE;
+      })(),
+      linkedDock: input.streaming?.linkedDock ?? base.streaming.linkedDock,
+      chatWidthFraction: (() => {
+        const f = input.streaming?.chatWidthFraction;
+        if (typeof f !== "number" || Number.isNaN(f)) {
+          return base.streaming.chatWidthFraction;
+        }
+        return Math.min(0.45, Math.max(0.12, f));
+      })(),
     },
     gui: {
       ...base.gui,
@@ -72,6 +86,11 @@ export function migrateSettings(raw: unknown): AppSettings {
     channels: { ...base.channels, ...input.channels },
     schemaVersion: SETTINGS_SCHEMA_VERSION,
   };
+
+  // Seamless and linked dock cannot both be on.
+  if (merged.streaming.seamlessSwitch && merged.streaming.linkedDock) {
+    merged.streaming.linkedDock = false;
+  }
 
   // v8: webbrowser default flipped off — it made first stream starts very slow.
   if (prevSchema < 8) {

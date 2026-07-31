@@ -2,7 +2,7 @@ import { openUrl } from "@tauri-apps/plugin-opener";
 import { useTranslation } from "react-i18next";
 import {
   CHATTERINO_INSTALL_URL,
-  CHATTERINO_SCOOP,
+  CHATTERINO_CHOCO,
   CHATTERINO_WINGET,
   MPV_INSTALL_URL,
   MPV_PORTABLE_URL,
@@ -217,8 +217,8 @@ export function ChatterinoSetupHelp({
               <code>{CHATTERINO_WINGET}</code>
             </div>
             <div>
-              <span className="muted">{t("chatterinoScoop")}</span>
-              <code>{CHATTERINO_SCOOP}</code>
+              <span className="muted">{t("chatterinoChoco")}</span>
+              <code>{CHATTERINO_CHOCO}</code>
             </div>
           </div>
           <div className="setup-help__actions">

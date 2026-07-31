@@ -95,9 +95,18 @@ p {
 }
 
 .page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
   margin-bottom: 1rem;
   padding-bottom: 0.65rem;
   border-bottom: 1px solid var(--border);
+}
+
+.page__refresh {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
 }
 
 .page__lede {

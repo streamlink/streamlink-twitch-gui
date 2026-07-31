@@ -2,6 +2,10 @@
   margin-bottom: 1.5rem;
 }
 
+.ms-slots-meta {
+  margin: 1rem 0 0;
+}
+
 .ms-section__head {
   display: flex;
   align-items: baseline;
@@ -74,6 +78,10 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.ms-muted {
+  opacity: 0.85;
 }
 
 .ms-chat-active {

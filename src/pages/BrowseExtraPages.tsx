@@ -6,6 +6,7 @@ import { ChannelResults } from "../components/ChannelResults";
 import { GameGrid } from "../components/GameGrid";
 import { LoadMore } from "../components/LoadMore";
 import { LoadingGrid } from "../components/LoadingGrid";
+import { PageRefreshButton } from "../components/PageRefreshButton";
 import { StreamGrid } from "../components/StreamGrid";
 import { useAuthStore } from "../lib/auth/store";
 import { useWatchingStore } from "../lib/streaming/store";
@@ -43,6 +44,7 @@ export function GamesPage() {
   });
 
   const games = query.data?.pages.flatMap((p) => p.data) ?? [];
+  const refreshing = query.isFetching && !query.isFetchingNextPage;
 
   return (
     <section className="page">
@@ -51,6 +53,12 @@ export function GamesPage() {
           <h1>{t("routes:gamesTitle")}</h1>
           <p className="page__lede">{t("routes:gamesLede")}</p>
         </div>
+        {loggedIn ? (
+          <PageRefreshButton
+            refreshing={refreshing}
+            onRefresh={() => void query.refetch()}
+          />
+        ) : null}
       </header>
       {!loggedIn && !authLoading ? (
         <p className="muted">{t("routes:followedLoginRequired")}</p>
@@ -76,7 +84,7 @@ export function GamesPage() {
 }
 
 export function GameStreamsPage() {
-  const { t } = useTranslation("routes");
+  const { t } = useTranslation(["routes", "common"]);
   const { gameId = "" } = useParams();
   const loggedIn = useLoggedIn();
   const watchStream = useWatchingStore((s) => s.watchStream);
@@ -90,13 +98,24 @@ export function GameStreamsPage() {
   });
 
   const streams = query.data?.pages.flatMap((p) => p.data) ?? [];
+  const refreshing = query.isFetching && !query.isFetchingNextPage;
 
   return (
     <section className="page">
       <p>
-        <Link to="/games">{t("gamesTitle")}</Link>
+        <Link to="/games">{t("routes:gamesTitle")}</Link>
       </p>
-      <h1>{t("gameStreamsTitle")}</h1>
+      <header className="page__header">
+        <div>
+          <h1>{t("routes:gameStreamsTitle")}</h1>
+        </div>
+        {loggedIn && gameId ? (
+          <PageRefreshButton
+            refreshing={refreshing}
+            onRefresh={() => void query.refetch()}
+          />
+        ) : null}
+      </header>
       {query.isLoading ? <LoadingGrid /> : null}
       {streams.length ? (
         <>
@@ -113,7 +132,7 @@ export function GameStreamsPage() {
           />
         </>
       ) : !query.isLoading ? (
-        <p className="muted">{t("followedEmpty")}</p>
+        <p className="muted">{t("routes:followedEmpty")}</p>
       ) : null}
     </section>
   );

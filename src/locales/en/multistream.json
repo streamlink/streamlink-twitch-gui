@@ -10,7 +10,7 @@
   "dragHint": "Drag to reorder tiles.",
   "chatPick": "Chat",
   "chatActive": "Chat active",
-  "chatterinoNote": "Chatterino opens one tab per stream — switch tabs there.",
+  "chatterinoNote": "Chatterino7 opens one tab per stream — switch tabs there.",
   "searchTitle": "Add channel",
   "searchPlaceholder": "Search Twitch channels…",
   "searchMinChars": "Type at least 2 characters to search all of Twitch.",
@@ -24,5 +24,7 @@
   "live": "Live",
   "offline": "Offline",
   "stop": "Stop",
-  "stopAll": "Stop all"
+  "stopAll": "Stop all",
+  "mute": "Mute",
+  "unmute": "Unmute"
 }

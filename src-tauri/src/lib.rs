@@ -3,6 +3,7 @@
 
 mod auth;
 mod doctor;
+mod dock;
 mod helix;
 mod http;
 mod streaming;
@@ -103,6 +104,14 @@ async fn stream_stop_all(state: tauri::State<'_, SharedStreaming>) -> Result<(),
 }
 
 #[tauri::command]
+fn stream_toggle_mute(
+    state: tauri::State<'_, SharedStreaming>,
+    id: String,
+) -> Result<bool, String> {
+    streaming::toggle_stream_mute(&state, &id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 async fn open_chatterino_chat(channels: Vec<String>) -> Result<String, String> {
     tauri::async_runtime::spawn_blocking(move || {
         streaming::launch_chatterino_for_channels(&channels).map_err(|e| e.to_string())
@@ -123,9 +132,34 @@ fn layout_watching(
     channels: Vec<String>,
     reserve_chat: bool,
     layout: Option<String>,
+    linked_dock: Option<bool>,
+    chat_fraction: Option<f64>,
+    main_side: Option<String>,
 ) -> Result<(), String> {
-    streaming::layout_watching(&channels, reserve_chat, layout.as_deref())
-        .map_err(|e| e.to_string())
+    streaming::layout_watching(
+        &channels,
+        reserve_chat,
+        layout.as_deref(),
+        linked_dock,
+        chat_fraction,
+        main_side.as_deref(),
+    )
+    .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn dock_set_linked(enabled: bool) {
+    streaming::dock_set_linked(enabled);
+}
+
+#[tauri::command]
+fn dock_set_chat_fraction(fraction: f64) {
+    streaming::dock_set_chat_fraction(fraction);
+}
+
+#[tauri::command]
+fn dock_cycle_monitor() {
+    streaming::dock_cycle_monitor();
 }
 
 #[tauri::command]
@@ -178,12 +212,17 @@ pub fn run() {
             stream_list,
             stream_stop,
             stream_stop_all,
+            stream_toggle_mute,
             open_chatterino_chat,
             close_owned_chatterino,
             layout_watching,
+            dock_set_linked,
+            dock_set_chat_fraction,
+            dock_cycle_monitor,
             app_quit
         ])
         .setup(|app| {
+            streaming::init_dock(app.handle().clone());
             let state = app.state::<SharedStreaming>().inner().clone();
             streaming::start_session_watchdog(app.handle().clone(), state);
             // Warm Streamlink so the first watch doesn't pay Python/plugin cold-start.

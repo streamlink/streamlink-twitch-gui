@@ -47,6 +47,24 @@ describe("computePresetTileFractions", () => {
     expect(tiles[3]!.y).toBeCloseTo(2 / 3);
   });
 
+  it("places 2plus1 as large left + two stacked right", () => {
+    const tiles = computePresetTileFractions("2plus1", 3, true);
+    expect(tiles).toHaveLength(3);
+    const videoW = 1 - CHAT_WIDTH_FRACTION;
+    expect(tiles[0]!.w).toBeCloseTo((videoW * 2) / 3);
+    expect(tiles[0]!.h).toBe(1);
+    expect(tiles[1]!.h).toBeCloseTo(0.5);
+    expect(tiles[2]!.y).toBeCloseTo(0.5);
+  });
+
+  it("places 8x1 as eight columns", () => {
+    const tiles = computePresetTileFractions("8x1", 8, false);
+    expect(tiles).toHaveLength(8);
+    expect(tiles[0]!.w).toBeCloseTo(0.125);
+    expect(tiles[0]!.h).toBe(1);
+    expect(tiles[7]!.x).toBeCloseTo(0.875);
+  });
+
   it("keeps 2x2 cell shape even with only two streams", () => {
     const tiles = computePresetTileFractions("2x2", 2, false);
     expect(tiles).toHaveLength(2);

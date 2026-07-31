@@ -204,18 +204,24 @@ fn mpv_fallbacks() -> Vec<PathBuf> {
 
 fn chatterino_fallbacks() -> Vec<PathBuf> {
     let mut paths = Vec::new();
+    // Prefer Chatterino7 (SevenTV fork) over stock Chatterino 2.
     // Prefer real installs first — WinGet Links shims often fail when spawned from a GUI host.
     for env in ["ProgramFiles", "ProgramFiles(x86)"] {
         if let Ok(root) = std::env::var(env) {
-            paths.push(
-                PathBuf::from(root)
-                    .join("Chatterino")
-                    .join("chatterino.exe"),
-            );
+            let root = PathBuf::from(root);
+            paths.push(root.join("Chatterino7").join("chatterino.exe"));
+            paths.push(root.join("Chatterino").join("chatterino.exe"));
         }
     }
     if let Ok(local) = std::env::var("LOCALAPPDATA") {
         let local = PathBuf::from(local);
+        paths.push(
+            local
+                .join("Programs")
+                .join("Chatterino7")
+                .join("chatterino.exe"),
+        );
+        paths.push(local.join("Chatterino7").join("chatterino.exe"));
         paths.push(
             local
                 .join("Programs")
@@ -226,13 +232,15 @@ fn chatterino_fallbacks() -> Vec<PathBuf> {
     }
     if let Ok(user) = std::env::var("USERPROFILE") {
         let user = PathBuf::from(user);
-        paths.push(
-            user.join("scoop")
-                .join("apps")
-                .join("chatterino")
-                .join("current")
-                .join("chatterino.exe"),
-        );
+        for app in ["chatterino7", "chatterino"] {
+            paths.push(
+                user.join("scoop")
+                    .join("apps")
+                    .join(app)
+                    .join("current")
+                    .join("chatterino.exe"),
+            );
+        }
         paths.push(user.join("scoop").join("shims").join("chatterino.exe"));
     }
     if let Ok(local) = std::env::var("LOCALAPPDATA") {

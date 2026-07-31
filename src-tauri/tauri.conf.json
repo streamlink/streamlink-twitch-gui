@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Streamlink Twitch GUI",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "identifier": "com.wibias.streamlinktwitchgui",
   "build": {
     "beforeDevCommand": "npm run dev",

@@ -33,7 +33,10 @@ export {
 } from "./settings/mpv";
 export const STREAMLINK_WINGET = "winget install Streamlink.Streamlink";
 export const STREAMLINK_SCOOP = "scoop install streamlink";
-export const CHATTERINO_INSTALL_URL = "https://chatterino.com/";
+export const CHATTERINO_INSTALL_URL =
+  "https://github.com/SevenTV/chatterino7/releases/latest";
 export const CHATTERINO_WINGET =
-  "winget install -e --id ChatterinoTeam.Chatterino";
-export const CHATTERINO_SCOOP = "scoop install chatterino";
+  "winget install -e --id SevenTV.Chatterino7";
+export const CHATTERINO_CHOCO = "choco install chatterino7";
+/** @deprecated Prefer CHATTERINO_CHOCO — Scoop has no official Chatterino7 package. */
+export const CHATTERINO_SCOOP = CHATTERINO_CHOCO;

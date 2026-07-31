@@ -5,11 +5,16 @@ import {
 } from "./mpv";
 import {
   DEFAULT_MULTISTREAM_LAYOUT,
+  DEFAULT_UNEVEN_MAIN_SIDE,
+  isMultistreamLayout,
+  isUnevenMainSide,
   type MultistreamLayout,
+  type UnevenMainSide,
 } from "../streaming/layout";
 
 export type { MpvPresetSettings } from "./mpv";
 export type { MultistreamLayout } from "../streaming/layout";
+export type { UnevenMainSide } from "../streaming/layout";
 
 export type ThemeMode = "system" | "dark" | "light";
 
@@ -41,6 +46,8 @@ export interface HotkeySettings {
   stopAll: string;
   openSettings: string;
   quit: string;
+  /** Move linked dock (mpv + Chatterino) to the next monitor. */
+  cycleDockMonitor: string;
 }
 
 export interface AppSettings {
@@ -71,6 +78,17 @@ export interface AppSettings {
     seamlessSwitch: boolean;
     /** Multistream grid when seamlessSwitch is off. */
     multistreamLayout: MultistreamLayout;
+    /**
+     * Where the large pane sits for 2+1 / 3+1 layouts.
+     */
+    unevenMainSide: UnevenMainSide;
+    /**
+     * When true (default), show grips to resize chat↔video / tiles and move
+     * the dock between monitors. Opt-out.
+     */
+    linkedDock: boolean;
+    /** Fraction of work-area width reserved for Chatterino (0.12–0.45). */
+    chatWidthFraction: number;
     webbrowser: boolean;
     webbrowserHeadless: boolean;
     webbrowserExecutable: string;
@@ -99,7 +117,7 @@ export interface AppSettings {
   closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 9;
+export const SETTINGS_SCHEMA_VERSION = 11;
 
 export const defaultHotkeys = (): HotkeySettings => ({
   refresh: "F5",
@@ -107,6 +125,7 @@ export const defaultHotkeys = (): HotkeySettings => ({
   stopAll: "Ctrl+Shift+S",
   openSettings: "Ctrl+,",
   quit: "Ctrl+Q",
+  cycleDockMonitor: "Ctrl+Shift+M",
 });
 
 export const defaultSettings = (): AppSettings => ({
@@ -134,6 +153,10 @@ export const defaultSettings = (): AppSettings => ({
     disableAds: false,
     seamlessSwitch: true,
     multistreamLayout: DEFAULT_MULTISTREAM_LAYOUT,
+    unevenMainSide: DEFAULT_UNEVEN_MAIN_SIDE,
+    // Mutually exclusive with seamlessSwitch (default single-stream).
+    linkedDock: false,
+    chatWidthFraction: 0.18,
     webbrowser: false,
     webbrowserHeadless: true,
     webbrowserExecutable: "",

@@ -1,6 +1,6 @@
 [package]
 name = "streamlink-twitch-gui"
-version = "0.1.1"
+version = "0.2.0"
 description = "Desktop Twitch browser for Streamlink"
 authors = ["Wibias"]
 edition = "2021"

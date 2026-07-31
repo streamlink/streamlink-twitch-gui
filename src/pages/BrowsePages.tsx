@@ -8,6 +8,7 @@ import { DoctorPanel } from "../components/DoctorPanel";
 import { EmbeddedChat } from "../components/EmbeddedChat";
 import { LoadMore } from "../components/LoadMore";
 import { LoadingGrid } from "../components/LoadingGrid";
+import { PageRefreshButton } from "../components/PageRefreshButton";
 import { StreamGrid } from "../components/StreamGrid";
 import { useUpdaterCheck } from "../components/DeepLinkAndUpdaterBootstrap";
 import { useAuthStore } from "../lib/auth/store";
@@ -35,6 +36,7 @@ export function FollowedPage() {
   });
 
   const streams = query.data?.pages.flatMap((p) => p.data) ?? [];
+  const refreshing = query.isFetching && !query.isFetchingNextPage;
 
   return (
     <section className="page">
@@ -43,6 +45,12 @@ export function FollowedPage() {
           <h1>{t("routes:followedTitle")}</h1>
           <p className="page__lede">{t("routes:followedLede")}</p>
         </div>
+        {loggedIn ? (
+          <PageRefreshButton
+            refreshing={refreshing}
+            onRefresh={() => void query.refetch()}
+          />
+        ) : null}
       </header>
       {!loggedIn ? <p className="muted">{t("routes:followedLoginRequired")}</p> : null}
       {query.isLoading ? <LoadingGrid /> : null}
@@ -90,6 +98,7 @@ export function StreamsPage() {
   });
 
   const streams = query.data?.pages.flatMap((p) => p.data) ?? [];
+  const refreshing = query.isFetching && !query.isFetchingNextPage;
 
   return (
     <section className="page">
@@ -98,6 +107,12 @@ export function StreamsPage() {
           <h1>{t("routes:streamsTitle")}</h1>
           <p className="page__lede">{t("routes:streamsLede")}</p>
         </div>
+        {loggedIn ? (
+          <PageRefreshButton
+            refreshing={refreshing}
+            onRefresh={() => void query.refetch()}
+          />
+        ) : null}
       </header>
       {!loggedIn && !authLoading ? (
         <p className="muted">{t("routes:followedLoginRequired")}</p>
@@ -134,6 +149,7 @@ export function WatchingPage() {
   const refresh = useWatchingStore((s) => s.refresh);
   const stopSession = useWatchingStore((s) => s.stopSession);
   const stopAll = useWatchingStore((s) => s.stopAll);
+  const toggleMute = useWatchingStore((s) => s.toggleMute);
   const moveSlot = useWatchingStore((s) => s.moveSlot);
   const applyLayout = useWatchingStore((s) => s.applyLayout);
   const activeChatChannel = useWatchingStore((s) => s.activeChatChannel);
@@ -196,10 +212,12 @@ export function WatchingPage() {
             >
               <option value="1">{t("settings:layout1")}</option>
               <option value="2">{t("settings:layout2")}</option>
+              <option value="2plus1">{t("settings:layout2plus1")}</option>
               <option value="2x2">{t("settings:layout2x2")}</option>
               <option value="3plus1">{t("settings:layout3plus1")}</option>
               <option value="3x2">{t("settings:layout3x2")}</option>
               <option value="4x2">{t("settings:layout4x2")}</option>
+              <option value="8x1">{t("settings:layout8x1")}</option>
             </select>
           </label>
         ) : null}
@@ -261,6 +279,14 @@ export function WatchingPage() {
                     {t("routes:chatTitle", { channel: session.channel })}
                   </button>
                 ) : null}
+                <button
+                  type="button"
+                  className="button-secondary"
+                  aria-pressed={Boolean(session.muted)}
+                  onClick={() => void toggleMute(session.id)}
+                >
+                  {session.muted ? "Unmute" : "Mute"}
+                </button>
                 <button type="button" onClick={() => void stopSession(session.id)}>
                   {t("common:stop")}
                 </button>
