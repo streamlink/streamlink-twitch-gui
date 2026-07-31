@@ -6,8 +6,6 @@ import {
 import {
   DEFAULT_MULTISTREAM_LAYOUT,
   DEFAULT_UNEVEN_MAIN_SIDE,
-  isMultistreamLayout,
-  isUnevenMainSide,
   type MultistreamLayout,
   type UnevenMainSide,
 } from "../streaming/layout";

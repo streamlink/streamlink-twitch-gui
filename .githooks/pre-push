@@ -1,0 +1,10 @@
+#!/bin/sh
+# Block pushes that would fail Windows CI (frontend + rust).
+# Skip with: SKIP_CI_HOOK=1 git push
+if [ "${SKIP_CI_HOOK:-}" = "1" ]; then
+  echo "pre-push: SKIP_CI_HOOK=1 — skipping local CI gate"
+  exit 0
+fi
+
+echo "pre-push: running Windows CI checks (npm run ci)…"
+npm run ci

@@ -32,6 +32,27 @@ jobs:
       - name: Install frontend deps
         run: npm ci
 
+      - name: Frontend tests
+        run: npm test
+
+      - name: Frontend build (tsc + vite)
+        run: npm run build
+
+      - name: Dependency audit gate
+        run: node scripts/audit-gate.mjs
+
+      - name: Cargo fmt
+        working-directory: src-tauri
+        run: cargo fmt --check
+
+      - name: Cargo clippy
+        working-directory: src-tauri
+        run: cargo clippy -- -D warnings
+
+      - name: Cargo test
+        working-directory: src-tauri
+        run: cargo test
+
       - name: Fetch bundled Streamlink
         run: npm run streamlink:fetch
 

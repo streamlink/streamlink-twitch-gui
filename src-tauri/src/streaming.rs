@@ -267,9 +267,8 @@ fn begin_offline_goodbye(
     let status = format!("The streamer {channel} went offline");
     if let Ok(mut map) = state.inner.lock() {
         if let Some(session) = map.get_mut(&id) {
-            session.offline_until = Some(
-                Instant::now() + Duration::from_secs(OFFLINE_GOODBYE_SECS + 3),
-            );
+            session.offline_until =
+                Some(Instant::now() + Duration::from_secs(OFFLINE_GOODBYE_SECS + 3));
             session.info.running = false;
             session.info.ready = false;
             session.info.phase = "ended".into();
@@ -508,9 +507,7 @@ pub fn launch_chatterino_for_channels(channels: &[String]) -> Result<String, Str
 
 fn normalize_layout(layout: Option<&str>) -> String {
     match layout.unwrap_or("2x2") {
-        s @ ("1" | "2" | "2plus1" | "2x2" | "3plus1" | "3x2" | "4x2" | "8x1") => {
-            s.to_string()
-        }
+        s @ ("1" | "2" | "2plus1" | "2x2" | "3plus1" | "3x2" | "4x2" | "8x1") => s.to_string(),
         _ => "2x2".into(),
     }
 }
@@ -1136,7 +1133,10 @@ fn suppress_chatterino_changelog_prompt(exe: &Path) {
         let _ = std::fs::write(&path, serde_json::to_string_pretty(&value).unwrap_or(raw));
         return;
     };
-    let current = misc.get("currentVersion").and_then(|v| v.as_str()).unwrap_or("");
+    let current = misc
+        .get("currentVersion")
+        .and_then(|v| v.as_str())
+        .unwrap_or("");
     if current == ver {
         return;
     }
@@ -1254,10 +1254,7 @@ fn rect_from_dock(r: crate::dock::Rect) -> WinRect {
 #[cfg(windows)]
 fn chat_video_split(reserve_chat: bool) -> Option<(WinRect, Option<WinRect>)> {
     let (video, chat) = crate::dock::chat_video_split(reserve_chat)?;
-    Some((
-        rect_from_dock(video),
-        chat.map(rect_from_dock),
-    ))
+    Some((rect_from_dock(video), chat.map(rect_from_dock)))
 }
 
 /// Effective grid for `count` running channels under the chosen preset.

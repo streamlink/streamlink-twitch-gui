@@ -2,8 +2,8 @@
 #![allow(linker_messages)]
 
 mod auth;
-mod doctor;
 mod dock;
+mod doctor;
 mod helix;
 mod http;
 mod streaming;

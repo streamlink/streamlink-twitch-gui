@@ -1,6 +1,12 @@
 //! Linked dock: shared chat|video fraction, multi-monitor work area, and
 //! always-on-top grip windows (Windows) for live resize / move.
 
+#![allow(
+    clippy::type_complexity,
+    clippy::needless_return,
+    clippy::needless_range_loop
+)]
+
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Mutex, OnceLock};
 use std::thread;
@@ -105,10 +111,7 @@ pub fn start_background() {
 }
 
 fn run_apply() {
-    if let Ok(guard) = APPLY_LAYOUT
-        .get_or_init(|| Mutex::new(None))
-        .lock()
-    {
+    if let Ok(guard) = APPLY_LAYOUT.get_or_init(|| Mutex::new(None)).lock() {
         if let Some(f) = *guard {
             f();
         }
@@ -116,10 +119,7 @@ fn run_apply() {
 }
 
 fn emit_fraction(f: f64) {
-    if let Ok(guard) = FRACTION_EMIT
-        .get_or_init(|| Mutex::new(None))
-        .lock()
-    {
+    if let Ok(guard) = FRACTION_EMIT.get_or_init(|| Mutex::new(None)).lock() {
         if let Some(cb) = *guard {
             cb(f);
         }
@@ -131,10 +131,7 @@ pub fn clamp_chat_fraction(f: f64) -> f64 {
 }
 
 pub fn snapshot() -> DockConfig {
-    dock()
-        .lock()
-        .map(|g| g.clone())
-        .unwrap_or_default()
+    dock().lock().map(|g| g.clone()).unwrap_or_default()
 }
 
 pub fn set_linked(enabled: bool) {
@@ -191,10 +188,7 @@ pub fn open_monitor_picker() {
 }
 
 pub fn sync_session(channels: &[String], layout: &str, reserve_chat: bool, linked: bool) {
-    let layout_changed = dock()
-        .lock()
-        .map(|g| g.layout != layout)
-        .unwrap_or(true);
+    let layout_changed = dock().lock().map(|g| g.layout != layout).unwrap_or(true);
     if let Ok(mut g) = dock().lock() {
         g.channels = channels.to_vec();
         if layout_changed {
@@ -560,8 +554,7 @@ fn parse_display_num(sz_device: &[u16; 32]) -> u32 {
     let name = String::from_utf16_lossy(sz_device);
     let name = name.trim_end_matches('\0');
     // `\\.\DISPLAY1` / `\\.\DISPLAY12`
-    name
-        .rsplit(|c: char| !c.is_ascii_digit())
+    name.rsplit(|c: char| !c.is_ascii_digit())
         .find(|s| !s.is_empty())
         .and_then(|s| s.parse().ok())
         .unwrap_or(999)
@@ -671,8 +664,9 @@ fn monitor_index_at(x: i32, y: i32) -> Option<usize> {
     list.iter()
         .position(|m| x >= m.full.left && x < m.full.right && y >= m.full.top && y < m.full.bottom)
         .or_else(|| {
-            list.iter()
-                .position(|m| x >= m.work.left && x < m.work.right && y >= m.work.top && y < m.work.bottom)
+            list.iter().position(|m| {
+                x >= m.work.left && x < m.work.right && y >= m.work.top && y < m.work.bottom
+            })
         })
 }
 
@@ -721,12 +715,7 @@ fn grip_thread_main() {
         ) -> i32;
         fn TranslateMessage(msg: *const Msg) -> i32;
         fn DispatchMessageW(msg: *const Msg) -> isize;
-        fn DefWindowProcW(
-            hwnd: *mut core::ffi::c_void,
-            msg: u32,
-            w: usize,
-            l: isize,
-        ) -> isize;
+        fn DefWindowProcW(hwnd: *mut core::ffi::c_void, msg: u32, w: usize, l: isize) -> isize;
         fn SetCapture(hwnd: *mut core::ffi::c_void) -> *mut core::ffi::c_void;
         fn ReleaseCapture() -> i32;
         fn GetCursorPos(pt: *mut Point) -> i32;
@@ -737,7 +726,8 @@ fn grip_thread_main() {
             rect: *const Rect,
             brush: *mut core::ffi::c_void,
         ) -> i32;
-        fn BeginPaint(hwnd: *mut core::ffi::c_void, ps: *mut PaintStruct) -> *mut core::ffi::c_void;
+        fn BeginPaint(hwnd: *mut core::ffi::c_void, ps: *mut PaintStruct)
+            -> *mut core::ffi::c_void;
         fn EndPaint(hwnd: *mut core::ffi::c_void, ps: *const PaintStruct) -> i32;
         fn GetClientRect(hwnd: *mut core::ffi::c_void, rect: *mut Rect) -> i32;
         fn CreateSolidBrush(color: u32) -> *mut core::ffi::c_void;
@@ -768,12 +758,7 @@ fn grip_thread_main() {
             rect: *mut Rect,
             format: u32,
         ) -> i32;
-        fn RegisterHotKey(
-            hwnd: *mut core::ffi::c_void,
-            id: i32,
-            modifiers: u32,
-            vk: u32,
-        ) -> i32;
+        fn RegisterHotKey(hwnd: *mut core::ffi::c_void, id: i32, modifiers: u32, vk: u32) -> i32;
         fn GetAsyncKeyState(vk: i32) -> i16;
     }
     #[link(name = "gdi32")]
@@ -839,9 +824,8 @@ fn grip_thread_main() {
     struct WndClassEx {
         cb_size: u32,
         style: u32,
-        wnd_proc: Option<
-            unsafe extern "system" fn(*mut core::ffi::c_void, u32, usize, isize) -> isize,
-        >,
+        wnd_proc:
+            Option<unsafe extern "system" fn(*mut core::ffi::c_void, u32, usize, isize) -> isize>,
         cls_extra: i32,
         wnd_extra: i32,
         instance: *mut core::ffi::c_void,
@@ -955,11 +939,7 @@ fn grip_thread_main() {
                 GetClientRect(hwnd, &mut rc);
                 if matches!(kind, GripKind::Move) {
                     let hover = MOVER_HOVER.load(Ordering::Relaxed);
-                    let brush = CreateSolidBrush(if hover {
-                        0x00_60_60_70
-                    } else {
-                        0x00_40_40_48
-                    });
+                    let brush = CreateSolidBrush(if hover { 0x00_60_60_70 } else { 0x00_40_40_48 });
                     FillRect(hdc, &rc, brush);
                     DeleteObject(brush);
                     SetBkMode(hdc, TRANSPARENT);
@@ -1045,8 +1025,9 @@ fn grip_thread_main() {
                 SetCursor(cur);
                 1
             }
-            WM_MOUSEMOVE if matches!(kind, GripKind::Move)
-                && drag().lock().map(|g| g.is_none()).unwrap_or(true) =>
+            WM_MOUSEMOVE
+                if matches!(kind, GripKind::Move)
+                    && drag().lock().map(|g| g.is_none()).unwrap_or(true) =>
             {
                 if !MOVER_HOVER.swap(true, Ordering::Relaxed) {
                     SetLayeredWindowAttributes(hwnd, 0, ALPHA_HOVER, LWA_ALPHA);
@@ -1241,8 +1222,8 @@ fn grip_thread_main() {
                                 x
                             };
                             let pair = weights[seam] + weights[seam + 1];
-                            let local = ((pt.x as f64 - left_edge) / stack_w)
-                                .clamp(0.05, pair - 0.05);
+                            let local =
+                                ((pt.x as f64 - left_edge) / stack_w).clamp(0.05, pair - 0.05);
                             weights[seam] = local;
                             weights[seam + 1] = pair - local;
                         } else {
@@ -1255,8 +1236,8 @@ fn grip_thread_main() {
                                 y
                             };
                             let pair = weights[seam] + weights[seam + 1];
-                            let local = ((pt.y as f64 - top_edge) / stack_h)
-                                .clamp(0.05, pair - 0.05);
+                            let local =
+                                ((pt.y as f64 - top_edge) / stack_h).clamp(0.05, pair - 0.05);
                             weights[seam] = local;
                             weights[seam + 1] = pair - local;
                         }
