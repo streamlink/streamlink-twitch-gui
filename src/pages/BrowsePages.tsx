@@ -18,8 +18,10 @@ import {
   layoutCapacity,
 } from "../lib/streaming/layout";
 import { getFollowedStreams, getTopGames, getTopStreams } from "../lib/twitch/helix";
+import { languagesQueryKey } from "../lib/twitch/languages";
 import { useSettingsStore } from "../lib/settings/store";
 import { isTauri } from "../lib/tauri";
+import { LanguageFilter } from "../components/LanguageFilter";
 
 export function FollowedPage() {
   const { t } = useTranslation(["routes", "common"]);
@@ -88,12 +90,16 @@ export function StreamsPage() {
   const authLoading = useAuthStore((s) => s.loading);
   const watchStream = useWatchingStore((s) => s.watchStream);
   const loggedIn = Boolean(session?.loggedIn);
+  const streamLanguages = useSettingsStore(
+    (s) => s.settings.streaming.streamLanguages,
+  );
+  const langKey = languagesQueryKey(streamLanguages);
 
   const query = useInfiniteQuery({
-    queryKey: ["top-streams"],
+    queryKey: ["top-streams", langKey],
     enabled: loggedIn,
     initialPageParam: undefined as string | undefined,
-    queryFn: ({ pageParam }) => getTopStreams(pageParam),
+    queryFn: ({ pageParam }) => getTopStreams(pageParam, streamLanguages),
     getNextPageParam: (last) => last.pagination?.cursor,
     staleTime: 20_000,
   });
@@ -109,10 +115,13 @@ export function StreamsPage() {
           <p className="page__lede">{t("routes:streamsLede")}</p>
         </div>
         {loggedIn ? (
-          <PageRefreshButton
-            refreshing={refreshing}
-            onRefresh={() => void query.refetch()}
-          />
+          <div className="page__header-actions">
+            <LanguageFilter />
+            <PageRefreshButton
+              refreshing={refreshing}
+              onRefresh={() => void query.refetch()}
+            />
+          </div>
         ) : null}
       </header>
       {!loggedIn && !authLoading ? (

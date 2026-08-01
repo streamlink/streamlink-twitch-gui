@@ -23,6 +23,8 @@ describe("migrateSettings", () => {
     expect(result.streaming.lowLatency).toBe(false);
     expect(result.streaming.disableAds).toBe(false);
     expect(result.streaming.seamlessSwitch).toBe(true);
+    expect(result.streaming.followRaids).toBe(true);
+    expect(result.streaming.streamLanguages).toEqual([]);
     expect(result.gui.onboardingDone).toBe(false);
     expect(result.player.input).toBe("default");
     expect(result.player.mpv).toEqual(defaultMpvPresets());
@@ -81,6 +83,32 @@ describe("migrateSettings", () => {
       gui: { closeToTray: true, minimizeOnWatch: false, onboardingDone: true },
     });
     expect(result.gui.onboardingDone).toBe(true);
+  });
+
+  it("normalizes streamLanguages and defaults missing to empty", () => {
+    const empty = migrateSettings({ schemaVersion: 12, streaming: {} });
+    expect(empty.streaming.streamLanguages).toEqual([]);
+    const kept = migrateSettings({
+      schemaVersion: 12,
+      streaming: { streamLanguages: ["EN", " de ", "en", "bad!", "pt-br", "other"] },
+    });
+    expect(kept.streaming.streamLanguages).toEqual(["en", "de", "other"]);
+  });
+
+  it("normalizes mutedFollowed and defaults missing to empty", () => {
+    const empty = migrateSettings({
+      schemaVersion: 13,
+      notifications: { followedOnline: true },
+    });
+    expect(empty.notifications.mutedFollowed).toEqual([]);
+    const kept = migrateSettings({
+      schemaVersion: 13,
+      notifications: {
+        followedOnline: true,
+        mutedFollowed: ["Forsen", " forsen ", "xqc", ""],
+      },
+    });
+    expect(kept.notifications.mutedFollowed).toEqual(["forsen", "xqc"]);
   });
 
   it("turns off webbrowser when migrating from schema < 8", () => {

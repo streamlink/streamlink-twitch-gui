@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { listen } from "@tauri-apps/api/event";
 import { invoke, isTauri } from "../tauri";
 import type { HelixStream } from "../twitch/helix";
+import { getChannelStreams, getUsersByLogin } from "../twitch/helix";
 import { useSettingsStore } from "../settings/store";
 import { resolveChannelLaunch } from "../settings/types";
 import { captureAppError } from "../sentry";
@@ -11,6 +12,7 @@ import {
   layoutCapacity,
   type MultistreamLayout,
 } from "./layout";
+import type { RaidOutgoingEvent } from "./raid";
 
 export interface StreamSession {
   id: string;
@@ -42,6 +44,8 @@ interface WatchingState {
   error: string | null;
   refresh: () => Promise<void>;
   watchStream: (stream: HelixStream) => Promise<void>;
+  /** Replace one watching slot after an outgoing raid (never kills other sessions). */
+  followRaid: (raid: RaidOutgoingEvent) => Promise<void>;
   stopSession: (id: string) => Promise<void>;
   stopAll: () => Promise<void>;
   toggleMute: (id: string) => Promise<void>;
@@ -143,6 +147,7 @@ function scheduleLayoutAfterReady() {
 function afterSessionsChanged() {
   const channels = orderedChannels();
   void syncChatterino(channels);
+  syncEventSub();
   if (channels.length) {
     scheduleLayoutAfterReady();
   } else if (isTauri()) {
@@ -152,6 +157,41 @@ function afterSessionsChanged() {
       reserveChat: false,
     }).catch(() => undefined);
   }
+}
+
+/** Keep Rust EventSub subscriptions aligned with watching + settings. */
+export function syncEventSub() {
+  if (!isTauri()) return;
+  const settings = useSettingsStore.getState().settings;
+  const channels = orderedChannels();
+  void invoke("eventsub_sync", {
+    enabled: settings.streaming.followRaids,
+    channels,
+  }).catch(() => undefined);
+}
+
+function stubHelixStream(opts: {
+  login: string;
+  userId: string;
+  displayName?: string;
+  title?: string;
+  gameName?: string;
+}): HelixStream {
+  return {
+    id: "",
+    user_id: opts.userId,
+    user_login: opts.login,
+    user_name: opts.displayName ?? opts.login,
+    game_id: "",
+    game_name: opts.gameName ?? "",
+    type: "live",
+    title: opts.title ?? "",
+    viewer_count: 0,
+    started_at: new Date().toISOString(),
+    language: "",
+    thumbnail_url: "",
+    is_mature: false,
+  };
 }
 
 export async function bindStreamingListeners(): Promise<() => void> {
@@ -180,6 +220,7 @@ export async function bindStreamingListeners(): Promise<() => void> {
       },
     });
   });
+  syncEventSub();
   return () => {
     listenersBound = false;
     unStatus();
@@ -343,8 +384,122 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
       // backend retries until every player window is actually tiled.
       scheduleLayoutAfterReady();
       void get().refresh();
+      syncEventSub();
     } catch (err) {
       captureAppError(err, "stream_start");
+      set({
+        error: err instanceof Error ? err.message : String(err),
+      });
+      throw err;
+    }
+  },
+
+  followRaid: async (raid) => {
+    set({ error: null });
+    const from = raid.fromChannel.toLowerCase();
+    const toLogin = raid.toChannel.toLowerCase();
+    const settings = useSettingsStore.getState().settings;
+    const reserveChat = settings.chat.provider === "chatterino";
+
+    const session = get().sessions.find(
+      (s) => s.running && s.channel.toLowerCase() === from,
+    );
+    if (!session) {
+      return;
+    }
+
+    // Resolve live Helix data when possible; fall back to a stub so we still jump.
+    let target: HelixStream | null = null;
+    try {
+      const page = await getChannelStreams(toLogin);
+      target = page.data[0] ?? null;
+      if (!target) {
+        const users = await getUsersByLogin([toLogin]);
+        const user = users.data[0];
+        target = stubHelixStream({
+          login: toLogin,
+          userId: user?.id ?? raid.toUserId,
+          displayName: user?.display_name,
+        });
+      }
+    } catch {
+      target = stubHelixStream({
+        login: toLogin,
+        userId: raid.toUserId,
+      });
+    }
+
+    // Replace slot in-place before stop so layout/chat see the new set.
+    const slots = [...get().slotChannels];
+    const idx = slots.indexOf(from);
+    if (idx >= 0) {
+      slots[idx] = toLogin;
+    } else {
+      slots.push(toLogin);
+    }
+    const nextSlots = [...new Set(slots.filter(Boolean))];
+    set({
+      slotChannels: nextSlots,
+      activeChatChannel:
+        settings.chat.provider === "embedded" &&
+        (get().activeChatChannel?.toLowerCase() === from ||
+          !get().activeChatChannel)
+          ? toLogin
+          : get().activeChatChannel,
+    });
+
+    await invoke("stream_stop", { id: session.id });
+    await get().refresh();
+
+    const launch = resolveChannelLaunch(settings, toLogin, {
+      title: target.title,
+      game: target.game_name,
+    });
+    const plannedChannels = [...new Set([...orderedChannels(), toLogin])];
+
+    if (reserveChat) {
+      void syncChatterino(plannedChannels);
+    }
+
+    try {
+      const started = await invoke<StreamSession>("stream_start", {
+        request: {
+          channel: toLogin,
+          quality: launch.quality,
+          title: target.title,
+          game: target.game_name,
+          streamlinkSource: settings.streamlink.source,
+          streamlinkCustomPath: settings.streamlink.customPath,
+          playerId: launch.playerId,
+          playerCustomPath: settings.player.customPath,
+          playerCustomArgs: launch.playerCustomArgs,
+          lowLatency: launch.lowLatency,
+          disableAds: launch.disableAds,
+          playerInput: settings.player.input,
+          webbrowser: settings.streaming.webbrowser,
+          webbrowserHeadless: settings.streaming.webbrowserHeadless,
+          webbrowserExecutable: settings.streaming.webbrowserExecutable,
+          retryStreams: 0,
+          retryMax: 0,
+          playerNoClose: settings.streaming.playerNoClose,
+          reserveChat,
+          replaceExisting: false,
+          slotIndex: Math.max(0, plannedChannels.indexOf(toLogin)),
+          slotCount: plannedChannels.length,
+          layout: currentLayout(),
+        },
+      });
+      set((state) => ({
+        sessions: [
+          ...state.sessions.filter((s) => s.id !== started.id && s.id !== session.id),
+          started,
+        ],
+      }));
+      scheduleLayoutAfterReady();
+      void get().refresh();
+      syncEventSub();
+    } catch (err) {
+      captureAppError(err, "follow_raid");
       set({
         error: err instanceof Error ? err.message : String(err),
       });
@@ -370,6 +525,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     lastChatSyncKey = "";
     void invoke("close_owned_chatterino").catch(() => undefined);
     set({ sessions: [], slotChannels: [], activeChatChannel: null });
+    syncEventSub();
   },
 
   toggleMute: async (id) => {

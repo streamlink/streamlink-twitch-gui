@@ -17,6 +17,7 @@ import {
   GamesPage,
   SearchPage,
   TeamPage,
+  TeamsSearchPage,
 } from "./pages/BrowseExtraPages";
 import { SettingsPage, SettingsBootstrap } from "./pages/SettingsPage";
 import { MultistreamPage } from "./pages/MultistreamPage";
@@ -28,6 +29,7 @@ import { StreamingBootstrap } from "./components/StreamingBootstrap";
 import { OnboardingWizard } from "./components/OnboardingWizard";
 import { LaunchErrorBanner } from "./components/LaunchErrorBanner";
 import { UpdateBanner } from "./components/UpdateBanner";
+import { RaidBanner } from "./components/RaidBanner";
 import { SentryBootstrap } from "./lib/sentry";
 import "./styles/global.css";
 
@@ -59,6 +61,7 @@ function AppRoutes() {
         <Route path="/games" element={<GamesPage />} />
         <Route path="/games/:gameId" element={<GameStreamsPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/teams" element={<TeamsSearchPage />} />
         <Route path="/channel/:login" element={<ChannelPage />} />
         <Route path="/team/:teamName" element={<TeamPage />} />
         <Route path="/watching" element={<WatchingPage />} />
@@ -88,6 +91,7 @@ export default function App() {
                         <TauriGuardBanner />
                         <LaunchErrorBanner />
                         <UpdateBanner />
+                        <RaidBanner />
                         <AppRoutes />
                       </AppShell>
                     </StreamingBootstrap>

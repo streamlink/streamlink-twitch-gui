@@ -4,6 +4,7 @@
 mod auth;
 mod dock;
 mod doctor;
+mod eventsub;
 mod helix;
 mod http;
 mod streaming;
@@ -163,6 +164,12 @@ fn dock_cycle_monitor() {
 }
 
 #[tauri::command]
+fn eventsub_sync(enabled: bool, channels: Vec<String>) -> Result<(), String> {
+    eventsub::sync(enabled, channels);
+    Ok(())
+}
+
+#[tauri::command]
 fn app_quit(app: AppHandle) {
     app.exit(0);
 }
@@ -219,10 +226,12 @@ pub fn run() {
             dock_set_linked,
             dock_set_chat_fraction,
             dock_cycle_monitor,
+            eventsub_sync,
             app_quit
         ])
         .setup(|app| {
             streaming::init_dock(app.handle().clone());
+            eventsub::init(app.handle().clone());
             let state = app.state::<SharedStreaming>().inner().clone();
             streaming::start_session_watchdog(app.handle().clone(), state);
             // Warm Streamlink so the first watch doesn't pay Python/plugin cold-start.

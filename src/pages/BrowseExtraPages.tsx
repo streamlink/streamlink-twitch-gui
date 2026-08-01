@@ -1,11 +1,12 @@
 import { useMemo, useState, useEffect } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { ChannelResults } from "../components/ChannelResults";
 import { GameGrid } from "../components/GameGrid";
 import { LoadMore } from "../components/LoadMore";
 import { LoadingGrid } from "../components/LoadingGrid";
+import { LanguageFilter } from "../components/LanguageFilter";
 import { PageRefreshButton } from "../components/PageRefreshButton";
 import { StreamGrid } from "../components/StreamGrid";
 import { useAuthStore } from "../lib/auth/store";
@@ -23,6 +24,8 @@ import {
   searchChannels,
   type HelixStream,
 } from "../lib/twitch/helix";
+import { languagesQueryKey } from "../lib/twitch/languages";
+import { toggleMutedFollowed } from "../lib/notifications/followedLive";
 import "../pages/SettingsPage.css";
 
 function useLoggedIn() {
@@ -88,12 +91,17 @@ export function GameStreamsPage() {
   const { gameId = "" } = useParams();
   const loggedIn = useLoggedIn();
   const watchStream = useWatchingStore((s) => s.watchStream);
+  const streamLanguages = useSettingsStore(
+    (s) => s.settings.streaming.streamLanguages,
+  );
+  const langKey = languagesQueryKey(streamLanguages);
 
   const query = useInfiniteQuery({
-    queryKey: ["game-streams", gameId],
+    queryKey: ["game-streams", gameId, langKey],
     enabled: loggedIn && Boolean(gameId),
     initialPageParam: undefined as string | undefined,
-    queryFn: ({ pageParam }) => getStreamsByGame(gameId, pageParam),
+    queryFn: ({ pageParam }) =>
+      getStreamsByGame(gameId, pageParam, streamLanguages),
     getNextPageParam: (last) => last.pagination?.cursor,
   });
 
@@ -110,10 +118,13 @@ export function GameStreamsPage() {
           <h1>{t("routes:gameStreamsTitle")}</h1>
         </div>
         {loggedIn && gameId ? (
-          <PageRefreshButton
-            refreshing={refreshing}
-            onRefresh={() => void query.refetch()}
-          />
+          <div className="page__header-actions">
+            <LanguageFilter />
+            <PageRefreshButton
+              refreshing={refreshing}
+              onRefresh={() => void query.refetch()}
+            />
+          </div>
         ) : null}
       </header>
       {query.isLoading ? <LoadingGrid /> : null}
@@ -233,6 +244,81 @@ export function SearchPage() {
   );
 }
 
+export function TeamsSearchPage() {
+  const { t } = useTranslation(["routes", "common"]);
+  const loggedIn = useLoggedIn();
+  const navigate = useNavigate();
+  const [q, setQ] = useState("");
+  const [submitted, setSubmitted] = useState("");
+  const [lookupError, setLookupError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function lookup(name: string) {
+    const trimmed = name.trim();
+    if (!trimmed || !loggedIn) return;
+    setSubmitted(trimmed);
+    setLookupError(null);
+    setBusy(true);
+    try {
+      const team = await getTeamByName(trimmed);
+      if (!team) {
+        setLookupError(t("routes:teamsNotFound"));
+        return;
+      }
+      void navigate(`/team/${encodeURIComponent(team.team_name)}`);
+    } catch (err) {
+      setLookupError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="page">
+      <header className="page__header">
+        <div>
+          <h1>{t("routes:teamsTitle")}</h1>
+          <p className="page__lede">{t("routes:teamsLede")}</p>
+        </div>
+      </header>
+
+      <form
+        className="search-hero"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void lookup(q);
+        }}
+      >
+        <input
+          type="search"
+          className="search-hero__input"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={t("routes:teamsPlaceholder")}
+          aria-label={t("routes:teamsTitle")}
+          autoFocus
+        />
+        <button type="submit" disabled={!loggedIn || !q.trim() || busy}>
+          {busy ? t("common:loading") : t("common:search")}
+        </button>
+      </form>
+
+      {!loggedIn ? (
+        <p className="muted">{t("routes:followedLoginRequired")}</p>
+      ) : null}
+
+      {!submitted && loggedIn ? (
+        <div className="empty-panel">
+          <strong>{t("routes:teamsIdleTitle")}</strong>
+          <p className="muted">{t("routes:teamsIdleBody")}</p>
+        </div>
+      ) : null}
+
+      {lookupError ? <p className="muted">{lookupError}</p> : null}
+    </section>
+  );
+}
+
 export function ChannelPage() {
   const { t } = useTranslation(["routes", "common", "settings"]);
   const { login = "" } = useParams();
@@ -240,14 +326,20 @@ export function ChannelPage() {
   const watchStream = useWatchingStore((s) => s.watchStream);
   const channels = useSettingsStore((s) => s.settings.channels);
   const setChannelOverride = useSettingsStore((s) => s.setChannelOverride);
+  const setSettings = useSettingsStore((s) => s.setSettings);
+  const notifications = useSettingsStore((s) => s.settings.notifications);
   const globalQuality = useSettingsStore((s) => s.settings.streaming.quality);
+  const loginKey = login.toLowerCase();
+  const notifyWhenLive = !notifications.mutedFollowed.some(
+    (m) => m.toLowerCase() === loginKey,
+  );
   const [overrideQuality, setOverrideQuality] = useState(
-    () => channels[login.toLowerCase()]?.quality ?? "",
+    () => channels[loginKey]?.quality ?? "",
   );
 
   useEffect(() => {
-    setOverrideQuality(channels[login.toLowerCase()]?.quality ?? "");
-  }, [channels, login]);
+    setOverrideQuality(channels[loginKey]?.quality ?? "");
+  }, [channels, loginKey]);
 
   const userQuery = useQuery({
     queryKey: ["channel-user", login],
@@ -306,6 +398,37 @@ export function ChannelPage() {
             )}
           </div>
         </div>
+      ) : null}
+
+      {login ? (
+        <fieldset className="settings__group">
+          <legend>{t("routes:channelNotifyTitle")}</legend>
+          <label className="settings__row settings__row--check">
+            <input
+              type="checkbox"
+              checked={notifyWhenLive}
+              disabled={!notifications.followedOnline}
+              onChange={(e) =>
+                setSettings({
+                  notifications: {
+                    ...notifications,
+                    mutedFollowed: toggleMutedFollowed(
+                      notifications.mutedFollowed,
+                      loginKey,
+                      e.target.checked,
+                    ),
+                  },
+                })
+              }
+            />
+            <span className="settings__check-text">
+              {t("routes:channelNotifyLive")}
+              {!notifications.followedOnline ? (
+                <small className="muted">{t("routes:channelNotifyGlobalOff")}</small>
+              ) : null}
+            </span>
+          </label>
+        </fieldset>
       ) : null}
 
       {login ? (

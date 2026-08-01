@@ -8,6 +8,7 @@ const primaryLinks = [
   { to: "/streams", key: "streams" as const },
   { to: "/games", key: "games" as const },
   { to: "/search", key: "search" as const },
+  { to: "/teams", key: "teams" as const },
   { to: "/watching", key: "watching" as const },
   { to: "/multistream", key: "multistream" as const },
 ];

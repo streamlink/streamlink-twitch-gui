@@ -66,6 +66,19 @@ export function migrateSettings(raw: unknown): AppSettings {
         return raw && isUnevenMainSide(raw) ? raw : DEFAULT_UNEVEN_MAIN_SIDE;
       })(),
       linkedDock: input.streaming?.linkedDock ?? base.streaming.linkedDock,
+      followRaids: input.streaming?.followRaids ?? base.streaming.followRaids,
+      streamLanguages: (() => {
+        const raw = input.streaming?.streamLanguages;
+        if (!Array.isArray(raw)) return base.streaming.streamLanguages;
+        return [
+          ...new Set(
+            raw
+              .filter((c): c is string => typeof c === "string")
+              .map((c) => c.trim().toLowerCase())
+              .filter((c) => c === "other" || /^[a-z]{2}$/.test(c)),
+          ),
+        ].slice(0, 100);
+      })(),
       chatWidthFraction: (() => {
         const f = input.streaming?.chatWidthFraction;
         if (typeof f !== "number" || Number.isNaN(f)) {
@@ -81,7 +94,22 @@ export function migrateSettings(raw: unknown): AppSettings {
         input.gui?.closeToTray ?? input.closeToTray ?? base.gui.closeToTray,
       onboardingDone: input.gui?.onboardingDone ?? base.gui.onboardingDone,
     },
-    notifications: { ...base.notifications, ...input.notifications },
+    notifications: {
+      ...base.notifications,
+      ...input.notifications,
+      mutedFollowed: (() => {
+        const raw = input.notifications?.mutedFollowed;
+        if (!Array.isArray(raw)) return base.notifications.mutedFollowed;
+        return [
+          ...new Set(
+            raw
+              .filter((c): c is string => typeof c === "string")
+              .map((c) => c.trim().toLowerCase())
+              .filter(Boolean),
+          ),
+        ];
+      })(),
+    },
     hotkeys: { ...defaultHotkeys(), ...input.hotkeys },
     channels: { ...base.channels, ...input.channels },
     schemaVersion: SETTINGS_SCHEMA_VERSION,
