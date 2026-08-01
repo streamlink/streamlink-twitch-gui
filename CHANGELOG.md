@@ -7,14 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- Grey dock borders stay above mpv/Chatterino again (TOPMOST while the dock or app is focused, re-asserted so players cannot bury them), and drop TOPMOST only when another program is clearly foreground — a failed window title scan no longer demotes the bars under the stream
-
 ### Planned
 
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI
 - Further parity and polish as we dogfood releases
+
+## [0.3.1] — 2026-08-01
+
+### Fixed
+
+- **Grey dock grips usable again**: temporarily TOPMOST while the dock or app is focused (re-asserted so mpv/Chatterino cannot bury them), and demoted only when another program is clearly foreground. A failed window title scan no longer drops the bars under the stream.
 
 ## [0.3.0] — 2026-08-01
 
@@ -125,7 +127,8 @@ First public preview of the Windows rewrite (Tauri 2 + React + TypeScript). The 
 - Chatty is intentionally not supported
 - Unsigned installers may show a SmartScreen “Unknown publisher” warning until Authenticode is configured
 
-[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.3.1
 [0.3.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.3.0
 [0.2.1]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.2.1
 [0.2.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.2.0
