@@ -12,6 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI
 - Further parity and polish as we dogfood releases
 
+## [0.2.1] — 2026-08-01
+
+### Added
+
+- About page shows the running app **version** (Tauri `getVersion()` / package version in browser)
+
+### Fixed
+
+- **No audio / mpv speaker “!”**: JSON IPC was sending `mute: "no"` (truthy string → mute on); mute is now a real boolean, with `--mute=no` on the CLI
+- **Linked dock minimize sync**: minimizing mpv (or Chatterino) also minimizes the grey grips and the rest of the group, and restore brings everyone back
+- Dock window finder still resolves **minimized** mpv/Chatterino windows (iconic rects used to drop them from the group)
+- Grey dock borders are **no longer always-on-top** over unrelated apps; they only raise while the dock group is focused (monitor-number overlays still go topmost briefly)
+
 ## [0.2.0] — 2026-07-31
 
 ### Added
@@ -95,7 +108,8 @@ First public preview of the Windows rewrite (Tauri 2 + React + TypeScript). The 
 - Chatty is intentionally not supported
 - Unsigned installers may show a SmartScreen “Unknown publisher” warning until Authenticode is configured
 
-[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.2.1
 [0.2.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.2.0
 [0.1.1]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.1.1
 [0.1.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.1.0

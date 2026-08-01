@@ -497,6 +497,8 @@ enum DockCmd {
     SuppressSeam,
     /// Re-show seam grips after a Chatterino popup closes (no full rebuild).
     RestoreSeam,
+    /// Lift grips above mpv/chat without making them global TOPMOST.
+    RaiseGrips,
     /// Show Windows-style monitor numbers; click to pick.
     PickMonitor,
 }
@@ -515,16 +517,61 @@ fn post_cmd(cmd: DockCmd) {
     }
 }
 
+#[cfg(windows)]
+static GRIPS_GROUP_MINIMIZED: AtomicBool = AtomicBool::new(false);
+
 /// Hide dock grips while the player/chat group is minimized.
 pub fn hide_grips() {
     #[cfg(windows)]
-    post_cmd(DockCmd::HideGrips);
+    {
+        GRIPS_GROUP_MINIMIZED.store(true, Ordering::SeqCst);
+        post_cmd(DockCmd::HideGrips);
+    }
 }
 
 /// Re-show / rebuild grips after restore.
 pub fn show_grips() {
     #[cfg(windows)]
-    post_cmd(DockCmd::Sync);
+    {
+        GRIPS_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
+        post_cmd(DockCmd::Sync);
+    }
+}
+
+/// Keep grips above the dock players without WS_EX_TOPMOST (so other apps
+/// can cover the whole dock including the grey borders).
+pub fn raise_grips() {
+    #[cfg(windows)]
+    {
+        if GRIPS_GROUP_MINIMIZED.load(Ordering::SeqCst) {
+            return;
+        }
+        post_cmd(DockCmd::RaiseGrips);
+    }
+}
+
+/// True when `hwnd` is one of our dock grip windows (class `StguiDockGrip`).
+#[cfg(windows)]
+pub fn is_grip_hwnd(hwnd: *mut core::ffi::c_void) -> bool {
+    if hwnd.is_null() {
+        return false;
+    }
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn GetClassNameW(hwnd: *mut core::ffi::c_void, buf: *mut u16, n: i32) -> i32;
+    }
+    let mut buf = [0u16; 64];
+    let n = unsafe { GetClassNameW(hwnd, buf.as_mut_ptr(), buf.len() as i32) };
+    if n <= 0 {
+        return false;
+    }
+    let class = String::from_utf16_lossy(&buf[..n as usize]);
+    class == "StguiDockGrip"
+}
+
+#[cfg(not(windows))]
+pub fn is_grip_hwnd(_hwnd: *mut core::ffi::c_void) -> bool {
+    false
 }
 
 /// Temporarily hide the chat/move seam grips (Chatterino usercard, etc.).
@@ -847,15 +894,20 @@ fn grip_thread_main() {
     const WM_HOTKEY: u32 = 0x0312;
     const WS_POPUP: u32 = 0x8000_0000;
     const WS_VISIBLE: u32 = 0x1000_0000;
-    // TOPMOST so the seam stays above mpv; temporarily suppressed while a
-    // Chatterino usercard/popup is the foreground window.
-    const WS_EX_TOPMOST: u32 = 0x0000_0008;
+    // Stay above mpv/chat via RaiseGrips / HWND_TOP — never WS_EX_TOPMOST, or
+    // the grey bars cover every other application.
     const WS_EX_TOOLWINDOW: u32 = 0x0000_0080;
     const WS_EX_NOACTIVATE: u32 = 0x0800_0000;
     const WS_EX_LAYERED: u32 = 0x0008_0000;
-    const HWND_TOPMOST: isize = -1;
+    /// Only monitor-number overlays use TOPMOST (brief picker UX).
+    const WS_EX_TOPMOST: u32 = 0x0000_0008;
+    const HWND_TOP: isize = 0;
+    const HWND_NOTOPMOST: isize = -2;
     const SWP_NOACTIVATE: u32 = 0x0010;
     const SWP_SHOWWINDOW: u32 = 0x0040;
+    const SWP_NOMOVE: u32 = 0x0002;
+    const SWP_NOSIZE: u32 = 0x0001;
+    const SWP_NOZORDER: u32 = 0x0004;
     const SW_SHOWNOACTIVATE: i32 = 4;
     const IDC_SIZEWE: usize = 32644;
     const IDC_SIZENS: usize = 32645;
@@ -1309,16 +1361,15 @@ fn grip_thread_main() {
         if hwnd.is_null() {
             return;
         }
-        // Topmost/layered grips can linger visually with ShowWindow alone —
-        // park them off-screen and hide.
+        // Park off-screen and hide without asserting TOPMOST.
         SetWindowPos(
             hwnd,
-            HWND_TOPMOST as *mut core::ffi::c_void,
+            std::ptr::null_mut(),
             -32000,
             -32000,
             1,
             1,
-            SWP_NOACTIVATE | SWP_HIDEWINDOW,
+            SWP_NOACTIVATE | SWP_NOZORDER | SWP_HIDEWINDOW,
         );
         ShowWindow(hwnd, 0);
     }
@@ -1332,10 +1383,11 @@ fn grip_thread_main() {
         let is_mover = kind_code == 10;
         let is_identify = (1000..1100).contains(&kind_code);
         let layered = is_mover || is_identify;
-        let ex = WS_EX_TOPMOST
-            | WS_EX_TOOLWINDOW
+        // Identify overlays briefly cover the desktop; regular grips must not.
+        let ex = WS_EX_TOOLWINDOW
             | WS_EX_NOACTIVATE
-            | if layered { WS_EX_LAYERED } else { 0 };
+            | if layered { WS_EX_LAYERED } else { 0 }
+            | if is_identify { WS_EX_TOPMOST } else { 0 };
         let (w, h) = if is_identify {
             (220, 220)
         } else if is_mover {
@@ -1364,6 +1416,18 @@ fn grip_thread_main() {
             } else if is_identify {
                 SetLayeredWindowAttributes(hwnd, 0, ALPHA_IDENTIFY, LWA_ALPHA);
             }
+            // Clear any inherited topmost bit on non-identify grips.
+            if !is_identify {
+                SetWindowPos(
+                    hwnd,
+                    HWND_NOTOPMOST as *mut core::ffi::c_void,
+                    0,
+                    0,
+                    0,
+                    0,
+                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+                );
+            }
             ShowWindow(hwnd, SW_SHOWNOACTIVATE);
         }
         hwnd
@@ -1387,15 +1451,47 @@ fn grip_thread_main() {
         if hwnd.is_null() {
             return;
         }
+        // Move/size only — z-order is handled by RaiseGrips when the dock is
+        // focused, so we never pin bars above unrelated apps.
         SetWindowPos(
             hwnd,
-            HWND_TOPMOST as *mut core::ffi::c_void,
+            std::ptr::null_mut(),
             r.left,
             r.top,
             r.width().max(4),
             r.height().max(4),
-            SWP_NOACTIVATE | SWP_SHOWWINDOW,
+            SWP_NOACTIVATE | SWP_NOZORDER | SWP_SHOWWINDOW,
         );
+    }
+
+    unsafe fn raise_grips_inner() {
+        let Ok(g) = grips().lock() else {
+            return;
+        };
+        let mut list = Vec::with_capacity(2 + g.tiles.len());
+        if !g.chat.is_null() {
+            list.push(g.chat);
+        }
+        for &h in &g.tiles {
+            if !h.is_null() {
+                list.push(h);
+            }
+        }
+        // Mover last so it sits above seam/tile grips.
+        if !g.mover.is_null() {
+            list.push(g.mover);
+        }
+        for &hwnd in &list {
+            SetWindowPos(
+                hwnd,
+                HWND_TOP as *mut core::ffi::c_void,
+                0,
+                0,
+                0,
+                0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW,
+            );
+        }
     }
 
     fn tile_grip_plan(video: Rect, cfg: &DockConfig, layout: &str) -> Vec<(isize, Rect)> {
@@ -1696,6 +1792,7 @@ fn grip_thread_main() {
                 DockCmd::HideGrips => hide_all_grips(),
                 DockCmd::SuppressSeam => suppress_seam_grips_inner(),
                 DockCmd::RestoreSeam => restore_seam_grips_inner(),
+                DockCmd::RaiseGrips => unsafe { raise_grips_inner() },
                 DockCmd::PickMonitor => {
                     if PICKER_OPEN.load(Ordering::SeqCst) {
                         dismiss_monitor_picker();
@@ -1792,6 +1889,10 @@ fn grip_thread_main() {
     }
 
     fn sync_grips_full(instance: *mut core::ffi::c_void, class: *const u16) {
+        if GRIPS_GROUP_MINIMIZED.load(Ordering::SeqCst) {
+            hide_all_grips();
+            return;
+        }
         let cfg = snapshot();
         let Ok(mut g) = grips().lock() else {
             return;
@@ -1849,6 +1950,11 @@ fn grip_thread_main() {
                     place_grip(g.mover, mover_rect(video, Some(chat)));
                 }
             }
+        }
+        drop(g);
+        // Sit above players without WS_EX_TOPMOST.
+        unsafe {
+            raise_grips_inner();
         }
     }
 

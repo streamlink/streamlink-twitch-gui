@@ -57,13 +57,13 @@ Deep links: `stg://watch/<channel-login>`.
 
 ## Release (maintainers)
 
-Version is kept in sync in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json` (currently **0.2.0**).
+Version is kept in sync in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json` (currently **0.2.1**).
 
 **Quality gates:** pushes to `master` require a PR with green Windows CI (`frontend` + `rust`). A local `pre-push` hook runs the same checks (`npm run ci`). Skip the hook only in emergencies with `SKIP_CI_HOOK=1`. The Release workflow re-runs those checks before building installers.
 
 ```bash
-git tag v0.2.0
-git push origin v0.2.0
+git tag v0.2.1
+git push origin v0.2.1
 ```
 
 That runs [`.github/workflows/release.yml`](.github/workflows/release.yml): fetch Streamlink → `tauri build` (NSIS + MSI + updater signatures) → GitHub Release with auto-generated notes. Keep the curated narrative in [CHANGELOG.md](CHANGELOG.md) in sync when you cut a version.

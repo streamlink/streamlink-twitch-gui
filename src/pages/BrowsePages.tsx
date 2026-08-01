@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   useInfiniteQuery,
@@ -19,6 +19,7 @@ import {
 } from "../lib/streaming/layout";
 import { getFollowedStreams, getTopGames, getTopStreams } from "../lib/twitch/helix";
 import { useSettingsStore } from "../lib/settings/store";
+import { isTauri } from "../lib/tauri";
 
 export function FollowedPage() {
   const { t } = useTranslation(["routes", "common"]);
@@ -305,12 +306,42 @@ export function WatchingPage() {
 export function AboutPage() {
   const { t } = useTranslation("routes");
   const { status, version, error, check, install } = useUpdaterCheck();
+  const [appVersion, setAppVersion] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        if (isTauri()) {
+          const { getVersion } = await import("@tauri-apps/api/app");
+          const v = await getVersion();
+          if (!cancelled) setAppVersion(v);
+          return;
+        }
+      } catch {
+        // fall through to package version
+      }
+      if (!cancelled) {
+        setAppVersion(import.meta.env.VITE_APP_VERSION ?? null);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <section className="page">
       <header className="page__header">
-        <h1>{t("aboutTitle")}</h1>
-        <p className="page__lede">{t("aboutBlurb")}</p>
+        <div>
+          <h1>{t("aboutTitle")}</h1>
+          <p className="page__lede">{t("aboutBlurb")}</p>
+          {appVersion ? (
+            <p className="muted" style={{ marginTop: "0.35rem" }}>
+              {t("aboutVersion", { version: appVersion })}
+            </p>
+          ) : null}
+        </div>
       </header>
       <p className="muted">{t("deepLinkHint")}</p>
       <div className="channel-header__actions" style={{ marginBottom: "1rem" }}>
