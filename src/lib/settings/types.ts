@@ -114,6 +114,8 @@ export interface AppSettings {
   };
   notifications: {
     followedOnline: boolean;
+    /** Lowercase logins that should not trigger go-live notifications. */
+    mutedFollowed: string[];
   };
   hotkeys: HotkeySettings;
   /** Per-channel launch overrides, keyed by lowercase login. */
@@ -125,7 +127,7 @@ export interface AppSettings {
   closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 13;
+export const SETTINGS_SCHEMA_VERSION = 14;
 
 export const defaultHotkeys = (): HotkeySettings => ({
   refresh: "F5",
@@ -182,6 +184,7 @@ export const defaultSettings = (): AppSettings => ({
   },
   notifications: {
     followedOnline: true,
+    mutedFollowed: [],
   },
   hotkeys: defaultHotkeys(),
   channels: {},

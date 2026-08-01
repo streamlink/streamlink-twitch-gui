@@ -25,6 +25,7 @@ import {
   type HelixStream,
 } from "../lib/twitch/helix";
 import { languagesQueryKey } from "../lib/twitch/languages";
+import { toggleMutedFollowed } from "../lib/notifications/followedLive";
 import "../pages/SettingsPage.css";
 
 function useLoggedIn() {
@@ -325,14 +326,20 @@ export function ChannelPage() {
   const watchStream = useWatchingStore((s) => s.watchStream);
   const channels = useSettingsStore((s) => s.settings.channels);
   const setChannelOverride = useSettingsStore((s) => s.setChannelOverride);
+  const setSettings = useSettingsStore((s) => s.setSettings);
+  const notifications = useSettingsStore((s) => s.settings.notifications);
   const globalQuality = useSettingsStore((s) => s.settings.streaming.quality);
+  const loginKey = login.toLowerCase();
+  const notifyWhenLive = !notifications.mutedFollowed.some(
+    (m) => m.toLowerCase() === loginKey,
+  );
   const [overrideQuality, setOverrideQuality] = useState(
-    () => channels[login.toLowerCase()]?.quality ?? "",
+    () => channels[loginKey]?.quality ?? "",
   );
 
   useEffect(() => {
-    setOverrideQuality(channels[login.toLowerCase()]?.quality ?? "");
-  }, [channels, login]);
+    setOverrideQuality(channels[loginKey]?.quality ?? "");
+  }, [channels, loginKey]);
 
   const userQuery = useQuery({
     queryKey: ["channel-user", login],
@@ -391,6 +398,37 @@ export function ChannelPage() {
             )}
           </div>
         </div>
+      ) : null}
+
+      {login ? (
+        <fieldset className="settings__group">
+          <legend>{t("routes:channelNotifyTitle")}</legend>
+          <label className="settings__row settings__row--check">
+            <input
+              type="checkbox"
+              checked={notifyWhenLive}
+              disabled={!notifications.followedOnline}
+              onChange={(e) =>
+                setSettings({
+                  notifications: {
+                    ...notifications,
+                    mutedFollowed: toggleMutedFollowed(
+                      notifications.mutedFollowed,
+                      loginKey,
+                      e.target.checked,
+                    ),
+                  },
+                })
+              }
+            />
+            <span className="settings__check-text">
+              {t("routes:channelNotifyLive")}
+              {!notifications.followedOnline ? (
+                <small className="muted">{t("routes:channelNotifyGlobalOff")}</small>
+              ) : null}
+            </span>
+          </label>
+        </fieldset>
       ) : null}
 
       {login ? (

@@ -94,7 +94,22 @@ export function migrateSettings(raw: unknown): AppSettings {
         input.gui?.closeToTray ?? input.closeToTray ?? base.gui.closeToTray,
       onboardingDone: input.gui?.onboardingDone ?? base.gui.onboardingDone,
     },
-    notifications: { ...base.notifications, ...input.notifications },
+    notifications: {
+      ...base.notifications,
+      ...input.notifications,
+      mutedFollowed: (() => {
+        const raw = input.notifications?.mutedFollowed;
+        if (!Array.isArray(raw)) return base.notifications.mutedFollowed;
+        return [
+          ...new Set(
+            raw
+              .filter((c): c is string => typeof c === "string")
+              .map((c) => c.trim().toLowerCase())
+              .filter(Boolean),
+          ),
+        ];
+      })(),
+    },
     hotkeys: { ...defaultHotkeys(), ...input.hotkeys },
     channels: { ...base.channels, ...input.channels },
     schemaVersion: SETTINGS_SCHEMA_VERSION,

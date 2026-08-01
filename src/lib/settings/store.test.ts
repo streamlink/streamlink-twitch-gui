@@ -95,6 +95,22 @@ describe("migrateSettings", () => {
     expect(kept.streaming.streamLanguages).toEqual(["en", "de", "other"]);
   });
 
+  it("normalizes mutedFollowed and defaults missing to empty", () => {
+    const empty = migrateSettings({
+      schemaVersion: 13,
+      notifications: { followedOnline: true },
+    });
+    expect(empty.notifications.mutedFollowed).toEqual([]);
+    const kept = migrateSettings({
+      schemaVersion: 13,
+      notifications: {
+        followedOnline: true,
+        mutedFollowed: ["Forsen", " forsen ", "xqc", ""],
+      },
+    });
+    expect(kept.notifications.mutedFollowed).toEqual(["forsen", "xqc"]);
+  });
+
   it("turns off webbrowser when migrating from schema < 8", () => {
     const result = migrateSettings({
       schemaVersion: 7,

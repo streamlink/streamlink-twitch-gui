@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useSettingsStore } from "../lib/settings/store";
 import {
@@ -836,8 +837,43 @@ export function SettingsPage() {
           />
           <span className="settings__check-text">
             {t("settings:followedOnline")}
+            <small className="muted">{t("settings:followedOnlineHint")}</small>
           </span>
         </label>
+        <div className="settings__row settings__row--stack">
+          <div className="settings__label">
+            <span>{t("settings:mutedFollowed")}</span>
+            <small className="muted">{t("settings:mutedFollowedHint")}</small>
+          </div>
+          {settings.notifications.mutedFollowed.length === 0 ? (
+            <p className="muted">{t("settings:mutedFollowedEmpty")}</p>
+          ) : (
+            <ul className="settings__muted-list">
+              {settings.notifications.mutedFollowed.map((login) => (
+                <li key={login} className="settings__muted-item">
+                  <Link to={`/channel/${login}`}>{login}</Link>
+                  <button
+                    type="button"
+                    className="button-secondary"
+                    onClick={() =>
+                      setSettings({
+                        notifications: {
+                          ...settings.notifications,
+                          mutedFollowed:
+                            settings.notifications.mutedFollowed.filter(
+                              (m) => m !== login,
+                            ),
+                        },
+                      })
+                    }
+                  >
+                    {t("settings:mutedFollowedUnmute")}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </fieldset>
 
       <fieldset className="settings__group">

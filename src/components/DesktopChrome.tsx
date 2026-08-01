@@ -5,6 +5,7 @@ import { invoke, isTauri } from "../lib/tauri";
 import { useAuthStore } from "../lib/auth/store";
 import { useSettingsStore } from "../lib/settings/store";
 import { getFollowedStreams } from "../lib/twitch/helix";
+import { shouldNotifyFollowedLive } from "../lib/notifications/followedLive";
 
 /**
  * Desktop-only chrome: tray icon, close-to-tray, followed-live notifications.
@@ -14,6 +15,9 @@ export function DesktopChrome() {
   const closeToTray = useSettingsStore((s) => s.settings.gui.closeToTray);
   const notifyFollowed = useSettingsStore(
     (s) => s.settings.notifications.followedOnline,
+  );
+  const mutedFollowed = useSettingsStore(
+    (s) => s.settings.notifications.mutedFollowed,
   );
   const hydrated = useSettingsStore((s) => s.hydrated);
   const session = useAuthStore((s) => s.session);
@@ -125,7 +129,14 @@ export function DesktopChrome() {
       return;
     }
 
-    const newlyLive = [...next].filter((login) => !knownLive.current.has(login));
+    const newlyLive = [...next]
+      .filter((login) => !knownLive.current.has(login))
+      .filter((login) =>
+        shouldNotifyFollowedLive(login, {
+          followedOnline: notifyFollowed,
+          mutedFollowed,
+        }),
+      );
     knownLive.current = next;
 
     if (!newlyLive.length || !isTauri()) return;
@@ -155,7 +166,7 @@ export function DesktopChrome() {
         });
       }
     })();
-  }, [followedQuery.data, notifyFollowed, t]);
+  }, [followedQuery.data, mutedFollowed, notifyFollowed, t]);
 
   return null;
 }
