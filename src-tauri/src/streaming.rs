@@ -883,6 +883,7 @@ fn start_dock_visibility_watchdog() {
         // 0 = shown/normal, 1 = minimized as a group
         let mut group_minimized = false;
         let mut seam_suppressed = false;
+        let mut grips_elevated = false;
         // Remember last-known member HWNDs. Once minimized, title/area scans
         // often miss borderless mpv (iconic rect is ~160x28), so without a
         // cache the watchdog never observes IsIconic and never syncs.
@@ -897,6 +898,10 @@ fn start_dock_visibility_watchdog() {
                     group_minimized = false;
                     DOCK_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
                     crate::dock::show_grips();
+                }
+                if grips_elevated {
+                    crate::dock::demote_grips();
+                    grips_elevated = false;
                 }
                 cached.clear();
                 continue;
@@ -927,6 +932,7 @@ fn start_dock_visibility_watchdog() {
                 crate::dock::hide_grips();
                 minimize_dock_group(&hwnds);
                 group_minimized = true;
+                grips_elevated = false;
                 continue;
             }
             if group_minimized {
@@ -937,7 +943,8 @@ fn start_dock_visibility_watchdog() {
                     crate::dock::show_grips();
                     group_minimized = false;
                     seam_suppressed = false;
-                    // Refresh cache from live finds after restore/retile.
+                    grips_elevated = true; // Sync elevates; track that here.
+                                           // Refresh cache from live finds after restore/retile.
                     cached = dock_member_hwnds(&cfg.channels, cfg.reserve_chat);
                     continue;
                 }
@@ -961,10 +968,17 @@ fn start_dock_visibility_watchdog() {
                 }
             }
 
-            // Keep grey grips above mpv/chat only while the dock group (or a
-            // grip) is focused — never pin them over unrelated apps.
-            if cfg.linked && is_dock_surface_foreground(&cfg.channels, cfg.reserve_chat) {
-                crate::dock::raise_grips();
+            // Keep grey grips above mpv/chat while the dock is focused; demote
+            // TOPMOST when another app is foreground so bars don't cover it.
+            if cfg.linked {
+                let dock_fg = is_dock_surface_foreground(&cfg.channels, cfg.reserve_chat);
+                if dock_fg && !grips_elevated {
+                    crate::dock::raise_grips();
+                    grips_elevated = true;
+                } else if !dock_fg && grips_elevated {
+                    crate::dock::demote_grips();
+                    grips_elevated = false;
+                }
             }
 
             // Chatterino usercards/menus sit above the main chat window; our seam
@@ -994,6 +1008,11 @@ fn is_dock_surface_foreground(channels: &[String], reserve_chat: bool) -> bool {
     #[link(name = "user32")]
     unsafe extern "system" {
         fn GetForegroundWindow() -> *mut core::ffi::c_void;
+        fn GetWindowThreadProcessId(hwnd: *mut core::ffi::c_void, pid: *mut u32) -> u32;
+    }
+    #[link(name = "kernel32")]
+    unsafe extern "system" {
+        fn GetCurrentProcessId() -> u32;
     }
     let fg = unsafe { GetForegroundWindow() };
     if fg.is_null() {
@@ -1002,7 +1021,29 @@ fn is_dock_surface_foreground(channels: &[String], reserve_chat: bool) -> bool {
     if crate::dock::is_grip_hwnd(fg) {
         return true;
     }
-    dock_member_hwnds(channels, reserve_chat).contains(&fg)
+    let mut fg_pid = 0u32;
+    unsafe {
+        GetWindowThreadProcessId(fg, &mut fg_pid);
+    }
+    // Keep bars usable while interacting with our own UI (settings, watching).
+    if fg_pid != 0 && fg_pid == unsafe { GetCurrentProcessId() } {
+        return true;
+    }
+    let members = dock_member_hwnds(channels, reserve_chat);
+    if members.contains(&fg) {
+        return true;
+    }
+    // mpv/Chatterino may focus a sibling top-level; match by process.
+    if fg_pid == 0 {
+        return false;
+    }
+    members.iter().any(|&h| {
+        let mut pid = 0u32;
+        unsafe {
+            GetWindowThreadProcessId(h, &mut pid);
+        }
+        pid == fg_pid
+    })
 }
 
 #[cfg(windows)]

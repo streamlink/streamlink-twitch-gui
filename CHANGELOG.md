@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Grey dock borders stay above mpv/Chatterino again (temporary TOPMOST while the dock or app is focused), and drop TOPMOST when another program is foreground so they no longer cover unrelated windows
+
 ### Planned
 
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI
