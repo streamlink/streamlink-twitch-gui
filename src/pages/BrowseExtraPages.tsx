@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { ChannelResults } from "../components/ChannelResults";
@@ -239,6 +239,81 @@ export function SearchPage() {
           </section>
         </div>
       ) : null}
+    </section>
+  );
+}
+
+export function TeamsSearchPage() {
+  const { t } = useTranslation(["routes", "common"]);
+  const loggedIn = useLoggedIn();
+  const navigate = useNavigate();
+  const [q, setQ] = useState("");
+  const [submitted, setSubmitted] = useState("");
+  const [lookupError, setLookupError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function lookup(name: string) {
+    const trimmed = name.trim();
+    if (!trimmed || !loggedIn) return;
+    setSubmitted(trimmed);
+    setLookupError(null);
+    setBusy(true);
+    try {
+      const team = await getTeamByName(trimmed);
+      if (!team) {
+        setLookupError(t("routes:teamsNotFound"));
+        return;
+      }
+      void navigate(`/team/${encodeURIComponent(team.team_name)}`);
+    } catch (err) {
+      setLookupError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="page">
+      <header className="page__header">
+        <div>
+          <h1>{t("routes:teamsTitle")}</h1>
+          <p className="page__lede">{t("routes:teamsLede")}</p>
+        </div>
+      </header>
+
+      <form
+        className="search-hero"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void lookup(q);
+        }}
+      >
+        <input
+          type="search"
+          className="search-hero__input"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={t("routes:teamsPlaceholder")}
+          aria-label={t("routes:teamsTitle")}
+          autoFocus
+        />
+        <button type="submit" disabled={!loggedIn || !q.trim() || busy}>
+          {busy ? t("common:loading") : t("common:search")}
+        </button>
+      </form>
+
+      {!loggedIn ? (
+        <p className="muted">{t("routes:followedLoginRequired")}</p>
+      ) : null}
+
+      {!submitted && loggedIn ? (
+        <div className="empty-panel">
+          <strong>{t("routes:teamsIdleTitle")}</strong>
+          <p className="muted">{t("routes:teamsIdleBody")}</p>
+        </div>
+      ) : null}
+
+      {lookupError ? <p className="muted">{lookupError}</p> : null}
     </section>
   );
 }

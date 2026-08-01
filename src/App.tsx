@@ -17,6 +17,7 @@ import {
   GamesPage,
   SearchPage,
   TeamPage,
+  TeamsSearchPage,
 } from "./pages/BrowseExtraPages";
 import { SettingsPage, SettingsBootstrap } from "./pages/SettingsPage";
 import { MultistreamPage } from "./pages/MultistreamPage";
@@ -60,6 +61,7 @@ function AppRoutes() {
         <Route path="/games" element={<GamesPage />} />
         <Route path="/games/:gameId" element={<GameStreamsPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/teams" element={<TeamsSearchPage />} />
         <Route path="/channel/:login" element={<ChannelPage />} />
         <Route path="/team/:teamName" element={<TeamPage />} />
         <Route path="/watching" element={<WatchingPage />} />
