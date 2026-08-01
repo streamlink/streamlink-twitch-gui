@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Follow raids**: EventSub detects when a watched channel raids out; a 15s banner (Follow now / Stay) then switches that slot’s stream and chat to the raid target (multistream: only the raiding slot moves). Toggle under Settings → Streaming.
+- **Browse language filter**: multi-select languages on Top streams and category pages (Helix `language`); empty selection shows all. Persisted in settings.
 
 ### Planned
 

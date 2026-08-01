@@ -90,6 +90,11 @@ export interface AppSettings {
      * slot to the raid target (EventSub). Opt-out.
      */
     followRaids: boolean;
+    /**
+     * Broadcast language codes for Top/category stream lists (Helix `language`).
+     * Empty = all languages.
+     */
+    streamLanguages: string[];
     /** Fraction of work-area width reserved for Chatterino (0.12–0.45). */
     chatWidthFraction: number;
     webbrowser: boolean;
@@ -120,7 +125,7 @@ export interface AppSettings {
   closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 12;
+export const SETTINGS_SCHEMA_VERSION = 13;
 
 export const defaultHotkeys = (): HotkeySettings => ({
   refresh: "F5",
@@ -160,6 +165,7 @@ export const defaultSettings = (): AppSettings => ({
     // Mutually exclusive with seamlessSwitch (default single-stream).
     linkedDock: false,
     followRaids: true,
+    streamLanguages: [],
     chatWidthFraction: 0.18,
     webbrowser: false,
     webbrowserHeadless: true,

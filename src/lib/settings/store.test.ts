@@ -24,6 +24,7 @@ describe("migrateSettings", () => {
     expect(result.streaming.disableAds).toBe(false);
     expect(result.streaming.seamlessSwitch).toBe(true);
     expect(result.streaming.followRaids).toBe(true);
+    expect(result.streaming.streamLanguages).toEqual([]);
     expect(result.gui.onboardingDone).toBe(false);
     expect(result.player.input).toBe("default");
     expect(result.player.mpv).toEqual(defaultMpvPresets());
@@ -82,6 +83,16 @@ describe("migrateSettings", () => {
       gui: { closeToTray: true, minimizeOnWatch: false, onboardingDone: true },
     });
     expect(result.gui.onboardingDone).toBe(true);
+  });
+
+  it("normalizes streamLanguages and defaults missing to empty", () => {
+    const empty = migrateSettings({ schemaVersion: 12, streaming: {} });
+    expect(empty.streaming.streamLanguages).toEqual([]);
+    const kept = migrateSettings({
+      schemaVersion: 12,
+      streaming: { streamLanguages: ["EN", " de ", "en", "bad!", "pt-br", "other"] },
+    });
+    expect(kept.streaming.streamLanguages).toEqual(["en", "de", "other"]);
   });
 
   it("turns off webbrowser when migrating from schema < 8", () => {

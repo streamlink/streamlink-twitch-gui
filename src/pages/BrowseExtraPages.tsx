@@ -6,6 +6,7 @@ import { ChannelResults } from "../components/ChannelResults";
 import { GameGrid } from "../components/GameGrid";
 import { LoadMore } from "../components/LoadMore";
 import { LoadingGrid } from "../components/LoadingGrid";
+import { LanguageFilter } from "../components/LanguageFilter";
 import { PageRefreshButton } from "../components/PageRefreshButton";
 import { StreamGrid } from "../components/StreamGrid";
 import { useAuthStore } from "../lib/auth/store";
@@ -23,6 +24,7 @@ import {
   searchChannels,
   type HelixStream,
 } from "../lib/twitch/helix";
+import { languagesQueryKey } from "../lib/twitch/languages";
 import "../pages/SettingsPage.css";
 
 function useLoggedIn() {
@@ -88,12 +90,17 @@ export function GameStreamsPage() {
   const { gameId = "" } = useParams();
   const loggedIn = useLoggedIn();
   const watchStream = useWatchingStore((s) => s.watchStream);
+  const streamLanguages = useSettingsStore(
+    (s) => s.settings.streaming.streamLanguages,
+  );
+  const langKey = languagesQueryKey(streamLanguages);
 
   const query = useInfiniteQuery({
-    queryKey: ["game-streams", gameId],
+    queryKey: ["game-streams", gameId, langKey],
     enabled: loggedIn && Boolean(gameId),
     initialPageParam: undefined as string | undefined,
-    queryFn: ({ pageParam }) => getStreamsByGame(gameId, pageParam),
+    queryFn: ({ pageParam }) =>
+      getStreamsByGame(gameId, pageParam, streamLanguages),
     getNextPageParam: (last) => last.pagination?.cursor,
   });
 
@@ -110,10 +117,13 @@ export function GameStreamsPage() {
           <h1>{t("routes:gameStreamsTitle")}</h1>
         </div>
         {loggedIn && gameId ? (
-          <PageRefreshButton
-            refreshing={refreshing}
-            onRefresh={() => void query.refetch()}
-          />
+          <div className="page__header-actions">
+            <LanguageFilter />
+            <PageRefreshButton
+              refreshing={refreshing}
+              onRefresh={() => void query.refetch()}
+            />
+          </div>
         ) : null}
       </header>
       {query.isLoading ? <LoadingGrid /> : null}

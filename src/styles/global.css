@@ -104,6 +104,15 @@ p {
   border-bottom: 1px solid var(--border);
 }
 
+.page__header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
 .page__refresh {
   flex-shrink: 0;
   margin-top: 0.15rem;

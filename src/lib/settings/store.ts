@@ -67,6 +67,18 @@ export function migrateSettings(raw: unknown): AppSettings {
       })(),
       linkedDock: input.streaming?.linkedDock ?? base.streaming.linkedDock,
       followRaids: input.streaming?.followRaids ?? base.streaming.followRaids,
+      streamLanguages: (() => {
+        const raw = input.streaming?.streamLanguages;
+        if (!Array.isArray(raw)) return base.streaming.streamLanguages;
+        return [
+          ...new Set(
+            raw
+              .filter((c): c is string => typeof c === "string")
+              .map((c) => c.trim().toLowerCase())
+              .filter((c) => c === "other" || /^[a-z]{2}$/.test(c)),
+          ),
+        ].slice(0, 100);
+      })(),
       chatWidthFraction: (() => {
         const f = input.streaming?.chatWidthFraction;
         if (typeof f !== "number" || Number.isNaN(f)) {

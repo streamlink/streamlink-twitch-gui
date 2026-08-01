@@ -32,5 +32,8 @@
   "raidBannerTitle": "{{from}} is raiding {{to}}",
   "raidBannerBody": "Following in {{seconds}}s…",
   "raidFollowNow": "Follow now",
-  "raidStay": "Stay"
+  "raidStay": "Stay",
+  "languages": "Languages",
+  "languagesAll": "All languages",
+  "languagesClear": "Clear"
 }

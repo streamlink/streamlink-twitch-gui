@@ -114,13 +114,35 @@ export async function getFollowedChannelLogins(userId: string): Promise<string[]
   return logins;
 }
 
+function streamsQueryPairs(opts: {
+  cursor?: string;
+  gameId?: string;
+  languages?: string[];
+}): QueryPairs {
+  const pairs: QueryPairs = [["first", "25"]];
+  if (opts.gameId) pairs.push(["game_id", opts.gameId]);
+  if (opts.cursor) pairs.push(["after", opts.cursor]);
+  const langs = [
+    ...new Set(
+      (opts.languages ?? [])
+        .map((c) => c.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  ].slice(0, 100);
+  for (const lang of langs) {
+    pairs.push(["language", lang]);
+  }
+  return pairs;
+}
+
 export async function getTopStreams(
   cursor?: string,
+  languages?: string[],
 ): Promise<HelixPage<HelixStream>> {
-  return helixFetch<HelixPage<HelixStream>>("streams", {
-    first: 25,
-    after: cursor,
-  });
+  return helixFetchPairs<HelixPage<HelixStream>>(
+    "streams",
+    streamsQueryPairs({ cursor, languages }),
+  );
 }
 
 export interface HelixGame {
@@ -166,12 +188,12 @@ export async function getTopGames(
 export async function getStreamsByGame(
   gameId: string,
   cursor?: string,
+  languages?: string[],
 ): Promise<HelixPage<HelixStream>> {
-  return helixFetch<HelixPage<HelixStream>>("streams", {
-    game_id: gameId,
-    first: 25,
-    after: cursor,
-  });
+  return helixFetchPairs<HelixPage<HelixStream>>(
+    "streams",
+    streamsQueryPairs({ gameId, cursor, languages }),
+  );
 }
 
 export async function searchChannels(
