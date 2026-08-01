@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Follow raids**: EventSub detects when a watched channel raids out; a 15s banner (Follow now / Stay) then switches that slot’s stream and chat to the raid target (multistream: only the raiding slot moves). Toggle under Settings → Streaming.
+
 ### Planned
 
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI

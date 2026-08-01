@@ -85,6 +85,11 @@ export interface AppSettings {
      * the dock between monitors. Opt-out.
      */
     linkedDock: boolean;
+    /**
+     * When a watched channel raids out, show a countdown and follow that
+     * slot to the raid target (EventSub). Opt-out.
+     */
+    followRaids: boolean;
     /** Fraction of work-area width reserved for Chatterino (0.12–0.45). */
     chatWidthFraction: number;
     webbrowser: boolean;
@@ -115,7 +120,7 @@ export interface AppSettings {
   closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 11;
+export const SETTINGS_SCHEMA_VERSION = 12;
 
 export const defaultHotkeys = (): HotkeySettings => ({
   refresh: "F5",
@@ -154,6 +159,7 @@ export const defaultSettings = (): AppSettings => ({
     unevenMainSide: DEFAULT_UNEVEN_MAIN_SIDE,
     // Mutually exclusive with seamlessSwitch (default single-stream).
     linkedDock: false,
+    followRaids: true,
     chatWidthFraction: 0.18,
     webbrowser: false,
     webbrowserHeadless: true,

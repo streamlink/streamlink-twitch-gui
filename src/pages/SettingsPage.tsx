@@ -438,6 +438,28 @@ export function SettingsPage() {
           </span>
         </label>
 
+        <label className="settings__row settings__row--check">
+          <input
+            type="checkbox"
+            checked={settings.streaming.followRaids}
+            onChange={(e) => {
+              setSettings({
+                streaming: {
+                  ...settings.streaming,
+                  followRaids: e.target.checked,
+                },
+              });
+              void import("../lib/streaming/store").then(({ syncEventSub }) => {
+                syncEventSub();
+              });
+            }}
+          />
+          <span className="settings__check-text">
+            {t("settings:followRaids")}
+            <small className="muted">{t("settings:followRaidsHint")}</small>
+          </span>
+        </label>
+
         {settings.streaming.linkedDock ? (
           <label className="settings__row">
             <span>

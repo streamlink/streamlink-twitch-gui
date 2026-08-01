@@ -28,6 +28,8 @@
   "seamlessSwitchHint": "On: one stream at a time (replaces the current). Off: multistream + linked dock grips (turns Linked dock on automatically).",
   "linkedDock": "Linked dock grips",
   "linkedDockHint": "Resize with thin grips; click the center ◀ ▶ handle (or Ctrl+Shift+M) to pick a monitor — numbers appear on each screen. Turns Seamless off when enabled.",
+  "followRaids": "Follow raids",
+  "followRaidsHint": "When a watched channel raids out, show a 15s prompt then switch that stream (and chat) to the raid target. You can cancel.",
   "chatWidthFraction": "Chat width",
   "chatWidthFractionHint": "Share of the screen width for Chatterino7 when linked dock is on (12–45%).",
   "multistreamLayout": "Multistream layout",

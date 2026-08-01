@@ -28,6 +28,7 @@ import { StreamingBootstrap } from "./components/StreamingBootstrap";
 import { OnboardingWizard } from "./components/OnboardingWizard";
 import { LaunchErrorBanner } from "./components/LaunchErrorBanner";
 import { UpdateBanner } from "./components/UpdateBanner";
+import { RaidBanner } from "./components/RaidBanner";
 import { SentryBootstrap } from "./lib/sentry";
 import "./styles/global.css";
 
@@ -88,6 +89,7 @@ export default function App() {
                         <TauriGuardBanner />
                         <LaunchErrorBanner />
                         <UpdateBanner />
+                        <RaidBanner />
                         <AppRoutes />
                       </AppShell>
                     </StreamingBootstrap>

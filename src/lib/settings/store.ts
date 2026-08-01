@@ -66,6 +66,7 @@ export function migrateSettings(raw: unknown): AppSettings {
         return raw && isUnevenMainSide(raw) ? raw : DEFAULT_UNEVEN_MAIN_SIDE;
       })(),
       linkedDock: input.streaming?.linkedDock ?? base.streaming.linkedDock,
+      followRaids: input.streaming?.followRaids ?? base.streaming.followRaids,
       chatWidthFraction: (() => {
         const f = input.streaming?.chatWidthFraction;
         if (typeof f !== "number" || Number.isNaN(f)) {

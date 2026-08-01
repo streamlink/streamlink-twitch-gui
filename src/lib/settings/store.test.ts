@@ -23,6 +23,7 @@ describe("migrateSettings", () => {
     expect(result.streaming.lowLatency).toBe(false);
     expect(result.streaming.disableAds).toBe(false);
     expect(result.streaming.seamlessSwitch).toBe(true);
+    expect(result.streaming.followRaids).toBe(true);
     expect(result.gui.onboardingDone).toBe(false);
     expect(result.player.input).toBe("default");
     expect(result.player.mpv).toEqual(defaultMpvPresets());
