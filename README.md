@@ -6,14 +6,16 @@ Browse live Twitch channels, launch them in your player via Streamlink, and keep
 
 Upstream project: [streamlink/streamlink-twitch-gui](https://github.com/streamlink/streamlink-twitch-gui).
 
-## Features (v0.1)
+## Features (v0.3)
 
 - Twitch login (OAuth **Device Code** flow) with tokens in the OS keyring
-- Followed / top streams, games, search, channel pages, teams
+- Followed / top streams, games, search, channel pages, teams (search by name)
+- Browse language filter on top/category streams; follow outgoing raids with a cancellable banner
 - Streamlink launch (bundled in release builds, or system / custom path)
 - Watching list with live Streamlink status and seamless channel switching
 - Embedded chat (default) or [Chatterino7](https://github.com/SevenTV/chatterino7) / browser
 - Settings: quality, low latency, ad filter, player, hotkeys, per-channel overrides, tray
+- Desktop notifications when followed channels go live (global opt-out + per-channel mute)
 - First-run setup wizard (Streamlink → player → optional login)
 - Auto-updater (Tauri) + `stg://` deep links
 - Optional Sentry crash reports (opt-out in Settings)

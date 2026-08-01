@@ -7,17 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- **Follow raids**: EventSub detects when a watched channel raids out; a 15s banner (Follow now / Stay) then switches that slot’s stream and chat to the raid target (multistream: only the raiding slot moves). Toggle under Settings → Streaming.
-- **Browse language filter**: multi-select languages on Top streams and category pages (Helix `language`); empty selection shows all. Persisted in settings.
-- **Teams search**: Browse → Teams looks up a team by name and opens the existing team page (live members + watch).
-- **Per-channel notification mute**: keep global followed-live desktop notifications, and mute individual channels from the channel page or Settings → Notifications.
-
 ### Planned
 
 - Optional Authenticode-signed installers once a Windows code-signing certificate is available in CI
 - Further parity and polish as we dogfood releases
+
+## [0.3.0] — 2026-08-01
+
+### Added
+
+- **Follow raids**: EventSub WebSocket watches for outgoing `channel.raid` on streams you’re watching; a 15s banner (Follow now / Stay) then switches that slot’s stream and chat to the raid target. Multistream: only the raiding slot moves. Toggle under Settings → Streaming (`followRaids`, default on).
+- **Browse language filter**: multi-select broadcast languages on Top streams and category pages (Helix `language` params). Empty selection = all languages. Persisted as `streaming.streamLanguages`.
+- **Teams search**: Browse → Teams looks up a Twitch team by name and opens the team page (live members + watch). Channel → team links unchanged.
+- **Per-channel notification mute**: global “notify when followed go live” remains; mute individual channels from the channel page or Settings → Notifications (`mutedFollowed`).
+
+### Notes
+
+- Settings schema advanced through **12 → 14** (follow raids, stream languages, muted followed). Older settings migrate with safe defaults.
 
 ## [0.2.1] — 2026-08-01
 
@@ -115,7 +121,8 @@ First public preview of the Windows rewrite (Tauri 2 + React + TypeScript). The 
 - Chatty is intentionally not supported
 - Unsigned installers may show a SmartScreen “Unknown publisher” warning until Authenticode is configured
 
-[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/Wibias/streamlink-twitch-gui/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.3.0
 [0.2.1]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.2.1
 [0.2.0]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.2.0
 [0.1.1]: https://github.com/Wibias/streamlink-twitch-gui/releases/tag/v0.1.1
