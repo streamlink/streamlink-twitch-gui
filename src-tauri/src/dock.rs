@@ -515,6 +515,16 @@ fn cmd_queue() -> &'static Mutex<Vec<DockCmd>> {
 fn post_cmd(cmd: DockCmd) {
     ensure_grip_thread();
     if let Ok(mut q) = cmd_queue().lock() {
+        // Coalesce z-order spam from the 100ms watchdog.
+        match cmd {
+            DockCmd::ElevateGrips => {
+                q.retain(|c| !matches!(c, DockCmd::ElevateGrips | DockCmd::DemoteGrips));
+            }
+            DockCmd::DemoteGrips => {
+                q.retain(|c| !matches!(c, DockCmd::ElevateGrips | DockCmd::DemoteGrips));
+            }
+            _ => {}
+        }
         q.push(cmd);
     }
 }

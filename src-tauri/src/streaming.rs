@@ -968,16 +968,24 @@ fn start_dock_visibility_watchdog() {
                 }
             }
 
-            // Keep grey grips above mpv/chat while the dock is focused; demote
-            // TOPMOST when another app is foreground so bars don't cover it.
+            // Keep grey grips above mpv/chat while the dock owns focus.
+            // Re-assert TOPMOST every tick (mpv --ontop / BringWindowToTop can
+            // reorder the TOPMOST band). Only demote when FG is clearly a
+            // foreign app — never demote on a failed title scan (that buried
+            // the bars under the stream).
             if cfg.linked {
-                let dock_fg = is_dock_surface_foreground(&cfg.channels, cfg.reserve_chat);
-                if dock_fg && !grips_elevated {
-                    crate::dock::raise_grips();
-                    grips_elevated = true;
-                } else if !dock_fg && grips_elevated {
-                    crate::dock::demote_grips();
-                    grips_elevated = false;
+                match dock_focus_kind(&hwnds) {
+                    DockFocusKind::DockOrApp | DockFocusKind::Unknown => {
+                        // Re-elevate even when already tracked as elevated.
+                        crate::dock::raise_grips();
+                        grips_elevated = true;
+                    }
+                    DockFocusKind::Foreign => {
+                        if grips_elevated {
+                            crate::dock::demote_grips();
+                            grips_elevated = false;
+                        }
+                    }
                 }
             }
 
@@ -1004,7 +1012,20 @@ fn start_dock_visibility_watchdog() {
 fn start_dock_visibility_watchdog() {}
 
 #[cfg(windows)]
-fn is_dock_surface_foreground(channels: &[String], reserve_chat: bool) -> bool {
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum DockFocusKind {
+    /// Our app, a grip, or a known dock member (mpv / owned Chatterino).
+    DockOrApp,
+    /// Some other process is foreground — safe to drop TOPMOST.
+    Foreign,
+    /// No FG window, or we have no member HWNDs to compare yet.
+    Unknown,
+}
+
+/// Classify the foreground window using the watchdog's HWND cache (not a
+/// fresh title scan — those miss borderless mpv and incorrectly demoted grips).
+#[cfg(windows)]
+fn dock_focus_kind(members: &[*mut core::ffi::c_void]) -> DockFocusKind {
     #[link(name = "user32")]
     unsafe extern "system" {
         fn GetForegroundWindow() -> *mut core::ffi::c_void;
@@ -1016,34 +1037,43 @@ fn is_dock_surface_foreground(channels: &[String], reserve_chat: bool) -> bool {
     }
     let fg = unsafe { GetForegroundWindow() };
     if fg.is_null() {
-        return false;
+        return DockFocusKind::Unknown;
     }
     if crate::dock::is_grip_hwnd(fg) {
-        return true;
+        return DockFocusKind::DockOrApp;
     }
     let mut fg_pid = 0u32;
     unsafe {
         GetWindowThreadProcessId(fg, &mut fg_pid);
     }
-    // Keep bars usable while interacting with our own UI (settings, watching).
     if fg_pid != 0 && fg_pid == unsafe { GetCurrentProcessId() } {
-        return true;
+        return DockFocusKind::DockOrApp;
     }
-    let members = dock_member_hwnds(channels, reserve_chat);
+    if members.is_empty() {
+        return DockFocusKind::Unknown;
+    }
     if members.contains(&fg) {
-        return true;
+        return DockFocusKind::DockOrApp;
     }
     // mpv/Chatterino may focus a sibling top-level; match by process.
     if fg_pid == 0 {
-        return false;
+        return DockFocusKind::Unknown;
     }
-    members.iter().any(|&h| {
+    let member_match = members.iter().any(|&h| {
+        if h.is_null() {
+            return false;
+        }
         let mut pid = 0u32;
         unsafe {
             GetWindowThreadProcessId(h, &mut pid);
         }
-        pid == fg_pid
-    })
+        pid != 0 && pid == fg_pid
+    });
+    if member_match {
+        DockFocusKind::DockOrApp
+    } else {
+        DockFocusKind::Foreign
+    }
 }
 
 #[cfg(windows)]

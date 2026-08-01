@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Grey dock borders stay above mpv/Chatterino again (temporary TOPMOST while the dock or app is focused), and drop TOPMOST when another program is foreground so they no longer cover unrelated windows
+- Grey dock borders stay above mpv/Chatterino again (TOPMOST while the dock or app is focused, re-asserted so players cannot bury them), and drop TOPMOST only when another program is clearly foreground — a failed window title scan no longer demotes the bars under the stream
 
 ### Planned
 
