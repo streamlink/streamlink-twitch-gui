@@ -159,8 +159,23 @@ struct FastPlayer {
 
 /// Send one command to mpv's IPC pipe, retrying until `timeout` (the pipe
 /// appears shortly after the mpv process spawns).
+/// Prefer [`mpv_ipc_json`] when arguments need native JSON types (booleans,
+/// numbers) — string `"no"` for a flag is truthy and mutes audio.
 #[cfg(windows)]
 fn mpv_ipc_command(pipe: &str, cmd: &[&str], timeout: Duration) -> Result<(), StreamError> {
+    let values: Vec<serde_json::Value> = cmd
+        .iter()
+        .map(|s| serde_json::Value::String((*s).into()))
+        .collect();
+    mpv_ipc_json(pipe, values, timeout)
+}
+
+#[cfg(windows)]
+fn mpv_ipc_json(
+    pipe: &str,
+    command: Vec<serde_json::Value>,
+    timeout: Duration,
+) -> Result<(), StreamError> {
     use std::fs::OpenOptions;
     use std::io::{BufRead, BufReader, Write};
     let deadline = Instant::now() + timeout;
@@ -168,7 +183,7 @@ fn mpv_ipc_command(pipe: &str, cmd: &[&str], timeout: Duration) -> Result<(), St
     while Instant::now() < deadline {
         match OpenOptions::new().read(true).write(true).open(pipe) {
             Ok(mut file) => {
-                let msg = serde_json::json!({ "command": cmd }).to_string() + "\n";
+                let msg = serde_json::json!({ "command": command }).to_string() + "\n";
                 file.write_all(msg.as_bytes())?;
                 // Events may precede the reply; read until the "error" field.
                 let mut reader = BufReader::new(file);
@@ -203,6 +218,17 @@ fn mpv_ipc_command(pipe: &str, cmd: &[&str], timeout: Duration) -> Result<(), St
 
 #[cfg(not(windows))]
 fn mpv_ipc_command(_pipe: &str, _cmd: &[&str], _timeout: Duration) -> Result<(), StreamError> {
+    Err(StreamError::Message(
+        "mpv IPC is only supported on Windows".into(),
+    ))
+}
+
+#[cfg(not(windows))]
+fn mpv_ipc_json(
+    _pipe: &str,
+    _command: Vec<serde_json::Value>,
+    _timeout: Duration,
+) -> Result<(), StreamError> {
     Err(StreamError::Message(
         "mpv IPC is only supported on Windows".into(),
     ))
@@ -251,6 +277,35 @@ fn close_session_player(state: &StreamingState, id: &str, graceful: bool) {
             close_fast_player(&mut session.player, graceful);
         }
     }
+}
+
+/// After attaching a live stream, force mute off and a sane volume.
+/// Important: mpv's JSON IPC needs a real boolean for flags — the string
+/// `"no"` is truthy and would *enable* mute (speaker shows "!").
+fn mpv_ensure_audible(pipe: &str) {
+    let _ = mpv_ipc_json(
+        pipe,
+        vec![
+            serde_json::Value::String("set_property".into()),
+            serde_json::Value::String("mute".into()),
+            serde_json::Value::Bool(false),
+        ],
+        Duration::from_millis(800),
+    );
+    let _ = mpv_ipc_json(
+        pipe,
+        vec![
+            serde_json::Value::String("set_property".into()),
+            serde_json::Value::String("volume".into()),
+            serde_json::Value::from(100),
+        ],
+        Duration::from_millis(800),
+    );
+    let _ = mpv_ipc_command(
+        pipe,
+        &["set_property", "aid", "auto"],
+        Duration::from_millis(800),
+    );
 }
 
 const OFFLINE_GOODBYE_SECS: u64 = 5;
@@ -828,48 +883,94 @@ fn start_dock_visibility_watchdog() {
         // 0 = shown/normal, 1 = minimized as a group
         let mut group_minimized = false;
         let mut seam_suppressed = false;
+        // Remember last-known member HWNDs. Once minimized, title/area scans
+        // often miss borderless mpv (iconic rect is ~160x28), so without a
+        // cache the watchdog never observes IsIconic and never syncs.
+        let mut cached: Vec<*mut core::ffi::c_void> = Vec::new();
         loop {
-            thread::sleep(Duration::from_millis(200));
+            thread::sleep(Duration::from_millis(100));
             let cfg = crate::dock::snapshot();
-            if !cfg.linked || cfg.channels.is_empty() {
-                group_minimized = false;
-                DOCK_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
+            // Sync whenever the dock is active (linked grips and/or reserved chat).
+            let dock_active = !cfg.channels.is_empty() && (cfg.linked || cfg.reserve_chat);
+            if !dock_active {
+                if group_minimized {
+                    group_minimized = false;
+                    DOCK_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
+                    crate::dock::show_grips();
+                }
+                cached.clear();
                 continue;
             }
-            let hwnds = dock_member_hwnds(&cfg.channels, cfg.reserve_chat);
+            let found = dock_member_hwnds(&cfg.channels, cfg.reserve_chat);
+            // Drop destroyed windows from the cache; merge with fresh finds.
+            cached.retain(|&h| is_hwnd_alive(h));
+            for &h in &found {
+                if !h.is_null() && !cached.contains(&h) {
+                    cached.push(h);
+                }
+            }
+            // Prefer the union so an iconic mpv still participates.
+            let hwnds: Vec<_> = if cached.is_empty() {
+                found
+            } else {
+                cached.clone()
+            };
             if hwnds.is_empty() {
                 continue;
             }
             let any_iconic = hwnds.iter().any(|&h| is_hwnd_iconic(h));
             let any_zoomed = hwnds.iter().any(|&h| is_hwnd_zoomed(h));
-            let any_restored = hwnds
-                .iter()
-                .any(|&h| is_hwnd_visible(h) && !is_hwnd_iconic(h));
+            let any_restored = hwnds.iter().any(|&h| is_hwnd_restored(h));
 
             if !group_minimized && any_iconic {
                 DOCK_GROUP_MINIMIZED.store(true, Ordering::SeqCst);
-                minimize_dock_group(&hwnds);
                 crate::dock::hide_grips();
+                minimize_dock_group(&hwnds);
                 group_minimized = true;
                 continue;
             }
-            if group_minimized && any_restored {
-                DOCK_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
-                restore_dock_group(&cfg.channels, cfg.reserve_chat, &cfg.layout);
-                crate::dock::show_grips();
-                group_minimized = false;
+            if group_minimized {
+                if any_restored {
+                    DOCK_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
+                    restore_dock_group(&cfg.channels, cfg.reserve_chat, &cfg.layout);
+                    // Clears grip-minimized latch; Sync no-ops grips when unlinked.
+                    crate::dock::show_grips();
+                    group_minimized = false;
+                    seam_suppressed = false;
+                    // Refresh cache from live finds after restore/retile.
+                    cached = dock_member_hwnds(&cfg.channels, cfg.reserve_chat);
+                    continue;
+                }
+                // Chatterino (or a new mpv) may appear after the group was
+                // minimized — keep every member iconic.
+                let stragglers: Vec<_> = hwnds
+                    .iter()
+                    .copied()
+                    .filter(|&h| is_hwnd_alive(h) && !is_hwnd_iconic(h))
+                    .collect();
+                if !stragglers.is_empty() {
+                    minimize_dock_group(&stragglers);
+                }
                 continue;
             }
             // Solo maximize breaks the dock — snap everyone back to tiles.
-            if !group_minimized && any_zoomed {
+            if any_zoomed {
                 restore_dock_group(&cfg.channels, cfg.reserve_chat, &cfg.layout);
-                crate::dock::show_grips();
+                if cfg.linked {
+                    crate::dock::show_grips();
+                }
+            }
+
+            // Keep grey grips above mpv/chat only while the dock group (or a
+            // grip) is focused — never pin them over unrelated apps.
+            if cfg.linked && is_dock_surface_foreground(&cfg.channels, cfg.reserve_chat) {
+                crate::dock::raise_grips();
             }
 
             // Chatterino usercards/menus sit above the main chat window; our seam
             // grips used to be TOPMOST and sliced through them. Hide seam grips
             // while a secondary Chatterino window is visible.
-            if cfg.reserve_chat && !group_minimized {
+            if cfg.linked && cfg.reserve_chat {
                 let has_popup = chatterino_has_overlay_popup();
                 if has_popup && !seam_suppressed {
                     crate::dock::suppress_seam_grips();
@@ -887,6 +988,22 @@ fn start_dock_visibility_watchdog() {
 
 #[cfg(not(windows))]
 fn start_dock_visibility_watchdog() {}
+
+#[cfg(windows)]
+fn is_dock_surface_foreground(channels: &[String], reserve_chat: bool) -> bool {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn GetForegroundWindow() -> *mut core::ffi::c_void;
+    }
+    let fg = unsafe { GetForegroundWindow() };
+    if fg.is_null() {
+        return false;
+    }
+    if crate::dock::is_grip_hwnd(fg) {
+        return true;
+    }
+    dock_member_hwnds(channels, reserve_chat).contains(&fg)
+}
 
 #[cfg(windows)]
 fn chatterino_has_overlay_popup() -> bool {
@@ -964,12 +1081,21 @@ fn dock_member_hwnds(channels: &[String], reserve_chat: bool) -> Vec<*mut core::
 }
 
 #[cfg(windows)]
+fn is_hwnd_alive(hwnd: *mut core::ffi::c_void) -> bool {
+    #[link(name = "user32")]
+    unsafe extern "system" {
+        fn IsWindow(hwnd: *mut core::ffi::c_void) -> i32;
+    }
+    !hwnd.is_null() && unsafe { IsWindow(hwnd) != 0 }
+}
+
+#[cfg(windows)]
 fn is_hwnd_iconic(hwnd: *mut core::ffi::c_void) -> bool {
     #[link(name = "user32")]
     unsafe extern "system" {
         fn IsIconic(hwnd: *mut core::ffi::c_void) -> i32;
     }
-    !hwnd.is_null() && unsafe { IsIconic(hwnd) != 0 }
+    is_hwnd_alive(hwnd) && unsafe { IsIconic(hwnd) != 0 }
 }
 
 #[cfg(windows)]
@@ -991,16 +1117,28 @@ fn is_hwnd_visible(hwnd: *mut core::ffi::c_void) -> bool {
 }
 
 #[cfg(windows)]
+fn is_hwnd_restored(hwnd: *mut core::ffi::c_void) -> bool {
+    // IsWindowVisible stays true for minimized windows — exclude iconic.
+    is_hwnd_visible(hwnd) && !is_hwnd_iconic(hwnd)
+}
+
+#[cfg(windows)]
 fn minimize_dock_group(hwnds: &[*mut core::ffi::c_void]) {
     #[link(name = "user32")]
     unsafe extern "system" {
         fn ShowWindow(hwnd: *mut core::ffi::c_void, cmd: i32) -> i32;
+        fn CloseWindow(hwnd: *mut core::ffi::c_void) -> i32;
     }
+    // SW_FORCEMINIMIZE works more reliably for borderless mpv than SW_MINIMIZE.
+    const SW_FORCEMINIMIZE: i32 = 11;
     const SW_MINIMIZE: i32 = 6;
     for &hwnd in hwnds {
-        if !hwnd.is_null() {
-            unsafe {
-                let _ = ShowWindow(hwnd, SW_MINIMIZE);
+        if !is_hwnd_alive(hwnd) || is_hwnd_iconic(hwnd) {
+            continue;
+        }
+        unsafe {
+            if ShowWindow(hwnd, SW_FORCEMINIMIZE) == 0 && ShowWindow(hwnd, SW_MINIMIZE) == 0 {
+                let _ = CloseWindow(hwnd);
             }
         }
     }
@@ -1015,10 +1153,14 @@ fn restore_dock_group(channels: &[String], reserve_chat: bool, layout: &str) {
     const SW_RESTORE: i32 = 9;
     let hwnds = dock_member_hwnds(channels, reserve_chat);
     for &hwnd in &hwnds {
-        unsafe {
-            let _ = ShowWindow(hwnd, SW_RESTORE);
+        if is_hwnd_alive(hwnd) {
+            unsafe {
+                let _ = ShowWindow(hwnd, SW_RESTORE);
+            }
         }
     }
+    // Let Win32 finish restoring before we MoveWindow / retile.
+    thread::sleep(Duration::from_millis(50));
     let _ = retile_player_windows(channels, reserve_chat, layout);
     if reserve_chat {
         place_chatterino_window_right(0);
@@ -1335,9 +1477,9 @@ fn mpv_geometry_for_dock(
 
 /// Dock arg parts for mpv, shared by the classic --player-args string and the
 /// fast-start path, which spawns mpv directly with an argv vector.
-/// Branded loading screen shown by the pre-launched idle player instead of
-/// mpv's "Drop files or URLs" screen. Written to the temp dir once; the
-/// stream's loadfile replaces the image when playback attaches.
+/// Branded loading image used for the offline goodbye screen only.
+/// Written to the temp dir once. Do not use as the initial fast-start media —
+/// starting on a silent image breaks audio when the live stream attaches.
 fn loading_image_path() -> Option<PathBuf> {
     static BYTES: &[u8] = include_bytes!("../assets/loading.png");
     let path = std::env::temp_dir().join("stgui-loading.png");
@@ -1368,6 +1510,8 @@ fn mpv_dock_arg_parts(
         "--cache=no".into(),
         "--demuxer-readahead-secs=0.5".into(),
         "--watch-later-options-clr".into(),
+        // Never inherit a muted watch-later / conf default.
+        "--mute=no".into(),
     ];
     // Options the dock owns; matching preset flags are dropped. Everything
     // else the user configured (loop-*, demuxer cache, custom extras, …) is
@@ -1383,6 +1527,7 @@ fn mpv_dock_arg_parts(
         "--keep-open",
         "--no-border",
         "--watch-later-options-clr",
+        "--mute",
     ];
     for p in rebuild_player_args_preserving_quotes(preset_args) {
         let key = p.split('=').next().unwrap_or(p.as_str());
@@ -1396,6 +1541,8 @@ fn mpv_dock_arg_parts(
     // Unique title so Win32 can find this mpv window (not a browser tab named after the channel).
     parts.push(format!("--title={}", mpv_window_title(channel)));
     parts.push(format!("--force-media-title={}", mpv_window_title(channel)));
+    // Last-one-wins: keep audible even if a custom extra tried to mute.
+    parts.push("--mute=no".into());
     parts
 }
 
@@ -1449,6 +1596,7 @@ fn rebuild_player_args_preserving_quotes(args: &str) -> Vec<String> {
 }
 
 /// Prefer an exact title match (mpv `--title=channel`), else prefix / contains.
+/// Includes minimized windows so dock group min/restore can still find players.
 #[cfg(windows)]
 fn find_window_by_title(needle: &str, exact_preferred: bool) -> Option<*mut core::ffi::c_void> {
     #[link(name = "user32")]
@@ -1458,9 +1606,22 @@ fn find_window_by_title(needle: &str, exact_preferred: bool) -> Option<*mut core
             lparam: isize,
         ) -> i32;
         fn IsWindowVisible(hwnd: *mut core::ffi::c_void) -> i32;
+        fn IsIconic(hwnd: *mut core::ffi::c_void) -> i32;
         fn GetWindow(hwnd: *mut core::ffi::c_void, cmd: u32) -> *mut core::ffi::c_void;
         fn GetWindowTextW(hwnd: *mut core::ffi::c_void, lp: *mut u16, n: i32) -> i32;
         fn GetWindowRect(hwnd: *mut core::ffi::c_void, rect: *mut WinRect) -> i32;
+        fn GetWindowPlacement(hwnd: *mut core::ffi::c_void, place: *mut WindowPlacement) -> i32;
+    }
+    #[repr(C)]
+    struct WindowPlacement {
+        length: u32,
+        flags: u32,
+        show_cmd: u32,
+        min_x: i32,
+        min_y: i32,
+        max_x: i32,
+        max_y: i32,
+        normal: WinRect,
     }
     const GW_OWNER: u32 = 4;
     struct Data {
@@ -1471,7 +1632,13 @@ fn find_window_by_title(needle: &str, exact_preferred: bool) -> Option<*mut core
     }
     unsafe extern "system" fn enum_cb(hwnd: *mut core::ffi::c_void, lparam: isize) -> i32 {
         let data = &mut *(lparam as *mut Data);
-        if IsWindowVisible(hwnd) == 0 || !GetWindow(hwnd, GW_OWNER).is_null() {
+        if !GetWindow(hwnd, GW_OWNER).is_null() {
+            return 1;
+        }
+        let visible = IsWindowVisible(hwnd) != 0;
+        let iconic = IsIconic(hwnd) != 0;
+        // Minimized windows still report visible; accept either path.
+        if !visible && !iconic {
             return 1;
         }
         let mut buf = [0u16; 512];
@@ -1493,18 +1660,46 @@ fn find_window_by_title(needle: &str, exact_preferred: bool) -> Option<*mut core
         if !is_exact && !is_soft {
             return 1;
         }
-        let mut rect = WinRect {
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-        };
-        if GetWindowRect(hwnd, &mut rect) == 0 {
-            return 1;
+        // GetWindowRect for iconic windows is often tiny (~taskbar button size).
+        let mut area = 0i64;
+        if iconic {
+            let mut place = WindowPlacement {
+                length: std::mem::size_of::<WindowPlacement>() as u32,
+                flags: 0,
+                show_cmd: 0,
+                min_x: 0,
+                min_y: 0,
+                max_x: 0,
+                max_y: 0,
+                normal: WinRect {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                },
+            };
+            if GetWindowPlacement(hwnd, &mut place) != 0 {
+                let r = place.normal;
+                area = (r.right - r.left).max(0) as i64 * (r.bottom - r.top).max(0) as i64;
+            }
+        } else {
+            let mut rect = WinRect {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+            };
+            if GetWindowRect(hwnd, &mut rect) == 0 {
+                return 1;
+            }
+            area = (rect.right - rect.left).max(0) as i64 * (rect.bottom - rect.top).max(0) as i64;
         }
-        let area = (rect.right - rect.left).max(0) as i64 * (rect.bottom - rect.top).max(0) as i64;
         if area < 20_000 {
-            return 1;
+            // Exact title + iconic: trust it even when the shell shrinks the
+            // visible rect to a taskbar thumbnail size.
+            if !(is_exact && iconic) {
+                return 1;
+            }
         }
         if is_exact {
             data.exact = hwnd;
@@ -1753,9 +1948,12 @@ fn raise_dock_windows(channels: &[String], reserve_chat: bool) {
             raise_hwnd(hwnd, false);
         }
     }
+    // Grips above players, still not global TOPMOST.
+    crate::dock::raise_grips();
 }
 
-/// Largest visible top-level window owned by `pid` (our spawned Chatterino only).
+/// Largest top-level window owned by `pid` (our spawned Chatterino only).
+/// Includes minimized windows so dock group min/restore can find chat.
 #[cfg(windows)]
 fn find_main_window_for_pid(pid: u32) -> Option<*mut core::ffi::c_void> {
     if pid == 0 {
@@ -1768,9 +1966,22 @@ fn find_main_window_for_pid(pid: u32) -> Option<*mut core::ffi::c_void> {
             lparam: isize,
         ) -> i32;
         fn IsWindowVisible(hwnd: *mut core::ffi::c_void) -> i32;
+        fn IsIconic(hwnd: *mut core::ffi::c_void) -> i32;
         fn GetWindow(hwnd: *mut core::ffi::c_void, cmd: u32) -> *mut core::ffi::c_void;
         fn GetWindowThreadProcessId(hwnd: *mut core::ffi::c_void, pid: *mut u32) -> u32;
         fn GetWindowRect(hwnd: *mut core::ffi::c_void, rect: *mut WinRect) -> i32;
+        fn GetWindowPlacement(hwnd: *mut core::ffi::c_void, place: *mut WindowPlacement) -> i32;
+    }
+    #[repr(C)]
+    struct WindowPlacement {
+        length: u32,
+        flags: u32,
+        show_cmd: u32,
+        min_x: i32,
+        min_y: i32,
+        max_x: i32,
+        max_y: i32,
+        normal: WinRect,
     }
     const GW_OWNER: u32 = 4;
     struct Data {
@@ -1780,7 +1991,13 @@ fn find_main_window_for_pid(pid: u32) -> Option<*mut core::ffi::c_void> {
     }
     unsafe extern "system" fn enum_cb(hwnd: *mut core::ffi::c_void, lparam: isize) -> i32 {
         let data = &mut *(lparam as *mut Data);
-        if IsWindowVisible(hwnd) == 0 || !GetWindow(hwnd, GW_OWNER).is_null() {
+        if !GetWindow(hwnd, GW_OWNER).is_null() {
+            return 1;
+        }
+        let visible = IsWindowVisible(hwnd) != 0;
+        let iconic = IsIconic(hwnd) != 0;
+        // Minimized windows are still "visible" to IsWindowVisible; accept either.
+        if !visible && !iconic {
             return 1;
         }
         let mut wpid = 0u32;
@@ -1788,16 +2005,39 @@ fn find_main_window_for_pid(pid: u32) -> Option<*mut core::ffi::c_void> {
         if wpid != data.pid {
             return 1;
         }
-        let mut rect = WinRect {
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-        };
-        if GetWindowRect(hwnd, &mut rect) == 0 {
-            return 1;
+        let mut area = 0i64;
+        if iconic {
+            let mut place = WindowPlacement {
+                length: std::mem::size_of::<WindowPlacement>() as u32,
+                flags: 0,
+                show_cmd: 0,
+                min_x: 0,
+                min_y: 0,
+                max_x: 0,
+                max_y: 0,
+                normal: WinRect {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                },
+            };
+            if GetWindowPlacement(hwnd, &mut place) != 0 {
+                let r = place.normal;
+                area = (r.right - r.left).max(0) as i64 * (r.bottom - r.top).max(0) as i64;
+            }
+        } else {
+            let mut rect = WinRect {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+            };
+            if GetWindowRect(hwnd, &mut rect) != 0 {
+                area =
+                    (rect.right - rect.left).max(0) as i64 * (rect.bottom - rect.top).max(0) as i64;
+            }
         }
-        let area = (rect.right - rect.left).max(0) as i64 * (rect.bottom - rect.top).max(0) as i64;
         if area < 10_000 {
             return 1;
         }
@@ -2014,13 +2254,20 @@ fn spawn_output_readers(
                         let replace2 = replace_ids.clone();
                         let handoff2 = handoff_done.clone();
                         thread::spawn(move || {
+                            // Clear any prior idle/loading playlist state, then
+                            // attach the live HTTP stream as a fresh demuxer.
+                            let _ =
+                                mpv_ipc_command(&fx.pipe, &["stop"], Duration::from_millis(800));
                             let attached = mpv_ipc_command(
                                 &fx.pipe,
-                                &["loadfile", &url],
+                                &["loadfile", &url, "replace"],
                                 Duration::from_secs(5),
                             )
                             .is_ok();
                             if attached {
+                                // Image/idle sessions leave mute/aid in a bad
+                                // state (speaker "!"); force audible playback.
+                                mpv_ensure_audible(&fx.pipe);
                                 // Clear the loading-phase show-text now that
                                 // video frames are on screen.
                                 let _ = mpv_ipc_command(
@@ -2245,12 +2492,11 @@ pub fn start_stream(
             let mut idle_argv = dock_argv.clone();
             idle_argv.push("--idle=yes".into());
             idle_argv.push(format!("--input-ipc-server={pipe}"));
-            // Branded loading screen instead of the "Drop files" idle screen.
-            // image-display-duration=inf keeps it up until loadfile replaces it.
-            idle_argv.push("--image-display-duration=inf".into());
-            if let Some(png) = loading_image_path() {
-                idle_argv.push(png.to_string_lossy().into_owned());
-            }
+            // Do NOT play loading.png as the first media file: an image has no
+            // audio track, and mpv can then fail to attach sound when loadfile
+            // replaces it with the live stream (speaker shows "!"). Branding
+            // is the OSD show-text below on a dark idle window instead.
+            idle_argv.push("--force-window=immediate".into());
             if let Ok(mpv_child) = Command::new(player_path)
                 .args(&idle_argv)
                 .stdin(Stdio::null())
@@ -2260,10 +2506,8 @@ pub fn start_stream(
             {
                 let job = assign_job(&mpv_child);
                 fast_pid = Some(mpv_child.id());
-                // The idle window would be a black rectangle until the stream
-                // attaches (~3 s). osd-msg1 does NOT repaint the idle window
-                // (verified via PrintWindow screenshots) — show-text does.
-                // Long duration; each later phase update replaces it.
+                // Idle window is otherwise empty until the stream attaches.
+                // show-text repaints immediately; osd-msg1 does not.
                 let osd_pipe = pipe.clone();
                 let osd_msg = format!("Starting {channel}…");
                 thread::spawn(move || {
@@ -2532,10 +2776,14 @@ pub fn toggle_stream_mute(state: &StreamingState, id: &str) -> Result<bool, Stre
                 "mute needs a fast-start mpv session (IPC). Restart the stream.".into(),
             )
         })?;
-    let flag = if next { "yes" } else { "no" };
-    mpv_ipc_command(
+    // JSON boolean — string "yes"/"no" is wrong for flag properties over IPC.
+    mpv_ipc_json(
         &pipe,
-        &["set_property", "mute", flag],
+        vec![
+            serde_json::Value::String("set_property".into()),
+            serde_json::Value::String("mute".into()),
+            serde_json::Value::Bool(next),
+        ],
         Duration::from_millis(800),
     )?;
     session.info.muted = next;
@@ -2836,6 +3084,164 @@ mod tests {
         // mpv_window_title strips anything outside [a-z0-9_-].
         assert_eq!(mpv_window_title("Some_Channel-1"), "stgui-some_channel-1");
         assert_eq!(mpv_window_title("äöü"), "stgui-stream");
+    }
+
+    /// Minimized windows report a tiny GetWindowRect (~160x28). The dock
+    /// minimize-sync watchdog must still resolve them by title.
+    #[test]
+    #[cfg(windows)]
+    fn find_window_by_title_keeps_iconic_hwnd() {
+        #[link(name = "user32")]
+        unsafe extern "system" {
+            fn RegisterClassExW(c: *const WndClassEx) -> u16;
+            fn CreateWindowExW(
+                ex: u32,
+                class: *const u16,
+                name: *const u16,
+                style: u32,
+                x: i32,
+                y: i32,
+                w: i32,
+                h: i32,
+                parent: *mut core::ffi::c_void,
+                menu: *mut core::ffi::c_void,
+                instance: *mut core::ffi::c_void,
+                param: *mut core::ffi::c_void,
+            ) -> *mut core::ffi::c_void;
+            fn DestroyWindow(hwnd: *mut core::ffi::c_void) -> i32;
+            fn ShowWindow(hwnd: *mut core::ffi::c_void, cmd: i32) -> i32;
+            fn DefWindowProcW(hwnd: *mut core::ffi::c_void, msg: u32, w: usize, l: isize) -> isize;
+            fn GetModuleHandleW(name: *const u16) -> *mut core::ffi::c_void;
+        }
+        #[repr(C)]
+        struct WndClassEx {
+            size: u32,
+            style: u32,
+            wnd_proc: Option<
+                unsafe extern "system" fn(*mut core::ffi::c_void, u32, usize, isize) -> isize,
+            >,
+            cls_extra: i32,
+            wnd_extra: i32,
+            instance: *mut core::ffi::c_void,
+            icon: *mut core::ffi::c_void,
+            cursor: *mut core::ffi::c_void,
+            background: *mut core::ffi::c_void,
+            menu_name: *const u16,
+            class_name: *const u16,
+            icon_sm: *mut core::ffi::c_void,
+        }
+        unsafe extern "system" fn wnd_proc(
+            hwnd: *mut core::ffi::c_void,
+            msg: u32,
+            w: usize,
+            l: isize,
+        ) -> isize {
+            DefWindowProcW(hwnd, msg, w, l)
+        }
+        fn wide(s: &str) -> Vec<u16> {
+            s.encode_utf16().chain(std::iter::once(0)).collect()
+        }
+
+        let class = wide("StguiIconicFindTest");
+        let title = wide("stgui-iconicfindtest");
+        let instance = unsafe { GetModuleHandleW(std::ptr::null()) };
+        let wc = WndClassEx {
+            size: std::mem::size_of::<WndClassEx>() as u32,
+            style: 0,
+            wnd_proc: Some(wnd_proc),
+            cls_extra: 0,
+            wnd_extra: 0,
+            instance,
+            icon: std::ptr::null_mut(),
+            cursor: std::ptr::null_mut(),
+            background: std::ptr::null_mut(),
+            menu_name: std::ptr::null(),
+            class_name: class.as_ptr(),
+            icon_sm: std::ptr::null_mut(),
+        };
+        unsafe {
+            RegisterClassExW(&wc);
+        }
+        // WS_OVERLAPPEDWINDOW | WS_VISIBLE
+        const STYLE: u32 = 0x00CF_0000 | 0x1000_0000;
+        let hwnd = unsafe {
+            CreateWindowExW(
+                0,
+                class.as_ptr(),
+                title.as_ptr(),
+                STYLE,
+                100,
+                100,
+                640,
+                480,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                instance,
+                std::ptr::null_mut(),
+            )
+        };
+        assert!(!hwnd.is_null(), "CreateWindowExW failed");
+        #[link(name = "user32")]
+        unsafe extern "system" {
+            fn PeekMessageW(
+                msg: *mut Msg,
+                hwnd: *mut core::ffi::c_void,
+                min: u32,
+                max: u32,
+                remove: u32,
+            ) -> i32;
+            fn TranslateMessage(msg: *const Msg) -> i32;
+            fn DispatchMessageW(msg: *const Msg) -> isize;
+        }
+        #[repr(C)]
+        struct Point {
+            x: i32,
+            y: i32,
+        }
+        #[repr(C)]
+        struct Msg {
+            hwnd: *mut core::ffi::c_void,
+            message: u32,
+            wparam: usize,
+            lparam: isize,
+            time: u32,
+            pt: Point,
+        }
+        let pump = || unsafe {
+            let mut msg = std::mem::zeroed::<Msg>();
+            while PeekMessageW(&mut msg, std::ptr::null_mut(), 0, 0, 1) != 0 {
+                TranslateMessage(&msg);
+                DispatchMessageW(&msg);
+            }
+        };
+        unsafe {
+            let _ = ShowWindow(hwnd, 5); // SW_SHOW
+        }
+        pump();
+        assert!(
+            find_window_by_title("stgui-iconicfindtest", true).is_some(),
+            "should find restored test window"
+        );
+        unsafe {
+            let _ = ShowWindow(hwnd, 6); // SW_MINIMIZE
+        }
+        pump();
+        std::thread::sleep(Duration::from_millis(100));
+        pump();
+        assert!(
+            is_hwnd_iconic(hwnd),
+            "test window should be iconic after minimize"
+        );
+        let found = find_window_by_title("stgui-iconicfindtest", true);
+        assert!(
+            found.is_some(),
+            "must still find iconic window (minimize-sync regression)"
+        );
+        assert_eq!(found.unwrap(), hwnd);
+        unsafe {
+            let _ = DestroyWindow(hwnd);
+        }
+        pump();
     }
 
     #[test]
