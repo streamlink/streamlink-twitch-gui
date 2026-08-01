@@ -322,7 +322,11 @@ async fn delete_subscription(token: &str, client_id: &str, id: &str) -> Result<(
     if res.status().is_success() || res.status().as_u16() == 404 {
         Ok(())
     } else {
-        Err(format!("delete sub {}: {}", res.status(), res.text().await.unwrap_or_default()))
+        Err(format!(
+            "delete sub {}: {}",
+            res.status(),
+            res.text().await.unwrap_or_default()
+        ))
     }
 }
 
