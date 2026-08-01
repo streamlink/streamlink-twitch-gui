@@ -883,6 +883,7 @@ fn start_dock_visibility_watchdog() {
         // 0 = shown/normal, 1 = minimized as a group
         let mut group_minimized = false;
         let mut seam_suppressed = false;
+        let mut grips_elevated = false;
         // Remember last-known member HWNDs. Once minimized, title/area scans
         // often miss borderless mpv (iconic rect is ~160x28), so without a
         // cache the watchdog never observes IsIconic and never syncs.
@@ -897,6 +898,10 @@ fn start_dock_visibility_watchdog() {
                     group_minimized = false;
                     DOCK_GROUP_MINIMIZED.store(false, Ordering::SeqCst);
                     crate::dock::show_grips();
+                }
+                if grips_elevated {
+                    crate::dock::demote_grips();
+                    grips_elevated = false;
                 }
                 cached.clear();
                 continue;
@@ -927,6 +932,7 @@ fn start_dock_visibility_watchdog() {
                 crate::dock::hide_grips();
                 minimize_dock_group(&hwnds);
                 group_minimized = true;
+                grips_elevated = false;
                 continue;
             }
             if group_minimized {
@@ -937,7 +943,8 @@ fn start_dock_visibility_watchdog() {
                     crate::dock::show_grips();
                     group_minimized = false;
                     seam_suppressed = false;
-                    // Refresh cache from live finds after restore/retile.
+                    grips_elevated = true; // Sync elevates; track that here.
+                                           // Refresh cache from live finds after restore/retile.
                     cached = dock_member_hwnds(&cfg.channels, cfg.reserve_chat);
                     continue;
                 }
@@ -961,10 +968,25 @@ fn start_dock_visibility_watchdog() {
                 }
             }
 
-            // Keep grey grips above mpv/chat only while the dock group (or a
-            // grip) is focused — never pin them over unrelated apps.
-            if cfg.linked && is_dock_surface_foreground(&cfg.channels, cfg.reserve_chat) {
-                crate::dock::raise_grips();
+            // Keep grey grips above mpv/chat while the dock owns focus.
+            // Re-assert TOPMOST every tick (mpv --ontop / BringWindowToTop can
+            // reorder the TOPMOST band). Only demote when FG is clearly a
+            // foreign app — never demote on a failed title scan (that buried
+            // the bars under the stream).
+            if cfg.linked {
+                match dock_focus_kind(&hwnds) {
+                    DockFocusKind::DockOrApp | DockFocusKind::Unknown => {
+                        // Re-elevate even when already tracked as elevated.
+                        crate::dock::raise_grips();
+                        grips_elevated = true;
+                    }
+                    DockFocusKind::Foreign => {
+                        if grips_elevated {
+                            crate::dock::demote_grips();
+                            grips_elevated = false;
+                        }
+                    }
+                }
             }
 
             // Chatterino usercards/menus sit above the main chat window; our seam
@@ -990,19 +1012,68 @@ fn start_dock_visibility_watchdog() {
 fn start_dock_visibility_watchdog() {}
 
 #[cfg(windows)]
-fn is_dock_surface_foreground(channels: &[String], reserve_chat: bool) -> bool {
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum DockFocusKind {
+    /// Our app, a grip, or a known dock member (mpv / owned Chatterino).
+    DockOrApp,
+    /// Some other process is foreground — safe to drop TOPMOST.
+    Foreign,
+    /// No FG window, or we have no member HWNDs to compare yet.
+    Unknown,
+}
+
+/// Classify the foreground window using the watchdog's HWND cache (not a
+/// fresh title scan — those miss borderless mpv and incorrectly demoted grips).
+#[cfg(windows)]
+fn dock_focus_kind(members: &[*mut core::ffi::c_void]) -> DockFocusKind {
     #[link(name = "user32")]
     unsafe extern "system" {
         fn GetForegroundWindow() -> *mut core::ffi::c_void;
+        fn GetWindowThreadProcessId(hwnd: *mut core::ffi::c_void, pid: *mut u32) -> u32;
+    }
+    #[link(name = "kernel32")]
+    unsafe extern "system" {
+        fn GetCurrentProcessId() -> u32;
     }
     let fg = unsafe { GetForegroundWindow() };
     if fg.is_null() {
-        return false;
+        return DockFocusKind::Unknown;
     }
     if crate::dock::is_grip_hwnd(fg) {
-        return true;
+        return DockFocusKind::DockOrApp;
     }
-    dock_member_hwnds(channels, reserve_chat).contains(&fg)
+    let mut fg_pid = 0u32;
+    unsafe {
+        GetWindowThreadProcessId(fg, &mut fg_pid);
+    }
+    if fg_pid != 0 && fg_pid == unsafe { GetCurrentProcessId() } {
+        return DockFocusKind::DockOrApp;
+    }
+    if members.is_empty() {
+        return DockFocusKind::Unknown;
+    }
+    if members.contains(&fg) {
+        return DockFocusKind::DockOrApp;
+    }
+    // mpv/Chatterino may focus a sibling top-level; match by process.
+    if fg_pid == 0 {
+        return DockFocusKind::Unknown;
+    }
+    let member_match = members.iter().any(|&h| {
+        if h.is_null() {
+            return false;
+        }
+        let mut pid = 0u32;
+        unsafe {
+            GetWindowThreadProcessId(h, &mut pid);
+        }
+        pid != 0 && pid == fg_pid
+    });
+    if member_match {
+        DockFocusKind::DockOrApp
+    } else {
+        DockFocusKind::Foreign
+    }
 }
 
 #[cfg(windows)]
