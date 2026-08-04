@@ -12,7 +12,7 @@ from PIL import Image
 MPV = r"C:\Program Files\MPV Player\mpv.exe"
 TITLE = "stgui-loadprobe"
 PIPE = r"\\.\pipe\stgui-loadprobe"
-LOADING = r"C:\Users\JK\Desktop\Anderes\GitHub\streamlink-twitch-gui\src-tauri\assets\loading.png"
+LOADING = r"C:\Users\ws\Desktop\Anderes\GitHub\streamlink-twitch-gui\src-tauri\assets\loading.png"
 
 user32 = ctypes.windll.user32
 gdi32 = ctypes.windll.gdi32
