@@ -103,9 +103,7 @@ pub(crate) fn load_token() -> Result<Option<String>, TwitchWebAuthError> {
 pub(crate) fn normalize_token(raw: &str) -> Result<String, TwitchWebAuthError> {
     let trimmed = raw.trim();
     let lower = trimmed.to_ascii_lowercase();
-    let token = if lower.starts_with("oauth:") {
-        &trimmed[6..]
-    } else if lower.starts_with("oauth ") {
+    let token = if lower.starts_with("oauth:") || lower.starts_with("oauth ") {
         &trimmed[6..]
     } else {
         trimmed
@@ -155,10 +153,7 @@ pub(crate) fn streamlink_config_path_for(
 
 pub(crate) fn remove_managed_block(existing: &str) -> String {
     let mut result = existing.to_string();
-    loop {
-        let Some(begin) = result.find(MANAGED_BEGIN) else {
-            break;
-        };
+    while let Some(begin) = result.find(MANAGED_BEGIN) {
         let after_begin = begin + MANAGED_BEGIN.len();
         let Some(relative_end) = result[after_begin..].find(MANAGED_END) else {
             let prefix = result[..begin].trim_end_matches(['\r', '\n']);
