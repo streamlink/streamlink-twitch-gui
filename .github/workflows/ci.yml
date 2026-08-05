@@ -5,50 +5,42 @@ on:
     branches: [master, main]
   pull_request:
 
-permissions:
-  contents: write
-
 jobs:
-  deduplicate-lifecycle:
+  frontend:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          ref: agent/channel-points-presence
-      - name: Remove duplicate generated hooks
-        shell: pwsh
-        run: |
-          @'
-          from pathlib import Path
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      # Fails on any high/critical advisory without a documented exception
+      # (see scripts/audit-gate.mjs for the allowlist + justifications).
+      - name: Dependency audit gate
+        run: node scripts/audit-gate.mjs
 
-          path = Path("src/lib/streaming/store.ts")
-          text = path.read_text(encoding="utf-8")
-          import_block = '''import {
-            buildPresenceTargets,
-            prunePresenceMetadata,
-            type PresenceMetadata,
-          } from "./presence";
-          '''
-          while import_block + import_block in text:
-              text = text.replace(import_block + import_block, import_block)
-          for line in (
-              "      rememberPresence(session.id, stream);\n",
-              "      syncViewerPresence();\n",
-              "      rememberPresence(started.id, target);\n",
-          ):
-              while line + line in text:
-                  text = text.replace(line + line, line)
-          path.write_text(text, encoding="utf-8")
-          '@ | Set-Content -Path .ci-dedupe.py -Encoding utf8
-          python .ci-dedupe.py
-          Remove-Item .ci-dedupe.py
-      - name: Commit cleanup
-        shell: pwsh
-        run: |
-          if (git status --porcelain -- src/lib/streaming/store.ts) {
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/lib/streaming/store.ts
-            git commit -m "fix: deduplicate viewer presence lifecycle hooks"
-            git push origin HEAD:agent/channel-points-presence
-          }
+  rust:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - name: Cargo fmt
+        working-directory: src-tauri
+        run: cargo fmt --check
+      - name: Cargo clippy
+        working-directory: src-tauri
+        run: cargo clippy -- -D warnings
+      - name: Cargo check
+        working-directory: src-tauri
+        run: cargo check
+      - name: Cargo test
+        working-directory: src-tauri
+        run: cargo test
