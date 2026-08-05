@@ -5,16 +5,11 @@ on:
     branches: [master, main]
   pull_request:
 
-permissions:
-  contents: write
-
 jobs:
   frontend:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: agent/twitch-web-auth
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -22,6 +17,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      # Fails on any high/critical advisory without a documented exception
+      # (see scripts/audit-gate.mjs for the allowlist + justifications).
       - name: Dependency audit gate
         run: node scripts/audit-gate.mjs
 
@@ -29,27 +26,21 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: agent/twitch-web-auth
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: src-tauri
-      - name: Apply rustfmt
+      - name: Cargo fmt
         working-directory: src-tauri
-        run: cargo fmt
-      - name: Commit rustfmt output
-        shell: pwsh
-        run: |
-          if (git status --porcelain -- src-tauri) {
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src-tauri
-            git commit -m "style: apply rustfmt"
-            git push origin HEAD:agent/twitch-web-auth
-          }
-      - name: Stop after formatting
-        shell: pwsh
-        run: exit 1
+        run: cargo fmt --check
+      - name: Cargo clippy
+        working-directory: src-tauri
+        run: cargo clippy -- -D warnings
+      - name: Cargo check
+        working-directory: src-tauri
+        run: cargo check
+      - name: Cargo test
+        working-directory: src-tauri
+        run: cargo test
