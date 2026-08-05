@@ -22,7 +22,9 @@ mod tests {
     fn inserts_and_replaces_only_the_managed_config_block() {
         let first = upsert_managed_block("player=mpv\n", "abcdefghijklmnopqrstuvwxyz0123");
         assert!(first.starts_with("player=mpv\n\n"));
-        assert!(first.contains("twitch-api-header=Authorization=OAuth abcdefghijklmnopqrstuvwxyz0123"));
+        assert!(first.contains(
+            "twitch-api-header=Authorization=OAuth abcdefghijklmnopqrstuvwxyz0123"
+        ));
 
         let replaced = upsert_managed_block(&first, "zyxwvutsrqponmlkjihgfedcba3210");
         assert!(replaced.contains("player=mpv"));
