@@ -5,35 +5,42 @@ on:
     branches: [master, main]
   pull_request:
 
-permissions:
-  contents: write
-
 jobs:
-  patch-staged-hook:
+  frontend:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          ref: agent/twitch-web-auth
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      # Fails on any high/critical advisory without a documented exception
+      # (see scripts/audit-gate.mjs for the allowlist + justifications).
+      - name: Dependency audit gate
+        run: node scripts/audit-gate.mjs
+
+  rust:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt
-      - name: Mark stacked hook as intentional
-        shell: pwsh
-        run: |
-          $path = "src-tauri/src/twitch_web_auth.rs"
-          $content = Get-Content -Raw $path
-          $needle = "pub(crate) fn load_token()"
-          $replacement = "#[allow(dead_code)]`r`npub(crate) fn load_token()"
-          if ($content.Contains($needle) -and -not $content.Contains("#[allow(dead_code)]`r`n$needle")) {
-            $content = $content.Replace($needle, $replacement)
-            Set-Content -Path $path -Value $content -NoNewline
-            Push-Location src-tauri
-            cargo fmt
-            Pop-Location
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add $path
-            git commit -m "chore: mark stacked auth hook as staged"
-            git push origin HEAD:agent/twitch-web-auth
-          }
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - name: Cargo fmt
+        working-directory: src-tauri
+        run: cargo fmt --check
+      - name: Cargo clippy
+        working-directory: src-tauri
+        run: cargo clippy -- -D warnings
+      - name: Cargo check
+        working-directory: src-tauri
+        run: cargo check
+      - name: Cargo test
+        working-directory: src-tauri
+        run: cargo test
