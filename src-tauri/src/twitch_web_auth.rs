@@ -54,19 +54,14 @@ mod tests {
 
     #[test]
     fn resolves_platform_config_paths() {
-        let windows = HashMap::from([(
-            "APPDATA",
-            r"C:\Users\Janik\AppData\Roaming",
-        )]);
+        let windows = HashMap::from([("APPDATA", r"C:\Users\Janik\AppData\Roaming")]);
         let windows_path = streamlink_config_path_for("windows", |key| {
             windows.get(key).map(|value| value.to_string())
         })
         .unwrap();
-        let expected_windows = PathBuf::from(
-            r"C:\Users\Janik\AppData\Roaming",
-        )
-        .join("streamlink")
-        .join("config.twitch");
+        let expected_windows = PathBuf::from(r"C:\Users\Janik\AppData\Roaming")
+            .join("streamlink")
+            .join("config.twitch");
         assert_eq!(windows_path, expected_windows);
 
         let linux = HashMap::from([("HOME", "/home/janik")]);
@@ -74,9 +69,7 @@ mod tests {
             linux.get(key).map(|value| value.to_string())
         })
         .unwrap();
-        let expected_linux = PathBuf::from(
-            "/home/janik/.config/streamlink/config.twitch",
-        );
+        let expected_linux = PathBuf::from("/home/janik/.config/streamlink/config.twitch");
         assert_eq!(linux_path, expected_linux);
     }
 }
