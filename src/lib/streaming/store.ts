@@ -544,7 +544,6 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
   stopSession: async (id) => {
     const session = get().sessions.find((s) => s.id === id);
     delete presenceMetadata[id];
-    delete presenceMetadata[id];
     const channel = session?.channel.toLowerCase();
     await invoke("stream_stop", { id });
     if (channel) {
@@ -561,10 +560,8 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     lastChatSyncKey = "";
     void invoke("close_owned_chatterino").catch(() => undefined);
     presenceMetadata = {};
-    presenceMetadata = {};
     set({ sessions: [], slotChannels: [], activeChatChannel: null });
     syncEventSub();
-    syncViewerPresence();
     syncViewerPresence();
   },
 
