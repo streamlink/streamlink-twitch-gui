@@ -147,9 +147,7 @@ pub async fn sync(
     let _website_token = crate::twitch_web_auth::load_token()
         .map_err(|error| ViewerPresenceError::Message(error.to_string()))?
         .ok_or_else(|| {
-            ViewerPresenceError::Message(
-                "authenticated Twitch playback is not configured".into(),
-            )
+            ViewerPresenceError::Message("authenticated Twitch playback is not configured".into())
         })?;
     let website = crate::twitch_web_auth::get_status()
         .map_err(|error| ViewerPresenceError::Message(error.to_string()))?;
@@ -403,8 +401,7 @@ pub(crate) fn build_minute_watched_payload(
 }
 
 pub(crate) fn base64_encode(input: &[u8]) -> String {
-    const ALPHABET: &[u8; 64] =
-        b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    const ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     let mut output = String::with_capacity(input.len().div_ceil(3) * 4);
     let mut index = 0;
     while index < input.len() {
@@ -414,8 +411,7 @@ pub(crate) fn base64_encode(input: &[u8]) -> String {
 
         output.push(ALPHABET[(first >> 2) as usize] as char);
         output.push(
-            ALPHABET[(((first & 0b0000_0011) << 4) | second.unwrap_or(0) >> 4) as usize]
-                as char,
+            ALPHABET[(((first & 0b0000_0011) << 4) | second.unwrap_or(0) >> 4) as usize] as char,
         );
         match second {
             Some(second) => output.push(
@@ -492,7 +488,8 @@ mod tests {
 
     #[test]
     fn extracts_runtime_settings_and_spade_urls() {
-        let html = r#"<script src="https://static.twitchcdn.net/config/settings.abc123.js"></script>"#;
+        let html =
+            r#"<script src="https://static.twitchcdn.net/config/settings.abc123.js"></script>"#;
         assert_eq!(
             extract_settings_url(html),
             Some("https://static.twitchcdn.net/config/settings.abc123.js".into())
