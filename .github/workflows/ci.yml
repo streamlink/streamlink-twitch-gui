@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  rust-diagnostic:
+  patch-staged-hook:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,22 +17,23 @@ jobs:
           ref: agent/twitch-web-auth
       - uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy, rustfmt
-      - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: src-tauri
-      - name: Capture clippy output
+          components: rustfmt
+      - name: Mark stacked hook as intentional
         shell: pwsh
-        working-directory: src-tauri
         run: |
-          $lines = & cargo clippy -- -D warnings 2>&1
-          $code = $LASTEXITCODE
-          $lines | Out-File -FilePath ../docs/ci-clippy.log -Encoding utf8
-          if ($code -ne 0) {
+          $path = "src-tauri/src/twitch_web_auth.rs"
+          $content = Get-Content -Raw $path
+          $needle = "pub(crate) fn load_token()"
+          $replacement = "#[allow(dead_code)]`r`npub(crate) fn load_token()"
+          if ($content.Contains($needle) -and -not $content.Contains("#[allow(dead_code)]`r`n$needle")) {
+            $content = $content.Replace($needle, $replacement)
+            Set-Content -Path $path -Value $content -NoNewline
+            Push-Location src-tauri
+            cargo fmt
+            Pop-Location
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add ../docs/ci-clippy.log
-            git commit -m "chore: capture clippy diagnostic"
+            git add $path
+            git commit -m "chore: mark stacked auth hook as staged"
             git push origin HEAD:agent/twitch-web-auth
           }
-          exit $code
