@@ -18,11 +18,6 @@ import {
   prunePresenceMetadata,
   type PresenceMetadata,
 } from "./presence";
-import {
-  buildPresenceTargets,
-  prunePresenceMetadata,
-  type PresenceMetadata,
-} from "./presence";
 
 export interface StreamSession {
   id: string;
@@ -401,7 +396,6 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
         },
       });
       rememberPresence(session.id, stream);
-      rememberPresence(session.id, stream);
       if (settings.gui.minimizeOnWatch && isTauri()) {
         void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
           void getCurrentWindow().minimize();
@@ -417,7 +411,6 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
             ? stream.user_login
             : state.activeChatChannel,
       }));
-      syncViewerPresence();
       syncViewerPresence();
       // Kick the debounced layout once the session is registered (orderedChannels
       // reads the store). The "ready" status event re-triggers it later; the
@@ -529,7 +522,6 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           layout: currentLayout(),
         },
       });
-      rememberPresence(started.id, target);
       rememberPresence(started.id, target);
       set((state) => ({
         sessions: [
