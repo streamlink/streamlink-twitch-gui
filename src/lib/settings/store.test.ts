@@ -22,6 +22,7 @@ describe("migrateSettings", () => {
     expect(result.streaming.chatWidthFraction).toBe(0.18);
     expect(result.streaming.lowLatency).toBe(false);
     expect(result.streaming.disableAds).toBe(false);
+    expect(result.streaming.channelPoints).toBe(false);
     expect(result.streaming.seamlessSwitch).toBe(true);
     expect(result.streaming.followRaids).toBe(true);
     expect(result.streaming.streamLanguages).toEqual([]);
@@ -69,6 +70,7 @@ describe("migrateSettings", () => {
       },
     });
     expect(result.streaming.disableAds).toBe(false);
+    expect(result.streaming.channelPoints).toBe(false);
     expect(result.streaming.seamlessSwitch).toBe(true);
     expect(result.streaming.webbrowser).toBe(false);
     expect(result.player.input).toBe("default");
