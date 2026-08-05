@@ -47,18 +47,24 @@ mod tests {
     #[test]
     fn resolves_platform_config_paths_from_explicit_environment() {
         let windows = HashMap::from([("APPDATA", r"C:\Users\Janik\AppData\Roaming")]);
+        let windows_path = streamlink_config_path_for("windows", |key| {
+            windows.get(key).map(|value| value.to_string())
+        })
+        .unwrap();
         assert_eq!(
-            streamlink_config_path_for("windows", |key| windows.get(key).map(|v| v.to_string()))
-                .unwrap(),
+            windows_path,
             std::path::PathBuf::from(r"C:\Users\Janik\AppData\Roaming")
                 .join("streamlink")
                 .join("config.twitch")
         );
 
         let linux = HashMap::from([("HOME", "/home/janik")]);
+        let linux_path = streamlink_config_path_for("linux", |key| {
+            linux.get(key).map(|value| value.to_string())
+        })
+        .unwrap();
         assert_eq!(
-            streamlink_config_path_for("linux", |key| linux.get(key).map(|v| v.to_string()))
-                .unwrap(),
+            linux_path,
             std::path::PathBuf::from("/home/janik/.config/streamlink/config.twitch")
         );
     }
