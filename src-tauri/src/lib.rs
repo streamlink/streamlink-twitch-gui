@@ -8,6 +8,7 @@ mod eventsub;
 mod helix;
 mod http;
 mod streaming;
+mod twitch_web_auth;
 
 use auth::{AuthSession, DeviceCodeResponse};
 use doctor::DoctorReport;
