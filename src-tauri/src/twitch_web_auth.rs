@@ -95,6 +95,7 @@ fn clear_auth() -> Result<(), TwitchWebAuthError> {
     }
 }
 
+#[allow(dead_code)]
 pub(crate) fn load_token() -> Result<Option<String>, TwitchWebAuthError> {
     Ok(load_auth()?.map(|auth| auth.token))
 }
