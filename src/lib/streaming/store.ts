@@ -18,6 +18,11 @@ import {
   prunePresenceMetadata,
   type PresenceMetadata,
 } from "./presence";
+import {
+  buildPresenceTargets,
+  prunePresenceMetadata,
+  type PresenceMetadata,
+} from "./presence";
 
 export interface StreamSession {
   id: string;
@@ -396,6 +401,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
         },
       });
       rememberPresence(session.id, stream);
+      rememberPresence(session.id, stream);
       if (settings.gui.minimizeOnWatch && isTauri()) {
         void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
           void getCurrentWindow().minimize();
@@ -411,6 +417,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
             ? stream.user_login
             : state.activeChatChannel,
       }));
+      syncViewerPresence();
       syncViewerPresence();
       // Kick the debounced layout once the session is registered (orderedChannels
       // reads the store). The "ready" status event re-triggers it later; the
@@ -523,6 +530,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
         },
       });
       rememberPresence(started.id, target);
+      rememberPresence(started.id, target);
       set((state) => ({
         sessions: [
           ...state.sessions.filter((s) => s.id !== started.id && s.id !== session.id),
@@ -544,6 +552,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
   stopSession: async (id) => {
     const session = get().sessions.find((s) => s.id === id);
     delete presenceMetadata[id];
+    delete presenceMetadata[id];
     const channel = session?.channel.toLowerCase();
     await invoke("stream_stop", { id });
     if (channel) {
@@ -560,8 +569,10 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     lastChatSyncKey = "";
     void invoke("close_owned_chatterino").catch(() => undefined);
     presenceMetadata = {};
+    presenceMetadata = {};
     set({ sessions: [], slotChannels: [], activeChatChannel: null });
     syncEventSub();
+    syncViewerPresence();
     syncViewerPresence();
   },
 
