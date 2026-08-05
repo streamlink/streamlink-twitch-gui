@@ -53,6 +53,25 @@ async fn auth_logout() -> Result<(), String> {
     auth::logout().await.map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn twitch_web_auth_status() -> Result<twitch_web_auth::TwitchWebAuthStatus, String> {
+    twitch_web_auth::get_status().map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+async fn twitch_web_auth_save(
+    token: String,
+) -> Result<twitch_web_auth::TwitchWebAuthStatus, String> {
+    twitch_web_auth::save(&token)
+        .await
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn twitch_web_auth_clear() -> Result<twitch_web_auth::TwitchWebAuthStatus, String> {
+    twitch_web_auth::clear().map_err(|e| e.to_string())
+}
+
 /// Helix GET proxy: keeps the OAuth token inside Rust (never in the webview).
 #[tauri::command]
 async fn helix_fetch(
@@ -215,6 +234,9 @@ pub fn run() {
             auth_start_device_login,
             auth_poll_device_login,
             auth_logout,
+            twitch_web_auth_status,
+            twitch_web_auth_save,
+            twitch_web_auth_clear,
             helix_fetch,
             stream_start,
             stream_list,
