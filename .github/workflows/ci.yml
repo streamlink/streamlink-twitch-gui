@@ -34,7 +34,13 @@ jobs:
           workspaces: src-tauri
       - name: Cargo fmt
         working-directory: src-tauri
-        run: cargo fmt --check
+        shell: pwsh
+        run: |
+          cargo fmt
+          "``````diff" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+          git diff -- . | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+          "``````" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+          git diff --exit-code -- .
       - name: Cargo clippy
         working-directory: src-tauri
         run: cargo clippy -- -D warnings
