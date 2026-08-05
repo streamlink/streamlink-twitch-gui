@@ -10,10 +10,8 @@ const SERVICE: &str = "streamlink-twitch-gui";
 const USER: &str = "twitch-website-oauth";
 const VALIDATE_URL: &str = "https://id.twitch.tv/oauth2/validate";
 
-pub(crate) const MANAGED_BEGIN: &str =
-    "# BEGIN streamlink-twitch-gui managed Twitch auth";
-pub(crate) const MANAGED_END: &str =
-    "# END streamlink-twitch-gui managed Twitch auth";
+pub(crate) const MANAGED_BEGIN: &str = "# BEGIN streamlink-twitch-gui managed Twitch auth";
+pub(crate) const MANAGED_END: &str = "# END streamlink-twitch-gui managed Twitch auth";
 
 #[derive(Debug, Error)]
 pub enum TwitchWebAuthError {
@@ -58,8 +56,8 @@ fn ensure_keyring() -> Result<(), TwitchWebAuthError> {
     let result = INIT.get_or_init(|| {
         #[cfg(windows)]
         {
-            let store = windows_native_keyring_store::Store::new()
-                .map_err(|error| error.to_string())?;
+            let store =
+                windows_native_keyring_store::Store::new().map_err(|error| error.to_string())?;
             keyring_core::set_default_store(store);
         }
         Ok(())
@@ -69,8 +67,7 @@ fn ensure_keyring() -> Result<(), TwitchWebAuthError> {
 
 fn entry() -> Result<Entry, TwitchWebAuthError> {
     ensure_keyring()?;
-    Entry::new(SERVICE, USER)
-        .map_err(|error| TwitchWebAuthError::Keyring(error.to_string()))
+    Entry::new(SERVICE, USER).map_err(|error| TwitchWebAuthError::Keyring(error.to_string()))
 }
 
 fn load_auth() -> Result<Option<StoredWebsiteAuth>, TwitchWebAuthError> {
@@ -114,7 +111,9 @@ pub(crate) fn normalize_token(raw: &str) -> Result<String, TwitchWebAuthError> {
     };
 
     if !(20..=200).contains(&token.len())
-        || !token.chars().all(|character| character.is_ascii_alphanumeric())
+        || !token
+            .chars()
+            .all(|character| character.is_ascii_alphanumeric())
     {
         return Err(TwitchWebAuthError::Message(
             "invalid Twitch website token format".into(),
@@ -141,11 +140,13 @@ pub(crate) fn streamlink_config_path_for(
             .ok_or_else(|| TwitchWebAuthError::Message("HOME is not set".into()))?,
         _ => env("XDG_CONFIG_HOME")
             .map(PathBuf::from)
-            .or_else(|| env("HOME").map(PathBuf::from).map(|home| home.join(".config")))
+            .or_else(|| {
+                env("HOME")
+                    .map(PathBuf::from)
+                    .map(|home| home.join(".config"))
+            })
             .ok_or_else(|| {
-                TwitchWebAuthError::Message(
-                    "neither XDG_CONFIG_HOME nor HOME is set".into(),
-                )
+                TwitchWebAuthError::Message("neither XDG_CONFIG_HOME nor HOME is set".into())
             })?,
     };
     Ok(base.join("streamlink").join("config.twitch"))
@@ -189,9 +190,8 @@ pub(crate) fn remove_managed_block(existing: &str) -> String {
 pub(crate) fn upsert_managed_block(existing: &str, token: &str) -> String {
     let cleaned = remove_managed_block(existing);
     let user_config = cleaned.trim_end_matches(['\r', '\n']);
-    let block = format!(
-        "{MANAGED_BEGIN}\ntwitch-api-header=Authorization=OAuth {token}\n{MANAGED_END}\n"
-    );
+    let block =
+        format!("{MANAGED_BEGIN}\ntwitch-api-header=Authorization=OAuth {token}\n{MANAGED_END}\n");
     if user_config.is_empty() {
         block
     } else {
@@ -263,8 +263,7 @@ fn status_from(
         configured: auth.is_some(),
         login: auth.as_ref().map(|value| value.login.clone()),
         user_id: auth.as_ref().map(|value| value.user_id.clone()),
-        streamlink_configured: config.contains(MANAGED_BEGIN)
-            && config.contains(MANAGED_END),
+        streamlink_configured: config.contains(MANAGED_BEGIN) && config.contains(MANAGED_END),
         config_path: path.to_string_lossy().into_owned(),
     })
 }
