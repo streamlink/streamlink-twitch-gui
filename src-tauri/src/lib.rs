@@ -9,6 +9,7 @@ mod helix;
 mod http;
 mod streaming;
 mod twitch_web_auth;
+mod viewer_presence;
 
 use auth::{AuthSession, DeviceCodeResponse};
 use doctor::DoctorReport;
