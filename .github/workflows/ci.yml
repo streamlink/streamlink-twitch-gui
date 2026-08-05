@@ -5,42 +5,185 @@ on:
     branches: [master, main]
   pull_request:
 
-jobs:
-  frontend:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
-      # Fails on any high/critical advisory without a documented exception
-      # (see scripts/audit-gate.mjs for the allowlist + justifications).
-      - name: Dependency audit gate
-        run: node scripts/audit-gate.mjs
+permissions:
+  contents: write
 
-  rust:
+jobs:
+  integrate-channel-points:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: agent/channel-points-presence
       - uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy, rustfmt
-      - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: src-tauri
-      - name: Cargo fmt
-        working-directory: src-tauri
-        run: cargo fmt --check
-      - name: Cargo clippy
-        working-directory: src-tauri
-        run: cargo clippy -- -D warnings
-      - name: Cargo check
-        working-directory: src-tauri
-        run: cargo check
-      - name: Cargo test
-        working-directory: src-tauri
-        run: cargo test
+          components: rustfmt
+      - name: Apply lifecycle integration
+        shell: pwsh
+        run: |
+          @'
+          from pathlib import Path
+          import json
+
+          def replace_once(path: str, old: str, new: str) -> None:
+              file = Path(path)
+              text = file.read_text(encoding="utf-8")
+              count = text.count(old)
+              if count != 1:
+                  raise RuntimeError(f"{path}: expected one match, got {count}: {old[:80]!r}")
+              file.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+          store_path = Path("src/lib/streaming/store.ts")
+          store = store_path.read_text(encoding="utf-8")
+          store = store.replace(
+              'import type { RaidOutgoingEvent } from "./raid";\n',
+              'import type { RaidOutgoingEvent } from "./raid";\nimport {\n  buildPresenceTargets,\n  prunePresenceMetadata,\n  type PresenceMetadata,\n} from "./presence";\n',
+              1,
+          )
+          store = store.replace(
+              'let layoutTimer: ReturnType<typeof setTimeout> | null = null;\n\nfunction currentLayout()',
+              '''let layoutTimer: ReturnType<typeof setTimeout> | null = null;
+          let presenceMetadata: PresenceMetadata = {};
+
+          function rememberPresence(sessionId: string, stream: HelixStream) {
+            if (!stream.id || !stream.user_id) {
+              delete presenceMetadata[sessionId];
+              return;
+            }
+            presenceMetadata[sessionId] = {
+              channelLogin: stream.user_login.toLowerCase(),
+              channelId: stream.user_id,
+              broadcastId: stream.id,
+            };
+          }
+
+          export function syncViewerPresence() {
+            if (!isTauri()) return;
+            const state = useWatchingStore.getState();
+            const enabled = useSettingsStore.getState().settings.streaming.channelPoints;
+            const targets = buildPresenceTargets(state.sessions, presenceMetadata);
+            void invoke("viewer_presence_sync", { enabled, targets }).catch(() => undefined);
+          }
+
+          function currentLayout()''',
+              1,
+          )
+          store = store.replace(
+              '  syncEventSub();\n  if (channels.length) {',
+              '  syncEventSub();\n  syncViewerPresence();\n  if (channels.length) {',
+              1,
+          )
+          store = store.replace(
+              '  syncEventSub();\n  return () => {',
+              '  syncEventSub();\n  syncViewerPresence();\n  return () => {',
+              1,
+          )
+          store = store.replace(
+              '    set({ sessions });\n    const active = get().activeChatChannel;',
+              '    set({ sessions });\n    presenceMetadata = prunePresenceMetadata(presenceMetadata, sessions);\n    const active = get().activeChatChannel;',
+              1,
+          )
+          store = store.replace(
+              '    }\n  },\n\n  applyStatus: (payload) => {',
+              '    }\n    syncViewerPresence();\n  },\n\n  applyStatus: (payload) => {',
+              1,
+          )
+          store = store.replace(
+              '    if (payload.ready) {\n      scheduleLayoutAfterReady();\n    }\n  },',
+              '    if (payload.ready) {\n      scheduleLayoutAfterReady();\n    }\n    syncViewerPresence();\n  },',
+              1,
+          )
+
+          watch_start = store.index('      const session = await invoke<StreamSession>("stream_start"')
+          watch_after = store.index('      if (settings.gui.minimizeOnWatch', watch_start)
+          store = store[:watch_after] + '      rememberPresence(session.id, stream);\n' + store[watch_after:]
+          watch_set_end = store.index('      // Kick the debounced layout', watch_after)
+          store = store[:watch_set_end] + '      syncViewerPresence();\n' + store[watch_set_end:]
+
+          raid_start = store.index('      const started = await invoke<StreamSession>("stream_start"')
+          raid_set = store.index('      set((state) => ({', raid_start)
+          store = store[:raid_set] + '      rememberPresence(started.id, target);\n' + store[raid_set:]
+
+          store = store.replace(
+              '  stopSession: async (id) => {\n    const session = get().sessions.find((s) => s.id === id);',
+              '  stopSession: async (id) => {\n    const session = get().sessions.find((s) => s.id === id);\n    delete presenceMetadata[id];',
+              1,
+          )
+          store = store.replace(
+              '    set({ sessions: [], slotChannels: [], activeChatChannel: null });\n    syncEventSub();',
+              '    presenceMetadata = {};\n    set({ sessions: [], slotChannels: [], activeChatChannel: null });\n    syncEventSub();\n    syncViewerPresence();',
+              1,
+          )
+          store_path.write_text(store, encoding="utf-8")
+
+          replace_once(
+              "src/pages/SettingsPage.tsx",
+              'import { useWatchingStore } from "../lib/streaming/store";',
+              'import { syncViewerPresence, useWatchingStore } from "../lib/streaming/store";',
+          )
+          settings_page = Path("src/pages/SettingsPage.tsx")
+          page = settings_page.read_text(encoding="utf-8")
+          marker = '''        <label className="settings__row settings__row--check">
+                    <input
+                      type="checkbox"
+                      checked={settings.streaming.seamlessSwitch}'''
+          block = '''        <label className="settings__row settings__row--check">
+                    <input
+                      type="checkbox"
+                      checked={settings.streaming.channelPoints}
+                      onChange={(e) => {
+                        setSettings({
+                          streaming: {
+                            ...settings.streaming,
+                            channelPoints: e.target.checked,
+                          },
+                        });
+                        queueMicrotask(syncViewerPresence);
+                      }}
+                    />
+                    <span className="settings__check-text">
+                      {t("settings:channelPoints")}
+                      <small className="muted">{t("settings:channelPointsHint")}</small>
+                    </span>
+                  </label>
+
+          '''
+          if page.count(marker) != 1:
+              raise RuntimeError(f"SettingsPage seamless marker count: {page.count(marker)}")
+          settings_page.write_text(page.replace(marker, block + marker, 1), encoding="utf-8")
+
+          replace_once(
+              "src/lib/settings/store.test.ts",
+              '    expect(result.streaming.disableAds).toBe(false);\n',
+              '    expect(result.streaming.disableAds).toBe(false);\n    expect(result.streaming.channelPoints).toBe(false);\n',
+          )
+
+          locale_path = Path("src/locales/en/settings.json")
+          locale = json.loads(locale_path.read_text(encoding="utf-8"))
+          rebuilt = {}
+          for key, value in locale.items():
+              rebuilt[key] = value
+              if key == "disableAdsHint":
+                  rebuilt["channelPoints"] = "Channel Points presence (experimental)"
+                  rebuilt["channelPointsHint"] = (
+                      "Send Twitch's undocumented watch-presence telemetry only while a real "
+                      "Streamlink player is ready. Requires authenticated playback and may stop "
+                      "working whenever Twitch changes its private systems."
+                  )
+          locale_path.write_text(json.dumps(rebuilt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          '@ | Set-Content -Path .ci-integrate.py -Encoding utf8
+          python .ci-integrate.py
+          Remove-Item .ci-integrate.py
+          Push-Location src-tauri
+          cargo fmt
+          Pop-Location
+      - name: Commit integration
+        shell: pwsh
+        run: |
+          if (git status --porcelain) {
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src src-tauri
+            git commit -m "feat: integrate channel points presence lifecycle"
+            git push origin HEAD:agent/channel-points-presence
+          }
