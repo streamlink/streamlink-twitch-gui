@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "../lib/auth/store";
+import { TwitchWebsiteAuth } from "./TwitchWebsiteAuth";
 import "./AuthBar.css";
 
 export function AuthBar({ compact = false }: { compact?: boolean }) {
@@ -37,27 +38,30 @@ export function AuthBar({ compact = false }: { compact?: boolean }) {
         </div>
       ) : null}
       {session?.loggedIn ? (
-        <div className="authbar__user">
-          {session.profileImageUrl ? (
-            <img
-              src={session.profileImageUrl}
-              alt=""
-              className="authbar__avatar"
-              width={28}
-              height={28}
-            />
-          ) : null}
-          <span className="authbar__name">
-            {session.displayName ?? session.login}
-          </span>
-          <button
-            type="button"
-            className="button-secondary"
-            onClick={() => void logout()}
-          >
-            {t("logout")}
-          </button>
-        </div>
+        <>
+          <div className="authbar__user">
+            {session.profileImageUrl ? (
+              <img
+                src={session.profileImageUrl}
+                alt=""
+                className="authbar__avatar"
+                width={28}
+                height={28}
+              />
+            ) : null}
+            <span className="authbar__name">
+              {session.displayName ?? session.login}
+            </span>
+            <button
+              type="button"
+              className="button-secondary"
+              onClick={() => void logout()}
+            >
+              {t("logout")}
+            </button>
+          </div>
+          <TwitchWebsiteAuth compact={compact} />
+        </>
       ) : !device ? (
         <button
           type="button"
