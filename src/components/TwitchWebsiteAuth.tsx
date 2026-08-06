@@ -42,6 +42,9 @@ export function TwitchWebsiteAuth({ compact = false }: { compact?: boolean }) {
       const completed = completeWebsiteAuthSave(token, next);
       setToken(completed.token);
       setStatus(completed.status);
+      void import("../lib/streaming/store").then(({ syncViewerPresence }) => {
+        syncViewerPresence(true);
+      });
       setExpanded(false);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason));
