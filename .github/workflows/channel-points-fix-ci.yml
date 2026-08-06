@@ -1,0 +1,44 @@
+name: Channel Points Fix CI
+
+on:
+  push:
+    branches:
+      - fix/channel-points-playback-correlation
+
+jobs:
+  frontend:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Dependency audit gate
+        run: node scripts/audit-gate.mjs
+
+  rust:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - name: Cargo fmt
+        working-directory: src-tauri
+        run: cargo fmt --check
+      - name: Cargo clippy
+        working-directory: src-tauri
+        run: cargo clippy -- -D warnings
+      - name: Cargo check
+        working-directory: src-tauri
+        run: cargo check
+      - name: Cargo test
+        working-directory: src-tauri
+        run: cargo test
