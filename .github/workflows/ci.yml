@@ -5,197 +5,42 @@ on:
     branches: [master, main]
   pull_request:
 
-permissions:
-  contents: write
-
 jobs:
-  apply-review-fixes:
+  frontend:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          ref: agent/channel-points-presence
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      # Fails on any high/critical advisory without a documented exception
+      # (see scripts/audit-gate.mjs for the allowlist + justifications).
+      - name: Dependency audit gate
+        run: node scripts/audit-gate.mjs
+
+  rust:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt
-      - name: Apply concurrency and ordering fixes
-        shell: pwsh
-        run: |
-          @'
-          from pathlib import Path
-
-          def replace_if_present(path: str, old: str, new: str) -> None:
-              file = Path(path)
-              text = file.read_text(encoding="utf-8")
-              if old in text:
-                  file.write_text(text.replace(old, new, 1), encoding="utf-8")
-
-          viewer = "src-tauri/src/viewer_presence.rs"
-          replace_if_present(
-              viewer,
-              "use std::sync::atomic::{AtomicBool, Ordering};",
-              "use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};",
-          )
-          replace_if_present(
-              viewer,
-              '''pub struct ViewerPresenceState {
-              workers: Mutex<HashMap<String, Worker>>,
-          }''',
-              '''pub struct ViewerPresenceState {
-              workers: Mutex<HashMap<String, Worker>>,
-              sync_gate: tokio::sync::Mutex<()>,
-              generation: AtomicU64,
-          }''',
-          )
-          replace_if_present(
-              viewer,
-              '''        Self {
-                      workers: Mutex::new(HashMap::new()),
-                  }''',
-              '''        Self {
-                      workers: Mutex::new(HashMap::new()),
-                      sync_gate: tokio::sync::Mutex::new(()),
-                      generation: AtomicU64::new(0),
-                  }''',
-          )
-          replace_if_present(
-              viewer,
-              '''pub fn cancel_all(state: &ViewerPresenceState) {
-              if let Ok(mut workers) = state.workers.lock() {''',
-              '''pub fn cancel_all(state: &ViewerPresenceState) {
-              state.generation.fetch_add(1, Ordering::AcqRel);
-              if let Ok(mut workers) = state.workers.lock() {''',
-          )
-          replace_if_present(
-              viewer,
-              ''') -> Result<ViewerPresenceStatus, ViewerPresenceError> {
-              if !enabled {''',
-              ''') -> Result<ViewerPresenceStatus, ViewerPresenceError> {
-              let _sync_guard = state.sync_gate.lock().await;
-              if !enabled {''',
-          )
-          replace_if_present(
-              viewer,
-              '''    let _website_token = crate::twitch_web_auth::load_token()''',
-              '''    let generation = state.generation.load(Ordering::Acquire);
-
-              let _website_token = crate::twitch_web_auth::load_token()''',
-          )
-          replace_if_present(
-              viewer,
-              '''    let desired = selected
-                  .iter()''',
-              '''    if state.generation.load(Ordering::Acquire) != generation {
-                  return status(&state, true, limited);
-              }
-
-              let desired = selected
-                  .iter()''',
-          )
-          replace_if_present(
-              viewer,
-              '''            run_worker(worker_state, target, worker_viewer_id, cancel).await;''',
-              '''            run_worker(
-                          worker_state,
-                          target,
-                          worker_viewer_id,
-                          generation,
-                          cancel,
-                      )
-                      .await;''',
-          )
-          replace_if_present(
-              viewer,
-              '''    viewer_id: String,
-              cancel: Arc<AtomicBool>,
-          ) {''',
-              '''    viewer_id: String,
-              generation: u64,
-              cancel: Arc<AtomicBool>,
-          ) {''',
-          )
-          replace_if_present(
-              viewer,
-              '''        if cancel.load(Ordering::Acquire) || !website_auth_still_matches(&viewer_id) {''',
-              '''        if cancel.load(Ordering::Acquire)
-                      || state.generation.load(Ordering::Acquire) != generation
-                      || !website_auth_still_matches(&viewer_id)
-                  {''',
-          )
-
-          store = "src/lib/streaming/store.ts"
-          replace_if_present(
-              store,
-              '''let layoutTimer: ReturnType<typeof setTimeout> | null = null;
-          let presenceMetadata: PresenceMetadata = {};''',
-              '''let layoutTimer: ReturnType<typeof setTimeout> | null = null;
-          let presenceMetadata: PresenceMetadata = {};
-          let lastPresenceSyncKey = "";''',
-          )
-          replace_if_present(
-              store,
-              '''export function syncViewerPresence() {
-            if (!isTauri()) return;
-            const state = useWatchingStore.getState();
-            const enabled = useSettingsStore.getState().settings.streaming.channelPoints;
-            const targets = buildPresenceTargets(state.sessions, presenceMetadata);
-            void invoke("viewer_presence_sync", { enabled, targets }).catch(() => undefined);
-          }''',
-              '''export function syncViewerPresence(force = false) {
-            if (!isTauri()) return;
-            const state = useWatchingStore.getState();
-            const settings = useSettingsStore.getState().settings;
-            const preferredSessionIds = settings.streaming.seamlessSwitch
-              ? []
-              : state.slotChannels
-                  .map(
-                    (channel) =>
-                      state.sessions.find(
-                        (session) => session.channel.toLowerCase() === channel,
-                      )?.id,
-                  )
-                  .filter((sessionId): sessionId is string => Boolean(sessionId));
-            const enabled = settings.streaming.channelPoints;
-            const targets = buildPresenceTargets(
-              state.sessions,
-              presenceMetadata,
-              preferredSessionIds,
-            );
-            const key = JSON.stringify({ enabled, targets });
-            if (!force && key === lastPresenceSyncKey) return;
-            lastPresenceSyncKey = key;
-            void invoke("viewer_presence_sync", { enabled, targets }).catch(() => {
-              if (lastPresenceSyncKey === key) {
-                lastPresenceSyncKey = "";
-              }
-            });
-          }''',
-          )
-
-          component = "src/components/TwitchWebsiteAuth.tsx"
-          replace_if_present(
-              component,
-              '''      setStatus(completed.status);
-                    setExpanded(false);''',
-              '''      setStatus(completed.status);
-                    void import("../lib/streaming/store").then(({ syncViewerPresence }) => {
-                      syncViewerPresence(true);
-                    });
-                    setExpanded(false);''',
-          )
-          '@ | Set-Content -Path .ci-review-fixes.py -Encoding utf8
-          python .ci-review-fixes.py
-          Remove-Item .ci-review-fixes.py
-          Push-Location src-tauri
-          cargo fmt
-          Pop-Location
-      - name: Commit fixes
-        shell: pwsh
-        run: |
-          if (git status --porcelain -- src src-tauri) {
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src src-tauri
-            git commit -m "fix: serialize and stabilize viewer presence sync"
-            git push origin HEAD:agent/channel-points-presence
-          }
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - name: Cargo fmt
+        working-directory: src-tauri
+        run: cargo fmt --check
+      - name: Cargo clippy
+        working-directory: src-tauri
+        run: cargo clippy -- -D warnings
+      - name: Cargo check
+        working-directory: src-tauri
+        run: cargo check
+      - name: Cargo test
+        working-directory: src-tauri
+        run: cargo test
