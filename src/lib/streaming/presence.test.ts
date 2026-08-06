@@ -64,6 +64,16 @@ describe("viewer presence lifecycle", () => {
     ]);
   });
 
+  it("uses the stable multistream slot order instead of backend map order", () => {
+    const targets = buildPresenceTargets(sessions, metadata, [
+      "three",
+      "one",
+      "two",
+    ]);
+
+    expect(targets.map((target) => target.sessionId)).toEqual(["three", "one"]);
+  });
+
   it("ignores incomplete Twitch identifiers", () => {
     const targets = buildPresenceTargets(
       [{ id: "broken", running: true, ready: true }],
