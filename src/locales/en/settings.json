@@ -24,6 +24,8 @@
   "lowLatencyHint": "Passes --twitch-low-latency (closer to live). Cold start is dominated by Twitch playlist fetch (~2s), not this flag.",
   "disableAds": "Filter Twitch ads",
   "disableAdsHint": "Opt-in. Passes --twitch-disable-ads. Can skip ad segments; not a major startup delay.",
+  "channelPoints": "Channel Points presence (experimental)",
+  "channelPointsHint": "Send Twitch's undocumented watch-presence telemetry only while a real Streamlink player is ready. Requires authenticated playback and may stop working whenever Twitch changes its private systems.",
   "seamlessSwitch": "Seamless channel switch",
   "seamlessSwitchHint": "On: one stream at a time (replaces the current). Off: multistream + linked dock grips (turns Linked dock on automatically).",
   "linkedDock": "Linked dock grips",

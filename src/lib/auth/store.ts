@@ -46,6 +46,12 @@ function clearPoll() {
   }
 }
 
+function restartViewerPresence() {
+  void import("../streaming/store").then(({ syncViewerPresence }) => {
+    syncViewerPresence(true);
+  });
+}
+
 export const useAuthStore = create<AuthState>((set, get) => ({
   session: null,
   loading: true,
@@ -104,6 +110,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           if (result.state === "done" && result.session?.loggedIn) {
             clearPoll();
             set({ session: result.session, device: null, error: null });
+            restartViewerPresence();
             return;
           }
           if (result.state === "slowDown") {
