@@ -90,6 +90,13 @@ async fn viewer_presence_sync(
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn viewer_presence_status(
+    state: tauri::State<'_, viewer_presence::SharedViewerPresence>,
+) -> Result<viewer_presence::ViewerPresenceStatus, String> {
+    viewer_presence::get_status(state.inner()).map_err(|e| e.to_string())
+}
+
 /// Helix GET proxy: keeps the OAuth token inside Rust (never in the webview).
 #[tauri::command]
 async fn helix_fetch(
@@ -258,6 +265,7 @@ pub fn run() {
             twitch_web_auth_save,
             twitch_web_auth_clear,
             viewer_presence_sync,
+            viewer_presence_status,
             helix_fetch,
             stream_start,
             stream_list,
