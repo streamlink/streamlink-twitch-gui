@@ -26,7 +26,7 @@ import { MPV_INSTALL_URL } from "../lib/doctor";
 import { eventToHotkey, normalizeHotkey } from "../lib/hotkeys";
 import { isTauri } from "../lib/tauri";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { useWatchingStore } from "../lib/streaming/store";
+import { syncViewerPresence, useWatchingStore } from "../lib/streaming/store";
 import "./SettingsPage.css";
 import "../components/SetupHelp.css";
 
@@ -319,6 +319,26 @@ export function SettingsPage() {
           <span className="settings__check-text">
             {t("settings:disableAds")}
             <small className="muted">{t("settings:disableAdsHint")}</small>
+          </span>
+        </label>
+
+        <label className="settings__row settings__row--check">
+          <input
+            type="checkbox"
+            checked={settings.streaming.channelPoints}
+            onChange={(e) => {
+              setSettings({
+                streaming: {
+                  ...settings.streaming,
+                  channelPoints: e.target.checked,
+                },
+              });
+              queueMicrotask(syncViewerPresence);
+            }}
+          />
+          <span className="settings__check-text">
+            {t("settings:channelPoints")}
+            <small className="muted">{t("settings:channelPointsHint")}</small>
           </span>
         </label>
 

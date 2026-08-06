@@ -72,6 +72,8 @@ export interface AppSettings {
     quality: string;
     lowLatency: boolean;
     disableAds: boolean;
+    /** Send undocumented Twitch viewer-presence telemetry for ready sessions. */
+    channelPoints: boolean;
     /** Start the next Streamlink process before stopping the previous one. */
     seamlessSwitch: boolean;
     /** Multistream grid when seamlessSwitch is off. */
@@ -127,7 +129,7 @@ export interface AppSettings {
   closeToTray?: boolean;
 }
 
-export const SETTINGS_SCHEMA_VERSION = 14;
+export const SETTINGS_SCHEMA_VERSION = 15;
 
 export const defaultHotkeys = (): HotkeySettings => ({
   refresh: "F5",
@@ -161,6 +163,7 @@ export const defaultSettings = (): AppSettings => ({
     quality: "best",
     lowLatency: false,
     disableAds: false,
+    channelPoints: false,
     seamlessSwitch: true,
     multistreamLayout: DEFAULT_MULTISTREAM_LAYOUT,
     unevenMainSide: DEFAULT_UNEVEN_MAIN_SIDE,

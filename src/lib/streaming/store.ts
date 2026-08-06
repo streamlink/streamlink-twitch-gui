@@ -13,6 +13,11 @@ import {
   type MultistreamLayout,
 } from "./layout";
 import type { RaidOutgoingEvent } from "./raid";
+import {
+  buildPresenceTargets,
+  prunePresenceMetadata,
+  type PresenceMetadata,
+} from "./presence";
 
 export interface StreamSession {
   id: string;
@@ -61,6 +66,50 @@ interface WatchingState {
 let listenersBound = false;
 let lastChatSyncKey = "";
 let layoutTimer: ReturnType<typeof setTimeout> | null = null;
+let presenceMetadata: PresenceMetadata = {};
+let lastPresenceSyncKey = "";
+
+function rememberPresence(sessionId: string, stream: HelixStream) {
+  if (!stream.id || !stream.user_id) {
+    delete presenceMetadata[sessionId];
+    return;
+  }
+  presenceMetadata[sessionId] = {
+    channelLogin: stream.user_login.toLowerCase(),
+    channelId: stream.user_id,
+    broadcastId: stream.id,
+  };
+}
+
+export function syncViewerPresence(force = false) {
+  if (!isTauri()) return;
+  const state = useWatchingStore.getState();
+  const settings = useSettingsStore.getState().settings;
+  const preferredSessionIds = settings.streaming.seamlessSwitch
+    ? []
+    : state.slotChannels
+        .map(
+          (channel) =>
+            state.sessions.find(
+              (session) => session.channel.toLowerCase() === channel,
+            )?.id,
+        )
+        .filter((sessionId): sessionId is string => Boolean(sessionId));
+  const enabled = settings.streaming.channelPoints;
+  const targets = buildPresenceTargets(
+    state.sessions,
+    presenceMetadata,
+    preferredSessionIds,
+  );
+  const key = JSON.stringify({ enabled, targets });
+  if (!force && key === lastPresenceSyncKey) return;
+  lastPresenceSyncKey = key;
+  void invoke("viewer_presence_sync", { enabled, targets }).catch(() => {
+    if (lastPresenceSyncKey === key) {
+      lastPresenceSyncKey = "";
+    }
+  });
+}
 
 function currentLayout(): MultistreamLayout {
   const raw = useSettingsStore.getState().settings.streaming.multistreamLayout;
@@ -148,6 +197,7 @@ function afterSessionsChanged() {
   const channels = orderedChannels();
   void syncChatterino(channels);
   syncEventSub();
+  syncViewerPresence();
   if (channels.length) {
     scheduleLayoutAfterReady();
   } else if (isTauri()) {
@@ -221,6 +271,7 @@ export async function bindStreamingListeners(): Promise<() => void> {
     });
   });
   syncEventSub();
+  syncViewerPresence();
   return () => {
     listenersBound = false;
     unStatus();
@@ -240,6 +291,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     syncSlotsFromSessions(sessions);
     const hadSessions = get().sessions.length > 0;
     set({ sessions });
+    presenceMetadata = prunePresenceMetadata(presenceMetadata, sessions);
     const active = get().activeChatChannel;
     if (active && !sessions.some((s) => s.channel === active)) {
       set({ activeChatChannel: sessions[0]?.channel ?? null });
@@ -257,6 +309,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
         void win.unminimize().then(() => win.setFocus());
       });
     }
+    syncViewerPresence();
   },
 
   applyStatus: (payload) => {
@@ -275,6 +328,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     if (payload.ready) {
       scheduleLayoutAfterReady();
     }
+    syncViewerPresence();
   },
 
   watchStream: async (stream) => {
@@ -364,6 +418,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           layout: currentLayout(),
         },
       });
+      rememberPresence(session.id, stream);
       if (settings.gui.minimizeOnWatch && isTauri()) {
         void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
           void getCurrentWindow().minimize();
@@ -379,6 +434,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
             ? stream.user_login
             : state.activeChatChannel,
       }));
+      syncViewerPresence();
       // Kick the debounced layout once the session is registered (orderedChannels
       // reads the store). The "ready" status event re-triggers it later; the
       // backend retries until every player window is actually tiled.
@@ -489,6 +545,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
           layout: currentLayout(),
         },
       });
+      rememberPresence(started.id, target);
       set((state) => ({
         sessions: [
           ...state.sessions.filter((s) => s.id !== started.id && s.id !== session.id),
@@ -509,6 +566,7 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
 
   stopSession: async (id) => {
     const session = get().sessions.find((s) => s.id === id);
+    delete presenceMetadata[id];
     const channel = session?.channel.toLowerCase();
     await invoke("stream_stop", { id });
     if (channel) {
@@ -524,8 +582,10 @@ export const useWatchingStore = create<WatchingState>((set, get) => ({
     await invoke("stream_stop_all");
     lastChatSyncKey = "";
     void invoke("close_owned_chatterino").catch(() => undefined);
+    presenceMetadata = {};
     set({ sessions: [], slotChannels: [], activeChatChannel: null });
     syncEventSub();
+    syncViewerPresence();
   },
 
   toggleMute: async (id) => {

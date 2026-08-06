@@ -8,6 +8,8 @@ mod eventsub;
 mod helix;
 mod http;
 mod streaming;
+mod twitch_web_auth;
+mod viewer_presence;
 
 use auth::{AuthSession, DeviceCodeResponse};
 use doctor::DoctorReport;
@@ -48,8 +50,44 @@ async fn auth_poll_device_login(device_code: String) -> Result<auth::DevicePoll,
 }
 
 #[tauri::command]
-async fn auth_logout() -> Result<(), String> {
+async fn auth_logout(
+    presence: tauri::State<'_, viewer_presence::SharedViewerPresence>,
+) -> Result<(), String> {
+    viewer_presence::cancel_all(presence.inner());
     auth::logout().await.map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn twitch_web_auth_status() -> Result<twitch_web_auth::TwitchWebAuthStatus, String> {
+    twitch_web_auth::get_status().map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+async fn twitch_web_auth_save(
+    token: String,
+) -> Result<twitch_web_auth::TwitchWebAuthStatus, String> {
+    twitch_web_auth::save(&token)
+        .await
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn twitch_web_auth_clear(
+    presence: tauri::State<'_, viewer_presence::SharedViewerPresence>,
+) -> Result<twitch_web_auth::TwitchWebAuthStatus, String> {
+    viewer_presence::cancel_all(presence.inner());
+    twitch_web_auth::clear().map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+async fn viewer_presence_sync(
+    state: tauri::State<'_, viewer_presence::SharedViewerPresence>,
+    enabled: bool,
+    targets: Vec<viewer_presence::ViewerPresenceTarget>,
+) -> Result<viewer_presence::ViewerPresenceStatus, String> {
+    viewer_presence::sync(state.inner().clone(), enabled, targets)
+        .await
+        .map_err(|e| e.to_string())
 }
 
 /// Helix GET proxy: keeps the OAuth token inside Rust (never in the webview).
@@ -195,6 +233,7 @@ fn show_main_window(app: &AppHandle) {
 pub fn run() {
     let _sentry_guard = init_sentry();
     let streaming = Arc::new(StreamingState::new());
+    let viewer_presence = Arc::new(viewer_presence::ViewerPresenceState::new());
 
     tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
@@ -207,6 +246,7 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_notification::init())
         .manage(streaming)
+        .manage(viewer_presence)
         .invoke_handler(tauri::generate_handler![
             get_doctor_report,
             get_twitch_client_id,
@@ -214,6 +254,10 @@ pub fn run() {
             auth_start_device_login,
             auth_poll_device_login,
             auth_logout,
+            twitch_web_auth_status,
+            twitch_web_auth_save,
+            twitch_web_auth_clear,
+            viewer_presence_sync,
             helix_fetch,
             stream_start,
             stream_list,
