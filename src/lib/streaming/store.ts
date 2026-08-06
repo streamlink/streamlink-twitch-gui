@@ -67,6 +67,7 @@ let listenersBound = false;
 let lastChatSyncKey = "";
 let layoutTimer: ReturnType<typeof setTimeout> | null = null;
 let presenceMetadata: PresenceMetadata = {};
+let lastPresenceSyncKey = "";
 
 function rememberPresence(sessionId: string, stream: HelixStream) {
   if (!stream.id || !stream.user_id) {
@@ -80,12 +81,34 @@ function rememberPresence(sessionId: string, stream: HelixStream) {
   };
 }
 
-export function syncViewerPresence() {
+export function syncViewerPresence(force = false) {
   if (!isTauri()) return;
   const state = useWatchingStore.getState();
-  const enabled = useSettingsStore.getState().settings.streaming.channelPoints;
-  const targets = buildPresenceTargets(state.sessions, presenceMetadata);
-  void invoke("viewer_presence_sync", { enabled, targets }).catch(() => undefined);
+  const settings = useSettingsStore.getState().settings;
+  const preferredSessionIds = settings.streaming.seamlessSwitch
+    ? []
+    : state.slotChannels
+        .map(
+          (channel) =>
+            state.sessions.find(
+              (session) => session.channel.toLowerCase() === channel,
+            )?.id,
+        )
+        .filter((sessionId): sessionId is string => Boolean(sessionId));
+  const enabled = settings.streaming.channelPoints;
+  const targets = buildPresenceTargets(
+    state.sessions,
+    presenceMetadata,
+    preferredSessionIds,
+  );
+  const key = JSON.stringify({ enabled, targets });
+  if (!force && key === lastPresenceSyncKey) return;
+  lastPresenceSyncKey = key;
+  void invoke("viewer_presence_sync", { enabled, targets }).catch(() => {
+    if (lastPresenceSyncKey === key) {
+      lastPresenceSyncKey = "";
+    }
+  });
 }
 
 function currentLayout(): MultistreamLayout {

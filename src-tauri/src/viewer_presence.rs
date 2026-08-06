@@ -1,7 +1,7 @@
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use thiserror::Error;
@@ -46,6 +46,8 @@ struct Worker {
 
 pub struct ViewerPresenceState {
     workers: Mutex<HashMap<String, Worker>>,
+    sync_gate: tokio::sync::Mutex<()>,
+    generation: AtomicU64,
 }
 
 pub type SharedViewerPresence = Arc<ViewerPresenceState>;
@@ -54,6 +56,8 @@ impl ViewerPresenceState {
     pub fn new() -> Self {
         Self {
             workers: Mutex::new(HashMap::new()),
+            sync_gate: tokio::sync::Mutex::new(()),
+            generation: AtomicU64::new(0),
         }
     }
 }
@@ -100,6 +104,7 @@ pub(crate) fn select_targets(targets: Vec<ViewerPresenceTarget>) -> Vec<ViewerPr
 }
 
 pub fn cancel_all(state: &ViewerPresenceState) {
+    state.generation.fetch_add(1, Ordering::AcqRel);
     if let Ok(mut workers) = state.workers.lock() {
         for worker in workers.values() {
             worker.cancel.store(true, Ordering::Release);
@@ -131,6 +136,7 @@ pub async fn sync(
     enabled: bool,
     targets: Vec<ViewerPresenceTarget>,
 ) -> Result<ViewerPresenceStatus, ViewerPresenceError> {
+    let _sync_guard = state.sync_gate.lock().await;
     if !enabled {
         cancel_all(&state);
         return status(&state, false, false);
@@ -143,6 +149,8 @@ pub async fn sync(
         cancel_all(&state);
         return status(&state, true, limited);
     }
+
+    let generation = state.generation.load(Ordering::Acquire);
 
     let _website_token = crate::twitch_web_auth::load_token()
         .map_err(|error| ViewerPresenceError::Message(error.to_string()))?
@@ -162,6 +170,10 @@ pub async fn sync(
         return Err(ViewerPresenceError::Message(
             "authenticated playback does not match the current Twitch account".into(),
         ));
+    }
+
+    if state.generation.load(Ordering::Acquire) != generation {
+        return status(&state, true, limited);
     }
 
     let desired = selected
@@ -202,7 +214,7 @@ pub async fn sync(
         let worker_state = state.clone();
         let worker_viewer_id = viewer_id.clone();
         tauri::async_runtime::spawn(async move {
-            run_worker(worker_state, target, worker_viewer_id, cancel).await;
+            run_worker(worker_state, target, worker_viewer_id, generation, cancel).await;
         });
     }
 
@@ -213,13 +225,17 @@ async fn run_worker(
     state: SharedViewerPresence,
     target: ViewerPresenceTarget,
     viewer_id: String,
+    generation: u64,
     cancel: Arc<AtomicBool>,
 ) {
     let mut endpoint: Option<String> = None;
     let mut failures = 0u32;
 
     loop {
-        if cancel.load(Ordering::Acquire) || !website_auth_still_matches(&viewer_id) {
+        if cancel.load(Ordering::Acquire)
+            || state.generation.load(Ordering::Acquire) != generation
+            || !website_auth_still_matches(&viewer_id)
+        {
             break;
         }
 
