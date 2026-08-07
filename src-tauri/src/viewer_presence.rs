@@ -833,7 +833,7 @@ pub(crate) fn extract_client_version(html: &str) -> Option<String> {
     let marker = "window.__twilightBuildID";
     let tail = &html[html.find(marker)? + marker.len()..];
     let tail = &tail[tail.find('=')? + 1..];
-    let quote_index = tail.find(|character| character == '"' || character == '\'')?;
+    let quote_index = tail.find(['"', '\''])?;
     let quote = tail.as_bytes().get(quote_index).copied()? as char;
     let value_tail = &tail[quote_index + 1..];
     let end = value_tail.find(quote)?;
