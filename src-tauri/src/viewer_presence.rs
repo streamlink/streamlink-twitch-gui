@@ -1090,7 +1090,8 @@ mod tests {
 
     #[test]
     fn extracts_runtime_urls() {
-        let html = r#"<script src="https://static.twitchcdn.net/config/settings.abc123.js"></script>"#;
+        let html =
+            r#"<script src="https://static.twitchcdn.net/config/settings.abc123.js"></script>"#;
         assert_eq!(
             extract_settings_url(html).as_deref(),
             Some("https://static.twitchcdn.net/config/settings.abc123.js")
