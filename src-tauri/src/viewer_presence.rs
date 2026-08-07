@@ -529,12 +529,16 @@ async fn resolve_runtime(channel_login: &str) -> Result<RuntimeConfig, ProtocolE
         extract_client_version(&page).unwrap_or_else(|| FALLBACK_CLIENT_VERSION.to_string());
 
     let settings_url = extract_settings_url(&page).ok_or_else(|| {
-        ProtocolError::new("runtime-config", "Twitch runtime settings URL was not found")
+        ProtocolError::new(
+            "runtime-config",
+            "Twitch runtime settings URL was not found",
+        )
     })?;
     let settings_url = validate_https_url(&settings_url, "runtime-config")?;
     let (settings, _) = fetch_text(&settings_url, "runtime-config").await?;
-    let spade_url = extract_spade_url(&settings)
-        .ok_or_else(|| ProtocolError::new("runtime-config", "Twitch Spade endpoint was not found"))?;
+    let spade_url = extract_spade_url(&settings).ok_or_else(|| {
+        ProtocolError::new("runtime-config", "Twitch Spade endpoint was not found")
+    })?;
     let spade_url = validate_https_url(&spade_url, "runtime-config")?;
 
     Ok(RuntimeConfig {
@@ -719,7 +723,11 @@ fn select_media_playlist_url(master: &str, master_url: &Url) -> Result<Url, Prot
         if let Ok(url) = master_url.join(line.trim_matches('"')) {
             if url.scheme() == "https" {
                 let bandwidth = pending_bandwidth.unwrap_or(u64::MAX);
-                if best.as_ref().map(|(best_bw, _)| bandwidth < *best_bw).unwrap_or(true) {
+                if best
+                    .as_ref()
+                    .map(|(best_bw, _)| bandwidth < *best_bw)
+                    .unwrap_or(true)
+                {
                     best = Some((bandwidth, url));
                 }
             }
@@ -925,8 +933,7 @@ pub(crate) fn build_minute_watched_payload(
 }
 
 pub(crate) fn base64_encode(input: &[u8]) -> String {
-    const ALPHABET: &[u8; 64] =
-        b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    const ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     let mut output = String::with_capacity(input.len().div_ceil(3) * 4);
     let mut index = 0;
     while index < input.len() {
@@ -936,8 +943,7 @@ pub(crate) fn base64_encode(input: &[u8]) -> String {
 
         output.push(ALPHABET[(first >> 2) as usize] as char);
         output.push(
-            ALPHABET[(((first & 0b0000_0011) << 4) | second.unwrap_or(0) >> 4) as usize]
-                as char,
+            ALPHABET[(((first & 0b0000_0011) << 4) | second.unwrap_or(0) >> 4) as usize] as char,
         );
         match second {
             Some(second) => output.push(
@@ -1013,8 +1019,7 @@ mod tests {
 
     #[test]
     fn extracts_dynamic_twitch_client_version() {
-        let html =
-            r#"<script>window.__twilightBuildID = "12345678-1234-abcd-9876-0123456789ab";</script>"#;
+        let html = r#"<script>window.__twilightBuildID = "12345678-1234-abcd-9876-0123456789ab";</script>"#;
         assert_eq!(
             extract_client_version(html).as_deref(),
             Some("12345678-1234-abcd-9876-0123456789ab")
@@ -1085,15 +1090,13 @@ mod tests {
 
     #[test]
     fn extracts_runtime_urls() {
-        let html =
-            r#"<script src="https://static.twitchcdn.net/config/settings.abc123.js"></script>"#;
+        let html = r#"<script src="https://static.twitchcdn.net/config/settings.abc123.js"></script>"#;
         assert_eq!(
             extract_settings_url(html).as_deref(),
             Some("https://static.twitchcdn.net/config/settings.abc123.js")
         );
 
-        let settings =
-            r#"window.__settings={"spade_url":"https:\/\/spade.twitch.tv\/track"};"#;
+        let settings = r#"window.__settings={"spade_url":"https:\/\/spade.twitch.tv\/track"};"#;
         assert_eq!(
             extract_spade_url(settings).as_deref(),
             Some("https://spade.twitch.tv/track")
