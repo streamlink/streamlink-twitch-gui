@@ -96,7 +96,7 @@ export function describeViewerPresenceStatus(
       if (worker.lastError) {
         return `${worker.channelLogin}: ${worker.lastStage}${http} — ${worker.lastError}`;
       }
-      if (worker.lastSuccessUnixMs) {
+      if (worker.lastStage === "telemetry-accepted" && worker.lastSuccessUnixMs) {
         return `${worker.channelLogin}: telemetry accepted${http}`;
       }
       return `${worker.channelLogin}: ${worker.lastStage}${http}`;
