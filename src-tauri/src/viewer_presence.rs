@@ -700,9 +700,36 @@ async fn response_text(
 }
 
 fn select_media_playlist_url(master: &str, master_url: &Url) -> Result<Url, ProtocolError> {
-    let urls = playlist_urls(master, master_url);
-    if let Some(url) = urls.last() {
-        return Ok(url.clone());
+    let mut best: Option<(u64, Url)> = None;
+    let mut pending_bandwidth: Option<u64> = None;
+
+    for line in master.lines().map(str::trim) {
+        if let Some(rest) = line.strip_prefix("#EXT-X-STREAM-INF:") {
+            pending_bandwidth = rest
+                .split(',')
+                .find_map(|part| part.trim().strip_prefix("BANDWIDTH="))
+                .and_then(|value| value.parse::<u64>().ok());
+            continue;
+        }
+
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+
+        if let Ok(url) = master_url.join(line.trim_matches('"')) {
+            if url.scheme() == "https" {
+                let bandwidth = pending_bandwidth.unwrap_or(u64::MAX);
+                if best.as_ref().map(|(best_bw, _)| bandwidth < *best_bw).unwrap_or(true) {
+                    best = Some((bandwidth, url));
+                }
+            }
+        }
+
+        pending_bandwidth = None;
+    }
+
+    if let Some((_, url)) = best {
+        return Ok(url);
     }
     if master.contains("#EXT-X-TARGETDURATION") || master.contains("#EXTINF") {
         return Ok(master_url.clone());
