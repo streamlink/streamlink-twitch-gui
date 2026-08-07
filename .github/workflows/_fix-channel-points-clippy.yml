@@ -20,15 +20,9 @@ jobs:
         run: |
           $path = 'src-tauri/src/viewer_presence.rs'
           $text = Get-Content $path -Raw
-          $old = @'
-    let quote_index = tail.find(|character| character == '"' || character == '\'')?;
-'@.TrimEnd()
-          $new = @'
-    let quote_index = tail.find(['"', '\''])?;
-'@.TrimEnd()
-          if (-not $text.Contains($old)) {
-            throw 'Target clippy pattern not found.'
-          }
+          $old = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('ICAgIGxldCBxdW90ZV9pbmRleCA9IHRhaWwuZmluZCh8Y2hhcmFjdGVyfCBjaGFyYWN0ZXIgPT0gJyInIHx8IGNoYXJhY3RlciA9PSAnXCcnKT87'))
+          $new = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('ICAgIGxldCBxdW90ZV9pbmRleCA9IHRhaWwuZmluZChbJyInLCAnXCcnXSk/Ow=='))
+          if (-not $text.Contains($old)) { throw 'Target clippy pattern not found.' }
           [System.IO.File]::WriteAllText($path, $text.Replace($old, $new))
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -39,10 +33,7 @@ jobs:
       - name: Commit fix
         shell: pwsh
         run: |
-          if (-not (git status --porcelain)) {
-            Write-Host 'No changes required.'
-            exit 0
-          }
+          if (-not (git status --porcelain)) { exit 0 }
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src-tauri/src/viewer_presence.rs
