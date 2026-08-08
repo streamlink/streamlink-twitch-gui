@@ -2,6 +2,7 @@
 #![allow(linker_messages)]
 
 mod auth;
+mod channel_points;
 mod dock;
 mod doctor;
 mod eventsub;
@@ -95,6 +96,15 @@ fn viewer_presence_status(
     state: tauri::State<'_, viewer_presence::SharedViewerPresence>,
 ) -> Result<viewer_presence::ViewerPresenceStatus, String> {
     viewer_presence::get_status(state.inner()).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+async fn channel_points_refresh(
+    channel_login: String,
+) -> Result<channel_points::ChannelPointsSnapshot, String> {
+    channel_points::refresh(&channel_login)
+        .await
+        .map_err(|e| e.to_string())
 }
 
 /// Helix GET proxy: keeps the OAuth token inside Rust (never in the webview).
@@ -266,6 +276,7 @@ pub fn run() {
             twitch_web_auth_clear,
             viewer_presence_sync,
             viewer_presence_status,
+            channel_points_refresh,
             helix_fetch,
             stream_start,
             stream_list,
