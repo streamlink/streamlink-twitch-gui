@@ -1,5 +1,5 @@
 #[test]
-fn hls_probe_matches_current_miner_contract() {
+fn hls_probe_matches_current_web_player_contract() {
     let source = include_str!("../src/viewer_presence.rs");
 
     assert!(
@@ -16,11 +16,16 @@ fn hls_probe_matches_current_miner_contract() {
     let build_body = &build_tail[..build_end];
     assert!(build_body.contains(".append_pair(\"sig\", signature)"));
     assert!(build_body.contains(".append_pair(\"token\", token)"));
+    assert!(build_body.contains(".append_pair(\"cdm\", \"wv\")"));
+    assert!(build_body.contains(".append_pair(\"player_version\", \"1.22.0\")"));
+    assert!(build_body.contains(".append_pair(\"player_type\", \"pulsar\")"));
+    assert!(build_body.contains(".append_pair(\"player_backend\", \"mediaplayer\")"));
+    assert!(build_body.contains(".append_pair(\"playlist_include_framerate\", \"true\")"));
+    assert!(build_body.contains(".append_pair(\"allow_source\", \"true\")"));
+    assert!(build_body.contains(".append_pair(\"transcode_mode\", \"cbr_v1\")"));
     assert!(!build_body.contains(".append_pair(\"platform\""));
     assert!(!build_body.contains(".append_pair(\"p\""));
-    assert!(!build_body.contains(".append_pair(\"allow_source\""));
     assert!(!build_body.contains(".append_pair(\"allow_audio_only\""));
-    assert!(!build_body.contains(".append_pair(\"playlist_include_framerate\""));
     assert!(!build_body.contains(".append_pair(\"supported_codecs\""));
 
     let fetch_start = source

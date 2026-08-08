@@ -18,7 +18,8 @@ const PLAYBACK_ACCESS_TOKEN_HASH: &str =
 const FALLBACK_CLIENT_VERSION: &str = "ef928475-9403-42f2-8a34-55784bd08e16";
 const USER_AGENT_VALUE: &str =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
-const SUCCESS_INTERVAL: Duration = Duration::from_secs(20);
+const MIN_SUCCESS_INTERVAL_SECS: u64 = 55;
+const MAX_SUCCESS_INTERVAL_SECS: u64 = 70;
 const MAX_WORKERS: usize = 2;
 
 #[derive(Debug, Error)]
@@ -84,8 +85,8 @@ impl ViewerPresenceState {
             generation: AtomicU64::new(0),
             enabled: AtomicBool::new(false),
             limited: AtomicBool::new(false),
-            device_id: crate::channel_points_auth::device_id().to_string(),
-            client_session: crate::channel_points_auth::client_session_id().to_string(),
+            device_id: crate::twitch_web_auth::device_id().to_string(),
+            client_session: crate::twitch_web_auth::client_session_id().to_string(),
         }
     }
 }
@@ -234,10 +235,10 @@ pub async fn sync(
         return get_status(&state);
     }
 
-    let points_auth = crate::channel_points_auth::load_session()
+    let points_auth = crate::twitch_web_auth::load_session()
         .map_err(|error| ViewerPresenceError::Message(error.to_string()))?
         .ok_or_else(|| {
-            ViewerPresenceError::Message("Channel Points TV login is not configured".into())
+            ViewerPresenceError::Message("Twitch Website Authentication is not configured".into())
         })?;
     let token = points_auth.token;
     let session = crate::auth::get_session()
@@ -250,7 +251,7 @@ pub async fn sync(
         cancel_workers(&state, true);
         state.enabled.store(true, Ordering::Release);
         return Err(ViewerPresenceError::Message(
-            "Channel Points TV login does not match the current Twitch account".into(),
+            "Twitch Website Authentication does not match the current Twitch account".into(),
         ));
     }
 
@@ -360,7 +361,7 @@ async fn run_worker(
     loop {
         if cancel.load(Ordering::Acquire)
             || state.generation.load(Ordering::Acquire) != generation
-            || !channel_points_auth_still_matches(&viewer_id, &token)
+            || !website_auth_still_matches(&viewer_id, &token)
         {
             break;
         }
@@ -378,7 +379,7 @@ async fn run_worker(
                     None,
                     Some(unix_time_ms()),
                 );
-                SUCCESS_INTERVAL
+                success_interval()
             }
             Err(error) => {
                 failures = failures.saturating_add(1);
@@ -479,12 +480,27 @@ async fn run_watch_cycle(
     send_minute_watched(&runtime.spade_url, target, viewer_id).await
 }
 
-fn channel_points_auth_still_matches(viewer_id: &str, expected_token: &str) -> bool {
-    crate::channel_points_auth::load_session()
+fn website_auth_still_matches(viewer_id: &str, expected_token: &str) -> bool {
+    crate::twitch_web_auth::load_session()
         .ok()
         .flatten()
         .map(|session| session.token == expected_token && session.user_id == viewer_id)
         .unwrap_or(false)
+}
+
+fn success_interval_from_seed(seed: u64) -> Duration {
+    let span = MAX_SUCCESS_INTERVAL_SECS - MIN_SUCCESS_INTERVAL_SECS + 1;
+    Duration::from_secs(MIN_SUCCESS_INTERVAL_SECS + seed % span)
+}
+
+fn success_interval() -> Duration {
+    let seed = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_nanos()
+        .try_into()
+        .unwrap_or(u64::MAX);
+    success_interval_from_seed(seed)
 }
 
 fn failure_delay(failures: u32) -> Duration {
@@ -575,8 +591,8 @@ async fn fetch_playback_access_token(
         .post(GQL_URL)
         .header(USER_AGENT, USER_AGENT_VALUE)
         .header(ACCEPT, "application/json")
-        .header(AUTHORIZATION, format!("Bearer {token}"))
-        .header("Client-Id", crate::channel_points_auth::TV_CLIENT_ID)
+        .header(AUTHORIZATION, format!("OAuth {token}"))
+        .header("Client-Id", crate::twitch_web_auth::WEB_CLIENT_ID)
         .header("Client-Session-Id", client_session)
         .header("Client-Version", client_version)
         .header("X-Device-Id", device_id)
@@ -635,7 +651,7 @@ pub(crate) fn build_playback_access_token_payload(channel_login: &str) -> serde_
             "isLive": true,
             "isVod": false,
             "vodID": "",
-            "playerType": "site",
+            "playerType": "picture-by-picture",
             "platform": "web"
         },
         "extensions": {
@@ -656,7 +672,14 @@ fn build_usher_url(
         .map_err(|_| ProtocolError::new("master-playlist", "invalid Twitch playlist URL"))?;
     url.query_pairs_mut()
         .append_pair("sig", signature)
-        .append_pair("token", token);
+        .append_pair("token", token)
+        .append_pair("cdm", "wv")
+        .append_pair("player_version", "1.22.0")
+        .append_pair("player_type", "pulsar")
+        .append_pair("player_backend", "mediaplayer")
+        .append_pair("playlist_include_framerate", "true")
+        .append_pair("allow_source", "true")
+        .append_pair("transcode_mode", "cbr_v1");
     Ok(url)
 }
 
@@ -926,7 +949,11 @@ pub(crate) fn build_minute_watched_payload(
             "player": "site",
             "user_id": viewer_id,
             "live": true,
-            "channel": target.channel_login.to_ascii_lowercase()
+            "channel": target.channel_login.to_ascii_lowercase(),
+            "hidden": false,
+            "logged_in": true,
+            "muted": false,
+            "location": "channel"
         }
     }])
     .to_string()
@@ -1000,6 +1027,10 @@ mod tests {
         assert_eq!(properties["user_id"], "9001");
         assert_eq!(properties["live"], true);
         assert_eq!(properties["channel"], "example_channel");
+        assert_eq!(properties["hidden"], false);
+        assert_eq!(properties["logged_in"], true);
+        assert_eq!(properties["muted"], false);
+        assert_eq!(properties["location"], "channel");
     }
 
     #[test]
@@ -1009,12 +1040,62 @@ mod tests {
         assert_eq!(payload["variables"]["login"], "example");
         assert_eq!(payload["variables"]["isLive"], true);
         assert_eq!(payload["variables"]["isVod"], false);
-        assert_eq!(payload["variables"]["playerType"], "site");
+        assert_eq!(payload["variables"]["playerType"], "picture-by-picture");
         assert_eq!(payload["variables"]["platform"], "web");
         assert_eq!(
             payload["extensions"]["persistedQuery"]["sha256Hash"],
             PLAYBACK_ACCESS_TOKEN_HASH
         );
+    }
+
+    #[test]
+    fn usher_url_matches_current_web_player_contract() {
+        let url = build_usher_url("example", "signature", "token").unwrap();
+        let query = url.query_pairs().collect::<HashMap<_, _>>();
+
+        assert_eq!(
+            query.get("sig").map(|value| value.as_ref()),
+            Some("signature")
+        );
+        assert_eq!(
+            query.get("token").map(|value| value.as_ref()),
+            Some("token")
+        );
+        assert_eq!(query.get("cdm").map(|value| value.as_ref()), Some("wv"));
+        assert_eq!(
+            query.get("player_version").map(|value| value.as_ref()),
+            Some("1.22.0")
+        );
+        assert_eq!(
+            query.get("player_type").map(|value| value.as_ref()),
+            Some("pulsar")
+        );
+        assert_eq!(
+            query.get("player_backend").map(|value| value.as_ref()),
+            Some("mediaplayer")
+        );
+        assert_eq!(
+            query
+                .get("playlist_include_framerate")
+                .map(|value| value.as_ref()),
+            Some("true")
+        );
+        assert_eq!(
+            query.get("allow_source").map(|value| value.as_ref()),
+            Some("true")
+        );
+        assert_eq!(
+            query.get("transcode_mode").map(|value| value.as_ref()),
+            Some("cbr_v1")
+        );
+    }
+
+    #[test]
+    fn success_interval_stays_within_known_good_bounds() {
+        for seed in [0, 1, 15, 16, 31, u64::MAX] {
+            let seconds = success_interval_from_seed(seed).as_secs();
+            assert!((MIN_SUCCESS_INTERVAL_SECS..=MAX_SUCCESS_INTERVAL_SECS).contains(&seconds));
+        }
     }
 
     #[test]
