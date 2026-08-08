@@ -269,14 +269,17 @@ pub async fn poll_device_token(device_code: &str) -> Result<TvDevicePoll, Channe
 
     if !response.status().is_success() {
         let status = response.status();
-        let error = response.json::<TokenErrorBody>().await.unwrap_or(TokenErrorBody {
-            message: None,
-        });
+        let error = response
+            .json::<TokenErrorBody>()
+            .await
+            .unwrap_or(TokenErrorBody { message: None });
         return match error.message.as_deref() {
             Some("authorization_pending") => Ok(TvDevicePoll::Pending),
             Some("slow_down") => Ok(TvDevicePoll::SlowDown),
             Some("expired_token") | Some("access_denied") => Err(ChannelPointsAuthError::Message(
-                error.message.unwrap_or_else(|| "Channel Points TV login failed".into()),
+                error
+                    .message
+                    .unwrap_or_else(|| "Channel Points TV login failed".into()),
             )),
             _ => Err(ChannelPointsAuthError::Message(format!(
                 "Channel Points TV token poll failed (HTTP {status})"
