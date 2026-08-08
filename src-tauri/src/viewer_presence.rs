@@ -912,7 +912,6 @@ async fn send_minute_watched(
     let response = shared_client()
         .post(endpoint.clone())
         .header(USER_AGENT, USER_AGENT_VALUE)
-        .header(REFERER, TWITCH_URL)
         .form(&[("data", encoded.as_str())])
         .timeout(Duration::from_secs(20))
         .send()
