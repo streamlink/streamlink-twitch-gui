@@ -13,7 +13,7 @@ use crate::http::shared_client;
 
 const TWITCH_URL: &str = "https://www.twitch.tv";
 const GQL_URL: &str = "https://gql.twitch.tv/gql";
-const USHER_URL: &str = "https://usher.ttvnw.net/api/v2/channel/hls/";
+const USHER_URL: &str = "https://usher.ttvnw.net/api/channel/hls/";
 const BROWSER_CLIENT_ID: &str = "kimne78kx3ncx6brgo4mv6wki5h1ko";
 const PLAYBACK_ACCESS_TOKEN_HASH: &str =
     "ed230aa1e33e07eebb8928504583da78a5173989fadfb1ac94be06a04f3cdbe9";
@@ -661,16 +661,9 @@ fn build_usher_url(
 ) -> Result<Url, ProtocolError> {
     let mut url = Url::parse(&format!("{USHER_URL}{channel_login}.m3u8"))
         .map_err(|_| ProtocolError::new("master-playlist", "invalid Twitch playlist URL"))?;
-    let random_parameter = unix_time_ms() % 999_999;
     url.query_pairs_mut()
         .append_pair("sig", signature)
-        .append_pair("token", token)
-        .append_pair("platform", "web")
-        .append_pair("p", &random_parameter.to_string())
-        .append_pair("allow_source", "true")
-        .append_pair("allow_audio_only", "true")
-        .append_pair("playlist_include_framerate", "true")
-        .append_pair("supported_codecs", "h264");
+        .append_pair("token", token);
     Ok(url)
 }
 
@@ -678,7 +671,6 @@ async fn fetch_text(url: &Url, stage: &'static str) -> Result<(String, StatusCod
     let response = shared_client()
         .get(url.clone())
         .header(USER_AGENT, USER_AGENT_VALUE)
-        .header(REFERER, TWITCH_URL)
         .send()
         .await
         .map_err(|_| ProtocolError::new(stage, "Twitch request failed"))?;
@@ -779,7 +771,6 @@ async fn touch_media_segment(url: &Url) -> Result<StatusCode, ProtocolError> {
     let response = shared_client()
         .head(url.clone())
         .header(USER_AGENT, USER_AGENT_VALUE)
-        .header(REFERER, TWITCH_URL)
         .send()
         .await
         .map_err(|_| ProtocolError::new("media-segment", "Twitch media-segment request failed"))?;
@@ -792,7 +783,6 @@ async fn touch_media_segment(url: &Url) -> Result<StatusCode, ProtocolError> {
         let fallback = shared_client()
             .get(url.clone())
             .header(USER_AGENT, USER_AGENT_VALUE)
-            .header(REFERER, TWITCH_URL)
             .header(RANGE, "bytes=0-0")
             .send()
             .await
@@ -1050,7 +1040,7 @@ mod tests {
     #[test]
     fn parses_master_and_media_playlists_with_relative_urls() {
         let master_url =
-            Url::parse("https://usher.ttvnw.net/api/v2/channel/hls/example.m3u8").unwrap();
+            Url::parse("https://usher.ttvnw.net/api/channel/hls/example.m3u8").unwrap();
         let master = concat!(
             "#EXTM3U\r\n",
             "#EXT-X-STREAM-INF:BANDWIDTH=3000000\r\n",
@@ -1061,7 +1051,7 @@ mod tests {
         let media_url = select_media_playlist_url(master, &master_url).unwrap();
         assert_eq!(
             media_url.as_str(),
-            "https://usher.ttvnw.net/api/v2/channel/hls/low/index.m3u8"
+            "https://usher.ttvnw.net/api/channel/hls/low/index.m3u8"
         );
 
         let media = concat!(
@@ -1075,7 +1065,7 @@ mod tests {
         let segment_url = select_media_segment_url(media, &media_url).unwrap();
         assert_eq!(
             segment_url.as_str(),
-            "https://usher.ttvnw.net/api/v2/channel/hls/low/segment-11.ts"
+            "https://usher.ttvnw.net/api/channel/hls/low/segment-11.ts"
         );
     }
 
