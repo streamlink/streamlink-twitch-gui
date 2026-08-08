@@ -2,9 +2,9 @@
 fn hls_probe_matches_current_miner_contract() {
     let source = include_str!("../src/viewer_presence.rs");
 
-    assert!(source.contains(
-        "const USHER_URL: &str = \"https://usher.ttvnw.net/api/channel/hls/\";"
-    ));
+    assert!(
+        source.contains("const USHER_URL: &str = \"https://usher.ttvnw.net/api/channel/hls/\";")
+    );
 
     let build_start = source
         .find("fn build_usher_url(")
