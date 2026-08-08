@@ -1,0 +1,47 @@
+name: Apply telemetry transport fix
+
+on:
+  push:
+    branches:
+      - fix/channel-points-telemetry-transport
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/channel-points-telemetry-transport
+      - name: Apply source fix
+        shell: pwsh
+        run: |
+          $path = 'src-tauri/src/viewer_presence.rs'
+          $text = Get-Content $path -Raw
+          $old = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('YXN5bmMgZm4gc2VuZF9taW51dGVfd2F0Y2hlZCgKICAgIGVuZHBvaW50OiAmVXJsLAogICAgdGFyZ2V0OiAmVmlld2VyUHJlc2VuY2VUYXJnZXQsCiAgICB2aWV3ZXJfaWQ6ICZzdHIsCikgLT4gUmVzdWx0PFN0YXR1c0NvZGUsIFByb3RvY29sRXJyb3I+IHsKICAgIGxldCBwYXlsb2FkID0gYnVpbGRfbWludXRlX3dhdGNoZWRfcGF5bG9hZCh0YXJnZXQsIHZpZXdlcl9pZCk7CiAgICBsZXQgZW5jb2RlZCA9IGJhc2U2NF9lbmNvZGUocGF5bG9hZC5hc19ieXRlcygpKTsKICAgIGxldCByZXNwb25zZSA9IHNoYXJlZF9jbGllbnQoKQogICAgICAgIC5wb3N0KGVuZHBvaW50LmNsb25lKCkpCiAgICAgICAgLmhlYWRlcihVU0VSX0FHRU5ULCBVU0VSX0FHRU5UX1ZBTFVFKQogICAgICAgIC5oZWFkZXIoUkVGRVJFUiwgVFdJVENIX1VSTCkKICAgICAgICAuZm9ybSgmWygiZGF0YSIsIGVuY29kZWQuYXNfc3RyKCkpXSkKICAgICAgICAuc2VuZCgpCiAgICAgICAgLmF3YWl0CiAgICAgICAgLm1hcF9lcnIofF98IFByb3RvY29sRXJyb3I6Om5ldygidGVsZW1ldHJ5IiwgIlR3aXRjaCB0ZWxlbWV0cnkgcmVxdWVzdCBmYWlsZWQiKSk/OwogICAgbGV0IHN0YXR1cyA9IHJlc3BvbnNlLnN0YXR1cygpOwogICAgaWYgc3RhdHVzID09IFN0YXR1c0NvZGU6Ok5PX0NPTlRFTlQgewogICAgICAgIE9rKHN0YXR1cykKICAgIH0gZWxzZSB7CiAgICAgICAgRXJyKFByb3RvY29sRXJyb3I6OndpdGhfc3RhdHVzKAogICAgICAgICAgICAidGVsZW1ldHJ5IiwKICAgICAgICAgICAgc3RhdHVzLAogICAgICAgICAgICAiVHdpdGNoIGRpZCBub3QgYWNjZXB0IHRoZSB3YXRjaCB0ZWxlbWV0cnkiLAogICAgICAgICkpCiAgICB9Cn0K'))
+          $new = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('Zm4gdGVsZW1ldHJ5X3RyYW5zcG9ydF9tZXNzYWdlKGVuZHBvaW50OiAmVXJsLCBlcnJvcjogJnJlcXdlc3Q6OkVycm9yKSAtPiBTdHJpbmcgewogICAgbGV0IGhvc3QgPSBlbmRwb2ludAogICAgICAgIC5ob3N0X3N0cigpCiAgICAgICAgLnVud3JhcF9vcigidW5rbm93biBUd2l0Y2ggdGVsZW1ldHJ5IGhvc3QiKTsKICAgIGlmIGVycm9yLmlzX3RpbWVvdXQoKSB7CiAgICAgICAgZm9ybWF0ISgiVHdpdGNoIHRlbGVtZXRyeSB0aW1lZCBvdXQgY29ubmVjdGluZyB0byB7aG9zdH0iKQogICAgfSBlbHNlIGlmIGVycm9yLmlzX2Nvbm5lY3QoKSB7CiAgICAgICAgZm9ybWF0ISgKICAgICAgICAgICAgIlR3aXRjaCB0ZWxlbWV0cnkgY29ubmVjdGlvbiBmYWlsZWQgZm9yIHtob3N0fTsgY2hlY2sgRE5TLCBmaXJld2FsbCwgVlBOLCBvciBhZC90cmFja2VyIGJsb2NraW5nIgogICAgICAgICkKICAgIH0gZWxzZSB7CiAgICAgICAgZm9ybWF0ISgiVHdpdGNoIHRlbGVtZXRyeSB0cmFuc3BvcnQgZmFpbGVkIGZvciB7aG9zdH0iKQogICAgfQp9Cgphc3luYyBmbiBzZW5kX21pbnV0ZV93YXRjaGVkKAogICAgZW5kcG9pbnQ6ICZVcmwsCiAgICB0YXJnZXQ6ICZWaWV3ZXJQcmVzZW5jZVRhcmdldCwKICAgIHZpZXdlcl9pZDogJnN0ciwKKSAtPiBSZXN1bHQ8U3RhdHVzQ29kZSwgUHJvdG9jb2xFcnJvcj4gewogICAgbGV0IHBheWxvYWQgPSBidWlsZF9taW51dGVfd2F0Y2hlZF9wYXlsb2FkKHRhcmdldCwgdmlld2VyX2lkKTsKICAgIGxldCBlbmNvZGVkID0gYmFzZTY0X2VuY29kZShwYXlsb2FkLmFzX2J5dGVzKCkpOwogICAgbGV0IHJlc3BvbnNlID0gc2hhcmVkX2NsaWVudCgpCiAgICAgICAgLnBvc3QoZW5kcG9pbnQuY2xvbmUoKSkKICAgICAgICAuaGVhZGVyKFVTRVJfQUdFTlQsIFVTRVJfQUdFTlRfVkFMVUUpCiAgICAgICAgLmhlYWRlcihSRUZFUkVSLCBUV0lUQ0hfVVJMKQogICAgICAgIC5mb3JtKCZbKCJkYXRhIiwgZW5jb2RlZC5hc19zdHIoKSldKQogICAgICAgIC50aW1lb3V0KER1cmF0aW9uOjpmcm9tX3NlY3MoMjApKQogICAgICAgIC5zZW5kKCkKICAgICAgICAuYXdhaXQKICAgICAgICAubWFwX2Vycih8ZXJyb3J8IHsKICAgICAgICAgICAgUHJvdG9jb2xFcnJvcjo6bmV3KCJ0ZWxlbWV0cnkiLCB0ZWxlbWV0cnlfdHJhbnNwb3J0X21lc3NhZ2UoZW5kcG9pbnQsICZlcnJvcikpCiAgICAgICAgfSk/OwogICAgbGV0IHN0YXR1cyA9IHJlc3BvbnNlLnN0YXR1cygpOwogICAgaWYgc3RhdHVzID09IFN0YXR1c0NvZGU6Ok5PX0NPTlRFTlQgewogICAgICAgIE9rKHN0YXR1cykKICAgIH0gZWxzZSB7CiAgICAgICAgRXJyKFByb3RvY29sRXJyb3I6OndpdGhfc3RhdHVzKAogICAgICAgICAgICAidGVsZW1ldHJ5IiwKICAgICAgICAgICAgc3RhdHVzLAogICAgICAgICAgICAiVHdpdGNoIGRpZCBub3QgYWNjZXB0IHRoZSB3YXRjaCB0ZWxlbWV0cnkiLAogICAgICAgICkpCiAgICB9Cn0K'))
+          if ($text.Contains($new)) {
+            Write-Host 'Source fix already applied.'
+            exit 0
+          }
+          if (-not $text.Contains($old)) {
+            throw 'Target telemetry function not found.'
+          }
+          [System.IO.File]::WriteAllText($path, $text.Replace($old, $new))
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Format Rust
+        working-directory: src-tauri
+        run: cargo fmt
+      - name: Commit source fix
+        shell: pwsh
+        run: |
+          if (-not (git status --porcelain)) { exit 0 }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src-tauri/src/viewer_presence.rs
+          git commit -m 'fix: expose Twitch telemetry transport failures'
+          git push origin HEAD:fix/channel-points-telemetry-transport
