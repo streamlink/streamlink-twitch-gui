@@ -20,7 +20,7 @@ const PLAYBACK_ACCESS_TOKEN_HASH: &str =
 const FALLBACK_CLIENT_VERSION: &str = "ef928475-9403-42f2-8a34-55784bd08e16";
 const USER_AGENT_VALUE: &str =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
-const SUCCESS_INTERVAL: Duration = Duration::from_secs(60);
+const SUCCESS_INTERVAL: Duration = Duration::from_secs(20);
 const MAX_WORKERS: usize = 2;
 
 #[derive(Debug, Error)]
