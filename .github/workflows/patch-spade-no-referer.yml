@@ -1,0 +1,43 @@
+name: Patch Spade no Referer
+
+on:
+  push:
+    branches:
+      - agent/channel-points-spade-no-referer
+    paths:
+      - .github/workflows/patch-spade-no-referer.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/channel-points-spade-no-referer
+      - name: Remove Spade Referer only
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path("src-tauri/src/viewer_presence.rs")
+          text = path.read_text(encoding="utf-8")
+          old = '''        .post(endpoint.clone())
+        .header(USER_AGENT, USER_AGENT_VALUE)
+        .header(REFERER, TWITCH_URL)
+        .form(&[("data", encoded.as_str())])'''
+          new = '''        .post(endpoint.clone())
+        .header(USER_AGENT, USER_AGENT_VALUE)
+        .form(&[("data", encoded.as_str())])'''
+          if text.count(old) != 1:
+              raise SystemExit(f"expected exactly one Spade request block, found {text.count(old)}")
+          path.write_text(text.replace(old, new), encoding="utf-8", newline="\n")
+      - name: Commit patch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src-tauri/src/viewer_presence.rs
+          git commit -m "fix: match Spade telemetry headers"
+          git push origin HEAD:agent/channel-points-spade-no-referer
