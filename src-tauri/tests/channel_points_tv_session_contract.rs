@@ -13,10 +13,12 @@ fn channel_points_uses_dedicated_tv_session() {
     assert!(presence.contains("channel_points_auth::load_session"));
     assert!(presence.contains("channel_points_auth::TV_CLIENT_ID"));
     assert!(presence.contains("channel_points_auth::client_session_id"));
+    assert!(presence.contains("format!(\"Bearer {token}\")"));
 
     assert!(points.contains("channel_points_auth::load_session"));
     assert!(points.contains("channel_points_auth::TV_CLIENT_ID"));
     assert!(points.contains("channel_points_auth::client_session_id"));
+    assert!(points.contains("format!(\"Bearer {token}\")"));
 
     assert!(auth_ui.contains("channel_points_auth_start_device_login"));
     assert!(auth_ui.contains("channel_points_auth_poll_device_login"));
