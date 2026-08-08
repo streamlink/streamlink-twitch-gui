@@ -1040,10 +1040,7 @@ mod tests {
         assert_eq!(payload["variables"]["login"], "example");
         assert_eq!(payload["variables"]["isLive"], true);
         assert_eq!(payload["variables"]["isVod"], false);
-        assert_eq!(
-            payload["variables"]["playerType"],
-            "picture-by-picture"
-        );
+        assert_eq!(payload["variables"]["playerType"], "picture-by-picture");
         assert_eq!(payload["variables"]["platform"], "web");
         assert_eq!(
             payload["extensions"]["persistedQuery"]["sha256Hash"],
@@ -1056,8 +1053,14 @@ mod tests {
         let url = build_usher_url("example", "signature", "token").unwrap();
         let query = url.query_pairs().collect::<HashMap<_, _>>();
 
-        assert_eq!(query.get("sig").map(|value| value.as_ref()), Some("signature"));
-        assert_eq!(query.get("token").map(|value| value.as_ref()), Some("token"));
+        assert_eq!(
+            query.get("sig").map(|value| value.as_ref()),
+            Some("signature")
+        );
+        assert_eq!(
+            query.get("token").map(|value| value.as_ref()),
+            Some("token")
+        );
         assert_eq!(query.get("cdm").map(|value| value.as_ref()), Some("wv"));
         assert_eq!(
             query.get("player_version").map(|value| value.as_ref()),
