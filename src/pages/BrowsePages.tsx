@@ -222,6 +222,9 @@ export function WatchingPage() {
             >
               <option value="1">{t("settings:layout1")}</option>
               <option value="2">{t("settings:layout2")}</option>
+              <option value="1x2">{t("settings:layout1x2")}</option>
+              <option value="1x3">{t("settings:layout1x3")}</option>
+              <option value="1x4">{t("settings:layout1x4")}</option>
               <option value="2plus1">{t("settings:layout2plus1")}</option>
               <option value="2x2">{t("settings:layout2x2")}</option>
               <option value="3plus1">{t("settings:layout3plus1")}</option>

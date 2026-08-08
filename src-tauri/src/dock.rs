@@ -430,6 +430,9 @@ pub fn tile_rect(video: Rect, index: usize, layout: &str) -> Rect {
     let (cols, rows) = match layout {
         "1" => (1, 1),
         "2" => (2, 1),
+        "1x2" => (1, 2),
+        "1x3" => (1, 3),
+        "1x4" => (1, 4),
         "2x2" => (2, 2),
         "3x2" => (3, 2),
         "4x2" => (4, 2),
@@ -1349,6 +1352,9 @@ fn grip_thread_main() {
         match layout {
             "1" => (1, 1),
             "2" => (2, 1),
+            "1x2" => (1, 2),
+            "1x3" => (1, 3),
+            "1x4" => (1, 4),
             "2x2" => (2, 2),
             "3x2" => (3, 2),
             "4x2" => (4, 2),
@@ -2032,6 +2038,9 @@ fn grip_thread_main() {
         }
         if preset == "8x1" && count >= 2 {
             return "8x1";
+        }
+        if (preset == "1x2" || preset == "1x3" || preset == "1x4") && count >= 2 {
+            return preset;
         }
         match count {
             0 | 1 => "1",

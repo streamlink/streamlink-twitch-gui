@@ -562,7 +562,7 @@ pub fn launch_chatterino_for_channels(channels: &[String]) -> Result<String, Str
 
 fn normalize_layout(layout: Option<&str>) -> String {
     match layout.unwrap_or("2x2") {
-        s @ ("1" | "2" | "2plus1" | "2x2" | "3plus1" | "3x2" | "4x2" | "8x1") => s.to_string(),
+        s @ ("1" | "2" | "1x2" | "1x3" | "1x4" | "2plus1" | "2x2" | "3plus1" | "3x2" | "4x2" | "8x1") => s.to_string(),
         _ => "2x2".into(),
     }
 }
@@ -1484,6 +1484,9 @@ fn effective_layout(count: usize, preset: &str) -> &str {
     }
     if preset == "8x1" && count >= 2 {
         return "8x1";
+    }
+    if (preset == "1x2" || preset == "1x3" || preset == "1x4") && count >= 2 {
+        return preset;
     }
     match count {
         0 | 1 => "1",
@@ -3400,6 +3403,11 @@ mod tests {
         // 3plus1 keeps its asymmetric main+stack split for 2+ channels.
         assert_eq!(effective_layout(1, "3plus1"), "1");
         assert_eq!(effective_layout(2, "3plus1"), "3plus1");
+        // Vertical stack presets keep stacking for 2+ channels.
+        assert_eq!(effective_layout(1, "1x2"), "1");
+        assert_eq!(effective_layout(2, "1x2"), "1x2");
+        assert_eq!(effective_layout(3, "1x3"), "1x3");
+        assert_eq!(effective_layout(4, "1x4"), "1x4");
     }
 
     #[test]

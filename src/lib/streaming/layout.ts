@@ -7,6 +7,9 @@ export const CHAT_WIDTH_FRACTION = 0.18;
 export type MultistreamLayout =
   | "1"
   | "2"
+  | "1x2"
+  | "1x3"
+  | "1x4"
   | "2plus1"
   | "2x2"
   | "3plus1"
@@ -33,6 +36,9 @@ export function isUnevenMainSide(value: string): value is UnevenMainSide {
 export const MULTISTREAM_LAYOUTS: MultistreamLayout[] = [
   "1",
   "2",
+  "1x2",
+  "1x3",
+  "1x4",
   "2plus1",
   "2x2",
   "3plus1",
@@ -44,6 +50,9 @@ export const MULTISTREAM_LAYOUTS: MultistreamLayout[] = [
 export const LAYOUT_CAPACITY: Record<MultistreamLayout, number> = {
   "1": 1,
   "2": 2,
+  "1x2": 2,
+  "1x3": 3,
+  "1x4": 4,
   "2plus1": 3,
   "2x2": 4,
   "3plus1": 4,
@@ -72,6 +81,12 @@ function layoutGrid(layout: MultistreamLayout): { cols: number; rows: number } {
       return { cols: 1, rows: 1 };
     case "2":
       return { cols: 2, rows: 1 };
+    case "1x2":
+      return { cols: 1, rows: 2 };
+    case "1x3":
+      return { cols: 1, rows: 3 };
+    case "1x4":
+      return { cols: 1, rows: 4 };
     case "2x2":
       return { cols: 2, rows: 2 };
     case "3x2":

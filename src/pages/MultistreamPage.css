@@ -50,12 +50,28 @@
   cursor: grab;
   color: var(--text-faint);
   user-select: none;
+  -webkit-user-select: none;
   font-size: 1rem;
   line-height: 1;
+  padding: 0.4rem 0.5rem;
+  margin-left: -0.5rem;
+  border-radius: var(--radius);
+  touch-action: none;
 }
 
 .ms-slot__handle:active {
   cursor: grabbing;
+}
+
+.ms-slot__handle:hover {
+  background: var(--bg-hover);
+  color: var(--text-muted);
+}
+
+.ms-slot--dragging .ms-slot__meta,
+.ms-slot--dragging .ms-slot__actions {
+  pointer-events: none;
+  user-select: none;
 }
 
 .ms-slot__meta {

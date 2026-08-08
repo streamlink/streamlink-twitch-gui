@@ -65,6 +65,42 @@ describe("computePresetTileFractions", () => {
     expect(tiles[7]!.x).toBeCloseTo(0.875);
   });
 
+  it("stacks 1x2 vertically (one column, two rows)", () => {
+    const tiles = computePresetTileFractions("1x2", 2, false);
+    expect(tiles).toHaveLength(2);
+    expect(tiles[0]!.w).toBe(1);
+    expect(tiles[0]!.h).toBeCloseTo(0.5);
+    expect(tiles[1]!.y).toBeCloseTo(0.5);
+    expect(tiles[1]!.x).toBe(0);
+  });
+
+  it("stacks 1x3 vertically (one column, three rows)", () => {
+    const tiles = computePresetTileFractions("1x3", 3, false);
+    expect(tiles).toHaveLength(3);
+    expect(tiles[0]!.w).toBe(1);
+    expect(tiles[0]!.h).toBeCloseTo(1 / 3);
+    expect(tiles[1]!.y).toBeCloseTo(1 / 3);
+    expect(tiles[2]!.y).toBeCloseTo(2 / 3);
+  });
+
+  it("stacks 1x4 vertically (one column, four rows)", () => {
+    const tiles = computePresetTileFractions("1x4", 4, false);
+    expect(tiles).toHaveLength(4);
+    expect(tiles[0]!.w).toBe(1);
+    expect(tiles[0]!.h).toBeCloseTo(0.25);
+    expect(tiles[1]!.y).toBeCloseTo(0.25);
+    expect(tiles[3]!.y).toBeCloseTo(0.75);
+  });
+
+  it("keeps 1x3 column full width even when chat is reserved", () => {
+    const tiles = computePresetTileFractions("1x3", 2, true);
+    const videoW = 1 - CHAT_WIDTH_FRACTION;
+    expect(tiles).toHaveLength(2);
+    expect(tiles[0]!.w).toBeCloseTo(videoW);
+    expect(tiles[0]!.h).toBeCloseTo(1 / 3);
+    expect(tiles[1]!.y).toBeCloseTo(1 / 3);
+  });
+
   it("keeps 2x2 cell shape even with only two streams", () => {
     const tiles = computePresetTileFractions("2x2", 2, false);
     expect(tiles).toHaveLength(2);

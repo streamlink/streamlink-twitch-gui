@@ -291,11 +291,6 @@ export function MultistreamPage() {
                   ]
                     .filter(Boolean)
                     .join(" ")}
-                  draggable
-                  onDragStart={(e) => {
-                    e.dataTransfer.effectAllowed = "move";
-                    setDragIndex(index);
-                  }}
                   onDragOver={(e) => {
                     e.preventDefault();
                     e.dataTransfer.dropEffect = "move";
@@ -316,8 +311,26 @@ export function MultistreamPage() {
                     setDragIndex(null);
                     setOverIndex(null);
                   }}
+                  onDragLeave={() => {
+                    if (overIndex === index) setOverIndex(null);
+                  }}
                 >
-                  <span className="ms-slot__handle" aria-hidden>
+                  <span
+                    className="ms-slot__handle"
+                    draggable
+                    onDragStart={(e) => {
+                      // HTML5 DnD requires payload data, otherwise Chromium
+                      // (WebView2) shows the "not-allowed" cursor.
+                      e.dataTransfer.effectAllowed = "move";
+                      e.dataTransfer.setData("text/plain", channel);
+                      setDragIndex(index);
+                    }}
+                    onDragEnd={() => {
+                      setDragIndex(null);
+                      setOverIndex(null);
+                    }}
+                    aria-hidden
+                  >
                     ⋮⋮
                   </span>
                   <div className="ms-slot__meta">
