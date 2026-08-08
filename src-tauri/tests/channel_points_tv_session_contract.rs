@@ -7,6 +7,7 @@ fn channel_points_uses_dedicated_tv_session() {
     assert!(lib.contains("mod channel_points_auth;"));
     assert!(lib.contains("channel_points_auth_start_device_login"));
     assert!(lib.contains("channel_points_auth_poll_device_login"));
+    assert!(lib.contains("channel_points_auth_clear"));
 
     assert!(presence.contains("channel_points_auth::load_session"));
     assert!(presence.contains("channel_points_auth::TV_CLIENT_ID"));
