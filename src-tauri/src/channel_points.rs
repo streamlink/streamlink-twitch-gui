@@ -217,13 +217,11 @@ async fn fetch_integrity_token(
         .filter(|value| !value.is_empty())
         .ok_or_else(|| ChannelPointsError::Message("Twitch returned no integrity token".into()))?
         .to_string();
-    let expiration = body
-        .get("expiration")
-        .and_then(|value| {
-            value
-                .as_u64()
-                .or_else(|| value.as_str().and_then(|raw| raw.parse::<u64>().ok()))
-        });
+    let expiration = body.get("expiration").and_then(|value| {
+        value
+            .as_u64()
+            .or_else(|| value.as_str().and_then(|raw| raw.parse::<u64>().ok()))
+    });
     let expiration_ms = normalize_integrity_expiration(expiration, now_ms);
 
     if let Ok(mut cache) = integrity_cache().lock() {
