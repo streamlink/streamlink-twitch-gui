@@ -1,0 +1,83 @@
+name: Apply TV session wiring
+
+on:
+  push:
+    branches:
+      - agent/channel-points-tv-session
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/channel-points-tv-session
+          fetch-depth: 0
+      - name: Wire TV session into existing code
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'expected source block not found in {path}: {old[:80]!r}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # lib.rs: register dedicated Channel Points auth commands.
+          replace('src-tauri/src/lib.rs',
+                  'mod channel_points;\nmod dock;',
+                  'mod channel_points;\nmod channel_points_auth;\nmod dock;')
+
+          marker = '''#[tauri::command]\nasync fn viewer_presence_sync(\n'''
+          commands = '''#[tauri::command]\nfn channel_points_auth_status() -> Result<channel_points_auth::ChannelPointsAuthStatus, String> {\n    channel_points_auth::get_status().map_err(|e| e.to_string())\n}\n\n#[tauri::command]\nasync fn channel_points_auth_start_device_login(\n) -> Result<channel_points_auth::TvDeviceCodeResponse, String> {\n    channel_points_auth::start_device_flow()\n        .await\n        .map_err(|e| e.to_string())\n}\n\n#[tauri::command]\nasync fn channel_points_auth_poll_device_login(\n    device_code: String,\n) -> Result<channel_points_auth::TvDevicePoll, String> {\n    channel_points_auth::poll_device_token(&device_code)\n        .await\n        .map_err(|e| e.to_string())\n}\n\n#[tauri::command]\nfn channel_points_auth_clear(\n    presence: tauri::State<'_, viewer_presence::SharedViewerPresence>,\n) -> Result<channel_points_auth::ChannelPointsAuthStatus, String> {\n    viewer_presence::cancel_all(presence.inner());\n    channel_points_auth::clear().map_err(|e| e.to_string())\n}\n\n#[tauri::command]\nasync fn viewer_presence_sync(\n'''
+          replace('src-tauri/src/lib.rs', marker, commands)
+          replace('src-tauri/src/lib.rs',
+                  '            twitch_web_auth_clear,\n            viewer_presence_sync,',
+                  '            twitch_web_auth_clear,\n            channel_points_auth_status,\n            channel_points_auth_start_device_login,\n            channel_points_auth_poll_device_login,\n            channel_points_auth_clear,\n            viewer_presence_sync,')
+
+          # Auth bar: expose the dedicated TV activation flow.
+          replace('src/components/AuthBar.tsx',
+                  'import { ChannelPointsStatus } from "./ChannelPointsStatus";\n',
+                  'import { ChannelPointsStatus } from "./ChannelPointsStatus";\nimport { ChannelPointsAuth } from "./ChannelPointsAuth";\n')
+          replace('src/components/AuthBar.tsx',
+                  '          <TwitchWebsiteAuth compact={compact} />\n          <ChannelPointsStatus compact={compact} />',
+                  '          <TwitchWebsiteAuth compact={compact} />\n          <ChannelPointsAuth compact={compact} />\n          <ChannelPointsStatus compact={compact} />')
+
+          # viewer_presence.rs: keep HLS/Spade byte-for-byte, swap only auth/session identity.
+          replace('src-tauri/src/viewer_presence.rs', 'use uuid::Uuid;\n', '')
+          replace('src-tauri/src/viewer_presence.rs',
+                  'const BROWSER_CLIENT_ID: &str = "kimne78kx3ncx6brgo4mv6wki5h1ko";\n', '')
+          replace('src-tauri/src/viewer_presence.rs',
+                  '            device_id: Uuid::new_v4().simple().to_string(),\n            client_session: Uuid::new_v4().simple().to_string(),',
+                  '            device_id: crate::channel_points_auth::device_id().to_string(),\n            client_session: crate::channel_points_auth::client_session_id().to_string(),')
+
+          old_auth = '''    let token = crate::twitch_web_auth::load_token()\n        .map_err(|error| ViewerPresenceError::Message(error.to_string()))?\n        .ok_or_else(|| {\n            ViewerPresenceError::Message("authenticated Twitch playback is not configured".into())\n        })?;\n    let website = crate::twitch_web_auth::get_status()\n        .map_err(|error| ViewerPresenceError::Message(error.to_string()))?;\n    let session = crate::auth::get_session()\n        .await\n        .map_err(|error| ViewerPresenceError::Message(error.to_string()))?;\n    let viewer_id = session.user_id.ok_or_else(|| {\n        ViewerPresenceError::Message("log in with Twitch before enabling channel points".into())\n    })?;\n    if !session.logged_in || website.user_id.as_deref() != Some(viewer_id.as_str()) {\n        cancel_workers(&state, true);\n        state.enabled.store(true, Ordering::Release);\n        return Err(ViewerPresenceError::Message(\n            "authenticated playback does not match the current Twitch account".into(),\n        ));\n    }\n'''
+          new_auth = '''    let points_auth = crate::channel_points_auth::load_session()\n        .map_err(|error| ViewerPresenceError::Message(error.to_string()))?\n        .ok_or_else(|| {\n            ViewerPresenceError::Message("Channel Points TV login is not configured".into())\n        })?;\n    let token = points_auth.token;\n    let session = crate::auth::get_session()\n        .await\n        .map_err(|error| ViewerPresenceError::Message(error.to_string()))?;\n    let viewer_id = session.user_id.ok_or_else(|| {\n        ViewerPresenceError::Message("log in with Twitch before enabling channel points".into())\n    })?;\n    if !session.logged_in || points_auth.user_id != viewer_id {\n        cancel_workers(&state, true);\n        state.enabled.store(true, Ordering::Release);\n        return Err(ViewerPresenceError::Message(\n            "Channel Points TV login does not match the current Twitch account".into(),\n        ));\n    }\n'''
+          replace('src-tauri/src/viewer_presence.rs', old_auth, new_auth)
+          replace('src-tauri/src/viewer_presence.rs',
+                  'website_auth_still_matches(&viewer_id, &token)',
+                  'channel_points_auth_still_matches(&viewer_id, &token)')
+          old_match = '''fn website_auth_still_matches(viewer_id: &str, expected_token: &str) -> bool {\n    let current_token = crate::twitch_web_auth::load_token().ok().flatten();\n    if current_token.as_deref() != Some(expected_token) {\n        return false;\n    }\n    crate::twitch_web_auth::get_status()\n        .ok()\n        .and_then(|status| status.user_id)\n        .as_deref()\n        == Some(viewer_id)\n}\n'''
+          new_match = '''fn channel_points_auth_still_matches(viewer_id: &str, expected_token: &str) -> bool {\n    crate::channel_points_auth::load_session()\n        .ok()\n        .flatten()\n        .map(|session| session.token == expected_token && session.user_id == viewer_id)\n        .unwrap_or(false)\n}\n'''
+          replace('src-tauri/src/viewer_presence.rs', old_match, new_match)
+          replace('src-tauri/src/viewer_presence.rs',
+                  '.header(AUTHORIZATION, format!("OAuth {token}"))\n        .header("Client-Id", BROWSER_CLIENT_ID)',
+                  '.header(AUTHORIZATION, format!("Bearer {token}"))\n        .header("Client-Id", crate::channel_points_auth::TV_CLIENT_ID)')
+
+          # Remove this one-shot helper from the resulting branch.
+          Path('.github/workflows/apply-tv-session-patch.yml').unlink()
+          PY
+      - name: Commit wiring
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: wire Channel Points TV session"
+          git push origin HEAD:agent/channel-points-tv-session
