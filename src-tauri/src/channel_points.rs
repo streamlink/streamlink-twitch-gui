@@ -36,6 +36,7 @@ pub struct ChannelPointsSnapshot {
     pub bonus_available: bool,
     pub bonus_claimed: bool,
     pub claim_http_status: Option<u16>,
+    pub claim_error: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -291,25 +292,30 @@ pub async fn refresh(raw_channel_login: &str) -> Result<ChannelPointsSnapshot, C
     let mut context = fetch_context(&channel_login, &token, &client_version).await?;
     let mut bonus_claimed = false;
     let mut claim_http_status = None;
+    let mut claim_error = None;
 
     if let Some(claim_id) = context.claim_id.clone() {
-        claim_http_status = Some(
-            claim_bonus(
-                &channel_login,
-                &context.channel_id,
-                &claim_id,
-                &token,
-                &client_version,
-            )
-            .await?,
-        );
-        bonus_claimed = true;
+        match claim_bonus(
+            &channel_login,
+            &context.channel_id,
+            &claim_id,
+            &token,
+            &client_version,
+        )
+        .await
+        {
+            Ok(status) => {
+                claim_http_status = Some(status);
+                bonus_claimed = true;
 
-        // Refresh once after a successful claim so the displayed balance catches
-        // up immediately. A transient refresh failure must not hide a claim that
-        // Twitch already accepted.
-        if let Ok(updated) = fetch_context(&channel_login, &token, &client_version).await {
-            context = updated;
+                // Refresh once after a successful claim so the displayed balance catches
+                // up immediately. A transient refresh failure must not hide a claim that
+                // Twitch already accepted.
+                if let Ok(updated) = fetch_context(&channel_login, &token, &client_version).await {
+                    context = updated;
+                }
+            }
+            Err(error) => claim_error = Some(error.to_string()),
         }
     }
 
@@ -319,6 +325,7 @@ pub async fn refresh(raw_channel_login: &str) -> Result<ChannelPointsSnapshot, C
         bonus_available: context.claim_id.is_some(),
         bonus_claimed,
         claim_http_status,
+        claim_error,
     })
 }
 
