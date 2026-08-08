@@ -43,8 +43,6 @@ struct StoredTvAuth {
 pub(crate) struct ChannelPointsAuthSession {
     pub token: String,
     pub user_id: String,
-    pub login: String,
-    pub device_id: String,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -203,8 +201,6 @@ pub(crate) fn load_session() -> Result<Option<ChannelPointsAuthSession>, Channel
     Ok(load_auth()?.map(|auth| ChannelPointsAuthSession {
         token: auth.token,
         user_id: auth.user_id,
-        login: auth.login,
-        device_id: auth.device_id,
     }))
 }
 
