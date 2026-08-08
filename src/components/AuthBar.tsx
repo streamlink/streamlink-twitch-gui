@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "../lib/auth/store";
 import { ChannelPointsStatus } from "./ChannelPointsStatus";
+import { ChannelPointsAuth } from "./ChannelPointsAuth";
 import { TwitchWebsiteAuth } from "./TwitchWebsiteAuth";
 import "./AuthBar.css";
 
@@ -62,6 +63,7 @@ export function AuthBar({ compact = false }: { compact?: boolean }) {
             </button>
           </div>
           <TwitchWebsiteAuth compact={compact} />
+          <ChannelPointsAuth compact={compact} />
           <ChannelPointsStatus compact={compact} />
         </>
       ) : !device ? (

@@ -7,14 +7,12 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use thiserror::Error;
 use url::Url;
-use uuid::Uuid;
 
 use crate::http::shared_client;
 
 const TWITCH_URL: &str = "https://www.twitch.tv";
 const GQL_URL: &str = "https://gql.twitch.tv/gql";
 const USHER_URL: &str = "https://usher.ttvnw.net/api/channel/hls/";
-const BROWSER_CLIENT_ID: &str = "kimne78kx3ncx6brgo4mv6wki5h1ko";
 const PLAYBACK_ACCESS_TOKEN_HASH: &str =
     "ed230aa1e33e07eebb8928504583da78a5173989fadfb1ac94be06a04f3cdbe9";
 const FALLBACK_CLIENT_VERSION: &str = "ef928475-9403-42f2-8a34-55784bd08e16";
@@ -86,8 +84,8 @@ impl ViewerPresenceState {
             generation: AtomicU64::new(0),
             enabled: AtomicBool::new(false),
             limited: AtomicBool::new(false),
-            device_id: Uuid::new_v4().simple().to_string(),
-            client_session: Uuid::new_v4().simple().to_string(),
+            device_id: crate::channel_points_auth::device_id().to_string(),
+            client_session: crate::channel_points_auth::client_session_id().to_string(),
         }
     }
 }
@@ -236,24 +234,23 @@ pub async fn sync(
         return get_status(&state);
     }
 
-    let token = crate::twitch_web_auth::load_token()
+    let points_auth = crate::channel_points_auth::load_session()
         .map_err(|error| ViewerPresenceError::Message(error.to_string()))?
         .ok_or_else(|| {
-            ViewerPresenceError::Message("authenticated Twitch playback is not configured".into())
+            ViewerPresenceError::Message("Channel Points TV login is not configured".into())
         })?;
-    let website = crate::twitch_web_auth::get_status()
-        .map_err(|error| ViewerPresenceError::Message(error.to_string()))?;
+    let token = points_auth.token;
     let session = crate::auth::get_session()
         .await
         .map_err(|error| ViewerPresenceError::Message(error.to_string()))?;
     let viewer_id = session.user_id.ok_or_else(|| {
         ViewerPresenceError::Message("log in with Twitch before enabling channel points".into())
     })?;
-    if !session.logged_in || website.user_id.as_deref() != Some(viewer_id.as_str()) {
+    if !session.logged_in || points_auth.user_id != viewer_id {
         cancel_workers(&state, true);
         state.enabled.store(true, Ordering::Release);
         return Err(ViewerPresenceError::Message(
-            "authenticated playback does not match the current Twitch account".into(),
+            "Channel Points TV login does not match the current Twitch account".into(),
         ));
     }
 
@@ -363,7 +360,7 @@ async fn run_worker(
     loop {
         if cancel.load(Ordering::Acquire)
             || state.generation.load(Ordering::Acquire) != generation
-            || !website_auth_still_matches(&viewer_id, &token)
+            || !channel_points_auth_still_matches(&viewer_id, &token)
         {
             break;
         }
@@ -482,16 +479,12 @@ async fn run_watch_cycle(
     send_minute_watched(&runtime.spade_url, target, viewer_id).await
 }
 
-fn website_auth_still_matches(viewer_id: &str, expected_token: &str) -> bool {
-    let current_token = crate::twitch_web_auth::load_token().ok().flatten();
-    if current_token.as_deref() != Some(expected_token) {
-        return false;
-    }
-    crate::twitch_web_auth::get_status()
+fn channel_points_auth_still_matches(viewer_id: &str, expected_token: &str) -> bool {
+    crate::channel_points_auth::load_session()
         .ok()
-        .and_then(|status| status.user_id)
-        .as_deref()
-        == Some(viewer_id)
+        .flatten()
+        .map(|session| session.token == expected_token && session.user_id == viewer_id)
+        .unwrap_or(false)
 }
 
 fn failure_delay(failures: u32) -> Duration {
@@ -582,8 +575,8 @@ async fn fetch_playback_access_token(
         .post(GQL_URL)
         .header(USER_AGENT, USER_AGENT_VALUE)
         .header(ACCEPT, "application/json")
-        .header(AUTHORIZATION, format!("OAuth {token}"))
-        .header("Client-Id", BROWSER_CLIENT_ID)
+        .header(AUTHORIZATION, format!("Bearer {token}"))
+        .header("Client-Id", crate::channel_points_auth::TV_CLIENT_ID)
         .header("Client-Session-Id", client_session)
         .header("Client-Version", client_version)
         .header("X-Device-Id", device_id)
