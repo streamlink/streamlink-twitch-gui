@@ -198,13 +198,15 @@ fn parse_context(body: &Value) -> Result<ContextState, ChannelPointsError> {
         .filter(|value| !value.is_empty())
         .ok_or_else(|| ChannelPointsError::Message("Twitch returned no channel id".into()))?
         .to_string();
-    let community_points = channel
-        .pointer("/self/communityPoints")
-        .ok_or_else(|| ChannelPointsError::Message("Twitch returned no Channel Points state".into()))?;
+    let community_points = channel.pointer("/self/communityPoints").ok_or_else(|| {
+        ChannelPointsError::Message("Twitch returned no Channel Points state".into())
+    })?;
     let balance = community_points
         .get("balance")
         .and_then(Value::as_u64)
-        .ok_or_else(|| ChannelPointsError::Message("Twitch returned no Channel Points balance".into()))?;
+        .ok_or_else(|| {
+            ChannelPointsError::Message("Twitch returned no Channel Points balance".into())
+        })?;
     let claim_id = community_points
         .pointer("/availableClaim/id")
         .and_then(Value::as_str)
