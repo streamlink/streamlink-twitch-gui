@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildPresenceTargets,
+  describeViewerPresenceStatus,
   prunePresenceMetadata,
   type PresenceMetadata,
   type PresenceSession,
@@ -87,5 +88,27 @@ describe("viewer presence lifecycle", () => {
     );
 
     expect(targets).toEqual([]);
+  });
+
+  it("describes the exact failing backend protocol stage", () => {
+    expect(
+      describeViewerPresenceStatus({
+        enabled: true,
+        activeSessionIds: ["one"],
+        limited: false,
+        workers: [
+          {
+            sessionId: "one",
+            channelLogin: "one",
+            lastStage: "playback-token",
+            lastHttpStatus: 401,
+            lastError: "Twitch rejected the playback-token request",
+            lastSuccessUnixMs: null,
+          },
+        ],
+      }),
+    ).toBe(
+      "one: playback-token HTTP 401 — Twitch rejected the playback-token request",
+    );
   });
 });
