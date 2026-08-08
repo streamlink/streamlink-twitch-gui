@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 use thiserror::Error;
+use uuid::Uuid;
 
 use crate::http::shared_client;
 
@@ -10,6 +11,8 @@ const SERVICE: &str = "streamlink-twitch-gui";
 const USER: &str = "twitch-website-oauth";
 const VALIDATE_URL: &str = "https://id.twitch.tv/oauth2/validate";
 
+#[allow(dead_code)]
+pub(crate) const WEB_CLIENT_ID: &str = "kimne78kx3ncx6brgo4mv6wki5h1ko";
 pub(crate) const MANAGED_BEGIN: &str = "# BEGIN streamlink-twitch-gui managed Twitch auth";
 pub(crate) const MANAGED_END: &str = "# END streamlink-twitch-gui managed Twitch auth";
 
@@ -33,6 +36,13 @@ struct StoredWebsiteAuth {
     token: String,
     user_id: String,
     login: String,
+}
+
+#[allow(dead_code)]
+#[derive(Debug, Clone)]
+pub(crate) struct TwitchWebAuthSession {
+    pub token: String,
+    pub user_id: String,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -98,6 +108,30 @@ fn clear_auth() -> Result<(), TwitchWebAuthError> {
 #[allow(dead_code)]
 pub(crate) fn load_token() -> Result<Option<String>, TwitchWebAuthError> {
     Ok(load_auth()?.map(|auth| auth.token))
+}
+
+#[allow(dead_code)]
+pub(crate) fn load_session() -> Result<Option<TwitchWebAuthSession>, TwitchWebAuthError> {
+    Ok(load_auth()?.map(|auth| TwitchWebAuthSession {
+        token: auth.token,
+        user_id: auth.user_id,
+    }))
+}
+
+#[allow(dead_code)]
+pub(crate) fn device_id() -> &'static str {
+    static VALUE: OnceLock<String> = OnceLock::new();
+    VALUE
+        .get_or_init(|| Uuid::new_v4().simple().to_string())
+        .as_str()
+}
+
+#[allow(dead_code)]
+pub(crate) fn client_session_id() -> &'static str {
+    static VALUE: OnceLock<String> = OnceLock::new();
+    VALUE
+        .get_or_init(|| Uuid::new_v4().simple().to_string())
+        .as_str()
 }
 
 pub(crate) fn normalize_token(raw: &str) -> Result<String, TwitchWebAuthError> {
@@ -400,5 +434,14 @@ mod tests {
         .unwrap();
         let expected_linux = PathBuf::from("/home/janik/.config/streamlink/config.twitch");
         assert_eq!(linux_path, expected_linux);
+    }
+
+    #[test]
+    fn web_identity_helpers_are_stable() {
+        assert_eq!(WEB_CLIENT_ID, "kimne78kx3ncx6brgo4mv6wki5h1ko");
+        assert!(!device_id().is_empty());
+        assert_eq!(device_id(), device_id());
+        assert!(!client_session_id().is_empty());
+        assert_eq!(client_session_id(), client_session_id());
     }
 }
