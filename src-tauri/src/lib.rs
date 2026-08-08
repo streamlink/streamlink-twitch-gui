@@ -3,7 +3,6 @@
 
 mod auth;
 mod channel_points;
-mod channel_points_auth;
 mod dock;
 mod doctor;
 mod eventsub;
@@ -79,36 +78,6 @@ fn twitch_web_auth_clear(
 ) -> Result<twitch_web_auth::TwitchWebAuthStatus, String> {
     viewer_presence::cancel_all(presence.inner());
     twitch_web_auth::clear().map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-fn channel_points_auth_status() -> Result<channel_points_auth::ChannelPointsAuthStatus, String> {
-    channel_points_auth::get_status().map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-async fn channel_points_auth_start_device_login(
-) -> Result<channel_points_auth::TvDeviceCodeResponse, String> {
-    channel_points_auth::start_device_flow()
-        .await
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-async fn channel_points_auth_poll_device_login(
-    device_code: String,
-) -> Result<channel_points_auth::TvDevicePoll, String> {
-    channel_points_auth::poll_device_token(&device_code)
-        .await
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-fn channel_points_auth_clear(
-    presence: tauri::State<'_, viewer_presence::SharedViewerPresence>,
-) -> Result<channel_points_auth::ChannelPointsAuthStatus, String> {
-    viewer_presence::cancel_all(presence.inner());
-    channel_points_auth::clear().map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -305,10 +274,6 @@ pub fn run() {
             twitch_web_auth_status,
             twitch_web_auth_save,
             twitch_web_auth_clear,
-            channel_points_auth_status,
-            channel_points_auth_start_device_login,
-            channel_points_auth_poll_device_login,
-            channel_points_auth_clear,
             viewer_presence_sync,
             viewer_presence_status,
             channel_points_refresh,
