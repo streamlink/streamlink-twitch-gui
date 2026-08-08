@@ -401,4 +401,13 @@ mod tests {
         let expected_linux = PathBuf::from("/home/janik/.config/streamlink/config.twitch");
         assert_eq!(linux_path, expected_linux);
     }
+
+    #[test]
+    fn web_identity_helpers_are_stable() {
+        assert_eq!(WEB_CLIENT_ID, "kimne78kx3ncx6brgo4mv6wki5h1ko");
+        assert!(!device_id().is_empty());
+        assert_eq!(device_id(), device_id());
+        assert!(!client_session_id().is_empty());
+        assert_eq!(client_session_id(), client_session_id());
+    }
 }
