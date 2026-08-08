@@ -106,14 +106,14 @@ async fn post_gql(
         .post(GQL_URL)
         .header(USER_AGENT, USER_AGENT_VALUE)
         .header(ACCEPT, "application/json")
-        .header(AUTHORIZATION, format!("Bearer {token}"))
-        .header("Client-Id", crate::channel_points_auth::TV_CLIENT_ID)
+        .header(AUTHORIZATION, format!("OAuth {token}"))
+        .header("Client-Id", crate::twitch_web_auth::WEB_CLIENT_ID)
         .header(
             "Client-Session-Id",
-            crate::channel_points_auth::client_session_id(),
+            crate::twitch_web_auth::client_session_id(),
         )
         .header("Client-Version", client_version)
-        .header("X-Device-Id", crate::channel_points_auth::device_id())
+        .header("X-Device-Id", crate::twitch_web_auth::device_id())
         .header(REFERER, format!("{TWITCH_URL}/{channel_login}"))
         .json(payload)
         .send()
@@ -210,17 +210,17 @@ pub async fn refresh(raw_channel_login: &str) -> Result<ChannelPointsSnapshot, C
         ));
     }
 
-    let points_auth = crate::channel_points_auth::load_session()
+    let points_auth = crate::twitch_web_auth::load_session()
         .map_err(|error| ChannelPointsError::Message(error.to_string()))?
         .ok_or_else(|| {
-            ChannelPointsError::Message("Channel Points TV login is not configured".into())
+            ChannelPointsError::Message("Twitch Website Authentication is not configured".into())
         })?;
     let session = crate::auth::get_session()
         .await
         .map_err(|error| ChannelPointsError::Message(error.to_string()))?;
     if !session.logged_in || session.user_id.as_deref() != Some(points_auth.user_id.as_str()) {
         return Err(ChannelPointsError::Message(
-            "Channel Points TV login does not match the current Twitch account".into(),
+            "Twitch Website Authentication does not match the current Twitch account".into(),
         ));
     }
 
