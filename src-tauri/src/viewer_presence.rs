@@ -887,6 +887,21 @@ pub(crate) fn extract_spade_url(settings: &str) -> Option<String> {
     })
 }
 
+fn telemetry_transport_message(endpoint: &Url, error: &reqwest::Error) -> String {
+    let host = endpoint
+        .host_str()
+        .unwrap_or("unknown Twitch telemetry host");
+    if error.is_timeout() {
+        format!("Twitch telemetry timed out connecting to {host}")
+    } else if error.is_connect() {
+        format!(
+            "Twitch telemetry connection failed for {host}; check DNS, firewall, VPN, or ad/tracker blocking"
+        )
+    } else {
+        format!("Twitch telemetry transport failed for {host}")
+    }
+}
+
 async fn send_minute_watched(
     endpoint: &Url,
     target: &ViewerPresenceTarget,
@@ -899,9 +914,12 @@ async fn send_minute_watched(
         .header(USER_AGENT, USER_AGENT_VALUE)
         .header(REFERER, TWITCH_URL)
         .form(&[("data", encoded.as_str())])
+        .timeout(Duration::from_secs(20))
         .send()
         .await
-        .map_err(|_| ProtocolError::new("telemetry", "Twitch telemetry request failed"))?;
+        .map_err(|error| {
+            ProtocolError::new("telemetry", telemetry_transport_message(endpoint, &error))
+        })?;
     let status = response.status();
     if status == StatusCode::NO_CONTENT {
         Ok(status)
