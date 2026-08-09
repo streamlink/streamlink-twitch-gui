@@ -3,6 +3,7 @@
 
 mod auth;
 mod channel_points;
+mod channel_points_realtime;
 mod dock;
 mod doctor;
 mod eventsub;
@@ -54,6 +55,7 @@ async fn auth_poll_device_login(device_code: String) -> Result<auth::DevicePoll,
 async fn auth_logout(
     presence: tauri::State<'_, viewer_presence::SharedViewerPresence>,
 ) -> Result<(), String> {
+    channel_points_realtime::clear();
     viewer_presence::cancel_all(presence.inner());
     auth::logout().await.map_err(|e| e.to_string())
 }
@@ -76,6 +78,7 @@ async fn twitch_web_auth_save(
 fn twitch_web_auth_clear(
     presence: tauri::State<'_, viewer_presence::SharedViewerPresence>,
 ) -> Result<twitch_web_auth::TwitchWebAuthStatus, String> {
+    channel_points_realtime::clear();
     viewer_presence::cancel_all(presence.inner());
     twitch_web_auth::clear().map_err(|e| e.to_string())
 }
@@ -86,6 +89,14 @@ async fn viewer_presence_sync(
     enabled: bool,
     targets: Vec<viewer_presence::ViewerPresenceTarget>,
 ) -> Result<viewer_presence::ViewerPresenceStatus, String> {
+    if let Err(error) = channel_points_realtime::sync(enabled, &targets).await {
+        viewer_presence::cancel_all(state.inner());
+        return Err(error);
+    }
+    if enabled && !targets.is_empty() && !channel_points_realtime::is_ready() {
+        viewer_presence::cancel_all(state.inner());
+        return Err("waiting for Twitch realtime presence".into());
+    }
     viewer_presence::sync(state.inner().clone(), enabled, targets)
         .await
         .map_err(|e| e.to_string())
@@ -226,6 +237,7 @@ fn eventsub_sync(enabled: bool, channels: Vec<String>) -> Result<(), String> {
 
 #[tauri::command]
 fn app_quit(app: AppHandle) {
+    channel_points_realtime::clear();
     app.exit(0);
 }
 
