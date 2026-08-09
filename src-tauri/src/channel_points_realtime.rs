@@ -78,14 +78,19 @@ pub async fn sync(
         .ok_or_else(|| "log in with Twitch before enabling channel points".to_string())?;
     if !auth_session.logged_in || web_auth.user_id != viewer_id {
         clear();
-        return Err("Twitch Website Authentication does not match the current Twitch account".into());
+        return Err(
+            "Twitch Website Authentication does not match the current Twitch account".into(),
+        );
     }
 
     let mut channel_ids = targets
         .iter()
         .map(|target| target.channel_id.trim().to_string())
         .filter(|channel_id| {
-            !channel_id.is_empty() && channel_id.chars().all(|character| character.is_ascii_digit())
+            !channel_id.is_empty()
+                && channel_id
+                    .chars()
+                    .all(|character| character.is_ascii_digit())
         })
         .collect::<Vec<_>>();
     channel_ids.sort();
@@ -245,10 +250,9 @@ async fn run_session(desired: &DesiredPresence, generation: u64) -> Result<(), S
     )
     .into_client_request()
     .map_err(|error| format!("Hermes request: {error}"))?;
-    request.headers_mut().insert(
-        ORIGIN,
-        HeaderValue::from_static(TWITCH_ORIGIN),
-    );
+    request
+        .headers_mut()
+        .insert(ORIGIN, HeaderValue::from_static(TWITCH_ORIGIN));
 
     let (mut socket, _) = tokio::time::timeout(CONNECT_TIMEOUT, connect_async(request))
         .await
@@ -268,7 +272,7 @@ async fn run_session(desired: &DesiredPresence, generation: u64) -> Result<(), S
     wait_for_subscriptions(&mut socket, &mut subscriptions).await?;
 
     if !generation_matches(generation) {
-        let _ = socket.close(None).await;
+        let _ = socket.send(Message::Close(None)).await;
         return Ok(());
     }
     mark_ready(generation);
@@ -279,7 +283,7 @@ async fn run_session(desired: &DesiredPresence, generation: u64) -> Result<(), S
         tokio::select! {
             _ = state().wake.notified() => {
                 if !generation_matches(generation) {
-                    let _ = socket.close(None).await;
+                    let _ = socket.send(Message::Close(None)).await;
                     return Ok(());
                 }
             }
@@ -457,9 +461,7 @@ fn timestamp() -> String {
     let hour = seconds_of_day / 3_600;
     let minute = (seconds_of_day % 3_600) / 60;
     let second = seconds_of_day % 60;
-    format!(
-        "{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}.{millis:03}Z"
-    )
+    format!("{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}.{millis:03}Z")
 }
 
 fn civil_from_days(days_since_epoch: i64) -> (i64, i64, i64) {
@@ -467,8 +469,7 @@ fn civil_from_days(days_since_epoch: i64) -> (i64, i64, i64) {
     let era = if z >= 0 { z } else { z - 146_096 } / 146_097;
     let day_of_era = z - era * 146_097;
     let year_of_era =
-        (day_of_era - day_of_era / 1_460 + day_of_era / 36_524 - day_of_era / 146_096)
-            / 365;
+        (day_of_era - day_of_era / 1_460 + day_of_era / 36_524 - day_of_era / 146_096) / 365;
     let mut year = year_of_era + era * 400;
     let day_of_year = day_of_era - (365 * year_of_era + year_of_era / 4 - year_of_era / 100);
     let month_prime = (5 * day_of_year + 2) / 153;
