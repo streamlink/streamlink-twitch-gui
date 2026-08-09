@@ -6,5 +6,58 @@ if [ "${SKIP_CI_HOOK:-}" = "1" ]; then
   exit 0
 fi
 
+# GitHub Desktop and other GUI clients run hooks in Git Bash with a minimal PATH.
+bootstrap_windows_path() {
+  case "$(uname -s 2>/dev/null)" in
+    MINGW* | MSYS* | CYGWIN*)
+      for dir in \
+        "$PROGRAMFILES/nodejs" \
+        "/c/Program Files (x86)/nodejs" \
+        "$LOCALAPPDATA/Programs/nodejs" \
+        "$APPDATA/npm" \
+        "$HOME/scoop/apps/nodejs/current/bin" \
+        "$HOME/scoop/shims"
+      do
+        if [ -n "$dir" ] && [ -d "$dir" ]; then
+          PATH="$dir:$PATH"
+        fi
+      done
+      export PATH
+      ;;
+  esac
+}
+
+run_ci() {
+  # .githooks/ is at the repo root; avoid git(1) so hooks work when git is not on PATH.
+  ROOT="$(cd "$(dirname "$0")/.." && pwd)" || return 1
+  cd "$ROOT" || return 1
+
+  if command -v node >/dev/null 2>&1; then
+    node scripts/ci-local.mjs
+    return $?
+  fi
+
+  if [ -x "/c/Program Files/nodejs/node.exe" ]; then
+    "/c/Program Files/nodejs/node.exe" scripts/ci-local.mjs
+    return $?
+  fi
+
+  # npm.cmd is not executable from sh; cmd.exe uses the full Windows PATH.
+  if command -v cmd >/dev/null 2>&1; then
+    cmd //c "npm run ci"
+    return $?
+  fi
+
+  return 127
+}
+
 echo "pre-push: running Windows CI checks (npm run ci)…"
-npm run ci
+bootstrap_windows_path
+run_ci
+status=$?
+if [ "$status" -ne 0 ]; then
+  if [ "$status" -eq 127 ]; then
+    echo "pre-push: Node.js/npm not found. Install Node.js (add to system PATH) or use SKIP_CI_HOOK=1 git push" >&2
+  fi
+  exit "$status"
+fi

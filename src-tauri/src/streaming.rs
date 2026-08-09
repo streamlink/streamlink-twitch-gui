@@ -562,7 +562,8 @@ pub fn launch_chatterino_for_channels(channels: &[String]) -> Result<String, Str
 
 fn normalize_layout(layout: Option<&str>) -> String {
     match layout.unwrap_or("2x2") {
-        s @ ("1" | "2" | "1x2" | "1x3" | "1x4" | "2plus1" | "2x2" | "3plus1" | "3x2" | "4x2" | "8x1") => s.to_string(),
+        s @ ("1" | "2" | "1x2" | "1x3" | "1x4" | "2plus1" | "2x2" | "3plus1" | "3x2" | "4x2"
+        | "8x1") => s.to_string(),
         _ => "2x2".into(),
     }
 }
