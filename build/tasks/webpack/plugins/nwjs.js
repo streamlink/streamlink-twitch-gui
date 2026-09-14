@@ -6,12 +6,14 @@ class NwjsPlugin {
 		const platform = platforms.getPlatform();
 		const { options: nwOptions, [ platform ]: { options: nwPlatformOptions } } = nwConf;
 
-		this.nwOptions = Object.assign( {}, nwOptions, nwPlatformOptions, nwOptionsOverride );
+		this.nwOptions = Object.assign(
+			{ mode: "run", glob: false },
+			nwOptions,
+			nwPlatformOptions,
+			nwOptionsOverride
+		);
 		this.options = Object.assign({
-			rerunOnExit: true,
-			log: true,
-			logStdOut: true,
-			logStdErr: true
+			rerunOnExit: true
 		}, options );
 		this.launched = false;
 	}
@@ -26,32 +28,19 @@ class NwjsPlugin {
 	}
 
 	_run() {
-		const NwBuilder = require( "nw-builder" );
 		const { nwOptions, options } = this;
 
-		function log( msg ) {
-			/* eslint-disable no-console */
-			console.log( String( msg ).trim() );
-		}
-
 		function launch() {
-			const nw = new NwBuilder( nwOptions );
-
-			if ( options.log ) {
-				nw.on( "log", log );
-			}
-			if ( options.log && options.logStdOut ) {
-				nw.on( "stdout", log );
-			}
-			if ( options.log && options.logStdErr ) {
-				nw.on( "stderr", log );
-			}
-
-			nw.run().then(function() {
-				if ( options.rerunOnExit ) {
-					setTimeout( launch, 1000 );
-				}
-			});
+			import( "nw-builder" )
+				.then( ( { default: nwbuild } ) => nwbuild( nwOptions ) )
+				.then( nwProcess => {
+					if ( !nwProcess || !options.rerunOnExit ) {
+						return;
+					}
+					nwProcess.on( "close", () => {
+						setTimeout( launch, 1000 );
+					});
+				});
 		}
 
 		launch();

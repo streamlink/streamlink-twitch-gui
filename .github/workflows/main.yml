@@ -6,7 +6,7 @@ on:
 
 env:
   CI: true
-  NODE_VERSION: 20
+  NODE_VERSION: 22
 
 jobs:
   test:

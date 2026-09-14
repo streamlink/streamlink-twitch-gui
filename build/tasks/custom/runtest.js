@@ -1,6 +1,5 @@
 module.exports = function( grunt ) {
 	grunt.registerTask( "runtest", "Run the tests in NW.js", function() {
-		const NwBuilder = require( "nw-builder" );
 		const cdpConnect = require( "../common/cdp/connect" );
 		const cdpQUnit = require( "../common/cdp/qunit" );
 		const cdpCoverage = require( "../common/cdp/coverage" );
@@ -30,23 +29,23 @@ module.exports = function( grunt ) {
 			argv.unshift( "--disable-gpu", "--no-sandbox" );
 		}
 		const nwjsOptions = Object.assign( {}, nwOptions, nwPlatformOptions, {
+			mode  : "run",
+			glob  : false,
 			flavor: "sdk",
-			files: options.path,
+			srcDir: options.path,
 			argv
 		});
-		const nwjs = new NwBuilder( nwjsOptions );
 
+		let nwProcess;
 
 		function kill() {
-			if ( nwjs.isAppRunning() ) {
-				const appProcess = nwjs.getAppProcess();
-
+			if ( nwProcess ) {
 				// workaround for the close event log message
-				appProcess.removeAllListeners( "close" );
-				nwjs._nwProcess = undefined;
+				nwProcess.removeAllListeners( "close" );
 
 				// now kill the child process
-				appProcess.kill();
+				nwProcess.kill();
+				nwProcess = undefined;
 
 				grunt.log.debug( "NW.js stopped" );
 				process.removeListener( "exit", kill );
@@ -65,39 +64,34 @@ module.exports = function( grunt ) {
 		new Promise( ( resolve, reject ) => {
 			process.on( "exit", kill );
 
-			nwjs.on( "log", grunt.log.writeln.bind( grunt.log ) );
-			nwjs.on( "stdout", grunt.log.writeln.bind( grunt.log ) );
-			nwjs.on( "stderr", grunt.log.writeln.bind( grunt.log ) );
-
-			// listen for the appstart event
-			nwjs.on( "appstart", () => {
-				grunt.log.debug( "NW.js started" );
-
-				const nwjsProcess = nwjs.getAppProcess();
-				nwjsProcess.on( "close", () => {
-					reject( "NW.js exited prematurely" );
-				});
-
-				// connect to NW.js
-				cdpConnect( options, grunt.log.error )
-					.then( async cdp => {
-						grunt.log.debug( `Connected to ${options.host}:${options.port}` );
-
-						// set up and start QUnit
-						await cdpQUnit( grunt, options, cdp );
-						if ( isCoverage ) {
-							await cdpCoverage( grunt, options, cdp );
-						}
-					})
-					// resolve on a successful test run
-					.then( resolve, reject );
-			});
-
 			grunt.log.debug( "Starting NW.js..." );
 
 			// start the NW.js process (or download NW.js first)
-			// reject if NW.js exited prematurely
-			nwjs.run().then( reject, reject );
+			// reject if NW.js fails to start or exits prematurely
+			import( "nw-builder" )
+				.then( ( { default: nwbuild } ) => nwbuild( nwjsOptions ) )
+				.then( childProcess => {
+					grunt.log.debug( "NW.js started" );
+
+					nwProcess = childProcess;
+					nwProcess.on( "close", () => {
+						reject( "NW.js exited prematurely" );
+					});
+
+					// connect to NW.js
+					return cdpConnect( options, grunt.log.error )
+						.then( async cdp => {
+							grunt.log.debug( `Connected to ${options.host}:${options.port}` );
+
+							// set up and start QUnit
+							await cdpQUnit( grunt, options, cdp );
+							if ( isCoverage ) {
+								await cdpCoverage( grunt, options, cdp );
+							}
+						});
+				})
+				// resolve on a successful test run
+				.then( resolve, reject );
 		})
 			// make sure to terminate the NW.js process
 			.then( noShutdown => {

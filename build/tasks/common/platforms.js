@@ -1,3 +1,12 @@
+// maps this project's own platform identifiers (which mirror Node's
+// process.platform) to the platform identifiers used by nw-builder
+const nwBuildPlatforms = {
+	win32 : "win",
+	darwin: "osx",
+	linux : "linux"
+};
+
+
 module.exports = {
 	platforms: {
 		win32: {
@@ -22,6 +31,19 @@ module.exports = {
 			platform: "linux",
 			arch    : "x64"
 		}
+	},
+
+	/**
+	 * Get the `platform` and `arch` values expected by nw-builder for one of
+	 * this project's own platform identifiers (eg. "win32", "linux64", ...).
+	 */
+	getNwBuildTarget( name ) {
+		const { platform, arch } = this.platforms[ name ];
+
+		return {
+			platform: nwBuildPlatforms[ platform ],
+			arch
+		};
 	},
 
 	getList() {
